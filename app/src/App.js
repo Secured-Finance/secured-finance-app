@@ -41,8 +41,6 @@ function App() {
       <CssBaseline />
       <Router>
         <NavBar />
-        <Container className={classes.container}>
-          <Redirect to="/moneymkt/3m" />
 
           <Switch>
             <Route path="/moneymkt">
@@ -60,8 +58,10 @@ function App() {
             <Route path="/history">
               <History />
             </Route>
+            <Route path="*">
+              <MoneyMKT />
+            </Route>
           </Switch>
-        </Container>
       </Router>
     </ThemeProvider>
   );

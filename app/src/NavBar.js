@@ -13,7 +13,7 @@ import {
   Box,
 } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
-import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route, Link, useLocation } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -45,16 +45,25 @@ function a11yProps(index) {
   };
 }
 
+const tabs = ['MoneyMKT', 'Swap', 'FX', 'Book', 'History'];
+
 export default function Navbar(props) {
+  let location = useLocation();
+  let word=location.pathname.slice(1)
+  if(location.pathname.slice(1).indexOf('/')!==-1){
+    const end=location.pathname.slice(1).indexOf('/')
+    word=location.pathname.slice(1,end+1)
+  }
+  console.log('word',word)
   const classes = useStyles();
-  console.log('classes', classes);
-  const [value, setValue] = React.useState(0);
+  const [value, setValue] = React.useState(tabs.map(t=>t.toLowerCase()).indexOf(word));
+  console.log('classes', tabs.map(t=>t.toLowerCase()).indexOf(word));
 
   const handleChange = (event, newValue) => {
+    console.log("new",newValue);
     setValue(newValue);
   };
 
-  const tabs = ['MoneyMKT', 'Swap', 'FX', 'Book', 'History'];
 
   return (
     <div className={classes.root}>
@@ -62,7 +71,7 @@ export default function Navbar(props) {
         <Toolbar component="nav" variant="regular" className={classes.toolbar}>
           <Box className={classes.navs} component={Link} to="/moneymkt">
             <Avatar
-              alt="Remy Sharp"
+              alt="Secured Finance"
               src="./logo.jpeg"
               className={classes.logo}
             />
@@ -76,7 +85,7 @@ export default function Navbar(props) {
             value={value}
             onChange={handleChange}
             aria-label="simple tabs example"
-            component={'ul'}
+            component={'div'}
             className={classes.navs}
           >
             {tabs.map((tab) => (
