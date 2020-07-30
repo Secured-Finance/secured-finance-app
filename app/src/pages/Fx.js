@@ -10,6 +10,11 @@ const useStyles = makeStyles((theme) => ({
   paper: {
     padding: theme.spacing(1),
   },
+  midPrice:{
+    padding:"20px 10px",
+    textAlign:'center',
+    border:'1px dotted white'
+  }
 }));
 
 export default function Fx() {
@@ -24,6 +29,26 @@ export default function Fx() {
       </Grid>
       <Grid item xs={4}>
         <Paper className={classes.paper}>
+          <div>
+            <ReactVirtualizedTable
+              rows={[]}
+              columns={[
+                {
+                  width: 100,
+                  label: 'Amount',
+                  dataKey: 'size',
+                  flexGrow: 1,
+                },
+                {
+                  width: 120,
+                  label: 'Rate %',
+                  dataKey: 'rate',
+                  numeric: true,
+                },
+              ]}
+            />
+          </div>
+          <div className={classes.midPrice}>$92</div>
           <div>
             <ReactVirtualizedTable
               rows={[]}
