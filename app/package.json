@@ -20,7 +20,8 @@
     "react-dom": "^16.13.1",
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.1",
-    "react-virtualized": "^9.21.2"
+    "react-virtualized": "^9.21.2",
+    "web3": "^1.2.11"
   },
   "scripts": {
     "start": "react-scripts start",
