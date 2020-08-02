@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import {
   Container,
   Paper,
@@ -6,7 +6,9 @@ import {
   Grid,
   Input,
   Button,
+  Typography,
 } from '@material-ui/core';
+import { ContractContext } from '../App';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -14,6 +16,21 @@ const useStyles = makeStyles((theme) => ({
     paddingTop: theme.spacing(8),
     paddingBottom: theme.spacing(8),
   },
+  loanBookBtn: {
+    padding: theme.spacing(4),
+  },
+  ccy: {
+    borderWidth: 1,
+    borderColor: 'white',
+    borderStyle: 'solid',
+    padding: 1,
+  },
+
+  left:{
+
+    borderLeft: '1px solid white', 
+    paddingLeft:theme.spacing(5)
+  }
 }));
 
 export default function Book() {
@@ -33,12 +50,45 @@ export default function Book() {
   const [b3y, setb3y] = useState('');
   const [l3y, setl3y] = useState('');
   const [a3y, seta3y] = useState('');
+  const [b5y, setb5y] = useState('');
+  const [l5y, setl5y] = useState('');
+  const [a5y, seta5y] = useState('');
+  const [buyFilVal, setbuyFilVal] = useState('');
+  const [sellEthVal, setsellEthVal] = useState('');
+  const [sellFilVal, setsellFilVal] = useState('');
+  const [buyEthVal, setbuyEthVal] = useState('');
+
+  const contract = useContext(ContractContext);
+
+  console.log('contract', contract);
+
+  if (contract.web3) {
+    contract.web3.eth
+      .getTransaction(
+        '0x32bd75a22634687f6915da1e06c46076347b4c99175ef0583a9302d2e07adb27',
+      )
+      .then((r) => {
+        console.log('ww', r);
+      });
+  }
 
   return (
     <Paper className={classes.root}>
       <Container>
         <Grid container spacing={3}>
-          <Grid item xs={10}>
+          <Grid item xs={9}>
+            <Grid container justify="center" style={{ marginBottom: 40 }}>
+              <Typography
+                variant="h4"
+                component="h6"
+                align="left"
+                color="textPrimary"
+                gutterBottom
+                noWrap
+              >
+                Loan
+              </Typography>
+            </Grid>
             <Grid container spacing={3}>
               <Grid item xs={2}></Grid>
               <Grid item xs={3}>
@@ -217,21 +267,154 @@ export default function Book() {
                 />
               </Grid>
             </Grid>
+            <Grid container spacing={3}>
+              <Grid item xs={2} justify="flex-end" container>
+                5y
+              </Grid>
+              <Grid item xs={3}>
+                <Input
+                  onChange={(e) => {
+                    setb5y(Number(e.target.value));
+                  }}
+                  inputProps={{ 'aria-label': 'description' }}
+                  value={b5y}
+                />
+              </Grid>
+              <Grid item xs={3}>
+                <Input
+                  onChange={(e) => {
+                    setl5y(Number(e.target.value));
+                  }}
+                  inputProps={{ 'aria-label': 'description' }}
+                  value={l5y}
+                />
+              </Grid>
+              <Grid item xs={3}>
+                <Input
+                  onChange={(e) => {
+                    seta5y(Number(e.target.value));
+                  }}
+                  inputProps={{ 'aria-label': 'description' }}
+                  value={a5y}
+                />
+              </Grid>
+            </Grid>
+
+            <Grid
+              container
+              spacing={3}
+              justify="center"
+              alignItems="center"
+              className={classes.loanBookBtn}
+            >
+              <Button variant="contained" color="primary">
+                Set Loan Book
+              </Button>
+            </Grid>
           </Grid>
 
-          <Grid item xs={2} container justify="center" direction="column">
-            <div>
+          <Grid item xs={3} container className={classes.left}>
+            <Grid container style={{ marginBottom: 40 }}>
+              <Typography
+                variant="h4"
+                component="h6"
+                align="left"
+                color="textPrimary"
+                gutterBottom
+                noWrap
+              >
+                Fx
+              </Typography>
+            </Grid>
+            <Grid container direction="column">
               <div style={{ marginBottom: 20 }}>
-                <Button variant="contained" color="primary">
-                  Buy FIL
+                <div>
+                  <Typography
+                    variant="subtitle1"
+                    component="h6"
+                    align="left"
+                    color="textPrimary"
+                    gutterBottom
+                    noWrap
+                  >
+                    Buy FIL Sell ETH
+                  </Typography>
+                </div>
+                <Grid container justify="center" spacing={2}>
+                  <Grid item xs={6}>
+                    <Input
+                      inputProps={{ 'aria-label': 'description' }}
+                      disableUnderline
+                      required
+                      className={classes.ccy}
+                      value={buyFilVal}
+                      onChange={(e) => setbuyFilVal(Number(e.target.value))}
+                    />
+                  </Grid>
+                  <Grid item xs={6}>
+                    <Input
+                      inputProps={{ 'aria-label': 'description' }}
+                      disableUnderline
+                      required
+                      className={classes.ccy}
+                      value={sellEthVal}
+                      onChange={(e) => setsellEthVal(Number(e.target.value))}
+                    />
+                  </Grid>
+                </Grid>
+                <div style={{ marginTop: 20 }}>
+                  <Typography
+                    variant="subtitle1"
+                    component="h6"
+                    align="left"
+                    color="textPrimary"
+                    gutterBottom
+                    noWrap
+                  >
+                    Sell FIL Buy ETH
+                  </Typography>
+                </div>
+                <Grid container justify="center" spacing={2}>
+                  <Grid item xs={6}>
+                    <Input
+                      inputProps={{ 'aria-label': 'description' }}
+                      disableUnderline
+                      required
+                      className={classes.ccy}
+                      value={sellFilVal}
+                      onChange={(e) => setsellFilVal(Number(e.target.value))}
+                    />
+                  </Grid>
+                  <Grid item xs={6}>
+                    <Input
+                      inputProps={{ 'aria-label': 'description' }}
+                      disableUnderline
+                      required
+                      className={classes.ccy}
+                      value={buyEthVal}
+                      onChange={(e) => setbuyEthVal(Number(e.target.value))}
+                    />
+                  </Grid>
+                </Grid>
+              </div>
+              <div style={{ textAlign: 'center', marginTop: 40 }}>
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  onClick={async () => {
+                    console.log('setFX');
+                    await contract.fxContract.methods
+                      .setFXBook(0, [1, 0, buyFilVal, sellEthVal], [0, 1, 1000, 750], 3600)
+                      .send({
+                        from: '0xdC4B87B1b7a3cCFb5d9e85C09a59923C0F6cdAFc',
+                        gas: 3000000,
+                      });
+                  }}
+                >
+                  Set FX
                 </Button>
               </div>
-              <div>
-                <Button variant="contained" color="secondary">
-                  Sell FIL
-                </Button>
-              </div>
-            </div>
+            </Grid>
           </Grid>
         </Grid>
       </Container>

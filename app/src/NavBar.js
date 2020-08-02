@@ -54,7 +54,11 @@ export default function Navbar(props) {
     const end=location.pathname.slice(1).indexOf('/')
     word=location.pathname.slice(1,end+1)
   }
-  console.log('word',word)
+
+  if(location.pathname.length===1){
+    word="moneymkt"
+  }
+  console.log('word',word, tabs.map(t=>t.toLowerCase()).indexOf(word))
   const classes = useStyles();
   const [value, setValue] = React.useState(tabs.map(t=>t.toLowerCase()).indexOf(word));
   console.log('classes', tabs.map(t=>t.toLowerCase()).indexOf(word));
