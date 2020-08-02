@@ -7,8 +7,14 @@ import {
   Input,
   Button,
   Typography,
+  Box,
 } from '@material-ui/core';
+import LinearProgress from '@material-ui/core/LinearProgress';
+import clsx from 'clsx';
+import Alert from '@material-ui/lab/Alert';
+
 import { ContractContext } from '../App';
+// import { Alert } from 'react-bootstrap';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -26,11 +32,14 @@ const useStyles = makeStyles((theme) => ({
     padding: 1,
   },
 
-  left:{
-
-    borderLeft: '1px solid white', 
-    paddingLeft:theme.spacing(5)
-  }
+  right: {
+    borderLeft: '1px solid white',
+    paddingLeft: theme.spacing(5),
+    position: 'relative',
+  },
+  hidden: {
+    visibility: 'hidden',
+  },
 }));
 
 export default function Book() {
@@ -57,6 +66,12 @@ export default function Book() {
   const [sellEthVal, setsellEthVal] = useState('');
   const [sellFilVal, setsellFilVal] = useState('');
   const [buyEthVal, setbuyEthVal] = useState('');
+
+  const [isLoanLoading, setisLoanLoading] = useState(false);
+  const [isFxLoading, setisFxLoading] = useState(false);
+
+  const [isFxShow, setisFxShow] = useState(true);
+  const [isFxSuccess, setisFxSuccess] = useState(true);
 
   const contract = useContext(ContractContext);
 
@@ -312,108 +327,142 @@ export default function Book() {
               </Button>
             </Grid>
           </Grid>
+          {/* RIght side */}
+          <Grid item xs={3} className={classes.right}>
+            <Grid item >            
+              <Grid container direction="column" style={{marginBottom:30}}>
+                <Box>
+                  <Typography
+                    variant="h4"
+                    component="h6"
+                    align="left"
+                    color="textPrimary"
+                    gutterBottom
+                    noWrap
+                  >
+                    Fx
+                  </Typography>
+                </Box>
+                <Box>
+                  <Alert
+                  variant="outlined"
+                    severity={isFxSuccess ? 'success' : 'error'}
+                    className={clsx(!isFxShow && classes.hidden)}
+                  >
+                    {isFxSuccess
+                      ? 'Transaction success!'
+                      : 'Transaction failure'}
+                    !
+                  </Alert>
+                </Box>
+              </Grid>
+              <Grid container direction="column">
+                <div style={{ marginBottom: 20 }}>
+                  <div>
+                    <Typography
+                      variant="subtitle1"
+                      component="h6"
+                      align="left"
+                      color="textPrimary"
+                      gutterBottom
+                      noWrap
+                    >
+                      Buy FIL Sell ETH
+                    </Typography>
+                  </div>
+                  <Grid container justify="center" spacing={2}>
+                    <Grid item xs={6}>
+                      <Input
+                        inputProps={{ 'aria-label': 'description' }}
+                        disableUnderline
+                        required
+                        className={classes.ccy}
+                        value={buyFilVal}
+                        onChange={(e) => setbuyFilVal(Number(e.target.value))}
+                      />
+                    </Grid>
+                    <Grid item xs={6}>
+                      <Input
+                        inputProps={{ 'aria-label': 'description' }}
+                        disableUnderline
+                        required
+                        className={classes.ccy}
+                        value={sellEthVal}
+                        onChange={(e) => setsellEthVal(Number(e.target.value))}
+                      />
+                    </Grid>
+                  </Grid>
+                  <div style={{ marginTop: 20 }}>
+                    <Typography
+                      variant="subtitle1"
+                      component="h6"
+                      align="left"
+                      color="textPrimary"
+                      gutterBottom
+                      noWrap
+                    >
+                      Sell FIL Buy ETH
+                    </Typography>
+                  </div>
+                  <Grid container justify="center" spacing={2}>
+                    <Grid item xs={6}>
+                      <Input
+                        inputProps={{ 'aria-label': 'description' }}
+                        disableUnderline
+                        required
+                        className={classes.ccy}
+                        value={sellFilVal}
+                        onChange={(e) => setsellFilVal(Number(e.target.value))}
+                      />
+                    </Grid>
+                    <Grid item xs={6}>
+                      <Input
+                        inputProps={{ 'aria-label': 'description' }}
+                        disableUnderline
+                        required
+                        className={classes.ccy}
+                        value={buyEthVal}
+                        onChange={(e) => setbuyEthVal(Number(e.target.value))}
+                      />
+                    </Grid>
+                  </Grid>
+                </div>
+                <div style={{ textAlign: 'center' }}>
+                  <Box m={1} className={clsx(!isFxLoading && classes.hidden)}>
+                    {console.log('isFxLoading', isFxLoading)}
+                    <LinearProgress />
+                  </Box>
 
-          <Grid item xs={3} container className={classes.left}>
-            <Grid container style={{ marginBottom: 40 }}>
-              <Typography
-                variant="h4"
-                component="h6"
-                align="left"
-                color="textPrimary"
-                gutterBottom
-                noWrap
-              >
-                Fx
-              </Typography>
-            </Grid>
-            <Grid container direction="column">
-              <div style={{ marginBottom: 20 }}>
-                <div>
-                  <Typography
-                    variant="subtitle1"
-                    component="h6"
-                    align="left"
-                    color="textPrimary"
-                    gutterBottom
-                    noWrap
+                  <Button
+                    variant="contained"
+                    color="secondary"
+                    onClick={async () => {
+                      console.log('setFX');
+                      setisFxLoading(true);
+                      try {
+                        const result = await contract.fxContract.methods
+                          .setFXBook(
+                            0,
+                            [1, 0, buyFilVal, sellEthVal],
+                            [0, 1, sellFilVal, buyEthVal],
+                            3600,
+                          )
+                          .send({
+                            from: '0xdC4B87B1b7a3cCFb5d9e85C09a59923C0F6cdAFc',
+                            gas: 3000000,
+                          });
+
+                        console.log('result', result);
+                      } catch (e) {}
+                      setisFxLoading(false);
+
+                      // setbuyFilVal('');
+                    }}
                   >
-                    Buy FIL Sell ETH
-                  </Typography>
+                    Set FX
+                  </Button>
                 </div>
-                <Grid container justify="center" spacing={2}>
-                  <Grid item xs={6}>
-                    <Input
-                      inputProps={{ 'aria-label': 'description' }}
-                      disableUnderline
-                      required
-                      className={classes.ccy}
-                      value={buyFilVal}
-                      onChange={(e) => setbuyFilVal(Number(e.target.value))}
-                    />
-                  </Grid>
-                  <Grid item xs={6}>
-                    <Input
-                      inputProps={{ 'aria-label': 'description' }}
-                      disableUnderline
-                      required
-                      className={classes.ccy}
-                      value={sellEthVal}
-                      onChange={(e) => setsellEthVal(Number(e.target.value))}
-                    />
-                  </Grid>
-                </Grid>
-                <div style={{ marginTop: 20 }}>
-                  <Typography
-                    variant="subtitle1"
-                    component="h6"
-                    align="left"
-                    color="textPrimary"
-                    gutterBottom
-                    noWrap
-                  >
-                    Sell FIL Buy ETH
-                  </Typography>
-                </div>
-                <Grid container justify="center" spacing={2}>
-                  <Grid item xs={6}>
-                    <Input
-                      inputProps={{ 'aria-label': 'description' }}
-                      disableUnderline
-                      required
-                      className={classes.ccy}
-                      value={sellFilVal}
-                      onChange={(e) => setsellFilVal(Number(e.target.value))}
-                    />
-                  </Grid>
-                  <Grid item xs={6}>
-                    <Input
-                      inputProps={{ 'aria-label': 'description' }}
-                      disableUnderline
-                      required
-                      className={classes.ccy}
-                      value={buyEthVal}
-                      onChange={(e) => setbuyEthVal(Number(e.target.value))}
-                    />
-                  </Grid>
-                </Grid>
-              </div>
-              <div style={{ textAlign: 'center', marginTop: 40 }}>
-                <Button
-                  variant="contained"
-                  color="secondary"
-                  onClick={async () => {
-                    console.log('setFX');
-                    await contract.fxContract.methods
-                      .setFXBook(0, [1, 0, buyFilVal, sellEthVal], [0, 1, 1000, 750], 3600)
-                      .send({
-                        from: '0xdC4B87B1b7a3cCFb5d9e85C09a59923C0F6cdAFc',
-                        gas: 3000000,
-                      });
-                  }}
-                >
-                  Set FX
-                </Button>
-              </div>
+              </Grid>
             </Grid>
           </Grid>
         </Grid>

@@ -1,620 +1,684 @@
-export const Fx_address='0x84DE59b43c3518c32EBFD402A5e76a46AcE67a0A'
+export const Fx_address = '0x84DE59b43c3518c32EBFD402A5e76a46AcE67a0A';
 
-export const Fx_ABI=[
+export const Fx_ABI = [
   {
-    "inputs": [
+    anonymous: false,
+    inputs: [
       {
-        "internalType": "enum FXMarket.CcyPair",
-        "name": "pair",
-        "type": "uint8"
+        indexed: false,
+        internalType: 'uint256',
+        name: 'amtBuy',
+        type: 'uint256',
       },
       {
-        "components": [
+        indexed: false,
+        internalType: 'uint256',
+        name: 'amtSell',
+        type: 'uint256',
+      },
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'fxRate',
+        type: 'uint256',
+      },
+    ],
+    name: 'DEBUG',
+    type: 'event',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: 'address',
+        name: 'sender',
+        type: 'address',
+      },
+    ],
+    name: 'DelFXBook',
+    type: 'event',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: 'address',
+        name: 'sender',
+        type: 'address',
+      },
+    ],
+    name: 'DelOneItem',
+    type: 'event',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: 'address',
+        name: 'sender',
+        type: 'address',
+      },
+    ],
+    name: 'SetFXBook',
+    type: 'event',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'enum FXMarket.CcyPair',
+        name: 'pair',
+        type: 'uint8',
+      },
+      {
+        components: [
           {
-            "internalType": "enum FXMarket.Ccy",
-            "name": "ccyBuy",
-            "type": "uint8"
+            internalType: 'enum FXMarket.Ccy',
+            name: 'ccyBuy',
+            type: 'uint8',
           },
           {
-            "internalType": "enum FXMarket.Ccy",
-            "name": "ccySell",
-            "type": "uint8"
+            internalType: 'enum FXMarket.Ccy',
+            name: 'ccySell',
+            type: 'uint8',
           },
           {
-            "internalType": "uint256",
-            "name": "amtBuy",
-            "type": "uint256"
+            internalType: 'uint256',
+            name: 'amtBuy',
+            type: 'uint256',
           },
           {
-            "internalType": "uint256",
-            "name": "amtSell",
-            "type": "uint256"
-          }
+            internalType: 'uint256',
+            name: 'amtSell',
+            type: 'uint256',
+          },
         ],
-        "internalType": "struct FXMarket.FXInput",
-        "name": "offerInput",
-        "type": "tuple"
+        internalType: 'struct FXMarket.FXInput',
+        name: 'offerInput',
+        type: 'tuple',
       },
       {
-        "components": [
+        components: [
           {
-            "internalType": "enum FXMarket.Ccy",
-            "name": "ccyBuy",
-            "type": "uint8"
+            internalType: 'enum FXMarket.Ccy',
+            name: 'ccyBuy',
+            type: 'uint8',
           },
           {
-            "internalType": "enum FXMarket.Ccy",
-            "name": "ccySell",
-            "type": "uint8"
+            internalType: 'enum FXMarket.Ccy',
+            name: 'ccySell',
+            type: 'uint8',
           },
           {
-            "internalType": "uint256",
-            "name": "amtBuy",
-            "type": "uint256"
+            internalType: 'uint256',
+            name: 'amtBuy',
+            type: 'uint256',
           },
           {
-            "internalType": "uint256",
-            "name": "amtSell",
-            "type": "uint256"
-          }
+            internalType: 'uint256',
+            name: 'amtSell',
+            type: 'uint256',
+          },
         ],
-        "internalType": "struct FXMarket.FXInput",
-        "name": "bidInput",
-        "type": "tuple"
+        internalType: 'struct FXMarket.FXInput',
+        name: 'bidInput',
+        type: 'tuple',
       },
       {
-        "internalType": "uint256",
-        "name": "effectiveSec",
-        "type": "uint256"
-      }
+        internalType: 'uint256',
+        name: 'effectiveSec',
+        type: 'uint256',
+      },
     ],
-    "name": "setFXBook",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
+    name: 'setFXBook',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
   },
   {
-    "inputs": [],
-    "name": "delFXBook",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
+    inputs: [],
+    name: 'delFXBook',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
   },
   {
-    "inputs": [
+    inputs: [
       {
-        "internalType": "address",
-        "name": "addr",
-        "type": "address"
+        internalType: 'address',
+        name: 'addr',
+        type: 'address',
       },
       {
-        "internalType": "enum FXMarket.Side",
-        "name": "side",
-        "type": "uint8"
+        internalType: 'enum FXMarket.Side',
+        name: 'side',
+        type: 'uint8',
       },
       {
-        "internalType": "enum FXMarket.CcyPair",
-        "name": "pair",
-        "type": "uint8"
-      }
+        internalType: 'enum FXMarket.CcyPair',
+        name: 'pair',
+        type: 'uint8',
+      },
     ],
-    "name": "delOneItem",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
+    name: 'delOneItem',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
   },
   {
-    "inputs": [
+    inputs: [
       {
-        "internalType": "address",
-        "name": "addr",
-        "type": "address"
+        internalType: 'address',
+        name: 'addr',
+        type: 'address',
       },
       {
-        "internalType": "enum FXMarket.Side",
-        "name": "side",
-        "type": "uint8"
+        internalType: 'enum FXMarket.Side',
+        name: 'side',
+        type: 'uint8',
       },
       {
-        "internalType": "enum FXMarket.CcyPair",
-        "name": "pair",
-        "type": "uint8"
-      }
+        internalType: 'enum FXMarket.CcyPair',
+        name: 'pair',
+        type: 'uint8',
+      },
     ],
-    "name": "getOneItem",
-    "outputs": [
+    name: 'getOneItem',
+    outputs: [
       {
-        "components": [
+        components: [
           {
-            "internalType": "enum FXMarket.CcyPair",
-            "name": "pair",
-            "type": "uint8"
+            internalType: 'enum FXMarket.CcyPair',
+            name: 'pair',
+            type: 'uint8',
           },
           {
-            "internalType": "enum FXMarket.Ccy",
-            "name": "ccyBuy",
-            "type": "uint8"
+            internalType: 'enum FXMarket.Ccy',
+            name: 'ccyBuy',
+            type: 'uint8',
           },
           {
-            "internalType": "enum FXMarket.Ccy",
-            "name": "ccySell",
-            "type": "uint8"
+            internalType: 'enum FXMarket.Ccy',
+            name: 'ccySell',
+            type: 'uint8',
           },
           {
-            "internalType": "uint256",
-            "name": "amtBuy",
-            "type": "uint256"
+            internalType: 'uint256',
+            name: 'amtBuy',
+            type: 'uint256',
           },
           {
-            "internalType": "uint256",
-            "name": "amtSell",
-            "type": "uint256"
+            internalType: 'uint256',
+            name: 'amtSell',
+            type: 'uint256',
           },
           {
-            "internalType": "uint256",
-            "name": "rate",
-            "type": "uint256"
+            internalType: 'uint256',
+            name: 'rate',
+            type: 'uint256',
           },
           {
-            "internalType": "uint256",
-            "name": "goodtil",
-            "type": "uint256"
+            internalType: 'uint256',
+            name: 'goodtil',
+            type: 'uint256',
           },
           {
-            "internalType": "bool",
-            "name": "isAvailable",
-            "type": "bool"
+            internalType: 'bool',
+            name: 'isAvailable',
+            type: 'bool',
           },
           {
-            "internalType": "address",
-            "name": "addr",
-            "type": "address"
-          }
+            internalType: 'address',
+            name: 'addr',
+            type: 'address',
+          },
         ],
-        "internalType": "struct FXMarket.FXItem",
-        "name": "",
-        "type": "tuple"
-      }
+        internalType: 'struct FXMarket.FXItem',
+        name: '',
+        type: 'tuple',
+      },
     ],
-    "stateMutability": "view",
-    "type": "function",
-    "constant": true
+    stateMutability: 'view',
+    type: 'function',
+    constant: true,
   },
   {
-    "inputs": [
+    inputs: [
       {
-        "internalType": "address",
-        "name": "addr",
-        "type": "address"
-      }
+        internalType: 'address',
+        name: 'addr',
+        type: 'address',
+      },
     ],
-    "name": "getOneBook",
-    "outputs": [
+    name: 'getOneBook',
+    outputs: [
       {
-        "components": [
+        components: [
           {
-            "components": [
+            components: [
               {
-                "internalType": "enum FXMarket.CcyPair",
-                "name": "pair",
-                "type": "uint8"
+                internalType: 'enum FXMarket.CcyPair',
+                name: 'pair',
+                type: 'uint8',
               },
               {
-                "internalType": "enum FXMarket.Ccy",
-                "name": "ccyBuy",
-                "type": "uint8"
+                internalType: 'enum FXMarket.Ccy',
+                name: 'ccyBuy',
+                type: 'uint8',
               },
               {
-                "internalType": "enum FXMarket.Ccy",
-                "name": "ccySell",
-                "type": "uint8"
+                internalType: 'enum FXMarket.Ccy',
+                name: 'ccySell',
+                type: 'uint8',
               },
               {
-                "internalType": "uint256",
-                "name": "amtBuy",
-                "type": "uint256"
+                internalType: 'uint256',
+                name: 'amtBuy',
+                type: 'uint256',
               },
               {
-                "internalType": "uint256",
-                "name": "amtSell",
-                "type": "uint256"
+                internalType: 'uint256',
+                name: 'amtSell',
+                type: 'uint256',
               },
               {
-                "internalType": "uint256",
-                "name": "rate",
-                "type": "uint256"
+                internalType: 'uint256',
+                name: 'rate',
+                type: 'uint256',
               },
               {
-                "internalType": "uint256",
-                "name": "goodtil",
-                "type": "uint256"
+                internalType: 'uint256',
+                name: 'goodtil',
+                type: 'uint256',
               },
               {
-                "internalType": "bool",
-                "name": "isAvailable",
-                "type": "bool"
+                internalType: 'bool',
+                name: 'isAvailable',
+                type: 'bool',
               },
               {
-                "internalType": "address",
-                "name": "addr",
-                "type": "address"
-              }
+                internalType: 'address',
+                name: 'addr',
+                type: 'address',
+              },
             ],
-            "internalType": "struct FXMarket.FXItem[1]",
-            "name": "bids",
-            "type": "tuple[1]"
+            internalType: 'struct FXMarket.FXItem[1]',
+            name: 'bids',
+            type: 'tuple[1]',
           },
           {
-            "components": [
+            components: [
               {
-                "internalType": "enum FXMarket.CcyPair",
-                "name": "pair",
-                "type": "uint8"
+                internalType: 'enum FXMarket.CcyPair',
+                name: 'pair',
+                type: 'uint8',
               },
               {
-                "internalType": "enum FXMarket.Ccy",
-                "name": "ccyBuy",
-                "type": "uint8"
+                internalType: 'enum FXMarket.Ccy',
+                name: 'ccyBuy',
+                type: 'uint8',
               },
               {
-                "internalType": "enum FXMarket.Ccy",
-                "name": "ccySell",
-                "type": "uint8"
+                internalType: 'enum FXMarket.Ccy',
+                name: 'ccySell',
+                type: 'uint8',
               },
               {
-                "internalType": "uint256",
-                "name": "amtBuy",
-                "type": "uint256"
+                internalType: 'uint256',
+                name: 'amtBuy',
+                type: 'uint256',
               },
               {
-                "internalType": "uint256",
-                "name": "amtSell",
-                "type": "uint256"
+                internalType: 'uint256',
+                name: 'amtSell',
+                type: 'uint256',
               },
               {
-                "internalType": "uint256",
-                "name": "rate",
-                "type": "uint256"
+                internalType: 'uint256',
+                name: 'rate',
+                type: 'uint256',
               },
               {
-                "internalType": "uint256",
-                "name": "goodtil",
-                "type": "uint256"
+                internalType: 'uint256',
+                name: 'goodtil',
+                type: 'uint256',
               },
               {
-                "internalType": "bool",
-                "name": "isAvailable",
-                "type": "bool"
+                internalType: 'bool',
+                name: 'isAvailable',
+                type: 'bool',
               },
               {
-                "internalType": "address",
-                "name": "addr",
-                "type": "address"
-              }
+                internalType: 'address',
+                name: 'addr',
+                type: 'address',
+              },
             ],
-            "internalType": "struct FXMarket.FXItem[1]",
-            "name": "offers",
-            "type": "tuple[1]"
+            internalType: 'struct FXMarket.FXItem[1]',
+            name: 'offers',
+            type: 'tuple[1]',
           },
           {
-            "internalType": "bool",
-            "name": "isValue",
-            "type": "bool"
-          }
+            internalType: 'bool',
+            name: 'isValue',
+            type: 'bool',
+          },
         ],
-        "internalType": "struct FXMarket.FXBook",
-        "name": "",
-        "type": "tuple"
-      }
+        internalType: 'struct FXMarket.FXBook',
+        name: '',
+        type: 'tuple',
+      },
     ],
-    "stateMutability": "view",
-    "type": "function",
-    "constant": true
+    stateMutability: 'view',
+    type: 'function',
+    constant: true,
   },
   {
-    "inputs": [],
-    "name": "getAllBooks",
-    "outputs": [
+    inputs: [],
+    name: 'getAllBooks',
+    outputs: [
       {
-        "components": [
+        components: [
           {
-            "components": [
+            components: [
               {
-                "internalType": "enum FXMarket.CcyPair",
-                "name": "pair",
-                "type": "uint8"
+                internalType: 'enum FXMarket.CcyPair',
+                name: 'pair',
+                type: 'uint8',
               },
               {
-                "internalType": "enum FXMarket.Ccy",
-                "name": "ccyBuy",
-                "type": "uint8"
+                internalType: 'enum FXMarket.Ccy',
+                name: 'ccyBuy',
+                type: 'uint8',
               },
               {
-                "internalType": "enum FXMarket.Ccy",
-                "name": "ccySell",
-                "type": "uint8"
+                internalType: 'enum FXMarket.Ccy',
+                name: 'ccySell',
+                type: 'uint8',
               },
               {
-                "internalType": "uint256",
-                "name": "amtBuy",
-                "type": "uint256"
+                internalType: 'uint256',
+                name: 'amtBuy',
+                type: 'uint256',
               },
               {
-                "internalType": "uint256",
-                "name": "amtSell",
-                "type": "uint256"
+                internalType: 'uint256',
+                name: 'amtSell',
+                type: 'uint256',
               },
               {
-                "internalType": "uint256",
-                "name": "rate",
-                "type": "uint256"
+                internalType: 'uint256',
+                name: 'rate',
+                type: 'uint256',
               },
               {
-                "internalType": "uint256",
-                "name": "goodtil",
-                "type": "uint256"
+                internalType: 'uint256',
+                name: 'goodtil',
+                type: 'uint256',
               },
               {
-                "internalType": "bool",
-                "name": "isAvailable",
-                "type": "bool"
+                internalType: 'bool',
+                name: 'isAvailable',
+                type: 'bool',
               },
               {
-                "internalType": "address",
-                "name": "addr",
-                "type": "address"
-              }
+                internalType: 'address',
+                name: 'addr',
+                type: 'address',
+              },
             ],
-            "internalType": "struct FXMarket.FXItem[1]",
-            "name": "bids",
-            "type": "tuple[1]"
+            internalType: 'struct FXMarket.FXItem[1]',
+            name: 'bids',
+            type: 'tuple[1]',
           },
           {
-            "components": [
+            components: [
               {
-                "internalType": "enum FXMarket.CcyPair",
-                "name": "pair",
-                "type": "uint8"
+                internalType: 'enum FXMarket.CcyPair',
+                name: 'pair',
+                type: 'uint8',
               },
               {
-                "internalType": "enum FXMarket.Ccy",
-                "name": "ccyBuy",
-                "type": "uint8"
+                internalType: 'enum FXMarket.Ccy',
+                name: 'ccyBuy',
+                type: 'uint8',
               },
               {
-                "internalType": "enum FXMarket.Ccy",
-                "name": "ccySell",
-                "type": "uint8"
+                internalType: 'enum FXMarket.Ccy',
+                name: 'ccySell',
+                type: 'uint8',
               },
               {
-                "internalType": "uint256",
-                "name": "amtBuy",
-                "type": "uint256"
+                internalType: 'uint256',
+                name: 'amtBuy',
+                type: 'uint256',
               },
               {
-                "internalType": "uint256",
-                "name": "amtSell",
-                "type": "uint256"
+                internalType: 'uint256',
+                name: 'amtSell',
+                type: 'uint256',
               },
               {
-                "internalType": "uint256",
-                "name": "rate",
-                "type": "uint256"
+                internalType: 'uint256',
+                name: 'rate',
+                type: 'uint256',
               },
               {
-                "internalType": "uint256",
-                "name": "goodtil",
-                "type": "uint256"
+                internalType: 'uint256',
+                name: 'goodtil',
+                type: 'uint256',
               },
               {
-                "internalType": "bool",
-                "name": "isAvailable",
-                "type": "bool"
+                internalType: 'bool',
+                name: 'isAvailable',
+                type: 'bool',
               },
               {
-                "internalType": "address",
-                "name": "addr",
-                "type": "address"
-              }
+                internalType: 'address',
+                name: 'addr',
+                type: 'address',
+              },
             ],
-            "internalType": "struct FXMarket.FXItem[1]",
-            "name": "offers",
-            "type": "tuple[1]"
+            internalType: 'struct FXMarket.FXItem[1]',
+            name: 'offers',
+            type: 'tuple[1]',
           },
           {
-            "internalType": "bool",
-            "name": "isValue",
-            "type": "bool"
-          }
+            internalType: 'bool',
+            name: 'isValue',
+            type: 'bool',
+          },
         ],
-        "internalType": "struct FXMarket.FXBook[]",
-        "name": "",
-        "type": "tuple[]"
-      }
+        internalType: 'struct FXMarket.FXBook[]',
+        name: '',
+        type: 'tuple[]',
+      },
     ],
-    "stateMutability": "view",
-    "type": "function",
-    "constant": true
+    stateMutability: 'view',
+    type: 'function',
+    constant: true,
   },
   {
-    "inputs": [],
-    "name": "getBestBook",
-    "outputs": [
+    inputs: [],
+    name: 'getBestBook',
+    outputs: [
       {
-        "components": [
+        components: [
           {
-            "components": [
+            components: [
               {
-                "internalType": "enum FXMarket.CcyPair",
-                "name": "pair",
-                "type": "uint8"
+                internalType: 'enum FXMarket.CcyPair',
+                name: 'pair',
+                type: 'uint8',
               },
               {
-                "internalType": "enum FXMarket.Ccy",
-                "name": "ccyBuy",
-                "type": "uint8"
+                internalType: 'enum FXMarket.Ccy',
+                name: 'ccyBuy',
+                type: 'uint8',
               },
               {
-                "internalType": "enum FXMarket.Ccy",
-                "name": "ccySell",
-                "type": "uint8"
+                internalType: 'enum FXMarket.Ccy',
+                name: 'ccySell',
+                type: 'uint8',
               },
               {
-                "internalType": "uint256",
-                "name": "amtBuy",
-                "type": "uint256"
+                internalType: 'uint256',
+                name: 'amtBuy',
+                type: 'uint256',
               },
               {
-                "internalType": "uint256",
-                "name": "amtSell",
-                "type": "uint256"
+                internalType: 'uint256',
+                name: 'amtSell',
+                type: 'uint256',
               },
               {
-                "internalType": "uint256",
-                "name": "rate",
-                "type": "uint256"
+                internalType: 'uint256',
+                name: 'rate',
+                type: 'uint256',
               },
               {
-                "internalType": "uint256",
-                "name": "goodtil",
-                "type": "uint256"
+                internalType: 'uint256',
+                name: 'goodtil',
+                type: 'uint256',
               },
               {
-                "internalType": "bool",
-                "name": "isAvailable",
-                "type": "bool"
+                internalType: 'bool',
+                name: 'isAvailable',
+                type: 'bool',
               },
               {
-                "internalType": "address",
-                "name": "addr",
-                "type": "address"
-              }
+                internalType: 'address',
+                name: 'addr',
+                type: 'address',
+              },
             ],
-            "internalType": "struct FXMarket.FXItem[1]",
-            "name": "bids",
-            "type": "tuple[1]"
+            internalType: 'struct FXMarket.FXItem[1]',
+            name: 'bids',
+            type: 'tuple[1]',
           },
           {
-            "components": [
+            components: [
               {
-                "internalType": "enum FXMarket.CcyPair",
-                "name": "pair",
-                "type": "uint8"
+                internalType: 'enum FXMarket.CcyPair',
+                name: 'pair',
+                type: 'uint8',
               },
               {
-                "internalType": "enum FXMarket.Ccy",
-                "name": "ccyBuy",
-                "type": "uint8"
+                internalType: 'enum FXMarket.Ccy',
+                name: 'ccyBuy',
+                type: 'uint8',
               },
               {
-                "internalType": "enum FXMarket.Ccy",
-                "name": "ccySell",
-                "type": "uint8"
+                internalType: 'enum FXMarket.Ccy',
+                name: 'ccySell',
+                type: 'uint8',
               },
               {
-                "internalType": "uint256",
-                "name": "amtBuy",
-                "type": "uint256"
+                internalType: 'uint256',
+                name: 'amtBuy',
+                type: 'uint256',
               },
               {
-                "internalType": "uint256",
-                "name": "amtSell",
-                "type": "uint256"
+                internalType: 'uint256',
+                name: 'amtSell',
+                type: 'uint256',
               },
               {
-                "internalType": "uint256",
-                "name": "rate",
-                "type": "uint256"
+                internalType: 'uint256',
+                name: 'rate',
+                type: 'uint256',
               },
               {
-                "internalType": "uint256",
-                "name": "goodtil",
-                "type": "uint256"
+                internalType: 'uint256',
+                name: 'goodtil',
+                type: 'uint256',
               },
               {
-                "internalType": "bool",
-                "name": "isAvailable",
-                "type": "bool"
+                internalType: 'bool',
+                name: 'isAvailable',
+                type: 'bool',
               },
               {
-                "internalType": "address",
-                "name": "addr",
-                "type": "address"
-              }
+                internalType: 'address',
+                name: 'addr',
+                type: 'address',
+              },
             ],
-            "internalType": "struct FXMarket.FXItem[1]",
-            "name": "offers",
-            "type": "tuple[1]"
+            internalType: 'struct FXMarket.FXItem[1]',
+            name: 'offers',
+            type: 'tuple[1]',
           },
           {
-            "internalType": "bool",
-            "name": "isValue",
-            "type": "bool"
-          }
+            internalType: 'bool',
+            name: 'isValue',
+            type: 'bool',
+          },
         ],
-        "internalType": "struct FXMarket.FXBook",
-        "name": "",
-        "type": "tuple"
-      }
+        internalType: 'struct FXMarket.FXBook',
+        name: '',
+        type: 'tuple',
+      },
     ],
-    "stateMutability": "view",
-    "type": "function",
-    "constant": true
+    stateMutability: 'view',
+    type: 'function',
+    constant: true,
   },
   {
-    "inputs": [],
-    "name": "getOfferRates",
-    "outputs": [
+    inputs: [],
+    name: 'getOfferRates',
+    outputs: [
       {
-        "internalType": "uint256[1]",
-        "name": "",
-        "type": "uint256[1]"
-      }
+        internalType: 'uint256[1]',
+        name: '',
+        type: 'uint256[1]',
+      },
     ],
-    "stateMutability": "view",
-    "type": "function",
-    "constant": true
+    stateMutability: 'view',
+    type: 'function',
+    constant: true,
   },
   {
-    "inputs": [],
-    "name": "getBidRates",
-    "outputs": [
+    inputs: [],
+    name: 'getBidRates',
+    outputs: [
       {
-        "internalType": "uint256[1]",
-        "name": "",
-        "type": "uint256[1]"
-      }
+        internalType: 'uint256[1]',
+        name: '',
+        type: 'uint256[1]',
+      },
     ],
-    "stateMutability": "view",
-    "type": "function",
-    "constant": true
+    stateMutability: 'view',
+    type: 'function',
+    constant: true,
   },
   {
-    "inputs": [],
-    "name": "getMidRates",
-    "outputs": [
+    inputs: [],
+    name: 'getMidRates',
+    outputs: [
       {
-        "internalType": "uint256[1]",
-        "name": "",
-        "type": "uint256[1]"
-      }
+        internalType: 'uint256[1]',
+        name: '',
+        type: 'uint256[1]',
+      },
     ],
-    "stateMutability": "view",
-    "type": "function",
-    "constant": true
+    stateMutability: 'view',
+    type: 'function',
+    constant: true,
   },
   {
-    "inputs": [],
-    "name": "getMarketMakers",
-    "outputs": [
+    inputs: [],
+    name: 'getMarketMakers',
+    outputs: [
       {
-        "internalType": "address[]",
-        "name": "",
-        "type": "address[]"
-      }
+        internalType: 'address[]',
+        name: '',
+        type: 'address[]',
+      },
     ],
-    "stateMutability": "view",
-    "type": "function",
-    "constant": true
-  }
-]
+    stateMutability: 'view',
+    type: 'function',
+    constant: true,
+  },
+];
