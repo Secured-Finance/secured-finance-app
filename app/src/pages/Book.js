@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import {
   Container,
   Paper,
@@ -8,10 +8,16 @@ import {
   Button,
   Typography,
   Box,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
 } from '@material-ui/core';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import clsx from 'clsx';
 import Alert from '@material-ui/lab/Alert';
+import Snackbar from '@material-ui/core/Snackbar';
+import isNumber from 'isnumber';
 
 import { ContractContext } from '../App';
 // import { Alert } from 'react-bootstrap';
@@ -39,6 +45,17 @@ const useStyles = makeStyles((theme) => ({
   },
   hidden: {
     visibility: 'hidden',
+  },
+  progressLoan: {
+    minWidth: 200,
+  },
+  formControl: {
+    margin: theme.spacing(1),
+    minWidth: 200,
+  },
+  titleContainer: {
+    // marginBottom:40,
+    position: 'relative',
   },
 }));
 
@@ -70,12 +87,18 @@ export default function Book() {
   const [isLoanLoading, setisLoanLoading] = useState(false);
   const [isFxLoading, setisFxLoading] = useState(false);
 
-  const [isFxShow, setisFxShow] = useState(true);
-  const [isFxSuccess, setisFxSuccess] = useState(true);
+  const [isFxShow, setisFxShow] = useState(false);
+  const [isFxSuccess, setisFxSuccess] = useState(false);
+
+  const [isLoanShow, setisLoanShow] = useState(false);
+  const [isLoanSuccess, setisLoanSuccess] = useState(false);
 
   const contract = useContext(ContractContext);
 
+  const [ccy, setccy] = useState(0);
+
   console.log('contract', contract);
+  console.log('numb', isNumber('1.'));
 
   if (contract.web3) {
     contract.web3.eth
@@ -87,12 +110,49 @@ export default function Book() {
       });
   }
 
+  useEffect(() => {
+    const id = setTimeout(() => {
+      // setisLoanShow(false)
+      setisFxShow(false);
+    }, 4000);
+    return () => {
+      clearTimeout(id);
+    };
+  });
+
+  const resetFx = () => {
+    setbuyFilVal('');
+    setsellEthVal('');
+    setsellFilVal('');
+    setbuyEthVal('');
+  };
+
+  const resetLoan = () => {
+    setb3m('');
+    setl3m('');
+    seta3m('');
+    setb6m('');
+    setl6m('');
+    seta6m('');
+    setb1y('');
+    setl1y('');
+    seta1y('');
+    setb2y('');
+    setl2y('');
+    seta2y('');
+    setl3y('');
+    seta3y('');
+    setb5y('');
+    setl5y('');
+    seta5y('');
+  };
+
   return (
     <Paper className={classes.root}>
       <Container>
         <Grid container spacing={3}>
           <Grid item xs={9}>
-            <Grid container justify="center" style={{ marginBottom: 40 }}>
+            <Grid container justify="center" className={classes.titleContainer}>
               <Typography
                 variant="h4"
                 component="h6"
@@ -104,13 +164,32 @@ export default function Book() {
                 Loan
               </Typography>
             </Grid>
+            <Grid container style={{ marginBottom: 30 }} justify="center">
+              <Grid item>
+                <FormControl variant="standard" className={classes.formControl}>
+                  <InputLabel id="demo-simple-select-label">
+                    Currency
+                  </InputLabel>
+                  <Select
+                    id="demo-simple-select-outlined"
+                    value={ccy}
+                    onChange={(e) => {
+                      setccy(Number(e.target.value));
+                    }}
+                  >
+                    <MenuItem value={0}>ETH</MenuItem>
+                    <MenuItem value={1}>FIL</MenuItem>
+                  </Select>
+                </FormControl>
+              </Grid>
+            </Grid>
             <Grid container spacing={3}>
               <Grid item xs={2}></Grid>
               <Grid item xs={3}>
-                <div style={{ fontSize: '1.2rem' }}>Borrow</div>
+                <div style={{ fontSize: '1.2rem' }}>Borrow %</div>
               </Grid>
               <Grid item xs={3}>
-                <div style={{ fontSize: '1.2rem' }}>Lend</div>
+                <div style={{ fontSize: '1.2rem' }}>Lend %</div>
               </Grid>
               <Grid item xs={3}>
                 <div style={{ fontSize: '1.2rem' }}>Amount</div>
@@ -129,7 +208,13 @@ export default function Book() {
               <Grid item xs={3}>
                 <Input
                   onChange={(e) => {
-                    setb3m(Number(e.target.value));
+                    let val = e.target.value;
+
+                    if (!isNumber(val) && val !== '') {
+                      return;
+                    }
+
+                    setb3m(val);
                   }}
                   inputProps={{ 'aria-label': 'description' }}
                   value={b3m}
@@ -138,7 +223,13 @@ export default function Book() {
               <Grid item xs={3}>
                 <Input
                   onChange={(e) => {
-                    setl3m(Number(e.target.value));
+                    let val = e.target.value;
+
+                    if (!isNumber(val) && val !== '') {
+                      return;
+                    }
+
+                    setl3m(val);
                   }}
                   inputProps={{ 'aria-label': 'description' }}
                   value={l3m}
@@ -147,10 +238,17 @@ export default function Book() {
               <Grid item xs={3}>
                 <Input
                   onChange={(e) => {
-                    seta3m(Number(e.target.value));
+                    let val = e.target.value;
+
+                    if (!isNumber(val) && val !== '') {
+                      return;
+                    }
+
+                    seta3m(val);
                   }}
                   inputProps={{ 'aria-label': 'description' }}
                   value={a3m}
+                  style={{ background: 'red' }}
                 />
               </Grid>
             </Grid>
@@ -161,7 +259,13 @@ export default function Book() {
               <Grid item xs={3}>
                 <Input
                   onChange={(e) => {
-                    setb6m(Number(e.target.value));
+                    let val = e.target.value;
+
+                    if (!isNumber(val) && val !== '') {
+                      return;
+                    }
+
+                    setb6m(val);
                   }}
                   inputProps={{ 'aria-label': 'description' }}
                   value={b6m}
@@ -170,7 +274,13 @@ export default function Book() {
               <Grid item xs={3}>
                 <Input
                   onChange={(e) => {
-                    setl6m(Number(e.target.value));
+                    let val = e.target.value;
+
+                    if (!isNumber(val) && val !== '') {
+                      return;
+                    }
+
+                    setl6m(val);
                   }}
                   inputProps={{ 'aria-label': 'description' }}
                   value={l6m}
@@ -179,7 +289,13 @@ export default function Book() {
               <Grid item xs={3}>
                 <Input
                   onChange={(e) => {
-                    seta6m(Number(e.target.value));
+                    let val = e.target.value;
+
+                    if (!isNumber(val) && val !== '') {
+                      return;
+                    }
+
+                    seta6m(val);
                   }}
                   inputProps={{ 'aria-label': 'description' }}
                   value={a6m}
@@ -193,7 +309,13 @@ export default function Book() {
               <Grid item xs={3}>
                 <Input
                   onChange={(e) => {
-                    setb1y(Number(e.target.value));
+                    let val = e.target.value;
+
+                    if (!isNumber(val) && val !== '') {
+                      return;
+                    }
+
+                    setb1y(val);
                   }}
                   inputProps={{ 'aria-label': 'description' }}
                   value={b1y}
@@ -202,7 +324,13 @@ export default function Book() {
               <Grid item xs={3}>
                 <Input
                   onChange={(e) => {
-                    setl1y(Number(e.target.value));
+                    let val = e.target.value;
+
+                    if (!isNumber(val) && val !== '') {
+                      return;
+                    }
+
+                    setl1y(val);
                   }}
                   inputProps={{ 'aria-label': 'description' }}
                   value={l1y}
@@ -211,7 +339,13 @@ export default function Book() {
               <Grid item xs={3}>
                 <Input
                   onChange={(e) => {
-                    seta1y(Number(e.target.value));
+                    let val = e.target.value;
+
+                    if (!isNumber(val) && val !== '') {
+                      return;
+                    }
+
+                    seta1y(val);
                   }}
                   inputProps={{ 'aria-label': 'description' }}
                   value={a1y}
@@ -225,7 +359,13 @@ export default function Book() {
               <Grid item xs={3}>
                 <Input
                   onChange={(e) => {
-                    setb2y(Number(e.target.value));
+                    let val = e.target.value;
+
+                    if (!isNumber(val) && val !== '') {
+                      return;
+                    }
+
+                    setb2y(val);
                   }}
                   inputProps={{ 'aria-label': 'description' }}
                   value={b2y}
@@ -234,7 +374,13 @@ export default function Book() {
               <Grid item xs={3}>
                 <Input
                   onChange={(e) => {
-                    setl2y(Number(e.target.value));
+                    let val = e.target.value;
+
+                    if (!isNumber(val) && val !== '') {
+                      return;
+                    }
+
+                    setl2y(val);
                   }}
                   inputProps={{ 'aria-label': 'description' }}
                   value={l2y}
@@ -243,7 +389,13 @@ export default function Book() {
               <Grid item xs={3}>
                 <Input
                   onChange={(e) => {
-                    seta2y(Number(e.target.value));
+                    let val = e.target.value;
+
+                    if (!isNumber(val) && val !== '') {
+                      return;
+                    }
+
+                    seta2y(val);
                   }}
                   inputProps={{ 'aria-label': 'description' }}
                   value={a2y}
@@ -257,7 +409,13 @@ export default function Book() {
               <Grid item xs={3}>
                 <Input
                   onChange={(e) => {
-                    setb3y(Number(e.target.value));
+                    let val = e.target.value;
+
+                    if (!isNumber(val) && val !== '') {
+                      return;
+                    }
+
+                    setb3y(val);
                   }}
                   inputProps={{ 'aria-label': 'description' }}
                   value={b3y}
@@ -266,7 +424,13 @@ export default function Book() {
               <Grid item xs={3}>
                 <Input
                   onChange={(e) => {
-                    setl3y(Number(e.target.value));
+                    let val = e.target.value;
+
+                    if (!isNumber(val) && val !== '') {
+                      return;
+                    }
+
+                    setl3y(val);
                   }}
                   inputProps={{ 'aria-label': 'description' }}
                   value={l3y}
@@ -275,7 +439,13 @@ export default function Book() {
               <Grid item xs={3}>
                 <Input
                   onChange={(e) => {
-                    seta3y(Number(e.target.value));
+                    let val = e.target.value;
+
+                    if (!isNumber(val) && val !== '') {
+                      return;
+                    }
+
+                    seta3y(val);
                   }}
                   inputProps={{ 'aria-label': 'description' }}
                   value={a3y}
@@ -289,7 +459,13 @@ export default function Book() {
               <Grid item xs={3}>
                 <Input
                   onChange={(e) => {
-                    setb5y(Number(e.target.value));
+                    let val = e.target.value;
+
+                    if (!isNumber(val) && val !== '') {
+                      return;
+                    }
+
+                    setb5y(val);
                   }}
                   inputProps={{ 'aria-label': 'description' }}
                   value={b5y}
@@ -298,7 +474,13 @@ export default function Book() {
               <Grid item xs={3}>
                 <Input
                   onChange={(e) => {
-                    setl5y(Number(e.target.value));
+                    let val = e.target.value;
+
+                    if (!isNumber(val) && val !== '') {
+                      return;
+                    }
+
+                    setl5y(val);
                   }}
                   inputProps={{ 'aria-label': 'description' }}
                   value={l5y}
@@ -307,7 +489,13 @@ export default function Book() {
               <Grid item xs={3}>
                 <Input
                   onChange={(e) => {
-                    seta5y(Number(e.target.value));
+                    let val = e.target.value;
+
+                    if (!isNumber(val) && val !== '') {
+                      return;
+                    }
+
+                    seta5y(val);
                   }}
                   inputProps={{ 'aria-label': 'description' }}
                   value={a5y}
@@ -321,16 +509,71 @@ export default function Book() {
               justify="center"
               alignItems="center"
               className={classes.loanBookBtn}
+              direction="column"
             >
-              <Button variant="contained" color="primary">
-                Set Loan Book
-              </Button>
+              <Grid item>
+                <Box
+                  m={1}
+                  className={clsx(
+                    !isLoanLoading && classes.hidden,
+                    classes.progressLoan,
+                  )}
+                >
+                  <LinearProgress color="secondary" />
+                </Box>
+              </Grid>
+              <Grid item>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={async () => {
+                    setisLoanLoading(true);
+                    try {
+                      const result = await contract.moneymarketContract.methods
+                        .setMoneyMarketBook(
+                          ccy,
+                          [
+                            [0, parseInt(a3m), 1],
+                            [1, parseInt(a6m), 1],
+                            [2, parseInt(a1y), 1],
+                            [3, parseInt(a2y), 1],
+                            [4, parseInt(a3y), 1],
+                            [5, parseInt(a5y), 1],
+                          ],
+                          [
+                            [0, parseInt(a3m), 1],
+                            [1, parseInt(a6m), 1],
+                            [2, parseInt(a1y), 1],
+                            [3, parseInt(a2y), 1],
+                            [4, parseInt(a3y), 1],
+                            [5, parseInt(a5y), 1],
+                          ],
+                          3600,
+                        )
+                        .send({
+                          from: '0xdC4B87B1b7a3cCFb5d9e85C09a59923C0F6cdAFc',
+                          gas: 3000000,
+                        });
+
+                      setisLoanShow(true);
+                      setisLoanSuccess(true);
+                      resetLoan();
+                    } catch (e) {
+                      setisLoanShow(true);
+                      setisLoanSuccess(false);
+                    }
+                    setisLoanLoading(false);
+                  }}
+                >
+                  Set Loan Book
+                </Button>
+              </Grid>
             </Grid>
           </Grid>
           {/* RIght side */}
           <Grid item xs={3} className={classes.right}>
-            <Grid item >            
-              <Grid container direction="column" style={{marginBottom:30}}>
+            <Grid item>
+              <Grid container direction="column" style={{ marginBottom: 30 }}>
                 <Box>
                   <Typography
                     variant="h4"
@@ -345,7 +588,7 @@ export default function Book() {
                 </Box>
                 <Box>
                   <Alert
-                  variant="outlined"
+                    variant="outlined"
                     severity={isFxSuccess ? 'success' : 'error'}
                     className={clsx(!isFxShow && classes.hidden)}
                   >
@@ -378,7 +621,16 @@ export default function Book() {
                         required
                         className={classes.ccy}
                         value={buyFilVal}
-                        onChange={(e) => setbuyFilVal(Number(e.target.value))}
+                        onChange={(e) => {
+                          if (
+                            !isNumber(e.target.value) &&
+                            e.target.value !== ''
+                          ) {
+                            return;
+                          }
+
+                          setbuyFilVal(Number(e.target.value));
+                        }}
                       />
                     </Grid>
                     <Grid item xs={6}>
@@ -388,7 +640,16 @@ export default function Book() {
                         required
                         className={classes.ccy}
                         value={sellEthVal}
-                        onChange={(e) => setsellEthVal(Number(e.target.value))}
+                        onChange={(e) => {
+                          if (
+                            !isNumber(e.target.value) &&
+                            e.target.value !== ''
+                          ) {
+                            return;
+                          }
+
+                          setsellEthVal(e.target.value);
+                        }}
                       />
                     </Grid>
                   </Grid>
@@ -412,7 +673,15 @@ export default function Book() {
                         required
                         className={classes.ccy}
                         value={sellFilVal}
-                        onChange={(e) => setsellFilVal(Number(e.target.value))}
+                        onChange={(e) => {
+                          if (
+                            !isNumber(e.target.value) &&
+                            e.target.value !== ''
+                          ) {
+                            return;
+                          }
+                          setsellFilVal(e.target.value);
+                        }}
                       />
                     </Grid>
                     <Grid item xs={6}>
@@ -422,7 +691,15 @@ export default function Book() {
                         required
                         className={classes.ccy}
                         value={buyEthVal}
-                        onChange={(e) => setbuyEthVal(Number(e.target.value))}
+                        onChange={(e) => {
+                          if (
+                            !isNumber(e.target.value) &&
+                            e.target.value !== ''
+                          ) {
+                            return;
+                          }
+                          setbuyEthVal(e.target.value);
+                        }}
                       />
                     </Grid>
                   </Grid>
@@ -443,8 +720,18 @@ export default function Book() {
                         const result = await contract.fxContract.methods
                           .setFXBook(
                             0,
-                            [1, 0, buyFilVal, sellEthVal],
-                            [0, 1, sellFilVal, buyEthVal],
+                            [
+                              1,
+                              0,
+                              buyFilVal ? Number(buyFilVal) : 0,
+                              sellEthVal ? Number(sellEthVal) : 0,
+                            ],
+                            [
+                              0,
+                              1,
+                              sellFilVal ? Number(sellFilVal) : 0,
+                              buyEthVal ? Number(buyEthVal) : 0,
+                            ],
                             3600,
                           )
                           .send({
@@ -452,11 +739,18 @@ export default function Book() {
                             gas: 3000000,
                           });
 
-                        console.log('result', result);
-                      } catch (e) {}
-                      setisFxLoading(false);
+                        setisFxShow(true);
+                        setisFxSuccess(true);
+                        resetFx();
 
-                      // setbuyFilVal('');
+                        console.log('result', result);
+                      } catch (e) {
+                        setisFxShow(true);
+                        setisFxSuccess(false);
+
+                        console.log('err tr', e);
+                      }
+                      setisFxLoading(false);
                     }}
                   >
                     Set FX
@@ -467,6 +761,20 @@ export default function Book() {
           </Grid>
         </Grid>
       </Container>
+      <Snackbar
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+        open={isLoanShow}
+        onClose={() => {
+          setisLoanShow(false);
+        }}
+        key={'topcenter'}
+        autoHideDuration={3000}
+        style={{ padding: 30 }}
+      >
+        <Alert severity={isLoanSuccess ? 'success' : 'error'}>
+          {isLoanSuccess ? 'Loan is set!' : 'Error'}
+        </Alert>
+      </Snackbar>
     </Paper>
   );
 }
