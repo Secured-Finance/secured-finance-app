@@ -38,7 +38,7 @@ export default function Right(props) {
     setTabValue(tabs[index]);
   };
 
-  const tabs = ['3m', '6m', '1y', '2y', '3y'];
+  const tabs = ['3m', '6m', '1y', '2y', '3y', '5y'];
 
   const { res } = props;
 

@@ -34,7 +34,7 @@ export default function MoneyMKT(props) {
   const [res, setRes] = useState({});
 
   const data = {
-    labels: ['3m', '6m', '1y', '2y', '3y'],
+    labels: ['3m', '6m', '1y', '2y', '3y','5y'],
     datasets: [
       {
         label: 'Lend',
