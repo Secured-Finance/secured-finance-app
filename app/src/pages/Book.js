@@ -248,7 +248,6 @@ export default function Book() {
                   }}
                   inputProps={{ 'aria-label': 'description' }}
                   value={a3m}
-                  style={{ background: 'red' }}
                 />
               </Grid>
             </Grid>
@@ -533,20 +532,20 @@ export default function Book() {
                         .setMoneyMarketBook(
                           ccy,
                           [
-                            [0, parseInt(a3m), 1],
-                            [1, parseInt(a6m), 1],
-                            [2, parseInt(a1y), 1],
-                            [3, parseInt(a2y), 1],
-                            [4, parseInt(a3y), 1],
-                            [5, parseInt(a5y), 1],
+                            [0, parseInt(a3m), Math.round(Number(l3m) * 100)],
+                            [1, parseInt(a6m), Math.round(Number(l6m) * 100)],
+                            [2, parseInt(a1y), Math.round(Number(l1y) * 100)],
+                            [3, parseInt(a2y), Math.round(Number(l2y) * 100)],
+                            [4, parseInt(a3y), Math.round(Number(l3y) * 100)],
+                            [5, parseInt(a5y), Math.round(Number(l5y) * 100)],
                           ],
                           [
-                            [0, parseInt(a3m), 1],
-                            [1, parseInt(a6m), 1],
-                            [2, parseInt(a1y), 1],
-                            [3, parseInt(a2y), 1],
-                            [4, parseInt(a3y), 1],
-                            [5, parseInt(a5y), 1],
+                            [0, parseInt(a3m), Math.round(Number(b3m) * 100)],
+                            [1, parseInt(a6m), Math.round(Number(b6m) * 100)],
+                            [2, parseInt(a1y), Math.round(Number(b1y) * 100)],
+                            [3, parseInt(a2y), Math.round(Number(b2y) * 100)],
+                            [4, parseInt(a3y), Math.round(Number(b3y) * 100)],
+                            [5, parseInt(a5y), Math.round(Number(b5y) * 100)],
                           ],
                           3600,
                         )
