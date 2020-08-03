@@ -771,7 +771,7 @@ export default function Book() {
         style={{ padding: 30 }}
       >
         <Alert severity={isLoanSuccess ? 'success' : 'error'}>
-          {isLoanSuccess ? 'Loan is set!' : 'Error'}
+          {isLoanSuccess ? 'Loan Book is set!' : 'Error'}
         </Alert>
       </Snackbar>
     </Paper>
