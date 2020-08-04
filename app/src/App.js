@@ -45,12 +45,11 @@ const FxContext = React.createContext(null);
 
 function App() {
   const classes = useStyles();
-  const [account, setaccount] = useState(null);
   const web3Ref = useRef(null);
   const moneymarketContractRef = useRef(null);
   const fxContractRef = useRef(null);
 
-  const [count, setcount] = useState(0);
+  const [account, setaccount] = useState(null);
 
   useEffect(() => {
     (async () => {
@@ -77,7 +76,7 @@ function App() {
      
       web3Ref.current = new Web3(web3Provider); //Web3.givenProvider || "http://localhost:9545"
       const accounts = await web3Ref.current.eth.getAccounts();
-      // setaccount(accounts[0]);
+      setaccount(accounts[0]);
       web3Ref.current.eth.defaultAccount =
         '0xdC4B87B1b7a3cCFb5d9e85C09a59923C0F6cdAFc';
       moneymarketContractRef.current = new web3Ref.current.eth.Contract(
@@ -102,7 +101,6 @@ function App() {
 
       console.dir(moneymarketContractRef.current);
 
-      setcount((c) => c + 1);
     })();
 
     return () => {};
@@ -115,6 +113,7 @@ function App() {
           moneymarketContract: moneymarketContractRef.current,
           fxContract: fxContractRef.current,
           web3: web3Ref.current,
+          account:account
         }}
       >
         <CssBaseline />

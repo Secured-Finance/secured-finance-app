@@ -140,6 +140,7 @@ export default function Book() {
     setb2y('');
     setl2y('');
     seta2y('');
+    setb3y('');
     setl3y('');
     seta3y('');
     setb5y('');
@@ -550,7 +551,7 @@ export default function Book() {
                           3600,
                         )
                         .send({
-                          from: '0xdC4B87B1b7a3cCFb5d9e85C09a59923C0F6cdAFc',
+                          from: contract.account,
                           gas: 3000000,
                         });
 
@@ -734,7 +735,7 @@ export default function Book() {
                             3600,
                           )
                           .send({
-                            from: '0xdC4B87B1b7a3cCFb5d9e85C09a59923C0F6cdAFc',
+                            from: contract.account,
                             gas: 3000000,
                           });
 

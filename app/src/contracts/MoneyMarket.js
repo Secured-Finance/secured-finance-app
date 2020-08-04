@@ -1,4 +1,4 @@
-export const MoneyMarket_address = '0x14d260e77a0F7627fA0a4fF63C369F7Fd919ee74';
+export const MoneyMarket_address = '0xC2B09Bfdac5deC15a15E37c9E0E010bc6fE0e9BD';
 
 export const MoneyMarket_ABI = [
   {

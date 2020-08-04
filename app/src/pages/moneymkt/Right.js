@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext, useEffect } from 'react';
 import { Tabs, Tab, makeStyles } from '@material-ui/core';
 import {
   BrowserRouter as Router,
@@ -11,6 +11,7 @@ import {
   Redirect,
 } from 'react-router-dom';
 import Duration from './Duration';
+import { ContractContext } from '../../App';
 
 const useStyles = makeStyles((theme) => ({
   tab: {
@@ -32,6 +33,8 @@ export default function Right(props) {
   const [tabValue, setTabValue] = React.useState('3m');
   let { url } = useRouteMatch();
   const classes = useStyles();
+  const contract = useContext(ContractContext);
+
 
   const handleChange = (event, index) => {
     console.log('handleChange', tabValue);
@@ -52,6 +55,19 @@ export default function Right(props) {
       ),
     };
   }
+
+  useEffect(() => {
+    if(contract.moneymarketContract){
+      const x=contract.moneymarketContract.methods.getAllBooks().call().then(r=>{
+
+        console.log('ccc',r)
+      })
+
+    }
+    return () => {
+      
+    }
+  })
 
   return (
     <div>
