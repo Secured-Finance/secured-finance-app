@@ -58,14 +58,14 @@ export default function Duration(props) {
           <div className={classes.midPrice}>% {average}</div>
         </Grid>
         <Grid item xs={6}>
-          <div style={{ fontSize: '1.5rem' }}>Borrow</div>
+          <div style={{ fontSize: '1.5rem' }}>Borrowers</div>
           <ReactVirtualizedTable
             rows={borrows}
             columns={[
               {
                 width: 100,
-                label: 'Size',
-                dataKey: 'size',
+                label: 'Amount',
+                dataKey: 'amount',
                 flexGrow: 1,
               },
               {
@@ -78,14 +78,14 @@ export default function Duration(props) {
           />
         </Grid>
         <Grid item xs={6}>
-          <div style={{ fontSize: '1.5rem' }}>Lend</div>
+          <div style={{ fontSize: '1.5rem' }}>Lenders</div>
           <ReactVirtualizedTable
             rows={lends}
             columns={[
               {
                 width: 100,
-                label: 'Size',
-                dataKey: 'size',
+                label: 'Amount',
+                dataKey: 'amount',
                 flexGrow: 1,
               },
               {

@@ -149,7 +149,7 @@ export default function ReactVirtualizedTable(props) {
   const {rows,columns}=props
 
   return (
-    <div style={{ height: 400 }}>
+    <div style={{ height: 200 }}>
       <VirtualizedTable
         rowCount={rows.length}
         rowGetter={({ index }) => rows[index]}

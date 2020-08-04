@@ -29,7 +29,7 @@ function a11yProps(index) {
   };
 }
 
-const ccyPairs=['ETH', 'FIL']
+const ccyPairs = ['ETH', 'FIL'];
 
 export default function Right(props) {
   const [tabValue, setTabValue] = React.useState('3m');
@@ -37,7 +37,6 @@ export default function Right(props) {
   let { url } = useRouteMatch();
   const classes = useStyles();
   const contract = useContext(ContractContext);
-
 
   const handleChange = (event, index) => {
     console.log('handleChange', tabValue);
@@ -50,41 +49,74 @@ export default function Right(props) {
 
   let orderbook = { lenderbook: [], borrowerbook: [] };
 
-  if (res.loan) {
-    orderbook = {
-      lenderbook: res.loan.FIL.lenderbook.filter((l) => l.term === tabValue),
-      borrowerbook: res.loan.FIL.borrowerbook.filter(
-        (l) => l.term === tabValue,
-      ),
-    };
+  let borrowers = {};
+  let lenders = {};
 
-    let borrowers=[]
-    let lenders=[]
-
-    for(let book of allBooks){
-      console.log("allboo",book.borrowers)
-      break
-    }
-
-    console.log('orderbook',orderbook)
+  for (const tab of tabs) {
+    borrowers[tab] = [];
+    lenders[tab] = [];
   }
 
+  if (res.loan) {
+    // orderbook = {
+    //   lenderbook: res.loan.FIL.lenderbook.filter((l) => l.term === tabValue),
+    //   borrowerbook: res.loan.FIL.borrowerbook.filter(
+    //     (l) => l.term === tabValue,
+    //   ),
+    // };
+
+    for (let book of allBooks) {
+      const curr_borrowers = book.borrowers[parseInt(contract.currentCurrency)];
+      const curr_lenders = book.lenders[parseInt(contract.currentCurrency)];
+      console.log('allboo', curr_borrowers);
+
+      for (let borrower of curr_borrowers) {
+        console.log('allboo 1', borrower);
+        const termIndex = tabs[parseInt(borrower[0])];
+        borrowers[termIndex] = borrowers[termIndex].concat({
+          term: parseInt(borrower[0]),
+          amount: parseInt(borrower[1]),
+          rate: parseInt(borrower[2]) / 100,
+          goodtil: parseInt(borrower[3]),
+          addr: borrower[5],
+        });
+      }
+
+      for (let lender of curr_lenders) {
+        console.log('allboo 1', lender);
+        const termIndex = tabs[parseInt(lender[0])];
+        lenders[termIndex] = lenders[termIndex].concat({
+          term: parseInt(lender[0]),
+          amount: parseInt(lender[1]),
+          rate: parseInt(lender[2]) / 100,
+          goodtil: parseInt(lender[3]),
+          addr: lender[5],
+        });
+      }
+      console.log('allboo 2', borrowers, lenders);
+      // break
+    }
+  }
+
+  orderbook = {
+    lenderbook: lenders[tabValue],
+    borrowerbook: borrowers[tabValue],
+  };
+
   useEffect(() => {
-    if(contract.moneymarketContract){
-      const x=contract.moneymarketContract.methods.getAllBooks().call().then(r=>{
-
-        console.log('ccc',r)
-        setallBooks(r)
-
-      })
-
+    if (contract.moneymarketContract) {
+      const x = contract.moneymarketContract.methods
+        .getAllBooks()
+        .call()
+        .then((r) => {
+          console.log('ccc', r);
+          setallBooks(r);
+        });
     }
-    return () => {
-      
-    }
-  },[tabValue,contract])
+    return () => {};
+  }, [tabValue, contract]);
 
-  console.log('allBooks',allBooks);
+  console.log('allBooks', allBooks);
 
   return (
     <div>
@@ -111,7 +143,6 @@ export default function Right(props) {
         <Route exact path={`/moneymkt/:duration`}>
           <Duration orderbook={orderbook} />
         </Route>
-       
       </Switch>
     </div>
   );
