@@ -29,6 +29,8 @@ function a11yProps(index) {
   };
 }
 
+const ccyPairs=['ETH', 'FIL']
+
 export default function Right(props) {
   const [tabValue, setTabValue] = React.useState('3m');
   const [allBooks, setallBooks] = React.useState([]);
@@ -55,6 +57,16 @@ export default function Right(props) {
         (l) => l.term === tabValue,
       ),
     };
+
+    let borrowers=[]
+    let lenders=[]
+
+    for(let book of allBooks){
+      console.log("allboo",book.borrowers)
+      break
+    }
+
+    console.log('orderbook',orderbook)
   }
 
   useEffect(() => {

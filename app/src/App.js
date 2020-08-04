@@ -50,7 +50,7 @@ function App() {
   const fxContractRef = useRef(null);
 
   const [account, setaccount] = useState(null);
-  const [currentCurrency, setCurrentCurrency] = useState('FIL');
+  const [currentCurrency, setCurrentCurrency] = useState('1');
 
   useEffect(() => {
     (async () => {

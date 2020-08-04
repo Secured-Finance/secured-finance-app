@@ -107,11 +107,11 @@ export default function Navbar(props) {
               value={props.currentCurrency}
               style={{ height: 30 }}
               onChange={(e) => {
-                props.setCurrentCurrency(e.target.value);
+                props.setCurrentCurrency((e.target.value));
               }}
             >
-              <option value="FIL">FIL</option>
-              <option value="ETH">ETH</option>
+              <option value="1">FIL</option>
+              <option value="0">ETH</option>
             </select>
           </Box>
 

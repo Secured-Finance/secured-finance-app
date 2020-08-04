@@ -120,7 +120,7 @@ export default function Book() {
   const contract = useContext(ContractContext);
 
   console.log('contract', contract);
-  console.log('numb', isNumber('1.'));
+  console.log('numb', typeof contract.currentCurrency);
 
   if (contract.web3) {
     contract.web3.eth
@@ -536,7 +536,7 @@ export default function Book() {
                     try {
                       const result = await contract.moneymarketContract.methods
                         .setMoneyMarketBook(
-                          ['ETH', 'FIL'].indexOf(contract.currentCurrency),
+                          Number(contract.currentCurrency),
                           [
                             [0, parseInt(a3m), Math.round(Number(l3m) * 100)],
                             [1, parseInt(a6m), Math.round(Number(l6m) * 100)],
