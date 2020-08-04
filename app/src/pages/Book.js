@@ -25,8 +25,8 @@ import { ContractContext } from '../App';
 const useStyles = makeStyles((theme) => ({
   root: {
     margin: theme.spacing(2),
-    paddingTop: theme.spacing(8),
-    paddingBottom: theme.spacing(8),
+    paddingTop: theme.spacing(3),
+    paddingBottom: theme.spacing(3),
   },
   loanBookBtn: {
     padding: theme.spacing(4),
@@ -54,31 +54,55 @@ const useStyles = makeStyles((theme) => ({
     minWidth: 200,
   },
   titleContainer: {
-    // marginBottom:40,
+    marginBottom: 20,
     position: 'relative',
   },
 }));
 
 export default function Book() {
   const classes = useStyles();
-  const [b3m, setb3m] = useState('');
-  const [l3m, setl3m] = useState('');
-  const [a3m, seta3m] = useState('');
-  const [b6m, setb6m] = useState('');
-  const [l6m, setl6m] = useState('');
-  const [a6m, seta6m] = useState('');
-  const [b1y, setb1y] = useState('');
-  const [l1y, setl1y] = useState('');
-  const [a1y, seta1y] = useState('');
-  const [b2y, setb2y] = useState('');
-  const [l2y, setl2y] = useState('');
-  const [a2y, seta2y] = useState('');
-  const [b3y, setb3y] = useState('');
-  const [l3y, setl3y] = useState('');
-  const [a3y, seta3y] = useState('');
-  const [b5y, setb5y] = useState('');
-  const [l5y, setl5y] = useState('');
-  const [a5y, seta5y] = useState('');
+  const [b3m, setb3m] = useState(
+    Math.round((Math.random() + 1) * 100) / 100 + '',
+  );
+  const [l3m, setl3m] = useState(
+    Math.round((Math.random() + 1) * 100) / 100 + '',
+  );
+  const [a3m, seta3m] = useState(Math.round(Math.random() * 1000) + '');
+  const [b6m, setb6m] = useState(
+    Math.round((Math.random() + 1) * 100) / 100 + '',
+  );
+  const [l6m, setl6m] = useState(
+    Math.round((Math.random() + 1) * 100) / 100 + '',
+  );
+  const [a6m, seta6m] = useState(Math.round(Math.random() * 1000) + '');
+  const [b1y, setb1y] = useState(
+    Math.round((Math.random() + 1) * 100) / 100 + '',
+  );
+  const [l1y, setl1y] = useState(
+    Math.round((Math.random() + 1) * 100) / 100 + '',
+  );
+  const [a1y, seta1y] = useState(Math.round(Math.random() * 1000) + '');
+  const [b2y, setb2y] = useState(
+    Math.round((Math.random() + 1) * 100) / 100 + '',
+  );
+  const [l2y, setl2y] = useState(
+    Math.round((Math.random() + 1) * 100) / 100 + '',
+  );
+  const [a2y, seta2y] = useState(Math.round(Math.random() * 1000) + '');
+  const [b3y, setb3y] = useState(
+    Math.round((Math.random() + 1) * 100) / 100 + '',
+  );
+  const [l3y, setl3y] = useState(
+    Math.round((Math.random() + 1) * 100) / 100 + '',
+  );
+  const [a3y, seta3y] = useState(Math.round(Math.random() * 1000) + '');
+  const [b5y, setb5y] = useState(
+    Math.round((Math.random() + 1) * 100) / 100 + '',
+  );
+  const [l5y, setl5y] = useState(
+    Math.round((Math.random() + 1) * 100) / 100 + '',
+  );
+  const [a5y, seta5y] = useState(Math.round(Math.random() * 1000) + '');
   const [buyFilVal, setbuyFilVal] = useState('');
   const [sellEthVal, setsellEthVal] = useState('');
   const [sellFilVal, setsellFilVal] = useState('');
@@ -94,8 +118,6 @@ export default function Book() {
   const [isLoanSuccess, setisLoanSuccess] = useState(false);
 
   const contract = useContext(ContractContext);
-
-  const [ccy, setccy] = useState(0);
 
   console.log('contract', contract);
   console.log('numb', isNumber('1.'));
@@ -165,25 +187,7 @@ export default function Book() {
                 Loan
               </Typography>
             </Grid>
-            <Grid container style={{ marginBottom: 30 }} justify="center">
-              <Grid item>
-                <FormControl variant="standard" className={classes.formControl}>
-                  <InputLabel id="demo-simple-select-label">
-                    Currency
-                  </InputLabel>
-                  <Select
-                    id="demo-simple-select-outlined"
-                    value={ccy}
-                    onChange={(e) => {
-                      setccy(Number(e.target.value));
-                    }}
-                  >
-                    <MenuItem value={0}>ETH</MenuItem>
-                    <MenuItem value={1}>FIL</MenuItem>
-                  </Select>
-                </FormControl>
-              </Grid>
-            </Grid>
+
             <Grid container spacing={3}>
               <Grid item xs={2}></Grid>
               <Grid item xs={3}>
@@ -528,10 +532,11 @@ export default function Book() {
                   color="primary"
                   onClick={async () => {
                     setisLoanLoading(true);
+                    console.log('setMoneyMarketBook', contract.currentCurrency);
                     try {
                       const result = await contract.moneymarketContract.methods
                         .setMoneyMarketBook(
-                          ccy,
+                          ['ETH', 'FIL'].indexOf(contract.currentCurrency),
                           [
                             [0, parseInt(a3m), Math.round(Number(l3m) * 100)],
                             [1, parseInt(a6m), Math.round(Number(l6m) * 100)],
@@ -714,7 +719,15 @@ export default function Book() {
                     variant="contained"
                     color="secondary"
                     onClick={async () => {
-                      console.log('setFX');
+                      console.log(
+                        'setFX',
+                        contract.account,
+                        buyFilVal,
+                        sellEthVal,
+                        sellFilVal,
+                        buyEthVal,
+                      );
+
                       setisFxLoading(true);
                       try {
                         const result = await contract.fxContract.methods

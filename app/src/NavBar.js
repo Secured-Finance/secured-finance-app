@@ -13,7 +13,14 @@ import {
   Box,
 } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
-import { BrowserRouter as Router, Switch, Route, Link, useLocation } from 'react-router-dom';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link,
+  useLocation,
+} from 'react-router-dom';
+import logo from './logo.jpeg';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -32,9 +39,11 @@ const useStyles = makeStyles((theme) => ({
   },
   navs: {
     display: 'flex',
+    alignItems: 'center',
   },
   toolbar: {
     justifyContent: 'space-between',
+    alignItems: 'center',
   },
 }));
 
@@ -49,42 +58,63 @@ const tabs = ['MoneyMKT', 'Swap', 'FX', 'Book', 'History'];
 
 export default function Navbar(props) {
   let location = useLocation();
-  let word=location.pathname.slice(1)
-  if(location.pathname.slice(1).indexOf('/')!==-1){
-    const end=location.pathname.slice(1).indexOf('/')
-    word=location.pathname.slice(1,end+1)
+  let word = location.pathname.slice(1);
+  if (location.pathname.slice(1).indexOf('/') !== -1) {
+    const end = location.pathname.slice(1).indexOf('/');
+    word = location.pathname.slice(1, end + 1);
   }
 
-  if(location.pathname.length===1){
-    word="moneymkt"
+  if (location.pathname.length === 1) {
+    word = 'moneymkt';
   }
-  console.log('word',word, tabs.map(t=>t.toLowerCase()).indexOf(word))
+  console.log('word', word, tabs.map((t) => t.toLowerCase()).indexOf(word));
   const classes = useStyles();
-  const [value, setValue] = React.useState(tabs.map(t=>t.toLowerCase()).indexOf(word));
-  console.log('classes', tabs.map(t=>t.toLowerCase()).indexOf(word));
+  const [value, setValue] = React.useState(
+    tabs.map((t) => t.toLowerCase()).indexOf(word),
+  );
+  console.log('classes', tabs.map((t) => t.toLowerCase()).indexOf(word));
 
   const handleChange = (event, newValue) => {
-    console.log("new",newValue);
+    console.log('new', newValue);
     setValue(newValue);
   };
-
 
   return (
     <div className={classes.root}>
       <AppBar position="static" color="default">
         <Toolbar component="nav" variant="regular" className={classes.toolbar}>
-          <Box className={classes.navs} component={Link} to="/moneymkt">
-            <Avatar
-              alt="Secured Finance"
-              src="./logo.jpeg"
-              className={classes.logo}
-            />
-            <Button>
-              <Typography variant="h6" className={classes.title}>
-                Secured Finance
-              </Typography>
-            </Button>
+          <Box className={classes.navs}>
+            <Box
+              component={Link}
+              to="/moneymkt/3m"
+              className={classes.navs}
+              style={{ marginRight: 10 }}
+            >
+              <Avatar
+                alt="Secured Finance"
+                src={logo}
+                className={classes.logo}
+              />
+              <Button>
+                <Typography variant="h6" className={classes.title}>
+                  Secured Finance
+                </Typography>
+              </Button>
+            </Box>
+            <select
+              name=""
+              id=""
+              value={props.currentCurrency}
+              style={{ height: 30 }}
+              onChange={(e) => {
+                props.setCurrentCurrency(e.target.value);
+              }}
+            >
+              <option value="FIL">FIL</option>
+              <option value="ETH">ETH</option>
+            </select>
           </Box>
+
           <Tabs
             value={value}
             onChange={handleChange}

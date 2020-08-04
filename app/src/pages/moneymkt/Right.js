@@ -31,6 +31,7 @@ function a11yProps(index) {
 
 export default function Right(props) {
   const [tabValue, setTabValue] = React.useState('3m');
+  const [allBooks, setallBooks] = React.useState([]);
   let { url } = useRouteMatch();
   const classes = useStyles();
   const contract = useContext(ContractContext);
@@ -61,13 +62,17 @@ export default function Right(props) {
       const x=contract.moneymarketContract.methods.getAllBooks().call().then(r=>{
 
         console.log('ccc',r)
+        setallBooks(r)
+
       })
 
     }
     return () => {
       
     }
-  })
+  },[tabValue,contract])
+
+  console.log('allBooks',allBooks);
 
   return (
     <div>
