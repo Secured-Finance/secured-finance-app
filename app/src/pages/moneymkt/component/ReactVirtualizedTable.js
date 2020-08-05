@@ -25,15 +25,23 @@ const styles = (theme) => ({
   },
   tableRowHover: {
     '&:hover': {
-      backgroundColor: theme.palette.grey[200],
+      // backgroundColor: theme.palette.grey[200],
+      opacity: 0.85,
     },
   },
   tableCell: {
     flex: 1,
-    border:'0.01px solid white'
+    border: '0.01px solid white',
   },
   noClick: {
     cursor: 'initial',
+  },
+  header: {
+    background: 'black',
+    fontWeight: 'bold',
+  },
+  highlight: {
+    background: '#3498db',
   },
 });
 
@@ -43,11 +51,17 @@ class MuiVirtualizedTable extends React.PureComponent {
     rowHeight: 48,
   };
 
+  state = {
+    currIndex: null,
+  };
+
   getRowClassName = ({ index }) => {
     const { classes, onRowClick } = this.props;
+    // console.log('getRowClassName', onRowClick);
 
     return clsx(classes.tableRow, classes.flexContainer, {
       [classes.tableRowHover]: index !== -1 && onRowClick != null,
+      [classes.highlight]: index === this.state.currIndex,
     });
   };
 
@@ -61,7 +75,11 @@ class MuiVirtualizedTable extends React.PureComponent {
         })}
         variant="body"
         style={{ height: rowHeight }}
-        align={(columnIndex != null && columns[columnIndex].numeric) || false ? 'right' : 'left'}
+        align={
+          (columnIndex != null && columns[columnIndex].numeric) || false
+            ? 'right'
+            : 'left'
+        }
       >
         {cellData}
       </TableCell>
@@ -74,7 +92,12 @@ class MuiVirtualizedTable extends React.PureComponent {
     return (
       <TableCell
         component="div"
-        className={clsx(classes.tableCell, classes.flexContainer, classes.noClick)}
+        className={clsx(
+          classes.tableCell,
+          classes.flexContainer,
+          classes.noClick,
+          classes.header,
+        )}
         variant="head"
         style={{ height: headerHeight }}
         align={columns[columnIndex].numeric || false ? 'right' : 'left'}
@@ -85,7 +108,13 @@ class MuiVirtualizedTable extends React.PureComponent {
   };
 
   render() {
-    const { classes, columns, rowHeight, headerHeight, ...tableProps } = this.props;
+    const {
+      classes,
+      columns,
+      rowHeight,
+      headerHeight,
+      ...tableProps
+    } = this.props;
     return (
       <AutoSizer>
         {({ height, width }) => (
@@ -100,6 +129,14 @@ class MuiVirtualizedTable extends React.PureComponent {
             className={classes.table}
             {...tableProps}
             rowClassName={this.getRowClassName}
+            onRowClick={(r) => {
+              this.setState({
+                currIndex: r.index,
+              });
+              // {index:currIndex}
+
+              this.props.onRowClick(r);
+            }}
           >
             {columns.map(({ dataKey, ...other }, index) => {
               return (
@@ -144,16 +181,18 @@ const VirtualizedTable = withStyles(styles)(MuiVirtualizedTable);
 
 // ---
 
-
 export default function ReactVirtualizedTable(props) {
-  const {rows,columns}=props
+  const { rows, columns, onRowClick, type } = props;
 
   return (
-    <div style={{ height: 200 }}>
+    <div style={{ height: 230 }}>
       <VirtualizedTable
         rowCount={rows.length}
         rowGetter={({ index }) => rows[index]}
         columns={columns}
+        onRowClick={(r) => {
+          onRowClick(r.rowData);
+        }}
       />
     </div>
   );

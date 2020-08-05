@@ -19,6 +19,7 @@
     "react-apexcharts": "^1.3.7",
     "react-bootstrap": "^1.3.0",
     "react-chartjs-2": "^2.9.0",
+    "react-checkmark": "^1.3.0",
     "react-dom": "^16.13.1",
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.1",
