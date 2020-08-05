@@ -1,4 +1,4 @@
-export const Fx_address = '0x867Cf70245Adf1156d8058F17485e39dc46d23DF';
+export const Fx_address = '0x910bB27cB5c4e3ED6cB4535d60eBe8976F3F3E79';
 
 export const Fx_ABI = [
   {

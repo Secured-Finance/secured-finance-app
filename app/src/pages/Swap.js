@@ -2,8 +2,8 @@ import React from 'react'
 
 export default function Swap() {
   return (
-    <div>
-      Swap
+    <div style={{textAlign:'center', marginTop:20}}>
+      To be developed soon....
     </div>
   )
 }
