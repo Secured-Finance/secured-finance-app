@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import {
   makeStyles,
@@ -6,6 +6,7 @@ import {
   Grid,
   Typography,
   Box,
+  Button,
 } from '@material-ui/core';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -42,20 +43,25 @@ const useStyles = makeStyles((theme) => ({
 export default function Duration(props) {
   let { duration } = useParams();
   const classes = useStyles();
-  const { orderbook } = props;
+  const { orderbook, currentMidrate, setcurrType, setselectedRow } = props;
 
   const borrows = orderbook.borrowerbook.sort((a, b) => a.rate - b.rate);
   const lends = orderbook.lenderbook.sort((a, b) => b.rate - a.rate);
 
   const average = borrows.length ? (borrows[0].rate + lends[0].rate) / 2 : 0;
 
-  console.log('borrows', average);
+  console.log('borrows', average);  
+
+  const selRow=(rowData) => {
+    console.log('setselectedRow x', rowData);
+    setselectedRow(rowData)
+  }
 
   return (
     <div className={classes.root}>
       <Grid container spacing={3}>
         <Grid item xs={12}>
-          <div className={classes.midPrice}>% {average}</div>
+          <div className={classes.midPrice}>{currentMidrate}%</div>
         </Grid>
         <Grid item xs={6}>
           <div style={{ fontSize: '1.5rem' }}>Borrowers</div>
@@ -75,7 +81,18 @@ export default function Duration(props) {
                 numeric: true,
               },
             ]}
+            type={'lend'}
+            onRowClick={selRow}
           />
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => {
+              setcurrType('lend');
+            }}
+          >
+            Lend
+          </Button>
         </Grid>
         <Grid item xs={6}>
           <div style={{ fontSize: '1.5rem' }}>Lenders</div>
@@ -95,7 +112,17 @@ export default function Duration(props) {
                 numeric: true,
               },
             ]}
+            onRowClick={selRow}
           />
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => {
+              setcurrType('borrow');
+            }}
+          >
+            Borrow
+          </Button>
         </Grid>
       </Grid>
     </div>

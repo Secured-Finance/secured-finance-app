@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { Paper, Card, makeStyles, Grid } from '@material-ui/core';
 import { Line } from 'react-chartjs-2';
 import Right from './moneymkt/Right';
 import { useRouteMatch, Redirect } from 'react-router-dom';
 import Axios from 'axios';
-
-
+import { ContractContext } from '../App';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -26,15 +25,23 @@ const useStyles = makeStyles((theme) => ({
   graph: {
     paddingTop: 100,
   },
+  right: {
+    paddingBottom: theme.spacing(4),
+  },
 }));
 
 export default function MoneyMKT(props) {
+  const { count } = props;
   const classes = useStyles();
   let x = useRouteMatch();
   const [res, setRes] = useState({});
+  const contract = useContext(ContractContext);
+
+  const [lenderRates, setlenderRates] = useState([]);
+  const [borrowerRates, setborrowerRates] = useState([]);
 
   const data = {
-    labels: ['3m', '6m', '1y', '2y', '3y','5y'],
+    labels: ['3m', '6m', '1y', '2y', '3y', '5y'],
     datasets: [
       {
         label: 'Lend',
@@ -55,7 +62,7 @@ export default function MoneyMKT(props) {
         pointHoverBorderWidth: 1.5,
         pointRadius: 1.7,
         pointHitRadius: 5,
-        data: res.loan?res.loan.FIL.lenderbook.map(b=>b.rate):[],
+        data: lenderRates.length ? lenderRates[contract.currentCurrency].map(r=>r/100) : [],
         borderWidth: 0.5,
       },
       {
@@ -77,7 +84,7 @@ export default function MoneyMKT(props) {
         pointHoverBorderWidth: 1.5,
         pointRadius: 1.7,
         pointHitRadius: 5,
-        data: res.loan?res.loan.FIL.borrowerbook.map(b=>b.rate):[],
+        data: borrowerRates.length ? borrowerRates[contract.currentCurrency].map(r=>r/100) : [],
         borderWidth: 0.5,
       },
     ],
@@ -93,17 +100,33 @@ export default function MoneyMKT(props) {
     return () => {};
   }, []);
 
-  console.log('res',res);
+  useEffect(() => {
+    console.log('ratess');
+    (async () => {
+      if (contract.moneymarketContract) {
+        const lr = await contract.moneymarketContract.methods
+          .getLenderRates()
+          .call();
+        const br = await contract.moneymarketContract.methods
+          .getBorrowerRates()
+          .call();
+
+        setlenderRates(lr);
+        setborrowerRates(br);
+
+        console.log('ratess', lr, br);
+      }
+    })();
+    return () => {};
+  }, [count,contract]);
+
+  console.log('res', res);
 
   return (
-    <Grid container spacing={3} className={classes.gridClass}>      
-      <Redirect to="/moneymkt/3m"/>
-      
-      <Grid
-        item
-        xs={5}
-        align="center"
-      >
+    <Grid container spacing={3} className={classes.gridClass}>
+      <Redirect to="/moneymkt/3m" />
+
+      <Grid item xs={5} align="center">
         <Paper className={classes.paper}>
           <Line data={data} />
         </Paper>
@@ -112,8 +135,8 @@ export default function MoneyMKT(props) {
         </Paper>
       </Grid>
       <Grid item xs={7} className={classes.ok}>
-        <Paper>
-          <Right res={res}/>
+        <Paper className={classes.right}>
+          <Right res={res} />
         </Paper>
       </Grid>
     </Grid>

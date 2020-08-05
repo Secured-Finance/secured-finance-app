@@ -1,9 +1,9 @@
-export const MoneyMarket_address = '0x87630E3A1743d09963b9Df943651C6d6fbccbe6E';
+export const MoneyMarket_address = '0x828283D437cCff90CF2C2bE8332810646DB0BCdA';
 
 export const MoneyMarket_ABI = [
   {
     anonymous: false,
-    inputs: [
+    inputs: [ 
       {
         indexed: true,
         internalType: 'address',

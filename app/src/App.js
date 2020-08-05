@@ -23,6 +23,7 @@ import History from './pages/History';
 import Web3 from 'web3';
 import { MoneyMarket_address, MoneyMarket_ABI } from './contracts/MoneyMarket';
 import { Fx_ABI, Fx_address } from './contracts/Fx';
+import { Loan_ABI, Loan_address } from './contracts/Loan';
 
 const theme = createMuiTheme({
   palette: {
@@ -48,9 +49,14 @@ function App() {
   const web3Ref = useRef(null);
   const moneymarketContractRef = useRef(null);
   const fxContractRef = useRef(null);
+  const loanContractRef = useRef(null);
 
   const [account, setaccount] = useState(null);
   const [currentCurrency, setCurrentCurrency] = useState('1');
+
+
+  const [count, setcount] = useState(0);
+
 
   useEffect(() => {
     (async () => {
@@ -89,6 +95,11 @@ function App() {
         Fx_ABI,
         Fx_address,
       );
+
+      loanContractRef.current = new web3Ref.current.eth.Contract(
+        Loan_ABI,
+        Loan_address,
+      );
       // console.clear();
       // const x = await moneymarket.methods.getMidPrice.call()
       console.log('xxxx', fxContractRef.current.methods);
@@ -98,6 +109,11 @@ function App() {
       // .then((r) => console.log('xxxx', r)),
 
       console.dir(moneymarketContractRef.current);
+
+      web3Ref.current.eth.subscribe('newBlockHeaders',()=>{
+        console.log("newBlockHeaders")
+        setcount(c=>c+1)
+      } )
       setaccount(accounts[0]);
      
     })();
@@ -111,6 +127,7 @@ function App() {
         value={{
           moneymarketContract: moneymarketContractRef.current,
           fxContract: fxContractRef.current,
+          loanContract: loanContractRef.current,
           web3: web3Ref.current,
           account: account,
           currentCurrency,
@@ -125,7 +142,7 @@ function App() {
 
           <Switch>
             <Route path="/moneymkt">
-              <MoneyMKT currentCurrency={currentCurrency} />
+              <MoneyMKT currentCurrency={currentCurrency} count={count}/>
             </Route>
             <Route path="/swap">
               <Swap />
