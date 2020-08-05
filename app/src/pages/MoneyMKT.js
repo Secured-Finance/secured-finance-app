@@ -40,6 +40,9 @@ export default function MoneyMKT(props) {
   const [lenderRates, setlenderRates] = useState([]);
   const [borrowerRates, setborrowerRates] = useState([]);
 
+  const [fileth, setfileth] = useState(0);
+
+
   const data = {
     labels: ['3m', '6m', '1y', '2y', '3y', '5y'],
     datasets: [
@@ -116,6 +119,12 @@ export default function MoneyMKT(props) {
 
         console.log('ratess', lr, br);
       }
+
+      if(contract.fxContract){
+        const fileth=await contract.fxContract.methods.getMidRates().call()
+        setfileth(parseInt(fileth[0])/1000)
+        console.log('fileth',fileth)
+      }
     })();
     return () => {};
   }, [count,contract]);
@@ -131,7 +140,7 @@ export default function MoneyMKT(props) {
           <Line data={data} />
         </Paper>
         <Paper className={classes.paper} style={{ marginTop: 8 }}>
-          <div className={classes.priceQuote}>1 FIL = 0.85 ETH</div>
+  <div className={classes.priceQuote}>1 FIL = {`${fileth?fileth:'..'} ETH`}</div>
         </Paper>
       </Grid>
       <Grid item xs={7} className={classes.ok}>
