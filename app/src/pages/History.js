@@ -5,7 +5,7 @@ import MUIDataTable from 'mui-datatables';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import CopyClip from './CopyClip';
 import Side from './Side';
-
+import moment from 'moment';
 
 const columns = [
   {
@@ -40,9 +40,9 @@ const columns = [
     label: 'Ccy',
     options: {
       customBodyRender: (value, tableMeta, updateValue) => {
-        const ccys=['ETH','FIL']
+        const ccys = ['ETH', 'FIL'];
 
-        return ccys[value]
+        return ccys[value];
       },
     },
   },
@@ -51,9 +51,9 @@ const columns = [
     label: 'Term',
     options: {
       customBodyRender: (value, tableMeta, updateValue) => {
-        const terms=['3m','6m','1y','2y','3y','5y']
+        const terms = ['3m', '6m', '1y', '2y', '3y', '5y'];
 
-        return terms[value]
+        return terms[value];
       },
     },
   },
@@ -62,25 +62,54 @@ const columns = [
     name: 'Rate',
     label: 'Rate',
     options: {
-      customBodyRender: (value, tableMeta, updateValue) => {        
-
-        return `${value/100}%`
+      customBodyRender: (value, tableMeta, updateValue) => {
+        return `${value / 100}%`;
       },
     },
   },
-  'Schedule',
+  {
+    name: 'Schedule',
+    label: 'Schedule',
+    options: {
+      customBodyRender: (value, tableMeta, updateValue) => {
+        return 'todo';
+      },
+    },
+  },
   'PV',
   {
     name: 'AsOf',
     label: 'AsOf',
     options: {
-      customBodyRender: (value, tableMeta, updateValue) => {        
+      customBodyRender: (value, tableMeta, updateValue) => {
+        // console.log('AsOf', value, typeof value);
 
-        return new Date(Number(value)).toString()
+        return moment.unix(value).format('DD/MM/YYYY');
       },
     },
   },
-  'Available',
+  {
+    name: 'Available',
+    label: 'Available',
+    options: {
+      customBodyRender: (value, tableMeta, updateValue) => {
+        console.log('AsOf', value, typeof value);
+        let style = { width: 10, height: 10 };
+        if (value) {
+          style = { ...style, background: 'green' };
+        } else {
+          style = { ...style, background: 'red' };
+        }
+
+        return (
+          <div
+            style={style}
+            title={value ? 'available' : 'not available'}
+          ></div>
+        );
+      },
+    },
+  },
   'State',
 ];
 
