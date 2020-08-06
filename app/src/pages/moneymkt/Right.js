@@ -13,6 +13,7 @@ import {
   TableCell,
   CircularProgress,
   Backdrop,
+  withStyles,
 } from '@material-ui/core';
 import {
   BrowserRouter as Router,
@@ -83,6 +84,51 @@ function a11yProps(index) {
   };
 }
 
+const StyledTabs = withStyles({
+  root: {
+    background: '#303030',
+  },
+  indicator: {
+    top: 0,
+    display: 'flex',
+    justifyContent: 'center',
+    backgroundColor: 'transparent',
+    '& > div': {
+      maxWidth: 20,
+      width: '100%',
+      maxHeight:1,
+      backgroundColor: 'white',
+    },
+  },
+})((props) => <Tabs {...props} TabIndicatorProps={{ children: <div /> }} />);
+
+const StyledTab = withStyles((theme) => ({
+  root: {
+    textTransform: 'none',
+    color: '#fff',
+    fontSize: theme.typography.pxToRem(15),
+    marginRight: theme.spacing(1),
+    '&:focus': {
+      opacity: 1,
+    },
+    '&:hover': {
+      textDecoration: 'none',
+      color: 'inherit',
+    },
+    '&$selected': {
+      // color: '#1890ff',
+      fontWeight: theme.typography.fontWeightMedium,
+      background: '#424242',
+      border: ' 0.1px solid transparent',
+      borderBottom: 'none',
+      borderTopLeftRadius: '.25rem',
+      borderTopRightRadius: '.25rem',
+      // border:'1px dashed #212121'
+    },
+  },
+  selected: {},
+}))((props) => <Tab {...props} />);
+
 const ccyPairs = ['ETH', 'FIL'];
 
 const ChosenRowContext = React.createContext({});
@@ -129,11 +175,11 @@ export default function Right(props) {
       const res = await contract.loanContract.methods
         .makeLoanDeal(
           selectedRow.addr,
-          ['borrow','lend' ].indexOf(currType),
+          ['borrow', 'lend'].indexOf(currType),
           Number(contract.currentCurrency),
           tabs.indexOf(tabValue),
           Number(dialogAmount),
-        )      
+        )
         .send({
           from: contract.account,
           // gas: 8000000,
@@ -231,8 +277,6 @@ export default function Right(props) {
           console.log('midRates', midRates);
           setmidRates(midRates);
         } catch (error) {}
-
-        
       }
     })();
 
@@ -251,14 +295,14 @@ export default function Right(props) {
 
   return (
     <div>
-      <Tabs
+      <StyledTabs
         value={tabs.indexOf(tabValue)}
         onChange={handleChange}
         aria-label="simple tabs example"
         variant="fullWidth"
       >
         {tabs.map((tab) => (
-          <Tab
+          <StyledTab
             wrapped
             label={tab}
             {...a11yProps(0)}
@@ -269,7 +313,7 @@ export default function Right(props) {
             className={classes.tab}
           />
         ))}
-      </Tabs>
+      </StyledTabs>
       <Switch>
         <Route exact path={`/moneymkt/:duration`}>
           <Duration
