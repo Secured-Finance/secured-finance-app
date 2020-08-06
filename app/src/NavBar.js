@@ -11,6 +11,7 @@ import {
   Tabs,
   Tab,
   Box,
+  withStyles,
 } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 import {
@@ -55,6 +56,46 @@ function a11yProps(index) {
 }
 
 const tabs = ['MoneyMKT', 'Swap', 'FX', 'Book', 'History'];
+
+const StyledTabs = withStyles({
+  indicator: {
+    // top: 0,
+    display: 'flex',
+    // display: 'none',
+    justifyContent: 'center',
+    backgroundColor: 'transparent',
+    '& > div': {
+      maxWidth: 40,
+      width: '100%',
+      backgroundColor: '#31698c',
+    },
+  },
+})((props) => <Tabs {...props} TabIndicatorProps={{ children: <div /> }} />);
+
+const StyledTab = withStyles((theme) => ({
+  root: {
+    textTransform: 'none',
+    color: '#fff',
+    fontWeight: theme.typography.fontWeightRegular,
+    fontSize: theme.typography.pxToRem(15),
+    marginRight: theme.spacing(1),
+    '&:focus': {
+      opacity: 1,
+    },
+    '&:hover': {
+      textDecoration: 'none',
+      color: 'inherit',
+    },
+    '&$selected': {
+      // color: '#1890ff',
+      fontWeight: theme.typography.fontWeightMedium,
+      background:'#303030',
+      // border:'1px dashed #212121'
+    },
+
+  },
+  selected: {},
+}))((props) => <Tab disableRipple {...props} />);
 
 export default function Navbar(props) {
   let location = useLocation();
@@ -107,7 +148,7 @@ export default function Navbar(props) {
               value={props.currentCurrency}
               style={{ height: 30 }}
               onChange={(e) => {
-                props.setCurrentCurrency((e.target.value));
+                props.setCurrentCurrency(e.target.value);
               }}
             >
               <option value="1">FIL</option>
@@ -115,7 +156,7 @@ export default function Navbar(props) {
             </select>
           </Box>
 
-          <Tabs
+          <StyledTabs
             value={value}
             onChange={handleChange}
             aria-label="simple tabs example"
@@ -123,7 +164,7 @@ export default function Navbar(props) {
             className={classes.navs}
           >
             {tabs.map((tab) => (
-              <Tab
+              <StyledTab
                 label={tab}
                 {...a11yProps(0)}
                 key={tab}
@@ -131,7 +172,7 @@ export default function Navbar(props) {
                 to={`/${tab.toLowerCase()}`}
               />
             ))}
-          </Tabs>
+          </StyledTabs>
         </Toolbar>
       </AppBar>
     </div>
