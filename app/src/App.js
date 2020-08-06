@@ -154,7 +154,7 @@ function App() {
               <Book />
             </Route>
             <Route path="/history">
-              <History />
+              <History count={count} />
             </Route>
             <Route path="*">
               <MoneyMKT />
