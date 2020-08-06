@@ -28,8 +28,8 @@ const testAuthentication = () => {
   return axios
     .get(url, {
       headers: {
-        pinata_api_key: process.env.PINATA_API_KEY, //'d653cd95e0dc829f4ea6',
-        pinata_secret_api_key: process.env.PINATA_SECRET_API_KEY,
+        pinata_api_key: process.env.REACT_APP_PINATA_API_KEY, //'d653cd95e0dc829f4ea6',
+        pinata_secret_api_key: process.env.REACT_APP_PINATA_SECRET_API_KEY,
         // 'a0fb1a8a6c7d3a6638aa6d4c9e8f70a4db11e9f7e86b93345f260914e5ffe288',
       },
     })
@@ -79,9 +79,8 @@ const pinfiletoipfs = (blob) => {
       maxContentLength: 'Infinity', //this is needed to prevent axios from erroring out with large files
       headers: {
         'Content-Type': `multipart/form-data; boundary=${data._boundary}`,
-        pinata_api_key: 'd653cd95e0dc829f4ea6',
-        pinata_secret_api_key:
-          'a0fb1a8a6c7d3a6638aa6d4c9e8f70a4db11e9f7e86b93345f260914e5ffe288',
+        pinata_api_key: process.env.REACT_APP_PINATA_API_KEY,
+        pinata_secret_api_key: process.env.REACT_APP_PINATA_SECRET_API_KEY,
       },
     })
     .then(function (response) {
