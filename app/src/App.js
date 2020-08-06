@@ -25,6 +25,16 @@ import { MoneyMarket_address, MoneyMarket_ABI } from './contracts/MoneyMarket';
 import { Fx_ABI, Fx_address } from './contracts/Fx';
 import { Loan_ABI, Loan_address } from './contracts/Loan';
 
+import { createPow } from "@textile/powergate-client";
+
+const PowerGate = createPow({ host: "https://grpcweb.slate.textile.io" });
+
+
+console.log('PowerGate',PowerGate);
+console.log("--------------------")
+console.dir(PowerGate)
+console.log("--------------------")
+
 const theme = createMuiTheme({
   palette: {
     type: 'dark',

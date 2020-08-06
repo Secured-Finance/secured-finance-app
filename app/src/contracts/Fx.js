@@ -1,4 +1,4 @@
-export const Fx_address = '0x910bB27cB5c4e3ED6cB4535d60eBe8976F3F3E79';
+export const Fx_address = process.env.REACT_APP_FX_ADDRESS
 
 export const Fx_ABI = [
   {
