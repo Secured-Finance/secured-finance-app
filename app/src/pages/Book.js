@@ -39,7 +39,7 @@ const useStyles = makeStyles((theme) => ({
   },
 
   right: {
-    borderLeft: '1px solid white',
+    borderLeft: '1px dashed white',
     paddingLeft: theme.spacing(5),
     position: 'relative',
   },
@@ -628,7 +628,7 @@ export default function Book() {
                   <Typography
                     variant="h4"
                     component="h6"
-                    align="left"
+                    align="center"
                     color="textPrimary"
                     gutterBottom
                     noWrap
