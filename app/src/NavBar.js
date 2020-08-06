@@ -67,7 +67,7 @@ const StyledTabs = withStyles({
     '& > div': {
       maxWidth: 40,
       width: '100%',
-      backgroundColor: '#635ee7',
+      backgroundColor: '#31698c',
     },
   },
 })((props) => <Tabs {...props} TabIndicatorProps={{ children: <div /> }} />);
@@ -89,7 +89,8 @@ const StyledTab = withStyles((theme) => ({
     '&$selected': {
       // color: '#1890ff',
       fontWeight: theme.typography.fontWeightMedium,
-      background:'#303030'
+      background:'#303030',
+      // border:'1px dashed #212121'
     },
 
   },
