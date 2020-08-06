@@ -103,7 +103,7 @@ const columns = [
     label: 'Rate',
     options: {
       customBodyRender: (value, tableMeta, updateValue) => {
-        return `${value / 100}%`;
+        return `${(value / 100).toFixed(2)}%`;
       },
     },
   },

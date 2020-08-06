@@ -28,9 +28,9 @@ const testAuthentication = () => {
   return axios
     .get(url, {
       headers: {
-        pinata_api_key: 'd653cd95e0dc829f4ea6',
-        pinata_secret_api_key:
-          'a0fb1a8a6c7d3a6638aa6d4c9e8f70a4db11e9f7e86b93345f260914e5ffe288',
+        pinata_api_key: process.env.PINATA_API_KEY, //'d653cd95e0dc829f4ea6',
+        pinata_secret_api_key: PINATA_SECRET_API_KEY,
+        // 'a0fb1a8a6c7d3a6638aa6d4c9e8f70a4db11e9f7e86b93345f260914e5ffe288',
       },
     })
     .then(function (response) {
