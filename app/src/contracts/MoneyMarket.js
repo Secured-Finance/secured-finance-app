@@ -1,4 +1,5 @@
-export const MoneyMarket_address = '0x828283D437cCff90CF2C2bE8332810646DB0BCdA';
+console.log(" process.env.MONEYMARKET_ADDRESS", process.env.REACT_APP_MONEYMARKET_ADDRESS)
+export const MoneyMarket_address = process.env.REACT_APP_MONEYMARKET_ADDRESS;
 
 export const MoneyMarket_ABI = [
   {

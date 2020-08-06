@@ -50,7 +50,7 @@ export default function Duration(props) {
 
   const average = borrows.length ? (borrows[0].rate + lends[0].rate) / 2 : 0;
 
-  console.log('borrows', average);  
+  console.log('borrows', borrows);  
 
   const selRow=(rowData) => {
     console.log('setselectedRow x', rowData);

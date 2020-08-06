@@ -1,11 +1,41 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Paper, Container, makeStyles } from '@material-ui/core';
 import { ContractContext } from '../App';
-import MUIDataTable from 'mui-datatables';
+import MUIDataTable, { TableFilterList } from 'mui-datatables';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import CopyClip from './CopyClip';
 import Side from './Side';
+import Schedule from './Schedule';
 import moment from 'moment';
+import CustomToolbar from './CustomToolbar';
+import Chip from '@material-ui/core/Chip';
+
+const CustomChip = ({ label, onDelete }) => {
+  return 'xxxx';
+  return (
+    <Chip
+      variant="outlined"
+      color="secondary"
+      label={label}
+      onDelete={onDelete}
+    />
+  );
+};
+
+const CustomFilterList = (props, x) => {
+  console.log('CustomFilterList', x);
+  // return "XXXCC"
+  return <TableFilterList {...props} ItemComponent={CustomChip} />;
+};
+
+const STATE = [
+  'REGISTERED',
+  'WORKING',
+  'DUE',
+  'PAST_DUE',
+  'CLOSED',
+  'TERMINATED',
+];
 
 const columns = [
   {
@@ -53,7 +83,17 @@ const columns = [
       customBodyRender: (value, tableMeta, updateValue) => {
         const terms = ['3m', '6m', '1y', '2y', '3y', '5y'];
 
-        return terms[value];
+        return (
+          <div
+            style={{
+              color: 'orange',
+              border: '1px solid orange',
+              textAlign: 'center',
+            }}
+          >
+            {terms[value]}
+          </div>
+        );
       },
     },
   },
@@ -63,7 +103,7 @@ const columns = [
     label: 'Rate',
     options: {
       customBodyRender: (value, tableMeta, updateValue) => {
-        return `${value / 100}%`;
+        return `${(value / 100).toFixed(2)}%`;
       },
     },
   },
@@ -72,7 +112,24 @@ const columns = [
     label: 'Schedule',
     options: {
       customBodyRender: (value, tableMeta, updateValue) => {
-        return 'todo';
+        if (value.length) {
+          const start = moment.unix(value[0]).format('DD/MM/YYYY');
+          const end = moment.unix(value[1]).format('DD/MM/YYYY');
+          return (
+            <Schedule
+              start={start}
+              values={{
+                start,
+                end,
+                notices: value[2],
+                payments: value[3],
+                amounts: value[4],
+              }}
+            />
+          );
+        }
+
+        return null;
       },
     },
   },
@@ -94,7 +151,12 @@ const columns = [
     options: {
       customBodyRender: (value, tableMeta, updateValue) => {
         console.log('AsOf', value, typeof value);
-        let style = { width: 10, height: 10 };
+        let style = {
+          width: 15,
+          height: 15,
+          borderRadius: '50%',
+          textAlign: 'center',
+        };
         if (value) {
           style = { ...style, background: 'green' };
         } else {
@@ -110,15 +172,16 @@ const columns = [
       },
     },
   },
-  'State',
+  {
+    name: 'State',
+    label: 'State',
+    options: {
+      customBodyRender: (value, tableMeta, updateValue) => {
+        return <div style={{ fontSize: '0.6rem' }}>{STATE[value]}</div>;
+      },
+    },
+  },
 ];
-
-const data = [];
-
-const options = {
-  filterType: 'dropdown',
-  // resizableColumns: true
-};
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -152,14 +215,28 @@ export default function History(props) {
     return () => {};
   }, [loanContract, count]);
 
+  const options = {
+    filterType: 'dropdown',
+    customToolbar: () => {
+      console.log('customToolbar');
+      return <CustomToolbar data={loanBooks} columns={columns} />;
+    },
+    // resizableColumns: true
+  };
+
   return (
     <Container className={classes.root}>
-      <MUIDataTable
-        title={'Loan Book'}
-        data={loanBooks}
-        columns={columns}
-        options={options}
-      />
+      <div id="loanbook">
+        <MUIDataTable
+          title={'Loan Book'}
+          data={loanBooks}
+          columns={columns}
+          options={options}
+          components={{
+            TableFilterList: CustomFilterList,
+          }}
+        />
+      </div>
     </Container>
   );
 }

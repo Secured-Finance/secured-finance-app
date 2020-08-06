@@ -1,4 +1,4 @@
-export const Loan_address = '0xDA5253f6382D3c4f85E169f170C2a1F09dD84874';
+export const Loan_address = process.env.REACT_APP_LOAN_ADDRESS;
 
 export const Loan_ABI = [
   {
