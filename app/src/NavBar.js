@@ -89,10 +89,9 @@ const StyledTab = withStyles((theme) => ({
     '&$selected': {
       // color: '#1890ff',
       fontWeight: theme.typography.fontWeightMedium,
-      background:'#303030',
+      background: '#303030',
       // border:'1px dashed #212121'
     },
-
   },
   selected: {},
 }))((props) => <Tab disableRipple {...props} />);
