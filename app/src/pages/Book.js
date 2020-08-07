@@ -61,97 +61,82 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Book() {
   const classes = useStyles();
-  const {IS_DEV}=process.env
-  console.log("IS_DEV",IS_DEV);
+  const { REACT_APP_IS_DEV } = process.env;
+  console.log('REACT_APP_IS_DEV', REACT_APP_IS_DEV);
 
-  let b3mi=""
-  let l3mi=""
-  let a3mi=""
-  let b6mi=""
-  let l6mi=""
-  let a6mi=""
-  let b1yi=""
-  let l1yi=""
-  let a1yi=""
-  let b2yi=""
-  let l2yi=""
-  let a2yi=""
-  let b3yi=""
-  let l3yi=""
-  let a3yi=""
-  let b5yi=""
-  let l5yi=""
-  let a5yi=""
+  let b3mi = '';
+  let l3mi = '';
+  let a3mi = '';
+  let b6mi = '';
+  let l6mi = '';
+  let a6mi = '';
+  let b1yi = '';
+  let l1yi = '';
+  let a1yi = '';
+  let b2yi = '';
+  let l2yi = '';
+  let a2yi = '';
+  let b3yi = '';
+  let l3yi = '';
+  let a3yi = '';
+  let b5yi = '';
+  let l5yi = '';
+  let a5yi = '';
 
+  let buyFilVali = '';
+  let sellEthVali = '';
+  let sellFilVali = '';
+  let buyEthVali = '';
 
-  if(IS_DEV){
-    b3mi= Math.round((Math.random() + 1) * 100) / 100 + ''
-    l3mi=Math.round((Math.random() + 1) * 100) / 100 + ''
-    a3mi=Math.round(Math.random() * 1000) + ''
-    b6mi=Math.round((Math.random() + 1) * 100) / 100 + ''
-    l6mi=Math.round((Math.random() + 1) * 100) / 100 + ''
-    a6mi=Math.round(Math.random() * 1000) + ''
-    b1yi=Math.round((Math.random() + 1) * 100) / 100 + ''
-    l1yi=Math.round((Math.random() + 1) * 100) / 100 + ''
-    a1yi=Math.round(Math.random() * 1000) + ''
-    b2yi=Math.round((Math.random() + 1) * 100) / 100 + ''
-    l2yi=Math.round((Math.random() + 1) * 100) / 100 + ''
-    a2yi=Math.round(Math.random() * 1000) + ''
-    b3yi=Math.round((Math.random() + 1) * 100) / 100 + ''
-    l3yi=Math.round((Math.random() + 1) * 100) / 100 + ''
-    a3yi=Math.round(Math.random() * 1000) + ''
-    b5yi=Math.round((Math.random() + 1) * 100) / 100 + ''
-    l5yi=Math.round((Math.random() + 1) * 100) / 100 + ''
-    a5yi=Math.round(Math.random() * 1000) + ''
+  if (REACT_APP_IS_DEV) {
+    b3mi = Math.round((Math.random() + 1) * 100) / 100 + '';
+    l3mi = Math.round((Math.random() + 1) * 100) / 100 + '';
+    a3mi = Math.round(Math.random() * 1000) + '';
+    b6mi = Math.round((Math.random() + 1) * 100) / 100 + '';
+    l6mi = Math.round((Math.random() + 1) * 100) / 100 + '';
+    a6mi = Math.round(Math.random() * 1000) + '';
+    b1yi = Math.round((Math.random() + 1) * 100) / 100 + '';
+    l1yi = Math.round((Math.random() + 1) * 100) / 100 + '';
+    a1yi = Math.round(Math.random() * 1000) + '';
+    b2yi = Math.round((Math.random() + 1) * 100) / 100 + '';
+    l2yi = Math.round((Math.random() + 1) * 100) / 100 + '';
+    a2yi = Math.round(Math.random() * 1000) + '';
+    b3yi = Math.round((Math.random() + 1) * 100) / 100 + '';
+    l3yi = Math.round((Math.random() + 1) * 100) / 100 + '';
+    a3yi = Math.round(Math.random() * 1000) + '';
+    b5yi = Math.round((Math.random() + 1) * 100) / 100 + '';
+    l5yi = Math.round((Math.random() + 1) * 100) / 100 + '';
+    a5yi = Math.round(Math.random() * 1000) + '';
+
+    buyFilVali = Math.round(Math.random() * 1000) + '';
+    sellEthVali = Math.round(Math.random() * 100) + '';
+    sellFilVali = Math.round(Math.random() * 1000) + '';
+    buyEthVali = Math.round(Math.random() * 100) + '';
   }
 
-
-  const [b3m, setb3m] = useState(
-    b3mi
-  );
-  const [l3m, setl3m] = useState(
-    l3mi
-  );
+  const [b3m, setb3m] = useState(b3mi);
+  const [l3m, setl3m] = useState(l3mi);
   const [a3m, seta3m] = useState(a3mi);
-  const [b6m, setb6m] = useState(
-    b6mi
-  );
-  const [l6m, setl6m] = useState(
-    l6mi
-  );
+  const [b6m, setb6m] = useState(b6mi);
+  const [l6m, setl6m] = useState(l6mi);
   const [a6m, seta6m] = useState(a6mi);
-  const [b1y, setb1y] = useState(
-    b1yi
-  );
-  const [l1y, setl1y] = useState(
-    l1yi
-  );
+  const [b1y, setb1y] = useState(b1yi);
+  const [l1y, setl1y] = useState(l1yi);
   const [a1y, seta1y] = useState(a1yi);
-  const [b2y, setb2y] = useState(
-    b2yi
-  );
-  const [l2y, setl2y] = useState(
-    l2yi
-  );
+  const [b2y, setb2y] = useState(b2yi);
+  const [l2y, setl2y] = useState(l2yi);
   const [a2y, seta2y] = useState(a2yi);
-  const [b3y, setb3y] = useState(
-    b3yi
-  );
-  const [l3y, setl3y] = useState(
-    l3yi
-  );
+  const [b3y, setb3y] = useState(b3yi);
+  const [l3y, setl3y] = useState(l3yi);
   const [a3y, seta3y] = useState(a3yi);
-  const [b5y, setb5y] = useState(
-    b5yi
-  );
-  const [l5y, setl5y] = useState(
-    l5yi
-  );
+  const [b5y, setb5y] = useState(b5yi);
+  const [l5y, setl5y] = useState(l5yi);
   const [a5y, seta5y] = useState(a5yi);
-  const [buyFilVal, setbuyFilVal] = useState('');
-  const [sellEthVal, setsellEthVal] = useState('');
-  const [sellFilVal, setsellFilVal] = useState('');
-  const [buyEthVal, setbuyEthVal] = useState('');
+
+  const [buyFilVal, setbuyFilVal] = useState(buyFilVali);
+  const [sellEthVal, setsellEthVal] = useState(sellEthVali);
+  const [sellFilVal, setsellFilVal] = useState(sellFilVali);
+  const [buyEthVal, setbuyEthVal] = useState(buyEthVali);
 
   const [isLoanLoading, setisLoanLoading] = useState(false);
   const [isFxLoading, setisFxLoading] = useState(false);
