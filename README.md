@@ -1,5 +1,5 @@
 <h1 align="center">
-  <img width="600" src="app/images/logo.jpg" alt="Secured Finance logo" />
+  <img width="600" src="app/src/logo.jpeg" alt="Secured Finance logo" />
 </h1>
 
 <h3 align="center">A protocol for financial transactions backed by crypto-assets.</h3>
