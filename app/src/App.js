@@ -25,15 +25,14 @@ import { MoneyMarket_address, MoneyMarket_ABI } from './contracts/MoneyMarket';
 import { Fx_ABI, Fx_address } from './contracts/Fx';
 import { Loan_ABI, Loan_address } from './contracts/Loan';
 
-import { createPow } from "@textile/powergate-client";
+import { createPow } from '@textile/powergate-client';
 
-const PowerGate = createPow({ host: "https://grpcweb.slate.textile.io" });
+const PowerGate = createPow({ host: 'https://grpcweb.slate.textile.io' });
 
-
-console.log('PowerGate',PowerGate);
-console.log("--------------------")
-console.dir(PowerGate)
-console.log("--------------------")
+console.log('PowerGate', PowerGate);
+console.log('--------------------');
+console.dir(PowerGate);
+console.log('--------------------');
 
 const theme = createMuiTheme({
   palette: {
@@ -54,6 +53,14 @@ const routes = tabs.map((t) => t.toLowerCase());
 export const ContractContext = React.createContext(null);
 const FxContext = React.createContext(null);
 
+export const PGContext = React.createContext({
+  pg: PowerGate,
+  token: null,
+  setTkn: () => {},
+  address:null,
+  setaddress:()=>{}
+});
+
 function App() {
   const classes = useStyles();
   const web3Ref = useRef(null);
@@ -63,10 +70,14 @@ function App() {
 
   const [account, setaccount] = useState(null);
   const [currentCurrency, setCurrentCurrency] = useState('1');
-
+  const [token, settoken] = useState();
+  const [address, setaddress] = useState();
 
   const [count, setcount] = useState(0);
 
+  const setTkn = (tkn) => {
+    settoken(tkn);
+  };
 
   useEffect(() => {
     (async () => {
@@ -77,7 +88,6 @@ function App() {
           // Request account access
           // await window.ethereum.enable();
           window.ethereum.request({ method: 'eth_requestAccounts' });
-        
         } catch (error) {
           // User denied account access...
           console.error('User denied account access');
@@ -120,12 +130,11 @@ function App() {
 
       console.dir(moneymarketContractRef.current);
 
-      web3Ref.current.eth.subscribe('newBlockHeaders',()=>{
-        console.log("newBlockHeaders")
-        setcount(c=>c+1)
-      } )
+      web3Ref.current.eth.subscribe('newBlockHeaders', () => {
+        console.log('newBlockHeaders');
+        setcount((c) => c + 1);
+      });
       setaccount(accounts[0]);
-     
     })();
 
     return () => {};
@@ -143,34 +152,46 @@ function App() {
           currentCurrency,
         }}
       >
-        <CssBaseline />
-        <Router>
-          <NavBar
-            setCurrentCurrency={setCurrentCurrency}
-            currentCurrency={currentCurrency}
-          />
+        <PGContext.Provider
+          value={{
+            pg: PowerGate,
+            token: token,
+            setTkn: setTkn,
+            address:address,
+            setaddress:(addr)=>{
+              setaddress(addr)//str
+            }
+          }}
+        >
+          <CssBaseline />
+          <Router>
+            <NavBar
+              setCurrentCurrency={setCurrentCurrency}
+              currentCurrency={currentCurrency}
+            />
 
-          <Switch>
-            <Route path="/moneymkt">
-              <MoneyMKT currentCurrency={currentCurrency} count={count}/>
-            </Route>
-            <Route path="/swap">
-              <Swap />
-            </Route>
-            <Route path="/fx">
-              <Fx />
-            </Route>
-            <Route path="/book">
-              <Book />
-            </Route>
-            <Route path="/history">
-              <History count={count} />
-            </Route>
-            <Route path="*">
-              <MoneyMKT />
-            </Route>
-          </Switch>
-        </Router>
+            <Switch>
+              <Route path="/moneymkt">
+                <MoneyMKT currentCurrency={currentCurrency} count={count} />
+              </Route>
+              <Route path="/swap">
+                <Swap />
+              </Route>
+              <Route path="/fx">
+                <Fx />
+              </Route>
+              <Route path="/book">
+                <Book />
+              </Route>
+              <Route path="/history">
+                <History count={count} />
+              </Route>
+              <Route path="*">
+                <MoneyMKT />
+              </Route>
+            </Switch>
+          </Router>
+        </PGContext.Provider>
       </ContractContext.Provider>
     </ThemeProvider>
   );
