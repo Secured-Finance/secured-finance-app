@@ -22,6 +22,7 @@ import {
   useLocation,
 } from 'react-router-dom';
 import logo from './logo.jpeg';
+import logobtnb from './logobtnb.png';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -128,9 +129,10 @@ export default function Navbar(props) {
               component={Link}
               to="/moneymkt/3m"
               className={classes.navs}
-              style={{ marginRight: 10 }}
+              style={{ marginRight: 10,width:250 }}
             >
-              <Avatar
+              <img src={logobtnb} alt="logo" style={{width:240}}/>
+              {/* <Avatar
                 alt="Secured Finance"
                 src={logo}
                 className={classes.logo}
@@ -139,7 +141,7 @@ export default function Navbar(props) {
                 <Typography variant="h6" className={classes.title}>
                   Secured Finance
                 </Typography>
-              </Button>
+              </Button> */}
             </Box>
             <select
               name=""
