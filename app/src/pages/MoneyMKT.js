@@ -8,6 +8,8 @@ import { ContractContext } from '../App';
 
 import { Widget } from 'react-chat-widget';
 import 'react-chat-widget/lib/styles.css';
+import Createtokenx from '../slate/Createtokenx';
+import FullScreenDialog from './FullScreenDialog';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -149,6 +151,11 @@ export default function MoneyMKT(props) {
           <Paper className={classes.paper} style={{ marginTop: 8 }}>
             <div className={classes.priceQuote}>
               1 FIL = {`${fileth ? fileth : '..'} ETH`}
+            </div>
+          </Paper>
+          <Paper className={classes.paper} style={{ marginTop: 8 }}>
+            <div>
+            <FullScreenDialog></FullScreenDialog>
             </div>
           </Paper>
         </Grid>
