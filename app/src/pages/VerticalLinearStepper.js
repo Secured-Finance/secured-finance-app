@@ -147,7 +147,7 @@ export default function VerticalLinearStepper() {
       </Stepper>
       {activeStep === steps.length && (
         <Paper square elevation={0} className={classes.resetContainer}>
-          <Typography>All steps completed - you&apos;re finished</Typography>
+          <Typography>All steps completed - FIL was sent</Typography>
           <Button onClick={handleReset} className={classes.button}>
             Reset
           </Button>
