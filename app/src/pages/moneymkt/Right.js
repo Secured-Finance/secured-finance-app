@@ -96,7 +96,7 @@ const StyledTabs = withStyles({
     '& > div': {
       maxWidth: 20,
       width: '100%',
-      maxHeight:1,
+      maxHeight: 1,
       backgroundColor: 'white',
     },
   },
@@ -162,19 +162,23 @@ export default function Right(props) {
 
   const confirmLoan = async () => {
     setdialogLoading(true);
-    // console.log('confirmLoan',
-    // selectedRow.addr,
-    //       ['borrow','lend' ].indexOf(currType),
-    // Number(contract.currentCurrency),
-    // tabs.indexOf(tabValue),
-    // Number(dialogAmount),
-    // )
+    console.log(
+      'confirmLoan',
+      selectedRow.addr,
+      ['borrow', 'lend'].indexOf(currType),
+      Number(contract.currentCurrency),
+      tabs.indexOf(tabValue),
+      Number(dialogAmount),
+      contract.account,
+    );
 
     // contract.loanContract.options.gasPrice = '20000000000000';
+    // debugger;
     try {
       const res = await contract.loanContract.methods
         .makeLoanDeal(
           selectedRow.addr,
+          // ['lend', 'borrow'].indexOf(currType),
           ['borrow', 'lend'].indexOf(currType),
           Number(contract.currentCurrency),
           tabs.indexOf(tabValue),
@@ -182,13 +186,31 @@ export default function Right(props) {
         )
         .send({
           from: contract.account,
-          // gas: 8000000,
+          // gas: 80000000,
           // gasPrice: '30000000000'
         });
+
+      console.log(
+        'confirmLoan after',
+        selectedRow.addr,
+        ['borrow', 'lend'].indexOf(currType),
+        Number(contract.currentCurrency),
+        tabs.indexOf(tabValue),
+        Number(dialogAmount),
+      );
+
       setdialogLoading(false);
       setdialogState('s');
     } catch (e) {
-      console.log('ERRRRRRRRRRR', e);
+      console.log(
+        'confirmLoan err',
+        selectedRow.addr,
+        ['borrow', 'lend'].indexOf(currType),
+        Number(contract.currentCurrency),
+        tabs.indexOf(tabValue),
+        Number(dialogAmount),
+      );
+      console.log('makeLoanDeal err', e);
       setdialogLoading(false);
       setdialogState('e');
     } finally {
@@ -222,7 +244,7 @@ export default function Right(props) {
     //     (l) => l.term === tabValue,
     //   ),
     // };
-
+    debugger;
     for (let book of allBooks) {
       const curr_borrowers = book.borrowers[parseInt(contract.currentCurrency)];
       const curr_lenders = book.lenders[parseInt(contract.currentCurrency)];
@@ -256,6 +278,7 @@ export default function Right(props) {
     }
   }
 
+  debugger;
   orderbook = {
     lenderbook: lenders[tabValue],
     borrowerbook: borrowers[tabValue],
@@ -263,13 +286,22 @@ export default function Right(props) {
 
   useEffect(() => {
     (async () => {
+      debugger;
       if (contract.moneymarketContract) {
         try {
+          const x = await contract.moneymarketContract.methods
+            .getMarketMakers()
+            .call();
+
+          console.log('getMarketMakers x', x);
+
           const allBooks = await contract.moneymarketContract.methods
             .getAllBooks()
             .call();
 
-          setallBooks(allBooks);
+          if (allBooks !== null) {
+            setallBooks(allBooks);
+          }
 
           const midRates = await contract.moneymarketContract.methods
             .getMidRates()
