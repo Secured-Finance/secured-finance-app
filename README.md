@@ -33,6 +33,7 @@ you need to install unstoppable domain [browser extension](https://chrome.google
 - Powergate
 - Slate
 - Pinata cloud
+- Filecoin
 
 ## Deploy
 
