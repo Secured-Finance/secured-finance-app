@@ -1,6 +1,6 @@
 # Secured Finance App
 
-This repo contains UI of SecuredFinance decentralized web application.
+This repo contains a decentralized web application.
 
 ## Quick Start
 
