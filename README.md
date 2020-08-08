@@ -44,4 +44,3 @@ Set environment variables below on Fleek:
 - `REACT_APP_MONEYMARKET_ADDRESS` - MoneyMarket smart contract address
 - `REACT_APP_FX_ADDRESS` - FX smart contract address
 - `REACT_APP_LOAN_ADDRESS` - Loan smart contract address
-- `` - 
