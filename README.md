@@ -1,39 +1,47 @@
-<h1 align="center">
-  <img width="600" src="https://github.com/Secured-Finance/secured-finance-docs/blob/master/img/logo.jpg" alt="Secured Finance logo" />
-</h1>
+# Secured Finance App
 
-<h3 align="center">A protocol for financial transactions backed by crypto-assets.</h3>
+This repo contains decentralized web application.
 
-## Financial Transactions
+## Quick Start
 
-You can do the following traditional financial transactions with various formats.
-A list of formats and examples is shown below. We can also create innovative structured products by combining these plain-vanilla transactions.
+1. Set environment variables in `.env` file, check `.env.sample` in `app`
+2. In the terminal `cd app`, then `npm install`
+3. `npm start`
 
-- Loan (FIL loan backed by ETH) <---- HackFS primary focus
-- Deposit (FIL deposit to earn interest)
-- Swap (FIL/ETH cross-currency swap)
-- Option (FIL/ETH European call option)
+## Domains 
+you need to install unstoppable domain [browser extension](https://chrome.google.com/webstore/detail/unstoppable-extension/beelkklmblgdljamcmoffgfbdddfpnnl?hl=en) for `.crypto`
+- https://securedfinance.on.fleek.co/
+- https://securedfinance.crypto
 
-## Target User
 
-- Miners who want to borrow/lend their FIL without worrying about credit risk
-- Investors who have long-term view and aim for excess return from markets
-- Hedgers who want to reduce their current exposure of their crypto-assets
-- Arbitragers who want to profit by providing liquidity to collateralized assets
+## Sections of the app
 
-## Key Components
+- MoneyMarket
+- Swap
+- FX
+- Books
+- History
+- Filecoin Page
 
-- Payment management smart contract
-- Collateral management smart contract
-- Ecosystem design of primary & secondary market on financial transactions
-- Liquidity management to support margin call operations
+## Technologies used
 
-## Contributors
+- ReactJS framework
+- React router
+- NodeJS
+- Web3js to integrate with smart contracts
+- Metamask
+- Powergate
+- Slate
+- Pinata cloud
 
-Senshi M. Onions [Twitter: @onion797jp](https://twitter.com/onion797jp)
-[Bakhtiiar Muzakparov](https://github.com/muzakparov)
-[Bach Adylbekov](https://github.com/bahadylbekov)
+## Deploy
 
-## License
-
-This project is licensed under the MIT license, Copyright (c) 2020 Secured Finance. For more information see `LICENSE.md`.
+Deployed to ipfs using Fleek.
+Set environment variables below on Fleek:
+- `REACT_APP_IS_DEV` - set to `false` on production
+- `REACT_APP_PINATA_API_KEY` - your Pinata Cloud API key
+- `REACT_APP_PINATA_SECRET_API_KEY` - your Pinata Cloud secret API key
+- `REACT_APP_MONEYMARKET_ADDRESS` - MoneyMarket smart contract address
+- `REACT_APP_FX_ADDRESS` - FX smart contract address
+- `REACT_APP_LOAN_ADDRESS` - Loan smart contract address
+- `` - 
