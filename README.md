@@ -22,6 +22,7 @@ you need to install unstoppable domain [browser extension](https://chrome.google
 - Books
 - History
 - Filecoin Page
+- Decentralized chat - work in progress
 
 ## Technologies used
 
@@ -34,6 +35,7 @@ you need to install unstoppable domain [browser extension](https://chrome.google
 - Slate
 - Pinata cloud
 - Filecoin
+- Textile bucket/threadb
 
 ## Deploy
 
