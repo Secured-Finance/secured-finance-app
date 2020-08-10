@@ -131,7 +131,6 @@ function App() {
       console.dir(moneymarketContractRef.current);
 
       web3Ref.current.eth.subscribe('newBlockHeaders', () => {
-        console.log('newBlockHeaders');
         setcount((c) => c + 1);
       });
       setaccount(accounts[0]);
