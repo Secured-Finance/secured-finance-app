@@ -88,7 +88,7 @@ export default function Book() {
   let sellFilVali = '';
   let buyEthVali = '';
 
-  if (REACT_APP_IS_DEV) {
+  if (REACT_APP_IS_DEV==="dev") {
     b3mi = Math.round((Math.random() + 1) * 100) / 100 + '';
     l3mi = Math.round((Math.random() + 1) * 100) / 100 + '';
     a3mi = Math.round(Math.random() * 1000) + '';
