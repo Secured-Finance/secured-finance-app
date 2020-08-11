@@ -7,7 +7,7 @@ import Axios from 'axios';
 import { ContractContext } from '../App';
 
 import { Widget } from 'react-chat-widget';
-import 'react-chat-widget/lib/styles.css';
+// import 'react-chat-widget/lib/styles.css';
 import Createtokenx from '../slate/Createtokenx';
 import FullScreenDialog from './FullScreenDialog';
 
@@ -166,7 +166,7 @@ export default function MoneyMKT(props) {
         </Grid>
       </Grid>
       <div style={{ position: 'absolute', left:0 }}>
-        <Widget />
+        {/* <Widget /> */}
       </div>
     </div>
   );

@@ -25,6 +25,9 @@ import { MoneyMarket_address, MoneyMarket_ABI } from './contracts/MoneyMarket';
 import { Fx_ABI, Fx_address } from './contracts/Fx';
 import { Loan_ABI, Loan_address } from './contracts/Loan';
 
+import Box from '3box';
+import ChatBox from '3box-chatbox-react';
+
 import { createPow } from '@textile/powergate-client';
 
 const PowerGate = createPow({ host: 'https://grpcweb.slate.textile.io' });
@@ -57,8 +60,8 @@ export const PGContext = React.createContext({
   pg: PowerGate,
   token: null,
   setTkn: () => {},
-  address:null,
-  setaddress:()=>{}
+  address: null,
+  setaddress: () => {},
 });
 
 function App() {
@@ -69,6 +72,7 @@ function App() {
   const loanContractRef = useRef(null);
 
   const [account, setaccount] = useState(null);
+  const [box_instance, setbox] = useState(null);
   const [currentCurrency, setCurrentCurrency] = useState('1');
   const [token, settoken] = useState();
   const [address, setaddress] = useState();
@@ -130,10 +134,19 @@ function App() {
 
       console.dir(moneymarketContractRef.current);
 
+      let box
+      try {
+        box = await Box.openBox(accounts[0],web3Provider);        
+      } catch (error) {
+        console.log("box err",error,accounts[0])        
+      }
+
+
       web3Ref.current.eth.subscribe('newBlockHeaders', () => {
         setcount((c) => c + 1);
       });
       setaccount(accounts[0]);
+      setbox(box);
     })();
 
     return () => {};
@@ -156,10 +169,10 @@ function App() {
             pg: PowerGate,
             token: token,
             setTkn: setTkn,
-            address:address,
-            setaddress:(addr)=>{
-              setaddress(addr)//str
-            }
+            address: address,
+            setaddress: (addr) => {
+              setaddress(addr); //str
+            },
           }}
         >
           <CssBaseline />
@@ -190,6 +203,22 @@ function App() {
               </Route>
             </Switch>
           </Router>
+          {box_instance && (
+            <ChatBox
+              // required
+              spaceName="mySpaceName"
+              threadName="myThreadName"
+              // Required props for context A) & B)
+              box={box_instance}
+              currentUserAddr={account}
+              ethereum={window.ethereum}
+              // optional
+              mute={false}
+              popupChat
+              showEmoji
+              colorTheme="#181F21"
+            />
+          )}
         </PGContext.Provider>
       </ContractContext.Provider>
     </ThemeProvider>

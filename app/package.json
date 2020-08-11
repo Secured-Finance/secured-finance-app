@@ -4,6 +4,8 @@
   "private": true,
   "homepage": ".",
   "dependencies": {
+    "3box": "^1.21.0",
+    "3box-chatbox-react": "^0.3.0",
     "@emotion/babel-preset-css-prop": "^10.0.27",
     "@emotion/cache": "^10.0.29",
     "@emotion/core": "^10.0.28",
@@ -25,6 +27,7 @@
     "crypto-random-string": "^3.2.0",
     "dom-to-image": "^2.6.0",
     "fontsource-roboto": "^2.2.6",
+    "identity-wallet": "^1.4.1",
     "isnumber": "^1.0.0",
     "moment": "^2.27.0",
     "mui-datatables": "^3.3.1",
