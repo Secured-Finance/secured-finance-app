@@ -1,5 +1,7 @@
 # Secured Finance App
 
+[![badge](https://img.shields.io/badge/submit%20for-HackFS-blue)](https://hack.ethglobal.co/showcase/secured-finance-recTkx6c1RDoLeaQm)
+
 This repo contains a decentralized web application.
 
 ## Quick Start
