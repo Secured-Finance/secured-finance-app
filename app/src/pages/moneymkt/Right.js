@@ -173,7 +173,6 @@ export default function Right(props) {
     );
 
     // contract.loanContract.options.gasPrice = '20000000000000';
-    // debugger;
     try {
       const res = await contract.loanContract.methods
         .makeLoanDeal(
@@ -244,7 +243,6 @@ export default function Right(props) {
     //     (l) => l.term === tabValue,
     //   ),
     // };
-    debugger;
     for (let book of allBooks) {
       const curr_borrowers = book.borrowers[parseInt(contract.currentCurrency)];
       const curr_lenders = book.lenders[parseInt(contract.currentCurrency)];
@@ -278,7 +276,6 @@ export default function Right(props) {
     }
   }
 
-  debugger;
   orderbook = {
     lenderbook: lenders[tabValue],
     borrowerbook: borrowers[tabValue],
@@ -286,7 +283,6 @@ export default function Right(props) {
 
   useEffect(() => {
     (async () => {
-      debugger;
       if (contract.moneymarketContract) {
         try {
           const x = await contract.moneymarketContract.methods
