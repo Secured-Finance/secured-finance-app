@@ -65,10 +65,12 @@
   },
   "dependencies": {
     "@babel/polyfill": "7.4.3",
+    "@textile/powergate-client": "^1.0.0",
     "chalk": "^2.4.2",
     "compression": "1.7.4",
     "connected-react-router": "6.4.0",
     "cross-env": "5.2.0",
+    "dotenv": "^8.2.0",
     "express": "4.16.4",
     "fontfaceobserver": "2.1.0",
     "history": "4.9.0",

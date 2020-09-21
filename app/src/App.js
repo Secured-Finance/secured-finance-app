@@ -30,9 +30,10 @@ import ChatBox from '3box-chatbox-react';
 
 import { createPow } from '@textile/powergate-client';
 
-const PowerGate = createPow({ host: 'https://grpcweb.slate.textile.io' });
+const PowerGate = createPow({ host: process.env.REACT_APP_POWERGATE_HOST });
 
-console.log('PowerGate', PowerGate);
+
+console.log('PowerGate', PowerGate, process.env.REACT_APP_POWERGATE_HOST);
 console.log('--------------------');
 console.dir(PowerGate);
 console.log('--------------------');
