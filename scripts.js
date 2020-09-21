@@ -19,36 +19,36 @@ const pow = createPow({ host });
 
   pow.setToken(token)
 
-  // const { info } = await pow.ffs.info()
+  const { info } = await pow.ffs.info()
 
-  // console.log("Info ",info);
+  console.log("Info ",info);
 
-  // const { addrsList } = await pow.ffs.addrs()
+  const { addrsList } = await pow.ffs.addrs()
 
-  // console.log("addrsList",addrsList);
+  console.log("addrsList",addrsList);
 
   const balance=await pow.wallet.balance(addr)
 
   console.log('balance', balance);
 
-  // const buffer = fs.readFileSync(asksbids)
-  // const { cid } = await pow.ffs.stage(buffer)
+  const buffer = fs.readFileSync(asksbids)
+  const { cid } = await pow.ffs.stage(buffer)
 
-  // console.log("cid",cid)
+  console.log("cid",cid)
 
-  // const { jobId } = await pow.ffs.pushStorageConfig(cid)
+  const { jobId } = await pow.ffs.pushStorageConfig(cid)
 
-  // console.log("jobId",jobId)
+  console.log("jobId",jobId)
 
-  // const jobsCancel = pow.ffs.watchJobs((job) => {
-  //   if (job.status === JobStatus.JOB_STATUS_CANCELED) {
-  //     console.log("job canceled")
-  //   } else if (job.status === JobStatus.JOB_STATUS_FAILED) {
-  //     console.log("job failed")
-  //   } else if (job.status === JobStatus.JOB_STATUS_SUCCESS) {
-  //     console.log("job success!")
-  //   }
-  // }, jobId)
+  const jobsCancel = pow.ffs.watchJobs((job) => {
+    if (job.status === JobStatus.JOB_STATUS_CANCELED) {
+      console.log("job canceled")
+    } else if (job.status === JobStatus.JOB_STATUS_FAILED) {
+      console.log("job failed")
+    } else if (job.status === JobStatus.JOB_STATUS_SUCCESS) {
+      console.log("job success!")
+    }
+  }, jobId)
 })()
 
 // cid Qmc3SHZs5HMTw4GTpPgzQWch6MdH7cY9XZAZ73r7a9HzHf
