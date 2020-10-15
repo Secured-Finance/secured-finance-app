@@ -1,6 +1,9 @@
 import React, { Fragment, useEffect, useState, useRef } from 'react';
 import { Button, Container } from '@material-ui/core';
 import NavBar from './NavBar';
+import Authereum from 'authereum';
+import UniLogin from '@unilogin/provider';
+
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import {
   createMuiTheme,
@@ -24,14 +27,13 @@ import Web3 from 'web3';
 import { MoneyMarket_address, MoneyMarket_ABI } from './contracts/MoneyMarket';
 import { Fx_ABI, Fx_address } from './contracts/Fx';
 import { Loan_ABI, Loan_address } from './contracts/Loan';
-
+import Web3Modal from 'web3modal';
 import Box from '3box';
 import ChatBox from '3box-chatbox-react';
 
 import { createPow } from '@textile/powergate-client';
 
 const PowerGate = createPow({ host: process.env.REACT_APP_POWERGATE_HOST });
-
 
 console.log('PowerGate', PowerGate, process.env.REACT_APP_POWERGATE_HOST);
 console.log('--------------------');
@@ -65,12 +67,29 @@ export const PGContext = React.createContext({
   setaddress: () => {},
 });
 
+function initWeb3(provider) {
+  const web3 = new Web3(provider);
+
+  web3.eth.extend({
+    methods: [
+      {
+        name: 'chainId',
+        call: 'eth_chainId',
+        outputFormatter: web3.utils.hexToNumber,
+      },
+    ],
+  });
+
+  return web3;
+}
+
 function App() {
   const classes = useStyles();
   const web3Ref = useRef(null);
   const moneymarketContractRef = useRef(null);
   const fxContractRef = useRef(null);
   const loanContractRef = useRef(null);
+  const web3ModalRef = useRef(null);
 
   const [account, setaccount] = useState(null);
   const [box_instance, setbox] = useState(null);
@@ -84,70 +103,72 @@ function App() {
     settoken(tkn);
   };
 
+  const resetApp = async () => {
+    const web3 = web3Ref.current;
+    if (web3 && web3.currentProvider && web3.currentProvider.close) {
+      await web3.currentProvider.close();
+    }
+    await web3ModalRef.current.clearCachedProvider();
+    //reset
+  };
+
+  const subscribeProvider = async (provider) => {
+    if (!provider.on) {
+      return;
+    }
+    provider.on('close', () => resetApp());
+  };
+
+  const onConnect = async () => {
+    // debugger
+    const provider = await web3ModalRef.current.connect();
+
+    await subscribeProvider(provider);
+
+    web3Ref.current = new Web3(provider);
+
+    console.log('accounts', web3Ref.current);
+    const accounts = await web3Ref.current.eth.getAccounts();
+
+    const address = accounts[0];
+    console.log('address', address);
+
+    moneymarketContractRef.current = new web3Ref.current.eth.Contract(
+      MoneyMarket_ABI,
+      MoneyMarket_address,
+    );
+
+    fxContractRef.current = new web3Ref.current.eth.Contract(
+      Fx_ABI,
+      Fx_address,
+    );
+
+    loanContractRef.current = new web3Ref.current.eth.Contract(
+      Loan_ABI,
+      Loan_address,
+    );
+
+    web3Ref.current.eth.subscribe('newBlockHeaders', () => {
+      setcount((c) => c + 1);
+    });
+
+    setaccount(address);
+  };
+
   useEffect(() => {
     (async () => {
-      let web3Provider;
-      if (window.ethereum) {
-        web3Provider = window.ethereum;
-        try {
-          // Request account access
-          // await window.ethereum.enable();
-          window.ethereum.request({ method: 'eth_requestAccounts' });
-        } catch (error) {
-          // User denied account access...
-          console.error('User denied account access');
-        }
-      }
-      // Legacy dapp browsers...
-      else if (window.web3) {
-        web3Provider = window.web3.currentProvider;
-      }
-      // If no injected web3 instance is detected, fall back to Ganache
-      else {
-        web3Provider = new Web3.providers.HttpProvider('http://localhost:9545');
-      }
-
-      web3Ref.current = new Web3(web3Provider); //Web3.givenProvider || "http://localhost:9545"
-      const accounts = await web3Ref.current.eth.getAccounts();
-      web3Ref.current.eth.defaultAccount =
-        '0xdC4B87B1b7a3cCFb5d9e85C09a59923C0F6cdAFc';
-      moneymarketContractRef.current = new web3Ref.current.eth.Contract(
-        MoneyMarket_ABI,
-        MoneyMarket_address,
-      );
-
-      fxContractRef.current = new web3Ref.current.eth.Contract(
-        Fx_ABI,
-        Fx_address,
-      );
-
-      loanContractRef.current = new web3Ref.current.eth.Contract(
-        Loan_ABI,
-        Loan_address,
-      );
-      // console.clear();
-      // const x = await moneymarket.methods.getMidPrice.call()
-      console.log('xxxx', fxContractRef.current.methods);
-      // moneymarketContractRef.current.methods
-      // .getMidRates()
-      // .call()
-      // .then((r) => console.log('xxxx', r)),
-
-      console.dir(moneymarketContractRef.current);
-
-      let box
-      try {
-        box = await Box.openBox(accounts[0],web3Provider);        
-      } catch (error) {
-        console.log("box err",error,accounts[0])        
-      }
-
-
-      web3Ref.current.eth.subscribe('newBlockHeaders', () => {
-        setcount((c) => c + 1);
+      web3ModalRef.current = new Web3Modal({
+        network: 'ropsten', // optional
+        cacheProvider: false, // optional
+        providerOptions: {
+          authereum: {
+            package: Authereum, // required
+          },
+          unilogin: {
+            package: UniLogin, // required
+          },
+        },
       });
-      setaccount(accounts[0]);
-      setbox(box);
     })();
 
     return () => {};
@@ -181,6 +202,8 @@ function App() {
             <NavBar
               setCurrentCurrency={setCurrentCurrency}
               currentCurrency={currentCurrency}
+              onConnect={onConnect}
+              account={account}
             />
 
             <Switch>
