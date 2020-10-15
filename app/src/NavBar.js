@@ -80,6 +80,7 @@ const StyledTab = withStyles((theme) => ({
     fontWeight: theme.typography.fontWeightRegular,
     fontSize: theme.typography.pxToRem(15),
     marginRight: theme.spacing(1),
+    minWidth: 100,
     '&:focus': {
       opacity: 1,
     },
@@ -120,6 +121,8 @@ export default function Navbar(props) {
     setValue(newValue);
   };
 
+  console.log('onConnect', props.onConnect);
+
   return (
     <div className={classes.root}>
       <AppBar position="static" color="default">
@@ -129,9 +132,9 @@ export default function Navbar(props) {
               component={Link}
               to="/moneymkt/3m"
               className={classes.navs}
-              style={{ marginRight: 10,width:250 }}
+              style={{ marginRight: 10, width: 250 }}
             >
-              <img src={logobtnb} alt="logo" style={{width:240}}/>
+              <img src={logobtnb} alt="logo" style={{ width: 240 }} />
               {/* <Avatar
                 alt="Secured Finance"
                 src={logo}
@@ -174,6 +177,20 @@ export default function Navbar(props) {
               />
             ))}
           </StyledTabs>
+          <div>
+            {props.account ? (
+              <Button disabled>
+                {props.account.slice(0, 3) + '..' + props.account.slice(-2)}
+              </Button>
+            ) : (
+              <Button
+                style={{ textTransform: 'capitalize' }}
+                onClick={props.onConnect}
+              >
+                Connect
+              </Button>
+            )}
+          </div>
         </Toolbar>
       </AppBar>
     </div>

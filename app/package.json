@@ -21,7 +21,9 @@
     "@testing-library/user-event": "^7.1.2",
     "@textile/hub": "^0.5.1",
     "@textile/powergate-client": "^0.2.0",
+    "@unilogin/provider": "^0.6.1",
     "apexcharts": "^3.19.3",
+    "authereum": "^0.1.0",
     "axios": "^0.19.2",
     "bootstrap": "^4.5.0",
     "chart.js": "^2.9.3",
@@ -48,7 +50,8 @@
     "react-virtualized": "^9.21.2",
     "slate-react-system": "0.1.0",
     "uuid": "^8.3.0",
-    "web3": "^1.2.11"
+    "web3": "^1.2.11",
+    "web3modal": "^1.9.1"
   },
   "scripts": {
     "start": "react-scripts start",
