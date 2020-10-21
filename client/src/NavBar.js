@@ -195,7 +195,6 @@ export default function Navbar(props) {
                 <Button
                   color="primary"
                   variant="outlined"
-                  title={props.account}
                   disableFocusRipple
                   disableElevation
                   disableRipple
