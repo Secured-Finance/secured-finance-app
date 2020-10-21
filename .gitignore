@@ -2,6 +2,7 @@
 coverage
 build
 node_modules
+**/node_modules
 stats.json
 
 # Cruft
@@ -9,5 +10,8 @@ stats.json
 npm-debug.log
 .idea
 
-app/.env
+server/.env
 .env
+*.txt
+ignore*
+misc/*
