@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from "react";
 import {
   Tabs,
   Tab,
@@ -14,7 +14,10 @@ import {
   CircularProgress,
   Backdrop,
   withStyles,
-} from '@material-ui/core';
+  Paper,
+  Box,
+  ButtonGroup,
+} from "@material-ui/core";
 import {
   BrowserRouter as Router,
   Switch,
@@ -24,23 +27,23 @@ import {
   useLocation,
   useRouteMatch,
   Redirect,
-} from 'react-router-dom';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import Duration from './Duration';
-import { ContractContext } from '../../App';
-import Slide from '@material-ui/core/Slide';
-import BootstrapInput from './component/BootstrapInput';
-import { Checkmark } from 'react-checkmark';
+} from "react-router-dom";
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import Duration from "./Duration";
+import { ContractContext } from "../../App";
+import Slide from "@material-ui/core/Slide";
+import BootstrapInput from "./component/BootstrapInput";
+import { Checkmark } from "react-checkmark";
 
 const useStyles = makeStyles((theme) => ({
   tab: {
-    '&:hover': {
-      textDecoration: 'none',
-      color: '#fff',
+    "&:hover": {
+      textDecoration: "none",
+      color: "#fff",
     },
   },
   dialog: {
@@ -48,88 +51,67 @@ const useStyles = makeStyles((theme) => ({
     minWidth: 230,
   },
   dialogBtn: {
-    textAlign: 'center',
+    textAlign: "center",
     marginTop: 20,
   },
   dContent: {
-    position: 'relative',
+    position: "relative",
   },
   spinner: {
-    position: 'absolute',
-    display: 'flex',
+    position: "absolute",
+    display: "flex",
     top: 0,
     left: 0,
     bottom: 0,
     right: 0,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     // textAlign: 'center',
     // top: '50%',
     // transform: 'translateY(-50%)',
-    background: '#424242',
+    background: "#424242",
     zIndex: 999,
     // height:400,
     // width:600
   },
   backdrop: {
     zIndex: theme.zIndex.drawer + 1,
-    color: '#fff',
+    color: "#fff",
+  },
+  right: {
+    paddingBottom: theme.spacing(4),
   },
 }));
 
 function a11yProps(index) {
   return {
     id: `simple-tab-${index}`,
-    'aria-controls': `simple-tabpanel-${index}`,
+    "aria-controls": `simple-tabpanel-${index}`,
   };
 }
 
 const StyledTabs = withStyles({
-  root: {
-    background: '#303030',
-  },
+  // root: {
+  //   background: "red",
+  // },
   indicator: {
-    top: 0,
-    display: 'flex',
-    justifyContent: 'center',
-    backgroundColor: 'transparent',
-    '& > div': {
-      maxWidth: 20,
-      width: '100%',
-      maxHeight: 1,
-      backgroundColor: 'white',
-    },
+    display: "none",
   },
-})((props) => <Tabs {...props} TabIndicatorProps={{ children: <div /> }} />);
+})((props) => <Tabs {...props} />);
 
 const StyledTab = withStyles((theme) => ({
   root: {
-    textTransform: 'none',
-    color: '#fff',
-    fontSize: theme.typography.pxToRem(15),
+    textTransform: "none",
+    color: "#fff",
+    fontSize: theme.typography.pxToRem(10),
     marginRight: theme.spacing(1),
-    '&:focus': {
-      opacity: 1,
-    },
-    '&:hover': {
-      textDecoration: 'none',
-      color: 'inherit',
-    },
-    '&$selected': {
-      // color: '#1890ff',
-      fontWeight: theme.typography.fontWeightMedium,
-      background: '#424242',
-      border: ' 0.1px solid transparent',
-      borderBottom: 'none',
-      borderTopLeftRadius: '.25rem',
-      borderTopRightRadius: '.25rem',
-      // border:'1px dashed #212121'
-    },
   },
-  selected: {},
-}))((props) => <Tab {...props} />);
+  selected: {
+    background: "red",
+  },
+}))((props) => <Button {...props}>{props.label}</Button>);
 
-const ccyPairs = ['ETH', 'FIL'];
+const ccyPairs = ["ETH", "FIL"];
 
 const ChosenRowContext = React.createContext({});
 
@@ -138,7 +120,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 export default function Right(props) {
-  const [tabValue, setTabValue] = React.useState('3m');
+  const [tabValue, setTabValue] = React.useState("3m");
   const [allBooks, setallBooks] = React.useState([]);
   const [midRates, setmidRates] = React.useState([]);
   let { url } = useRouteMatch();
@@ -149,27 +131,27 @@ export default function Right(props) {
   const [currType, setcurrType] = useState(null);
   const [selectedRow, setselectedRow] = useState(null);
 
-  const [dialogAmount, setdialogAmount] = useState('');
+  const [dialogAmount, setdialogAmount] = useState("");
   const [dialogLoading, setdialogLoading] = useState(false);
   const [dialogState, setdialogState] = useState(null);
 
-  console.log('selectedRow', selectedRow);
+  console.log("selectedRow", selectedRow);
 
-  const handleChange = (event, index) => {
-    console.log('handleChange', tabValue);
-    setTabValue(tabs[index]);
+  const handleChange = (tab) => () => {
+    console.log("handleChange", tabValue);
+    setTabValue(tab);
   };
 
   const confirmLoan = async () => {
     setdialogLoading(true);
     console.log(
-      'confirmLoan',
+      "confirmLoan",
       selectedRow.addr,
-      ['borrow', 'lend'].indexOf(currType),
+      ["borrow", "lend"].indexOf(currType),
       Number(contract.currentCurrency),
       tabs.indexOf(tabValue),
       Number(dialogAmount),
-      contract.account,
+      contract.account
     );
 
     // contract.loanContract.options.gasPrice = '20000000000000';
@@ -178,10 +160,10 @@ export default function Right(props) {
         .makeLoanDeal(
           selectedRow.addr,
           // ['lend', 'borrow'].indexOf(currType),
-          ['borrow', 'lend'].indexOf(currType),
+          ["borrow", "lend"].indexOf(currType),
           Number(contract.currentCurrency),
           tabs.indexOf(tabValue),
-          Number(dialogAmount),
+          Number(dialogAmount)
         )
         .send({
           from: contract.account,
@@ -190,28 +172,28 @@ export default function Right(props) {
         });
 
       console.log(
-        'confirmLoan after',
+        "confirmLoan after",
         selectedRow.addr,
-        ['borrow', 'lend'].indexOf(currType),
+        ["borrow", "lend"].indexOf(currType),
         Number(contract.currentCurrency),
         tabs.indexOf(tabValue),
-        Number(dialogAmount),
+        Number(dialogAmount)
       );
 
       setdialogLoading(false);
-      setdialogState('s');
+      setdialogState("s");
     } catch (e) {
       console.log(
-        'confirmLoan err',
+        "confirmLoan err",
         selectedRow.addr,
-        ['borrow', 'lend'].indexOf(currType),
+        ["borrow", "lend"].indexOf(currType),
         Number(contract.currentCurrency),
         tabs.indexOf(tabValue),
-        Number(dialogAmount),
+        Number(dialogAmount)
       );
-      console.log('makeLoanDeal err', e);
+      console.log("makeLoanDeal err", e);
       setdialogLoading(false);
-      setdialogState('e');
+      setdialogState("e");
     } finally {
       setTimeout(() => {
         setcurrType(null);
@@ -220,9 +202,9 @@ export default function Right(props) {
     }
   };
 
-  console.log('currType', tabValue);
+  console.log("currType", tabValue);
 
-  const tabs = ['3m', '6m', '1y', '2y', '3y', '5y'];
+  const tabs = ["3m", "6m", "1y", "2y", "3y", "5y"];
 
   const { res } = props;
 
@@ -246,10 +228,10 @@ export default function Right(props) {
     for (let book of allBooks) {
       const curr_borrowers = book.borrowers[parseInt(contract.currentCurrency)];
       const curr_lenders = book.lenders[parseInt(contract.currentCurrency)];
-      console.log('allboo', curr_borrowers);
+      console.log("allboo", curr_borrowers);
 
       for (let borrower of curr_borrowers) {
-        console.log('allboo 1', borrower);
+        console.log("allboo 1", borrower);
         const termIndex = tabs[parseInt(borrower[0])];
         borrowers[termIndex] = borrowers[termIndex].concat({
           term: parseInt(borrower[0]),
@@ -261,7 +243,7 @@ export default function Right(props) {
       }
 
       for (let lender of curr_lenders) {
-        console.log('allboo 1', lender);
+        console.log("allboo 1", lender);
         const termIndex = tabs[parseInt(lender[0])];
         lenders[termIndex] = lenders[termIndex].concat({
           term: parseInt(lender[0]),
@@ -271,7 +253,7 @@ export default function Right(props) {
           addr: lender[5],
         });
       }
-      console.log('allboo 2', borrowers, lenders);
+      console.log("allboo 2", borrowers, lenders);
       // break
     }
   }
@@ -289,7 +271,7 @@ export default function Right(props) {
             .getMarketMakers()
             .call();
 
-          console.log('getMarketMakers x', x);
+          console.log("getMarketMakers x", x);
 
           const allBooks = await contract.moneymarketContract.methods
             .getAllBooks()
@@ -302,7 +284,7 @@ export default function Right(props) {
           const midRates = await contract.moneymarketContract.methods
             .getMidRates()
             .call();
-          console.log('midRates', midRates);
+          console.log("midRates", midRates);
           setmidRates(midRates);
         } catch (error) {}
       }
@@ -311,37 +293,57 @@ export default function Right(props) {
     return () => {};
   }, [tabValue, contract]);
 
-  console.log('allBooks', allBooks);
+  console.log("allBooks", allBooks);
 
   let currentMidrate = 0;
   if (midRates.length > 0) {
     currentMidrate =
       Number(
-        midRates[parseInt(contract.currentCurrency)][tabs.indexOf(tabValue)],
+        midRates[parseInt(contract.currentCurrency)][tabs.indexOf(tabValue)]
       ) / 100;
   }
 
   return (
     <div>
-      <StyledTabs
-        value={tabs.indexOf(tabValue)}
-        onChange={handleChange}
-        aria-label="simple tabs example"
-        variant="fullWidth"
+      <div
+        style={{
+          display: "flex",
+          padding: 10,
+          justifyContent: "space-between",
+          alignItems:"center",
+        }}
       >
-        {tabs.map((tab) => (
-          <StyledTab
-            wrapped
-            label={tab}
-            {...a11yProps(0)}
-            key={tab}
-            component={Link}
-            to={`${url}/${tab.toLowerCase()}`}
-            style={{ minWidth: '80px' }}
-            className={classes.tab}
-          />
-        ))}
-      </StyledTabs>
+        <div>
+          <Button variant="contained" size="small" color="secondary" style={{marginRight:4}}>
+            Borrow
+          </Button>
+          <Button variant="contained" size="small" color="primary">
+            Lend
+          </Button>
+        </div>
+        <div>
+          {tabs.map((tab, i) => (
+            <Button
+              style={{
+                background: tabValue === tab ? "#2e084b" : "#bb72f0",
+                fontSize: 12,
+                outline: "none",
+                minWidth: 30,
+                height: 30,
+                borderRadius: 0,
+                marginRight: 5,
+              }}
+              size="small"
+              onClick={handleChange(tab)}
+              component={Link}
+              to={`${url}/${tab.toLowerCase()}`}
+            >
+              {tab}
+            </Button>
+          ))}
+        </div>
+      </div>
+
       <Switch>
         <Route exact path={`/moneymkt/:duration`}>
           <Duration
@@ -363,9 +365,9 @@ export default function Right(props) {
       >
         <DialogTitle
           id="responsive-dialog-title"
-          style={{ textAlign: 'center' }}
+          style={{ textAlign: "center" }}
         >
-          {currType ? currType.toUpperCase() : 'Details'}
+          {currType ? currType.toUpperCase() : "Details"}
         </DialogTitle>
         <DialogContent dividers className={classes.dContent}>
           <Backdrop className={classes.backdrop} open={dialogLoading}>
@@ -377,7 +379,7 @@ export default function Right(props) {
             </div>
           ) : null} */}
           {dialogState !== null ? (
-            dialogState === 's' ? (
+            dialogState === "s" ? (
               <div className={classes.spinner}>
                 <Checkmark size="xxLarge" />
               </div>
@@ -435,10 +437,10 @@ export default function Right(props) {
                   <BootstrapInput
                     value={dialogAmount}
                     onChange={(e) => {
-                      console.log('ok', e.target.value);
+                      console.log("ok", e.target.value);
                       setdialogAmount(e.target.value);
                     }}
-                    type={'number'}
+                    type={"number"}
                   />
                 </TableCell>
               </TableRow>
