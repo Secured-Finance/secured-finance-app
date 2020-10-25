@@ -60,57 +60,84 @@ export default function MoneyMKT(props) {
 
   const [fileth, setfileth] = useState(0);
 
+  //del
+  const bs = [0, 0.4, 0.6, 0.7, 0.75, 0.775, 0.79];
+  const ls = [0, 0.3, 0.4, 0.45, 0.475, 0.485, 0.491];
+  const ms = [];
+
+  for (let i = 0; i < bs.length; i++) {
+    const x = (bs[i] + ls[i]) / 2;
+    ms.push(x);
+  }
+
   const data = {
     labels: ["0", "3m", "6m", "1y", "2y", "3y", "5y"],
     datasets: [
       {
-        label: "Lend",
-        fill: false,
+        label: "Borrow",
+        fill: true,
         lineTension: 0.2,
-        backgroundColor: "white",
-        borderColor: "yellow",
+        backgroundColor: "rgb(214, 115, 90,0.1)",
+        borderColor: "#d6735a",
         borderCapStyle: "butt",
         borderDash: [],
         borderDashOffset: 0.0,
         borderJoinStyle: "miter",
-        pointBorderColor: "yellow",
+        pointBorderColor: "#d6735a",
         pointBackgroundColor: "white",
         pointBorderWidth: 1,
         pointHoverRadius: 4,
         pointHoverBackgroundColor: "rgba(75,192,192,1)",
-        pointHoverBorderColor: "yellow",
+        pointHoverBorderColor: "#d6735a",
         pointHoverBorderWidth: 1.5,
         pointRadius: 1.7,
         pointHitRadius: 5,
-        data: lenderRates.length
-          ? lenderRates[contract.currentCurrency].map((r) => r / 100).unshift(0)
-          : [],
+        data: bs,
+        borderWidth: 0.5,
+        opacity:0.1
+      },
+      {
+        label: "Lend",
+        fill: true,
+        lineTension: 0.2,
+        backgroundColor: "rgb(62, 105, 137,0.5)",
+        borderColor: "#3e6989",
+        borderCapStyle: "butt",
+        borderDash: [],
+        borderDashOffset: 0.0,
+        borderJoinStyle: "miter",
+        pointBorderColor: "#3e6989",
+        pointBackgroundColor: "white",
+        pointBorderWidth: 1,
+        pointHoverRadius: 4,
+        pointHoverBackgroundColor: "rgba(75,192,192,1)",
+        pointHoverBorderColor: "#3e6989",
+        pointHoverBorderWidth: 1.5,
+        pointRadius: 1.7,
+        pointHitRadius: 5,
+        data: ls,
         borderWidth: 0.5,
       },
       {
-        label: "Borrow",
+        label: "Mid Price",
         fill: false,
         lineTension: 0.2,
-        backgroundColor: "white",
-        borderColor: "green",
+        backgroundColor: "rgb(199, 149, 86,0.5)",
+        borderColor: "#c79556",
         borderCapStyle: "butt",
         borderDash: [],
         borderDashOffset: 0.0,
         borderJoinStyle: "miter",
-        pointBorderColor: "green",
+        pointBorderColor: "#c79556",
         pointBackgroundColor: "white",
         pointBorderWidth: 1,
         pointHoverRadius: 4,
         pointHoverBackgroundColor: "rgba(75,192,192,1)",
-        pointHoverBorderColor: "green",
+        pointHoverBorderColor: "#c79556",
         pointHoverBorderWidth: 1.5,
         pointRadius: 1.7,
         pointHitRadius: 5,
-        data: borrowerRates.length
-          ? borrowerRates[contract.currentCurrency]
-              .map((r) => r / 100)
-              .unshift(0)
-          : [],
+        data: ms,
         borderWidth: 0.5,
       },
     ],
