@@ -288,7 +288,7 @@ export default function MoneyMKT(props) {
           <Line data={data} />
           <Paper className={classes.paper} style={{ marginTop: 8 }}>
             <div className={classes.priceQuote}>
-              1 FIL = {`${fileth ? fileth : ".."} ETH`}
+              1 FIL = {`${'fileth' ? 0.079 : ".."} ETH`}
             </div>
           </Paper>
           <Paper className={classes.paper} style={{ marginTop: 8 }}>
