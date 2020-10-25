@@ -50,6 +50,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const useStylesTab = makeStyles((theme) => ({
+  selected: {
+    background: "#172734",
+  },
+}));
+
 // connectBtn:{
 //   background:
 // }
@@ -100,7 +106,20 @@ const StyledTab = withStyles((theme) => ({
     },
   },
   selected: {},
-}))((props) => <Tab disableRipple {...props} />);
+}))((props) => {
+  const classes = useStylesTab();
+
+  return (
+    <Tab
+    style={{textDecoration:'none'}}
+      disableRipple
+      {...props}
+      classes={{
+        selected: classes.selected,
+      }}
+    />
+  );
+});
 
 export default function Navbar(props) {
   let location = useLocation();
@@ -129,27 +148,27 @@ export default function Navbar(props) {
 
   return (
     <div className={classes.root}>
-        <Toolbar
-          component="nav"
-          variant="regular"
-          className={classes.toolbar}
-          style={{
-            boxShadow: "none",
-            borderBottom: "2px solid #192b38",
-            background: "#0f1a22",
-            minHeight: 30,
-            minWidth:'100vw'
-          }}
-        >
-          <Box className={classes.navs}>
-            <Box
-              component={Link}
-              to="/moneymkt/3m"
-              className={classes.navs}
-              style={{ width: 250 }}
-            >
-              <img src={logobtnb} alt="logo" style={{ width: 190 }} />
-              {/* <Avatar
+      <Toolbar
+        component="nav"
+        variant="regular"
+        className={classes.toolbar}
+        style={{
+          boxShadow: "none",
+          borderBottom: "2px solid #192b38",
+          background: "#0f1a22",
+          minHeight: 30,
+          minWidth: "100vw",
+        }}
+      >
+        <Box className={classes.navs}>
+          <Box
+            component={Link}
+            to="/moneymkt/3m"
+            className={classes.navs}
+            style={{ width: 250 }}
+          >
+            <img src={logobtnb} alt="logo" style={{ width: 190 }} />
+            {/* <Avatar
                 alt="Secured Finance"
                 src={logo}
                 className={classes.logo}
@@ -159,52 +178,51 @@ export default function Navbar(props) {
                   Secured Finance
                 </Typography>
               </Button> */}
-            </Box>
-            
           </Box>
+        </Box>
 
-          <StyledTabs
-            value={value}
-            onChange={handleChange}
-            aria-label="simple tabs example"
-            component={"div"}
-            className={classes.navs}
-          >
-            {tabs.map((tab) => (
-              <StyledTab
-                label={tab}
-                {...a11yProps(0)}
-                key={tab}
-                component={Link}
-                to={`/${tab.toLowerCase()}`}
-              />
-            ))}
-          </StyledTabs>
-          <div>
-            {props.account ? (
-              <Tooltip title={props.account} arrow>
-                <Button
-                  color="primary"
-                  variant="outlined"
-                  disableFocusRipple
-                  disableElevation
-                  disableRipple
-                >
-                  {props.account.slice(0, 3) + ".." + props.account.slice(-2)}
-                </Button>
-              </Tooltip>
-            ) : (
+        <StyledTabs
+          value={value}
+          onChange={handleChange}
+          aria-label="simple tabs example"
+          component={"div"}
+          className={classes.navs}
+        >
+          {tabs.map((tab) => (
+            <StyledTab
+              label={tab}
+              {...a11yProps(0)}
+              key={tab}
+              component={Link}
+              to={`/${tab.toLowerCase()}`}
+            />
+          ))}
+        </StyledTabs>
+        <div>
+          {props.account ? (
+            <Tooltip title={props.account} arrow>
               <Button
-                style={{ textTransform: "capitalize" }}
-                onClick={props.onConnect}
-                variant="contained"
                 color="primary"
+                variant="outlined"
+                disableFocusRipple
+                disableElevation
+                disableRipple
               >
-                Connect
+                {props.account.slice(0, 3) + ".." + props.account.slice(-2)}
               </Button>
-            )}
-          </div>
-        </Toolbar>
+            </Tooltip>
+          ) : (
+            <Button
+              style={{ textTransform: "capitalize" }}
+              onClick={props.onConnect}
+              variant="contained"
+              color="primary"
+            >
+              Connect
+            </Button>
+          )}
+        </div>
+      </Toolbar>
     </div>
   );
 }

@@ -21,6 +21,7 @@ const useStyles = makeStyles((theme) => ({
   root: {
     marginTop: theme.spacing(2),
     padding: theme.spacing(2),
+    paddingTop: theme.spacing(5),
     flexGrow: 1,
     textAlign: "center",
   },
@@ -39,6 +40,10 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 //del
+const type={
+  'b':'Borrow',
+  'l':'Lend'
+}
 
 export default function Duration(props) {
   let { duration } = useParams();

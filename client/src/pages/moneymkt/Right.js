@@ -38,6 +38,7 @@ import { ContractContext } from "../../App";
 import Slide from "@material-ui/core/Slide";
 import BootstrapInput from "./component/BootstrapInput";
 import { Checkmark } from "react-checkmark";
+import clsx from "clsx";
 
 const useStyles = makeStyles((theme) => ({
   tab: {
@@ -80,6 +81,17 @@ const useStyles = makeStyles((theme) => ({
   },
   right: {
     paddingBottom: theme.spacing(4),
+  },
+  actionType: {
+    marginRight: 14,
+    fontSize: 22,
+    fontWeight: "bold",
+    color: "#365b77",
+    cursor: "pointer",
+  },
+  selected: {
+    color: "white",
+    borderBottom: "3px solid #d6735a",
   },
 }));
 
@@ -128,7 +140,7 @@ export default function Right(props) {
   const contract = useContext(ContractContext);
 
   const [open, setopen] = useState(false);
-  const [currType, setcurrType] = useState(null);
+  const [currType, setcurrType] = useState("b");
   const [selectedRow, setselectedRow] = useState(null);
 
   const [dialogAmount, setdialogAmount] = useState("");
@@ -204,7 +216,7 @@ export default function Right(props) {
 
   console.log("currType", tabValue);
 
-  const tabs = ["3m", "6m", "1y", "2y", "3y", "5y"];
+  const tabs = ["1m","3m", "6m", "1y", "2y", "3y", "5y"];
 
   const { res } = props;
 
@@ -303,6 +315,22 @@ export default function Right(props) {
       ) / 100;
   }
 
+  const chooseType = (type) => () => {
+    switch (type) {
+      case "b":
+        setcurrType(type);
+        break;
+
+      case "l":
+        setcurrType(type);
+
+        break;
+
+      default:
+        break;
+    }
+  };
+
   return (
     <div>
       <div
@@ -310,28 +338,39 @@ export default function Right(props) {
           display: "flex",
           padding: 10,
           justifyContent: "space-between",
-          alignItems:"center",
+          alignItems: "center",
         }}
       >
-        <div>
-          <Button variant="contained" size="small" color="secondary" style={{marginRight:4}}>
+        <div style={{ display: "flex" }}>
+          <div
+            className={clsx(classes.actionType, {
+              [classes.selected]: currType === "b",
+            })}
+            onClick={chooseType("b")}
+          >
             Borrow
-          </Button>
-          <Button variant="contained" size="small" color="primary">
+          </div>
+          <div
+            className={clsx(classes.actionType, {
+              [classes.selected]: currType === "l",
+            })}
+            onClick={chooseType("l")}
+          >
             Lend
-          </Button>
+          </div>
         </div>
         <div>
           {tabs.map((tab, i) => (
             <Button
               style={{
-                background: tabValue === tab ? "#2e084b" : "#bb72f0",
+                background: tabValue === tab ? "#4B94C2" : "#172734",
                 fontSize: 12,
                 outline: "none",
                 minWidth: 30,
                 height: 30,
                 borderRadius: 0,
                 marginRight: 5,
+                
               }}
               size="small"
               onClick={handleChange(tab)}
@@ -344,18 +383,21 @@ export default function Right(props) {
         </div>
       </div>
 
-      <Switch>
-        <Route exact path={`/moneymkt/:duration`}>
-          <Duration
-            orderbook={orderbook}
-            currentMidrate={currentMidrate}
-            setcurrType={setcurrType}
-            setselectedRow={setselectedRow}
-          />
-        </Route>
-      </Switch>
+      <Paper>
+        <Switch>
+          <Route exact path={`/moneymkt/:duration`}>
+            <Duration
+              orderbook={orderbook}
+              currentMidrate={currentMidrate}
+              currType={currType}
+              setcurrType={setcurrType}
+              setselectedRow={setselectedRow}
+            />
+          </Route>
+        </Switch>
+      </Paper>
       <Dialog
-        open={currType !== null}
+        open={false}
         onClose={() => setcurrType(null)}
         aria-labelledby="responsive-dialog-title"
         TransitionComponent={Transition}
