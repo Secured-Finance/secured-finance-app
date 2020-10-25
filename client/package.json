@@ -33,6 +33,7 @@
     "fontsource-roboto": "^2.2.6",
     "identity-wallet": "^1.4.1",
     "isnumber": "^1.0.0",
+    "lodash": "^4.17.20",
     "moment": "^2.27.0",
     "mui-datatables": "^3.3.1",
     "react": "^16.13.1",

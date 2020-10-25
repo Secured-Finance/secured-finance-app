@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
-import { Paper, Card, makeStyles, Grid } from "@material-ui/core";
-import { Line } from "react-chartjs-2";
+import { Paper, Card, makeStyles, Grid, Button } from "@material-ui/core";
+import { Line, defaults } from "react-chartjs-2";
 import Right from "./moneymkt/Right";
 import { useRouteMatch, Redirect } from "react-router-dom";
 import Axios from "axios";
@@ -10,6 +10,19 @@ import { Widget } from "react-chat-widget";
 // import 'react-chat-widget/lib/styles.css';
 import Createtokenx from "../slate/Createtokenx";
 import FullScreenDialog from "./FullScreenDialog";
+import merge from "lodash.merge";
+
+merge(defaults, {
+  global: {
+    // line: {
+    //   borderColor: '#F85F73',
+    //  },
+    defaultFontColor: "#78acd3",
+    legend: {
+      display: false,
+    },
+  },
+});
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -48,7 +61,7 @@ export default function MoneyMKT(props) {
   const [fileth, setfileth] = useState(0);
 
   const data = {
-    labels: ["3m", "6m", "1y", "2y", "3y", "5y"],
+    labels: ["0", "3m", "6m", "1y", "2y", "3y", "5y"],
     datasets: [
       {
         label: "Lend",
@@ -70,7 +83,7 @@ export default function MoneyMKT(props) {
         pointRadius: 1.7,
         pointHitRadius: 5,
         data: lenderRates.length
-          ? lenderRates[contract.currentCurrency].map((r) => r / 100)
+          ? lenderRates[contract.currentCurrency].map((r) => r / 100).unshift(0)
           : [],
         borderWidth: 0.5,
       },
@@ -94,7 +107,9 @@ export default function MoneyMKT(props) {
         pointRadius: 1.7,
         pointHitRadius: 5,
         data: borrowerRates.length
-          ? borrowerRates[contract.currentCurrency].map((r) => r / 100)
+          ? borrowerRates[contract.currentCurrency]
+              .map((r) => r / 100)
+              .unshift(0)
           : [],
         borderWidth: 0.5,
       },
@@ -145,9 +160,104 @@ export default function MoneyMKT(props) {
         <Redirect to="/moneymkt/3m" />
 
         <Grid item xs={6} align="center">
-          <Paper className={classes.paper}>
-            <Line data={data} />
-          </Paper>
+          <div
+            style={{ display: "flex", alignItems: "center", marginBottom: 24 }}
+          >
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+              }}
+            >
+              <select
+                name="currentCurrency"
+                id="currentCurrency"
+                value={props.currentCurrency}
+                style={{
+                  height: 25,
+                  outline: "none",
+                  background: "#172734",
+                  border: "1px solid #192b38",
+                  color: "white",
+                  borderTopLeftRadius: 5,
+                  borderTopRightRadius: 5,
+                  borderColor: "#192b38",
+                  fontWeight: "bold",
+                  marginLeft:30
+                }}
+                onChange={(e) => {
+                  // props.setCurrentCurrency(e.target.value);
+                }}
+              >
+                <option value="1">FIL</option>
+                <option value="0">ETH</option>
+              </select>
+            </div>
+            <div
+              style={{
+                fontWeight: 400,
+                fontSize: 22,
+                paddingLeft: 26,
+                marginRight: 33,
+              }}
+            >
+              Loan Rates
+            </div>
+            <div style={{ display: "flex" }}>
+              <div>
+                <Button
+                  variant="contained"
+                  size="small"
+                  style={{
+                    background: "#d6735a",
+                    borderRadius: 0,
+                    outline: "none",
+                    marginRight: 5,
+                  }}
+                  disableElevation
+                  disableFocusRipple
+                  disableRipple
+                >
+                  Borrow
+                </Button>
+              </div>
+              <div>
+                <Button
+                  variant="contained"
+                  size="small"
+                  style={{
+                    background: "#3e6989",
+                    borderRadius: 0,
+                    outline: "none",
+                    marginRight: 5,
+                  }}
+                  disableElevation
+                  disableFocusRipple
+                  disableRipple
+                >
+                  Lending
+                </Button>
+              </div>
+              <div>
+                <Button
+                  variant="contained"
+                  size="small"
+                  style={{
+                    background: "#c79556",
+                    borderRadius: 0,
+                    outline: "none",
+                  }}
+                  disableElevation
+                  disableFocusRipple
+                  disableRipple
+                >
+                  Mid price
+                </Button>
+              </div>
+            </div>
+          </div>
+          <Line data={data} />
           <Paper className={classes.paper} style={{ marginTop: 8 }}>
             <div className={classes.priceQuote}>
               1 FIL = {`${fileth ? fileth : ".."} ETH`}
@@ -160,9 +270,7 @@ export default function MoneyMKT(props) {
           </Paper>
         </Grid>
         <Grid item xs={6} className={classes.ok}>
-          <Paper className={classes.right}>
-            <Right res={res} />
-          </Paper>
+          <Right res={res} />
         </Grid>
       </Grid>
       <div style={{ position: "absolute", left: 0 }}>{/* <Widget /> */}</div>
