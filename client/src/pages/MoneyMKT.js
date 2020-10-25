@@ -184,7 +184,7 @@ export default function MoneyMKT(props) {
                   borderTopRightRadius: 5,
                   borderColor: "#192b38",
                   fontWeight: "bold",
-                  marginLeft:30
+                  marginLeft: 30,
                 }}
                 onChange={(e) => {
                   // props.setCurrentCurrency(e.target.value);
@@ -192,6 +192,7 @@ export default function MoneyMKT(props) {
               >
                 <option value="1">FIL</option>
                 <option value="0">ETH</option>
+                <option value="2">USDC</option>
               </select>
             </div>
             <div

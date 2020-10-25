@@ -16,6 +16,7 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import ReactVirtualizedTable from "./component/ReactVirtualizedTable";
+import clsx from "clsx";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -24,6 +25,7 @@ const useStyles = makeStyles((theme) => ({
     paddingTop: theme.spacing(5),
     flexGrow: 1,
     textAlign: "center",
+    minHeight: "75vh",
   },
   paper: {
     padding: theme.spacing(2),
@@ -37,13 +39,27 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: theme.typography.fontWeightBold,
     textAlign: "center",
   },
+  row: {
+    borderBottom: "2px solid #192b38",
+    paddingTop: 15,
+    paddingBottom: 15,
+  },
+  even: {
+    background: "#172734",
+  },
+  odd: {
+    background: "#0f1a22",
+  },
+  tbcontainer: {
+    maxHeight: 320,
+  },
 }));
 
 //del
-const type={
-  'b':'Borrow',
-  'l':'Lend'
-}
+const type = {
+  b: "Borrow",
+  l: "Lend",
+};
 
 export default function Duration(props) {
   let { duration } = useParams();
@@ -65,97 +81,143 @@ export default function Duration(props) {
   return (
     <div className={classes.root}>
       <Container>
-        <div style={{ marginBottom: 50 }}>
-          <div style={{ display: "flex" }}>
-            <div
-              style={{
-                width: "60%",
-                textAlign: "start",
-                padding: "5px 10px",
-                border: "0.5px solid white",
-              }}
-            >
-              Amount
-            </div>
-            <div
-              style={{
-                width: "40%",
-                textAlign: "start",
-                padding: 5,
-                border: "0.5px solid white",
-              }}
-            >
-              Rate
-            </div>
-          </div>
+        <div style={{ textAlign: "left", marginBottom: 20 }}>
+          {type[props.currType] + " Rates"}
+        </div>
+        <TableContainer className={classes.tbcontainer}>
+          <Table
+            stickyHeader
+            aria-label="sticky table"
+            className={classes.table}
+            size="small"
+            aria-label="a dense table"
+            style={{
+              border: "2px solid #1e3344",
+              borderRadiusTopLeft: 15,
+              borderRadiusTopRight: 15,
+            }}
+          >
+            <TableHead>
+              <TableRow>
+                <TableCell className={classes.row}>AMOUNT</TableCell>
+                <TableCell className={classes.row}>RATE</TableCell>
+                <TableCell className={classes.row}>PeerID</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody stripedRows>
+              {[1, 2, 3, 4, 5].map((row, i) => (
+                <TableRow key={row.name}>
+                  <TableCell
+                    className={clsx(classes.row, {
+                      [classes.even]: i % 2 === 0,
+                      [classes.odd]: i % 2 !== 0,
+                    })}
+                  >
+                    {"10,000 FIL"}
+                  </TableCell>
+                  <TableCell
+                    className={clsx(classes.row, {
+                      [classes.even]: i % 2 === 0,
+                      [classes.odd]: i % 2 !== 0,
+                    })}
+                  >
+                    {"8.10%"}
+                  </TableCell>
+                  <TableCell
+                    className={clsx(classes.row, {
+                      [classes.even]: i % 2 === 0,
+                      [classes.odd]: i % 2 !== 0,
+                    })}
+                  >
+                    {"0x92..E3"}
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+        <div style={{ marginTop: 20 }}>
+          <Button
+            variant="contained"
+            disableRipple
+            disableFocusRipple
+            size="large"
+            style={{
+              background: "#d6735a",
+              color: "white",
+              textTransform: "capitalize",
+            }}
+          >
+            {type[props.currType]}
+          </Button>
         </div>
       </Container>
-      <Grid container spacing={3}>
+      {/* <Grid container spacing={3}>
         {/* <Grid item xs={12}>
           <div className={classes.midPrice}>{currentMidrate}%</div>
         </Grid> */}
-        <Grid item xs={6}>
-          <div style={{ fontSize: "1.5rem" }}>Borrowersx</div>
-          <ReactVirtualizedTable
-            rows={borrows}
-            columns={[
-              {
-                width: 100,
-                label: "Amount",
-                dataKey: "amount",
-                flexGrow: 1,
-              },
-              {
-                width: 120,
-                label: "Rate %",
-                dataKey: "rate",
-                numeric: true,
-              },
-            ]}
-            type={"lend"}
-            onRowClick={selRow}
-          />
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={() => {
-              setcurrType("lend");
-            }}
-          >
-            Lend
-          </Button>
-        </Grid>
-        <Grid item xs={6}>
-          <div style={{ fontSize: "1.5rem" }}>Lenders</div>
-          <ReactVirtualizedTable
-            rows={lends}
-            columns={[
-              {
-                width: 100,
-                label: "Amount",
-                dataKey: "amount",
-                flexGrow: 1,
-              },
-              {
-                width: 120,
-                label: "Rate %",
-                dataKey: "rate",
-                numeric: true,
-              },
-            ]}
-            onRowClick={selRow}
-          />
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={() => {
-              setcurrType("borrow");
-            }}
-          >
-            Borrow
-          </Button>
-        </Grid>
+      {/* <Grid item xs={6}>
+        <div style={{ fontSize: "1.5rem" }}>Borrowersx</div>
+        <ReactVirtualizedTable
+          rows={borrows}
+          columns={[
+            {
+              width: 100,
+              label: "Amount",
+              dataKey: "amount",
+              flexGrow: 1,
+            },
+            {
+              width: 120,
+              label: "Rate %",
+              dataKey: "rate",
+              numeric: true,
+            },
+          ]}
+          type={"lend"}
+          onRowClick={selRow}
+        />
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => {
+            setcurrType("lend");
+          }}
+        >
+          Lend
+        </Button>
       </Grid>
+      <Grid item xs={6}>
+        <div style={{ fontSize: "1.5rem" }}>Lenders</div>
+        <ReactVirtualizedTable
+          rows={lends}
+          columns={[
+            {
+              width: 100,
+              label: "Amount",
+              dataKey: "amount",
+              flexGrow: 1,
+            },
+            {
+              width: 120,
+              label: "Rate %",
+              dataKey: "rate",
+              numeric: true,
+            },
+          ]}
+          onRowClick={selRow}
+        />
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => {
+            setcurrType("borrow");
+          }}
+        >
+          Borrow
+        </Button>
+      </Grid> */}
+      {/* </Grid> */}
     </div>
   );
 }
