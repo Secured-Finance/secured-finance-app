@@ -49,7 +49,6 @@ export default function Swap() {
   const classes = useStyles();
 
   const handleChange = (tab) => () => {
-    console.log("handleChange", tabValue);
     setTabValue(tab);
   };
 

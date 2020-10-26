@@ -155,7 +155,6 @@ export default function MoneyMKT(props) {
   }, []);
 
   useEffect(() => {
-    console.log("ratess");
     (async () => {
       if (contract.moneymarketContract) {
         const lr = await contract.moneymarketContract.methods
@@ -168,19 +167,16 @@ export default function MoneyMKT(props) {
         setlenderRates(lr);
         setborrowerRates(br);
 
-        console.log("ratess", lr, br);
       }
 
       if (contract.fxContract) {
         const fileth = await contract.fxContract.methods.getMidRates().call();
         setfileth(parseInt(fileth[0]) / 1000);
-        console.log("fileth", fileth);
       }
     })();
     return () => {};
   }, [count, contract]);
 
-  console.log("res", res);
 
   return (
     <div style={{ position: "relative" }}>

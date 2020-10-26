@@ -150,7 +150,6 @@ export default function Right(props) {
   console.log("selectedRow", selectedRow);
 
   const handleChange = (tab) => () => {
-    console.log("handleChange", tabValue);
     setTabValue(tab);
   };
 
@@ -203,7 +202,6 @@ export default function Right(props) {
         tabs.indexOf(tabValue),
         Number(dialogAmount)
       );
-      console.log("makeLoanDeal err", e);
       setdialogLoading(false);
       setdialogState("e");
     } finally {
@@ -240,10 +238,8 @@ export default function Right(props) {
     for (let book of allBooks) {
       const curr_borrowers = book.borrowers[parseInt(contract.currentCurrency)];
       const curr_lenders = book.lenders[parseInt(contract.currentCurrency)];
-      console.log("allboo", curr_borrowers);
 
       for (let borrower of curr_borrowers) {
-        console.log("allboo 1", borrower);
         const termIndex = tabs[parseInt(borrower[0])];
         borrowers[termIndex] = borrowers[termIndex].concat({
           term: parseInt(borrower[0]),
@@ -255,7 +251,6 @@ export default function Right(props) {
       }
 
       for (let lender of curr_lenders) {
-        console.log("allboo 1", lender);
         const termIndex = tabs[parseInt(lender[0])];
         lenders[termIndex] = lenders[termIndex].concat({
           term: parseInt(lender[0]),
@@ -265,7 +260,6 @@ export default function Right(props) {
           addr: lender[5],
         });
       }
-      console.log("allboo 2", borrowers, lenders);
       // break
     }
   }
@@ -479,7 +473,6 @@ export default function Right(props) {
                   <BootstrapInput
                     value={dialogAmount}
                     onChange={(e) => {
-                      console.log("ok", e.target.value);
                       setdialogAmount(e.target.value);
                     }}
                     type={"number"}

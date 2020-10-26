@@ -23,7 +23,6 @@ const defaultToolbarStyles = {
 };
 
 const testAuthentication = () => {
-  console.log('testAuthentication start');
   const url = `https://api.pinata.cloud/data/testAuthentication`;
   return axios
     .get(url, {
@@ -35,7 +34,6 @@ const testAuthentication = () => {
     })
     .then(function (response) {
       //handle your response here
-      console.log('testAuthentication', response);
     })
     .catch(function (error) {
       //handle error here
@@ -43,7 +41,6 @@ const testAuthentication = () => {
 };
 
 const pinfiletoipfs = (blob) => {
-  console.log('pinfiletoipfs start');
   const url = `https://api.pinata.cloud/pinning/pinFileToIPFS`;
 
   let data = new FormData();
@@ -85,7 +82,6 @@ const pinfiletoipfs = (blob) => {
     })
     .then(function (response) {
       //handle your response here
-      console.log('pinfiletoipfs', response);
       return response;
     })
     .catch(function (error) {
@@ -107,7 +103,6 @@ function CustomToolbar(props) {
     domtoimage
       .toBlob(document.getElementById('loanbook'))
       .then(function (blob) {
-        console.log('blob', blob);
 
         pinfiletoipfs(blob).then((res) => {
           setOpen(true);
