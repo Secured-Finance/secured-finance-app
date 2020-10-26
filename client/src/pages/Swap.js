@@ -273,7 +273,7 @@ export default function Swap() {
                           <TableCell className={classes.row}>RECEIVE</TableCell>
                         </TableRow>
                       </TableHead>
-                      <TableBody stripedRows>
+                      <TableBody >
                         {[1, 2, 3, 4, 5].map((row, i) => (
                           <TableRow key={i}>
                             <TableCell className={clsx(classes.row)}>
@@ -312,7 +312,7 @@ export default function Swap() {
                           <TableCell className={classes.row}>PAY</TableCell>
                         </TableRow>
                       </TableHead>
-                      <TableBody stripedRows>
+                      <TableBody >
                         {[1, 2, 3, 4, 5].map((row, i) => (
                           <TableRow key={i}>
                             <TableCell className={clsx(classes.row)}>

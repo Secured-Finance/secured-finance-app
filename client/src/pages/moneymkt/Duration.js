@@ -104,7 +104,7 @@ export default function Duration(props) {
                 <TableCell className={classes.row}>PeerID</TableCell>
               </TableRow>
             </TableHead>
-            <TableBody stripedRows>
+            <TableBody >
               {[1, 2, 3, 4, 5].map((row, i) => (
                 <TableRow key={i}>
                   <TableCell
