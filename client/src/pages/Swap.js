@@ -140,6 +140,7 @@ export default function Swap() {
           <div>
             {tabs.map((tab, i) => (
               <Button
+                key={i}
                 style={{
                   background: tabValue === tab ? "#4B94C2" : "#172734",
                   fontSize: 12,
@@ -274,7 +275,7 @@ export default function Swap() {
                       </TableHead>
                       <TableBody stripedRows>
                         {[1, 2, 3, 4, 5].map((row, i) => (
-                          <TableRow key={row.name}>
+                          <TableRow key={i}>
                             <TableCell className={clsx(classes.row)}>
                               {"10,000 FIL"}
                             </TableCell>
@@ -313,7 +314,7 @@ export default function Swap() {
                       </TableHead>
                       <TableBody stripedRows>
                         {[1, 2, 3, 4, 5].map((row, i) => (
-                          <TableRow key={row.name}>
+                          <TableRow key={i}>
                             <TableCell className={clsx(classes.row)}>
                               {"60,000 USDC"}
                             </TableCell>

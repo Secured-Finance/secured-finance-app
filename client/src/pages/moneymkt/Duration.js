@@ -106,7 +106,7 @@ export default function Duration(props) {
             </TableHead>
             <TableBody stripedRows>
               {[1, 2, 3, 4, 5].map((row, i) => (
-                <TableRow key={row.name}>
+                <TableRow key={i}>
                   <TableCell
                     className={clsx(classes.row, {
                       [classes.even]: i % 2 === 0,

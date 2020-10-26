@@ -216,7 +216,7 @@ export default function Right(props) {
 
   console.log("currType", tabValue);
 
-  const tabs = ["1m","3m", "6m", "1y", "2y", "3y", "5y"];
+  const tabs = ["1m", "3m", "6m", "1y", "2y", "3y", "5y"];
 
   const { res } = props;
 
@@ -362,6 +362,7 @@ export default function Right(props) {
         <div>
           {tabs.map((tab, i) => (
             <Button
+              key={i}
               style={{
                 background: tabValue === tab ? "#4B94C2" : "#172734",
                 fontSize: 12,
@@ -370,7 +371,6 @@ export default function Right(props) {
                 height: 30,
                 borderRadius: 0,
                 marginRight: 5,
-                
               }}
               size="small"
               onClick={handleChange(tab)}

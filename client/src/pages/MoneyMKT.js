@@ -11,6 +11,7 @@ import { Widget } from "react-chat-widget";
 import Createtokenx from "../slate/Createtokenx";
 import FullScreenDialog from "./FullScreenDialog";
 import merge from "lodash.merge";
+import Currselect from "../components/Currselect";
 
 merge(defaults, {
   global: {
@@ -94,7 +95,7 @@ export default function MoneyMKT(props) {
         pointHitRadius: 5,
         data: bs,
         borderWidth: 0.5,
-        opacity:0.1
+        opacity: 0.1,
       },
       {
         label: "Lend",
@@ -195,32 +196,14 @@ export default function MoneyMKT(props) {
                 display: "flex",
                 flexDirection: "column",
                 justifyContent: "center",
+                marginLeft: 30,
               }}
             >
-              <select
-                name="currentCurrency"
-                id="currentCurrency"
-                value={props.currentCurrency}
-                style={{
-                  height: 25,
-                  outline: "none",
-                  background: "#172734",
-                  border: "1px solid #192b38",
-                  color: "white",
-                  borderTopLeftRadius: 5,
-                  borderTopRightRadius: 5,
-                  borderColor: "#192b38",
-                  fontWeight: "bold",
-                  marginLeft: 30,
-                }}
+              <Currselect
                 onChange={(e) => {
-                  // props.setCurrentCurrency(e.target.value);
+                  console.log(e.target.value);
                 }}
-              >
-                <option value="1">FIL</option>
-                <option value="0">ETH</option>
-                <option value="2">USDC</option>
-              </select>
+              />
             </div>
             <div
               style={{
@@ -288,7 +271,7 @@ export default function MoneyMKT(props) {
           <Line data={data} />
           <Paper className={classes.paper} style={{ marginTop: 8 }}>
             <div className={classes.priceQuote}>
-              1 FIL = {`${'fileth' ? 0.079 : ".."} ETH`}
+              1 FIL = {`${"fileth" ? 0.079 : ".."} ETH`}
             </div>
           </Paper>
           <Paper className={classes.paper} style={{ marginTop: 8 }}>
