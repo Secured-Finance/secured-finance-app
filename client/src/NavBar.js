@@ -132,19 +132,15 @@ export default function Navbar(props) {
   if (location.pathname.length === 1) {
     word = "moneymkt";
   }
-  console.log("word", word, tabs.map((t) => t.toLowerCase()).indexOf(word));
   const classes = useStyles();
   const [value, setValue] = React.useState(
     tabs.map((t) => t.toLowerCase()).indexOf(word)
   );
-  console.log("classes", tabs.map((t) => t.toLowerCase()).indexOf(word));
 
   const handleChange = (event, newValue) => {
-    console.log("new", newValue);
     setValue(newValue);
   };
 
-  console.log("onConnect", props.onConnect);
 
   return (
     <div className={classes.root}>

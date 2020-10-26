@@ -562,7 +562,6 @@ export default function Book() {
                   color="primary"
                   onClick={async () => {
                     setisLoanLoading(true);
-                    console.log('setMoneyMarketBook', contract.currentCurrency);
                     try {
                       const result = await contract.moneymarketContract.methods
                         .setMoneyMarketBook(
@@ -741,7 +740,6 @@ export default function Book() {
                 </div>
                 <div style={{ textAlign: 'center' }}>
                   <Box m={1} className={clsx(!isFxLoading && classes.hidden)}>
-                    {console.log('isFxLoading', isFxLoading)}
                     <LinearProgress />
                   </Box>
 

@@ -23,8 +23,6 @@ const CustomChip = ({ label, onDelete }) => {
 };
 
 const CustomFilterList = (props, x) => {
-  console.log('CustomFilterList', x);
-  // return "XXXCC"
   return <TableFilterList {...props} ItemComponent={CustomChip} />;
 };
 
@@ -139,7 +137,6 @@ const columns = [
     label: 'AsOf',
     options: {
       customBodyRender: (value, tableMeta, updateValue) => {
-        // console.log('AsOf', value, typeof value);
 
         return moment.unix(value).format('DD/MM/YYYY');
       },
@@ -150,7 +147,6 @@ const columns = [
     label: 'Available',
     options: {
       customBodyRender: (value, tableMeta, updateValue) => {
-        console.log('AsOf', value, typeof value);
         let style = {
           width: 15,
           height: 15,
@@ -205,9 +201,7 @@ export default function History(props) {
         try {
           const lbs = await loanContract.methods.getOneBook(account).call();
           setloanBooks(lbs[0]);
-          console.log('hhh', lbs);
         } catch (error) {
-          console.log('hhh err');
         }
       }
     })();
@@ -218,7 +212,6 @@ export default function History(props) {
   const options = {
     filterType: 'dropdown',
     customToolbar: () => {
-      console.log('customToolbar');
       return <CustomToolbar data={loanBooks} columns={columns} />;
     },
     // resizableColumns: true
