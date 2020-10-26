@@ -5,7 +5,8 @@ export default function Currselect(props) {
     <select
       name="currentCurrency"
       id="currentCurrency"
-      value={props.currentCurrency}
+      value={props.currentValue}
+      onChange={props.onChange}
       style={{
         height: 25,
         outline: "none",
@@ -17,11 +18,17 @@ export default function Currselect(props) {
         borderColor: "#192b38",
         fontWeight: "bold",
       }}
-      onChange={props.onChange}
     >
-      <option value="1">FIL</option>
-      <option value="0">ETH</option>
-      <option value="2">USDC</option>
+      {props.values.map((value, i) => (
+        <option key={value} value={value}>
+          {value}
+        </option>
+      ))}
     </select>
   );
 }
+
+Currselect.defaultProps = {
+  values: ["FIL", "ETH", "USDC"],
+  currentValue: "FIL",
+};

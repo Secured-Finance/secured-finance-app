@@ -55,6 +55,7 @@ export default function MoneyMKT(props) {
   let x = useRouteMatch();
   const [res, setRes] = useState({});
   const contract = useContext(ContractContext);
+  const [currentCurrency, setcurrentCurrency] = useState(0);
 
   const [lenderRates, setlenderRates] = useState([]);
   const [borrowerRates, setborrowerRates] = useState([]);
@@ -166,7 +167,6 @@ export default function MoneyMKT(props) {
 
         setlenderRates(lr);
         setborrowerRates(br);
-
       }
 
       if (contract.fxContract) {
@@ -176,7 +176,6 @@ export default function MoneyMKT(props) {
     })();
     return () => {};
   }, [count, contract]);
-
 
   return (
     <div style={{ position: "relative" }}>
@@ -197,8 +196,9 @@ export default function MoneyMKT(props) {
             >
               <Currselect
                 onChange={(e) => {
-                  console.log(e.target.value);
+                  setcurrentCurrency(e.target.value);
                 }}
+                currentValue={currentCurrency}
               />
             </div>
             <div
