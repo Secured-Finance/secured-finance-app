@@ -72,7 +72,7 @@ export default function MoneyMKT(props) {
     ms.push(x);
   }
 
-  const data = {
+  let data = {
     labels: ["0", "3m", "6m", "1y", "2y", "3y", "5y"],
     datasets: [
       {
@@ -144,6 +144,14 @@ export default function MoneyMKT(props) {
       },
     ],
   };
+
+  const toggleLine = (i) => () => {
+    const newlineData = { ...lineData };
+    newlineData.datasets[i].hidden = !newlineData.datasets[i].hidden;
+    setlineData(newlineData);
+  };
+
+  const [lineData, setlineData] = useState(data);
 
   useEffect(() => {
     Axios.get(
@@ -221,10 +229,15 @@ export default function MoneyMKT(props) {
                     borderRadius: 0,
                     outline: "none",
                     marginRight: 5,
+                    textDecoration:
+                      lineData.datasets[0].hidden === true
+                        ? "line-through"
+                        : "none",
                   }}
                   disableElevation
                   disableFocusRipple
                   disableRipple
+                  onClick={toggleLine(0)}
                 >
                   Borrow
                 </Button>
@@ -238,10 +251,15 @@ export default function MoneyMKT(props) {
                     borderRadius: 0,
                     outline: "none",
                     marginRight: 5,
+                    textDecoration:
+                      lineData.datasets[1].hidden === true
+                        ? "line-through"
+                        : "none",
                   }}
                   disableElevation
                   disableFocusRipple
                   disableRipple
+                  onClick={toggleLine(1)}
                 >
                   Lending
                 </Button>
@@ -254,17 +272,22 @@ export default function MoneyMKT(props) {
                     background: "#c79556",
                     borderRadius: 0,
                     outline: "none",
+                    textDecoration:
+                      lineData.datasets[2].hidden === true
+                        ? "line-through"
+                        : "none",
                   }}
                   disableElevation
                   disableFocusRipple
                   disableRipple
+                  onClick={toggleLine(2)}
                 >
                   Mid price
                 </Button>
               </div>
             </div>
           </div>
-          <Line data={data} />
+          <Line data={lineData} />
           <Paper className={classes.paper} style={{ marginTop: 8 }}>
             <div className={classes.priceQuote}>
               1 FIL = {`${"fileth" ? 0.079 : ".."} ETH`}
