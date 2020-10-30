@@ -161,8 +161,7 @@ export default function Right(props) {
   };
 
   const confirmLoan = async () => {
-    setisShowConf(true)
-    return
+    
     setdialogLoading(true);
     console.log(
       "confirmLoan",
@@ -395,13 +394,16 @@ export default function Right(props) {
               currType={currType}
               setcurrType={setcurrType}
               setselectedRow={setselectedRow}
+              setisShowConf={setisShowConf}
             />
           </Route>
         </Switch>
       </Paper>
       <Dialog
         open={isShowConf}
-        onClose={() => setcurrType(null)}
+        onClose={() =>{
+          setisShowConf(false)
+        } }
         aria-labelledby="responsive-dialog-title"
         TransitionComponent={Transition}
         className={classes.dialog}

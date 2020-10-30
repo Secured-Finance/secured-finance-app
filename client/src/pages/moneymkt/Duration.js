@@ -157,6 +157,9 @@ export default function Duration(props) {
               color: "white",
               textTransform: "capitalize",
             }}
+            onClick={()=>{
+              props.setisShowConf(true)
+            }}
           >
             {type[props.currType]}
           </Button>
