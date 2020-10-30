@@ -62,6 +62,7 @@ const type = {
 };
 
 export default function Duration(props) {
+  const [selRo, setselRo] = useState({});
   let { duration } = useParams();
   const classes = useStyles();
   const { orderbook, currentMidrate, setcurrType, setselectedRow } = props;
@@ -71,10 +72,15 @@ export default function Duration(props) {
 
   const average = borrows.length ? (borrows[0].rate + lends[0].rate) / 2 : 0;
 
-
   const selRow = (rowData) => {
     setselectedRow(rowData);
   };
+
+  const clickRo = (r, i) => () => {
+    setselRo({ ...r, i });
+  };
+
+  const testRows = [1, 2, 3, 4, 5];
 
   return (
     <div className={classes.root}>
@@ -102,9 +108,15 @@ export default function Duration(props) {
                 <TableCell className={classes.row}>PeerID</TableCell>
               </TableRow>
             </TableHead>
-            <TableBody >
-              {[1, 2, 3, 4, 5].map((row, i) => (
-                <TableRow key={i}>
+            <TableBody>
+              {testRows.map((row, i) => (
+                <TableRow
+                  key={i}
+                  onClick={clickRo(row, i)}
+                  style={{
+                    outline: selRo.i === i ? "1px solid #4b94c2" : "none",
+                  }}
+                >
                   <TableCell
                     className={clsx(classes.row, {
                       [classes.even]: i % 2 === 0,

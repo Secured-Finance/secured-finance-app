@@ -17,6 +17,7 @@ import {
   Paper,
   Box,
   ButtonGroup,
+  Input,
 } from "@material-ui/core";
 import {
   BrowserRouter as Router,
@@ -39,6 +40,8 @@ import Slide from "@material-ui/core/Slide";
 import BootstrapInput from "./component/BootstrapInput";
 import { Checkmark } from "react-checkmark";
 import clsx from "clsx";
+import numeral from "numeral";
+import { isNumber } from "lodash";
 
 const useStyles = makeStyles((theme) => ({
   tab: {
@@ -146,6 +149,9 @@ export default function Right(props) {
   const [dialogAmount, setdialogAmount] = useState("");
   const [dialogLoading, setdialogLoading] = useState(false);
   const [dialogState, setdialogState] = useState(null);
+
+  const [showDiv, setshowDiv] = useState(true)
+  const [confAm, setconfAm] = useState(10000)
 
   console.log("selectedRow", selectedRow);
 
@@ -391,19 +397,20 @@ export default function Right(props) {
         </Switch>
       </Paper>
       <Dialog
-        open={false}
+        open={true}
         onClose={() => setcurrType(null)}
         aria-labelledby="responsive-dialog-title"
         TransitionComponent={Transition}
         className={classes.dialog}
         style={{ padding: 40 }}
         fullWidth={true}
+        maxWidth="xs"
       >
         <DialogTitle
           id="responsive-dialog-title"
           style={{ textAlign: "center" }}
         >
-          {currType ? currType.toUpperCase() : "Details"}
+          { "Confirm Transaction"}
         </DialogTitle>
         <DialogContent dividers className={classes.dContent}>
           <Backdrop className={classes.backdrop} open={dialogLoading}>
@@ -423,64 +430,37 @@ export default function Right(props) {
               <div className={classes.spinner}>FAILED</div>
             )
           ) : null}
-          <Table className={classes.table} aria-label="simple table">
-            <TableBody>
-              <TableRow>
-                <TableCell component="th" scope="row" align="right">
-                  Counter Party:
-                </TableCell>
-                <TableCell align="left">
-                  {selectedRow ? selectedRow.addr : null}
-                </TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell component="th" scope="row" align="right">
-                  Currency:
-                </TableCell>
-                <TableCell align="left">
-                  {ccyPairs[contract.currentCurrency]}
-                </TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell component="th" scope="row" align="right">
-                  Term:
-                </TableCell>
-                <TableCell align="left">
-                  {selectedRow ? selectedRow.term : null}
-                </TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell component="th" scope="row" align="right">
-                  Rate:
-                </TableCell>
-                <TableCell align="left">
-                  {selectedRow ? selectedRow.rate : null}
-                </TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell component="th" scope="row" align="right">
-                  Max Amount:
-                </TableCell>
-                <TableCell align="left">
-                  {selectedRow ? selectedRow.amount : null}
-                </TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell component="th" scope="row" align="right">
-                  Amount:
-                </TableCell>
-                <TableCell align="left">
-                  <BootstrapInput
-                    value={dialogAmount}
-                    onChange={(e) => {
-                      setdialogAmount(e.target.value);
+          <div>
+            <div>
+              <div>borrow</div>
+              <div>
+                {showDiv ? (
+                  <div style={{ color: "#CF6650" }} onClick={()=>{setshowDiv(false)}}>
+                    {numeral(10000).format("0,0.00")+" FIL"}
+                  </div>
+                ) : (
+                  <Input
+                    value={confAm}
+                    disableUnderline
+                    //  required
+                    autoFocus
+                    onBlur={()=>{setshowDiv(true)}}
+                    onKeyPress={event => {
+                      if (event.key === 'Enter') {
+                        setshowDiv(true)
+                      }
+
+                      if (isNumber(event.target.value)) {
+                        setconfAm(parseInt(confAm+event.target.value))
+                      } else {
+                        return
+                      }
                     }}
-                    type={"number"}
                   />
-                </TableCell>
-              </TableRow>
-            </TableBody>
-          </Table>
+                )}
+              </div>
+            </div>
+          </div>
           <div className={classes.dialogBtn}>
             <Button variant="contained" color="primary" onClick={confirmLoan}>
               Confirm
