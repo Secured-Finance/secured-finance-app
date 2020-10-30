@@ -150,8 +150,9 @@ export default function Right(props) {
   const [dialogLoading, setdialogLoading] = useState(false);
   const [dialogState, setdialogState] = useState(null);
 
-  const [showDiv, setshowDiv] = useState(true)
-  const [confAm, setconfAm] = useState(10000)
+  const [showDiv, setshowDiv] = useState(true);
+  const [confAm, setconfAm] = useState(10000);
+  const [isShowConf, setisShowConf] = useState(false)
 
   console.log("selectedRow", selectedRow);
 
@@ -160,6 +161,8 @@ export default function Right(props) {
   };
 
   const confirmLoan = async () => {
+    setisShowConf(true)
+    return
     setdialogLoading(true);
     console.log(
       "confirmLoan",
@@ -397,22 +400,21 @@ export default function Right(props) {
         </Switch>
       </Paper>
       <Dialog
-        open={true}
+        open={isShowConf}
         onClose={() => setcurrType(null)}
         aria-labelledby="responsive-dialog-title"
         TransitionComponent={Transition}
         className={classes.dialog}
-        style={{ padding: 40 }}
         fullWidth={true}
         maxWidth="xs"
       >
         <DialogTitle
           id="responsive-dialog-title"
-          style={{ textAlign: "center" }}
+          style={{ textAlign: "center", borderBottom:'none', paddingTop:40  }}
         >
-          { "Confirm Transaction"}
+          {"Confirm Transaction"}
         </DialogTitle>
-        <DialogContent dividers className={classes.dContent}>
+        <DialogContent  className={classes.dContent} style={{ paddingBottom: 40}}>
           <Backdrop className={classes.backdrop} open={dialogLoading}>
             <CircularProgress color="primary" />
           </Backdrop>
@@ -431,39 +433,71 @@ export default function Right(props) {
             )
           ) : null}
           <div>
-            <div>
-              <div>borrow</div>
+            <div style={{ textAlign: "center" }}>
+              <div>{{ b: "borrow", l: "lend" }[currType]}</div>
               <div>
                 {showDiv ? (
-                  <div style={{ color: "#CF6650" }} onClick={()=>{setshowDiv(false)}}>
-                    {numeral(10000).format("0,0.00")+" FIL"}
+                  <div
+                    style={{
+                      color: "#CF6650",
+                      fontSize: 20,
+                      fontWeight: "bold",
+                    }}
+                    onClick={() => {
+                      setshowDiv(false);
+                    }}
+                  >
+                    {numeral(10000).format("0,0.00") + " FIL"}
                   </div>
                 ) : (
                   <Input
                     value={confAm}
-                    disableUnderline
                     //  required
                     autoFocus
-                    onBlur={()=>{setshowDiv(true)}}
-                    onKeyPress={event => {
-                      if (event.key === 'Enter') {
-                        setshowDiv(true)
+                    inputProps={{min: 0, style: { textAlign: 'center' }}}
+                    onBlur={() => {
+                      setshowDiv(true);
+                    }}
+                    onKeyPress={(event) => {
+                      if (event.key === "Enter") {
+                        setshowDiv(true);
                       }
 
                       if (isNumber(event.target.value)) {
-                        setconfAm(parseInt(confAm+event.target.value))
+                        setconfAm(parseInt(confAm + event.target.value));
                       } else {
-                        return
+                        return;
                       }
                     }}
                   />
                 )}
               </div>
+              <div
+                style={{
+                  marginTop: 20,
+                  marginBottom: 50,
+                  display: "flex",
+                  justifyContent: "space-between",
+                }}
+              >
+                <div>
+                  <div>Interest rate</div>
+                  <div style={{color:'#CF6650', fontSize:16}}>1.2%</div>
+                </div>
+                <div>
+                  <div>Term</div>
+                  <div style={{color:'#CF6650', fontSize:16}}>3 month</div>
+                </div>
+                <div>
+                  <div>Protocol</div>
+                  <div style={{color:'#CF6650', fontSize:16}}>Counter Party</div>
+                </div>
+              </div>
             </div>
           </div>
           <div className={classes.dialogBtn}>
             <Button variant="contained" color="primary" onClick={confirmLoan}>
-              Confirm
+              Submit
             </Button>
           </div>
         </DialogContent>
