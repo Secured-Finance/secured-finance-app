@@ -1,17 +1,18 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { Paper, Container, makeStyles } from '@material-ui/core';
-import { ContractContext } from '../App';
-import MUIDataTable, { TableFilterList } from 'mui-datatables';
-import { CopyToClipboard } from 'react-copy-to-clipboard';
-import CopyClip from './CopyClip';
-import Side from './Side';
-import Schedule from './Schedule';
-import moment from 'moment';
-import CustomToolbar from './CustomToolbar';
-import Chip from '@material-ui/core/Chip';
+import React, { useContext, useEffect, useState } from "react";
+import { Paper, Container, makeStyles } from "@material-ui/core";
+import { ContractContext } from "../App";
+import MUIDataTable, { TableFilterList } from "mui-datatables";
+import { CopyToClipboard } from "react-copy-to-clipboard";
+import CopyClip from "./CopyClip";
+import Side from "./Side";
+import Schedule from "./Schedule";
+import moment from "moment";
+import CustomToolbar from "./CustomToolbar";
+import Chip from "@material-ui/core/Chip";
+import EnhancedTable from "../components/EnhancedTable";
 
 const CustomChip = ({ label, onDelete }) => {
-  return 'xxxx';
+  return "xxxx";
   return (
     <Chip
       variant="outlined"
@@ -27,18 +28,18 @@ const CustomFilterList = (props, x) => {
 };
 
 const STATE = [
-  'REGISTERED',
-  'WORKING',
-  'DUE',
-  'PAST_DUE',
-  'CLOSED',
-  'TERMINATED',
+  "REGISTERED",
+  "WORKING",
+  "DUE",
+  "PAST_DUE",
+  "CLOSED",
+  "TERMINATED",
 ];
 
 const columns = [
   {
-    name: 'Lender',
-    label: 'Lender',
+    name: "Lender",
+    label: "Lender",
     options: {
       customBodyRender: (value, tableMeta, updateValue) => (
         <CopyClip value={value} label={shortenEthAddr(value)}></CopyClip>
@@ -46,8 +47,8 @@ const columns = [
     },
   },
   {
-    name: 'Borrower',
-    label: 'Borrower',
+    name: "Borrower",
+    label: "Borrower",
     options: {
       customBodyRender: (value, tableMeta, updateValue) => (
         <CopyClip value={value} label={shortenEthAddr(value)}></CopyClip>
@@ -55,8 +56,8 @@ const columns = [
     },
   },
   {
-    name: 'Side',
-    label: 'Side',
+    name: "Side",
+    label: "Side",
     options: {
       customBodyRender: (value, tableMeta, updateValue) => (
         <Side side={value}></Side>
@@ -64,29 +65,29 @@ const columns = [
     },
   },
   {
-    name: 'Ccy',
-    label: 'Ccy',
+    name: "Ccy",
+    label: "Ccy",
     options: {
       customBodyRender: (value, tableMeta, updateValue) => {
-        const ccys = ['ETH', 'FIL'];
+        const ccys = ["ETH", "FIL"];
 
         return ccys[value];
       },
     },
   },
   {
-    name: 'Term',
-    label: 'Term',
+    name: "Term",
+    label: "Term",
     options: {
       customBodyRender: (value, tableMeta, updateValue) => {
-        const terms = ['3m', '6m', '1y', '2y', '3y', '5y'];
+        const terms = ["3m", "6m", "1y", "2y", "3y", "5y"];
 
         return (
           <div
             style={{
-              color: 'orange',
-              border: '1px solid orange',
-              textAlign: 'center',
+              color: "orange",
+              border: "1px solid orange",
+              textAlign: "center",
             }}
           >
             {terms[value]}
@@ -95,10 +96,10 @@ const columns = [
       },
     },
   },
-  'Amount',
+  "Amount",
   {
-    name: 'Rate',
-    label: 'Rate',
+    name: "Rate",
+    label: "Rate",
     options: {
       customBodyRender: (value, tableMeta, updateValue) => {
         return `${(value / 100).toFixed(2)}%`;
@@ -106,13 +107,13 @@ const columns = [
     },
   },
   {
-    name: 'Schedule',
-    label: 'Schedule',
+    name: "Schedule",
+    label: "Schedule",
     options: {
       customBodyRender: (value, tableMeta, updateValue) => {
         if (value.length) {
-          const start = moment.unix(value[0]).format('DD/MM/YYYY');
-          const end = moment.unix(value[1]).format('DD/MM/YYYY');
+          const start = moment.unix(value[0]).format("DD/MM/YYYY");
+          const end = moment.unix(value[1]).format("DD/MM/YYYY");
           return (
             <Schedule
               start={start}
@@ -131,49 +132,48 @@ const columns = [
       },
     },
   },
-  'PV',
+  "PV",
   {
-    name: 'AsOf',
-    label: 'AsOf',
+    name: "AsOf",
+    label: "AsOf",
     options: {
       customBodyRender: (value, tableMeta, updateValue) => {
-
-        return moment.unix(value).format('DD/MM/YYYY');
+        return moment.unix(value).format("DD/MM/YYYY");
       },
     },
   },
   {
-    name: 'Available',
-    label: 'Available',
+    name: "Available",
+    label: "Available",
     options: {
       customBodyRender: (value, tableMeta, updateValue) => {
         let style = {
           width: 15,
           height: 15,
-          borderRadius: '50%',
-          textAlign: 'center',
+          borderRadius: "50%",
+          textAlign: "center",
         };
         if (value) {
-          style = { ...style, background: 'green' };
+          style = { ...style, background: "green" };
         } else {
-          style = { ...style, background: 'red' };
+          style = { ...style, background: "red" };
         }
 
         return (
           <div
             style={style}
-            title={value ? 'available' : 'not available'}
+            title={value ? "available" : "not available"}
           ></div>
         );
       },
     },
   },
   {
-    name: 'State',
-    label: 'State',
+    name: "State",
+    label: "State",
     options: {
       customBodyRender: (value, tableMeta, updateValue) => {
-        return <div style={{ fontSize: '0.6rem' }}>{STATE[value]}</div>;
+        return <div style={{ fontSize: "0.6rem" }}>{STATE[value]}</div>;
       },
     },
   },
@@ -188,6 +188,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const LOAN_BOOKS=[
+  {
+
+  }
+]
+
 export default function History(props) {
   const { count } = props;
   const classes = useStyles();
@@ -201,8 +207,7 @@ export default function History(props) {
         try {
           const lbs = await loanContract.methods.getOneBook(account).call();
           setloanBooks(lbs[0]);
-        } catch (error) {
-        }
+        } catch (error) {}
       }
     })();
 
@@ -210,18 +215,24 @@ export default function History(props) {
   }, [loanContract, count]);
 
   const options = {
-    filterType: 'dropdown',
-    customToolbar: () => {
-      return <CustomToolbar data={loanBooks} columns={columns} />;
-    },
+    filterType: "dropdown",
+    // customToolbar: () => {
+    //   return <CustomToolbar data={loanBooks} columns={columns} />;
+    // },
+    selectableRows: false ,
+    customToolbar:()=>null,
+    download:false,
+    print:false,
     // resizableColumns: true
   };
+
+  console.log('lll',loanBooks);
 
   return (
     <Container className={classes.root}>
       <div id="loanbook">
         <MUIDataTable
-          title={'Loan Book'}
+          title={"Trade History"}
           data={loanBooks}
           columns={columns}
           options={options}
@@ -237,6 +248,6 @@ export default function History(props) {
 // 0xdC4B87B1b7a3cCFb5d9e85C09a59923C0F6cdAFc
 
 function shortenEthAddr(addr) {
-  if (typeof addr !== 'string') return 'xx..xx';
-  return addr.slice(0, 4) + '..' + addr.slice(-2);
+  if (typeof addr !== "string") return "xx..xx";
+  return addr.slice(0, 4) + ".." + addr.slice(-2);
 }
