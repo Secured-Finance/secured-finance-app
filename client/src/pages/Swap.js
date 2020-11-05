@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   TextField,
   Button,
@@ -122,6 +122,16 @@ export default function Swap() {
         borderWidth: 0.5,
       },
     ],
+  };
+
+  const [selIndLeft, setselIndLeft] = useState(null);
+  const [selIndRight, setselIndRight] = useState(null);
+  const [selRowLeft, setselRowLeft] = useState({});
+  const [selRowRight, setselRowRight] = useState({});
+
+  const rowSelect = (row, i, setselInd, setselRow) => () => {
+    setselInd(i);
+    setselRow(row);
   };
 
   return (
@@ -272,16 +282,45 @@ export default function Swap() {
                           <TableCell className={classes.row}>RECEIVE</TableCell>
                         </TableRow>
                       </TableHead>
-                      <TableBody >
+                      <TableBody>
                         {[1, 2, 3, 4, 5].map((row, i) => (
-                          <TableRow key={i}>
-                            <TableCell className={clsx(classes.row)}>
+                          <TableRow
+                            key={i}
+                            onClick={rowSelect(
+                              row,
+                              i,
+                              setselIndLeft,
+                              setselRowLeft
+                            )}
+                          >
+                            <TableCell
+                              className={clsx(classes.row)}
+                              style={{
+                                borderBottom: "1px solid #1E4258",
+                                background:
+                                  selIndLeft === i ? "#21435A" : undefined,
+                              }}
+                            >
                               {"10,000 FIL"}
                             </TableCell>
-                            <TableCell className={clsx(classes.row)}>
+                            <TableCell
+                              className={clsx(classes.row)}
+                              style={{
+                                borderBottom: "1px solid #1E4258",
+                                background:
+                                  selIndLeft === i ? "#21435A" : undefined,
+                              }}
+                            >
                               {"8.10%"}
                             </TableCell>
-                            <TableCell className={clsx(classes.row)}>
+                            <TableCell
+                              className={clsx(classes.row)}
+                              style={{
+                                borderBottom: "1px solid #1E4258",
+                                background:
+                                  selIndLeft === i ? "#21435A" : undefined,
+                              }}
+                            >
                               {"810 FIL"}
                             </TableCell>
                           </TableRow>
@@ -311,16 +350,45 @@ export default function Swap() {
                           <TableCell className={classes.row}>PAY</TableCell>
                         </TableRow>
                       </TableHead>
-                      <TableBody >
+                      <TableBody>
                         {[1, 2, 3, 4, 5].map((row, i) => (
-                          <TableRow key={i}>
-                            <TableCell className={clsx(classes.row)}>
+                          <TableRow
+                            key={i}
+                            onClick={rowSelect(
+                              row,
+                              i,
+                              setselIndRight,
+                              setselRowRight
+                            )}
+                          >
+                            <TableCell
+                              className={clsx(classes.row)}
+                              style={{
+                                borderBottom: "1px solid #1E4258",
+                                background:
+                                  selIndRight === i ? "#21435A" : undefined,
+                              }}
+                            >
                               {"60,000 USDC"}
                             </TableCell>
-                            <TableCell className={clsx(classes.row)}>
+                            <TableCell
+                              className={clsx(classes.row)}
+                              style={{
+                                borderBottom: "1px solid #1E4258",
+                                background:
+                                  selIndRight === i ? "#21435A" : undefined,
+                              }}
+                            >
                               {"0.12%"}
                             </TableCell>
-                            <TableCell className={clsx(classes.row)}>
+                            <TableCell
+                              className={clsx(classes.row)}
+                              style={{
+                                borderBottom: "1px solid #1E4258",
+                                background:
+                                  selIndRight === i ? "#21435A" : undefined,
+                              }}
+                            >
                               {"72 USDC"}
                             </TableCell>
                           </TableRow>
