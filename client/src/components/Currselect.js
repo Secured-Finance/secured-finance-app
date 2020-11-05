@@ -8,15 +8,19 @@ export default function Currselect(props) {
       value={props.currentValue}
       onChange={props.onChange}
       style={{
-        height: 25,
+        // height: 25,
         outline: "none",
         background: "#172734",
-        border: "1px solid #192b38",
+        border: "1px solid red",
         color: "white",
         borderTopLeftRadius: 5,
         borderTopRightRadius: 5,
         borderColor: "#192b38",
         fontWeight: "bold",
+        paddingLeft: 5,
+        paddingTop: 3,
+        paddingBottom: 3,
+        ...props.style,
       }}
     >
       {props.values.map((value, i) => (

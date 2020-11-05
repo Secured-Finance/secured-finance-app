@@ -26,6 +26,7 @@ import {
 } from "react-router-dom";
 import clsx from "clsx";
 import { Line } from "react-chartjs-2";
+import Currselect from "../components/Currselect";
 
 const tabs = ["1m", "3m", "6m", "1y", "2y", "3y", "5y"];
 
@@ -47,6 +48,8 @@ export default function Swap() {
   const [tabValue, setTabValue] = React.useState("3m");
   let { url } = useRouteMatch();
   const classes = useStyles();
+  const [fromCry, setfromCry] = useState('FIL')
+  const [toCry, settoCry] = useState('USDC')
 
   const handleChange = (tab) => () => {
     setTabValue(tab);
@@ -191,30 +194,11 @@ export default function Swap() {
                     justifyContent: "center",
                   }}
                 >
-                  <select
-                    name="currentCurrency"
-                    id="currentCurrency"
-                    value={"1"}
-                    style={{
-                      height: 25,
-                      outline: "none",
-                      background: "#172734",
-                      border: "1px solid #192b38",
-                      color: "white",
-                      borderTopLeftRadius: 5,
-                      borderTopRightRadius: 5,
-                      borderColor: "#192b38",
-                      fontWeight: "bold",
-                      marginRight: 30,
-                    }}
-                    onChange={(e) => {
-                      // props.setCurrentCurrency(e.target.value);
-                    }}
-                  >
-                    <option value="1">FIL</option>
-                    <option value="0">ETH</option>
-                    <option value="2">USDC</option>
-                  </select>
+                  <Currselect 
+                  onChange={(e)=>setfromCry(e.target.value)}
+                  currentValue={fromCry}
+                  style={{marginRight:30}}
+                  />
                 </div>
                 <div style={{ marginRight: 30 }}>for</div>
                 <div
@@ -234,29 +218,10 @@ export default function Swap() {
                     justifyContent: "center",
                   }}
                 >
-                  <select
-                    name="currentCurrency"
-                    id="currentCurrency"
-                    value={"2"}
-                    style={{
-                      height: 25,
-                      outline: "none",
-                      background: "#172734",
-                      border: "1px solid #192b38",
-                      color: "white",
-                      borderTopLeftRadius: 5,
-                      borderTopRightRadius: 5,
-                      borderColor: "#192b38",
-                      fontWeight: "bold",
-                    }}
-                    onChange={(e) => {
-                      // props.setCurrentCurrency(e.target.value);
-                    }}
-                  >
-                    <option value="1">FIL</option>
-                    <option value="0">ETH</option>
-                    <option value="2">USDC</option>
-                  </select>
+                  <Currselect 
+                  onChange={(e)=>settoCry(e.target.value)}
+                  currentValue={toCry}
+                  />
                 </div>
               </div>
 
