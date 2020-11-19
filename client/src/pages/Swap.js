@@ -176,7 +176,7 @@ export default function Swap() {
           <Grid container spacing={4}>
             <Grid item xs={6}>
               <div style={{ display: "flex", marginBottom: 33, fontSize: 20 }}>
-                <div style={{ marginRight: 30 }}>Exchange</div>
+                <div style={{ marginRi5ght: 30 }}>Exchange</div>
                 <div
                   style={{
                     color: "#35759d",
@@ -185,7 +185,7 @@ export default function Swap() {
                     marginRight: 30,
                   }}
                 >
-                  10.000
+                  {rowSelect}
                 </div>
                 <div
                   style={{
