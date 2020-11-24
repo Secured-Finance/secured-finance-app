@@ -186,7 +186,7 @@ export default function MoneyMKT(props) {
   }, [count, contract]);
 
   return (
-    <div style={{ position: "relative" }}>
+    <div style={{ position: "relative" }} >
       <Grid container spacing={3} className={classes.gridClass}>
         <Redirect to="/moneymkt/3m" />
 
