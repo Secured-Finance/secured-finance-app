@@ -1,6 +1,6 @@
 import React, { Fragment, useEffect, useState, useRef } from "react";
 import { Button, Container } from "@material-ui/core";
-import NavBar from "./NavBar";
+import NavBar from "./components/NavBar";
 import Authereum from "authereum";
 import UniLogin from "@unilogin/provider";
 
