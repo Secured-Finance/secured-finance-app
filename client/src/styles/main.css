@@ -72,6 +72,7 @@ code {
 .orderbook__title {
   text-transform: uppercase;
   font-size: 1.3em;
+  margin-bottom: 20px;
 }
 
 .orderbook__heads,
@@ -83,21 +84,34 @@ code {
   font-size: 1em;
 }
 
-.order_row {
-  font-size: 0.75em;
+.orderbook__heads {
+  margin-bottom: 15px;
 }
 
-.orderbook__heads > * {
-  border: 1px solid red;
+.order_row {
+  font-size: 0.75em;
 }
 
 .orderbook__head {
   color: #2a5c7b;
 }
 
+.order-type {
+  margin-bottom: 30px;
+}
+
 .order-type_title {
   color: #3a80ab;
   text-transform: uppercase;
+  margin-bottom: 0;
+}
+
+.order-type_title--l {
+  color: "#3A80AB";
+}
+
+.order-type_title--b {
+  color: "#E46D53";
 }
 
 .order_row {
@@ -108,10 +122,12 @@ code {
   padding-bottom: 0.5em;
 }
 
-.order_progress{
+.order_progress {
   position: absolute;
-  top:0;left: 0;bottom: 0;
-  background-color: #3A80AB;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  background-color: #3a80ab;
   width: 10%;
   opacity: 0.15;
 }
