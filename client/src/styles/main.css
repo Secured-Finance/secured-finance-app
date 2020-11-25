@@ -1,0 +1,74 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+.page-wrapper {
+  height: 100vh;
+  display: flex;
+  flex-flow: column;
+}
+
+
+
+.mm-container {
+  flex: 1 1 auto;
+  display: grid;
+  grid-template-columns:1.4fr 4fr 1.4fr;
+  /* background-color: red; */
+  /* height: 100%; */
+}
+
+.mm-container>div{
+  padding: 0.5em;
+}
+
+.mm-left{
+  border-right:1px solid #3A80AB;
+  /* background-color: orange; */
+}
+
+.mm-mid{
+  border-right:1px solid #3A80AB;
+}
+
+.mm-graph{
+  height: 65%;
+  padding-left:1em;
+}
+
+.orderbook__title{
+  text-transform: uppercase;
+ 
+
+}
