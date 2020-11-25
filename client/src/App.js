@@ -212,6 +212,8 @@ function App() {
           }}
         >
           <CssBaseline />
+          <div className='page-wrapper'>
+
           <Router>
             <NavBar
               setCurrentCurrency={setCurrentCurrency}
@@ -240,6 +242,7 @@ function App() {
               </Route>
             </Switch>
           </Router>
+          </div>
         </PGContext.Provider>
       </ContractContext.Provider>
     </ThemeProvider>

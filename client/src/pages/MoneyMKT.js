@@ -12,6 +12,7 @@ import Createtokenx from "../slate/Createtokenx";
 import FullScreenDialog from "./FullScreenDialog";
 import merge from "lodash.merge";
 import Currselect from "../components/Currselect";
+import OrderBook from "../components/OrderBook";
 
 merge(defaults, {
   global: {
@@ -186,124 +187,16 @@ export default function MoneyMKT(props) {
   }, [count, contract]);
 
   return (
-    <div style={{ position: "relative" }} >
-      <Grid container spacing={3} className={classes.gridClass}>
-        <Redirect to="/moneymkt/3m" />
-
-        <Grid item xs={6} align="center">
-          <div
-            style={{ display: "flex", alignItems: "center", marginBottom: 24 }}
-          >
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-                marginLeft: 30,
-              }}
-            >
-              <Currselect
-                onChange={(e) => {
-                  setcurrentCurrency(e.target.value);
-                }}
-                currentValue={currentCurrency}
-              />
-            </div>
-            <div
-              style={{
-                fontWeight: 400,
-                fontSize: 22,
-                paddingLeft: 26,
-                marginRight: 33,
-              }}
-            >
-              Loan Rates
-            </div>
-            <div style={{ display: "flex" }}>
-              <div>
-                <Button
-                  variant="contained"
-                  size="small"
-                  style={{
-                    background: "#d6735a",
-                    borderRadius: 0,
-                    outline: "none",
-                    marginRight: 5,
-                    textDecoration:
-                      lineData.datasets[0].hidden === true
-                        ? "line-through"
-                        : "none",
-                  }}
-                  disableElevation
-                  disableFocusRipple
-                  disableRipple
-                  onClick={toggleLine(0)}
-                >
-                  Borrow
-                </Button>
-              </div>
-              <div>
-                <Button
-                  variant="contained"
-                  size="small"
-                  style={{
-                    background: "#3e6989",
-                    borderRadius: 0,
-                    outline: "none",
-                    marginRight: 5,
-                    textDecoration:
-                      lineData.datasets[1].hidden === true
-                        ? "line-through"
-                        : "none",
-                  }}
-                  disableElevation
-                  disableFocusRipple
-                  disableRipple
-                  onClick={toggleLine(1)}
-                >
-                  Lending
-                </Button>
-              </div>
-              <div>
-                <Button
-                  variant="contained"
-                  size="small"
-                  style={{
-                    background: "#c79556",
-                    borderRadius: 0,
-                    outline: "none",
-                    textDecoration:
-                      lineData.datasets[2].hidden === true
-                        ? "line-through"
-                        : "none",
-                  }}
-                  disableElevation
-                  disableFocusRipple
-                  disableRipple
-                  onClick={toggleLine(2)}
-                >
-                  Mid price
-                </Button>
-              </div>
-            </div>
-          </div>
-          <Line data={lineData} />
-          <Paper className={classes.paper} style={{ marginTop: 8 }}>
-            <div className={classes.priceQuote}>
-              1 FIL = {`${"fileth" ? 0.079 : ".."} ETH`}
-            </div>
-          </Paper>
-          <Paper className={classes.paper} style={{ marginTop: 8 }}>
-            <div>
-              <FullScreenDialog></FullScreenDialog>
-            </div>
-          </Paper>
-        </Grid>
-        <Grid item xs={6} className={classes.ok}>
-          <Right res={res} />
-        </Grid>
-      </Grid>
-      <div style={{ position: "absolute", left: 0 }}>{/* <Widget /> */}</div>
+    <div className="mm-container">
+      <Redirect to="/moneymkt/3m" />
+      <div className="mm-left">left</div>
+      <div className="mm-mid">
+        <div className="mm-graph">graph</div>
+        <div className="mm-actions">actions</div>
+      </div>
+      <div className="mm-right">
+        <OrderBook></OrderBook>
+      </div>
     </div>
   );
 }

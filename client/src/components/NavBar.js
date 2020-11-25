@@ -21,15 +21,11 @@ import {
   Link,
   useLocation,
 } from "react-router-dom";
-import logo from "./logo.jpeg";
-import logobtnb from "./logobtnb.png";
+import logo from "../white_sf_logo.png";
+import logobtnb from "../logobtnb.png";
 import { Tooltip } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-    height: "100%",
-  },
   menuButton: {
     marginRight: theme.spacing(2),
   },
@@ -47,6 +43,11 @@ const useStyles = makeStyles((theme) => ({
   toolbar: {
     justifyContent: "space-between",
     alignItems: "center",
+    boxShadow: "none",
+    borderBottom: "1px solid #2A5C7B",
+    background: "#0f1a22",
+    minHeight: 30,
+    minWidth: "100vw",
   },
 }));
 
@@ -111,7 +112,7 @@ const StyledTab = withStyles((theme) => ({
 
   return (
     <Tab
-    style={{textDecoration:'none'}}
+      style={{ textDecoration: "none" }}
       disableRipple
       {...props}
       classes={{
@@ -141,21 +142,9 @@ export default function Navbar(props) {
     setValue(newValue);
   };
 
-
   return (
     <div className={classes.root}>
-      <Toolbar
-        component="nav"
-        variant="regular"
-        className={classes.toolbar}
-        style={{
-          boxShadow: "none",
-          borderBottom: "2px solid #192b38",
-          background: "#0f1a22",
-          minHeight: 30,
-          minWidth: "100vw",
-        }}
-      >
+      <Toolbar component="nav" variant="regular" className={classes.toolbar}>
         <Box className={classes.navs}>
           <Box
             component={Link}
