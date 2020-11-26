@@ -7,11 +7,11 @@ export default function OrderType({ type, orders }) {
 
     return (
       <div className="order_row" key={i}>
-        <div className="order_price">
-          {price.value} {price.label}
-        </div>
         <div className="order_amount">
           {amount.value} {amount.label}
+        </div>
+        <div className="order_price">
+          {price.value} {price.label}
         </div>
         <div
           className="order_progress"
