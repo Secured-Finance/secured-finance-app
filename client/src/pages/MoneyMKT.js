@@ -13,6 +13,7 @@ import FullScreenDialog from "./FullScreenDialog";
 import merge from "lodash.merge";
 import Currselect from "../components/Currselect";
 import OrderBook from "../components/OrderBook";
+import Actions from "../components/Actions";
 
 merge(defaults, {
   global: {
@@ -192,7 +193,7 @@ export default function MoneyMKT(props) {
       <div className="mm-left">left</div>
       <div className="mm-mid">
         <div className="mm-graph">graph</div>
-        <div className="mm-actions">actions</div>
+        <Actions></Actions>
       </div>
       <div className="mm-right">
         <OrderBook></OrderBook>

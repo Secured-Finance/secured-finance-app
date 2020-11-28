@@ -1,9 +1,10 @@
 import React from "react";
+import clsx from "clsx";
 
 export default function OrderType({ type, orders }) {
   const rows = orders.map(({ price, amount }, i) => {
-    const w = type === "l" ? `${100 - i * 10}%` : `${(i + 1) * 10}%`;
-    const bgColor = type === "l" ? "#3A80AB" : "#E46D53";
+    const w = type.side === "b" ? `${100 - i * 10}%` : `${(i + 1) * 10}%`;
+    const bgColor = type.side === "b" ? "#3A80AB" : "#E46D53";
 
     return (
       <div className="order_row" key={i}>
@@ -21,18 +22,16 @@ export default function OrderType({ type, orders }) {
     );
   });
 
-  let title;
-
-  if (type.toLowerCase() === "l") {
-    title = <div className="order-type_title order-type_title--l">Lenders</div>;
-  } else {
-    title = <div className="order-type_title order-type_title--b">Borrowers</div>;
-
-  }
-
   return (
     <div className="order-type">
-      {title}
+      <div
+        className={clsx("order-type_title", {
+          "order-type_title--b": type.side === "b",
+          "order-type_title--r": type.side === "r",
+        })}
+      >
+        {type.text}
+      </div>
       <div className="order_rows">{rows}</div>
     </div>
   );

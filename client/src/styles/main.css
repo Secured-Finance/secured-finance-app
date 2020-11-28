@@ -47,7 +47,7 @@ code {
   /* height: 100%; */
 }
 
-.mm-container > div {
+.mm-container > div:not(:nth-child(2)) {
   padding: 0.5em;
 }
 
@@ -58,11 +58,35 @@ code {
 
 .mm-mid {
   border-right: 1px solid #3a80ab;
+  display: flex;
+  flex-direction: column;
 }
 
 .mm-graph {
   height: 65%;
-  padding-left: 1em;
+  /* padding-left: 1em; */
+}
+
+.mm-actions {
+  display: flex;
+  flex: 1;
+  /* height: 100%;   */
+}
+
+.mm-actions_item {
+  border-top: 1px solid #3a80ab;
+  width: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.mm-actions_item--left {
+  border-right: 1px solid #3a80ab;
+}
+
+.mm-actions_item--right {
+  border-left: 1px solid #3a80ab;
 }
 
 .orderbook {
@@ -103,15 +127,15 @@ code {
 .order-type_title {
   color: #3a80ab;
   text-transform: uppercase;
-  margin-bottom: 0;
-}
-
-.order-type_title--l {
-  color: "#3A80AB";
+  margin-bottom: 5px;
 }
 
 .order-type_title--b {
-  color: "#E46D53";
+  color: #3a80ab;
+}
+
+.order-type_title--r {
+  color: #e46d53;
 }
 
 .order_row {
@@ -122,6 +146,9 @@ code {
   padding-bottom: 0.5em;
 }
 
+.order_row > div {
+  padding-left: 2px;
+}
 .order_progress {
   position: absolute;
   top: 0;
