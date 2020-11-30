@@ -2,6 +2,7 @@ import { Button } from "@material-ui/core";
 import React, { useState } from "react";
 import { Line } from "react-chartjs-2";
 import styled from "styled-components";
+import Terms from "../Terms";
 
 const bs = [0, 0.4, 0.6, 0.7, 0.75, 0.775, 0.79];
 const ls = [0, 0.3, 0.4, 0.45, 0.475, 0.485, 0.491];
@@ -93,8 +94,6 @@ const Flex = styled.div`
 const Title = styled.div`
   font-weight: 400;
   font-size: 22px;
-  padding-left: 26px;
-  margin-right: 33px;
 `;
 
 export default function YieldCurve() {
@@ -108,10 +107,10 @@ export default function YieldCurve() {
 
   return (
     <div>
-      <Title
-      >
-        FIL Yield Curve
-      </Title>
+      <div className="flex justify-between px-4 py-2">
+      <Title>FIL Yield Curve</Title>
+      <Terms></Terms>
+      </div>
       <Flex>
         <div>
           <button
