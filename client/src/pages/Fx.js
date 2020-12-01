@@ -1,7 +1,7 @@
-import React from 'react';
-import { Grid, Paper, makeStyles } from '@material-ui/core';
-import ApexChart from './ApexChart';
-import ReactVirtualizedTable from './moneymkt/component/ReactVirtualizedTable';
+import React from "react";
+import { Grid, Paper, makeStyles } from "@material-ui/core";
+import ApexChart from "./ApexChart";
+import ReactVirtualizedTable from "./moneymkt/component/ReactVirtualizedTable";
 
 const useStyles = makeStyles((theme) => ({
   gridItem: {
@@ -11,32 +11,32 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(1),
   },
   midPrice: {
-    padding: '20px 10px',
-    textAlign: 'center',
-    border: '1px dotted white',
+    padding: "20px 10px",
+    textAlign: "center",
+    border: "1px dotted white",
   },
 }));
 
+const asks = [];
+const bids = [];
+
+for (let index = 0; index < 7; index++) {
+  asks.push({
+    size: Math.round(Math.random() * 10000),
+    rate: Math.round(Math.random() * 100),
+  });
+
+  bids.push({
+    size: Math.round(Math.random() * 10000),
+    rate: Math.round(Math.random() * 100),
+  });
+}
+
+asks.sort((a, b) => a.rate - b.rate);
+bids.sort((a, b) => b.rate - a.rate);
+
 export default function Fx() {
   const classes = useStyles();
-
-  const asks = [];
-  const bids = [];
-
-  for (let index = 0; index < 7; index++) {
-    asks.push({
-      size: Math.round(Math.random() * 10000),
-      rate: Math.round(Math.random() * 100),
-    });
-
-    bids.push({
-      size: Math.round(Math.random() * 10000),
-      rate: Math.round(Math.random() * 100),
-    });
-  }
-
-  asks.sort((a, b) => a.rate - b.rate);
-  bids.sort((a, b) => b.rate - a.rate);
 
   return (
     <Grid container spacing={2} className={classes.gridItem}>
@@ -45,7 +45,7 @@ export default function Fx() {
           <div id="apex">
             <ApexChart
               options={{
-                colors: ['#ff0000', '#ff0000'],
+                colors: ["#ff0000", "#ff0000"],
               }}
             />
           </div>
@@ -59,14 +59,14 @@ export default function Fx() {
               columns={[
                 {
                   width: 100,
-                  label: 'Amount',
-                  dataKey: 'size',
+                  label: "Amount",
+                  dataKey: "size",
                   flexGrow: 1,
                 },
                 {
                   width: 120,
-                  label: 'Rate %',
-                  dataKey: 'rate',
+                  label: "Rate %",
+                  dataKey: "rate",
                   numeric: true,
                 },
               ]}
@@ -81,14 +81,14 @@ export default function Fx() {
               columns={[
                 {
                   width: 100,
-                  label: 'Amount',
-                  dataKey: 'size',
+                  label: "Amount",
+                  dataKey: "size",
                   flexGrow: 1,
                 },
                 {
                   width: 120,
-                  label: 'Rate %',
-                  dataKey: 'rate',
+                  label: "Rate %",
+                  dataKey: "rate",
                   numeric: true,
                 },
               ]}
