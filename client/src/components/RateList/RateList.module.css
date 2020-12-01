@@ -1,11 +1,28 @@
-.rate-list{
+.rate-list {
   text-align: center;
+  padding-left: 10px;
+  padding-right: 10px;
 }
 
 .rate-table {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
+  font-size: 14px;
 }
+
+.ccy {
+  margin-bottom: 10px;
+  text-align: left;
+}
+
+.ccy_curr{
+  background-color: #3A80AB;
+  padding:2px 4px;
+}
+
+/* .rate-table > div {
+  border: 1px solid red;
+} */
 
 .search {
   margin-bottom: 10px;
@@ -13,12 +30,35 @@
 
 .head {
   color: #2a5c7b;
-  font-size: 14px;
   padding: 4px 0;
+  text-align: left;
+}
+
+.head:nth-child(2) {
+  text-align: center;
+}
+
+.head:nth-child(3) {
+  text-align: center;
 }
 
 .token,
 .lend,
-.borrow{
+.borrow {
+  font-size: 13px;
   padding: 4px 0;
+}
+
+.token {
+  text-align: left;
+}
+
+.lend {
+  text-align: center;
+  color: #3a80ab;
+}
+
+.borrow {
+  text-align: center;
+  color: #e46d53;
 }
