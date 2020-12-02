@@ -54,6 +54,7 @@
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.1",
     "react-spinners": "^0.9.0",
+    "react-tradingview-widget": "^1.3.2",
     "react-virtualized": "^9.21.2",
     "slate-react-system": "0.1.0",
     "styled-components": "^5.2.1",
