@@ -2,6 +2,10 @@ import React from "react";
 import { Grid, Paper, makeStyles } from "@material-ui/core";
 import ApexChart from "./ApexChart";
 import ReactVirtualizedTable from "./moneymkt/component/ReactVirtualizedTable";
+import RateList from "../components/RateList/RateList";
+import Actions from "../components/Actions";
+import OrderBook from "../components/OrderBook";
+import TradingViewWidget, { Themes } from "react-tradingview-widget";
 
 const useStyles = makeStyles((theme) => ({
   gridItem: {
@@ -45,7 +49,12 @@ export default function Fx() {
       </div>
       <div className="fx-mid">
         <div className="fx-graph">
-          <YieldCurve></YieldCurve>
+          <TradingViewWidget
+            symbol="FILUSD"
+            theme={Themes.DARK}
+            locale="fr"
+            autosize
+          />
         </div>
         <Actions></Actions>
       </div>

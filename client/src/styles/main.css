@@ -52,18 +52,29 @@ code {
   padding: 0.5em;
 }
 
-.mm-left {
+.mm-left,
+.fx-left {
   border-right: 1px solid #3a80ab;
+  padding-top: 8px !important;
   /* background-color: orange; */
 }
 
-.mm-mid {
+.mm-mid,
+.fx-mid {
   border-right: 1px solid #3a80ab;
   display: flex;
   flex-direction: column;
 }
 
-.mm-graph {
+.mm-right,
+.fx-right {
+  padding-left: 10px !important;
+  padding-right: 10px !important;
+  padding-top: 8px !important;
+}
+
+.mm-graph,
+.fx-graph {
   height: 65%;
   /* padding-left: 1em; */
 }
