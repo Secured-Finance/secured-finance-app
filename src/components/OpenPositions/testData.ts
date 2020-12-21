@@ -1,0 +1,38 @@
+export const testData = [
+    {
+        action: "Lend",
+        pair: 'FIL/ETH',
+        amount: 1200,
+        rate: 3.43,
+        term: "3 month",
+        pv: 100,
+        state: 'COMPLETED',
+    },
+    {
+        action: "Lend",
+        pair: 'FIL/ETH',
+        amount: 5000,
+        rate: 5.23,
+        term: "1 month",
+        pv: 12,
+        state: 'REGISTERED',
+    },
+    {
+        action: "Borrow",
+        pair: 'FIL/USDC',
+        amount: 3500,
+        rate: 7.43,
+        term: "6 month",
+        pv: 153,
+        state: 'REGISTERED',
+    },
+    {
+        action: "Borrow",
+        pair: 'ETH/USDC',
+        amount: 21500,
+        rate: 1.43,
+        term: "3 month",
+        pv: 13,
+        state: 'REGISTERED',
+    },
+]

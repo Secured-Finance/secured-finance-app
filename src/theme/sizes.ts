@@ -1,0 +1,18 @@
+export const sizes = {
+    base: 16,
+    font: 14,
+    radius: 4,
+    padding: 25,
+
+    h0: 32,
+    h1: 24,
+    h2: 18,
+    headline: 17,
+    body: 16,
+    callout: 15,
+    subhead: 14,
+    footnote: 13,
+    caption: 12,
+    caption2: 11,
+    caption3: 10,
+};
