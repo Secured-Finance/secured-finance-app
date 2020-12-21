@@ -1,9 +1,8 @@
-import * as wasm from "@zondax/filecoin-signing-tools"
 import { WalletSubProvider } from "@glif/filecoin-wallet-provider"
 import { Network } from "@glif/filecoin-address"
 import { LotusMessage, SignedLotusMessage } from "@glif/filecoin-message"
 
-export const PrivateKeyProvider = (privateKey: string | Buffer): WalletSubProvider => {
+export const PrivateKeyProvider = (wasm: any, privateKey: string | Buffer): WalletSubProvider => {
     const PRIVATE_KEY = privateKey;
     const { private_hexstring } = wasm.keyRecover(PRIVATE_KEY);
     return {

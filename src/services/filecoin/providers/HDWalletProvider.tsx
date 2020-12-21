@@ -1,10 +1,9 @@
-import * as wasm from "@zondax/filecoin-signing-tools"
 import { WalletSubProvider } from "@glif/filecoin-wallet-provider"
 import { Network } from "@glif/filecoin-address"
 import { LotusMessage, SignedLotusMessage } from "@glif/filecoin-message"
 import { MainNetPath, TestNetPath } from "../utils"
 
-export const HDWalletProvider = (mnemonic: string | Buffer): WalletSubProvider => {
+export const HDWalletProvider = (wasm: any, mnemonic: string | Buffer): WalletSubProvider => {
     const MNEMONIC = mnemonic
     return {
         getAccounts: async (_nStart: number, _nEnd: number = 5, network: string = Network.TEST) => {

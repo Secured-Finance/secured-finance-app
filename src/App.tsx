@@ -10,6 +10,7 @@ import History from './views/History'
 import Exchange from './views/Exchange'
 import SecuredFinanceProvider from './contexts/SecuredFinanceProvider'
 import Account from './views/Account'
+import FilecoinWalletProvider from './contexts/FilecoinWalletProvider'
 
 const App: React.FC = () => {	
   return (
@@ -44,11 +45,13 @@ const Providers: React.FC = ({ children }) => {
 				walletconnect: { rpcUrl: 'https://mainnet.eth.aragon.network/' },
 			}}
 		>
-			<SecuredFinanceProvider>
-				<ModalsProvider>
-					{children}
-				</ModalsProvider>
-			</SecuredFinanceProvider>
+			<FilecoinWalletProvider>
+				<SecuredFinanceProvider>
+					<ModalsProvider>
+						{children}
+					</ModalsProvider>
+				</SecuredFinanceProvider>
+			</FilecoinWalletProvider>
 		</UseWalletProvider>
 	  </ThemeProvider>
 	)

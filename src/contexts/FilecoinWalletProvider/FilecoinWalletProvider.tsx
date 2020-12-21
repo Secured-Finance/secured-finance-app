@@ -24,10 +24,19 @@ const FilecoinWalletProvider: React.FC = ({ children }) => {
   window.filecoinWallet = filecoinWallet
 
   useEffect(() => {
-      const network = FilNetwork.TEST
-      const filWallet = new FilecoinWallet(null, network)
-      setFilecoinWallet(filWallet)
-      window.filWallet = filWallet
+		async function loadWasmModule() {
+			try {
+				const wasm = await import("@zondax/filecoin-signing-tools")
+				return wasm
+			} catch (err) {
+				console.error(`Unexpected error in loadWasm. [Message: ${err.message}]`);
+			}
+		}
+		const wasm = loadWasmModule()
+		const network = FilNetwork.TEST
+		const filWallet = new FilecoinWallet(wasm, null, network)
+		setFilecoinWallet(filWallet)
+		window.filWallet = filWallet
   }, [])
 
   return <Context.Provider value={{ filecoinWallet }}>{children}</Context.Provider>
