@@ -6,9 +6,9 @@ This repo contains a decentralized web application.
 
 ## Quick Start
 
-1. Set environment variables in `.env` file, check `.env.sample` in `app`
-2. In the terminal `cd app`, then `npm install`
-3. `npm start`
+1. Clone this repository 
+2. Install all required dependencies using `npm install` command
+3. Run `npm run start` to start development mode
 
 ## Domains 
 you need to install unstoppable domain [browser extension](https://chrome.google.com/webstore/detail/unstoppable-extension/beelkklmblgdljamcmoffgfbdddfpnnl?hl=en) for `.crypto`
@@ -18,13 +18,10 @@ you need to install unstoppable domain [browser extension](https://chrome.google
 
 ## Sections of the app
 
-- MoneyMarket
+- Lending
 - Swap
 - FX
-- Books
 - History
-- Filecoin Page
-- Decentralized chat - work in progress
 
 ## Technologies used
 
@@ -33,19 +30,8 @@ you need to install unstoppable domain [browser extension](https://chrome.google
 - NodeJS
 - Web3js to integrate with smart contracts
 - Metamask
-- Powergate
-- Slate
-- Pinata cloud
 - Filecoin
-- Textile bucket/threadb
 
-## Deploy
+## Deployment
 
 Deployed to ipfs using Fleek.
-Set environment variables below on Fleek:
-- `REACT_APP_IS_DEV` - set to `false` on production
-- `REACT_APP_PINATA_API_KEY` - your Pinata Cloud API key
-- `REACT_APP_PINATA_SECRET_API_KEY` - your Pinata Cloud secret API key
-- `REACT_APP_MONEYMARKET_ADDRESS` - MoneyMarket smart contract address
-- `REACT_APP_FX_ADDRESS` - FX smart contract address
-- `REACT_APP_LOAN_ADDRESS` - Loan smart contract address

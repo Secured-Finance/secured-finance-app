@@ -1,0 +1,73 @@
+{
+  "name": "secured-finance-web",
+  "version": "0.1.0",
+  "private": true,
+  "homepage": ".",
+  "dependencies": {
+    "@glif/filecoin-address": "^1.1.0-beta.10",
+    "@glif/filecoin-message": "^1.1.0-beta.10",
+    "@glif/filecoin-wallet-provider": "^1.1.0-beta.11",
+    "@ledgerhq/hw-transport-webusb": "^5.36.0",
+    "@reduxjs/toolkit": "^1.5.0",
+    "@testing-library/jest-dom": "^5.11.4",
+    "@testing-library/react": "^11.1.0",
+    "@testing-library/user-event": "^12.1.10",
+    "@zondax/filecoin-signing-tools": "^0.13.0",
+    "axios": "^0.21.0",
+    "big-number": "^2.0.0",
+    "bignumber.js": "^9.0.1",
+    "canvas": "^2.6.1",
+    "chart.js": "^2.9.4",
+    "react": "^17.0.1",
+    "react-chartjs-2": "^2.11.1",
+    "react-dom": "^17.0.1",
+    "react-redux": "^7.2.2",
+    "react-router-dom": "^5.2.0",
+    "react-scripts": "4.0.1",
+    "react-table": "^7.6.2",
+    "styled-components": "^5.2.1",
+    "typescript": "^4.1.2",
+    "use-wallet": "^0.8.1",
+    "web-vitals": "^0.2.4",
+    "web3": "^1.3.0",
+    "webfontloader": "^1.6.28"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",  
+    "cert": "openssl req -nodes -config certs/openssl.cnf -new -x509 -keyout certs/server.key -out certs/server.cert; openssl x509 -in certs/server.cert -out certs/cert.pem -outform PEM"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@types/react": "^17.0.0",
+    "@types/react-dom": "^17.0.0",
+    "@types/react-redux": "^7.1.11",
+    "@types/react-router-dom": "^5.1.6",
+    "@types/react-table": "^7.0.25",
+    "@types/styled-components": "^5.1.4",
+    "@types/webfontloader": "^1.6.32",
+    "copy-webpack-plugin": "^7.0.0",
+    "react-app-rewired": "^2.1.8",
+    "redux-devtools": "^3.7.0",
+    "wasm-loader": "^1.3.0",
+    "webpack-cli": "^4.2.0"
+  }
+}

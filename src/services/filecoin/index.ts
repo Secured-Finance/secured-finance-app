@@ -1,0 +1,1 @@
+export { FilecoinWallet } from './wallet'
