@@ -1,6 +1,5 @@
-import * as wasm from "@zondax/filecoin-signing-tools"
 import { Network as FilNetwork } from "@glif/filecoin-address"
-import { LotusMessage, SignedLotusMessage } from "@glif/filecoin-message"
+import { LotusMessage } from "@glif/filecoin-message"
 import Filecoin, { LocalNodeProvider, WalletSubProvider } from '@glif/filecoin-wallet-provider'
 import { MainNetPath, TestNetPath } from "./utils"
 
@@ -10,15 +9,17 @@ interface FilWalletConfig {
 }
 
 export class FilecoinWallet {
+    wasm: any = {}
     filecoin: Filecoin
     account: any
 
-	constructor(provider: WalletSubProvider, network: FilNetwork = FilNetwork.TEST) {
+	constructor(wasm: any, provider: WalletSubProvider, network: FilNetwork = FilNetwork.TEST) {
         const apiAddr = network == FilNetwork.MAIN ? "https://calibration.node.glif.io" : "http://api.node.glif.io/rpc/v0"
         const config = {
             apiAddress: apiAddr,
             token: '',
         }
+        this.wasm = wasm
         if (provider) {
             this.filecoin = new Filecoin(provider, config)
         } else {
@@ -48,7 +49,7 @@ export class FilecoinWallet {
     }
 
     generateMnemonic = () => {
-        const mnemonic = wasm.generateMnemonic()
+        const mnemonic = this.wasm.generateMnemonic()
         localStorage.setItem('mnemonic', mnemonic)
 
         return mnemonic
@@ -57,7 +58,7 @@ export class FilecoinWallet {
     getPrivateKey = (network: FilNetwork = FilNetwork.TEST) => {
         const mnemonic = localStorage.getItem('mnemonic')
         const path = network == FilNetwork.MAIN ? MainNetPath : TestNetPath
-        return wasm.keyDerive(mnemonic, path, "")
+        return this.wasm.keyDerive(mnemonic, path, "")
     }
 
     getBalance = (account?: any) => {
