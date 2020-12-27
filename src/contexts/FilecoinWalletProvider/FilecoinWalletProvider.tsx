@@ -1,45 +1,38 @@
-import React, { createContext, useEffect, useState } from 'react'
+import React, { createContext, ReactNode, useEffect, useState } from 'react'
 import { Network as FilNetwork } from "@glif/filecoin-address"
 
-import { FilecoinWallet } from '../../services/filecoin'
+import { providers } from '../../services/filecoin/providers'
 
-export interface FWContext {
-  filecoinWallet?: typeof FilecoinWallet
-}
-
-export const Context = createContext<FWContext>({
-  filecoinWallet: undefined,
+export const Context = createContext({
+	isLoaded: false,
 })
 
-declare global {
-  interface Window {
-    filWallet: any
-  }
+interface FilecoinWalletProviderProps {
+	children: ReactNode,
+	ntwk?: FilNetwork.MAIN | FilNetwork.TEST
 }
 
-const FilecoinWalletProvider: React.FC = ({ children }) => {
-  const [filecoinWallet, setFilecoinWallet] = useState<any>()
+const FilecoinWasmProvider: React.FC<FilecoinWalletProviderProps> = ({ children, ntwk }) => {
+	const [wasmModule, setWasmModule] = useState<any>()
+	const [loaded, setLoaded] = useState<boolean>(false)
+	const [filProviders, setFilProviders] = useState<any>()
 
-  // @ts-ignore
-  window.filecoinWallet = filecoinWallet
-
-  useEffect(() => {
+	useEffect(() => {
 		async function loadWasmModule() {
 			try {
 				const wasm = await import("@zondax/filecoin-signing-tools")
-				return wasm
+				await setWasmModule(wasm)
+				await setLoaded(true)
+				await setFilProviders(providers(wasm))
 			} catch (err) {
+				await setLoaded(false)
 				console.error(`Unexpected error in loadWasm. [Message: ${err.message}]`);
 			}
 		}
-		const wasm = loadWasmModule()
-		const network = FilNetwork.TEST
-		const filWallet = new FilecoinWallet(wasm, null, network)
-		setFilecoinWallet(filWallet)
-		window.filWallet = filWallet
-  }, [])
+		loadWasmModule()
+	}, [setWasmModule, setLoaded, setFilProviders, providers])
 
-  return <Context.Provider value={{ filecoinWallet }}>{children}</Context.Provider>
+	return <Context.Provider value={{ ...wasmModule, loaded, filProviders, isLoaded: true }}>{children}</Context.Provider>
 }
 
-export default FilecoinWalletProvider
+export default FilecoinWasmProvider

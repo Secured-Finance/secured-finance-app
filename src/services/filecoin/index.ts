@@ -1,1 +1,2 @@
-export { FilecoinWallet } from './wallet'
+export * from './wallet'
+export * from './utils'

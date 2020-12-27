@@ -111,7 +111,7 @@ export default function YieldCurve() {
 			setLineData(graphData);
 		}
 		updateGraph();
-	}, [borrowRates, lendingRates, midRate])	
+	}, [borrowRates, lendingRates, midRate, labels])	
 
 
   return (

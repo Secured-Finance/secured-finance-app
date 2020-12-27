@@ -1,3 +1,4 @@
+import produce from 'immer'
 import * as constants from './constants'
 import { AssetPrices } from './types'
 
@@ -13,53 +14,30 @@ const initialStore: AssetPrices = {
     isLoading: false,
 }
 
-function ethAccountReducer(state = initialStore, action: any) {
-    switch (action.type) {
-        case constants.FETCHING_ASSET_PRICE:
-            return {
-                ...Object.freeze(state),
-                isLoading: true
-            }
-        case constants.FETCHING_ASSET_PRICE_FAILURE:
-            return {
-                ...Object.freeze(state),
-                isLoading: false
-            }
-        case constants.UPDATE_ETHEREUM_USD_PRICE:
-            return {
-                ...Object.freeze(state),
-                ethereum: {
-                    ...state.ethereum,
-                    price: action.data,
-                }
-            }
-        case constants.UPDATE_ETHEREUM_USD_CHANGE:
-            return {
-                ...Object.freeze(state),
-                ethereum: {
-                    ...state.ethereum,
-                    change: action.data,
-                }
-            }
-        case constants.UPDATE_FILECOIN_USD_PRICE:
-            return {
-                ...Object.freeze(state),
-                filecoin: {
-                    ...state.filecoin,
-                    price: action.data,
-                }
-            }
-        case constants.UPDATE_FILECOIN_USD_CHANGE:
-            return {
-                ...Object.freeze(state),
-                filecoin: {
-                    ...state.filecoin,
-                    change: action.data,
-                }
-            }
-        default:
-            return state               
+const assetPricesReducer = (state = initialStore, action: any) => 
+    produce(state, draft => {
+        switch (action.type) {
+            case constants.FETCHING_ASSET_PRICE:
+                draft.isLoading = true
+                break
+            case constants.FETCHING_ASSET_PRICE_FAILURE:
+                draft.isLoading = false
+                break
+            case constants.UPDATE_ETHEREUM_USD_PRICE:
+                draft.ethereum.price = action.data
+                break
+            case constants.UPDATE_ETHEREUM_USD_CHANGE:
+                draft.ethereum.change = action.data
+                break
+            case constants.UPDATE_FILECOIN_USD_PRICE:
+                draft.filecoin.price = action.data
+                break
+            case constants.UPDATE_FILECOIN_USD_CHANGE:
+                draft.filecoin.change = action.data
+                break
+            default:
+                break
     }
-}  
+})
 
-export default ethAccountReducer
+export default assetPricesReducer

@@ -1,26 +1,27 @@
 import React, { useCallback } from 'react'
 import styled from 'styled-components'
-import { useWallet } from 'use-wallet'
 import theme from '../../theme'
 import Button from '../Button'
-import Label from '../Label'
 import Modal, { ModalProps } from '../Modal'
 import ModalActions from '../ModalActions'
 import ModalContent from '../ModalContent'
 import ModalTitle from '../ModalTitle'
-import Spacer from '../Spacer'
 import EthWallet from './components/EthWallet'
 import FilWallet from './components/FilWallet'
 
-const WalletModal: React.FC<ModalProps> = ({ onDismiss }) => {
+const WalletModal: React.FC<ModalProps> = ({ onDismiss, ccyIndex }) => {
 
 	return (
 		<Modal>
-			<ModalTitle text="Wallets" />
+			<ModalTitle text="Wallet Information" />
 			<ModalContent>
-				<EthWallet onDismiss={onDismiss}/>
-				<Spacer size={"lg"}/>
-				<FilWallet />
+				{
+					ccyIndex == 1 
+					?
+					<FilWallet onDismiss={onDismiss}/>
+					:
+					<EthWallet onDismiss={onDismiss}/>
+				}
 			</ModalContent>
 			<ModalActions>
 				<Button 

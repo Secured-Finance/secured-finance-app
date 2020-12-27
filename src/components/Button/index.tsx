@@ -141,7 +141,7 @@ const StyledButton = styled.button<StyledButtonProps>`
 	font-family: Inter;
 	align-items: center;
 	background-color: ${props => props.background};
-	border: ${props => props.borderRadius ? props.borderRadius : 1}px solid ${props => props.borderColor ? props.borderColor : props.background};
+	border: ${props => props.borderWidth ? props.borderWidth : 1}px solid ${props => props.borderColor ? props.borderColor : props.background};
 	border-bottom: ${props => props.borderBottom ? '1px solid ' + props.borderBottom : 'none'};
 	border-radius: ${props => props.borderRadius ? props.borderRadius : 6}px;
 	// box-shadow: ${props => props.boxShadow};
@@ -160,6 +160,10 @@ const StyledButton = styled.button<StyledButtonProps>`
 	padding-right: ${props => props.paddingRight}px;
 	pointer-events: ${props => !props.disabled ? undefined : 'none'};
 	width: ${props => props.width ? props.width : '100%'};
+
+	:disabled {
+		opacity: 0.7
+	}
 `
 
 const StyledLink = styled(Link)`

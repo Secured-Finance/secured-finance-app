@@ -11,19 +11,20 @@ interface ActionProps {
         signOut?: () => void
         placeCollateral?: () => void    
     }
+    ccyIndex: number
 }
 
-const RenderActions: React.FC<ActionProps> = ({callbackMap}) => {
-    const [onPresentAccountModal] = useModal(<WalletAccountModal />)
+const RenderActions: React.FC<ActionProps> = ({callbackMap, ccyIndex}) => {
+    const [onPresentSettingsModal] = useModal(<WalletAccountModal ccyIndex={ccyIndex}/>)
 
-    const [onPresentWalletProviderModal] = useModal(
-        <WalletProviderModal />,
+    const [onPresentWalletEthProviderModal] = useModal(
+        <WalletProviderModal ccyIndex={ccyIndex}/>,
         'provider',
     )
         
     const handleConnectWallet = useCallback(() => {
-    onPresentWalletProviderModal()
-    }, [onPresentWalletProviderModal])
+        onPresentWalletEthProviderModal()
+    }, [onPresentWalletEthProviderModal])
 
     return (
         <div>
@@ -35,16 +36,16 @@ const RenderActions: React.FC<ActionProps> = ({callbackMap}) => {
                 ?
                 <StyledActionsContainer>
                     <StyledActionButton 
-                        onClick={onPresentAccountModal}
+                        onClick={onPresentSettingsModal}
                         >Send
                     </StyledActionButton>
                     <StyledActionButton
-                        onClick={onPresentAccountModal}
+                        onClick={onPresentSettingsModal}
                         >Place Collateral
                     </StyledActionButton>
                     <StyledActionButton 
-                        onClick={callbackMap.signOut}
-                        >Sign Out
+                        onClick={onPresentSettingsModal}
+                        >Settings
                     </StyledActionButton>
                 </StyledActionsContainer>
                 :
@@ -68,8 +69,8 @@ const StyledActionsContainer = styled.div`
 
 const StyledActionButton = styled.button`
     padding: 4px 10px;
-    background-color: #FAFAFA;
-    color: #0E7EEB;
+    background-color: ${(props) => props.theme.colors.darkenedBg};
+    color: ${(props) => props.theme.colors.blue};
     font-size: 13px;
     font-weight: 700;
     outline: none; 

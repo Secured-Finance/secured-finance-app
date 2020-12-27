@@ -3,6 +3,7 @@ import styled, { keyframes } from 'styled-components'
 
 export interface ModalProps {
   onDismiss?: () => void
+  ccyIndex?: number
 }
 
 const Modal: React.FC = ({ children }) => {
