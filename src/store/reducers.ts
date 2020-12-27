@@ -4,6 +4,7 @@ import history from './history';
 import lending from './lending';
 import wallets from './wallets';
 import assetPrices from './assetPrices';
+import filWalletProvider from '../services/filecoin/store';
 
 const rootReducer = combineReducers({
     rates,
@@ -11,6 +12,7 @@ const rootReducer = combineReducers({
     lending,
     wallets,
     assetPrices,
+    filWalletProvider,
 });
 
 export default rootReducer

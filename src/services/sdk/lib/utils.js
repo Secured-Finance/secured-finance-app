@@ -23,9 +23,9 @@ export const INTEGERS = {
 }
 
 export const contractsAddresses = {
-	moneyMarket: '0x059Fda1C98288AE6a9dc81a89d89E1EC50b72Dca',
-	fxMarket: '0x9bC1b25A7D12D015dc2669Eefa536fEC8D8375F9',
-	collateral: '0x97aCe9c7e8191edf34c10E1D9B73Ea84b3F92e6B',
-	loan: '0xDFc4Fd1C14BBbD4Fd81dC202602B02ED0677956F',
+	moneyMarket: '0x993727de518e1A063051B1372c2ac90c2C1F2e6A',
+	fxMarket: '0x53ae65b3dC95f0D8C0a23E11b6153f2CE6F8e40c',
+	collateral: '0xE1684A5bfcAC505900d304E90ad0D6122CDF2Abb',
+	loan: '0x1ddd8D75E2100A2B8999e64E0F360aB820eA5cd7',
 	// usdc: '',
 }

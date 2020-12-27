@@ -11,16 +11,17 @@ interface WalletCardProps {
   icon: React.ReactNode
   onConnect: () => void
   title: string
+  buttonText?: string
 }
 
-const WalletCard: React.FC<WalletCardProps> = ({ icon, onConnect, title }) => (
+const WalletCard: React.FC<WalletCardProps> = ({ icon, onConnect, title, buttonText }) => (
   <Card>
     <CardContent>
       <CardIcon>{icon}</CardIcon>
       <CardTitle text={title} />
       <Button 
         onClick={onConnect} 
-        text="Connect" 
+        text={buttonText ? buttonText : "Connect"}
         style={{
           background: theme.colors.buttonBlue,
           fontSize: theme.sizes.callout, 

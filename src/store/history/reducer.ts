@@ -1,3 +1,4 @@
+import produce from 'immer'
 import * as constants from './constants'
 import { HistoryStore } from './types'
 
@@ -6,27 +7,22 @@ const initialStore: HistoryStore = {
     isLoading: false,
 }
 
-function ratesReducer(state = initialStore, action: any) {
-    switch (action.type) {
-        case constants.FETCHING_HISTORY:
-            return {
-                ...Object.freeze(state),
-                isLoading: true
-            }
-        case constants.FETCHING_LENDING_HISTORY_FAILURE:
-            return {
-                ...Object.freeze(state),
-                isLoading: false,
-            }
-        case constants.FETCHING_LENDING_HISTORY_SUCCESS:
-            return {
-                ...Object.freeze(state),
-                lendingHistory: action.data,
-                isLoading: false,
-            }   
-        default:
-            return state               
-    }
-}  
+const historyReducer = (state = initialStore, action: any) =>
+    produce(state, draft => {
+        switch (action.type) {
+            case constants.FETCHING_HISTORY:
+                draft.isLoading = true
+                break
+            case constants.FETCHING_LENDING_HISTORY_FAILURE:
+                draft.isLoading = false
+                break
+            case constants.FETCHING_LENDING_HISTORY_SUCCESS:
+                draft.lendingHistory = action.data
+                draft.isLoading = true
+                break
+            default:
+                break
+        }
+})
 
-export default ratesReducer
+export default historyReducer

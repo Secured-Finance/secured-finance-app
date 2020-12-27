@@ -2,7 +2,6 @@ import { formatAddress } from "../../../../utils";
 import CurrencyContainer from "../../../../components/CurrencyContainer";
 import React from "react";
 import { RenderBalance, RenderPrice, RenderActions, RenderPortfolio } from "./components";
-import BigNumber from "bignumber.js";
 
 interface WalletTableDataProps {
     columns?: Array<TableColumns>,
@@ -33,10 +32,6 @@ interface Columns {
     Header: string,
     accessor: string,
     Cell: any,
-}
-
-const calculateUsdValue = (price: number, balance: number) => {
-    return new BigNumber(price).multipliedBy(new BigNumber(balance)).toNumber()
 }
 
 export const walletTableColumns = [{
@@ -72,7 +67,7 @@ export const walletTableColumns = [{
         {
             Header: 'Actions',
             accessor: 'actions',
-            Cell: (cell: {value: any}) => <RenderActions callbackMap={cell.value}/>
+            Cell: (cell: {value: any, row: any }) => <RenderActions callbackMap={cell.value} ccyIndex={cell.row.values.ccyIndex}/>
         },
     ]
 }] as Array<TableColumns>

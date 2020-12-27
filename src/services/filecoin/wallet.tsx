@@ -1,83 +1,70 @@
-import { Network as FilNetwork } from "@glif/filecoin-address"
-import { LotusMessage } from "@glif/filecoin-message"
-import Filecoin, { LocalNodeProvider, WalletSubProvider } from '@glif/filecoin-wallet-provider'
-import { MainNetPath, TestNetPath } from "./utils"
+import { Network as FilNetwork, Network } from "@glif/filecoin-address"
+import Filecoin, { WalletSubProvider } from '@glif/filecoin-wallet-provider'
+import { useDispatch, useSelector } from "react-redux";
+import { failFetchingFilWalletProvider, startFetchingFilWalletProvider, setFilWalletProvider, setFilWalletType, resetFilWalletProvider } from "./store";
+import { RootState } from "../../store/types";
+import useFilWasm from "../../hooks/useFilWasm";
+import { useCallback, useEffect, useState } from "react";
+import { resetFilWallet } from "../../store/wallets";
 
-interface FilWalletConfig {
-    apiAddress: string
-    token: string
+export const useResetFilWalletProvider = () => {
+    localStorage.setItem('mnemonic', null)
+    localStorage.setItem('privateKey', null)
+    const dispatch = useDispatch();
+    const { loaded } = useFilWasm()
+
+    const handleResetProvider = useCallback(async () => {
+        await dispatch(startFetchingFilWalletProvider())
+        try {
+            await dispatch(resetFilWalletProvider())
+            await dispatch(resetFilWallet())
+        } catch (e) {
+            console.log(e)
+            await dispatch(failFetchingFilWalletProvider())
+        }
+    }, [loaded, dispatch])
+  
+	return { onReset: handleResetProvider }
 }
 
-export class FilecoinWallet {
-    wasm: any = {}
-    filecoin: Filecoin
-    account: any
+export const useNewFilWalletProvider = () => {
+    const walletProvider = useSelector((state: RootState) => state.filWalletProvider.walletProvider);
+    const dispatch = useDispatch();
+    const { loaded } = useFilWasm()
 
-	constructor(wasm: any, provider: WalletSubProvider, network: FilNetwork = FilNetwork.TEST) {
-        const apiAddr = network == FilNetwork.MAIN ? "https://calibration.node.glif.io" : "http://api.node.glif.io/rpc/v0"
-        const config = {
-            apiAddress: apiAddr,
-            token: '',
-        }
-        this.wasm = wasm
-        if (provider) {
-            this.filecoin = new Filecoin(provider, config)
+    const handleCreateFilWalletProvider = useCallback(async (provider: WalletSubProvider, providerType: string, network: Network = Network.TEST) => {
+        await dispatch(startFetchingFilWalletProvider())
+        if (loaded && walletProvider == null) {
+            const config = {
+                apiAddress: network == Network.MAIN ? "http://api.node.glif.io/rpc/v0" : "https://calibration.node.glif.io/rpc/v0",
+            }
+            const filecoin = await new Filecoin(provider, config)        
+            await dispatch(setFilWalletProvider(filecoin))
+            await dispatch(setFilWalletType(providerType))
         } else {
-            this.filecoin = new Filecoin(new LocalNodeProvider(config), config)
+            await dispatch(failFetchingFilWalletProvider())
         }
-    }
-    
+    }, [loaded, walletProvider])
 
-	setProvider = (provider: WalletSubProvider, config: FilWalletConfig) => {
-		this.filecoin = new Filecoin(provider, config)
-    }
-    
-	setDefaultAccount = (network: FilNetwork = FilNetwork.TEST, account?: any) => {
-        if (account) {
-            this.account = account
-        } else {
-            this.account = this.filecoin.wallet.getAccounts(0, 1, network)
+	return { onCreate: handleCreateFilWalletProvider }
+}
+
+export const useDefaultWallet = (network: Network = Network.TEST) => {
+    const walletProvider = useSelector((state: RootState) => state.filWalletProvider.walletProvider);
+    const [address, setAddress] = useState('')
+    const [balance, setBalance] = useState(0)
+
+    useEffect(() => {
+        async function compute() {
+            if (walletProvider != null) {
+                const [filAddr] = await walletProvider.wallet.getAccounts(0, 1, network)
+                setAddress(filAddr)
+                const filBal = await walletProvider.getBalance(filAddr)
+                setBalance(filBal.toNumber())
+            }    
         }
-    }
+        compute()
+    }, [setAddress, setBalance])
 
-	getDefaultAccount = () => {
-		return this.account
-    }
-    
-    getAccounts = (network: FilNetwork = FilNetwork.TEST) => {
-        return this.filecoin.wallet.getAccounts(0, 5, network)
-    }
-
-    generateMnemonic = () => {
-        const mnemonic = this.wasm.generateMnemonic()
-        localStorage.setItem('mnemonic', mnemonic)
-
-        return mnemonic
-    }
-
-    getPrivateKey = (network: FilNetwork = FilNetwork.TEST) => {
-        const mnemonic = localStorage.getItem('mnemonic')
-        const path = network == FilNetwork.MAIN ? MainNetPath : TestNetPath
-        return this.wasm.keyDerive(mnemonic, path, "")
-    }
-
-    getBalance = (account?: any) => {
-        this.filecoin.getBalance(account)
-        .then((res) => {
-            return res
-        })
-        .catch((err) => {
-            console.log(err)  
-        })
-    }
-
-    signMessage = (message: LotusMessage) => {
-        const _ = this.filecoin.wallet.sign(this.account, message)
-        .then((res) => {
-            return res
-        })
-        .catch((err) => {
-            console.log(err)
-        })
-    }
+    return { address, balance }
 }

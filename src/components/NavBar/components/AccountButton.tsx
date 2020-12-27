@@ -3,15 +3,13 @@ import styled from 'styled-components'
 import { useWallet } from 'use-wallet'
 import useModal from '../../../hooks/useModal'
 import Button from '../../Button'
-import WalletAccountModal from '../../WalletAccountModal'
 import WalletProviderModal from '../../WalletProviderModal'
 
 interface AccountButtonProps {}
 
 const AccountButton: React.FC<AccountButtonProps> = (props) => {
-  const [onPresentAccountModal] = useModal(<WalletAccountModal />)
   const [onPresentWalletProviderModal] = useModal(
-	<WalletProviderModal />,
+	<WalletProviderModal ccyIndex={0}/>,
 	'provider',
   )
 
@@ -26,7 +24,7 @@ const AccountButton: React.FC<AccountButtonProps> = (props) => {
 	  {!account ? (
 		<Button size="sm" onClick={handleUnlockClick} text="Unlock Wallet" variant="blue"/>
 		) : (
-		<Button size="sm" onClick={onPresentAccountModal} text="My Wallet" variant="blue"/>
+		<Button size="sm" to="/account" text="My Wallet" variant="blue"/>
 	  )}
 	</StyledAccountButton>
   )

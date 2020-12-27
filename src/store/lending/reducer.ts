@@ -1,3 +1,4 @@
+import produce from 'immer'
 import * as constants from './constants'
 import { LendingStore } from './types'
 
@@ -18,76 +19,51 @@ const initialStore: LendingStore = {
     isLoading: false,
 }
 
-function ratesReducer(state = initialStore, action: any) {
+const lendingReducer = (state = initialStore, action: any) => 
+    produce(state, draft => {
     switch (action.type) {
         case constants.UPDATE_SELECTED_CURRENCY:
-            return {
-                ...Object.freeze(state),
-                selectedCcy: action.data
-            }
+            draft.selectedCcy = action.data
+            break
         case constants.UPDATE_SELECTED_CURRENCY_NAME:
-            return {
-                ...Object.freeze(state),
-                selectedCcyName: action.data
-            }    
+            draft.selectedCcyName = action.data
+            break
         case constants.UPDATE_CURRENCY_INDEX:
-            return {
-                ...Object.freeze(state),
-                currencyIndex: action.data
-            }
+            draft.currencyIndex = action.data
+            break
         case constants.UPDATE_COLLATERAL_CURRENCY:
-            return {
-                ...Object.freeze(state),
-                collateralCcy: action.data
-            }
+            draft.collateralCcy = action.data
+            break
         case constants.UPDATE_COLLATERAL_CURRENCY_NAME:
-            return {
-                ...Object.freeze(state),
-                collateralCcyName: action.data
-            }
+            draft.collateralCcyName = action.data
+            break
         case constants.UPDATE_COLLATERAL_CURRENCY_INDEX:
-            return {
-                ...Object.freeze(state),
-                collateralCcyIndex: action.data
-            }    
+            draft.collateralCcyIndex = action.data
+            break
         case constants.UPDATE_COLLATERAL_AMOUNT:
-            return {
-                ...Object.freeze(state),
-                collateralAmount: action.data
-            }
+            draft.collateralAmount = action.data
+            break
         case constants.UPDATE_SELECTED_TERMS:
-            return {
-                ...Object.freeze(state),
-                selectedTerms: action.data
-            }
+            draft.selectedTerms = action.data
+            break
         case constants.UPDATE_TERMS_INDEX:
-            return {
-                ...Object.freeze(state),
-                termsIndex: action.data
-            }    
+            draft.termsIndex = action.data
+            break
         case constants.UPDATE_BORROW_AMOUNT:
-            return {
-                ...Object.freeze(state),
-                borrowAmount: action.data
-            }    
+            draft.borrowAmount = action.data
+            break
         case constants.UPDATE_BORROW_RATE:
-            return {
-                ...Object.freeze(state),
-                borrowRate: action.data
-            }
+            draft.borrowRate = action.data
+            break
         case constants.UPDATE_LEND_AMOUNT:
-            return {
-                ...Object.freeze(state),
-                lendAmount: action.data
-            }    
+            draft.lendAmount = action.data
+            break
         case constants.UPDATE_LEND_RATE:
-            return {
-                ...Object.freeze(state),
-                lendRate: action.data
-            }    
+            draft.lendRate = action.data
+            break
         default:
-            return state               
+            break               
     }
-}  
+})
 
-export default ratesReducer
+export default lendingReducer

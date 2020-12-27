@@ -24,7 +24,7 @@ export const useTotalUSDBalance = () => {
         } else {
             dispatch(fetchWalletFailure())
         }
-	}, [dispatch, account, balance])
+	}, [dispatch, account, balance, ethPrice])
     
 	useEffect(() => {
         let isMounted = true;

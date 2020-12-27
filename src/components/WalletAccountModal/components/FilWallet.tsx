@@ -1,26 +1,46 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
+import { Network } from '@glif/filecoin-address'
 import styled from 'styled-components'
-import { useWallet } from 'use-wallet'
+import { useResetFilWalletProvider } from '../../../services/filecoin'
 import theme from '../../../theme'
 import Button from '../../Button'
 import Label from '../../Label'
 import { ModalProps } from '../../Modal'
 import Spacer from '../../Spacer'
+import { useSelector } from 'react-redux'
+import { RootState } from '../../../store/types'
 
 const FilWallet: React.FC<ModalProps> = ({ onDismiss }) => {
-	const { account, reset } = useWallet()
+    const [address, setAddress] = useState<string>()
+    const walletProvider = useSelector((state: RootState) => state.filWalletProvider.walletProvider);
+
+    const getAddress = useCallback(() => {
+        const accounts = walletProvider.wallet.getAccounts(0, 1, Network.TEST)
+        .then((res) => {
+            setAddress(res[0])
+        })
+        .catch((err) => console.log(err))
+    }, [setAddress, walletProvider])
+
+    const { onReset } = useResetFilWalletProvider()
 
 	const handleSignOutClick = useCallback(() => {
-		onDismiss!()
-		reset()
-	}, [onDismiss, reset])
+        onDismiss!()
+        onReset()
+    }, [onDismiss])
+    
+    useEffect(()=> {
+        if (walletProvider) {
+            getAddress();
+		}
+    }, [walletProvider, getAddress])
 
     return (
         <StyledWalletContainer>
             <div style={{ display: 'flex' }}>
             <StyledAccountContainer>
                 <StyledAccount>
-                        <StyledAccountText>{account}</StyledAccountText>
+                        <StyledAccountText>{address}</StyledAccountText>
                         <Label 
                             style={{marginTop: 5}}
                             text="Filecoin address" 
@@ -30,8 +50,8 @@ const FilWallet: React.FC<ModalProps> = ({ onDismiss }) => {
         </div>
         <StyledButtonContainer>
             <Button
-                href={`https://etherscan.io/address/${account}`}
-                text="View on Etherscan"
+                href={`https://filscan.io/#/tipset/address-detail?address=${address}`}
+                text="View on Filscan"
                 style={{
                     background: theme.colors.buttonBlue,
                     fontSize: theme.sizes.callout, 

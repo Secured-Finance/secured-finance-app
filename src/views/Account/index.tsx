@@ -1,9 +1,11 @@
-import React, { useMemo, useState } from 'react'
+import { Network } from '@glif/filecoin-address'
+import React, { useEffect, useMemo, useState } from 'react'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
 import Container from '../../components/Container'
 import Page from '../../components/Page'
 import { useEthereumWalletStore } from '../../hooks/useEthWalletStore'
+import { useFilecoinWalletStore } from '../../hooks/useFilWallet'
 import { useTotalUSDBalance } from '../../hooks/useTotalUSDBalance'
 import { RootState } from '../../store/types'
 import { WalletBase } from '../../store/wallets'
@@ -13,17 +15,29 @@ import WalletsTable from './components/WalletsTable'
 
 const Account: React.FC = () => {
     const totalUSDBalance = useTotalUSDBalance()
+    // const [filAddr, setFilAddr] = useState<string>()
     const ethWallet = useEthereumWalletStore()
+    const filWallet = useFilecoinWalletStore()
     const [tableData, setTableData] = useState([] as Array<WalletBase>)
+
+    // const getBalance = () => {
+    //     if (filAddr != undefined) {
+    //         const balance = filWallet.getBalance(filAddr)
+    //         .then((res) => {
+    //             return res.toFil()
+    //         })
+    //         .catch((err) => console.log(err))    
+    //     }
+    // }
 
     useMemo(() => {
         async function updateTable() {
             let array = []
-            array.push(ethWallet)
+            array.push(ethWallet, filWallet)
             setTableData(array)
         }
         updateTable();
-    }, [ethWallet, totalUSDBalance])
+    }, [ethWallet, filWallet, totalUSDBalance, setTableData])
 
 	return (
 		<Page background={theme.colors.background}>
@@ -101,6 +115,7 @@ const mapStateToProps = (state: RootState) => {
     return {
         assetPrices: state.assetPrices,
         wallets: state.wallets,
+        filWalletProvider: state.filWalletProvider,
     }
 }
 
