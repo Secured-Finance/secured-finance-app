@@ -5,23 +5,25 @@ import Button from '../../../components/Button';
 import CurrencySelector from '../../../components/CurrencySelector';
 import TermsSelector from '../../../components/TermsSelector';
 import { RootState } from '../../../store/types';
-import { connect, useDispatch } from 'react-redux';
+import { connect, useDispatch, useSelector } from 'react-redux';
 import { LendingStore } from '../../../store/lending/types';
 import { updateLendAmount, updateLendRate, updateMainCurrency, updateMainTerms } from '../../../store/lending';
 import { useExecuteLoan } from '../../../hooks/useExecuteLoan';
-import { terms, currencyList, percentFormat } from '../../../utils';
+import { terms, currencyList, percentFormat, formatInput } from '../../../utils';
 
 interface LendTabProps {
     lendingRates: any[]
 }
 type CombinedProps = LendTabProps & LendingStore;
 
-const prices = [551.24, 30.54, 1]
 const daysInYear = [90, 180, 360, 720, 1080, 1800]
 
 const Lend: React.FC<CombinedProps> = ({ lendingRates, selectedCcy, selectedCcyName, selectedTerms, lendAmount, lendRate, currencyIndex, termsIndex }) => {
     const dispatch = useDispatch();
     const [pendingTx, setPendingTx] = useState(false)
+    const ethPrice = useSelector((state: RootState) => state.assetPrices.ethereum.price);
+    const filPrice = useSelector((state: RootState) => state.assetPrices.filecoin.price);
+    const usdcPrice = useSelector((state: RootState) => state.assetPrices.usdc.price);
 
     const [buttonOpen, setButtonOpen] = useState(false)
     const [termsOpen, setTermsOpen] = useState(false)
@@ -72,11 +74,11 @@ const Lend: React.FC<CombinedProps> = ({ lendingRates, selectedCcy, selectedCcyN
     const TotalUsdAmount = useMemo(() => {
         switch (selectedCcy) {
             case "FIL":
-                return (lendAmount*prices[1]).toFixed(2)
+                return (lendAmount*filPrice).toFixed(2)
             case "ETH":
-                return (lendAmount*prices[0]).toFixed(2)
+                return (lendAmount*ethPrice).toFixed(2)
             case "USDC":
-                return (lendAmount*prices[2]).toFixed(2)
+                return (lendAmount*usdcPrice).toFixed(2)
             default: 
                 return 0
         }
@@ -85,7 +87,21 @@ const Lend: React.FC<CombinedProps> = ({ lendingRates, selectedCcy, selectedCcyN
     const estimatedReturns = useMemo(() => {
         let interest = lendRate/10000
         let p = interest * (daysInYear[termsIndex]/360)
-        let usdAmount = lendAmount*prices[currencyIndex]
+        let usdAmount: number
+        switch(currencyIndex) {
+            case 0:
+                usdAmount = lendAmount*ethPrice
+                break
+            case 1:
+                usdAmount = lendAmount*filPrice
+                break
+            case 2:
+                usdAmount = lendAmount*usdcPrice
+                break
+            default: 
+                usdAmount = lendAmount*ethPrice
+                break
+        }
         let compoundInterest = usdAmount * p
         return compoundInterest.toFixed(2)
     },[termsIndex, currencyIndex, lendRate, lendAmount])
@@ -115,6 +131,9 @@ const Lend: React.FC<CombinedProps> = ({ lendingRates, selectedCcy, selectedCcyN
                             type={'number'}
                             placeholder={'0'}
                             value={lendAmount}
+                            minLength={1}
+                            maxLength={79}
+                            onKeyDown={formatInput}
                             onChange={handleLend}
                         />
                     </StyledCurrencyInput>
@@ -156,7 +175,7 @@ const Lend: React.FC<CombinedProps> = ({ lendingRates, selectedCcy, selectedCcyN
                         />
                         <StyledLoanInput 
                             placeholder={'0'}
-                            value={percentFormat(lendRate)}
+                            value={percentFormat(lendRate, 10000)}
                             disabled={true}
                         />
                     </StyledCurrencyInput>

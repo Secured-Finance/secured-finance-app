@@ -1,10 +1,10 @@
 import BigNumber from 'bignumber.js'
-import { useCallback, useEffect } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useWallet } from 'use-wallet'
 import WalletAccountModal from '../components/WalletAccountModal'
 import { RootState } from '../store/types'
-import { fetchWallet, fetchWalletFailure, updateEthWalletActions, updateEthWalletAddress, updateEthWalletAssetPrice, updateEthWalletBalance, updateEthWalletDailyChange, updateEthWalletPortfolioShare, updateEthWalletUSDBalance } from '../store/wallets'
+import { updateEthWalletActions, updateEthWalletAddress, updateEthWalletAssetPrice, updateEthWalletBalance, updateEthWalletDailyChange, updateEthWalletPortfolioShare, updateEthWalletUSDBalance } from '../store/wallets'
 import { useEthereumUsd } from './useAssetPrices'
 
 import useBlock from './useBlock'
@@ -50,4 +50,25 @@ export const useEthereumWalletStore = () => {
     }, [block, dispatch, account, balance, reset, totalUSDBalance, price, change])
 
     return ethWallet
+}
+
+export const useEthBalance = () => {
+    const { account, balance } = useWallet()
+    const dispatch = useDispatch()
+    const ethBalance = useSelector((state: RootState) => state.wallets.ethereum.balance);
+
+    const fetchEthStore = useCallback(async (isMounted: boolean) => {
+        const inEther = new BigNumber(balance).dividedBy(new BigNumber(10).pow(18)).toNumber()
+        dispatch(updateEthWalletBalance(inEther))
+	}, [dispatch, account, balance, ])
+    
+	useEffect(() => {
+        let isMounted = true;
+        if ( account && balance) {
+            fetchEthStore(isMounted)
+        }
+        return () => { isMounted = false };
+    }, [dispatch, account, balance])
+
+    return ethBalance
 }

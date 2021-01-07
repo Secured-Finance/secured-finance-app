@@ -1,0 +1,32 @@
+export const testCollateralPositions = [
+    {
+        "ccyIndex": 0,
+        "vault": "0x910B02Fc7b6a1003f7376Ba512b1B63F5741B8e9",
+        "collateral": 10000,
+        "borrow": 820,
+        "health": 125,
+        "assetPrice": 733.55,
+        "usdValue": 72956.75291751,
+        "dailyChange": -0.029181824678304193,
+    },
+    // {
+    //     "ccyIndex": 1,
+    //     "vault": "t1q5o4una3n2a2sy5uymiyohuzgbf4kez6llltm4a",
+    //     "collateral": 0,
+    //     "borrow": 0,
+    //     "health": 0,
+    //     "assetPrice": 22.63,
+    //     "usdValue": 0.00,
+    //     "dailyChange": -2.19,
+    // },
+    // {
+    //     "ccyIndex": 2,
+    //     "vault": "0x910B02Fc7b6a1003f7376Ba512b1B63F5741B8e9",
+    //     "collateral": 0,
+    //     "borrow": 0,
+    //     "health": 0,
+    //     "assetPrice": 1.01,
+    //     "usdValue": 0,
+    //     "dailyChange": -0.013181824678304193,
+    // },
+]

@@ -1,34 +1,24 @@
-import { Network } from '@glif/filecoin-address'
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
 import Container from '../../components/Container'
 import Page from '../../components/Page'
-import { useEthereumWalletStore } from '../../hooks/useEthWalletStore'
+import { useEthereumWalletStore } from '../../hooks/useEthWallet'
 import { useFilecoinWalletStore } from '../../hooks/useFilWallet'
 import { useTotalUSDBalance } from '../../hooks/useTotalUSDBalance'
 import { RootState } from '../../store/types'
 import { WalletBase } from '../../store/wallets'
 import theme from '../../theme'
 import { usdFormat } from '../../utils/formatNumbers'
+import CollateralTable from './components/CollateralTable'
+import { testCollateralPositions } from './components/CollateralTable/testData'
 import WalletsTable from './components/WalletsTable'
 
 const Account: React.FC = () => {
     const totalUSDBalance = useTotalUSDBalance()
-    // const [filAddr, setFilAddr] = useState<string>()
     const ethWallet = useEthereumWalletStore()
     const filWallet = useFilecoinWalletStore()
     const [tableData, setTableData] = useState([] as Array<WalletBase>)
-
-    // const getBalance = () => {
-    //     if (filAddr != undefined) {
-    //         const balance = filWallet.getBalance(filAddr)
-    //         .then((res) => {
-    //             return res.toFil()
-    //         })
-    //         .catch((err) => console.log(err))    
-    //     }
-    // }
 
     useMemo(() => {
         async function updateTable() {
@@ -49,9 +39,13 @@ const Account: React.FC = () => {
                     {/* <StyledBalanceChange>{ethChange.toFixed(2)}%</StyledBalanceChange> */}
                 </StyledBalanceContainer>
             </StyledPortfolioBalance>
-            <StyledAccountContainer>
-                <StyledTitle fontWeight={500} marginBottom={25}>Wallets</StyledTitle>
+            <StyledAccountContainer marginTop={"3px"}>
+                <StyledTitle fontWeight={500} marginBottom={35}>Wallets</StyledTitle>
                 <WalletsTable table={tableData}/>
+            </StyledAccountContainer>
+            <StyledAccountContainer marginTop={"35px"} marginBottom={"35px"}>
+                <StyledTitle fontWeight={500} marginBottom={35}>Collateral Positions</StyledTitle>
+                <CollateralTable table={testCollateralPositions}/>
             </StyledAccountContainer>
             </Container>
 		</Page>
@@ -69,7 +63,14 @@ const StyledPortfolioBalance = styled.div`
 	padding-right: ${(props) => props.theme.spacing[5]}px;  
 `
 
-const StyledAccountContainer = styled.div`
+interface StyledAccountContainerProps {
+    marginTop?: string
+    marginBottom?: string
+}
+
+const StyledAccountContainer = styled.div<StyledAccountContainerProps>`
+    margin-top: ${(props) => props.marginTop ? props.marginTop : '0px'};
+    margin-bottom: ${(props) => props.marginBottom ? props.marginBottom : '0px'};
 	padding-left: ${(props) => props.theme.spacing[5]}px;
 	padding-right: ${(props) => props.theme.spacing[5]}px;
 `

@@ -16,7 +16,7 @@ interface LoansHistory {
 }
 
 const useLoanHistory = () => {
-    const { account, ethereum}: { account: string; ethereum: provider } = useWallet()
+    const { account}: { account: string } = useWallet()
     const securedFinance = useSF()
     const block = useBlock()
     const loanContract = getLoanContract(securedFinance)
@@ -25,29 +25,29 @@ const useLoanHistory = () => {
     const dispatch = useDispatch();  
     
     const fetchLoanHistory = useCallback(async () => {
-            dispatch(startSetLendingHistory())
-            const history: Promise<LoansHistory> = await getLoansHistory(loanContract, account)
-            let parsedHistory: Array<HistoryTableData> = []
-            try {
-                for (var i = 0; i < (await history).loans.length; i++) {
-                    const loanObj = Object.assign({},(await history).loans[i]) 
-                    parsedHistory.push(loanObj)
-                }
-                    await dispatch(setLendingHistory(parsedHistory))
+        dispatch(startSetLendingHistory())
+        const history: Promise<LoansHistory> = await getLoansHistory(loanContract, account)
+        let parsedHistory: Array<HistoryTableData> = []
+        try {
+            for (var i = 0; i < (await history).loans.length; i++) {
+                const loanObj = Object.assign({},(await history).loans[i]) 
+                parsedHistory.push(loanObj)
             }
-            catch (err) {
-                dispatch(failSetLendingHistory())
-                console.log(err)
-            }
+                await dispatch(setLendingHistory(parsedHistory))
+        }
+        catch (err) {
+            dispatch(failSetLendingHistory())
+            console.log(err)
+        }
 	}, [dispatch, loanContract, account])
     
 	useEffect(() => {
         let isMounted = true;
-		if (securedFinance && loanContract) {
+		if (securedFinance && loanContract && account) {
 			fetchLoanHistory()
         }
         return () => { isMounted = false };
-	}, [block, loanContract, dispatch, securedFinance])
+	}, [block, loanContract, dispatch, securedFinance, account])
     
 	return lendingHistory
 }

@@ -21,10 +21,23 @@ export function updateFilUSDPrice(data: number) {
 	}
 }
 
-
 export function updateFilUSDChange(data: number) {
 	return {
 		type: constants.UPDATE_FILECOIN_USD_CHANGE,
+		data
+	}
+}
+
+export function updateUSDCUSDPrice(data: number) {
+	return {
+		type: constants.UPDATE_USDC_USD_PRICE,
+		data
+	}
+}
+
+export function updateUSDCUSDChange(data: number) {
+	return {
+		type: constants.UPDATE_USDC_USD_CHANGE,
 		data
 	}
 }

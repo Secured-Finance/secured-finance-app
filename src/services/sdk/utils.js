@@ -79,6 +79,10 @@ export const getFxRates = async (fxMarketContract) => {
 	return fxMarketContract.methods.getMidRates().call()
 }
 
+export const getCollateralBook = async (collateralContract, account) => {
+	return collateralContract.methods.getOneBook(account).call()
+}
+
 export const upSizeEth = async (collateralContract, account, amount) => {
 	return collateralContract.methods
 		.upSizeETH()

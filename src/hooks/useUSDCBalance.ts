@@ -8,7 +8,7 @@ import { getUsdcBalance, getUsdcContract } from '../services/sdk/utils'
 import useSF from './useSecuredFinance'
 import useBlock from './useBlock'
 
-const useTokenBalance = () => {
+const useUSDCBalance = () => {
 	const securedFinance = useSF()
 	const usdcContact = getUsdcContract(securedFinance)
 	const block = useBlock()
@@ -29,4 +29,4 @@ const useTokenBalance = () => {
 	return balance
 }
 
-export default useTokenBalance
+export default useUSDCBalance
