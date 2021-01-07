@@ -2,26 +2,29 @@ import React, { useCallback, useContext, useEffect, useMemo, useState } from 're
 import styled, { ThemeContext } from 'styled-components'
 import theme from '../../../theme';
 import Button from '../../../components/Button';
-import ArrowSVG from '../../../components/ArrowSVG';
 import { LendingStore } from '../../../store/lending/types';
 import { RootState } from '../../../store/types';
-import { connect, useDispatch } from 'react-redux';
+import { connect, useDispatch, useSelector } from 'react-redux';
 import { updateBorrowAmount, updateMainCurrency, updateBorrowRate, updateCollateralAmount, updateMainCollateralCurrency, updateMainTerms } from '../../../store/lending';
 import { useSetUpCollateral } from '../../../hooks/useSetUpCollateral';
 import { useExecuteLoan } from '../../../hooks/useExecuteLoan';
 import { useUpsizeCollateral } from '../../../hooks/useUpSizeCollateral';
-import { terms, collateralList, currencyList, percentFormat } from '../../../utils';
+import { terms, collateralList, currencyList, percentFormat, formatInput } from '../../../utils';
 import CurrencySelector from '../../../components/CurrencySelector';
 import TermsSelector from '../../../components/TermsSelector';
 
 interface BorrowTabProps {
     borrowRates: any[]
 }
+
 type CombinedProps = BorrowTabProps & LendingStore;
 const prices = [551.24, 30.54, 1]
 
 const Borrow: React.FC<CombinedProps> = ({ borrowRates, selectedCcy, selectedCcyName, currencyIndex, collateralCcy, collateralCcyName, selectedTerms, termsIndex, collateralAmount, borrowAmount, borrowRate, }) => {
     const dispatch = useDispatch();
+    const ethPrice = useSelector((state: RootState) => state.assetPrices.ethereum.price);
+    const filPrice = useSelector((state: RootState) => state.assetPrices.filecoin.price);
+    const usdcPrice = useSelector((state: RootState) => state.assetPrices.usdc.price);
 
     const [requestedCollateral, setRequestedCollateral] = useState(false)
     const [pendingTx, setPendingTx] = useState(false)
@@ -98,16 +101,16 @@ const Borrow: React.FC<CombinedProps> = ({ borrowRates, selectedCcy, selectedCcy
     const TotalUsdAmount = useMemo(() => {
         switch (selectedCcy) {
             case "FIL":
-                return (borrowAmount*prices[1]).toFixed(2)
+                return (borrowAmount*filPrice).toFixed(2)
             case "ETH":
-                return (borrowAmount*prices[0]).toFixed(2)
+                return (borrowAmount*ethPrice).toFixed(2)
             case "USDC":
-                return (borrowAmount*prices[2]).toFixed(2)
+                return (borrowAmount*usdcPrice).toFixed(2)
             default: 
                 return 0
         }
     },[borrowAmount, selectedCcy])
-
+    
     const handleBorrow = useCallback((e: React.FormEvent<HTMLInputElement>) => {
         dispatch(updateBorrowAmount(e.currentTarget.value))
     },[dispatch])
@@ -134,6 +137,9 @@ const Borrow: React.FC<CombinedProps> = ({ borrowRates, selectedCcy, selectedCcy
                             type={'number'}
                             placeholder={'0'}
                             value={borrowAmount}
+                            minLength={1}
+                            maxLength={79}
+                            onKeyDown={formatInput}
                             onChange={handleBorrow}
                         />
                     </StyledCurrencyInput>
@@ -175,7 +181,7 @@ const Borrow: React.FC<CombinedProps> = ({ borrowRates, selectedCcy, selectedCcy
                         />
                         <StyledLoanInput 
                             placeholder={'0'}
-                            value={percentFormat(borrowRate)}
+                            value={percentFormat(borrowRate, 10000)}
                             disabled={true}
                         />
                     </StyledCurrencyInput>
@@ -215,6 +221,9 @@ const Borrow: React.FC<CombinedProps> = ({ borrowRates, selectedCcy, selectedCcy
                             type={'number'}
                             placeholder={'0'}
                             value={collateralAmount}
+                            minLength={1}
+                            maxLength={79}
+                            onKeyDown={formatInput}
                             onChange={handleCollateral}
                         />
                     </StyledCurrencyInput>

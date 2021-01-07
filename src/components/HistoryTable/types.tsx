@@ -83,7 +83,7 @@ export const historyTableColumns = [{
         {
             Header: 'Side',
             accessor: 'side',
-            Cell: ( cell: { value: string } ) => ( cell.value === "0" ? <span >Borrower</span> : <span>Lender</span>),
+            Cell: ( cell: { value: string } ) => ( cell.value === "0" ? <span>Lender</span> : <span>Borrower</span>),
         },
         {
             Header: 'Rate',

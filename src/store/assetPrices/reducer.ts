@@ -11,6 +11,10 @@ const initialStore: AssetPrices = {
         price: 0,
         change: 0
     },
+    usdc: {
+        price: 0,
+        change: 0   
+    },
     isLoading: false,
 }
 
@@ -34,6 +38,12 @@ const assetPricesReducer = (state = initialStore, action: any) =>
                 break
             case constants.UPDATE_FILECOIN_USD_CHANGE:
                 draft.filecoin.change = action.data
+                break
+            case constants.UPDATE_USDC_USD_PRICE:
+                draft.usdc.price = action.data
+                break
+            case constants.UPDATE_USDC_USD_CHANGE:
+                draft.usdc.change = action.data
                 break
             default:
                 break

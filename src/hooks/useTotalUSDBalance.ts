@@ -30,7 +30,7 @@ export const useTotalUSDBalance = () => {
         let isMounted = true;
         fetchWalletStore(isMounted)
         return () => { isMounted = false };
-    }, [block, dispatch])
+    }, [block, dispatch, account, balance, ethPrice])
 
     return totalUSDBalance
 }

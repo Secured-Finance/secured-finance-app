@@ -1,7 +1,8 @@
 import axios, { AxiosResponse } from "axios"
 import { useCallback, useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux";
-import { fetchAssetPrice, fetchAssetPriceFailure, updateEthUSDChange, updateEthUSDPrice, AssetPrice, updateFilUSDChange, updateFilUSDPrice } from "../store/assetPrices";
+import { useWallet } from "use-wallet";
+import { fetchAssetPrice, fetchAssetPriceFailure, updateEthUSDChange, updateEthUSDPrice, AssetPrice, updateFilUSDChange, updateFilUSDPrice, updateUSDCUSDPrice, updateUSDCUSDChange } from "../store/assetPrices";
 import { RootState } from "../store/types";
 import useBlock from "./useBlock";
 
@@ -53,4 +54,11 @@ export const useFilUsd = ():AssetPrice => {
     useAssetPrice('filecoin', updateFilUSDPrice, updateFilUSDChange)
     
     return filecoinUsd
+} 
+
+export const useUSDCUsd = ():AssetPrice => {
+    const USDCUsd = useSelector((state: RootState) => state.assetPrices.usdc);
+    useAssetPrice('usd-coin', updateUSDCUSDPrice, updateUSDCUSDChange)
+    
+    return USDCUsd
 } 

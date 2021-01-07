@@ -1,8 +1,6 @@
 import React, { useCallback } from 'react'
-import { useDispatch } from 'react-redux'
 import styled from 'styled-components'
 import { useWallet } from 'use-wallet'
-import { resetEthWallet } from '../../../store/wallets'
 import theme from '../../../theme'
 import Button from '../../Button'
 import Label from '../../Label'
@@ -10,14 +8,12 @@ import { ModalProps } from '../../Modal'
 import Spacer from '../../Spacer'
 
 const EthWallet: React.FC<ModalProps> = ({ onDismiss }) => {
-    const dispatch = useDispatch()
 	const { account, reset } = useWallet()
 
 	const handleSignOutClick = useCallback(() => {
         onDismiss!()
-        dispatch(resetEthWallet())
 		reset()
-	}, [onDismiss, dispatch, reset])
+	}, [onDismiss, reset])
 
     return (
         <StyledWalletContainer>

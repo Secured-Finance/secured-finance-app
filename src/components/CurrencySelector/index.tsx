@@ -7,6 +7,7 @@ import { currencyList, CurrencyInfo, collateralList } from '../../utils/currenci
 interface CurrencySelectorProps {
     selectedCcy: string
     onClick?: () => void
+    disabled?: boolean
     type?: "collateral" | "currencies"
 }
 
@@ -30,7 +31,7 @@ const RenderImage: React.FC<ChildrenProps> = ({ selectedCcy, currencies, }) => {
     )
 }
 
-const CurrencySelector: React.FC<CurrencySelectorProps> = ({ selectedCcy, onClick, type }) => {
+const CurrencySelector: React.FC<CurrencySelectorProps> = ({ selectedCcy, onClick, type, disabled }) => {
     let currencies: CurrencyInfo[] = []
     switch(type) {
         case "collateral":
@@ -47,11 +48,18 @@ const CurrencySelector: React.FC<CurrencySelectorProps> = ({ selectedCcy, onClic
     return (
         <StyledCurrencySelector
             onClick={onClick}
+            disabled={disabled}
         >
             <RenderImage selectedCcy={selectedCcy} currencies={currencies}/>
             <StyledCurrencyText>{selectedCcy}</StyledCurrencyText>
             <StyledSVGContainer>
-                <ArrowSVG width={'15'} height="6" rotate={0} fill={theme.colors.white} stroke={theme.colors.white}/>
+                {
+                    disabled
+                    ?
+                    null
+                    :
+                    <ArrowSVG width={'15'} height="6" rotate={0} fill={theme.colors.white} stroke={theme.colors.white}/>
+                }
             </StyledSVGContainer>
         </StyledCurrencySelector>
     )

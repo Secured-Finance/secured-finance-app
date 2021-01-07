@@ -6,5 +6,6 @@ export interface AssetPrice {
 export interface AssetPrices {
     ethereum: AssetPrice
     filecoin: AssetPrice
+    usdc: AssetPrice
     isLoading: boolean
 }

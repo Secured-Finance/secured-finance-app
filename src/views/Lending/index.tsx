@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import Page from '../../components/Page'
+import { useEthereumUsd, useFilUsd, useUSDCUsd } from '../../hooks/useAssetPrices'
 import { useRates } from '../../hooks/useRates'
 import useSF from '../../hooks/useSecuredFinance'
 import { getMoneyMarketContract } from '../../services/sdk/utils'
@@ -14,6 +15,9 @@ const Lending: React.FC = () => {
 	const borrowRates = useRates(moneyMarketContract, 0)
 	const lendingRates = useRates(moneyMarketContract, 1)
 	const midRate = useRates(moneyMarketContract, 2)
+	const ethPrice = useEthereumUsd()
+	const filPrice = useFilUsd()
+	const usdcPrice = useUSDCUsd()
 
 	return (
 		<Page background={theme.colors.background}>

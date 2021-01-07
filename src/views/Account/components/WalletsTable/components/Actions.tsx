@@ -1,6 +1,7 @@
 import React, { useCallback } from 'react'
 import styled from 'styled-components'
-import { useWallet } from 'use-wallet'
+import CollateralModal from '../../../../../components/CollateralModal'
+import SendModal from '../../../../../components/SendModal'
 import WalletAccountModal from '../../../../../components/WalletAccountModal'
 import WalletProviderModal from '../../../../../components/WalletProviderModal'
 import useModal from '../../../../../hooks/useModal'
@@ -16,6 +17,8 @@ interface ActionProps {
 
 const RenderActions: React.FC<ActionProps> = ({callbackMap, ccyIndex}) => {
     const [onPresentSettingsModal] = useModal(<WalletAccountModal ccyIndex={ccyIndex}/>)
+    const [onPresentSendModal] = useModal(<SendModal ccyIndex={ccyIndex}/>)
+    const [onPresentCollateralModal] = useModal(<CollateralModal ccyIndex={ccyIndex}/>)
 
     const [onPresentWalletEthProviderModal] = useModal(
         <WalletProviderModal ccyIndex={ccyIndex}/>,
@@ -36,12 +39,12 @@ const RenderActions: React.FC<ActionProps> = ({callbackMap, ccyIndex}) => {
                 ?
                 <StyledActionsContainer>
                     <StyledActionButton 
-                        onClick={onPresentSettingsModal}
+                        onClick={onPresentSendModal}
                         >Send
                     </StyledActionButton>
                     <StyledActionButton
-                        onClick={onPresentSettingsModal}
-                        >Place Collateral
+                        onClick={onPresentCollateralModal}
+                        >Manage Collateral
                     </StyledActionButton>
                     <StyledActionButton 
                         onClick={onPresentSettingsModal}
