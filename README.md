@@ -35,3 +35,7 @@ you need to install unstoppable domain [browser extension](https://chrome.google
 ## Deployment
 
 Deployed to ipfs using Fleek.
+
+# License
+
+This project is licensed under the MIT license, Copyright (c) 2020 Secured Finance. For more information see `LICENSE.md`.
