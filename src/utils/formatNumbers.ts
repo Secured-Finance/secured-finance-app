@@ -2,12 +2,12 @@ export const usdFormat = (number: number) => {
     return Intl.NumberFormat('en-US',{ style: 'currency', currency: 'USD', currencySign: 'accounting', maximumFractionDigits: 2 }).format(number)
 }
 
-export const percentFormat = (number: number, dividedBy: number = 100) => {
+export const percentFormat = (number: any, dividedBy: number = 100) => {
     return Intl.NumberFormat('en-US', { style: "percent", maximumFractionDigits: 2 }).format(number/dividedBy)
 }
 
-export const ordinaryFormat = (number: number) => {
-    return Intl.NumberFormat('en-US', { maximumFractionDigits: 2 }).format(number)
+export const ordinaryFormat = (number: any, decimals: number = 2) => {
+    return Intl.NumberFormat('en-US', { maximumFractionDigits: decimals }).format(number)
 }
 
 export const formatInput = (e: React.KeyboardEvent<HTMLInputElement>) => {

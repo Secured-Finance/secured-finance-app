@@ -1,13 +1,13 @@
 export const testCollateralPositions = [
     {
         "ccyIndex": 0,
-        "vault": "0x910B02Fc7b6a1003f7376Ba512b1B63F5741B8e9",
+        "vault": "0xf5bdFd512A1e20eBd3AA4ea94F37D4cD0f8A5927",
         "collateral": 10000,
-        "borrow": 820,
-        "health": 125,
-        "assetPrice": 733.55,
-        "usdValue": 72956.75291751,
-        "dailyChange": -0.029181824678304193,
+        "usdCollateral": 72956.75291751,
+        "borrowed": 10000,
+        "usdBorrowed": 30426.142,
+        "coverage": 160,
+        "state": "2",
     },
     // {
     //     "ccyIndex": 1,

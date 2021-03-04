@@ -59,41 +59,49 @@ function PositionsTable() {
 
 const StyledTable = styled.table`
 	border-spacing: 0;
-	color: ${props => props.theme.colors.darkBlue};
 	width: 100%;
 	padding: 0;
+	margin-top: ${(props) => props.theme.spacing[1]}px;
 `
 
 const StyledTableHead  = styled.thead`
 	tr:first-child { display: none; }
-	background-color: #0F1D25;
 `
 
 const StyledTableRow = styled.tr`
-	td:first-child { padding-left: ${(props) => props.theme.spacing[3]+2}px }
-	td:last-child { padding-right: ${(props) => props.theme.spacing[3]+2}px }
+	td:first-child { 
+		padding-left: ${(props) => props.theme.spacing[3]+4}px;
+		text-align: center;
+	}
+	td:last-child { 
+		text-align: center; 
+	}
 `
 
 const StyledTableHeaderText = styled.td`
-	font-size: ${(props) => props.theme.sizes.caption}px;
-	color: ${props => props.theme.colors.darkBlue};
+	font-size: ${(props) => props.theme.sizes.caption5}px;
+	color: ${props => props.theme.colors.gray};
 	text-transform: uppercase;
     font-weight: 500;
     height: 30px;
+	padding: 0;
+	text-align: right;
 `
 
 const StyledTableBody = styled.tbody`
-	tr {
-		text-align: left;
+	td {
+		text-align: right;
 		color: #DEE8F0;
-		font-size: ${(props) => props.theme.sizes.caption}px;
+		font-size: ${(props) => props.theme.sizes.caption3}px;
 	}
 
-	tr:nth-child(even) {
-		background-color: #0F1D25;
+	td:first-child { 
+		padding-left: ${(props) => props.theme.spacing[3]+4}px;
+		text-align: center;
 	}
-	td:first-child { padding-left: ${(props) => props.theme.spacing[3]+2}px }
-	td:last-child { padding-right: ${(props) => props.theme.spacing[3]+2}px }
+	td:last-child { 
+		text-align: center; 
+	}
 `
 
 const StyledTableBodyItem = styled.td`

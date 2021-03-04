@@ -71,6 +71,14 @@ export const getLoansHistory = async (loanContract, account) => {
   	return loanContract.methods.getOneBook(account).call()
 }
 
+export const getBorrowHistory = async (loanContract, account) => {
+	return loanContract.methods.getBorrowerBook(account).call()
+}
+
+export const getLoanInfo = async (loanContract, id) => {
+	return loanContract.methods.getLoanItem(id).call()
+}
+
 export const getBestBook = async (moneyMarketContract) => {
   	return moneyMarketContract.methods.getBestBook().call()
 }

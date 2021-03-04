@@ -572,6 +572,296 @@
     "type": "function"
   },
   {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "lender",
+        "type": "address"
+      }
+    ],
+    "name": "getLenderBook",
+    "outputs": [
+      {
+        "components": [
+          {
+            "components": [
+              {
+                "internalType": "uint256",
+                "name": "loanId",
+                "type": "uint256"
+              },
+              {
+                "internalType": "address",
+                "name": "lender",
+                "type": "address"
+              },
+              {
+                "internalType": "address",
+                "name": "borrower",
+                "type": "address"
+              },
+              {
+                "internalType": "enum MoneyMarket.Side",
+                "name": "side",
+                "type": "uint8"
+              },
+              {
+                "internalType": "enum MoneyMarket.Ccy",
+                "name": "ccy",
+                "type": "uint8"
+              },
+              {
+                "internalType": "enum MoneyMarket.Term",
+                "name": "term",
+                "type": "uint8"
+              },
+              {
+                "internalType": "uint256",
+                "name": "amt",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "rate",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "start",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "end",
+                "type": "uint256"
+              },
+              {
+                "components": [
+                  {
+                    "internalType": "uint256[5]",
+                    "name": "notices",
+                    "type": "uint256[5]"
+                  },
+                  {
+                    "internalType": "uint256[5]",
+                    "name": "payments",
+                    "type": "uint256[5]"
+                  },
+                  {
+                    "internalType": "uint256[5]",
+                    "name": "amounts",
+                    "type": "uint256[5]"
+                  },
+                  {
+                    "internalType": "bool[5]",
+                    "name": "isDone",
+                    "type": "bool[5]"
+                  },
+                  {
+                    "internalType": "bytes32[5]",
+                    "name": "txHash",
+                    "type": "bytes32[5]"
+                  }
+                ],
+                "internalType": "struct Loan.Schedule",
+                "name": "schedule",
+                "type": "tuple"
+              },
+              {
+                "internalType": "uint256",
+                "name": "pv",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "asOf",
+                "type": "uint256"
+              },
+              {
+                "internalType": "bool",
+                "name": "isAvailable",
+                "type": "bool"
+              },
+              {
+                "internalType": "bytes32",
+                "name": "startTxHash",
+                "type": "bytes32"
+              },
+              {
+                "internalType": "enum Loan.State",
+                "name": "state",
+                "type": "uint8"
+              }
+            ],
+            "internalType": "struct Loan.LoanItem[]",
+            "name": "loans",
+            "type": "tuple[]"
+          },
+          {
+            "internalType": "uint256",
+            "name": "loanNum",
+            "type": "uint256"
+          },
+          {
+            "internalType": "bool",
+            "name": "isValue",
+            "type": "bool"
+          }
+        ],
+        "internalType": "struct Loan.LoanBook",
+        "name": "",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "borrower",
+        "type": "address"
+      }
+    ],
+    "name": "getBorrowerBook",
+    "outputs": [
+      {
+        "components": [
+          {
+            "components": [
+              {
+                "internalType": "uint256",
+                "name": "loanId",
+                "type": "uint256"
+              },
+              {
+                "internalType": "address",
+                "name": "lender",
+                "type": "address"
+              },
+              {
+                "internalType": "address",
+                "name": "borrower",
+                "type": "address"
+              },
+              {
+                "internalType": "enum MoneyMarket.Side",
+                "name": "side",
+                "type": "uint8"
+              },
+              {
+                "internalType": "enum MoneyMarket.Ccy",
+                "name": "ccy",
+                "type": "uint8"
+              },
+              {
+                "internalType": "enum MoneyMarket.Term",
+                "name": "term",
+                "type": "uint8"
+              },
+              {
+                "internalType": "uint256",
+                "name": "amt",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "rate",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "start",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "end",
+                "type": "uint256"
+              },
+              {
+                "components": [
+                  {
+                    "internalType": "uint256[5]",
+                    "name": "notices",
+                    "type": "uint256[5]"
+                  },
+                  {
+                    "internalType": "uint256[5]",
+                    "name": "payments",
+                    "type": "uint256[5]"
+                  },
+                  {
+                    "internalType": "uint256[5]",
+                    "name": "amounts",
+                    "type": "uint256[5]"
+                  },
+                  {
+                    "internalType": "bool[5]",
+                    "name": "isDone",
+                    "type": "bool[5]"
+                  },
+                  {
+                    "internalType": "bytes32[5]",
+                    "name": "txHash",
+                    "type": "bytes32[5]"
+                  }
+                ],
+                "internalType": "struct Loan.Schedule",
+                "name": "schedule",
+                "type": "tuple"
+              },
+              {
+                "internalType": "uint256",
+                "name": "pv",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "asOf",
+                "type": "uint256"
+              },
+              {
+                "internalType": "bool",
+                "name": "isAvailable",
+                "type": "bool"
+              },
+              {
+                "internalType": "bytes32",
+                "name": "startTxHash",
+                "type": "bytes32"
+              },
+              {
+                "internalType": "enum Loan.State",
+                "name": "state",
+                "type": "uint8"
+              }
+            ],
+            "internalType": "struct Loan.LoanItem[]",
+            "name": "loans",
+            "type": "tuple[]"
+          },
+          {
+            "internalType": "uint256",
+            "name": "loanNum",
+            "type": "uint256"
+          },
+          {
+            "internalType": "bool",
+            "name": "isValue",
+            "type": "bool"
+          }
+        ],
+        "internalType": "struct Loan.LoanBook",
+        "name": "",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [],
     "name": "getAllBooks",
     "outputs": [

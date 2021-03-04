@@ -3,6 +3,7 @@ export const colors = {
     lightBackground: "#FFFFFF",
     darkenedBg: "#122735",
     black: "#1E1E1E",
+    darkSection: "#0C141B",
     notBlack: "#222529",
     lightGray: ["#E8E8E9", "#DEE8F0"],
     // graySubtitle: "#273D52",
@@ -19,6 +20,7 @@ export const colors = {
     turquoise: "#42C1CA",
     red: "#FF6161",
     red2: "C8102E",
+    red3: "#F23A32",
     darkRed: "#D5534E",
     pastelRed: "#F8D8D8",
     orange: "#D6735A",
@@ -28,4 +30,5 @@ export const colors = {
     darkGreen: "#48835D",
     yellow: "#F7DA39",
     pastelYellow: "#EFE2D0",
+    cyan: "#2DF7CE",
 };

@@ -6,27 +6,50 @@ import Container from '../../components/Container'
 import HistoryTable from '../../components/HistoryTable'
 import Page from '../../components/Page'
 import Terms from '../../components/Terms'
-import useLoanHistory from '../../hooks/useLoanHistory'
+import useLoanHistory, { useBorrowHistory, useLoanState } from '../../hooks/useLoanHistory'
 import theme from '../../theme'
 import { RootState } from '../../store/types';
-import { failSetLendingHistory, setLendingHistory, startSetLendingHistory } from '../../store/history';
+import { failSetLendingHistory, setLendingHistory, startSetHistory } from '../../store/history';
 import { Dispatch } from '@reduxjs/toolkit';
 
 const History: React.FC = () => {
 	const loanHistory = useLoanHistory();
+	const borrowHistory = useBorrowHistory();
 
 	return (
 		<Page background={theme.colors.background}>
 			<Container>
-				<StyledHistoryTitleContainer>
-					<StyledHistoryTitle>Trading  history</StyledHistoryTitle>
-					<StyledTermsContainer>
-						<Terms/>
-					</StyledTermsContainer>
-				</StyledHistoryTitleContainer>
-				<StyledHistoryContainer>
-					<HistoryTable table={loanHistory}/>
-				</StyledHistoryContainer>
+				{
+					loanHistory.length === 0 
+					?
+					null
+					:
+					<div>
+					<StyledHistoryTitleContainer>
+						<StyledHistoryTitle>Lending  history</StyledHistoryTitle>
+						<StyledTermsContainer>
+							<Terms/>
+						</StyledTermsContainer>
+					</StyledHistoryTitleContainer>
+					<StyledHistoryContainer>
+						<HistoryTable table={loanHistory}/>
+					</StyledHistoryContainer>
+					</div>
+				}
+				{
+					borrowHistory.length === 0 
+					?
+					null
+					:
+					<div>
+					<StyledHistoryTitleContainer>
+						<StyledHistoryTitle>Borrowing  history</StyledHistoryTitle>
+					</StyledHistoryTitleContainer>
+					<StyledHistoryContainer>
+						<HistoryTable table={borrowHistory}/>
+					</StyledHistoryContainer>
+					</div>
+				}
 			</Container>
 		</Page>
   	)
@@ -69,7 +92,7 @@ const mapStateToProps = (state: RootState) => {
 const mapDispatchToProps = (dispatch: Dispatch) => {
 	return {
 		setLendingHistory: (data: any[]) => dispatch(setLendingHistory(data)),  
-		startSetLendingHistory: () => dispatch(startSetLendingHistory()),
+		startSetHistory: () => dispatch(startSetHistory()),
 		failSetLendingHistory: () => dispatch(failSetLendingHistory()),	
 	}
 }

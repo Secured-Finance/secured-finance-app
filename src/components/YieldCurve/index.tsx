@@ -7,20 +7,6 @@ import { getMoneyMarketContract } from "../../services/sdk/utils";
 import Terms from "../Terms";
 import { chartOptions } from "./chartOptions";
 
-// const bs = [0, 0.4, 0.6, 0.7, 0.75, 0.775, 0.79];
-// const ls = [0, 0.3, 0.4, 0.45, 0.475, 0.485, 0.491];
-// const ms = [];
-
-// for (let i = 0; i < bs.length; i++) {
-//   const x = (bs[i] + ls[i]) / 2;
-//   ms.push(x);
-// }
-
-const Flex = styled.div`
-  display: flex;
-  padding-left: 26px;
-`;
-
 const Title = styled.div`
   font-weight: 400;
   font-size: 22px;
@@ -30,7 +16,7 @@ const Title = styled.div`
 const labels = ["0", "3m", "6m", "1y", "2y", "3y", "5y"]
 
 export default function YieldCurve() {
-	const [currencyIndex, setCurrencyIndex] = useState(0)
+	const [currencyIndex, setCurrencyIndex] = useState(1)
 	const [lineData, setLineData] = useState({});
 	const securedFinance = useSF()
 	const moneyMarketContract = getMoneyMarketContract(securedFinance)
@@ -116,12 +102,12 @@ export default function YieldCurve() {
 
   return (
     <StyledYieldCurveContainer>
-		<StyledYieldCurveInfo>
+		{/* <StyledYieldCurveInfo>
 		<Title>FIL Yield Curve</Title>
 		<StyledTermsContainer>
 			<Terms/>
 		</StyledTermsContainer>
-		</StyledYieldCurveInfo>
+		</StyledYieldCurveInfo> */}
 		<Line data={lineData} options={chartOptions}/>
     </StyledYieldCurveContainer>
   );
@@ -130,8 +116,10 @@ export default function YieldCurve() {
 const StyledYieldCurveContainer = styled.div`
 	display: flex;
 	flex-direction: column;
-	padding-left: ${(props) => props.theme.spacing[3]}px;
-	padding-right: ${(props) => props.theme.spacing[3]}px;
+	padding-top: ${(props) => props.theme.spacing[3]-1}px;
+	padding-bottom: ${(props) => props.theme.spacing[3]-1}px;
+	padding-left: ${(props) => props.theme.spacing[3]-1}px;
+	padding-right: ${(props) => props.theme.spacing[3]-1}px;
 `
 
 const StyledYieldCurveInfo = styled.div`
