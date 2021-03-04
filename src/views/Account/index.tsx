@@ -1,8 +1,10 @@
 import React, { useMemo, useState } from 'react'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
+import { useWallet } from 'use-wallet'
 import Container from '../../components/Container'
 import Page from '../../components/Page'
+import useCollateralBook from '../../hooks/useCollateralBook'
 import { useEthereumWalletStore } from '../../hooks/useEthWallet'
 import { useFilecoinWalletStore } from '../../hooks/useFilWallet'
 import { useTotalUSDBalance } from '../../hooks/useTotalUSDBalance'
@@ -11,7 +13,6 @@ import { WalletBase } from '../../store/wallets'
 import theme from '../../theme'
 import { usdFormat } from '../../utils/formatNumbers'
 import CollateralTable from './components/CollateralTable'
-import { testCollateralPositions } from './components/CollateralTable/testData'
 import WalletsTable from './components/WalletsTable'
 
 const Account: React.FC = () => {
@@ -19,6 +20,8 @@ const Account: React.FC = () => {
     const ethWallet = useEthereumWalletStore()
     const filWallet = useFilecoinWalletStore()
     const [tableData, setTableData] = useState([] as Array<WalletBase>)
+    const { account }: { account: string } = useWallet()
+    const colBook = useCollateralBook(account)
 
     useMemo(() => {
         async function updateTable() {
@@ -45,7 +48,7 @@ const Account: React.FC = () => {
             </StyledAccountContainer>
             <StyledAccountContainer marginTop={"35px"} marginBottom={"35px"}>
                 <StyledTitle fontWeight={500} marginBottom={35}>Collateral Positions</StyledTitle>
-                <CollateralTable table={testCollateralPositions}/>
+                <CollateralTable table={colBook}/>
             </StyledAccountContainer>
             </Container>
 		</Page>

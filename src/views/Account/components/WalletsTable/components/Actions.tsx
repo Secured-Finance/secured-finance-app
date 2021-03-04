@@ -42,10 +42,16 @@ const RenderActions: React.FC<ActionProps> = ({callbackMap, ccyIndex}) => {
                         onClick={onPresentSendModal}
                         >Send
                     </StyledActionButton>
-                    <StyledActionButton
-                        onClick={onPresentCollateralModal}
+                    {
+                        (ccyIndex == 0) 
+                        ?
+                        <StyledActionButton
+                            onClick={onPresentCollateralModal}
                         >Manage Collateral
-                    </StyledActionButton>
+                        </StyledActionButton>
+                        :   
+                        null 
+                    }
                     <StyledActionButton 
                         onClick={onPresentSettingsModal}
                         >Settings

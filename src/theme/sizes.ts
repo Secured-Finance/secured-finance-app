@@ -15,4 +15,6 @@ export const sizes = {
     caption: 12,
     caption2: 11,
     caption3: 10,
+    caption4: 8,
+    caption5: 9,
 };

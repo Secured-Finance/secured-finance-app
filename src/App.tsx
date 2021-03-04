@@ -11,6 +11,7 @@ import Exchange from './views/Exchange'
 import SecuredFinanceProvider from './contexts/SecuredFinanceProvider'
 import Account from './views/Account'
 import FilecoinWalletProvider from './contexts/FilecoinWalletProvider'
+import Loan from './views/Loan'
 
 const App: React.FC = () => {	
   return (
@@ -29,6 +30,9 @@ const App: React.FC = () => {
 				</Route>
 				<Route path="/account">
 					<Account />
+				</Route>
+				<Route path="/loan/:loanId">
+					<Loan />
 				</Route>
 			</Switch>
 	  	</Router>

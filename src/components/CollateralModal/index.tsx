@@ -11,25 +11,27 @@ import { connect, useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../store/types'
 import CurrencySelector from '../CurrencySelector';
 import { CollateralFormStore, updateCollateralAmount, updateCollateralCurrency } from '../../store/collateralForm'
-import { currencyList, formatInput, percentFormat } from '../../utils'
+import { currencyList, formatInput, ordinaryFormat, percentFormat, usdFormat } from '../../utils'
 import { colors } from '../../theme/colors'
 import { useEthBalance } from '../../hooks/useEthWallet'
 import { useSetUpCollateral } from '../../hooks/useSetUpCollateral'
 import { useUpsizeCollateral } from '../../hooks/useUpSizeCollateral'
 import useCollateralBook from '../../hooks/useCollateralBook'
+import { useWallet } from 'use-wallet'
+import BigNumber from 'bignumber.js'
 
 type CombinedProps = ModalProps & CollateralFormStore
 
 const CollateralModal: React.FC<CombinedProps> = ({ onDismiss, amount, ccyIndex, isInitiated, currencyIndex, currencyName, currencyShortName, filAddress }) => {
     const [buttonOpen, setButtonOpen] = useState(false)
     const [collateralTx, setCollateralTx] = useState(false)
-    const colBook = useCollateralBook()
+    const [balanceErr, setBalanceErr] = useState(false)
+    const { account }: { account: string } = useWallet()
+    const colBook = useCollateralBook(account)
 
     const ethBalance = useEthBalance()
     const dispatch = useDispatch()
     const ethPrice = useSelector((state: RootState) => state.assetPrices.ethereum.price);
-
-    let textColor: string = colors.yellow
 
     const handleButtonClick = useCallback((buttonOpen:boolean) => {
         setButtonOpen(!buttonOpen)
@@ -42,7 +44,19 @@ const CollateralModal: React.FC<CombinedProps> = ({ onDismiss, amount, ccyIndex,
 
     const handleCollateralAmount = useCallback((e: React.FormEvent<HTMLInputElement>) => {
         dispatch(updateCollateralAmount(e.currentTarget.value))
+        if (!isEnoughBalance(e.currentTarget.value)) {
+            setBalanceErr(true)
+        } else {
+            setBalanceErr(false)
+        }
     },[dispatch])
+
+    const isEnoughBalance = (amount: string) => {
+        switch (currencyIndex) {
+            case 0:
+                return new BigNumber(amount).isLessThanOrEqualTo(new BigNumber(ethBalance))
+        }
+    }
 
     const { onSetUpCollateral } = useSetUpCollateral(amount, 'id', filAddress)
     const { onUpsizeCollateral } = useUpsizeCollateral(amount, 0)
@@ -134,29 +148,55 @@ const CollateralModal: React.FC<CombinedProps> = ({ onDismiss, amount, ccyIndex,
                 <StyledAddressContainer marginBottom={"0px"}>
                     <StyledRowContainer>
                         <StyledAddressTitle>Total collateral position</StyledAddressTitle>
-                        <StyledAddress>
-                            10,000 ETH
-                        </StyledAddress>
+                            {
+                                account && colBook.length > 0
+                                ?
+                                <StyledAddress>{colBook[0].collateral != null ? ordinaryFormat(colBook[0].collateral) : ordinaryFormat(0)} ETH</StyledAddress>
+                                :
+                                <StyledAddress>{ordinaryFormat(0)} ETH</StyledAddress>
+                            }
                     </StyledRowContainer>
                     <StyledRowContainer marginTop={"10px"}>
                         <StyledAddressTitle>Total collateral position (USD)</StyledAddressTitle>
-                        <StyledAddress>
-                            $72,956.75
-                        </StyledAddress>
+                            {
+                                account && colBook.length > 0
+                                ?
+                                <StyledAddress>{colBook[0].usdCollateral != null ? usdFormat(colBook[0].usdCollateral) : usdFormat(0)}</StyledAddress>
+                                :
+                                <StyledAddress>{usdFormat(0)}</StyledAddress>
+                            }
                     </StyledRowContainer>
                     <StyledRowContainer marginTop={"10px"}>
-                        <StyledAddressTitle>Borrow up to</StyledAddressTitle>
-                        <StyledAddress>
-                            $45,043
-                        </StyledAddress>
+                        <StyledAddressTitle>Borrowed</StyledAddressTitle>
+                            {
+                                account && colBook.length > 0
+                                ?
+                                <StyledAddress>{colBook[0].borrowed != null ? ordinaryFormat(colBook[0].borrowed) : ordinaryFormat(0)} FIL</StyledAddress>
+                                :
+                                <StyledAddress>{ordinaryFormat(0)} FIL</StyledAddress>
+                            }
+                    </StyledRowContainer>
+                    <StyledRowContainer marginTop={"10px"}>
+                        <StyledAddressTitle>Borrowed (USD)</StyledAddressTitle>
+                            {
+                                account && colBook.length > 0
+                                ?
+                                <StyledAddress>{colBook[0].usdBorrowed != null ? usdFormat(colBook[0].usdBorrowed) : usdFormat(0)}</StyledAddress>
+                                :
+                                <StyledAddress>{usdFormat(0)}</StyledAddress>
+                            }
                     </StyledRowContainer>
                     <StyledRowContainer marginTop={"10px"}>
                         <StyledAddress>
-                            Health ratio
+                            Coverage
                         </StyledAddress>
-                        <StyledHealthRatioText color={textColor}>
-                            {percentFormat(75)}
-                        </StyledHealthRatioText>
+                        {
+                            account && colBook.length > 0
+                            ?
+                            <StyledHealthRatioText color={colBook[0].coverage < 125 ? theme.colors.red3 : theme.colors.gray}>{colBook[0].coverage != null ? percentFormat(colBook[0].coverage) : percentFormat(0)}</StyledHealthRatioText>
+                            :
+                            <StyledHealthRatioText>{percentFormat(0)}</StyledHealthRatioText>
+                        }
                     </StyledRowContainer>
                 </StyledAddressContainer>
 			</ModalContent>
@@ -178,14 +218,14 @@ const CollateralModal: React.FC<CombinedProps> = ({ onDismiss, amount, ccyIndex,
                     <Spacer size={"md"}/>
                     <Button 
                         onClick={handleDepositCollateral}
-                        text={"Deposit"}
+                        text={balanceErr ? "Insuficient Amount" : "Deposit"}
                         style={{
                             background: theme.colors.buttonBlue,
                             fontSize: theme.sizes.callout, 
                             fontWeight: 500,
                             color: theme.colors.white
                         }}
-                        disabled={!(amount > 0)}
+                        disabled={!(amount > 0) || balanceErr}
                     />
                 </StyledButtonContainer>
 			</ModalActions>

@@ -9,7 +9,7 @@ const Nav: React.FC = () => {
         Lending
       </StyledLink>
       <StyledLink exact activeClassName="active" to="/exchange">
-        Exchange
+        Terminal
       </StyledLink>
       <StyledLink exact activeClassName="active" to="/history">
         History

@@ -4,6 +4,7 @@ import { HistoryStore } from './types'
 
 const initialStore: HistoryStore = {
     lendingHistory: [],
+    borrowingHistory: [],
     isLoading: false,
 }
 
@@ -20,6 +21,13 @@ const historyReducer = (state = initialStore, action: any) =>
                 draft.lendingHistory = action.data
                 draft.isLoading = true
                 break
+            case constants.FETCHING_BORROWING_HISTORY_FAILURE:
+                draft.isLoading = false
+                break
+            case constants.FETCHING_BORROWING_HISTORY_SUCCESS:
+                draft.borrowingHistory = action.data
+                draft.isLoading = true
+                break    
             default:
                 break
         }

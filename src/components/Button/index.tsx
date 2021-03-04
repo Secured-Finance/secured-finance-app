@@ -144,6 +144,10 @@ const StyledButton = styled.button<StyledButtonProps>`
 	border: ${props => props.borderWidth ? props.borderWidth : 1}px solid ${props => props.borderColor ? props.borderColor : props.background};
 	border-bottom: ${props => props.borderBottom ? '1px solid ' + props.borderBottom : 'none'};
 	border-radius: ${props => props.borderRadius ? props.borderRadius : 6}px;
+	margin-top: ${props => props.marginTop ? props.marginTop : 0}px;
+	margin-bottom: ${props => props.marginBottom ? props.marginBottom : 0}px;
+	margin-left: ${props => props.marginLeft ? props.marginLeft : 0}px;
+	margin-right: ${props => props.marginRight ? props.marginRight : 0}px;
 	// box-shadow: ${props => props.boxShadow};
 	color: ${props => props.color};
 	cursor: pointer;

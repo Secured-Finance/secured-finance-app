@@ -2,6 +2,7 @@ import BigNumber from "bignumber.js";
 import { HistoryTableData } from "../../store/history/types";
 import { formatAddress } from "../../utils";
 import CurrencyContainer from "../CurrencyContainer";
+import RenderAction from './components/State';
 
 interface HistoryTableProps {
     columns?: Array<TableColumns>,
@@ -27,7 +28,7 @@ interface IndexProps {
     index?: string
 }
 
-const RenderTerms: React.FC<IndexProps> = ({index}) => {
+export const RenderTerms: React.FC<IndexProps> = ({index}) => {
     switch (index) {
         case "0":
             return <span>3 Month</span>
@@ -113,10 +114,15 @@ export const historyTableColumns = [{
         //     Header: 'Schedule',
         //     accessor: 'schedule',
         // },
+        // {
+        //     Header: 'State',
+        //     accessor: 'state',
+        //     Cell: ( cell: { value: string } ) => <RenderState index={cell.value} />
+        // },
         {
             Header: 'State',
             accessor: 'state',
-            Cell: ( cell: { value: string } ) => <RenderState index={cell.value} />
+            Cell: (cell: {row: any }) => <RenderAction loan={cell.row.original} />
         },
     ]
 }] as Array<TableColumns>

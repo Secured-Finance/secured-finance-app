@@ -19,6 +19,7 @@ import { isAddress } from 'web3-utils'
 import { validateAddressString } from "@glif/filecoin-address"
 import { useEstimateTxFee, useSendEth } from '../../hooks/useSendEth'
 import { GasPriceOracle } from 'gas-price-oracle'
+import BigNumber from 'bignumber.js'
 
 type CombinedProps = ModalProps & SendFormStore
 
@@ -168,7 +169,7 @@ const SendModal: React.FC<CombinedProps> = ({ onDismiss, amount, currencyIndex, 
     const isEnoughBalance = (amount: string) => {
         switch (currencyIndex) {
             case 0:
-                return amount <= ethBalance.toString()
+                return new BigNumber(amount).isLessThanOrEqualTo(new BigNumber(ethBalance))
             case 1:
                 return amount <= filBalance.toString()
         }
@@ -300,7 +301,7 @@ const SendModal: React.FC<CombinedProps> = ({ onDismiss, amount, currencyIndex, 
                     <Spacer size={"md"}/>
                     <Button 
                         onClick={handleTransferAssets}
-                        text={balanceErr ? "Insuficient Balance" : "Send"}
+                        text={balanceErr ? "Insuficient Amount" : "Send"}
                         style={{
                             background: theme.colors.buttonBlue,
                             fontSize: theme.sizes.callout, 

@@ -1,27 +1,24 @@
 import React from 'react'
 import styled from 'styled-components'
-import { percentFormat, usdFormat } from '../../../../../utils/formatNumbers'
+import { ordinaryFormat, percentFormat, usdFormat } from '../../../../../utils/formatNumbers'
 
 interface BorrowContainerProps {
     borrow: number,
-    dailyChange: number,
+    value: number,
 }
 
-const RenderBorrow: React.FC<BorrowContainerProps> = ({borrow, dailyChange}) => {
+const RenderBorrow: React.FC<BorrowContainerProps> = ({borrow, value}) => {
     return (
         <StyledBorrow>
             <StyledWalletInfoContainer>
                 <StyledBorrowText>
-                   up to { borrow != null ? usdFormat(borrow) : 0 }
+                   { borrow != null ? ordinaryFormat(borrow) : 0 } FIL
                 </StyledBorrowText>
                 <StyledBorrowSubtitleContainer
                     >
-                    { dailyChange != null && dailyChange > 0 
-                    ? 
-                    <StyledBorrowSubtitle>{dailyChange != null ? percentFormat(dailyChange): 0}</StyledBorrowSubtitle>
-                    : 
-                    <StyledBorrowSubtitleNegative>{dailyChange != null ? percentFormat(dailyChange): 0}</StyledBorrowSubtitleNegative>
-                    }
+                    <StyledBorrowlSubtitle>
+                        { value != null ? usdFormat(value) : 0 }
+                    </StyledBorrowlSubtitle>
                 </StyledBorrowSubtitleContainer>
             </StyledWalletInfoContainer>
         </StyledBorrow>
@@ -51,19 +48,11 @@ const StyledWalletInfoContainer = styled.div`
 const StyledBorrowSubtitleContainer = styled.div`
 `
 
-const StyledBorrowSubtitle = styled.p`
+const StyledBorrowlSubtitle = styled.p`
     margin: 0;
     margin-top: 2px;
-    color: ${(props) => props.theme.colors.green};
     font-size: ${(props) => props.theme.sizes.caption}px;
-    font-weight: 400;
-`
-
-const StyledBorrowSubtitleNegative = styled.p`
-    margin: 0;
-    margin-top: 2px;
-    color: ${(props) => props.theme.colors.red};
-    font-size: ${(props) => props.theme.sizes.caption}px;
+    color: ${(props) => props.theme.colors.gray};
     font-weight: 400;
 `
 

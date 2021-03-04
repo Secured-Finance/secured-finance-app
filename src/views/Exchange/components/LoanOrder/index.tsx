@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react'
 import styled, { ThemeContext } from 'styled-components'
-import theme from '../../theme';
-import Button from '../Button';
+import theme from '../../../../theme';
+import Button from '../../../../components/Button';
 import Borrow from './components/Borrow';
 import Lend from './components/Loan';
 
@@ -21,19 +21,19 @@ const LoanOrder: React.FC = () => {
                     <Button
                         key={i}
                         style={{
-                            background: selectedTab === tab ? '#0F1D25': 'transparent',
-                            color: selectedTab === tab ? theme.colors.white : theme.colors.lightText,
-                            textTransform: 'uppercase',
+                            background: selectedTab === tab ? theme.colors.darkSection : 'transparent',
+                            color: theme.colors.white,
+                            textTransform: 'capitalize',
                             fontWeight: 600,
-                            fontSize: 14,
+                            fontSize: 11,
                             outline: "none",
                             height: 42,
-                            borderRadius: 3,
-                            marginRight: 5,
-                            width: 'unset',
+                            borderRadius: 0.5,
+                            marginRight: 0,
+                            width: '50%',
                             textAlign: "center",
-                            paddingLeft: 18,
-                            paddingRight: 18,
+                            paddingLeft: 15,
+                            paddingRight: 15,
                         }}
                         onClick={handleChange(tab)}
                     >
@@ -56,11 +56,12 @@ const StyledLoanOrder = styled.div`
 `
 
 const StyledLoanOrderTitle = styled.div`
-    text-transform: uppercase;
-    font-size: ${(props) => props.theme.sizes.subhead}px;
-    margin-bottom: ${(props) => props.theme.sizes.caption3}px;
-    margin-top: 0px;
+    text-transform: capitalize;
+    font-size: ${(props) => props.theme.sizes.caption}px;
+    margin-bottom: ${(props) => props.theme.sizes.callout}px;
+    margin-top: 0;
     font-weight: 600;
+    line-height: 15px;
     color: ${props => props.theme.colors.white};
 `
 
@@ -69,6 +70,8 @@ const StyledLoanOrderButtons = styled.div`
 	flex-direction: row;
 	text-transform: uppercase;
 	padding: 0;
+    margin-bottom: ${(props) => props.theme.sizes.callout}px;
+    margin-top: 0;
 `
 
 export default LoanOrder
