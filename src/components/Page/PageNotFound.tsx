@@ -1,9 +1,14 @@
 import React, { useContext } from 'react'
-import { ThemeProvider } from 'styled-components'
+import { ThemeContext } from 'styled-components'
 import Page from './Page'
 
 const PageNotFound: React.FC<{}> = () => {
-  return <Page>404: Not found</Page>
+  const theme = useContext(ThemeContext)
+  return (
+    <Page>
+      <h1 style={{ color: theme.colors.lightText }}>404: Page not found</h1>
+    </Page>
+  )
 }
 
 export default PageNotFound
