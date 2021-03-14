@@ -1,4 +1,5 @@
 import React, { ErrorInfo } from 'react'
+import ErrorPage from '../Page/ErrorPage'
 
 interface State {
   hasError: boolean
@@ -23,14 +24,7 @@ export default class ErrorBoundary extends React.Component<any, State> {
 
   render() {
     if (this.state.hasError) {
-      // TODO: Add some nice error page.
-      // use ThemeProvider
-      return (
-        <div>
-          <h1>Something went wrong</h1>
-          <h2>Please refresh the page</h2>
-        </div>
-      )
+      return <ErrorPage />
     }
     return this.props.children
   }
