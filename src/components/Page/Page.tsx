@@ -17,7 +17,12 @@ interface StyledPageProps {
 const StyledPage = styled.div<StyledPageProps>`
   background-color: ${props => props.theme.colors.background};
   padding: ${props => props.padding ?? 0};
-  height: 100%;
+
+  // Next line causes BUG with page contents going over the nav-bar
+  // when browser window is resized (height made smaller)
+  // height: 100%;
+  margin-top: 10vh;
+
   align-items: center;
   display: flex;
   flex-direction: column;
