@@ -29,14 +29,9 @@ interface TermsListProps {
 
 type ChildrenProps = TermsSelectorProps & TermsListProps
 
+// why call components RenderText?
 const RenderText: React.FC<ChildrenProps> = ({ selectedTerm, terms }) => {
-    let text: string
-
-    terms.filter((term, i) => {
-        if (selectedTerm == term.term) {
-            text = term.text
-        }
-    })
+    const text = useMemo(() => terms.find(term => term.term === term.text)?.text, [terms])
 
     return (
         <StyledTermsText marginLeft={'0px'}>{text}</StyledTermsText>
@@ -45,6 +40,9 @@ const RenderText: React.FC<ChildrenProps> = ({ selectedTerm, terms }) => {
 
 const CurrencySelector: React.FC<TermsSelectorProps> = ({ selectedTerm, onClick, style, disabled, noIcon }) => {
 
+    // it is a disaster with spacing
+    // usually reusable components don't have margins
+    // we use Wrappers to define spacing
     return (
         <StyledTermsSelector
 	        disabled={disabled}

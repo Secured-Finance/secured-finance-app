@@ -30,7 +30,7 @@ const FilecoinWasmProvider: React.FC<FilecoinWalletProviderProps> = ({ children,
 			}
 		}
 		loadWasmModule()
-	}, [setWasmModule, setLoaded, setFilProviders, providers])
+	}, [setWasmModule, setLoaded, setFilProviders])
 
 	return <Context.Provider value={{ ...wasmModule, loaded, filProviders, isLoaded: true }}>{children}</Context.Provider>
 }

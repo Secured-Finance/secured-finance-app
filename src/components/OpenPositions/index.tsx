@@ -6,10 +6,10 @@ import PositionsTable from './PositionsTable';
 
 interface OpenPositionsProps {
 }
+const ordersTabs = ["Open Positions", "Orders", "Trading History"];
 
 const OpenPositions: React.FC<OpenPositionsProps> = () => {
-    const ordersTabs = ["Open Positions", "Orders", "Trading History"];
-    const [selectedTab, setSelectedTab] = useState("Open Positions")
+    const [selectedTab, setSelectedTab] = useState(ordersTabs[0])
 
     const handleChange = (tab: React.SetStateAction<string>) => () => {
         setSelectedTab(tab);

@@ -146,6 +146,7 @@ const CollateralModal: React.FC<CombinedProps> = ({ onDismiss, amount, ccyIndex,
                     }
                 </StyledSubcontainer>
                 <StyledAddressContainer marginBottom={"0px"}>
+                    {/* there are should be reusable components */}
                     <StyledRowContainer>
                         <StyledAddressTitle>Total collateral position</StyledAddressTitle>
                             {

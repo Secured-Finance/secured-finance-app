@@ -1,3 +1,8 @@
+/*
+TO-DO: replace with css variables
+Better to use css variables instead of styled components theme.
+It is a standard and would be better for performance.
+*/
 export const colors = {
     background: "#0F1A22",
     lightBackground: "#FFFFFF",

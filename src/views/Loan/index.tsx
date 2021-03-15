@@ -39,6 +39,14 @@ const initCoupon: NextCoupon = {
 
 type CombinedProps = LoanScreenProps
 
+const PERIODS_FOR_TERM = {
+    '0': 0.25,
+    '1': 0.5,
+    '2': 1,
+    '4': 3,
+    '5': 5
+}
+
 const LoanScreen: React.FC<CombinedProps> = ({ }) => {
     let params: any = useParams();
     const loan: any = useLoanState(params.loanId);
@@ -58,31 +66,10 @@ const LoanScreen: React.FC<CombinedProps> = ({ }) => {
         return ordinaryFormat(interestPayments) + " FIL"
     }
 
-    const totalInterest = (amount: number, rate: number, term: string) => {
-        let periods: number
+    const totalInterest = (amount: number, rate: number, term: keyof typeof PERIODS_FOR_TERM) => {
         var interestRate = new BigNumber(rate).dividedBy(10000).toNumber()
-        switch (term) {
-            case "0":
-                periods = 0.25
-                break
-            case "1":
-                periods = 0.5
-                break
-            case "2":
-                periods = 1
-                break
-            case "3":
-                periods = 2
-                break
-            case "4":
-                periods = 3
-                break
-            case "5":
-                periods = 5
-                break
-            default: 
-                break
-        }
+        const periods = PERIODS_FOR_TERM[term]
+
         var interestPayments = new BigNumber(amount).multipliedBy(interestRate).multipliedBy(periods).toNumber()
         return interestPayments
     }
@@ -131,6 +118,10 @@ const LoanScreen: React.FC<CombinedProps> = ({ }) => {
         handleCounterpartyAddr()
     }, [dispatch, setSchedule, setCouponPayment, setCounterpartyAddr, loan])
 
+    /*
+        It's wery rare that components called <Styled.../>
+        It happens because there is no reusable components and too much staff in one file 
+    */
 	return (
 		<Page background={theme.colors.background}>
             <Container>

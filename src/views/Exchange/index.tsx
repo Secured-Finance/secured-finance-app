@@ -13,6 +13,7 @@ import { TradeHistory } from './components/TradeHistory'
 import { Balances } from './components/Balances'
 import { MarketInfo } from './components/MarketInfo'
 
+
 const Exchange: React.FC = () => {
 
   return (
@@ -37,6 +38,43 @@ const Exchange: React.FC = () => {
     </Page>
   )
 }
+
+
+/*
+	This spacing looks scary.
+	Below are examples of components that would cover majority of spacing needs
+*/
+
+export const VStack = styled.div<{
+  gap?: number;
+}>`
+  display: grid;
+  grid-gap: ${({ gap }) => gap ?? 8}px;
+  grid-template-columns: minmax(0, auto);
+`;
+
+
+export const HStack = styled.div<{
+  gap: number;
+  alignItems?: string;
+  justifyContent?: string;
+}>`
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(min-content, max-content);
+  grid-gap: ${props => props.gap}px;
+  align-items: ${props => props.alignItems || 'initial'};
+  justify-content: ${props => props.justifyContent || 'initial'};
+`;
+
+export const Spacer = styled.div<{
+	width?: number,
+	height?: number
+}>`
+	width: ${props => `${props.width}px` || 'initial'};
+	height: ${props => `${props.height}px` || 'initial'};
+`
+
 
 const StyledDivider = styled.hr`
 	margin: 0;

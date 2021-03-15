@@ -12,6 +12,9 @@ export const useSendEth = (amount: number, to: string, gasPrice: number) => {
     
     const handleSendEther = useCallback(async () => {
         if (account && securedFinance) {
+
+            // this kind of functions should be moved to helpers
+            // they definitely will be reused accross the board
             let gweiGasPrice = new BigNumber(gasPrice).multipliedBy(new BigNumber(10).pow(9)).toNumber()
             try {
                 let tx: any

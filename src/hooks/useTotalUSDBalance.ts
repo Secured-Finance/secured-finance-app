@@ -17,6 +17,9 @@ export const useTotalUSDBalance = () => {
     const inEth = new BigNumber(balance).dividedBy(new BigNumber(10).pow(18)).toNumber()
     let usdBalance = new BigNumber(inEth).times(new BigNumber(ethPrice)).toNumber()
     
+    // why passing isMounted here?
+    // the value will stay the same when you change it in the effect
+    // better to go with redux sagas
     const fetchWalletStore = useCallback(async (isMounted: boolean) => {
         await dispatch(fetchWallet())
         if (account && balance && ethPrice > 0) {
