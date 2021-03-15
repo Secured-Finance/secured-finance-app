@@ -13,6 +13,10 @@ import Account from './views/Account'
 import FilecoinWalletProvider from './contexts/FilecoinWalletProvider'
 import Loan from './views/Loan'
 
+// lazy loading to resque
+// const Loan = lazy(() => import('./views/Loan'));
+// <Route render={Loan} /> 
+
 const App: React.FC = () => {	
   return (
 	<Providers>
