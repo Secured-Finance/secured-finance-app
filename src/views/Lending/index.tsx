@@ -38,19 +38,17 @@ const Lending: React.FC = () => {
 }
 
 const StyledLendingContainer = styled.div`
-  width: calc(100% - 208px);
-  height: calc(100vh - ${props => props.theme.topBarSize + 1}px);
-  padding-left: 104px;
-  padding-right: 104px;
+  width: 80%;
   display: flex;
   flex-direction: row;
-  // column-gap: 40px;
   justify-content: space-around;
   align-items: center;
+  height: 100%;
 
-  // @media (max-width: 400px) {
-  // 		width: auto;
-  // }
+  @media (max-width: 769px) {
+    flex-direction: column;
+    width: 100%;
+  }
 `
 
 export default Lending

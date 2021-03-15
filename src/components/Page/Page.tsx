@@ -7,32 +7,20 @@ interface PageProps {
 }
 
 const Page: React.FC<PageProps> = ({ children, padding }) => {
-  const theme = useContext(ThemeContext)
-  return (
-    <StyledPage background={theme.background} padding={padding}>
-      <StyledMain>{children}</StyledMain>
-    </StyledPage>
-  )
+  return <StyledPage padding={padding}>{children}</StyledPage>
 }
 
 interface StyledPageProps {
-  background: string
   padding?: number
 }
 
 const StyledPage = styled.div<StyledPageProps>`
-  background-color: ${props => props.background};
-  padding-bottom: ${props => props.padding};
-  padding-top: ${props => props.padding};
-  padding-left: ${props => props.padding};
-  padding-right: ${props => props.padding};
-`
-
-const StyledMain = styled.div`
+  background-color: ${props => props.theme.colors.background};
+  padding: ${props => props.padding ?? 0};
+  height: 100%;
   align-items: center;
   display: flex;
   flex-direction: column;
-  min-height: calc(100vh - ${props => props.theme.topBarSize}px);
 `
 
 export default Page

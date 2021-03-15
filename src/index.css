@@ -1,14 +1,13 @@
+html, body, #root {
+  height: 100%;
+}
+
 body {
-  background: "#0F1A22";
+  background-color: #0F1A22;
   margin: 0;
   font-family: 'Inter', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
-
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
 }
 
 /* Chrome, Safari, Edge, Opera */
@@ -21,4 +20,9 @@ input::-webkit-inner-spin-button {
 /* Firefox */
 input[type=number] {
   -moz-appearance: textfield;
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
 }
