@@ -27,7 +27,6 @@ const useLoanHistory = () => {
     const fetchLoanHistory = useCallback(async () => {
         dispatch(startSetHistory())
         const history: Promise<LoansHistory> = await getLoansHistory(loanContract, account)
-        console.log(history)
         let parsedHistory: Array<HistoryTableData> = []
         try {
             for (var i = 0; i < (await history).loans.length; i++) {
