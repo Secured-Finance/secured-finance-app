@@ -4,13 +4,14 @@ import theme from '../../theme'
 
 interface IButtonProps extends React.ButtonHTMLAttributes<'button'> {
     size?: 'xs' | 'sm' | 'md' | 'lg',
-    accent?: 'default' | 'prominent',
+    accent?: 'default' | 'prominent' | 'success',
     outline?: boolean
 }
 
 const buttonColors = {
     default: theme.colors.primaryBlue,
     prominent: theme.colors.ratesRed,
+    success: theme.colors.darkGreen
 }
 
 export const Button = styled.button<IButtonProps>`
