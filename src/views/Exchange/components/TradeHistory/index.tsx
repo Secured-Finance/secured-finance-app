@@ -2,6 +2,8 @@ import React from "react"
 import styled from "styled-components";
 import TradesTable from "./TradesTable"
 import { Trades } from "./types";
+import { Subheader } from "../../../../components/common/Subheader"
+import theme from "../../../../theme"
 
 export const TradeHistory: React.FC = () => {
 
@@ -31,7 +33,7 @@ export const TradeHistory: React.FC = () => {
     
     return (
         <StyledTradeHistory>
-            <StyledTradeHistoryTitle>Trade History</StyledTradeHistoryTitle>
+            <Subheader>Trade History</Subheader>
             <TradesTable trades={testData} />
         </StyledTradeHistory>
     );
@@ -39,14 +41,5 @@ export const TradeHistory: React.FC = () => {
 
 const StyledTradeHistory = styled.div`
     display: grid;
-`
-
-const StyledTradeHistoryTitle = styled.h6`
-	text-transform: capitalize;
-    font-size: ${(props) => props.theme.sizes.caption}px;
-    margin-bottom: ${(props) => props.theme.sizes.caption3}px;
-    margin-top: ${(props) => props.theme.sizes.callout}px;
-    font-weight: 600;
-    line-height: 15px;
-    color: ${props => props.theme.colors.white};
+    margin-top: ${theme.spacing[3]}px;
 `

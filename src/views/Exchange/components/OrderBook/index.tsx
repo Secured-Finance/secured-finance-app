@@ -3,6 +3,7 @@ import styled from "styled-components";
 import OrderType from "./components/OrderType"
 import Spread from "./components/Spread";
 import { Type, Orders } from './types'
+import { Subheader } from "../../../../components/common/Subheader"
 
 interface OrderBookProps {
     buyType: Type,
@@ -28,7 +29,7 @@ export const OrderBook: React.FC = () => {
     
     return (
         <StyledOrderBook>
-            <StyledOrderBookTitle>Order book</StyledOrderBookTitle>
+            <Subheader>Order Book</Subheader>
             <OrderType type={{ side: "lend", text: "Lenders" }} showHeader={true} orders={reversedTestData} />
             <Spread spread={0.25} rate={7.1}/>
             <OrderType type={{ side: "borrow", text: "Borrowers" }} showHeader={false} orders={testData} />
@@ -38,14 +39,4 @@ export const OrderBook: React.FC = () => {
 
 const StyledOrderBook = styled.div`
     display: grid;
-`
-
-const StyledOrderBookTitle = styled.h6`
-	text-transform: capitalize;
-    font-size: ${(props) => props.theme.sizes.caption}px;
-    margin-bottom: ${(props) => props.theme.sizes.caption3}px;
-    margin-top: 0px;
-    font-weight: 600;
-    line-height: 15px;
-    color: ${props => props.theme.colors.white};
 `

@@ -20,6 +20,7 @@ export const Button = styled.button<IButtonProps>`
   font-weight: 500;
   font-family: Inter, Arial, sans-serif;
   font-size: ${theme.sizes.subhead}px;
+  line-height: ${theme.sizes.subhead}px;
   color: ${({outline, accent}) => outline ? buttonColors[accent] : theme.colors.lightBackground};
   background-color: ${({accent, outline}) => outline? 'transparent' : buttonColors[accent]};
   border-radius: ${theme.sizes.radius}px;
