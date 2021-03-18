@@ -1,20 +1,20 @@
 import React from 'react'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import theme from '../../theme'
 
-interface IInput extends React.InputHTMLAttributes<HTMLInputElement> {
+export interface IInput extends React.InputHTMLAttributes<HTMLInputElement> {
     label: string | Array<string>,
-    onChange: (event: React.FormEvent<HTMLInputElement>) => void
+    onChange: (event: React.FormEvent<HTMLInputElement>) => void,
+    icon?: string
 }
 
-const InputField = styled.input`
+export const sharedInputStyles = css`
     background-color: ${theme.colors.darkenedBg};
     color: ${theme.colors.lightBackground};
     border: 1px solid ${theme.colors.sfBlue1100};
     border-radius: ${theme.sizes.radius}px;
     font-size: ${theme.sizes.caption}px;
     padding: 10px 12px;
-    width: calc(100% - 24px);
     margin-bottom: ${theme.spacing[2]}px;
 
   :focus {
@@ -23,7 +23,12 @@ const InputField = styled.input`
   }
 `
 
-const Label = styled.label`
+const InputField = styled.input`
+  ${sharedInputStyles};
+  width: calc(100% - 24px);
+`
+
+export const Label = styled.label`
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -33,21 +38,24 @@ const Label = styled.label`
     margin-bottom: ${theme.spacing[2]}px;
 `
 
-export const Input: React.FC<IInput> = ({label, ...props}) => {
-   console.log(props)
+const InputContainer = styled.div`
+    margin-bottom: ${theme.spacing[3]}px;
+`
+
+export const Input: React.FC<IInput> = ({label, icon, ...props}) => {
     return typeof label === "string" ? (
-        <div>
+        <InputContainer>
             <Label> {label}
-                <InputField {...props} />
             </Label>
-        </div>
+            <InputField {...props} />
+        </InputContainer>
    ) : (
-       <div>
+       <InputContainer>
        <Label>
            <span>{label[0]}</span>
            <span style={{color: theme.colors.cellKey}}>{label[1]}</span>
        </Label>
            <InputField {...props} />
-       </div>
+       </InputContainer>
    )
 }
