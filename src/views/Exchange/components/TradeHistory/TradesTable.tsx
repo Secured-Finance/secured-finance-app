@@ -9,7 +9,7 @@ interface OrderTypeProps {
 }
 
 const TradesTable: React.FC<OrderTypeProps> = ({ trades }) => {
-    const rows = trades.map(({ rate, amount, time, side }, i) => {
+    const rows = trades.map(({rate, amount, time, side}, i) => {
         const txtColor = side === 0 ? theme.colors.red3 : theme.colors.green;
 
         return (
@@ -28,22 +28,16 @@ const TradesTable: React.FC<OrderTypeProps> = ({ trades }) => {
     });
 
     return (
-        <StyledOrderType>
+        <div>
             <StyledOrderBookHeader>
                 <StyledOrderBookHeaderItem>Rate (%)</StyledOrderBookHeaderItem>
                 <StyledOrderBookHeaderItem textAlign={"right"}>Amount (FIL)</StyledOrderBookHeaderItem>
                 <StyledOrderBookHeaderItem textAlign={"right"}>Time</StyledOrderBookHeaderItem>
             </StyledOrderBookHeader>
-            <StyledOrderRows>{rows}</StyledOrderRows>
-        </StyledOrderType>
+            <div>{rows}</div>
+        </div>
     );
 }
-
-const StyledOrderType = styled.div`
-    margin-bottom: ${(props) => props.theme.spacing[2]}px;;
-`
-
-const StyledOrderRows = styled.div``
 
 const StyledOrderRow = styled.div`
 	text-transform: uppercase;
