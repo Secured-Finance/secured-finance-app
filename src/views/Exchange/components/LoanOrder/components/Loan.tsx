@@ -75,18 +75,8 @@ const Lend: React.FC = () => {
                     }
                 </TermsSelectorContainer>
             </StyledLoanSubcontainer>
-            <StyledLoanSubcontainer>
-                <StyledLabelContainer>
-                    <StyledLoanLabel>Interest rate</StyledLoanLabel>
-                    <StyledLoanLabel textDecoration={'underline'}>Market Rate: 7.10 %</StyledLoanLabel>
-                </StyledLabelContainer>
-                <StyledLoanInput 
-                    type={'number'}
-                    placeholder={'0'}
-                    value={interestRate}
-                    onChange={handleInterest}
-                />
-            </StyledLoanSubcontainer>
+
+            <Input label={['Interest rate', 'Market Rate: 7.10 %']} type={'number'} placeholder={'0'}  value={interestRate}  onChange={handleInterest}/>
 
             <InfoTable />
 
