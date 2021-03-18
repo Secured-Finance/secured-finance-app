@@ -4,6 +4,7 @@ import theme from '../../../../theme';
 import Button from '../../../../components/Button';
 import Borrow from './components/Borrow';
 import Lend from './components/Loan';
+import { Subheader } from "../../../../components/common/Subheader";
 
 const LoanOrder: React.FC = () => {
     const ordersTabs = ["Lend", "Borrow"];
@@ -15,7 +16,7 @@ const LoanOrder: React.FC = () => {
 
     return (
         <StyledLoanOrder>
-            <StyledLoanOrderTitle>Place Order</StyledLoanOrderTitle>
+            <Subheader>Place Order</Subheader>
             <StyledLoanOrderButtons>
                 {ordersTabs.map((tab, i) => (
                     <Button
@@ -53,16 +54,6 @@ const StyledLoanOrder = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: center;
-`
-
-const StyledLoanOrderTitle = styled.div`
-    text-transform: capitalize;
-    font-size: ${(props) => props.theme.sizes.caption}px;
-    margin-bottom: ${(props) => props.theme.sizes.callout}px;
-    margin-top: 0;
-    font-weight: 600;
-    line-height: 15px;
-    color: ${props => props.theme.colors.white};
 `
 
 const StyledLoanOrderButtons = styled.div`
