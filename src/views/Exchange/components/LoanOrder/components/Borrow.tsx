@@ -4,6 +4,8 @@ import theme from '../../../../../theme';
 import Button from '../../../../../components/Button';
 import TermsSelector from '../../../../../components/TermsSelector';
 import { terms } from '../../../../../utils';
+import { Button as BN } from "../../../../../components/common/Buttons"
+import { InfoTable } from "./InfoTable";
 
 const Borrow: React.FC = () => {
     const [interestRate, setInterestRate] = useState('')
@@ -96,42 +98,9 @@ const Borrow: React.FC = () => {
                     onChange={handleInterest}
                 />
             </StyledLoanSubcontainer>
-            <StyledLabelContainer>
-                <StyledLoanInfoLabel>Available to borrow</StyledLoanInfoLabel>
-                <StyledLoanInfoLabel color={theme.colors.white}>0 FIL</StyledLoanInfoLabel>
-            </StyledLabelContainer>
-            <StyledLabelContainer>
-                <StyledLoanInfoLabel>Order Amount (USD)</StyledLoanInfoLabel>
-                <StyledLoanInfoLabel color={theme.colors.white}>0$</StyledLoanInfoLabel>
-            </StyledLabelContainer>
-            <StyledLabelContainer>
-                <StyledLoanInfoLabel>Coupon payment</StyledLoanInfoLabel>
-                <StyledLoanInfoLabel color={theme.colors.white}>0$</StyledLoanInfoLabel>
-            </StyledLabelContainer>
-            <StyledLabelContainer>
-                <StyledLoanInfoLabel>FIL Balance after trade</StyledLoanInfoLabel>
-                <StyledLoanInfoLabel color={theme.colors.white}>0 FIL</StyledLoanInfoLabel>
-            </StyledLabelContainer>
-            <StyledLabelContainer>
-                <StyledLoanInfoLabel >Transaction fee</StyledLoanInfoLabel>
-                <StyledLoanInfoLabel color={theme.colors.white}>1.2$</StyledLoanInfoLabel>
-            </StyledLabelContainer>
+            <InfoTable />
             <StyledButtonContainer>
-                <Button 
-                    size={"lg"}
-                    style={{ 
-                        borderBottom: '1px solid' + theme.colors.green,
-                        background: 'transparent',
-                        borderColor: theme.colors.green,
-                        borderWidth: 1,
-                        borderRadius: 2,
-                        fontWeight: 600,
-                        fontSize: 12,
-                        color: theme.colors.white 
-                    }}
-                >
-                    Borrow
-                </Button>
+                <BN accent={'success'} outline>Borrow</BN>
             </StyledButtonContainer>
         </StyledLoanContainer>
     );
@@ -193,7 +162,8 @@ const StyledLoanInput = styled.input`
 `
 
 const StyledButtonContainer = styled.div`
-    margin-top: 13px;
+  display: grid;
+  margin-top: 13px;
 `
 
 interface StyledCurrencyTextProps {

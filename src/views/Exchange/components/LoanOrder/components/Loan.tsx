@@ -1,11 +1,10 @@
 import React, { useCallback, useState } from 'react'
 import styled from 'styled-components'
 import theme from '../../../../../theme';
-import Button from '../../../../../components/Button';
 import TermsSelector from '../../../../../components/TermsSelector';
 import { terms } from '../../../../../utils';
-import { Table, Cell, CellKey, CellValue} from '../../../../../components/common/Table';
-import { Button as ButtonNew } from "../../../../../components/common/Buttons"
+import { Button } from "../../../../../components/common/Buttons"
+import { InfoTable } from "./InfoTable";
 
 const Lend: React.FC = () => {
     const [interestRate, setInterestRate] = useState('')
@@ -98,31 +97,11 @@ const Lend: React.FC = () => {
                     onChange={handleInterest}
                 />
             </StyledLoanSubcontainer>
-            <Table>
-                <Cell>
-                    <CellKey>Available to lend</CellKey>
-                    <CellValue>0 FIL</CellValue>
-                </Cell>
-                <Cell>
-                    <CellKey>Order Amount (USD)</CellKey>
-                    <CellValue>0$</CellValue>
-                </Cell>
-                <Cell>
-                    <CellKey>Estimated returns</CellKey>
-                    <CellValue>0$</CellValue>
-                </Cell>
-                <Cell>
-                    <CellKey>FIL Balance after trade</CellKey>
-                    <CellValue>0 FIL</CellValue>
-                </Cell>
-                <Cell>
-                    <CellKey >Transaction fee</CellKey>
-                    <CellValue>1.2$</CellValue>
-                </Cell>
-            </Table>
+
+            <InfoTable />
 
             <StyledButtonContainer>
-                <ButtonNew accent={'prominent'} outline>Lend</ButtonNew>
+                <Button accent={'prominent'} outline>Lend</Button>
             </StyledButtonContainer>
         </StyledLoanContainer>
     );
