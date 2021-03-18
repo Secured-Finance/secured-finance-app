@@ -18,21 +18,21 @@ const Exchange: React.FC = () => {
   return (
     <Page background={theme.colors.background}>
 		<StyledTerminalContainer>
-			<StyledLeftContainer>
+			<ScrollableSideContainer>
 				<Balances />
 				<StyledDivider />
 				<LoanOrder />
-			</StyledLeftContainer>
+			</ScrollableSideContainer>
 			<StyledCenterContainer>
 				<MarketInfo />
 				<YieldCurve />
 				<OpenPositions />
 			</StyledCenterContainer>
-			<StyledRightContainer>
+			<ScrollableSideContainer>
 				<OrderBook />
 				<StyledDivider />
 				<TradeHistory />
-			</StyledRightContainer>
+			</ScrollableSideContainer>
 		</StyledTerminalContainer>
     </Page>
   )
@@ -60,7 +60,7 @@ const StyledTerminalContainer = styled.div`
 	overflow: auto;
 `
 
-const StyledLeftContainer = styled.div`
+const ScrollableSideContainer = styled.div`
 	border-left: 1px solid ${(props) => props.theme.colors.darkenedBg};
 	border-right: 1px solid ${(props) => props.theme.colors.darkenedBg};
 	padding-top: ${(props) => props.theme.spacing[3]-1}px !important;
@@ -71,7 +71,7 @@ const StyledLeftContainer = styled.div`
 	height: calc(100vh - 120px);
 	z-index: 1;
 	overflow-y: scroll;
-	
+
 	::-webkit-scrollbar {
 		display: none;
 	}
@@ -82,17 +82,6 @@ const StyledCenterContainer = styled.div`
 	flex-direction: column;
 	overflow: auto;
 	// width: calc(100% - ${(props) => props.theme.spacing[3]*2}px);
-`
-
-const StyledRightContainer = styled.div`
-	border-left: 1px solid ${(props) => props.theme.colors.darkenedBg};
-	border-right: 1px solid ${(props) => props.theme.colors.darkenedBg};
-	padding-top: ${(props) => props.theme.spacing[3]-1}px !important;
-	padding-left: ${(props) => props.theme.spacing[3]-1}px;
-	padding-right: ${(props) => props.theme.spacing[3]-1}px;
-	width: calc(100% - ${(props) => props.theme.spacing[5]-2}px);
-	min-height: calc(100vh - ${(props) => props.theme.topBarSize + props.theme.spacing[3] + 1}px);
-	z-index: 1;
 `
 
 export default Exchange
