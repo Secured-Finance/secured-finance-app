@@ -101,7 +101,7 @@ const Lend: React.FC = () => {
             <InfoTable />
 
             <StyledButtonContainer>
-                <Button accent={'prominent'} outline>Lend</Button>
+                <Button>Lend</Button>
             </StyledButtonContainer>
         </StyledLoanContainer>
     );
