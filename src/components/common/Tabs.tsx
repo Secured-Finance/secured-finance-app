@@ -34,7 +34,7 @@ const TabsContainer = styled.div`
 export const Tabs: React.FC<ITabs> = ({options, selectedTab, onClick}) => {
 
     return <TabsContainer>{
-        options.map((tabName) => <Tab isActive={tabName === selectedTab} onClick={() => onClick(tabName)}>
+        options.map((tabName, i) => <Tab key={i} isActive={tabName === selectedTab} onClick={() => onClick(tabName)}>
             <Subheader style={{margin: 0}}>{tabName}
             </Subheader>
         </Tab>)
