@@ -33,4 +33,6 @@ export const colors = {
     cyan: "#2DF7CE",
     primaryBlue: "#4B94C2",
     cellKey: '#A7ACB0',
+    sfBlue1100: '#183546',
+    sfBlue900: '#244F69'
 };

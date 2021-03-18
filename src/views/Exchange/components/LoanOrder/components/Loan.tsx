@@ -4,6 +4,7 @@ import theme from '../../../../../theme';
 import TermsSelector from '../../../../../components/TermsSelector';
 import { terms } from '../../../../../utils';
 import { Button } from "../../../../../components/common/Buttons"
+import { Input } from "../../../../../components/common/Inputs"
 import { InfoTable } from "./InfoTable";
 
 const Lend: React.FC = () => {
@@ -39,18 +40,7 @@ const Lend: React.FC = () => {
 
     return (
         <StyledLoanContainer>
-            <StyledLoanSubcontainer>
-                <StyledLabelContainer>
-                    <StyledLoanLabel>Amount FIL</StyledLoanLabel>
-                    <StyledLoanLabel textDecoration={'underline'}>Balance: 0.00</StyledLoanLabel>
-                </StyledLabelContainer>
-                <StyledLoanInput 
-                    type={'number'}
-                    placeholder={'0'}
-                    value={lendAmount}
-                    onChange={handleLend}
-                />
-            </StyledLoanSubcontainer>
+            <Input label={['Amount FIL', 'Balance: 0.00']} type={'number'} placeholder={'0'}  value={lendAmount}  onChange={handleLend}/>
             <StyledLoanSubcontainer>
                 <StyledLabelContainer>
                     <StyledLoanLabel>Term</StyledLoanLabel>
