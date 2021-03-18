@@ -12,14 +12,6 @@ const Lend: React.FC = () => {
     const handleOpenTerms = useCallback((termsOpen:boolean) => {
         setTermsOpen(!termsOpen)
     },[setTermsOpen])
-
-    // const fullBalance = useMemo(() => {
-    //     return getFullDisplayBalance(max)
-    // }, [max])
-
-    // const handleSelectMax = useCallback(() => {
-    //     setCollateralAmount(fullBalance)
-    // }, [fullBalance, setCollateralAmount])
     
     const handleInterest = useCallback((e: React.FormEvent<HTMLInputElement>) => {
         setInterestRate(e.currentTarget.value)
@@ -28,11 +20,6 @@ const Lend: React.FC = () => {
     const handleLend = useCallback((e: React.FormEvent<HTMLInputElement>) => {
         setLendAmount(e.currentTarget.value)
     },[setLendAmount])
-
-    const handleTermSelect = useCallback((value:string, termsOpen:boolean) => {
-        setSelectedTerms(value)
-        setTermsOpen(!termsOpen)
-    },[setSelectedTerms, setTermsOpen])
 
     return (
         <StyledLoanContainer>
