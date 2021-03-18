@@ -1,10 +1,9 @@
 import React, { useCallback, useState } from 'react'
 import styled from 'styled-components'
 import theme from '../../../../../theme';
-import Button from '../../../../../components/Button';
 import TermsSelector from '../../../../../components/TermsSelector';
 import { terms } from '../../../../../utils';
-import { Button as BN } from "../../../../../components/common/Buttons"
+import { Button } from "../../../../../components/common/Buttons"
 import { InfoTable } from "./InfoTable";
 
 const Borrow: React.FC = () => {
@@ -100,7 +99,7 @@ const Borrow: React.FC = () => {
             </StyledLoanSubcontainer>
             <InfoTable />
             <StyledButtonContainer>
-                <BN accent={'success'} outline>Borrow</BN>
+                <Button accent={'success'}>Borrow</Button>
             </StyledButtonContainer>
         </StyledLoanContainer>
     );
