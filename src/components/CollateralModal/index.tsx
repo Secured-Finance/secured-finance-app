@@ -409,7 +409,7 @@ const ButtonWithCommentContainer = styled.span`
 const Comment = styled.span`
     color: ${theme.colors.cellKey};
     margin-right: ${theme.spacing[2]}px;
-    font-size: ${theme.sizes.caption}px;
+    font-size: ${theme.sizes.caption2}px;
 `
 
 const mapStateToProps = (state: RootState) => state.collateralForm;
