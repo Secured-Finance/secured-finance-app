@@ -22,7 +22,13 @@ const theme = {
 	},
 	breakpoints: {
 		mobile: 400,
-	},	
+	},
+	buttonSizes: {
+		xs: '28px',
+		sm: '36px',
+		md: '40px',
+		lg: '44px'
+	}
 }
 
 export default theme
