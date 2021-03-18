@@ -35,7 +35,7 @@ const DropdownContainer = styled.div`
 export const Icon = styled.img`
   position: absolute;
   right: 6px;
-  top: calc(50% - 6px);
+  top: 50%;
   cursor: pointer;
 `
 

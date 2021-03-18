@@ -203,10 +203,15 @@ const CollateralModal: React.FC<CombinedProps> = ({ onDismiss, amount, ccyIndex,
 			<ModalActions>
                 <StyledButtonContainer>
                     <Button onClick={onDismiss} outline>Cancel</Button>
-                    <Button
-                        onClick={handleDepositCollateral}
-                        disabled={!(amount > 0) || balanceErr}
-                    >{balanceErr ? "Insufficient Amount" : "Deposit"}</Button>
+                    <ButtonWithCommentContainer>
+                        {balanceErr && <Comment>Insufficient Amount</Comment>}
+                        <Button
+                            onClick={handleDepositCollateral}
+                            disabled={!(amount > 0) || balanceErr}
+                            >
+                            {"Deposit"}
+                        </Button>
+                    </ButtonWithCommentContainer>
                 </StyledButtonContainer>
 			</ModalActions>
 		</Modal>
@@ -394,6 +399,17 @@ const StyledCurrencyText = styled.p<StyledCurrencyTextProps>`
     margin: 0;
     margin-left: ${(props) => props.marginLeft ? props.marginLeft : '7px'};
     text-align: left;
+`
+
+const ButtonWithCommentContainer = styled.span`
+    display: flex;
+    align-items: center;
+`
+
+const Comment = styled.span`
+    color: ${theme.colors.cellKey};
+    margin-right: ${theme.spacing[2]}px;
+    font-size: ${theme.sizes.caption}px;
 `
 
 const mapStateToProps = (state: RootState) => state.collateralForm;

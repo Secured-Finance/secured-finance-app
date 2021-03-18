@@ -30,6 +30,11 @@ export const Button = styled.button<IButtonProps>`
   :focus {
     outline: none;
   }
+  
+  :disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
 `
 
 Button.defaultProps = {
