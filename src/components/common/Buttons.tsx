@@ -14,11 +14,12 @@ const buttonColors = {
 }
 
 export const Button = styled.button<IButtonProps>`
-  height: 40px;
+  height: ${({size}) => theme.buttonSizes[size] };
+  padding: ${`0 ${theme.sizes.base}px 0 ${theme.sizes.base}px`};
   font-weight: 500;
   font-family: Inter, Arial, sans-serif;
   font-size: ${theme.sizes.subhead}px;
-  color: ${({accent}) => buttonColors[accent]};
+  color: ${({outline, accent}) => outline ? buttonColors[accent] : theme.colors.lightBackground};
   background-color: ${({accent, outline}) => outline? 'transparent' : buttonColors[accent]};
   border-radius: ${theme.sizes.radius}px;
   border: ${({accent}) => `1px solid ${buttonColors[accent]}` };
@@ -28,8 +29,9 @@ export const Button = styled.button<IButtonProps>`
     outline: none;
   }
 `
+
 Button.defaultProps = {
-    size: 'sm',
+    size: 'md',
     accent: 'default',
     outline: false
 }
