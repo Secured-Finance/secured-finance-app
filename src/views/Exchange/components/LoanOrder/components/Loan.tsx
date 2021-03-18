@@ -5,6 +5,7 @@ import TermsSelector from '../../../../../components/TermsSelector';
 import { terms } from '../../../../../utils';
 import { Button } from "../../../../../components/common/Buttons"
 import { Input } from "../../../../../components/common/Inputs"
+import { Dropdown } from "../../../../../components/common/Dropdown"
 import { InfoTable } from "./InfoTable";
 
 const Lend: React.FC = () => {
@@ -41,41 +42,7 @@ const Lend: React.FC = () => {
     return (
         <StyledLoanContainer>
             <Input label={['Amount FIL', 'Balance: 0.00']} type={'number'} placeholder={'0'}  value={lendAmount}  onChange={handleLend}/>
-            <StyledLoanSubcontainer>
-                <StyledLabelContainer>
-                    <StyledLoanLabel>Term</StyledLoanLabel>
-                </StyledLabelContainer>
-                <TermsSelectorContainer>
-                    <TermsSelector
-                        selectedTerm={selectedTerms}
-                        onClick={() => handleOpenTerms(termsOpen)}
-                        style={{
-                            fontSize:theme.sizes.caption,
-                            fontWeight: 400,
-                        }}
-                    />
-                    { termsOpen 
-                        ? 
-                        <StyledDropdown>
-                            <ul>
-                                {
-                                    terms.map((term, i) => (
-                                        <StyledDropdownItem 
-                                            key={i}
-                                            onClick={() => handleTermSelect(term.term, termsOpen)}
-                                        >
-                                            <StyledCurrencyText>{term.text}</StyledCurrencyText>
-                                        </StyledDropdownItem>
-                                    ))
-                                }
-                            </ul>
-                        </StyledDropdown> 
-                        : 
-                        null 
-                    }
-                </TermsSelectorContainer>
-            </StyledLoanSubcontainer>
-
+            <Dropdown label={'Term'} onChange={() => handleOpenTerms(termsOpen)} value={selectedTerms} options={terms}/>
             <Input label={['Interest rate', 'Market Rate: 7.10 %']} type={'number'} placeholder={'0'}  value={interestRate}  onChange={handleInterest}/>
 
             <InfoTable />
