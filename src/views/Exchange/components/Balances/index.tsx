@@ -7,7 +7,6 @@ import { useEthereumWalletStore } from "../../../../hooks/useEthWallet";
 import { useFilecoinWalletStore } from "../../../../hooks/useFilWallet";
 import useModal from "../../../../hooks/useModal";
 import { useTotalUSDBalance } from "../../../../hooks/useTotalUSDBalance";
-import theme from "../../../../theme";
 import { ordinaryFormat, usdFormat } from "../../../../utils";
 import { Subheader } from "../../../../components/common/Subheader"
 import { Table, Cell, CellKey, CellValue } from "../../../../components/common/Table";
