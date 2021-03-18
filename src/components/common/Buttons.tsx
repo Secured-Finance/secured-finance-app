@@ -21,7 +21,12 @@ export const Button = styled.button<IButtonProps>`
   color: ${({accent}) => buttonColors[accent]};
   background-color: ${({accent, outline}) => outline? 'transparent' : buttonColors[accent]};
   border-radius: ${theme.sizes.radius}px;
-  border: ${({accent}) => `1px solid ${buttonColors[accent]}` }
+  border: ${({accent}) => `1px solid ${buttonColors[accent]}` };
+  cursor: pointer;
+  
+  :focus {
+    outline: none;
+  }
 `
 Button.defaultProps = {
     size: 'sm',

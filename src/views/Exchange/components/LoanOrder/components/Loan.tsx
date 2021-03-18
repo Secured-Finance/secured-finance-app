@@ -5,7 +5,7 @@ import Button from '../../../../../components/Button';
 import TermsSelector from '../../../../../components/TermsSelector';
 import { terms } from '../../../../../utils';
 import { Table, Cell, CellKey, CellValue} from '../../../../../components/common/Table';
-
+import { Button as ButtonNew } from "../../../../../components/common/Buttons"
 
 const Lend: React.FC = () => {
     const [interestRate, setInterestRate] = useState('')
@@ -122,21 +122,7 @@ const Lend: React.FC = () => {
             </Table>
 
             <StyledButtonContainer>
-                <Button 
-                    size={"lg"}
-                    style={{ 
-                        borderBottom: '1px solid' + theme.colors.red3,
-                        background: 'transparent',
-                        borderColor: theme.colors.red3,
-                        borderWidth: 1,
-                        borderRadius: 2,
-                        fontWeight: 600,
-                        fontSize: 12,
-                        color: theme.colors.white 
-                    }}
-                >
-                    Lend
-                </Button>
+                <ButtonNew accent={'prominent'} outline>Lend</ButtonNew>
             </StyledButtonContainer>
         </StyledLoanContainer>
     );
@@ -189,6 +175,7 @@ const StyledLoanInput = styled.input`
 `
 
 const StyledButtonContainer = styled.div`
+    display: grid;
     margin-top: 13px;
 `
 
