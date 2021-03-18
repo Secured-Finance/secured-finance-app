@@ -109,7 +109,7 @@ const StyledOrderBookHeader = styled.div`
     text-transform: uppercase;
     display: grid;
 	grid-template-columns: 1fr 1.5fr 1.5fr;
-    font-size: ${(props) => props.theme.sizes.caption4}px;
+    font-size: ${(props) => props.theme.sizes.caption5}px;
     padding: 6px 0;
 `
 
@@ -118,7 +118,7 @@ interface StyledOrderBookHeaderItemProps {
 }
 
 const StyledOrderBookHeaderItem = styled.div<StyledOrderBookHeaderItemProps>`
-    color: ${(props) => props.theme.colors.gray};
+    color: ${(props) => props.theme.colors.cellKey};
     text-align: ${(props) => props.textAlign ? props.textAlign : "left"};
 `
 
