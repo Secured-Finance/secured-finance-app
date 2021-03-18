@@ -29,7 +29,7 @@ const DropdownSelect = styled.select`
 
 const DropdownContainer = styled.div`
     position: relative;
-    margin-bottom: ${theme.spacing[3]}px;
+    margin-bottom: ${theme.spacing[2]}px;
 `
 
 export const Icon = styled.img`

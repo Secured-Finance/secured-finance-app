@@ -36,10 +36,11 @@ export const Label = styled.label`
     color: ${theme.colors.lightBackground};
     line-height: 14px;
     margin-bottom: ${theme.spacing[2]}px;
+    height: 22px;
 `
 
 const InputContainer = styled.div`
-    margin-bottom: ${theme.spacing[3]}px;
+    margin-bottom: ${theme.spacing[2]}px;
 `
 
 export const Input: React.FC<IInput> = ({label, icon, ...props}) => {
