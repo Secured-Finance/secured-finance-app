@@ -4,6 +4,8 @@ import theme from '../../../../../theme';
 import Button from '../../../../../components/Button';
 import TermsSelector from '../../../../../components/TermsSelector';
 import { terms } from '../../../../../utils';
+import { Table, Cell, CellKey, CellValue} from '../../../../../components/common/Table';
+
 
 const Lend: React.FC = () => {
     const [interestRate, setInterestRate] = useState('')
@@ -96,26 +98,29 @@ const Lend: React.FC = () => {
                     onChange={handleInterest}
                 />
             </StyledLoanSubcontainer>
-            <StyledLabelContainer>
-                <StyledLoanInfoLabel>Available to lend</StyledLoanInfoLabel>
-                <StyledLoanInfoLabel color={theme.colors.white}>0 FIL</StyledLoanInfoLabel>
-            </StyledLabelContainer>
-            <StyledLabelContainer>
-                <StyledLoanInfoLabel>Order Amount (USD)</StyledLoanInfoLabel>
-                <StyledLoanInfoLabel color={theme.colors.white}>0$</StyledLoanInfoLabel>
-            </StyledLabelContainer>
-            <StyledLabelContainer>
-                <StyledLoanInfoLabel>Estimated returns</StyledLoanInfoLabel>
-                <StyledLoanInfoLabel color={theme.colors.white}>0$</StyledLoanInfoLabel>
-            </StyledLabelContainer>
-            <StyledLabelContainer>
-                <StyledLoanInfoLabel>FIL Balance after trade</StyledLoanInfoLabel>
-                <StyledLoanInfoLabel color={theme.colors.white}>0 FIL</StyledLoanInfoLabel>
-            </StyledLabelContainer>
-            <StyledLabelContainer>
-                <StyledLoanInfoLabel >Transaction fee</StyledLoanInfoLabel>
-                <StyledLoanInfoLabel color={theme.colors.white}>1.2$</StyledLoanInfoLabel>
-            </StyledLabelContainer>
+            <Table>
+                <Cell>
+                    <CellKey>Available to lend</CellKey>
+                    <CellValue>0 FIL</CellValue>
+                </Cell>
+                <Cell>
+                    <CellKey>Order Amount (USD)</CellKey>
+                    <CellValue>0$</CellValue>
+                </Cell>
+                <Cell>
+                    <CellKey>Estimated returns</CellKey>
+                    <CellValue>0$</CellValue>
+                </Cell>
+                <Cell>
+                    <CellKey>FIL Balance after trade</CellKey>
+                    <CellValue>0 FIL</CellValue>
+                </Cell>
+                <Cell>
+                    <CellKey >Transaction fee</CellKey>
+                    <CellValue>1.2$</CellValue>
+                </Cell>
+            </Table>
+
             <StyledButtonContainer>
                 <Button 
                     size={"lg"}
@@ -169,15 +174,6 @@ const StyledLoanLabel = styled.div<StyledLoanLabelProps>`
     margin-top: 0px;
     font-weight: ${(props) => props.fontWeight ? props.fontWeight :600};
     color: ${props => props.theme.colors.gray};
-`
-
-const StyledLoanInfoLabel = styled.p<StyledLoanLabelProps>`
-    text-transform: ${(props) => props.textTransform ? props.textTransform : 'capitalize' };
-    font-size: ${(props) => props.fontSize ? props.fontSize : props.theme.sizes.caption2}px;
-    margin-bottom: ${(props) => props.theme.spacing[2]-1}px;
-    margin-top: 0px;
-    font-weight: ${(props) => props.fontWeight ? props.fontWeight : 500};
-    color: ${props => props.color ? props.color : props.theme.colors.gray};
 `
 
 const StyledLoanInput = styled.input`
