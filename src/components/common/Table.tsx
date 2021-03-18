@@ -5,10 +5,8 @@ export const Table = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  font-size: ${theme.sizes.caption2}px;
-  margin-top: 0;
   font-weight: 500;
-  margin-bottom: ${theme.spacing[2]+2}px;
+  margin-bottom: ${theme.spacing[2]}px;
 `
 
 export const Cell = styled.div`
