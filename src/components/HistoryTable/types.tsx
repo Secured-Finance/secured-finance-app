@@ -117,7 +117,7 @@ export const historyTableColumns = [{
         // {
         //     Header: 'State',
         //     accessor: 'state',
-        //     Table: ( cell: { value: string } ) => <RenderState index={cell.value} />
+        //     Cell: ( cell: { value: string } ) => <RenderState index={cell.value} />
         // },
         {
             Header: 'State',
