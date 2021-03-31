@@ -43,15 +43,15 @@ export const MarketInfo: React.FC = () => {
                 </StyledMarketSelector>
                 <StyledMarketAssetInfo marginLeft={30}>
                     <StyledAssetInfoText>{ordinaryFormat(filToEthPrice(), 6)}</StyledAssetInfoText>
-                    <StyledAssetInfoText marginTop={1} color={theme.colors.gray} fontSize={theme.sizes.caption3}>{filPrice.price ? usdFormat(filPrice.price): usdFormat(0)}</StyledAssetInfoText>
+                    <StyledAssetInfoText marginTop={1} color={theme.colors.cellKey} fontSize={theme.sizes.caption3}>{filPrice.price ? usdFormat(filPrice.price): usdFormat(0)}</StyledAssetInfoText>
                 </StyledMarketAssetInfo>
                 <StyledDivider />
                 <StyledMarketAssetInfo>
-                    <StyledAssetInfoText color={theme.colors.gray} fontSize={theme.sizes.caption5}>24hr Change</StyledAssetInfoText>
+                    <StyledAssetInfoText color={theme.colors.cellKey} fontSize={theme.sizes.caption3}>24hr Change</StyledAssetInfoText>
                     <StyledAssetInfoText marginTop={3} color={theme.colors.red3} fontSize={theme.sizes.caption3}>-0.000135 ({ordinaryFormat(filToEthChange(), 6)})</StyledAssetInfoText>
                 </StyledMarketAssetInfo>
                 <StyledMarketAssetInfo marginLeft={15}>
-                    <StyledAssetInfoText color={theme.colors.gray} fontSize={theme.sizes.caption5}>Current Yield</StyledAssetInfoText>
+                    <StyledAssetInfoText color={theme.colors.cellKey} fontSize={theme.sizes.caption3}>Current Yield</StyledAssetInfoText>
                     <StyledAssetInfoText marginTop={3} color={theme.colors.green} fontSize={theme.sizes.caption3}>
                         { 
                             lendingRates && lendingRates.length > 0
@@ -63,7 +63,7 @@ export const MarketInfo: React.FC = () => {
                     </StyledAssetInfoText>
                 </StyledMarketAssetInfo>
                 <StyledMarketAssetInfo marginLeft={15}>
-                    <StyledAssetInfoText color={theme.colors.gray} fontSize={theme.sizes.caption5}>1yr Yield</StyledAssetInfoText>
+                    <StyledAssetInfoText color={theme.colors.cellKey} fontSize={theme.sizes.caption3}>1yr Yield</StyledAssetInfoText>
                     <StyledAssetInfoText marginTop={3} fontSize={theme.sizes.caption3}>
                         { 
                             lendingRates && lendingRates.length > 0
@@ -75,7 +75,7 @@ export const MarketInfo: React.FC = () => {
                     </StyledAssetInfoText>
                 </StyledMarketAssetInfo>
                 <StyledMarketAssetInfo marginLeft={15}>
-                    <StyledAssetInfoText color={theme.colors.gray} fontSize={theme.sizes.caption5}>3yr Yield</StyledAssetInfoText>
+                    <StyledAssetInfoText color={theme.colors.cellKey} fontSize={theme.sizes.caption3}>3yr Yield</StyledAssetInfoText>
                     <StyledAssetInfoText marginTop={3} fontSize={theme.sizes.caption3}>
                         { 
                             lendingRates && lendingRates.length > 0
@@ -87,7 +87,7 @@ export const MarketInfo: React.FC = () => {
                     </StyledAssetInfoText>
                 </StyledMarketAssetInfo>
                 <StyledMarketAssetInfo marginLeft={15}>
-                    <StyledAssetInfoText color={theme.colors.gray} fontSize={theme.sizes.caption5}>5yr Yield</StyledAssetInfoText>
+                    <StyledAssetInfoText color={theme.colors.cellKey} fontSize={theme.sizes.caption3}>5yr Yield</StyledAssetInfoText>
                     <StyledAssetInfoText marginTop={3} fontSize={theme.sizes.caption3}>
                         { 
                             lendingRates && lendingRates.length > 0
@@ -182,7 +182,7 @@ interface StyledAssetInfoTextProps {
 
 const StyledAssetInfoText = styled.p<StyledAssetInfoTextProps>`
     margin: 0;
-    color: ${props => props.color ? props.color : props.theme.colors.white};
+    color: ${props => props.color ? props.color : props.theme.colors.lightBackground};
     font-size: ${(props) => props.fontSize ? props.fontSize : props.theme.sizes.caption2}px;
     margin-top: ${(props) => props.marginTop ? props.marginTop : 0}px;
     margin-bottom: ${(props) => props.marginBottom ? props.marginBottom : 0}px;
