@@ -76,7 +76,14 @@ const ScrollableSideContainer = styled.div`
 const StyledCenterContainer = styled.div`
     display: flex;
 	flex-direction: column;
-	overflow: auto;
+	height: calc(100vh - 25px);
+	max-height: calc(100% - 97px);
+	padding-bottom: 25px;
+	overflow-y: auto;
+
+	::-webkit-scrollbar {
+		display: none;
+	}
 `
 
 export default Exchange
