@@ -1,5 +1,5 @@
 import BigNumber from "bignumber.js";
-import React, { useState } from "react"
+import React, {HTMLAttributes, useState} from "react"
 import styled from "styled-components";
 import ArrowSVG from "../../../../components/ArrowSVG";
 import Button from "../../../../components/Button";
@@ -9,6 +9,7 @@ import useSF from "../../../../hooks/useSecuredFinance";
 import { getMoneyMarketContract } from "../../../../services/sdk/utils";
 import theme from "../../../../theme";
 import { ordinaryFormat, percentFormat, usdFormat } from "../../../../utils";
+import { Tabs } from "../../../../components/common/Tabs";
 
 export const MarketInfo: React.FC = () => {
     const securedFinance = useSF()
@@ -20,7 +21,7 @@ export const MarketInfo: React.FC = () => {
 	const borrowRates = useRates(moneyMarketContract, 0)
 	const lendingRates = useRates(moneyMarketContract, 1)
 
-    const handleSelectTab = (tab: React.SetStateAction<string>) => () => {
+    const handleSelectTab = (tab: React.SetStateAction<string>) => {
         setSelectedTab(tab);
     };
 
@@ -99,34 +100,9 @@ export const MarketInfo: React.FC = () => {
                     </StyledAssetInfoText>
                 </StyledMarketAssetInfo>
             </StyledMarketInfoContainer>
-            <StyledMarketInfoContainer>
-                {marketTabs.map((tab, i) => (
-                        <Button
-                            key={i}
-                            style={{
-                                background: selectedTab === tab ? theme.colors.darkenedBg : 'transparent',
-                                fontSize: theme.sizes.caption5, 
-                                height: 23,
-                                color: theme.colors.gray,
-                                borderColor: theme.colors.darkenedBg,
-                                borderWidth: 0.5,
-                                borderBottom: theme.colors.darkenedBg,
-                                marginRight: 5,        
-                                textTransform: 'capitalize',
-                                fontWeight: 600,
-                                outline: "none",
-                                borderRadius: 2,
-                                width: '50%',
-                                textAlign: "center",
-                                paddingLeft: 15,
-                                paddingRight: 15,
-                            }}
-                            onClick={handleSelectTab(tab)}
-                        >
-                            {tab}
-                        </Button>
-                    ))}
-            </StyledMarketInfoContainer>
+            <MarketTabsContainer>
+               <Tabs selectedTab={selectedTab} options={marketTabs} onClick={handleSelectTab} style={{fontWeight: 500, fontSize: theme.sizes.caption2}}/>
+            </MarketTabsContainer>
         </StyledMarketInfo>
     );
 }
@@ -137,7 +113,7 @@ const StyledMarketInfo = styled.div`
     justify-content: space-between;
     align-items: center;
     background: ${(props) => props.theme.colors.darkSection};
-    padding: 8px 20px;
+    padding: 12px 20px;
 `
 
 const StyledMarketInfoContainer = styled.div`
@@ -191,10 +167,13 @@ const StyledDivider = styled.hr`
 	margin: 0;
 	width: 26px;
     transform: rotate(-90deg);
-	margin-left: 0;
-	margin-right: 0;
 	border-left: 0;
 	border-right: 0;
 	border-bottom: 0;
 	border-top: 1px solid ${(props) => props.theme.colors.darkenedBg};
+`
+
+const MarketTabsContainer = styled(StyledMarketInfoContainer)`
+    width: 110px;
+    font-weight: 500;
 `

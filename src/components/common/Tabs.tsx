@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {HTMLAttributes} from 'react'
 import styled from 'styled-components'
 import theme from '../../theme'
 import {Subheader} from "./Subheader"
@@ -11,7 +11,8 @@ interface ITab {
 interface ITabs {
     options: Array<string>,
     selectedTab: string,
-    onClick: (tabName: string) => void
+    onClick: (tabName: string) => void,
+    style?: React.CSSProperties,
 }
 
 const Tab = styled.div<ITab>`
@@ -31,11 +32,11 @@ const TabsContainer = styled.div`
   flex: 1 0 100%;
 `
 
-export const Tabs: React.FC<ITabs> = ({options, selectedTab, onClick}) => {
+export const Tabs: React.FC<ITabs> = ({options, selectedTab, onClick, style}) => {
 
     return <TabsContainer>{
         options.map((tabName, i) => <Tab key={i} isActive={tabName === selectedTab} onClick={() => onClick(tabName)}>
-            <Subheader style={{margin: 0}}>{tabName}
+            <Subheader style={{...style, margin: 0, color: 'inherit'}}>{tabName}
             </Subheader>
         </Tab>)
     }</TabsContainer>
