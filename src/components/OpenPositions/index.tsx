@@ -1,7 +1,6 @@
-import React, {HTMLAttributes, useContext, useState} from 'react'
-import styled, { ThemeContext } from 'styled-components'
+import React, {HTMLAttributes, useState} from 'react'
+import styled  from 'styled-components'
 import theme from '../../theme';
-import Button from '../Button';
 import PositionsTable from './PositionsTable';
 
 interface OpenPositionsProps {
@@ -59,6 +58,7 @@ const TableTab = styled.div<ITableTab>`
   font-size: ${theme.sizes.footnote}px;
   padding: 15px 0;
   margin: 0 20px;
+  cursor: ${(props) => props.isSelected ? 'default' : 'pointer' };
 `
 
 export default OpenPositions;
