@@ -112,8 +112,8 @@ const StyledMarketInfo = styled.div`
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    background: ${(props) => props.theme.colors.darkSection};
     padding: 12px 20px;
+    border-bottom: 1px solid ${theme.colors.darkenedBg};
 `
 
 const StyledMarketInfoContainer = styled.div`
