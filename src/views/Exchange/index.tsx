@@ -76,9 +76,7 @@ const ScrollableSideContainer = styled.div`
 const StyledCenterContainer = styled.div`
     display: flex;
 	flex-direction: column;
-	height: calc(100vh - 25px);
-	max-height: calc(100% - 97px);
-	padding-bottom: 25px;
+	max-height: calc(100% - 25px);
 	overflow-y: auto;
 
 	::-webkit-scrollbar {

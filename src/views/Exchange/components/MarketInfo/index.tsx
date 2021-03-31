@@ -2,7 +2,6 @@ import BigNumber from "bignumber.js";
 import React, {HTMLAttributes, useState} from "react"
 import styled from "styled-components";
 import ArrowSVG from "../../../../components/ArrowSVG";
-import Button from "../../../../components/Button";
 import { useEthereumUsd, useFilUsd } from "../../../../hooks/useAssetPrices";
 import { useRates } from "../../../../hooks/useRates";
 import useSF from "../../../../hooks/useSecuredFinance";
@@ -101,7 +100,7 @@ export const MarketInfo: React.FC = () => {
                 </StyledMarketAssetInfo>
             </StyledMarketInfoContainer>
             <MarketTabsContainer>
-               <Tabs selectedTab={selectedTab} options={marketTabs} onClick={handleSelectTab} style={{fontWeight: 500, fontSize: theme.sizes.caption2}}/>
+               <Tabs selectedTab={selectedTab} options={marketTabs} onClick={handleSelectTab} style={{fontWeight: 500, fontSize: theme.sizes.caption5}}/>
             </MarketTabsContainer>
         </StyledMarketInfo>
     );
