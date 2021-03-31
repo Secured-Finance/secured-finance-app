@@ -71,36 +71,32 @@ const StyledTableHead  = styled.thead`
 const StyledTableRow = styled.tr`
 	td:first-child { 
 		padding-left: ${(props) => props.theme.spacing[3]+4}px;
-		text-align: center;
-	}
-	td:last-child { 
-		text-align: center; 
 	}
 `
 
 const StyledTableHeaderText = styled.td`
-	font-size: ${(props) => props.theme.sizes.caption5}px;
-	color: ${props => props.theme.colors.gray};
+	font-size: ${(props) => props.theme.sizes.caption3}px;
+	color: ${props => props.theme.colors.cellKey};
 	text-transform: uppercase;
     font-weight: 500;
     height: 30px;
 	padding: 0;
-	text-align: right;
+	text-align: left;
 `
 
 const StyledTableBody = styled.tbody`
 	td {
-		text-align: right;
+		text-align: left;
 		color: #DEE8F0;
 		font-size: ${(props) => props.theme.sizes.caption3}px;
 	}
 
 	td:first-child { 
 		padding-left: ${(props) => props.theme.spacing[3]+4}px;
-		text-align: center;
+		//text-align: center;
 	}
 	td:last-child { 
-		text-align: center; 
+		//text-align: center; 
 	}
 `
 
