@@ -67,8 +67,8 @@ const ScrollableSideContainer = styled.div`
 	padding-left: ${(props) => props.theme.spacing[3]-1}px;
 	padding-right: ${(props) => props.theme.spacing[3]-1}px;
 	padding-bottom: ${theme.sizes.padding}px;
-	width: calc(100% - ${(props) => props.theme.spacing[5]-2}px);
-	height: calc(100vh - 120px);
+	width: calc(100% - ${(props) => props.theme.spacing[5]-1}px);
+	height: calc(100vh - 115px);
 	z-index: 1;
 	overflow-y: scroll;
 

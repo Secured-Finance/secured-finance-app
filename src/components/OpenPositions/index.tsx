@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, {HTMLAttributes, useContext, useState} from 'react'
 import styled, { ThemeContext } from 'styled-components'
 import theme from '../../theme';
 import Button from '../Button';
@@ -17,31 +17,17 @@ const OpenPositions: React.FC<OpenPositionsProps> = () => {
 
     return (
         <StyledPositionsComponent>
-        <StyledPositionTitle>
+        <TableTabs>
             {ordersTabs.map((tab, i) => (
-                <Button
+                <TableTab
                     key={i}
-                    style={{
-                        background: selectedTab === tab ? theme.colors.background : 'transparent',
-                        color: theme.colors.white,
-                        textTransform: 'capitalize',
-                        fontWeight: 600,
-                        fontSize: theme.sizes.caption2,
-                        outline: "none",
-                        height: 43,
-                        borderRadius: 0.1,
-                        marginRight: 0,
-                        width: 'unset',
-                        textAlign: "center",
-                        paddingLeft: 20,
-                        paddingRight: 20,
-                    }}
+                    isSelected={selectedTab === tab}
                     onClick={handleChange(tab)}
                 >
                     {tab}
-                </Button>
+                </TableTab>
             ))}
-        </StyledPositionTitle>
+        </TableTabs>
         <PositionsTable />
         </StyledPositionsComponent>
     );
@@ -53,11 +39,26 @@ const StyledPositionsComponent = styled.div`
 	flex-direction: column;
 `
 
-const StyledPositionTitle = styled.div`
-	display: flex;
-	flex-direction: row;
-	text-transform: uppercase;
-    background: ${(props) => props.theme.colors.darkSection};
+const TableTabs = styled.div`
+  display: flex;
+  flex-direction: row;
+  font-size: 13px;
+  font-weight: 600;
+  color: ${theme.colors.lightBackground};
+  border-bottom: 1px solid ${theme.colors.darkenedBg};
+`
+
+interface ITableTab extends HTMLAttributes<HTMLDivElement> {
+    isSelected: boolean,
+}
+
+const TableTab = styled.div<ITableTab>`
+  color: ${(props) => props.isSelected ? theme.colors.lightBackground : theme.colors.cellKey };
+  border-bottom: ${(props) => props.isSelected ? `2px solid${theme.colors.sfBlue900}` : ''};
+  font-weight: 600;
+  font-size: ${theme.sizes.footnote}px;
+  padding: 15px 0;
+  margin: 0 20px;
 `
 
 export default OpenPositions;

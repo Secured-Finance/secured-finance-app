@@ -61,7 +61,7 @@ const StyledTable = styled.table`
 	border-spacing: 0;
 	width: 100%;
 	padding: 0;
-	margin-top: ${(props) => props.theme.spacing[1]}px;
+	margin-top: ${(props) => props.theme.spacing[2]}px;
 `
 
 const StyledTableHead  = styled.thead`
