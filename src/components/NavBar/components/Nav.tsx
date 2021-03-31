@@ -25,16 +25,22 @@ const StyledNav = styled.nav`
 `
 
 const StyledLink = styled(NavLink)`
-  color: ${(props) => props.theme.colors.lightText};
-  font-size: 15px;
-  padding: ${({theme}) => `${theme.topBarPadding}px 40px ${theme.topBarPadding}px 40px`};
+  color: ${(props) => props.theme.colors.cellKey};
+  border-bottom: 2px solid transparent;
+  font-weight: 600;
+  margin: 0 16px;
+  cursor: pointer;
+  font-size: 14px;
+  padding: ${({theme}) => `${theme.topBarPadding}px 8px ${theme.topBarPadding}px`};
   text-align: center;
   text-decoration: none;
+  
   &:hover {
     color: ${(props) => props.theme.colors.grey};
   }
   &.active {
-    background-color: ${(props) => props.theme.colors.darkenedBg};
+    color: ${(props) => props.theme.colors.lightBackground};
+    border-bottom-color: ${(props) => props.theme.colors.sfBlue900};
     cursor: default;
   }
   @media (max-width: 400px) {
