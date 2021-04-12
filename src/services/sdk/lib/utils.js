@@ -23,9 +23,49 @@ export const INTEGERS = {
 }
 
 export const contractsAddresses = {
-	moneyMarket: '0x5D2E8C39E417954172897f17b3d485d72a9fa035',
-	fxMarket: '0xA9CBC2Fa7c167f6abb1eeE9FA734d639C2B754c7',
-	collateral: '0x476796FA0CF20947E6be81E1d18018070189A226',
-	loan: '0x7029BE618c6724198f93D6E65Aae556Df50Dc3E0',
+	lendingController: '0x0d1a99841ae744556D6397826F2d158993287947',
+	fxMarket: '0x6D1e0d1DE236e8dBDa99Ccd549B8421A1A87B72F',
+	collateral: '0x86D971F85Be1f6e3C1b1E41d74104560e9e2040d',
+	loan: '0x51C947C8dFc96E591DE1Cb4007150fAd46907b05',
 	// usdc: '',
 }
+
+export const lendingMarkets = [
+	{
+		ccy: "FIL",
+		ccyIndex: 1,
+		markets: [
+			{
+				term: '3 month',
+				termIndex: 0,
+				address: "0xe497CFF94Bf62CDA3BA49DCe66D7Fd767800e865",	
+			},
+			{
+				term: '6 month',
+				termIndex: 1,
+				address: "0x255679287C0EDBc7a39bF4EEAA95f8389553676c",	
+			},
+			{
+				term: '1 year',
+				termIndex: 2,
+				address: "0x377e216ef37d3BD72774C27726f3F0BDE8c22D22",	
+			},
+			{
+				term: '2 year',
+				termIndex: 3,
+				address: "0x6A735e6930da93DF3BA2E4be1C75b2df996E45EF",	
+			},
+			{
+				term: '3 year',
+				termIndex: 4,
+				address: "0x599E4122D166302391Fa70F2ad64E04f1DFA840d",	
+			},
+			{
+				term: '5 year',
+				termIndex: 5,
+				address: "0x1a21094368DA603A57D43ccc9609A97eda9f455A",	
+			},
+
+		]
+	},
+]

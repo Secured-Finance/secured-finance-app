@@ -1,45 +1,19 @@
-import React, { useContext, useState } from 'react'
-import styled, { ThemeContext } from 'styled-components'
-import theme from '../../../../theme';
-import Button from '../../../../components/Button';
+import React, { useState } from 'react'
+import styled  from 'styled-components'
 import Borrow from './components/Borrow';
 import Lend from './components/Loan';
+import { Subheader } from "../../../../components/common/Subheader";
+import { Tabs } from "../../../../components/common/Tabs";
 
 const LoanOrder: React.FC = () => {
     const ordersTabs = ["Lend", "Borrow"];
     const [selectedTab, setSelectedTab] = useState("Lend")
 
-    const handleChange = (tab: React.SetStateAction<string>) => () => {
-        setSelectedTab(tab);
-    };
-
     return (
         <StyledLoanOrder>
-            <StyledLoanOrderTitle>Place Order</StyledLoanOrderTitle>
+            <Subheader>Place Order</Subheader>
             <StyledLoanOrderButtons>
-                {ordersTabs.map((tab, i) => (
-                    <Button
-                        key={i}
-                        style={{
-                            background: selectedTab === tab ? theme.colors.darkSection : 'transparent',
-                            color: theme.colors.white,
-                            textTransform: 'capitalize',
-                            fontWeight: 600,
-                            fontSize: 11,
-                            outline: "none",
-                            height: 42,
-                            borderRadius: 0.5,
-                            marginRight: 0,
-                            width: '50%',
-                            textAlign: "center",
-                            paddingLeft: 15,
-                            paddingRight: 15,
-                        }}
-                        onClick={handleChange(tab)}
-                    >
-                        {tab}
-                    </Button>
-                ))}
+                <Tabs options={ordersTabs} selectedTab={selectedTab} onClick={setSelectedTab}/>
             </StyledLoanOrderButtons>
                 { selectedTab === "Lend" ? <Lend /> :<Borrow /> }
             {/* <OrderType type={{ side: "b", text: "Lenders" }} orders={testData} />
@@ -55,20 +29,9 @@ const StyledLoanOrder = styled.div`
     justify-content: center;
 `
 
-const StyledLoanOrderTitle = styled.div`
-    text-transform: capitalize;
-    font-size: ${(props) => props.theme.sizes.caption}px;
-    margin-bottom: ${(props) => props.theme.sizes.callout}px;
-    margin-top: 0;
-    font-weight: 600;
-    line-height: 15px;
-    color: ${props => props.theme.colors.white};
-`
-
 const StyledLoanOrderButtons = styled.div`
 	display: flex;
 	flex-direction: row;
-	text-transform: uppercase;
 	padding: 0;
     margin-bottom: ${(props) => props.theme.sizes.callout}px;
     margin-top: 0;

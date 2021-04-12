@@ -1,6 +1,6 @@
 import BigNumber from "bignumber.js";
 import { HistoryTableData } from "../../store/history/types";
-import { formatAddress } from "../../utils";
+import { formatAddress, ordinaryFormat, percentFormat } from "../../utils";
 import CurrencyContainer from "../CurrencyContainer";
 import RenderAction from './components/State';
 
@@ -25,41 +25,42 @@ interface Columns {
 }
 
 interface IndexProps {
-    index?: string
+    index?: number
 }
 
 export const RenderTerms: React.FC<IndexProps> = ({index}) => {
     switch (index) {
-        case "0":
+        case 0:
             return <span>3 Month</span>
-        case "1":
+        case 1:
             return <span>6 Month</span>
-        case "2":
+        case 2:
             return <span>1 Year</span>
-        case "3":
+        case 3:
             return <span>2 Years</span>
-        case "4":
+        case 4:
             return <span>3 Years</span> 
-        case "5":
+        case 5:
             return <span>5 Years</span>             
         default: 
+            return <span></span> 
             break
     }
 }
 
 const RenderState: React.FC<IndexProps> = ({index}) => {
     switch (index) {
-        case "0":
+        case 0:
             return <div><button style={{padding: '4px 10px', background: '#EFE2D0', borderRadius: 15, color: "#C79556", fontSize: 13, fontWeight: 700, outline: "none", border: "none"}}>Registered</button></div>
-        case "1":
+        case 1:
             return <div><button style={{padding: '4px 10px', background: '#ABE3B8', borderRadius: 15, color: "#48835D", fontSize: 13, fontWeight: 700, margin: 0, outline: "none", border: "none"}}>Working</button></div>
-        case "2":
+        case 2:
             return <div><button style={{padding: '4px 10px', background: '#EFE2D0', borderRadius: 15, color: "#C79556", fontSize: 13, fontWeight: 700, outline: "none", border: "none"}}>Due</button></div>
-        case "3":
+        case 3:
             return <div><button style={{padding: '4px 10px', background: '#F8D8D8', borderRadius: 15, color: "#D5534E", fontSize: 13, fontWeight: 700, outline: "none", border: "none"}}>Past Due</button></div>
-        case "4":
+        case 4:
             return <div style={{padding: "4px, 10px"}}>Closed</div>
-        case "5":
+        case 5:
             return <div style={{padding: "4px, 10px"}}>Terminated</div>
         default: 
             break
@@ -84,27 +85,27 @@ export const historyTableColumns = [{
         {
             Header: 'Side',
             accessor: 'side',
-            Cell: ( cell: { value: string } ) => ( cell.value === "0" ? <span>Lender</span> : <span>Borrower</span>),
+            Cell: ( cell: { value: number } ) => ( cell.value === 0 ? <span>Lender</span> : <span>Borrower</span>),
         },
         {
             Header: 'Rate',
             accessor: 'rate',
-            Cell: ( cell: { value: string } ) => <span>{new BigNumber(cell.value).dividedBy(100) + '%'}</span>,
+            Cell: ( cell: { value: number } ) => <span>{percentFormat(cell.value, 10000)}</span>,
         },
         {
             Header: 'Amount',
-            accessor: 'amt',
-            Cell: ( cell : { value: any } ) => <span>{ cell.value != null ? Intl.NumberFormat().format(cell.value) : 0 }</span>
+            accessor: 'amount',
+            Cell: ( cell : { value: number } ) => <span>{ cell.value != null ? ordinaryFormat(cell.value) : 0 }</span>
         },
         {
             Header: 'Currency',
-            accessor: 'ccy',
-            Cell: ( cell: { value: string } ) => <CurrencyContainer index={cell.value} size={"sm"} short={false}/>
+            accessor: 'currency',
+            Cell: ( cell: { value: number } ) => <CurrencyContainer index={cell.value} size={"sm"} short={false}/>
         },
         {
             Header: 'Term',
             accessor: 'term',
-            Cell: ( cell: { value: string } ) => <RenderTerms index={cell.value} />
+            Cell: ( cell: { value: number } ) => <RenderTerms index={cell.value} />
         },
         // {
         //     Header: 'PV',
@@ -114,15 +115,15 @@ export const historyTableColumns = [{
         //     Header: 'Schedule',
         //     accessor: 'schedule',
         // },
-        // {
-        //     Header: 'State',
-        //     accessor: 'state',
-        //     Cell: ( cell: { value: string } ) => <RenderState index={cell.value} />
-        // },
         {
             Header: 'State',
             accessor: 'state',
-            Cell: (cell: {row: any }) => <RenderAction loan={cell.row.original} />
+            Cell: ( cell: { value: number } ) => <RenderState index={cell.value} />
         },
+        // {
+        //     Header: 'State',
+        //     accessor: 'state',
+        //     Cell: (cell: {row: any }) => <RenderAction loan={cell.row.original.id} />
+        // },
     ]
 }] as Array<TableColumns>

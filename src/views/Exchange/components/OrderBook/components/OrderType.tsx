@@ -1,31 +1,32 @@
 import React from "react";
 import styled from "styled-components";
+import { OrderbookRow } from "../../../../../store/lendingTerminal";
 import theme from "../../../../../theme";
-import { ordinaryFormat } from "../../../../../utils";
-import { Type, Orders } from "../types";
+import { ordinaryFormat, percentFormat } from "../../../../../utils";
+import { Type } from "../types";
 
 interface OrderTypeProps {
     type: Type,
-    orders: Array<Orders>
+    orders: Array<OrderbookRow>
     showHeader: boolean
 }
 
 const OrderType: React.FC<OrderTypeProps> = ({ orders, type, showHeader }) => {
-    const rows = orders.map(({ rate, amount, total }, i) => {
-        const w = `${0 + amount / 50}%`;
+    const rows = orders.map(({ rate, totalAmount, usdAmount }, i) => {
+        const w = `${0 + totalAmount / 50}%`;
         const bgColor = type.side === "lend" ? "#E46D53" : "#3A80AB";
         const txtColor = type.side === "lend" ? theme.colors.red3 : theme.colors.green;
 
         return (
             <StyledOrderRow key={i}>
                 <StyledOrderRowText textColor={txtColor}>
-                    {ordinaryFormat(rate)}
+                    {percentFormat(rate, 10000)}
                 </StyledOrderRowText>
                 <StyledOrderRowText textAlign={"right"}>
-                    {ordinaryFormat(amount)}
+                    {ordinaryFormat(totalAmount)}
                 </StyledOrderRowText>
                 <StyledOrderRowText textAlign={"right"}>
-                    {ordinaryFormat(total)}
+                    {ordinaryFormat(usdAmount)}
                 </StyledOrderRowText>
                 {/* <StyledOrderRowProgress
                     width={w}
@@ -109,7 +110,7 @@ const StyledOrderBookHeader = styled.div`
     text-transform: uppercase;
     display: grid;
 	grid-template-columns: 1fr 1.5fr 1.5fr;
-    font-size: ${(props) => props.theme.sizes.caption4}px;
+    font-size: ${(props) => props.theme.sizes.caption5}px;
     padding: 6px 0;
 `
 
@@ -118,7 +119,7 @@ interface StyledOrderBookHeaderItemProps {
 }
 
 const StyledOrderBookHeaderItem = styled.div<StyledOrderBookHeaderItemProps>`
-    color: ${(props) => props.theme.colors.gray};
+    color: ${(props) => props.theme.colors.cellKey};
     text-align: ${(props) => props.textAlign ? props.textAlign : "left"};
 `
 

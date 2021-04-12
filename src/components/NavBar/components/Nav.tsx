@@ -21,24 +21,27 @@ const Nav: React.FC = () => {
 const StyledNav = styled.nav`
   align-items: center;
   display: flex;
+  // margin-left: auto;
 `
 
 const StyledLink = styled(NavLink)`
-  color: ${(props) => props.theme.colors.lightText};
-  font-weight: 500;
-  font-size: 16px;
-  padding-top: ${(props) => props.theme.topBarPadding}px;
-  padding-bottom: ${(props) => props.theme.topBarPadding}px;
-  width: 150px;
+  color: ${(props) => props.theme.colors.cellKey};
+  border-bottom: 2px solid transparent;
+  font-weight: 600;
+  margin: 0 16px;
+  cursor: pointer;
+  font-size: 14px;
+  padding: ${({theme}) => `${theme.topBarPadding}px 8px ${theme.topBarPadding}px`};
   text-align: center;
   text-decoration: none;
+  
   &:hover {
     color: ${(props) => props.theme.colors.grey};
-    // font-weight:600;
   }
   &.active {
-    background-color: ${(props) => props.theme.colors.darkenedBg};
-    font-weight:600;
+    color: ${(props) => props.theme.colors.lightBackground};
+    border-bottom-color: ${(props) => props.theme.colors.sfBlue900};
+    cursor: default;
   }
   @media (max-width: 400px) {
     padding-left: ${(props) => props.theme.spacing[2]}px;

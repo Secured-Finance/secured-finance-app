@@ -1,20 +1,23 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import styled from 'styled-components'
 import Page from '../../components/Page'
 import { useEthereumUsd, useFilUsd, useUSDCUsd } from '../../hooks/useAssetPrices'
 import { useRates } from '../../hooks/useRates'
 import useSF from '../../hooks/useSecuredFinance'
-import { getMoneyMarketContract } from '../../services/sdk/utils'
+import { getLendingControllerContract, getLendingMarketAddress, getLendingMarketContract } from '../../services/sdk/utils'
+import { LendingStore } from '../../store/lending'
+import { RootState } from '../../store/types'
 import theme from '../../theme'
 import YieldGraph from './components/Graph'
 import PlaceOrder from './components/PlaceOrder'
 
-const Lending: React.FC = () => {
+const Lending: React.FC<LendingStore> = ({ currencyIndex }) => {
 	const securedFinance = useSF()
-	const moneyMarketContract = getMoneyMarketContract(securedFinance)
-	const borrowRates = useRates(moneyMarketContract, 0)
-	const lendingRates = useRates(moneyMarketContract, 1)
-	const midRate = useRates(moneyMarketContract, 2)
+	const lendingController = getLendingControllerContract(securedFinance)
+	const borrowRates = useRates(lendingController, 0, currencyIndex)
+	const lendingRates = useRates(lendingController, 1, currencyIndex)
+	const midRate = useRates(lendingController, 2, currencyIndex)
 	const ethPrice = useEthereumUsd()
 	const filPrice = useFilUsd()
 	const usdcPrice = useUSDCUsd()
@@ -52,4 +55,6 @@ const StyledLendingContainer = styled.div`
 		// }
 `
 
-export default Lending
+const mapStateToProps = (state: RootState) => state.lending;
+
+export default connect(mapStateToProps)(Lending);

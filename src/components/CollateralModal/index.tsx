@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
 import theme from '../../theme'
-import Button from '../Button'
 import Modal, { ModalProps } from '../Modal'
 import ModalActions from '../ModalActions'
 import ModalContent from '../ModalContent'
@@ -19,6 +18,7 @@ import { useUpsizeCollateral } from '../../hooks/useUpSizeCollateral'
 import useCollateralBook from '../../hooks/useCollateralBook'
 import { useWallet } from 'use-wallet'
 import BigNumber from 'bignumber.js'
+import { Button } from "../common/Buttons"
 
 type CombinedProps = ModalProps & CollateralFormStore
 
@@ -202,31 +202,16 @@ const CollateralModal: React.FC<CombinedProps> = ({ onDismiss, amount, ccyIndex,
 			</ModalContent>
 			<ModalActions>
                 <StyledButtonContainer>
-                    <Button 
-                        text="Cancel"
-                        onClick={onDismiss}
-                        style={{
-                            background: 'transparent',
-                            borderWidth: 1,
-                            borderColor: theme.colors.buttonBlue,
-                            borderBottom: theme.colors.buttonBlue,
-                            fontSize: theme.sizes.callout, 
-                            fontWeight: 500,
-                            color: theme.colors.white
-                        }}
-                    />
-                    <Spacer size={"md"}/>
-                    <Button 
-                        onClick={handleDepositCollateral}
-                        text={balanceErr ? "Insuficient Amount" : "Deposit"}
-                        style={{
-                            background: theme.colors.buttonBlue,
-                            fontSize: theme.sizes.callout, 
-                            fontWeight: 500,
-                            color: theme.colors.white
-                        }}
-                        disabled={!(amount > 0) || balanceErr}
-                    />
+                    <Button onClick={onDismiss} outline>Cancel</Button>
+                    <ButtonWithCommentContainer>
+                        {balanceErr && <Comment>Insufficient Amount</Comment>}
+                        <Button
+                            onClick={handleDepositCollateral}
+                            disabled={!(amount > 0) || balanceErr}
+                            >
+                            {"Deposit"}
+                        </Button>
+                    </ButtonWithCommentContainer>
                 </StyledButtonContainer>
 			</ModalActions>
 		</Modal>
@@ -349,7 +334,7 @@ const StyledAddressContainer = styled.div<StyledAddressContainerProps>`
 
 const StyledButtonContainer = styled.div`
     display: flex;
-    flex-direction: row;
+    justify-content: space-between;
 `
 
 const StyledAddressTitle = styled.p`
@@ -414,6 +399,17 @@ const StyledCurrencyText = styled.p<StyledCurrencyTextProps>`
     margin: 0;
     margin-left: ${(props) => props.marginLeft ? props.marginLeft : '7px'};
     text-align: left;
+`
+
+const ButtonWithCommentContainer = styled.span`
+    display: flex;
+    align-items: center;
+`
+
+const Comment = styled.span`
+    color: ${theme.colors.cellKey};
+    margin-right: ${theme.spacing[2]}px;
+    font-size: ${theme.sizes.caption2}px;
 `
 
 const mapStateToProps = (state: RootState) => state.collateralForm;

@@ -4,6 +4,7 @@ import { useTable, useSortBy } from 'react-table'
 import { historyTableColumns } from './types'
 import ArrowSVG from '../ArrowSVG'
 import useLoanHistory from '../../hooks/useLoanHistory'
+import { Td } from "../common/Td";
 
 const STATE = [
 	"REGISTERED",
@@ -56,7 +57,12 @@ const HistoryTable = ({table}) => {
 					return (
 						<tr {...row.getRowProps()}>
 							{row.cells.map(cell => {
-								return <StyledTableBodyItem {...cell.getCellProps()}>{cell.render('Cell')}</StyledTableBodyItem>
+								return <Td 
+									to={`/loan/${row.original.id}`}
+									{...cell.getCellProps()}
+								>
+									{cell.render('Cell')}
+								</Td>
 							})}
 						</tr>
 					)
@@ -116,10 +122,6 @@ const StyledTableBody = styled.tbody`
 	tr:nth-child(even) {
 		background-color: #122735;
 	}
-`
-
-const StyledTableBodyItem = styled.td`
-	padding: ${(props) => props.theme.spacing[3]+2}px 0;
 `
 
 export default HistoryTable

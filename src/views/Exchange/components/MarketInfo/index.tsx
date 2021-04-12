@@ -1,26 +1,28 @@
 import BigNumber from "bignumber.js";
-import React, { useState } from "react"
+import React, {HTMLAttributes, useState} from "react"
 import styled from "styled-components";
 import ArrowSVG from "../../../../components/ArrowSVG";
-import Button from "../../../../components/Button";
 import { useEthereumUsd, useFilUsd } from "../../../../hooks/useAssetPrices";
 import { useRates } from "../../../../hooks/useRates";
 import useSF from "../../../../hooks/useSecuredFinance";
-import { getMoneyMarketContract } from "../../../../services/sdk/utils";
+import { getLendingControllerContract } from "../../../../services/sdk/utils";
 import theme from "../../../../theme";
 import { ordinaryFormat, percentFormat, usdFormat } from "../../../../utils";
+import { Tabs } from "../../../../components/common/Tabs";
+import { LendingTerminalStore } from "../../../../store/lendingTerminal";
+import { RootState } from "../../../../store/types";
+import { connect } from "react-redux";
 
-export const MarketInfo: React.FC = () => {
+const MarketInfo: React.FC<LendingTerminalStore> = ({ currencyIndex, termsIndex }) => {
     const securedFinance = useSF()
-	const moneyMarketContract = getMoneyMarketContract(securedFinance)
+	const lendingController = getLendingControllerContract(securedFinance)
     const marketTabs = ["Yield", "Price"];
     const [selectedTab, setSelectedTab] = useState("Yield")
 	const ethPrice = useEthereumUsd()
 	const filPrice = useFilUsd()
-	const borrowRates = useRates(moneyMarketContract, 0)
-	const lendingRates = useRates(moneyMarketContract, 1)
+	const lendingRates = useRates(lendingController, 2, currencyIndex)
 
-    const handleSelectTab = (tab: React.SetStateAction<string>) => () => {
+    const handleSelectTab = (tab: React.SetStateAction<string>) => {
         setSelectedTab(tab);
     };
 
@@ -43,90 +45,65 @@ export const MarketInfo: React.FC = () => {
                 </StyledMarketSelector>
                 <StyledMarketAssetInfo marginLeft={30}>
                     <StyledAssetInfoText>{ordinaryFormat(filToEthPrice(), 6)}</StyledAssetInfoText>
-                    <StyledAssetInfoText marginTop={1} color={theme.colors.gray} fontSize={theme.sizes.caption3}>{filPrice.price ? usdFormat(filPrice.price): usdFormat(0)}</StyledAssetInfoText>
+                    <StyledAssetInfoText marginTop={1} color={theme.colors.cellKey} fontSize={theme.sizes.caption3}>{filPrice.price ? usdFormat(filPrice.price): usdFormat(0)}</StyledAssetInfoText>
                 </StyledMarketAssetInfo>
                 <StyledDivider />
                 <StyledMarketAssetInfo>
-                    <StyledAssetInfoText color={theme.colors.gray} fontSize={theme.sizes.caption5}>24hr Change</StyledAssetInfoText>
+                    <StyledAssetInfoText color={theme.colors.cellKey} fontSize={theme.sizes.caption3}>24hr Change</StyledAssetInfoText>
                     <StyledAssetInfoText marginTop={3} color={theme.colors.red3} fontSize={theme.sizes.caption3}>-0.000135 ({ordinaryFormat(filToEthChange(), 6)})</StyledAssetInfoText>
                 </StyledMarketAssetInfo>
                 <StyledMarketAssetInfo marginLeft={15}>
-                    <StyledAssetInfoText color={theme.colors.gray} fontSize={theme.sizes.caption5}>Current Yield</StyledAssetInfoText>
+                    <StyledAssetInfoText color={theme.colors.cellKey} fontSize={theme.sizes.caption3}>Current Yield</StyledAssetInfoText>
                     <StyledAssetInfoText marginTop={3} color={theme.colors.green} fontSize={theme.sizes.caption3}>
                         { 
                             lendingRates && lendingRates.length > 0
                             ? 
-                            percentFormat(lendingRates[1][0], 10000)
+                            percentFormat(lendingRates[termsIndex], 10000)
                             : 
                             percentFormat(0)
                         }
                     </StyledAssetInfoText>
                 </StyledMarketAssetInfo>
                 <StyledMarketAssetInfo marginLeft={15}>
-                    <StyledAssetInfoText color={theme.colors.gray} fontSize={theme.sizes.caption5}>1yr Yield</StyledAssetInfoText>
+                    <StyledAssetInfoText color={theme.colors.cellKey} fontSize={theme.sizes.caption3}>1yr Yield</StyledAssetInfoText>
                     <StyledAssetInfoText marginTop={3} fontSize={theme.sizes.caption3}>
                         { 
                             lendingRates && lendingRates.length > 0
                             ? 
-                            percentFormat(lendingRates[1][2], 10000)
+                            percentFormat(lendingRates[2], 10000)
                             : 
                             percentFormat(0)
                         }
                     </StyledAssetInfoText>
                 </StyledMarketAssetInfo>
                 <StyledMarketAssetInfo marginLeft={15}>
-                    <StyledAssetInfoText color={theme.colors.gray} fontSize={theme.sizes.caption5}>3yr Yield</StyledAssetInfoText>
+                    <StyledAssetInfoText color={theme.colors.cellKey} fontSize={theme.sizes.caption3}>3yr Yield</StyledAssetInfoText>
                     <StyledAssetInfoText marginTop={3} fontSize={theme.sizes.caption3}>
                         { 
                             lendingRates && lendingRates.length > 0
                             ? 
-                            percentFormat(lendingRates[1][4], 10000)
+                            percentFormat(lendingRates[4], 10000)
                             : 
                             percentFormat(0)
                         }
                     </StyledAssetInfoText>
                 </StyledMarketAssetInfo>
                 <StyledMarketAssetInfo marginLeft={15}>
-                    <StyledAssetInfoText color={theme.colors.gray} fontSize={theme.sizes.caption5}>5yr Yield</StyledAssetInfoText>
+                    <StyledAssetInfoText color={theme.colors.cellKey} fontSize={theme.sizes.caption3}>5yr Yield</StyledAssetInfoText>
                     <StyledAssetInfoText marginTop={3} fontSize={theme.sizes.caption3}>
                         { 
                             lendingRates && lendingRates.length > 0
                             ? 
-                            percentFormat(lendingRates[1][5], 10000)
+                            percentFormat(lendingRates[5], 10000)
                             : 
                             percentFormat(0)
                         }
                     </StyledAssetInfoText>
                 </StyledMarketAssetInfo>
             </StyledMarketInfoContainer>
-            <StyledMarketInfoContainer>
-                {marketTabs.map((tab, i) => (
-                        <Button
-                            key={i}
-                            style={{
-                                background: selectedTab === tab ? theme.colors.darkenedBg : 'transparent',
-                                fontSize: theme.sizes.caption5, 
-                                height: 23,
-                                color: theme.colors.gray,
-                                borderColor: theme.colors.darkenedBg,
-                                borderWidth: 0.5,
-                                borderBottom: theme.colors.darkenedBg,
-                                marginRight: 5,        
-                                textTransform: 'capitalize',
-                                fontWeight: 600,
-                                outline: "none",
-                                borderRadius: 2,
-                                width: '50%',
-                                textAlign: "center",
-                                paddingLeft: 15,
-                                paddingRight: 15,
-                            }}
-                            onClick={handleSelectTab(tab)}
-                        >
-                            {tab}
-                        </Button>
-                    ))}
-            </StyledMarketInfoContainer>
+            <MarketTabsContainer>
+               <Tabs selectedTab={selectedTab} options={marketTabs} onClick={handleSelectTab} style={{fontWeight: 500, fontSize: theme.sizes.caption5}}/>
+            </MarketTabsContainer>
         </StyledMarketInfo>
     );
 }
@@ -136,8 +113,8 @@ const StyledMarketInfo = styled.div`
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    background: ${(props) => props.theme.colors.darkSection};
-    padding: 8px 20px;
+    padding: 12px 20px;
+    border-bottom: 1px solid ${theme.colors.darkenedBg};
 `
 
 const StyledMarketInfoContainer = styled.div`
@@ -182,7 +159,7 @@ interface StyledAssetInfoTextProps {
 
 const StyledAssetInfoText = styled.p<StyledAssetInfoTextProps>`
     margin: 0;
-    color: ${props => props.color ? props.color : props.theme.colors.white};
+    color: ${props => props.color ? props.color : props.theme.colors.lightBackground};
     font-size: ${(props) => props.fontSize ? props.fontSize : props.theme.sizes.caption2}px;
     margin-top: ${(props) => props.marginTop ? props.marginTop : 0}px;
     margin-bottom: ${(props) => props.marginBottom ? props.marginBottom : 0}px;
@@ -191,10 +168,16 @@ const StyledDivider = styled.hr`
 	margin: 0;
 	width: 26px;
     transform: rotate(-90deg);
-	margin-left: 0;
-	margin-right: 0;
 	border-left: 0;
 	border-right: 0;
 	border-bottom: 0;
 	border-top: 1px solid ${(props) => props.theme.colors.darkenedBg};
 `
+
+const MarketTabsContainer = styled(StyledMarketInfoContainer)`
+    width: 110px;
+    font-weight: 500;
+`
+
+const mapStateToProps = (state: RootState) => state.lendingTerminal
+export default connect(mapStateToProps)(MarketInfo)

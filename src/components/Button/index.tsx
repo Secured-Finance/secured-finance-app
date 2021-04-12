@@ -138,11 +138,11 @@ const Button: React.FC<ButtonProps> = ({
 }
 
 const StyledButton = styled.button<StyledButtonProps>`
-	font-family: Inter;
+	font-family: Inter, Arial, sans-serif;
 	align-items: center;
 	background-color: ${props => props.background};
 	border: ${props => props.borderWidth ? props.borderWidth : 1}px solid ${props => props.borderColor ? props.borderColor : props.background};
-	border-bottom: ${props => props.borderBottom ? '1px solid ' + props.borderBottom : 'none'};
+	border-bottom: ${props => props.borderBottom ? '1px solid ' + props.borderBottom : ''};
 	border-radius: ${props => props.borderRadius ? props.borderRadius : 6}px;
 	margin-top: ${props => props.marginTop ? props.marginTop : 0}px;
 	margin-bottom: ${props => props.marginBottom ? props.marginBottom : 0}px;
