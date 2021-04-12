@@ -1,31 +1,32 @@
 import React from "react";
 import styled from "styled-components";
+import { OrderbookRow } from "../../../../../store/lendingTerminal";
 import theme from "../../../../../theme";
-import { ordinaryFormat } from "../../../../../utils";
-import { Type, Orders } from "../types";
+import { ordinaryFormat, percentFormat } from "../../../../../utils";
+import { Type } from "../types";
 
 interface OrderTypeProps {
     type: Type,
-    orders: Array<Orders>
+    orders: Array<OrderbookRow>
     showHeader: boolean
 }
 
 const OrderType: React.FC<OrderTypeProps> = ({ orders, type, showHeader }) => {
-    const rows = orders.map(({ rate, amount, total }, i) => {
-        const w = `${0 + amount / 50}%`;
+    const rows = orders.map(({ rate, totalAmount, usdAmount }, i) => {
+        const w = `${0 + totalAmount / 50}%`;
         const bgColor = type.side === "lend" ? "#E46D53" : "#3A80AB";
         const txtColor = type.side === "lend" ? theme.colors.red3 : theme.colors.green;
 
         return (
             <StyledOrderRow key={i}>
                 <StyledOrderRowText textColor={txtColor}>
-                    {ordinaryFormat(rate)}
+                    {percentFormat(rate, 10000)}
                 </StyledOrderRowText>
                 <StyledOrderRowText textAlign={"right"}>
-                    {ordinaryFormat(amount)}
+                    {ordinaryFormat(totalAmount)}
                 </StyledOrderRowText>
                 <StyledOrderRowText textAlign={"right"}>
-                    {ordinaryFormat(total)}
+                    {ordinaryFormat(usdAmount)}
                 </StyledOrderRowText>
                 {/* <StyledOrderRowProgress
                     width={w}

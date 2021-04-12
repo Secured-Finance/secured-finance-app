@@ -3,7 +3,7 @@ import { useWallet } from 'use-wallet'
 import { provider } from 'web3-core'
 import { Contract } from 'web3-eth-contract'
 
-import { getBestBook, getFxRates } from '../services/sdk/utils'
+import { getFxRates } from '../services/sdk/utils'
 import useBlock from './useBlock'
 
 const useBestBook = (fxMarketContract: Contract) => {

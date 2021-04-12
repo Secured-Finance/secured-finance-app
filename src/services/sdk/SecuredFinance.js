@@ -25,7 +25,7 @@ export class SecuredFinance {
 			this.web3.eth.defaultAccount = options.defaultAccount
 		}
 		this.contracts = new Contracts(realProvider, networkId, this.web3, options)
-		this.moneyMarket = contractsAddresses.moneyMarket
+		this.lendingController = contractsAddresses.lendingController
 		this.loan = contractsAddresses.loan
 		this.fxMarket = contractsAddresses.fxMarket
 		this.collateral = contractsAddresses.collateral

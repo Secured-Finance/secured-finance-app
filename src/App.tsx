@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
+import { ApolloProvider } from '@apollo/client/react';
 import { ThemeProvider } from 'styled-components'
 import { UseWalletProvider } from 'use-wallet'
 import ModalsProvider from './contexts/Modals'
@@ -12,6 +13,7 @@ import SecuredFinanceProvider from './contexts/SecuredFinanceProvider'
 import Account from './views/Account'
 import FilecoinWalletProvider from './contexts/FilecoinWalletProvider'
 import Loan from './views/Loan'
+import { client } from './services/apollo'
 
 const App: React.FC = () => {	
   return (
@@ -43,20 +45,22 @@ const App: React.FC = () => {
 const Providers: React.FC = ({ children }) => {
 	return (
 	  <ThemeProvider theme={theme}>
-		<UseWalletProvider
-			chainId={3}
-			connectors={{
-				walletconnect: { rpcUrl: 'https://mainnet.eth.aragon.network/' },
-			}}
-		>
-			<FilecoinWalletProvider>
-				<SecuredFinanceProvider>
-					<ModalsProvider>
-						{children}
-					</ModalsProvider>
-				</SecuredFinanceProvider>
-			</FilecoinWalletProvider>
-		</UseWalletProvider>
+		<ApolloProvider client={client}>
+			<UseWalletProvider
+				chainId={3}
+				connectors={{
+					walletconnect: { rpcUrl: 'https://ropsten.eth.aragon.network/' },
+				}}
+			>
+				<FilecoinWalletProvider>
+					<SecuredFinanceProvider>
+						<ModalsProvider>
+							{children}
+						</ModalsProvider>
+					</SecuredFinanceProvider>
+				</FilecoinWalletProvider>
+			</UseWalletProvider>
+		</ApolloProvider>
 	  </ThemeProvider>
 	)
 }

@@ -8,7 +8,7 @@ interface IPlaceOrderForm {
     amountFILValue: string,
     onChangeAmountFILValue: (e: React.FormEvent<HTMLInputElement>) => void,
     termValue: string,
-    onChangeTerm: () => void,
+    onChangeTerm: (e: React.FormEvent<HTMLSelectElement>) => void,
     insertRateValue: string,
     onChangeInsertRate: (e: React.FormEvent<HTMLInputElement>) => void,
 }
@@ -17,7 +17,7 @@ export const PlaceOrderForm: React.FC<IPlaceOrderForm> = ({amountFILValue, onCha
     return (
         <>
             <Input label={['Amount FIL', 'Balance: 0.00']} type={'number'} placeholder={'0'}  value={amountFILValue}  onChange={onChangeAmountFILValue}/>
-            <Dropdown label={'Term'} onChange={onChangeTerm} value={termValue} options={terms}/>
+            <Dropdown label={'Term'} onChangeValue={onChangeTerm} value={termValue} options={terms}/>
             <Input label={['Interest rate', 'Market Rate: 7.10 %']} type={'number'} placeholder={'0'}  value={insertRateValue}  onChange={onChangeInsertRate}/>
 
             <InfoTable />

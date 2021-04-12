@@ -5,39 +5,35 @@ import {connect} from 'react-redux';
 import Container from '../../components/Container'
 import HistoryTable from '../../components/HistoryTable'
 import Page from '../../components/Page'
-import Terms from '../../components/Terms'
-import useLoanHistory, { useBorrowHistory, useLoanState } from '../../hooks/useLoanHistory'
+import { useLoanDeals, useBorrowDeals } from '../../hooks/useLoanHistory'
 import theme from '../../theme'
 import { RootState } from '../../store/types';
 import { failSetLendingHistory, setLendingHistory, startSetHistory } from '../../store/history';
 import { Dispatch } from '@reduxjs/toolkit';
 
 const History: React.FC = () => {
-	const loanHistory = useLoanHistory();
-	const borrowHistory = useBorrowHistory();
-
+	const loans = useLoanDeals();
+	const borrows = useBorrowDeals();
+	
 	return (
 		<Page background={theme.colors.background}>
 			<Container>
 				{
-					loanHistory.length === 0 
+					loans.length === 0 
 					?
 					null
 					:
 					<div>
 					<StyledHistoryTitleContainer>
 						<StyledHistoryTitle>Lending  history</StyledHistoryTitle>
-						<StyledTermsContainer>
-							<Terms/>
-						</StyledTermsContainer>
 					</StyledHistoryTitleContainer>
 					<StyledHistoryContainer>
-						<HistoryTable table={loanHistory}/>
+						<HistoryTable table={loans}/>
 					</StyledHistoryContainer>
 					</div>
 				}
 				{
-					borrowHistory.length === 0 
+					borrows.length === 0 
 					?
 					null
 					:
@@ -46,7 +42,7 @@ const History: React.FC = () => {
 						<StyledHistoryTitle>Borrowing  history</StyledHistoryTitle>
 					</StyledHistoryTitleContainer>
 					<StyledHistoryContainer>
-						<HistoryTable table={borrowHistory}/>
+						<HistoryTable table={borrows}/>
 					</StyledHistoryContainer>
 					</div>
 				}

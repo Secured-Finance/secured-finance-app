@@ -4,6 +4,7 @@
   "private": true,
   "homepage": ".",
   "dependencies": {
+    "@apollo/client": "^3.3.13",
     "@glif/filecoin-address": "^1.1.0-beta.10",
     "@glif/filecoin-message": "^1.1.0-beta.10",
     "@glif/filecoin-number": "^1.1.0-beta.11",
@@ -21,6 +22,7 @@
     "canvas": "^2.6.1",
     "chart.js": "^2.9.4",
     "gas-price-oracle": "^0.2.2",
+    "graphql": "^15.5.0",
     "immer": "^8.0.0",
     "react": "^17.0.1",
     "react-chartjs-2": "^2.11.1",

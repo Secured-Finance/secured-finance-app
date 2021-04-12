@@ -7,6 +7,8 @@ import theme from '../../theme'
 
 interface IDropdown extends React.SelectHTMLAttributes<HTMLSelectElement>{
     label: string,
+    value: string,
+    onChangeValue: (event: React.FormEvent<HTMLSelectElement>) => void,
     options: Terms[];
 }
 
@@ -39,11 +41,14 @@ export const Icon = styled.img`
   cursor: pointer;
 `
 
-export const Dropdown: React.FC<IDropdown> = ({options, label,...props}) => {
+export const Dropdown: React.FC<IDropdown> = ({options, onChangeValue, value, label,...props}) => {
     return <DropdownContainer>
         <Label>{label}</Label>
-        <DropdownSelect>
-            {options.map(option =>  <option>{option.text}</option>)}
+        <DropdownSelect
+          onChange={onChangeValue}
+          value={value}  
+        >
+          {options.map(option => <option value={option.term}>{option.text}</option>)}
         </DropdownSelect>
         <Icon src={ChevronDown} />
     </DropdownContainer>

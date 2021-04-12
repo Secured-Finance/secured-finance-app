@@ -5,20 +5,22 @@ import ArrowSVG from "../../../../components/ArrowSVG";
 import { useEthereumUsd, useFilUsd } from "../../../../hooks/useAssetPrices";
 import { useRates } from "../../../../hooks/useRates";
 import useSF from "../../../../hooks/useSecuredFinance";
-import { getMoneyMarketContract } from "../../../../services/sdk/utils";
+import { getLendingControllerContract } from "../../../../services/sdk/utils";
 import theme from "../../../../theme";
 import { ordinaryFormat, percentFormat, usdFormat } from "../../../../utils";
 import { Tabs } from "../../../../components/common/Tabs";
+import { LendingTerminalStore } from "../../../../store/lendingTerminal";
+import { RootState } from "../../../../store/types";
+import { connect } from "react-redux";
 
-export const MarketInfo: React.FC = () => {
+const MarketInfo: React.FC<LendingTerminalStore> = ({ currencyIndex, termsIndex }) => {
     const securedFinance = useSF()
-	const moneyMarketContract = getMoneyMarketContract(securedFinance)
+	const lendingController = getLendingControllerContract(securedFinance)
     const marketTabs = ["Yield", "Price"];
     const [selectedTab, setSelectedTab] = useState("Yield")
 	const ethPrice = useEthereumUsd()
 	const filPrice = useFilUsd()
-	const borrowRates = useRates(moneyMarketContract, 0)
-	const lendingRates = useRates(moneyMarketContract, 1)
+	const lendingRates = useRates(lendingController, 2, currencyIndex)
 
     const handleSelectTab = (tab: React.SetStateAction<string>) => {
         setSelectedTab(tab);
@@ -56,7 +58,7 @@ export const MarketInfo: React.FC = () => {
                         { 
                             lendingRates && lendingRates.length > 0
                             ? 
-                            percentFormat(lendingRates[1][0], 10000)
+                            percentFormat(lendingRates[termsIndex], 10000)
                             : 
                             percentFormat(0)
                         }
@@ -68,7 +70,7 @@ export const MarketInfo: React.FC = () => {
                         { 
                             lendingRates && lendingRates.length > 0
                             ? 
-                            percentFormat(lendingRates[1][2], 10000)
+                            percentFormat(lendingRates[2], 10000)
                             : 
                             percentFormat(0)
                         }
@@ -80,7 +82,7 @@ export const MarketInfo: React.FC = () => {
                         { 
                             lendingRates && lendingRates.length > 0
                             ? 
-                            percentFormat(lendingRates[1][4], 10000)
+                            percentFormat(lendingRates[4], 10000)
                             : 
                             percentFormat(0)
                         }
@@ -92,7 +94,7 @@ export const MarketInfo: React.FC = () => {
                         { 
                             lendingRates && lendingRates.length > 0
                             ? 
-                            percentFormat(lendingRates[1][5], 10000)
+                            percentFormat(lendingRates[5], 10000)
                             : 
                             percentFormat(0)
                         }
@@ -176,3 +178,6 @@ const MarketTabsContainer = styled(StyledMarketInfoContainer)`
     width: 110px;
     font-weight: 500;
 `
+
+const mapStateToProps = (state: RootState) => state.lendingTerminal
+export default connect(mapStateToProps)(MarketInfo)

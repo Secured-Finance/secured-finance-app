@@ -36,7 +36,7 @@ const YieldGraph: React.FC<CombinedProps> = ({ borrowRates, lendingRates, midRat
 
 	const convertArray = (array: Array<any>) => {
 		if (array.length > 0) {
-			const newArray = array[currencyIndex].slice()
+			const newArray = array.slice()
 			newArray.unshift(0)
 			return newArray.map((r:any) => r/100)
 		}

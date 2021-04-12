@@ -5,7 +5,7 @@ import theme from '../../theme'
 
 interface CurrencyContainerProps {
     index: any,
-    size?: 'sm' | 'lg' | 'xl',
+    size?: 'xs' | 'sm' | 'lg' | 'xl',
     short: boolean,
     wallet?: boolean,
     style?: StyledCurrencyProps
@@ -16,6 +16,8 @@ interface StyledCurrencyProps {
 	fontSize?: number,
     marginLeft?: number,
     fontWeight?: number,
+    alignItems?: string,
+    justifyContent?: string,
 }
 
 interface CurrencyListProps {
@@ -45,7 +47,10 @@ const CurrencyItem: React.FC<ItemProps> = ({index, iconSize, marginLeft, fontSiz
         {
             wallet
             ?
-            <StyledCurrency>
+            <StyledCurrency
+                alignItems={style?.justifyContent ? style?.justifyContent : 'center'}
+                justifyContent={style?.justifyContent ? style?.justifyContent : 'center'}
+            >
                 <img width={40} height={40} src={icon}/>
                 <StyledWalletInfoContainer>
                     <StyledCurrencyText 
@@ -53,6 +58,8 @@ const CurrencyItem: React.FC<ItemProps> = ({index, iconSize, marginLeft, fontSiz
                         marginLeft={style?.marginLeft ? style?.marginLeft : 10}
                         fontSize={style?.fontSize ? style?.fontSize : theme.sizes.body}
                         fontWeight={style?.fontWeight ? style?.fontWeight : 500}
+                        alignItems={style?.alignItems ? style?.alignItems : 'center'}
+                        justifyContent={style?.justifyContent ? style?.justifyContent : 'center'}
                     >{fullName}</StyledCurrencyText>
                     <StyledWalletSubtitle
                         marginLeft={style?.marginLeft ? style?.marginLeft : 10}
@@ -84,6 +91,11 @@ const CurrencyContainer: React.FC<CurrencyContainerProps> = ({index, size, short
     let marginLeft: number
 
     switch (size) {
+        case 'xs':
+            iconSize = 12
+            fontSize = 10
+            marginLeft = 4
+            break
 		case 'sm':
 			iconSize = 14
             fontSize = 14
@@ -119,11 +131,11 @@ const CurrencyContainer: React.FC<CurrencyContainerProps> = ({index, size, short
     )
 }
 
-const StyledCurrency = styled.div`
+const StyledCurrency = styled.div<StyledCurrencyProps>`
     font-size: ${(props) => props.theme.sizes.subhead}px;
-    align-items: center;
+    align-items: ${(props) => props.alignItems};
+    justify-content: ${(props) => props.justifyContent};
     display: flex;
-    justify-content: center;
     margin: 0 auto;
 `
 

@@ -3,12 +3,7 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "moneyAddr",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "fxAddr",
+        "name": "loanAddr",
         "type": "address"
       }
     ],
@@ -95,7 +90,7 @@
       },
       {
         "indexed": false,
-        "internalType": "enum MoneyMarket.Ccy",
+        "internalType": "enum ProtocolTypes.Ccy",
         "name": "ccy",
         "type": "uint8"
       }
@@ -209,13 +204,13 @@
       },
       {
         "indexed": false,
-        "internalType": "enum Collateral.State",
+        "internalType": "enum ProtocolTypes.CollateralState",
         "name": "prevState",
         "type": "uint8"
       },
       {
         "indexed": false,
-        "internalType": "enum Collateral.State",
+        "internalType": "enum ProtocolTypes.CollateralState",
         "name": "currState",
         "type": "uint8"
       }
@@ -226,90 +221,13 @@
   {
     "inputs": [
       {
-        "internalType": "address",
-        "name": "moneyAddr",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "fxAddr",
-        "type": "address"
-      }
-    ],
-    "name": "setMarketAddr",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "loanAddr",
-        "type": "address"
-      }
-    ],
-    "name": "setLoanAddr",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "string",
-        "name": "id",
-        "type": "string"
-      },
-      {
-        "internalType": "bytes32",
-        "name": "userAddrFIL",
-        "type": "bytes32"
-      },
-      {
-        "internalType": "address",
-        "name": "userAddrUSDC",
-        "type": "address"
-      }
-    ],
-    "name": "setColBook",
-    "outputs": [],
-    "stateMutability": "payable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "enum MoneyMarket.Ccy",
-        "name": "ccy",
+        "internalType": "enum ProtocolTypes.Ccy",
+        "name": "_ccy",
         "type": "uint8"
       },
       {
-        "internalType": "uint256",
-        "name": "amt",
-        "type": "uint256"
-      },
-      {
-        "internalType": "address",
-        "name": "addr",
-        "type": "address"
-      }
-    ],
-    "name": "useCollateral",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "amt",
-        "type": "uint256"
-      },
-      {
-        "internalType": "enum MoneyMarket.Ccy",
-        "name": "ccy",
+        "internalType": "enum ProtocolTypes.Term",
+        "name": "_term",
         "type": "uint8"
       },
       {
@@ -318,80 +236,9 @@
         "type": "address"
       }
     ],
-    "name": "isCovered",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "enum MoneyMarket.Ccy",
-        "name": "ccy",
-        "type": "uint8"
-      },
-      {
-        "internalType": "uint256",
-        "name": "amt",
-        "type": "uint256"
-      },
-      {
-        "internalType": "address",
-        "name": "addr",
-        "type": "address"
-      }
-    ],
-    "name": "releaseCollateral",
+    "name": "addLendingMarket",
     "outputs": [],
     "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "enum MoneyMarket.Ccy",
-        "name": "ccy",
-        "type": "uint8"
-      },
-      {
-        "internalType": "uint256",
-        "name": "amt",
-        "type": "uint256"
-      }
-    ],
-    "name": "withdrawCollaretal",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "amt",
-        "type": "uint256"
-      },
-      {
-        "internalType": "address",
-        "name": "addr",
-        "type": "address"
-      }
-    ],
-    "name": "getCoverage",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -417,108 +264,11 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "addr",
-        "type": "address"
-      }
-    ],
-    "name": "updateState",
-    "outputs": [
-      {
-        "internalType": "enum Collateral.State",
-        "name": "",
-        "type": "uint8"
-      }
-    ],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "updateAllState",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "borrower",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "lender",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "amount",
-        "type": "uint256"
-      },
-      {
-        "internalType": "enum MoneyMarket.Ccy",
-        "name": "ccy",
-        "type": "uint8"
-      }
-    ],
-    "name": "partialLiquidation",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
         "name": "borrower",
         "type": "address"
       }
     ],
     "name": "completePartialLiquidation",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "borrower",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "amount",
-        "type": "uint256"
-      }
-    ],
-    "name": "liquiadtion",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "upSizeETH",
-    "outputs": [],
-    "stateMutability": "payable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "amtFIL",
-        "type": "uint256"
-      },
-      {
-        "internalType": "bytes32",
-        "name": "txHash",
-        "type": "bytes32"
-      }
-    ],
-    "name": "upSizeFIL",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -556,6 +306,211 @@
     "name": "delColBook",
     "outputs": [],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getAllBooks",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "string",
+            "name": "id",
+            "type": "string"
+          },
+          {
+            "internalType": "address",
+            "name": "userAddrETH",
+            "type": "address"
+          },
+          {
+            "internalType": "bytes32",
+            "name": "userAddrFIL",
+            "type": "bytes32"
+          },
+          {
+            "internalType": "address",
+            "name": "userAddrUSDC",
+            "type": "address"
+          },
+          {
+            "internalType": "bytes32",
+            "name": "colAddrFIL",
+            "type": "bytes32"
+          },
+          {
+            "internalType": "address",
+            "name": "colAddrUSDC",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "colAmtETH",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "colAmtFIL",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "colAmtUSDC",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "colAmtFILValue",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "colAmtUSDCValue",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "inuseETH",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "inuseFIL",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "inuseUSDC",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "inuseFILValue",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "inuseUSDCValue",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "coverage",
+            "type": "uint256"
+          },
+          {
+            "internalType": "bool",
+            "name": "isAvailable",
+            "type": "bool"
+          },
+          {
+            "internalType": "enum ProtocolTypes.CollateralState",
+            "name": "state",
+            "type": "uint8"
+          }
+        ],
+        "internalType": "struct Collateral.ColBook[]",
+        "name": "",
+        "type": "tuple[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getAllFILCustodyAddr",
+    "outputs": [
+      {
+        "internalType": "bytes32[]",
+        "name": "",
+        "type": "bytes32[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getAllUsers",
+    "outputs": [
+      {
+        "internalType": "address[]",
+        "name": "",
+        "type": "address[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "addr",
+        "type": "address"
+      }
+    ],
+    "name": "getColState",
+    "outputs": [
+      {
+        "internalType": "enum ProtocolTypes.CollateralState",
+        "name": "",
+        "type": "uint8"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "amt",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "addr",
+        "type": "address"
+      }
+    ],
+    "name": "getCoverage",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getETHUSDC",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getFILETH",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -661,7 +616,7 @@
             "type": "bool"
           },
           {
-            "internalType": "enum Collateral.State",
+            "internalType": "enum ProtocolTypes.CollateralState",
             "name": "state",
             "type": "uint8"
           }
@@ -675,246 +630,19 @@
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "getAllBooks",
-    "outputs": [
-      {
-        "components": [
-          {
-            "internalType": "string",
-            "name": "id",
-            "type": "string"
-          },
-          {
-            "internalType": "address",
-            "name": "userAddrETH",
-            "type": "address"
-          },
-          {
-            "internalType": "bytes32",
-            "name": "userAddrFIL",
-            "type": "bytes32"
-          },
-          {
-            "internalType": "address",
-            "name": "userAddrUSDC",
-            "type": "address"
-          },
-          {
-            "internalType": "bytes32",
-            "name": "colAddrFIL",
-            "type": "bytes32"
-          },
-          {
-            "internalType": "address",
-            "name": "colAddrUSDC",
-            "type": "address"
-          },
-          {
-            "internalType": "uint256",
-            "name": "colAmtETH",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "colAmtFIL",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "colAmtUSDC",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "colAmtFILValue",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "colAmtUSDCValue",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "inuseETH",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "inuseFIL",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "inuseUSDC",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "inuseFILValue",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "inuseUSDCValue",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "coverage",
-            "type": "uint256"
-          },
-          {
-            "internalType": "bool",
-            "name": "isAvailable",
-            "type": "bool"
-          },
-          {
-            "internalType": "enum Collateral.State",
-            "name": "state",
-            "type": "uint8"
-          }
-        ],
-        "internalType": "struct Collateral.ColBook[]",
-        "name": "",
-        "type": "tuple[]"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "getAllUsers",
-    "outputs": [
-      {
-        "internalType": "address[]",
-        "name": "",
-        "type": "address[]"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
     "inputs": [
       {
-        "internalType": "address",
-        "name": "addr",
-        "type": "address"
-      }
-    ],
-    "name": "getColState",
-    "outputs": [
-      {
-        "internalType": "enum Collateral.State",
-        "name": "",
-        "type": "uint8"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "getFILETH",
-    "outputs": [
-      {
         "internalType": "uint256",
-        "name": "",
+        "name": "seed",
         "type": "uint256"
       }
     ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "addr",
-        "type": "address"
-      }
-    ],
-    "name": "updateFILValue",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "updateAllFILValue",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "getETHUSDC",
+    "name": "getRandFILCustodyAddr",
     "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "addr",
-        "type": "address"
-      }
-    ],
-    "name": "updateUSDCValue",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "updateAllUSDCValue",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "requestFILCustodyAddr",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
       {
         "internalType": "bytes32",
-        "name": "colAddrFIL",
-        "type": "bytes32"
-      },
-      {
-        "internalType": "address",
-        "name": "addr",
-        "type": "address"
-      }
-    ],
-    "name": "registerFILCustodyAddr",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "getAllFILCustodyAddr",
-    "outputs": [
-      {
-        "internalType": "bytes32[]",
         "name": "",
-        "type": "bytes32[]"
+        "type": "bytes32"
       }
     ],
     "stateMutability": "view",
@@ -943,19 +671,365 @@
     "inputs": [
       {
         "internalType": "uint256",
-        "name": "seed",
+        "name": "amt",
         "type": "uint256"
+      },
+      {
+        "internalType": "enum ProtocolTypes.Ccy",
+        "name": "ccy",
+        "type": "uint8"
+      },
+      {
+        "internalType": "address",
+        "name": "addr",
+        "type": "address"
       }
     ],
-    "name": "getRandFILCustodyAddr",
+    "name": "isCovered",
     "outputs": [
       {
-        "internalType": "bytes32",
+        "internalType": "bool",
         "name": "",
-        "type": "bytes32"
+        "type": "bool"
       }
     ],
     "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "enum ProtocolTypes.Ccy",
+        "name": "_ccy",
+        "type": "uint8"
+      },
+      {
+        "internalType": "address",
+        "name": "addr",
+        "type": "address"
+      }
+    ],
+    "name": "isLendingMarket",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "enum ProtocolTypes.Ccy",
+        "name": "",
+        "type": "uint8"
+      },
+      {
+        "internalType": "enum ProtocolTypes.Term",
+        "name": "",
+        "type": "uint8"
+      }
+    ],
+    "name": "lendingMarkets",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "borrower",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "liquiadtion",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "owner",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "borrower",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "lender",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "enum ProtocolTypes.Ccy",
+        "name": "ccy",
+        "type": "uint8"
+      }
+    ],
+    "name": "partialLiquidation",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "colAddrFIL",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "address",
+        "name": "addr",
+        "type": "address"
+      }
+    ],
+    "name": "registerFILCustodyAddr",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "enum ProtocolTypes.Ccy",
+        "name": "ccy",
+        "type": "uint8"
+      },
+      {
+        "internalType": "uint256",
+        "name": "amt",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "addr",
+        "type": "address"
+      }
+    ],
+    "name": "releaseCollateral",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "requestFILCustodyAddr",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "id",
+        "type": "string"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "userAddrFIL",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "address",
+        "name": "userAddrUSDC",
+        "type": "address"
+      }
+    ],
+    "name": "setColBook",
+    "outputs": [],
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "addr",
+        "type": "address"
+      }
+    ],
+    "name": "setFxMarketAddr",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "addr",
+        "type": "address"
+      }
+    ],
+    "name": "setLoanAddr",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "upSizeETH",
+    "outputs": [],
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "amtFIL",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "txHash",
+        "type": "bytes32"
+      }
+    ],
+    "name": "upSizeFIL",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "updateAllFILValue",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "updateAllState",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "updateAllUSDCValue",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "addr",
+        "type": "address"
+      }
+    ],
+    "name": "updateFILValue",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "addr",
+        "type": "address"
+      }
+    ],
+    "name": "updateState",
+    "outputs": [
+      {
+        "internalType": "enum ProtocolTypes.CollateralState",
+        "name": "",
+        "type": "uint8"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "addr",
+        "type": "address"
+      }
+    ],
+    "name": "updateUSDCValue",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "enum ProtocolTypes.Ccy",
+        "name": "ccy",
+        "type": "uint8"
+      },
+      {
+        "internalType": "uint256",
+        "name": "amt",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "addr",
+        "type": "address"
+      }
+    ],
+    "name": "useCollateral",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "enum ProtocolTypes.Ccy",
+        "name": "ccy",
+        "type": "uint8"
+      },
+      {
+        "internalType": "uint256",
+        "name": "amt",
+        "type": "uint256"
+      }
+    ],
+    "name": "withdrawCollaretal",
+    "outputs": [],
+    "stateMutability": "nonpayable",
     "type": "function"
   }
 ]

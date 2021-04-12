@@ -4,11 +4,13 @@ import { OrderBook } from './components/OrderBook'
 import Page from '../../components/Page'
 import YieldCurve from '../../components/YieldCurve'
 import theme from '../../theme'
-import OpenPositions from '../../components/OpenPositions'
 import LoanOrder from './components/LoanOrder'
 import { TradeHistory } from './components/TradeHistory'
 import { Balances } from './components/Balances'
-import { MarketInfo } from './components/MarketInfo'
+import MarketInfo from './components/MarketInfo'
+import { RootState } from '../../store/types'
+import { connect } from 'react-redux'
+import OrderHistory from './components/OrderHistory'
 
 const Exchange: React.FC = () => {
 
@@ -23,7 +25,7 @@ const Exchange: React.FC = () => {
 			<StyledCenterContainer>
 				<MarketInfo />
 				<YieldCurve />
-				<OpenPositions />
+				<OrderHistory />
 			</StyledCenterContainer>
 			<ScrollableSideContainer>
 				<OrderBook />
@@ -84,4 +86,5 @@ const StyledCenterContainer = styled.div`
 	}
 `
 
-export default Exchange
+const mapStateToProps = (state: RootState) => state.lendingTerminal
+export default connect(mapStateToProps)(Exchange)

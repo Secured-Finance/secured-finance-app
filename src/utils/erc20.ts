@@ -13,10 +13,10 @@ export const getContract = (provider: provider, address: string) => {
 	return contract
 }
 
-export const getAllowance = async (tokenContract: Contract, moneyMarketContract: Contract, account: string): Promise<string> => {
+export const getAllowance = async (tokenContract: Contract, lendingMarketContract: Contract, account: string): Promise<string> => {
 	try {
 		const allowance: string = await tokenContract.methods
-		.allowance(account, moneyMarketContract.options.address)
+		.allowance(account, lendingMarketContract.options.address)
 		.call()
 		return allowance
 	} catch (e) {
