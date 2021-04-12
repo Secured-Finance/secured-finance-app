@@ -12,72 +12,87 @@ import { useParams } from 'react-router-dom'
 import Container from '../../components/Container'
 import Page from '../../components/Page'
 import Spacer from '../../components/Spacer'
-import { useLoanState } from '../../hooks/useLoanHistory'
+import { useLoanInformation } from '../../hooks/useLoanHistory'
+import { useWallet } from 'use-wallet'
 
 interface LoanScreenProps {
     loan?: any
 }
 
-interface ScheduleItem {
-    date: number,
-    coupon: number,
+interface CouponPayment {
+    amount: number,
+    id: number | string,
+    isDone: boolean,
+    notice: number,
+    payment: number,
+    txHash: string,
+    __typename?: string,
 }
 
-interface NextCoupon {
-    dueDate: number,
-    notification: number,
-    coupon: number,
-    usdAmount: number,
-}
-
-const initCoupon: NextCoupon = {
-    dueDate: 1,
-    notification: 1,
-    coupon: 0,
-    usdAmount: 0,
+const initCoupon: CouponPayment = {
+    amount: 0,
+    id: 0,
+    isDone: false,
+    notice: 1648016979,
+    payment: 1649226579,
+    txHash: "0x",
+    __typename: "SchedulePayment",
 }
 
 type CombinedProps = LoanScreenProps
 
 const LoanScreen: React.FC<CombinedProps> = ({ }) => {
-    let params: any = useParams();
-    const loan: any = useLoanState(params.loanId);
-    const [schedule, setSchedule] = useState<Array<ScheduleItem>>([])
-    const [couponPayment, setCouponPayment] = useState<NextCoupon>(initCoupon)
+    const { account } = useWallet()
+    let params: any = useParams()
+    const loan = useLoanInformation(params.loanId)
+    const [couponPayment, setCouponPayment] = useState<CouponPayment>()
     const [counterpartyAddr, setCounterpartyAddr] = useState('')
     const dispatch = useDispatch()
     const filPrice = useSelector((state: RootState) => state.assetPrices.filecoin.price)
     const colBook = useCollateralBook(counterpartyAddr)
 
+    const getLoanCcy = () => {
+        switch (loan?.currency) {
+            case 0:
+                return 'ETH'
+            case 1:
+                return 'FIL'
+            case 2:
+                return 'USDC'
+            default: 
+                return ''
+        }
+    }
+
     const handleNotional = () => {
-        return ordinaryFormat(loan.amt) + " FIL"
+        return ordinaryFormat(loan?.amount) + ` ${getLoanCcy()}`
     }
 
     const handleInterest = () => {
-        const interestPayments = totalInterest(loan.amt, loan.rate, loan.term)
-        return ordinaryFormat(interestPayments) + " FIL"
+        const interestPayments = totalInterest(loan?.amount, loan?.rate, loan?.term)
+        return ordinaryFormat(interestPayments) + ` ${getLoanCcy()}`
     }
 
-    const totalInterest = (amount: number, rate: number, term: string) => {
+    const totalInterest = (amount: number, rate: number, term: number) => {
         let periods: number
         var interestRate = new BigNumber(rate).dividedBy(10000).toNumber()
         switch (term) {
-            case "0":
+            case 0:
                 periods = 0.25
                 break
-            case "1":
+            case 1:
                 periods = 0.5
                 break
-            case "2":
+            case 2:
                 periods = 1
                 break
-            case "3":
+            case 3:
                 periods = 2
                 break
-            case "4":
+            case 4:
                 periods = 3
                 break
-            case "5":
+            case 5:
                 periods = 5
                 break
             default: 
@@ -88,48 +103,38 @@ const LoanScreen: React.FC<CombinedProps> = ({ }) => {
     }
 
     const handleTotalRepay = () => {
-        const interestPayments = totalInterest(loan.amt, loan.rate, loan.term)
-        var totalRepay = new BigNumber(loan.amt).plus(interestPayments).toNumber()
-        return ordinaryFormat(totalRepay) + " FIL"
-    }
+        const interestPayments = totalInterest(loan?.amount, loan?.rate, loan?.term)
+        var totalRepay = new BigNumber(loan?.amount).plus(interestPayments).toNumber()
 
-    const constructSchedule = () => {
-        let parsedScheduleDates: Array<ScheduleItem> = []
-        for (var i = 0; i < loan.schedule[1].length; i++) {
-            const item: ScheduleItem = {
-                date: loan.schedule[1][i],
-                coupon: loan.schedule[2][i]
-            }
-            parsedScheduleDates.push(item)
-        }
-        setSchedule(parsedScheduleDates)    
+        return ordinaryFormat(totalRepay) + ` ${getLoanCcy()}`
     }
 
     const nextCouponPayment = () => {
-        var payment = loan.schedule[2][0]
-        const usdAmount = new BigNumber(payment).multipliedBy(filPrice).toNumber()
-        var nextCoupon: NextCoupon = {
-            dueDate: loan.schedule[1][0],
-            coupon: payment,
-            notification: loan.schedule[0][0],
-            usdAmount: usdAmount,
-        }
-        setCouponPayment(nextCoupon)
+        const payment: Array<CouponPayment> = loan?.schedule.payments?.filter((payment: any) => {
+            return payment.isDone == false
+        }) || []
+        setCouponPayment(payment[0])
+    }
+
+    const couponUsdPayment = (amount: number) => {
+        var usdPayment = new BigNumber(amount).multipliedBy(filPrice).toNumber()
+        return usdFormat(usdPayment)
     }
 
     const handleCounterpartyAddr = () => {
-        if (loan.side === "0") {
-            setCounterpartyAddr(loan.borrower)
+        if (loan?.side === 0) {
+            setCounterpartyAddr(loan?.borrower)
         } else {
-            setCounterpartyAddr(loan.lender)
+            setCounterpartyAddr(loan?.lender)
         }
     }
 
     useEffect(() => {
-        constructSchedule()
-        nextCouponPayment()
-        handleCounterpartyAddr()
-    }, [dispatch, setSchedule, setCouponPayment, setCounterpartyAddr, loan])
+        if (loan != null) {
+            nextCouponPayment()
+            handleCounterpartyAddr()
+        }
+    }, [dispatch, setCouponPayment, setCounterpartyAddr, loan])
 
 	return (
 		<Page background={theme.colors.background}>
@@ -153,31 +158,31 @@ const LoanScreen: React.FC<CombinedProps> = ({ }) => {
                             <StyledRowContainer marginTop={"10px"}>
                                 <StyledItemText>Start Date</StyledItemText>
                                 <StyledItemText>
-                                    {formatDate(loan.start)}
+                                    {formatDate(loan?.startTimestamp)}
                                 </StyledItemText>
                             </StyledRowContainer>
                             <StyledRowContainer marginTop={"10px"}>
                                 <StyledItemText>Maturity Date</StyledItemText>
                                 <StyledItemText>
-                                    {formatDate(loan.end)}
+                                    {formatDate(loan?.endTimestamp)}
                                 </StyledItemText>
                             </StyledRowContainer>
                             <StyledRowContainer marginTop={"10px"}>
                                 <StyledItemText>Term</StyledItemText>
                                 <StyledItemText>
-                                    <RenderTerms index={loan.term} />
+                                    <RenderTerms index={loan?.term} />
                                 </StyledItemText>
                             </StyledRowContainer>
                             <StyledRowContainer marginTop={"10px"}>
                                 <StyledItemText>Interest Rate</StyledItemText>
                                 <StyledItemText>
-                                    {percentFormat(loan.rate, 10000)}
+                                    {percentFormat(loan?.rate, 10000)}
                                 </StyledItemText>
                             </StyledRowContainer>
                             <StyledRowContainer marginTop={"10px"}>
                                 <StyledItemText>Daily Interest Rate</StyledItemText>
                                 <StyledItemText>
-                                    {percentFormat(loan.rate, 3650000)}
+                                    {percentFormat(loan?.rate, 3650000)}
                                 </StyledItemText>
                             </StyledRowContainer>
                             <StyledRowContainer marginTop={"10px"}>
@@ -199,11 +204,11 @@ const LoanScreen: React.FC<CombinedProps> = ({ }) => {
                     <StyledLabelTitle textTransform={"capitalize"}>Payment Schedule</StyledLabelTitle>
                     <StyledItemContainer marginBottom={"0px"} background={"none"}>
                         {
-                            schedule.map((item, i) => (
+                            loan?.schedule.payments?.map((item: CouponPayment, i: number) => (
                                 <StyledRowContainer key={i} marginTop={"10px"}>
-                                <StyledItemText>{formatDate(item.date)}</StyledItemText>
+                                <StyledItemText>{formatDate(item.payment)}</StyledItemText>
                                 <StyledItemText>
-                                    {ordinaryFormat(item.coupon) + ' FIL'}
+                                    {ordinaryFormat(item.amount) + ` ${getLoanCcy()}`}
                                 </StyledItemText>
                                 </StyledRowContainer>
                             ))
@@ -231,21 +236,21 @@ const LoanScreen: React.FC<CombinedProps> = ({ }) => {
                         <StyledLabelTitle textTransform={"capitalize"}>Next Coupon Payment</StyledLabelTitle>
                         <StyledItemContainer marginBottom={"0px"} background={"none"}>
                             <StyledRowContainer>
-                                <StyledItemText fontSize={16} fontWeight={600}>{ordinaryFormat(couponPayment.coupon) + " FIL"}</StyledItemText>
+                                <StyledItemText fontSize={16} fontWeight={600}>{ordinaryFormat(couponPayment?.amount) + ` ${getLoanCcy()}`}</StyledItemText>
                                 <StyledItemText color={theme.colors.gray}>
-                                    {usdFormat(couponPayment.usdAmount)}
+                                    {couponUsdPayment(couponPayment?.amount)}
                                 </StyledItemText>
                             </StyledRowContainer>
                             <StyledRowContainer marginTop={"10px"}>
                                 <StyledItemText fontSize={12} opacity={0.9} fontWeight={400}>Payment Notification</StyledItemText>
                                 <StyledItemText fontSize={12} fontWeight={400}>
-                                    {formatDate(couponPayment.notification)}
+                                    {formatDate(couponPayment?.notice)}
                                 </StyledItemText>
                             </StyledRowContainer>
                             <StyledRowContainer marginTop={"10px"}>
                                 <StyledItemText fontSize={12} opacity={0.9} fontWeight={400}>Payment Due Date</StyledItemText>
                                 <StyledItemText fontSize={12} fontWeight={400}>
-                                    {formatDate(couponPayment.dueDate)}
+                                    {formatDate(couponPayment?.payment)}
                                 </StyledItemText>
                             </StyledRowContainer>
                             <Button 
@@ -276,7 +281,7 @@ const LoanScreen: React.FC<CombinedProps> = ({ }) => {
                                     </StyledItemText>
                                 </StyledRowContainer>
                                 <StyledRowContainer marginTop={"10px"}>
-                                    <StyledItemText>FIL Address</StyledItemText>
+                                    <StyledItemText>{getLoanCcy()} Address</StyledItemText>
                                     <StyledItemText>
                                         {formatAddress(colBook[0].filAddr, 24)}
                                     </StyledItemText>

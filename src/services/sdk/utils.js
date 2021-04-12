@@ -7,8 +7,8 @@ BigNumber.config({
 })
 
 // Contract addresses
-export const getMoneyMarketAddress = (securedFinance) => {
-	return securedFinance && securedFinance.moneyMarket
+export const getLendingControllerAddress = (securedFinance) => {
+	return securedFinance && securedFinance.lendingController
 }
 export const getLoanAddress = (securedFinance) => {
   	return securedFinance && securedFinance.loan
@@ -22,10 +22,38 @@ export const getCollateralAddress = (securedFinance) => {
 export const getUsdcAddress = (securedFinance) => {
 	return securedFinance && securedFinance.usdc
 }
+export const getLendingMarketAddress = (securedFinance, ccyIndex, termIndex) => {
+	let marketAddr
+	securedFinance ? securedFinance.contracts.lendingMarkets.map(({ccy, markets}) => {
+		if (ccy == ccyIndex) {
+			markets.map(market => {
+				if (market.term == termIndex) {
+					marketAddr = market.lendingMarketAddress
+				}
+			})
+		}
+	}) : marketAddr = ''
+
+	return securedFinance && marketAddr
+}
 
 // Contract objects
-export const getMoneyMarketContract = (securedFinance) => {
-  	return securedFinance && securedFinance.contracts && securedFinance.contracts.moneyMarket
+export const getLendingControllerContract = (securedFinance) => {
+  	return securedFinance && securedFinance.contracts && securedFinance.contracts.lendingController
+}
+export const getLendingMarketContract = (securedFinance, ccyIndex, termIndex) => {
+	let marketContract
+	securedFinance ? securedFinance.contracts.lendingMarkets.map(({ccy, markets}) => {
+		if (ccy == ccyIndex) {
+			markets.map(market => {
+				if (market.term == termIndex) {
+					marketContract = market.lendingMarket
+				}
+			})
+		}
+	}) : marketContract = null
+
+	return securedFinance && marketContract
 }
 export const getLoanContract = (securedFinance) => {
   	return securedFinance && securedFinance.contracts && securedFinance.contracts.loan
@@ -41,9 +69,9 @@ export const getUsdcContract = (securedFinance) => {
 }
 
 // Approve USDC spending from user account to money market
-export const approve = async (usdcContract, moneyMarketContract, account) => {
+export const approve = async (usdcContract, LendingMarket, account) => {
 	return usdcContract.methods
-		.approve(moneyMarketContract.options.address, ethers.constants.MaxUint256)
+		.approve(LendingMarket.options.address, ethers.constants.MaxUint256)
 		.send({ from: account })
 }
 
@@ -51,36 +79,32 @@ export const getUsdcBalance = async (usdcContract, account) => {
   	return new BigNumber(await usdcContract.methods.balanceOf(account).call())
 }
 
-export const getLenderRates = async (moneyMarketContract) => {
-  	return moneyMarketContract.methods.getLenderRates().call()
+export const getLenderRates = async (lendingController, ccy) => {
+  	return lendingController.methods.getLendRatesForCcy(ccy).call()
 }
 
-export const getBorrowerRates = async (moneyMarketContract) => {
-  	return moneyMarketContract.methods.getBorrowerRates().call()
+export const getBorrowerRates = async (lendingController, ccy) => {
+  	return lendingController.methods.getBorrowRatesForCcy(ccy).call()
 }
 
-export const getMidRates = async (moneyMarketContract) => {
-  	return moneyMarketContract.methods.getMidRates().call()
+export const getMidRates = async (lendingController, ccy) => {
+  	return lendingController.methods.getMidRatesForCcy(ccy).call()
 }
 
-export const getDiscountFactors = async (moneyMarketContract) => {
-  	return moneyMarketContract.methods.getDiscountFactors().call()
+export const getDiscountFactors = async (lendingController, ccy) => {
+  	return lendingController.methods.getDiscountFactorsForCcy(ccy).call()
 }
 
 export const getLoansHistory = async (loanContract, account) => {
-  	return loanContract.methods.getOneBook(account).call()
+	return loanContract.methods.getOneBook(account).call()
 }
 
-export const getBorrowHistory = async (loanContract, account) => {
-	return loanContract.methods.getBorrowerBook(account).call()
+export const getAllLoanBooks = async (loanContract) => {
+	return loanContract.methods.getAllBooks().call()
 }
 
 export const getLoanInfo = async (loanContract, id) => {
 	return loanContract.methods.getLoanItem(id).call()
-}
-
-export const getBestBook = async (moneyMarketContract) => {
-  	return moneyMarketContract.methods.getBestBook().call()
 }
 
 export const getFxRates = async (fxMarketContract) => {
@@ -121,10 +145,10 @@ export const setUpCollateral = async (collateralContract, id, filAddr, account, 
 		})
 }
 
-export const executeLoan = async (loanContract, account, makerAddr, side, currency, term, amount) => {
-	return loanContract.methods
-		.makeLoanDeal(makerAddr, side, currency, term, amount)
-		.send({ from: account})
+export const placeOrder = async (lendingMarketContract, account, side, amount, rate, deadline) => {
+	return lendingMarketContract.methods
+		.order(side, amount, rate, deadline)
+		.send({ from: account })
 		.on('transactionHash', (tx) => {
 			console.log(tx)
 			return tx.transactionHash

@@ -1,7 +1,23 @@
 export interface HistoryStore {
-    lendingHistory: Array<HistoryTableData>
-    borrowingHistory: Array<HistoryTableData>
+    lendingHistory: Array<HistoryTableData2>
+    borrowingHistory: Array<HistoryTableData2>
     isLoading: boolean
+}
+
+export interface HistoryTableData2 {
+    id: number,
+    lender: string,
+    borrower: string,
+    side: number,
+    rate: number,
+    currency: number,
+    term: number,
+    presentValue: number,
+    amount: number,
+    couponPayment: number,
+    state: number,
+    startTimestamp: number,
+    endTimestamp: number,
 }
 
 export interface HistoryTableData {

@@ -1,27 +1,27 @@
 import React from "react";
 import styled from "styled-components";
+import { TradingHistoryRow } from "../../../../store/lendingTerminal";
 import theme from "../../../../theme";
-import { formatTime, ordinaryFormat } from "../../../../utils";
-import { Trades } from "./types";
+import { formatTime, ordinaryFormat, percentFormat } from "../../../../utils";
 
 interface OrderTypeProps {
-    trades: Array<Trades>,
+    trades: Array<TradingHistoryRow>,
 }
 
 const TradesTable: React.FC<OrderTypeProps> = ({ trades }) => {
-    const rows = trades.map(({rate, amount, time, side}, i) => {
+    const rows = trades.map(({rate, amount, createdAtTimestamp, side}, i) => {
         const txtColor = side === 0 ? theme.colors.red3 : theme.colors.green;
 
         return (
             <StyledOrderRow key={i}>
                 <StyledOrderRowText textColor={txtColor}>
-                    {ordinaryFormat(rate)}
+                    {percentFormat(rate, 10000)}
                 </StyledOrderRowText>
                 <StyledOrderRowText textAlign={"right"}>
                     {ordinaryFormat(amount)}
                 </StyledOrderRowText>
                 <StyledOrderRowText textAlign={"right"}>
-                    {formatTime(time)}
+                    {formatTime(createdAtTimestamp)}
                 </StyledOrderRowText>
             </StyledOrderRow>
         );

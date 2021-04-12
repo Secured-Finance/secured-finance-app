@@ -3,7 +3,7 @@ import { defaults, Line } from "react-chartjs-2";
 import styled from "styled-components";
 import { useRates } from "../../hooks/useRates";
 import useSF from "../../hooks/useSecuredFinance";
-import { getMoneyMarketContract } from "../../services/sdk/utils";
+import { getLendingControllerContract } from "../../services/sdk/utils";
 import Terms from "../Terms";
 import { chartOptions } from "./chartOptions";
 import theme from '../../theme'
@@ -20,11 +20,11 @@ export default function YieldCurve() {
 	const [currencyIndex, setCurrencyIndex] = useState(1)
 	const [lineData, setLineData] = useState({});
 	const securedFinance = useSF()
-	const moneyMarketContract = getMoneyMarketContract(securedFinance)
+	const lendingControllerContract = getLendingControllerContract(securedFinance)
 
-	const borrowRates = useRates(moneyMarketContract, 0)
-	const lendingRates = useRates(moneyMarketContract, 1)
-	const midRate = useRates(moneyMarketContract, 2)
+	const borrowRates = useRates(lendingControllerContract, 0, currencyIndex)
+	const lendingRates = useRates(lendingControllerContract, 1, currencyIndex)
+	const midRate = useRates(lendingControllerContract, 2, currencyIndex)
 
 	defaults.global.defaultFontColor = theme.colors.cellKey;
 
@@ -43,7 +43,7 @@ export default function YieldCurve() {
 	purpleGradient.addColorStop(1, "rgba(15, 26, 34, 0.1)");
 	
 	const convertArray = (array: Array<any>) => {
-		const newArray = array[currencyIndex].slice()
+		const newArray = array.slice()
 		newArray.unshift(0)
 		return newArray.map((r:any) => r/100)
 	}

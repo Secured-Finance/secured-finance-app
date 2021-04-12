@@ -1,14 +1,19 @@
 import React, {HTMLAttributes, useState} from 'react'
+import { connect } from 'react-redux';
 import styled  from 'styled-components'
-import theme from '../../theme';
-import PositionsTable from './PositionsTable';
+import { LendingTerminalStore } from '../../../../store/lendingTerminal';
+import { RootState } from '../../../../store/types';
+import theme from '../../../../theme';
+import { FilledOrders } from './components/FilledOrders';
+import { OpenOrders } from './components/Orders';
 
-interface OpenPositionsProps {
-}
+interface OrderHistoryProps {}
 
-const OpenPositions: React.FC<OpenPositionsProps> = () => {
-    const ordersTabs = ["Open Positions", "Orders", "Trading History"];
-    const [selectedTab, setSelectedTab] = useState("Open Positions")
+type MergedProps = LendingTerminalStore & OrderHistoryProps
+
+const OrderHistory: React.FC<MergedProps> = ({ currencyIndex, termsIndex }) => {
+    const ordersTabs = ["Open Orders", "Trading History"];
+    const [selectedTab, setSelectedTab] = useState("Open Orders")
 
     const handleChange = (tab: React.SetStateAction<string>) => () => {
         setSelectedTab(tab);
@@ -27,7 +32,12 @@ const OpenPositions: React.FC<OpenPositionsProps> = () => {
                 </TableTab>
             ))}
         </TableTabs>
-        <PositionsTable />
+        { 
+            selectedTab === "Open Orders" ? 
+            <OpenOrders ccy={currencyIndex} term={termsIndex}/>
+            :
+            <FilledOrders ccy={currencyIndex} term={termsIndex}/>
+        }
         </StyledPositionsComponent>
     );
 }
@@ -61,4 +71,5 @@ const TableTab = styled.div<ITableTab>`
   cursor: ${(props) => props.isSelected ? 'default' : 'pointer' };
 `
 
-export default OpenPositions;
+const mapStateToProps = (state: RootState) => state.lendingTerminal
+export default connect(mapStateToProps)(OrderHistory)

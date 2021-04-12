@@ -8,8 +8,8 @@ import { RootState } from '../../../store/types';
 import { connect, useDispatch, useSelector } from 'react-redux';
 import { LendingStore } from '../../../store/lending/types';
 import { updateLendAmount, updateLendRate, updateMainCurrency, updateMainTerms } from '../../../store/lending';
-import { useExecuteLoan } from '../../../hooks/useExecuteLoan';
-import { terms, currencyList, percentFormat, formatInput } from '../../../utils';
+import { terms, currencyList, percentFormat, formatInput, usdFormat } from '../../../utils';
+import { usePlaceOrder } from '../../../hooks/usePlaceOrder';
 
 interface LendTabProps {
     lendingRates: any[]
@@ -46,20 +46,20 @@ const Lend: React.FC<CombinedProps> = ({ lendingRates, selectedCcy, selectedCcyN
         setTermsOpen(!termsOpen)
     },[dispatch, setTermsOpen])
 
-    const { onLoanDeal } = useExecuteLoan('0x5C8675aF5082c30423cA831790B450a800f988d8', 0, currencyIndex, termsIndex, lendAmount)
+    const { onPlaceOrder } = usePlaceOrder(currencyIndex, termsIndex, 0, lendAmount, lendRate)
     const handleLendDeal = useCallback(async () => {
         try {
             setPendingTx(true)
-            await onLoanDeal()
+            await onPlaceOrder()
             setPendingTx(false)
         } catch (e) {
             console.log(e)
         }
-    }, [onLoanDeal, setPendingTx])
+    }, [onPlaceOrder, setPendingTx])
 
     const getLendRateForTerm = useEffect(() => {
         if (lendingRates.length > 0) {
-            dispatch(updateLendRate(lendingRates[currencyIndex][termsIndex]))
+            dispatch(updateLendRate(lendingRates[termsIndex]))
         }
     }, [dispatch, currencyIndex, termsIndex])
 
@@ -74,11 +74,11 @@ const Lend: React.FC<CombinedProps> = ({ lendingRates, selectedCcy, selectedCcyN
     const TotalUsdAmount = useMemo(() => {
         switch (selectedCcy) {
             case "FIL":
-                return (lendAmount*filPrice).toFixed(2)
+                return (lendAmount*filPrice)
             case "ETH":
-                return (lendAmount*ethPrice).toFixed(2)
+                return (lendAmount*ethPrice)
             case "USDC":
-                return (lendAmount*usdcPrice).toFixed(2)
+                return (lendAmount*usdcPrice)
             default: 
                 return 0
         }
@@ -103,7 +103,7 @@ const Lend: React.FC<CombinedProps> = ({ lendingRates, selectedCcy, selectedCcyN
                 break
         }
         let compoundInterest = usdAmount * p
-        return compoundInterest.toFixed(2)
+        return compoundInterest
     },[termsIndex, currencyIndex, lendRate, lendAmount])
 
     const handleLend = useCallback((e: React.FormEvent<HTMLInputElement>) => {
@@ -120,7 +120,7 @@ const Lend: React.FC<CombinedProps> = ({ lendingRates, selectedCcy, selectedCcyN
                 <StyledInputContainer>
                     <StyledLabelContainer>
                         <StyledLoanLabel marginBottom={4} color={theme.colors.white} textTransform={"capitalize"} fontSize={16}>{selectedCcyName}</StyledLoanLabel>
-                        <StyledLoanLabel fontWeight={400} marginBottom={4} textTransform={"capitalize"} fontSize={16}>~ ${TotalUsdAmount}</StyledLoanLabel>
+                        <StyledLoanLabel fontWeight={400} marginBottom={4} textTransform={"capitalize"} fontSize={16}>~ {usdFormat(TotalUsdAmount)}</StyledLoanLabel>
                     </StyledLabelContainer>
                     <StyledCurrencyInput>
                         <CurrencySelector 
@@ -176,7 +176,7 @@ const Lend: React.FC<CombinedProps> = ({ lendingRates, selectedCcy, selectedCcyN
                         <StyledLoanInput 
                             placeholder={'0'}
                             value={percentFormat(lendRate, 10000)}
-                            disabled={true}
+                            // disabled={true}
                         />
                     </StyledCurrencyInput>
                 </StyledInputContainer>
@@ -210,7 +210,7 @@ const Lend: React.FC<CombinedProps> = ({ lendingRates, selectedCcy, selectedCcyN
             </StyledButtonContainer>
             <StyledLabelContainer>
                 <StyledLoanLabel fontWeight={400} textTransform={"capitalize"}>Estimated returns</StyledLoanLabel>
-                <StyledLoanLabel fontSize={12} fontWeight={400} textTransform={"capitalize"} color={theme.colors.green}>{estimatedReturns}$</StyledLoanLabel>
+                <StyledLoanLabel fontSize={12} fontWeight={400} textTransform={"capitalize"} color={theme.colors.green}>{usdFormat(estimatedReturns)}</StyledLoanLabel>
             </StyledLabelContainer>
             <StyledLabelContainer>
                 <StyledLoanLabel fontWeight={400} textTransform={"capitalize"}>Transaction fee</StyledLoanLabel>

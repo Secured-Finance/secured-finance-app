@@ -3,7 +3,7 @@ export const usdFormat = (number: number) => {
 }
 
 export const percentFormat = (number: any, dividedBy: number = 100) => {
-    return Intl.NumberFormat('en-US', { style: "percent", maximumFractionDigits: 2 }).format(number/dividedBy)
+    return number != 0 ? Intl.NumberFormat('en-US', { style: "percent", maximumFractionDigits: 2 }).format(number/dividedBy) : '0 %'
 }
 
 export const ordinaryFormat = (number: any, decimals: number = 2) => {

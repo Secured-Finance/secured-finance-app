@@ -1,21 +1,10 @@
 import React from 'react'
 import styled from 'styled-components'
 import { useTable } from 'react-table'
-import { positionsTableColumns } from './types'
-import { testData } from './testData'
+import { filledTableCollumns } from './types'
 
-const STATE = [
-	"REGISTERED",
-	"WORKING",
-	"DUE",
-	"PAST_DUE",
-	"CLOSED",
-	"TERMINATED",
-];  
-
-function PositionsTable() {
-	const columns = React.useMemo(() => positionsTableColumns,[])
-	const data = React.useMemo(() => testData,[])
+function OrdersTable({table}) {
+	const columns = React.useMemo(() => filledTableCollumns,[])
 	const {
 		getTableProps,
 		getTableBodyProps,
@@ -23,7 +12,7 @@ function PositionsTable() {
 		rows,
 		prepareRow,
 	} = useTable(
-		{ columns, data },
+		{ columns, data:table },
 	)
 
 	return (
@@ -105,4 +94,4 @@ const StyledTableBodyItem = styled.td`
 	font-weight: 500;
 `
 
-export default PositionsTable
+export default OrdersTable
