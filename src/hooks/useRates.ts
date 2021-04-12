@@ -4,7 +4,7 @@ import { getBorrowerRates, getLenderRates, getMidRates } from '../services/sdk/u
 import useBlock from './useBlock'
 import { Contract } from 'web3-eth-contract'
 
-export const useRates = (moneyMarketContract: Contract, type: number) => {
+export const useRates = (lendingControllerContract: Contract, type: number, ccy: number) => {
     const block = useBlock()
     const [rates, setRates] = useState(new Array)
 
@@ -12,27 +12,27 @@ export const useRates = (moneyMarketContract: Contract, type: number) => {
         let rates: Array<any>
         switch (type) {
             case 0:
-                rates = await getBorrowerRates(moneyMarketContract)
+                rates = await getBorrowerRates(lendingControllerContract, ccy)
                 break
             case 1:
-                rates = await getLenderRates(moneyMarketContract)
+                rates = await getLenderRates(lendingControllerContract, ccy)
                 break
             case 2:
-                rates = await getMidRates(moneyMarketContract)
+                rates = await getMidRates(lendingControllerContract, ccy)
                 break
             default:
                 break
-        }    
+        }
         await setRates(rates)
-    }, [moneyMarketContract])
+    }, [lendingControllerContract, ccy])
 
     useEffect(() => {
         let isMounted = true;
-        if (moneyMarketContract) {
+        if (lendingControllerContract) {
             fetchBorrowRates(isMounted)
         }
         return () => { isMounted = false };
-    }, [block, setRates, moneyMarketContract])
+    }, [block, setRates, lendingControllerContract, ccy])
 
     return rates
 }

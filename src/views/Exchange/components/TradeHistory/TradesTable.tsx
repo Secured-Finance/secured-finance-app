@@ -1,49 +1,43 @@
 import React from "react";
 import styled from "styled-components";
+import { TradingHistoryRow } from "../../../../store/lendingTerminal";
 import theme from "../../../../theme";
-import { formatTime, ordinaryFormat } from "../../../../utils";
-import { Trades } from "./types";
+import { formatTime, ordinaryFormat, percentFormat } from "../../../../utils";
 
 interface OrderTypeProps {
-    trades: Array<Trades>,
+    trades: Array<TradingHistoryRow>,
 }
 
 const TradesTable: React.FC<OrderTypeProps> = ({ trades }) => {
-    const rows = trades.map(({ rate, amount, time, side }, i) => {
+    const rows = trades.map(({rate, amount, createdAtTimestamp, side}, i) => {
         const txtColor = side === 0 ? theme.colors.red3 : theme.colors.green;
 
         return (
             <StyledOrderRow key={i}>
                 <StyledOrderRowText textColor={txtColor}>
-                    {ordinaryFormat(rate)}
+                    {percentFormat(rate, 10000)}
                 </StyledOrderRowText>
                 <StyledOrderRowText textAlign={"right"}>
                     {ordinaryFormat(amount)}
                 </StyledOrderRowText>
                 <StyledOrderRowText textAlign={"right"}>
-                    {formatTime(time)}
+                    {formatTime(createdAtTimestamp)}
                 </StyledOrderRowText>
             </StyledOrderRow>
         );
     });
 
     return (
-        <StyledOrderType>
+        <div>
             <StyledOrderBookHeader>
                 <StyledOrderBookHeaderItem>Rate (%)</StyledOrderBookHeaderItem>
                 <StyledOrderBookHeaderItem textAlign={"right"}>Amount (FIL)</StyledOrderBookHeaderItem>
                 <StyledOrderBookHeaderItem textAlign={"right"}>Time</StyledOrderBookHeaderItem>
             </StyledOrderBookHeader>
-            <StyledOrderRows>{rows}</StyledOrderRows>
-        </StyledOrderType>
+            <div>{rows}</div>
+        </div>
     );
 }
-
-const StyledOrderType = styled.div`
-    margin-bottom: ${(props) => props.theme.spacing[2]}px;;
-`
-
-const StyledOrderRows = styled.div``
 
 const StyledOrderRow = styled.div`
 	text-transform: uppercase;
@@ -77,7 +71,7 @@ const StyledOrderBookHeader = styled.div`
     text-transform: uppercase;
     display: grid;
 	grid-template-columns: 1fr 1.5fr 1.5fr;
-    font-size: ${(props) => props.theme.sizes.caption4}px;
+    font-size: ${(props) => props.theme.sizes.caption5}px;
     padding: 6px 0;
 `
 
@@ -86,7 +80,7 @@ interface StyledOrderBookHeaderItemProps {
 }
 
 const StyledOrderBookHeaderItem = styled.div<StyledOrderBookHeaderItemProps>`
-    color: ${(props) => props.theme.colors.gray};
+    color: ${(props) => props.theme.colors.cellKey};
     text-align: ${(props) => props.textAlign ? props.textAlign : "left"};
 `
 

@@ -2,7 +2,6 @@ import React, { useMemo, useState } from 'react'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
 import { useWallet } from 'use-wallet'
-import Container from '../../components/Container'
 import Page from '../../components/Page'
 import useCollateralBook from '../../hooks/useCollateralBook'
 import { useEthereumWalletStore } from '../../hooks/useEthWallet'
@@ -34,7 +33,7 @@ const Account: React.FC = () => {
 
 	return (
 		<Page background={theme.colors.background}>
-            <Container>
+            <AccountContainer>
             <StyledPortfolioBalance>
                 <StyledTitle>Total Portfolio Balance</StyledTitle>
                 <StyledBalanceContainer>
@@ -50,7 +49,7 @@ const Account: React.FC = () => {
                 <StyledTitle fontWeight={500} marginBottom={35}>Collateral Positions</StyledTitle>
                 <CollateralTable table={colBook}/>
             </StyledAccountContainer>
-            </Container>
+            </AccountContainer>
 		</Page>
 	)
 }
@@ -60,10 +59,23 @@ const StyledPortfolioBalance = styled.div`
     flex-direction: column;
 	// justify-content: space-between;
 	// align-items: center;
-	padding-top: 59px;
+	padding-top: ${(props) => props.theme.spacing[4]}px;
 	padding-bottom: 51px;
 	padding-left: ${(props) => props.theme.spacing[5]}px;
 	padding-right: ${(props) => props.theme.spacing[5]}px;  
+`
+
+const AccountContainer = styled.div`
+  margin: 0 auto;
+  padding: 0 ${props => props.theme.spacing[4]}px;
+  padding-bottom: ${props => props.theme.spacing[4]}px;
+  width: calc(100% - 48px);
+  height: calc(100vh - 96px);
+  overflow-y: auto;
+
+  ::-webkit-scrollbar {
+    display: none;
+  }
 `
 
 interface StyledAccountContainerProps {

@@ -1,4 +1,5 @@
-import MoneyMarketAbi from './abi/MoneyMarket.json'
+import LendingMarketControllerAbi from './abi/LendingMarketController.json'
+import LendingMarketAbi from './abi/LendingMarket.json'
 import LoanAbi from './abi/Loan.json'
 import FxMarketAbi from './abi/FxMarket.json'
 import CollateralAbi from './abi/Collateral.json'
@@ -7,6 +8,7 @@ import {
     contractsAddresses,
     SUBTRACT_GAS_LIMIT,
 } from './utils.js'
+import { lendingMarkets } from './utils'
 import * as Types from './types.js'
 
 export class Contracts {
@@ -19,11 +21,24 @@ export class Contracts {
         this.defaultGas = options.defaultGas
         this.defaultGasPrice = options.defaultGasPrice
 
-        this.moneyMarket = new this.web3.eth.Contract(MoneyMarketAbi)
+        this.lendingController = new this.web3.eth.Contract(LendingMarketControllerAbi)
         this.loan = new this.web3.eth.Contract(LoanAbi)
         this.fxMarket = new this.web3.eth.Contract(FxMarketAbi)
         this.collateral = new this.web3.eth.Contract(CollateralAbi)
         // this.usdc = new this.web3.eth.Contract(USDCAbi)
+
+        this.lendingMarkets = lendingMarkets.map((ccyMarkets) => {
+            return {
+                ccy : ccyMarkets.ccyIndex,
+                markets: ccyMarkets.markets.map((lendingMarket) => {
+                    return {
+                        term: lendingMarket.termIndex,
+                        lendingMarket: new this.web3.eth.Contract(LendingMarketAbi),
+                        lendingMarketAddress: lendingMarket.address
+                    }
+                })
+            }
+        })
 
         this.setProvider(provider, networkId)
         this.setDefaultAccount(this.web3.eth.defaultAccount)
@@ -36,15 +51,21 @@ export class Contracts {
         else console.error('Contract address not found in network', networkId)
     }
 
-    setProvider(this.moneyMarket, contractsAddresses.moneyMarket)
+    setProvider(this.lendingController, contractsAddresses.lendingController)
     setProvider(this.loan, contractsAddresses.loan)
     setProvider(this.fxMarket, contractsAddresses.fxMarket)
     setProvider(this.collateral, contractsAddresses.collateral)
         // setProvider(this.usdc, contractsAddresses.usdc[networkId])
+
+    this.lendingMarkets.forEach((ccyMarket) => {
+        ccyMarket.markets.forEach(({lendingMarket, lendingMarketAddress}) => {
+            setProvider(lendingMarket, lendingMarketAddress)
+        })
+    })
   }
 
     setDefaultAccount(account) {
-        this.moneyMarket.options.from = account
+        this.lendingController.options.from = account
     }
 
     async setGasLimit() {

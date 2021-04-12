@@ -1,0 +1,238 @@
+[
+    {
+      "inputs": [],
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "enum ProtocolTypes.Ccy",
+          "name": "ccy",
+          "type": "uint8"
+        },
+        {
+          "indexed": false,
+          "internalType": "enum ProtocolTypes.Term",
+          "name": "term",
+          "type": "uint8"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "marketAddr",
+          "type": "address"
+        }
+      ],
+      "name": "LendingMarketCreated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "oldOwner",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "OwnerChanged",
+      "type": "event"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "enum ProtocolTypes.Ccy",
+          "name": "_ccy",
+          "type": "uint8"
+        },
+        {
+          "internalType": "enum ProtocolTypes.Term",
+          "name": "_term",
+          "type": "uint8"
+        }
+      ],
+      "name": "deployLendingMarket",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "market",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "enum ProtocolTypes.Ccy",
+          "name": "_ccy",
+          "type": "uint8"
+        }
+      ],
+      "name": "getBorrowRatesForCcy",
+      "outputs": [
+        {
+          "internalType": "uint256[6]",
+          "name": "rates",
+          "type": "uint256[6]"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "enum ProtocolTypes.Ccy",
+          "name": "_ccy",
+          "type": "uint8"
+        }
+      ],
+      "name": "getDiscountFactorsForCcy",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "uint256",
+              "name": "df3m",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "df6m",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "df1y",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "df2y",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "df3y",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "df4y",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "df5y",
+              "type": "uint256"
+            }
+          ],
+          "internalType": "struct ProtocolTypes.DiscountFactor",
+          "name": "",
+          "type": "tuple"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "enum ProtocolTypes.Ccy",
+          "name": "_ccy",
+          "type": "uint8"
+        }
+      ],
+      "name": "getLendRatesForCcy",
+      "outputs": [
+        {
+          "internalType": "uint256[6]",
+          "name": "rates",
+          "type": "uint256[6]"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "enum ProtocolTypes.Ccy",
+          "name": "_ccy",
+          "type": "uint8"
+        }
+      ],
+      "name": "getMidRatesForCcy",
+      "outputs": [
+        {
+          "internalType": "uint256[6]",
+          "name": "rates",
+          "type": "uint256[6]"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "enum ProtocolTypes.Ccy",
+          "name": "",
+          "type": "uint8"
+        },
+        {
+          "internalType": "enum ProtocolTypes.Term",
+          "name": "",
+          "type": "uint8"
+        }
+      ],
+      "name": "lendingMarkets",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "owner",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_owner",
+          "type": "address"
+        }
+      ],
+      "name": "setOwner",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ]

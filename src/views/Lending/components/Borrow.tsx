@@ -7,9 +7,9 @@ import { RootState } from '../../../store/types';
 import { connect, useDispatch, useSelector } from 'react-redux';
 import { updateBorrowAmount, updateMainCurrency, updateBorrowRate, updateCollateralAmount, updateMainCollateralCurrency, updateMainTerms } from '../../../store/lending';
 import { useSetUpCollateral } from '../../../hooks/useSetUpCollateral';
-import { useExecuteLoan } from '../../../hooks/useExecuteLoan';
+import { usePlaceOrder } from '../../../hooks/usePlaceOrder';
 import { useUpsizeCollateral } from '../../../hooks/useUpSizeCollateral';
-import { terms, collateralList, currencyList, percentFormat, formatInput } from '../../../utils';
+import { terms, collateralList, currencyList, percentFormat, formatInput, usdFormat } from '../../../utils';
 import CurrencySelector from '../../../components/CurrencySelector';
 import TermsSelector from '../../../components/TermsSelector';
 
@@ -46,16 +46,16 @@ const Borrow: React.FC<CombinedProps> = ({ borrowRates, selectedCcy, selectedCcy
     }, [onSetUpCollateral, setRequestedCollateral])
 
     const { onUpsizeCollateral } = useUpsizeCollateral(collateralAmount, 0)
-    const { onLoanDeal } = useExecuteLoan('0x4f9c57D70a2Dd981cDa60262736a3Fd9517088aB', 1, currencyIndex, termsIndex, borrowAmount)
+    const { onPlaceOrder } = usePlaceOrder(currencyIndex, termsIndex, 1, borrowAmount, borrowRate)
     const handleBorrowDeal = useCallback(async () => {
         try {
             setPendingTx(true)
-            await onLoanDeal()
+            await onPlaceOrder()
             setPendingTx(false)
         } catch (e) {
             console.log(e)
         }
-    }, [onLoanDeal])
+    }, [onPlaceOrder])
 
     const handleButtonClick = useCallback((buttonOpen:boolean) => {
         setButtonOpen(!buttonOpen)
@@ -86,7 +86,7 @@ const Borrow: React.FC<CombinedProps> = ({ borrowRates, selectedCcy, selectedCcy
 
     const getBorrowRateForTerm = useEffect(() => {
         if (borrowRates.length > 0) {
-            dispatch(updateBorrowRate(borrowRates[currencyIndex][termsIndex]))
+            dispatch(updateBorrowRate(borrowRates[termsIndex]))
         }
     }, [dispatch, currencyIndex, termsIndex])
 
@@ -101,11 +101,11 @@ const Borrow: React.FC<CombinedProps> = ({ borrowRates, selectedCcy, selectedCcy
     const TotalUsdAmount = useMemo(() => {
         switch (selectedCcy) {
             case "FIL":
-                return (borrowAmount*filPrice).toFixed(2)
+                return (borrowAmount*filPrice)
             case "ETH":
-                return (borrowAmount*ethPrice).toFixed(2)
+                return (borrowAmount*ethPrice)
             case "USDC":
-                return (borrowAmount*usdcPrice).toFixed(2)
+                return (borrowAmount*usdcPrice)
             default: 
                 return 0
         }
@@ -129,7 +129,7 @@ const Borrow: React.FC<CombinedProps> = ({ borrowRates, selectedCcy, selectedCcy
                 <StyledInputContainer>
                     <StyledLabelContainer>
                         <StyledLoanLabel marginBottom={4} color={theme.colors.white} textTransform={"capitalize"} fontSize={16}>{selectedCcyName}</StyledLoanLabel>
-                        <StyledLoanLabel fontWeight={400} marginBottom={4} textTransform={"capitalize"} fontSize={16}>~ ${TotalUsdAmount}</StyledLoanLabel>
+                        <StyledLoanLabel fontWeight={400} marginBottom={4} textTransform={"capitalize"} fontSize={16}>~ {usdFormat(TotalUsdAmount)}</StyledLoanLabel>
                     </StyledLabelContainer>
                     <StyledCurrencyInput>
                         <CurrencySelector selectedCcy={selectedCcy} onClick={() => handleButtonClick(buttonOpen)} />
@@ -182,7 +182,7 @@ const Borrow: React.FC<CombinedProps> = ({ borrowRates, selectedCcy, selectedCcy
                         <StyledLoanInput 
                             placeholder={'0'}
                             value={percentFormat(borrowRate, 10000)}
-                            disabled={true}
+                            // disabled={true}
                         />
                     </StyledCurrencyInput>
                 </StyledInputContainer>
@@ -253,7 +253,7 @@ const Borrow: React.FC<CombinedProps> = ({ borrowRates, selectedCcy, selectedCcy
                 <Button 
                     variant={'orange'} 
                     size={"lg"} 
-                    onClick={onUpsizeCollateral}
+                    onClick={handleBorrowDeal}
                     style={{fontSize:16, fontWeight: 600, background: 'rgba(0, 122, 255, 1)', color: theme.colors.white}}
                 > Borrow</Button>
                 {/* {

@@ -1,52 +1,27 @@
 import React from "react"
 import styled from "styled-components";
 import TradesTable from "./TradesTable"
-import { Trades } from "./types";
+import { Subheader } from "../../../../components/common/Subheader"
+import theme from "../../../../theme"
+import { useLendingTradingHistory } from "../../../../hooks/useLendingOrderbook";
+import { RootState } from "../../../../store/types";
+import { useSelector } from "react-redux";
 
 export const TradeHistory: React.FC = () => {
+    const ccyIndex = useSelector((state: RootState) => state.lendingTerminal.currencyIndex)
+    const termsIndex = useSelector((state: RootState) => state.lendingTerminal.termsIndex)
 
-    const generateRandomDOB = (): number => {
-        const random = getRandomDate(new Date('2020-02-12T01:57:45.271Z'), new Date('2021-02-12T01:57:45.271Z'))
-        return random.getTime();
-    }
-    
-    function getRandomDate(from: Date, to: Date) {
-        const fromTime = from.getTime();
-        const toTime = to.getTime();
-        return new Date(fromTime + Math.random() * (toTime - fromTime));
-    }
-
-    const testData = [...Array(10)].map((d, i) => {
-        const basisAmount = 3500 - i * 300;
-        const basisTime = generateRandomDOB();
-        const basisRate = 7.1 + i * 0.23;
-    
-        return {
-          rate: basisRate,
-          amount: basisAmount,
-          time: basisTime,
-          side: Math.round(Math.random())
-        }
-    }) as Array<Trades>
+    const tradeHistory = useLendingTradingHistory(ccyIndex, termsIndex)
     
     return (
         <StyledTradeHistory>
-            <StyledTradeHistoryTitle>Trade History</StyledTradeHistoryTitle>
-            <TradesTable trades={testData} />
+            <Subheader>Trade History</Subheader>
+            <TradesTable trades={tradeHistory} />
         </StyledTradeHistory>
     );
 }
 
 const StyledTradeHistory = styled.div`
     display: grid;
-`
-
-const StyledTradeHistoryTitle = styled.h6`
-	text-transform: capitalize;
-    font-size: ${(props) => props.theme.sizes.caption}px;
-    margin-bottom: ${(props) => props.theme.sizes.caption3}px;
-    margin-top: ${(props) => props.theme.sizes.callout}px;
-    font-weight: 600;
-    line-height: 15px;
-    color: ${props => props.theme.colors.white};
+    margin-top: ${theme.spacing[3]}px;
 `

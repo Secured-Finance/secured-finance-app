@@ -52,7 +52,7 @@ interface StyledSpreadItemTextProps {
 const StyledSpreadItemText = styled.p<StyledSpreadItemTextProps>`
 	font-size: ${(props) => props.fontSize ? props.fontSize : theme.sizes.caption5}px;
 	font-weight: ${(props) => props.fontWeight ? props.fontWeight : 400};
-	color: ${(props) => props.color ? props.color : theme.colors.gray};
+	color: ${(props) => props.color ? props.color : theme.colors.cellKey};
 	text-align: ${(props) => props.textAlign ? props.textAlign : 'left'};
 	margin: 0;
 	margin-top: ${(props) => props.marginTop ? props.marginTop : 0}px;
