@@ -1,6 +1,6 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import styled from 'styled-components'
-import { useWallet } from 'use-wallet'
+import { ChainUnsupportedError, useWallet } from 'use-wallet'
 import metamaskLogo from '../../../assets/img/metamask-fox.svg'
 import walletConnectLogo from '../../../assets/img/wallet-connect.svg'
 
@@ -10,14 +10,11 @@ import Spacer from '../../Spacer'
 import WalletCard from './WalletCard'
 
 const EthWalletConnector: React.FC<ModalProps> = ({ onDismiss }) => {
-	const { account, connect, error } = useWallet()
+	const { account, connect } = useWallet()
 
 	const handleConnect = useCallback(async (provider: "authereum" | "fortmatic" | "frame" | "injected" | "portis" | "squarelink" | "provided" | "torus" | "walletconnect" | "walletlink") => {
 		if (!account) {
-			connect(provider)
-			if (error?.name) {
-				alert('Unsupported network, please use Ropsten (Chain ID: 3)')
-			}
+			await connect(provider)
 			onDismiss()
 		}
     }, [account, onDismiss, connect])
