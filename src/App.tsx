@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react'
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
+import { HashRouter as Router, Route, Switch } from 'react-router-dom'
 import { ApolloProvider } from '@apollo/client/react';
 import { ThemeProvider } from 'styled-components'
 import { UseWalletProvider } from 'use-wallet'
