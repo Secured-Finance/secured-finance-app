@@ -1,6 +1,8 @@
-import React, { createContext, useEffect, useState } from 'react'
+import React, { createContext, useCallback, useEffect, useState } from 'react'
 
-import { useWallet } from 'use-wallet'
+import { ChainUnsupportedError, useWallet } from 'use-wallet'
+import WalletErrorModal from '../../components/WalletProviderModal/components/WalletErrorModal'
+import useModal from '../../hooks/useModal'
 
 import { SecuredFinance } from '../../services/sdk'
 
@@ -19,13 +21,19 @@ declare global {
 }
 
 const SecuredFinanceProvider: React.FC = ({ children }) => {
-  const { ethereum }: { ethereum: any } = useWallet()
+  const { ethereum, error, status }: { ethereum: any, error: any, status: any, connect: any } = useWallet()
   const [securedFinance, setSecuredFinance] = useState<any>()
 
   // @ts-ignore
   window.securedFinance = securedFinance
   // @ts-ignore
   window.eth = ethereum
+
+  const handleNetworkChanged = (networkId: string | number) => {
+    if (networkId != 3) {
+      alert('Unsupported network, please use Ropsten (Chain ID: 3)');
+    }
+  }
 
   useEffect(() => {
     if (ethereum) {
@@ -42,8 +50,24 @@ const SecuredFinanceProvider: React.FC = ({ children }) => {
       })
       setSecuredFinance(securedFinanceLib)
       window.securedFinanceSDK = securedFinanceLib
+
+      ethereum.on('networkChanged', handleNetworkChanged)
+
+      return () => {
+        if (ethereum.removeListener) {
+          ethereum.removeListener('networkChanged', handleNetworkChanged)
+        }
+      }
+
+    } else {
+      if (status === 'error') {
+        if (error instanceof ChainUnsupportedError) {
+            alert('Unsupported network, please use Ropsten (Chain ID: 3)')
+        }
+      }
     }
-  }, [ethereum])
+  }, [ethereum, status, error])
+
 
   return <Context.Provider value={{ securedFinance }}>{children}</Context.Provider>
 }
