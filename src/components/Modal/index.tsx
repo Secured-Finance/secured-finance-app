@@ -49,8 +49,9 @@ const StyledModal = styled.div`
   display: flex;
   flex-direction: column;
   position: relative;
-  width: 100%;
+  width: 645px;
   min-height: 0;
+  max-width: 645px;
 `
 
 export default Modal

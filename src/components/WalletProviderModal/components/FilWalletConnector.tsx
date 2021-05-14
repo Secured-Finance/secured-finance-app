@@ -10,10 +10,16 @@ import WalletCard from './WalletCard'
 import useModal from '../../../hooks/useModal'
 import MnemonicModal from './MnemonicModal'
 import PrivateKeyModal from './PrivateKeyModal'
+import ledgerLogo from "../../../assets/img/ledger.svg";
 
 const FilWalletConnector: React.FC<ModalProps> = ({ onDismiss }) => {
     const [onMnemonicModal] = useModal(<MnemonicModal />)
     const [onPrivateKeyModal] = useModal(<PrivateKeyModal />)
+
+
+	const handleLedgerConnect = () => {
+
+	}
 
 	return (
 		<StyledWalletsWrapper>
@@ -34,13 +40,21 @@ const FilWalletConnector: React.FC<ModalProps> = ({ onDismiss }) => {
 					buttonText="Import"
 				/>
 			</StyledWalletCard>
+
+			<Spacer size="sm" />
+
+			<StyledWalletCard>
+				<WalletCard
+					icon={<img src={ledgerLogo} style={{ height: 26 }}/>}
+					onConnect={handleLedgerConnect}
+					title="Ledger wallet"/>
+			</StyledWalletCard>
 		</StyledWalletsWrapper>
 	)
 }
 
 const StyledWalletsWrapper = styled.div`
 	display: flex;
-	flex-wrap: wrap;
 	@media (max-width: ${(props) => props.theme.breakpoints.mobile}px) {
 		flex-direction: column;
 		flex-wrap: none;
