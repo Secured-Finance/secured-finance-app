@@ -1,4 +1,4 @@
-import Filecoin from '@glif/filecoin-wallet-provider';
+import Filecoin, { WalletSubProvider } from '@glif/filecoin-wallet-provider';
 
 import {
     LEDGER_USER_INITIATED_IMPORT,
