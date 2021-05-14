@@ -1,0 +1,4 @@
+/* FILECOIN APP VERSION MIN */
+export const LEDGER_VERSION_MAJOR = 0
+export const LEDGER_VERSION_MINOR = 18
+export const LEDGER_VERSION_PATCH = 2
