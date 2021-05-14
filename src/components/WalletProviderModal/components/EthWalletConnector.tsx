@@ -3,7 +3,6 @@ import styled from 'styled-components'
 import { ChainUnsupportedError, useWallet } from 'use-wallet'
 import metamaskLogo from '../../../assets/img/metamask-fox.svg'
 import walletConnectLogo from '../../../assets/img/wallet-connect.svg'
-import ledgerLogo from '../../../assets/img/ledger.svg'
 
 import { ModalProps } from '../../Modal'
 import Spacer from '../../Spacer'
@@ -37,20 +36,12 @@ const EthWalletConnector: React.FC<ModalProps> = ({ onDismiss }) => {
 					title="WalletConnect"
 				/>
 			</StyledWalletCard>
-			<Spacer size="sm" />
-			<StyledWalletCard>
-				<WalletCard
-					icon={<img src={ledgerLogo} style={{ height: 26 }}/>}
-					onConnect={() => {}}
-					title="Ledger wallet"/>
-			</StyledWalletCard>
 		</StyledWalletsWrapper>
 	)
 }
 
 const StyledWalletsWrapper = styled.div`
 	display: flex;
-	//flex-wrap: wrap;
 	@media (max-width: ${(props) => props.theme.breakpoints.mobile}px) {
 		flex-direction: column;
 		flex-wrap: none;

@@ -85,6 +85,7 @@ const StyledActionButton = styled.button`
     outline: none; 
     border: none;
     border-radius: 15px;
+    cursor: pointer;
 `
 
 export default RenderActions
