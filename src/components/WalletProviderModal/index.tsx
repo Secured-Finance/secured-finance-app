@@ -24,7 +24,7 @@ const WalletProviderModal: React.FC<ModalProps> = ({ onDismiss, ccyIndex }) => {
 
 	return (
 		<Modal>
-			<ModalTitle text="Select a wallet provider." />
+			<ModalTitle text="Select a wallet provider" />
 			<ModalContent>
 				{
 					ccyIndex == 0

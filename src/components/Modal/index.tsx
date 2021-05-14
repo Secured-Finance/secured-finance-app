@@ -29,8 +29,6 @@ const StyledResponsiveWrapper = styled.div`
   flex-direction: column;
   justify-content: flex-end;
   position: relative;
-  width: 100%;
-  max-width: 512px;
   @media (max-width: ${(props) => props.theme.breakpoints.mobile}px) {
     flex: 1;
     position: absolute;
