@@ -1,11 +1,12 @@
 import styled from 'styled-components';
-import React from 'react';
+import React, { useEffect } from 'react';
 import Modal, { ModalProps } from '../../Modal';
 import ModalTitle from '../../ModalTitle';
 import { Button } from '../../common/Buttons';
 import theme from '../../../theme';
-import connectWithLedger from '../../../services/ledger/connectLedger';
-import { useDispatch } from 'react-redux';
+import { setLedgerProvider } from '../../../services/ledger/setLedgerProvider';
+import { useDispatch, useSelector } from 'react-redux';
+import { isUsedByAnotherApp } from '../../../store/ledger/slectors';
 
 const getModalTextMap = (state: string) => {
     switch (state) {
@@ -19,49 +20,79 @@ const getModalTextMap = (state: string) => {
                         <span>Please unlock your Ledger and try again.</span>
                     </>
                 ),
+                button: 'Try again',
             };
         case 'deviceIsConnected':
             return {
                 title: 'Unlock and open',
                 content:
                     'Please unlock your Ledger device and make sure the Filecoin App is open',
+                button: 'My device is unlocked and Filecoin app is open',
+            };
+        case 'usedByAnotherApp':
+            return {
+                title: 'Device is used by another app',
+                content: (
+                    <>
+                        <span>
+                            Looks like another app is connected to your Ledger
+                            device.
+                        </span>
+                        <br />
+                        <span>
+                            Please, disconnect the device from every other app
+                            and try again
+                        </span>
+                    </>
+                ),
+                button: 'Try agan',
             };
         default:
             return {
                 title: 'Connect',
                 content: 'Please connect your Ledger to your computer',
+                button: 'Yes, my device is connected',
             };
     }
 };
 
 const LedgerModal: React.FC<ModalProps & any> = ({ onClose }) => {
     const dispatch = useDispatch();
+    const isDeviceUsedByAnotherApp = useSelector(isUsedByAnotherApp);
     const [contentState, setContentState] = React.useState('');
 
-    const titleText = getModalTextMap(contentState).title;
-    const content = getModalTextMap(contentState).content;
+    const { button, content, title } = getModalTextMap(contentState);
+
+    useEffect(() => {
+        if (isDeviceUsedByAnotherApp) {
+            setContentState('usedByAnotherApp');
+        }
+    }, [isDeviceUsedByAnotherApp]);
 
     const onConnectDevice = async () => {
-        const x = await connectWithLedger(dispatch, {});
+        const provider = await setLedgerProvider(dispatch);
 
-        if (!x) {
+        if (isDeviceUsedByAnotherApp) {
+            setContentState('usedByAnotherApp');
+        } else if (!provider) {
             setContentState('hasDeviceConnectionError');
         } else {
+            if (contentState === 'deviceIsConnected') {
+            }
+
             setContentState('deviceIsConnected');
         }
     };
 
     return (
         <Modal>
-            <ModalTitle text={titleText} />
+            <ModalTitle text={title} />
             <Content>{content}</Content>
             <ButtonsContainer>
                 <Button onClick={onClose} outline>
                     Close
                 </Button>
-                <Button onClick={onConnectDevice}>
-                    Yes, my device is connected
-                </Button>
+                <Button onClick={onConnectDevice}>{button}</Button>
             </ButtonsContainer>
         </Modal>
     );

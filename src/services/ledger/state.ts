@@ -14,6 +14,7 @@ import {
     LEDGER_USED_BY_ANOTHER_APP,
     LEDGER_BAD_VERSION,
     WEBUSB_UNSUPPORTED,
+    ILedger,
 } from './ledgerStateManagement';
 import Filecoin from '@glif/filecoin-wallet-provider';
 
@@ -21,7 +22,7 @@ interface IInitialState {
     walletType: string;
     walletProvider: Filecoin | null;
     error: string;
-    ledger: any;
+    ledger: ILedger;
 }
 
 export const initialState: IInitialState = {
@@ -74,7 +75,7 @@ type Payload = { provider: Filecoin; walletType: string };
 
 /* REDUCER */
 export default (
-    state: IInitialState,
+    state: IInitialState = initialState,
     action: { type: string; payload: Payload; error: string }
 ) => {
     switch (action.type) {

@@ -5,13 +5,10 @@ import {
 } from './setLedgerProvider';
 import { Dispatch } from 'react';
 
-const connectWithLedger = async (
-    dispatch: Dispatch<{ type: string }>,
-    LedgerProvider: any
-) => {
+const connectWithLedger = async (dispatch: Dispatch<{ type: string }>) => {
     dispatch(clearError());
     dispatch(resetLedgerState());
-    const provider = await setLedgerProvider(dispatch, LedgerProvider);
+    const provider = await setLedgerProvider(dispatch);
     if (!provider) return null;
     const configured = await checkLedgerConfiguration(dispatch, provider);
     if (!configured) return null;
