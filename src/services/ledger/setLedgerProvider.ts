@@ -1,4 +1,5 @@
 import Filecoin, { WalletSubProvider } from '@glif/filecoin-wallet-provider';
+import RustModule from '@zondax/filecoin-signing-tools';
 
 import {
     LEDGER_USER_INITIATED_IMPORT,
@@ -19,16 +20,19 @@ import { createWalletProvider } from './state';
 import createTransport from './createTransport';
 import badVersion, { IBadVersionProps } from './badVersion';
 import { Dispatch } from 'react';
+import createLedgerProvider from './createLedgerProvider';
 
 type ResponseType = { device_locked: boolean } & IBadVersionProps;
 
 export const setLedgerProvider = async (
-    dispatch: Dispatch<{ type: string }>,
-    LedgerProvider: any
+    dispatch: Dispatch<{ type: string }>
 ) => {
+    const rustModule = await import('@zondax/filecoin-signing-tools');
+    const LedgerProvider = createLedgerProvider(rustModule);
     dispatch({ type: LEDGER_USER_INITIATED_IMPORT });
     try {
         const transport = await createTransport();
+        // @ts-ignore
         const provider = new Filecoin(LedgerProvider(transport), {
             apiAddress: process.env.LOTUS_NODE_JSONRPC,
         });

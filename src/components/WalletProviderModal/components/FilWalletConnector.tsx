@@ -1,5 +1,4 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import seedLogo from '../../../assets/img/seed.svg';
 import keyLogo from '../../../assets/img/key.svg';
@@ -13,7 +12,6 @@ import MnemonicModal from './MnemonicModal';
 import PrivateKeyModal from './PrivateKeyModal';
 import LedgerModal from './LedgerModal';
 import ledgerLogo from '../../../assets/img/ledger.svg';
-import connectWithLedger from '../../../services/ledger/connectLedger';
 
 const FilWalletConnector: React.FC<ModalProps> = () => {
     const closeLedgerModal = () => {
@@ -25,12 +23,6 @@ const FilWalletConnector: React.FC<ModalProps> = () => {
         <LedgerModal onClose={closeLedgerModal} />,
         'ledger'
     );
-
-    const dispatch = useDispatch();
-
-    const handleLedgerConnect = () => {
-        connectWithLedger(dispatch, {});
-    };
 
     return (
         <StyledWalletsWrapper>

@@ -17,7 +17,7 @@ export const LEDGER_USED_BY_ANOTHER_APP = 'LEDGER_USED_BY_ANOTHER_APP';
 export const LEDGER_BAD_VERSION = 'LEDGER_BAD_VERSION';
 export const WEBUSB_UNSUPPORTED = 'WEBUSB_UNSUPPORTED';
 
-interface ILedger {
+export interface ILedger {
     userImportFailure: boolean;
     connecting: boolean;
     connectedFailure: boolean;
@@ -31,7 +31,7 @@ interface ILedger {
     webUSBSupported: boolean;
 }
 
-export const initialLedgerState = {
+export const initialLedgerState: ILedger = {
     userImportFailure: false,
     connecting: false,
     connectedFailure: false,
