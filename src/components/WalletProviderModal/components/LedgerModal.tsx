@@ -6,13 +6,17 @@ import { Button } from '../../common/Buttons';
 import theme from '../../../theme';
 import { setLedgerProvider } from '../../../services/ledger/setLedgerProvider';
 import { useDispatch, useSelector } from 'react-redux';
-import { isUsedByAnotherApp } from '../../../store/ledger/slectors';
+import {
+    isUsedByAnotherApp,
+    isDeviceUnlocked,
+} from '../../../store/ledger/selectors';
+import fetchDefaultWallet from '../../../services/ledger/fetchDefaultWallet';
 
 const getModalTextMap = (state: string) => {
     switch (state) {
         case 'hasDeviceConnectionError':
             return {
-                title: 'Error',
+                title: 'Connection error',
                 content: (
                     <>
                         <span>We couldn’t connect to your Ledger Device.</span>
@@ -45,7 +49,19 @@ const getModalTextMap = (state: string) => {
                         </span>
                     </>
                 ),
-                button: 'Try agan',
+                button: 'Try again',
+            };
+        case 'loading':
+            return {
+                title: 'Please wait',
+                content: 'Loading...',
+                button: 'Loading',
+            };
+        case 'finished':
+            return {
+                title: "You're all set",
+                content: '',
+                button: 'Close',
             };
         default:
             return {
@@ -59,8 +75,8 @@ const getModalTextMap = (state: string) => {
 const LedgerModal: React.FC<ModalProps & any> = ({ onClose }) => {
     const dispatch = useDispatch();
     const isDeviceUsedByAnotherApp = useSelector(isUsedByAnotherApp);
+    const isUnlocked = useSelector(isDeviceUnlocked);
     const [contentState, setContentState] = React.useState('');
-
     const { button, content, title } = getModalTextMap(contentState);
 
     useEffect(() => {
@@ -69,18 +85,28 @@ const LedgerModal: React.FC<ModalProps & any> = ({ onClose }) => {
         }
     }, [isDeviceUsedByAnotherApp]);
 
-    const onConnectDevice = async () => {
-        const provider = await setLedgerProvider(dispatch);
+    useEffect(() => {
+        setLedgerProvider(dispatch);
+    }, []);
 
+    const onConnectDevice = async () => {
         if (isDeviceUsedByAnotherApp) {
             setContentState('usedByAnotherApp');
-        } else if (!provider) {
-            setContentState('hasDeviceConnectionError');
         } else {
             if (contentState === 'deviceIsConnected') {
-            }
+                setContentState('loading');
+                const wallet = await fetchDefaultWallet(dispatch);
 
-            setContentState('deviceIsConnected');
+                if (wallet) {
+                    setContentState('finished');
+                }
+            } else {
+                if (!isUnlocked) {
+                    setContentState('hasDeviceConnectionError');
+                } else {
+                    setContentState('deviceIsConnected');
+                }
+            }
         }
     };
 
@@ -92,7 +118,14 @@ const LedgerModal: React.FC<ModalProps & any> = ({ onClose }) => {
                 <Button onClick={onClose} outline>
                     Close
                 </Button>
-                <Button onClick={onConnectDevice}>{button}</Button>
+                <Button
+                    disabled={contentState === 'loading'}
+                    onClick={
+                        contentState === 'finished' ? onClose : onConnectDevice
+                    }
+                >
+                    {button}
+                </Button>
             </ButtonsContainer>
         </Modal>
     );

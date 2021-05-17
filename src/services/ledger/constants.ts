@@ -1,3 +1,5 @@
+export const LEDGER = 'LEDGER';
+
 /* FILECOIN APP VERSION MIN */
 export const LEDGER_VERSION_MAJOR = 0;
 export const LEDGER_VERSION_MINOR = 18;
