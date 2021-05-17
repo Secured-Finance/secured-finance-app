@@ -16,9 +16,15 @@ import ledgerLogo from '../../../assets/img/ledger.svg';
 import connectWithLedger from '../../../services/ledger/connectLedger';
 
 const FilWalletConnector: React.FC<ModalProps> = () => {
+    const closeLedgerModal = () => {
+        dismissLedgerModal();
+    };
     const [onMnemonicModal] = useModal(<MnemonicModal />);
     const [onPrivateKeyModal] = useModal(<PrivateKeyModal />);
-    const [onLedgerModal] = useModal(<LedgerModal />);
+    const [onLedgerModal, dismissLedgerModal] = useModal(
+        <LedgerModal onClose={closeLedgerModal} />,
+        'ledger'
+    );
 
     const dispatch = useDispatch();
 
