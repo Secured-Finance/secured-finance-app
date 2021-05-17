@@ -1,5 +1,4 @@
-import Filecoin, { WalletSubProvider } from '@glif/filecoin-wallet-provider';
-import RustModule from '@zondax/filecoin-signing-tools';
+import Filecoin from '@glif/filecoin-wallet-provider';
 
 import {
     LEDGER_USER_INITIATED_IMPORT,
@@ -25,7 +24,7 @@ import createLedgerProvider from './createLedgerProvider';
 type ResponseType = { device_locked: boolean } & IBadVersionProps;
 
 export const setLedgerProvider = async (
-    dispatch: Dispatch<{ type: string }>
+    dispatch: Dispatch<{ type: string; payload?: any }>
 ) => {
     const rustModule = await import('@zondax/filecoin-signing-tools');
     const LedgerProvider = createLedgerProvider(rustModule);
@@ -34,7 +33,7 @@ export const setLedgerProvider = async (
         const transport = await createTransport();
         // @ts-ignore
         const provider = new Filecoin(LedgerProvider(transport), {
-            apiAddress: process.env.LOTUS_NODE_JSONRPC,
+            apiAddress: 'https://calibration.node.glif.io/rpc/v0',
         });
         dispatch({ type: LEDGER_CONNECTED });
         dispatch(createWalletProvider(provider));
@@ -69,7 +68,7 @@ export const setLedgerProvider = async (
 };
 
 export const checkLedgerConfiguration = async (
-    dispatch: Dispatch<{ type: string }>,
+    dispatch: Dispatch<{ type: string; payload?: any }>,
     walletProvider: any
 ) => {
     dispatch({ type: LEDGER_ESTABLISHING_CONNECTION_W_FILECOIN_APP });
@@ -86,7 +85,7 @@ export const checkLedgerConfiguration = async (
         }
 
         dispatch({ type: LEDGER_UNLOCKED });
-        dispatch({ type: LEDGER_FILECOIN_APP_OPEN });
+        dispatch({ type: LEDGER_FILECOIN_APP_OPEN, payload: walletProvider });
         return true;
     } catch (err) {
         if (

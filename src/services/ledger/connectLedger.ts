@@ -5,7 +5,9 @@ import {
 } from './setLedgerProvider';
 import { Dispatch } from 'react';
 
-const connectWithLedger = async (dispatch: Dispatch<{ type: string }>) => {
+const connectWithLedger = async (
+    dispatch: Dispatch<{ type: string; payload?: any }>
+) => {
     dispatch(clearError());
     dispatch(resetLedgerState());
     const provider = await setLedgerProvider(dispatch);

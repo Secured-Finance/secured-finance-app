@@ -2,7 +2,12 @@ import FilecoinApp from '@zondax/ledger-filecoin';
 import RustModule from '@zondax/filecoin-signing-tools';
 import Transport from '@ledgerhq/hw-transport';
 import { mapSeries } from 'bluebird';
-import { MAINNET, MAINNET_PATH_CODE, TESTNET_PATH_CODE } from './constants';
+import {
+    MAINNET,
+    MAINNET_PATH_CODE,
+    TESTNET_PATH_CODE,
+    LEDGER,
+} from './constants';
 import createPath from './createPath';
 
 type Response = {
@@ -43,7 +48,7 @@ const createLedgerProvider = (rustModule: RustModule) => {
         let ledgerBusy = false;
         const ledgerApp = new FilecoinApp(transport);
         return {
-            type: 'LEDGER',
+            type: LEDGER,
 
             // /* getVersion call rejects if it takes too long to respond,
             // meaning the Ledger device is locked */
@@ -80,7 +85,11 @@ const createLedgerProvider = (rustModule: RustModule) => {
                 });
             },
 
-            getAccounts: async (network = MAINNET, nStart = 0, nEnd = 5) => {
+            getAccounts: async (
+                network: string = MAINNET,
+                nStart = 0,
+                nEnd = 5
+            ) => {
                 throwIfBusy(ledgerBusy);
                 ledgerBusy = true;
                 const networkCode =
