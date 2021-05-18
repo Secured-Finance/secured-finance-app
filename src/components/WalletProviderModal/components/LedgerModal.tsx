@@ -4,13 +4,13 @@ import Modal, { ModalProps } from '../../Modal';
 import ModalTitle from '../../ModalTitle';
 import { Button } from '../../common/Buttons';
 import theme from '../../../theme';
-import { setLedgerProvider } from '../../../services/ledger/setLedgerProvider';
 import { useDispatch, useSelector } from 'react-redux';
 import {
     isUsedByAnotherApp,
     isDeviceUnlocked,
 } from '../../../store/ledger/selectors';
 import fetchDefaultWallet from '../../../services/ledger/fetchDefaultWallet';
+import connectWithLedger from '../../../services/ledger/connectLedger';
 
 const getModalTextMap = (state: string) => {
     switch (state) {
@@ -21,7 +21,10 @@ const getModalTextMap = (state: string) => {
                     <>
                         <span>We couldn’t connect to your Ledger Device.</span>
                         <br />
-                        <span>Please unlock your Ledger and try again.</span>
+                        <span>
+                            Please unlock your Ledger, make sure Filecoin app is
+                            open and try again.
+                        </span>
                     </>
                 ),
                 button: 'Try again',
@@ -86,7 +89,7 @@ const LedgerModal: React.FC<ModalProps & any> = ({ onClose }) => {
     }, [isDeviceUsedByAnotherApp]);
 
     useEffect(() => {
-        setLedgerProvider(dispatch);
+        connectWithLedger(dispatch);
     }, []);
 
     const onConnectDevice = async () => {
@@ -94,18 +97,18 @@ const LedgerModal: React.FC<ModalProps & any> = ({ onClose }) => {
             setContentState('usedByAnotherApp');
         } else {
             if (contentState === 'deviceIsConnected') {
-                setContentState('loading');
-                const wallet = await fetchDefaultWallet(dispatch);
-
-                if (wallet) {
-                    setContentState('finished');
-                }
-            } else {
                 if (!isUnlocked) {
                     setContentState('hasDeviceConnectionError');
                 } else {
-                    setContentState('deviceIsConnected');
+                    setContentState('loading');
+                    const wallet = await fetchDefaultWallet(dispatch);
+
+                    if (wallet) {
+                        setContentState('finished');
+                    }
                 }
+            } else {
+                setContentState('deviceIsConnected');
             }
         }
     };
