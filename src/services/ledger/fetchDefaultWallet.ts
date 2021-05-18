@@ -1,6 +1,5 @@
 import { MAINNET, MAINNET_PATH_CODE, TESTNET_PATH_CODE } from './constants';
 import createPath from './createPath';
-import { Dispatch } from 'react';
 import connectLedger from './connectLedger';
 import {
     updateFilWalletBalance,

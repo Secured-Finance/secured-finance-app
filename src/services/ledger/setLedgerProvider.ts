@@ -20,11 +20,13 @@ import createTransport from './createTransport';
 import badVersion, { IBadVersionProps } from './badVersion';
 import { Dispatch } from 'react';
 import createLedgerProvider from '../filecoin/providers/LedgerProvider';
+import { Network } from '@glif/filecoin-address';
 
 type ResponseType = { device_locked: boolean } & IBadVersionProps;
 
 export const setLedgerProvider = async (
-    dispatch: Dispatch<{ type: string; payload?: any }>
+    dispatch: Dispatch<{ type: string; payload?: any }>,
+    network: Network = Network.TEST
 ) => {
     const rustModule = await import('@zondax/filecoin-signing-tools');
     const LedgerProvider = createLedgerProvider(rustModule);
@@ -33,7 +35,10 @@ export const setLedgerProvider = async (
         const transport = await createTransport();
         // @ts-ignore
         const provider = new Filecoin(LedgerProvider(transport), {
-            apiAddress: 'https://calibration.node.glif.io/rpc/v0',
+            apiAddress:
+                network === Network.MAIN
+                    ? 'http://api.node.glif.io/rpc/v0'
+                    : 'https://calibration.node.glif.io/rpc/v0',
         });
         dispatch({ type: LEDGER_CONNECTED });
         dispatch(createWalletProvider(provider));
