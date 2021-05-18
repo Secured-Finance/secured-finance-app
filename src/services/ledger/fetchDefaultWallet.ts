@@ -1,21 +1,14 @@
 import { MAINNET, MAINNET_PATH_CODE, TESTNET_PATH_CODE } from './constants';
-import {
-    checkLedgerConfiguration,
-    setLedgerProvider,
-} from './setLedgerProvider';
-import { clearError, resetLedgerState } from './state';
 import createPath from './createPath';
 import { Dispatch } from 'react';
+import connectLedger from './connectLedger';
 
 // a helper function for getting the default wallet associated with the wallet provider
 const fetchDefaultWallet = async (dispatch: Dispatch<{ type: string }>) => {
     const network = MAINNET;
-    dispatch(clearError());
-    dispatch(resetLedgerState());
-    const provider = await setLedgerProvider(dispatch);
+
+    const provider = await connectLedger(dispatch);
     if (!provider) return null;
-    const configured = await checkLedgerConfiguration(dispatch, provider);
-    if (!configured) return null;
 
     // @ts-ignore
     const [defaultAddress] = await provider.wallet.getAccounts(network, 0, 1);

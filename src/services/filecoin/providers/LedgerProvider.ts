@@ -7,8 +7,8 @@ import {
     MAINNET_PATH_CODE,
     TESTNET_PATH_CODE,
     LEDGER,
-} from './constants';
-import createPath from './createPath';
+} from '../../ledger/constants';
+import createPath from '../../ledger/createPath';
 
 type Response = {
     error_message: string;
@@ -43,7 +43,7 @@ const throwIfBusy: (busy: boolean) => void = busy => {
         );
 };
 
-const createLedgerProvider = (rustModule: RustModule) => {
+const ledgerProvider = (rustModule: RustModule) => {
     return (transport: Transport) => {
         let ledgerBusy = false;
         const ledgerApp = new FilecoinApp(transport);
@@ -136,4 +136,4 @@ const createLedgerProvider = (rustModule: RustModule) => {
     };
 };
 
-export default createLedgerProvider;
+export default ledgerProvider;
