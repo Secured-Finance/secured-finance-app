@@ -2,6 +2,8 @@ import React, { createContext, ReactNode, useEffect, useState } from 'react';
 import { Network as FilNetwork } from '@glif/filecoin-address';
 
 import { providers } from '../../services/filecoin/providers';
+import { useWallet } from 'use-wallet';
+export const CACHED_PROVIDER_KEY = 'CACHED_PROVIDER_KEY';
 
 export const Context = createContext({
     isLoaded: false,
@@ -20,6 +22,16 @@ const FilecoinWasmProvider: React.FC<FilecoinWalletProviderProps> = ({
     const [loaded, setLoaded] = useState<boolean>(false);
     const [filProviders, setFilProviders] = useState<any>();
 
+    const { connect } = useWallet();
+
+    useEffect(() => {
+        const cachedProvider = localStorage.getItem(CACHED_PROVIDER_KEY);
+        if (cachedProvider !== null) {
+            console.log('connect');
+            connect('injected');
+        }
+    }, []);
+
     useEffect(() => {
         async function loadWasmModule() {
             try {
@@ -37,7 +49,6 @@ const FilecoinWasmProvider: React.FC<FilecoinWalletProviderProps> = ({
         loadWasmModule();
     }, [setWasmModule, setLoaded, setFilProviders, providers]);
 
-    console.log({ wasmModule, loaded, filProviders });
     return (
         <Context.Provider
             value={{ ...wasmModule, loaded, filProviders, isLoaded: true }}
