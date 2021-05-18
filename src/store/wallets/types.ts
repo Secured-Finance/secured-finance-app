@@ -20,6 +20,8 @@ export interface WalletBase {
     };
 }
 
+export type Coin = 'filecoin' | 'ethereum' | 'usdc';
+
 export const defaultEthWallet = {
     ccyIndex: 0,
     address: '',

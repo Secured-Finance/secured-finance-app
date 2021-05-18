@@ -34,7 +34,6 @@ const RenderActions: React.FC<ActionProps> = ({ callbackMap, ccyIndex }) => {
         onPresentWalletEthProviderModal();
     }, [onPresentWalletEthProviderModal]);
 
-    console.log('action');
     return (
         <div>
             {callbackMap != null &&
