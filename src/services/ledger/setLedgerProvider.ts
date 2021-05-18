@@ -19,7 +19,7 @@ import { createWalletProvider } from './state';
 import createTransport from './createTransport';
 import badVersion, { IBadVersionProps } from './badVersion';
 import { Dispatch } from 'react';
-import createLedgerProvider from './createLedgerProvider';
+import createLedgerProvider from '../filecoin/providers/LedgerProvider';
 
 type ResponseType = { device_locked: boolean } & IBadVersionProps;
 
