@@ -12,75 +12,69 @@ import {
 import fetchDefaultWallet from '../../../services/ledger/fetchDefaultWallet';
 import connectWithLedger from '../../../services/ledger/connectLedger';
 
-const getModalTextMap = (state: string) => {
-    switch (state) {
-        case 'hasDeviceConnectionError':
-            return {
-                title: 'Connection error',
-                content: (
-                    <>
-                        <span>We couldn’t connect to your Ledger Device.</span>
-                        <br />
-                        <span>
-                            Please unlock your Ledger, make sure Filecoin app is
-                            open and try again.
-                        </span>
-                    </>
-                ),
-                button: 'Try again',
-            };
-        case 'deviceIsConnected':
-            return {
-                title: 'Unlock and open',
-                content:
-                    'Please unlock your Ledger device and make sure the Filecoin App is open',
-                button: 'My device is unlocked and Filecoin app is open',
-            };
-        case 'usedByAnotherApp':
-            return {
-                title: 'Device is used by another app',
-                content: (
-                    <>
-                        <span>
-                            Looks like another app is connected to your Ledger
-                            device.
-                        </span>
-                        <br />
-                        <span>
-                            Please, disconnect the device from every other app
-                            and try again
-                        </span>
-                    </>
-                ),
-                button: 'Try again',
-            };
-        case 'loading':
-            return {
-                title: 'Please wait',
-                content: 'Loading...',
-                button: 'Loading',
-            };
-        case 'finished':
-            return {
-                title: "You're all set",
-                content: '',
-                button: 'Close',
-            };
-        default:
-            return {
-                title: 'Connect',
-                content: 'Please connect your Ledger to your computer',
-                button: 'Yes, my device is connected',
-            };
-    }
+type ContentStates =
+    | 'hasDeviceConnectionError'
+    | 'deviceIsConnected'
+    | 'usedByAnotherApp'
+    | 'loading'
+    | 'default';
+
+const modalTextMap = {
+    hasDeviceConnectionError: {
+        title: 'Connection error',
+        content: (
+            <>
+                <span>We couldn’t connect to your Ledger Device.</span>
+                <br />
+                <span>
+                    Please unlock your Ledger, make sure Filecoin app is open
+                    and try again.
+                </span>
+            </>
+        ),
+        button: 'Try again',
+    },
+    deviceIsConnected: {
+        title: 'Unlock and open',
+        content:
+            'Please unlock your Ledger device and make sure the Filecoin App is open',
+        button: 'My device is unlocked and Filecoin app is open',
+    },
+    usedByAnotherApp: {
+        title: 'Device is used by another app',
+        content: (
+            <>
+                <span>
+                    Looks like another app is connected to your Ledger device.
+                </span>
+                <br />
+                <span>
+                    Please, disconnect the device from every other app and try
+                    again
+                </span>
+            </>
+        ),
+        button: 'Try again',
+    },
+    loading: {
+        title: 'Please wait',
+        content: 'Loading...',
+        button: 'Loading',
+    },
+    default: {
+        title: 'Connect',
+        content: 'Please connect your Ledger to your computer',
+        button: 'Yes, my device is connected',
+    },
 };
 
 const LedgerModal: React.FC<ModalProps & any> = ({ onClose }) => {
     const dispatch = useDispatch();
     const isDeviceUsedByAnotherApp = useSelector(isUsedByAnotherApp);
     const isUnlocked = useSelector(isDeviceUnlocked);
-    const [contentState, setContentState] = React.useState('');
-    const { button, content, title } = getModalTextMap(contentState);
+    const [contentState, setContentState] =
+        React.useState<ContentStates>('default');
+    const { button, content, title } = modalTextMap[contentState];
 
     useEffect(() => {
         if (isDeviceUsedByAnotherApp) {
@@ -93,23 +87,16 @@ const LedgerModal: React.FC<ModalProps & any> = ({ onClose }) => {
     }, []);
 
     const onConnectDevice = async () => {
-        if (isDeviceUsedByAnotherApp) {
-            setContentState('usedByAnotherApp');
-        } else {
-            if (contentState === 'deviceIsConnected') {
-                if (!isUnlocked) {
-                    setContentState('hasDeviceConnectionError');
-                } else {
-                    setContentState('loading');
-                    const wallet = await fetchDefaultWallet(dispatch);
+        if (isDeviceUsedByAnotherApp)
+            return setContentState('usedByAnotherApp');
 
-                    if (wallet) {
-                        setContentState('finished');
-                    }
-                }
-            } else {
-                setContentState('deviceIsConnected');
-            }
+        if (contentState === 'deviceIsConnected') {
+            if (!isUnlocked) return setContentState('hasDeviceConnectionError');
+
+            setContentState('loading');
+            if (await fetchDefaultWallet(dispatch)) onClose();
+        } else {
+            setContentState('deviceIsConnected');
         }
     };
 
@@ -123,9 +110,7 @@ const LedgerModal: React.FC<ModalProps & any> = ({ onClose }) => {
                 </Button>
                 <Button
                     disabled={contentState === 'loading'}
-                    onClick={
-                        contentState === 'finished' ? onClose : onConnectDevice
-                    }
+                    onClick={onConnectDevice}
                 >
                     {button}
                 </Button>
