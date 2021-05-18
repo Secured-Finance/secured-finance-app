@@ -27,7 +27,6 @@ const FilecoinWasmProvider: React.FC<FilecoinWalletProviderProps> = ({
     useEffect(() => {
         const cachedProvider = localStorage.getItem(CACHED_PROVIDER_KEY);
         if (cachedProvider !== null) {
-            console.log('connect');
             connect('injected');
         }
     }, []);
