@@ -9,12 +9,10 @@ import {
     isUsedByAnotherApp,
     isDeviceUnlocked,
 } from '../../../store/ledger/selectors';
-import fetchDefaultWallet from '../../../services/ledger/fetchDefaultWallet';
 import connectWithLedger from '../../../services/ledger/connectLedger';
 
 type ContentStates =
     | 'hasDeviceConnectionError'
-    | 'deviceIsConnected'
     | 'usedByAnotherApp'
     | 'loading'
     | 'default';
@@ -33,12 +31,6 @@ const modalTextMap = {
             </>
         ),
         button: 'Try again',
-    },
-    deviceIsConnected: {
-        title: 'Unlock and open',
-        content:
-            'Please unlock your Ledger device and make sure the Filecoin App is open',
-        button: 'My device is unlocked and Filecoin app is open',
     },
     usedByAnotherApp: {
         title: 'Device is used by another app',
@@ -75,6 +67,7 @@ const LedgerModal: React.FC<ModalProps & any> = ({ onClose }) => {
     const [contentState, setContentState] =
         React.useState<ContentStates>('default');
     const { button, content, title } = modalTextMap[contentState];
+    const [status, setStatus] = React.useState('');
 
     useEffect(() => {
         if (isDeviceUsedByAnotherApp) {
@@ -83,21 +76,23 @@ const LedgerModal: React.FC<ModalProps & any> = ({ onClose }) => {
     }, [isDeviceUsedByAnotherApp]);
 
     useEffect(() => {
-        connectWithLedger(dispatch);
-    }, []);
+        console.log('useEffect', isUnlocked, status);
+
+        if (!isUnlocked && status === 'ledgerConnected') {
+            console.log('hasDeviceConnectionError');
+            return setContentState('hasDeviceConnectionError');
+        }
+    }, [status, isUnlocked]);
 
     const onConnectDevice = async () => {
         if (isDeviceUsedByAnotherApp)
             return setContentState('usedByAnotherApp');
 
-        if (contentState === 'deviceIsConnected') {
-            if (!isUnlocked) return setContentState('hasDeviceConnectionError');
+        setContentState('loading');
+        const provider = await connectWithLedger(dispatch);
+        setStatus('ledgerConnected');
 
-            setContentState('loading');
-            if (await fetchDefaultWallet(dispatch)) onClose();
-        } else {
-            setContentState('deviceIsConnected');
-        }
+        if (provider) onClose();
     };
 
     return (
