@@ -1,5 +1,4 @@
 import Filecoin from '@glif/filecoin-wallet-provider';
-
 import {
     LEDGER_USER_INITIATED_IMPORT,
     LEDGER_CONNECTED,
@@ -15,7 +14,6 @@ import {
     WEBUSB_UNSUPPORTED,
     LEDGER_BAD_VERSION,
 } from './ledgerStateManagement';
-import { createWalletProvider } from './state';
 import createTransport from './createTransport';
 import badVersion, { IBadVersionProps } from './badVersion';
 import { Dispatch } from 'react';
@@ -41,7 +39,6 @@ export const setLedgerProvider = async (
                     : 'https://calibration.node.glif.io/rpc/v0',
         });
         dispatch({ type: LEDGER_CONNECTED });
-        dispatch(createWalletProvider(provider));
         return provider;
     } catch (err) {
         if (
@@ -111,6 +108,7 @@ export const checkLedgerConfiguration = async (
         ) {
             dispatch({ type: LEDGER_FILECOIN_APP_NOT_OPEN });
         } else {
+            console.log(err);
             dispatch({ type: LEDGER_REPLUG });
         }
         return false;

@@ -1,70 +1,95 @@
-import { Network as FilNetwork, Network } from "@glif/filecoin-address"
-import Filecoin, { WalletSubProvider } from '@glif/filecoin-wallet-provider'
-import { useDispatch, useSelector } from "react-redux";
-import { failFetchingFilWalletProvider, startFetchingFilWalletProvider, setFilWalletProvider, setFilWalletType, resetFilWalletProvider } from "./store";
-import { RootState } from "../../store/types";
-import useFilWasm from "../../hooks/useFilWasm";
-import { useCallback, useEffect, useState } from "react";
-import { resetFilWallet } from "../../store/wallets";
+import { Network as FilNetwork, Network } from '@glif/filecoin-address';
+import Filecoin, { WalletSubProvider } from '@glif/filecoin-wallet-provider';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+    failFetchingFilWalletProvider,
+    startFetchingFilWalletProvider,
+    setFilWalletProvider,
+    setFilWalletType,
+    resetFilWalletProvider,
+} from './store';
+import { RootState } from '../../store/types';
+import useFilWasm from '../../hooks/useFilWasm';
+import { useCallback, useEffect, useState } from 'react';
+import { resetFilWallet } from '../../store/wallets';
 
 export const useResetFilWalletProvider = () => {
-    localStorage.setItem('mnemonic', null)
-    localStorage.setItem('privateKey', null)
+    localStorage.setItem('mnemonic', null);
+    localStorage.setItem('privateKey', null);
     const dispatch = useDispatch();
-    const { loaded } = useFilWasm()
+    const { loaded } = useFilWasm();
 
     const handleResetProvider = useCallback(async () => {
-        await dispatch(startFetchingFilWalletProvider())
+        await dispatch(startFetchingFilWalletProvider());
         try {
-            await dispatch(resetFilWalletProvider())
-            await dispatch(resetFilWallet())
+            await dispatch(resetFilWalletProvider());
+            await dispatch(resetFilWallet());
         } catch (e) {
-            console.log(e)
-            await dispatch(failFetchingFilWalletProvider())
+            console.log(e);
+            await dispatch(failFetchingFilWalletProvider());
         }
-    }, [loaded, dispatch])
-  
-	return { onReset: handleResetProvider }
-}
+    }, [loaded, dispatch]);
+
+    return { onReset: handleResetProvider };
+};
 
 export const useNewFilWalletProvider = () => {
-    const walletProvider = useSelector((state: RootState) => state.filWalletProvider.walletProvider);
+    const walletProvider = useSelector(
+        (state: RootState) => state.filWalletProvider.walletProvider
+    );
     const dispatch = useDispatch();
-    const { loaded } = useFilWasm()
+    const { loaded } = useFilWasm();
 
-    const handleCreateFilWalletProvider = useCallback(async (provider: WalletSubProvider, providerType: string, network: Network = Network.TEST) => {
-        await dispatch(startFetchingFilWalletProvider())
-        if (loaded && walletProvider == null) {
-            const config = {
-                apiAddress: network == Network.MAIN ? "http://api.node.glif.io/rpc/v0" : "https://calibration.node.glif.io/rpc/v0",
+    const handleCreateFilWalletProvider = useCallback(
+        async (
+            provider: WalletSubProvider,
+            providerType: string,
+            network: Network = Network.TEST
+        ) => {
+            await dispatch(startFetchingFilWalletProvider());
+            if (loaded && walletProvider == null) {
+                const config = {
+                    apiAddress:
+                        network == Network.MAIN
+                            ? 'http://api.node.glif.io/rpc/v0'
+                            : 'https://calibration.node.glif.io/rpc/v0',
+                };
+                const filecoin = await new Filecoin(provider, config);
+                await dispatch(setFilWalletProvider(filecoin));
+                await dispatch(setFilWalletType(providerType));
+            } else {
+                await dispatch(failFetchingFilWalletProvider());
             }
-            const filecoin = await new Filecoin(provider, config)        
-            await dispatch(setFilWalletProvider(filecoin))
-            await dispatch(setFilWalletType(providerType))
-        } else {
-            await dispatch(failFetchingFilWalletProvider())
-        }
-    }, [loaded, walletProvider])
+        },
+        [loaded, walletProvider]
+    );
 
-	return { onCreate: handleCreateFilWalletProvider }
-}
+    return { onCreate: handleCreateFilWalletProvider };
+};
 
 export const useDefaultWallet = (network: Network = Network.TEST) => {
-    const walletProvider = useSelector((state: RootState) => state.filWalletProvider.walletProvider);
-    const [address, setAddress] = useState('')
-    const [balance, setBalance] = useState(0)
+    const walletProvider = useSelector(
+        (state: RootState) => state.filWalletProvider.walletProvider
+    );
+    const [address, setAddress] = useState('');
+    const [balance, setBalance] = useState(0);
 
     useEffect(() => {
         async function compute() {
             if (walletProvider != null) {
-                const [filAddr] = await walletProvider.wallet.getAccounts(0, 1, network)
-                setAddress(filAddr)
-                const filBal = await walletProvider.getBalance(filAddr)
-                setBalance(filBal.toNumber())
-            }    
+                console.log('wallet');
+                const [filAddr] = await walletProvider.wallet.getAccounts(
+                    0,
+                    1,
+                    network
+                );
+                setAddress(filAddr);
+                const filBal = await walletProvider.getBalance(filAddr);
+                setBalance(filBal.toNumber());
+            }
         }
-        compute()
-    }, [setAddress, setBalance])
+        compute();
+    }, [setAddress, setBalance]);
 
-    return { address, balance }
-}
+    return { address, balance };
+};

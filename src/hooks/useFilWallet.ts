@@ -113,6 +113,7 @@ export const useFilecoinUSDBalance = async () => {
     const fetchFilStore = useCallback(
         async (isMounted: boolean) => {
             await dispatch(fetchWallet());
+
             if (loaded && walletProvider != null && filUSDPrice != 0) {
                 const [filAddr] = await walletProvider.wallet.getAccounts(
                     0,
@@ -187,19 +188,22 @@ export const useFilecoinWalletStore = () => {
     );
 
     useEffect(() => {
-        let isMounted = true;
-        if (
-            loaded &&
-            totalUSDBalance != 0 &&
-            walletProvider != null &&
-            price != 0 &&
-            change != 0
-        ) {
-            fetchFilStore(isMounted);
-        }
-        return () => {
-            isMounted = false;
-        };
+        (async () => {
+            let isMounted = true;
+            if (
+                loaded &&
+                totalUSDBalance != 0 &&
+                walletProvider != null &&
+                price != 0 &&
+                change != 0
+            ) {
+                await fetchFilStore(isMounted);
+            }
+
+            return () => {
+                isMounted = false;
+            };
+        })();
     }, [dispatch, loaded, totalUSDBalance, walletProvider, price, change]);
 
     return filWallet;
