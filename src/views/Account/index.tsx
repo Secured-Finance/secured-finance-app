@@ -10,7 +10,7 @@ import { useTotalUSDBalance } from '../../hooks/useTotalUSDBalance';
 import { RootState } from '../../store/types';
 import { WalletBase } from '../../store/wallets';
 import theme from '../../theme';
-import { usdFormat } from '../../utils/formatNumbers';
+import { usdFormat } from '../../utils';
 import CollateralTable from './components/CollateralTable';
 import WalletsTable from './components/WalletsTable';
 
@@ -67,8 +67,6 @@ const Account: React.FC = () => {
 const StyledPortfolioBalance = styled.div`
     display: flex;
     flex-direction: column;
-    // justify-content: space-between;
-    // align-items: center;
     padding-top: ${props => props.theme.spacing[4]}px;
     padding-bottom: 51px;
     padding-left: ${props => props.theme.spacing[5]}px;
@@ -111,7 +109,7 @@ const StyledTitle = styled.p<TitleProps>`
     font-weight: ${props => (props.fontWeight ? props.fontWeight : 400)};
     font-size: ${props => props.theme.sizes.h1}px;
     color: ${props => props.theme.colors.white};
-    margin: 0px;
+    margin: 0;
     margin-bottom: ${props => (props.marginBottom ? props.marginBottom : 0)}px;
 `;
 
@@ -128,14 +126,6 @@ const StyledBalanceAmount = styled.p`
     line-height: ${props => props.theme.sizes.h0 - 2}px;
     color: ${props => props.theme.colors.white};
     margin: ${props => props.theme.sizes.footnote}px 0 0 0;
-`;
-
-const StyledBalanceChange = styled.p`
-    font-style: normal;
-    font-weight: 400;
-    font-size: ${props => props.theme.sizes.body}px;
-    color: ${props => props.theme.colors.green};
-    margin: 0 0 0 14px;
 `;
 
 const mapStateToProps = (state: RootState) => {
