@@ -41,7 +41,6 @@ const Account: React.FC = () => {
                                 ? usdFormat(totalUSDBalance)
                                 : 0}
                         </StyledBalanceAmount>
-                        {/* <StyledBalanceChange>{ethChange.toFixed(2)}%</StyledBalanceChange> */}
                     </StyledBalanceContainer>
                 </StyledPortfolioBalance>
                 <StyledAccountContainer marginTop={'3px'}>
@@ -50,15 +49,17 @@ const Account: React.FC = () => {
                     </StyledTitle>
                     <WalletsTable table={tableData} />
                 </StyledAccountContainer>
-                <StyledAccountContainer
-                    marginTop={'35px'}
-                    marginBottom={'35px'}
-                >
-                    <StyledTitle fontWeight={500} marginBottom={35}>
-                        Collateral Positions
-                    </StyledTitle>
-                    <CollateralTable table={colBook} />
-                </StyledAccountContainer>
+                {account !== null && (
+                    <StyledAccountContainer
+                        marginTop={'35px'}
+                        marginBottom={'35px'}
+                    >
+                        <StyledTitle fontWeight={500} marginBottom={35}>
+                            Collateral Positions
+                        </StyledTitle>
+                        <CollateralTable table={colBook} />
+                    </StyledAccountContainer>
+                )}
             </AccountContainer>
         </Page>
     );
