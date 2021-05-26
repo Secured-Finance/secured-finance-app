@@ -8,3 +8,6 @@ export const getAssetPrices = (state: RootState) => ({
 
 export const getTotalUSDBalance = (state: RootState) =>
     state.wallets.totalUSDBalance;
+
+export const getFilAddress = (state: RootState) =>
+    state.wallets.filecoin.address;
