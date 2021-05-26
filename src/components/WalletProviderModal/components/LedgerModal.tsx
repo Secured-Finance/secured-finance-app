@@ -76,10 +76,7 @@ const LedgerModal: React.FC<ModalProps & any> = ({ onClose }) => {
     }, [isDeviceUsedByAnotherApp]);
 
     useEffect(() => {
-        console.log('useEffect', isUnlocked, status);
-
         if (!isUnlocked && status === 'ledgerConnected') {
-            console.log('hasDeviceConnectionError');
             return setContentState('hasDeviceConnectionError');
         }
     }, [status, isUnlocked]);

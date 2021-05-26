@@ -1,5 +1,5 @@
-import React, { useMemo, useState } from 'react';
-import { connect } from 'react-redux';
+import React, { useEffect, useMemo, useState } from 'react';
+import { connect, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { useWallet } from 'use-wallet';
 import Page from '../../components/Page';
@@ -13,6 +13,7 @@ import theme from '../../theme';
 import { usdFormat } from '../../utils';
 import CollateralTable from './components/CollateralTable';
 import WalletsTable from './components/WalletsTable';
+import { getFilAddress } from '../../store/wallets/selectors';
 
 const Account: React.FC = () => {
     const totalUSDBalance = useTotalUSDBalance();
@@ -21,6 +22,8 @@ const Account: React.FC = () => {
     const [tableData, setTableData] = useState([] as Array<WalletBase>);
     const { account }: { account: string } = useWallet();
     const colBook = useCollateralBook(account);
+    const filAddress = useSelector(getFilAddress);
+
     useMemo(() => {
         async function updateTable() {
             let array = [];
@@ -29,6 +32,12 @@ const Account: React.FC = () => {
         }
         updateTable();
     }, [ethWallet, filWallet, totalUSDBalance, setTableData]);
+
+    useEffect(() => {
+        if (filAddress) {
+            localStorage.setItem('FIL_ADDRESS', filAddress);
+        }
+    }, [filAddress]);
 
     return (
         <Page background={theme.colors.background}>
