@@ -10,13 +10,13 @@ import { Coin } from './types';
 import {
     getAssetPrices,
     getEthUSDBalance,
+    getFilAddress,
     getFilUSDBalance,
     getTotalUSDBalance,
 } from './selectors';
 import { BigNumber, FilecoinNumber } from '@glif/filecoin-number';
 import { ThunkDispatch } from 'redux-thunk';
 import { Action } from 'redux';
-import { Network } from '@glif/filecoin-address';
 import LotusRpcEngine from '@glif/filecoin-rpc-client';
 
 export const calculateUSDBalance = (coin: Coin, balance: FilecoinNumber) => {
@@ -44,17 +44,13 @@ export const recalculateTotalUSDBalance = () => {
     };
 };
 
-export const updateFilWalletViaProvider = (
-    // @ts-ignore
-    walletProvider,
-    network = Network.TEST
-) => {
-    return async (dispatch: ThunkDispatch<RootState, void, Action>) => {
-        const [filAddr] = await walletProvider.wallet.getAccounts(
-            0,
-            1,
-            network
-        );
+export const updateFilWalletViaProvider = (walletProvider: any) => {
+    return async (
+        dispatch: ThunkDispatch<RootState, void, Action>,
+        getState: () => RootState
+    ) => {
+        const state = getState();
+        const filAddr = getFilAddress(state);
         const balance = await walletProvider.getBalance(filAddr);
 
         dispatch(updateFilWallet(balance, filAddr));
