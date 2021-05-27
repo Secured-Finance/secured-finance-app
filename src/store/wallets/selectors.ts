@@ -11,3 +11,9 @@ export const getTotalUSDBalance = (state: RootState) =>
 
 export const getFilAddress = (state: RootState) =>
     state.wallets.filecoin.address;
+
+export const getFilUSDBalance = (state: RootState) =>
+    state.wallets.filecoin.usdBalance;
+
+export const getEthUSDBalance = (state: RootState) =>
+    state.wallets.ethereum.usdBalance;
