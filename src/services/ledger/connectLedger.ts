@@ -22,7 +22,6 @@ const connectWithLedger = async (dispatch: any) => {
     const [filAddr] = await provider.wallet.getAccounts(0, 1, Network.TEST);
     const balance = await provider.getBalance(filAddr);
     dispatch(updateFilWalletBalance(balance.toNumber()));
-    dispatch(recalculateTotalUSDBalance());
 
     return provider;
 };
