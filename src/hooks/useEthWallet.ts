@@ -18,6 +18,7 @@ import { useEthereumUsd } from './useAssetPrices';
 
 import useBlock from './useBlock';
 import useModal from './useModal';
+import { recalculateTotalUSDBalance } from '../store/wallets/helpers';
 
 export const useEthereumWalletStore = () => {
     const ethWallet = useSelector((state: RootState) => {
@@ -38,14 +39,21 @@ export const useEthereumWalletStore = () => {
         signOut: reset,
     };
 
+    const getWalletBalance = () => {
+        if (!account) return { usdBalance: 0, inEther: 0 };
+
+        const inEther = new BigNumber(balance)
+            .dividedBy(new BigNumber(10).pow(18))
+            .toNumber();
+        const usdBalance = new BigNumber(inEther)
+            .times(new BigNumber(price))
+            .toNumber();
+        return { usdBalance, inEther };
+    };
+
     const fetchEthStore = useCallback(
         async (isMounted: boolean) => {
-            const inEther = new BigNumber(balance)
-                .dividedBy(new BigNumber(10).pow(18))
-                .toNumber();
-            const usdBalance = new BigNumber(inEther)
-                .times(new BigNumber(price))
-                .toNumber();
+            const { usdBalance, inEther } = getWalletBalance();
             const portfolioShare = new BigNumber(usdBalance)
                 .times(100)
                 .dividedBy(new BigNumber(totalUSDBalance))
@@ -59,6 +67,7 @@ export const useEthereumWalletStore = () => {
             if (portfolioShare != (null || Infinity)) {
                 dispatch(updateEthWalletPortfolioShare(portfolioShare));
             }
+            dispatch(recalculateTotalUSDBalance());
             dispatch(updateEthWalletActions(actObj));
         },
         [dispatch, account, balance, reset, totalUSDBalance, price, change]
@@ -90,6 +99,13 @@ export const useEthereumWalletStore = () => {
         price,
         change,
     ]);
+
+    useEffect(() => {
+        const { inEther, usdBalance } = getWalletBalance();
+        dispatch(updateEthWalletBalance(inEther));
+        dispatch(updateEthWalletUSDBalance(usdBalance));
+        dispatch(recalculateTotalUSDBalance());
+    }, [balance]);
 
     useEffect(() => {
         if (account === null) {

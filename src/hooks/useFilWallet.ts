@@ -19,6 +19,11 @@ import {
 import { useFilUsd } from './useAssetPrices';
 import useFilWasm from './useFilWasm';
 import useModal from './useModal';
+import {
+    updateFilWalletViaProvider,
+    updateFilWalletViaRPC,
+} from '../store/wallets/helpers';
+import { getFilUSDBalance } from '../store/wallets/selectors';
 
 export const useFilecoinAddress = () => {
     const dispatch = useDispatch();
@@ -154,6 +159,7 @@ export const useFilecoinWalletStore = () => {
     const totalUSDBalance = useSelector(
         (state: RootState) => state.wallets.totalUSDBalance
     );
+    const usdBalance = useSelector(getFilUSDBalance);
     const [onPresentAccountModal] = useModal(WalletAccountModal);
     const actObj = {
         send: onPresentAccountModal,
@@ -163,26 +169,10 @@ export const useFilecoinWalletStore = () => {
 
     const fetchFilStore = useCallback(
         async (isMounted: boolean) => {
-            const [filAddr] = await walletProvider.wallet.getAccounts(
-                0,
-                1,
-                Network.TEST
-            );
-            dispatch(updateFilWalletAddress(filAddr));
-            const balance = await walletProvider.getBalance(filAddr);
-            dispatch(updateFilWalletBalance(balance.toNumber()));
-            let usdBalance = new BigNumber(balance.toFil())
-                .times(new BigNumber(price))
-                .toNumber();
-            dispatch(updateFilWalletUSDBalance(usdBalance));
             dispatch(updateFilWalletAssetPrice(price));
             dispatch(updateFilWalletDailyChange(change));
+            dispatch(updateFilWalletViaProvider(walletProvider));
             dispatch(updateFilWalletActions(actObj));
-            let portfolioShare = new BigNumber(usdBalance)
-                .times(100)
-                .dividedBy(new BigNumber(totalUSDBalance))
-                .toNumber();
-            dispatch(updateFilWalletPortfolioShare(portfolioShare));
         },
         [dispatch, price, totalUSDBalance, loaded, walletProvider, change]
     );
@@ -205,6 +195,35 @@ export const useFilecoinWalletStore = () => {
             };
         })();
     }, [dispatch, loaded, totalUSDBalance, walletProvider, price, change]);
+
+    useEffect(() => {
+        // fetch FIL wallet info when not connected
+        (async () => {
+            const filAddr = localStorage.getItem('FIL_ADDRESS');
+            if (filAddr && !walletProvider) {
+                dispatch(updateFilWalletViaRPC(filAddr));
+            }
+        })();
+    }, []);
+
+    useEffect(() => {
+        if (price !== 0 || change !== 0) {
+            dispatch(updateFilWalletAssetPrice(price));
+            dispatch(updateFilWalletDailyChange(change));
+        }
+    }, [price, change]);
+
+    useEffect(() => {
+        // update portfolio share on totalUSDBalance change
+        let portfolioShare =
+            totalUSDBalance === 0
+                ? 0
+                : new BigNumber(usdBalance)
+                      .times(100)
+                      .dividedBy(new BigNumber(totalUSDBalance))
+                      .toNumber();
+        dispatch(updateFilWalletPortfolioShare(portfolioShare));
+    }, [totalUSDBalance]);
 
     return filWallet;
 };

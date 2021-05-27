@@ -4,10 +4,7 @@ import {
     setLedgerProvider,
 } from './setLedgerProvider';
 import { setFilWalletProvider, setFilWalletType } from '../filecoin/store';
-import {
-    recalculateTotalUSDBalance,
-    calculateUSDBalance,
-} from '../../store/wallets/helpers';
+import { recalculateTotalUSDBalance } from '../../store/wallets/helpers';
 import { updateFilWalletBalance } from '../../store/wallets';
 import { Network } from '@glif/filecoin-address';
 
@@ -25,8 +22,7 @@ const connectWithLedger = async (dispatch: any) => {
     const [filAddr] = await provider.wallet.getAccounts(0, 1, Network.TEST);
     const balance = await provider.getBalance(filAddr);
     dispatch(updateFilWalletBalance(balance.toNumber()));
-    const usdBalance = dispatch(calculateUSDBalance('filecoin', balance));
-    dispatch(recalculateTotalUSDBalance(usdBalance));
+    dispatch(recalculateTotalUSDBalance());
 
     return provider;
 };

@@ -6,17 +6,19 @@ import Page from '../../components/Page';
 import useCollateralBook from '../../hooks/useCollateralBook';
 import { useEthereumWalletStore } from '../../hooks/useEthWallet';
 import { useFilecoinWalletStore } from '../../hooks/useFilWallet';
-import { useTotalUSDBalance } from '../../hooks/useTotalUSDBalance';
 import { RootState } from '../../store/types';
 import { WalletBase } from '../../store/wallets';
 import theme from '../../theme';
 import { usdFormat } from '../../utils';
 import CollateralTable from './components/CollateralTable';
 import WalletsTable from './components/WalletsTable';
-import { getFilAddress } from '../../store/wallets/selectors';
+import {
+    getFilAddress,
+    getTotalUSDBalance,
+} from '../../store/wallets/selectors';
 
 const Account: React.FC = () => {
-    const totalUSDBalance = useTotalUSDBalance();
+    const totalUSDBalance = useSelector(getTotalUSDBalance);
     const ethWallet = useEthereumWalletStore();
     const filWallet = useFilecoinWalletStore();
     const [tableData, setTableData] = useState([] as Array<WalletBase>);
