@@ -21,5 +21,9 @@ module.exports = function override(config, env) {
     use: [{ loader: require.resolve('wasm-loader'), options: {} }]
   });
 
+  config.resolve.alias = {
+    src: path.resolve(__dirname, 'src')
+  }
+
   return config;
 }

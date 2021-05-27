@@ -1,15 +1,15 @@
 import styled from 'styled-components';
 import React, { useEffect } from 'react';
-import Modal, { ModalProps } from '../../Modal';
-import ModalTitle from '../../ModalTitle';
-import { Button } from '../../common/Buttons';
-import theme from '../../../theme';
+import Modal, { ModalProps } from 'src/components/Modal';
+import ModalTitle from 'src/components/ModalTitle';
+import { Button } from 'src/components/common/Buttons';
+import theme from 'src/theme';
 import { useDispatch, useSelector } from 'react-redux';
 import {
     isUsedByAnotherApp,
     isDeviceUnlocked,
-} from '../../../store/ledger/selectors';
-import connectWithLedger from '../../../services/ledger/connectLedger';
+} from 'src/store/ledger/selectors';
+import connectWithLedger from 'src/services/ledger/connectLedger';
 
 type ContentStates =
     | 'hasDeviceConnectionError'
