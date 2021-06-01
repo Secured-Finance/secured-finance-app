@@ -24,6 +24,7 @@ import {
     updateFilWalletViaRPC,
 } from '../store/wallets/helpers';
 import { getFilUSDBalance } from '../store/wallets/selectors';
+import connectWithLedger from 'src/services/ledger/connectLedger';
 
 export const useFilecoinAddress = () => {
     const dispatch = useDispatch();
@@ -201,7 +202,10 @@ export const useFilecoinWalletStore = () => {
         (async () => {
             const filAddr = localStorage.getItem('FIL_ADDRESS');
             if (filAddr && !walletProvider) {
-                dispatch(updateFilWalletViaRPC(filAddr));
+                dispatch(updateFilWalletAddress(filAddr));
+
+                const provider = await connectWithLedger(dispatch);
+                if (!provider) dispatch(updateFilWalletViaRPC(filAddr));
             }
         })();
     }, []);
