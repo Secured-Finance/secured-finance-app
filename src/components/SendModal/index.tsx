@@ -9,103 +9,23 @@ import ModalTitle from '../ModalTitle';
 import Spacer from '../Spacer';
 import { connect, useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store/types';
-import CurrencySelector from '../CurrencySelector';
 import {
     SendFormStore,
     updateSendAmount,
     updateSendCurrency,
-    updateSendGasPrice,
     updateSendToAddreess,
-    updateSendTxFee,
 } from '../../store/sendForm';
 import { currencyList, formatInput } from '../../utils';
 import { useEthBalance } from '../../hooks/useEthWallet';
 import { useFilecoinBalance } from '../../hooks/useFilWallet';
-
 import { isAddress } from 'web3-utils';
 import { validateAddressString } from '@glif/filecoin-address';
-import { useEstimateTxFee, useSendEth } from '../../hooks/useSendEth';
-import { GasPriceOracle } from 'gas-price-oracle';
+import { useSendEth } from '../../hooks/useSendEth';
 import BigNumber from 'bignumber.js';
 import { CurrencyImage } from 'src/components/common/CurrencyImage';
+import { GasTabsAndTable } from './GastabsAndTable';
 
 type CombinedProps = ModalProps & SendFormStore;
-
-const RenderGasTabs: React.FC = () => {
-    const defaultGasPrices = new Map([
-        ['Standard', 0],
-        ['Fast', 0],
-        ['Instant', 0],
-    ]);
-    const [gasTabs, setGasTabs] = useState(defaultGasPrices);
-    const [selectedTxFee, setSelectedTxFee] = useState('Fast');
-    const [isGasUpdated, setGasUpdated] = useState(false);
-    let tabs: Array<any> = [];
-
-    const dispatch = useDispatch();
-    const oracle = new GasPriceOracle();
-
-    const handleSelectTab =
-        (tab: React.SetStateAction<string>, gasPrice: number) => () => {
-            setSelectedTxFee(tab);
-            dispatch(updateSendGasPrice(gasPrice.toFixed(0)));
-        };
-
-    const updateGasPrices = () => {
-        let cGasTabs = new Map(gasTabs);
-        oracle.fetchMedianGasPriceOffChain().then(gasPrices => {
-            cGasTabs.set('Standard', gasPrices.standard);
-            cGasTabs.set('Fast', gasPrices.fast);
-            cGasTabs.set('Instant', gasPrices.instant);
-            dispatch(updateSendGasPrice(gasPrices.fast.toFixed(0)));
-        });
-        setGasTabs(cGasTabs);
-        setGasUpdated(true);
-    };
-
-    useEffect(() => {
-        if (!isGasUpdated) {
-            updateGasPrices();
-        }
-    }, [isGasUpdated]);
-
-    gasTabs.forEach((tab, tabName) => {
-        tabs.push(
-            <Button
-                key={tabName}
-                style={{
-                    background: 'transparent',
-                    color: theme.colors.lightText,
-                    borderWidth: 1,
-                    borderColor:
-                        selectedTxFee === tabName
-                            ? theme.colors.darkBlue
-                            : 'transparent',
-                    borderBottom:
-                        selectedTxFee === tabName
-                            ? theme.colors.darkBlue
-                            : 'transparent',
-                    textTransform: 'capitalize',
-                    fontWeight: 500,
-                    fontSize: 14,
-                    outline: 'none',
-                    height: 40,
-                    borderRadius: 4,
-                    marginRight: 0,
-                    width: '120px',
-                    textAlign: 'center',
-                    paddingLeft: 18,
-                    paddingRight: 18,
-                }}
-                onClick={handleSelectTab(tabName, tab)}
-            >
-                {tabName}
-            </Button>
-        );
-    });
-
-    return <StyledGasTabs>{tabs}</StyledGasTabs>;
-};
 
 const SendModal: React.FC<CombinedProps> = ({
     onDismiss,
@@ -113,9 +33,9 @@ const SendModal: React.FC<CombinedProps> = ({
     currencyIndex,
     currencyName,
     currencyShortName,
-    txFee,
     gasPrice,
     toAddress,
+    ccyIndex,
 }) => {
     const [buttonOpen, setButtonOpen] = useState(false);
     const [addrErr, setAddrErr] = useState(false);
@@ -222,8 +142,16 @@ const SendModal: React.FC<CombinedProps> = ({
         }
     };
 
+    useEffect(() => {
+        const currencyShortName = currencyList.find(
+            currency => currency.index === ccyIndex
+        )?.shortName;
+        if (currencyShortName) {
+            dispatch(updateSendCurrency(currencyShortName));
+        }
+    }, []);
+
     const { onSendEth } = useSendEth(amount, toAddress, gasPrice);
-    const txFeeUSD = useEstimateTxFee(gasPrice);
 
     const handleTransferAssets = useCallback(async () => {
         try {
@@ -247,7 +175,6 @@ const SendModal: React.FC<CombinedProps> = ({
         }
     }, [toAddress, amount, setAddrErr, onSendEth, setOngoingTx]);
 
-    console.log({ currencyShortName });
     return (
         <Modal>
             <ModalTitle text='Send' />
@@ -341,19 +268,7 @@ const SendModal: React.FC<CombinedProps> = ({
                         />
                     </StyledInputContainer>
                 </StyledSubcontainer>
-                <StyledSubcontainer marginBottom={'0'}>
-                    <RenderGasTabs />
-                </StyledSubcontainer>
-                <StyledAddressContainer>
-                    <StyledRowContainer>
-                        <StyledAddressTitle>Gas Price</StyledAddressTitle>
-                        <StyledAddress>{gasPrice} Gwei</StyledAddress>
-                    </StyledRowContainer>
-                    <StyledRowContainer marginTop={'5px'}>
-                        <StyledAddressTitle>Transaction fee</StyledAddressTitle>
-                        <StyledAddress>${txFee.toFixed(2)}</StyledAddress>
-                    </StyledRowContainer>
-                </StyledAddressContainer>
+                <GasTabsAndTable currencyIndex={ccyIndex} />
             </ModalContent>
             <ModalActions>
                 <StyledButtonContainer>
@@ -473,46 +388,9 @@ const StyledAddressInput = styled.input`
     border: none;
 `;
 
-interface StyledRowContainerProps {
-    marginTop?: string;
-}
-
-const StyledRowContainer = styled.div<StyledRowContainerProps>`
-    margin-top: ${props => (props.marginTop ? props.marginTop : 0)};
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-`;
-
-const StyledAddressContainer = styled.div`
-    background: rgb(18, 39, 53, 0.7);
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
-    padding: 18px;
-    border: 1px solid ${props => props.theme.colors.darkenedBg};
-    border-top: 0;
-    border-radius: 10px;
-`;
-
 const StyledButtonContainer = styled.div`
     display: flex;
     flex-direction: row;
-`;
-
-const StyledAddressTitle = styled.p`
-    margin: 0;
-    color: ${props => props.theme.colors.gray};
-    font-size: ${props => props.theme.sizes.footnote}px;
-`;
-
-const StyledAddress = styled.p`
-    margin: 0;
-    color: ${props => props.theme.colors.gray};
-    font-size: ${props => props.theme.sizes.footnote}px;
 `;
 
 const StyledDropdown = styled.div`
@@ -547,15 +425,6 @@ const StyledDropdownItem = styled.li`
     align-items: center;
     padding: 8px 8px;
     border-bottom: 0.5px solid ${props => props.theme.colors.lightGray[1]};
-`;
-
-const StyledGasTabs = styled.div`
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    text-transform: uppercase;
-    padding: 0;
-    margin-bottom: 20px;
 `;
 
 interface StyledCurrencyTextProps {
