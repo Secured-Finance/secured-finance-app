@@ -8,7 +8,8 @@ import {
     TESTNET_PATH_CODE,
     LEDGER,
 } from '../../ledger/constants';
-import createPath from '../../ledger/createPath';
+import createPath from 'src/services/ledger/createPath';
+import { SerializableMessage } from '@glif/filecoin-message';
 
 type Response = {
     error_message: string;
@@ -75,7 +76,10 @@ const ledgerProvider = (rustModule: RustModule) => {
                 });
             },
 
-            sign: async (filecoinMessage: string, path: string) => {
+            sign: async (
+                filecoinMessage: SerializableMessage,
+                path: string
+            ) => {
                 const serializedMessage: string =
                     rustModule.transactionSerialize(filecoinMessage);
                 const res = handleErrors(

@@ -1,42 +1,67 @@
-import BigNumber from 'bignumber.js'
-import React, { useCallback, useState } from 'react'
-import { connect, useDispatch } from 'react-redux'
-import styled from 'styled-components'
-import Button from "../../../../../components/Button"
-import { usePlaceOrder } from '../../../../../hooks/usePlaceOrder'
-import { LendingTerminalStore, updateLendAmount, updateLendingTerms, updateLendRate } from '../../../../../store/lendingTerminal'
-import { RootState } from '../../../../../store/types'
-import theme from '../../../../../theme'
-import { PlaceOrderForm } from './PlaceOrderForm'
+import BigNumber from 'bignumber.js';
+import React, { useCallback, useState } from 'react';
+import { connect, useDispatch } from 'react-redux';
+import styled from 'styled-components';
+import { usePlaceOrder } from '../../../../../hooks/usePlaceOrder';
+import {
+    LendingTerminalStore,
+    updateLendAmount,
+    updateLendingTerms,
+    updateLendRate,
+} from '../../../../../store/lendingTerminal';
+import { RootState } from '../../../../../store/types';
+import { PlaceOrderForm } from './PlaceOrderForm';
+import { Button } from 'src/components/common/Buttons';
 
-const Lend: React.FC<LendingTerminalStore> = ({ currencyIndex, lendAmount, lendRate, selectedTerms, termsIndex }) => {
+const Lend: React.FC<LendingTerminalStore> = ({
+    currencyIndex,
+    lendAmount,
+    lendRate,
+    selectedTerms,
+    termsIndex,
+}) => {
     const dispatch = useDispatch();
-    const [termsOpen, setTermsOpen] = useState(false)
-    const [pendingTx, setPendingTx] = useState(false)
+    const [termsOpen, setTermsOpen] = useState(false);
+    const [pendingTx, setPendingTx] = useState(false);
 
-    const handleOpenTerms = useCallback((e: React.FormEvent<HTMLSelectElement>, termsOpen:boolean) => {
-        dispatch(updateLendingTerms(e.currentTarget.value))
-        setTermsOpen(!termsOpen)
-    },[setTermsOpen])
+    const handleOpenTerms = useCallback(
+        (e: React.FormEvent<HTMLSelectElement>, termsOpen: boolean) => {
+            dispatch(updateLendingTerms(e.currentTarget.value));
+            setTermsOpen(!termsOpen);
+        },
+        [setTermsOpen]
+    );
 
-    const handleInterestRate = useCallback((e: React.FormEvent<HTMLInputElement>) => {
-        dispatch(updateLendRate(e.currentTarget.value))
-    },[lendRate])
+    const handleInterestRate = useCallback(
+        (e: React.FormEvent<HTMLInputElement>) => {
+            dispatch(updateLendRate(e.currentTarget.value));
+        },
+        [lendRate]
+    );
 
-    const handleLendAmount = useCallback((e: React.FormEvent<HTMLInputElement>) => {
-        dispatch(updateLendAmount(e.currentTarget.value))
-    },[lendAmount])
+    const handleLendAmount = useCallback(
+        (e: React.FormEvent<HTMLInputElement>) => {
+            dispatch(updateLendAmount(e.currentTarget.value));
+        },
+        [lendAmount]
+    );
 
-    const { onPlaceOrder } = usePlaceOrder(currencyIndex, termsIndex, 0, lendAmount, new BigNumber(lendRate).multipliedBy(100).toNumber())
+    const { onPlaceOrder } = usePlaceOrder(
+        currencyIndex,
+        termsIndex,
+        0,
+        lendAmount,
+        new BigNumber(lendRate).multipliedBy(100).toNumber()
+    );
     const handleLoanDeal = useCallback(async () => {
         try {
-            setPendingTx(true)
-            await onPlaceOrder()
-            setPendingTx(false)
+            setPendingTx(true);
+            await onPlaceOrder();
+            setPendingTx(false);
         } catch (e) {
-            console.log(e)
+            console.log(e);
         }
-    }, [onPlaceOrder, setPendingTx])
+    }, [onPlaceOrder, setPendingTx]);
 
     return (
         <StyledLoanContainer>
@@ -44,37 +69,30 @@ const Lend: React.FC<LendingTerminalStore> = ({ currencyIndex, lendAmount, lendR
                 amountFILValue={lendAmount.toString()}
                 onChangeAmountFILValue={handleLendAmount}
                 termValue={selectedTerms}
-                onChangeTerm={(e: React.FormEvent<HTMLSelectElement>) => handleOpenTerms(e, termsOpen)}
+                onChangeTerm={(e: React.FormEvent<HTMLSelectElement>) =>
+                    handleOpenTerms(e, termsOpen)
+                }
                 insertRateValue={lendRate.toString()}
                 onChangeInsertRate={handleInterestRate}
             />
             <StyledButtonContainer>
-                {/* <Button 
-                    size={"lg"} 
-                    style={{borderRadius: 5, background: 'rgba(0, 122, 255, 1)', color: theme.colors.white}}
-                    onClick={handleLoanDeal}
-                    disabled={pendingTx}
-                >Lend</Button> */}
-                <Button 
-                    onClick={handleLoanDeal}
-                    disabled={pendingTx}
-                >
+                <Button onClick={handleLoanDeal} disabled={pendingTx}>
                     Lend
                 </Button>
             </StyledButtonContainer>
         </StyledLoanContainer>
     );
-}
+};
 
 const StyledLoanContainer = styled.div`
     display: flex;
     flex-direction: column;
-`
+`;
 
 const StyledButtonContainer = styled.div`
     display: grid;
     margin-top: 13px;
-`
+`;
 
-const mapStateToProps = (state: RootState) => state.lendingTerminal
-export default connect(mapStateToProps)(Lend)
+const mapStateToProps = (state: RootState) => state.lendingTerminal;
+export default connect(mapStateToProps)(Lend);

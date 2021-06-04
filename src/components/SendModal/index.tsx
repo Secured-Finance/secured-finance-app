@@ -24,20 +24,20 @@ import { useSendEth } from '../../hooks/useSendEth';
 import BigNumber from 'bignumber.js';
 import { CurrencyImage } from 'src/components/common/CurrencyImage';
 import { GasTabsAndTable } from './GastabsAndTable';
+import { useSendFil } from 'src/hooks/useSendFil';
+import { FilTxFeeTable } from './FilTxFeeTable';
 
 type CombinedProps = ModalProps & SendFormStore;
 
 const SendModal: React.FC<CombinedProps> = ({
     onDismiss,
     amount,
-    currencyIndex,
     currencyName,
     currencyShortName,
     gasPrice,
     toAddress,
     ccyIndex,
 }) => {
-    const [buttonOpen, setButtonOpen] = useState(false);
     const [addrErr, setAddrErr] = useState(false);
     const [balanceErr, setBalanceErr] = useState(false);
     const [ongoingTx, setOngoingTx] = useState(false);
@@ -53,21 +53,6 @@ const SendModal: React.FC<CombinedProps> = ({
     );
     const usdcPrice = useSelector(
         (state: RootState) => state.assetPrices.usdc.price
-    );
-
-    const handleButtonClick = useCallback(
-        (buttonOpen: boolean) => {
-            setButtonOpen(!buttonOpen);
-        },
-        [setButtonOpen]
-    );
-
-    const handleCurrencySelect = useCallback(
-        (value: string, buttonOpen: boolean) => {
-            dispatch(updateSendCurrency(value));
-            setButtonOpen(!buttonOpen);
-        },
-        [dispatch, setButtonOpen]
     );
 
     const handleSendAmount = useCallback(
@@ -90,7 +75,7 @@ const SendModal: React.FC<CombinedProps> = ({
     );
 
     const renderBalance = useMemo(() => {
-        switch (currencyIndex) {
+        switch (ccyIndex) {
             case 0:
                 return (
                     <span>
@@ -107,10 +92,10 @@ const SendModal: React.FC<CombinedProps> = ({
                 // TODO: Add USDC balances
                 return <span>0.00 {currencyShortName}</span>;
         }
-    }, [currencyIndex, currencyShortName]);
+    }, [ccyIndex, currencyShortName]);
 
     const TotalUsdAmount = useMemo(() => {
-        switch (currencyIndex) {
+        switch (ccyIndex) {
             case 0:
                 return (amount * ethPrice).toFixed(2);
             case 1:
@@ -123,7 +108,7 @@ const SendModal: React.FC<CombinedProps> = ({
     }, [amount, currencyShortName]);
 
     const isValidAddress = () => {
-        switch (currencyIndex) {
+        switch (ccyIndex) {
             case 0:
                 return isAddress(toAddress);
             case 1:
@@ -132,13 +117,13 @@ const SendModal: React.FC<CombinedProps> = ({
     };
 
     const isEnoughBalance = (amount: string) => {
-        switch (currencyIndex) {
+        switch (ccyIndex) {
             case 0:
                 return new BigNumber(amount).isLessThanOrEqualTo(
                     new BigNumber(ethBalance)
                 );
             case 1:
-                return amount <= filBalance.toString();
+                return +amount <= filBalance;
         }
     };
 
@@ -152,13 +137,15 @@ const SendModal: React.FC<CombinedProps> = ({
     }, []);
 
     const { onSendEth } = useSendEth(amount, toAddress, gasPrice);
+    const { sendFil } = useSendFil(amount, toAddress);
 
     const handleTransferAssets = useCallback(async () => {
         try {
-            if (toAddress != '' && amount > 0) {
+            if (toAddress !== '' && amount > 0) {
                 if (isValidAddress()) {
                     setOngoingTx(true);
-                    const txHash = await onSendEth();
+                    const txHash =
+                        ccyIndex === 0 ? await onSendEth() : await sendFil();
                     if (!txHash) {
                         setOngoingTx(false);
                     } else {
@@ -226,28 +213,6 @@ const SendModal: React.FC<CombinedProps> = ({
                             />
                         </StyledCurrencyInput>
                     </StyledInputContainer>
-                    {buttonOpen ? (
-                        <StyledDropdown>
-                            <ul>
-                                {currencyList.map((ccy, i) => (
-                                    <StyledDropdownItem
-                                        key={i}
-                                        onClick={() =>
-                                            handleCurrencySelect(
-                                                ccy.shortName,
-                                                buttonOpen
-                                            )
-                                        }
-                                    >
-                                        <img width={28} src={ccy.icon} />
-                                        <StyledCurrencyText>
-                                            {ccy.shortName}
-                                        </StyledCurrencyText>
-                                    </StyledDropdownItem>
-                                ))}
-                            </ul>
-                        </StyledDropdown>
-                    ) : null}
                 </StyledSubcontainer>
                 <StyledSubcontainer>
                     <StyledLabelContainer>
@@ -269,6 +234,7 @@ const SendModal: React.FC<CombinedProps> = ({
                     </StyledInputContainer>
                 </StyledSubcontainer>
                 <GasTabsAndTable currencyIndex={ccyIndex} />
+                {ccyIndex === 1 && <FilTxFeeTable />}
             </ModalContent>
             <ModalActions>
                 <StyledButtonContainer>
@@ -288,7 +254,7 @@ const SendModal: React.FC<CombinedProps> = ({
                     <Spacer size={'md'} />
                     <Button
                         onClick={handleTransferAssets}
-                        text={balanceErr ? 'Insuficient Amount' : 'Send'}
+                        text={balanceErr ? 'Insufficient Amount' : 'Send'}
                         style={{
                             background: theme.colors.buttonBlue,
                             fontSize: theme.sizes.callout,
@@ -391,50 +357,6 @@ const StyledAddressInput = styled.input`
 const StyledButtonContainer = styled.div`
     display: flex;
     flex-direction: row;
-`;
-
-const StyledDropdown = styled.div`
-    position: relative;
-    top: -10px;
-    left: 20px;
-
-    ul {
-        background: white;
-        position: absolute;
-        z-index: 2;
-        min-width: 120px;
-        border-radius: 3px;
-        list-style: none;
-        padding: 0;
-        margin: 0;
-    }
-
-    li:hover {
-        background-color: rgba(232, 232, 233, 0.4);
-        cursor: pointer;
-    }
-
-    li:last-child {
-        border-bottom: none;
-    }
-`;
-
-const StyledDropdownItem = styled.li`
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    padding: 8px 8px;
-    border-bottom: 0.5px solid ${props => props.theme.colors.lightGray[1]};
-`;
-
-interface StyledCurrencyTextProps {
-    marginLeft?: string;
-}
-
-const StyledCurrencyText = styled.p<StyledCurrencyTextProps>`
-    margin: 0;
-    margin-left: ${props => (props.marginLeft ? props.marginLeft : '7px')};
-    text-align: left;
 `;
 
 const mapStateToProps = (state: RootState) => state.sendForm;

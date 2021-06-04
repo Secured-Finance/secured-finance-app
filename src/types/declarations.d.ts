@@ -1,6 +1,8 @@
 declare module '@zondax/filecoin-signing-tools' {
+    import { SerializableMessage } from '@glif/filecoin-message';
+
     interface RustModule {
-        transactionSerialize?: (filecoinMessage: string) => string;
+        transactionSerialize?: (filecoinMessage: SerializableMessage) => string;
     }
     export default RustModule;
 }
