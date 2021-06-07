@@ -1,20 +1,23 @@
 import React, { useCallback } from 'react';
+import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import { useWallet } from 'use-wallet';
-import theme from '../../../theme';
-import Button from '../../Button';
-import Label from '../../Label';
-import { ModalProps } from '../../Modal';
-import Spacer from '../../Spacer';
-import { CACHED_PROVIDER_KEY } from '../../../contexts/FilecoinWalletProvider';
+import theme from 'src/theme';
+import Button from 'src/components/Button';
+import Label from 'src/components/Label';
+import { ModalProps } from 'src/components/Modal';
+import Spacer from 'src/components/Spacer';
+import { CACHED_PROVIDER_KEY } from 'src/contexts/FilecoinWalletProvider';
 
 const EthWallet: React.FC<ModalProps> = ({ onDismiss, ...props }) => {
     const { account, reset } = useWallet();
+    const history = useHistory();
 
     const handleSignOutClick = useCallback(() => {
         reset();
         localStorage.removeItem(CACHED_PROVIDER_KEY);
         onDismiss();
+        history.push('/');
     }, [onDismiss, reset]);
 
     return (
