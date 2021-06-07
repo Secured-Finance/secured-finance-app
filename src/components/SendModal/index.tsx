@@ -233,7 +233,7 @@ const SendModal: React.FC<CombinedProps> = ({
                             <StyledInput
                                 type={'number'}
                                 placeholder={'0'}
-                                value={amount === 0 ? '' : amount}
+                                value={amount}
                                 minLength={1}
                                 maxLength={79}
                                 onKeyDown={formatInput}

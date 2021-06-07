@@ -6,6 +6,7 @@ import Button from 'src/components/Button';
 import theme from 'src/theme';
 import styled from 'styled-components';
 import { getGasPrice, getTxFee } from 'src/store/sendForm/selectors';
+import { useEstimateTxFee } from 'src/hooks/useSendEth';
 
 export const GasTabsAndTable: React.FC = () => {
     const gasPrice = useSelector(getGasPrice);
@@ -19,6 +20,8 @@ export const GasTabsAndTable: React.FC = () => {
     const [selectedTxFee, setSelectedTxFee] = useState('Fast');
     const [isGasUpdated, setGasUpdated] = useState(false);
     let tabs: Array<any> = [];
+
+    useEstimateTxFee(gasPrice);
 
     const dispatch = useDispatch();
     const oracle = new GasPriceOracle();
