@@ -1,26 +1,27 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
-import theme from '../../theme';
-import Button from '../Button';
-import Modal, { ModalProps } from '../Modal';
-import ModalActions from '../ModalActions';
-import ModalContent from '../ModalContent';
-import ModalTitle from '../ModalTitle';
-import Spacer from '../Spacer';
+import theme from 'src/theme';
+import Button from 'src/components/Button';
+import Modal, { ModalProps } from 'src/components/Modal';
+import ModalActions from 'src/components/ModalActions';
+import ModalContent from 'src/components/ModalContent';
+import ModalTitle from 'src/components/ModalTitle';
+import Spacer from 'src/components/Spacer';
 import { connect, useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../store/types';
+import { RootState } from 'src/store/types';
 import {
+    resetSendForm,
     SendFormStore,
     updateSendAmount,
     updateSendCurrency,
     updateSendToAddreess,
-} from '../../store/sendForm';
-import { currencyList, formatInput } from '../../utils';
-import { useEthBalance } from '../../hooks/useEthWallet';
-import { useFilecoinBalance } from '../../hooks/useFilWallet';
+} from 'src/store/sendForm';
+import { currencyList, formatInput } from 'src/utils';
+import { useEthBalance } from 'src/hooks/useEthWallet';
+import { useFilecoinBalance } from 'src/hooks/useFilWallet';
 import { isAddress } from 'web3-utils';
 import { validateAddressString } from '@glif/filecoin-address';
-import { useSendEth } from '../../hooks/useSendEth';
+import { useSendEth } from 'src/hooks/useSendEth';
 import BigNumber from 'bignumber.js';
 import { CurrencyImage } from 'src/components/common/CurrencyImage';
 import { GasTabsAndTable } from './GastabsAndTable';
@@ -37,6 +38,7 @@ const SendModal: React.FC<CombinedProps> = ({
     gasPrice,
     toAddress,
     ccyIndex,
+    maxTxFee,
 }) => {
     const [addrErr, setAddrErr] = useState(false);
     const [balanceErr, setBalanceErr] = useState(false);
@@ -54,17 +56,18 @@ const SendModal: React.FC<CombinedProps> = ({
     const usdcPrice = useSelector(
         (state: RootState) => state.assetPrices.usdc.price
     );
+    const maxFilTxFee = Number(maxTxFee.toFil());
 
     const handleSendAmount = useCallback(
         (e: React.FormEvent<HTMLInputElement>) => {
-            dispatch(updateSendAmount(e.currentTarget.value));
+            dispatch(updateSendAmount(+e.currentTarget.value));
             if (!isEnoughBalance(e.currentTarget.value)) {
                 setBalanceErr(true);
             } else {
                 setBalanceErr(false);
             }
         },
-        [dispatch, setBalanceErr]
+        [dispatch, setBalanceErr, maxFilTxFee]
     );
 
     const handleRecipientAddress = useCallback(
@@ -123,7 +126,7 @@ const SendModal: React.FC<CombinedProps> = ({
                     new BigNumber(ethBalance)
                 );
             case 1:
-                return +amount <= filBalance;
+                return +amount + maxFilTxFee <= filBalance;
         }
     };
 
@@ -136,8 +139,18 @@ const SendModal: React.FC<CombinedProps> = ({
         }
     }, []);
 
+    const handleSendModalClose = () => {
+        dispatch(resetSendForm());
+        if (!ongoingTx) onDismiss();
+    };
+
     const { onSendEth } = useSendEth(amount, toAddress, gasPrice);
-    const { sendFil } = useSendFil(amount, toAddress);
+    const { sendFil } = useSendFil(
+        amount,
+        toAddress,
+        handleSendModalClose,
+        setOngoingTx
+    );
 
     const handleTransferAssets = useCallback(async () => {
         try {
@@ -149,7 +162,7 @@ const SendModal: React.FC<CombinedProps> = ({
                     if (!txHash) {
                         setOngoingTx(false);
                     } else {
-                        onDismiss();
+                        if (!ongoingTx) onDismiss();
                     }
                 } else {
                     setAddrErr(true);
@@ -161,6 +174,21 @@ const SendModal: React.FC<CombinedProps> = ({
             console.log(e);
         }
     }, [toAddress, amount, setAddrErr, onSendEth, setOngoingTx]);
+
+    const isSendButtonDisabled = () => {
+        return ongoingTx || amount <= 0 || balanceErr;
+    };
+
+    const getSendButtonText = () => {
+        if (ongoingTx) return 'Confirm transaction';
+        if (balanceErr) return 'Insufficient amount';
+        return 'Send';
+    };
+
+    const onCloseSendModal = () => {
+        dispatch(resetSendForm());
+        onDismiss();
+    };
 
     return (
         <Modal>
@@ -205,11 +233,12 @@ const SendModal: React.FC<CombinedProps> = ({
                             <StyledInput
                                 type={'number'}
                                 placeholder={'0'}
-                                value={amount}
+                                value={amount === 0 ? '' : amount}
                                 minLength={1}
                                 maxLength={79}
                                 onKeyDown={formatInput}
                                 onInput={handleSendAmount}
+                                disabled={ongoingTx}
                             />
                         </StyledCurrencyInput>
                     </StyledInputContainer>
@@ -230,17 +259,18 @@ const SendModal: React.FC<CombinedProps> = ({
                             placeholder={'Paste ' + currencyName + ' address'}
                             value={toAddress}
                             onChange={handleRecipientAddress}
+                            disabled={ongoingTx}
                         />
                     </StyledInputContainer>
                 </StyledSubcontainer>
-                <GasTabsAndTable currencyIndex={ccyIndex} />
+                {ccyIndex === 0 && <GasTabsAndTable />}
                 {ccyIndex === 1 && <FilTxFeeTable />}
             </ModalContent>
             <ModalActions>
                 <StyledButtonContainer>
                     <Button
                         text='Cancel'
-                        onClick={onDismiss}
+                        onClick={onCloseSendModal}
                         style={{
                             background: 'transparent',
                             borderWidth: 1,
@@ -250,18 +280,19 @@ const SendModal: React.FC<CombinedProps> = ({
                             fontWeight: 500,
                             color: theme.colors.white,
                         }}
+                        disabled={ongoingTx}
                     />
                     <Spacer size={'md'} />
                     <Button
                         onClick={handleTransferAssets}
-                        text={balanceErr ? 'Insufficient Amount' : 'Send'}
+                        text={getSendButtonText()}
                         style={{
                             background: theme.colors.buttonBlue,
                             fontSize: theme.sizes.callout,
                             fontWeight: 500,
                             color: theme.colors.white,
                         }}
-                        disabled={!(amount > 0) || balanceErr}
+                        disabled={isSendButtonDisabled()}
                     />
                 </StyledButtonContainer>
             </ModalActions>

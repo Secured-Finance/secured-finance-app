@@ -17,7 +17,7 @@ import {
 } from 'src/services/ledger/constants';
 import createPath from 'src/services/ledger/createPath';
 import { validateAddressString } from '@glif/filecoin-address';
-import { setMaxTxFee } from '../store/sendForm';
+import { setMaxTxFee, updateSendAmount } from 'src/store/sendForm';
 
 // TODO: add params
 // TODO: use frozen, fetchingTxDetails, mPoolPushing and value Error to disable Send button
@@ -38,14 +38,18 @@ const friendlifyError = err => {
 
 const path = createPath(TESTNET_PATH_CODE, 0);
 
-export const useSendFil = (amount = 0, toAddress: string) => {
+export const useSendFil = (
+    amount = 0,
+    toAddress: string,
+    close: any,
+    setOngoingTx: any
+) => {
     const [frozen, setFrozen] = useState(false);
     const [gasInfo, setGasInfo] = useState(emptyGasInfo);
     const [valueError, setValueError] = useState('');
     const [fetchingTxDetails, setFetchingTxDetails] = useState(false);
     const [mPoolPushing, setMPoolPushing] = useState(false);
     const [uncaughtError, setUncaughtError] = useState('');
-    const [attemptingTx, setAttemptingTx] = useState(false);
     const wallet = useSelector(getFilWallet);
     const value = new FilecoinNumber(amount, 'fil');
 
@@ -169,9 +173,8 @@ export const useSendFil = (amount = 0, toAddress: string) => {
         try {
             const message = await send();
             if (message) {
-                // dispatch(confirmMessage(toLowerCaseMsgFields(message)))
-                // setValue(new FilecoinNumber('0', 'fil'));
-                // close();
+                updateSendAmount(0);
+                close();
             }
         } catch (err) {
             if (err.message.includes('Unexpected number of items')) {
@@ -182,7 +185,7 @@ export const useSendFil = (amount = 0, toAddress: string) => {
                 setUncaughtError(err.message);
             }
         } finally {
-            setAttemptingTx(false);
+            setOngoingTx(false);
             setFetchingTxDetails(false);
             setMPoolPushing(false);
         }

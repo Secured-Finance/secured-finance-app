@@ -7,11 +7,7 @@ import theme from 'src/theme';
 import styled from 'styled-components';
 import { getGasPrice, getTxFee } from 'src/store/sendForm/selectors';
 
-interface IGasTabs {
-    currencyIndex: number;
-}
-
-export const GasTabsAndTable: React.FC<IGasTabs> = ({ currencyIndex }) => {
+export const GasTabsAndTable: React.FC = () => {
     const gasPrice = useSelector(getGasPrice);
     const txFee = useSelector(getTxFee);
     const defaultGasPrices = new Map([
@@ -51,60 +47,57 @@ export const GasTabsAndTable: React.FC<IGasTabs> = ({ currencyIndex }) => {
         }
     }, [isGasUpdated]);
 
-    if (currencyIndex === 0) {
-        return (
-            <>
-                <StyledSubcontainer marginBottom={'0'}>
-                    {gasTabs.forEach((tab, tabName) => {
-                        tabs.push(
-                            <Button
-                                key={tabName}
-                                style={{
-                                    background: 'transparent',
-                                    color: theme.colors.lightText,
-                                    borderWidth: 1,
-                                    borderColor:
-                                        selectedTxFee === tabName
-                                            ? theme.colors.darkBlue
-                                            : 'transparent',
-                                    borderBottom:
-                                        selectedTxFee === tabName
-                                            ? theme.colors.darkBlue
-                                            : 'transparent',
-                                    textTransform: 'capitalize',
-                                    fontWeight: 500,
-                                    fontSize: 14,
-                                    outline: 'none',
-                                    height: 40,
-                                    borderRadius: 4,
-                                    marginRight: 0,
-                                    width: '120px',
-                                    textAlign: 'center',
-                                    paddingLeft: 18,
-                                    paddingRight: 18,
-                                }}
-                                onClick={handleSelectTab(tabName, tab)}
-                            >
-                                {tabName}
-                            </Button>
-                        );
-                    })}
-                    <StyledGasTabs>{tabs}</StyledGasTabs>;
-                </StyledSubcontainer>
-                <StyledAddressContainer>
-                    <StyledRowContainer>
-                        <StyledAddressTitle>Gas Price</StyledAddressTitle>
-                        <StyledAddress>{gasPrice} Gwei</StyledAddress>
-                    </StyledRowContainer>
-                    <StyledRowContainer marginTop={'5px'}>
-                        <StyledAddressTitle>Transaction fee</StyledAddressTitle>
-                        <StyledAddress>${txFee.toFixed(2)}</StyledAddress>
-                    </StyledRowContainer>
-                </StyledAddressContainer>
-            </>
-        );
-    }
-    return null;
+    return (
+        <>
+            <StyledSubcontainer marginBottom={'0'}>
+                {gasTabs.forEach((tab, tabName) => {
+                    tabs.push(
+                        <Button
+                            key={tabName}
+                            style={{
+                                background: 'transparent',
+                                color: theme.colors.lightText,
+                                borderWidth: 1,
+                                borderColor:
+                                    selectedTxFee === tabName
+                                        ? theme.colors.darkBlue
+                                        : 'transparent',
+                                borderBottom:
+                                    selectedTxFee === tabName
+                                        ? theme.colors.darkBlue
+                                        : 'transparent',
+                                textTransform: 'capitalize',
+                                fontWeight: 500,
+                                fontSize: 14,
+                                outline: 'none',
+                                height: 40,
+                                borderRadius: 4,
+                                marginRight: 0,
+                                width: '120px',
+                                textAlign: 'center',
+                                paddingLeft: 18,
+                                paddingRight: 18,
+                            }}
+                            onClick={handleSelectTab(tabName, tab)}
+                        >
+                            {tabName}
+                        </Button>
+                    );
+                })}
+                <StyledGasTabs>{tabs}</StyledGasTabs>;
+            </StyledSubcontainer>
+            <StyledAddressContainer>
+                <StyledRowContainer>
+                    <StyledAddressTitle>Gas Price</StyledAddressTitle>
+                    <StyledAddress>{gasPrice} Gwei</StyledAddress>
+                </StyledRowContainer>
+                <StyledRowContainer marginTop={'5px'}>
+                    <StyledAddressTitle>Transaction fee</StyledAddressTitle>
+                    <StyledAddress>${txFee.toFixed(2)}</StyledAddress>
+                </StyledRowContainer>
+            </StyledAddressContainer>
+        </>
+    );
 };
 
 interface StyledRowContainerProps {
