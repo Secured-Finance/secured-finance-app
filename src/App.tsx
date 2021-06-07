@@ -17,8 +17,8 @@ import { client } from './services/apollo';
 
 const App: React.FC = () => {
     return (
-        <Providers>
-            <Router>
+        <Router>
+            <Providers>
                 <NavBar />
                 <Switch>
                     <Route path='/' exact>
@@ -37,8 +37,8 @@ const App: React.FC = () => {
                         <Loan />
                     </Route>
                 </Switch>
-            </Router>
-        </Providers>
+            </Providers>
+        </Router>
     );
 };
 

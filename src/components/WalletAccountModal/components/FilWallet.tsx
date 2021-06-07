@@ -1,20 +1,22 @@
 import React, { useCallback, useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import { Network } from '@glif/filecoin-address';
 import styled from 'styled-components';
-import { useResetFilWalletProvider } from '../../../services/filecoin';
-import theme from '../../../theme';
-import Button from '../../Button';
-import Label from '../../Label';
-import { ModalProps } from '../../Modal';
-import Spacer from '../../Spacer';
+import { useResetFilWalletProvider } from 'src/services/filecoin';
+import theme from 'src/theme';
+import Button from 'src/components/Button';
+import Label from 'src/components/Label';
+import { ModalProps } from 'src/components/Modal';
+import Spacer from 'src/components/Spacer';
 import { useSelector } from 'react-redux';
-import { RootState } from '../../../store/types';
+import { RootState } from 'src/store/types';
 
 const FilWallet: React.FC<ModalProps> = ({ onDismiss }) => {
     const [address, setAddress] = useState<string>();
     const walletProvider = useSelector(
         (state: RootState) => state.filWalletProvider.walletProvider
     );
+    const history = useHistory();
 
     const getAddress = useCallback(() => {
         const accounts = walletProvider.wallet
@@ -32,6 +34,7 @@ const FilWallet: React.FC<ModalProps> = ({ onDismiss }) => {
     const handleSignOutClick = useCallback(() => {
         onDismiss!();
         onReset();
+        history.push('/');
     }, [onDismiss]);
 
     useEffect(() => {

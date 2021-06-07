@@ -1,17 +1,17 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback } from 'react';
+import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import { useWallet } from 'use-wallet';
-import metamaskLogo from '../../../assets/img/metamask-fox.svg';
-import walletConnectLogo from '../../../assets/img/wallet-connect.svg';
-import { CACHED_PROVIDER_KEY } from '../../../contexts/FilecoinWalletProvider';
-
-import { ModalProps } from '../../Modal';
-import Spacer from '../../Spacer';
-
+import metamaskLogo from 'src/assets/img/metamask-fox.svg';
+import walletConnectLogo from 'src/assets/img/wallet-connect.svg';
+import { CACHED_PROVIDER_KEY } from 'src/contexts/FilecoinWalletProvider';
+import { ModalProps } from 'src/components/Modal';
+import Spacer from 'src/components/Spacer';
 import WalletCard from './WalletCard';
 
 const EthWalletConnector: React.FC<ModalProps> = ({ onDismiss }) => {
     const { account, connect } = useWallet();
+    const history = useHistory();
 
     const handleConnect = useCallback(
         async (
@@ -31,6 +31,7 @@ const EthWalletConnector: React.FC<ModalProps> = ({ onDismiss }) => {
                 await connect(provider);
                 localStorage.setItem(CACHED_PROVIDER_KEY, 'connected');
                 onDismiss();
+                history.push('/account');
             }
         },
         [account, onDismiss, connect]
