@@ -7,3 +7,5 @@ declare module '@zondax/filecoin-signing-tools' {
     export default RustModule;
 }
 declare module '@zondax/ledger-filecoin';
+
+declare module '@ledgerhq/hw-transport-webhid';
