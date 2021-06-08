@@ -37,13 +37,23 @@ const handleErrors: (response: Response) => Response = response => {
     throw new Error(response.error_message);
 };
 
+const throwIfBusy = (busy: boolean) => {
+    if (busy)
+        throw new Error(
+            'Ledger is busy, please check device, or quit Filecoin app and unplug/replug your device.'
+        );
+};
+
 const ledgerProvider = (rustModule: RustModule) => {
     return (transport: Transport) => {
+        let ledgerBusy = false;
         const ledgerApp = new FilecoinApp(transport);
         return {
             type: LEDGER,
 
             getVersion: async () => {
+                throwIfBusy(ledgerBusy);
+                ledgerBusy = true;
                 let finished = false;
 
                 try {
@@ -53,6 +63,7 @@ const ledgerProvider = (rustModule: RustModule) => {
                 } finally {
                     if (!finished) {
                         finished = true;
+                        ledgerBusy = false;
                     }
                 }
             },
@@ -62,24 +73,30 @@ const ledgerProvider = (rustModule: RustModule) => {
                 nEnd = 5,
                 network: string = MAINNET
             ) => {
+                throwIfBusy(ledgerBusy);
+                ledgerBusy = true;
                 const networkCode =
                     network === MAINNET ? MAINNET_PATH_CODE : TESTNET_PATH_CODE;
                 const paths = [];
                 for (let i = nStart; i < nEnd; i += 1) {
                     paths.push(createPath(networkCode, i));
                 }
-                return mapSeries(paths, async path => {
+                const addresses = mapSeries(paths, async path => {
                     const { addrString } = handleErrors(
                         await ledgerApp.getAddressAndPubKey(path)
                     );
                     return addrString;
                 });
+                ledgerBusy = false;
+                return addresses;
             },
 
             sign: async (
                 filecoinMessage: SerializableMessage,
                 path: string
             ) => {
+                throwIfBusy(ledgerBusy);
+                ledgerBusy = true;
                 const serializedMessage: string =
                     rustModule.transactionSerialize(filecoinMessage);
                 const res = handleErrors(
@@ -88,11 +105,18 @@ const ledgerProvider = (rustModule: RustModule) => {
                         Buffer.from(serializedMessage, 'hex')
                     )
                 );
+                ledgerBusy = false;
                 return res.signature_compact.toString('base64');
             },
 
             showAddressAndPubKey: async (path: string) => {
-                return handleErrors(await ledgerApp.showAddressAndPubKey(path));
+                throwIfBusy(ledgerBusy);
+                ledgerBusy = true;
+                const res = handleErrors(
+                    await ledgerApp.showAddressAndPubKey(path)
+                );
+                ledgerBusy = false;
+                return res;
             },
         };
     };

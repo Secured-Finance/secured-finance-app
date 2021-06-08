@@ -8,8 +8,12 @@ import Label from 'src/components/Label';
 import { ModalProps } from 'src/components/Modal';
 import Spacer from 'src/components/Spacer';
 import { useSelector } from 'react-redux';
-import { getFilAddress } from 'src/store/wallets/selectors';
+import {
+    getFilAddress,
+    isAnyOtherWalletConnected,
+} from 'src/store/wallets/selectors';
 import { FIL_ADDRESS } from 'src/store/wallets/constants';
+import { RootState } from 'src/store/types';
 
 const FilWallet: React.FC<ModalProps> = ({ onDismiss }) => {
     const history = useHistory();
@@ -17,13 +21,18 @@ const FilWallet: React.FC<ModalProps> = ({ onDismiss }) => {
     const addressFromStore = useSelector(getFilAddress);
 
     const address = addressFromLocalStorage || addressFromStore;
+    const otherWalletConnected = useSelector((state: RootState) =>
+        isAnyOtherWalletConnected(state, 'filecoin')
+    );
 
     const { onReset } = useResetFilWalletProvider();
 
     const handleSignOutClick = useCallback(() => {
         onDismiss!();
         onReset();
-        history.push('/');
+        if (!otherWalletConnected) {
+            history.push('/');
+        }
     }, [onDismiss]);
 
     return (

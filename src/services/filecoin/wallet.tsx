@@ -77,7 +77,6 @@ export const useDefaultWallet = (network: Network = Network.TEST) => {
     useEffect(() => {
         async function compute() {
             if (walletProvider != null) {
-                console.log('wallet');
                 const [filAddr] = await walletProvider.wallet.getAccounts(
                     0,
                     1,
