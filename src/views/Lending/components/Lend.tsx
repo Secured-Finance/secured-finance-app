@@ -1,67 +1,111 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import styled from 'styled-components'
-import theme from '../../../theme';
-import Button from '../../../components/Button';
-import CurrencySelector from '../../../components/CurrencySelector';
-import TermsSelector from '../../../components/TermsSelector';
-import { RootState } from '../../../store/types';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import styled from 'styled-components';
+import theme from 'src/theme';
+import Button from 'src/components/Button';
+import CurrencySelector from 'src/components/CurrencySelector';
+import TermsSelector from 'src/components/TermsSelector';
+import { RootState } from 'src/store/types';
 import { connect, useDispatch, useSelector } from 'react-redux';
-import { LendingStore } from '../../../store/lending/types';
-import { updateLendAmount, updateLendRate, updateMainCurrency, updateMainTerms } from '../../../store/lending';
-import { terms, currencyList, percentFormat, formatInput, usdFormat } from '../../../utils';
-import { usePlaceOrder } from '../../../hooks/usePlaceOrder';
+import { LendingStore } from 'src/store/lending/types';
+import {
+    updateLendAmount,
+    updateLendRate,
+    updateMainCurrency,
+    updateMainTerms,
+} from 'src/store/lending';
+import {
+    terms,
+    currencyList,
+    percentFormat,
+    formatInput,
+    usdFormat,
+} from 'src/utils';
+import { usePlaceOrder } from 'src/hooks/usePlaceOrder';
 
 interface LendTabProps {
-    lendingRates: any[]
+    lendingRates: any[];
 }
 type CombinedProps = LendTabProps & LendingStore;
 
-const daysInYear = [90, 180, 360, 720, 1080, 1800]
+const daysInYear = [90, 180, 360, 720, 1080, 1800];
 
-const Lend: React.FC<CombinedProps> = ({ lendingRates, selectedCcy, selectedCcyName, selectedTerms, lendAmount, lendRate, currencyIndex, termsIndex }) => {
+const Lend: React.FC<CombinedProps> = ({
+    lendingRates,
+    selectedCcy,
+    selectedCcyName,
+    selectedTerms,
+    lendAmount,
+    lendRate,
+    currencyIndex,
+    termsIndex,
+}) => {
     const dispatch = useDispatch();
-    const [pendingTx, setPendingTx] = useState(false)
-    const ethPrice = useSelector((state: RootState) => state.assetPrices.ethereum.price);
-    const filPrice = useSelector((state: RootState) => state.assetPrices.filecoin.price);
-    const usdcPrice = useSelector((state: RootState) => state.assetPrices.usdc.price);
+    const [pendingTx, setPendingTx] = useState(false);
+    const ethPrice = useSelector(
+        (state: RootState) => state.assetPrices.ethereum.price
+    );
+    const filPrice = useSelector(
+        (state: RootState) => state.assetPrices.filecoin.price
+    );
+    const usdcPrice = useSelector(
+        (state: RootState) => state.assetPrices.usdc.price
+    );
 
-    const [buttonOpen, setButtonOpen] = useState(false)
-    const [termsOpen, setTermsOpen] = useState(false)
+    const [buttonOpen, setButtonOpen] = useState(false);
+    const [termsOpen, setTermsOpen] = useState(false);
 
-    const handleButtonClick = useCallback((buttonOpen:boolean) => {
-        setButtonOpen(!buttonOpen)
-    },[setButtonOpen])
+    const handleButtonClick = useCallback(
+        (buttonOpen: boolean) => {
+            setButtonOpen(!buttonOpen);
+        },
+        [setButtonOpen]
+    );
 
-    const handleOpenTerms = useCallback((termsOpen:boolean) => {
-        setTermsOpen(!termsOpen)
-    },[setTermsOpen])
+    const handleOpenTerms = useCallback(
+        (termsOpen: boolean) => {
+            setTermsOpen(!termsOpen);
+        },
+        [setTermsOpen]
+    );
 
-    const handleCurrencySelect = useCallback((value:string, buttonOpen:boolean) => {
-        dispatch(updateMainCurrency(value))
-        setButtonOpen(!buttonOpen)
-    },[dispatch, setButtonOpen])
+    const handleCurrencySelect = useCallback(
+        (value: string, buttonOpen: boolean) => {
+            dispatch(updateMainCurrency(value));
+            setButtonOpen(!buttonOpen);
+        },
+        [dispatch, setButtonOpen]
+    );
 
-    const handleTermSelect = useCallback((value:string, termsOpen:boolean) => {
-        dispatch(updateMainTerms(value))
-        setTermsOpen(!termsOpen)
-    },[dispatch, setTermsOpen])
+    const handleTermSelect = useCallback(
+        (value: string, termsOpen: boolean) => {
+            dispatch(updateMainTerms(value));
+            setTermsOpen(!termsOpen);
+        },
+        [dispatch, setTermsOpen]
+    );
 
-    const { onPlaceOrder } = usePlaceOrder(currencyIndex, termsIndex, 0, lendAmount, lendRate)
+    const { onPlaceOrder } = usePlaceOrder(
+        currencyIndex,
+        termsIndex,
+        0,
+        lendAmount,
+        lendRate
+    );
     const handleLendDeal = useCallback(async () => {
         try {
-            setPendingTx(true)
-            await onPlaceOrder()
-            setPendingTx(false)
+            setPendingTx(true);
+            await onPlaceOrder();
+            setPendingTx(false);
         } catch (e) {
-            console.log(e)
+            console.log(e);
         }
-    }, [onPlaceOrder, setPendingTx])
+    }, [onPlaceOrder, setPendingTx]);
 
     const getLendRateForTerm = useEffect(() => {
         if (lendingRates.length > 0) {
-            dispatch(updateLendRate(lendingRates[termsIndex]))
+            dispatch(updateLendRate(lendingRates[termsIndex]));
         }
-    }, [dispatch, currencyIndex, termsIndex])
+    }, [dispatch, currencyIndex, termsIndex]);
 
     // const fullBalance = useMemo(() => {
     //     return getFullDisplayBalance(max)
@@ -70,64 +114,91 @@ const Lend: React.FC<CombinedProps> = ({ lendingRates, selectedCcy, selectedCcyN
     // const handleSelectMax = useCallback(() => {
     //     setCollateralAmount(fullBalance)
     // }, [fullBalance, setCollateralAmount])
-    
+
     const TotalUsdAmount = useMemo(() => {
         switch (selectedCcy) {
-            case "FIL":
-                return (lendAmount*filPrice)
-            case "ETH":
-                return (lendAmount*ethPrice)
-            case "USDC":
-                return (lendAmount*usdcPrice)
-            default: 
-                return 0
+            case 'FIL':
+                return lendAmount * filPrice;
+            case 'ETH':
+                return lendAmount * ethPrice;
+            case 'USDC':
+                return lendAmount * usdcPrice;
+            default:
+                return 0;
         }
-    },[lendAmount, selectedCcy])
+    }, [lendAmount, selectedCcy]);
 
     const estimatedReturns = useMemo(() => {
-        let interest = lendRate/10000
-        let p = interest * (daysInYear[termsIndex]/360)
-        let usdAmount: number
-        switch(currencyIndex) {
+        let interest = lendRate / 10000;
+        let p = interest * (daysInYear[termsIndex] / 360);
+        let usdAmount: number;
+        switch (currencyIndex) {
             case 0:
-                usdAmount = lendAmount*ethPrice
-                break
+                usdAmount = lendAmount * ethPrice;
+                break;
             case 1:
-                usdAmount = lendAmount*filPrice
-                break
+                usdAmount = lendAmount * filPrice;
+                break;
             case 2:
-                usdAmount = lendAmount*usdcPrice
-                break
-            default: 
-                usdAmount = lendAmount*ethPrice
-                break
+                usdAmount = lendAmount * usdcPrice;
+                break;
+            default:
+                usdAmount = lendAmount * ethPrice;
+                break;
         }
-        let compoundInterest = usdAmount * p
-        return compoundInterest
-    },[termsIndex, currencyIndex, lendRate, lendAmount])
+        let compoundInterest = usdAmount * p;
+        return compoundInterest;
+    }, [termsIndex, currencyIndex, lendRate, lendAmount]);
 
-    const handleLend = useCallback((e: React.FormEvent<HTMLInputElement>) => {
-        dispatch(updateLendAmount(e.currentTarget.value))
-    },[dispatch])
+    const handleLend = useCallback(
+        (e: React.FormEvent<HTMLInputElement>) => {
+            dispatch(updateLendAmount(e.currentTarget.value));
+        },
+        [dispatch]
+    );
 
     return (
         <StyledLoanContainer>
             <StyledLoanSubcontainer>
                 <StyledLabelContainer>
-                    <StyledLoanLabel fontWeight={400} textTransform={"capitalize"}>Currency</StyledLoanLabel>
-                    <StyledLoanLabel fontWeight={400} textTransform={"capitalize"}>Balance: $ 0.00</StyledLoanLabel>
+                    <StyledLoanLabel
+                        fontWeight={400}
+                        textTransform={'capitalize'}
+                    >
+                        Currency
+                    </StyledLoanLabel>
+                    <StyledLoanLabel
+                        fontWeight={400}
+                        textTransform={'capitalize'}
+                    >
+                        Balance: $ 0.00
+                    </StyledLoanLabel>
                 </StyledLabelContainer>
                 <StyledInputContainer>
                     <StyledLabelContainer>
-                        <StyledLoanLabel marginBottom={4} color={theme.colors.white} textTransform={"capitalize"} fontSize={16}>{selectedCcyName}</StyledLoanLabel>
-                        <StyledLoanLabel fontWeight={400} marginBottom={4} textTransform={"capitalize"} fontSize={16}>~ {usdFormat(TotalUsdAmount)}</StyledLoanLabel>
+                        <StyledLoanLabel
+                            marginBottom={4}
+                            color={theme.colors.white}
+                            textTransform={'capitalize'}
+                            fontSize={16}
+                        >
+                            {selectedCcyName}
+                        </StyledLoanLabel>
+                        <StyledLoanLabel
+                            fontWeight={400}
+                            marginBottom={4}
+                            textTransform={'capitalize'}
+                            fontSize={16}
+                        >
+                            ~ {usdFormat(TotalUsdAmount)}
+                        </StyledLoanLabel>
                     </StyledLabelContainer>
                     <StyledCurrencyInput>
-                        <CurrencySelector 
-                            selectedCcy={selectedCcy} 
+                        <CurrencySelector
+                            selectedCcy={selectedCcy}
                             onClick={() => handleButtonClick(buttonOpen)}
                         />
-                        <StyledLoanInput 
+                        <StyledLoanInput
                             type={'number'}
                             placeholder={'0'}
                             value={lendAmount}
@@ -138,137 +209,185 @@ const Lend: React.FC<CombinedProps> = ({ lendingRates, selectedCcy, selectedCcyN
                         />
                     </StyledCurrencyInput>
                 </StyledInputContainer>
-                { buttonOpen 
-                    ? 
+                {buttonOpen ? (
                     <StyledDropdown>
                         <ul>
-                            {
-                                currencyList.map((ccy, i) => (
-                                    <StyledDropdownItem 
-                                        key={i}
-                                        onClick={() => handleCurrencySelect(ccy.shortName, buttonOpen)}
-                                    >
-                                        <img width={28} src={ccy.icon}/>
-                                        <StyledCurrencyText>{ccy.shortName}</StyledCurrencyText>
-                                    </StyledDropdownItem>
-                                ))
-                            }
+                            {currencyList.map((ccy, i) => (
+                                <StyledDropdownItem
+                                    key={i}
+                                    onClick={() =>
+                                        handleCurrencySelect(
+                                            ccy.shortName,
+                                            buttonOpen
+                                        )
+                                    }
+                                >
+                                    <img width={28} src={ccy.icon} />
+                                    <StyledCurrencyText>
+                                        {ccy.shortName}
+                                    </StyledCurrencyText>
+                                </StyledDropdownItem>
+                            ))}
                         </ul>
-                    </StyledDropdown> 
-                    : 
-                    null 
-                }
+                    </StyledDropdown>
+                ) : null}
             </StyledLoanSubcontainer>
             <StyledLoanSubcontainer>
                 <StyledLabelContainer>
-                    <StyledLoanLabel fontWeight={400} textTransform={"capitalize"}>Loan terms</StyledLoanLabel>
-                    <StyledLoanLabel fontWeight={400} textTransform={"capitalize"}>Rate (APY)</StyledLoanLabel>
+                    <StyledLoanLabel
+                        fontWeight={400}
+                        textTransform={'capitalize'}
+                    >
+                        Loan terms
+                    </StyledLoanLabel>
+                    <StyledLoanLabel
+                        fontWeight={400}
+                        textTransform={'capitalize'}
+                    >
+                        Rate (APY)
+                    </StyledLoanLabel>
                 </StyledLabelContainer>
                 <StyledInputContainer>
                     <StyledLabelContainer>
-                        <StyledLoanLabel marginBottom={4} color={theme.colors.white} textTransform={"capitalize"} fontSize={16}>Fixed</StyledLoanLabel>
+                        <StyledLoanLabel
+                            marginBottom={4}
+                            color={theme.colors.white}
+                            textTransform={'capitalize'}
+                            fontSize={16}
+                        >
+                            Fixed
+                        </StyledLoanLabel>
                     </StyledLabelContainer>
                     <StyledCurrencyInput>
                         <TermsSelector
                             selectedTerm={selectedTerms}
                             onClick={() => handleOpenTerms(termsOpen)}
                         />
-                        <StyledLoanInput 
+                        <StyledLoanInput
                             placeholder={'0'}
                             value={percentFormat(lendRate, 10000)}
+                            onChange={() => {}}
                             // disabled={true}
                         />
                     </StyledCurrencyInput>
                 </StyledInputContainer>
-                { termsOpen 
-                    ? 
+                {termsOpen ? (
                     <StyledDropdown>
                         <ul>
-                            {
-                                terms.map((term, i) => (
-                                    <StyledDropdownItem 
-                                        key={i}
-                                        onClick={() => handleTermSelect(term.term, termsOpen)}
-                                    >
-                                        <StyledCurrencyText>{term.text}</StyledCurrencyText>
-                                    </StyledDropdownItem>
-                                ))
-                            }
+                            {terms.map((term, i) => (
+                                <StyledDropdownItem
+                                    key={i}
+                                    onClick={() =>
+                                        handleTermSelect(term.term, termsOpen)
+                                    }
+                                >
+                                    <StyledCurrencyText>
+                                        {term.text}
+                                    </StyledCurrencyText>
+                                </StyledDropdownItem>
+                            ))}
                         </ul>
-                    </StyledDropdown> 
-                    : 
-                    null 
-                }
+                    </StyledDropdown>
+                ) : null}
             </StyledLoanSubcontainer>
             <StyledButtonContainer>
-                <Button 
-                    size={"lg"} 
-                    style={{fontSize:16, fontWeight: 600, background: 'rgba(0, 122, 255, 1)', color: theme.colors.white}}
+                <Button
+                    size={'lg'}
+                    style={{
+                        fontSize: 16,
+                        fontWeight: 600,
+                        background: 'rgba(0, 122, 255, 1)',
+                        color: theme.colors.white,
+                    }}
                     onClick={handleLendDeal}
                     disabled={pendingTx}
-                >Lend</Button>
+                >
+                    Lend
+                </Button>
             </StyledButtonContainer>
             <StyledLabelContainer>
-                <StyledLoanLabel fontWeight={400} textTransform={"capitalize"}>Estimated returns</StyledLoanLabel>
-                <StyledLoanLabel fontSize={12} fontWeight={400} textTransform={"capitalize"} color={theme.colors.green}>{usdFormat(estimatedReturns)}</StyledLoanLabel>
+                <StyledLoanLabel fontWeight={400} textTransform={'capitalize'}>
+                    Estimated returns
+                </StyledLoanLabel>
+                <StyledLoanLabel
+                    fontSize={12}
+                    fontWeight={400}
+                    textTransform={'capitalize'}
+                    color={theme.colors.green}
+                >
+                    {usdFormat(estimatedReturns)}
+                </StyledLoanLabel>
             </StyledLabelContainer>
             <StyledLabelContainer>
-                <StyledLoanLabel fontWeight={400} textTransform={"capitalize"}>Transaction fee</StyledLoanLabel>
-                <StyledLoanLabel fontSize={12} fontWeight={400} textTransform={"capitalize"}>1.2$</StyledLoanLabel>
+                <StyledLoanLabel fontWeight={400} textTransform={'capitalize'}>
+                    Transaction fee
+                </StyledLoanLabel>
+                <StyledLoanLabel
+                    fontSize={12}
+                    fontWeight={400}
+                    textTransform={'capitalize'}
+                >
+                    1.2$
+                </StyledLoanLabel>
             </StyledLabelContainer>
         </StyledLoanContainer>
     );
-}
+};
 
 const StyledLoanContainer = styled.div`
-    margin-top: ${(props) => props.theme.spacing[3]+4}px;
-    margin-bottom: ${(props) => props.theme.spacing[3]+4}px;
+    margin-top: ${props => props.theme.spacing[3] + 4}px;
+    margin-bottom: ${props => props.theme.spacing[3] + 4}px;
     display: flex;
     flex-direction: column;
-    padding: 0 ${(props) => props.theme.spacing[3]+4}px;
-`
+    padding: 0 ${props => props.theme.spacing[3] + 4}px;
+`;
 
 const StyledLabelContainer = styled.div`
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-`
+`;
 
 const StyledLoanSubcontainer = styled.div`
-    margin-bottom: ${(props) => props.theme.spacing[4]}px;
-`
+    margin-bottom: ${props => props.theme.spacing[4]}px;
+`;
 
 interface StyledLoanLabelProps {
-    textTransform?: string,
-    fontWeight?: number,
-    fontSize?: number,
-    marginBottom?: number,
+    textTransform?: string;
+    fontWeight?: number;
+    fontSize?: number;
+    marginBottom?: number;
 }
 
 const StyledLoanLabel = styled.div<StyledLoanLabelProps>`
-    text-transform: ${(props) => props.textTransform ? props.textTransform : 'uppercase' };
-    font-size: ${(props) => props.fontSize ? props.fontSize : props.theme.sizes.subhead}px;
-    margin-bottom: ${(props) => props.marginBottom ? props.marginBottom : props.theme.sizes.caption3-3}px;
+    text-transform: ${props =>
+        props.textTransform ? props.textTransform : 'uppercase'};
+    font-size: ${props =>
+        props.fontSize ? props.fontSize : props.theme.sizes.subhead}px;
+    margin-bottom: ${props =>
+        props.marginBottom
+            ? props.marginBottom
+            : props.theme.sizes.caption3 - 3}px;
     margin-top: 0px;
-    font-weight: ${(props) => props.fontWeight ? props.fontWeight :600};
-    color: ${props => props.color ? props.color : props.theme.colors.gray};
-`
+    font-weight: ${props => (props.fontWeight ? props.fontWeight : 600)};
+    color: ${props => (props.color ? props.color : props.theme.colors.gray)};
+`;
 
 const StyledInputContainer = styled.div`
     display: flex;
     flex-direction: column;
     padding: 12px 18px;
-    border: 1px solid ${(props) => props.theme.colors.darkenedBg};
+    border: 1px solid ${props => props.theme.colors.darkenedBg};
     border-radius: 10px;
-`
+`;
 
 const StyledCurrencyInput = styled.div`
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-`
+`;
 
 const StyledLoanInput = styled.input`
     background-color: transparent;
@@ -283,12 +402,12 @@ const StyledLoanInput = styled.input`
     text-align: right;
     width: 100%;
     border: none;
-`
+`;
 
 const StyledButtonContainer = styled.div`
     margin-top: -4px;
     margin-bottom: 20px;
-`
+`;
 
 interface StyledCurrencyTextProps {
     marginLeft?: string;
@@ -296,15 +415,15 @@ interface StyledCurrencyTextProps {
 
 const StyledCurrencyText = styled.p<StyledCurrencyTextProps>`
     margin: 0;
-    margin-left: ${(props) => props.marginLeft ? props.marginLeft : '7px'};
+    margin-left: ${props => (props.marginLeft ? props.marginLeft : '7px')};
     text-align: left;
-`
+`;
 
 const StyledDropdown = styled.div`
     position: relative;
     top: -10px;
     left: 20px;
-    
+
     ul {
         background: white;
         position: absolute;
@@ -315,7 +434,7 @@ const StyledDropdown = styled.div`
         padding: 0;
         margin: 0;
     }
-    
+
     li:hover {
         background-color: rgba(232, 232, 233, 0.4);
         cursor: pointer;
@@ -324,15 +443,15 @@ const StyledDropdown = styled.div`
     li:last-child {
         border-bottom: none;
     }
-`
+`;
 
 const StyledDropdownItem = styled.li`
     display: flex;
     flex-direction: row;
     align-items: center;
     padding: 8px 8px;
-    border-bottom: 0.5px solid ${(props) => props.theme.colors.lightGray[1]};
-`
+    border-bottom: 0.5px solid ${props => props.theme.colors.lightGray[1]};
+`;
 
 const mapStateToProps = (state: RootState) => state.lending;
 
