@@ -14,7 +14,7 @@ const WalletsTable = ({table}) => {
 	} = useTable(
 		{ columns, data:table },
 	)
-
+	
 	return (
 		<StyledTable {...getTableProps()}>
 			<StyledTableHead>

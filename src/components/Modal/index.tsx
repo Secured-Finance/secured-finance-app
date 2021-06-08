@@ -29,8 +29,6 @@ const StyledResponsiveWrapper = styled.div`
   flex-direction: column;
   justify-content: flex-end;
   position: relative;
-  width: 100%;
-  max-width: 512px;
   @media (max-width: ${(props) => props.theme.breakpoints.mobile}px) {
     flex: 1;
     position: absolute;
@@ -51,8 +49,9 @@ const StyledModal = styled.div`
   display: flex;
   flex-direction: column;
   position: relative;
-  width: 100%;
+  width: 645px;
   min-height: 0;
+  max-width: 645px;
 `
 
 export default Modal

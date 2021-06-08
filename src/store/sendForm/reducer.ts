@@ -1,52 +1,75 @@
-import produce from 'immer'
-import * as constants from './constants'
-import { defaultStore, SendFormStore } from './types'
+import produce from 'immer';
+import * as constants from './constants';
+import { defaultStore, SendFormStore } from './types';
 
-const initialStore: SendFormStore = defaultStore
+const initialStore: SendFormStore = defaultStore;
 
-const sendFormReducer = (state = initialStore, action: any) => 
-    produce(state, draft => {
+const sendFormReducer = (state: SendFormStore = initialStore, action: any) => {
     switch (action.type) {
         case constants.FETCH_SEND_STORE:
-            draft.isLoading = true
-            break
+            return {
+                ...state,
+                isLoading: true,
+            };
         case constants.FETCH_SEND_STORE_FAILURE:
-            draft.isLoading = false
-            break    
-        case constants.UPDATE_CCY_INDEX:
-            draft.isLoading = false
-            draft.currencyIndex = action.data
-            break
-        case constants.UPDATE_CCY_SHORT_NAME:
-            draft.isLoading = false
-            draft.currencyShortName = action.data
-            break
-        case constants.UPDATE_CCY_NAME:
-            draft.isLoading = false
-            draft.currencyName = action.data
-            break
-        case constants.UPDATE_AMOUNT:
-            draft.isLoading = false
-            draft.amount = action.data
-            break
-        case constants.UPDATE_GAS_PRICE:
-            draft.isLoading = false
-            draft.gasPrice = action.data
-            break
-        case constants.UPDATE_TX_FEE:
-            draft.isLoading = false
-            draft.txFee = action.data
-            break
-        case constants.UPDATE_TO_ADDRESS:
-            draft.isLoading = false
-            draft.toAddress = action.data
-            break
-        case constants.RESET_SEND_FORM:
-            draft = defaultStore
-            break
-        default:
-            break               
-    }
-})
+            return {
+                ...state,
+                isLoading: false,
+            };
 
-export default sendFormReducer
+        case constants.UPDATE_CCY_INDEX:
+            return {
+                ...state,
+                isLoading: false,
+                currencyIndex: action.data,
+            };
+        case constants.UPDATE_CCY_SHORT_NAME:
+            return {
+                ...state,
+                isLoading: false,
+                currencyShortName: action.data,
+            };
+        case constants.UPDATE_CCY_NAME:
+            return {
+                ...state,
+                isLoading: false,
+                currencyName: action.data,
+            };
+        case constants.UPDATE_AMOUNT:
+            return {
+                ...state,
+                isLoading: false,
+                amount: action.data,
+            };
+        case constants.UPDATE_GAS_PRICE:
+            return {
+                ...state,
+                isLoading: false,
+                gasPrice: action.data,
+            };
+        case constants.UPDATE_TX_FEE:
+            return {
+                ...state,
+                isLoading: false,
+                txFee: action.data,
+            };
+        case constants.UPDATE_TO_ADDRESS:
+            return {
+                ...state,
+                isLoading: false,
+                toAddress: action.data,
+            };
+        case constants.RESET_SEND_FORM:
+            return defaultStore;
+        case constants.SET_MAX_TX_FEE:
+            return {
+                ...state,
+                isLoading: false,
+                maxTxFee: action.data,
+            };
+        default:
+            return state;
+    }
+};
+
+export default sendFormReducer;

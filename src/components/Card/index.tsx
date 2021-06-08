@@ -12,6 +12,7 @@ const StyledCard = styled.div`
   display: flex;
   flex: 1;
   flex-direction: column;
+  min-width: 162px;
 `
 
 export default Card
