@@ -9,14 +9,14 @@ import { ModalProps } from 'src/components/Modal';
 import Spacer from 'src/components/Spacer';
 import { CACHED_PROVIDER_KEY } from 'src/contexts/FilecoinWalletProvider';
 import { useSelector } from 'react-redux';
-import { isAnyOtherWalletConnected } from 'src/store/wallets/selectors';
+import { isAnyWalletConnected } from 'src/store/wallets/selectors';
 import { RootState } from 'src/store/types';
 
 const EthWallet: React.FC<ModalProps> = ({ onDismiss, ...props }) => {
     const { account, reset } = useWallet();
     const history = useHistory();
     const otherWalletConnected = useSelector((state: RootState) =>
-        isAnyOtherWalletConnected(state, 'ethereum')
+        isAnyWalletConnected(state, 'ethereum')
     );
 
     const handleSignOutClick = useCallback(() => {

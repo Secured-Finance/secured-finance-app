@@ -169,7 +169,7 @@ export const useFilecoinWalletStore = () => {
         signOut: useResetFilWalletProvider,
     };
     const [DOMContentLoaded, setDOMContentLoaded] = useState(false);
-    const [filAddressFromLS, setFilAddressFromLS] = useState('');
+    const filAddr = localStorage.getItem(FIL_ADDRESS);
 
     window.addEventListener('DOMContentLoaded', () =>
         setDOMContentLoaded(true)
@@ -179,9 +179,7 @@ export const useFilecoinWalletStore = () => {
         async (isMounted: boolean) => {
             dispatch(updateFilWalletAssetPrice(price));
             dispatch(updateFilWalletDailyChange(change));
-            dispatch(
-                updateFilWalletViaProvider(walletProvider, filAddressFromLS)
-            );
+            dispatch(updateFilWalletViaProvider(walletProvider, filAddr));
             dispatch(updateFilWalletActions(actObj));
         },
         [dispatch, price, totalUSDBalance, loaded, walletProvider, change]
@@ -209,14 +207,14 @@ export const useFilecoinWalletStore = () => {
     useEffect(() => {
         // fetch FIL wallet info when not connected
         (async () => {
-            const filAddr = localStorage.getItem(FIL_ADDRESS);
-            setFilAddressFromLS(filAddr);
             if (filAddr && !walletProvider && DOMContentLoaded) {
                 dispatch(updateFilWalletAddress(filAddr));
 
                 // connect FIL wallet if address is stored
                 const provider = await connectWithLedger(dispatch);
-                if (!provider) dispatch(updateFilWalletViaRPC(filAddr));
+                provider
+                    ? dispatch(updateFilWalletActions(actObj))
+                    : dispatch(updateFilWalletViaRPC(filAddr));
             }
         })();
     }, [DOMContentLoaded]);

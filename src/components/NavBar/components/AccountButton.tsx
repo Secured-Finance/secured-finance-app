@@ -1,11 +1,11 @@
 import React, { useCallback } from 'react';
-import styled from 'styled-components';
-import { useWallet } from 'use-wallet';
-import useModal from '../../../hooks/useModal';
-import WalletProviderModal from '../../WalletProviderModal';
-import { Button } from '../../common/Buttons';
+import useModal from 'src/hooks/useModal';
+import WalletProviderModal from 'src/components/WalletProviderModal';
+import { Button } from 'src/components/common/Buttons';
 import { Link } from 'react-router-dom';
-import { CACHED_PROVIDER_KEY } from '../../../contexts/FilecoinWalletProvider';
+import { CACHED_PROVIDER_KEY } from 'src/contexts/FilecoinWalletProvider';
+import { useSelector } from 'react-redux';
+import { isAnyWalletConnected } from 'src/store/wallets/selectors';
 
 interface AccountButtonProps {}
 
@@ -15,30 +15,28 @@ const AccountButton: React.FC<AccountButtonProps> = props => {
         'provider'
     );
 
-    const { account } = useWallet();
     const isAccountConnected = localStorage.getItem(CACHED_PROVIDER_KEY);
+    const hasAnyWalletConnection = useSelector(isAnyWalletConnected);
 
     const handleUnlockClick = useCallback(() => {
         onPresentWalletProviderModal();
     }, [onPresentWalletProviderModal]);
 
     return (
-        <StyledAccountButton>
-            {!isAccountConnected ? (
-                <Button size='sm' onClick={handleUnlockClick}>
-                    Unlock Wallet
-                </Button>
-            ) : (
+        <div>
+            {isAccountConnected || hasAnyWalletConnection ? (
                 <Link to='/account'>
                     <Button outline size='sm'>
                         My Wallet
                     </Button>
                 </Link>
+            ) : (
+                <Button size='sm' onClick={handleUnlockClick}>
+                    Unlock Wallet
+                </Button>
             )}
-        </StyledAccountButton>
+        </div>
     );
 };
-
-const StyledAccountButton = styled.div``;
 
 export default AccountButton;
