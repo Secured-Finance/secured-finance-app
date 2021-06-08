@@ -1,6 +1,5 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
-import { Network } from '@glif/filecoin-address';
 import styled from 'styled-components';
 import { useResetFilWalletProvider } from 'src/services/filecoin';
 import theme from 'src/theme';
@@ -9,25 +8,14 @@ import Label from 'src/components/Label';
 import { ModalProps } from 'src/components/Modal';
 import Spacer from 'src/components/Spacer';
 import { useSelector } from 'react-redux';
-import { RootState } from 'src/store/types';
+import { getFilAddress } from 'src/store/wallets/selectors';
 
 const FilWallet: React.FC<ModalProps> = ({ onDismiss }) => {
-    const [address, setAddress] = useState<string>();
-    const walletProvider = useSelector(
-        (state: RootState) => state.filWalletProvider.walletProvider
-    );
     const history = useHistory();
+    const addressFromLocalStorage = localStorage.getItem('FIL_ADDRESS');
+    const addressFromStore = useSelector(getFilAddress);
 
-    const getAddress = useCallback(() => {
-        const accounts = walletProvider.wallet
-            .getAccounts(0, 1, Network.TEST)
-            // @ts-ignore
-            .then(res => {
-                setAddress(res[0]);
-            })
-            // @ts-ignore
-            .catch(err => console.log(err));
-    }, [setAddress, walletProvider]);
+    const address = addressFromLocalStorage || addressFromStore;
 
     const { onReset } = useResetFilWalletProvider();
 
@@ -36,12 +24,6 @@ const FilWallet: React.FC<ModalProps> = ({ onDismiss }) => {
         onReset();
         history.push('/');
     }, [onDismiss]);
-
-    useEffect(() => {
-        if (walletProvider) {
-            getAddress();
-        }
-    }, [walletProvider, getAddress]);
 
     return (
         <div>
