@@ -1,6 +1,6 @@
 import { Network } from '@glif/filecoin-address';
 import { BigNumber } from '@glif/filecoin-number';
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import WalletAccountModal from '../components/WalletAccountModal';
 import { useResetFilWalletProvider } from '../services/filecoin';
@@ -167,6 +167,11 @@ export const useFilecoinWalletStore = () => {
         placeCollateral: onPresentAccountModal,
         signOut: useResetFilWalletProvider,
     };
+    const [DOMContentLoaded, setDOMContentLoaded] = useState(false);
+
+    window.addEventListener('DOMContentLoaded', () =>
+        setDOMContentLoaded(true)
+    );
 
     const fetchFilStore = useCallback(
         async (isMounted: boolean) => {
@@ -201,14 +206,15 @@ export const useFilecoinWalletStore = () => {
         // fetch FIL wallet info when not connected
         (async () => {
             const filAddr = localStorage.getItem('FIL_ADDRESS');
-            if (filAddr && !walletProvider) {
+            if (filAddr && !walletProvider && DOMContentLoaded) {
                 dispatch(updateFilWalletAddress(filAddr));
 
+                // connect FIL wallet if address is stored
                 const provider = await connectWithLedger(dispatch);
                 if (!provider) dispatch(updateFilWalletViaRPC(filAddr));
             }
         })();
-    }, []);
+    }, [DOMContentLoaded]);
 
     useEffect(() => {
         if (price !== 0 || change !== 0) {
