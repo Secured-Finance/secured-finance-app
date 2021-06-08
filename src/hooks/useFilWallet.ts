@@ -2,9 +2,9 @@ import { Network } from '@glif/filecoin-address';
 import { BigNumber } from '@glif/filecoin-number';
 import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import WalletAccountModal from '../components/WalletAccountModal';
-import { useResetFilWalletProvider } from '../services/filecoin';
-import { RootState } from '../store/types';
+import WalletAccountModal from 'src/components/WalletAccountModal';
+import { useResetFilWalletProvider } from 'src/services/filecoin';
+import { RootState } from 'src/store/types';
 import {
     fetchWallet,
     fetchWalletFailure,
@@ -15,16 +15,17 @@ import {
     updateFilWalletDailyChange,
     updateFilWalletPortfolioShare,
     updateFilWalletUSDBalance,
-} from '../store/wallets';
+} from 'src/store/wallets';
 import { useFilUsd } from './useAssetPrices';
 import useFilWasm from './useFilWasm';
 import useModal from './useModal';
 import {
     updateFilWalletViaProvider,
     updateFilWalletViaRPC,
-} from '../store/wallets/helpers';
-import { getFilUSDBalance } from '../store/wallets/selectors';
+} from 'src/store/wallets/helpers';
+import { getFilUSDBalance } from 'src/store/wallets/selectors';
 import connectWithLedger from 'src/services/ledger/connectLedger';
+import { FIL_ADDRESS } from 'src/store/wallets/constants';
 
 export const useFilecoinAddress = () => {
     const dispatch = useDispatch();
@@ -205,7 +206,7 @@ export const useFilecoinWalletStore = () => {
     useEffect(() => {
         // fetch FIL wallet info when not connected
         (async () => {
-            const filAddr = localStorage.getItem('FIL_ADDRESS');
+            const filAddr = localStorage.getItem(FIL_ADDRESS);
             if (filAddr && !walletProvider && DOMContentLoaded) {
                 dispatch(updateFilWalletAddress(filAddr));
 
