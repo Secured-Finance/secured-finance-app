@@ -2,20 +2,18 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { connect, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { useWallet } from 'use-wallet';
-import Page from '../../components/Page';
-import useCollateralBook from '../../hooks/useCollateralBook';
-import { useEthereumWalletStore } from '../../hooks/useEthWallet';
-import { useFilecoinWalletStore } from '../../hooks/useFilWallet';
-import { RootState } from '../../store/types';
-import { WalletBase } from '../../store/wallets';
-import theme from '../../theme';
-import { usdFormat } from '../../utils';
+import Page from 'src/components/Page';
+import useCollateralBook from 'src/hooks/useCollateralBook';
+import { useEthereumWalletStore } from 'src/hooks/useEthWallet';
+import { useFilecoinWalletStore } from 'src/hooks/useFilWallet';
+import { RootState } from 'src/store/types';
+import { WalletBase } from 'src/store/wallets';
+import theme from 'src/theme';
+import { usdFormat } from 'src/utils';
 import CollateralTable from './components/CollateralTable';
 import WalletsTable from './components/WalletsTable';
-import {
-    getFilAddress,
-    getTotalUSDBalance,
-} from '../../store/wallets/selectors';
+import { getFilAddress, getTotalUSDBalance } from 'src/store/wallets/selectors';
+import { FIL_ADDRESS } from 'src/store/wallets/constants';
 
 const Account: React.FC = () => {
     const totalUSDBalance = useSelector(getTotalUSDBalance);
@@ -37,7 +35,7 @@ const Account: React.FC = () => {
 
     useEffect(() => {
         if (filAddress) {
-            localStorage.setItem('FIL_ADDRESS', filAddress);
+            localStorage.setItem(FIL_ADDRESS, filAddress);
         }
     }, [filAddress]);
 

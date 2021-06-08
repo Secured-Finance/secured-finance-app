@@ -9,10 +9,11 @@ import { ModalProps } from 'src/components/Modal';
 import Spacer from 'src/components/Spacer';
 import { useSelector } from 'react-redux';
 import { getFilAddress } from 'src/store/wallets/selectors';
+import { FIL_ADDRESS } from 'src/store/wallets/constants';
 
 const FilWallet: React.FC<ModalProps> = ({ onDismiss }) => {
     const history = useHistory();
-    const addressFromLocalStorage = localStorage.getItem('FIL_ADDRESS');
+    const addressFromLocalStorage = localStorage.getItem(FIL_ADDRESS);
     const addressFromStore = useSelector(getFilAddress);
 
     const address = addressFromLocalStorage || addressFromStore;
