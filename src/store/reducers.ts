@@ -8,6 +8,7 @@ import filWalletProvider from '../services/filecoin/store';
 import sendForm from './sendForm';
 import collateralForm from './collateralForm';
 import lendingTerminal from './lendingTerminal';
+import ledger from '../services/ledger/state';
 
 const rootReducer = combineReducers({
     rates,
@@ -19,6 +20,7 @@ const rootReducer = combineReducers({
     sendForm,
     collateralForm,
     lendingTerminal,
+    ledger,
 });
 
-export default rootReducer
+export default rootReducer;
