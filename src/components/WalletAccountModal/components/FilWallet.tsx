@@ -10,7 +10,7 @@ import Spacer from 'src/components/Spacer';
 import { useSelector } from 'react-redux';
 import {
     getFilAddress,
-    isAnyOtherWalletConnected,
+    isAnyWalletConnected,
 } from 'src/store/wallets/selectors';
 import { FIL_ADDRESS } from 'src/store/wallets/constants';
 import { RootState } from 'src/store/types';
@@ -22,7 +22,7 @@ const FilWallet: React.FC<ModalProps> = ({ onDismiss }) => {
 
     const address = addressFromLocalStorage || addressFromStore;
     const otherWalletConnected = useSelector((state: RootState) =>
-        isAnyOtherWalletConnected(state, 'filecoin')
+        isAnyWalletConnected(state, 'filecoin')
     );
 
     const { onReset } = useResetFilWalletProvider();
