@@ -44,13 +44,11 @@ export const recalculateTotalUSDBalance = () => {
     };
 };
 
-export const updateFilWalletViaProvider = (walletProvider: any) => {
-    return async (
-        dispatch: ThunkDispatch<RootState, void, Action>,
-        getState: () => RootState
-    ) => {
-        const state = getState();
-        const filAddr = getFilAddress(state);
+export const updateFilWalletViaProvider = (
+    walletProvider: any,
+    filAddr: string
+) => {
+    return async (dispatch: ThunkDispatch<RootState, void, Action>) => {
         const balance = await walletProvider.getBalance(filAddr);
 
         dispatch(updateFilWallet(balance, filAddr));
