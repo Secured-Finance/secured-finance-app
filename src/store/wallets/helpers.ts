@@ -49,9 +49,11 @@ export const updateFilWalletViaProvider = (
     filAddr: string
 ) => {
     return async (dispatch: ThunkDispatch<RootState, void, Action>) => {
-        const balance = await walletProvider.getBalance(filAddr);
+        if (filAddr) {
+            const balance = await walletProvider.getBalance(filAddr);
 
-        dispatch(updateFilWallet(balance, filAddr));
+            dispatch(updateFilWallet(balance, filAddr));
+        }
     };
 };
 
@@ -66,7 +68,7 @@ export const updateFilWalletViaRPC = (filAddr: string) => {
     };
 };
 
-const updateFilWallet = (balance: FilecoinNumber, filAddr: string) => {
+export const updateFilWallet = (balance: FilecoinNumber, filAddr: string) => {
     return (
         dispatch: ThunkDispatch<RootState, void, Action>,
         getState: () => RootState

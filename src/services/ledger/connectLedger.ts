@@ -3,9 +3,13 @@ import {
     checkLedgerConfiguration,
     setLedgerProvider,
 } from './setLedgerProvider';
-import { setFilWalletProvider, setFilWalletType } from '../filecoin/store';
-import { updateFilWalletBalance } from '../../store/wallets';
+import {
+    setFilWalletProvider,
+    setFilWalletType,
+} from 'src/services/filecoin/store';
 import { Network } from '@glif/filecoin-address';
+import { LEDGER } from './constants';
+import { updateFilWallet } from 'src/store/wallets/helpers';
 
 const connectWithLedger = async (dispatch: any) => {
     dispatch(clearError());
@@ -17,12 +21,12 @@ const connectWithLedger = async (dispatch: any) => {
     if (!configured) return null;
 
     dispatch(setFilWalletProvider(provider));
-    dispatch(setFilWalletType('Ledger'));
+    dispatch(setFilWalletType(LEDGER));
 
     const [filAddr] = await provider.wallet.getAccounts(0, 1, Network.TEST);
     const balance = await provider.getBalance(filAddr);
 
-    dispatch(updateFilWalletBalance(balance.toNumber()));
+    dispatch(updateFilWallet(balance, filAddr));
 
     return provider;
 };
