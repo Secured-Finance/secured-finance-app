@@ -32,7 +32,7 @@ export const defaultEthWallet = {
     dailyChange: 0,
 };
 
-export const defaultFilWallet = {
+export const defaultFilWallet: WalletBase = {
     ccyIndex: 1,
     address: '',
     balance: 0,
@@ -40,4 +40,5 @@ export const defaultFilWallet = {
     assetPrice: 0,
     portfolioShare: 0,
     dailyChange: 0,
+    actions: null,
 };

@@ -7,7 +7,7 @@ import {
     MAINNET_PATH_CODE,
     TESTNET_PATH_CODE,
     LEDGER,
-} from '../../ledger/constants';
+} from 'src/services/ledger/constants';
 import createPath from 'src/services/ledger/createPath';
 import { SerializableMessage } from '@glif/filecoin-message';
 
@@ -51,21 +51,37 @@ const ledgerProvider = (rustModule: RustModule) => {
         return {
             type: LEDGER,
 
-            getVersion: async () => {
+            getVersion: () => {
                 throwIfBusy(ledgerBusy);
                 ledgerBusy = true;
-                let finished = false;
+                return new Promise((resolve, reject) => {
+                    let finished = false;
+                    setTimeout(() => {
+                        if (!finished) {
+                            finished = true;
+                            ledgerBusy = false;
+                            return reject(
+                                new Error('Ledger device locked or busy')
+                            );
+                        }
+                    }, 3000);
 
-                try {
-                    return handleErrors(await ledgerApp.getVersion());
-                } catch (err) {
-                    return err;
-                } finally {
-                    if (!finished) {
-                        finished = true;
-                        ledgerBusy = false;
-                    }
-                }
+                    setTimeout(async () => {
+                        try {
+                            const response = handleErrors(
+                                await ledgerApp.getVersion()
+                            );
+                            return resolve(response);
+                        } catch (err) {
+                            return reject(err);
+                        } finally {
+                            if (!finished) {
+                                finished = true;
+                                ledgerBusy = false;
+                            }
+                        }
+                    });
+                });
             },
 
             getAccounts: async (
