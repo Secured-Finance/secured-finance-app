@@ -27,6 +27,8 @@ import { CurrencyImage } from 'src/components/common/CurrencyImage';
 import { GasTabsAndTable } from './GastabsAndTable';
 import { useSendFil } from 'src/hooks/useSendFil';
 import { FilTxFeeTable } from './FilTxFeeTable';
+import { ErrorModal } from './ErrorModal';
+import { getFilActions } from 'src/store/wallets/selectors';
 
 type CombinedProps = ModalProps & SendFormStore;
 
@@ -47,6 +49,7 @@ const SendModal: React.FC<CombinedProps> = ({
     const ethBalance = useEthBalance();
     const filBalance = useFilecoinBalance();
     const dispatch = useDispatch();
+    const filecoinActions = useSelector(getFilActions);
     const ethPrice = useSelector(
         (state: RootState) => state.assetPrices.ethereum.price
     );
@@ -189,6 +192,18 @@ const SendModal: React.FC<CombinedProps> = ({
         dispatch(resetSendForm());
         onDismiss();
     };
+
+    if (ccyIndex === 1 && !filecoinActions) {
+        return (
+            <ErrorModal
+                title={'Connection error'}
+                text={
+                    'Ledger seems to be disconnected. Please reconnect the device and try again'
+                }
+                onClose={onCloseSendModal}
+            />
+        );
+    }
 
     return (
         <Modal>
