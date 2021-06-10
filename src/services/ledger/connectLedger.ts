@@ -16,7 +16,6 @@ const connectWithLedger = async (dispatch: any) => {
     dispatch(resetLedgerState());
     const provider = await setLedgerProvider(dispatch);
 
-    console.log(provider);
     if (!provider) return null;
     const configured = await checkLedgerConfiguration(dispatch, provider);
     if (!configured) return null;
