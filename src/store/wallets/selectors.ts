@@ -40,3 +40,6 @@ export const isAnyWalletConnected = (
     }
     return false;
 };
+
+export const getFilActions = (state: RootState) =>
+    state.wallets.filecoin.actions;
