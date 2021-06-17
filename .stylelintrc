@@ -2,7 +2,9 @@
   "rules": {
     "color-no-invalid-hex": true,
     "max-empty-lines": 2,
-    "at-rule-no-unknown": null
+    "at-rule-no-unknown": null,
+    "selector-pseudo-class-no-unknown": null,
+    "property-no-unknown": null
   },
   "extends": [
     "stylelint-config-standard",
