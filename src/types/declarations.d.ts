@@ -9,3 +9,4 @@ declare module '@zondax/filecoin-signing-tools' {
 declare module '@zondax/ledger-filecoin';
 
 declare module '@ledgerhq/hw-transport-webhid';
+declare module '*.scss';
