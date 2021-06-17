@@ -1,0 +1,10 @@
+{
+  "rules": {
+    "color-no-invalid-hex": true,
+    "max-empty-lines": 2
+  },
+  "extends": [
+    "stylelint-config-standard",
+    "stylelint-config-prettier"
+  ]
+}
