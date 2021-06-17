@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react';
-import cm from 'src/theme/theme.module.scss';
+import cm from 'src/theme/typography.module.scss';
 import cx from 'classnames';
 
 interface ITypography {
