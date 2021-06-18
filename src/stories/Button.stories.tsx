@@ -11,6 +11,9 @@ export default {
 const Template: Story<IButton> = args => <Button {...args}>Button</Button>;
 
 export const Default = Template.bind({});
+Default.args = {
+    outline: false,
+};
 
 export const Outlined = Template.bind({});
 Outlined.args = {
