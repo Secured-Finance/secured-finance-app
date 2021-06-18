@@ -1,0 +1,8 @@
+.textsContainer {
+    display: flex;
+    flex-direction: column;
+
+    > span {
+        margin-bottom: 0.8rem;
+    }
+}
