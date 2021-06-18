@@ -1,6 +1,8 @@
 @import '../../../theme/styleduide';
 
 .textButton {
+    display: inline-flex;
+    align-items: flex-end;
     color: $white;
     font-size: $subtitleSize;
     line-height: 1.3;
@@ -20,11 +22,11 @@
 }
 
 .icon {
-    display: inline-block;
+    display: flex;
+    flex-shrink: 0;
     background-size: cover;
     transform: rotate(180deg);
     position: relative;
-    bottom: -6px;
     margin-left: $paddingXXS;
     cursor: pointer;
     color: inherit;
@@ -32,4 +34,6 @@
     -webkit-mask-image: url('../icons/arrow.svg');
     mask-image: url('../icons/arrow.svg');
     transition: 0.1s;
+    width: 24px;
+    height: 24px;
 }
