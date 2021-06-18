@@ -4,8 +4,9 @@ import { Story, Meta } from '@storybook/react';
 import { Button, IButton } from 'src/components/new/Button';
 
 export default {
-    title: 'Example/Button',
+    title: 'Components/Button',
     component: Button,
+    argTypes: { onClick: { action: 'clicked' } },
 } as Meta;
 
 const Template: Story<IButton> = args => <Button {...args}>Button</Button>;

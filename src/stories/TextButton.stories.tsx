@@ -4,8 +4,9 @@ import { Story, Meta } from '@storybook/react';
 import { TextButton, ITextButton } from 'src/components/new/TextButton';
 
 export default {
-    title: 'Example/TextButton',
+    title: 'Components/TextButton',
     component: TextButton,
+    argTypes: { onClick: { action: 'clicked' } },
 } as Meta;
 
 const Template: Story<ITextButton> = args => (
