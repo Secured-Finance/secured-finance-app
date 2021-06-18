@@ -1,7 +1,7 @@
 import React from 'react';
 import cx from 'classnames';
 import cm from './IconButton.module.scss';
-import arrow from '../icons/arrow.svg';
+import { arrow } from '../icons';
 
 export interface IIconButton
     extends React.ButtonHTMLAttributes<HTMLButtonElement> {
