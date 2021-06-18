@@ -1,8 +1,9 @@
-.textsContainer {
+.elementsContainer {
     display: flex;
     flex-direction: column;
 
-    > span {
+    > span,
+    > button {
         margin-bottom: 0.8rem;
     }
 }

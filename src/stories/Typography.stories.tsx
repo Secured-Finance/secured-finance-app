@@ -8,7 +8,7 @@ export default {
 } as Meta;
 
 export const Typography: Story = () => (
-    <div className={cm.textsContainer}>
+    <div className={cm.elementsContainer}>
         <Headline>Headline</Headline>
         <Title>Title</Title>
         <Subtitle>Subtitle</Subtitle>
