@@ -1,7 +1,7 @@
 @import '../../../theme/styleduide';
 
 .tabs {
-    display: flex;
+    display: inline-flex;
     align-items: center;
     color: $lightGrey;
     font-size: $tabSize;
@@ -28,6 +28,16 @@
     padding: 0 20px;
     cursor: pointer;
     transition: 0.1s;
+
+    &.largeTab {
+        font-size: $titleSize;
+        line-height: 29px;
+        padding: 0 32px;
+
+        & .tabLabel {
+            padding: 21px 0;
+        }
+    }
 
     &:first-child {
         padding-left: 0;

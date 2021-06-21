@@ -28,4 +28,5 @@ Default.args = {
     ],
     onChange: () => {},
     selected: null,
+    large: false,
 };

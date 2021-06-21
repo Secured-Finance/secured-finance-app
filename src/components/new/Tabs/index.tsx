@@ -5,6 +5,7 @@ import cm from './Tabs.module.scss';
 interface ITab extends React.HTMLAttributes<HTMLDivElement> {
     label: string;
     isSelected: boolean;
+    isLarge?: boolean;
 }
 
 export interface ITabs {
@@ -14,10 +15,17 @@ export interface ITabs {
     }>;
     selected?: string | number;
     onChange: (value: number | string) => void;
+    large?: boolean;
 }
 
-const Tab: React.FC<ITab> = ({ label, isSelected }) => (
-    <div className={cx(cm.tab, isSelected && cm.selected)}>
+const Tab: React.FC<ITab> = ({ label, isSelected, isLarge }) => (
+    <div
+        className={cx(
+            cm.tab,
+            isSelected && cm.selected,
+            isLarge && cm.largeTab
+        )}
+    >
         <div className={cm.tabLabel}>
             {label}
             <div className={cm.bottomBorder} />
@@ -29,6 +37,7 @@ export const Tabs: React.FC<ITabs> = ({
     onChange,
     options,
     selected,
+    large,
     ...props
 }) => {
     return (
@@ -39,6 +48,7 @@ export const Tabs: React.FC<ITabs> = ({
                         label={label}
                         isSelected={selected === value}
                         onClick={() => onChange(value)}
+                        isLarge={large}
                     />
                 ))}
         </div>
