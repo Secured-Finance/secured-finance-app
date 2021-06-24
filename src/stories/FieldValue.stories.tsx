@@ -13,6 +13,8 @@ export const Default = Template.bind({});
 Default.args = {
     field: '1Y Yield',
     value: '4.25%',
+    small: false,
+    bold: false,
 };
 
 export const Small = Template.bind({});
@@ -20,4 +22,11 @@ Small.args = {
     field: '1Y Yield',
     value: '4.25%',
     small: true,
+};
+
+export const Bold = Template.bind({});
+Bold.args = {
+    field: '1Y Yield',
+    value: '4.25%',
+    bold: true,
 };
