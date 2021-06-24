@@ -1,0 +1,46 @@
+@import '../Input/Input.module';
+@import '../../../theme/styleduide';
+
+.container {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    border: 1px solid $darkGray;
+    padding: $paddingS $paddingXS $paddingS $paddingSM;
+    cursor: pointer;
+    width: 135px;
+}
+
+.label {
+    color: $white;
+}
+
+.select {
+    @include input;
+
+    display: inline-block;
+    width: 100%;
+    outline: none;
+    cursor: pointer;
+    padding-right: 30px;
+    background-image: url(../icons/chevron.svg);
+    background-repeat: no-repeat;
+    background-position-x: 100%;
+    background-position-y: 4px;
+    text-overflow: ellipsis;
+
+    // hide arrow
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    text-indent: 1px;
+    //text-overflow: '';
+
+    // for IE
+    ::-ms-expand {
+        display: none;
+    }
+}
+
+.optionIcon {
+    margin-right: $paddingXS;
+}
