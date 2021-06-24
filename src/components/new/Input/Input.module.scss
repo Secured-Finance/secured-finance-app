@@ -1,0 +1,8 @@
+@import '../../../theme/styleduide';
+
+@mixin input {
+    background-color: transparent;
+    color: $white;
+    font-size: $titleSize;
+    border: 0;
+}
