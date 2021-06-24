@@ -33,4 +33,5 @@ Default.args = {
         { value: 4, label: 'Long with icon', icon: telegram },
     ],
     value,
+    label: '',
 };
