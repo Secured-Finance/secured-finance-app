@@ -5,7 +5,7 @@ import cx from 'classnames';
 export interface IFieldValue {
     field: string;
     value: string;
-    icon?: string;
+    icon?: JSX.Element | string;
     bold?: boolean;
     small?: boolean;
 }
@@ -16,32 +16,38 @@ export const FieldValue: React.FC<IFieldValue> = ({
     icon,
     bold,
     small,
-}) => (
-    <span className={cm.wrapper}>
-        <span className={cm.container}>
-            <span
-                className={cx(
-                    {
-                        [cm.small]: small,
-                        [cm.bold]: bold,
-                    },
-                    cm.field
-                )}
-            >
-                {field}
+}) => {
+    return (
+        <span className={cm.wrapper}>
+            <span className={cm.container}>
+                <span
+                    className={cx(
+                        {
+                            [cm.small]: small,
+                            [cm.bold]: bold,
+                        },
+                        cm.field
+                    )}
+                >
+                    {field}
+                </span>
+                <span
+                    className={cx(
+                        {
+                            [cm.small]: small,
+                            [cm.bold]: bold,
+                        },
+                        cm.value
+                    )}
+                >
+                    {value}
+                </span>
             </span>
-            <span
-                className={cx(
-                    {
-                        [cm.small]: small,
-                        [cm.bold]: bold,
-                    },
-                    cm.value
-                )}
-            >
-                {value}
-            </span>
+            {icon && typeof icon === 'string' ? (
+                <img className={cm.icon} src={icon} />
+            ) : (
+                <span className={cm.icon}>{icon}</span>
+            )}
         </span>
-        {icon && <img className={cm.icon} src={icon} />}
-    </span>
-);
+    );
+};

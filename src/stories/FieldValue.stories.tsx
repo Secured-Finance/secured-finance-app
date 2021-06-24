@@ -1,7 +1,7 @@
 import React from 'react';
 import { Story, Meta } from '@storybook/react';
 import { FieldValue, IFieldValue } from 'src/components/new/FieldValue';
-import { verified } from 'src/components/new/icons';
+import { verified, VerifiedIcon } from 'src/components/new/icons';
 
 export default {
     title: 'Components/FieldValue',
@@ -36,5 +36,5 @@ export const WithIcon = Template.bind({});
 WithIcon.args = {
     field: '1Y Yield',
     value: '4.25%',
-    icon: verified,
+    icon: <VerifiedIcon fill={'#666cf3'} />,
 };
