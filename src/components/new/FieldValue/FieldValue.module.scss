@@ -1,5 +1,11 @@
 @import '../../../theme/styleduide';
 
+.wrapper {
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+}
+
 .container {
     display: inline-flex;
     flex-direction: column;
@@ -32,4 +38,10 @@
         font-size: $titleSize;
         color: $white;
     }
+}
+
+.icon {
+    position: relative;
+    bottom: 2px;
+    margin-left: $paddingXS;
 }
