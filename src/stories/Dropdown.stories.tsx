@@ -34,4 +34,5 @@ Default.args = {
     ],
     value,
     label: '',
+    noBorders: false,
 };

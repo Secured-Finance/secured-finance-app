@@ -15,10 +15,15 @@
     padding: $paddingS $paddingXS $paddingS $paddingSM;
     cursor: pointer;
     width: 135px;
+
+    &.noBorder {
+        border: none;
+        padding: 0 0 0 $paddingSM;
+    }
 }
 
 .label {
-    margin: 0 0 $paddingS $paddingXS;
+    margin: 0 0 $paddingXXS $paddingSM;
     font-size: $bodySize;
     color: $lightSilver;
 }

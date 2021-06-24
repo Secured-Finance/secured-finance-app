@@ -1,6 +1,6 @@
 import cm from './Dropdown.module.scss';
 import React, { RefObject } from 'react';
-import { chevron } from 'src/components/new/icons';
+import cx from 'classnames';
 
 export interface IDropdown
     extends React.SelectHTMLAttributes<HTMLSelectElement> {
@@ -12,6 +12,7 @@ export interface IDropdown
         label: string;
         icon?: string;
     }>;
+    noBorders?: boolean;
 }
 
 export const Dropdown: React.FC<IDropdown> = ({
@@ -20,6 +21,7 @@ export const Dropdown: React.FC<IDropdown> = ({
     onChange,
     value,
     style,
+    noBorders,
 }) => {
     const valueIcon = options.find(
         ({ value: optValue }) => String(optValue) === String(value)
@@ -29,7 +31,10 @@ export const Dropdown: React.FC<IDropdown> = ({
         <div className={cm.container}>
             {label && <span className={cm.label}>{label}</span>}
 
-            <div className={cm.dropdownContainer} style={style}>
+            <div
+                className={cx(cm.dropdownContainer, noBorders && cm.noBorder)}
+                style={style}
+            >
                 {valueIcon && <img src={valueIcon} className={cm.optionIcon} />}
                 <select className={cm.select} onChange={onChange} value={value}>
                     {options.map(option => (
