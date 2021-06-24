@@ -19,8 +19,28 @@ export const FieldValue: React.FC<IFieldValue> = ({
 }) => (
     <span>
         <span className={cm.container}>
-            <span className={cx(small && cm.small, cm.field)}>{field}</span>
-            <span className={cx(small && cm.small, cm.value)}>{value}</span>
+            <span
+                className={cx(
+                    {
+                        [cm.small]: small,
+                        [cm.bold]: bold,
+                    },
+                    cm.field
+                )}
+            >
+                {field}
+            </span>
+            <span
+                className={cx(
+                    {
+                        [cm.small]: small,
+                        [cm.bold]: bold,
+                    },
+                    cm.value
+                )}
+            >
+                {value}
+            </span>
         </span>
         {icon && <img src={icon} />}
     </span>
