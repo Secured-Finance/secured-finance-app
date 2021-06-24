@@ -1,0 +1,26 @@
+@import '../../../theme/styleduide';
+
+.container {
+    display: inline-flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    color: $lightGrey;
+    line-height: 1.2;
+}
+
+.field {
+    font-size: $bodySize;
+
+    &.small {
+        font-size: $captionSize;
+    }
+}
+
+.value {
+    font-size: $subtitleSize;
+    font-weight: $bold;
+
+    &.small {
+        font-size: $tabSize;
+    }
+}
