@@ -2,6 +2,12 @@
 @import '../../../theme/styleduide';
 
 .container {
+    display: inline-flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.dropdownContainer {
     position: relative;
     display: inline-flex;
     align-items: center;
@@ -12,7 +18,9 @@
 }
 
 .label {
-    color: $white;
+    margin: 0 0 $paddingS $paddingXS;
+    font-size: $bodySize;
+    color: $lightSilver;
 }
 
 .select {

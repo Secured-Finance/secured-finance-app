@@ -26,16 +26,19 @@ export const Dropdown: React.FC<IDropdown> = ({
     )?.icon;
 
     return (
-        <div className={cm.container} style={style}>
+        <div className={cm.container}>
             {label && <span className={cm.label}>{label}</span>}
-            {valueIcon && <img src={valueIcon} className={cm.optionIcon} />}
-            <select className={cm.select} onChange={onChange} value={value}>
-                {options.map(option => (
-                    <option key={option.value} value={option.value}>
-                        {option.label}
-                    </option>
-                ))}
-            </select>
+
+            <div className={cm.dropdownContainer} style={style}>
+                {valueIcon && <img src={valueIcon} className={cm.optionIcon} />}
+                <select className={cm.select} onChange={onChange} value={value}>
+                    {options.map(option => (
+                        <option key={option.value} value={option.value}>
+                            {option.label}
+                        </option>
+                    ))}
+                </select>
+            </div>
         </div>
     );
 };
