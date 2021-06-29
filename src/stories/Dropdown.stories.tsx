@@ -16,7 +16,7 @@ const Template: Story<IDropdown> = args => {
         <Dropdown
             {...args}
             onChange={e => {
-                setValue(e.target.value);
+                setValue(e.currentTarget.value);
             }}
             value={value}
         />
