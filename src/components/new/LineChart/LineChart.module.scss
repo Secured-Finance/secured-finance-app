@@ -1,0 +1,51 @@
+@import '../../../theme/styleduide';
+
+.container {
+    position: relative;
+    width: 700px;
+}
+
+.chartView {
+    margin-top: $paddingS;
+}
+
+.title {
+    color: $lightSilver;
+    font-size: $tabSize;
+}
+
+.legendMarker {
+    width: 20px;
+    height: 20px;
+}
+
+.legend {
+    position: absolute;
+    right: 24px;
+    display: inline-block;
+    bottom: 40px;
+    color: $lightGrey;
+    font-size: $captionSize;
+
+    > ul {
+        display: flex;
+        list-style-type: none;
+
+        :not(:first-child) {
+            margin-left: $paddingSM;
+        }
+
+        > li {
+            display: flex;
+
+            > span {
+                display: inline-flex;
+                width: 5px;
+                height: 5px;
+                border-radius: 50%;
+                align-self: center;
+                margin-right: $paddingXS;
+            }
+        }
+    }
+}
