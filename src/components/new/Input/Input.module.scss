@@ -6,3 +6,41 @@
     font-size: $titleSize;
     border: 0;
 }
+
+.container {
+    display: flex;
+    flex-direction: column;
+}
+
+.label {
+    color: $lightGrey;
+    font-size: $bodySize;
+    margin-bottom: $paddingXS;
+    padding: 0 $paddingSM;
+
+    &.alignRight {
+        text-align: right;
+    }
+}
+
+.input {
+    @include input;
+
+    border: 1px solid $darkGray;
+    padding: $paddingS $paddingSM;
+    line-height: 1.2;
+    font-weight: $bold;
+
+    &:focus {
+        outline: none;
+        border-color: $gray;
+    }
+
+    &.noBorder {
+        border: 0;
+    }
+
+    &.alignRight {
+        text-align: right;
+    }
+}
