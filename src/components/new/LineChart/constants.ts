@@ -74,6 +74,7 @@ export const options = {
                     color: '#5f616a',
                     fontSize: 13,
                     padding: 8,
+                    callback: (value: number) => value + '%',
                 },
                 gridLines: {
                     color: getYAxisLinesColor(),
@@ -99,7 +100,27 @@ export const options = {
             },
         ],
     },
-    callbacks: {},
+    tooltips: {
+        filter: (item: any) => {
+            return item.value > 0;
+        },
+        callbacks: {
+            label: ({ value, datasetIndex, yLabel }: any, data: any) => {
+                if (value > 0) {
+                    const label = data.datasets[datasetIndex].label || '';
+                    let content = '';
+
+                    if (data.datasets.length > 1) {
+                        content += label;
+                    }
+
+                    content += ' ' + yLabel + ' %';
+                    return content;
+                }
+                return false;
+            },
+        },
+    },
     legend: {
         display: false,
         position: 'right',
