@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import cm from './LineChart.module.scss';
 import { Line, ChartComponentProps } from 'react-chartjs-2';
 import { defaultDatasets, commonDataset } from './constants';
+import { options } from './constants';
 
 export interface ILineChart extends ChartComponentProps {
     title?: string | JSX.Element;
@@ -35,11 +36,11 @@ export const LineChart: React.FC<ILineChart> = ({
 
     const chartRef = useRef(null);
     useEffect(() => {
-        if (showLegend) {
+        if (showLegend && data.datasets.length) {
             document.getElementById('legend').innerHTML =
                 chartRef.current.chartInstance.generateLegend();
         }
-    }, [showLegend]);
+    }, [showLegend, data.datasets.length]);
 
     return (
         <div className={cm.container} style={style}>
@@ -56,4 +57,5 @@ LineChart.defaultProps = {
     data: {
         datasets: [],
     },
+    options,
 };
