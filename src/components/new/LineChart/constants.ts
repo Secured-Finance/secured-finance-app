@@ -66,6 +66,11 @@ const getYAxisLinesColor = () => {
 
 export const options = {
     responsive: true,
+    layout: {
+        padding: {
+            left: 34,
+        },
+    },
     scales: {
         yAxes: [
             {
@@ -73,9 +78,11 @@ export const options = {
                 ticks: {
                     color: '#5f616a',
                     fontSize: 13,
-                    padding: 8,
+                    padding: 34,
                     callback: (value: number) => value + '%',
+                    mirror: true,
                 },
+
                 gridLines: {
                     color: getYAxisLinesColor(),
                     drawBorder: false,

@@ -18,7 +18,7 @@
 
     &.noBorder {
         border: none;
-        padding: 0 0 0 $paddingSM;
+        padding: 0;
     }
 }
 
@@ -31,16 +31,17 @@
 .select {
     @include input;
 
-    display: inline-block;
+    display: block;
     width: 100%;
     outline: none;
     cursor: pointer;
-    padding-right: 30px;
+    padding-right: 28px;
     background-image: url(../icons/chevron.svg);
     background-repeat: no-repeat;
-    background-position-x: 100%;
-    background-position-y: 4px;
+    background-position-x: calc(100% - 2px);
+    background-position-y: 2px;
     text-overflow: ellipsis;
+    font-weight: $bold;
 
     // hide arrow
     -webkit-appearance: none;
@@ -51,6 +52,10 @@
     // for IE
     ::-ms-expand {
         display: none;
+    }
+
+    &.withIcon {
+        margin-left: $paddingXS;
     }
 }
 
