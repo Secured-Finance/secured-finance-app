@@ -4,10 +4,11 @@ import cx from 'classnames';
 
 export interface IFieldValue {
     field: string;
-    value: string;
+    value: string | JSX.Element;
     icon?: JSX.Element | string;
     bold?: boolean;
-    small?: boolean;
+    large?: boolean;
+    light?: boolean;
 }
 
 export const FieldValue: React.FC<IFieldValue> = ({
@@ -15,16 +16,27 @@ export const FieldValue: React.FC<IFieldValue> = ({
     value,
     icon,
     bold,
-    small,
+    large,
+    light,
 }) => {
+    const renderIcon = () => {
+        if (!icon) return null;
+
+        return typeof icon === 'string' ? (
+            <img className={cm.icon} src={icon} />
+        ) : (
+            <span className={cm.icon}>{icon}</span>
+        );
+    };
     return (
         <span className={cm.wrapper}>
             <span className={cm.container}>
                 <span
                     className={cx(
                         {
-                            [cm.small]: small,
+                            [cm.large]: large,
                             [cm.bold]: bold,
+                            [cm.light]: light,
                         },
                         cm.field
                     )}
@@ -34,8 +46,9 @@ export const FieldValue: React.FC<IFieldValue> = ({
                 <span
                     className={cx(
                         {
-                            [cm.small]: small,
+                            [cm.large]: large,
                             [cm.bold]: bold,
+                            [cm.light]: light,
                         },
                         cm.value
                     )}
@@ -43,11 +56,7 @@ export const FieldValue: React.FC<IFieldValue> = ({
                     {value}
                 </span>
             </span>
-            {icon && typeof icon === 'string' ? (
-                <img className={cm.icon} src={icon} />
-            ) : (
-                <span className={cm.icon}>{icon}</span>
-            )}
+            {renderIcon()}
         </span>
     );
 };

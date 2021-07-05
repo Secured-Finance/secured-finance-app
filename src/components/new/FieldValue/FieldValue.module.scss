@@ -12,13 +12,17 @@
     justify-content: flex-start;
     color: $lightGrey;
     line-height: 1.2;
+
+    & .light {
+        color: $lightSilver;
+    }
 }
 
 .field {
-    font-size: $bodySize;
+    font-size: $captionSize;
 
-    &.small {
-        font-size: $captionSize;
+    &.large {
+        font-size: $bodySize;
     }
 
     &.bold {
@@ -27,11 +31,11 @@
 }
 
 .value {
-    font-size: $subtitleSize;
-    font-weight: $bold;
+    font-size: $tabSize;
 
-    &.small {
-        font-size: $tabSize;
+    &.large {
+        font-size: $subtitleSize;
+        font-weight: $bold;
     }
 
     &.bold {
