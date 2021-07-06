@@ -7,26 +7,29 @@ export default {
     argTypes: { onClick: { action: 'clicked' } },
 } as Meta;
 
-const Template: Story<ITabs> = args => <Tabs {...args} />;
+const Template: Story<ITabs> = args => {
+    const [selected, setValue] = React.useState(args.selected ?? '');
+
+    return <Tabs {...args} onChange={setValue} selected={selected} />;
+};
 
 export const Default = Template.bind({});
 Default.args = {
     options: [
-        { value: 1, label: 'Tab 1' },
+        { value: '1', label: 'Tab 1' },
         {
-            value: 2,
+            value: '2',
             label: 'Tab 2',
         },
         {
-            value: 3,
+            value: '3',
             label: 'Tab 3',
         },
         {
-            value: 4,
+            value: '4',
             label: 'Tab 4',
         },
     ],
-    onChange: () => {},
     selected: null,
     large: false,
 };

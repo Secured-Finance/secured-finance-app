@@ -1,0 +1,51 @@
+@import '../../../theme/styleduide';
+
+.container {
+    display: flex;
+    flex-direction: column;
+    width: 370px;
+
+    > div:first-child {
+        margin-bottom: 60px;
+    }
+}
+
+.table {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid $darkGray;
+    color: $lightGrey;
+    padding: 14px 0;
+
+    .row {
+        display: flex;
+        align-items: center;
+        border: 1px solid $darkGray;
+        border-left-width: 0;
+        border-right-width: 0;
+        padding: 0 0 0 14px;
+
+        .divider {
+            border: 1px solid $darkGray;
+            height: 100%;
+            border-right-width: 0;
+        }
+    }
+}
+
+.tableTitle {
+    font-weight: $bold;
+    padding: 0 14px 14px;
+}
+
+.subtitle {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 14px 0;
+}
+
+.USDValue {
+    font-weight: $bold;
+    font-size: $subtitleSize;
+}

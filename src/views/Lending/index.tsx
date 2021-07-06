@@ -10,6 +10,7 @@ import PlaceOrder from './components/PlaceOrder';
 import cm from './index.module.scss';
 import { ChartInfo } from './components/ChartInfo';
 import { Page } from 'src/components/new/Page';
+import { LendBorrowTable } from './components/LendBorrowTable';
 
 const Lending: React.FC<LendingStore> = ({ currencyIndex }) => {
     const securedFinance = useSF();
@@ -29,11 +30,12 @@ const Lending: React.FC<LendingStore> = ({ currencyIndex }) => {
                         midRate={midRate}
                     />
                 </div>
+                <LendBorrowTable />
 
-                <PlaceOrder
-                    borrowRates={borrowRates}
-                    lendingRates={lendingRates}
-                />
+                {/*<PlaceOrder*/}
+                {/*    borrowRates={borrowRates}*/}
+                {/*    lendingRates={lendingRates}*/}
+                {/*/>*/}
             </div>
         </Page>
     );

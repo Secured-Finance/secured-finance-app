@@ -4,6 +4,13 @@
     display: flex;
     flex-direction: column;
     width: 700px;
+    margin-top: 53px;
+}
+
+@media (max-width: 1280px) {
+    .container {
+        width: 600px;
+    }
 }
 
 @media (max-width: 1024px) {
