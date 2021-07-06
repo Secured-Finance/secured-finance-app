@@ -1,17 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import styled from 'styled-components';
-import {
-    useEthereumUsd,
-    useFilUsd,
-    useUSDCUsd,
-} from '../../hooks/useAssetPrices';
-import { useRates } from '../../hooks/useRates';
-import useSF from '../../hooks/useSecuredFinance';
-import { getLendingControllerContract } from '../../services/sdk/utils';
-import { LendingStore } from '../../store/lending';
-import { RootState } from '../../store/types';
-import theme from '../../theme';
+import { useRates } from 'src/hooks/useRates';
+import useSF from 'src/hooks/useSecuredFinance';
+import { getLendingControllerContract } from 'src/services/sdk/utils';
+import { LendingStore } from 'src/store/lending';
+import { RootState } from 'src/store/types';
 import YieldGraph from './components/Graph';
 import PlaceOrder from './components/PlaceOrder';
 import cm from './index.module.scss';

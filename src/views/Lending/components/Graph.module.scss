@@ -5,3 +5,9 @@
     flex-direction: column;
     width: 700px;
 }
+
+@media (max-width: 1024px) {
+    .container {
+        width: 520px;
+    }
+}
