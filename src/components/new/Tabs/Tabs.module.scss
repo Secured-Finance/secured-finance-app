@@ -32,7 +32,7 @@
     &.largeTab {
         font-size: $titleSize;
         line-height: 29px;
-        padding: 0 32px;
+        padding: 0 16px;
 
         & .tabLabel {
             padding: 21px 0;
@@ -49,13 +49,18 @@
 
     &:hover {
         color: $white;
+    }
+
+    &.selected {
+        color: $white;
 
         & .bottomBorder {
             background: $purple;
         }
     }
 
-    &.selected {
+    // will be updated soon
+    .filled {
         color: $black;
         background-color: $white;
 

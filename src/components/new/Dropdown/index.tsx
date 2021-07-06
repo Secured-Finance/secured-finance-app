@@ -12,7 +12,7 @@ export interface IDropdown
         label: string;
         icon?: string | JSX.Element;
     }>;
-    noBorders?: boolean;
+    noBorder?: boolean;
 }
 
 export const Dropdown: React.FC<IDropdown> = ({
@@ -21,7 +21,7 @@ export const Dropdown: React.FC<IDropdown> = ({
     onChange,
     value,
     style,
-    noBorders,
+    noBorder,
 }) => {
     const ValueIcon = options.find(
         ({ value: optValue }) => String(optValue) === String(value)
@@ -32,7 +32,7 @@ export const Dropdown: React.FC<IDropdown> = ({
             {label && <span className={cm.label}>{label}</span>}
 
             <div
-                className={cx(cm.dropdownContainer, noBorders && cm.noBorder)}
+                className={cx(cm.dropdownContainer, noBorder && cm.noBorder)}
                 style={style}
             >
                 {ValueIcon &&

@@ -10,21 +10,22 @@ interface ITab extends React.HTMLAttributes<HTMLDivElement> {
 
 export interface ITabs {
     options: Array<{
-        value: string | number;
+        value: string;
         label: string;
     }>;
-    selected?: string | number;
-    onChange: (value: number | string) => void;
+    selected?: string;
+    onChange: (value: string) => void;
     large?: boolean;
 }
 
-const Tab: React.FC<ITab> = ({ label, isSelected, isLarge }) => (
+const Tab: React.FC<ITab> = ({ onClick, label, isSelected, isLarge }) => (
     <div
         className={cx(
             cm.tab,
             isSelected && cm.selected,
             isLarge && cm.largeTab
         )}
+        onClick={onClick}
     >
         <div className={cm.tabLabel}>
             {label}
@@ -56,7 +57,6 @@ export const Tabs: React.FC<ITabs> = ({
 };
 
 Tabs.defaultProps = {
-    selected: 2,
     options: [],
     onChange: () => {},
 };

@@ -19,7 +19,7 @@ export const ChartInfo = () => {
                         ]}
                         value={'fil'}
                         style={{ width: 104 }}
-                        noBorders
+                        noBorder
                     />
                     <Dropdown
                         options={[
@@ -30,7 +30,7 @@ export const ChartInfo = () => {
                         ]}
                         value={'yield'}
                         style={{ width: 164 }}
-                        noBorders
+                        noBorder
                     />
                 </span>
                 <span className={cm.divider} />
