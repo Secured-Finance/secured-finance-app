@@ -96,7 +96,7 @@ export const LendBorrowTable: React.FC<ILendBorrowTable> = ({
             const action = isBorrow ? updateBorrowAmount : updateLendAmount;
             dispatch(action(e.currentTarget.value));
         },
-        [dispatch]
+        [isBorrow, dispatch]
     );
 
     const handleCollateralChange = useCallback(
@@ -165,6 +165,7 @@ export const LendBorrowTable: React.FC<ILendBorrowTable> = ({
                     <Input
                         value={amount}
                         onChange={handleAmountChange}
+                        type={'number'}
                         noBorder
                         alignRight
                     />
@@ -222,6 +223,7 @@ export const LendBorrowTable: React.FC<ILendBorrowTable> = ({
                             <Input
                                 value={collateralAmount}
                                 onChange={handleCollateralChange}
+                                type={'number'}
                                 noBorder
                                 alignRight
                             />
