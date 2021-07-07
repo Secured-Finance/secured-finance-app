@@ -1,4 +1,4 @@
-import cm from './PlaceOrder.module.scss';
+import cm from './LendBorrowTable.module.scss';
 import { Dropdown } from 'src/components/new/Dropdown';
 import { Input } from 'src/components/new/Input';
 import { FieldValue } from 'src/components/new/FieldValue';
