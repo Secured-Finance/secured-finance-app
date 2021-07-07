@@ -32,6 +32,8 @@
 }
 
 .value {
+    display: flex;
+    align-items: center;
     font-size: $tabSize;
 
     &.large {
@@ -51,14 +53,16 @@
     &.accent-red {
         color: $red;
     }
+
+    &.accent-purple {
+        color: $purple;
+    }
 }
 
 .icon {
     position: relative;
-    bottom: 2px;
     margin-left: $paddingXS;
-    height: 24px;
-    width: 24px;
+    display: flex;
 }
 
 .alignRight {

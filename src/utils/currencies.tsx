@@ -25,7 +25,6 @@ export const currencyList = [
     },
     {
         index: 2,
-        icon: usdcLogo,
         shortName: 'USDC',
         fullName: 'USDC',
     },
@@ -43,6 +42,20 @@ export const currencyListDropdown = [
         icon: <FilIcon size={24} fill={'#fff'} />,
         value: 'FIL',
         label: 'FIL',
+    },
+    {
+        index: 2,
+        value: 'USDC',
+        label: 'USDC',
+    },
+];
+
+export const collateralListDropdown = [
+    {
+        index: 0,
+        icon: ethereum,
+        value: 'ETH',
+        label: 'ETH',
     },
     {
         index: 2,
