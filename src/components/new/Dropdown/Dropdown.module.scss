@@ -26,6 +26,11 @@
     margin: 0 0 $paddingXXS $paddingSM;
     font-size: $bodySize;
     color: $lightSilver;
+
+    &.noBorder {
+        margin: 0;
+        padding: 0;
+    }
 }
 
 .select {

@@ -29,7 +29,11 @@ export const Dropdown: React.FC<IDropdown> = ({
 
     return (
         <div className={cm.container}>
-            {label && <span className={cm.label}>{label}</span>}
+            {label && (
+                <span className={cx(noBorder && cm.noBorder, cm.label)}>
+                    {label}
+                </span>
+            )}
 
             <div
                 className={cx(cm.dropdownContainer, noBorder && cm.noBorder)}

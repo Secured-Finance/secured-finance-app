@@ -42,6 +42,14 @@
         font-size: $titleSize;
         color: $white;
     }
+
+    &.accent-green {
+        color: $green;
+    }
+
+    &.accent-red {
+        color: $red;
+    }
 }
 
 .icon {
@@ -50,4 +58,8 @@
     margin-left: $paddingXS;
     height: 24px;
     width: 24px;
+}
+
+.alignRight {
+    text-align: right;
 }

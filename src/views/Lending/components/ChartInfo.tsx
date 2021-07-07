@@ -58,9 +58,13 @@ export const ChartInfo = () => {
                                 direction={'down'}
                             />
                             -0.000135
-                            <span className={cm.percentChange}>(-0.20%)</span>
+                            <span className={cm.percentChange}>
+                                &nbsp;(-0.20%)
+                            </span>
                         </span>
                     }
+                    accent={'red'}
+                    large
                 />
             </div>
         </div>

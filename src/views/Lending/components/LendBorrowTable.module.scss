@@ -1,4 +1,11 @@
 @import '../../../theme/styleduide';
+$tablePadding: 16px;
+
+@mixin row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
 
 .container {
     display: flex;
@@ -6,7 +13,11 @@
     width: 370px;
 
     > div:first-child {
-        margin-bottom: 60px;
+        margin-bottom: 36px;
+    }
+
+    button {
+        margin-top: 85px;
     }
 }
 
@@ -15,15 +26,16 @@
     flex-direction: column;
     border: 1px solid $darkGray;
     color: $lightGrey;
-    padding: 14px 0;
+    padding: $tablePadding 0;
+    margin-top: 24px;
 
-    .row {
+    .inputsWithBorder {
         display: flex;
         align-items: center;
         border: 1px solid $darkGray;
         border-left-width: 0;
         border-right-width: 0;
-        padding: 0 0 0 14px;
+        padding: 0 0 0 $tablePadding;
 
         .divider {
             border: 1px solid $darkGray;
@@ -31,21 +43,38 @@
             border-right-width: 0;
         }
     }
+
+    .loanTermsRow {
+        @include row;
+
+        padding: $tablePadding $tablePadding 0;
+    }
 }
 
 .tableTitle {
     font-weight: $bold;
-    padding: 0 14px 14px;
+    padding: 0 $tablePadding $tablePadding;
+    border-bottom: 1px solid $darkGray;
 }
 
 .subtitle {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 14px 14px 0;
+    @include row;
+
+    padding: $tablePadding $tablePadding 0;
 }
 
 .USDValue {
     font-weight: $bold;
     font-size: $subtitleSize;
+}
+
+.feeAndReturnsRow {
+    @include row;
+
+    justify-content: flex-start;
+    margin-top: 24px;
+
+    > span:last-of-type {
+        margin-left: 44px;
+    }
 }
