@@ -11,6 +11,12 @@ $tablePadding: 16px;
     display: flex;
     flex-direction: column;
     width: 370px;
+    overflow-y: scroll;
+    padding-bottom: 20px;
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
 
     > div:first-child {
         margin-bottom: 36px;
@@ -26,16 +32,19 @@ $tablePadding: 16px;
     flex-direction: column;
     border: 1px solid $darkGray;
     color: $lightGrey;
-    padding: $tablePadding 0;
+    padding: $tablePadding 0 0;
     margin-top: 24px;
 
-    .inputsWithBorder {
+    .inputsWithBorder,
+    .collateralRow {
         display: flex;
         align-items: center;
-        border: 1px solid $darkGray;
-        border-left-width: 0;
-        border-right-width: 0;
+        border-bottom: 1px solid $darkGray;
         padding: 0 0 0 $tablePadding;
+
+        &.collateralRow {
+            border: 0;
+        }
 
         .divider {
             border: 1px solid $darkGray;
@@ -44,23 +53,23 @@ $tablePadding: 16px;
         }
     }
 
-    .loanTermsRow {
+    .bottomRow {
         @include row;
 
-        padding: $tablePadding $tablePadding 0;
+        padding: $tablePadding;
     }
 }
 
 .tableTitle {
+    @include row;
+
     font-weight: $bold;
     padding: 0 $tablePadding $tablePadding;
     border-bottom: 1px solid $darkGray;
-}
 
-.subtitle {
-    @include row;
-
-    padding: $tablePadding $tablePadding 0;
+    .tableTitleComment {
+        font-weight: $normalWeight;
+    }
 }
 
 .USDValue {
@@ -77,4 +86,8 @@ $tablePadding: 16px;
     > span:last-of-type {
         margin-left: 44px;
     }
+}
+
+.collateralCoverage {
+    margin: 24px 0 0;
 }

@@ -10,7 +10,7 @@ export interface IFieldValue {
     large?: boolean;
     light?: boolean;
     alignRight?: boolean;
-    accent?: 'green' | 'red';
+    accent?: 'green' | 'red' | 'purple';
 }
 
 export const FieldValue: React.FC<IFieldValue> = ({
@@ -25,9 +25,15 @@ export const FieldValue: React.FC<IFieldValue> = ({
 }) => {
     const renderIcon = () => {
         if (!icon) return null;
+        const defaultImageSize = bold ? 24 : 20;
 
         return typeof icon === 'string' ? (
-            <img className={cm.icon} src={icon} />
+            <img
+                className={cm.icon}
+                width={defaultImageSize}
+                height={defaultImageSize}
+                src={icon}
+            />
         ) : (
             <span className={cm.icon}>{icon}</span>
         );
@@ -59,10 +65,10 @@ export const FieldValue: React.FC<IFieldValue> = ({
                         cm.value
                     )}
                 >
-                    {value}
+                    <span>{value}</span>
+                    {renderIcon()}
                 </span>
             </span>
-            {renderIcon()}
         </span>
     );
 };

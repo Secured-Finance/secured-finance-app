@@ -31,7 +31,6 @@ export function updateMainCollateralCurrency(data: string) {
 export function updateMainTerms(data: string) {
     return (dispatch: any) => {
         dispatch(updateSelectedTerms(data));
-        console.log(data);
         switch (data) {
             case '3mo':
                 dispatch(updateTermsIndex(0));
