@@ -9,6 +9,8 @@ export interface IFieldValue {
     bold?: boolean;
     large?: boolean;
     light?: boolean;
+    alignRight?: boolean;
+    accent?: 'green' | 'red';
 }
 
 export const FieldValue: React.FC<IFieldValue> = ({
@@ -18,6 +20,8 @@ export const FieldValue: React.FC<IFieldValue> = ({
     bold,
     large,
     light,
+    alignRight,
+    accent,
 }) => {
     const renderIcon = () => {
         if (!icon) return null;
@@ -49,6 +53,8 @@ export const FieldValue: React.FC<IFieldValue> = ({
                             [cm.large]: large,
                             [cm.bold]: bold,
                             [cm.light]: light,
+                            [cm.alignRight]: alignRight,
+                            [cm[`accent-${accent}`]]: accent,
                         },
                         cm.value
                     )}

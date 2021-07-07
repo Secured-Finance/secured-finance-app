@@ -4,6 +4,8 @@ import { Tabs } from 'src/components/new/Tabs';
 import { Dropdown } from 'src/components/new/Dropdown';
 import { Input } from 'src/components/new/Input';
 import { FilIcon } from 'src/components/new/icons';
+import { FieldValue } from 'src/components/new/FieldValue';
+import { Button } from 'src/components/new/Button';
 
 export const LendBorrowTable = () => {
     const [selectedTab, setTab] = React.useState<string>('lend');
@@ -25,7 +27,7 @@ export const LendBorrowTable = () => {
             />
             <div className={cm.table}>
                 <span className={cm.tableTitle}>Currency</span>
-                <span className={cm.row}>
+                <span className={cm.inputsWithBorder}>
                     <Dropdown
                         options={[
                             {
@@ -48,6 +50,41 @@ export const LendBorrowTable = () => {
                     <span className={cm.USDValue}>~$224,000.00</span>
                 </span>
             </div>
+
+            <div className={cm.table}>
+                <span className={cm.tableTitle}>Loan Terms</span>
+                <span className={cm.loanTermsRow}>
+                    <Dropdown
+                        options={[
+                            {
+                                value: '5m',
+                                label: '5 month',
+                            },
+                        ]}
+                        value={'5m'}
+                        label={'Fixed'}
+                        noBorder
+                    />
+                    <FieldValue
+                        field={'Rate (APY)'}
+                        value={'9%'}
+                        large
+                        alignRight
+                    />
+                </span>
+            </div>
+
+            <div className={cm.feeAndReturnsRow}>
+                <FieldValue
+                    field={'Estimated Returns'}
+                    value={'$168 000.00'}
+                    accent={'green'}
+                    large
+                />
+                <FieldValue field={'Transaction Fee'} value={'$1.2'} large />
+            </div>
+
+            <Button>Lend</Button>
         </div>
     );
 };
