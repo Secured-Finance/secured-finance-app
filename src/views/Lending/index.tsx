@@ -6,11 +6,10 @@ import { getLendingControllerContract } from 'src/services/sdk/utils';
 import { LendingStore } from 'src/store/lending';
 import { RootState } from 'src/store/types';
 import YieldGraph from './components/Graph';
-import PlaceOrder from './components/PlaceOrder';
 import cm from './index.module.scss';
 import { ChartInfo } from './components/ChartInfo';
 import { Page } from 'src/components/new/Page';
-import { LendBorrowTable } from './components/LendBorrowTable';
+import { PlaceOrder } from './components/PlaceOrder';
 
 const Lending: React.FC<LendingStore> = ({ currencyIndex }) => {
     const securedFinance = useSF();
@@ -30,9 +29,9 @@ const Lending: React.FC<LendingStore> = ({ currencyIndex }) => {
                         midRate={midRate}
                     />
                 </div>
-                <LendBorrowTable />
+                <PlaceOrder />
 
-                {/*<PlaceOrder*/}
+                {/*<PlaceOrderObsolete*/}
                 {/*    borrowRates={borrowRates}*/}
                 {/*    lendingRates={lendingRates}*/}
                 {/*/>*/}
