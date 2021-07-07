@@ -3,7 +3,7 @@ import { Dropdown } from 'src/components/new/Dropdown';
 import { Input } from 'src/components/new/Input';
 import { FieldValue } from 'src/components/new/FieldValue';
 import { Button } from 'src/components/new/Button';
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import {
     updateLendAmount,
     updateMainCurrency,
@@ -33,6 +33,7 @@ import {
 } from 'src/store/wallets/selectors';
 import { daysInYear } from '../constants';
 import { VerifiedIcon } from 'src/components/new/icons';
+import { usePlaceOrder } from 'src/hooks/usePlaceOrder';
 
 interface ILendBorrowTable extends LendingStore {
     selectedTab: string;
@@ -51,6 +52,7 @@ export const LendBorrowTable: React.FC<ILendBorrowTable> = ({
     collateralCcy,
     collateralAmount,
 }) => {
+    const [pendingTx, setPendingTx] = useState(false);
     const dispatch = useDispatch();
     const tabName = selectedTab.charAt(0).toUpperCase() + selectedTab.slice(1);
     const filPrice = useSelector(getFilPrice);
@@ -121,6 +123,32 @@ export const LendBorrowTable: React.FC<ILendBorrowTable> = ({
         borrowRate,
         borrowAmount,
     ]);
+
+    const { onPlaceOrder: onPlaceLend } = usePlaceOrder(
+        currencyIndex,
+        termsIndex,
+        0,
+        lendAmount,
+        lendRate
+    );
+    const { onPlaceOrder: onPlaceBorrow } = usePlaceOrder(
+        currencyIndex,
+        termsIndex,
+        1,
+        borrowAmount,
+        borrowRate
+    );
+    const action = isBorrow ? onPlaceBorrow : onPlaceLend;
+
+    const handleLendDeal = useCallback(async () => {
+        try {
+            setPendingTx(true);
+            await action();
+            setPendingTx(false);
+        } catch (e) {
+            console.log(e);
+        }
+    }, [action, setPendingTx]);
 
     return (
         <>
@@ -230,7 +258,9 @@ export const LendBorrowTable: React.FC<ILendBorrowTable> = ({
                 <FieldValue field={'Transaction Fee'} value={'$1.2'} large />
             </div>
 
-            <Button>{tabName}</Button>
+            <Button onClick={handleLendDeal} disabled={pendingTx}>
+                {tabName}
+            </Button>
         </>
     );
 };
