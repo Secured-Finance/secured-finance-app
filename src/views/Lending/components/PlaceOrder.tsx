@@ -3,7 +3,12 @@ import cm from './PlaceOrder.module.scss';
 import { Tabs } from 'src/components/new/Tabs';
 import LendBorrowTable from './LendBorrowTable';
 
-export const PlaceOrder = () => {
+interface IPlaceOrder {
+    lendingRates: Array<number>;
+    borrowRates: Array<number>;
+}
+
+export const PlaceOrder: React.FC<IPlaceOrder> = props => {
     const [selectedTab, setTab] = React.useState<string>('lend');
 
     return (
@@ -21,7 +26,7 @@ export const PlaceOrder = () => {
                 large
             />
 
-            <LendBorrowTable selectedTab={selectedTab} />
+            <LendBorrowTable selectedTab={selectedTab} {...props} />
         </div>
     );
 };

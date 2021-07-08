@@ -29,7 +29,10 @@ const Lending: React.FC<LendingStore> = ({ currencyIndex }) => {
                         midRate={midRate}
                     />
                 </div>
-                <PlaceOrder />
+                <PlaceOrder
+                    borrowRates={borrowRates}
+                    lendingRates={lendingRates}
+                />
 
                 {/*<PlaceOrderObsolete*/}
                 {/*    borrowRates={borrowRates}*/}
