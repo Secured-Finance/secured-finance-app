@@ -1,11 +1,7 @@
 import cm from './LendBorrowTable.module.scss';
-import {
-    calculatePercents,
-    MIN_COVERAGE,
-    getSmartFormattedNumber,
-} from '../constants';
+import { calculatePercents, MIN_COVERAGE } from '../constants';
 import { Dropdown } from 'src/components/new/Dropdown';
-import { collateralListDropdown } from 'src/utils';
+import { collateralListDropdown, usdFormat } from 'src/utils';
 import { Input } from 'src/components/new/Input';
 import { FieldValue } from 'src/components/new/FieldValue';
 import React, { useCallback, useMemo } from 'react';
@@ -23,20 +19,35 @@ import {
     getFilPrice,
     getUSDCPrice,
 } from 'src/store/assetPrices/selectors';
+import BigNumber from 'bignumber.js';
+import { getEthBalance } from 'src/store/wallets/selectors';
+import cx from 'classnames';
 
 interface IBorrowCollateralManagement extends LendingStore {
-    USDAmount: number;
+    USDAmount: BigNumber;
+    setCollateralInadequate: (bool: boolean) => void;
 }
 
 const BorrowCollateralManagement: React.FC<IBorrowCollateralManagement> = ({
     collateralCcy,
     collateralAmount,
     USDAmount,
+    setCollateralInadequate,
 }) => {
     const dispatch = useDispatch();
     const filPrice = useSelector(getFilPrice);
     const ethPrice = useSelector(getEthPrice);
     const usdcPrice = useSelector(getUSDCPrice);
+    const priceMap: any = {
+        FIL: filPrice,
+        ETH: ethPrice,
+        USDC: usdcPrice,
+    };
+
+    const balanceMap: any = {
+        ETH: useSelector(getEthBalance),
+        USDC: 0,
+    };
 
     const handleCollateralCurrencyChange = (
         e: React.SyntheticEvent<HTMLSelectElement>
@@ -50,29 +61,15 @@ const BorrowCollateralManagement: React.FC<IBorrowCollateralManagement> = ({
     );
 
     const USDCollateral = useMemo(() => {
-        switch (collateralCcy) {
-            case 'FIL':
-                return collateralAmount * filPrice;
-            case 'ETH':
-                return collateralAmount * ethPrice;
-            case 'USDC':
-                return collateralAmount * usdcPrice;
-            default:
-                return 0;
-        }
+        if (!collateralAmount) return new BigNumber(0);
+
+        return new BigNumber(collateralAmount).multipliedBy(
+            priceMap[collateralCcy]
+        );
     }, [collateralAmount, collateralCcy]);
 
-    const tokenCollateral = (amount: number) => {
-        switch (collateralCcy) {
-            case 'FIL':
-                return amount / filPrice;
-            case 'ETH':
-                return amount / ethPrice;
-            case 'USDC':
-                return amount / usdcPrice;
-            default:
-                return 0;
-        }
+    const getTokenCollateral = (amount: BigNumber) => {
+        return amount.dividedBy(priceMap[collateralCcy]);
     };
 
     const collateralCoverage = calculatePercents(USDCollateral, USDAmount);
@@ -80,20 +77,14 @@ const BorrowCollateralManagement: React.FC<IBorrowCollateralManagement> = ({
     const inadequateCollateral = collateralPercentageDifference > 0;
 
     const addCollateral = () => {
-        const amountToAdd = (USDAmount / 100) * collateralPercentageDifference;
-        const sufficientUSDCollateralAmount = +USDCollateral + +amountToAdd;
-        console.log({
-            USDCollateral,
-            amountToAdd,
-            sufficientUSDCollateralAmount,
-            ethPrice,
-        });
-        const sufficientCollateral = getSmartFormattedNumber(
-            tokenCollateral(sufficientUSDCollateralAmount)
-        );
-        console.log(USDCollateral, amountToAdd);
+        const appropriateUSDAmount = USDAmount.multipliedBy(1.5);
+        const sufficientCollateral = getTokenCollateral(appropriateUSDAmount);
         dispatch(updateCollateralAmount(sufficientCollateral));
     };
+
+    React.useEffect(() => {
+        setCollateralInadequate(inadequateCollateral);
+    }, [inadequateCollateral]);
 
     return (
         <>
@@ -105,7 +96,7 @@ const BorrowCollateralManagement: React.FC<IBorrowCollateralManagement> = ({
                     </span>
                 </span>
 
-                <span className={cm.collateralRow}>
+                <span className={cm.inputsWithBorder}>
                     <Dropdown
                         options={collateralListDropdown}
                         value={collateralCcy}
@@ -122,6 +113,17 @@ const BorrowCollateralManagement: React.FC<IBorrowCollateralManagement> = ({
                         alignRight
                     />
                 </span>
+                <span className={cm.bottomRow}>
+                    <span>Balance: {balanceMap[collateralCcy]}</span>
+                    <span
+                        className={cx(
+                            inadequateCollateral && cm.inadequateCollateral,
+                            cm.USDValue
+                        )}
+                    >
+                        ~ {usdFormat(USDCollateral.toNumber())}
+                    </span>
+                </span>
             </div>
             <div className={cm.collateralCoverage}>
                 <FieldValue
@@ -135,7 +137,7 @@ const BorrowCollateralManagement: React.FC<IBorrowCollateralManagement> = ({
                     }
                     large
                 />
-                {inadequateCollateral && (
+                {inadequateCollateral && USDAmount.isGreaterThan(0) && (
                     <span className={cm.collateralManagement}>
                         <span className={cm.collateralCoverageComment}>
                             You need {MIN_COVERAGE}%. Please, click below on tag

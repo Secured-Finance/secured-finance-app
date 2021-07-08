@@ -21,6 +21,11 @@ export const getFilUSDBalance = (state: RootState) =>
 export const getEthUSDBalance = (state: RootState) =>
     state.wallets.ethereum.usdBalance;
 
+export const getEthBalance = (state: RootState) =>
+    state.wallets.ethereum.balance;
+export const getFilBalance = (state: RootState) =>
+    state.wallets.filecoin.balance;
+
 export const isAnyWalletConnected = (
     state: RootState,
     walletName?: 'filecoin' | 'ethereum'
