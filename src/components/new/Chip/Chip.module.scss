@@ -1,7 +1,6 @@
 @import '../../../theme/styleduide.scss';
 
 @mixin chip {
-    align-self: flex-start;
     color: $lightSilver;
     border-radius: 40px;
     border: 1px solid $lightGrey;

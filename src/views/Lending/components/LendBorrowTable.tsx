@@ -31,9 +31,10 @@ import {
     getEthUSDBalance,
     getFilUSDBalance,
 } from 'src/store/wallets/selectors';
-import { daysInYear } from '../constants';
+import { daysInYear, MIN_COVERAGE } from '../constants';
 import { VerifiedIcon } from 'src/components/new/icons';
 import { usePlaceOrder } from 'src/hooks/usePlaceOrder';
+import { ChipButton } from 'src/components/new/Chip/ChipButton';
 
 interface ILendBorrowTable extends LendingStore {
     selectedTab: string;
@@ -61,6 +62,7 @@ export const LendBorrowTable: React.FC<ILendBorrowTable> = ({
     const isBorrow = selectedTab === 'borrow';
     const amount = isBorrow ? borrowAmount : lendAmount;
     const rate = isBorrow ? borrowRate : lendRate;
+    const chipValues = [20, 30, 40, 48, 50];
 
     const ethUSDBalance = useSelector(getEthUSDBalance);
     const filUSDBalance = useSelector(getFilUSDBalance);
@@ -207,7 +209,7 @@ export const LendBorrowTable: React.FC<ILendBorrowTable> = ({
                         <span className={cm.tableTitle}>
                             <span>Collateral Currency</span>
                             <span className={cm.tableTitleComment}>
-                                MIN 150%
+                                MIN {MIN_COVERAGE}%
                             </span>
                         </span>
 
@@ -237,6 +239,15 @@ export const LendBorrowTable: React.FC<ILendBorrowTable> = ({
                             icon={<VerifiedIcon fill={'#666CF380'} size={20} />}
                             large
                         />
+                        <span className={cm.collateralManagement}>
+                            <span className={cm.collateralCoverageComment}>
+                                You need {MIN_COVERAGE}%. Please, click below on
+                                tag to add some percents of coverage.
+                            </span>
+                            <ChipButton style={{ alignSelf: 'flex-start' }}>
+                                +48%
+                            </ChipButton>
+                        </span>
                     </div>
                 </>
             )}
