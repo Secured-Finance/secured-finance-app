@@ -3,12 +3,14 @@ import { Dropdown } from 'src/components/new/Dropdown';
 import { Input } from 'src/components/new/Input';
 import { FieldValue } from 'src/components/new/FieldValue';
 import { Button } from 'src/components/new/Button';
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import {
     updateLendAmount,
     updateMainCurrency,
     updateMainTerms,
     updateBorrowAmount,
+    updateLendRate,
+    updateBorrowRate,
 } from 'src/store/lending';
 import {
     currencyListDropdown,
@@ -19,11 +21,7 @@ import {
 import { connect, useDispatch, useSelector } from 'react-redux';
 import { LendingStore } from 'src/store/lending/types';
 import { RootState } from 'src/store/types';
-import {
-    getFilPrice,
-    getEthPrice,
-    getUSDCPrice,
-} from 'src/store/assetPrices/selectors';
+import { getUSDCPrice } from 'src/store/assetPrices/selectors';
 import {
     getEthUSDBalance,
     getFilUSDBalance,
@@ -32,10 +30,12 @@ import { daysInYear } from '../constants';
 import { usePlaceOrder } from 'src/hooks/usePlaceOrder';
 import BorrowCollateralManagement from './BorrowCollateralManagement';
 import BigNumber from 'bignumber.js/bignumber';
-import { useEthereumUsd, useFilUsd } from '../../../hooks/useAssetPrices';
+import { useEthereumUsd, useFilUsd } from 'src/hooks/useAssetPrices';
 
 interface ILendBorrowTable extends LendingStore {
     selectedTab: string;
+    lendingRates: Array<number>;
+    borrowRates: Array<number>;
 }
 
 export const LendBorrowTable: React.FC<ILendBorrowTable> = ({
@@ -48,6 +48,8 @@ export const LendBorrowTable: React.FC<ILendBorrowTable> = ({
     currencyIndex,
     borrowAmount,
     borrowRate,
+    lendingRates,
+    borrowRates,
 }) => {
     const [pendingTx, setPendingTx] = useState(false);
     const [isCollateralInadequate, setCollateralInadequate] = useState(false);
@@ -68,6 +70,14 @@ export const LendBorrowTable: React.FC<ILendBorrowTable> = ({
         FIL: filUSDBalance,
         USDC: 0,
     };
+
+    useEffect(() => {
+        const rates = isBorrow ? borrowRates : lendingRates;
+        if (rates.length > 0) {
+            const action = isBorrow ? updateBorrowRate : updateLendRate;
+            dispatch(action(rates[termsIndex]));
+        }
+    }, [dispatch, currencyIndex, termsIndex, selectedTab]);
 
     const handleCurrencyChange = (e: React.SyntheticEvent<HTMLSelectElement>) =>
         dispatch(updateMainCurrency(e.currentTarget.value));
