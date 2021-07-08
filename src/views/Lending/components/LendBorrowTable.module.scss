@@ -1,5 +1,4 @@
 @import '../../../theme/styleduide';
-$tablePadding: 16px;
 
 @mixin row {
     display: flex;
@@ -9,7 +8,7 @@ $tablePadding: 16px;
 .table {
     display: flex;
     flex-direction: column;
-    border: 1px solid $darkGray;
+    border: 1px solid $darkGrey;
     color: $lightGrey;
     padding: 0;
     margin-top: 24px;
@@ -18,15 +17,15 @@ $tablePadding: 16px;
     .collateralRow {
         display: flex;
         align-items: center;
-        border-bottom: 1px solid $darkGray;
-        padding: 0 0 0 $tablePadding;
+        border-bottom: 1px solid $darkGrey;
+        padding: 0 0 0 $paddingSM;
 
         &.collateralRow {
             border: 0;
         }
 
         .divider {
-            border: 1px solid $darkGray;
+            border: 1px solid $darkGrey;
             height: 100%;
             border-right-width: 0;
         }
@@ -35,7 +34,7 @@ $tablePadding: 16px;
     .bottomRow {
         @include row;
 
-        padding: $tablePadding;
+        padding: $paddingSM;
     }
 }
 
@@ -43,8 +42,8 @@ $tablePadding: 16px;
     @include row;
 
     font-weight: $bold;
-    padding: $tablePadding;
-    border-bottom: 1px solid $darkGray;
+    padding: $paddingSM;
+    border-bottom: 1px solid $darkGrey;
 
     .tableTitleComment {
         font-weight: $normalWeight;
@@ -69,4 +68,15 @@ $tablePadding: 16px;
 
 .collateralCoverage {
     margin: 24px 0 0;
+
+    .collateralManagement {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .collateralCoverageComment {
+        font-size: $captionSize;
+        color: $lightGrey;
+        margin: 14px 0;
+    }
 }
