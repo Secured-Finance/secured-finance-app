@@ -79,7 +79,10 @@ const BorrowCollateralManagement: React.FC<IBorrowCollateralManagement> = ({
     const addCollateral = () => {
         const appropriateUSDAmount = USDAmount.multipliedBy(1.5);
         const sufficientCollateral = getTokenCollateral(appropriateUSDAmount);
-        dispatch(updateCollateralAmount(sufficientCollateral));
+        const result = sufficientCollateral.isInteger()
+            ? sufficientCollateral.toNumber()
+            : sufficientCollateral.toFixed(4, 2);
+        dispatch(updateCollateralAmount(result));
     };
 
     React.useEffect(() => {

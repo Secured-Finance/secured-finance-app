@@ -32,6 +32,7 @@ import { daysInYear } from '../constants';
 import { usePlaceOrder } from 'src/hooks/usePlaceOrder';
 import BorrowCollateralManagement from './BorrowCollateralManagement';
 import BigNumber from 'bignumber.js/bignumber';
+import { useEthereumUsd, useFilUsd } from '../../../hooks/useAssetPrices';
 
 interface ILendBorrowTable extends LendingStore {
     selectedTab: string;
@@ -52,15 +53,15 @@ export const LendBorrowTable: React.FC<ILendBorrowTable> = ({
     const [isCollateralInadequate, setCollateralInadequate] = useState(false);
     const dispatch = useDispatch();
     const tabName = selectedTab.charAt(0).toUpperCase() + selectedTab.slice(1);
-    const filPrice = useSelector(getFilPrice);
-    const ethPrice = useSelector(getEthPrice);
-    const usdcPrice = useSelector(getUSDCPrice);
-    const isBorrow = selectedTab === 'borrow';
-    const amount = new BigNumber(isBorrow ? borrowAmount : lendAmount);
-    const rate = isBorrow ? borrowRate : lendRate;
 
     const ethUSDBalance = useSelector(getEthUSDBalance);
     const filUSDBalance = useSelector(getFilUSDBalance);
+    const isBorrow = selectedTab === 'borrow';
+    const amount = new BigNumber(isBorrow ? borrowAmount : lendAmount);
+    const rate = isBorrow ? borrowRate : lendRate;
+    const ethPrice = useEthereumUsd().price;
+    const filPrice = useFilUsd().price;
+    const usdcPrice = useSelector(getUSDCPrice);
 
     const USDBalanceMap: any = {
         ETH: ethUSDBalance,
@@ -83,7 +84,7 @@ export const LendBorrowTable: React.FC<ILendBorrowTable> = ({
             default:
                 return new BigNumber(0);
         }
-    }, [borrowAmount, lendAmount, selectedCcy]);
+    }, [borrowAmount, lendAmount, selectedCcy, isBorrow]);
 
     const handleAmountChange = useCallback(
         (e: React.FormEvent<HTMLInputElement>) => {
