@@ -9,12 +9,9 @@ import {
     updateMainCurrency,
     updateMainTerms,
     updateBorrowAmount,
-    updateMainCollateralCurrency,
-    updateCollateralAmount,
 } from 'src/store/lending';
 import {
     currencyListDropdown,
-    collateralListDropdown,
     percentFormat,
     termsList,
     usdFormat,
@@ -31,10 +28,9 @@ import {
     getEthUSDBalance,
     getFilUSDBalance,
 } from 'src/store/wallets/selectors';
-import { daysInYear, MIN_COVERAGE } from '../constants';
-import { VerifiedIcon } from 'src/components/new/icons';
+import { daysInYear } from '../constants';
 import { usePlaceOrder } from 'src/hooks/usePlaceOrder';
-import { ChipButton } from 'src/components/new/Chip/ChipButton';
+import BorrowCollateralManagement from './BorrowCollateralManagement';
 
 interface ILendBorrowTable extends LendingStore {
     selectedTab: string;
@@ -50,8 +46,6 @@ export const LendBorrowTable: React.FC<ILendBorrowTable> = ({
     currencyIndex,
     borrowAmount,
     borrowRate,
-    collateralCcy,
-    collateralAmount,
 }) => {
     const [pendingTx, setPendingTx] = useState(false);
     const dispatch = useDispatch();
@@ -62,7 +56,6 @@ export const LendBorrowTable: React.FC<ILendBorrowTable> = ({
     const isBorrow = selectedTab === 'borrow';
     const amount = isBorrow ? borrowAmount : lendAmount;
     const rate = isBorrow ? borrowRate : lendRate;
-    const chipValues = [20, 30, 40, 48, 50];
 
     const ethUSDBalance = useSelector(getEthUSDBalance);
     const filUSDBalance = useSelector(getFilUSDBalance);
@@ -75,10 +68,6 @@ export const LendBorrowTable: React.FC<ILendBorrowTable> = ({
 
     const handleCurrencyChange = (e: React.SyntheticEvent<HTMLSelectElement>) =>
         dispatch(updateMainCurrency(e.currentTarget.value));
-
-    const handleCollateralCurrencyChange = (
-        e: React.SyntheticEvent<HTMLSelectElement>
-    ) => dispatch(updateMainCollateralCurrency(e.currentTarget.value));
 
     const USDAmount = useMemo(() => {
         switch (selectedCcy) {
@@ -99,13 +88,6 @@ export const LendBorrowTable: React.FC<ILendBorrowTable> = ({
             dispatch(action(e.currentTarget.value));
         },
         [isBorrow, dispatch]
-    );
-
-    const handleCollateralChange = useCallback(
-        (e: React.FormEvent<HTMLInputElement>) => {
-            dispatch(updateCollateralAmount(e.currentTarget.value));
-        },
-        [dispatch]
     );
 
     const handleTermsChange = (e: React.SyntheticEvent<HTMLSelectElement>) => {
@@ -203,54 +185,7 @@ export const LendBorrowTable: React.FC<ILendBorrowTable> = ({
                 </span>
             </div>
 
-            {isBorrow && (
-                <>
-                    <div className={cm.table}>
-                        <span className={cm.tableTitle}>
-                            <span>Collateral Currency</span>
-                            <span className={cm.tableTitleComment}>
-                                MIN {MIN_COVERAGE}%
-                            </span>
-                        </span>
-
-                        <span className={cm.collateralRow}>
-                            <Dropdown
-                                options={collateralListDropdown}
-                                value={collateralCcy}
-                                onChange={handleCollateralCurrencyChange}
-                                noBorder
-                            />
-                            <span className={cm.divider} />
-
-                            <Input
-                                value={collateralAmount}
-                                onChange={handleCollateralChange}
-                                type={'number'}
-                                noBorder
-                                alignRight
-                            />
-                        </span>
-                    </div>
-                    <div className={cm.collateralCoverage}>
-                        <FieldValue
-                            field={'Collateral Coverage'}
-                            value={'150%'}
-                            accent={'purple'}
-                            icon={<VerifiedIcon fill={'#666CF380'} size={20} />}
-                            large
-                        />
-                        <span className={cm.collateralManagement}>
-                            <span className={cm.collateralCoverageComment}>
-                                You need {MIN_COVERAGE}%. Please, click below on
-                                tag to add some percents of coverage.
-                            </span>
-                            <ChipButton style={{ alignSelf: 'flex-start' }}>
-                                +48%
-                            </ChipButton>
-                        </span>
-                    </div>
-                </>
-            )}
+            {isBorrow && <BorrowCollateralManagement USDAmount={USDAmount} />}
 
             <div className={cm.feeAndReturnsRow}>
                 {isBorrow ? (
