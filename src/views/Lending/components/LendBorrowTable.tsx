@@ -31,6 +31,7 @@ import {
 import { daysInYear } from '../constants';
 import { usePlaceOrder } from 'src/hooks/usePlaceOrder';
 import BorrowCollateralManagement from './BorrowCollateralManagement';
+import BigNumber from 'bignumber.js/bignumber';
 
 interface ILendBorrowTable extends LendingStore {
     selectedTab: string;
@@ -48,13 +49,14 @@ export const LendBorrowTable: React.FC<ILendBorrowTable> = ({
     borrowRate,
 }) => {
     const [pendingTx, setPendingTx] = useState(false);
+    const [isCollateralInadequate, setCollateralInadequate] = useState(false);
     const dispatch = useDispatch();
     const tabName = selectedTab.charAt(0).toUpperCase() + selectedTab.slice(1);
     const filPrice = useSelector(getFilPrice);
     const ethPrice = useSelector(getEthPrice);
     const usdcPrice = useSelector(getUSDCPrice);
     const isBorrow = selectedTab === 'borrow';
-    const amount = isBorrow ? borrowAmount : lendAmount;
+    const amount = new BigNumber(isBorrow ? borrowAmount : lendAmount);
     const rate = isBorrow ? borrowRate : lendRate;
 
     const ethUSDBalance = useSelector(getEthUSDBalance);
@@ -69,16 +71,17 @@ export const LendBorrowTable: React.FC<ILendBorrowTable> = ({
     const handleCurrencyChange = (e: React.SyntheticEvent<HTMLSelectElement>) =>
         dispatch(updateMainCurrency(e.currentTarget.value));
 
-    const USDAmount = useMemo(() => {
+    const USDAmount: BigNumber = useMemo(() => {
+        if (amount.isNaN()) return new BigNumber(0);
         switch (selectedCcy) {
             case 'FIL':
-                return amount * filPrice;
+                return amount.multipliedBy(filPrice);
             case 'ETH':
-                return amount * ethPrice;
+                return amount.multipliedBy(ethPrice);
             case 'USDC':
-                return amount * usdcPrice;
+                return amount.multipliedBy(usdcPrice);
             default:
-                return 0;
+                return new BigNumber(0);
         }
     }, [borrowAmount, lendAmount, selectedCcy]);
 
@@ -98,7 +101,7 @@ export const LendBorrowTable: React.FC<ILendBorrowTable> = ({
         const interest = rate / 10000;
         const p = interest * (daysInYear[termsIndex] / 360);
 
-        return USDAmount * p;
+        return USDAmount.multipliedBy(p).toNumber();
     }, [
         termsIndex,
         currencyIndex,
@@ -134,6 +137,10 @@ export const LendBorrowTable: React.FC<ILendBorrowTable> = ({
         }
     }, [action, setPendingTx]);
 
+    const isButtonDisabled =
+        pendingTx ||
+        (isBorrow && (borrowAmount <= 0 || isCollateralInadequate));
+
     return (
         <>
             <div className={cm.table}>
@@ -147,7 +154,7 @@ export const LendBorrowTable: React.FC<ILendBorrowTable> = ({
                     />
                     <span className={cm.divider} />
                     <Input
-                        value={amount}
+                        value={amount.toNumber()}
                         onChange={handleAmountChange}
                         type={'number'}
                         noBorder
@@ -159,7 +166,7 @@ export const LendBorrowTable: React.FC<ILendBorrowTable> = ({
                         Balance: {usdFormat(USDBalanceMap[selectedCcy])}
                     </span>
                     <span className={cm.USDValue}>
-                        ~ {usdFormat(USDAmount)}
+                        ~ {usdFormat(USDAmount.toNumber())}
                     </span>
                 </span>
             </div>
@@ -185,7 +192,12 @@ export const LendBorrowTable: React.FC<ILendBorrowTable> = ({
                 </span>
             </div>
 
-            {isBorrow && <BorrowCollateralManagement USDAmount={USDAmount} />}
+            {isBorrow && (
+                <BorrowCollateralManagement
+                    USDAmount={USDAmount}
+                    setCollateralInadequate={setCollateralInadequate}
+                />
+            )}
 
             <div className={cm.feeAndReturnsRow}>
                 {isBorrow ? (
@@ -206,7 +218,7 @@ export const LendBorrowTable: React.FC<ILendBorrowTable> = ({
                 <FieldValue field={'Transaction Fee'} value={'$1.2'} large />
             </div>
 
-            <Button onClick={handleLendDeal} disabled={pendingTx}>
+            <Button onClick={handleLendDeal} disabled={isButtonDisabled}>
                 {tabName}
             </Button>
         </>
