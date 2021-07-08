@@ -11,7 +11,7 @@ $tablePadding: 16px;
     flex-direction: column;
     border: 1px solid $darkGray;
     color: $lightGrey;
-    padding: $tablePadding 0 0;
+    padding: 0;
     margin-top: 24px;
 
     .inputsWithBorder,
@@ -43,7 +43,7 @@ $tablePadding: 16px;
     @include row;
 
     font-weight: $bold;
-    padding: 0 $tablePadding $tablePadding;
+    padding: $tablePadding;
     border-bottom: 1px solid $darkGray;
 
     .tableTitleComment {
