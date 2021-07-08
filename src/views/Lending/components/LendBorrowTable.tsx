@@ -139,7 +139,10 @@ export const LendBorrowTable: React.FC<ILendBorrowTable> = ({
 
     const isButtonDisabled =
         pendingTx ||
-        (isBorrow && (borrowAmount <= 0 || isCollateralInadequate));
+        (isBorrow && (borrowAmount <= 0 || isCollateralInadequate)) ||
+        amount.isNaN() ||
+        amount.isEqualTo(0) ||
+        amount.isLessThan(0);
 
     return (
         <>
