@@ -33,40 +33,34 @@ export const ChartInfo = () => {
                         noBorder
                     />
                 </span>
-                <span className={cm.divider} />
-                <span className={cm.yieldSection}>
-                    <FieldValue field={'Current Yield'} value={'5.00%'} light />
-
-                    <FieldValue field={'1Y Yield'} value={'4.25%'} />
-                    <FieldValue field={'3Y Yield'} value={'4.55%'} />
-                    <FieldValue field={'5Y Yield'} value={'5.00%'} />
-                </span>
-            </div>
-
-            <div className={cm.priceContainer}>
-                <FieldValue
-                    field={'FIL/USD Price'}
-                    value={<span className={cm.priceValue}>$224,000.00</span>}
-                />
-                <FieldValue
-                    field={'24h Change (FIL)'}
-                    value={
-                        <span className={cm.changeValue}>
-                            <ArrowIcon
-                                fill={'#de5f42'}
-                                size={14}
-                                direction={'down'}
-                            />
-                            -0.000135
-                            <span className={cm.percentChange}>
-                                &nbsp;(-0.20%)
+                <div className={cm.priceContainer}>
+                    <FieldValue
+                        field={'FIL/USD Price'}
+                        value={
+                            <span className={cm.priceValue}>$224,000.00</span>
+                        }
+                    />
+                    <FieldValue
+                        field={'24h Change (FIL)'}
+                        value={
+                            <span className={cm.changeValue}>
+                                <ArrowIcon
+                                    fill={'#de5f42'}
+                                    size={14}
+                                    direction={'down'}
+                                />
+                                -0.000135
+                                <span className={cm.percentChange}>
+                                    &nbsp;(-0.20%)
+                                </span>
                             </span>
-                        </span>
-                    }
-                    accent={'red'}
-                    large
-                />
+                        }
+                        accent={'red'}
+                    />
+                </div>
             </div>
+
+            <span className={cm.divider} />
         </div>
     );
 };

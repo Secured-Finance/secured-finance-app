@@ -2,37 +2,35 @@
 
 .container {
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
 }
 
 .infoContainer {
     display: flex;
-    flex-direction: column;
-    width: 317px;
+    justify-content: space-between;
 }
 
 .dropdownSection {
     display: flex;
     justify-content: space-between;
-}
-
-.yieldSection {
-    display: flex;
-    justify-content: space-between;
+    align-items: center;
+    width: 300px;
 }
 
 .divider {
     border-bottom: 1px solid $darkGrey;
     width: 100%;
-    margin: 24px 0 12px;
+    margin: $paddingSM 0;
 }
 
 .priceContainer {
     display: flex;
-    flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
     justify-content: space-between;
-    margin-right: $paddingS;
+
+    > span:first-of-type {
+        margin-right: 90px;
+    }
 }
 
 .priceValue {
@@ -43,6 +41,7 @@
 .changeValue {
     display: flex;
     align-items: center;
+    font-weight: $bold;
 
     .percentChange {
         opacity: 0.5;
