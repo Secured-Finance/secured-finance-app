@@ -10,6 +10,7 @@ import cm from './index.module.scss';
 import { ChartInfo } from './components/ChartInfo';
 import { Page } from 'src/components/new/Page';
 import { PlaceOrder } from './components/PlaceOrder';
+// import PlaceOrderObsolete from './components/PlaceOrderObsolete';
 
 const Lending: React.FC<LendingStore> = ({ currencyIndex }) => {
     const securedFinance = useSF();
