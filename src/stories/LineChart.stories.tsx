@@ -9,7 +9,7 @@ export default {
 } as Meta;
 
 const Template: Story<ILineChart> = args => (
-    <div>
+    <div style={{ width: 700 }}>
         <LineChart {...args} />
     </div>
 );
