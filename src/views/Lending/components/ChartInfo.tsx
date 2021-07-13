@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import cm from './ChartInfo.module.scss';
 import { Dropdown } from 'src/components/new/Dropdown';
 import { FilIcon, ArrowIcon } from 'src/components/new/icons';
 import { FieldValue } from 'src/components/new/FieldValue';
 
 export const ChartInfo = () => {
+    const [cureType, setCurveType] = useState('yield');
     return (
         <div className={cm.container}>
             <div className={cm.infoContainer}>
@@ -27,9 +28,14 @@ export const ChartInfo = () => {
                                 value: 'yield',
                                 label: 'Yield Curve',
                             },
+                            {
+                                value: 'price',
+                                label: 'Price Curve',
+                            },
                         ]}
-                        value={'yield'}
+                        value={cureType}
                         style={{ width: 164 }}
+                        onChange={e => setCurveType(e.currentTarget.value)}
                         noBorder
                     />
                 </span>
