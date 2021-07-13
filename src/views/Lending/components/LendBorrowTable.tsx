@@ -77,7 +77,15 @@ export const LendBorrowTable: React.FC<ILendBorrowTable> = ({
             const action = isBorrow ? updateBorrowRate : updateLendRate;
             dispatch(action(rates[termsIndex]));
         }
-    }, [dispatch, currencyIndex, termsIndex, selectedTab]);
+    }, [
+        dispatch,
+        currencyIndex,
+        termsIndex,
+        selectedTab,
+        borrowRates,
+        lendingRates,
+        isBorrow,
+    ]);
 
     const handleCurrencyChange = (e: React.SyntheticEvent<HTMLSelectElement>) =>
         dispatch(updateMainCurrency(e.currentTarget.value));
