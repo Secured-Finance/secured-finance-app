@@ -34,7 +34,8 @@ export const isAnyWalletConnected = (
     for (let key in wallets) {
         if (
             wallets.hasOwnProperty(key) &&
-            wallets[key].hasOwnProperty('actions')
+            wallets[key].hasOwnProperty('actions') &&
+            !!wallets[key].actions
         ) {
             if (walletName) {
                 if (key !== walletName) return true;
