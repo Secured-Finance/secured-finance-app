@@ -1,0 +1,60 @@
+@import '../../theme/styleduide';
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 86px;
+    width: calc(100% - 172px);
+    border-bottom: 1px solid $strokeGrey;
+    font-size: $logoText;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    padding: $paddingS 163px $paddingS 0;
+    border-right: 1px solid $strokeGrey;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.logoText {
+    color: $purple;
+    margin-left: $paddingSM;
+
+    > .logoTextBold {
+        font-weight: $bold;
+    }
+}
+
+.navigation {
+    display: flex;
+    justify-content: center;
+
+    > .navLink {
+        display: flex;
+        align-items: center;
+        color: $lightGrey;
+        padding: 0 $paddingSM;
+        text-decoration: none;
+        cursor: pointer;
+
+        &.active {
+            color: $lightSilver;
+        }
+
+        &.unlockWalletLink {
+            display: flex;
+            color: $purple;
+
+            > span {
+                margin-right: $paddingXS;
+            }
+        }
+    }
+}
+
+.themeSwitch {
+    width: 76px;
+}

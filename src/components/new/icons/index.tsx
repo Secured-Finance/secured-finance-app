@@ -16,11 +16,8 @@ import USD from './USD.svg';
 import verified from './verified.svg';
 import wallet from './wallet.svg';
 import React from 'react';
-
-interface IIcon {
-    fill?: string;
-    size?: number;
-}
+import { IIcon } from './constants';
+import { Logo } from './Logo';
 
 interface ArrowIcon extends IIcon {
     direction?: 'down' | 'up' | 'left' | 'right';
@@ -121,4 +118,5 @@ export {
     wallet,
     VerifiedIcon,
     FilIcon,
+    Logo,
 };
