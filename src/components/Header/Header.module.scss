@@ -1,13 +1,16 @@
 @import '../../theme/styleduide';
 
+.container {
+    border-bottom: 1px solid $strokeGrey;
+}
+
 .header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 86px;
-    width: calc(100% - 172px);
-    border-bottom: 1px solid $strokeGrey;
     font-size: $logoText;
+    margin: auto;
+    padding: 0 86px;
 }
 
 .logo {
@@ -57,4 +60,10 @@
 
 .themeSwitch {
     width: 76px;
+}
+
+@media (min-width: 1300px) {
+    .header {
+        @include wideDesktop;
+    }
 }
