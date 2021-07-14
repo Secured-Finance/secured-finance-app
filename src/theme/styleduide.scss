@@ -42,3 +42,10 @@ $topBar: 72px;
 
 // fixed sizes
 $lendingChartWidth: 817px;
+$wideContainer: 1268px;
+
+@mixin wideDesktop {
+    padding: 0;
+    width: $wideContainer;
+    margin: auto;
+}
