@@ -4,7 +4,6 @@ import { ApolloProvider } from '@apollo/client/react';
 import { ThemeProvider } from 'styled-components';
 import { useWallet, UseWalletProvider } from 'use-wallet';
 import ModalsProvider from './contexts/Modals';
-import NavBar from './components/NavBar';
 import theme from './theme';
 import Lending from './views/Lending';
 import History from './views/History';
@@ -14,12 +13,13 @@ import Account from './views/Account';
 import FilecoinWalletProvider from './contexts/FilecoinWalletProvider';
 import Loan from './views/Loan';
 import { client } from './services/apollo';
+import { Header } from 'src/components/Header';
 
 const App: React.FC = () => {
     return (
         <Router>
             <Providers>
-                <NavBar />
+                <Header />
                 <Switch>
                     <Route path='/' exact>
                         <Lending />

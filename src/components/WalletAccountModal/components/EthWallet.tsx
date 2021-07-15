@@ -8,12 +8,14 @@ import Label from 'src/components/Label';
 import { ModalProps } from 'src/components/Modal';
 import Spacer from 'src/components/Spacer';
 import { CACHED_PROVIDER_KEY } from 'src/contexts/FilecoinWalletProvider';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { isAnyWalletConnected } from 'src/store/wallets/selectors';
 import { RootState } from 'src/store/types';
+import { resetEthWallet } from 'src/store/wallets';
 
 const EthWallet: React.FC<ModalProps> = ({ onDismiss, ...props }) => {
     const { account, reset } = useWallet();
+    const dispatch = useDispatch();
     const history = useHistory();
     const otherWalletConnected = useSelector((state: RootState) =>
         isAnyWalletConnected(state, 'ethereum')
@@ -23,6 +25,7 @@ const EthWallet: React.FC<ModalProps> = ({ onDismiss, ...props }) => {
         reset();
         localStorage.removeItem(CACHED_PROVIDER_KEY);
         onDismiss();
+        dispatch(resetEthWallet());
         if (!otherWalletConnected) {
             history.push('/');
         }

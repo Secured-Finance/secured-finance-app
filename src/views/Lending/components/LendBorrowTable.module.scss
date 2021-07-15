@@ -1,0 +1,81 @@
+@import '../../../theme/styleduide';
+
+@mixin row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.table {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid $darkGrey;
+    color: $lightGrey;
+    padding: 0;
+    margin-top: 24px;
+
+    .inputsWithBorder {
+        display: flex;
+        align-items: center;
+        border-bottom: 1px solid $darkGrey;
+        padding: 0 0 0 $paddingSM;
+
+        .divider {
+            border: 1px solid $darkGrey;
+            height: 100%;
+            border-right-width: 0;
+        }
+    }
+
+    .bottomRow {
+        @include row;
+
+        padding: $paddingSM;
+    }
+}
+
+.tableTitle {
+    @include row;
+
+    font-weight: $bold;
+    padding: $paddingSM;
+    border-bottom: 1px solid $darkGrey;
+
+    .tableTitleComment {
+        font-weight: $normalWeight;
+    }
+}
+
+.USDValue {
+    font-weight: $bold;
+    font-size: $subtitleSize;
+
+    .inadequateCollateral {
+        color: $red;
+    }
+}
+
+.feeAndReturnsRow {
+    @include row;
+
+    justify-content: flex-start;
+    margin-top: 24px;
+
+    > span:last-of-type {
+        margin-left: 44px;
+    }
+}
+
+.collateralCoverage {
+    margin: 24px 0 0;
+
+    .collateralManagement {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .collateralCoverageComment {
+        font-size: $captionSize;
+        color: $lightGrey;
+        margin: 14px 0;
+    }
+}

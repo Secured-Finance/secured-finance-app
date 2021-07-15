@@ -21,6 +21,11 @@ export const getFilUSDBalance = (state: RootState) =>
 export const getEthUSDBalance = (state: RootState) =>
     state.wallets.ethereum.usdBalance;
 
+export const getEthBalance = (state: RootState) =>
+    state.wallets.ethereum.balance;
+export const getFilBalance = (state: RootState) =>
+    state.wallets.filecoin.balance;
+
 export const isAnyWalletConnected = (
     state: RootState,
     walletName?: 'filecoin' | 'ethereum'
@@ -29,7 +34,8 @@ export const isAnyWalletConnected = (
     for (let key in wallets) {
         if (
             wallets.hasOwnProperty(key) &&
-            wallets[key].hasOwnProperty('actions')
+            wallets[key].hasOwnProperty('actions') &&
+            !!wallets[key].actions
         ) {
             if (walletName) {
                 if (key !== walletName) return true;

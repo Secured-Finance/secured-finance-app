@@ -1,0 +1,73 @@
+@import '../../../theme/styleduide.scss';
+
+@mixin chip {
+    color: $lightSilver;
+    border-radius: 40px;
+    border: 1px solid $lightGrey;
+    background-color: transparent;
+    line-height: 1.2;
+}
+
+.chipLabel {
+    @include chip;
+
+    padding: 6px 10px;
+    font-size: $captionSize;
+
+    &.purple {
+        color: $purple;
+        border-color: rgba($purple, 0.2);
+        background-color: rgba($purple, 0.2);
+    }
+
+    &.red {
+        color: $red;
+        border-color: rgba($red, 0.2);
+        background-color: rgba($red, 0.2);
+    }
+
+    &.green {
+        color: $green;
+        border-color: rgba($green, 0.2);
+        background-color: rgba($green, 0.2);
+    }
+
+    &.grey {
+        color: $middleGrey;
+        border-color: rgba($middleGrey, 0.2);
+        background-color: rgba($middleGrey, 0.2);
+    }
+
+    &.turquoise {
+        color: $turquoise;
+        border-color: rgba($turquoise, 0.2);
+        background-color: rgba($turquoise, 0.2);
+    }
+
+    &.blue {
+        color: $brightBlue;
+        border-color: rgba($brightBlue, 0.2);
+        background-color: rgba($brightBlue, 0.2);
+    }
+}
+
+.chipButton {
+    @include chip;
+
+    padding: $paddingXS $paddingS;
+    cursor: pointer;
+    font-size: $bodySize;
+    transition: 0.1s;
+
+    &.purple {
+        color: $purple;
+        border-color: $purple;
+        background-color: rgba($purple, 0.2);
+    }
+
+    &.red {
+        color: $red;
+        border-color: $red;
+        background-color: rgba($red, 0.2);
+    }
+}
