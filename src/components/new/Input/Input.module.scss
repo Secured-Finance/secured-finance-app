@@ -1,0 +1,47 @@
+@import '../../../theme/styleduide';
+
+@mixin input {
+    background-color: transparent;
+    color: $white;
+    font-size: $titleSize;
+    border: 0;
+}
+
+.container {
+    display: inline-flex;
+    flex-direction: column;
+}
+
+.label {
+    color: $lightGrey;
+    font-size: $bodySize;
+    margin-bottom: $paddingXS;
+    padding: 0 $paddingSM;
+
+    &.alignRight {
+        text-align: right;
+    }
+}
+
+.input {
+    @include input;
+
+    border: 1px solid $darkGrey;
+    padding: $paddingS $paddingSM;
+    line-height: 1.2;
+    font-weight: $bold;
+    width: calc(100% - 32px);
+
+    &:focus {
+        outline: none;
+        border-color: $gray;
+    }
+
+    &.noBorder {
+        border: 0;
+    }
+
+    &.alignRight {
+        text-align: right;
+    }
+}

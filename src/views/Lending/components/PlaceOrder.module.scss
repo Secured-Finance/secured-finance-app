@@ -1,0 +1,22 @@
+@import '../../../theme/styleduide';
+
+.container {
+    display: flex;
+    flex-direction: column;
+    width: 370px;
+    overflow-y: scroll;
+    padding-bottom: 20px;
+    margin-top: -21px;
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
+
+    > div:first-child {
+        margin-bottom: 36px;
+    }
+
+    > button {
+        margin-top: 85px;
+    }
+}

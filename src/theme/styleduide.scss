@@ -1,0 +1,51 @@
+// font sizes
+$captionSize: 13px;
+$bodySize: 15px;
+$tabSize: 16px;
+$logoText: 17px;
+$subtitleSize: 20px;
+$titleSize: 24px;
+$headlineSize: 52px;
+
+//font weight
+$normalWeight: 400;
+$bold: 600;
+
+// colors
+$black: #000;
+$background: #060609;
+$darkGrey: #1a1b1f;
+$strokeGrey: #27282f;
+$turquoise: #38afa8;
+$green: #93c257;
+$red: #de5f42;
+$darkPurple: #5b50de;
+$purple: #666cf3;
+$bluePurple: #4557fb;
+$brightBlue: #4faaff;
+$blue: #70a9d4;
+$gray: #494a52;
+$lightGrey: #7a7c89;
+$middleGrey: #9496a3;
+$lightSilver: #b9b9c2;
+$white: #fff;
+
+// paddings
+$paddingSM: 16px;
+$paddingS: 12px;
+$paddingXS: 8px;
+$paddingXXS: 4px;
+$paddingXXXS: 2px;
+
+// sizes
+$topBar: 72px;
+
+// fixed sizes
+$lendingChartWidth: 817px;
+$wideContainer: 1268px;
+
+@mixin wideDesktop {
+    padding: 0;
+    width: $wideContainer;
+    margin: auto;
+}

@@ -1,0 +1,20 @@
+@import '../../../theme/styleduide';
+
+.page {
+    background: $background;
+    padding: 0 86px;
+    height: calc(100vh - #{$topBar});
+    display: flex;
+}
+
+@media (min-width: 1300px) {
+    .page {
+        @include wideDesktop;
+    }
+}
+
+@media (max-width: 1024px) {
+    .page {
+        padding: 0 24px;
+    }
+}

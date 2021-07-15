@@ -1,0 +1,49 @@
+@import '../../../theme/styleduide';
+
+.container {
+    display: flex;
+    flex-direction: column;
+}
+
+.infoContainer {
+    display: flex;
+    justify-content: space-between;
+}
+
+.dropdownSection {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 300px;
+}
+
+.divider {
+    border-bottom: 1px solid $darkGrey;
+    width: 100%;
+    margin: $paddingSM 0;
+}
+
+.priceContainer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    > span:first-of-type {
+        margin-right: 90px;
+    }
+}
+
+.priceValue {
+    font-weight: $bold;
+    color: $white;
+}
+
+.changeValue {
+    display: flex;
+    align-items: center;
+    font-weight: $bold;
+
+    .percentChange {
+        opacity: 0.5;
+    }
+}

@@ -1,0 +1,36 @@
+@import '../../../theme/styleduide';
+
+.button {
+    color: $purple;
+    font-weight: $bold;
+    line-height: 1.2;
+    font-size: $subtitleSize;
+    background: rgba($bluePurple, 0.2);
+    border: 1px solid rgba($bluePurple, 0.3);
+    padding: $paddingSM;
+    cursor: pointer;
+    transition: 0.1s;
+
+    &:hover {
+        color: $white;
+        background: rgba($bluePurple, 0.4);
+    }
+
+    &:disabled {
+        background: transparent;
+        border-color: $darkGrey;
+        color: $darkGrey;
+    }
+}
+
+.outline {
+    color: $white;
+    background: transparent;
+    border-color: $lightGrey;
+
+    &:hover {
+        color: $purple;
+        border-color: $purple;
+        background: transparent;
+    }
+}

@@ -1,0 +1,38 @@
+@import '../theme/styleduide';
+
+@mixin text {
+    font-weight: $normalWeight;
+    line-height: 1.2;
+    color: $white;
+}
+
+.text {
+    @include text;
+
+    font-size: $bodySize;
+}
+
+.textBold {
+    font-weight: $bold;
+}
+
+.headline {
+    @include text;
+
+    font-weight: $bold;
+    font-size: $headlineSize;
+}
+
+.title {
+    @include text;
+
+    font-weight: $bold;
+    font-size: $titleSize;
+}
+
+.subtitle {
+    @include text;
+
+    font-weight: $bold;
+    font-size: $subtitleSize;
+}
