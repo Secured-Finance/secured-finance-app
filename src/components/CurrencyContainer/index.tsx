@@ -4,7 +4,7 @@ import { currencyList, CurrencyInfo } from '../../utils/currencies'
 import theme from '../../theme'
 
 interface CurrencyContainerProps {
-    index: any,
+    ccy: string | number,
     size?: 'xs' | 'sm' | 'lg' | 'xl',
     short: boolean,
     wallet?: boolean,
@@ -29,13 +29,13 @@ interface CurrencyListProps {
 
 type ItemProps = CurrencyContainerProps & CurrencyListProps
 
-const CurrencyItem: React.FC<ItemProps> = ({index, iconSize, marginLeft, fontSize, short, wallet, currencies, style}) => {
+const CurrencyItem: React.FC<ItemProps> = ({ccy, iconSize, marginLeft, fontSize, short, wallet, currencies, style}) => {
     let icon: string
     let shortName: string
     let fullName: string
 
     currencies.filter((currency, i) => {
-        if (index == i) {
+        if (ccy == currency.index) {
             icon = currency.icon
             shortName = currency.shortName
             fullName = currency.fullName
@@ -84,7 +84,7 @@ const CurrencyItem: React.FC<ItemProps> = ({index, iconSize, marginLeft, fontSiz
     )
 }
 
-const CurrencyContainer: React.FC<CurrencyContainerProps> = ({index, size, short, wallet, style}) => {
+const CurrencyContainer: React.FC<CurrencyContainerProps> = ({ccy, size, short, wallet, style}) => {
 
     let iconSize: number
     let fontSize: number
@@ -119,7 +119,7 @@ const CurrencyContainer: React.FC<CurrencyContainerProps> = ({index, size, short
     
     return (
         <CurrencyItem 
-            index={index}
+            ccy={ccy}
             iconSize={iconSize}
             marginLeft={marginLeft}
             fontSize={fontSize}

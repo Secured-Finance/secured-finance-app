@@ -3,32 +3,22 @@ import { useCallback } from 'react'
 import { useWallet } from 'use-wallet'
 import { provider } from 'web3-core'
 
-import { upSizeEth, upSizeFil, getCollateralContract } from '../services/sdk/utils'
+import { upSizeEth, getCollateralContract } from '../services/sdk/utils'
 import useSF from './useSecuredFinance'
 
-export const useUpsizeCollateral = (amount: number, currency: number) => {
+export const useUpsizeCollateral = (amount: number) => {
     const securedFinance = useSF()
     const { account }: { account: string; ethereum: provider } = useWallet()
     const collateralContract = getCollateralContract(securedFinance)
   
     const handleUpSizeCollateral = useCallback(async () => {
       try {
-        let tx: any
-        switch (currency) {
-            case 0:
-                tx = await upSizeEth(collateralContract, account, amount)
-                break
-            case 1:
-                tx = await upSizeFil(collateralContract, account, amount)
-                break
-            default:
-                break
-        }    
+        let tx = await upSizeEth(collateralContract, account, amount)
         return tx
       } catch (e) {
         return false
       }
-    }, [account, collateralContract, amount, currency])
+    }, [account, collateralContract, amount])
   
     return { onUpsizeCollateral: handleUpSizeCollateral }
 }

@@ -15,6 +15,7 @@ export const usePlaceOrder = (ccy: number, term: number, side: number, amount: n
 
 	const handlePlaceOrder = useCallback(async () => {
 		try {
+			const amountBN = new BigNumber(amount).multipliedBy(new BigNumber(10).pow(18));
 			let tx: any
 			tx = await placeOrder(lendingMarket, account, side, amount, rate, deadline)
 			return tx

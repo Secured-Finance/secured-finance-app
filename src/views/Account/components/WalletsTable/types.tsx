@@ -42,7 +42,7 @@ export const walletTableColumns = [{
         {
             Header: 'Asset',
             accessor: 'ccyIndex',
-            Cell: ( cell: { value: number } ) => <CurrencyContainer index={cell.value} short={false} wallet={true}/>
+            Cell: ( cell: { value: number } ) => <CurrencyContainer ccy={cell.value} short={false} wallet={true}/>
         },
         {
             Header: 'Address',

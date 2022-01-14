@@ -10,7 +10,7 @@ export interface IFieldValue {
     large?: boolean;
     light?: boolean;
     alignRight?: boolean;
-    accent?: 'green' | 'red' | 'purple';
+    accent?: string;
 }
 
 export const FieldValue: React.FC<IFieldValue> = ({

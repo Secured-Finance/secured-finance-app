@@ -178,30 +178,30 @@ const LoanConfirmationModal: React.FC<CombinedProps> = ({ onDismiss, loan }) => 
                     </StyledItemContainer>
                 </StyledSubcontainer>
                 {
-                    colBook.length > 0 
+                    colBook.vault != "" 
                     ?
                     <CounterpartyContainer>
                     <StyledSubcontainer>
                         <StyledLabelTitle textTransform={"capitalize"}>Counterparty Information</StyledLabelTitle>
                         <StyledItemContainer marginBottom={"0px"}>
-                            <StyledRowContainer>
+                            {/* <StyledRowContainer>
                                 <StyledItemText>ETH Address</StyledItemText>
                                 <StyledItemText>
-                                    {formatAddress(colBook[0].ethAddr, 24)}
+                                    {formatAddress(colBook.ethAddr, 24)}
                                 </StyledItemText>
-                            </StyledRowContainer>
-                            <StyledRowContainer marginTop={"10px"}>
+                            </StyledRowContainer> */}
+                            {/* <StyledRowContainer marginTop={"10px"}>
                                 <StyledItemText>FIL Address</StyledItemText>
                                 <StyledItemText>
                                     {formatAddress(colBook[0].filAddr, 24)}
                                 </StyledItemText>
-                            </StyledRowContainer>
+                            </StyledRowContainer> */}
                         </StyledItemContainer>
                     </StyledSubcontainer>
                     <StyledSubcontainer marginBottom={'0px'}>
                         <StyledLabelTitle textTransform={"capitalize"}>Provided Collateral</StyledLabelTitle>
                         <StyledItemContainer marginBottom={"0px"}>
-                            <StyledRowContainer>
+                            {/* <StyledRowContainer>
                                 <StyledItemText>Collateral amount</StyledItemText>
                                 <StyledItemText>
                                     {ordinaryFormat(colBook[0].collateral) + " ETH"}
@@ -212,7 +212,7 @@ const LoanConfirmationModal: React.FC<CombinedProps> = ({ onDismiss, loan }) => 
                                 <StyledItemText>
                                     {percentFormat(colBook[0].coverage)}
                                 </StyledItemText>
-                            </StyledRowContainer>
+                            </StyledRowContainer> */}
                         </StyledItemContainer>
                     </StyledSubcontainer>
                     </CounterpartyContainer>

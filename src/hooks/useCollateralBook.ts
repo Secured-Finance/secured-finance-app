@@ -9,24 +9,40 @@ import {
 import useSF from './useSecuredFinance';
 import useBlock from './useBlock';
 import { RootState } from '../store/types';
+import { BigNumber } from 'src/services/sdk';
+
+const ZERO_BN = new BigNumber(0);
 
 interface CollateralBook {
     ccyIndex: number;
-    collateral: number;
-    usdCollateral: number;
+    collateral: BigNumber;
+    usdCollateral: BigNumber;
     vault: string;
-    state: string;
-    borrowed: string;
-    usdBorrowed: number;
-    coverage: number;
-    filAddr: string;
-    ethAddr: string;
+    locked?: BigNumber;
+    usdLocked?: BigNumber;
+    borrowed?: BigNumber;
+    usdBorrowed: BigNumber;
+}
+
+const emptyBook: CollateralBook = {
+    ccyIndex: 0,
+    collateral: ZERO_BN,
+    usdCollateral: ZERO_BN,
+    vault: '',
+    locked: ZERO_BN,
+    usdLocked: ZERO_BN,
+    borrowed: ZERO_BN,
+    usdBorrowed: ZERO_BN,
+}
+
+interface CollateralResponse {
+    colAmtETH: string | number,
+    inuseETH: string | number,
+    inuseFIL: string | number,
 }
 
 const useCollateralBook = (account: string) => {
-    const [collateralBook, setCollateralBook] = useState<Array<CollateralBook>>(
-        []
-    );
+    const [collateralBook, setCollateralBook] = useState<CollateralBook>(emptyBook);
     const securedFinance = useSF();
     const block = useBlock();
     const ethPrice = useSelector(
@@ -40,24 +56,27 @@ const useCollateralBook = (account: string) => {
     const dispatch = useDispatch();
 
     const fetchCollateralBook = useCallback(async () => {
-        const book: Array<any> = await getCollateralBook(
+        const ethPriceBN = new BigNumber(ethPrice)
+        const filPriceBN = new BigNumber(filPrice)
+        
+        const book: CollateralResponse = await getCollateralBook(
             collateralContract,
             account
         );
-        let colBook = [
+
+        let borrowed = new BigNumber(book.inuseFIL).multipliedBy(filPriceBN)
+
+        let colBook: CollateralBook =
             {
                 ccyIndex: 0,
-                collateral: book[6],
-                usdCollateral: book[6] * ethPrice,
+                collateral: new BigNumber(book.colAmtETH),
+                usdCollateral: new BigNumber(book.colAmtETH).multipliedBy(ethPriceBN),
                 vault: collateralContract._address,
-                state: book[18],
-                borrowed: book[12],
-                usdBorrowed: book[12] * filPrice,
-                coverage: book[16],
-                filAddr: book[2],
-                ethAddr: book[1],
-            },
-        ] as Array<CollateralBook>;
+                // locked: lockedCollateral.dividedBy(ethPriceBN),
+                // usdLocked: lockedCollateral,
+                borrowed: borrowed,
+                usdBorrowed: borrowed.dividedBy(ethPriceBN),
+            }
         setCollateralBook(colBook);
     }, [dispatch, collateralContract, account]);
 
@@ -73,7 +92,7 @@ const useCollateralBook = (account: string) => {
 
     useEffect(() => {
         if (account === null) {
-            setCollateralBook([]);
+            setCollateralBook(emptyBook);
         }
     }, [account]);
 

@@ -13,14 +13,14 @@ import { LendingTerminalStore } from "../../../../store/lendingTerminal";
 import { RootState } from "../../../../store/types";
 import { connect } from "react-redux";
 
-const MarketInfo: React.FC<LendingTerminalStore> = ({ currencyIndex, termsIndex }) => {
+const MarketInfo: React.FC<LendingTerminalStore> = ({ selectedCcy, termsIndex }) => {
     const securedFinance = useSF()
 	const lendingController = getLendingControllerContract(securedFinance)
     const marketTabs = ["Yield", "Price"];
     const [selectedTab, setSelectedTab] = useState("Yield")
 	const ethPrice = useEthereumUsd()
 	const filPrice = useFilUsd()
-	const lendingRates = useRates(lendingController, 2, currencyIndex)
+	const lendingRates = useRates(lendingController, 2, selectedCcy)
 
     const handleSelectTab = (tab: React.SetStateAction<string>) => {
         setSelectedTab(tab);
@@ -45,12 +45,18 @@ const MarketInfo: React.FC<LendingTerminalStore> = ({ currencyIndex, termsIndex 
                 </StyledMarketSelector>
                 <StyledMarketAssetInfo marginLeft={30}>
                     <StyledAssetInfoText>{ordinaryFormat(filToEthPrice(), 6)}</StyledAssetInfoText>
-                    <StyledAssetInfoText marginTop={1} color={theme.colors.cellKey} fontSize={theme.sizes.caption3}>{filPrice.price ? usdFormat(filPrice.price): usdFormat(0)}</StyledAssetInfoText>
+                    <StyledAssetInfoText marginTop={1} color={theme.colors.cellKey} fontSize={theme.sizes.caption3}>{filPrice.price ? usdFormat(filPrice.price, 2): usdFormat(0)}</StyledAssetInfoText>
                 </StyledMarketAssetInfo>
                 <StyledDivider />
                 <StyledMarketAssetInfo>
                     <StyledAssetInfoText color={theme.colors.cellKey} fontSize={theme.sizes.caption3}>24hr Change</StyledAssetInfoText>
-                    <StyledAssetInfoText marginTop={3} color={theme.colors.red3} fontSize={theme.sizes.caption3}>-0.000135 ({ordinaryFormat(filToEthChange(), 6)})</StyledAssetInfoText>
+                    {
+                        filPrice.change < 0 
+                        ?
+                        <StyledAssetInfoText marginTop={3} color={theme.colors.red3} fontSize={theme.sizes.caption3}>{percentFormat(filPrice.change)}</StyledAssetInfoText>
+                        :
+                        <StyledAssetInfoText marginTop={3} color={theme.colors.green} fontSize={theme.sizes.caption3}>{percentFormat(filPrice.change)}</StyledAssetInfoText>
+                    }
                 </StyledMarketAssetInfo>
                 <StyledMarketAssetInfo marginLeft={15}>
                     <StyledAssetInfoText color={theme.colors.cellKey} fontSize={theme.sizes.caption3}>Current Yield</StyledAssetInfoText>

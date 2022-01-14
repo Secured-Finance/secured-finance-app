@@ -1,10 +1,10 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import theme from '../../theme'
 import Button from '../../components/Button'
 import { connect, useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../store/types'
-import { formatAddress, formatDate, ordinaryFormat, percentFormat, usdFormat } from '../../utils'
+import { formatAddress, formatDate, getDisplayBalance, ordinaryFormat, percentFormat, usdFormat } from '../../utils'
 import { RenderTerms } from '../../components/HistoryTable/types'
 import BigNumber from 'bignumber.js'
 import useCollateralBook from '../../hooks/useCollateralBook'
@@ -122,7 +122,7 @@ const LoanScreen: React.FC<CombinedProps> = ({ }) => {
     }
 
     const handleCounterpartyAddr = () => {
-        if (loan?.side === 0) {
+        if (loan === 0) {
             setCounterpartyAddr(loan?.borrower)
         } else {
             setCounterpartyAddr(loan?.lender)
@@ -150,7 +150,7 @@ const LoanScreen: React.FC<CombinedProps> = ({ }) => {
                         </StyledLabelContainer>
                         <StyledItemContainer background={'none'}>
                             <StyledRowContainer>
-                                <StyledItemText>Principal Amount</StyledItemText>
+                                <StyledItemText>Principal notional</StyledItemText>
                                 <StyledItemText>
                                     {handleNotional()}
                                 </StyledItemText>
@@ -225,7 +225,7 @@ const LoanScreen: React.FC<CombinedProps> = ({ }) => {
                                 borderColor: theme.colors.buttonBlue,
                                 borderBottom: theme.colors.buttonBlue,
                             }}
-                            // disabled={!(amount > 0)}
+                            // disabled={!(notional > 0)}
                         />
                     </StyledItemContainer>
                 </StyledSubcontainer>
@@ -263,12 +263,12 @@ const LoanScreen: React.FC<CombinedProps> = ({ }) => {
                                     fontWeight: 500,
                                     color: theme.colors.white,
                                 }}
-                                // disabled={!(amount > 0)}
+                                // disabled={!(notional > 0)}
                             />
                         </StyledItemContainer>
                     </StyledSubcontainer>
                     {
-                        colBook.length > 0 
+                        colBook.vault != '' 
                         ?
                         <CounterpartyContainer>
                         <StyledSubcontainer>
@@ -277,32 +277,27 @@ const LoanScreen: React.FC<CombinedProps> = ({ }) => {
                                 <StyledRowContainer>
                                     <StyledItemText>ETH Address</StyledItemText>
                                     <StyledItemText>
-                                        {formatAddress(colBook[0].ethAddr, 24)}
+                                        {formatAddress(loan?.borrower, 20)}
                                     </StyledItemText>
                                 </StyledRowContainer>
                                 <StyledRowContainer marginTop={"10px"}>
-                                    <StyledItemText>{getLoanCcy()} Address</StyledItemText>
-                                    <StyledItemText>
-                                        {formatAddress(colBook[0].filAddr, 24)}
-                                    </StyledItemText>
-                                </StyledRowContainer>
-                            </StyledItemContainer>
-                        </StyledSubcontainer>
-                        <StyledSubcontainer>
-                            <StyledLabelTitle textTransform={"capitalize"}>Provided Collateral</StyledLabelTitle>
-                            <StyledItemContainer marginBottom={"0px"}>
-                                <StyledRowContainer>
                                     <StyledItemText>Collateral amount</StyledItemText>
                                     <StyledItemText>
-                                        {ordinaryFormat(colBook[0].collateral) + " ETH"}
+                                        {getDisplayBalance(colBook.collateral) + " ETH"}
                                     </StyledItemText>
                                 </StyledRowContainer>
-                                <StyledRowContainer marginTop={"10px"}>
+                                {/* <StyledRowContainer marginTop={"10px"}>
                                     <StyledItemText>Coverage</StyledItemText>
                                     <StyledItemText>
                                         {percentFormat(colBook[0].coverage)}
                                     </StyledItemText>
-                                </StyledRowContainer>
+                                </StyledRowContainer> */}
+                                {/* <StyledRowContainer marginTop={"10px"}>
+                                    <StyledItemText>{fromBytes32(loan?.currency)} Address</StyledItemText>
+                                    <StyledItemText>
+                                        {formatAddress(colBook[0].filAddr, 24)}
+                                    </StyledItemText>
+                                </StyledRowContainer> */}
                             </StyledItemContainer>
                         </StyledSubcontainer>
                         </CounterpartyContainer>

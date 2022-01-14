@@ -65,7 +65,6 @@ export const lendingMarkets = [
 				termIndex: 5,
 				address: "0x1a21094368DA603A57D43ccc9609A97eda9f455A",	
 			},
-
 		]
 	},
 ]

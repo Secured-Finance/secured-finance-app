@@ -21,7 +21,7 @@ interface StyledContainerProps {
 const StyledContainer = styled.div<StyledContainerProps>`
   box-sizing: border-box;
   margin: 0 auto;
-  background-color: ${props => props.theme.background};
+  // background-color: ${props => props.theme.background};
   padding: 0 ${props => props.theme.spacing[4]}px;
   width: 100%;
 `

@@ -3,7 +3,6 @@ import styled from 'styled-components'
 import { useTable, useSortBy } from 'react-table'
 import { historyTableColumns } from './types'
 import ArrowSVG from '../ArrowSVG'
-import useLoanHistory from '../../hooks/useLoanHistory'
 import { Td } from "../common/Td";
 
 const STATE = [
@@ -120,7 +119,7 @@ const StyledTableBody = styled.tbody`
 	}
 
 	tr:nth-child(even) {
-		background-color: #122735;
+		// background-color: #122735;
 	}
 `
 

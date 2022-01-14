@@ -32,7 +32,7 @@ const Borrow: React.FC<CombinedProps> = ({ borrowRates, selectedCcy, selectedCcy
     const [collateralOpen, setCollateralOpen] = useState(false)
     const [termsOpen, setTermsOpen] = useState(false)
 
-    const { onSetUpCollateral } = useSetUpCollateral(collateralAmount, 'did:sample_1', 'cid_FIL_1')
+    const { onSetUpCollateral } = useSetUpCollateral(collateralAmount, "", "")
     const handleCollateralPayment = useCallback(async () => {
         try {
             setRequestedCollateral(true)
@@ -45,7 +45,7 @@ const Borrow: React.FC<CombinedProps> = ({ borrowRates, selectedCcy, selectedCcy
         }
     }, [onSetUpCollateral, setRequestedCollateral])
 
-    const { onUpsizeCollateral } = useUpsizeCollateral(collateralAmount, 0)
+    const { onUpsizeCollateral } = useUpsizeCollateral(collateralAmount)
     const { onPlaceOrder } = usePlaceOrder(currencyIndex, termsIndex, 1, borrowAmount, borrowRate)
     const handleBorrowDeal = useCallback(async () => {
         try {

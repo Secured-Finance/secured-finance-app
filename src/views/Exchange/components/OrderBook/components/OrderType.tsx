@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { OrderbookRow } from "../../../../../store/lendingTerminal";
 import theme from "../../../../../theme";
-import { ordinaryFormat, percentFormat } from "../../../../../utils";
+import { ordinaryFormat, percentFormat, usdFormat } from "../../../../../utils";
 import { Type } from "../types";
 
 interface OrderTypeProps {
@@ -26,7 +26,7 @@ const OrderType: React.FC<OrderTypeProps> = ({ orders, type, showHeader }) => {
                     {ordinaryFormat(totalAmount)}
                 </StyledOrderRowText>
                 <StyledOrderRowText textAlign={"right"}>
-                    {ordinaryFormat(usdAmount)}
+                    {usdFormat(usdAmount)}
                 </StyledOrderRowText>
                 {/* <StyledOrderRowProgress
                     width={w}

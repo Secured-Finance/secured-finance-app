@@ -1,10 +1,12 @@
+import BigNumber from 'bignumber.js'
 import React from 'react'
+import { getFullDisplayBalanceNumber, getDisplayBalance, getUSDFormatBalanceNumber } from 'src/utils'
 import styled from 'styled-components'
 import { currencyList, CurrencyInfo } from '../../../../../utils/currencies'
 import { ordinaryFormat, usdFormat } from '../../../../../utils/formatNumbers'
 
 interface CollateralContainerProps {
-    collateral: number,
+    collateral: BigNumber,
     value: number,
     index: any,
 }
@@ -29,9 +31,15 @@ const CollateralInfo: React.FC<ItemProps> = ({index, currencies, collateral, val
             <StyledCollateral>
                 <StyledWalletInfoContainer>
                     <StyledCollateralText
-                    >{ collateral != null ? ordinaryFormat(collateral) : 0 } {shortName}</StyledCollateralText>
+                    >{ 
+                        collateral != null 
+                        ? 
+                        getDisplayBalance(collateral)
+                        : 
+                        0 
+                    } {shortName}</StyledCollateralText>
                     <StyledCollateralSubtitle
-                    >{ value != null ? usdFormat(value) : 0 }</StyledCollateralSubtitle>
+                    >{ value != null ? getUSDFormatBalanceNumber(value) : 0 }</StyledCollateralSubtitle>
                 </StyledWalletInfoContainer>
             </StyledCollateral>
         </div>

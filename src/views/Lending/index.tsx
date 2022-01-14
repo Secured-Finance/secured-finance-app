@@ -12,12 +12,12 @@ import { Page } from 'src/components/new/Page';
 import { PlaceOrder } from './components/PlaceOrder';
 // import PlaceOrderObsolete from './components/PlaceOrderObsolete';
 
-const Lending: React.FC<LendingStore> = ({ currencyIndex }) => {
+const Lending: React.FC<LendingStore> = ({ selectedCcy }) => {
     const securedFinance = useSF();
     const lendingController = getLendingControllerContract(securedFinance);
-    const borrowRates = useRates(lendingController, 0, currencyIndex);
-    const lendingRates = useRates(lendingController, 1, currencyIndex);
-    const midRate = useRates(lendingController, 2, currencyIndex);
+    const borrowRates = useRates(lendingController, 0, selectedCcy);
+    const lendingRates = useRates(lendingController, 1, selectedCcy);
+    const midRate = useRates(lendingController, 2, selectedCcy);
 
     return (
         <Page>
@@ -31,8 +31,8 @@ const Lending: React.FC<LendingStore> = ({ currencyIndex }) => {
                     />
                 </div>
                 <PlaceOrder
-                    borrowRates={borrowRates}
-                    lendingRates={lendingRates}
+                    borrowRates={lendingRates}
+                    lendingRates={borrowRates}
                 />
 
                 {/*<PlaceOrderObsolete*/}

@@ -115,7 +115,6 @@ export const useOpenLoans = (ccy: number, term: number) => {
         })
         try {
             if (res?.data.user.loans) {
-                console.log(res?.data.user.loans)
                 setLoans(res.data.user.loans)
             }
         }

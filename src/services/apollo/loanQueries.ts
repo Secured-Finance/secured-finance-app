@@ -6,7 +6,6 @@ export const LOAN_DEALS = gql`
             id
             lender
             borrower
-            side
             currency
             term
             amount
@@ -26,7 +25,6 @@ export const BORROW_DEALS = gql`
             id
             lender
             borrower
-            side
             currency
             term
             amount
@@ -46,7 +44,6 @@ export const LOAN_INFO = gql`
             id
             lender
             borrower
-            side
             currency
             term
             amount

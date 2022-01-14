@@ -27,8 +27,8 @@ export const filledTableCollumns = [{
         {
             Header: 'Currency',
             accessor: 'currency',
-            Cell: ( cell: { value: number } ) => <CurrencyContainer 
-                index={cell.value} 
+            Cell: ( cell: { value: string } ) => <CurrencyContainer 
+                ccy={cell.value} 
                 size={"xs"} 
                 short={true}
                 style={{

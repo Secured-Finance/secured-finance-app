@@ -17,7 +17,7 @@ const Title = styled.div`
 const labels = ["0", "3m", "6m", "1y", "2y", "3y", "5y"]
 
 export default function YieldCurve() {
-	const [currencyIndex, setCurrencyIndex] = useState(1)
+	const [currencyIndex, setCurrencyIndex] = useState("FIL")
 	const [lineData, setLineData] = useState({});
 	const securedFinance = useSF()
 	const lendingControllerContract = getLendingControllerContract(securedFinance)
@@ -30,16 +30,17 @@ export default function YieldCurve() {
 
 	let canvas: HTMLCanvasElement = document.createElement("canvas");
 	let ctx: CanvasRenderingContext2D = canvas.getContext("2d");
-	var blueGradient = ctx.createLinearGradient(0, 0, 0, 290);
+	var blueGradient = ctx.createLinearGradient(0, 0, 0, 0);
 	blueGradient.addColorStop(0, "rgba(0, 122, 255, 0.5)");
 	blueGradient.addColorStop(1, "rgba(15, 26, 34, 0.1)");
 	
-	var yellowGradient = ctx.createLinearGradient(0, 0, 0, 290);
+	var yellowGradient = ctx.createLinearGradient(0, 0, 0, 0);
 	yellowGradient.addColorStop(0, "rgba(242, 109, 79, 1)");
 	yellowGradient.addColorStop(1, "rgba(15, 26, 34, 0.1)");
 	
-	var purpleGradient = ctx.createLinearGradient(0, 0, 0, 290);
+	var purpleGradient = ctx.createLinearGradient(0, 0, 0, 250);
 	purpleGradient.addColorStop(0, "rgba(145, 59, 175, 1)");
+	purpleGradient.addColorStop(0.5, "rgba(15, 26, 34, 0.25)");
 	purpleGradient.addColorStop(1, "rgba(15, 26, 34, 0.1)");
 	
 	const convertArray = (array: Array<any>) => {

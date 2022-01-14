@@ -1,7 +1,8 @@
 import CurrencyContainer from "../../../../../../components/CurrencyContainer"
 import theme from "../../../../../../theme"
-import { formatDate, formatDateAndTime, ordinaryFormat, percentFormat } from "../../../../../../utils"
+import { formatDateAndTime, ordinaryFormat, percentFormat } from "../../../../../../utils"
 import { RenderTerms, TableColumns } from "../commonTypes"
+import RenderCancelButton from "../CancelButton"
 
 export interface OrdersTableData {
     orderId: number,
@@ -11,7 +12,6 @@ export interface OrdersTableData {
     rate: number,
     term: string,
     createdAtTimestamp: number,
-    deadline: number,
 }
 
 
@@ -28,8 +28,8 @@ export const ordersTableColumns = [{
         {
             Header: 'Currency',
             accessor: 'currency',
-            Cell: ( cell: { value: number } ) => <CurrencyContainer 
-                index={cell.value} 
+            Cell: ( cell: { value: string } ) => <CurrencyContainer 
+                ccy={cell.value} 
                 size={"xs"} 
                 short={true}
                 style={{
@@ -58,9 +58,9 @@ export const ordersTableColumns = [{
             Cell: ( cell : { value: number } ) => <span>{ cell.value != null ? formatDateAndTime(cell.value) : 0 }</span>
         },
         {
-            Header: 'Deadline',
-            accessor: 'deadline',
-            Cell: ( cell : { value: number } ) => <span>{ cell.value != null ? formatDate(cell.value) : 0 }</span>
+            Header: '',
+            accessor: 'orderId',
+            Cell: (cell: {value: string }) => <RenderCancelButton orderId={cell.value}/>
         },
     ]
 }] as Array<TableColumns>
