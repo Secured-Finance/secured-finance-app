@@ -50,6 +50,7 @@ export const Tabs: React.FC<ITabs> = ({
                         isSelected={selected === value}
                         onClick={() => onChange(value)}
                         isLarge={large}
+                        key={value}
                     />
                 ))}
         </div>

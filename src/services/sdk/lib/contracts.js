@@ -1,9 +1,8 @@
 import LendingMarketControllerAbi from './abi/LendingMarketController.json'
 import LendingMarketAbi from './abi/LendingMarket.json'
 import LoanAbi from './abi/Loan.json'
-import FxMarketAbi from './abi/FxMarket.json'
 import CollateralAbi from './abi/Collateral.json'
-// import USDCAbi from './abi/usdc.json'
+
 import {
     contractsAddresses,
     SUBTRACT_GAS_LIMIT,
@@ -23,7 +22,6 @@ export class Contracts {
 
         this.lendingController = new this.web3.eth.Contract(LendingMarketControllerAbi)
         this.loan = new this.web3.eth.Contract(LoanAbi)
-        this.fxMarket = new this.web3.eth.Contract(FxMarketAbi)
         this.collateral = new this.web3.eth.Contract(CollateralAbi)
         // this.usdc = new this.web3.eth.Contract(USDCAbi)
 
@@ -53,9 +51,7 @@ export class Contracts {
 
     setProvider(this.lendingController, contractsAddresses.lendingController)
     setProvider(this.loan, contractsAddresses.loan)
-    setProvider(this.fxMarket, contractsAddresses.fxMarket)
     setProvider(this.collateral, contractsAddresses.collateral)
-        // setProvider(this.usdc, contractsAddresses.usdc[networkId])
 
     this.lendingMarkets.forEach((ccyMarket) => {
         ccyMarket.markets.forEach(({lendingMarket, lendingMarketAddress}) => {

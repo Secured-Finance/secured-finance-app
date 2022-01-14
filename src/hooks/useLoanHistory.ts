@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useWallet } from 'use-wallet'
 import { provider } from 'web3-core'
 
-import { getLoanContract, getLoanInfo, getLoansHistory } from '../services/sdk/utils'
+import { getLoanContract, getLoanInfo } from '../services/sdk/utils'
 import useSF from './useSecuredFinance'
 import useBlock from './useBlock'
 import { emptyLoan, HistoryTableData, Schedule } from '../store/history/types'
@@ -14,43 +14,6 @@ import { client, BORROW_DEALS, LOAN_DEALS, LOAN_INFO } from '../services/apollo'
 interface LoansHistory {
     isValue: boolean
     loans: HistoryTableData[]
-}
-
-export const useLoanHistory = () => {
-    const { account}: { account: string } = useWallet()
-    const securedFinance = useSF()
-    const block = useBlock()
-    const loanContract = getLoanContract(securedFinance)
-    
-    const lendingHistory = useSelector((state: RootState) => state.history.lendingHistory);
-    const dispatch = useDispatch();  
-    
-    const fetchLoanHistory = useCallback(async () => {
-        dispatch(startSetHistory())
-        const history: Promise<LoansHistory> = await getLoansHistory(loanContract, account)
-        let parsedHistory: Array<HistoryTableData> = []
-        try {
-            for (var i = 0; i < (await history).loans.length; i++) {
-                const loanObj = Object.assign({},(await history).loans[i]) 
-                parsedHistory.push(loanObj)
-            }
-                // await dispatch(setLendingHistory(parsedHistory))
-        }
-        catch (err) {
-            dispatch(failSetLendingHistory())
-            console.log(err)
-        }
-	}, [dispatch, loanContract, account])
-    
-	useEffect(() => {
-        let isMounted = true;
-		if (securedFinance && loanContract && account) {
-			fetchLoanHistory()
-        }
-        return () => { isMounted = false };
-	}, [block, loanContract, dispatch, securedFinance, account])
-    
-	return lendingHistory
 }
 
 export const useLoanState = (id: any) => {
@@ -91,7 +54,7 @@ export const useLoanDeals = () => {
             let res = await client.query({
                 query: LOAN_DEALS,
                 variables: {
-                    account: account,
+                    account: account.toLowerCase(),
                 },
                 fetchPolicy: 'cache-first',
             })
@@ -132,6 +95,7 @@ export const useBorrowDeals = () => {
                 fetchPolicy: 'cache-first',
             })
             if (res?.data.loans) {
+                console.log(res.data.loans)
                 await dispatch(setBorrowingHistory(res.data.loans))
             }
         }
@@ -163,6 +127,7 @@ export const useLoanInformation = (id: string) => {
             },
             fetchPolicy: 'cache-first',
         })
+
         try {
             if (res?.data.loan) {
                 setLoanInfo(res.data.loan)

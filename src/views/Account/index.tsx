@@ -66,7 +66,7 @@ const Account: React.FC = () => {
                         <StyledTitle fontWeight={500} marginBottom={35}>
                             Collateral Positions
                         </StyledTitle>
-                        <CollateralTable table={colBook} />
+                        <CollateralTable table={[colBook]} />
                     </StyledAccountContainer>
                 )}
             </AccountContainer>

@@ -27,7 +27,7 @@ export const LENDING_BORROW_ORDERBOOK = gql`
 export const LENDING_LEND_ORDERBOOK = gql`
     query LendOrderbook($market: Bytes!, $skip: Int!) {
         lendingMarket (id: $market) {
-            lendOrderbook (orderBy: rate, orderDirection: asc, first: 10, skip: $skip) {
+            lendOrderbook (orderBy: rate, orderDirection: desc, first: 10, skip: $skip) {
                 rate
                 totalAmount
             }

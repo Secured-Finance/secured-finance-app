@@ -13,9 +13,7 @@ export const getLendingControllerAddress = (securedFinance) => {
 export const getLoanAddress = (securedFinance) => {
   	return securedFinance && securedFinance.loan
 }
-export const getFxMarketAddress = (securedFinance) => {
-  	return securedFinance && securedFinance.fxMarket
-}
+
 export const getCollateralAddress = (securedFinance) => {
 	return securedFinance && securedFinance.collateral
 }
@@ -58,9 +56,7 @@ export const getLendingMarketContract = (securedFinance, ccyIndex, termIndex) =>
 export const getLoanContract = (securedFinance) => {
   	return securedFinance && securedFinance.contracts && securedFinance.contracts.loan
 }
-export const getFxMarketContract = (securedFinance) => {
-  	return securedFinance && securedFinance.contracts && securedFinance.contracts.fxMarket
-}
+
 export const getCollateralContract = (securedFinance) => {
 	return securedFinance && securedFinance.contracts && securedFinance.contracts.collateral
 }
@@ -95,20 +91,17 @@ export const getDiscountFactors = async (lendingController, ccy) => {
   	return lendingController.methods.getDiscountFactorsForCcy(ccy).call()
 }
 
-export const getLoansHistory = async (loanContract, account) => {
-	return loanContract.methods.getOneBook(account).call()
-}
-
-export const getAllLoanBooks = async (loanContract) => {
-	return loanContract.methods.getAllBooks().call()
-}
-
 export const getLoanInfo = async (loanContract, id) => {
 	return loanContract.methods.getLoanItem(id).call()
 }
 
-export const getFxRates = async (fxMarketContract) => {
-	return fxMarketContract.methods.getMidRates().call()
+export const checkCollateralBook = async (collateralContract, account) => {
+	let book = await collateralContract.methods.getOneBook(account).call()
+	if (book.id === "") {
+		return false;
+	} else {
+		return true;
+	}
 }
 
 export const getCollateralBook = async (collateralContract, account) => {
@@ -125,17 +118,8 @@ export const upSizeEth = async (collateralContract, account, amount) => {
 		})
 }
 
-export const upSizeFil = async (collateralContract, account, amount) => {
-	return collateralContract.methods
-		.upSizeETH(amount)
-		.send({ from: account })
-		.on('transactionHash', (tx) => {
-			console.log(tx)
-			return tx.transactionHash
-		})
-}
-
 export const setUpCollateral = async (collateralContract, id, filAddr, account, amount) => {
+	console.log(collateralContract.methods)
 	return collateralContract.methods
 		.setColBook(id, filAddr, account)
 		.send({ from: account, value: new BigNumber(amount).times(new BigNumber(10).pow(18)).toString()})
@@ -148,6 +132,17 @@ export const setUpCollateral = async (collateralContract, id, filAddr, account, 
 export const placeOrder = async (lendingMarketContract, account, side, amount, rate, deadline) => {
 	return lendingMarketContract.methods
 		.order(side, amount, rate, deadline)
+		.send({ from: account })
+		.on('transactionHash', (tx) => {
+			console.log(tx)
+			return tx.transactionHash
+		})
+}
+
+
+export const cancelOrder = async (lendingMarketContract, account, orderId) => {
+	return lendingMarketContract.methods
+		.cancelOrder(orderId)
 		.send({ from: account })
 		.on('transactionHash', (tx) => {
 			console.log(tx)

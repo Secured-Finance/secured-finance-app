@@ -1,6 +1,5 @@
-import BigNumber from "bignumber.js";
 import { HistoryTableData } from "../../store/history/types";
-import { formatAddress, ordinaryFormat, percentFormat } from "../../utils";
+import { formatAddress, getFullDisplayBalanceNumber, ordinaryFormat, percentFormat } from "../../utils";
 import CurrencyContainer from "../CurrencyContainer";
 import RenderAction from './components/State';
 
@@ -93,37 +92,24 @@ export const historyTableColumns = [{
             Cell: ( cell: { value: number } ) => <span>{percentFormat(cell.value, 10000)}</span>,
         },
         {
-            Header: 'Amount',
+            Header: 'Notional',
             accessor: 'amount',
             Cell: ( cell : { value: number } ) => <span>{ cell.value != null ? ordinaryFormat(cell.value) : 0 }</span>
         },
         {
             Header: 'Currency',
             accessor: 'currency',
-            Cell: ( cell: { value: number } ) => <CurrencyContainer index={cell.value} size={"sm"} short={false}/>
+            Cell: ( cell: { value: string } ) => <CurrencyContainer ccy={cell.value} size={"sm"} short={false}/>
         },
         {
             Header: 'Term',
             accessor: 'term',
             Cell: ( cell: { value: number } ) => <RenderTerms index={cell.value} />
         },
-        // {
-        //     Header: 'PV',
-        //     accessor: 'pv',
-        // },
-        // {
-        //     Header: 'Schedule',
-        //     accessor: 'schedule',
-        // },
         {
             Header: 'State',
             accessor: 'state',
             Cell: ( cell: { value: number } ) => <RenderState index={cell.value} />
         },
-        // {
-        //     Header: 'State',
-        //     accessor: 'state',
-        //     Cell: (cell: {row: any }) => <RenderAction loan={cell.row.original.id} />
-        // },
     ]
 }] as Array<TableColumns>

@@ -1,5 +1,5 @@
-import BigNumber from "bignumber.js"
 import { useCallback } from 'react'
+import { toBytes32 } from "src/utils/strings"
 import { useWallet } from 'use-wallet'
 import { provider } from 'web3-core'
 
@@ -14,7 +14,7 @@ export const useSetUpCollateral = (amount: number, id: string, filAddr: string) 
     const handleSetUpCollateral = useCallback(async () => {
 		try {
 			let tx: any
-			tx = await setUpCollateral(collateralContract, id, filAddr, account, amount)
+			tx = await setUpCollateral(collateralContract, id, toBytes32(filAddr), account, amount)
 			return tx
 		} catch (e) {
 			return false

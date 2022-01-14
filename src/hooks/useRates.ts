@@ -4,7 +4,8 @@ import { getBorrowerRates, getLenderRates, getMidRates } from '../services/sdk/u
 import useBlock from './useBlock'
 import { Contract } from 'web3-eth-contract'
 
-export const useRates = (lendingControllerContract: Contract, type: number, ccy: number) => {
+export const useRates = (lendingControllerContract: Contract, type: number, ccy: number | string) => {
+    let selectedCcy = 1;
     const block = useBlock()
     const [rates, setRates] = useState(new Array)
 
@@ -12,13 +13,13 @@ export const useRates = (lendingControllerContract: Contract, type: number, ccy:
         let rates: Array<any>
         switch (type) {
             case 0:
-                rates = await getBorrowerRates(lendingControllerContract, ccy)
+                rates = await getBorrowerRates(lendingControllerContract, selectedCcy)
                 break
             case 1:
-                rates = await getLenderRates(lendingControllerContract, ccy)
+                rates = await getLenderRates(lendingControllerContract, selectedCcy)
                 break
             case 2:
-                rates = await getMidRates(lendingControllerContract, ccy)
+                rates = await getMidRates(lendingControllerContract, selectedCcy)
                 break
             default:
                 break

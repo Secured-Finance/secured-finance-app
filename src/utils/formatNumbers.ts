@@ -1,5 +1,5 @@
-export const usdFormat = (number: number) => {
-    return Intl.NumberFormat('en-US',{ style: 'currency', currency: 'USD', currencySign: 'accounting', maximumFractionDigits: 2 }).format(number)
+export const usdFormat = (number: number, digits: number = 0) => {
+    return Intl.NumberFormat('en-US',{ style: 'currency', currency: 'USD', currencySign: 'accounting', maximumFractionDigits: digits }).format(number)
 }
 
 export const percentFormat = (number: any, dividedBy: number = 100) => {

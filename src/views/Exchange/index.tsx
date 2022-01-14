@@ -79,7 +79,6 @@ const StyledCenterContainer = styled.div`
     display: flex;
 	flex-direction: column;
 	max-height: calc(100% - 25px);
-	overflow-y: auto;
 
 	::-webkit-scrollbar {
 		display: none;

@@ -49,7 +49,7 @@ export const collateralTableColumns = [{
         {
             Header: 'Asset',
             accessor: 'ccyIndex',
-            Cell: ( cell: { value: number } ) => <CurrencyContainer index={cell.value} short={false} wallet={true}/>
+            Cell: ( cell: { value: number } ) => <CurrencyContainer ccy={cell.value} short={false} wallet={true}/>
         },
         {
             Header: 'Vault',
@@ -67,14 +67,9 @@ export const collateralTableColumns = [{
             Cell: ( cell : { value: any, row: any } ) => <RenderBorrow borrow={cell.value} value={cell.row.original.usdBorrowed}/>
         },
         {
-            Header: 'Coverage',
-            accessor: 'coverage',
-            Cell: ( cell : { value: any } ) => <RenderRatio ratio={cell.value}/>
-        },
-        {
             Header: 'State',
             accessor: 'state',
-            Cell: (cell: {value: any, row: any }) => <RenderState index={cell.value}/>
+            Cell: (cell: {value: any, row: any }) => <RenderState index={'1'}/>
         },
     ]
 }] as Array<TableColumns>

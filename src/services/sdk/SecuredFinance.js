@@ -27,7 +27,6 @@ export class SecuredFinance {
 		this.contracts = new Contracts(realProvider, networkId, this.web3, options)
 		this.lendingController = contractsAddresses.lendingController
 		this.loan = contractsAddresses.loan
-		this.fxMarket = contractsAddresses.fxMarket
 		this.collateral = contractsAddresses.collateral
 	}
 

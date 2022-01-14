@@ -5,13 +5,11 @@ import Modal, { ModalProps } from '../Modal'
 import ModalActions from '../ModalActions'
 import ModalContent from '../ModalContent'
 import ModalTitle from '../ModalTitle'
-import Spacer from '../Spacer'
 import { connect, useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../store/types'
 import CurrencySelector from '../CurrencySelector';
 import { CollateralFormStore, updateCollateralAmount, updateCollateralCurrency } from '../../store/collateralForm'
-import { currencyList, formatInput, ordinaryFormat, percentFormat, usdFormat } from '../../utils'
-import { colors } from '../../theme/colors'
+import { currencyList, formatInput, getDisplayBalance, getFullDisplayBalanceNumber, getUSDFormatBalanceNumber, ordinaryFormat, percentFormat, usdFormat } from '../../utils'
 import { useEthBalance } from '../../hooks/useEthWallet'
 import { useSetUpCollateral } from '../../hooks/useSetUpCollateral'
 import { useUpsizeCollateral } from '../../hooks/useUpSizeCollateral'
@@ -19,16 +17,18 @@ import useCollateralBook from '../../hooks/useCollateralBook'
 import { useWallet } from 'use-wallet'
 import BigNumber from 'bignumber.js'
 import { Button } from "../common/Buttons"
+import useCheckCollateralBook from 'src/hooks/useCheckCollateralBook'
 
 type CombinedProps = ModalProps & CollateralFormStore
 
 const CollateralModal: React.FC<CombinedProps> = ({ onDismiss, amount, ccyIndex, isInitiated, currencyIndex, currencyName, currencyShortName, filAddress }) => {
     const [buttonOpen, setButtonOpen] = useState(false)
     const [collateralTx, setCollateralTx] = useState(false)
+    const [collateralStatus, setCollateralStatus] = useState(false)
     const [balanceErr, setBalanceErr] = useState(false)
     const { account }: { account: string } = useWallet()
     const colBook = useCollateralBook(account)
-
+    const status = useCheckCollateralBook(account);
     const ethBalance = useEthBalance()
     const dispatch = useDispatch()
     const ethPrice = useSelector((state: RootState) => state.assetPrices.ethereum.price);
@@ -58,13 +58,19 @@ const CollateralModal: React.FC<CombinedProps> = ({ onDismiss, amount, ccyIndex,
         }
     }
 
-    const { onSetUpCollateral } = useSetUpCollateral(amount, 'id', filAddress)
-    const { onUpsizeCollateral } = useUpsizeCollateral(amount, 0)
+    useEffect(() => {
+        if (status) {
+            setCollateralStatus(true);
+        }
+    }, [setCollateralStatus, status]);
+
+    const { onSetUpCollateral } = useSetUpCollateral(amount, "id", "0xfilAddr")
+    const { onUpsizeCollateral } = useUpsizeCollateral(amount)
 
     const handleDepositCollateral = useCallback(async () => {
         try {
             setCollateralTx(true)
-            if (isInitiated) {
+            if (collateralStatus) {
                 const txHash = await onUpsizeCollateral()
                 if (!txHash) {
                     setCollateralTx(false)
@@ -147,56 +153,44 @@ const CollateralModal: React.FC<CombinedProps> = ({ onDismiss, amount, ccyIndex,
                 </StyledSubcontainer>
                 <StyledAddressContainer marginBottom={"0px"}>
                     <StyledRowContainer>
-                        <StyledAddressTitle>Total collateral position</StyledAddressTitle>
+                        <StyledAddressTitle>Available collateral position</StyledAddressTitle>
                             {
-                                account && colBook.length > 0
+                                account && colBook.vault != ''
                                 ?
-                                <StyledAddress>{colBook[0].collateral != null ? ordinaryFormat(colBook[0].collateral) : ordinaryFormat(0)} ETH</StyledAddress>
+                                <StyledAddress>{colBook.collateral != null ? getDisplayBalance(colBook.collateral) : getFullDisplayBalanceNumber(0)} ETH</StyledAddress>
                                 :
-                                <StyledAddress>{ordinaryFormat(0)} ETH</StyledAddress>
+                                <StyledAddress>{getFullDisplayBalanceNumber(0)} ETH</StyledAddress>
                             }
                     </StyledRowContainer>
                     <StyledRowContainer marginTop={"10px"}>
-                        <StyledAddressTitle>Total collateral position (USD)</StyledAddressTitle>
+                        <StyledAddressTitle>Available collateral position (USD)</StyledAddressTitle>
                             {
-                                account && colBook.length > 0
+                                account && colBook.vault != ''
                                 ?
-                                <StyledAddress>{colBook[0].usdCollateral != null ? usdFormat(colBook[0].usdCollateral) : usdFormat(0)}</StyledAddress>
+                                <StyledAddress>{colBook.usdCollateral != null ? getUSDFormatBalanceNumber(colBook.usdCollateral.toNumber()) : getUSDFormatBalanceNumber(0)}</StyledAddress>
                                 :
-                                <StyledAddress>{usdFormat(0)}</StyledAddress>
+                                <StyledAddress>{getUSDFormatBalanceNumber(0)}</StyledAddress>
                             }
                     </StyledRowContainer>
                     <StyledRowContainer marginTop={"10px"}>
-                        <StyledAddressTitle>Borrowed</StyledAddressTitle>
+                        <StyledAddressTitle>Locked collateral</StyledAddressTitle>
                             {
-                                account && colBook.length > 0
+                                account && colBook.vault != ''
                                 ?
-                                <StyledAddress>{colBook[0].borrowed != null ? ordinaryFormat(colBook[0].borrowed) : ordinaryFormat(0)} FIL</StyledAddress>
+                                <StyledAddress>{colBook.locked != null ? getDisplayBalance(colBook.locked) : getFullDisplayBalanceNumber(0)} ETH</StyledAddress>
                                 :
-                                <StyledAddress>{ordinaryFormat(0)} FIL</StyledAddress>
+                                <StyledAddress>{getFullDisplayBalanceNumber(0)} ETH</StyledAddress>
                             }
                     </StyledRowContainer>
                     <StyledRowContainer marginTop={"10px"}>
-                        <StyledAddressTitle>Borrowed (USD)</StyledAddressTitle>
+                        <StyledAddressTitle>Locked collateral (USD)</StyledAddressTitle>
                             {
-                                account && colBook.length > 0
+                                account && colBook.vault != ''
                                 ?
-                                <StyledAddress>{colBook[0].usdBorrowed != null ? usdFormat(colBook[0].usdBorrowed) : usdFormat(0)}</StyledAddress>
+                                <StyledAddress>{colBook.usdLocked != null ? getUSDFormatBalanceNumber(colBook.usdLocked.toNumber()) : getUSDFormatBalanceNumber(0)}</StyledAddress>
                                 :
-                                <StyledAddress>{usdFormat(0)}</StyledAddress>
+                                <StyledAddress>{getUSDFormatBalanceNumber(0)}</StyledAddress>
                             }
-                    </StyledRowContainer>
-                    <StyledRowContainer marginTop={"10px"}>
-                        <StyledAddress>
-                            Coverage
-                        </StyledAddress>
-                        {
-                            account && colBook.length > 0
-                            ?
-                            <StyledHealthRatioText color={colBook[0].coverage < 125 ? theme.colors.red3 : theme.colors.gray}>{colBook[0].coverage != null ? percentFormat(colBook[0].coverage) : percentFormat(0)}</StyledHealthRatioText>
-                            :
-                            <StyledHealthRatioText>{percentFormat(0)}</StyledHealthRatioText>
-                        }
                     </StyledRowContainer>
                 </StyledAddressContainer>
 			</ModalContent>

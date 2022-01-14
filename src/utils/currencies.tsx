@@ -14,19 +14,19 @@ export const currencyList = [
     {
         index: 0,
         icon: ethLogo,
-        shortName: 'ETH',
+        shortName: "ETH",
         fullName: 'Ethereum',
     },
     {
         index: 1,
         icon: filLogo,
-        shortName: 'FIL',
+        shortName: "FIL",
         fullName: 'Filecoin',
     },
     {
         index: 2,
-        shortName: 'USDC',
-        fullName: 'USDC',
+        shortName: "USDC",
+        fullName: "USDC",
     },
 ] as Array<CurrencyInfo>;
 

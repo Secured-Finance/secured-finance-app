@@ -31,6 +31,7 @@ export const useBorrowOrderbook = (ccy: number, term: number, skip: number = 0) 
                 },
                 fetchPolicy: 'cache-first',
             })
+
             if (res?.data.lendingMarket.borrowOrderbook) {
                 let parsedOrderbook: Array<OrderbookRow> = []
                 res.data.lendingMarket.borrowOrderbook.map(function(item: any, index: number){

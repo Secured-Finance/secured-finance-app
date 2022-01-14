@@ -1,4 +1,4 @@
-import React, {HTMLAttributes, useState} from 'react'
+import React, {HTMLAttributes, useEffect, useState} from 'react'
 import { connect } from 'react-redux';
 import styled  from 'styled-components'
 import { LendingTerminalStore } from '../../../../store/lendingTerminal';
@@ -13,7 +13,7 @@ type MergedProps = LendingTerminalStore & OrderHistoryProps
 
 const OrderHistory: React.FC<MergedProps> = ({ currencyIndex, termsIndex }) => {
     const ordersTabs = ["Open Orders", "Trading History"];
-    const [selectedTab, setSelectedTab] = useState("Open Orders")
+    const [selectedTab, setSelectedTab] = useState("Open Orders");
 
     const handleChange = (tab: React.SetStateAction<string>) => () => {
         setSelectedTab(tab);
@@ -21,23 +21,25 @@ const OrderHistory: React.FC<MergedProps> = ({ currencyIndex, termsIndex }) => {
 
     return (
         <StyledPositionsComponent>
-        <TableTabs>
-            {ordersTabs.map((tab, i) => (
-                <TableTab
-                    key={i}
-                    isSelected={selectedTab === tab}
-                    onClick={handleChange(tab)}
-                >
-                    {tab}
-                </TableTab>
-            ))}
-        </TableTabs>
-        { 
-            selectedTab === "Open Orders" ? 
-            <OpenOrders ccy={currencyIndex} term={termsIndex}/>
-            :
-            <FilledOrders ccy={currencyIndex} term={termsIndex}/>
-        }
+            <TableTabs>
+                {ordersTabs.map((tab, i) => (
+                    <TableTab
+                        key={i}
+                        isSelected={selectedTab === tab}
+                        onClick={handleChange(tab)}
+                    >
+                        {tab}
+                    </TableTab>
+                ))}
+            </TableTabs>
+            <TableWrapper>
+                { 
+                    selectedTab === "Open Orders" ? 
+                    <OpenOrders ccy={currencyIndex} term={termsIndex}/>
+                    :
+                    <FilledOrders ccy={currencyIndex} term={termsIndex}/>
+                }
+            </TableWrapper>
         </StyledPositionsComponent>
     );
 }
@@ -55,6 +57,13 @@ const TableTabs = styled.div`
   font-weight: 600;
   color: ${theme.colors.lightBackground};
   border-bottom: 1px solid ${theme.colors.darkenedBg};
+`
+
+const TableWrapper = styled.div`
+    display: flex;
+    max-height: 60%;
+    overflow-y: scroll;
+    padding: 8px 0;
 `
 
 interface ITableTab extends HTMLAttributes<HTMLDivElement> {
