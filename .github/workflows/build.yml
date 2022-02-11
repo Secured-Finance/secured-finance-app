@@ -1,0 +1,19 @@
+name: Build
+on:
+  [push, pull_request]:
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubunt-latest
+      steps:
+        - name: Checkout Repo
+          uses: actions/checkout@master
+        - name: Install Dependencies
+          run: npm install
+        - name: Test
+          run: npm run test -- --watchAll=false
+        - name: Build
+          run: npm run build
+        - name: Build Storybook
+          run: npm run build-storybook
