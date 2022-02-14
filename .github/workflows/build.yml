@@ -1,11 +1,10 @@
-name: Build
+name: Build and test
 on:
   [push, pull_request]
-
 jobs:
   build:
-    name: Build
-    runs-on: ubunt-latest
+    name: Build and test
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo
         uses: actions/checkout@master
