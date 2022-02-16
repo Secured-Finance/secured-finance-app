@@ -3,13 +3,10 @@ on:
   [push, pull_request]
 jobs:
   build:
-    name: Build and test
+    name: Build and Test
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Repo
-        uses: actions/checkout@master
-      - name: Install Dependencies
-        run: npm install
+      - uses: ./.github/workflows/checkout-and-install
       - name: Test
         run: npm run test -- --watchAll=false
         # bad way to configure this build command.
