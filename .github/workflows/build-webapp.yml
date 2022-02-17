@@ -11,18 +11,10 @@ jobs:
       - uses: actions/checkout@master
       - name: Install Dependencies
         run: npm install
-  run-tests:
-    name: Run Tests
-    runs-on: ubuntu-latest
-    steps:
       - name: Run Tests
         run: npm run test -- --watchAll=false
-  build-wepapp:
-    name: Build Web App
-    runs-on: ubuntu-latest
-    steps:
         # bad way to configure this build command.
         # this sets CI=false to not treat warnings are errors
         # TODO: remove this ASAP and fix all the warnings
-      - name: Build
+      - name: Build Web App
         run: CI=false npm run build
