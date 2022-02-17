@@ -4,12 +4,17 @@ on:
   [push, pull_request]
 
 jobs:
-  build-all:
-    name: Build All and Run Tests
+  checkout:
+    name: Checkout
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
-      - uses: ./.github/workflows/install-dependencies.yml
+  install-dependencies:
+    uses: ./.github/workflows/install-dependencies.yml
+  test:
+    name: Run All Tests
+    runs-on: ubuntu-latest
+    steps:
       - name: Test
         run: npm run test -- --watchAll=false
         # bad way to configure this build command.
@@ -17,4 +22,5 @@ jobs:
         # TODO: remove this ASAP and fix all the warnings
       - name: Build
         run: CI=false npm run build
-      - uses: ./.github/workflows/build-storybook.yml
+  build-storybook:
+    uses: ./.github/workflows/build-storybook.yml
