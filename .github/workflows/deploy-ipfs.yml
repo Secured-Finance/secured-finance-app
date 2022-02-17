@@ -27,3 +27,9 @@ jobs:
           protocol: https
           timeout: 180000
           verbose: true
+      - uses: LouisBrunner/checks-action@v1.1.1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          name: IPFS Link
+          conclusion: ${{ job.status }}
+          details_url: https://ipfs.io/ipfs/${{ step.ipfs.outputs.hash }}
