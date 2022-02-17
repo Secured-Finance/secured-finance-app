@@ -24,4 +24,4 @@ jobs:
         uses: actions/upload-artifact@master
         with:
           name: Storybook
-          path: .storybook
+          path: storybook-static
