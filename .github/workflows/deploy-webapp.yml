@@ -1,0 +1,24 @@
+name: Deploy Web App
+on:
+  workflow_call:
+
+jobs:
+  deploy-webapp:
+    name: Deploy Web App
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download Artifact
+        uses: actions/download-artifact@master
+        with:
+          name: WebApp
+          path: build
+      - name: Deploy on IPFS
+        uses: aquiladev/ipfs-action@v1
+        id: ipfs
+        with:
+          path: build
+          host: ipfs.komputing.org
+          port: 443
+          protocol: https
+          timeout: 180000
+          verbose: true
