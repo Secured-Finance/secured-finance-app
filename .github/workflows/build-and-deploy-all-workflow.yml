@@ -1,0 +1,28 @@
+on:
+  push:
+    branches:
+      - master
+      - develop
+      - SF-*
+
+jobs:
+  build-storybook:
+    name: Build Storybook
+    uses: ./.github/workflows/build-storybook.yml
+    with:
+      publish: true
+  build-webapp:
+    name: Build Web App
+    uses: ./.github/workflows/build-webapp.yml
+    with:
+      publish: true
+  # deploy-webapp:
+  #   name: Deploy Web App
+  #   uses: ./.github/workflows/deploy-webapp.yml
+  #   needs:
+  #     - build-webapp
+  deploy-storybook:
+    name: Deploy Storybook
+    uses: ./.github/workflows/deploy-storybook.yml
+    needs:
+      - build-storybook
