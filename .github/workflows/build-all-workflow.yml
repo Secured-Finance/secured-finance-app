@@ -4,7 +4,9 @@ on:
   [push, pull_request]
 
 jobs:
-  install-dependencies:
+  build-webapp:
+    name: Build Web App
     uses: ./.github/workflows/build-webapp.yml
   build-storybook:
+    name: Build Storybook
     uses: ./.github/workflows/build-storybook.yml

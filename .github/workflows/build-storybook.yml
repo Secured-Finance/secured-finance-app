@@ -1,7 +1,13 @@
 name: Build Storybook
 
 on:
-  workflow_call
+  workflow_call:
+    inputs:
+      publish:
+        description: "Publish the storybook artifact to github"
+        default: false
+        type: boolean
+        required: false
 
 jobs:
   build-storybook:
@@ -9,5 +15,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
+      - name: Install Dependencies
+        run: npm install
       - name: Build Storybook
         run: npm run build-storybook
+      - if: ${{ inputs.publish }}
+        name: Publish Storybook
+        uses: actions/upload-artifact@master
+        with:
+          name: Storybook
+          path: .storybook

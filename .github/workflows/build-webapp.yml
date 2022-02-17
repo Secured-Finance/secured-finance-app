@@ -1,7 +1,13 @@
 name: Build Web App
 
 on:
-  workflow_call
+  workflow_call:
+    inputs:
+      publish:
+        description: "Publish the storybook artifact to github"
+        default: false
+        type: boolean
+        required: false
 
 jobs:
   install-dependencies:
@@ -18,3 +24,9 @@ jobs:
         # TODO: remove this ASAP and fix all the warnings
       - name: Build Web App
         run: CI=false npm run build
+      - if: ${{ inputs.publish }}
+        name: Publish Web App
+        uses: actions/upload-artifact@master
+        with:
+          name: WebApp
+          path: build
