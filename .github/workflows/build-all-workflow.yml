@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
-      - uses: ./.github/workflows/install-dependencies
+      - uses: ./.github/workflows/install-dependencies.yml
       - name: Test
         run: npm run test -- --watchAll=false
         # bad way to configure this build command.
@@ -17,4 +17,4 @@ jobs:
         # TODO: remove this ASAP and fix all the warnings
       - name: Build
         run: CI=false npm run build
-      - uses: ./.github/workflows/build-storybook
+      - uses: ./.github/workflows/build-storybook.yml
