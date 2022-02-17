@@ -33,6 +33,3 @@ jobs:
           name: IPFS Link - https://ipfs.io/ipfs/${{ steps.ipfs.outputs.hash }}
           conclusion: ${{ job.status }}
           details_url: https://ipfs.io/ipfs/${{ steps.ipfs.outputs.hash }}
-          output: |
-            {"summary":"Deployed on IPFS"",
-            "text_description":"https://ipfs.io/ipfs/${{ steps.ipfs.outputs.hash }}"}
