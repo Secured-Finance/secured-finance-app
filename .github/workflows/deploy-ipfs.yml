@@ -1,22 +1,27 @@
-name: Deploy Web App
+name: Deploy on IPFS
 on:
   workflow_call:
+    inputs:
+      name:
+        description: "Name of the artifact to deploy"
+        type: string
+        required: true
 
 jobs:
   deploy-webapp:
-    name: Deploy Web App
+    name: Deploy Storybook
     runs-on: ubuntu-latest
     steps:
       - name: Download Artifact
         uses: actions/download-artifact@master
         with:
-          name: WebApp
-          path: build
+          name: ${{ inputs.name }}
+          path: ${{ inputs.name }}
       - name: Deploy on IPFS
-        uses: aquiladev/ipfs-action@v1
+        uses: aquiladev/ipfs-action@v0.2.0
         id: ipfs
         with:
-          path: build
+          path: ${{ inputs.name }}
           host: ipfs.komputing.org
           port: 443
           protocol: https
