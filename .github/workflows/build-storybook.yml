@@ -1,0 +1,12 @@
+name: Build Storybook
+
+on:
+  workflow_call
+
+jobs:
+  build-storybook:
+    name: Build Storybook
+    runs-on: ubuntu-latest
+    steps:
+      - name: Build Storybook
+        run: npm run build-storybook
