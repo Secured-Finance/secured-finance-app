@@ -32,4 +32,4 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           name: IPFS Link
           conclusion: ${{ job.status }}
-          details_url: https://ipfs.io/ipfs/${{ step.ipfs.outputs.hash }}
+          details_url: https://ipfs.io/ipfs/${{ steps.ipfs.outputs.hash }}
