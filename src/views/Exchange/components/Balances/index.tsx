@@ -6,7 +6,12 @@ import useCollateralBook from '../../../../hooks/useCollateralBook';
 import { useEthereumWalletStore } from '../../../../hooks/useEthWallet';
 import { useFilecoinWalletStore } from '../../../../hooks/useFilWallet';
 import useModal from '../../../../hooks/useModal';
-import { getDisplayBalance, getFullDisplayBalanceNumber, ordinaryFormat, usdFormat } from '../../../../utils';
+import {
+    getDisplayBalance,
+    getFullDisplayBalanceNumber,
+    ordinaryFormat,
+    usdFormat,
+} from '../../../../utils';
 import { Subheader } from '../../../../components/common/Subheader';
 import {
     Table,
@@ -61,15 +66,11 @@ export const Balances: React.FC = () => {
                 </Cell>
                 <Cell>
                     <CellKey>ETH Collateral</CellKey>
-                    {account && colBook.vault != "" ? (
+                    {account && colBook.vault != '' ? (
                         <CellValue>
-                            {
-                                colBook.collateral != null
-                                ? 
-                                getDisplayBalance(colBook.collateral)
-                                : 
-                                0
-                            }{' '}
+                            {colBook.collateral != null
+                                ? getDisplayBalance(colBook.collateral)
+                                : 0}{' '}
                             ETH
                         </CellValue>
                     ) : (

@@ -2,8 +2,12 @@ import { gql } from '@apollo/client';
 
 export const OPEN_ORDERS = gql`
     query OpenOrders($account: Bytes!, $market: Bytes!) {
-        user (id: $account) {
-            openOrders (where: {marketAddr: $market}, orderBy: createdAtTimestamp, orderDirection: asc) {
+        user(id: $account) {
+            openOrders(
+                where: { marketAddr: $market }
+                orderBy: createdAtTimestamp
+                orderDirection: asc
+            ) {
                 id
                 orderId
                 currency
@@ -19,12 +23,16 @@ export const OPEN_ORDERS = gql`
             }
         }
     }
-`
+`;
 
 export const TRADE_HISTORY = gql`
     query TradingHistory($account: Bytes!, $market: Bytes!) {
-        user (id: $account) {
-            takenOrders (where: {marketAddr: $market}, orderBy: createdAtTimestamp, orderDirection: desc) {
+        user(id: $account) {
+            takenOrders(
+                where: { marketAddr: $market }
+                orderBy: createdAtTimestamp
+                orderDirection: desc
+            ) {
                 id
                 orderId
                 currency
@@ -38,7 +46,11 @@ export const TRADE_HISTORY = gql`
                 createdAtTimestamp
                 createdAtBlockNumber
             }
-            madeOrders (where: {marketAddr: $market}, orderBy: createdAtTimestamp, orderDirection: desc) {
+            madeOrders(
+                where: { marketAddr: $market }
+                orderBy: createdAtTimestamp
+                orderDirection: desc
+            ) {
                 id
                 orderId
                 currency
@@ -54,12 +66,12 @@ export const TRADE_HISTORY = gql`
             }
         }
     }
-`
+`;
 
 export const OPEN_LOANS = gql`
     query OpenLoans($account: Bytes!, $currency: Int!, $term: Int!) {
-        user (id: $account) {
-            loans (where: {currency: $currency, term: $term}) {
+        user(id: $account) {
+            loans(where: { currency: $currency, term: $term }) {
                 id
                 lender
                 borrower
@@ -82,4 +94,4 @@ export const OPEN_LOANS = gql`
             }
         }
     }
-`
+`;

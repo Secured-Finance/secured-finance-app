@@ -10,6 +10,14 @@
       "options": {
         "parser": "scss"
       }
+    },
+    {
+      "files": ["*.json", "*.jsonc", "*.json5"],
+      "options": {
+        "parser": "json",
+        "singleQuote": false,
+        "tabWidth": 2
+      }
     }
   ]
 }

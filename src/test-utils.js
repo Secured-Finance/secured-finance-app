@@ -1,7 +1,7 @@
-import React from 'react';
 import { render as rtlRender } from '@testing-library/react';
-import { createStore } from 'redux';
+import React from 'react';
 import { Provider } from 'react-redux';
+import { createStore } from 'redux';
 import reducer from 'src/store/reducers';
 
 function render(

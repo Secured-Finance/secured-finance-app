@@ -33,16 +33,17 @@ const emptyBook: CollateralBook = {
     usdLocked: ZERO_BN,
     borrowed: ZERO_BN,
     usdBorrowed: ZERO_BN,
-}
+};
 
 interface CollateralResponse {
-    colAmtETH: string | number,
-    inuseETH: string | number,
-    inuseFIL: string | number,
+    colAmtETH: string | number;
+    inuseETH: string | number;
+    inuseFIL: string | number;
 }
 
 const useCollateralBook = (account: string) => {
-    const [collateralBook, setCollateralBook] = useState<CollateralBook>(emptyBook);
+    const [collateralBook, setCollateralBook] =
+        useState<CollateralBook>(emptyBook);
     const securedFinance = useSF();
     const block = useBlock();
     const ethPrice = useSelector(
@@ -56,27 +57,28 @@ const useCollateralBook = (account: string) => {
     const dispatch = useDispatch();
 
     const fetchCollateralBook = useCallback(async () => {
-        const ethPriceBN = new BigNumber(ethPrice)
-        const filPriceBN = new BigNumber(filPrice)
-        
+        const ethPriceBN = new BigNumber(ethPrice);
+        const filPriceBN = new BigNumber(filPrice);
+
         const book: CollateralResponse = await getCollateralBook(
             collateralContract,
             account
         );
 
-        let borrowed = new BigNumber(book.inuseFIL).multipliedBy(filPriceBN)
+        let borrowed = new BigNumber(book.inuseFIL).multipliedBy(filPriceBN);
 
-        let colBook: CollateralBook =
-            {
-                ccyIndex: 0,
-                collateral: new BigNumber(book.colAmtETH),
-                usdCollateral: new BigNumber(book.colAmtETH).multipliedBy(ethPriceBN),
-                vault: collateralContract._address,
-                // locked: lockedCollateral.dividedBy(ethPriceBN),
-                // usdLocked: lockedCollateral,
-                borrowed: borrowed,
-                usdBorrowed: borrowed.dividedBy(ethPriceBN),
-            }
+        let colBook: CollateralBook = {
+            ccyIndex: 0,
+            collateral: new BigNumber(book.colAmtETH),
+            usdCollateral: new BigNumber(book.colAmtETH).multipliedBy(
+                ethPriceBN
+            ),
+            vault: collateralContract._address,
+            // locked: lockedCollateral.dividedBy(ethPriceBN),
+            // usdLocked: lockedCollateral,
+            borrowed: borrowed,
+            usdBorrowed: borrowed.dividedBy(ethPriceBN),
+        };
         setCollateralBook(colBook);
     }, [dispatch, collateralContract, account]);
 

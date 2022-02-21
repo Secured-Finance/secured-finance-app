@@ -1,18 +1,18 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import Button from '../Button';
-import styled, { ThemeContext } from 'styled-components'
-import { Link, useRouteMatch } from "react-router-dom";
-import theme from "../../theme";
+import styled, { ThemeContext } from 'styled-components';
+import { Link, useRouteMatch } from 'react-router-dom';
+import theme from '../../theme';
 
 interface TermsProps {
-    tabs?: Array<string>,
+    tabs?: Array<string>;
 }
 
 const Terms: React.FC<TermsProps> = () => {
-    const testTabs = ["1mo", "3mo", "6mo", "1yr", "2yr", "5yr"];
-    const [tabValue, setTabValue] = useState("3mo")
+    const testTabs = ['1mo', '3mo', '6mo', '1yr', '2yr', '5yr'];
+    const [tabValue, setTabValue] = useState('3mo');
     let { url } = useRouteMatch();
-  
+
     const handleChange = (tab: React.SetStateAction<string>) => () => {
         setTabValue(tab);
     };
@@ -23,10 +23,10 @@ const Terms: React.FC<TermsProps> = () => {
                 <Button
                     key={i}
                     style={{
-                        background: tabValue === tab ? "#4B94C2" : "#172734",
+                        background: tabValue === tab ? '#4B94C2' : '#172734',
                         color: theme.colors.white,
                         fontSize: 12,
-                        outline: "none",
+                        outline: 'none',
                         height: 25,
                         borderRadius: 3,
                         marginRight: 5,
@@ -34,10 +34,10 @@ const Terms: React.FC<TermsProps> = () => {
                         paddingLeft: 10,
                         paddingRight: 10,
                         width: 'unset',
-                        textTransform:"lowercase",
-                        textAlign: "center",
+                        textTransform: 'lowercase',
+                        textAlign: 'center',
                     }}
-                    size="xs"
+                    size='xs'
                     onClick={handleChange(tab)}
                 >
                     {tab}
@@ -45,12 +45,12 @@ const Terms: React.FC<TermsProps> = () => {
             ))}
         </StyledTermsContainer>
     );
-}
-export default Terms
+};
+export default Terms;
 
 const StyledTermsContainer = styled.div`
     width: 100%;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-`
+`;

@@ -1,9 +1,9 @@
-import { useContext } from 'react'
-import { Context } from '../contexts/SecuredFinanceProvider'
+import { useContext } from 'react';
+import { Context } from '../contexts/SecuredFinanceProvider';
 
 const useSF = () => {
-    const { securedFinance } = useContext(Context)
-    return securedFinance
-}
+    const { securedFinance } = useContext(Context);
+    return securedFinance;
+};
 
-export default useSF
+export default useSF;

@@ -2,7 +2,7 @@ import { gql } from '@apollo/client';
 
 export const COLLATERAL_BOOK = gql`
     query Collateral($user: Bytes!) {
-        collateral (id: $user) {
+        collateral(id: $user) {
             id
             userAddressETH
             userAddressFIL
@@ -24,4 +24,4 @@ export const COLLATERAL_BOOK = gql`
             state
         }
     }
-`
+`;
