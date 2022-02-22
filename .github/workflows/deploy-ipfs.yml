@@ -1,0 +1,35 @@
+name: Deploy on IPFS
+on:
+  workflow_call:
+    inputs:
+      package-name:
+        description: "Name of the artifact to deploy"
+        type: string
+        required: true
+
+jobs:
+  deploy-package:
+    name: Deploy ${{ inputs.package-name }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download Artifact
+        uses: actions/download-artifact@master
+        with:
+          name: ${{ inputs.package-name }}
+          path: ${{ inputs.package-name }}
+      - name: Deploy on IPFS
+        uses: aquiladev/ipfs-action@v0.2.0
+        id: ipfs
+        with:
+          path: ${{ inputs.package-name }}
+          host: ipfs.komputing.org
+          port: 443
+          protocol: https
+          timeout: 180000
+          verbose: true
+      - uses: LouisBrunner/checks-action@v1.1.1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          name: IPFS Link - https://ipfs.io/ipfs/${{ steps.ipfs.outputs.hash }}
+          conclusion: ${{ job.status }}
+          details_url: https://ipfs.io/ipfs/${{ steps.ipfs.outputs.hash }}

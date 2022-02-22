@@ -47,15 +47,19 @@ export const ChartInfo = () => {
                     <FieldValue
                         field={'FIL/USD Price'}
                         value={
-                            <span className={cm.priceValue}>{usdFormat(price, 2)}</span>
+                            <span className={cm.priceValue}>
+                                {usdFormat(price, 2)}
+                            </span>
                         }
                     />
                     <FieldValue
                         field={'24h Change (FIL)'}
                         value={
-                                change < 0 
-                                ?
-                                <span className={cm.changeValue} style={{color: '#F23A32'}}>
+                            change < 0 ? (
+                                <span
+                                    className={cm.changeValue}
+                                    style={{ color: '#F23A32' }}
+                                >
                                     <ArrowIcon
                                         fill={'#F23A32'}
                                         size={14}
@@ -63,7 +67,7 @@ export const ChartInfo = () => {
                                     />
                                     {percentFormat(change)}
                                 </span>
-                                : 
+                            ) : (
                                 <span className={cm.changeValue}>
                                     <ArrowIcon
                                         fill={'#0F9D58'}
@@ -72,6 +76,7 @@ export const ChartInfo = () => {
                                     />
                                     {percentFormat(change)}
                                 </span>
+                            )
                         }
                         accent={'green'}
                     />

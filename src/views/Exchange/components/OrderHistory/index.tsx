@@ -1,6 +1,6 @@
-import React, {HTMLAttributes, useEffect, useState} from 'react'
+import React, { HTMLAttributes, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
-import styled  from 'styled-components'
+import styled from 'styled-components';
 import { LendingTerminalStore } from '../../../../store/lendingTerminal';
 import { RootState } from '../../../../store/types';
 import theme from '../../../../theme';
@@ -9,11 +9,11 @@ import { OpenOrders } from './components/Orders';
 
 interface OrderHistoryProps {}
 
-type MergedProps = LendingTerminalStore & OrderHistoryProps
+type MergedProps = LendingTerminalStore & OrderHistoryProps;
 
 const OrderHistory: React.FC<MergedProps> = ({ currencyIndex, termsIndex }) => {
-    const ordersTabs = ["Open Orders", "Trading History"];
-    const [selectedTab, setSelectedTab] = useState("Open Orders");
+    const ordersTabs = ['Open Orders', 'Trading History'];
+    const [selectedTab, setSelectedTab] = useState('Open Orders');
 
     const handleChange = (tab: React.SetStateAction<string>) => () => {
         setSelectedTab(tab);
@@ -33,52 +33,53 @@ const OrderHistory: React.FC<MergedProps> = ({ currencyIndex, termsIndex }) => {
                 ))}
             </TableTabs>
             <TableWrapper>
-                { 
-                    selectedTab === "Open Orders" ? 
-                    <OpenOrders ccy={currencyIndex} term={termsIndex}/>
-                    :
-                    <FilledOrders ccy={currencyIndex} term={termsIndex}/>
-                }
+                {selectedTab === 'Open Orders' ? (
+                    <OpenOrders ccy={currencyIndex} term={termsIndex} />
+                ) : (
+                    <FilledOrders ccy={currencyIndex} term={termsIndex} />
+                )}
             </TableWrapper>
         </StyledPositionsComponent>
     );
-}
+};
 
 const StyledPositionsComponent = styled.div`
-	border-top: 1px solid ${(props) => props.theme.colors.darkenedBg};
-	display: flex;
-	flex-direction: column;
-`
+    border-top: 1px solid ${props => props.theme.colors.darkenedBg};
+    display: flex;
+    flex-direction: column;
+`;
 
 const TableTabs = styled.div`
-  display: flex;
-  flex-direction: row;
-  font-size: 13px;
-  font-weight: 600;
-  color: ${theme.colors.lightBackground};
-  border-bottom: 1px solid ${theme.colors.darkenedBg};
-`
+    display: flex;
+    flex-direction: row;
+    font-size: 13px;
+    font-weight: 600;
+    color: ${theme.colors.lightBackground};
+    border-bottom: 1px solid ${theme.colors.darkenedBg};
+`;
 
 const TableWrapper = styled.div`
     display: flex;
     max-height: 60%;
     overflow-y: scroll;
     padding: 8px 0;
-`
+`;
 
 interface ITableTab extends HTMLAttributes<HTMLDivElement> {
-    isSelected: boolean,
+    isSelected: boolean;
 }
 
 const TableTab = styled.div<ITableTab>`
-  color: ${(props) => props.isSelected ? theme.colors.lightBackground : theme.colors.cellKey };
-  border-bottom: ${(props) => props.isSelected ? `2px solid${theme.colors.sfBlue900}` : ''};
-  font-weight: 600;
-  font-size: ${theme.sizes.footnote}px;
-  padding: 15px 0;
-  margin: 0 20px;
-  cursor: ${(props) => props.isSelected ? 'default' : 'pointer' };
-`
+    color: ${props =>
+        props.isSelected ? theme.colors.lightBackground : theme.colors.cellKey};
+    border-bottom: ${props =>
+        props.isSelected ? `2px solid${theme.colors.sfBlue900}` : ''};
+    font-weight: 600;
+    font-size: ${theme.sizes.footnote}px;
+    padding: 15px 0;
+    margin: 0 20px;
+    cursor: ${props => (props.isSelected ? 'default' : 'pointer')};
+`;
 
-const mapStateToProps = (state: RootState) => state.lendingTerminal
-export default connect(mapStateToProps)(OrderHistory)
+const mapStateToProps = (state: RootState) => state.lendingTerminal;
+export default connect(mapStateToProps)(OrderHistory);

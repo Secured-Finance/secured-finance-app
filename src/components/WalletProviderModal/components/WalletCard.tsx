@@ -1,36 +1,41 @@
-import React from 'react'
-import theme from '../../../theme'
-import Button from '../../Button'
-import Card from '../../Card'
-import CardContent from '../../CardContent'
-import CardIcon from '../../CardIcon'
-import CardTitle from '../../CardTitle'
-import Spacer from '../../Spacer'
+import React from 'react';
+import theme from '../../../theme';
+import Button from '../../Button';
+import Card from '../../Card';
+import CardContent from '../../CardContent';
+import CardIcon from '../../CardIcon';
+import CardTitle from '../../CardTitle';
+import Spacer from '../../Spacer';
 
 interface WalletCardProps {
-  icon: React.ReactNode
-  onConnect: () => void
-  title: string
-  buttonText?: string
+    icon: React.ReactNode;
+    onConnect: () => void;
+    title: string;
+    buttonText?: string;
 }
 
-const WalletCard: React.FC<WalletCardProps> = ({ icon, onConnect, title, buttonText }) => (
-  <Card>
-    <CardContent>
-      <CardIcon>{icon}</CardIcon>
-      <CardTitle text={title} />
-      <Button 
-        onClick={onConnect} 
-        text={buttonText ? buttonText : "Connect"}
-        style={{
-          background: theme.colors.buttonBlue,
-          fontSize: theme.sizes.callout, 
-          fontWeight: 500,
-          color: theme.colors.white
-        }}
-      />
-    </CardContent>
-  </Card>
-)
+const WalletCard: React.FC<WalletCardProps> = ({
+    icon,
+    onConnect,
+    title,
+    buttonText,
+}) => (
+    <Card>
+        <CardContent>
+            <CardIcon>{icon}</CardIcon>
+            <CardTitle text={title} />
+            <Button
+                onClick={onConnect}
+                text={buttonText ? buttonText : 'Connect'}
+                style={{
+                    background: theme.colors.buttonBlue,
+                    fontSize: theme.sizes.callout,
+                    fontWeight: 500,
+                    color: theme.colors.white,
+                }}
+            />
+        </CardContent>
+    </Card>
+);
 
-export default WalletCard
+export default WalletCard;

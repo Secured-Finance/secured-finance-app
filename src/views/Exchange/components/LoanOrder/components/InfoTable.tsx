@@ -1,5 +1,10 @@
-import {Cell, CellKey, CellValue, Table} from "../../../../../components/common/Table";
-import React from "react";
+import {
+    Cell,
+    CellKey,
+    CellValue,
+    Table,
+} from '../../../../../components/common/Table';
+import React from 'react';
 
 export const InfoTable = () => {
     return (
@@ -21,9 +26,9 @@ export const InfoTable = () => {
                 <CellValue>0 FIL</CellValue>
             </Cell>
             <Cell>
-                <CellKey >Transaction fee</CellKey>
+                <CellKey>Transaction fee</CellKey>
                 <CellValue>1.2$</CellValue>
             </Cell>
         </Table>
-    )
-}
+    );
+};
