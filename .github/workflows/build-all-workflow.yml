@@ -27,13 +27,13 @@ jobs:
     name: Deploy Web App
     uses: ./.github/workflows/deploy-ipfs.yml
     with:
-      name: Storybook
+      package-name: Storybook
     needs:
       - build-webapp
   deploy-storybook:
     name: Deploy Storybook
     uses: ./.github/workflows/deploy-ipfs.yml
     with:
-      name: WebApp
+      package-name: WebApp
     needs:
       - build-storybook
