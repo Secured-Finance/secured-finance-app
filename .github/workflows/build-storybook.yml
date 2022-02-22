@@ -16,7 +16,7 @@ jobs:
     steps:
       - uses: actions/checkout@master
       - name: Install Dependencies
-        run: npm install
+        run: npm ci
       - name: Build Storybook
         run: npm run build-storybook
       - if: ${{ inputs.publish }}
