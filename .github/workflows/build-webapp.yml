@@ -8,10 +8,15 @@ on:
         default: false
         type: boolean
         required: false
+      retention-days:
+        description: "Retention days for the artifact"
+        default: 90
+        type: number
+        required: true
 
 jobs:
-  install-dependencies:
-    name: Install Dependencies
+  build-webapp:
+    name: Build Web App
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
@@ -32,3 +37,4 @@ jobs:
         with:
           name: WebApp
           path: build
+          retention-days: ${{ inputs.retention-days }}
