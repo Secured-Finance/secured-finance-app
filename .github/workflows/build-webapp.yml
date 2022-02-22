@@ -16,7 +16,7 @@ on:
       package-name:
         description: "Name of the artifact to upload"
         type: string
-        required: false
+        required: true
 
 jobs:
   build-webapp:
