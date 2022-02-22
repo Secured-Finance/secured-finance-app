@@ -13,9 +13,11 @@ jobs:
     with:
       publish: true
       retention-days: 90
+      package-name: Storybook
   build-webapp:
     name: Build Web App
     uses: ./.github/workflows/build-webapp.yml
     with:
       publish: true
       retention-days: 90
+      package-name: WebApp
