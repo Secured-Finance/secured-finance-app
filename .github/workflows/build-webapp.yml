@@ -13,6 +13,10 @@ on:
         default: 90
         type: number
         required: true
+      package-name:
+        description: "Name of the artifact to upload"
+        type: string
+        required: false
 
 jobs:
   build-webapp:
@@ -35,6 +39,6 @@ jobs:
         name: Publish Web App
         uses: actions/upload-artifact@master
         with:
-          name: WebApp
+          name: ${{ inputs.package-name }}
           path: build
           retention-days: ${{ inputs.retention-days }}

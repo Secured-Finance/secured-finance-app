@@ -13,6 +13,10 @@ on:
         default: 90
         type: number
         required: true
+      package-name:
+        description: "Name of the artifact to upload"
+        type: string
+        required: false
 
 jobs:
   build-storybook:
@@ -28,6 +32,6 @@ jobs:
         name: Publish Storybook
         uses: actions/upload-artifact@master
         with:
-          name: Storybook
+          name: ${{ inputs.package-name }}
           path: storybook-static
           retention-days: ${{ inputs.retention-days }}

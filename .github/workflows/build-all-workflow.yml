@@ -1,5 +1,10 @@
 name: Build Web App, Storybook and Deploy on IPFS
 
+env:
+  web-app-name: WebApp
+  storybook-name: Storybook
+
+
 on:
   pull_request:
     types:
@@ -15,21 +20,25 @@ jobs:
     with:
       publish: true
       retention-days: 3
+      package-name: ${{ env.storybook-name }}
   build-webapp:
     name: Build Web App
     uses: ./.github/workflows/build-webapp.yml
     with:
       publish: true
       retention-days: 3
+      package-name: ${{ env.web-app-name }}
   deploy-webapp:
     name: Deploy Web App
-    uses: ./.github/workflows/deploy-webapp.yml
+    uses: ./.github/workflows/deploy-ipfs.yml
+    with:
+      name: ${{ env.web-app-name }}
     needs:
       - build-webapp
   deploy-storybook:
     name: Deploy Storybook
     uses: ./.github/workflows/deploy-ipfs.yml
     with:
-      name: Storybook
+      name: ${{ env.storybook-name }}
     needs:
       - build-storybook
