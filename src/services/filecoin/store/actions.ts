@@ -2,33 +2,33 @@ import Filecoin from '@glif/filecoin-wallet-provider';
 import * as constants from './constants';
 
 export function startFetchingFilWalletProvider() {
-	return {
-		type: constants.FETCHING_FILECOIN_WALLET_PROVIDER,
-	}
+    return {
+        type: constants.FETCHING_FILECOIN_WALLET_PROVIDER,
+    };
 }
 
 export function failFetchingFilWalletProvider() {
-	return {
-		type: constants.FETCHING_FILECOIN_WALLET_PROVIDER_FAILURE,
-	}
+    return {
+        type: constants.FETCHING_FILECOIN_WALLET_PROVIDER_FAILURE,
+    };
 }
 
 export function setFilWalletType(data: string) {
-	return {
+    return {
         type: constants.UPDATE_WALLET_TYPE,
-        data
-	}
+        data,
+    };
 }
 
 export function setFilWalletProvider(data: Filecoin) {
-	return {
+    return {
         type: constants.UPDATE_WALLET_PROVIDER,
-        data
-    }
+        data,
+    };
 }
 
 export function resetFilWalletProvider() {
-	return {
+    return {
         type: constants.RESET_WALLET_PROVIDER,
-	}
+    };
 }

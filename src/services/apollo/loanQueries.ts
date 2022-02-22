@@ -2,7 +2,7 @@ import { gql } from '@apollo/client';
 
 export const LOAN_DEALS = gql`
     query LoanDeals($account: Bytes!) {
-        loans (where: {lender: $account}) {
+        loans(where: { lender: $account }) {
             id
             lender
             borrower
@@ -17,11 +17,11 @@ export const LOAN_DEALS = gql`
             state
         }
     }
-`
+`;
 
 export const BORROW_DEALS = gql`
     query BorrowDeals($account: Bytes!) {
-        loans (where: {borrower: $account}) {
+        loans(where: { borrower: $account }) {
             id
             lender
             borrower
@@ -36,11 +36,11 @@ export const BORROW_DEALS = gql`
             state
         }
     }
-`
+`;
 
 export const LOAN_INFO = gql`
     query Loan($id: String!) {
-        loan (id: $id) {
+        loan(id: $id) {
             id
             lender
             borrower
@@ -65,4 +65,4 @@ export const LOAN_INFO = gql`
             }
         }
     }
-`
+`;

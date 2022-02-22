@@ -1,0 +1,23 @@
+name: Build Web App and Storybook
+
+on:
+  push:
+    branches:
+      - master
+      - develop
+
+jobs:
+  build-storybook:
+    name: Build Storybook
+    uses: ./.github/workflows/build-storybook.yml
+    with:
+      publish: true
+      retention-days: 90
+      package-name: Storybook
+  build-webapp:
+    name: Build Web App
+    uses: ./.github/workflows/build-webapp.yml
+    with:
+      publish: true
+      retention-days: 90
+      package-name: WebApp

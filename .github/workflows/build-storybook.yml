@@ -1,0 +1,37 @@
+name: Build Storybook
+
+on:
+  workflow_call:
+    inputs:
+      publish:
+        description: "Publish the storybook artifact to github"
+        default: false
+        type: boolean
+        required: false
+      retention-days:
+        description: "Retention days for the artifact"
+        default: 90
+        type: number
+        required: true
+      package-name:
+        description: "Name of the artifact to upload"
+        type: string
+        required: true
+
+jobs:
+  build-storybook:
+    name: Build Storybook
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - name: Install Dependencies
+        run: npm ci
+      - name: Build Storybook
+        run: npm run build-storybook
+      - if: ${{ inputs.publish }}
+        name: Publish Storybook
+        uses: actions/upload-artifact@master
+        with:
+          name: ${{ inputs.package-name }}
+          path: storybook-static
+          retention-days: ${{ inputs.retention-days }}

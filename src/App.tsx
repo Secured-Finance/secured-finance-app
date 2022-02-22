@@ -1,19 +1,19 @@
-import React, { useEffect, useRef } from 'react';
-import { HashRouter as Router, Route, Switch } from 'react-router-dom';
 import { ApolloProvider } from '@apollo/client/react';
-import { ThemeProvider } from 'styled-components';
-import { useWallet, UseWalletProvider } from 'use-wallet';
-import ModalsProvider from './contexts/Modals';
-import theme from './theme';
-import Lending from './views/Lending';
-import History from './views/History';
-import Exchange from './views/Exchange';
-import SecuredFinanceProvider from './contexts/SecuredFinanceProvider';
-import Account from './views/Account';
-import FilecoinWalletProvider from './contexts/FilecoinWalletProvider';
-import Loan from './views/Loan';
-import { client } from './services/apollo';
+import React from 'react';
+import { HashRouter as Router, Route, Switch } from 'react-router-dom';
 import { Header } from 'src/components/Header';
+import { ThemeProvider } from 'styled-components';
+import { UseWalletProvider } from 'use-wallet';
+import FilecoinWalletProvider from './contexts/FilecoinWalletProvider';
+import ModalsProvider from './contexts/Modals';
+import SecuredFinanceProvider from './contexts/SecuredFinanceProvider';
+import { client } from './services/apollo';
+import theme from './theme';
+import Account from './views/Account';
+import Exchange from './views/Exchange';
+import History from './views/History';
+import Lending from './views/Lending';
+import Loan from './views/Loan';
 
 const App: React.FC = () => {
     return (

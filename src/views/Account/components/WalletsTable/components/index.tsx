@@ -3,4 +3,4 @@ import RenderPrice from './Price';
 import RenderActions from './Actions';
 import RenderPortfolio from './Portfolio';
 
-export { RenderBalance, RenderPrice, RenderActions, RenderPortfolio }
+export { RenderBalance, RenderPrice, RenderActions, RenderPortfolio };

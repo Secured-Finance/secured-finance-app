@@ -1,11 +1,11 @@
-import React from 'react'
-import styled, { css } from 'styled-components'
-import theme from '../../theme'
+import React from 'react';
+import styled, { css } from 'styled-components';
+import theme from '../../theme';
 
 export interface IInput extends React.InputHTMLAttributes<HTMLInputElement> {
-    label: string | Array<string>,
-    onChange: (event: React.FormEvent<HTMLInputElement>) => void,
-    icon?: string
+    label: string | Array<string>;
+    onChange: (event: React.FormEvent<HTMLInputElement>) => void;
+    icon?: string;
 }
 
 export const sharedInputStyles = css`
@@ -17,16 +17,16 @@ export const sharedInputStyles = css`
     padding: 10px 12px;
     margin-bottom: ${theme.spacing[2]}px;
 
-  :focus {
-    outline: none;
-    border-color: ${theme.colors.sfBlue900};
-  }
-`
+    :focus {
+        outline: none;
+        border-color: ${theme.colors.sfBlue900};
+    }
+`;
 
 const InputField = styled.input`
-  ${sharedInputStyles};
-  width: calc(100% - 24px);
-`
+    ${sharedInputStyles};
+    width: calc(100% - 24px);
+`;
 
 export const Label = styled.label`
     display: flex;
@@ -37,26 +37,25 @@ export const Label = styled.label`
     line-height: 14px;
     margin-bottom: ${theme.spacing[2]}px;
     height: 22px;
-`
+`;
 
 const InputContainer = styled.div`
     margin-bottom: ${theme.spacing[2]}px;
-`
+`;
 
-export const Input: React.FC<IInput> = ({label, icon, ...props}) => {
-    return typeof label === "string" ? (
+export const Input: React.FC<IInput> = ({ label, icon, ...props }) => {
+    return typeof label === 'string' ? (
         <InputContainer>
-            <Label> {label}
+            <Label> {label}</Label>
+            <InputField {...props} />
+        </InputContainer>
+    ) : (
+        <InputContainer>
+            <Label>
+                <span>{label[0]}</span>
+                <span style={{ color: theme.colors.cellKey }}>{label[1]}</span>
             </Label>
             <InputField {...props} />
         </InputContainer>
-   ) : (
-       <InputContainer>
-       <Label>
-           <span>{label[0]}</span>
-           <span style={{color: theme.colors.cellKey}}>{label[1]}</span>
-       </Label>
-           <InputField {...props} />
-       </InputContainer>
-   )
-}
+    );
+};
