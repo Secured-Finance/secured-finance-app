@@ -8,8 +8,8 @@ on:
         required: true
 
 jobs:
-  deploy-webapp:
-    name: Deploy Storybook
+  deploy-package:
+    name: Deploy ${{ inputs.name }}
     runs-on: ubuntu-latest
     steps:
       - name: Download Artifact

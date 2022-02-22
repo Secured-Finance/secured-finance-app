@@ -8,6 +8,11 @@ on:
         default: false
         type: boolean
         required: false
+      retention-days:
+        description: "Retention days for the artifact"
+        default: 90
+        type: number
+        required: true
 
 jobs:
   build-storybook:
@@ -25,3 +30,4 @@ jobs:
         with:
           name: Storybook
           path: storybook-static
+          retention-days: ${{ inputs.retention-days }}

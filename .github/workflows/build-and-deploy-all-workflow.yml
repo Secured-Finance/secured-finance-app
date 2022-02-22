@@ -1,11 +1,10 @@
-name: Build and Deploy All
+name: Build Web App and Storybook
 
 on:
   push:
     branches:
       - master
       - develop
-      - SF-*
 
 jobs:
   build-storybook:
@@ -13,20 +12,10 @@ jobs:
     uses: ./.github/workflows/build-storybook.yml
     with:
       publish: true
-  # build-webapp:
-  #   name: Build Web App
-  #   uses: ./.github/workflows/build-webapp.yml
-  #   with:
-  #     publish: true
-  # deploy-webapp:
-  #   name: Deploy Web App
-  #   uses: ./.github/workflows/deploy-webapp.yml
-  #   needs:
-  #     - build-webapp
-  deploy-storybook:
-    name: Deploy Storybook
-    uses: ./.github/workflows/deploy-ipfs.yml
+      retention-days: 90
+  build-webapp:
+    name: Build Web App
+    uses: ./.github/workflows/build-webapp.yml
     with:
-      name: Storybook
-    needs:
-      - build-storybook
+      publish: true
+      retention-days: 90
