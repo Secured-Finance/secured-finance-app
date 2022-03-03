@@ -2,6 +2,11 @@ const path = require('path');
 const { addBeforeLoader, loaderByName } = require('@craco/craco');
 
 module.exports = {
+    style: {
+        postcss: {
+            plugins: [require('tailwindcss'), require('autoprefixer')],
+        },
+    },
     webpack: {
         alias: {
             src: path.resolve(__dirname, 'src'),
