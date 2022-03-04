@@ -8,7 +8,7 @@ module.exports = {
     addons: [
         '@storybook/addon-links',
         '@storybook/addon-essentials',
-        '@storybook/preset-create-react-app',
+        'storybook-preset-craco',
     ],
     typescript: {
         reactDocgen: 'none',
@@ -20,6 +20,7 @@ module.exports = {
             include: path.resolve(__dirname, '../'),
             type: 'javascript/auto',
         });
+
         return config;
     },
 };
