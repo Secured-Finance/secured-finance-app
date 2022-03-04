@@ -1,11 +1,7 @@
 {
   "compilerOptions": {
     "target": "es5",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "baseUrl": "./",
     "allowJs": true,
     "skipLibCheck": true,
@@ -21,13 +17,9 @@
     "jsx": "react-jsx",
     "strictNullChecks": false,
     "noFallthroughCasesInSwitch": true,
-    "typeRoots": [
-      "node_modules/@types",
-      "src/types"
-    ]
+    //TODO: remove this when we fix the issue with error objects
+    "useUnknownInCatchVariables": false,
+    "typeRoots": ["node_modules/@types", "src/types"]
   },
-  "include": [
-    "src",
-    "bootstrap.js"
-  ]
+  "include": ["src", "bootstrap.js"]
 }
