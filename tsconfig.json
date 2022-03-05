@@ -17,8 +17,6 @@
     "jsx": "react-jsx",
     "strictNullChecks": false,
     "noFallthroughCasesInSwitch": true,
-    //TODO: remove this when we fix the issue with error objects
-    "useUnknownInCatchVariables": false,
     "typeRoots": ["node_modules/@types", "src/types"]
   },
   "include": ["src", "bootstrap.js"]
