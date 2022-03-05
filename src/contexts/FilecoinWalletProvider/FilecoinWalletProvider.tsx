@@ -1,8 +1,8 @@
-import React, { createContext, ReactNode, useEffect, useState } from 'react';
 import { Network as FilNetwork } from '@glif/filecoin-address';
-
-import { providers } from '../../services/filecoin/providers';
+import React, { createContext, ReactNode, useEffect, useState } from 'react';
 import { useWallet } from 'use-wallet';
+import { providers } from '../../services/filecoin/providers';
+
 export const CACHED_PROVIDER_KEY = 'CACHED_PROVIDER_KEY';
 
 export const Context = createContext({
@@ -41,7 +41,7 @@ const FilecoinWasmProvider: React.FC<FilecoinWalletProviderProps> = ({
             } catch (err) {
                 await setLoaded(false);
                 console.error(
-                    `Unexpected error in loadWasm. [Message: ${err.message}]`
+                    `Unexpected error in loadWasm. [Message: ${(err as Error).message}]`
                 );
             }
         }

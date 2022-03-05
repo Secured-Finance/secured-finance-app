@@ -1,24 +1,24 @@
+import { Network } from '@glif/filecoin-address';
 import Filecoin from '@glif/filecoin-wallet-provider';
+import { Dispatch } from 'react';
+import createLedgerProvider from '../filecoin/providers/LedgerProvider';
+import badVersion, { IBadVersionProps } from './badVersion';
+import createTransport from './createTransport';
 import {
-    LEDGER_USER_INITIATED_IMPORT,
+    LEDGER_BAD_VERSION,
+    LEDGER_BUSY,
     LEDGER_CONNECTED,
-    LEDGER_NOT_FOUND,
-    LEDGER_REPLUG,
-    LEDGER_LOCKED,
-    LEDGER_UNLOCKED,
     LEDGER_ESTABLISHING_CONNECTION_W_FILECOIN_APP,
     LEDGER_FILECOIN_APP_NOT_OPEN,
     LEDGER_FILECOIN_APP_OPEN,
-    LEDGER_BUSY,
+    LEDGER_LOCKED,
+    LEDGER_NOT_FOUND,
+    LEDGER_REPLUG,
+    LEDGER_UNLOCKED,
     LEDGER_USED_BY_ANOTHER_APP,
+    LEDGER_USER_INITIATED_IMPORT,
     WEBUSB_UNSUPPORTED,
-    LEDGER_BAD_VERSION,
 } from './ledgerStateManagement';
-import createTransport from './createTransport';
-import badVersion, { IBadVersionProps } from './badVersion';
-import { Dispatch } from 'react';
-import createLedgerProvider from '../filecoin/providers/LedgerProvider';
-import { Network } from '@glif/filecoin-address';
 
 type ResponseType = { device_locked: boolean } & IBadVersionProps;
 
@@ -41,30 +41,29 @@ export const setLedgerProvider = async (
         dispatch({ type: LEDGER_CONNECTED });
         return provider;
     } catch (err) {
+        const e = err as Error;
         if (
-            err.message &&
-            err.message.includes('TRANSPORT NOT SUPPORTED BY DEVICE')
+            e.message &&
+            e.message.includes('TRANSPORT NOT SUPPORTED BY DEVICE')
         ) {
             dispatch({ type: WEBUSB_UNSUPPORTED });
         } else if (
-            err.message &&
-            err.message.toLowerCase().includes('unable to claim interface.')
+            e.message &&
+            e.message.toLowerCase().includes('unable to claim interface.')
         ) {
             dispatch({ type: LEDGER_USED_BY_ANOTHER_APP });
         } else if (
-            err.message &&
-            err.message
-                .toLowerCase()
-                .includes('transporterror: invalid channel')
+            e.message &&
+            e.message.toLowerCase().includes('transporterror: invalid channel')
         ) {
             dispatch({ type: LEDGER_REPLUG });
         } else if (
-            err.message &&
-            err.message.toLowerCase().includes('no device selected')
+            e.message &&
+            e.message.toLowerCase().includes('no device selected')
         ) {
             dispatch({ type: LEDGER_NOT_FOUND });
         }
-        console.log(err);
+        console.log(e);
         return false;
     }
 };
@@ -90,25 +89,24 @@ export const checkLedgerConfiguration = async (
         dispatch({ type: LEDGER_FILECOIN_APP_OPEN, payload: walletProvider });
         return true;
     } catch (err) {
+        const e = err as Error;
         if (
-            err.message &&
-            err.message
-                .toLowerCase()
-                .includes('transporterror: invalid channel')
+            e.message &&
+            e.message.toLowerCase().includes('transporterror: invalid channel')
         ) {
             dispatch({ type: LEDGER_REPLUG });
         } else if (
-            err.message &&
-            err.message.toLowerCase().includes('ledger device locked or busy')
+            e.message &&
+            e.message.toLowerCase().includes('ledger device locked or busy')
         ) {
             dispatch({ type: LEDGER_BUSY });
         } else if (
-            err.message &&
-            err.message.toLowerCase().includes('app does not seem to be open')
+            e.message &&
+            e.message.toLowerCase().includes('app does not seem to be open')
         ) {
             dispatch({ type: LEDGER_FILECOIN_APP_NOT_OPEN });
         } else {
-            console.log(err);
+            console.log(e);
             dispatch({ type: LEDGER_REPLUG });
         }
         return false;
