@@ -41,7 +41,9 @@ const FilecoinWasmProvider: React.FC<FilecoinWalletProviderProps> = ({
             } catch (err) {
                 await setLoaded(false);
                 console.error(
-                    `Unexpected error in loadWasm. [Message: ${(err as Error).message}]`
+                    `Unexpected error in loadWasm. [Message: ${
+                        (err as Error).message
+                    }]`
                 );
             }
         }
