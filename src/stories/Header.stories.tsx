@@ -1,8 +1,8 @@
+import { Meta, Story } from '@storybook/react';
 import React from 'react';
-import { Story, Meta } from '@storybook/react';
-import { Header } from 'src/components/Header';
-import { HashRouter as Router } from 'react-router-dom';
 import { Provider } from 'react-redux';
+import { HashRouter as Router } from 'react-router-dom';
+import { Header } from 'src/components/Header/Header';
 import { default as store } from 'src/store';
 
 export default {
