@@ -1,15 +1,14 @@
-import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { Logo } from 'src/components/new/icons';
 import { WalletButton } from './WalletButton';
 
-export const Header: React.FC = () => {
+export const Header = () => {
     return (
         <div className='border-b-2 border-solid border-strokeGrey'>
-            <div className='m-auto flex justify-between py-0'>
+            <div className='m-auto flex justify-between py-3'>
                 <NavLink
-                    className='flex cursor-pointer items-center border-r-2 border-solid border-strokeGrey py-3 pl-24 pr-72'
-                    to={'/'}
+                    className='flex w-2/5 cursor-pointer items-center border-r-2 border-solid border-strokeGrey pl-12'
+                    to='/'
                 >
                     <Logo fill={'#666cf3'} size={40} />
                     <span className='ml-4 text-purple'>
@@ -17,7 +16,7 @@ export const Header: React.FC = () => {
                         <span>Finance</span>
                     </span>
                 </NavLink>
-                <div className='flex flex-auto items-center justify-start space-x-8 border-l-2 border-solid pl-4'>
+                <div className='flex flex-grow items-center justify-start space-x-8 border-l-2 border-solid pl-4'>
                     <ItemLink text='Lending' link='/' />
                     <ItemLink text='Terminal' link='/exchange' />
                     <ItemLink text='History' link='/history' />
