@@ -1,6 +1,6 @@
 import { NavLink } from 'react-router-dom';
 import { Logo } from 'src/components/new/icons';
-import { WalletButton } from './WalletButton';
+import { WalletButton } from '../WalletButton/WalletButton';
 
 export const Header = () => {
     return (

@@ -10,8 +10,19 @@ export default {
     component: Header,
 } as Meta;
 
+export const Connected: Story = () => {
+    localStorage.setItem('CACHED_PROVIDER_KEY', 'connected');
+    return (
+        <Provider store={store}>
+            <Router>
+                <Header />
+            </Router>
+        </Provider>
+    );
+};
+
 export const Default: Story = () => {
-    // localStorage.setItem('CACHED_PROVIDER_KEY', 'connected');
+    localStorage.removeItem('CACHED_PROVIDER_KEY');
     return (
         <Provider store={store}>
             <Router>
