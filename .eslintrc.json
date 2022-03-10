@@ -1,6 +1,23 @@
 {
   "root": true,
-  "extends": ["react-app", "react-app/jest", "plugin:prettier/recommended"],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "project": "./tsconfig.json",
+    "sourceType": "module"
+  },
+  "env": {
+    "browser": true,
+    "node": false,
+    "es6": true
+  },
+  "plugins": ["@typescript-eslint"],
+  "extends": [
+    "react-app",
+    "react-app/jest",
+    "plugin:prettier/recommended",
+    "plugin:@typescript-eslint/recommended",
+    "prettier"
+  ],
   "overrides": [
     {
       "files": ["**/*.@(story|stories).*"],
