@@ -53,9 +53,9 @@ export const chartOptions = {
         callbacks: {
             label: function (item: any, data: any) {
                 if (item.value > 0) {
-                    var label = data.datasets[item.datasetIndex].label || '';
-                    var yLabel = item.yLabel;
-                    var content = '';
+                    const label = data.datasets[item.datasetIndex].label || '';
+                    const yLabel = item.yLabel;
+                    let content = '';
 
                     if (data.datasets.length > 1) {
                         content += label;

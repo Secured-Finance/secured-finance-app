@@ -26,7 +26,7 @@ export const useTotalUSDBalance = () => {
     const inEth = new BigNumber(balance)
         .dividedBy(new BigNumber(10).pow(18))
         .toNumber();
-    let usdBalance = new BigNumber(inEth)
+    const usdBalance = new BigNumber(inEth)
         .times(new BigNumber(ethPrice))
         .toNumber();
 

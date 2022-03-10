@@ -13,7 +13,7 @@ export const useCancelOrder = (ccy: number, term: number, orderId: any) => {
 
     const handleCancelOrder = useCallback(async () => {
         try {
-            let tx = await cancelOrder(lendingMarket, account, orderId);
+            const tx = await cancelOrder(lendingMarket, account, orderId);
             return tx;
         } catch (e) {
             return false;

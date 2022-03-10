@@ -128,7 +128,7 @@ export const useFilecoinUSDBalance = async () => {
                     Network.TEST
                 );
                 const balance = await walletProvider.getBalance(filAddr);
-                let usdBalance = new BigNumber(balance.toFil())
+                const usdBalance = new BigNumber(balance.toFil())
                     .times(new BigNumber(filUSDPrice))
                     .toNumber();
                 dispatch(updateFilWalletUSDBalance(usdBalance));
@@ -228,7 +228,7 @@ export const useFilecoinWalletStore = () => {
 
     useEffect(() => {
         // update portfolio share on totalUSDBalance change
-        let portfolioShare =
+        const portfolioShare =
             totalUSDBalance === 0
                 ? 0
                 : new BigNumber(usdBalance)

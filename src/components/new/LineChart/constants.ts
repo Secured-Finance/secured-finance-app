@@ -1,5 +1,5 @@
 const canvas: HTMLCanvasElement = document.createElement('canvas');
-let ctx: CanvasRenderingContext2D = canvas.getContext('2d');
+const ctx: CanvasRenderingContext2D = canvas.getContext('2d');
 
 const purpleGradient = ctx.createLinearGradient(0, 0, 0, 290);
 purpleGradient.addColorStop(0, 'rgba(91, 80, 222, 0.5)');

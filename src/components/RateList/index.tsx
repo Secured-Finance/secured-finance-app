@@ -1,13 +1,8 @@
-import React, { useContext } from 'react';
-import styled, { ThemeContext } from 'styled-components';
+import React from 'react';
+import styled from 'styled-components';
 import theme from '../../theme';
-import { Rate } from './types';
 
-interface RateListProps {
-    // rates: Array<Rate>,
-}
-
-const RateList: React.FC<RateListProps> = () => {
+const RateList = () => {
     const testRates = [
         { token: 'ETH', lend: 7.0, borrow: 9.0 },
         { token: 'FIL', lend: 8.0, borrow: 10.0 },

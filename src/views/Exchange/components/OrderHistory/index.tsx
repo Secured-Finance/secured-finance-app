@@ -1,4 +1,4 @@
-import React, { HTMLAttributes, useEffect, useState } from 'react';
+import React, { HTMLAttributes, useState } from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 import { LendingTerminalStore } from '../../../../store/lendingTerminal';
@@ -7,9 +7,7 @@ import theme from '../../../../theme';
 import { FilledOrders } from './components/FilledOrders';
 import { OpenOrders } from './components/Orders';
 
-interface OrderHistoryProps {}
-
-type MergedProps = LendingTerminalStore & OrderHistoryProps;
+type MergedProps = LendingTerminalStore;
 
 const OrderHistory: React.FC<MergedProps> = ({ currencyIndex, termsIndex }) => {
     const ordersTabs = ['Open Orders', 'Trading History'];

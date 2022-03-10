@@ -9,8 +9,12 @@ interface ModalsContext {
 }
 
 export const Context = createContext<ModalsContext>({
-    onPresent: () => {},
-    onDismiss: () => {},
+    onPresent: () => {
+        /* Do Nothing */
+    },
+    onDismiss: () => {
+        /* Do Nothing */
+    },
 });
 
 const Modals: React.FC = ({ children }) => {

@@ -26,7 +26,7 @@ const Account: React.FC = () => {
 
     useMemo(() => {
         async function updateTable() {
-            let array = [];
+            const array = [];
             array.push(ethWallet, filWallet);
             setTableData(array);
         }

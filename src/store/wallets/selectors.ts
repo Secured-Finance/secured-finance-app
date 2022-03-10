@@ -31,7 +31,7 @@ export const isAnyWalletConnected = (
     walletName?: 'filecoin' | 'ethereum'
 ) => {
     const wallets: any = state.wallets;
-    for (let key in wallets) {
+    for (const key in wallets) {
         if (
             wallets.hasOwnProperty(key) &&
             wallets[key].hasOwnProperty('actions') &&

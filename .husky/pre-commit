@@ -2,3 +2,5 @@
 . "$(dirname "$0")/_/husky.sh"
 
 npm run test -- --watchAll=false
+npm run lint:check
+npm run prettier:check

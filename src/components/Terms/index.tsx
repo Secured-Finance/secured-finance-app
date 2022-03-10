@@ -11,7 +11,7 @@ interface TermsProps {
 const Terms: React.FC<TermsProps> = () => {
     const testTabs = ['1mo', '3mo', '6mo', '1yr', '2yr', '5yr'];
     const [tabValue, setTabValue] = useState('3mo');
-    let { url } = useRouteMatch();
+    const { url } = useRouteMatch();
 
     const handleChange = (tab: React.SetStateAction<string>) => () => {
         setTabValue(tab);

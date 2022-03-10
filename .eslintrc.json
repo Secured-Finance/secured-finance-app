@@ -18,6 +18,10 @@
     "plugin:@typescript-eslint/recommended",
     "prettier"
   ],
+  "rules": {
+    // few ts-ignore rules which need to be removed. DO NOT ADD MORE PLEASE
+    "@typescript-eslint/ban-ts-comment": "warn"
+  },
   "overrides": [
     {
       "files": ["**/*.@(story|stories).*"],
