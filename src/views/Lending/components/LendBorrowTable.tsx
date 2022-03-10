@@ -1,36 +1,36 @@
-import cm from './LendBorrowTable.module.scss';
-import { Dropdown } from 'src/components/new/Dropdown';
-import { Input } from 'src/components/new/Input';
-import { FieldValue } from 'src/components/new/FieldValue';
-import { Button } from 'src/components/new/Button';
+import BigNumber from 'bignumber.js/bignumber';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { connect, useDispatch, useSelector } from 'react-redux';
+import { Button } from 'src/components/new/Button';
+import { Dropdown } from 'src/components/new/Dropdown';
+import { FieldValue } from 'src/components/new/FieldValue';
+import { Input } from 'src/components/new/Input';
+import { useEthereumUsd, useFilUsd } from 'src/hooks/useAssetPrices';
+import { usePlaceOrder } from 'src/hooks/usePlaceOrder';
+import { getUSDCPrice } from 'src/store/assetPrices/selectors';
 import {
+    updateBorrowAmount,
+    updateBorrowRate,
     updateLendAmount,
+    updateLendRate,
     updateMainCurrency,
     updateMainTerms,
-    updateBorrowAmount,
-    updateLendRate,
-    updateBorrowRate,
 } from 'src/store/lending';
+import { LendingStore } from 'src/store/lending/types';
+import { RootState } from 'src/store/types';
+import {
+    getEthUSDBalance,
+    getFilUSDBalance,
+} from 'src/store/wallets/selectors';
 import {
     currencyListDropdown,
     percentFormat,
     termsList,
     usdFormat,
 } from 'src/utils';
-import { connect, useDispatch, useSelector } from 'react-redux';
-import { LendingStore } from 'src/store/lending/types';
-import { RootState } from 'src/store/types';
-import { getUSDCPrice } from 'src/store/assetPrices/selectors';
-import {
-    getEthUSDBalance,
-    getFilUSDBalance,
-} from 'src/store/wallets/selectors';
 import { daysInYear } from '../constants';
-import { usePlaceOrder } from 'src/hooks/usePlaceOrder';
 import BorrowCollateralManagement from './BorrowCollateralManagement';
-import BigNumber from 'bignumber.js/bignumber';
-import { useEthereumUsd, useFilUsd } from 'src/hooks/useAssetPrices';
+import cm from './LendBorrowTable.module.scss';
 
 interface ILendBorrowTable extends LendingStore {
     selectedTab: string;
@@ -102,7 +102,7 @@ export const LendBorrowTable: React.FC<ILendBorrowTable> = ({
             default:
                 return new BigNumber(0);
         }
-    }, [borrowAmount, lendAmount, selectedCcy, isBorrow]);
+    }, [amount, selectedCcy, filPrice, ethPrice, usdcPrice]);
 
     const handleAmountChange = useCallback(
         (e: React.FormEvent<HTMLInputElement>) => {
@@ -121,14 +121,7 @@ export const LendBorrowTable: React.FC<ILendBorrowTable> = ({
         const p = interest * (daysInYear[termsIndex] / 360);
 
         return USDAmount.multipliedBy(p).toNumber();
-    }, [
-        termsIndex,
-        currencyIndex,
-        lendRate,
-        lendAmount,
-        borrowRate,
-        borrowAmount,
-    ]);
+    }, [termsIndex, USDAmount, rate]);
 
     const { onPlaceOrder: onPlaceLend } = usePlaceOrder(
         currencyIndex,
@@ -240,7 +233,11 @@ export const LendBorrowTable: React.FC<ILendBorrowTable> = ({
                 <FieldValue field={'Transaction Fee'} value={'$1.2'} large />
             </div>
 
-            <Button onClick={handleLendDeal} disabled={isButtonDisabled}>
+            <Button
+                onClick={handleLendDeal}
+                disabled={isButtonDisabled}
+                style={{ marginTop: '32px' }}
+            >
                 {tabName}
             </Button>
         </>

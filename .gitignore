@@ -14,6 +14,9 @@
 # storybook files
 /storybook-static
 
+# vs code
+.vscode
+
 # misc
 .DS_Store
 .env.local
