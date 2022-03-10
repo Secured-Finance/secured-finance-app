@@ -1,5 +1,5 @@
-import React from 'react';
 import cx from 'classnames';
+import React from 'react';
 import cm from './Tabs.module.scss';
 
 interface ITab extends React.HTMLAttributes<HTMLDivElement> {
@@ -59,5 +59,7 @@ export const Tabs: React.FC<ITabs> = ({
 
 Tabs.defaultProps = {
     options: [],
-    onChange: () => {},
+    onChange: () => {
+        /* Do Nothing */
+    },
 };

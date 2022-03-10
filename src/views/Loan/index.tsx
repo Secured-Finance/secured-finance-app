@@ -50,7 +50,7 @@ type CombinedProps = LoanScreenProps;
 
 const LoanScreen: React.FC<CombinedProps> = ({}) => {
     const { account } = useWallet();
-    let params: any = useParams();
+    const params: any = useParams();
     const loan = useLoanInformation(params.loanId);
     const [couponPayment, setCouponPayment] = useState<CouponPayment>();
     const [counterpartyAddr, setCounterpartyAddr] = useState('');
@@ -88,7 +88,7 @@ const LoanScreen: React.FC<CombinedProps> = ({}) => {
 
     const totalInterest = (amount: number, rate: number, term: number) => {
         let periods: number;
-        var interestRate = new BigNumber(rate).dividedBy(10000).toNumber();
+        const interestRate = new BigNumber(rate).dividedBy(10000).toNumber();
         switch (term) {
             case 0:
                 periods = 0.25;
@@ -111,7 +111,7 @@ const LoanScreen: React.FC<CombinedProps> = ({}) => {
             default:
                 break;
         }
-        var interestPayments = new BigNumber(amount)
+        const interestPayments = new BigNumber(amount)
             .multipliedBy(interestRate)
             .multipliedBy(periods)
             .toNumber();
@@ -124,7 +124,7 @@ const LoanScreen: React.FC<CombinedProps> = ({}) => {
             loan?.rate,
             loan?.term
         );
-        var totalRepay = new BigNumber(loan?.amount)
+        const totalRepay = new BigNumber(loan?.amount)
             .plus(interestPayments)
             .toNumber();
 
@@ -140,7 +140,7 @@ const LoanScreen: React.FC<CombinedProps> = ({}) => {
     };
 
     const couponUsdPayment = (amount: number) => {
-        var usdPayment = new BigNumber(amount)
+        const usdPayment = new BigNumber(amount)
             .multipliedBy(filPrice)
             .toNumber();
         return usdFormat(usdPayment);

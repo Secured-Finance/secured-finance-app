@@ -70,7 +70,7 @@ const RenderPrivateKeyContainer: React.FC<ContainerProps> = ({
             if (keyDerive && data != undefined) {
                 const isMnemonic = validateMnemonic(data);
                 if (isMnemonic) {
-                    let key = keyDerive(data, TestNetPath, '');
+                    const key = keyDerive(data, TestNetPath, '');
                     setMnemonicAddr(key.address);
                     setSecretSet(true);
                 } else {
@@ -88,7 +88,7 @@ const RenderPrivateKeyContainer: React.FC<ContainerProps> = ({
                 const pkB64 = Buffer.from(data, 'base64');
                 const isPKB64 = isPrivate(pkB64);
                 if (isPKB64) {
-                    let key = keyRecover(pkB64, true);
+                    const key = keyRecover(pkB64, true);
                     setPrivateKeyAddr(key.address);
                     setSecretSet(true);
                 }

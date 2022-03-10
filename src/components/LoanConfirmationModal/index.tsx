@@ -69,7 +69,7 @@ const LoanConfirmationModal: React.FC<CombinedProps> = ({
 
     const totalInterest = (amount: number, rate: number, term: string) => {
         let periods: number;
-        var interestRate = new BigNumber(rate).dividedBy(10000).toNumber();
+        const interestRate = new BigNumber(rate).dividedBy(10000).toNumber();
         switch (term) {
             case '0':
                 periods = 0.25;
@@ -92,7 +92,7 @@ const LoanConfirmationModal: React.FC<CombinedProps> = ({
             default:
                 break;
         }
-        var interestPayments = new BigNumber(amount)
+        const interestPayments = new BigNumber(amount)
             .multipliedBy(interestRate)
             .multipliedBy(periods)
             .toNumber();
@@ -101,15 +101,15 @@ const LoanConfirmationModal: React.FC<CombinedProps> = ({
 
     const handleTotalRepay = () => {
         const interestPayments = totalInterest(loan.amt, loan.rate, loan.term);
-        var totalRepay = new BigNumber(loan.amt)
+        const totalRepay = new BigNumber(loan.amt)
             .plus(interestPayments)
             .toNumber();
         return ordinaryFormat(totalRepay) + ' FIL';
     };
 
     const constructSchedule = () => {
-        let parsedScheduleDates: Array<ScheduleItem> = [];
-        for (var i = 0; i < loan.schedule[1].length; i++) {
+        const parsedScheduleDates: Array<ScheduleItem> = [];
+        for (let i = 0; i < loan.schedule[1].length; i++) {
             const item: ScheduleItem = {
                 date: loan.schedule[1][i],
                 coupon: loan.schedule[2][i],
@@ -120,11 +120,11 @@ const LoanConfirmationModal: React.FC<CombinedProps> = ({
     };
 
     const nextCouponPayment = () => {
-        var payment = loan.schedule[2][0];
+        const payment = loan.schedule[2][0];
         const usdAmount = new BigNumber(payment)
             .multipliedBy(filPrice)
             .toNumber();
-        var nextCoupon: NextCoupon = {
+        const nextCoupon: NextCoupon = {
             dueDate: loan.schedule[1][0],
             coupon: payment,
             notification: loan.schedule[0][0],

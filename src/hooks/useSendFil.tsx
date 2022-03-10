@@ -115,7 +115,7 @@ export const useSendFil = (
     const send = async () => {
         setFetchingTxDetails(true);
 
-        let provider = walletProvider;
+        const provider = walletProvider;
 
         if (provider) {
             const nonce = await provider.getNonce(wallet.address);

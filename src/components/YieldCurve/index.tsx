@@ -29,17 +29,17 @@ export default function YieldCurve() {
 
     defaults.global.defaultFontColor = theme.colors.cellKey;
 
-    let canvas: HTMLCanvasElement = document.createElement('canvas');
-    let ctx: CanvasRenderingContext2D = canvas.getContext('2d');
-    var blueGradient = ctx.createLinearGradient(0, 0, 0, 0);
+    const canvas: HTMLCanvasElement = document.createElement('canvas');
+    const ctx: CanvasRenderingContext2D = canvas.getContext('2d');
+    const blueGradient = ctx.createLinearGradient(0, 0, 0, 0);
     blueGradient.addColorStop(0, 'rgba(0, 122, 255, 0.5)');
     blueGradient.addColorStop(1, 'rgba(15, 26, 34, 0.1)');
 
-    var yellowGradient = ctx.createLinearGradient(0, 0, 0, 0);
+    const yellowGradient = ctx.createLinearGradient(0, 0, 0, 0);
     yellowGradient.addColorStop(0, 'rgba(242, 109, 79, 1)');
     yellowGradient.addColorStop(1, 'rgba(15, 26, 34, 0.1)');
 
-    var purpleGradient = ctx.createLinearGradient(0, 0, 0, 250);
+    const purpleGradient = ctx.createLinearGradient(0, 0, 0, 250);
     purpleGradient.addColorStop(0, 'rgba(145, 59, 175, 1)');
     purpleGradient.addColorStop(0.5, 'rgba(15, 26, 34, 0.25)');
     purpleGradient.addColorStop(1, 'rgba(15, 26, 34, 0.1)');
@@ -52,7 +52,7 @@ export default function YieldCurve() {
 
     useMemo(() => {
         async function updateGraph() {
-            let graphData = await {
+            const graphData = await {
                 labels: labels,
                 datasets: [
                     {
