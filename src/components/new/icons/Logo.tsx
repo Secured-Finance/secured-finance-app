@@ -14,276 +14,276 @@ export const Logo: React.FC<IIcon> = ({ fill = 'white', size = 56 }) => {
                 d='M27.527 29.913C28.936 29.913 30.0761 28.7655 30.0761 27.3525C30.0761 25.9396 28.936 24.7921 27.527 24.7921C26.118 24.7921 24.9778 25.9396 24.9778 27.3525C24.9778 28.7655 26.118 29.913 27.527 29.913Z'
                 fill={fill}
                 stroke={fill}
-                stroke-width='0.5'
+                strokeWidth='0.5'
             />
             <path
                 d='M15.3482 19.1792C16.3291 19.1792 17.1222 18.3805 17.1222 17.3977C17.1222 16.415 16.3291 15.6162 15.3482 15.6162C14.3672 15.6162 13.5742 16.415 13.5742 17.3977C13.5742 18.3805 14.3672 19.1792 15.3482 19.1792Z'
                 fill={fill}
                 stroke={fill}
-                stroke-width='0.5'
+                strokeWidth='0.5'
             />
             <path
                 d='M14.6781 37.7818C15.8041 37.7818 16.7148 36.8648 16.7148 35.7362C16.7148 34.6077 15.8041 33.6907 14.6781 33.6907C13.552 33.6907 12.6413 34.6077 12.6413 35.7362C12.6413 36.8648 13.552 37.7818 14.6781 37.7818Z'
                 fill={fill}
                 stroke={fill}
-                stroke-width='0.5'
+                strokeWidth='0.5'
             />
             <path
                 d='M19.6443 51.407C20.6252 51.407 21.4183 50.6082 21.4183 49.6255C21.4183 48.6427 20.6252 47.844 19.6443 47.844C18.6634 47.844 17.8703 48.6427 17.8703 49.6255C17.8703 50.6082 18.6634 51.407 19.6443 51.407Z'
                 fill={fill}
                 stroke={fill}
-                stroke-width='0.5'
+                strokeWidth='0.5'
             />
             <path
                 d='M34.6872 53.5194C35.6681 53.5194 36.4612 52.7206 36.4612 51.7379C36.4612 50.7551 35.6681 49.9564 34.6872 49.9564C33.7063 49.9564 32.9132 50.7551 32.9132 51.7379C32.9132 52.7206 33.7063 53.5194 34.6872 53.5194Z'
                 fill={fill}
                 stroke={fill}
-                stroke-width='0.5'
+                strokeWidth='0.5'
             />
             <path
                 d='M21.431 6.62347C22.6078 6.62347 23.5598 5.6651 23.5598 4.48549C23.5598 3.30587 22.6078 2.3475 21.431 2.3475C20.2542 2.3475 19.3023 3.30587 19.3023 4.48549C19.3023 5.6651 20.2542 6.62347 21.431 6.62347Z'
                 fill={fill}
                 stroke={fill}
-                stroke-width='0.5'
+                strokeWidth='0.5'
             />
             <path
                 d='M36.7366 6.069C37.7176 6.069 38.5106 5.27023 38.5106 4.28749C38.5106 3.30475 37.7176 2.50598 36.7366 2.50598C35.7557 2.50598 34.9626 3.30475 34.9626 4.28749C34.9626 5.27023 35.7557 6.069 36.7366 6.069Z'
                 fill={fill}
                 stroke={fill}
-                stroke-width='0.5'
+                strokeWidth='0.5'
             />
             <path
                 d='M43.3451 30.2299C44.326 30.2299 45.1191 29.4311 45.1191 28.4483C45.1191 27.4656 44.326 26.6668 43.3451 26.6668C42.3642 26.6668 41.5711 27.4656 41.5711 28.4483C41.5711 29.4311 42.3642 30.2299 43.3451 30.2299Z'
                 fill={fill}
                 stroke={fill}
-                stroke-width='0.5'
+                strokeWidth='0.5'
             />
             <path
                 d='M52.3972 30.2299C53.3781 30.2299 54.1712 29.4311 54.1712 28.4483C54.1712 27.4656 53.3781 26.6668 52.3972 26.6668C51.4163 26.6668 50.6232 27.4656 50.6232 28.4483C50.6232 29.4311 51.4163 30.2299 52.3972 30.2299Z'
                 fill={fill}
                 stroke={fill}
-                stroke-width='0.5'
+                strokeWidth='0.5'
             />
             <path
                 d='M29.0773 2.80792C29.6446 2.80792 30.1025 2.34608 30.1025 1.77896C30.1025 1.21184 29.6446 0.75 29.0773 0.75C28.51 0.75 28.0522 1.21184 28.0522 1.77896C28.0522 2.34608 28.51 2.80792 29.0773 2.80792Z'
                 fill={fill}
                 stroke={fill}
-                stroke-width='0.5'
+                strokeWidth='0.5'
             />
             <path
                 d='M33.1763 13.7397C33.7436 13.7397 34.2014 13.2779 34.2014 12.7108C34.2014 12.1436 33.7436 11.6818 33.1763 11.6818C32.609 11.6818 32.1512 12.1436 32.1512 12.7108C32.1512 13.2779 32.609 13.7397 33.1763 13.7397Z'
                 fill={fill}
                 stroke={fill}
-                stroke-width='0.5'
+                strokeWidth='0.5'
             />
             <path
                 d='M31.8231 44.4492C32.775 44.4492 33.5446 43.674 33.5446 42.7205C33.5446 41.7669 32.775 40.9918 31.8231 40.9918C30.8712 40.9918 30.1017 41.7669 30.1017 42.7205C30.1017 43.674 30.8712 44.4492 31.8231 44.4492Z'
                 fill={fill}
                 stroke={fill}
-                stroke-width='0.5'
+                strokeWidth='0.5'
             />
             <path
                 d='M44.3173 9.23765C45.1023 9.23765 45.7366 8.59848 45.7366 7.81261C45.7366 7.02674 45.1023 6.38757 44.3173 6.38757C43.5323 6.38757 42.8981 7.02674 42.8981 7.81261C42.8981 8.59848 43.5323 9.23765 44.3173 9.23765Z'
                 fill={fill}
                 stroke={fill}
-                stroke-width='0.5'
+                strokeWidth='0.5'
             />
             <path
                 d='M42.8459 50.3375C43.4133 50.3375 43.8711 49.8757 43.8711 49.3086C43.8711 48.7415 43.4133 48.2796 42.8459 48.2796C42.2786 48.2796 41.8208 48.7415 41.8208 49.3086C41.8208 49.8757 42.2786 50.3375 42.8459 50.3375Z'
                 fill={fill}
                 stroke={fill}
-                stroke-width='0.5'
+                strokeWidth='0.5'
             />
             <path
                 d='M27.2643 54.9321C27.8316 54.9321 28.2894 54.4703 28.2894 53.9031C28.2894 53.336 27.8316 52.8742 27.2643 52.8742C26.697 52.8742 26.2391 53.336 26.2391 53.9031C26.2391 54.4703 26.697 54.9321 27.2643 54.9321Z'
                 fill={fill}
                 stroke={fill}
-                stroke-width='0.5'
+                strokeWidth='0.5'
             />
             <path
                 d='M52.3972 38.0987C52.8556 38.0987 53.2252 37.7255 53.2252 37.2677C53.2252 36.81 52.8556 36.4368 52.3972 36.4368C51.9387 36.4368 51.5691 36.81 51.5691 37.2677C51.5691 37.7255 51.9387 38.0987 52.3972 38.0987Z'
                 fill={fill}
                 stroke={fill}
-                stroke-width='0.5'
+                strokeWidth='0.5'
             />
             <path
                 d='M53.2248 21.7934C53.7922 21.7934 54.25 21.3315 54.25 20.7644C54.25 20.1973 53.7922 19.7354 53.2248 19.7354C52.6575 19.7354 52.1997 20.1973 52.1997 20.7644C52.1997 21.3315 52.6575 21.7934 53.2248 21.7934Z'
                 fill={fill}
                 stroke={fill}
-                stroke-width='0.5'
+                strokeWidth='0.5'
             />
             <path
                 d='M12.379 49.1229C12.9463 49.1229 13.4041 48.6611 13.4041 48.0939C13.4041 47.5268 12.9463 47.065 12.379 47.065C11.8116 47.065 11.3538 47.5268 11.3538 48.0939C11.3538 48.6611 11.8116 49.1229 12.379 49.1229Z'
                 fill={fill}
                 stroke={fill}
-                stroke-width='0.5'
+                strokeWidth='0.5'
             />
             <path
                 d='M47.8909 16.103C48.8065 16.103 49.5466 15.3575 49.5466 14.4403C49.5466 13.5232 48.8065 12.7776 47.8909 12.7776C46.9753 12.7776 46.2351 13.5232 46.2351 14.4403C46.2351 15.3575 46.9753 16.103 47.8909 16.103Z'
                 fill={fill}
                 stroke={fill}
-                stroke-width='0.5'
+                strokeWidth='0.5'
             />
             <path
                 d='M46.472 43.6042C47.1627 43.6042 47.7205 43.0419 47.7205 42.3508C47.7205 41.6597 47.1627 41.0974 46.472 41.0974C45.7813 41.0974 45.2235 41.6597 45.2235 42.3508C45.2235 43.0419 45.7813 43.6042 46.472 43.6042Z'
                 fill={fill}
                 stroke={fill}
-                stroke-width='0.5'
+                strokeWidth='0.5'
             />
             <path
                 d='M4.53563 28.1702C5.41495 28.1702 6.1257 27.4542 6.1257 26.5736C6.1257 25.6929 5.41495 24.9769 4.53563 24.9769C3.6563 24.9769 2.94556 25.6929 2.94556 26.5736C2.94556 27.4542 3.6563 28.1702 4.53563 28.1702Z'
                 fill={fill}
                 stroke={fill}
-                stroke-width='0.5'
+                strokeWidth='0.5'
             />
             <path
                 d='M7.57049 42.4159C8.13781 42.4159 8.59563 41.9541 8.59563 41.387C8.59563 40.8199 8.13781 40.358 7.57049 40.358C7.00316 40.358 6.54535 40.8199 6.54535 41.387C6.54535 41.9541 7.00316 42.4159 7.57049 42.4159Z'
                 fill={fill}
                 stroke={fill}
-                stroke-width='0.5'
+                strokeWidth='0.5'
             />
             <path
                 d='M2.47297 35.2997C2.87341 35.2997 3.19593 34.9738 3.19593 34.5744C3.19593 34.175 2.87341 33.8491 2.47297 33.8491C2.07252 33.8491 1.75 34.175 1.75 34.5744C1.75 34.9738 2.07253 35.2997 2.47297 35.2997Z'
                 fill={fill}
                 stroke={fill}
-                stroke-width='0.5'
+                strokeWidth='0.5'
             />
             <path
                 d='M3.99694 19.945C4.56427 19.945 5.02208 19.4832 5.02208 18.916C5.02208 18.3489 4.56427 17.8871 3.99694 17.8871C3.42961 17.8871 2.9718 18.3489 2.9718 18.916C2.9718 19.4832 3.42961 19.945 3.99694 19.945Z'
                 fill={fill}
                 stroke={fill}
-                stroke-width='0.5'
+                strokeWidth='0.5'
             />
             <path
                 d='M8.58217 13.6605C9.41796 13.6605 10.0934 12.98 10.0934 12.1431C10.0934 11.3062 9.41796 10.6256 8.58217 10.6256C7.74637 10.6256 7.07092 11.3062 7.07092 12.1431C7.07092 12.98 7.74637 13.6605 8.58217 13.6605Z'
                 fill={fill}
                 stroke={fill}
-                stroke-width='0.5'
+                strokeWidth='0.5'
             />
             <path
                 d='M14.2709 7.34963C14.8382 7.34963 15.296 6.88779 15.296 6.32067C15.296 5.75356 14.8382 5.29172 14.2709 5.29172C13.7035 5.29172 13.2457 5.75356 13.2457 6.32067C13.2457 6.88779 13.7035 7.34963 14.2709 7.34963Z'
                 fill={fill}
                 stroke={fill}
-                stroke-width='0.5'
+                strokeWidth='0.5'
             />
             <path
                 d='M4.53564 26.8508L8.58213 12.143L15.3482 17.3977L4.53564 26.8508Z'
                 stroke={fill}
-                stroke-width='0.5'
-                stroke-miterlimit='10'
-                stroke-linejoin='round'
+                strokeWidth='0.5'
+                strokeMiterlimit='10'
+                strokeLinejoin='round'
             />
             <path
                 d='M14.6781 35.7362L4.53564 26.8508L7.57051 41.387L14.6781 35.7362Z'
                 stroke={fill}
-                stroke-width='0.5'
-                stroke-miterlimit='10'
-                stroke-linejoin='round'
+                strokeWidth='0.5'
+                strokeMiterlimit='10'
+                strokeLinejoin='round'
             />
             <path
                 d='M27.527 27.3526L14.6781 35.7362L15.3481 17.3977L27.527 27.3526Z'
                 stroke={fill}
-                stroke-width='0.5'
-                stroke-miterlimit='10'
-                stroke-linejoin='round'
+                strokeWidth='0.5'
+                strokeMiterlimit='10'
+                strokeLinejoin='round'
             />
             <path
                 d='M27.527 27.3525L31.8231 42.7204L43.5028 28.4484L27.527 27.3525Z'
                 stroke={fill}
-                stroke-width='0.5'
-                stroke-miterlimit='10'
-                stroke-linejoin='round'
+                strokeWidth='0.5'
+                strokeMiterlimit='10'
+                strokeLinejoin='round'
             />
             <path
                 d='M27.527 27.3525L33.1763 12.7108L15.3481 17.3977L21.431 4.4855L8.58209 12.1431L14.2708 6.32068L21.431 4.4855'
                 stroke={fill}
-                stroke-width='0.5'
-                stroke-miterlimit='10'
-                stroke-linejoin='round'
+                strokeWidth='0.5'
+                strokeMiterlimit='10'
+                strokeLinejoin='round'
             />
             <path
                 d='M8.5821 12.143L3.99696 18.916L4.53562 26.8508L2.47296 34.5744L3.99696 18.916'
                 stroke={fill}
-                stroke-width='0.5'
-                stroke-miterlimit='10'
-                stroke-linejoin='round'
+                strokeWidth='0.5'
+                strokeMiterlimit='10'
+                strokeLinejoin='round'
             />
             <path
                 d='M2.47296 34.5744L7.57048 41.387L19.6443 49.6254L14.6781 35.7362L31.8231 42.7204L19.6968 49.9291L12.379 48.0939L7.57048 41.387'
                 stroke={fill}
-                stroke-width='0.5'
-                stroke-miterlimit='10'
-                stroke-linejoin='round'
+                strokeWidth='0.5'
+                strokeMiterlimit='10'
+                strokeLinejoin='round'
             />
             <path
                 d='M31.8231 42.7204L34.6872 51.7379L46.4719 42.3508L31.8231 42.7204Z'
                 stroke={fill}
-                stroke-width='0.5'
-                stroke-miterlimit='10'
-                stroke-linejoin='round'
+                strokeWidth='0.5'
+                strokeMiterlimit='10'
+                strokeLinejoin='round'
             />
             <path
                 d='M43.5028 28.4483L46.472 42.3508L52.3972 28.4483H43.5028Z'
                 stroke={fill}
-                stroke-width='0.5'
-                stroke-miterlimit='10'
-                stroke-linejoin='round'
+                strokeWidth='0.5'
+                strokeMiterlimit='10'
+                strokeLinejoin='round'
             />
             <path
                 d='M33.1764 12.7108L43.5028 28.4483L47.8909 14.4403L33.1764 12.7108Z'
                 stroke={fill}
-                stroke-width='0.5'
-                stroke-miterlimit='10'
-                stroke-linejoin='round'
+                strokeWidth='0.5'
+                strokeMiterlimit='10'
+                strokeLinejoin='round'
             />
             <path
                 d='M21.4311 4.48552L33.1764 12.7108L36.7368 4.28748L21.4311 4.48552Z'
                 stroke={fill}
-                stroke-width='0.5'
-                stroke-miterlimit='10'
-                stroke-linejoin='round'
+                strokeWidth='0.5'
+                strokeMiterlimit='10'
+                strokeLinejoin='round'
             />
             <path
                 d='M52.3972 28.4483L47.8909 14.4403L53.2249 20.7644L52.3972 28.4483Z'
                 stroke={fill}
-                stroke-width='0.5'
-                stroke-miterlimit='10'
-                stroke-linejoin='round'
+                strokeWidth='0.5'
+                strokeMiterlimit='10'
+                strokeLinejoin='round'
             />
             <path
                 d='M52.3972 37.2677V28.4483V37.2677Z'
                 stroke={fill}
-                stroke-width='0.5'
-                stroke-miterlimit='10'
-                stroke-linejoin='round'
+                strokeWidth='0.5'
+                strokeMiterlimit='10'
+                strokeLinejoin='round'
             />
             <path
                 d='M46.472 42.3508L52.3972 37.2678L42.8459 49.3086L34.6873 51.7379'
                 stroke={fill}
-                stroke-width='0.5'
-                stroke-miterlimit='10'
-                stroke-linejoin='round'
+                strokeWidth='0.5'
+                strokeMiterlimit='10'
+                strokeLinejoin='round'
             />
             <path
                 d='M21.4311 4.48551L29.0774 1.77896L36.7368 4.28747L47.8909 14.4403L44.3174 7.81258L36.7368 4.28747'
                 stroke={fill}
-                stroke-width='0.5'
-                stroke-miterlimit='10'
-                stroke-linejoin='round'
+                strokeWidth='0.5'
+                strokeMiterlimit='10'
+                strokeLinejoin='round'
             />
             <path
                 d='M52.3972 37.2677L53.2248 20.7644L44.3173 7.81259'
                 stroke={fill}
-                stroke-width='0.5'
-                stroke-miterlimit='10'
-                stroke-linejoin='round'
+                strokeWidth='0.5'
+                strokeMiterlimit='10'
+                strokeLinejoin='round'
             />
             <path
                 d='M27.2643 53.9031L19.6968 49.9291L34.6872 51.7379L27.2643 53.9031ZM27.2643 53.9031L12.379 48.0939'
                 stroke={fill}
-                stroke-width='0.5'
-                stroke-miterlimit='10'
-                stroke-linejoin='round'
+                strokeWidth='0.5'
+                strokeMiterlimit='10'
+                strokeLinejoin='round'
             />
         </svg>
     );

@@ -1,5 +1,4 @@
 import React from 'react';
-import cm from './PlaceOrder.module.scss';
 import { Tabs } from 'src/components/new/Tabs';
 import LendBorrowTable from './LendBorrowTable';
 
@@ -12,7 +11,7 @@ export const PlaceOrder: React.FC<IPlaceOrder> = props => {
     const [selectedTab, setTab] = React.useState<string>('lend');
 
     return (
-        <div className={cm.container}>
+        <div className='-mt-5 flex w-3/4 flex-col overflow-y-hidden pb-5 pl-6'>
             <Tabs
                 options={[
                     { value: 'lend', label: 'Lend' },
