@@ -8,7 +8,7 @@ export const usdFormat = (number: number, digits: number = 0) => {
 };
 
 export const percentFormat = (number: any, dividedBy: number = 100) => {
-    return number != 0
+    return number !== 0
         ? Intl.NumberFormat('en-US', {
               style: 'percent',
               maximumFractionDigits: 2,

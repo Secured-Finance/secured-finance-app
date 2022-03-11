@@ -1,13 +1,12 @@
-import { useDispatch, useSelector } from 'react-redux';
-import { useCallback, useEffect, useState } from 'react';
-import { RootState } from 'src/store/types';
-import { getFilWallet } from 'src/store/wallets/selectors';
+import { validateAddressString } from '@glif/filecoin-address';
 import {
     LotusMessage,
     Message,
     SignedLotusMessage,
 } from '@glif/filecoin-message';
 import { BigNumber, FilecoinNumber } from '@glif/filecoin-number';
+import { useCallback, useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import {
     emptyGasInfo,
     insufficientMsigFundsErr,
@@ -16,8 +15,9 @@ import {
     TESTNET_PATH_CODE,
 } from 'src/services/ledger/constants';
 import createPath from 'src/services/ledger/createPath';
-import { validateAddressString } from '@glif/filecoin-address';
 import { setMaxTxFee, updateSendAmount } from 'src/store/sendForm';
+import { RootState } from 'src/store/types';
+import { getFilWallet } from 'src/store/wallets/selectors';
 
 // TODO: add params
 // TODO: use frozen, fetchingTxDetails, mPoolPushing and value Error to disable Send button
@@ -177,12 +177,13 @@ export const useSendFil = (
                 close();
             }
         } catch (err) {
-            if (err.message.includes('Unexpected number of items')) {
+            const e = err as Error;
+            if (e.message.includes('Unexpected number of items')) {
                 setUncaughtError(
                     'Ledger devices cannot sign arbitrary base64 params yet. Coming soon.'
                 );
             } else {
-                setUncaughtError(err.message);
+                setUncaughtError(e.message);
             }
         } finally {
             setOngoingTx(false);
