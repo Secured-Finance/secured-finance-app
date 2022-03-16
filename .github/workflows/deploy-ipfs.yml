@@ -18,7 +18,7 @@ jobs:
           name: ${{ inputs.package-name }}
           path: ${{ inputs.package-name }}
       - name: Deploy on IPFS
-        uses: aquiladev/ipfs-action@v0.2.0
+        uses: aquiladev/ipfs-action@master
         id: ipfs
         with:
           path: ${{ inputs.package-name }}
