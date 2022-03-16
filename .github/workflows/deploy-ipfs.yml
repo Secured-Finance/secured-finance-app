@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Download Artifact
-        uses: actions/download-artifact@master
+        uses: actions/download-artifact@v1
         with:
           name: ${{ inputs.package-name }}
           path: ${{ inputs.package-name }}
