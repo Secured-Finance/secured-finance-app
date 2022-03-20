@@ -1,4 +1,4 @@
-export const usdFormat = (number: number, digits: number = 0) => {
+export const usdFormat = (number: number, digits = 0) => {
     return Intl.NumberFormat('en-US', {
         style: 'currency',
         currency: 'USD',
@@ -7,7 +7,7 @@ export const usdFormat = (number: number, digits: number = 0) => {
     }).format(number);
 };
 
-export const percentFormat = (number: any, dividedBy: number = 100) => {
+export const percentFormat = (number: any, dividedBy = 100) => {
     return number !== 0
         ? Intl.NumberFormat('en-US', {
               style: 'percent',
@@ -16,7 +16,7 @@ export const percentFormat = (number: any, dividedBy: number = 100) => {
         : '0 %';
 };
 
-export const ordinaryFormat = (number: any, decimals: number = 2) => {
+export const ordinaryFormat = (number: any, decimals = 2) => {
     return Intl.NumberFormat('en-US', {
         maximumFractionDigits: decimals,
     }).format(number);

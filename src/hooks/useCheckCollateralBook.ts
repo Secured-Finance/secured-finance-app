@@ -9,7 +9,7 @@ import useSF from './useSecuredFinance';
 import useBlock from './useBlock';
 
 const useCheckCollateralBook = (account: string) => {
-    const [status, setStatus] = useState<Boolean>(false);
+    const [status, setStatus] = useState<boolean>(false);
     const securedFinance = useSF();
     const block = useBlock();
 
@@ -17,7 +17,7 @@ const useCheckCollateralBook = (account: string) => {
     const dispatch = useDispatch();
 
     const fetchCollateralBook = useCallback(async () => {
-        const status: Boolean = await checkCollateralBook(
+        const status: boolean = await checkCollateralBook(
             collateralContract,
             account
         );

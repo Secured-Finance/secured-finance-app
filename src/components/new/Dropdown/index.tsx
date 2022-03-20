@@ -1,6 +1,6 @@
-import cm from './Dropdown.module.scss';
-import React from 'react';
 import cx from 'classnames';
+import React from 'react';
+import cm from './Dropdown.module.scss';
 
 export interface IDropdown
     extends React.SelectHTMLAttributes<HTMLSelectElement> {
@@ -62,5 +62,7 @@ export const Dropdown: React.FC<IDropdown> = ({
 };
 
 Dropdown.defaultProps = {
-    onChange: () => {},
+    onChange: () => {
+        /* Do Nothing */
+    },
 };

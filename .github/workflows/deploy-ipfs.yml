@@ -18,15 +18,10 @@ jobs:
           name: ${{ inputs.package-name }}
           path: ${{ inputs.package-name }}
       - name: Deploy on IPFS
-        uses: aquiladev/ipfs-action@v0.2.0
+        uses: aquiladev/ipfs-action@master
         id: ipfs
         with:
           path: ${{ inputs.package-name }}
-          host: ipfs.komputing.org
-          port: 443
-          protocol: https
-          timeout: 180000
-          verbose: true
       - uses: LouisBrunner/checks-action@v1.1.1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}

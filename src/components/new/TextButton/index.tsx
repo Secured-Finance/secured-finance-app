@@ -1,8 +1,7 @@
 import React from 'react';
 import cm from './TextButton.module.scss';
 
-export interface ITextButton
-    extends React.ButtonHTMLAttributes<HTMLButtonElement> {}
+export type ITextButton = React.ButtonHTMLAttributes<HTMLButtonElement>;
 
 export const TextButton: React.FC<ITextButton> = ({ children, ...props }) => {
     return (

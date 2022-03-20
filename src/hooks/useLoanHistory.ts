@@ -65,7 +65,7 @@ export const useLoanDeals = () => {
     const fetchLoanHistory = useCallback(async () => {
         dispatch(startSetHistory());
         try {
-            let res = await client.query({
+            const res = await client.query({
                 query: LOAN_DEALS,
                 variables: {
                     account: account.toLowerCase(),
@@ -104,7 +104,7 @@ export const useBorrowDeals = () => {
     const fetchLoanHistory = useCallback(async () => {
         dispatch(startSetHistory());
         try {
-            let res = await client.query({
+            const res = await client.query({
                 query: BORROW_DEALS,
                 variables: {
                     account: account,
@@ -138,7 +138,7 @@ export const useLoanInformation = (id: string) => {
     const [loanInfo, setLoanInfo] = useState(null);
 
     const fetchLoanInformation = useCallback(async () => {
-        let res = await client.query({
+        const res = await client.query({
             query: LOAN_INFO,
             variables: {
                 id: id,

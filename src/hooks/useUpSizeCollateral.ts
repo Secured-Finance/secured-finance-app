@@ -13,7 +13,7 @@ export const useUpsizeCollateral = (amount: number) => {
 
     const handleUpSizeCollateral = useCallback(async () => {
         try {
-            let tx = await upSizeEth(collateralContract, account, amount);
+            const tx = await upSizeEth(collateralContract, account, amount);
             return tx;
         } catch (e) {
             return false;

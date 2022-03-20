@@ -1,5 +1,5 @@
 import BigNumber from 'bignumber.js';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useWallet } from 'use-wallet';
 import { updateSendTxFee } from '../store/sendForm';
@@ -12,12 +12,11 @@ export const useSendEth = (amount: number, to: string, gasPrice: number) => {
 
     const handleSendEther = useCallback(async () => {
         if (account && securedFinance) {
-            let gweiGasPrice = new BigNumber(gasPrice)
+            const gweiGasPrice = new BigNumber(gasPrice)
                 .multipliedBy(new BigNumber(10).pow(9))
                 .toNumber();
             try {
-                let tx: any;
-                tx = securedFinance.web3.eth
+                const tx = securedFinance.web3.eth
                     .sendTransaction({
                         from: account,
                         to: to,
@@ -50,20 +49,20 @@ export const useEstimateTxFee = (gasPrice: number) => {
 
     const handleEstimateTxFee = useCallback(
         async (isMounted: boolean) => {
-            let gweiGasPrice = new BigNumber(gasPrice)
+            const gweiGasPrice = new BigNumber(gasPrice)
                 .multipliedBy(new BigNumber(10).pow(9))
                 .toNumber();
-            var transactionObject = {
+            const transactionObject = {
                 from: account,
                 to: '0x0000000000000000000000000000000000000000',
                 value: 0,
                 gasPrice: gweiGasPrice,
             };
-            var gasLimit = securedFinance.web3.eth
+            const gasLimit = securedFinance.web3.eth
                 .estimateGas(transactionObject)
                 .then((gasLimit: number) => {
-                    var transactionFee = gasPrice * gasLimit;
-                    var txFee = new BigNumber(transactionFee)
+                    const transactionFee = gasPrice * gasLimit;
+                    const txFee = new BigNumber(transactionFee)
                         .dividedBy(new BigNumber(10).pow(9))
                         .multipliedBy(ethPrice)
                         .toNumber();

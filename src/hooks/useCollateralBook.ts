@@ -65,9 +65,9 @@ const useCollateralBook = (account: string) => {
             account
         );
 
-        let borrowed = new BigNumber(book.inuseFIL).multipliedBy(filPriceBN);
+        const borrowed = new BigNumber(book.inuseFIL).multipliedBy(filPriceBN);
 
-        let colBook: CollateralBook = {
+        const colBook: CollateralBook = {
             ccyIndex: 0,
             collateral: new BigNumber(book.colAmtETH),
             usdCollateral: new BigNumber(book.colAmtETH).multipliedBy(
