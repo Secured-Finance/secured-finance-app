@@ -25,11 +25,7 @@ import {
 } from '../store/lendingTerminal';
 import BigNumber from 'bignumber.js';
 
-export const useBorrowOrderbook = (
-    ccy: number,
-    term: number,
-    skip: number = 0
-) => {
+export const useBorrowOrderbook = (ccy: number, term: number, skip = 0) => {
     const { account }: { account: string } = useWallet();
     const block = useBlock();
     const securedFinance = useSF();
@@ -46,7 +42,7 @@ export const useBorrowOrderbook = (
     const fetchBorrowOrderbook = useCallback(async () => {
         dispatch(startSetOrderbook());
         try {
-            let res = await client.query({
+            const res = await client.query({
                 query: LENDING_BORROW_ORDERBOOK,
                 variables: {
                     market: lendingMarket.toLowerCase(),
@@ -56,7 +52,7 @@ export const useBorrowOrderbook = (
             });
 
             if (res?.data.lendingMarket.borrowOrderbook) {
-                let parsedOrderbook: Array<OrderbookRow> = [];
+                const parsedOrderbook: Array<OrderbookRow> = [];
                 res.data.lendingMarket.borrowOrderbook.map(function (
                     item: any,
                     index: number
@@ -96,11 +92,7 @@ export const useBorrowOrderbook = (
     return borrowOrderbook;
 };
 
-export const useLendOrderbook = (
-    ccy: number,
-    term: number,
-    skip: number = 0
-) => {
+export const useLendOrderbook = (ccy: number, term: number, skip = 0) => {
     const { account }: { account: string } = useWallet();
     const block = useBlock();
     const securedFinance = useSF();
@@ -117,7 +109,7 @@ export const useLendOrderbook = (
     const fetchLendOrderbook = useCallback(async () => {
         dispatch(startSetOrderbook());
         try {
-            let res = await client.query({
+            const res = await client.query({
                 query: LENDING_LEND_ORDERBOOK,
                 variables: {
                     market: lendingMarket.toLowerCase(),
@@ -126,7 +118,7 @@ export const useLendOrderbook = (
                 fetchPolicy: 'cache-first',
             });
             if (res?.data.lendingMarket.lendOrderbook) {
-                let parsedOrderbook: Array<OrderbookRow> = [];
+                const parsedOrderbook: Array<OrderbookRow> = [];
                 res.data.lendingMarket.lendOrderbook.map(function (
                     item: any,
                     index: number
@@ -167,7 +159,7 @@ export const useLendOrderbook = (
 export const useLendingTradingHistory = (
     ccy: number,
     term: number,
-    skip: number = 0
+    skip = 0
 ) => {
     const { account }: { account: string } = useWallet();
     const block = useBlock();
@@ -181,7 +173,7 @@ export const useLendingTradingHistory = (
     const fetchLendingTradingHistory = useCallback(async () => {
         dispatch(startSetTradingHistory());
         try {
-            let res = await client.query({
+            const res = await client.query({
                 query: LENDING_TRADING_HISTORY,
                 variables: {
                     market: lendingMarket.toLowerCase(),

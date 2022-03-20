@@ -1,26 +1,26 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import styled from 'styled-components';
-import theme from 'src/theme';
+import { connect, useDispatch, useSelector } from 'react-redux';
 import Button from 'src/components/Button';
 import CurrencySelector from 'src/components/CurrencySelector';
 import TermsSelector from 'src/components/TermsSelector';
-import { RootState } from 'src/store/types';
-import { connect, useDispatch, useSelector } from 'react-redux';
-import { LendingStore } from 'src/store/lending/types';
+import { usePlaceOrder } from 'src/hooks/usePlaceOrder';
 import {
     updateLendAmount,
     updateLendRate,
     updateMainCurrency,
     updateMainTerms,
 } from 'src/store/lending';
+import { LendingStore } from 'src/store/lending/types';
+import { RootState } from 'src/store/types';
+import theme from 'src/theme';
 import {
-    terms,
     currencyList,
-    percentFormat,
     formatInput,
+    percentFormat,
+    terms,
     usdFormat,
 } from 'src/utils';
-import { usePlaceOrder } from 'src/hooks/usePlaceOrder';
+import styled from 'styled-components';
 
 interface LendTabProps {
     lendingRates: any[];
@@ -129,8 +129,8 @@ const Lend: React.FC<CombinedProps> = ({
     }, [lendAmount, selectedCcy]);
 
     const estimatedReturns = useMemo(() => {
-        let interest = lendRate / 10000;
-        let p = interest * (daysInYear[termsIndex] / 360);
+        const interest = lendRate / 10000;
+        const p = interest * (daysInYear[termsIndex] / 360);
         let usdAmount: number;
         switch (currencyIndex) {
             case 0:
@@ -146,7 +146,7 @@ const Lend: React.FC<CombinedProps> = ({
                 usdAmount = lendAmount * ethPrice;
                 break;
         }
-        let compoundInterest = usdAmount * p;
+        const compoundInterest = usdAmount * p;
         return compoundInterest;
     }, [termsIndex, currencyIndex, lendRate, lendAmount]);
 
@@ -266,7 +266,9 @@ const Lend: React.FC<CombinedProps> = ({
                         <StyledLoanInput
                             placeholder={'0'}
                             value={percentFormat(lendRate, 10000)}
-                            onChange={() => {}}
+                            onChange={() => {
+                                /* Do Nothing */
+                            }}
                             // disabled={true}
                         />
                     </StyledCurrencyInput>

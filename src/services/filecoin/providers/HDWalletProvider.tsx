@@ -9,7 +9,7 @@ export function HDWalletProvider(wasm: any) {
         return {
             getAccounts: async (
                 _nStart: number,
-                _nEnd: number = 5,
+                _nEnd = 5,
                 network: string = Network.TEST
             ) => {
                 const path =

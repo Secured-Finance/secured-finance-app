@@ -1,7 +1,7 @@
 import cm from './Page.module.scss';
 import React, { HTMLAttributes } from 'react';
 
-interface IPage extends HTMLAttributes<HTMLDivElement> {}
+type IPage = HTMLAttributes<HTMLDivElement>;
 
 export const Page: React.FC<IPage> = ({ style, children }) => {
     return (

@@ -1,9 +1,5 @@
-import React, { createContext, useCallback, useEffect, useState } from 'react';
-
+import React, { createContext, useEffect, useState } from 'react';
 import { ChainUnsupportedError, useWallet } from 'use-wallet';
-import WalletErrorModal from '../../components/WalletProviderModal/components/WalletErrorModal';
-import useModal from '../../hooks/useModal';
-
 import { SecuredFinance } from '../../services/sdk';
 
 export interface SFContext {

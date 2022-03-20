@@ -17,7 +17,7 @@ export const useOpenOrders = (ccy: number, term: number) => {
     const [openOrders, setOpenOrders] = useState([]);
 
     const fetchOpenOrders = useCallback(async () => {
-        let res = await client.query({
+        const res = await client.query({
             query: OPEN_ORDERS,
             variables: {
                 account: account.toLowerCase(),
@@ -55,7 +55,7 @@ export const useTradeHistoryOrders = (ccy: number, term: number) => {
     const [tradeHistory, setTradeHistory] = useState([]);
 
     const fetchTradeHistoryOrders = useCallback(async () => {
-        let res = await client.query({
+        const res = await client.query({
             query: TRADE_HISTORY,
             variables: {
                 account: account.toLowerCase(),
@@ -65,7 +65,7 @@ export const useTradeHistoryOrders = (ccy: number, term: number) => {
         });
         try {
             if (res?.data.user.madeOrders && res?.data.user.takenOrders) {
-                let parsedHistory: Array<any> = [];
+                const parsedHistory: Array<any> = [];
 
                 res.data.user.madeOrders.map(function (
                     item: any,
@@ -125,7 +125,7 @@ export const useOpenLoans = (ccy: number, term: number) => {
     const [loans, setLoans] = useState([]);
 
     const fetchMadeOrders = useCallback(async () => {
-        let res = await client.query({
+        const res = await client.query({
             query: OPEN_LOANS,
             variables: {
                 account: account.toLowerCase(),

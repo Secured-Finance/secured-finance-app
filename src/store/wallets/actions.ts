@@ -43,7 +43,7 @@ export function updateEthWalletAssetPrice(data: number) {
     };
 }
 
-export function updateEthWalletActions(data: object) {
+export function updateEthWalletActions(data: Record<string, unknown>) {
     return {
         type: constants.UPDATE_ETHEREUM_WALLET_ACTIONS,
         data,
@@ -93,7 +93,7 @@ export function updateFilWalletAssetPrice(data: number) {
     };
 }
 
-export function updateFilWalletActions(data: object) {
+export function updateFilWalletActions(data: Record<string, unknown>) {
     return {
         type: constants.UPDATE_FILECOIN_WALLET_ACTIONS,
         data,

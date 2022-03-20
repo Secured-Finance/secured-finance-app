@@ -13,9 +13,9 @@ export const useRates = (
     type: number,
     ccy: number | string
 ) => {
-    let selectedCcy = 1;
+    const selectedCcy = 1;
     const block = useBlock();
-    const [rates, setRates] = useState(new Array());
+    const [rates, setRates] = useState([]);
 
     const fetchBorrowRates = useCallback(
         async (isMounted: boolean) => {

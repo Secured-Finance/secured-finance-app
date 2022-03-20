@@ -27,7 +27,7 @@ jobs:
       - name: Install Dependencies
         run: npm ci
       - name: Check Syntax with Prettier
-        run: npm run prettier-check
+        run: npm run prettier:check
       - name: Run Tests
         run: npm run test -- --watchAll=false
         # bad way to configure this build command.

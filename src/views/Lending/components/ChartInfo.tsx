@@ -79,7 +79,7 @@ const PriceTicker = ({
     change: number;
     direction: 'up' | 'down';
 }) => {
-    var color = '#0F9D58';
+    let color = '#0F9D58';
     if (direction === 'up') {
         color = '#0F9D58';
     } else if (direction === 'down') {

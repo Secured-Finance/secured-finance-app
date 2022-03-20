@@ -23,7 +23,7 @@ const Template: Story<IDropdown> = args => {
     );
 };
 
-let value = 1;
+const value = 1;
 export const Default = Template.bind({});
 Default.args = {
     options: [

@@ -19,7 +19,7 @@ export const GasTabsAndTable: React.FC = () => {
     const [gasTabs, setGasTabs] = useState(defaultGasPrices);
     const [selectedTxFee, setSelectedTxFee] = useState('Fast');
     const [isGasUpdated, setGasUpdated] = useState(false);
-    let tabs: Array<any> = [];
+    const tabs: Array<any> = [];
 
     useEstimateTxFee(gasPrice);
 
@@ -33,7 +33,7 @@ export const GasTabsAndTable: React.FC = () => {
         };
 
     const updateGasPrices = () => {
-        let cGasTabs = new Map(gasTabs);
+        const cGasTabs = new Map(gasTabs);
         oracle.fetchMedianGasPriceOffChain().then(gasPrices => {
             cGasTabs.set('Standard', gasPrices.standard);
             cGasTabs.set('Fast', gasPrices.fast);
