@@ -1,28 +1,28 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import styled from 'styled-components';
+import { Network } from '@glif/filecoin-address';
 import { validateMnemonic } from 'bip39';
+import React, { useCallback, useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import styled from 'styled-components';
 import { isPrivate } from 'tiny-secp256k1';
 import isBase64 from 'validator/lib/isBase64';
 import useFilWasm from '../../../hooks/useFilWasm';
+import useModal from '../../../hooks/useModal';
 import {
     HDWallet,
     PKWallet,
     TestNetPath,
     useNewFilWalletProvider,
 } from '../../../services/filecoin';
+import { RootState } from '../../../store/types';
 import theme from '../../../theme';
+import Breaker from '../../Breaker';
 import Button from '../../Button';
 import Modal, { ModalProps } from '../../Modal';
 import ModalActions from '../../ModalActions';
 import ModalContent from '../../ModalContent';
 import ModalTitle from '../../ModalTitle';
 import Spacer from '../../Spacer';
-import useModal from '../../../hooks/useModal';
 import MnemonicModal from './MnemonicModal';
-import Breaker from '../../Breaker';
-import { Network } from '@glif/filecoin-address';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../../store/types';
 
 interface PrivateKeyContainerProps {
     selectedTab?: string;
@@ -67,7 +67,7 @@ const RenderPrivateKeyContainer: React.FC<ContainerProps> = ({
 
     const filAddressFromMnemonic = useCallback(
         (data: string) => {
-            if (keyDerive && data != undefined) {
+            if (keyDerive && data !== undefined) {
                 const isMnemonic = validateMnemonic(data);
                 if (isMnemonic) {
                     const key = keyDerive(data, TestNetPath, '');
@@ -84,7 +84,7 @@ const RenderPrivateKeyContainer: React.FC<ContainerProps> = ({
 
     const filAddressFromPrivateKey = useCallback(
         (data: string) => {
-            if (keyRecover && data != undefined && isBase64(data)) {
+            if (keyRecover && data && isBase64(data)) {
                 const pkB64 = Buffer.from(data, 'base64');
                 const isPKB64 = isPrivate(pkB64);
                 if (isPKB64) {
@@ -104,7 +104,7 @@ const RenderPrivateKeyContainer: React.FC<ContainerProps> = ({
 
     const handleCreateFilHDWallet = useCallback(async () => {
         try {
-            if (filProviders && mnemonic != '' && walletProvider == null) {
+            if (filProviders && mnemonic !== '' && walletProvider == null) {
                 const provider = await filProviders.HDWalletProvider(mnemonic);
                 await onCreate(provider, HDWallet, Network.TEST);
             }
@@ -115,7 +115,7 @@ const RenderPrivateKeyContainer: React.FC<ContainerProps> = ({
 
     const handleCreateFilPKWallet = useCallback(async () => {
         try {
-            if (filProviders && privateKey != '' && walletProvider == null) {
+            if (filProviders && privateKey !== '' && walletProvider == null) {
                 const provider = await filProviders.PrivateKeyProvider(
                     privateKey
                 );
@@ -146,7 +146,7 @@ const RenderPrivateKeyContainer: React.FC<ContainerProps> = ({
     ];
 
     tabs.filter((tab, i) => {
-        if (selectedTab == tab.title) {
+        if (selectedTab === tab.title) {
             handleSave = tab.saveHook;
             placeholder = tab.placeholder;
             handleChange = tab.handleChange;
@@ -167,7 +167,7 @@ const RenderPrivateKeyContainer: React.FC<ContainerProps> = ({
             <StyledAddressContainer>
                 <StyledAddressTitle>Address</StyledAddressTitle>
                 <StyledAddress>
-                    {selectedTab == 'Mnemonic' ? mnemonicAddr : privateKeyAddr}
+                    {selectedTab === 'Mnemonic' ? mnemonicAddr : privateKeyAddr}
                 </StyledAddress>
             </StyledAddressContainer>
             <Spacer size={'md'} />

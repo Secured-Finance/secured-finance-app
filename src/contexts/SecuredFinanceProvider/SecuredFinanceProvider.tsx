@@ -30,7 +30,7 @@ const SecuredFinanceProvider: React.FC = ({ children }) => {
     window.eth = ethereum;
 
     const handleNetworkChanged = (networkId: string | number) => {
-        if (networkId != 3) {
+        if (networkId !== 3) {
             alert('Unsupported network, please use Ropsten (Chain ID: 3)');
         }
     };

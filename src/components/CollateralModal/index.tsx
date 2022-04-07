@@ -1,36 +1,33 @@
+import BigNumber from 'bignumber.js';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import styled from 'styled-components';
-import theme from '../../theme';
-import Modal, { ModalProps } from '../Modal';
-import ModalActions from '../ModalActions';
-import ModalContent from '../ModalContent';
-import ModalTitle from '../ModalTitle';
 import { connect, useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../store/types';
-import CurrencySelector from '../CurrencySelector';
+import useCheckCollateralBook from 'src/hooks/useCheckCollateralBook';
+import styled from 'styled-components';
+import { useWallet } from 'use-wallet';
+import useCollateralBook from '../../hooks/useCollateralBook';
+import { useEthBalance } from '../../hooks/useEthWallet';
+import { useSetUpCollateral } from '../../hooks/useSetUpCollateral';
+import { useUpsizeCollateral } from '../../hooks/useUpSizeCollateral';
 import {
     CollateralFormStore,
     updateCollateralAmount,
     updateCollateralCurrency,
 } from '../../store/collateralForm';
+import { RootState } from '../../store/types';
+import theme from '../../theme';
 import {
     currencyList,
     formatInput,
     getDisplayBalance,
     getFullDisplayBalanceNumber,
     getUSDFormatBalanceNumber,
-    ordinaryFormat,
-    percentFormat,
-    usdFormat,
 } from '../../utils';
-import { useEthBalance } from '../../hooks/useEthWallet';
-import { useSetUpCollateral } from '../../hooks/useSetUpCollateral';
-import { useUpsizeCollateral } from '../../hooks/useUpSizeCollateral';
-import useCollateralBook from '../../hooks/useCollateralBook';
-import { useWallet } from 'use-wallet';
-import BigNumber from 'bignumber.js';
 import { Button } from '../common/Buttons';
-import useCheckCollateralBook from 'src/hooks/useCheckCollateralBook';
+import CurrencySelector from '../CurrencySelector';
+import Modal, { ModalProps } from '../Modal';
+import ModalActions from '../ModalActions';
+import ModalContent from '../ModalContent';
+import ModalTitle from '../ModalTitle';
 
 type CombinedProps = ModalProps & CollateralFormStore;
 
@@ -45,7 +42,7 @@ const CollateralModal: React.FC<CombinedProps> = ({
     filAddress,
 }) => {
     const [buttonOpen, setButtonOpen] = useState(false);
-    const [collateralTx, setCollateralTx] = useState(false);
+    const [, setCollateralTx] = useState(false);
     const [collateralStatus, setCollateralStatus] = useState(false);
     const [balanceErr, setBalanceErr] = useState(false);
     const { account }: { account: string } = useWallet();
@@ -217,7 +214,7 @@ const CollateralModal: React.FC<CombinedProps> = ({
                         <StyledAddressTitle>
                             Available collateral position
                         </StyledAddressTitle>
-                        {account && colBook.vault != '' ? (
+                        {account && colBook.vault !== '' ? (
                             <StyledAddress>
                                 {colBook.collateral != null
                                     ? getDisplayBalance(colBook.collateral)
@@ -234,7 +231,7 @@ const CollateralModal: React.FC<CombinedProps> = ({
                         <StyledAddressTitle>
                             Available collateral position (USD)
                         </StyledAddressTitle>
-                        {account && colBook.vault != '' ? (
+                        {account && colBook.vault !== '' ? (
                             <StyledAddress>
                                 {colBook.usdCollateral != null
                                     ? getUSDFormatBalanceNumber(
@@ -252,7 +249,7 @@ const CollateralModal: React.FC<CombinedProps> = ({
                         <StyledAddressTitle>
                             Locked collateral
                         </StyledAddressTitle>
-                        {account && colBook.vault != '' ? (
+                        {account && colBook.vault !== '' ? (
                             <StyledAddress>
                                 {colBook.locked != null
                                     ? getDisplayBalance(colBook.locked)
@@ -269,7 +266,7 @@ const CollateralModal: React.FC<CombinedProps> = ({
                         <StyledAddressTitle>
                             Locked collateral (USD)
                         </StyledAddressTitle>
-                        {account && colBook.vault != '' ? (
+                        {account && colBook.vault !== '' ? (
                             <StyledAddress>
                                 {colBook.usdLocked != null
                                     ? getUSDFormatBalanceNumber(

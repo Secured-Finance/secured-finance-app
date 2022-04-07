@@ -1,11 +1,10 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback } from 'react';
 import styled from 'styled-components';
 import CollateralModal from '../../../../../components/CollateralModal';
 import SendModal from '../../../../../components/SendModal';
 import WalletAccountModal from '../../../../../components/WalletAccountModal';
 import WalletProviderModal from '../../../../../components/WalletProviderModal';
 import useModal from '../../../../../hooks/useModal';
-import { useWallet } from 'use-wallet';
 
 interface ActionProps {
     callbackMap?: {
@@ -44,7 +43,7 @@ const RenderActions: React.FC<ActionProps> = ({ callbackMap, ccyIndex }) => {
                     <StyledActionButton onClick={onPresentSendModal}>
                         Send
                     </StyledActionButton>
-                    {ccyIndex == 0 ? (
+                    {ccyIndex === 0 ? (
                         <StyledActionButton onClick={onPresentCollateralModal}>
                             Manage Collateral
                         </StyledActionButton>

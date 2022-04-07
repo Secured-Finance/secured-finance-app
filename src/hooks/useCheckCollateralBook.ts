@@ -1,12 +1,11 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-
 import {
-    getCollateralContract,
     checkCollateralBook,
+    getCollateralContract,
 } from '../services/sdk/utils';
-import useSF from './useSecuredFinance';
 import useBlock from './useBlock';
+import useSF from './useSecuredFinance';
 
 const useCheckCollateralBook = (account: string) => {
     const [status, setStatus] = useState<boolean>(false);
@@ -29,7 +28,7 @@ const useCheckCollateralBook = (account: string) => {
         if (account === null) {
             setStatus(false);
         }
-        if (securedFinance && collateralContract && account != '') {
+        if (securedFinance && collateralContract && account !== '') {
             fetchCollateralBook();
         }
         return () => {

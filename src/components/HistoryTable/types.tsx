@@ -1,12 +1,6 @@
 import { HistoryTableData } from '../../store/history/types';
-import {
-    formatAddress,
-    getFullDisplayBalanceNumber,
-    ordinaryFormat,
-    percentFormat,
-} from '../../utils';
+import { formatAddress, ordinaryFormat, percentFormat } from '../../utils';
 import CurrencyContainer from '../CurrencyContainer';
-import RenderAction from './components/State';
 
 interface HistoryTableProps {
     columns?: Array<TableColumns>;
