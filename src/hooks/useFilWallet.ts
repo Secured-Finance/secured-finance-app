@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import WalletAccountModal from 'src/components/WalletAccountModal';
 import { useResetFilWalletProvider } from 'src/services/filecoin';
+import connectWithLedger from 'src/services/ledger/connectLedger';
 import { RootState } from 'src/store/types';
 import {
     fetchWallet,
@@ -16,16 +17,15 @@ import {
     updateFilWalletPortfolioShare,
     updateFilWalletUSDBalance,
 } from 'src/store/wallets';
-import { useFilUsd } from './useAssetPrices';
-import useFilWasm from './useFilWasm';
-import useModal from './useModal';
+import { FIL_ADDRESS } from 'src/store/wallets/constants';
 import {
     updateFilWalletViaProvider,
     updateFilWalletViaRPC,
 } from 'src/store/wallets/helpers';
 import { getFilUSDBalance } from 'src/store/wallets/selectors';
-import connectWithLedger from 'src/services/ledger/connectLedger';
-import { FIL_ADDRESS } from 'src/store/wallets/constants';
+import { useFilUsd } from './useAssetPrices';
+import useFilWasm from './useFilWasm';
+import useModal from './useModal';
 
 export const useFilecoinAddress = () => {
     const dispatch = useDispatch();
@@ -121,7 +121,7 @@ export const useFilecoinUSDBalance = async () => {
         async (isMounted: boolean) => {
             await dispatch(fetchWallet());
 
-            if (loaded && walletProvider != null && filUSDPrice != 0) {
+            if (loaded && walletProvider != null && filUSDPrice !== 0) {
                 const [filAddr] = await walletProvider.wallet.getAccounts(
                     0,
                     1,
@@ -190,10 +190,10 @@ export const useFilecoinWalletStore = () => {
             let isMounted = true;
             if (
                 loaded &&
-                totalUSDBalance != 0 &&
+                totalUSDBalance !== 0 &&
                 walletProvider != null &&
-                price != 0 &&
-                change != 0
+                price !== 0 &&
+                change !== 0
             ) {
                 await fetchFilStore(isMounted);
             }

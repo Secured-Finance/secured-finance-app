@@ -3,7 +3,6 @@ import { useSelector } from 'react-redux';
 import { useWallet } from 'use-wallet';
 import { RootState } from '../../store/types';
 import theme from '../../theme';
-
 import Button from '../Button';
 import Modal, { ModalProps } from '../Modal';
 import ModalActions from '../ModalActions';
@@ -13,7 +12,7 @@ import EthWalletConnector from './components/EthWalletConnector';
 import FilWalletConnector from './components/FilWalletConnector';
 
 const WalletProviderModal: React.FC<ModalProps> = ({ onDismiss, ccyIndex }) => {
-    const { account, connect } = useWallet();
+    const { account } = useWallet();
     const walletProvider = useSelector(
         (state: RootState) => state.filWalletProvider.walletProvider
     );
@@ -28,7 +27,7 @@ const WalletProviderModal: React.FC<ModalProps> = ({ onDismiss, ccyIndex }) => {
         <Modal>
             <ModalTitle text='Select a wallet provider' />
             <ModalContent>
-                {ccyIndex == 0 ? (
+                {ccyIndex === 0 ? (
                     <EthWalletConnector onDismiss={onDismiss} />
                 ) : (
                     <FilWalletConnector onDismiss={onDismiss} />

@@ -1,17 +1,17 @@
-import { Network as FilNetwork, Network } from '@glif/filecoin-address';
+import { Network } from '@glif/filecoin-address';
 import Filecoin, { WalletSubProvider } from '@glif/filecoin-wallet-provider';
+import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import useFilWasm from '../../hooks/useFilWasm';
+import { RootState } from '../../store/types';
+import { resetFilWallet } from '../../store/wallets';
 import {
     failFetchingFilWalletProvider,
-    startFetchingFilWalletProvider,
+    resetFilWalletProvider,
     setFilWalletProvider,
     setFilWalletType,
-    resetFilWalletProvider,
+    startFetchingFilWalletProvider,
 } from './store';
-import { RootState } from '../../store/types';
-import useFilWasm from '../../hooks/useFilWasm';
-import { useCallback, useEffect, useState } from 'react';
-import { resetFilWallet } from '../../store/wallets';
 
 export const useResetFilWalletProvider = () => {
     localStorage.setItem('mnemonic', null);
@@ -50,7 +50,7 @@ export const useNewFilWalletProvider = () => {
             if (loaded && walletProvider == null) {
                 const config = {
                     apiAddress:
-                        network == Network.MAIN
+                        network === Network.MAIN
                             ? 'http://api.node.glif.io/rpc/v0'
                             : 'https://calibration.node.glif.io/rpc/v0',
                 };

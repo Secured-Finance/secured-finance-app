@@ -134,7 +134,7 @@ const LoanScreen: React.FC<CombinedProps> = ({}) => {
     const nextCouponPayment = () => {
         const payment: Array<CouponPayment> =
             loan?.schedule.payments?.filter((payment: any) => {
-                return payment.isDone == false;
+                return payment.isDone === false;
             }) || [];
         setCouponPayment(payment[0]);
     };
@@ -345,7 +345,7 @@ const LoanScreen: React.FC<CombinedProps> = ({}) => {
                                 />
                             </StyledItemContainer>
                         </StyledSubcontainer>
-                        {colBook.vault != '' ? (
+                        {colBook.vault !== '' ? (
                             <CounterpartyContainer>
                                 <StyledSubcontainer>
                                     <StyledLabelTitle

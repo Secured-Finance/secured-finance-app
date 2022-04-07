@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
-import { currencyList, CurrencyInfo } from '../../utils/currencies';
 import theme from '../../theme';
+import { CurrencyInfo, currencyList } from '../../utils/currencies';
 
 interface CurrencyContainerProps {
     ccy: string | number;
@@ -44,7 +44,7 @@ const CurrencyItem: React.FC<ItemProps> = ({
     let fullName: string;
 
     currencies.filter((currency, i) => {
-        if (ccy == currency.index) {
+        if (ccy === currency.index) {
             icon = currency.icon;
             shortName = currency.shortName;
             fullName = currency.fullName;
