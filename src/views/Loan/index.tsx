@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react';
 import { connect, useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
-import { useWallet } from 'use-wallet';
 import Button from '../../components/Button';
 import Container from '../../components/Container';
 import { RenderTerms } from '../../components/HistoryTable/types';
@@ -48,8 +47,7 @@ const initCoupon: CouponPayment = {
 
 type CombinedProps = LoanScreenProps;
 
-const LoanScreen: React.FC<CombinedProps> = ({}) => {
-    const { account } = useWallet();
+const LoanScreen: React.FC<CombinedProps> = () => {
     const params: any = useParams();
     const loan = useLoanInformation(params.loanId);
     const [couponPayment, setCouponPayment] = useState<CouponPayment>();

@@ -1,8 +1,6 @@
-import BigNumber from 'bignumber.js';
 import { useCallback } from 'react';
 import { useWallet } from 'use-wallet';
 import { provider } from 'web3-core';
-
 import { cancelOrder, getLendingMarketContract } from '../services/sdk/utils';
 import useSF from './useSecuredFinance';
 
