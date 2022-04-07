@@ -4,7 +4,7 @@ import Web3 from 'web3';
 import { provider } from 'web3-core';
 // import debounce from 'debounce'
 
-const useBlock = (): JSX.Element => {
+const useBlock = (): number => {
     const [block, setBlock] = useState(0);
     const { ethereum }: { ethereum: provider } = useWallet();
 
