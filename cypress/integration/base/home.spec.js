@@ -21,7 +21,6 @@ describe('The Home Page', () => {
         cy.get('[data-cy="exchange-page"]').should('be.visible');
 
         cy.get('[data-cy="lending"]').click();
-        cy.url().should('include', '/lending');
         cy.get('[data-cy="lending-page"]').should('be.visible');
     });
 });
