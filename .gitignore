@@ -31,3 +31,6 @@ yarn-error.log*
 certs/cert.pem
 certs/server.cert
 certs/server.key
+
+cypress/integration/1-getting-started/
+cypress/integration/2-advanced-examples/

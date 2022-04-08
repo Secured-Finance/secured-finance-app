@@ -88,6 +88,7 @@
     "@types/webfontloader": "^1.6.32",
     "autoprefixer": "^9.8.8",
     "css-loader": "^5.2.6",
+    "cypress": "^9.5.3",
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.4.0",
     "eslint-plugin-prettier": "^4.0.0",
