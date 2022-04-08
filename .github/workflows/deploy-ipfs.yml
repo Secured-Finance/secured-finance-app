@@ -18,11 +18,10 @@ jobs:
           name: ${{ inputs.package-name }}
           path: ${{ inputs.package-name }}
       - name: Deploy on IPFS
-        uses: aquiladev/ipfs-action@master
+        uses: aquiladev/ipfs-action@v0.2.1
         id: ipfs
         with:
           path: ${{ inputs.package-name }}
-          protocol: http
       - uses: LouisBrunner/checks-action@v1.1.1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
