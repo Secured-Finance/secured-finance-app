@@ -1,4 +1,4 @@
-import { createMemoryHistory } from 'history';
+import { MemoryRouter } from 'react-router-dom';
 import { Router } from 'react-router';
 import { render, screen } from 'src/test-utils.js';
 import { WalletButton } from './WalletButton';
@@ -14,12 +14,11 @@ describe('Wallet Button component', () => {
     });
     it('Should render the a link to My Wallet when connected', () => {
         localStorage.setItem('CACHED_PROVIDER_KEY', 'connected');
-        const history = createMemoryHistory();
 
         render(
-            <Router history={history}>
+            <MemoryRouter>
                 <WalletButton />
-            </Router>
+            </MemoryRouter>
         );
         expect(screen.getByText('My Wallet')).toBeInTheDocument();
     });
