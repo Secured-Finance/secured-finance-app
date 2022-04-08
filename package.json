@@ -59,7 +59,8 @@
     "build-storybook": "build-storybook -s public",
     "prepare": "husky install",
     "cypress:open": "cypress open",
-    "cypress:run": "cypress run"
+    "cypress:run": "cypress run",
+    "build:ci": "CI=false npm run build"
   },
   "browserslist": {
     "production": [">0.2%", "not dead", "not op_mini all"],
