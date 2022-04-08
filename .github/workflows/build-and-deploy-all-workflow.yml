@@ -38,3 +38,4 @@ jobs:
         with:
           build: npm run build:ci
           start: npm start
+          wait-on: 'http://localhost:3000'
