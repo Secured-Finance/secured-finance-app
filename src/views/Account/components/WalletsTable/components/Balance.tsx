@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { currencyList, CurrencyInfo } from '../../../../../utils/currencies';
+import { CurrencyInfo, currencyList } from '../../../../../utils/currencies';
 import { ordinaryFormat, usdFormat } from '../../../../../utils/formatNumbers';
 
 interface BalanceContainerProps {
@@ -24,7 +24,7 @@ const BalanceInfo: React.FC<ItemProps> = ({
     let shortName: string;
 
     currencies.filter((currency, i) => {
-        if (index == i) {
+        if (index === i) {
             shortName = currency.shortName;
         }
     });

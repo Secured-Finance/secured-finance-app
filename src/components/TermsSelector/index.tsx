@@ -1,8 +1,8 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import theme from '../../theme';
-import ArrowSVG from '../ArrowSVG';
 import { Terms, terms } from '../../utils/terms';
+import ArrowSVG from '../ArrowSVG';
 
 interface TermsSelectorProps {
     selectedTerm: string;
@@ -33,7 +33,7 @@ const RenderText: React.FC<ChildrenProps> = ({ selectedTerm, terms }) => {
     let text: string;
 
     terms.filter((term, i) => {
-        if (selectedTerm == term.term) {
+        if (selectedTerm === term.term) {
             text = term.text;
         }
     });

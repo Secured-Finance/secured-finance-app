@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react';
 import { connect, useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
-import { useWallet } from 'use-wallet';
 import Button from '../../components/Button';
 import Container from '../../components/Container';
 import { RenderTerms } from '../../components/HistoryTable/types';
@@ -48,8 +47,7 @@ const initCoupon: CouponPayment = {
 
 type CombinedProps = LoanScreenProps;
 
-const LoanScreen: React.FC<CombinedProps> = ({}) => {
-    const { account } = useWallet();
+const LoanScreen: React.FC<CombinedProps> = () => {
     const params: any = useParams();
     const loan = useLoanInformation(params.loanId);
     const [couponPayment, setCouponPayment] = useState<CouponPayment>();
@@ -134,7 +132,7 @@ const LoanScreen: React.FC<CombinedProps> = ({}) => {
     const nextCouponPayment = () => {
         const payment: Array<CouponPayment> =
             loan?.schedule.payments?.filter((payment: any) => {
-                return payment.isDone == false;
+                return payment.isDone === false;
             }) || [];
         setCouponPayment(payment[0]);
     };
@@ -345,7 +343,7 @@ const LoanScreen: React.FC<CombinedProps> = ({}) => {
                                 />
                             </StyledItemContainer>
                         </StyledSubcontainer>
-                        {colBook.vault != '' ? (
+                        {colBook.vault !== '' ? (
                             <CounterpartyContainer>
                                 <StyledSubcontainer>
                                     <StyledLabelTitle
