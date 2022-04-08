@@ -1,0 +1,15 @@
+{
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "files.associations": {
+    "*.jsx": "javascriptreact",
+    "*.tsx": "typescriptreact"
+  },
+  "files.trimTrailingWhitespace": true,
+  "files.trimFinalNewlines": true,
+  "[javascriptreact][javascript][typescriptreact][typescript][json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": true
+    }
+  }
+}
