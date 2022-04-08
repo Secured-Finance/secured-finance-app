@@ -1,7 +1,6 @@
 import BigNumber from 'bignumber.js';
 import { useCallback } from 'react';
 import { useWallet } from 'use-wallet';
-import { provider } from 'web3-core';
 import { getLendingMarketContract, placeOrder } from '../services/sdk/utils';
 import useSF from './useSecuredFinance';
 
@@ -13,7 +12,7 @@ export const usePlaceOrder = (
     rate: number
 ) => {
     const securedFinance = useSF();
-    const { account }: { account: string; ethereum: provider } = useWallet();
+    const { account } = useWallet();
     const lendingMarket = getLendingMarketContract(securedFinance, ccy, term);
     const deadline = Date.now() + 60 * 60 * 24 * 14;
 

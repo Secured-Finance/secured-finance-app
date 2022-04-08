@@ -17,11 +17,7 @@ declare global {
 }
 
 const SecuredFinanceProvider: React.FC = ({ children }) => {
-    const {
-        ethereum,
-        error,
-        status,
-    }: { ethereum: any; error: any; status: any; connect: any } = useWallet();
+    const { ethereum, error, status } = useWallet();
     const [securedFinance, setSecuredFinance] = useState<any>();
 
     // @ts-ignore
