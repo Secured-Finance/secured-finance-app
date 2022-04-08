@@ -27,3 +27,14 @@ jobs:
       publish: true
       retention-days: 90
       package-name: WebApp
+  cypress-run:
+    runs-on: ubuntu-latest
+    name: Cypress Run Tests
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Cypress run
+        uses: cypress-io/github-action@v2
+        with:
+          build: npm run build
+          start: npm start
