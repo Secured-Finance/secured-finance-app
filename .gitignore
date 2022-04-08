@@ -15,7 +15,7 @@
 /storybook-static
 
 # vs code
-.vscode
+.vscode/tasks.json
 
 # misc
 .DS_Store

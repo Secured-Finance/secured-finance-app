@@ -1,13 +1,13 @@
-import React, { useContext, useState } from 'react';
-import styled, { ThemeContext } from 'styled-components';
-import theme from '../../../theme';
+import React, { useState } from 'react';
+import styled from 'styled-components';
 import Button from '../../../components/Button';
+import theme from '../../../theme';
 import Borrow from './Borrow';
 import Lend from './Lend';
 
 interface PlaceOrderProps {
-    borrowRates: any[];
-    lendingRates: any[];
+    borrowRates: number[];
+    lendingRates: number[];
 }
 
 const PlaceOrderObsolete: React.FC<PlaceOrderProps> = ({

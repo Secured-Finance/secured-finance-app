@@ -1,6 +1,5 @@
 import { useCallback } from 'react';
 import { useWallet } from 'use-wallet';
-
 import { cancelOrder, getLendingMarketContract } from '../services/sdk/utils';
 import useSF from './useSecuredFinance';
 

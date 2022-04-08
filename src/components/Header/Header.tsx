@@ -2,7 +2,7 @@ import { NavLink } from 'react-router-dom';
 import { Logo } from 'src/components/new/icons';
 import { WalletButton } from '../WalletButton/WalletButton';
 
-export const Header = () => {
+export const Header = (): JSX.Element => {
     return (
         <div className='border-b-2 border-solid border-strokeGrey'>
             <div className='m-auto flex justify-between py-3'>

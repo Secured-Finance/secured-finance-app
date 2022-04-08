@@ -74,7 +74,7 @@ const MnemonicModal: React.FC<ModalProps> = ({ onDismiss }) => {
 
     const handleCreateFilHDWallet = useCallback(async () => {
         try {
-            if (filProviders && mnemonic != '' && walletProvider == null) {
+            if (filProviders && mnemonic !== '' && walletProvider == null) {
                 const provider = await filProviders.HDWalletProvider(mnemonic);
                 await onCreate(provider, HDWallet, Network.TEST);
             }

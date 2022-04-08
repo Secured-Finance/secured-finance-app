@@ -1,15 +1,13 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useWallet } from 'use-wallet';
-
-import {
-    getCollateralContract,
-    getCollateralBook,
-} from '../services/sdk/utils';
-import useSF from './useSecuredFinance';
-import useBlock from './useBlock';
-import { RootState } from '../store/types';
 import { BigNumber } from 'src/services/sdk';
+import {
+    getCollateralBook,
+    getCollateralContract,
+} from '../services/sdk/utils';
+import { RootState } from '../store/types';
+import useBlock from './useBlock';
+import useSF from './useSecuredFinance';
 
 const ZERO_BN = new BigNumber(0);
 
@@ -84,7 +82,7 @@ const useCollateralBook = (account: string) => {
 
     useEffect(() => {
         let isMounted = true;
-        if (securedFinance && collateralContract && account && account != '') {
+        if (securedFinance && collateralContract && account && account !== '') {
             fetchCollateralBook();
         }
         return () => {

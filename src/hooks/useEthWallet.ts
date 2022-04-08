@@ -1,10 +1,11 @@
 import BigNumber from 'bignumber.js';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useWallet } from 'use-wallet';
 import WalletAccountModal from '../components/WalletAccountModal';
 import { RootState } from '../store/types';
 import {
+    resetEthWallet,
     updateEthWalletActions,
     updateEthWalletAddress,
     updateEthWalletAssetPrice,
@@ -12,13 +13,11 @@ import {
     updateEthWalletDailyChange,
     updateEthWalletPortfolioShare,
     updateEthWalletUSDBalance,
-    resetEthWallet,
 } from '../store/wallets';
+import { recalculateTotalUSDBalance } from '../store/wallets/helpers';
 import { useEthereumUsd } from './useAssetPrices';
-
 import useBlock from './useBlock';
 import useModal from './useModal';
-import { recalculateTotalUSDBalance } from '../store/wallets/helpers';
 
 export const useEthereumWalletStore = () => {
     const ethWallet = useSelector((state: RootState) => {
@@ -64,7 +63,7 @@ export const useEthereumWalletStore = () => {
             dispatch(updateEthWalletAssetPrice(price));
             dispatch(updateEthWalletDailyChange(change));
             dispatch(updateEthWalletUSDBalance(usdBalance));
-            if (portfolioShare != (null || Infinity)) {
+            if (portfolioShare !== (null || Infinity)) {
                 dispatch(updateEthWalletPortfolioShare(portfolioShare));
             }
             dispatch(recalculateTotalUSDBalance());
@@ -79,9 +78,9 @@ export const useEthereumWalletStore = () => {
             account &&
             balance &&
             reset &&
-            totalUSDBalance != 0 &&
-            price != 0 &&
-            change != 0
+            totalUSDBalance !== 0 &&
+            price !== 0 &&
+            change !== 0
         ) {
             fetchEthStore(isMounted);
         }

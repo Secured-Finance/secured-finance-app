@@ -1,7 +1,6 @@
 import { useCallback } from 'react';
 import { useWallet } from 'use-wallet';
-
-import { upSizeEth, getCollateralContract } from '../services/sdk/utils';
+import { getCollateralContract, upSizeEth } from '../services/sdk/utils';
 import useSF from './useSecuredFinance';
 
 export const useUpsizeCollateral = (amount: number) => {
