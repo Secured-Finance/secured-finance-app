@@ -1,15 +1,14 @@
-import { createMemoryHistory } from 'history';
+import { MemoryRouter } from 'react-router-dom';
 import { Router } from 'react-router-dom';
 import { render, screen } from 'src/test-utils.js';
 import { Header } from './Header';
 
 describe('Header component', () => {
     it('Should render the header', () => {
-        const history = createMemoryHistory();
         render(
-            <Router history={history}>
+            <MemoryRouter>
                 <Header />
-            </Router>
+            </MemoryRouter>
         );
         expect(screen.getByText('Secured')).toBeInTheDocument();
         expect(screen.getByText('Finance')).toBeInTheDocument();

@@ -21,7 +21,7 @@ const App: React.FC = () => {
             <Providers>
                 <Header />
                 <Switch>
-                    <Route path='/' exact>
+                    <Route path='/'>
                         <Lending />
                     </Route>
                     <Route path='/exchange'>
@@ -47,7 +47,6 @@ const Providers: React.FC = ({ children }) => {
         <ThemeProvider theme={theme}>
             <ApolloProvider client={client}>
                 <UseWalletProvider
-                    chainId={3}
                     connectors={{
                         walletconnect: {
                             rpcUrl: 'https://ropsten.eth.aragon.network/',
