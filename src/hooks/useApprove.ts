@@ -1,6 +1,5 @@
 import { useCallback } from 'react';
 import { useWallet } from 'use-wallet';
-import { provider } from 'web3-core';
 import {
     approve,
     getLendingMarketContract,
@@ -10,7 +9,7 @@ import useSF from './useSecuredFinance';
 
 const useApprove = (ccy: number, term: number) => {
     const securedFinance = useSF();
-    const { account }: { account: string; ethereum: provider } = useWallet();
+    const { account } = useWallet();
     const usdcContract = getUsdcContract(securedFinance);
     const lendingMarketContract = getLendingMarketContract(
         securedFinance,
