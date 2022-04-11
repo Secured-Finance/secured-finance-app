@@ -1,7 +1,7 @@
-import { formatAddress } from '../../../../utils';
-import CurrencyContainer from '../../../../components/CurrencyContainer';
+import { formatAddress } from 'src/utils';
+import { CurrencyContainer } from 'src/components/atoms';
 import React from 'react';
-import { RenderCollateral, RenderBorrow, RenderRatio } from './components';
+import { RenderCollateral, RenderBorrow } from './components';
 
 export interface TableColumns {
     Header: string;

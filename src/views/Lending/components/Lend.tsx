@@ -1,8 +1,9 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { connect, useDispatch, useSelector } from 'react-redux';
-import Button from 'src/components/Button';
-import CurrencySelector from 'src/components/CurrencySelector';
-import TermsSelector from 'src/components/TermsSelector';
+import styled from 'styled-components';
+
+import { Button } from 'src/components/atoms';
+import { CurrencySelector, TermsSelector } from 'src/components/molecules';
 import { usePlaceOrder } from 'src/hooks/usePlaceOrder';
 import {
     updateLendAmount,
@@ -20,7 +21,6 @@ import {
     terms,
     usdFormat,
 } from 'src/utils';
-import styled from 'styled-components';
 
 interface LendTabProps {
     lendingRates: any[];

@@ -1,7 +1,7 @@
 import { ApolloProvider } from '@apollo/client/react';
 import React from 'react';
 import { HashRouter as Router, Route, Switch } from 'react-router-dom';
-import { Header } from 'src/components/Header/Header';
+import { Header } from 'src/components/organisms';
 import { ThemeProvider } from 'styled-components';
 import { UseWalletProvider } from 'use-wallet';
 import FilecoinWalletProvider from './contexts/FilecoinWalletProvider';

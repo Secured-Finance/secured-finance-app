@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
-import ProgressBar from '../../../../../components/ProgressBar';
-import { percentFormat } from '../../../../../utils/formatNumbers';
+import { ProgressBar } from 'src/components/atoms';
+import { percentFormat } from 'src/utils/formatNumbers';
 
 interface PortfolioContainerProps {
     share: number;

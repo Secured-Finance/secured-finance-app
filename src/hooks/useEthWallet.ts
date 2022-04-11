@@ -2,8 +2,8 @@ import BigNumber from 'bignumber.js';
 import { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useWallet } from 'use-wallet';
-import WalletAccountModal from '../components/WalletAccountModal';
-import { RootState } from '../store/types';
+import { WalletAccountModal } from 'src/components/organisms';
+import { RootState } from 'src/store/types';
 import {
     resetEthWallet,
     updateEthWalletActions,
@@ -13,8 +13,8 @@ import {
     updateEthWalletDailyChange,
     updateEthWalletPortfolioShare,
     updateEthWalletUSDBalance,
-} from '../store/wallets';
-import { recalculateTotalUSDBalance } from '../store/wallets/helpers';
+} from 'src/store/wallets';
+import { recalculateTotalUSDBalance } from 'src/store/wallets/helpers';
 import { useEthereumUsd } from './useAssetPrices';
 import useBlock from './useBlock';
 import useModal from './useModal';
