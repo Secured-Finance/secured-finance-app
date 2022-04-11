@@ -4,7 +4,10 @@ import { WalletButton } from '../WalletButton/WalletButton';
 
 export const Header = (): JSX.Element => {
     return (
-        <div className='border-b-2 border-solid border-strokeGrey'>
+        <div
+            data-cy='header'
+            className='border-b-2 border-solid border-strokeGrey'
+        >
             <div className='m-auto flex justify-between py-3'>
                 <NavLink
                     className='flex w-2/5 cursor-pointer items-center border-r-2 border-solid border-strokeGrey pl-12'
@@ -20,7 +23,7 @@ export const Header = (): JSX.Element => {
                     <ItemLink text='Lending' link='/' />
                     <ItemLink text='Terminal' link='/exchange' />
                     <ItemLink text='History' link='/history' />
-                    <div className='flex text-purple'>
+                    <div className='flex text-purple' data-cy='wallet'>
                         <WalletButton />
                     </div>
                 </div>
@@ -33,6 +36,7 @@ const ItemLink = ({ text, link }: { text: string; link: string }) => {
     return (
         <NavLink
             exact
+            data-cy={text.toLowerCase()}
             className='flex cursor-pointer text-lightGrey'
             activeClassName='text-lightSilver'
             to={link}

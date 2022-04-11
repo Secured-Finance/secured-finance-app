@@ -1,38 +1,40 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
+import { connect } from 'react-redux';
 import styled from 'styled-components';
-import { OrderBook } from './components/OrderBook';
 import Page from '../../components/Page';
 import YieldCurve from '../../components/YieldCurve';
-import theme from '../../theme';
-import LoanOrder from './components/LoanOrder';
-import { TradeHistory } from './components/TradeHistory';
-import { Balances } from './components/Balances';
-import MarketInfo from './components/MarketInfo';
 import { RootState } from '../../store/types';
-import { connect } from 'react-redux';
+import theme from '../../theme';
+import { Balances } from './components/Balances';
+import LoanOrder from './components/LoanOrder';
+import MarketInfo from './components/MarketInfo';
+import { OrderBook } from './components/OrderBook';
 import OrderHistory from './components/OrderHistory';
+import { TradeHistory } from './components/TradeHistory';
 
 const Exchange: React.FC = () => {
     return (
-        <Page background={theme.colors.background}>
-            <StyledTerminalContainer>
-                <ScrollableSideContainer>
-                    <Balances />
-                    <StyledDivider />
-                    <LoanOrder />
-                </ScrollableSideContainer>
-                <StyledCenterContainer>
-                    <MarketInfo />
-                    <YieldCurve />
-                    <OrderHistory />
-                </StyledCenterContainer>
-                <ScrollableSideContainer>
-                    <OrderBook />
-                    <StyledDivider />
-                    <TradeHistory />
-                </ScrollableSideContainer>
-            </StyledTerminalContainer>
-        </Page>
+        <div data-cy='exchange-page'>
+            <Page background={theme.colors.background}>
+                <StyledTerminalContainer>
+                    <ScrollableSideContainer>
+                        <Balances />
+                        <StyledDivider />
+                        <LoanOrder />
+                    </ScrollableSideContainer>
+                    <StyledCenterContainer>
+                        <MarketInfo />
+                        <YieldCurve />
+                        <OrderHistory />
+                    </StyledCenterContainer>
+                    <ScrollableSideContainer>
+                        <OrderBook />
+                        <StyledDivider />
+                        <TradeHistory />
+                    </ScrollableSideContainer>
+                </StyledTerminalContainer>
+            </Page>
+        </div>
     );
 };
 
