@@ -1,9 +1,9 @@
 import React from 'react';
 import { Story, Meta } from '@storybook/react';
-import cm from './index.module.scss';
+import cm from 'src/stories/index.module.scss';
 
-import { ChipButton, IChipButton } from 'src/components/new/Chip/ChipButton';
-import { ChipLabel, IChipLabel } from 'src/components/new/Chip/ChipLabel';
+import { ChipButton, IChipButton } from './ChipButton';
+import { ChipLabel, IChipLabel } from './ChipLabel';
 
 export default {
     title: 'Components/Chips',

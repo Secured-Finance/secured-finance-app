@@ -1,7 +1,7 @@
 import React from 'react';
 import { Story, Meta } from '@storybook/react';
 
-import { IconButton, IIconButton } from 'src/components/new/IconButton';
+import { IconButton, IIconButton } from './';
 
 export default {
     title: 'Components/IconButton',

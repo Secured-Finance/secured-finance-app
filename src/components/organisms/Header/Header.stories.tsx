@@ -1,12 +1,11 @@
 import { Meta, Story } from '@storybook/react';
-import React from 'react';
 import { Provider } from 'react-redux';
 import { HashRouter as Router } from 'react-router-dom';
 import { Header } from './Header';
 import { default as store } from 'src/store';
 
 export default {
-    title: 'Components/Header',
+    title: 'Components/Organisms/Header',
     component: Header,
 } as Meta;
 

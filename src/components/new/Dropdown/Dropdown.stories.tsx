@@ -1,7 +1,7 @@
 import React from 'react';
 import { Story, Meta } from '@storybook/react';
-import { Dropdown, IDropdown } from 'src/components/new/Dropdown';
-import { filecoin, telegram } from 'src/components/new/icons';
+import { Dropdown, IDropdown } from './';
+import { filecoin, telegram } from '../icons';
 
 export default {
     title: 'Components/Dropdown',

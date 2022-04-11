@@ -1,7 +1,6 @@
-import React from 'react';
 import { Story, Meta } from '@storybook/react';
-import { LineChart, ILineChart } from 'src/components/new/LineChart';
-import { options } from 'src/components/new/LineChart/constants';
+import { LineChart, ILineChart } from './';
+import { options } from './constants';
 
 export default {
     title: 'Components/LineChart',

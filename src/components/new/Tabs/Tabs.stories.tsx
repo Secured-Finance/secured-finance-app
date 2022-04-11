@@ -1,6 +1,6 @@
 import React from 'react';
 import { Story, Meta } from '@storybook/react';
-import { Tabs, ITabs } from 'src/components/new/Tabs';
+import { Tabs, ITabs } from './';
 
 export default {
     title: 'Components/Tabs',

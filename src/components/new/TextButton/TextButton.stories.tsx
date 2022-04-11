@@ -1,7 +1,6 @@
-import React from 'react';
 import { Story, Meta } from '@storybook/react';
 
-import { TextButton, ITextButton } from 'src/components/new/TextButton';
+import { TextButton, ITextButton } from './';
 
 export default {
     title: 'Components/TextButton',

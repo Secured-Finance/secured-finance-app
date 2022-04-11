@@ -1,7 +1,7 @@
 import React from 'react';
 import { Story, Meta } from '@storybook/react';
-import { FieldValue, IFieldValue } from 'src/components/new/FieldValue';
-import { VerifiedIcon, telegram } from 'src/components/new/icons';
+import { FieldValue, IFieldValue } from './';
+import { VerifiedIcon, telegram } from '../icons';
 
 export default {
     title: 'Components/FieldValue',
