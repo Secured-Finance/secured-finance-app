@@ -1,7 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const Card: React.FC = ({ children }) => <StyledCard>{children}</StyledCard>;
+export const Card: React.FC = ({ children }) => (
+    <StyledCard>{children}</StyledCard>
+);
 
 const StyledCard = styled.div`
     background: ${props => props.theme.colors.background};
@@ -14,5 +16,3 @@ const StyledCard = styled.div`
     flex-direction: column;
     min-width: 162px;
 `;
-
-export default Card;

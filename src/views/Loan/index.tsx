@@ -3,8 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { connect, useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
-import { Button, Container, Spacer } from 'src/components/atoms';
-import { RenderTerms } from 'src/components/molecules';
+import { Button, Container, Spacer, RenderTerms } from 'src/components/atoms';
 import { Page } from 'src/components/templates';
 import useCollateralBook from 'src/hooks/useCollateralBook';
 import { useLoanInformation } from 'src/hooks/useLoanHistory';
@@ -17,7 +16,7 @@ import {
     ordinaryFormat,
     percentFormat,
     usdFormat,
-} from '../../utils';
+} from 'src/utils';
 
 interface LoanScreenProps {
     loan?: any;

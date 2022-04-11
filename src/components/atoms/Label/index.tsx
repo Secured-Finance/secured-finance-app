@@ -6,7 +6,7 @@ interface LabelProps {
     style?: StyledLabelProps;
 }
 
-const Label: React.FC<LabelProps> = ({ text, style }) => (
+export const Label: React.FC<LabelProps> = ({ text, style }) => (
     <StyledLabel
         marginTop={style?.marginTop}
         fontSize={style?.fontSize}
@@ -30,5 +30,3 @@ const StyledLabel = styled.div<StyledLabelProps>`
     color: ${props => props.theme.colors.gray};
     margin-top: ${props => (props.marginTop ? props.marginTop : 0)}px;
 `;
-
-export default Label;

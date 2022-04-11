@@ -1,8 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 import theme from '../../../theme';
-import { Terms, terms } from '../../../utils/terms';
-import { ArrowSVG } from 'src/components/atoms';
+// import { Terms, terms } from '../../../utils/terms';
+import { ArrowSVG, Term, termsList } from 'src/components/atoms';
 
 interface TermsSelectorProps {
     selectedTerm: string;
@@ -24,7 +24,7 @@ interface StyledTermsSelectorProps {
 }
 
 interface TermsListProps {
-    terms: Array<Terms>;
+    terms: Array<Term>;
 }
 
 type ChildrenProps = TermsSelectorProps & TermsListProps;
@@ -33,8 +33,8 @@ const RenderText: React.FC<ChildrenProps> = ({ selectedTerm, terms }) => {
     let text: string;
 
     terms.filter((term, i) => {
-        if (selectedTerm === term.term) {
-            text = term.text;
+        if (selectedTerm === term.value) {
+            text = term.label;
         }
     });
 
@@ -61,7 +61,7 @@ export const TermsSelector: React.FC<TermsSelectorProps> = ({
             fontWeight={style?.fontWeight}
             fontSize={style?.fontSize}
         >
-            <RenderText selectedTerm={selectedTerm} terms={terms} />
+            <RenderText selectedTerm={selectedTerm} terms={termsList} />
             {!noIcon ? (
                 <StyledSVGContainer>
                     <ArrowSVG

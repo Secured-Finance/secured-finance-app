@@ -11,7 +11,7 @@ import {
 import EthWallet from './components/EthWallet';
 import FilWallet from './components/FilWallet';
 
-const WalletModal: React.FC<ModalProps> = ({ onDismiss, ccyIndex }) => {
+const WalletAccountModal: React.FC<ModalProps> = ({ onDismiss, ccyIndex }) => {
     return (
         <Modal>
             <ModalTitle text='Wallet Information' />
@@ -41,4 +41,4 @@ const WalletModal: React.FC<ModalProps> = ({ onDismiss, ccyIndex }) => {
     );
 };
 
-export default WalletModal;
+export default WalletAccountModal;

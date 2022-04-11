@@ -1,13 +1,6 @@
-import CollateralModal from './CollateralModal';
-import LoanConfirmationModal from './LoanConfirmationModal';
-import SendModal from './SendModal';
-import WalletAccountModal from './WalletAccountModal';
-export * from './WalletProviderModal';
+export * from './CollateralModal';
 export * from './Header';
-
-export {
-    CollateralModal,
-    LoanConfirmationModal,
-    SendModal,
-    WalletAccountModal,
-};
+export * from './LoanConfirmationModal';
+export * from './SendModal';
+export * from './WalletAccountModal';
+export * from './WalletProviderModal';

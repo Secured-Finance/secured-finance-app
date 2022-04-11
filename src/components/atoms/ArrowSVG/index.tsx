@@ -8,7 +8,7 @@ interface ArrowSVGProps {
     stroke?: string;
 }
 
-const ArrowSVG: React.FC<ArrowSVGProps> = ({
+export const ArrowSVG: React.FC<ArrowSVGProps> = ({
     width,
     height,
     rotate,
@@ -32,5 +32,3 @@ const ArrowSVG: React.FC<ArrowSVGProps> = ({
         </svg>
     );
 };
-
-export default ArrowSVG;

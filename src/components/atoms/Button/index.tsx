@@ -41,7 +41,7 @@ interface StyledButtonProps {
     borderColor?: string;
 }
 
-const Button: React.FC<ButtonProps> = ({
+export const Button: React.FC<ButtonProps> = ({
     children,
     disabled,
     href,
@@ -200,5 +200,3 @@ const StyledExternalLink = styled.a`
     padding: 0 ${props => props.theme.spacing[4]}px;
     text-decoration: none;
 `;
-
-export default Button;

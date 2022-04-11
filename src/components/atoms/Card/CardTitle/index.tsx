@@ -5,7 +5,7 @@ interface CardTitleProps {
     text?: string;
 }
 
-const CardTitle: React.FC<CardTitleProps> = ({ text }) => (
+export const CardTitle: React.FC<CardTitleProps> = ({ text }) => (
     <StyledCardTitle>{text}</StyledCardTitle>
 );
 
@@ -16,5 +16,3 @@ const StyledCardTitle = styled.div`
     padding: ${props => props.theme.spacing[4]}px 0;
     text-align: center;
 `;
-
-export default CardTitle;

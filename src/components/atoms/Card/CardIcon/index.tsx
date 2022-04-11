@@ -5,7 +5,7 @@ interface CardIconProps {
     children?: React.ReactNode;
 }
 
-const CardIcon: React.FC<CardIconProps> = ({ children }) => (
+export const CardIcon: React.FC<CardIconProps> = ({ children }) => (
     <StyledCardIcon>{children}</StyledCardIcon>
 );
 
@@ -20,5 +20,3 @@ const StyledCardIcon = styled.div`
     justify-content: center;
     margin: 0 auto;
 `;
-
-export default CardIcon;

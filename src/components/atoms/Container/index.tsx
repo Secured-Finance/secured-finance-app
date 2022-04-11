@@ -6,7 +6,7 @@ interface ContainerProps {
     width?: number;
 }
 
-const Container: React.FC<ContainerProps> = ({ children, width }) => {
+export const Container: React.FC<ContainerProps> = ({ children, width }) => {
     return <StyledContainer width={width}>{children}</StyledContainer>;
 };
 
@@ -21,5 +21,3 @@ const StyledContainer = styled.div<StyledContainerProps>`
     padding: 0 ${props => props.theme.spacing[4]}px;
     width: 100%;
 `;
-
-export default Container;
