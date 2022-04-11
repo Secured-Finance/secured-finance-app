@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { OrderBook } from './components/OrderBook';
-import Page from '../../components/Page';
-import YieldCurve from '../../components/YieldCurve';
-import theme from '../../theme';
+import { Page } from 'src/components/templates';
+import { YieldCurve } from 'src/components/molecules';
+import theme from 'src/theme';
 import LoanOrder from './components/LoanOrder';
 import { TradeHistory } from './components/TradeHistory';
 import { Balances } from './components/Balances';
 import MarketInfo from './components/MarketInfo';
-import { RootState } from '../../store/types';
+import { RootState } from 'src/store/types';
 import { connect } from 'react-redux';
 import OrderHistory from './components/OrderHistory';
 

@@ -1,10 +1,6 @@
-import CurrencyContainer from '../../../../../../components/CurrencyContainer';
-import theme from '../../../../../../theme';
-import {
-    formatDateAndTime,
-    ordinaryFormat,
-    percentFormat,
-} from '../../../../../../utils';
+import { CurrencyContainer } from 'src/components/atoms';
+import theme from 'src/theme';
+import { formatDateAndTime, ordinaryFormat, percentFormat } from 'src/utils';
 import { RenderTerms, TableColumns } from '../commonTypes';
 
 export interface FilledOrdersTableData {

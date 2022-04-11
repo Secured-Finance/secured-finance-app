@@ -1,5 +1,5 @@
-import { formatAddress } from '../../../../utils';
-import CurrencyContainer from '../../../../components/CurrencyContainer';
+import { formatAddress } from 'src/utils';
+import { CurrencyContainer } from 'src/components/atoms';
 import React from 'react';
 import {
     RenderBalance,

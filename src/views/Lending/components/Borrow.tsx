@@ -1,15 +1,9 @@
-import React, {
-    useCallback,
-    useContext,
-    useEffect,
-    useMemo,
-    useState,
-} from 'react';
-import styled, { ThemeContext } from 'styled-components';
-import theme from '../../../theme';
-import Button from '../../../components/Button';
-import { LendingStore } from '../../../store/lending/types';
-import { RootState } from '../../../store/types';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import styled from 'styled-components';
+import theme from 'src/theme';
+import { Button } from 'src/components/atoms';
+import { LendingStore } from 'src/store/lending/types';
+import { RootState } from 'src/store/types';
 import { connect, useDispatch, useSelector } from 'react-redux';
 import {
     updateBorrowAmount,
@@ -18,10 +12,10 @@ import {
     updateCollateralAmount,
     updateMainCollateralCurrency,
     updateMainTerms,
-} from '../../../store/lending';
-import { useSetUpCollateral } from '../../../hooks/useSetUpCollateral';
-import { usePlaceOrder } from '../../../hooks/usePlaceOrder';
-import { useUpsizeCollateral } from '../../../hooks/useUpSizeCollateral';
+} from 'src/store/lending';
+import { useSetUpCollateral } from 'src/hooks/useSetUpCollateral';
+import { usePlaceOrder } from 'src/hooks/usePlaceOrder';
+import { useUpsizeCollateral } from 'src/hooks/useUpSizeCollateral';
 import {
     terms,
     collateralList,
@@ -29,9 +23,8 @@ import {
     percentFormat,
     formatInput,
     usdFormat,
-} from '../../../utils';
-import CurrencySelector from '../../../components/CurrencySelector';
-import TermsSelector from '../../../components/TermsSelector';
+} from 'src/utils';
+import { CurrencySelector, TermsSelector } from 'src/components/molecules';
 
 interface BorrowTabProps {
     borrowRates: any[];
@@ -405,15 +398,15 @@ const Borrow: React.FC<CombinedProps> = ({
                 {/* {
                 requestedCollateral
                 ?
-                <Button 
-                    variant={'orange'} 
-                    size={"lg"} 
+                <Button
+                    variant={'orange'}
+                    size={"lg"}
                     onClick={handleBorrowDeal}
                     style={{fontSize:16, fontWeight: 600, background: 'rgba(0, 122, 255, 1)', color: theme.colors.white}}
                 > Borrow</Button>
                 :
-                <Button 
-                    size={"lg"} 
+                <Button
+                    size={"lg"}
                     onClick={handleCollateralPayment}
                     style={{fontSize:16, fontWeight: 600, background: 'rgba(0, 122, 255, 1)', color: theme.colors.white}}
                 > Place collateral</Button>
