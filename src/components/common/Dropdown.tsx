@@ -2,7 +2,7 @@ import React from 'react';
 import { Label, sharedInputStyles } from './Inputs';
 import ChevronDown from 'src/assets/icons/ChevronDown.svg';
 import styled from 'styled-components';
-import { Term } from 'src/components/atoms';
+import { Term } from 'src/utils';
 import theme from 'src/theme';
 
 interface IDropdown extends React.SelectHTMLAttributes<HTMLSelectElement> {
