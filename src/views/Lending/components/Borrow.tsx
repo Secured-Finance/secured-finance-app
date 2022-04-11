@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
 import theme from 'src/theme';
-import { Button, termsList } from 'src/components/atoms';
+import { Button } from 'src/components/atoms';
 import { LendingStore } from 'src/store/lending/types';
 import { RootState } from 'src/store/types';
 import { connect, useDispatch, useSelector } from 'react-redux';
@@ -22,6 +22,7 @@ import {
     percentFormat,
     formatInput,
     usdFormat,
+    termList,
 } from 'src/utils';
 import { CurrencySelector, TermsSelector } from 'src/components/molecules';
 
@@ -295,7 +296,7 @@ const Borrow: React.FC<CombinedProps> = ({
                 {termsOpen ? (
                     <StyledDropdown>
                         <ul>
-                            {termsList.map((term, i) => (
+                            {termList.map((term, i) => (
                                 <StyledDropdownItem
                                     key={i}
                                     onClick={() =>

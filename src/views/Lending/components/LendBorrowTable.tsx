@@ -5,7 +5,6 @@ import { Button } from 'src/components/new/Button';
 import { Dropdown } from 'src/components/new/Dropdown';
 import { FieldValue } from 'src/components/new/FieldValue';
 import { Input } from 'src/components/new/Input';
-import { termsList } from 'src/components/atoms';
 import { useEthereumUsd, useFilUsd } from 'src/hooks/useAssetPrices';
 import { usePlaceOrder } from 'src/hooks/usePlaceOrder';
 import { getUSDCPrice } from 'src/store/assetPrices/selectors';
@@ -23,7 +22,12 @@ import {
     getEthUSDBalance,
     getFilUSDBalance,
 } from 'src/store/wallets/selectors';
-import { currencyListDropdown, percentFormat, usdFormat } from 'src/utils';
+import {
+    currencyListDropdown,
+    percentFormat,
+    usdFormat,
+    termList,
+} from 'src/utils';
 import { daysInYear } from '../constants';
 import BorrowCollateralManagement from './BorrowCollateralManagement';
 import cm from './LendBorrowTable.module.scss';
@@ -188,7 +192,7 @@ export const LendBorrowTable: React.FC<ILendBorrowTable> = ({
                 </span>
                 <span className={cm.bottomRow}>
                     <Dropdown
-                        options={termsList}
+                        options={termList}
                         onChange={handleTermsChange}
                         value={selectedTerms}
                         label={'Fixed'}
