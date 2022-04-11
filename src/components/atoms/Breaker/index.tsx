@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const Breaker: React.FC = () => {
+export const Breaker: React.FC = () => {
     return (
         <StyledBreakerContainer>
             <StyledBreak />
@@ -34,5 +34,3 @@ const StyledBreakerText = styled.p`
     font-size: ${props => props.theme.sizes.footnote}px;
     text-transform: uppercase;
 `;
-
-export default Breaker;

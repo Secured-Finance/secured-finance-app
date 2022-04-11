@@ -13,8 +13,8 @@ import {
     ModalActions,
     ModalContent,
     ModalTitle,
+    RenderTerms,
 } from 'src/components/atoms';
-import { RenderTerms } from 'src/components/molecules';
 
 interface LoanModalProps {
     loan?: any;

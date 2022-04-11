@@ -2,7 +2,7 @@ import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { ThemeProvider } from 'styled-components';
 import theme from 'src/theme';
 
-import Button from './';
+import { Button } from './';
 
 export default {
     title: 'Components/Atoms/Button',

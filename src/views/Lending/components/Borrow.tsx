@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
 import theme from 'src/theme';
-import { Button } from 'src/components/atoms';
+import { Button, termsList } from 'src/components/atoms';
 import { LendingStore } from 'src/store/lending/types';
 import { RootState } from 'src/store/types';
 import { connect, useDispatch, useSelector } from 'react-redux';
@@ -17,7 +17,6 @@ import { useSetUpCollateral } from 'src/hooks/useSetUpCollateral';
 import { usePlaceOrder } from 'src/hooks/usePlaceOrder';
 import { useUpsizeCollateral } from 'src/hooks/useUpSizeCollateral';
 import {
-    terms,
     collateralList,
     currencyList,
     percentFormat,
@@ -296,15 +295,15 @@ const Borrow: React.FC<CombinedProps> = ({
                 {termsOpen ? (
                     <StyledDropdown>
                         <ul>
-                            {terms.map((term, i) => (
+                            {termsList.map((term, i) => (
                                 <StyledDropdownItem
                                     key={i}
                                     onClick={() =>
-                                        handleTermSelect(term.term, termsOpen)
+                                        handleTermSelect(term.value, termsOpen)
                                     }
                                 >
                                     <StyledCurrencyText>
-                                        {term.text}
+                                        {term.label}
                                     </StyledCurrencyText>
                                 </StyledDropdownItem>
                             ))}

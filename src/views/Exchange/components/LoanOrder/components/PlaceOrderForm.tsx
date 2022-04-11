@@ -1,6 +1,6 @@
-import { Input } from '../../../../../components/common/Inputs';
-import { Dropdown } from '../../../../../components/common/Dropdown';
-import { terms } from '../../../../../utils';
+import { Input } from 'src/components/common/Inputs';
+import { Dropdown } from 'src/components/common/Dropdown';
+import { termsList } from 'src/components/atoms';
 import { InfoTable } from './InfoTable';
 import React from 'react';
 
@@ -34,7 +34,7 @@ export const PlaceOrderForm: React.FC<IPlaceOrderForm> = ({
                 label={'Term'}
                 onChangeValue={onChangeTerm}
                 value={termValue}
-                options={terms}
+                options={termsList}
             />
             <Input
                 label={['Interest rate', 'Market Rate: 7.10 %']}

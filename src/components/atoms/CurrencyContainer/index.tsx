@@ -129,7 +129,7 @@ const CurrencyItem: React.FC<ItemProps> = ({
     );
 };
 
-const CurrencyContainer: React.FC<CurrencyContainerProps> = ({
+export const CurrencyContainer: React.FC<CurrencyContainerProps> = ({
     ccy,
     size,
     short,
@@ -210,5 +210,3 @@ const StyledWalletSubtitle = styled.p<StyledCurrencyProps>`
     color: ${props => props.color};
     font-weight: ${props => props.fontWeight};
 `;
-
-export default CurrencyContainer;

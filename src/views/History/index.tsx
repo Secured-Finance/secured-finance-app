@@ -1,9 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
+import { Dispatch } from '@reduxjs/toolkit';
 
 import { Container } from 'src/components/atoms';
-import { HistoryTable } from 'src/components/molecules';
 import { Page } from 'src/components/templates';
 import { useLoanDeals, useBorrowDeals } from 'src/hooks/useLoanHistory';
 import theme from 'src/theme';
@@ -13,7 +13,7 @@ import {
     setLendingHistory,
     startSetHistory,
 } from 'src/store/history';
-import { Dispatch } from '@reduxjs/toolkit';
+import { HistoryTable } from './components';
 
 const History: React.FC = () => {
     const loans = useLoanDeals();
