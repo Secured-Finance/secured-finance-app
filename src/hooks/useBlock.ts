@@ -1,17 +1,16 @@
-import { useCallback, useEffect, useState } from 'react';
-import Web3 from 'web3';
-import { provider } from 'web3-core';
+import { useEffect, useState } from 'react';
 import { useWallet } from 'use-wallet';
+import Web3 from 'web3';
 // import debounce from 'debounce'
 
-const useBlock = () => {
+const useBlock = (): number => {
     const [block, setBlock] = useState(0);
-    const { ethereum }: { ethereum: provider } = useWallet();
+    const { ethereum } = useWallet();
 
     useEffect(() => {
         // const setBlockDebounced = debounce(setBlock, 300)
         if (!ethereum) return;
-        const web3 = new Web3(ethereum);
+        const web3 = new Web3(ethereum as any);
 
         // const subscription = new Web3(ethereum).eth.subscribe(
         //   'newBlockHeaders',

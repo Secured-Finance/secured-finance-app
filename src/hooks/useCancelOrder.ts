@@ -1,4 +1,4 @@
-import { BigNumber, Overrides } from 'ethers';
+import { BigNumber } from 'ethers';
 import { useCallback } from 'react';
 import { useWallet } from 'use-wallet';
 import { provider } from 'web3-core';

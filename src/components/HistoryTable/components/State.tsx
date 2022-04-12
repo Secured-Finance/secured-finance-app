@@ -1,8 +1,8 @@
-import React, { useCallback } from 'react';
-import styled from 'styled-components';
-import LoanConfirmationModal from '../../LoanConfirmationModal';
-import useModal from '../../../hooks/useModal';
+import React from 'react';
 import { Link } from 'react-router-dom';
+import styled from 'styled-components';
+import useModal from '../../../hooks/useModal';
+import LoanConfirmationModal from '../../LoanConfirmationModal';
 
 interface StateProps {
     loan: any;

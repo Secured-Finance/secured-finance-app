@@ -15,7 +15,7 @@ const Lending = ({ selectedCcy }: LendingStore) => {
     const midRate = useRates(selectedCcy, 2);
 
     return (
-        <Page>
+        <Page id='lending-page'>
             <div className='flex flex-grow justify-between space-x-4 pt-8'>
                 <div className='flex flex-col'>
                     <ChartInfo />
