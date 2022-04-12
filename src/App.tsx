@@ -21,9 +21,6 @@ const App: React.FC = () => {
             <Providers>
                 <Header />
                 <Switch>
-                    <Route path='/'>
-                        <Lending />
-                    </Route>
                     <Route path='/exchange'>
                         <Exchange />
                     </Route>
@@ -35,6 +32,9 @@ const App: React.FC = () => {
                     </Route>
                     <Route path='/loan/:loanId'>
                         <Loan />
+                    </Route>
+                    <Route path='/'>
+                        <Lending />
                     </Route>
                 </Switch>
             </Providers>
