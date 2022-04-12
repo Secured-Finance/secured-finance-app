@@ -5,6 +5,7 @@ import useModal from '../../../../../hooks/useModal';
 
 interface ActionProps {
     ccyIndex: number;
+    collateralVault: string;
 }
 
 const RenderActions: React.FC<ActionProps> = ({ ccyIndex }) => {

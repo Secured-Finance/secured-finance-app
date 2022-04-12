@@ -1,11 +1,10 @@
 import BigNumber from 'bignumber.js';
-import React, { HTMLAttributes, useState } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import ArrowSVG from '../../../../components/ArrowSVG';
 import { useEthereumUsd, useFilUsd } from '../../../../hooks/useAssetPrices';
 import { useRates } from '../../../../hooks/useRates';
 import useSF from '../../../../hooks/useSecuredFinance';
-import { getLendingControllerContract } from '../../../../services/sdk/utils';
 import theme from '../../../../theme';
 import { ordinaryFormat, percentFormat, usdFormat } from '../../../../utils';
 import { Tabs } from '../../../../components/common/Tabs';
@@ -17,13 +16,11 @@ const MarketInfo: React.FC<LendingTerminalStore> = ({
     selectedCcy,
     termsIndex,
 }) => {
-    const securedFinance = useSF();
-    const lendingController = getLendingControllerContract(securedFinance);
     const marketTabs = ['Yield', 'Price'];
     const [selectedTab, setSelectedTab] = useState('Yield');
     const ethPrice = useEthereumUsd();
     const filPrice = useFilUsd();
-    const lendingRates = useRates(lendingController, 2, selectedCcy);
+    const lendingRates = useRates('FIL', 2);
 
     const handleSelectTab = (tab: React.SetStateAction<string>) => {
         setSelectedTab(tab);

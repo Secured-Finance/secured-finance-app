@@ -8,7 +8,7 @@ export const LOAN_DEALS = gql`
             borrower
             currency
             term
-            amount
+            notional
             couponPayment
             rate
             startTimestamp
@@ -20,14 +20,14 @@ export const LOAN_DEALS = gql`
 `;
 
 export const BORROW_DEALS = gql`
-    query BorrowDeals($account: Bytes!) {
-        loans(where: { borrower: $account }) {
+    query BorrowDeals($account: Bytes!, $skip: Int!) {
+        loans(where: { borrower: $account }, skip: $skip) {
             id
             lender
             borrower
             currency
             term
-            amount
+            notional
             couponPayment
             rate
             startTimestamp
@@ -46,7 +46,7 @@ export const LOAN_INFO = gql`
             borrower
             currency
             term
-            amount
+            notional
             couponPayment
             rate
             startTimestamp

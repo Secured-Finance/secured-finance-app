@@ -19,9 +19,9 @@ import {
     updateMainCollateralCurrency,
     updateMainTerms,
 } from '../../../store/lending';
-import { useSetUpCollateral } from '../../../hooks/useSetUpCollateral';
+import { useRegisterUser } from '../../../hooks/useRegisterUser';
 import { usePlaceOrder } from '../../../hooks/usePlaceOrder';
-import { useUpsizeCollateral } from '../../../hooks/useUpSizeCollateral';
+import { useDepositCollateral } from '../../../hooks/useDepositCollateral';
 import {
     terms,
     collateralList,
@@ -70,23 +70,26 @@ const Borrow: React.FC<CombinedProps> = ({
     const [collateralOpen, setCollateralOpen] = useState(false);
     const [termsOpen, setTermsOpen] = useState(false);
 
-    const { onSetUpCollateral } = useSetUpCollateral(collateralAmount, '', '');
+    const { onRegisterUser } = useRegisterUser();
     const handleCollateralPayment = useCallback(async () => {
         try {
             setRequestedCollateral(true);
-            const txHash = await onSetUpCollateral();
+            const txHash = await onRegisterUser();
             if (!txHash) {
                 setRequestedCollateral(false);
             }
         } catch (e) {
             console.log(e);
         }
-    }, [onSetUpCollateral, setRequestedCollateral]);
+    }, [onRegisterUser, setRequestedCollateral]);
 
-    const { onUpsizeCollateral } = useUpsizeCollateral(collateralAmount);
+    const { onDepositCollateral } = useDepositCollateral(
+        selectedCcy,
+        collateralAmount
+    );
     const { onPlaceOrder } = usePlaceOrder(
-        currencyIndex,
-        termsIndex,
+        selectedCcy,
+        selectedTerms,
         1,
         borrowAmount,
         borrowRate

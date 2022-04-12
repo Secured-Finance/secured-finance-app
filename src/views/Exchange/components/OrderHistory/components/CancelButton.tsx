@@ -6,19 +6,19 @@ import { RootState } from 'src/store/types';
 import styled from 'styled-components';
 
 interface CancelButtonProps {
-    orderId?: string;
+    orderId?: any;
 }
 
 type CombinedProps = CancelButtonProps & LendingStore;
 
 const RenderCancelButton: React.FC<CombinedProps> = ({
     orderId,
-    currencyIndex,
-    termsIndex,
+    selectedCcy,
+    selectedTerms,
 }) => {
     const { onCancelOrder } = useCancelOrder(
-        currencyIndex,
-        termsIndex,
+        selectedCcy,
+        selectedTerms,
         orderId
     );
 

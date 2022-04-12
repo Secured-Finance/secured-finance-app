@@ -20,11 +20,11 @@ interface OrderBookProps {
 }
 
 export const OrderBook: React.FC = () => {
-    const ccyIndex = useSelector(
-        (state: RootState) => state.lendingTerminal.currencyIndex
+    const selectedCcy = useSelector(
+        (state: RootState) => state.lendingTerminal.selectedCcy
     );
-    const termsIndex = useSelector(
-        (state: RootState) => state.lendingTerminal.termsIndex
+    const selectedTerms = useSelector(
+        (state: RootState) => state.lendingTerminal.selectedTerms
     );
     const spread = useSelector(
         (state: RootState) => state.lendingTerminal.spread
@@ -33,8 +33,8 @@ export const OrderBook: React.FC = () => {
         (state: RootState) => state.lendingTerminal.marketRate
     );
 
-    const borrowOrderbook = useBorrowOrderbook(ccyIndex, termsIndex);
-    const lendOrderbook = useLendOrderbook(ccyIndex, termsIndex);
+    const borrowOrderbook = useBorrowOrderbook(selectedCcy, selectedTerms);
+    const lendOrderbook = useLendOrderbook(selectedCcy, selectedTerms);
 
     return (
         <StyledOrderBook>

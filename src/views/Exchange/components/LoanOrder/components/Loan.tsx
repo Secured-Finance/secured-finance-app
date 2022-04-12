@@ -14,11 +14,10 @@ import { PlaceOrderForm } from './PlaceOrderForm';
 import { Button } from 'src/components/common/Buttons';
 
 const Lend: React.FC<LendingTerminalStore> = ({
-    currencyIndex,
+    selectedCcy,
     lendAmount,
     lendRate,
     selectedTerms,
-    termsIndex,
 }) => {
     const dispatch = useDispatch();
     const [termsOpen, setTermsOpen] = useState(false);
@@ -47,8 +46,8 @@ const Lend: React.FC<LendingTerminalStore> = ({
     );
 
     const { onPlaceOrder } = usePlaceOrder(
-        currencyIndex,
-        termsIndex,
+        selectedCcy,
+        selectedTerms,
         0,
         lendAmount,
         new BigNumber(lendRate).multipliedBy(100).toNumber()

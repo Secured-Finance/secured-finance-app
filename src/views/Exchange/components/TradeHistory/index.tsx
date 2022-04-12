@@ -8,14 +8,14 @@ import { RootState } from '../../../../store/types';
 import { useSelector } from 'react-redux';
 
 export const TradeHistory: React.FC = () => {
-    const ccyIndex = useSelector(
-        (state: RootState) => state.lendingTerminal.currencyIndex
+    const selectedCcy = useSelector(
+        (state: RootState) => state.lendingTerminal.selectedCcy
     );
-    const termsIndex = useSelector(
-        (state: RootState) => state.lendingTerminal.termsIndex
+    const selectedTerms = useSelector(
+        (state: RootState) => state.lendingTerminal.selectedTerms
     );
 
-    const tradeHistory = useLendingTradingHistory(ccyIndex, termsIndex);
+    const tradeHistory = useLendingTradingHistory(selectedCcy, selectedTerms);
 
     return (
         <StyledTradeHistory>

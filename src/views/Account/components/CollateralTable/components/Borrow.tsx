@@ -1,26 +1,28 @@
+import BigNumber from 'bignumber.js';
 import React from 'react';
+import { getDisplayBalance, getUSDFormatBalanceNumber } from 'src/utils';
 import styled from 'styled-components';
-import {
-    ordinaryFormat,
-    percentFormat,
-    usdFormat,
-} from '../../../../../utils/formatNumbers';
 
 interface BorrowContainerProps {
-    borrow: number;
+    locked: BigNumber;
     value: number;
+    shortName: number;
 }
 
-const RenderBorrow: React.FC<BorrowContainerProps> = ({ borrow, value }) => {
+const RenderBorrow: React.FC<BorrowContainerProps> = ({
+    locked,
+    value,
+    shortName,
+}) => {
     return (
         <StyledBorrow>
             <StyledWalletInfoContainer>
                 <StyledBorrowText>
-                    {borrow != null ? ordinaryFormat(borrow) : 0} FIL
+                    {locked != null ? getDisplayBalance(locked) : 0} {shortName}
                 </StyledBorrowText>
                 <StyledBorrowSubtitleContainer>
                     <StyledBorrowlSubtitle>
-                        {value != null ? usdFormat(value) : 0}
+                        {value != null ? getUSDFormatBalanceNumber(value) : 0}
                     </StyledBorrowlSubtitle>
                 </StyledBorrowSubtitleContainer>
             </StyledWalletInfoContainer>

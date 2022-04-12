@@ -7,7 +7,7 @@ const initialStore: LendingTerminalStore = {
     selectedCcy: 'FIL',
     selectedCcyName: 'Filecoin',
     currencyIndex: 1,
-    selectedTerms: '3mo',
+    selectedTerms: '3 month',
     termsIndex: 0,
     borrowAmount: 0,
     borrowRate: 0,

@@ -2,6 +2,7 @@ import CurrencyContainer from '../../../../../../components/CurrencyContainer';
 import theme from '../../../../../../theme';
 import {
     formatDateAndTime,
+    fromBytes32,
     ordinaryFormat,
     percentFormat,
 } from '../../../../../../utils';
@@ -40,14 +41,15 @@ export const filledTableCollumns = [
                 Header: 'Currency',
                 accessor: 'currency',
                 Cell: (cell: { value: string }) => (
-                    <CurrencyContainer
-                        ccy={cell.value}
-                        size={'xs'}
-                        short={true}
-                        style={{
-                            justifyContent: 'flex-start',
-                        }}
-                    />
+                    <span>{fromBytes32(cell.value)}</span>
+                    // <CurrencyContainer
+                    //     ccy={cell.value}
+                    //     size={'xs'}
+                    //     short={true}
+                    //     style={{
+                    //         justifyContent: 'flex-start',
+                    //     }}
+                    // />
                 ),
             },
             {
