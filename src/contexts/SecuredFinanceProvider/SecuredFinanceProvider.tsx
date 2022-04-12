@@ -1,9 +1,10 @@
 import React, { createContext, useEffect, useState } from 'react';
 import { ChainUnsupportedError, useWallet } from 'use-wallet';
-import { SecuredFinance } from '../../services/sdk';
+import { ethers } from 'ethers';
+import { SecuredFinanceClient } from '@secured-finance/sf-client';
 
 export interface SFContext {
-    securedFinance?: typeof SecuredFinance;
+    securedFinance?: SecuredFinanceClient;
 }
 
 export const Context = createContext<SFContext>({
@@ -21,7 +22,14 @@ const SecuredFinanceProvider: React.FC = ({ children }) => {
         ethereum,
         error,
         status,
-    }: { ethereum: any; error: any; status: any; connect: any } = useWallet();
+        account,
+    }: {
+        ethereum: any;
+        error: any;
+        status: any;
+        connect: any;
+        account: string;
+    } = useWallet();
     const [securedFinance, setSecuredFinance] = useState<any>();
 
     // @ts-ignore
@@ -36,27 +44,28 @@ const SecuredFinanceProvider: React.FC = ({ children }) => {
     };
 
     useEffect(() => {
-        if (ethereum) {
-            const chainId = Number(ethereum.chainId);
-            const securedFinanceLib = new SecuredFinance(ethereum, chainId, {
-                defaultAccount: ethereum.selectedAddress,
-                defaultConfirmations: 1,
-                autoGasMultiplier: 1.5,
-                testing: false,
-                defaultGas: '6000000',
-                defaultGasPrice: '1000000000000',
-                accounts: [],
-                ethereumNodeTimeout: 10000,
-            });
+        const connectSFClient = async (chainId: number) => {
+            const provider = new ethers.providers.Web3Provider(
+                ethereum,
+                chainId
+            );
+            const signer = provider.getSigner();
+            const network = await provider.getNetwork();
+
+            const securedFinanceLib = new SecuredFinanceClient(signer, network);
             setSecuredFinance(securedFinanceLib);
             window.securedFinanceSDK = securedFinanceLib;
+        };
 
-            ethereum.on('networkChanged', handleNetworkChanged);
+        if (ethereum) {
+            const chainId = Number(ethereum.chainId);
+            connectSFClient(chainId);
+            ethereum.on('chainChanged', handleNetworkChanged);
 
             return () => {
                 if (ethereum.removeListener) {
                     ethereum.removeListener(
-                        'networkChanged',
+                        'chainChanged',
                         handleNetworkChanged
                     );
                 }

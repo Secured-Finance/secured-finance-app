@@ -2,6 +2,7 @@ import BigNumber from 'bignumber.js';
 import React, { useEffect, useState } from 'react';
 import { connect, useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
+import { useBilateralCollateralPosition } from 'src/hooks/useBilateralCollateralPosition';
 import styled from 'styled-components';
 import { useWallet } from 'use-wallet';
 import Button from '../../components/Button';
@@ -14,8 +15,10 @@ import { useLoanInformation } from '../../hooks/useLoanHistory';
 import { RootState } from '../../store/types';
 import theme from '../../theme';
 import {
+    DEFAULT_COLLATERAL_VAULT,
     formatAddress,
     formatDate,
+    fromBytes32,
     getDisplayBalance,
     ordinaryFormat,
     percentFormat,
@@ -58,54 +61,51 @@ const LoanScreen: React.FC<CombinedProps> = ({}) => {
     const filPrice = useSelector(
         (state: RootState) => state.assetPrices.filecoin.price
     );
-    const colBook = useCollateralBook(counterpartyAddr);
+    const colBook = useCollateralBook(
+        counterpartyAddr ? counterpartyAddr : '',
+        DEFAULT_COLLATERAL_VAULT
+    );
 
-    const getLoanCcy = () => {
-        switch (loan?.currency) {
-            case 0:
-                return 'ETH';
-            case 1:
-                return 'FIL';
-            case 2:
-                return 'USDC';
-            default:
-                return '';
-        }
+    const getLoanCcy = (currency: string) => {
+        return fromBytes32(currency);
     };
 
     const handleNotional = () => {
-        return ordinaryFormat(loan?.amount) + ` ${getLoanCcy()}`;
+        return (
+            ordinaryFormat(loan?.notional) + ` ${getLoanCcy(loan?.currency)}`
+        );
     };
 
     const handleInterest = () => {
         const interestPayments = totalInterest(
-            loan?.amount,
+            loan?.notional,
             loan?.rate,
             loan?.term
         );
-        return ordinaryFormat(interestPayments) + ` ${getLoanCcy()}`;
+        const ccy = getLoanCcy(loan?.currency);
+        return ordinaryFormat(interestPayments) + ` ${ccy}`;
     };
 
-    const totalInterest = (amount: number, rate: number, term: number) => {
+    const totalInterest = (amount: number, rate: number, term: string) => {
         let periods: number;
         const interestRate = new BigNumber(rate).dividedBy(10000).toNumber();
         switch (term) {
-            case 0:
+            case '90':
                 periods = 0.25;
                 break;
-            case 1:
+            case '180':
                 periods = 0.5;
                 break;
-            case 2:
+            case '365':
                 periods = 1;
                 break;
-            case 3:
+            case '730':
                 periods = 2;
                 break;
-            case 4:
+            case '1095':
                 periods = 3;
                 break;
-            case 5:
+            case '1825':
                 periods = 5;
                 break;
             default:
@@ -120,15 +120,15 @@ const LoanScreen: React.FC<CombinedProps> = ({}) => {
 
     const handleTotalRepay = () => {
         const interestPayments = totalInterest(
-            loan?.amount,
+            loan?.notional,
             loan?.rate,
             loan?.term
         );
-        const totalRepay = new BigNumber(loan?.amount)
+        const totalRepay = new BigNumber(loan?.notional)
             .plus(interestPayments)
             .toNumber();
 
-        return ordinaryFormat(totalRepay) + ` ${getLoanCcy()}`;
+        return ordinaryFormat(totalRepay) + ` ${getLoanCcy(loan?.currency)}`;
     };
 
     const nextCouponPayment = () => {
@@ -147,7 +147,7 @@ const LoanScreen: React.FC<CombinedProps> = ({}) => {
     };
 
     const handleCounterpartyAddr = () => {
-        if (loan === 0) {
+        if (loan.lender === account.toLowerCase()) {
             setCounterpartyAddr(loan?.borrower);
         } else {
             setCounterpartyAddr(loan?.lender);
@@ -159,7 +159,7 @@ const LoanScreen: React.FC<CombinedProps> = ({}) => {
             nextCouponPayment();
             handleCounterpartyAddr();
         }
-    }, [dispatch, setCouponPayment, setCounterpartyAddr, loan]);
+    }, [dispatch, setCouponPayment, setCounterpartyAddr, loan, account]);
 
     return (
         <Page background={theme.colors.background}>
@@ -255,7 +255,9 @@ const LoanScreen: React.FC<CombinedProps> = ({}) => {
                                             </StyledItemText>
                                             <StyledItemText>
                                                 {ordinaryFormat(item.amount) +
-                                                    ` ${getLoanCcy()}`}
+                                                    ` ${getLoanCcy(
+                                                        loan?.currency
+                                                    )}`}
                                             </StyledItemText>
                                         </StyledRowContainer>
                                     )
@@ -293,7 +295,7 @@ const LoanScreen: React.FC<CombinedProps> = ({}) => {
                                         fontWeight={600}
                                     >
                                         {ordinaryFormat(couponPayment?.amount) +
-                                            ` ${getLoanCcy()}`}
+                                            ` ${getLoanCcy(loan?.currency)}`}
                                     </StyledItemText>
                                     <StyledItemText color={theme.colors.gray}>
                                         {couponUsdPayment(
@@ -360,7 +362,7 @@ const LoanScreen: React.FC<CombinedProps> = ({}) => {
                                             </StyledItemText>
                                             <StyledItemText>
                                                 {formatAddress(
-                                                    loan?.borrower,
+                                                    counterpartyAddr,
                                                     20
                                                 )}
                                             </StyledItemText>
@@ -371,7 +373,9 @@ const LoanScreen: React.FC<CombinedProps> = ({}) => {
                                             </StyledItemText>
                                             <StyledItemText>
                                                 {getDisplayBalance(
-                                                    colBook.collateral
+                                                    new BigNumber(
+                                                        colBook.collateral.toString()
+                                                    )
                                                 ) + ' ETH'}
                                             </StyledItemText>
                                         </StyledRowContainer>

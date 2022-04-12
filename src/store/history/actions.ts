@@ -1,6 +1,7 @@
 import * as constants from './constants';
+import { HistoryTableData } from './types';
 
-export function setLendingHistory(data: Array<any>) {
+export function setLendingHistory(data: Array<HistoryTableData>) {
     return {
         type: constants.FETCHING_LENDING_HISTORY_SUCCESS,
         data,
@@ -19,7 +20,7 @@ export function failSetLendingHistory() {
     };
 }
 
-export function setBorrowingHistory(data: Array<any>) {
+export function setBorrowingHistory(data: Array<HistoryTableData>) {
     return {
         type: constants.FETCHING_BORROWING_HISTORY_SUCCESS,
         data,

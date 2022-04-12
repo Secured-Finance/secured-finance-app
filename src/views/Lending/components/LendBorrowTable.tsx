@@ -124,15 +124,15 @@ export const LendBorrowTable: React.FC<ILendBorrowTable> = ({
     }, [termsIndex, USDAmount, rate]);
 
     const { onPlaceOrder: onPlaceLend } = usePlaceOrder(
-        currencyIndex,
-        termsIndex,
+        selectedCcy,
+        selectedTerms,
         0,
         lendAmount,
         lendRate
     );
     const { onPlaceOrder: onPlaceBorrow } = usePlaceOrder(
-        currencyIndex,
-        termsIndex,
+        selectedCcy,
+        selectedTerms,
         1,
         borrowAmount,
         borrowRate

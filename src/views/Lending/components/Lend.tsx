@@ -85,8 +85,8 @@ const Lend: React.FC<CombinedProps> = ({
     );
 
     const { onPlaceOrder } = usePlaceOrder(
-        currencyIndex,
-        termsIndex,
+        selectedCcy,
+        selectedTerms,
         0,
         lendAmount,
         lendRate

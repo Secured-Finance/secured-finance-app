@@ -1,5 +1,5 @@
 const path = require('path');
-const { addBeforeLoader, loaderByName } = require('@craco/craco');
+const { addBeforeLoader, loaderByName, getLoaders } = require('@craco/craco');
 
 module.exports = {
     style: {
@@ -10,6 +10,9 @@ module.exports = {
     webpack: {
         alias: {
             src: path.resolve(__dirname, 'src'),
+        },
+        babel: {
+            presets: [['babel-preset-react']],
         },
         configure: webpackConfig => {
             const wasmExtensionRegExp = /\.wasm$/;

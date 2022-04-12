@@ -7,8 +7,8 @@ import { useEthereumWalletStore } from '../../../../hooks/useEthWallet';
 import { useFilecoinWalletStore } from '../../../../hooks/useFilWallet';
 import useModal from '../../../../hooks/useModal';
 import {
+    DEFAULT_COLLATERAL_VAULT,
     getDisplayBalance,
-    getFullDisplayBalanceNumber,
     ordinaryFormat,
     usdFormat,
 } from '../../../../utils';
@@ -28,7 +28,10 @@ export const Balances: React.FC = () => {
     const ethWallet = useEthereumWalletStore();
     const filWallet = useFilecoinWalletStore();
     const { account }: { account: string } = useWallet();
-    const colBook = useCollateralBook(account);
+    const colBook = useCollateralBook(
+        account ? account : '',
+        DEFAULT_COLLATERAL_VAULT
+    );
 
     const [onPresentCollateralModal] = useModal(
         <CollateralModal ccyIndex={0} />

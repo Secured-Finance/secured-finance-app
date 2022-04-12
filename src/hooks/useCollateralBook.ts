@@ -1,31 +1,26 @@
-import { useCallback, useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { useWallet } from 'use-wallet';
-
-import {
-    getCollateralContract,
-    getCollateralBook,
-} from '../services/sdk/utils';
-import useSF from './useSecuredFinance';
-import useBlock from './useBlock';
+import { useMemo, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { RootState } from '../store/types';
-import { BigNumber } from 'src/services/sdk';
+import { BigNumber } from 'bignumber.js';
+import { useCollateralBookFromVault } from '@secured-finance/sf-graph-client';
 
-const ZERO_BN = new BigNumber(0);
+const ZERO_BN = new BigNumber('0');
 
 interface CollateralBook {
     ccyIndex: number;
+    ccyName: string;
     collateral: BigNumber;
     usdCollateral: BigNumber;
     vault: string;
     locked?: BigNumber;
     usdLocked?: BigNumber;
     borrowed?: BigNumber;
-    usdBorrowed: BigNumber;
+    usdBorrowed?: BigNumber;
 }
 
 const emptyBook: CollateralBook = {
     ccyIndex: 0,
+    ccyName: 'ETH',
     collateral: ZERO_BN,
     usdCollateral: ZERO_BN,
     vault: '',
@@ -35,68 +30,33 @@ const emptyBook: CollateralBook = {
     usdBorrowed: ZERO_BN,
 };
 
-interface CollateralResponse {
-    colAmtETH: string | number;
-    inuseETH: string | number;
-    inuseFIL: string | number;
-}
-
-const useCollateralBook = (account: string) => {
+const useCollateralBook = (account: string, vault: string) => {
     const [collateralBook, setCollateralBook] =
         useState<CollateralBook>(emptyBook);
-    const securedFinance = useSF();
-    const block = useBlock();
     const ethPrice = useSelector(
         (state: RootState) => state.assetPrices.ethereum.price
     );
-    const filPrice = useSelector(
-        (state: RootState) => state.assetPrices.filecoin.price
-    );
-
-    const collateralContract = getCollateralContract(securedFinance);
-    const dispatch = useDispatch();
-
-    const fetchCollateralBook = useCallback(async () => {
-        const ethPriceBN = new BigNumber(ethPrice);
-        const filPriceBN = new BigNumber(filPrice);
-
-        const book: CollateralResponse = await getCollateralBook(
-            collateralContract,
-            account
-        );
-
-        const borrowed = new BigNumber(book.inuseFIL).multipliedBy(filPriceBN);
-
-        const colBook: CollateralBook = {
-            ccyIndex: 0,
-            collateral: new BigNumber(book.colAmtETH),
-            usdCollateral: new BigNumber(book.colAmtETH).multipliedBy(
-                ethPriceBN
-            ),
-            vault: collateralContract._address,
-            // locked: lockedCollateral.dividedBy(ethPriceBN),
-            // usdLocked: lockedCollateral,
-            borrowed: borrowed,
-            usdBorrowed: borrowed.dividedBy(ethPriceBN),
-        };
-        setCollateralBook(colBook);
-    }, [dispatch, collateralContract, account]);
-
-    useEffect(() => {
-        let isMounted = true;
-        if (securedFinance && collateralContract && account && account != '') {
-            fetchCollateralBook();
+    const ethPriceBN = new BigNumber(ethPrice);
+    const book = useCollateralBookFromVault(vault, account) as any;
+    useMemo(() => {
+        if (book) {
+            const colBook: CollateralBook = {
+                ccyIndex: 0,
+                ccyName: book.currency.shortName,
+                collateral: new BigNumber(book.independentCollateral),
+                usdCollateral: new BigNumber(
+                    book.independentCollateral
+                ).multipliedBy(ethPriceBN),
+                vault: book.vault.address,
+                locked: new BigNumber(book.lockedCollateral),
+                usdLocked: new BigNumber(book.lockedCollateral).multipliedBy(
+                    ethPriceBN
+                ),
+            };
+            console.log(book);
+            setCollateralBook(colBook);
         }
-        return () => {
-            isMounted = false;
-        };
-    }, [block, collateralContract, dispatch, securedFinance, account]);
-
-    useEffect(() => {
-        if (account === null) {
-            setCollateralBook(emptyBook);
-        }
-    }, [account]);
+    }, [book]);
 
     return collateralBook;
 };
