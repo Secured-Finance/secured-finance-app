@@ -1,7 +1,7 @@
+import { SecuredFinanceClient } from '@secured-finance/sf-client';
+import { ethers } from 'ethers';
 import React, { createContext, useEffect, useState } from 'react';
 import { ChainUnsupportedError, useWallet } from 'use-wallet';
-import { ethers } from 'ethers';
-import { SecuredFinanceClient } from '@secured-finance/sf-client';
 
 export interface SFContext {
     securedFinance?: SecuredFinanceClient;
@@ -38,7 +38,7 @@ const SecuredFinanceProvider: React.FC = ({ children }) => {
     window.eth = ethereum;
 
     const handleNetworkChanged = (networkId: string | number) => {
-        if (networkId != 3) {
+        if (networkId !== 3) {
             alert('Unsupported network, please use Ropsten (Chain ID: 3)');
         }
     };

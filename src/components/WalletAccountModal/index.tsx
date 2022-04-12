@@ -13,7 +13,7 @@ const WalletModal: React.FC<ModalProps> = ({ onDismiss, ccyIndex }) => {
         <Modal>
             <ModalTitle text='Wallet Information' />
             <ModalContent>
-                {ccyIndex == 1 ? (
+                {ccyIndex === 1 ? (
                     <FilWallet onDismiss={onDismiss} />
                 ) : (
                     <EthWallet onDismiss={onDismiss} />

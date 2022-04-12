@@ -1,8 +1,8 @@
+import { useCollateralBookFromVault } from '@secured-finance/sf-graph-client';
+import { BigNumber } from 'bignumber.js';
 import { useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../store/types';
-import { BigNumber } from 'bignumber.js';
-import { useCollateralBookFromVault } from '@secured-finance/sf-graph-client';
 
 const ZERO_BN = new BigNumber('0');
 

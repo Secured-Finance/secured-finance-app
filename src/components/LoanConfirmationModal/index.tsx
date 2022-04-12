@@ -1,24 +1,17 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import BigNumber from 'bignumber.js';
+import React, { useEffect, useState } from 'react';
+import { connect, useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
+import useCollateralBook from '../../hooks/useCollateralBook';
+import { RootState } from '../../store/types';
 import theme from '../../theme';
+import { formatDate, ordinaryFormat, percentFormat } from '../../utils';
 import Button from '../Button';
+import { RenderTerms } from '../HistoryTable/types';
 import Modal, { ModalProps } from '../Modal';
 import ModalActions from '../ModalActions';
 import ModalContent from '../ModalContent';
 import ModalTitle from '../ModalTitle';
-import { connect, useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../store/types';
-import { useEthBalance } from '../../hooks/useEthWallet';
-import {
-    formatAddress,
-    formatDate,
-    ordinaryFormat,
-    percentFormat,
-    usdFormat,
-} from '../../utils';
-import { RenderTerms } from '../HistoryTable/types';
-import BigNumber from 'bignumber.js';
-import useCollateralBook from '../../hooks/useCollateralBook';
 
 interface LoanModalProps {
     loan?: any;
@@ -198,7 +191,7 @@ const LoanConfirmationModal: React.FC<CombinedProps> = ({
                         </StyledRowContainer>
                     </StyledItemContainer>
                 </StyledSubcontainer>
-                {colBook.vault != '' ? (
+                {colBook.vault !== '' ? (
                     <CounterpartyContainer>
                         <StyledSubcontainer>
                             <StyledLabelTitle textTransform={'capitalize'}>

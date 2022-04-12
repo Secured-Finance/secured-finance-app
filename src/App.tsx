@@ -20,9 +20,6 @@ const App: React.FC = () => {
             <Providers>
                 <Header />
                 <Switch>
-                    <Route path='/' exact>
-                        <Lending />
-                    </Route>
                     <Route path='/exchange'>
                         <Exchange />
                     </Route>
@@ -35,6 +32,9 @@ const App: React.FC = () => {
                     <Route path='/loan/:loanId'>
                         <Loan />
                     </Route>
+                    <Route path='/'>
+                        <Lending />
+                    </Route>
                 </Switch>
             </Providers>
         </Router>
@@ -46,7 +46,6 @@ const Providers: React.FC = ({ children }) => {
         <ThemeProvider theme={theme}>
             <GraphClientProvider>
                 <UseWalletProvider
-                    chainId={3}
                     connectors={{
                         walletconnect: {
                             rpcUrl: 'https://ropsten.eth.aragon.network/',

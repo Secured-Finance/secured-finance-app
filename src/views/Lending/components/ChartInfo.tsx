@@ -5,7 +5,7 @@ import { ArrowIcon, FilIcon } from 'src/components/new/icons';
 import { useFilUsd } from 'src/hooks/useAssetPrices';
 import { percentFormat, usdFormat } from 'src/utils';
 
-export const ChartInfo = () => {
+export const ChartInfo = (): JSX.Element => {
     const [cureType, setCurveType] = useState('yield');
     const { price, change } = useFilUsd();
 

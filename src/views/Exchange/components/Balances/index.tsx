@@ -1,27 +1,27 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { useWallet } from 'use-wallet';
 import CollateralModal from '../../../../components/CollateralModal';
+import { Button } from '../../../../components/common/Buttons';
+import { Subheader } from '../../../../components/common/Subheader';
+import {
+    Cell,
+    CellKey,
+    CellValue,
+    Table,
+} from '../../../../components/common/Table';
 import useCollateralBook from '../../../../hooks/useCollateralBook';
 import { useEthereumWalletStore } from '../../../../hooks/useEthWallet';
 import { useFilecoinWalletStore } from '../../../../hooks/useFilWallet';
 import useModal from '../../../../hooks/useModal';
+import { getTotalUSDBalance } from '../../../../store/wallets/selectors';
 import {
     DEFAULT_COLLATERAL_VAULT,
     getDisplayBalance,
     ordinaryFormat,
     usdFormat,
 } from '../../../../utils';
-import { Subheader } from '../../../../components/common/Subheader';
-import {
-    Table,
-    Cell,
-    CellKey,
-    CellValue,
-} from '../../../../components/common/Table';
-import { Button } from '../../../../components/common/Buttons';
-import { useSelector } from 'react-redux';
-import { getTotalUSDBalance } from '../../../../store/wallets/selectors';
 
 export const Balances: React.FC = () => {
     const totalUSDBalance = useSelector(getTotalUSDBalance);
@@ -69,7 +69,7 @@ export const Balances: React.FC = () => {
                 </Cell>
                 <Cell>
                     <CellKey>ETH Collateral</CellKey>
-                    {account && colBook.vault != '' ? (
+                    {account && colBook.vault !== '' ? (
                         <CellValue>
                             {colBook.collateral != null
                                 ? getDisplayBalance(colBook.collateral)

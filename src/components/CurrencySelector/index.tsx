@@ -1,12 +1,12 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import theme from '../../theme';
-import ArrowSVG from '../ArrowSVG';
 import {
-    currencyList,
-    CurrencyInfo,
     collateralList,
+    CurrencyInfo,
+    currencyList,
 } from '../../utils/currencies';
+import ArrowSVG from '../ArrowSVG';
 
 interface CurrencySelectorProps {
     selectedCcy: string;
@@ -22,15 +22,11 @@ interface CurrenciesListProps {
 type ChildrenProps = CurrencySelectorProps & CurrenciesListProps;
 
 const RenderImage: React.FC<ChildrenProps> = ({ selectedCcy, currencies }) => {
-    let icon: string;
+    const icon: string = currencies.filter(
+        ccy => selectedCcy === ccy.shortName
+    )[0].icon;
 
-    currencies.filter((currency, i) => {
-        if (selectedCcy == currency.shortName) {
-            icon = currency.icon;
-        }
-    });
-
-    return <img width={28} src={icon} />;
+    return <img width={28} src={icon} alt={selectedCcy} />;
 };
 
 const CurrencySelector: React.FC<CurrencySelectorProps> = ({
