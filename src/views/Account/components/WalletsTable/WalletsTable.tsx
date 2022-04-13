@@ -1,11 +1,12 @@
 import React from 'react';
 import { useTable } from 'react-table';
-import { walletTableColumns } from './types';
+import { TableColumns, walletTableColumns } from './types';
 
-const WalletsTable = ({ table }) => {
+// TODO: Fix the types here as they are not coherent
+const WalletsTable = ({ table }: { table: any }): JSX.Element => {
     const columns = React.useMemo(() => walletTableColumns, []);
     const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
-        useTable({ columns, data: table });
+        useTable<TableColumns>({ columns, data: table });
 
     return (
         <table
@@ -19,7 +20,7 @@ const WalletsTable = ({ table }) => {
                         {...headerGroup.getHeaderGroupProps()}
                     >
                         {headerGroup.headers.map(column => {
-                            return column.isHiddenHeader === false ? null : (
+                            return (
                                 <td
                                     className='p-5 text-center text-subhead font-bold'
                                     {...column.getHeaderProps()}
