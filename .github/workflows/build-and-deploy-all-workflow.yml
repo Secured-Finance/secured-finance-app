@@ -19,6 +19,7 @@ jobs:
       publish: true
       retention-days: 90
       package-name: Storybook
+      NPM_AUTH_TOKEN: ${{ secrets.PAT }}
   build-webapp:
     name: Build Web App
     uses: ./.github/workflows/build-webapp.yml
@@ -26,6 +27,7 @@ jobs:
       publish: true
       retention-days: 90
       package-name: WebApp
+      NPM_AUTH_TOKEN: ${{ secrets.PAT }}
   cypress-run:
     runs-on: ubuntu-latest
     name: Cypress Run Tests
