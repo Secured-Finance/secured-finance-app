@@ -1,19 +1,19 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
+import { Dispatch } from '@reduxjs/toolkit';
 
-import Container from '../../components/Container';
-import HistoryTable from '../../components/HistoryTable';
-import Page from '../../components/Page';
-import { useLoanDeals, useBorrowDeals } from '../../hooks/useLoanHistory';
-import theme from '../../theme';
-import { RootState } from '../../store/types';
+import { Container } from 'src/components/atoms';
+import { Page } from 'src/components/templates';
+import { useLoanDeals, useBorrowDeals } from 'src/hooks/useLoanHistory';
+import theme from 'src/theme';
+import { RootState } from 'src/store/types';
 import {
     failSetLendingHistory,
     setLendingHistory,
     startSetHistory,
-} from '../../store/history';
-import { Dispatch } from '@reduxjs/toolkit';
+} from 'src/store/history';
+import { HistoryTable } from './components';
 
 const History: React.FC = () => {
     const loans = useLoanDeals();

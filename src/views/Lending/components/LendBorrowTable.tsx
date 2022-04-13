@@ -25,8 +25,8 @@ import {
 import {
     currencyListDropdown,
     percentFormat,
-    termsList,
     usdFormat,
+    termList,
 } from 'src/utils';
 import { daysInYear } from '../constants';
 import BorrowCollateralManagement from './BorrowCollateralManagement';
@@ -192,7 +192,7 @@ export const LendBorrowTable: React.FC<ILendBorrowTable> = ({
                 </span>
                 <span className={cm.bottomRow}>
                     <Dropdown
-                        options={termsList}
+                        options={termList}
                         onChange={handleTermsChange}
                         value={selectedTerms}
                         label={'Fixed'}

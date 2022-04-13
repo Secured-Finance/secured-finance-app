@@ -1,4 +1,3 @@
-import React from 'react';
 import { Story, Meta } from '@storybook/react';
 import { Title, Subtitle, Headline, Text } from 'src/components/typography';
 import cm from './index.module.scss';

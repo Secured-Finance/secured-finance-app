@@ -1,37 +1,30 @@
-import React, {
-    useCallback,
-    useContext,
-    useEffect,
-    useMemo,
-    useState,
-} from 'react';
-import styled, { ThemeContext } from 'styled-components';
-import theme from '../../../theme';
-import Button from '../../../components/Button';
-import { LendingStore } from '../../../store/lending/types';
-import { RootState } from '../../../store/types';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { connect, useDispatch, useSelector } from 'react-redux';
+import { Button } from 'src/components/atoms';
+import { CurrencySelector, TermsSelector } from 'src/components/molecules';
+import { useDepositCollateral } from 'src/hooks/useDepositCollateral';
+import { usePlaceOrder } from 'src/hooks/usePlaceOrder';
+import { useRegisterUser } from 'src/hooks/useRegisterUser';
 import {
     updateBorrowAmount,
-    updateMainCurrency,
     updateBorrowRate,
     updateCollateralAmount,
     updateMainCollateralCurrency,
+    updateMainCurrency,
     updateMainTerms,
-} from '../../../store/lending';
-import { useRegisterUser } from '../../../hooks/useRegisterUser';
-import { usePlaceOrder } from '../../../hooks/usePlaceOrder';
-import { useDepositCollateral } from '../../../hooks/useDepositCollateral';
+} from 'src/store/lending';
+import { LendingStore } from 'src/store/lending/types';
+import { RootState } from 'src/store/types';
+import theme from 'src/theme';
 import {
-    terms,
     collateralList,
     currencyList,
-    percentFormat,
     formatInput,
+    percentFormat,
+    termList,
     usdFormat,
-} from '../../../utils';
-import CurrencySelector from '../../../components/CurrencySelector';
-import TermsSelector from '../../../components/TermsSelector';
+} from 'src/utils';
+import styled from 'styled-components';
 
 interface BorrowTabProps {
     borrowRates: any[];
@@ -306,15 +299,15 @@ const Borrow: React.FC<CombinedProps> = ({
                 {termsOpen ? (
                     <StyledDropdown>
                         <ul>
-                            {terms.map((term, i) => (
+                            {termList.map((term, i) => (
                                 <StyledDropdownItem
                                     key={i}
                                     onClick={() =>
-                                        handleTermSelect(term.term, termsOpen)
+                                        handleTermSelect(term.value, termsOpen)
                                     }
                                 >
                                     <StyledCurrencyText>
-                                        {term.text}
+                                        {term.label}
                                     </StyledCurrencyText>
                                 </StyledDropdownItem>
                             ))}
@@ -408,15 +401,15 @@ const Borrow: React.FC<CombinedProps> = ({
                 {/* {
                 requestedCollateral
                 ?
-                <Button 
-                    variant={'orange'} 
-                    size={"lg"} 
+                <Button
+                    variant={'orange'}
+                    size={"lg"}
                     onClick={handleBorrowDeal}
                     style={{fontSize:16, fontWeight: 600, background: 'rgba(0, 122, 255, 1)', color: theme.colors.white}}
                 > Borrow</Button>
                 :
-                <Button 
-                    size={"lg"} 
+                <Button
+                    size={"lg"}
                     onClick={handleCollateralPayment}
                     style={{fontSize:16, fontWeight: 600, background: 'rgba(0, 122, 255, 1)', color: theme.colors.white}}
                 > Place collateral</Button>

@@ -2,14 +2,14 @@ import React from 'react';
 import { Label, sharedInputStyles } from './Inputs';
 import ChevronDown from 'src/assets/icons/ChevronDown.svg';
 import styled from 'styled-components';
-import { Terms } from 'src/utils';
+import { Term } from 'src/utils';
 import theme from 'src/theme';
 
 interface IDropdown extends React.SelectHTMLAttributes<HTMLSelectElement> {
     label: string;
     value: string;
     onChangeValue: (event: React.FormEvent<HTMLSelectElement>) => void;
-    options: Terms[];
+    options: Term[];
 }
 
 const DropdownSelect = styled.select`
@@ -52,8 +52,8 @@ export const Dropdown: React.FC<IDropdown> = ({
             <Label>{label}</Label>
             <DropdownSelect onChange={onChangeValue} value={value}>
                 {options.map(option => (
-                    <option key={option.term} value={option.term}>
-                        {option.text}
+                    <option key={option.value} value={option.value}>
+                        {option.label}
                     </option>
                 ))}
             </DropdownSelect>
