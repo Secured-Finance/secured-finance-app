@@ -32,7 +32,7 @@ jobs:
         with:
           node-version: '${{ steps.nvm.outputs.NVMRC }}'
       - name: Install Dependencies
-        run: npm install
+        run: npm ci
         env:
           NPM_AUTH_TOKEN: ${{ secrets.PAT }}
       - name: Check Syntax with Prettier
