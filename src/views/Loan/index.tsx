@@ -3,15 +3,12 @@ import React, { useEffect, useState } from 'react';
 import { connect, useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
-import Button from '../../components/Button';
-import Container from '../../components/Container';
-import { RenderTerms } from '../../components/HistoryTable/types';
-import Page from '../../components/Page';
-import Spacer from '../../components/Spacer';
-import useCollateralBook from '../../hooks/useCollateralBook';
-import { useLoanInformation } from '../../hooks/useLoanHistory';
-import { RootState } from '../../store/types';
-import theme from '../../theme';
+import { Button, Container, Spacer, RenderTerms } from 'src/components/atoms';
+import { Page } from 'src/components/templates';
+import useCollateralBook from 'src/hooks/useCollateralBook';
+import { useLoanInformation } from 'src/hooks/useLoanHistory';
+import { RootState } from 'src/store/types';
+import theme from 'src/theme';
 import {
     formatAddress,
     formatDate,
@@ -19,7 +16,7 @@ import {
     ordinaryFormat,
     percentFormat,
     usdFormat,
-} from '../../utils';
+} from 'src/utils';
 
 interface LoanScreenProps {
     loan?: any;

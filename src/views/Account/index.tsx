@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { connect, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { useWallet } from 'use-wallet';
-import Page from 'src/components/Page';
+import { Page } from 'src/components/templates';
 import useCollateralBook from 'src/hooks/useCollateralBook';
 import { useEthereumWalletStore } from 'src/hooks/useEthWallet';
 import { useFilecoinWalletStore } from 'src/hooks/useFilWallet';

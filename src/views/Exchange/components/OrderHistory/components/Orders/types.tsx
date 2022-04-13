@@ -1,11 +1,7 @@
-import CurrencyContainer from '../../../../../../components/CurrencyContainer';
-import theme from '../../../../../../theme';
-import {
-    formatDateAndTime,
-    ordinaryFormat,
-    percentFormat,
-} from '../../../../../../utils';
-import { RenderTerms, TableColumns } from '../commonTypes';
+import { CurrencyContainer, RenderTerms } from 'src/components/atoms';
+import theme from 'src/theme';
+import { formatDateAndTime, ordinaryFormat, percentFormat } from 'src/utils';
+import { TableColumns } from '../commonTypes';
 import RenderCancelButton from '../CancelButton';
 
 export interface OrdersTableData {

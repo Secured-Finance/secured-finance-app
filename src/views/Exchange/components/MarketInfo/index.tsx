@@ -1,16 +1,16 @@
 import BigNumber from 'bignumber.js';
 import React, { HTMLAttributes, useState } from 'react';
 import styled from 'styled-components';
-import ArrowSVG from '../../../../components/ArrowSVG';
-import { useEthereumUsd, useFilUsd } from '../../../../hooks/useAssetPrices';
-import { useRates } from '../../../../hooks/useRates';
-import useSF from '../../../../hooks/useSecuredFinance';
-import { getLendingControllerContract } from '../../../../services/sdk/utils';
-import theme from '../../../../theme';
-import { ordinaryFormat, percentFormat, usdFormat } from '../../../../utils';
-import { Tabs } from '../../../../components/common/Tabs';
-import { LendingTerminalStore } from '../../../../store/lendingTerminal';
-import { RootState } from '../../../../store/types';
+import { ArrowSVG } from 'src/components/atoms';
+import { useEthereumUsd, useFilUsd } from 'src/hooks/useAssetPrices';
+import { useRates } from 'src/hooks/useRates';
+import useSF from 'src/hooks/useSecuredFinance';
+import { getLendingControllerContract } from 'src/services/sdk/utils';
+import theme from 'src/theme';
+import { ordinaryFormat, percentFormat, usdFormat } from 'src/utils';
+import { Tabs } from 'src/components/common/Tabs';
+import { LendingTerminalStore } from 'src/store/lendingTerminal';
+import { RootState } from 'src/store/types';
 import { connect } from 'react-redux';
 
 const MarketInfo: React.FC<LendingTerminalStore> = ({
