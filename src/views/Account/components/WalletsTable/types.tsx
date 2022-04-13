@@ -1,18 +1,12 @@
-import { formatAddress } from 'src/utils';
-import { CurrencyContainer } from 'src/components/atoms';
 import React from 'react';
+import { CurrencyContainer } from 'src/components/atoms';
+import { formatAddress } from 'src/utils';
 import {
-    RenderBalance,
-    RenderPrice,
     RenderActions,
+    RenderBalance,
     RenderPortfolio,
+    RenderPrice,
 } from './components';
-
-interface WalletTableDataProps {
-    columns?: Array<TableColumns>;
-    data?: Array<WalletTableData>;
-}
-
 export interface WalletTableData {
     asset: string;
     address: string;
@@ -20,7 +14,7 @@ export interface WalletTableData {
     growth: number;
     price: number;
     portfolio: number;
-    actions: any;
+    actions: never;
     isAvailable: boolean;
 }
 
@@ -36,7 +30,7 @@ export interface TableColumns {
 interface Columns {
     Header: string;
     accessor: string;
-    Cell: any;
+    Cell: never;
 }
 
 export const walletTableColumns = [
