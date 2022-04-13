@@ -53,7 +53,6 @@ const useCollateralBook = (account: string, vault: string) => {
                     ethPriceBN
                 ),
             };
-            console.log(book);
             setCollateralBook(colBook);
         }
     }, [book]);

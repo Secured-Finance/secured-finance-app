@@ -1,7 +1,6 @@
 import { BigNumber } from 'ethers';
 import { useCallback } from 'react';
 import { useWallet } from 'use-wallet';
-import { provider } from 'web3-core';
 import useSF from './useSecuredFinance';
 
 export const useCancelOrder = (
@@ -10,7 +9,7 @@ export const useCancelOrder = (
     orderId: number | BigNumber
 ) => {
     const securedFinance = useSF();
-    const { account }: { account: string; ethereum: provider } = useWallet();
+    const { account } = useWallet();
 
     const handleCancelOrder = useCallback(async () => {
         const tx = await securedFinance.cancelLendingOrder(ccy, term, orderId);

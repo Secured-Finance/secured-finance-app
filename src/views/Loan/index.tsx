@@ -2,9 +2,7 @@ import BigNumber from 'bignumber.js';
 import React, { useEffect, useState } from 'react';
 import { connect, useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { useBilateralCollateralPosition } from 'src/hooks/useBilateralCollateralPosition';
-import styled from 'styled-components';
-import { Button, Container, Spacer, RenderTerms } from 'src/components/atoms';
+import { Button, Container, RenderTerms, Spacer } from 'src/components/atoms';
 import { Page } from 'src/components/templates';
 import useCollateralBook from 'src/hooks/useCollateralBook';
 import { useLoanInformation } from 'src/hooks/useLoanHistory';
@@ -20,6 +18,8 @@ import {
     percentFormat,
     usdFormat,
 } from 'src/utils';
+import styled from 'styled-components';
+import { useWallet } from 'use-wallet';
 
 interface LoanScreenProps {
     loan?: any;
@@ -49,6 +49,7 @@ type CombinedProps = LoanScreenProps;
 
 const LoanScreen: React.FC<CombinedProps> = () => {
     const params: any = useParams();
+    const { account } = useWallet();
     const loan = useLoanInformation(params.loanId);
     const [couponPayment, setCouponPayment] = useState<CouponPayment>();
     const [counterpartyAddr, setCounterpartyAddr] = useState('');
