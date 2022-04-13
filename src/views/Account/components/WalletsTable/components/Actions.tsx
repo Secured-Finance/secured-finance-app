@@ -1,10 +1,12 @@
 import React, { useCallback } from 'react';
 import styled from 'styled-components';
-import CollateralModal from '../../../../../components/CollateralModal';
-import SendModal from '../../../../../components/SendModal';
-import WalletAccountModal from '../../../../../components/WalletAccountModal';
-import WalletProviderModal from '../../../../../components/WalletProviderModal';
-import useModal from '../../../../../hooks/useModal';
+import {
+    CollateralModal,
+    WalletProviderModal,
+    SendModal,
+    WalletAccountModal,
+} from 'src/components/organisms';
+import useModal from 'src/hooks/useModal';
 
 interface ActionProps {
     callbackMap?: {

@@ -1,7 +1,7 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import styled from 'styled-components';
-import CollateralModal from '../../../../../components/CollateralModal';
-import useModal from '../../../../../hooks/useModal';
+import { CollateralModal } from 'src/components/organisms';
+import useModal from 'src/hooks/useModal';
 
 interface ActionProps {
     ccyIndex: number;

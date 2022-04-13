@@ -6,11 +6,11 @@ This repo contains a decentralized web application.
 
 ## Quick Start
 
-1. Clone this repository 
+1. Clone this repository
 2. Install all required dependencies using `npm install` command
 3. Run `npm run start` to start development mode
 
-## Domains 
+## Domains
 you need to install unstoppable domain [browser extension](https://chrome.google.com/webstore/detail/unstoppable-extension/beelkklmblgdljamcmoffgfbdddfpnnl?hl=en) for `.crypto`
 - https://securedfinance.on.fleek.co/
 - https://securedfinance.crypto
@@ -31,6 +31,10 @@ you need to install unstoppable domain [browser extension](https://chrome.google
 - Web3js to integrate with smart contracts
 - Metamask
 - Filecoin
+
+## Architectures used
+
+- [Atomic Design](https://atomicdesign.bradfrost.com/table-of-contents/)
 
 ## Deployment
 

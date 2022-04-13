@@ -1,16 +1,16 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
-import Page from '../../components/Page';
-import YieldCurve from '../../components/YieldCurve';
-import { RootState } from '../../store/types';
-import theme from '../../theme';
-import { Balances } from './components/Balances';
-import LoanOrder from './components/LoanOrder';
-import MarketInfo from './components/MarketInfo';
+import { Page } from 'src/components/templates';
+import { YieldCurve } from 'src/components/molecules';
+import theme from 'src/theme';
+import { RootState } from 'src/store/types';
 import { OrderBook } from './components/OrderBook';
-import OrderHistory from './components/OrderHistory';
+import LoanOrder from './components/LoanOrder';
 import { TradeHistory } from './components/TradeHistory';
+import { Balances } from './components/Balances';
+import MarketInfo from './components/MarketInfo';
+import OrderHistory from './components/OrderHistory';
 
 const Exchange: React.FC = () => {
     return (

@@ -2,7 +2,7 @@ import { Network } from '@glif/filecoin-address';
 import { BigNumber } from '@glif/filecoin-number';
 import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import WalletAccountModal from 'src/components/WalletAccountModal';
+import { WalletAccountModal } from 'src/components/organisms';
 import { useResetFilWalletProvider } from 'src/services/filecoin';
 import connectWithLedger from 'src/services/ledger/connectLedger';
 import { RootState } from 'src/store/types';

@@ -1,8 +1,8 @@
-import { formatAddress } from '../../../../utils';
-import CurrencyContainer from '../../../../components/CurrencyContainer';
-import React from 'react';
-import { RenderCollateral, RenderBorrow, RenderRatio } from './components';
 import BigNumber from 'bignumber.js';
+import React from 'react';
+import { CurrencyContainer } from 'src/components/atoms';
+import { formatAddress } from 'src/utils';
+import { RenderBorrow, RenderCollateral } from './components';
 
 export interface TableColumns {
     Header: string;

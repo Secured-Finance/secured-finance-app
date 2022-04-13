@@ -1,8 +1,9 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { connect, useDispatch, useSelector } from 'react-redux';
-import Button from 'src/components/Button';
-import CurrencySelector from 'src/components/CurrencySelector';
-import TermsSelector from 'src/components/TermsSelector';
+import styled from 'styled-components';
+
+import { Button } from 'src/components/atoms';
+import { CurrencySelector, TermsSelector } from 'src/components/molecules';
 import { usePlaceOrder } from 'src/hooks/usePlaceOrder';
 import {
     updateLendAmount,
@@ -17,10 +18,9 @@ import {
     currencyList,
     formatInput,
     percentFormat,
-    terms,
     usdFormat,
+    termList,
 } from 'src/utils';
-import styled from 'styled-components';
 
 interface LendTabProps {
     lendingRates: any[];
@@ -276,15 +276,15 @@ const Lend: React.FC<CombinedProps> = ({
                 {termsOpen ? (
                     <StyledDropdown>
                         <ul>
-                            {terms.map((term, i) => (
+                            {termList.map((term, i) => (
                                 <StyledDropdownItem
                                     key={i}
                                     onClick={() =>
-                                        handleTermSelect(term.term, termsOpen)
+                                        handleTermSelect(term.value, termsOpen)
                                     }
                                 >
                                     <StyledCurrencyText>
-                                        {term.text}
+                                        {term.label}
                                     </StyledCurrencyText>
                                 </StyledDropdownItem>
                             ))}

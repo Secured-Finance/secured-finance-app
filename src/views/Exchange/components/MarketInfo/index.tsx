@@ -1,16 +1,15 @@
 import BigNumber from 'bignumber.js';
 import React, { useState } from 'react';
-import styled from 'styled-components';
-import ArrowSVG from '../../../../components/ArrowSVG';
-import { useEthereumUsd, useFilUsd } from '../../../../hooks/useAssetPrices';
-import { useRates } from '../../../../hooks/useRates';
-import useSF from '../../../../hooks/useSecuredFinance';
-import theme from '../../../../theme';
-import { ordinaryFormat, percentFormat, usdFormat } from '../../../../utils';
-import { Tabs } from '../../../../components/common/Tabs';
-import { LendingTerminalStore } from '../../../../store/lendingTerminal';
-import { RootState } from '../../../../store/types';
 import { connect } from 'react-redux';
+import { ArrowSVG } from 'src/components/atoms';
+import { Tabs } from 'src/components/common/Tabs';
+import { useEthereumUsd, useFilUsd } from 'src/hooks/useAssetPrices';
+import { useRates } from 'src/hooks/useRates';
+import { LendingTerminalStore } from 'src/store/lendingTerminal';
+import { RootState } from 'src/store/types';
+import theme from 'src/theme';
+import { ordinaryFormat, percentFormat, usdFormat } from 'src/utils';
+import styled from 'styled-components';
 
 const MarketInfo: React.FC<LendingTerminalStore> = ({
     selectedCcy,

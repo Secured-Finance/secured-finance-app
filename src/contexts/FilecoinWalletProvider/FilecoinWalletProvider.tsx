@@ -1,7 +1,7 @@
 import { Network as FilNetwork } from '@glif/filecoin-address';
 import React, { createContext, ReactNode, useEffect, useState } from 'react';
 import { useWallet } from 'use-wallet';
-import { providers } from '../../services/filecoin/providers';
+import { providers } from 'src/services/filecoin/providers';
 
 export const CACHED_PROVIDER_KEY = 'CACHED_PROVIDER_KEY';
 
