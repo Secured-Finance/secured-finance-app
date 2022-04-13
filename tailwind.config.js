@@ -19,6 +19,11 @@ module.exports = {
             middleGrey: '#9496a3',
             lightSilver: '#b9b9c2',
             white: '#fff',
+            tableHeader: '#122735',
+            tableBorder: '#1c303f',
+        },
+        fontSize: {
+            subhead: '0.875rem',
         },
         extend: {},
     },
