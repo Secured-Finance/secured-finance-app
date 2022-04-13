@@ -11,6 +11,8 @@ on:
       - edited
       - synchronize
       - reopened
+permissions:
+  packages: read
 
 jobs:
   build-storybook:
