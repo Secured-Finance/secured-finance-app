@@ -18,7 +18,8 @@ const RenderBorrow: React.FC<BorrowContainerProps> = ({
         <StyledBorrow>
             <StyledWalletInfoContainer>
                 <StyledBorrowText>
-                    {locked != null ? getDisplayBalance(locked) : 0} {shortName}
+                    {locked !== null ? getDisplayBalance(locked) : 0}{' '}
+                    {shortName}
                 </StyledBorrowText>
                 <StyledBorrowSubtitleContainer>
                     <StyledBorrowlSubtitle>

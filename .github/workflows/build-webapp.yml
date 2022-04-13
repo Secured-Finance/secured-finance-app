@@ -31,6 +31,10 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: '${{ steps.nvm.outputs.NVMRC }}'
+      - name: "Setup npm"
+        run: |
+          npm set @secured-finance:registry=https://npm.pkg.github.com
+          npm set "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}"
       - name: Install Dependencies
         run: npm ci
       - name: Check Syntax with Prettier

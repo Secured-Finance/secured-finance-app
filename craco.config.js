@@ -11,9 +11,6 @@ module.exports = {
         alias: {
             src: path.resolve(__dirname, 'src'),
         },
-        babel: {
-            presets: [['babel-preset-react']],
-        },
         configure: webpackConfig => {
             const wasmExtensionRegExp = /\.wasm$/;
             webpackConfig.resolve.extensions.push('.wasm');

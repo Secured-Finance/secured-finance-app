@@ -17,7 +17,7 @@ const useCheckCollateralBook = (account: string) => {
         if (account === null) {
             setStatus(false);
         }
-        if (securedFinance && account != '') {
+        if (securedFinance && account !== '') {
             fetchCollateralBook();
         }
         return () => {
