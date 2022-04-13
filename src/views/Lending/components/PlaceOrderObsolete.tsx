@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import Button from '../../../components/Button';
-import theme from '../../../theme';
+import { Button } from 'src/components/atoms';
+import theme from 'src/theme';
 import Borrow from './Borrow';
 import Lend from './Lend';
 
