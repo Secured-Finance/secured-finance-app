@@ -1,7 +1,6 @@
-import { BigNumber, Overrides, utils } from 'ethers';
+import { BigNumber, utils } from 'ethers';
 import { useCallback } from 'react';
 import { useWallet } from 'use-wallet';
-import { provider } from 'web3-core';
 import useSF from './useSecuredFinance';
 
 export const useDepositCollateral = (
@@ -9,7 +8,7 @@ export const useDepositCollateral = (
     amount: number | BigNumber
 ) => {
     const securedFinance = useSF();
-    const { account }: { account: string; ethereum: provider } = useWallet();
+    const { account } = useWallet();
 
     const handleDepositCollateral = useCallback(async () => {
         const etherAmount = utils.parseUnits(amount.toString(), 'ether');
@@ -25,7 +24,7 @@ export const useWithdrawCollateral = (
     amount: number | BigNumber
 ) => {
     const securedFinance = useSF();
-    const { account }: { account: string; ethereum: provider } = useWallet();
+    const { account } = useWallet();
 
     const handleWithdrawCollateral = useCallback(async () => {
         try {

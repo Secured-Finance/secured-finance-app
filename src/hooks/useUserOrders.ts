@@ -1,12 +1,12 @@
+import { utils } from '@secured-finance/sf-client';
+import { client } from '@secured-finance/sf-graph-client';
 import { useCallback, useEffect, useState } from 'react';
 import { useWallet } from 'use-wallet';
-import { client } from '@secured-finance/sf-graph-client';
 import {
-    TRADE_HISTORY,
-    OPEN_ORDERS,
     OPEN_LOANS,
+    OPEN_ORDERS,
+    TRADE_HISTORY,
 } from '../services/apollo/userQueries';
-import { utils } from '@secured-finance/sf-client';
 
 export const useOpenOrders = (ccy: string, term: string) => {
     const { account, chainId }: { account: string; chainId: number | null } =

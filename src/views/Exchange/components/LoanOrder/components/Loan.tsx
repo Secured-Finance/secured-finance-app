@@ -1,6 +1,7 @@
 import BigNumber from 'bignumber.js';
 import React, { useCallback, useState } from 'react';
 import { connect, useDispatch } from 'react-redux';
+import { Button } from 'src/components/common/Buttons';
 import styled from 'styled-components';
 import { usePlaceOrder } from '../../../../../hooks/usePlaceOrder';
 import {
@@ -11,7 +12,6 @@ import {
 } from '../../../../../store/lendingTerminal';
 import { RootState } from '../../../../../store/types';
 import { PlaceOrderForm } from './PlaceOrderForm';
-import { Button } from 'src/components/common/Buttons';
 
 const Lend: React.FC<LendingTerminalStore> = ({
     selectedCcy,
@@ -25,6 +25,7 @@ const Lend: React.FC<LendingTerminalStore> = ({
 
     const handleOpenTerms = useCallback(
         (e: React.FormEvent<HTMLSelectElement>, termsOpen: boolean) => {
+            console.log(e.currentTarget.value);
             dispatch(updateLendingTerms(e.currentTarget.value));
             setTermsOpen(!termsOpen);
         },
