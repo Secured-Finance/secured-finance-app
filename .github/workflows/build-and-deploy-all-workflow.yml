@@ -12,8 +12,12 @@ on:
       - synchronize
       - reopened
 permissions:
+  actions: read
+  checks: write
+  contents: read
   packages: read
-
+  pull-requests: read
+  statuses: read
 jobs:
   build-storybook:
     name: Build Storybook
