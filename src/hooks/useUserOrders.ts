@@ -113,7 +113,7 @@ export const useTradeHistoryOrders = (ccy: string, term: string) => {
 
     useEffect(() => {
         let isMounted = true;
-        if (lendingMarketAddress != null && account) {
+        if (lendingMarketAddress !== null && account) {
             fetchTradeHistoryOrders();
         }
         return () => {

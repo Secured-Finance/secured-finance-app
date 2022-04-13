@@ -93,8 +93,6 @@
     "@types/validator": "^13.1.2",
     "@types/webfontloader": "^1.6.32",
     "autoprefixer": "^9.8.8",
-    "babel-preset-react": "^6.24.1",
-    "copy-webpack-plugin": "^7.0.0",
     "css-loader": "^5.2.6",
     "cypress": "^9.5.3",
     "eslint": "^7.32.0",
