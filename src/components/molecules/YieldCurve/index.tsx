@@ -1,11 +1,8 @@
-import React, { useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { defaults, Line } from 'react-chartjs-2';
-import styled from 'styled-components';
 import { useRates } from 'src/hooks/useRates';
-import useSF from 'src/hooks/useSecuredFinance';
-import { getLendingControllerContract } from 'src/services/sdk/utils';
 import theme from 'src/theme';
-
+import styled from 'styled-components';
 import { chartOptions } from './chartOptions';
 
 const Title = styled.div`
@@ -19,13 +16,9 @@ const labels = ['0', '3m', '6m', '1y', '2y', '3y', '5y'];
 export function YieldCurve() {
     const [currencyIndex, setCurrencyIndex] = useState('FIL');
     const [lineData, setLineData] = useState({});
-    const securedFinance = useSF();
-    const lendingControllerContract =
-        getLendingControllerContract(securedFinance);
-
-    const borrowRates = useRates(lendingControllerContract, 0, currencyIndex);
-    const lendingRates = useRates(lendingControllerContract, 1, currencyIndex);
-    const midRate = useRates(lendingControllerContract, 2, currencyIndex);
+    const borrowRates = useRates('FIL', 0);
+    const lendingRates = useRates('FIL', 1);
+    const midRate = useRates('FIL', 2);
 
     defaults.global.defaultFontColor = theme.colors.cellKey;
 

@@ -9,7 +9,7 @@ import { useFilecoinWalletStore } from 'src/hooks/useFilWallet';
 import { RootState } from 'src/store/types';
 import { WalletBase } from 'src/store/wallets';
 import theme from 'src/theme';
-import { usdFormat } from 'src/utils';
+import { DEFAULT_COLLATERAL_VAULT, usdFormat } from 'src/utils';
 import CollateralTable from './components/CollateralTable';
 import WalletsTable from './components/WalletsTable';
 import { getFilAddress, getTotalUSDBalance } from 'src/store/wallets/selectors';
@@ -21,7 +21,10 @@ const Account: React.FC = () => {
     const filWallet = useFilecoinWalletStore();
     const [tableData, setTableData] = useState([] as Array<WalletBase>);
     const { account }: { account: string } = useWallet();
-    const colBook = useCollateralBook(account);
+    const colBook = useCollateralBook(
+        account ? account : '',
+        DEFAULT_COLLATERAL_VAULT
+    );
     const filAddress = useSelector(getFilAddress);
 
     useMemo(() => {
@@ -64,7 +67,7 @@ const Account: React.FC = () => {
                         marginBottom={'35px'}
                     >
                         <StyledTitle fontWeight={500} marginBottom={35}>
-                            Collateral Positions
+                            Collateral Deposits
                         </StyledTitle>
                         <CollateralTable table={[colBook]} />
                     </StyledAccountContainer>

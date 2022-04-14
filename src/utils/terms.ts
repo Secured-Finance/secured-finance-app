@@ -5,27 +5,27 @@ export interface Term {
 
 export const termList: Term[] = [
     {
-        value: '3mo',
+        value: '3 month',
         label: '3 Month',
     },
     {
-        value: '6mo',
+        value: '6 month',
         label: '6 Month',
     },
     {
-        value: '1yr',
+        value: '1 year',
         label: '1 Year',
     },
     {
-        value: '2yr',
+        value: '2 year',
         label: '2 Years',
     },
     {
-        value: '3yr',
+        value: '3 year',
         label: '3 Years',
     },
     {
-        value: '5yr',
+        value: '5 year',
         label: '5 Years',
     },
 ];

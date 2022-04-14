@@ -14,6 +14,11 @@ module.exports = {
         reactDocgen: 'none',
     },
     webpackFinal: config => {
+        config.node = {
+            ...config.node,
+            fs: 'empty',
+        };
+
         config.module.rules.push({
             test: /\.wasm$/,
             use: ['wasm-loader'],

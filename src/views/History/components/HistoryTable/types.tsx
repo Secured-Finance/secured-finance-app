@@ -1,6 +1,10 @@
 import { HistoryTableData } from 'src/store/history/types';
-import { formatAddress, ordinaryFormat, percentFormat } from 'src/utils';
-import { CurrencyContainer } from 'src/components/atoms';
+import {
+    formatAddress,
+    fromBytes32,
+    ordinaryFormat,
+    percentFormat,
+} from 'src/utils';
 
 interface HistoryTableProps {
     columns?: Array<TableColumns>;
@@ -23,22 +27,22 @@ interface Columns {
 }
 
 interface IndexProps {
-    index?: number;
+    index?: number | string;
 }
 
 export const RenderTerms: React.FC<IndexProps> = ({ index }) => {
     switch (index) {
-        case 0:
+        case '90':
             return <span>3 Month</span>;
-        case 1:
+        case '180':
             return <span>6 Month</span>;
-        case 2:
+        case '365':
             return <span>1 Year</span>;
-        case 3:
+        case '730':
             return <span>2 Years</span>;
-        case 4:
+        case '1095':
             return <span>3 Years</span>;
-        case 5:
+        case '1825':
             return <span>5 Years</span>;
         default:
             return <span></span>;
@@ -173,7 +177,7 @@ export const historyTableColumns = [
             },
             {
                 Header: 'Notional',
-                accessor: 'amount',
+                accessor: 'notional',
                 Cell: (cell: { value: number }) => (
                     <span>
                         {cell.value != null ? ordinaryFormat(cell.value) : 0}
@@ -184,11 +188,7 @@ export const historyTableColumns = [
                 Header: 'Currency',
                 accessor: 'currency',
                 Cell: (cell: { value: string }) => (
-                    <CurrencyContainer
-                        ccy={cell.value}
-                        size={'sm'}
-                        short={false}
-                    />
+                    <span>{fromBytes32(cell.value)}</span>
                 ),
             },
             {

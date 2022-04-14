@@ -1,8 +1,13 @@
-import { CurrencyContainer, RenderTerms } from 'src/components/atoms';
+import { RenderTerms } from 'src/components/atoms';
 import theme from 'src/theme';
-import { formatDateAndTime, ordinaryFormat, percentFormat } from 'src/utils';
-import { TableColumns } from '../commonTypes';
+import {
+    formatDateAndTime,
+    fromBytes32,
+    ordinaryFormat,
+    percentFormat,
+} from 'src/utils';
 import RenderCancelButton from '../CancelButton';
+import { TableColumns } from '../commonTypes';
 
 export interface OrdersTableData {
     orderId: number;
@@ -36,14 +41,15 @@ export const ordersTableColumns = [
                 Header: 'Currency',
                 accessor: 'currency',
                 Cell: (cell: { value: string }) => (
-                    <CurrencyContainer
-                        ccy={cell.value}
-                        size={'xs'}
-                        short={true}
-                        style={{
-                            justifyContent: 'flex-start',
-                        }}
-                    />
+                    <span>{fromBytes32(cell.value)}</span>
+                    // <CurrencyContainer
+                    //     ccy={cell.value}
+                    //     size={'xs'}
+                    //     short={true}
+                    //     style={{
+                    //         justifyContent: 'flex-start',
+                    //     }}
+                    // />
                 ),
             },
             {
@@ -85,7 +91,7 @@ export const ordersTableColumns = [
             {
                 Header: '',
                 accessor: 'orderId',
-                Cell: (cell: { value: string }) => (
+                Cell: (cell: { value: any }) => (
                     <RenderCancelButton orderId={cell.value} />
                 ),
             },

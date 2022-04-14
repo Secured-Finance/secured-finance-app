@@ -7,7 +7,7 @@ import { RootState } from '../store/types';
 import useSF from './useSecuredFinance';
 
 export const useSendEth = (amount: number, to: string, gasPrice: number) => {
-    const { account }: { account: string } = useWallet();
+    const { account } = useWallet();
     const securedFinance: any = useSF();
 
     const handleSendEther = useCallback(async () => {
@@ -39,7 +39,7 @@ export const useSendEth = (amount: number, to: string, gasPrice: number) => {
 };
 
 export const useEstimateTxFee = (gasPrice: number) => {
-    const { account }: { account: string } = useWallet();
+    const { account } = useWallet();
     const securedFinance: any = useSF();
     const ethPrice = useSelector(
         (state: RootState) => state.assetPrices.ethereum.price

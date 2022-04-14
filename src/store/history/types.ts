@@ -1,39 +1,22 @@
 export interface HistoryStore {
-    lendingHistory: Array<HistoryTableData2>;
-    borrowingHistory: Array<HistoryTableData2>;
+    lendingHistory: Array<HistoryTableData>;
+    borrowingHistory: Array<HistoryTableData>;
     isLoading: boolean;
 }
 
-export interface HistoryTableData2 {
-    id: number;
-    lender: string;
-    borrower: string;
-    side: number;
-    rate: number;
-    currency: number;
-    term: number;
-    presentValue: number;
-    amount: number;
-    couponPayment: number;
-    state: number;
-    startTimestamp: number;
-    endTimestamp: number;
-}
-
 export interface HistoryTableData {
-    loanId: string;
+    id: string;
     lender: string;
     borrower: string;
-    side: number;
-    rate: number;
-    ccy: number;
-    asOf: string;
-    term: number;
-    pv: number;
-    amt: number;
-    schedule: Array<Schedule>;
+    rate: string;
+    currency: string;
+    term: string;
+    presentValue: string;
+    notional: string;
+    couponPayment: string;
     state: number;
-    isAvailable: boolean;
+    startTimestamp: string;
+    endTimestamp: string;
 }
 
 export interface Schedule {
@@ -51,7 +34,7 @@ export const emptyLoan: any = {
     side: '0',
     ccy: '0',
     term: '0',
-    amt: '0',
+    amount: '0',
     rate: '0',
     start: '1613926013',
     end: '1771606013',

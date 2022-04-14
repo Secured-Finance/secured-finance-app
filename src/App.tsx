@@ -1,4 +1,3 @@
-import { ApolloProvider } from '@apollo/client/react';
 import React from 'react';
 import { HashRouter as Router, Route, Switch } from 'react-router-dom';
 import { Header } from 'src/components/organisms';
@@ -7,13 +6,13 @@ import { UseWalletProvider } from 'use-wallet';
 import FilecoinWalletProvider from './contexts/FilecoinWalletProvider';
 import ModalsProvider from './contexts/Modals';
 import SecuredFinanceProvider from './contexts/SecuredFinanceProvider';
-import { client } from './services/apollo';
 import theme from './theme';
 import Account from './views/Account';
 import Exchange from './views/Exchange';
 import History from './views/History';
 import Lending from './views/Lending';
 import Loan from './views/Loan';
+import { GraphClientProvider } from '@secured-finance/sf-graph-client';
 
 const App: React.FC = () => {
     return (
@@ -45,7 +44,7 @@ const App: React.FC = () => {
 const Providers: React.FC = ({ children }) => {
     return (
         <ThemeProvider theme={theme}>
-            <ApolloProvider client={client}>
+            <GraphClientProvider>
                 <UseWalletProvider
                     connectors={{
                         walletconnect: {
@@ -59,7 +58,7 @@ const Providers: React.FC = ({ children }) => {
                         </SecuredFinanceProvider>
                     </FilecoinWalletProvider>
                 </UseWalletProvider>
-            </ApolloProvider>
+            </GraphClientProvider>
         </ThemeProvider>
     );
 };

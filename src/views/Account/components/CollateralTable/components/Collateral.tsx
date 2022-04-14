@@ -2,12 +2,12 @@ import BigNumber from 'bignumber.js';
 import React from 'react';
 import { getDisplayBalance, getUSDFormatBalanceNumber } from 'src/utils';
 import styled from 'styled-components';
-import { CurrencyInfo, currencyList } from '../../../../../utils/currencies';
+import { CurrencyInfo } from '../../../../../utils/currencies';
 
 interface CollateralContainerProps {
     collateral: BigNumber;
     value: number;
-    index: any;
+    shortName: string;
 }
 
 interface CollateralProps {
@@ -17,19 +17,10 @@ interface CollateralProps {
 type ItemProps = CollateralContainerProps & CollateralProps;
 
 const CollateralInfo: React.FC<ItemProps> = ({
-    index,
-    currencies,
+    shortName,
     collateral,
     value,
 }) => {
-    let shortName: string;
-
-    currencies.filter((currency, i) => {
-        if (index === i) {
-            shortName = currency.shortName;
-        }
-    });
-
     return (
         <div>
             <StyledCollateral>
@@ -50,14 +41,13 @@ const CollateralInfo: React.FC<ItemProps> = ({
 const RenderCollateral: React.FC<CollateralContainerProps> = ({
     collateral,
     value,
-    index,
+    shortName,
 }) => {
     return (
         <CollateralInfo
             collateral={collateral}
             value={value}
-            index={index}
-            currencies={currencyList}
+            shortName={shortName}
         />
     );
 };

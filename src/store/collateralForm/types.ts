@@ -7,6 +7,7 @@ export interface CollateralFormStore {
     isLoading: boolean;
     isInitiated: boolean;
     filAddress: string;
+    collateralVault: string;
 }
 
 export const defaultStore = {

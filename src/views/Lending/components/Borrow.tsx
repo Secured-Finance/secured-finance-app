@@ -1,30 +1,30 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import styled from 'styled-components';
-import theme from 'src/theme';
-import { Button } from 'src/components/atoms';
-import { LendingStore } from 'src/store/lending/types';
-import { RootState } from 'src/store/types';
 import { connect, useDispatch, useSelector } from 'react-redux';
+import { Button } from 'src/components/atoms';
+import { CurrencySelector, TermsSelector } from 'src/components/molecules';
+import { useDepositCollateral } from 'src/hooks/useDepositCollateral';
+import { usePlaceOrder } from 'src/hooks/usePlaceOrder';
+import { useRegisterUser } from 'src/hooks/useRegisterUser';
 import {
     updateBorrowAmount,
-    updateMainCurrency,
     updateBorrowRate,
     updateCollateralAmount,
     updateMainCollateralCurrency,
+    updateMainCurrency,
     updateMainTerms,
 } from 'src/store/lending';
-import { useSetUpCollateral } from 'src/hooks/useSetUpCollateral';
-import { usePlaceOrder } from 'src/hooks/usePlaceOrder';
-import { useUpsizeCollateral } from 'src/hooks/useUpSizeCollateral';
+import { LendingStore } from 'src/store/lending/types';
+import { RootState } from 'src/store/types';
+import theme from 'src/theme';
 import {
     collateralList,
     currencyList,
-    percentFormat,
     formatInput,
-    usdFormat,
+    percentFormat,
     termList,
+    usdFormat,
 } from 'src/utils';
-import { CurrencySelector, TermsSelector } from 'src/components/molecules';
+import styled from 'styled-components';
 
 interface BorrowTabProps {
     borrowRates: any[];
@@ -63,23 +63,26 @@ const Borrow: React.FC<CombinedProps> = ({
     const [collateralOpen, setCollateralOpen] = useState(false);
     const [termsOpen, setTermsOpen] = useState(false);
 
-    const { onSetUpCollateral } = useSetUpCollateral(collateralAmount, '', '');
+    const { onRegisterUser } = useRegisterUser();
     const handleCollateralPayment = useCallback(async () => {
         try {
             setRequestedCollateral(true);
-            const txHash = await onSetUpCollateral();
+            const txHash = await onRegisterUser();
             if (!txHash) {
                 setRequestedCollateral(false);
             }
         } catch (e) {
             console.log(e);
         }
-    }, [onSetUpCollateral, setRequestedCollateral]);
+    }, [onRegisterUser, setRequestedCollateral]);
 
-    const { onUpsizeCollateral } = useUpsizeCollateral(collateralAmount);
+    const { onDepositCollateral } = useDepositCollateral(
+        selectedCcy,
+        collateralAmount
+    );
     const { onPlaceOrder } = usePlaceOrder(
-        currencyIndex,
-        termsIndex,
+        selectedCcy,
+        selectedTerms,
         1,
         borrowAmount,
         borrowRate

@@ -14,10 +14,9 @@ import { RootState } from '../../../../../store/types';
 import { PlaceOrderForm } from './PlaceOrderForm';
 
 const Borrow: React.FC<LendingTerminalStore> = ({
-    currencyIndex,
+    selectedCcy,
     borrowAmount,
     borrowRate,
-    termsIndex,
     selectedTerms,
 }) => {
     const dispatch = useDispatch();
@@ -47,8 +46,8 @@ const Borrow: React.FC<LendingTerminalStore> = ({
     );
 
     const { onPlaceOrder } = usePlaceOrder(
-        currencyIndex,
-        termsIndex,
+        selectedCcy,
+        selectedTerms,
         1,
         borrowAmount,
         new BigNumber(borrowRate).multipliedBy(100).toNumber()

@@ -1,13 +1,20 @@
 import BigNumber from 'bignumber.js';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { connect, useDispatch, useSelector } from 'react-redux';
+import {
+    Modal,
+    ModalActions,
+    ModalContent,
+    ModalProps,
+    ModalTitle,
+} from 'src/components/atoms';
+import { Button } from 'src/components/common/Buttons';
+import { CurrencySelector } from 'src/components/molecules';
 import useCheckCollateralBook from 'src/hooks/useCheckCollateralBook';
-import styled from 'styled-components';
-import { useWallet } from 'use-wallet';
 import useCollateralBook from 'src/hooks/useCollateralBook';
+import { useDepositCollateral } from 'src/hooks/useDepositCollateral';
 import { useEthBalance } from 'src/hooks/useEthWallet';
-import { useSetUpCollateral } from 'src/hooks/useSetUpCollateral';
-import { useUpsizeCollateral } from 'src/hooks/useUpSizeCollateral';
+import { useRegisterUser } from 'src/hooks/useRegisterUser';
 import {
     CollateralFormStore,
     updateCollateralAmount,
@@ -17,20 +24,14 @@ import { RootState } from 'src/store/types';
 import theme from 'src/theme';
 import {
     currencyList,
+    DEFAULT_COLLATERAL_VAULT,
     formatInput,
     getDisplayBalance,
     getFullDisplayBalanceNumber,
     getUSDFormatBalanceNumber,
 } from 'src/utils';
-import { Button } from 'src/components/common/Buttons';
-import {
-    Modal,
-    ModalProps,
-    ModalActions,
-    ModalContent,
-    ModalTitle,
-} from 'src/components/atoms';
-import { CurrencySelector } from 'src/components/molecules';
+import styled from 'styled-components';
+import { useWallet } from 'use-wallet';
 
 type CombinedProps = ModalProps & CollateralFormStore;
 
@@ -46,10 +47,12 @@ const CollateralModal: React.FC<CombinedProps> = ({
 }) => {
     const [buttonOpen, setButtonOpen] = useState(false);
     const [, setCollateralTx] = useState(false);
-    const [collateralStatus, setCollateralStatus] = useState(false);
     const [balanceErr, setBalanceErr] = useState(false);
     const { account }: { account: string } = useWallet();
-    const colBook = useCollateralBook(account);
+    const colBook = useCollateralBook(
+        account ? account : '',
+        DEFAULT_COLLATERAL_VAULT
+    );
     const status = useCheckCollateralBook(account);
     const ethBalance = useEthBalance();
     const dispatch = useDispatch();
@@ -93,27 +96,24 @@ const CollateralModal: React.FC<CombinedProps> = ({
         }
     };
 
-    useEffect(() => {
-        if (status) {
-            setCollateralStatus(true);
-        }
-    }, [setCollateralStatus, status]);
-
-    const { onSetUpCollateral } = useSetUpCollateral(amount, 'id', '0xfilAddr');
-    const { onUpsizeCollateral } = useUpsizeCollateral(amount);
+    const { onRegisterUser } = useRegisterUser();
+    const { onDepositCollateral } = useDepositCollateral(
+        currencyShortName,
+        amount
+    );
 
     const handleDepositCollateral = useCallback(async () => {
         try {
             setCollateralTx(true);
-            if (collateralStatus) {
-                const txHash = await onUpsizeCollateral();
+            if (status) {
+                const txHash = await onDepositCollateral();
                 if (!txHash) {
                     setCollateralTx(false);
                 } else {
                     onDismiss();
                 }
             } else {
-                const txHash = await onSetUpCollateral();
+                const txHash = await onRegisterUser();
                 if (!txHash) {
                     setCollateralTx(false);
                 } else {
@@ -123,7 +123,7 @@ const CollateralModal: React.FC<CombinedProps> = ({
         } catch (e) {
             console.log(e);
         }
-    }, [onSetUpCollateral, setCollateralTx]);
+    }, [setCollateralTx, status, amount]);
 
     const renderBalance = useMemo(() => {
         return (

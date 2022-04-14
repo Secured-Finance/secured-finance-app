@@ -3,8 +3,8 @@ import { useTradeHistoryOrders } from '../../../../../../hooks/useUserOrders';
 import FilledOrdersTable from './FilledOrdersTable';
 
 interface OpenOrdersProps {
-    ccy?: number;
-    term?: number;
+    ccy?: string;
+    term?: string;
 }
 
 type MergedProps = OpenOrdersProps;
