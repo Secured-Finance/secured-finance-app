@@ -167,22 +167,22 @@ export function updateLendingTerms(data: string) {
     return (dispatch: any) => {
         dispatch(updateSelectedTerms(data));
         switch (data) {
-            case '3mo':
+            case '3 month':
                 dispatch(updateTermsIndex(0));
                 break;
-            case '6mo':
+            case '6 month':
                 dispatch(updateTermsIndex(1));
                 break;
-            case '1yr':
+            case '1 year':
                 dispatch(updateTermsIndex(2));
                 break;
-            case '2yr':
+            case '2 year':
                 dispatch(updateTermsIndex(3));
                 break;
-            case '3yr':
+            case '3 year':
                 dispatch(updateTermsIndex(4));
                 break;
-            case '5yr':
+            case '5 year':
                 dispatch(updateTermsIndex(5));
                 break;
             default:

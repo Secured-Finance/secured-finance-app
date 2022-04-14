@@ -1,39 +1,27 @@
-import BigNumber from 'bignumber.js';
+import { utils } from 'ethers';
 import { useCallback } from 'react';
-import { useWallet } from 'use-wallet';
-import { getLendingMarketContract, placeOrder } from '../services/sdk/utils';
 import useSF from './useSecuredFinance';
 
 export const usePlaceOrder = (
-    ccy: number,
-    term: number,
+    ccy: string,
+    term: string,
     side: number,
     amount: number,
     rate: number
 ) => {
     const securedFinance = useSF();
-    const { account } = useWallet();
-    const lendingMarket = getLendingMarketContract(securedFinance, ccy, term);
-    const deadline = Date.now() + 60 * 60 * 24 * 14;
 
     const handlePlaceOrder = useCallback(async () => {
-        try {
-            const amountBN = new BigNumber(amount).multipliedBy(
-                new BigNumber(10).pow(18)
-            );
-            const tx = await placeOrder(
-                lendingMarket,
-                account,
-                side,
-                amount,
-                rate,
-                deadline
-            );
-            return tx;
-        } catch (e) {
-            return false;
-        }
-    }, [lendingMarket, ccy, term, side, amount, rate]);
+        const etherAmount = utils.parseUnits(amount.toString(), 'ether');
+        const tx = await securedFinance.placeLendingOrder(
+            ccy,
+            term,
+            side,
+            etherAmount,
+            rate
+        );
+        return tx;
+    }, [securedFinance, ccy, term, side, amount, rate]);
 
     return { onPlaceOrder: handlePlaceOrder };
 };

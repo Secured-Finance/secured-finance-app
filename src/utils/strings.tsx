@@ -7,3 +7,6 @@ export const fromBytes32 = (key: string) => {
         return hexToAscii(key);
     }
 };
+
+export const DEFAULT_COLLATERAL_VAULT =
+    '0x62e09a147445af26edb7a67f51ae11e09ed37407';

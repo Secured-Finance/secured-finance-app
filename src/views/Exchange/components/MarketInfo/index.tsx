@@ -1,29 +1,25 @@
 import BigNumber from 'bignumber.js';
-import React, { HTMLAttributes, useState } from 'react';
-import styled from 'styled-components';
+import React, { useState } from 'react';
+import { connect } from 'react-redux';
 import { ArrowSVG } from 'src/components/atoms';
+import { Tabs } from 'src/components/common/Tabs';
 import { useEthereumUsd, useFilUsd } from 'src/hooks/useAssetPrices';
 import { useRates } from 'src/hooks/useRates';
-import useSF from 'src/hooks/useSecuredFinance';
-import { getLendingControllerContract } from 'src/services/sdk/utils';
-import theme from 'src/theme';
-import { ordinaryFormat, percentFormat, usdFormat } from 'src/utils';
-import { Tabs } from 'src/components/common/Tabs';
 import { LendingTerminalStore } from 'src/store/lendingTerminal';
 import { RootState } from 'src/store/types';
-import { connect } from 'react-redux';
+import theme from 'src/theme';
+import { ordinaryFormat, percentFormat, usdFormat } from 'src/utils';
+import styled from 'styled-components';
 
 const MarketInfo: React.FC<LendingTerminalStore> = ({
     selectedCcy,
     termsIndex,
 }) => {
-    const securedFinance = useSF();
-    const lendingController = getLendingControllerContract(securedFinance);
     const marketTabs = ['Yield', 'Price'];
     const [selectedTab, setSelectedTab] = useState('Yield');
     const ethPrice = useEthereumUsd();
     const filPrice = useFilUsd();
-    const lendingRates = useRates(lendingController, 2, selectedCcy);
+    const lendingRates = useRates('FIL', 2);
 
     const handleSelectTab = (tab: React.SetStateAction<string>) => {
         setSelectedTab(tab);

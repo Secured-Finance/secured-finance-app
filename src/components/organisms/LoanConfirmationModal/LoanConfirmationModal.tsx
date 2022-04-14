@@ -52,7 +52,13 @@ const LoanConfirmationModal: React.FC<CombinedProps> = ({
     const filPrice = useSelector(
         (state: RootState) => state.assetPrices.filecoin.price
     );
-    const colBook = useCollateralBook(counterpartyAddr);
+    // const colBook = useCollateralBook(
+    //     counterpartyAddr,
+    //     '0x62e09a147445af26edb7a67f51ae11e09ed37407'
+    // );
+    const colBook = {
+        vault: '',
+    };
 
     const handleNotional = () => {
         return ordinaryFormat(loan.amt) + ' FIL';

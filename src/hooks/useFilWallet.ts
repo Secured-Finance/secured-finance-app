@@ -113,6 +113,7 @@ export const useFilecoinUSDBalance = async () => {
     const filUSDPrice = useSelector(
         (state: RootState) => state.assetPrices.filecoin.price
     );
+    // TODO: add filecoin USD balance hook call
     const walletProvider = useSelector(
         (state: RootState) => state.filWalletProvider.walletProvider
     );

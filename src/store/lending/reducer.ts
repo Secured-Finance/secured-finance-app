@@ -9,7 +9,7 @@ const initialStore: LendingStore = {
     collateralCcy: 'ETH',
     collateralCcyName: 'Ethereum',
     collateralCcyIndex: 0,
-    selectedTerms: '3mo',
+    selectedTerms: '3 month',
     termsIndex: 0,
     borrowAmount: 0,
     lendAmount: 0,

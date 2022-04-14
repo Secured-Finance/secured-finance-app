@@ -1,41 +1,27 @@
 import { useCallback, useEffect, useState } from 'react';
-
-import {
-    getBorrowerRates,
-    getLenderRates,
-    getMidRates,
-} from '../services/sdk/utils';
 import useBlock from './useBlock';
-import { Contract } from 'web3-eth-contract';
+import useSF from './useSecuredFinance';
 
-export const useRates = (
-    lendingControllerContract: Contract,
-    type: number,
-    ccy: number | string
-) => {
-    const selectedCcy = 1;
+export const useRates = (ccy: string, type: number) => {
+    const selectedCcy = 'FIL';
+    const securedFinance = useSF();
     const block = useBlock();
     const [rates, setRates] = useState([]);
 
-    const fetchBorrowRates = useCallback(
+    const fetchYieldCurve = useCallback(
         async (isMounted: boolean) => {
             let rates: Array<any>;
             switch (type) {
                 case 0:
-                    rates = await getBorrowerRates(
-                        lendingControllerContract,
+                    rates = await securedFinance.getBorrowYieldCurve(
                         selectedCcy
                     );
                     break;
                 case 1:
-                    rates = await getLenderRates(
-                        lendingControllerContract,
-                        selectedCcy
-                    );
+                    rates = await securedFinance.getLendYieldCurve(selectedCcy);
                     break;
                 case 2:
-                    rates = await getMidRates(
-                        lendingControllerContract,
+                    rates = await securedFinance.getMidRateYieldCurve(
                         selectedCcy
                     );
                     break;
@@ -44,18 +30,18 @@ export const useRates = (
             }
             await setRates(rates);
         },
-        [lendingControllerContract, ccy]
+        [securedFinance, ccy]
     );
 
     useEffect(() => {
         let isMounted = true;
-        if (lendingControllerContract) {
-            fetchBorrowRates(isMounted);
+        if (securedFinance) {
+            fetchYieldCurve(isMounted);
         }
         return () => {
             isMounted = false;
         };
-    }, [block, setRates, lendingControllerContract, ccy]);
+    }, [block, setRates, ccy]);
 
     return rates;
 };

@@ -1,7 +1,8 @@
-import { formatAddress } from 'src/utils';
-import { CurrencyContainer } from 'src/components/atoms';
+import BigNumber from 'bignumber.js';
 import React from 'react';
-import { RenderCollateral, RenderBorrow } from './components';
+import { CurrencyContainer } from 'src/components/atoms';
+import { formatAddress } from 'src/utils';
+import { RenderBorrow, RenderCollateral } from './components';
 
 export interface TableColumns {
     Header: string;
@@ -140,18 +141,19 @@ export const collateralTableColumns = [
                 Cell: (cell: { value: any; row: any }) => (
                     <RenderCollateral
                         collateral={cell.value}
-                        index={cell.row.values.ccyIndex}
+                        shortName={cell.row.original.ccyName}
                         value={cell.row.original.usdCollateral}
                     />
                 ),
             },
             {
-                Header: 'Borrowed',
-                accessor: 'borrowed',
-                Cell: (cell: { value: any; row: any }) => (
+                Header: 'Locked',
+                accessor: 'locked',
+                Cell: (cell: { value: BigNumber; row: any }) => (
                     <RenderBorrow
-                        borrow={cell.value}
-                        value={cell.row.original.usdBorrowed}
+                        locked={cell.value}
+                        value={cell.row.original.usdLocked}
+                        shortName={cell.row.original.ccyName}
                     />
                 ),
             },

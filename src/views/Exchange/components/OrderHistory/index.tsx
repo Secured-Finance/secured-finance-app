@@ -9,7 +9,10 @@ import { OpenOrders } from './components/Orders';
 
 type MergedProps = LendingTerminalStore;
 
-const OrderHistory: React.FC<MergedProps> = ({ currencyIndex, termsIndex }) => {
+const OrderHistory: React.FC<MergedProps> = ({
+    selectedCcy,
+    selectedTerms,
+}) => {
     const ordersTabs = ['Open Orders', 'Trading History'];
     const [selectedTab, setSelectedTab] = useState('Open Orders');
 
@@ -32,9 +35,9 @@ const OrderHistory: React.FC<MergedProps> = ({ currencyIndex, termsIndex }) => {
             </TableTabs>
             <TableWrapper>
                 {selectedTab === 'Open Orders' ? (
-                    <OpenOrders ccy={currencyIndex} term={termsIndex} />
+                    <OpenOrders ccy={selectedCcy} term={selectedTerms} />
                 ) : (
-                    <FilledOrders ccy={currencyIndex} term={termsIndex} />
+                    <FilledOrders ccy={selectedCcy} term={selectedTerms} />
                 )}
             </TableWrapper>
         </StyledPositionsComponent>

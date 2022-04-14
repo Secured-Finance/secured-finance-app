@@ -8,12 +8,10 @@ import {
     fetchWalletFailure,
     updateTotalUSDBalance,
 } from '../store/wallets';
-
 import useBlock from './useBlock';
 
 export const useTotalUSDBalance = () => {
-    const { account, balance }: { account: string; balance: string } =
-        useWallet();
+    const { account, balance } = useWallet();
     const block = useBlock();
     const dispatch = useDispatch();
     const totalUSDBalance = useSelector(

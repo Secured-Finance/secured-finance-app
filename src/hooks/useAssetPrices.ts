@@ -1,6 +1,7 @@
 import axios, { AxiosResponse } from 'axios';
 import { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { ordinaryFormat } from 'src/utils';
 import { useWallet } from 'use-wallet';
 import {
     fetchAssetPrice,
@@ -48,7 +49,9 @@ const useAssetPrice = (
                             response.data[asset].usd_24h_change
                         ) {
                             await dispatch(
-                                priceAction(response.data[asset].usd)
+                                priceAction(
+                                    Number(response.data[asset].usd.toFixed(2))
+                                )
                             );
                             await dispatch(
                                 changeAction(

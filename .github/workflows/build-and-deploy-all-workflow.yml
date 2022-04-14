@@ -13,26 +13,62 @@ on:
       - reopened
 
 jobs:
-  build-storybook:
-    name: Build Storybook
-    uses: ./.github/workflows/build-storybook.yml
-    with:
-      publish: true
-      retention-days: 90
-      package-name: Storybook
-  build-webapp:
-    name: Build Web App
-    uses: ./.github/workflows/build-webapp.yml
-    with:
-      publish: true
-      retention-days: 90
-      package-name: WebApp
+  build-all:
+    name: Check Syntax, Build and Publish
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - name: Read .nvmrc
+        run: echo "##[set-output name=NVMRC;]$(cat .nvmrc)"
+        id: nvm
+      - name: Install Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: '${{ steps.nvm.outputs.NVMRC }}'
+      - name: Install Dependencies
+        run: npm ci
+        env:
+          NPM_AUTH_TOKEN: ${{ secrets.PAT }}
+      - name: Check Syntax with Prettier
+        run: npm run prettier:check
+      - name: Run Tests
+        run: npm run test -- --watchAll=false
+        # bad way to configure this build command.
+        # this sets CI=false to not treat warnings are errors
+        # TODO: remove this ASAP and fix all the warnings
+      - name: Build Web App
+        run: CI=false npm run build
+      - name: Build Storybook
+        run: npm run build-storybook
+      - name: Publish Web App
+        uses: actions/upload-artifact@master
+        with:
+          name: WebApp
+          path: build
+          retention-days: 10
+      - name: Publish Storybook
+        uses: actions/upload-artifact@master
+        with:
+          name: Storybook
+          path: storybook-static
+          retention-days: 10
   cypress-run:
     runs-on: ubuntu-latest
     name: Cypress Run Tests
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+      - name: Read .nvmrc
+        run: echo "##[set-output name=NVMRC;]$(cat .nvmrc)"
+        id: nvm
+      - name: Install Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: '${{ steps.nvm.outputs.NVMRC }}'
+      - name: "Setup npm"
+        run: |
+          npm set @secured-finance:registry=https://npm.pkg.github.com
+          npm set "//npm.pkg.github.com/:_authToken=${{ secrets.PAT }}"
       - name: Cypress run
         uses: cypress-io/github-action@v2
         with:
