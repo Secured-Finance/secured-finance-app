@@ -1,7 +1,8 @@
 import React from 'react';
-import styled from 'styled-components';
+import Chip from 'src/components/atoms/Chip/Chip';
 import { CollateralModal } from 'src/components/organisms';
 import useModal from 'src/hooks/useModal';
+import styled from 'styled-components';
 
 interface ActionProps {
     ccyIndex: number;
@@ -15,12 +16,8 @@ const RenderActions: React.FC<ActionProps> = ({ ccyIndex }) => {
 
     return (
         <StyledActionsContainer>
-            <StyledActionButton onClick={onPresentCollateralModal}>
-                Deposit
-            </StyledActionButton>
-            <StyledActionButton onClick={onPresentCollateralModal}>
-                Withdraw
-            </StyledActionButton>
+            <Chip onClick={onPresentCollateralModal} text='Deposit' />
+            <Chip onClick={onPresentCollateralModal} text='Withdraw' />
         </StyledActionsContainer>
     );
 };
@@ -30,17 +27,6 @@ const StyledActionsContainer = styled.div`
     flex-direction: row;
     align-items: center;
     justify-content: space-evenly;
-`;
-
-const StyledActionButton = styled.button`
-    padding: 4px 10px;
-    background-color: ${props => props.theme.colors.darkenedBg};
-    color: ${props => props.theme.colors.blue};
-    font-size: 13px;
-    font-weight: 700;
-    outline: none;
-    border: none;
-    border-radius: 15px;
 `;
 
 export default RenderActions;
