@@ -44,12 +44,12 @@ export const useSendFil = (
     close: any,
     setOngoingTx: any
 ) => {
-    const [frozen, setFrozen] = useState(false);
+    const [, setFrozen] = useState(false);
     const [gasInfo, setGasInfo] = useState(emptyGasInfo);
-    const [valueError, setValueError] = useState('');
-    const [fetchingTxDetails, setFetchingTxDetails] = useState(false);
-    const [mPoolPushing, setMPoolPushing] = useState(false);
-    const [uncaughtError, setUncaughtError] = useState('');
+    const [, setValueError] = useState('');
+    const [, setFetchingTxDetails] = useState(false);
+    const [, setMPoolPushing] = useState(false);
+    const [, setUncaughtError] = useState('');
     const wallet = useSelector(getFilWallet);
     const value = new FilecoinNumber(amount, 'fil');
 
@@ -59,7 +59,7 @@ export const useSendFil = (
     );
 
     const getMaxAffordableFee = () => {
-        const affordableFee = wallet.balance.minus(value);
+        const affordableFee = new BigNumber(wallet.balance).minus(value);
         return new FilecoinNumber(affordableFee, 'fil');
     };
 

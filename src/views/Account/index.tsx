@@ -1,19 +1,19 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { connect, useSelector } from 'react-redux';
-import styled from 'styled-components';
-import { useWallet } from 'use-wallet';
 import { Page } from 'src/components/templates';
 import useCollateralBook from 'src/hooks/useCollateralBook';
 import { useEthereumWalletStore } from 'src/hooks/useEthWallet';
 import { useFilecoinWalletStore } from 'src/hooks/useFilWallet';
 import { RootState } from 'src/store/types';
 import { WalletBase } from 'src/store/wallets';
+import { FIL_ADDRESS } from 'src/store/wallets/constants';
+import { getFilAddress, getTotalUSDBalance } from 'src/store/wallets/selectors';
 import theme from 'src/theme';
 import { DEFAULT_COLLATERAL_VAULT, usdFormat } from 'src/utils';
+import styled from 'styled-components';
+import { useWallet } from 'use-wallet';
 import CollateralTable from './components/CollateralTable';
 import WalletsTable from './components/WalletsTable';
-import { getFilAddress, getTotalUSDBalance } from 'src/store/wallets/selectors';
-import { FIL_ADDRESS } from 'src/store/wallets/constants';
 
 const Account: React.FC = () => {
     const totalUSDBalance = useSelector(getTotalUSDBalance);
@@ -34,7 +34,7 @@ const Account: React.FC = () => {
             setTableData(array);
         }
         updateTable();
-    }, [ethWallet, filWallet, totalUSDBalance, setTableData]);
+    }, [ethWallet, filWallet, setTableData]);
 
     useEffect(() => {
         if (filAddress) {

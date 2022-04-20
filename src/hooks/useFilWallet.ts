@@ -40,7 +40,7 @@ export const useFilecoinAddress = () => {
     const fetchFilStore = useCallback(
         async (isMounted: boolean) => {
             await dispatch(fetchWallet());
-            if (loaded && walletProvider != null) {
+            if (loaded && walletProvider !== null) {
                 const [filAddr] = await walletProvider.wallet.getAccounts(
                     0,
                     1,
@@ -65,7 +65,7 @@ export const useFilecoinAddress = () => {
     return filecoinAddr;
 };
 
-export const useFilecoinBalance = () => {
+export const useFilecoinBalance = (): any => {
     const dispatch = useDispatch();
     const { loaded } = useFilWasm();
     const filecoinBalance = useSelector(
@@ -75,31 +75,24 @@ export const useFilecoinBalance = () => {
         (state: RootState) => state.filWalletProvider.walletProvider
     );
 
-    const fetchFilStore = useCallback(
-        async (isMounted: boolean) => {
-            await dispatch(fetchWallet());
-            if (loaded && walletProvider != null) {
-                const [filAddr] = await walletProvider.wallet.getAccounts(
-                    0,
-                    1,
-                    Network.TEST
-                );
-                const balance = await walletProvider.getBalance(filAddr);
-                dispatch(updateFilWalletBalance(balance.toNumber()));
-            } else {
-                dispatch(fetchWalletFailure());
-            }
-        },
-        [dispatch, loaded, walletProvider]
-    );
+    const fetchFilStore = useCallback(async () => {
+        await dispatch(fetchWallet());
+        if (loaded && walletProvider != null) {
+            const [filAddr] = await walletProvider.wallet.getAccounts(
+                0,
+                1,
+                Network.TEST
+            );
+            const balance = await walletProvider.getBalance(filAddr);
+            dispatch(updateFilWalletBalance(balance.toNumber()));
+        } else {
+            dispatch(fetchWalletFailure());
+        }
+    }, [dispatch, loaded, walletProvider]);
 
     useEffect(() => {
-        let isMounted = true;
-        fetchFilStore(isMounted);
-        return () => {
-            isMounted = false;
-        };
-    }, [dispatch, walletProvider]);
+        fetchFilStore();
+    }, [fetchFilStore]);
 
     return filecoinBalance;
 };
