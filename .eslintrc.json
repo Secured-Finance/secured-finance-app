@@ -19,8 +19,8 @@
     "prettier"
   ],
   "rules": {
-    // few ts-ignore rules which need to be removed. DO NOT ADD MORE PLEASE
-    "@typescript-eslint/ban-ts-comment": "warn"
+    "@typescript-eslint/ban-ts-comment": "warn",
+    "eqeqeq": "error"
   },
   "overrides": [
     {
