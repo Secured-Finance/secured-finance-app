@@ -1,4 +1,7 @@
 const path = require('path');
+const customESLintConfig = require('./.eslintrc');
+const { ESLINT_MODES } = require('@craco/craco');
+
 const { addBeforeLoader, loaderByName, getLoaders } = require('@craco/craco');
 
 module.exports = {
@@ -6,6 +9,10 @@ module.exports = {
         postcss: {
             plugins: [require('tailwindcss'), require('autoprefixer')],
         },
+    },
+    eslint: {
+        mode: ESLINT_MODES.extends,
+        configure: () => customESLintConfig,
     },
     webpack: {
         alias: {
