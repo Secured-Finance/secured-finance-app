@@ -1,23 +1,25 @@
 import React, { useCallback } from 'react';
-import { useHistory } from 'react-router-dom';
-import styled from 'styled-components';
-import { useResetFilWalletProvider } from 'src/services/filecoin';
-import theme from 'src/theme';
-import { Button, Label, ModalProps, Spacer } from 'src/components/atoms';
 import { useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+import { Button, Label, ModalProps, Spacer } from 'src/components/atoms';
+import { useFilecoinAddress } from 'src/hooks/useFilWallet';
+import { useResetFilWalletProvider } from 'src/services/filecoin';
+import { RootState } from 'src/store/types';
+import { FIL_ADDRESS } from 'src/store/wallets/constants';
 import {
     getFilAddress,
     isAnyWalletConnected,
 } from 'src/store/wallets/selectors';
-import { FIL_ADDRESS } from 'src/store/wallets/constants';
-import { RootState } from 'src/store/types';
+import theme from 'src/theme';
+import styled from 'styled-components';
 
 const FilWallet: React.FC<ModalProps> = ({ onDismiss }) => {
     const history = useHistory();
     const addressFromLocalStorage = localStorage.getItem(FIL_ADDRESS);
     const addressFromStore = useSelector(getFilAddress);
+    const filAdress = useFilecoinAddress();
 
-    const address = addressFromLocalStorage || addressFromStore;
+    const address = addressFromLocalStorage || addressFromStore || filAdress;
     const otherWalletConnected = useSelector((state: RootState) =>
         isAnyWalletConnected(state, 'filecoin')
     );
@@ -25,12 +27,12 @@ const FilWallet: React.FC<ModalProps> = ({ onDismiss }) => {
     const { onReset } = useResetFilWalletProvider();
 
     const handleSignOutClick = useCallback(() => {
-        onDismiss!();
+        onDismiss?.();
         onReset();
         if (!otherWalletConnected) {
             history.push('/');
         }
-    }, [onDismiss]);
+    }, [history, onDismiss, onReset, otherWalletConnected]);
 
     return (
         <div>

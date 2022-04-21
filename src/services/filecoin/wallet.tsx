@@ -2,6 +2,7 @@ import { Network } from '@glif/filecoin-address';
 import Filecoin, { WalletSubProvider } from '@glif/filecoin-wallet-provider';
 import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { updateFilWallet } from 'src/store/wallets/helpers';
 import useFilWasm from '../../hooks/useFilWasm';
 import { RootState } from '../../store/types';
 import { resetFilWallet } from '../../store/wallets';
@@ -17,18 +18,16 @@ export const useResetFilWalletProvider = () => {
     localStorage.setItem('mnemonic', null);
     localStorage.setItem('privateKey', null);
     const dispatch = useDispatch();
-    const { loaded } = useFilWasm();
 
     const handleResetProvider = useCallback(async () => {
-        await dispatch(startFetchingFilWalletProvider());
+        dispatch(startFetchingFilWalletProvider());
         try {
-            await dispatch(resetFilWalletProvider());
-            await dispatch(resetFilWallet());
+            dispatch(resetFilWalletProvider());
+            dispatch(resetFilWallet());
         } catch (e) {
-            console.log(e);
-            await dispatch(failFetchingFilWalletProvider());
+            dispatch(failFetchingFilWalletProvider());
         }
-    }, [loaded, dispatch]);
+    }, [dispatch]);
 
     return { onReset: handleResetProvider };
 };
@@ -46,28 +45,41 @@ export const useNewFilWalletProvider = () => {
             providerType: string,
             network: Network = Network.TEST
         ) => {
-            await dispatch(startFetchingFilWalletProvider());
-            if (loaded && walletProvider == null) {
+            dispatch(startFetchingFilWalletProvider());
+            if (loaded && walletProvider === null) {
                 const config = {
                     apiAddress:
                         network === Network.MAIN
                             ? 'http://api.node.glif.io/rpc/v0'
                             : 'https://calibration.node.glif.io/rpc/v0',
                 };
-                const filecoin = await new Filecoin(provider, config);
-                await dispatch(setFilWalletProvider(filecoin));
-                await dispatch(setFilWalletType(providerType));
+                const filecoin = new Filecoin(provider, config);
+                dispatch(setFilWalletProvider(filecoin));
+                dispatch(setFilWalletType(providerType));
+                const [filAddr] = await provider.getAccounts(
+                    0,
+                    1,
+                    Network.TEST
+                );
+                const balance = await filecoin.getBalance(filAddr);
+
+                dispatch(updateFilWallet(balance, filAddr));
             } else {
-                await dispatch(failFetchingFilWalletProvider());
+                dispatch(failFetchingFilWalletProvider());
             }
         },
-        [loaded, walletProvider]
+        [dispatch, loaded, walletProvider]
     );
 
     return { onCreate: handleCreateFilWalletProvider };
 };
 
-export const useDefaultWallet = (network: Network = Network.TEST) => {
+export const useDefaultWallet = (
+    network: Network = Network.TEST
+): {
+    address: string;
+    balance: number;
+} => {
     const walletProvider = useSelector(
         (state: RootState) => state.filWalletProvider.walletProvider
     );
@@ -88,7 +100,7 @@ export const useDefaultWallet = (network: Network = Network.TEST) => {
             }
         }
         compute();
-    }, [setAddress, setBalance]);
+    }, [network, setAddress, setBalance, walletProvider]);
 
     return { address, balance };
 };

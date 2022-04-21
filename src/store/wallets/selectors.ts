@@ -1,5 +1,4 @@
 import { RootState } from '../types';
-import { WalletsStore } from './types';
 
 export const getAssetPrices = (state: RootState) => ({
     ethereum: state.assetPrices.ethereum,
