@@ -1,6 +1,6 @@
-import { WalletSubProvider } from '@glif/filecoin-wallet-provider';
 import { Network } from '@glif/filecoin-address';
 import { LotusMessage, SignedLotusMessage } from '@glif/filecoin-message';
+import { WalletSubProvider } from '@glif/filecoin-wallet-provider';
 
 export const PrivateKeyProvider = (wasm: any) => {
     return (privateKey: string | Buffer): WalletSubProvider => {

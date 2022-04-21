@@ -1,22 +1,22 @@
 import { Network } from '@glif/filecoin-address';
 import React, { useCallback, useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-import styled from 'styled-components';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+    Breaker,
+    Button,
+    Modal,
+    ModalActions,
+    ModalContent,
+    ModalProps,
+    ModalTitle,
+    Spacer,
+} from 'src/components/atoms';
 import useFilWasm from 'src/hooks/useFilWasm';
 import useModal from 'src/hooks/useModal';
 import { HDWallet, useNewFilWalletProvider } from 'src/services/filecoin';
 import { RootState } from 'src/store/types';
 import theme from 'src/theme';
-import {
-    Breaker,
-    Button,
-    Modal,
-    ModalProps,
-    ModalActions,
-    ModalContent,
-    ModalTitle,
-    Spacer,
-} from 'src/components/atoms';
+import styled from 'styled-components';
 import PrivateKeyModal from './PrivateKeyModal';
 
 interface MnemonicProps {
@@ -54,6 +54,7 @@ const MnemonicModal: React.FC<ModalProps> = ({ onDismiss }) => {
     const walletProvider = useSelector(
         (state: RootState) => state.filWalletProvider.walletProvider
     );
+    const dispatch = useDispatch();
 
     const genPhrase = useCallback(async () => {
         const phrase = await generateMnemonic();
@@ -84,7 +85,7 @@ const MnemonicModal: React.FC<ModalProps> = ({ onDismiss }) => {
         } catch (e) {
             console.log(e);
         }
-    }, [onCreate, filProviders, mnemonic, walletProvider]);
+    }, [filProviders, mnemonic, walletProvider, onCreate]);
 
     return (
         <Modal>

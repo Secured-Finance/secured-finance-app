@@ -1,3 +1,8 @@
+import { BigNumber, FilecoinNumber } from '@glif/filecoin-number';
+import LotusRpcEngine from '@glif/filecoin-rpc-client';
+import { Action } from 'redux';
+import { ThunkDispatch } from 'redux-thunk';
+import { RootState } from '../types';
 import {
     updateFilWalletAddress,
     updateFilWalletBalance,
@@ -5,19 +10,13 @@ import {
     updateFilWalletUSDBalance,
     updateTotalUSDBalance,
 } from './actions';
-import { RootState } from '../types';
-import { Coin } from './types';
 import {
     getAssetPrices,
     getEthUSDBalance,
-    getFilAddress,
     getFilUSDBalance,
     getTotalUSDBalance,
 } from './selectors';
-import { BigNumber, FilecoinNumber } from '@glif/filecoin-number';
-import { ThunkDispatch } from 'redux-thunk';
-import { Action } from 'redux';
-import LotusRpcEngine from '@glif/filecoin-rpc-client';
+import { Coin } from './types';
 
 export const calculateUSDBalance = (coin: Coin, balance: FilecoinNumber) => {
     return (
