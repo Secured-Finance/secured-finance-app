@@ -2,7 +2,6 @@ import React, { useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { Button, Label, ModalProps, Spacer } from 'src/components/atoms';
-import { useFilecoinAddress } from 'src/hooks/useFilWallet';
 import { useResetFilWalletProvider } from 'src/services/filecoin';
 import { RootState } from 'src/store/types';
 import { FIL_ADDRESS } from 'src/store/wallets/constants';
@@ -17,9 +16,8 @@ const FilWallet: React.FC<ModalProps> = ({ onDismiss }) => {
     const history = useHistory();
     const addressFromLocalStorage = localStorage.getItem(FIL_ADDRESS);
     const addressFromStore = useSelector(getFilAddress);
-    const filAdress = useFilecoinAddress();
 
-    const address = addressFromLocalStorage || addressFromStore || filAdress;
+    const address = addressFromLocalStorage || addressFromStore;
     const otherWalletConnected = useSelector((state: RootState) =>
         isAnyWalletConnected(state, 'filecoin')
     );
