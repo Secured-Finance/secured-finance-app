@@ -2,10 +2,12 @@ import { Network } from '@glif/filecoin-address';
 import Filecoin, { WalletSubProvider } from '@glif/filecoin-wallet-provider';
 import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useUpdateCrossChainWallet } from 'src/hooks/useUpdateCrossChainWallet';
 import { updateFilWallet } from 'src/store/wallets/helpers';
 import useFilWasm from '../../hooks/useFilWasm';
 import { RootState } from '../../store/types';
 import { resetFilWallet } from '../../store/wallets';
+import { TESTNET_PATH_CODE } from '../ledger/constants';
 import {
     failFetchingFilWalletProvider,
     resetFilWalletProvider,
@@ -38,6 +40,7 @@ export const useNewFilWalletProvider = () => {
     );
     const dispatch = useDispatch();
     const { loaded } = useFilWasm();
+    const { onRegisterCrossChainWallet } = useUpdateCrossChainWallet();
 
     const handleCreateFilWalletProvider = useCallback(
         async (
@@ -64,11 +67,12 @@ export const useNewFilWalletProvider = () => {
                 const balance = await filecoin.getBalance(filAddr);
 
                 dispatch(updateFilWallet(balance, filAddr));
+                await onRegisterCrossChainWallet(TESTNET_PATH_CODE, filAddr);
             } else {
                 dispatch(failFetchingFilWalletProvider());
             }
         },
-        [dispatch, loaded, walletProvider]
+        [dispatch, loaded, onRegisterCrossChainWallet, walletProvider]
     );
 
     return { onCreate: handleCreateFilWalletProvider };
