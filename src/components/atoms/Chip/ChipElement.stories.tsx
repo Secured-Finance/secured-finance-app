@@ -1,7 +1,6 @@
+import { Meta, Story } from '@storybook/react';
 import React from 'react';
-import { Story, Meta } from '@storybook/react';
 import cm from 'src/stories/index.module.scss';
-
 import { ChipButton, IChipButton } from './ChipButton';
 import { ChipLabel, IChipLabel } from './ChipLabel';
 
