@@ -12,7 +12,8 @@ export const usePlaceOrder = (
     const securedFinance = useSF();
 
     const handlePlaceOrder = useCallback(async () => {
-        const etherAmount = utils.parseUnits(amount.toString(), 'ether');
+        const etherAmount = utils.parseUnits(amount.toString(), 'wei');
+        console.log(etherAmount.toString());
         const tx = await securedFinance.placeLendingOrder(
             ccy,
             term,
