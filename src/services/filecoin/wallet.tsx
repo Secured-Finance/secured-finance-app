@@ -1,9 +1,11 @@
 import { Network } from '@glif/filecoin-address';
 import Filecoin, { WalletSubProvider } from '@glif/filecoin-wallet-provider';
+import { useCrosschainAddressById } from '@secured-finance/sf-graph-client';
 import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useUpdateCrossChainWallet } from 'src/hooks/useUpdateCrossChainWallet';
 import { updateFilWallet } from 'src/store/wallets/helpers';
+import { useWallet } from 'use-wallet';
 import useFilWasm from '../../hooks/useFilWasm';
 import { RootState } from '../../store/types';
 import { resetFilWallet } from '../../store/wallets';
@@ -15,6 +17,12 @@ import {
     setFilWalletType,
     startFetchingFilWalletProvider,
 } from './store';
+
+export type CrossChainWallet = {
+    address: string;
+    chainId: string;
+    [key: string]: unknown;
+};
 
 export const useResetFilWalletProvider = () => {
     localStorage.setItem('mnemonic', null);
@@ -40,7 +48,14 @@ export const useNewFilWalletProvider = () => {
     );
     const dispatch = useDispatch();
     const { loaded } = useFilWasm();
+    const { account } = useWallet();
     const { onRegisterCrossChainWallet } = useUpdateCrossChainWallet();
+
+    // TODO: Remove the cast to an object here once the type is fixed in [SF-98]
+    const filWalletAddr = useCrosschainAddressById(
+        account,
+        TESTNET_PATH_CODE
+    ) as CrossChainWallet;
 
     const handleCreateFilWalletProvider = useCallback(
         async (
@@ -64,15 +79,26 @@ export const useNewFilWalletProvider = () => {
                     1,
                     Network.TEST
                 );
-                const balance = await filecoin.getBalance(filAddr);
 
-                dispatch(updateFilWallet(balance, filAddr));
-                await onRegisterCrossChainWallet(TESTNET_PATH_CODE, filAddr);
+                const crossChainAdress = await registerCrossChainWallet(
+                    filWalletAddr,
+                    filAddr,
+                    onRegisterCrossChainWallet
+                );
+
+                const balance = await filecoin.getBalance(crossChainAdress);
+                dispatch(updateFilWallet(balance, crossChainAdress));
             } else {
                 dispatch(failFetchingFilWalletProvider());
             }
         },
-        [dispatch, loaded, onRegisterCrossChainWallet, walletProvider]
+        [
+            dispatch,
+            filWalletAddr,
+            loaded,
+            onRegisterCrossChainWallet,
+            walletProvider,
+        ]
     );
 
     return { onCreate: handleCreateFilWalletProvider };
@@ -108,3 +134,25 @@ export const useDefaultWallet = (
 
     return { address, balance };
 };
+
+export async function registerCrossChainWallet(
+    filWalletAddr: CrossChainWallet,
+    filAddr: string,
+    register: (chainId: number, adress: string) => Promise<unknown>
+) {
+    console.log(filWalletAddr);
+
+    if (!filWalletAddr || !filWalletAddr?.address) {
+        await register(TESTNET_PATH_CODE, filAddr);
+        return filAddr;
+    } else if (
+        filWalletAddr?.address &&
+        filWalletAddr.chainId === TESTNET_PATH_CODE.toString() &&
+        filWalletAddr.address !== filAddr
+    ) {
+        await register(TESTNET_PATH_CODE, filAddr);
+        return filAddr;
+    } else {
+        return filWalletAddr.address;
+    }
+}
