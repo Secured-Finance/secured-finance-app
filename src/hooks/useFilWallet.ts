@@ -61,7 +61,8 @@ export const useFilecoinAddress = (): string => {
 
 export const useFilecoinBalance = (): number => {
     const dispatch = useDispatch();
-    const { loaded } = useFilWasm();
+    // TODO: rework this part as this hooks seems fishy
+    const { loaded }: { loaded: boolean } = useFilWasm();
     const filecoinBalance = useSelector(
         (state: RootState) => state.wallets.filecoin.balance
     );
@@ -158,25 +159,19 @@ export const useFilecoinWalletStore = (): WalletBase => {
     );
 
     const fetchFilStore = useCallback(async () => {
-        dispatch(updateFilWalletAssetPrice(price));
-        dispatch(updateFilWalletDailyChange(change));
+        if (!loaded || walletProvider === null) {
+            return;
+        }
+
         dispatch(updateFilWalletViaProvider(walletProvider, filAddr));
         dispatch(updateFilWalletActions(actObj));
-    }, [dispatch, price, change, walletProvider, filAddr, actObj]);
+    }, [walletProvider, loaded, dispatch, actObj, filAddr]);
 
     useEffect(() => {
         (async () => {
-            if (
-                loaded &&
-                totalUSDBalance !== 0 &&
-                walletProvider != null &&
-                price !== 0 &&
-                change !== 0
-            ) {
-                await fetchFilStore();
-            }
+            await fetchFilStore();
         })();
-    }, [loaded, totalUSDBalance, walletProvider, price, change, fetchFilStore]);
+    }, [fetchFilStore]);
 
     useEffect(() => {
         // fetch FIL wallet info when not connected
@@ -186,9 +181,11 @@ export const useFilecoinWalletStore = (): WalletBase => {
 
                 // connect FIL wallet if address is stored
                 const provider = await connectWithLedger(dispatch);
-                provider
-                    ? dispatch(updateFilWalletActions(actObj))
-                    : dispatch(updateFilWalletViaRPC(filAddr));
+                if (!provider) {
+                    dispatch(updateFilWalletViaRPC(filAddr));
+                }
+
+                dispatch(updateFilWalletActions(actObj));
             }
         })();
     }, [DOMContentLoaded, actObj, dispatch, filAddr, walletProvider]);
