@@ -66,7 +66,7 @@ jobs:
         with:
           node-version: '${{ steps.nvm.outputs.NVMRC }}'
       - name: Cypress run
-        uses: cypress-io/github-action@v2
+        uses: cypress-io/github-action@v3
         with:
           build: npm run build:ci
           start: npm start
