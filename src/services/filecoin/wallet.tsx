@@ -25,11 +25,10 @@ export type CrossChainWallet = {
 };
 
 export const useResetFilWalletProvider = () => {
-    localStorage.setItem('mnemonic', null);
-    localStorage.setItem('privateKey', null);
     const dispatch = useDispatch();
 
     const handleResetProvider = useCallback(async () => {
+        localStorage.setItem('FIL_ADDRESS', '');
         dispatch(startFetchingFilWalletProvider());
         try {
             dispatch(resetFilWalletProvider());
@@ -140,8 +139,6 @@ export async function registerCrossChainWallet(
     filAddr: string,
     register: (chainId: number, adress: string) => Promise<unknown>
 ) {
-    console.log(filWalletAddr);
-
     if (!filWalletAddr || !filWalletAddr?.address) {
         await register(TESTNET_PATH_CODE, filAddr);
         return filAddr;
