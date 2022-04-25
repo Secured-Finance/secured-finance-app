@@ -4,7 +4,7 @@ import { CrossChainWallet, registerCrossChainWallet } from './wallet';
 describe('Wallet', () => {
     const onChainWallet: CrossChainWallet = {
         address: '0x0',
-        chainId: TESTNET_PATH_CODE.toString(),
+        chainID: TESTNET_PATH_CODE.toString(),
     };
     const onMockRegisterCrossChainWallet = jest.fn();
 
