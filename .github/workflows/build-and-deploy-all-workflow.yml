@@ -41,13 +41,14 @@ jobs:
       - name: Build Storybook
         run: npm run build-storybook
       - name: Publish Web App
-        uses: actions/upload-artifact@master
+        uses: actions/upload-artifact@v3
         with:
           name: WebApp
           path: build
           retention-days: 10
+          if-no-files-found: error
       - name: Publish Storybook
-        uses: actions/upload-artifact@master
+        uses: actions/upload-artifact@v3
         with:
           name: Storybook
           path: storybook-static
@@ -55,6 +56,7 @@ jobs:
   cypress-run:
     runs-on: ubuntu-latest
     name: Cypress Run Tests
+    needs: build-all
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -65,12 +67,16 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: '${{ steps.nvm.outputs.NVMRC }}'
+      - name: Download the build folders of the WebApp
+        uses: actions/download-artifact@v3
+        with:
+          name: WebApp
+          path: build
       - name: Cypress run
         uses: cypress-io/github-action@v3
         with:
-          build: npm run build
+          install: false
           start: npm run start
           wait-on: 'http://localhost:3000'
-          env: CI=false,NPM_AUTH_TOKEN=${{ secrets.PAT }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
