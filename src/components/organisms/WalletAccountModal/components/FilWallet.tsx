@@ -2,7 +2,11 @@ import React, { useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { Button, Label, ModalProps, Spacer } from 'src/components/atoms';
-import { useResetFilWalletProvider } from 'src/services/filecoin';
+import {
+    getBlockExporerUrl,
+    getFilecoinNetwork,
+    useResetFilWalletProvider,
+} from 'src/services/filecoin';
 import { RootState } from 'src/store/types';
 import { FIL_ADDRESS } from 'src/store/wallets/constants';
 import {
@@ -18,6 +22,8 @@ const FilWallet: React.FC<ModalProps> = ({ onDismiss }) => {
     const addressFromStore = useSelector(getFilAddress);
 
     const address = addressFromLocalStorage || addressFromStore;
+    const blockExporerUrl = getBlockExporerUrl(getFilecoinNetwork(), address);
+
     const otherWalletConnected = useSelector((state: RootState) =>
         isAnyWalletConnected(state, 'filecoin')
     );
@@ -47,7 +53,7 @@ const FilWallet: React.FC<ModalProps> = ({ onDismiss }) => {
             </div>
             <StyledButtonContainer>
                 <Button
-                    href={`https://filscan.io/#/tipset/address-detail?address=${address}`}
+                    href={blockExporerUrl}
                     text='View on Filscan'
                     style={{
                         background: theme.colors.buttonBlue,
