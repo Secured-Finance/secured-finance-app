@@ -6,6 +6,13 @@ export const TestNetPath = "m/44'/1'/0'/0/0";
 export const HDWallet = 'HDWallet';
 export const PKWallet = 'PrivateKeyWallet';
 
+const BLOCK_EXPLORER_URL: Record<Network, string> = {
+    [Network.MAIN]: 'https://filscan.io/',
+    [Network.TEST]: 'https://calibration.filscan.io/',
+};
+
+const BLOCK_EXPLORER_WALLET_PREFIX = 'address/general?address=';
+
 export const getFilecoinNetwork = () => {
     if (process.env.REACT_APP_FILECOIN_NETWORK.toLowerCase() === 'mainnet') {
         return Network.MAIN;
@@ -20,4 +27,8 @@ export const getFilecoinChainId = (network: Network) => {
     }
 
     return TESTNET_PATH_CODE;
+};
+
+export const getBlockExporerUrl = (network: Network, wallet: string) => {
+    return `${BLOCK_EXPLORER_URL[network]}${BLOCK_EXPLORER_WALLET_PREFIX}${wallet}`;
 };
