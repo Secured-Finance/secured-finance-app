@@ -1,10 +1,16 @@
-import { Network } from '@glif/filecoin-address';
 import { validateMnemonic } from 'bip39';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import styled from 'styled-components';
-import { isPrivate } from 'tiny-secp256k1';
-import isBase64 from 'validator/lib/isBase64';
+import {
+    Breaker,
+    Button,
+    Modal,
+    ModalActions,
+    ModalContent,
+    ModalProps,
+    ModalTitle,
+    Spacer,
+} from 'src/components/atoms';
 import useFilWasm from 'src/hooks/useFilWasm';
 import useModal from 'src/hooks/useModal';
 import {
@@ -13,18 +19,12 @@ import {
     TestNetPath,
     useNewFilWalletProvider,
 } from 'src/services/filecoin';
+import { getFilecoinNetwork } from 'src/services/filecoin/utils';
 import { RootState } from 'src/store/types';
 import theme from 'src/theme';
-import {
-    Button,
-    Breaker,
-    Modal,
-    ModalProps,
-    ModalActions,
-    ModalContent,
-    ModalTitle,
-    Spacer,
-} from 'src/components/atoms';
+import styled from 'styled-components';
+import { isPrivate } from 'tiny-secp256k1';
+import isBase64 from 'validator/lib/isBase64';
 import MnemonicModal from './MnemonicModal';
 
 interface PrivateKeyContainerProps {
@@ -109,7 +109,7 @@ const RenderPrivateKeyContainer: React.FC<ContainerProps> = ({
         try {
             if (filProviders && mnemonic !== '' && walletProvider == null) {
                 const provider = await filProviders.HDWalletProvider(mnemonic);
-                await onCreate(provider, HDWallet, Network.TEST);
+                await onCreate(provider, HDWallet, getFilecoinNetwork());
             }
         } catch (e) {
             console.log(e);
@@ -122,7 +122,7 @@ const RenderPrivateKeyContainer: React.FC<ContainerProps> = ({
                 const provider = await filProviders.PrivateKeyProvider(
                     privateKey
                 );
-                await onCreate(provider, PKWallet, Network.TEST);
+                await onCreate(provider, PKWallet, getFilecoinNetwork());
             }
         } catch (e) {
             console.log(e);

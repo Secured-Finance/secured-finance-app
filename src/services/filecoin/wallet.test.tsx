@@ -1,10 +1,10 @@
-import { TESTNET_PATH_CODE } from '../ledger/constants';
+import { getFilecoinChainId, getFilecoinNetwork } from './utils';
 import { CrossChainWallet, registerCrossChainWallet } from './wallet';
 
 describe('Wallet', () => {
     const onChainWallet: CrossChainWallet = {
         address: '0x0',
-        chainID: TESTNET_PATH_CODE.toString(),
+        chainID: getFilecoinChainId(getFilecoinNetwork()).toString(),
     };
     const onMockRegisterCrossChainWallet = jest.fn();
 

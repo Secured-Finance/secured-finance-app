@@ -1,9 +1,9 @@
-import { Network } from '@glif/filecoin-address';
 import { BigNumber } from '@glif/filecoin-number';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { WalletAccountModal } from 'src/components/organisms';
 import { useResetFilWalletProvider } from 'src/services/filecoin';
+import { getFilecoinNetwork } from 'src/services/filecoin/utils';
 import connectWithLedger from 'src/services/ledger/connectLedger';
 import { RootState } from 'src/store/types';
 import {
@@ -44,7 +44,7 @@ export const useFilecoinAddress = (): string => {
             const [filAddr] = await walletProvider.wallet.getAccounts(
                 0,
                 1,
-                Network.TEST
+                getFilecoinNetwork()
             );
             dispatch(updateFilWalletAddress(filAddr));
         } else {
@@ -76,7 +76,7 @@ export const useFilecoinBalance = (): number => {
             const [filAddr] = await walletProvider.wallet.getAccounts(
                 0,
                 1,
-                Network.TEST
+                getFilecoinNetwork()
             );
             const balance = await walletProvider.getBalance(filAddr);
             dispatch(updateFilWalletBalance(balance.toNumber()));
@@ -112,7 +112,7 @@ export const useFilecoinUSDBalance = async (): Promise<number> => {
             const [filAddr] = await walletProvider.wallet.getAccounts(
                 0,
                 1,
-                Network.TEST
+                getFilecoinNetwork()
             );
             const balance = await walletProvider.getBalance(filAddr);
             const usdBalance = new BigNumber(balance.toFil())
@@ -175,6 +175,7 @@ export const useFilecoinWalletStore = (): WalletBase => {
 
     useEffect(() => {
         // fetch FIL wallet info when not connected
+
         (async () => {
             if (filAddr && !walletProvider && DOMContentLoaded) {
                 dispatch(updateFilWalletAddress(filAddr));
