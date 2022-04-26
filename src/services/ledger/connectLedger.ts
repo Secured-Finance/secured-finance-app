@@ -1,8 +1,8 @@
-import { Network } from '@glif/filecoin-address';
 import {
     setFilWalletProvider,
     setFilWalletType,
 } from 'src/services/filecoin/store';
+import { getFilecoinNetwork } from 'src/services/filecoin/utils';
 import { updateFilWallet } from 'src/store/wallets/helpers';
 import { LEDGER } from './constants';
 import {
@@ -23,7 +23,11 @@ const connectWithLedger = async (dispatch: any) => {
     dispatch(setFilWalletProvider(provider));
     dispatch(setFilWalletType(LEDGER));
 
-    const [filAddr] = await provider.wallet.getAccounts(0, 1, Network.TEST);
+    const [filAddr] = await provider.wallet.getAccounts(
+        0,
+        1,
+        getFilecoinNetwork()
+    );
     const balance = await provider.getBalance(filAddr);
 
     //TODO: add something here

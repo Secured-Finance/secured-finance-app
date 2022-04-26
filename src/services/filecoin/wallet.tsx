@@ -9,7 +9,6 @@ import { useWallet } from 'use-wallet';
 import useFilWasm from '../../hooks/useFilWasm';
 import { RootState } from '../../store/types';
 import { resetFilWallet } from '../../store/wallets';
-import { TESTNET_PATH_CODE } from '../ledger/constants';
 import {
     failFetchingFilWalletProvider,
     resetFilWalletProvider,
@@ -17,6 +16,7 @@ import {
     setFilWalletType,
     startFetchingFilWalletProvider,
 } from './store';
+import { getFilecoinChainId, getFilecoinNetwork } from './utils';
 
 export type CrossChainWallet = {
     address: string;
@@ -53,7 +53,7 @@ export const useNewFilWalletProvider = () => {
     // TODO: Remove the cast to an object here once the type is fixed in [SF-98]
     const filWalletAddr = useCrosschainAddressById(
         account,
-        TESTNET_PATH_CODE
+        getFilecoinChainId(getFilecoinNetwork())
     ) as CrossChainWallet;
 
     const handleCreateFilWalletProvider = useCallback(
@@ -73,16 +73,8 @@ export const useNewFilWalletProvider = () => {
                 const filecoin = new Filecoin(provider, config);
                 dispatch(setFilWalletProvider(filecoin));
                 dispatch(setFilWalletType(providerType));
-                const [filAddr] = await provider.getAccounts(
-                    0,
-                    1,
-                    Network.TEST
-                );
+                const [filAddr] = await provider.getAccounts(0, 1, network);
 
-                console.log({
-                    filAddr,
-                    filWalletAddr,
-                });
                 const crossChainAdress = await registerCrossChainWallet(
                     filWalletAddr,
                     filAddr,
@@ -143,15 +135,16 @@ export async function registerCrossChainWallet(
     filAddr: string,
     register: (chainId: number, adress: string) => Promise<unknown>
 ) {
+    const chainId = getFilecoinChainId(getFilecoinNetwork());
     if (!filWalletAddr || !filWalletAddr?.address) {
-        await register(TESTNET_PATH_CODE, filAddr);
+        await register(chainId, filAddr);
         return filAddr;
     } else if (
         filWalletAddr?.address &&
-        filWalletAddr.chainID === TESTNET_PATH_CODE.toString() &&
+        filWalletAddr.chainID === chainId.toString() &&
         filWalletAddr.address !== filAddr
     ) {
-        await register(TESTNET_PATH_CODE, filAddr);
+        await register(chainId, filAddr);
         return filAddr;
     } else {
         return filWalletAddr.address;

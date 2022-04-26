@@ -1,4 +1,3 @@
-import { Network } from '@glif/filecoin-address';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import {
@@ -14,6 +13,7 @@ import {
 import useFilWasm from 'src/hooks/useFilWasm';
 import useModal from 'src/hooks/useModal';
 import { HDWallet, useNewFilWalletProvider } from 'src/services/filecoin';
+import { getFilecoinNetwork } from 'src/services/filecoin/utils';
 import { RootState } from 'src/store/types';
 import theme from 'src/theme';
 import styled from 'styled-components';
@@ -71,7 +71,7 @@ const MnemonicModal: React.FC<ModalProps> = ({ onDismiss }) => {
         try {
             if (filProviders && mnemonic !== '' && walletProvider == null) {
                 const provider = await filProviders.HDWalletProvider(mnemonic);
-                await onCreate(provider, HDWallet, Network.TEST);
+                await onCreate(provider, HDWallet, getFilecoinNetwork());
             }
         } catch (e) {
             console.error(e);

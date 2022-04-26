@@ -7,12 +7,12 @@ import {
 import { BigNumber, FilecoinNumber } from '@glif/filecoin-number';
 import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { getFilecoinNetwork } from 'src/services/filecoin/utils';
 import {
     emptyGasInfo,
     insufficientMsigFundsErr,
     insufficientSendFundsErr,
     SEND,
-    TESTNET_PATH_CODE,
 } from 'src/services/ledger/constants';
 import createPath from 'src/services/ledger/createPath';
 import { setMaxTxFee, updateSendAmount } from 'src/store/sendForm';
@@ -36,7 +36,7 @@ const friendlifyError = err => {
     return err.message;
 };
 
-const path = createPath(TESTNET_PATH_CODE, 0);
+const path = createPath(getFilecoinNetwork(), 0);
 
 export const useSendFil = (
     amount = 0,
