@@ -17,7 +17,7 @@ jobs:
     name: Check Syntax, Build and Publish
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@master
+      - uses: actions/checkout@v3
       - name: Read .nvmrc
         run: echo "##[set-output name=NVMRC;]$(cat .nvmrc)"
         id: nvm
@@ -57,7 +57,7 @@ jobs:
     name: Cypress Run Tests
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Read .nvmrc
         run: echo "##[set-output name=NVMRC;]$(cat .nvmrc)"
         id: nvm
@@ -68,7 +68,9 @@ jobs:
       - name: Cypress run
         uses: cypress-io/github-action@v3
         with:
-          build: npm run build:ci
-          start: npm start
+          build: npm run build
+          start: npm run start
           wait-on: 'http://localhost:3000'
-          env: NPM_AUTH_TOKEN=${{ secrets.PAT }}
+          env: CI=false,NPM_AUTH_TOKEN=${{ secrets.PAT }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
