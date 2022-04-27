@@ -1,6 +1,8 @@
 import { BigNumber } from '@glif/filecoin-number';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import Filecoin from '@glif/filecoin-wallet-provider';
+import { useCallback, useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { Dispatch } from 'redux';
 import { WalletAccountModal } from 'src/components/organisms';
 import { useResetFilWalletProvider } from 'src/services/filecoin';
 import { getFilecoinNetwork } from 'src/services/filecoin/utils';
@@ -28,77 +30,16 @@ import { useFilUsd } from './useAssetPrices';
 import useFilWasm from './useFilWasm';
 import useModal from './useModal';
 
-export const useFilecoinAddress = (): string => {
+export const useFilecoinWalletInfo = () => {
     const dispatch = useDispatch();
     const { loaded } = useFilWasm();
-    const filecoinAddr = useSelector(
-        (state: RootState) => state.wallets.filecoin.address
-    );
-    const walletProvider = useSelector(
-        (state: RootState) => state.filWalletProvider.walletProvider
-    );
+    const {
+        address: filecoinAddr,
+        usdBalance: filecoinUSDBalance,
+        balance: filecoinBalance,
+    } = useSelector((state: RootState) => state.wallets.filecoin);
 
-    const fetchFilStore = useCallback(async () => {
-        dispatch(fetchWallet());
-        if (loaded && walletProvider !== null) {
-            const [filAddr] = await walletProvider.wallet.getAccounts(
-                0,
-                1,
-                getFilecoinNetwork()
-            );
-            dispatch(updateFilWalletAddress(filAddr));
-        } else {
-            dispatch(fetchWalletFailure());
-        }
-    }, [dispatch, loaded, walletProvider]);
-
-    useEffect(() => {
-        fetchFilStore();
-    }, [fetchFilStore]);
-
-    return filecoinAddr;
-};
-
-export const useFilecoinBalance = (): number => {
-    const dispatch = useDispatch();
-    // TODO: rework this part as this hooks seems fishy
-    const { loaded }: { loaded: boolean } = useFilWasm();
-    const filecoinBalance = useSelector(
-        (state: RootState) => state.wallets.filecoin.balance
-    );
-    const walletProvider = useSelector(
-        (state: RootState) => state.filWalletProvider.walletProvider
-    );
-
-    const fetchFilStore = useCallback(async () => {
-        dispatch(fetchWallet());
-        if (loaded && walletProvider != null) {
-            const [filAddr] = await walletProvider.wallet.getAccounts(
-                0,
-                1,
-                getFilecoinNetwork()
-            );
-            const balance = await walletProvider.getBalance(filAddr);
-            dispatch(updateFilWalletBalance(balance.toNumber()));
-        } else {
-            dispatch(fetchWalletFailure());
-        }
-    }, [dispatch, loaded, walletProvider]);
-
-    useEffect(() => {
-        fetchFilStore();
-    }, [fetchFilStore]);
-
-    return filecoinBalance;
-};
-
-export const useFilecoinUSDBalance = async (): Promise<number> => {
-    const dispatch = useDispatch();
-    const { loaded } = useFilWasm();
-    const filecoinUSDBalance = useSelector(
-        (state: RootState) => state.wallets.filecoin.usdBalance
-    );
-    const filUSDPrice = useSelector(
+    const fileCoinUSDPrice = useSelector(
         (state: RootState) => state.assetPrices.filecoin.price
     );
     // TODO: add filecoin USD balance hook call
@@ -106,29 +47,56 @@ export const useFilecoinUSDBalance = async (): Promise<number> => {
         (state: RootState) => state.filWalletProvider.walletProvider
     );
 
-    const fetchFilStore = useCallback(async () => {
+    const updateFilStore = async (
+        dispatch: Dispatch,
+        wasmLoaded: boolean,
+        walletProvider: Filecoin,
+        filUSDPrice: number = null
+    ) => {
         dispatch(fetchWallet());
-        if (loaded && walletProvider !== null && filUSDPrice !== 0) {
+        if (wasmLoaded && walletProvider !== null) {
             const [filAddr] = await walletProvider.wallet.getAccounts(
                 0,
                 1,
                 getFilecoinNetwork()
             );
+            dispatch(updateFilWalletAddress(filAddr));
+
             const balance = await walletProvider.getBalance(filAddr);
-            const usdBalance = new BigNumber(balance.toFil())
-                .times(new BigNumber(filUSDPrice))
-                .toNumber();
-            dispatch(updateFilWalletUSDBalance(usdBalance));
+            dispatch(updateFilWalletBalance(balance.toNumber()));
+
+            if (filUSDPrice) {
+                const usdBalance = new BigNumber(balance.toFil())
+                    .times(new BigNumber(filUSDPrice))
+                    .toNumber();
+                dispatch(updateFilWalletUSDBalance(usdBalance));
+            }
         } else {
             dispatch(fetchWalletFailure());
         }
-    }, [dispatch, filUSDPrice, loaded, walletProvider]);
+    };
+
+    const fetchFilStore = useCallback(
+        async () =>
+            await updateFilStore(
+                dispatch,
+                loaded,
+                walletProvider,
+                fileCoinUSDPrice
+            ),
+        [dispatch, loaded, walletProvider, fileCoinUSDPrice]
+    );
 
     useEffect(() => {
         fetchFilStore();
     }, [fetchFilStore]);
 
-    return filecoinUSDBalance;
+    return {
+        filecoinAddr,
+        filecoinUSDBalance,
+        fileCoinUSDPrice,
+        filecoinBalance,
+    };
 };
 
 export const useFilecoinWalletStore = (): WalletBase => {
@@ -151,12 +119,7 @@ export const useFilecoinWalletStore = (): WalletBase => {
             signOut: useResetFilWalletProvider,
         };
     }, [onPresentAccountModal]);
-    const [DOMContentLoaded, setDOMContentLoaded] = useState(false);
     const filAddr = localStorage.getItem(FIL_ADDRESS);
-
-    window.addEventListener('DOMContentLoaded', () =>
-        setDOMContentLoaded(true)
-    );
 
     const fetchFilStore = useCallback(async () => {
         if (!loaded || walletProvider === null) {
@@ -177,7 +140,7 @@ export const useFilecoinWalletStore = (): WalletBase => {
         // fetch FIL wallet info when not connected
 
         (async () => {
-            if (filAddr && !walletProvider && DOMContentLoaded) {
+            if (filAddr && !walletProvider) {
                 dispatch(updateFilWalletAddress(filAddr));
 
                 // connect FIL wallet if address is stored
@@ -189,7 +152,7 @@ export const useFilecoinWalletStore = (): WalletBase => {
                 dispatch(updateFilWalletActions(actObj));
             }
         })();
-    }, [DOMContentLoaded, actObj, dispatch, filAddr, walletProvider]);
+    }, [actObj, dispatch, filAddr, walletProvider]);
 
     useEffect(() => {
         if (price !== 0 || change !== 0) {
