@@ -35,6 +35,12 @@ export type WalletAction = {
 
 export type Coin = 'filecoin' | 'ethereum' | 'usdc';
 
+export const supportedCoins: Record<number, Coin> = {
+    0: 'ethereum',
+    1: 'filecoin',
+    2: 'usdc',
+};
+
 export const defaultEthWallet = {
     ccyIndex: 0,
     address: '',

@@ -19,5 +19,6 @@
     "noFallthroughCasesInSwitch": true,
     "typeRoots": ["node_modules/@types", "src/types"]
   },
-  "include": ["src", "bootstrap.js"]
+  "include": ["src", "bootstrap.js"],
+  "exclude": ["node_modules", "build", "cypress"]
 }

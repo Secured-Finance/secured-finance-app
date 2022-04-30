@@ -54,7 +54,9 @@ export const walletTableColumns = [
                 Header: 'Address',
                 accessor: 'address',
                 Cell: (cell: { value: string }) => (
-                    <span>{formatAddress(cell.value, 24)}</span>
+                    <span data-cy='wallet-address'>
+                        {formatAddress(cell.value, 24)}
+                    </span>
                 ),
             },
             {

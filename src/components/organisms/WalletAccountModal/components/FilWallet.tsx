@@ -43,7 +43,9 @@ const FilWallet: React.FC<ModalProps> = ({ onDismiss }) => {
             <div style={{ display: 'flex' }}>
                 <StyledAccountContainer>
                     <StyledAccount>
-                        <StyledAccountText>{address}</StyledAccountText>
+                        <StyledAccountText data-cy='modal-wallet-address'>
+                            {address}
+                        </StyledAccountText>
                         <Label
                             style={{ marginTop: 5 }}
                             text='Filecoin address'

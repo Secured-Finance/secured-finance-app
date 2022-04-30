@@ -8,7 +8,7 @@ export interface ModalProps {
 
 export const Modal: React.FC = ({ children }) => {
     return (
-        <StyledResponsiveWrapper>
+        <StyledResponsiveWrapper data-cy='modal'>
             <StyledModal>{children}</StyledModal>
         </StyledResponsiveWrapper>
     );
