@@ -1,7 +1,7 @@
 import React, { useContext, useMemo } from 'react';
-import styled, { ThemeContext } from 'styled-components';
-
 import { Link } from 'react-router-dom';
+import { toKebabCase } from 'src/utils';
+import styled, { ThemeContext } from 'styled-components';
 
 interface ButtonProps {
     children?: React.ReactNode;
@@ -110,6 +110,7 @@ export const Button: React.FC<ButtonProps> = ({
 
     return (
         <StyledButton
+            data-cy={`${toKebabCase(text)}-button`}
             boxShadow={boxShadow}
             color={style?.color ? style?.color : buttonColor}
             background={style?.background ? style?.background : buttonBg}

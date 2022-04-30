@@ -7,6 +7,7 @@ import {
     WalletProviderModal,
 } from 'src/components/organisms';
 import useModal from 'src/hooks/useModal';
+import { supportedCoins } from 'src/store/wallets/types';
 
 interface ActionProps {
     callbackMap?: {
@@ -35,6 +36,8 @@ const RenderActions: React.FC<ActionProps> = ({ callbackMap, ccyIndex }) => {
         onPresentWalletEthProviderModal();
     }, [onPresentWalletEthProviderModal]);
 
+    const coin = supportedCoins[ccyIndex];
+
     return (
         <div>
             {callbackMap?.send &&
@@ -48,11 +51,19 @@ const RenderActions: React.FC<ActionProps> = ({ callbackMap, ccyIndex }) => {
                             text='Manage Collateral'
                         />
                     ) : null}
-                    <Chip onClick={onPresentSettingsModal} text='Settings' />
+                    <Chip
+                        onClick={onPresentSettingsModal}
+                        text='Settings'
+                        dataCy={`${coin}-settings-chip`}
+                    />
                 </div>
             ) : (
                 <div className='flex flex-row items-center justify-evenly'>
-                    <Chip onClick={handleConnectWallet} text='Connect Wallet' />
+                    <Chip
+                        onClick={handleConnectWallet}
+                        text='Connect Wallet'
+                        dataCy={`${coin}-connect-wallet-chip`}
+                    />
                 </div>
             )}
         </div>

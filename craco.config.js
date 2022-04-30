@@ -2,7 +2,7 @@ const path = require('path');
 const customESLintConfig = require('./.eslintrc');
 const { ESLINT_MODES } = require('@craco/craco');
 
-const { addBeforeLoader, loaderByName, getLoaders } = require('@craco/craco');
+const { addBeforeLoader, loaderByName } = require('@craco/craco');
 
 module.exports = {
     style: {

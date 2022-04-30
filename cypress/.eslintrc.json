@@ -1,0 +1,8 @@
+{
+  "plugins": ["cypress"],
+  "parserOptions": {
+    "project": "./tsconfig.json",
+    "sourceType": "module",
+    "createDefaultProgram": true
+  }
+}
