@@ -1,6 +1,6 @@
 import { HistoryTableData } from 'src/store/history/types';
 import {
-    formatAddress,
+    AddressUtils,
     fromBytes32,
     ordinaryFormat,
     percentFormat,
@@ -148,14 +148,14 @@ export const historyTableColumns = [
                 Header: 'Lender',
                 accessor: 'lender',
                 Cell: (cell: { value: string }) => (
-                    <span>{formatAddress(cell.value, 18)}</span>
+                    <span>{AddressUtils.format(cell.value, 18)}</span>
                 ),
             },
             {
                 Header: 'Borrower',
                 accessor: 'borrower',
                 Cell: (cell: { value: string }) => (
-                    <span>{formatAddress(cell.value, 18)}</span>
+                    <span>{AddressUtils.format(cell.value, 18)}</span>
                 ),
             },
             {
