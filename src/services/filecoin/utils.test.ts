@@ -1,6 +1,6 @@
 import { Network } from '@glif/filecoin-address';
 import {
-    getBlockExporerUrl,
+    getBlockExplorerUrl,
     getFilecoinChainId,
     getFilecoinNetwork,
 } from './utils';
@@ -23,13 +23,13 @@ describe('Filecoin network', () => {
 
 describe('Block exporer', () => {
     it('should return the mainnet url when the network is MAINNET', () => {
-        expect(getBlockExporerUrl(Network.MAIN, '0x0')).toEqual(
+        expect(getBlockExplorerUrl(Network.MAIN, '0x0')).toEqual(
             'https://filscan.io/address/general?address=0x0'
         );
     });
 
     it('should return the testnet url when the network is TESTNET', () => {
-        expect(getBlockExporerUrl(Network.TEST, '0x0')).toEqual(
+        expect(getBlockExplorerUrl(Network.TEST, '0x0')).toEqual(
             'https://calibration.filscan.io/address/general?address=0x0'
         );
     });

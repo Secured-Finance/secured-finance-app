@@ -29,6 +29,6 @@ export const getFilecoinChainId = (network: Network) => {
     return TESTNET_PATH_CODE;
 };
 
-export const getBlockExporerUrl = (network: Network, wallet: string) => {
+export const getBlockExplorerUrl = (network: Network, wallet: string) => {
     return `${BLOCK_EXPLORER_URL[network]}${BLOCK_EXPLORER_WALLET_PREFIX}${wallet}`;
 };
