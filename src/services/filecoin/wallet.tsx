@@ -75,14 +75,14 @@ export const useNewFilWalletProvider = () => {
                 dispatch(setFilWalletType(providerType));
                 const [filAddr] = await provider.getAccounts(0, 1, network);
 
-                const crossChainAdress = await registerCrossChainWallet(
+                const crossChainAddress = await registerCrossChainWallet(
                     filWalletAddr,
                     filAddr,
                     onRegisterCrossChainWallet
                 );
 
-                const balance = await filecoin.getBalance(crossChainAdress);
-                dispatch(updateFilWallet(balance, crossChainAdress));
+                const balance = await filecoin.getBalance(crossChainAddress);
+                dispatch(updateFilWallet(balance, crossChainAddress));
             } else {
                 dispatch(failFetchingFilWalletProvider());
             }
@@ -133,7 +133,7 @@ export const useDefaultWallet = (
 export async function registerCrossChainWallet(
     filWalletAddr: CrossChainWallet,
     filAddr: string,
-    register: (chainId: number, adress: string) => Promise<unknown>
+    register: (chainId: number, address: string) => Promise<unknown>
 ) {
     const chainId = getFilecoinChainId(getFilecoinNetwork());
     if (!filWalletAddr || !filWalletAddr?.address) {
