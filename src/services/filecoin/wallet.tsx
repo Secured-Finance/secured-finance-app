@@ -5,6 +5,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useUpdateCrossChainWallet } from 'src/hooks/useUpdateCrossChainWallet';
 import { updateFilWallet } from 'src/store/wallets/helpers';
+import { AddressUtils } from 'src/utils';
 import { useWallet } from 'use-wallet';
 import useFilWasm from '../../hooks/useFilWasm';
 import { RootState } from '../../store/types';
@@ -142,7 +143,7 @@ export async function registerCrossChainWallet(
     } else if (
         filWalletAddr?.address &&
         filWalletAddr.chainID === chainId.toString() &&
-        filWalletAddr.address !== filAddr
+        !AddressUtils.equals(filWalletAddr.address, filAddr)
     ) {
         await register(chainId, filAddr);
         return filAddr;

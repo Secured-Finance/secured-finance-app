@@ -1,6 +1,6 @@
 import React from 'react';
 import { CurrencyContainer } from 'src/components/atoms';
-import { formatAddress } from 'src/utils';
+import { AddressUtils } from 'src/utils';
 import {
     RenderActions,
     RenderBalance,
@@ -55,7 +55,7 @@ export const walletTableColumns = [
                 accessor: 'address',
                 Cell: (cell: { value: string }) => (
                     <span data-cy='wallet-address'>
-                        {formatAddress(cell.value, 24)}
+                        {AddressUtils.format(cell.value, 24)}
                     </span>
                 ),
             },

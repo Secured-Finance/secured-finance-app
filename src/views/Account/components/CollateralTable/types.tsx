@@ -1,7 +1,7 @@
 import BigNumber from 'bignumber.js';
 import React from 'react';
 import { CurrencyContainer } from 'src/components/atoms';
-import { formatAddress } from 'src/utils';
+import { AddressUtils } from 'src/utils';
 import { RenderBorrow, RenderCollateral } from './components';
 
 export interface TableColumns {
@@ -132,7 +132,7 @@ export const collateralTableColumns = [
                 Header: 'Vault',
                 accessor: 'vault',
                 Cell: (cell: { value: string }) => (
-                    <span>{formatAddress(cell.value, 24)}</span>
+                    <span>{AddressUtils.format(cell.value, 24)}</span>
                 ),
             },
             {

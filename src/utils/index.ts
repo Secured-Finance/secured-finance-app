@@ -1,6 +1,6 @@
 import BigNumber from 'bignumber.js';
+export * from './address';
 export * from './currencies';
-export * from './formatAddress';
 export * from './formatBalance';
 export * from './formatDate';
 export * from './formatNumbers';
