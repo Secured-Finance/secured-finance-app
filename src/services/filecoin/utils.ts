@@ -11,6 +11,11 @@ const BLOCK_EXPLORER_URL: Record<Network, string> = {
     [Network.TEST]: 'https://calibration.filscan.io/',
 };
 
+export const FILSCAN_API_URL: Record<Network, string> = {
+    [Network.MAIN]: 'https://api.filscan.io/',
+    [Network.TEST]: 'https://api.calibration.filscan.io/',
+};
+
 const BLOCK_EXPLORER_WALLET_PREFIX = 'address/general?address=';
 
 export const getFilecoinNetwork = () => {

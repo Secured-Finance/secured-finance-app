@@ -17,7 +17,11 @@ import {
     setFilWalletType,
     startFetchingFilWalletProvider,
 } from './store';
-import { getFilecoinChainId, getFilecoinNetwork } from './utils';
+import {
+    FILSCAN_API_URL,
+    getFilecoinChainId,
+    getFilecoinNetwork,
+} from './utils';
 
 export type CrossChainWallet = {
     address: string;
@@ -66,10 +70,7 @@ export const useNewFilWalletProvider = () => {
             dispatch(startFetchingFilWalletProvider());
             if (loaded && walletProvider === null) {
                 const config = {
-                    apiAddress:
-                        network === Network.MAIN
-                            ? 'http://api.node.glif.io/rpc/v0'
-                            : 'https://calibration.node.glif.io/rpc/v0',
+                    apiAddress: FILSCAN_API_URL[network],
                 };
                 const filecoin = new Filecoin(provider, config);
                 dispatch(setFilWalletProvider(filecoin));
