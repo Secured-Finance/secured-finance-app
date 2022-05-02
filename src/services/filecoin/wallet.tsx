@@ -141,7 +141,6 @@ export async function registerCrossChainWallet(
         await register(chainId, filAddr);
         return filAddr;
     } else if (
-        filWalletAddr?.address &&
         filWalletAddr.chainID === chainId.toString() &&
         !AddressUtils.equals(filWalletAddr.address, filAddr)
     ) {
