@@ -1,15 +1,11 @@
-import FilecoinApp from '@zondax/ledger-filecoin';
-import RustModule from '@zondax/filecoin-signing-tools';
-import Transport from '@ledgerhq/hw-transport';
-import { mapSeries } from 'bluebird';
-import {
-    MAINNET,
-    MAINNET_PATH_CODE,
-    TESTNET_PATH_CODE,
-    LEDGER,
-} from 'src/services/ledger/constants';
-import createPath from 'src/services/ledger/createPath';
+import { Network } from '@glif/filecoin-address';
 import { SerializableMessage } from '@glif/filecoin-message';
+import Transport from '@ledgerhq/hw-transport';
+import RustModule from '@zondax/filecoin-signing-tools';
+import FilecoinApp from '@zondax/ledger-filecoin';
+import { mapSeries } from 'bluebird';
+import createPath from 'src/services/ledger/createPath';
+import { FilecoinWalletType } from '../store/types';
 
 type Response = {
     error_message: string;
@@ -49,7 +45,7 @@ const ledgerProvider = (rustModule: RustModule) => {
         let ledgerBusy = false;
         const ledgerApp = new FilecoinApp(transport);
         return {
-            type: LEDGER,
+            type: FilecoinWalletType.Ledger,
 
             getVersion: () => {
                 throwIfBusy(ledgerBusy);
@@ -87,15 +83,13 @@ const ledgerProvider = (rustModule: RustModule) => {
             getAccounts: async (
                 nStart = 0,
                 nEnd = 5,
-                network: string = MAINNET
+                network: Network = Network.TEST
             ) => {
                 throwIfBusy(ledgerBusy);
                 ledgerBusy = true;
-                const networkCode =
-                    network === MAINNET ? MAINNET_PATH_CODE : TESTNET_PATH_CODE;
                 const paths = [];
                 for (let i = nStart; i < nEnd; i += 1) {
-                    paths.push(createPath(networkCode, i));
+                    paths.push(createPath(network, i));
                 }
                 const addresses = mapSeries(paths, async path => {
                     const { addrString } = handleErrors(

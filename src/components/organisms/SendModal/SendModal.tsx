@@ -1,17 +1,21 @@
+import { validateAddressString } from '@glif/filecoin-address';
+import BigNumber from 'bignumber.js';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import styled from 'styled-components';
-import theme from 'src/theme';
+import { connect, useDispatch, useSelector } from 'react-redux';
 import {
     Button,
     Modal,
-    ModalProps,
     ModalActions,
     ModalContent,
+    ModalProps,
     ModalTitle,
     Spacer,
 } from 'src/components/atoms';
-import { connect, useDispatch, useSelector } from 'react-redux';
-import { RootState } from 'src/store/types';
+import { CurrencyImage } from 'src/components/common/CurrencyImage';
+import { useEthBalance } from 'src/hooks/useEthWallet';
+import { useFilecoinWalletInfo } from 'src/hooks/useFilWallet';
+import { useSendEth } from 'src/hooks/useSendEth';
+import { useSendFil } from 'src/hooks/useSendFil';
 import {
     resetSendForm,
     SendFormStore,
@@ -19,20 +23,15 @@ import {
     updateSendCurrency,
     updateSendToAddreess,
 } from 'src/store/sendForm';
+import { RootState } from 'src/store/types';
 import { getFilActions } from 'src/store/wallets/selectors';
+import theme from 'src/theme';
 import { currencyList, formatInput } from 'src/utils';
-import { useEthBalance } from 'src/hooks/useEthWallet';
-import { useFilecoinBalance } from 'src/hooks/useFilWallet';
+import styled from 'styled-components';
 import { isAddress } from 'web3-utils';
-import { validateAddressString } from '@glif/filecoin-address';
-import { useSendEth } from 'src/hooks/useSendEth';
-import BigNumber from 'bignumber.js';
-import { CurrencyImage } from 'src/components/common/CurrencyImage';
-import { useSendFil } from 'src/hooks/useSendFil';
-
-import { GasTabsAndTable } from './components/GastabsAndTable';
-import { FilTxFeeTable } from './components/FilTxFeeTable';
 import { ErrorModal } from './components/ErrorModal';
+import { FilTxFeeTable } from './components/FilTxFeeTable';
+import { GasTabsAndTable } from './components/GastabsAndTable';
 
 type CombinedProps = ModalProps & SendFormStore;
 
@@ -51,7 +50,7 @@ const SendModal: React.FC<CombinedProps> = ({
     const [ongoingTx, setOngoingTx] = useState(false);
 
     const ethBalance = useEthBalance();
-    const filBalance = useFilecoinBalance();
+    const { filecoinBalance } = useFilecoinWalletInfo();
     const dispatch = useDispatch();
     const filecoinActions = useSelector(getFilActions);
     const ethPrice = useSelector(
@@ -95,7 +94,7 @@ const SendModal: React.FC<CombinedProps> = ({
             case 1:
                 return (
                     <span>
-                        {filBalance} {currencyShortName}
+                        {filecoinBalance} {currencyShortName}
                     </span>
                 );
             case 2:
@@ -133,7 +132,7 @@ const SendModal: React.FC<CombinedProps> = ({
                     new BigNumber(ethBalance)
                 );
             case 1:
-                return +amount + maxFilTxFee <= filBalance;
+                return +amount + maxFilTxFee <= filecoinBalance;
         }
     };
 

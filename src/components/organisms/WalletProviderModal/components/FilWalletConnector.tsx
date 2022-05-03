@@ -1,16 +1,14 @@
 import React from 'react';
-import styled from 'styled-components';
-import seedLogo from 'src/assets/img/seed.svg';
 import keyLogo from 'src/assets/img/key.svg';
 import ledgerLogo from 'src/assets/img/ledger.svg';
-
+import seedLogo from 'src/assets/img/seed.svg';
 import { ModalProps, Spacer } from 'src/components/atoms';
 import useModal from 'src/hooks/useModal';
-
-import WalletCard from './WalletCard';
+import styled from 'styled-components';
+import LedgerModal from './LedgerModal';
 import MnemonicModal from './MnemonicModal';
 import PrivateKeyModal from './PrivateKeyModal';
-import LedgerModal from './LedgerModal';
+import WalletCard from './WalletCard';
 
 const FilWalletConnector: React.FC<ModalProps> = () => {
     const closeLedgerModal = () => {
@@ -27,7 +25,13 @@ const FilWalletConnector: React.FC<ModalProps> = () => {
         <StyledWalletsWrapper>
             <StyledWalletCard>
                 <WalletCard
-                    icon={<img src={seedLogo} style={{ height: 24 }} />}
+                    icon={
+                        <img
+                            src={seedLogo}
+                            style={{ height: 24 }}
+                            alt='Mnemonic phrase'
+                        />
+                    }
                     onConnect={onMnemonicModal}
                     title='Mnemonic phrase'
                     buttonText='Generate'
@@ -36,7 +40,13 @@ const FilWalletConnector: React.FC<ModalProps> = () => {
             <Spacer size='sm' />
             <StyledWalletCard>
                 <WalletCard
-                    icon={<img src={keyLogo} style={{ height: 24 }} />}
+                    icon={
+                        <img
+                            src={keyLogo}
+                            style={{ height: 24 }}
+                            alt='Private Key'
+                        />
+                    }
                     onConnect={onPrivateKeyModal}
                     title='Private Key'
                     buttonText='Import'
@@ -47,7 +57,13 @@ const FilWalletConnector: React.FC<ModalProps> = () => {
 
             <StyledWalletCard>
                 <WalletCard
-                    icon={<img src={ledgerLogo} style={{ height: 26 }} />}
+                    icon={
+                        <img
+                            src={ledgerLogo}
+                            style={{ height: 26 }}
+                            alt='Ledger Wallet'
+                        />
+                    }
                     onConnect={onLedgerModal}
                     title='Ledger wallet'
                 />

@@ -9,8 +9,8 @@ import { useLoanInformation } from 'src/hooks/useLoanHistory';
 import { RootState } from 'src/store/types';
 import theme from 'src/theme';
 import {
+    AddressUtils,
     DEFAULT_COLLATERAL_VAULT,
-    formatAddress,
     formatDate,
     fromBytes32,
     getDisplayBalance,
@@ -357,7 +357,7 @@ const LoanScreen: React.FC<CombinedProps> = () => {
                                                 ETH Address
                                             </StyledItemText>
                                             <StyledItemText>
-                                                {formatAddress(
+                                                {AddressUtils.format(
                                                     counterpartyAddr,
                                                     20
                                                 )}

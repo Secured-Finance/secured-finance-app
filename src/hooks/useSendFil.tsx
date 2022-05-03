@@ -7,12 +7,12 @@ import {
 import { BigNumber, FilecoinNumber } from '@glif/filecoin-number';
 import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { getFilecoinNetwork } from 'src/services/filecoin/utils';
 import {
     emptyGasInfo,
     insufficientMsigFundsErr,
     insufficientSendFundsErr,
     SEND,
-    TESTNET_PATH_CODE,
 } from 'src/services/ledger/constants';
 import createPath from 'src/services/ledger/createPath';
 import { setMaxTxFee, updateSendAmount } from 'src/store/sendForm';
@@ -36,7 +36,7 @@ const friendlifyError = err => {
     return err.message;
 };
 
-const path = createPath(TESTNET_PATH_CODE, 0);
+const path = createPath(getFilecoinNetwork(), 0);
 
 export const useSendFil = (
     amount = 0,
@@ -44,12 +44,12 @@ export const useSendFil = (
     close: any,
     setOngoingTx: any
 ) => {
-    const [frozen, setFrozen] = useState(false);
+    const [, setFrozen] = useState(false);
     const [gasInfo, setGasInfo] = useState(emptyGasInfo);
-    const [valueError, setValueError] = useState('');
-    const [fetchingTxDetails, setFetchingTxDetails] = useState(false);
-    const [mPoolPushing, setMPoolPushing] = useState(false);
-    const [uncaughtError, setUncaughtError] = useState('');
+    const [, setValueError] = useState('');
+    const [, setFetchingTxDetails] = useState(false);
+    const [, setMPoolPushing] = useState(false);
+    const [, setUncaughtError] = useState('');
     const wallet = useSelector(getFilWallet);
     const value = new FilecoinNumber(amount, 'fil');
 
@@ -59,7 +59,7 @@ export const useSendFil = (
     );
 
     const getMaxAffordableFee = () => {
-        const affordableFee = wallet.balance.minus(value);
+        const affordableFee = new BigNumber(wallet.balance).minus(value);
         return new FilecoinNumber(affordableFee, 'fil');
     };
 

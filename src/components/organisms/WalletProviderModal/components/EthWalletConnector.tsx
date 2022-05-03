@@ -1,11 +1,11 @@
 import React, { useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
-import styled from 'styled-components';
-import { useWallet } from 'use-wallet';
 import metamaskLogo from 'src/assets/img/metamask-fox.svg';
 import walletConnectLogo from 'src/assets/img/wallet-connect.svg';
-import { CACHED_PROVIDER_KEY } from 'src/contexts/FilecoinWalletProvider';
 import { ModalProps, Spacer } from 'src/components/atoms';
+import { CACHED_PROVIDER_KEY } from 'src/contexts/FilecoinWalletProvider';
+import styled from 'styled-components';
+import { useWallet } from 'use-wallet';
 import WalletCard from './WalletCard';
 
 const EthWalletConnector: React.FC<ModalProps> = ({ onDismiss }) => {
@@ -37,10 +37,16 @@ const EthWalletConnector: React.FC<ModalProps> = ({ onDismiss }) => {
     );
 
     return (
-        <StyledWalletsWrapper>
+        <StyledWalletsWrapper data-cy='eth-wallet'>
             <StyledWalletCard>
                 <WalletCard
-                    icon={<img src={metamaskLogo} style={{ height: 32 }} />}
+                    icon={
+                        <img
+                            src={metamaskLogo}
+                            style={{ height: 32 }}
+                            alt='Metamask'
+                        />
+                    }
                     onConnect={() => handleConnect('injected')}
                     title='Metamask'
                 />
@@ -49,7 +55,11 @@ const EthWalletConnector: React.FC<ModalProps> = ({ onDismiss }) => {
             <StyledWalletCard>
                 <WalletCard
                     icon={
-                        <img src={walletConnectLogo} style={{ height: 24 }} />
+                        <img
+                            src={walletConnectLogo}
+                            style={{ height: 24 }}
+                            alt='Wallet Connect'
+                        />
                     }
                     onConnect={() => handleConnect('walletconnect')}
                     title='WalletConnect'

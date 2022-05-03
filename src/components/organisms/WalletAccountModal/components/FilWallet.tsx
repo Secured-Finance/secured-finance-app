@@ -1,16 +1,20 @@
 import React, { useCallback } from 'react';
-import { useHistory } from 'react-router-dom';
-import styled from 'styled-components';
-import { useResetFilWalletProvider } from 'src/services/filecoin';
-import theme from 'src/theme';
-import { Button, Label, ModalProps, Spacer } from 'src/components/atoms';
 import { useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+import { Button, Label, ModalProps, Spacer } from 'src/components/atoms';
+import {
+    getBlockExplorerUrl,
+    getFilecoinNetwork,
+    useResetFilWalletProvider,
+} from 'src/services/filecoin';
+import { RootState } from 'src/store/types';
+import { FIL_ADDRESS } from 'src/store/wallets/constants';
 import {
     getFilAddress,
     isAnyWalletConnected,
 } from 'src/store/wallets/selectors';
-import { FIL_ADDRESS } from 'src/store/wallets/constants';
-import { RootState } from 'src/store/types';
+import theme from 'src/theme';
+import styled from 'styled-components';
 
 const FilWallet: React.FC<ModalProps> = ({ onDismiss }) => {
     const history = useHistory();
@@ -18,6 +22,8 @@ const FilWallet: React.FC<ModalProps> = ({ onDismiss }) => {
     const addressFromStore = useSelector(getFilAddress);
 
     const address = addressFromLocalStorage || addressFromStore;
+    const blockExplorerUrl = getBlockExplorerUrl(getFilecoinNetwork(), address);
+
     const otherWalletConnected = useSelector((state: RootState) =>
         isAnyWalletConnected(state, 'filecoin')
     );
@@ -25,19 +31,21 @@ const FilWallet: React.FC<ModalProps> = ({ onDismiss }) => {
     const { onReset } = useResetFilWalletProvider();
 
     const handleSignOutClick = useCallback(() => {
-        onDismiss!();
+        onDismiss?.();
         onReset();
         if (!otherWalletConnected) {
             history.push('/');
         }
-    }, [onDismiss]);
+    }, [history, onDismiss, onReset, otherWalletConnected]);
 
     return (
         <div>
             <div style={{ display: 'flex' }}>
                 <StyledAccountContainer>
                     <StyledAccount>
-                        <StyledAccountText>{address}</StyledAccountText>
+                        <StyledAccountText data-cy='modal-wallet-address'>
+                            {address}
+                        </StyledAccountText>
                         <Label
                             style={{ marginTop: 5 }}
                             text='Filecoin address'
@@ -47,7 +55,7 @@ const FilWallet: React.FC<ModalProps> = ({ onDismiss }) => {
             </div>
             <StyledButtonContainer>
                 <Button
-                    href={`https://filscan.io/#/tipset/address-detail?address=${address}`}
+                    href={blockExplorerUrl}
                     text='View on Filscan'
                     style={{
                         background: theme.colors.buttonBlue,

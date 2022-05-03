@@ -1,3 +1,5 @@
+import { ActionType } from './constants';
+
 export interface WalletsStore {
     totalUSDBalance: number;
     ethereum: WalletBase;
@@ -20,7 +22,24 @@ export interface WalletBase {
     };
 }
 
+export type WalletAction = {
+    type: ActionType;
+    data?:
+        | number
+        | string
+        | boolean
+        | Record<string, unknown>
+        | WalletBase['actions'];
+    error?: string;
+};
+
 export type Coin = 'filecoin' | 'ethereum' | 'usdc';
+
+export const supportedCoins: Record<number, Coin> = {
+    0: 'ethereum',
+    1: 'filecoin',
+    2: 'usdc',
+};
 
 export const defaultEthWallet = {
     ccyIndex: 0,

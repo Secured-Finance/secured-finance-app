@@ -1,9 +1,9 @@
 import React from 'react';
-import styled from 'styled-components';
-import { useTable, useSortBy } from 'react-table';
-import { historyTableColumns } from './types';
+import { useSortBy, useTable } from 'react-table';
 import { ArrowSVG } from 'src/components/atoms';
 import { Td } from 'src/components/common/Td';
+import styled from 'styled-components';
+import { historyTableColumns } from './types';
 
 const STATE = [
     'REGISTERED',
