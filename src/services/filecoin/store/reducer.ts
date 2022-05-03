@@ -2,7 +2,11 @@ import Filecoin from '@glif/filecoin-wallet-provider';
 import produce from 'immer';
 import { WritableDraft } from 'immer/dist/internal';
 import * as constants from './constants';
-import { FilWalletProvider, FilWalletProviderAction } from './types';
+import {
+    FilecoinWalletType,
+    FilWalletProvider,
+    FilWalletProviderAction,
+} from './types';
 
 const initialStore: FilWalletProvider = {
     walletType: null,
@@ -22,7 +26,7 @@ const filWalletProviderReducer = (
                 draft.isLoading = false;
                 break;
             case constants.UPDATE_WALLET_TYPE:
-                draft.walletType = action.data as string;
+                draft.walletType = action.data as FilecoinWalletType;
                 draft.isLoading = false;
                 break;
             case constants.UPDATE_WALLET_PROVIDER:

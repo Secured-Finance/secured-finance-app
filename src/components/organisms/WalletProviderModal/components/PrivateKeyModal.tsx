@@ -13,12 +13,8 @@ import {
 } from 'src/components/atoms';
 import useFilWasm from 'src/hooks/useFilWasm';
 import useModal from 'src/hooks/useModal';
-import {
-    HDWallet,
-    PKWallet,
-    TestNetPath,
-    useNewFilWalletProvider,
-} from 'src/services/filecoin';
+import { TestNetPath, useNewFilWalletProvider } from 'src/services/filecoin';
+import { FilecoinWalletType } from 'src/services/filecoin/store/types';
 import { getFilecoinNetwork } from 'src/services/filecoin/utils';
 import { RootState } from 'src/store/types';
 import theme from 'src/theme';
@@ -94,7 +90,11 @@ const RenderPrivateKeyContainer: React.FC<ContainerProps> = ({
         try {
             if (filProviders && mnemonic !== '' && walletProvider == null) {
                 const provider = await filProviders.HDWalletProvider(mnemonic);
-                await onCreate(provider, HDWallet, getFilecoinNetwork());
+                await onCreate(
+                    provider,
+                    FilecoinWalletType.HDWallet,
+                    getFilecoinNetwork()
+                );
             }
         } catch (e) {
             console.log(e);
@@ -107,7 +107,11 @@ const RenderPrivateKeyContainer: React.FC<ContainerProps> = ({
                 const provider = await filProviders.PrivateKeyProvider(
                     privateKey
                 );
-                await onCreate(provider, PKWallet, getFilecoinNetwork());
+                await onCreate(
+                    provider,
+                    FilecoinWalletType.PKWallet,
+                    getFilecoinNetwork()
+                );
             }
         } catch (e) {
             console.log(e);

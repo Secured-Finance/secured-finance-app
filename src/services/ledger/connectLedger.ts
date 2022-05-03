@@ -4,7 +4,7 @@ import {
 } from 'src/services/filecoin/store';
 import { getFilecoinNetwork } from 'src/services/filecoin/utils';
 import { updateFilWallet } from 'src/store/wallets/helpers';
-import { LEDGER } from './constants';
+import { FilecoinWalletType } from '../filecoin/store/types';
 import {
     checkLedgerConfiguration,
     setLedgerProvider,
@@ -21,7 +21,7 @@ const connectWithLedger = async (dispatch: any) => {
     if (!configured) return null;
 
     dispatch(setFilWalletProvider(provider));
-    dispatch(setFilWalletType(LEDGER));
+    dispatch(setFilWalletType(FilecoinWalletType.Ledger));
 
     const [filAddr] = await provider.wallet.getAccounts(
         0,

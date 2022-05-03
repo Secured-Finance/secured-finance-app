@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { connect, useSelector } from 'react-redux';
 import { Page } from 'src/components/templates';
 import useCollateralBook from 'src/hooks/useCollateralBook';
@@ -6,8 +6,7 @@ import { useEthereumWalletStore } from 'src/hooks/useEthWallet';
 import { useFilecoinWalletStore } from 'src/hooks/useFilWallet';
 import { RootState } from 'src/store/types';
 import { WalletBase } from 'src/store/wallets';
-import { FIL_ADDRESS } from 'src/store/wallets/constants';
-import { getFilAddress, getTotalUSDBalance } from 'src/store/wallets/selectors';
+import { getTotalUSDBalance } from 'src/store/wallets/selectors';
 import theme from 'src/theme';
 import { DEFAULT_COLLATERAL_VAULT, usdFormat } from 'src/utils';
 import styled from 'styled-components';
@@ -25,7 +24,6 @@ const Account: React.FC = () => {
         account ? account : '',
         DEFAULT_COLLATERAL_VAULT
     );
-    const filAddress = useSelector(getFilAddress);
 
     useMemo(() => {
         async function updateTable() {
@@ -35,12 +33,6 @@ const Account: React.FC = () => {
         }
         updateTable();
     }, [ethWallet, filWallet, setTableData]);
-
-    useEffect(() => {
-        if (filAddress) {
-            localStorage.setItem(FIL_ADDRESS, filAddress);
-        }
-    }, [filAddress]);
 
     return (
         <Page background={theme.colors.background}>

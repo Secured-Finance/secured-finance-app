@@ -1,9 +1,10 @@
 import { Network } from '@glif/filecoin-address';
 import Filecoin, { WalletSubProvider } from '@glif/filecoin-wallet-provider';
 import { useCrosschainAddressById } from '@secured-finance/sf-graph-client';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useUpdateCrossChainWallet } from 'src/hooks/useUpdateCrossChainWallet';
+import { FIL_ADDRESS, FIL_WALLET_TYPE } from 'src/store/wallets/constants';
 import { updateFilWallet } from 'src/store/wallets/helpers';
 import { AddressUtils } from 'src/utils';
 import { useWallet } from 'use-wallet';
@@ -17,6 +18,7 @@ import {
     setFilWalletType,
     startFetchingFilWalletProvider,
 } from './store';
+import { FilecoinWalletType } from './store/types';
 import {
     FILSCAN_API_URL,
     getFilecoinChainId,
@@ -33,7 +35,7 @@ export const useResetFilWalletProvider = () => {
     const dispatch = useDispatch();
 
     const handleResetProvider = useCallback(async () => {
-        localStorage.setItem('FIL_ADDRESS', '');
+        resetLocalStorage();
         dispatch(startFetchingFilWalletProvider());
         try {
             dispatch(resetFilWalletProvider());
@@ -64,7 +66,7 @@ export const useNewFilWalletProvider = () => {
     const handleCreateFilWalletProvider = useCallback(
         async (
             provider: WalletSubProvider,
-            providerType: string,
+            providerType: FilecoinWalletType,
             network: Network = Network.TEST
         ) => {
             dispatch(startFetchingFilWalletProvider());
@@ -82,6 +84,7 @@ export const useNewFilWalletProvider = () => {
                     filAddr,
                     onRegisterCrossChainWallet
                 );
+                setLocalStorage(crossChainAddress, providerType);
 
                 const balance = await filecoin.getBalance(crossChainAddress);
                 dispatch(updateFilWallet(balance, crossChainAddress));
@@ -101,53 +104,36 @@ export const useNewFilWalletProvider = () => {
     return { onCreate: handleCreateFilWalletProvider };
 };
 
-export const useDefaultWallet = (
-    network: Network = Network.TEST
-): {
-    address: string;
-    balance: number;
-} => {
-    const walletProvider = useSelector(
-        (state: RootState) => state.filWalletProvider.walletProvider
-    );
-    const [address, setAddress] = useState('');
-    const [balance, setBalance] = useState(0);
-
-    useEffect(() => {
-        async function compute() {
-            if (walletProvider != null) {
-                const [filAddr] = await walletProvider.wallet.getAccounts(
-                    0,
-                    1,
-                    network
-                );
-                setAddress(filAddr);
-                const filBal = await walletProvider.getBalance(filAddr);
-                setBalance(filBal.toNumber());
-            }
-        }
-        compute();
-    }, [network, setAddress, setBalance, walletProvider]);
-
-    return { address, balance };
-};
-
 export async function registerCrossChainWallet(
     filWalletAddr: CrossChainWallet,
     filAddr: string,
     register: (chainId: number, address: string) => Promise<unknown>
 ) {
-    const chainId = getFilecoinChainId(getFilecoinNetwork());
-    if (!filWalletAddr || !filWalletAddr?.address) {
-        await register(chainId, filAddr);
-        return filAddr;
-    } else if (
-        filWalletAddr.chainID === chainId.toString() &&
-        !AddressUtils.equals(filWalletAddr.address, filAddr)
-    ) {
-        await register(chainId, filAddr);
-        return filAddr;
-    } else {
-        return filWalletAddr.address;
+    try {
+        const chainId = getFilecoinChainId(getFilecoinNetwork());
+        if (!filWalletAddr?.address) {
+            await register(chainId, filAddr);
+            return filAddr;
+        } else if (
+            filWalletAddr.chainID === chainId.toString() &&
+            !AddressUtils.equals(filWalletAddr.address, filAddr)
+        ) {
+            await register(chainId, filAddr);
+            return filAddr;
+        } else {
+            return filWalletAddr.address;
+        }
+    } catch (e) {
+        return filWalletAddr?.address ? filWalletAddr.address : filAddr;
     }
+}
+
+function setLocalStorage(filAddr: string, providerType: FilecoinWalletType) {
+    localStorage.setItem(FIL_ADDRESS, filAddr);
+    localStorage.setItem(FIL_WALLET_TYPE, providerType.toString());
+}
+
+function resetLocalStorage() {
+    localStorage.removeItem(FIL_ADDRESS);
+    localStorage.removeItem(FIL_WALLET_TYPE);
 }

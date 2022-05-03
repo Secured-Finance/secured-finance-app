@@ -4,8 +4,8 @@ import Transport from '@ledgerhq/hw-transport';
 import RustModule from '@zondax/filecoin-signing-tools';
 import FilecoinApp from '@zondax/ledger-filecoin';
 import { mapSeries } from 'bluebird';
-import { LEDGER } from 'src/services/ledger/constants';
 import createPath from 'src/services/ledger/createPath';
+import { FilecoinWalletType } from '../store/types';
 
 type Response = {
     error_message: string;
@@ -45,7 +45,7 @@ const ledgerProvider = (rustModule: RustModule) => {
         let ledgerBusy = false;
         const ledgerApp = new FilecoinApp(transport);
         return {
-            type: LEDGER,
+            type: FilecoinWalletType.Ledger,
 
             getVersion: () => {
                 throwIfBusy(ledgerBusy);
