@@ -5,11 +5,15 @@ describe('Filecoin Wallet', () => {
     const assertFilecoinWalletNotConnected = () => {
         cy.get('[data-cy="filecoin-connect-wallet-chip"]').should('be.visible');
         cy.get('[data-cy="filecoin-settings-chip"]').should('not.exist');
+        chai.expect(localStorage.getItem('FIL_WALLET_TYPE')).to.not.exist;
+        chai.expect(localStorage.getItem('FIL_ADDRESS')).to.not.exist;
     };
 
     const assertFilecoinWalletConnected = () => {
         cy.get('[data-cy="filecoin-connect-wallet-chip"]').should('not.exist');
         cy.get('[data-cy="filecoin-settings-chip"]').should('be.visible');
+        chai.expect(localStorage.getItem('FIL_WALLET_TYPE')).to.be.not.null;
+        chai.expect(localStorage.getItem('FIL_ADDRESS')).to.be.not.null;
     };
 
     const checkConnectedWallet = (address: string) => {
@@ -20,8 +24,9 @@ describe('Filecoin Wallet', () => {
     };
 
     beforeEach(() => {
-        cy.connectWallet();
-        assertFilecoinWalletNotConnected();
+        cy.connectWallet().then(() => {
+            assertFilecoinWalletNotConnected();
+        });
     });
 
     it('should offer three choices when trying to connect', () => {
@@ -30,19 +35,18 @@ describe('Filecoin Wallet', () => {
         cy.contains('Private Key').should('be.visible');
         cy.contains('Ledger wallet').should('be.visible');
         cy.contains('Mnemonic phrase').should('be.visible');
-        cy.get('[data-cy="cancel-button"]')
-            .should('be.visible')
-            .and(button => {
-                button.click();
-            });
+        cy.get('[data-cy="cancel-button"]').should('be.visible').click();
     });
 
     it('should connect to a new filecoin wallet when using mnemonic phrase and disconnect', () => {
         cy.get('[data-cy="filecoin-connect-wallet-chip"]').click();
         cy.get('[data-cy="generate-button"]').click();
-        cy.get('[data-cy="save-button"]').click();
-        // cy.get('@useUpdateCrossChainWallet').should('be.called');
-        assertFilecoinWalletConnected();
+        cy.get('[data-cy="save-button"]')
+            .click()
+            .then(() => {
+                assertFilecoinWalletConnected();
+            });
+
         cy.get('[data-cy="wallet-address"]')
             .should('have.length', 2)
             .and(walletAddress => {
@@ -53,8 +57,11 @@ describe('Filecoin Wallet', () => {
         cy.get('[data-cy="filecoin-settings-chip"]').click();
         cy.get('[data-cy="sign-out-button"]').click();
 
-        cy.get('[data-cy="wallet"]').click();
-        assertFilecoinWalletNotConnected();
+        cy.get('[data-cy="wallet"]')
+            .click()
+            .then(() => {
+                assertFilecoinWalletNotConnected();
+            });
     });
 
     it('should connect to an existing account when importing an account with a mnemonic phrase', () => {
@@ -66,10 +73,13 @@ describe('Filecoin Wallet', () => {
         ).click();
         cy.get('#mnemonic-input').type(filecoin.phrase);
         cy.get('[data-cy="address"]').contains(filecoin.wallet);
-        cy.get('[data-cy="import-button"]').click();
-        assertFilecoinWalletConnected();
-
-        // This one is failing because of the Ethereum connectivity.
-        //checkConnectedWallet(filecoin.wallet);
+        cy.get('[data-cy="import-button"]')
+            .click()
+            .then(() => {
+                assertFilecoinWalletConnected();
+            })
+            .then(() => {
+                checkConnectedWallet(filecoin.wallet);
+            });
     });
 });

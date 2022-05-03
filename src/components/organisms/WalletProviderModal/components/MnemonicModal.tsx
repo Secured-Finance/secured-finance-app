@@ -12,7 +12,8 @@ import {
 } from 'src/components/atoms';
 import useFilWasm from 'src/hooks/useFilWasm';
 import useModal from 'src/hooks/useModal';
-import { HDWallet, useNewFilWalletProvider } from 'src/services/filecoin';
+import { useNewFilWalletProvider } from 'src/services/filecoin';
+import { FilecoinWalletType } from 'src/services/filecoin/store/types';
 import { getFilecoinNetwork } from 'src/services/filecoin/utils';
 import { RootState } from 'src/store/types';
 import theme from 'src/theme';
@@ -71,7 +72,11 @@ const MnemonicModal: React.FC<ModalProps> = ({ onDismiss }) => {
         try {
             if (filProviders && mnemonic !== '' && walletProvider == null) {
                 const provider = await filProviders.HDWalletProvider(mnemonic);
-                await onCreate(provider, HDWallet, getFilecoinNetwork());
+                await onCreate(
+                    provider,
+                    FilecoinWalletType.HDWallet,
+                    getFilecoinNetwork()
+                );
             }
         } catch (e) {
             console.error(e);

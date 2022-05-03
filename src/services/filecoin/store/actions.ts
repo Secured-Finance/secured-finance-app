@@ -1,6 +1,6 @@
 import Filecoin from '@glif/filecoin-wallet-provider';
 import * as constants from './constants';
-import { FilWalletProviderAction } from './types';
+import { FilecoinWalletType, FilWalletProviderAction } from './types';
 
 export function startFetchingFilWalletProvider(): FilWalletProviderAction {
     return {
@@ -14,7 +14,9 @@ export function failFetchingFilWalletProvider(): FilWalletProviderAction {
     };
 }
 
-export function setFilWalletType(data: string): FilWalletProviderAction {
+export function setFilWalletType(
+    data: FilecoinWalletType
+): FilWalletProviderAction {
     return {
         type: constants.UPDATE_WALLET_TYPE,
         data,

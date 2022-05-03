@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Dispatch } from 'redux';
 import { WalletAccountModal } from 'src/components/organisms';
 import { useResetFilWalletProvider } from 'src/services/filecoin';
+import { FilecoinWalletType } from 'src/services/filecoin/store/types';
 import { getFilecoinNetwork } from 'src/services/filecoin/utils';
 import connectWithLedger from 'src/services/ledger/connectLedger';
 import { RootState } from 'src/store/types';
@@ -20,7 +21,7 @@ import {
     updateFilWalletUSDBalance,
     WalletBase,
 } from 'src/store/wallets';
-import { FIL_ADDRESS } from 'src/store/wallets/constants';
+import { FIL_ADDRESS, FIL_WALLET_TYPE } from 'src/store/wallets/constants';
 import {
     updateFilWalletViaProvider,
     updateFilWalletViaRPC,
@@ -120,6 +121,7 @@ export const useFilecoinWalletStore = (): WalletBase => {
         };
     }, [onPresentAccountModal]);
     const filAddr = localStorage.getItem(FIL_ADDRESS);
+    const filWalletType = localStorage.getItem(FIL_WALLET_TYPE);
 
     const fetchFilStore = useCallback(async () => {
         if (!loaded || walletProvider === null) {
@@ -138,21 +140,30 @@ export const useFilecoinWalletStore = (): WalletBase => {
 
     useEffect(() => {
         // fetch FIL wallet info when not connected
-
         (async () => {
             if (filAddr && !walletProvider) {
                 dispatch(updateFilWalletAddress(filAddr));
 
-                // connect FIL wallet if address is stored
-                const provider = await connectWithLedger(dispatch);
-                if (!provider) {
-                    dispatch(updateFilWalletViaRPC(filAddr));
+                // connect ledger wallet if address is stored and last connected wallet was ledger
+                if (
+                    filWalletType &&
+                    (Object.values(FilecoinWalletType) as string[]).includes(
+                        filWalletType
+                    )
+                ) {
+                    const walletType = filWalletType as FilecoinWalletType;
+                    if (walletType === FilecoinWalletType.Ledger) {
+                        const provider = await connectWithLedger(dispatch);
+                        if (!provider) {
+                            dispatch(updateFilWalletViaRPC(filAddr));
+                        }
+                    }
                 }
 
                 dispatch(updateFilWalletActions(actObj));
             }
         })();
-    }, [actObj, dispatch, filAddr, walletProvider]);
+    }, [actObj, dispatch, filAddr, filWalletType, walletProvider]);
 
     useEffect(() => {
         if (price !== 0 || change !== 0) {

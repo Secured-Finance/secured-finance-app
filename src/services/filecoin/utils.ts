@@ -3,8 +3,6 @@ import { MAINNET_PATH_CODE, TESTNET_PATH_CODE } from '../ledger/constants';
 
 export const MainNetPath = "m/44'/461'/0'/0/0";
 export const TestNetPath = "m/44'/1'/0'/0/0";
-export const HDWallet = 'HDWallet';
-export const PKWallet = 'PrivateKeyWallet';
 
 const BLOCK_EXPLORER_URL: Record<Network, string> = {
     [Network.MAIN]: 'https://filscan.io/',

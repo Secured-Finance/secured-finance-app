@@ -4,5 +4,8 @@
     "project": "./tsconfig.json",
     "sourceType": "module",
     "createDefaultProgram": true
+  },
+  "rules": {
+    "@typescript-eslint/no-unused-expressions": "off"
   }
 }

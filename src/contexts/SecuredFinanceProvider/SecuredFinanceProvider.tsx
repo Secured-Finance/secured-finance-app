@@ -13,16 +13,19 @@ export const Context = createContext<SFContext>({
 
 declare global {
     interface Window {
-        securedFinanceSDK: any;
+        securedFinanceSDK: SecuredFinanceClient;
     }
 }
 
 const SecuredFinanceProvider: React.FC = ({ children }) => {
     const { ethereum, error, status } = useWallet();
-    const [securedFinance, setSecuredFinance] = useState<any>();
+    const [securedFinance, setSecuredFinance] =
+        useState<SecuredFinanceClient>();
 
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     window.securedFinance = securedFinance;
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     window.eth = ethereum;
 

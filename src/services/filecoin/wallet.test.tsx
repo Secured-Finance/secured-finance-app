@@ -40,4 +40,20 @@ describe('Wallet', () => {
         ).toEqual('1x0');
         expect(onMockRegisterCrossChainWallet).toHaveBeenCalled();
     });
+
+    it('should return the cross chain address if an error happens', async () => {
+        expect(
+            await registerCrossChainWallet(onChainWallet, '1x0', () => {
+                throw new Error('test');
+            })
+        ).toEqual('0x0');
+    });
+
+    it('should return the current address if an error happens and the cross chain in not defined', async () => {
+        expect(
+            await registerCrossChainWallet(null, '1x0', () => {
+                throw new Error('test');
+            })
+        ).toEqual('1x0');
+    });
 });
