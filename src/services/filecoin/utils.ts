@@ -10,8 +10,8 @@ const BLOCK_EXPLORER_URL: Record<Network, string> = {
 };
 
 export const FILSCAN_API_URL: Record<Network, string> = {
-    [Network.MAIN]: 'https://api.filscan.io/',
-    [Network.TEST]: 'https://api.calibration.filscan.io/',
+    [Network.MAIN]: 'http://api.node.glif.io/rpc/v0',
+    [Network.TEST]: 'https://calibration.node.glif.io/rpc/v0',
 };
 
 const BLOCK_EXPLORER_WALLET_PREFIX = 'address/general?address=';

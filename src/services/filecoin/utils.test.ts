@@ -39,13 +39,13 @@ describe('Block explorer', () => {
 describe('Filscan api url', () => {
     it('should return the mainnet api url when the network is MAINNET', () => {
         expect(FILSCAN_API_URL[Network.MAIN]).toEqual(
-            'https://api.filscan.io/'
+            'http://api.node.glif.io/rpc/v0'
         );
     });
 
     it('should return the testnet api url when the network is MAINNET', () => {
         expect(FILSCAN_API_URL[Network.TEST]).toEqual(
-            'https://api.calibration.filscan.io/'
+            'https://calibration.node.glif.io/rpc/v0'
         );
     });
 });
