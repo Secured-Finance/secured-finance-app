@@ -1,7 +1,7 @@
 import { Network as FilNetwork } from '@glif/filecoin-address';
 import React, { createContext, ReactNode, useEffect, useState } from 'react';
-import { useWallet } from 'use-wallet';
 import { providers } from 'src/services/filecoin/providers';
+import { useWallet } from 'use-wallet';
 
 export const CACHED_PROVIDER_KEY = 'CACHED_PROVIDER_KEY';
 
@@ -35,11 +35,11 @@ const FilecoinWasmProvider: React.FC<FilecoinWalletProviderProps> = ({
         async function loadWasmModule() {
             try {
                 const wasm = await import('@zondax/filecoin-signing-tools');
-                await setWasmModule(wasm);
-                await setLoaded(true);
-                await setFilProviders(providers(wasm));
+                setWasmModule(wasm);
+                setLoaded(true);
+                setFilProviders(providers(wasm));
             } catch (err) {
-                await setLoaded(false);
+                setLoaded(false);
                 console.error(
                     `Unexpected error in loadWasm. [Message: ${
                         (err as Error).message

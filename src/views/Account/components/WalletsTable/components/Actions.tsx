@@ -1,12 +1,13 @@
 import React, { useCallback } from 'react';
-import styled from 'styled-components';
+import Chip from 'src/components/atoms/Chip/Chip';
 import {
     CollateralModal,
-    WalletProviderModal,
     SendModal,
     WalletAccountModal,
+    WalletProviderModal,
 } from 'src/components/organisms';
 import useModal from 'src/hooks/useModal';
+import { supportedCoins } from 'src/store/wallets/types';
 
 interface ActionProps {
     callbackMap?: {
@@ -35,53 +36,38 @@ const RenderActions: React.FC<ActionProps> = ({ callbackMap, ccyIndex }) => {
         onPresentWalletEthProviderModal();
     }, [onPresentWalletEthProviderModal]);
 
+    const coin = supportedCoins[ccyIndex];
+
     return (
         <div>
-            {callbackMap != null &&
-            callbackMap.send != null &&
-            callbackMap.placeCollateral != null &&
-            callbackMap.signOut != null ? (
-                <StyledActionsContainer>
-                    <StyledActionButton onClick={onPresentSendModal}>
-                        Send
-                    </StyledActionButton>
+            {callbackMap?.send &&
+            callbackMap?.placeCollateral &&
+            callbackMap?.signOut ? (
+                <div className='flex flex-row items-center justify-evenly'>
+                    <Chip onClick={onPresentSendModal} text='Send' />
                     {ccyIndex === 0 ? (
-                        <StyledActionButton onClick={onPresentCollateralModal}>
-                            Manage Collateral
-                        </StyledActionButton>
+                        <Chip
+                            onClick={onPresentCollateralModal}
+                            text='Manage Collateral'
+                        />
                     ) : null}
-                    <StyledActionButton onClick={onPresentSettingsModal}>
-                        Settings
-                    </StyledActionButton>
-                </StyledActionsContainer>
+                    <Chip
+                        onClick={onPresentSettingsModal}
+                        text='Settings'
+                        dataCy={`${coin}-settings-chip`}
+                    />
+                </div>
             ) : (
-                <StyledActionsContainer>
-                    <StyledActionButton onClick={handleConnectWallet}>
-                        Connect Wallet
-                    </StyledActionButton>
-                </StyledActionsContainer>
+                <div className='flex flex-row items-center justify-evenly'>
+                    <Chip
+                        onClick={handleConnectWallet}
+                        text='Connect Wallet'
+                        dataCy={`${coin}-connect-wallet-chip`}
+                    />
+                </div>
             )}
         </div>
     );
 };
-
-const StyledActionsContainer = styled.div`
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-evenly;
-`;
-
-const StyledActionButton = styled.button`
-    padding: 4px 10px;
-    background-color: ${props => props.theme.colors.darkenedBg};
-    color: ${props => props.theme.colors.blue};
-    font-size: 13px;
-    font-weight: 700;
-    outline: none;
-    border: none;
-    border-radius: 15px;
-    cursor: pointer;
-`;
 
 export default RenderActions;

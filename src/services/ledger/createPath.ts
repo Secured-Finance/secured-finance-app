@@ -1,12 +1,8 @@
-import { MAINNET_PATH_CODE, TESTNET_PATH_CODE } from './constants';
+import { Network } from '@glif/filecoin-address';
+import { getFilecoinChainId } from 'src/services/filecoin/utils';
 
-const createPath: (networkCode: number, i: number) => string = (
-    networkCode,
-    i
-) => {
-    if (networkCode !== MAINNET_PATH_CODE && networkCode !== TESTNET_PATH_CODE)
-        throw new Error('Invalid network code passed');
-    return `m/44'/${networkCode}'/0'/0/${i}`;
+const createPath: (network: Network, i: number) => string = (network, i) => {
+    return `m/44'/${getFilecoinChainId(network)}'/0'/0/${i}`;
 };
 
 export default createPath;

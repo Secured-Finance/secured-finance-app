@@ -1,41 +1,38 @@
-import { Network } from '@glif/filecoin-address';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import styled from 'styled-components';
-import useFilWasm from 'src/hooks/useFilWasm';
-import useModal from 'src/hooks/useModal';
-import { HDWallet, useNewFilWalletProvider } from 'src/services/filecoin';
-import { RootState } from 'src/store/types';
-import theme from 'src/theme';
 import {
     Breaker,
     Button,
     Modal,
-    ModalProps,
     ModalActions,
     ModalContent,
+    ModalProps,
     ModalTitle,
     Spacer,
 } from 'src/components/atoms';
+import useFilWasm from 'src/hooks/useFilWasm';
+import useModal from 'src/hooks/useModal';
+import { useNewFilWalletProvider } from 'src/services/filecoin';
+import { FilecoinWalletType } from 'src/services/filecoin/store/types';
+import { getFilecoinNetwork } from 'src/services/filecoin/utils';
+import { RootState } from 'src/store/types';
+import theme from 'src/theme';
+import styled from 'styled-components';
 import PrivateKeyModal from './PrivateKeyModal';
 
-interface MnemonicProps {
-    mnemonic: string;
-}
-
-const RenderMnemonic: React.FC<MnemonicProps> = ({ mnemonic }) => {
+const RenderMnemonic = ({ mnemonic }: { mnemonic: string }) => {
     const [mnemonicPhrase, setMnemonicPhrase] = useState([] as Array<string>);
 
-    async function parseMnemonic() {
-        if (mnemonic != null) {
-            const parsedMnemonic = await mnemonic.split(' ');
-            await setMnemonicPhrase(parsedMnemonic);
+    const parseMnemonic = useCallback(() => {
+        if (mnemonic) {
+            const parsedMnemonic = mnemonic.split(' ');
+            setMnemonicPhrase(parsedMnemonic);
         }
-    }
+    }, [mnemonic]);
 
     useEffect(() => {
         parseMnemonic();
-    }, [mnemonic, setMnemonicPhrase]);
+    }, [parseMnemonic]);
 
     return (
         <StyledMnemonicContainer>
@@ -57,21 +54,17 @@ const MnemonicModal: React.FC<ModalProps> = ({ onDismiss }) => {
 
     const genPhrase = useCallback(async () => {
         const phrase = await generateMnemonic();
-        await setMnemonic(phrase);
+        setMnemonic(phrase);
         setIsLoading(true);
     }, [setMnemonic, setIsLoading, generateMnemonic]);
 
     useEffect(() => {
-        let isMounted = true;
         if (walletProvider) {
             onDismiss();
         } else if (loaded && generateMnemonic) {
             genPhrase();
         }
-        return () => {
-            isMounted = false;
-        };
-    }, [loaded, generateMnemonic, setMnemonic, walletProvider, onDismiss]);
+    }, [loaded, generateMnemonic, walletProvider, onDismiss, genPhrase]);
 
     const { onCreate } = useNewFilWalletProvider();
 
@@ -79,12 +72,16 @@ const MnemonicModal: React.FC<ModalProps> = ({ onDismiss }) => {
         try {
             if (filProviders && mnemonic !== '' && walletProvider == null) {
                 const provider = await filProviders.HDWalletProvider(mnemonic);
-                await onCreate(provider, HDWallet, Network.TEST);
+                await onCreate(
+                    provider,
+                    FilecoinWalletType.HDWallet,
+                    getFilecoinNetwork()
+                );
             }
         } catch (e) {
-            console.log(e);
+            console.error(e);
         }
-    }, [onCreate, filProviders, mnemonic, walletProvider]);
+    }, [filProviders, mnemonic, walletProvider, onCreate]);
 
     return (
         <Modal>

@@ -1,5 +1,11 @@
 import * as constants from './constants';
-import { defaultEthWallet, defaultFilWallet, WalletsStore } from './types';
+import {
+    defaultEthWallet,
+    defaultFilWallet,
+    WalletAction,
+    WalletBase,
+    WalletsStore,
+} from './types';
 
 const initialStore: WalletsStore = {
     totalUSDBalance: 0,
@@ -8,10 +14,12 @@ const initialStore: WalletsStore = {
     isLoading: false,
 };
 
-export default (
+const reducer = (
     state = initialStore,
-    action: { type: string; data: any; error: string }
-) => {
+    action: WalletAction
+): {
+    isLoading: boolean;
+} & WalletsStore => {
     switch (action.type) {
         case constants.FETCHING_WALLETS:
             return {
@@ -26,7 +34,7 @@ export default (
         case constants.UPDATE_TOTAL_USD_BALANCE:
             return {
                 ...state,
-                totalUSDBalance: action.data,
+                totalUSDBalance: action.data as number,
             };
 
         // Ethereum
@@ -35,7 +43,7 @@ export default (
                 ...state,
                 ethereum: {
                     ...state.ethereum,
-                    address: action.data,
+                    address: action.data as string,
                 },
                 isLoading: false,
             };
@@ -44,7 +52,7 @@ export default (
                 ...state,
                 ethereum: {
                     ...state.ethereum,
-                    balance: action.data,
+                    balance: action.data as number,
                 },
                 isLoading: false,
             };
@@ -53,7 +61,7 @@ export default (
                 ...state,
                 ethereum: {
                     ...state.ethereum,
-                    usdBalance: action.data,
+                    usdBalance: action.data as number,
                 },
                 isLoading: false,
             };
@@ -62,7 +70,7 @@ export default (
                 ...state,
                 ethereum: {
                     ...state.ethereum,
-                    assetPrice: action.data,
+                    assetPrice: action.data as number,
                 },
                 isLoading: false,
             };
@@ -71,7 +79,7 @@ export default (
                 ...state,
                 ethereum: {
                     ...state.ethereum,
-                    portfolioShare: action.data,
+                    portfolioShare: action.data as number,
                 },
                 isLoading: false,
             };
@@ -80,7 +88,7 @@ export default (
                 ...state,
                 ethereum: {
                     ...state.ethereum,
-                    dailyChange: action.data,
+                    dailyChange: action.data as number,
                 },
                 isLoading: false,
             };
@@ -89,7 +97,7 @@ export default (
                 ...state,
                 ethereum: {
                     ...state.ethereum,
-                    actions: action.data,
+                    actions: action.data as WalletBase['actions'],
                 },
                 isLoading: false,
             };
@@ -106,7 +114,7 @@ export default (
                 ...state,
                 filecoin: {
                     ...state.filecoin,
-                    address: action.data,
+                    address: action.data as string,
                 },
                 isLoading: false,
             };
@@ -115,7 +123,7 @@ export default (
                 ...state,
                 filecoin: {
                     ...state.filecoin,
-                    balance: action.data,
+                    balance: action.data as number,
                 },
                 isLoading: false,
             };
@@ -124,7 +132,7 @@ export default (
                 ...state,
                 filecoin: {
                     ...state.filecoin,
-                    usdBalance: action.data,
+                    usdBalance: action.data as number,
                 },
                 isLoading: false,
             };
@@ -133,7 +141,7 @@ export default (
                 ...state,
                 filecoin: {
                     ...state.filecoin,
-                    assetPrice: action.data,
+                    assetPrice: action.data as number,
                 },
                 isLoading: false,
             };
@@ -142,7 +150,7 @@ export default (
                 ...state,
                 filecoin: {
                     ...state.filecoin,
-                    portfolioShare: action.data,
+                    portfolioShare: action.data as number,
                 },
                 isLoading: false,
             };
@@ -151,7 +159,7 @@ export default (
                 ...state,
                 filecoin: {
                     ...state.filecoin,
-                    dailyChange: action.data,
+                    dailyChange: action.data as number,
                 },
                 isLoading: false,
             };
@@ -160,7 +168,7 @@ export default (
                 ...state,
                 filecoin: {
                     ...state.filecoin,
-                    actions: action.data,
+                    actions: action.data as WalletBase['actions'],
                 },
                 isLoading: false,
             };
@@ -174,3 +182,5 @@ export default (
             return state;
     }
 };
+
+export default reducer;

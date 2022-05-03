@@ -1,1 +1,1 @@
-export { default } from './WalletsTable.jsx';
+export { default } from './WalletsTable';

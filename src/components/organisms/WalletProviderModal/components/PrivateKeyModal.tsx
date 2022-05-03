@@ -1,30 +1,27 @@
-import { Network } from '@glif/filecoin-address';
 import { validateMnemonic } from 'bip39';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import styled from 'styled-components';
-import { isPrivate } from 'tiny-secp256k1';
-import isBase64 from 'validator/lib/isBase64';
-import useFilWasm from 'src/hooks/useFilWasm';
-import useModal from 'src/hooks/useModal';
 import {
-    HDWallet,
-    PKWallet,
-    TestNetPath,
-    useNewFilWalletProvider,
-} from 'src/services/filecoin';
-import { RootState } from 'src/store/types';
-import theme from 'src/theme';
-import {
-    Button,
     Breaker,
+    Button,
     Modal,
-    ModalProps,
     ModalActions,
     ModalContent,
+    ModalProps,
     ModalTitle,
     Spacer,
 } from 'src/components/atoms';
+import useFilWasm from 'src/hooks/useFilWasm';
+import useModal from 'src/hooks/useModal';
+import { TestNetPath, useNewFilWalletProvider } from 'src/services/filecoin';
+import { FilecoinWalletType } from 'src/services/filecoin/store/types';
+import { getFilecoinNetwork } from 'src/services/filecoin/utils';
+import { RootState } from 'src/store/types';
+import theme from 'src/theme';
+import { toKebabCase } from 'src/utils';
+import styled from 'styled-components';
+import { isPrivate } from 'tiny-secp256k1';
+import isBase64 from 'validator/lib/isBase64';
 import MnemonicModal from './MnemonicModal';
 
 interface PrivateKeyContainerProps {
@@ -51,22 +48,6 @@ const RenderPrivateKeyContainer: React.FC<ContainerProps> = ({
     let placeholder: string;
     let secret: string;
     let handleChange: (data: string) => void;
-
-    const handleChangeMnemonic = useCallback(
-        (data: string) => {
-            setMnemonic(data);
-            filAddressFromMnemonic(data);
-        },
-        [setMnemonic, setMnemonicAddr]
-    );
-
-    const handleChangePrivateKey = useCallback(
-        (data: string) => {
-            setPrivateKey(data);
-            filAddressFromPrivateKey(data);
-        },
-        [setPrivateKey, setPrivateKeyAddr]
-    );
 
     const filAddressFromMnemonic = useCallback(
         (data: string) => {
@@ -109,7 +90,11 @@ const RenderPrivateKeyContainer: React.FC<ContainerProps> = ({
         try {
             if (filProviders && mnemonic !== '' && walletProvider == null) {
                 const provider = await filProviders.HDWalletProvider(mnemonic);
-                await onCreate(provider, HDWallet, Network.TEST);
+                await onCreate(
+                    provider,
+                    FilecoinWalletType.HDWallet,
+                    getFilecoinNetwork()
+                );
             }
         } catch (e) {
             console.log(e);
@@ -122,12 +107,32 @@ const RenderPrivateKeyContainer: React.FC<ContainerProps> = ({
                 const provider = await filProviders.PrivateKeyProvider(
                     privateKey
                 );
-                await onCreate(provider, PKWallet, Network.TEST);
+                await onCreate(
+                    provider,
+                    FilecoinWalletType.PKWallet,
+                    getFilecoinNetwork()
+                );
             }
         } catch (e) {
             console.log(e);
         }
     }, [onCreate, filProviders, privateKey, walletProvider]);
+
+    const handleChangeMnemonic = useCallback(
+        (data: string) => {
+            setMnemonic(data);
+            filAddressFromMnemonic(data);
+        },
+        [filAddressFromMnemonic]
+    );
+
+    const handleChangePrivateKey = useCallback(
+        (data: string) => {
+            setPrivateKey(data);
+            filAddressFromPrivateKey(data);
+        },
+        [filAddressFromPrivateKey]
+    );
 
     const tabs = [
         {
@@ -148,20 +153,21 @@ const RenderPrivateKeyContainer: React.FC<ContainerProps> = ({
         },
     ];
 
-    tabs.filter((tab, i) => {
-        if (selectedTab === tab.title) {
+    for (const tab of tabs) {
+        if (tab.title === selectedTab) {
             handleSave = tab.saveHook;
             placeholder = tab.placeholder;
             handleChange = tab.handleChange;
             secret = tab.secret;
         }
-    });
+    }
 
     return (
         <div>
             <StyledLabel>{selectedTab}</StyledLabel>
             <StyledInputContainer>
                 <StyledInput
+                    id={`${toKebabCase(selectedTab)}-input`}
                     placeholder={placeholder}
                     value={secret}
                     onChange={e => handleChange(e.target.value)}
@@ -169,7 +175,7 @@ const RenderPrivateKeyContainer: React.FC<ContainerProps> = ({
             </StyledInputContainer>
             <StyledAddressContainer>
                 <StyledAddressTitle>Address</StyledAddressTitle>
-                <StyledAddress>
+                <StyledAddress data-cy='address'>
                     {selectedTab === 'Mnemonic' ? mnemonicAddr : privateKeyAddr}
                 </StyledAddress>
             </StyledAddressContainer>

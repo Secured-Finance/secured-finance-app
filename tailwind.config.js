@@ -19,8 +19,15 @@ module.exports = {
             middleGrey: '#9496a3',
             lightSilver: '#b9b9c2',
             white: '#fff',
+            darkenedBg: '#122735',
+            tableHeader: '#122735',
+            tableBorder: '#1c303f',
         },
-        extend: {},
+        extend: {
+            fontSize: {
+                subhead: '0.875rem',
+            },
+        },
     },
     plugins: [],
 };

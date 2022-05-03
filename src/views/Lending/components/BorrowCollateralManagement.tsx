@@ -1,27 +1,27 @@
-import cm from './LendBorrowTable.module.scss';
-import { calculatePercents, MIN_COVERAGE } from '../constants';
-import { Dropdown } from 'src/components/new/Dropdown';
-import { collateralListDropdown, usdFormat } from 'src/utils';
-import { Input } from 'src/components/new/Input';
-import { FieldValue } from 'src/components/new/FieldValue';
+import BigNumber from 'bignumber.js';
+import cx from 'classnames';
 import React, { useCallback, useMemo } from 'react';
-import { ChipButton } from 'src/components/new/Chip/ChipButton';
-import { VerifiedIcon } from 'src/components/new/icons';
-import { RootState } from 'src/store/types';
 import { connect, useDispatch, useSelector } from 'react-redux';
-import {
-    LendingStore,
-    updateCollateralAmount,
-    updateMainCollateralCurrency,
-} from 'src/store/lending';
+import { ChipButton } from 'src/components/atoms/Chip/ChipButton';
+import { Dropdown } from 'src/components/new/Dropdown';
+import { FieldValue } from 'src/components/new/FieldValue';
+import { VerifiedIcon } from 'src/components/new/icons';
+import { Input } from 'src/components/new/Input';
 import {
     getEthPrice,
     getFilPrice,
     getUSDCPrice,
 } from 'src/store/assetPrices/selectors';
-import BigNumber from 'bignumber.js';
+import {
+    LendingStore,
+    updateCollateralAmount,
+    updateMainCollateralCurrency,
+} from 'src/store/lending';
+import { RootState } from 'src/store/types';
 import { getEthBalance } from 'src/store/wallets/selectors';
-import cx from 'classnames';
+import { collateralListDropdown, usdFormat } from 'src/utils';
+import { calculatePercents, MIN_COVERAGE } from '../constants';
+import cm from './LendBorrowTable.module.scss';
 
 interface IBorrowCollateralManagement extends LendingStore {
     USDAmount: BigNumber;

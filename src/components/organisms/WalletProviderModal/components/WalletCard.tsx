@@ -1,5 +1,4 @@
 import React from 'react';
-import theme from 'src/theme';
 import {
     Button,
     Card,
@@ -7,6 +6,8 @@ import {
     CardIcon,
     CardTitle,
 } from 'src/components/atoms';
+import theme from 'src/theme';
+import { toKebabCase } from 'src/utils';
 
 interface WalletCardProps {
     icon: React.ReactNode;
@@ -21,7 +22,7 @@ const WalletCard: React.FC<WalletCardProps> = ({
     title,
     buttonText,
 }) => (
-    <Card>
+    <Card data-cy={toKebabCase(title)}>
         <CardContent>
             <CardIcon>{icon}</CardIcon>
             <CardTitle text={title} />
