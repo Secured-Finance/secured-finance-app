@@ -65,7 +65,11 @@
     "cypress:run": "cypress run"
   },
   "browserslist": {
-    "production": [">0.2%", "not dead", "not op_mini all"],
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
     "development": [
       "last 1 chrome version",
       "last 1 firefox version",
@@ -74,6 +78,7 @@
   },
   "devDependencies": {
     "@craco/craco": "^6.4.3",
+    "@ethersproject/experimental": "^5.6.0",
     "@storybook/addon-actions": "^6.4.19",
     "@storybook/addon-essentials": "^6.4.19",
     "@storybook/addon-links": "^6.4.19",

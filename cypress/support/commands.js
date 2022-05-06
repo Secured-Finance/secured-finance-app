@@ -11,12 +11,15 @@
 //
 // -- This is a parent command --
 // Cypress.Commands.add('login', (email, password) => { ... })
-Cypress.Commands.add('connectWallet', () => {
-    cy.visit('/');
+Cypress.Commands.add('connectWallet', onBeforeLoad => {
+    cy.visit('/', { onBeforeLoad: onBeforeLoad });
     cy.get('[data-cy="wallet"]').click();
-    cy.get('[data-cy="connect-button"]').and(buttonList => {
-        buttonList.get(0).click();
-    });
+    // Selecting the first element of connect button. Not the best way to do it, but it works for now.
+    cy.get('[data-cy="connect-button"]:first').click();
+});
+
+Cypress.Commands.add('clean', () => {
+    config.after();
 });
 
 //

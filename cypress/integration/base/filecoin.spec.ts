@@ -1,7 +1,10 @@
 /// <reference types="cypress" />
+import { tenderlyConfig } from 'support/utils/tenderlyConfig';
 import * as filecoin from '../../fixtures/filecoin.json';
 
 describe('Filecoin Wallet', () => {
+    const { onBeforeLoad } = tenderlyConfig();
+
     const assertFilecoinWalletNotConnected = () => {
         cy.get('[data-cy="filecoin-connect-wallet-chip"]').should('be.visible');
         cy.get('[data-cy="filecoin-settings-chip"]').should('not.exist');
@@ -24,7 +27,9 @@ describe('Filecoin Wallet', () => {
     };
 
     beforeEach(() => {
-        cy.connectWallet().then(() => {
+        //const onBeforeLoad = tenderlyFork.onBeforeLoad();
+        cy.connectWallet(onBeforeLoad).then(() => {
+            cy.window().its('ethereum').should('exist');
             assertFilecoinWalletNotConnected();
         });
     });
@@ -64,7 +69,7 @@ describe('Filecoin Wallet', () => {
             });
     });
 
-    it('should connect to an existing account when importing an account with a mnemonic phrase', () => {
+    it.only('should connect to an existing account when importing an account with a mnemonic phrase', () => {
         cy.get('[data-cy="filecoin-connect-wallet-chip"]').click();
         cy.get('[data-cy="import-button"]').click();
         //TODO: replace this selector once the buttons are reorganized
