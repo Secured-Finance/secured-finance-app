@@ -9,6 +9,6 @@ declare namespace Cypress {
          * @example
          * cy.connectWallet
          */
-        connectWallet(): Chainable<any>;
+        connectWallet(onBeforeLoad: (win: any) => void): Chainable<any>;
     }
 }
