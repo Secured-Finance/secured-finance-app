@@ -7,6 +7,9 @@ import { CustomizedBridge } from './customBridget';
 const TENDERLY_KEY = Cypress.env('TENDERLY_KEY');
 const TENDERLY_ACCOUNT = Cypress.env('TENDERLY_ACCOUNT');
 const TENDERLY_PROJECT = Cypress.env('TENDERLY_PROJECT');
+const TENDERLY_PERSIST_FORK_AFTER_RUN = Cypress.env(
+    'TENDERLY_PERSIST_FORK_AFTER_RUN'
+);
 
 export const DEFAULT_TEST_ACCOUNT = {
     privateKey:
@@ -25,14 +28,16 @@ export class TenderlyFork {
     public _forkNetworkID: string;
     public _chainID: number;
     private fork_id: string;
-    private delete = true;
+    private persist = false;
 
     constructor(forkNetworkID: number, forkId?: string) {
         this._forkNetworkID = forkNetworkID.toString();
         this._chainID = 3030;
         if (forkId) {
             this.fork_id = forkId;
-            this.delete = false;
+        }
+        if (TENDERLY_PERSIST_FORK_AFTER_RUN) {
+            this.persist = TENDERLY_PERSIST_FORK_AFTER_RUN;
         }
     }
 
@@ -53,7 +58,7 @@ export class TenderlyFork {
         this.fork_id = response.data.simulation_fork.id;
     }
 
-    get_rpc_url() {
+    getRpcUrl() {
         if (!this.fork_id) throw new Error('Fork not initialized!');
         return `https://rpc.tenderly.co/fork/${this.fork_id}`;
     }
@@ -66,10 +71,10 @@ export class TenderlyFork {
         );
     }
 
-    async add_balance_rpc(address: string) {
+    async addBalanceRpc(address: string) {
         if (!this.fork_id) throw new Error('Fork not initialized!');
         const options = {
-            url: this.get_rpc_url(),
+            url: this.getRpcUrl(),
             method: 'post',
             headers: { 'content-type': 'text/plain' },
             body: JSON.stringify({
@@ -83,7 +88,7 @@ export class TenderlyFork {
     }
 
     async deleteFork() {
-        if (!this.delete) {
+        if (this.persist) {
             return;
         }
         cy.log(`deleting fork ${this.fork_id}`);
@@ -95,7 +100,7 @@ export class TenderlyFork {
     onBeforeLoad() {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         return (win: any) => {
-            const rpc = this.get_rpc_url();
+            const rpc = this.getRpcUrl();
             const provider = new JsonRpcProvider(rpc, 3030);
             const signer = new Wallet(
                 DEFAULT_TEST_ACCOUNT.privateKey,
