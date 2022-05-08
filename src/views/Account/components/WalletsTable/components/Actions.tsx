@@ -44,7 +44,11 @@ const RenderActions: React.FC<ActionProps> = ({ callbackMap, ccyIndex }) => {
             callbackMap?.placeCollateral &&
             callbackMap?.signOut ? (
                 <div className='flex flex-row items-center justify-evenly'>
-                    <Chip onClick={onPresentSendModal} text='Send' />
+                    <Chip
+                        onClick={onPresentSendModal}
+                        text='Send'
+                        dataCy={`${coin}-send-chip`}
+                    />
                     {ccyIndex === 0 ? (
                         <Chip
                             onClick={onPresentCollateralModal}
