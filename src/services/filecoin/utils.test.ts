@@ -1,6 +1,6 @@
 import { Network } from '@glif/filecoin-address';
 import {
-    FILSCAN_API_URL,
+    FIL_JSON_RPC_ENDPOINT,
     getBlockExplorerUrl,
     getFilecoinChainId,
     getFilecoinNetwork,
@@ -38,13 +38,13 @@ describe('Block explorer', () => {
 
 describe('Filscan api url', () => {
     it('should return the mainnet api url when the network is MAINNET', () => {
-        expect(FILSCAN_API_URL[Network.MAIN]).toEqual(
+        expect(FIL_JSON_RPC_ENDPOINT[Network.MAIN]).toEqual(
             'http://api.node.glif.io/rpc/v0'
         );
     });
 
     it('should return the testnet api url when the network is MAINNET', () => {
-        expect(FILSCAN_API_URL[Network.TEST]).toEqual(
+        expect(FIL_JSON_RPC_ENDPOINT[Network.TEST]).toEqual(
             'https://calibration.node.glif.io/rpc/v0'
         );
     });

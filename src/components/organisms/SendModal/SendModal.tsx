@@ -64,18 +64,6 @@ const SendModal: React.FC<CombinedProps> = ({
     );
     const maxFilTxFee = Number(maxTxFee.toFil());
 
-    const handleSendAmount = useCallback(
-        (e: React.FormEvent<HTMLInputElement>) => {
-            dispatch(updateSendAmount(+e.currentTarget.value));
-            if (!isEnoughBalance(e.currentTarget.value)) {
-                setBalanceErr(true);
-            } else {
-                setBalanceErr(false);
-            }
-        },
-        [dispatch, setBalanceErr, maxFilTxFee]
-    );
-
     const handleRecipientAddress = useCallback(
         (e: React.FormEvent<HTMLInputElement>) => {
             dispatch(updateSendToAddreess(e.currentTarget.value));
@@ -101,7 +89,7 @@ const SendModal: React.FC<CombinedProps> = ({
                 // TODO: Add USDC balances
                 return <span>0.00 {currencyShortName}</span>;
         }
-    }, [ccyIndex, currencyShortName]);
+    }, [ccyIndex, currencyShortName, ethBalance, filecoinBalance]);
 
     const TotalUsdAmount = useMemo(() => {
         switch (ccyIndex) {
@@ -114,27 +102,42 @@ const SendModal: React.FC<CombinedProps> = ({
             default:
                 return 0;
         }
-    }, [amount, currencyShortName]);
+    }, [amount, ccyIndex, ethPrice, filPrice, usdcPrice]);
 
-    const isValidAddress = () => {
+    const isValidAddress = useCallback(() => {
         switch (ccyIndex) {
             case 0:
                 return isAddress(toAddress);
             case 1:
                 return validateAddressString(toAddress);
         }
-    };
+    }, [ccyIndex, toAddress]);
 
-    const isEnoughBalance = (amount: string) => {
-        switch (ccyIndex) {
-            case 0:
-                return new BigNumber(amount).isLessThanOrEqualTo(
-                    new BigNumber(ethBalance)
-                );
-            case 1:
-                return +amount + maxFilTxFee <= filecoinBalance;
-        }
-    };
+    const isEnoughBalance = useCallback(
+        (amount: string) => {
+            switch (ccyIndex) {
+                case 0:
+                    return new BigNumber(amount).isLessThanOrEqualTo(
+                        new BigNumber(ethBalance)
+                    );
+                case 1:
+                    return +amount + maxFilTxFee <= filecoinBalance;
+            }
+        },
+        [ccyIndex, ethBalance, maxFilTxFee, filecoinBalance]
+    );
+
+    const handleSendAmount = useCallback(
+        (e: React.FormEvent<HTMLInputElement>) => {
+            dispatch(updateSendAmount(+e.currentTarget.value));
+            if (!isEnoughBalance(e.currentTarget.value)) {
+                setBalanceErr(true);
+            } else {
+                setBalanceErr(false);
+            }
+        },
+        [dispatch, isEnoughBalance]
+    );
 
     useEffect(() => {
         const currencyShortName = currencyList.find(
@@ -143,7 +146,7 @@ const SendModal: React.FC<CombinedProps> = ({
         if (currencyShortName) {
             dispatch(updateSendCurrency(currencyShortName));
         }
-    }, []);
+    }, [ccyIndex, dispatch]);
 
     const handleSendModalClose = () => {
         dispatch(resetSendForm());
@@ -179,7 +182,16 @@ const SendModal: React.FC<CombinedProps> = ({
         } catch (e) {
             console.log(e);
         }
-    }, [toAddress, amount, setAddrErr, onSendEth, setOngoingTx]);
+    }, [
+        toAddress,
+        amount,
+        isValidAddress,
+        ccyIndex,
+        onSendEth,
+        sendFil,
+        ongoingTx,
+        onDismiss,
+    ]);
 
     const isSendButtonDisabled = () => {
         return ongoingTx || amount <= 0 || balanceErr;
@@ -212,12 +224,13 @@ const SendModal: React.FC<CombinedProps> = ({
         <Modal>
             <ModalTitle text='Send' />
             <ModalContent paddingBottom={'0'} paddingTop={'0'}>
-                <StyledSubcontainer>
+                <StyledSubcontainer data-cy='send-modal'>
                     <StyledLabelContainer>
                         <StyledLabel textTransform={'capitalize'}>
                             Currency
                         </StyledLabel>
                         <StyledLabel
+                            data-cy='balance-label'
                             fontWeight={400}
                             textTransform={'capitalize'}
                         >
@@ -249,6 +262,7 @@ const SendModal: React.FC<CombinedProps> = ({
                                 showName
                             />
                             <StyledInput
+                                data-cy='send-amount-input'
                                 type={'number'}
                                 placeholder={'0'}
                                 value={amount}
@@ -273,6 +287,7 @@ const SendModal: React.FC<CombinedProps> = ({
                         }
                     >
                         <StyledAddressInput
+                            data-cy='send-address-input'
                             type={'text'}
                             placeholder={'Paste ' + currencyName + ' address'}
                             value={toAddress}
