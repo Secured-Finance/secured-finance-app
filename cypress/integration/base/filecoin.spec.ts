@@ -3,13 +3,6 @@ import { expectFilecoin, filecoin } from 'support/filecoin';
 import * as wallets from '../../fixtures/filecoin.json';
 
 describe('Filecoin Wallet', () => {
-    const assertFilecoinWalletNotConnected = () => {
-        cy.get('[data-cy="filecoin-connect-wallet-chip"]').should('be.visible');
-        cy.get('[data-cy="filecoin-settings-chip"]').should('not.exist');
-        chai.expect(localStorage.getItem('FIL_WALLET_TYPE')).to.not.exist;
-        chai.expect(localStorage.getItem('FIL_ADDRESS')).to.not.exist;
-    };
-
     beforeEach(() => {
         cy.connectWallet().then(() => {
             expectFilecoin.walletNotConnected();
