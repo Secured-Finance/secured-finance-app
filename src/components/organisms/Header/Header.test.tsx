@@ -1,5 +1,4 @@
 import { MemoryRouter } from 'react-router-dom';
-import { Router } from 'react-router-dom';
 import { render, screen } from 'src/test-utils.js';
 import { Header } from './Header';
 

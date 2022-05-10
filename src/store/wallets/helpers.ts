@@ -2,7 +2,10 @@ import { BigNumber, FilecoinNumber } from '@glif/filecoin-number';
 import LotusRpcEngine from '@glif/filecoin-rpc-client';
 import { Action } from 'redux';
 import { ThunkDispatch } from 'redux-thunk';
-import { FILSCAN_API_URL, getFilecoinNetwork } from 'src/services/filecoin';
+import {
+    FIL_JSON_RPC_ENDPOINT,
+    getFilecoinNetwork,
+} from 'src/services/filecoin';
 import { RootState } from '../types';
 import {
     updateFilWalletAddress,
@@ -60,7 +63,7 @@ export const updateFilWalletViaProvider = (
 export const updateFilWalletViaRPC = (filAddr: string) => {
     return async (dispatch: ThunkDispatch<RootState, void, Action>) => {
         const lotusRPC = new LotusRpcEngine({
-            apiAddress: FILSCAN_API_URL[getFilecoinNetwork()],
+            apiAddress: FIL_JSON_RPC_ENDPOINT[getFilecoinNetwork()],
         });
         const chainHead = await lotusRPC.request('WalletBalance', filAddr);
         const balance = new FilecoinNumber(chainHead, 'attofil');

@@ -5,16 +5,13 @@ import {
     SignedLotusMessage,
 } from '@glif/filecoin-message';
 import { BigNumber, FilecoinNumber } from '@glif/filecoin-number';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getFilecoinNetwork } from 'src/services/filecoin/utils';
 import {
     emptyGasInfo,
     insufficientMsigFundsErr,
     insufficientSendFundsErr,
-    SEND,
 } from 'src/services/ledger/constants';
-import createPath from 'src/services/ledger/createPath';
 import { setMaxTxFee, updateSendAmount } from 'src/store/sendForm';
 import { RootState } from 'src/store/types';
 import { getFilWallet } from 'src/store/wallets/selectors';
@@ -26,8 +23,7 @@ import { getFilWallet } from 'src/store/wallets/selectors';
 
 const params = '';
 
-// @ts-ignore
-const friendlifyError = err => {
+const friendlifyError = (err: Error) => {
     if (!err.message) return err;
     if (err.message.toLowerCase().includes('retcode=2'))
         return insufficientMsigFundsErr;
@@ -36,34 +32,31 @@ const friendlifyError = err => {
     return err.message;
 };
 
-const path = createPath(getFilecoinNetwork(), 0);
-
 export const useSendFil = (
     amount = 0,
     toAddress: string,
-    close: any,
-    setOngoingTx: any
+    close: () => void,
+    setOngoingTx: React.Dispatch<React.SetStateAction<boolean>>
 ) => {
     const [, setFrozen] = useState(false);
     const [gasInfo, setGasInfo] = useState(emptyGasInfo);
     const [, setValueError] = useState('');
     const [, setFetchingTxDetails] = useState(false);
     const [, setMPoolPushing] = useState(false);
-    const [, setUncaughtError] = useState('');
     const wallet = useSelector(getFilWallet);
-    const value = new FilecoinNumber(amount, 'fil');
+    const value = useMemo(() => new FilecoinNumber(amount, 'fil'), [amount]);
 
     const dispatch = useDispatch();
     const { walletProvider } = useSelector(
         (state: RootState) => state.filWalletProvider
     );
 
-    const getMaxAffordableFee = () => {
+    const getMaxAffordableFee = useCallback(() => {
         const affordableFee = new BigNumber(wallet.balance).minus(value);
         return new FilecoinNumber(affordableFee, 'fil');
-    };
+    }, [wallet, value]);
 
-    const estimate = async () => {
+    const estimate = useCallback(async () => {
         const message: LotusMessage = new Message({
             to: toAddress,
             from: wallet.address,
@@ -71,9 +64,6 @@ export const useSendFil = (
             nonce: 0,
             method: 0,
             params,
-            gasFeeCap: gasInfo?.gasFeeCap.toAttoFil(),
-            gasLimit: new BigNumber(gasInfo?.gasLimit.toAttoFil()).toNumber(),
-            gasPremium: gasInfo?.gasPremium.toAttoFil(),
         }).toLotusType();
         try {
             setFrozen(true);
@@ -99,27 +89,35 @@ export const useSendFil = (
                 setValueError(err);
             }
         } catch (err) {
-            setValueError(friendlifyError(err));
+            setValueError(friendlifyError(err as Error).toString());
         } finally {
             setFrozen(false);
         }
-    };
+    }, [
+        dispatch,
+        getMaxAffordableFee,
+        toAddress,
+        value,
+        wallet.address,
+        walletProvider,
+    ]);
 
     useEffect(() => {
         // estimate gas price and tx fee
         if (toAddress && validateAddressString(toAddress) && amount !== 0) {
             estimate();
         }
-    }, [toAddress, amount]);
+    }, [toAddress, amount, estimate]);
 
-    const send = async () => {
+    const send = useCallback(async () => {
         setFetchingTxDetails(true);
 
         const provider = walletProvider;
 
         if (provider) {
             const nonce = await provider.getNonce(wallet.address);
-            const message: Message = new Message({
+
+            const message = new Message({
                 to: toAddress,
                 from: wallet.address,
                 value: value.toAttoFil(),
@@ -131,66 +129,60 @@ export const useSendFil = (
                 gasPremium: gasInfo?.gasPremium.toAttoFil(),
                 nonce,
                 params,
-            });
+            }).toLotusType();
 
             setFetchingTxDetails(false);
             const signedMessage: SignedLotusMessage =
-                // @ts-ignore
-                await provider.wallet.sign(message.toSerializeableType(), path);
+                await provider.wallet.sign(wallet.address, message);
 
-            const messageObj: any = message.toLotusType();
             setMPoolPushing(true);
-            const validMsg = await provider.simulateMessage(
-                message.toLotusType()
-            );
+            const validMsg = await provider.simulateMessage(message);
             if (validMsg) {
                 const msgCid = await provider.sendMessage(
-                    message.toLotusType(),
-                    // @ts-ignore
-                    signedMessage
+                    message,
+                    signedMessage.Signature.Data
                 );
 
-                messageObj.cid = msgCid['/'];
-                messageObj.timestamp = new Date();
-                messageObj.maxFee = gasInfo.estimatedTransactionFee.toAttoFil();
-                // dont know how much was actually paid in this message yet, so we mark it as 0
-                messageObj.paidFee = '0';
-                messageObj.value = new FilecoinNumber(
-                    messageObj.Value,
-                    'attofil'
-                ).toAttoFil();
-                messageObj.method = SEND;
-                messageObj.params = params || {};
-                return messageObj;
+                return msgCid;
             }
             throw new Error(
                 'Filecoin message invalid. No gas or fees were spent.'
             );
         }
-    };
+    }, [
+        gasInfo?.gasFeeCap,
+        gasInfo?.gasLimit,
+        gasInfo?.gasPremium,
+        toAddress,
+        value,
+        wallet.address,
+        walletProvider,
+    ]);
 
     const sendFil = useCallback(async () => {
         try {
             const message = await send();
             if (message) {
                 updateSendAmount(0);
+                // TODO: ADD something in the UI to show that the transaction was done
+                console.log(`transaction sent: ${message}`);
                 close();
             }
         } catch (err) {
             const e = err as Error;
             if (e.message.includes('Unexpected number of items')) {
-                setUncaughtError(
+                console.error(
                     'Ledger devices cannot sign arbitrary base64 params yet. Coming soon.'
                 );
             } else {
-                setUncaughtError(e.message);
+                console.error(e.message);
             }
         } finally {
             setOngoingTx(false);
             setFetchingTxDetails(false);
             setMPoolPushing(false);
         }
-    }, [amount, toAddress]);
+    }, [close, send, setOngoingTx]);
 
     return { sendFil };
 };
