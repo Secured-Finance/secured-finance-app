@@ -20,7 +20,7 @@ import {
 } from './store';
 import { FilecoinWalletType } from './store/types';
 import {
-    FILSCAN_API_URL,
+    FIL_JSON_RPC_ENDPOINT,
     getFilecoinChainId,
     getFilecoinNetwork,
 } from './utils';
@@ -72,7 +72,7 @@ export const useNewFilWalletProvider = () => {
             dispatch(startFetchingFilWalletProvider());
             if (loaded && walletProvider === null) {
                 const config = {
-                    apiAddress: FILSCAN_API_URL[network],
+                    apiAddress: FIL_JSON_RPC_ENDPOINT[network],
                 };
                 const filecoin = new Filecoin(provider, config);
                 dispatch(setFilWalletProvider(filecoin));
