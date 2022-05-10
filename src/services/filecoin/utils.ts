@@ -9,7 +9,7 @@ const BLOCK_EXPLORER_URL: Record<Network, string> = {
     [Network.TEST]: 'https://calibration.filscan.io/',
 };
 
-export const FILSCAN_API_URL: Record<Network, string> = {
+export const FIL_JSON_RPC_ENDPOINT: Record<Network, string> = {
     [Network.MAIN]: 'http://api.node.glif.io/rpc/v0',
     [Network.TEST]: 'https://calibration.node.glif.io/rpc/v0',
 };

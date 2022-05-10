@@ -76,6 +76,7 @@ jobs:
           install: false
           start: npm run start
           wait-on: 'http://localhost:3000'
+          wait-on-timeout: 120
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - uses: actions/upload-artifact@v3

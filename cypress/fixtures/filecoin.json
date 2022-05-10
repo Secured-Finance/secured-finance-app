@@ -1,5 +1,14 @@
 {
-  "name": "Filip",
-  "wallet": "t1vjfsd4v5g7qaherrpgvky5aavmll5vvcmy7gdzq",
-  "phrase": "rapid safe language large girl panther waste fade false else lion motor fold bundle plug win salad enforce elbow neutral cushion knife magnet soft"
+  "walletAlice": {
+    "address": "t1vjfsd4v5g7qaherrpgvky5aavmll5vvcmy7gdzq",
+    "phrase": "rapid safe language large girl panther waste fade false else lion motor fold bundle plug win salad enforce elbow neutral cushion knife magnet soft"
+  },
+  "walletBob": {
+    "address": "t1bzeyvnwkfk3poewgjdpn3xudnkqoisilqsmgwei",
+    "phrase": "antenna desk then picnic host tenant nasty chef tiny obtain laugh legal pistol lens thought spy twice sad faculty sunny autumn domain wrap jelly"
+  },
+  "walletCharlie": {
+    "address": "t12vg6zzuwwusugmxdi37ev2in3i3xdgczby5t4ui",
+    "phrase": "must popular combine wrist vocal potato marriage rotate trouble index cube chaos fluid edit bubble advice prevent service retreat obvious code crush mention regret"
+  }
 }
