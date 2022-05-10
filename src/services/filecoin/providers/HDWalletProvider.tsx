@@ -1,7 +1,8 @@
-import { WalletSubProvider } from '@glif/filecoin-wallet-provider';
 import { Network } from '@glif/filecoin-address';
 import { LotusMessage, SignedLotusMessage } from '@glif/filecoin-message';
+import { WalletSubProvider } from '@glif/filecoin-wallet-provider';
 import { MainNetPath, TestNetPath } from '../utils';
+import { ExtendedKey } from './types';
 
 export function HDWalletProvider(wasm: any) {
     return (mnemonic: string | Buffer): WalletSubProvider => {
@@ -24,19 +25,18 @@ export function HDWalletProvider(wasm: any) {
             ): Promise<SignedLotusMessage> => {
                 const path = Network.TEST ? TestNetPath : MainNetPath;
 
-                const private_hexstring = wasm.keyDerive(MNEMONIC, path, '');
-                const { signature } = wasm.transactionSign(
-                    filecoinMessage,
-                    Buffer.from(private_hexstring, 'hex').toString('base64')
+                const private_hexstring: ExtendedKey = wasm.keyDerive(
+                    MNEMONIC,
+                    path,
+                    ''
                 );
 
-                return {
-                    Message: filecoinMessage,
-                    Signature: {
-                        Type: 0,
-                        Data: signature.data,
-                    },
-                };
+                const signedTx = wasm.transactionSignLotus(
+                    filecoinMessage,
+                    private_hexstring.private_base64
+                );
+
+                return JSON.parse(signedTx) as SignedLotusMessage;
             },
         };
     };

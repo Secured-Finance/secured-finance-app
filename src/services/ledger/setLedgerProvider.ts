@@ -1,7 +1,7 @@
 import { Network } from '@glif/filecoin-address';
 import Filecoin from '@glif/filecoin-wallet-provider';
 import { Dispatch } from 'react';
-import { FILSCAN_API_URL } from '../filecoin';
+import { FIL_JSON_RPC_ENDPOINT } from '../filecoin';
 import createLedgerProvider from '../filecoin/providers/LedgerProvider';
 import badVersion, { IBadVersionProps } from './badVersion';
 import createTransport from './createTransport';
@@ -34,7 +34,7 @@ export const setLedgerProvider = async (
         const transport = await createTransport();
         // @ts-ignore
         const provider = new Filecoin(LedgerProvider(transport), {
-            apiAddress: FILSCAN_API_URL[network],
+            apiAddress: FIL_JSON_RPC_ENDPOINT[network],
         });
         dispatch({ type: LEDGER_CONNECTED });
         return provider;

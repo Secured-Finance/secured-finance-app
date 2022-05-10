@@ -1,36 +1,15 @@
 /// <reference types="cypress" />
+import { expectFilecoin, filecoin } from 'support/filecoin';
 import { tenderlyConfig } from 'support/utils/tenderlyConfig';
-import * as filecoin from '../../fixtures/filecoin.json';
+import * as wallets from '../../fixtures/filecoin.json';
 
 describe('Filecoin Wallet', () => {
     const { onBeforeLoad } = tenderlyConfig();
 
-    const assertFilecoinWalletNotConnected = () => {
-        cy.get('[data-cy="filecoin-connect-wallet-chip"]').should('be.visible');
-        cy.get('[data-cy="filecoin-settings-chip"]').should('not.exist');
-        chai.expect(localStorage.getItem('FIL_WALLET_TYPE')).to.not.exist;
-        chai.expect(localStorage.getItem('FIL_ADDRESS')).to.not.exist;
-    };
-
-    const assertFilecoinWalletConnected = () => {
-        cy.get('[data-cy="filecoin-connect-wallet-chip"]').should('not.exist');
-        cy.get('[data-cy="filecoin-settings-chip"]').should('be.visible');
-        chai.expect(localStorage.getItem('FIL_WALLET_TYPE')).to.be.not.null;
-        chai.expect(localStorage.getItem('FIL_ADDRESS')).to.be.not.null;
-    };
-
-    const checkConnectedWallet = (address: string) => {
-        cy.get('[data-cy="filecoin-settings-chip"]').click();
-        cy.get('[data-cy="modal-wallet-address"]').contains(address);
-
-        cy.get('[data-cy="close-button"]').click();
-    };
-
     beforeEach(() => {
-        //const onBeforeLoad = tenderlyFork.onBeforeLoad();
         cy.connectWallet(onBeforeLoad).then(() => {
             cy.window().its('ethereum').should('exist');
-            assertFilecoinWalletNotConnected();
+            expectFilecoin.walletNotConnected();
         });
     });
 
@@ -49,7 +28,7 @@ describe('Filecoin Wallet', () => {
         cy.get('[data-cy="save-button"]')
             .click()
             .then(() => {
-                assertFilecoinWalletConnected();
+                expectFilecoin.walletConnected();
             });
 
         cy.get('[data-cy="wallet-address"]')
@@ -65,26 +44,33 @@ describe('Filecoin Wallet', () => {
         cy.get('[data-cy="wallet"]')
             .click()
             .then(() => {
-                assertFilecoinWalletNotConnected();
+                expectFilecoin.walletNotConnected();
             });
     });
 
     it.only('should connect to an existing account when importing an account with a mnemonic phrase', () => {
-        cy.get('[data-cy="filecoin-connect-wallet-chip"]').click();
-        cy.get('[data-cy="import-button"]').click();
-        //TODO: replace this selector once the buttons are reorganized
-        cy.get(
-            'button:contains("Mnemonic"):not(:contains("Generate"))'
-        ).click();
-        cy.get('#mnemonic-input').type(filecoin.phrase);
-        cy.get('[data-cy="address"]').contains(filecoin.wallet);
-        cy.get('[data-cy="import-button"]')
+        filecoin.connectWallet(wallets.walletAlice);
+        filecoin.disconnectWallet();
+    });
+
+    it('should transfer FIL to an existing account', () => {
+        filecoin.connectWallet(wallets.walletBob);
+        cy.get('[data-cy="filecoin-send-chip"]')
             .click()
             .then(() => {
-                assertFilecoinWalletConnected();
-            })
+                cy.get('[data-cy="send-modal"]').should('be.visible');
+            });
+        cy.get('[data-cy="send-button"]').should('be.disabled');
+        cy.get('[data-cy="send-address-input"]').type(
+            wallets.walletCharlie.address
+        );
+        cy.get('[data-cy="send-amount-input"]').type('1');
+        cy.get('[data-cy="send-button"]')
+            .should('not.be.disabled')
+            .wait(2000)
+            .click()
             .then(() => {
-                checkConnectedWallet(filecoin.wallet);
+                cy.get('[data-cy="send-modal"]').should('not.exist');
             });
     });
 });
