@@ -1,15 +1,9 @@
-import { HistoryTableData } from 'src/store/history/types';
 import {
     AddressUtils,
     fromBytes32,
     ordinaryFormat,
     percentFormat,
 } from 'src/utils';
-
-interface HistoryTableProps {
-    columns?: Array<TableColumns>;
-    data?: Array<HistoryTableData>;
-}
 
 export interface TableColumns {
     Header: string;
