@@ -1,7 +1,7 @@
 import React from 'react';
-import styled from 'styled-components';
 import theme from 'src/theme';
-import { CurrencyInfo, currencyList } from 'src/utils/currencies';
+import { CurrencyInfo, currencyList } from 'src/utils/currencyList';
+import styled from 'styled-components';
 
 interface CurrencyContainerProps {
     ccy: string | number;

@@ -10,10 +10,12 @@ export const NextCouponPaymentCard = ({
     couponPayment,
     currency,
     filPrice,
+    onClick,
 }: {
     couponPayment: CouponPayment;
     currency: string;
     filPrice: number;
+    onClick: () => void;
 }) => {
     const couponUsdPayment = useMemo(
         () => (amount: number) => {
@@ -77,7 +79,8 @@ export const NextCouponPaymentCard = ({
                 />
             </div>
             <div>
-                <Button // onClick={handleLendOut}
+                <Button
+                    onClick={onClick}
                     text={'Pay Coupon'}
                     style={{
                         marginTop: 15,

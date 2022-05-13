@@ -27,6 +27,11 @@ export const Default: Story = () => {
                     couponPayment={couponPayment}
                     currency='FIL'
                     filPrice={8}
+                    onClick={() => {
+                        return {
+                            action: 'clicked',
+                        };
+                    }}
                 />
             </Router>
         </ThemeProvider>

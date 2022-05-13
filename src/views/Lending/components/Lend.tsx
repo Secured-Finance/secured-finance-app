@@ -1,7 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { connect, useDispatch, useSelector } from 'react-redux';
-import styled from 'styled-components';
-
 import { Button } from 'src/components/atoms';
 import { CurrencySelector, TermsSelector } from 'src/components/molecules';
 import { usePlaceOrder } from 'src/hooks/usePlaceOrder';
@@ -14,13 +12,9 @@ import {
 import { LendingStore } from 'src/store/lending/types';
 import { RootState } from 'src/store/types';
 import theme from 'src/theme';
-import {
-    currencyList,
-    formatInput,
-    percentFormat,
-    usdFormat,
-    termList,
-} from 'src/utils';
+import { formatInput, percentFormat, termList, usdFormat } from 'src/utils';
+import { currencyList } from 'src/utils/currencyList';
+import styled from 'styled-components';
 
 interface LendTabProps {
     lendingRates: any[];

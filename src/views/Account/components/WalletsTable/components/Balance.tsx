@@ -1,6 +1,6 @@
 import React from 'react';
+import { CurrencyInfo, currencyList } from 'src/utils/currencyList';
 import styled from 'styled-components';
-import { CurrencyInfo, currencyList } from '../../../../../utils/currencies';
 import { ordinaryFormat, usdFormat } from '../../../../../utils/formatNumbers';
 
 interface BalanceContainerProps {

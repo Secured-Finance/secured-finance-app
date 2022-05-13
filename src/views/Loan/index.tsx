@@ -3,9 +3,11 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { connect, useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { Button, Container, RenderTerms, Spacer } from 'src/components/atoms';
+import { SendModal } from 'src/components/organisms';
 import { Page } from 'src/components/templates';
 import useCollateralBook from 'src/hooks/useCollateralBook';
 import { useLoanInformation } from 'src/hooks/useLoanHistory';
+import useModal from 'src/hooks/useModal';
 import { RootState } from 'src/store/types';
 import theme from 'src/theme';
 import {
@@ -17,6 +19,7 @@ import {
     ordinaryFormat,
     percentFormat,
 } from 'src/utils';
+import { getCurrencyIndexFromCurrency } from 'src/utils/currencyList';
 import styled from 'styled-components';
 import { useWallet } from 'use-wallet';
 import { NextCouponPaymentCard } from '../../components/organisms/Loan/NextCouponPaymentCard';
@@ -49,6 +52,12 @@ const LoanScreen = () => {
     const getLoanCcy = (currency: string) => {
         return fromBytes32(currency);
     };
+
+    const [onPresentSendModal] = useModal(
+        <SendModal
+            ccyIndex={getCurrencyIndexFromCurrency(getLoanCcy(loan?.currency))}
+        />
+    );
 
     const handleNotional = () => {
         return (
@@ -263,6 +272,7 @@ const LoanScreen = () => {
                     <Spacer size='lg' />
                     <StyledColumn>
                         <NextCouponPaymentCard
+                            onClick={onPresentSendModal}
                             couponPayment={couponPayment}
                             currency={getLoanCcy(loan?.currency)}
                             filPrice={filPrice}
