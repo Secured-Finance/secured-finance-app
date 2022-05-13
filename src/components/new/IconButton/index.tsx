@@ -1,7 +1,7 @@
-import React from 'react';
 import cx from 'classnames';
-import cm from './IconButton.module.scss';
+import React from 'react';
 import { arrow } from '../icons';
+import cm from './IconButton.module.scss';
 
 export interface IIconButton
     extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -28,6 +28,7 @@ export const IconButton: React.FC<IIconButton> = ({
                 src={icon}
                 width={size}
                 className={withBackground && cm.iconWithBackground}
+                alt=''
             />
         </button>
     );
