@@ -25,6 +25,7 @@ export const currencyList = [
         index: 2,
         shortName: 'USDC',
         fullName: 'USDC',
+        icon: '',
     },
 ] as Array<CurrencyInfo>;
 
@@ -39,4 +40,11 @@ export const getCurrencyIndexFromCurrency = (currency: string) => {
     }
 
     return index;
+};
+
+export const getCurrencyBy = (label: keyof CurrencyInfo, value: string) => {
+    return currencyList.find(
+        ({ [label]: val }) =>
+            val.toString().toLowerCase() === value.toLowerCase()
+    );
 };

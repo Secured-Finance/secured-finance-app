@@ -1,6 +1,6 @@
+import cx from 'classnames';
 import React from 'react';
 import cm from './FieldValue.module.scss';
-import cx from 'classnames';
 
 export interface IFieldValue {
     field: string;
@@ -33,6 +33,7 @@ export const FieldValue: React.FC<IFieldValue> = ({
                 width={defaultImageSize}
                 height={defaultImageSize}
                 src={icon}
+                alt=''
             />
         ) : (
             <span className={cm.icon}>{icon}</span>

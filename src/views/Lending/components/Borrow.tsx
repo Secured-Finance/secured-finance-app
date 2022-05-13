@@ -248,7 +248,11 @@ const Borrow: React.FC<CombinedProps> = ({
                                         )
                                     }
                                 >
-                                    <img width={28} src={ccy.icon} />
+                                    <img
+                                        width={28}
+                                        src={ccy.icon}
+                                        alt={ccy.shortName}
+                                    />
                                     <StyledCurrencyText>
                                         {ccy.shortName}
                                     </StyledCurrencyText>
@@ -373,7 +377,11 @@ const Borrow: React.FC<CombinedProps> = ({
                                         )
                                     }
                                 >
-                                    <img width={28} src={ccy.icon} />
+                                    <img
+                                        width={28}
+                                        src={ccy.icon}
+                                        alt={ccy.shortName}
+                                    />
                                     <StyledCurrencyText>
                                         {ccy.shortName}
                                     </StyledCurrencyText>
