@@ -1,6 +1,8 @@
+import React from 'react';
 import arrow from './arrow.svg';
 import chevron from './chevron.svg';
 import close from './close.svg';
+import { IIcon } from './constants';
 import darkMode from './dark-mode.svg';
 import discord from './discord.svg';
 import ethereum from './ethereum.svg';
@@ -9,17 +11,15 @@ import filter from './filter.svg';
 import github from './github.svg';
 import lightMode from './light-mode.svg';
 import like from './like.svg';
+import { Logo } from './Logo';
 import medium from './medium.svg';
 import telegram from './telegram.svg';
 import twitter from './twitter.svg';
 import USD from './USD.svg';
 import verified from './verified.svg';
 import wallet from './wallet.svg';
-import React from 'react';
-import { IIcon } from './constants';
-import { Logo } from './Logo';
 
-interface ArrowIcon extends IIcon {
+interface ArrowIconProps extends IIcon {
     direction?: 'down' | 'up' | 'left' | 'right';
 }
 
@@ -65,7 +65,7 @@ const FilIcon: React.FC<IIcon> = ({ size = 24, fill, ...props }) => (
     </svg>
 );
 
-export const ArrowIcon: React.FC<ArrowIcon> = ({
+export const ArrowIcon: React.FC<ArrowIconProps> = ({
     fill = 'white',
     direction,
     size = 24,

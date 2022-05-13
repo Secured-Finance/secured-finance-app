@@ -1,18 +1,16 @@
 import axios, { AxiosResponse } from 'axios';
 import { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { ordinaryFormat } from 'src/utils';
-import { useWallet } from 'use-wallet';
 import {
+    AssetPrice,
     fetchAssetPrice,
     fetchAssetPriceFailure,
     updateEthUSDChange,
     updateEthUSDPrice,
-    AssetPrice,
     updateFilUSDChange,
     updateFilUSDPrice,
-    updateUSDCUSDPrice,
     updateUSDCUSDChange,
+    updateUSDCUSDPrice,
 } from '../store/assetPrices';
 import { RootState } from '../store/types';
 import useBlock from './useBlock';

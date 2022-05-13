@@ -2,10 +2,10 @@ import React, { useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import { ArrowIcon } from 'src/components/new/icons';
+import WalletProviderModal from 'src/components/organisms/WalletProviderModal/WalletProviderModal';
 import { CACHED_PROVIDER_KEY } from 'src/contexts/FilecoinWalletProvider';
 import useModal from 'src/hooks/useModal';
 import { isAnyWalletConnected } from 'src/store/wallets/selectors';
-import WalletProviderModal from 'src/components/organisms/WalletProviderModal/WalletProviderModal';
 
 export const WalletButton = () => {
     const isAccountConnected = localStorage.getItem(CACHED_PROVIDER_KEY);

@@ -1,20 +1,19 @@
 import BigNumber from 'bignumber.js';
 import React, { useEffect, useState } from 'react';
 import { connect, useDispatch, useSelector } from 'react-redux';
-import styled from 'styled-components';
-import useCollateralBook from 'src/hooks/useCollateralBook';
-import { RootState } from 'src/store/types';
-import theme from 'src/theme';
-import { formatDate, ordinaryFormat, percentFormat } from 'src/utils';
 import {
     Button,
     Modal,
-    ModalProps,
     ModalActions,
     ModalContent,
+    ModalProps,
     ModalTitle,
     RenderTerms,
 } from 'src/components/atoms';
+import { RootState } from 'src/store/types';
+import theme from 'src/theme';
+import { formatDate, ordinaryFormat, percentFormat } from 'src/utils';
+import styled from 'styled-components';
 
 interface LoanModalProps {
     loan?: any;
