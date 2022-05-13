@@ -34,9 +34,7 @@ import { ErrorModal } from './components/ErrorModal';
 import { FilTxFeeTable } from './components/FilTxFeeTable';
 import { GasTabsAndTable } from './components/GastabsAndTable';
 
-type CombinedProps = ModalProps & SendFormStore;
-
-const SendModal: React.FC<CombinedProps> = ({
+const SendModal = ({
     onDismiss,
     amount,
     currencyName,
@@ -45,7 +43,7 @@ const SendModal: React.FC<CombinedProps> = ({
     toAddress,
     ccyIndex,
     maxTxFee,
-}) => {
+}: SendFormStore & ModalProps) => {
     const [addrErr, setAddrErr] = useState(false);
     const [balanceErr, setBalanceErr] = useState(false);
     const [ongoingTx, setOngoingTx] = useState(false);

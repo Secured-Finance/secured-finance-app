@@ -1,10 +1,10 @@
 import React from 'react';
 import styled, { keyframes } from 'styled-components';
 
-export interface ModalProps {
+export type ModalProps = {
     onDismiss?: () => void;
     ccyIndex?: number;
-}
+};
 
 export const Modal: React.FC = ({ children }) => {
     return (
