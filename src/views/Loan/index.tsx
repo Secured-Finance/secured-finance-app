@@ -1,5 +1,5 @@
 import BigNumber from 'bignumber.js';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { connect, useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { Button, Container, RenderTerms, Spacer } from 'src/components/atoms';
@@ -16,16 +16,16 @@ import {
     getDisplayBalance,
     ordinaryFormat,
     percentFormat,
-    usdFormat,
 } from 'src/utils';
 import styled from 'styled-components';
 import { useWallet } from 'use-wallet';
+import { NextCouponPaymentCard } from '../../components/organisms/Loan/NextCouponPaymentCard';
 
 interface LoanScreenProps {
     loan?: any;
 }
 
-interface CouponPayment {
+export interface CouponPayment {
     amount: number;
     id: number | string;
     isDone: boolean;
@@ -35,20 +35,10 @@ interface CouponPayment {
     __typename?: string;
 }
 
-const initCoupon: CouponPayment = {
-    amount: 0,
-    id: 0,
-    isDone: false,
-    notice: 1648016979,
-    payment: 1649226579,
-    txHash: '0x',
-    __typename: 'SchedulePayment',
-};
-
 type CombinedProps = LoanScreenProps;
 
 const LoanScreen: React.FC<CombinedProps> = () => {
-    const params: any = useParams();
+    const params = useParams();
     const { account } = useWallet();
     const loan = useLoanInformation(params.loanId);
     const [couponPayment, setCouponPayment] = useState<CouponPayment>();
@@ -127,35 +117,36 @@ const LoanScreen: React.FC<CombinedProps> = () => {
         return ordinaryFormat(totalRepay) + ` ${getLoanCcy(loan?.currency)}`;
     };
 
-    const nextCouponPayment = () => {
+    const nextCouponPayment = useCallback(() => {
         const payment: Array<CouponPayment> =
             loan?.schedule.payments?.filter((payment: any) => {
                 return payment.isDone === false;
             }) || [];
         setCouponPayment(payment[0]);
-    };
+    }, [loan]);
 
-    const couponUsdPayment = (amount: number) => {
-        const usdPayment = new BigNumber(amount)
-            .multipliedBy(filPrice)
-            .toNumber();
-        return usdFormat(usdPayment);
-    };
-
-    const handleCounterpartyAddr = () => {
+    const handleCounterpartyAddr = useCallback(() => {
         if (loan.lender === account.toLowerCase()) {
             setCounterpartyAddr(loan?.borrower);
         } else {
             setCounterpartyAddr(loan?.lender);
         }
-    };
+    }, [loan, account]);
 
     useEffect(() => {
         if (loan != null) {
             nextCouponPayment();
             handleCounterpartyAddr();
         }
-    }, [dispatch, setCouponPayment, setCounterpartyAddr, loan, account]);
+    }, [
+        dispatch,
+        setCouponPayment,
+        setCounterpartyAddr,
+        loan,
+        account,
+        nextCouponPayment,
+        handleCounterpartyAddr,
+    ]);
 
     return (
         <Page background={theme.colors.background}>
@@ -277,72 +268,11 @@ const LoanScreen: React.FC<CombinedProps> = () => {
                     </StyledColumn>
                     <Spacer size='lg' />
                     <StyledColumn>
-                        <StyledSubcontainer>
-                            <StyledLabelTitle textTransform={'capitalize'}>
-                                Next Coupon Payment
-                            </StyledLabelTitle>
-                            <StyledItemContainer
-                                marginBottom={'0px'}
-                                background={'none'}
-                            >
-                                <StyledRowContainer>
-                                    <StyledItemText
-                                        fontSize={16}
-                                        fontWeight={600}
-                                    >
-                                        {ordinaryFormat(couponPayment?.amount) +
-                                            ` ${getLoanCcy(loan?.currency)}`}
-                                    </StyledItemText>
-                                    <StyledItemText color={theme.colors.gray}>
-                                        {couponUsdPayment(
-                                            couponPayment?.amount
-                                        )}
-                                    </StyledItemText>
-                                </StyledRowContainer>
-                                <StyledRowContainer marginTop={'10px'}>
-                                    <StyledItemText
-                                        fontSize={12}
-                                        opacity={0.9}
-                                        fontWeight={400}
-                                    >
-                                        Payment Notification
-                                    </StyledItemText>
-                                    <StyledItemText
-                                        fontSize={12}
-                                        fontWeight={400}
-                                    >
-                                        {formatDate(couponPayment?.notice)}
-                                    </StyledItemText>
-                                </StyledRowContainer>
-                                <StyledRowContainer marginTop={'10px'}>
-                                    <StyledItemText
-                                        fontSize={12}
-                                        opacity={0.9}
-                                        fontWeight={400}
-                                    >
-                                        Payment Due Date
-                                    </StyledItemText>
-                                    <StyledItemText
-                                        fontSize={12}
-                                        fontWeight={400}
-                                    >
-                                        {formatDate(couponPayment?.payment)}
-                                    </StyledItemText>
-                                </StyledRowContainer>
-                                <Button
-                                    // onClick={handleLendOut}
-                                    text={'Pay Coupon'}
-                                    style={{
-                                        marginTop: 15,
-                                        background: theme.colors.buttonBlue,
-                                        fontSize: theme.sizes.callout,
-                                        fontWeight: 500,
-                                        color: theme.colors.white,
-                                    }}
-                                    // disabled={!(notional > 0)}
-                                />
-                            </StyledItemContainer>
-                        </StyledSubcontainer>
+                        <NextCouponPaymentCard
+                            couponPayment={couponPayment}
+                            currency={getLoanCcy(loan?.currency)}
+                            filPrice={filPrice}
+                        ></NextCouponPaymentCard>
                         {colBook.vault !== '' ? (
                             <CounterpartyContainer>
                                 <StyledSubcontainer>
