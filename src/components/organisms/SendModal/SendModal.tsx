@@ -21,7 +21,7 @@ import {
     SendFormStore,
     updateSendAmount,
     updateSendCurrency,
-    updateSendToAddreess,
+    updateSendToAddress,
 } from 'src/store/sendForm';
 import { RootState } from 'src/store/types';
 import { getFilActions } from 'src/store/wallets/selectors';
@@ -53,20 +53,17 @@ const SendModal: React.FC<CombinedProps> = ({
     const { filecoinBalance } = useFilecoinWalletInfo();
     const dispatch = useDispatch();
     const filecoinActions = useSelector(getFilActions);
-    const ethPrice = useSelector(
-        (state: RootState) => state.assetPrices.ethereum.price
-    );
-    const filPrice = useSelector(
-        (state: RootState) => state.assetPrices.filecoin.price
-    );
-    const usdcPrice = useSelector(
-        (state: RootState) => state.assetPrices.usdc.price
-    );
+    const {
+        ethereum: { price: ethPrice },
+        filecoin: { price: filPrice },
+        usdc: { price: usdcPrice },
+    } = useSelector((state: RootState) => state.assetPrices);
+
     const maxFilTxFee = Number(maxTxFee.toFil());
 
     const handleRecipientAddress = useCallback(
         (e: React.FormEvent<HTMLInputElement>) => {
-            dispatch(updateSendToAddreess(e.currentTarget.value));
+            dispatch(updateSendToAddress(e.currentTarget.value));
         },
         [dispatch]
     );

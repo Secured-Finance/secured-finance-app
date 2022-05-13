@@ -30,7 +30,7 @@ export const GasTabsAndTable: React.FC = () => {
     const handleSelectTab =
         (tab: React.SetStateAction<string>, gasPrice: number) => () => {
             setSelectedTxFee(tab);
-            dispatch(updateSendGasPrice(gasPrice.toFixed(0)));
+            dispatch(updateSendGasPrice(parseInt(gasPrice.toFixed(0))));
         };
 
     const updateGasPrices = useCallback(() => {
@@ -39,7 +39,7 @@ export const GasTabsAndTable: React.FC = () => {
             cGasTabs.set('Standard', gasPrices.standard);
             cGasTabs.set('Fast', gasPrices.fast);
             cGasTabs.set('Instant', gasPrices.instant);
-            dispatch(updateSendGasPrice(gasPrices.fast.toFixed(0)));
+            dispatch(updateSendGasPrice(parseInt(gasPrices.fast.toFixed(0))));
         });
         setGasTabs(cGasTabs);
         setGasUpdated(true);

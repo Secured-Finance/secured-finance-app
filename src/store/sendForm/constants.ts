@@ -12,3 +12,16 @@ export const UPDATE_TO_ADDRESS = 'UPDATE_TO_ADDRESS';
 export const RESET_SEND_FORM = 'RESET_SEND_FORM';
 
 export const SET_MAX_TX_FEE = 'SET_MAX_TX_FEE';
+
+export type SendFormActionTypes =
+    | typeof FETCH_SEND_STORE
+    | typeof FETCH_SEND_STORE_FAILURE
+    | typeof UPDATE_CCY_INDEX
+    | typeof UPDATE_CCY_NAME
+    | typeof UPDATE_CCY_SHORT_NAME
+    | typeof UPDATE_AMOUNT
+    | typeof UPDATE_GAS_PRICE
+    | typeof UPDATE_TX_FEE
+    | typeof UPDATE_TO_ADDRESS
+    | typeof RESET_SEND_FORM
+    | typeof SET_MAX_TX_FEE;
