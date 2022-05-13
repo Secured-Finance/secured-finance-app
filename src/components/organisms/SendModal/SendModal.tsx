@@ -26,7 +26,8 @@ import {
 import { RootState } from 'src/store/types';
 import { getFilActions } from 'src/store/wallets/selectors';
 import theme from 'src/theme';
-import { currencyList, formatInput } from 'src/utils';
+import { formatInput } from 'src/utils';
+import { currencyList } from 'src/utils/currencyList';
 import styled from 'styled-components';
 import { isAddress } from 'web3-utils';
 import { ErrorModal } from './components/ErrorModal';

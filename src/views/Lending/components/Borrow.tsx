@@ -18,12 +18,12 @@ import { RootState } from 'src/store/types';
 import theme from 'src/theme';
 import {
     collateralList,
-    currencyList,
     formatInput,
     percentFormat,
     termList,
     usdFormat,
 } from 'src/utils';
+import { currencyList } from 'src/utils/currencyList';
 import styled from 'styled-components';
 
 interface BorrowTabProps {

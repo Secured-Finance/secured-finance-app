@@ -23,13 +23,13 @@ import {
 import { RootState } from 'src/store/types';
 import theme from 'src/theme';
 import {
-    currencyList,
     DEFAULT_COLLATERAL_VAULT,
     formatInput,
     getDisplayBalance,
     getFullDisplayBalanceNumber,
     getUSDFormatBalanceNumber,
 } from 'src/utils';
+import { currencyList } from 'src/utils/currencyList';
 import styled from 'styled-components';
 import { useWallet } from 'use-wallet';
 

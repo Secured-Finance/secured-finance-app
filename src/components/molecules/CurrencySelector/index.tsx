@@ -1,8 +1,9 @@
 import React from 'react';
-import styled from 'styled-components';
-import theme from 'src/theme';
-import { collateralList, CurrencyInfo, currencyList } from 'src/utils';
 import { ArrowSVG } from 'src/components/atoms';
+import theme from 'src/theme';
+import { collateralList } from 'src/utils';
+import { CurrencyInfo, currencyList } from 'src/utils/currencyList';
+import styled from 'styled-components';
 
 interface CurrencySelectorProps {
     selectedCcy: string;

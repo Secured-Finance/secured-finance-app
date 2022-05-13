@@ -1,34 +1,7 @@
-import usdcLogo from '../assets/coins/usdc.png';
-import ethLogo from '../assets/coins/eth.png';
-import filLogo from '../assets/coins/fil.png';
 import { ethereum, FilIcon } from 'src/components/new/icons';
-
-export interface CurrencyInfo {
-    index: number;
-    icon: string;
-    shortName: string;
-    fullName: string;
-}
-
-export const currencyList = [
-    {
-        index: 0,
-        icon: ethLogo,
-        shortName: 'ETH',
-        fullName: 'Ethereum',
-    },
-    {
-        index: 1,
-        icon: filLogo,
-        shortName: 'FIL',
-        fullName: 'Filecoin',
-    },
-    {
-        index: 2,
-        shortName: 'USDC',
-        fullName: 'USDC',
-    },
-] as Array<CurrencyInfo>;
+import ethLogo from '../assets/coins/eth.png';
+import usdcLogo from '../assets/coins/usdc.png';
+import { CurrencyInfo } from './currencyList';
 
 export const currencyListDropdown = [
     {
