@@ -8,6 +8,7 @@ import { Page } from 'src/components/templates';
 import useCollateralBook from 'src/hooks/useCollateralBook';
 import { useLoanInformation } from 'src/hooks/useLoanHistory';
 import useModal from 'src/hooks/useModal';
+import { updateSendAmount, updateSendToAddress } from 'src/store/sendForm';
 import { RootState } from 'src/store/types';
 import theme from 'src/theme';
 import {
@@ -140,6 +141,8 @@ const LoanScreen = () => {
         if (loan != null) {
             nextCouponPayment();
             handleCounterpartyAddr();
+            dispatch(updateSendToAddress(counterpartyAddr));
+            dispatch(updateSendAmount(loan.notional));
         }
     }, [
         dispatch,
@@ -149,6 +152,7 @@ const LoanScreen = () => {
         account,
         nextCouponPayment,
         handleCounterpartyAddr,
+        counterpartyAddr,
     ]);
 
     return (
