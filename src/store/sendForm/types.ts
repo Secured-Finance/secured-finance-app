@@ -1,4 +1,5 @@
 import { FilecoinNumber } from '@glif/filecoin-number';
+import { SendFormActionTypes } from './constants';
 
 export interface SendFormStore {
     currencyIndex: number;
@@ -23,3 +24,8 @@ export const defaultStore = {
     isLoading: false,
     maxTxFee: new FilecoinNumber(0, 'attofil'),
 } as SendFormStore;
+
+export type SendFormAction = {
+    type: SendFormActionTypes;
+    data: number | string | FilecoinNumber;
+};

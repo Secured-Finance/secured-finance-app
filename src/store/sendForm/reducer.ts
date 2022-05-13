@@ -1,10 +1,13 @@
-import produce from 'immer';
+import { FilecoinNumber } from '@glif/filecoin-number';
 import * as constants from './constants';
-import { defaultStore, SendFormStore } from './types';
+import { defaultStore, SendFormAction, SendFormStore } from './types';
 
 const initialStore: SendFormStore = defaultStore;
 
-const sendFormReducer = (state: SendFormStore = initialStore, action: any) => {
+const sendFormReducer = (
+    state: SendFormStore = initialStore,
+    action: SendFormAction
+): SendFormStore => {
     switch (action.type) {
         case constants.FETCH_SEND_STORE:
             return {
@@ -21,43 +24,43 @@ const sendFormReducer = (state: SendFormStore = initialStore, action: any) => {
             return {
                 ...state,
                 isLoading: false,
-                currencyIndex: action.data,
+                currencyIndex: action.data as number,
             };
         case constants.UPDATE_CCY_SHORT_NAME:
             return {
                 ...state,
                 isLoading: false,
-                currencyShortName: action.data,
+                currencyShortName: action.data as string,
             };
         case constants.UPDATE_CCY_NAME:
             return {
                 ...state,
                 isLoading: false,
-                currencyName: action.data,
+                currencyName: action.data as string,
             };
         case constants.UPDATE_AMOUNT:
             return {
                 ...state,
                 isLoading: false,
-                amount: action.data,
+                amount: action.data as number,
             };
         case constants.UPDATE_GAS_PRICE:
             return {
                 ...state,
                 isLoading: false,
-                gasPrice: action.data,
+                gasPrice: action.data as number,
             };
         case constants.UPDATE_TX_FEE:
             return {
                 ...state,
                 isLoading: false,
-                txFee: action.data,
+                txFee: action.data as number,
             };
         case constants.UPDATE_TO_ADDRESS:
             return {
                 ...state,
                 isLoading: false,
-                toAddress: action.data,
+                toAddress: action.data as string,
             };
         case constants.RESET_SEND_FORM:
             return defaultStore;
@@ -65,7 +68,7 @@ const sendFormReducer = (state: SendFormStore = initialStore, action: any) => {
             return {
                 ...state,
                 isLoading: false,
-                maxTxFee: action.data,
+                maxTxFee: action.data as FilecoinNumber,
             };
         default:
             return state;
