@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { GasPriceOracle } from 'gas-price-oracle';
-import { updateSendGasPrice } from 'src/store/sendForm';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Button } from 'src/components/atoms';
+import { useEstimateTxFee } from 'src/hooks/useSendEth';
+import { updateSendGasPrice } from 'src/store/sendForm';
+import { getGasPrice, getTxFee } from 'src/store/sendForm/selectors';
 import theme from 'src/theme';
 import styled from 'styled-components';
-import { getGasPrice, getTxFee } from 'src/store/sendForm/selectors';
-import { useEstimateTxFee } from 'src/hooks/useSendEth';
 
 export const GasTabsAndTable: React.FC = () => {
     const gasPrice = useSelector(getGasPrice);
@@ -19,12 +19,13 @@ export const GasTabsAndTable: React.FC = () => {
     const [gasTabs, setGasTabs] = useState(defaultGasPrices);
     const [selectedTxFee, setSelectedTxFee] = useState('Fast');
     const [isGasUpdated, setGasUpdated] = useState(false);
-    const tabs: Array<any> = [];
+    const tabs: React.ReactElement[] = [];
 
     useEstimateTxFee(gasPrice);
 
     const dispatch = useDispatch();
-    const oracle = new GasPriceOracle();
+
+    const oracle = useRef(new GasPriceOracle());
 
     const handleSelectTab =
         (tab: React.SetStateAction<string>, gasPrice: number) => () => {
@@ -32,9 +33,9 @@ export const GasTabsAndTable: React.FC = () => {
             dispatch(updateSendGasPrice(gasPrice.toFixed(0)));
         };
 
-    const updateGasPrices = () => {
+    const updateGasPrices = useCallback(() => {
         const cGasTabs = new Map(gasTabs);
-        oracle.fetchMedianGasPriceOffChain().then(gasPrices => {
+        oracle.current.fetchMedianGasPriceOffChain().then(gasPrices => {
             cGasTabs.set('Standard', gasPrices.standard);
             cGasTabs.set('Fast', gasPrices.fast);
             cGasTabs.set('Instant', gasPrices.instant);
@@ -42,13 +43,13 @@ export const GasTabsAndTable: React.FC = () => {
         });
         setGasTabs(cGasTabs);
         setGasUpdated(true);
-    };
+    }, [gasTabs, dispatch]);
 
     useEffect(() => {
         if (!isGasUpdated) {
             updateGasPrices();
         }
-    }, [isGasUpdated]);
+    }, [isGasUpdated, updateGasPrices]);
 
     return (
         <>

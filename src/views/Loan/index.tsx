@@ -21,10 +21,6 @@ import styled from 'styled-components';
 import { useWallet } from 'use-wallet';
 import { NextCouponPaymentCard } from '../../components/organisms/Loan/NextCouponPaymentCard';
 
-interface LoanScreenProps {
-    loan?: any;
-}
-
 export interface CouponPayment {
     amount: number;
     id: number | string;
@@ -35,9 +31,7 @@ export interface CouponPayment {
     __typename?: string;
 }
 
-type CombinedProps = LoanScreenProps;
-
-const LoanScreen: React.FC<CombinedProps> = () => {
+const LoanScreen = () => {
     const params = useParams();
     const { account } = useWallet();
     const loan = useLoanInformation(params.loanId);
@@ -119,7 +113,7 @@ const LoanScreen: React.FC<CombinedProps> = () => {
 
     const nextCouponPayment = useCallback(() => {
         const payment: Array<CouponPayment> =
-            loan?.schedule.payments?.filter((payment: any) => {
+            loan?.schedule.payments?.filter((payment: { isDone: boolean }) => {
                 return payment.isDone === false;
             }) || [];
         setCouponPayment(payment[0]);
