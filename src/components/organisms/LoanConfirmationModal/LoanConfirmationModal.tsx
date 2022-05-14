@@ -44,9 +44,9 @@ const LoanConfirmationModal: React.FC<CombinedProps> = ({
     onDismiss,
     loan,
 }) => {
-    const [schedule, setSchedule] = useState<Array<ScheduleItem>>([]);
-    const [couponPayment, setCouponPayment] = useState<NextCoupon>(initCoupon);
-    const [counterpartyAddr, setCounterpartyAddr] = useState('');
+    const [, setSchedule] = useState<Array<ScheduleItem>>([]);
+    const [, setCouponPayment] = useState<NextCoupon>(initCoupon);
+    const [, setCounterpartyAddr] = useState('');
     const dispatch = useDispatch();
     const filPrice = useSelector(
         (state: RootState) => state.assetPrices.filecoin.price

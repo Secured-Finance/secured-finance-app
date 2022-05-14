@@ -95,6 +95,8 @@ const YieldGraph: React.FC<CombinedProps> = ({
             ],
         };
         setData(graphData);
+        //TODO: rework everything here
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [borrowRates, lendingRates, midRate]);
 
     return (

@@ -14,7 +14,7 @@ export const useBilateralCollateralPosition = (
         user,
         counterparty,
         ccyName
-    ) as any;
+    );
 
     useMemo(() => {
         if (position) {

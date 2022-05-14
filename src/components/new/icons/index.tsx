@@ -70,7 +70,7 @@ export const ArrowIcon: React.FC<ArrowIconProps> = ({
     direction,
     size = 24,
 }) => {
-    const angles: any = {
+    const angles = {
         left: 0,
         down: -90,
         up: 90,

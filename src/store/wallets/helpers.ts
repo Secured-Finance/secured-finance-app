@@ -1,5 +1,6 @@
 import { BigNumber, FilecoinNumber } from '@glif/filecoin-number';
 import LotusRpcEngine from '@glif/filecoin-rpc-client';
+import Filecoin from '@glif/filecoin-wallet-provider';
 import { Action } from 'redux';
 import { ThunkDispatch } from 'redux-thunk';
 import {
@@ -48,7 +49,7 @@ export const recalculateTotalUSDBalance = () => {
 };
 
 export const updateFilWalletViaProvider = (
-    walletProvider: any,
+    walletProvider: Filecoin,
     filAddr: string
 ) => {
     return async (dispatch: ThunkDispatch<RootState, void, Action>) => {

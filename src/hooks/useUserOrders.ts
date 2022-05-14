@@ -38,13 +38,9 @@ export const useOpenOrders = (ccy: string, term: string) => {
     }, [lendingMarketAddress, account]);
 
     useEffect(() => {
-        let isMounted = true;
         if (lendingMarketAddress != null && account) {
             fetchOpenOrders();
         }
-        return () => {
-            isMounted = false;
-        };
     }, [ccy, term, lendingMarketAddress, account, fetchOpenOrders]);
 
     return openOrders;

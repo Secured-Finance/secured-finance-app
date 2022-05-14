@@ -1,7 +1,8 @@
+import { Dispatch } from '@reduxjs/toolkit';
 import * as constants from './constants';
 
 export function updateMainCurrency(data: string) {
-    return (dispatch: any) => {
+    return (dispatch: Dispatch) => {
         dispatch(updateSelectedCurrency(data));
         switch (data) {
             case 'FIL':
@@ -23,13 +24,13 @@ export function updateMainCurrency(data: string) {
 }
 
 export function updateMainCollateralCurrency(data: string) {
-    return (dispatch: any) => {
+    return (dispatch: Dispatch) => {
         dispatch(updateCollateralCurrency(data));
     };
 }
 
 export function updateMainTerms(data: string) {
-    return (dispatch: any) => {
+    return (dispatch: Dispatch) => {
         dispatch(updateSelectedTerms(data));
         switch (data) {
             case '3 month':
