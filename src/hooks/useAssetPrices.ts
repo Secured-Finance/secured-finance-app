@@ -28,52 +28,44 @@ const useAssetPrice = (
     changeAction: (data: number) => void
 ) => {
     const block = useBlock();
-    const reqUrl =
-        'https://api.coingecko.com/api/v3/simple/price?ids=' +
-        asset +
-        '&vs_currencies=usd&include_24hr_change=true';
+
     const dispatch = useDispatch();
 
-    const fetchPriceRequest = useCallback(
-        async (isMounted: boolean) => {
-            await dispatch(fetchAssetPrice());
-            const response: any = await axios
-                .get(reqUrl)
-                .then(async (response: AxiosResponse<ICoinGeckoResponse>) => {
-                    if (response.status === 200) {
-                        if (
-                            response.data &&
-                            response.data[asset].usd &&
-                            response.data[asset].usd_24h_change
-                        ) {
-                            await dispatch(
-                                priceAction(
-                                    Number(response.data[asset].usd.toFixed(2))
-                                )
-                            );
-                            await dispatch(
-                                changeAction(
-                                    response.data[asset].usd_24h_change
-                                )
-                            );
-                        }
+    const fetchPriceRequest = useCallback(async () => {
+        const reqUrl =
+            'https://api.coingecko.com/api/v3/simple/price?ids=' +
+            asset +
+            '&vs_currencies=usd&include_24hr_change=true';
+        dispatch(fetchAssetPrice());
+        await axios
+            .get(reqUrl)
+            .then(async (response: AxiosResponse<ICoinGeckoResponse>) => {
+                if (response.status === 200) {
+                    if (
+                        response.data &&
+                        response.data[asset].usd &&
+                        response.data[asset].usd_24h_change
+                    ) {
+                        dispatch(
+                            priceAction(
+                                Number(response.data[asset].usd.toFixed(2))
+                            )
+                        );
+                        dispatch(
+                            changeAction(response.data[asset].usd_24h_change)
+                        );
                     }
-                })
-                .catch(function (error) {
-                    dispatch(fetchAssetPriceFailure());
-                    console.log(error);
-                });
-        },
-        [dispatch]
-    );
+                }
+            })
+            .catch(function (error) {
+                dispatch(fetchAssetPriceFailure());
+                console.log(error);
+            });
+    }, [asset, changeAction, dispatch, priceAction]);
 
     useEffect(() => {
-        let isMounted = true;
-        fetchPriceRequest(isMounted);
-        return () => {
-            isMounted = false;
-        };
-    }, [block, dispatch]);
+        fetchPriceRequest();
+    }, [block, dispatch, fetchPriceRequest]);
 };
 
 export const useEthereumUsd = (): AssetPrice => {

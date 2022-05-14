@@ -32,13 +32,6 @@ const MarketInfo: React.FC<LendingTerminalStore> = ({
         return assetDelta.toNumber();
     };
 
-    const filToEthChange = () => {
-        const changeDelta = new BigNumber(filPrice.change).minus(
-            new BigNumber(ethPrice.change)
-        );
-        return changeDelta.toNumber();
-    };
-
     return (
         <StyledMarketInfo>
             <StyledMarketInfoContainer>

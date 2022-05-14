@@ -28,9 +28,9 @@ export const useRates = (ccy: string, type: number) => {
                 default:
                     break;
             }
-            await setRates(rates);
+            setRates(rates);
         },
-        [securedFinance, ccy]
+        [type, securedFinance]
     );
 
     useEffect(() => {
@@ -41,7 +41,7 @@ export const useRates = (ccy: string, type: number) => {
         return () => {
             isMounted = false;
         };
-    }, [block, setRates, ccy]);
+    }, [block, setRates, ccy, securedFinance, fetchYieldCurve]);
 
     return rates;
 };

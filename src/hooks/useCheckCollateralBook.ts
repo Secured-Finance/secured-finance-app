@@ -10,20 +10,16 @@ const useCheckCollateralBook = (account: string) => {
     const fetchCollateralBook = useCallback(async () => {
         const status = await securedFinance.checkRegisteredUser(account);
         setStatus(status);
-    }, [dispatch, securedFinance, account]);
+    }, [securedFinance, account]);
 
     useEffect(() => {
-        let isMounted = true;
         if (account === null) {
             setStatus(false);
         }
         if (securedFinance && account !== '') {
             fetchCollateralBook();
         }
-        return () => {
-            isMounted = false;
-        };
-    }, [dispatch, securedFinance, account]);
+    }, [dispatch, securedFinance, account, fetchCollateralBook]);
 
     return status;
 };

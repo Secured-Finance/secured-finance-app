@@ -75,6 +75,18 @@ const CollateralModal: React.FC<CombinedProps> = ({
         [dispatch, setButtonOpen]
     );
 
+    const isEnoughBalance = useCallback(
+        (amount: string) => {
+            switch (currencyIndex) {
+                case 0:
+                    return new BigNumber(amount).isLessThanOrEqualTo(
+                        new BigNumber(ethBalance)
+                    );
+            }
+        },
+        [ethBalance, currencyIndex]
+    );
+
     const handleCollateralAmount = useCallback(
         (e: React.FormEvent<HTMLInputElement>) => {
             dispatch(updateCollateralAmount(e.currentTarget.value));
@@ -84,17 +96,8 @@ const CollateralModal: React.FC<CombinedProps> = ({
                 setBalanceErr(false);
             }
         },
-        [dispatch]
+        [dispatch, isEnoughBalance]
     );
-
-    const isEnoughBalance = (amount: string) => {
-        switch (currencyIndex) {
-            case 0:
-                return new BigNumber(amount).isLessThanOrEqualTo(
-                    new BigNumber(ethBalance)
-                );
-        }
-    };
 
     const { onRegisterUser } = useRegisterUser();
     const { onDepositCollateral } = useDepositCollateral(
@@ -123,7 +126,7 @@ const CollateralModal: React.FC<CombinedProps> = ({
         } catch (e) {
             console.log(e);
         }
-    }, [setCollateralTx, status, amount]);
+    }, [status, onDepositCollateral, onDismiss, onRegisterUser]);
 
     const renderBalance = useMemo(() => {
         return (
@@ -131,11 +134,11 @@ const CollateralModal: React.FC<CombinedProps> = ({
                 {ethBalance} {currencyShortName}
             </span>
         );
-    }, [currencyIndex, currencyShortName]);
+    }, [currencyShortName, ethBalance]);
 
     const TotalUsdAmount = useMemo(() => {
         return (amount * ethPrice).toFixed(2);
-    }, [amount, currencyShortName]);
+    }, [amount, ethPrice]);
 
     return (
         <Modal>
@@ -358,19 +361,6 @@ const StyledCurrencyInput = styled.div`
     align-items: center;
 `;
 
-const StyledPortfolioText = styled.div`
-    margin-top: 5px;
-    font-size: ${props => props.theme.sizes.subhead}px;
-    color: ${props => props.theme.colors.white};
-    font-weight: 500;
-`;
-
-const StyledPortfolioInfoContainer = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-`;
-
 const StyledInput = styled.input`
     background-color: transparent;
     height: 42px;
@@ -397,16 +387,6 @@ const StyledRowContainer = styled.div<StyledRowContainerProps>`
     justify-content: space-between;
     align-items: center;
     width: 100%;
-`;
-
-interface StyledHealthRatioTextProps {
-    color?: string;
-}
-
-const StyledHealthRatioText = styled.div<StyledHealthRatioTextProps>`
-    font-size: ${props => props.theme.sizes.subhead}px;
-    color: ${props => (props.color ? props.color : props.theme.colors.white)};
-    font-weight: 500;
 `;
 
 interface StyledAddressContainerProps {
@@ -476,14 +456,6 @@ const StyledDropdownItem = styled.li`
     align-items: center;
     padding: 8px 8px;
     border-bottom: 0.5px solid ${props => props.theme.colors.lightGray[1]};
-`;
-
-const StyledGasTabs = styled.div`
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    text-transform: uppercase;
-    padding: 0;
 `;
 
 interface StyledCurrencyTextProps {
