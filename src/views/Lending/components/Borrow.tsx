@@ -2,9 +2,7 @@ import React, { useCallback, useMemo, useState } from 'react';
 import { connect, useDispatch, useSelector } from 'react-redux';
 import { Button } from 'src/components/atoms';
 import { CurrencySelector, TermsSelector } from 'src/components/molecules';
-import { useDepositCollateral } from 'src/hooks/useDepositCollateral';
 import { usePlaceOrder } from 'src/hooks/usePlaceOrder';
-import { useRegisterUser } from 'src/hooks/useRegisterUser';
 import {
     updateBorrowAmount,
     updateCollateralAmount,
@@ -30,7 +28,6 @@ interface BorrowTabProps {
 }
 
 type CombinedProps = BorrowTabProps & LendingStore;
-const prices = [551.24, 30.54, 1];
 
 const Borrow: React.FC<CombinedProps> = ({
     borrowRates,
@@ -56,29 +53,11 @@ const Borrow: React.FC<CombinedProps> = ({
         (state: RootState) => state.assetPrices.usdc.price
     );
 
-    const [requestedCollateral, setRequestedCollateral] = useState(false);
-    const [pendingTx, setPendingTx] = useState(false);
+    const [, setPendingTx] = useState(false);
     const [buttonOpen, setButtonOpen] = useState(false);
     const [collateralOpen, setCollateralOpen] = useState(false);
     const [termsOpen, setTermsOpen] = useState(false);
 
-    const { onRegisterUser } = useRegisterUser();
-    const handleCollateralPayment = useCallback(async () => {
-        try {
-            setRequestedCollateral(true);
-            const txHash = await onRegisterUser();
-            if (!txHash) {
-                setRequestedCollateral(false);
-            }
-        } catch (e) {
-            console.log(e);
-        }
-    }, [onRegisterUser, setRequestedCollateral]);
-
-    const { onDepositCollateral } = useDepositCollateral(
-        selectedCcy,
-        collateralAmount
-    );
     const { onPlaceOrder } = usePlaceOrder(
         selectedCcy,
         selectedTerms,

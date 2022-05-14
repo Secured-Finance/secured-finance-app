@@ -1,22 +1,22 @@
+import Filecoin from '@glif/filecoin-wallet-provider';
 import {
+    ILedger,
     initialLedgerState,
-    LEDGER_USER_INITIATED_IMPORT,
-    LEDGER_NOT_FOUND,
-    LEDGER_RESET_STATE,
+    LEDGER_BAD_VERSION,
+    LEDGER_BUSY,
     LEDGER_CONNECTED,
     LEDGER_ESTABLISHING_CONNECTION_W_FILECOIN_APP,
     LEDGER_FILECOIN_APP_NOT_OPEN,
     LEDGER_FILECOIN_APP_OPEN,
     LEDGER_LOCKED,
-    LEDGER_UNLOCKED,
+    LEDGER_NOT_FOUND,
     LEDGER_REPLUG,
-    LEDGER_BUSY,
+    LEDGER_RESET_STATE,
+    LEDGER_UNLOCKED,
     LEDGER_USED_BY_ANOTHER_APP,
-    LEDGER_BAD_VERSION,
+    LEDGER_USER_INITIATED_IMPORT,
     WEBUSB_UNSUPPORTED,
-    ILedger,
 } from './ledgerStateManagement';
-import Filecoin from '@glif/filecoin-wallet-provider';
 
 interface IInitialState {
     walletType: string;
@@ -74,7 +74,7 @@ export const resetState = () => ({
 type Payload = { provider: Filecoin; walletType: string };
 
 /* REDUCER */
-export default (
+const reducer = (
     state: IInitialState = initialState,
     action: { type: string; payload: Payload; error: string }
 ) => {
@@ -232,3 +232,5 @@ export default (
             return state;
     }
 };
+
+export default reducer;

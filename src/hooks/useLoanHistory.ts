@@ -1,7 +1,12 @@
+import {
+    useBorrowingDeals,
+    useLendingDeals,
+    useLoanInfo,
+} from '@secured-finance/sf-graph-client';
 import { useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { HistoryTableData } from 'src/store/history/types';
 import { useWallet } from 'use-wallet';
-import { RootState } from '../store/types';
 import {
     failSetBorrowingHistory,
     failSetLendingHistory,
@@ -9,12 +14,7 @@ import {
     setLendingHistory,
     startSetHistory,
 } from '../store/history';
-import {
-    useBorrowingDeals,
-    useLendingDeals,
-    useLoanInfo,
-} from '@secured-finance/sf-graph-client';
-import { HistoryTableData } from 'src/store/history/types';
+import { RootState } from '../store/types';
 
 export const useLoanDeals = (skip = 0) => {
     const { account } = useWallet();
@@ -60,7 +60,7 @@ export const useBorrowDeals = (skip = 0) => {
 
 export const useLoanInformation = (id: string) => {
     const [loanInfo, setLoanInfo] = useState(null);
-    const loan = useLoanInfo(id) as any;
+    const loan = useLoanInfo(id);
 
     useMemo(() => {
         if (loan) {

@@ -37,7 +37,7 @@ const useCollateralBook = (account: string, vault: string) => {
         (state: RootState) => state.assetPrices.ethereum.price
     );
     const ethPriceBN = useMemo(() => new BigNumber(ethPrice), [ethPrice]);
-    const book = useCollateralBookFromVault(vault, account) as any;
+    const book = useCollateralBookFromVault(vault, account);
     useMemo(() => {
         if (book) {
             const colBook: CollateralBook = {

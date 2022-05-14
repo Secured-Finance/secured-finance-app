@@ -5,16 +5,9 @@ import theme from 'src/theme';
 import styled from 'styled-components';
 import { chartOptions } from './chartOptions';
 
-const Title = styled.div`
-    font-weight: 400;
-    font-size: 22px;
-    color: white;
-`;
-
 const labels = ['0', '3m', '6m', '1y', '2y', '3y', '5y'];
 
 export function YieldCurve() {
-    const [currencyIndex, setCurrencyIndex] = useState('FIL');
     const [lineData, setLineData] = useState({});
     const borrowRates = useRates('FIL', 0);
     const lendingRates = useRates('FIL', 1);

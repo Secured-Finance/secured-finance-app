@@ -8,7 +8,7 @@ import useSF from './useSecuredFinance';
 
 export const useSendEth = (amount: number, to: string, gasPrice: number) => {
     const { account } = useWallet();
-    const securedFinance: any = useSF();
+    const securedFinance = useSF() as any;
 
     const handleSendEther = useCallback(async () => {
         if (account && securedFinance) {
