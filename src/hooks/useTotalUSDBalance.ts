@@ -37,7 +37,7 @@ export const useTotalUSDBalance = () => {
                 dispatch(fetchWalletFailure());
             }
         },
-        [dispatch, account, balance, ethPrice]
+        [dispatch, account, balance, ethPrice, usdBalance]
     );
 
     useEffect(() => {
@@ -46,7 +46,7 @@ export const useTotalUSDBalance = () => {
         return () => {
             isMounted = false;
         };
-    }, [block, dispatch, account, balance, ethPrice]);
+    }, [block, dispatch, account, balance, ethPrice, fetchWalletStore]);
 
     return totalUSDBalance;
 };

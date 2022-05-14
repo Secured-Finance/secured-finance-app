@@ -29,6 +29,8 @@ const FilecoinWasmProvider: React.FC<FilecoinWalletProviderProps> = ({
         if (cachedProvider !== null) {
             connect('injected');
         }
+        // TODO: understand why adding connect in the dependencies makes the app crash
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     useEffect(() => {
@@ -48,7 +50,7 @@ const FilecoinWasmProvider: React.FC<FilecoinWalletProviderProps> = ({
             }
         }
         loadWasmModule();
-    }, [setWasmModule, setLoaded, setFilProviders, providers]);
+    }, [setWasmModule, setLoaded, setFilProviders]);
 
     return (
         <Context.Provider

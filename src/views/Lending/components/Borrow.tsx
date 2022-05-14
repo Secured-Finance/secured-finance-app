@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { connect, useDispatch, useSelector } from 'react-redux';
 import { Button } from 'src/components/atoms';
 import { CurrencySelector, TermsSelector } from 'src/components/molecules';
@@ -7,7 +7,6 @@ import { usePlaceOrder } from 'src/hooks/usePlaceOrder';
 import { useRegisterUser } from 'src/hooks/useRegisterUser';
 import {
     updateBorrowAmount,
-    updateBorrowRate,
     updateCollateralAmount,
     updateMainCollateralCurrency,
     updateMainCurrency,
@@ -142,12 +141,6 @@ const Borrow: React.FC<CombinedProps> = ({
         [dispatch, setCollateralOpen]
     );
 
-    const getBorrowRateForTerm = useEffect(() => {
-        if (borrowRates.length > 0) {
-            dispatch(updateBorrowRate(borrowRates[termsIndex]));
-        }
-    }, [dispatch, currencyIndex, termsIndex]);
-
     // const fullBalance = useMemo(() => {
     //     return getFullDisplayBalance(max)
     // }, [max])
@@ -167,7 +160,7 @@ const Borrow: React.FC<CombinedProps> = ({
             default:
                 return 0;
         }
-    }, [borrowAmount, selectedCcy]);
+    }, [borrowAmount, ethPrice, filPrice, selectedCcy, usdcPrice]);
 
     const handleBorrow = useCallback(
         (e: React.FormEvent<HTMLInputElement>) => {

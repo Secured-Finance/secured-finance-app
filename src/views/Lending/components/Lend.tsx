@@ -1,11 +1,10 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { connect, useDispatch, useSelector } from 'react-redux';
 import { Button } from 'src/components/atoms';
 import { CurrencySelector, TermsSelector } from 'src/components/molecules';
 import { usePlaceOrder } from 'src/hooks/usePlaceOrder';
 import {
     updateLendAmount,
-    updateLendRate,
     updateMainCurrency,
     updateMainTerms,
 } from 'src/store/lending';
@@ -95,12 +94,6 @@ const Lend: React.FC<CombinedProps> = ({
         }
     }, [onPlaceOrder, setPendingTx]);
 
-    const getLendRateForTerm = useEffect(() => {
-        if (lendingRates.length > 0) {
-            dispatch(updateLendRate(lendingRates[termsIndex]));
-        }
-    }, [dispatch, currencyIndex, termsIndex]);
-
     // const fullBalance = useMemo(() => {
     //     return getFullDisplayBalance(max)
     // }, [max])
@@ -120,7 +113,7 @@ const Lend: React.FC<CombinedProps> = ({
             default:
                 return 0;
         }
-    }, [lendAmount, selectedCcy]);
+    }, [ethPrice, filPrice, lendAmount, selectedCcy, usdcPrice]);
 
     const estimatedReturns = useMemo(() => {
         const interest = lendRate / 10000;
@@ -142,7 +135,15 @@ const Lend: React.FC<CombinedProps> = ({
         }
         const compoundInterest = usdAmount * p;
         return compoundInterest;
-    }, [termsIndex, currencyIndex, lendRate, lendAmount]);
+    }, [
+        lendRate,
+        termsIndex,
+        currencyIndex,
+        lendAmount,
+        ethPrice,
+        filPrice,
+        usdcPrice,
+    ]);
 
     const handleLend = useCallback(
         (e: React.FormEvent<HTMLInputElement>) => {

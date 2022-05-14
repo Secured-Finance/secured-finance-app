@@ -44,8 +44,8 @@ export function YieldCurve() {
     };
 
     useMemo(() => {
-        async function updateGraph() {
-            const graphData = await {
+        function updateGraph() {
+            const graphData = {
                 labels: labels,
                 datasets: [
                     {
@@ -99,6 +99,8 @@ export function YieldCurve() {
             setLineData(graphData);
         }
         updateGraph();
+        // TODO: Rework completely this part
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [borrowRates, lendingRates, midRate, labels]);
 
     return (
@@ -121,18 +123,4 @@ const StyledYieldCurveContainer = styled.div`
     padding-bottom: ${props => props.theme.spacing[3] - 1}px;
     padding-left: ${props => props.theme.spacing[3] - 1}px;
     padding-right: ${props => props.theme.spacing[3] - 1}px;
-`;
-
-const StyledYieldCurveInfo = styled.div`
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    padding-top: ${props => props.theme.spacing[3]}px;
-    padding-bottom: ${props => props.theme.spacing[3]}px;
-    padding-left: ${props => props.theme.spacing[3]}px;
-    padding-right: ${props => props.theme.spacing[3]}px;
-`;
-
-const StyledTermsContainer = styled.div`
-    width: 40%;
 `;

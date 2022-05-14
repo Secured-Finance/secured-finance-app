@@ -33,7 +33,7 @@ const EthWalletConnector: React.FC<ModalProps> = ({ onDismiss }) => {
                 history.push('/account');
             }
         },
-        [account, onDismiss, connect]
+        [account, connect, onDismiss, history]
     );
 
     return (
