@@ -1,14 +1,14 @@
 import React, { useCallback } from 'react';
-import { useHistory } from 'react-router-dom';
-import styled from 'styled-components';
-import { useWallet } from 'use-wallet';
-import theme from 'src/theme';
-import { Button, Label, ModalProps, Spacer } from 'src/components/atoms';
-import { CACHED_PROVIDER_KEY } from 'src/contexts/FilecoinWalletProvider';
 import { useDispatch, useSelector } from 'react-redux';
-import { isAnyWalletConnected } from 'src/store/wallets/selectors';
+import { useHistory } from 'react-router-dom';
+import { Button, Label, ModalProps, Spacer } from 'src/components/atoms';
+import { CACHED_PROVIDER_KEY } from 'src/contexts/SecuredFinanceProvider/SecuredFinanceProvider';
 import { RootState } from 'src/store/types';
 import { resetEthWallet } from 'src/store/wallets';
+import { isAnyWalletConnected } from 'src/store/wallets/selectors';
+import theme from 'src/theme';
+import styled from 'styled-components';
+import { useWallet } from 'use-wallet';
 
 const EthWallet: React.FC<ModalProps> = ({ onDismiss, ...props }) => {
     const { account, reset } = useWallet();
@@ -26,7 +26,7 @@ const EthWallet: React.FC<ModalProps> = ({ onDismiss, ...props }) => {
         if (!otherWalletConnected) {
             history.push('/');
         }
-    }, [onDismiss, reset]);
+    }, [dispatch, history, onDismiss, otherWalletConnected, reset]);
 
     return (
         <div>

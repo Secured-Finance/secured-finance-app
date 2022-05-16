@@ -29,6 +29,8 @@ const useBlock = (): number => {
         }, 1000);
 
         return () => clearInterval(interval);
+        // TODO: rework this
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [ethereum]);
 
     return block;

@@ -1,7 +1,8 @@
+import { Dispatch } from '@reduxjs/toolkit';
 import * as constants from './constants';
 
 export function updateCollateralCurrency(data: string) {
-    return (dispatch: any) => {
+    return (dispatch: Dispatch) => {
         dispatch(updateCollateralCcyShortName(data));
         switch (data) {
             case 'ETH':

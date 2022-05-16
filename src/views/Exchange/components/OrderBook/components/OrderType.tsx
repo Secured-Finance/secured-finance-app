@@ -13,8 +13,6 @@ interface OrderTypeProps {
 
 const OrderType: React.FC<OrderTypeProps> = ({ orders, type, showHeader }) => {
     const rows = orders.map(({ rate, totalAmount, usdAmount }, i) => {
-        const w = `${0 + totalAmount / 50}%`;
-        const bgColor = type.side === 'lend' ? '#E46D53' : '#3A80AB';
         const txtColor =
             type.side === 'lend' ? theme.colors.red3 : theme.colors.green;
 

@@ -1,7 +1,7 @@
 import React from 'react';
-import styled from 'styled-components';
 import theme from 'src/theme';
-import { currencyList } from 'src/utils/currencies';
+import { getCurrencyBy } from 'src/utils/currencyList';
+import styled from 'styled-components';
 
 interface CurrencySelectorProps {
     selectedCcy: string;
@@ -12,9 +12,7 @@ export const CurrencyImage: React.FC<CurrencySelectorProps> = ({
     selectedCcy,
     showName,
 }) => {
-    const icon: string = currencyList.find(
-        currency => selectedCcy === currency.shortName
-    )?.icon;
+    const { icon } = getCurrencyBy('shortName', selectedCcy);
 
     return (
         <Container>

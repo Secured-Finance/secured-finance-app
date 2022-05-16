@@ -1,20 +1,19 @@
 import BigNumber from 'bignumber.js';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { connect, useDispatch, useSelector } from 'react-redux';
-import styled from 'styled-components';
-import useCollateralBook from 'src/hooks/useCollateralBook';
-import { RootState } from 'src/store/types';
-import theme from 'src/theme';
-import { formatDate, ordinaryFormat, percentFormat } from 'src/utils';
 import {
     Button,
     Modal,
-    ModalProps,
     ModalActions,
     ModalContent,
+    ModalProps,
     ModalTitle,
     RenderTerms,
 } from 'src/components/atoms';
+import { RootState } from 'src/store/types';
+import theme from 'src/theme';
+import { formatDate, ordinaryFormat, percentFormat } from 'src/utils';
+import styled from 'styled-components';
 
 interface LoanModalProps {
     loan?: any;
@@ -45,9 +44,9 @@ const LoanConfirmationModal: React.FC<CombinedProps> = ({
     onDismiss,
     loan,
 }) => {
-    const [schedule, setSchedule] = useState<Array<ScheduleItem>>([]);
-    const [couponPayment, setCouponPayment] = useState<NextCoupon>(initCoupon);
-    const [counterpartyAddr, setCounterpartyAddr] = useState('');
+    const [, setSchedule] = useState<Array<ScheduleItem>>([]);
+    const [, setCouponPayment] = useState<NextCoupon>(initCoupon);
+    const [, setCounterpartyAddr] = useState('');
     const dispatch = useDispatch();
     const filPrice = useSelector(
         (state: RootState) => state.assetPrices.filecoin.price
@@ -109,7 +108,7 @@ const LoanConfirmationModal: React.FC<CombinedProps> = ({
         return ordinaryFormat(totalRepay) + ' FIL';
     };
 
-    const constructSchedule = () => {
+    const constructSchedule = useCallback(() => {
         const parsedScheduleDates: Array<ScheduleItem> = [];
         for (let i = 0; i < loan.schedule[1].length; i++) {
             const item: ScheduleItem = {
@@ -119,9 +118,9 @@ const LoanConfirmationModal: React.FC<CombinedProps> = ({
             parsedScheduleDates.push(item);
         }
         setSchedule(parsedScheduleDates);
-    };
+    }, [loan.schedule]);
 
-    const nextCouponPayment = () => {
+    const nextCouponPayment = useCallback(() => {
         const payment = loan.schedule[2][0];
         const usdAmount = new BigNumber(payment)
             .multipliedBy(filPrice)
@@ -133,21 +132,29 @@ const LoanConfirmationModal: React.FC<CombinedProps> = ({
             usdAmount: usdAmount,
         };
         setCouponPayment(nextCoupon);
-    };
+    }, [filPrice, loan.schedule]);
 
-    const handleCounterpartyAddr = () => {
+    const handleCounterpartyAddr = useCallback(() => {
         if (loan.side === '0') {
             setCounterpartyAddr(loan.borrower);
         } else {
             setCounterpartyAddr(loan.lender);
         }
-    };
+    }, [loan.side, loan.borrower, loan.lender]);
 
     useEffect(() => {
         constructSchedule();
         nextCouponPayment();
         handleCounterpartyAddr();
-    }, [dispatch, setSchedule, setCouponPayment, setCounterpartyAddr]);
+    }, [
+        dispatch,
+        setSchedule,
+        setCouponPayment,
+        setCounterpartyAddr,
+        constructSchedule,
+        nextCouponPayment,
+        handleCounterpartyAddr,
+    ]);
 
     return (
         <Modal>

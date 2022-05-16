@@ -1,7 +1,6 @@
 import BigNumber from 'bignumber.js';
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useWallet } from 'use-wallet';
 import { WalletAccountModal } from 'src/components/organisms';
 import { RootState } from 'src/store/types';
 import {
@@ -15,6 +14,7 @@ import {
     updateEthWalletUSDBalance,
 } from 'src/store/wallets';
 import { recalculateTotalUSDBalance } from 'src/store/wallets/helpers';
+import { useWallet } from 'use-wallet';
 import { useEthereumUsd } from './useAssetPrices';
 import useBlock from './useBlock';
 import useModal from './useModal';
@@ -32,13 +32,15 @@ export const useEthereumWalletStore = () => {
     );
     const [onPresentAccountModal] = useModal(WalletAccountModal);
 
-    const actObj = {
-        send: onPresentAccountModal,
-        placeCollateral: onPresentAccountModal,
-        signOut: reset,
-    };
+    const actObj = useMemo(() => {
+        return {
+            send: onPresentAccountModal,
+            placeCollateral: onPresentAccountModal,
+            signOut: reset,
+        };
+    }, [onPresentAccountModal, reset]);
 
-    const getWalletBalance = () => {
+    const getWalletBalance = useCallback(() => {
         if (!account) return { usdBalance: 0, inEther: 0 };
 
         const inEther = new BigNumber(balance)
@@ -48,7 +50,7 @@ export const useEthereumWalletStore = () => {
             .times(new BigNumber(price))
             .toNumber();
         return { usdBalance, inEther };
-    };
+    }, [account, balance, price]);
 
     const fetchEthStore = useCallback(
         async (isMounted: boolean) => {
@@ -69,7 +71,15 @@ export const useEthereumWalletStore = () => {
             dispatch(recalculateTotalUSDBalance());
             dispatch(updateEthWalletActions(actObj));
         },
-        [dispatch, account, balance, reset, totalUSDBalance, price, change]
+        [
+            getWalletBalance,
+            totalUSDBalance,
+            dispatch,
+            account,
+            price,
+            change,
+            actObj,
+        ]
     );
 
     useEffect(() => {
@@ -97,6 +107,7 @@ export const useEthereumWalletStore = () => {
         totalUSDBalance,
         price,
         change,
+        fetchEthStore,
     ]);
 
     useEffect(() => {
@@ -104,13 +115,13 @@ export const useEthereumWalletStore = () => {
         dispatch(updateEthWalletBalance(inEther));
         dispatch(updateEthWalletUSDBalance(usdBalance));
         dispatch(recalculateTotalUSDBalance());
-    }, [balance]);
+    }, [balance, dispatch, getWalletBalance]);
 
     useEffect(() => {
         if (account === null) {
             dispatch(resetEthWallet());
         }
-    }, [account]);
+    }, [account, dispatch]);
 
     return ethWallet;
 };
@@ -129,7 +140,7 @@ export const useEthBalance = () => {
                 .toNumber();
             dispatch(updateEthWalletBalance(inEther));
         },
-        [dispatch, account, balance]
+        [dispatch, balance]
     );
 
     useEffect(() => {
@@ -140,7 +151,7 @@ export const useEthBalance = () => {
         return () => {
             isMounted = false;
         };
-    }, [dispatch, account, balance]);
+    }, [dispatch, account, balance, fetchEthStore]);
 
     return ethBalance;
 };

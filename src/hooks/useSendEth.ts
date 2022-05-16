@@ -8,7 +8,7 @@ import useSF from './useSecuredFinance';
 
 export const useSendEth = (amount: number, to: string, gasPrice: number) => {
     const { account } = useWallet();
-    const securedFinance: any = useSF();
+    const securedFinance = useSF() as any;
 
     const handleSendEther = useCallback(async () => {
         if (account && securedFinance) {
@@ -58,7 +58,7 @@ export const useEstimateTxFee = (gasPrice: number) => {
                 value: 0,
                 gasPrice: gweiGasPrice,
             };
-            const gasLimit = securedFinance.web3.eth
+            securedFinance.web3.eth
                 .estimateGas(transactionObject)
                 .then((gasLimit: number) => {
                     const transactionFee = gasPrice * gasLimit;
@@ -80,7 +80,14 @@ export const useEstimateTxFee = (gasPrice: number) => {
         return () => {
             isMounted = false;
         };
-    }, [account, securedFinance, gasPrice, dispatch, ethPrice]);
+    }, [
+        account,
+        securedFinance,
+        gasPrice,
+        dispatch,
+        ethPrice,
+        handleEstimateTxFee,
+    ]);
 
     return txFee;
 };

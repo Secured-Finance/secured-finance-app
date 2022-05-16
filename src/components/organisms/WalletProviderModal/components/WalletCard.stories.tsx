@@ -6,7 +6,7 @@ import { ThemeProvider } from 'styled-components';
 import WalletCard from './WalletCard';
 
 export default {
-    title: 'Organism/WalletProviderModal/WalletCard',
+    title: 'Components/Organisms/WalletProviderModal/WalletCard',
     component: WalletCard,
     argTypes: {
         onConnect: { action: 'clicked' },

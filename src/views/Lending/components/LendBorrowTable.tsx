@@ -25,8 +25,8 @@ import {
 import {
     currencyListDropdown,
     percentFormat,
-    usdFormat,
     termList,
+    usdFormat,
 } from 'src/utils';
 import { daysInYear } from '../constants';
 import BorrowCollateralManagement from './BorrowCollateralManagement';
@@ -59,13 +59,16 @@ export const LendBorrowTable: React.FC<ILendBorrowTable> = ({
     const ethUSDBalance = useSelector(getEthUSDBalance);
     const filUSDBalance = useSelector(getFilUSDBalance);
     const isBorrow = selectedTab === 'borrow';
-    const amount = new BigNumber(isBorrow ? borrowAmount : lendAmount);
+    const amount = useMemo(
+        () => new BigNumber(isBorrow ? borrowAmount : lendAmount),
+        [borrowAmount, isBorrow, lendAmount]
+    );
     const rate = isBorrow ? borrowRate : lendRate;
     const ethPrice = useEthereumUsd().price;
     const filPrice = useFilUsd().price;
     const usdcPrice = useSelector(getUSDCPrice);
 
-    const USDBalanceMap: any = {
+    const USDBalanceMap = {
         ETH: ethUSDBalance,
         FIL: filUSDBalance,
         USDC: 0,
@@ -178,7 +181,12 @@ export const LendBorrowTable: React.FC<ILendBorrowTable> = ({
                 </span>
                 <span className={cm.bottomRow}>
                     <span>
-                        Balance: {usdFormat(USDBalanceMap[selectedCcy])}
+                        Balance:{' '}
+                        {usdFormat(
+                            USDBalanceMap[
+                                selectedCcy as keyof typeof USDBalanceMap
+                            ]
+                        )}
                     </span>
                     <span className={cm.USDValue}>
                         ~ {usdFormat(USDAmount.toNumber())}

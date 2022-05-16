@@ -27,13 +27,5 @@
       "error",
       { "allow": ["arrowFunctions"] }
     ]
-  },
-  "overrides": [
-    {
-      "files": ["**/*.@(story|stories).*"],
-      "rules": {
-        "import/no-anonymous-default-export": "off"
-      }
-    }
-  ]
+  }
 }

@@ -1,18 +1,17 @@
-import React from 'react';
-import styled from 'styled-components';
-import { connect } from 'react-redux';
 import { Dispatch } from '@reduxjs/toolkit';
-
+import React from 'react';
+import { connect } from 'react-redux';
 import { Container } from 'src/components/atoms';
 import { Page } from 'src/components/templates';
-import { useLoanDeals, useBorrowDeals } from 'src/hooks/useLoanHistory';
-import theme from 'src/theme';
-import { RootState } from 'src/store/types';
+import { useBorrowDeals, useLoanDeals } from 'src/hooks/useLoanHistory';
 import {
     failSetLendingHistory,
     setLendingHistory,
     startSetHistory,
 } from 'src/store/history';
+import { RootState } from 'src/store/types';
+import theme from 'src/theme';
+import styled from 'styled-components';
 import { HistoryTable } from './components';
 
 const History: React.FC = () => {
@@ -60,10 +59,6 @@ const StyledHistoryTitleContainer = styled.div`
     padding-bottom: ${props => props.theme.spacing[5]}px;
     padding-left: ${props => props.theme.spacing[5]}px;
     padding-right: ${props => props.theme.spacing[5]}px;
-`;
-
-const StyledTermsContainer = styled.div`
-    width: 25%;
 `;
 
 const StyledHistoryTitle = styled.p`

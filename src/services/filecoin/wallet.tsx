@@ -11,6 +11,7 @@ import { useWallet } from 'use-wallet';
 import useFilWasm from '../../hooks/useFilWasm';
 import { RootState } from '../../store/types';
 import { resetFilWallet } from '../../store/wallets';
+import { MAINNET_PATH_CODE } from '../ledger/constants';
 import {
     failFetchingFilWalletProvider,
     resetFilWalletProvider,
@@ -110,7 +111,8 @@ export async function registerCrossChainWallet(
     register: (chainId: number, address: string) => Promise<unknown>
 ) {
     try {
-        const chainId = getFilecoinChainId(getFilecoinNetwork());
+        // TODO: For now the protocol does not handle mainnet or testnet. Therefore we use the mainnet path code.
+        const chainId = MAINNET_PATH_CODE;
         if (!filWalletAddr?.address) {
             await register(chainId, filAddr);
             return filAddr;

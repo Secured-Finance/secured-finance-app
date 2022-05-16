@@ -1,3 +1,4 @@
+import { GraphClientProvider } from '@secured-finance/sf-graph-client';
 import React from 'react';
 import { HashRouter as Router, Route, Switch } from 'react-router-dom';
 import { Header } from 'src/components/organisms';
@@ -12,7 +13,6 @@ import Exchange from './views/Exchange';
 import History from './views/History';
 import Lending from './views/Lending';
 import Loan from './views/Loan';
-import { GraphClientProvider } from '@secured-finance/sf-graph-client';
 
 const App: React.FC = () => {
     return (
