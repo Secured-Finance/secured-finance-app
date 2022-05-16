@@ -3,6 +3,8 @@ import { ethers } from 'ethers';
 import React, { createContext, useEffect, useState } from 'react';
 import { ChainUnsupportedError, useWallet } from 'use-wallet';
 
+export const CACHED_PROVIDER_KEY = 'CACHED_PROVIDER_KEY';
+
 export interface SFContext {
     securedFinance?: SecuredFinanceClient;
 }
@@ -18,7 +20,7 @@ declare global {
 }
 
 const SecuredFinanceProvider: React.FC = ({ children }) => {
-    const { ethereum, error, status } = useWallet();
+    const { ethereum, error, status, connect, account } = useWallet();
     const [securedFinance, setSecuredFinance] =
         useState<SecuredFinanceClient>();
 
@@ -72,6 +74,16 @@ const SecuredFinanceProvider: React.FC = ({ children }) => {
             }
         }
     }, [ethereum, status, error]);
+
+    useEffect(() => {
+        if (account) {
+            return;
+        }
+        const cachedProvider = localStorage.getItem(CACHED_PROVIDER_KEY);
+        if (cachedProvider !== null) {
+            connect('injected');
+        }
+    }, [connect, account]);
 
     return (
         <Context.Provider value={{ securedFinance }}>

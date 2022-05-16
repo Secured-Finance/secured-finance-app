@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import { ArrowIcon } from 'src/components/new/icons';
 import WalletProviderModal from 'src/components/organisms/WalletProviderModal/WalletProviderModal';
-import { CACHED_PROVIDER_KEY } from 'src/contexts/FilecoinWalletProvider';
+import { CACHED_PROVIDER_KEY } from 'src/contexts/SecuredFinanceProvider/SecuredFinanceProvider';
 import useModal from 'src/hooks/useModal';
 import { isAnyWalletConnected } from 'src/store/wallets/selectors';
 
