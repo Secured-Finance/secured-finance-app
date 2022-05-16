@@ -1,5 +1,6 @@
+import { useCrosschainAddressById } from '@secured-finance/sf-graph-client/dist/hooks';
 import BigNumber from 'bignumber.js';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { connect, useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { Button, Container, RenderTerms, Spacer } from 'src/components/atoms';
@@ -8,6 +9,7 @@ import { Page } from 'src/components/templates';
 import useCollateralBook from 'src/hooks/useCollateralBook';
 import { useLoanInformation } from 'src/hooks/useLoanHistory';
 import useModal from 'src/hooks/useModal';
+import { CrossChainWallet } from 'src/services/filecoin';
 import { updateSendAmount, updateSendToAddress } from 'src/store/sendForm';
 import { RootState } from 'src/store/types';
 import theme from 'src/theme';
@@ -15,12 +17,11 @@ import {
     AddressUtils,
     DEFAULT_COLLATERAL_VAULT,
     formatDate,
-    fromBytes32,
     getDisplayBalance,
     ordinaryFormat,
     percentFormat,
 } from 'src/utils';
-import { getCurrencyBy } from 'src/utils/currencyList';
+import { Currency, currencyList, getCurrencyBy } from 'src/utils/currencyList';
 import styled from 'styled-components';
 import { useWallet } from 'use-wallet';
 import { NextCouponPaymentCard } from '../../components/organisms/Loan/NextCouponPaymentCard';
@@ -50,25 +51,38 @@ const LoanScreen = () => {
         DEFAULT_COLLATERAL_VAULT
     );
 
-    const getLoanCcy = (currency: string) => {
-        return fromBytes32(currency);
-    };
+    const counterPartyWallet = useMemo(() => {
+        if (account && loan) {
+            if (loan.lender === account.toLowerCase()) {
+                return loan.borrower;
+            } else {
+                return loan.lender;
+            }
+        }
+        return '';
+    }, [account, loan]);
+
+    const loanCurrency = useMemo(() => {
+        if (loan?.currency) {
+            return getCurrencyBy('shortName', loan.currency.shortName);
+        } else {
+            // we should never be in this condition, but just in case.
+            // TODO: manage global error with a component and display it to the user
+            return currencyList[1];
+        }
+    }, [loan]);
+
+    const counterpartyFilWallet = useCrosschainAddressById(
+        counterPartyWallet,
+        loanCurrency.chainId
+    ) as CrossChainWallet;
 
     const [onPresentSendModal] = useModal(
-        <SendModal
-            ccyIndex={
-                loan?.currency
-                    ? getCurrencyBy('indexCcy', getLoanCcy(loan.currency))
-                          ?.indexCcy
-                    : -1
-            }
-        />
+        <SendModal ccyIndex={loanCurrency.indexCcy} />
     );
 
     const handleNotional = () => {
-        return (
-            ordinaryFormat(loan?.notional) + ` ${getLoanCcy(loan?.currency)}`
-        );
+        return ordinaryFormat(loan?.notional) + ` ${loanCurrency.shortName}`;
     };
 
     const handleInterest = () => {
@@ -77,8 +91,7 @@ const LoanScreen = () => {
             loan?.rate,
             loan?.term
         );
-        const ccy = getLoanCcy(loan?.currency);
-        return ordinaryFormat(interestPayments) + ` ${ccy}`;
+        return ordinaryFormat(interestPayments) + ` ${loanCurrency.shortName}`;
     };
 
     const totalInterest = (amount: number, rate: number, term: string) => {
@@ -123,7 +136,7 @@ const LoanScreen = () => {
             .plus(interestPayments)
             .toNumber();
 
-        return ordinaryFormat(totalRepay) + ` ${getLoanCcy(loan?.currency)}`;
+        return ordinaryFormat(totalRepay) + ` ${loanCurrency.shortName}`;
     };
 
     const nextCouponPayment = useCallback(() => {
@@ -134,19 +147,19 @@ const LoanScreen = () => {
         setCouponPayment(payment[0]);
     }, [loan]);
 
-    const handleCounterpartyAddr = useCallback(() => {
-        if (loan.lender === account.toLowerCase()) {
-            setCounterpartyAddr(loan?.borrower);
-        } else {
-            setCounterpartyAddr(loan?.lender);
-        }
-    }, [loan, account]);
-
     useEffect(() => {
         if (loan != null) {
+            setCounterpartyAddr(counterPartyWallet);
             nextCouponPayment();
-            handleCounterpartyAddr();
-            dispatch(updateSendToAddress(counterpartyAddr));
+            if (
+                counterpartyFilWallet &&
+                loan?.currency &&
+                loanCurrency.shortName === Currency.FIL
+            ) {
+                dispatch(updateSendToAddress(counterpartyFilWallet.address));
+            } else {
+                dispatch(updateSendToAddress(counterPartyWallet));
+            }
             dispatch(updateSendAmount(loan.notional));
         }
     }, [
@@ -156,8 +169,10 @@ const LoanScreen = () => {
         loan,
         account,
         nextCouponPayment,
-        handleCounterpartyAddr,
         counterpartyAddr,
+        counterPartyWallet,
+        counterpartyFilWallet,
+        loanCurrency,
     ]);
 
     return (
@@ -254,9 +269,7 @@ const LoanScreen = () => {
                                             </StyledItemText>
                                             <StyledItemText>
                                                 {ordinaryFormat(item.amount) +
-                                                    ` ${getLoanCcy(
-                                                        loan?.currency
-                                                    )}`}
+                                                    ` ${loanCurrency.shortName}`}
                                             </StyledItemText>
                                         </StyledRowContainer>
                                     )
@@ -283,7 +296,7 @@ const LoanScreen = () => {
                         <NextCouponPaymentCard
                             onClick={onPresentSendModal}
                             couponPayment={couponPayment}
-                            currency={getLoanCcy(loan?.currency)}
+                            currency={loanCurrency.shortName}
                             filPrice={filPrice}
                         ></NextCouponPaymentCard>
                         {colBook.vault !== '' ? (

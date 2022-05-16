@@ -4,6 +4,7 @@ import React, { useMemo } from 'react';
 import { Button } from 'src/components/atoms';
 import theme from 'src/theme';
 import { formatDate, ordinaryFormat, usdFormat } from 'src/utils';
+import { Currency } from 'src/utils/currencyList';
 import { CouponPayment } from 'src/views/Loan/index';
 
 export const NextCouponPaymentCard = ({
@@ -13,7 +14,7 @@ export const NextCouponPaymentCard = ({
     onClick,
 }: {
     couponPayment: CouponPayment;
-    currency: string;
+    currency: Currency;
     filPrice: number;
     onClick: () => void;
 }) => {
