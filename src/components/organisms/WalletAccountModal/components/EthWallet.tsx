@@ -2,7 +2,7 @@ import React, { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { Button, Label, ModalProps, Spacer } from 'src/components/atoms';
-import { CACHED_PROVIDER_KEY } from 'src/contexts/FilecoinWalletProvider';
+import { CACHED_PROVIDER_KEY } from 'src/contexts/SecuredFinanceProvider/SecuredFinanceProvider';
 import { RootState } from 'src/store/types';
 import { resetEthWallet } from 'src/store/wallets';
 import { isAnyWalletConnected } from 'src/store/wallets/selectors';

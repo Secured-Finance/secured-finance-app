@@ -3,7 +3,7 @@ import { useHistory } from 'react-router-dom';
 import metamaskLogo from 'src/assets/img/metamask-fox.svg';
 import walletConnectLogo from 'src/assets/img/wallet-connect.svg';
 import { ModalProps, Spacer } from 'src/components/atoms';
-import { CACHED_PROVIDER_KEY } from 'src/contexts/FilecoinWalletProvider';
+import { CACHED_PROVIDER_KEY } from 'src/contexts/SecuredFinanceProvider/SecuredFinanceProvider';
 import styled from 'styled-components';
 import { useWallet } from 'use-wallet';
 import WalletCard from './WalletCard';
