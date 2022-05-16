@@ -44,7 +44,7 @@ const CurrencyItem: React.FC<ItemProps> = ({
     style,
 }) => {
     const { icon, shortName, fullName } = getCurrencyBy(
-        'index',
+        'indexCcy',
         ccy.toString()
     );
 

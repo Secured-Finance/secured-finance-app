@@ -39,13 +39,13 @@ export const collateralListDropdown = [
 
 export const collateralList = [
     {
-        index: 0,
+        indexCcy: 0,
         icon: ethLogo,
         shortName: 'ETH',
         fullName: 'Ethereum',
     },
     {
-        index: 2,
+        indexCcy: 2,
         icon: usdcLogo,
         shortName: 'USDC',
         fullName: 'USDC',
