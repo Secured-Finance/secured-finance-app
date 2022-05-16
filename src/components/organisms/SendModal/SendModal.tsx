@@ -27,7 +27,7 @@ import { RootState } from 'src/store/types';
 import { getFilActions } from 'src/store/wallets/selectors';
 import theme from 'src/theme';
 import { formatInput } from 'src/utils';
-import { currencyList } from 'src/utils/currencyList';
+import { getCurrencyBy } from 'src/utils/currencyList';
 import styled from 'styled-components';
 import { isAddress } from 'web3-utils';
 import { ErrorModal } from './components/ErrorModal';
@@ -136,11 +136,9 @@ const SendModal = ({
     );
 
     useEffect(() => {
-        const currencyShortName = currencyList.find(
-            currency => currency.index === ccyIndex
-        )?.shortName;
-        if (currencyShortName) {
-            dispatch(updateSendCurrency(currencyShortName));
+        const { shortName } = getCurrencyBy('indexCcy', ccyIndex);
+        if (shortName) {
+            dispatch(updateSendCurrency(shortName));
         }
     }, [ccyIndex, dispatch]);
 

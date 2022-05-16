@@ -20,7 +20,7 @@ import {
     ordinaryFormat,
     percentFormat,
 } from 'src/utils';
-import { getCurrencyIndexFromCurrency } from 'src/utils/currencyList';
+import { getCurrencyBy } from 'src/utils/currencyList';
 import styled from 'styled-components';
 import { useWallet } from 'use-wallet';
 import { NextCouponPaymentCard } from '../../components/organisms/Loan/NextCouponPaymentCard';
@@ -56,7 +56,12 @@ const LoanScreen = () => {
 
     const [onPresentSendModal] = useModal(
         <SendModal
-            ccyIndex={getCurrencyIndexFromCurrency(getLoanCcy(loan?.currency))}
+            ccyIndex={
+                loan?.currency
+                    ? getCurrencyBy('indexCcy', getLoanCcy(loan.currency))
+                          ?.indexCcy
+                    : -1
+            }
         />
     );
 

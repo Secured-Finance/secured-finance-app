@@ -1,53 +1,38 @@
 import ethLogo from '../assets/coins/eth.png';
 import filLogo from '../assets/coins/fil.png';
-import { getCurrencyBy, getCurrencyIndexFromCurrency } from './currencyList';
-
-describe('getCurrencyIndexFromCurrency', () => {
-    it('should return the correct indexCcy for each currency', () => {
-        expect(getCurrencyIndexFromCurrency('ETH')).toEqual(0);
-        expect(getCurrencyIndexFromCurrency('FIL')).toEqual(1);
-        expect(getCurrencyIndexFromCurrency('USDC')).toEqual(2);
-    });
-
-    it('should not case sensitive', () => {
-        expect(getCurrencyIndexFromCurrency('eth')).toEqual(
-            getCurrencyIndexFromCurrency('EtH')
-        );
-        expect(getCurrencyIndexFromCurrency('fil')).toEqual(
-            getCurrencyIndexFromCurrency('FIl')
-        );
-        expect(getCurrencyIndexFromCurrency('usdc')).toEqual(
-            getCurrencyIndexFromCurrency('uSDc')
-        );
-    });
-
-    it('should return -1 if the currency is not found', () => {
-        expect(getCurrencyIndexFromCurrency('XXX')).toEqual(-1);
-    });
-});
+import { getCurrencyBy } from './currencyList';
 
 describe('getCurrencyBy', () => {
     const eth = {
-        index: 0,
+        indexCcy: 0,
         icon: ethLogo,
         shortName: 'ETH',
         fullName: 'Ethereum',
     };
 
     const fil = {
-        index: 1,
+        indexCcy: 1,
         icon: filLogo,
         shortName: 'FIL',
         fullName: 'Filecoin',
     };
 
-    it('should return the currency object for existing index', () => {
-        expect(getCurrencyBy('index', '0')).toEqual(eth);
-        expect(getCurrencyBy('index', '1')).toEqual(fil);
+    it('should return the currency object for an existing string indexCcy', () => {
+        expect(getCurrencyBy('indexCcy', '0')).toEqual(eth);
+        expect(getCurrencyBy('indexCcy', '1')).toEqual(fil);
     });
 
-    it('should be undefined for non existing index', () => {
-        expect(getCurrencyBy('index', '3')).toBeUndefined();
+    it('should return the currency object for an existing number indexCcy', () => {
+        expect(getCurrencyBy('indexCcy', 0)).toEqual(eth);
+        expect(getCurrencyBy('indexCcy', 1)).toEqual(fil);
+
+        expect(getCurrencyBy('shortName', 'ETH').indexCcy).toEqual(0);
+        expect(getCurrencyBy('shortName', 'FIL').indexCcy).toEqual(1);
+        expect(getCurrencyBy('shortName', 'USDC').indexCcy).toEqual(2);
+    });
+
+    it('should be undefined for non existing indexCcy', () => {
+        expect(getCurrencyBy('indexCcy', 3)).toBeUndefined();
         expect(getCurrencyBy('shortName', 'XXX')).toBeUndefined();
         expect(getCurrencyBy('fullName', 'Terra Luna')).toBeUndefined();
     });

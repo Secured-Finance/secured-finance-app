@@ -16,7 +16,7 @@ interface BalanceProps {
 type ItemProps = BalanceContainerProps & BalanceProps;
 
 const BalanceInfo: React.FC<ItemProps> = ({ index, balance, value }) => {
-    const { shortName } = getCurrencyBy('index', index.toString());
+    const { shortName } = getCurrencyBy('indexCcy', index.toString());
 
     return (
         <div>
