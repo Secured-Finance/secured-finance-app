@@ -1,6 +1,5 @@
 import { BigNumber, utils } from 'ethers';
 import { useCallback } from 'react';
-import { useWallet } from 'use-wallet';
 import useSF from './useSecuredFinance';
 
 export const useDepositCollateral = (
@@ -8,13 +7,12 @@ export const useDepositCollateral = (
     amount: number | BigNumber
 ) => {
     const securedFinance = useSF();
-    const { account } = useWallet();
 
     const handleDepositCollateral = useCallback(async () => {
         const etherAmount = utils.parseUnits(amount.toString(), 'ether');
         const tx = await securedFinance.depositCollateral(ccy, etherAmount);
         return tx;
-    }, [account, ccy, amount]);
+    }, [amount, securedFinance, ccy]);
 
     return { onDepositCollateral: handleDepositCollateral };
 };
@@ -24,7 +22,6 @@ export const useWithdrawCollateral = (
     amount: number | BigNumber
 ) => {
     const securedFinance = useSF();
-    const { account } = useWallet();
 
     const handleWithdrawCollateral = useCallback(async () => {
         try {
@@ -33,7 +30,7 @@ export const useWithdrawCollateral = (
         } catch (e) {
             return false;
         }
-    }, [account, ccy, amount]);
+    }, [securedFinance, ccy, amount]);
 
     return { onWithdrawCollateral: handleWithdrawCollateral };
 };

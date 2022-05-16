@@ -1,23 +1,14 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import styled from 'styled-components';
-import OrderType from './components/OrderType';
-import Spread from './components/Spread';
-import { Type, Orders } from './types';
 import { Subheader } from '../../../../components/common/Subheader';
 import {
     useBorrowOrderbook,
     useLendOrderbook,
 } from '../../../../hooks/useLendingOrderbook';
-import { OrderbookRow } from '../../../../store/lendingTerminal';
-import { useSelector } from 'react-redux';
 import { RootState } from '../../../../store/types';
-
-interface OrderBookProps {
-    buyType: Type;
-    buyOrders?: Array<OrderbookRow>;
-    sellType: Type;
-    sellOrders?: Array<OrderbookRow>;
-}
+import OrderType from './components/OrderType';
+import Spread from './components/Spread';
 
 export const OrderBook: React.FC = () => {
     const selectedCcy = useSelector(

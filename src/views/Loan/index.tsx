@@ -1,31 +1,32 @@
+import { useCrosschainAddressById } from '@secured-finance/sf-graph-client/dist/hooks';
 import BigNumber from 'bignumber.js';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { connect, useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { Button, Container, RenderTerms, Spacer } from 'src/components/atoms';
+import { SendModal } from 'src/components/organisms';
 import { Page } from 'src/components/templates';
 import useCollateralBook from 'src/hooks/useCollateralBook';
 import { useLoanInformation } from 'src/hooks/useLoanHistory';
+import useModal from 'src/hooks/useModal';
+import { CrossChainWallet } from 'src/services/filecoin';
+import { updateSendAmount, updateSendToAddress } from 'src/store/sendForm';
 import { RootState } from 'src/store/types';
 import theme from 'src/theme';
 import {
     AddressUtils,
     DEFAULT_COLLATERAL_VAULT,
     formatDate,
-    fromBytes32,
     getDisplayBalance,
     ordinaryFormat,
     percentFormat,
-    usdFormat,
 } from 'src/utils';
+import { Currency, currencyList, getCurrencyBy } from 'src/utils/currencyList';
 import styled from 'styled-components';
 import { useWallet } from 'use-wallet';
+import { NextCouponPaymentCard } from '../../components/organisms/Loan/NextCouponPaymentCard';
 
-interface LoanScreenProps {
-    loan?: any;
-}
-
-interface CouponPayment {
+export interface CouponPayment {
     amount: number;
     id: number | string;
     isDone: boolean;
@@ -35,20 +36,8 @@ interface CouponPayment {
     __typename?: string;
 }
 
-const initCoupon: CouponPayment = {
-    amount: 0,
-    id: 0,
-    isDone: false,
-    notice: 1648016979,
-    payment: 1649226579,
-    txHash: '0x',
-    __typename: 'SchedulePayment',
-};
-
-type CombinedProps = LoanScreenProps;
-
-const LoanScreen: React.FC<CombinedProps> = () => {
-    const params: any = useParams();
+const LoanScreen = () => {
+    const params = useParams();
     const { account } = useWallet();
     const loan = useLoanInformation(params.loanId);
     const [couponPayment, setCouponPayment] = useState<CouponPayment>();
@@ -62,14 +51,38 @@ const LoanScreen: React.FC<CombinedProps> = () => {
         DEFAULT_COLLATERAL_VAULT
     );
 
-    const getLoanCcy = (currency: string) => {
-        return fromBytes32(currency);
-    };
+    const counterPartyWallet = useMemo(() => {
+        if (account && loan) {
+            if (loan.lender === account.toLowerCase()) {
+                return loan.borrower;
+            } else {
+                return loan.lender;
+            }
+        }
+        return '';
+    }, [account, loan]);
+
+    const loanCurrency = useMemo(() => {
+        if (loan?.currency) {
+            return getCurrencyBy('shortName', loan.currency.shortName);
+        } else {
+            // we should never be in this condition, but just in case.
+            // TODO: manage global error with a component and display it to the user
+            return currencyList[1];
+        }
+    }, [loan]);
+
+    const counterpartyFilWallet = useCrosschainAddressById(
+        counterPartyWallet,
+        loanCurrency.chainId
+    ) as CrossChainWallet;
+
+    const [onPresentSendModal] = useModal(
+        <SendModal ccyIndex={loanCurrency.indexCcy} />
+    );
 
     const handleNotional = () => {
-        return (
-            ordinaryFormat(loan?.notional) + ` ${getLoanCcy(loan?.currency)}`
-        );
+        return ordinaryFormat(loan?.notional) + ` ${loanCurrency.shortName}`;
     };
 
     const handleInterest = () => {
@@ -78,8 +91,7 @@ const LoanScreen: React.FC<CombinedProps> = () => {
             loan?.rate,
             loan?.term
         );
-        const ccy = getLoanCcy(loan?.currency);
-        return ordinaryFormat(interestPayments) + ` ${ccy}`;
+        return ordinaryFormat(interestPayments) + ` ${loanCurrency.shortName}`;
     };
 
     const totalInterest = (amount: number, rate: number, term: string) => {
@@ -124,38 +136,44 @@ const LoanScreen: React.FC<CombinedProps> = () => {
             .plus(interestPayments)
             .toNumber();
 
-        return ordinaryFormat(totalRepay) + ` ${getLoanCcy(loan?.currency)}`;
+        return ordinaryFormat(totalRepay) + ` ${loanCurrency.shortName}`;
     };
 
-    const nextCouponPayment = () => {
+    const nextCouponPayment = useCallback(() => {
         const payment: Array<CouponPayment> =
-            loan?.schedule.payments?.filter((payment: any) => {
+            loan?.schedule.payments?.filter((payment: { isDone: boolean }) => {
                 return payment.isDone === false;
             }) || [];
         setCouponPayment(payment[0]);
-    };
-
-    const couponUsdPayment = (amount: number) => {
-        const usdPayment = new BigNumber(amount)
-            .multipliedBy(filPrice)
-            .toNumber();
-        return usdFormat(usdPayment);
-    };
-
-    const handleCounterpartyAddr = () => {
-        if (loan.lender === account.toLowerCase()) {
-            setCounterpartyAddr(loan?.borrower);
-        } else {
-            setCounterpartyAddr(loan?.lender);
-        }
-    };
+    }, [loan]);
 
     useEffect(() => {
         if (loan != null) {
+            setCounterpartyAddr(counterPartyWallet);
             nextCouponPayment();
-            handleCounterpartyAddr();
+            if (
+                counterpartyFilWallet &&
+                loan?.currency &&
+                loanCurrency.shortName === Currency.FIL
+            ) {
+                dispatch(updateSendToAddress(counterpartyFilWallet.address));
+            } else {
+                dispatch(updateSendToAddress(counterPartyWallet));
+            }
+            dispatch(updateSendAmount(loan.notional));
         }
-    }, [dispatch, setCouponPayment, setCounterpartyAddr, loan, account]);
+    }, [
+        dispatch,
+        setCouponPayment,
+        setCounterpartyAddr,
+        loan,
+        account,
+        nextCouponPayment,
+        counterpartyAddr,
+        counterPartyWallet,
+        counterpartyFilWallet,
+        loanCurrency,
+    ]);
 
     return (
         <Page background={theme.colors.background}>
@@ -251,9 +269,7 @@ const LoanScreen: React.FC<CombinedProps> = () => {
                                             </StyledItemText>
                                             <StyledItemText>
                                                 {ordinaryFormat(item.amount) +
-                                                    ` ${getLoanCcy(
-                                                        loan?.currency
-                                                    )}`}
+                                                    ` ${loanCurrency.shortName}`}
                                             </StyledItemText>
                                         </StyledRowContainer>
                                     )
@@ -277,72 +293,12 @@ const LoanScreen: React.FC<CombinedProps> = () => {
                     </StyledColumn>
                     <Spacer size='lg' />
                     <StyledColumn>
-                        <StyledSubcontainer>
-                            <StyledLabelTitle textTransform={'capitalize'}>
-                                Next Coupon Payment
-                            </StyledLabelTitle>
-                            <StyledItemContainer
-                                marginBottom={'0px'}
-                                background={'none'}
-                            >
-                                <StyledRowContainer>
-                                    <StyledItemText
-                                        fontSize={16}
-                                        fontWeight={600}
-                                    >
-                                        {ordinaryFormat(couponPayment?.amount) +
-                                            ` ${getLoanCcy(loan?.currency)}`}
-                                    </StyledItemText>
-                                    <StyledItemText color={theme.colors.gray}>
-                                        {couponUsdPayment(
-                                            couponPayment?.amount
-                                        )}
-                                    </StyledItemText>
-                                </StyledRowContainer>
-                                <StyledRowContainer marginTop={'10px'}>
-                                    <StyledItemText
-                                        fontSize={12}
-                                        opacity={0.9}
-                                        fontWeight={400}
-                                    >
-                                        Payment Notification
-                                    </StyledItemText>
-                                    <StyledItemText
-                                        fontSize={12}
-                                        fontWeight={400}
-                                    >
-                                        {formatDate(couponPayment?.notice)}
-                                    </StyledItemText>
-                                </StyledRowContainer>
-                                <StyledRowContainer marginTop={'10px'}>
-                                    <StyledItemText
-                                        fontSize={12}
-                                        opacity={0.9}
-                                        fontWeight={400}
-                                    >
-                                        Payment Due Date
-                                    </StyledItemText>
-                                    <StyledItemText
-                                        fontSize={12}
-                                        fontWeight={400}
-                                    >
-                                        {formatDate(couponPayment?.payment)}
-                                    </StyledItemText>
-                                </StyledRowContainer>
-                                <Button
-                                    // onClick={handleLendOut}
-                                    text={'Pay Coupon'}
-                                    style={{
-                                        marginTop: 15,
-                                        background: theme.colors.buttonBlue,
-                                        fontSize: theme.sizes.callout,
-                                        fontWeight: 500,
-                                        color: theme.colors.white,
-                                    }}
-                                    // disabled={!(notional > 0)}
-                                />
-                            </StyledItemContainer>
-                        </StyledSubcontainer>
+                        <NextCouponPaymentCard
+                            onClick={onPresentSendModal}
+                            couponPayment={couponPayment}
+                            currency={loanCurrency.shortName}
+                            filPrice={filPrice}
+                        ></NextCouponPaymentCard>
                         {colBook.vault !== '' ? (
                             <CounterpartyContainer>
                                 <StyledSubcontainer>

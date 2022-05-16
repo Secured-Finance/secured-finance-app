@@ -1,7 +1,11 @@
-import { useCallback, useEffect } from 'react';
+import { utils } from '@secured-finance/sf-client';
+import {
+    useBorrowOrderbook as useBorrowOrderbookQuery,
+    useLendingTradingHistory as useLendingTradingHistoryQuery,
+    useLendOrderbook as useLendOrderbookQuery,
+} from '@secured-finance/sf-graph-client';
 import { useDispatch, useSelector } from 'react-redux';
 import { useWallet } from 'use-wallet';
-import { RootState } from '../store/types';
 import {
     failSetOrderbook,
     failSetTradingHistory,
@@ -11,12 +15,7 @@ import {
     startSetOrderbook,
     startSetTradingHistory,
 } from '../store/lendingTerminal';
-import { utils } from '@secured-finance/sf-client';
-import {
-    useLendOrderbook as useLendOrderbookQuery,
-    useBorrowOrderbook as useBorrowOrderbookQuery,
-    useLendingTradingHistory as useLendingTradingHistoryQuery,
-} from '@secured-finance/sf-graph-client';
+import { RootState } from '../store/types';
 
 export const useBorrowOrderbook = (ccy: string, term: string, skip = 0) => {
     const { chainId }: { chainId: number | null } = useWallet();

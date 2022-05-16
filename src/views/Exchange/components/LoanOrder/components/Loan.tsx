@@ -29,21 +29,21 @@ const Lend: React.FC<LendingTerminalStore> = ({
             dispatch(updateLendingTerms(e.currentTarget.value));
             setTermsOpen(!termsOpen);
         },
-        [setTermsOpen]
+        [dispatch]
     );
 
     const handleInterestRate = useCallback(
         (e: React.FormEvent<HTMLInputElement>) => {
             dispatch(updateLendRate(e.currentTarget.value));
         },
-        [lendRate]
+        [dispatch]
     );
 
     const handleLendAmount = useCallback(
         (e: React.FormEvent<HTMLInputElement>) => {
             dispatch(updateLendAmount(e.currentTarget.value));
         },
-        [lendAmount]
+        [dispatch]
     );
 
     const { onPlaceOrder } = usePlaceOrder(

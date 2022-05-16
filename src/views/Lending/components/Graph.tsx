@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { RootState } from 'src/store/types';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
-import { LendingStore } from 'src/store/lending/types';
-import cm from './Graph.module.scss';
 import { LineChart } from 'src/components/new/LineChart';
+import { LendingStore } from 'src/store/lending/types';
+import { RootState } from 'src/store/types';
+import cm from './Graph.module.scss';
 
 const labels = ['0', '3m', '6m', '1y', '2y', '3y', '5y'];
 
@@ -95,6 +95,8 @@ const YieldGraph: React.FC<CombinedProps> = ({
             ],
         };
         setData(graphData);
+        //TODO: rework everything here
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [borrowRates, lendingRates, midRate]);
 
     return (

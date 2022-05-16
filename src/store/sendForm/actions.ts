@@ -1,8 +1,9 @@
-import * as constants from './constants';
 import { FilecoinNumber } from '@glif/filecoin-number';
+import { Dispatch } from '@reduxjs/toolkit';
+import * as constants from './constants';
 
 export function updateSendCurrency(data: string) {
-    return (dispatch: any) => {
+    return (dispatch: Dispatch) => {
         dispatch(updateSendCcyShortName(data));
         switch (data) {
             case 'ETH':
@@ -44,14 +45,14 @@ export function updateSendCcyShortName(data: string) {
     };
 }
 
-export function updateSendAmount(data: any) {
+export function updateSendAmount(data: number) {
     return {
         type: constants.UPDATE_AMOUNT,
         data,
     };
 }
 
-export function updateSendToAddreess(data: string) {
+export function updateSendToAddress(data: string) {
     return {
         type: constants.UPDATE_TO_ADDRESS,
         data,
@@ -65,7 +66,7 @@ export function updateSendTxFee(data: number) {
     };
 }
 
-export function updateSendGasPrice(data: any) {
+export function updateSendGasPrice(data: number) {
     return {
         type: constants.UPDATE_GAS_PRICE,
         data,

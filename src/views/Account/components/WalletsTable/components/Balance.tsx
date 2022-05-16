@@ -1,12 +1,12 @@
 import React from 'react';
+import { CurrencyInfo, getCurrencyBy } from 'src/utils/currencyList';
 import styled from 'styled-components';
-import { CurrencyInfo, currencyList } from '../../../../../utils/currencies';
 import { ordinaryFormat, usdFormat } from '../../../../../utils/formatNumbers';
 
 interface BalanceContainerProps {
     balance: number;
     value: number;
-    index: any;
+    index: number;
 }
 
 interface BalanceProps {
@@ -15,19 +15,8 @@ interface BalanceProps {
 
 type ItemProps = BalanceContainerProps & BalanceProps;
 
-const BalanceInfo: React.FC<ItemProps> = ({
-    index,
-    currencies,
-    balance,
-    value,
-}) => {
-    let shortName: string;
-
-    currencies.filter((currency, i) => {
-        if (index === i) {
-            shortName = currency.shortName;
-        }
-    });
+const BalanceInfo: React.FC<ItemProps> = ({ index, balance, value }) => {
+    const { shortName } = getCurrencyBy('indexCcy', index.toString());
 
     return (
         <div>
@@ -51,14 +40,7 @@ const RenderBalance: React.FC<BalanceContainerProps> = ({
     value,
     index,
 }) => {
-    return (
-        <BalanceInfo
-            balance={balance}
-            value={value}
-            index={index}
-            currencies={currencyList}
-        />
-    );
+    return <BalanceInfo balance={balance} value={value} index={index} />;
 };
 
 const StyledBalance = styled.div`

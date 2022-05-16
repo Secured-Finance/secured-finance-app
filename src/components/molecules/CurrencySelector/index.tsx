@@ -1,8 +1,13 @@
 import React from 'react';
-import styled from 'styled-components';
-import theme from 'src/theme';
-import { collateralList, CurrencyInfo, currencyList } from 'src/utils';
 import { ArrowSVG } from 'src/components/atoms';
+import theme from 'src/theme';
+import { collateralList } from 'src/utils';
+import {
+    CurrencyInfo,
+    currencyList,
+    getCurrencyBy,
+} from 'src/utils/currencyList';
+import styled from 'styled-components';
 
 interface CurrencySelectorProps {
     selectedCcy: string;
@@ -18,9 +23,7 @@ interface CurrenciesListProps {
 type ChildrenProps = CurrencySelectorProps & CurrenciesListProps;
 
 const RenderImage: React.FC<ChildrenProps> = ({ selectedCcy, currencies }) => {
-    const icon: string = currencies.filter(
-        ccy => selectedCcy === ccy.shortName
-    )[0].icon;
+    const { icon } = getCurrencyBy('shortName', selectedCcy);
 
     return <img width={28} src={icon} alt={selectedCcy} />;
 };

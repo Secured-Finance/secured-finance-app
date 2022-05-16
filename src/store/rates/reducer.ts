@@ -1,5 +1,4 @@
 import produce from 'immer';
-import { isBreakStatement } from 'typescript';
 import * as constants from './constants';
 import { RatesStore } from './types';
 

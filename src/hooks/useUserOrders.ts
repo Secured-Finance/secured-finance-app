@@ -35,17 +35,13 @@ export const useOpenOrders = (ccy: string, term: string) => {
         } catch (err) {
             console.log(err);
         }
-    }, [ccy, term, lendingMarketAddress, account]);
+    }, [lendingMarketAddress, account]);
 
     useEffect(() => {
-        let isMounted = true;
         if (lendingMarketAddress != null && account) {
             fetchOpenOrders();
         }
-        return () => {
-            isMounted = false;
-        };
-    }, [ccy, term, lendingMarketAddress, account]);
+    }, [ccy, term, lendingMarketAddress, account, fetchOpenOrders]);
 
     return openOrders;
 };
@@ -109,7 +105,7 @@ export const useTradeHistoryOrders = (ccy: string, term: string) => {
         } catch (err) {
             console.log(err);
         }
-    }, [ccy, term, lendingMarketAddress, account]);
+    }, [lendingMarketAddress, account]);
 
     useEffect(() => {
         let isMounted = true;
@@ -119,7 +115,7 @@ export const useTradeHistoryOrders = (ccy: string, term: string) => {
         return () => {
             isMounted = false;
         };
-    }, [ccy, term, lendingMarketAddress, account]);
+    }, [ccy, term, lendingMarketAddress, account, fetchTradeHistoryOrders]);
 
     return tradeHistory;
 };
@@ -152,7 +148,7 @@ export const useOpenLoans = (ccy: string, term: string) => {
         } catch (err) {
             console.log(err);
         }
-    }, [ccy, term, lendingMarketAddress, account]);
+    }, [lendingMarketAddress, account]);
 
     useEffect(() => {
         let isMounted = true;
@@ -162,7 +158,7 @@ export const useOpenLoans = (ccy: string, term: string) => {
         return () => {
             isMounted = false;
         };
-    }, [ccy, term, lendingMarketAddress, account]);
+    }, [ccy, term, lendingMarketAddress, account, fetchMadeOrders]);
 
     return loans;
 };
