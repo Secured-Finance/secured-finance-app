@@ -8,6 +8,7 @@ describe('getCurrencyBy', () => {
         icon: ethLogo,
         shortName: 'ETH',
         fullName: 'Ethereum',
+        chainId: 60,
     };
 
     const fil = {
@@ -15,6 +16,7 @@ describe('getCurrencyBy', () => {
         icon: filLogo,
         shortName: 'FIL',
         fullName: 'Filecoin',
+        chainId: 461,
     };
 
     it('should return the currency object for an existing string indexCcy', () => {
@@ -51,5 +53,11 @@ describe('getCurrencyBy', () => {
         expect(getCurrencyBy('fullName', 'ethereUm')).toEqual(eth);
         expect(getCurrencyBy('shortName', 'eth')).toEqual(eth);
         expect(getCurrencyBy('shortName', 'fIL')).toEqual(fil);
+    });
+
+    it('should return the chainId for a shortName', () => {
+        expect(getCurrencyBy('shortName', 'ETH').chainId).toEqual(eth.chainId);
+        expect(getCurrencyBy('shortName', 'FIL').chainId).toEqual(fil.chainId);
+        expect(getCurrencyBy('shortName', 'USDC').chainId).toEqual(60);
     });
 });
