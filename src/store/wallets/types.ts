@@ -1,5 +1,3 @@
-import { ActionType } from './constants';
-
 export interface WalletsStore {
     totalUSDBalance: number;
     ethereum: WalletBase;
@@ -21,18 +19,6 @@ export interface WalletBase {
         placeCollateral: () => void;
     };
 }
-
-export type WalletAction = {
-    type: ActionType;
-    data?:
-        | number
-        | string
-        | boolean
-        | Record<string, unknown>
-        | WalletBase['actions'];
-    error?: string;
-};
-
 export type Coin = 'filecoin' | 'ethereum' | 'usdc';
 
 export const supportedCoins: Record<number, Coin> = {

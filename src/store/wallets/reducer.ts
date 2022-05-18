@@ -1,11 +1,6 @@
-import * as constants from './constants';
-import {
-    defaultEthWallet,
-    defaultFilWallet,
-    WalletAction,
-    WalletBase,
-    WalletsStore,
-} from './types';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { WalletBase } from '.';
+import { defaultEthWallet, defaultFilWallet, WalletsStore } from './types';
 
 const initialStore: WalletsStore = {
     totalUSDBalance: 0,
@@ -14,173 +9,91 @@ const initialStore: WalletsStore = {
     isLoading: false,
 };
 
-const reducer = (
-    state = initialStore,
-    action: WalletAction
-): {
-    isLoading: boolean;
-} & WalletsStore => {
-    switch (action.type) {
-        case constants.FETCHING_WALLETS:
-            return {
-                ...state,
-                isLoading: true,
-            };
-        case constants.FETCHING_WALLETS_FAILURE:
-            return {
-                ...state,
-                isLoading: false,
-            };
-        case constants.UPDATE_TOTAL_USD_BALANCE:
-            return {
-                ...state,
-                totalUSDBalance: action.data as number,
-            };
+const walletsSlice = createSlice({
+    name: 'wallets',
+    initialState: initialStore,
+    reducers: {
+        updateEthWalletBalance(state, action: PayloadAction<number>) {
+            state.ethereum.balance = action.payload;
+            state.isLoading = false;
+        },
+        updateEthWalletUSDBalance(state, action: PayloadAction<number>) {
+            state.ethereum.usdBalance = action.payload;
+            state.isLoading = false;
+        },
+        updateEthWalletAddress(state, action: PayloadAction<string>) {
+            state.ethereum.address = action.payload;
+            state.isLoading = false;
+        },
+        updateEthWalletPortfolioShare(state, action: PayloadAction<number>) {
+            state.ethereum.portfolioShare = action.payload;
+            state.isLoading = false;
+        },
+        updateEthWalletDailyChange(state, action: PayloadAction<number>) {
+            state.ethereum.dailyChange = action.payload;
+            state.isLoading = false;
+        },
+        updateEthWalletAssetPrice(state, action: PayloadAction<number>) {
+            state.ethereum.assetPrice = action.payload;
+            state.isLoading = false;
+        },
+        updateEthWalletActions(
+            state,
+            action: PayloadAction<WalletBase['actions']>
+        ) {
+            state.ethereum.actions = action.payload;
+            state.isLoading = false;
+        },
+        updateFilWalletBalance(state, action: PayloadAction<number>) {
+            state.filecoin.balance = action.payload;
+            state.isLoading = false;
+        },
+        updateFilWalletUSDBalance(state, action: PayloadAction<number>) {
+            state.filecoin.usdBalance = action.payload;
+            state.isLoading = false;
+        },
+        updateFilWalletAddress(state, action: PayloadAction<string>) {
+            state.filecoin.address = action.payload;
+            state.isLoading = false;
+        },
+        updateFilWalletPortfolioShare(state, action: PayloadAction<number>) {
+            state.filecoin.portfolioShare = action.payload;
+            state.isLoading = false;
+        },
+        updateFilWalletDailyChange(state, action: PayloadAction<number>) {
+            state.filecoin.dailyChange = action.payload;
+            state.isLoading = false;
+        },
+        updateFilWalletAssetPrice(state, action: PayloadAction<number>) {
+            state.filecoin.assetPrice = action.payload;
+            state.isLoading = false;
+        },
+        updateFilWalletActions(
+            state,
+            action: PayloadAction<WalletBase['actions']>
+        ) {
+            state.filecoin.actions = action.payload;
+            state.isLoading = false;
+        },
+        updateTotalUSDBalance(state, action: PayloadAction<number>) {
+            state.totalUSDBalance = action.payload;
+            state.isLoading = false;
+        },
+        fetchWallet(state) {
+            state.isLoading = true;
+        },
+        fetchWalletFailure(state) {
+            state.isLoading = false;
+        },
+        resetEthWallet(state) {
+            state.ethereum = defaultEthWallet;
+            state.isLoading = false;
+        },
+        resetFilWallet(state) {
+            state.filecoin = defaultFilWallet;
+            state.isLoading = false;
+        },
+    },
+});
 
-        // Ethereum
-        case constants.UPDATE_ETHEREUM_WALLET_ADDRESS:
-            return {
-                ...state,
-                ethereum: {
-                    ...state.ethereum,
-                    address: action.data as string,
-                },
-                isLoading: false,
-            };
-        case constants.UPDATE_ETHEREUM_WALLET_BALANCE:
-            return {
-                ...state,
-                ethereum: {
-                    ...state.ethereum,
-                    balance: action.data as number,
-                },
-                isLoading: false,
-            };
-        case constants.UPDATE_ETHEREUM_WALLET_USD_BALANCE:
-            return {
-                ...state,
-                ethereum: {
-                    ...state.ethereum,
-                    usdBalance: action.data as number,
-                },
-                isLoading: false,
-            };
-        case constants.UPDATE_ETHEREUM_WALLET_ASSET_PRICE:
-            return {
-                ...state,
-                ethereum: {
-                    ...state.ethereum,
-                    assetPrice: action.data as number,
-                },
-                isLoading: false,
-            };
-        case constants.UPDATE_ETHEREUM_WALLET_PORTFOLIO_SHARE:
-            return {
-                ...state,
-                ethereum: {
-                    ...state.ethereum,
-                    portfolioShare: action.data as number,
-                },
-                isLoading: false,
-            };
-        case constants.UPDATE_ETHEREUM_WALLET_DAILY_CHANGE:
-            return {
-                ...state,
-                ethereum: {
-                    ...state.ethereum,
-                    dailyChange: action.data as number,
-                },
-                isLoading: false,
-            };
-        case constants.UPDATE_ETHEREUM_WALLET_ACTIONS:
-            return {
-                ...state,
-                ethereum: {
-                    ...state.ethereum,
-                    actions: action.data as WalletBase['actions'],
-                },
-                isLoading: false,
-            };
-        case constants.RESET_ETHEREUM_WALLET:
-            return {
-                ...state,
-                ethereum: defaultEthWallet,
-                isLoading: false,
-            };
-
-        // Filecoin
-        case constants.UPDATE_FILECOIN_WALLET_ADDRESS:
-            return {
-                ...state,
-                filecoin: {
-                    ...state.filecoin,
-                    address: action.data as string,
-                },
-                isLoading: false,
-            };
-        case constants.UPDATE_FILECOIN_WALLET_BALANCE:
-            return {
-                ...state,
-                filecoin: {
-                    ...state.filecoin,
-                    balance: action.data as number,
-                },
-                isLoading: false,
-            };
-        case constants.UPDATE_FILECOIN_WALLET_USD_BALANCE:
-            return {
-                ...state,
-                filecoin: {
-                    ...state.filecoin,
-                    usdBalance: action.data as number,
-                },
-                isLoading: false,
-            };
-        case constants.UPDATE_FILECOIN_WALLET_ASSET_PRICE:
-            return {
-                ...state,
-                filecoin: {
-                    ...state.filecoin,
-                    assetPrice: action.data as number,
-                },
-                isLoading: false,
-            };
-        case constants.UPDATE_FILECOIN_WALLET_PORTFOLIO_SHARE:
-            return {
-                ...state,
-                filecoin: {
-                    ...state.filecoin,
-                    portfolioShare: action.data as number,
-                },
-                isLoading: false,
-            };
-        case constants.UPDATE_FILECOIN_WALLET_DAILY_CHANGE:
-            return {
-                ...state,
-                filecoin: {
-                    ...state.filecoin,
-                    dailyChange: action.data as number,
-                },
-                isLoading: false,
-            };
-        case constants.UPDATE_FILECOIN_WALLET_ACTIONS:
-            return {
-                ...state,
-                filecoin: {
-                    ...state.filecoin,
-                    actions: action.data as WalletBase['actions'],
-                },
-                isLoading: false,
-            };
-        case constants.RESET_FILECOIN_WALLET:
-            return {
-                ...state,
-                filecoin: defaultFilWallet,
-                isLoading: false,
-            };
-        default:
-            return state;
-    }
-};
-
-export default reducer;
+export default walletsSlice;

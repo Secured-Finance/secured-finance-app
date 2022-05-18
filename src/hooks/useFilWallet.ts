@@ -4,7 +4,11 @@ import { useCallback, useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Dispatch } from 'redux';
 import { WalletAccountModal } from 'src/components/organisms';
-import { useResetFilWalletProvider } from 'src/services/filecoin';
+import {
+    FIL_ADDRESS,
+    FIL_WALLET_TYPE,
+    useResetFilWalletProvider,
+} from 'src/services/filecoin';
 import { FilecoinWalletType } from 'src/services/filecoin/store/types';
 import { getFilecoinNetwork } from 'src/services/filecoin/utils';
 import connectWithLedger from 'src/services/ledger/connectLedger';
@@ -21,7 +25,6 @@ import {
     updateFilWalletUSDBalance,
     WalletBase,
 } from 'src/store/wallets';
-import { FIL_ADDRESS, FIL_WALLET_TYPE } from 'src/store/wallets/constants';
 import {
     updateFilWalletViaProvider,
     updateFilWalletViaRPC,
