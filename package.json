@@ -83,6 +83,7 @@
     "@storybook/react": "^6.4.19",
     "@tailwindcss/postcss7-compat": "^2.2.17",
     "@types/bluebird": "^3.5.34",
+    "@types/chart.js": "^2.9.37",
     "@types/ledgerhq__hw-transport-webusb": "^4.70.1",
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0",
