@@ -19,7 +19,7 @@ export interface FilledOrdersTableData {
     createdAtTimestamp: number;
 }
 
-export const filledTableCollumns = [
+export const filledTableColumns = [
     {
         Header: '',
         id: 'positions',
