@@ -9,6 +9,7 @@ import {
     setLendingHistory,
     startSetHistory,
 } from 'src/store/history';
+import { HistoryTableData } from 'src/store/history/types';
 import { RootState } from 'src/store/types';
 import theme from 'src/theme';
 import styled from 'styled-components';
@@ -82,7 +83,8 @@ const mapStateToProps = (state: RootState) => {
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
     return {
-        setLendingHistory: (data: any[]) => dispatch(setLendingHistory(data)),
+        setLendingHistory: (data: HistoryTableData[]) =>
+            dispatch(setLendingHistory(data)),
         startSetHistory: () => dispatch(startSetHistory()),
         failSetLendingHistory: () => dispatch(failSetLendingHistory()),
     };

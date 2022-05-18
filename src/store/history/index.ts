@@ -1,8 +1,10 @@
-export { default } from './reducer';
-export {
-    setLendingHistory,
+import historySlice from './reducer';
+
+export default historySlice.reducer;
+export const {
     startSetHistory,
-    failSetLendingHistory,
     setBorrowingHistory,
+    setLendingHistory,
     failSetBorrowingHistory,
-} from './actions';
+    failSetLendingHistory,
+} = historySlice.actions;

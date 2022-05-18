@@ -4,7 +4,6 @@ import { useCrosschainAddressById } from '@secured-finance/sf-graph-client';
 import { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useUpdateCrossChainWallet } from 'src/hooks/useUpdateCrossChainWallet';
-import { FIL_ADDRESS, FIL_WALLET_TYPE } from 'src/store/wallets/constants';
 import { updateFilWallet } from 'src/store/wallets/helpers';
 import { AddressUtils } from 'src/utils';
 import { useWallet } from 'use-wallet';
@@ -31,6 +30,9 @@ export type CrossChainWallet = {
     chainID: string;
     [key: string]: unknown;
 };
+
+export const FIL_ADDRESS = 'FIL_ADDRESS';
+export const FIL_WALLET_TYPE = 'FIL_WALLET_TYPE';
 
 export const useResetFilWalletProvider = () => {
     const dispatch = useDispatch();
