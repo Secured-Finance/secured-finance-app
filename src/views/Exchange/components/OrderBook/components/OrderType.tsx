@@ -27,10 +27,6 @@ const OrderType: React.FC<OrderTypeProps> = ({ orders, type, showHeader }) => {
                 <StyledOrderRowText textAlign={'right'}>
                     {usdFormat(usdAmount)}
                 </StyledOrderRowText>
-                {/* <StyledOrderRowProgress
-                    width={w}
-                    background={bgColor}
-                ></StyledOrderRowProgress> */}
             </StyledOrderRow>
         );
     });
@@ -91,21 +87,6 @@ const StyledOrderRowText = styled.p<StyledOrderRowTextProps>`
     text-align: ${props => (props.textAlign ? props.textAlign : 'left')};
     z-index: 2;
     margin: 0;
-`;
-
-interface StyledOrderRowProgressProps {
-    background: string;
-    width: string;
-}
-
-const StyledOrderRowProgress = styled.div<StyledOrderRowProgressProps>`
-    position: absolute;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    background-color: ${props => props.background};
-    width: ${props => props.width};
-    opacity: 0.15;
 `;
 
 const StyledOrderBookHeader = styled.div`
