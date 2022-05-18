@@ -1,10 +1,10 @@
-import React from 'react';
-import styled from 'styled-components';
+import { useMemo } from 'react';
 import { useTable } from 'react-table';
-import { filledTableCollumns } from './types';
+import styled from 'styled-components';
+import { filledTableColumns } from './types';
 
 function OrdersTable({ table }) {
-    const columns = React.useMemo(() => filledTableCollumns, []);
+    const columns = useMemo(() => filledTableColumns, []);
     const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
         useTable({ columns, data: table });
 
@@ -26,7 +26,7 @@ function OrdersTable({ table }) {
                 ))}
             </StyledTableHead>
             <StyledTableBody {...getTableBodyProps()}>
-                {rows.map((row, i) => {
+                {rows.map(row => {
                     prepareRow(row);
                     return (
                         <tr {...row.getRowProps()}>
