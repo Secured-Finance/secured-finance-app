@@ -33,7 +33,7 @@ export const useOpenOrders = (ccy: string, term: string) => {
                 setOpenOrders(res.data.user.openOrders);
             }
         } catch (err) {
-            console.log(err);
+            console.error(err);
         }
     }, [lendingMarketAddress, account]);
 
@@ -103,7 +103,7 @@ export const useTradeHistoryOrders = (ccy: string, term: string) => {
                 setTradeHistory(parsedHistory);
             }
         } catch (err) {
-            console.log(err);
+            console.error(err);
         }
     }, [lendingMarketAddress, account]);
 
@@ -142,7 +142,7 @@ export const useOpenLoans = (ccy: string, term: string) => {
                 setLoans(res.data.user.loans);
             }
         } catch (err) {
-            console.log(err);
+            console.error(err);
         }
     }, [lendingMarketAddress, account]);
 

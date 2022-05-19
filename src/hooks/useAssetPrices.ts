@@ -59,7 +59,7 @@ const useAssetPrice = (
             })
             .catch(function (error) {
                 dispatch(fetchAssetPriceFailure());
-                console.log(error);
+                console.error(error);
             });
     }, [asset, changeAction, dispatch, priceAction]);
 

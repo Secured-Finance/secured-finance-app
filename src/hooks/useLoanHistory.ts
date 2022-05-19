@@ -23,7 +23,7 @@ export const useLoanDeals = (skip = 0) => {
             dispatch(setLendingHistory(res));
         }
     } catch (err) {
-        console.log(err);
+        console.error(err);
     }
 
     return lendingHistory;
@@ -42,7 +42,7 @@ export const useBorrowDeals = (skip = 0) => {
             dispatch(setBorrowingHistory(res));
         }
     } catch (err) {
-        console.log(err);
+        console.error(err);
     }
 
     return borrowingHistory;
