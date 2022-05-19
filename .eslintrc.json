@@ -20,6 +20,7 @@
   ],
   "rules": {
     "@typescript-eslint/ban-ts-comment": "warn",
+    "no-console": ["warn", { "allow": ["error"] }],
     "eqeqeq": "error",
     "@typescript-eslint/explicit-function-return-type": "off",
     "@typescript-eslint/explicit-module-boundary-types": "off",

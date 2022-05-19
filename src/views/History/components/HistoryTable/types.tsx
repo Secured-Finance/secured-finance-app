@@ -17,7 +17,7 @@ export interface TableColumns {
 interface Columns {
     Header: string;
     accessor: string;
-    Cell: any;
+    Cell: (cell: { value: string | number }) => JSX.Element;
 }
 
 interface IndexProps {

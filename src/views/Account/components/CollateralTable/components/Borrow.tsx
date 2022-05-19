@@ -6,7 +6,7 @@ import styled from 'styled-components';
 interface BorrowContainerProps {
     locked: BigNumber;
     value: number;
-    shortName: number;
+    shortName: string;
 }
 
 const RenderBorrow: React.FC<BorrowContainerProps> = ({
