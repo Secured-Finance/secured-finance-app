@@ -28,6 +28,7 @@ import {
     termList,
     usdFormat,
 } from 'src/utils';
+import { getCurrencyBy } from 'src/utils/currencyList';
 import { daysInYear } from '../constants';
 import BorrowCollateralManagement from './BorrowCollateralManagement';
 import cm from './LendBorrowTable.module.scss';
@@ -91,7 +92,11 @@ export const LendBorrowTable: React.FC<ILendBorrowTable> = ({
     ]);
 
     const handleCurrencyChange = (e: React.SyntheticEvent<HTMLSelectElement>) =>
-        dispatch(updateMainCurrency(e.currentTarget.value));
+        dispatch(
+            updateMainCurrency(
+                getCurrencyBy('shortName', e.currentTarget.value)
+            )
+        );
 
     const USDAmount: BigNumber = useMemo(() => {
         if (amount.isNaN()) return new BigNumber(0);
@@ -110,7 +115,7 @@ export const LendBorrowTable: React.FC<ILendBorrowTable> = ({
     const handleAmountChange = useCallback(
         (e: React.FormEvent<HTMLInputElement>) => {
             const action = isBorrow ? updateBorrowAmount : updateLendAmount;
-            dispatch(action(e.currentTarget.value));
+            dispatch(action(e.currentTarget.valueAsNumber));
         },
         [isBorrow, dispatch]
     );
@@ -148,7 +153,7 @@ export const LendBorrowTable: React.FC<ILendBorrowTable> = ({
             await action();
             setPendingTx(false);
         } catch (e) {
-            console.log(e);
+            console.error(e);
         }
     }, [action, setPendingTx]);
 

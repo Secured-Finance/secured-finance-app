@@ -1,6 +1,6 @@
+import { OrderbookRow } from '@secured-finance/sf-graph-client/dist/utils';
 import React from 'react';
 import styled from 'styled-components';
-import { OrderbookRow } from '../../../../../store/lendingTerminal';
 import theme from '../../../../../theme';
 import { ordinaryFormat, percentFormat, usdFormat } from '../../../../../utils';
 import { Type } from '../types';
@@ -25,7 +25,7 @@ const OrderType: React.FC<OrderTypeProps> = ({ orders, type, showHeader }) => {
                     {ordinaryFormat(totalAmount)}
                 </StyledOrderRowText>
                 <StyledOrderRowText textAlign={'right'}>
-                    {usdFormat(usdAmount)}
+                    {usdFormat(usdAmount as number)}
                 </StyledOrderRowText>
             </StyledOrderRow>
         );

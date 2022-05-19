@@ -33,14 +33,14 @@ const Borrow: React.FC<LendingTerminalStore> = ({
 
     const handleInterestRate = useCallback(
         (e: React.FormEvent<HTMLInputElement>) => {
-            dispatch(updateBorrowRate(e.currentTarget.value));
+            dispatch(updateBorrowRate(e.currentTarget.valueAsNumber));
         },
         [dispatch]
     );
 
     const handleBorrowAmount = useCallback(
         (e: React.FormEvent<HTMLInputElement>) => {
-            dispatch(updateBorrowAmount(e.currentTarget.value));
+            dispatch(updateBorrowAmount(e.currentTarget.valueAsNumber));
         },
         [dispatch]
     );
@@ -58,7 +58,7 @@ const Borrow: React.FC<LendingTerminalStore> = ({
             await onPlaceOrder();
             setPendingTx(false);
         } catch (e) {
-            console.log(e);
+            console.error(e);
         }
     }, [onPlaceOrder, setPendingTx]);
 

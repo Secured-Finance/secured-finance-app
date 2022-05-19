@@ -174,7 +174,7 @@ const SendModal = ({
                 setAddrErr(true);
             }
         } catch (e) {
-            console.log(e);
+            console.error(e);
         }
     }, [
         toAddress,
