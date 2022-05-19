@@ -16,14 +16,15 @@ import {
 import { recalculateTotalUSDBalance } from 'src/store/wallets/helpers';
 import { useWallet } from 'use-wallet';
 import { useEthereumUsd } from './useAssetPrices';
-import useBlock from './useBlock';
 import useModal from './useModal';
 
 export const useEthereumWalletStore = () => {
     const ethWallet = useSelector((state: RootState) => {
         return state.wallets.ethereum;
     });
-    const block = useBlock();
+    const block = useSelector(
+        (state: RootState) => state.blockchain.latestBlock
+    );
     const dispatch = useDispatch();
     const { account, balance, reset } = useWallet();
     const { price, change } = useEthereumUsd();

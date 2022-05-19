@@ -4,11 +4,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useWallet } from 'use-wallet';
 import { RootState } from '../store/types';
 import { updateTotalUSDBalance } from '../store/wallets';
-import useBlock from './useBlock';
 
 export const useTotalUSDBalance = () => {
     const { account, balance } = useWallet();
-    const block = useBlock();
+    const block = useSelector(
+        (state: RootState) => state.blockchain.latestBlock
+    );
     const dispatch = useDispatch();
     const totalUSDBalance = useSelector(
         (state: RootState) => state.wallets.totalUSDBalance

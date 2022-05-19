@@ -1,8 +1,9 @@
 import { configureStore } from '@reduxjs/toolkit';
 import filWalletProvider from '../services/filecoin/store';
 import assetPrices from './assetPrices';
+import blockchain from './blockchain';
 import collateralForm from './collateralForm';
-import historyReducer from './history';
+import history from './history';
 import ledger from './ledger';
 import lending from './lending';
 import lendingTerminal from './lendingTerminal';
@@ -11,7 +12,7 @@ import sendForm from './sendForm';
 import wallets from './wallets';
 
 export const rootReducers = {
-    history: historyReducer,
+    history,
     rates,
     lending,
     wallets,
@@ -21,11 +22,12 @@ export const rootReducers = {
     collateralForm,
     lendingTerminal,
     ledger,
+    blockchain,
 };
 
 const store = configureStore({
     reducer: {
-        history: historyReducer,
+        history,
         rates,
         lending,
         wallets,
@@ -35,6 +37,7 @@ const store = configureStore({
         collateralForm,
         lendingTerminal,
         ledger,
+        blockchain,
     },
     // This setting reproduce the behavior without redux-toolkit.
     middleware: getDefaultMiddleware =>
