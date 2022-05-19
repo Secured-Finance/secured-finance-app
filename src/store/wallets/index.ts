@@ -10,7 +10,7 @@ export default walletsSlice.reducer;
 export const {
     updateEthWalletBalance,
     updateEthWalletUSDBalance,
-    updateEthWalletAddress,
+    connectEthWallet,
     updateEthWalletPortfolioShare,
     updateEthWalletDailyChange,
     updateEthWalletAssetPrice,
@@ -23,8 +23,6 @@ export const {
     updateFilWalletAssetPrice,
     updateFilWalletActions,
     updateTotalUSDBalance,
-    fetchWallet,
-    fetchWalletFailure,
     resetEthWallet,
     resetFilWallet,
 } = walletsSlice.actions;
