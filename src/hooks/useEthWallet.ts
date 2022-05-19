@@ -4,9 +4,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { WalletAccountModal } from 'src/components/organisms';
 import { RootState } from 'src/store/types';
 import {
+    connectEthWallet,
     resetEthWallet,
     updateEthWalletActions,
-    updateEthWalletAddress,
     updateEthWalletAssetPrice,
     updateEthWalletBalance,
     updateEthWalletDailyChange,
@@ -60,7 +60,7 @@ export const useEthereumWalletStore = () => {
                 .dividedBy(new BigNumber(totalUSDBalance))
                 .toNumber();
 
-            dispatch(updateEthWalletAddress(account));
+            dispatch(connectEthWallet(account));
             dispatch(updateEthWalletBalance(inEther));
             dispatch(updateEthWalletAssetPrice(price));
             dispatch(updateEthWalletDailyChange(change));

@@ -14,8 +14,6 @@ import { getFilecoinNetwork } from 'src/services/filecoin/utils';
 import connectWithLedger from 'src/services/ledger/connectLedger';
 import { RootState } from 'src/store/types';
 import {
-    fetchWallet,
-    fetchWalletFailure,
     updateFilWalletActions,
     updateFilWalletAddress,
     updateFilWalletAssetPrice,
@@ -57,7 +55,6 @@ export const useFilecoinWalletInfo = () => {
         walletProvider: Filecoin,
         filUSDPrice: number = null
     ) => {
-        dispatch(fetchWallet());
         if (wasmLoaded && walletProvider !== null) {
             const [filAddr] = await walletProvider.wallet.getAccounts(
                 0,
@@ -75,8 +72,6 @@ export const useFilecoinWalletInfo = () => {
                     .toNumber();
                 dispatch(updateFilWalletUSDBalance(usdBalance));
             }
-        } else {
-            dispatch(fetchWalletFailure());
         }
     };
 

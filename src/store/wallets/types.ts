@@ -2,7 +2,6 @@ export interface WalletsStore {
     totalUSDBalance: number;
     ethereum: WalletBase;
     filecoin: WalletBase;
-    isLoading: boolean;
 }
 
 export interface WalletBase {
