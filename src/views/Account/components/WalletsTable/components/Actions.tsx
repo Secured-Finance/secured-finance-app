@@ -9,7 +9,7 @@ import {
 import useModal from 'src/hooks/useModal';
 import { supportedCoins } from 'src/store/wallets/types';
 
-interface ActionProps {
+export interface ActionProps {
     callbackMap?: {
         send?: () => void;
         signOut?: () => void;
