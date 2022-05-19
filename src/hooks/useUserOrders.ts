@@ -68,7 +68,7 @@ export const useTradeHistoryOrders = (ccy: string, term: string) => {
         });
         try {
             if (res.data.user?.madeOrders && res?.data.user.takenOrders) {
-                const parsedHistory: Array<any> = [];
+                const parsedHistory: Array<{ createdAtTimestamp: number }> = [];
 
                 res.data.user.madeOrders.forEach(
                     (_item: unknown, index: number) => {

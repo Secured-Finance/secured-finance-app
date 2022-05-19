@@ -1,6 +1,7 @@
 import { Network } from '@glif/filecoin-address';
 import Filecoin from '@glif/filecoin-wallet-provider';
-import { Dispatch } from 'react';
+import RustModule from '@zondax/filecoin-signing-tools';
+import { AppDispatch } from 'src/store';
 import {
     busy,
     establishingConnectionWithFilecoinApp,
@@ -24,14 +25,17 @@ import createTransport from './createTransport';
 type ResponseType = { device_locked: boolean } & IBadVersionProps;
 
 export const setLedgerProvider = async (
-    dispatch: Dispatch<{ type: string; payload?: any }>,
+    dispatch: AppDispatch,
     network: Network = Network.TEST
 ) => {
-    const rustModule = await import('@zondax/filecoin-signing-tools');
+    const rustModule = (await import(
+        '@zondax/filecoin-signing-tools'
+    )) as RustModule;
     const LedgerProvider = createLedgerProvider(rustModule);
     dispatch(userInitiatedImport());
     try {
         const transport = await createTransport();
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         const provider = new Filecoin(LedgerProvider(transport), {
             apiAddress: FIL_JSON_RPC_ENDPOINT[network],
@@ -61,17 +65,19 @@ export const setLedgerProvider = async (
         ) {
             dispatch(ledgerNotFound());
         }
-        console.log(e);
+        console.error(e);
         return false;
     }
 };
 
 export const checkLedgerConfiguration = async (
-    dispatch: Dispatch<{ type: string; payload?: any }>,
-    walletProvider: any
+    dispatch: AppDispatch,
+    walletProvider: Filecoin
 ) => {
     dispatch(establishingConnectionWithFilecoinApp());
     try {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         const response: ResponseType = await walletProvider.wallet.getVersion();
         if (response.device_locked) {
             dispatch(lock());
@@ -104,7 +110,7 @@ export const checkLedgerConfiguration = async (
         ) {
             dispatch(filecoinAppNotOpen());
         } else {
-            console.log(e);
+            console.error(e);
             dispatch(replug());
         }
         return false;
