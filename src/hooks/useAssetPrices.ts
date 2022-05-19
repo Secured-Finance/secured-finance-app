@@ -13,7 +13,6 @@ import {
     updateUSDCUSDPrice,
 } from '../store/assetPrices';
 import { RootState } from '../store/types';
-import useBlock from './useBlock';
 
 interface ICoinGeckoResponse {
     [key: string]: {
@@ -27,7 +26,9 @@ const useAssetPrice = (
     priceAction: (data: number) => void,
     changeAction: (data: number) => void
 ) => {
-    const block = useBlock();
+    const block = useSelector(
+        (state: RootState) => state.blockchain.latestBlock
+    );
 
     const dispatch = useDispatch();
 
