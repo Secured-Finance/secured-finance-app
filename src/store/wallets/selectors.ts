@@ -1,4 +1,5 @@
 import { RootState } from '../types';
+import { WalletsStore } from './types';
 
 export const getAssetPrices = (state: RootState) => ({
     ethereum: state.assetPrices.ethereum,
@@ -29,12 +30,11 @@ export const isAnyWalletConnected = (
     state: RootState,
     walletName?: 'filecoin' | 'ethereum'
 ) => {
-    const wallets: any = state.wallets;
+    const wallets = state.wallets;
     for (const key in wallets) {
         if (
             wallets.hasOwnProperty(key) &&
-            wallets[key].hasOwnProperty('actions') &&
-            !!wallets[key].actions
+            wallets[key as keyof WalletsStore].hasOwnProperty('actions')
         ) {
             if (walletName) {
                 if (key !== walletName) return true;
