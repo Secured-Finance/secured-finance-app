@@ -2,6 +2,10 @@ import { SecuredFinanceClient } from '@secured-finance/sf-client';
 import { ethers } from 'ethers';
 import React, { createContext, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
+import {
+    useWatchEthereumUsdPrice,
+    useWatchFilecoinUsdPrice,
+} from 'src/hooks/useAssetPrices';
 import { updateLatestBlock } from 'src/store/blockchain';
 import { ChainUnsupportedError, useWallet } from 'use-wallet';
 import Web3 from 'web3';
@@ -27,13 +31,8 @@ const SecuredFinanceProvider: React.FC = ({ children }) => {
     const [securedFinance, setSecuredFinance] =
         useState<SecuredFinanceClient>();
     const dispatch = useDispatch();
-
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    window.securedFinance = securedFinance;
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    window.eth = ethereum;
+    useWatchEthereumUsdPrice();
+    useWatchFilecoinUsdPrice();
 
     const handleNetworkChanged = (networkId: string | number) => {
         if (networkId !== 3) {
@@ -99,7 +98,7 @@ const SecuredFinanceProvider: React.FC = ({ children }) => {
         }, 2000);
 
         return () => clearInterval(interval);
-    });
+    }, [dispatch, ethereum]);
 
     return (
         <Context.Provider value={{ securedFinance }}>

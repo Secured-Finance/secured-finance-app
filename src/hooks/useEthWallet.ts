@@ -15,7 +15,6 @@ import {
 } from 'src/store/wallets';
 import { recalculateTotalUSDBalance } from 'src/store/wallets/helpers';
 import { useWallet } from 'use-wallet';
-import { useEthereumUsd } from './useAssetPrices';
 import useModal from './useModal';
 
 export const useEthereumWalletStore = () => {
@@ -27,7 +26,9 @@ export const useEthereumWalletStore = () => {
     );
     const dispatch = useDispatch();
     const { account, balance, reset } = useWallet();
-    const { price, change } = useEthereumUsd();
+    const { price, change } = useSelector(
+        (state: RootState) => state.assetPrices.ethereum
+    );
     const totalUSDBalance = useSelector(
         (state: RootState) => state.wallets.totalUSDBalance
     );

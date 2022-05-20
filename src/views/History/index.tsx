@@ -1,17 +1,12 @@
-import { Dispatch } from '@reduxjs/toolkit';
 import React from 'react';
-import { connect } from 'react-redux';
 import { Container } from 'src/components/atoms';
 import { Page } from 'src/components/templates';
 import { useBorrowDeals, useLoanDeals } from 'src/hooks/useLoanHistory';
-import { setLendingHistory } from 'src/store/history';
-import { HistoryTableData } from 'src/store/history/types';
-import { RootState } from 'src/store/types';
 import theme from 'src/theme';
 import styled from 'styled-components';
 import { HistoryTable } from './components';
 
-const History: React.FC = () => {
+const History = () => {
     const loans = useLoanDeals();
     const borrows = useBorrowDeals();
 
@@ -71,16 +66,4 @@ const StyledHistoryContainer = styled.div`
     padding-right: ${props => props.theme.spacing[5]}px;
 `;
 
-const mapStateToProps = (state: RootState) => {
-    return {
-        lendingHistory: state.history,
-    };
-};
-
-const mapDispatchToProps = (dispatch: Dispatch) => {
-    return {
-        setLendingHistory: (data: HistoryTableData[]) =>
-            dispatch(setLendingHistory(data)),
-    };
-};
-export default connect(mapStateToProps, mapDispatchToProps)(History);
+export default History;

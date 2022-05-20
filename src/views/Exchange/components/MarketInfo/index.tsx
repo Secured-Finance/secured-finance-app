@@ -1,9 +1,8 @@
 import BigNumber from 'bignumber.js';
 import React, { useState } from 'react';
-import { connect } from 'react-redux';
+import { connect, useSelector } from 'react-redux';
 import { ArrowSVG } from 'src/components/atoms';
 import { Tabs } from 'src/components/common/Tabs';
-import { useEthereumUsd, useFilUsd } from 'src/hooks/useAssetPrices';
 import { useRates } from 'src/hooks/useRates';
 import { LendingTerminalStore } from 'src/store/lendingTerminal';
 import { RootState } from 'src/store/types';
@@ -17,8 +16,10 @@ const MarketInfo: React.FC<LendingTerminalStore> = ({
 }) => {
     const marketTabs = ['Yield', 'Price'];
     const [selectedTab, setSelectedTab] = useState('Yield');
-    const ethPrice = useEthereumUsd();
-    const filPrice = useFilUsd();
+    const { ethereum: ethPrice, filecoin: filPrice } = useSelector(
+        (state: RootState) => state.assetPrices
+    );
+
     const lendingRates = useRates('FIL', 2);
 
     const handleSelectTab = (tab: React.SetStateAction<string>) => {

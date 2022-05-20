@@ -1,7 +1,7 @@
 import { validateAddressString } from '@glif/filecoin-address';
 import BigNumber from 'bignumber.js';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { connect, useDispatch, useSelector } from 'react-redux';
+import React, { useCallback, useMemo, useState } from 'react';
+import { useSelector } from 'react-redux';
 import {
     Button,
     Modal,
@@ -16,18 +16,12 @@ import { useEthBalance } from 'src/hooks/useEthWallet';
 import { useFilecoinWalletInfo } from 'src/hooks/useFilWallet';
 import { useSendEth } from 'src/hooks/useSendEth';
 import { useSendFil } from 'src/hooks/useSendFil';
-import {
-    resetSendForm,
-    SendFormStore,
-    updateSendAmount,
-    updateSendCurrency,
-    updateSendToAddress,
-} from 'src/store/sendForm';
+import { getAssetInfo } from 'src/store/assetPrices/selectors';
 import { RootState } from 'src/store/types';
 import { getFilActions } from 'src/store/wallets/selectors';
 import theme from 'src/theme';
 import { formatInput } from 'src/utils';
-import { Currency, getCurrencyBy } from 'src/utils/currencyList';
+import { CurrencyInfo } from 'src/utils/currencyList';
 import styled from 'styled-components';
 import { isAddress } from 'web3-utils';
 import { ErrorModal } from './components/ErrorModal';
@@ -37,81 +31,77 @@ import { GasTabsAndTable } from './components/GastabsAndTable';
 const SendModal = ({
     onDismiss,
     amount,
-    currencyName,
-    currencyShortName,
-    gasPrice,
+    currencyInfo,
     toAddress,
-    ccyIndex,
-    maxTxFee,
-}: SendFormStore & ModalProps) => {
+}: {
+    amount?: number;
+    currencyInfo: CurrencyInfo;
+    toAddress?: string;
+} & ModalProps) => {
     const [addrErr, setAddrErr] = useState(false);
     const [balanceErr, setBalanceErr] = useState(false);
     const [ongoingTx, setOngoingTx] = useState(false);
+    const [recipientAddress, setRecipientAddress] = useState(toAddress ?? '');
+    const [amountToSend, setAmountToSend] = useState(amount ?? 0);
 
     const ethBalance = useEthBalance();
     const { filecoinBalance } = useFilecoinWalletInfo();
-    const dispatch = useDispatch();
     const filecoinActions = useSelector(getFilActions);
-    const {
-        ethereum: { price: ethPrice },
-        filecoin: { price: filPrice },
-        usdc: { price: usdcPrice },
-    } = useSelector((state: RootState) => state.assetPrices);
+
+    const { price } = useSelector(getAssetInfo(currencyInfo.shortName));
+
+    const TotalUsdAmount = useMemo(
+        () => (amountToSend * price).toFixed(2),
+        [amountToSend, price]
+    );
+
+    const { maxTxFee, gasPrice } = useSelector(
+        (state: RootState) => state.sendForm
+    );
 
     const maxFilTxFee = Number(maxTxFee.toFil());
 
-    const handleRecipientAddress = useCallback(
-        (e: React.FormEvent<HTMLInputElement>) => {
-            dispatch(updateSendToAddress(e.currentTarget.value));
-        },
-        [dispatch]
-    );
+    const handleRecipientAddress = (e: React.FormEvent<HTMLInputElement>) => {
+        setRecipientAddress(e.currentTarget.value);
+    };
 
     const renderBalance = useMemo(() => {
-        switch (ccyIndex) {
+        switch (currencyInfo.indexCcy) {
             case 0:
                 return (
                     <span>
-                        {ethBalance} {currencyShortName}
+                        {ethBalance} {currencyInfo.shortName}
                     </span>
                 );
             case 1:
                 return (
                     <span>
-                        {filecoinBalance} {currencyShortName}
+                        {filecoinBalance} {currencyInfo.shortName}
                     </span>
                 );
             case 2:
                 // TODO: Add USDC balances
-                return <span>0.00 {currencyShortName}</span>;
+                return <span>0.00 {currencyInfo.shortName}</span>;
         }
-    }, [ccyIndex, currencyShortName, ethBalance, filecoinBalance]);
-
-    const TotalUsdAmount = useMemo(() => {
-        switch (ccyIndex) {
-            case 0:
-                return (amount * ethPrice).toFixed(2);
-            case 1:
-                return (amount * filPrice).toFixed(2);
-            case 2:
-                return (amount * usdcPrice).toFixed(2);
-            default:
-                return 0;
-        }
-    }, [amount, ccyIndex, ethPrice, filPrice, usdcPrice]);
+    }, [
+        currencyInfo.indexCcy,
+        currencyInfo.shortName,
+        ethBalance,
+        filecoinBalance,
+    ]);
 
     const isValidAddress = useCallback(() => {
-        switch (ccyIndex) {
+        switch (currencyInfo.indexCcy) {
             case 0:
-                return isAddress(toAddress);
+                return isAddress(recipientAddress);
             case 1:
-                return validateAddressString(toAddress);
+                return validateAddressString(recipientAddress);
         }
-    }, [ccyIndex, toAddress]);
+    }, [currencyInfo.indexCcy, recipientAddress]);
 
     const isEnoughBalance = useCallback(
         (amount: string) => {
-            switch (ccyIndex) {
+            switch (currencyInfo.indexCcy) {
                 case 0:
                     return new BigNumber(amount).isLessThanOrEqualTo(
                         new BigNumber(ethBalance)
@@ -120,48 +110,39 @@ const SendModal = ({
                     return +amount + maxFilTxFee <= filecoinBalance;
             }
         },
-        [ccyIndex, ethBalance, maxFilTxFee, filecoinBalance]
+        [currencyInfo.indexCcy, ethBalance, maxFilTxFee, filecoinBalance]
     );
 
-    const handleSendAmount = useCallback(
-        (e: React.FormEvent<HTMLInputElement>) => {
-            dispatch(updateSendAmount(+e.currentTarget.value));
-            if (!isEnoughBalance(e.currentTarget.value)) {
-                setBalanceErr(true);
-            } else {
-                setBalanceErr(false);
-            }
-        },
-        [dispatch, isEnoughBalance]
-    );
-
-    useEffect(() => {
-        const { shortName } = getCurrencyBy('indexCcy', ccyIndex);
-        if (shortName) {
-            dispatch(updateSendCurrency(shortName));
+    const handleSendAmount = (e: React.FormEvent<HTMLInputElement>) => {
+        setAmountToSend(+e.currentTarget.value);
+        if (!isEnoughBalance(e.currentTarget.value)) {
+            setBalanceErr(true);
+        } else {
+            setBalanceErr(false);
         }
-    }, [ccyIndex, dispatch]);
+    };
 
     const handleSendModalClose = () => {
-        dispatch(resetSendForm());
         if (!ongoingTx) onDismiss();
     };
 
-    const { onSendEth } = useSendEth(amount, toAddress, gasPrice);
+    const { onSendEth } = useSendEth(amountToSend, recipientAddress, gasPrice);
     const { sendFil } = useSendFil(
-        amount,
-        toAddress,
+        amountToSend,
+        recipientAddress,
         handleSendModalClose,
         setOngoingTx
     );
 
     const handleTransferAssets = useCallback(async () => {
         try {
-            if (toAddress !== '' && amount > 0) {
+            if (recipientAddress !== '' && amountToSend > 0) {
                 if (isValidAddress()) {
                     setOngoingTx(true);
                     const txHash =
-                        ccyIndex === 0 ? await onSendEth() : await sendFil();
+                        currencyInfo.indexCcy === 0
+                            ? await onSendEth()
+                            : await sendFil();
                     if (!txHash) {
                         setOngoingTx(false);
                     } else {
@@ -177,10 +158,10 @@ const SendModal = ({
             console.error(e);
         }
     }, [
-        toAddress,
-        amount,
+        recipientAddress,
+        amountToSend,
         isValidAddress,
-        ccyIndex,
+        currencyInfo.indexCcy,
         onSendEth,
         sendFil,
         ongoingTx,
@@ -188,7 +169,7 @@ const SendModal = ({
     ]);
 
     const isSendButtonDisabled = () => {
-        return ongoingTx || amount <= 0 || balanceErr;
+        return ongoingTx || amountToSend <= 0 || balanceErr;
     };
 
     const getSendButtonText = () => {
@@ -198,11 +179,10 @@ const SendModal = ({
     };
 
     const onCloseSendModal = () => {
-        dispatch(resetSendForm());
         onDismiss();
     };
 
-    if (ccyIndex === 1 && !filecoinActions) {
+    if (currencyInfo.indexCcy === 1 && !filecoinActions) {
         return (
             <ErrorModal
                 title={'Connection error'}
@@ -239,7 +219,7 @@ const SendModal = ({
                                 textTransform={'capitalize'}
                                 fontSize={16}
                             >
-                                {currencyName}
+                                {currencyInfo.fullName}
                             </StyledLabel>
                             <StyledLabel
                                 fontWeight={400}
@@ -252,14 +232,14 @@ const SendModal = ({
                         </StyledLabelContainer>
                         <StyledCurrencyInput>
                             <CurrencyImage
-                                selectedCcy={currencyShortName as Currency}
+                                selectedCcy={currencyInfo.shortName}
                                 showName
                             />
                             <StyledInput
                                 data-cy='send-amount-input'
                                 type={'number'}
                                 placeholder={'0'}
-                                value={amount}
+                                value={amountToSend}
                                 minLength={1}
                                 maxLength={79}
                                 onKeyDown={formatInput}
@@ -283,15 +263,17 @@ const SendModal = ({
                         <StyledAddressInput
                             data-cy='send-address-input'
                             type={'text'}
-                            placeholder={'Paste ' + currencyName + ' address'}
-                            value={toAddress}
+                            placeholder={
+                                'Paste ' + currencyInfo.fullName + ' address'
+                            }
+                            value={recipientAddress}
                             onChange={handleRecipientAddress}
                             disabled={ongoingTx}
                         />
                     </StyledInputContainer>
                 </StyledSubcontainer>
-                {ccyIndex === 0 && <GasTabsAndTable />}
-                {ccyIndex === 1 && <FilTxFeeTable />}
+                {currencyInfo.indexCcy === 0 && <GasTabsAndTable />}
+                {currencyInfo.indexCcy === 1 && <FilTxFeeTable />}
             </ModalContent>
             <ModalActions>
                 <StyledButtonContainer>
@@ -417,6 +399,4 @@ const StyledButtonContainer = styled.div`
     flex-direction: row;
 `;
 
-const mapStateToProps = (state: RootState) => state.sendForm;
-
-export default connect(mapStateToProps)(SendModal);
+export default SendModal;

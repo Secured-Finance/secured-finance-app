@@ -12,7 +12,7 @@ import {
     insufficientMsigFundsErr,
     insufficientSendFundsErr,
 } from 'src/services/ledger/constants';
-import { setMaxTxFee, updateSendAmount } from 'src/store/sendForm';
+import { setMaxTxFee } from 'src/store/sendForm';
 import { RootState } from 'src/store/types';
 import { getFilWallet } from 'src/store/wallets/selectors';
 
@@ -163,7 +163,6 @@ export const useSendFil = (
         try {
             const message = await send();
             if (message) {
-                updateSendAmount(0);
                 close();
             }
         } catch (err) {

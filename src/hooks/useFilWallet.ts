@@ -28,7 +28,6 @@ import {
     updateFilWalletViaRPC,
 } from 'src/store/wallets/helpers';
 import { getFilUSDBalance } from 'src/store/wallets/selectors';
-import { useFilUsd } from './useAssetPrices';
 import useFilWasm from './useFilWasm';
 import useModal from './useModal';
 
@@ -101,7 +100,9 @@ export const useFilecoinWalletInfo = () => {
 export const useFilecoinWalletStore = (): WalletBase => {
     const dispatch = useDispatch();
     const { loaded } = useFilWasm();
-    const { price, change } = useFilUsd();
+    const { price, change } = useSelector(
+        (state: RootState) => state.assetPrices.filecoin
+    );
     const filWallet = useSelector((state: RootState) => state.wallets.filecoin);
     const walletProvider = useSelector(
         (state: RootState) => state.filWalletProvider.walletProvider
