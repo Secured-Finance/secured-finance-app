@@ -1,6 +1,6 @@
 module.exports = {
     darkMode: 'media',
-    content: ['./src/**/*.{js,jsx,ts,tsx}'],
+    purge: ['./src/**/*.{ts,tsx,js,jsx}'],
     theme: {
         colors: {
             background: '#060609',
