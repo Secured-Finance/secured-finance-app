@@ -13,7 +13,6 @@ import {
 } from 'src/components/atoms';
 import { CurrencyImage } from 'src/components/common/CurrencyImage';
 import { useEthBalance } from 'src/hooks/useEthWallet';
-import { useFilecoinWalletInfo } from 'src/hooks/useFilWallet';
 import { useSendEth } from 'src/hooks/useSendEth';
 import { useSendFil } from 'src/hooks/useSendFil';
 import { getAssetInfo } from 'src/store/assetPrices/selectors';
@@ -45,7 +44,9 @@ const SendModal = ({
     const [amountToSend, setAmountToSend] = useState(amount ?? 0);
 
     const ethBalance = useEthBalance();
-    const { filecoinBalance } = useFilecoinWalletInfo();
+    const filecoinBalance = useSelector(
+        (state: RootState) => state.wallets.filecoin.balance
+    );
     const filecoinActions = useSelector(getFilActions);
 
     const { price } = useSelector(getAssetInfo(currencyInfo.shortName));
