@@ -29,7 +29,7 @@ import {
     getFullDisplayBalanceNumber,
     getUSDFormatBalanceNumber,
 } from 'src/utils';
-import { currencyList } from 'src/utils/currencyList';
+import { CurrencyInfo, currencyList } from 'src/utils/currencyList';
 import styled from 'styled-components';
 import { useWallet } from 'use-wallet';
 
@@ -68,7 +68,7 @@ const CollateralModal: React.FC<CombinedProps> = ({
     );
 
     const handleCurrencySelect = useCallback(
-        (value: string, buttonOpen: boolean) => {
+        (value: CurrencyInfo, buttonOpen: boolean) => {
             dispatch(updateCollateralCurrency(value));
             setButtonOpen(!buttonOpen);
         },
@@ -76,7 +76,7 @@ const CollateralModal: React.FC<CombinedProps> = ({
     );
 
     const isEnoughBalance = useCallback(
-        (amount: string) => {
+        (amount: number) => {
             switch (currencyIndex) {
                 case 0:
                     return new BigNumber(amount).isLessThanOrEqualTo(
@@ -89,8 +89,8 @@ const CollateralModal: React.FC<CombinedProps> = ({
 
     const handleCollateralAmount = useCallback(
         (e: React.FormEvent<HTMLInputElement>) => {
-            dispatch(updateCollateralAmount(e.currentTarget.value));
-            if (!isEnoughBalance(e.currentTarget.value)) {
+            dispatch(updateCollateralAmount(e.currentTarget.valueAsNumber));
+            if (!isEnoughBalance(e.currentTarget.valueAsNumber)) {
                 setBalanceErr(true);
             } else {
                 setBalanceErr(false);
@@ -124,7 +124,7 @@ const CollateralModal: React.FC<CombinedProps> = ({
                 }
             }
         } catch (e) {
-            console.log(e);
+            console.error(e);
         }
     }, [status, onDepositCollateral, onDismiss, onRegisterUser]);
 
@@ -200,7 +200,7 @@ const CollateralModal: React.FC<CombinedProps> = ({
                                         key={i}
                                         onClick={() =>
                                             handleCurrencySelect(
-                                                ccy.shortName,
+                                                ccy,
                                                 buttonOpen
                                             )
                                         }

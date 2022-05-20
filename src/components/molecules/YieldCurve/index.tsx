@@ -30,10 +30,10 @@ export function YieldCurve() {
     purpleGradient.addColorStop(0.5, 'rgba(15, 26, 34, 0.25)');
     purpleGradient.addColorStop(1, 'rgba(15, 26, 34, 0.1)');
 
-    const convertArray = (array: Array<any>) => {
+    const convertArray = (array: Array<number>) => {
         const newArray = array.slice();
         newArray.unshift(0);
-        return newArray.map((r: any) => r / 100);
+        return newArray.map(r => r / 100);
     };
 
     useMemo(() => {
@@ -98,12 +98,6 @@ export function YieldCurve() {
 
     return (
         <StyledYieldCurveContainer>
-            {/* <StyledYieldCurveInfo>
-		<Title>FIL Yield Curve</Title>
-		<StyledTermsContainer>
-			<Terms/>
-		</StyledTermsContainer>
-		</StyledYieldCurveInfo> */}
             <Line data={lineData} options={chartOptions} />
         </StyledYieldCurveContainer>
     );

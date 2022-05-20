@@ -1,5 +1,4 @@
-import produce from 'immer';
-import * as constants from './constants';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { AssetPrices } from './types';
 
 const initialStore: AssetPrices = {
@@ -18,36 +17,35 @@ const initialStore: AssetPrices = {
     isLoading: false,
 };
 
-const assetPricesReducer = (state = initialStore, action: any) =>
-    produce(state, draft => {
-        switch (action.type) {
-            case constants.FETCHING_ASSET_PRICE:
-                draft.isLoading = true;
-                break;
-            case constants.FETCHING_ASSET_PRICE_FAILURE:
-                draft.isLoading = false;
-                break;
-            case constants.UPDATE_ETHEREUM_USD_PRICE:
-                draft.ethereum.price = action.data;
-                break;
-            case constants.UPDATE_ETHEREUM_USD_CHANGE:
-                draft.ethereum.change = action.data;
-                break;
-            case constants.UPDATE_FILECOIN_USD_PRICE:
-                draft.filecoin.price = action.data;
-                break;
-            case constants.UPDATE_FILECOIN_USD_CHANGE:
-                draft.filecoin.change = action.data;
-                break;
-            case constants.UPDATE_USDC_USD_PRICE:
-                draft.usdc.price = action.data;
-                break;
-            case constants.UPDATE_USDC_USD_CHANGE:
-                draft.usdc.change = action.data;
-                break;
-            default:
-                break;
-        }
-    });
+const assetPricesSlice = createSlice({
+    name: 'assetPrices',
+    initialState: initialStore,
+    reducers: {
+        updateEthUSDPrice: (state, action: PayloadAction<number>) => {
+            state.ethereum.price = action.payload;
+        },
+        updateEthUSDChange: (state, action: PayloadAction<number>) => {
+            state.ethereum.change = action.payload;
+        },
+        updateFilUSDPrice: (state, action: PayloadAction<number>) => {
+            state.filecoin.price = action.payload;
+        },
+        updateFilUSDChange: (state, action: PayloadAction<number>) => {
+            state.filecoin.change = action.payload;
+        },
+        updateUSDCUSDPrice: (state, action: PayloadAction<number>) => {
+            state.usdc.price = action.payload;
+        },
+        updateUSDCUSDChange: (state, action: PayloadAction<number>) => {
+            state.usdc.change = action.payload;
+        },
+        fetchAssetPrice: (state, action: PayloadAction<boolean>) => {
+            state.isLoading = action.payload;
+        },
+        fetchAssetPriceFailure: (state, action: PayloadAction<boolean>) => {
+            state.isLoading = action.payload;
+        },
+    },
+});
 
-export default assetPricesReducer;
+export default assetPricesSlice;

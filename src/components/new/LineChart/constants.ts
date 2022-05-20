@@ -1,3 +1,5 @@
+import * as chartjs from 'chart.js';
+
 const canvas: HTMLCanvasElement = document.createElement('canvas');
 const ctx: CanvasRenderingContext2D = canvas.getContext('2d');
 
@@ -54,17 +56,7 @@ export const defaultDatasets = [
     },
 ];
 
-const getYAxisLinesColor = () => {
-    // hack for hiding the last yAxis line for charts of 20 ticks max
-    const colors: Array<string | CanvasGradient> = ['transparent'];
-    for (let i = 0; i < 20; i++) {
-        colors.push(yAxisGradient);
-    }
-
-    return colors;
-};
-
-export const options = {
+export const options: chartjs.ChartOptions = {
     responsive: true,
     layout: {
         padding: {
@@ -74,9 +66,7 @@ export const options = {
     scales: {
         yAxes: [
             {
-                color: yAxisGradient,
                 ticks: {
-                    color: '#5f616a',
                     fontSize: 13,
                     padding: 34,
                     callback: (value: number) => value + '%',
@@ -84,7 +74,6 @@ export const options = {
                 },
 
                 gridLines: {
-                    color: getYAxisLinesColor(),
                     drawBorder: false,
                     zeroLineColor: yAxisGradient,
                     drawTicks: false,
@@ -94,7 +83,6 @@ export const options = {
         xAxes: [
             {
                 ticks: {
-                    color: '#5f616a',
                     fontSize: 13,
                     padding: 8,
                 },
@@ -108,23 +96,21 @@ export const options = {
         ],
     },
     tooltips: {
-        filter: (item: any) => {
-            return item.value > 0;
-        },
         callbacks: {
-            label: ({ value, datasetIndex, yLabel }: any, data: any) => {
-                if (value > 0) {
-                    const label = data.datasets[datasetIndex].label || '';
-                    let content = '';
+            label: (
+                item: chartjs.ChartTooltipItem,
+                data: chartjs.ChartData
+            ) => {
+                const { datasetIndex, yLabel } = item;
+                const label = data.datasets[datasetIndex].label || '';
+                let content = '';
 
-                    if (data.datasets.length > 1) {
-                        content += label;
-                    }
-
-                    content += ' ' + yLabel + ' %';
-                    return content;
+                if (data.datasets.length > 1) {
+                    content += label;
                 }
-                return false;
+
+                content += ' ' + yLabel + ' %';
+                return content;
             },
         },
     },
@@ -132,9 +118,9 @@ export const options = {
         display: false,
         position: 'right',
     },
-    legendCallback: (chart: any) => {
+    legendCallback: (chart: Chart) => {
         const ul = document.createElement('ul');
-        chart.data?.datasets?.forEach((dataset: any) => {
+        chart.data?.datasets?.forEach(dataset => {
             const borderColor = dataset.borderColor;
             ul.innerHTML += `
                 <li>

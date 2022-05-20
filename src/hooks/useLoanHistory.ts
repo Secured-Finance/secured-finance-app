@@ -7,13 +7,7 @@ import { useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { HistoryTableData } from 'src/store/history/types';
 import { useWallet } from 'use-wallet';
-import {
-    failSetBorrowingHistory,
-    failSetLendingHistory,
-    setBorrowingHistory,
-    setLendingHistory,
-    startSetHistory,
-} from '../store/history';
+import { setBorrowingHistory, setLendingHistory } from '../store/history';
 import { RootState } from '../store/types';
 
 export const useLoanDeals = (skip = 0) => {
@@ -23,15 +17,13 @@ export const useLoanDeals = (skip = 0) => {
     );
     const dispatch = useDispatch();
 
-    dispatch(startSetHistory());
     try {
         const res = useLendingDeals(account ? account : '', skip);
         if (res.length > 0) {
             dispatch(setLendingHistory(res));
         }
     } catch (err) {
-        dispatch(failSetLendingHistory());
-        console.log(err);
+        console.error(err);
     }
 
     return lendingHistory;
@@ -44,15 +36,13 @@ export const useBorrowDeals = (skip = 0) => {
     );
     const dispatch = useDispatch();
 
-    dispatch(startSetHistory());
     try {
         const res = useBorrowingDeals(account, skip) as HistoryTableData[];
         if (res.length > 0) {
             dispatch(setBorrowingHistory(res));
         }
     } catch (err) {
-        dispatch(failSetBorrowingHistory());
-        console.log(err);
+        console.error(err);
     }
 
     return borrowingHistory;

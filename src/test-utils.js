@@ -1,14 +1,14 @@
+import { configureStore } from '@reduxjs/toolkit';
 import { render as rtlRender } from '@testing-library/react';
 import React from 'react';
 import { Provider } from 'react-redux';
-import { createStore } from 'redux';
-import reducer from 'src/store/reducers';
+import { rootReducers } from 'src/store';
 
 function render(
     ui,
     {
         initialState,
-        store = createStore(reducer, initialState),
+        store = configureStore({ reducer: rootReducers, initialState }),
         ...renderOptions
     } = {}
 ) {

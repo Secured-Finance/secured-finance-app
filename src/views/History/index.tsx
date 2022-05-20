@@ -4,11 +4,8 @@ import { connect } from 'react-redux';
 import { Container } from 'src/components/atoms';
 import { Page } from 'src/components/templates';
 import { useBorrowDeals, useLoanDeals } from 'src/hooks/useLoanHistory';
-import {
-    failSetLendingHistory,
-    setLendingHistory,
-    startSetHistory,
-} from 'src/store/history';
+import { setLendingHistory } from 'src/store/history';
+import { HistoryTableData } from 'src/store/history/types';
 import { RootState } from 'src/store/types';
 import theme from 'src/theme';
 import styled from 'styled-components';
@@ -82,9 +79,8 @@ const mapStateToProps = (state: RootState) => {
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
     return {
-        setLendingHistory: (data: any[]) => dispatch(setLendingHistory(data)),
-        startSetHistory: () => dispatch(startSetHistory()),
-        failSetLendingHistory: () => dispatch(failSetLendingHistory()),
+        setLendingHistory: (data: HistoryTableData[]) =>
+            dispatch(setLendingHistory(data)),
     };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(History);

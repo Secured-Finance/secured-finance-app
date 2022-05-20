@@ -1,3 +1,12 @@
-export { default } from './reducer';
+import filWalletSlice from './reducer';
+
 export type { FilWalletProvider } from './types';
-export * from './actions';
+
+export const {
+    startFetchingFilWalletProvider,
+    failFetchingFilWalletProvider,
+    setFilWalletType,
+    setFilWalletProvider,
+    resetFilWalletProvider,
+} = filWalletSlice.actions;
+export default filWalletSlice.reducer;

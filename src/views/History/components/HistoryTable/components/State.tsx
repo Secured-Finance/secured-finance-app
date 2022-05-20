@@ -1,25 +1,17 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import useModal from 'src/hooks/useModal';
-import { LoanConfirmationModal } from 'src/components/organisms';
 
 interface StateProps {
     loan: any;
 }
 
 const RenderAction: React.FC<StateProps> = ({ loan }) => {
-    const [onPresentArrangeLoan] = useModal(
-        <LoanConfirmationModal loan={loan} />
-    );
-
     return (
         <div>
             {
                 <StyledActionsContainer>
-                    <StyledActionButton
-                    // onClick={onPresentArrangeLoan}
-                    >
+                    <StyledActionButton>
                         <StyledLink to={`/loan/${loan.loanId}`}>
                             State
                         </StyledLink>

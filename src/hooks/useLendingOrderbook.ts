@@ -40,7 +40,7 @@ export const useBorrowOrderbook = (ccy: string, term: string, skip = 0) => {
         }
     } catch (err) {
         dispatch(failSetOrderbook());
-        console.log(err);
+        console.error(err);
     }
 
     return borrowOrderbook;
@@ -70,7 +70,7 @@ export const useLendOrderbook = (ccy: string, term: string, skip = 0) => {
         }
     } catch (err) {
         dispatch(failSetOrderbook());
-        console.log(err);
+        console.error(err);
     }
 
     return lendOrderbook;
@@ -100,7 +100,7 @@ export const useLendingTradingHistory = (
         }
     } catch (err) {
         dispatch(failSetTradingHistory());
-        console.log(err);
+        console.error(err);
     }
 
     return tradingHistory;

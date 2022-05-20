@@ -1,10 +1,10 @@
-import React from 'react';
-import styled from 'styled-components';
+import { useMemo } from 'react';
 import { useTable } from 'react-table';
+import styled from 'styled-components';
 import { collateralTableColumns } from './types';
 
 const CollateralTable = ({ table }) => {
-    const columns = React.useMemo(() => collateralTableColumns, []);
+    const columns = useMemo(() => collateralTableColumns, []);
     const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
         useTable({ columns, data: table });
 
@@ -28,7 +28,7 @@ const CollateralTable = ({ table }) => {
                 ))}
             </StyledTableHead>
             <StyledTableBody {...getTableBodyProps()}>
-                {rows.map((row, i) => {
+                {rows.map(row => {
                     prepareRow(row);
                     return (
                         <tr {...row.getRowProps()}>

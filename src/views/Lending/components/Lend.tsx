@@ -12,7 +12,7 @@ import { LendingStore } from 'src/store/lending/types';
 import { RootState } from 'src/store/types';
 import theme from 'src/theme';
 import { formatInput, percentFormat, termList, usdFormat } from 'src/utils';
-import { currencyList } from 'src/utils/currencyList';
+import { CurrencyInfo, currencyList } from 'src/utils/currencyList';
 import styled from 'styled-components';
 
 interface LendTabProps {
@@ -62,7 +62,7 @@ const Lend: React.FC<CombinedProps> = ({
     );
 
     const handleCurrencySelect = useCallback(
-        (value: string, buttonOpen: boolean) => {
+        (value: CurrencyInfo, buttonOpen: boolean) => {
             dispatch(updateMainCurrency(value));
             setButtonOpen(!buttonOpen);
         },
@@ -147,7 +147,7 @@ const Lend: React.FC<CombinedProps> = ({
 
     const handleLend = useCallback(
         (e: React.FormEvent<HTMLInputElement>) => {
-            dispatch(updateLendAmount(e.currentTarget.value));
+            dispatch(updateLendAmount(e.currentTarget.valueAsNumber));
         },
         [dispatch]
     );
@@ -211,10 +211,7 @@ const Lend: React.FC<CombinedProps> = ({
                                 <StyledDropdownItem
                                     key={i}
                                     onClick={() =>
-                                        handleCurrencySelect(
-                                            ccy.shortName,
-                                            buttonOpen
-                                        )
+                                        handleCurrencySelect(ccy, buttonOpen)
                                     }
                                 >
                                     <img
