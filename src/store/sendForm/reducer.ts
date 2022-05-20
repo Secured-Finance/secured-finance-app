@@ -10,12 +10,13 @@ const sendFormSlice = createSlice({
     initialState: initialStore,
     reducers: {
         updateSendCurrency: (state, action: PayloadAction<Currency>) => {
-            const { fullName, indexCcy } = getCurrencyBy(
+            const { fullName, indexCcy, shortName } = getCurrencyBy(
                 'shortName',
                 action.payload
             );
             state.currencyIndex = indexCcy;
             state.currencyName = fullName;
+            state.currencyShortName = shortName;
         },
         updateSendCcyIndex: (state, action: PayloadAction<number>) => {
             state.currencyIndex = action.payload;

@@ -27,7 +27,7 @@ import { RootState } from 'src/store/types';
 import { getFilActions } from 'src/store/wallets/selectors';
 import theme from 'src/theme';
 import { formatInput } from 'src/utils';
-import { getCurrencyBy } from 'src/utils/currencyList';
+import { Currency, getCurrencyBy } from 'src/utils/currencyList';
 import styled from 'styled-components';
 import { isAddress } from 'web3-utils';
 import { ErrorModal } from './components/ErrorModal';
@@ -252,7 +252,7 @@ const SendModal = ({
                         </StyledLabelContainer>
                         <StyledCurrencyInput>
                             <CurrencyImage
-                                selectedCcy={currencyShortName}
+                                selectedCcy={currencyShortName as Currency}
                                 showName
                             />
                             <StyledInput
