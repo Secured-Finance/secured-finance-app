@@ -20,7 +20,7 @@ import {
     termList,
     usdFormat,
 } from 'src/utils';
-import { currencyList } from 'src/utils/currencyList';
+import { Currency, CurrencyInfo, currencyList } from 'src/utils/currencyList';
 import styled from 'styled-components';
 
 interface BorrowTabProps {
@@ -71,7 +71,7 @@ const Borrow: React.FC<CombinedProps> = ({
             await onPlaceOrder();
             setPendingTx(false);
         } catch (e) {
-            console.log(e);
+            console.error(e);
         }
     }, [onPlaceOrder]);
 
@@ -97,7 +97,7 @@ const Borrow: React.FC<CombinedProps> = ({
     );
 
     const handleCurrencySelect = useCallback(
-        (value: string, buttonOpen: boolean) => {
+        (value: CurrencyInfo, buttonOpen: boolean) => {
             dispatch(updateMainCurrency(value));
             setButtonOpen(!buttonOpen);
         },
@@ -113,7 +113,7 @@ const Borrow: React.FC<CombinedProps> = ({
     );
 
     const handleCollateralSelect = useCallback(
-        (value: string, collateralOpen: boolean) => {
+        (value: Currency, collateralOpen: boolean) => {
             dispatch(updateMainCollateralCurrency(value));
             setCollateralOpen(!collateralOpen);
         },
@@ -143,14 +143,14 @@ const Borrow: React.FC<CombinedProps> = ({
 
     const handleBorrow = useCallback(
         (e: React.FormEvent<HTMLInputElement>) => {
-            dispatch(updateBorrowAmount(e.currentTarget.value));
+            dispatch(updateBorrowAmount(e.currentTarget.valueAsNumber));
         },
         [dispatch]
     );
 
     const handleCollateral = useCallback(
         (e: React.FormEvent<HTMLInputElement>) => {
-            dispatch(updateCollateralAmount(e.currentTarget.value));
+            dispatch(updateCollateralAmount(e.currentTarget.valueAsNumber));
         },
         [dispatch]
     );
@@ -214,10 +214,7 @@ const Borrow: React.FC<CombinedProps> = ({
                                 <StyledDropdownItem
                                     key={i}
                                     onClick={() =>
-                                        handleCurrencySelect(
-                                            ccy.shortName,
-                                            buttonOpen
-                                        )
+                                        handleCurrencySelect(ccy, buttonOpen)
                                     }
                                 >
                                     <img

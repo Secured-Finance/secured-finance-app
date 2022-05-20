@@ -4,14 +4,16 @@ import { useCallback, useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Dispatch } from 'redux';
 import { WalletAccountModal } from 'src/components/organisms';
-import { useResetFilWalletProvider } from 'src/services/filecoin';
+import {
+    FIL_ADDRESS,
+    FIL_WALLET_TYPE,
+    useResetFilWalletProvider,
+} from 'src/services/filecoin';
 import { FilecoinWalletType } from 'src/services/filecoin/store/types';
 import { getFilecoinNetwork } from 'src/services/filecoin/utils';
 import connectWithLedger from 'src/services/ledger/connectLedger';
 import { RootState } from 'src/store/types';
 import {
-    fetchWallet,
-    fetchWalletFailure,
     updateFilWalletActions,
     updateFilWalletAddress,
     updateFilWalletAssetPrice,
@@ -21,7 +23,6 @@ import {
     updateFilWalletUSDBalance,
     WalletBase,
 } from 'src/store/wallets';
-import { FIL_ADDRESS, FIL_WALLET_TYPE } from 'src/store/wallets/constants';
 import {
     updateFilWalletViaProvider,
     updateFilWalletViaRPC,
@@ -54,7 +55,6 @@ export const useFilecoinWalletInfo = () => {
         walletProvider: Filecoin,
         filUSDPrice: number = null
     ) => {
-        dispatch(fetchWallet());
         if (wasmLoaded && walletProvider !== null) {
             const [filAddr] = await walletProvider.wallet.getAccounts(
                 0,
@@ -72,8 +72,6 @@ export const useFilecoinWalletInfo = () => {
                     .toNumber();
                 dispatch(updateFilWalletUSDBalance(usdBalance));
             }
-        } else {
-            dispatch(fetchWalletFailure());
         }
     };
 

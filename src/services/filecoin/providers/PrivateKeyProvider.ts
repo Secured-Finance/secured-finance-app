@@ -1,12 +1,17 @@
 import { Network } from '@glif/filecoin-address';
 import { LotusMessage, SignedLotusMessage } from '@glif/filecoin-message';
 import { WalletSubProvider } from '@glif/filecoin-wallet-provider';
+import RustModule from '@zondax/filecoin-signing-tools';
+import { getFilecoinNetwork } from '../utils';
 import { ExtendedKey } from './types';
 
-export const PrivateKeyProvider = (wasm: any) => {
+export const PrivateKeyProvider = (wasm: RustModule) => {
     return (privateKey: string | Buffer): WalletSubProvider => {
         const PRIVATE_KEY = privateKey;
-        const { private_base64 } = wasm.keyRecover(PRIVATE_KEY) as ExtendedKey;
+        const { private_base64 } = wasm.keyRecover(
+            PRIVATE_KEY,
+            getFilecoinNetwork() === Network.TEST
+        ) as ExtendedKey;
         return {
             getAccounts: async (
                 _nStart: number,

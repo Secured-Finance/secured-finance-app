@@ -20,6 +20,7 @@ import {
 import { RootState } from 'src/store/types';
 import { getEthBalance } from 'src/store/wallets/selectors';
 import { collateralListDropdown, usdFormat } from 'src/utils';
+import { Currency } from 'src/utils/currencyList';
 import { calculatePercents, MIN_COVERAGE } from '../constants';
 import cm from './LendBorrowTable.module.scss';
 
@@ -55,11 +56,14 @@ const BorrowCollateralManagement: React.FC<IBorrowCollateralManagement> = ({
 
     const handleCollateralCurrencyChange = (
         e: React.SyntheticEvent<HTMLSelectElement>
-    ) => dispatch(updateMainCollateralCurrency(e.currentTarget.value));
+    ) =>
+        dispatch(
+            updateMainCollateralCurrency(e.currentTarget.value as Currency)
+        );
 
     const handleCollateralChange = useCallback(
         (e: React.FormEvent<HTMLInputElement>) => {
-            dispatch(updateCollateralAmount(e.currentTarget.value));
+            dispatch(updateCollateralAmount(e.currentTarget.valueAsNumber));
         },
         [dispatch]
     );
@@ -87,7 +91,7 @@ const BorrowCollateralManagement: React.FC<IBorrowCollateralManagement> = ({
         const sufficientCollateral = getTokenCollateral(appropriateUSDAmount);
         const result = sufficientCollateral.isInteger()
             ? sufficientCollateral.toNumber()
-            : sufficientCollateral.toFixed(4, 2);
+            : Number(sufficientCollateral.toFixed(4, 2));
         dispatch(updateCollateralAmount(result));
     };
 

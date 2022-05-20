@@ -1,10 +1,8 @@
 import React from 'react';
-import theme from 'src/theme';
-import { getCurrencyBy } from 'src/utils/currencyList';
-import styled from 'styled-components';
+import { Currency, getCurrencyBy } from 'src/utils/currencyList';
 
 interface CurrencySelectorProps {
-    selectedCcy: string;
+    selectedCcy: Currency;
     showName?: boolean;
 }
 
@@ -15,19 +13,21 @@ export const CurrencyImage: React.FC<CurrencySelectorProps> = ({
     const { icon } = getCurrencyBy('shortName', selectedCcy);
 
     return (
-        <Container>
-            <img width={28} src={icon} alt={`currency_${selectedCcy}`} />
-            {showName && <CurrencyName>{selectedCcy}</CurrencyName>}
-        </Container>
+        <span className='flex items-center'>
+            <img
+                width={28}
+                src={icon}
+                alt={`currency_${selectedCcy}`}
+                data-cy='currency-image-icon'
+            />
+            {showName && (
+                <span
+                    className='ml-2 text-lightBackground'
+                    data-cy='currency-image-ccy'
+                >
+                    {selectedCcy}
+                </span>
+            )}
+        </span>
     );
 };
-
-const Container = styled.div`
-    display: flex;
-    align-items: center;
-`;
-
-const CurrencyName = styled.span`
-    margin-left: ${theme.spacing['2']}px;
-    color: ${theme.colors.lightBackground};
-`;

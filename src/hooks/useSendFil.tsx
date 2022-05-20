@@ -164,8 +164,6 @@ export const useSendFil = (
             const message = await send();
             if (message) {
                 updateSendAmount(0);
-                // TODO: ADD something in the UI to show that the transaction was done
-                console.log(`transaction sent: ${message}`);
                 close();
             }
         } catch (err) {

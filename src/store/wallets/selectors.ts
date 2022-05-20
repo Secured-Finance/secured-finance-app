@@ -29,21 +29,10 @@ export const isAnyWalletConnected = (
     state: RootState,
     walletName?: 'filecoin' | 'ethereum'
 ) => {
-    const wallets: any = state.wallets;
-    for (const key in wallets) {
-        if (
-            wallets.hasOwnProperty(key) &&
-            wallets[key].hasOwnProperty('actions') &&
-            !!wallets[key].actions
-        ) {
-            if (walletName) {
-                if (key !== walletName) return true;
-            } else {
-                return true;
-            }
-        }
+    if (walletName) {
+        return !!state.wallets[walletName].address;
     }
-    return false;
+    return !!state.wallets.filecoin.address || !!state.wallets.ethereum.address;
 };
 
 export const getFilActions = (state: RootState) =>

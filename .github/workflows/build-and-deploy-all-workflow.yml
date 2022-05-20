@@ -33,11 +33,8 @@ jobs:
         run: npm run prettier:check
       - name: Run Tests
         run: npm run test -- --watchAll=false
-        # bad way to configure this build command.
-        # this sets CI=false to not treat warnings are errors
-        # TODO: remove this ASAP and fix all the warnings
       - name: Build Web App
-        run: CI=false npm run build
+        run: npm run build
       - name: Build Storybook
         run: npm run build-storybook
       - name: Publish Web App

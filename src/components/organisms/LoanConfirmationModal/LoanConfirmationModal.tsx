@@ -15,7 +15,9 @@ import theme from 'src/theme';
 import { formatDate, ordinaryFormat, percentFormat } from 'src/utils';
 import styled from 'styled-components';
 
+//TODO: type this with the sf sdk
 interface LoanModalProps {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     loan?: any;
 }
 

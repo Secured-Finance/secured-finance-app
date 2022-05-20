@@ -1,5 +1,5 @@
-import produce from 'immer';
-import * as constants from './constants';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { Currency, CurrencyInfo, getCurrencyBy } from 'src/utils/currencyList';
 import { LendingStore } from './types';
 
 const initialStore: LendingStore = {
@@ -19,51 +19,87 @@ const initialStore: LendingStore = {
     isLoading: false,
 };
 
-const lendingReducer = (state = initialStore, action: any) =>
-    produce(state, draft => {
-        switch (action.type) {
-            case constants.UPDATE_SELECTED_CURRENCY:
-                draft.selectedCcy = action.data;
-                break;
-            case constants.UPDATE_SELECTED_CURRENCY_NAME:
-                draft.selectedCcyName = action.data;
-                break;
-            case constants.UPDATE_CURRENCY_INDEX:
-                draft.currencyIndex = action.data;
-                break;
-            case constants.UPDATE_COLLATERAL_CURRENCY:
-                draft.collateralCcy = action.data;
-                break;
-            case constants.UPDATE_COLLATERAL_CURRENCY_NAME:
-                draft.collateralCcyName = action.data;
-                break;
-            case constants.UPDATE_COLLATERAL_CURRENCY_INDEX:
-                draft.collateralCcyIndex = action.data;
-                break;
-            case constants.UPDATE_COLLATERAL_AMOUNT:
-                draft.collateralAmount = action.data;
-                break;
-            case constants.UPDATE_SELECTED_TERMS:
-                draft.selectedTerms = action.data;
-                break;
-            case constants.UPDATE_TERMS_INDEX:
-                draft.termsIndex = action.data;
-                break;
-            case constants.UPDATE_BORROW_AMOUNT:
-                draft.borrowAmount = action.data;
-                break;
-            case constants.UPDATE_BORROW_RATE:
-                draft.borrowRate = action.data;
-                break;
-            case constants.UPDATE_LEND_AMOUNT:
-                draft.lendAmount = action.data;
-                break;
-            case constants.UPDATE_LEND_RATE:
-                draft.lendRate = action.data;
-                break;
-            default:
-                break;
-        }
-    });
+const lendingSlice = createSlice({
+    name: 'lending',
+    initialState: initialStore,
+    reducers: {
+        updateLendRate(state, action: PayloadAction<number>) {
+            state.lendRate = action.payload;
+        },
+        updateBorrowRate(state, action: PayloadAction<number>) {
+            state.borrowRate = action.payload;
+        },
+        updateBorrowAmount(state, action: PayloadAction<number>) {
+            state.borrowAmount = action.payload;
+        },
+        updateLendAmount(state, action: PayloadAction<number>) {
+            state.lendAmount = action.payload;
+        },
+        updateCollateralAmount(state, action: PayloadAction<number>) {
+            state.collateralAmount = action.payload;
+        },
+        updateSelectedTerms(state, action: PayloadAction<string>) {
+            state.selectedTerms = action.payload;
+        },
+        updateSelectedCurrency(state, action: PayloadAction<string>) {
+            state.selectedCcy = action.payload;
+        },
+        updateSelectedCurrencyName(state, action: PayloadAction<string>) {
+            state.selectedCcyName = action.payload;
+        },
+        updateSelectedCurrencyIndex(state, action: PayloadAction<number>) {
+            state.currencyIndex = action.payload;
+        },
+        updateCollateralCurrency(state, action: PayloadAction<string>) {
+            state.collateralCcy = action.payload;
+        },
+        updateCollateralCurrencyName(state, action: PayloadAction<string>) {
+            state.collateralCcyName = action.payload;
+        },
+        updateCollateralCurrencyIndex(state, action: PayloadAction<number>) {
+            state.collateralCcyIndex = action.payload;
+        },
+        updateMainCurrency(state, action: PayloadAction<CurrencyInfo>) {
+            const { indexCcy, fullName, shortName } = action.payload;
+            state.currencyIndex = indexCcy;
+            state.selectedCcyName = fullName;
+            state.selectedCcy = shortName;
+        },
+        updateMainCollateralCurrency(state, action: PayloadAction<Currency>) {
+            const { indexCcy, fullName, shortName } = getCurrencyBy(
+                'shortName',
+                action.payload
+            );
+            state.collateralCcyIndex = indexCcy;
+            state.collateralCcyName = fullName;
+            state.collateralCcy = shortName;
+        },
+        updateMainTerms(state, action: PayloadAction<string>) {
+            state.selectedTerms = action.payload;
+            switch (action.payload) {
+                case '3 month':
+                    state.termsIndex = 0;
+                    break;
+                case '6 month':
+                    state.termsIndex = 1;
+                    break;
+                case '1 year':
+                    state.termsIndex = 2;
+                    break;
+                case '2 year':
+                    state.termsIndex = 3;
+                    break;
+                case '3 year':
+                    state.termsIndex = 4;
+                    break;
+                case '5 year':
+                    state.termsIndex = 5;
+                    break;
+                default:
+                    break;
+            }
+        },
+    },
+});
 
-export default lendingReducer;
+export default lendingSlice;

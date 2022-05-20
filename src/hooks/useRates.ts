@@ -1,11 +1,14 @@
 import { useCallback, useEffect, useState } from 'react';
-import useBlock from './useBlock';
+import { useSelector } from 'react-redux';
+import { RootState } from 'src/store/types';
 import useSF from './useSecuredFinance';
 
 export const useRates = (ccy: string, type: number) => {
     const selectedCcy = 'FIL';
     const securedFinance = useSF();
-    const block = useBlock();
+    const block = useSelector(
+        (state: RootState) => state.blockchain.latestBlock
+    );
     const [rates, setRates] = useState([]);
 
     const fetchYieldCurve = useCallback(async () => {

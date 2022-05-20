@@ -1,44 +1,44 @@
-import produce from 'immer';
-import * as constants from './constants';
-import { defaultStore, CollateralFormStore } from './types';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { CurrencyInfo } from 'src/utils/currencyList';
+import { CollateralFormStore, defaultStore } from './types';
 
 const initialStore: CollateralFormStore = defaultStore;
 
-const collateralFormReducer = (state = initialStore, action: any) =>
-    produce(state, draft => {
-        switch (action.type) {
-            case constants.FETCH_COLLATERAL_FORM_STORE:
-                draft.isLoading = true;
-                break;
-            case constants.FETCH_COLLATERAL_FORM_STORE_FAILURE:
-                draft.isLoading = false;
-                break;
-            case constants.UPDATE_CCY_INDEX_COLLATERAL_FORM:
-                draft.isLoading = false;
-                draft.currencyIndex = action.data;
-                break;
-            case constants.UPDATE_CCY_SHORT_NAME_COLLATERAL_FORM:
-                draft.isLoading = false;
-                draft.currencyShortName = action.data;
-                break;
-            case constants.UPDATE_CCY_NAME_COLLATERAL_FORM:
-                draft.isLoading = false;
-                draft.currencyName = action.data;
-                break;
-            case constants.UPDATE_AMOUNT_COLLATERAL_FORM:
-                draft.isLoading = false;
-                draft.amount = action.data;
-                break;
-            case constants.UPDATE_TX_FEE_COLLATERAL_FORM:
-                draft.isLoading = false;
-                draft.txFee = action.data;
-                break;
-            case constants.RESET_COLLATERAL_FORM:
-                draft = defaultStore;
-                break;
-            default:
-                break;
-        }
-    });
+const collateralFormSlice = createSlice({
+    name: 'collateralForm',
+    initialState: initialStore,
+    reducers: {
+        updateCollateralCcyIndex(state, action: PayloadAction<number>) {
+            state.currencyIndex = action.payload;
+        },
+        updateCollateralCcyShortName(state, action: PayloadAction<string>) {
+            state.currencyShortName = action.payload;
+        },
+        updateCollateralCcyName(state, action: PayloadAction<string>) {
+            state.currencyName = action.payload;
+        },
+        updateCollateralAmount(state, action: PayloadAction<number>) {
+            state.amount = action.payload;
+        },
+        updateCollateralTxFee(state, action: PayloadAction<number>) {
+            state.txFee = action.payload;
+        },
+        resetCollateralForm(state) {
+            state = initialStore;
+        },
+        fetchCollateralStore(state) {
+            state.isLoading = true;
+        },
+        fetchCollateralStoreFailure(state) {
+            state.isLoading = false;
+        },
+        updateCollateralCurrency(state, action: PayloadAction<CurrencyInfo>) {
+            const { shortName, indexCcy, fullName } = action.payload;
+            state.currencyShortName = shortName;
+            state.currencyIndex = indexCcy;
+            state.currencyName = fullName;
+        },
+    },
+});
 
-export default collateralFormReducer;
+export default collateralFormSlice;
