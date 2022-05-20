@@ -1,7 +1,7 @@
 import { useCrosschainAddressById } from '@secured-finance/sf-graph-client/dist/hooks';
 import BigNumber from 'bignumber.js';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { connect, useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { Button, Container, RenderTerms, Spacer } from 'src/components/atoms';
 import { SendModal } from 'src/components/organisms';
@@ -10,7 +10,6 @@ import useCollateralBook from 'src/hooks/useCollateralBook';
 import { useLoanInformation } from 'src/hooks/useLoanHistory';
 import useModal from 'src/hooks/useModal';
 import { CrossChainWallet } from 'src/services/filecoin';
-import { updateSendAmount, updateSendToAddress } from 'src/store/sendForm';
 import { RootState } from 'src/store/types';
 import theme from 'src/theme';
 import {
@@ -38,11 +37,12 @@ export interface CouponPayment {
 
 const LoanScreen = () => {
     const params = useParams();
-    const { account } = useWallet();
     const loan = useLoanInformation(params.loanId);
+
+    const { account } = useWallet();
     const [couponPayment, setCouponPayment] = useState<CouponPayment>();
     const [counterpartyAddr, setCounterpartyAddr] = useState('');
-    const dispatch = useDispatch();
+    const [recipientAddress, setRecipientAddress] = useState('');
     const filPrice = useSelector(
         (state: RootState) => state.assetPrices.filecoin.price
     );
@@ -78,7 +78,11 @@ const LoanScreen = () => {
     ) as CrossChainWallet;
 
     const [onPresentSendModal] = useModal(
-        <SendModal ccyIndex={loanCurrency.indexCcy} />
+        <SendModal
+            currencyInfo={loanCurrency}
+            toAddress={recipientAddress}
+            amount={loan?.notional}
+        />
     );
 
     const handleNotional = () => {
@@ -156,14 +160,12 @@ const LoanScreen = () => {
                 loan?.currency &&
                 loanCurrency.shortName === Currency.FIL
             ) {
-                dispatch(updateSendToAddress(counterpartyFilWallet.address));
+                setRecipientAddress(counterpartyFilWallet.address);
             } else {
-                dispatch(updateSendToAddress(counterPartyWallet));
+                setRecipientAddress(counterPartyWallet);
             }
-            dispatch(updateSendAmount(loan.notional));
         }
     }, [
-        dispatch,
         setCouponPayment,
         setCounterpartyAddr,
         loan,
@@ -482,10 +484,4 @@ const StyledItemText = styled.p<StyledItemTextProps>`
     letter-spacing: 0.03em;
 `;
 
-const mapStateToProps = (state: RootState) => {
-    return {
-        assetPrices: state.assetPrices,
-    };
-};
-
-export default connect(mapStateToProps)(LoanScreen);
+export default LoanScreen;

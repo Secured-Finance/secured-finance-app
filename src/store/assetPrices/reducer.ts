@@ -39,12 +39,6 @@ const assetPricesSlice = createSlice({
         updateUSDCUSDChange: (state, action: PayloadAction<number>) => {
             state.usdc.change = action.payload;
         },
-        fetchAssetPrice: (state, action: PayloadAction<boolean>) => {
-            state.isLoading = action.payload;
-        },
-        fetchAssetPriceFailure: (state, action: PayloadAction<boolean>) => {
-            state.isLoading = action.payload;
-        },
     },
 });
 
