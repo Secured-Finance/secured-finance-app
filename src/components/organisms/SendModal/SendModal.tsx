@@ -17,13 +17,11 @@ import { useSendEth } from 'src/hooks/useSendEth';
 import { useSendFil } from 'src/hooks/useSendFil';
 import { getAssetInfo } from 'src/store/assetPrices/selectors';
 import { RootState } from 'src/store/types';
-import { getFilActions } from 'src/store/wallets/selectors';
 import theme from 'src/theme';
 import { formatInput } from 'src/utils';
 import { CurrencyInfo } from 'src/utils/currencyList';
 import styled from 'styled-components';
 import { isAddress } from 'web3-utils';
-import { ErrorModal } from './components/ErrorModal';
 import { FilTxFeeTable } from './components/FilTxFeeTable';
 import { GasTabsAndTable } from './components/GastabsAndTable';
 
@@ -47,7 +45,6 @@ const SendModal = ({
     const filecoinBalance = useSelector(
         (state: RootState) => state.wallets.filecoin.balance
     );
-    const filecoinActions = useSelector(getFilActions);
 
     const { price } = useSelector(getAssetInfo(currencyInfo.shortName));
 
@@ -182,18 +179,6 @@ const SendModal = ({
     const onCloseSendModal = () => {
         onDismiss();
     };
-
-    if (currencyInfo.indexCcy === 1 && !filecoinActions) {
-        return (
-            <ErrorModal
-                title={'Connection error'}
-                text={
-                    'Ledger seems to be disconnected. Please reconnect the device and try again'
-                }
-                onClose={onCloseSendModal}
-            />
-        );
-    }
 
     return (
         <Modal>
