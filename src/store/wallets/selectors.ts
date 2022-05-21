@@ -34,6 +34,3 @@ export const isAnyWalletConnected = (
     }
     return !!state.wallets.filecoin.address || !!state.wallets.ethereum.address;
 };
-
-export const getFilActions = (state: RootState) =>
-    state.wallets.filecoin.actions;
