@@ -1,5 +1,5 @@
 import { Meta, Story } from '@storybook/react';
-import { StorybookProviders } from 'src/setupStorrybook';
+import { StorybookProviders } from 'src/setupStorybook';
 import { updateEthUSDPrice, updateFilUSDPrice } from 'src/store/assetPrices';
 import {
     updateEthWalletBalance,
