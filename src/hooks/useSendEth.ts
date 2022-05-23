@@ -2,7 +2,6 @@ import BigNumber from 'bignumber.js';
 import { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useWallet } from 'use-wallet';
-import { updateSendTxFee } from '../store/sendForm';
 import { RootState } from '../store/types';
 import useSF from './useSecuredFinance';
 
@@ -17,28 +16,28 @@ export const useSendEth = (amount: number, to: string, gasPrice: number) => {
                 .toNumber();
             try {
                 // this does not work today and will break as soon as we upgrade to the new SDK
-                // TODO: FIX THIS
-                const tx = securedFinance.ethersUtils
-                    .sendTransaction({
-                        from: account,
-                        to: to,
-                        value: new BigNumber(amount).multipliedBy(
-                            new BigNumber(10).pow(18)
-                        ),
-                        gasPrice: gweiGasPrice,
-                    })
-                    .on(
-                        'transactionHash',
-                        (tx: { transactionHash: string }) => {
-                            return tx.transactionHash;
-                        }
-                    );
-                return tx;
+                // TODO: FIX THIS2
+                // const tx = securedFinance.utils
+                //     .sendTransaction({
+                //         from: account,
+                //         to: to,
+                //         value: new BigNumber(amount).multipliedBy(
+                //             new BigNumber(10).pow(18)
+                //         ),
+                //         gasPrice: gweiGasPrice,
+                //     })
+                //     .on(
+                //         'transactionHash',
+                //         (tx: { transactionHash: string }) => {
+                //             return tx.transactionHash;
+                //         }
+                //     );
+                // return tx;
             } catch (e) {
                 return false;
             }
         }
-    }, [account, securedFinance, amount, to, gasPrice]);
+    }, [account, securedFinance, gasPrice]);
 
     return { onSendEth: handleSendEther };
 };
@@ -64,17 +63,17 @@ export const useEstimateTxFee = (gasPrice: number) => {
         };
         // this does not work today and will break as soon as we upgrade to the new SDK
         // TODO: FIX THIS
-        securedFinance.utils
-            .estimateGas(transactionObject)
-            .then((gasLimit: number) => {
-                const transactionFee = gasPrice * gasLimit;
-                const txFee = new BigNumber(transactionFee)
-                    .dividedBy(new BigNumber(10).pow(9))
-                    .multipliedBy(ethPrice)
-                    .toNumber();
-                dispatch(updateSendTxFee(txFee));
-            });
-    }, [account, securedFinance, gasPrice, dispatch, ethPrice]);
+        // securedFinance.utils
+        //     .estimateGas(transactionObject)
+        //     .then((gasLimit: number) => {
+        //         const transactionFee = gasPrice * gasLimit;
+        //         const txFee = new BigNumber(transactionFee)
+        //             .dividedBy(new BigNumber(10).pow(9))
+        //             .multipliedBy(ethPrice)
+        //             .toNumber();
+        //         dispatch(updateSendTxFee(txFee));
+        //     });
+    }, [account, gasPrice]);
 
     useEffect(() => {
         if (account && securedFinance) {

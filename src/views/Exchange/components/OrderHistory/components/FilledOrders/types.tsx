@@ -1,5 +1,5 @@
+import { Currency } from '@secured-finance/sf-graph-client/dist/generated';
 import { RenderTerms } from 'src/components/atoms';
-import { Currency } from 'src/store/history/types';
 import theme from 'src/theme';
 import { formatDateAndTime, ordinaryFormat, percentFormat } from 'src/utils';
 import { TableColumns } from '../commonTypes';
