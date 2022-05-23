@@ -1,7 +1,9 @@
+import { getCollateralVaultAddressByCcy } from '@secured-finance/sf-client/dist/utils';
 import { useCollateralBookFromVault } from '@secured-finance/sf-graph-client';
 import { BigNumber } from 'bignumber.js';
 import { useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { useWallet } from 'use-wallet';
 import { RootState } from '../store/types';
 
 const ZERO_BN = new BigNumber('0');
@@ -30,32 +32,40 @@ const emptyBook: CollateralBook = {
     usdBorrowed: ZERO_BN,
 };
 
-const useCollateralBook = (account: string, vault: string) => {
+const useCollateralBook = (account: string, ccy = 'ETH') => {
     const [collateralBook, setCollateralBook] =
         useState<CollateralBook>(emptyBook);
     const ethPrice = useSelector(
         (state: RootState) => state.assetPrices.ethereum.price
     );
-    const ethPriceBN = new BigNumber(ethPrice);
-    const book = useCollateralBookFromVault(vault, account) as any;
+    const { chainId }: { chainId: number | null } = useWallet();
+    const vault = getCollateralVaultAddressByCcy(ccy, chainId);
+    const { data, error } = useCollateralBookFromVault(vault, account) as any;
+
+    if (error) {
+        console.error(error);
+    }
+
     useMemo(() => {
-        if (book) {
+        if (data) {
+            const ethPriceBN = new BigNumber(ethPrice);
+
             const colBook: CollateralBook = {
                 ccyIndex: 0,
-                ccyName: book.currency.shortName,
-                collateral: new BigNumber(book.independentCollateral),
+                ccyName: data.currency.shortName,
+                collateral: new BigNumber(data.independentCollateral),
                 usdCollateral: new BigNumber(
-                    book.independentCollateral
+                    data.independentCollateral
                 ).multipliedBy(ethPriceBN),
-                vault: book.vault.address,
-                locked: new BigNumber(book.lockedCollateral),
-                usdLocked: new BigNumber(book.lockedCollateral).multipliedBy(
+                vault: data.vault.address,
+                locked: new BigNumber(data.lockedCollateral),
+                usdLocked: new BigNumber(data.lockedCollateral).multipliedBy(
                     ethPriceBN
                 ),
             };
             setCollateralBook(colBook);
         }
-    }, [book]);
+    }, [data, ethPrice]);
 
     return collateralBook;
 };

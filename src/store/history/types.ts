@@ -9,7 +9,7 @@ export interface HistoryTableData {
     lender: string;
     borrower: string;
     rate: string;
-    currency: string;
+    currency: Currency;
     term: string;
     presentValue: string;
     notional: string;
@@ -17,6 +17,12 @@ export interface HistoryTableData {
     state: number;
     startTimestamp: string;
     endTimestamp: string;
+}
+
+export interface Currency {
+    identifier?: string;
+    shortName: string;
+    name: string;
 }
 
 export interface Schedule {

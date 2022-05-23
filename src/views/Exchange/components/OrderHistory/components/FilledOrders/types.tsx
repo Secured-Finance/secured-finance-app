@@ -1,11 +1,7 @@
 import { RenderTerms } from 'src/components/atoms';
+import { Currency } from 'src/store/history/types';
 import theme from 'src/theme';
-import {
-    formatDateAndTime,
-    fromBytes32,
-    ordinaryFormat,
-    percentFormat,
-} from 'src/utils';
+import { formatDateAndTime, ordinaryFormat, percentFormat } from 'src/utils';
 import { TableColumns } from '../commonTypes';
 
 export interface FilledOrdersTableData {
@@ -40,8 +36,8 @@ export const filledTableCollumns = [
             {
                 Header: 'Currency',
                 accessor: 'currency',
-                Cell: (cell: { value: string }) => (
-                    <span>{fromBytes32(cell.value)}</span>
+                Cell: (cell: { value: Currency }) => (
+                    <span>{cell.value.shortName}</span>
                     // <CurrencyContainer
                     //     ccy={cell.value}
                     //     size={'xs'}
@@ -75,8 +71,8 @@ export const filledTableCollumns = [
             {
                 Header: 'Term',
                 accessor: 'term',
-                Cell: (cell: { value: number }) => (
-                    <RenderTerms index={cell.value} />
+                Cell: (cell: { value: string }) => (
+                    <RenderTerms label={'termIndex'} value={cell.value} />
                 ),
             },
             {
