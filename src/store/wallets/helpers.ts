@@ -60,6 +60,7 @@ export const updateFilWalletViaRPC = (filAddr: string) => {
         const lotusRPC = new LotusRpcEngine({
             apiAddress: FIL_JSON_RPC_ENDPOINT[getFilecoinNetwork()],
         });
+
         const chainHead = await lotusRPC.request('WalletBalance', filAddr);
         const balance = new FilecoinNumber(chainHead, 'attofil');
         dispatch(updateFilWallet(balance, filAddr));
@@ -69,6 +70,7 @@ export const updateFilWalletViaRPC = (filAddr: string) => {
 export const updateFilWallet = (balance: FilecoinNumber, filAddr: string) => {
     return (dispatch: AppDispatch, getState: () => RootState) => {
         const state = getState();
+        dispatch(recalculateTotalUSDBalance());
         const totalUSDBalance = getTotalUSDBalance(state);
         const usdBalance: number = calculateUSDBalance(
             'filecoin',
@@ -86,6 +88,5 @@ export const updateFilWallet = (balance: FilecoinNumber, filAddr: string) => {
         dispatch(updateFilWalletBalance(balance.toNumber()));
         dispatch(updateFilWalletUSDBalance(usdBalance));
         dispatch(updateFilWalletPortfolioShare(portfolioShare));
-        dispatch(recalculateTotalUSDBalance());
     };
 };
