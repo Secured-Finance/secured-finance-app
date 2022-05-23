@@ -1,43 +1,32 @@
-import { Network as FilNetwork } from '@glif/filecoin-address';
+import RustModule from '@zondax/filecoin-signing-tools';
 import React, { createContext, ReactNode, useEffect, useState } from 'react';
-import { providers } from 'src/services/filecoin/providers';
-import { useWallet } from 'use-wallet';
+import { providers, WalletProviders } from 'src/services/filecoin/providers';
 
-export const CACHED_PROVIDER_KEY = 'CACHED_PROVIDER_KEY';
-
-export const Context = createContext({
+const initialContext: {
+    isLoaded: boolean;
+    loaded: boolean;
+    wasmModule: RustModule;
+    filProviders: WalletProviders;
+} = {
     isLoaded: false,
-});
+    loaded: false,
+    filProviders: null,
+    wasmModule: null,
+};
+export const Context = createContext(initialContext);
 
-interface FilecoinWalletProviderProps {
-    children: ReactNode;
-    ntwk?: FilNetwork.MAIN | FilNetwork.TEST;
-}
-
-const FilecoinWasmProvider: React.FC<FilecoinWalletProviderProps> = ({
-    children,
-    ntwk,
-}) => {
-    const [wasmModule, setWasmModule] = useState<any>();
+const FilecoinWasmProvider = ({ children }: { children: ReactNode }) => {
+    const [wasmModule, setWasmModule] = useState<RustModule>(null);
     const [loaded, setLoaded] = useState<boolean>(false);
-    const [filProviders, setFilProviders] = useState<any>();
-
-    const { connect } = useWallet();
-
-    useEffect(() => {
-        const cachedProvider = localStorage.getItem(CACHED_PROVIDER_KEY);
-        if (cachedProvider !== null) {
-            connect('injected');
-        }
-    }, []);
+    const [filProviders, setFilProviders] = useState<WalletProviders>(null);
 
     useEffect(() => {
         async function loadWasmModule() {
             try {
                 const wasm = await import('@zondax/filecoin-signing-tools');
-                setWasmModule(wasm);
+                setWasmModule(wasm as RustModule);
                 setLoaded(true);
-                setFilProviders(providers(wasm));
+                setFilProviders(providers(wasm as RustModule));
             } catch (err) {
                 setLoaded(false);
                 console.error(
@@ -48,11 +37,11 @@ const FilecoinWasmProvider: React.FC<FilecoinWalletProviderProps> = ({
             }
         }
         loadWasmModule();
-    }, [setWasmModule, setLoaded, setFilProviders, providers]);
+    }, [setWasmModule, setLoaded, setFilProviders]);
 
     return (
         <Context.Provider
-            value={{ ...wasmModule, loaded, filProviders, isLoaded: true }}
+            value={{ wasmModule, loaded, filProviders, isLoaded: true }}
         >
             {children}
         </Context.Provider>

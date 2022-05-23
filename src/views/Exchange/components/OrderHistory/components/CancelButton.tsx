@@ -6,7 +6,7 @@ import { RootState } from 'src/store/types';
 import styled from 'styled-components';
 
 interface CancelButtonProps {
-    orderId?: any;
+    orderId?: number;
 }
 
 type CombinedProps = CancelButtonProps & LendingStore;
@@ -26,7 +26,7 @@ const RenderCancelButton: React.FC<CombinedProps> = ({
         try {
             await onCancelOrder();
         } catch (e) {
-            console.log(e);
+            console.error(e);
         }
     }, [onCancelOrder]);
 

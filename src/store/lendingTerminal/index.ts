@@ -1,12 +1,8 @@
+import lendingTerminalSlice from './reducer';
 import { LendingTerminalStore } from './types';
-export type {
-    LendingTerminalStore,
-    OrderbookRow,
-    TradingHistoryRow,
-} from './types';
+export type { LendingTerminalStore, TradingHistoryRow } from './types';
 
-export { default } from './reducer';
-export {
+export const {
     setBorrowOrderbook,
     setLendOrderbook,
     setTradingHistory,
@@ -30,8 +26,10 @@ export {
     updateSelectedTerms,
     updateSpread,
     updateTermsIndex,
-} from './actions';
+} = lendingTerminalSlice.actions;
 
 export const lendingTerminalSelector = (state: {
     lendingTerminal: LendingTerminalStore;
 }) => state.lendingTerminal;
+
+export default lendingTerminalSlice.reducer;

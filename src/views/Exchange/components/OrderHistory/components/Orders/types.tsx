@@ -87,7 +87,7 @@ export const ordersTableColumns = [
             {
                 Header: '',
                 accessor: 'orderId',
-                Cell: (cell: { value: any }) => (
+                Cell: (cell: { value: number }) => (
                     <RenderCancelButton orderId={cell.value} />
                 ),
             },

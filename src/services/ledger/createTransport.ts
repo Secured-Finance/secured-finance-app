@@ -1,6 +1,6 @@
 import TransportWebHID from '@ledgerhq/hw-transport-webhid';
 
-let transport: any = null;
+let transport: unknown = null;
 
 const createTransport = async () => {
     const isSupported = await TransportWebHID.isSupported();

@@ -1,5 +1,6 @@
 import React from 'react';
 import { CurrencyContainer } from 'src/components/atoms';
+import { WalletBase } from 'src/store/wallets';
 import { AddressUtils } from 'src/utils';
 import {
     RenderActions,
@@ -7,6 +8,7 @@ import {
     RenderPortfolio,
     RenderPrice,
 } from './components';
+import { ActionProps } from './components/Actions';
 export interface WalletTableData {
     asset: string;
     address: string;
@@ -30,7 +32,10 @@ export interface TableColumns {
 interface Columns {
     Header: string;
     accessor: string;
-    Cell: never;
+    Cell: (cell: {
+        value: string | number | ActionProps['callbackMap'];
+        row: { original: WalletBase; values: WalletBase };
+    }) => JSX.Element;
 }
 
 export const walletTableColumns = [
@@ -62,9 +67,9 @@ export const walletTableColumns = [
             {
                 Header: 'Balance',
                 accessor: 'balance',
-                Cell: (cell: { value: any; row: any }) => (
+                Cell: cell => (
                     <RenderBalance
-                        balance={cell.value}
+                        balance={cell.value as number}
                         index={cell.row.values.ccyIndex}
                         value={cell.row.original.usdBalance}
                     />
@@ -73,9 +78,9 @@ export const walletTableColumns = [
             {
                 Header: 'Price',
                 accessor: 'assetPrice',
-                Cell: (cell: { value: any; row: any }) => (
+                Cell: cell => (
                     <RenderPrice
-                        price={cell.value}
+                        price={cell.value as number}
                         dailyChange={cell.row.original.dailyChange}
                     />
                 ),
@@ -83,16 +88,16 @@ export const walletTableColumns = [
             {
                 Header: 'Portfolio',
                 accessor: 'portfolioShare',
-                Cell: (cell: { value: any }) => (
+                Cell: (cell: { value: number }) => (
                     <RenderPortfolio share={cell.value} />
                 ),
             },
             {
                 Header: 'Actions',
                 accessor: 'actions',
-                Cell: (cell: { value: any; row: any }) => (
+                Cell: cell => (
                     <RenderActions
-                        callbackMap={cell.value}
+                        callbackMap={cell.value as ActionProps['callbackMap']}
                         ccyIndex={cell.row.values.ccyIndex}
                     />
                 ),

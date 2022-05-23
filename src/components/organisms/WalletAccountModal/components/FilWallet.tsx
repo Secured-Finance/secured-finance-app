@@ -3,12 +3,12 @@ import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { Button, Label, ModalProps, Spacer } from 'src/components/atoms';
 import {
+    FIL_ADDRESS,
     getBlockExplorerUrl,
     getFilecoinNetwork,
     useResetFilWalletProvider,
 } from 'src/services/filecoin';
 import { RootState } from 'src/store/types';
-import { FIL_ADDRESS } from 'src/store/wallets/constants';
 import {
     getFilAddress,
     isAnyWalletConnected,

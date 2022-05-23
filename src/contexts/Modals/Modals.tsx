@@ -20,7 +20,7 @@ export const Context = createContext<ModalsContext>({
 const Modals: React.FC = ({ children }) => {
     const [isOpen, setIsOpen] = useState(false);
     const [content, setContent] = useState<React.ReactNode>();
-    const [modalKey, setModalKey] = useState<string>();
+    const [, setModalKey] = useState<string>();
 
     const handlePresent = useCallback(
         (modalContent: React.ReactNode, key?: string) => {
@@ -34,7 +34,7 @@ const Modals: React.FC = ({ children }) => {
     const handleDismiss = useCallback(() => {
         setContent(undefined);
         setIsOpen(false);
-    }, [setContent, setIsOpen, modalKey]);
+    }, [setContent, setIsOpen]);
 
     return (
         <Context.Provider

@@ -19,7 +19,7 @@ export const useRegisterUser = (
             tx = await securedFinance.registerUser();
         }
         return tx;
-    }, [addresses, chainIds]);
+    }, [addresses, chainIds, securedFinance]);
 
     return { onRegisterUser: handleRegisterUser };
 };

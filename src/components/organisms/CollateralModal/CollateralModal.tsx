@@ -23,6 +23,7 @@ import {
 import { RootState } from 'src/store/types';
 import theme from 'src/theme';
 import {
+    CurrencyInfo,
     currencyList,
     formatInput,
     getDisplayBalance,
@@ -67,33 +68,36 @@ const CollateralModal: React.FC<CombinedProps> = ({
     );
 
     const handleCurrencySelect = useCallback(
-        (value: string, buttonOpen: boolean) => {
+        (value: CurrencyInfo, buttonOpen: boolean) => {
             dispatch(updateCollateralCurrency(value));
             setButtonOpen(!buttonOpen);
         },
         [dispatch, setButtonOpen]
     );
 
+    const isEnoughBalance = useCallback(
+        (amount: number) => {
+            switch (currencyIndex) {
+                case 0:
+                    return new BigNumber(amount).isLessThanOrEqualTo(
+                        new BigNumber(ethBalance)
+                    );
+            }
+        },
+        [ethBalance, currencyIndex]
+    );
+
     const handleCollateralAmount = useCallback(
         (e: React.FormEvent<HTMLInputElement>) => {
-            dispatch(updateCollateralAmount(e.currentTarget.value));
-            if (!isEnoughBalance(e.currentTarget.value)) {
+            dispatch(updateCollateralAmount(e.currentTarget.valueAsNumber));
+            if (!isEnoughBalance(e.currentTarget.valueAsNumber)) {
                 setBalanceErr(true);
             } else {
                 setBalanceErr(false);
             }
         },
-        [dispatch]
+        [dispatch, isEnoughBalance]
     );
-
-    const isEnoughBalance = (amount: string) => {
-        switch (currencyIndex) {
-            case 0:
-                return new BigNumber(amount).isLessThanOrEqualTo(
-                    new BigNumber(ethBalance)
-                );
-        }
-    };
 
     const { onRegisterUser } = useRegisterUser();
     const { onDepositCollateral } = useDepositCollateral(
@@ -120,9 +124,9 @@ const CollateralModal: React.FC<CombinedProps> = ({
                 }
             }
         } catch (e) {
-            console.log(e);
+            console.error(e);
         }
-    }, [setCollateralTx, status, amount]);
+    }, [status, onDepositCollateral, onDismiss, onRegisterUser]);
 
     const renderBalance = useMemo(() => {
         return (
@@ -130,11 +134,11 @@ const CollateralModal: React.FC<CombinedProps> = ({
                 {ethBalance} {currencyShortName}
             </span>
         );
-    }, [currencyIndex, currencyShortName]);
+    }, [currencyShortName, ethBalance]);
 
     const TotalUsdAmount = useMemo(() => {
         return (amount * ethPrice).toFixed(2);
-    }, [amount, currencyShortName]);
+    }, [amount, ethPrice]);
 
     return (
         <Modal>
@@ -196,12 +200,16 @@ const CollateralModal: React.FC<CombinedProps> = ({
                                         key={i}
                                         onClick={() =>
                                             handleCurrencySelect(
-                                                ccy.shortName,
+                                                ccy,
                                                 buttonOpen
                                             )
                                         }
                                     >
-                                        <img width={28} src={ccy.icon} />
+                                        <img
+                                            width={28}
+                                            src={ccy.icon}
+                                            alt={ccy.shortName}
+                                        />
                                         <StyledCurrencyText>
                                             {ccy.shortName}
                                         </StyledCurrencyText>
@@ -353,19 +361,6 @@ const StyledCurrencyInput = styled.div`
     align-items: center;
 `;
 
-const StyledPortfolioText = styled.div`
-    margin-top: 5px;
-    font-size: ${props => props.theme.sizes.subhead}px;
-    color: ${props => props.theme.colors.white};
-    font-weight: 500;
-`;
-
-const StyledPortfolioInfoContainer = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-`;
-
 const StyledInput = styled.input`
     background-color: transparent;
     height: 42px;
@@ -392,16 +387,6 @@ const StyledRowContainer = styled.div<StyledRowContainerProps>`
     justify-content: space-between;
     align-items: center;
     width: 100%;
-`;
-
-interface StyledHealthRatioTextProps {
-    color?: string;
-}
-
-const StyledHealthRatioText = styled.div<StyledHealthRatioTextProps>`
-    font-size: ${props => props.theme.sizes.subhead}px;
-    color: ${props => (props.color ? props.color : props.theme.colors.white)};
-    font-weight: 500;
 `;
 
 interface StyledAddressContainerProps {
@@ -471,14 +456,6 @@ const StyledDropdownItem = styled.li`
     align-items: center;
     padding: 8px 8px;
     border-bottom: 0.5px solid ${props => props.theme.colors.lightGray[1]};
-`;
-
-const StyledGasTabs = styled.div`
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    text-transform: uppercase;
-    padding: 0;
 `;
 
 interface StyledCurrencyTextProps {

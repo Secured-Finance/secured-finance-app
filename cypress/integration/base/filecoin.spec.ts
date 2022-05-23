@@ -1,5 +1,6 @@
 /// <reference types="cypress" />
 import { expectFilecoin, filecoin } from 'support/filecoin';
+import { expectSendModal } from 'support/sendModal';
 import * as wallets from '../../fixtures/filecoin.json';
 
 describe('Filecoin Wallet', () => {
@@ -54,9 +55,8 @@ describe('Filecoin Wallet', () => {
         cy.get('[data-cy="filecoin-send-chip"]')
             .click()
             .then(() => {
-                cy.get('[data-cy="send-modal"]').should('be.visible');
+                expectSendModal.displayCurrency('FIL');
             });
-        cy.get('[data-cy="send-button"]').should('be.disabled');
         cy.get('[data-cy="send-address-input"]').type(
             wallets.walletCharlie.address
         );

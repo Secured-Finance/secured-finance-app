@@ -1,6 +1,7 @@
-import produce from 'immer';
-import * as constants from './constants';
-import { LendingTerminalStore } from './types';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { OrderbookRow } from '@secured-finance/sf-graph-client/dist/utils';
+import { Currency, getCurrencyBy } from 'src/utils/currencyList';
+import { LendingTerminalStore, TradingHistoryRow } from './types';
 
 const initialStore: LendingTerminalStore = {
     market: '',
@@ -21,75 +22,112 @@ const initialStore: LendingTerminalStore = {
     isLoading: false,
 };
 
-const lendingTerminalReducer = (state = initialStore, action: any) =>
-    produce(state, draft => {
-        switch (action.type) {
-            case constants.FETCHING_LENDING_TERMINAL:
-                draft.isLoading = true;
-                break;
-            case constants.FETCHING_LENDING_TERMINAL_FAILURE:
-                draft.isLoading = false;
-                break;
-            case constants.FETCHING_ORDERBOOK:
-                draft.isLoading = true;
-                break;
-            case constants.FETCHING_ORDERBOOK_FAILURE:
-                draft.isLoading = false;
-                break;
-            case constants.FETCHING_TRADING_HISTORY:
-                draft.isLoading = true;
-                break;
-            case constants.FETCHING_TRADING_HISTORY_FAILURE:
-                draft.isLoading = false;
-                break;
-            case constants.FETCHING_BORROW_ORDERBOOK_SUCCESS:
-                draft.borrowOrderbook = action.data;
-                break;
-            case constants.FETCHING_LEND_ORDERBOOK_SUCCESS:
-                draft.lendOrderbook = action.data;
-                break;
-            case constants.FETCHING_TRADING_HISTORY_SUCCESS:
-                draft.tradingHistory = action.data;
-                break;
-            case constants.UPDATE_SELECTED_TERMS:
-                draft.selectedTerms = action.data;
-                break;
-            case constants.UPDATE_TERMS_INDEX:
-                draft.termsIndex = action.data;
-                break;
-            case constants.UPDATE_BORROW_AMOUNT:
-                draft.borrowAmount = action.data;
-                break;
-            case constants.UPDATE_BORROW_RATE:
-                draft.borrowRate = action.data;
-                break;
-            case constants.UPDATE_LEND_AMOUNT:
-                draft.lendAmount = action.data;
-                break;
-            case constants.UPDATE_LEND_RATE:
-                draft.lendRate = action.data;
-                break;
-            case constants.UPDATE_CURRENCY_INDEX:
-                draft.currencyIndex = action.data;
-                break;
-            case constants.UPDATE_SELECTED_CURRENCY:
-                draft.selectedCcy = action.data;
-                break;
-            case constants.UPDATE_SELECTED_CURRENCY_NAME:
-                draft.selectedCcyName = action.data;
-                break;
-            case constants.UPDATE_MARKET_ADDRESS:
-                draft.market = action.data;
-                break;
-            case constants.UPDATE_ORDERBOOK_SPREAD:
-                draft.spread = action.data;
-                break;
-            case constants.UPDATE_ORDERBOOK_MARKET_RATE:
-                draft.marketRate = action.data;
-                break;
-            default:
-                break;
-        }
-    });
+const lendingTerminalSlice = createSlice({
+    name: 'lendingTerminal',
+    initialState: initialStore,
+    reducers: {
+        startSetLendingTerminal(state) {
+            state.isLoading = true;
+        },
+        failSetLendingTerminal(state) {
+            state.isLoading = false;
+        },
+        startSetOrderbook(state) {
+            state.isLoading = true;
+        },
+        failSetOrderbook(state) {
+            state.isLoading = false;
+        },
+        startSetTradingHistory(state) {
+            state.isLoading = true;
+        },
+        failSetTradingHistory(state) {
+            state.isLoading = false;
+        },
+        setBorrowOrderbook(state, action: PayloadAction<Array<OrderbookRow>>) {
+            state.borrowOrderbook = action.payload;
+        },
+        setLendOrderbook(state, action: PayloadAction<Array<OrderbookRow>>) {
+            state.lendOrderbook = action.payload;
+        },
+        setTradingHistory(
+            state,
+            action: PayloadAction<Array<TradingHistoryRow>>
+        ) {
+            state.tradingHistory = action.payload;
+        },
+        updateSelectedTerms(state, action: PayloadAction<string>) {
+            state.selectedTerms = action.payload;
+        },
+        updateTermsIndex(state, action: PayloadAction<number>) {
+            state.termsIndex = action.payload;
+        },
+        updateBorrowAmount(state, action: PayloadAction<number>) {
+            state.borrowAmount = action.payload;
+        },
+        updateBorrowRate(state, action: PayloadAction<number>) {
+            state.borrowRate = action.payload;
+        },
+        updateLendAmount(state, action: PayloadAction<number>) {
+            state.lendAmount = action.payload;
+        },
+        updateLendRate(state, action: PayloadAction<number>) {
+            state.lendRate = action.payload;
+        },
+        updateSelectedCurrency(state, action: PayloadAction<string>) {
+            state.selectedCcy = action.payload;
+        },
+        updateSelectedCurrencyName(state, action: PayloadAction<string>) {
+            state.selectedCcyName = action.payload;
+        },
+        updateCurrencyIndex(state, action: PayloadAction<number>) {
+            state.currencyIndex = action.payload;
+        },
+        updateMarketAddr(state, action: PayloadAction<string>) {
+            state.market = action.payload;
+        },
+        updateSpread(state, action: PayloadAction<number>) {
+            state.spread = action.payload;
+        },
+        updateMarketRate(state, action: PayloadAction<number>) {
+            state.marketRate = action.payload;
+        },
+        updateLendingCurrency(state, action: PayloadAction<Currency>) {
+            const { indexCcy, fullName, shortName } = getCurrencyBy(
+                'shortName',
+                action.payload
+            );
+            state.currencyIndex = indexCcy;
+            state.selectedCcy = shortName;
+            state.selectedCcyName = fullName;
+        },
 
-export default lendingTerminalReducer;
+        updateLendingTerms(state, action: PayloadAction<string>) {
+            state.selectedTerms = action.payload;
+            switch (action.payload) {
+                case '3 month':
+                    state.termsIndex = 0;
+                    break;
+                case '6 month':
+                    state.termsIndex = 1;
+                    break;
+                case '1 year':
+                    state.termsIndex = 2;
+                    break;
+                case '2 year':
+                    state.termsIndex = 3;
+                    break;
+                case '3 year':
+                    state.termsIndex = 4;
+                    break;
+                case '5 year':
+                    state.termsIndex = 5;
+                    break;
+                default:
+                    break;
+            }
+        },
+    },
+});
+
+export default lendingTerminalSlice;

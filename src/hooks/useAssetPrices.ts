@@ -1,21 +1,18 @@
 import axios, { AxiosResponse } from 'axios';
 import { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { ordinaryFormat } from 'src/utils';
-import { useWallet } from 'use-wallet';
 import {
+    AssetPrice,
     fetchAssetPrice,
     fetchAssetPriceFailure,
     updateEthUSDChange,
     updateEthUSDPrice,
-    AssetPrice,
     updateFilUSDChange,
     updateFilUSDPrice,
-    updateUSDCUSDPrice,
     updateUSDCUSDChange,
+    updateUSDCUSDPrice,
 } from '../store/assetPrices';
 import { RootState } from '../store/types';
-import useBlock from './useBlock';
 
 interface ICoinGeckoResponse {
     [key: string]: {
@@ -29,53 +26,47 @@ const useAssetPrice = (
     priceAction: (data: number) => void,
     changeAction: (data: number) => void
 ) => {
-    const block = useBlock();
-    const reqUrl =
-        'https://api.coingecko.com/api/v3/simple/price?ids=' +
-        asset +
-        '&vs_currencies=usd&include_24hr_change=true';
-    const dispatch = useDispatch();
-
-    const fetchPriceRequest = useCallback(
-        async (isMounted: boolean) => {
-            await dispatch(fetchAssetPrice());
-            const response: any = await axios
-                .get(reqUrl)
-                .then(async (response: AxiosResponse<ICoinGeckoResponse>) => {
-                    if (response.status === 200) {
-                        if (
-                            response.data &&
-                            response.data[asset].usd &&
-                            response.data[asset].usd_24h_change
-                        ) {
-                            await dispatch(
-                                priceAction(
-                                    Number(response.data[asset].usd.toFixed(2))
-                                )
-                            );
-                            await dispatch(
-                                changeAction(
-                                    response.data[asset].usd_24h_change
-                                )
-                            );
-                        }
-                    }
-                })
-                .catch(function (error) {
-                    dispatch(fetchAssetPriceFailure());
-                    console.log(error);
-                });
-        },
-        [dispatch]
+    const block = useSelector(
+        (state: RootState) => state.blockchain.latestBlock
     );
 
+    const dispatch = useDispatch();
+
+    const fetchPriceRequest = useCallback(async () => {
+        const reqUrl =
+            'https://api.coingecko.com/api/v3/simple/price?ids=' +
+            asset +
+            '&vs_currencies=usd&include_24hr_change=true';
+        dispatch(fetchAssetPrice());
+        await axios
+            .get(reqUrl)
+            .then(async (response: AxiosResponse<ICoinGeckoResponse>) => {
+                if (response.status === 200) {
+                    if (
+                        response.data &&
+                        response.data[asset].usd &&
+                        response.data[asset].usd_24h_change
+                    ) {
+                        dispatch(
+                            priceAction(
+                                Number(response.data[asset].usd.toFixed(2))
+                            )
+                        );
+                        dispatch(
+                            changeAction(response.data[asset].usd_24h_change)
+                        );
+                    }
+                }
+            })
+            .catch(function (error) {
+                dispatch(fetchAssetPriceFailure());
+                console.error(error);
+            });
+    }, [asset, changeAction, dispatch, priceAction]);
+
     useEffect(() => {
-        let isMounted = true;
-        fetchPriceRequest(isMounted);
-        return () => {
-            isMounted = false;
-        };
-    }, [block, dispatch]);
+        fetchPriceRequest();
+    }, [block, dispatch, fetchPriceRequest]);
 };
 
 export const useEthereumUsd = (): AssetPrice => {

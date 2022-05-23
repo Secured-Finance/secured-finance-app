@@ -1,11 +1,6 @@
+import { Currency } from '@secured-finance/sf-graph-client/dist/generated';
 import { RenderTerms } from 'src/components/atoms/RenderTerms';
-import { Currency, HistoryTableData } from 'src/store/history/types';
 import { AddressUtils, ordinaryFormat, percentFormat } from 'src/utils';
-
-interface HistoryTableProps {
-    columns?: Array<TableColumns>;
-    data?: Array<HistoryTableData>;
-}
 
 export interface TableColumns {
     Header: string;
@@ -19,7 +14,7 @@ export interface TableColumns {
 interface Columns {
     Header: string;
     accessor: string;
-    Cell: any;
+    Cell: (cell: { value: string | number }) => JSX.Element;
 }
 
 interface IndexProps {

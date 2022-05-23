@@ -1,3 +1,5 @@
+import { OrderbookRow } from '@secured-finance/sf-graph-client/dist/utils';
+
 export interface LendingTerminalStore {
     market: string;
     selectedCcy: string;
@@ -18,12 +20,6 @@ export interface LendingTerminalStore {
     lendOrderbook: Array<OrderbookRow>;
 
     tradingHistory: Array<TradingHistoryRow>;
-}
-
-export interface OrderbookRow {
-    rate: number;
-    totalAmount: number;
-    usdAmount: number;
 }
 
 export interface TradingHistoryRow {

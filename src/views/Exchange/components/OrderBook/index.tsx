@@ -6,18 +6,9 @@ import {
     useBorrowOrderbook,
     useLendOrderbook,
 } from '../../../../hooks/useLendingOrderbook';
-import { OrderbookRow } from '../../../../store/lendingTerminal';
 import { RootState } from '../../../../store/types';
 import OrderType from './components/OrderType';
 import Spread from './components/Spread';
-import { Type } from './types';
-
-interface OrderBookProps {
-    buyType: Type;
-    buyOrders?: Array<OrderbookRow>;
-    sellType: Type;
-    sellOrders?: Array<OrderbookRow>;
-}
 
 export const OrderBook: React.FC = () => {
     const selectedCcy = useSelector(

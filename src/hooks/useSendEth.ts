@@ -8,7 +8,7 @@ import useSF from './useSecuredFinance';
 
 export const useSendEth = (amount: number, to: string, gasPrice: number) => {
     const { account } = useWallet();
-    const securedFinance: any = useSF();
+    const securedFinance = useSF();
 
     const handleSendEther = useCallback(async () => {
         if (account && securedFinance) {
@@ -16,7 +16,9 @@ export const useSendEth = (amount: number, to: string, gasPrice: number) => {
                 .multipliedBy(new BigNumber(10).pow(9))
                 .toNumber();
             try {
-                const tx = securedFinance.web3.eth
+                // this does not work today and will break as soon as we upgrade to the new SDK
+                // TODO: FIX THIS
+                const tx = securedFinance.ethersUtils
                     .sendTransaction({
                         from: account,
                         to: to,
@@ -25,9 +27,12 @@ export const useSendEth = (amount: number, to: string, gasPrice: number) => {
                         ),
                         gasPrice: gweiGasPrice,
                     })
-                    .on('transactionHash', (tx: any) => {
-                        return tx.transactionHash;
-                    });
+                    .on(
+                        'transactionHash',
+                        (tx: { transactionHash: string }) => {
+                            return tx.transactionHash;
+                        }
+                    );
                 return tx;
             } catch (e) {
                 return false;
@@ -40,47 +45,49 @@ export const useSendEth = (amount: number, to: string, gasPrice: number) => {
 
 export const useEstimateTxFee = (gasPrice: number) => {
     const { account } = useWallet();
-    const securedFinance: any = useSF();
+    const securedFinance = useSF();
     const ethPrice = useSelector(
         (state: RootState) => state.assetPrices.ethereum.price
     );
     const txFee = useSelector((state: RootState) => state.sendForm.txFee);
     const dispatch = useDispatch();
 
-    const handleEstimateTxFee = useCallback(
-        async (isMounted: boolean) => {
-            const gweiGasPrice = new BigNumber(gasPrice)
-                .multipliedBy(new BigNumber(10).pow(9))
-                .toNumber();
-            const transactionObject = {
-                from: account,
-                to: '0x0000000000000000000000000000000000000000',
-                value: 0,
-                gasPrice: gweiGasPrice,
-            };
-            const gasLimit = securedFinance.web3.eth
-                .estimateGas(transactionObject)
-                .then((gasLimit: number) => {
-                    const transactionFee = gasPrice * gasLimit;
-                    const txFee = new BigNumber(transactionFee)
-                        .dividedBy(new BigNumber(10).pow(9))
-                        .multipliedBy(ethPrice)
-                        .toNumber();
-                    dispatch(updateSendTxFee(txFee));
-                });
-        },
-        [account, securedFinance, gasPrice, dispatch, ethPrice]
-    );
+    const handleEstimateTxFee = useCallback(async () => {
+        const gweiGasPrice = new BigNumber(gasPrice)
+            .multipliedBy(new BigNumber(10).pow(9))
+            .toNumber();
+        const transactionObject = {
+            from: account,
+            to: '0x0000000000000000000000000000000000000000',
+            value: 0,
+            gasPrice: gweiGasPrice,
+        };
+        // this does not work today and will break as soon as we upgrade to the new SDK
+        // TODO: FIX THIS
+        securedFinance.utils
+            .estimateGas(transactionObject)
+            .then((gasLimit: number) => {
+                const transactionFee = gasPrice * gasLimit;
+                const txFee = new BigNumber(transactionFee)
+                    .dividedBy(new BigNumber(10).pow(9))
+                    .multipliedBy(ethPrice)
+                    .toNumber();
+                dispatch(updateSendTxFee(txFee));
+            });
+    }, [account, securedFinance, gasPrice, dispatch, ethPrice]);
 
     useEffect(() => {
-        let isMounted = true;
         if (account && securedFinance) {
-            handleEstimateTxFee(isMounted);
+            handleEstimateTxFee();
         }
-        return () => {
-            isMounted = false;
-        };
-    }, [account, securedFinance, gasPrice, dispatch, ethPrice]);
+    }, [
+        account,
+        securedFinance,
+        gasPrice,
+        dispatch,
+        ethPrice,
+        handleEstimateTxFee,
+    ]);
 
     return txFee;
 };

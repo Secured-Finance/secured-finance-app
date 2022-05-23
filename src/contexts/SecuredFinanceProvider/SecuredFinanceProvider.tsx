@@ -1,7 +1,12 @@
 import { SecuredFinanceClient } from '@secured-finance/sf-client';
 import { ethers } from 'ethers';
 import React, { createContext, useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { updateLatestBlock } from 'src/store/blockchain';
 import { ChainUnsupportedError, useWallet } from 'use-wallet';
+import Web3 from 'web3';
+
+export const CACHED_PROVIDER_KEY = 'CACHED_PROVIDER_KEY';
 
 export interface SFContext {
     securedFinance?: SecuredFinanceClient;
@@ -18,9 +23,10 @@ declare global {
 }
 
 const SecuredFinanceProvider: React.FC = ({ children }) => {
-    const { ethereum, error, status } = useWallet();
+    const { ethereum, error, status, connect, account } = useWallet();
     const [securedFinance, setSecuredFinance] =
         useState<SecuredFinanceClient>();
+    const dispatch = useDispatch();
 
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
@@ -72,6 +78,28 @@ const SecuredFinanceProvider: React.FC = ({ children }) => {
             }
         }
     }, [ethereum, status, error]);
+
+    useEffect(() => {
+        if (account) {
+            return;
+        }
+        const cachedProvider = localStorage.getItem(CACHED_PROVIDER_KEY);
+        if (cachedProvider !== null) {
+            connect('injected');
+        }
+    }, [connect, account]);
+
+    // Update the latest block every 5 seconds
+    useEffect(() => {
+        if (!ethereum) return;
+        const web3 = new Web3(ethereum);
+
+        const interval = setInterval(async () => {
+            dispatch(updateLatestBlock(await web3.eth.getBlockNumber()));
+        }, 2000);
+
+        return () => clearInterval(interval);
+    });
 
     return (
         <Context.Provider value={{ securedFinance }}>
