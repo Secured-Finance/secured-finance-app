@@ -41,7 +41,7 @@ export const Dropdown: React.FC<IDropdown> = ({
             >
                 {ValueIcon &&
                     (typeof ValueIcon === 'string' ? (
-                        <img src={ValueIcon} className={cm.optionIcon} />
+                        <img src={ValueIcon} className={cm.optionIcon} alt='' />
                     ) : (
                         ValueIcon
                     ))}

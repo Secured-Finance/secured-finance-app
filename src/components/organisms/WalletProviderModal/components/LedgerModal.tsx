@@ -1,14 +1,14 @@
-import styled from 'styled-components';
 import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Modal, ModalProps, ModalTitle } from 'src/components/atoms';
 import { Button } from 'src/components/common/Buttons';
-import theme from 'src/theme';
-import { useDispatch, useSelector } from 'react-redux';
-import {
-    isUsedByAnotherApp,
-    isDeviceUnlocked,
-} from 'src/store/ledger/selectors';
 import connectWithLedger from 'src/services/ledger/connectLedger';
+import {
+    isDeviceUnlocked,
+    isUsedByAnotherApp,
+} from 'src/store/ledger/selectors';
+import theme from 'src/theme';
+import styled from 'styled-components';
 
 type ContentStates =
     | 'hasDeviceConnectionError'
@@ -59,7 +59,9 @@ const modalTextMap = {
     },
 };
 
-const LedgerModal: React.FC<ModalProps & any> = ({ onClose }) => {
+const LedgerModal: React.FC<ModalProps & { onClose: () => void }> = ({
+    onClose,
+}) => {
     const dispatch = useDispatch();
     const isDeviceUsedByAnotherApp = useSelector(isUsedByAnotherApp);
     const isUnlocked = useSelector(isDeviceUnlocked);

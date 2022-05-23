@@ -39,7 +39,7 @@ const RenderPrivateKeyContainer: React.FC<ContainerProps> = ({
     const [secretSet, setSecretSet] = useState(false);
     const [privateKey, setPrivateKey] = useState('');
     const [privateKeyAddr, setPrivateKeyAddr] = useState('');
-    const { keyDerive, keyRecover, filProviders } = useFilWasm();
+    const { wasmModule, filProviders } = useFilWasm();
     const walletProvider = useSelector(
         (state: RootState) => state.filWalletProvider.walletProvider
     );
@@ -51,10 +51,10 @@ const RenderPrivateKeyContainer: React.FC<ContainerProps> = ({
 
     const filAddressFromMnemonic = useCallback(
         (data: string) => {
-            if (keyDerive && data !== undefined) {
+            if (wasmModule.keyDerive && data !== undefined) {
                 const isMnemonic = validateMnemonic(data);
                 if (isMnemonic) {
-                    const key = keyDerive(data, TestNetPath, '');
+                    const key = wasmModule.keyDerive(data, TestNetPath, '');
                     setMnemonicAddr(key.address);
                     setSecretSet(true);
                 } else {
@@ -63,16 +63,16 @@ const RenderPrivateKeyContainer: React.FC<ContainerProps> = ({
                 }
             }
         },
-        [keyDerive, setSecretSet, setMnemonicAddr]
+        [wasmModule]
     );
 
     const filAddressFromPrivateKey = useCallback(
         (data: string) => {
-            if (keyRecover && data && isBase64(data)) {
+            if (wasmModule.keyRecover && data && isBase64(data)) {
                 const pkB64 = Buffer.from(data, 'base64');
                 const isPKB64 = isPrivate(pkB64);
                 if (isPKB64) {
-                    const key = keyRecover(pkB64, true);
+                    const key = wasmModule.keyRecover(pkB64, true);
                     setPrivateKeyAddr(key.address);
                     setSecretSet(true);
                 }
@@ -81,7 +81,7 @@ const RenderPrivateKeyContainer: React.FC<ContainerProps> = ({
                 setSecretSet(false);
             }
         },
-        [keyRecover, setSecretSet, setPrivateKeyAddr]
+        [wasmModule]
     );
 
     const { onCreate } = useNewFilWalletProvider();
@@ -97,7 +97,7 @@ const RenderPrivateKeyContainer: React.FC<ContainerProps> = ({
                 );
             }
         } catch (e) {
-            console.log(e);
+            console.error(e);
         }
     }, [onCreate, filProviders, mnemonic, walletProvider]);
 
@@ -114,7 +114,7 @@ const RenderPrivateKeyContainer: React.FC<ContainerProps> = ({
                 );
             }
         } catch (e) {
-            console.log(e);
+            console.error(e);
         }
     }, [onCreate, filProviders, privateKey, walletProvider]);
 

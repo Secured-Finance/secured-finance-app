@@ -66,11 +66,6 @@ const StyledOrderRowText = styled.p<StyledOrderRowTextProps>`
     margin: 0;
 `;
 
-interface StyledOrderRowProgressProps {
-    background: string;
-    width: string;
-}
-
 const StyledOrderBookHeader = styled.div`
     text-transform: uppercase;
     display: grid;

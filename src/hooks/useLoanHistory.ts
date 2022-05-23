@@ -7,13 +7,7 @@ import { useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'src/store/types';
 import { useWallet } from 'use-wallet';
-import {
-    failSetBorrowingHistory,
-    failSetLendingHistory,
-    setBorrowingHistory,
-    setLendingHistory,
-    startSetHistory,
-} from '../store/history';
+import { setBorrowingHistory, setLendingHistory } from '../store/history';
 
 export const useLoanDeals = (skip = 0) => {
     const { account } = useWallet();
@@ -21,8 +15,6 @@ export const useLoanDeals = (skip = 0) => {
         (state: RootState) => state.history.lendingHistory
     );
     const dispatch = useDispatch();
-
-    dispatch(startSetHistory());
     const { data, error } = useLendingDeals(account ? account : '', skip);
 
     if (error) {
@@ -32,8 +24,6 @@ export const useLoanDeals = (skip = 0) => {
     useMemo(() => {
         if (data) {
             dispatch(setLendingHistory(data));
-        } else {
-            dispatch(failSetLendingHistory());
         }
     }, [dispatch, data]);
 
@@ -46,8 +36,6 @@ export const useBorrowDeals = (skip = 0) => {
         (state: RootState) => state.history.borrowingHistory
     );
     const dispatch = useDispatch();
-
-    dispatch(startSetHistory());
     const { data, error } = useBorrowingDeals(account ? account : '', skip);
 
     if (error) {
@@ -57,8 +45,6 @@ export const useBorrowDeals = (skip = 0) => {
     useMemo(() => {
         if (data) {
             dispatch(setBorrowingHistory(data));
-        } else {
-            dispatch(failSetBorrowingHistory());
         }
     }, [dispatch, data]);
 

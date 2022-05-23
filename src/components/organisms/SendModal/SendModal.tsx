@@ -21,21 +21,20 @@ import {
     SendFormStore,
     updateSendAmount,
     updateSendCurrency,
-    updateSendToAddreess,
+    updateSendToAddress,
 } from 'src/store/sendForm';
 import { RootState } from 'src/store/types';
 import { getFilActions } from 'src/store/wallets/selectors';
 import theme from 'src/theme';
-import { currencyList, formatInput } from 'src/utils';
+import { formatInput } from 'src/utils';
+import { Currency, getCurrencyBy } from 'src/utils/currencyList';
 import styled from 'styled-components';
 import { isAddress } from 'web3-utils';
 import { ErrorModal } from './components/ErrorModal';
 import { FilTxFeeTable } from './components/FilTxFeeTable';
 import { GasTabsAndTable } from './components/GastabsAndTable';
 
-type CombinedProps = ModalProps & SendFormStore;
-
-const SendModal: React.FC<CombinedProps> = ({
+const SendModal = ({
     onDismiss,
     amount,
     currencyName,
@@ -44,7 +43,7 @@ const SendModal: React.FC<CombinedProps> = ({
     toAddress,
     ccyIndex,
     maxTxFee,
-}) => {
+}: SendFormStore & ModalProps) => {
     const [addrErr, setAddrErr] = useState(false);
     const [balanceErr, setBalanceErr] = useState(false);
     const [ongoingTx, setOngoingTx] = useState(false);
@@ -53,20 +52,17 @@ const SendModal: React.FC<CombinedProps> = ({
     const { filecoinBalance } = useFilecoinWalletInfo();
     const dispatch = useDispatch();
     const filecoinActions = useSelector(getFilActions);
-    const ethPrice = useSelector(
-        (state: RootState) => state.assetPrices.ethereum.price
-    );
-    const filPrice = useSelector(
-        (state: RootState) => state.assetPrices.filecoin.price
-    );
-    const usdcPrice = useSelector(
-        (state: RootState) => state.assetPrices.usdc.price
-    );
+    const {
+        ethereum: { price: ethPrice },
+        filecoin: { price: filPrice },
+        usdc: { price: usdcPrice },
+    } = useSelector((state: RootState) => state.assetPrices);
+
     const maxFilTxFee = Number(maxTxFee.toFil());
 
     const handleRecipientAddress = useCallback(
         (e: React.FormEvent<HTMLInputElement>) => {
-            dispatch(updateSendToAddreess(e.currentTarget.value));
+            dispatch(updateSendToAddress(e.currentTarget.value));
         },
         [dispatch]
     );
@@ -140,11 +136,9 @@ const SendModal: React.FC<CombinedProps> = ({
     );
 
     useEffect(() => {
-        const currencyShortName = currencyList.find(
-            currency => currency.index === ccyIndex
-        )?.shortName;
-        if (currencyShortName) {
-            dispatch(updateSendCurrency(currencyShortName));
+        const { shortName } = getCurrencyBy('indexCcy', ccyIndex);
+        if (shortName) {
+            dispatch(updateSendCurrency(shortName));
         }
     }, [ccyIndex, dispatch]);
 
@@ -180,7 +174,7 @@ const SendModal: React.FC<CombinedProps> = ({
                 setAddrErr(true);
             }
         } catch (e) {
-            console.log(e);
+            console.error(e);
         }
     }, [
         toAddress,
@@ -258,7 +252,7 @@ const SendModal: React.FC<CombinedProps> = ({
                         </StyledLabelContainer>
                         <StyledCurrencyInput>
                             <CurrencyImage
-                                selectedCcy={currencyShortName}
+                                selectedCcy={currencyShortName as Currency}
                                 showName
                             />
                             <StyledInput

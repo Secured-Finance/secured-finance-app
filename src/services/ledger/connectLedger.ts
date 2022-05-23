@@ -3,15 +3,16 @@ import {
     setFilWalletType,
 } from 'src/services/filecoin/store';
 import { getFilecoinNetwork } from 'src/services/filecoin/utils';
+import { AppDispatch } from 'src/store';
+import { clearError, resetLedgerState } from 'src/store/ledger';
 import { updateFilWallet } from 'src/store/wallets/helpers';
 import { FilecoinWalletType } from '../filecoin/store/types';
 import {
     checkLedgerConfiguration,
     setLedgerProvider,
 } from './setLedgerProvider';
-import { clearError, resetLedgerState } from './state';
 
-const connectWithLedger = async (dispatch: any) => {
+const connectWithLedger = async (dispatch: AppDispatch) => {
     dispatch(clearError());
     dispatch(resetLedgerState());
     const provider = await setLedgerProvider(dispatch);

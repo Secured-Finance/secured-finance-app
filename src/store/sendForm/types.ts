@@ -1,6 +1,6 @@
 import { FilecoinNumber } from '@glif/filecoin-number';
 
-export interface SendFormStore {
+export type SendFormStore = {
     currencyIndex: number;
     currencyShortName: string;
     currencyName: string;
@@ -10,7 +10,7 @@ export interface SendFormStore {
     toAddress: string;
     isLoading: boolean;
     maxTxFee: FilecoinNumber;
-}
+};
 
 export const defaultStore = {
     currencyIndex: 0,

@@ -8,7 +8,7 @@ import { RootState } from '../store/types';
 
 const ZERO_BN = new BigNumber('0');
 
-interface CollateralBook {
+export interface CollateralBook {
     ccyIndex: number;
     ccyName: string;
     collateral: BigNumber;

@@ -1,5 +1,5 @@
-import { Story, Meta } from '@storybook/react';
-import { LineChart, ILineChart } from './';
+import { Meta, Story } from '@storybook/react';
+import { LineChart, LineChartProps } from './';
 import { options } from './constants';
 
 export default {
@@ -7,7 +7,7 @@ export default {
     component: LineChart,
 } as Meta;
 
-const Template: Story<ILineChart> = args => (
+const Template: Story<LineChartProps> = args => (
     <div style={{ width: 700 }}>
         <LineChart {...args} />
     </div>

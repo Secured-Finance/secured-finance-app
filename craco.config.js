@@ -1,5 +1,5 @@
 const path = require('path');
-const customESLintConfig = require('./.eslintrc');
+const customESLintConfig = require('./.eslintrc.json');
 const { ESLINT_MODES } = require('@craco/craco');
 
 const { addBeforeLoader, loaderByName } = require('@craco/craco');

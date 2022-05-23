@@ -1,23 +1,28 @@
+import * as chartjs from 'chart.js';
 import React, { useEffect, useRef } from 'react';
+import { ChartComponentProps, Line } from 'react-chartjs-2';
+import {
+    commonDataset,
+    defaultDatasets,
+    options as customOptions,
+} from './constants';
 import cm from './LineChart.module.scss';
-import { Line, ChartComponentProps } from 'react-chartjs-2';
-import { defaultDatasets, commonDataset } from './constants';
-import { options } from './constants';
 
-export interface ILineChart extends ChartComponentProps {
+export type LineChartProps = {
     title?: string | JSX.Element;
     style?: React.CSSProperties;
     showLegend?: boolean;
-}
+    data: chartjs.ChartData;
+} & ChartComponentProps;
 
-export const LineChart: React.FC<ILineChart> = ({
-    data,
-    options,
+export const LineChart = ({
+    data = { datasets: [] },
+    options = customOptions,
     title,
     style,
     showLegend,
-}) => {
-    const refinedDatasets = data.datasets.map((set: any, i: number) => {
+}: LineChartProps) => {
+    const refinedDatasets = data.datasets.map((set, i: number) => {
         if (defaultDatasets[i]) {
             return {
                 ...defaultDatasets[i],
@@ -51,11 +56,4 @@ export const LineChart: React.FC<ILineChart> = ({
             </div>
         </div>
     );
-};
-
-LineChart.defaultProps = {
-    data: {
-        datasets: [],
-    },
-    options,
 };

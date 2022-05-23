@@ -20,6 +20,7 @@ import {
 import { RootState } from 'src/store/types';
 import { getEthBalance } from 'src/store/wallets/selectors';
 import { collateralListDropdown, usdFormat } from 'src/utils';
+import { Currency } from 'src/utils/currencyList';
 import { calculatePercents, MIN_COVERAGE } from '../constants';
 import cm from './LendBorrowTable.module.scss';
 
@@ -38,24 +39,31 @@ const BorrowCollateralManagement: React.FC<IBorrowCollateralManagement> = ({
     const filPrice = useSelector(getFilPrice);
     const ethPrice = useSelector(getEthPrice);
     const usdcPrice = useSelector(getUSDCPrice);
-    const priceMap: any = {
-        FIL: filPrice,
-        ETH: ethPrice,
-        USDC: usdcPrice,
-    };
+    const priceMap = useMemo(() => {
+        return {
+            FIL: filPrice,
+            ETH: ethPrice,
+            USDC: usdcPrice,
+        };
+    }, [filPrice, ethPrice, usdcPrice]);
 
-    const balanceMap: any = {
+    type AvailableCollateralCcy = keyof typeof priceMap;
+
+    const balanceMap = {
         ETH: useSelector(getEthBalance),
         USDC: 0,
     };
 
     const handleCollateralCurrencyChange = (
         e: React.SyntheticEvent<HTMLSelectElement>
-    ) => dispatch(updateMainCollateralCurrency(e.currentTarget.value));
+    ) =>
+        dispatch(
+            updateMainCollateralCurrency(e.currentTarget.value as Currency)
+        );
 
     const handleCollateralChange = useCallback(
         (e: React.FormEvent<HTMLInputElement>) => {
-            dispatch(updateCollateralAmount(e.currentTarget.value));
+            dispatch(updateCollateralAmount(e.currentTarget.valueAsNumber));
         },
         [dispatch]
     );
@@ -64,12 +72,14 @@ const BorrowCollateralManagement: React.FC<IBorrowCollateralManagement> = ({
         if (!collateralAmount) return new BigNumber(0);
 
         return new BigNumber(collateralAmount).multipliedBy(
-            priceMap[collateralCcy]
+            priceMap[collateralCcy as AvailableCollateralCcy]
         );
-    }, [collateralAmount, collateralCcy]);
+    }, [collateralAmount, collateralCcy, priceMap]);
 
     const getTokenCollateral = (amount: BigNumber) => {
-        return amount.dividedBy(priceMap[collateralCcy]);
+        return amount.dividedBy(
+            priceMap[collateralCcy as AvailableCollateralCcy]
+        );
     };
 
     const collateralCoverage = calculatePercents(USDCollateral, USDAmount);
@@ -81,13 +91,13 @@ const BorrowCollateralManagement: React.FC<IBorrowCollateralManagement> = ({
         const sufficientCollateral = getTokenCollateral(appropriateUSDAmount);
         const result = sufficientCollateral.isInteger()
             ? sufficientCollateral.toNumber()
-            : sufficientCollateral.toFixed(4, 2);
+            : Number(sufficientCollateral.toFixed(4, 2));
         dispatch(updateCollateralAmount(result));
     };
 
     React.useEffect(() => {
         setCollateralInadequate(inadequateCollateral);
-    }, [inadequateCollateral]);
+    }, [inadequateCollateral, setCollateralInadequate]);
 
     return (
         <>
@@ -117,7 +127,10 @@ const BorrowCollateralManagement: React.FC<IBorrowCollateralManagement> = ({
                     />
                 </span>
                 <span className={cm.bottomRow}>
-                    <span>Balance: {balanceMap[collateralCcy]}</span>
+                    <span>
+                        Balance:{' '}
+                        {balanceMap[collateralCcy as keyof typeof balanceMap]}
+                    </span>
                     <span
                         className={cx(
                             inadequateCollateral && cm.inadequateCollateral,

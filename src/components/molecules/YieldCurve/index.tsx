@@ -5,16 +5,9 @@ import theme from 'src/theme';
 import styled from 'styled-components';
 import { chartOptions } from './chartOptions';
 
-const Title = styled.div`
-    font-weight: 400;
-    font-size: 22px;
-    color: white;
-`;
-
 const labels = ['0', '3m', '6m', '1y', '2y', '3y', '5y'];
 
 export function YieldCurve() {
-    const [currencyIndex, setCurrencyIndex] = useState('FIL');
     const [lineData, setLineData] = useState({});
     const borrowRates = useRates('FIL', 0);
     const lendingRates = useRates('FIL', 1);
@@ -37,15 +30,15 @@ export function YieldCurve() {
     purpleGradient.addColorStop(0.5, 'rgba(15, 26, 34, 0.25)');
     purpleGradient.addColorStop(1, 'rgba(15, 26, 34, 0.1)');
 
-    const convertArray = (array: Array<any>) => {
+    const convertArray = (array: Array<number>) => {
         const newArray = array.slice();
         newArray.unshift(0);
-        return newArray.map((r: any) => r / 100);
+        return newArray.map(r => r / 100);
     };
 
     useMemo(() => {
-        async function updateGraph() {
-            const graphData = await {
+        function updateGraph() {
+            const graphData = {
                 labels: labels,
                 datasets: [
                     {
@@ -99,16 +92,12 @@ export function YieldCurve() {
             setLineData(graphData);
         }
         updateGraph();
+        // TODO: Rework completely this part
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [borrowRates, lendingRates, midRate, labels]);
 
     return (
         <StyledYieldCurveContainer>
-            {/* <StyledYieldCurveInfo>
-		<Title>FIL Yield Curve</Title>
-		<StyledTermsContainer>
-			<Terms/>
-		</StyledTermsContainer>
-		</StyledYieldCurveInfo> */}
             <Line data={lineData} options={chartOptions} />
         </StyledYieldCurveContainer>
     );
@@ -121,18 +110,4 @@ const StyledYieldCurveContainer = styled.div`
     padding-bottom: ${props => props.theme.spacing[3] - 1}px;
     padding-left: ${props => props.theme.spacing[3] - 1}px;
     padding-right: ${props => props.theme.spacing[3] - 1}px;
-`;
-
-const StyledYieldCurveInfo = styled.div`
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    padding-top: ${props => props.theme.spacing[3]}px;
-    padding-bottom: ${props => props.theme.spacing[3]}px;
-    padding-left: ${props => props.theme.spacing[3]}px;
-    padding-right: ${props => props.theme.spacing[3]}px;
-`;
-
-const StyledTermsContainer = styled.div`
-    width: 40%;
 `;
