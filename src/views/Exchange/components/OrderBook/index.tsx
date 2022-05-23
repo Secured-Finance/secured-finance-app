@@ -1,16 +1,16 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import styled from 'styled-components';
-import OrderType from './components/OrderType';
-import Spread from './components/Spread';
-import { Type, Orders } from './types';
 import { Subheader } from '../../../../components/common/Subheader';
 import {
     useBorrowOrderbook,
     useLendOrderbook,
 } from '../../../../hooks/useLendingOrderbook';
 import { OrderbookRow } from '../../../../store/lendingTerminal';
-import { useSelector } from 'react-redux';
 import { RootState } from '../../../../store/types';
+import OrderType from './components/OrderType';
+import Spread from './components/Spread';
+import { Type } from './types';
 
 interface OrderBookProps {
     buyType: Type;

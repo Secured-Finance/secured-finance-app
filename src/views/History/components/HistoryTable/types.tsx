@@ -1,10 +1,6 @@
-import { HistoryTableData } from 'src/store/history/types';
-import {
-    AddressUtils,
-    fromBytes32,
-    ordinaryFormat,
-    percentFormat,
-} from 'src/utils';
+import { RenderTerms } from 'src/components/atoms/RenderTerms';
+import { Currency, HistoryTableData } from 'src/store/history/types';
+import { AddressUtils, ordinaryFormat, percentFormat } from 'src/utils';
 
 interface HistoryTableProps {
     columns?: Array<TableColumns>;
@@ -29,26 +25,6 @@ interface Columns {
 interface IndexProps {
     index?: number | string;
 }
-
-export const RenderTerms: React.FC<IndexProps> = ({ index }) => {
-    switch (index) {
-        case '90':
-            return <span>3 Month</span>;
-        case '180':
-            return <span>6 Month</span>;
-        case '365':
-            return <span>1 Year</span>;
-        case '730':
-            return <span>2 Years</span>;
-        case '1095':
-            return <span>3 Years</span>;
-        case '1825':
-            return <span>5 Years</span>;
-        default:
-            return <span></span>;
-            break;
-    }
-};
 
 const RenderState: React.FC<IndexProps> = ({ index }) => {
     switch (index) {
@@ -187,15 +163,15 @@ export const historyTableColumns = [
             {
                 Header: 'Currency',
                 accessor: 'currency',
-                Cell: (cell: { value: string }) => (
-                    <span>{fromBytes32(cell.value)}</span>
+                Cell: (cell: { value: Currency }) => (
+                    <span>{cell.value.shortName}</span>
                 ),
             },
             {
                 Header: 'Term',
                 accessor: 'term',
-                Cell: (cell: { value: number }) => (
-                    <RenderTerms index={cell.value} />
+                Cell: (cell: { value: string }) => (
+                    <RenderTerms label={'termIndex'} value={cell.value} />
                 ),
             },
             {

@@ -24,7 +24,6 @@ import { RootState } from 'src/store/types';
 import theme from 'src/theme';
 import {
     currencyList,
-    DEFAULT_COLLATERAL_VAULT,
     formatInput,
     getDisplayBalance,
     getFullDisplayBalanceNumber,
@@ -51,7 +50,7 @@ const CollateralModal: React.FC<CombinedProps> = ({
     const { account }: { account: string } = useWallet();
     const colBook = useCollateralBook(
         account ? account : '',
-        DEFAULT_COLLATERAL_VAULT
+        currencyShortName
     );
     const status = useCheckCollateralBook(account);
     const ethBalance = useEthBalance();

@@ -10,9 +10,7 @@ import { RootState } from 'src/store/types';
 import theme from 'src/theme';
 import {
     AddressUtils,
-    DEFAULT_COLLATERAL_VAULT,
     formatDate,
-    fromBytes32,
     getDisplayBalance,
     ordinaryFormat,
     percentFormat,
@@ -57,19 +55,10 @@ const LoanScreen: React.FC<CombinedProps> = () => {
     const filPrice = useSelector(
         (state: RootState) => state.assetPrices.filecoin.price
     );
-    const colBook = useCollateralBook(
-        counterpartyAddr ? counterpartyAddr : '',
-        DEFAULT_COLLATERAL_VAULT
-    );
-
-    const getLoanCcy = (currency: string) => {
-        return fromBytes32(currency);
-    };
+    const colBook = useCollateralBook(counterpartyAddr ? counterpartyAddr : '');
 
     const handleNotional = () => {
-        return (
-            ordinaryFormat(loan?.notional) + ` ${getLoanCcy(loan?.currency)}`
-        );
+        return ordinaryFormat(loan?.notional) + ` ${loan?.currency.shortName}`;
     };
 
     const handleInterest = () => {
@@ -78,7 +67,7 @@ const LoanScreen: React.FC<CombinedProps> = () => {
             loan?.rate,
             loan?.term
         );
-        const ccy = getLoanCcy(loan?.currency);
+        const ccy = loan?.currency.shortName;
         return ordinaryFormat(interestPayments) + ` ${ccy}`;
     };
 
@@ -124,7 +113,7 @@ const LoanScreen: React.FC<CombinedProps> = () => {
             .plus(interestPayments)
             .toNumber();
 
-        return ordinaryFormat(totalRepay) + ` ${getLoanCcy(loan?.currency)}`;
+        return ordinaryFormat(totalRepay) + ` ${loan?.currency.shortName}`;
     };
 
     const nextCouponPayment = () => {
@@ -197,7 +186,10 @@ const LoanScreen: React.FC<CombinedProps> = () => {
                                 <StyledRowContainer marginTop={'10px'}>
                                     <StyledItemText>Term</StyledItemText>
                                     <StyledItemText>
-                                        <RenderTerms index={loan?.term} />
+                                        <RenderTerms
+                                            label={'termIndex'}
+                                            value={loan?.term}
+                                        />
                                     </StyledItemText>
                                 </StyledRowContainer>
                                 <StyledRowContainer marginTop={'10px'}>
@@ -251,9 +243,7 @@ const LoanScreen: React.FC<CombinedProps> = () => {
                                             </StyledItemText>
                                             <StyledItemText>
                                                 {ordinaryFormat(item.amount) +
-                                                    ` ${getLoanCcy(
-                                                        loan?.currency
-                                                    )}`}
+                                                    ` ${loan?.currency.shortName}`}
                                             </StyledItemText>
                                         </StyledRowContainer>
                                     )
@@ -291,7 +281,7 @@ const LoanScreen: React.FC<CombinedProps> = () => {
                                         fontWeight={600}
                                     >
                                         {ordinaryFormat(couponPayment?.amount) +
-                                            ` ${getLoanCcy(loan?.currency)}`}
+                                            ` ${loan?.currency.shortName}`}
                                     </StyledItemText>
                                     <StyledItemText color={theme.colors.gray}>
                                         {couponUsdPayment(
