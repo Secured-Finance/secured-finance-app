@@ -3,7 +3,6 @@ import { connect, useSelector } from 'react-redux';
 import { Page } from 'src/components/templates';
 import useCollateralBook from 'src/hooks/useCollateralBook';
 import { useEthereumWalletStore } from 'src/hooks/useEthWallet';
-import { useFilecoinWalletStore } from 'src/hooks/useFilWallet';
 import { RootState } from 'src/store/types';
 import { WalletBase } from 'src/store/wallets';
 import { getTotalUSDBalance } from 'src/store/wallets/selectors';
@@ -16,8 +15,9 @@ import WalletsTable from './components/WalletsTable';
 
 const Account: React.FC = () => {
     const totalUSDBalance = useSelector(getTotalUSDBalance);
+    const filWallet = useSelector((state: RootState) => state.wallets.filecoin);
     const ethWallet = useEthereumWalletStore();
-    const filWallet = useFilecoinWalletStore();
+
     const [tableData, setTableData] = useState([] as Array<WalletBase>);
     const { account }: { account: string } = useWallet();
     const colBook = useCollateralBook(

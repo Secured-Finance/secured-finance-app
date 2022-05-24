@@ -10,39 +10,41 @@ export default function SettlementValidation({
     transactionHash?: string;
     error?: string;
 }) {
-    switch (status) {
-        case TransactionStatus.Pending:
-            return (
-                <div className='text-white'>Waiting for confirmation...</div>
-            );
-        case TransactionStatus.Confirmed:
-            return (
-                <div className='text-white'>
-                    <div>Transaction confirmed!</div>
-                    <div>
-                        <a
-                            href={`https://etherscan.io/tx/${transactionHash}`}
-                            target='_blank'
-                            rel='noopener noreferrer'
-                        >
-                            View on Etherscan
-                        </a>
-                    </div>
-                </div>
-            );
-        case TransactionStatus.Settled:
-            return (
-                <div className='text-white'>
-                    Settlement complete! with ${transactionHash}
-                </div>
-            );
-        case TransactionStatus.Error:
-            return (
-                <div className='text-white'>
-                    <div>Transaction failed! {error}</div>
-                </div>
-            );
-        default:
-            return null;
-    }
+    const child = () => {
+        switch (status) {
+            case TransactionStatus.Pending:
+                return <>Waiting for confirmation...</>;
+            case TransactionStatus.Confirmed:
+                return (
+                    <>
+                        <div>Transaction confirmed!</div>
+                        <div>
+                            <a
+                                href={`https://etherscan.io/tx/${transactionHash}`}
+                                target='_blank'
+                                rel='noopener noreferrer'
+                            >
+                                View on Etherscan
+                            </a>
+                        </div>
+                    </>
+                );
+            case TransactionStatus.Settled:
+                return <>Settlement complete! with ${transactionHash}</>;
+            case TransactionStatus.Error:
+                return (
+                    <>
+                        <div>Transaction failed! {error}</div>
+                    </>
+                );
+            default:
+                return null;
+        }
+    };
+
+    return (
+        <div className='text-white' data-cy='settlement-validation'>
+            {child()}
+        </div>
+    );
 }

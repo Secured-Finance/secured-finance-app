@@ -2,11 +2,7 @@ import { BigNumber } from '@glif/filecoin-number';
 import { useCallback, useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { WalletAccountModal } from 'src/components/organisms';
-import {
-    FIL_ADDRESS,
-    FIL_WALLET_TYPE,
-    useResetFilWalletProvider,
-} from 'src/services/filecoin';
+import { useResetFilWalletProvider } from 'src/services/filecoin';
 import { FilecoinWalletType } from 'src/services/filecoin/store/types';
 import connectWithLedger from 'src/services/ledger/connectLedger';
 import { RootState } from 'src/store/types';
@@ -15,7 +11,6 @@ import {
     updateFilWalletAssetPrice,
     updateFilWalletDailyChange,
     updateFilWalletPortfolioShare,
-    WalletBase,
 } from 'src/store/wallets';
 import {
     updateFilWalletViaProvider,
@@ -23,7 +18,10 @@ import {
 } from 'src/store/wallets/helpers';
 import useModal from './useModal';
 
-export const useFilecoinWalletStore = (): WalletBase => {
+export const useFilecoinWalletStore = (
+    filAddr: string,
+    filWalletType: string
+) => {
     const dispatch = useDispatch();
     const { price, change } = useSelector(
         (state: RootState) => state.assetPrices.filecoin
@@ -32,7 +30,6 @@ export const useFilecoinWalletStore = (): WalletBase => {
         (state: RootState) => state.filWalletProvider.walletProvider
     );
     const {
-        filecoin,
         totalUSDBalance,
         filecoin: { usdBalance },
     } = useSelector((state: RootState) => state.wallets);
@@ -45,10 +42,6 @@ export const useFilecoinWalletStore = (): WalletBase => {
             signOut: useResetFilWalletProvider,
         };
     }, [onPresentAccountModal]);
-    const filAddr = localStorage.getItem(FIL_ADDRESS);
-    const filWalletType = localStorage.getItem(
-        FIL_WALLET_TYPE
-    ) as FilecoinWalletType;
 
     const connectExistingWallet = useCallback(async () => {
         if (!filAddr) return;
@@ -85,6 +78,4 @@ export const useFilecoinWalletStore = (): WalletBase => {
             dispatch(updateFilWalletPortfolioShare(portfolioShare));
         }
     }, [change, dispatch, price, totalUSDBalance, usdBalance]);
-
-    return filecoin;
 };
