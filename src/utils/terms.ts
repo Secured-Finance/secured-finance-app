@@ -13,7 +13,7 @@ export const getTermBy = (label: keyof Term, value: string | number) => {
                 val.toString().toLowerCase() === value.toString().toLowerCase()
         );
     } catch (error) {
-        term = emplyTerm;
+        term = emptyTerm;
     }
 
     return term;
@@ -58,7 +58,7 @@ export const termList: Term[] = [
     },
 ];
 
-const emplyTerm: Term = {
+const emptyTerm: Term = {
     value: '',
     numOfDays: 0,
     termIndex: '0',
