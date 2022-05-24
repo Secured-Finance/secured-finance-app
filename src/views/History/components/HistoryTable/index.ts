@@ -1,5 +1,5 @@
 import HistoryTable from './HistoryTable';
-import { historyTableColumns, RenderTerms, TableColumns } from './types';
+import { historyTableColumns, TableColumns } from './types';
 
-export { HistoryTable, historyTableColumns, RenderTerms };
+export { HistoryTable, historyTableColumns };
 export type { TableColumns };

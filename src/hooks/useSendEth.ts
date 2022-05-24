@@ -1,39 +1,31 @@
-import BigNumber from 'bignumber.js';
+import { TransactionRequest } from '@ethersproject/abstract-provider';
+import { BigNumber, FixedNumber, utils } from 'ethers';
 import { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { formatUsdAmount } from 'src/utils';
 import { useWallet } from 'use-wallet';
 import { updateSendTxFee } from '../store/sendForm';
 import { RootState } from '../store/types';
 import useSF from './useSecuredFinance';
 
-export const useSendEth = (amount: number, to: string, gasPrice: number) => {
+export const useSendEth = (
+    amount: number | BigNumber,
+    to: string,
+    gasPrice: number | BigNumber
+) => {
     const { account } = useWallet();
     const securedFinance = useSF();
 
     const handleSendEther = useCallback(async () => {
         if (account && securedFinance) {
-            const gweiGasPrice = new BigNumber(gasPrice)
-                .multipliedBy(new BigNumber(10).pow(9))
-                .toNumber();
+            const gweiGasPrice = utils.parseUnits(gasPrice.toString(), 'gwei');
             try {
-                // this does not work today and will break as soon as we upgrade to the new SDK
-                // TODO: FIX THIS
-                const tx = securedFinance.ethersUtils
-                    .sendTransaction({
-                        from: account,
-                        to: to,
-                        value: new BigNumber(amount).multipliedBy(
-                            new BigNumber(10).pow(18)
-                        ),
-                        gasPrice: gweiGasPrice,
-                    })
-                    .on(
-                        'transactionHash',
-                        (tx: { transactionHash: string }) => {
-                            return tx.transactionHash;
-                        }
-                    );
-                return tx;
+                const tx = securedFinance.sendEther(
+                    utils.parseEther(amount.toString()),
+                    to,
+                    gweiGasPrice
+                );
+                return (await tx).hash;
             } catch (e) {
                 return false;
             }
@@ -53,27 +45,28 @@ export const useEstimateTxFee = (gasPrice: number) => {
     const dispatch = useDispatch();
 
     const handleEstimateTxFee = useCallback(async () => {
-        const gweiGasPrice = new BigNumber(gasPrice)
-            .multipliedBy(new BigNumber(10).pow(9))
-            .toNumber();
-        const transactionObject = {
+        const gweiGasPrice = utils.parseUnits(gasPrice.toString(), 'gwei');
+
+        const transactionObject: TransactionRequest = {
             from: account,
             to: '0x0000000000000000000000000000000000000000',
             value: 0,
             gasPrice: gweiGasPrice,
         };
-        // this does not work today and will break as soon as we upgrade to the new SDK
-        // TODO: FIX THIS
-        securedFinance.utils
-            .estimateGas(transactionObject)
-            .then((gasLimit: number) => {
-                const transactionFee = gasPrice * gasLimit;
-                const txFee = new BigNumber(transactionFee)
-                    .dividedBy(new BigNumber(10).pow(9))
-                    .multipliedBy(ethPrice)
-                    .toNumber();
-                dispatch(updateSendTxFee(txFee));
-            });
+        const gasLimit = await securedFinance.signerOrProvider.estimateGas(
+            transactionObject
+        );
+        const txFee = gasLimit.mul(gweiGasPrice);
+        let usdFeeInWei: BigNumber;
+        if (Number.isInteger(ethPrice)) {
+            usdFeeInWei = txFee.mul(ethPrice);
+        } else {
+            const ethPriceBN = BigNumber.from(formatUsdAmount(ethPrice));
+            usdFeeInWei = txFee.mul(ethPriceBN).div(10 ** 2);
+        }
+
+        const usdFee = FixedNumber.from(utils.formatEther(usdFeeInWei));
+        dispatch(updateSendTxFee(usdFee));
     }, [account, securedFinance, gasPrice, dispatch, ethPrice]);
 
     useEffect(() => {
