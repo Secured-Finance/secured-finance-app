@@ -1,12 +1,12 @@
 import { utils } from '@secured-finance/sf-client';
-import { client } from '@secured-finance/sf-graph-client';
-import { useCallback, useEffect, useState } from 'react';
-import { useWallet } from 'use-wallet';
 import {
-    OPEN_LOANS,
-    OPEN_ORDERS,
-    TRADE_HISTORY,
-} from '../services/apollo/userQueries';
+    useBilateralPosition,
+    useOpenOrders as useOpenOrdersHistory,
+    useUsersTradingHistoryQuery,
+} from '@secured-finance/sf-graph-client';
+import { BilateralPosition } from '@secured-finance/sf-graph-client/dist/generated';
+import { useMemo, useState } from 'react';
+import { useWallet } from 'use-wallet';
 
 export const useOpenOrders = (ccy: string, term: string) => {
     const { account, chainId }: { account: string; chainId: number | null } =
@@ -16,34 +16,42 @@ export const useOpenOrders = (ccy: string, term: string) => {
         term,
         chainId
     );
-
     const [openOrders, setOpenOrders] = useState([]);
+    const { data, error } = useOpenOrdersHistory(
+        account ? account : '',
+        lendingMarketAddress
+    );
 
-    const fetchOpenOrders = useCallback(async () => {
-        const res = await client.query({
-            query: OPEN_ORDERS,
-            variables: {
-                account: account.toLowerCase(),
-                market: lendingMarketAddress,
-            },
-            fetchPolicy: 'cache-first',
-        });
-        try {
-            if (res.data.user?.openOrders) {
-                setOpenOrders(res.data.user.openOrders);
-            }
-        } catch (err) {
-            console.error(err);
-        }
-    }, [lendingMarketAddress, account]);
+    if (error) {
+        console.error(error);
+    }
 
-    useEffect(() => {
-        if (lendingMarketAddress != null && account) {
-            fetchOpenOrders();
+    useMemo(() => {
+        if (data) {
+            setOpenOrders(data);
         }
-    }, [ccy, term, lendingMarketAddress, account, fetchOpenOrders]);
+    }, [data]);
 
     return openOrders;
+};
+
+export const useBilateralPositionsQuery = () => {
+    const { account }: { account: string } = useWallet();
+
+    const [positions, setPositions] = useState<Array<BilateralPosition>>([]);
+    const { data, error } = useBilateralPosition(account ? account : '');
+
+    if (error) {
+        console.error(error);
+    }
+
+    useMemo(() => {
+        if (data) {
+            setPositions(data);
+        }
+    }, [data]);
+
+    return positions;
 };
 
 export const useTradeHistoryOrders = (ccy: string, term: string) => {
@@ -57,100 +65,20 @@ export const useTradeHistoryOrders = (ccy: string, term: string) => {
 
     const [tradeHistory, setTradeHistory] = useState([]);
 
-    const fetchTradeHistoryOrders = useCallback(async () => {
-        const res = await client.query({
-            query: TRADE_HISTORY,
-            variables: {
-                account: account.toLowerCase(),
-                market: lendingMarketAddress,
-            },
-            fetchPolicy: 'cache-first',
-        });
-        try {
-            if (res.data.user?.madeOrders && res?.data.user.takenOrders) {
-                const parsedHistory: Array<{ createdAtTimestamp: number }> = [];
-
-                res.data.user.madeOrders.forEach(
-                    (_item: unknown, index: number) => {
-                        const counterparty =
-                            res.data.user.madeOrders[index].taker;
-                        const historyItem = Object.assign(
-                            {},
-                            res.data.user.madeOrders[index],
-                            { counterparty: counterparty }
-                        );
-                        parsedHistory.push(historyItem);
-                    }
-                );
-
-                res.data.user.takenOrders.forEach(
-                    (_item: unknown, index: number) => {
-                        const counterparty =
-                            res.data.user.takenOrders[index].maker;
-                        const historyItem = Object.assign(
-                            {},
-                            res.data.user.takenOrders[index],
-                            { counterparty: counterparty }
-                        );
-                        parsedHistory.push(historyItem);
-                    }
-                );
-
-                parsedHistory.sort(function (x, y) {
-                    return y.createdAtTimestamp - x.createdAtTimestamp;
-                });
-
-                setTradeHistory(parsedHistory);
-            }
-        } catch (err) {
-            console.error(err);
-        }
-    }, [lendingMarketAddress, account]);
-
-    useEffect(() => {
-        if (lendingMarketAddress !== null && account) {
-            fetchTradeHistoryOrders();
-        }
-    }, [ccy, term, lendingMarketAddress, account, fetchTradeHistoryOrders]);
-
-    return tradeHistory;
-};
-
-export const useOpenLoans = (ccy: string, term: string) => {
-    const { account, chainId }: { account: string; chainId: number | null } =
-        useWallet();
-    const lendingMarketAddress = utils.getLendingMarketAddressByCcyAndTerm(
-        ccy,
-        term,
-        chainId
+    const { data, error } = useUsersTradingHistoryQuery(
+        account ? account : '',
+        lendingMarketAddress
     );
 
-    const [loans, setLoans] = useState([]);
+    if (error) {
+        console.error(error);
+    }
 
-    const fetchMadeOrders = useCallback(async () => {
-        const res = await client.query({
-            query: OPEN_LOANS,
-            variables: {
-                account: account.toLowerCase(),
-                market: lendingMarketAddress,
-            },
-            fetchPolicy: 'cache-first',
-        });
-
-        try {
-            if (res.data.user?.loans) {
-                setLoans(res.data.user.loans);
-            }
-        } catch (err) {
-            console.error(err);
+    useMemo(() => {
+        if (data) {
+            setTradeHistory(data);
         }
-    }, [lendingMarketAddress, account]);
+    }, [data]);
 
-    useEffect(() => {
-        if (lendingMarketAddress != null && account) {
-            fetchMadeOrders();
-        }
-    }, [ccy, term, lendingMarketAddress, account, fetchMadeOrders]);
-
-    return loans;
+    return tradeHistory;
 };
