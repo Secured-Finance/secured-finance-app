@@ -90,7 +90,7 @@ const Lend: React.FC<CombinedProps> = ({
             await onPlaceOrder();
             setPendingTx(false);
         } catch (e) {
-            console.log(e);
+            console.error(e);
         }
     }, [onPlaceOrder, setPendingTx]);
 
