@@ -1,9 +1,11 @@
-import { termList } from 'src/utils';
+import { getTermBy, Term } from 'src/utils';
 
 interface RenderTermsProps {
-    index?: number;
+    label: keyof Term;
+    value: string | number;
 }
 
-export const RenderTerms: React.FC<RenderTermsProps> = ({ index }) => {
-    return <span>{termList[index]?.label}</span>;
+export const RenderTerms: React.FC<RenderTermsProps> = ({ label, value }) => {
+    const term = getTermBy(label, value);
+    return <span>{term.label}</span>;
 };

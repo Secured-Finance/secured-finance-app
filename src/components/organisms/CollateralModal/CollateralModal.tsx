@@ -23,13 +23,13 @@ import {
 import { RootState } from 'src/store/types';
 import theme from 'src/theme';
 import {
-    DEFAULT_COLLATERAL_VAULT,
+    CurrencyInfo,
+    currencyList,
     formatInput,
     getDisplayBalance,
     getFullDisplayBalanceNumber,
     getUSDFormatBalanceNumber,
 } from 'src/utils';
-import { CurrencyInfo, currencyList } from 'src/utils/currencyList';
 import styled from 'styled-components';
 import { useWallet } from 'use-wallet';
 
@@ -51,7 +51,7 @@ const CollateralModal: React.FC<CombinedProps> = ({
     const { account }: { account: string } = useWallet();
     const colBook = useCollateralBook(
         account ? account : '',
-        DEFAULT_COLLATERAL_VAULT
+        currencyShortName
     );
     const status = useCheckCollateralBook(account);
     const ethBalance = useEthBalance();

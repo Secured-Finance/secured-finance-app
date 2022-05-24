@@ -1,5 +1,6 @@
 import { FilecoinNumber } from '@glif/filecoin-number';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { FixedNumber } from 'ethers';
 import { defaultStore, SendFormStore } from './types';
 
 const initialStore: SendFormStore = defaultStore;
@@ -8,7 +9,7 @@ const sendFormSlice = createSlice({
     name: 'sendForm',
     initialState: initialStore,
     reducers: {
-        updateSendTxFee: (state, action: PayloadAction<number>) => {
+        updateSendTxFee: (state, action: PayloadAction<FixedNumber>) => {
             state.txFee = action.payload;
             state.isLoading = false;
         },

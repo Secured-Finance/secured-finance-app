@@ -7,7 +7,7 @@ import { RootState } from 'src/store/types';
 import { WalletBase } from 'src/store/wallets';
 import { getTotalUSDBalance } from 'src/store/wallets/selectors';
 import theme from 'src/theme';
-import { DEFAULT_COLLATERAL_VAULT, usdFormat } from 'src/utils';
+import { usdFormat } from 'src/utils';
 import styled from 'styled-components';
 import { useWallet } from 'use-wallet';
 import CollateralTable from './components/CollateralTable';
@@ -20,10 +20,7 @@ const Account: React.FC = () => {
 
     const [tableData, setTableData] = useState([] as Array<WalletBase>);
     const { account }: { account: string } = useWallet();
-    const colBook = useCollateralBook(
-        account ? account : '',
-        DEFAULT_COLLATERAL_VAULT
-    );
+    const colBook = useCollateralBook(account ? account : '');
 
     useMemo(() => {
         async function updateTable() {

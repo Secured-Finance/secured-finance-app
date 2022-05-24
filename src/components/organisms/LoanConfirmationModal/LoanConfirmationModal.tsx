@@ -182,7 +182,10 @@ const LoanConfirmationModal: React.FC<CombinedProps> = ({
                         <StyledRowContainer marginTop={'10px'}>
                             <StyledItemText>Term</StyledItemText>
                             <StyledItemText>
-                                <RenderTerms index={loan.term} />
+                                <RenderTerms
+                                    label={'termIndex'}
+                                    value={loan.term}
+                                />
                             </StyledItemText>
                         </StyledRowContainer>
                         <StyledRowContainer marginTop={'10px'}>

@@ -1,20 +1,19 @@
-import { useCrosschainAddressById } from '@secured-finance/sf-graph-client/dist/hooks';
 import BigNumber from 'bignumber.js';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { Button, Container, RenderTerms, Spacer } from 'src/components/atoms';
 import { SendModal } from 'src/components/organisms';
+import { NextCouponPaymentCard } from 'src/components/organisms/Loan/NextCouponPaymentCard';
 import { Page } from 'src/components/templates';
 import useCollateralBook from 'src/hooks/useCollateralBook';
+import { useCrosschainAddressByChainId } from 'src/hooks/useCrosschainAddress';
 import { useLoanInformation } from 'src/hooks/useLoanHistory';
 import useModal from 'src/hooks/useModal';
-import { CrossChainWallet } from 'src/services/filecoin';
 import { RootState } from 'src/store/types';
 import theme from 'src/theme';
 import {
     AddressUtils,
-    DEFAULT_COLLATERAL_VAULT,
     formatDate,
     getDisplayBalance,
     ordinaryFormat,
@@ -23,7 +22,6 @@ import {
 import { Currency, currencyList, getCurrencyBy } from 'src/utils/currencyList';
 import styled from 'styled-components';
 import { useWallet } from 'use-wallet';
-import { NextCouponPaymentCard } from '../../components/organisms/Loan/NextCouponPaymentCard';
 
 export interface CouponPayment {
     amount: number;
@@ -46,10 +44,7 @@ const LoanScreen = () => {
     const filPrice = useSelector(
         (state: RootState) => state.assetPrices.filecoin.price
     );
-    const colBook = useCollateralBook(
-        counterpartyAddr ? counterpartyAddr : '',
-        DEFAULT_COLLATERAL_VAULT
-    );
+    const colBook = useCollateralBook(counterpartyAddr ? counterpartyAddr : '');
 
     const counterPartyWallet = useMemo(() => {
         if (account && loan) {
@@ -72,10 +67,10 @@ const LoanScreen = () => {
         }
     }, [loan]);
 
-    const counterpartyFilWallet = useCrosschainAddressById(
-        counterPartyWallet,
-        loanCurrency.chainId
-    ) as CrossChainWallet;
+    const crossChainAddress = useCrosschainAddressByChainId(
+        counterPartyWallet ? counterPartyWallet : '',
+        loanCurrency.shortName
+    );
 
     const [onPresentSendModal] = useModal(
         <SendModal
@@ -158,11 +153,11 @@ const LoanScreen = () => {
             setCounterpartyAddr(counterPartyWallet);
             nextCouponPayment();
             if (
-                counterpartyFilWallet &&
+                crossChainAddress &&
                 loan?.currency &&
                 loanCurrency.shortName === Currency.FIL
             ) {
-                setRecipientAddress(counterpartyFilWallet.address);
+                setRecipientAddress(crossChainAddress.address);
             } else {
                 setRecipientAddress(counterPartyWallet);
             }
@@ -175,8 +170,8 @@ const LoanScreen = () => {
         nextCouponPayment,
         counterpartyAddr,
         counterPartyWallet,
-        counterpartyFilWallet,
         loanCurrency,
+        crossChainAddress,
     ]);
 
     return (
@@ -219,7 +214,10 @@ const LoanScreen = () => {
                                 <StyledRowContainer marginTop={'10px'}>
                                     <StyledItemText>Term</StyledItemText>
                                     <StyledItemText>
-                                        <RenderTerms index={loan?.term} />
+                                        <RenderTerms
+                                            label={'termIndex'}
+                                            value={loan?.term}
+                                        />
                                     </StyledItemText>
                                 </StyledRowContainer>
                                 <StyledRowContainer marginTop={'10px'}>
