@@ -1,3 +1,5 @@
+import { Currency } from '@secured-finance/sf-graph-client/dist/generated';
+
 export interface HistoryStore {
     lendingHistory: Array<HistoryTableData>;
     borrowingHistory: Array<HistoryTableData>;
@@ -8,7 +10,7 @@ export interface HistoryTableData {
     lender: string;
     borrower: string;
     rate: string;
-    currency: string;
+    currency: Currency;
     term: string;
     presentValue: string;
     notional: string;

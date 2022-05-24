@@ -8,12 +8,7 @@ import useCollateralBook from 'src/hooks/useCollateralBook';
 import useModal from 'src/hooks/useModal';
 import { RootState } from 'src/store/types';
 import { getTotalUSDBalance } from 'src/store/wallets/selectors';
-import {
-    DEFAULT_COLLATERAL_VAULT,
-    getDisplayBalance,
-    ordinaryFormat,
-    usdFormat,
-} from 'src/utils';
+import { getDisplayBalance, ordinaryFormat, usdFormat } from 'src/utils';
 import styled from 'styled-components';
 import { useWallet } from 'use-wallet';
 
@@ -25,10 +20,7 @@ export const Balances: React.FC = () => {
     } = useSelector((state: RootState) => state.wallets);
 
     const { account }: { account: string } = useWallet();
-    const colBook = useCollateralBook(
-        account ? account : '',
-        DEFAULT_COLLATERAL_VAULT
-    );
+    const colBook = useCollateralBook(account ? account : '');
 
     const [onPresentCollateralModal] = useModal(
         <CollateralModal ccyIndex={0} />

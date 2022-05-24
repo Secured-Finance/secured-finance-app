@@ -64,7 +64,7 @@ export const useNewFilWalletProvider = () => {
     const filWalletAddr = useCrosschainAddressById(
         account,
         getFilecoinChainId(getFilecoinNetwork())
-    ) as CrossChainWallet;
+    );
 
     const handleCreateFilWalletProvider = useCallback(
         async (
@@ -83,7 +83,7 @@ export const useNewFilWalletProvider = () => {
                 const [filAddr] = await provider.getAccounts(0, 1, network);
 
                 const crossChainAddress = await registerCrossChainWallet(
-                    filWalletAddr,
+                    filWalletAddr.data,
                     filAddr,
                     onRegisterCrossChainWallet
                 );
@@ -119,7 +119,7 @@ export async function registerCrossChainWallet(
             await register(chainId, filAddr);
             return filAddr;
         } else if (
-            filWalletAddr.chainID === chainId.toString() &&
+            // filWalletAddr.chainID === chainId.toString() &&
             !AddressUtils.equals(filWalletAddr.address, filAddr)
         ) {
             await register(chainId, filAddr);
