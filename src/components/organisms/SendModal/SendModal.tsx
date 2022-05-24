@@ -12,28 +12,34 @@ import {
     Spacer,
 } from 'src/components/atoms';
 import { CurrencyImage } from 'src/components/common/CurrencyImage';
-import { useEthBalance } from 'src/hooks/useEthWallet';
 import { useSendEth } from 'src/hooks/useSendEth';
 import { useSendFil } from 'src/hooks/useSendFil';
+import { useVerifyPayment } from 'src/hooks/useVerifyPayment';
 import { getAssetInfo } from 'src/store/assetPrices/selectors';
 import { RootState } from 'src/store/types';
+import { getBalance } from 'src/store/wallets/selectors';
 import theme from 'src/theme';
 import { formatInput } from 'src/utils';
-import { CurrencyInfo } from 'src/utils/currencyList';
+import { Currency, CurrencyInfo } from 'src/utils/currencyList';
 import styled from 'styled-components';
 import { isAddress } from 'web3-utils';
 import { FilTxFeeTable } from './components/FilTxFeeTable';
 import { GasTabsAndTable } from './components/GastabsAndTable';
+import SettlementValidation from './components/SettlementValidation';
 
 const SendModal = ({
     onDismiss,
     amount,
     currencyInfo,
     toAddress,
+    counterpartyAddress,
+    settleTransaction = false,
 }: {
     amount?: number;
     currencyInfo: CurrencyInfo;
     toAddress?: string;
+    counterpartyAddress?: string;
+    settleTransaction?: boolean;
 } & ModalProps) => {
     const [addrErr, setAddrErr] = useState(false);
     const [balanceErr, setBalanceErr] = useState(false);
@@ -41,12 +47,17 @@ const SendModal = ({
     const [recipientAddress, setRecipientAddress] = useState(toAddress ?? '');
     const [amountToSend, setAmountToSend] = useState(amount ?? 0);
 
-    const ethBalance = useEthBalance();
-    const filecoinBalance = useSelector(
-        (state: RootState) => state.wallets.filecoin.balance
+    const balance = useSelector((state: RootState) =>
+        getBalance(
+            state,
+            currencyInfo.fullName.toLowerCase() as 'ethereum' | 'filecoin'
+        )
     );
 
     const { price } = useSelector(getAssetInfo(currencyInfo.shortName));
+    const { hash, status, error } = useSelector(
+        (state: RootState) => state.transaction
+    );
 
     const TotalUsdAmount = useMemo(
         () => (amountToSend * price).toFixed(2),
@@ -60,33 +71,23 @@ const SendModal = ({
     const maxFilTxFee = Number(maxTxFee.toFil());
 
     const handleRecipientAddress = (e: React.FormEvent<HTMLInputElement>) => {
+        setAddrErr(false);
         setRecipientAddress(e.currentTarget.value);
     };
 
-    const renderBalance = useMemo(() => {
-        switch (currencyInfo.indexCcy) {
-            case 0:
-                return (
-                    <span>
-                        {ethBalance} {currencyInfo.shortName}
-                    </span>
-                );
-            case 1:
-                return (
-                    <span>
-                        {filecoinBalance} {currencyInfo.shortName}
-                    </span>
-                );
-            case 2:
-                // TODO: Add USDC balances
-                return <span>0.00 {currencyInfo.shortName}</span>;
-        }
-    }, [
-        currencyInfo.indexCcy,
-        currencyInfo.shortName,
-        ethBalance,
-        filecoinBalance,
-    ]);
+    const renderBalance = ({
+        balance,
+        currency,
+    }: {
+        balance: number;
+        currency: Currency;
+    }) => {
+        return (
+            <span>
+                {balance.toFixed(2)} {currency}
+            </span>
+        );
+    };
 
     const isValidAddress = useCallback(() => {
         switch (currencyInfo.indexCcy) {
@@ -102,13 +103,13 @@ const SendModal = ({
             switch (currencyInfo.indexCcy) {
                 case 0:
                     return new BigNumber(amount).isLessThanOrEqualTo(
-                        new BigNumber(ethBalance)
+                        new BigNumber(balance)
                     );
                 case 1:
-                    return +amount + maxFilTxFee <= filecoinBalance;
+                    return +amount + maxFilTxFee <= balance;
             }
         },
-        [currencyInfo.indexCcy, ethBalance, maxFilTxFee, filecoinBalance]
+        [balance, currencyInfo.indexCcy, maxFilTxFee]
     );
 
     const handleSendAmount = (e: React.FormEvent<HTMLInputElement>) => {
@@ -120,50 +121,56 @@ const SendModal = ({
         }
     };
 
-    const handleSendModalClose = () => {
-        if (!ongoingTx) onDismiss();
-    };
-
     const { onSendEth } = useSendEth(amountToSend, recipientAddress, gasPrice);
-    const { sendFil } = useSendFil(
+    const { sendFil, validateFilecoinTransaction } = useSendFil(
         amountToSend,
-        recipientAddress,
-        handleSendModalClose,
-        setOngoingTx
+        recipientAddress
+    );
+    const { verifyFilecoinPayment } = useVerifyPayment(
+        amountToSend,
+        counterpartyAddress,
+        currencyInfo.shortName
     );
 
     const handleTransferAssets = useCallback(async () => {
         try {
-            if (recipientAddress !== '' && amountToSend > 0) {
-                if (isValidAddress()) {
-                    setOngoingTx(true);
-                    const txHash =
-                        currencyInfo.indexCcy === 0
-                            ? await onSendEth()
-                            : await sendFil();
-                    if (!txHash) {
-                        setOngoingTx(false);
-                    } else {
-                        if (!ongoingTx) onDismiss();
-                    }
-                } else {
-                    setAddrErr(true);
+            if (!recipientAddress || amountToSend <= 0) {
+                return;
+            }
+
+            if (!isValidAddress()) {
+                setAddrErr(true);
+                return;
+            }
+
+            setOngoingTx(true);
+            if (currencyInfo.shortName === Currency.FIL) {
+                const tx = await sendFil();
+                if (
+                    tx &&
+                    (await validateFilecoinTransaction(tx)) &&
+                    settleTransaction &&
+                    (await verifyFilecoinPayment(tx))
+                ) {
+                    setOngoingTx(false);
                 }
             } else {
-                setAddrErr(true);
+                await onSendEth();
             }
-        } catch (e) {
-            console.error(e);
+            setOngoingTx(false);
+        } catch (error) {
+            console.error(error);
         }
     }, [
         recipientAddress,
         amountToSend,
         isValidAddress,
-        currencyInfo.indexCcy,
-        onSendEth,
+        currencyInfo.shortName,
         sendFil,
-        ongoingTx,
-        onDismiss,
+        validateFilecoinTransaction,
+        settleTransaction,
+        verifyFilecoinPayment,
+        onSendEth,
     ]);
 
     const isSendButtonDisabled = () => {
@@ -194,7 +201,11 @@ const SendModal = ({
                             fontWeight={400}
                             textTransform={'capitalize'}
                         >
-                            Balance: {renderBalance}
+                            Balance:
+                            {renderBalance({
+                                balance,
+                                currency: currencyInfo.shortName,
+                            })}
                         </StyledLabel>
                     </StyledLabelContainer>
                     <StyledInputContainer>
@@ -260,6 +271,11 @@ const SendModal = ({
                 </StyledSubcontainer>
                 {currencyInfo.indexCcy === 0 && <GasTabsAndTable />}
                 {currencyInfo.indexCcy === 1 && <FilTxFeeTable />}
+                <SettlementValidation
+                    status={status}
+                    transactionHash={hash}
+                    error={error}
+                />
             </ModalContent>
             <ModalActions>
                 <StyledButtonContainer>

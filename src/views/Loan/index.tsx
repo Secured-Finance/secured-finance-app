@@ -82,6 +82,8 @@ const LoanScreen = () => {
             currencyInfo={loanCurrency}
             toAddress={recipientAddress}
             amount={loan?.notional}
+            counterpartyAddress={counterpartyAddr}
+            settleTransaction
         />
     );
 
