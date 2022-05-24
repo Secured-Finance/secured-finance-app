@@ -7,6 +7,12 @@ import { UseWalletProvider } from 'use-wallet';
 import FilecoinWalletProvider from './contexts/FilecoinWalletProvider';
 import ModalsProvider from './contexts/Modals';
 import SecuredFinanceProvider from './contexts/SecuredFinanceProvider';
+import {
+    useWatchEthereumUsdPrice,
+    useWatchFilecoinUsdPrice,
+} from './hooks/useAssetPrices';
+import { useFilecoinWalletStore } from './hooks/useFilWallet';
+import { FIL_ADDRESS, FIL_WALLET_TYPE } from './services/filecoin';
 import theme from './theme';
 import Account from './views/Account';
 import Exchange from './views/Exchange';
@@ -15,6 +21,13 @@ import Lending from './views/Lending';
 import Loan from './views/Loan';
 
 const App: React.FC = () => {
+    const filAddr = localStorage.getItem(FIL_ADDRESS);
+    const filWalletType = localStorage.getItem(FIL_WALLET_TYPE);
+
+    useWatchEthereumUsdPrice();
+    useWatchFilecoinUsdPrice();
+    useFilecoinWalletStore(filAddr, filWalletType);
+
     return (
         <Router>
             <Providers>

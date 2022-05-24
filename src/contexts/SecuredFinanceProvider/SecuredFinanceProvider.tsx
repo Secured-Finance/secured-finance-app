@@ -2,10 +2,6 @@ import { SecuredFinanceClient } from '@secured-finance/sf-client';
 import { ethers } from 'ethers';
 import React, { createContext, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import {
-    useWatchEthereumUsdPrice,
-    useWatchFilecoinUsdPrice,
-} from 'src/hooks/useAssetPrices';
 import { updateLatestBlock } from 'src/store/blockchain';
 import { ChainUnsupportedError, useWallet } from 'use-wallet';
 import Web3 from 'web3';
@@ -31,8 +27,6 @@ const SecuredFinanceProvider: React.FC = ({ children }) => {
     const [securedFinance, setSecuredFinance] =
         useState<SecuredFinanceClient>();
     const dispatch = useDispatch();
-    useWatchEthereumUsdPrice();
-    useWatchFilecoinUsdPrice();
 
     const handleNetworkChanged = (networkId: string | number) => {
         if (networkId !== 3) {
