@@ -40,7 +40,7 @@ const useCollateralBook = (account: string, ccy = 'ETH') => {
     );
     const { chainId }: { chainId: number | null } = useWallet();
     const vault = getCollateralVaultAddressByCcy(ccy, chainId);
-    const { data, error } = useCollateralBookFromVault(vault, account) as any;
+    const { data, error } = useCollateralBookFromVault(vault, account);
 
     if (error) {
         console.error(error);

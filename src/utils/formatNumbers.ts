@@ -1,3 +1,5 @@
+import { FixedNumber } from 'ethers';
+
 export const usdFormat = (number: number, digits = 0) => {
     return Intl.NumberFormat('en-US', {
         style: 'currency',
@@ -29,4 +31,12 @@ export const formatInput = (e: React.KeyboardEvent<HTMLInputElement>) => {
             e.key === 'e' || e.key === '.' || e.key === '+' || e.key === '-';
     }
     return checkIfNum && e.preventDefault();
+};
+
+export const formatUsdAmount = (number: number): string => {
+    return (number * 100).toFixed(0);
+};
+
+export const formatFixedNumber = (value: FixedNumber, decimals = 2): string => {
+    return value.round(decimals).toString();
 };
