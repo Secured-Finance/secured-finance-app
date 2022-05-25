@@ -1,8 +1,7 @@
 import React, { useMemo, useState } from 'react';
-import { connect, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Page } from 'src/components/templates';
 import useCollateralBook from 'src/hooks/useCollateralBook';
-import { useEthereumWalletStore } from 'src/hooks/useEthWallet';
 import { RootState } from 'src/store/types';
 import { WalletBase } from 'src/store/wallets';
 import { getTotalUSDBalance } from 'src/store/wallets/selectors';
@@ -15,21 +14,20 @@ import WalletsTable from './components/WalletsTable';
 
 const Account: React.FC = () => {
     const totalUSDBalance = useSelector(getTotalUSDBalance);
-    const filWallet = useSelector((state: RootState) => state.wallets.filecoin);
-    const ethWallet = useEthereumWalletStore();
+    const { filecoin: filWallet, ethereum: ethWallet } = useSelector(
+        (state: RootState) => state.wallets
+    );
 
-    const [tableData, setTableData] = useState([] as Array<WalletBase>);
+    const [tableData, setTableData] = useState<Array<WalletBase>>([]);
     const { account }: { account: string } = useWallet();
     const colBook = useCollateralBook(account ? account : '');
 
     useMemo(() => {
         async function updateTable() {
-            const array = [];
-            array.push(ethWallet, filWallet);
-            setTableData(array);
+            setTableData([ethWallet, filWallet]);
         }
         updateTable();
-    }, [ethWallet, filWallet, setTableData]);
+    }, [ethWallet, filWallet]);
 
     return (
         <Page background={theme.colors.background}>
@@ -130,12 +128,4 @@ const StyledBalanceAmount = styled.p`
     margin: ${props => props.theme.sizes.footnote}px 0 0 0;
 `;
 
-const mapStateToProps = (state: RootState) => {
-    return {
-        assetPrices: state.assetPrices,
-        wallets: state.wallets,
-        filWalletProvider: state.filWalletProvider,
-    };
-};
-
-export default connect(mapStateToProps)(Account);
+export default Account;
