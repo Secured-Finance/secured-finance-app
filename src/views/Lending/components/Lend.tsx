@@ -15,15 +15,9 @@ import { formatInput, percentFormat, termList, usdFormat } from 'src/utils';
 import { CurrencyInfo, currencyList } from 'src/utils/currencyList';
 import styled from 'styled-components';
 
-interface LendTabProps {
-    lendingRates: any[];
-}
-type CombinedProps = LendTabProps & LendingStore;
-
 const daysInYear = [90, 180, 360, 720, 1080, 1800];
 
-const Lend: React.FC<CombinedProps> = ({
-    lendingRates,
+const Lend: React.FC<LendingStore> = ({
     selectedCcy,
     selectedCcyName,
     selectedTerms,
