@@ -1,3 +1,4 @@
+import { BigNumber } from 'ethers';
 import { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from 'src/store/types';
@@ -9,24 +10,25 @@ export const useRates = (ccy: string, type: number) => {
     const block = useSelector(
         (state: RootState) => state.blockchain.latestBlock
     );
-    const [rates, setRates] = useState([]);
+    const [rates, setRates] = useState<BigNumber[]>([]);
 
     const fetchYieldCurve = useCallback(async () => {
-        let rates;
+        let ratesFn;
         switch (type) {
             case 0:
-                rates = await securedFinance.getBorrowYieldCurve(selectedCcy);
+                ratesFn = () => securedFinance.getBorrowYieldCurve(selectedCcy);
                 break;
             case 1:
-                rates = await securedFinance.getLendYieldCurve(selectedCcy);
+                ratesFn = () => securedFinance.getLendYieldCurve(selectedCcy);
                 break;
             case 2:
-                rates = await securedFinance.getMidRateYieldCurve(selectedCcy);
+                ratesFn = () =>
+                    securedFinance.getMidRateYieldCurve(selectedCcy);
                 break;
             default:
                 break;
         }
-        setRates(rates);
+        setRates(await ratesFn());
     }, [type, securedFinance]);
 
     useEffect(() => {
@@ -35,5 +37,5 @@ export const useRates = (ccy: string, type: number) => {
         }
     }, [block, setRates, ccy, securedFinance, fetchYieldCurve]);
 
-    return rates;
+    return rates.map(rate => rate.toNumber());
 };

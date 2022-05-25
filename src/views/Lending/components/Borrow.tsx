@@ -23,14 +23,7 @@ import {
 import { Currency, CurrencyInfo, currencyList } from 'src/utils/currencyList';
 import styled from 'styled-components';
 
-interface BorrowTabProps {
-    borrowRates: any[];
-}
-
-type CombinedProps = BorrowTabProps & LendingStore;
-
-const Borrow: React.FC<CombinedProps> = ({
-    borrowRates,
+const Borrow: React.FC<LendingStore> = ({
     selectedCcy,
     selectedCcyName,
     currencyIndex,
