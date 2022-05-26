@@ -53,7 +53,6 @@ const CollateralModal: React.FC<CombinedProps> = ({
         account ? account : '',
         currencyShortName
     );
-    // const status = useCheckCollateralBook(account);
     const ethBalance = useEthBalance();
     const dispatch = useDispatch();
     const ethPrice = useSelector(
