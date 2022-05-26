@@ -33,12 +33,14 @@ const SendModal = ({
     currencyInfo,
     toAddress,
     counterpartyAddress,
+    nextCouponPaymentDate,
     settleTransaction = false,
 }: {
     amount?: number;
     currencyInfo: CurrencyInfo;
     toAddress?: string;
     counterpartyAddress?: string;
+    nextCouponPaymentDate?: number;
     settleTransaction?: boolean;
 } & ModalProps) => {
     const [addrErr, setAddrErr] = useState(false);
@@ -126,10 +128,12 @@ const SendModal = ({
         amountToSend,
         recipientAddress
     );
+
     const { verifyFilecoinPayment } = useVerifyPayment(
         amountToSend,
         counterpartyAddress,
-        currencyInfo.shortName
+        currencyInfo.shortName,
+        nextCouponPaymentDate
     );
 
     const handleTransferAssets = useCallback(async () => {
@@ -144,6 +148,7 @@ const SendModal = ({
             }
 
             setOngoingTx(true);
+
             if (currencyInfo.shortName === Currency.FIL) {
                 const tx = await sendFil();
                 if (

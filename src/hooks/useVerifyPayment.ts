@@ -1,7 +1,6 @@
 import { FilecoinNumber } from '@glif/filecoin-number';
 import { CID } from '@glif/filecoin-wallet-provider';
 import { BigNumber as BNEthers, ContractTransaction } from 'ethers';
-import moment from 'moment';
 import { useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 import { transactionFailed, updateTransaction } from 'src/store/transaction';
@@ -12,7 +11,8 @@ import useSF from './useSecuredFinance';
 export const useVerifyPayment = (
     amount: number,
     counterpartyAddress: string,
-    currency: Currency
+    currency: Currency,
+    timestamp: number
 ) => {
     const client = useSF();
     const dispatch = useDispatch();
@@ -25,8 +25,6 @@ export const useVerifyPayment = (
             }
 
             const value = new FilecoinNumber(amount, 'fil');
-            const date = moment();
-            const timestamp = date.utc().add(2, 'd').unix().toString();
             const timestampBN = BNEthers.from(timestamp);
             const ethTx: ContractTransaction = await client.verifyPayment(
                 counterpartyAddress,
@@ -39,7 +37,7 @@ export const useVerifyPayment = (
 
             return true;
         },
-        [amount, client, counterpartyAddress, currency, dispatch]
+        [amount, client, counterpartyAddress, currency, dispatch, timestamp]
     );
 
     return {

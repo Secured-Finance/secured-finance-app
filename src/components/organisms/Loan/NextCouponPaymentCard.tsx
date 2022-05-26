@@ -1,7 +1,9 @@
 import BigNumber from 'bignumber.js';
 import classNames from 'classnames';
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
+import { useDispatch } from 'react-redux';
 import { Button } from 'src/components/atoms';
+import { resetTransaction } from 'src/store/transaction';
 import theme from 'src/theme';
 import { formatDate, ordinaryFormat, usdFormat } from 'src/utils';
 import { Currency } from 'src/utils/currencyList';
@@ -18,6 +20,7 @@ export const NextCouponPaymentCard = ({
     filPrice: number;
     onClick: () => void;
 }) => {
+    const dispatch = useDispatch();
     const couponUsdPayment = useMemo(
         () => (amount: number) => {
             const usdPayment = new BigNumber(amount)
@@ -27,6 +30,10 @@ export const NextCouponPaymentCard = ({
         },
         [filPrice]
     );
+
+    useEffect(() => {
+        dispatch(resetTransaction());
+    }, [dispatch]);
 
     const Row = ({
         label,
