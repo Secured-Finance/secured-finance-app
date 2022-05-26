@@ -78,6 +78,7 @@ const LoanScreen = () => {
             toAddress={recipientAddress}
             amount={loan?.notional}
             counterpartyAddress={counterpartyAddr}
+            nextCouponPaymentDate={couponPayment?.payment}
             settleTransaction
         />
     );

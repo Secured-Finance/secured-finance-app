@@ -48,6 +48,12 @@ const transactionSlice = createSlice({
             state.error = action.payload;
             state.status = TransactionStatus.Error;
         },
+        resetTransaction(state) {
+            state.hash = '';
+            state.status = null;
+            state.settlementHash = '';
+            state.error = null;
+        },
     },
 });
 

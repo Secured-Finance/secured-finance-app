@@ -6,6 +6,7 @@ export const {
     updateSettlementHash,
     updateTransaction,
     transactionFailed,
+    resetTransaction,
 } = transactionSlice.actions;
 
 export default transactionSlice.reducer;
