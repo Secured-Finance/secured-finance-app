@@ -8,6 +8,8 @@ import {
 } from 'src/components/organisms';
 import useModal from 'src/hooks/useModal';
 import { supportedCoins } from 'src/store/wallets/types';
+import { useWallet } from 'use-wallet';
+import useCheckCollateralBook from 'src/hooks/useCheckCollateralBook';
 
 export interface ActionProps {
     callbackMap?: {
@@ -23,8 +25,10 @@ const RenderActions: React.FC<ActionProps> = ({ callbackMap, ccyIndex }) => {
         <WalletAccountModal ccyIndex={ccyIndex} />
     );
     const [onPresentSendModal] = useModal(<SendModal ccyIndex={ccyIndex} />);
+    const { account }: { account: string } = useWallet();
+    const status = useCheckCollateralBook(account);
     const [onPresentCollateralModal] = useModal(
-        <CollateralModal ccyIndex={ccyIndex} />
+        <CollateralModal ccyIndex={ccyIndex} status={status} />
     );
 
     const [onPresentWalletEthProviderModal] = useModal(

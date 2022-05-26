@@ -4,6 +4,7 @@ import styled, { keyframes } from 'styled-components';
 export type ModalProps = {
     onDismiss?: () => void;
     ccyIndex?: number;
+    status?: boolean;
 };
 
 export const Modal: React.FC = ({ children }) => {
