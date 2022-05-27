@@ -10,7 +10,6 @@ import {
 } from 'src/components/atoms';
 import { Button } from 'src/components/common/Buttons';
 import { CurrencySelector } from 'src/components/molecules';
-import useCheckCollateralBook from 'src/hooks/useCheckCollateralBook';
 import useCollateralBook from 'src/hooks/useCollateralBook';
 import { useDepositCollateral } from 'src/hooks/useDepositCollateral';
 import { useEthBalance } from 'src/hooks/useEthWallet';
@@ -33,7 +32,11 @@ import {
 import styled from 'styled-components';
 import { useWallet } from 'use-wallet';
 
-type CombinedProps = ModalProps & CollateralFormStore;
+type CollateralModalProps = {
+    status?: boolean;
+};
+
+type CombinedProps = ModalProps & CollateralFormStore & CollateralModalProps;
 
 const CollateralModal: React.FC<CombinedProps> = ({
     onDismiss,
@@ -44,6 +47,7 @@ const CollateralModal: React.FC<CombinedProps> = ({
     currencyName,
     currencyShortName,
     filAddress,
+    status,
 }) => {
     const [buttonOpen, setButtonOpen] = useState(false);
     const [, setCollateralTx] = useState(false);
@@ -53,7 +57,6 @@ const CollateralModal: React.FC<CombinedProps> = ({
         account ? account : '',
         currencyShortName
     );
-    const status = useCheckCollateralBook(account);
     const ethBalance = useEthBalance();
     const dispatch = useDispatch();
     const ethPrice = useSelector(
@@ -186,6 +189,7 @@ const CollateralModal: React.FC<CombinedProps> = ({
                                 placeholder={'0'}
                                 value={amount}
                                 minLength={1}
+                                disabled={!status}
                                 maxLength={79}
                                 onKeyDown={formatInput}
                                 onChange={handleCollateralAmount}
@@ -301,9 +305,11 @@ const CollateralModal: React.FC<CombinedProps> = ({
                         {balanceErr && <Comment>Insufficient Amount</Comment>}
                         <Button
                             onClick={handleDepositCollateral}
-                            disabled={!(amount > 0) || balanceErr}
+                            disabled={
+                                status ? !(amount > 0) || balanceErr : false
+                            }
                         >
-                            {'Deposit'}
+                            {status ? 'Deposit' : 'Register'}
                         </Button>
                     </ButtonWithCommentContainer>
                 </StyledButtonContainer>
@@ -374,6 +380,9 @@ const StyledInput = styled.input`
     text-align: right;
     width: 100%;
     border: none;
+    :disabled {
+        opacity: 0.5;
+    }
 `;
 
 interface StyledRowContainerProps {
