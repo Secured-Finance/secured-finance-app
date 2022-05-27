@@ -32,7 +32,11 @@ import {
 import styled from 'styled-components';
 import { useWallet } from 'use-wallet';
 
-type CombinedProps = ModalProps & CollateralFormStore;
+type CollateralModalProps = {
+    status?: boolean;
+};
+
+type CombinedProps = ModalProps & CollateralFormStore & CollateralModalProps;
 
 const CollateralModal: React.FC<CombinedProps> = ({
     onDismiss,

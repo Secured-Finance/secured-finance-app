@@ -25,7 +25,7 @@ const RenderActions: React.FC<ActionProps> = ({ callbackMap, ccyIndex }) => {
         <WalletAccountModal ccyIndex={ccyIndex} />
     );
     const [onPresentSendModal] = useModal(<SendModal ccyIndex={ccyIndex} />);
-    const { account }: { account: string } = useWallet();
+    const { account } = useWallet();
     const status = useCheckCollateralBook(account);
     const [onPresentCollateralModal] = useModal(
         <CollateralModal ccyIndex={ccyIndex} status={status} />
