@@ -23,16 +23,17 @@ export const ordinaryFormat = (
     number: number | bigint | BigNumber | FixedNumber,
     decimals = 2
 ) => {
-    let val: number | bigint;
     if (number instanceof BigNumber) {
-        val = number.toBigInt();
-    }
-    if (number instanceof FixedNumber) {
+        return Intl.NumberFormat('en-US', {
+            maximumFractionDigits: decimals,
+        }).format(number.toBigInt());
+    } else if (number instanceof FixedNumber) {
         return number.toString();
+    } else {
+        return Intl.NumberFormat('en-US', {
+            maximumFractionDigits: decimals,
+        }).format(number);
     }
-    return Intl.NumberFormat('en-US', {
-        maximumFractionDigits: decimals,
-    }).format(val);
 };
 
 export const formatInput = (e: React.KeyboardEvent<HTMLInputElement>) => {
