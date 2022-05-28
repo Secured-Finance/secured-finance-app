@@ -1,10 +1,6 @@
 import React from 'react';
 import theme from 'src/theme';
-import {
-    CurrencyInfo,
-    currencyList,
-    getCurrencyBy,
-} from 'src/utils/currencyList';
+import { getCurrencyBy } from 'src/utils/currencyList';
 import styled from 'styled-components';
 
 interface CurrencyContainerProps {
@@ -28,7 +24,6 @@ interface CurrencyListProps {
     iconSize?: number;
     marginLeft?: number;
     fontSize?: number;
-    currencies?: Array<CurrencyInfo>;
 }
 
 type ItemProps = CurrencyContainerProps & CurrencyListProps;
@@ -40,7 +35,6 @@ const CurrencyItem: React.FC<ItemProps> = ({
     fontSize,
     short,
     wallet,
-    currencies,
     style,
 }) => {
     const { icon, shortName, fullName } = getCurrencyBy(
@@ -177,7 +171,6 @@ export const CurrencyContainer: React.FC<CurrencyContainerProps> = ({
             fontSize={fontSize}
             wallet={wallet}
             short={short}
-            currencies={currencyList}
             style={style}
         />
     );
