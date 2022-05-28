@@ -47,6 +47,8 @@ const transactionSlice = createSlice({
         transactionFailed(state, action: PayloadAction<string>) {
             state.error = action.payload;
             state.status = TransactionStatus.Error;
+            state.hash = '';
+            state.settlementHash = '';
         },
         resetTransaction(state) {
             state.hash = '';
