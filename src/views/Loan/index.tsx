@@ -20,7 +20,12 @@ import {
     ordinaryFormat,
     percentFormat,
 } from 'src/utils';
-import { Currency, currencyList, getCurrencyBy } from 'src/utils/currencyList';
+import {
+    Currency,
+    currencyList,
+    formatAmount,
+    getCurrencyBy,
+} from 'src/utils/currencyList';
 import styled from 'styled-components';
 import { useWallet } from 'use-wallet';
 
@@ -67,6 +72,17 @@ const LoanScreen = () => {
         }
     }, [loan]);
 
+    const format = useCallback(
+        (amount: number) => {
+            const { value, unit } = formatAmount(
+                amount,
+                loanCurrency.shortName
+            );
+            return ordinaryFormat(value) + ` ${unit}`;
+        },
+        [loanCurrency.shortName]
+    );
+
     const crossChainAddress = useCrosschainAddressByChainId(
         counterPartyWallet ? counterPartyWallet : '',
         loanCurrency.shortName
@@ -76,63 +92,81 @@ const LoanScreen = () => {
         <SendModal ccyIndex={loanCurrency.indexCcy} />
     );
 
-    const handleNotional = () => {
-        return ordinaryFormat(loan?.notional) + ` ${loanCurrency.shortName}`;
-    };
-
-    const handleInterest = () => {
-        const interestPayments = totalInterest(
-            loan?.notional,
-            loan?.rate,
-            loan?.term
-        );
-        return ordinaryFormat(interestPayments) + ` ${loanCurrency.shortName}`;
-    };
-
-    const totalInterest = (amount: number, rate: number, term: string) => {
-        let periods: number;
-        const interestRate = new BigNumber(rate).dividedBy(10000).toNumber();
-        switch (term) {
-            case '90':
-                periods = 0.25;
-                break;
-            case '180':
-                periods = 0.5;
-                break;
-            case '365':
-                periods = 1;
-                break;
-            case '730':
-                periods = 2;
-                break;
-            case '1095':
-                periods = 3;
-                break;
-            case '1825':
-                periods = 5;
-                break;
-            default:
-                break;
+    const notional = useMemo(() => {
+        if (loan && loanCurrency) {
+            return format(loan.notional);
         }
-        const interestPayments = new BigNumber(amount)
-            .multipliedBy(interestRate)
-            .multipliedBy(periods)
-            .toNumber();
-        return interestPayments;
-    };
 
-    const handleTotalRepay = () => {
-        const interestPayments = totalInterest(
-            loan?.notional,
-            loan?.rate,
-            loan?.term
-        );
-        const totalRepay = new BigNumber(loan?.notional)
-            .plus(interestPayments)
-            .toNumber();
+        return 0;
+    }, [format, loan, loanCurrency]);
 
-        return ordinaryFormat(totalRepay) + ` ${loanCurrency.shortName}`;
-    };
+    const totalInterest = useCallback(
+        (amount: number, rate: number, term: string) => {
+            let periods: number;
+            const interestRate = new BigNumber(rate)
+                .dividedBy(10000)
+                .toNumber();
+            switch (term) {
+                case '90':
+                    periods = 0.25;
+                    break;
+                case '180':
+                    periods = 0.5;
+                    break;
+                case '365':
+                    periods = 1;
+                    break;
+                case '730':
+                    periods = 2;
+                    break;
+                case '1095':
+                    periods = 3;
+                    break;
+                case '1825':
+                    periods = 5;
+                    break;
+                default:
+                    break;
+            }
+            const interestPayments = new BigNumber(amount)
+                .multipliedBy(interestRate)
+                .multipliedBy(periods)
+                .toNumber();
+            return interestPayments;
+        },
+        []
+    );
+
+    const interests = useMemo(() => {
+        if (loan && loanCurrency) {
+            const interestPayments = totalInterest(
+                loan?.notional,
+                loan?.rate,
+                loan?.term
+            );
+
+            return format(interestPayments);
+        }
+
+        return 0;
+    }, [format, loan, loanCurrency, totalInterest]);
+
+    const totalRepay = useMemo(() => {
+        if (loan && loanCurrency) {
+            const interestPayments = totalInterest(
+                loan?.notional,
+                loan?.rate,
+                loan?.term
+            );
+            const totalRepay = new BigNumber(loan?.notional)
+                .plus(interestPayments)
+                .toNumber();
+
+            return format(totalRepay);
+        }
+
+        return 0;
+    }, [format, loan, loanCurrency, totalInterest]);
 
     const nextCouponPayment = useCallback(() => {
         const payment: Array<CouponPayment> =
@@ -189,9 +223,7 @@ const LoanScreen = () => {
                                     <StyledItemText>
                                         Principal notional
                                     </StyledItemText>
-                                    <StyledItemText>
-                                        {handleNotional()}
-                                    </StyledItemText>
+                                    <StyledItemText>{notional}</StyledItemText>
                                 </StyledRowContainer>
                                 <StyledRowContainer marginTop={'10px'}>
                                     <StyledItemText>Start Date</StyledItemText>
@@ -236,14 +268,12 @@ const LoanScreen = () => {
                                     <StyledItemText>
                                         Estimated Interest
                                     </StyledItemText>
-                                    <StyledItemText>
-                                        {handleInterest()}
-                                    </StyledItemText>
+                                    <StyledItemText>{interests}</StyledItemText>
                                 </StyledRowContainer>
                                 <StyledRowContainer marginTop={'10px'}>
                                     <StyledItemText>Total Debt</StyledItemText>
                                     <StyledItemText>
-                                        {handleTotalRepay()}
+                                        {totalRepay}
                                     </StyledItemText>
                                 </StyledRowContainer>
                             </StyledItemContainer>
@@ -266,8 +296,7 @@ const LoanScreen = () => {
                                                 {formatDate(item.payment)}
                                             </StyledItemText>
                                             <StyledItemText>
-                                                {ordinaryFormat(item.amount) +
-                                                    ` ${loanCurrency.shortName}`}
+                                                {format(item.amount)}
                                             </StyledItemText>
                                         </StyledRowContainer>
                                     )
@@ -296,6 +325,7 @@ const LoanScreen = () => {
                             couponPayment={couponPayment}
                             currency={loanCurrency.shortName}
                             filPrice={filPrice}
+                            totalAmount={format}
                         ></NextCouponPaymentCard>
                         {colBook.vault !== '' ? (
                             <CounterpartyContainer>
