@@ -33,6 +33,9 @@ export const Default: Story = () => {
                             action: 'clicked',
                         };
                     }}
+                    totalAmount={(amount: number) => {
+                        return amount.toString();
+                    }}
                 />
             </Router>
         </ThemeProvider>

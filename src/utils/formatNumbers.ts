@@ -1,4 +1,5 @@
-import { FixedNumber } from 'ethers';
+import { FilecoinNumber } from '@glif/filecoin-number';
+import { BigNumber, ethers, FixedNumber } from 'ethers';
 
 export const usdFormat = (number: number, digits = 0) => {
     return Intl.NumberFormat('en-US', {
@@ -18,10 +19,20 @@ export const percentFormat = (number: number, dividedBy = 100) => {
         : '0 %';
 };
 
-export const ordinaryFormat = (number: number, decimals = 2) => {
+export const ordinaryFormat = (
+    number: number | bigint | BigNumber | FixedNumber,
+    decimals = 2
+) => {
+    let val: number | bigint;
+    if (number instanceof BigNumber) {
+        val = number.toBigInt();
+    }
+    if (number instanceof FixedNumber) {
+        return number.toString();
+    }
     return Intl.NumberFormat('en-US', {
         maximumFractionDigits: decimals,
-    }).format(number);
+    }).format(val);
 };
 
 export const formatInput = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -39,4 +50,36 @@ export const formatUsdAmount = (number: number): string => {
 
 export const formatFixedNumber = (value: FixedNumber, decimals = 2): string => {
     return value.round(decimals).toString();
+};
+
+export const formatFilecoin = (
+    number: number,
+    unit: 'fil' | 'picofil' | 'attofil',
+    toUnit: 'fil' | 'picofil' | 'attofil' = 'fil'
+) => {
+    const filAmount = new FilecoinNumber(number, unit);
+    let amount: string;
+    switch (toUnit) {
+        case 'fil':
+            amount = filAmount.toFil();
+            break;
+        case 'picofil':
+            amount = filAmount.toPicoFil();
+            break;
+        case 'attofil':
+            amount = filAmount.toAttoFil();
+            break;
+        default:
+            throw new Error(`Unknown unit: ${unit}`);
+    }
+
+    const value =
+        toUnit === 'fil' && unit !== 'fil'
+            ? ethers.FixedNumber.from(amount)
+            : ethers.BigNumber.from(amount);
+
+    return {
+        value,
+        unit: toUnit.toUpperCase(),
+    };
 };

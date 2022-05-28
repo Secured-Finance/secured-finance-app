@@ -1,23 +1,8 @@
-import ethLogo from '../assets/coins/eth.png';
-import filLogo from '../assets/coins/fil.png';
-import { getCurrencyBy } from './currencyList';
+import { currencyList, getCurrencyBy } from './currencyList';
 
 describe('getCurrencyBy', () => {
-    const eth = {
-        indexCcy: 0,
-        icon: ethLogo,
-        shortName: 'ETH',
-        fullName: 'Ethereum',
-        chainId: 60,
-    };
-
-    const fil = {
-        indexCcy: 1,
-        icon: filLogo,
-        shortName: 'FIL',
-        fullName: 'Filecoin',
-        chainId: 461,
-    };
+    const eth = currencyList[0];
+    const fil = currencyList[1];
 
     it('should return the currency object for an existing string indexCcy', () => {
         expect(getCurrencyBy('indexCcy', '0')).toEqual(eth);
