@@ -45,7 +45,7 @@ export const currencyList = [
         fullName: 'Filecoin',
         chainId: MAINNET_PATH_CODE,
         formatFunction: (amount: number) => {
-            return formatFilecoin(amount, 'fil', 'attofil');
+            return formatFilecoin(amount, 'attofil', 'attofil');
         },
     },
     {
