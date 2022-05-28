@@ -61,7 +61,7 @@ export const currencyList = [
             };
         },
     },
-] as Array<CurrencyInfo>;
+] as Readonly<CurrencyInfo[]>;
 
 export const getCurrencyBy = (
     label: keyof CurrencyInfo,
