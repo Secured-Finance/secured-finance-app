@@ -1,8 +1,8 @@
-import { Input } from 'src/components/common/Inputs';
+import React from 'react';
 import { Dropdown } from 'src/components/common/Dropdown';
+import { Input } from 'src/components/common/Inputs';
 import { termList } from 'src/utils';
 import { InfoTable } from './InfoTable';
-import React from 'react';
 
 interface IPlaceOrderForm {
     amountFILValue: string;
@@ -25,8 +25,8 @@ export const PlaceOrderForm: React.FC<IPlaceOrderForm> = ({
         <>
             <Input
                 label={['Amount FIL', 'Balance: 0.00']}
-                type={'number'}
-                placeholder={'0'}
+                type='number'
+                placeholder='0'
                 value={amountFILValue}
                 onChange={onChangeAmountFILValue}
             />
@@ -38,8 +38,8 @@ export const PlaceOrderForm: React.FC<IPlaceOrderForm> = ({
             />
             <Input
                 label={['Interest rate', 'Market Rate: 7.10 %']}
-                type={'number'}
-                placeholder={'0'}
+                type='number'
+                placeholder='0'
                 value={insertRateValue}
                 onChange={onChangeInsertRate}
             />

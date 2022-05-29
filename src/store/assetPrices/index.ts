@@ -12,8 +12,6 @@ export const {
     updateFilUSDChange,
     updateUSDCUSDPrice,
     updateUSDCUSDChange,
-    fetchAssetPrice,
-    fetchAssetPriceFailure,
 } = assetPricesSlice.actions;
 
 export default assetPricesSlice.reducer;

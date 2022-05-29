@@ -8,9 +8,9 @@ import cm from './Graph.module.scss';
 const labels = ['0', '3m', '6m', '1y', '2y', '3y', '5y'];
 
 interface YieldGraphProps {
-    borrowRates: Array<string>;
-    lendingRates: Array<string>;
-    midRate: Array<string>;
+    borrowRates: Array<number>;
+    lendingRates: Array<number>;
+    midRate: Array<number>;
 }
 
 type CombinedProps = YieldGraphProps & LendingStore;

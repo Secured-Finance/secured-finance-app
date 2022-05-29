@@ -9,6 +9,7 @@ import lending from './lending';
 import lendingTerminal from './lendingTerminal';
 import rates from './rates';
 import sendForm from './sendForm';
+import transaction from './transaction';
 import wallets from './wallets';
 
 export const rootReducers = {
@@ -23,6 +24,7 @@ export const rootReducers = {
     lendingTerminal,
     ledger,
     blockchain,
+    transaction,
 };
 
 const store = configureStore({
@@ -38,6 +40,7 @@ const store = configureStore({
         lendingTerminal,
         ledger,
         blockchain,
+        transaction,
     },
     // This setting reproduce the behavior without redux-toolkit.
     middleware: getDefaultMiddleware =>

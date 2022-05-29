@@ -22,6 +22,13 @@ const initialStore: LendingTerminalStore = {
     isLoading: false,
 };
 
+const setToZeroIfNaN = (value: number) => {
+    if (isNaN(value)) {
+        return 0;
+    }
+    return value;
+};
+
 const lendingTerminalSlice = createSlice({
     name: 'lendingTerminal',
     initialState: initialStore,
@@ -63,16 +70,16 @@ const lendingTerminalSlice = createSlice({
             state.termsIndex = action.payload;
         },
         updateBorrowAmount(state, action: PayloadAction<number>) {
-            state.borrowAmount = action.payload;
+            state.borrowAmount = setToZeroIfNaN(action.payload);
         },
         updateBorrowRate(state, action: PayloadAction<number>) {
-            state.borrowRate = action.payload;
+            state.borrowRate = setToZeroIfNaN(action.payload);
         },
         updateLendAmount(state, action: PayloadAction<number>) {
-            state.lendAmount = action.payload;
+            state.lendAmount = setToZeroIfNaN(action.payload);
         },
         updateLendRate(state, action: PayloadAction<number>) {
-            state.lendRate = action.payload;
+            state.lendRate = setToZeroIfNaN(action.payload);
         },
         updateSelectedCurrency(state, action: PayloadAction<string>) {
             state.selectedCcy = action.payload;

@@ -2,15 +2,10 @@ import axios, { AxiosResponse } from 'axios';
 import { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
-    AssetPrice,
-    fetchAssetPrice,
-    fetchAssetPriceFailure,
     updateEthUSDChange,
     updateEthUSDPrice,
     updateFilUSDChange,
     updateFilUSDPrice,
-    updateUSDCUSDChange,
-    updateUSDCUSDPrice,
 } from '../store/assetPrices';
 import { RootState } from '../store/types';
 
@@ -37,7 +32,7 @@ const useAssetPrice = (
             'https://api.coingecko.com/api/v3/simple/price?ids=' +
             asset +
             '&vs_currencies=usd&include_24hr_change=true';
-        dispatch(fetchAssetPrice());
+
         await axios
             .get(reqUrl)
             .then(async (response: AxiosResponse<ICoinGeckoResponse>) => {
@@ -59,7 +54,6 @@ const useAssetPrice = (
                 }
             })
             .catch(function (error) {
-                dispatch(fetchAssetPriceFailure());
                 console.error(error);
             });
     }, [asset, changeAction, dispatch, priceAction]);
@@ -69,27 +63,10 @@ const useAssetPrice = (
     }, [block, dispatch, fetchPriceRequest]);
 };
 
-export const useEthereumUsd = (): AssetPrice => {
-    const ethereumUsd = useSelector(
-        (state: RootState) => state.assetPrices.ethereum
-    );
+export const useWatchEthereumUsdPrice = () => {
     useAssetPrice('ethereum', updateEthUSDPrice, updateEthUSDChange);
-
-    return ethereumUsd;
 };
 
-export const useFilUsd = (): AssetPrice => {
-    const filecoinUsd = useSelector(
-        (state: RootState) => state.assetPrices.filecoin
-    );
+export const useWatchFilecoinUsdPrice = () => {
     useAssetPrice('filecoin', updateFilUSDPrice, updateFilUSDChange);
-
-    return filecoinUsd;
-};
-
-export const useUSDCUsd = (): AssetPrice => {
-    const USDCUsd = useSelector((state: RootState) => state.assetPrices.usdc);
-    useAssetPrice('usd-coin', updateUSDCUSDPrice, updateUSDCUSDChange);
-
-    return USDCUsd;
 };

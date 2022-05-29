@@ -30,9 +30,11 @@ describe('Filecoin Wallet', () => {
 
         cy.get('[data-cy="wallet-address"]')
             .should('have.length', 2)
-            .and(walletAddress => {
+            .then(walletAddress => {
                 chai.expect(walletAddress[0].textContent).to.be.equal('...');
-                chai.expect(walletAddress[1].textContent).to.be.equal('...');
+                chai.expect(walletAddress[1].textContent).to.not.be.equal(
+                    '...'
+                );
             });
 
         cy.get('[data-cy="filecoin-settings-chip"]').click();
@@ -65,8 +67,10 @@ describe('Filecoin Wallet', () => {
             .should('not.be.disabled')
             .wait(2000)
             .click()
-            .then(() => {
-                cy.get('[data-cy="send-modal"]').should('not.exist');
-            });
+            .then(() =>
+                cy
+                    .get('[data-cy="settlement-validation"]')
+                    .contains('Waiting for confirmation...')
+            );
     });
 });
