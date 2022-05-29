@@ -2,6 +2,13 @@ import { SecuredFinanceClient } from '@secured-finance/sf-client';
 import { ethers } from 'ethers';
 import React, { createContext, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
+import {
+    useWatchEthereumUsdPrice,
+    useWatchFilecoinUsdPrice,
+} from 'src/hooks/useAssetPrices';
+import { useEthereumWalletStore } from 'src/hooks/useEthWallet';
+import { useFilecoinWalletStore } from 'src/hooks/useFilWallet';
+import { FIL_ADDRESS, FIL_WALLET_TYPE } from 'src/services/filecoin';
 import { updateLatestBlock } from 'src/store/blockchain';
 import { ChainUnsupportedError, useWallet } from 'use-wallet';
 import Web3 from 'web3';
@@ -28,12 +35,13 @@ const SecuredFinanceProvider: React.FC = ({ children }) => {
         useState<SecuredFinanceClient>();
     const dispatch = useDispatch();
 
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    window.securedFinance = securedFinance;
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    window.eth = ethereum;
+    const filAddr = localStorage.getItem(FIL_ADDRESS);
+    const filWalletType = localStorage.getItem(FIL_WALLET_TYPE);
+
+    useWatchEthereumUsdPrice();
+    useWatchFilecoinUsdPrice();
+    useFilecoinWalletStore(filAddr, filWalletType);
+    useEthereumWalletStore();
 
     const handleNetworkChanged = (networkId: string | number) => {
         if (networkId !== 3) {
@@ -99,7 +107,7 @@ const SecuredFinanceProvider: React.FC = ({ children }) => {
         }, 2000);
 
         return () => clearInterval(interval);
-    });
+    }, [dispatch, ethereum]);
 
     return (
         <Context.Provider value={{ securedFinance }}>

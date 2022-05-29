@@ -7,6 +7,7 @@
     "@apollo/client": "^3.3.13",
     "@glif/filecoin-address": "^1.1.0-beta.10",
     "@glif/filecoin-message": "^1.1.0-beta.10",
+    "@glif/filecoin-message-confirmer": "^2.0.0-beta.12",
     "@glif/filecoin-number": "^1.1.0-beta.11",
     "@glif/filecoin-wallet-provider": "^1.1.0-beta.11",
     "@ledgerhq/hw-transport-webhid": "^5.51.1",

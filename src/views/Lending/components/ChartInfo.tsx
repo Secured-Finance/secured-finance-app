@@ -1,13 +1,16 @@
 import { useState } from 'react';
+import { useSelector } from 'react-redux';
 import { Dropdown } from 'src/components/new/Dropdown';
 import { FieldValue } from 'src/components/new/FieldValue';
 import { ArrowIcon, FilIcon } from 'src/components/new/icons';
-import { useFilUsd } from 'src/hooks/useAssetPrices';
+import { RootState } from 'src/store/types';
 import { percentFormat, usdFormat } from 'src/utils';
 
 export const ChartInfo = (): JSX.Element => {
     const [cureType, setCurveType] = useState('yield');
-    const { price, change } = useFilUsd();
+    const { price, change } = useSelector(
+        (state: RootState) => state.assetPrices.filecoin
+    );
 
     return (
         <div className='flex items-center justify-between space-x-2'>

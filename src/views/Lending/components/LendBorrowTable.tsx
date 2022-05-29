@@ -5,7 +5,6 @@ import { Button } from 'src/components/new/Button';
 import { Dropdown } from 'src/components/new/Dropdown';
 import { FieldValue } from 'src/components/new/FieldValue';
 import { Input } from 'src/components/new/Input';
-import { useEthereumUsd, useFilUsd } from 'src/hooks/useAssetPrices';
 import { usePlaceOrder } from 'src/hooks/usePlaceOrder';
 import { getUSDCPrice } from 'src/store/assetPrices/selectors';
 import {
@@ -65,8 +64,10 @@ export const LendBorrowTable: React.FC<ILendBorrowTable> = ({
         [borrowAmount, isBorrow, lendAmount]
     );
     const rate = isBorrow ? borrowRate : lendRate;
-    const ethPrice = useEthereumUsd().price;
-    const filPrice = useFilUsd().price;
+    const {
+        ethereum: { price: ethPrice },
+        filecoin: { price: filPrice },
+    } = useSelector((state: RootState) => state.assetPrices);
     const usdcPrice = useSelector(getUSDCPrice);
 
     const USDBalanceMap = {
