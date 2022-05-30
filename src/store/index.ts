@@ -2,6 +2,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import filWalletProvider from '../services/filecoin/store';
 import assetPrices from './assetPrices';
 import blockchain from './blockchain';
+import { listenerMiddleware } from './blockchain/reducer';
 import collateralForm from './collateralForm';
 import history from './history';
 import ledger from './ledger';
@@ -43,7 +44,7 @@ const store = configureStore({
     middleware: getDefaultMiddleware =>
         getDefaultMiddleware({
             serializableCheck: false,
-        }),
+        }).prepend(listenerMiddleware.middleware),
 });
 export default store;
 export type AppDispatch = typeof store.dispatch;

@@ -1,4 +1,5 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import axios from 'axios';
 import { AssetPrices } from './types';
 
 const initialStore: AssetPrices = {
@@ -17,33 +18,57 @@ const initialStore: AssetPrices = {
     isLoading: false,
 };
 
+interface ICoinGeckoResponse {
+    [key: string]: {
+        usd: number;
+        usd_24h_change: number;
+    };
+}
+
+export const fetchAssetPrice = createAsyncThunk(
+    'assetPrices/fetchAssetPrice',
+    async (assetList: string[], thunkAPI) => {
+        try {
+            const reqUrl =
+                'https://api.coingecko.com/api/v3/simple/price?ids=' +
+                encodeURIComponent(assetList.join(',')) +
+                '&vs_currencies=usd&include_24hr_change=true';
+            const response = await axios.get(reqUrl);
+            return response.data;
+        } catch (error) {
+            thunkAPI.rejectWithValue(error);
+        }
+    }
+);
+
 const assetPricesSlice = createSlice({
     name: 'assetPrices',
     initialState: initialStore,
-    reducers: {
-        updateEthUSDPrice: (state, action: PayloadAction<number>) => {
-            state.ethereum.price = action.payload;
+    reducers: {},
+    extraReducers: {
+        [fetchAssetPrice.fulfilled.type]: (
+            state,
+            action: PayloadAction<ICoinGeckoResponse>
+        ) => {
+            state.isLoading = false;
+
+            const {
+                ethereum: { usd: ethPrice, usd_24h_change: ethChange },
+                filecoin: { usd: filPrice, usd_24h_change: filChange },
+                'usd-coin': { usd: usdcPrice, usd_24h_change: usdcChange },
+            } = action.payload;
+            state.ethereum.price = ethPrice;
+            state.ethereum.change = ethChange;
+            state.filecoin.price = filPrice;
+            state.filecoin.change = filChange;
+            state.usdc.price = usdcPrice;
+            state.usdc.change = usdcChange;
         },
-        updateEthUSDChange: (state, action: PayloadAction<number>) => {
-            state.ethereum.change = action.payload;
+        [fetchAssetPrice.pending.type]: state => {
+            state.isLoading = true;
         },
-        updateFilUSDPrice: (state, action: PayloadAction<number>) => {
-            state.filecoin.price = action.payload;
-        },
-        updateFilUSDChange: (state, action: PayloadAction<number>) => {
-            state.filecoin.change = action.payload;
-        },
-        updateUSDCUSDPrice: (state, action: PayloadAction<number>) => {
-            state.usdc.price = action.payload;
-        },
-        updateUSDCUSDChange: (state, action: PayloadAction<number>) => {
-            state.usdc.change = action.payload;
-        },
-        fetchAssetPrice: (state, action: PayloadAction<boolean>) => {
-            state.isLoading = action.payload;
-        },
-        fetchAssetPriceFailure: (state, action: PayloadAction<boolean>) => {
-            state.isLoading = action.payload;
+        [fetchAssetPrice.rejected.type]: state => {
+            state.isLoading = false;
         },
     },
 });

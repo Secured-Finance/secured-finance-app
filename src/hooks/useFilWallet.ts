@@ -12,6 +12,7 @@ import {
 import { FilecoinWalletType } from 'src/services/filecoin/store/types';
 import { getFilecoinNetwork } from 'src/services/filecoin/utils';
 import connectWithLedger from 'src/services/ledger/connectLedger';
+import { AppDispatch } from 'src/store';
 import { RootState } from 'src/store/types';
 import {
     updateFilWalletActions,
@@ -28,7 +29,6 @@ import {
     updateFilWalletViaRPC,
 } from 'src/store/wallets/helpers';
 import { getFilUSDBalance } from 'src/store/wallets/selectors';
-import { useFilUsd } from './useAssetPrices';
 import useFilWasm from './useFilWasm';
 import useModal from './useModal';
 
@@ -99,9 +99,11 @@ export const useFilecoinWalletInfo = () => {
 };
 
 export const useFilecoinWalletStore = (): WalletBase => {
-    const dispatch = useDispatch();
+    const dispatch = useDispatch<AppDispatch>();
     const { loaded } = useFilWasm();
-    const { price, change } = useFilUsd();
+    const { price, change } = useSelector(
+        (state: RootState) => state.assetPrices.filecoin
+    );
     const filWallet = useSelector((state: RootState) => state.wallets.filecoin);
     const walletProvider = useSelector(
         (state: RootState) => state.filWalletProvider.walletProvider

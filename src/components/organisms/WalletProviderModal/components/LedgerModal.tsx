@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Modal, ModalProps, ModalTitle } from 'src/components/atoms';
 import { Button } from 'src/components/common/Buttons';
 import connectWithLedger from 'src/services/ledger/connectLedger';
+import { AppDispatch } from 'src/store';
 import {
     isDeviceUnlocked,
     isUsedByAnotherApp,
@@ -62,7 +63,7 @@ const modalTextMap = {
 const LedgerModal: React.FC<ModalProps & { onClose: () => void }> = ({
     onClose,
 }) => {
-    const dispatch = useDispatch();
+    const dispatch = useDispatch<AppDispatch>();
     const isDeviceUsedByAnotherApp = useSelector(isUsedByAnotherApp);
     const isUnlocked = useSelector(isDeviceUnlocked);
     const [contentState, setContentState] =
