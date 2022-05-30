@@ -3,6 +3,7 @@ export const AddressUtils = {
         return address1.toLowerCase() === address2.toLowerCase();
     },
     format: (address: string, length: number): string => {
+        if (!address) return '...';
         return address.slice(0, length) + '...' + address.slice(-4);
     },
 };

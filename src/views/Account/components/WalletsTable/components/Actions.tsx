@@ -6,10 +6,11 @@ import {
     WalletAccountModal,
     WalletProviderModal,
 } from 'src/components/organisms';
+import useCheckCollateralBook from 'src/hooks/useCheckCollateralBook';
 import useModal from 'src/hooks/useModal';
 import { supportedCoins } from 'src/store/wallets/types';
+import { getCurrencyBy } from 'src/utils/currencyList';
 import { useWallet } from 'use-wallet';
-import useCheckCollateralBook from 'src/hooks/useCheckCollateralBook';
 
 export interface ActionProps {
     callbackMap?: {
@@ -24,7 +25,9 @@ const RenderActions: React.FC<ActionProps> = ({ callbackMap, ccyIndex }) => {
     const [onPresentSettingsModal] = useModal(
         <WalletAccountModal ccyIndex={ccyIndex} />
     );
-    const [onPresentSendModal] = useModal(<SendModal ccyIndex={ccyIndex} />);
+    const [onPresentSendModal] = useModal(
+        <SendModal currencyInfo={getCurrencyBy('indexCcy', ccyIndex)} />
+    );
     const { account } = useWallet();
     const status = useCheckCollateralBook(account);
     const [onPresentCollateralModal] = useModal(
