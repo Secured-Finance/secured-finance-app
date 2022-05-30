@@ -35,5 +35,12 @@ export const isAnyWalletConnected = (
     return !!state.wallets.filecoin.address || !!state.wallets.ethereum.address;
 };
 
-export const getFilActions = (state: RootState) =>
-    state.wallets.filecoin.actions;
+export const getBalance = (
+    state: RootState,
+    walletName: 'filecoin' | 'ethereum' | 'usdc'
+) => {
+    if (walletName === 'usdc') {
+        return 0;
+    }
+    return state.wallets[walletName].balance;
+};

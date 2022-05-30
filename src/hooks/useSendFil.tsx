@@ -4,15 +4,27 @@ import {
     Message,
     SignedLotusMessage,
 } from '@glif/filecoin-message';
+import confirmMessage from '@glif/filecoin-message-confirmer';
 import { BigNumber, FilecoinNumber } from '@glif/filecoin-number';
+import { CID } from '@glif/filecoin-wallet-provider';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import {
+    FIL_JSON_RPC_ENDPOINT,
+    getFilecoinNetwork,
+} from 'src/services/filecoin';
 import {
     emptyGasInfo,
     insufficientMsigFundsErr,
     insufficientSendFundsErr,
 } from 'src/services/ledger/constants';
-import { setMaxTxFee, updateSendAmount } from 'src/store/sendForm';
+import { setMaxTxFee } from 'src/store/sendForm';
+import {
+    transactionFailed,
+    updateStatus,
+    updateTransaction,
+} from 'src/store/transaction';
+import { TransactionStatus } from 'src/store/transaction/types';
 import { RootState } from 'src/store/types';
 import { getFilWallet } from 'src/store/wallets/selectors';
 
@@ -32,12 +44,7 @@ const friendlifyError = (err: Error) => {
     return err.message;
 };
 
-export const useSendFil = (
-    amount = 0,
-    toAddress: string,
-    close: () => void,
-    setOngoingTx: React.Dispatch<React.SetStateAction<boolean>>
-) => {
+export const useSendFil = (amount = 0, toAddress: string) => {
     const [, setFrozen] = useState(false);
     const [gasInfo, setGasInfo] = useState(emptyGasInfo);
     const [, setValueError] = useState('');
@@ -137,6 +144,7 @@ export const useSendFil = (
 
             setMPoolPushing(true);
             const validMsg = await provider.simulateMessage(message);
+
             if (validMsg) {
                 const msgCid = await provider.sendMessage(
                     message,
@@ -161,13 +169,17 @@ export const useSendFil = (
 
     const sendFil = useCallback(async () => {
         try {
+            dispatch(updateStatus(TransactionStatus.Created));
             const message = await send();
             if (message) {
-                updateSendAmount(0);
-                close();
+                dispatch(
+                    updateTransaction(message['/'], TransactionStatus.Pending)
+                );
+                return message;
             }
         } catch (err) {
             const e = err as Error;
+            dispatch(transactionFailed(e.message));
             if (e.message.includes('Unexpected number of items')) {
                 console.error(
                     'Ledger devices cannot sign arbitrary base64 params yet. Coming soon.'
@@ -176,11 +188,34 @@ export const useSendFil = (
                 console.error(e.message);
             }
         } finally {
-            setOngoingTx(false);
             setFetchingTxDetails(false);
             setMPoolPushing(false);
         }
-    }, [close, send, setOngoingTx]);
+    }, [dispatch, send]);
 
-    return { sendFil };
+    const validateFilecoinTransaction = useCallback(
+        async (message: CID) => {
+            if (!message) {
+                dispatch(transactionFailed('No valid transaction to confirm'));
+                return false;
+            }
+
+            const confirmed = await confirmMessage(message['/'], {
+                apiAddress: FIL_JSON_RPC_ENDPOINT[getFilecoinNetwork()],
+            });
+            if (confirmed) {
+                dispatch(
+                    updateTransaction(message['/'], TransactionStatus.Confirmed)
+                );
+            } else {
+                dispatch(
+                    updateTransaction(message['/'], TransactionStatus.Error)
+                );
+            }
+            return confirmed;
+        },
+        [dispatch]
+    );
+
+    return { sendFil, validateFilecoinTransaction };
 };

@@ -5,9 +5,8 @@ import { Subheader } from 'src/components/common/Subheader';
 import { Cell, CellKey, CellValue, Table } from 'src/components/common/Table';
 import { CollateralModal } from 'src/components/organisms';
 import useCollateralBook from 'src/hooks/useCollateralBook';
-import { useEthereumWalletStore } from 'src/hooks/useEthWallet';
-import { useFilecoinWalletStore } from 'src/hooks/useFilWallet';
 import useModal from 'src/hooks/useModal';
+import { RootState } from 'src/store/types';
 import { getTotalUSDBalance } from 'src/store/wallets/selectors';
 import { getDisplayBalance, ordinaryFormat, usdFormat } from 'src/utils';
 import styled from 'styled-components';
@@ -15,8 +14,11 @@ import { useWallet } from 'use-wallet';
 
 export const Balances: React.FC = () => {
     const totalUSDBalance = useSelector(getTotalUSDBalance);
-    const ethWallet = useEthereumWalletStore();
-    const filWallet = useFilecoinWalletStore();
+    const {
+        filecoin: { balance: filecoinBalance },
+        ethereum: { balance: ethereumBalance },
+    } = useSelector((state: RootState) => state.wallets);
+
     const { account }: { account: string } = useWallet();
     const colBook = useCollateralBook(account ? account : '');
 
@@ -39,8 +41,8 @@ export const Balances: React.FC = () => {
                 <Cell>
                     <CellKey>ETH Balance</CellKey>
                     <CellValue>
-                        {ethWallet.balance != null
-                            ? ordinaryFormat(ethWallet.balance)
+                        {ethereumBalance != null
+                            ? ordinaryFormat(ethereumBalance)
                             : 0}{' '}
                         ETH
                     </CellValue>
@@ -48,9 +50,7 @@ export const Balances: React.FC = () => {
                 <Cell style={{ marginBottom: 20 }}>
                     <CellKey>FIL Balance</CellKey>
                     <CellValue>
-                        {filWallet.balance != null
-                            ? ordinaryFormat(filWallet.balance)
-                            : 0}{' '}
+                        {filecoinBalance ? ordinaryFormat(filecoinBalance) : 0}{' '}
                         FIL
                     </CellValue>
                 </Cell>

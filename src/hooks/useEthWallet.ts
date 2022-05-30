@@ -54,38 +54,34 @@ export const useEthereumWalletStore = () => {
         return { usdBalance, inEther };
     }, [account, balance, price]);
 
-    const fetchEthStore = useCallback(
-        async (isMounted: boolean) => {
-            const { usdBalance, inEther } = getWalletBalance();
-            const portfolioShare = new BigNumber(usdBalance)
-                .times(100)
-                .dividedBy(new BigNumber(totalUSDBalance))
-                .toNumber();
+    const fetchEthStore = useCallback(async () => {
+        const { usdBalance, inEther } = getWalletBalance();
+        const portfolioShare = new BigNumber(usdBalance)
+            .times(100)
+            .dividedBy(new BigNumber(totalUSDBalance))
+            .toNumber();
 
-            dispatch(connectEthWallet(account));
-            dispatch(updateEthWalletBalance(inEther));
-            dispatch(updateEthWalletAssetPrice(price));
-            dispatch(updateEthWalletDailyChange(change));
-            dispatch(updateEthWalletUSDBalance(usdBalance));
-            if (portfolioShare !== (null || Infinity)) {
-                dispatch(updateEthWalletPortfolioShare(portfolioShare));
-            }
-            dispatch(recalculateTotalUSDBalance());
-            dispatch(updateEthWalletActions(actObj));
-        },
-        [
-            getWalletBalance,
-            totalUSDBalance,
-            dispatch,
-            account,
-            price,
-            change,
-            actObj,
-        ]
-    );
+        dispatch(connectEthWallet(account));
+        dispatch(updateEthWalletBalance(inEther));
+        dispatch(updateEthWalletAssetPrice(price));
+        dispatch(updateEthWalletDailyChange(change));
+        dispatch(updateEthWalletUSDBalance(usdBalance));
+        if (portfolioShare !== (null || Infinity)) {
+            dispatch(updateEthWalletPortfolioShare(portfolioShare));
+        }
+        dispatch(recalculateTotalUSDBalance());
+        dispatch(updateEthWalletActions(actObj));
+    }, [
+        getWalletBalance,
+        totalUSDBalance,
+        dispatch,
+        account,
+        price,
+        change,
+        actObj,
+    ]);
 
     useEffect(() => {
-        let isMounted = true;
         if (
             account &&
             balance &&
@@ -94,12 +90,8 @@ export const useEthereumWalletStore = () => {
             price !== 0 &&
             change !== 0
         ) {
-            fetchEthStore(isMounted);
+            fetchEthStore();
         }
-
-        return () => {
-            isMounted = false;
-        };
     }, [
         block,
         dispatch,
@@ -135,24 +127,17 @@ export const useEthBalance = () => {
         (state: RootState) => state.wallets.ethereum.balance
     );
 
-    const fetchEthStore = useCallback(
-        async (isMounted: boolean) => {
-            const inEther = new BigNumber(balance)
-                .dividedBy(new BigNumber(10).pow(18))
-                .toNumber();
-            dispatch(updateEthWalletBalance(inEther));
-        },
-        [dispatch, balance]
-    );
+    const fetchEthStore = useCallback(async () => {
+        const inEther = new BigNumber(balance)
+            .dividedBy(new BigNumber(10).pow(18))
+            .toNumber();
+        dispatch(updateEthWalletBalance(inEther));
+    }, [dispatch, balance]);
 
     useEffect(() => {
-        let isMounted = true;
         if (account && balance) {
-            fetchEthStore(isMounted);
+            fetchEthStore();
         }
-        return () => {
-            isMounted = false;
-        };
     }, [dispatch, account, balance, fetchEthStore]);
 
     return ethBalance;

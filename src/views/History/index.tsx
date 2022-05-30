@@ -6,7 +6,7 @@ import theme from 'src/theme';
 import styled from 'styled-components';
 import { HistoryTable } from './components';
 
-const History: React.FC = () => {
+const History = () => {
     const loans = useLoanDeals();
     const borrows = useBorrowDeals();
 
