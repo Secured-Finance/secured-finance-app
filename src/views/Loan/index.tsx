@@ -325,13 +325,15 @@ const LoanScreen = () => {
                     </StyledColumn>
                     <Spacer size='lg' />
                     <StyledColumn>
-                        <NextCouponPaymentCard
-                            onClick={onPresentSendModal}
-                            couponPayment={couponPayment}
-                            currency={loanCurrency.shortName}
-                            filPrice={filPrice}
-                            totalAmount={format}
-                        ></NextCouponPaymentCard>
+                        {couponPayment && (
+                            <NextCouponPaymentCard
+                                onClick={onPresentSendModal}
+                                couponPayment={couponPayment}
+                                filPrice={filPrice}
+                                totalAmount={format}
+                            ></NextCouponPaymentCard>
+                        )}
+
                         {colBook.vault !== '' ? (
                             <CounterpartyContainer>
                                 <StyledSubcontainer>

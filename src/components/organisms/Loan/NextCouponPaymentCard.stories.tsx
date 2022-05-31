@@ -1,7 +1,6 @@
 import { Meta, Story } from '@storybook/react';
 import { HashRouter as Router } from 'react-router-dom';
 import theme from 'src/theme';
-import { Currency } from 'src/utils/currencyList';
 import { CouponPayment } from 'src/views/Loan';
 import { ThemeProvider } from 'styled-components';
 import { NextCouponPaymentCard } from './NextCouponPaymentCard';
@@ -26,7 +25,6 @@ export const Default: Story = () => {
             <Router>
                 <NextCouponPaymentCard
                     couponPayment={couponPayment}
-                    currency={Currency.FIL}
                     filPrice={8}
                     onClick={() => {
                         return {
