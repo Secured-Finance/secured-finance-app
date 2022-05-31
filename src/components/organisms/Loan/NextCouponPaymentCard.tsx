@@ -6,18 +6,15 @@ import { Button } from 'src/components/atoms';
 import { resetTransaction } from 'src/store/transaction';
 import theme from 'src/theme';
 import { formatDate, usdFormat } from 'src/utils';
-import { Currency } from 'src/utils/currencyList';
 import { CouponPayment } from 'src/views/Loan/index';
 
 export const NextCouponPaymentCard = ({
     couponPayment,
-    currency,
     filPrice,
     totalAmount,
     onClick,
 }: {
     couponPayment: CouponPayment;
-    currency: Currency;
     filPrice: number;
     totalAmount: (amount: number) => string;
     onClick: () => void;
@@ -73,19 +70,17 @@ export const NextCouponPaymentCard = ({
             <div className='flex capitalize'>Next Coupon Payment</div>
             <div className='m-2 mb-0 flex flex-grow flex-col border-2 border-tableBorder p-4'>
                 <Row
-                    label={totalAmount(
-                        couponPayment ? couponPayment.amount : 0
-                    )}
-                    value={couponUsdPayment(couponPayment?.amount)}
+                    label={totalAmount(couponPayment.amount)}
+                    value={couponUsdPayment(couponPayment.amount)}
                     highlightLabel
                 ></Row>
                 <Row
                     label='Payment Notification'
-                    value={formatDate(couponPayment?.notice)}
+                    value={formatDate(couponPayment.notice)}
                 />
                 <Row
                     label='Payment Due Date'
-                    value={formatDate(couponPayment?.payment)}
+                    value={formatDate(couponPayment.payment)}
                 />
             </div>
             <div>
