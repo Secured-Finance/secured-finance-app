@@ -1,6 +1,5 @@
 import { Meta, Story } from '@storybook/react';
 import { StorybookProviders } from 'src/setupStorybook';
-import { updateEthUSDPrice, updateFilUSDPrice } from 'src/store/assetPrices';
 import {
     updateEthWalletBalance,
     updateFilWalletBalance,
@@ -8,12 +7,7 @@ import {
 import { currencyList } from 'src/utils/currencyList';
 import SendModal from './SendModal';
 
-const PopulateStore = [
-    updateFilWalletBalance(100),
-    updateFilUSDPrice(8.2),
-    updateEthUSDPrice(2000),
-    updateEthWalletBalance(12),
-];
+const PopulateStore = [updateFilWalletBalance(100), updateEthWalletBalance(12)];
 
 export default {
     title: 'components/organisms/SendModal/SendModal',

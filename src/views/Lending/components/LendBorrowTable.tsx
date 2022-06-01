@@ -6,7 +6,6 @@ import { Dropdown } from 'src/components/new/Dropdown';
 import { FieldValue } from 'src/components/new/FieldValue';
 import { Input } from 'src/components/new/Input';
 import { usePlaceOrder } from 'src/hooks/usePlaceOrder';
-import { getUSDCPrice } from 'src/store/assetPrices/selectors';
 import {
     updateBorrowAmount,
     updateBorrowRate,
@@ -65,10 +64,10 @@ export const LendBorrowTable: React.FC<ILendBorrowTable> = ({
     );
     const rate = isBorrow ? borrowRate : lendRate;
     const {
-        ethereum: { price: ethPrice },
-        filecoin: { price: filPrice },
+        filecoin: filPrice,
+        ethereum: ethPrice,
+        usdc: usdcPrice,
     } = useSelector((state: RootState) => state.assetPrices);
-    const usdcPrice = useSelector(getUSDCPrice);
 
     const USDBalanceMap = {
         ETH: ethUSDBalance,
@@ -103,11 +102,11 @@ export const LendBorrowTable: React.FC<ILendBorrowTable> = ({
         if (amount.isNaN()) return new BigNumber(0);
         switch (selectedCcy) {
             case 'FIL':
-                return amount.multipliedBy(filPrice);
+                return amount.multipliedBy(filPrice.price);
             case 'ETH':
-                return amount.multipliedBy(ethPrice);
+                return amount.multipliedBy(ethPrice.price);
             case 'USDC':
-                return amount.multipliedBy(usdcPrice);
+                return amount.multipliedBy(usdcPrice.price);
             default:
                 return new BigNumber(0);
         }

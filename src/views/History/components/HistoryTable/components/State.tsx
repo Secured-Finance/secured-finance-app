@@ -1,20 +1,15 @@
+import { Loan } from '@secured-finance/sf-graph-client/dist/generated';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
-interface StateProps {
-    loan: any;
-}
-
-const RenderAction: React.FC<StateProps> = ({ loan }) => {
+const RenderAction = ({ loan }: { loan: Loan }) => {
     return (
         <div>
             {
                 <StyledActionsContainer>
                     <StyledActionButton>
-                        <StyledLink to={`/loan/${loan.loanId}`}>
-                            State
-                        </StyledLink>
+                        <StyledLink to={`/loan/${loan.id}`}>State</StyledLink>
                         {/* State */}
                     </StyledActionButton>
                 </StyledActionsContainer>
