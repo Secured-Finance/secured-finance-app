@@ -2,10 +2,6 @@ import { SecuredFinanceClient } from '@secured-finance/sf-client';
 import { ethers } from 'ethers';
 import React, { createContext, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import {
-    useWatchEthereumUsdPrice,
-    useWatchFilecoinUsdPrice,
-} from 'src/hooks/useAssetPrices';
 import { useEthereumWalletStore } from 'src/hooks/useEthWallet';
 import { useFilecoinWalletStore } from 'src/hooks/useFilWallet';
 import { FIL_ADDRESS, FIL_WALLET_TYPE } from 'src/services/filecoin';
@@ -39,8 +35,6 @@ const SecuredFinanceProvider: React.FC = ({ children }) => {
     const filAddr = localStorage.getItem(FIL_ADDRESS);
     const filWalletType = localStorage.getItem(FIL_WALLET_TYPE);
 
-    useWatchEthereumUsdPrice();
-    useWatchFilecoinUsdPrice();
     useFilecoinWalletStore(filAddr, filWalletType);
     useEthereumWalletStore();
 
