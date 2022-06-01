@@ -5,6 +5,7 @@ import { WalletAccountModal } from 'src/components/organisms';
 import { useResetFilWalletProvider } from 'src/services/filecoin';
 import { FilecoinWalletType } from 'src/services/filecoin/store/types';
 import connectWithLedger from 'src/services/ledger/connectLedger';
+import { AppDispatch } from 'src/store';
 import { RootState } from 'src/store/types';
 import {
     updateFilWalletActions,
@@ -22,7 +23,7 @@ export const useFilecoinWalletStore = (
     filAddr: string,
     filWalletType: string
 ) => {
-    const dispatch = useDispatch();
+    const dispatch = useDispatch<AppDispatch>();
     const { price, change } = useSelector(
         (state: RootState) => state.assetPrices.filecoin
     );

@@ -1,4 +1,10 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import {
+    createListenerMiddleware,
+    createSlice,
+    PayloadAction,
+} from '@reduxjs/toolkit';
+import { fetchAssetPrice } from '../assetPrices/reducer';
+import { RootState } from '../types';
 import { Blockchain } from './type';
 
 const initialState: Blockchain = {
@@ -16,3 +22,19 @@ const blockchainSlice = createSlice({
 });
 
 export default blockchainSlice;
+
+export const listenerMiddleware = createListenerMiddleware();
+listenerMiddleware.startListening({
+    predicate: (_action, currentState, previousState) => {
+        const prevBlock = (previousState as RootState).blockchain.latestBlock;
+        const currBlock = (currentState as RootState).blockchain.latestBlock;
+        return currBlock !== prevBlock;
+    },
+
+    effect: async (action, listenerApi) => {
+        listenerApi.cancelActiveListeners();
+        listenerApi.dispatch(
+            fetchAssetPrice(['ethereum', 'filecoin', 'usd-coin'])
+        );
+    },
+});

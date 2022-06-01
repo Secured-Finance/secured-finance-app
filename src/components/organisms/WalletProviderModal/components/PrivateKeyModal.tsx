@@ -308,8 +308,8 @@ const StyledInput = styled.textarea`
     background-color: transparent;
     resize: none;
     padding: 0;
-    min-height: 52px;
-    max-height: 150px;
+    min-height: 80px;
+    max-height: 180px;
     font-weight: 500;
     font-family: 'Inter';
     color: ${props => props.theme.colors.lightText};
