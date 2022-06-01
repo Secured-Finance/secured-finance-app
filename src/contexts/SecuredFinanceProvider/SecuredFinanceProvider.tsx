@@ -8,6 +8,7 @@ import { FIL_ADDRESS, FIL_WALLET_TYPE } from 'src/services/filecoin';
 import { updateLatestBlock } from 'src/store/blockchain';
 import { ChainUnsupportedError, useWallet } from 'use-wallet';
 import Web3 from 'web3';
+import { hexToDec } from 'src/utils';
 
 export const CACHED_PROVIDER_KEY = 'CACHED_PROVIDER_KEY';
 
@@ -37,9 +38,9 @@ const SecuredFinanceProvider: React.FC = ({ children }) => {
     useFilecoinWalletStore(filAddr, filWalletType);
     useEthereumWalletStore();
 
-    const handleNetworkChanged = (networkId: string | number) => {
-        if (networkId !== 3) {
-            alert('Unsupported network, please use Ropsten (Chain ID: 3)');
+    const handleNetworkChanged = (networkId: string) => {
+        if (hexToDec(networkId) !== 4) {
+            alert('Unsupported network, please use Rinkeby (Chain ID: 4)');
         }
     };
 
