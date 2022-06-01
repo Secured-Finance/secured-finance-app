@@ -1,4 +1,4 @@
-import { asciiToHex, hexToAscii, rightPad } from 'web3-utils';
+import { asciiToHex, hexToAscii, rightPad, hexToNumber } from 'web3-utils';
 
 export const toBytes32 = (key: string) => rightPad(asciiToHex(key), 64);
 
@@ -19,3 +19,9 @@ export const toKebabCase = (str: string) =>
         )
         .map(x => x.toLowerCase())
         .join('-');
+
+export const hexToDec = (key: string): number => {
+    if (key != null) {
+        return hexToNumber(key);
+    }
+};
