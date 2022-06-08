@@ -1,31 +1,34 @@
 import BigNumber from 'bignumber.js';
-import React, { useEffect, useState } from 'react';
-import { connect, useDispatch, useSelector } from 'react-redux';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { Button, Container, RenderTerms, Spacer } from 'src/components/atoms';
+import { SendModal } from 'src/components/organisms';
+import { NextCouponPaymentCard } from 'src/components/organisms/Loan/NextCouponPaymentCard';
 import { Page } from 'src/components/templates';
 import useCollateralBook from 'src/hooks/useCollateralBook';
+import { useCrosschainAddressByChainId } from 'src/hooks/useCrosschainAddress';
 import { useLoanInformation } from 'src/hooks/useLoanHistory';
+import useModal from 'src/hooks/useModal';
 import { RootState } from 'src/store/types';
 import theme from 'src/theme';
 import {
     AddressUtils,
-    DEFAULT_COLLATERAL_VAULT,
     formatDate,
-    fromBytes32,
     getDisplayBalance,
     ordinaryFormat,
     percentFormat,
-    usdFormat,
 } from 'src/utils';
+import {
+    Currency,
+    currencyList,
+    formatAmount,
+    getCurrencyBy,
+} from 'src/utils/currencyList';
 import styled from 'styled-components';
 import { useWallet } from 'use-wallet';
 
-interface LoanScreenProps {
-    loan?: any;
-}
-
-interface CouponPayment {
+export interface CouponPayment {
     amount: number;
     id: number | string;
     isDone: boolean;
@@ -35,127 +38,176 @@ interface CouponPayment {
     __typename?: string;
 }
 
-const initCoupon: CouponPayment = {
-    amount: 0,
-    id: 0,
-    isDone: false,
-    notice: 1648016979,
-    payment: 1649226579,
-    txHash: '0x',
-    __typename: 'SchedulePayment',
-};
-
-type CombinedProps = LoanScreenProps;
-
-const LoanScreen: React.FC<CombinedProps> = () => {
-    const params: any = useParams();
-    const { account } = useWallet();
+const LoanScreen = () => {
+    const params = useParams();
     const loan = useLoanInformation(params.loanId);
+
+    const { account } = useWallet();
     const [couponPayment, setCouponPayment] = useState<CouponPayment>();
     const [counterpartyAddr, setCounterpartyAddr] = useState('');
-    const dispatch = useDispatch();
+    const [recipientAddress, setRecipientAddress] = useState('');
     const filPrice = useSelector(
         (state: RootState) => state.assetPrices.filecoin.price
     );
-    const colBook = useCollateralBook(
-        counterpartyAddr ? counterpartyAddr : '',
-        DEFAULT_COLLATERAL_VAULT
+    const colBook = useCollateralBook(counterpartyAddr ? counterpartyAddr : '');
+
+    const counterPartyWallet = useMemo(() => {
+        if (account && loan) {
+            if (loan.lender === account.toLowerCase()) {
+                return loan.borrower;
+            } else {
+                return loan.lender;
+            }
+        }
+        return '';
+    }, [account, loan]);
+
+    const loanCurrency = useMemo(() => {
+        if (loan?.currency) {
+            return getCurrencyBy('shortName', loan.currency.shortName);
+        } else {
+            // we should never be in this condition, but just in case.
+            // TODO: manage global error with a component and display it to the user
+            return currencyList[1];
+        }
+    }, [loan]);
+
+    const format = useCallback(
+        (amount: number) => {
+            const { value, unit } = formatAmount(
+                amount,
+                loanCurrency.shortName
+            );
+            return ordinaryFormat(value) + ` ${unit}`;
+        },
+        [loanCurrency.shortName]
     );
 
-    const getLoanCcy = (currency: string) => {
-        return fromBytes32(currency);
-    };
+    const crossChainAddress = useCrosschainAddressByChainId(
+        counterPartyWallet ? counterPartyWallet : '',
+        loanCurrency.shortName
+    );
 
-    const handleNotional = () => {
-        return (
-            ordinaryFormat(loan?.notional) + ` ${getLoanCcy(loan?.currency)}`
-        );
-    };
+    const [onPresentSendModal] = useModal(
+        <SendModal
+            currencyInfo={loanCurrency}
+            toAddress={recipientAddress}
+            amount={loan?.notional}
+            counterpartyAddress={counterpartyAddr}
+            nextCouponPaymentDate={couponPayment?.payment}
+            settleTransaction
+        />
+    );
 
-    const handleInterest = () => {
-        const interestPayments = totalInterest(
-            loan?.notional,
-            loan?.rate,
-            loan?.term
-        );
-        const ccy = getLoanCcy(loan?.currency);
-        return ordinaryFormat(interestPayments) + ` ${ccy}`;
-    };
-
-    const totalInterest = (amount: number, rate: number, term: string) => {
-        let periods: number;
-        const interestRate = new BigNumber(rate).dividedBy(10000).toNumber();
-        switch (term) {
-            case '90':
-                periods = 0.25;
-                break;
-            case '180':
-                periods = 0.5;
-                break;
-            case '365':
-                periods = 1;
-                break;
-            case '730':
-                periods = 2;
-                break;
-            case '1095':
-                periods = 3;
-                break;
-            case '1825':
-                periods = 5;
-                break;
-            default:
-                break;
+    const notional = useMemo(() => {
+        if (loan && loanCurrency) {
+            return format(loan.notional);
         }
-        const interestPayments = new BigNumber(amount)
-            .multipliedBy(interestRate)
-            .multipliedBy(periods)
-            .toNumber();
-        return interestPayments;
-    };
 
-    const handleTotalRepay = () => {
-        const interestPayments = totalInterest(
-            loan?.notional,
-            loan?.rate,
-            loan?.term
-        );
-        const totalRepay = new BigNumber(loan?.notional)
-            .plus(interestPayments)
-            .toNumber();
+        return 0;
+    }, [format, loan, loanCurrency]);
 
-        return ordinaryFormat(totalRepay) + ` ${getLoanCcy(loan?.currency)}`;
-    };
+    const totalInterest = useCallback(
+        (amount: number, rate: number, term: string) => {
+            let periods: number;
+            const interestRate = new BigNumber(rate)
+                .dividedBy(10000)
+                .toNumber();
+            switch (term) {
+                case '90':
+                    periods = 0.25;
+                    break;
+                case '180':
+                    periods = 0.5;
+                    break;
+                case '365':
+                    periods = 1;
+                    break;
+                case '730':
+                    periods = 2;
+                    break;
+                case '1095':
+                    periods = 3;
+                    break;
+                case '1825':
+                    periods = 5;
+                    break;
+                default:
+                    break;
+            }
+            const interestPayments = new BigNumber(amount)
+                .multipliedBy(interestRate)
+                .multipliedBy(periods)
+                .toNumber();
+            return interestPayments;
+        },
+        []
+    );
 
-    const nextCouponPayment = () => {
+    const interests = useMemo(() => {
+        if (loan && loanCurrency) {
+            const interestPayments = totalInterest(
+                loan?.notional,
+                loan?.rate,
+                loan?.term
+            );
+
+            return format(interestPayments);
+        }
+
+        return 0;
+    }, [format, loan, loanCurrency, totalInterest]);
+
+    const totalRepay = useMemo(() => {
+        if (loan && loanCurrency) {
+            const interestPayments = totalInterest(
+                loan?.notional,
+                loan?.rate,
+                loan?.term
+            );
+            const totalRepay = new BigNumber(loan?.notional)
+                .plus(interestPayments)
+                .toNumber();
+
+            return format(totalRepay);
+        }
+
+        return 0;
+    }, [format, loan, loanCurrency, totalInterest]);
+
+    const nextCouponPayment = useCallback(() => {
         const payment: Array<CouponPayment> =
-            loan?.schedule.payments?.filter((payment: any) => {
+            loan?.schedule.payments?.filter((payment: { isDone: boolean }) => {
                 return payment.isDone === false;
             }) || [];
         setCouponPayment(payment[0]);
-    };
-
-    const couponUsdPayment = (amount: number) => {
-        const usdPayment = new BigNumber(amount)
-            .multipliedBy(filPrice)
-            .toNumber();
-        return usdFormat(usdPayment);
-    };
-
-    const handleCounterpartyAddr = () => {
-        if (loan.lender === account.toLowerCase()) {
-            setCounterpartyAddr(loan?.borrower);
-        } else {
-            setCounterpartyAddr(loan?.lender);
-        }
-    };
+    }, [loan]);
 
     useEffect(() => {
         if (loan != null) {
+            setCounterpartyAddr(counterPartyWallet);
             nextCouponPayment();
-            handleCounterpartyAddr();
+            if (
+                crossChainAddress &&
+                loan?.currency &&
+                loanCurrency.shortName === Currency.FIL
+            ) {
+                setRecipientAddress(crossChainAddress.address);
+            } else {
+                setRecipientAddress(counterPartyWallet);
+            }
         }
-    }, [dispatch, setCouponPayment, setCounterpartyAddr, loan, account]);
+    }, [
+        setCouponPayment,
+        setCounterpartyAddr,
+        loan,
+        account,
+        nextCouponPayment,
+        counterpartyAddr,
+        counterPartyWallet,
+        loanCurrency,
+        crossChainAddress,
+    ]);
 
     return (
         <Page background={theme.colors.background}>
@@ -176,9 +228,7 @@ const LoanScreen: React.FC<CombinedProps> = () => {
                                     <StyledItemText>
                                         Principal notional
                                     </StyledItemText>
-                                    <StyledItemText>
-                                        {handleNotional()}
-                                    </StyledItemText>
+                                    <StyledItemText>{notional}</StyledItemText>
                                 </StyledRowContainer>
                                 <StyledRowContainer marginTop={'10px'}>
                                     <StyledItemText>Start Date</StyledItemText>
@@ -197,7 +247,10 @@ const LoanScreen: React.FC<CombinedProps> = () => {
                                 <StyledRowContainer marginTop={'10px'}>
                                     <StyledItemText>Term</StyledItemText>
                                     <StyledItemText>
-                                        <RenderTerms index={loan?.term} />
+                                        <RenderTerms
+                                            label={'termIndex'}
+                                            value={loan?.term}
+                                        />
                                     </StyledItemText>
                                 </StyledRowContainer>
                                 <StyledRowContainer marginTop={'10px'}>
@@ -220,14 +273,12 @@ const LoanScreen: React.FC<CombinedProps> = () => {
                                     <StyledItemText>
                                         Estimated Interest
                                     </StyledItemText>
-                                    <StyledItemText>
-                                        {handleInterest()}
-                                    </StyledItemText>
+                                    <StyledItemText>{interests}</StyledItemText>
                                 </StyledRowContainer>
                                 <StyledRowContainer marginTop={'10px'}>
                                     <StyledItemText>Total Debt</StyledItemText>
                                     <StyledItemText>
-                                        {handleTotalRepay()}
+                                        {totalRepay}
                                     </StyledItemText>
                                 </StyledRowContainer>
                             </StyledItemContainer>
@@ -250,10 +301,7 @@ const LoanScreen: React.FC<CombinedProps> = () => {
                                                 {formatDate(item.payment)}
                                             </StyledItemText>
                                             <StyledItemText>
-                                                {ordinaryFormat(item.amount) +
-                                                    ` ${getLoanCcy(
-                                                        loan?.currency
-                                                    )}`}
+                                                {format(item.amount)}
                                             </StyledItemText>
                                         </StyledRowContainer>
                                     )
@@ -277,72 +325,15 @@ const LoanScreen: React.FC<CombinedProps> = () => {
                     </StyledColumn>
                     <Spacer size='lg' />
                     <StyledColumn>
-                        <StyledSubcontainer>
-                            <StyledLabelTitle textTransform={'capitalize'}>
-                                Next Coupon Payment
-                            </StyledLabelTitle>
-                            <StyledItemContainer
-                                marginBottom={'0px'}
-                                background={'none'}
-                            >
-                                <StyledRowContainer>
-                                    <StyledItemText
-                                        fontSize={16}
-                                        fontWeight={600}
-                                    >
-                                        {ordinaryFormat(couponPayment?.amount) +
-                                            ` ${getLoanCcy(loan?.currency)}`}
-                                    </StyledItemText>
-                                    <StyledItemText color={theme.colors.gray}>
-                                        {couponUsdPayment(
-                                            couponPayment?.amount
-                                        )}
-                                    </StyledItemText>
-                                </StyledRowContainer>
-                                <StyledRowContainer marginTop={'10px'}>
-                                    <StyledItemText
-                                        fontSize={12}
-                                        opacity={0.9}
-                                        fontWeight={400}
-                                    >
-                                        Payment Notification
-                                    </StyledItemText>
-                                    <StyledItemText
-                                        fontSize={12}
-                                        fontWeight={400}
-                                    >
-                                        {formatDate(couponPayment?.notice)}
-                                    </StyledItemText>
-                                </StyledRowContainer>
-                                <StyledRowContainer marginTop={'10px'}>
-                                    <StyledItemText
-                                        fontSize={12}
-                                        opacity={0.9}
-                                        fontWeight={400}
-                                    >
-                                        Payment Due Date
-                                    </StyledItemText>
-                                    <StyledItemText
-                                        fontSize={12}
-                                        fontWeight={400}
-                                    >
-                                        {formatDate(couponPayment?.payment)}
-                                    </StyledItemText>
-                                </StyledRowContainer>
-                                <Button
-                                    // onClick={handleLendOut}
-                                    text={'Pay Coupon'}
-                                    style={{
-                                        marginTop: 15,
-                                        background: theme.colors.buttonBlue,
-                                        fontSize: theme.sizes.callout,
-                                        fontWeight: 500,
-                                        color: theme.colors.white,
-                                    }}
-                                    // disabled={!(notional > 0)}
-                                />
-                            </StyledItemContainer>
-                        </StyledSubcontainer>
+                        {couponPayment && (
+                            <NextCouponPaymentCard
+                                onClick={onPresentSendModal}
+                                couponPayment={couponPayment}
+                                filPrice={filPrice}
+                                totalAmount={format}
+                            ></NextCouponPaymentCard>
+                        )}
+
                         {colBook.vault !== '' ? (
                             <CounterpartyContainer>
                                 <StyledSubcontainer>
@@ -526,10 +517,4 @@ const StyledItemText = styled.p<StyledItemTextProps>`
     letter-spacing: 0.03em;
 `;
 
-const mapStateToProps = (state: RootState) => {
-    return {
-        assetPrices: state.assetPrices,
-    };
-};
-
-export default connect(mapStateToProps)(LoanScreen);
+export default LoanScreen;

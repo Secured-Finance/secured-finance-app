@@ -1,6 +1,3 @@
-import { ThemeProvider } from 'styled-components';
-import theme from '../../../../theme';
-
 export const chartOptions = {
     layout: {
         padding: 0,

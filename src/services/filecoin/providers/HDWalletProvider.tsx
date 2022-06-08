@@ -1,10 +1,11 @@
 import { Network } from '@glif/filecoin-address';
 import { LotusMessage, SignedLotusMessage } from '@glif/filecoin-message';
 import { WalletSubProvider } from '@glif/filecoin-wallet-provider';
+import RustModule from '@zondax/filecoin-signing-tools';
 import { MainNetPath, TestNetPath } from '../utils';
 import { ExtendedKey } from './types';
 
-export function HDWalletProvider(wasm: any) {
+export function HDWalletProvider(wasm: RustModule) {
     return (mnemonic: string | Buffer): WalletSubProvider => {
         const MNEMONIC = mnemonic;
         return {

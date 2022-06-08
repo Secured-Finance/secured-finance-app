@@ -6,7 +6,6 @@ export const useUpdateCrossChainWallet = () => {
 
     const registerCrossChainWallet = useCallback(
         async (chainId: number, address: string) => {
-            console.log({ securedFinance });
             const tx = await securedFinance.updateCrosschainAddress(
                 chainId,
                 address

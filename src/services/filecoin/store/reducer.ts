@@ -1,46 +1,37 @@
 import Filecoin from '@glif/filecoin-wallet-provider';
-import produce from 'immer';
-import { WritableDraft } from 'immer/dist/internal';
-import * as constants from './constants';
-import {
-    FilecoinWalletType,
-    FilWalletProvider,
-    FilWalletProviderAction,
-} from './types';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { FilecoinWalletType, FilWalletProvider } from './types';
 
 const initialStore: FilWalletProvider = {
     walletType: null,
     walletProvider: null,
     isLoading: false,
 };
-const filWalletProviderReducer = (
-    state = initialStore,
-    action: FilWalletProviderAction
-): FilWalletProvider =>
-    produce(state, draft => {
-        switch (action.type) {
-            case constants.FETCHING_FILECOIN_WALLET_PROVIDER:
-                draft.isLoading = true;
-                break;
-            case constants.FETCHING_FILECOIN_WALLET_PROVIDER_FAILURE:
-                draft.isLoading = false;
-                break;
-            case constants.UPDATE_WALLET_TYPE:
-                draft.walletType = action.data as FilecoinWalletType;
-                draft.isLoading = false;
-                break;
-            case constants.UPDATE_WALLET_PROVIDER:
-                draft.walletProvider = action.data as WritableDraft<Filecoin>;
-                draft.isLoading = false;
-                break;
-            case constants.RESET_WALLET_PROVIDER:
-                draft.walletProvider = null;
-                draft.walletType = null;
-                draft.isLoading = false;
-                break;
-            default:
-                break;
-        }
-    });
 
-export default filWalletProviderReducer;
+const filWalletSlice = createSlice({
+    name: 'filWalletProvider',
+    initialState: initialStore,
+    reducers: {
+        startFetchingFilWalletProvider(state) {
+            state.isLoading = true;
+        },
+        failFetchingFilWalletProvider(state) {
+            state.isLoading = false;
+        },
+        setFilWalletType(state, action: PayloadAction<FilecoinWalletType>) {
+            state.walletType = action.payload;
+            state.isLoading = false;
+        },
+        setFilWalletProvider(state, action: PayloadAction<Filecoin>) {
+            state.walletProvider = action.payload;
+            state.isLoading = false;
+        },
+        resetFilWalletProvider(state) {
+            state.walletProvider = null;
+            state.walletType = null;
+            state.isLoading = false;
+        },
+    },
+});
+
+export default filWalletSlice;

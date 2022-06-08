@@ -45,33 +45,39 @@ const RenderMnemonic = ({ mnemonic }: { mnemonic: string }) => {
 
 const MnemonicModal: React.FC<ModalProps> = ({ onDismiss }) => {
     const [onPrivateKeyModal] = useModal(<PrivateKeyModal />);
-    const { loaded, generateMnemonic, filProviders } = useFilWasm();
-    const [mnemonic, setMnemonic] = useState();
+    const { loaded, wasmModule, filProviders } = useFilWasm();
+    const [mnemonic, setMnemonic] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const walletProvider = useSelector(
         (state: RootState) => state.filWalletProvider.walletProvider
     );
 
     const genPhrase = useCallback(async () => {
-        const phrase = await generateMnemonic();
+        const phrase = await wasmModule.generateMnemonic();
         setMnemonic(phrase);
         setIsLoading(true);
-    }, [setMnemonic, setIsLoading, generateMnemonic]);
+    }, [wasmModule]);
 
     useEffect(() => {
         if (walletProvider) {
             onDismiss();
-        } else if (loaded && generateMnemonic) {
+        } else if (loaded && wasmModule.generateMnemonic) {
             genPhrase();
         }
-    }, [loaded, generateMnemonic, walletProvider, onDismiss, genPhrase]);
+    }, [
+        loaded,
+        walletProvider,
+        onDismiss,
+        genPhrase,
+        wasmModule.generateMnemonic,
+    ]);
 
     const { onCreate } = useNewFilWalletProvider();
 
     const handleCreateFilHDWallet = useCallback(async () => {
         try {
             if (filProviders && mnemonic !== '' && walletProvider == null) {
-                const provider = await filProviders.HDWalletProvider(mnemonic);
+                const provider = filProviders.HDWalletProvider(mnemonic);
                 await onCreate(
                     provider,
                     FilecoinWalletType.HDWallet,

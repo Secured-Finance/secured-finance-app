@@ -1,21 +1,12 @@
 import React from 'react';
-import styled from 'styled-components';
-import { connect } from 'react-redux';
-import { Dispatch } from '@reduxjs/toolkit';
-
 import { Container } from 'src/components/atoms';
 import { Page } from 'src/components/templates';
-import { useLoanDeals, useBorrowDeals } from 'src/hooks/useLoanHistory';
+import { useBorrowDeals, useLoanDeals } from 'src/hooks/useLoanHistory';
 import theme from 'src/theme';
-import { RootState } from 'src/store/types';
-import {
-    failSetLendingHistory,
-    setLendingHistory,
-    startSetHistory,
-} from 'src/store/history';
+import styled from 'styled-components';
 import { HistoryTable } from './components';
 
-const History: React.FC = () => {
+const History = () => {
     const loans = useLoanDeals();
     const borrows = useBorrowDeals();
 
@@ -62,10 +53,6 @@ const StyledHistoryTitleContainer = styled.div`
     padding-right: ${props => props.theme.spacing[5]}px;
 `;
 
-const StyledTermsContainer = styled.div`
-    width: 25%;
-`;
-
 const StyledHistoryTitle = styled.p`
     font-style: normal;
     font-weight: 400;
@@ -79,17 +66,4 @@ const StyledHistoryContainer = styled.div`
     padding-right: ${props => props.theme.spacing[5]}px;
 `;
 
-const mapStateToProps = (state: RootState) => {
-    return {
-        lendingHistory: state.history,
-    };
-};
-
-const mapDispatchToProps = (dispatch: Dispatch) => {
-    return {
-        setLendingHistory: (data: any[]) => dispatch(setLendingHistory(data)),
-        startSetHistory: () => dispatch(startSetHistory()),
-        failSetLendingHistory: () => dispatch(failSetLendingHistory()),
-    };
-};
-export default connect(mapStateToProps, mapDispatchToProps)(History);
+export default History;

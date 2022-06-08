@@ -25,25 +25,24 @@ const Lend: React.FC<LendingTerminalStore> = ({
 
     const handleOpenTerms = useCallback(
         (e: React.FormEvent<HTMLSelectElement>, termsOpen: boolean) => {
-            console.log(e.currentTarget.value);
             dispatch(updateLendingTerms(e.currentTarget.value));
             setTermsOpen(!termsOpen);
         },
-        [setTermsOpen]
+        [dispatch]
     );
 
     const handleInterestRate = useCallback(
         (e: React.FormEvent<HTMLInputElement>) => {
-            dispatch(updateLendRate(e.currentTarget.value));
+            dispatch(updateLendRate(e.currentTarget.valueAsNumber));
         },
-        [lendRate]
+        [dispatch]
     );
 
     const handleLendAmount = useCallback(
         (e: React.FormEvent<HTMLInputElement>) => {
-            dispatch(updateLendAmount(e.currentTarget.value));
+            dispatch(updateLendAmount(e.currentTarget.valueAsNumber));
         },
-        [lendAmount]
+        [dispatch]
     );
 
     const { onPlaceOrder } = usePlaceOrder(
@@ -59,7 +58,7 @@ const Lend: React.FC<LendingTerminalStore> = ({
             await onPlaceOrder();
             setPendingTx(false);
         } catch (e) {
-            console.log(e);
+            console.error(e);
         }
     }, [onPlaceOrder, setPendingTx]);
 

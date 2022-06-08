@@ -9,18 +9,22 @@ export const useBilateralCollateralPosition = (
 ) => {
     const [bilateralPosition, setBilateralPosition] = useState({});
 
-    const position = useBilateralPositionFromVault(
+    const { data, error } = useBilateralPositionFromVault(
         DEFAULT_COLLATERAL_VAULT,
         user,
         counterparty,
         ccyName
-    ) as any;
+    );
+
+    if (error) {
+        console.error(error);
+    }
 
     useMemo(() => {
-        if (position) {
-            setBilateralPosition(position);
+        if (data) {
+            setBilateralPosition(data);
         }
-    }, [position]);
+    }, [data]);
 
     return bilateralPosition;
 };

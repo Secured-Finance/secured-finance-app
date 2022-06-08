@@ -1,8 +1,8 @@
 import BigNumber from 'bignumber.js';
 import React from 'react';
 import { getDisplayBalance, getUSDFormatBalanceNumber } from 'src/utils';
+import { CurrencyInfo } from 'src/utils/currencyList';
 import styled from 'styled-components';
-import { CurrencyInfo } from '../../../../../utils/currencies';
 
 interface CollateralContainerProps {
     collateral: BigNumber;

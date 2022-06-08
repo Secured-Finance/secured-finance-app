@@ -1,7 +1,7 @@
 import React from 'react';
-import styled from 'styled-components';
 import theme from 'src/theme';
-import { CurrencyInfo, currencyList } from 'src/utils/currencies';
+import { getCurrencyBy } from 'src/utils/currencyList';
+import styled from 'styled-components';
 
 interface CurrencyContainerProps {
     ccy: string | number;
@@ -24,7 +24,6 @@ interface CurrencyListProps {
     iconSize?: number;
     marginLeft?: number;
     fontSize?: number;
-    currencies?: Array<CurrencyInfo>;
 }
 
 type ItemProps = CurrencyContainerProps & CurrencyListProps;
@@ -36,20 +35,12 @@ const CurrencyItem: React.FC<ItemProps> = ({
     fontSize,
     short,
     wallet,
-    currencies,
     style,
 }) => {
-    let icon: string;
-    let shortName: string;
-    let fullName: string;
-
-    currencies.filter((currency, i) => {
-        if (ccy === currency.index) {
-            icon = currency.icon;
-            shortName = currency.shortName;
-            fullName = currency.fullName;
-        }
-    });
+    const { icon, shortName, fullName } = getCurrencyBy(
+        'indexCcy',
+        ccy.toString()
+    );
 
     return (
         <div>
@@ -62,7 +53,7 @@ const CurrencyItem: React.FC<ItemProps> = ({
                         style?.justifyContent ? style?.justifyContent : 'center'
                     }
                 >
-                    <img width={40} height={40} src={icon} />
+                    <img width={40} height={40} src={icon} alt={shortName} />
                     <StyledWalletInfoContainer>
                         <StyledCurrencyText
                             color={
@@ -112,7 +103,12 @@ const CurrencyItem: React.FC<ItemProps> = ({
                 </StyledCurrency>
             ) : (
                 <StyledCurrency>
-                    <img width={iconSize} height={iconSize} src={icon} />
+                    <img
+                        width={iconSize}
+                        height={iconSize}
+                        src={icon}
+                        alt={shortName}
+                    />
                     <StyledCurrencyText
                         color={style?.color ? style?.color : theme.colors.white}
                         marginLeft={
@@ -175,7 +171,6 @@ export const CurrencyContainer: React.FC<CurrencyContainerProps> = ({
             fontSize={fontSize}
             wallet={wallet}
             short={short}
-            currencies={currencyList}
             style={style}
         />
     );

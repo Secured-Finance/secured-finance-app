@@ -1,8 +1,8 @@
 import React from 'react';
-import styled from 'styled-components';
-import theme from 'src/theme';
-import { collateralList, CurrencyInfo, currencyList } from 'src/utils';
 import { ArrowSVG } from 'src/components/atoms';
+import theme from 'src/theme';
+import { getCurrencyBy } from 'src/utils/currencyList';
+import styled from 'styled-components';
 
 interface CurrencySelectorProps {
     selectedCcy: string;
@@ -11,16 +11,8 @@ interface CurrencySelectorProps {
     type?: 'collateral' | 'currencies';
 }
 
-interface CurrenciesListProps {
-    currencies: Array<CurrencyInfo>;
-}
-
-type ChildrenProps = CurrencySelectorProps & CurrenciesListProps;
-
-const RenderImage: React.FC<ChildrenProps> = ({ selectedCcy, currencies }) => {
-    const icon: string = currencies.filter(
-        ccy => selectedCcy === ccy.shortName
-    )[0].icon;
+const RenderImage = ({ selectedCcy }: { selectedCcy: string }) => {
+    const { icon } = getCurrencyBy('shortName', selectedCcy);
 
     return <img width={28} src={icon} alt={selectedCcy} />;
 };
@@ -31,22 +23,9 @@ export const CurrencySelector: React.FC<CurrencySelectorProps> = ({
     type,
     disabled,
 }) => {
-    let currencies: CurrencyInfo[] = [];
-    switch (type) {
-        case 'collateral':
-            currencies = collateralList;
-            break;
-        case 'currencies':
-            currencies = currencyList;
-            break;
-        default:
-            currencies = currencyList;
-            break;
-    }
-
     return (
         <StyledCurrencySelector onClick={onClick} disabled={disabled}>
-            <RenderImage selectedCcy={selectedCcy} currencies={currencies} />
+            <RenderImage selectedCcy={selectedCcy} />
             <StyledCurrencyText>{selectedCcy}</StyledCurrencyText>
             <StyledSVGContainer>
                 {disabled ? null : (

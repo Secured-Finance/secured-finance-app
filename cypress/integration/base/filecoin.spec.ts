@@ -1,5 +1,6 @@
 /// <reference types="cypress" />
 import { expectFilecoin, filecoin } from 'support/filecoin';
+import { expectSendModal } from 'support/sendModal';
 import { tenderlyConfig } from 'support/utils/tenderlyConfig';
 import * as wallets from '../../fixtures/filecoin.json';
 
@@ -33,9 +34,11 @@ describe('Filecoin Wallet', () => {
 
         cy.get('[data-cy="wallet-address"]')
             .should('have.length', 2)
-            .and(walletAddress => {
+            .then(walletAddress => {
                 chai.expect(walletAddress[0].textContent).to.be.equal('...');
-                chai.expect(walletAddress[1].textContent).to.be.equal('...');
+                chai.expect(walletAddress[1].textContent).to.not.be.equal(
+                    '...'
+                );
             });
 
         cy.get('[data-cy="filecoin-settings-chip"]').click();
@@ -58,9 +61,8 @@ describe('Filecoin Wallet', () => {
         cy.get('[data-cy="filecoin-send-chip"]')
             .click()
             .then(() => {
-                cy.get('[data-cy="send-modal"]').should('be.visible');
+                expectSendModal.displayCurrency('FIL');
             });
-        cy.get('[data-cy="send-button"]').should('be.disabled');
         cy.get('[data-cy="send-address-input"]').type(
             wallets.walletCharlie.address
         );
@@ -69,8 +71,10 @@ describe('Filecoin Wallet', () => {
             .should('not.be.disabled')
             .wait(2000)
             .click()
-            .then(() => {
-                cy.get('[data-cy="send-modal"]').should('not.exist');
-            });
+            .then(() =>
+                cy
+                    .get('[data-cy="settlement-validation"]')
+                    .contains('Waiting for confirmation...')
+            );
     });
 });
