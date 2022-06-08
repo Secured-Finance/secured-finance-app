@@ -76,6 +76,7 @@ jobs:
           wait-on-timeout: 120
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CYPRESS_TENDERLY_KEY: ${{ secrets.TENDERLY_KEY }}
       - uses: actions/upload-artifact@v3
         if: failure()
         with:

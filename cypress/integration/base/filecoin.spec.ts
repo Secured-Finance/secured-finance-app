@@ -51,7 +51,7 @@ describe('Filecoin Wallet', () => {
             });
     });
 
-    it.only('should connect to an existing account when importing an account with a mnemonic phrase', () => {
+    it('should connect to an existing account when importing an account with a mnemonic phrase', () => {
         filecoin.connectWallet(wallets.walletAlice);
         filecoin.disconnectWallet();
     });
