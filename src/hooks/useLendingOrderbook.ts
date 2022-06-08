@@ -1,7 +1,12 @@
-import { useCallback, useEffect } from 'react';
+import { utils } from '@secured-finance/sf-client';
+import {
+    useBorrowOrderbookQuery,
+    useLendingTradingHistory as useLendingTradingHistoryQuery,
+    useLendOrderbookQuery,
+} from '@secured-finance/sf-graph-client';
+import { useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useWallet } from 'use-wallet';
-import { RootState } from '../store/types';
 import {
     failSetOrderbook,
     failSetTradingHistory,
@@ -11,12 +16,7 @@ import {
     startSetOrderbook,
     startSetTradingHistory,
 } from '../store/lendingTerminal';
-import { utils } from '@secured-finance/sf-client';
-import {
-    useLendOrderbook as useLendOrderbookQuery,
-    useBorrowOrderbook as useBorrowOrderbookQuery,
-    useLendingTradingHistory as useLendingTradingHistoryQuery,
-} from '@secured-finance/sf-graph-client';
+import { RootState } from '../store/types';
 
 export const useBorrowOrderbook = (ccy: string, term: string, skip = 0) => {
     const { chainId }: { chainId: number | null } = useWallet();
@@ -34,15 +34,24 @@ export const useBorrowOrderbook = (ccy: string, term: string, skip = 0) => {
     );
     const dispatch = useDispatch();
     dispatch(startSetOrderbook());
-    try {
-        const res = useBorrowOrderbookQuery(lendingMarket, filPrice, skip);
-        if (res != null) {
-            dispatch(setBorrowOrderbook(res));
-        }
-    } catch (err) {
-        dispatch(failSetOrderbook());
-        console.log(err);
+
+    const { data, error } = useBorrowOrderbookQuery(
+        lendingMarket,
+        filPrice,
+        skip
+    );
+
+    if (error) {
+        console.error(error);
     }
+
+    useMemo(() => {
+        if (data) {
+            dispatch(setBorrowOrderbook(data));
+        } else {
+            dispatch(failSetOrderbook());
+        }
+    }, [data, dispatch]);
 
     return borrowOrderbook;
 };
@@ -62,17 +71,25 @@ export const useLendOrderbook = (ccy: string, term: string, skip = 0) => {
         (state: RootState) => state.lendingTerminal.lendOrderbook
     );
     const dispatch = useDispatch();
-
     dispatch(startSetOrderbook());
-    try {
-        const res = useLendOrderbookQuery(lendingMarket, filPrice, skip);
-        if (res != null) {
-            dispatch(setLendOrderbook(res));
-        }
-    } catch (err) {
-        dispatch(failSetOrderbook());
-        console.log(err);
+
+    const { data, error } = useLendOrderbookQuery(
+        lendingMarket,
+        filPrice,
+        skip
+    );
+
+    if (error) {
+        console.error(error);
     }
+
+    useMemo(() => {
+        if (data) {
+            dispatch(setLendOrderbook(data));
+        } else {
+            dispatch(failSetOrderbook());
+        }
+    }, [data, dispatch]);
 
     return lendOrderbook;
 };
@@ -94,15 +111,19 @@ export const useLendingTradingHistory = (
     const dispatch = useDispatch();
 
     dispatch(startSetTradingHistory());
-    try {
-        const res = useLendingTradingHistoryQuery(lendingMarket, skip);
-        if (res != null) {
-            dispatch(setTradingHistory(res));
-        }
-    } catch (err) {
-        dispatch(failSetTradingHistory());
-        console.log(err);
+    const { data, error } = useLendingTradingHistoryQuery(lendingMarket, skip);
+
+    if (error) {
+        console.error(error);
     }
+
+    useMemo(() => {
+        if (data) {
+            dispatch(setTradingHistory(data));
+        } else {
+            dispatch(failSetTradingHistory());
+        }
+    }, [dispatch, data]);
 
     return tradingHistory;
 };

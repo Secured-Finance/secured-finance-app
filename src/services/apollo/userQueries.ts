@@ -10,7 +10,11 @@ export const OPEN_ORDERS = gql`
             ) {
                 id
                 orderId
-                currency
+                currency {
+                    identifier
+                    shortName
+                    name
+                }
                 side
                 marketAddr
                 term
@@ -35,7 +39,11 @@ export const TRADE_HISTORY = gql`
             ) {
                 id
                 orderId
-                currency
+                currency {
+                    identifier
+                    shortName
+                    name
+                }
                 side
                 marketAddr
                 term
@@ -53,7 +61,11 @@ export const TRADE_HISTORY = gql`
             ) {
                 id
                 orderId
-                currency
+                currency {
+                    identifier
+                    shortName
+                    name
+                }
                 side
                 marketAddr
                 term
@@ -82,7 +94,11 @@ export const OPEN_LOANS = gql`
                     }
                 }
                 side
-                currency
+                currency {
+                    identifier
+                    shortName
+                    name
+                }
                 term
                 amount
                 couponPayment

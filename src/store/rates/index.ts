@@ -1,8 +1,11 @@
-export { default } from './reducer';
-export {
+import ratesSlice from './reducer';
+
+export const {
     setBorrowingRates,
     setLendingRates,
     setMidRates,
-    startSetRates,
     setRatesFail,
-} from './actions';
+    startSetRates,
+} = ratesSlice.actions;
+
+export default ratesSlice.reducer;

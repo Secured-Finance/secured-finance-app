@@ -1,7 +1,16 @@
 import { SecuredFinanceClient } from '@secured-finance/sf-client';
 import { ethers } from 'ethers';
 import React, { createContext, useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { useEthereumWalletStore } from 'src/hooks/useEthWallet';
+import { useFilecoinWalletStore } from 'src/hooks/useFilWallet';
+import { FIL_ADDRESS, FIL_WALLET_TYPE } from 'src/services/filecoin';
+import { updateLatestBlock } from 'src/store/blockchain';
 import { ChainUnsupportedError, useWallet } from 'use-wallet';
+import Web3 from 'web3';
+import { hexToDec } from 'src/utils';
+
+export const CACHED_PROVIDER_KEY = 'CACHED_PROVIDER_KEY';
 
 export interface SFContext {
     securedFinance?: SecuredFinanceClient;
@@ -18,20 +27,20 @@ declare global {
 }
 
 const SecuredFinanceProvider: React.FC = ({ children }) => {
-    const { ethereum, error, status } = useWallet();
+    const { ethereum, error, status, connect, account } = useWallet();
     const [securedFinance, setSecuredFinance] =
         useState<SecuredFinanceClient>();
+    const dispatch = useDispatch();
 
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    window.securedFinance = securedFinance;
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    window.eth = ethereum;
+    const filAddr = localStorage.getItem(FIL_ADDRESS);
+    const filWalletType = localStorage.getItem(FIL_WALLET_TYPE);
 
-    const handleNetworkChanged = (networkId: string | number) => {
-        if (networkId !== 3) {
-            alert('Unsupported network, please use Ropsten (Chain ID: 3)');
+    useFilecoinWalletStore(filAddr, filWalletType);
+    useEthereumWalletStore();
+
+    const handleNetworkChanged = (networkId: string) => {
+        if (hexToDec(networkId) !== 4) {
+            alert('Unsupported network, please use Rinkeby (Chain ID: 4)');
         }
     };
 
@@ -72,6 +81,28 @@ const SecuredFinanceProvider: React.FC = ({ children }) => {
             }
         }
     }, [ethereum, status, error]);
+
+    useEffect(() => {
+        if (account) {
+            return;
+        }
+        const cachedProvider = localStorage.getItem(CACHED_PROVIDER_KEY);
+        if (cachedProvider !== null) {
+            connect('injected');
+        }
+    }, [connect, account]);
+
+    // Update the latest block every 5 seconds
+    useEffect(() => {
+        if (!ethereum) return;
+        const web3 = new Web3(ethereum);
+
+        const interval = setInterval(async () => {
+            dispatch(updateLatestBlock(await web3.eth.getBlockNumber()));
+        }, 2000);
+
+        return () => clearInterval(interval);
+    }, [dispatch, ethereum]);
 
     return (
         <Context.Provider value={{ securedFinance }}>

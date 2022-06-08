@@ -3,16 +3,13 @@ import { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useWallet } from 'use-wallet';
 import { RootState } from '../store/types';
-import {
-    fetchWallet,
-    fetchWalletFailure,
-    updateTotalUSDBalance,
-} from '../store/wallets';
-import useBlock from './useBlock';
+import { updateTotalUSDBalance } from '../store/wallets';
 
 export const useTotalUSDBalance = () => {
     const { account, balance } = useWallet();
-    const block = useBlock();
+    const block = useSelector(
+        (state: RootState) => state.blockchain.latestBlock
+    );
     const dispatch = useDispatch();
     const totalUSDBalance = useSelector(
         (state: RootState) => state.wallets.totalUSDBalance
@@ -28,25 +25,15 @@ export const useTotalUSDBalance = () => {
         .times(new BigNumber(ethPrice))
         .toNumber();
 
-    const fetchWalletStore = useCallback(
-        async (isMounted: boolean) => {
-            await dispatch(fetchWallet());
-            if (account && balance && ethPrice > 0) {
-                dispatch(updateTotalUSDBalance(usdBalance));
-            } else {
-                dispatch(fetchWalletFailure());
-            }
-        },
-        [dispatch, account, balance, ethPrice]
-    );
+    const fetchWalletStore = useCallback(async () => {
+        if (account && balance && ethPrice > 0) {
+            dispatch(updateTotalUSDBalance(usdBalance));
+        }
+    }, [dispatch, account, balance, ethPrice, usdBalance]);
 
     useEffect(() => {
-        let isMounted = true;
-        fetchWalletStore(isMounted);
-        return () => {
-            isMounted = false;
-        };
-    }, [block, dispatch, account, balance, ethPrice]);
+        fetchWalletStore();
+    }, [block, dispatch, account, balance, ethPrice, fetchWalletStore]);
 
     return totalUSDBalance;
 };

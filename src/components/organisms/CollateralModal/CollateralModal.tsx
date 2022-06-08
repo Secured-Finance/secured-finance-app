@@ -10,7 +10,6 @@ import {
 } from 'src/components/atoms';
 import { Button } from 'src/components/common/Buttons';
 import { CurrencySelector } from 'src/components/molecules';
-import useCheckCollateralBook from 'src/hooks/useCheckCollateralBook';
 import useCollateralBook from 'src/hooks/useCollateralBook';
 import { useDepositCollateral } from 'src/hooks/useDepositCollateral';
 import { useEthBalance } from 'src/hooks/useEthWallet';
@@ -23,8 +22,8 @@ import {
 import { RootState } from 'src/store/types';
 import theme from 'src/theme';
 import {
+    CurrencyInfo,
     currencyList,
-    DEFAULT_COLLATERAL_VAULT,
     formatInput,
     getDisplayBalance,
     getFullDisplayBalanceNumber,
@@ -33,7 +32,11 @@ import {
 import styled from 'styled-components';
 import { useWallet } from 'use-wallet';
 
-type CombinedProps = ModalProps & CollateralFormStore;
+type CollateralModalProps = {
+    status?: boolean;
+};
+
+type CombinedProps = ModalProps & CollateralFormStore & CollateralModalProps;
 
 const CollateralModal: React.FC<CombinedProps> = ({
     onDismiss,
@@ -44,6 +47,7 @@ const CollateralModal: React.FC<CombinedProps> = ({
     currencyName,
     currencyShortName,
     filAddress,
+    status,
 }) => {
     const [buttonOpen, setButtonOpen] = useState(false);
     const [, setCollateralTx] = useState(false);
@@ -51,9 +55,8 @@ const CollateralModal: React.FC<CombinedProps> = ({
     const { account }: { account: string } = useWallet();
     const colBook = useCollateralBook(
         account ? account : '',
-        DEFAULT_COLLATERAL_VAULT
+        currencyShortName
     );
-    const status = useCheckCollateralBook(account);
     const ethBalance = useEthBalance();
     const dispatch = useDispatch();
     const ethPrice = useSelector(
@@ -68,33 +71,36 @@ const CollateralModal: React.FC<CombinedProps> = ({
     );
 
     const handleCurrencySelect = useCallback(
-        (value: string, buttonOpen: boolean) => {
+        (value: CurrencyInfo, buttonOpen: boolean) => {
             dispatch(updateCollateralCurrency(value));
             setButtonOpen(!buttonOpen);
         },
         [dispatch, setButtonOpen]
     );
 
+    const isEnoughBalance = useCallback(
+        (amount: number) => {
+            switch (currencyIndex) {
+                case 0:
+                    return new BigNumber(amount).isLessThanOrEqualTo(
+                        new BigNumber(ethBalance)
+                    );
+            }
+        },
+        [ethBalance, currencyIndex]
+    );
+
     const handleCollateralAmount = useCallback(
         (e: React.FormEvent<HTMLInputElement>) => {
-            dispatch(updateCollateralAmount(e.currentTarget.value));
-            if (!isEnoughBalance(e.currentTarget.value)) {
+            dispatch(updateCollateralAmount(e.currentTarget.valueAsNumber));
+            if (!isEnoughBalance(e.currentTarget.valueAsNumber)) {
                 setBalanceErr(true);
             } else {
                 setBalanceErr(false);
             }
         },
-        [dispatch]
+        [dispatch, isEnoughBalance]
     );
-
-    const isEnoughBalance = (amount: string) => {
-        switch (currencyIndex) {
-            case 0:
-                return new BigNumber(amount).isLessThanOrEqualTo(
-                    new BigNumber(ethBalance)
-                );
-        }
-    };
 
     const { onRegisterUser } = useRegisterUser();
     const { onDepositCollateral } = useDepositCollateral(
@@ -121,9 +127,9 @@ const CollateralModal: React.FC<CombinedProps> = ({
                 }
             }
         } catch (e) {
-            console.log(e);
+            console.error(e);
         }
-    }, [setCollateralTx, status, amount]);
+    }, [status, onDepositCollateral, onDismiss, onRegisterUser]);
 
     const renderBalance = useMemo(() => {
         return (
@@ -131,11 +137,11 @@ const CollateralModal: React.FC<CombinedProps> = ({
                 {ethBalance} {currencyShortName}
             </span>
         );
-    }, [currencyIndex, currencyShortName]);
+    }, [currencyShortName, ethBalance]);
 
     const TotalUsdAmount = useMemo(() => {
         return (amount * ethPrice).toFixed(2);
-    }, [amount, currencyShortName]);
+    }, [amount, ethPrice]);
 
     return (
         <Modal>
@@ -183,6 +189,7 @@ const CollateralModal: React.FC<CombinedProps> = ({
                                 placeholder={'0'}
                                 value={amount}
                                 minLength={1}
+                                disabled={!status}
                                 maxLength={79}
                                 onKeyDown={formatInput}
                                 onChange={handleCollateralAmount}
@@ -197,12 +204,16 @@ const CollateralModal: React.FC<CombinedProps> = ({
                                         key={i}
                                         onClick={() =>
                                             handleCurrencySelect(
-                                                ccy.shortName,
+                                                ccy,
                                                 buttonOpen
                                             )
                                         }
                                     >
-                                        <img width={28} src={ccy.icon} />
+                                        <img
+                                            width={28}
+                                            src={ccy.icon}
+                                            alt={ccy.shortName}
+                                        />
                                         <StyledCurrencyText>
                                             {ccy.shortName}
                                         </StyledCurrencyText>
@@ -294,9 +305,11 @@ const CollateralModal: React.FC<CombinedProps> = ({
                         {balanceErr && <Comment>Insufficient Amount</Comment>}
                         <Button
                             onClick={handleDepositCollateral}
-                            disabled={!(amount > 0) || balanceErr}
+                            disabled={
+                                status ? !(amount > 0) || balanceErr : false
+                            }
                         >
-                            {'Deposit'}
+                            {status ? 'Deposit' : 'Register'}
                         </Button>
                     </ButtonWithCommentContainer>
                 </StyledButtonContainer>
@@ -354,19 +367,6 @@ const StyledCurrencyInput = styled.div`
     align-items: center;
 `;
 
-const StyledPortfolioText = styled.div`
-    margin-top: 5px;
-    font-size: ${props => props.theme.sizes.subhead}px;
-    color: ${props => props.theme.colors.white};
-    font-weight: 500;
-`;
-
-const StyledPortfolioInfoContainer = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-`;
-
 const StyledInput = styled.input`
     background-color: transparent;
     height: 42px;
@@ -380,6 +380,9 @@ const StyledInput = styled.input`
     text-align: right;
     width: 100%;
     border: none;
+    :disabled {
+        opacity: 0.5;
+    }
 `;
 
 interface StyledRowContainerProps {
@@ -393,16 +396,6 @@ const StyledRowContainer = styled.div<StyledRowContainerProps>`
     justify-content: space-between;
     align-items: center;
     width: 100%;
-`;
-
-interface StyledHealthRatioTextProps {
-    color?: string;
-}
-
-const StyledHealthRatioText = styled.div<StyledHealthRatioTextProps>`
-    font-size: ${props => props.theme.sizes.subhead}px;
-    color: ${props => (props.color ? props.color : props.theme.colors.white)};
-    font-weight: 500;
 `;
 
 interface StyledAddressContainerProps {
@@ -472,14 +465,6 @@ const StyledDropdownItem = styled.li`
     align-items: center;
     padding: 8px 8px;
     border-bottom: 0.5px solid ${props => props.theme.colors.lightGray[1]};
-`;
-
-const StyledGasTabs = styled.div`
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    text-transform: uppercase;
-    padding: 0;
 `;
 
 interface StyledCurrencyTextProps {

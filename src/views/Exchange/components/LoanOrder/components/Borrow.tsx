@@ -6,8 +6,8 @@ import { Button } from '../../../../../components/common/Buttons';
 import { usePlaceOrder } from '../../../../../hooks/usePlaceOrder';
 import {
     LendingTerminalStore,
-    updateBorrowRate,
     updateBorrowAmount,
+    updateBorrowRate,
     updateLendingTerms,
 } from '../../../../../store/lendingTerminal';
 import { RootState } from '../../../../../store/types';
@@ -28,21 +28,21 @@ const Borrow: React.FC<LendingTerminalStore> = ({
             dispatch(updateLendingTerms(e.currentTarget.value));
             setTermsOpen(!termsOpen);
         },
-        [setTermsOpen]
+        [dispatch]
     );
 
     const handleInterestRate = useCallback(
         (e: React.FormEvent<HTMLInputElement>) => {
-            dispatch(updateBorrowRate(e.currentTarget.value));
+            dispatch(updateBorrowRate(e.currentTarget.valueAsNumber));
         },
-        [borrowRate]
+        [dispatch]
     );
 
     const handleBorrowAmount = useCallback(
         (e: React.FormEvent<HTMLInputElement>) => {
-            dispatch(updateBorrowAmount(e.currentTarget.value));
+            dispatch(updateBorrowAmount(e.currentTarget.valueAsNumber));
         },
-        [borrowAmount]
+        [dispatch]
     );
 
     const { onPlaceOrder } = usePlaceOrder(
@@ -58,7 +58,7 @@ const Borrow: React.FC<LendingTerminalStore> = ({
             await onPlaceOrder();
             setPendingTx(false);
         } catch (e) {
-            console.log(e);
+            console.error(e);
         }
     }, [onPlaceOrder, setPendingTx]);
 

@@ -1,4 +1,6 @@
-export const chartOptions = {
+import * as chartjs from 'chart.js';
+
+export const chartOptions: chartjs.ChartOptions = {
     layout: {
         padding: 0,
     },
@@ -10,19 +12,12 @@ export const chartOptions = {
             {
                 gridLines: {
                     borderDash: [2],
-                    borderDashOffset: [2],
+                    borderDashOffset: 2,
                     color: 'rgba(0, 0, 0, 0.1)',
                     drawBorder: false,
-                    // drawTicks: false,
                     lineWidth: 1,
-                    // zeroLineWidth: 0,
-                    // zeroLineColor: 'rgba(97, 92, 107, 0.1)',
-                    // zeroLineBorderDash: [2],
-                    // zeroLineBorderDashOffset: [2]
                 },
                 ticks: {
-                    // beginAtZero: true,
-                    // padding: 5,
                     callback: function (value: number) {
                         return value + '%';
                     },
@@ -33,7 +28,7 @@ export const chartOptions = {
             {
                 gridLines: {
                     borderDash: [2],
-                    borderDashOffset: [2],
+                    borderDashOffset: 2,
                     color: 'rgba(0, 0, 0, 0.1)',
                     lineWidth: 1,
                 },
@@ -44,24 +39,21 @@ export const chartOptions = {
         ],
     },
     tooltips: {
-        filter: function (item: any, data: any) {
-            return item.value > 0;
-        },
         callbacks: {
-            label: function (item: any, data: any) {
-                if (item.value > 0) {
-                    const label = data.datasets[item.datasetIndex].label || '';
-                    const yLabel = item.yLabel;
-                    let content = '';
+            label: function (
+                item: chartjs.ChartTooltipItem,
+                data: chartjs.ChartData
+            ) {
+                const label = data.datasets[item.datasetIndex].label || '';
+                const yLabel = item.yLabel;
+                let content = '';
 
-                    if (data.datasets.length > 1) {
-                        content += label;
-                    }
-
-                    content += ' ' + yLabel + ' %';
-                    return content;
+                if (data.datasets.length > 1) {
+                    content += label;
                 }
-                return false;
+
+                content += ' ' + yLabel + ' %';
+                return content;
             },
         },
     },

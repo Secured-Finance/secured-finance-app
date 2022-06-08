@@ -1,6 +1,7 @@
 import BigNumber from 'bignumber.js';
 import React from 'react';
 import { CurrencyContainer } from 'src/components/atoms';
+import { CollateralBook } from 'src/hooks/useCollateralBook';
 import { AddressUtils } from 'src/utils';
 import { RenderBorrow, RenderCollateral } from './components';
 
@@ -16,14 +17,13 @@ export interface TableColumns {
 interface Columns {
     Header: string;
     accessor: string;
-    Cell: any;
+    Cell: (cell: {
+        value: string | number | BigNumber;
+        row: { original: CollateralBook };
+    }) => JSX.Element;
 }
 
-interface IndexProps {
-    index?: string;
-}
-
-const RenderState: React.FC<IndexProps> = ({ index }) => {
+const RenderState = ({ index }: { index?: string }) => {
     switch (index) {
         case '0':
             return (
@@ -131,28 +131,28 @@ export const collateralTableColumns = [
             {
                 Header: 'Vault',
                 accessor: 'vault',
-                Cell: (cell: { value: string }) => (
-                    <span>{AddressUtils.format(cell.value, 24)}</span>
+                Cell: cell => (
+                    <span>{AddressUtils.format(cell.value as string, 24)}</span>
                 ),
             },
             {
                 Header: 'Collateral',
                 accessor: 'collateral',
-                Cell: (cell: { value: any; row: any }) => (
+                Cell: cell => (
                     <RenderCollateral
-                        collateral={cell.value}
+                        collateral={cell.value as BigNumber}
                         shortName={cell.row.original.ccyName}
-                        value={cell.row.original.usdCollateral}
+                        value={cell.row.original.usdCollateral.toNumber()}
                     />
                 ),
             },
             {
                 Header: 'Locked',
                 accessor: 'locked',
-                Cell: (cell: { value: BigNumber; row: any }) => (
+                Cell: cell => (
                     <RenderBorrow
-                        locked={cell.value}
-                        value={cell.row.original.usdLocked}
+                        locked={cell.value as BigNumber}
+                        value={cell.row.original.usdLocked.toNumber()}
                         shortName={cell.row.original.ccyName}
                     />
                 ),
@@ -160,9 +160,7 @@ export const collateralTableColumns = [
             {
                 Header: 'State',
                 accessor: 'state',
-                Cell: (cell: { value: any; row: any }) => (
-                    <RenderState index={'1'} />
-                ),
+                Cell: _ => <RenderState index={'1'} />,
             },
         ],
     },

@@ -1,13 +1,10 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { connect, useDispatch, useSelector } from 'react-redux';
 import { Button } from 'src/components/atoms';
 import { CurrencySelector, TermsSelector } from 'src/components/molecules';
-import { useDepositCollateral } from 'src/hooks/useDepositCollateral';
 import { usePlaceOrder } from 'src/hooks/usePlaceOrder';
-import { useRegisterUser } from 'src/hooks/useRegisterUser';
 import {
     updateBorrowAmount,
-    updateBorrowRate,
     updateCollateralAmount,
     updateMainCollateralCurrency,
     updateMainCurrency,
@@ -18,23 +15,15 @@ import { RootState } from 'src/store/types';
 import theme from 'src/theme';
 import {
     collateralList,
-    currencyList,
     formatInput,
     percentFormat,
     termList,
     usdFormat,
 } from 'src/utils';
+import { Currency, CurrencyInfo, currencyList } from 'src/utils/currencyList';
 import styled from 'styled-components';
 
-interface BorrowTabProps {
-    borrowRates: any[];
-}
-
-type CombinedProps = BorrowTabProps & LendingStore;
-const prices = [551.24, 30.54, 1];
-
-const Borrow: React.FC<CombinedProps> = ({
-    borrowRates,
+const Borrow: React.FC<LendingStore> = ({
     selectedCcy,
     selectedCcyName,
     currencyIndex,
@@ -57,29 +46,11 @@ const Borrow: React.FC<CombinedProps> = ({
         (state: RootState) => state.assetPrices.usdc.price
     );
 
-    const [requestedCollateral, setRequestedCollateral] = useState(false);
-    const [pendingTx, setPendingTx] = useState(false);
+    const [, setPendingTx] = useState(false);
     const [buttonOpen, setButtonOpen] = useState(false);
     const [collateralOpen, setCollateralOpen] = useState(false);
     const [termsOpen, setTermsOpen] = useState(false);
 
-    const { onRegisterUser } = useRegisterUser();
-    const handleCollateralPayment = useCallback(async () => {
-        try {
-            setRequestedCollateral(true);
-            const txHash = await onRegisterUser();
-            if (!txHash) {
-                setRequestedCollateral(false);
-            }
-        } catch (e) {
-            console.log(e);
-        }
-    }, [onRegisterUser, setRequestedCollateral]);
-
-    const { onDepositCollateral } = useDepositCollateral(
-        selectedCcy,
-        collateralAmount
-    );
     const { onPlaceOrder } = usePlaceOrder(
         selectedCcy,
         selectedTerms,
@@ -93,7 +64,7 @@ const Borrow: React.FC<CombinedProps> = ({
             await onPlaceOrder();
             setPendingTx(false);
         } catch (e) {
-            console.log(e);
+            console.error(e);
         }
     }, [onPlaceOrder]);
 
@@ -119,7 +90,7 @@ const Borrow: React.FC<CombinedProps> = ({
     );
 
     const handleCurrencySelect = useCallback(
-        (value: string, buttonOpen: boolean) => {
+        (value: CurrencyInfo, buttonOpen: boolean) => {
             dispatch(updateMainCurrency(value));
             setButtonOpen(!buttonOpen);
         },
@@ -135,18 +106,12 @@ const Borrow: React.FC<CombinedProps> = ({
     );
 
     const handleCollateralSelect = useCallback(
-        (value: string, collateralOpen: boolean) => {
+        (value: Currency, collateralOpen: boolean) => {
             dispatch(updateMainCollateralCurrency(value));
             setCollateralOpen(!collateralOpen);
         },
         [dispatch, setCollateralOpen]
     );
-
-    const getBorrowRateForTerm = useEffect(() => {
-        if (borrowRates.length > 0) {
-            dispatch(updateBorrowRate(borrowRates[termsIndex]));
-        }
-    }, [dispatch, currencyIndex, termsIndex]);
 
     // const fullBalance = useMemo(() => {
     //     return getFullDisplayBalance(max)
@@ -167,18 +132,18 @@ const Borrow: React.FC<CombinedProps> = ({
             default:
                 return 0;
         }
-    }, [borrowAmount, selectedCcy]);
+    }, [borrowAmount, ethPrice, filPrice, selectedCcy, usdcPrice]);
 
     const handleBorrow = useCallback(
         (e: React.FormEvent<HTMLInputElement>) => {
-            dispatch(updateBorrowAmount(e.currentTarget.value));
+            dispatch(updateBorrowAmount(e.currentTarget.valueAsNumber));
         },
         [dispatch]
     );
 
     const handleCollateral = useCallback(
         (e: React.FormEvent<HTMLInputElement>) => {
-            dispatch(updateCollateralAmount(e.currentTarget.value));
+            dispatch(updateCollateralAmount(e.currentTarget.valueAsNumber));
         },
         [dispatch]
     );
@@ -242,13 +207,14 @@ const Borrow: React.FC<CombinedProps> = ({
                                 <StyledDropdownItem
                                     key={i}
                                     onClick={() =>
-                                        handleCurrencySelect(
-                                            ccy.shortName,
-                                            buttonOpen
-                                        )
+                                        handleCurrencySelect(ccy, buttonOpen)
                                     }
                                 >
-                                    <img width={28} src={ccy.icon} />
+                                    <img
+                                        width={28}
+                                        src={ccy.icon}
+                                        alt={ccy.shortName}
+                                    />
                                     <StyledCurrencyText>
                                         {ccy.shortName}
                                     </StyledCurrencyText>
@@ -373,7 +339,11 @@ const Borrow: React.FC<CombinedProps> = ({
                                         )
                                     }
                                 >
-                                    <img width={28} src={ccy.icon} />
+                                    <img
+                                        width={28}
+                                        src={ccy.icon}
+                                        alt={ccy.shortName}
+                                    />
                                     <StyledCurrencyText>
                                         {ccy.shortName}
                                     </StyledCurrencyText>

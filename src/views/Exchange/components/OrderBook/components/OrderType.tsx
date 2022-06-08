@@ -1,6 +1,6 @@
+import { OrderbookRow } from '@secured-finance/sf-graph-client/dist/utils';
 import React from 'react';
 import styled from 'styled-components';
-import { OrderbookRow } from '../../../../../store/lendingTerminal';
 import theme from '../../../../../theme';
 import { ordinaryFormat, percentFormat, usdFormat } from '../../../../../utils';
 import { Type } from '../types';
@@ -13,8 +13,6 @@ interface OrderTypeProps {
 
 const OrderType: React.FC<OrderTypeProps> = ({ orders, type, showHeader }) => {
     const rows = orders.map(({ rate, totalAmount, usdAmount }, i) => {
-        const w = `${0 + totalAmount / 50}%`;
-        const bgColor = type.side === 'lend' ? '#E46D53' : '#3A80AB';
         const txtColor =
             type.side === 'lend' ? theme.colors.red3 : theme.colors.green;
 
@@ -27,12 +25,8 @@ const OrderType: React.FC<OrderTypeProps> = ({ orders, type, showHeader }) => {
                     {ordinaryFormat(totalAmount)}
                 </StyledOrderRowText>
                 <StyledOrderRowText textAlign={'right'}>
-                    {usdFormat(usdAmount)}
+                    {usdFormat(usdAmount as number)}
                 </StyledOrderRowText>
-                {/* <StyledOrderRowProgress
-                    width={w}
-                    background={bgColor}
-                ></StyledOrderRowProgress> */}
             </StyledOrderRow>
         );
     });
@@ -93,21 +87,6 @@ const StyledOrderRowText = styled.p<StyledOrderRowTextProps>`
     text-align: ${props => (props.textAlign ? props.textAlign : 'left')};
     z-index: 2;
     margin: 0;
-`;
-
-interface StyledOrderRowProgressProps {
-    background: string;
-    width: string;
-}
-
-const StyledOrderRowProgress = styled.div<StyledOrderRowProgressProps>`
-    position: absolute;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    background-color: ${props => props.background};
-    width: ${props => props.width};
-    opacity: 0.15;
 `;
 
 const StyledOrderBookHeader = styled.div`

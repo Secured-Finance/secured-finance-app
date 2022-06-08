@@ -1,28 +1,15 @@
+import { Loan } from '@secured-finance/sf-graph-client/dist/generated';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import useModal from 'src/hooks/useModal';
-import { LoanConfirmationModal } from 'src/components/organisms';
 
-interface StateProps {
-    loan: any;
-}
-
-const RenderAction: React.FC<StateProps> = ({ loan }) => {
-    const [onPresentArrangeLoan] = useModal(
-        <LoanConfirmationModal loan={loan} />
-    );
-
+const RenderAction = ({ loan }: { loan: Loan }) => {
     return (
         <div>
             {
                 <StyledActionsContainer>
-                    <StyledActionButton
-                    // onClick={onPresentArrangeLoan}
-                    >
-                        <StyledLink to={`/loan/${loan.loanId}`}>
-                            State
-                        </StyledLink>
+                    <StyledActionButton>
+                        <StyledLink to={`/loan/${loan.id}`}>State</StyledLink>
                         {/* State */}
                     </StyledActionButton>
                 </StyledActionsContainer>

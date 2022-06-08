@@ -1,8 +1,8 @@
 import React from 'react';
+import { ArrowSVG } from 'src/components/atoms';
+import { Term, termList } from 'src/utils';
 import styled from 'styled-components';
 import theme from '../../../theme';
-import { Term, termList } from 'src/utils';
-import { ArrowSVG } from 'src/components/atoms';
 
 interface TermsSelectorProps {
     selectedTerm: string;
@@ -30,13 +30,7 @@ interface TermsListProps {
 type ChildrenProps = TermsSelectorProps & TermsListProps;
 
 const RenderText: React.FC<ChildrenProps> = ({ selectedTerm, terms }) => {
-    let text: string;
-
-    terms.filter((term, i) => {
-        if (selectedTerm === term.value) {
-            text = term.label;
-        }
-    });
+    const { label: text } = terms.find(term => selectedTerm === term.value);
 
     return <StyledTermsText marginLeft={'0px'}>{text}</StyledTermsText>;
 };

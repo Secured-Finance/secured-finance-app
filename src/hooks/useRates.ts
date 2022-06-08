@@ -1,47 +1,39 @@
+import { BigNumber } from 'ethers';
 import { useCallback, useEffect, useState } from 'react';
-import useBlock from './useBlock';
+import { useSelector } from 'react-redux';
+import { RootState } from 'src/store/types';
 import useSF from './useSecuredFinance';
 
 export const useRates = (ccy: string, type: number) => {
-    const selectedCcy = 'FIL';
     const securedFinance = useSF();
-    const block = useBlock();
-    const [rates, setRates] = useState([]);
-
-    const fetchYieldCurve = useCallback(
-        async (isMounted: boolean) => {
-            let rates: Array<any>;
-            switch (type) {
-                case 0:
-                    rates = await securedFinance.getBorrowYieldCurve(
-                        selectedCcy
-                    );
-                    break;
-                case 1:
-                    rates = await securedFinance.getLendYieldCurve(selectedCcy);
-                    break;
-                case 2:
-                    rates = await securedFinance.getMidRateYieldCurve(
-                        selectedCcy
-                    );
-                    break;
-                default:
-                    break;
-            }
-            await setRates(rates);
-        },
-        [securedFinance, ccy]
+    const block = useSelector(
+        (state: RootState) => state.blockchain.latestBlock
     );
+    const [rates, setRates] = useState<BigNumber[]>([]);
+
+    const fetchYieldCurve = useCallback(async () => {
+        let ratesFn;
+        switch (type) {
+            case 0:
+                ratesFn = () => securedFinance.getBorrowYieldCurve(ccy);
+                break;
+            case 1:
+                ratesFn = () => securedFinance.getLendYieldCurve(ccy);
+                break;
+            case 2:
+                ratesFn = () => securedFinance.getMidRateYieldCurve(ccy);
+                break;
+            default:
+                break;
+        }
+        setRates(await ratesFn());
+    }, [type, securedFinance, ccy]);
 
     useEffect(() => {
-        let isMounted = true;
         if (securedFinance) {
-            fetchYieldCurve(isMounted);
+            fetchYieldCurve();
         }
-        return () => {
-            isMounted = false;
-        };
-    }, [block, setRates, ccy]);
+    }, [fetchYieldCurve, securedFinance, block]);
 
-    return rates;
+    return rates.map(rate => rate.toNumber());
 };

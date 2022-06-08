@@ -1,1 +1,1 @@
-export { default } from './CollateralTable.jsx';
+export { default } from './CollateralTable';

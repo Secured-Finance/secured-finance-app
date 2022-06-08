@@ -1,8 +1,10 @@
 module.exports = {
-    content: ['./src/**/*.{js,jsx,ts,tsx}'],
+    darkMode: 'media',
+    purge: ['./src/**/*.{ts,tsx,js,jsx}'],
     theme: {
         colors: {
             background: '#060609',
+            lightBackground: '#FFFFFF',
             black: '#000',
             darkGrey: '#1a1b1f',
             strokeGrey: '#27282f',

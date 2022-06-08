@@ -9,6 +9,9 @@ describe('AddressUtils.format', () => {
             )
         ).toEqual('0x12345678...7890');
     });
+    it('should return an ... if the input is empty', () => {
+        expect(AddressUtils.format()).toEqual('...');
+    });
 });
 
 describe('AddressUtils.equals', () => {

@@ -5,9 +5,7 @@ import { Button } from 'src/components/new/Button';
 import { Dropdown } from 'src/components/new/Dropdown';
 import { FieldValue } from 'src/components/new/FieldValue';
 import { Input } from 'src/components/new/Input';
-import { useEthereumUsd, useFilUsd } from 'src/hooks/useAssetPrices';
 import { usePlaceOrder } from 'src/hooks/usePlaceOrder';
-import { getUSDCPrice } from 'src/store/assetPrices/selectors';
 import {
     updateBorrowAmount,
     updateBorrowRate,
@@ -25,9 +23,10 @@ import {
 import {
     currencyListDropdown,
     percentFormat,
-    usdFormat,
     termList,
+    usdFormat,
 } from 'src/utils';
+import { getCurrencyBy } from 'src/utils/currencyList';
 import { daysInYear } from '../constants';
 import BorrowCollateralManagement from './BorrowCollateralManagement';
 import cm from './LendBorrowTable.module.scss';
@@ -59,13 +58,18 @@ export const LendBorrowTable: React.FC<ILendBorrowTable> = ({
     const ethUSDBalance = useSelector(getEthUSDBalance);
     const filUSDBalance = useSelector(getFilUSDBalance);
     const isBorrow = selectedTab === 'borrow';
-    const amount = new BigNumber(isBorrow ? borrowAmount : lendAmount);
+    const amount = useMemo(
+        () => new BigNumber(isBorrow ? borrowAmount : lendAmount),
+        [borrowAmount, isBorrow, lendAmount]
+    );
     const rate = isBorrow ? borrowRate : lendRate;
-    const ethPrice = useEthereumUsd().price;
-    const filPrice = useFilUsd().price;
-    const usdcPrice = useSelector(getUSDCPrice);
+    const {
+        filecoin: filPrice,
+        ethereum: ethPrice,
+        usdc: usdcPrice,
+    } = useSelector((state: RootState) => state.assetPrices);
 
-    const USDBalanceMap: any = {
+    const USDBalanceMap = {
         ETH: ethUSDBalance,
         FIL: filUSDBalance,
         USDC: 0,
@@ -88,17 +92,21 @@ export const LendBorrowTable: React.FC<ILendBorrowTable> = ({
     ]);
 
     const handleCurrencyChange = (e: React.SyntheticEvent<HTMLSelectElement>) =>
-        dispatch(updateMainCurrency(e.currentTarget.value));
+        dispatch(
+            updateMainCurrency(
+                getCurrencyBy('shortName', e.currentTarget.value)
+            )
+        );
 
     const USDAmount: BigNumber = useMemo(() => {
         if (amount.isNaN()) return new BigNumber(0);
         switch (selectedCcy) {
             case 'FIL':
-                return amount.multipliedBy(filPrice);
+                return amount.multipliedBy(filPrice.price);
             case 'ETH':
-                return amount.multipliedBy(ethPrice);
+                return amount.multipliedBy(ethPrice.price);
             case 'USDC':
-                return amount.multipliedBy(usdcPrice);
+                return amount.multipliedBy(usdcPrice.price);
             default:
                 return new BigNumber(0);
         }
@@ -107,7 +115,7 @@ export const LendBorrowTable: React.FC<ILendBorrowTable> = ({
     const handleAmountChange = useCallback(
         (e: React.FormEvent<HTMLInputElement>) => {
             const action = isBorrow ? updateBorrowAmount : updateLendAmount;
-            dispatch(action(e.currentTarget.value));
+            dispatch(action(e.currentTarget.valueAsNumber));
         },
         [isBorrow, dispatch]
     );
@@ -145,7 +153,7 @@ export const LendBorrowTable: React.FC<ILendBorrowTable> = ({
             await action();
             setPendingTx(false);
         } catch (e) {
-            console.log(e);
+            console.error(e);
         }
     }, [action, setPendingTx]);
 
@@ -178,7 +186,12 @@ export const LendBorrowTable: React.FC<ILendBorrowTable> = ({
                 </span>
                 <span className={cm.bottomRow}>
                     <span>
-                        Balance: {usdFormat(USDBalanceMap[selectedCcy])}
+                        Balance:{' '}
+                        {usdFormat(
+                            USDBalanceMap[
+                                selectedCcy as keyof typeof USDBalanceMap
+                            ]
+                        )}
                     </span>
                     <span className={cm.USDValue}>
                         ~ {usdFormat(USDAmount.toNumber())}

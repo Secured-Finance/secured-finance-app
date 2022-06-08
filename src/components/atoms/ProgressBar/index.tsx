@@ -14,7 +14,7 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
 
     React.useEffect(() => {
         setComplete((percent / 100) * width);
-    });
+    }, [percent, width]);
 
     return (
         <StyledProgressBar width={width}>
