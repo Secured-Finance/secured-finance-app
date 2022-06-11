@@ -18,19 +18,13 @@ import { useWallet } from 'use-wallet';
 import useModal from './useModal';
 
 export const useEthereumWalletStore = () => {
-    const ethWallet = useSelector((state: RootState) => {
-        return state.wallets.ethereum;
-    });
-    const block = useSelector(
-        (state: RootState) => state.blockchain.latestBlock
-    );
     const dispatch = useDispatch();
-    const { account, balance, reset } = useWallet();
+    const { account, balance, reset, status } = useWallet();
     const { price, change } = useSelector(
         (state: RootState) => state.assetPrices.ethereum
     );
-    const totalUSDBalance = useSelector(
-        (state: RootState) => state.wallets.totalUSDBalance
+    const { totalUSDBalance, ethereum: ethWallet } = useSelector(
+        (state: RootState) => state.wallets
     );
     const [onPresentAccountModal] = useModal(WalletAccountModal);
 
@@ -42,20 +36,23 @@ export const useEthereumWalletStore = () => {
         };
     }, [onPresentAccountModal, reset]);
 
-    const getWalletBalance = useCallback(() => {
-        if (!account) return { usdBalance: 0, inEther: 0 };
+    const getWalletBalance = useCallback(
+        (balance: number | string, price: number) => {
+            if (!account) return { usdBalance: 0, inEther: 0 };
 
-        const inEther = new BigNumber(balance)
-            .dividedBy(new BigNumber(10).pow(18))
-            .toNumber();
-        const usdBalance = new BigNumber(inEther)
-            .times(new BigNumber(price))
-            .toNumber();
-        return { usdBalance, inEther };
-    }, [account, balance, price]);
+            const inEther = new BigNumber(balance)
+                .dividedBy(new BigNumber(10).pow(18))
+                .toNumber();
+            const usdBalance = new BigNumber(inEther)
+                .times(new BigNumber(price))
+                .toNumber();
+            return { usdBalance, inEther };
+        },
+        [account]
+    );
 
     const fetchEthStore = useCallback(async () => {
-        const { usdBalance, inEther } = getWalletBalance();
+        const { usdBalance, inEther } = getWalletBalance(balance, price);
         const portfolioShare = new BigNumber(usdBalance)
             .times(100)
             .dividedBy(new BigNumber(totalUSDBalance))
@@ -66,50 +63,41 @@ export const useEthereumWalletStore = () => {
         dispatch(updateEthWalletAssetPrice(price));
         dispatch(updateEthWalletDailyChange(change));
         dispatch(updateEthWalletUSDBalance(usdBalance));
-        if (portfolioShare !== (null || Infinity)) {
+
+        if (
+            !Number.isNaN(portfolioShare) &&
+            portfolioShare !== (null || Infinity)
+        ) {
             dispatch(updateEthWalletPortfolioShare(portfolioShare));
         }
         dispatch(recalculateTotalUSDBalance());
-        dispatch(updateEthWalletActions(actObj));
     }, [
         getWalletBalance,
-        totalUSDBalance,
-        dispatch,
-        account,
-        price,
-        change,
-        actObj,
-    ]);
-
-    useEffect(() => {
-        if (
-            account &&
-            balance &&
-            reset &&
-            totalUSDBalance !== 0 &&
-            price !== 0 &&
-            change !== 0
-        ) {
-            fetchEthStore();
-        }
-    }, [
-        block,
-        dispatch,
-        account,
         balance,
-        reset,
-        totalUSDBalance,
         price,
+        totalUSDBalance,
+        dispatch,
+        account,
         change,
-        fetchEthStore,
     ]);
 
+    const connectWallet = useCallback(
+        (account: string) => {
+            dispatch(connectEthWallet(account));
+            dispatch(updateEthWalletActions(actObj));
+        },
+        [dispatch, actObj]
+    );
+
     useEffect(() => {
-        const { inEther, usdBalance } = getWalletBalance();
-        dispatch(updateEthWalletBalance(inEther));
-        dispatch(updateEthWalletUSDBalance(usdBalance));
-        dispatch(recalculateTotalUSDBalance());
-    }, [balance, dispatch, getWalletBalance]);
+        if (status === 'connected') {
+            connectWallet(account);
+        }
+    }, [status, connectWallet, account]);
+
+    useEffect(() => {
+        fetchEthStore();
+    }, [account, balance, change, fetchEthStore, price, totalUSDBalance]);
 
     useEffect(() => {
         if (account === null) {

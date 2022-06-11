@@ -5,14 +5,7 @@ import { tenderlyConfig } from 'support/utils/tenderlyConfig';
 import * as wallets from '../../fixtures/filecoin.json';
 
 describe('Filecoin Wallet', () => {
-    const { onBeforeLoad } = tenderlyConfig();
-
-    beforeEach(() => {
-        cy.connectWallet(onBeforeLoad).then(() => {
-            cy.window().its('ethereum').should('exist');
-            expectFilecoin.walletNotConnected();
-        });
-    });
+    tenderlyConfig();
 
     it('should offer three choices when trying to connect', () => {
         cy.get('[data-cy="filecoin-connect-wallet-chip"]').click();
@@ -35,10 +28,10 @@ describe('Filecoin Wallet', () => {
         cy.get('[data-cy="wallet-address"]')
             .should('have.length', 2)
             .then(walletAddress => {
-                chai.expect(walletAddress[0].textContent).to.be.equal('...');
-                chai.expect(walletAddress[1].textContent).to.not.be.equal(
+                chai.expect(walletAddress[0].textContent).to.not.be.equal(
                     '...'
                 );
+                chai.expect(walletAddress[1].textContent).to.be.equal('...');
             });
 
         cy.get('[data-cy="filecoin-settings-chip"]').click();
@@ -76,5 +69,6 @@ describe('Filecoin Wallet', () => {
                     .get('[data-cy="settlement-validation"]')
                     .contains('Waiting for confirmation...')
             );
+        cy.get('body').click(0, 0);
     });
 });

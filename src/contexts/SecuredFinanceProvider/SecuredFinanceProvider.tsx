@@ -1,14 +1,11 @@
 import { SecuredFinanceClient } from '@secured-finance/sf-client';
 import { ethers } from 'ethers';
 import React, { createContext, useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
 import { useEthereumWalletStore } from 'src/hooks/useEthWallet';
 import { useFilecoinWalletStore } from 'src/hooks/useFilWallet';
 import { FIL_ADDRESS, FIL_WALLET_TYPE } from 'src/services/filecoin';
-import { updateLatestBlock } from 'src/store/blockchain';
-import { ChainUnsupportedError, useWallet } from 'use-wallet';
-import Web3 from 'web3';
 import { hexToDec } from 'src/utils';
+import { ChainUnsupportedError, useWallet } from 'use-wallet';
 
 export const CACHED_PROVIDER_KEY = 'CACHED_PROVIDER_KEY';
 
@@ -27,10 +24,9 @@ declare global {
 }
 
 const SecuredFinanceProvider: React.FC = ({ children }) => {
-    const { ethereum, error, status, connect, account } = useWallet();
+    const { error, status, connect, account, ethereum } = useWallet();
     const [securedFinance, setSecuredFinance] =
         useState<SecuredFinanceClient>();
-    const dispatch = useDispatch();
 
     const filAddr = localStorage.getItem(FIL_ADDRESS);
     const filWalletType = localStorage.getItem(FIL_WALLET_TYPE);
@@ -50,14 +46,16 @@ const SecuredFinanceProvider: React.FC = ({ children }) => {
                 ethereum,
                 chainId
             );
-            const signer = provider.getSigner();
             const network = await provider.getNetwork();
 
-            const securedFinanceLib = new SecuredFinanceClient(signer, network);
+            const securedFinanceLib = new SecuredFinanceClient(
+                provider,
+                network
+            );
+
             setSecuredFinance(securedFinanceLib);
             window.securedFinanceSDK = securedFinanceLib;
         };
-
         if (ethereum) {
             const chainId = Number(ethereum.chainId);
             connectSFClient(chainId);
@@ -91,18 +89,6 @@ const SecuredFinanceProvider: React.FC = ({ children }) => {
             connect('injected');
         }
     }, [connect, account]);
-
-    // Update the latest block every 5 seconds
-    useEffect(() => {
-        if (!ethereum) return;
-        const web3 = new Web3(ethereum);
-
-        const interval = setInterval(async () => {
-            dispatch(updateLatestBlock(await web3.eth.getBlockNumber()));
-        }, 2000);
-
-        return () => clearInterval(interval);
-    }, [dispatch, ethereum]);
 
     return (
         <Context.Provider value={{ securedFinance }}>
