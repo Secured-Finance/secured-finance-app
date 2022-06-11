@@ -31,7 +31,9 @@ describe('Filecoin Wallet', () => {
                 chai.expect(walletAddress[0].textContent).to.not.be.equal(
                     '...'
                 );
-                chai.expect(walletAddress[1].textContent).to.be.equal('...');
+                chai.expect(walletAddress[1].textContent).to.not.be.equal(
+                    '...'
+                );
             });
 
         cy.get('[data-cy="filecoin-settings-chip"]').click();
