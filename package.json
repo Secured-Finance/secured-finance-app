@@ -45,6 +45,7 @@
     "start": "craco start",
     "build": "craco build",
     "test": "craco test",
+    "test:ci": "npm run test -- --coverage --watchAll=false --coverageReporters=text-summary",
     "prettier:check": "prettier --check 'src/**/*.{ts,tsx,js,jsx,json}' '*.{ts,tsx,js,jsx,json}'",
     "prettier:write": "prettier --write 'src/**/*.{ts,tsx,js,jsx,json}' '*.{ts,tsx,js,jsx,json}'",
     "lint:check": "eslint .",
