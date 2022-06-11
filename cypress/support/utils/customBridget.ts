@@ -24,18 +24,16 @@ export class CustomizedBridge extends Eip1193Bridge {
     }
 
     async sendAsync(...args: unknown[]) {
-        cy.log('sendAsync called');
         return this.send(...args);
     }
 
     async send(...args: unknown[]) {
-        cy.log('send called');
         const isCallbackForm =
             typeof args[0] === 'object' && typeof args[1] === 'function';
         let callback;
         let method;
         let params;
-        console.log(args);
+
         if (isCallbackForm) {
             callback = args[1];
             // @ts-ignore
@@ -105,7 +103,6 @@ export class CustomizedBridge extends Eip1193Bridge {
         }
         try {
             const result = await super.send(method, params);
-            console.debug('result received', method, params, result);
             if (isCallbackForm) {
                 // @ts-ignore
                 callback(null, { result });

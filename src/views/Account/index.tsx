@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Page } from 'src/components/templates';
 import useCollateralBook from 'src/hooks/useCollateralBook';
@@ -22,7 +22,7 @@ const Account: React.FC = () => {
     const { account }: { account: string } = useWallet();
     const colBook = useCollateralBook(account ? account : '');
 
-    useMemo(() => {
+    useEffect(() => {
         async function updateTable() {
             setTableData([ethWallet, filWallet]);
         }
@@ -48,7 +48,7 @@ const Account: React.FC = () => {
                     </StyledTitle>
                     <WalletsTable table={tableData} />
                 </StyledAccountContainer>
-                {account !== null && (
+                {account && (
                     <StyledAccountContainer
                         marginTop={'35px'}
                         marginBottom={'35px'}

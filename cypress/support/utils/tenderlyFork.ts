@@ -1,8 +1,9 @@
 import { JsonRpcProvider } from '@ethersproject/providers';
 import axios from 'axios';
 import { Wallet } from 'ethers';
-import request from 'request';
 import { CustomizedBridge } from './customBridget';
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const request = require('request');
 
 const TENDERLY_KEY = Cypress.env('TENDERLY_KEY');
 const TENDERLY_ACCOUNT = Cypress.env('TENDERLY_ACCOUNT');
@@ -25,16 +26,16 @@ const tenderly = axios.create({
 });
 
 export class TenderlyFork {
-    public _forkNetworkID: string;
-    public _chainID: number;
-    private fork_id: string;
+    public forkNetworkID: string;
+    public chainId: number;
+    private forkId: string;
     private persist = false;
 
     constructor(forkNetworkID: number, forkId?: string) {
-        this._forkNetworkID = forkNetworkID.toString();
-        this._chainID = 3030;
+        this.forkNetworkID = forkNetworkID.toString();
+        this.chainId = forkNetworkID;
         if (forkId) {
-            this.fork_id = forkId;
+            this.forkId = forkId;
         }
         if (TENDERLY_PERSIST_FORK_AFTER_RUN) {
             this.persist = TENDERLY_PERSIST_FORK_AFTER_RUN;
@@ -42,8 +43,8 @@ export class TenderlyFork {
     }
 
     async init() {
-        if (this.fork_id) {
-            cy.log(`using existing fork: ${this.fork_id}`);
+        if (this.forkId) {
+            cy.log(`using existing fork: ${this.forkId}`);
             return;
         }
 
@@ -51,28 +52,20 @@ export class TenderlyFork {
         const response = await tenderly.post(
             `account/${TENDERLY_ACCOUNT}/project/${TENDERLY_PROJECT}/fork`,
             {
-                network_id: this._forkNetworkID,
-                chain_config: { chain_id: this._chainID },
+                network_id: this.forkNetworkID,
+                chain_config: { chain_id: this.chainId },
             }
         );
-        this.fork_id = response.data.simulation_fork.id;
+        this.forkId = response.data.simulation_fork.id;
     }
 
     getRpcUrl() {
-        if (!this.fork_id) throw new Error('Fork not initialized!');
-        return `https://rpc.tenderly.co/fork/${this.fork_id}`;
-    }
-
-    async add_balance(address: string, amount: number) {
-        if (!this.fork_id) throw new Error('Fork not initialized!');
-        tenderly.post(
-            `account/${TENDERLY_ACCOUNT}/project/${TENDERLY_PROJECT}/fork/${this.fork_id}/balance`,
-            { accounts: [address], amount: amount }
-        );
+        if (!this.forkId) throw new Error('Fork not initialized!');
+        return `https://rpc.tenderly.co/fork/${this.forkId}`;
     }
 
     async addBalanceRpc(address: string) {
-        if (!this.fork_id) throw new Error('Fork not initialized!');
+        if (!this.forkId) throw new Error('Fork not initialized!');
         const options = {
             url: this.getRpcUrl(),
             method: 'post',
@@ -91,22 +84,28 @@ export class TenderlyFork {
         if (this.persist) {
             return;
         }
-        cy.log(`deleting fork ${this.fork_id}`);
+        cy.log(`deleting fork ${this.forkId}`);
         await tenderly.delete(
-            `account/${TENDERLY_ACCOUNT}/project/${TENDERLY_PROJECT}/fork/${this.fork_id}`
+            `account/${TENDERLY_ACCOUNT}/project/${TENDERLY_PROJECT}/fork/${this.forkId}`
         );
     }
 
     onBeforeLoad() {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         return (win: any) => {
+            win.localStorage.clear();
             const rpc = this.getRpcUrl();
-            const provider = new JsonRpcProvider(rpc, 3030);
+            const provider = new JsonRpcProvider(rpc, this.chainId);
             const signer = new Wallet(
                 DEFAULT_TEST_ACCOUNT.privateKey,
                 provider
             );
-            win.ethereum = new CustomizedBridge(signer, provider);
+
+            win.ethereum = new CustomizedBridge(
+                signer.connect(provider),
+                provider,
+                this.chainId
+            );
         };
     }
 }

@@ -1,25 +1,26 @@
 import { useCallback, useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
 import useSF from './useSecuredFinance';
 
 const useCheckCollateralBook = (account: string) => {
     const [status, setStatus] = useState<boolean>(false);
     const securedFinance = useSF();
-    const dispatch = useDispatch();
 
-    const fetchCollateralBook = useCallback(async () => {
-        const status = await securedFinance.checkRegisteredUser(account);
-        setStatus(status);
-    }, [securedFinance, account]);
+    const fetchCollateralBook = useCallback(
+        async (account: string) => {
+            const status = await securedFinance.checkRegisteredUser(account);
+            setStatus(status);
+        },
+        [securedFinance]
+    );
 
     useEffect(() => {
-        if (account === null) {
+        if (!account) {
             setStatus(false);
         }
-        if (securedFinance && account !== '') {
-            fetchCollateralBook();
+        if (securedFinance && account) {
+            fetchCollateralBook(account);
         }
-    }, [dispatch, securedFinance, account, fetchCollateralBook]);
+    }, [securedFinance, account, fetchCollateralBook]);
 
     return status;
 };
