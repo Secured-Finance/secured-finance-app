@@ -23,16 +23,19 @@ describe('Filecoin Wallet', () => {
             .click()
             .then(() => {
                 expectFilecoin.walletConnected();
-            });
+            })
+            .wait(3000);
 
         cy.get('[data-cy="wallet-address"]')
             .should('have.length', 2)
             .then(walletAddress => {
                 chai.expect(walletAddress[0].textContent).to.not.be.equal(
-                    '...'
+                    '...',
+                    'Ethereum wallet address should not be empty'
                 );
                 chai.expect(walletAddress[1].textContent).to.not.be.equal(
-                    '...'
+                    '...',
+                    'Filecoin wallet address should not be empty'
                 );
             });
 
