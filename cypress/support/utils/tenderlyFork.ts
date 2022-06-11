@@ -32,6 +32,10 @@ export class TenderlyFork {
     private persist = false;
 
     constructor(forkNetworkID: number, forkId?: string) {
+        assert(TENDERLY_KEY, 'TENDERLY_KEY is required');
+        assert(TENDERLY_ACCOUNT, 'TENDERLY_ACCOUNT is required');
+        assert(TENDERLY_PROJECT, 'TENDERLY_PROJECT is required');
+
         this.forkNetworkID = forkNetworkID.toString();
         this.chainId = forkNetworkID;
         if (forkId) {
