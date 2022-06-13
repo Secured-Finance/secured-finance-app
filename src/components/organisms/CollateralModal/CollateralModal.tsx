@@ -193,6 +193,7 @@ const CollateralModal: React.FC<CombinedProps> = ({
                                 maxLength={79}
                                 onKeyDown={formatInput}
                                 onChange={handleCollateralAmount}
+                                data-cy='collateral-amount-input'
                             />
                         </StyledCurrencyInput>
                     </StyledInputContainer>
