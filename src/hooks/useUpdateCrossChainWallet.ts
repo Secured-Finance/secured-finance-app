@@ -5,10 +5,10 @@ export const useUpdateCrossChainWallet = () => {
     const securedFinance = useSF();
 
     const registerCrossChainWallet = useCallback(
-        async (chainId: number, adress: string) => {
+        async (chainId: number, address: string) => {
             const tx = await securedFinance.updateCrosschainAddress(
                 chainId,
-                adress
+                address
             );
             return tx;
         },

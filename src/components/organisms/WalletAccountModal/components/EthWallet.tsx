@@ -20,12 +20,12 @@ const EthWallet: React.FC<ModalProps> = ({ onDismiss, ...props }) => {
 
     const handleSignOutClick = useCallback(() => {
         reset();
-        localStorage.removeItem(CACHED_PROVIDER_KEY);
-        onDismiss();
         dispatch(resetEthWallet());
+        localStorage.removeItem(CACHED_PROVIDER_KEY);
         if (!otherWalletConnected) {
             history.push('/');
         }
+        onDismiss();
     }, [dispatch, history, onDismiss, otherWalletConnected, reset]);
 
     return (
