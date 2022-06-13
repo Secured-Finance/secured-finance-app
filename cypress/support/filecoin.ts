@@ -5,10 +5,14 @@ type wallet = {
 
 export const expectFilecoin = {
     walletConnected: () => {
-        cy.get('[data-cy="filecoin-connect-wallet-chip"]').should('not.exist');
-        cy.get('[data-cy="filecoin-settings-chip"]').should('be.visible');
-        chai.expect(localStorage.getItem('FIL_WALLET_TYPE')).to.be.not.null;
-        chai.expect(localStorage.getItem('FIL_ADDRESS')).to.be.not.null;
+        cy.wait(5000).then(() => {
+            cy.get('[data-cy="filecoin-connect-wallet-chip"]').should(
+                'not.exist'
+            );
+            cy.get('[data-cy="filecoin-settings-chip"]').should('be.visible');
+            chai.expect(localStorage.getItem('FIL_WALLET_TYPE')).to.be.not.null;
+            chai.expect(localStorage.getItem('FIL_ADDRESS')).to.be.not.null;
+        });
     },
     walletNotConnected: () => {
         cy.get('[data-cy="filecoin-connect-wallet-chip"]').should('be.visible');

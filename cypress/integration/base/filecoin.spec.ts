@@ -23,8 +23,7 @@ describe('Filecoin Wallet', () => {
             .click()
             .then(() => {
                 expectFilecoin.walletConnected();
-            })
-            .wait(3000);
+            });
 
         cy.get('[data-cy="wallet-address"]')
             .should('have.length', 2)

@@ -1,6 +1,5 @@
 import { JsonRpcProvider } from '@ethersproject/providers';
 import axios from 'axios';
-import { Wallet } from 'ethers';
 import { CustomizedBridge } from './customBridget';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const request = require('request');
@@ -86,6 +85,7 @@ export class TenderlyFork {
 
     async deleteFork() {
         if (this.persist) {
+            cy.log(`fork will not be deleted: ${this.forkId}`);
             return;
         }
         cy.log(`deleting fork ${this.forkId}`);
@@ -100,13 +100,11 @@ export class TenderlyFork {
             win.localStorage.clear();
             const rpc = this.getRpcUrl();
             const provider = new JsonRpcProvider(rpc, this.chainId);
-            const signer = new Wallet(
-                DEFAULT_TEST_ACCOUNT.privateKey,
-                provider
-            );
+
+            win.localStorage.setItem('FORK', 'true');
 
             win.ethereum = new CustomizedBridge(
-                signer.connect(provider),
+                provider.getSigner(),
                 provider,
                 this.chainId
             );

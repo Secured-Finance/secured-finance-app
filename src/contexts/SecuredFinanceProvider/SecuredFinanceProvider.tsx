@@ -42,16 +42,14 @@ const SecuredFinanceProvider: React.FC = ({ children }) => {
 
     useEffect(() => {
         const connectSFClient = async (chainId: number) => {
-            const provider = new ethers.providers.Web3Provider(
-                ethereum,
-                chainId
-            );
-            const network = await provider.getNetwork();
+            const provider = window.localStorage.getItem('FORK')
+                ? ethereum?.provider
+                : new ethers.providers.Web3Provider(ethereum, chainId);
 
-            const securedFinanceLib = new SecuredFinanceClient(
-                provider,
-                network
-            );
+            const network = await provider.getNetwork();
+            const signer = provider.getSigner();
+
+            const securedFinanceLib = new SecuredFinanceClient(signer, network);
 
             setSecuredFinance(securedFinanceLib);
             window.securedFinanceSDK = securedFinanceLib;

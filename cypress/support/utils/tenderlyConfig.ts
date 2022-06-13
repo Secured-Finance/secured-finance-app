@@ -1,4 +1,4 @@
-import { DEFAULT_TEST_ACCOUNT, TenderlyFork } from './tenderlyFork';
+import { TenderlyFork } from './tenderlyFork';
 
 export const tenderlyConfig = () => {
     const tenderlyFork = new TenderlyFork(4, Cypress.env('TENDERLY_FORK_ID'));
@@ -6,7 +6,6 @@ export const tenderlyConfig = () => {
     before(() => {
         cy.then(async () => {
             await tenderlyFork.init();
-            await tenderlyFork.addBalanceRpc(DEFAULT_TEST_ACCOUNT.address);
         });
     });
 
@@ -16,17 +15,13 @@ export const tenderlyConfig = () => {
         });
     });
 
-    beforeEach(() => {
+    before(() => {
         cy.connectWallet(tenderlyFork.onBeforeLoad()).then(() => {
             cy.window().its('ethereum').should('exist');
         });
     });
 
-    afterEach(() => {
+    after(() => {
         cy.disconnectWallet();
     });
-
-    const onBeforeLoad = tenderlyFork.onBeforeLoad();
-
-    return { onBeforeLoad };
 };

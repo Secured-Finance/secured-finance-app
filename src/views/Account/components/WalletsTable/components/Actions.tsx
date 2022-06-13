@@ -60,6 +60,7 @@ const RenderActions: React.FC<ActionProps> = ({ callbackMap, ccyIndex }) => {
                         <Chip
                             onClick={onPresentCollateralModal}
                             text='Manage Collateral'
+                            dataCy='manage-collateral-chip'
                         />
                     ) : null}
                     <Chip
