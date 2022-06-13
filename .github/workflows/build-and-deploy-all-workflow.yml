@@ -14,25 +14,17 @@ on:
 
 jobs:
   build-all:
-    name: Check Syntax, Build and Publish
+    name: Build and Publish
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Read .nvmrc
-        run: echo "##[set-output name=NVMRC;]$(cat .nvmrc)"
-        id: nvm
-      - name: Install Node
-        uses: actions/setup-node@v1
+      - uses: actions/setup-node@v3
         with:
-          node-version: '${{ steps.nvm.outputs.NVMRC }}'
+          node-version-file: '.nvmrc'
       - name: Install Dependencies
         run: npm ci
         env:
           NPM_AUTH_TOKEN: ${{ secrets.PAT }}
-      - name: Check Syntax with Prettier
-        run: npm run prettier:check
-      - name: Run Tests
-        run: npm run test -- --watchAll=false
       - name: Build Web App
         run: npm run build
       - name: Build Storybook
@@ -50,19 +42,36 @@ jobs:
           name: Storybook
           path: storybook-static
           retention-days: 10
+  check-code:
+    name: Check Code
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version-file: '.nvmrc'
+      - name: Install Dependencies
+        run: npm ci
+        env:
+          NPM_AUTH_TOKEN: ${{ secrets.PAT }}
+      - name: Check Syntax with Prettier
+        run: npm run prettier:check
+      - name: Run Tests
+        run: npm run test:ci
+      - name: Upload Code Coverage
+        uses: codecov/codecov-action@v2
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          flags: unit-tests
+          files: './coverage/cobertura-coverage.xml'
   cypress-run:
     runs-on: ubuntu-latest
     name: Cypress Run Tests
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-      - name: Read .nvmrc
-        run: echo "##[set-output name=NVMRC;]$(cat .nvmrc)"
-        id: nvm
-      - name: Install Node
-        uses: actions/setup-node@v1
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
         with:
-          node-version: '${{ steps.nvm.outputs.NVMRC }}'
+          node-version-file: '.nvmrc'
       - name: Install Dependencies
         run: npm ci
         env:
@@ -76,6 +85,7 @@ jobs:
           wait-on-timeout: 120
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CYPRESS_TENDERLY_KEY: ${{ secrets.TENDERLY_KEY }}
       - uses: actions/upload-artifact@v3
         if: failure()
         with:

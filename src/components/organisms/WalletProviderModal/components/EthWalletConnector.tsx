@@ -24,16 +24,18 @@ const EthWalletConnector: React.FC<ModalProps> = ({ onDismiss }) => {
                 | 'provided'
                 | 'torus'
                 | 'walletconnect'
-                | 'walletlink'
+                | 'walletlink',
+            account: string
         ) => {
             if (!account) {
                 await connect(provider);
                 localStorage.setItem(CACHED_PROVIDER_KEY, 'connected');
+
                 onDismiss();
                 history.push('/account');
             }
         },
-        [account, connect, onDismiss, history]
+        [connect, onDismiss, history]
     );
 
     return (
@@ -47,7 +49,7 @@ const EthWalletConnector: React.FC<ModalProps> = ({ onDismiss }) => {
                             alt='Metamask'
                         />
                     }
-                    onConnect={() => handleConnect('injected')}
+                    onConnect={() => handleConnect('injected', account)}
                     title='Metamask'
                 />
             </StyledWalletCard>
@@ -61,7 +63,7 @@ const EthWalletConnector: React.FC<ModalProps> = ({ onDismiss }) => {
                             alt='Wallet Connect'
                         />
                     }
-                    onConnect={() => handleConnect('walletconnect')}
+                    onConnect={() => handleConnect('walletconnect', account)}
                     title='WalletConnect'
                 />
             </StyledWalletCard>

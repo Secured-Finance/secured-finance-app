@@ -6,7 +6,7 @@ import {
     getFilecoinNetwork,
 } from './utils';
 
-describe('Filecoin Chaid ID', () => {
+describe('Filecoin ChainId ID', () => {
     it('should return the test chain id when the network is TESTNET', () => {
         expect(getFilecoinChainId(Network.TEST)).toEqual(1);
     });
