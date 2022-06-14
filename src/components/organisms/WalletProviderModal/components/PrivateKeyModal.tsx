@@ -182,6 +182,7 @@ const RenderPrivateKeyContainer: React.FC<ContainerProps> = ({
             <Spacer size={'md'} />
             <StyledButtonContainer>
                 <Button
+                    data-cy='import-mnemonic-button'
                     onClick={handleSave}
                     style={{
                         background: theme.colors.buttonBlue,

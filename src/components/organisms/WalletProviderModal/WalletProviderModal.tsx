@@ -38,6 +38,7 @@ const WalletProviderModal: React.FC<ModalProps> = ({ onDismiss, ccyIndex }) => {
             </ModalContent>
             <ModalActions>
                 <Button
+                    data-cy='cancel-button'
                     onClick={onDismiss}
                     style={{
                         background: 'transparent',

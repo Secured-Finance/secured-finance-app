@@ -18,8 +18,8 @@ describe('Filecoin Wallet', () => {
 
     it('should connect to a new filecoin wallet when using mnemonic phrase and disconnect', () => {
         cy.get('[data-cy="filecoin-connect-wallet-chip"]').click();
-        cy.get('[data-cy="generate-button"]').click();
-        cy.get('[data-cy="save-button"]')
+        cy.get('[data-cy="mnemonic-phrase-button"]').click();
+        cy.get('[data-cy="create-hd-wallet"]')
             .click()
             .then(() => {
                 expectFilecoin.walletConnected();
@@ -39,7 +39,7 @@ describe('Filecoin Wallet', () => {
             });
 
         cy.get('[data-cy="filecoin-settings-chip"]').click();
-        cy.get('[data-cy="sign-out-button"]').click();
+        cy.get('[data-cy="modal-sign-out-button"]').click();
 
         cy.get('[data-cy="wallet"]')
             .click()

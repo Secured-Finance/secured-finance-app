@@ -55,6 +55,7 @@ const EthWallet: React.FC<ModalProps> = ({ onDismiss, ...props }) => {
                 </Button>
                 <Spacer />
                 <Button
+                    data-cy='modal-sign-out-button'
                     onClick={handleSignOutClick}
                     style={{
                         background: theme.colors.buttonBlue,

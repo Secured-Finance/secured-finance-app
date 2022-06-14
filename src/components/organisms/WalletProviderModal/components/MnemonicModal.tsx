@@ -118,6 +118,7 @@ const MnemonicModal: React.FC<ModalProps> = ({ onDismiss }) => {
                     </Button>
                     <Spacer size={'md'} />
                     <Button
+                        data-cy='create-hd-wallet'
                         onClick={handleCreateFilHDWallet}
                         style={{
                             background: theme.colors.buttonBlue,
