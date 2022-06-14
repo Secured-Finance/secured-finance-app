@@ -301,6 +301,7 @@ const SendModal = ({
                     </Button>
                     <Spacer size={'md'} />
                     <Button
+                        data-cy='send-button'
                         onClick={handleTransferAssets}
                         style={{
                             background: theme.colors.buttonBlue,

@@ -67,6 +67,7 @@ const FilWallet: React.FC<ModalProps> = ({ onDismiss }) => {
                 </Button>
                 <Spacer />
                 <Button
+                    data-cy='modal-sign-out-button'
                     onClick={handleSignOutClick}
                     style={{
                         background: theme.colors.buttonBlue,
