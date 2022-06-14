@@ -44,25 +44,27 @@ const EthWallet: React.FC<ModalProps> = ({ onDismiss, ...props }) => {
             <StyledButtonContainer>
                 <Button
                     href={`https://etherscan.io/address/${account}`}
-                    text='View on Etherscan'
                     style={{
                         background: theme.colors.buttonBlue,
                         fontSize: theme.sizes.callout,
                         fontWeight: 500,
                         color: theme.colors.white,
                     }}
-                />
+                >
+                    View on Etherscan
+                </Button>
                 <Spacer />
                 <Button
                     onClick={handleSignOutClick}
-                    text='Sign out'
                     style={{
                         background: theme.colors.buttonBlue,
                         fontSize: theme.sizes.callout,
                         fontWeight: 500,
                         color: theme.colors.white,
                     }}
-                />
+                >
+                    Sign out
+                </Button>
             </StyledButtonContainer>
         </div>
     );
