@@ -1,13 +1,13 @@
 import React from 'react';
-import theme from 'src/theme';
 import {
     Button,
     Modal,
-    ModalProps,
     ModalActions,
     ModalContent,
+    ModalProps,
     ModalTitle,
 } from 'src/components/atoms';
+import theme from 'src/theme';
 import EthWallet from './components/EthWallet';
 import FilWallet from './components/FilWallet';
 
@@ -25,7 +25,6 @@ const WalletAccountModal: React.FC<ModalProps> = ({ onDismiss, ccyIndex }) => {
             <ModalActions>
                 <Button
                     onClick={onDismiss}
-                    text='Close'
                     style={{
                         background: 'transparent',
                         borderWidth: 1,
@@ -35,7 +34,9 @@ const WalletAccountModal: React.FC<ModalProps> = ({ onDismiss, ccyIndex }) => {
                         fontWeight: 500,
                         color: theme.colors.white,
                     }}
-                />
+                >
+                    Close
+                </Button>
             </ModalActions>
         </Modal>
     );

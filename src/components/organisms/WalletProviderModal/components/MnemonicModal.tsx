@@ -104,7 +104,6 @@ const MnemonicModal: React.FC<ModalProps> = ({ onDismiss }) => {
                 <StyledButtonContainer>
                     <Button
                         // onClick={saveProvider}
-                        text={'Download'}
                         style={{
                             background: 'transparent',
                             borderWidth: 1,
@@ -114,11 +113,12 @@ const MnemonicModal: React.FC<ModalProps> = ({ onDismiss }) => {
                             fontWeight: 500,
                             color: theme.colors.white,
                         }}
-                    />
+                    >
+                        Download
+                    </Button>
                     <Spacer size={'md'} />
                     <Button
                         onClick={handleCreateFilHDWallet}
-                        text={'Save'}
                         style={{
                             background: theme.colors.buttonBlue,
                             fontSize: theme.sizes.callout,
@@ -126,13 +126,14 @@ const MnemonicModal: React.FC<ModalProps> = ({ onDismiss }) => {
                             color: theme.colors.white,
                         }}
                         disabled={!isLoading}
-                    />
+                    >
+                        Save
+                    </Button>
                 </StyledButtonContainer>
                 <Breaker />
             </ModalContent>
             <ModalActions>
                 <Button
-                    text='Import Wallet'
                     onClick={onPrivateKeyModal}
                     style={{
                         background: 'transparent',
@@ -143,7 +144,9 @@ const MnemonicModal: React.FC<ModalProps> = ({ onDismiss }) => {
                         fontWeight: 500,
                         color: theme.colors.white,
                     }}
-                />
+                >
+                    Import Wallet
+                </Button>
             </ModalActions>
         </Modal>
     );

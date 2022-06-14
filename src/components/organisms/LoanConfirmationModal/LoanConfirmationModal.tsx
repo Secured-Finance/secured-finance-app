@@ -252,7 +252,6 @@ const LoanConfirmationModal: React.FC<CombinedProps> = ({
             <ModalActions>
                 <Button
                     // onClick={handleLendOut}
-                    text={'Lend out'}
                     style={{
                         background: theme.colors.buttonBlue,
                         fontSize: theme.sizes.callout,
@@ -260,7 +259,9 @@ const LoanConfirmationModal: React.FC<CombinedProps> = ({
                         color: theme.colors.white,
                     }}
                     // disabled={!(amount > 0)}
-                />
+                >
+                    Lend out
+                </Button>
             </ModalActions>
         </Modal>
     );
