@@ -38,7 +38,7 @@ const Item = ({
                     <Icon aria-hidden='true' className='h-6 w-6' />
                 </div>
                 <div className='ml-4'>
-                    <p className='text-gray-900 text-sm font-medium'>{name}</p>
+                    <p className='text-sm font-medium text-white'>{name}</p>
                 </div>
                 {Badge && (
                     <div className='ml-auto'>
@@ -90,7 +90,7 @@ export const WalletPopover = ({
                             leaveTo='opacity-0 translate-y-1'
                         >
                             <Popover.Panel className='absolute left-36 z-10 mt-3 w-screen max-w-sm -translate-x-1/2 transform px-4'>
-                                <div className='overflow-hidden rounded-md shadow-lg ring-1 ring-red ring-opacity-5'>
+                                <div className='ring-red overflow-hidden rounded-md shadow-lg ring-1 ring-opacity-5'>
                                     <div className='relative grid gap-4 bg-secondary-500 p-7 text-white'>
                                         <p className='focus:outline-none focus-visible:ring-orange-500 -m-3 flex flex-col items-start rounded-md p-2 transition duration-150 ease-in-out hover:bg-secondary-300 focus-visible:ring focus-visible:ring-opacity-50'>
                                             <span className='ml-2 pb-2 text-sm text-lightGrey'>
