@@ -12,7 +12,6 @@ export const Toggle = () => {
                 enabled ? 'bg-primary-400' : 'bg-secondary-200'
             } relative inline-flex h-6 w-11 items-center rounded-full`}
         >
-            <span className='sr-only text-gray'>Enable notifications</span>
             <span
                 className={`transform transition duration-200 ease-in-out ${
                     enabled ? 'translate-x-6' : 'translate-x-1'
