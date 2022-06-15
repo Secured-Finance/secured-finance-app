@@ -1,33 +1,51 @@
 import { Popover, Transition } from '@headlessui/react';
 import { LogoutIcon, UserIcon } from '@heroicons/react/outline';
-import { SupportIcon } from '@heroicons/react/solid';
+import { BadgeCheckIcon, SupportIcon } from '@heroicons/react/solid';
 import classNames from 'classnames';
 import { Fragment, SVGProps } from 'react';
 import metamaskLogo from 'src/assets/img/metamask-fox.svg';
+import { Toggle } from 'src/components/atoms/Toggle/Toggle';
 
 const Item = ({
     name,
-    href,
     Icon,
+    href,
+    Badge,
 }: {
     name: string;
-    href: string;
     Icon: (props: SVGProps<SVGSVGElement>) => JSX.Element;
+    href?: string;
+    Badge?: (props: SVGProps<SVGSVGElement>) => JSX.Element;
 }) => {
+    const Tag = href ? 'a' : 'button';
+    const props: {
+        name: string;
+        className: string;
+        href?: string;
+    } = {
+        name: name,
+        className:
+            'focus:outline-none focus-visible:ring-orange-500 -m-3 flex items-center rounded-md p-2 transition duration-150 ease-in-out hover:bg-secondary-300 focus-visible:ring focus-visible:ring-opacity-50',
+    };
+    if (href) {
+        props.href = href;
+    }
+
     return (
         <Fragment>
-            <a
-                key={name}
-                href={href}
-                className='focus:outline-none focus-visible:ring-orange-500 -m-3 flex items-center rounded-md p-2  transition duration-150 ease-in-out hover:bg-secondary-300 focus-visible:ring focus-visible:ring-opacity-50'
-            >
+            <Tag {...props}>
                 <div className='flex h-10 w-10 shrink-0 items-center justify-center text-secondary-200'>
                     <Icon aria-hidden='true' className='h-6 w-6' />
                 </div>
                 <div className='ml-4'>
                     <p className='text-gray-900 text-sm font-medium'>{name}</p>
                 </div>
-            </a>
+                {Badge && (
+                    <div className='ml-auto'>
+                        <Badge className='h-6 w-6' />
+                    </div>
+                )}
+            </Tag>
         </Fragment>
     );
 };
@@ -99,11 +117,20 @@ export const WalletPopover = ({
                                             </span>
                                         </p>
                                         <div className='border-b border-secondary-100 border-opacity-20' />
-                                        <Item
-                                            name='Account Verified'
-                                            href='##'
-                                            Icon={UserIcon}
-                                        />
+                                        {isKYC ? (
+                                            <Item
+                                                name='Account Verified'
+                                                Icon={UserIcon}
+                                                Badge={BadgeCheckIcon}
+                                            />
+                                        ) : (
+                                            <Item
+                                                name='Finish KYC'
+                                                Icon={UserIcon}
+                                                href='/kyc'
+                                            />
+                                        )}
+
                                         <Item
                                             name='Disconnect Wallet'
                                             href='##'
@@ -111,11 +138,13 @@ export const WalletPopover = ({
                                         />
 
                                         <div className='border-b border-secondary-100 border-opacity-20' />
-                                        <p className='focus:outline-none focus-visible:ring-orange-500 -m-3 flex items-center rounded-md p-2  transition duration-150 ease-in-out hover:bg-secondary-300 focus-visible:ring focus-visible:ring-opacity-50'>
+                                        <p className='focus:outline-none focus-visible:ring-orange-500 -m-3 flex flex-row items-center justify-between  rounded-md p-2 transition duration-150 ease-in-out hover:bg-secondary-300 focus-visible:ring focus-visible:ring-opacity-50'>
                                             <span className='ml-2'>
                                                 Dark Mode
                                             </span>
-                                            <span></span>
+                                            <span>
+                                                <Toggle />
+                                            </span>
                                         </p>
                                     </div>
                                 </div>

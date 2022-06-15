@@ -10,15 +10,25 @@ export default {
         status: 'connected',
         //children: 'Connect Wallet',
     },
-    // argTypes: {
-    //     children: { control: 'text' },
-    //     variant: { control: 'select', options: ['contained', 'outlined'] },
-    //     size: { control: 'select', options: ['xs', 'sm', 'md', 'lg'] },
-    // },
+    argTypes: {
+        wallet: { control: 'text' },
+        networkName: { control: 'text' },
+        status: {
+            control: 'select',
+            options: ['connected', 'disconnected', 'connecting'],
+        },
+    },
 } as ComponentMeta<typeof WalletPopover>;
 
 const Template: ComponentStory<typeof WalletPopover> = args => (
     <WalletPopover {...args} />
 );
 
+export const Default = Template.bind({});
 export const Primary = Template.bind({});
+Primary.args = {
+    wallet: '0x0123...321',
+    networkName: 'Rinkeby',
+    status: 'connected',
+    isKYC: true,
+};
