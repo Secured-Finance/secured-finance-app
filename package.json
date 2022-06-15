@@ -10,6 +10,8 @@
     "@glif/filecoin-message-confirmer": "^2.0.0-beta.12",
     "@glif/filecoin-number": "^1.1.0-beta.11",
     "@glif/filecoin-wallet-provider": "^1.1.0-beta.11",
+    "@headlessui/react": "^1.6.4",
+    "@heroicons/react": "^1.0.6",
     "@ledgerhq/hw-transport-webhid": "^5.51.1",
     "@reduxjs/toolkit": "^1.8.1",
     "@secured-finance/sf-client": "^0.1.6-beta.17",

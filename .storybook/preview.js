@@ -9,7 +9,7 @@ export const parameters = {
         },
     },
     backgrounds: {
-        default: 'black',
+        default: 'secfin',
         values: [
             {
                 name: 'black',
@@ -18,6 +18,14 @@ export const parameters = {
             {
                 name: 'white',
                 value: '#fff',
+            },
+            {
+                name: 'secfin',
+                value: '#0b1925',
+            },
+            {
+                name: 'blue',
+                value: '#174e7a',
             },
         ],
     },
