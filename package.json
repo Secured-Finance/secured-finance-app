@@ -47,7 +47,7 @@
     "start": "craco start",
     "build": "craco build",
     "test": "craco test",
-    "test:ci": "npm run test -- --watchAll=false --coverageReporters=cobertura --collectCoverage",
+    "test:cov": "npm run test -- --watchAll=false --coverageReporters=cobertura --collectCoverage",
     "prettier:check": "prettier --check 'src/**/*.{ts,tsx,js,jsx,json}' '*.{ts,tsx,js,jsx,json}'",
     "prettier:write": "prettier --write 'src/**/*.{ts,tsx,js,jsx,json}' '*.{ts,tsx,js,jsx,json}'",
     "lint:check": "eslint .",
@@ -66,6 +66,9 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "jest": {
+    "collectCoverageFrom": ["src/**/*.{js,ts,jsx,tsx}", "!**/*.stories.tsx"]
   },
   "devDependencies": {
     "@commitlint/cli": "^17.0.0",
