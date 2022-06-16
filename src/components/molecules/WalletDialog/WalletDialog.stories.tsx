@@ -5,12 +5,13 @@ export default {
     title: 'Components/Molecules/WalletDialog',
     component: WalletDialog,
     args: {
-        open: true,
+        isOpen: true,
+        onClose: () => {},
     },
 } as ComponentMeta<typeof WalletDialog>;
 
 const Template: ComponentStory<typeof WalletDialog> = args => (
-    <WalletDialog open />
+    <WalletDialog {...args} />
 );
 
 export const Primary = Template.bind({});

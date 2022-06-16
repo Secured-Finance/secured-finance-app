@@ -1,16 +1,18 @@
-import { Dialog } from '@headlessui/react';
-import { SVGProps, useState } from 'react';
+import { SVGProps, useCallback, useState } from 'react';
 import { ReactComponent as MetaMaskIcon } from 'src/assets/img/metamask-fox.svg';
 import { ReactComponent as WalletConnectIcon } from 'src/assets/img/wallet-connect.svg';
 
-import { Button } from 'src/components/atoms';
+import { Dialog } from '../Dialog/Dialog';
 
 const WalletProvider = ({
     name,
     Icon,
+    handleChange,
 }: {
     name: string;
+    key: 'metamask' | 'walletconnect';
     Icon: (props: SVGProps<SVGSVGElement>) => JSX.Element;
+    handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }) => {
     return (
         <div className='m-4 flex flex-row justify-between gap-6'>
@@ -22,39 +24,56 @@ const WalletProvider = ({
                 type='radio'
                 className='flex h-4 w-4 border-gray-300 bg-secondary-500 text-primary-400 ring-offset-gray-800 focus:ring-2 focus:ring-blue-400'
                 name='wallet'
+                value={name}
+                onChange={handleChange}
             />
         </div>
     );
 };
-export const WalletDialog = ({ open }: { open: boolean }) => {
-    const [isOpen, setIsOpen] = useState(open);
+export const WalletDialog = ({
+    isOpen,
+    onClose,
+}: {
+    isOpen: boolean;
+    onClose: () => void;
+}) => {
+    const [, setWallet] = useState<string | undefined>();
+
+    const handleChange = useCallback(
+        (e: React.ChangeEvent<HTMLInputElement>) => {
+            setWallet(e.target.value);
+        },
+        []
+    );
+
+    const connectWallet = useCallback(() => {
+        // TODO: connect wallet
+        onClose();
+    }, [onClose]);
 
     return (
         <Dialog
-            open={isOpen}
-            onClose={() => setIsOpen(false)}
-            className='relative z-50'
+            isOpen={isOpen}
+            onClose={onClose}
+            title='Select Wallet Provider'
+            description='Connect your wallet to unlock and start using services
+        on Secured Finance'
+            callToAction='Connect Wallet'
+            onClick={() => connectWallet()}
         >
-            <div className='fixed inset-0 flex items-center justify-center p-4'>
-                <Dialog.Panel className='w-full max-w-sm rounded-xl bg-secondary-500 p-10'>
-                    <Dialog.Title className='p-4 text-center text-2xl text-white'>
-                        Select Wallet Provider
-                    </Dialog.Title>
-                    <Dialog.Description className='pb-8 text-center text-base text-gray-400'>
-                        Connect your wallet to unlock and start using services
-                        on Secured Finance
-                    </Dialog.Description>
-                    <div className='flex flex-col items-stretch justify-center'>
-                        <WalletProvider name='Metamask' Icon={MetaMaskIcon} />
-                        <WalletProvider
-                            name='WalletConnect'
-                            Icon={WalletConnectIcon}
-                        />
-                    </div>
-                    <div className='pt-8'>
-                        <Button size='md'>Connect Wallet</Button>
-                    </div>
-                </Dialog.Panel>
+            <div className='flex flex-col items-stretch justify-center'>
+                <WalletProvider
+                    name='Metamask'
+                    key='metamask'
+                    Icon={MetaMaskIcon}
+                    handleChange={handleChange}
+                />
+                <WalletProvider
+                    name='WalletConnect'
+                    key='walletconnect'
+                    Icon={WalletConnectIcon}
+                    handleChange={handleChange}
+                />
             </div>
         </Dialog>
     );
