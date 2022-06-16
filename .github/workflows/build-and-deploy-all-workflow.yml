@@ -30,7 +30,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
       - name: Install Dependencies
-        if:  npm-cache.outputs.cache-hit != 'true'
+        if:  steps.npm-cache.outputs.cache-hit != 'true'
         run: npm ci
         env:
           NPM_AUTH_TOKEN: ${{ secrets.PAT }}
@@ -68,7 +68,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
       - name: Install Dependencies
-        if:  npm-cache.outputs.cache-hit != 'true'
+        if:  steps.npm-cache.outputs.cache-hit != 'true'
         run: npm ci
         env:
           NPM_AUTH_TOKEN: ${{ secrets.PAT }}
@@ -99,7 +99,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
       - name: Install Dependencies
-        if:  npm-cache.outputs.cache-hit != 'true'
+        if:  steps.npm-cache.outputs.cache-hit != 'true'
         run: npm ci
         env:
           NPM_AUTH_TOKEN: ${{ secrets.PAT }}
