@@ -1,7 +1,7 @@
 import BigNumber from 'bignumber.js/bignumber';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { connect, useDispatch, useSelector } from 'react-redux';
-import { Button } from 'src/components/new/Button';
+import { Button } from 'src/components/atoms/Button';
 import { Dropdown } from 'src/components/new/Dropdown';
 import { FieldValue } from 'src/components/new/FieldValue';
 import { Input } from 'src/components/new/Input';
