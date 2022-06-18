@@ -2,7 +2,7 @@ import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { Dialog } from './Dialog';
 
 export default {
-    title: 'Components/Molecules/Dialog',
+    title: 'Molecules/Dialog',
     component: Dialog,
     args: {
         isOpen: true,
