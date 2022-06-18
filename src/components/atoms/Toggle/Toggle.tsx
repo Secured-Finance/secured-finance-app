@@ -9,7 +9,7 @@ export const Toggle = () => {
             checked={enabled}
             onChange={setEnabled}
             className={`${
-                enabled ? 'bg-primary-400' : 'bg-secondary-200'
+                enabled ? 'bg-primary-200' : 'bg-secondary-400'
             } relative inline-flex h-6 w-11 items-center rounded-full`}
         >
             <span
