@@ -2,7 +2,7 @@ import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { WalletPopover } from './WalletPopover';
 
 export default {
-    title: 'Components/Molecules/WalletPopover',
+    title: 'Organism/WalletPopover',
     component: WalletPopover,
     args: {
         wallet: '0x0123...321',
