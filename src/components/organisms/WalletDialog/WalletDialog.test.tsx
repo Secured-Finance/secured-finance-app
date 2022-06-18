@@ -5,8 +5,8 @@ import * as stories from './WalletDialog.stories';
 
 const { Primary } = composeStories(stories);
 
-describe('Dialog component', () => {
-    it('should render a dialog if isOpen', () => {
+describe('Wallet Dialog component', () => {
+    it('should shows two options in a radio button with only one being able to be selected at the same time', () => {
         const onClose = jest.fn();
         render(<Primary onClose={onClose} />);
 
