@@ -78,7 +78,11 @@ export const WalletDialog = ({
             callToAction='Connect Wallet'
             onClick={() => connectWallet()}
         >
-            <RadioGroup value={wallet} onChange={setWallet}>
+            <RadioGroup
+                value={wallet}
+                onChange={setWallet}
+                className='rounded-lg border border-secondary-400 border-opacity-40 py-4'
+            >
                 <WalletOption name='Metamask' Icon={MetaMaskIcon} />
                 <WalletOption name='WalletConnect' Icon={WalletConnectIcon} />
             </RadioGroup>
