@@ -5,7 +5,7 @@ import { ReactComponent as CircleOutline } from 'src/assets/icons/circle-outline
 import { ReactComponent as MetaMaskIcon } from 'src/assets/img/metamask-fox.svg';
 import { ReactComponent as WalletConnectIcon } from 'src/assets/img/wallet-connect.svg';
 
-import { Dialog } from '../Dialog/Dialog';
+import { Dialog } from '../../molecules/Dialog/Dialog';
 
 const WalletOption = ({
     name,
