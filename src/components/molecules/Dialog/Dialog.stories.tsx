@@ -7,6 +7,7 @@ export default {
     args: {
         isOpen: true,
         onClose: () => {},
+        onClick: () => {},
     },
 } as ComponentMeta<typeof Dialog>;
 
@@ -16,7 +17,7 @@ const Template: ComponentStory<typeof Dialog> = args => (
         title='Modal Title'
         description='Description goes here. Try to keep message to not more than three lines.'
         callToAction='Ok'
-        onClick={() => {}}
+        onClick={args.onClick}
     >
         <p>
             This is the content but since it is a component, it can be styled as

@@ -1,35 +1,32 @@
 import { fireEvent, render, screen } from 'src/test-utils.js';
-import { Dialog } from './Dialog';
+
+import { composeStories } from '@storybook/testing-react';
+import * as stories from './Dialog.stories';
+
+const { Primary } = composeStories(stories);
 
 describe('Dialog component', () => {
     it('should render a dialog if isOpen', () => {
         const onClick = jest.fn();
         const onClose = jest.fn();
         render(
-            <Dialog
-                isOpen={true}
-                onClose={onClose}
-                title='This is the title'
-                description='This is a great description, usually this is a longer text'
-                callToAction='Do Something'
-                onClick={onClick}
-            >
+            <Primary onClose={onClose} onClick={onClick}>
                 <p style={{ color: 'white' }}>
                     This is the content but since it is a component, it can be
                     styled as we want
                 </p>
-            </Dialog>
+            </Primary>
         );
 
         expect(screen.getByRole('dialog')).toBeInTheDocument();
-        expect(screen.getByText('This is the title')).toBeInTheDocument();
+        expect(screen.getByText('Modal Title')).toBeInTheDocument();
         expect(
             screen.getByText(
-                'This is a great description, usually this is a longer text'
+                'Description goes here. Try to keep message to not more than three lines.'
             )
         ).toBeInTheDocument();
         const button = screen.getByRole('button');
-        expect(button).toHaveTextContent('Do Something');
+        expect(button).toHaveTextContent('Ok');
         fireEvent.click(button);
         expect(onClick).toHaveBeenCalled();
     });
