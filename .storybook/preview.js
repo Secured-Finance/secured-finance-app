@@ -29,4 +29,5 @@ export const parameters = {
             },
         ],
     },
+    chromatic: { disableSnapshot: true },
 };
