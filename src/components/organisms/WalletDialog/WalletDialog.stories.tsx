@@ -2,7 +2,7 @@ import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { WalletDialog } from './WalletDialog';
 
 export default {
-    title: 'Components/Molecules/WalletDialog',
+    title: 'Organism/WalletDialog',
     component: WalletDialog,
     args: {
         isOpen: true,
