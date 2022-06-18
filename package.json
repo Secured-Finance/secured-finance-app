@@ -97,6 +97,7 @@
     "@types/validator": "^13.1.2",
     "@types/webfontloader": "^1.6.32",
     "autoprefixer": "^9.8.8",
+    "chromatic": "^6.6.2",
     "css-loader": "^5.2.6",
     "cypress": "^9.5.3",
     "eslint": "^7.32.0",

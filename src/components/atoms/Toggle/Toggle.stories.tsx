@@ -5,6 +5,9 @@ export default {
     title: 'Atoms/Toggle',
     component: Toggle,
     args: {},
+    parameters: {
+        chromatic: { disableSnapshot: false },
+    },
 } as ComponentMeta<typeof Toggle>;
 
 const Template: ComponentStory<typeof Toggle> = args => <Toggle />;
