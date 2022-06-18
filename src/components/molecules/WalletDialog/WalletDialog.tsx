@@ -1,33 +1,58 @@
+import { RadioGroup } from '@headlessui/react';
+import { CheckIcon } from '@heroicons/react/solid';
 import { SVGProps, useCallback, useState } from 'react';
+import { ReactComponent as CircleOutline } from 'src/assets/icons/circle-outline.svg';
 import { ReactComponent as MetaMaskIcon } from 'src/assets/img/metamask-fox.svg';
 import { ReactComponent as WalletConnectIcon } from 'src/assets/img/wallet-connect.svg';
 
 import { Dialog } from '../Dialog/Dialog';
 
-const WalletProvider = ({
+const WalletOption = ({
     name,
     Icon,
-    handleChange,
 }: {
     name: string;
-    key: 'metamask' | 'walletconnect';
     Icon: (props: SVGProps<SVGSVGElement>) => JSX.Element;
-    handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }) => {
     return (
-        <div className='m-4 flex flex-row justify-between gap-6'>
-            <span className='flex'>
-                <Icon className='h-6 w-6' />
-                <p className='ml-6 text-white'>{name}</p>
-            </span>
-            <input
-                type='radio'
-                className='flex h-4 w-4 border-gray-300 bg-secondary-500 text-primary-400 ring-offset-gray-800 focus:ring-2 focus:ring-blue-400'
-                name='wallet'
-                value={name}
-                onChange={handleChange}
-            />
-        </div>
+        <RadioGroup.Option
+            value={name}
+            className='
+    focus:outline-none relative flex cursor-pointer rounded-lg px-5 py-4'
+        >
+            {({ checked }) => (
+                <>
+                    <div className='flex w-full items-center justify-between'>
+                        <div className='flex items-center'>
+                            <div className='text-sm'>
+                                <RadioGroup.Label
+                                    as='p'
+                                    className={`font-medium  ${
+                                        checked ? 'text-white' : 'text-gray-900'
+                                    }`}
+                                >
+                                    <span className='flex'>
+                                        <Icon className='h-6 w-6' />
+                                        <p className='ml-6 text-white'>
+                                            {name}
+                                        </p>
+                                    </span>
+                                </RadioGroup.Label>
+                            </div>
+                        </div>
+                        {checked ? (
+                            <div className='rounded-full border-2 border-secondary-400 bg-primary-500 text-white'>
+                                <CheckIcon className='h-6 w-6' />
+                            </div>
+                        ) : (
+                            <div className='rounded-full border-2 border-secondary-300 text-white'>
+                                <CircleOutline className='h-6 w-6' />
+                            </div>
+                        )}
+                    </div>
+                </>
+            )}
+        </RadioGroup.Option>
     );
 };
 export const WalletDialog = ({
@@ -37,17 +62,9 @@ export const WalletDialog = ({
     isOpen: boolean;
     onClose: () => void;
 }) => {
-    const [, setWallet] = useState<string | undefined>();
-
-    const handleChange = useCallback(
-        (e: React.ChangeEvent<HTMLInputElement>) => {
-            setWallet(e.target.value);
-        },
-        []
-    );
+    const [wallet, setWallet] = useState<string | undefined>();
 
     const connectWallet = useCallback(() => {
-        // TODO: connect wallet
         onClose();
     }, [onClose]);
 
@@ -61,20 +78,10 @@ export const WalletDialog = ({
             callToAction='Connect Wallet'
             onClick={() => connectWallet()}
         >
-            <div className='flex flex-col items-stretch justify-center'>
-                <WalletProvider
-                    name='Metamask'
-                    key='metamask'
-                    Icon={MetaMaskIcon}
-                    handleChange={handleChange}
-                />
-                <WalletProvider
-                    name='WalletConnect'
-                    key='walletconnect'
-                    Icon={WalletConnectIcon}
-                    handleChange={handleChange}
-                />
-            </div>
+            <RadioGroup value={wallet} onChange={setWallet}>
+                <WalletOption name='Metamask' Icon={MetaMaskIcon} />
+                <WalletOption name='WalletConnect' Icon={WalletConnectIcon} />
+            </RadioGroup>
         </Dialog>
     );
 };
