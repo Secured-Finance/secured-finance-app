@@ -24,20 +24,18 @@ export const Dialog = ({
             onClose={onClose}
             className='relative z-50'
         >
-            <div className='fixed inset-0 flex items-center justify-center p-4'>
-                <HeadlessDialog.Panel className='w-full max-w-sm rounded-xl bg-secondary-500 p-10'>
-                    <HeadlessDialog.Title className='p-4 text-center text-2xl text-white'>
+            <div className='inset-0 flex items-center justify-center p-4'>
+                <HeadlessDialog.Panel className='w-full max-w-md space-y-8 rounded-xl bg-secondary-500 p-10'>
+                    <HeadlessDialog.Title className='w-full text-center text-3xl font-semibold leading-9 text-gray-50'>
                         {title}
                     </HeadlessDialog.Title>
-                    <HeadlessDialog.Description className='pb-8 text-center text-base text-gray-400'>
+                    <HeadlessDialog.Description className='w-full text-center text-base leading-normal text-white text-opacity-50'>
                         {description}
                     </HeadlessDialog.Description>
                     {children}
-                    <div className='pt-8'>
-                        <Button size='md' onClick={onClick}>
-                            {callToAction}
-                        </Button>
-                    </div>
+                    <Button size='sm' fullWidth onClick={onClick}>
+                        {callToAction}
+                    </Button>
                 </HeadlessDialog.Panel>
             </div>
         </HeadlessDialog>

@@ -2,6 +2,23 @@
 @tailwind components;
 @tailwind utilities;
 
+
+@layer base {
+  p {
+    @apply text-gray-300
+  },
+  h1 {
+    @apply text-5xl;
+    @apply leading-10;
+    @apply text-gray-800;
+  }
+}
+
+@layer utilities {
+  .bg-gradient-primary {
+    @apply bg-gradient-to-l from-primary-500 to-primary-600;
+  }
+}
 body {
   background-color: #060609;
   margin: 0;

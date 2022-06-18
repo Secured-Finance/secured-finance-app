@@ -1,16 +1,20 @@
+import classNames from 'classnames';
 import React from 'react';
 
 export const Button = ({
     variant = 'contained',
     href, //do nothing
     size = 'sm',
+    fullWidth = false,
     children,
     ...props
-}: React.ButtonHTMLAttributes<HTMLButtonElement> & {
-    href?: string;
-    variant?: 'contained' | 'outlined';
-    size?: 'xs' | 'sm' | 'md' | 'lg';
-}) => {
+}: React.ButtonHTMLAttributes<HTMLButtonElement> &
+    React.AnchorHTMLAttributes<HTMLAnchorElement> & {
+        fullWidth?: boolean;
+        href?: string;
+        variant?: 'contained' | 'outlined';
+        size?: 'xs' | 'sm' | 'md' | 'lg';
+    }) => {
     const textSize =
         size === 'xs' || size === 'sm'
             ? 'text-base leading-normal'
@@ -18,29 +22,27 @@ export const Button = ({
 
     const variantStyle =
         variant === 'contained'
-            ? 'bg-gradient-to-l from-primary-500 to-primary-600'
+            ? 'bg-gradient-primary'
             : 'bg-primary-500 opacity-40';
 
-    if (href) {
-        return (
-            <a
-                href={href}
-                target='_blank'
-                rel='noreferrer'
-                className={`${variantStyle}  w-button-${size} inline-flex h-button-${size} items-center justify-center rounded-xl px-6 py-4 ${props.className}`}
-            >
-                <p className={`${textSize} tracking-wide text-white`}>
-                    {children}
-                </p>
-            </a>
-        );
-    }
+    const Tag = href ? 'a' : 'button';
+    const tagProps = href
+        ? {
+              href,
+              target: '_blank',
+              rel: 'noopener noreferrer',
+          }
+        : props;
+
     return (
-        <button
-            {...props}
-            className={`${variantStyle}  w-button-${size} inline-flex h-button-${size} items-center justify-center rounded-xl px-6 py-4 ${props.className}`}
+        <Tag
+            {...tagProps}
+            className={classNames(
+                `${variantStyle} inline-flex h-button-${size} items-center justify-center rounded-xl px-6 py-4 ${props.className}`,
+                fullWidth ? 'w-full' : `w-button-${size}`
+            )}
         >
             <p className={`${textSize} tracking-wide text-white`}>{children}</p>
-        </button>
+        </Tag>
     );
 };

@@ -13,6 +13,7 @@ describe('test Button component', () => {
         const button = screen.getByRole('link');
         expect(button).toBeInTheDocument();
         expect(button).toHaveAttribute('href', 'https://google.com');
+        expect(button).toHaveAttribute('target', '_blank');
         expect(button).toHaveTextContent('Hello');
     });
 
