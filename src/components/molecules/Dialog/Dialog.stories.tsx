@@ -20,7 +20,7 @@ export default {
 
 const Template: ComponentStory<typeof Dialog> = args => (
     <Dialog {...args}>
-        <p>
+        <p className='body1 text-white-70'>
             This is the content but since it is a component, it can be styled as
             we want
         </p>
