@@ -2,7 +2,7 @@ import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { CloseButton } from './CloseButton';
 
 export default {
-    title: 'Atoms/Toggle',
+    title: 'Atoms/CloseButton',
     component: CloseButton,
     args: {
         onClick: () => {},
