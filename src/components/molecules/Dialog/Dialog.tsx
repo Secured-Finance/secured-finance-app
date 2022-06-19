@@ -33,9 +33,11 @@ export const Dialog = ({
                         {description}
                     </HeadlessDialog.Description>
                     {children}
-                    <Button size='sm' fullWidth onClick={onClick}>
-                        {callToAction}
-                    </Button>
+                    {callToAction ? (
+                        <Button size='sm' fullWidth onClick={onClick}>
+                            {callToAction}
+                        </Button>
+                    ) : null}
                 </HeadlessDialog.Panel>
             </div>
         </HeadlessDialog>
