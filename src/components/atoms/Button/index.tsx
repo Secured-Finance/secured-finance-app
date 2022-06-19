@@ -21,7 +21,7 @@ export const Button = ({
             : 'text-lg font-semibold leading-7';
 
     const variantStyle =
-        variant === 'contained' ? 'bg-gradient-primary' : 'bg-starBlue';
+        variant === 'contained' ? 'bg-starBlue' : 'bg-starBlue';
 
     const Tag = href ? 'a' : 'button';
     const tagProps = href
@@ -40,7 +40,7 @@ export const Button = ({
                 fullWidth ? 'w-full' : `w-button-${size}`
             )}
         >
-            <p className={`${textSize} tracking-wide text-white`}>{children}</p>
+            <p className='typography-button6 text-white-80'>{children}</p>
         </Tag>
     );
 };
