@@ -26,10 +26,10 @@ export const Dialog = ({
         >
             <div className='inset-0 flex items-center justify-center p-4'>
                 <HeadlessDialog.Panel className='w-full max-w-md space-y-8 rounded-xl bg-secondary-500 p-10'>
-                    <HeadlessDialog.Title className='w-full text-center text-3xl font-semibold leading-9 text-gray-50'>
+                    <HeadlessDialog.Title className='w-full text-center font-primary text-3xl font-bold leading-9 text-gray-50'>
                         {title}
                     </HeadlessDialog.Title>
-                    <HeadlessDialog.Description className='w-full text-center text-base leading-normal text-white text-opacity-50'>
+                    <HeadlessDialog.Description className='w-full text-center font-secondary text-base leading-normal text-white text-opacity-50'>
                         {description}
                     </HeadlessDialog.Description>
                     {children}
