@@ -38,11 +38,11 @@ const WalletOption = ({
                             </div>
                         </div>
                         {checked ? (
-                            <div className='rounded-full border-2 border-secondary-400 bg-primary-500 text-white'>
+                            <div className='border-secondary-400 bg-primary-500 rounded-full border-2 text-white'>
                                 <CheckIcon className='h-6 w-6' />
                             </div>
                         ) : (
-                            <div className='rounded-full border-2 border-secondary-300 text-white'>
+                            <div className='border-secondary-300 rounded-full border-2 text-white'>
                                 <CircleOutline className='h-6 w-6' />
                             </div>
                         )}
@@ -63,7 +63,7 @@ export const WalletRadioGroup = ({
         <RadioGroup
             value={value}
             onChange={onChange}
-            className='rounded-lg border border-secondary-400 border-opacity-40 py-4'
+            className='rounded-lg border border-moonGrey border-opacity-40 py-4'
         >
             <WalletOption name='Metamask' Icon={MetaMaskIcon} />
             <WalletOption name='WalletConnect' Icon={WalletConnectIcon} />

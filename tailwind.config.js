@@ -45,29 +45,30 @@ module.exports = {
 
                 // colors for the design system\
                 // generated with https://tailwind.simeongriggs.dev/
-                primary: {
-                    '50': '#ECEBFA',
-                    '100': '#D9D7F4',
-                    '200': '#B3AEEA',
-                    '300': '#8E86DF',
-                    '400': '#685ED4',
-                    '500': '#4338CA',
-                    '600': '#352BA1',
-                    '700': '#282079',
-                    '800': '#1A1551',
-                    '900': '#0D0B28',
-                },
-                secondary: {
-                    '50': '#E3EBF2',
-                    '100': '#C4D5E3',
-                    '200': '#8AAAC7',
-                    '300': '#5180A9',
-                    '400': '#375672',
-                    '500': '#1A2936',
-                    '600': '#16222D',
-                    '700': '#0F171F',
-                    '800': '#0A1015',
-                    '900': '#05080A',
+
+                // Primary
+                universeBlue: '#002133',
+                horizonBlue: '#3555AC',
+                teal: '#11CABE',
+                green: '#5CD167',
+                orange: '#F9AA4B',
+                red: '#FA2256',
+                purple: '#BD47FB',
+
+                // Secondary
+                galacticOrange: '#F9AA4B',
+                planetaryPurple: '#ADB6FF',
+                nebulaTeal: '#15D6E8',
+                secondaryPurple: '#AE72FF',
+                moonGrey: '#E6E6E6',
+
+                white: '#FFFFFF',
+                black: '#000000',
+
+                starBlue: {
+                    DEFAULT: '#5162FF',
+                    '100': '#e8a838',
+                    '200': '#e8a838',
                 },
             },
             width: {
