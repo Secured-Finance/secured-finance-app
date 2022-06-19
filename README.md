@@ -11,6 +11,15 @@ This repo contains a decentralized web application.
 3. Install all required dependencies using `npm install` command
 4. Run `npm run start` to start development mode
 
+### Recommended Development Environment
+This repository provides a `.vscode/settings.json` which assumes you have the following extensions installed:
+- ESLint
+- Prettier
+- TailwindCSS Intellisense
+- Code Spell Checker
+
+Those extensions helps streamline the development process by creating a standard way of formatting the code.
+
 ## Test the app
 The web application is tested in multiple ways
 ### Unit test
@@ -42,9 +51,9 @@ you need to install unstoppable domain [browser extension](https://chrome.google
 
 ## Technologies used
 
-- ReactJS framework
-- React router
-- NodeJS
+- React: Create React App
+- TailwindCSS
+- Redux
 - Web3js to integrate with smart contracts
 - Metamask
 - Filecoin
