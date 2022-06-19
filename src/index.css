@@ -66,6 +66,6 @@
 
 @layer utilities {
   .bg-gradient-primary {
-    @apply bg-gradient-to-l from-primary-500 to-primary-600;
+    @apply bg-gradient-to-l from-horizonBlue to-starBlue;
   }
 }

@@ -34,7 +34,7 @@ const Item = ({
     return (
         <Fragment>
             <Tag {...props}>
-                <div className='flex h-10 w-10 shrink-0 items-center justify-center text-secondary-200'>
+                <div className='text-secondary-200 flex h-10 w-10 shrink-0 items-center justify-center'>
                     <Icon aria-hidden='true' className='h-6 w-6' />
                 </div>
                 <div className='ml-4'>
@@ -69,7 +69,7 @@ export const WalletPopover = ({
                         <Popover.Button
                             className={`
                 ${open ? '' : 'text-opacity-90'}
-                focus:outline-none group inline-flex items-center rounded-md bg-secondary-500 px-3 py-2 text-base font-medium text-white hover:text-opacity-100 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75`}
+                focus:outline-none bg-secondary-500 group inline-flex items-center rounded-md px-3 py-2 text-base font-medium text-white hover:text-opacity-100 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75`}
                         >
                             <span>
                                 <img
@@ -90,9 +90,9 @@ export const WalletPopover = ({
                             leaveTo='opacity-0 translate-y-1'
                         >
                             <Popover.Panel className='absolute left-36 z-10 mt-3 w-screen max-w-sm -translate-x-1/2 transform px-4'>
-                                <div className='ring-red overflow-hidden rounded-md shadow-lg ring-1 ring-opacity-5'>
-                                    <div className='relative grid gap-4 bg-secondary-500 p-7 text-white'>
-                                        <p className='focus:outline-none focus-visible:ring-orange-500 -m-3 flex flex-col items-start rounded-md p-2 transition duration-150 ease-in-out hover:bg-secondary-300 focus-visible:ring focus-visible:ring-opacity-50'>
+                                <div className='overflow-hidden rounded-md shadow-lg ring-1 ring-red ring-opacity-5'>
+                                    <div className='relative grid gap-4 bg-universeBlue p-7 text-white'>
+                                        <p className='focus:outline-none focus-visible:ring-orange-500 -m-3 flex flex-col items-start rounded-md p-2 transition duration-150 ease-in-out hover:bg-horizonBlue focus-visible:ring focus-visible:ring-opacity-50'>
                                             <span className='ml-2 pb-2 text-sm text-lightGrey'>
                                                 Network:
                                             </span>
@@ -116,7 +116,7 @@ export const WalletPopover = ({
                                                 <span>{networkName}</span>
                                             </span>
                                         </p>
-                                        <div className='border-b border-secondary-100 border-opacity-20' />
+                                        <div className='border-secondary-100 border-b border-opacity-20' />
                                         {isKYC ? (
                                             <Item
                                                 name='Account Verified'
@@ -137,8 +137,8 @@ export const WalletPopover = ({
                                             Icon={LogoutIcon}
                                         />
 
-                                        <div className='border-b border-secondary-100 border-opacity-20' />
-                                        <p className='focus:outline-none focus-visible:ring-orange-500 -m-3 flex flex-row items-center justify-between  rounded-md p-2 transition duration-150 ease-in-out hover:bg-secondary-300 focus-visible:ring focus-visible:ring-opacity-50'>
+                                        <div className='border-b border-moonGrey border-opacity-20' />
+                                        <p className='focus:outline-none focus-visible:ring-orange-500 -m-3 flex flex-row items-center justify-between rounded-md p-2 transition duration-150 ease-in-out hover:bg-horizonBlue focus-visible:ring focus-visible:ring-opacity-50'>
                                             <span className='ml-2'>
                                                 Dark Mode
                                             </span>

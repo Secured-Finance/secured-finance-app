@@ -1,16 +1,16 @@
 import { Meta, Story } from '@storybook/react';
 
 export default {
-    title: 'Typography/Text',
+    title: 'Design System/Typography',
     parameters: {
         chromatic: { disableSnapshot: false },
     },
 } as Meta;
 
 export const Typography: Story = () => (
-    <div className='grid grid-cols-2 place-items-stretch space-y-4 text-primary-100'>
+    <div className='grid grid-cols-2 place-items-stretch space-y-4 text-white'>
         <div className='border-b'>Class Name:</div>
-        <div className='border-b text-primary-100'>Usage</div>
+        <div className='border-b'>Usage</div>
 
         <div>Hero</div>
         <div className='typography-hero'>Hero</div>
