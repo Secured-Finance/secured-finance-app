@@ -59,7 +59,7 @@ module.exports = {
             secondaryPurple: '#AE72FF',
             moonGrey: '#E6E6E6',
 
-            white: '#FFFFFF',
+            neutral: '#353945',
 
             starBlue: {
                 '80': 'rgba(81, 98, 255, 0.8)',
