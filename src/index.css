@@ -2,6 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
+@import "tailwindcss/components";
+@import "./assets/css/components.css";
 
 @layer base {
   @font-face {
@@ -57,13 +59,8 @@
     src: url('./assets/fonts/suisse-intl/SuisseIntl-BoldItalic-WebS.woff2') format('woff2'), url('./assets/fonts/suisse-intl/SuisseIntl-BoldItalic-WebS.woff') format('woff');
   }
 
-  p {
-    @apply text-gray-300
-  }
-  h1 {
-    @apply text-5xl;
-    @apply leading-10;
-    @apply text-gray-800;
+  body {
+    @apply font-secondary;
   }
 }
 
@@ -71,29 +68,4 @@
   .bg-gradient-primary {
     @apply bg-gradient-to-l from-primary-500 to-primary-600;
   }
-}
-body {
-  background-color: #060609;
-  margin: 0;
-  font-family: 'Inter', sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  overflow: hidden;
-}
-
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
-}
-
-/* Chrome, Safari, Edge, Opera */
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
-/* Firefox */
-input[type=number] {
-  -moz-appearance: textfield;
 }

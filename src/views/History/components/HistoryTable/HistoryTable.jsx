@@ -23,7 +23,7 @@ const HistoryTable = ({ table }) => {
                         {headerGroup.headers.map(column => {
                             return column.isHiddenHeader === false ? null : (
                                 <td
-                                    className='p-5 text-center text-subhead font-bold'
+                                    className='p-5 text-center text-sm font-bold'
                                     {...column.getHeaderProps(
                                         column.getSortByToggleProps()
                                     )}
@@ -67,7 +67,7 @@ const HistoryTable = ({ table }) => {
                 ))}
             </thead>
             <tbody
-                className='text-center text-subhead'
+                className='text-subhead text-center'
                 {...getTableBodyProps()}
             >
                 {rows.map(row => {

@@ -1,0 +1,50 @@
+@layer components {
+    .typography-hero {
+      @apply text-5xl font-primary;
+    }
+    .typography-headline1 {
+      @apply text-4xl font-primary;
+    }
+    .typography-headline2 {
+      @apply text-3xl font-primary;
+    }
+    .typography-headline3 {
+      @apply text-2xl font-primary;
+    }
+    .typography-body1 {
+      @apply text-md font-secondary;
+    }
+    .typography-body2 {
+      @apply text-base font-secondary leading-6;
+    }
+    .typography-caption {
+      @apply text-sm font-secondary leading-6;
+    }
+    .typography-hairline1 {
+      @apply text-base leading-4 font-secondary uppercase;
+    }
+    .typography-hairline2 {
+      @apply text-xs leading-3 font-secondary uppercase;
+    }
+    .typography-button1 {
+      @apply text-sm leading-4 font-secondary;
+    }
+    .typography-button2 {
+      @apply text-sm leading-4 font-secondary font-semibold;
+    }
+    .typography-button3 {
+      @apply text-smd font-secondary font-semibold;
+    }
+    .typography-button4 {
+      @apply text-2xs font-semibold font-secondary uppercase;
+    }
+    .typography-button5 {
+      @apply text-sm leading-4 font-secondary;
+    }
+    .typography-button6 {
+      @apply text-base leading-4 font-secondary font-semibold;
+    }
+    .typography-button7 {
+      @apply text-2xs font-secondary;
+    }
+  }
