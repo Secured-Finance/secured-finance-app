@@ -2,6 +2,7 @@ export * from './ArrowSVG';
 export * from './Breaker';
 export * from './Button';
 export * from './Card';
+export * from './CloseButton';
 export * from './Container';
 export * from './CurrencyContainer';
 export * from './Label';

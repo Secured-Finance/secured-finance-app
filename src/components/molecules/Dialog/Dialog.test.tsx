@@ -17,14 +17,7 @@ describe('Dialog component', () => {
     it('should render a dialog if isOpen', () => {
         const onClick = jest.fn();
         const onClose = jest.fn();
-        render(
-            <Default onClose={onClose} onClick={onClick}>
-                <p style={{ color: 'white' }}>
-                    This is the content but since it is a component, it can be
-                    styled as we want
-                </p>
-            </Default>
-        );
+        render(<Default onClose={onClose} onClick={onClick} />);
 
         expect(screen.getByRole('dialog')).toBeInTheDocument();
         expect(screen.getByText('Dialog Title')).toBeInTheDocument();
@@ -33,7 +26,7 @@ describe('Dialog component', () => {
                 'Description goes here. Try to keep message to not more than three lines.'
             )
         ).toBeInTheDocument();
-        const button = screen.getByRole('button');
+        const button = screen.getByTestId('dialog-action-button');
         expect(button).toHaveTextContent('Ok');
         fireEvent.click(button);
         expect(onClick).toHaveBeenCalled();
@@ -41,11 +34,20 @@ describe('Dialog component', () => {
 
     it('should display the button at the bottom of the modal in full width', () => {
         render(<Default />);
-        expect(screen.getByRole('button')).toHaveClass('w-full');
+        expect(screen.getByTestId('dialog-action-button')).toHaveClass(
+            'w-full'
+        );
+    });
+
+    it('should call onClose when the close button is clicked', () => {
+        const onClose = jest.fn();
+        render(<Default onClose={onClose} />);
+        fireEvent.click(screen.getByTestId('close-button'));
+        expect(onClose).toHaveBeenCalled();
     });
 
     it('should not display the button in the modal if callToAction is empty', () => {
         render(<NoButton />);
-        expect(screen.queryByRole('button')).toBeNull();
+        expect(screen.queryByTestId('dialog-action-button')).toBeNull();
     });
 });

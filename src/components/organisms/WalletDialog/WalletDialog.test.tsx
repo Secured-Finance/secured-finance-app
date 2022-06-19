@@ -26,7 +26,7 @@ describe('Wallet Dialog component', () => {
         expect(screen.getByRole('dialog')).toBeInTheDocument();
         expect(screen.getByText('Select Wallet Provider')).toBeInTheDocument();
 
-        const button = screen.getByRole('button');
+        const button = screen.getByTestId('dialog-action-button');
         expect(button).toHaveTextContent('Connect Wallet');
 
         expect(screen.getAllByRole('radio')).toHaveLength(2);
@@ -36,7 +36,7 @@ describe('Wallet Dialog component', () => {
         const onClose = jest.fn();
         render(<Primary onClose={onClose} />);
 
-        const button = screen.getByRole('button');
+        const button = screen.getByTestId('dialog-action-button');
         fireEvent.click(button);
         expect(onClose).not.toHaveBeenCalled();
         expect(screen.getAllByRole('radio')).toHaveLength(2);
@@ -45,7 +45,7 @@ describe('Wallet Dialog component', () => {
     it('should move to the next step if an option was selected', () => {
         render(<Primary />);
         selectMetamaskOption();
-        fireEvent.click(screen.getByRole('button'));
+        fireEvent.click(screen.getByTestId('dialog-action-button'));
         expect(screen.getByText('Connecting...')).toBeInTheDocument();
         expect(
             screen.getByText(
@@ -59,7 +59,7 @@ describe('Wallet Dialog component', () => {
         render(<Primary onClose={onClose} />);
 
         selectMetamaskOption();
-        const button = screen.getByRole('button');
+        const button = screen.getByTestId('dialog-action-button');
         fireEvent.click(button);
         expect(onClose).not.toHaveBeenCalled();
 
