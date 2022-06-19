@@ -26,51 +26,76 @@ module.exports = {
             xs: '12px',
             '2xs': ['10px', { lineHeight: '15px' }],
         },
-        extend: {
-            colors: {
-                background: '#060609',
-                lightBackground: '#FFFFFF',
-                darkGrey: '#1a1b1f',
-                strokeGrey: '#27282f',
-                turquoise: '#38afa8',
-                darkPurple: '#5b50de',
-                bluePurple: '#4557fb',
-                brightBlue: '#4faaff',
-                lightGrey: '#7a7c89',
-                middleGrey: '#9496a3',
-                lightSilver: '#b9b9c2',
-                darkenedBg: '#122735',
-                tableHeader: '#122735',
-                tableBorder: '#1c303f',
+        colors: {
+            // Colors of the old design. TODO: remove them
+            background: '#060609',
+            lightBackground: '#FFFFFF',
+            darkGrey: '#1a1b1f',
+            strokeGrey: '#27282f',
+            turquoise: '#38afa8',
+            darkPurple: '#5b50de',
+            bluePurple: '#4557fb',
+            brightBlue: '#4faaff',
+            lightGrey: '#7a7c89',
+            middleGrey: '#9496a3',
+            lightSilver: '#b9b9c2',
+            darkenedBg: '#122735',
+            tableHeader: '#122735',
+            tableBorder: '#1c303f',
 
-                // colors for the design system\
-                // generated with https://tailwind.simeongriggs.dev/
+            // Primary
+            universeBlue: '#002133',
+            horizonBlue: '#3555AC',
+            teal: '#11CABE',
+            green: '#5CD167',
+            orange: '#F9AA4B',
+            red: '#FA2256',
+            purple: '#BD47FB',
 
-                // Primary
-                universeBlue: '#002133',
-                horizonBlue: '#3555AC',
-                teal: '#11CABE',
-                green: '#5CD167',
-                orange: '#F9AA4B',
-                red: '#FA2256',
-                purple: '#BD47FB',
+            // Secondary
+            galacticOrange: '#F9AA4B',
+            planetaryPurple: '#ADB6FF',
+            nebulaTeal: '#15D6E8',
+            secondaryPurple: '#AE72FF',
+            moonGrey: '#E6E6E6',
 
-                // Secondary
-                galacticOrange: '#F9AA4B',
-                planetaryPurple: '#ADB6FF',
-                nebulaTeal: '#15D6E8',
-                secondaryPurple: '#AE72FF',
-                moonGrey: '#E6E6E6',
+            white: '#FFFFFF',
 
-                white: '#FFFFFF',
-                black: '#000000',
-
-                starBlue: {
-                    DEFAULT: '#5162FF',
-                    '100': '#e8a838',
-                    '200': '#e8a838',
-                },
+            starBlue: {
+                '80': 'rgba(81, 98, 255, 0.8)',
+                '60': 'rgba(81, 98, 255, 0.6)',
+                '40': 'rgba(81, 98, 255, 0.4)',
+                '20': 'rgba(81, 98, 255, 0.2)',
+                '10': 'rgba(81, 98, 255, 0.1)',
+                DEFAULT: '#5162FF',
             },
+
+            black: {
+                DEFAULT: '#000000',
+                '90': 'rgba(0, 0, 0, 0.9)',
+                '80': 'rgba(0, 0, 0, 0.8)',
+                '70': 'rgba(0, 0, 0, 0.7)',
+                '60': 'rgba(0, 0, 0, 0.6)',
+                '50': 'rgba(0, 0, 0, 0.5)',
+                '40': 'rgba(0, 0, 0, 0.4)',
+                '30': 'rgba(0, 0, 0, 0.3)',
+                '20': 'rgba(0, 0, 0, 0.2)',
+                '10': 'rgba(0, 0, 0, 0.1)',
+            },
+            white: {
+                DEFAULT: '#FFFFFF',
+                '90': 'rgba(255, 255, 255, 0.9)',
+                '80': 'rgba(255, 255, 255, 0.8)',
+                '70': 'rgba(255, 255, 255, 0.7)',
+                '60': 'rgba(255, 255, 255, 0.6)',
+                '50': 'rgba(255, 255, 255, 0.5)',
+                '40': 'rgba(255, 255, 255, 0.4)',
+                '30': 'rgba(255, 255, 255, 0.3)',
+                '20': 'rgba(255, 255, 255, 0.2)',
+                '10': 'rgba(255, 255, 255, 0.1)',
+            },
+        },
+        extend: {
             width: {
                 'button-xs': '8rem',
                 'button-sm': '11rem',

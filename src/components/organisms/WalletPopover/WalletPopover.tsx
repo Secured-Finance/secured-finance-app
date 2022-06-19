@@ -25,7 +25,7 @@ const Item = ({
     } = {
         name: name,
         className:
-            'focus:outline-none focus-visible:ring-orange-500 -m-3 flex items-center rounded-md p-2 transition duration-150 ease-in-out hover:bg-secondary-300 focus-visible:ring focus-visible:ring-opacity-50',
+            'focus:outline-none focus-visible:ring-orange -m-3 flex items-center rounded-md p-2 transition duration-150 ease-in-out hover:bg-starBlue-80 focus-visible:ring focus-visible:ring-opacity-50',
     };
     if (href) {
         props.href = href;
@@ -69,7 +69,7 @@ export const WalletPopover = ({
                         <Popover.Button
                             className={`
                 ${open ? '' : 'text-opacity-90'}
-                focus:outline-none bg-secondary-500 group inline-flex items-center rounded-md px-3 py-2 text-base font-medium text-white hover:text-opacity-100 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75`}
+                focus:outline-none group inline-flex items-center rounded-md bg-universeBlue px-3 py-2 text-base font-medium text-white hover:text-opacity-100 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75`}
                         >
                             <span>
                                 <img
@@ -92,7 +92,7 @@ export const WalletPopover = ({
                             <Popover.Panel className='absolute left-36 z-10 mt-3 w-screen max-w-sm -translate-x-1/2 transform px-4'>
                                 <div className='overflow-hidden rounded-md shadow-lg ring-1 ring-red ring-opacity-5'>
                                     <div className='relative grid gap-4 bg-universeBlue p-7 text-white'>
-                                        <p className='focus:outline-none focus-visible:ring-orange-500 -m-3 flex flex-col items-start rounded-md p-2 transition duration-150 ease-in-out hover:bg-horizonBlue focus-visible:ring focus-visible:ring-opacity-50'>
+                                        <p className='focus:outline-none -m-3 flex flex-col items-start rounded-md p-2 transition duration-150 ease-in-out hover:bg-horizonBlue focus-visible:ring focus-visible:ring-orange focus-visible:ring-opacity-50'>
                                             <span className='ml-2 pb-2 text-sm text-lightGrey'>
                                                 Network:
                                             </span>
@@ -107,7 +107,7 @@ export const WalletPopover = ({
                                                             'text-red':
                                                                 status ===
                                                                 'disconnected',
-                                                            'text-orange-500':
+                                                            'text-orange':
                                                                 status ===
                                                                 'connecting',
                                                         }
@@ -138,7 +138,7 @@ export const WalletPopover = ({
                                         />
 
                                         <div className='border-b border-moonGrey border-opacity-20' />
-                                        <p className='focus:outline-none focus-visible:ring-orange-500 -m-3 flex flex-row items-center justify-between rounded-md p-2 transition duration-150 ease-in-out hover:bg-horizonBlue focus-visible:ring focus-visible:ring-opacity-50'>
+                                        <p className='focus:outline-none -m-3 flex flex-row items-center justify-between rounded-md p-2 transition duration-150 ease-in-out hover:bg-horizonBlue focus-visible:ring focus-visible:ring-orange focus-visible:ring-opacity-50'>
                                             <span className='ml-2'>
                                                 Dark Mode
                                             </span>

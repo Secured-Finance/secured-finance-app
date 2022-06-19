@@ -21,9 +21,7 @@ export const Button = ({
             : 'text-lg font-semibold leading-7';
 
     const variantStyle =
-        variant === 'contained'
-            ? 'bg-gradient-primary'
-            : 'bg-primary-500 opacity-40';
+        variant === 'contained' ? 'bg-gradient-primary' : 'bg-starBlue';
 
     const Tag = href ? 'a' : 'button';
     const tagProps = href

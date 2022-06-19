@@ -25,7 +25,7 @@ const WalletOption = ({
                             <div className='text-sm'>
                                 <RadioGroup.Label
                                     className={`font-medium  ${
-                                        checked ? 'text-white' : 'text-gray-900'
+                                        checked ? 'text-white' : 'text-black-30'
                                     }`}
                                 >
                                     <span className='flex'>
@@ -38,11 +38,11 @@ const WalletOption = ({
                             </div>
                         </div>
                         {checked ? (
-                            <div className='border-secondary-400 bg-primary-500 rounded-full border-2 text-white'>
+                            <div className='rounded-full border-2 border-teal border-opacity-40 bg-starBlue text-white'>
                                 <CheckIcon className='h-6 w-6' />
                             </div>
                         ) : (
-                            <div className='border-secondary-300 rounded-full border-2 text-white'>
+                            <div className='rounded-full border-2 border-teal border-opacity-40 text-white'>
                                 <CircleOutline className='h-6 w-6' />
                             </div>
                         )}
