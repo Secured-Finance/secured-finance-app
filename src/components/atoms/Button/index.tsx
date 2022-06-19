@@ -15,11 +15,6 @@ export const Button = ({
         variant?: 'contained' | 'outlined';
         size?: 'xs' | 'sm' | 'md' | 'lg';
     }) => {
-    const textSize =
-        size === 'xs' || size === 'sm'
-            ? 'text-base leading-normal'
-            : 'text-lg font-semibold leading-7';
-
     const variantStyle =
         variant === 'contained' ? 'bg-starBlue' : 'bg-starBlue';
 
