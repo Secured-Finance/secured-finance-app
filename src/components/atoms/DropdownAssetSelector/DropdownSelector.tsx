@@ -34,7 +34,7 @@ export const DropdownSelector = ({
                                     }
                                 </span>
                             ) : null}
-                            <span className='typography-button3 mx-3 text-white'>
+                            <span className='typography-button-3 mx-3 text-white'>
                                 {selectedOption.name}
                             </span>
                             <span>
@@ -72,7 +72,7 @@ export const DropdownSelector = ({
                                                 </span>
                                             ) : null}
 
-                                            <span className='typography-button3'>
+                                            <span className='typography-button-3'>
                                                 {asset.name}
                                             </span>
                                         </div>

@@ -30,10 +30,10 @@ export const Dialog = ({
                     <div className='-mb-7 flex items-center justify-end'>
                         <CloseButton onClick={onClose} />
                     </div>
-                    <HeadlessDialog.Title className='w-full text-center font-secondary text-lg font-semibold text-white opacity-80'>
+                    <HeadlessDialog.Title className='typography-modal-title w-full text-center text-white opacity-80'>
                         {title}
                     </HeadlessDialog.Title>
-                    <HeadlessDialog.Description className='typography-body2 w-full text-center text-white-50'>
+                    <HeadlessDialog.Description className='typography-body-2 w-full text-center text-white-50'>
                         {description}
                     </HeadlessDialog.Description>
                     {children}
