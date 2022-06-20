@@ -62,6 +62,7 @@ module.exports = {
 
             neutral: '#353945',
 
+            transparent: 'transparent',
             starBlue: {
                 '80': 'rgba(81, 98, 255, 0.8)',
                 '60': 'rgba(81, 98, 255, 0.6)',
@@ -102,6 +103,7 @@ module.exports = {
                 'button-sm': '11rem',
                 'button-md': '20rem',
                 'button-lg': '40rem',
+                '42': '8.5rem',
             },
             height: {
                 'button-xs': '2.25rem',

@@ -6,7 +6,6 @@ export * from './CloseButton';
 export * from './Container';
 export * from './CurrencyContainer';
 export * from './DropdownSelector';
-export * from './Input';
 export * from './Label';
 export * from './Modal';
 export * from './ProgressBar';
