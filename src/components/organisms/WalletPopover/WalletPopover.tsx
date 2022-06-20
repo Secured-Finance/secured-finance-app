@@ -4,6 +4,7 @@ import { BadgeCheckIcon, SupportIcon } from '@heroicons/react/solid';
 import classNames from 'classnames';
 import { Fragment, SVGProps } from 'react';
 import metamaskLogo from 'src/assets/img/metamask-fox.svg';
+import { Separator } from 'src/components/atoms/Separator/Separator';
 import { Toggle } from 'src/components/atoms/Toggle/Toggle';
 
 const Item = ({
@@ -116,7 +117,7 @@ export const WalletPopover = ({
                                                 <span>{networkName}</span>
                                             </span>
                                         </p>
-                                        <div className='border-secondary-100 border-b border-opacity-20' />
+                                        <Separator />
                                         {isKYC ? (
                                             <Item
                                                 name='Account Verified'
@@ -137,7 +138,7 @@ export const WalletPopover = ({
                                             Icon={LogoutIcon}
                                         />
 
-                                        <div className='border-b border-moonGrey border-opacity-20' />
+                                        <Separator />
                                         <p className='focus:outline-none -m-3 flex flex-row items-center justify-between rounded-md p-2 transition duration-150 ease-in-out hover:bg-horizonBlue focus-visible:ring focus-visible:ring-orange focus-visible:ring-opacity-50'>
                                             <span className='ml-2'>
                                                 Dark Mode
