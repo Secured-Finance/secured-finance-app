@@ -1,5 +1,6 @@
 import { Menu } from '@headlessui/react';
 import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/outline';
+import classNames from 'classnames';
 import { SVGProps, useCallback, useState } from 'react';
 import { Separator } from '../Separator/Separator';
 
@@ -53,7 +54,7 @@ export const DropdownSelector = ({
                             </span>
                         </div>
                     </Menu.Button>
-                    <Menu.Items className='flex max-h-96 max-w-md flex-col overflow-y-auto rounded-lg bg-gunMetal shadow-sm'>
+                    <Menu.Items className='flex max-h-96 w-52 flex-col overflow-y-auto rounded-lg bg-gunMetal p-2 shadow-sm'>
                         {optionList.map((asset, i) => (
                             <Menu.Item
                                 key={asset.name}
@@ -61,11 +62,14 @@ export const DropdownSelector = ({
                                 onClick={() => handleSelect(asset)}
                             >
                                 {({ active }) => (
-                                    <div className='mx-8'>
+                                    <div>
                                         <div
-                                            className={`${
-                                                active && 'bg-nebulaTeal'
-                                            }  flex flex-row items-end justify-start space-x-6 rounded-lg bg-gunMetal py-6 text-white`}
+                                            className={classNames(
+                                                'flex flex-row justify-start space-x-4 rounded-lg p-2 text-white-80',
+                                                {
+                                                    'bg-horizonBlue': active,
+                                                }
+                                            )}
                                         >
                                             {asset.Icon ? (
                                                 <span>
@@ -78,7 +82,9 @@ export const DropdownSelector = ({
                                             </span>
                                         </div>
                                         {i !== optionList.length - 1 ? (
-                                            <Separator />
+                                            <div className='py-2'>
+                                                <Separator />
+                                            </div>
                                         ) : null}
                                     </div>
                                 )}
