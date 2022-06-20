@@ -1,7 +1,7 @@
 import { Menu } from '@headlessui/react';
 import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/outline';
 import classNames from 'classnames';
-import { SVGProps, useCallback, useState } from 'react';
+import { SVGProps, useCallback, useEffect, useState } from 'react';
 import { Separator } from '../Separator/Separator';
 
 export type Option = {
@@ -11,8 +11,10 @@ export type Option = {
 
 export const DropdownSelector = ({
     optionList,
+    onChange,
 }: {
     optionList: Array<Option>;
+    onChange: (v: string) => void;
 }) => {
     const [selectedOption, setSelectedOption] = useState<Option>(optionList[0]);
 
@@ -23,17 +25,19 @@ export const DropdownSelector = ({
         [setSelectedOption]
     );
 
+    useEffect(() => {
+        onChange(selectedOption.name);
+    }, [onChange, selectedOption.name]);
+
     return (
-        <Menu as='div' className=''>
+        <Menu as='div'>
             {({ open }) => (
                 <>
                     <Menu.Button>
                         <div className='flex h-10 flex-row items-center rounded-lg bg-black-10 px-2'>
                             {selectedOption.Icon ? (
-                                <span className=''>
-                                    {
-                                        <selectedOption.Icon className='h-6 w-6' />
-                                    }
+                                <span>
+                                    <selectedOption.Icon className='h-6 w-6' />
                                 </span>
                             ) : null}
                             <span className='typography-button-3 mx-3 text-white'>
@@ -54,7 +58,7 @@ export const DropdownSelector = ({
                             </span>
                         </div>
                     </Menu.Button>
-                    <Menu.Items className='flex max-h-96 w-52 flex-col overflow-y-auto rounded-lg bg-gunMetal p-2 shadow-sm'>
+                    <Menu.Items className='absolute flex max-h-96 w-52 flex-col overflow-y-auto rounded-lg bg-gunMetal p-2 shadow-sm'>
                         {optionList.map((asset, i) => (
                             <Menu.Item
                                 key={asset.name}

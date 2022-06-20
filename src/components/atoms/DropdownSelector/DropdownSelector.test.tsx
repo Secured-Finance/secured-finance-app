@@ -38,4 +38,12 @@ describe('Dropdown Asset Selection Component', () => {
         render(<TermDropdown />);
         expect(screen.getByRole('button')).toBeInTheDocument();
     });
+
+    it('should call onChange function when a dropdown item is selected', () => {
+        const onChange = jest.fn();
+        render(<AssetDropdown onChange={onChange} />);
+        fireEvent.click(screen.getByRole('button'));
+        fireEvent.click(screen.getByText('Ethereum'));
+        expect(onChange).toHaveBeenCalled();
+    });
 });

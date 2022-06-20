@@ -34,6 +34,11 @@ export default {
     component: DropdownSelector,
     args: {
         optionList,
+        onChange: (v: string) => {},
+    },
+    argTypes: {
+        optionList: { control: { disable: true } },
+        onChange: { action: 'onChange' },
     },
     parameters: {
         chromatic: { disableSnapshot: false },
