@@ -1,6 +1,7 @@
 import { Menu } from '@headlessui/react';
 import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/outline';
 import { SVGProps, useCallback, useState } from 'react';
+import { Separator } from '../Separator/Separator';
 
 export type Option = {
     name: string;
@@ -77,7 +78,7 @@ export const DropdownSelector = ({
                                             </span>
                                         </div>
                                         {i !== optionList.length - 1 ? (
-                                            <div className='border-b border-moonGrey border-opacity-30' />
+                                            <Separator />
                                         ) : null}
                                     </div>
                                 )}
