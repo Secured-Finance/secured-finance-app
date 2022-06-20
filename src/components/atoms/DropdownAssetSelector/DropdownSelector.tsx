@@ -52,7 +52,7 @@ export const DropdownSelector = ({
                             </span>
                         </div>
                     </Menu.Button>
-                    <Menu.Items className='flex max-h-96 max-w-md flex-col overflow-y-auto rounded-lg bg-universeBlue shadow-sm'>
+                    <Menu.Items className='flex max-h-96 max-w-md flex-col overflow-y-auto rounded-lg bg-gunMetal shadow-sm'>
                         {optionList.map((asset, i) => (
                             <Menu.Item
                                 key={asset.name}
@@ -64,7 +64,7 @@ export const DropdownSelector = ({
                                         <div
                                             className={`${
                                                 active && 'bg-nebulaTeal'
-                                            }  flex flex-row items-end justify-start space-x-6 rounded-lg bg-universeBlue py-6 text-white`}
+                                            }  flex flex-row items-end justify-start space-x-6 rounded-lg bg-gunMetal py-6 text-white`}
                                         >
                                             {asset.Icon ? (
                                                 <span>

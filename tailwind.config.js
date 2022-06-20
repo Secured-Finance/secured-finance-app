@@ -51,6 +51,7 @@ module.exports = {
             orange: '#F9AA4B',
             red: '#FA2256',
             purple: '#BD47FB',
+            gunMetal: '#292D3F',
 
             // Secondary
             galacticOrange: '#F9AA4B',
