@@ -1,15 +1,31 @@
-import { LogoutIcon, UserIcon } from '@heroicons/react/outline';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { ReactComponent as EthIcon } from 'src/assets/coins/eth2.svg';
+import { ReactComponent as FilecoinIcon } from 'src/assets/coins/fil.svg';
+import { ReactComponent as UsdcIcon } from 'src/assets/coins/usdc.svg';
+import { ReactComponent as UsdtIcon } from 'src/assets/coins/usdt.svg';
+import { ReactComponent as BitcoinIcon } from 'src/assets/coins/xbc.svg';
 import { DropdownSelector, Option } from './DropdownSelector';
 
 const optionList = [
     {
         name: 'Bitcoin',
-        Icon: LogoutIcon,
+        Icon: BitcoinIcon,
     },
     {
         name: 'Ethereum',
-        Icon: UserIcon,
+        Icon: EthIcon,
+    },
+    {
+        name: 'Filecoin',
+        Icon: FilecoinIcon,
+    },
+    {
+        name: 'USDC',
+        Icon: UsdcIcon,
+    },
+    {
+        name: 'USD Tether',
+        Icon: UsdtIcon,
     },
 ] as Array<Option>;
 
