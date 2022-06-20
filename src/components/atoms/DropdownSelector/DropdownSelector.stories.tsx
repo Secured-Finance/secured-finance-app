@@ -44,9 +44,9 @@ const Template: ComponentStory<typeof DropdownSelector> = args => (
     <DropdownSelector {...args} />
 );
 
-export const AssetSelector = Template.bind({});
-export const TermSelector = Template.bind({});
-TermSelector.args = {
+export const AssetDropdown = Template.bind({});
+export const TermDropdown = Template.bind({});
+TermDropdown.args = {
     optionList: [
         { name: 'Sep 2022' },
         { name: 'Dec 2022' },
@@ -54,8 +54,8 @@ TermSelector.args = {
         { name: 'Jun 2023' },
     ],
 };
-export const LongSelection = Template.bind({});
-LongSelection.args = {
+export const LongSelectionDropdown = Template.bind({});
+LongSelectionDropdown.args = {
     optionList: [
         { name: 'Sep 2022' },
         { name: 'Dec 2022' },
