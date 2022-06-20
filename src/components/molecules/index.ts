@@ -1,3 +1,4 @@
+export * from './AssetSelector';
 export * from './CurrencySelector';
 export * from './Dialog';
 export * from './TermsSelector';

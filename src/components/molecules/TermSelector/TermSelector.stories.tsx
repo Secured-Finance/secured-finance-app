@@ -15,7 +15,7 @@ const options = [
 ];
 
 export default {
-    title: 'Organism/TermSelector',
+    title: 'Molecules/TermSelector',
     component: TermSelector,
     args: {
         options,
