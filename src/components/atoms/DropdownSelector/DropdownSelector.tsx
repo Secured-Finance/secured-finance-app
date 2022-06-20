@@ -34,24 +34,24 @@ export const DropdownSelector = ({
             {({ open }) => (
                 <>
                     <Menu.Button>
-                        <div className='flex h-10 flex-row items-center rounded-lg bg-black-10 px-2'>
+                        <div className='flex h-10 w-42 flex-row items-center justify-between space-x-2 rounded-lg bg-black-10 px-2'>
                             {selectedOption.Icon ? (
                                 <span>
                                     <selectedOption.Icon className='h-6 w-6' />
                                 </span>
                             ) : null}
-                            <span className='typography-button-3 mx-3 text-white'>
+                            <span className='typography-caption w-16 text-white'>
                                 {selectedOption.name}
                             </span>
                             <span>
                                 {open ? (
                                     <ChevronDownIcon
-                                        className='h-6 w-6 text-white'
+                                        className='h-5 w-5 text-white'
                                         data-testid='chevron-down-icon'
                                     />
                                 ) : (
                                     <ChevronUpIcon
-                                        className='h-6 w-6 text-white'
+                                        className='h-5 w-5 text-white'
                                         data-testid='chevron-up-icon'
                                     />
                                 )}
