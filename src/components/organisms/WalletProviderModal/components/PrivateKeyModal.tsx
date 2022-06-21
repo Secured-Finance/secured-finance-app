@@ -182,8 +182,8 @@ const RenderPrivateKeyContainer: React.FC<ContainerProps> = ({
             <Spacer size={'md'} />
             <StyledButtonContainer>
                 <Button
+                    data-cy='import-mnemonic-button'
                     onClick={handleSave}
-                    text={'Import'}
                     style={{
                         background: theme.colors.buttonBlue,
                         fontSize: theme.sizes.callout,
@@ -191,7 +191,9 @@ const RenderPrivateKeyContainer: React.FC<ContainerProps> = ({
                         color: theme.colors.white,
                     }}
                     disabled={!secretSet}
-                />
+                >
+                    Import
+                </Button>
             </StyledButtonContainer>
             <Breaker />
         </div>
@@ -262,7 +264,6 @@ const PrivateKeyModal: React.FC<ModalProps> = ({ onDismiss }) => {
             </ModalContent>
             <ModalActions>
                 <Button
-                    text='Generate Mnemonic'
                     onClick={onMnemonicModal}
                     style={{
                         background: 'transparent',
@@ -273,7 +274,9 @@ const PrivateKeyModal: React.FC<ModalProps> = ({ onDismiss }) => {
                         fontWeight: 500,
                         color: theme.colors.white,
                     }}
-                />
+                >
+                    Generate Mnemonic
+                </Button>
             </ModalActions>
         </Modal>
     );

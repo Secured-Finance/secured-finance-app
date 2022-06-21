@@ -32,8 +32,12 @@ certs/cert.pem
 certs/server.cert
 certs/server.key
 
+# Cypress
 cypress/integration/1-getting-started/
 cypress/integration/2-advanced-examples/
 cypress/**/*.mp4
 cypress/**/*.png
 cypress.env.json
+
+# Chromatic
+build-storybook.log

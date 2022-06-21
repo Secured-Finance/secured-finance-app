@@ -28,7 +28,7 @@ describe('The Home Page', () => {
         cy.get('[data-cy="modal"]').should('be.visible');
         cy.get('[data-cy="eth-wallet"]').should('be.visible');
 
-        cy.get('[data-cy="connect-button"]')
+        cy.get('button:contains("Connect")')
             .should('have.length', 2)
             .and(buttonList => {
                 chai.expect(

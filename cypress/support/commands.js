@@ -14,14 +14,13 @@
 Cypress.Commands.add('connectWallet', onBeforeLoad => {
     cy.visit('/', { onBeforeLoad: onBeforeLoad });
     cy.get('[data-cy="wallet"]').click();
-    // Selecting the first element of connect button. Not the best way to do it, but it works for now.
-    cy.get('[data-cy="connect-button"]:first').click();
+    cy.get('[data-cy="metamask-button"]').click();
 });
 
 Cypress.Commands.add('disconnectWallet', () => {
     cy.get('[data-cy="wallet"]').click();
     cy.get('[data-cy="ethereum-settings-chip"]').click();
-    cy.get('[data-cy="sign-out-button"]').click();
+    cy.get('[data-cy="modal-sign-out-button"]').click();
 });
 
 Cypress.on('uncaught:exception', (err, runnable) => {
