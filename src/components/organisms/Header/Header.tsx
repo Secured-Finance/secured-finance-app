@@ -1,5 +1,4 @@
-import { NavLink, useRouteMatch, useLocation } from 'react-router-dom';
-import { useContext, useState } from 'react';
+import { NavLink, useRouteMatch } from 'react-router-dom';
 import { ReactComponent as SFLogo } from 'src/assets/img/logo.svg';
 import { Button } from 'src/components/atoms';
 import { NavTab } from 'src/components/atoms/NavTab';
@@ -17,9 +16,9 @@ export const Header = (): JSX.Element => {
                 <SFLogo />
             </NavLink>
             <div className='flex items-center justify-center'>
-                <ItemLink text='OTC Lending' link='/' active />
+                <ItemLink text='OTC Lending' link='/' />
                 <ItemLink text='Market Dashboard' link='/exchange' />
-                <ItemLink text='Portfolio Management' link='/history/' />
+                <ItemLink text='Portfolio Management' link='/history' />
             </div>
             <div className='mr-5 mt-5'>
                 <Button>Connect Wallet</Button>
@@ -28,18 +27,13 @@ export const Header = (): JSX.Element => {
     );
 };
 
-const ItemLink = ({
-    text,
-    link,
-    active,
-}: {
-    text: string;
-    link: string;
-    active?: boolean;
-}) => {
+const ItemLink = ({ text, link }: { text: string; link: string }) => {
+    const useCheckActive = (): boolean => {
+        return useRouteMatch({ path: link, exact: true });
+    };
     return (
         <NavLink exact data-cy={text.toLowerCase()} to={link}>
-            <NavTab text={text} active={active} />
+            <NavTab text={text} active={useCheckActive()} />
         </NavLink>
     );
 };
