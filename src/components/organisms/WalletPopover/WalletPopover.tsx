@@ -4,6 +4,7 @@ import { BadgeCheckIcon, SupportIcon } from '@heroicons/react/solid';
 import classNames from 'classnames';
 import { Fragment, SVGProps } from 'react';
 import metamaskLogo from 'src/assets/img/metamask-fox.svg';
+import ExpandIndicator from 'src/components/atoms/ExpandIndicator';
 import { Separator } from 'src/components/atoms/Separator/Separator';
 import { Toggle } from 'src/components/atoms/Toggle/Toggle';
 
@@ -68,18 +69,25 @@ export const WalletPopover = ({
                 {({ open }) => (
                     <>
                         <Popover.Button
-                            className={`
-                ${open ? '' : 'text-opacity-90'}
-                focus:outline-none group inline-flex items-center rounded-md bg-universeBlue px-3 py-2 text-base font-medium text-white hover:text-opacity-100 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75`}
+                            className='
+                flex items-center space-x-3 rounded-xl bg-transparent p-3 ring ring-black-10 hover:bg-black-10'
                         >
                             <span>
                                 <img
                                     src={metamaskLogo}
                                     alt={wallet}
-                                    className='h-6'
+                                    className='h-4 w-4'
                                 />
                             </span>
-                            <span className='pl-4'>{wallet}</span>
+                            <span className='typography-button-2 text-white'>
+                                {wallet}
+                            </span>
+                            <span>
+                                <ExpandIndicator
+                                    expanded={open}
+                                    variant='opaque'
+                                />
+                            </span>
                         </Popover.Button>
                         <Transition
                             as={Fragment}
