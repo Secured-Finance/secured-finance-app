@@ -1,8 +1,8 @@
 import { Menu } from '@headlessui/react';
-import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/outline';
 import classNames from 'classnames';
 import { SVGProps, useCallback, useEffect, useState } from 'react';
-import { Separator } from '../Separator/Separator';
+import ExpandIndicator from 'src/components/atoms/ExpandIndicator';
+import Separator from 'src/components/atoms/Separator';
 
 export type Option = {
     name: string;
@@ -44,17 +44,7 @@ export const DropdownSelector = ({
                                 {selectedOption.name}
                             </span>
                             <span>
-                                {open ? (
-                                    <ChevronDownIcon
-                                        className='h-5 w-5 text-white'
-                                        data-testid='chevron-down-icon'
-                                    />
-                                ) : (
-                                    <ChevronUpIcon
-                                        className='h-5 w-5 text-white'
-                                        data-testid='chevron-up-icon'
-                                    />
-                                )}
+                                <ExpandIndicator expanded={open} />
                             </span>
                         </div>
                     </Menu.Button>
