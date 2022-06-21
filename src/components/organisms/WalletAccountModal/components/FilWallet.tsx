@@ -56,25 +56,28 @@ const FilWallet: React.FC<ModalProps> = ({ onDismiss }) => {
             <StyledButtonContainer>
                 <Button
                     href={blockExplorerUrl}
-                    text='View on Filscan'
                     style={{
                         background: theme.colors.buttonBlue,
                         fontSize: theme.sizes.callout,
                         fontWeight: 500,
                         color: theme.colors.white,
                     }}
-                />
+                >
+                    View on Filscan
+                </Button>
                 <Spacer />
                 <Button
+                    data-cy='modal-sign-out-button'
                     onClick={handleSignOutClick}
-                    text='Sign out'
                     style={{
                         background: theme.colors.buttonBlue,
                         fontSize: theme.sizes.callout,
                         fontWeight: 500,
                         color: theme.colors.white,
                     }}
-                />
+                >
+                    Sign out
+                </Button>
             </StyledButtonContainer>
         </div>
     );

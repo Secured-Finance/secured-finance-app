@@ -5,7 +5,7 @@ type wallet = {
 
 export const expectFilecoin = {
     walletConnected: () => {
-        cy.wait(5000).then(() => {
+        cy.wait(7000).then(() => {
             cy.get('[data-cy="filecoin-connect-wallet-chip"]').should(
                 'not.exist'
             );
@@ -23,21 +23,21 @@ export const expectFilecoin = {
     connectedWallet: (address: string) => {
         cy.get('[data-cy="filecoin-settings-chip"]').click();
         cy.get('[data-cy="modal-wallet-address"]').contains(address);
-        cy.get('[data-cy="close-button"]').click();
+        cy.get('button:contains("Close")').click();
     },
 };
 
 export const filecoin = {
     connectWallet: (wallet: wallet) => {
         cy.get('[data-cy="filecoin-connect-wallet-chip"]').click();
-        cy.get('[data-cy="import-button"]').click();
+        cy.get('[data-cy="private-key-button"]').click();
         //TODO: replace this selector once the buttons are reorganized
         cy.get(
             'button:contains("Mnemonic"):not(:contains("Generate"))'
         ).click();
         cy.get('#mnemonic-input').type(wallet.phrase);
         cy.get('[data-cy="address"]').contains(wallet.address);
-        cy.get('[data-cy="import-button"]')
+        cy.get('[data-cy="import-mnemonic-button"]')
             .click()
             .then(() => {
                 expectFilecoin.walletConnected();
@@ -48,7 +48,7 @@ export const filecoin = {
     },
     disconnectWallet: () => {
         cy.get('[data-cy="filecoin-settings-chip"]').click();
-        cy.get('[data-cy="sign-out-button"]').click();
+        cy.get('[data-cy="modal-sign-out-button"]').click();
 
         cy.get('[data-cy="wallet"]')
             .click()

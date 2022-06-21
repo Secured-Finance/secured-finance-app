@@ -1,5 +1,5 @@
 import BigNumber from 'bignumber.js';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { Button, Container, RenderTerms, Spacer } from 'src/components/atoms';
@@ -308,7 +308,6 @@ const LoanScreen = () => {
                                 )}
                                 <Button
                                     // onClick={handleLendOut}
-                                    text={'Request Early Termination'}
                                     style={{
                                         marginTop: 15,
                                         background: 'transparent',
@@ -319,7 +318,9 @@ const LoanScreen = () => {
                                         borderBottom: theme.colors.buttonBlue,
                                     }}
                                     // disabled={!(notional > 0)}
-                                />
+                                >
+                                    Request Early Termination
+                                </Button>
                             </StyledItemContainer>
                         </StyledSubcontainer>
                     </StyledColumn>

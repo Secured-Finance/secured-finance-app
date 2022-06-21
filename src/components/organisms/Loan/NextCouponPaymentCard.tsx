@@ -1,6 +1,6 @@
 import BigNumber from 'bignumber.js';
 import classNames from 'classnames';
-import React, { useEffect, useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useDispatch } from 'react-redux';
 import { Button } from 'src/components/atoms';
 import { resetTransaction } from 'src/store/transaction';
@@ -86,7 +86,6 @@ export const NextCouponPaymentCard = ({
             <div>
                 <Button
                     onClick={onClick}
-                    text={'Pay Coupon'}
                     style={{
                         marginTop: 15,
                         background: theme.colors.buttonBlue,
@@ -94,7 +93,9 @@ export const NextCouponPaymentCard = ({
                         fontWeight: 500,
                         color: theme.colors.white,
                     }} // disabled={!(notional > 0)}
-                />
+                >
+                    Pay Coupon
+                </Button>
             </div>
         </div>
     );

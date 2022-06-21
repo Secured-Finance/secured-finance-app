@@ -1,14 +1,14 @@
 import React from 'react';
-import styled from 'styled-components';
-import theme from 'src/theme';
 import {
     Button,
     Modal,
-    ModalProps,
     ModalActions,
     ModalContent,
+    ModalProps,
     ModalTitle,
 } from 'src/components/atoms';
+import theme from 'src/theme';
+import styled from 'styled-components';
 
 const WalletErrorModal: React.FC<ModalProps> = ({ onDismiss }) => {
     return (
@@ -21,7 +21,6 @@ const WalletErrorModal: React.FC<ModalProps> = ({ onDismiss }) => {
             </ModalContent>
             <ModalActions>
                 <Button
-                    text='Close'
                     onClick={onDismiss}
                     style={{
                         background: 'transparent',
@@ -32,7 +31,9 @@ const WalletErrorModal: React.FC<ModalProps> = ({ onDismiss }) => {
                         fontWeight: 500,
                         color: theme.colors.white,
                     }}
-                />
+                >
+                    Close
+                </Button>
             </ModalActions>
         </Modal>
     );

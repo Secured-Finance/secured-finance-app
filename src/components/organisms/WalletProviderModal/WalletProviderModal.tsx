@@ -1,16 +1,16 @@
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { useWallet } from 'use-wallet';
-import { RootState } from 'src/store/types';
-import theme from 'src/theme';
 import {
     Button,
     Modal,
-    ModalProps,
     ModalActions,
     ModalContent,
+    ModalProps,
     ModalTitle,
 } from 'src/components/atoms';
+import { RootState } from 'src/store/types';
+import theme from 'src/theme';
+import { useWallet } from 'use-wallet';
 import EthWalletConnector from './components/EthWalletConnector';
 import FilWalletConnector from './components/FilWalletConnector';
 
@@ -38,7 +38,7 @@ const WalletProviderModal: React.FC<ModalProps> = ({ onDismiss, ccyIndex }) => {
             </ModalContent>
             <ModalActions>
                 <Button
-                    text='Cancel'
+                    data-cy='cancel-button'
                     onClick={onDismiss}
                     style={{
                         background: 'transparent',
@@ -49,7 +49,9 @@ const WalletProviderModal: React.FC<ModalProps> = ({ onDismiss, ccyIndex }) => {
                         fontWeight: 500,
                         color: theme.colors.white,
                     }}
-                />
+                >
+                    Cancel
+                </Button>
             </ModalActions>
         </Modal>
     );

@@ -27,15 +27,17 @@ const WalletCard: React.FC<WalletCardProps> = ({
             <CardIcon>{icon}</CardIcon>
             <CardTitle text={title} />
             <Button
+                data-cy={`${toKebabCase(title)}-button`}
                 onClick={onConnect}
-                text={buttonText ? buttonText : 'Connect'}
                 style={{
                     background: theme.colors.buttonBlue,
                     fontSize: theme.sizes.callout,
                     fontWeight: 500,
                     color: theme.colors.white,
                 }}
-            />
+            >
+                {buttonText ? buttonText : 'Connect'}
+            </Button>
         </CardContent>
     </Card>
 );

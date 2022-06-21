@@ -2,7 +2,8 @@
   "typescript.tsdk": "node_modules/typescript/lib",
   "files.associations": {
     "*.jsx": "javascriptreact",
-    "*.tsx": "typescriptreact"
+    "*.tsx": "typescriptreact",
+    "*.css": "tailwindcss"
   },
   "files.trimTrailingWhitespace": true,
   "files.trimFinalNewlines": true,
@@ -11,5 +12,14 @@
     "editor.codeActionsOnSave": {
       "source.organizeImports": true
     }
-  }
+  },
+  "cSpell.words": [
+    "attofil",
+    "bignumber",
+    "chartjs",
+    "craco",
+    "picofil",
+    "reduxjs",
+    "walletconnect"
+  ]
 }

@@ -355,7 +355,6 @@ const Borrow: React.FC<LendingStore> = ({
             </StyledLoanSubcontainer>
             <StyledButtonContainer>
                 <Button
-                    variant={'orange'}
                     size={'lg'}
                     onClick={handleBorrowDeal}
                     style={{

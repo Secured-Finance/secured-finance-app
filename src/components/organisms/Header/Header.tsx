@@ -14,7 +14,7 @@ export const Header = (): JSX.Element => {
                     to='/'
                 >
                     <Logo fill={'#666cf3'} size={40} />
-                    <span className='ml-4 text-purple'>
+                    <span className='ml-4'>
                         <span className='font-bold'>Secured</span>&ensp;
                         <span>Finance</span>
                     </span>
@@ -23,7 +23,7 @@ export const Header = (): JSX.Element => {
                     <ItemLink text='Lending' link='/' />
                     <ItemLink text='Terminal' link='/exchange' />
                     <ItemLink text='History' link='/history' />
-                    <div className='flex text-purple' data-cy='wallet'>
+                    <div className='flex' data-cy='wallet'>
                         <WalletButton />
                     </div>
                 </div>

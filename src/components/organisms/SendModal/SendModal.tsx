@@ -285,7 +285,6 @@ const SendModal = ({
             <ModalActions>
                 <StyledButtonContainer>
                     <Button
-                        text='Cancel'
                         onClick={onCloseSendModal}
                         style={{
                             background: 'transparent',
@@ -297,11 +296,13 @@ const SendModal = ({
                             color: theme.colors.white,
                         }}
                         disabled={ongoingTx}
-                    />
+                    >
+                        Cancel
+                    </Button>
                     <Spacer size={'md'} />
                     <Button
+                        data-cy='send-button'
                         onClick={handleTransferAssets}
-                        text={getSendButtonText()}
                         style={{
                             background: theme.colors.buttonBlue,
                             fontSize: theme.sizes.callout,
@@ -309,7 +310,9 @@ const SendModal = ({
                             color: theme.colors.white,
                         }}
                         disabled={isSendButtonDisabled()}
-                    />
+                    >
+                        {getSendButtonText()}
+                    </Button>
                 </StyledButtonContainer>
             </ModalActions>
         </Modal>
