@@ -15,9 +15,9 @@ describe('AssetSelector Component', () => {
         fireEvent.click(screen.getByRole('button'));
         fireEvent.click(screen.getByText('Ethereum'));
         fireEvent.change(input, { target: { value: '1' } });
-        expect(screen.getByText(`1,012.00 USD`)).toBeInTheDocument();
+        expect(screen.getByText(`~ 1,012 USD`)).toBeInTheDocument();
         fireEvent.change(input, { target: { value: '10' } });
-        expect(screen.getByText(`10,120.00 USD`)).toBeInTheDocument();
+        expect(screen.getByText(`~ 10,120 USD`)).toBeInTheDocument();
     });
 
     it('should transform the option selected with the transform function', () => {

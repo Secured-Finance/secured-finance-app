@@ -7,7 +7,7 @@ export const AssetSelector = ({
     priceList,
     transform = (v: string) => v,
 }: {
-    options: Array<Option>;
+    options: Readonly<Array<Option>>;
     priceList: Record<string, number>;
     transform?: (v: string) => string;
 }) => {
@@ -18,21 +18,21 @@ export const AssetSelector = ({
             return 0;
         }
         return new Intl.NumberFormat('en-us', {
-            minimumFractionDigits: 2,
+            minimumFractionDigits: 0,
         }).format(priceList[asset] * amount);
     }, [asset, amount, priceList]);
 
     return (
         <div className='w-72 flex-col items-start justify-start space-y-2'>
             <div className='flex flex-row items-start justify-between'>
-                <label className='typography-caption ml-2 text-planetaryPurple'>
+                <label className='typography-caption-2 ml-2 text-planetaryPurple'>
                     Asset
                 </label>
                 <div
-                    className='typography-caption mr-1 text-white-60'
+                    className='typography-caption-3 mr-1 text-white-60'
                     data-testid='asset-selector-usd'
                 >
-                    {`${amountInUsd} USD`}
+                    {`~ ${amountInUsd} USD`}
                 </div>
             </div>
             <div className='flex h-14 w-72 flex-row items-center justify-between space-x-2 rounded-lg bg-black-20 py-2 pl-2 pr-4 focus-within:ring'>

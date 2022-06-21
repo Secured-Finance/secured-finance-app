@@ -42,12 +42,12 @@ export const collateralList = [
         indexCcy: 0,
         icon: ethLogo,
         shortName: 'ETH',
-        fullName: 'Ethereum',
+        name: 'Ethereum',
     },
     {
         indexCcy: 2,
         icon: usdcLogo,
         shortName: 'USDC',
-        fullName: 'USDC',
+        name: 'USDC',
     },
 ] as Array<CurrencyInfo>;
