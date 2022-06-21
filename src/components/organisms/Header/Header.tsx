@@ -1,47 +1,45 @@
-import { NavLink } from 'react-router-dom';
-import { Logo } from 'src/components/new/icons';
-import { WalletButton } from 'src/components/organisms';
+import { NavLink, useRouteMatch, useLocation } from 'react-router-dom';
+import { useContext, useState } from 'react';
+import { ReactComponent as SFLogo } from 'src/assets/img/logo.svg';
+import { Button } from 'src/components/atoms';
+import { NavTab } from 'src/components/atoms/NavTab';
 
 export const Header = (): JSX.Element => {
     return (
         <div
             data-cy='header'
-            className='border-b-2 border-solid border-strokeGrey'
+            className='flex h-20 w-full flex-row justify-between border-b border-neutral1'
         >
-            <div className='m-auto flex justify-between py-3'>
-                <NavLink
-                    className='flex w-2/5 cursor-pointer items-center border-r-2 border-solid border-strokeGrey pl-12'
-                    to='/'
-                >
-                    <Logo fill={'#666cf3'} size={40} />
-                    <span className='ml-4'>
-                        <span className='font-bold'>Secured</span>&ensp;
-                        <span>Finance</span>
-                    </span>
-                </NavLink>
-                <div className='flex flex-grow items-center justify-start space-x-8 border-l-2 border-solid pl-4'>
-                    <ItemLink text='Lending' link='/' />
-                    <ItemLink text='Terminal' link='/exchange' />
-                    <ItemLink text='History' link='/history' />
-                    <div className='flex' data-cy='wallet'>
-                        <WalletButton />
-                    </div>
-                </div>
+            <NavLink
+                className='ml-5 mt-5 flex h-10 items-center justify-center'
+                to='/'
+            >
+                <SFLogo />
+            </NavLink>
+            <div className='flex items-center justify-center'>
+                <ItemLink text='OTC Lending' link='/' active />
+                <ItemLink text='Market Dashboard' link='/exchange' />
+                <ItemLink text='Portfolio Management' link='/history/' />
+            </div>
+            <div className='mr-5 mt-5'>
+                <Button>Connect Wallet</Button>
             </div>
         </div>
     );
 };
 
-const ItemLink = ({ text, link }: { text: string; link: string }) => {
+const ItemLink = ({
+    text,
+    link,
+    active,
+}: {
+    text: string;
+    link: string;
+    active?: boolean;
+}) => {
     return (
-        <NavLink
-            exact
-            data-cy={text.toLowerCase()}
-            className='flex cursor-pointer text-lightGrey'
-            activeClassName='text-lightSilver'
-            to={link}
-        >
-            {text}
+        <NavLink exact data-cy={text.toLowerCase()} to={link}>
+            <NavTab text={text} active={active} />
         </NavLink>
     );
 };

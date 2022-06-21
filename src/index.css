@@ -61,6 +61,8 @@
 
   body {
     @apply font-secondary;
+    background: url(./assets/img/app-bg.jpg);
+    background-size: cover;
   }
 }
 

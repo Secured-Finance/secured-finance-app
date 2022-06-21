@@ -54,4 +54,7 @@
     .typography-button-7 {
       @apply text-2xs font-secondary;
     }
+    .typography-nav-tab {
+      @apply text-sm font-secondary leading-4 font-normal;
+    }
   }
