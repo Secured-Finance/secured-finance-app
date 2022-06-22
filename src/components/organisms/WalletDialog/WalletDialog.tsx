@@ -1,7 +1,5 @@
 import { useCallback, useReducer, useState } from 'react';
-import WalletRadioGroup from 'src/components/molecules/WalletRadioGroup';
-
-import { Dialog } from '../../molecules/Dialog/Dialog';
+import { Dialog, WalletRadioGroup } from 'src/components/molecules';
 
 enum step {
     selectWallet = 1,
