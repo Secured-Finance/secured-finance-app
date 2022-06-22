@@ -1,13 +1,16 @@
 import { MemoryRouter } from 'react-router-dom';
 import { render, screen } from 'src/test-utils.js';
+import { UseWalletProvider } from 'use-wallet';
 import { Header } from './Header';
 
 describe('Header component', () => {
     it('Should render the header', () => {
         render(
-            <MemoryRouter>
-                <Header />
-            </MemoryRouter>
+            <UseWalletProvider>
+                <MemoryRouter>
+                    <Header />
+                </MemoryRouter>
+            </UseWalletProvider>
         );
         expect(screen.getByText('OTC Lending')).toBeInTheDocument();
         expect(screen.getByText('Market Dashboard')).toBeInTheDocument();

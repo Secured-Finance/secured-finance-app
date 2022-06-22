@@ -11,10 +11,10 @@ export const Header = (): JSX.Element => {
     return (
         <div
             data-cy='header'
-            className='flex h-20 w-full flex-row justify-between border-b border-neutral1'
+            className='flex h-20 w-full flex-row items-center justify-between border-b border-neutral1'
         >
             <NavLink
-                className='ml-5 mt-5 flex h-10 items-center justify-center'
+                className='ml-5 flex h-10 items-center justify-center'
                 to='/'
             >
                 <SFLogo />
@@ -24,7 +24,7 @@ export const Header = (): JSX.Element => {
                 <ItemLink text='Market Dashboard' link='/exchange' />
                 <ItemLink text='Portfolio Management' link='/history' />
             </div>
-            <div className='mr-5 mt-5'>
+            <div className='mr-5'>
                 <Button onClick={() => setDisplay(true)}>Connect Wallet</Button>
             </div>
             <WalletDialog

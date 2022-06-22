@@ -53,12 +53,6 @@ const reducer = (
 ) => {
     switch (action.type) {
         case 'next':
-            console.log(state.nextStep);
-            return {
-                ...stateRecord[state.nextStep],
-            };
-        case 'connected':
-            console.log(state.nextStep);
             return {
                 ...stateRecord[state.nextStep],
             };
@@ -79,7 +73,6 @@ export const WalletDialog = ({
     const [wallet, setWallet] = useState<string | undefined>();
     const [state, dispatch] = useReducer(reducer, stateRecord[1]);
     const { account, connect } = useWallet();
-
     const handleConnect = useCallback(
         async (
             provider:
@@ -103,7 +96,7 @@ export const WalletDialog = ({
                 dispatch({ type: 'next' });
             }
         },
-        [connect, dispatch]
+        [connect]
     );
 
     useEffect(() => {

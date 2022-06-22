@@ -109,12 +109,17 @@ module.exports = {
                 'button-md': '20rem',
                 'button-lg': '40rem',
                 '42': '8.5rem',
+                '585px': '585px',
             },
             height: {
                 'button-xs': '2.25rem',
                 'button-sm': '2.25rem',
                 'button-md': '4rem',
                 'button-lg': '4rem',
+                '44px': '44px',
+            },
+            maxWidth: {
+                'popover-sm': '160px',
             },
         },
     },

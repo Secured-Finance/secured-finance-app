@@ -42,8 +42,10 @@ describe('Wallet Dialog component', () => {
         expect(screen.getAllByRole('radio')).toHaveLength(2);
     });
 
-    it('should move to the next step if an option was selected', () => {
-        render(<Primary />);
+    it('should move to the next step if an option was selected', async () => {
+        const onClose = jest.fn();
+
+        render(<Primary onClose={onClose} />);
         selectMetamaskOption();
         fireEvent.click(screen.getByTestId('dialog-action-button'));
         expect(screen.getByText('Connecting...')).toBeInTheDocument();
@@ -52,12 +54,20 @@ describe('Wallet Dialog component', () => {
                 'Please wait while we connect. Please make sure to accept the approvals on your browser'
             )
         ).toBeInTheDocument();
+        await waitFor(
+            () =>
+                expect(
+                    screen.getByText(
+                        'Please wait while we connect. Please make sure to accept the approvals on your browser'
+                    )
+                ).toBeInTheDocument(),
+            { timeout: 4000 }
+        );
     });
 
     it('should close the modal after the last step', async () => {
         const onClose = jest.fn();
         render(<Primary onClose={onClose} />);
-
         selectMetamaskOption();
         const button = screen.getByTestId('dialog-action-button');
         fireEvent.click(button);
@@ -69,8 +79,7 @@ describe('Wallet Dialog component', () => {
             () => expect(screen.getByRole('button')).toBeInTheDocument(),
             { timeout: 4000 }
         );
-
-        fireEvent.click(screen.getByRole('button'));
+        fireEvent.click(screen.getByTestId('dialog-action-button'));
         expect(onClose).toHaveBeenCalled();
     });
 });

@@ -1,10 +1,9 @@
 interface NavTabProps {
     text?: string;
     active?: boolean;
-    onClick?: () => void;
 }
 
-export const NavTab: React.FC<NavTabProps> = ({ text, active, onClick }) => {
+export const NavTab: React.FC<NavTabProps> = ({ text, active }) => {
     return (
         <div className='flex h-20 w-max flex-grow-0 flex-col items-center p-0'>
             <div className={`h-1 w-full ${active ? 'bg-starBlue' : ''}`}></div>

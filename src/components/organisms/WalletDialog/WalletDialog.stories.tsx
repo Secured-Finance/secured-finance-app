@@ -1,5 +1,6 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { WalletDialog } from './WalletDialog';
+import { UseWalletProvider } from 'use-wallet';
 
 export default {
     title: 'Organism/WalletDialog',
@@ -8,6 +9,13 @@ export default {
         isOpen: true,
         onClose: () => {},
     },
+    decorators: [
+        Story => (
+            <UseWalletProvider>
+                <Story />
+            </UseWalletProvider>
+        ),
+    ],
 } as ComponentMeta<typeof WalletDialog>;
 
 const Template: ComponentStory<typeof WalletDialog> = args => (
