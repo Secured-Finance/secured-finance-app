@@ -1,3 +1,1 @@
-import { AssetSelector } from './AssetSelector';
-
-export default AssetSelector;
+export * from './AssetSelector';
