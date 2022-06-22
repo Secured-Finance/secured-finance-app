@@ -1,3 +1,1 @@
-import { DropdownSelector } from './DropdownSelector';
-
-export default DropdownSelector;
+export * from './DropdownSelector';

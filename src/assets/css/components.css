@@ -27,6 +27,12 @@
     .typography-caption {
       @apply text-sm font-secondary leading-6;
     }
+    .typography-caption-2 {
+      @apply text-xs font-secondary leading-5;
+    }
+    .typography-caption-3 {
+      @apply text-2xs font-secondary leading-4;
+    }
     .typography-hairline-1 {
       @apply text-base leading-4 font-secondary uppercase;
     }

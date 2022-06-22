@@ -13,10 +13,6 @@ export default {
     argTypes: {
         wallet: { control: 'text' },
         networkName: { control: 'text' },
-        status: {
-            control: 'select',
-            options: ['connected', 'disconnected', 'connecting'],
-        },
     },
 } as ComponentMeta<typeof WalletPopover>;
 
@@ -29,6 +25,5 @@ export const Primary = Template.bind({});
 Primary.args = {
     wallet: '0x0123...321',
     networkName: 'Rinkeby',
-    status: 'connected',
     isKYC: true,
 };

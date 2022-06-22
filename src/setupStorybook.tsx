@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import { ReactNode } from 'react';
 import { Provider, useDispatch } from 'react-redux';
 import { HashRouter as Router } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';

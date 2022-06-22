@@ -1,19 +1,18 @@
 import { Menu } from '@headlessui/react';
-import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/outline';
 import classNames from 'classnames';
 import { SVGProps, useCallback, useEffect, useState } from 'react';
-import { Separator } from '../Separator/Separator';
+import { ExpandIndicator, Separator } from 'src/components/atoms';
 
 export type Option = {
     name: string;
-    Icon?: (props: SVGProps<SVGSVGElement>) => JSX.Element;
+    iconSVG?: (props: SVGProps<SVGSVGElement>) => JSX.Element;
 };
 
 export const DropdownSelector = ({
     optionList,
     onChange,
 }: {
-    optionList: Array<Option>;
+    optionList: Readonly<Array<Option>>;
     onChange: (v: string) => void;
 }) => {
     const [selectedOption, setSelectedOption] = useState<Option>(optionList[0]);
@@ -35,26 +34,16 @@ export const DropdownSelector = ({
                 <>
                     <Menu.Button>
                         <div className='flex h-10 w-42 flex-row items-center justify-between space-x-2 rounded-lg bg-black-10 px-2'>
-                            {selectedOption.Icon ? (
+                            {selectedOption.iconSVG ? (
                                 <span>
-                                    <selectedOption.Icon className='h-6 w-6' />
+                                    <selectedOption.iconSVG className='h-6 w-6' />
                                 </span>
                             ) : null}
                             <span className='typography-caption w-16 text-white'>
                                 {selectedOption.name}
                             </span>
                             <span>
-                                {open ? (
-                                    <ChevronDownIcon
-                                        className='h-5 w-5 text-white'
-                                        data-testid='chevron-down-icon'
-                                    />
-                                ) : (
-                                    <ChevronUpIcon
-                                        className='h-5 w-5 text-white'
-                                        data-testid='chevron-up-icon'
-                                    />
-                                )}
+                                <ExpandIndicator expanded={open} />
                             </span>
                         </div>
                     </Menu.Button>
@@ -75,9 +64,9 @@ export const DropdownSelector = ({
                                                 }
                                             )}
                                         >
-                                            {asset.Icon ? (
+                                            {asset.iconSVG ? (
                                                 <span>
-                                                    <asset.Icon className='h-6 w-6' />
+                                                    <asset.iconSVG className='h-6 w-6' />
                                                 </span>
                                             ) : null}
 

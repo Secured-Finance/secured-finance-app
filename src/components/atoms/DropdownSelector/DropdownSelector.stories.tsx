@@ -9,23 +9,23 @@ import { DropdownSelector, Option } from './DropdownSelector';
 const optionList = [
     {
         name: 'Bitcoin',
-        Icon: BitcoinIcon,
+        iconSVG: BitcoinIcon,
     },
     {
         name: 'Ethereum',
-        Icon: EthIcon,
+        iconSVG: EthIcon,
     },
     {
         name: 'Filecoin',
-        Icon: FilecoinIcon,
+        iconSVG: FilecoinIcon,
     },
     {
         name: 'USDC',
-        Icon: UsdcIcon,
+        iconSVG: UsdcIcon,
     },
     {
         name: 'USD Tether',
-        Icon: UsdtIcon,
+        iconSVG: UsdtIcon,
     },
 ] as Array<Option>;
 
