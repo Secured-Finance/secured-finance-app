@@ -1,5 +1,7 @@
-import { useCallback, useReducer, useState } from 'react';
+import { useCallback, useEffect, useReducer, useState } from 'react';
 import WalletRadioGroup from 'src/components/molecules/WalletRadioGroup';
+import { useWallet } from 'use-wallet';
+import { CACHED_PROVIDER_KEY } from 'src/contexts/SecuredFinanceProvider/SecuredFinanceProvider';
 
 import { Dialog } from '../../molecules/Dialog/Dialog';
 
@@ -51,6 +53,12 @@ const reducer = (
 ) => {
     switch (action.type) {
         case 'next':
+            console.log(state.nextStep);
+            return {
+                ...stateRecord[state.nextStep],
+            };
+        case 'connected':
+            console.log(state.nextStep);
             return {
                 ...stateRecord[state.nextStep],
             };
@@ -70,6 +78,41 @@ export const WalletDialog = ({
 }) => {
     const [wallet, setWallet] = useState<string | undefined>();
     const [state, dispatch] = useReducer(reducer, stateRecord[1]);
+    const { account, connect } = useWallet();
+
+    const handleConnect = useCallback(
+        async (
+            provider:
+                | 'authereum'
+                | 'fortmatic'
+                | 'frame'
+                | 'injected'
+                | 'portis'
+                | 'squarelink'
+                | 'provided'
+                | 'torus'
+                | 'walletconnect'
+                | 'walletlink',
+            account: string
+        ) => {
+            if (!account) {
+                await connect(provider);
+                localStorage.setItem(CACHED_PROVIDER_KEY, 'connected');
+                dispatch({ type: 'next' });
+            } else {
+                dispatch({ type: 'next' });
+            }
+        },
+        [connect, dispatch]
+    );
+
+    useEffect(() => {
+        if (state.currentStep === step.connecting) {
+            const provider =
+                wallet === 'Metamask' ? 'injected' : 'walletconnect';
+            handleConnect(provider, account);
+        }
+    }, [state, account, handleConnect, wallet]);
 
     const onClick = useCallback(
         (currentStep: step) => {
@@ -80,9 +123,6 @@ export const WalletDialog = ({
             switch (currentStep) {
                 case step.selectWallet:
                     dispatch({ type: 'next' });
-                    setTimeout(() => {
-                        dispatch({ type: 'next' });
-                    }, 2000);
                     break;
                 case step.connecting:
                     break;
