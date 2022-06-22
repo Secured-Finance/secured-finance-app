@@ -65,6 +65,7 @@ module.exports = {
             neutral8: '#FCFCFD',
             lg_1: 'rgba(57, 77, 174, 0)',
             lg_2: 'rgba(106, 118, 177, 0.35)',
+            bg_s: 'rgba(35, 43, 56, 0.6)',
 
             transparent: 'transparent',
             starBlue: {

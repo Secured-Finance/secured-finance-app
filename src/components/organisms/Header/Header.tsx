@@ -2,8 +2,13 @@ import { NavLink, useRouteMatch } from 'react-router-dom';
 import { ReactComponent as SFLogo } from 'src/assets/img/logo.svg';
 import { Button } from 'src/components/atoms';
 import { NavTab } from 'src/components/atoms/NavTab';
+import { useState, Fragment } from 'react';
+import WalletDialog from '../WalletDialog';
+import { Transition } from '@headlessui/react';
 
 export const Header = (): JSX.Element => {
+    const [display, setDisplay] = useState(false);
+
     return (
         <div
             data-cy='header'
@@ -21,8 +26,12 @@ export const Header = (): JSX.Element => {
                 <ItemLink text='Portfolio Management' link='/history' />
             </div>
             <div className='mr-5 mt-5'>
-                <Button>Connect Wallet</Button>
+                <Button onClick={() => setDisplay(true)}>Connect Wallet</Button>
             </div>
+            <WalletDialog
+                isOpen={display}
+                onClose={() => setDisplay(false)}
+            ></WalletDialog>
         </div>
     );
 };
