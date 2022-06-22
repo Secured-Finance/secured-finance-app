@@ -9,11 +9,9 @@ describe('Header component', () => {
                 <Header />
             </MemoryRouter>
         );
-        expect(screen.getByText('Secured')).toBeInTheDocument();
-        expect(screen.getByText('Finance')).toBeInTheDocument();
-        expect(screen.getByText('Lending')).toBeInTheDocument();
-        expect(screen.getByText('Terminal')).toBeInTheDocument();
-        expect(screen.getByText('History')).toBeInTheDocument();
-        expect(screen.getByText('Unlock Wallet')).toBeInTheDocument();
+        expect(screen.getByText('OTC Lending')).toBeInTheDocument();
+        expect(screen.getByText('Market Dashboard')).toBeInTheDocument();
+        expect(screen.getByText('Portfolio Management')).toBeInTheDocument();
+        expect(screen.getByText('Connect Wallet')).toBeInTheDocument();
     });
 });
