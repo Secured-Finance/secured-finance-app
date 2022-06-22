@@ -1,4 +1,5 @@
 import { Provider } from 'react-redux';
+import { HashRouter as Router } from 'react-router-dom';
 import '../src/index.css';
 import store from './../src/store';
 
@@ -35,6 +36,11 @@ export const parameters = {
 };
 
 export const decorators = [
+    Story => (
+        <Router>
+            <Story />
+        </Router>
+    ),
     Story => (
         <Provider store={store}>
             <Story />
