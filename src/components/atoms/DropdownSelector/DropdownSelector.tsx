@@ -1,8 +1,7 @@
 import { Menu } from '@headlessui/react';
 import classNames from 'classnames';
 import { SVGProps, useCallback, useEffect, useState } from 'react';
-import ExpandIndicator from 'src/components/atoms/ExpandIndicator';
-import Separator from 'src/components/atoms/Separator';
+import { ExpandIndicator, Separator } from 'src/components/atoms';
 
 export type Option = {
     name: string;

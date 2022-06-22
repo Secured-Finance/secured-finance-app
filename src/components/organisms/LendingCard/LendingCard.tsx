@@ -3,8 +3,7 @@ import classNames from 'classnames';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Button } from 'src/components/atoms';
-import AssetSelector from 'src/components/molecules/AssetSelector';
-import TermsSelector from 'src/components/molecules/TermSelector';
+import { AssetSelector, TermSelector } from 'src/components/molecules';
 import { RootState } from 'src/store/types';
 import { currencyList } from 'src/utils';
 
@@ -87,7 +86,7 @@ export const LendingCard = () => {
                     />
                 </div>
                 <div className='flex self-center'>
-                    <TermsSelector options={optionList} />
+                    <TermSelector options={optionList} />
                 </div>
                 <div className='flex flex-row items-stretch justify-between'>
                     <div className='flex-col'>

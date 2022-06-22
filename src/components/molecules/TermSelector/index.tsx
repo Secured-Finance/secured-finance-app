@@ -1,3 +1,1 @@
-import { TermSelector } from './TermSelector';
-
-export default TermSelector;
+export * from './TermSelector';

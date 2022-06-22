@@ -1,6 +1,5 @@
 import { ChangeEvent, useMemo, useState } from 'react';
-import DropdownSelector from 'src/components/atoms/DropdownSelector';
-import { Option } from 'src/components/atoms/DropdownSelector/DropdownSelector';
+import { DropdownSelector, Option } from 'src/components/atoms';
 
 export const AssetSelector = ({
     options,

@@ -11,4 +11,6 @@ export * from './Label';
 export * from './Modal';
 export * from './ProgressBar';
 export * from './RenderTerms';
+export * from './Separator';
 export * from './Spacer';
+export * from './Toggle';

@@ -4,11 +4,8 @@ import { BadgeCheckIcon } from '@heroicons/react/solid';
 import classNames from 'classnames';
 import { Fragment, SVGProps } from 'react';
 import { ReactComponent as FilecoinWallet } from 'src/assets/icons/FilecoinWallet.svg';
-
 import metamaskLogo from 'src/assets/img/metamask-fox.svg';
-import ExpandIndicator from 'src/components/atoms/ExpandIndicator';
-import { Separator } from 'src/components/atoms/Separator/Separator';
-import { Toggle } from 'src/components/atoms/Toggle/Toggle';
+import { ExpandIndicator, Separator, Toggle } from 'src/components/atoms';
 
 const Item = ({
     name,

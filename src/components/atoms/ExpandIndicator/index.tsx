@@ -1,3 +1,1 @@
-import { ExpandIndicator } from './ExpandIndicator';
-
-export default ExpandIndicator;
+export * from './ExpandIndicator';
