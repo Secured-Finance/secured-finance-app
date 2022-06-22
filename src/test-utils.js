@@ -1,7 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { render as rtlRender } from '@testing-library/react';
-import React from 'react';
 import { Provider } from 'react-redux';
+import { HashRouter } from 'react-router-dom';
 import { rootReducers } from 'src/store';
 
 function render(
@@ -13,7 +13,11 @@ function render(
     } = {}
 ) {
     function Wrapper({ children }) {
-        return <Provider store={store}>{children}</Provider>;
+        return (
+            <HashRouter>
+                <Provider store={store}>{children}</Provider>
+            </HashRouter>
+        );
     }
     return rtlRender(ui, { wrapper: Wrapper, ...renderOptions });
 }

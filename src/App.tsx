@@ -1,9 +1,9 @@
 import { GraphClientProvider } from '@secured-finance/sf-graph-client';
 import React from 'react';
-import { HashRouter as Router, Route, Switch } from 'react-router-dom';
-import { Header } from 'src/components/organisms';
+import { HashRouter as Router } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
 import { UseWalletProvider } from 'use-wallet';
+import { Layout } from './components/templates';
 import FilecoinWalletProvider from './contexts/FilecoinWalletProvider';
 import ModalsProvider from './contexts/Modals';
 import SecuredFinanceProvider from './contexts/SecuredFinanceProvider';
@@ -14,28 +14,34 @@ import History from './views/History';
 import Lending from './views/Lending';
 import Loan from './views/Loan';
 
+const routes = [
+    {
+        path: 'exchange',
+        component: <Exchange />,
+    },
+    {
+        path: '/history',
+        component: <History />,
+    },
+    {
+        path: '/account',
+        component: <Account />,
+    },
+    {
+        path: '/loan/:loanId',
+        component: <Loan />,
+    },
+    {
+        path: '/',
+        component: <Lending />,
+    },
+];
+
 const App: React.FC = () => {
     return (
         <Router>
             <Providers>
-                <Header />
-                <Switch>
-                    <Route path='/exchange'>
-                        <Exchange />
-                    </Route>
-                    <Route path='/history'>
-                        <History />
-                    </Route>
-                    <Route path='/account'>
-                        <Account />
-                    </Route>
-                    <Route path='/loan/:loanId'>
-                        <Loan />
-                    </Route>
-                    <Route path='/'>
-                        <Lending />
-                    </Route>
-                </Switch>
+                <Layout routes={routes} />
             </Providers>
         </Router>
     );
