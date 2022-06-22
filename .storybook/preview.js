@@ -1,4 +1,6 @@
+import { Provider } from 'react-redux';
 import '../src/index.css';
+import store from './../src/store';
 
 export const parameters = {
     actions: { argTypesRegex: '^on[A-Z].*' },
@@ -31,3 +33,11 @@ export const parameters = {
     },
     chromatic: { disableSnapshot: true },
 };
+
+export const decorators = [
+    Story => (
+        <Provider store={store}>
+            <Story />
+        </Provider>
+    ),
+];

@@ -1,9 +1,11 @@
 import { RadioGroup } from '@headlessui/react';
 import classNames from 'classnames';
 import { useState } from 'react';
+import { useSelector } from 'react-redux';
 import { Button } from 'src/components/atoms';
 import AssetSelector from 'src/components/molecules/AssetSelector';
 import TermsSelector from 'src/components/molecules/TermSelector';
+import { RootState } from 'src/store/types';
 import { currencyList } from 'src/utils';
 
 export const LendingCard = () => {
@@ -29,12 +31,16 @@ export const LendingCard = () => {
         'USD Tether': 'USDT',
     };
 
+    const {
+        filecoin: { price: filecoinPrice },
+        ethereum: { price: ethereumPrice },
+        usdc: { price: usdcPrice },
+    } = useSelector((state: RootState) => state.assetPrices);
+
     const priceList: Record<string, number> = {
-        Bitcoin: 20515,
-        Ethereum: 1012,
-        Filecoin: 4.85,
-        USDC: 1.0,
-        'USD Tether': 0.99,
+        Ethereum: ethereumPrice,
+        Filecoin: filecoinPrice,
+        USDC: usdcPrice,
     };
     return (
         <div className='w-80 flex-col space-y-6 rounded-lg border border-neutral bg-transparent pb-4 shadow-2xl'>
