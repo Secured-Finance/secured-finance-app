@@ -2,7 +2,7 @@ const defaultTheme = require('tailwindcss/defaultTheme');
 
 module.exports = {
     darkMode: 'media',
-    content: ['./src/**/*.{ts,tsx,js,jsx}', './public/index.html'],
+    purge: ['./src/**/*.{ts,tsx,js,jsx}', './public/index.html'],
     theme: {
         fontFamily: {
             primary: ['GT Super Display', ...defaultTheme.fontFamily.serif],
