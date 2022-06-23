@@ -10,21 +10,31 @@ export default {
             {
                 path: '/lending',
                 component: () => (
-                    <div>
+                    <div className='border-4 border-horizonBlue bg-gunMetal text-white-80'>
                         <Link to='/borrowing'>To Borrowing</Link>
                     </div>
                 ),
             },
             {
                 path: '/borrowing',
-                component: () => <div>Borrowing</div>,
+                component: () => (
+                    <div className='border-4 border-horizonBlue bg-gunMetal text-white-80'>
+                        Borrowing
+                    </div>
+                ),
             },
             {
                 path: '/',
-                component: () => <Link to='/lending'>To Lending</Link>,
+                component: () => (
+                    <div className='border-4 border-horizonBlue bg-gunMetal text-white-80'>
+                        <Link to='/lending'>To Lending</Link>
+                    </div>
+                ),
             },
         ],
-        navBar: <div>NavBar</div>,
+        navBar: (
+            <div className='bg-red text-center text-4xl text-white'>NavBar</div>
+        ),
     },
     argTypes: {
         routes: { control: { disable: true } },
