@@ -40,13 +40,10 @@ export const parameters = {
 export const decorators = [
     Story => (
         <Router>
-            <Story />
+            <Provider store={store}>
+                <Story />
+            </Provider>
         </Router>
-    ),
-    Story => (
-        <Provider store={store}>
-            <Story />
-        </Provider>
     ),
     withPerformance,
 ];

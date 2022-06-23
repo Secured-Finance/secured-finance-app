@@ -1,9 +1,8 @@
-const { lineHeight } = require('tailwindcss/defaultTheme');
 const defaultTheme = require('tailwindcss/defaultTheme');
 
 module.exports = {
     darkMode: 'media',
-    purge: ['./src/**/*.{ts,tsx,js,jsx}'],
+    content: ['./src/**/*.{ts,tsx,js,jsx}', './public/index.html'],
     theme: {
         fontFamily: {
             primary: ['GT Super Display', ...defaultTheme.fontFamily.serif],

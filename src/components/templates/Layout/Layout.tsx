@@ -1,8 +1,8 @@
 import { Route, Switch } from 'react-router-dom';
-import { Header } from 'src/components/organisms';
 
 export const Layout = ({
     routes,
+    navBar,
 }: {
     routes: Readonly<
         Array<{
@@ -10,12 +10,11 @@ export const Layout = ({
             component: React.ReactNode;
         }>
     >;
+    navBar: React.ReactNode;
 }) => {
     return (
-        <div className='flex flex-col items-center justify-center'>
-            <header className='w-full'>
-                <Header />
-            </header>
+        <div className='flex max-w-full flex-col items-stretch justify-center'>
+            <header>{navBar}</header>
             <main>
                 <Switch>
                     {routes.map(({ path, component }) => (
