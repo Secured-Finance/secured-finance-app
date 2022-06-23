@@ -3,6 +3,7 @@ import React from 'react';
 import { HashRouter as Router } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
 import { UseWalletProvider } from 'use-wallet';
+import { Header } from './components/organisms';
 import { Layout } from './components/templates';
 import FilecoinWalletProvider from './contexts/FilecoinWalletProvider';
 import ModalsProvider from './contexts/Modals';
@@ -41,7 +42,7 @@ const App: React.FC = () => {
     return (
         <Router>
             <Providers>
-                <Layout routes={routes} />
+                <Layout routes={routes} navBar={<Header />} />
             </Providers>
         </Router>
     );

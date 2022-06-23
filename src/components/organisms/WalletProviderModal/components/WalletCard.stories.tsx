@@ -1,5 +1,4 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
-import React from 'react';
 import ledgerLogo from 'src/assets/img/ledger.svg';
 import theme from 'src/theme';
 import { ThemeProvider } from 'styled-components';
@@ -10,8 +9,8 @@ export default {
     component: WalletCard,
     argTypes: {
         onConnect: { action: 'clicked' },
-        title: { control: 'text', defaultValue: 'Ledger' },
-        buttonText: { control: 'text', defaultValue: 'Connect' },
+        title: { control: 'text' },
+        buttonText: { control: 'text' },
     },
 } as ComponentMeta<typeof WalletCard>;
 
