@@ -60,7 +60,11 @@
     "cypress:run": "cypress run"
   },
   "browserslist": {
-    "production": [">0.2%", "not dead", "not op_mini all"],
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
     "development": [
       "last 1 chrome version",
       "last 1 firefox version",
@@ -68,14 +72,19 @@
     ]
   },
   "jest": {
-    "collectCoverageFrom": ["src/**/*.{js,ts,jsx,tsx}", "!**/*.stories.tsx"]
+    "collectCoverageFrom": [
+      "src/**/*.{js,ts,jsx,tsx}",
+      "!**/*.stories.tsx"
+    ]
   },
   "devDependencies": {
     "@commitlint/cli": "^17.0.0",
     "@commitlint/config-conventional": "^17.0.0",
     "@craco/craco": "^6.4.3",
     "@ethersproject/experimental": "^5.6.0",
-    "@storybook/addon-actions": "^6.4.19",
+    "@storybook/addon-a11y": "^6.5.9",
+    "@storybook/addon-actions": "^6.5.9",
+    "@storybook/addon-console": "^1.2.3",
     "@storybook/addon-essentials": "^6.4.19",
     "@storybook/addon-links": "^6.4.19",
     "@storybook/node-logger": "^6.4.19",
@@ -111,6 +120,7 @@
     "prettier": "^2.3.0",
     "prettier-plugin-tailwindcss": "^0.1.8",
     "sass": "^1.35.1",
+    "storybook-addon-performance": "^0.16.1",
     "storybook-preset-craco": "^0.0.6",
     "style-loader": "^2.0.0",
     "stylelint": "^14.5.3",
