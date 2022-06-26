@@ -20,6 +20,6 @@
     "typeRoots": ["node_modules/@types", "src/types"],
     "incremental": true
   },
-  "include": ["src", "bootstrap.js", "next-env.d.ts"],
+  "include": ["src", "next-env.d.ts"],
   "exclude": ["node_modules", "build", "cypress"]
 }
