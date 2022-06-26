@@ -19,7 +19,7 @@ import Loan from './views/Loan';
 
 const routes = [
     {
-        path: 'exchange',
+        path: '/exchange',
         component: <Exchange />,
     },
     {
