@@ -17,7 +17,7 @@
     "@secured-finance/sf-client": "^0.1.6-beta.17",
     "@secured-finance/sf-graph-client": "^0.1.6-beta.17",
     "@svgr/webpack": "^6.2.1",
-    "@zondax/filecoin-signing-tools": "^0.13.0",
+    "@zondax/filecoin-signing-tools": "^0.18.5",
     "@zondax/ledger-filecoin": "^0.11.2",
     "axios": "^0.21.1",
     "bignumber.js": "^9.0.1",
