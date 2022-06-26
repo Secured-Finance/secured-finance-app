@@ -66,7 +66,7 @@ export const WalletDialog = ({
     isOpen: boolean;
     onClose: () => void;
 }) => {
-    const [wallet, setWallet] = useState<string | undefined>();
+    const [wallet, setWallet] = useState<string>('');
     const [state, dispatch] = useReducer(reducer, stateRecord[1]);
 
     const onClick = useCallback(
