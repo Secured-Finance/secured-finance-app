@@ -1,5 +1,4 @@
 /** @type {import('next').NextConfig} */
-const extensionRules = require('./webpack-extensions');
 const webpack = require('./webpack-config');
 
 module.exports = {
