@@ -32,6 +32,13 @@ describe('Wallet Dialog component', () => {
         expect(screen.getAllByRole('radio')).toHaveLength(2);
     });
 
+    it('should open with nothing selected', () => {
+        render(<Primary />);
+        screen.getAllByRole('radio').forEach(radio => {
+            expect(radio).toHaveAttribute('aria-checked', 'false');
+        });
+    });
+
     it('should do nothing when no option is selected and button is clicked', () => {
         const onClose = jest.fn();
         render(<Primary onClose={onClose} />);

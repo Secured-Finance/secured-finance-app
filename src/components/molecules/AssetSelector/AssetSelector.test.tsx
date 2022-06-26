@@ -26,10 +26,10 @@ describe('AssetSelector Component', () => {
             screen.getByTestId('asset-selector-transformed-value')
         ).toHaveTextContent('BTC');
         fireEvent.click(screen.getByRole('button'));
-        const option = Default.args.options[3].name;
-        fireEvent.click(screen.getByText(option));
+
+        fireEvent.click(screen.getByText('Filecoin'));
         expect(
             screen.getByTestId('asset-selector-transformed-value')
-        ).toHaveTextContent('USDC');
+        ).toHaveTextContent('FIL');
     });
 });

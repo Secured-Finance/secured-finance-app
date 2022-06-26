@@ -10,7 +10,7 @@ export default {
     },
 } as ComponentMeta<typeof WalletRadioGroup>;
 
-const Template: ComponentStory<typeof WalletRadioGroup> = args => {
+const Template: ComponentStory<typeof WalletRadioGroup> = () => {
     const [value, setValue] = React.useState('');
     return <WalletRadioGroup value={value} onChange={setValue} />;
 };

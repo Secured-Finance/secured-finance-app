@@ -16,7 +16,9 @@ export const Landing = () => {
             </div>
             <div className='flex flex-row justify-center space-x-8'>
                 <LendingCard />
-                <div className='w-5/12 bg-gunMetal text-white'>PLAHOLDER</div>
+                <div className='w-[700px] bg-gunMetal text-white'>
+                    PLAHOLDER
+                </div>
             </div>
         </div>
     );
