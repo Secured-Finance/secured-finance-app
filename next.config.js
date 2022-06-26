@@ -1,33 +1,11 @@
 /** @type {import('next').NextConfig} */
 const extensionRules = require('./webpack-extensions');
+const webpack = require('./webpack-config');
 
 module.exports = {
     reactStrictMode: true,
 
-    webpack: (config, options) => {
-        config.resolve.fallback = {
-            fs: false,
-            path: false,
-            stream: false,
-            constants: false,
-        };
-
-        extensionRules.forEach(rule => config.module.rules.push(rule));
-
-        config.module.rules.push({
-            test: /\.(png|jpe?g|gif)$/i,
-            use: [
-                {
-                    loader: 'file-loader',
-                    options: {
-                        publicPath: 'public',
-                    },
-                },
-            ],
-        });
-
-        return config;
-    },
+    webpack: (config, options) => webpack.webpackOverride(config),
 
     async rewrites() {
         return [
