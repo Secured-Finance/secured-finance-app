@@ -231,7 +231,7 @@ const CollateralModal: React.FC<CombinedProps> = ({
                         </StyledAddressTitle>
                         {account && colBook.vault !== '' ? (
                             <StyledAddress>
-                                {colBook.collateral != null
+                                {colBook.collateral !== null
                                     ? getDisplayBalance(colBook.collateral)
                                     : getFullDisplayBalanceNumber(0)}{' '}
                                 ETH
@@ -248,7 +248,7 @@ const CollateralModal: React.FC<CombinedProps> = ({
                         </StyledAddressTitle>
                         {account && colBook.vault !== '' ? (
                             <StyledAddress>
-                                {colBook.usdCollateral != null
+                                {colBook.usdCollateral !== null
                                     ? getUSDFormatBalanceNumber(
                                           colBook.usdCollateral.toNumber()
                                       )
@@ -266,7 +266,7 @@ const CollateralModal: React.FC<CombinedProps> = ({
                         </StyledAddressTitle>
                         {account && colBook.vault !== '' ? (
                             <StyledAddress>
-                                {colBook.locked != null
+                                {colBook.locked !== null
                                     ? getDisplayBalance(colBook.locked)
                                     : getFullDisplayBalanceNumber(0)}{' '}
                                 ETH
@@ -283,7 +283,7 @@ const CollateralModal: React.FC<CombinedProps> = ({
                         </StyledAddressTitle>
                         {account && colBook.vault !== '' ? (
                             <StyledAddress>
-                                {colBook.usdLocked != null
+                                {colBook.usdLocked === null
                                     ? getUSDFormatBalanceNumber(
                                           colBook.usdLocked.toNumber()
                                       )

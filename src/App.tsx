@@ -1,5 +1,6 @@
 import { GraphClientProvider } from '@secured-finance/sf-graph-client';
 import React from 'react';
+import { Provider } from 'react-redux';
 import { HashRouter as Router } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
 import { UseWalletProvider } from 'use-wallet';
@@ -8,6 +9,7 @@ import { Layout } from './components/templates';
 import FilecoinWalletProvider from './contexts/FilecoinWalletProvider';
 import ModalsProvider from './contexts/Modals';
 import SecuredFinanceProvider from './contexts/SecuredFinanceProvider';
+import store from './store';
 import theme from './theme';
 import Account from './views/Account';
 import Exchange from './views/Exchange';
@@ -38,13 +40,15 @@ const routes = [
     },
 ];
 
-const App: React.FC = () => {
+const SecuredFinanceApp: React.FC = () => {
     return (
-        <Router>
-            <Providers>
-                <Layout routes={routes} navBar={<Header />} />
-            </Providers>
-        </Router>
+        <Provider store={store}>
+            <Router>
+                <Providers>
+                    <Layout routes={routes} navBar={<Header />} />
+                </Providers>
+            </Router>
+        </Provider>
     );
 };
 
@@ -73,4 +77,4 @@ const Providers: React.FC = ({ children }) => {
     );
 };
 
-export default App;
+export default SecuredFinanceApp;

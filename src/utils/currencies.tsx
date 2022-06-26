@@ -1,7 +1,5 @@
 import { ethereum, FilIcon } from 'src/components/new/icons';
-import ethLogo from '../assets/coins/eth.png';
-import usdcLogo from '../assets/coins/usdc.png';
-import { CurrencyInfo } from './currencyList';
+import { CurrencyInfo, currencyList } from './currencyList';
 
 export const currencyListDropdown = [
     {
@@ -38,16 +36,6 @@ export const collateralListDropdown = [
 ];
 
 export const collateralList = [
-    {
-        indexCcy: 0,
-        icon: ethLogo,
-        shortName: 'ETH',
-        name: 'Ethereum',
-    },
-    {
-        indexCcy: 2,
-        icon: usdcLogo,
-        shortName: 'USDC',
-        name: 'USDC',
-    },
+    currencyList[0],
+    currencyList[1],
 ] as Array<CurrencyInfo>;

@@ -1,11 +1,11 @@
 import { Menu } from '@headlessui/react';
 import classNames from 'classnames';
-import { SVGProps, useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { ExpandIndicator, Separator } from 'src/components/atoms';
 
 export type Option = {
     name: string;
-    iconSVG?: (props: SVGProps<SVGSVGElement>) => JSX.Element;
+    iconSVG?: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
 };
 
 export const DropdownSelector = ({

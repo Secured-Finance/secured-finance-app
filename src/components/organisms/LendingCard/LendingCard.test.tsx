@@ -8,7 +8,7 @@ describe('LendingCard Component', () => {
     const selectFilecoin = () => {
         fireEvent.click(
             screen.getByRole('button', {
-                name: 'eth2.svg Ethereum',
+                name: 'Ethereum',
             })
         );
         fireEvent.click(screen.getByText('Filecoin'));
@@ -18,18 +18,18 @@ describe('LendingCard Component', () => {
     });
 
     it('should render the component with Borrow as the default', () => {
-        const { getByText } = render(<Default />);
-        expect(getByText('Borrow')).toBeInTheDocument();
+        render(<Default />);
+        expect(screen.getByText('Borrow')).toBeInTheDocument();
     });
 
     it('should let the user choose between ETH, FIL and USDC when clicking on the asset selector', () => {
-        const screen = render(<Default />);
+        render(<Default />);
         expect(screen.getAllByText('Ethereum')).toHaveLength(1);
         expect(screen.queryByText('USDC')).not.toBeInTheDocument();
         expect(screen.queryByText('Filecoin')).not.toBeInTheDocument();
         fireEvent.click(
             screen.getByRole('button', {
-                name: 'eth2.svg Ethereum',
+                name: 'Ethereum',
             })
         );
         expect(screen.getAllByText('Ethereum')).toHaveLength(2);
@@ -38,7 +38,7 @@ describe('LendingCard Component', () => {
     });
 
     it('should switch to Filecoin when selecting it from the option', () => {
-        const screen = render(<Default />);
+        render(<Default />);
         selectFilecoin();
         expect(screen.getByText('Filecoin')).toBeInTheDocument();
     });

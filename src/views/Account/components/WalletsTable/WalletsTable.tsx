@@ -16,12 +16,14 @@ const WalletsTable = ({ table }: { table: Array<WalletBase> }): JSX.Element => {
             <thead className='bg-tableHeader'>
                 {headerGroups.map((headerGroup, index) => (
                     <tr
+                        key={`header-${index}`}
                         className={index === 1 ? 'text-center' : 'hidden'}
                         {...headerGroup.getHeaderGroupProps()}
                     >
                         {headerGroup.headers.map(column => {
                             return (
                                 <td
+                                    key={column.id}
                                     className='p-5 text-center text-sm font-bold'
                                     {...column.getHeaderProps()}
                                 >
@@ -41,10 +43,11 @@ const WalletsTable = ({ table }: { table: Array<WalletBase> }): JSX.Element => {
                 {rows.map((row, i) => {
                     prepareRow(row);
                     return (
-                        <tr {...row.getRowProps()}>
-                            {row.cells.map(cell => {
+                        <tr key={`row-${i}`} {...row.getRowProps()}>
+                            {row.cells.map((cell, j) => {
                                 return (
                                     <td
+                                        key={`row-${i}-cell-${j}`}
                                         className='p-5'
                                         {...cell.getCellProps()}
                                     >

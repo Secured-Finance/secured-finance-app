@@ -1,22 +1,20 @@
 import { RadioGroup } from '@headlessui/react';
-import { CheckIcon } from '@heroicons/react/solid';
-import { SVGProps } from 'react';
-import { ReactComponent as CircleOutline } from 'src/assets/icons/circle-outline.svg';
-import { ReactComponent as MetaMaskIcon } from 'src/assets/img/metamask-fox.svg';
-import { ReactComponent as WalletConnectIcon } from 'src/assets/img/wallet-connect.svg';
+import { CheckIcon } from '@heroicons/react/outline';
+import CircleOutline from 'src/assets/icons/circle-outline.svg';
+import MetaMaskIcon from 'src/assets/img/metamask-fox.svg';
+import WalletConnectIcon from 'src/assets/img/wallet-connect.svg';
 
 const WalletOption = ({
     name,
     Icon,
 }: {
     name: string;
-    Icon: (props: SVGProps<SVGSVGElement>) => JSX.Element;
+    Icon: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
 }) => {
     return (
         <RadioGroup.Option
             value={name}
-            className='
-    focus:outline-none relative flex cursor-pointer rounded-lg px-5 py-4'
+            className='relative·flex·cursor-pointer·rounded-lg·px-5·py-4·focus:outline-none'
         >
             {({ checked }) => (
                 <>
