@@ -9,7 +9,9 @@ function webpackOverride(config) {
     };
 
     // remove the existing svg rule. This is specific for Storybook
-    const imageRule = config.module.rules.find(rule => rule.test.test('.svg'));
+    const imageRule = config.module.rules.find(
+        rule => rule.test ?? rule.test.test('.svg')
+    );
     imageRule.exclude = /\.svg$/;
 
     config.module.rules.push({
@@ -37,6 +39,12 @@ function webpackOverride(config) {
         url: require.resolve('url'),
         stream: require.resolve('stream-browserify'),
         buffer: require.resolve('buffer'),
+    };
+
+    config.output.webassemblyModuleFilename = 'static/wasm/[modulehash].wasm';
+
+    config.experiments = {
+        asyncWebAssembly: true,
     };
 
     return config;
