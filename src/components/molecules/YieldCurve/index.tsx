@@ -26,7 +26,7 @@ const usePrevious = <T extends Array<unknown>>(value: T) => {
     return ref.current;
 };
 
-export function YieldCurve() {
+export const YieldCurve = () => {
     const [lineData, setLineData] = useState({});
 
     const borrowRates = useRates('FIL', 0);
@@ -136,7 +136,7 @@ export function YieldCurve() {
             {lineData ? <Line data={lineData} options={chartOptions} /> : null}
         </StyledYieldCurveContainer>
     );
-}
+};
 
 const StyledYieldCurveContainer = styled.div`
     display: flex;

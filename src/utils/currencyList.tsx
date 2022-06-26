@@ -1,11 +1,9 @@
 import { BigNumber, FixedNumber } from 'ethers';
 import { SVGProps } from 'react';
-import { ReactComponent as EthIcon } from 'src/assets/coins/eth2.svg';
-import { ReactComponent as FilecoinIcon } from 'src/assets/coins/fil.svg';
-import { ReactComponent as UsdcIcon } from 'src/assets/coins/usdc.svg';
+import EthIcon from 'src/assets/coins/eth2.svg';
+import FilecoinIcon from 'src/assets/coins/fil.svg';
+import UsdcIcon from 'src/assets/coins/usdc.svg';
 import { MAINNET_PATH_CODE } from 'src/services/ledger/constants';
-import ethLogo from '../assets/coins/eth.png';
-import filLogo from '../assets/coins/fil.png';
 import { formatFilecoin } from './formatNumbers';
 
 const ETH_CHAIN_ID = 60;
@@ -32,7 +30,7 @@ export type CurrencyInfo = {
 export const currencyList = [
     {
         indexCcy: 0,
-        icon: ethLogo,
+        icon: 'ethLogo',
         iconSVG: EthIcon,
         shortName: Currency.ETH,
         name: 'Ethereum',
@@ -46,7 +44,7 @@ export const currencyList = [
     },
     {
         indexCcy: 1,
-        icon: filLogo,
+        icon: 'filLogo',
         iconSVG: FilecoinIcon,
         shortName: Currency.FIL,
         name: 'Filecoin',
@@ -64,7 +62,7 @@ export const currencyList = [
         chainId: ETH_CHAIN_ID,
         formatFunction: (amount: number) => {
             return {
-                value: amount.toFixed(2),
+                value: BigNumber.from(amount.toFixed(2)),
                 unit: 'USDC',
             };
         },

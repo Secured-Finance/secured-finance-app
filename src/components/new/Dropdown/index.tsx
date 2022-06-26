@@ -1,5 +1,5 @@
 import cx from 'classnames';
-import React from 'react';
+import React, { FunctionComponent, SVGProps } from 'react';
 import cm from './Dropdown.module.scss';
 
 export interface IDropdown
@@ -10,7 +10,10 @@ export interface IDropdown
     options: Array<{
         value: string | number;
         label: string;
-        icon?: string | JSX.Element;
+        icon?:
+            | string
+            | JSX.Element
+            | FunctionComponent<SVGProps<SVGSVGElement>>;
     }>;
     noBorder?: boolean;
 }

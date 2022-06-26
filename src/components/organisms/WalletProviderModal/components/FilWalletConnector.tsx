@@ -1,7 +1,7 @@
 import React from 'react';
-import keyLogo from 'src/assets/img/key.svg';
-import ledgerLogo from 'src/assets/img/ledger.svg';
-import seedLogo from 'src/assets/img/seed.svg';
+import KeyLogo from 'src/assets/img/key.svg';
+import LedgerLogo from 'src/assets/img/ledger.svg';
+import SeedLogo from 'src/assets/img/seed.svg';
 import { ModalProps, Spacer } from 'src/components/atoms';
 import useModal from 'src/hooks/useModal';
 import styled from 'styled-components';
@@ -25,13 +25,7 @@ const FilWalletConnector: React.FC<ModalProps> = () => {
         <StyledWalletsWrapper>
             <StyledWalletCard>
                 <WalletCard
-                    icon={
-                        <img
-                            src={seedLogo}
-                            style={{ height: 24 }}
-                            alt='Mnemonic phrase'
-                        />
-                    }
+                    icon={<SeedLogo style={{ height: 24 }} />}
                     onConnect={onMnemonicModal}
                     title='Mnemonic phrase'
                     buttonText='Generate'
@@ -40,13 +34,7 @@ const FilWalletConnector: React.FC<ModalProps> = () => {
             <Spacer size='sm' />
             <StyledWalletCard>
                 <WalletCard
-                    icon={
-                        <img
-                            src={keyLogo}
-                            style={{ height: 24 }}
-                            alt='Private Key'
-                        />
-                    }
+                    icon={<KeyLogo style={{ height: 24 }} />}
                     onConnect={onPrivateKeyModal}
                     title='Private Key'
                     buttonText='Import'
@@ -57,13 +45,7 @@ const FilWalletConnector: React.FC<ModalProps> = () => {
 
             <StyledWalletCard>
                 <WalletCard
-                    icon={
-                        <img
-                            src={ledgerLogo}
-                            style={{ height: 26 }}
-                            alt='Ledger Wallet'
-                        />
-                    }
+                    icon={<LedgerLogo style={{ height: 26 }} />}
                     onConnect={onLedgerModal}
                     title='Ledger wallet'
                 />

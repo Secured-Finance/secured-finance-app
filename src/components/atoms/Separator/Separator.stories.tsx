@@ -7,6 +7,6 @@ export default {
     args: {},
 } as ComponentMeta<typeof Separator>;
 
-const Template: ComponentStory<typeof Separator> = args => <Separator />;
+const Template: ComponentStory<typeof Separator> = () => <Separator />;
 
 export const Default = Template.bind({});

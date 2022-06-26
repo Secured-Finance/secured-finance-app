@@ -1,5 +1,3 @@
-const path = require('path');
-
 module.exports = {
     stories: [
         '../src/**/*.stories.mdx',
@@ -9,23 +7,48 @@ module.exports = {
         '@storybook/addon-links',
         '@storybook/addon-essentials',
         '@storybook/addon-a11y',
-        'storybook-preset-craco',
-        'storybook-addon-performance/register',
+        'storybook-addon-performance',
+        'storybook-addon-next',
     ],
     typescript: {
         reactDocgen: 'none',
     },
-    webpackFinal: config => {
-        config.node = {
-            ...config.node,
-            fs: 'empty',
+    framework: '@storybook/react',
+    core: {
+        builder: 'webpack5',
+    },
+
+    webpackFinal: async config => {
+        config.resolve.fallback = {
+            fs: false,
+            path: require.resolve('path-browserify'),
+            stream: false,
+            constants: false,
+            crypto: require.resolve('crypto-browserify'),
+            assert: require.resolve('assert'),
+            http: require.resolve('stream-http'),
+            https: require.resolve('https-browserify'),
+            os: require.resolve('os-browserify'),
+            url: require.resolve('url'),
+            stream: require.resolve('stream-browserify'),
+            buffer: require.resolve('buffer'),
         };
 
+        const imageRule = config.module.rules.find(rule =>
+            rule.test.test('.svg')
+        );
+        imageRule.exclude = /\.svg$/;
+
         config.module.rules.push({
-            test: /\.wasm$/,
-            use: ['wasm-loader'],
-            include: path.resolve(__dirname, '../'),
-            type: 'javascript/auto',
+            test: /\.svg$/,
+            use: [
+                {
+                    loader: '@svgr/webpack',
+                    options: {
+                        icon: true,
+                    },
+                },
+            ],
         });
 
         return config;

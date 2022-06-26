@@ -1,5 +1,5 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
-import ledgerLogo from 'src/assets/img/ledger.svg';
+import LedgerLogo from 'src/assets/img/ledger.svg';
 import theme from 'src/theme';
 import { ThemeProvider } from 'styled-components';
 import WalletCard from './WalletCard';
@@ -17,13 +17,7 @@ export default {
 const Template: ComponentStory<typeof WalletCard> = args => (
     <ThemeProvider theme={theme}>
         <WalletCard
-            icon={
-                <img
-                    src={ledgerLogo}
-                    style={{ height: 26 }}
-                    alt='Ledger Wallet'
-                />
-            }
+            icon={<LedgerLogo style={{ height: 26 }} />}
             onConnect={() => {}}
             title={args.title}
             buttonText={args.buttonText}

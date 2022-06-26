@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
-import metamaskLogo from 'src/assets/img/metamask-fox.svg';
-import walletConnectLogo from 'src/assets/img/wallet-connect.svg';
+import MetaMaskLogo from 'src/assets/img/metamask-fox.svg';
+import WalletConnectLogo from 'src/assets/img/wallet-connect.svg';
 import { ModalProps, Spacer } from 'src/components/atoms';
 import { CACHED_PROVIDER_KEY } from 'src/contexts/SecuredFinanceProvider/SecuredFinanceProvider';
 import styled from 'styled-components';
@@ -42,13 +42,7 @@ const EthWalletConnector: React.FC<ModalProps> = ({ onDismiss }) => {
         <StyledWalletsWrapper data-cy='eth-wallet'>
             <StyledWalletCard>
                 <WalletCard
-                    icon={
-                        <img
-                            src={metamaskLogo}
-                            style={{ height: 32 }}
-                            alt='Metamask'
-                        />
-                    }
+                    icon={<MetaMaskLogo style={{ height: 32 }} />}
                     onConnect={() => handleConnect('injected', account)}
                     title='Metamask'
                 />
@@ -56,13 +50,7 @@ const EthWalletConnector: React.FC<ModalProps> = ({ onDismiss }) => {
             <Spacer size='sm' />
             <StyledWalletCard>
                 <WalletCard
-                    icon={
-                        <img
-                            src={walletConnectLogo}
-                            style={{ height: 24 }}
-                            alt='Wallet Connect'
-                        />
-                    }
+                    icon={<WalletConnectLogo style={{ height: 24 }} />}
                     onConnect={() => handleConnect('walletconnect', account)}
                     title='WalletConnect'
                 />

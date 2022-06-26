@@ -1,6 +1,5 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { YieldCurve } from 'src/components/molecules';
 import { Page } from 'src/components/templates';
 import { RootState } from 'src/store/types';
 import theme from 'src/theme';
@@ -24,7 +23,7 @@ const Exchange: React.FC = () => {
                     </ScrollableSideContainer>
                     <StyledCenterContainer>
                         <MarketInfo />
-                        <YieldCurve />
+                        {/* <DynamicYieldCurve /> */}
                         <OrderHistory />
                     </StyledCenterContainer>
                     <ScrollableSideContainer>

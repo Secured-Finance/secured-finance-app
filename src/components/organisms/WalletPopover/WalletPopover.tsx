@@ -3,8 +3,8 @@ import { LogoutIcon, UserIcon } from '@heroicons/react/outline';
 import { BadgeCheckIcon } from '@heroicons/react/solid';
 import classNames from 'classnames';
 import { Fragment, SVGProps } from 'react';
-import { ReactComponent as FilecoinWallet } from 'src/assets/icons/FilecoinWallet.svg';
-import metamaskLogo from 'src/assets/img/metamask-fox.svg';
+import FilecoinWallet from 'src/assets/icons/FilecoinWallet.svg';
+import MetamaskLogo from 'src/assets/img/metamask-fox.svg';
 import { ExpandIndicator, Separator, Toggle } from 'src/components/atoms';
 
 const Item = ({
@@ -71,7 +71,7 @@ const HeaderItem = ({
             <Tag
                 {...args}
                 className={classNames(
-                    'focus:outline-none flex flex-col justify-start rounded-md p-2 transition duration-150 ease-in-out',
+                    'flex·flex-col·justify-start·rounded-md·p-2·transition·duration-150·ease-in-out·focus:outline-none',
                     { 'hover:bg-horizonBlue': href }
                 )}
             >
@@ -108,11 +108,7 @@ export const WalletPopover = ({
                 flex items-center space-x-3 rounded-xl bg-transparent p-3 ring ring-black-10 hover:bg-black-10'
                         >
                             <span>
-                                <img
-                                    src={metamaskLogo}
-                                    alt={wallet}
-                                    className='h-4 w-4'
-                                />
+                                <MetamaskLogo className='h-4 w-4' />
                             </span>
                             <span className='typography-button-2 text-white'>
                                 {wallet}
