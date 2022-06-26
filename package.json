@@ -46,9 +46,11 @@
   "scripts": {
     "start": "next dev",
     "build": "next build",
-    "preview": "next build && next start",
+    "postbuild": "npm run export",
+    "preview:server": "next build && next start",
+    "preview": "npm run build && npx serve ./build",
     "export": "next export -o ./build",
-    "build:static": "npm run build && npm run export",
+    "build:server": "next build",
     "preexport": "rm -rf ./build",
     "test": "jest --watch",
     "test:cov": "jest --watchAll=false --coverageReporters=cobertura --collectCoverage",
