@@ -88,7 +88,7 @@ const RenderPrivateKeyContainer: React.FC<ContainerProps> = ({
 
     const handleCreateFilHDWallet = useCallback(async () => {
         try {
-            if (filProviders && mnemonic !== '' && walletProvider == null) {
+            if (filProviders && mnemonic !== '' && walletProvider === null) {
                 const provider = await filProviders.HDWalletProvider(mnemonic);
                 await onCreate(
                     provider,
@@ -103,7 +103,7 @@ const RenderPrivateKeyContainer: React.FC<ContainerProps> = ({
 
     const handleCreateFilPKWallet = useCallback(async () => {
         try {
-            if (filProviders && privateKey !== '' && walletProvider == null) {
+            if (filProviders && privateKey !== '' && walletProvider === null) {
                 const provider = await filProviders.PrivateKeyProvider(
                     privateKey
                 );

@@ -1,9 +1,8 @@
 import React from 'react';
-import { Label, sharedInputStyles } from './Inputs';
-import ChevronDown from 'src/assets/icons/ChevronDown.svg';
-import styled from 'styled-components';
-import { Term } from 'src/utils';
 import theme from 'src/theme';
+import { Term } from 'src/utils';
+import styled from 'styled-components';
+import { Label, sharedInputStyles } from './Inputs';
 
 interface IDropdown extends React.SelectHTMLAttributes<HTMLSelectElement> {
     label: string;
@@ -57,7 +56,7 @@ export const Dropdown: React.FC<IDropdown> = ({
                     </option>
                 ))}
             </DropdownSelect>
-            <Icon src={ChevronDown} />
+            <Icon src={'ChevronDown'} />
         </DropdownContainer>
     );
 };

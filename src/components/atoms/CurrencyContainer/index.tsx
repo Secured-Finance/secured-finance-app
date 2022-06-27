@@ -37,10 +37,7 @@ const CurrencyItem: React.FC<ItemProps> = ({
     wallet,
     style,
 }) => {
-    const { icon, shortName, fullName } = getCurrencyBy(
-        'indexCcy',
-        ccy.toString()
-    );
+    const { icon, shortName, name } = getCurrencyBy('indexCcy', ccy.toString());
 
     return (
         <div>
@@ -79,7 +76,7 @@ const CurrencyItem: React.FC<ItemProps> = ({
                                     : 'center'
                             }
                         >
-                            {fullName}
+                            {name}
                         </StyledCurrencyText>
                         <StyledWalletSubtitle
                             marginLeft={
@@ -117,7 +114,7 @@ const CurrencyItem: React.FC<ItemProps> = ({
                         fontSize={style?.fontSize ? style?.fontSize : fontSize}
                         fontWeight={style?.fontWeight ? style?.fontWeight : 500}
                     >
-                        {short ? shortName : fullName}
+                        {short ? shortName : name}
                     </StyledCurrencyText>
                 </StyledCurrency>
             )}

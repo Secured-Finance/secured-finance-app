@@ -1,4 +1,4 @@
-const path = require('path');
+const webpack = require('./../webpack-config');
 
 module.exports = {
     stories: [
@@ -8,24 +8,17 @@ module.exports = {
     addons: [
         '@storybook/addon-links',
         '@storybook/addon-essentials',
-        'storybook-preset-craco',
+        '@storybook/addon-a11y',
+        'storybook-addon-performance',
+        'storybook-addon-next',
     ],
     typescript: {
         reactDocgen: 'none',
     },
-    webpackFinal: config => {
-        config.node = {
-            ...config.node,
-            fs: 'empty',
-        };
-
-        config.module.rules.push({
-            test: /\.wasm$/,
-            use: ['wasm-loader'],
-            include: path.resolve(__dirname, '../'),
-            type: 'javascript/auto',
-        });
-
-        return config;
+    framework: '@storybook/react',
+    core: {
+        builder: 'webpack5',
     },
+
+    webpackFinal: (config, options) => webpack.webpackOverride(config),
 };

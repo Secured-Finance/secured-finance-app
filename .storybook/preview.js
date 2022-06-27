@@ -1,4 +1,9 @@
+import '@storybook/addon-console';
+import { Provider } from 'react-redux';
+import { HashRouter as Router } from 'react-router-dom';
+import { withPerformance } from 'storybook-addon-performance';
 import '../src/index.css';
+import store from './../src/store';
 
 export const parameters = {
     actions: { argTypesRegex: '^on[A-Z].*' },
@@ -31,3 +36,14 @@ export const parameters = {
     },
     chromatic: { disableSnapshot: true },
 };
+
+export const decorators = [
+    Story => (
+        <Router>
+            <Provider store={store}>
+                <Story />
+            </Provider>
+        </Router>
+    ),
+    withPerformance,
+];

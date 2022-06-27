@@ -1,6 +1,5 @@
 import { Dialog as HeadlessDialog } from '@headlessui/react';
-import { Button } from 'src/components/atoms';
-import CloseButton from 'src/components/atoms/CloseButton';
+import { Button, CloseButton } from 'src/components/atoms';
 
 export const Dialog = ({
     title,

@@ -1,7 +1,6 @@
-import React from 'react';
-import { Story, Meta } from '@storybook/react';
+import { Meta, Story } from '@storybook/react';
+import { telegram, VerifiedIcon } from '../icons';
 import { FieldValue, IFieldValue } from './';
-import { VerifiedIcon, telegram } from '../icons';
 
 export default {
     title: 'Components/FieldValue',
@@ -43,6 +42,6 @@ export const WithStringIcon = Template.bind({});
 WithStringIcon.args = {
     field: '1Y Yield',
     value: '4.25%',
-    icon: telegram,
+    icon: telegram.toString(),
     bold: false,
 };

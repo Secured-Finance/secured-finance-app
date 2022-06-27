@@ -10,6 +10,10 @@ export const tenderlyConfig = () => {
     });
 
     after(() => {
+        cy.disconnectWallet();
+    });
+
+    after(() => {
         cy.then(async () => {
             await tenderlyFork.deleteFork();
         });
@@ -19,9 +23,5 @@ export const tenderlyConfig = () => {
         cy.connectWallet(tenderlyFork.onBeforeLoad()).then(() => {
             cy.window().its('ethereum').should('exist');
         });
-    });
-
-    after(() => {
-        cy.disconnectWallet();
     });
 };

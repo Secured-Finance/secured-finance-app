@@ -10,23 +10,25 @@
     "node": false,
     "es6": true
   },
-  "plugins": ["@typescript-eslint"],
+  "plugins": ["@typescript-eslint", "jest"],
   "extends": [
-    "react-app",
-    "react-app/jest",
     "plugin:prettier/recommended",
     "plugin:@typescript-eslint/recommended",
+    "plugin:storybook/recommended",
+    "next",
     "prettier"
   ],
   "rules": {
     "@typescript-eslint/ban-ts-comment": "warn",
     "no-console": ["warn", { "allow": ["error"] }],
-    "eqeqeq": "error",
+    "eqeqeq": "warn",
     "@typescript-eslint/explicit-function-return-type": "off",
     "@typescript-eslint/explicit-module-boundary-types": "off",
     "@typescript-eslint/no-empty-function": [
       "error",
       { "allow": ["arrowFunctions"] }
-    ]
+    ],
+    "no-unused-vars": "off",
+    "@typescript-eslint/no-unused-vars": ["warn", { "argsIgnorePattern": "^_" }]
   }
 }

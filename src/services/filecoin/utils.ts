@@ -17,7 +17,7 @@ export const FIL_JSON_RPC_ENDPOINT: Record<Network, string> = {
 const BLOCK_EXPLORER_WALLET_PREFIX = 'address/general?address=';
 
 export const getFilecoinNetwork = () => {
-    if (process.env.REACT_APP_FILECOIN_NETWORK.toLowerCase() === 'mainnet') {
+    if (process.env.NEXT_PUBLIC_FILECOIN_NETWORK.toLowerCase() === 'mainnet') {
         return Network.MAIN;
     } else {
         return Network.TEST;
