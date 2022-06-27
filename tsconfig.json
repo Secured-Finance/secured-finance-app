@@ -14,11 +14,12 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react-jsx",
+    "jsx": "preserve",
     "strictNullChecks": false,
     "noFallthroughCasesInSwitch": true,
-    "typeRoots": ["node_modules/@types", "src/types"]
+    "typeRoots": ["node_modules/@types", "src/types"],
+    "incremental": true
   },
-  "include": ["src", "bootstrap.js"],
+  "include": ["src", "next-env.d.ts"],
   "exclude": ["node_modules", "build", "cypress"]
 }

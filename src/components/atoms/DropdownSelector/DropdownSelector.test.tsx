@@ -20,11 +20,11 @@ describe('Dropdown Asset Selection Component', () => {
         expect(screen.getByRole('menu')).toBeInTheDocument();
     });
 
-    it('should have an arrow up when the dropdown is not visible, and an arrow down when the dropdown is visible', () => {
+    it('should have an arrow down when the dropdown is not visible, and an arrow down when the dropdown is visible', () => {
         render(<AssetDropdown />);
-        expect(screen.getByTestId('chevron-up-icon')).toBeInTheDocument();
-        fireEvent.click(screen.getByRole('button'));
         expect(screen.getByTestId('chevron-down-icon')).toBeInTheDocument();
+        fireEvent.click(screen.getByRole('button'));
+        expect(screen.getByTestId('chevron-up-icon')).toBeInTheDocument();
     });
 
     it('should change the button when a dropdown item is selected', () => {

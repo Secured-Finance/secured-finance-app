@@ -51,7 +51,9 @@ you need to install unstoppable domain [browser extension](https://chrome.google
 
 ## Technologies used
 
-- React: Create React App
+- NextJs
+- Jest
+- Storybook
 - TailwindCSS
 - Redux
 - Web3js to integrate with smart contracts

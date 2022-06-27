@@ -1,9 +1,11 @@
 import { SecuredFinanceClient } from '@secured-finance/sf-client';
 import { ethers } from 'ethers';
 import React, { createContext, useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { useEthereumWalletStore } from 'src/hooks/useEthWallet';
 import { useFilecoinWalletStore } from 'src/hooks/useFilWallet';
 import { FIL_ADDRESS, FIL_WALLET_TYPE } from 'src/services/filecoin';
+import { updateLatestBlock } from 'src/store/blockchain';
 import { hexToDec } from 'src/utils';
 import { ChainUnsupportedError, useWallet } from 'use-wallet';
 
@@ -24,9 +26,12 @@ declare global {
 }
 
 const SecuredFinanceProvider: React.FC = ({ children }) => {
+    const [web3Provider, setWeb3Provider] =
+        useState<ethers.providers.Web3Provider | null>(null);
     const { error, status, connect, account, ethereum } = useWallet();
     const [securedFinance, setSecuredFinance] =
         useState<SecuredFinanceClient>();
+    const dispatch = useDispatch();
 
     const filAddr = localStorage.getItem(FIL_ADDRESS);
     const filWalletType = localStorage.getItem(FIL_WALLET_TYPE);
@@ -45,7 +50,7 @@ const SecuredFinanceProvider: React.FC = ({ children }) => {
             const provider = window.localStorage.getItem('FORK')
                 ? ethereum?.provider
                 : new ethers.providers.Web3Provider(ethereum, chainId);
-
+            setWeb3Provider(provider);
             const network = await provider.getNetwork();
             const signer = provider.getSigner();
 
@@ -87,6 +92,17 @@ const SecuredFinanceProvider: React.FC = ({ children }) => {
             connect('injected');
         }
     }, [connect, account]);
+
+    // Update the latest block every 5 seconds
+    useEffect(() => {
+        if (!web3Provider) return;
+
+        const interval = setInterval(async () => {
+            dispatch(updateLatestBlock(await web3Provider.getBlockNumber()));
+        }, 2000);
+
+        return () => clearInterval(interval);
+    }, [dispatch, web3Provider]);
 
     return (
         <Context.Provider value={{ securedFinance }}>
