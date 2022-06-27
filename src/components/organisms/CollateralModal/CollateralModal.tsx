@@ -283,7 +283,7 @@ const CollateralModal: React.FC<CombinedProps> = ({
                         </StyledAddressTitle>
                         {account && colBook.vault !== '' ? (
                             <StyledAddress>
-                                {colBook.usdLocked === null
+                                {colBook.usdLocked !== null
                                     ? getUSDFormatBalanceNumber(
                                           colBook.usdLocked.toNumber()
                                       )
