@@ -9,7 +9,7 @@ describe('Wallet', () => {
 
     const onChainWallet: CrossChainWallet = {
         address: '0x0',
-        chainID: MAINNET_PATH_CODE.toString(),
+        chainId: MAINNET_PATH_CODE.toString(),
     };
 
     it('should register a cross chain wallet if there is no on chain wallet already registered', async () => {
