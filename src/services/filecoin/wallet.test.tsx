@@ -2,11 +2,15 @@ import { MAINNET_PATH_CODE } from '../ledger/constants';
 import { CrossChainWallet, registerCrossChainWallet } from './wallet';
 
 describe('Wallet', () => {
+    const onMockRegisterCrossChainWallet = jest.fn();
+    beforeEach(() => {
+        onMockRegisterCrossChainWallet.mockClear();
+    });
+
     const onChainWallet: CrossChainWallet = {
         address: '0x0',
         chainID: MAINNET_PATH_CODE.toString(),
     };
-    const onMockRegisterCrossChainWallet = jest.fn();
 
     it('should register a cross chain wallet if there is no on chain wallet already registered', async () => {
         expect(

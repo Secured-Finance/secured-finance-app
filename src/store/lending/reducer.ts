@@ -60,18 +60,18 @@ const lendingSlice = createSlice({
             state.collateralCcyIndex = action.payload;
         },
         updateMainCurrency(state, action: PayloadAction<CurrencyInfo>) {
-            const { indexCcy, fullName, shortName } = action.payload;
+            const { indexCcy, name, shortName } = action.payload;
             state.currencyIndex = indexCcy;
-            state.selectedCcyName = fullName;
+            state.selectedCcyName = name;
             state.selectedCcy = shortName;
         },
         updateMainCollateralCurrency(state, action: PayloadAction<Currency>) {
-            const { indexCcy, fullName, shortName } = getCurrencyBy(
+            const { indexCcy, name, shortName } = getCurrencyBy(
                 'shortName',
                 action.payload
             );
             state.collateralCcyIndex = indexCcy;
-            state.collateralCcyName = fullName;
+            state.collateralCcyName = name;
             state.collateralCcy = shortName;
         },
         updateMainTerms(state, action: PayloadAction<string>) {

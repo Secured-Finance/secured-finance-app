@@ -1,32 +1,32 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
-import { ReactComponent as EthIcon } from 'src/assets/coins/eth2.svg';
-import { ReactComponent as FilecoinIcon } from 'src/assets/coins/fil.svg';
-import { ReactComponent as UsdcIcon } from 'src/assets/coins/usdc.svg';
-import { ReactComponent as UsdtIcon } from 'src/assets/coins/usdt.svg';
-import { ReactComponent as BitcoinIcon } from 'src/assets/coins/xbc.svg';
+import EthIcon from 'src/assets/coins/eth2.svg';
+import FilecoinIcon from 'src/assets/coins/fil.svg';
+import UsdcIcon from 'src/assets/coins/usdc.svg';
+import UsdtIcon from 'src/assets/coins/usdt.svg';
+import BitcoinIcon from 'src/assets/coins/xbc.svg';
 import { Option } from 'src/components/atoms/DropdownSelector/DropdownSelector';
 import { AssetSelector } from './AssetSelector';
 
 const options = [
     {
         name: 'Bitcoin',
-        Icon: BitcoinIcon,
+        iconSVG: BitcoinIcon,
     },
     {
         name: 'Ethereum',
-        Icon: EthIcon,
+        iconSVG: EthIcon,
     },
     {
         name: 'Filecoin',
-        Icon: FilecoinIcon,
+        iconSVG: FilecoinIcon,
     },
     {
         name: 'USDC',
-        Icon: UsdcIcon,
+        iconSVG: UsdcIcon,
     },
     {
         name: 'USD Tether',
-        Icon: UsdtIcon,
+        iconSVG: UsdtIcon,
     },
 ] as Array<Option>;
 

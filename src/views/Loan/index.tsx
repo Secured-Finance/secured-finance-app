@@ -39,7 +39,7 @@ export interface CouponPayment {
 }
 
 const LoanScreen = () => {
-    const params = useParams();
+    const params: { loanId: string } = useParams();
     const loan = useLoanInformation(params.loanId);
 
     const { account } = useWallet();

@@ -52,7 +52,7 @@ const SendModal = ({
     const balance = useSelector((state: RootState) =>
         getBalance(
             state,
-            currencyInfo.fullName.toLowerCase() as 'ethereum' | 'filecoin'
+            currencyInfo.name.toLowerCase() as 'ethereum' | 'filecoin'
         )
     );
 
@@ -221,7 +221,7 @@ const SendModal = ({
                                 textTransform={'capitalize'}
                                 fontSize={16}
                             >
-                                {currencyInfo.fullName}
+                                {currencyInfo.name}
                             </StyledLabel>
                             <StyledLabel
                                 fontWeight={400}
@@ -266,7 +266,7 @@ const SendModal = ({
                             data-cy='send-address-input'
                             type={'text'}
                             placeholder={
-                                'Paste ' + currencyInfo.fullName + ' address'
+                                'Paste ' + currencyInfo.name + ' address'
                             }
                             value={recipientAddress}
                             onChange={handleRecipientAddress}
