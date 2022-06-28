@@ -61,6 +61,8 @@ module.exports = {
             moonGrey: '#E6E6E6',
 
             neutral: '#353945',
+            neutral1: '#141416',
+            neutral8: '#FCFCFD',
 
             transparent: 'transparent',
             starBlue: {
@@ -104,12 +106,14 @@ module.exports = {
                 'button-md': '20rem',
                 'button-lg': '40rem',
                 '42': '8.5rem',
+                '585': '585px',
             },
             height: {
                 'button-xs': '2.25rem',
                 'button-sm': '2.25rem',
                 'button-md': '4rem',
                 'button-lg': '4rem',
+                '44': '44px',
             },
         },
     },
