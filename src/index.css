@@ -1,9 +1,11 @@
+@import "tailwindcss/components";
+@import "./assets/css/components.css";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-@import "tailwindcss/components";
-@import "./assets/css/components.css";
+
 
 @layer base {
   @font-face {

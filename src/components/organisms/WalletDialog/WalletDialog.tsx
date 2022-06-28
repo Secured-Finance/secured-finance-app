@@ -1,7 +1,5 @@
 import { useCallback, useReducer, useState } from 'react';
-import WalletRadioGroup from 'src/components/molecules/WalletRadioGroup';
-
-import { Dialog } from '../../molecules/Dialog/Dialog';
+import { Dialog, WalletRadioGroup } from 'src/components/molecules';
 
 enum step {
     selectWallet = 1,
@@ -68,7 +66,7 @@ export const WalletDialog = ({
     isOpen: boolean;
     onClose: () => void;
 }) => {
-    const [wallet, setWallet] = useState<string | undefined>();
+    const [wallet, setWallet] = useState<string>('');
     const [state, dispatch] = useReducer(reducer, stateRecord[1]);
 
     const onClick = useCallback(

@@ -25,3 +25,11 @@ declare module '@zondax/ledger-filecoin';
 
 declare module '@ledgerhq/hw-transport-webhid';
 declare module '*.scss';
+
+declare module '*.svg' {
+    const ReactComponent: React.FunctionComponent<
+        React.SVGProps<SVGSVGElement>
+    >;
+    export { ReactComponent };
+    export default ReactComponent;
+}

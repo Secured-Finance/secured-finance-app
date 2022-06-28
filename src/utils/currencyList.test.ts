@@ -21,7 +21,7 @@ describe('getCurrencyBy', () => {
     it('should be undefined for non existing indexCcy', () => {
         expect(getCurrencyBy('indexCcy', 3)).toBeUndefined();
         expect(getCurrencyBy('shortName', 'XXX')).toBeUndefined();
-        expect(getCurrencyBy('fullName', 'Terra Luna')).toBeUndefined();
+        expect(getCurrencyBy('name', 'Terra Luna')).toBeUndefined();
     });
 
     it('should return the currency object for existing shortName', () => {
@@ -29,13 +29,13 @@ describe('getCurrencyBy', () => {
         expect(getCurrencyBy('shortName', 'FIL')).toEqual(fil);
     });
 
-    it('should return the currency object for existing fullName', () => {
-        expect(getCurrencyBy('fullName', 'Ethereum')).toEqual(eth);
-        expect(getCurrencyBy('fullName', 'Filecoin')).toEqual(fil);
+    it('should return the currency object for existing name', () => {
+        expect(getCurrencyBy('name', 'Ethereum')).toEqual(eth);
+        expect(getCurrencyBy('name', 'Filecoin')).toEqual(fil);
     });
 
     it('should not be case sensitive for the value', () => {
-        expect(getCurrencyBy('fullName', 'ethereUm')).toEqual(eth);
+        expect(getCurrencyBy('name', 'ethereUm')).toEqual(eth);
         expect(getCurrencyBy('shortName', 'eth')).toEqual(eth);
         expect(getCurrencyBy('shortName', 'fIL')).toEqual(fil);
     });

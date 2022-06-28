@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import axios from 'axios';
+import { coingeckoApi } from 'src/utils/coinGeckoApi';
 import { AssetPrices } from './types';
 
 const initialStore: AssetPrices = {
@@ -28,16 +28,14 @@ interface ICoinGeckoResponse {
 export const fetchAssetPrice = createAsyncThunk(
     'assetPrices/fetchAssetPrice',
     async (assetList: string[], thunkAPI) => {
-        try {
-            const reqUrl =
-                'https://api.coingecko.com/api/v3/simple/price?ids=' +
-                encodeURIComponent(assetList.join(',')) +
-                '&vs_currencies=usd&include_24hr_change=true';
-            const response = await axios.get(reqUrl);
-            return response.data;
-        } catch (error) {
-            thunkAPI.rejectWithValue(error);
-        }
+        const response = await coingeckoApi.get('/simple/price', {
+            params: {
+                ids: assetList.join(','),
+                vs_currencies: 'usd',
+                include_24hr_change: true,
+            },
+        });
+        return response.data;
     }
 );
 

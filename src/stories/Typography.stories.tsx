@@ -45,6 +45,15 @@ export const Typography: Story = () => (
             Caption text, used for very small paragraphs.
         </div>
 
+        <div>Caption 2</div>
+        <div className='typography-caption-2'>
+            Caption 2 text regular, could be used for secondary links or
+            navigation elements.
+        </div>
+
+        <div>Caption 3</div>
+        <div className='typography-caption-3'>Caption 3</div>
+
         <div>Hairline1</div>
         <div className='typography-hairline-1'>Hairline Large</div>
 
