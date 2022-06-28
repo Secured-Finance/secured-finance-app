@@ -19,6 +19,7 @@ export default {
     component: TermSelector,
     args: {
         options,
+        value: { name: 'Sep 2022' },
     },
     argTypes: {
         options: { control: { disable: true } },

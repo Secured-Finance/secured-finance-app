@@ -3,14 +3,16 @@ import { DropdownSelector, Option } from 'src/components/atoms';
 
 export const TermSelector = ({
     options,
+    value,
     transform = (v: string) => v,
     onTermChange,
 }: {
     options: Array<Option>;
+    value: Option;
     transform?: (v: string) => string;
     onTermChange?: (v: string) => void;
 }) => {
-    const [term, setTerm] = useState('');
+    const [term, setTerm] = useState(value.name);
 
     const handleTermChange = (v: string) => {
         setTerm(v);
@@ -28,6 +30,7 @@ export const TermSelector = ({
                 <div>
                     <DropdownSelector
                         optionList={options}
+                        value={value}
                         onChange={handleTermChange}
                     />
                 </div>
