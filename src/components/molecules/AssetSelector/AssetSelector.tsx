@@ -3,18 +3,20 @@ import { DropdownSelector, Option } from 'src/components/atoms';
 
 export const AssetSelector = ({
     options,
+    value,
     priceList,
     transform = (v: string) => v,
     onAssetChange,
     onAmountChange,
 }: {
     options: Readonly<Array<Option>>;
+    value: Option;
     priceList: Record<string, number>;
     transform?: (v: string) => string;
     onAssetChange?: (v: string) => void;
     onAmountChange?: (v: number) => void;
 }) => {
-    const [asset, setAsset] = useState('');
+    const [asset, setAsset] = useState(value.name);
     const [amount, setAmount] = useState(0);
     const amountInUsd = useMemo(() => {
         if (!asset) {
@@ -59,6 +61,7 @@ export const AssetSelector = ({
                 <div>
                     <DropdownSelector
                         optionList={options}
+                        value={value}
                         onChange={handleAssetChange}
                     />
                 </div>

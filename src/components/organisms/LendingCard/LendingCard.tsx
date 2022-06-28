@@ -136,6 +136,7 @@ export const LendingCard = ({
                 <div className='flex self-center'>
                     <AssetSelector
                         options={currencyList}
+                        value={currencyList[0]}
                         transform={(v: string) => shortNames[v]}
                         priceList={priceList}
                         onAmountChange={setAmount}
@@ -143,7 +144,11 @@ export const LendingCard = ({
                     />
                 </div>
                 <div className='flex self-center'>
-                    <TermSelector options={optionList} onTermChange={setTerm} />
+                    <TermSelector
+                        options={optionList}
+                        value={optionList[0]}
+                        onTermChange={setTerm}
+                    />
                 </div>
                 <div className='flex flex-row items-stretch justify-between'>
                     <div className='flex-col'>

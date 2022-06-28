@@ -9,14 +9,16 @@ export type Option = {
 };
 
 export const DropdownSelector = ({
+    value,
     optionList,
     onChange,
 }: {
+    value: Option;
     optionList: Readonly<Array<Option>>;
     onChange: (v: string) => void;
 }) => {
     const [selectedOptionName, setSelectedOptionName] = useState<string>(
-        optionList[0].name
+        value.name
     );
     const selectedOption = useMemo(
         () => optionList.find(o => o.name === selectedOptionName),
@@ -33,10 +35,10 @@ export const DropdownSelector = ({
 
     // Handle the case of the initial value
     useEffect(() => {
-        if (selectedOptionName) {
-            onChange(selectedOptionName);
+        if (value.name === selectedOptionName) {
+            onChange(value.name);
         }
-    }, []);
+    }, [onChange, selectedOptionName, value.name]);
 
     return (
         <Menu as='div'>
@@ -44,13 +46,13 @@ export const DropdownSelector = ({
                 <>
                     <Menu.Button>
                         <div className='flex h-10 w-42 flex-row items-center justify-between space-x-2 rounded-lg bg-black-10 px-2'>
-                            {selectedOption.iconSVG ? (
+                            {selectedOption?.iconSVG ? (
                                 <span>
                                     <selectedOption.iconSVG className='h-6 w-6' />
                                 </span>
                             ) : null}
                             <span className='typography-caption w-16 text-white'>
-                                {selectedOption.name}
+                                {selectedOption?.name}
                             </span>
                             <span>
                                 <ExpandIndicator expanded={open} />
