@@ -1,6 +1,7 @@
 import { Network } from '@glif/filecoin-address';
 import Filecoin, { WalletSubProvider } from '@glif/filecoin-wallet-provider';
 import { useCrosschainAddressById } from '@secured-finance/sf-graph-client';
+import { CrosschainAddress } from '@secured-finance/sf-graph-client/dist/.graphclient';
 import { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useUpdateCrossChainWallet } from 'src/hooks/useUpdateCrossChainWallet';
@@ -83,7 +84,8 @@ export const useNewFilWalletProvider = () => {
                 const [filAddr] = await provider.getAccounts(0, 1, network);
 
                 const crossChainAddress = await registerCrossChainWallet(
-                    filWalletAddr.data,
+                    filWalletAddr.data
+                        ?.crosschainAddress as unknown as CrosschainAddress,
                     filAddr,
                     onRegisterCrossChainWallet
                 );
@@ -108,7 +110,7 @@ export const useNewFilWalletProvider = () => {
 };
 
 export async function registerCrossChainWallet(
-    filWalletAddr: CrossChainWallet,
+    filWalletAddr: CrosschainAddress,
     filAddr: string,
     register: (chainId: number, address: string) => Promise<unknown>
 ) {
