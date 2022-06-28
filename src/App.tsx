@@ -5,6 +5,7 @@ import { HashRouter as Router } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
 import { UseWalletProvider } from 'use-wallet';
 import { Header } from './components/organisms';
+import { Landing } from './components/pages';
 import { Layout } from './components/templates';
 import FilecoinWalletProvider from './contexts/FilecoinWalletProvider';
 import ModalsProvider from './contexts/Modals';
@@ -14,7 +15,6 @@ import theme from './theme';
 import Account from './views/Account';
 import Exchange from './views/Exchange';
 import History from './views/History';
-import Lending from './views/Lending';
 import Loan from './views/Loan';
 
 const routes = [
@@ -36,7 +36,7 @@ const routes = [
     },
     {
         path: '/',
-        component: <Lending />,
+        component: <Landing />,
     },
 ];
 

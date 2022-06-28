@@ -53,6 +53,8 @@ export default {
         options,
         transform: (v: string) => shortNames[v],
         priceList,
+        onAssetChange: () => {},
+        onAmountChange: () => {},
     },
     parameters: {
         chromatic: { disableSnapshot: false },

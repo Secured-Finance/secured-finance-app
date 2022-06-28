@@ -5,10 +5,14 @@ export const AssetSelector = ({
     options,
     priceList,
     transform = (v: string) => v,
+    onAssetChange,
+    onAmountChange,
 }: {
     options: Readonly<Array<Option>>;
     priceList: Record<string, number>;
     transform?: (v: string) => string;
+    onAssetChange?: (v: string) => void;
+    onAmountChange?: (v: number) => void;
 }) => {
     const [asset, setAsset] = useState('');
     const [amount, setAmount] = useState(0);
@@ -20,6 +24,23 @@ export const AssetSelector = ({
             minimumFractionDigits: 0,
         }).format(priceList[asset] * amount);
     }, [asset, amount, priceList]);
+
+    const handleAssetChange = (v: string) => {
+        setAsset(v);
+        if (onAssetChange) {
+            onAssetChange(v);
+        }
+    };
+
+    const handleAmountChange = (e: ChangeEvent<HTMLInputElement>) => {
+        const maybeNumber = e.target.value;
+        let amount = 0;
+        isNaN(+maybeNumber) ? (amount = 0) : (amount = +maybeNumber);
+        setAmount(amount);
+        if (onAmountChange) {
+            onAmountChange(amount);
+        }
+    };
 
     return (
         <div className='w-72 flex-col items-start justify-start space-y-2'>
@@ -38,7 +59,7 @@ export const AssetSelector = ({
                 <div>
                     <DropdownSelector
                         optionList={options}
-                        onChange={setAsset}
+                        onChange={handleAssetChange}
                     />
                 </div>
                 <div>
@@ -46,12 +67,7 @@ export const AssetSelector = ({
                         type='text'
                         placeholder='0'
                         className='typography-body-1 h-8 w-24 rounded-lg bg-transparent p-2 text-right font-bold text-white placeholder-opacity-50'
-                        onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                            const maybeNumber = e.target.value;
-                            isNaN(+maybeNumber)
-                                ? setAmount(0)
-                                : setAmount(+maybeNumber);
-                        }}
+                        onChange={handleAmountChange}
                         value={amount}
                     />
                 </div>

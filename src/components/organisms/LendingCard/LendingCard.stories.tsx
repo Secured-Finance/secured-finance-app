@@ -8,7 +8,11 @@ import { LendingCard } from './LendingCard';
 export default {
     title: 'Organism/LendingCard',
     component: LendingCard,
-    args: {},
+    args: {
+        onPlaceOrder: async () => {
+            return Promise.resolve();
+        },
+    },
     parameters: {
         chromatic: { disableSnapshot: false },
     },
@@ -48,7 +52,22 @@ const Template: ComponentStory<typeof LendingCard> = args => {
         setTimeout(() => dispatch(updateLatestBlock(12345)), 100);
     }, [dispatch]);
 
-    return <LendingCard />;
+    return <LendingCard {...args} />;
 };
 
 export const Default = Template.bind({});
+
+export const WithError = Template.bind({});
+WithError.args = {
+    onPlaceOrder: async () => {
+        throw Error('Something went wrong');
+    },
+};
+export const PendingTransaction = Template.bind({});
+PendingTransaction.args = {
+    onPlaceOrder: async () => {
+        return new Promise(resolve => {
+            setTimeout(resolve, 5000);
+        });
+    },
+};

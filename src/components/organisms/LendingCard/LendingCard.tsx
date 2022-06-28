@@ -1,14 +1,38 @@
 import { RadioGroup } from '@headlessui/react';
 import classNames from 'classnames';
-import { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useCallback, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Button } from 'src/components/atoms';
 import { AssetSelector, TermSelector } from 'src/components/molecules';
+import { setLastMessage } from 'src/store/lastError';
 import { RootState } from 'src/store/types';
 import { currencyList } from 'src/utils';
 
-export const LendingCard = () => {
-    const [market, setMarket] = useState<'Lend' | 'Borrow'>('Lend');
+//TODO: move this to the SDK
+enum OrderSide {
+    Lend = 0,
+    Borrow = 1,
+}
+
+export const LendingCard = ({
+    onPlaceOrder,
+}: {
+    onPlaceOrder: (
+        ccy: string,
+        term: string,
+        side: OrderSide,
+        amount: number,
+        rate: number
+    ) => Promise<unknown>;
+}) => {
+    const [pendingTransaction, setPendingTransaction] = useState(false);
+    const [ccy, setCcy] = useState('USD');
+    const [term, setTerm] = useState('1');
+    const [side, setSide] = useState<OrderSide>(OrderSide.Lend);
+    const [amount, setAmount] = useState(0);
+    const [rate] = useState(0);
+
+    const dispatch = useDispatch();
     const optionList = [
         { name: 'Sep 2022' },
         { name: 'Dec 2022' },
@@ -41,15 +65,42 @@ export const LendingCard = () => {
         Filecoin: filecoinPrice,
         USDC: usdcPrice,
     };
+
+    const handlePlaceOrder = useCallback(
+        async (
+            ccy: string,
+            term: string,
+            side: number,
+            amount: number,
+            rate: number
+        ) => {
+            try {
+                setPendingTransaction(true);
+                await onPlaceOrder(ccy, term, side, amount, rate);
+                setPendingTransaction(false);
+            } catch (e) {
+                if (e instanceof Error) {
+                    setPendingTransaction(false);
+                    dispatch(setLastMessage(e.message));
+                }
+            }
+        },
+        [onPlaceOrder, dispatch]
+    );
+
     return (
         <div className='w-80 flex-col space-y-6 rounded-lg border border-neutral bg-transparent pb-4 shadow-2xl'>
             <RadioGroup
-                value={market}
-                onChange={setMarket}
+                value={side}
+                onChange={setSide}
                 as='div'
                 className='flex flex-row'
             >
-                <RadioGroup.Option value='Borrow' as='div' className='w-1/2'>
+                <RadioGroup.Option
+                    value={OrderSide.Borrow}
+                    as='div'
+                    className='w-1/2'
+                >
                     {({ checked }) => (
                         <RadioGroup.Label
                             className={classNames('w-full', {
@@ -60,7 +111,11 @@ export const LendingCard = () => {
                         </RadioGroup.Label>
                     )}
                 </RadioGroup.Option>
-                <RadioGroup.Option value='Lend' as='div' className='w-1/2'>
+                <RadioGroup.Option
+                    value={OrderSide.Lend}
+                    as='div'
+                    className='w-1/2'
+                >
                     {({ checked }) => (
                         <RadioGroup.Label
                             className={classNames('w-full', {
@@ -83,10 +138,12 @@ export const LendingCard = () => {
                         options={currencyList}
                         transform={(v: string) => shortNames[v]}
                         priceList={priceList}
+                        onAmountChange={setAmount}
+                        onAssetChange={setCcy}
                     />
                 </div>
                 <div className='flex self-center'>
-                    <TermSelector options={optionList} />
+                    <TermSelector options={optionList} onTermChange={setTerm} />
                 </div>
                 <div className='flex flex-row items-stretch justify-between'>
                     <div className='flex-col'>
@@ -107,7 +164,15 @@ export const LendingCard = () => {
                     </div>
                 </div>
                 <div className='flex'>
-                    <Button fullWidth>{market}</Button>
+                    <Button
+                        fullWidth
+                        onClick={() =>
+                            handlePlaceOrder(ccy, term, side, amount, rate)
+                        }
+                        disabled={pendingTransaction}
+                    >
+                        {side ? 'Borrow' : 'Lend'}
+                    </Button>
                 </div>
             </div>
         </div>
