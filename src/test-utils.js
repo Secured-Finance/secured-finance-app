@@ -19,7 +19,7 @@ function render(
             </HashRouter>
         );
     }
-    return rtlRender(ui, { wrapper: Wrapper, ...renderOptions });
+    return { store, ...rtlRender(ui, { wrapper: Wrapper, ...renderOptions }) };
 }
 
 export * from '@testing-library/react';

@@ -35,7 +35,12 @@ export const Button = ({
                 fullWidth ? 'w-full' : `w-button-${size}`
             )}
         >
-            <p className='typography-button-6 text-white-80'>{children}</p>
+            <p
+                className='typography-button-6 text-white-80'
+                aria-label={children.toString()}
+            >
+                {children}
+            </p>
         </Tag>
     );
 };

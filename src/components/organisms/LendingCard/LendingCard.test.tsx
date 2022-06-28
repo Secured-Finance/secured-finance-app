@@ -2,7 +2,7 @@ import { composeStories } from '@storybook/testing-react';
 import { fireEvent, render, screen } from 'src/test-utils.js';
 import * as stories from './LendingCard.stories';
 
-const { Default } = composeStories(stories);
+const { Default, PendingTransaction } = composeStories(stories);
 
 describe('LendingCard Component', () => {
     const selectFilecoin = () => {
@@ -41,5 +41,55 @@ describe('LendingCard Component', () => {
         render(<Default />);
         selectFilecoin();
         expect(screen.getByText('Filecoin')).toBeInTheDocument();
+    });
+
+    it('should disable the action button when the transaction is pending', () => {
+        render(<PendingTransaction />);
+        const button = screen.getByRole('button', { name: 'Lend' });
+        expect(button).not.toBeDisabled();
+        fireEvent.click(button);
+        expect(button).toBeDisabled();
+    });
+
+    it('should call the onPlaceOrder with the initial value when click on the action button', () => {
+        const onPlaceOrder = jest.fn();
+        render(<Default onPlaceOrder={onPlaceOrder} />);
+        const button = screen.getByRole('button', { name: 'Lend' });
+        fireEvent.click(button);
+        expect(onPlaceOrder).toHaveBeenCalledWith(
+            'Ethereum',
+            'Sep 2022',
+            0,
+            0,
+            0
+        );
+    });
+
+    it('should call the onPlaceOrder function with the argument selected asset and amount when clicking on the action button', () => {
+        const onPlaceOrder = jest.fn();
+        render(<Default onPlaceOrder={onPlaceOrder} />);
+        selectFilecoin();
+        const input = screen.getByRole('textbox');
+        fireEvent.change(input, { target: { value: '10' } });
+        fireEvent.click(screen.getByRole('button', { name: 'Lend' }));
+        expect(onPlaceOrder).toHaveBeenCalledWith(
+            'Filecoin',
+            'Sep 2022',
+            0,
+            10,
+            0
+        );
+    });
+
+    it('should write an error in the store if onPlaceOrder throw an error', async () => {
+        const onPlaceOrder = jest.fn(() => {
+            throw new Error('This is an error');
+        });
+        const { store } = render(<Default onPlaceOrder={onPlaceOrder} />);
+        fireEvent.click(screen.getByRole('button', { name: 'Lend' }));
+
+        expect(store.getState().lastError.lastMessage).toEqual(
+            'This is an error'
+        );
     });
 });

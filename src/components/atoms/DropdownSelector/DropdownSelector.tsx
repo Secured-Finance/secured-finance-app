@@ -1,6 +1,6 @@
 import { Menu } from '@headlessui/react';
 import classNames from 'classnames';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { ExpandIndicator, Separator } from 'src/components/atoms';
 
 export type Option = {
@@ -15,18 +15,28 @@ export const DropdownSelector = ({
     optionList: Readonly<Array<Option>>;
     onChange: (v: string) => void;
 }) => {
-    const [selectedOption, setSelectedOption] = useState<Option>(optionList[0]);
-
-    const handleSelect = useCallback(
-        (option: Option) => {
-            setSelectedOption(option);
-        },
-        [setSelectedOption]
+    const [selectedOptionName, setSelectedOptionName] = useState<string>(
+        optionList[0].name
+    );
+    const selectedOption = useMemo(
+        () => optionList.find(o => o.name === selectedOptionName),
+        [optionList, selectedOptionName]
     );
 
+    const handleSelect = useCallback(
+        (optionName: string) => {
+            setSelectedOptionName(optionName);
+            onChange(optionName);
+        },
+        [onChange]
+    );
+
+    // Handle the case of the initial value
     useEffect(() => {
-        onChange(selectedOption.name);
-    }, [onChange, selectedOption.name]);
+        if (selectedOptionName) {
+            onChange(selectedOptionName);
+        }
+    }, []);
 
     return (
         <Menu as='div'>
@@ -52,7 +62,7 @@ export const DropdownSelector = ({
                             <Menu.Item
                                 key={asset.name}
                                 as='button'
-                                onClick={() => handleSelect(asset)}
+                                onClick={() => handleSelect(asset.name)}
                             >
                                 {({ active }) => (
                                     <div>
