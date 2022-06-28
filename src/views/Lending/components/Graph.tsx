@@ -4,6 +4,7 @@ import { LineChart } from 'src/components/new/LineChart';
 import { LendingStore } from 'src/store/lending/types';
 import { RootState } from 'src/store/types';
 import cm from './Graph.module.scss';
+import type { ChartData } from 'chart.js';
 
 const labels = ['0', '3m', '6m', '1y', '2y', '3y', '5y'];
 
@@ -20,7 +21,10 @@ const YieldGraph: React.FC<CombinedProps> = ({
     lendingRates,
     midRate,
 }) => {
-    const [data, setData] = useState({ datasets: [] });
+    const [data, setData] = useState<ChartData<'line'>>({
+        datasets: [],
+        labels: [],
+    });
 
     const canvas: HTMLCanvasElement = document.createElement('canvas');
     const ctx: CanvasRenderingContext2D = canvas.getContext('2d');
@@ -36,60 +40,60 @@ const YieldGraph: React.FC<CombinedProps> = ({
     purpleGradient.addColorStop(0, 'rgba(145, 59, 175, 1)');
     purpleGradient.addColorStop(1, 'rgba(15, 26, 34, 0.1)');
 
-    const refineArray = (array: Array<string | number>) => {
+    const refineArray = (array: Array<number>) => {
         if (!array.length) return array;
 
         if (array.length > 0) {
             const newArray = array.slice();
             newArray.unshift(0);
-            return newArray.map((r: string | number) => +r / 100);
+            return newArray.map((r: number) => +r / 100);
         }
     };
 
     useEffect(() => {
-        const graphData = {
+        const graphData: ChartData<'line'> = {
             labels,
             datasets: [
                 {
                     label: 'Borrow',
                     fill: true,
-                    lineTension: 0.4,
+                    // lineTension: 0.4,
                     backgroundColor: blueGradient,
                     borderColor: 'rgba(0, 122, 255, 1)',
-                    radius: 0,
-                    hoverRadius: 0,
+                    // radius: 0,
+                    // hoverRadius: 0,
                     pointHitRadius: 100,
                     data: refineArray(borrowRates),
                     borderWidth: 2,
-                    opacity: 1,
+                    // opacity: 1,
                     hidden: false,
                 },
                 {
                     label: 'Lend',
                     fill: true,
-                    lineTension: 0.4,
+                    // lineTension: 0.4,
                     backgroundColor: purpleGradient,
                     borderColor: 'rgba(145, 59, 175, 1)',
-                    radius: 0,
-                    hoverRadius: 0,
+                    // radius: 0,
+                    // hoverRadius: 0,
                     pointHitRadius: 100,
                     data: refineArray(lendingRates),
                     borderWidth: 2,
-                    opacity: 0.1,
+                    // opacity: 0.1,
                     hidden: false,
                 },
                 {
                     label: 'Mid Rate',
                     fill: false,
-                    lineTension: 0.4,
+                    // lineTension: 0.4,
                     backgroundColor: yellowGradient,
                     borderColor: 'rgba(242, 109, 79, 1)',
-                    radius: 0,
-                    hoverRadius: 0,
+                    // radius: 0,
+                    // hoverRadius: 0,
                     pointHitRadius: 100,
                     data: refineArray(midRate),
                     borderWidth: 2,
-                    opacity: 1,
+                    // opacity: 1,
                     hidden: false,
                 },
             ],
@@ -101,7 +105,7 @@ const YieldGraph: React.FC<CombinedProps> = ({
 
     return (
         <div className={cm.container}>
-            <LineChart data={data} showLegend />
+            <LineChart type='line' data={data} showLegend />
         </div>
     );
 };

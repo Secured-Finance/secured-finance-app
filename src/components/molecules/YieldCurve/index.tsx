@@ -1,9 +1,11 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { defaults, Line } from 'react-chartjs-2';
+import { Line } from 'react-chartjs-2';
 import { useRates } from 'src/hooks/useRates';
 import theme from 'src/theme';
 import styled from 'styled-components';
 import { chartOptions } from './chartOptions';
+import Chart from 'chart.js/auto';
+import type { ChartData } from 'chart.js';
 
 const labels = ['0', '3m', '6m', '1y', '2y', '3y', '5y'];
 
@@ -27,7 +29,7 @@ const usePrevious = <T extends Array<unknown>>(value: T) => {
 };
 
 export function YieldCurve() {
-    const [lineData, setLineData] = useState({});
+    const [lineData, setLineData] = useState<ChartData<'line'>>();
 
     const borrowRates = useRates('FIL', 0);
     const lendingRates = useRates('FIL', 1);
@@ -42,7 +44,8 @@ export function YieldCurve() {
     const canvas = useRef(document.createElement('canvas'));
 
     const [blueGradient, yellowGradient, purpleGradient] = useMemo(() => {
-        defaults.global.defaultFontColor = theme.colors.cellKey;
+        Chart.defaults.color = theme.colors.cellKey;
+        // defaults.global.defaultFontColor = theme.colors.cellKey;
         canvas.current.id = 'yieldCurve';
         const ctx: CanvasRenderingContext2D = canvas.current.getContext('2d');
         const blueGradient = ctx.createLinearGradient(0, 0, 0, 0);

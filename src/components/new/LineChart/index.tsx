@@ -1,22 +1,22 @@
-import * as chartjs from 'chart.js';
 import React, { useEffect, useRef } from 'react';
-import { ChartComponentProps, Line } from 'react-chartjs-2';
+import { ChartProps, Line } from 'react-chartjs-2';
 import {
     commonDataset,
     defaultDatasets,
     options as customOptions,
 } from './constants';
 import cm from './LineChart.module.scss';
+import type { ChartData } from 'chart.js';
 
 export type LineChartProps = {
     title?: string | JSX.Element;
     style?: React.CSSProperties;
     showLegend?: boolean;
-    data: chartjs.ChartData;
-} & ChartComponentProps;
+    data: ChartData<'line'>;
+} & ChartProps;
 
 export const LineChart = ({
-    data = { datasets: [] },
+    data = { datasets: [], labels: [] },
     options = customOptions,
     title,
     style,
