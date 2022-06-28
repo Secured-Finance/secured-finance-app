@@ -94,16 +94,12 @@ export const LendingCard = ({
                 value={side}
                 onChange={setSide}
                 as='div'
-                className='flex flex-row'
+                className='grid grid-flow-col grid-cols-2'
             >
-                <RadioGroup.Option
-                    value={OrderSide.Borrow}
-                    as='div'
-                    className='w-1/2'
-                >
+                <RadioGroup.Option value={OrderSide.Borrow} as='div'>
                     {({ checked }) => (
                         <RadioGroup.Label
-                            className={classNames('w-full', {
+                            className={classNames({
                                 'ring ring-red': checked,
                             })}
                         >
@@ -111,14 +107,10 @@ export const LendingCard = ({
                         </RadioGroup.Label>
                     )}
                 </RadioGroup.Option>
-                <RadioGroup.Option
-                    value={OrderSide.Lend}
-                    as='div'
-                    className='w-1/2'
-                >
+                <RadioGroup.Option value={OrderSide.Lend} as='div'>
                     {({ checked }) => (
                         <RadioGroup.Label
-                            className={classNames('w-full', {
+                            className={classNames({
                                 'ring ring-red': checked,
                             })}
                         >
@@ -128,12 +120,12 @@ export const LendingCard = ({
                 </RadioGroup.Option>
             </RadioGroup>
 
-            <div className='flex flex-col items-stretch justify-center space-y-4 px-4'>
+            <div className='grid justify-center space-y-4 px-4'>
                 <div className='typography-body-2 flex flex-col text-center text-white-50'>
                     <span>16.23%</span>
                     <span>Fixed Rate APY</span>
                 </div>
-                <div className='flex self-center'>
+                <div>
                     <AssetSelector
                         options={currencyList}
                         value={currencyList[0]}
@@ -143,7 +135,7 @@ export const LendingCard = ({
                         onAssetChange={setCcy}
                     />
                 </div>
-                <div className='flex self-center'>
+                <div>
                     <TermSelector
                         options={optionList}
                         value={optionList[0]}
@@ -168,7 +160,7 @@ export const LendingCard = ({
                         </div>
                     </div>
                 </div>
-                <div className='flex'>
+                <div>
                     <Button
                         fullWidth
                         onClick={() =>
