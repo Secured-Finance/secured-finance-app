@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { Page } from 'src/components/templates';
 import useCollateralBook from 'src/hooks/useCollateralBook';
 import { RootState } from 'src/store/types';
 import { WalletBase } from 'src/store/wallets';
 import { getTotalUSDBalance } from 'src/store/wallets/selectors';
-import theme from 'src/theme';
 import { usdFormat } from 'src/utils';
 import styled from 'styled-components';
 import { useWallet } from 'use-wallet';
@@ -30,13 +28,13 @@ const Account: React.FC = () => {
     }, [ethWallet, filWallet]);
 
     return (
-        <Page background={theme.colors.background}>
+        <div>
             <AccountContainer>
                 <StyledPortfolioBalance>
                     <StyledTitle>Total Portfolio Balance</StyledTitle>
                     <StyledBalanceContainer>
                         <StyledBalanceAmount>
-                            {totalUSDBalance != null
+                            {totalUSDBalance !== null
                                 ? usdFormat(totalUSDBalance)
                                 : 0}
                         </StyledBalanceAmount>
@@ -60,7 +58,7 @@ const Account: React.FC = () => {
                     </StyledAccountContainer>
                 )}
             </AccountContainer>
-        </Page>
+        </div>
     );
 };
 
