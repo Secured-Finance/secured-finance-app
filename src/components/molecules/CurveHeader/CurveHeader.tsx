@@ -1,9 +1,9 @@
 import { CurveHeaderTotal } from 'src/components/atoms/CurveHeaderTotal';
-import { ReactComponent as EthIcon } from 'src/assets/coins/eth2.svg';
-import { ReactComponent as FilecoinIcon } from 'src/assets/coins/fil.svg';
-import { ReactComponent as UsdcIcon } from 'src/assets/coins/usdc.svg';
-import { ReactComponent as UsdtIcon } from 'src/assets/coins/usdt.svg';
-import { ReactComponent as BitcoinIcon } from 'src/assets/coins/xbc.svg';
+import EthIcon from 'src/assets/coins/eth2.svg';
+import FilecoinIcon from 'src/assets/coins/fil.svg';
+import UsdcIcon from 'src/assets/coins/usdc.svg';
+import UsdtIcon from 'src/assets/coins/usdt.svg';
+import BitcoinIcon from 'src/assets/coins/xbc.svg';
 import { CurveHeaderAsset } from 'src/components/atoms/CurveHeaderAsset';
 import { useSelector } from 'react-redux';
 import { RootState } from 'src/store/types';
