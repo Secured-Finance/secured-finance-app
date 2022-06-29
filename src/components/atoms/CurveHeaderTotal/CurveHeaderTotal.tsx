@@ -8,7 +8,7 @@ export const CurveHeaderTotal: React.FC<CurveHeaderTotalProps> = ({
     footer,
 }) => {
     return (
-        <div className='flex h-44 w-42 flex-col p-0 text-center'>
+        <div className='flex h-[44px] w-42 flex-col p-0 text-center'>
             <div className='typography-caption-2 h-5 text-planetaryPurple'>
                 {header}
             </div>

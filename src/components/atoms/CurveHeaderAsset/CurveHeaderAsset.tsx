@@ -14,7 +14,7 @@ export const CurveHeaderAsset: React.FC<CurveHeaderAssetProps> = ({
     IconSVG,
 }) => {
     return (
-        <div className='flex h-44 w-36 flex-row justify-between gap-3 py-0.5 '>
+        <div className='flex h-[44px] w-36 flex-row justify-between gap-3 py-0.5 '>
             {IconSVG ? (
                 <div>
                     <IconSVG className='h-10 w-10' />
