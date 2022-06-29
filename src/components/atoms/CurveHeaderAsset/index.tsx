@@ -1,10 +1,8 @@
-import { SVGProps } from 'react';
-
 interface CurveHeaderAssetProps {
     asset: string;
     value: string;
     fluctuation: string;
-    IconSVG: (props: SVGProps<SVGSVGElement>) => JSX.Element;
+    IconSVG: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
 }
 
 export const CurveHeaderAsset: React.FC<CurveHeaderAssetProps> = ({
