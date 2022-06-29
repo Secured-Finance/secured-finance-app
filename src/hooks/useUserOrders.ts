@@ -4,7 +4,7 @@ import {
     useOpenOrders as useOpenOrdersHistory,
     useUsersTradingHistoryQuery,
 } from '@secured-finance/sf-graph-client';
-import { BilateralPosition } from '@secured-finance/sf-graph-client/dist/generated';
+import { BilateralPosition } from '@secured-finance/sf-graph-client/dist/.graphclient';
 import { useMemo, useState } from 'react';
 import { useWallet } from 'use-wallet';
 
@@ -27,8 +27,8 @@ export const useOpenOrders = (ccy: string, term: string) => {
     }
 
     useMemo(() => {
-        if (data) {
-            setOpenOrders(data);
+        if (data !== undefined && data.user !== undefined) {
+            setOpenOrders(data.user.openOrders);
         }
     }, [data]);
 
@@ -46,8 +46,8 @@ export const useBilateralPositionsQuery = () => {
     }
 
     useMemo(() => {
-        if (data) {
-            setPositions(data);
+        if (data?.bilateralPositions) {
+            setPositions(data.bilateralPositions as Array<BilateralPosition>);
         }
     }, [data]);
 

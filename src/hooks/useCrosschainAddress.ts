@@ -1,5 +1,5 @@
 import { useCrosschainAddressById } from '@secured-finance/sf-graph-client';
-import { CrosschainAddress } from '@secured-finance/sf-graph-client/dist/generated';
+import { CrosschainAddress } from '@secured-finance/sf-graph-client/dist/.graphclient';
 import { useMemo, useState } from 'react';
 import { getCurrencyBy } from 'src/utils';
 
@@ -16,8 +16,10 @@ export const useCrosschainAddressByChainId = (user: string, ccy: string) => {
     }
 
     useMemo(() => {
-        if (data) {
-            setCrosschainAddress(data);
+        if (data?.crosschainAddress) {
+            setCrosschainAddress(
+                data.crosschainAddress as unknown as CrosschainAddress
+            );
         }
     }, [data]);
 

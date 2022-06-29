@@ -21,8 +21,8 @@ export const useBilateralCollateralPosition = (
     }
 
     useMemo(() => {
-        if (data) {
-            setBilateralPosition(data);
+        if (data?.collateralVaultPosition) {
+            setBilateralPosition(data.collateralVaultPosition);
         }
     }, [data]);
 

@@ -1,4 +1,4 @@
-import { Currency } from '@secured-finance/sf-graph-client/dist/generated';
+import { Currency } from '@secured-finance/sf-graph-client/dist/.graphclient';
 
 export interface HistoryStore {
     lendingHistory: Array<HistoryTableData>;

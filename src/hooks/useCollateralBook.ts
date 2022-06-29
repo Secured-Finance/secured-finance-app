@@ -47,19 +47,20 @@ const useCollateralBook = (account: string, ccy = 'ETH') => {
     }
 
     useMemo(() => {
-        if (data) {
+        if (data?.collateralBooks) {
+            const book = data?.collateralBooks[0];
             const ethPriceBN = new BigNumber(ethPrice);
 
             const colBook: CollateralBook = {
                 ccyIndex: 0,
-                ccyName: data.currency.shortName,
-                collateral: new BigNumber(data.independentCollateral),
+                ccyName: book.currency.shortName,
+                collateral: new BigNumber(book.independentCollateral),
                 usdCollateral: new BigNumber(
-                    data.independentCollateral
+                    book.independentCollateral
                 ).multipliedBy(ethPriceBN),
-                vault: data.vault.address,
-                locked: new BigNumber(data.lockedCollateral),
-                usdLocked: new BigNumber(data.lockedCollateral).multipliedBy(
+                vault: book.vault.address,
+                locked: new BigNumber(book.lockedCollateral),
+                usdLocked: new BigNumber(book.lockedCollateral).multipliedBy(
                     ethPriceBN
                 ),
             };

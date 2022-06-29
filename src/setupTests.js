@@ -4,5 +4,7 @@
 // learn more: https://github.com/testing-library/jest-dom
 import { loadEnvConfig } from '@next/env';
 import '@testing-library/jest-dom';
+import { TextDecoder } from 'util';
+global.TextDecoder = TextDecoder;
 
 loadEnvConfig(process.cwd());
