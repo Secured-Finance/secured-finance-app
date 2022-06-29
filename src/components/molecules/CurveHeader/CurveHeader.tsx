@@ -36,7 +36,7 @@ export const CurveHeader: React.FC<CurveHeaderProps> = ({
     };
 
     return (
-        <div className='flex h-20 w-585 flex-row justify-between p-4'>
+        <div className='flex h-20 w-[585px] flex-row justify-between p-4'>
             <CurveHeaderAsset
                 asset={asset}
                 value={priceList[asset.toLowerCase()]}
