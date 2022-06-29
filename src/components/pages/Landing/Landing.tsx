@@ -1,6 +1,9 @@
 import { LendingCard } from 'src/components/organisms';
+import { usePlaceOrder } from 'src/hooks';
 
 export const Landing = () => {
+    const { placeOrder } = usePlaceOrder();
+
     return (
         <div className='flex-col items-center space-y-24 py-24'>
             <div className='flex flex-col items-center justify-center space-y-8 text-center'>
@@ -15,7 +18,7 @@ export const Landing = () => {
                 </h2>
             </div>
             <div className='flex flex-row justify-center space-x-8'>
-                <LendingCard />
+                <LendingCard onPlaceOrder={placeOrder} />
                 <div className='w-[700px] bg-gunMetal text-white'>
                     PLAHOLDER
                 </div>

@@ -1,8 +1,12 @@
 import { composeStories } from '@storybook/testing-react';
+import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { fireEvent, render, screen } from 'src/test-utils.js';
 import * as stories from './LendingCard.stories';
 
 const { Default, PendingTransaction } = composeStories(stories);
+
+const mockSecuredFinance = mockUseSF();
+jest.mock('src/hooks/useSecuredFinance', () => () => mockSecuredFinance);
 
 describe('LendingCard Component', () => {
     const selectFilecoin = () => {

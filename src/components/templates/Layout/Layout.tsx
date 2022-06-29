@@ -13,7 +13,7 @@ export const Layout = ({
     navBar: React.ReactNode;
 }) => {
     return (
-        <div className='flex max-w-full flex-col items-stretch justify-center'>
+        <div className='grid'>
             <header>{navBar}</header>
             <main>
                 <Switch>
