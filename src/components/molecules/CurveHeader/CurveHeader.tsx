@@ -7,7 +7,6 @@ import BitcoinIcon from 'src/assets/coins/xbc.svg';
 import { CurveHeaderAsset } from 'src/components/atoms/CurveHeaderAsset';
 import { useSelector } from 'react-redux';
 import { RootState } from 'src/store/types';
-import { percentFormat, usdFormat } from 'src/utils';
 
 interface CurveHeaderProps {
     asset: string;
@@ -15,18 +14,33 @@ interface CurveHeaderProps {
 }
 
 export const CurveHeader: React.FC<CurveHeaderProps> = ({
-    asset,
+    asset = 'Filecoin',
     isBorrow,
 }): JSX.Element => {
-    const { price, change } = useSelector(
-        (state: RootState) => state.assetPrices.filecoin
-    );
+    const {
+        filecoin: { price: filecoinPrice, change: filecoinChange },
+        ethereum: { price: ethereumPrice, change: ethereumChange },
+        usdc: { price: usdcPrice, change: usdcChange },
+    } = useSelector((state: RootState) => state.assetPrices);
+
+    const priceList: Record<string, number> = {
+        ethereum: ethereumPrice,
+        filecoin: filecoinPrice,
+        usdc: usdcPrice,
+    };
+
+    const priceChangeList: Record<string, number> = {
+        ethereum: ethereumChange,
+        filecoin: filecoinChange,
+        usdc: usdcChange,
+    };
+
     return (
         <div className='flex h-20 w-585 flex-row justify-between p-4'>
             <CurveHeaderAsset
                 asset={asset}
-                value={usdFormat(price)}
-                fluctuation={percentFormat(change)}
+                value={priceList[asset.toLowerCase()]}
+                fluctuation={priceChangeList[asset.toLowerCase()]}
                 IconSVG={getSVGIcon(asset)}
             ></CurveHeaderAsset>
             <div className='flex flex-row gap-2'>
