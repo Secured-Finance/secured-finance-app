@@ -1,8 +1,5 @@
-import React from 'react';
 import { Container } from 'src/components/atoms';
-import { Page } from 'src/components/templates';
 import { useBorrowDeals, useLoanDeals } from 'src/hooks/useLoanHistory';
-import theme from 'src/theme';
 import styled from 'styled-components';
 import { HistoryTable } from './components';
 
@@ -11,7 +8,7 @@ const History = () => {
     const borrows = useBorrowDeals();
 
     return (
-        <Page background={theme.colors.background}>
+        <div>
             <Container>
                 {loans.length === 0 ? null : (
                     <div>
@@ -38,7 +35,7 @@ const History = () => {
                     </div>
                 )}
             </Container>
-        </Page>
+        </div>
     );
 };
 

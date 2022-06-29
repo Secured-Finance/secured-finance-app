@@ -5,7 +5,6 @@ import { useParams } from 'react-router-dom';
 import { Button, Container, RenderTerms, Spacer } from 'src/components/atoms';
 import { SendModal } from 'src/components/organisms';
 import { NextCouponPaymentCard } from 'src/components/organisms/Loan/NextCouponPaymentCard';
-import { Page } from 'src/components/templates';
 import useCollateralBook from 'src/hooks/useCollateralBook';
 import { useCrosschainAddressByChainId } from 'src/hooks/useCrosschainAddress';
 import { useLoanInformation } from 'src/hooks/useLoanHistory';
@@ -184,7 +183,7 @@ const LoanScreen = () => {
     }, [loan]);
 
     useEffect(() => {
-        if (loan != null) {
+        if (loan !== null) {
             setCounterpartyAddr(counterPartyWallet);
             nextCouponPayment();
             if (
@@ -210,7 +209,7 @@ const LoanScreen = () => {
     ]);
 
     return (
-        <Page background={theme.colors.background}>
+        <div>
             <Container>
                 <StyledPortfolioBalance>
                     <StyledTitle>Loan Agreement Details</StyledTitle>
@@ -386,7 +385,7 @@ const LoanScreen = () => {
                     </StyledColumn>
                 </StyledInfoContainer>
             </Container>
-        </Page>
+        </div>
     );
 };
 
