@@ -1,7 +1,9 @@
+import { percentFormat, usdFormat } from 'src/utils';
+
 interface CurveHeaderAssetProps {
     asset: string;
-    value: string;
-    fluctuation: string;
+    value: number;
+    fluctuation: number;
     IconSVG: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
 }
 
@@ -24,16 +26,14 @@ export const CurveHeaderAsset: React.FC<CurveHeaderAssetProps> = ({
                 </span>
                 <div className='flex h-5 w-full flex-row items-center justify-between'>
                     <span className='typography-caption flex h-full items-center text-neutral8'>
-                        {value}
+                        {usdFormat(value, 2)}
                     </span>
                     <span
                         className={`typography-caption flex h-full items-center ${
-                            fluctuation.startsWith('+')
-                                ? 'text-green'
-                                : 'text-red'
+                            fluctuation > 0 ? 'text-green' : 'text-red'
                         }`}
                     >
-                        {fluctuation}
+                        {percentFormat(fluctuation)}
                     </span>
                 </div>
             </div>

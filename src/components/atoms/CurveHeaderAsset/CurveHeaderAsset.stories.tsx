@@ -8,8 +8,8 @@ export default {
     component: CurveHeaderAsset,
     args: {
         asset: 'Filecoin',
-        value: '$8.00',
-        fluctuation: '-2.45%',
+        value: 8.02,
+        fluctuation: -2.45,
         IconSVG: FilecoinIcon,
     },
     parameters: {
@@ -26,7 +26,7 @@ export const Default = Template.bind({});
 export const PositiveFluctuation = Template.bind({});
 PositiveFluctuation.args = {
     asset: 'Bitcoin',
-    value: '$8.00',
-    fluctuation: '+2.45%',
+    value: 8.02,
+    fluctuation: 2.45,
     IconSVG: BitcoinIcon,
 };
