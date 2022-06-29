@@ -1,17 +1,16 @@
 import React, { useCallback } from 'react';
-import { connect } from 'react-redux';
 import { useCancelOrder } from 'src/hooks/useCancelOrder';
-import { LendingStore } from 'src/store/lending';
-import { RootState } from 'src/store/types';
 import styled from 'styled-components';
 
 interface CancelButtonProps {
     orderId?: number;
+    selectedCcy?: string;
+    selectedTerms?: string;
 }
 
-type CombinedProps = CancelButtonProps & LendingStore;
+type CombinedProps = CancelButtonProps;
 
-const RenderCancelButton: React.FC<CombinedProps> = ({
+export const RenderCancelButton: React.FC<CombinedProps> = ({
     orderId,
     selectedCcy,
     selectedTerms,
@@ -56,6 +55,3 @@ const StyledActionButton = styled.button`
     border: none;
     border-radius: 15px;
 `;
-
-const mapStateToProps = (state: RootState) => state.lendingTerminal;
-export default connect(mapStateToProps)(RenderCancelButton);
