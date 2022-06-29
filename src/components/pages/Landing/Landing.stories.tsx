@@ -9,6 +9,6 @@ export default {
     decorators: [WithAppLayout],
 } as ComponentMeta<typeof Landing>;
 
-const Template: ComponentStory<typeof Landing> = args => <Landing />;
+const Template: ComponentStory<typeof Landing> = () => <Landing />;
 
 export const Default = Template.bind({});
