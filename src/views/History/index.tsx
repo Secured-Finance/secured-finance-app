@@ -8,7 +8,7 @@ const History = () => {
     const borrows = useBorrowDeals();
 
     return (
-        <div>
+        <div role='main'>
             <Container>
                 {loans.length === 0 ? null : (
                     <div>

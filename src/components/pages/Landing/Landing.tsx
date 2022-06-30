@@ -5,7 +5,11 @@ export const Landing = () => {
     const { placeOrder } = usePlaceOrder();
 
     return (
-        <div className='flex-col items-center space-y-24 py-24'>
+        <div
+            className='flex-col items-center space-y-24 py-24'
+            role='main'
+            data-cy='lending-page'
+        >
             <div className='flex flex-col items-center justify-center space-y-8 text-center'>
                 <h1 className='typography-headline-1 text-white'>
                     Interbank-grade Lending <br />

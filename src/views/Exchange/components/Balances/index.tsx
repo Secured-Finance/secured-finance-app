@@ -33,7 +33,7 @@ export const Balances: React.FC = () => {
                 <Cell>
                     <CellKey>Account Value</CellKey>
                     <CellValue>
-                        {totalUSDBalance != null
+                        {totalUSDBalance !== null
                             ? usdFormat(totalUSDBalance)
                             : 0}
                     </CellValue>
@@ -41,7 +41,7 @@ export const Balances: React.FC = () => {
                 <Cell>
                     <CellKey>ETH Balance</CellKey>
                     <CellValue>
-                        {ethereumBalance != null
+                        {ethereumBalance !== null
                             ? ordinaryFormat(ethereumBalance)
                             : 0}{' '}
                         ETH
@@ -58,7 +58,7 @@ export const Balances: React.FC = () => {
                     <CellKey>ETH Collateral</CellKey>
                     {account && colBook.vault !== '' ? (
                         <CellValue>
-                            {colBook.collateral != null
+                            {colBook.collateral !== null
                                 ? getDisplayBalance(colBook.collateral)
                                 : 0}{' '}
                             ETH

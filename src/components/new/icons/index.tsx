@@ -39,7 +39,7 @@ const VerifiedIcon: React.FC<IIcon> = ({ fill, size = 24, ...props }) => (
     </svg>
 );
 
-const FilIcon: React.FC<IIcon> = ({ size = 24, fill, ...props }) => (
+const FilIcon: React.FC<IIcon> = ({ size = 24, fill }) => (
     <svg
         width={size}
         height={size}
