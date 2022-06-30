@@ -3,13 +3,13 @@ import BigNumber from 'bignumber.js';
 import React, { useCallback, useMemo, useState } from 'react';
 import { connect, useDispatch, useSelector } from 'react-redux';
 import {
+    Button,
     Modal,
     ModalActions,
     ModalContent,
     ModalProps,
     ModalTitle,
 } from 'src/components/atoms';
-import { Button } from 'src/components/common/Buttons';
 import { CurrencySelector } from 'src/components/molecules';
 import useCollateralBook from 'src/hooks/useCollateralBook';
 import { useDepositCollateral } from 'src/hooks/useDepositCollateral';
@@ -297,9 +297,7 @@ const CollateralModal: React.FC<CombinedProps> = ({
             </ModalContent>
             <ModalActions>
                 <StyledButtonContainer>
-                    <Button onClick={onDismiss} outline>
-                        Cancel
-                    </Button>
+                    <Button onClick={onDismiss}>Cancel</Button>
                     <ButtonWithCommentContainer>
                         {balanceErr && <Comment>Insufficient Amount</Comment>}
                         <Button

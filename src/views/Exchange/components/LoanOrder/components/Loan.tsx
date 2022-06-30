@@ -1,7 +1,7 @@
 import BigNumber from 'bignumber.js';
 import React, { useCallback, useState } from 'react';
 import { connect, useDispatch } from 'react-redux';
-import { Button } from 'src/components/common/Buttons';
+import { Button } from 'src/components/atoms';
 import styled from 'styled-components';
 import { usePlaceOrder } from '../../../../../hooks/usePlaceOrder/usePlaceOrder';
 import {

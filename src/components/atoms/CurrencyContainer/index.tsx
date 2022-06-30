@@ -158,6 +158,7 @@ export const CurrencyContainer: React.FC<CurrencyContainerProps> = ({
         default:
             iconSize = 14;
             fontSize = 14;
+            marginLeft = 0;
             break;
     }
 

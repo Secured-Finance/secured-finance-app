@@ -1,8 +1,8 @@
 import BigNumber from 'bignumber.js';
 import React, { useCallback, useState } from 'react';
 import { connect, useDispatch } from 'react-redux';
+import { Button } from 'src/components/atoms';
 import styled from 'styled-components';
-import { Button } from '../../../../../components/common/Buttons';
 import { usePlaceOrder } from '../../../../../hooks/usePlaceOrder/usePlaceOrder';
 import {
     LendingTerminalStore,
@@ -76,11 +76,7 @@ const Borrow: React.FC<LendingTerminalStore> = ({
             />
 
             <StyledButtonContainer>
-                <Button
-                    accent={'success'}
-                    onClick={handleBorrowDeal}
-                    disabled={pendingTx}
-                >
+                <Button onClick={handleBorrowDeal} disabled={pendingTx}>
                     Borrow
                 </Button>
             </StyledButtonContainer>
