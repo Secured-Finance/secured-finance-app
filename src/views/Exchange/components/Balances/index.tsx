@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { Button } from 'src/components/common/Buttons';
+import { Button } from 'src/components/atoms';
 import { Subheader } from 'src/components/common/Subheader';
 import { Cell, CellKey, CellValue, Table } from 'src/components/common/Table';
 import { CollateralModal } from 'src/components/organisms';
@@ -72,7 +72,7 @@ export const Balances: React.FC = () => {
                     <CellValue>10 000 FIL</CellValue>
                 </Cell>
             </Table>
-            <Button onClick={onPresentCollateralModal} outline>
+            <Button onClick={onPresentCollateralModal}>
                 Manage Collateral
             </Button>
         </BalanceContainer>

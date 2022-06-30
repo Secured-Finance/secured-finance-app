@@ -15,6 +15,7 @@ export const usePlaceOrder = () => {
             amount: number,
             rate: number
         ) => {
+            if (!securedFinance) return;
             let amountToSend;
             if (ccy === Currency.ETH) {
                 amountToSend = utils.parseUnits(amount.toString(), 'wei');

@@ -18,10 +18,10 @@ describe('getCurrencyBy', () => {
         expect(getCurrencyBy('shortName', 'USDC').indexCcy).toEqual(2);
     });
 
-    it('should be undefined for non existing indexCcy', () => {
-        expect(getCurrencyBy('indexCcy', 3)).toBeUndefined();
-        expect(getCurrencyBy('shortName', 'XXX')).toBeUndefined();
-        expect(getCurrencyBy('name', 'Terra Luna')).toBeUndefined();
+    it('should raise an error non existing indexCcy', () => {
+        expect(() => getCurrencyBy('indexCcy', 3)).toThrow();
+        expect(() => getCurrencyBy('shortName', 'XXX')).toThrow();
+        expect(() => getCurrencyBy('name', 'Terra Luna')).toThrow();
     });
 
     it('should return the currency object for existing shortName', () => {

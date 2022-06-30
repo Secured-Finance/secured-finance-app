@@ -10,6 +10,7 @@ export const useCancelOrder = (
     const securedFinance = useSF();
 
     const handleCancelOrder = useCallback(async () => {
+        if (!securedFinance) return;
         const tx = await securedFinance.cancelLendingOrder(ccy, term, orderId);
         return tx;
     }, [securedFinance, ccy, term, orderId]);
