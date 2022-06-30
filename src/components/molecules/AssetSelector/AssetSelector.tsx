@@ -47,9 +47,9 @@ export const AssetSelector = ({
     return (
         <div className='w-72 flex-col items-start justify-start space-y-2'>
             <div className='flex flex-row items-start justify-between'>
-                <label className='typography-caption-2 ml-2 text-planetaryPurple'>
+                <div className='typography-caption-2 ml-2 text-planetaryPurple'>
                     Asset
-                </label>
+                </div>
                 <div
                     className='typography-caption-3 mr-1 text-white-60'
                     data-testid='asset-selector-usd'

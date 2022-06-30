@@ -1,5 +1,5 @@
+import { StarIcon } from '@heroicons/react/solid';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
-
 import { Button } from './';
 
 export default {
@@ -10,8 +10,10 @@ export default {
     },
     argTypes: {
         children: { control: 'text' },
-        variant: { control: 'select', options: ['contained', 'outlined'] },
-        size: { control: 'select', options: ['xs', 'sm', 'md', 'lg'] },
+        size: { control: 'radio', options: ['sm', 'md'] },
+        fullWidth: { control: 'boolean' },
+        StartIcon: { control: false },
+        EndIcon: { control: false },
     },
 } as ComponentMeta<typeof Button>;
 
@@ -21,66 +23,35 @@ const Template: ComponentStory<typeof Button> = args => (
 
 export const Primary = () => {
     return (
-        <>
-            <ul style={{ padding: '10px' }}>
-                <li style={{ padding: '10px' }}>
-                    <Button variant='contained' size='xs'>
-                        Deposit
-                    </Button>
-                </li>
-                <li style={{ padding: '10px' }}>
-                    <Button variant='contained' size='sm'>
-                        Connect Wallet
-                    </Button>
-                </li>
-                <li style={{ padding: '10px' }}>
-                    <Button variant='contained' size='md'>
-                        Connect Wallet
-                    </Button>
-                </li>
-                <li style={{ padding: '10px' }}>
-                    <Button variant='contained' size='lg'>
-                        Connect Wallet
-                    </Button>
-                </li>
-            </ul>
-        </>
+        <div className='grid gap-4'>
+            <Button size='sm'>Deposit</Button>
+            <Button size='md'>Connect Wallet</Button>
+            <Button disabled>Disabled</Button>
+            <Button size='md' fullWidth>
+                Full Width
+            </Button>
+            <Button StartIcon={StarIcon}>Icons</Button>
+            <Button EndIcon={StarIcon}>Icons</Button>
+        </div>
     );
 };
 
 export const Default = Template.bind({});
 
-export const XS = Template.bind({});
-XS.args = {
-    ...Default.args,
-    children: 'Deposit',
-    size: 'xs',
-};
-
-export const SM = Template.bind({});
-SM.args = {
+export const Small = Template.bind({});
+Small.args = {
     ...Default.args,
     size: 'sm',
 };
 
-export const MD = Template.bind({});
-MD.args = {
+export const Medium = Template.bind({});
+Medium.args = {
     ...Default.args,
     size: 'md',
 };
 
-export const LG = Template.bind({});
-LG.args = {
+export const WithIcon = Template.bind({});
+WithIcon.args = {
     ...Default.args,
-    size: 'lg',
-};
-
-export const Outlined = Template.bind({});
-Outlined.args = {
-    variant: 'outlined',
-};
-
-export const Link = Template.bind({});
-Link.args = {
-    href: 'http://www.google.com',
+    StartIcon: StarIcon,
 };
