@@ -1,4 +1,4 @@
-import * as chartjs from 'chart.js';
+import { ChartOptions } from 'chart.js';
 
 const canvas: HTMLCanvasElement = document.createElement('canvas');
 const ctx: CanvasRenderingContext2D = canvas.getContext('2d');
@@ -32,7 +32,7 @@ export const commonDataset = {
     fill: true,
     pointHitRadius: 100,
     borderWidth: 2,
-    opacity: 1,
+    // opacity: 1,
     hidden: false,
     radius: 0,
     hoverRadius: 3,
@@ -56,79 +56,47 @@ export const defaultDatasets = [
     },
 ];
 
-export const options: chartjs.ChartOptions = {
+export const options: ChartOptions<'line'> = {
     responsive: true,
     layout: {
         padding: {
-            left: 34,
+            // left: 34,
         },
     },
     scales: {
-        yAxes: [
-            {
-                ticks: {
-                    fontSize: 13,
-                    padding: 34,
-                    callback: (value: number) => value + '%',
-                    mirror: true,
-                },
-
-                gridLines: {
-                    drawBorder: false,
-                    zeroLineColor: yAxisGradient,
-                    drawTicks: false,
-                },
+        y: {
+            ticks: {
+                // fontSize: 13,
+                // padding: 34,
+                callback: (value: number | string) => value + '%',
+                mirror: true,
             },
-        ],
-        xAxes: [
-            {
-                ticks: {
-                    fontSize: 13,
-                    padding: 8,
-                },
-                gridLines: {
-                    color: xAxisGradient, // hides xAxis grid except for zero line
-                    drawBorder: false,
-                    zeroLineColor: xAxisZeroLineGradient,
-                    drawTicks: false,
-                },
+
+            grid: {
+                drawBorder: false,
+                // zeroLineColor: yAxisGradient,
+                drawTicks: false,
             },
-        ],
-    },
-    tooltips: {
-        callbacks: {
-            label: (
-                item: chartjs.ChartTooltipItem,
-                data: chartjs.ChartData
-            ) => {
-                const { datasetIndex, yLabel } = item;
-                const label = data.datasets[datasetIndex].label || '';
-                let content = '';
+        },
 
-                if (data.datasets.length > 1) {
-                    content += label;
-                }
-
-                content += ' ' + yLabel + ' %';
-                return content;
+        x: {
+            ticks: {
+                // fontSize: 13,
+                padding: 8,
+            },
+            grid: {
+                color: xAxisGradient, // hides xAxis grid except for zero line
+                drawBorder: false,
+                // zeroLineColor: xAxisZeroLineGradient,
+                drawTicks: false,
             },
         },
     },
-    legend: {
-        display: false,
-        position: 'right',
-    },
-    legendCallback: (chart: Chart) => {
-        const ul = document.createElement('ul');
-        chart.data?.datasets?.forEach(dataset => {
-            const borderColor = dataset.borderColor;
-            ul.innerHTML += `
-                <li>
-                   <span class="legendMarker" style="background-color: ${borderColor}"></span>
-                    ${dataset.label}
-                 </li>
-              `;
-        });
-        return ul.outerHTML;
+    plugins: {
+        // tooltip: {},
+        legend: {
+            display: false,
+            position: 'right',
+        },
     },
 };
