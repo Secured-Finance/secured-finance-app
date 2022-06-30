@@ -23,7 +23,7 @@ const RenderBorrow: React.FC<BorrowContainerProps> = ({
                 </StyledBorrowText>
                 <StyledBorrowSubtitleContainer>
                     <StyledBorrowlSubtitle>
-                        {value != null ? getUSDFormatBalanceNumber(value) : 0}
+                        {value !== null ? getUSDFormatBalanceNumber(value) : 0}
                     </StyledBorrowlSubtitle>
                 </StyledBorrowSubtitleContainer>
             </StyledWalletInfoContainer>

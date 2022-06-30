@@ -23,9 +23,6 @@ const collateralFormSlice = createSlice({
         updateCollateralTxFee(state, action: PayloadAction<number>) {
             state.txFee = action.payload;
         },
-        resetCollateralForm(state) {
-            state = initialStore;
-        },
         fetchCollateralStore(state) {
             state.isLoading = true;
         },

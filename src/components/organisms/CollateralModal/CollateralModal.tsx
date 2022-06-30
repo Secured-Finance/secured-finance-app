@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import BigNumber from 'bignumber.js';
 import React, { useCallback, useMemo, useState } from 'react';
 import { connect, useDispatch, useSelector } from 'react-redux';
@@ -41,12 +42,9 @@ type CombinedProps = ModalProps & CollateralFormStore & CollateralModalProps;
 const CollateralModal: React.FC<CombinedProps> = ({
     onDismiss,
     amount,
-    ccyIndex,
-    isInitiated,
     currencyIndex,
     currencyName,
     currencyShortName,
-    filAddress,
     status,
 }) => {
     const [buttonOpen, setButtonOpen] = useState(false);

@@ -28,7 +28,7 @@ const Account: React.FC = () => {
     }, [ethWallet, filWallet]);
 
     return (
-        <div>
+        <div role='main' data-cy='account-page'>
             <AccountContainer>
                 <StyledPortfolioBalance>
                     <StyledTitle>Total Portfolio Balance</StyledTitle>
