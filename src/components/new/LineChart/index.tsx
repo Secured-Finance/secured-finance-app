@@ -1,22 +1,40 @@
-import * as chartjs from 'chart.js';
-import React, { useEffect, useRef } from 'react';
-import { ChartComponentProps, Line } from 'react-chartjs-2';
+import React, { useRef } from 'react';
+import { ChartProps, Line } from 'react-chartjs-2';
 import {
     commonDataset,
     defaultDatasets,
     options as customOptions,
 } from './constants';
 import cm from './LineChart.module.scss';
+import { ChartData } from 'chart.js';
+import {
+    Chart as ChartJS,
+    LinearScale,
+    PointElement,
+    LineElement,
+    Title,
+    CategoryScale,
+    Tooltip,
+} from 'chart.js';
+
+ChartJS.register(
+    LinearScale,
+    PointElement,
+    LineElement,
+    Title,
+    CategoryScale,
+    Tooltip
+);
 
 export type LineChartProps = {
     title?: string | JSX.Element;
     style?: React.CSSProperties;
     showLegend?: boolean;
-    data: chartjs.ChartData;
-} & ChartComponentProps;
+    data: ChartData<'line'>;
+} & ChartProps;
 
 export const LineChart = ({
-    data = { datasets: [] },
+    data = { datasets: [], labels: [] },
     options = customOptions,
     title,
     style,
@@ -40,12 +58,6 @@ export const LineChart = ({
     };
 
     const chartRef = useRef(null);
-    useEffect(() => {
-        if (showLegend && data.datasets.length) {
-            document.getElementById('legend').innerHTML =
-                chartRef.current.chartInstance.generateLegend();
-        }
-    }, [showLegend, data.datasets.length]);
 
     return (
         <div className={cm.container} style={style}>
