@@ -4,8 +4,7 @@ import {
     commonDataset,
     defaultDatasets,
     options as customOptions,
-} from './constants';
-import cm from './LineChart.module.scss';
+} from '../../molecules/LineChart/constants';
 import { ChartData } from 'chart.js';
 import {
     Chart as ChartJS,
@@ -27,22 +26,19 @@ ChartJS.register(
 );
 
 export type LineChartProps = {
-    title?: string | JSX.Element;
     style?: React.CSSProperties;
-    showLegend?: boolean;
     data: ChartData<'line'>;
 } & ChartProps;
 
 export const LineChart = ({
     data = { datasets: [], labels: [] },
     options = customOptions,
-    title,
     style,
-    showLegend,
 }: LineChartProps) => {
     const refinedDatasets = data.datasets.map((set, i: number) => {
         if (defaultDatasets[i]) {
             return {
+                borderCapStyle: 'round',
                 ...defaultDatasets[i],
                 ...set,
             };
@@ -60,12 +56,11 @@ export const LineChart = ({
     const chartRef = useRef(null);
 
     return (
-        <div className={cm.container} style={style}>
-            {title && <span className={cm.title}>{title}</span>}
-            <div className={cm.chartView}>
-                <Line data={refinedData} options={options} ref={chartRef} />
-                {showLegend && <div id={'legend'} className={cm.legend} />}
-            </div>
-        </div>
+        <Line
+            style={style}
+            data={refinedData}
+            options={options}
+            ref={chartRef}
+        />
     );
 };
