@@ -1,7 +1,7 @@
 import { ChartData } from 'chart.js';
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
-import { LineChart } from 'src/components/new/LineChart';
+import { LineChart } from 'src/components/molecules/LineChart';
 import { LendingStore } from 'src/store/lending/types';
 import { RootState } from 'src/store/types';
 import cm from './Graph.module.scss';
@@ -105,7 +105,7 @@ const YieldGraph: React.FC<CombinedProps> = ({
 
     return (
         <div className={cm.container}>
-            <LineChart type='line' data={data} showLegend />
+            <LineChart type='line' data={data} />
         </div>
     );
 };
