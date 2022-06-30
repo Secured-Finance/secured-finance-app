@@ -167,6 +167,7 @@ export const LendingCard = ({
                             handlePlaceOrder(ccy, term, side, amount, rate)
                         }
                         disabled={pendingTransaction}
+                        data-testid='place-order-button'
                     >
                         {side ? 'Borrow' : 'Lend'}
                     </Button>

@@ -49,7 +49,7 @@ describe('LendingCard Component', () => {
 
     it('should disable the action button when the transaction is pending', () => {
         render(<PendingTransaction />);
-        const button = screen.getByRole('button', { name: 'Lend' });
+        const button = screen.getByTestId('place-order-button');
         expect(button).not.toBeDisabled();
         fireEvent.click(button);
         expect(button).toBeDisabled();
@@ -58,7 +58,7 @@ describe('LendingCard Component', () => {
     it('should call the onPlaceOrder with the initial value when click on the action button', () => {
         const onPlaceOrder = jest.fn();
         render(<Default onPlaceOrder={onPlaceOrder} />);
-        const button = screen.getByRole('button', { name: 'Lend' });
+        const button = screen.getByTestId('place-order-button');
         fireEvent.click(button);
         expect(onPlaceOrder).toHaveBeenCalledWith(
             'Ethereum',
@@ -75,7 +75,7 @@ describe('LendingCard Component', () => {
         selectFilecoin();
         const input = screen.getByRole('textbox');
         fireEvent.change(input, { target: { value: '10' } });
-        fireEvent.click(screen.getByRole('button', { name: 'Lend' }));
+        fireEvent.click(screen.getByTestId('place-order-button'));
         expect(onPlaceOrder).toHaveBeenCalledWith(
             'Filecoin',
             'Sep 2022',
@@ -90,7 +90,7 @@ describe('LendingCard Component', () => {
             throw new Error('This is an error');
         });
         const { store } = render(<Default onPlaceOrder={onPlaceOrder} />);
-        fireEvent.click(screen.getByRole('button', { name: 'Lend' }));
+        fireEvent.click(screen.getByTestId('place-order-button'));
 
         expect(store.getState().lastError.lastMessage).toEqual(
             'This is an error'

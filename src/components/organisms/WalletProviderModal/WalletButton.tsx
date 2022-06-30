@@ -1,4 +1,6 @@
-import React, { useCallback } from 'react';
+/* eslint-disable jsx-a11y/interactive-supports-focus */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+import { useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import { ArrowIcon } from 'src/components/new/icons';

@@ -45,7 +45,7 @@ export const DropdownSelector = ({
             {({ open }) => (
                 <>
                     <Menu.Button>
-                        <div className='flex h-10 w-42 flex-row items-center justify-between space-x-2 rounded-lg bg-black-10 px-2'>
+                        <div className='flex h-10 w-[42px] flex-row items-center justify-between space-x-2 rounded-lg bg-black-10 px-2'>
                             {selectedOption?.iconSVG ? (
                                 <span>
                                     <selectedOption.iconSVG className='h-6 w-6' />
