@@ -1,8 +1,8 @@
 import '@storybook/addon-console';
 import { Provider } from 'react-redux';
 import { HashRouter as Router } from 'react-router-dom';
+import 'src/assets/css/index.css';
 import { withPerformance } from 'storybook-addon-performance';
-import '../src/index.css';
 import store from './../src/store';
 
 export const parameters = {

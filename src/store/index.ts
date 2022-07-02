@@ -36,6 +36,5 @@ const store = configureStore({
             serializableCheck: false,
         }).prepend(listenerMiddleware.middleware),
 });
-
 export default store;
 export type AppDispatch = typeof store.dispatch;
