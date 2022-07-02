@@ -57,26 +57,22 @@ export const AssetSelector = ({
                     {`~ ${amountInUsd} USD`}
                 </div>
             </div>
-            <div className='flex h-14 w-72 flex-row items-center justify-between space-x-2 rounded-lg bg-black-20 py-2 pl-2 pr-4 focus-within:ring'>
-                <div>
-                    <DropdownSelector
-                        optionList={options}
-                        value={value}
-                        onChange={handleAssetChange}
-                    />
-                </div>
-                <div>
-                    <input
-                        type='text'
-                        placeholder='0'
-                        className='typography-body-1 h-8 w-24 rounded-lg bg-transparent p-2 text-right font-bold text-white placeholder-opacity-50'
-                        onChange={handleAmountChange}
-                        value={amount}
-                    />
-                </div>
+            <div className='flex h-14 flex-row items-center justify-between space-x-2 rounded-lg bg-black-20 py-2 pl-2 pr-4 focus-within:ring'>
+                <DropdownSelector
+                    optionList={options}
+                    value={value}
+                    onChange={handleAssetChange}
+                />
+                <input
+                    type='text'
+                    placeholder='0'
+                    className='typography-body-1 h-8 w-20 rounded-lg bg-transparent p-2 text-right font-bold text-white placeholder-opacity-50'
+                    onChange={handleAmountChange}
+                    value={amount}
+                />
 
                 <div
-                    className='typography-caption ml-2 text-white-60'
+                    className='typography-caption ml-2 flex text-white-60'
                     data-testid='asset-selector-transformed-value'
                 >
                     {transform(asset)}
