@@ -1,6 +1,6 @@
 import { composeStories } from '@storybook/testing-react';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
-import { fireEvent, render, screen } from 'src/test-utils.js';
+import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
 import * as stories from './LendingCard.stories';
 
 const { Default, PendingTransaction } = composeStories(stories);
@@ -52,36 +52,42 @@ describe('LendingCard Component', () => {
         const button = screen.getByTestId('place-order-button');
         expect(button).not.toBeDisabled();
         fireEvent.click(button);
-        expect(button).toBeDisabled();
+
+        expect(screen.getByTestId('place-order-button')).toBeDisabled();
     });
 
-    it('should call the onPlaceOrder with the initial value when click on the action button', () => {
+    it('should call the onPlaceOrder with the initial value when click on the action button', async () => {
         const onPlaceOrder = jest.fn();
         render(<Default onPlaceOrder={onPlaceOrder} />);
         const button = screen.getByTestId('place-order-button');
         fireEvent.click(button);
-        expect(onPlaceOrder).toHaveBeenCalledWith(
-            'Ethereum',
-            'Sep 2022',
-            0,
-            0,
-            0
+        await waitFor(() =>
+            expect(onPlaceOrder).toHaveBeenCalledWith(
+                'Ethereum',
+                'Sep 2022',
+                0,
+                0,
+                0
+            )
         );
     });
 
-    it('should call the onPlaceOrder function with the argument selected asset and amount when clicking on the action button', () => {
+    it('should call the onPlaceOrder function with the argument selected asset and amount when clicking on the action button', async () => {
         const onPlaceOrder = jest.fn();
         render(<Default onPlaceOrder={onPlaceOrder} />);
         selectFilecoin();
         const input = screen.getByRole('textbox');
         fireEvent.change(input, { target: { value: '10' } });
         fireEvent.click(screen.getByTestId('place-order-button'));
-        expect(onPlaceOrder).toHaveBeenCalledWith(
-            'Filecoin',
-            'Sep 2022',
-            0,
-            10,
-            0
+
+        await waitFor(() =>
+            expect(onPlaceOrder).toHaveBeenCalledWith(
+                'Filecoin',
+                'Sep 2022',
+                0,
+                10,
+                0
+            )
         );
     });
 
@@ -91,9 +97,10 @@ describe('LendingCard Component', () => {
         });
         const { store } = render(<Default onPlaceOrder={onPlaceOrder} />);
         fireEvent.click(screen.getByTestId('place-order-button'));
-
-        expect(store.getState().lastError.lastMessage).toEqual(
-            'This is an error'
+        await waitFor(() =>
+            expect(store.getState().lastError.lastMessage).toEqual(
+                'This is an error'
+            )
         );
     });
 });
