@@ -8,7 +8,14 @@ function render(
     ui,
     {
         initialState,
-        store = configureStore({ reducer: rootReducers, initialState }),
+        store = configureStore({
+            reducer: rootReducers,
+            initialState,
+            middleware: getDefaultMiddleware =>
+                getDefaultMiddleware({
+                    serializableCheck: false,
+                }),
+        }),
         ...renderOptions
     } = {}
 ) {
