@@ -60,6 +60,9 @@ module.exports = {
             moonGrey: '#E6E6E6',
 
             neutral: '#353945',
+            neutral8: '#FCFCFD',
+            tabGradient1: 'rgba(57, 77, 174, 0)',
+            tabGradient2: 'rgba(106, 118, 177, 0.35)',
 
             transparent: 'transparent',
             starBlue: {
