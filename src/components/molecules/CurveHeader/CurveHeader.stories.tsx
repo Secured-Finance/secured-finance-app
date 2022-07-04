@@ -7,7 +7,7 @@ import AxiosMock from '../../../stories/mocks/AxiosMock';
 import { CurveHeader } from './CurveHeader';
 
 export default {
-    title: 'Organism/CurveHeader',
+    title: 'Molecules/CurveHeader',
     component: CurveHeader,
     args: {
         asset: 'Filecoin',
