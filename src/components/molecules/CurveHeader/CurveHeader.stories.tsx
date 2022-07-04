@@ -1,10 +1,10 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
-import { CurveHeader } from './CurveHeader';
-import AxiosMock from '../../../stories/mocks/AxiosMock';
-import { coingeckoApi } from 'src/utils/coinGeckoApi';
-import { useDispatch } from 'react-redux';
 import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import { updateLatestBlock } from 'src/store/blockchain';
+import { coingeckoApi } from 'src/utils/coinGeckoApi';
+import AxiosMock from '../../../stories/mocks/AxiosMock';
+import { CurveHeader } from './CurveHeader';
 
 export default {
     title: 'Organism/CurveHeader',

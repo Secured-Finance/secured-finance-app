@@ -1,9 +1,9 @@
 import {
     ActiveElement,
     ChartEvent,
+    ChartOptions,
     ChartTypeRegistry,
     TooltipItem,
-    ChartOptions,
 } from 'chart.js';
 
 export const defaultDatasets = {

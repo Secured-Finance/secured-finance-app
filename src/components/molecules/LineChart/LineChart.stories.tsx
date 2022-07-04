@@ -1,6 +1,6 @@
-import { LineChart } from './';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { options } from '../../molecules/LineChart/constants';
+import { LineChart } from './';
 
 export default {
     title: 'Molecules/LineChart',

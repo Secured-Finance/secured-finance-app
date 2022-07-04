@@ -1,7 +1,7 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
-import { CurveHeaderAsset } from './';
 import FilecoinIcon from 'src/assets/coins/fil.svg';
 import BitcoinIcon from 'src/assets/coins/xbc.svg';
+import { CurveHeaderAsset } from './';
 
 export default {
     title: 'Atoms/CurveHeaderAsset',

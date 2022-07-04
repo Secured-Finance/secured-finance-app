@@ -1,3 +1,1 @@
-import { CurveHeader } from './CurveHeader';
-
-export { CurveHeader };
+export * from './CurveHeader';
