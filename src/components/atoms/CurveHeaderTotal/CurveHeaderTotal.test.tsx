@@ -1,5 +1,5 @@
-import { render, screen } from 'src/test-utils.js';
 import { composeStories } from '@storybook/testing-react';
+import { render, screen } from 'src/test-utils.js';
 import * as stories from './CurveHeaderTotal.stories';
 
 const { Default } = composeStories(stories);

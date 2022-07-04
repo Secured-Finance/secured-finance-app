@@ -1,21 +1,21 @@
+import {
+    CategoryScale,
+    Chart as ChartJS,
+    ChartData,
+    LinearScale,
+    LineElement,
+    PointElement,
+    Scriptable,
+    ScriptableContext,
+    Title,
+    Tooltip,
+} from 'chart.js';
 import React, { useRef } from 'react';
 import { ChartProps, Line } from 'react-chartjs-2';
 import {
     defaultDatasets,
     options as customOptions,
 } from '../../molecules/LineChart/constants';
-import {
-    Chart as ChartJS,
-    LinearScale,
-    PointElement,
-    LineElement,
-    Title,
-    CategoryScale,
-    Tooltip,
-    Scriptable,
-    ChartData,
-    ScriptableContext,
-} from 'chart.js';
 
 ChartJS.register(
     LinearScale,

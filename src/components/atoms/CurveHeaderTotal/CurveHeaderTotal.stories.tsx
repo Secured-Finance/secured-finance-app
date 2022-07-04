@@ -1,5 +1,5 @@
-import { CurveHeaderTotal } from './';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { CurveHeaderTotal } from './';
 
 export default {
     title: 'Atoms/CurveHeaderTotal',
