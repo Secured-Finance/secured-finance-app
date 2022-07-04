@@ -1,26 +1,33 @@
-import { BigNumber } from 'ethers';
+import { BigNumber, utils } from 'ethers';
+const COLLATERAL_RATIO = 1.5;
 
 export const computeAvailableToBorrow = (
     assetPrice: number,
     etherPrice: number,
     collateral: BigNumber
 ) => {
+    const maxToBorrowInEth = utils.formatEther(collateral);
     return Math.floor(
-        ((collateral.toNumber() * etherPrice) / assetPrice) * 1.5
+        ((+maxToBorrowInEth / COLLATERAL_RATIO) * etherPrice) / assetPrice
     );
 };
 
 export const collateralUsage = (
     lockedCollateral: BigNumber,
-    collateral: BigNumber
+    independentCollateral: BigNumber
 ) => {
-    if (collateral.isZero() || !lockedCollateral) {
+    if (!lockedCollateral) {
+        return 0;
+    }
+    const totalCollateral = independentCollateral.add(lockedCollateral);
+
+    if (totalCollateral.isZero()) {
         return 0;
     }
 
-    if (lockedCollateral.gt(collateral)) {
+    if (lockedCollateral.gt(totalCollateral)) {
         return 100;
     }
 
-    return lockedCollateral.mul(100).div(collateral).toNumber();
+    return lockedCollateral.mul(100).div(totalCollateral).toNumber();
 };
