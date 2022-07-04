@@ -15,7 +15,7 @@ import { ChartProps, Line } from 'react-chartjs-2';
 import {
     defaultDatasets,
     options as customOptions,
-} from '../../molecules/LineChart/constants';
+} from 'src/components/molecules/LineChart/constants';
 
 ChartJS.register(
     LinearScale,
