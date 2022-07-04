@@ -1,13 +1,19 @@
 import { RadioGroup } from '@headlessui/react';
 import classNames from 'classnames';
+import { BigNumber } from 'ethers';
 import { useCallback, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button } from 'src/components/atoms';
 import { CollateralUsageSection } from 'src/components/atoms/CollateralUsageSection';
 import { AssetSelector, TermSelector } from 'src/components/molecules';
+import { CollateralBook } from 'src/hooks';
 import { setLastMessage } from 'src/store/lastError';
 import { RootState } from 'src/store/types';
-import { Currency, currencyList } from 'src/utils';
+import { Currency, currencyList, percentFormat } from 'src/utils';
+import {
+    collateralUsage,
+    computeAvailableToBorrow,
+} from 'src/utils/collateral';
 
 //TODO: move this to the SDK
 enum OrderSide {
@@ -17,6 +23,7 @@ enum OrderSide {
 
 export const LendingCard = ({
     onPlaceOrder,
+    collateralBook,
 }: {
     onPlaceOrder: (
         ccy: string,
@@ -25,13 +32,62 @@ export const LendingCard = ({
         amount: number,
         rate: number
     ) => Promise<unknown>;
+    collateralBook: CollateralBook;
 }) => {
     const [pendingTransaction, setPendingTransaction] = useState(false);
-    const [ccy, setCcy] = useState('USD');
+    const [ccy, setCcy] = useState('');
     const [term, setTerm] = useState('1');
     const [side, setSide] = useState<OrderSide>(OrderSide.Lend);
     const [amount, setAmount] = useState(0);
     const [rate] = useState(0);
+
+    const shortNames = useMemo(
+        () =>
+            currencyList.reduce<Record<string, Currency>>(
+                (acc, ccy) => ({
+                    ...acc,
+                    [ccy.name]: ccy.shortName,
+                }),
+                {}
+            ),
+        []
+    );
+
+    const {
+        filecoin: { price: filecoinPrice },
+        ethereum: { price: ethereumPrice },
+        usdc: { price: usdcPrice },
+    } = useSelector((state: RootState) => state.assetPrices);
+
+    const assetPriceMap: Record<string, number> = useMemo(() => {
+        return {
+            Ethereum: ethereumPrice,
+            Filecoin: filecoinPrice,
+            USDC: usdcPrice,
+        };
+    }, [ethereumPrice, filecoinPrice, usdcPrice]);
+
+    const collateralUsagePercent = useMemo(() => {
+        //TODO: Remove the usage of BigNumber.js and use only Ethers.js
+        return percentFormat(
+            collateralUsage(
+                BigNumber.from(collateralBook.locked.toNumber()),
+                BigNumber.from(collateralBook.collateral.toNumber())
+            )
+        );
+    }, [collateralBook]);
+
+    const availableToBorrow = useMemo(() => {
+        if (!ccy) {
+            return 0;
+        }
+        //TODO: Remove the usage of BigNumber.js and use only Ethers.js
+        return `${computeAvailableToBorrow(
+            assetPriceMap[ccy],
+            assetPriceMap['Ethereum'],
+            BigNumber.from('1000')
+        )}  ${shortNames[ccy]}`;
+    }, [assetPriceMap, ccy, shortNames]);
 
     const dispatch = useDispatch();
     const optionList = [
@@ -46,30 +102,6 @@ export const LendingCard = ({
         { name: 'Sep 2024' },
         { name: 'Dec 2024' },
     ];
-
-    const {
-        filecoin: { price: filecoinPrice },
-        ethereum: { price: ethereumPrice },
-        usdc: { price: usdcPrice },
-    } = useSelector((state: RootState) => state.assetPrices);
-
-    const assetPriceMap: Record<string, number> = {
-        Ethereum: ethereumPrice,
-        Filecoin: filecoinPrice,
-        USDC: usdcPrice,
-    };
-
-    const shortNames = useMemo(
-        () =>
-            currencyList.reduce<Record<string, Currency>>(
-                (acc, ccy) => ({
-                    ...acc,
-                    [ccy.name]: ccy.shortName,
-                }),
-                {}
-            ),
-        []
-    );
 
     const handlePlaceOrder = useCallback(
         async (
@@ -146,7 +178,10 @@ export const LendingCard = ({
                     onTermChange={setTerm}
                 />
 
-                <CollateralUsageSection available={10} usage={20} />
+                <CollateralUsageSection
+                    available={availableToBorrow.toString()}
+                    usage={collateralUsagePercent.toString()}
+                />
 
                 <Button
                     fullWidth

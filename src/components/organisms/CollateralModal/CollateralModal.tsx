@@ -11,7 +11,7 @@ import {
     ModalTitle,
 } from 'src/components/atoms';
 import { CurrencySelector } from 'src/components/molecules';
-import useCollateralBook from 'src/hooks/useCollateralBook';
+import { useCollateralBook } from 'src/hooks';
 import { useDepositCollateral } from 'src/hooks/useDepositCollateral';
 import { useEthBalance } from 'src/hooks/useEthWallet';
 import { useRegisterUser } from 'src/hooks/useRegisterUser';
@@ -50,9 +50,10 @@ const CollateralModal: React.FC<CombinedProps> = ({
     const [buttonOpen, setButtonOpen] = useState(false);
     const [, setCollateralTx] = useState(false);
     const [balanceErr, setBalanceErr] = useState(false);
-    const { account }: { account: string } = useWallet();
+    const { account, chainId } = useWallet();
     const colBook = useCollateralBook(
         account ? account : '',
+        chainId,
         currencyShortName
     );
     const ethBalance = useEthBalance();

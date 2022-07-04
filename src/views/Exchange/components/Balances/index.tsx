@@ -4,7 +4,7 @@ import { Button } from 'src/components/atoms';
 import { Subheader } from 'src/components/common/Subheader';
 import { Cell, CellKey, CellValue, Table } from 'src/components/common/Table';
 import { CollateralModal } from 'src/components/organisms';
-import useCollateralBook from 'src/hooks/useCollateralBook';
+import { useCollateralBook } from 'src/hooks';
 import useModal from 'src/hooks/useModal';
 import { RootState } from 'src/store/types';
 import { getTotalUSDBalance } from 'src/store/wallets/selectors';
@@ -19,8 +19,8 @@ export const Balances: React.FC = () => {
         ethereum: { balance: ethereumBalance },
     } = useSelector((state: RootState) => state.wallets);
 
-    const { account }: { account: string } = useWallet();
-    const colBook = useCollateralBook(account ? account : '');
+    const { account, chainId } = useWallet();
+    const colBook = useCollateralBook(account ? account : '', chainId);
 
     const [onPresentCollateralModal] = useModal(
         <CollateralModal ccyIndex={0} />

@@ -1,4 +1,5 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { BigNumber } from 'bignumber.js';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { updateLatestBlock } from 'src/store/blockchain';
@@ -12,6 +13,14 @@ export default {
     args: {
         onPlaceOrder: async () => {
             return Promise.resolve();
+        },
+        collateralBook: {
+            ccyIndex: 0,
+            ccyName: 'ETH',
+            collateral: new BigNumber(100),
+            usdCollateral: new BigNumber(1000),
+            vault: '',
+            locked: new BigNumber(1),
         },
     },
     parameters: {

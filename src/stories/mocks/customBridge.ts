@@ -20,7 +20,7 @@ export class CustomizedBridge extends Eip1193Bridge {
         chainId?: number
     ) {
         super(signer, provider);
-        this.chainId = chainId || 3030;
+        this.chainId = chainId || 4;
     }
 
     async sendAsync(...args: unknown[]) {

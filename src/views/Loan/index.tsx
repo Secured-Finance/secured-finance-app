@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom';
 import { Button, Container, RenderTerms, Spacer } from 'src/components/atoms';
 import { SendModal } from 'src/components/organisms';
 import { NextCouponPaymentCard } from 'src/components/organisms/Loan/NextCouponPaymentCard';
-import useCollateralBook from 'src/hooks/useCollateralBook';
+import { useCollateralBook } from 'src/hooks';
 import { useCrosschainAddressByChainId } from 'src/hooks/useCrosschainAddress';
 import { useLoanInformation } from 'src/hooks/useLoanHistory';
 import useModal from 'src/hooks/useModal';

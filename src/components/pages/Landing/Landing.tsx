@@ -1,8 +1,14 @@
 import { LendingCard } from 'src/components/organisms';
-import { usePlaceOrder } from 'src/hooks';
+import { useCollateralBook, usePlaceOrder } from 'src/hooks';
+import { useWallet } from 'use-wallet';
 
 export const Landing = () => {
+    const { account, chainId } = useWallet();
     const { placeOrder } = usePlaceOrder();
+    const collateralBook = useCollateralBook(
+        account ? account : '',
+        chainId ? chainId : 1
+    );
 
     return (
         <div
@@ -22,9 +28,12 @@ export const Landing = () => {
                 </h2>
             </div>
             <div className='flex flex-row justify-center space-x-8'>
-                <LendingCard onPlaceOrder={placeOrder} />
-                <div className='w-[700px] bg-gunMetal text-white'>
-                    PLAHOLDER
+                <LendingCard
+                    onPlaceOrder={placeOrder}
+                    collateralBook={collateralBook}
+                />
+                <div className='w-[700px] bg-gunMetal text-3xl text-white'>
+                    account: {account}
                 </div>
             </div>
         </div>

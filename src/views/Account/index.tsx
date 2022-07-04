@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import useCollateralBook from 'src/hooks/useCollateralBook';
+import { useCollateralBook } from 'src/hooks';
 import { RootState } from 'src/store/types';
 import { WalletBase } from 'src/store/wallets';
 import { getTotalUSDBalance } from 'src/store/wallets/selectors';
@@ -17,8 +17,8 @@ const Account: React.FC = () => {
     );
 
     const [tableData, setTableData] = useState<Array<WalletBase>>([]);
-    const { account }: { account: string } = useWallet();
-    const colBook = useCollateralBook(account ? account : '');
+    const { account, chainId } = useWallet();
+    const colBook = useCollateralBook(account ? account : '', chainId);
 
     useEffect(() => {
         async function updateTable() {
