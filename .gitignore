@@ -42,3 +42,6 @@ cypress.env.json
 
 # Chromatic
 build-storybook.log
+
+# Typecheck
+tsconfig.tsbuildinfo

@@ -41,14 +41,17 @@ const LoanScreen = () => {
     const params: { loanId: string } = useParams();
     const loan = useLoanInformation(params.loanId);
 
-    const { account } = useWallet();
+    const { account, chainId } = useWallet();
     const [couponPayment, setCouponPayment] = useState<CouponPayment>();
     const [counterpartyAddr, setCounterpartyAddr] = useState('');
     const [recipientAddress, setRecipientAddress] = useState('');
     const filPrice = useSelector(
         (state: RootState) => state.assetPrices.filecoin.price
     );
-    const colBook = useCollateralBook(counterpartyAddr ? counterpartyAddr : '');
+    const colBook = useCollateralBook(
+        counterpartyAddr ? counterpartyAddr : '',
+        chainId
+    );
 
     const counterPartyWallet = useMemo(() => {
         if (account && loan) {
