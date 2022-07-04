@@ -1,6 +1,6 @@
 import { JsonRpcProvider } from '@ethersproject/providers';
 import axios from 'axios';
-import { CustomizedBridge } from './customBridget';
+import { CustomizedBridge } from '../../../src/stories/mocks/customBridge';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const request = require('request');
 

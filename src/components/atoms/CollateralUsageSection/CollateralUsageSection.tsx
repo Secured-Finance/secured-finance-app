@@ -2,8 +2,8 @@ export const CollateralUsageSection = ({
     available,
     usage,
 }: {
-    available: number;
-    usage: number;
+    available: string;
+    usage: string;
 }) => {
     return (
         <div className='flex max-w-sm flex-row justify-between'>

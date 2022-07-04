@@ -10,10 +10,10 @@ describe('CollateralUsageSection Component', () => {
     });
 
     it('should display the available and the collateral usage', () => {
-        render(<Default available={100} usage={50} />);
+        render(<Default available={'100'} usage={'50%'} />);
         expect(screen.getByText('Available to borrow')).toBeInTheDocument();
         expect(screen.getByText('Collateral Usage')).toBeInTheDocument();
         expect(screen.getByText('100')).toBeInTheDocument();
-        expect(screen.getByText('50')).toBeInTheDocument();
+        expect(screen.getByText('50%')).toBeInTheDocument();
     });
 });

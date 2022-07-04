@@ -5,8 +5,8 @@ export default {
     title: 'Atoms/CollateralUsageSection',
     component: CollateralUsageSection,
     args: {
-        available: 100,
-        usage: 50,
+        available: '100',
+        usage: '50%',
     },
     parameters: {
         chromatic: { disableSnapshot: false },
