@@ -42,7 +42,7 @@ export const LineChart = ({
     const yieldCurveGradient = ctx.createLinearGradient(0, 0, 500, 0);
     yieldCurveGradient.addColorStop(0, 'rgba(255, 89, 248, 0)');
     yieldCurveGradient.addColorStop(0.2, 'rgba(174, 114, 255, 1)');
-    yieldCurveGradient.addColorStop(0.5, 'rgba(144, 233, 237, 1');
+    yieldCurveGradient.addColorStop(0.5, 'rgba(144, 233, 237, 1)');
     yieldCurveGradient.addColorStop(0.78, 'rgba(92, 209, 103, 1)');
     yieldCurveGradient.addColorStop(1, 'rgba(255, 238, 0, 0)');
 
