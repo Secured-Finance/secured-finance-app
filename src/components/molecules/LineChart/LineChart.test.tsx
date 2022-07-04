@@ -1,18 +1,21 @@
 import { composeStories } from '@storybook/testing-react';
-import { render, screen } from 'src/test-utils.js';
+import { queries, render, RenderResult, waitFor } from 'src/test-utils.js';
 import * as stories from './LineChart.stories';
-
-global.ResizeObserver = jest.fn().mockImplementation(() => ({
-    observe: jest.fn(),
-    unobserve: jest.fn(),
-    disconnect: jest.fn(),
-}));
 
 const { Default } = composeStories(stories);
 
 describe('LineChart Component', () => {
-    it('should render a LineChart', () => {
-        render(<Default />);
-        expect(screen.getByText('xyz')).toBeInTheDocument();
+    it('should render a LineChart', async () => {
+        let ag: RenderResult<typeof queries, HTMLElement>;
+        await waitFor(() => {
+            ag = render(<Default />);
+        }).then(() => {
+            expect(
+                ag.container
+                    .querySelector('canvas')
+                    ?.getContext('2d')
+                    ?.__getEvents()
+            ).toMatchSnapshot();
+        });
     });
 });

@@ -4,7 +4,12 @@
 // learn more: https://github.com/testing-library/jest-dom
 import { loadEnvConfig } from '@next/env';
 import '@testing-library/jest-dom';
-// import 'canvas';
-// import 'jest-canvas-mock';
+import 'jest-canvas-mock';
+
+global.ResizeObserver = jest.fn().mockImplementation(() => ({
+    observe: jest.fn(),
+    unobserve: jest.fn(),
+    disconnect: jest.fn(),
+}));
 
 loadEnvConfig(process.cwd());
