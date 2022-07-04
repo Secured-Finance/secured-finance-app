@@ -4,8 +4,7 @@ import FilecoinIcon from 'src/assets/coins/fil.svg';
 import UsdcIcon from 'src/assets/coins/usdc.svg';
 import UsdtIcon from 'src/assets/coins/usdt.svg';
 import BitcoinIcon from 'src/assets/coins/xbc.svg';
-import { CurveHeaderAsset } from 'src/components/atoms/CurveHeaderAsset';
-import { CurveHeaderTotal } from 'src/components/atoms/CurveHeaderTotal';
+import { CurveHeaderAsset, CurveHeaderTotal } from 'src/components/atoms';
 import { RootState } from 'src/store/types';
 
 interface CurveHeaderProps {

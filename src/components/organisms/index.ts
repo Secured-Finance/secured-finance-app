@@ -6,3 +6,4 @@ export * from './SendModal';
 export * from './WalletAccountModal';
 export * from './WalletDialog';
 export * from './WalletProviderModal';
+export * from './YieldChart';

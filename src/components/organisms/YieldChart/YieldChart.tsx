@@ -1,6 +1,5 @@
 import { ChartData } from 'chart.js';
-import { CurveHeader } from 'src/components/molecules/CurveHeader';
-import { LineChart } from 'src/components/molecules/LineChart';
+import { CurveHeader, LineChart } from 'src/components/molecules';
 import { useRates } from 'src/hooks/useRates';
 
 interface YieldChartProps {
