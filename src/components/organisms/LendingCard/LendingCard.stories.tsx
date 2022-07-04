@@ -17,10 +17,10 @@ export default {
         collateralBook: {
             ccyIndex: 0,
             ccyName: 'ETH',
-            collateral: new BigNumber(100),
-            usdCollateral: new BigNumber(1000),
+            collateral: new BigNumber('10000000000000000000'),
+            usdCollateral: new BigNumber('100000000000000000000'),
             vault: '',
-            locked: new BigNumber(1),
+            locked: new BigNumber('5000000000000000000'),
         },
     },
     parameters: {

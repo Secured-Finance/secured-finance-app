@@ -71,8 +71,8 @@ export const LendingCard = ({
         //TODO: Remove the usage of BigNumber.js and use only Ethers.js
         return percentFormat(
             collateralUsage(
-                BigNumber.from(collateralBook.locked.toNumber()),
-                BigNumber.from(collateralBook.collateral.toNumber())
+                BigNumber.from(collateralBook.locked.toString()),
+                BigNumber.from(collateralBook.collateral.toString())
             )
         );
     }, [collateralBook]);
@@ -85,9 +85,9 @@ export const LendingCard = ({
         return `${computeAvailableToBorrow(
             assetPriceMap[ccy],
             assetPriceMap['Ethereum'],
-            BigNumber.from('1000')
+            BigNumber.from(collateralBook.collateral.toString())
         )}  ${shortNames[ccy]}`;
-    }, [assetPriceMap, ccy, shortNames]);
+    }, [assetPriceMap, ccy, collateralBook.collateral, shortNames]);
 
     const dispatch = useDispatch();
     const optionList = [
