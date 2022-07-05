@@ -1,0 +1,98 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`YieldChart Component should render YieldChart 1`] = `
+<body>
+  <div>
+    <div
+      class="flex h-[536px] w-[585px] flex-col items-start"
+    >
+      <div
+        class="h-20 w-full"
+      >
+        <div
+          class="flex h-20 w-[585px] flex-row justify-between p-4"
+        >
+          <div
+            class="flex h-[44px] w-36 flex-row justify-between gap-3 py-0.5 "
+          >
+            <div>
+              <svg
+                class="h-10 w-10"
+              />
+            </div>
+            <div
+              class="flex h-full w-full flex-col"
+            >
+              <span
+                class="typography-caption-2 h-5 text-planetaryPurple"
+              >
+                USDC
+              </span>
+              <div
+                class="flex h-5 w-full flex-row items-center justify-between"
+              >
+                <span
+                  class="typography-caption flex h-full items-center text-neutral8"
+                >
+                  $0.00
+                </span>
+                <span
+                  class="typography-caption flex h-full items-center text-red"
+                >
+                  0 %
+                </span>
+              </div>
+            </div>
+          </div>
+          <div
+            class="flex flex-row gap-2"
+          >
+            <div
+              class="flex h-[44px] w-42 flex-col p-0 text-center"
+            >
+              <div
+                class="typography-caption-2 h-5 text-planetaryPurple"
+              >
+                Total Borrow (Asset)
+              </div>
+              <div
+                class="typography-caption h-6 text-white-60"
+              >
+                80,000,009 FIL
+              </div>
+            </div>
+            <div
+              class="flex h-[44px] w-42 flex-col p-0 text-center"
+            >
+              <div
+                class="typography-caption-2 h-5 text-planetaryPurple"
+              >
+                Total Borrow (USD)
+              </div>
+              <div
+                class="typography-caption h-6 text-white-60"
+              >
+                $650,400,073
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="flex w-full flex-grow items-center pl-[35px]"
+      >
+        <div
+          class="h-[350px] w-[500px]"
+        >
+          <canvas
+            height="0"
+            role="img"
+            style="display: block; box-sizing: border-box; height: 0px; width: 0px;"
+            width="0"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+`;
