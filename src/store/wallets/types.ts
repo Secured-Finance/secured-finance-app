@@ -44,5 +44,5 @@ export const defaultFilWallet: WalletBase = {
     assetPrice: 0,
     portfolioShare: 0,
     dailyChange: 0,
-    actions: null,
+    actions: undefined,
 };

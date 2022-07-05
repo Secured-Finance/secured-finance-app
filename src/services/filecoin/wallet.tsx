@@ -27,7 +27,7 @@ import {
 
 export type CrossChainWallet = {
     address: string;
-    chainID: string;
+    chainId: string;
     [key: string]: unknown;
 };
 
@@ -81,9 +81,9 @@ export const useNewFilWalletProvider = () => {
                 dispatch(setFilWalletProvider(filecoin));
                 dispatch(setFilWalletType(providerType));
                 const [filAddr] = await provider.getAccounts(0, 1, network);
-
                 const crossChainAddress = await registerCrossChainWallet(
-                    filWalletAddr.data,
+                    filWalletAddr.data
+                        ?.crosschainAddress as unknown as CrossChainWallet,
                     filAddr,
                     onRegisterCrossChainWallet
                 );
@@ -119,7 +119,7 @@ export async function registerCrossChainWallet(
             await register(chainId, filAddr);
             return filAddr;
         } else if (
-            // filWalletAddr.chainID === chainId.toString() &&
+            filWalletAddr.chainId === chainId.toString() &&
             !AddressUtils.equals(filWalletAddr.address, filAddr)
         ) {
             await register(chainId, filAddr);

@@ -4,6 +4,4 @@ export * from './CurveHeader';
 export * from './Dialog';
 export * from './LineChart';
 export * from './TermSelector';
-export * from './TermsSelector';
 export * from './WalletRadioGroup';
-export * from './YieldCurve';

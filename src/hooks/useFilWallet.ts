@@ -20,8 +20,8 @@ import {
 import useModal from './useModal';
 
 export const useFilecoinWalletStore = (
-    filAddr: string,
-    filWalletType: string
+    filAddr: string | null,
+    filWalletType: string | null
 ) => {
     const dispatch = useDispatch<AppDispatch>();
     const { price, change } = useSelector(
@@ -49,7 +49,7 @@ export const useFilecoinWalletStore = (
         if (filAddr && !walletProvider) {
             if (filWalletType && filWalletType === FilecoinWalletType.Ledger) {
                 const ledger = await connectWithLedger(dispatch);
-                if (!ledger) {
+                if (ledger !== null) {
                     dispatch(updateFilWalletViaProvider(ledger, filAddr));
                 }
             } else {

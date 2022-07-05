@@ -48,7 +48,7 @@ exports[`YieldChart Component should render YieldChart 1`] = `
             class="flex flex-row gap-2"
           >
             <div
-              class="flex h-[44px] w-42 flex-col p-0 text-center"
+              class="flex h-[44px] w-[135px] flex-col p-0 text-center"
             >
               <div
                 class="typography-caption-2 h-5 text-planetaryPurple"
@@ -62,7 +62,7 @@ exports[`YieldChart Component should render YieldChart 1`] = `
               </div>
             </div>
             <div
-              class="flex h-[44px] w-42 flex-col p-0 text-center"
+              class="flex h-[44px] w-[135px] flex-col p-0 text-center"
             >
               <div
                 class="typography-caption-2 h-5 text-planetaryPurple"

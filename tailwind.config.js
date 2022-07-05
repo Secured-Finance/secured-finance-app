@@ -98,21 +98,6 @@ module.exports = {
                 '10': 'rgba(255, 255, 255, 0.1)',
             },
         },
-        extend: {
-            width: {
-                'button-xs': '8rem',
-                'button-sm': '11rem',
-                'button-md': '20rem',
-                'button-lg': '40rem',
-                '42': '8.5rem',
-            },
-            height: {
-                'button-xs': '2.25rem',
-                'button-sm': '2.25rem',
-                'button-md': '4rem',
-                'button-lg': '4rem',
-            },
-        },
     },
     plugins: [],
 };

@@ -1,8 +1,8 @@
-import { Currency } from '@secured-finance/sf-graph-client/dist/generated';
+import { Currency } from '@secured-finance/sf-graph-client/dist/.graphclient';
 import { RenderTerms } from 'src/components/atoms';
 import theme from 'src/theme';
 import { formatDateAndTime, ordinaryFormat, percentFormat } from 'src/utils';
-import RenderCancelButton from '../CancelButton';
+import { RenderCancelButton } from '../CancelButton';
 import { TableColumns } from '../commonTypes';
 
 export interface OrdersTableData {
@@ -53,7 +53,7 @@ export const ordersTableColumns = [
                 accessor: 'amount',
                 Cell: (cell: { value: number }) => (
                     <span>
-                        {cell.value != null ? ordinaryFormat(cell.value) : 0}
+                        {cell.value !== null ? ordinaryFormat(cell.value) : 0}
                     </span>
                 ),
             },
@@ -62,7 +62,7 @@ export const ordersTableColumns = [
                 accessor: 'rate',
                 Cell: (cell: { value: number }) => (
                     <span>
-                        {cell.value != null
+                        {cell.value !== null
                             ? percentFormat(cell.value, 10000)
                             : 0}
                     </span>
@@ -80,7 +80,9 @@ export const ordersTableColumns = [
                 accessor: 'createdAtTimestamp',
                 Cell: (cell: { value: number }) => (
                     <span>
-                        {cell.value != null ? formatDateAndTime(cell.value) : 0}
+                        {cell.value !== null
+                            ? formatDateAndTime(cell.value)
+                            : 0}
                     </span>
                 ),
             },

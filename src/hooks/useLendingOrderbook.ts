@@ -15,6 +15,7 @@ import {
     setTradingHistory,
     startSetOrderbook,
     startSetTradingHistory,
+    TradingHistoryRow,
 } from '../store/lendingTerminal';
 import { RootState } from '../store/types';
 
@@ -118,8 +119,13 @@ export const useLendingTradingHistory = (
     }
 
     useMemo(() => {
-        if (data) {
-            dispatch(setTradingHistory(data));
+        if (data?.lendingMarket?.tradeHistory) {
+            dispatch(
+                setTradingHistory(
+                    data.lendingMarket
+                        .tradeHistory as unknown as TradingHistoryRow[]
+                )
+            );
         } else {
             dispatch(failSetTradingHistory());
         }

@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Modal, ModalProps, ModalTitle } from 'src/components/atoms';
-import { Button } from 'src/components/common/Buttons';
+import { Button, Modal, ModalProps, ModalTitle } from 'src/components/atoms';
 import connectWithLedger from 'src/services/ledger/connectLedger';
 import { AppDispatch } from 'src/store';
 import {
@@ -99,9 +98,7 @@ const LedgerModal: React.FC<ModalProps & { onClose: () => void }> = ({
             <ModalTitle text={title} />
             <Content>{content}</Content>
             <ButtonsContainer>
-                <Button onClick={onClose} outline>
-                    Close
-                </Button>
+                <Button onClick={onClose}>Close</Button>
                 <Button
                     disabled={contentState === 'loading'}
                     onClick={onConnectDevice}

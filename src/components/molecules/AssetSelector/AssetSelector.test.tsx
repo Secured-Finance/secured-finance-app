@@ -32,4 +32,25 @@ describe('AssetSelector Component', () => {
             screen.getByTestId('asset-selector-transformed-value')
         ).toHaveTextContent('FIL');
     });
+
+    it('should call the onAmountChange function when the amount is changed', () => {
+        const onAmountChange = jest.fn();
+        render(<Default onAmountChange={onAmountChange} />);
+        const input = screen.getByRole('textbox');
+        fireEvent.change(input, { target: { value: '1' } });
+        expect(onAmountChange).toHaveBeenCalledWith(1);
+    });
+
+    it('should call the onAssetChange function when the asset is changed', () => {
+        const onAssetChange = jest.fn();
+        render(<Default onAssetChange={onAssetChange} />);
+        expect(onAssetChange).toHaveBeenCalledWith('Bitcoin');
+        fireEvent.click(screen.getByRole('button'));
+        fireEvent.click(screen.getByText('Ethereum'));
+        expect(onAssetChange).toHaveBeenLastCalledWith('Ethereum');
+        fireEvent.click(screen.getByRole('button'));
+        fireEvent.click(screen.getByText('Filecoin'));
+        expect(onAssetChange).toHaveBeenLastCalledWith('Filecoin');
+        expect(onAssetChange).toHaveBeenCalledTimes(3);
+    });
 });

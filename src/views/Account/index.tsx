@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { Page } from 'src/components/templates';
-import useCollateralBook from 'src/hooks/useCollateralBook';
+import { useCollateralBook } from 'src/hooks';
 import { RootState } from 'src/store/types';
 import { WalletBase } from 'src/store/wallets';
 import { getTotalUSDBalance } from 'src/store/wallets/selectors';
-import theme from 'src/theme';
 import { usdFormat } from 'src/utils';
 import styled from 'styled-components';
 import { useWallet } from 'use-wallet';
@@ -19,8 +17,8 @@ const Account: React.FC = () => {
     );
 
     const [tableData, setTableData] = useState<Array<WalletBase>>([]);
-    const { account }: { account: string } = useWallet();
-    const colBook = useCollateralBook(account ? account : '');
+    const { account, chainId } = useWallet();
+    const colBook = useCollateralBook(account ? account : '', chainId);
 
     useEffect(() => {
         async function updateTable() {
@@ -30,13 +28,13 @@ const Account: React.FC = () => {
     }, [ethWallet, filWallet]);
 
     return (
-        <Page background={theme.colors.background}>
+        <div role='main' data-cy='account-page'>
             <AccountContainer>
                 <StyledPortfolioBalance>
                     <StyledTitle>Total Portfolio Balance</StyledTitle>
                     <StyledBalanceContainer>
                         <StyledBalanceAmount>
-                            {totalUSDBalance != null
+                            {totalUSDBalance !== null
                                 ? usdFormat(totalUSDBalance)
                                 : 0}
                         </StyledBalanceAmount>
@@ -60,7 +58,7 @@ const Account: React.FC = () => {
                     </StyledAccountContainer>
                 )}
             </AccountContainer>
-        </Page>
+        </div>
     );
 };
 

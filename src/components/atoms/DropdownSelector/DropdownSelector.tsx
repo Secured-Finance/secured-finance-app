@@ -1,6 +1,6 @@
 import { Menu } from '@headlessui/react';
 import classNames from 'classnames';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { ExpandIndicator, Separator } from 'src/components/atoms';
 
 export type Option = {
@@ -9,38 +9,50 @@ export type Option = {
 };
 
 export const DropdownSelector = ({
+    value,
     optionList,
     onChange,
 }: {
+    value: Option;
     optionList: Readonly<Array<Option>>;
     onChange: (v: string) => void;
 }) => {
-    const [selectedOption, setSelectedOption] = useState<Option>(optionList[0]);
-
-    const handleSelect = useCallback(
-        (option: Option) => {
-            setSelectedOption(option);
-        },
-        [setSelectedOption]
+    const [selectedOptionName, setSelectedOptionName] = useState<string>(
+        value.name
+    );
+    const selectedOption = useMemo(
+        () => optionList.find(o => o.name === selectedOptionName),
+        [optionList, selectedOptionName]
     );
 
+    const handleSelect = useCallback(
+        (optionName: string) => {
+            setSelectedOptionName(optionName);
+            onChange(optionName);
+        },
+        [onChange]
+    );
+
+    // Handle the case of the initial value
     useEffect(() => {
-        onChange(selectedOption.name);
-    }, [onChange, selectedOption.name]);
+        if (value.name === selectedOptionName) {
+            onChange(value.name);
+        }
+    }, [onChange, selectedOptionName, value.name]);
 
     return (
-        <Menu as='div'>
+        <Menu as='div' className='flex'>
             {({ open }) => (
                 <>
                     <Menu.Button>
-                        <div className='flex h-10 w-42 flex-row items-center justify-between space-x-2 rounded-lg bg-black-10 px-2'>
-                            {selectedOption.iconSVG ? (
+                        <div className='flex h-10 w-36 flex-row items-center justify-between space-x-2 rounded-lg bg-black-10 px-2'>
+                            {selectedOption?.iconSVG ? (
                                 <span>
                                     <selectedOption.iconSVG className='h-6 w-6' />
                                 </span>
                             ) : null}
                             <span className='typography-caption w-16 text-white'>
-                                {selectedOption.name}
+                                {selectedOption?.name}
                             </span>
                             <span>
                                 <ExpandIndicator expanded={open} />
@@ -52,7 +64,7 @@ export const DropdownSelector = ({
                             <Menu.Item
                                 key={asset.name}
                                 as='button'
-                                onClick={() => handleSelect(asset)}
+                                onClick={() => handleSelect(asset.name)}
                             >
                                 {({ active }) => (
                                     <div>
