@@ -5,6 +5,7 @@ import {
 } from '@secured-finance/sf-graph-client';
 import { useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { HistoryTableData } from 'src/store/history/types';
 import { RootState } from 'src/store/types';
 import { useWallet } from 'use-wallet';
 import { setBorrowingHistory, setLendingHistory } from '../store/history';
@@ -22,8 +23,12 @@ export const useLoanDeals = (skip = 0) => {
     }
 
     useMemo(() => {
-        if (data) {
-            dispatch(setLendingHistory(data));
+        if (data?.loans) {
+            dispatch(
+                setLendingHistory(
+                    data?.loans as unknown as Array<HistoryTableData>
+                )
+            );
         }
     }, [dispatch, data]);
 
@@ -43,8 +48,12 @@ export const useBorrowDeals = (skip = 0) => {
     }
 
     useMemo(() => {
-        if (data) {
-            dispatch(setBorrowingHistory(data));
+        if (data?.loans) {
+            dispatch(
+                setBorrowingHistory(
+                    data?.loans as unknown as Array<HistoryTableData>
+                )
+            );
         }
     }, [dispatch, data]);
 
@@ -60,8 +69,8 @@ export const useLoanInformation = (id: string) => {
     }
 
     useMemo(() => {
-        if (data) {
-            setLoanInfo(data);
+        if (data?.loan) {
+            setLoanInfo(data.loan);
         }
     }, [data]);
 

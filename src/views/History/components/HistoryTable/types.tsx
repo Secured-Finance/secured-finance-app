@@ -1,4 +1,4 @@
-import { Currency } from '@secured-finance/sf-graph-client/dist/generated';
+import { Currency } from '@secured-finance/sf-graph-client/dist/.graphclient';
 import { RenderTerms } from 'src/components/atoms/RenderTerms';
 import { AddressUtils, ordinaryFormat, percentFormat } from 'src/utils';
 
@@ -151,7 +151,7 @@ export const historyTableColumns = [
                 accessor: 'notional',
                 Cell: (cell: { value: number }) => (
                     <span>
-                        {cell.value != null ? ordinaryFormat(cell.value) : 0}
+                        {cell.value !== null ? ordinaryFormat(cell.value) : 0}
                     </span>
                 ),
             },

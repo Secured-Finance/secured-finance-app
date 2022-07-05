@@ -44,6 +44,13 @@ describe('Dropdown Asset Selection Component', () => {
         render(<AssetDropdown onChange={onChange} />);
         fireEvent.click(screen.getByRole('button'));
         fireEvent.click(screen.getByText('Ethereum'));
-        expect(onChange).toHaveBeenCalled();
+        expect(onChange).toHaveBeenLastCalledWith('Ethereum');
+        expect(onChange).toHaveBeenCalledTimes(2);
+    });
+
+    it('should call onChange function with the initial value', () => {
+        const onChange = jest.fn();
+        render(<AssetDropdown onChange={onChange} />);
+        expect(onChange).toHaveBeenLastCalledWith('Bitcoin');
     });
 });

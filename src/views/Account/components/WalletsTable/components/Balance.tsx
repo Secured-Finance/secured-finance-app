@@ -23,11 +23,11 @@ const BalanceInfo: React.FC<ItemProps> = ({ index, balance, value }) => {
             <StyledBalance>
                 <StyledWalletInfoContainer>
                     <StyledBalanceText>
-                        {balance != null ? ordinaryFormat(balance) : 0}{' '}
+                        {balance !== null ? ordinaryFormat(balance) : 0}{' '}
                         {shortName}
                     </StyledBalanceText>
                     <StyledBalanceSubtitle>
-                        {value != null ? usdFormat(value) : 0}
+                        {value !== null ? usdFormat(value) : 0}
                     </StyledBalanceSubtitle>
                 </StyledWalletInfoContainer>
             </StyledBalance>

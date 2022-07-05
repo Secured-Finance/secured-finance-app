@@ -29,8 +29,8 @@ const ledgerSlice = createSlice({
         resetLedgerState(state) {
             state.ledger = initialLedgerState;
         },
-        resetState(state) {
-            state = initialStore;
+        resetState() {
+            initialStore;
         },
         userInitiatedImport(state) {
             state.ledger.connecting = true;

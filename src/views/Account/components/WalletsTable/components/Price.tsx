@@ -12,18 +12,18 @@ const RenderPrice: React.FC<PriceContainerProps> = ({ price, dailyChange }) => {
         <StyledPrice>
             <StyledWalletInfoContainer>
                 <StyledPriceText>
-                    {price != null ? usdFormat(price) : 0}
+                    {price !== null ? usdFormat(price) : 0}
                 </StyledPriceText>
                 <StyledPriceSubtitleContainer>
-                    {dailyChange != null && dailyChange > 0 ? (
+                    {dailyChange !== null && dailyChange > 0 ? (
                         <StyledPriceSubtitle>
-                            {dailyChange != null
+                            {dailyChange !== null
                                 ? percentFormat(dailyChange)
                                 : 0}
                         </StyledPriceSubtitle>
                     ) : (
                         <StyledPriceSubtitleNegative>
-                            {dailyChange != null
+                            {dailyChange !== null
                                 ? percentFormat(dailyChange)
                                 : 0}
                         </StyledPriceSubtitleNegative>

@@ -73,10 +73,16 @@ export const getCurrencyBy = (
     label: keyof CurrencyInfo,
     value: string | number
 ) => {
-    return currencyList.find(
+    const currency = currencyList.find(
         ({ [label]: val }) =>
             val.toString().toLowerCase() === value.toString().toLowerCase()
     );
+
+    if (!currency) {
+        throw new Error(`Currency ${value} not found`);
+    }
+
+    return currency;
 };
 
 export const formatAmount = (amount: number, currency: Currency) => {

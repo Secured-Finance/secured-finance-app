@@ -51,8 +51,11 @@ export default {
     component: AssetSelector,
     args: {
         options,
+        value: options[0],
         transform: (v: string) => shortNames[v],
         priceList,
+        onAssetChange: () => {},
+        onAmountChange: () => {},
     },
     parameters: {
         chromatic: { disableSnapshot: false },

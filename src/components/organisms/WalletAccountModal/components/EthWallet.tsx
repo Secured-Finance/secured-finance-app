@@ -10,7 +10,7 @@ import theme from 'src/theme';
 import styled from 'styled-components';
 import { useWallet } from 'use-wallet';
 
-const EthWallet: React.FC<ModalProps> = ({ onDismiss, ...props }) => {
+const EthWallet: React.FC<ModalProps> = ({ onDismiss }) => {
     const { account, reset } = useWallet();
     const dispatch = useDispatch();
     const history = useHistory();
