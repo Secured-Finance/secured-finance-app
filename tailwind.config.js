@@ -60,6 +60,8 @@ module.exports = {
             moonGrey: '#E6E6E6',
 
             neutral: '#353945',
+            neutral1: '#141416',
+            neutral8: '#FCFCFD',
 
             transparent: 'transparent',
             starBlue: {

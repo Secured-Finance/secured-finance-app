@@ -5,6 +5,8 @@ export * from './Card';
 export * from './CloseButton';
 export * from './Container';
 export * from './CurrencyContainer';
+export * from './CurveHeaderAsset';
+export * from './CurveHeaderTotal';
 export * from './DropdownSelector';
 export * from './ExpandIndicator';
 export * from './Label';

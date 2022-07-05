@@ -1,0 +1,32 @@
+import { ComponentMeta, ComponentStory } from '@storybook/react';
+import FilecoinIcon from 'src/assets/coins/fil.svg';
+import BitcoinIcon from 'src/assets/coins/xbc.svg';
+import { CurveHeaderAsset } from './';
+
+export default {
+    title: 'Atoms/CurveHeaderAsset',
+    component: CurveHeaderAsset,
+    args: {
+        asset: 'Filecoin',
+        value: 8.02,
+        fluctuation: -2.45,
+        IconSVG: FilecoinIcon,
+    },
+    parameters: {
+        chromatic: { disableSnapshot: false },
+    },
+} as ComponentMeta<typeof CurveHeaderAsset>;
+
+const Template: ComponentStory<typeof CurveHeaderAsset> = args => (
+    <CurveHeaderAsset {...args} />
+);
+
+export const Default = Template.bind({});
+
+export const PositiveFluctuation = Template.bind({});
+PositiveFluctuation.args = {
+    asset: 'Bitcoin',
+    value: 8.02,
+    fluctuation: 2.45,
+    IconSVG: BitcoinIcon,
+};
