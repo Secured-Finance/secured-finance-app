@@ -62,7 +62,7 @@ const HeaderItem = ({
     Icon: React.ReactNode;
     href?: string;
 }) => {
-    const Tag = href ? 'a' : 'p';
+    const Tag = href ? 'a' : 'div';
     const args = {
         href,
     };

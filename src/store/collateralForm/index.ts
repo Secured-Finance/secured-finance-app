@@ -12,7 +12,6 @@ export const {
     updateCollateralCcyName,
     updateCollateralAmount,
     updateCollateralTxFee,
-    resetCollateralForm,
     fetchCollateralStore,
     fetchCollateralStoreFailure,
     updateCollateralCurrency,

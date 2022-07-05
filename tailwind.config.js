@@ -60,9 +60,8 @@ module.exports = {
             moonGrey: '#E6E6E6',
 
             neutral: '#353945',
+            neutral1: '#141416',
             neutral8: '#FCFCFD',
-            tabGradient1: 'rgba(57, 77, 174, 0)',
-            tabGradient2: 'rgba(106, 118, 177, 0.35)',
 
             transparent: 'transparent',
             starBlue: {
@@ -97,21 +96,6 @@ module.exports = {
                 '30': 'rgba(255, 255, 255, 0.3)',
                 '20': 'rgba(255, 255, 255, 0.2)',
                 '10': 'rgba(255, 255, 255, 0.1)',
-            },
-        },
-        extend: {
-            width: {
-                'button-xs': '8rem',
-                'button-sm': '11rem',
-                'button-md': '20rem',
-                'button-lg': '40rem',
-                '42': '8.5rem',
-            },
-            height: {
-                'button-xs': '2.25rem',
-                'button-sm': '2.25rem',
-                'button-md': '4rem',
-                'button-lg': '4rem',
             },
         },
     },

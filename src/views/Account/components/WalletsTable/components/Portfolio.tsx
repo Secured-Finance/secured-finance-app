@@ -1,7 +1,7 @@
 import React from 'react';
-import styled from 'styled-components';
 import { ProgressBar } from 'src/components/atoms';
 import { percentFormat } from 'src/utils/formatNumbers';
+import styled from 'styled-components';
 
 interface PortfolioContainerProps {
     share: number;
@@ -13,7 +13,7 @@ const RenderPortfolio: React.FC<PortfolioContainerProps> = ({ share = 0 }) => {
             <StyledPortfolioInfoContainer>
                 <ProgressBar width={120} percent={share} />
                 <StyledPortfolioText>
-                    {share != null ? percentFormat(share) : 0}
+                    {share !== null ? percentFormat(share) : 0}
                 </StyledPortfolioText>
             </StyledPortfolioInfoContainer>
         </StyledPortfolio>

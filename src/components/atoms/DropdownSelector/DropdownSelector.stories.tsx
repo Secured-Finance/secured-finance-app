@@ -34,11 +34,15 @@ export default {
     component: DropdownSelector,
     args: {
         optionList,
+        value: optionList[0],
         onChange: (_v: string) => {},
     },
     argTypes: {
-        optionList: { control: { disable: true } },
-        onChange: { action: 'onChange' },
+        optionList: {
+            name: 'The list of options to display the the dropdown selector',
+            control: { disable: true },
+        },
+        onChange: { control: { disable: true }, action: 'onChange' },
     },
     parameters: {
         chromatic: { disableSnapshot: false },
@@ -58,6 +62,7 @@ TermDropdown.args = {
         { name: 'Mar 2023' },
         { name: 'Jun 2023' },
     ],
+    value: { name: 'Sep 2022' },
 };
 export const LongSelectionDropdown = Template.bind({});
 LongSelectionDropdown.args = {
@@ -73,4 +78,5 @@ LongSelectionDropdown.args = {
         { name: 'Sep 2024' },
         { name: 'Dec 2024' },
     ],
+    value: { name: 'Sep 2022' },
 };

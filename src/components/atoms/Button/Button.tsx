@@ -2,22 +2,22 @@ import classNames from 'classnames';
 import React from 'react';
 
 export const Button = ({
-    variant = 'contained',
     href, //do nothing
-    size = 'sm',
+    size = 'md',
     fullWidth = false,
     children,
+    StartIcon,
+    EndIcon,
     ...props
 }: React.ButtonHTMLAttributes<HTMLButtonElement> &
     React.AnchorHTMLAttributes<HTMLAnchorElement> & {
         fullWidth?: boolean;
         href?: string;
-        variant?: 'contained' | 'outlined';
-        size?: 'xs' | 'sm' | 'md' | 'lg';
+        size?: 'sm' | 'md';
+    } & {
+        StartIcon?: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
+        EndIcon?: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
     }) => {
-    const variantStyle =
-        variant === 'contained' ? 'bg-starBlue' : 'bg-starBlue';
-
     const Tag = href ? 'a' : 'button';
     const tagProps = href
         ? {
@@ -27,15 +27,42 @@ export const Button = ({
           }
         : props;
 
+    const label = typeof children === 'string' ? children : 'Button';
+
     return (
         <Tag
             {...tagProps}
+            aria-label={label}
             className={classNames(
-                `${variantStyle} inline-flex h-button-${size} items-center justify-center rounded-xl px-6 py-4 ${props.className}`,
-                fullWidth ? 'w-full' : `w-button-${size}`
+                `flex items-center justify-center rounded-xl bg-starBlue   ${props?.className}`,
+                'enabled:hover:bg-gradient-to-t enabled:hover:from-black-20 enabled:hover:via-black-20 enabled:hover:to-starBlue ',
+                'disabled:bg-opacity-50',
+                {
+                    'h-10 px-4 py-3': size === 'sm',
+                    'h-11 px-6 py-4': size === 'md',
+                    'w-full': fullWidth,
+                    'w-fit': !fullWidth,
+                }
             )}
         >
-            <p className='typography-button-6 text-white-80'>{children}</p>
+            {StartIcon && (
+                <span className='mr-3'>
+                    <StartIcon className='h-4 text-white' role='img' />
+                </span>
+            )}
+            <p
+                className={classNames('text-white', {
+                    'typography-button-2': size === 'sm',
+                    'typography-button-1`': size === 'md',
+                })}
+            >
+                {children}
+            </p>
+            {EndIcon && (
+                <span className='ml-3'>
+                    <EndIcon className='h-4 text-white' role='img' />
+                </span>
+            )}
         </Tag>
     );
 };

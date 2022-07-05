@@ -4,7 +4,15 @@
 // learn more: https://github.com/testing-library/jest-dom
 import { loadEnvConfig } from '@next/env';
 import '@testing-library/jest-dom';
+import 'jest-canvas-mock';
 import { TextDecoder } from 'util';
+
+global.ResizeObserver = jest.fn().mockImplementation(() => ({
+    observe: jest.fn(),
+    unobserve: jest.fn(),
+    disconnect: jest.fn(),
+}));
+
 global.TextDecoder = TextDecoder;
 
 loadEnvConfig(process.cwd());
