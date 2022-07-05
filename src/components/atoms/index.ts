@@ -11,6 +11,7 @@ export * from './DropdownSelector';
 export * from './ExpandIndicator';
 export * from './Label';
 export * from './Modal';
+export * from './NavTab';
 export * from './ProgressBar';
 export * from './RenderTerms';
 export * from './Separator';

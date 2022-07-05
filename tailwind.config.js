@@ -62,6 +62,8 @@ module.exports = {
             neutral: '#353945',
             neutral1: '#141416',
             neutral8: '#FCFCFD',
+            tabGradient2: 'rgba(106, 118, 177, 0.35)',
+            tabGradient1: 'rgba(57, 77, 174, 0)',
 
             transparent: 'transparent',
             starBlue: {
