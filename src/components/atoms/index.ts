@@ -17,3 +17,4 @@ export * from './RenderTerms';
 export * from './Separator';
 export * from './Spacer';
 export * from './Toggle';
+export * from './TraderProTab';
