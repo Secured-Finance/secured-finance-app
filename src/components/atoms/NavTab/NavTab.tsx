@@ -1,7 +1,7 @@
 interface NavTabProps {
     text: string;
     active: boolean;
-    onClick: () => void;
+    onClick?: () => void;
 }
 
 export const NavTab: React.FC<NavTabProps> = ({
@@ -13,7 +13,7 @@ export const NavTab: React.FC<NavTabProps> = ({
         <div className='flex h-20 w-max flex-grow-0 flex-col items-center p-0'>
             <div className={`h-1 w-full ${active ? 'bg-starBlue' : ''}`}></div>
             <div
-                className={`w-full flex-1 items-center justify-center px-8 pt-7 ${
+                className={`w-full flex-1 items-center justify-center px-8 pt-6 ${
                     active
                         ? 'bg-gradient-to-b from-tabGradient2 to-tabGradient1'
                         : ''
