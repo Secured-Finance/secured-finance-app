@@ -21,7 +21,7 @@ const RenderRatio: React.FC<RatioContainerProps> = ({ ratio }) => {
     return (
         <StyledRatio>
             <StyledRatioText color={textColor}>
-                {ratio != null ? percentFormat(ratio) : 0}
+                {ratio !== null ? percentFormat(ratio) : 0}
             </StyledRatioText>
         </StyledRatio>
     );

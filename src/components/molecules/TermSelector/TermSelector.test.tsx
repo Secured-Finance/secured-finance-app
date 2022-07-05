@@ -33,4 +33,13 @@ describe('TermSelector Component', () => {
             screen.getByTestId('term-selector-transformed-value')
         ).toHaveTextContent(option.toUpperCase());
     });
+
+    it('should call the onTermChange function when the term is changed', () => {
+        const onTermChange = jest.fn();
+        render(<Default onTermChange={onTermChange} />);
+        fireEvent.click(screen.getByRole('button'));
+        const option = Default.args.options[3].name;
+        fireEvent.click(screen.getByText(option));
+        expect(onTermChange).toHaveBeenCalledWith(option);
+    });
 });

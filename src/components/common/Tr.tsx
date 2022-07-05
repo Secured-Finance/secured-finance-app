@@ -7,7 +7,5 @@ interface TrProps {
 }
 
 export const Tr: React.FC<TrProps> = ({ to, children }) => {
-    return (
-        <tr>{to !== '' ? <Link to={to}>{children}</Link> : <>{children}</>}</tr>
-    );
+    return <tr>{to ? <Link to={to}>{children}</Link> : <>{children}</>}</tr>;
 };

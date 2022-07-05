@@ -26,11 +26,13 @@ const CollateralInfo: React.FC<ItemProps> = ({
             <StyledCollateral>
                 <StyledWalletInfoContainer>
                     <StyledCollateralText>
-                        {collateral != null ? getDisplayBalance(collateral) : 0}{' '}
+                        {collateral !== null
+                            ? getDisplayBalance(collateral)
+                            : 0}
                         {shortName}
                     </StyledCollateralText>
                     <StyledCollateralSubtitle>
-                        {value != null ? getUSDFormatBalanceNumber(value) : 0}
+                        {value !== null ? getUSDFormatBalanceNumber(value) : 0}
                     </StyledCollateralSubtitle>
                 </StyledWalletInfoContainer>
             </StyledCollateral>

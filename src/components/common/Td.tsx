@@ -14,7 +14,7 @@ export const Td: React.FC<TdProps> = ({ to, children }) => {
                 padding: theme.spacing[3] + 2,
             }}
         >
-            {to !== '' ? (
+            {to ? (
                 <Link
                     to={to}
                     style={{

@@ -10,5 +10,5 @@ export interface TableColumns {
 interface Columns {
     Header: string;
     accessor: string;
-    Cell: any;
+    Cell: unknown;
 }

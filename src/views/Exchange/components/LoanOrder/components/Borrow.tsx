@@ -1,9 +1,9 @@
 import BigNumber from 'bignumber.js';
 import React, { useCallback, useState } from 'react';
 import { connect, useDispatch } from 'react-redux';
+import { Button } from 'src/components/atoms';
 import styled from 'styled-components';
-import { Button } from '../../../../../components/common/Buttons';
-import { usePlaceOrder } from '../../../../../hooks/usePlaceOrder';
+import { usePlaceOrder } from '../../../../../hooks/usePlaceOrder/usePlaceOrder';
 import {
     LendingTerminalStore,
     updateBorrowAmount,
@@ -45,22 +45,22 @@ const Borrow: React.FC<LendingTerminalStore> = ({
         [dispatch]
     );
 
-    const { onPlaceOrder } = usePlaceOrder(
-        selectedCcy,
-        selectedTerms,
-        1,
-        borrowAmount,
-        new BigNumber(borrowRate).multipliedBy(100).toNumber()
-    );
+    const { placeOrder } = usePlaceOrder();
     const handleBorrowDeal = useCallback(async () => {
         try {
             setPendingTx(true);
-            await onPlaceOrder();
+            await placeOrder(
+                selectedCcy,
+                selectedTerms,
+                1,
+                borrowAmount,
+                new BigNumber(borrowRate).multipliedBy(100).toNumber()
+            );
             setPendingTx(false);
         } catch (e) {
             console.error(e);
         }
-    }, [onPlaceOrder, setPendingTx]);
+    }, [borrowAmount, borrowRate, placeOrder, selectedCcy, selectedTerms]);
 
     return (
         <StyledLoanContainer>
@@ -76,11 +76,7 @@ const Borrow: React.FC<LendingTerminalStore> = ({
             />
 
             <StyledButtonContainer>
-                <Button
-                    accent={'success'}
-                    onClick={handleBorrowDeal}
-                    disabled={pendingTx}
-                >
+                <Button onClick={handleBorrowDeal} disabled={pendingTx}>
                     Borrow
                 </Button>
             </StyledButtonContainer>

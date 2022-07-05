@@ -1,18 +1,19 @@
 import '@storybook/addon-console';
 import { Provider } from 'react-redux';
 import { HashRouter as Router } from 'react-router-dom';
+import 'src/assets/css/index.css';
 import { withPerformance } from 'storybook-addon-performance';
-import '../src/index.css';
 import store from './../src/store';
 
 export const parameters = {
-    actions: { argTypesRegex: '^on[A-Z].*' },
+    actions: { argTypesRegex: '^on.*' },
     controls: {
         matchers: {
             color: /(background|color)$/i,
             date: /Date$/,
         },
     },
+
     backgrounds: {
         default: 'secfin',
         values: [

@@ -29,6 +29,6 @@ export const getFullDisplayBalanceNumber = (balance: number, decimals = 18) => {
     return new BigNumber(balance).dividedBy(TEN_BN.pow(decimals)).toNumber();
 };
 
-export const getUSDFormatBalanceNumber = (balance: number, decimals = 18) => {
+export const getUSDFormatBalanceNumber = (balance: number) => {
     return usdFormat(getFullDisplayBalanceNumber(balance));
 };

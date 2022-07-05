@@ -5,8 +5,8 @@ import blockchain from './blockchain';
 import { listenerMiddleware } from './blockchain/reducer';
 import collateralForm from './collateralForm';
 import history from './history';
+import lastError from './lastError';
 import ledger from './ledger';
-import lending from './lending';
 import lendingTerminal from './lendingTerminal';
 import rates from './rates';
 import sendForm from './sendForm';
@@ -16,7 +16,6 @@ import wallets from './wallets';
 export const rootReducers = {
     history,
     rates,
-    lending,
     wallets,
     assetPrices,
     filWalletProvider,
@@ -26,23 +25,11 @@ export const rootReducers = {
     ledger,
     blockchain,
     transaction,
+    lastError,
 };
 
 const store = configureStore({
-    reducer: {
-        history,
-        rates,
-        lending,
-        wallets,
-        assetPrices,
-        filWalletProvider,
-        sendForm,
-        collateralForm,
-        lendingTerminal,
-        ledger,
-        blockchain,
-        transaction,
-    },
+    reducer: rootReducers,
     // This setting reproduce the behavior without redux-toolkit.
     middleware: getDefaultMiddleware =>
         getDefaultMiddleware({

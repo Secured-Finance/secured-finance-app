@@ -10,10 +10,7 @@ import theme from 'src/theme';
 import { ordinaryFormat, percentFormat, usdFormat } from 'src/utils';
 import styled from 'styled-components';
 
-const MarketInfo: React.FC<LendingTerminalStore> = ({
-    selectedCcy,
-    termsIndex,
-}) => {
+const MarketInfo: React.FC<LendingTerminalStore> = ({ termsIndex }) => {
     const marketTabs = ['Yield', 'Price'];
     const [selectedTab, setSelectedTab] = useState('Yield');
     const { ethereum: ethPrice, filecoin: filPrice } = useSelector(

@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import React from 'react';
 import { ArrowSVG } from 'src/components/atoms';
 import theme from 'src/theme';
@@ -20,7 +21,6 @@ const RenderImage = ({ selectedCcy }: { selectedCcy: string }) => {
 export const CurrencySelector: React.FC<CurrencySelectorProps> = ({
     selectedCcy,
     onClick,
-    type,
     disabled,
 }) => {
     return (
