@@ -1,6 +1,5 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Page } from 'src/components/templates';
 import { RootState } from 'src/store/types';
 import theme from 'src/theme';
 import styled from 'styled-components';
@@ -14,25 +13,23 @@ import { TradeHistory } from './components/TradeHistory';
 const Exchange: React.FC = () => {
     return (
         <div data-cy='exchange-page'>
-            <Page background={theme.colors.background}>
-                <StyledTerminalContainer>
-                    <ScrollableSideContainer>
-                        <Balances />
-                        <StyledDivider />
-                        <LoanOrder />
-                    </ScrollableSideContainer>
-                    <StyledCenterContainer>
-                        <MarketInfo />
-                        {/* <DynamicYieldCurve /> */}
-                        <OrderHistory />
-                    </StyledCenterContainer>
-                    <ScrollableSideContainer>
-                        <OrderBook />
-                        <StyledDivider />
-                        <TradeHistory />
-                    </ScrollableSideContainer>
-                </StyledTerminalContainer>
-            </Page>
+            <StyledTerminalContainer>
+                <ScrollableSideContainer>
+                    <Balances />
+                    <StyledDivider />
+                    <LoanOrder />
+                </ScrollableSideContainer>
+                <StyledCenterContainer>
+                    <MarketInfo />
+                    {/* <DynamicYieldCurve /> */}
+                    <OrderHistory />
+                </StyledCenterContainer>
+                <ScrollableSideContainer>
+                    <OrderBook />
+                    <StyledDivider />
+                    <TradeHistory />
+                </ScrollableSideContainer>
+            </StyledTerminalContainer>
         </div>
     );
 };

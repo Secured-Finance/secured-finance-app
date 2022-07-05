@@ -5,13 +5,4 @@ module.exports = {
     reactStrictMode: true,
 
     webpack: (config, options) => webpack.webpackOverride(config),
-
-    async rewrites() {
-        return [
-            {
-                source: '/:any*',
-                destination: '/',
-            },
-        ];
-    },
 };

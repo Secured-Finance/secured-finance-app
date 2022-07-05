@@ -31,7 +31,6 @@ interface PrivateKeyContainerProps {
 type ContainerProps = ModalProps & PrivateKeyContainerProps;
 
 const RenderPrivateKeyContainer: React.FC<ContainerProps> = ({
-    onDismiss,
     selectedTab,
 }) => {
     const [mnemonic, setMnemonic] = useState('');

@@ -1,10 +1,10 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { Button } from 'src/components/common/Buttons';
+import { Button } from 'src/components/atoms';
 import { Subheader } from 'src/components/common/Subheader';
 import { Cell, CellKey, CellValue, Table } from 'src/components/common/Table';
 import { CollateralModal } from 'src/components/organisms';
-import useCollateralBook from 'src/hooks/useCollateralBook';
+import { useCollateralBook } from 'src/hooks';
 import useModal from 'src/hooks/useModal';
 import { RootState } from 'src/store/types';
 import { getTotalUSDBalance } from 'src/store/wallets/selectors';
@@ -19,8 +19,8 @@ export const Balances: React.FC = () => {
         ethereum: { balance: ethereumBalance },
     } = useSelector((state: RootState) => state.wallets);
 
-    const { account }: { account: string } = useWallet();
-    const colBook = useCollateralBook(account ? account : '');
+    const { account, chainId } = useWallet();
+    const colBook = useCollateralBook(account ? account : '', chainId);
 
     const [onPresentCollateralModal] = useModal(
         <CollateralModal ccyIndex={0} />
@@ -33,7 +33,7 @@ export const Balances: React.FC = () => {
                 <Cell>
                     <CellKey>Account Value</CellKey>
                     <CellValue>
-                        {totalUSDBalance != null
+                        {totalUSDBalance !== null
                             ? usdFormat(totalUSDBalance)
                             : 0}
                     </CellValue>
@@ -41,7 +41,7 @@ export const Balances: React.FC = () => {
                 <Cell>
                     <CellKey>ETH Balance</CellKey>
                     <CellValue>
-                        {ethereumBalance != null
+                        {ethereumBalance !== null
                             ? ordinaryFormat(ethereumBalance)
                             : 0}{' '}
                         ETH
@@ -58,7 +58,7 @@ export const Balances: React.FC = () => {
                     <CellKey>ETH Collateral</CellKey>
                     {account && colBook.vault !== '' ? (
                         <CellValue>
-                            {colBook.collateral != null
+                            {colBook.collateral !== null
                                 ? getDisplayBalance(colBook.collateral)
                                 : 0}{' '}
                             ETH
@@ -72,7 +72,7 @@ export const Balances: React.FC = () => {
                     <CellValue>10 000 FIL</CellValue>
                 </Cell>
             </Table>
-            <Button onClick={onPresentCollateralModal} outline>
+            <Button onClick={onPresentCollateralModal}>
                 Manage Collateral
             </Button>
         </BalanceContainer>
