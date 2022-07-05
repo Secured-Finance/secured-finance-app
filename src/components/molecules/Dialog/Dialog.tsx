@@ -23,6 +23,7 @@ export const Dialog = ({
             open={isOpen}
             onClose={onClose}
             className='relative z-50'
+            data-cy='modal'
         >
             <div className='fixed inset-0 bg-backgroundBlur' />
             <div className='fixed inset-0 flex items-center justify-center p-4'>
