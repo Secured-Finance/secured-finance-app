@@ -1,7 +1,6 @@
 import BigNumber from 'bignumber.js';
-import React from 'react';
 import { CurrencyContainer } from 'src/components/atoms';
-import { CollateralBook } from 'src/hooks/useCollateralBook';
+import { CollateralBook } from 'src/hooks/useCollateralBook/useCollateralBook';
 import { AddressUtils } from 'src/utils';
 import { RenderBorrow, RenderCollateral } from './components';
 

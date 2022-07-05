@@ -6,14 +6,13 @@ export interface Term {
 }
 
 export const getTermBy = (label: keyof Term, value: string | number) => {
-    let term;
-    try {
-        term = termList.find(
-            ({ [label]: val }) =>
-                val.toString().toLowerCase() === value.toString().toLowerCase()
-        );
-    } catch (error) {
-        term = emptyTerm;
+    const term = termList.find(
+        ({ [label]: val }) =>
+            val.toString().toLowerCase() === value.toString().toLowerCase()
+    );
+
+    if (!term) {
+        throw new Error(`Term ${label} ${value} not found`);
     }
 
     return term;
@@ -57,10 +56,3 @@ export const termList: Term[] = [
         label: '5 Years',
     },
 ];
-
-const emptyTerm: Term = {
-    value: '',
-    numOfDays: 0,
-    termIndex: '0',
-    label: '',
-};

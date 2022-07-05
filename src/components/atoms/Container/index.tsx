@@ -3,18 +3,13 @@ import styled from 'styled-components';
 
 interface ContainerProps {
     children?: React.ReactNode;
-    width?: number;
 }
 
-export const Container: React.FC<ContainerProps> = ({ children, width }) => {
-    return <StyledContainer width={width}>{children}</StyledContainer>;
+export const Container: React.FC<ContainerProps> = ({ children }) => {
+    return <StyledContainer>{children}</StyledContainer>;
 };
 
-interface StyledContainerProps {
-    width: number;
-}
-
-const StyledContainer = styled.div<StyledContainerProps>`
+const StyledContainer = styled.div<ContainerProps>`
     box-sizing: border-box;
     margin: 0 auto;
     // background-color: ${props => props.theme.background};

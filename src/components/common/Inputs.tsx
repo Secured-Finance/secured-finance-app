@@ -43,7 +43,7 @@ const InputContainer = styled.div`
     margin-bottom: ${theme.spacing[2]}px;
 `;
 
-export const Input: React.FC<IInput> = ({ label, icon, ...props }) => {
+export const Input: React.FC<IInput> = ({ label, ...props }) => {
     return typeof label === 'string' ? (
         <InputContainer>
             <Label> {label}</Label>

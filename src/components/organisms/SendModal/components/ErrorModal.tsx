@@ -1,13 +1,13 @@
 import React from 'react';
 import {
+    Button,
     Modal,
     ModalActions,
-    ModalTitle,
     ModalContent,
+    ModalTitle,
 } from 'src/components/atoms';
-import { Button } from 'src/components/common/Buttons';
-import styled from 'styled-components';
 import theme from 'src/theme';
+import styled from 'styled-components';
 
 interface IErrorModal {
     title?: string;
@@ -27,9 +27,7 @@ export const ErrorModal: React.FC<IErrorModal> = ({
                 <ContentBlock>{text}</ContentBlock>
             </ModalContent>
             <ModalActions>
-                <Button outline onClick={onClose}>
-                    Close
-                </Button>
+                <Button onClick={onClose}>Close</Button>
             </ModalActions>
         </Modal>
     );

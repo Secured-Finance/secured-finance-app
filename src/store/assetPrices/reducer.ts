@@ -27,7 +27,7 @@ interface ICoinGeckoResponse {
 
 export const fetchAssetPrice = createAsyncThunk(
     'assetPrices/fetchAssetPrice',
-    async (assetList: string[], thunkAPI) => {
+    async (assetList: string[]) => {
         const response = await coingeckoApi.get('/simple/price', {
             params: {
                 ids: assetList.join(','),

@@ -1,4 +1,5 @@
-import { ethereum, FilIcon } from 'src/components/new/icons';
+import ethereum from 'src/assets/coins/eth2.svg';
+import FilIcon from 'src/assets/coins/fil.svg';
 import { CurrencyInfo, currencyList } from './currencyList';
 
 export const currencyListDropdown = [
@@ -10,7 +11,7 @@ export const currencyListDropdown = [
     },
     {
         index: 1,
-        icon: <FilIcon size={24} fill={'#fff'} />,
+        icon: <FilIcon className='h-6 w-6' />,
         value: 'FIL',
         label: 'FIL',
     },

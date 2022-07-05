@@ -1,9 +1,9 @@
 import BigNumber from 'bignumber.js';
 import React, { useCallback, useState } from 'react';
 import { connect, useDispatch } from 'react-redux';
-import { Button } from 'src/components/common/Buttons';
+import { Button } from 'src/components/atoms';
 import styled from 'styled-components';
-import { usePlaceOrder } from '../../../../../hooks/usePlaceOrder';
+import { usePlaceOrder } from '../../../../../hooks/usePlaceOrder/usePlaceOrder';
 import {
     LendingTerminalStore,
     updateLendAmount,
@@ -45,22 +45,22 @@ const Lend: React.FC<LendingTerminalStore> = ({
         [dispatch]
     );
 
-    const { onPlaceOrder } = usePlaceOrder(
-        selectedCcy,
-        selectedTerms,
-        0,
-        lendAmount,
-        new BigNumber(lendRate).multipliedBy(100).toNumber()
-    );
+    const { placeOrder } = usePlaceOrder();
     const handleLoanDeal = useCallback(async () => {
         try {
             setPendingTx(true);
-            await onPlaceOrder();
+            await placeOrder(
+                selectedCcy,
+                selectedTerms,
+                0,
+                lendAmount,
+                new BigNumber(lendRate).multipliedBy(100).toNumber()
+            );
             setPendingTx(false);
         } catch (e) {
             console.error(e);
         }
-    }, [onPlaceOrder, setPendingTx]);
+    }, [lendAmount, lendRate, placeOrder, selectedCcy, selectedTerms]);
 
     return (
         <StyledLoanContainer>

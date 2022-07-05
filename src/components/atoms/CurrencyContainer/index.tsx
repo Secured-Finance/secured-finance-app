@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import React from 'react';
 import theme from 'src/theme';
 import { getCurrencyBy } from 'src/utils/currencyList';
@@ -157,6 +158,7 @@ export const CurrencyContainer: React.FC<CurrencyContainerProps> = ({
         default:
             iconSize = 14;
             fontSize = 14;
+            marginLeft = 0;
             break;
     }
 

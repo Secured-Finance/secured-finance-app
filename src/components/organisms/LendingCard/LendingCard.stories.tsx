@@ -1,14 +1,28 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { BigNumber } from 'bignumber.js';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { updateLatestBlock } from 'src/store/blockchain';
 import { coingeckoApi } from 'src/utils/coinGeckoApi';
 import AxiosMock from '../../../stories/mocks/AxiosMock';
 import { LendingCard } from './LendingCard';
+
 export default {
     title: 'Organism/LendingCard',
     component: LendingCard,
-    args: {},
+    args: {
+        onPlaceOrder: async () => {
+            return Promise.resolve();
+        },
+        collateralBook: {
+            ccyIndex: 0,
+            ccyName: 'ETH',
+            collateral: new BigNumber('10000000000000000000'),
+            usdCollateral: new BigNumber('100000000000000000000'),
+            vault: '',
+            locked: new BigNumber('5000000000000000000'),
+        },
+    },
     parameters: {
         chromatic: { disableSnapshot: false },
     },
@@ -48,7 +62,22 @@ const Template: ComponentStory<typeof LendingCard> = args => {
         setTimeout(() => dispatch(updateLatestBlock(12345)), 100);
     }, [dispatch]);
 
-    return <LendingCard />;
+    return <LendingCard {...args} />;
 };
 
 export const Default = Template.bind({});
+
+export const WithError = Template.bind({});
+WithError.args = {
+    onPlaceOrder: async () => {
+        throw Error('Something went wrong');
+    },
+};
+export const PendingTransaction = Template.bind({});
+PendingTransaction.args = {
+    onPlaceOrder: async () => {
+        return new Promise(resolve => {
+            setTimeout(resolve, 5000);
+        });
+    },
+};
