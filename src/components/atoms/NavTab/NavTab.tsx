@@ -1,9 +1,14 @@
 interface NavTabProps {
     text: string;
     active: boolean;
+    onClick: () => void;
 }
 
-export const NavTab: React.FC<NavTabProps> = ({ text, active = false }) => {
+export const NavTab: React.FC<NavTabProps> = ({
+    text,
+    active = false,
+    onClick,
+}) => {
     return (
         <div className='flex h-20 w-max flex-grow-0 flex-col items-center p-0'>
             <div className={`h-1 w-full ${active ? 'bg-starBlue' : ''}`}></div>
@@ -14,9 +19,13 @@ export const NavTab: React.FC<NavTabProps> = ({ text, active = false }) => {
                         : ''
                 }`}
             >
-                <span className='typography-nav-menu-default h-4 items-center text-center text-neutral8'>
+                <button
+                    className='typography-nav-menu-default h-4 items-center text-center text-neutral8'
+                    onClick={onClick}
+                    data-testid={`${text}-tab-button`}
+                >
                     {text}
-                </span>
+                </button>
             </div>
         </div>
     );

@@ -7,6 +7,7 @@ export default {
     args: {
         text: 'OTC Lending',
         active: true,
+        onClick: () => {},
     },
     parameters: {
         chromatic: { disableSnapshot: false },
@@ -21,4 +22,5 @@ export const MarketDashboard = Template.bind({});
 MarketDashboard.args = {
     text: 'Market Dashboard',
     active: false,
+    onClick: () => {},
 };
