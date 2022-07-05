@@ -20,12 +20,20 @@ export const Header = () => {
                 <SFLogo className='h-10 w-[200px]' />
             </NavLink>
             <div className='flex items-center justify-center'>
-                <ItemLink text='OTC Lending' link='/' />
-                <ItemLink text='Market Dashboard' link='/exchange' />
-                <ItemLink text='Portfolio Management' link='/history' />
+                <ItemLink text='OTC Lending' dataCy='lending' link='/' />
+                <ItemLink
+                    text='Market Dashboard'
+                    dataCy='terminal'
+                    link='/exchange'
+                />
+                <ItemLink
+                    text='Portfolio Management'
+                    dataCy='history'
+                    link='/history'
+                />
                 <TraderProTab text='Trader Pro'></TraderProTab>
             </div>
-            <div className='mr-5'>
+            <div className='mr-5' data-cy='wallet'>
                 <Button onClick={() => setDisplay(true)}>Connect Wallet</Button>
             </div>
             <WalletDialog
@@ -36,12 +44,20 @@ export const Header = () => {
     );
 };
 
-const ItemLink = ({ text, link }: { text: string; link: string }) => {
+const ItemLink = ({
+    text,
+    dataCy,
+    link,
+}: {
+    text: string;
+    dataCy: string;
+    link: string;
+}) => {
     const useCheckActive = (): boolean => {
         return useRouteMatch({ path: link, exact: true }) ? true : false;
     };
     return (
-        <NavLink exact data-cy={text.toLowerCase()} to={link}>
+        <NavLink exact data-cy={dataCy.toLowerCase()} to={link}>
             <NavTab text={text} active={useCheckActive()} />
         </NavLink>
     );

@@ -23,7 +23,7 @@ describe('The Home Page', () => {
         cy.get('[data-cy="lending-page"]').should('be.visible');
     });
 
-    it('display two wallet providers when clicking unlocking wallet', () => {
+    it.skip('display two wallet providers when clicking unlocking wallet', () => {
         cy.get('[data-cy="wallet"]').click();
         cy.get('[data-cy="modal"]').should('be.visible');
         cy.get('[data-cy="eth-wallet"]').should('be.visible');
