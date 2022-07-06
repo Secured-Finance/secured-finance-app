@@ -5,40 +5,48 @@ import { ExpandIndicator, Separator } from 'src/components/atoms';
 
 export type Option = {
     name: string;
+    value: string;
     iconSVG?: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
 };
 
 export const DropdownSelector = ({
-    value,
+    selected,
     optionList,
     onChange,
 }: {
-    value: Option;
+    selected: Option;
     optionList: Readonly<Array<Option>>;
     onChange: (v: string) => void;
 }) => {
-    const [selectedOptionName, setSelectedOptionName] = useState<string>(
-        value.name
+    const [selectedOptionValue, setSelectedOptionValue] = useState<string>(
+        selected.value
     );
+
     const selectedOption = useMemo(
-        () => optionList.find(o => o.name === selectedOptionName),
-        [optionList, selectedOptionName]
+        () => optionList.find(o => o.value === selectedOptionValue),
+        [optionList, selectedOptionValue]
     );
 
     const handleSelect = useCallback(
-        (optionName: string) => {
-            setSelectedOptionName(optionName);
-            onChange(optionName);
+        (option: Option) => {
+            setSelectedOptionValue(option.value);
+            onChange(option.value);
         },
         [onChange]
     );
 
-    // Handle the case of the initial value
+    //Handle the case of the initial value
     useEffect(() => {
-        if (value.name === selectedOptionName) {
-            onChange(value.name);
+        if (selected.value === selectedOptionValue) {
+            onChange(selected.value);
         }
-    }, [onChange, selectedOptionName, value.name]);
+    }, [onChange, selectedOptionValue, selected.name, selected.value]);
+
+    useEffect(() => {
+        if (selected.value) {
+            setSelectedOptionValue(selected.value);
+        }
+    }, [selected.value]);
 
     return (
         <Menu as='div' className='flex'>
@@ -62,9 +70,9 @@ export const DropdownSelector = ({
                     <Menu.Items className='absolute flex max-h-96 w-52 flex-col overflow-y-auto rounded-lg bg-gunMetal p-2 shadow-sm'>
                         {optionList.map((asset, i) => (
                             <Menu.Item
-                                key={asset.name}
+                                key={asset.value}
                                 as='button'
-                                onClick={() => handleSelect(asset.name)}
+                                onClick={() => handleSelect(asset)}
                             >
                                 {({ active }) => (
                                     <div>

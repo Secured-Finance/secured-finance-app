@@ -1,9 +1,10 @@
 import { ChartData } from 'chart.js';
 import { CurveHeader, LineChart } from 'src/components/molecules';
 import { useRates } from 'src/hooks/useRates';
+import { Currency } from 'src/utils';
 
 interface YieldChartProps {
-    asset: string;
+    asset: Currency;
     isBorrow: boolean;
 }
 
@@ -46,7 +47,7 @@ export const YieldChart: React.FC<YieldChartProps> = ({
     const lendingRates = useRates('FIL', 1);
 
     return (
-        <div className='flex h-[536px] w-[585px] flex-col items-start'>
+        <div className='flex h-[536px] w-[585px] flex-col items-start shadow-xl drop-shadow-2xl'>
             <div className='h-20 w-full'>
                 <CurveHeader asset={asset} isBorrow={isBorrow}></CurveHeader>
             </div>

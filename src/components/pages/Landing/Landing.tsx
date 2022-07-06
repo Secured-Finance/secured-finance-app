@@ -1,5 +1,7 @@
-import { LendingCard } from 'src/components/organisms';
+import { useSelector } from 'react-redux';
+import { LendingCard, YieldChart } from 'src/components/organisms';
 import { useCollateralBook, usePlaceOrder } from 'src/hooks';
+import { RootState } from 'src/store/types';
 import { useWallet } from 'use-wallet';
 
 export const Landing = () => {
@@ -8,6 +10,10 @@ export const Landing = () => {
     const collateralBook = useCollateralBook(
         account ? account : '',
         chainId ? chainId : 1
+    );
+
+    const { currency, side } = useSelector(
+        (state: RootState) => state.landingOrderForm
     );
 
     return (
@@ -27,14 +33,12 @@ export const Landing = () => {
                     decentralization via Web3
                 </h2>
             </div>
-            <div className='flex flex-row justify-center space-x-8'>
+            <div className='flex flex-row justify-center'>
                 <LendingCard
                     onPlaceOrder={placeOrder}
                     collateralBook={collateralBook}
                 />
-                <div className='w-[700px] bg-gunMetal text-3xl text-white'>
-                    account: {account}
-                </div>
+                <YieldChart asset={currency} isBorrow={side === 1} />
             </div>
         </div>
     );

@@ -9,6 +9,23 @@ const mockSecuredFinance = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mockSecuredFinance);
 
 describe('LendingCard Component', () => {
+    const preloadedState = {
+        assetPrices: {
+            filecoin: {
+                price: 5.87,
+                change: -8.208519783216566,
+            },
+            ethereum: {
+                price: 2000.34,
+                change: 0.5162466489453748,
+            },
+            usdc: {
+                price: 1.002,
+                change: 0.042530768538486696,
+            },
+        },
+    };
+
     const selectFilecoin = () => {
         fireEvent.click(
             screen.getByRole('button', {
@@ -62,13 +79,7 @@ describe('LendingCard Component', () => {
         const button = screen.getByTestId('place-order-button');
         fireEvent.click(button);
         await waitFor(() =>
-            expect(onPlaceOrder).toHaveBeenCalledWith(
-                'Ethereum',
-                'Sep 2022',
-                0,
-                0,
-                0
-            )
+            expect(onPlaceOrder).toHaveBeenCalledWith('ETH', 'SEP22', 0, 0, 0)
         );
     });
 
@@ -81,13 +92,7 @@ describe('LendingCard Component', () => {
         fireEvent.click(screen.getByTestId('place-order-button'));
 
         await waitFor(() =>
-            expect(onPlaceOrder).toHaveBeenCalledWith(
-                'Filecoin',
-                'Sep 2022',
-                0,
-                10,
-                0
-            )
+            expect(onPlaceOrder).toHaveBeenCalledWith('FIL', 'SEP22', 0, 10, 0)
         );
     });
 
@@ -102,5 +107,30 @@ describe('LendingCard Component', () => {
                 'This is an error'
             )
         );
+    });
+
+    it('should display the amount inputted by the user in USD', () => {
+        render(<Default />, { preloadedState });
+        const input = screen.getByRole('textbox');
+        fireEvent.change(input, { target: { value: '10' } });
+        expect(screen.getByText('~ 20,003.4 USD')).toBeInTheDocument();
+    });
+
+    it('should display the rate from the store', () => {
+        render(<Default />, {
+            preloadedState: {
+                landingOrderForm: { rate: '20' },
+            },
+        });
+        expect(screen.getByText('20 %')).toBeInTheDocument();
+    });
+
+    it('should select the term from the store', () => {
+        render(<Default />, {
+            preloadedState: {
+                landingOrderForm: { term: 'JUN23' },
+            },
+        });
+        expect(screen.getAllByText('Jun 2023')).toHaveLength(2);
     });
 });

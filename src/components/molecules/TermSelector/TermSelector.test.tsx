@@ -38,8 +38,8 @@ describe('TermSelector Component', () => {
         const onTermChange = jest.fn();
         render(<Default onTermChange={onTermChange} />);
         fireEvent.click(screen.getByRole('button'));
-        const option = Default.args.options[3].name;
-        fireEvent.click(screen.getByText(option));
-        expect(onTermChange).toHaveBeenCalledWith(option);
+        const option = Default.args.options[3];
+        fireEvent.click(screen.getByText(option.name));
+        expect(onTermChange).toHaveBeenCalledWith(option.value);
     });
 });
