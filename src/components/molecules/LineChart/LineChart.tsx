@@ -11,11 +11,13 @@ import {
     Tooltip,
 } from 'chart.js';
 import React, { useRef } from 'react';
-import { ChartProps, Line } from 'react-chartjs-2';
+import { ChartProps, getElementAtEvent, Line } from 'react-chartjs-2';
+import { useDispatch } from 'react-redux';
 import {
     defaultDatasets,
     options as customOptions,
 } from 'src/components/molecules/LineChart/constants';
+import { setRate, setTerm } from 'src/store/landingOrderForm';
 
 ChartJS.register(
     LinearScale,
@@ -36,6 +38,8 @@ export const LineChart = ({
     options = customOptions,
     style,
 }: LineChartProps) => {
+    const dispatch = useDispatch();
+
     const canvas: HTMLCanvasElement = document.createElement('canvas');
     const ctx: CanvasRenderingContext2D = canvas.getContext('2d');
 
@@ -68,6 +72,17 @@ export const LineChart = ({
     };
 
     const chartRef = useRef(null);
+    const handleClick = (event: React.MouseEvent<HTMLCanvasElement>) => {
+        const element = getElementAtEvent(chartRef.current, event);
+        if (element && element[0]) {
+            const { datasetIndex, index } = element[0];
+            const dataset = data.datasets[datasetIndex];
+            const label = data.labels[index];
+            const value = dataset.data[index];
+            dispatch(setTerm(label as string));
+            dispatch(setRate(value as number));
+        }
+    };
 
     return (
         <Line
@@ -75,6 +90,7 @@ export const LineChart = ({
             data={refinedData}
             options={options}
             ref={chartRef}
+            onClick={handleClick}
         />
     );
 };

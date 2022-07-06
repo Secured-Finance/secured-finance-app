@@ -11,22 +11,27 @@ const options = [
     {
         name: 'Bitcoin',
         iconSVG: BitcoinIcon,
+        value: 'BTC',
     },
     {
         name: 'Ethereum',
         iconSVG: EthIcon,
+        value: 'ETH',
     },
     {
         name: 'Filecoin',
         iconSVG: FilecoinIcon,
+        value: 'FIL',
     },
     {
         name: 'USDC',
         iconSVG: UsdcIcon,
+        value: 'USDC',
     },
     {
         name: 'USD Tether',
         iconSVG: UsdtIcon,
+        value: 'USDT',
     },
 ] as Array<Option>;
 
@@ -39,11 +44,11 @@ const shortNames: Record<string, string> = {
 };
 
 const priceList: Record<string, number> = {
-    Bitcoin: 20515,
-    Ethereum: 1012,
-    Filecoin: 4.85,
+    BTC: 20515,
+    ETH: 1012,
+    FIL: 4.85,
     USDC: 1.0,
-    'USD Tether': 0.99,
+    USDT: 0.99,
 };
 
 export default {
@@ -51,7 +56,7 @@ export default {
     component: AssetSelector,
     args: {
         options,
-        value: options[0],
+        selected: options[0],
         transform: (v: string) => shortNames[v],
         priceList,
         onAssetChange: () => {},
