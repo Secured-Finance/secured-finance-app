@@ -1,17 +1,14 @@
-import { useState } from 'react';
 import { NavLink, useRouteMatch } from 'react-router-dom';
 import SFLogo from 'src/assets/img/logo.svg';
-import { Button, NavTab, TraderProTab } from 'src/components/atoms';
-import { WalletDialog } from '../WalletDialog';
+import { NavTab, TraderProTab } from 'src/components/atoms';
+import { WalletButton } from '../WalletProviderModal';
 
 export const Header = () => {
-    const [display, setDisplay] = useState(false);
     return (
         <nav
             data-cy='header'
-            className={`flex h-20 w-full flex-row items-center justify-between border-b border-neutral1 ${
-                display ? 'blur-sm' : ''
-            }`}
+            className={`} flex h-20 w-full flex-row items-center justify-between border-b
+            border-neutral1`}
         >
             <NavLink
                 className='ml-5 flex h-10 items-center justify-center'
@@ -33,15 +30,9 @@ export const Header = () => {
                 />
                 <TraderProTab text='Trader Pro'></TraderProTab>
             </div>
-            <div className='mr-5'>
-                <Button data-cy='wallet' onClick={() => setDisplay(true)}>
-                    Connect Wallet
-                </Button>
+            <div className='mr-5' data-cy='wallet'>
+                <WalletButton />
             </div>
-            <WalletDialog
-                isOpen={display}
-                onClose={() => setDisplay(false)}
-            ></WalletDialog>
         </nav>
     );
 };

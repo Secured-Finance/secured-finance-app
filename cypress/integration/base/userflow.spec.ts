@@ -3,7 +3,7 @@ import { tenderlyConfig } from 'support/utils/tenderlyConfig';
 describe('A user connecting to the app', () => {
     tenderlyConfig();
 
-    it.skip('should be able to connect is wallet for the first time', () => {
+    it('should be able to connect is wallet for the first time', () => {
         cy.get('[data-cy="wallet-address"]')
             .should('have.length', 2)
             .then(walletAddress => {
