@@ -7,10 +7,10 @@ import { WalletDialog } from '../WalletDialog';
 export const Header = () => {
     const [display, setDisplay] = useState(false);
     return (
-        <div
+        <nav
             data-cy='header'
             className={`flex h-20 w-full flex-row items-center justify-between border-b border-neutral1 ${
-                display ? 'blur' : ''
+                display ? 'blur-sm' : ''
             }`}
         >
             <NavLink
@@ -33,14 +33,16 @@ export const Header = () => {
                 />
                 <TraderProTab text='Trader Pro'></TraderProTab>
             </div>
-            <div className='mr-5' data-cy='wallet'>
-                <Button onClick={() => setDisplay(true)}>Connect Wallet</Button>
+            <div className='mr-5'>
+                <Button data-cy='wallet' onClick={() => setDisplay(true)}>
+                    Connect Wallet
+                </Button>
             </div>
             <WalletDialog
                 isOpen={display}
                 onClose={() => setDisplay(false)}
             ></WalletDialog>
-        </div>
+        </nav>
     );
 };
 

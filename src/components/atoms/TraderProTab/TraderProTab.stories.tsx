@@ -18,5 +18,3 @@ const Template: ComponentStory<typeof TraderProTab> = args => (
 );
 
 export const Default = Template.bind({});
-
-export const MarketDashboard = Template.bind({});
