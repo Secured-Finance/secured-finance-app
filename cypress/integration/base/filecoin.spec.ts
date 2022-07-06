@@ -7,7 +7,7 @@ import * as wallets from '../../fixtures/filecoin.json';
 describe('Filecoin Wallet', () => {
     tenderlyConfig();
 
-    it('should offer three choices when trying to connect', () => {
+    it.skip('should offer three choices when trying to connect', () => {
         cy.get('[data-cy="filecoin-connect-wallet-chip"]').click();
         cy.contains('Select a wallet provider').should('be.visible');
         cy.contains('Private Key').should('be.visible');
@@ -16,7 +16,7 @@ describe('Filecoin Wallet', () => {
         cy.get('[data-cy="cancel-button"]').should('be.visible').click();
     });
 
-    it('should connect to a new filecoin wallet when using mnemonic phrase and disconnect', () => {
+    it.skip('should connect to a new filecoin wallet when using mnemonic phrase and disconnect', () => {
         cy.get('[data-cy="filecoin-connect-wallet-chip"]').click();
         cy.get('[data-cy="mnemonic-phrase-button"]').click();
         cy.get('[data-cy="create-hd-wallet"]')
@@ -48,12 +48,12 @@ describe('Filecoin Wallet', () => {
             });
     });
 
-    it('should connect to an existing account when importing an account with a mnemonic phrase', () => {
+    it.skip('should connect to an existing account when importing an account with a mnemonic phrase', () => {
         filecoin.connectWallet(wallets.walletAlice);
         filecoin.disconnectWallet();
     });
 
-    it('should transfer FIL to an existing account', () => {
+    it.skip('should transfer FIL to an existing account', () => {
         filecoin.connectWallet(wallets.walletBob);
         cy.get('[data-cy="filecoin-send-chip"]')
             .click()
