@@ -7,7 +7,7 @@ import * as wallets from '../../fixtures/filecoin.json';
 describe('Filecoin Wallet', () => {
     tenderlyConfig();
 
-    it.skip('should offer three choices when trying to connect', () => {
+    it('should offer three choices when trying to connect', () => {
         cy.get('[data-cy="filecoin-connect-wallet-chip"]').click();
         cy.contains('Select a wallet provider').should('be.visible');
         cy.contains('Private Key').should('be.visible');
