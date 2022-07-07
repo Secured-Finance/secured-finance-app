@@ -28,7 +28,9 @@ describe('Dropdown Asset Selection Component', () => {
     it('should change the value of selected option when rerendered with a different selected option', () => {
         render(<AssetDropdown />);
         expect(screen.getByText('Bitcoin')).toBeInTheDocument();
-        render(<AssetDropdown selected={{ name: 'Ethereum', value: 'ETH' }} />);
+        render(
+            <AssetDropdown selected={{ label: 'Ethereum', value: 'ETH' }} />
+        );
         expect(screen.getByText('Ethereum')).toBeInTheDocument();
     });
 

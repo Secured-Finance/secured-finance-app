@@ -81,7 +81,7 @@ export const AssetSelector = ({
                     className='typography-caption ml-2 flex text-white-60'
                     data-testid='asset-selector-transformed-value'
                 >
-                    {transform(selectedOption.name)}
+                    {transform(selectedOption.label)}
                 </div>
             </div>
         </div>
