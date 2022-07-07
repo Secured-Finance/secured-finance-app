@@ -5,7 +5,7 @@ import {
     getPriceMap,
 } from 'src/store/assetPrices/selectors';
 import { RootState } from 'src/store/types';
-import { Currency, CurrencyMap } from 'src/utils';
+import { Currency, currencyMap } from 'src/utils';
 
 interface CurveHeaderProps {
     asset: Currency;
@@ -24,10 +24,10 @@ export const CurveHeader: React.FC<CurveHeaderProps> = ({
     return (
         <div className='flex h-20 w-[585px] flex-row justify-between p-4'>
             <CurveHeaderAsset
-                asset={CurrencyMap[asset]?.name}
+                asset={currencyMap[asset]?.name}
                 value={priceList[asset]}
                 fluctuation={priceChangeList[asset]}
-                IconSVG={CurrencyMap[asset]?.iconSVG}
+                IconSVG={currencyMap[asset]?.iconSVG}
             ></CurveHeaderAsset>
             <div className='flex flex-row gap-2'>
                 <CurveHeaderTotal

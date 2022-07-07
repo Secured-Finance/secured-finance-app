@@ -1,7 +1,7 @@
 import { ChartData } from 'chart.js';
 import { CurveHeader, LineChart } from 'src/components/molecules';
 import { useRates } from 'src/hooks/useRates';
-import { Currency } from 'src/utils';
+import { Currency, getTermsAsOptions } from 'src/utils';
 
 interface YieldChartProps {
     asset: Currency;
@@ -20,16 +20,7 @@ const refineArray = (array: Array<number>) => {
 
 const getData = (rates: number[], label: string): ChartData<'line'> => {
     return {
-        labels: [
-            'SEP22',
-            'DEC22',
-            'MAR23',
-            'JUN23',
-            'SEP23',
-            'DEC23',
-            'MAR24',
-            'JUN24',
-        ],
+        labels: getTermsAsOptions().map(o => o.label),
         datasets: [
             {
                 label: label,

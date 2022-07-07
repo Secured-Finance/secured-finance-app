@@ -18,6 +18,7 @@ import {
     options as customOptions,
 } from 'src/components/molecules/LineChart/constants';
 import { setRate, setTerm } from 'src/store/landingOrderForm';
+import { Term, termMap } from 'src/utils';
 
 ChartJS.register(
     LinearScale,
@@ -78,8 +79,15 @@ export const LineChart = ({
             const { datasetIndex, index } = element[0];
             const dataset = data.datasets[datasetIndex];
             const label = data.labels[index];
+            termMap;
+
+            const key = (Object.keys(termMap) as Array<Term>).find(
+                key => termMap[key].label === label
+            );
+
+            dispatch(setTerm(key));
+
             const value = dataset.data[index];
-            dispatch(setTerm(label as string));
             dispatch(setRate(value as number));
         }
     };

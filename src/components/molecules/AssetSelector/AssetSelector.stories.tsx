@@ -7,7 +7,9 @@ import BitcoinIcon from 'src/assets/coins/xbc.svg';
 import { Option } from 'src/components/atoms/DropdownSelector/DropdownSelector';
 import { AssetSelector } from './AssetSelector';
 
-const options = [
+type AllowedCcy = 'BTC' | 'ETH' | 'FIL' | 'USDC' | 'USDT';
+
+const options: Array<Option<AllowedCcy>> = [
     {
         label: 'Bitcoin',
         iconSVG: BitcoinIcon,
@@ -33,7 +35,7 @@ const options = [
         iconSVG: UsdtIcon,
         value: 'USDT',
     },
-] as Array<Option>;
+];
 
 const shortNames: Record<string, string> = {
     Bitcoin: 'BTC',
@@ -43,7 +45,7 @@ const shortNames: Record<string, string> = {
     'USD Tether': 'USDT',
 };
 
-const priceList: Record<string, number> = {
+const priceList: Record<AllowedCcy, number> = {
     BTC: 20515,
     ETH: 1012,
     FIL: 4.85,
@@ -53,11 +55,11 @@ const priceList: Record<string, number> = {
 
 export default {
     title: 'Molecules/AssetSelector',
-    component: AssetSelector,
+    component: AssetSelector<AllowedCcy>,
     args: {
         options,
         selected: options[0],
-        transform: (v: string) => shortNames[v],
+        transformLabel: (v: string) => shortNames[v],
         priceList,
         onAssetChange: () => {},
         onAmountChange: () => {},

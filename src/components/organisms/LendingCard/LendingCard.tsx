@@ -3,7 +3,7 @@ import classNames from 'classnames';
 import { BigNumber } from 'ethers';
 import { useCallback, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button, Option } from 'src/components/atoms';
+import { Button } from 'src/components/atoms';
 import { CollateralUsageSection } from 'src/components/atoms/CollateralUsageSection';
 import { AssetSelector, TermSelector } from 'src/components/molecules';
 import { CollateralBook } from 'src/hooks';
@@ -16,7 +16,14 @@ import {
 } from 'src/store/landingOrderForm';
 import { setLastMessage } from 'src/store/lastError';
 import { RootState } from 'src/store/types';
-import { Currency, currencyList, percentFormat } from 'src/utils';
+import {
+    Currency,
+    currencyList,
+    getCurrencyMapAsOptions,
+    getTermsAsOptions,
+    percentFormat,
+    Term,
+} from 'src/utils';
 import {
     collateralUsage,
     computeAvailableToBorrow,
@@ -83,21 +90,7 @@ export const LendingCard = ({
     }, [assetPriceMap, collateralBook.collateral, currency]);
 
     const dispatch = useDispatch();
-    const optionList = useMemo(
-        () => [
-            { label: 'Sep 2022', value: 'SEP22' },
-            { label: 'Dec 2022', value: 'DEC22' },
-            { label: 'Mar 2023', value: 'MAR23' },
-            { label: 'Jun 2023', value: 'JUN23' },
-            { label: 'Sep 2023', value: 'SEP23' },
-            { label: 'Dec 2023', value: 'DEC23' },
-            { label: 'Mar 2024', value: 'MAR24' },
-            { label: 'Jun 2024', value: 'JUN24' },
-            { label: 'Sep 2024', value: 'SEP24' },
-            { label: 'Dec 2024', value: 'DEC24' },
-        ],
-        []
-    );
+    const optionList = useMemo(() => getTermsAsOptions(), []);
 
     //TODO: strongly type the terms
     const selectedTerm = useMemo(() => {
@@ -106,21 +99,7 @@ export const LendingCard = ({
         );
     }, [term, optionList]);
 
-    const assetList = useMemo(
-        () =>
-            currencyList.reduce<Array<Option>>(
-                (acc, ccy) => [
-                    ...acc,
-                    {
-                        label: ccy.name,
-                        value: ccy.shortName,
-                        iconSVG: ccy.iconSVG,
-                    },
-                ],
-                []
-            ),
-        []
-    );
+    const assetList = useMemo(() => getCurrencyMapAsOptions(), []);
 
     const handlePlaceOrder = useCallback(
         async (
@@ -187,18 +166,18 @@ export const LendingCard = ({
                 <AssetSelector
                     options={assetList}
                     selected={assetList[0]}
-                    transform={(v: string) => shortNames[v]}
+                    transformLabel={(v: string) => shortNames[v]}
                     priceList={assetPriceMap}
                     onAmountChange={(v: number) => dispatch(setAmount(v))}
-                    onAssetChange={(v: string) => {
-                        dispatch(setCurrency(v as Currency));
+                    onAssetChange={(v: Currency) => {
+                        dispatch(setCurrency(v));
                     }}
                 />
 
                 <TermSelector
                     options={optionList}
                     selected={selectedTerm}
-                    onTermChange={(v: string) => dispatch(setTerm(v))}
+                    onTermChange={(v: Term) => dispatch(setTerm(v))}
                 />
 
                 <CollateralUsageSection

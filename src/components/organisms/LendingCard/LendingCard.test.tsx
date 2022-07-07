@@ -79,7 +79,7 @@ describe('LendingCard Component', () => {
         const button = screen.getByTestId('place-order-button');
         fireEvent.click(button);
         await waitFor(() =>
-            expect(onPlaceOrder).toHaveBeenCalledWith('ETH', 'SEP22', 0, 0, 0)
+            expect(onPlaceOrder).toHaveBeenCalledWith('ETH', '3M', 0, 0, 0)
         );
     });
 
@@ -92,7 +92,7 @@ describe('LendingCard Component', () => {
         fireEvent.click(screen.getByTestId('place-order-button'));
 
         await waitFor(() =>
-            expect(onPlaceOrder).toHaveBeenCalledWith('FIL', 'SEP22', 0, 10, 0)
+            expect(onPlaceOrder).toHaveBeenCalledWith('FIL', '3M', 0, 10, 0)
         );
     });
 
@@ -128,9 +128,9 @@ describe('LendingCard Component', () => {
     it('should select the term from the store', () => {
         render(<Default />, {
             preloadedState: {
-                landingOrderForm: { term: 'JUN23' },
+                landingOrderForm: { term: '1Y' },
             },
         });
-        expect(screen.getAllByText('Jun 2023')).toHaveLength(2);
+        expect(screen.getAllByText('1 Year')).toHaveLength(2);
     });
 });

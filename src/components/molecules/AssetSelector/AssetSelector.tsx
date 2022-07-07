@@ -1,19 +1,19 @@
 import { ChangeEvent, useMemo, useState } from 'react';
 import { DropdownSelector, Option } from 'src/components/atoms';
 
-export const AssetSelector = ({
+export const AssetSelector = <AssetType extends string = string>({
     options,
     selected,
     priceList,
-    transform = (v: string) => v,
+    transformLabel = (v: string) => v,
     onAssetChange,
     onAmountChange,
 }: {
-    options: Readonly<Array<Option>>;
-    selected: Option;
-    priceList: Record<string, number>;
-    transform?: (v: string) => string;
-    onAssetChange?: (v: string) => void;
+    options: Readonly<Array<Option<AssetType>>>;
+    selected: Option<AssetType>;
+    priceList: Record<AssetType, number>;
+    transformLabel?: (v: string) => string;
+    onAssetChange?: (v: AssetType) => void;
     onAmountChange?: (v: number) => void;
 }) => {
     const [assetValue, setAssetValue] = useState(selected.value);
@@ -33,7 +33,7 @@ export const AssetSelector = ({
         }).format(priceList[selectedOption.value] * amount);
     }, [selectedOption.value, priceList, amount]);
 
-    const handleAssetChange = (v: string) => {
+    const handleAssetChange = (v: AssetType) => {
         setAssetValue(v);
         if (onAssetChange) {
             onAssetChange(v);
@@ -81,7 +81,7 @@ export const AssetSelector = ({
                     className='typography-caption ml-2 flex text-white-60'
                     data-testid='asset-selector-transformed-value'
                 >
-                    {transform(selectedOption.label)}
+                    {transformLabel(selectedOption.label)}
                 </div>
             </div>
         </div>
