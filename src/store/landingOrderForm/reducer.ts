@@ -1,14 +1,14 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Currency } from 'src/utils';
 
-type landingOrderFormStore = {
+type LandingOrderFormStore = {
     currency: Currency;
     term: string;
     side: number;
     amount: number;
     rate: number;
 };
-const initialStore: landingOrderFormStore = {
+const initialStore: LandingOrderFormStore = {
     currency: Currency.FIL,
     term: '0',
     side: 0,
