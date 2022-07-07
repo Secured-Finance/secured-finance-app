@@ -1,16 +1,18 @@
 import { RadioGroup } from '@headlessui/react';
 import classNames from 'classnames';
 import { BigNumber } from 'ethers';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button } from 'src/components/atoms';
 import { CollateralUsageSection } from 'src/components/atoms/CollateralUsageSection';
 import { AssetSelector, TermSelector } from 'src/components/molecules';
 import { CollateralBook } from 'src/hooks';
+import { useRates } from 'src/hooks/useRates';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import {
     setAmount,
     setCurrency,
+    setRate,
     setSide,
     setTerm,
 } from 'src/store/landingOrderForm';
@@ -23,6 +25,7 @@ import {
     getTermsAsOptions,
     percentFormat,
     Term,
+    termMap,
 } from 'src/utils';
 import {
     collateralUsage,
@@ -53,6 +56,11 @@ export const LendingCard = ({
         (state: RootState) => state.landingOrderForm
     );
 
+    //TODO: use the currency instead of FIL
+    const rates = useRates(Currency.FIL, 0);
+
+    const dispatch = useDispatch();
+
     const shortNames = useMemo(
         () =>
             currencyList.reduce<Record<string, Currency>>(
@@ -66,6 +74,8 @@ export const LendingCard = ({
     );
 
     const assetPriceMap = useSelector((state: RootState) => getPriceMap(state));
+    const assetList = useMemo(() => getCurrencyMapAsOptions(), []);
+    const optionList = useMemo(() => getTermsAsOptions(), []);
 
     const collateralUsagePercent = useMemo(() => {
         //TODO: Remove the usage of BigNumber.js and use only Ethers.js
@@ -89,17 +99,12 @@ export const LendingCard = ({
         )}  ${currency}`;
     }, [assetPriceMap, collateralBook.collateral, currency]);
 
-    const dispatch = useDispatch();
-    const optionList = useMemo(() => getTermsAsOptions(), []);
-
     //TODO: strongly type the terms
     const selectedTerm = useMemo(() => {
         return (
             optionList.find(option => option.value === term) || optionList[0]
         );
     }, [term, optionList]);
-
-    const assetList = useMemo(() => getCurrencyMapAsOptions(), []);
 
     const handlePlaceOrder = useCallback(
         async (
@@ -122,6 +127,10 @@ export const LendingCard = ({
         },
         [onPlaceOrder, dispatch]
     );
+
+    useEffect(() => {
+        dispatch(setRate(rates[Object.keys(termMap).indexOf(term)]));
+    }, [term, rates, dispatch]);
 
     return (
         <div className='w-80 flex-col space-y-6 rounded-xl border border-neutral bg-transparent pb-4 shadow-2xl'>
@@ -158,7 +167,7 @@ export const LendingCard = ({
             <div className='grid justify-center space-y-4 px-4'>
                 <div className='typography-body-2 flex flex-col text-center text-white-50'>
                     <span className='typography-big-body-bold text-white'>
-                        {rate} %
+                        {rate / 100} %
                     </span>
                     <span>Fixed Rate APY</span>
                 </div>
