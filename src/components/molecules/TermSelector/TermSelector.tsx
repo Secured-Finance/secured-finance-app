@@ -1,16 +1,16 @@
 import { useMemo, useState } from 'react';
 import { DropdownSelector, Option } from 'src/components/atoms';
 
-export const TermSelector = ({
+export const TermSelector = <TermType extends string = string>({
     options,
     selected,
-    transform = (v: string) => v,
+    transformLabel = (v: string) => v,
     onTermChange,
 }: {
-    options: Array<Option>;
-    selected: Option;
-    transform?: (v: string) => string;
-    onTermChange?: (v: string) => void;
+    options: Array<Option<TermType>>;
+    selected: Option<TermType>;
+    transformLabel?: (v: string) => string;
+    onTermChange?: (v: TermType) => void;
 }) => {
     const [termValue, setTermValue] = useState(selected.value);
     const selectedTerm = useMemo(
@@ -18,7 +18,7 @@ export const TermSelector = ({
         [options, termValue]
     );
 
-    const handleTermChange = (v: string) => {
+    const handleTermChange = (v: TermType) => {
         setTermValue(v);
         if (onTermChange) {
             onTermChange(v);
@@ -42,7 +42,7 @@ export const TermSelector = ({
                     className='typography-caption text-white-60'
                     data-testid='term-selector-transformed-value'
                 >
-                    {transform(selectedTerm?.label)}
+                    {transformLabel(selectedTerm?.label)}
                 </div>
             </div>
         </div>

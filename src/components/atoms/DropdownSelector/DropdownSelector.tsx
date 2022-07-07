@@ -3,22 +3,22 @@ import classNames from 'classnames';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { ExpandIndicator, Separator } from 'src/components/atoms';
 
-export type Option = {
+export type Option<T = string> = {
     label: string;
-    value: string;
+    value: T;
     iconSVG?: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
 };
 
-export const DropdownSelector = ({
+export const DropdownSelector = <T extends string = string>({
     selected,
     optionList,
     onChange,
 }: {
-    selected: Option;
-    optionList: Readonly<Array<Option>>;
-    onChange: (v: string) => void;
+    selected: Option<T>;
+    optionList: Readonly<Array<Option<T>>>;
+    onChange: (v: T) => void;
 }) => {
-    const [selectedOptionValue, setSelectedOptionValue] = useState<string>(
+    const [selectedOptionValue, setSelectedOptionValue] = useState<T>(
         selected.value
     );
 
@@ -28,7 +28,7 @@ export const DropdownSelector = ({
     );
 
     const handleSelect = useCallback(
-        (option: Option) => {
+        (option: Option<T>) => {
             setSelectedOptionValue(option.value);
             onChange(option.value);
         },
@@ -70,7 +70,7 @@ export const DropdownSelector = ({
                     <Menu.Items className='absolute flex max-h-96 w-52 flex-col overflow-y-auto rounded-lg bg-gunMetal p-2 shadow-sm'>
                         {optionList.map((asset, i) => (
                             <Menu.Item
-                                key={asset.value}
+                                key={`${asset.label}_${i}`}
                                 as='button'
                                 onClick={() => handleSelect(asset)}
                             >

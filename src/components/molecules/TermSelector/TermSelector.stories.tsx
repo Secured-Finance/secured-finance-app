@@ -38,7 +38,7 @@ export const Default = Template.bind({});
 export const WithTransformFunction = Template.bind({});
 WithTransformFunction.args = {
     options,
-    transform: (v: string) => {
+    transformLabel: (v: string) => {
         return v.toUpperCase();
     },
 };

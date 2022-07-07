@@ -3,6 +3,7 @@ import { SVGProps } from 'react';
 import EthIcon from 'src/assets/coins/eth2.svg';
 import FilecoinIcon from 'src/assets/coins/fil.svg';
 import UsdcIcon from 'src/assets/coins/usdc.svg';
+import { Option } from 'src/components/atoms';
 import { MAINNET_PATH_CODE } from 'src/services/ledger/constants';
 import { formatFilecoin } from './formatNumbers';
 
@@ -14,7 +15,7 @@ export enum Currency {
     USDC = 'USDC',
 }
 
-export const CurrencyMap: Readonly<Record<Currency, CurrencyInfo>> = {
+export const currencyMap: Readonly<Record<Currency, CurrencyInfo>> = {
     [Currency.ETH]: {
         indexCcy: 0,
         icon: 'ethLogo',
@@ -54,6 +55,16 @@ export const CurrencyMap: Readonly<Record<Currency, CurrencyInfo>> = {
             };
         },
     },
+};
+
+export const getCurrencyMapAsOptions = () => {
+    return Object.values(currencyMap).map<Option<Currency>>(
+        ({ shortName, name, iconSVG }) => ({
+            value: shortName,
+            label: name,
+            iconSVG: iconSVG,
+        })
+    );
 };
 
 export type CurrencyInfo = {

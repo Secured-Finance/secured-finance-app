@@ -1,16 +1,16 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { Currency } from 'src/utils';
+import { Currency, Term } from 'src/utils';
 
 type LandingOrderFormStore = {
     currency: Currency;
-    term: string;
+    term: Term;
     side: number;
     amount: number;
     rate: number;
 };
 const initialStore: LandingOrderFormStore = {
     currency: Currency.FIL,
-    term: '0',
+    term: Term['3M'],
     side: 0,
     amount: 0,
     rate: 0,
@@ -23,7 +23,7 @@ const landingOrderFormSlice = createSlice({
         setCurrency: (state, action: PayloadAction<Currency>) => {
             state.currency = action.payload;
         },
-        setTerm: (state, action: PayloadAction<string>) => {
+        setTerm: (state, action: PayloadAction<Term>) => {
             state.term = action.payload;
         },
         setSide: (state, action: PayloadAction<number>) => {
