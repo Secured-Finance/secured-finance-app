@@ -1,14 +1,22 @@
+import { useState } from 'react';
 import { NavLink, useRouteMatch } from 'react-router-dom';
 import SFLogo from 'src/assets/img/logo.svg';
-import { NavTab, TraderProTab } from 'src/components/atoms';
-import { WalletButton } from '../WalletProviderModal';
+import { Button, NavTab, TraderProTab } from 'src/components/atoms';
+import { AddressUtils } from 'src/utils/address';
+import { useWallet } from 'use-wallet';
+import { WalletDialog } from '../WalletDialog';
+import { WalletPopover } from '../WalletPopover/WalletPopover';
 
 export const Header = () => {
+    const [display, setDisplay] = useState(false);
+    const { account } = useWallet();
+
     return (
         <nav
             data-cy='header'
-            className={`} flex h-20 w-full flex-row items-center justify-between border-b
-            border-neutral1`}
+            className={`flex h-20 w-full flex-row items-center justify-between border-b border-neutral1 ${
+                display ? 'blur-sm' : ''
+            }`}
         >
             <NavLink
                 className='ml-5 flex h-10 items-center justify-center'
@@ -30,9 +38,24 @@ export const Header = () => {
                 />
                 <TraderProTab text='Trader Pro'></TraderProTab>
             </div>
-            <div className='mr-5' data-cy='wallet'>
-                <WalletButton />
+            <div className='mr-5'>
+                {account ? (
+                    <WalletPopover
+                        wallet={AddressUtils.format(account, 6)}
+                        networkName='Rinkeby'
+                        data-cy='popover'
+                    />
+                ) : (
+                    <Button data-cy='wallet' onClick={() => setDisplay(true)}>
+                        Connect Wallet
+                    </Button>
+                )}
             </div>
+            <WalletDialog
+                isOpen={display}
+                onClose={() => setDisplay(false)}
+                data-cy='modal'
+            ></WalletDialog>
         </nav>
     );
 };

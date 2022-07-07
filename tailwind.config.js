@@ -51,6 +51,7 @@ module.exports = {
             red: '#FA2256',
             purple: '#BD47FB',
             gunMetal: '#292D3F',
+            primary7: '#11CABE',
 
             // Secondary
             galacticOrange: '#F9AA4B',
@@ -58,6 +59,7 @@ module.exports = {
             nebulaTeal: '#15D6E8',
             secondaryPurple: '#AE72FF',
             moonGrey: '#E6E6E6',
+            secondary7: '#B9BDEA',
 
             neutral: '#353945',
             neutral1: '#141416',

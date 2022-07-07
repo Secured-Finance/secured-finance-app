@@ -10,7 +10,7 @@ describe('Header component', () => {
         expect(screen.getByText('OTC Lending')).toBeInTheDocument();
         expect(screen.getByText('Market Dashboard')).toBeInTheDocument();
         expect(screen.getByText('Portfolio Management')).toBeInTheDocument();
-        expect(screen.getByText('Unlock Wallet')).toBeInTheDocument();
+        expect(screen.getByText('Connect Wallet')).toBeInTheDocument();
         expect(screen.getByText('Trader Pro')).toBeInTheDocument();
     });
 });

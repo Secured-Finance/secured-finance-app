@@ -1,5 +1,8 @@
-import { useCallback, useReducer, useState } from 'react';
+import { useCallback, useEffect, useReducer, useState } from 'react';
+import Check from 'src/assets/icons/check-mark.svg';
 import { Dialog, WalletRadioGroup } from 'src/components/molecules';
+import { CACHED_PROVIDER_KEY } from 'src/contexts/SecuredFinanceProvider/SecuredFinanceProvider';
+import { useWallet } from 'use-wallet';
 
 enum step {
     selectWallet = 1,
@@ -33,8 +36,8 @@ const stateRecord: Record<step, State> = {
         buttonText: '',
     },
     [step.connected]: {
-        nextStep: step.selectWallet,
         currentStep: step.connected,
+        nextStep: step.selectWallet,
         title: 'Success!',
         description: 'Your wallet has been connected successfully',
         buttonText: 'OK',
@@ -69,6 +72,28 @@ export const WalletDialog = ({
     const [wallet, setWallet] = useState<string>('');
     const [state, dispatch] = useReducer(reducer, stateRecord[1]);
 
+    const { account, connect } = useWallet();
+
+    const handleConnect = useCallback(
+        async (provider: 'injected' | 'walletconnect', account: string) => {
+            if (!account) {
+                await connect(provider);
+                localStorage.setItem(CACHED_PROVIDER_KEY, 'connected');
+            } else {
+                dispatch({ type: 'next' });
+            }
+        },
+        [connect, dispatch]
+    );
+
+    useEffect(() => {
+        if (state.currentStep === step.connecting) {
+            const provider =
+                wallet === 'Metamask' ? 'injected' : 'walletconnect';
+            handleConnect(provider, account);
+        }
+    }, [state, account, handleConnect, wallet]);
+
     const onClick = useCallback(
         (currentStep: step) => {
             if (!wallet) {
@@ -78,9 +103,6 @@ export const WalletDialog = ({
             switch (currentStep) {
                 case step.selectWallet:
                     dispatch({ type: 'next' });
-                    setTimeout(() => {
-                        dispatch({ type: 'next' });
-                    }, 2000);
                     break;
                 case step.connecting:
                     break;
@@ -93,14 +115,22 @@ export const WalletDialog = ({
         [onClose, wallet]
     );
 
+    const handleClose = () => {
+        if (state.currentStep === step.connected) {
+            dispatch({ type: 'next' });
+        }
+        onClose();
+    };
+
     return (
         <Dialog
             isOpen={isOpen}
-            onClose={onClose}
+            onClose={handleClose}
             title={state.title}
             description={state.description}
             callToAction={state.buttonText}
             onClick={() => onClick(state.currentStep)}
+            data-cy='modal'
         >
             {(() => {
                 switch (state.currentStep) {
@@ -112,9 +142,9 @@ export const WalletDialog = ({
                             />
                         );
                     case step.connecting:
-                        return <p>Placeholder...</p>;
+                        break;
                     case step.connected:
-                        return <p>Connected</p>;
+                        return <Check className='h-[100px] w-[100px]' />;
                     default:
                         return <p>Unknown</p>;
                 }
