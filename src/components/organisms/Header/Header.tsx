@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { NavLink, useRouteMatch } from 'react-router-dom';
 import SFLogo from 'src/assets/img/logo.svg';
 import { Button, NavTab, TraderProTab } from 'src/components/atoms';
+import useSF from 'src/hooks/useSecuredFinance';
+import { capitalizeFirstLetter } from 'src/utils';
 import { AddressUtils } from 'src/utils/address';
 import { useWallet } from 'use-wallet';
 import { WalletDialog } from '../WalletDialog';
@@ -10,6 +12,7 @@ import { WalletPopover } from '../WalletPopover/WalletPopover';
 export const Header = () => {
     const [display, setDisplay] = useState(false);
     const { account } = useWallet();
+    const securedFinance = useSF();
 
     return (
         <nav
@@ -42,7 +45,9 @@ export const Header = () => {
                 {account ? (
                     <WalletPopover
                         wallet={AddressUtils.format(account, 6)}
-                        networkName='Rinkeby'
+                        networkName={capitalizeFirstLetter(
+                            securedFinance?.network
+                        )}
                         data-cy='popover'
                     />
                 ) : (
