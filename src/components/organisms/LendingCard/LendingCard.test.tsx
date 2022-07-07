@@ -133,4 +133,21 @@ describe('LendingCard Component', () => {
         });
         expect(screen.getAllByText('1 Year')).toHaveLength(2);
     });
+
+    it.skip('should be mounted with a default rate', () => {
+        render(<Default />);
+        expect(screen.getByText('0 %')).toBeInTheDocument();
+    });
+
+    it.skip('should update the rate when changing the term', () => {
+        render(<Default />);
+        fireEvent.click(screen.getByText('1 Year'));
+        expect(screen.getByText('20 %')).toBeInTheDocument();
+    });
+
+    it.skip('should update the rate when changing the asset', () => {
+        render(<Default />);
+        fireEvent.click(screen.getByText('Ethereum'));
+        expect(screen.getByText('0 %')).toBeInTheDocument();
+    });
 });
