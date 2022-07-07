@@ -2,21 +2,30 @@ import { Popover, Transition } from '@headlessui/react';
 import { LogoutIcon, UserIcon } from '@heroicons/react/outline';
 import { BadgeCheckIcon } from '@heroicons/react/solid';
 import classNames from 'classnames';
-import { Fragment, SVGProps } from 'react';
+import React, { Fragment, SVGProps, useCallback } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import FilecoinWallet from 'src/assets/icons/FilecoinWallet.svg';
 import MetamaskLogo from 'src/assets/img/metamask-fox.svg';
 import { ExpandIndicator, Separator, Toggle } from 'src/components/atoms';
+import { CACHED_PROVIDER_KEY } from 'src/contexts/SecuredFinanceProvider/SecuredFinanceProvider';
+import { RootState } from 'src/store/types';
+import { resetEthWallet } from 'src/store/wallets';
+import { isAnyWalletConnected } from 'src/store/wallets/selectors';
+import { useWallet } from 'use-wallet';
 
 const Item = ({
     name,
     Icon,
     href,
     Badge,
+    onClick,
 }: {
     name: string;
     Icon: (props: SVGProps<SVGSVGElement>) => JSX.Element;
     href?: string;
     Badge?: (props: SVGProps<SVGSVGElement>) => JSX.Element;
+    onClick?: () => void;
 }) => {
     const Tag = href ? 'a' : 'button';
     const props: {
@@ -34,7 +43,7 @@ const Item = ({
 
     return (
         <div>
-            <Tag {...props}>
+            <Tag {...props} onClick={onClick}>
                 <div className='flex h-10 w-10 items-center'>
                     <Icon className='h-6 w-6' />
                 </div>
@@ -98,6 +107,22 @@ export const WalletPopover = ({
     networkName: string;
     isKYC?: boolean;
 }) => {
+    const { reset } = useWallet();
+    const dispatch = useDispatch();
+    const history = useHistory();
+    const otherWalletConnected = useSelector((state: RootState) =>
+        isAnyWalletConnected(state, 'ethereum')
+    );
+
+    const handleSignOutClick = useCallback(() => {
+        reset();
+        dispatch(resetEthWallet());
+        localStorage.removeItem(CACHED_PROVIDER_KEY);
+        if (!otherWalletConnected) {
+            history.push('/');
+        }
+    }, [dispatch, history, otherWalletConnected, reset]);
+
     return (
         <div className='w-full max-w-sm px-4'>
             <Popover className='relative'>
@@ -129,7 +154,7 @@ export const WalletPopover = ({
                             leaveFrom='opacity-100 translate-y-0'
                             leaveTo='opacity-0 translate-y-5'
                         >
-                            <Popover.Panel className='relative left-36 z-10 mt-3 w-screen max-w-xs -translate-x-1/2 transform px-4'>
+                            <Popover.Panel className='absolute left-36 z-10 mt-3 w-screen max-w-xs -translate-x-1/2 transform px-4'>
                                 <div className='overflow-hidden rounded-lg shadow-sm ring-1 ring-red ring-opacity-5'>
                                     <div className='relative flex flex-col space-y-2 bg-universeBlue p-2 text-white'>
                                         <HeaderItem
@@ -166,7 +191,7 @@ export const WalletPopover = ({
 
                                         <Item
                                             name='Disconnect Wallet'
-                                            href='##'
+                                            onClick={handleSignOutClick}
                                             Icon={LogoutIcon}
                                         />
 

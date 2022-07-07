@@ -1,4 +1,5 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { WithWalletProvider } from 'src/../.storybook/decorators';
 import { WalletPopover } from './WalletPopover';
 
 export default {
@@ -14,6 +15,7 @@ export default {
         wallet: { control: 'text' },
         networkName: { control: 'text' },
     },
+    decorators: [WithWalletProvider],
 } as ComponentMeta<typeof WalletPopover>;
 
 const Template: ComponentStory<typeof WalletPopover> = args => (
