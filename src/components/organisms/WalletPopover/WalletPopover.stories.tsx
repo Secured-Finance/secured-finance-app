@@ -1,5 +1,5 @@
+import { WithWalletProvider } from '.storybook/decorators';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
-import { WithWalletProvider } from 'src/../.storybook/decorators';
 import { WalletPopover } from './WalletPopover';
 
 export default {
@@ -9,7 +9,7 @@ export default {
         wallet: '0x0123...321',
         networkName: 'Rinkeby',
         status: 'connected',
-        //children: 'Connect Wallet',
+        // children: 'Connect Wallet',
     },
     argTypes: {
         wallet: { control: 'text' },
@@ -19,7 +19,9 @@ export default {
 } as ComponentMeta<typeof WalletPopover>;
 
 const Template: ComponentStory<typeof WalletPopover> = args => (
-    <WalletPopover {...args} />
+    <div className='ml-[1000px]'>
+        <WalletPopover {...args} />
+    </div>
 );
 
 export const Default = Template.bind({});
