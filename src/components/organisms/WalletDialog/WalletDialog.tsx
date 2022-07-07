@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useReducer, useState } from 'react';
 import Check from 'src/assets/icons/check-mark.svg';
+import Loader from 'src/assets/img/gradient-loader.png';
 import { Dialog, WalletRadioGroup } from 'src/components/molecules';
 import { CACHED_PROVIDER_KEY } from 'src/contexts/SecuredFinanceProvider/SecuredFinanceProvider';
 import { useWallet } from 'use-wallet';
@@ -95,7 +96,7 @@ export const WalletDialog = ({
     }, [state, account, handleConnect, wallet]);
 
     const onClick = useCallback(
-        (currentStep: step) => {
+        async (currentStep: step) => {
             if (!wallet) {
                 return;
             }
@@ -116,9 +117,7 @@ export const WalletDialog = ({
     );
 
     const handleClose = () => {
-        if (state.currentStep === step.connected) {
-            dispatch({ type: 'next' });
-        }
+        dispatch({ type: 'default' });
         onClose();
     };
 
@@ -142,6 +141,14 @@ export const WalletDialog = ({
                             />
                         );
                     case step.connecting:
+                        return (
+                            // eslint-disable-next-line @next/next/no-img-element
+                            <img
+                                src={Loader.src}
+                                alt='Loader'
+                                className='animate-spin'
+                            ></img>
+                        );
                         break;
                     case step.connected:
                         return <Check className='h-[100px] w-[100px]' />;
