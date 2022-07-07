@@ -9,27 +9,27 @@ import { AssetSelector } from './AssetSelector';
 
 const options = [
     {
-        name: 'Bitcoin',
+        label: 'Bitcoin',
         iconSVG: BitcoinIcon,
         value: 'BTC',
     },
     {
-        name: 'Ethereum',
+        label: 'Ethereum',
         iconSVG: EthIcon,
         value: 'ETH',
     },
     {
-        name: 'Filecoin',
+        label: 'Filecoin',
         iconSVG: FilecoinIcon,
         value: 'FIL',
     },
     {
-        name: 'USDC',
+        label: 'USDC',
         iconSVG: UsdcIcon,
         value: 'USDC',
     },
     {
-        name: 'USD Tether',
+        label: 'USD Tether',
         iconSVG: UsdtIcon,
         value: 'USDT',
     },

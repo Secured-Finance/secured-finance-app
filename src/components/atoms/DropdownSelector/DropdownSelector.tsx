@@ -4,7 +4,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { ExpandIndicator, Separator } from 'src/components/atoms';
 
 export type Option = {
-    name: string;
+    label: string;
     value: string;
     iconSVG?: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
 };
@@ -40,7 +40,7 @@ export const DropdownSelector = ({
         if (selected.value === selectedOptionValue) {
             onChange(selected.value);
         }
-    }, [onChange, selectedOptionValue, selected.name, selected.value]);
+    }, [onChange, selectedOptionValue, selected.label, selected.value]);
 
     useEffect(() => {
         if (selected.value) {
@@ -60,7 +60,7 @@ export const DropdownSelector = ({
                                 </span>
                             ) : null}
                             <span className='typography-caption w-16 text-white'>
-                                {selectedOption?.name}
+                                {selectedOption?.label}
                             </span>
                             <span>
                                 <ExpandIndicator expanded={open} />
@@ -91,7 +91,7 @@ export const DropdownSelector = ({
                                             ) : null}
 
                                             <span className='typography-button-3'>
-                                                {asset.name}
+                                                {asset.label}
                                             </span>
                                         </div>
                                         {i !== optionList.length - 1 ? (

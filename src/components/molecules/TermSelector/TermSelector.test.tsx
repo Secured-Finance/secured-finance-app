@@ -12,7 +12,7 @@ describe('TermSelector Component', () => {
     it('should not transform the option selected by default', () => {
         render(<Default />);
         fireEvent.click(screen.getByRole('button'));
-        const option = WithTransformFunction.args.options[3].name;
+        const option = WithTransformFunction.args.options[3].label;
         fireEvent.click(screen.getByText(option));
         expect(
             screen.getByTestId('term-selector-transformed-value')
@@ -24,10 +24,10 @@ describe('TermSelector Component', () => {
         expect(
             screen.getByTestId('term-selector-transformed-value')
         ).toHaveTextContent(
-            WithTransformFunction.args.options[0].name.toUpperCase()
+            WithTransformFunction.args.options[0].label.toUpperCase()
         );
         fireEvent.click(screen.getByRole('button'));
-        const option = WithTransformFunction.args.options[3].name;
+        const option = WithTransformFunction.args.options[3].label;
         fireEvent.click(screen.getByText(option));
         expect(
             screen.getByTestId('term-selector-transformed-value')
@@ -39,7 +39,7 @@ describe('TermSelector Component', () => {
         render(<Default onTermChange={onTermChange} />);
         fireEvent.click(screen.getByRole('button'));
         const option = Default.args.options[3];
-        fireEvent.click(screen.getByText(option.name));
+        fireEvent.click(screen.getByText(option.label));
         expect(onTermChange).toHaveBeenCalledWith(option.value);
     });
 });

@@ -85,16 +85,16 @@ export const LendingCard = ({
     const dispatch = useDispatch();
     const optionList = useMemo(
         () => [
-            { name: 'Sep 2022', value: 'SEP22' },
-            { name: 'Dec 2022', value: 'DEC22' },
-            { name: 'Mar 2023', value: 'MAR23' },
-            { name: 'Jun 2023', value: 'JUN23' },
-            { name: 'Sep 2023', value: 'SEP23' },
-            { name: 'Dec 2023', value: 'DEC23' },
-            { name: 'Mar 2024', value: 'MAR24' },
-            { name: 'Jun 2024', value: 'JUN24' },
-            { name: 'Sep 2024', value: 'SEP24' },
-            { name: 'Dec 2024', value: 'DEC24' },
+            { label: 'Sep 2022', value: 'SEP22' },
+            { label: 'Dec 2022', value: 'DEC22' },
+            { label: 'Mar 2023', value: 'MAR23' },
+            { label: 'Jun 2023', value: 'JUN23' },
+            { label: 'Sep 2023', value: 'SEP23' },
+            { label: 'Dec 2023', value: 'DEC23' },
+            { label: 'Mar 2024', value: 'MAR24' },
+            { label: 'Jun 2024', value: 'JUN24' },
+            { label: 'Sep 2024', value: 'SEP24' },
+            { label: 'Dec 2024', value: 'DEC24' },
         ],
         []
     );
@@ -112,7 +112,7 @@ export const LendingCard = ({
                 (acc, ccy) => [
                     ...acc,
                     {
-                        name: ccy.name,
+                        label: ccy.name,
                         value: ccy.shortName,
                         iconSVG: ccy.iconSVG,
                     },
