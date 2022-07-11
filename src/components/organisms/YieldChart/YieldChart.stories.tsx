@@ -7,6 +7,7 @@ export default {
     args: {
         asset: 'USDC',
         isBorrow: true,
+        rates: [100, 200, 300, 400, 500, 600],
     },
     argTypes: {},
 } as ComponentMeta<typeof YieldChart>;
