@@ -1,6 +1,6 @@
 import React from 'react';
 import theme from 'src/theme';
-import { Term } from 'src/utils';
+import { TermInfo } from 'src/utils';
 import styled from 'styled-components';
 import { Label, sharedInputStyles } from './Inputs';
 
@@ -8,7 +8,7 @@ interface IDropdown extends React.SelectHTMLAttributes<HTMLSelectElement> {
     label: string;
     value: string;
     onChangeValue: (event: React.FormEvent<HTMLSelectElement>) => void;
-    options: Term[];
+    options: TermInfo[];
 }
 
 const DropdownSelect = styled.select`

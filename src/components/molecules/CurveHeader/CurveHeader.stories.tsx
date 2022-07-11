@@ -2,6 +2,7 @@ import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { updateLatestBlock } from 'src/store/blockchain';
+import { Currency } from 'src/utils';
 import { coingeckoApi } from 'src/utils/coinGeckoApi';
 import AxiosMock from '../../../stories/mocks/AxiosMock';
 import { CurveHeader } from './CurveHeader';
@@ -10,7 +11,7 @@ export default {
     title: 'Molecules/CurveHeader',
     component: CurveHeader,
     args: {
-        asset: 'Filecoin',
+        asset: Currency.FIL,
         isBorrow: true,
     },
     argTypes: {},

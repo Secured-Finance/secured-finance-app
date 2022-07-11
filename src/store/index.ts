@@ -5,6 +5,7 @@ import blockchain from './blockchain';
 import { listenerMiddleware } from './blockchain/reducer';
 import collateralForm from './collateralForm';
 import history from './history';
+import landingOrderForm from './landingOrderForm';
 import lastError from './lastError';
 import ledger from './ledger';
 import lendingTerminal from './lendingTerminal';
@@ -26,6 +27,7 @@ export const rootReducers = {
     blockchain,
     transaction,
     lastError,
+    landingOrderForm,
 };
 
 const store = configureStore({

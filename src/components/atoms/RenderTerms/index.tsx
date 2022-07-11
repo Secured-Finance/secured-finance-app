@@ -1,7 +1,7 @@
-import { getTermBy, Term } from 'src/utils';
+import { getTermBy, TermInfo } from 'src/utils';
 
 interface RenderTermsProps {
-    label: keyof Term;
+    label: keyof TermInfo;
     value: string | number;
 }
 

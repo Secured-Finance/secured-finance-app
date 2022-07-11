@@ -44,13 +44,13 @@ describe('AssetSelector Component', () => {
     it('should call the onAssetChange function when the asset is changed', () => {
         const onAssetChange = jest.fn();
         render(<Default onAssetChange={onAssetChange} />);
-        expect(onAssetChange).toHaveBeenCalledWith('Bitcoin');
+        expect(onAssetChange).toHaveBeenCalledWith('BTC');
         fireEvent.click(screen.getByRole('button'));
         fireEvent.click(screen.getByText('Ethereum'));
-        expect(onAssetChange).toHaveBeenLastCalledWith('Ethereum');
+        expect(onAssetChange).toHaveBeenLastCalledWith('ETH');
         fireEvent.click(screen.getByRole('button'));
         fireEvent.click(screen.getByText('Filecoin'));
-        expect(onAssetChange).toHaveBeenLastCalledWith('Filecoin');
+        expect(onAssetChange).toHaveBeenLastCalledWith('FIL');
         expect(onAssetChange).toHaveBeenCalledTimes(3);
     });
 });

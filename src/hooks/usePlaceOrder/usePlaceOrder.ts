@@ -4,6 +4,11 @@ import { useCallback } from 'react';
 import { Currency } from 'src/utils';
 import useSF from '../useSecuredFinance';
 
+export enum OrderSide {
+    Lend = 0,
+    Borrow = 1,
+}
+
 export const usePlaceOrder = () => {
     const securedFinance = useSF();
 
@@ -11,7 +16,7 @@ export const usePlaceOrder = () => {
         async (
             ccy: string,
             term: string,
-            side: number,
+            side: OrderSide,
             amount: number,
             rate: number
         ) => {
