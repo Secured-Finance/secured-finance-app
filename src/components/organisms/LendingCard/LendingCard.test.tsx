@@ -79,7 +79,7 @@ describe('LendingCard Component', () => {
         const button = screen.getByTestId('place-order-button');
         fireEvent.click(button);
         await waitFor(() =>
-            expect(onPlaceOrder).toHaveBeenCalledWith('ETH', '3M', 0, 0, 0)
+            expect(onPlaceOrder).toHaveBeenCalledWith('ETH', '3M', 0, 0, 100)
         );
     });
 
@@ -92,7 +92,7 @@ describe('LendingCard Component', () => {
         fireEvent.click(screen.getByTestId('place-order-button'));
 
         await waitFor(() =>
-            expect(onPlaceOrder).toHaveBeenCalledWith('FIL', '3M', 0, 10, 0)
+            expect(onPlaceOrder).toHaveBeenCalledWith('FIL', '3M', 0, 10, 100)
         );
     });
 
@@ -116,13 +116,9 @@ describe('LendingCard Component', () => {
         expect(screen.getByText('~ 20,003.4 USD')).toBeInTheDocument();
     });
 
-    it('should display the rate from the store', () => {
-        render(<Default />, {
-            preloadedState: {
-                landingOrderForm: { rate: '20' },
-            },
-        });
-        expect(screen.getByText('20 %')).toBeInTheDocument();
+    it('should display the rate from the prop', () => {
+        render(<Default marketRate={20} />);
+        expect(screen.getByText('0.2 %')).toBeInTheDocument();
     });
 
     it('should select the term from the store', () => {

@@ -1,18 +1,16 @@
 import { RadioGroup } from '@headlessui/react';
 import classNames from 'classnames';
 import { BigNumber } from 'ethers';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button } from 'src/components/atoms';
 import { CollateralUsageSection } from 'src/components/atoms/CollateralUsageSection';
 import { AssetSelector, TermSelector } from 'src/components/molecules';
-import { CollateralBook } from 'src/hooks';
-import { useRates } from 'src/hooks/useRates';
+import { CollateralBook, OrderSide } from 'src/hooks';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import {
     setAmount,
     setCurrency,
-    setRate,
     setSide,
     setTerm,
 } from 'src/store/landingOrderForm';
@@ -25,22 +23,16 @@ import {
     getTermsAsOptions,
     percentFormat,
     Term,
-    termMap,
 } from 'src/utils';
 import {
     collateralUsage,
     computeAvailableToBorrow,
 } from 'src/utils/collateral';
 
-//TODO: move this to the SDK
-enum OrderSide {
-    Lend = 0,
-    Borrow = 1,
-}
-
 export const LendingCard = ({
     onPlaceOrder,
     collateralBook,
+    marketRate,
 }: {
     onPlaceOrder: (
         ccy: string,
@@ -50,14 +42,12 @@ export const LendingCard = ({
         rate: number
     ) => Promise<unknown>;
     collateralBook: CollateralBook;
+    marketRate: number;
 }) => {
     const [pendingTransaction, setPendingTransaction] = useState(false);
-    const { currency, term, amount, rate, side } = useSelector(
+    const { currency, term, amount, side } = useSelector(
         (state: RootState) => state.landingOrderForm
     );
-
-    //TODO: use the currency instead of FIL
-    const rates = useRates(Currency.FIL, 0);
 
     const dispatch = useDispatch();
 
@@ -128,10 +118,6 @@ export const LendingCard = ({
         [onPlaceOrder, dispatch]
     );
 
-    useEffect(() => {
-        dispatch(setRate(rates[Object.keys(termMap).indexOf(term)]));
-    }, [term, rates, dispatch]);
-
     return (
         <div className='w-80 flex-col space-y-6 rounded-xl border border-neutral bg-transparent pb-4 shadow-2xl'>
             <RadioGroup
@@ -167,7 +153,7 @@ export const LendingCard = ({
             <div className='grid justify-center space-y-4 px-4'>
                 <div className='typography-body-2 flex flex-col text-center text-white-50'>
                     <span className='typography-big-body-bold text-white'>
-                        {rate / 100} %
+                        {marketRate && marketRate / 100} %
                     </span>
                     <span>Fixed Rate APY</span>
                 </div>
@@ -197,7 +183,13 @@ export const LendingCard = ({
                 <Button
                     fullWidth
                     onClick={() =>
-                        handlePlaceOrder(currency, term, side, amount, rate)
+                        handlePlaceOrder(
+                            currency,
+                            term,
+                            side,
+                            amount,
+                            marketRate
+                        )
                     }
                     disabled={pendingTransaction}
                     data-testid='place-order-button'
