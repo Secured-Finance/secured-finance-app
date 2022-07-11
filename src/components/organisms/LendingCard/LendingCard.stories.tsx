@@ -22,6 +22,7 @@ export default {
             vault: '',
             locked: new BigNumber('5000000000000000000'),
         },
+        marketRate: 100,
     },
     parameters: {
         chromatic: { disableSnapshot: false },
