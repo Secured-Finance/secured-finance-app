@@ -129,7 +129,6 @@ export const WalletDialog = ({
             description={state.description}
             callToAction={state.buttonText}
             onClick={() => onClick(state.currentStep)}
-            data-cy='modal'
         >
             {(() => {
                 switch (state.currentStep) {

@@ -23,25 +23,30 @@ describe('The Home Page', () => {
         cy.get('[data-cy="lending-page"]').should('be.visible');
     });
 
-    it.skip('display two wallet providers when clicking unlocking wallet', () => {
+    it('display two wallet providers when clicking unlocking wallet', () => {
         cy.get('[data-cy="wallet"]').click();
         cy.get('[data-cy="modal"]').should('be.visible');
-        cy.get('[data-cy="eth-wallet"]').should('be.visible');
+        cy.get('[data-cy="radio-group"]').should('be.visible');
 
-        cy.get('button:contains("Connect")')
+        cy.get('[data-cy="radio-group"]')
+            .children()
             .should('have.length', 2)
-            .and(buttonList => {
+            .and(radioList => {
                 chai.expect(
-                    buttonList.get(0).textContent,
-                    'metamask button'
-                ).to.be.equal('Connect');
+                    radioList.get(0).textContent,
+                    'Metamask button'
+                ).to.be.equal('Metamask');
                 chai.expect(
-                    buttonList.get(1).textContent,
-                    'other button'
-                ).to.be.equal('Connect');
+                    radioList.get(1).textContent,
+                    'WalletConnect button'
+                ).to.be.equal('WalletConnect');
             })
-            .and(buttonList => {
-                buttonList.get(0).click();
+            .and(radioList => {
+                radioList.get(0).click();
             });
+
+        cy.get('[data-testid="dialog-action-button"]')
+            .should('be.visible')
+            .click();
     });
 });
