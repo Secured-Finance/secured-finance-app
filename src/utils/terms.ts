@@ -69,9 +69,9 @@ export const termMap: Record<Term, TermInfo> = {
 };
 
 export const getTermsAsOptions = () => {
-    return Object.values(termMap).map<Option<Term>>(({ label }, index) => ({
-        label,
-        value: Object.keys(termMap)[index] as Term,
+    return Object.entries(termMap).map<Option<Term>>(o => ({
+        label: o[1].label,
+        value: o[0] as Term,
     }));
 };
 
