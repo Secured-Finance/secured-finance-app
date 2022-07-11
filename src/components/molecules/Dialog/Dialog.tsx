@@ -23,16 +23,15 @@ export const Dialog = ({
             open={isOpen}
             onClose={onClose}
             className='relative z-50'
-            data-cy='modal'
         >
             <div className='fixed inset-0 bg-backgroundBlur' />
             <div className='fixed inset-0 flex items-center justify-center p-4'>
-                <HeadlessDialog.Panel className='w-full max-w-md space-y-8 rounded-xl bg-universeBlue p-10'>
+                <HeadlessDialog.Panel
+                    className='w-full max-w-md space-y-8 rounded-xl bg-universeBlue p-10'
+                    data-cy='modal'
+                >
                     <div className='-mb-7 flex items-center justify-end'>
-                        <CloseButton
-                            data-cy='modal-close-button'
-                            onClick={onClose}
-                        />
+                        <CloseButton onClick={onClose} />
                     </div>
                     <HeadlessDialog.Title className='typography-modal-title w-full text-center text-white opacity-80'>
                         {title}

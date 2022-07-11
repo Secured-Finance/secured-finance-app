@@ -48,7 +48,6 @@ export const Header = () => {
                         networkName={capitalizeFirstLetter(
                             securedFinance?.network
                         )}
-                        data-cy='popover'
                     />
                 ) : (
                     <Button data-cy='wallet' onClick={() => setDisplay(true)}>
@@ -59,7 +58,6 @@ export const Header = () => {
             <WalletDialog
                 isOpen={display}
                 onClose={() => setDisplay(false)}
-                data-cy='modal'
             ></WalletDialog>
         </nav>
     );
