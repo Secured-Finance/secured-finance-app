@@ -4,7 +4,7 @@ exports[`YieldChart Component should render YieldChart 1`] = `
 <body>
   <div>
     <div
-      class="flex h-[536px] w-[585px] flex-col items-start"
+      class="flex h-[536px] w-[585px] flex-col items-start shadow-xl drop-shadow-2xl"
     >
       <div
         class="h-20 w-full"

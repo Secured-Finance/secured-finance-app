@@ -1,34 +1,40 @@
 import { ChangeEvent, useMemo, useState } from 'react';
 import { DropdownSelector, Option } from 'src/components/atoms';
 
-export const AssetSelector = ({
+export const AssetSelector = <AssetType extends string = string>({
     options,
-    value,
+    selected,
     priceList,
-    transform = (v: string) => v,
+    transformLabel = (v: string) => v,
     onAssetChange,
     onAmountChange,
 }: {
-    options: Readonly<Array<Option>>;
-    value: Option;
-    priceList: Record<string, number>;
-    transform?: (v: string) => string;
-    onAssetChange?: (v: string) => void;
+    options: Readonly<Array<Option<AssetType>>>;
+    selected: Option<AssetType>;
+    priceList: Record<AssetType, number>;
+    transformLabel?: (v: string) => string;
+    onAssetChange?: (v: AssetType) => void;
     onAmountChange?: (v: number) => void;
 }) => {
-    const [asset, setAsset] = useState(value.name);
+    const [assetValue, setAssetValue] = useState(selected.value);
     const [amount, setAmount] = useState(0);
+
+    const selectedOption = useMemo(
+        () => options.find(o => o.value === assetValue),
+        [options, assetValue]
+    );
+
     const amountInUsd = useMemo(() => {
-        if (!asset) {
+        if (!selectedOption.value) {
             return 0;
         }
         return new Intl.NumberFormat('en-us', {
             minimumFractionDigits: 0,
-        }).format(priceList[asset] * amount);
-    }, [asset, amount, priceList]);
+        }).format(priceList[selectedOption.value] * amount);
+    }, [selectedOption.value, priceList, amount]);
 
-    const handleAssetChange = (v: string) => {
-        setAsset(v);
+    const handleAssetChange = (v: AssetType) => {
+        setAssetValue(v);
         if (onAssetChange) {
             onAssetChange(v);
         }
@@ -60,7 +66,7 @@ export const AssetSelector = ({
             <div className='flex h-14 flex-row items-center justify-between space-x-2 rounded-lg bg-black-20 py-2 pl-2 pr-4 focus-within:ring'>
                 <DropdownSelector
                     optionList={options}
-                    value={value}
+                    selected={selected}
                     onChange={handleAssetChange}
                 />
                 <input
@@ -75,7 +81,7 @@ export const AssetSelector = ({
                     className='typography-caption ml-2 flex text-white-60'
                     data-testid='asset-selector-transformed-value'
                 >
-                    {transform(asset)}
+                    {transformLabel(selectedOption.label)}
                 </div>
             </div>
         </div>

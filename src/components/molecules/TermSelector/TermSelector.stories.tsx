@@ -1,17 +1,18 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { Option } from 'src/components/atoms';
 import { TermSelector } from './TermSelector';
 
-const options = [
-    { name: 'Sep 2022' },
-    { name: 'Dec 2022' },
-    { name: 'Mar 2023' },
-    { name: 'Jun 2023' },
-    { name: 'Sep 2023' },
-    { name: 'Dec 2023' },
-    { name: 'Mar 2024' },
-    { name: 'Jun 2024' },
-    { name: 'Sep 2024' },
-    { name: 'Dec 2024' },
+const options: Array<Option> = [
+    { label: 'Sep 2022', value: 'Sep2022' },
+    { label: 'Dec 2022', value: 'Dec2022' },
+    { label: 'Mar 2023', value: 'Mar2023' },
+    { label: 'Jun 2023', value: 'Jun2023' },
+    { label: 'Sep 2023', value: 'Sep2023' },
+    { label: 'Dec 2023', value: 'Dec2023' },
+    { label: 'Mar 2024', value: 'Mar2024' },
+    { label: 'Jun 2024', value: 'Jun2024' },
+    { label: 'Sep 2024', value: 'Sep2024' },
+    { label: 'Dec 2024', value: 'Dec2024' },
 ];
 
 export default {
@@ -19,7 +20,7 @@ export default {
     component: TermSelector,
     args: {
         options,
-        value: { name: 'Sep 2022' },
+        selected: { label: 'Sep 2022', value: 'Sep2022' },
     },
     argTypes: {
         options: { control: { disable: true } },
@@ -37,7 +38,7 @@ export const Default = Template.bind({});
 export const WithTransformFunction = Template.bind({});
 WithTransformFunction.args = {
     options,
-    transform: (v: string) => {
+    transformLabel: (v: string) => {
         return v.toUpperCase();
     },
 };
