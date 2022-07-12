@@ -3,42 +3,50 @@ import classNames from 'classnames';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { ExpandIndicator, Separator } from 'src/components/atoms';
 
-export type Option = {
-    name: string;
+export type Option<T = string> = {
+    label: string;
+    value: T;
     iconSVG?: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
 };
 
-export const DropdownSelector = ({
-    value,
+export const DropdownSelector = <T extends string = string>({
+    selected,
     optionList,
     onChange,
 }: {
-    value: Option;
-    optionList: Readonly<Array<Option>>;
-    onChange: (v: string) => void;
+    selected: Option<T>;
+    optionList: Readonly<Array<Option<T>>>;
+    onChange: (v: T) => void;
 }) => {
-    const [selectedOptionName, setSelectedOptionName] = useState<string>(
-        value.name
+    const [selectedOptionValue, setSelectedOptionValue] = useState<T>(
+        selected.value
     );
+
     const selectedOption = useMemo(
-        () => optionList.find(o => o.name === selectedOptionName),
-        [optionList, selectedOptionName]
+        () => optionList.find(o => o.value === selectedOptionValue),
+        [optionList, selectedOptionValue]
     );
 
     const handleSelect = useCallback(
-        (optionName: string) => {
-            setSelectedOptionName(optionName);
-            onChange(optionName);
+        (option: Option<T>) => {
+            setSelectedOptionValue(option.value);
+            onChange(option.value);
         },
         [onChange]
     );
 
-    // Handle the case of the initial value
+    //Handle the case of the initial value
     useEffect(() => {
-        if (value.name === selectedOptionName) {
-            onChange(value.name);
+        if (selected.value === selectedOptionValue) {
+            onChange(selected.value);
         }
-    }, [onChange, selectedOptionName, value.name]);
+    }, [onChange, selectedOptionValue, selected.label, selected.value]);
+
+    useEffect(() => {
+        if (selected.value) {
+            setSelectedOptionValue(selected.value);
+        }
+    }, [selected.value]);
 
     return (
         <Menu as='div' className='flex'>
@@ -52,7 +60,7 @@ export const DropdownSelector = ({
                                 </span>
                             ) : null}
                             <span className='typography-caption w-16 text-white'>
-                                {selectedOption?.name}
+                                {selectedOption?.label}
                             </span>
                             <span>
                                 <ExpandIndicator expanded={open} />
@@ -62,9 +70,9 @@ export const DropdownSelector = ({
                     <Menu.Items className='absolute flex max-h-96 w-52 flex-col overflow-y-auto rounded-lg bg-gunMetal p-2 shadow-sm'>
                         {optionList.map((asset, i) => (
                             <Menu.Item
-                                key={asset.name}
+                                key={`${asset.label}_${i}`}
                                 as='button'
-                                onClick={() => handleSelect(asset.name)}
+                                onClick={() => handleSelect(asset)}
                             >
                                 {({ active }) => (
                                     <div>
@@ -83,7 +91,7 @@ export const DropdownSelector = ({
                                             ) : null}
 
                                             <span className='typography-button-3'>
-                                                {asset.name}
+                                                {asset.label}
                                             </span>
                                         </div>
                                         {i !== optionList.length - 1 ? (

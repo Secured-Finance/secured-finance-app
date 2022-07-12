@@ -6,24 +6,33 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Button } from 'src/components/atoms';
 import { CollateralUsageSection } from 'src/components/atoms/CollateralUsageSection';
 import { AssetSelector, TermSelector } from 'src/components/molecules';
-import { CollateralBook } from 'src/hooks';
+import { CollateralBook, OrderSide } from 'src/hooks';
+import { getPriceMap } from 'src/store/assetPrices/selectors';
+import {
+    setAmount,
+    setCurrency,
+    setSide,
+    setTerm,
+} from 'src/store/landingOrderForm';
 import { setLastMessage } from 'src/store/lastError';
 import { RootState } from 'src/store/types';
-import { Currency, currencyList, percentFormat } from 'src/utils';
+import {
+    Currency,
+    currencyList,
+    getCurrencyMapAsOptions,
+    getTermsAsOptions,
+    percentFormat,
+    Term,
+} from 'src/utils';
 import {
     collateralUsage,
     computeAvailableToBorrow,
 } from 'src/utils/collateral';
 
-//TODO: move this to the SDK
-enum OrderSide {
-    Lend = 0,
-    Borrow = 1,
-}
-
 export const LendingCard = ({
     onPlaceOrder,
     collateralBook,
+    marketRate,
 }: {
     onPlaceOrder: (
         ccy: string,
@@ -33,13 +42,14 @@ export const LendingCard = ({
         rate: number
     ) => Promise<unknown>;
     collateralBook: CollateralBook;
+    marketRate: number;
 }) => {
     const [pendingTransaction, setPendingTransaction] = useState(false);
-    const [ccy, setCcy] = useState('');
-    const [term, setTerm] = useState('1');
-    const [side, setSide] = useState<OrderSide>(OrderSide.Lend);
-    const [amount, setAmount] = useState(0);
-    const [rate] = useState(0);
+    const { currency, term, amount, side } = useSelector(
+        (state: RootState) => state.landingOrderForm
+    );
+
+    const dispatch = useDispatch();
 
     const shortNames = useMemo(
         () =>
@@ -53,19 +63,9 @@ export const LendingCard = ({
         []
     );
 
-    const {
-        filecoin: { price: filecoinPrice },
-        ethereum: { price: ethereumPrice },
-        usdc: { price: usdcPrice },
-    } = useSelector((state: RootState) => state.assetPrices);
-
-    const assetPriceMap: Record<string, number> = useMemo(() => {
-        return {
-            Ethereum: ethereumPrice,
-            Filecoin: filecoinPrice,
-            USDC: usdcPrice,
-        };
-    }, [ethereumPrice, filecoinPrice, usdcPrice]);
+    const assetPriceMap = useSelector((state: RootState) => getPriceMap(state));
+    const assetList = useMemo(() => getCurrencyMapAsOptions(), []);
+    const optionList = useMemo(() => getTermsAsOptions(), []);
 
     const collateralUsagePercent = useMemo(() => {
         //TODO: Remove the usage of BigNumber.js and use only Ethers.js
@@ -78,30 +78,23 @@ export const LendingCard = ({
     }, [collateralBook]);
 
     const availableToBorrow = useMemo(() => {
-        if (!ccy) {
+        if (!currency) {
             return 0;
         }
         //TODO: Remove the usage of BigNumber.js and use only Ethers.js
         return `${computeAvailableToBorrow(
-            assetPriceMap[ccy],
-            assetPriceMap['Ethereum'],
+            assetPriceMap[currency],
+            assetPriceMap[Currency.ETH],
             BigNumber.from(collateralBook.collateral.toString())
-        )}  ${shortNames[ccy]}`;
-    }, [assetPriceMap, ccy, collateralBook.collateral, shortNames]);
+        )}  ${currency}`;
+    }, [assetPriceMap, collateralBook.collateral, currency]);
 
-    const dispatch = useDispatch();
-    const optionList = [
-        { name: 'Sep 2022' },
-        { name: 'Dec 2022' },
-        { name: 'Mar 2023' },
-        { name: 'Jun 2023' },
-        { name: 'Sep 2023' },
-        { name: 'Dec 2023' },
-        { name: 'Mar 2024' },
-        { name: 'Jun 2024' },
-        { name: 'Sep 2024' },
-        { name: 'Dec 2024' },
-    ];
+    //TODO: strongly type the terms
+    const selectedTerm = useMemo(() => {
+        return (
+            optionList.find(option => option.value === term) || optionList[0]
+        );
+    }, [term, optionList]);
 
     const handlePlaceOrder = useCallback(
         async (
@@ -126,10 +119,10 @@ export const LendingCard = ({
     );
 
     return (
-        <div className='w-80 flex-col space-y-6 rounded-lg border border-neutral bg-transparent pb-4 shadow-2xl'>
+        <div className='w-80 flex-col space-y-6 rounded-xl border border-neutral bg-transparent pb-4 shadow-2xl'>
             <RadioGroup
                 value={side}
-                onChange={setSide}
+                onChange={(v: number) => dispatch(setSide(v))}
                 as='div'
                 className='grid grid-flow-col grid-cols-2'
             >
@@ -159,23 +152,27 @@ export const LendingCard = ({
 
             <div className='grid justify-center space-y-4 px-4'>
                 <div className='typography-body-2 flex flex-col text-center text-white-50'>
-                    <span>16.23%</span>
+                    <span className='typography-big-body-bold text-white'>
+                        {marketRate && marketRate / 100} %
+                    </span>
                     <span>Fixed Rate APY</span>
                 </div>
 
                 <AssetSelector
-                    options={currencyList}
-                    value={currencyList[0]}
-                    transform={(v: string) => shortNames[v]}
+                    options={assetList}
+                    selected={assetList[0]}
+                    transformLabel={(v: string) => shortNames[v]}
                     priceList={assetPriceMap}
-                    onAmountChange={setAmount}
-                    onAssetChange={setCcy}
+                    onAmountChange={(v: number) => dispatch(setAmount(v))}
+                    onAssetChange={(v: Currency) => {
+                        dispatch(setCurrency(v));
+                    }}
                 />
 
                 <TermSelector
                     options={optionList}
-                    value={optionList[0]}
-                    onTermChange={setTerm}
+                    selected={selectedTerm}
+                    onTermChange={(v: Term) => dispatch(setTerm(v))}
                 />
 
                 <CollateralUsageSection
@@ -186,7 +183,13 @@ export const LendingCard = ({
                 <Button
                     fullWidth
                     onClick={() =>
-                        handlePlaceOrder(ccy, term, side, amount, rate)
+                        handlePlaceOrder(
+                            currency,
+                            term,
+                            side,
+                            amount,
+                            marketRate
+                        )
                     }
                     disabled={pendingTransaction}
                     data-testid='place-order-button'

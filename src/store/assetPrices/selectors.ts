@@ -18,3 +18,19 @@ export const getFilPrice = (state: RootState) =>
 export const getEthPrice = (state: RootState) =>
     state.assetPrices.ethereum.price;
 export const getUSDCPrice = (state: RootState) => state.assetPrices.usdc.price;
+
+export const getPriceMap = (state: RootState) => {
+    return {
+        [Currency.ETH]: state.assetPrices.ethereum.price,
+        [Currency.FIL]: state.assetPrices.filecoin.price,
+        [Currency.USDC]: state.assetPrices.usdc.price,
+    };
+};
+
+export const getPriceChangeMap = (state: RootState) => {
+    return {
+        [Currency.ETH]: state.assetPrices.ethereum.change,
+        [Currency.FIL]: state.assetPrices.filecoin.change,
+        [Currency.USDC]: state.assetPrices.usdc.change,
+    };
+};
