@@ -60,4 +60,10 @@
     .typography-button-7 {
       @apply text-2xs font-secondary;
     }
+    .typography-nav-menu-default {
+      @apply text-sm font-secondary leading-4 font-normal;
+    }
+    .typography-pill-label {
+      @apply text-2xs font-secondary leading-4 font-semibold uppercase;
+    }
   }

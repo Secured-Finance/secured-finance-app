@@ -63,6 +63,9 @@
 
   body {
     @apply font-secondary;
+    background-image: url(../img/app-bg.jpg);
+    background-size: cover;
+    overflow: hidden;
   }
 }
 

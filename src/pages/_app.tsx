@@ -3,7 +3,7 @@ import '../assets/css/index.css';
 
 function App({ Component, pageProps }: AppProps) {
     return (
-        <div suppressHydrationWarning className='bg-universeBlue text-white'>
+        <div suppressHydrationWarning>
             {typeof window === 'undefined' ? null : (
                 <Component {...pageProps} />
             )}

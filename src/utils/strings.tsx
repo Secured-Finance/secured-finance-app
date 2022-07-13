@@ -25,3 +25,11 @@ export const hexToDec = (key: string): number => {
         return hexToNumber(key);
     }
 };
+
+export const capitalizeFirstLetter = (str: string): string => {
+    return str ? str[0].toUpperCase() + str.slice(1) : '';
+};
+
+export const formatDataCy = (str: string): string => {
+    return str.replace(/\s+/g, '-').toLowerCase();
+};
