@@ -83,7 +83,7 @@ const HeaderItem = ({
             <Tag
                 {...args}
                 className={classNames(
-                    'flex·flex-col·justify-start·rounded-md·p-2·transition·duration-150·ease-in-out·focus:outline-none',
+                    'flex flex-col justify-start rounded-md p-2 transition duration-150 ease-in-out focus:outline-none',
                     { 'hover:bg-horizonBlue': href }
                 )}
                 onClick={onClick}
@@ -171,7 +171,7 @@ export const WalletPopover = ({
                             leaveFrom='opacity-100 translate-y-0'
                             leaveTo='opacity-0 translate-y-5'
                         >
-                            <Popover.Panel className='absolute left-4 z-10 mt-3 w-screen max-w-xs -translate-x-1/2'>
+                            <Popover.Panel className='absolute left-4 z-10 mt-3 w-64 -translate-x-1/2'>
                                 {({ close }) => (
                                     <div className='overflow-hidden rounded-lg shadow-sm ring-1 ring-red ring-opacity-5'>
                                         <div className='relative flex flex-col space-y-2 bg-universeBlue p-2 text-white'>

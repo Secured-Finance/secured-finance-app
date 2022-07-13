@@ -25,33 +25,33 @@ export const Dialog = ({
             className='relative z-50'
         >
             <div className='fixed inset-0 bg-backgroundBlur' />
-            <div className='fixed inset-0 flex items-center justify-center p-4'>
+            <div className='fixed inset-0 flex items-center justify-center'>
                 <HeadlessDialog.Panel
-                    className='w-full max-w-md space-y-8 rounded-xl bg-universeBlue p-10'
+                    className='w-96 rounded-xl bg-universeBlue p-6 pb-8 shadow-deep'
                     data-cy='modal'
                 >
-                    <div className='-mb-7 flex items-center justify-end'>
+                    <div className='text-right'>
                         <CloseButton onClick={onClose} />
                     </div>
-                    <HeadlessDialog.Title className='typography-modal-title w-full text-center text-white opacity-80'>
-                        {title}
-                    </HeadlessDialog.Title>
-                    <HeadlessDialog.Description className='typography-body-2 w-full text-center text-white-50'>
-                        {description}
-                    </HeadlessDialog.Description>
-                    <div className='flex items-center justify-center'>
+                    <div className='flex w-full flex-col items-center space-y-7'>
+                        <HeadlessDialog.Title className='typography-modal-title w-full text-center text-white opacity-80'>
+                            {title}
+                        </HeadlessDialog.Title>
+                        <HeadlessDialog.Description className='typography-body-2 w-full text-center text-white-50'>
+                            {description}
+                        </HeadlessDialog.Description>
                         {children}
+                        {callToAction ? (
+                            <Button
+                                size='sm'
+                                fullWidth
+                                onClick={onClick}
+                                data-testid='dialog-action-button'
+                            >
+                                {callToAction}
+                            </Button>
+                        ) : null}
                     </div>
-                    {callToAction ? (
-                        <Button
-                            size='sm'
-                            fullWidth
-                            onClick={onClick}
-                            data-testid='dialog-action-button'
-                        >
-                            {callToAction}
-                        </Button>
-                    ) : null}
                 </HeadlessDialog.Panel>
             </div>
         </HeadlessDialog>
