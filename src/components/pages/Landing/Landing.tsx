@@ -44,7 +44,7 @@ export const Landing = () => {
                     decentralization via Web3
                 </h2>
             </div>
-            <div className='flex flex-row justify-center'>
+            <div className='flex flex-row items-center justify-center'>
                 <LendingCard
                     onPlaceOrder={placeOrder}
                     collateralBook={collateralBook}
