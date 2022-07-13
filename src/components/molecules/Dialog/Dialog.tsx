@@ -24,8 +24,12 @@ export const Dialog = ({
             onClose={onClose}
             className='relative z-50'
         >
-            <div className='inset-0 flex items-center justify-center p-4'>
-                <HeadlessDialog.Panel className='w-full max-w-md space-y-8 rounded-xl bg-universeBlue p-10'>
+            <div className='fixed inset-0 bg-backgroundBlur' />
+            <div className='fixed inset-0 flex items-center justify-center p-4'>
+                <HeadlessDialog.Panel
+                    className='w-full max-w-md space-y-8 rounded-xl bg-universeBlue p-10'
+                    data-cy='modal'
+                >
                     <div className='-mb-7 flex items-center justify-end'>
                         <CloseButton onClick={onClose} />
                     </div>
@@ -35,7 +39,9 @@ export const Dialog = ({
                     <HeadlessDialog.Description className='typography-body-2 w-full text-center text-white-50'>
                         {description}
                     </HeadlessDialog.Description>
-                    {children}
+                    <div className='flex items-center justify-center'>
+                        {children}
+                    </div>
                     {callToAction ? (
                         <Button
                             size='sm'

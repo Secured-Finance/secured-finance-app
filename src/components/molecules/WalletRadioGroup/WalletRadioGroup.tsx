@@ -3,6 +3,7 @@ import { CheckIcon } from '@heroicons/react/outline';
 import CircleOutline from 'src/assets/icons/circle-outline.svg';
 import MetaMaskIcon from 'src/assets/img/metamask-fox.svg';
 import WalletConnectIcon from 'src/assets/img/wallet-connect.svg';
+import { formatDataCy } from 'src/utils';
 
 const WalletOption = ({
     name,
@@ -14,6 +15,7 @@ const WalletOption = ({
     return (
         <RadioGroup.Option
             value={name}
+            data-cy={formatDataCy(name.concat('-radio-option'))}
             className='relative·flex·cursor-pointer·rounded-lg·px-5·py-4·focus:outline-none'
         >
             {({ checked }) => (
@@ -62,6 +64,7 @@ export const WalletRadioGroup = ({
             value={value}
             onChange={onChange}
             className='rounded-lg border border-moonGrey border-opacity-40 py-4'
+            data-cy='radio-group'
         >
             <WalletOption name='Metamask' Icon={MetaMaskIcon} />
             <WalletOption name='WalletConnect' Icon={WalletConnectIcon} />

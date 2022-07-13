@@ -1,47 +1,83 @@
-import { NavLink } from 'react-router-dom';
-import { Logo } from 'src/components/new/icons';
-import { WalletButton } from 'src/components/organisms';
+import { useState } from 'react';
+import { NavLink, useRouteMatch } from 'react-router-dom';
+import SFLogo from 'src/assets/img/logo.svg';
+import { Button, NavTab, TraderProTab } from 'src/components/atoms';
+import useSF from 'src/hooks/useSecuredFinance';
+import { capitalizeFirstLetter } from 'src/utils';
+import { AddressUtils } from 'src/utils/address';
+import { useWallet } from 'use-wallet';
+import { WalletDialog } from '../WalletDialog';
+import { WalletPopover } from '../WalletPopover/WalletPopover';
 
-export const Header = (): JSX.Element => {
+export const Header = () => {
+    const [display, setDisplay] = useState(false);
+    const { account } = useWallet();
+    const securedFinance = useSF();
+
     return (
-        <div
+        <nav
             data-cy='header'
-            className='border-b-2 border-solid border-strokeGrey'
+            className={`flex h-20 w-full flex-row items-center justify-between border-b border-neutral1 ${
+                display ? 'blur-sm' : ''
+            }`}
         >
-            <div className='m-auto flex justify-between py-3'>
-                <NavLink
-                    className='flex w-2/5 cursor-pointer items-center border-r-2 border-solid border-strokeGrey pl-12'
-                    to='/'
-                >
-                    <Logo fill={'#666cf3'} size={40} />
-                    <span className='ml-4'>
-                        <span className='font-bold'>Secured</span>&ensp;
-                        <span>Finance</span>
-                    </span>
-                </NavLink>
-                <div className='flex flex-grow items-center justify-start space-x-8 border-l-2 border-solid pl-4'>
-                    <ItemLink text='Lending' link='/' />
-                    <ItemLink text='Terminal' link='/exchange' />
-                    <ItemLink text='History' link='/history' />
-                    <div className='flex' data-cy='wallet'>
-                        <WalletButton />
-                    </div>
-                </div>
+            <NavLink
+                className='ml-5 flex h-10 items-center justify-center'
+                to='/'
+            >
+                <SFLogo className='h-10 w-[200px]' />
+            </NavLink>
+            <div className='flex items-center justify-center'>
+                <ItemLink text='OTC Lending' dataCy='lending' link='/' />
+                <ItemLink
+                    text='Market Dashboard'
+                    dataCy='terminal'
+                    link='/exchange'
+                />
+                <ItemLink
+                    text='Portfolio Management'
+                    dataCy='history'
+                    link='/history'
+                />
+                <TraderProTab text='Trader Pro'></TraderProTab>
             </div>
-        </div>
+            <div className='mr-5'>
+                {account ? (
+                    <WalletPopover
+                        wallet={AddressUtils.format(account, 6)}
+                        networkName={capitalizeFirstLetter(
+                            securedFinance?.network
+                        )}
+                    />
+                ) : (
+                    <Button data-cy='wallet' onClick={() => setDisplay(true)}>
+                        Connect Wallet
+                    </Button>
+                )}
+            </div>
+            <WalletDialog
+                isOpen={display}
+                onClose={() => setDisplay(false)}
+            ></WalletDialog>
+        </nav>
     );
 };
 
-const ItemLink = ({ text, link }: { text: string; link: string }) => {
+const ItemLink = ({
+    text,
+    dataCy,
+    link,
+}: {
+    text: string;
+    dataCy: string;
+    link: string;
+}) => {
+    const useCheckActive = (): boolean => {
+        return useRouteMatch({ path: link, exact: true }) ? true : false;
+    };
     return (
-        <NavLink
-            exact
-            data-cy={text.toLowerCase()}
-            className='flex cursor-pointer text-lightGrey'
-            activeClassName='text-lightSilver'
-            to={link}
-        >
-            {text}
+        <NavLink exact data-cy={dataCy.toLowerCase()} to={link}>
+            <NavTab text={text} active={useCheckActive()} />
         </NavLink>
     );
 };

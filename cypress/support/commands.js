@@ -14,13 +14,16 @@
 Cypress.Commands.add('connectWallet', onBeforeLoad => {
     cy.visit('/', { onBeforeLoad: onBeforeLoad });
     cy.get('[data-cy="wallet"]').click();
-    cy.get('[data-cy="metamask-button"]').click();
+    cy.get('[data-cy="metamask-radio-option"]').click();
+    cy.get('[data-testid="dialog-action-button"]').click();
+    cy.wait(1000);
+    cy.get('[data-testid="close-button"]').click();
 });
 
 Cypress.Commands.add('disconnectWallet', () => {
-    cy.get('[data-cy="wallet"]').click();
-    cy.get('[data-cy="ethereum-settings-chip"]').click();
-    cy.get('[data-cy="modal-sign-out-button"]').click();
+    cy.get('[data-cy="popover-button"]').click();
+    cy.wait(1000);
+    cy.get('[data-cy="disconnect-wallet"]').click();
 });
 
 Cypress.on('uncaught:exception', (err, runnable) => {
