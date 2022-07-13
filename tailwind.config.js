@@ -4,6 +4,11 @@ module.exports = {
     darkMode: 'media',
     content: ['./src/**/*.{ts,tsx,js,jsx}', './public/index.html'],
     theme: {
+        extend: {
+            boxShadow: {
+                deep: '0px 34px 64px rgba(0, 0, 0, 0.45)',
+            },
+        },
         fontFamily: {
             primary: ['GT Super Display', ...defaultTheme.fontFamily.serif],
             secondary: [
