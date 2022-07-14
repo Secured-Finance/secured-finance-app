@@ -69,16 +69,15 @@ export const Typography: Story = () => (
         <div>Button 3</div>
         <div className='typography-button-3'>Tooltip Large</div>
 
-        <div>Button 4</div>
-        <div className='typography-button-4'>Pill Label</div>
+        <div>Nav Menu Default</div>
+        <div className='typography-nav-menu-default'>Navigation Menu</div>
 
-        <div>Button 5</div>
-        <div className='typography-button-5'>Button Small</div>
+        <div>Pill Label</div>
+        <div className='typography-pill-label'>Pill Label</div>
 
-        <div>Button 6</div>
-        <div className='typography-button-6'>Button Default</div>
-
-        <div>Button 7</div>
-        <div className='typography-button-7'>Caption 3</div>
+        <div>Dropdown Selection Label</div>
+        <div className='typography-dropdown-selection-label'>
+            Dropdown Selection Label
+        </div>
     </div>
 );
