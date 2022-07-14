@@ -25,7 +25,6 @@ export const Colors: Story = () => (
                 <div className='inline-flex items-center justify-start space-x-6'>
                     <div className='h-10 w-10 rounded-lg bg-purple' />
                     <div className='h-10 w-10 rounded-lg bg-gunMetal' />
-                    <div className='h-10 w-10 rounded-lg bg-slateGray' />
                 </div>
             </div>
         </div>
@@ -39,6 +38,7 @@ export const Colors: Story = () => (
                 <div className='h-10 w-10 rounded-lg bg-nebulaTeal' />
                 <div className='h-10 w-10 rounded-lg bg-secondaryPurple ' />
                 <div className='h-10 w-10 rounded-lg bg-moonGrey' />
+                <div className='h-10 w-10 rounded-lg bg-slateGray' />
             </div>
         </div>
         <div className='inline-flex flex-col items-start justify-start rounded-3xl bg-white p-10'>
