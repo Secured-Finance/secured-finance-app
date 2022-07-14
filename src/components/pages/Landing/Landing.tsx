@@ -29,11 +29,11 @@ export const Landing = () => {
 
     return (
         <div
-            className='flex-col items-center space-y-24 py-24'
+            className='flex-col items-center space-y-20 py-20'
             role='main'
             data-cy='lending-page'
         >
-            <div className='flex flex-col items-center justify-center space-y-8 text-center'>
+            <div className='flex flex-col items-center justify-center space-y-5 text-center'>
                 <h1 className='typography-headline-1 text-white'>
                     Interbank-grade Lending <br />
                     Now Democratized
