@@ -25,6 +25,7 @@ export const Colors: Story = () => (
                 <div className='inline-flex items-center justify-start space-x-6'>
                     <div className='h-10 w-10 rounded-lg bg-purple' />
                     <div className='h-10 w-10 rounded-lg bg-gunMetal' />
+                    <div className='h-10 w-10 rounded-lg bg-slateGray' />
                 </div>
             </div>
         </div>

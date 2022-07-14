@@ -56,7 +56,7 @@ describe('Wallet Dialog component', () => {
         expect(screen.getByText('Connecting...')).toBeInTheDocument();
         expect(
             screen.getByText(
-                'Please wait while we connect. Please make sure to accept the approvals on your browser'
+                'Please wait while we connect. Please make sure to accept the approvals on your browser.'
             )
         ).toBeInTheDocument();
     });
