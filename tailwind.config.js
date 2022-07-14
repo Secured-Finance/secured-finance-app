@@ -4,6 +4,12 @@ module.exports = {
     darkMode: 'media',
     content: ['./src/**/*.{ts,tsx,js,jsx}', './public/index.html'],
     theme: {
+        extend: {
+            boxShadow: {
+                deep: '0px 34px 64px rgba(0, 0, 0, 0.45)',
+                dropdown: '0px 16px 64px -48px rgba(31, 47, 70, 0.4)',
+            },
+        },
         fontFamily: {
             primary: ['GT Super Display', ...defaultTheme.fontFamily.serif],
             secondary: [
@@ -59,6 +65,7 @@ module.exports = {
             nebulaTeal: '#15D6E8',
             secondaryPurple: '#AE72FF',
             moonGrey: '#E6E6E6',
+            slateGray: '#777E90',
             secondary7: '#B9BDEA',
 
             neutral: '#353945',

@@ -36,7 +36,7 @@ export const YieldChart: React.FC<YieldChartProps> = ({
     rates,
 }): JSX.Element => {
     return (
-        <div className='flex h-[536px] w-[585px] flex-col items-start shadow-xl drop-shadow-2xl'>
+        <div className='flex h-[480px] w-[640px] flex-col items-start rounded-r-xl pl-8 shadow-[0_46px_64px_rgba(0,0,0,0.4)]'>
             <div className='h-20 w-full'>
                 <CurveHeader asset={asset} isBorrow={isBorrow}></CurveHeader>
             </div>

@@ -48,22 +48,13 @@
     .typography-button-3 {
       @apply text-smd font-secondary font-semibold;
     }
-    .typography-button-4 {
-      @apply text-2xs font-semibold font-secondary uppercase;
-    }
-    .typography-button-5 {
-      @apply text-sm leading-4 font-secondary;
-    }
-    .typography-button-6 {
-      @apply text-base leading-4 font-secondary font-semibold;
-    }
-    .typography-button-7 {
-      @apply text-2xs font-secondary;
-    }
     .typography-nav-menu-default {
       @apply text-sm font-secondary leading-4 font-normal;
     }
     .typography-pill-label {
       @apply text-2xs font-secondary leading-4 font-semibold uppercase;
+    }
+    .typography-dropdown-selection-label {
+      @apply text-[11px] font-secondary leading-4;
     }
   }

@@ -1,9 +1,8 @@
 import { RadioGroup } from '@headlessui/react';
-import classNames from 'classnames';
 import { BigNumber } from 'ethers';
 import { useCallback, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button } from 'src/components/atoms';
+import { Button, NavTab } from 'src/components/atoms';
 import { CollateralUsageSection } from 'src/components/atoms/CollateralUsageSection';
 import { AssetSelector, TermSelector } from 'src/components/molecules';
 import { CollateralBook, OrderSide } from 'src/hooks';
@@ -119,34 +118,22 @@ export const LendingCard = ({
     );
 
     return (
-        <div className='w-80 flex-col space-y-6 rounded-xl border border-neutral bg-transparent pb-4 shadow-2xl'>
+        <div className='w-80 flex-col space-y-6 rounded-b-xl border border-neutral bg-transparent pb-4 shadow-deep'>
             <RadioGroup
                 value={side}
                 onChange={(v: number) => dispatch(setSide(v))}
                 as='div'
-                className='grid grid-flow-col grid-cols-2'
+                className='flex flex-row items-center justify-around'
             >
-                <RadioGroup.Option value={OrderSide.Borrow} as='div'>
-                    {({ checked }) => (
-                        <RadioGroup.Label
-                            className={classNames({
-                                'ring ring-red': checked,
-                            })}
-                        >
-                            <Button fullWidth>Borrow</Button>
-                        </RadioGroup.Label>
-                    )}
+                <RadioGroup.Option value={OrderSide.Borrow} className='w-1/2'>
+                    {({ checked }) => <NavTab text='Borrow' active={checked} />}
                 </RadioGroup.Option>
-                <RadioGroup.Option value={OrderSide.Lend} as='div'>
-                    {({ checked }) => (
-                        <RadioGroup.Label
-                            className={classNames({
-                                'ring ring-red': checked,
-                            })}
-                        >
-                            <Button fullWidth>Lend</Button>
-                        </RadioGroup.Label>
-                    )}
+                <RadioGroup.Option
+                    value={OrderSide.Lend}
+                    as='div'
+                    className='w-1/2'
+                >
+                    {({ checked }) => <NavTab text='Lend' active={checked} />}
                 </RadioGroup.Option>
             </RadioGroup>
 
