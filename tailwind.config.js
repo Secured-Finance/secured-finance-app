@@ -7,6 +7,7 @@ module.exports = {
         extend: {
             boxShadow: {
                 deep: '0px 34px 64px rgba(0, 0, 0, 0.45)',
+                dropdown: '0px 16px 64px -48px rgba(31, 47, 70, 0.4)',
             },
         },
         fontFamily: {

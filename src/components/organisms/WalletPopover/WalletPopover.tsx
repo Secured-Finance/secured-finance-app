@@ -105,8 +105,10 @@ export const WalletPopover = ({
                     <>
                         <Popover.Button
                             data-cy='popover-button'
-                            className='
-                flex items-center space-x-3 rounded-xl bg-transparent p-3 ring ring-black-10 hover:bg-black-10'
+                            className={classNames(
+                                'flex items-center space-x-3 rounded-xl bg-transparent p-3 ring ring-neutral hover:bg-neutral',
+                                { 'bg-neutral': open }
+                            )}
                         >
                             <span>
                                 <MetamaskLogo className='h-4 w-4' />
@@ -133,10 +135,10 @@ export const WalletPopover = ({
                             leaveFrom='opacity-100 translate-y-0'
                             leaveTo='opacity-0 translate-y-5'
                         >
-                            <Popover.Panel className='absolute left-4 z-10 mt-3 w-64 -translate-x-1/2'>
+                            <Popover.Panel className='absolute left-9 z-10 mt-3 w-64 -translate-x-1/2'>
                                 {({ close }) => (
-                                    <div className='overflow-hidden rounded-lg shadow-sm ring-1 ring-red ring-opacity-5'>
-                                        <div className='relative flex flex-col space-y-2 bg-universeBlue p-2 text-white'>
+                                    <div className='overflow-hidden rounded-lg shadow-sm'>
+                                        <div className='relative flex flex-col space-y-2 border border-black bg-universeBlue p-2 text-white shadow-dropdown'>
                                             <MenuItem
                                                 label='Network'
                                                 text={networkName}
