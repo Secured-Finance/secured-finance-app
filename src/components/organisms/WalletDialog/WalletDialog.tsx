@@ -25,7 +25,7 @@ const stateRecord: Record<step, State> = {
         nextStep: step.connecting,
         title: 'Select Wallet Provider',
         description:
-            'Connect your wallet to unlock and start using services on Secured Finance',
+            'Connect your wallet to unlock and start using services on Secured Finance.',
         buttonText: 'Connect Wallet',
     },
     [step.connecting]: {
@@ -33,14 +33,14 @@ const stateRecord: Record<step, State> = {
         nextStep: step.connected,
         title: 'Connecting...',
         description:
-            'Please wait while we connect. Please make sure to accept the approvals on your browser',
+            'Please wait while we connect. Please make sure to accept the approvals on your browser.',
         buttonText: '',
     },
     [step.connected]: {
         currentStep: step.connected,
         nextStep: step.selectWallet,
         title: 'Success!',
-        description: 'Your wallet has been connected successfully',
+        description: 'Your wallet has been connected successfully.',
         buttonText: 'OK',
     },
 };

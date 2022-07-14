@@ -15,7 +15,7 @@ export const Layout = ({
     return (
         <div className='grid'>
             <header>{navBar}</header>
-            <main>
+            <main className='h-screen'>
                 <Switch>
                     {routes.map(({ path, component }) => (
                         <Route path={path} key={path}>
