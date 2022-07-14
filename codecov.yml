@@ -3,5 +3,9 @@ coverage:
     patch:
       default:
         target: 80%
+    project:
+      default:
+        target: auto
+        threshold: 2%
   round: up
   precision: 0
