@@ -18,6 +18,7 @@ export const AssetSelector = <AssetType extends string = string>({
 }) => {
     const [assetValue, setAssetValue] = useState(selected.value);
     const [amount, setAmount] = useState(0);
+    const [inputValue, setInputValue] = useState('0');
 
     const selectedOption = useMemo(
         () => options.find(o => o.value === assetValue),
@@ -45,6 +46,7 @@ export const AssetSelector = <AssetType extends string = string>({
         let amount = 0;
         isNaN(+maybeNumber) ? (amount = 0) : (amount = +maybeNumber);
         setAmount(amount);
+        setInputValue(amount === 0 ? '0' : maybeNumber);
         if (onAmountChange) {
             onAmountChange(amount);
         }
@@ -74,7 +76,7 @@ export const AssetSelector = <AssetType extends string = string>({
                     placeholder='0'
                     className='typography-body-1 h-8 w-20 rounded-lg bg-transparent p-2 text-right font-bold text-white placeholder-opacity-50'
                     onChange={handleAmountChange}
-                    value={amount}
+                    value={inputValue}
                 />
 
                 <div
