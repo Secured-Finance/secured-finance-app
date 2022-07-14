@@ -3,3 +3,5 @@ coverage:
     patch:
       default:
         target: 80%
+  round: up
+  precision: 0

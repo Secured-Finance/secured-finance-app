@@ -17,6 +17,7 @@ const customJestConfig = {
         'src/**/*.{js,ts,jsx,tsx}',
         '!**/*.stories.tsx',
         '!src/**/*.d.ts',
+        '!src/**/index.ts',
     ],
     moduleNameMapper: {
         // .svg should have high priority

@@ -45,6 +45,7 @@ const MenuItem = ({
                 </span>
             )}
             <button
+                aria-label='Menu Item'
                 onClick={onClick}
                 className={classNames(
                     'flex flex-row items-center justify-start space-x-2',
@@ -173,7 +174,9 @@ export const WalletPopover = ({
                                                     icon={
                                                         <UserIcon className='h-5 w-5 text-slateGray' />
                                                     }
-                                                    onClick={() => {}}
+                                                    onClick={() => {
+                                                        close();
+                                                    }}
                                                 />
                                             )}
                                             <MenuItem
