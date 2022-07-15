@@ -58,7 +58,9 @@ const MenuItem = ({
                     {icon}
                 </div>
 
-                <p className='typography-caption flex text-white'>{text}</p>
+                <p className='typography-caption flex capitalize text-white'>
+                    {text}
+                </p>
                 {badge && <div className='pl-8'>{badge}</div>}
             </button>
         </div>

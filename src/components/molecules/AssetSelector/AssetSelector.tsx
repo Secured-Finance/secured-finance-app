@@ -26,13 +26,13 @@ export const AssetSelector = <AssetType extends string = string>({
     );
 
     const amountInUsd = useMemo(() => {
-        if (!selectedOption.value) {
+        if (!selectedOption?.value) {
             return 0;
         }
         return new Intl.NumberFormat('en-us', {
             minimumFractionDigits: 0,
         }).format(priceList[selectedOption.value] * amount);
-    }, [selectedOption.value, priceList, amount]);
+    }, [selectedOption?.value, priceList, amount]);
 
     const handleAssetChange = (v: AssetType) => {
         setAssetValue(v);
@@ -83,7 +83,7 @@ export const AssetSelector = <AssetType extends string = string>({
                     className='typography-caption ml-2 flex text-white-60'
                     data-testid='asset-selector-transformed-value'
                 >
-                    {transformLabel(selectedOption.label)}
+                    {selectedOption && transformLabel(selectedOption.label)}
                 </div>
             </div>
         </div>

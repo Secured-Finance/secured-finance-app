@@ -42,7 +42,7 @@ export const TermSelector = <TermType extends string = string>({
                     className='typography-caption text-white-60'
                     data-testid='term-selector-transformed-value'
                 >
-                    {transformLabel(selectedTerm?.label)}
+                    {selectedTerm && transformLabel(selectedTerm.label)}
                 </div>
             </div>
         </div>

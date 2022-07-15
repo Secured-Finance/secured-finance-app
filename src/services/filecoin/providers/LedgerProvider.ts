@@ -105,18 +105,25 @@ const ledgerProvider = (rustModule: RustModule) => {
                 filecoinMessage: SerializableMessage,
                 path: string
             ) => {
+                if (!rustModule) {
+                    throw new Error('Rust module not loaded');
+                }
+
                 throwIfBusy(ledgerBusy);
                 ledgerBusy = true;
-                const serializedMessage: string =
-                    rustModule.transactionSerialize(filecoinMessage);
+                const serializedMessage =
+                    rustModule.transactionSerialize?.(filecoinMessage);
                 const res = handleErrors(
                     await ledgerApp.sign(
                         path,
-                        Buffer.from(serializedMessage, 'hex')
+                        Buffer.from(
+                            serializedMessage ? serializedMessage : '',
+                            'hex'
+                        )
                     )
                 );
                 ledgerBusy = false;
-                return res.signature_compact.toString('base64');
+                return res?.signature_compact?.toString('base64');
             },
 
             showAddressAndPubKey: async (path: string) => {

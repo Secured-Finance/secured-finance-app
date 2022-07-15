@@ -2,7 +2,6 @@ import { Currency } from '@secured-finance/sf-graph-client/dist/.graphclient';
 import { RenderTerms } from 'src/components/atoms';
 import theme from 'src/theme';
 import { formatDateAndTime, ordinaryFormat, percentFormat } from 'src/utils';
-import { RenderCancelButton } from '../CancelButton';
 import { TableColumns } from '../commonTypes';
 
 export interface OrdersTableData {
@@ -90,7 +89,7 @@ export const ordersTableColumns = [
                 Header: '',
                 accessor: 'orderId',
                 Cell: (cell: { value: number }) => (
-                    <RenderCancelButton orderId={cell.value} />
+                    <div>{`There should be a cancel button for trade id: ${cell.value}`}</div>
                 ),
             },
         ],

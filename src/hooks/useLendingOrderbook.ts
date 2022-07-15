@@ -20,11 +20,11 @@ import {
 import { RootState } from '../store/types';
 
 export const useBorrowOrderbook = (ccy: string, term: string, skip = 0) => {
-    const { chainId }: { chainId: number | null } = useWallet();
+    const { chainId } = useWallet();
     const lendingMarket = utils.getLendingMarketAddressByCcyAndTerm(
         ccy,
         term,
-        chainId
+        chainId ? chainId : 1
     );
 
     const filPrice = useSelector(
@@ -58,11 +58,11 @@ export const useBorrowOrderbook = (ccy: string, term: string, skip = 0) => {
 };
 
 export const useLendOrderbook = (ccy: string, term: string, skip = 0) => {
-    const { chainId }: { chainId: number | null } = useWallet();
+    const { chainId } = useWallet();
     const lendingMarket = utils.getLendingMarketAddressByCcyAndTerm(
         ccy,
         term,
-        chainId
+        chainId ? chainId : 1
     );
 
     const filPrice = useSelector(
@@ -100,11 +100,11 @@ export const useLendingTradingHistory = (
     term: string,
     skip = 0
 ) => {
-    const { chainId }: { chainId: number | null } = useWallet();
+    const { chainId } = useWallet();
     const lendingMarket = utils.getLendingMarketAddressByCcyAndTerm(
         ccy,
         term,
-        chainId
+        chainId ? chainId : 1
     );
     const tradingHistory = useSelector(
         (state: RootState) => state.lendingTerminal.tradingHistory

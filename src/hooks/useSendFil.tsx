@@ -64,6 +64,7 @@ export const useSendFil = (amount = 0, toAddress: string) => {
     }, [wallet, value]);
 
     const estimate = useCallback(async () => {
+        if (!walletProvider) return;
         const message: LotusMessage = new Message({
             to: toAddress,
             from: wallet.address,

@@ -1,5 +1,4 @@
 import { BigNumber, FixedNumber } from 'ethers';
-import { SVGProps } from 'react';
 import EthIcon from 'src/assets/coins/eth2.svg';
 import FilecoinIcon from 'src/assets/coins/fil.svg';
 import UsdcIcon from 'src/assets/coins/usdc.svg';
@@ -73,7 +72,7 @@ export type CurrencyInfo = {
     shortName: Currency;
     name: string;
     chainId: number;
-    iconSVG: (props: SVGProps<SVGSVGElement>) => JSX.Element;
+    iconSVG: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
     formatFunction: (amount: number) => {
         value: BigNumber | FixedNumber;
         unit: string;

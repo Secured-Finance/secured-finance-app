@@ -71,7 +71,7 @@ export const LendingCard = ({
         //TODO: Remove the usage of BigNumber.js and use only Ethers.js
         return percentFormat(
             collateralUsage(
-                BigNumber.from(collateralBook.locked.toString()),
+                BigNumber.from(collateralBook.locked?.toString()),
                 BigNumber.from(collateralBook.collateral.toString())
             )
         );
