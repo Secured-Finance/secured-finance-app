@@ -62,7 +62,7 @@ export const useNewFilWalletProvider = () => {
 
     // TODO: Remove the cast to an object here once the type is fixed in [SF-98]
     const filWalletAddr = useCrosschainAddressById(
-        account,
+        account ? account : '',
         getFilecoinChainId(getFilecoinNetwork())
     );
 
@@ -108,7 +108,7 @@ export const useNewFilWalletProvider = () => {
 };
 
 export async function registerCrossChainWallet(
-    filWalletAddr: CrossChainWallet,
+    filWalletAddr: CrossChainWallet | null,
     filAddr: string,
     register: (chainId: number, address: string) => Promise<unknown>
 ) {

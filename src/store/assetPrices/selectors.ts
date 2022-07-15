@@ -9,8 +9,6 @@ export const getAssetInfo = (ccy: Currency) => (state: RootState) => {
             return state.assetPrices.filecoin;
         case Currency.USDC:
             return state.assetPrices.usdc;
-        default:
-            return undefined;
     }
 };
 export const getFilPrice = (state: RootState) =>

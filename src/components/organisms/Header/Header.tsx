@@ -3,7 +3,6 @@ import { NavLink, useRouteMatch } from 'react-router-dom';
 import SFLogo from 'src/assets/img/logo.svg';
 import { Button, NavTab, TraderProTab } from 'src/components/atoms';
 import useSF from 'src/hooks/useSecuredFinance';
-import { capitalizeFirstLetter } from 'src/utils';
 import { AddressUtils } from 'src/utils/address';
 import { useWallet } from 'use-wallet';
 import { WalletDialog } from '../WalletDialog';
@@ -45,9 +44,9 @@ export const Header = () => {
                 {account ? (
                     <WalletPopover
                         wallet={AddressUtils.format(account, 6)}
-                        networkName={capitalizeFirstLetter(
-                            securedFinance?.network
-                        )}
+                        networkName={
+                            securedFinance ? securedFinance.network : 'Unknown'
+                        }
                     />
                 ) : (
                     <Button data-cy='wallet' onClick={() => setDisplay(true)}>

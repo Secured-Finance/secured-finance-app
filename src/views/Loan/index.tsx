@@ -39,7 +39,8 @@ export interface CouponPayment {
 
 const LoanScreen = () => {
     const params: { loanId: string } = useParams();
-    const loan = useLoanInformation(params.loanId);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const loan: any = useLoanInformation(params.loanId);
 
     const { account, chainId } = useWallet();
     const [couponPayment, setCouponPayment] = useState<CouponPayment>();
@@ -111,7 +112,7 @@ const LoanScreen = () => {
 
     const totalInterest = useCallback(
         (amount: number, rate: number, term: string) => {
-            let periods: number;
+            let periods = 0;
             const interestRate = new BigNumber(rate)
                 .dividedBy(10000)
                 .toNumber();

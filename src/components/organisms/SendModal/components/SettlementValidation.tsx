@@ -1,4 +1,3 @@
-import React from 'react';
 import { TransactionStatus } from 'src/store/transaction/types';
 
 export default function SettlementValidation({
@@ -6,9 +5,9 @@ export default function SettlementValidation({
     transactionHash,
     error,
 }: {
-    status: TransactionStatus;
+    status: TransactionStatus | null;
     transactionHash?: string;
-    error?: string;
+    error?: string | null;
 }) {
     const child = () => {
         switch (status) {

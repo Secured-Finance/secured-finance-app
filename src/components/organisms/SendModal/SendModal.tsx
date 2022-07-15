@@ -131,9 +131,9 @@ const SendModal = ({
 
     const { verifyFilecoinPayment } = useVerifyPayment(
         amountToSend,
-        counterpartyAddress,
+        counterpartyAddress ? counterpartyAddress : '',
         currencyInfo.shortName,
-        nextCouponPaymentDate
+        nextCouponPaymentDate ? nextCouponPaymentDate : 0
     );
 
     const handleTransferAssets = useCallback(async () => {
@@ -189,7 +189,7 @@ const SendModal = ({
     };
 
     const onCloseSendModal = () => {
-        onDismiss();
+        onDismiss?.();
     };
 
     return (

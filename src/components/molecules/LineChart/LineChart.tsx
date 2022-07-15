@@ -40,9 +40,12 @@ export const LineChart = ({
     style,
 }: LineChartProps) => {
     const dispatch = useDispatch();
+    const chartRef = useRef(null);
 
     const canvas: HTMLCanvasElement = document.createElement('canvas');
-    const ctx: CanvasRenderingContext2D = canvas.getContext('2d');
+    const ctx = canvas.getContext('2d');
+
+    if (!ctx) return null;
 
     const yieldCurveGradient = ctx.createLinearGradient(0, 0, 500, 0);
     yieldCurveGradient.addColorStop(0, 'rgba(255, 89, 248, 0)');
@@ -72,20 +75,23 @@ export const LineChart = ({
         datasets: refinedDatasets,
     };
 
-    const chartRef = useRef(null);
     const handleClick = (event: React.MouseEvent<HTMLCanvasElement>) => {
+        if (!chartRef.current) return;
+
         const element = getElementAtEvent(chartRef.current, event);
         if (element && element[0]) {
             const { datasetIndex, index } = element[0];
             const dataset = data.datasets[datasetIndex];
-            const label = data.labels[index];
+            const label = data.labels?.[index];
             termMap;
 
             const key = (Object.keys(termMap) as Array<Term>).find(
                 key => termMap[key].label === label
             );
 
-            dispatch(setTerm(key));
+            if (key) {
+                dispatch(setTerm(key));
+            }
 
             const value = dataset.data[index];
             dispatch(setRate(value as number));

@@ -1,12 +1,12 @@
 import RustModule from '@zondax/filecoin-signing-tools';
-import React, { createContext, ReactNode, useEffect, useState } from 'react';
+import { createContext, ReactNode, useEffect, useState } from 'react';
 import { providers, WalletProviders } from 'src/services/filecoin/providers';
 
 const initialContext: {
     isLoaded: boolean;
     loaded: boolean;
-    wasmModule: RustModule;
-    filProviders: WalletProviders;
+    wasmModule: RustModule | null;
+    filProviders: WalletProviders | null;
 } = {
     isLoaded: false,
     loaded: false,
@@ -16,9 +16,11 @@ const initialContext: {
 export const Context = createContext(initialContext);
 
 const FilecoinWasmProvider = ({ children }: { children: ReactNode }) => {
-    const [wasmModule, setWasmModule] = useState<RustModule>(null);
+    const [wasmModule, setWasmModule] = useState<RustModule | null>(null);
     const [loaded, setLoaded] = useState<boolean>(false);
-    const [filProviders, setFilProviders] = useState<WalletProviders>(null);
+    const [filProviders, setFilProviders] = useState<WalletProviders | null>(
+        null
+    );
 
     useEffect(() => {
         async function loadWasmModule() {

@@ -1,4 +1,5 @@
 import { Network } from '@glif/filecoin-address';
+import assert from 'assert';
 import { MAINNET_PATH_CODE, TESTNET_PATH_CODE } from '../ledger/constants';
 
 export const MainNetPath = "m/44'/461'/0'/0/0";
@@ -17,6 +18,10 @@ export const FIL_JSON_RPC_ENDPOINT: Record<Network, string> = {
 const BLOCK_EXPLORER_WALLET_PREFIX = 'address/general?address=';
 
 export const getFilecoinNetwork = () => {
+    assert(
+        process.env.NEXT_PUBLIC_FILECOIN_NETWORK,
+        'NEXT_PUBLIC_FILECOIN_NETWORK environment variable is not set'
+    );
     if (process.env.NEXT_PUBLIC_FILECOIN_NETWORK.toLowerCase() === 'mainnet') {
         return Network.MAIN;
     } else {

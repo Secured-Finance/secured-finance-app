@@ -53,6 +53,7 @@ const MnemonicModal: React.FC<ModalProps> = ({ onDismiss }) => {
     );
 
     const genPhrase = useCallback(async () => {
+        if (!wasmModule) return;
         const phrase = await wasmModule.generateMnemonic();
         setMnemonic(phrase);
         setIsLoading(true);
@@ -60,17 +61,11 @@ const MnemonicModal: React.FC<ModalProps> = ({ onDismiss }) => {
 
     useEffect(() => {
         if (walletProvider) {
-            onDismiss();
-        } else if (loaded && wasmModule.generateMnemonic) {
+            onDismiss?.();
+        } else if (loaded) {
             genPhrase();
         }
-    }, [
-        loaded,
-        walletProvider,
-        onDismiss,
-        genPhrase,
-        wasmModule.generateMnemonic,
-    ]);
+    }, [loaded, walletProvider, onDismiss, genPhrase]);
 
     const { onCreate } = useNewFilWalletProvider();
 

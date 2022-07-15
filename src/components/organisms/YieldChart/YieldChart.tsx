@@ -9,13 +9,13 @@ interface YieldChartProps {
 }
 
 const refineArray = (array: Array<number>) => {
-    if (!array.length) return array;
-
     if (array.length > 0) {
         const newArray = array.slice();
         newArray.unshift(0);
         return newArray.map((r: number) => +r / 100);
     }
+
+    return array;
 };
 
 const getData = (rates: number[], label: string): ChartData<'line'> => {

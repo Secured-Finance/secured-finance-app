@@ -9,6 +9,10 @@ export const useRegisterUser = (
     const securedFinance = useSF();
 
     const handleRegisterUser = useCallback(async () => {
+        if (!securedFinance) {
+            return;
+        }
+
         let tx;
         if (addresses.length > 0) {
             tx = await securedFinance.registerUserWithCrosschainAddresses(

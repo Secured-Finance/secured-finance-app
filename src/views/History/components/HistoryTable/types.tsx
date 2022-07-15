@@ -105,7 +105,7 @@ const RenderState: React.FC<IndexProps> = ({ index }) => {
         case 5:
             return <div style={{ padding: '4px, 10px' }}>Terminated</div>;
         default:
-            break;
+            return <div></div>;
     }
 };
 

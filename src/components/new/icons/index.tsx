@@ -20,7 +20,7 @@ import verified from './verified.svg';
 import wallet from './wallet.svg';
 
 interface ArrowIconProps extends IIcon {
-    direction?: 'down' | 'up' | 'left' | 'right';
+    direction: 'down' | 'up' | 'left' | 'right';
 }
 
 const VerifiedIcon: React.FC<IIcon> = ({ fill, size = 24, ...props }) => (

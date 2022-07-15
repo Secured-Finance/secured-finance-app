@@ -115,14 +115,14 @@ const CollateralModal: React.FC<CombinedProps> = ({
                 if (!txHash) {
                     setCollateralTx(false);
                 } else {
-                    onDismiss();
+                    onDismiss?.();
                 }
             } else {
                 const txHash = await onRegisterUser();
                 if (!txHash) {
                     setCollateralTx(false);
                 } else {
-                    onDismiss();
+                    onDismiss?.();
                 }
             }
         } catch (e) {
@@ -265,7 +265,7 @@ const CollateralModal: React.FC<CombinedProps> = ({
                         </StyledAddressTitle>
                         {account && colBook.vault !== '' ? (
                             <StyledAddress>
-                                {colBook.locked !== null
+                                {colBook.locked
                                     ? getDisplayBalance(colBook.locked)
                                     : getFullDisplayBalanceNumber(0)}{' '}
                                 ETH
@@ -282,7 +282,7 @@ const CollateralModal: React.FC<CombinedProps> = ({
                         </StyledAddressTitle>
                         {account && colBook.vault !== '' ? (
                             <StyledAddress>
-                                {colBook.usdLocked !== null
+                                {colBook.usdLocked
                                     ? getUSDFormatBalanceNumber(
                                           colBook.usdLocked.toNumber()
                                       )

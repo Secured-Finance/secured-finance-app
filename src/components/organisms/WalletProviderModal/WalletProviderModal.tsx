@@ -22,7 +22,7 @@ const WalletProviderModal: React.FC<ModalProps> = ({ onDismiss, ccyIndex }) => {
 
     useEffect(() => {
         if (account && walletProvider) {
-            onDismiss();
+            onDismiss?.();
         }
     }, [account, walletProvider, onDismiss]);
 
