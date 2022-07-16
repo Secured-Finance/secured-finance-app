@@ -1,8 +1,8 @@
 import Filecoin from '@glif/filecoin-wallet-provider';
 
 export interface FilWalletProvider {
-    walletType: FilecoinWalletType;
-    walletProvider: Filecoin;
+    walletType: FilecoinWalletType | null;
+    walletProvider: Filecoin | null;
     isLoading: boolean;
 }
 

@@ -28,7 +28,7 @@ export const GasTabsAndTable: React.FC = () => {
 
     const dispatch = useDispatch();
 
-    const oracle = utils.getDefaultOracle(securedFinance.networkId);
+    const oracle = utils.getDefaultOracle(securedFinance?.networkId);
 
     const handleSelectTab =
         (tab: React.SetStateAction<string>, gasPrice: number) => () => {

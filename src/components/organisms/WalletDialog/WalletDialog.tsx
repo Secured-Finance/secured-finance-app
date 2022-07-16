@@ -76,7 +76,10 @@ export const WalletDialog = ({
     const { account, connect } = useWallet();
 
     const handleConnect = useCallback(
-        async (provider: 'injected' | 'walletconnect', account: string) => {
+        async (
+            provider: 'injected' | 'walletconnect',
+            account: string | null
+        ) => {
             if (!account) {
                 await connect(provider);
                 localStorage.setItem(CACHED_PROVIDER_KEY, 'connected');

@@ -5,7 +5,7 @@ import styled from 'styled-components';
 
 interface BorrowContainerProps {
     locked: BigNumber;
-    value: number;
+    value: number | undefined;
     shortName: string;
 }
 
@@ -23,7 +23,7 @@ const RenderBorrow: React.FC<BorrowContainerProps> = ({
                 </StyledBorrowText>
                 <StyledBorrowSubtitleContainer>
                     <StyledBorrowlSubtitle>
-                        {value !== null ? getUSDFormatBalanceNumber(value) : 0}
+                        {value ? getUSDFormatBalanceNumber(value) : 0}
                     </StyledBorrowlSubtitle>
                 </StyledBorrowSubtitleContainer>
             </StyledWalletInfoContainer>

@@ -22,6 +22,7 @@ import {
     getTermsAsOptions,
     percentFormat,
     Term,
+    termMap,
 } from 'src/utils';
 import {
     collateralUsage,
@@ -70,7 +71,7 @@ export const LendingCard = ({
         //TODO: Remove the usage of BigNumber.js and use only Ethers.js
         return percentFormat(
             collateralUsage(
-                BigNumber.from(collateralBook.locked.toString()),
+                BigNumber.from(collateralBook.locked?.toString()),
                 BigNumber.from(collateralBook.collateral.toString())
             )
         );
@@ -98,14 +99,20 @@ export const LendingCard = ({
     const handlePlaceOrder = useCallback(
         async (
             ccy: string,
-            term: string,
+            term: Term,
             side: number,
             amount: number,
             rate: number
         ) => {
             try {
                 setPendingTransaction(true);
-                await onPlaceOrder(ccy, term, side, amount, rate);
+                await onPlaceOrder(
+                    ccy,
+                    termMap[term].value,
+                    side,
+                    amount,
+                    rate
+                );
                 setPendingTransaction(false);
             } catch (e) {
                 if (e instanceof Error) {

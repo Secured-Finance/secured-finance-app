@@ -1,4 +1,5 @@
 import { composeStories } from '@storybook/testing-react';
+import assert from 'assert';
 import { fireEvent, render, screen } from 'src/test-utils.js';
 import * as stories from './TermSelector.stories';
 
@@ -10,6 +11,7 @@ describe('TermSelector Component', () => {
     });
 
     it('should not transform the option selected by default', () => {
+        assert(WithTransformFunction.args?.options);
         render(<Default />);
         fireEvent.click(screen.getByRole('button'));
         const option = WithTransformFunction.args.options[3].label;
@@ -20,6 +22,7 @@ describe('TermSelector Component', () => {
     });
 
     it('should transform the option selected with the transform function', () => {
+        assert(WithTransformFunction.args?.options);
         render(<WithTransformFunction />);
         expect(
             screen.getByTestId('term-selector-transformed-value')
@@ -35,6 +38,7 @@ describe('TermSelector Component', () => {
     });
 
     it('should call the onTermChange function when the term is changed', () => {
+        assert(Default.args?.options);
         const onTermChange = jest.fn();
         render(<Default onTermChange={onTermChange} />);
         fireEvent.click(screen.getByRole('button'));
