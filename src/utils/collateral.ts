@@ -13,7 +13,7 @@ export const computeAvailableToBorrow = (
 };
 
 export const collateralUsage = (
-    lockedCollateral: BigNumber,
+    lockedCollateral: BigNumber | undefined,
     independentCollateral: BigNumber
 ) => {
     if (!lockedCollateral) {

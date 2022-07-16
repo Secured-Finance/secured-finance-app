@@ -9,6 +9,9 @@ export const useDepositCollateral = (
     const securedFinance = useSF();
 
     const handleDepositCollateral = useCallback(async () => {
+        if (!securedFinance) {
+            return;
+        }
         const etherAmount = utils.parseUnits(amount.toString(), 'ether');
         const tx = await securedFinance.depositCollateral(ccy, etherAmount);
         return tx;
@@ -25,6 +28,9 @@ export const useWithdrawCollateral = (
 
     const handleWithdrawCollateral = useCallback(async () => {
         try {
+            if (!securedFinance) {
+                return;
+            }
             const tx = await securedFinance.withdrawCollateral(ccy, amount);
             return tx;
         } catch (e) {

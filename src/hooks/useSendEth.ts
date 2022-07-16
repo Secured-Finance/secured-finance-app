@@ -25,7 +25,7 @@ export const useSendEth = (
                     to,
                     gweiGasPrice
                 );
-                return (await tx).hash;
+                return (await tx)?.hash;
             } catch (e) {
                 return false;
             }
@@ -45,10 +45,13 @@ export const useEstimateTxFee = (gasPrice: number) => {
     const dispatch = useDispatch();
 
     const handleEstimateTxFee = useCallback(async () => {
+        if (!securedFinance || !account) {
+            return;
+        }
         const gweiGasPrice = utils.parseUnits(gasPrice.toString(), 'gwei');
 
         const transactionObject: TransactionRequest = {
-            from: account,
+            from: account ? account : '',
             to: '0x0000000000000000000000000000000000000000',
             value: 0,
             gasPrice: gweiGasPrice,

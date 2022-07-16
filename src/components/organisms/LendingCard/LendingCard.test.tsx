@@ -79,7 +79,13 @@ describe('LendingCard Component', () => {
         const button = screen.getByTestId('place-order-button');
         fireEvent.click(button);
         await waitFor(() =>
-            expect(onPlaceOrder).toHaveBeenCalledWith('ETH', '3M', 0, 0, 100)
+            expect(onPlaceOrder).toHaveBeenCalledWith(
+                'ETH',
+                '3 month',
+                0,
+                0,
+                100
+            )
         );
     });
 
@@ -92,7 +98,13 @@ describe('LendingCard Component', () => {
         fireEvent.click(screen.getByTestId('place-order-button'));
 
         await waitFor(() =>
-            expect(onPlaceOrder).toHaveBeenCalledWith('FIL', '3M', 0, 10, 100)
+            expect(onPlaceOrder).toHaveBeenCalledWith(
+                'FIL',
+                '3 month',
+                0,
+                10,
+                100
+            )
         );
     });
 

@@ -25,13 +25,13 @@ const EthWalletConnector: React.FC<ModalProps> = ({ onDismiss }) => {
                 | 'torus'
                 | 'walletconnect'
                 | 'walletlink',
-            account: string
+            account: string | null
         ) => {
             if (!account) {
                 await connect(provider);
                 localStorage.setItem(CACHED_PROVIDER_KEY, 'connected');
 
-                onDismiss();
+                onDismiss?.();
                 history.push('/account');
             }
         },

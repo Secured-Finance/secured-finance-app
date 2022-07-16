@@ -46,7 +46,7 @@ export const useFilecoinWalletStore = (
 
     const connectExistingWallet = useCallback(async () => {
         if (!filAddr) return;
-        if (filAddr && !walletProvider) {
+        if (!walletProvider) {
             if (filWalletType && filWalletType === FilecoinWalletType.Ledger) {
                 const ledger = await connectWithLedger(dispatch);
                 if (ledger !== null) {
