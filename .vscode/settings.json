@@ -18,8 +18,18 @@
     "bignumber",
     "chartjs",
     "craco",
+    "graphclient",
+    "headlessui",
+    "heroicons",
+    "ledgerhq",
+    "Orderbook",
     "picofil",
     "reduxjs",
-    "walletconnect"
+    "Scriptable",
+    "secp",
+    "Subcontainer",
+    "testid",
+    "walletconnect",
+    "zondax"
   ]
 }

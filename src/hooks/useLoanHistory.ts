@@ -61,7 +61,7 @@ export const useBorrowDeals = (skip = 0) => {
 };
 
 export const useLoanInformation = (id: string) => {
-    const [loanInfo, setLoanInfo] = useState(null);
+    const [loanInfo, setLoanInfo] = useState<unknown | null>(null);
     const { data, error } = useLoanInfo(id);
 
     if (error) {

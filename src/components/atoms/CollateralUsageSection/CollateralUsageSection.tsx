@@ -11,7 +11,7 @@ export const CollateralUsageSection = ({
                 <h3 className='typography-caption-2 text-planetaryPurple'>
                     Available to borrow
                 </h3>
-                <p className='typography-caption font-bold  text-white'>
+                <p className='typography-caption ml-1 font-bold text-white'>
                     {available}
                 </p>
             </div>
@@ -19,7 +19,7 @@ export const CollateralUsageSection = ({
                 <h3 className='typography-caption-2 text-planetaryPurple'>
                     Collateral Usage
                 </h3>
-                <p className='typography-caption text-right font-bold text-white'>
+                <p className='typography-caption mr-1 text-right font-bold text-white'>
                     {usage}
                 </p>
             </div>

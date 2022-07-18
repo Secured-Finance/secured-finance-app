@@ -50,10 +50,6 @@ export const filecoin = {
         cy.get('[data-cy="filecoin-settings-chip"]').click();
         cy.get('[data-cy="modal-sign-out-button"]').click();
 
-        cy.get('[data-cy="wallet"]')
-            .click()
-            .then(() => {
-                expectFilecoin.walletNotConnected();
-            });
+        expectFilecoin.walletNotConnected();
     },
 };

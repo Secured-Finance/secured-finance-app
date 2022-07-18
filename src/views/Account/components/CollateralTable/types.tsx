@@ -106,7 +106,7 @@ const RenderState = ({ index }: { index?: string }) => {
         case '5':
             return <div style={{ padding: '4px, 10px' }}>Liquidated</div>;
         default:
-            break;
+            return <div></div>;
     }
 };
 
@@ -151,7 +151,7 @@ export const collateralTableColumns = [
                 Cell: cell => (
                     <RenderBorrow
                         locked={cell.value as BigNumber}
-                        value={cell.row.original.usdLocked.toNumber()}
+                        value={cell.row.original.usdLocked?.toNumber()}
                         shortName={cell.row.original.ccyName}
                     />
                 ),

@@ -1,4 +1,8 @@
-import { currencyList, getCurrencyBy } from './currencyList';
+import {
+    currencyList,
+    getCurrencyBy,
+    getCurrencyMapAsOptions,
+} from './currencyList';
 
 describe('getCurrencyBy', () => {
     const eth = currencyList[0];
@@ -44,5 +48,28 @@ describe('getCurrencyBy', () => {
         expect(getCurrencyBy('shortName', 'ETH').chainId).toEqual(eth.chainId);
         expect(getCurrencyBy('shortName', 'FIL').chainId).toEqual(fil.chainId);
         expect(getCurrencyBy('shortName', 'USDC').chainId).toEqual(60);
+    });
+});
+
+describe('currencyList.getCurrencyMapAsOptions', () => {
+    it('should return the currencyList as a list of Option for the ComboBox', () => {
+        const options = getCurrencyMapAsOptions();
+        expect(options).toEqual([
+            {
+                label: 'Ethereum',
+                value: 'ETH',
+                iconSVG: 'svg',
+            },
+            {
+                label: 'Filecoin',
+                value: 'FIL',
+                iconSVG: 'svg',
+            },
+            {
+                label: 'USDC',
+                value: 'USDC',
+                iconSVG: 'svg',
+            },
+        ]);
     });
 });

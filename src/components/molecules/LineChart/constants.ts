@@ -80,7 +80,7 @@ export const options: ChartOptions<'line'> = {
             const activePoint = activeElements[0];
             const ctx = this.ctx;
             if (!ctx) {
-                //return;
+                return;
             }
             const x = activePoint.element.x;
             const y = activePoint.element.y;

@@ -13,18 +13,35 @@ describe('WalletPopover component', () => {
         expect(screen.getByText('Rinkeby')).toBeInTheDocument();
     });
 
-    it('should have a non clickable item for the network name and a clickable one for Filecoin Test Program', () => {
+    it('should have a default cursor if there is no onclick action', () => {
         render(<Primary />);
         fireEvent.click(screen.getByRole('button'));
-        const item = screen.getByText('Rinkeby');
-        expect(item.parentNode.parentNode).not.toHaveClass(
-            'hover:bg-horizonBlue'
-        );
+        screen.getAllByRole('button', { name: 'Menu Item' }).forEach(button => {
+            if (!button.hasAttribute('onclick')) {
+                expect(button).toHaveStyle('cursor: default');
+            } else {
+                expect(button).toHaveStyle('cursor: pointer');
+            }
+        });
+    });
 
-        const item2 = screen.getByText('Add Filecoin Wallet').parentNode
-            .parentNode;
+    it('should close the popover when clicking on Add Filecoin Wallet', () => {
+        render(<Primary />);
+        fireEvent.click(screen.getByRole('button'));
+        fireEvent.click(screen.getByText('Add Filecoin Wallet'));
+        expect(screen.queryByText('Rinkeby')).toBeNull();
+    });
 
-        expect(item2).toHaveClass('hover:bg-horizonBlue');
-        expect(item2).toHaveAttribute('href');
+    it('should close the popover when clicking on finish KYC', () => {
+        render(<Primary isKYC={false} />);
+        fireEvent.click(screen.getByRole('button'));
+        fireEvent.click(screen.getByText('Finish KYC'));
+        expect(screen.queryByText('Rinkeby')).toBeNull();
+    });
+
+    it('should show that the account if verified is the KYC is done', () => {
+        render(<Primary isKYC={true} />);
+        fireEvent.click(screen.getByRole('button'));
+        expect(screen.getByText('Account Verified')).toBeInTheDocument();
     });
 });

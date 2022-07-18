@@ -25,7 +25,7 @@ const EthWallet: React.FC<ModalProps> = ({ onDismiss }) => {
         if (!otherWalletConnected) {
             history.push('/');
         }
-        onDismiss();
+        onDismiss?.();
     }, [dispatch, history, onDismiss, otherWalletConnected, reset]);
 
     return (

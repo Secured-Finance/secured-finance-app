@@ -26,8 +26,8 @@ export const parameters = {
                 value: '#fff',
             },
             {
-                name: 'secfin',
-                value: '#0b1925',
+                name: 'figma',
+                value: '#19305C',
             },
             {
                 name: 'blue',
