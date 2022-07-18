@@ -2,7 +2,6 @@
 import React from 'react';
 import { ArrowSVG } from 'src/components/atoms';
 import theme from 'src/theme';
-import { getCurrencyBy } from 'src/utils/currencyList';
 import styled from 'styled-components';
 
 interface CurrencySelectorProps {
@@ -13,9 +12,7 @@ interface CurrencySelectorProps {
 }
 
 const RenderImage = ({ selectedCcy }: { selectedCcy: string }) => {
-    const { icon } = getCurrencyBy('shortName', selectedCcy);
-
-    return <img width={28} src={icon} alt={selectedCcy} />;
+    return <img width={28} src={''} alt={selectedCcy} />;
 };
 
 export const CurrencySelector: React.FC<CurrencySelectorProps> = ({
