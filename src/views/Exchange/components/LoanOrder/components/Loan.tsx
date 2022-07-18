@@ -63,7 +63,7 @@ const Lend: React.FC<LendingTerminalStore> = ({
         } catch (e) {
             console.error(e);
         }
-    }, [lendAmount, lendRate, placeOrder, selectedCcy, selectedTerms]);
+    }, [ccy, lendAmount, lendRate, placeOrder, selectedTerms]);
 
     return (
         <StyledLoanContainer>
