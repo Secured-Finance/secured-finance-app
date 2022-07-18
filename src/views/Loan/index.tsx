@@ -66,7 +66,7 @@ const LoanScreen = () => {
         } else {
             // we should never be in this condition, but just in case.
             // TODO: manage global error with a component and display it to the user
-            return currencyMap[Currency.FIL];
+            return currencyMap.FIL;
         }
     }, [loan]);
 
