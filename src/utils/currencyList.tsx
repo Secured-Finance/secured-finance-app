@@ -14,7 +14,7 @@ export enum Currency {
     USDC = 'USDC',
 }
 
-export const currencyMap: Readonly<Record<Currency, CurrencyInfo>> = {
+export const currencyMap: Readonly<Record<Currency, Readonly<CurrencyInfo>>> = {
     [Currency.ETH]: {
         indexCcy: 0,
         icon: EthIcon,
@@ -52,8 +52,12 @@ export const currencyMap: Readonly<Record<Currency, CurrencyInfo>> = {
     },
 };
 
+export const getCurrencyMapAsList = () => {
+    return Object.values(currencyMap);
+};
+
 export const getCurrencyMapAsOptions = () => {
-    return Object.values(currencyMap).map<Option<Currency>>(
+    return getCurrencyMapAsList().map<Option<Currency>>(
         ({ shortName, name, icon }) => ({
             value: shortName,
             label: name,
@@ -73,7 +77,7 @@ export type CurrencyInfo = {
 
 // Do not use this function, as we don't want to use the IndexCcy to identify the currency
 export const getCurrencyByIndex = (value: string | number) => {
-    const currency = Object.values(currencyMap).find(
+    const currency = getCurrencyMapAsList().find(
         ({ indexCcy }) =>
             indexCcy.toString().toLowerCase() === value.toString().toLowerCase()
     );
