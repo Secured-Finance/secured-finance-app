@@ -24,8 +24,8 @@ import { RootState } from 'src/store/types';
 import theme from 'src/theme';
 import {
     CurrencyInfo,
-    currencyMap,
     formatInput,
+    getCurrencyMapAsList,
     getDisplayBalance,
     getFullDisplayBalanceNumber,
     getUSDFormatBalanceNumber,
@@ -199,7 +199,7 @@ const CollateralModal: React.FC<CombinedProps> = ({
                     {buttonOpen ? (
                         <StyledDropdown>
                             <ul>
-                                {Object.values(currencyMap).map((ccy, i) => (
+                                {getCurrencyMapAsList().map((ccy, i) => (
                                     <StyledDropdownItem
                                         key={i}
                                         onClick={() =>

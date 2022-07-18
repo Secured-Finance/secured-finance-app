@@ -2,6 +2,7 @@ import {
     Currency,
     currencyMap,
     getCurrencyByIndex,
+    getCurrencyMapAsList,
     getCurrencyMapAsOptions,
 } from './currencyList';
 
@@ -44,6 +45,16 @@ describe('currencyList.getCurrencyMapAsOptions', () => {
                 iconSVG: 'svg',
             },
         ]);
+    });
+});
+
+describe('currencyList.getCurrencyMapAsOptions', () => {
+    it('should return the getCurrencyMapAsOptions as a list', () => {
+        const options = getCurrencyMapAsList();
+        expect(options).toHaveLength(3);
+        expect(options[0]).toEqual(currencyMap.ETH);
+        expect(options[1]).toEqual(currencyMap.FIL);
+        expect(options[2]).toEqual(currencyMap.USDC);
     });
 });
 
