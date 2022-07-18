@@ -51,35 +51,30 @@ export const useEthereumWalletStore = () => {
         [account]
     );
 
-    const fetchEthStore = useCallback(async () => {
-        const { usdBalance, inEther } = getWalletBalance(balance, price);
-        const portfolioShare = new BigNumber(usdBalance)
-            .times(100)
-            .dividedBy(new BigNumber(totalUSDBalance))
-            .toNumber();
+    const fetchEthStore = useCallback(
+        async (account: string) => {
+            const { usdBalance, inEther } = getWalletBalance(balance, price);
+            const portfolioShare = new BigNumber(usdBalance)
+                .times(100)
+                .dividedBy(new BigNumber(totalUSDBalance))
+                .toNumber();
 
-        dispatch(connectEthWallet(account));
-        dispatch(updateEthWalletBalance(inEther));
-        dispatch(updateEthWalletAssetPrice(price));
-        dispatch(updateEthWalletDailyChange(change));
-        dispatch(updateEthWalletUSDBalance(usdBalance));
+            dispatch(connectEthWallet(account));
+            dispatch(updateEthWalletBalance(inEther));
+            dispatch(updateEthWalletAssetPrice(price));
+            dispatch(updateEthWalletDailyChange(change));
+            dispatch(updateEthWalletUSDBalance(usdBalance));
 
-        if (
-            !Number.isNaN(portfolioShare) &&
-            portfolioShare !== (null || Infinity)
-        ) {
-            dispatch(updateEthWalletPortfolioShare(portfolioShare));
-        }
-        dispatch(recalculateTotalUSDBalance());
-    }, [
-        getWalletBalance,
-        balance,
-        price,
-        totalUSDBalance,
-        dispatch,
-        account,
-        change,
-    ]);
+            if (
+                !Number.isNaN(portfolioShare) &&
+                portfolioShare !== (null || Infinity)
+            ) {
+                dispatch(updateEthWalletPortfolioShare(portfolioShare));
+            }
+            dispatch(recalculateTotalUSDBalance());
+        },
+        [getWalletBalance, balance, price, totalUSDBalance, dispatch, change]
+    );
 
     const connectWallet = useCallback(
         (account: string) => {
@@ -90,13 +85,15 @@ export const useEthereumWalletStore = () => {
     );
 
     useEffect(() => {
-        if (status === 'connected') {
+        if (status === 'connected' && account) {
             connectWallet(account);
         }
     }, [status, connectWallet, account]);
 
     useEffect(() => {
-        fetchEthStore();
+        if (account) {
+            fetchEthStore(account);
+        }
     }, [account, balance, change, fetchEthStore, price, totalUSDBalance]);
 
     useEffect(() => {

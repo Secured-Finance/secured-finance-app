@@ -7,6 +7,11 @@ import * as wallets from '../../fixtures/filecoin.json';
 describe('Filecoin Wallet', () => {
     tenderlyConfig();
 
+    beforeEach(() => {
+        cy.get('[data-cy="popover-button"]').click();
+        cy.get('[data-cy="add-filecoin-wallet"]').click();
+    });
+
     it('should offer three choices when trying to connect', () => {
         cy.get('[data-cy="filecoin-connect-wallet-chip"]').click();
         cy.contains('Select a wallet provider').should('be.visible');
@@ -25,7 +30,7 @@ describe('Filecoin Wallet', () => {
                 expectFilecoin.walletConnected();
             });
 
-        cy.get('[data-cy="wallet-address"]')
+        cy.get('[data-cy="old-wallet-address"]')
             .should('have.length', 2)
             .then(walletAddress => {
                 chai.expect(walletAddress[0].textContent).to.not.be.equal(
@@ -40,12 +45,7 @@ describe('Filecoin Wallet', () => {
 
         cy.get('[data-cy="filecoin-settings-chip"]').click();
         cy.get('[data-cy="modal-sign-out-button"]').click();
-
-        cy.get('[data-cy="wallet"]')
-            .click()
-            .then(() => {
-                expectFilecoin.walletNotConnected();
-            });
+        expectFilecoin.walletNotConnected();
     });
 
     it('should connect to an existing account when importing an account with a mnemonic phrase', () => {

@@ -8,10 +8,10 @@ import { rootReducers } from 'src/store';
 function render(
     ui,
     {
-        initialState,
+        preloadedState = {},
         store = configureStore({
             reducer: rootReducers,
-            initialState,
+            preloadedState,
             middleware: getDefaultMiddleware =>
                 getDefaultMiddleware({
                     serializableCheck: false,

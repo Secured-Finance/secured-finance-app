@@ -1,3 +1,1 @@
-import { WalletDialog } from './WalletDialog';
-
-export default WalletDialog;
+export * from './WalletDialog';

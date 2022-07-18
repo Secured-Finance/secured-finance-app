@@ -56,7 +56,7 @@ describe('Wallet Dialog component', () => {
         expect(screen.getByText('Connecting...')).toBeInTheDocument();
         expect(
             screen.getByText(
-                'Please wait while we connect. Please make sure to accept the approvals on your browser'
+                'Please wait while we connect. Please make sure to accept the approvals on your browser.'
             )
         ).toBeInTheDocument();
     });
@@ -69,12 +69,5 @@ describe('Wallet Dialog component', () => {
         const button = screen.getByTestId('dialog-action-button');
         fireEvent.click(button);
         expect(onClose).not.toHaveBeenCalled();
-
-        // wait for 3 seconds to make sure the modal is closed
-        // expect(onClose).not.toHaveBeenCalled();
-        // expect(screen.findByRole('button')).toBeInTheDocument();
-
-        // fireEvent.click(screen.getByRole('button'));
-        // expect(onClose).toHaveBeenCalled();
     });
 });

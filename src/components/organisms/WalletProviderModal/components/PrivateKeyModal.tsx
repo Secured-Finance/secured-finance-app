@@ -43,14 +43,14 @@ const RenderPrivateKeyContainer: React.FC<ContainerProps> = ({
         (state: RootState) => state.filWalletProvider.walletProvider
     );
 
-    let handleSave: () => void;
-    let placeholder: string;
-    let secret: string;
+    let handleSave = () => {};
+    let placeholder = '';
+    let secret = '';
     let handleChange: (data: string) => void;
 
     const filAddressFromMnemonic = useCallback(
         (data: string) => {
-            if (wasmModule.keyDerive && data !== undefined) {
+            if (wasmModule && wasmModule.keyDerive && data !== undefined) {
                 const isMnemonic = validateMnemonic(data);
                 if (isMnemonic) {
                     const key = wasmModule.keyDerive(data, TestNetPath, '');
@@ -67,10 +67,10 @@ const RenderPrivateKeyContainer: React.FC<ContainerProps> = ({
 
     const filAddressFromPrivateKey = useCallback(
         (data: string) => {
-            if (wasmModule.keyRecover && data && isBase64(data)) {
+            if (data && isBase64(data)) {
                 const pkB64 = Buffer.from(data, 'base64');
                 const isPKB64 = isPrivate(pkB64);
-                if (isPKB64) {
+                if (isPKB64 && wasmModule) {
                     const key = wasmModule.keyRecover(pkB64, true);
                     setPrivateKeyAddr(key.address);
                     setSecretSet(true);
@@ -166,7 +166,11 @@ const RenderPrivateKeyContainer: React.FC<ContainerProps> = ({
             <StyledLabel>{selectedTab}</StyledLabel>
             <StyledInputContainer>
                 <StyledInput
-                    id={`${toKebabCase(selectedTab)}-input`}
+                    id={
+                        selectedTab
+                            ? `${toKebabCase(selectedTab)}-input`
+                            : 'tab-input'
+                    }
                     placeholder={placeholder}
                     value={secret}
                     onChange={e => handleChange(e.target.value)}
@@ -213,7 +217,7 @@ const PrivateKeyModal: React.FC<ModalProps> = ({ onDismiss }) => {
 
     useEffect(() => {
         if (walletProvider) {
-            onDismiss();
+            onDismiss?.();
         }
     }, [walletProvider, onDismiss]);
 

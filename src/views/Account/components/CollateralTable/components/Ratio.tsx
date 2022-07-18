@@ -8,7 +8,7 @@ interface RatioContainerProps {
 }
 
 const RenderRatio: React.FC<RatioContainerProps> = ({ ratio }) => {
-    let textColor: string;
+    let textColor = colors.red;
 
     if (ratio < 125 && ratio > 0) {
         textColor = colors.red;

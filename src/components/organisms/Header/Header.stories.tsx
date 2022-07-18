@@ -1,32 +1,14 @@
-import { Meta, Story } from '@storybook/react';
-import { Provider } from 'react-redux';
-import { HashRouter as Router } from 'react-router-dom';
-import { Header } from './Header';
-import { default as store } from 'src/store';
+import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { WithWalletProvider } from 'src/../.storybook/decorators';
+import { Header } from './';
 
 export default {
-    title: 'Components/Organisms/Header',
+    title: 'Organism/Header',
     component: Header,
-} as Meta;
+    args: {},
+    decorators: [WithWalletProvider],
+} as ComponentMeta<typeof Header>;
 
-export const Connected: Story = () => {
-    localStorage.setItem('CACHED_PROVIDER_KEY', 'connected');
-    return (
-        <Provider store={store}>
-            <Router>
-                <Header />
-            </Router>
-        </Provider>
-    );
-};
+const Template: ComponentStory<typeof Header> = () => <Header />;
 
-export const Default: Story = () => {
-    localStorage.removeItem('CACHED_PROVIDER_KEY');
-    return (
-        <Provider store={store}>
-            <Router>
-                <Header />
-            </Router>
-        </Provider>
-    );
-};
+export const Primary = Template.bind({});

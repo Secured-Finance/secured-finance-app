@@ -19,6 +19,9 @@ export const useVerifyPayment = (
 
     const verifyFilecoinPayment = useCallback(
         async (transactionHash: CID) => {
+            if (!client) {
+                return false;
+            }
             if (!transactionHash) {
                 dispatch(transactionFailed('No transaction to verify'));
                 return false;

@@ -1,4 +1,3 @@
-import React from 'react';
 import { CurrencyContainer } from 'src/components/atoms';
 import { WalletBase } from 'src/store/wallets';
 import { AddressUtils } from 'src/utils';
@@ -59,7 +58,7 @@ export const walletTableColumns = [
                 Header: 'Address',
                 accessor: 'address',
                 Cell: (cell: { value: string }) => (
-                    <span data-cy='wallet-address'>
+                    <span data-cy='old-wallet-address'>
                         {AddressUtils.format(cell.value, 24)}
                     </span>
                 ),
