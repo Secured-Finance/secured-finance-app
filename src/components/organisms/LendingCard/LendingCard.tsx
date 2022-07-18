@@ -17,7 +17,7 @@ import { setLastMessage } from 'src/store/lastError';
 import { RootState } from 'src/store/types';
 import {
     Currency,
-    currencyList,
+    currencyMap,
     getCurrencyMapAsOptions,
     getTermsAsOptions,
     percentFormat,
@@ -53,7 +53,7 @@ export const LendingCard = ({
 
     const shortNames = useMemo(
         () =>
-            currencyList.reduce<Record<string, Currency>>(
+            Object.values(currencyMap).reduce<Record<string, Currency>>(
                 (acc, ccy) => ({
                     ...acc,
                     [ccy.name]: ccy.shortName,

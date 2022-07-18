@@ -1,5 +1,5 @@
 import React from 'react';
-import { CurrencyInfo, getCurrencyBy } from 'src/utils/currencyList';
+import { CurrencyInfo, getCurrencyByIndex } from 'src/utils/currencyList';
 import styled from 'styled-components';
 import { ordinaryFormat, usdFormat } from '../../../../../utils/formatNumbers';
 
@@ -16,7 +16,7 @@ interface BalanceProps {
 type ItemProps = BalanceContainerProps & BalanceProps;
 
 const BalanceInfo: React.FC<ItemProps> = ({ index, balance, value }) => {
-    const { shortName } = getCurrencyBy('indexCcy', index.toString());
+    const { shortName } = getCurrencyByIndex(index.toString());
 
     return (
         <div>

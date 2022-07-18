@@ -1,53 +1,26 @@
 import {
-    currencyList,
-    getCurrencyBy,
+    Currency,
+    currencyMap,
+    getCurrencyByIndex,
     getCurrencyMapAsOptions,
 } from './currencyList';
 
 describe('getCurrencyBy', () => {
-    const eth = currencyList[0];
-    const fil = currencyList[1];
+    const eth = currencyMap[Currency.ETH];
+    const fil = currencyMap[Currency.FIL];
 
     it('should return the currency object for an existing string indexCcy', () => {
-        expect(getCurrencyBy('indexCcy', '0')).toEqual(eth);
-        expect(getCurrencyBy('indexCcy', '1')).toEqual(fil);
+        expect(getCurrencyByIndex('0')).toEqual(eth);
+        expect(getCurrencyByIndex('1')).toEqual(fil);
     });
 
     it('should return the currency object for an existing number indexCcy', () => {
-        expect(getCurrencyBy('indexCcy', 0)).toEqual(eth);
-        expect(getCurrencyBy('indexCcy', 1)).toEqual(fil);
-
-        expect(getCurrencyBy('shortName', 'ETH').indexCcy).toEqual(0);
-        expect(getCurrencyBy('shortName', 'FIL').indexCcy).toEqual(1);
-        expect(getCurrencyBy('shortName', 'USDC').indexCcy).toEqual(2);
+        expect(getCurrencyByIndex(0)).toEqual(eth);
+        expect(getCurrencyByIndex(1)).toEqual(fil);
     });
 
     it('should raise an error non existing indexCcy', () => {
-        expect(() => getCurrencyBy('indexCcy', 3)).toThrow();
-        expect(() => getCurrencyBy('shortName', 'XXX')).toThrow();
-        expect(() => getCurrencyBy('name', 'Terra Luna')).toThrow();
-    });
-
-    it('should return the currency object for existing shortName', () => {
-        expect(getCurrencyBy('shortName', 'ETH')).toEqual(eth);
-        expect(getCurrencyBy('shortName', 'FIL')).toEqual(fil);
-    });
-
-    it('should return the currency object for existing name', () => {
-        expect(getCurrencyBy('name', 'Ethereum')).toEqual(eth);
-        expect(getCurrencyBy('name', 'Filecoin')).toEqual(fil);
-    });
-
-    it('should not be case sensitive for the value', () => {
-        expect(getCurrencyBy('name', 'ethereUm')).toEqual(eth);
-        expect(getCurrencyBy('shortName', 'eth')).toEqual(eth);
-        expect(getCurrencyBy('shortName', 'fIL')).toEqual(fil);
-    });
-
-    it('should return the chainId for a shortName', () => {
-        expect(getCurrencyBy('shortName', 'ETH').chainId).toEqual(eth.chainId);
-        expect(getCurrencyBy('shortName', 'FIL').chainId).toEqual(fil.chainId);
-        expect(getCurrencyBy('shortName', 'USDC').chainId).toEqual(60);
+        expect(() => getCurrencyByIndex(3)).toThrow();
     });
 });
 
@@ -71,5 +44,25 @@ describe('currencyList.getCurrencyMapAsOptions', () => {
                 iconSVG: 'svg',
             },
         ]);
+    });
+});
+
+describe('currencyList toBaseUnit', () => {
+    it('should return the value in wei for ETH', () => {
+        const eth = currencyMap[Currency.ETH];
+        expect(eth.toBaseUnit(1).toString()).toEqual('1000000000000000000');
+        expect(eth.toBaseUnit(1.23).toString()).toEqual('1230000000000000000');
+        expect(eth.toBaseUnit(1.23456789).toString()).toEqual(
+            '1234567890000000000'
+        );
+    });
+
+    it('should return the value in attoFil for FIL', () => {
+        const fil = currencyMap[Currency.FIL];
+        expect(fil.toBaseUnit(1).toString()).toEqual('1000000000000000000');
+        expect(fil.toBaseUnit(1.23).toString()).toEqual('1230000000000000000');
+        expect(fil.toBaseUnit(1.23456789).toString()).toEqual(
+            '1234567890000000000'
+        );
     });
 });

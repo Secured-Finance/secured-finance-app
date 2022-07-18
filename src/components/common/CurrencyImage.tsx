@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import React from 'react';
-import { Currency, getCurrencyBy } from 'src/utils/currencyList';
+import { Currency } from 'src/utils/currencyList';
 
 interface CurrencySelectorProps {
     selectedCcy: Currency;
@@ -11,13 +11,11 @@ export const CurrencyImage: React.FC<CurrencySelectorProps> = ({
     selectedCcy,
     showName,
 }) => {
-    const { icon } = getCurrencyBy('shortName', selectedCcy);
-
     return (
         <span className='flex items-center'>
             <img
                 width={28}
-                src={icon}
+                src={''}
                 alt={`currency_${selectedCcy}`}
                 data-cy='currency-image-icon'
             />

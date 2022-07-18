@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import React from 'react';
 import theme from 'src/theme';
-import { getCurrencyBy } from 'src/utils/currencyList';
+import { getCurrencyByIndex } from 'src/utils/currencyList';
 import styled from 'styled-components';
 
 interface CurrencyContainerProps {
@@ -38,7 +38,7 @@ const CurrencyItem: React.FC<ItemProps> = ({
     wallet,
     style,
 }) => {
-    const { icon, shortName, name } = getCurrencyBy('indexCcy', ccy.toString());
+    const { shortName, name } = getCurrencyByIndex(ccy.toString());
 
     return (
         <div>
@@ -51,7 +51,7 @@ const CurrencyItem: React.FC<ItemProps> = ({
                         style?.justifyContent ? style?.justifyContent : 'center'
                     }
                 >
-                    <img width={40} height={40} src={icon} alt={shortName} />
+                    <img width={40} height={40} src={''} alt={shortName} />
                     <StyledWalletInfoContainer>
                         <StyledCurrencyText
                             color={
@@ -104,7 +104,7 @@ const CurrencyItem: React.FC<ItemProps> = ({
                     <img
                         width={iconSize}
                         height={iconSize}
-                        src={icon}
+                        src={''}
                         alt={shortName}
                     />
                     <StyledCurrencyText
