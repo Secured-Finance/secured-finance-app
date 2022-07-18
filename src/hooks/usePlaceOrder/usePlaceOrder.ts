@@ -1,5 +1,4 @@
-import { FilecoinNumber } from '@glif/filecoin-number';
-import { BigNumber, utils } from 'ethers';
+import { BigNumber } from 'ethers';
 import { useCallback } from 'react';
 import { Currency } from 'src/utils';
 import useSF from '../useSecuredFinance';
@@ -14,31 +13,19 @@ export const usePlaceOrder = () => {
 
     const placeOrder = useCallback(
         async (
-            ccy: string,
+            ccy: Currency,
             term: string,
             side: OrderSide,
-            amount: number,
+            amount: BigNumber,
             rate: number
         ) => {
             if (!securedFinance) return;
-
-            let amountToSend;
-            if (ccy === Currency.ETH) {
-                amountToSend = utils.parseUnits(amount.toString(), 'wei');
-            } else if (ccy === Currency.FIL) {
-                amountToSend = new FilecoinNumber(
-                    amount,
-                    'attofil'
-                ).toAttoFil();
-            } else {
-                throw new Error('Unsupported currency');
-            }
 
             const tx = await securedFinance.placeLendingOrder(
                 ccy,
                 term,
                 side,
-                BigNumber.from(amountToSend),
+                amount,
                 rate
             );
             return tx;

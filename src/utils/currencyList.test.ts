@@ -6,8 +6,8 @@ import {
 } from './currencyList';
 
 describe('getCurrencyBy', () => {
-    const eth = currencyMap[Currency.ETH];
-    const fil = currencyMap[Currency.FIL];
+    const eth = currencyMap.ETH;
+    const fil = currencyMap.FIL;
 
     it('should return the currency object for an existing string indexCcy', () => {
         expect(getCurrencyByIndex('0')).toEqual(eth);
@@ -49,7 +49,7 @@ describe('currencyList.getCurrencyMapAsOptions', () => {
 
 describe('currencyList toBaseUnit', () => {
     it('should return the value in wei for ETH', () => {
-        const eth = currencyMap[Currency.ETH];
+        const eth = currencyMap.ETH;
         expect(eth.toBaseUnit(1).toString()).toEqual('1000000000000000000');
         expect(eth.toBaseUnit(1.23).toString()).toEqual('1230000000000000000');
         expect(eth.toBaseUnit(1.23456789).toString()).toEqual(

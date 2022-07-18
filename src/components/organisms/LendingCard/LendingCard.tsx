@@ -8,6 +8,7 @@ import { AssetSelector, TermSelector } from 'src/components/molecules';
 import { CollateralBook, OrderSide } from 'src/hooks';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import {
+    selectLandingOrderForm,
     setAmount,
     setCurrency,
     setSide,
@@ -35,18 +36,18 @@ export const LendingCard = ({
     marketRate,
 }: {
     onPlaceOrder: (
-        ccy: string,
+        ccy: Currency,
         term: string,
         side: OrderSide,
-        amount: number,
+        amount: BigNumber,
         rate: number
     ) => Promise<unknown>;
     collateralBook: CollateralBook;
     marketRate: number;
 }) => {
     const [pendingTransaction, setPendingTransaction] = useState(false);
-    const { currency, term, amount, side } = useSelector(
-        (state: RootState) => state.landingOrderForm
+    const { currency, term, amount, side } = useSelector((state: RootState) =>
+        selectLandingOrderForm(state.landingOrderForm)
     );
 
     const dispatch = useDispatch();
@@ -59,6 +60,20 @@ export const LendingCard = ({
                     [ccy.name]: ccy.shortName,
                 }),
                 {}
+            ),
+        []
+    );
+
+    const amountFormatterMap = useMemo(
+        () =>
+            Object.values(currencyMap).reduce<
+                Record<Currency, (value: number) => BigNumber>
+            >(
+                (acc, ccy) => ({
+                    ...acc,
+                    [ccy.shortName]: ccy.toBaseUnit,
+                }),
+                {} as Record<Currency, (value: number) => BigNumber>
             ),
         []
     );
@@ -98,10 +113,10 @@ export const LendingCard = ({
 
     const handlePlaceOrder = useCallback(
         async (
-            ccy: string,
+            ccy: Currency,
             term: Term,
             side: number,
-            amount: number,
+            amount: BigNumber,
             rate: number
         ) => {
             try {
@@ -157,7 +172,8 @@ export const LendingCard = ({
                     selected={assetList[0]}
                     transformLabel={(v: string) => shortNames[v]}
                     priceList={assetPriceMap}
-                    onAmountChange={(v: number) => dispatch(setAmount(v))}
+                    onAmountChange={(v: BigNumber) => dispatch(setAmount(v))}
+                    amountFormatterMap={amountFormatterMap}
                     onAssetChange={(v: Currency) => {
                         dispatch(setCurrency(v));
                     }}
