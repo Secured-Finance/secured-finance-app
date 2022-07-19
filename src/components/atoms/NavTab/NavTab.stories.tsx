@@ -14,7 +14,11 @@ export default {
     },
 } as ComponentMeta<typeof NavTab>;
 
-const Template: ComponentStory<typeof NavTab> = args => <NavTab {...args} />;
+const Template: ComponentStory<typeof NavTab> = args => (
+    <div className='h-20'>
+        <NavTab {...args} />
+    </div>
+);
 
 export const Default = Template.bind({});
 
