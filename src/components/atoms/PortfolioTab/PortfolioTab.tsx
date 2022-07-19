@@ -1,4 +1,4 @@
-interface PortfolioTabProps {
+export interface PortfolioTabProps {
     name: string;
     value: string;
     orientation: 'left' | 'right' | 'center';
@@ -10,14 +10,14 @@ export const PortfolioTab: React.FC<PortfolioTabProps> = ({
     orientation,
 }) => {
     return (
-        <div className='flex h-[109px] w-[148px] flex-col items-center justify-center bg-gradient-to-b from-[rgba(106,118,177,0.1)] via-[rgba(106,118,177,0)] to-black-20'>
+        <div className='flex h-[111px] w-[186px] flex-col items-center justify-center '>
             <div className='h-1 w-full bg-starBlue'></div>
             <div
-                className={`flex h-full w-full flex-col items-center justify-center ${
+                className={`flex h-full w-full flex-col items-center justify-center overflow-hidden bg-gradient-to-b from-[rgba(106,118,177,0.1)] via-[rgba(106,118,177,0)] to-black-20 ${
                     orientation ? getBorderStyle(orientation) : ''
                 }`}
             >
-                <span className='typography-caption-2 h-5 w-full text-center text-[#B9BDEA]'>
+                <span className='typography-caption-2 h-5 w-full text-center text-secondary7'>
                     {name}
                 </span>
                 <span className='typography-body-1 h-8 w-full text-center text-white'>

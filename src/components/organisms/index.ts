@@ -1,7 +1,6 @@
 export * from './CollateralModal';
 export * from './Header';
 export * from './LendingCard';
-export * from './PortfolioManagementTabs';
 export * from './SendModal';
 export * from './WalletAccountModal';
 export * from './WalletDialog';
