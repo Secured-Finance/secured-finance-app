@@ -57,4 +57,7 @@
     .typography-dropdown-selection-label {
       @apply text-[11px] font-secondary leading-4;
     }
+    .typography-percentage-tab {
+      @apply text-sm font-secondary leading-4 font-bold;
+    }
   }

@@ -1,4 +1,5 @@
 export * from './ArrowSVG';
+export * from './AssetInformation';
 export * from './Breaker';
 export * from './Button';
 export * from './Card';
@@ -13,6 +14,7 @@ export * from './ExpandIndicator';
 export * from './Label';
 export * from './Modal';
 export * from './NavTab';
+export * from './PercentageTab';
 export * from './PortfolioTab';
 export * from './ProgressBar';
 export * from './RenderTerms';
