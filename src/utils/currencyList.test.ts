@@ -1,5 +1,4 @@
 import {
-    Currency,
     currencyMap,
     getCurrencyByIndex,
     getCurrencyMapAsList,
@@ -59,21 +58,35 @@ describe('currencyList.getCurrencyMapAsOptions', () => {
 });
 
 describe('currencyList toBaseUnit', () => {
+    const fil = currencyMap.FIL;
+    const eth = currencyMap.ETH;
     it('should return the value in wei for ETH', () => {
-        const eth = currencyMap.ETH;
         expect(eth.toBaseUnit(1).toString()).toEqual('1000000000000000000');
         expect(eth.toBaseUnit(1.23).toString()).toEqual('1230000000000000000');
         expect(eth.toBaseUnit(1.23456789).toString()).toEqual(
             '1234567890000000000'
         );
+        expect(eth.toBaseUnit(0.00000001).toString()).toEqual('10000000000');
+        expect(eth.toBaseUnit(0.000000000001).toString()).toEqual('1000000');
+        expect(eth.toBaseUnit(0.000000000000000001).toString()).toEqual('1');
     });
 
     it('should return the value in attoFil for FIL', () => {
-        const fil = currencyMap[Currency.FIL];
         expect(fil.toBaseUnit(1).toString()).toEqual('1000000000000000000');
         expect(fil.toBaseUnit(1.23).toString()).toEqual('1230000000000000000');
         expect(fil.toBaseUnit(1.23456789).toString()).toEqual(
             '1234567890000000000'
         );
+        expect(fil.toBaseUnit(0.00000001).toString()).toEqual('10000000000');
+        expect(fil.toBaseUnit(0.000000000001).toString()).toEqual('1000000');
+        expect(fil.toBaseUnit(0.000000000000000001).toString()).toEqual('1');
+    });
+
+    it('should return 0 if the input value is inferior to the base blockchain unit', () => {
+        expect(fil.toBaseUnit(0.0000000000000000001).toString()).toEqual('0');
+        expect(fil.toBaseUnit(0.0000000000000000009).toString()).toEqual('0');
+        expect(fil.toBaseUnit(0.000000000000000000001).toString()).toEqual('0');
+        expect(eth.toBaseUnit(0.0000000000000000001).toString()).toEqual('0');
+        expect(eth.toBaseUnit(0.000000000000000000001).toString()).toEqual('0');
     });
 });
