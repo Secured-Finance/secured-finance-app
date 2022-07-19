@@ -1,12 +1,13 @@
 import { FilecoinNumber } from '@glif/filecoin-number';
-import { BigNumber, ethers } from 'ethers';
+import { BigNumber as BigNumberJS } from 'bignumber.js';
+import { BigNumber } from 'ethers';
 import EthIcon from 'src/assets/coins/eth2.svg';
 import FilecoinIcon from 'src/assets/coins/fil.svg';
 import UsdcIcon from 'src/assets/coins/usdc.svg';
 import { Option } from 'src/components/atoms';
 import { MAINNET_PATH_CODE } from 'src/services/ledger/constants';
-
 const ETH_CHAIN_ID = 60;
+const ETH_TO_WEI = new BigNumberJS(10 ** 18);
 
 export enum Currency {
     ETH = 'ETH',
@@ -21,11 +22,7 @@ export const currencyMap: Readonly<Record<Currency, Readonly<CurrencyInfo>>> = {
         shortName: Currency.ETH,
         name: 'Ethereum',
         chainId: ETH_CHAIN_ID,
-        toBaseUnit: (amount: number) => {
-            return BigNumber.from(
-                ethers.utils.parseUnits(amount.toString(), 'ether')
-            );
-        },
+        toBaseUnit: (amount: number) => convertEthToWei(amount),
     },
     [Currency.FIL]: {
         indexCcy: 1,
@@ -44,11 +41,7 @@ export const currencyMap: Readonly<Record<Currency, Readonly<CurrencyInfo>>> = {
         name: 'USDC',
         icon: UsdcIcon,
         chainId: ETH_CHAIN_ID,
-        toBaseUnit: (amount: number) => {
-            return BigNumber.from(
-                ethers.utils.parseUnits(amount.toString(), 'ether')
-            );
-        },
+        toBaseUnit: (amount: number) => convertEthToWei(amount),
     },
 };
 
@@ -87,4 +80,14 @@ export const getCurrencyByIndex = (value: string | number) => {
     }
 
     return currency;
+};
+
+const convertEthToWei = (amount: number) => {
+    const wei = new BigNumberJS(amount).multipliedBy(ETH_TO_WEI);
+    if (wei.isLessThan(new BigNumberJS(1))) {
+        return BigNumber.from(0);
+    }
+    return BigNumber.from(
+        new BigNumberJS(amount).multipliedBy(ETH_TO_WEI).toString()
+    );
 };
