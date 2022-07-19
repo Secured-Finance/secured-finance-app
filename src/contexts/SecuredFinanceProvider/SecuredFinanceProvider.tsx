@@ -76,7 +76,7 @@ const SecuredFinanceProvider: React.FC = ({ children }) => {
             if (status === 'error') {
                 if (error instanceof ChainUnsupportedError) {
                     alert(
-                        'Unsupported network, please use Ropsten (Chain ID: 1337'
+                        'Unsupported network, please use Rinkeby (Chain ID: 4)'
                     );
                 }
             }
