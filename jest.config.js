@@ -18,6 +18,10 @@ const customJestConfig = {
         '!**/*.stories.tsx',
         '!src/**/*.d.ts',
         '!src/**/index.ts',
+        '!src/views/**/*.*',
+        '!src/components/common/*.*',
+        '!src/components/new/*.*',
+        '!src/stories/**/*.*',
     ],
     moduleNameMapper: {
         // .svg should have high priority
@@ -25,6 +29,7 @@ const customJestConfig = {
     },
     testPathIgnorePatterns: ['<rootDir>/cypress/'],
     coverageProvider: 'v8',
+    coverageReporters: ['json', 'lcov', 'text', 'text-summary'],
 };
 
 // createJestConfig is exported this way to ensure that next/jest can load the Next.js config which is async
