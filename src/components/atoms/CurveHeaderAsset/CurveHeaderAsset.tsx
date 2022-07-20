@@ -25,7 +25,7 @@ export const CurveHeaderAsset: React.FC<CurveHeaderAssetProps> = ({
                     {asset}
                 </span>
                 <div className='flex h-5 w-full flex-row items-center justify-between'>
-                    <span className='typography-caption flex h-full items-center text-neutral8'>
+                    <span className='typography-caption flex h-full items-center text-neutral-8'>
                         {usdFormat(value, 2)}
                     </span>
                     <span

@@ -19,7 +19,7 @@
       @apply font-secondary text-lg font-semibold sm:text-smd sm:leading-7;
     }
     .typography-body-1 {
-      @apply text-md font-secondary;
+      @apply text-md font-secondary font-semibold;
     }
     .typography-body-2 {
       @apply text-base font-secondary leading-6;
@@ -56,5 +56,8 @@
     }
     .typography-dropdown-selection-label {
       @apply text-[11px] font-secondary leading-4;
+    }
+    .typography-percentage-tab {
+      @apply text-sm font-secondary leading-4 font-bold;
     }
   }
