@@ -23,6 +23,9 @@ export const mockUseSF = () => {
                 BigNumber.from('550'),
             ])
         ),
+        checkRegisteredUser: jest.fn<Promise<boolean> | undefined, []>(() =>
+            Promise.resolve(true)
+        ),
     };
 
     return mockSecuredFinance;
