@@ -3,7 +3,7 @@ import { WithWalletProvider } from 'src/../.storybook/decorators';
 import { ConnectWalletCard } from '.';
 
 export default {
-    title: 'Atoms/ConnectWalletCard',
+    title: 'Organism/ConnectWalletCard',
     component: ConnectWalletCard,
     parameters: {
         chromatic: { disableSnapshot: false },

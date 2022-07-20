@@ -31,10 +31,10 @@ export const PortfolioTab: React.FC<PortfolioTabProps> = ({
 const getBorderStyle = (orientation: 'left' | 'right' | 'center') => {
     switch (orientation) {
         case 'left':
-            return 'border-l border-r-[0.5px] border-b rounded-bl-2xl border-white-10';
+            return 'border-l border-r-0.5 border-b rounded-bl-2xl border-white-10';
         case 'right':
-            return 'border-l-[0.5px] border-r border-b border-white-10 rounded-br-2xl';
+            return 'border-l-0.5 border-r border-b border-white-10 rounded-br-2xl';
         case 'center':
-            return 'border-x-[0.5px] border-b border-white-10';
+            return 'border-x-0.5 border-b border-white-10';
     }
 };

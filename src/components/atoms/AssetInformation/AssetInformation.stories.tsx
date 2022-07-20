@@ -1,11 +1,10 @@
+import { WithAssetPrice } from '.storybook/decorators';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { updateLatestBlock } from 'src/store/blockchain';
 import { Currency } from 'src/utils';
-import { coingeckoApi } from 'src/utils/coinGeckoApi';
 import { AssetInformation } from '.';
-import AxiosMock from '../../../stories/mocks/AxiosMock';
 
 export default {
     title: 'Atoms/AssetInformation',
@@ -18,31 +17,7 @@ export default {
     parameters: {
         chromatic: { disableSnapshot: false },
     },
-    decorators: [
-        Story => (
-            <AxiosMock
-                api={coingeckoApi}
-                mock={adapter =>
-                    adapter.onGet('/simple/price').reply(200, {
-                        ethereum: {
-                            usd: 2000.34,
-                            usd_24h_change: 0.5162466489453748,
-                        },
-                        filecoin: {
-                            usd: 6.0,
-                            usd_24h_change: -8.208519783216566,
-                        },
-                        'usd-coin': {
-                            usd: 1.0,
-                            usd_24h_change: 0.042530768538486696,
-                        },
-                    })
-                }
-            >
-                <Story />
-            </AxiosMock>
-        ),
-    ],
+    decorators: [WithAssetPrice],
 } as ComponentMeta<typeof AssetInformation>;
 
 const Template: ComponentStory<typeof AssetInformation> = args => {

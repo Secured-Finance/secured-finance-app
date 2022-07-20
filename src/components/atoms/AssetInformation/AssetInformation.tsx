@@ -1,7 +1,7 @@
 import { useSelector } from 'react-redux';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { RootState } from 'src/store/types';
-import { Currency, getCurrencyBy, usdFormat } from 'src/utils';
+import { Currency, currencyMap, usdFormatAppendUSD } from 'src/utils';
 
 interface AssetInformationProps {
     header: string;
@@ -14,7 +14,7 @@ export const AssetInformation: React.FC<AssetInformationProps> = ({
     asset,
     quantity,
 }) => {
-    const currencyInfo = getCurrencyBy('shortName', asset);
+    const currencyInfo = currencyMap[asset];
     const priceList = useSelector((state: RootState) => getPriceMap(state));
     const price = priceList[asset];
 
@@ -25,16 +25,16 @@ export const AssetInformation: React.FC<AssetInformationProps> = ({
             </div>
             <div className='flex h-10 w-full flex-row items-center gap-3'>
                 <div>
-                    <currencyInfo.iconSVG className='h-7 w-7' />
+                    <currencyInfo.icon className='h-7 w-7' />
                 </div>
                 <div className='flex w-full flex-row justify-between'>
                     <Tab
                         header={asset}
-                        footer={usdFormat(price, 2) + ' USD'}
+                        footer={usdFormatAppendUSD(price, 2)}
                     ></Tab>
                     <Tab
-                        header={quantity + ' ' + asset}
-                        footer={usdFormat(quantity * price) + ' USD'}
+                        header={`${quantity} ${asset}`}
+                        footer={usdFormatAppendUSD(quantity * price)}
                         align='right'
                     ></Tab>
                 </div>

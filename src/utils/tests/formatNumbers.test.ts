@@ -1,4 +1,4 @@
-import { formatFilecoin } from '../formatNumbers';
+import { formatFilecoin, usdFormatAppendUSD } from '../formatNumbers';
 
 describe('formatFilecoin', () => {
     it('should convert the input to filecoin', () => {
@@ -48,5 +48,12 @@ describe('formatFilecoin', () => {
         const { value, unit } = formatFilecoin(1, 'picofil', 'attofil');
         expect(value.toString()).toEqual('1000000');
         expect(unit).toEqual('ATTOFIL');
+    });
+
+    it('should convert input number to usdFormat and append USD', () => {
+        const value = usdFormatAppendUSD(1, 0);
+        expect(value).toEqual('$1 USD');
+        const value1 = usdFormatAppendUSD(2.1234, 2);
+        expect(value1).toEqual('$2.12 USD');
     });
 });

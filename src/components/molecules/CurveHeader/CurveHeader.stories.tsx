@@ -1,10 +1,9 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
+import { WithAssetPrice } from 'src/../.storybook/decorators';
 import { updateLatestBlock } from 'src/store/blockchain';
 import { Currency } from 'src/utils';
-import { coingeckoApi } from 'src/utils/coinGeckoApi';
-import AxiosMock from '../../../stories/mocks/AxiosMock';
 import { CurveHeader } from './CurveHeader';
 
 export default {
@@ -15,31 +14,7 @@ export default {
         isBorrow: true,
     },
     argTypes: {},
-    decorators: [
-        Story => (
-            <AxiosMock
-                api={coingeckoApi}
-                mock={adapter =>
-                    adapter.onGet('/simple/price').reply(200, {
-                        ethereum: {
-                            usd: 2000.34,
-                            usd_24h_change: 0.5162466489453748,
-                        },
-                        filecoin: {
-                            usd: 5.87,
-                            usd_24h_change: -8.208519783216566,
-                        },
-                        'usd-coin': {
-                            usd: 1.002,
-                            usd_24h_change: 0.042530768538486696,
-                        },
-                    })
-                }
-            >
-                <Story />
-            </AxiosMock>
-        ),
-    ],
+    decorators: [WithAssetPrice],
 } as ComponentMeta<typeof CurveHeader>;
 
 const Template: ComponentStory<typeof CurveHeader> = args => {

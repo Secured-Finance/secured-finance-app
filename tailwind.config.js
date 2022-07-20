@@ -116,6 +116,11 @@ module.exports = {
                 '10': 'rgba(255, 255, 255, 0.1)',
             },
         },
+        borderWidth: {
+            DEFAULT: '1px',
+            '0.5': '0.5px',
+            '2': '2px',
+        },
     },
     plugins: [],
 };
