@@ -1,13 +1,13 @@
 import { useCrosschainAddressById } from '@secured-finance/sf-graph-client';
 import { CrosschainAddress } from '@secured-finance/sf-graph-client/dist/.graphclient';
 import { useMemo, useState } from 'react';
-import { getCurrencyBy } from 'src/utils';
+import { Currency, currencyMap } from 'src/utils';
 
-export const useCrosschainAddressByChainId = (user: string, ccy: string) => {
+export const useCrosschainAddressByChainId = (user: string, ccy: Currency) => {
     const [crosschainAddress, setCrosschainAddress] =
         useState<CrosschainAddress>();
 
-    const currency = getCurrencyBy('shortName', ccy);
+    const currency = currencyMap[ccy];
 
     const { data, error } = useCrosschainAddressById(user, currency.chainId);
 
