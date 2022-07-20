@@ -1,10 +1,16 @@
 import { composeStories } from '@storybook/testing-react';
+import { BigNumber } from 'ethers';
 import { fireEvent, render, screen } from 'src/test-utils.js';
 import * as stories from './AssetSelector.stories';
 
 const { Default } = composeStories(stories);
 
 describe('AssetSelector Component', () => {
+    const amountFormatterMap = {
+        ['BTC']: (amount: number) => BigNumber.from(amount * 100),
+        ['ETH']: (amount: number) => BigNumber.from(amount * 1000),
+    };
+
     it('should render a AssetSelector', () => {
         render(<Default />);
     });
@@ -38,7 +44,45 @@ describe('AssetSelector Component', () => {
         render(<Default onAmountChange={onAmountChange} />);
         const input = screen.getByRole('textbox');
         fireEvent.change(input, { target: { value: '1' } });
-        expect(onAmountChange).toHaveBeenCalledWith(1);
+        expect(onAmountChange).toHaveBeenCalled();
+    });
+
+    it('should call onAmountChange function with the amount converted to BigNumber if no amountFormatterMap was provided', () => {
+        const onAmountChange = jest.fn();
+        render(<Default onAmountChange={onAmountChange} />);
+        const input = screen.getByRole('textbox');
+        fireEvent.change(input, { target: { value: '1' } });
+        expect(onAmountChange).toHaveBeenCalledWith(BigNumber.from(1));
+        fireEvent.change(input, { target: { value: '10' } });
+        expect(onAmountChange).toHaveBeenLastCalledWith(BigNumber.from(10));
+    });
+
+    it('should call onAmountChange function with the amount converted to BigNumber with the function from amountFormatterMap', () => {
+        const onAmountChange = jest.fn();
+        render(
+            <Default
+                onAmountChange={onAmountChange}
+                amountFormatterMap={amountFormatterMap}
+            />
+        );
+        const input = screen.getByRole('textbox');
+        fireEvent.change(input, { target: { value: '1' } });
+        expect(onAmountChange).toHaveBeenCalledWith(BigNumber.from(100));
+        fireEvent.change(input, { target: { value: '10' } });
+        expect(onAmountChange).toHaveBeenLastCalledWith(BigNumber.from(1000));
+    });
+
+    it('should call onAmountChange function when the asset is changed', () => {
+        const onAmountChange = jest.fn();
+        render(<Default onAmountChange={onAmountChange} />);
+        expect(onAmountChange).toHaveBeenCalledTimes(1);
+        fireEvent.click(screen.getByRole('button'));
+        fireEvent.click(screen.getByText('Ethereum'));
+        expect(onAmountChange).toHaveBeenCalledTimes(2);
+
+        fireEvent.click(screen.getByRole('button'));
+        fireEvent.click(screen.getByText('Filecoin'));
+        expect(onAmountChange).toHaveBeenCalledTimes(3);
     });
 
     it('should call the onAssetChange function when the asset is changed', () => {
@@ -52,5 +96,25 @@ describe('AssetSelector Component', () => {
         fireEvent.click(screen.getByText('Filecoin'));
         expect(onAssetChange).toHaveBeenLastCalledWith('FIL');
         expect(onAssetChange).toHaveBeenCalledTimes(3);
+    });
+
+    it('should call the onAmountChange function when the asset is changed', () => {
+        const onAmountChange = jest.fn();
+        render(
+            <Default
+                onAmountChange={onAmountChange}
+                amountFormatterMap={amountFormatterMap}
+            />
+        );
+        expect(onAmountChange).toHaveBeenCalledWith(BigNumber.from(0));
+        const input = screen.getByRole('textbox');
+        fireEvent.change(input, { target: { value: '1' } });
+        expect(onAmountChange).toHaveBeenLastCalledWith(BigNumber.from(100));
+        fireEvent.click(screen.getByRole('button'));
+        fireEvent.click(screen.getByText('Ethereum'));
+        expect(onAmountChange).toHaveBeenLastCalledWith(BigNumber.from(1000));
+        fireEvent.click(screen.getByRole('button'));
+        fireEvent.click(screen.getByText('Filecoin'));
+        expect(onAmountChange).toHaveBeenLastCalledWith(BigNumber.from(1));
     });
 });
