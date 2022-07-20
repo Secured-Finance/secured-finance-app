@@ -64,7 +64,7 @@ jobs:
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           flags: unit-tests
-          files: './coverage/cobertura-coverage.xml'
+          files: './coverage/coverage-final.json'
   cypress-run:
     runs-on: ubuntu-latest
     name: Cypress Run Tests

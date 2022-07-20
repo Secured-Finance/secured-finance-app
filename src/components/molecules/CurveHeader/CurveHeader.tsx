@@ -27,7 +27,7 @@ export const CurveHeader: React.FC<CurveHeaderProps> = ({
                 asset={currencyMap[asset]?.name}
                 value={priceList[asset]}
                 fluctuation={priceChangeList[asset]}
-                IconSVG={currencyMap[asset]?.iconSVG}
+                IconSVG={currencyMap[asset]?.icon}
             ></CurveHeaderAsset>
             <div className='flex flex-row gap-2'>
                 <CurveHeaderTotal

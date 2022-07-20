@@ -8,6 +8,7 @@ import { AssetSelector, TermSelector } from 'src/components/molecules';
 import { CollateralBook, OrderSide } from 'src/hooks';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import {
+    selectLandingOrderForm,
     setAmount,
     setCurrency,
     setSide,
@@ -17,7 +18,7 @@ import { setLastMessage } from 'src/store/lastError';
 import { RootState } from 'src/store/types';
 import {
     Currency,
-    currencyList,
+    getCurrencyMapAsList,
     getCurrencyMapAsOptions,
     getTermsAsOptions,
     percentFormat,
@@ -35,30 +36,44 @@ export const LendingCard = ({
     marketRate,
 }: {
     onPlaceOrder: (
-        ccy: string,
+        ccy: Currency,
         term: string,
         side: OrderSide,
-        amount: number,
+        amount: BigNumber,
         rate: number
     ) => Promise<unknown>;
     collateralBook: CollateralBook;
     marketRate: number;
 }) => {
     const [pendingTransaction, setPendingTransaction] = useState(false);
-    const { currency, term, amount, side } = useSelector(
-        (state: RootState) => state.landingOrderForm
+    const { currency, term, amount, side } = useSelector((state: RootState) =>
+        selectLandingOrderForm(state.landingOrderForm)
     );
 
     const dispatch = useDispatch();
 
     const shortNames = useMemo(
         () =>
-            currencyList.reduce<Record<string, Currency>>(
+            getCurrencyMapAsList().reduce<Record<string, Currency>>(
                 (acc, ccy) => ({
                     ...acc,
                     [ccy.name]: ccy.shortName,
                 }),
                 {}
+            ),
+        []
+    );
+
+    const amountFormatterMap = useMemo(
+        () =>
+            getCurrencyMapAsList().reduce<
+                Record<Currency, (value: number) => BigNumber>
+            >(
+                (acc, ccy) => ({
+                    ...acc,
+                    [ccy.shortName]: ccy.toBaseUnit,
+                }),
+                {} as Record<Currency, (value: number) => BigNumber>
             ),
         []
     );
@@ -98,10 +113,10 @@ export const LendingCard = ({
 
     const handlePlaceOrder = useCallback(
         async (
-            ccy: string,
+            ccy: Currency,
             term: Term,
             side: number,
-            amount: number,
+            amount: BigNumber,
             rate: number
         ) => {
             try {
@@ -157,7 +172,8 @@ export const LendingCard = ({
                     selected={assetList[0]}
                     transformLabel={(v: string) => shortNames[v]}
                     priceList={assetPriceMap}
-                    onAmountChange={(v: number) => dispatch(setAmount(v))}
+                    onAmountChange={(v: BigNumber) => dispatch(setAmount(v))}
+                    amountFormatterMap={amountFormatterMap}
                     onAssetChange={(v: Currency) => {
                         dispatch(setCurrency(v));
                     }}

@@ -1,12 +1,13 @@
-import { BigNumber, FixedNumber } from 'ethers';
+import { FilecoinNumber } from '@glif/filecoin-number';
+import { BigNumber as BigNumberJS } from 'bignumber.js';
+import { BigNumber } from 'ethers';
 import EthIcon from 'src/assets/coins/eth2.svg';
 import FilecoinIcon from 'src/assets/coins/fil.svg';
 import UsdcIcon from 'src/assets/coins/usdc.svg';
 import { Option } from 'src/components/atoms';
 import { MAINNET_PATH_CODE } from 'src/services/ledger/constants';
-import { formatFilecoin } from './formatNumbers';
-
 const ETH_CHAIN_ID = 60;
+const ETH_TO_WEI = new BigNumberJS(10 ** 18);
 
 export enum Currency {
     ETH = 'ETH',
@@ -14,120 +15,64 @@ export enum Currency {
     USDC = 'USDC',
 }
 
-export const currencyMap: Readonly<Record<Currency, CurrencyInfo>> = {
+export const currencyMap: Readonly<Record<Currency, Readonly<CurrencyInfo>>> = {
     [Currency.ETH]: {
         indexCcy: 0,
-        icon: 'ethLogo',
-        iconSVG: EthIcon,
+        icon: EthIcon,
         shortName: Currency.ETH,
         name: 'Ethereum',
         chainId: ETH_CHAIN_ID,
-        formatFunction: (amount: number) => {
-            return {
-                value: BigNumber.from(amount),
-                unit: 'ETH',
-            };
-        },
+        toBaseUnit: (amount: number) => convertEthToWei(amount),
     },
     [Currency.FIL]: {
         indexCcy: 1,
-        icon: 'filLogo',
-        iconSVG: FilecoinIcon,
+        icon: FilecoinIcon,
         shortName: Currency.FIL,
         name: 'Filecoin',
         chainId: MAINNET_PATH_CODE,
-        formatFunction: (amount: number) => {
-            return formatFilecoin(amount, 'attofil', 'attofil');
+        toBaseUnit: (amount: number) => {
+            const filAmount = new FilecoinNumber(amount, 'fil');
+            return BigNumber.from(filAmount.toAttoFil());
         },
     },
     [Currency.USDC]: {
         indexCcy: 2,
         shortName: Currency.USDC,
         name: 'USDC',
-        icon: '',
-        iconSVG: UsdcIcon,
+        icon: UsdcIcon,
         chainId: ETH_CHAIN_ID,
-        formatFunction: (amount: number) => {
-            return {
-                value: BigNumber.from(amount.toFixed(2)),
-                unit: 'USDC',
-            };
-        },
+        toBaseUnit: (amount: number) => convertEthToWei(amount),
     },
 };
 
+export const getCurrencyMapAsList = () => {
+    return Object.values(currencyMap);
+};
+
 export const getCurrencyMapAsOptions = () => {
-    return Object.values(currencyMap).map<Option<Currency>>(
-        ({ shortName, name, iconSVG }) => ({
+    return getCurrencyMapAsList().map<Option<Currency>>(
+        ({ shortName, name, icon }) => ({
             value: shortName,
             label: name,
-            iconSVG: iconSVG,
+            iconSVG: icon,
         })
     );
 };
 
 export type CurrencyInfo = {
     indexCcy: number;
-    icon: string;
     shortName: Currency;
     name: string;
     chainId: number;
-    iconSVG: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
-    formatFunction: (amount: number) => {
-        value: BigNumber | FixedNumber;
-        unit: string;
-    };
+    icon: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
+    toBaseUnit: (amount: number) => BigNumber;
 };
 
-export const currencyList = [
-    {
-        indexCcy: 0,
-        icon: 'ethLogo',
-        iconSVG: EthIcon,
-        shortName: Currency.ETH,
-        name: 'Ethereum',
-        chainId: ETH_CHAIN_ID,
-        formatFunction: (amount: number) => {
-            return {
-                value: BigNumber.from(amount),
-                unit: 'ETH',
-            };
-        },
-    },
-    {
-        indexCcy: 1,
-        icon: 'filLogo',
-        iconSVG: FilecoinIcon,
-        shortName: Currency.FIL,
-        name: 'Filecoin',
-        chainId: MAINNET_PATH_CODE,
-        formatFunction: (amount: number) => {
-            return formatFilecoin(amount, 'attofil', 'attofil');
-        },
-    },
-    {
-        indexCcy: 2,
-        shortName: Currency.USDC,
-        name: 'USDC',
-        icon: '',
-        iconSVG: UsdcIcon,
-        chainId: ETH_CHAIN_ID,
-        formatFunction: (amount: number) => {
-            return {
-                value: BigNumber.from(amount.toFixed(2)),
-                unit: 'USDC',
-            };
-        },
-    },
-] as Readonly<CurrencyInfo[]>;
-
-export const getCurrencyBy = (
-    label: keyof CurrencyInfo,
-    value: string | number
-) => {
-    const currency = currencyList.find(
-        ({ [label]: val }) =>
-            val.toString().toLowerCase() === value.toString().toLowerCase()
+// Do not use this function, as we don't want to use the IndexCcy to identify the currency
+export const getCurrencyByIndex = (value: string | number) => {
+    const currency = getCurrencyMapAsList().find(
+        ({ indexCcy }) =>
+            indexCcy.toString().toLowerCase() === value.toString().toLowerCase()
     );
 
     if (!currency) {
@@ -137,12 +82,12 @@ export const getCurrencyBy = (
     return currency;
 };
 
-export const formatAmount = (amount: number, currency: Currency) => {
-    const currencyInfo = getCurrencyBy('shortName', currency);
-
-    if (!currencyInfo || (currencyInfo && !currencyInfo.formatFunction)) {
-        return { value: BigNumber.from(amount), unit: currency };
+const convertEthToWei = (amount: number) => {
+    const wei = new BigNumberJS(amount).multipliedBy(ETH_TO_WEI);
+    if (wei.isLessThan(new BigNumberJS(1))) {
+        return BigNumber.from(0);
     }
-
-    return currencyInfo.formatFunction(amount);
+    return BigNumber.from(
+        new BigNumberJS(amount).multipliedBy(ETH_TO_WEI).toString()
+    );
 };

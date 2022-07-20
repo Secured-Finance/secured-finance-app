@@ -1,5 +1,6 @@
 import { renderHook } from '@testing-library/react-hooks';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
+import { Currency, currencyMap } from 'src/utils';
 import { usePlaceOrder } from './';
 
 const mockSecuredFinance = mockUseSF();
@@ -14,7 +15,13 @@ describe('usePlaceOrder hook', () => {
     it('should call the SDK in wei when used with ETH', async () => {
         const { result } = renderHook(() => usePlaceOrder());
         const placeOrder = result.current.placeOrder;
-        await placeOrder('ETH', '2022', 0, 1, 1);
+        await placeOrder(
+            Currency.ETH,
+            '2022',
+            0,
+            currencyMap.ETH.toBaseUnit(1),
+            1
+        );
         expect(mockSecuredFinance.placeLendingOrder).toHaveBeenCalledTimes(1);
     });
 });

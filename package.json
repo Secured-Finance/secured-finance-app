@@ -50,7 +50,7 @@
     "build:server": "next build",
     "preexport": "rm -rf ./build",
     "test": "jest --watch",
-    "test:cov": "jest --watchAll=false --coverageReporters=cobertura --collectCoverage",
+    "test:cov": "jest --watchAll=false --collectCoverage",
     "typecheck": "tsc  -p ./tsconfig.json",
     "prettier:check": "prettier --check 'src/**/*.{ts,tsx,js,jsx,json}' '*.{ts,tsx,js,jsx,json}' '!package.json'",
     "prettier:write": "prettier --write 'src/**/*.{ts,tsx,js,jsx,json}' '*.{ts,tsx,js,jsx,json}' '!package.json'",
@@ -64,11 +64,7 @@
     "cypress:run": "cypress run"
   },
   "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
+    "production": [">0.2%", "not dead", "not op_mini all"],
     "development": [
       "last 1 chrome version",
       "last 1 firefox version",
