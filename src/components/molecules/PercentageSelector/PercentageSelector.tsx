@@ -18,7 +18,7 @@ export const PercentageSelector: React.FC<PercentageSelectorProps> = ({
     };
 
     return (
-        <div className='flex h-10 w-[360px] flex-col items-center'>
+        <div className='flex h-10 flex-col items-center'>
             <div className='flex flex-row justify-around gap-4'>
                 {percentage.map(percentage => {
                     return (
