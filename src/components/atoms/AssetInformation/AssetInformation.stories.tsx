@@ -1,7 +1,7 @@
-import { WithAssetPrice } from '.storybook/decorators';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
+import { WithAssetPrice } from 'src/../.storybook/decorators';
 import { updateLatestBlock } from 'src/store/blockchain';
 import { Currency } from 'src/utils';
 import { AssetInformation } from '.';
