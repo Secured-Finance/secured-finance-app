@@ -9,6 +9,9 @@ module.exports = {
                 deep: '0px 34px 64px rgba(0, 0, 0, 0.45)',
                 dropdown: '0px 16px 64px -48px rgba(31, 47, 70, 0.4)',
             },
+            borderWidth: {
+                '0.5': '0.5px',
+            },
         },
         fontFamily: {
             primary: ['GT Super Display', ...defaultTheme.fontFamily.serif],
@@ -68,9 +71,15 @@ module.exports = {
             slateGray: '#777E90',
             secondary7: '#B9BDEA',
 
-            neutral: '#353945',
-            neutral1: '#141416',
-            neutral8: '#FCFCFD',
+            neutral: {
+                DEFAULT: '#353945',
+                '1': '#141416',
+                '2': '#23262F',
+                '3': '#353945',
+                '4': '#777E91',
+                '8': '#FCFCFD',
+            },
+
             tabGradient2: 'rgba(106, 118, 177, 0.35)',
             tabGradient1: 'rgba(57, 77, 174, 0)',
             backgroundBlur: 'rgba(35, 43, 56, 0.6)',

@@ -16,7 +16,7 @@ export const Header = () => {
     return (
         <nav
             data-cy='header'
-            className={`flex h-20 w-full flex-row items-center justify-between border-b border-neutral1 ${
+            className={`flex h-20 w-full flex-row items-center justify-between border-b border-neutral-1 ${
                 display ? 'blur-sm' : ''
             }`}
         >

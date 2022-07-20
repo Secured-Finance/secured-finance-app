@@ -3,5 +3,7 @@ export * from './CurrencySelector';
 export * from './CurveHeader';
 export * from './Dialog';
 export * from './LineChart';
+export * from './PercentageSelector';
+export * from './PortfolioManagementTable';
 export * from './TermSelector';
 export * from './WalletRadioGroup';

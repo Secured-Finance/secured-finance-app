@@ -10,6 +10,10 @@ export const usdFormat = (number: number, digits = 0) => {
     }).format(number);
 };
 
+export const usdFormatAppendUSD = (number: number, digits = 0) => {
+    return `${usdFormat(number, digits)} USD`;
+};
+
 export const percentFormat = (number: number, dividedBy = 100) => {
     return number !== 0
         ? Intl.NumberFormat('en-US', {
