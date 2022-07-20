@@ -9,6 +9,9 @@ module.exports = {
                 deep: '0px 34px 64px rgba(0, 0, 0, 0.45)',
                 dropdown: '0px 16px 64px -48px rgba(31, 47, 70, 0.4)',
             },
+            borderWidth: {
+                '0.5': '0.5px',
+            },
         },
         fontFamily: {
             primary: ['GT Super Display', ...defaultTheme.fontFamily.serif],
@@ -115,11 +118,6 @@ module.exports = {
                 '20': 'rgba(255, 255, 255, 0.2)',
                 '10': 'rgba(255, 255, 255, 0.1)',
             },
-        },
-        borderWidth: {
-            DEFAULT: '1px',
-            '0.5': '0.5px',
-            '2': '2px',
         },
     },
     plugins: [],
