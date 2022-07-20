@@ -30,6 +30,16 @@
       { "allow": ["arrowFunctions"] }
     ],
     "no-unused-vars": "off",
-    "@typescript-eslint/no-unused-vars": ["warn", { "argsIgnorePattern": "^_" }]
+    "@typescript-eslint/no-unused-vars": [
+      "warn",
+      { "argsIgnorePattern": "^_" }
+    ],
+    "@typescript-eslint/naming-convention": [
+      "error",
+      {
+        "selector": "typeLike",
+        "format": ["PascalCase"]
+      }
+    ]
   }
 }
