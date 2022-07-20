@@ -1,4 +1,4 @@
-type wallet = {
+type Wallet = {
     address: string;
     phrase: string;
 };
@@ -28,7 +28,7 @@ export const expectFilecoin = {
 };
 
 export const filecoin = {
-    connectWallet: (wallet: wallet) => {
+    connectWallet: (wallet: Wallet) => {
         cy.get('[data-cy="filecoin-connect-wallet-chip"]').click();
         cy.get('[data-cy="private-key-button"]').click();
         //TODO: replace this selector once the buttons are reorganized
