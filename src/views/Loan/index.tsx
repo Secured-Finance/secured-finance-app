@@ -18,12 +18,7 @@ import {
     ordinaryFormat,
     percentFormat,
 } from 'src/utils';
-import {
-    Currency,
-    currencyList,
-    formatAmount,
-    getCurrencyBy,
-} from 'src/utils/currencyList';
+import { Currency, currencyMap } from 'src/utils/currencyList';
 import styled from 'styled-components';
 import { useWallet } from 'use-wallet';
 
@@ -67,21 +62,21 @@ const LoanScreen = () => {
 
     const loanCurrency = useMemo(() => {
         if (loan?.currency) {
-            return getCurrencyBy('shortName', loan.currency.shortName);
+            return currencyMap[loan?.currency as Currency];
         } else {
             // we should never be in this condition, but just in case.
             // TODO: manage global error with a component and display it to the user
-            return currencyList[1];
+            return currencyMap.FIL;
         }
     }, [loan]);
 
     const format = useCallback(
         (amount: number) => {
-            const { value, unit } = formatAmount(
-                amount,
-                loanCurrency.shortName
+            return (
+                ordinaryFormat(
+                    currencyMap[loanCurrency.shortName].toBaseUnit(amount)
+                ) + ` ${loanCurrency.shortName}`
             );
-            return ordinaryFormat(value) + ` ${unit}`;
         },
         [loanCurrency.shortName]
     );

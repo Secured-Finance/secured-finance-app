@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { OrderbookRow } from '@secured-finance/sf-graph-client/dist/utils';
-import { Currency, getCurrencyBy } from 'src/utils/currencyList';
+import { Currency, currencyMap } from 'src/utils/currencyList';
 import { LendingTerminalStore, TradingHistoryRow } from './types';
 
 const initialStore: LendingTerminalStore = {
@@ -100,10 +100,7 @@ const lendingTerminalSlice = createSlice({
             state.marketRate = action.payload;
         },
         updateLendingCurrency(state, action: PayloadAction<Currency>) {
-            const { indexCcy, name, shortName } = getCurrencyBy(
-                'shortName',
-                action.payload
-            );
+            const { indexCcy, name, shortName } = currencyMap[action.payload];
             state.currencyIndex = indexCcy;
             state.selectedCcy = shortName;
             state.selectedCcyName = name;

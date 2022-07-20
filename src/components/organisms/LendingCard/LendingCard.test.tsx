@@ -1,6 +1,8 @@
 import { composeStories } from '@storybook/testing-react';
+import { BigNumber } from 'ethers';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
+import { currencyMap } from 'src/utils';
 import * as stories from './LendingCard.stories';
 
 const { Default, PendingTransaction } = composeStories(stories);
@@ -83,7 +85,7 @@ describe('LendingCard Component', () => {
                 'ETH',
                 '3 month',
                 0,
-                0,
+                BigNumber.from(0),
                 100
             )
         );
@@ -102,7 +104,7 @@ describe('LendingCard Component', () => {
                 'FIL',
                 '3 month',
                 0,
-                10,
+                currencyMap.FIL.toBaseUnit(10),
                 100
             )
         );
@@ -136,7 +138,7 @@ describe('LendingCard Component', () => {
     it('should select the term from the store', () => {
         render(<Default />, {
             preloadedState: {
-                landingOrderForm: { term: '1Y' },
+                landingOrderForm: { term: '1Y', amount: '10' },
             },
         });
         expect(screen.getAllByText('1 Year')).toHaveLength(2);
