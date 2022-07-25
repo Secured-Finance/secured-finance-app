@@ -87,7 +87,5 @@ const convertEthToWei = (amount: number) => {
     if (wei.isLessThan(new BigNumberJS(1))) {
         return BigNumber.from(0);
     }
-    return BigNumber.from(
-        new BigNumberJS(amount).multipliedBy(ETH_TO_WEI).toString()
-    );
+    return BigNumber.from(wei.toString());
 };
