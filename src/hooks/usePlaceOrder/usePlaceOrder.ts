@@ -1,7 +1,7 @@
 import { BigNumber } from 'ethers';
 import { useCallback } from 'react';
+import useSF from 'src/hooks/useSecuredFinance';
 import { Currency } from 'src/utils';
-import useSF from '../useSecuredFinance';
 
 export enum OrderSide {
     Lend = 0,
