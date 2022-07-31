@@ -1,4 +1,4 @@
-import { OrderbookRow } from '@secured-finance/sf-graph-client/dist/utils';
+import { OrderbookRow } from '@secured-finance/sf-graph-client/dist/hooks/lending-market/common';
 
 export interface LendingTerminalStore {
     market: string;

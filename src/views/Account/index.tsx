@@ -17,8 +17,8 @@ const Account: React.FC = () => {
     );
 
     const [tableData, setTableData] = useState<Array<WalletBase>>([]);
-    const { account, chainId } = useWallet();
-    const colBook = useCollateralBook(account ? account : '', chainId);
+    const { account } = useWallet();
+    const colBook = useCollateralBook(account);
 
     useEffect(() => {
         async function updateTable() {

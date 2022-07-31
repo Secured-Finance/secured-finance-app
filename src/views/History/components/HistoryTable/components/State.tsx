@@ -1,4 +1,4 @@
-import { Loan } from '@secured-finance/sf-graph-client/dist/.graphclient';
+import { Loan } from '@secured-finance/sf-graph-client/dist/graphclients';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 

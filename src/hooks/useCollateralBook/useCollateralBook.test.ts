@@ -1,53 +1,63 @@
 import BigNumber from 'bignumber.js';
-import { renderHook } from 'src/test-utils';
+import { mockUseSF } from 'src/stories/mocks/useSFMock';
+import { act, renderHook } from 'src/test-utils';
+import { currencyMap } from 'src/utils';
 import { CollateralBook, useCollateralBook } from './';
 
-jest.mock('@secured-finance/sf-client/dist/utils');
-jest.mock('@secured-finance/sf-graph-client', () => {
-    return {
-        useCollateralBookFromVault: jest.fn((_: string, account: string) => {
-            if (!account) {
-                return {};
-            }
-            return {
-                data: {
-                    collateralBooks: [
-                        {
-                            currency: {
-                                shortName: 'ETH',
-                            },
-                            collateral: '1',
-                            locked: '2',
-                            borrowed: '3',
-                            independentCollateral: '4',
-                            vault: {
-                                address: '0x123',
-                            },
-                        },
-                    ],
-                },
-                error: null,
-            };
-        }),
-    };
-});
+const mock = mockUseSF();
+jest.mock('src/hooks/useSecuredFinance', () => () => mock);
 
 describe('useCollateralBook hook', () => {
-    it('should return the collateral book when given an user and a chainId', () => {
-        const { result } = renderHook(() => useCollateralBook('0x0', 1, 'ETH'));
+    const ETH = currencyMap.ETH;
+    const ETH_PRICE = 2000;
+    const preloadedState = {
+        assetPrices: {
+            ethereum: {
+                price: ETH_PRICE,
+                change: 0.5162466489453748,
+            },
+        },
+    };
+    it('should return the collateral book for an user', async () => {
+        const { result, waitForNextUpdate } = renderHook(() =>
+            useCollateralBook('0x0', ETH.shortName)
+        );
+        await act(async () => {
+            await waitForNextUpdate();
+        });
         const colBook = result.current as CollateralBook;
-        expect(colBook.ccyIndex).toEqual(0);
+        expect(colBook.ccyIndex).toEqual(ETH.indexCcy);
         expect(colBook.ccyName).toEqual('ETH');
-        expect(colBook.collateral).toEqual(new BigNumber('4'));
+        expect(colBook.collateral.toString()).toEqual('10000');
     });
 
-    it('should return the empty book when given an undefined user', () => {
-        const { result } = renderHook(() =>
-            useCollateralBook(undefined, 1, 'ETH')
+    it('should return the empty book when given an null user', async () => {
+        const { result, waitForNextUpdate } = renderHook(() =>
+            useCollateralBook(null)
         );
         const colBook = result.current as CollateralBook;
-        expect(colBook.ccyIndex).toEqual(0);
+        await act(async () => {
+            await waitForNextUpdate();
+        });
+        expect(colBook.ccyIndex).toEqual(ETH.indexCcy);
         expect(colBook.ccyName).toEqual('ETH');
         expect(colBook.collateral).toEqual(new BigNumber('0'));
+    });
+
+    it('should compute the collaterals in USD', async () => {
+        const { result, waitForNextUpdate } = renderHook(
+            () => useCollateralBook('0x0', ETH.shortName),
+            { preloadedState }
+        );
+        await act(async () => {
+            await waitForNextUpdate();
+        });
+        const colBook = result.current as CollateralBook;
+        expect(colBook.usdCollateral.toString()).toEqual(
+            (colBook.collateral.toNumber() * ETH_PRICE).toString()
+        );
+        expect(colBook.usdLocked.toString()).toEqual(
+            (colBook.locked.toNumber() * ETH_PRICE).toString()
+        );
     });
 });

@@ -1,4 +1,3 @@
-import { utils } from '@secured-finance/sf-client';
 import {
     useBorrowOrderbookQuery,
     useLendingTradingHistory as useLendingTradingHistoryQuery,
@@ -6,7 +5,7 @@ import {
 } from '@secured-finance/sf-graph-client';
 import { useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useWallet } from 'use-wallet';
+import { useLendingMarketAddress } from 'src/hooks';
 import {
     failSetOrderbook,
     failSetTradingHistory,
@@ -20,12 +19,7 @@ import {
 import { RootState } from '../store/types';
 
 export const useBorrowOrderbook = (ccy: string, term: string, skip = 0) => {
-    const { chainId } = useWallet();
-    const lendingMarket = utils.getLendingMarketAddressByCcyAndTerm(
-        ccy,
-        term,
-        chainId ? chainId : 1
-    );
+    const lendingMarket = useLendingMarketAddress(ccy, term);
 
     const filPrice = useSelector(
         (state: RootState) => state.assetPrices.filecoin.price
@@ -36,11 +30,11 @@ export const useBorrowOrderbook = (ccy: string, term: string, skip = 0) => {
     const dispatch = useDispatch();
     dispatch(startSetOrderbook());
 
-    const { data, error } = useBorrowOrderbookQuery(
+    const { data, error } = useBorrowOrderbookQuery({
         lendingMarket,
-        filPrice,
-        skip
-    );
+        assetPrice: filPrice,
+        skip,
+    });
 
     if (error) {
         console.error(error);
@@ -58,12 +52,7 @@ export const useBorrowOrderbook = (ccy: string, term: string, skip = 0) => {
 };
 
 export const useLendOrderbook = (ccy: string, term: string, skip = 0) => {
-    const { chainId } = useWallet();
-    const lendingMarket = utils.getLendingMarketAddressByCcyAndTerm(
-        ccy,
-        term,
-        chainId ? chainId : 1
-    );
+    const lendingMarket = useLendingMarketAddress(ccy, term);
 
     const filPrice = useSelector(
         (state: RootState) => state.assetPrices.filecoin.price
@@ -74,11 +63,11 @@ export const useLendOrderbook = (ccy: string, term: string, skip = 0) => {
     const dispatch = useDispatch();
     dispatch(startSetOrderbook());
 
-    const { data, error } = useLendOrderbookQuery(
+    const { data, error } = useLendOrderbookQuery({
         lendingMarket,
-        filPrice,
-        skip
-    );
+        assetPrice: filPrice,
+        skip,
+    });
 
     if (error) {
         console.error(error);
@@ -100,19 +89,18 @@ export const useLendingTradingHistory = (
     term: string,
     skip = 0
 ) => {
-    const { chainId } = useWallet();
-    const lendingMarket = utils.getLendingMarketAddressByCcyAndTerm(
-        ccy,
-        term,
-        chainId ? chainId : 1
-    );
+    const lendingMarket = useLendingMarketAddress(ccy, term);
+
     const tradingHistory = useSelector(
         (state: RootState) => state.lendingTerminal.tradingHistory
     );
     const dispatch = useDispatch();
 
     dispatch(startSetTradingHistory());
-    const { data, error } = useLendingTradingHistoryQuery(lendingMarket, skip);
+    const { data, error } = useLendingTradingHistoryQuery({
+        lendingMarket,
+        skip,
+    });
 
     if (error) {
         console.error(error);

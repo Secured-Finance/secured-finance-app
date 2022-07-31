@@ -1,4 +1,4 @@
-import { OrderbookRow } from '@secured-finance/sf-graph-client/dist/utils';
+import { OrderbookRow } from '@secured-finance/sf-graph-client/dist/hooks/lending-market/common';
 import React from 'react';
 import styled from 'styled-components';
 import theme from '../../../../../theme';

@@ -1,11 +1,11 @@
 import { Network } from '@glif/filecoin-address';
 import Filecoin, { WalletSubProvider } from '@glif/filecoin-wallet-provider';
-import { useCrosschainAddressById } from '@secured-finance/sf-graph-client';
 import { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useCrosschainAddressByChainId } from 'src/hooks';
 import { useUpdateCrossChainWallet } from 'src/hooks/useUpdateCrossChainWallet';
 import { updateFilWallet } from 'src/store/wallets/helpers';
-import { AddressUtils } from 'src/utils';
+import { AddressUtils, Currency } from 'src/utils';
 import { useWallet } from 'use-wallet';
 import useFilWasm from '../../hooks/useFilWasm';
 import { RootState } from '../../store/types';
@@ -19,17 +19,7 @@ import {
     startFetchingFilWalletProvider,
 } from './store';
 import { FilecoinWalletType } from './store/types';
-import {
-    FIL_JSON_RPC_ENDPOINT,
-    getFilecoinChainId,
-    getFilecoinNetwork,
-} from './utils';
-
-export type CrossChainWallet = {
-    address: string;
-    chainId: string;
-    [key: string]: unknown;
-};
+import { FIL_JSON_RPC_ENDPOINT } from './utils';
 
 export const FIL_ADDRESS = 'FIL_ADDRESS';
 export const FIL_WALLET_TYPE = 'FIL_WALLET_TYPE';
@@ -60,10 +50,9 @@ export const useNewFilWalletProvider = () => {
     const { account } = useWallet();
     const { onRegisterCrossChainWallet } = useUpdateCrossChainWallet();
 
-    // TODO: Remove the cast to an object here once the type is fixed in [SF-98]
-    const filWalletAddr = useCrosschainAddressById(
+    const filWalletAddr = useCrosschainAddressByChainId(
         account ? account : '',
-        getFilecoinChainId(getFilecoinNetwork())
+        Currency.FIL
     );
 
     const handleCreateFilWalletProvider = useCallback(
@@ -82,8 +71,7 @@ export const useNewFilWalletProvider = () => {
                 dispatch(setFilWalletType(providerType));
                 const [filAddr] = await provider.getAccounts(0, 1, network);
                 const crossChainAddress = await registerCrossChainWallet(
-                    filWalletAddr.data
-                        ?.crosschainAddress as unknown as CrossChainWallet,
+                    filWalletAddr,
                     filAddr,
                     onRegisterCrossChainWallet
                 );
@@ -108,27 +96,24 @@ export const useNewFilWalletProvider = () => {
 };
 
 export async function registerCrossChainWallet(
-    filWalletAddr: CrossChainWallet | null,
+    filWalletAddr: string,
     filAddr: string,
     register: (chainId: number, address: string) => Promise<unknown>
 ) {
     try {
         // TODO: For now the protocol does not handle mainnet or testnet. Therefore we use the mainnet path code.
         const chainId = MAINNET_PATH_CODE;
-        if (!filWalletAddr?.address) {
+        if (!filWalletAddr) {
             await register(chainId, filAddr);
             return filAddr;
-        } else if (
-            filWalletAddr.chainId === chainId.toString() &&
-            !AddressUtils.equals(filWalletAddr.address, filAddr)
-        ) {
+        } else if (!AddressUtils.equals(filWalletAddr, filAddr)) {
             await register(chainId, filAddr);
             return filAddr;
         } else {
-            return filWalletAddr.address;
+            return filWalletAddr;
         }
     } catch (e) {
-        return filWalletAddr?.address ? filWalletAddr.address : filAddr;
+        return filWalletAddr ? filWalletAddr : filAddr;
     }
 }
 
