@@ -27,7 +27,7 @@ export const Header = () => {
             >
                 <SFLogo className='h-10 w-[200px]' />
             </NavLink>
-            <div className='flex items-center justify-center'>
+            <div className='flex h-full items-center justify-center'>
                 <ItemLink text='OTC Lending' dataCy='lending' link='/' />
                 <ItemLink
                     text='Market Dashboard'
@@ -76,7 +76,12 @@ const ItemLink = ({
         return useRouteMatch({ path: link, exact: true }) ? true : false;
     };
     return (
-        <NavLink exact data-cy={dataCy.toLowerCase()} to={link}>
+        <NavLink
+            exact
+            data-cy={dataCy.toLowerCase()}
+            to={link}
+            className='h-full'
+        >
             <NavTab text={text} active={useCheckActive()} />
         </NavLink>
     );

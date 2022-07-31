@@ -11,6 +11,9 @@
     .typography-headline-3 {
       @apply text-2xl font-primary;
     }
+    .typography-headline-4 {
+      @apply text-3xl leading-[64px] font-secondary font-semibold;
+    }
     .typography-big-body-bold {
       @apply text-xl font-secondary font-semibold;
     }

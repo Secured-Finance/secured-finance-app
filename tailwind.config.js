@@ -3,11 +3,13 @@ const defaultTheme = require('tailwindcss/defaultTheme');
 module.exports = {
     darkMode: 'media',
     content: ['./src/**/*.{ts,tsx,js,jsx}', './public/index.html'],
+
     theme: {
         extend: {
             boxShadow: {
                 deep: '0px 34px 64px rgba(0, 0, 0, 0.45)',
                 dropdown: '0px 16px 64px -48px rgba(31, 47, 70, 0.4)',
+                tab: '0px 46px 64px rgba(31, 47, 70, 0.4)',
             },
             borderWidth: {
                 '0.5': '0.5px',
@@ -79,6 +81,7 @@ module.exports = {
                 '4': '#777E91',
                 '8': '#FCFCFD',
             },
+            grayScale: '#FAFAFA',
 
             tabGradient2: 'rgba(106, 118, 177, 0.35)',
             tabGradient1: 'rgba(57, 77, 174, 0)',
