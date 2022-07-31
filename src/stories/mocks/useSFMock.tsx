@@ -1,3 +1,4 @@
+import { BigNumber as BigNumberJS } from 'bignumber.js';
 import { BigNumber } from 'ethers';
 
 export const mockUseSF = () => {
@@ -23,6 +24,22 @@ export const mockUseSF = () => {
                 BigNumber.from('550'),
             ])
         ),
+        getCollateralBook: jest.fn(() =>
+            Promise.resolve({
+                independentCollateral: new BigNumberJS('10000'),
+                lockedCollateral: new BigNumberJS('10000'),
+            })
+        ),
+        lendingMarkets: {
+            get: jest.fn(() =>
+                Promise.resolve({
+                    contract: {
+                        address: '0x0',
+                    },
+                })
+            ),
+        },
+        getCrosschainAddress: jest.fn(() => Promise.resolve('0x0')),
     };
 
     return mockSecuredFinance;
