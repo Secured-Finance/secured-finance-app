@@ -43,6 +43,22 @@ export const mockUseSF = () => {
         checkRegisteredUser: jest.fn<Promise<boolean> | undefined, []>(() =>
             Promise.resolve(true)
         ),
+        getCollateralBook: jest.fn(() =>
+            Promise.resolve({
+                independentCollateral: new BigNumberJS('10000'),
+                lockedCollateral: new BigNumberJS('10000'),
+            })
+        ),
+        lendingMarkets: {
+            get: jest.fn(() =>
+                Promise.resolve({
+                    contract: {
+                        address: '0x0',
+                    },
+                })
+            ),
+        },
+        getCrosschainAddress: jest.fn(() => Promise.resolve('0x0')),
     };
 
     return mockSecuredFinance;
