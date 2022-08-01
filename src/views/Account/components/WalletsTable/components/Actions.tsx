@@ -6,7 +6,7 @@ import {
     WalletAccountModal,
     WalletProviderModal,
 } from 'src/components/organisms';
-import useCheckCollateralBook from 'src/hooks/useCheckCollateralBook';
+import { useCheckCollateralBook } from 'src/hooks';
 import useModal from 'src/hooks/useModal';
 import { supportedCoins } from 'src/store/wallets/types';
 import { getCurrencyByIndex } from 'src/utils/currencyList';
