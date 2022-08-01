@@ -54,7 +54,7 @@ const SecuredFinanceApp: React.FC = () => {
 };
 
 const Providers: React.FC = ({ children }) => {
-    const { network } = setUpSecuredFinanceSkd();
+    const network = setUpSecuredFinanceSkd();
     return (
         <ThemeProvider theme={theme}>
             <GraphClientProvider network={network}>
