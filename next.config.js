@@ -5,4 +5,8 @@ module.exports = {
     reactStrictMode: true,
 
     webpack: (config, options) => webpack.webpackOverride(config),
+
+    env: {
+        SF_ENV: 'development',
+    },
 };

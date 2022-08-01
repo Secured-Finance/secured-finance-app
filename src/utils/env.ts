@@ -1,14 +1,12 @@
 import assert from 'assert';
 
 export const setUpSecuredFinanceSkd = () => {
-    const { NEXT_PUBLIC_ETHEREUM_NETWORK, SF_ENV } = process.env;
+    const NEXT_PUBLIC_ETHEREUM_NETWORK =
+        process.env.NEXT_PUBLIC_ETHEREUM_NETWORK;
     assert(
         NEXT_PUBLIC_ETHEREUM_NETWORK,
         'NEXT_PUBLIC_ETHEREUM_NETWORK is not set'
     );
 
-    return {
-        network: NEXT_PUBLIC_ETHEREUM_NETWORK,
-        sfEnv: SF_ENV,
-    };
+    return NEXT_PUBLIC_ETHEREUM_NETWORK;
 };

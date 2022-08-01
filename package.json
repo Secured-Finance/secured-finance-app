@@ -13,8 +13,8 @@
     "@heroicons/react": "^1.0.6",
     "@ledgerhq/hw-transport-webhid": "^5.51.1",
     "@reduxjs/toolkit": "^1.8.1",
-    "@secured-finance/sf-client": "0.1.7-beta.19",
-    "@secured-finance/sf-graph-client": "0.1.7-beta.19",
+    "@secured-finance/sf-client": "^0.1.7-beta.21",
+    "@secured-finance/sf-graph-client": "^0.1.7-beta.21",
     "@svgr/webpack": "^6.2.1",
     "@zondax/filecoin-signing-tools": "^0.18.5",
     "@zondax/ledger-filecoin": "^0.11.2",
@@ -64,7 +64,11 @@
     "cypress:run": "cypress run"
   },
   "browserslist": {
-    "production": [">0.2%", "not dead", "not op_mini all"],
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
     "development": [
       "last 1 chrome version",
       "last 1 firefox version",
