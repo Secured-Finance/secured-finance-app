@@ -5,9 +5,10 @@ import {
 import { LendingMarketExtendedOrder } from '@secured-finance/sf-graph-client/dist/hooks/user/common';
 import { useMemo, useState } from 'react';
 import { useLendingMarketAddress } from 'src/hooks';
+import { Currency } from 'src/utils';
 import { useWallet } from 'use-wallet';
 
-export const useOpenOrders = (ccy: string, term: string) => {
+export const useOpenOrders = (ccy: Currency, term: string) => {
     const { account } = useWallet();
     const lendingMarketAddress = useLendingMarketAddress(ccy, term);
 
@@ -31,7 +32,7 @@ export const useOpenOrders = (ccy: string, term: string) => {
     return openOrders;
 };
 
-export const useTradeHistoryOrders = (ccy: string, term: string) => {
+export const useTradeHistoryOrders = (ccy: Currency, term: string) => {
     const { account } = useWallet();
     const lendingMarketAddress = useLendingMarketAddress(ccy, term);
 

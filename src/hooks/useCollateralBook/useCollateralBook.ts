@@ -1,4 +1,5 @@
 import { BigNumber } from 'bignumber.js';
+import { utils } from 'ethers';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import useSF from 'src/hooks/useSecuredFinance';
@@ -36,14 +37,14 @@ export const useCollateralBook = (
     );
 
     useEffect(() => {
-        if (!securedFinance) {
+        if (!securedFinance || !account) {
             return;
         }
         const getCollateralBook = async () => {
             const { independentCollateral, lockedCollateral } =
                 await securedFinance.getCollateralBook(
-                    account ? account : '',
-                    ccy
+                    account,
+                    utils.formatBytes32String(ccy)
                 );
 
             setCollateralBook({

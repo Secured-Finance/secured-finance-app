@@ -55,7 +55,7 @@ const SecuredFinanceProvider: React.FC = ({ children }) => {
             const signer = provider.getSigner();
 
             const securedFinanceLib = new SecuredFinanceClient();
-            securedFinanceLib.init(signer, network);
+            await securedFinanceLib.init(signer, network);
 
             setSecuredFinance(securedFinanceLib);
             window.securedFinanceSDK = securedFinanceLib;
