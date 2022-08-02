@@ -1,5 +1,6 @@
 import { renderHook } from '@testing-library/react-hooks';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
+import { Currency } from 'src/utils';
 import { useLendingMarketAddress } from './useLendingMarketAddress';
 
 const mock = mockUseSF();
@@ -8,7 +9,7 @@ jest.mock('src/hooks/useSecuredFinance', () => () => mock);
 describe('useLendingMarketAddress hook', () => {
     it('should return lending market address', async () => {
         const { result, waitForNextUpdate } = renderHook(() =>
-            useLendingMarketAddress('ETH', '1 year')
+            useLendingMarketAddress(Currency.ETH, '1 year')
         );
         expect(result.current).toEqual('');
         await waitForNextUpdate();

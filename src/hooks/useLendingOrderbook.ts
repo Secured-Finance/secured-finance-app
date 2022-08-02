@@ -6,6 +6,7 @@ import {
 import { useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLendingMarketAddress } from 'src/hooks';
+import { Currency } from 'src/utils';
 import {
     failSetOrderbook,
     failSetTradingHistory,
@@ -18,7 +19,7 @@ import {
 } from '../store/lendingTerminal';
 import { RootState } from '../store/types';
 
-export const useBorrowOrderbook = (ccy: string, term: string, skip = 0) => {
+export const useBorrowOrderbook = (ccy: Currency, term: string, skip = 0) => {
     const lendingMarket = useLendingMarketAddress(ccy, term);
 
     const filPrice = useSelector(
@@ -51,7 +52,7 @@ export const useBorrowOrderbook = (ccy: string, term: string, skip = 0) => {
     return borrowOrderbook;
 };
 
-export const useLendOrderbook = (ccy: string, term: string, skip = 0) => {
+export const useLendOrderbook = (ccy: Currency, term: string, skip = 0) => {
     const lendingMarket = useLendingMarketAddress(ccy, term);
 
     const filPrice = useSelector(
@@ -85,7 +86,7 @@ export const useLendOrderbook = (ccy: string, term: string, skip = 0) => {
 };
 
 export const useLendingTradingHistory = (
-    ccy: string,
+    ccy: Currency,
     term: string,
     skip = 0
 ) => {
