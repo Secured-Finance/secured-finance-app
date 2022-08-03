@@ -56,9 +56,10 @@ export const useEstimateTxFee = (gasPrice: number) => {
             value: 0,
             gasPrice: gweiGasPrice,
         };
-        const gasLimit = await securedFinance.signerOrProvider.estimateGas(
-            transactionObject
-        );
+        const gasLimit =
+            await securedFinance.config.signerOrProvider.estimateGas(
+                transactionObject
+            );
         const txFee = gasLimit.mul(gweiGasPrice);
         let usdFeeInWei: BigNumber;
         if (Number.isInteger(ethPrice)) {

@@ -19,8 +19,8 @@ export const Balances: React.FC = () => {
         ethereum: { balance: ethereumBalance },
     } = useSelector((state: RootState) => state.wallets);
 
-    const { account, chainId } = useWallet();
-    const colBook = useCollateralBook(account ? account : '', chainId);
+    const { account } = useWallet();
+    const colBook = useCollateralBook(account);
 
     const [onPresentCollateralModal] = useModal(
         <CollateralModal ccyIndex={0} />
@@ -56,7 +56,7 @@ export const Balances: React.FC = () => {
                 </Cell>
                 <Cell>
                     <CellKey>ETH Collateral</CellKey>
-                    {account && colBook.vault !== '' ? (
+                    {account ? (
                         <CellValue>
                             {colBook.collateral !== null
                                 ? getDisplayBalance(colBook.collateral)

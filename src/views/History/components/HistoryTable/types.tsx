@@ -1,4 +1,3 @@
-import { Currency } from '@secured-finance/sf-graph-client/dist/.graphclient';
 import { RenderTerms } from 'src/components/atoms/RenderTerms';
 import { AddressUtils, ordinaryFormat, percentFormat } from 'src/utils';
 
@@ -158,9 +157,7 @@ export const historyTableColumns = [
             {
                 Header: 'Currency',
                 accessor: 'currency',
-                Cell: (cell: { value: Currency }) => (
-                    <span>{cell.value.shortName}</span>
-                ),
+                Cell: (cell: { value: string }) => <span>{cell.value}</span>,
             },
             {
                 Header: 'Term',
