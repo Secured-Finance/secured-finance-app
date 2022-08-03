@@ -1,5 +1,4 @@
-import { MAINNET_PATH_CODE } from '../ledger/constants';
-import { CrossChainWallet, registerCrossChainWallet } from './wallet';
+import { registerCrossChainWallet } from './wallet';
 
 describe('Wallet', () => {
     const onMockRegisterCrossChainWallet = jest.fn();
@@ -7,15 +6,12 @@ describe('Wallet', () => {
         onMockRegisterCrossChainWallet.mockClear();
     });
 
-    const onChainWallet: CrossChainWallet = {
-        address: '0x0',
-        chainId: MAINNET_PATH_CODE.toString(),
-    };
+    const onChainWallet = '0x0';
 
     it('should register a cross chain wallet if there is no on chain wallet already registered', async () => {
         expect(
             await registerCrossChainWallet(
-                null,
+                '',
                 '0x0',
                 onMockRegisterCrossChainWallet
             )
@@ -55,7 +51,7 @@ describe('Wallet', () => {
 
     it('should return the current address if an error happens and the cross chain in not defined', async () => {
         expect(
-            await registerCrossChainWallet(null, '1x0', () => {
+            await registerCrossChainWallet('', '1x0', () => {
                 throw new Error('test');
             })
         ).toEqual('1x0');

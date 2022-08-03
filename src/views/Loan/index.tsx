@@ -5,8 +5,7 @@ import { useParams } from 'react-router-dom';
 import { Button, Container, RenderTerms, Spacer } from 'src/components/atoms';
 import { SendModal } from 'src/components/organisms';
 import { NextCouponPaymentCard } from 'src/components/organisms/Loan/NextCouponPaymentCard';
-import { useCollateralBook } from 'src/hooks';
-import { useCrosschainAddressByChainId } from 'src/hooks/useCrosschainAddress';
+import { useCollateralBook, useCrosschainAddressByChainId } from 'src/hooks';
 import { useLoanInformation } from 'src/hooks/useLoanHistory';
 import useModal from 'src/hooks/useModal';
 import { RootState } from 'src/store/types';
@@ -37,17 +36,14 @@ const LoanScreen = () => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const loan: any = useLoanInformation(params.loanId);
 
-    const { account, chainId } = useWallet();
+    const { account } = useWallet();
     const [couponPayment, setCouponPayment] = useState<CouponPayment>();
     const [counterpartyAddr, setCounterpartyAddr] = useState('');
     const [recipientAddress, setRecipientAddress] = useState('');
     const filPrice = useSelector(
         (state: RootState) => state.assetPrices.filecoin.price
     );
-    const colBook = useCollateralBook(
-        counterpartyAddr ? counterpartyAddr : '',
-        chainId
-    );
+    const colBook = useCollateralBook(counterpartyAddr);
 
     const counterPartyWallet = useMemo(() => {
         if (account && loan) {
@@ -190,7 +186,7 @@ const LoanScreen = () => {
                 loan?.currency &&
                 loanCurrency.shortName === Currency.FIL
             ) {
-                setRecipientAddress(crossChainAddress.address);
+                setRecipientAddress(crossChainAddress);
             } else {
                 setRecipientAddress(counterPartyWallet);
             }
@@ -333,7 +329,7 @@ const LoanScreen = () => {
                             ></NextCouponPaymentCard>
                         )}
 
-                        {colBook.vault !== '' ? (
+                        {colBook ? (
                             <CounterpartyContainer>
                                 <StyledSubcontainer>
                                     <StyledLabelTitle

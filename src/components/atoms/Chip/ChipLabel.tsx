@@ -1,8 +1,6 @@
+import cx from 'classnames';
 import React from 'react';
 import cm from './Chip.module.scss';
-import cx from 'classnames';
-
-export type accent = 'purple' | 'red' | 'green' | 'grey' | 'turquoise' | 'blue';
 
 export interface IChipLabel {
     accent?: string;

@@ -1,5 +1,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
+import { Currency } from 'src/utils';
 import styled from 'styled-components';
 import { Subheader } from '../../../../components/common/Subheader';
 import { useLendingTradingHistory } from '../../../../hooks/useLendingOrderbook';
@@ -12,7 +13,10 @@ export const TradeHistory: React.FC = () => {
         (state: RootState) => state.lendingTerminal
     );
 
-    const tradeHistory = useLendingTradingHistory(selectedCcy, selectedTerms);
+    const tradeHistory = useLendingTradingHistory(
+        selectedCcy ? (selectedCcy as Currency) : Currency.ETH,
+        selectedTerms
+    );
 
     return (
         <StyledTradeHistory>
