@@ -50,10 +50,7 @@ export const useNewFilWalletProvider = () => {
     const { account } = useWallet();
     const { onRegisterCrossChainWallet } = useUpdateCrossChainWallet();
 
-    const filWalletAddr = useCrosschainAddressByChainId(
-        account ? account : '',
-        Currency.FIL
-    );
+    const filWalletAddr = useCrosschainAddressByChainId(account, Currency.FIL);
 
     const handleCreateFilWalletProvider = useCallback(
         async (

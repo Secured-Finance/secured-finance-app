@@ -39,7 +39,7 @@ export const mockUseSF = () => {
                 })
             ),
         },
-        getCrosschainAddress: jest.fn(() => Promise.resolve('0x0')),
+        getCrosschainAddress: jest.fn(() => Promise.resolve('fil0x0')),
         checkRegisteredUser: jest.fn<Promise<boolean> | undefined, []>(() =>
             Promise.resolve(true)
         ),

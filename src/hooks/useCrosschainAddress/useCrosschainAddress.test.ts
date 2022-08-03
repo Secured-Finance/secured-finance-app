@@ -1,6 +1,6 @@
 import { renderHook } from '@testing-library/react-hooks';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
-import { Currency } from 'src/utils';
+import { Currency, currencyMap } from 'src/utils';
 import { useCrosschainAddressByChainId } from './useCrosschainAddress';
 
 const mock = mockUseSF();
@@ -13,6 +13,10 @@ describe('useCrosschainAddress hook', () => {
         );
         expect(result.current).toEqual('');
         await waitForNextUpdate();
-        expect(result.current).toEqual('0x0');
+        expect(mock.getCrosschainAddress).toHaveBeenCalledWith(
+            currencyMap.FIL.chainId,
+            '0x0'
+        );
+        expect(result.current).toEqual('fil0x0');
     });
 });
