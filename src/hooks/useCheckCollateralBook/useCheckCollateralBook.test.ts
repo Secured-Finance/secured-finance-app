@@ -7,12 +7,9 @@ jest.mock('src/hooks/useSecuredFinance', () => () => mockSecuredFinance);
 
 describe('useCheckCollateralBook hook', () => {
     it('should return false when the user is null', async () => {
-        const { result, waitForNextUpdate } = renderHook(() =>
-            useCheckCollateralBook(null)
-        );
+        const { result } = renderHook(() => useCheckCollateralBook(null));
         expect(result.current).toBe(false);
-        await waitForNextUpdate();
-        expect(mockSecuredFinance.checkRegisteredUser).toHaveBeenCalledWith('');
+        expect(mockSecuredFinance.checkRegisteredUser).not.toHaveBeenCalled();
     });
 
     it('should return true when the user is registered', async () => {
