@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { OrderbookRow } from '@secured-finance/sf-graph-client/dist/utils';
+import { OrderbookRow } from '@secured-finance/sf-graph-client/dist/hooks/lending-market/common';
 import { Currency, currencyMap } from 'src/utils/currencyList';
 import { LendingTerminalStore, TradingHistoryRow } from './types';
 

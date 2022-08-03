@@ -5,40 +5,40 @@ import { Dialog, WalletRadioGroup } from 'src/components/molecules';
 import { CACHED_PROVIDER_KEY } from 'src/contexts/SecuredFinanceProvider/SecuredFinanceProvider';
 import { useWallet } from 'use-wallet';
 
-enum step {
+enum Step {
     selectWallet = 1,
     connecting,
     connected,
 }
 
 type State = {
-    currentStep: step;
-    nextStep: step;
+    currentStep: Step;
+    nextStep: Step;
     title: string;
     description: string;
     buttonText: string;
 };
 
-const stateRecord: Record<step, State> = {
-    [step.selectWallet]: {
-        currentStep: step.selectWallet,
-        nextStep: step.connecting,
+const stateRecord: Record<Step, State> = {
+    [Step.selectWallet]: {
+        currentStep: Step.selectWallet,
+        nextStep: Step.connecting,
         title: 'Select Wallet Provider',
         description:
             'Connect your wallet to unlock and start using services on Secured Finance.',
         buttonText: 'Connect Wallet',
     },
-    [step.connecting]: {
-        currentStep: step.connecting,
-        nextStep: step.connected,
+    [Step.connecting]: {
+        currentStep: Step.connecting,
+        nextStep: Step.connected,
         title: 'Connecting...',
         description:
             'Please wait while we connect. Please make sure to accept the approvals on your browser.',
         buttonText: '',
     },
-    [step.connected]: {
-        currentStep: step.connected,
-        nextStep: step.selectWallet,
+    [Step.connected]: {
+        currentStep: Step.connected,
+        nextStep: Step.selectWallet,
         title: 'Success!',
         description: 'Your wallet has been connected successfully.',
         buttonText: 'OK',
@@ -58,7 +58,7 @@ const reducer = (
             };
         default:
             return {
-                ...stateRecord[step.selectWallet],
+                ...stateRecord[Step.selectWallet],
             };
     }
 };
@@ -91,7 +91,7 @@ export const WalletDialog = ({
     );
 
     useEffect(() => {
-        if (state.currentStep === step.connecting) {
+        if (state.currentStep === Step.connecting) {
             const provider =
                 wallet === 'Metamask' ? 'injected' : 'walletconnect';
             handleConnect(provider, account);
@@ -99,18 +99,18 @@ export const WalletDialog = ({
     }, [state, account, handleConnect, wallet]);
 
     const onClick = useCallback(
-        async (currentStep: step) => {
+        async (currentStep: Step) => {
             if (!wallet) {
                 return;
             }
 
             switch (currentStep) {
-                case step.selectWallet:
+                case Step.selectWallet:
                     dispatch({ type: 'next' });
                     break;
-                case step.connecting:
+                case Step.connecting:
                     break;
-                case step.connected:
+                case Step.connected:
                     dispatch({ type: 'next' });
                     onClose();
                     break;
@@ -135,14 +135,14 @@ export const WalletDialog = ({
         >
             {(() => {
                 switch (state.currentStep) {
-                    case step.selectWallet:
+                    case Step.selectWallet:
                         return (
                             <WalletRadioGroup
                                 value={wallet}
                                 onChange={setWallet}
                             />
                         );
-                    case step.connecting:
+                    case Step.connecting:
                         return (
                             // eslint-disable-next-line @next/next/no-img-element
                             <img
@@ -152,7 +152,7 @@ export const WalletDialog = ({
                             ></img>
                         );
                         break;
-                    case step.connected:
+                    case Step.connected:
                         return <Check className='h-[100px] w-[100px]' />;
                     default:
                         return <p>Unknown</p>;

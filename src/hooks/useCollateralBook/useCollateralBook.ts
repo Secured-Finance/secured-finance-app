@@ -1,8 +1,9 @@
-import { getCollateralVaultAddressByCcy } from '@secured-finance/sf-client/dist/utils';
-import { useCollateralBookFromVault } from '@secured-finance/sf-graph-client';
 import { BigNumber } from 'bignumber.js';
-import { useMemo } from 'react';
+import { utils } from 'ethers';
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import useSF from 'src/hooks/useSecuredFinance';
+import { Currency, currencyMap } from 'src/utils';
 import { RootState } from '../../store/types';
 
 const ZERO_BN = new BigNumber('0');
@@ -12,11 +13,8 @@ export interface CollateralBook {
     ccyName: string;
     collateral: BigNumber;
     usdCollateral: BigNumber;
-    vault: string;
-    locked?: BigNumber;
-    usdLocked?: BigNumber;
-    borrowed?: BigNumber;
-    usdBorrowed?: BigNumber;
+    locked: BigNumber;
+    usdLocked: BigNumber;
 }
 
 const emptyBook: CollateralBook = {
@@ -24,64 +22,46 @@ const emptyBook: CollateralBook = {
     ccyName: 'ETH',
     collateral: ZERO_BN,
     usdCollateral: ZERO_BN,
-    vault: '',
     locked: ZERO_BN,
     usdLocked: ZERO_BN,
-    borrowed: ZERO_BN,
-    usdBorrowed: ZERO_BN,
 };
 
 export const useCollateralBook = (
-    account: string | undefined,
-    chainId: number | undefined,
-    ccy = 'ETH'
+    account: string | null,
+    ccy = Currency.ETH
 ) => {
+    const [collateralBook, setCollateralBook] = useState(emptyBook);
+    const securedFinance = useSF();
     const ethPrice = useSelector(
         (state: RootState) => state.assetPrices.ethereum.price
     );
 
-    const userAccount = useMemo(() => {
-        if (account) {
-            return account;
-        } else {
-            return '';
+    useEffect(() => {
+        if (!securedFinance || !account) {
+            return;
         }
-    }, [account]);
+        const getCollateralBook = async () => {
+            const { independentCollateral, lockedCollateral } =
+                await securedFinance.getCollateralBook(
+                    account,
+                    utils.formatBytes32String(ccy)
+                );
 
-    const chainIdNumber = useMemo(() => {
-        if (chainId) {
-            return chainId;
-        } else {
-            return 1;
-        }
-    }, [chainId]);
-
-    const vault = getCollateralVaultAddressByCcy(ccy, chainIdNumber);
-    const { data, error } = useCollateralBookFromVault(vault, userAccount);
-
-    if (error) {
-        console.error(error);
-    }
-
-    if (data?.collateralBooks) {
-        const book = data?.collateralBooks[0];
-        const ethPriceBN = new BigNumber(ethPrice);
-
-        const colBook: CollateralBook = {
-            ccyIndex: 0,
-            ccyName: book.currency.shortName,
-            collateral: new BigNumber(book.independentCollateral),
-            usdCollateral: new BigNumber(
-                book.independentCollateral
-            ).multipliedBy(ethPriceBN),
-            vault: book.vault.address,
-            locked: new BigNumber(book.lockedCollateral),
-            usdLocked: new BigNumber(book.lockedCollateral).multipliedBy(
-                ethPriceBN
-            ),
+            setCollateralBook({
+                ccyIndex: currencyMap[ccy].indexCcy,
+                ccyName: ccy,
+                collateral: new BigNumber(independentCollateral.toString()),
+                usdCollateral: new BigNumber(
+                    independentCollateral.toString()
+                ).multipliedBy(ethPrice),
+                locked: new BigNumber(lockedCollateral.toString()),
+                usdLocked: new BigNumber(
+                    lockedCollateral.toString()
+                ).multipliedBy(ethPrice),
+            });
         };
-        return colBook;
-    }
+        getCollateralBook();
+    }, [account, ccy, securedFinance, ethPrice]);
 
-    return emptyBook;
+    return collateralBook;
 };

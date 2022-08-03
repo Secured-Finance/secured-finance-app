@@ -33,10 +33,10 @@ function render(
 function renderHook(
     hook,
     {
-        initialState,
+        preloadedState = {},
         store = configureStore({
             reducer: rootReducers,
-            initialState,
+            preloadedState,
             middleware: getDefaultMiddleware =>
                 getDefaultMiddleware({
                     serializableCheck: false,
