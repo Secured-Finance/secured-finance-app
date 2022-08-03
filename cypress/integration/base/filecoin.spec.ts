@@ -4,7 +4,7 @@ import { expectSendModal } from 'support/sendModal';
 import { tenderlyConfig } from 'support/utils/tenderlyConfig';
 import * as wallets from '../../fixtures/filecoin.json';
 
-describe('Filecoin Wallet', () => {
+describe.skip('Filecoin Wallet', () => {
     tenderlyConfig();
 
     beforeEach(() => {
@@ -12,7 +12,7 @@ describe('Filecoin Wallet', () => {
         cy.get('[data-cy="add-filecoin-wallet"]').click();
     });
 
-    it.skip('should offer three choices when trying to connect', () => {
+    it('should offer three choices when trying to connect', () => {
         cy.get('[data-cy="filecoin-connect-wallet-chip"]').click();
         cy.contains('Select a wallet provider').should('be.visible');
         cy.contains('Private Key').should('be.visible');
@@ -21,7 +21,7 @@ describe('Filecoin Wallet', () => {
         cy.get('[data-cy="cancel-button"]').should('be.visible').click();
     });
 
-    it.skip('should connect to a new filecoin wallet when using mnemonic phrase and disconnect', () => {
+    it('should connect to a new filecoin wallet when using mnemonic phrase and disconnect', () => {
         cy.get('[data-cy="filecoin-connect-wallet-chip"]').click();
         cy.get('[data-cy="mnemonic-phrase-button"]').click();
         cy.get('[data-cy="create-hd-wallet"]')
@@ -48,12 +48,12 @@ describe('Filecoin Wallet', () => {
         expectFilecoin.walletNotConnected();
     });
 
-    it.skip('should connect to an existing account when importing an account with a mnemonic phrase', () => {
+    it('should connect to an existing account when importing an account with a mnemonic phrase', () => {
         filecoin.connectWallet(wallets.walletAlice);
         filecoin.disconnectWallet();
     });
 
-    it.skip('should transfer FIL to an existing account', () => {
+    it('should transfer FIL to an existing account', () => {
         filecoin.connectWallet(wallets.walletBob);
         cy.get('[data-cy="filecoin-send-chip"]')
             .click()
