@@ -12,6 +12,7 @@ import ModalsProvider from './contexts/Modals';
 import SecuredFinanceProvider from './contexts/SecuredFinanceProvider';
 import store from './store';
 import theme from './theme';
+import { setUpSecuredFinanceSkd } from './utils';
 import Account from './views/Account';
 import Exchange from './views/Exchange';
 import History from './views/History';
@@ -53,9 +54,10 @@ const SecuredFinanceApp: React.FC = () => {
 };
 
 const Providers: React.FC = ({ children }) => {
+    const network = setUpSecuredFinanceSkd();
     return (
         <ThemeProvider theme={theme}>
-            <GraphClientProvider>
+            <GraphClientProvider network={network}>
                 <UseWalletProvider
                     connectors={{
                         injected: {

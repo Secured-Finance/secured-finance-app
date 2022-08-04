@@ -7,8 +7,8 @@ export const useCheckCollateralBook = (account: string | null) => {
 
     useEffect(() => {
         const checkCollateralBook = async () => {
-            if (!securedFinance) return;
-            setStatus(await securedFinance.checkRegisteredUser(account ?? ''));
+            if (!securedFinance || !account) return;
+            setStatus(await securedFinance.checkRegisteredUser(account));
         };
         checkCollateralBook();
     }, [securedFinance, account]);

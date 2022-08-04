@@ -1,4 +1,3 @@
-import { Currency } from '@secured-finance/sf-graph-client/dist/.graphclient';
 import { RenderTerms } from 'src/components/atoms';
 import theme from 'src/theme';
 import { formatDateAndTime, ordinaryFormat, percentFormat } from 'src/utils';
@@ -36,8 +35,8 @@ export const filledTableColumns = [
             {
                 Header: 'Currency',
                 accessor: 'currency',
-                Cell: (cell: { value: Currency }) => (
-                    <span>{cell.value.shortName}</span>
+                Cell: (cell: { value: string }) => (
+                    <span>{cell.value}</span>
                     // <CurrencyContainer
                     //     ccy={cell.value}
                     //     size={'xs'}
