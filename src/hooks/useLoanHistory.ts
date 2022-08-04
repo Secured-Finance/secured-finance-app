@@ -16,7 +16,10 @@ export const useLoanDeals = (skip = 0) => {
         (state: RootState) => state.history.lendingHistory
     );
     const dispatch = useDispatch();
-    const { data, error } = useLendingDeals(account ? account : '', skip);
+    const { data, error } = useLendingDeals({
+        account: account ? account : '',
+        skip,
+    });
 
     if (error) {
         console.error(error);
@@ -41,7 +44,10 @@ export const useBorrowDeals = (skip = 0) => {
         (state: RootState) => state.history.borrowingHistory
     );
     const dispatch = useDispatch();
-    const { data, error } = useBorrowingDeals(account ? account : '', skip);
+    const { data, error } = useBorrowingDeals({
+        account: account ? account : '',
+        skip,
+    });
 
     if (error) {
         console.error(error);
@@ -62,7 +68,7 @@ export const useBorrowDeals = (skip = 0) => {
 
 export const useLoanInformation = (id: string) => {
     const [loanInfo, setLoanInfo] = useState<unknown | null>(null);
-    const { data, error } = useLoanInfo(id);
+    const { data, error } = useLoanInfo({ id });
 
     if (error) {
         console.error(error);

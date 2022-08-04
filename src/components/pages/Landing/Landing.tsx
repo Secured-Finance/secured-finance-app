@@ -8,12 +8,9 @@ import { Currency, termMap } from 'src/utils';
 import { useWallet } from 'use-wallet';
 
 export const Landing = () => {
-    const { account, chainId } = useWallet();
+    const { account } = useWallet();
     const { placeOrder } = usePlaceOrder();
-    const collateralBook = useCollateralBook(
-        account ? account : '',
-        chainId ? chainId : 1
-    );
+    const collateralBook = useCollateralBook(account);
 
     const { currency, side, term } = useSelector(
         (state: RootState) => state.landingOrderForm

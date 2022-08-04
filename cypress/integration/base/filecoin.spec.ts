@@ -4,7 +4,7 @@ import { expectSendModal } from 'support/sendModal';
 import { tenderlyConfig } from 'support/utils/tenderlyConfig';
 import * as wallets from '../../fixtures/filecoin.json';
 
-describe('Filecoin Wallet', () => {
+describe.skip('Filecoin Wallet', () => {
     tenderlyConfig();
 
     beforeEach(() => {
