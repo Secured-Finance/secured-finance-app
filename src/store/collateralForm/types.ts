@@ -1,8 +1,10 @@
+import { BigNumber } from 'ethers';
+
 export interface CollateralFormStore {
     currencyIndex: number;
     currencyShortName: string;
     currencyName: string;
-    amount: number;
+    amount: BigNumber;
     txFee: number;
     isLoading: boolean;
     isInitiated: boolean;
@@ -14,7 +16,7 @@ export const defaultStore = {
     currencyIndex: 0,
     currencyShortName: 'ETH',
     currencyName: 'Ethereum',
-    amount: 0,
+    amount: BigNumber.from(0),
     txFee: 0,
     isLoading: false,
     isInitiated: true,

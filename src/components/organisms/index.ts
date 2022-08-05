@@ -1,5 +1,6 @@
 export * from './CollateralModal';
 export * from './ConnectWalletCard';
+export * from './DepositCollateral';
 export * from './Header';
 export * from './LendingCard';
 export * from './SendModal';

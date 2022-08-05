@@ -1,7 +1,8 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import Chip from 'src/components/atoms/Chip/Chip';
 import {
     CollateralModal,
+    DepositCollateral,
     SendModal,
     WalletAccountModal,
     WalletProviderModal,
@@ -30,6 +31,7 @@ const RenderActions: React.FC<ActionProps> = ({ callbackMap, ccyIndex }) => {
     );
     const { account } = useWallet();
     const status = useCheckCollateralBook(account);
+    const [isOpen, setOpen] = useState(false);
     const [onPresentCollateralModal] = useModal(
         <CollateralModal ccyIndex={ccyIndex} status={status} />
     );
@@ -58,7 +60,7 @@ const RenderActions: React.FC<ActionProps> = ({ callbackMap, ccyIndex }) => {
                     />
                     {ccyIndex === 0 ? (
                         <Chip
-                            onClick={onPresentCollateralModal}
+                            onClick={() => setOpen(true)}
                             text='Manage Collateral'
                             dataCy='manage-collateral-chip'
                         />
@@ -68,6 +70,10 @@ const RenderActions: React.FC<ActionProps> = ({ callbackMap, ccyIndex }) => {
                         text='Settings'
                         dataCy={`${coin}-settings-chip`}
                     />
+                    <DepositCollateral
+                        isOpen={isOpen}
+                        onClose={() => setOpen(false)}
+                    ></DepositCollateral>
                 </div>
             ) : (
                 <div className='flex flex-row items-center justify-evenly'>
