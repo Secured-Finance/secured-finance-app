@@ -14,6 +14,7 @@ export const useDepositCollateral = (
         }
         const etherAmount = utils.parseUnits(amount.toString(), 'ether');
         const tx = await securedFinance.depositCollateral(ccy, etherAmount);
+        console.log(tx);
         return tx;
     }, [amount, securedFinance, ccy]);
 
