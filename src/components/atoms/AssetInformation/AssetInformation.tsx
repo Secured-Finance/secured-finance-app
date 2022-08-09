@@ -1,11 +1,11 @@
 import { useSelector } from 'react-redux';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { RootState } from 'src/store/types';
-import { Currency, currencyMap, usdFormatAppendUSD } from 'src/utils';
+import { currencyMap, CurrencySymbol, usdFormatAppendUSD } from 'src/utils';
 
 interface AssetInformationProps {
     header: string;
-    asset: Currency;
+    asset: CurrencySymbol;
     quantity: number;
 }
 

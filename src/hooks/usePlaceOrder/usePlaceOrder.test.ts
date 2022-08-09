@@ -1,6 +1,6 @@
 import { renderHook } from '@testing-library/react-hooks';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
-import { Currency, currencyMap } from 'src/utils';
+import { currencyMap, CurrencySymbol } from 'src/utils';
 import { usePlaceOrder } from './';
 
 const mockSecuredFinance = mockUseSF();
@@ -16,7 +16,7 @@ describe('usePlaceOrder hook', () => {
         const { result } = renderHook(() => usePlaceOrder());
         const placeOrder = result.current.placeOrder;
         await placeOrder(
-            Currency.ETH,
+            CurrencySymbol.ETH,
             '2022',
             0,
             currencyMap.ETH.toBaseUnit(1),
