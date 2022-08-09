@@ -14,13 +14,12 @@ import {
 import { CurrencyImage } from 'src/components/common/CurrencyImage';
 import { useSendEth } from 'src/hooks/useSendEth';
 import { useSendFil } from 'src/hooks/useSendFil';
-import { useVerifyPayment } from 'src/hooks/useVerifyPayment';
 import { getAssetInfo } from 'src/store/assetPrices/selectors';
 import { RootState } from 'src/store/types';
 import { getBalance } from 'src/store/wallets/selectors';
 import theme from 'src/theme';
 import { formatInput } from 'src/utils';
-import { Currency, CurrencyInfo } from 'src/utils/currencyList';
+import { CurrencyInfo, CurrencySymbol } from 'src/utils/currencyList';
 import styled from 'styled-components';
 import { isAddress } from 'web3-utils';
 import { FilTxFeeTable } from './components/FilTxFeeTable';
@@ -32,7 +31,9 @@ const SendModal = ({
     amount,
     currencyInfo,
     toAddress,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     counterpartyAddress,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     nextCouponPaymentDate,
     settleTransaction = false,
 }: {
@@ -82,7 +83,7 @@ const SendModal = ({
         currency,
     }: {
         balance: number;
-        currency: Currency;
+        currency: CurrencySymbol;
     }) => {
         return (
             <span>
@@ -129,13 +130,6 @@ const SendModal = ({
         recipientAddress
     );
 
-    const { verifyFilecoinPayment } = useVerifyPayment(
-        amountToSend,
-        counterpartyAddress ? counterpartyAddress : '',
-        currencyInfo.shortName,
-        nextCouponPaymentDate ? nextCouponPaymentDate : 0
-    );
-
     const handleTransferAssets = useCallback(async () => {
         try {
             if (!recipientAddress || amountToSend <= 0) {
@@ -149,13 +143,12 @@ const SendModal = ({
 
             setOngoingTx(true);
 
-            if (currencyInfo.shortName === Currency.FIL) {
+            if (currencyInfo.shortName === CurrencySymbol.FIL) {
                 const tx = await sendFil();
                 if (
                     tx &&
                     (await validateFilecoinTransaction(tx)) &&
-                    settleTransaction &&
-                    (await verifyFilecoinPayment(tx))
+                    settleTransaction
                 ) {
                     setOngoingTx(false);
                 }
@@ -174,7 +167,6 @@ const SendModal = ({
         sendFil,
         validateFilecoinTransaction,
         settleTransaction,
-        verifyFilecoinPayment,
         onSendEth,
     ]);
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Currency } from 'src/utils';
+import { CurrencySymbol } from 'src/utils';
 import { useTradeHistoryOrders } from '../../../../../../hooks/useUserOrders';
 import FilledOrdersTable from './FilledOrdersTable';
 
@@ -12,7 +12,7 @@ type MergedProps = OpenOrdersProps;
 
 export const FilledOrders: React.FC<MergedProps> = ({ ccy, term }) => {
     const data = useTradeHistoryOrders(
-        ccy ? (ccy as Currency) : Currency.ETH,
+        ccy ? (ccy as CurrencySymbol) : CurrencySymbol.ETH,
         term
     );
 

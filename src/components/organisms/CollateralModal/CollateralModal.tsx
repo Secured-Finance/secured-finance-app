@@ -23,8 +23,8 @@ import {
 import { RootState } from 'src/store/types';
 import theme from 'src/theme';
 import {
-    Currency,
     CurrencyInfo,
+    CurrencySymbol,
     formatInput,
     getCurrencyMapAsList,
     getDisplayBalance,
@@ -52,7 +52,10 @@ const CollateralModal: React.FC<CombinedProps> = ({
     const [, setCollateralTx] = useState(false);
     const [balanceErr, setBalanceErr] = useState(false);
     const { account } = useWallet();
-    const colBook = useCollateralBook(account, currencyShortName as Currency);
+    const colBook = useCollateralBook(
+        account,
+        currencyShortName as CurrencySymbol
+    );
     const ethBalance = useEthBalance();
     const dispatch = useDispatch();
     const ethPrice = useSelector(
@@ -100,7 +103,7 @@ const CollateralModal: React.FC<CombinedProps> = ({
 
     const { onRegisterUser } = useRegisterUser();
     const { onDepositCollateral } = useDepositCollateral(
-        currencyShortName,
+        currencyShortName as CurrencySymbol,
         amount
     );
 

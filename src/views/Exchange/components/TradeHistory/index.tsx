@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { Currency } from 'src/utils';
+import { CurrencySymbol } from 'src/utils';
 import styled from 'styled-components';
 import { Subheader } from '../../../../components/common/Subheader';
 import { useLendingTradingHistory } from '../../../../hooks/useLendingOrderbook';
@@ -14,7 +14,7 @@ export const TradeHistory: React.FC = () => {
     );
 
     const tradeHistory = useLendingTradingHistory(
-        selectedCcy ? (selectedCcy as Currency) : Currency.ETH,
+        selectedCcy ? (selectedCcy as CurrencySymbol) : CurrencySymbol.ETH,
         selectedTerms
     );
 
