@@ -1,19 +1,18 @@
-import { utils } from 'ethers';
 import { useEffect, useMemo, useState } from 'react';
 import useSF from 'src/hooks/useSecuredFinance';
-import { Currency, getTermBy } from 'src/utils';
+import { CurrencySymbol, getTermBy, toCurrency } from 'src/utils';
 
-export const useLendingMarketAddress = (ccy: Currency, term: string) => {
+export const useLendingMarketAddress = (ccy: CurrencySymbol, term: string) => {
     const [lendingMarket, setLendingMarket] = useState<string>('');
     const securedFinance = useSF();
     const termValue = useMemo(() => getTermBy('value', term).termIndex, [term]);
     useEffect(() => {
         const fetchContractAddress = async () => {
-            if (!securedFinance?.lendingMarkets?.get || !termValue) return;
+            if (!securedFinance?.getLendingMarket || !termValue) return;
             setLendingMarket(
                 (
-                    await securedFinance.lendingMarkets.get(
-                        utils.formatBytes32String(ccy),
+                    await securedFinance.getLendingMarket(
+                        toCurrency(ccy),
                         termValue
                     )
                 ).contract.address

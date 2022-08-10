@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useCrosschainAddressByChainId } from 'src/hooks';
 import { useUpdateCrossChainWallet } from 'src/hooks/useUpdateCrossChainWallet';
 import { updateFilWallet } from 'src/store/wallets/helpers';
-import { AddressUtils, Currency } from 'src/utils';
+import { AddressUtils, CurrencySymbol } from 'src/utils';
 import { useWallet } from 'use-wallet';
 import useFilWasm from '../../hooks/useFilWasm';
 import { RootState } from '../../store/types';
@@ -50,7 +50,10 @@ export const useNewFilWalletProvider = () => {
     const { account } = useWallet();
     const { onRegisterCrossChainWallet } = useUpdateCrossChainWallet();
 
-    const filWalletAddr = useCrosschainAddressByChainId(account, Currency.FIL);
+    const filWalletAddr = useCrosschainAddressByChainId(
+        account,
+        CurrencySymbol.FIL
+    );
 
     const handleCreateFilWalletProvider = useCallback(
         async (

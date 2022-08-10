@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { Currency } from 'src/utils';
+import { CurrencySymbol } from 'src/utils';
 import styled from 'styled-components';
 import { Subheader } from '../../../../components/common/Subheader';
 import {
@@ -26,11 +26,11 @@ export const OrderBook: React.FC = () => {
     );
 
     const borrowOrderbook = useBorrowOrderbook(
-        selectedCcy ? (selectedCcy as Currency) : Currency.ETH,
+        selectedCcy ? (selectedCcy as CurrencySymbol) : CurrencySymbol.ETH,
         selectedTerms
     );
     const lendOrderbook = useLendOrderbook(
-        selectedCcy ? (selectedCcy as Currency) : Currency.ETH,
+        selectedCcy ? (selectedCcy as CurrencySymbol) : CurrencySymbol.ETH,
         selectedTerms
     );
 
