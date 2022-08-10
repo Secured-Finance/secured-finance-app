@@ -20,7 +20,7 @@ describe('useCollateralBook hook', () => {
     };
     it('should return the collateral book for an user', async () => {
         const { result, waitForNextUpdate } = renderHook(() =>
-            useCollateralBook('0x0', ETH.shortName)
+            useCollateralBook('0x0', ETH.symbol)
         );
         await act(async () => {
             await waitForNextUpdate();
@@ -41,7 +41,7 @@ describe('useCollateralBook hook', () => {
 
     it('should compute the collaterals in USD', async () => {
         const { result, waitForNextUpdate } = renderHook(
-            () => useCollateralBook('0x0', ETH.shortName),
+            () => useCollateralBook('0x0', ETH.symbol),
             { preloadedState }
         );
         await act(async () => {

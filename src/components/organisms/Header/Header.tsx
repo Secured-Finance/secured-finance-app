@@ -46,9 +46,7 @@ export const Header = () => {
                     <WalletPopover
                         wallet={AddressUtils.format(account, 6)}
                         networkName={
-                            securedFinance
-                                ? securedFinance.config.network
-                                : 'Unknown'
+                            securedFinance?.config?.network ?? 'Unknown'
                         }
                     />
                 ) : (

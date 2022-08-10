@@ -38,7 +38,7 @@ const CurrencyItem: React.FC<ItemProps> = ({
     wallet,
     style,
 }) => {
-    const { shortName, name } = getCurrencyByIndex(ccy.toString());
+    const { symbol, name } = getCurrencyByIndex(ccy.toString());
 
     return (
         <div>
@@ -51,7 +51,7 @@ const CurrencyItem: React.FC<ItemProps> = ({
                         style?.justifyContent ? style?.justifyContent : 'center'
                     }
                 >
-                    <img width={40} height={40} src={''} alt={shortName} />
+                    <img width={40} height={40} src={''} alt={symbol} />
                     <StyledWalletInfoContainer>
                         <StyledCurrencyText
                             color={
@@ -95,7 +95,7 @@ const CurrencyItem: React.FC<ItemProps> = ({
                                 style?.fontWeight ? style?.fontWeight : 400
                             }
                         >
-                            {shortName}
+                            {symbol}
                         </StyledWalletSubtitle>
                     </StyledWalletInfoContainer>
                 </StyledCurrency>
@@ -105,7 +105,7 @@ const CurrencyItem: React.FC<ItemProps> = ({
                         width={iconSize}
                         height={iconSize}
                         src={''}
-                        alt={shortName}
+                        alt={symbol}
                     />
                     <StyledCurrencyText
                         color={style?.color ? style?.color : theme.colors.white}
@@ -115,7 +115,7 @@ const CurrencyItem: React.FC<ItemProps> = ({
                         fontSize={style?.fontSize ? style?.fontSize : fontSize}
                         fontWeight={style?.fontWeight ? style?.fontWeight : 500}
                     >
-                        {short ? shortName : name}
+                        {short ? symbol : name}
                     </StyledCurrencyText>
                 </StyledCurrency>
             )}
