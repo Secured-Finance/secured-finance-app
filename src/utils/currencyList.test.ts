@@ -1,8 +1,10 @@
 import {
     currencyMap,
+    CurrencySymbol,
     getCurrencyByIndex,
     getCurrencyMapAsList,
     getCurrencyMapAsOptions,
+    toCurrency,
 } from './currencyList';
 
 describe('getCurrencyBy', () => {
@@ -88,5 +90,16 @@ describe('currencyList toBaseUnit', () => {
         expect(fil.toBaseUnit(0.000000000000000000001).toString()).toEqual('0');
         expect(eth.toBaseUnit(0.0000000000000000001).toString()).toEqual('0');
         expect(eth.toBaseUnit(0.000000000000000000001).toString()).toEqual('0');
+    });
+});
+
+describe('toCurrency', () => {
+    it('should convert currency symbol to Currency object', () => {
+        expect(toCurrency(CurrencySymbol.ETH)).toEqual(
+            currencyMap.ETH.toCurrency()
+        );
+        expect(toCurrency(CurrencySymbol.FIL)).toEqual(
+            currencyMap.FIL.toCurrency()
+        );
     });
 });

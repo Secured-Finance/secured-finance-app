@@ -17,7 +17,7 @@ import {
     ordinaryFormat,
     percentFormat,
 } from 'src/utils';
-import { Currency, currencyMap } from 'src/utils/currencyList';
+import { currencyMap, CurrencySymbol } from 'src/utils/currencyList';
 import styled from 'styled-components';
 import { useWallet } from 'use-wallet';
 
@@ -58,7 +58,7 @@ const LoanScreen = () => {
 
     const loanCurrency = useMemo(() => {
         if (loan?.currency) {
-            return currencyMap[loan?.currency as Currency];
+            return currencyMap[loan?.currency as CurrencySymbol];
         } else {
             // we should never be in this condition, but just in case.
             // TODO: manage global error with a component and display it to the user
@@ -184,7 +184,7 @@ const LoanScreen = () => {
             if (
                 crossChainAddress &&
                 loan?.currency &&
-                loanCurrency.shortName === Currency.FIL
+                loanCurrency.shortName === CurrencySymbol.FIL
             ) {
                 setRecipientAddress(crossChainAddress);
             } else {

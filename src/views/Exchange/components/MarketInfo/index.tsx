@@ -7,7 +7,12 @@ import { useRates } from 'src/hooks/useRates';
 import { LendingTerminalStore } from 'src/store/lendingTerminal';
 import { RootState } from 'src/store/types';
 import theme from 'src/theme';
-import { ordinaryFormat, percentFormat, usdFormat } from 'src/utils';
+import {
+    CurrencySymbol,
+    ordinaryFormat,
+    percentFormat,
+    usdFormat,
+} from 'src/utils';
 import styled from 'styled-components';
 
 const MarketInfo: React.FC<LendingTerminalStore> = ({ termsIndex }) => {
@@ -17,7 +22,7 @@ const MarketInfo: React.FC<LendingTerminalStore> = ({ termsIndex }) => {
         (state: RootState) => state.assetPrices
     );
 
-    const lendingRates = useRates('FIL', 2);
+    const lendingRates = useRates(CurrencySymbol.FIL, 2);
 
     const handleSelectTab = (tab: React.SetStateAction<string>) => {
         setSelectedTab(tab);

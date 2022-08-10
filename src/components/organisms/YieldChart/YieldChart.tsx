@@ -1,9 +1,9 @@
 import { ChartData } from 'chart.js';
 import { CurveHeader, LineChart } from 'src/components/molecules';
-import { Currency, getTermsAsOptions } from 'src/utils';
+import { CurrencySymbol, getTermsAsOptions } from 'src/utils';
 
 interface YieldChartProps {
-    asset: Currency;
+    asset: CurrencySymbol;
     isBorrow: boolean;
     rates: Array<number>;
 }

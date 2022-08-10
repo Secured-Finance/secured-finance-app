@@ -1,9 +1,10 @@
 import { BigNumber, utils } from 'ethers';
 import { useCallback } from 'react';
+import { CurrencySymbol, toCurrency } from 'src/utils';
 import useSF from './useSecuredFinance';
 
 export const useDepositCollateral = (
-    ccy: string,
+    ccy: CurrencySymbol,
     amount: number | BigNumber
 ) => {
     const securedFinance = useSF();
@@ -13,7 +14,10 @@ export const useDepositCollateral = (
             return;
         }
         const etherAmount = utils.parseUnits(amount.toString(), 'ether');
-        const tx = await securedFinance.depositCollateral(ccy, etherAmount);
+        const tx = await securedFinance.depositCollateral(
+            toCurrency(ccy),
+            etherAmount
+        );
         return tx;
     }, [amount, securedFinance, ccy]);
 
@@ -21,7 +25,7 @@ export const useDepositCollateral = (
 };
 
 export const useWithdrawCollateral = (
-    ccy: string,
+    ccy: CurrencySymbol,
     amount: number | BigNumber
 ) => {
     const securedFinance = useSF();
@@ -31,7 +35,10 @@ export const useWithdrawCollateral = (
             if (!securedFinance) {
                 return;
             }
-            const tx = await securedFinance.withdrawCollateral(ccy, amount);
+            const tx = await securedFinance.withdrawCollateral(
+                toCurrency(ccy),
+                amount
+            );
             return tx;
         } catch (e) {
             return false;

@@ -3,9 +3,10 @@ import { BigNumber } from 'ethers';
 import { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from 'src/store/types';
+import { CurrencySymbol, toCurrency } from 'src/utils';
 import useSF from './useSecuredFinance';
 
-export const useRates = (ccy: string, type: number) => {
+export const useRates = (ccy: CurrencySymbol, type: number) => {
     const securedFinance = useSF();
     const block = useSelector(
         (state: RootState) => state.blockchain.latestBlock
@@ -14,16 +15,19 @@ export const useRates = (ccy: string, type: number) => {
 
     const fetchYieldCurve = useCallback(
         async (securedFinance: SecuredFinanceClient) => {
+            const currency = toCurrency(ccy);
             let ratesFn;
             switch (type) {
                 case 0:
-                    ratesFn = () => securedFinance.getBorrowYieldCurve(ccy);
+                    ratesFn = () =>
+                        securedFinance.getBorrowYieldCurve(currency);
                     break;
                 case 1:
-                    ratesFn = () => securedFinance.getLendYieldCurve(ccy);
+                    ratesFn = () => securedFinance.getLendYieldCurve(currency);
                     break;
                 case 2:
-                    ratesFn = () => securedFinance.getMidRateYieldCurve(ccy);
+                    ratesFn = () =>
+                        securedFinance.getMidRateYieldCurve(currency);
                     break;
                 default:
                     ratesFn = () => Promise.resolve([]);

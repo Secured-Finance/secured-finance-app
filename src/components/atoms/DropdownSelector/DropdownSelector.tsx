@@ -62,7 +62,9 @@ export const DropdownSelector = <T extends string = string>({
                             <span className='typography-caption w-16 text-white'>
                                 {selectedOption?.label}
                             </span>
-                            <span>
+                            <span
+                                data-cy={`asset-expand-${selectedOption?.label}`}
+                            >
                                 <ExpandIndicator expanded={open} />
                             </span>
                         </div>

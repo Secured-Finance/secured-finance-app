@@ -1,9 +1,8 @@
 import { BigNumber } from 'bignumber.js';
-import { utils } from 'ethers';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import useSF from 'src/hooks/useSecuredFinance';
-import { Currency, currencyMap } from 'src/utils';
+import { currencyMap, CurrencySymbol, toCurrency } from 'src/utils';
 import { RootState } from '../../store/types';
 
 const ZERO_BN = new BigNumber('0');
@@ -28,7 +27,7 @@ const emptyBook: CollateralBook = {
 
 export const useCollateralBook = (
     account: string | null,
-    ccy = Currency.ETH
+    ccy = CurrencySymbol.ETH
 ) => {
     const [collateralBook, setCollateralBook] = useState(emptyBook);
     const securedFinance = useSF();
@@ -44,7 +43,7 @@ export const useCollateralBook = (
             const { independentCollateral, lockedCollateral } =
                 await securedFinance.getCollateralBook(
                     account,
-                    utils.formatBytes32String(ccy)
+                    toCurrency(ccy)
                 );
 
             setCollateralBook({

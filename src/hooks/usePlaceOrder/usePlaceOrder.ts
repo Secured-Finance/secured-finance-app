@@ -1,7 +1,7 @@
 import { BigNumber } from 'ethers';
 import { useCallback } from 'react';
 import useSF from 'src/hooks/useSecuredFinance';
-import { Currency } from 'src/utils';
+import { currencyMap, CurrencySymbol } from 'src/utils';
 
 export enum OrderSide {
     Lend = 0,
@@ -13,7 +13,7 @@ export const usePlaceOrder = () => {
 
     const placeOrder = useCallback(
         async (
-            ccy: Currency,
+            ccy: CurrencySymbol,
             term: string,
             side: OrderSide,
             amount: BigNumber,
@@ -22,7 +22,7 @@ export const usePlaceOrder = () => {
             if (!securedFinance) return;
 
             const tx = await securedFinance.placeLendingOrder(
-                ccy,
+                currencyMap[ccy].toCurrency(),
                 term,
                 side,
                 amount,
