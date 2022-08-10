@@ -70,16 +70,16 @@ const LoanScreen = () => {
         (amount: number) => {
             return (
                 ordinaryFormat(
-                    currencyMap[loanCurrency.shortName].toBaseUnit(amount)
-                ) + ` ${loanCurrency.shortName}`
+                    currencyMap[loanCurrency.symbol].toBaseUnit(amount)
+                ) + ` ${loanCurrency.symbol}`
             );
         },
-        [loanCurrency.shortName]
+        [loanCurrency.symbol]
     );
 
     const crossChainAddress = useCrosschainAddressByChainId(
         counterPartyWallet ? counterPartyWallet : '',
-        loanCurrency.shortName
+        loanCurrency.symbol
     );
 
     const [onPresentSendModal] = useModal(
@@ -184,7 +184,7 @@ const LoanScreen = () => {
             if (
                 crossChainAddress &&
                 loan?.currency &&
-                loanCurrency.shortName === CurrencySymbol.FIL
+                loanCurrency.symbol === CurrencySymbol.FIL
             ) {
                 setRecipientAddress(crossChainAddress);
             } else {

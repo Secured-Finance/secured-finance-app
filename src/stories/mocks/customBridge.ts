@@ -28,6 +28,7 @@ export class CustomizedBridge extends Eip1193Bridge {
     }
 
     async send(...args: unknown[]) {
+        console.log('CustomizedBridge.send', args);
         const isCallbackForm =
             typeof args[0] === 'object' && typeof args[1] === 'function';
         let callback;
