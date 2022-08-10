@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { WithAssetPrice } from 'src/../.storybook/decorators';
 import { updateLatestBlock } from 'src/store/blockchain';
-import { Currency } from 'src/utils';
+import { CurrencySymbol } from 'src/utils';
 import { AssetInformation } from '.';
 
 export default {
@@ -11,7 +11,7 @@ export default {
     component: AssetInformation,
     args: {
         header: 'Collateral Assets',
-        asset: Currency.FIL,
+        asset: CurrencySymbol.FIL,
         quantity: 740,
     },
     parameters: {
@@ -33,6 +33,6 @@ export const Default = Template.bind({});
 export const CollateralUtil = Template.bind({});
 CollateralUtil.args = {
     header: 'Borrowed Assets',
-    asset: Currency.USDC,
+    asset: CurrencySymbol.USDC,
     quantity: 12000,
 };

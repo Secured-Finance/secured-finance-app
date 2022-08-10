@@ -107,6 +107,7 @@ export const AssetSelector = <AssetType extends string = string>({
                     className='typography-body-1 h-8 w-20 rounded-lg bg-transparent p-2 text-right font-bold text-white placeholder-opacity-50'
                     onChange={handleAmountChange}
                     value={inputValue}
+                    data-cy='asset-selector-input'
                 />
 
                 <div

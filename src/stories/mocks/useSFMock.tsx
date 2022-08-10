@@ -30,15 +30,13 @@ export const mockUseSF = () => {
                 lockedCollateral: new BigNumberJS('10000'),
             })
         ),
-        lendingMarkets: {
-            get: jest.fn(() =>
-                Promise.resolve({
-                    contract: {
-                        address: '0x0',
-                    },
-                })
-            ),
-        },
+        getLendingMarket: jest.fn(() =>
+            Promise.resolve({
+                contract: {
+                    address: '0x0',
+                },
+            })
+        ),
         getCrosschainAddress: jest.fn(() => Promise.resolve('fil0x0')),
         checkRegisteredUser: jest.fn<Promise<boolean> | undefined, []>(() =>
             Promise.resolve(true)
