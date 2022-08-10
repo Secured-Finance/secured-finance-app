@@ -7,4 +7,5 @@ export * from './SendModal';
 export * from './WalletAccountModal';
 export * from './WalletDialog';
 export * from './WalletProviderModal';
+export * from './WithdrawCollateral';
 export * from './YieldChart';
