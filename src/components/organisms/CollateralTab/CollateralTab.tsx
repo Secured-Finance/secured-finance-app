@@ -4,6 +4,7 @@ import { useCollateralBook } from 'src/hooks/useCollateralBook';
 import { getFullDisplayBalanceNumber } from 'src/utils';
 import { useWallet } from 'use-wallet';
 import { DepositCollateral } from '../DepositCollateral';
+import { WithdrawCollateral } from '../WithdrawCollateral';
 
 export const CollateralTab = () => {
     const { account } = useWallet();
@@ -31,10 +32,10 @@ export const CollateralTab = () => {
                                 isOpen={openModal === 'deposit'}
                                 onClose={() => setOpenModal('')}
                             ></DepositCollateral>
-                            <DepositCollateral
+                            <WithdrawCollateral
                                 isOpen={openModal === 'withdraw'}
                                 onClose={() => setOpenModal('')}
-                            ></DepositCollateral>
+                            ></WithdrawCollateral>
                         </div>
                     );
                 })()}

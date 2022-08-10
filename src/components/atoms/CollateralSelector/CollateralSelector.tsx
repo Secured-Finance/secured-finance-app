@@ -43,7 +43,7 @@ export const CollateralSelector: React.FC<CollateralSelectorProps> = ({
                                 {selected.assetName}
                             </span>
                             <span className='typography-caption-2 flex h-6 w-full max-w-[200px] items-center justify-end pr-2 text-secondary7'>
-                                {ordinaryFormat(selected.available, 2)}{' '}
+                                {ordinaryFormat(selected.available, 4)}{' '}
                                 {selected.asset} Available
                             </span>
                             <Line
@@ -82,7 +82,7 @@ export const CollateralSelector: React.FC<CollateralSelectorProps> = ({
                                                 <span className='typography-caption-2 flex h-6 w-full max-w-[200px] items-center justify-end text-secondary7'>
                                                     {ordinaryFormat(
                                                         assetObj.available,
-                                                        2
+                                                        4
                                                     )}{' '}
                                                     {assetObj.asset} Available
                                                 </span>

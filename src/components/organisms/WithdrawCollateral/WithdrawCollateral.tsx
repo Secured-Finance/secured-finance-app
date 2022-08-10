@@ -5,28 +5,21 @@ import Check from 'src/assets/icons/check-mark.svg';
 import Loader from 'src/assets/img/gradient-loader.png';
 import { CollateralObject, CollateralSelector } from 'src/components/atoms';
 import { Dialog } from 'src/components/molecules';
-import { useCheckCollateralBook } from 'src/hooks';
-import { useDepositCollateral } from 'src/hooks/useDepositCollateral';
-import { useRegisterUser } from 'src/hooks/useRegisterUser';
+import { useCheckCollateralBook, useCollateralBook } from 'src/hooks';
+import { useWithdrawCollateral } from 'src/hooks/useDepositCollateral';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { updateCollateralAmount } from 'src/store/collateralForm';
 import { RootState } from 'src/store/types';
-import { CurrencySymbol } from 'src/utils';
+import { CurrencySymbol, getDisplayBalance } from 'src/utils';
 import { useWallet } from 'use-wallet';
 import { CollateralInput } from '../CollateralInput';
+import { CollateralInfo } from '../DepositCollateral';
 
 enum Step {
-    depositCollateral = 1,
-    depositing,
-    deposited,
+    withdrawCollateral = 1,
+    withdrawing,
+    withdrawn,
 }
-
-export type CollateralInfo = {
-    id: number;
-    asset: CurrencySymbol;
-    available: number;
-    assetName: string;
-};
 
 type State = {
     currentStep: Step;
@@ -37,26 +30,26 @@ type State = {
 };
 
 const stateRecord: Record<Step, State> = {
-    [Step.depositCollateral]: {
-        currentStep: Step.depositCollateral,
-        nextStep: Step.depositing,
-        title: 'Deposit Collateral',
+    [Step.withdrawCollateral]: {
+        currentStep: Step.withdrawCollateral,
+        nextStep: Step.withdrawing,
+        title: 'Withdraw Collateral',
         description: '',
         buttonText: 'Continue',
     },
-    [Step.depositing]: {
-        currentStep: Step.depositing,
-        nextStep: Step.deposited,
-        title: 'Depositing...',
+    [Step.withdrawing]: {
+        currentStep: Step.withdrawing,
+        nextStep: Step.withdrawn,
+        title: 'Withdrawing...',
         description: '',
         buttonText: '',
     },
-    [Step.deposited]: {
-        currentStep: Step.deposited,
-        nextStep: Step.depositCollateral,
+    [Step.withdrawn]: {
+        currentStep: Step.withdrawn,
+        nextStep: Step.withdrawCollateral,
         title: 'Success!',
         description:
-            'You have succesfully deposited collateral on Secured Finance.',
+            'You have succesfully withdrawn collateral on Secured Finance.',
         buttonText: 'OK',
     },
 };
@@ -74,12 +67,12 @@ const reducer = (
             };
         default:
             return {
-                ...stateRecord[Step.depositCollateral],
+                ...stateRecord[Step.withdrawCollateral],
             };
     }
 };
 
-export const DepositCollateral = ({
+export const WithdrawCollateral = ({
     isOpen,
     onClose,
 }: {
@@ -94,22 +87,14 @@ export const DepositCollateral = ({
     const [, setCollateralTx] = useState(false);
     const { account } = useWallet();
     const status = useCheckCollateralBook(account);
-    const {
-        ethereum: { balance: ethereumBalance },
-    } = useSelector((state: RootState) => state.wallets);
+    const colBook = useCollateralBook(account);
 
     const assetList: Record<string, CollateralInfo> = {
         ETH: {
             id: 1,
             asset: CurrencySymbol.ETH,
-            available: ethereumBalance,
+            available: parseFloat(getDisplayBalance(colBook.collateral)),
             assetName: 'Ethereum',
-        },
-        USDC: {
-            id: 2,
-            asset: CurrencySymbol.USDC,
-            available: 1000,
-            assetName: 'USDC',
         },
     };
 
@@ -117,8 +102,7 @@ export const DepositCollateral = ({
     const collateral = useSelector(
         (state: RootState) => state.collateralForm.amount
     );
-    const { onRegisterUser } = useRegisterUser();
-    const { onDepositCollateral } = useDepositCollateral(
+    const { onWithdrawCollateral } = useWithdrawCollateral(
         currencyShortName as CurrencySymbol,
         BigNumber.from(collateral)
     );
@@ -128,16 +112,11 @@ export const DepositCollateral = ({
         onClose();
     }, [onClose]);
 
-    const handleDepositCollateral = useCallback(async () => {
+    const handleWithdrawCollateral = useCallback(async () => {
         try {
             setCollateralTx(true);
             if (status) {
-                const txHash = await onDepositCollateral();
-                if (!txHash) {
-                    setCollateralTx(false);
-                }
-            } else {
-                const txHash = await onRegisterUser();
+                const txHash = await onWithdrawCollateral();
                 if (!txHash) {
                     setCollateralTx(false);
                 }
@@ -147,7 +126,7 @@ export const DepositCollateral = ({
             handleClose();
         }
         dispatch({ type: 'next' });
-    }, [status, onDepositCollateral, onRegisterUser, handleClose]);
+    }, [status, onWithdrawCollateral, handleClose]);
 
     const onClick = useCallback(
         async (currentStep: Step) => {
@@ -156,19 +135,18 @@ export const DepositCollateral = ({
             }
 
             switch (currentStep) {
-                case Step.depositCollateral:
+                case Step.withdrawCollateral:
                     dispatch({ type: 'next' });
-                    handleDepositCollateral();
+                    handleWithdrawCollateral();
                     break;
-                case Step.depositing:
+                case Step.withdrawing:
                     break;
-                case Step.deposited:
-                    dispatch({ type: 'next' });
-                    onClose();
+                case Step.withdrawn:
+                    handleClose();
                     break;
             }
         },
-        [onClose, wallet, handleDepositCollateral]
+        [wallet, handleWithdrawCollateral, handleClose]
     );
 
     const handleChange = (v: CollateralObject) => {
@@ -186,7 +164,7 @@ export const DepositCollateral = ({
         >
             {(() => {
                 switch (state.currentStep) {
-                    case Step.depositCollateral:
+                    case Step.withdrawCollateral:
                         return (
                             <div className='flex flex-col gap-6'>
                                 <CollateralSelector
@@ -202,9 +180,15 @@ export const DepositCollateral = ({
                                     }
                                     availableAmount={assetList[asset].available}
                                 />
+                                <div className='typography-caption-2 h-fit rounded-xl border border-red px-3 py-2 text-slateGray'>
+                                    Please note that withdrawal will impact the
+                                    LTV ratio and liquidation threshold
+                                    collateral requirement for active contracts
+                                    on Secured Finance.
+                                </div>
                             </div>
                         );
-                    case Step.depositing:
+                    case Step.withdrawing:
                         return (
                             // eslint-disable-next-line @next/next/no-img-element
                             <img
@@ -214,7 +198,7 @@ export const DepositCollateral = ({
                             ></img>
                         );
                         break;
-                    case Step.deposited:
+                    case Step.withdrawn:
                         return <Check className='h-[100px] w-[100px]' />;
                     default:
                         return <p>Unknown</p>;
