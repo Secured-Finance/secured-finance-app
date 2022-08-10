@@ -1,9 +1,9 @@
 /* eslint-disable @next/next/no-img-element */
 import React from 'react';
-import { Currency } from 'src/utils/currencyList';
+import { CurrencySymbol } from 'src/utils/currencyList';
 
 interface CurrencySelectorProps {
-    selectedCcy: Currency;
+    selectedCcy: CurrencySymbol;
     showName?: boolean;
 }
 

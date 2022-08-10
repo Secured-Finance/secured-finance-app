@@ -1,4 +1,5 @@
 import { FilecoinNumber } from '@glif/filecoin-number';
+import { Currency as CurrencyInterface, Ether } from '@secured-finance/sf-core';
 import { BigNumber as BigNumberJS } from 'bignumber.js';
 import { BigNumber } from 'ethers';
 import EthIcon from 'src/assets/coins/eth2.svg';
@@ -6,42 +7,51 @@ import FilecoinIcon from 'src/assets/coins/fil.svg';
 import UsdcIcon from 'src/assets/coins/usdc.svg';
 import { Option } from 'src/components/atoms';
 import { MAINNET_PATH_CODE } from 'src/services/ledger/constants';
+import { Filecoin } from './filecoin';
 const ETH_CHAIN_ID = 60;
 const ETH_TO_WEI = new BigNumberJS(10 ** 18);
 
-export enum Currency {
+//TODO: use a global variable for the current network
+const ether = new Ether(4);
+
+export enum CurrencySymbol {
     ETH = 'ETH',
     FIL = 'FIL',
     USDC = 'USDC',
 }
 
-export const currencyMap: Readonly<Record<Currency, Readonly<CurrencyInfo>>> = {
-    [Currency.ETH]: {
+export const currencyMap: Readonly<
+    Record<CurrencySymbol, Readonly<CurrencyInfo>>
+> = {
+    [CurrencySymbol.ETH]: {
         indexCcy: 0,
         icon: EthIcon,
-        shortName: Currency.ETH,
+        shortName: CurrencySymbol.ETH,
         name: 'Ethereum',
         chainId: ETH_CHAIN_ID,
         toBaseUnit: (amount: number) => convertEthToWei(amount),
+        toCurrency: () => ether,
     },
-    [Currency.FIL]: {
+    [CurrencySymbol.FIL]: {
         indexCcy: 1,
         icon: FilecoinIcon,
-        shortName: Currency.FIL,
-        name: 'Filecoin',
+        shortName: CurrencySymbol.FIL,
+        name: Filecoin.get().name,
         chainId: MAINNET_PATH_CODE,
         toBaseUnit: (amount: number) => {
             const filAmount = new FilecoinNumber(amount, 'fil');
             return BigNumber.from(filAmount.toAttoFil());
         },
+        toCurrency: () => Filecoin.get(),
     },
-    [Currency.USDC]: {
+    [CurrencySymbol.USDC]: {
         indexCcy: 2,
-        shortName: Currency.USDC,
+        shortName: CurrencySymbol.USDC,
         name: 'USDC',
         icon: UsdcIcon,
         chainId: ETH_CHAIN_ID,
         toBaseUnit: (amount: number) => convertEthToWei(amount),
+        toCurrency: () => Filecoin.get(),
     },
 };
 
@@ -50,7 +60,7 @@ export const getCurrencyMapAsList = () => {
 };
 
 export const getCurrencyMapAsOptions = () => {
-    return getCurrencyMapAsList().map<Option<Currency>>(
+    return getCurrencyMapAsList().map<Option<CurrencySymbol>>(
         ({ shortName, name, icon }) => ({
             value: shortName,
             label: name,
@@ -61,11 +71,12 @@ export const getCurrencyMapAsOptions = () => {
 
 export type CurrencyInfo = {
     indexCcy: number;
-    shortName: Currency;
+    shortName: CurrencySymbol;
     name: string;
     chainId: number;
     icon: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
     toBaseUnit: (amount: number) => BigNumber;
+    toCurrency: () => CurrencyInterface;
 };
 
 // Do not use this function, as we don't want to use the IndexCcy to identify the currency
@@ -80,6 +91,10 @@ export const getCurrencyByIndex = (value: string | number) => {
     }
 
     return currency;
+};
+
+export const toCurrency = (ccy: CurrencySymbol) => {
+    return currencyMap[ccy].toCurrency();
 };
 
 const convertEthToWei = (amount: number) => {

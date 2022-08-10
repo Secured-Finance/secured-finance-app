@@ -5,15 +5,15 @@ import {
     getPriceMap,
 } from 'src/store/assetPrices/selectors';
 import { RootState } from 'src/store/types';
-import { Currency, currencyMap } from 'src/utils';
+import { currencyMap, CurrencySymbol } from 'src/utils';
 
 interface CurveHeaderProps {
-    asset: Currency;
+    asset: CurrencySymbol;
     isBorrow: boolean;
 }
 
 export const CurveHeader: React.FC<CurveHeaderProps> = ({
-    asset = Currency.FIL,
+    asset = CurrencySymbol.FIL,
     isBorrow,
 }): JSX.Element => {
     const priceList = useSelector((state: RootState) => getPriceMap(state));

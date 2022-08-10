@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import useSF from 'src/hooks/useSecuredFinance';
-import { Currency, currencyMap } from 'src/utils';
+import { currencyMap, CurrencySymbol } from 'src/utils';
 
 export const useCrosschainAddressByChainId = (
     user: string | null,
-    ccy: Currency
+    ccy: CurrencySymbol
 ) => {
     const securedFinance = useSF();
     const currency = currencyMap[ccy];

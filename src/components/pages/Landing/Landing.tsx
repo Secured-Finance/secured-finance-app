@@ -4,7 +4,7 @@ import { LendingCard, YieldChart } from 'src/components/organisms';
 import { OrderSide, useCollateralBook, usePlaceOrder } from 'src/hooks';
 import { useRates } from 'src/hooks/useRates';
 import { RootState } from 'src/store/types';
-import { Currency, termMap } from 'src/utils';
+import { CurrencySymbol, termMap } from 'src/utils';
 import { useWallet } from 'use-wallet';
 
 export const Landing = () => {
@@ -16,7 +16,7 @@ export const Landing = () => {
         (state: RootState) => state.landingOrderForm
     );
 
-    const rates = useRates(Currency.FIL, side === OrderSide.Lend ? 1 : 0);
+    const rates = useRates(CurrencySymbol.FIL, side === OrderSide.Lend ? 1 : 0);
     const marketRate = useMemo(() => {
         if (!rates) {
             return 0;

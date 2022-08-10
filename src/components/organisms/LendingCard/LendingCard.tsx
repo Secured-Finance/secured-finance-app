@@ -17,7 +17,7 @@ import {
 import { setLastMessage } from 'src/store/lastError';
 import { RootState } from 'src/store/types';
 import {
-    Currency,
+    CurrencySymbol,
     getCurrencyMapAsList,
     getCurrencyMapAsOptions,
     getTermsAsOptions,
@@ -36,7 +36,7 @@ export const LendingCard = ({
     marketRate,
 }: {
     onPlaceOrder: (
-        ccy: Currency,
+        ccy: CurrencySymbol,
         term: string,
         side: OrderSide,
         amount: BigNumber,
@@ -54,7 +54,7 @@ export const LendingCard = ({
     // console.log(collateralBook);
     const shortNames = useMemo(
         () =>
-            getCurrencyMapAsList().reduce<Record<string, Currency>>(
+            getCurrencyMapAsList().reduce<Record<string, CurrencySymbol>>(
                 (acc, ccy) => ({
                     ...acc,
                     [ccy.name]: ccy.shortName,
@@ -67,13 +67,13 @@ export const LendingCard = ({
     const amountFormatterMap = useMemo(
         () =>
             getCurrencyMapAsList().reduce<
-                Record<Currency, (value: number) => BigNumber>
+                Record<CurrencySymbol, (value: number) => BigNumber>
             >(
                 (acc, ccy) => ({
                     ...acc,
                     [ccy.shortName]: ccy.toBaseUnit,
                 }),
-                {} as Record<Currency, (value: number) => BigNumber>
+                {} as Record<CurrencySymbol, (value: number) => BigNumber>
             ),
         []
     );
@@ -99,7 +99,7 @@ export const LendingCard = ({
         //TODO: Remove the usage of BigNumber.js and use only Ethers.js
         return `${computeAvailableToBorrow(
             assetPriceMap[currency],
-            assetPriceMap[Currency.ETH],
+            assetPriceMap[CurrencySymbol.ETH],
             BigNumber.from(collateralBook.collateral.toString())
         )}  ${currency}`;
     }, [assetPriceMap, collateralBook.collateral, currency]);
@@ -113,7 +113,7 @@ export const LendingCard = ({
 
     const handlePlaceOrder = useCallback(
         async (
-            ccy: Currency,
+            ccy: CurrencySymbol,
             term: Term,
             side: number,
             amount: BigNumber,
@@ -177,7 +177,7 @@ export const LendingCard = ({
                     priceList={assetPriceMap}
                     onAmountChange={(v: BigNumber) => dispatch(setAmount(v))}
                     amountFormatterMap={amountFormatterMap}
-                    onAssetChange={(v: Currency) => {
+                    onAssetChange={(v: CurrencySymbol) => {
                         dispatch(setCurrency(v));
                     }}
                 />
