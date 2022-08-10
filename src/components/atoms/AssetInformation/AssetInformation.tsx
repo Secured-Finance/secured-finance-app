@@ -34,7 +34,7 @@ export const AssetInformation: React.FC<AssetInformationProps> = ({
                     ></Tab>
                     <Tab
                         header={`${quantity} ${asset}`}
-                        footer={usdFormatAppendUSD(quantity * price)}
+                        footer={usdFormatAppendUSD(quantity * price, 2)}
                         align='right'
                     ></Tab>
                 </div>

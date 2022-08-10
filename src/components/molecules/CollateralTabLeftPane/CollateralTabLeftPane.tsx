@@ -1,17 +1,30 @@
 import { AssetInformation, Button } from 'src/components/atoms';
-import { CurrencySymbol, usdFormat } from 'src/utils';
+import { useCollateralBook } from 'src/hooks';
+import {
+    CurrencySymbol,
+    getDisplayBalance,
+    getFullDisplayBalanceNumber,
+    usdFormat,
+} from 'src/utils';
 
 interface CollateralTabLeftPaneProps {
-    balance?: number;
     account?: string | null;
     onClick: (step: 'deposit' | 'withdraw') => void;
 }
 
 export const CollateralTabLeftPane: React.FC<CollateralTabLeftPaneProps> = ({
-    balance = 0,
     account,
     onClick,
 }) => {
+    const colBook = useCollateralBook(account ? account : '');
+    const balance = account
+        ? getFullDisplayBalanceNumber(colBook.usdCollateral.toNumber())
+        : 0;
+
+    const quantity = colBook
+        ? parseFloat(getDisplayBalance(colBook.collateral))
+        : 0;
+
     return (
         <div className='flex h-[410px] flex-row'>
             <div className='flex flex-col border-r border-white-10'>
@@ -33,14 +46,18 @@ export const CollateralTabLeftPane: React.FC<CollateralTabLeftPaneProps> = ({
                         <div className='ml-5 mt-6'>
                             <AssetInformation
                                 header='Collateral Assets'
-                                asset={CurrencySymbol.FIL}
-                                quantity={100}
+                                asset={CurrencySymbol.ETH}
+                                quantity={quantity}
                             ></AssetInformation>
                         </div>
                     )}
                 </div>
                 <div className='flex h-full flex-1 flex-row items-center justify-center gap-4'>
-                    <Button size='sm' onClick={() => onClick('deposit')}>
+                    <Button
+                        size='sm'
+                        onClick={() => onClick('deposit')}
+                        disabled={!account}
+                    >
                         Deposit
                     </Button>
                     <Button
