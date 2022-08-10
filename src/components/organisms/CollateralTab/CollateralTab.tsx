@@ -6,7 +6,7 @@ import { useWallet } from 'use-wallet';
 import { DepositCollateral } from '../DepositCollateral';
 
 export const CollateralTab = () => {
-    const { account, chainId } = useWallet();
+    const { account } = useWallet();
     const colBook = useCollateralBook(account ? account : '');
     const [openModal, setOpenModal] = useState('');
 

@@ -1,11 +1,16 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
-import { Currency } from 'src/utils';
+import { CurrencySymbol } from 'src/utils';
 import { CollateralSelector } from './CollateralSelector';
 
 const assetList = [
-    { id: 1, asset: Currency.USDC, available: 1000, assetName: 'USDC' },
-    { id: 2, asset: Currency.ETH, available: 120, assetName: 'Ethereum' },
-    { id: 3, asset: Currency.FIL, available: 1020, assetName: 'Filecoin' },
+    { id: 1, asset: CurrencySymbol.USDC, available: 1000, assetName: 'USDC' },
+    { id: 2, asset: CurrencySymbol.ETH, available: 120, assetName: 'Ethereum' },
+    {
+        id: 3,
+        asset: CurrencySymbol.FIL,
+        available: 1020,
+        assetName: 'Filecoin',
+    },
 ];
 
 export default {

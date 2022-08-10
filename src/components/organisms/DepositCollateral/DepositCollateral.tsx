@@ -5,13 +5,13 @@ import Check from 'src/assets/icons/check-mark.svg';
 import Loader from 'src/assets/img/gradient-loader.png';
 import { CollateralObject, CollateralSelector } from 'src/components/atoms';
 import { Dialog } from 'src/components/molecules';
-import { useCheckCollateralBook, useCollateralBook } from 'src/hooks';
+import { useCheckCollateralBook } from 'src/hooks';
 import { useDepositCollateral } from 'src/hooks/useDepositCollateral';
 import { useRegisterUser } from 'src/hooks/useRegisterUser';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { updateCollateralAmount } from 'src/store/collateralForm';
 import { RootState } from 'src/store/types';
-import { Currency } from 'src/utils';
+import { CurrencySymbol } from 'src/utils';
 import { useWallet } from 'use-wallet';
 import { CollateralInput } from '../CollateralInput';
 
@@ -20,6 +20,13 @@ enum Step {
     depositing,
     deposited,
 }
+
+export type CollateralInfo = {
+    id: number;
+    asset: CurrencySymbol;
+    available: number;
+    assetName: string;
+};
 
 type State = {
     currentStep: Step;
@@ -79,74 +86,68 @@ export const DepositCollateral = ({
     isOpen: boolean;
     onClose: () => void;
 }) => {
-    const [asset, setAsset] = useState(Currency.ETH);
+    const [asset, setAsset] = useState(CurrencySymbol.ETH);
     const [wallet, setWallet] = useState<string>('Metamask');
     const [state, dispatch] = useReducer(reducer, stateRecord[1]);
+    const currencyShortName = 'ETH';
     const dispatch1 = useDispatch();
     const [, setCollateralTx] = useState(false);
-    const currencyShortName = 'ETH';
     const { account } = useWallet();
     const status = useCheckCollateralBook(account);
     const {
         ethereum: { balance: ethereumBalance },
     } = useSelector((state: RootState) => state.wallets);
 
-    const assetList = {
-        [Currency.ETH]: {
+    const assetList: Record<string, CollateralInfo> = {
+        ETH: {
             id: 1,
-            asset: Currency.ETH,
+            asset: CurrencySymbol.ETH,
             available: ethereumBalance,
             assetName: 'Ethereum',
         },
-        [Currency.USDC]: {
+        USDC: {
             id: 2,
-            asset: Currency.USDC,
+            asset: CurrencySymbol.USDC,
             available: 1000,
             assetName: 'USDC',
         },
     };
 
-    const colBook = useCollateralBook(account ? account : '');
-
     const priceList = useSelector((state: RootState) => getPriceMap(state));
     const collateral = useSelector(
         (state: RootState) => state.collateralForm.amount
     );
-
     const { onRegisterUser } = useRegisterUser();
     const { onDepositCollateral } = useDepositCollateral(
-        currencyShortName,
-        collateral
+        currencyShortName as CurrencySymbol,
+        BigNumber.from(collateral)
     );
+
+    const handleClose = useCallback(() => {
+        dispatch({ type: 'default' });
+        onClose();
+    }, [onClose]);
 
     const handleDepositCollateral = useCallback(async () => {
         try {
             setCollateralTx(true);
-            console.log(status);
             if (status) {
-                console.log(currencyShortName);
-                console.log(collateral.toString());
                 const txHash = await onDepositCollateral();
-                console.log(txHash);
                 if (!txHash) {
                     setCollateralTx(false);
-                } else {
-                    // onClose();
                 }
             } else {
                 const txHash = await onRegisterUser();
                 if (!txHash) {
                     setCollateralTx(false);
-                } else {
-                    // onClose();
                 }
             }
         } catch (e) {
             console.error(e);
-            // handleClose();
+            handleClose();
         }
-        // dispatch({ type: 'next' });
-    }, [status, onDepositCollateral, onRegisterUser, onClose]);
+        dispatch({ type: 'next' });
+    }, [status, onDepositCollateral, onRegisterUser, handleClose]);
 
     const onClick = useCallback(
         async (currentStep: Step) => {
@@ -169,11 +170,6 @@ export const DepositCollateral = ({
         },
         [onClose, wallet, handleDepositCollateral]
     );
-
-    const handleClose = () => {
-        dispatch({ type: 'default' });
-        onClose();
-    };
 
     const handleChange = (v: CollateralObject) => {
         setAsset(v.asset);
@@ -204,7 +200,7 @@ export const DepositCollateral = ({
                                     onAmountChange={(v: BigNumber) =>
                                         dispatch1(updateCollateralAmount(v))
                                     }
-                                    availableAmount={10000}
+                                    availableAmount={assetList[asset].available}
                                 />
                                 <div className='typography-caption-2 h-fit rounded-xl border border-red px-3 py-2 text-slateGray'>
                                     Please note that withdrawal will impact the
