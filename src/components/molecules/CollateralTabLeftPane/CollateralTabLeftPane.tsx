@@ -1,5 +1,5 @@
 import { AssetInformation, Button } from 'src/components/atoms';
-import { Currency, usdFormat } from 'src/utils';
+import { CurrencySymbol, usdFormat } from 'src/utils';
 
 interface CollateralTabLeftPaneProps {
     balance?: number;
@@ -33,7 +33,7 @@ export const CollateralTabLeftPane: React.FC<CollateralTabLeftPaneProps> = ({
                         <div className='ml-5 mt-6'>
                             <AssetInformation
                                 header='Collateral Assets'
-                                asset={Currency.FIL}
+                                asset={CurrencySymbol.FIL}
                                 quantity={100}
                             ></AssetInformation>
                         </div>

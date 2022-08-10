@@ -1,11 +1,11 @@
 import { Listbox, Transition } from '@headlessui/react';
 import { Fragment, useCallback, useState } from 'react';
 import Line from 'src/assets/img/Line.svg';
-import { Currency } from 'src/utils';
+import { CurrencySymbol, ordinaryFormat } from 'src/utils';
 
 export interface CollateralObject {
     id: number;
-    asset: Currency;
+    asset: CurrencySymbol;
     assetName: string;
     available: number;
 }
@@ -43,7 +43,8 @@ export const CollateralSelector: React.FC<CollateralSelectorProps> = ({
                                 {selected.assetName}
                             </span>
                             <span className='typography-caption-2 flex h-6 w-full max-w-[200px] items-center justify-end pr-2 text-secondary7'>
-                                {selected.available} {selected.asset} Available
+                                {ordinaryFormat(selected.available, 2)}{' '}
+                                {selected.asset} Available
                             </span>
                             <Line
                                 className='pointer-events-none absolute right-3 h-6 w-6'
@@ -79,7 +80,10 @@ export const CollateralSelector: React.FC<CollateralSelectorProps> = ({
                                                     {assetObj.assetName}
                                                 </span>
                                                 <span className='typography-caption-2 flex h-6 w-full max-w-[200px] items-center justify-end text-secondary7'>
-                                                    {assetObj.available}{' '}
+                                                    {ordinaryFormat(
+                                                        assetObj.available,
+                                                        2
+                                                    )}{' '}
                                                     {assetObj.asset} Available
                                                 </span>
                                             </div>

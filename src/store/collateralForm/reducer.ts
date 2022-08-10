@@ -19,7 +19,7 @@ const collateralFormSlice = createSlice({
             state.currencyName = action.payload;
         },
         updateCollateralAmount(state, action: PayloadAction<BigNumber>) {
-            state.amount = action.payload;
+            state.amount = action.payload.toString();
         },
         updateCollateralTxFee(state, action: PayloadAction<number>) {
             state.txFee = action.payload;

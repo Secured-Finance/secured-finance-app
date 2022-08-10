@@ -1,12 +1,12 @@
 import { BigNumber } from 'ethers';
 import { ChangeEvent, useCallback, useMemo, useState } from 'react';
 import { PercentageSelector } from 'src/components/molecules';
-import { Currency, getCurrencyMapAsList, usdFormat } from 'src/utils';
+import { CurrencySymbol, getCurrencyMapAsList, usdFormat } from 'src/utils';
 
 interface CollateralInputProps {
     price: number;
     availableAmount: number;
-    asset: Currency;
+    asset: CurrencySymbol;
     onAmountChange?: (v: BigNumber) => void;
 }
 
@@ -22,13 +22,13 @@ export const CollateralInput: React.FC<CollateralInputProps> = ({
     const amountFormatterMap = useMemo(
         () =>
             getCurrencyMapAsList().reduce<
-                Record<Currency, (value: number) => BigNumber>
+                Record<CurrencySymbol, (value: number) => BigNumber>
             >(
                 (acc, ccy) => ({
                     ...acc,
                     [ccy.shortName]: ccy.toBaseUnit,
                 }),
-                {} as Record<Currency, (value: number) => BigNumber>
+                {} as Record<CurrencySymbol, (value: number) => BigNumber>
             ),
         []
     );
@@ -36,7 +36,7 @@ export const CollateralInput: React.FC<CollateralInputProps> = ({
     const handleInputChange = useCallback(
         (
             amount: number,
-            asset: Currency,
+            asset: CurrencySymbol,
             onAmountChange: (v: BigNumber) => void
         ) => {
             let format = (x: number) => BigNumber.from(x);
