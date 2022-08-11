@@ -3,7 +3,6 @@ const defaultTheme = require('tailwindcss/defaultTheme');
 module.exports = {
     darkMode: 'media',
     content: ['./src/**/*.{ts,tsx,js,jsx}', './public/index.html'],
-
     theme: {
         extend: {
             boxShadow: {
@@ -82,7 +81,6 @@ module.exports = {
                 '8': '#FCFCFD',
             },
             grayScale: '#FAFAFA',
-
             tabGradient2: 'rgba(106, 118, 177, 0.35)',
             tabGradient1: 'rgba(57, 77, 174, 0)',
             backgroundBlur: 'rgba(35, 43, 56, 0.6)',
