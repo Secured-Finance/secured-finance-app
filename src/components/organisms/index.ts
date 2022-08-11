@@ -1,4 +1,5 @@
 export * from './CollateralModal';
+export * from './CollateralOrganism';
 export * from './ConnectWalletCard';
 export * from './DepositCollateral';
 export * from './Header';

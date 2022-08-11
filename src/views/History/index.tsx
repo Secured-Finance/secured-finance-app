@@ -1,5 +1,5 @@
 import { Container } from 'src/components/atoms';
-import { CollateralTab } from 'src/components/organisms/CollateralTab';
+import { CollateralOrganism } from 'src/components/organisms/CollateralOrganism';
 import { useBorrowDeals, useLoanDeals } from 'src/hooks/useLoanHistory';
 import styled from 'styled-components';
 import { HistoryTable } from './components';
@@ -35,7 +35,7 @@ const History = () => {
                         </StyledHistoryContainer>
                     </div>
                 )}
-                <CollateralTab />
+                <CollateralOrganism />
             </Container>
         </div>
     );

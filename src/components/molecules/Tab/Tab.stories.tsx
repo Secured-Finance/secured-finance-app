@@ -5,26 +5,22 @@ export default {
     title: 'Molecules/Tab',
     component: Tab,
     args: {
-        isOpen: true,
-        onClose: () => {},
-        onClick: () => {},
-        title: 'Tab Title',
-        description:
-            'Description goes here. Try to keep message to not more than three lines.',
-        callToAction: 'Ok',
-        parameters: {
-            chromatic: { disableSnapshot: false },
-        },
+        tabDataArray: [
+            { text: 'Tab A' },
+            { text: 'Tab B' },
+            { text: 'Tab C', disabled: true },
+        ],
     },
 } as ComponentMeta<typeof Tab>;
 
 const Template: ComponentStory<typeof Tab> = args => (
-    <Tab {...args}>
-        <p className='body1 text-white-70'>
-            This is the content but since it is a component, it can be styled as
-            we want
-        </p>
-    </Tab>
+    <div className='h-[400px] w-[600px] text-white-80'>
+        <Tab {...args}>
+            <p>Tab A Content</p>
+            <p>Tab B Content</p>
+            <p>Tab C Content</p>
+        </Tab>
+    </div>
 );
 
 export const Default = Template.bind({});
