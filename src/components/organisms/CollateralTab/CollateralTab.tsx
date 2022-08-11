@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import { CollateralTabLeftPane, Tab } from 'src/components/molecules';
+import { useCollateralBook } from 'src/hooks';
 import { useWallet } from 'use-wallet';
 import { DepositCollateral } from '../DepositCollateral';
 import { WithdrawCollateral } from '../WithdrawCollateral';
 
 export const CollateralTab = () => {
     const { account } = useWallet();
+    const collateralBook = useCollateralBook(account);
     const [openModal, setOpenModal] = useState('');
 
     return (
@@ -13,10 +15,11 @@ export const CollateralTab = () => {
             <Tab>
                 {(() => {
                     return (
-                        <div>
+                        <div className='h-[410px]'>
                             <CollateralTabLeftPane
                                 onClick={step => setOpenModal(step)}
                                 account={account}
+                                collateralBook={collateralBook}
                             />
                             <DepositCollateral
                                 isOpen={openModal === 'deposit'}

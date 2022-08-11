@@ -1,0 +1,33 @@
+import { composeStories } from '@storybook/testing-react';
+import { fireEvent, render, screen } from 'src/test-utils.js';
+import * as stories from './CollateralSelector.stories';
+
+const { Default } = composeStories(stories);
+
+describe('CollateralSelector component', () => {
+    it('should render CollateralSelector', () => {
+        render(<Default />);
+        expect(screen.getByText('Select Asset')).toBeInTheDocument();
+        expect(screen.getByText('USDC')).toBeInTheDocument();
+        expect(screen.getByText('1,000 USDC Available')).toBeInTheDocument();
+    });
+
+    it('should render a clickable button', () => {
+        render(<Default />);
+        expect(screen.getByRole('button')).toBeInTheDocument();
+    });
+
+    it('should render a dropdown', () => {
+        render(<Default />);
+        fireEvent.click(screen.getByRole('button'));
+        expect(screen.getByRole('listbox')).toBeInTheDocument();
+    });
+
+    it('should change the button when a dropdown item is selected', () => {
+        render(<Default />);
+        fireEvent.click(screen.getByRole('button'));
+        fireEvent.click(screen.getByText('Ethereum'));
+        expect(screen.getByText('Ethereum')).toBeInTheDocument();
+        expect(screen.getByText('120 ETH Available')).toBeInTheDocument();
+    });
+});

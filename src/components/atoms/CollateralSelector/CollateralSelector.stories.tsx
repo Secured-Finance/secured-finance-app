@@ -5,12 +5,6 @@ import { CollateralSelector } from './CollateralSelector';
 const assetList = [
     { id: 1, asset: CurrencySymbol.USDC, available: 1000, assetName: 'USDC' },
     { id: 2, asset: CurrencySymbol.ETH, available: 120, assetName: 'Ethereum' },
-    {
-        id: 3,
-        asset: CurrencySymbol.FIL,
-        available: 1020,
-        assetName: 'Filecoin',
-    },
 ];
 
 export default {
