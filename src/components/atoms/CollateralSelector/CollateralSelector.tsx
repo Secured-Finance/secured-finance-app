@@ -1,6 +1,6 @@
 import { Listbox, Transition } from '@headlessui/react';
 import { Fragment, useCallback, useState } from 'react';
-import Line from 'src/assets/img/Line.svg';
+import DownIcon from 'src/assets/img/DownIcon.svg';
 import { CurrencySymbol, ordinaryFormat } from 'src/utils';
 
 export interface CollateralObject {
@@ -46,10 +46,10 @@ export const CollateralSelector: React.FC<CollateralSelectorProps> = ({
                                 {ordinaryFormat(selected.available, 4)}{' '}
                                 {selected.asset} Available
                             </span>
-                            <Line
+                            <DownIcon
                                 className='pointer-events-none absolute right-3 h-6 w-6'
                                 aria-hidden='true'
-                            ></Line>
+                            ></DownIcon>
                         </Listbox.Button>
                         <Transition
                             as={Fragment}

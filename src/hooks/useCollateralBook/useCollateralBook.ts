@@ -61,6 +61,6 @@ export const useCollateralBook = (
         };
         getCollateralBook();
     }, [account, ccy, securedFinance, ethPrice]);
-    // console.log(collateralBook);
+
     return collateralBook;
 };

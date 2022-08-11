@@ -30,7 +30,6 @@ const RenderActions: React.FC<ActionProps> = ({ callbackMap, ccyIndex }) => {
     );
     const { account } = useWallet();
     const status = useCheckCollateralBook(account);
-    console.log(status);
     const [onPresentCollateralModal] = useModal(
         <CollateralModal ccyIndex={ccyIndex} status={status} />
     );
