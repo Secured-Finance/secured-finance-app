@@ -122,11 +122,11 @@ export const DepositCollateral = ({
             } else {
                 await onRegisterUser();
             }
+            dispatch({ type: 'next' });
         } catch (e) {
             console.error(e);
             handleClose();
         }
-        dispatch({ type: 'next' });
     }, [status, onDepositCollateral, onRegisterUser, handleClose]);
 
     const onClick = useCallback(

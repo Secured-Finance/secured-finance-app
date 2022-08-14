@@ -30,18 +30,14 @@ export const useWithdrawCollateral = (
     const securedFinance = useSF();
 
     const handleWithdrawCollateral = useCallback(async () => {
-        try {
-            if (!securedFinance) {
-                return;
-            }
-            const tx = await securedFinance.withdrawCollateral(
-                toCurrency(ccy),
-                amount
-            );
-            return tx;
-        } catch (e) {
-            return false;
+        if (!securedFinance) {
+            return;
         }
+        const tx = await securedFinance.withdrawCollateral(
+            toCurrency(ccy),
+            amount
+        );
+        return tx;
     }, [securedFinance, ccy, amount]);
 
     return { onWithdrawCollateral: handleWithdrawCollateral };

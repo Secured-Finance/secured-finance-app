@@ -111,11 +111,11 @@ export const WithdrawCollateral = ({
             if (status) {
                 await onWithdrawCollateral();
             }
+            dispatch({ type: 'next' });
         } catch (e) {
             console.error(e);
             handleClose();
         }
-        dispatch({ type: 'next' });
     }, [status, onWithdrawCollateral, handleClose]);
 
     const onClick = useCallback(
