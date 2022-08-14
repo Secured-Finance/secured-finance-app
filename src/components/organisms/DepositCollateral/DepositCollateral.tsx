@@ -1,6 +1,6 @@
 import { BigNumber } from 'ethers';
 import { useCallback, useReducer, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import Check from 'src/assets/icons/check-mark.svg';
 import Loader from 'src/assets/img/gradient-loader.png';
 import { CollateralObject, CollateralSelector } from 'src/components/atoms';
@@ -9,7 +9,6 @@ import { useCheckCollateralBook } from 'src/hooks';
 import { useDepositCollateral } from 'src/hooks/useDepositCollateral';
 import { useRegisterUser } from 'src/hooks/useRegisterUser';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
-import { updateCollateralAmount } from 'src/store/collateralForm';
 import { RootState } from 'src/store/types';
 import { CurrencySymbol } from 'src/utils';
 import { useWallet } from 'use-wallet';
@@ -87,11 +86,8 @@ export const DepositCollateral = ({
     onClose: () => void;
 }) => {
     const [asset, setAsset] = useState(CurrencySymbol.ETH);
-    const [wallet, setWallet] = useState<string>('Metamask');
+    const [collateral, setCollateral] = useState('0');
     const [state, dispatch] = useReducer(reducer, stateRecord[1]);
-    const currencyShortName = 'ETH';
-    const dispatch1 = useDispatch();
-    const [, setCollateralTx] = useState(false);
     const { account } = useWallet();
     const status = useCheckCollateralBook(account);
     const {
@@ -105,21 +101,12 @@ export const DepositCollateral = ({
             available: ethereumBalance,
             assetName: 'Ethereum',
         },
-        USDC: {
-            id: 2,
-            asset: CurrencySymbol.USDC,
-            available: 1000,
-            assetName: 'USDC',
-        },
     };
 
     const priceList = useSelector((state: RootState) => getPriceMap(state));
-    const collateral = useSelector(
-        (state: RootState) => state.collateralForm.amount
-    );
     const { onRegisterUser } = useRegisterUser();
     const { onDepositCollateral } = useDepositCollateral(
-        currencyShortName as CurrencySymbol,
+        CurrencySymbol.ETH,
         BigNumber.from(collateral)
     );
 
@@ -130,17 +117,10 @@ export const DepositCollateral = ({
 
     const handleDepositCollateral = useCallback(async () => {
         try {
-            setCollateralTx(true);
             if (status) {
-                const txHash = await onDepositCollateral();
-                if (!txHash) {
-                    setCollateralTx(false);
-                }
+                await onDepositCollateral();
             } else {
-                const txHash = await onRegisterUser();
-                if (!txHash) {
-                    setCollateralTx(false);
-                }
+                await onRegisterUser();
             }
         } catch (e) {
             console.error(e);
@@ -151,24 +131,20 @@ export const DepositCollateral = ({
 
     const onClick = useCallback(
         async (currentStep: Step) => {
-            if (!wallet) {
-                return;
-            }
-
             switch (currentStep) {
                 case Step.depositCollateral:
+                    if (!collateral || collateral === '0') return;
                     dispatch({ type: 'next' });
                     handleDepositCollateral();
                     break;
                 case Step.depositing:
                     break;
                 case Step.deposited:
-                    dispatch({ type: 'next' });
-                    onClose();
+                    handleClose();
                     break;
             }
         },
-        [onClose, wallet, handleDepositCollateral]
+        [collateral, handleClose, handleDepositCollateral]
     );
 
     const handleChange = (v: CollateralObject) => {
@@ -198,7 +174,7 @@ export const DepositCollateral = ({
                                     price={priceList[asset]}
                                     asset={asset}
                                     onAmountChange={(v: BigNumber) =>
-                                        dispatch1(updateCollateralAmount(v))
+                                        setCollateral(v.toString())
                                     }
                                     availableAmount={assetList[asset].available}
                                 />

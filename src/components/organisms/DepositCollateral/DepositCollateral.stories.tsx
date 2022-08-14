@@ -1,5 +1,8 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
-import { WithWalletProvider } from 'src/../.storybook/decorators';
+import {
+    WithAssetPrice,
+    WithWalletProvider,
+} from 'src/../.storybook/decorators';
 import { DepositCollateral } from './DepositCollateral';
 
 export default {
@@ -9,7 +12,7 @@ export default {
         isOpen: true,
         onClose: () => {},
     },
-    decorators: [WithWalletProvider],
+    decorators: [WithAssetPrice, WithWalletProvider],
     parameters: {
         chromatic: { disableSnapshot: false },
     },

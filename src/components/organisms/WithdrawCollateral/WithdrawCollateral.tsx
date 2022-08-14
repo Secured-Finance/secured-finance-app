@@ -1,14 +1,13 @@
 import { BigNumber } from 'ethers';
 import { useCallback, useReducer, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import Check from 'src/assets/icons/check-mark.svg';
 import Loader from 'src/assets/img/gradient-loader.png';
 import { CollateralObject, CollateralSelector } from 'src/components/atoms';
 import { Dialog } from 'src/components/molecules';
-import { useCheckCollateralBook, useCollateralBook } from 'src/hooks';
+import { CollateralBook, useCheckCollateralBook } from 'src/hooks';
 import { useWithdrawCollateral } from 'src/hooks/useDepositCollateral';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
-import { updateCollateralAmount } from 'src/store/collateralForm';
 import { RootState } from 'src/store/types';
 import { CurrencySymbol, getDisplayBalance } from 'src/utils';
 import { useWallet } from 'use-wallet';
@@ -75,35 +74,30 @@ const reducer = (
 export const WithdrawCollateral = ({
     isOpen,
     onClose,
+    collateralBook,
 }: {
     isOpen: boolean;
     onClose: () => void;
+    collateralBook: CollateralBook;
 }) => {
     const [asset, setAsset] = useState(CurrencySymbol.ETH);
-    const [wallet, setWallet] = useState<string>('Metamask');
     const [state, dispatch] = useReducer(reducer, stateRecord[1]);
-    const currencyShortName = 'ETH';
-    const dispatch1 = useDispatch();
-    const [, setCollateralTx] = useState(false);
+    const [collateral, setCollateral] = useState('0');
     const { account } = useWallet();
     const status = useCheckCollateralBook(account);
-    const colBook = useCollateralBook(account);
 
     const assetList: Record<string, CollateralInfo> = {
         ETH: {
             id: 1,
             asset: CurrencySymbol.ETH,
-            available: parseFloat(getDisplayBalance(colBook.collateral)),
+            available: parseFloat(getDisplayBalance(collateralBook.collateral)),
             assetName: 'Ethereum',
         },
     };
 
     const priceList = useSelector((state: RootState) => getPriceMap(state));
-    const collateral = useSelector(
-        (state: RootState) => state.collateralForm.amount
-    );
     const { onWithdrawCollateral } = useWithdrawCollateral(
-        currencyShortName as CurrencySymbol,
+        CurrencySymbol.ETH,
         BigNumber.from(collateral)
     );
 
@@ -114,12 +108,8 @@ export const WithdrawCollateral = ({
 
     const handleWithdrawCollateral = useCallback(async () => {
         try {
-            setCollateralTx(true);
             if (status) {
-                const txHash = await onWithdrawCollateral();
-                if (!txHash) {
-                    setCollateralTx(false);
-                }
+                await onWithdrawCollateral();
             }
         } catch (e) {
             console.error(e);
@@ -130,12 +120,9 @@ export const WithdrawCollateral = ({
 
     const onClick = useCallback(
         async (currentStep: Step) => {
-            if (!wallet) {
-                return;
-            }
-
             switch (currentStep) {
                 case Step.withdrawCollateral:
+                    if (!collateral || collateral === '0') return;
                     dispatch({ type: 'next' });
                     handleWithdrawCollateral();
                     break;
@@ -146,7 +133,7 @@ export const WithdrawCollateral = ({
                     break;
             }
         },
-        [wallet, handleWithdrawCollateral, handleClose]
+        [collateral, handleWithdrawCollateral, handleClose]
     );
 
     const handleChange = (v: CollateralObject) => {
@@ -176,7 +163,7 @@ export const WithdrawCollateral = ({
                                     price={priceList[asset]}
                                     asset={asset}
                                     onAmountChange={(v: BigNumber) =>
-                                        dispatch1(updateCollateralAmount(v))
+                                        setCollateral(v.toString())
                                     }
                                     availableAmount={assetList[asset].available}
                                 />
