@@ -11,6 +11,9 @@ export default {
             { text: 'Tab C', disabled: true },
         ],
     },
+    parameters: {
+        chromatic: { disableSnapshot: false },
+    },
 } as ComponentMeta<typeof Tab>;
 
 const Template: ComponentStory<typeof Tab> = args => (
