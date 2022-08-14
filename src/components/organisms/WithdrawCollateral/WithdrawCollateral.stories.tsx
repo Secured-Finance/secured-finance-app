@@ -10,6 +10,9 @@ export default {
         onClose: () => {},
     },
     decorators: [WithWalletProvider],
+    parameters: {
+        chromatic: { disableSnapshot: false },
+    },
 } as ComponentMeta<typeof WithdrawCollateral>;
 
 const Template: ComponentStory<typeof WithdrawCollateral> = args => (

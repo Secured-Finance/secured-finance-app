@@ -7,6 +7,9 @@ export default {
     component: CollateralOrganism,
     args: {},
     decorators: [WithWalletProvider],
+    parameters: {
+        chromatic: { disableSnapshot: false },
+    },
 } as ComponentMeta<typeof CollateralOrganism>;
 
 const Template: ComponentStory<typeof CollateralOrganism> = () => (

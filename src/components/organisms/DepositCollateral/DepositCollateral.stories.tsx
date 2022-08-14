@@ -10,10 +10,13 @@ export default {
         onClose: () => {},
     },
     decorators: [WithWalletProvider],
+    parameters: {
+        chromatic: { disableSnapshot: false },
+    },
 } as ComponentMeta<typeof DepositCollateral>;
 
 const Template: ComponentStory<typeof DepositCollateral> = args => (
     <DepositCollateral {...args} />
 );
 
-export const Primary = Template.bind({});
+export const Default = Template.bind({});
