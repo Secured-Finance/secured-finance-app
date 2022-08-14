@@ -24,6 +24,7 @@ export const CollateralTab = () => {
             <WithdrawCollateral
                 isOpen={openModal === 'withdraw'}
                 onClose={() => setOpenModal('')}
+                collateralBook={collateralBook}
             ></WithdrawCollateral>
         </div>
     );

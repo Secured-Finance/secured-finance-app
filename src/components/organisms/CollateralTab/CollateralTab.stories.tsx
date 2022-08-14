@@ -12,9 +12,7 @@ export default {
     decorators: [WithWalletProvider],
 } as ComponentMeta<typeof CollateralTab>;
 
-const Template: ComponentStory<typeof CollateralTab> = args => (
-    <CollateralTab />
-);
+const Template: ComponentStory<typeof CollateralTab> = () => <CollateralTab />;
 
 export const Default = Template.bind({});
 export const ConnectedToWallet = Template.bind({});
