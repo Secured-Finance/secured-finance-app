@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { BigNumber } from 'ethers';
 import { CurrencyInfo } from 'src/utils/currencyList';
 import { CollateralFormStore, defaultStore } from './types';
 
@@ -18,8 +17,8 @@ const collateralFormSlice = createSlice({
         updateCollateralCcyName(state, action: PayloadAction<string>) {
             state.currencyName = action.payload;
         },
-        updateCollateralAmount(state, action: PayloadAction<BigNumber>) {
-            state.amount = action.payload.toString();
+        updateCollateralAmount(state, action: PayloadAction<number>) {
+            state.amount = action.payload;
         },
         updateCollateralTxFee(state, action: PayloadAction<number>) {
             state.txFee = action.payload;
