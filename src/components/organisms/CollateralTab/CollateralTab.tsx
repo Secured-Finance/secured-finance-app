@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { CollateralTabLeftPane } from 'src/components/molecules';
 import { CollateralBook } from 'src/hooks';
@@ -44,9 +44,16 @@ export const CollateralTab = ({
         ethereum: { balance: ethereumBalance },
     } = useSelector((state: RootState) => state.wallets);
 
-    const depositCollateralList = generateCollateralList(ethereumBalance);
-    const withdrawCollateralList = generateCollateralList(
-        parseFloat(getDisplayBalance(collateralBook.collateral))
+    const depositCollateralList = useMemo(
+        () => generateCollateralList(ethereumBalance),
+        [ethereumBalance]
+    );
+    const withdrawCollateralList = useMemo(
+        () =>
+            generateCollateralList(
+                parseFloat(getDisplayBalance(collateralBook.collateral))
+            ),
+        [collateralBook.collateral]
     );
 
     return (
