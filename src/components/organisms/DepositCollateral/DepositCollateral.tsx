@@ -3,14 +3,14 @@ import { useCallback, useReducer, useState } from 'react';
 import { useSelector } from 'react-redux';
 import Check from 'src/assets/icons/check-mark.svg';
 import Loader from 'src/assets/img/gradient-loader.png';
-import { CollateralObject, CollateralSelector } from 'src/components/atoms';
+import { CollateralSelector } from 'src/components/atoms';
 import { Dialog } from 'src/components/molecules';
 import { useCheckCollateralBook } from 'src/hooks';
 import { useDepositCollateral } from 'src/hooks/useDepositCollateral';
 import { useRegisterUser } from 'src/hooks/useRegisterUser';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { RootState } from 'src/store/types';
-import { CurrencySymbol } from 'src/utils';
+import { CollateralInfo, CurrencySymbol } from 'src/utils';
 import { useWallet } from 'use-wallet';
 import { CollateralInput } from '../CollateralInput';
 
@@ -19,13 +19,6 @@ enum Step {
     depositing,
     deposited,
 }
-
-export type CollateralInfo = {
-    id: number;
-    asset: CurrencySymbol;
-    available: number;
-    assetName: string;
-};
 
 type State = {
     currentStep: Step;
@@ -81,27 +74,17 @@ const reducer = (
 export const DepositCollateral = ({
     isOpen,
     onClose,
+    collateralList,
 }: {
     isOpen: boolean;
     onClose: () => void;
+    collateralList: Record<string, CollateralInfo>;
 }) => {
     const [asset, setAsset] = useState(CurrencySymbol.ETH);
     const [collateral, setCollateral] = useState('0');
     const [state, dispatch] = useReducer(reducer, stateRecord[1]);
     const { account } = useWallet();
     const status = useCheckCollateralBook(account);
-    const {
-        ethereum: { balance: ethereumBalance },
-    } = useSelector((state: RootState) => state.wallets);
-
-    const assetList: Record<string, CollateralInfo> = {
-        ETH: {
-            id: 1,
-            asset: CurrencySymbol.ETH,
-            available: ethereumBalance,
-            assetName: 'Ethereum',
-        },
-    };
 
     const priceList = useSelector((state: RootState) => getPriceMap(state));
     const { onRegisterUser } = useRegisterUser();
@@ -147,8 +130,8 @@ export const DepositCollateral = ({
         [collateral, handleClose, handleDepositCollateral]
     );
 
-    const handleChange = (v: CollateralObject) => {
-        setAsset(v.asset);
+    const handleChange = (v: CollateralInfo) => {
+        setAsset(v.shortName);
     };
 
     return (
@@ -168,7 +151,7 @@ export const DepositCollateral = ({
                                 <CollateralSelector
                                     headerText='Select Asset'
                                     onChange={v => handleChange(v)}
-                                    optionList={Object.values(assetList)}
+                                    optionList={Object.values(collateralList)}
                                 />
                                 <CollateralInput
                                     price={priceList[asset]}
@@ -176,7 +159,9 @@ export const DepositCollateral = ({
                                     onAmountChange={(v: BigNumber) =>
                                         setCollateral(v.toString())
                                     }
-                                    availableAmount={assetList[asset].available}
+                                    availableAmount={
+                                        collateralList[asset].available
+                                    }
                                 />
                             </div>
                         );

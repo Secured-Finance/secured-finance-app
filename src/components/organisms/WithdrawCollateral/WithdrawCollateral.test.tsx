@@ -12,6 +12,23 @@ global.IntersectionObserver = class FakeIntersectionObserver {
     disconnect() {}
 };
 
+const preloadedState = {
+    assetPrices: {
+        filecoin: {
+            price: 6.0,
+            change: -8.208519783216566,
+        },
+        ethereum: {
+            price: 2000.34,
+            change: 0.5162466489453748,
+        },
+        usdc: {
+            price: 1.0,
+            change: 0.042530768538486696,
+        },
+    },
+};
+
 describe('WithdrawCollateral component', () => {
     it('should display the WithdrawCollateral Modal when open', () => {
         const onClose = jest.fn();
@@ -41,5 +58,18 @@ describe('WithdrawCollateral component', () => {
         fireEvent.click(button);
         expect(onClose).not.toHaveBeenCalled();
         expect(screen.getByRole('textbox')).toBeInTheDocument();
+    });
+
+    it('should select asset and update amount', () => {
+        render(<Default />, { preloadedState });
+
+        fireEvent.click(screen.getByTestId('collateral-selector-button'));
+        fireEvent.click(screen.getByTestId('option-1'));
+        expect(screen.getByText('USDC')).toBeInTheDocument();
+        expect(screen.getByText('50 USDC Available')).toBeInTheDocument();
+
+        const tab = screen.getByTestId(100);
+        fireEvent.click(tab);
+        expect(screen.getByText('$50.00')).toBeInTheDocument();
     });
 });

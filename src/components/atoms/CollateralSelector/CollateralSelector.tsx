@@ -1,24 +1,17 @@
 import { Listbox, Transition } from '@headlessui/react';
 import { Fragment, useCallback, useState } from 'react';
 import DownIcon from 'src/assets/img/DownIcon.svg';
-import { CurrencySymbol, ordinaryFormat } from 'src/utils';
-
-export interface CollateralObject {
-    id: number;
-    asset: CurrencySymbol;
-    assetName: string;
-    available: number;
-}
+import { CollateralInfo, ordinaryFormat } from 'src/utils';
 
 interface CollateralSelectorProps {
     headerText: string;
-    optionList: CollateralObject[];
-    onChange: (v: CollateralObject) => void;
+    optionList: CollateralInfo[];
+    onChange: (v: CollateralInfo) => void;
 }
 
-const formatOption = (collateralObject: CollateralObject) => {
+const formatOption = (collateralObject: CollateralInfo) => {
     return `${ordinaryFormat(collateralObject.available, 4)} ${
-        collateralObject.asset
+        collateralObject.name
     } Available`;
 };
 
@@ -29,7 +22,7 @@ export const CollateralSelector = ({
 }: CollateralSelectorProps) => {
     const [selected, setSelected] = useState(optionList[0]);
     const handleSelect = useCallback(
-        (option: CollateralObject) => {
+        (option: CollateralInfo) => {
             setSelected(option);
             onChange(option);
         },
@@ -44,9 +37,12 @@ export const CollateralSelector = ({
             <div className='h-12 w-full bg-transparent'>
                 <Listbox value={selected} onChange={setSelected}>
                     <div className='relative h-full'>
-                        <Listbox.Button className='flex w-full cursor-default gap-2 rounded-lg border-2 border-white-40 py-3 px-4 focus:outline-none'>
+                        <Listbox.Button
+                            className='flex w-full cursor-default gap-2 rounded-lg border-2 border-white-40 py-3 px-4 focus:outline-none'
+                            data-testid='collateral-selector-button'
+                        >
                             <span className='typography-caption-2 flex h-6 min-w-[80px] items-center text-grayScale'>
-                                {selected.assetName}
+                                {selected.name}
                             </span>
                             <span className='typography-caption-2 flex h-6 w-full max-w-[200px] items-center justify-end pr-2 text-secondary7'>
                                 {formatOption(selected)}
@@ -66,6 +62,7 @@ export const CollateralSelector = ({
                                 {optionList.map((assetObj, index) => (
                                     <Listbox.Option
                                         key={index}
+                                        data-testid={`option-${index}`}
                                         className={({ active }) =>
                                             `relative cursor-default select-none ${
                                                 index !== optionList.length - 1
@@ -81,7 +78,7 @@ export const CollateralSelector = ({
                                         {() => (
                                             <div className='flex gap-3'>
                                                 <span className='typography-caption-2 flex h-6 min-w-[100px] items-center text-grayScale'>
-                                                    {assetObj.assetName}
+                                                    {assetObj.name}
                                                 </span>
                                                 <span className='typography-caption-2 flex h-6 w-full max-w-[200px] items-center justify-end text-secondary7'>
                                                     {formatOption(assetObj)}

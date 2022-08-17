@@ -1,16 +1,18 @@
 import { composeStories } from '@storybook/testing-react';
-import { queries, render, RenderResult, waitFor } from 'src/test-utils.js';
+import { render, screen } from 'src/test-utils.js';
 import * as stories from './CollateralTab.stories';
 
 const { Default } = composeStories(stories);
 
 describe('CollateralTab Component', () => {
-    it('should render CollateralTab', async () => {
-        let ag: RenderResult<typeof queries, HTMLElement>;
-        await waitFor(() => {
-            ag = render(<Default />);
-        }).then(() => {
-            expect(ag.baseElement).toMatchSnapshot();
-        });
+    it('should render CollateralTab', () => {
+        render(<Default />);
+        expect(screen.getByText('Collateral Balance')).toBeInTheDocument();
+        expect(screen.getByText('$0.00')).toBeInTheDocument();
+        expect(
+            screen.getByText(
+                'Connect your wallet to see your deposited collateral balance.'
+            )
+        ).toBeInTheDocument();
     });
 });

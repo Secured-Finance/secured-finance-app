@@ -25,9 +25,9 @@ describe('CollateralSelector component', () => {
 
     it('should change the button when a dropdown item is selected', () => {
         render(<Default />);
-        fireEvent.click(screen.getByRole('button'));
-        fireEvent.click(screen.getByText('Ethereum'));
+        fireEvent.click(screen.getByTestId('collateral-selector-button'));
+        fireEvent.click(screen.getByTestId('option-1'));
         expect(screen.getByText('Ethereum')).toBeInTheDocument();
-        expect(screen.getByText('120 ETH Available')).toBeInTheDocument();
+        expect(screen.getByText('120 Ethereum Available')).toBeInTheDocument();
     });
 });
