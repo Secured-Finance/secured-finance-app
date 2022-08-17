@@ -43,7 +43,4 @@ export const collateralListDropdown = [
     },
 ];
 
-export const collateralList = [
-    currencyMap.ETH,
-    currencyMap.USDC,
-] as Array<CurrencyInfo>;
+export const collateralList = [currencyMap.ETH] as Array<CurrencyInfo>;
