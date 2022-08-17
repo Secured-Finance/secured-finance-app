@@ -51,7 +51,7 @@ export const LendingCard = ({
     );
 
     const dispatch = useDispatch();
-    // console.log(collateralBook);
+
     const shortNames = useMemo(
         () =>
             getCurrencyMapAsList().reduce<Record<string, CurrencySymbol>>(
