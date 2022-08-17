@@ -3,8 +3,18 @@ import { CurrencySymbol } from 'src/utils';
 import { CollateralSelector } from './CollateralSelector';
 
 const assetList = [
-    { id: 1, asset: CurrencySymbol.USDC, available: 1000, assetName: 'USDC' },
-    { id: 2, asset: CurrencySymbol.ETH, available: 120, assetName: 'Ethereum' },
+    {
+        indexCcy: 0,
+        shortName: CurrencySymbol.USDC,
+        available: 1000,
+        name: 'USDC',
+    },
+    {
+        indexCcy: 2,
+        shortName: CurrencySymbol.ETH,
+        available: 120,
+        name: 'Ethereum',
+    },
 ];
 
 export default {

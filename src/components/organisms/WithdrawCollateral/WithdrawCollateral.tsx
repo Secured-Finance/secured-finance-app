@@ -3,16 +3,15 @@ import { useCallback, useReducer, useState } from 'react';
 import { useSelector } from 'react-redux';
 import Check from 'src/assets/icons/check-mark.svg';
 import Loader from 'src/assets/img/gradient-loader.png';
-import { CollateralObject, CollateralSelector } from 'src/components/atoms';
+import { CollateralSelector } from 'src/components/atoms';
 import { Dialog } from 'src/components/molecules';
-import { CollateralBook, useCheckCollateralBook } from 'src/hooks';
+import { useCheckCollateralBook } from 'src/hooks';
 import { useWithdrawCollateral } from 'src/hooks/useDepositCollateral';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { RootState } from 'src/store/types';
-import { CurrencySymbol, getDisplayBalance } from 'src/utils';
+import { CollateralInfo, CurrencySymbol } from 'src/utils';
 import { useWallet } from 'use-wallet';
 import { CollateralInput } from '../CollateralInput';
-import { CollateralInfo } from '../DepositCollateral';
 
 enum Step {
     withdrawCollateral = 1,
@@ -74,26 +73,17 @@ const reducer = (
 export const WithdrawCollateral = ({
     isOpen,
     onClose,
-    collateralBook,
+    collateralList,
 }: {
     isOpen: boolean;
     onClose: () => void;
-    collateralBook: CollateralBook;
+    collateralList: Record<string, CollateralInfo>;
 }) => {
     const [asset, setAsset] = useState(CurrencySymbol.ETH);
     const [state, dispatch] = useReducer(reducer, stateRecord[1]);
     const [collateral, setCollateral] = useState('0');
     const { account } = useWallet();
     const status = useCheckCollateralBook(account);
-
-    const assetList: Record<string, CollateralInfo> = {
-        ETH: {
-            id: 1,
-            asset: CurrencySymbol.ETH,
-            available: parseFloat(getDisplayBalance(collateralBook.collateral)),
-            assetName: 'Ethereum',
-        },
-    };
 
     const priceList = useSelector((state: RootState) => getPriceMap(state));
     const { onWithdrawCollateral } = useWithdrawCollateral(
@@ -136,8 +126,8 @@ export const WithdrawCollateral = ({
         [collateral, handleWithdrawCollateral, handleClose]
     );
 
-    const handleChange = (v: CollateralObject) => {
-        setAsset(v.asset);
+    const handleChange = (v: CollateralInfo) => {
+        setAsset(v.shortName);
     };
 
     return (
@@ -157,7 +147,7 @@ export const WithdrawCollateral = ({
                                 <CollateralSelector
                                     headerText='Select Asset'
                                     onChange={v => handleChange(v)}
-                                    optionList={Object.values(assetList)}
+                                    optionList={Object.values(collateralList)}
                                 />
                                 <CollateralInput
                                     price={priceList[asset]}
@@ -165,7 +155,9 @@ export const WithdrawCollateral = ({
                                     onAmountChange={(v: BigNumber) =>
                                         setCollateral(v.toString())
                                     }
-                                    availableAmount={assetList[asset].available}
+                                    availableAmount={
+                                        collateralList[asset].available
+                                    }
                                 />
                                 <div className='typography-caption-2 h-fit rounded-xl border border-red px-3 py-2 text-slateGray'>
                                     Please note that withdrawal will impact the

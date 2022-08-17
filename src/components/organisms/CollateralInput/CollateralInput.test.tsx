@@ -17,7 +17,7 @@ describe('CollateralInput component', () => {
 
     it('should update collateral amount when percentage button is clicked', () => {
         render(<Default />);
-        const tab = screen.getAllByRole('button')[1];
+        const tab = screen.getByTestId(50);
         fireEvent.click(tab);
         expect(screen.getByRole('textbox').getAttribute('value')).toBe('5');
         expect(screen.getByText('$500.00')).toBeInTheDocument();
@@ -26,7 +26,7 @@ describe('CollateralInput component', () => {
     it('should call onAmountChange when percentage button is clicked', () => {
         const onChange = jest.fn();
         render(<Default onAmountChange={onChange} />);
-        const tab = screen.getAllByRole('button')[1];
+        const tab = screen.getByTestId(50);
         fireEvent.click(tab);
         expect(onChange).toHaveBeenCalledWith(
             BigNumber.from('5000000000000000000')
