@@ -12,11 +12,11 @@ interface CollateralTabLeftPaneProps {
     collateralBook: CollateralBook;
 }
 
-export const CollateralTabLeftPane: React.FC<CollateralTabLeftPaneProps> = ({
+export const CollateralTabLeftPane = ({
     account,
     onClick,
     collateralBook,
-}) => {
+}: CollateralTabLeftPaneProps) => {
     const balance = account
         ? getFullDisplayBalanceNumber(collateralBook.usdCollateral.toNumber())
         : 0;

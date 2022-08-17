@@ -10,12 +10,12 @@ interface CollateralInputProps {
     onAmountChange?: (v: BigNumber) => void;
 }
 
-export const CollateralInput: React.FC<CollateralInputProps> = ({
+export const CollateralInput = ({
     price,
     availableAmount,
     asset,
     onAmountChange,
-}) => {
+}: CollateralInputProps) => {
     const [amount, setAmount] = useState(0);
     const [inputValue, setInputValue] = useState('');
 

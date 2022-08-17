@@ -8,7 +8,7 @@ import { WithdrawCollateral } from '../WithdrawCollateral';
 export const CollateralTab = () => {
     const { account } = useWallet();
     const collateralBook = useCollateralBook(account);
-    const [openModal, setOpenModal] = useState('');
+    const [openModal, setOpenModal] = useState<'' | 'deposit' | 'withdraw'>('');
 
     return (
         <div className='h-[410px] w-full'>

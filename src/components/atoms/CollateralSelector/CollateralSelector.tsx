@@ -16,11 +16,17 @@ interface CollateralSelectorProps {
     onChange: (v: CollateralObject) => void;
 }
 
-export const CollateralSelector: React.FC<CollateralSelectorProps> = ({
+const formatOption = (collateralObject: CollateralObject) => {
+    return `${ordinaryFormat(collateralObject.available, 4)} ${
+        collateralObject.asset
+    } Available`;
+};
+
+export const CollateralSelector = ({
     headerText,
     optionList,
     onChange,
-}) => {
+}: CollateralSelectorProps) => {
     const [selected, setSelected] = useState(optionList[0]);
     const handleSelect = useCallback(
         (option: CollateralObject) => {
@@ -43,8 +49,7 @@ export const CollateralSelector: React.FC<CollateralSelectorProps> = ({
                                 {selected.assetName}
                             </span>
                             <span className='typography-caption-2 flex h-6 w-full max-w-[200px] items-center justify-end pr-2 text-secondary7'>
-                                {ordinaryFormat(selected.available, 4)}{' '}
-                                {selected.asset} Available
+                                {formatOption(selected)}
                             </span>
                             <DownIcon
                                 className='pointer-events-none absolute right-3 h-6 w-6'
@@ -58,13 +63,12 @@ export const CollateralSelector: React.FC<CollateralSelectorProps> = ({
                             leaveTo='opacity-0'
                         >
                             <Listbox.Options className='absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-gunMetal pt-2 focus:outline-none'>
-                                {optionList.map((assetObj, personIdx) => (
+                                {optionList.map((assetObj, index) => (
                                     <Listbox.Option
-                                        key={personIdx}
+                                        key={index}
                                         className={({ active }) =>
                                             `relative cursor-default select-none ${
-                                                personIdx !==
-                                                optionList.length - 1
+                                                index !== optionList.length - 1
                                                     ? 'border-b border-moonGrey border-opacity-30'
                                                     : ''
                                             } py-4 px-4 ${
@@ -80,11 +84,7 @@ export const CollateralSelector: React.FC<CollateralSelectorProps> = ({
                                                     {assetObj.assetName}
                                                 </span>
                                                 <span className='typography-caption-2 flex h-6 w-full max-w-[200px] items-center justify-end text-secondary7'>
-                                                    {ordinaryFormat(
-                                                        assetObj.available,
-                                                        4
-                                                    )}{' '}
-                                                    {assetObj.asset} Available
+                                                    {formatOption(assetObj)}
                                                 </span>
                                             </div>
                                         )}
