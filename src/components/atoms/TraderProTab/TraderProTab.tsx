@@ -8,7 +8,7 @@ export const TraderProTab: React.FC<TraderProTabProps> = ({
     onClick,
 }) => {
     return (
-        <div className='flex h-20 w-max flex-grow-0 flex-row items-center justify-center gap-[10px] px-[30px]'>
+        <div className='flex h-20 w-max flex-grow-0 flex-row justify-center gap-[10px] px-[30px] pt-9'>
             <div className='typography-nav-menu-default h-4 text-center text-secondary7'>
                 {text}
             </div>
