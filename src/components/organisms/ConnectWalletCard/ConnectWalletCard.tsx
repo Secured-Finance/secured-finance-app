@@ -9,7 +9,7 @@ export const ConnectWalletCard = () => {
     const [display, setDisplay] = useState(false);
 
     return (
-        <div className='h-fit w-[350px]'>
+        <div className='h-fit w-full'>
             <div className='h-1 w-full bg-starBlue'></div>
             <div className='h-full w-full rounded-b-2xl border border-white-10 bg-gradient-to-b from-[rgba(106,118,177,0.1)] via-[rgba(106,118,177,0)] to-black-20 px-6'>
                 <div className='flex h-full flex-col items-center gap-4 pt-5 pb-6'>
