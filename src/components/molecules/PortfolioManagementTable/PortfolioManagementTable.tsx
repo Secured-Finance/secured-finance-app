@@ -24,7 +24,7 @@ const tableArray: PortfolioTabProps[] = [
 ];
 
 interface PortfolioManagementTableProps {
-    values: string[];
+    values?: string[];
 }
 
 export const PortfolioManagementTable: React.FC<
