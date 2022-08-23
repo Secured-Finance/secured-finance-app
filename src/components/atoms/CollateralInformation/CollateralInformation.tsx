@@ -33,7 +33,15 @@ export const CollateralInformation = ({
     );
 };
 
-const Tab = ({ header = '', footer = '', align = 'left' }) => {
+const Tab = ({
+    header = '',
+    footer = '',
+    align = 'left',
+}: {
+    header: string;
+    footer: string;
+    align?: 'left' | 'right';
+}) => {
     return (
         <div
             className={`flex flex-col ${align === 'right' ? 'text-right' : ''}`}

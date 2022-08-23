@@ -13,6 +13,9 @@ module.exports = {
             borderWidth: {
                 '0.5': '0.5px',
             },
+            dropShadow: {
+                tab: '0px 46px 64px rgba(31, 47, 70, 0.4)',
+            },
         },
         fontFamily: {
             primary: ['GT Super Display', ...defaultTheme.fontFamily.serif],
@@ -84,6 +87,10 @@ module.exports = {
             tabGradient2: 'rgba(106, 118, 177, 0.35)',
             tabGradient1: 'rgba(57, 77, 174, 0)',
             backgroundBlur: 'rgba(35, 43, 56, 0.6)',
+            cardBackground: {
+                '60': 'rgba(41, 45, 63, 0.6)',
+                '74': 'rgba(41, 45, 63, 0.74)',
+            },
 
             transparent: 'transparent',
             starBlue: {
