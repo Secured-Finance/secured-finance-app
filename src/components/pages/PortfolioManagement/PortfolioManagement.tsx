@@ -1,3 +1,5 @@
+import { useMemo } from 'react';
+import { useSelector } from 'react-redux';
 import {
     AssetDisclosureProps,
     PortfolioManagementTable,
@@ -7,26 +9,42 @@ import {
     ConnectWalletCard,
     MyWalletCard,
 } from 'src/components/organisms';
+import { FIL_ADDRESS } from 'src/services/filecoin';
+import { RootState } from 'src/store/types';
+import { getFilAddress } from 'src/store/wallets/selectors';
 import { CurrencySymbol } from 'src/utils';
 import { useWallet } from 'use-wallet';
 
 export const PortfolioManagement = () => {
     const { account } = useWallet();
-    const assetMap: AssetDisclosureProps[] = [
-        {
-            data: [
-                { asset: CurrencySymbol.ETH, quantity: 1.2 },
-                { asset: CurrencySymbol.USDC, quantity: 100 },
-            ],
-            walletSource: 'metamask',
-            account: 'de926db3012af759b4f24b5a51ef6afa397f04670f634aa4f',
-        },
-        {
-            data: [{ asset: CurrencySymbol.FIL, quantity: 1.2 }],
-            walletSource: 'ledger',
-            account: 'de926db3012af759b4f24b5',
-        },
-    ];
+    const addressFromLocalStorage = localStorage.getItem(FIL_ADDRESS);
+    const addressFromStore = useSelector(getFilAddress);
+    const address = addressFromLocalStorage || addressFromStore;
+
+    const {
+        ethereum: { balance: ethereumBalance },
+        filecoin: { balance: filecoinBalance },
+    } = useSelector((state: RootState) => state.wallets);
+
+    const assetMap: AssetDisclosureProps[] = useMemo(
+        () => [
+            {
+                data: [
+                    { asset: CurrencySymbol.ETH, quantity: ethereumBalance },
+                ],
+                walletSource: 'metamask',
+                account: account ? account : '',
+            },
+            {
+                data: [
+                    { asset: CurrencySymbol.FIL, quantity: filecoinBalance },
+                ],
+                walletSource: 'ledger',
+                account: address,
+            },
+        ],
+        [account, address, ethereumBalance, filecoinBalance]
+    );
 
     return (
         <div className='mx-40 mt-7' data-cy='portfolio-management'>

@@ -1,7 +1,12 @@
 import { useSelector } from 'react-redux';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { RootState } from 'src/store/types';
-import { currencyMap, CurrencySymbol, usdFormat } from 'src/utils';
+import {
+    currencyMap,
+    CurrencySymbol,
+    ordinaryFormat,
+    usdFormat,
+} from 'src/utils';
 
 export interface CollateralInformationProps {
     asset: CurrencySymbol;
@@ -24,7 +29,7 @@ export const CollateralInformation = ({
             <div className='flex w-full flex-row justify-between'>
                 <Tab header={asset} footer={currencyMap[asset].name}></Tab>
                 <Tab
-                    header={`${quantity} ${asset}`}
+                    header={`${ordinaryFormat(quantity, 4)} ${asset}`}
                     footer={usdFormat(quantity * price, 2)}
                     align='right'
                 ></Tab>

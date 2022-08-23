@@ -32,3 +32,9 @@ const Template: ComponentStory<typeof AssetDisclosure> = args => {
 };
 
 export const Default = Template.bind({});
+export const Ledger = Template.bind({});
+Ledger.args = {
+    data: [{ asset: CurrencySymbol.FIL, quantity: 12 }],
+    walletSource: 'ledger',
+    account: 'de926db3012af759b4f24b5a51ef6afa397f04670f634aa4f',
+};
