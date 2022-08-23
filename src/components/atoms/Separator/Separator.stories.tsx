@@ -7,6 +7,12 @@ export default {
     args: {},
 } as ComponentMeta<typeof Separator>;
 
-const Template: ComponentStory<typeof Separator> = () => <Separator />;
+const Template: ComponentStory<typeof Separator> = args => (
+    <Separator {...args} />
+);
 
 export const Default = Template.bind({});
+export const Primary = Template.bind({});
+Primary.args = {
+    color: 'white-10',
+};

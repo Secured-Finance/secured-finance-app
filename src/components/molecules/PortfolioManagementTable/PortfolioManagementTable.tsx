@@ -27,12 +27,12 @@ interface PortfolioManagementTableProps {
     values?: string[];
 }
 
-export const PortfolioManagementTable: React.FC<
-    PortfolioManagementTableProps
-> = ({ values }) => {
+export const PortfolioManagementTable = ({
+    values,
+}: PortfolioManagementTableProps) => {
     return (
         <div
-            className='flex flex-row drop-shadow-[0_46px_64px_rgba(31,47,70,0.4)]'
+            className='flex flex-row drop-shadow-tab'
             data-testid='portfolio-management-table'
         >
             {tableArray.map((item, index) => {

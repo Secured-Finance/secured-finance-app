@@ -1,3 +1,4 @@
+import { Separator } from 'src/components/atoms';
 import {
     AssetDisclosure,
     AssetDisclosureProps,
@@ -17,14 +18,16 @@ export const MyWalletCard = ({ assetMap }: MyWalletCardProps) => {
                 </div>
                 {assetMap.length !== 0 && (
                     <div>
-                        <div className='h-[1px] w-full bg-white-10'></div>
+                        <Separator color='white-10' />
                         <div className='px-2 pt-1 pb-6'>
                             {assetMap.map((asset, index) => {
                                 return (
                                     <div key={asset.account}>
                                         <AssetDisclosure {...asset} />
                                         {assetMap.length - 1 !== index && (
-                                            <div className='mt-2 mb-2 h-[1px] w-full bg-white-10'></div>
+                                            <div className='mt-2 mb-2'>
+                                                <Separator color='white-10' />
+                                            </div>
                                         )}
                                     </div>
                                 );
