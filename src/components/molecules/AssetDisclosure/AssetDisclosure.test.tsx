@@ -2,7 +2,7 @@ import { composeStories } from '@storybook/testing-react';
 import { fireEvent, render, screen } from 'src/test-utils.js';
 import * as stories from './AssetDisclosure.stories';
 
-const { Default } = composeStories(stories);
+const { Default, Ledger } = composeStories(stories);
 
 describe('test AssetDisclosure component', () => {
     it('should render only button of AssetDisclosure', () => {
@@ -34,5 +34,15 @@ describe('test AssetDisclosure component', () => {
         fireEvent.click(screen.getByRole('button'));
         expect(screen.queryByText('Asset')).not.toBeInTheDocument();
         expect(screen.queryByText('Balance')).not.toBeInTheDocument();
+    });
+
+    it('should format account depending on source metamask', () => {
+        render(<Default />);
+        expect(screen.getByText('de926d...aa4f')).toBeInTheDocument();
+    });
+
+    it('should format account depending on source ledger', () => {
+        render(<Ledger />);
+        expect(screen.getByText('de926db3012a...aa4f')).toBeInTheDocument();
     });
 });
