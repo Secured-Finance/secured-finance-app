@@ -1,6 +1,13 @@
 import ethereum from 'src/assets/coins/eth2.svg';
 import FilIcon from 'src/assets/coins/fil.svg';
-import { CurrencyInfo, currencyMap } from './currencyList';
+import { CurrencyInfo, currencyMap, CurrencySymbol } from './currencyList';
+
+export type CollateralInfo = {
+    indexCcy: number;
+    shortName: CurrencySymbol;
+    name: string;
+    available: number;
+};
 
 export const currencyListDropdown = [
     {
@@ -36,7 +43,4 @@ export const collateralListDropdown = [
     },
 ];
 
-export const collateralList = [
-    currencyMap.ETH,
-    currencyMap.FIL,
-] as Array<CurrencyInfo>;
+export const collateralList = [currencyMap.ETH] as Array<CurrencyInfo>;

@@ -4,6 +4,7 @@ export * from './Breaker';
 export * from './Button';
 export * from './Card';
 export * from './CloseButton';
+export * from './CollateralSelector';
 export * from './Container';
 export * from './CurrencyContainer';
 export * from './CurveHeaderAsset';

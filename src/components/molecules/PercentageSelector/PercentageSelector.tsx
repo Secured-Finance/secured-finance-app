@@ -14,7 +14,7 @@ export const PercentageSelector: React.FC<PercentageSelectorProps> = ({
 
     const handleClick = (percentage: number) => {
         setActiveNumber(percentage);
-        onClick(percentage);
+        onClick(percentage / 100.0);
     };
 
     return (
