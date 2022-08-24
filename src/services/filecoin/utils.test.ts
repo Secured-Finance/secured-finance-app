@@ -45,7 +45,7 @@ describe('Filscan api url', () => {
 
     it('should return the testnet api url when the network is MAINNET', () => {
         expect(FIL_JSON_RPC_ENDPOINT[Network.TEST]).toEqual(
-            'https://calibration.node.glif.io/rpc/v0'
+            'https://api.calibration.node.glif.io/rpc/v0'
         );
     });
 });
