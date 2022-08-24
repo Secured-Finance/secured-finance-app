@@ -10,9 +10,11 @@ describe('Default ExpandIndicator Component', () => {
         expect(screen.getByTestId('chevron-down-icon')).toBeInTheDocument();
     });
 
-    it('should render a an arrow pointing down to collapse', () => {
+    it('should render an arrow pointing down to collapse', () => {
         render(<Expanded />);
-        expect(screen.getByTestId('chevron-up-icon')).toBeInTheDocument();
+        const chevron = screen.getByTestId('chevron-down-icon');
+        expect(chevron).toBeInTheDocument();
+        expect(chevron).toHaveClass('rotate-180');
     });
 });
 
@@ -22,12 +24,13 @@ describe('Opaque ExpandIndicator Component', () => {
         const chevron = screen.getByTestId('chevron-down-icon');
         expect(chevron).toBeInTheDocument();
         expect(chevron).toHaveClass('opacity-50');
+        expect(chevron).not.toHaveClass('rotate-180');
     });
 
-    it('should render a an arrow pointing down to collapse', () => {
+    it('should render an arrow pointing down to collapse', () => {
         render(<Expanded variant='opaque' />);
-        const chevron = screen.getByTestId('chevron-up-icon');
+        const chevron = screen.getByTestId('chevron-down-icon');
         expect(chevron).toBeInTheDocument();
-        expect(chevron).toHaveClass('opacity-50');
+        expect(chevron).toHaveClass('opacity-50 rotate-180');
     });
 });

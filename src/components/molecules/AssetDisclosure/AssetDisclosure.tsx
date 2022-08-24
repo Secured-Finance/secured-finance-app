@@ -4,8 +4,10 @@ import {
 } from '@headlessui/react';
 import Ledger from 'src/assets/img/ledger.svg';
 import MetamaskFox from 'src/assets/img/metamask-fox.svg';
-import UpIcon from 'src/assets/img/UpIcon.svg';
-import { CollateralInformationTable } from 'src/components/atoms';
+import {
+    CollateralInformationTable,
+    ExpandIndicator,
+} from 'src/components/atoms';
 import { CollateralInformationProps } from 'src/components/atoms/CollateralInformation';
 import { AddressUtils } from 'src/utils';
 
@@ -34,12 +36,9 @@ export const AssetDisclosure = ({
                             <span className='typography-caption text-grayScale'>
                                 {accountFormater(account, walletSource)}
                             </span>
-                            <UpIcon
-                                className={`absolute right-0 h-8 w-8 ${
-                                    open ? '' : 'rotate-180'
-                                }`}
-                                aria-hidden='true'
-                            ></UpIcon>
+                            <div className='absolute right-3'>
+                                <ExpandIndicator expanded={open} />
+                            </div>
                         </HeadlessDisclosure.Button>
                         <Transition
                             show={open}
