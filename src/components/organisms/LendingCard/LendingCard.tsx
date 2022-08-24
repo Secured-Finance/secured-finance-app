@@ -145,15 +145,18 @@ export const LendingCard = ({
                 value={side}
                 onChange={(v: number) => dispatch(setSide(v))}
                 as='div'
-                className='flex flex-row items-center justify-around'
+                className='flex h-16 flex-row items-center justify-around'
             >
-                <RadioGroup.Option value={OrderSide.Borrow} className='w-1/2'>
+                <RadioGroup.Option
+                    value={OrderSide.Borrow}
+                    className='h-full w-1/2'
+                >
                     {({ checked }) => <NavTab text='Borrow' active={checked} />}
                 </RadioGroup.Option>
                 <RadioGroup.Option
                     value={OrderSide.Lend}
                     as='div'
-                    className='w-1/2'
+                    className='h-full w-1/2'
                 >
                     {({ checked }) => <NavTab text='Lend' active={checked} />}
                 </RadioGroup.Option>

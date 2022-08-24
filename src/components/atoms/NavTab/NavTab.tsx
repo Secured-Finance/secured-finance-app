@@ -10,10 +10,10 @@ export const NavTab: React.FC<NavTabProps> = ({
     onClick,
 }) => {
     return (
-        <div className='flex h-20 w-full flex-grow-0 flex-col items-center p-0 text-center'>
+        <div className='flex h-full w-full flex-col p-0 text-center'>
             <div className={`h-1 w-full ${active ? 'bg-starBlue' : ''}`}></div>
             <div
-                className={`flex h-full w-full items-center justify-center px-8 ${
+                className={`flex h-full items-center justify-center px-8 ${
                     active
                         ? 'bg-gradient-to-b from-tabGradient2 to-tabGradient1'
                         : ''
