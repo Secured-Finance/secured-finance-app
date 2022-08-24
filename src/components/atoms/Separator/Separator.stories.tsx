@@ -14,5 +14,5 @@ const Template: ComponentStory<typeof Separator> = args => (
 export const Default = Template.bind({});
 export const Primary = Template.bind({});
 Primary.args = {
-    color: 'white-10',
+    color: 'white',
 };
