@@ -9,6 +9,7 @@ import { Option } from 'src/components/atoms';
 import { MAINNET_PATH_CODE } from 'src/services/ledger/constants';
 import { Filecoin } from './currencies/filecoin';
 import { USDC } from './currencies/usdc';
+
 const ETH_CHAIN_ID = 60;
 const ETH_TO_WEI = new BigNumberJS(10 ** 18);
 
