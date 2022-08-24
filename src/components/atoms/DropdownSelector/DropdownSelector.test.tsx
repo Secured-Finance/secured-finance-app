@@ -38,7 +38,9 @@ describe('Dropdown Asset Selection Component', () => {
         render(<AssetDropdown />);
         expect(screen.getByTestId('chevron-down-icon')).toBeInTheDocument();
         fireEvent.click(screen.getByRole('button'));
-        expect(screen.getByTestId('chevron-up-icon')).toBeInTheDocument();
+        expect(screen.getByTestId('chevron-down-icon')).toHaveClass(
+            'rotate-180'
+        );
     });
 
     it('should change the button when a dropdown item is selected', () => {
