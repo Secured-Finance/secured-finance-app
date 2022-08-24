@@ -16,7 +16,7 @@ export const Tab: React.FC<TabProps> = ({ tabDataArray, children }) => {
     const [selectedIndex, setSelectedIndex] = useState(0);
 
     return (
-        <div className='h-full w-full overflow-hidden rounded-br-2xl rounded-bl-2xl border border-white-10 bg-cardBackground-60 shadow-tab'>
+        <div className='h-full w-full overflow-hidden rounded-br-2xl rounded-bl-2xl border border-white-10 bg-cardBackground/60 shadow-tab'>
             <HeadlessTab.Group
                 selectedIndex={selectedIndex}
                 onChange={setSelectedIndex}
