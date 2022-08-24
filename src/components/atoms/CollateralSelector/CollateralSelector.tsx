@@ -1,7 +1,7 @@
 import { Listbox, Transition } from '@headlessui/react';
 import { Fragment, useCallback, useState } from 'react';
-import DownIcon from 'src/assets/img/DownIcon.svg';
 import { CollateralInfo, ordinaryFormat } from 'src/utils';
+import { ExpandIndicator } from '../ExpandIndicator';
 
 interface CollateralSelectorProps {
     headerText: string;
@@ -40,7 +40,7 @@ export const CollateralSelector = ({
                         <>
                             <div className='relative h-full'>
                                 <Listbox.Button
-                                    className='flex w-full cursor-default gap-2 rounded-lg border-2 border-white-40 py-3 px-4 focus:outline-none'
+                                    className='flex w-full cursor-default items-center gap-2 rounded-lg border-2 border-white-40 py-3 px-4 focus:outline-none'
                                     data-testid='collateral-selector-button'
                                 >
                                     <span className='typography-caption-2 flex h-6 min-w-[80px] items-center text-grayScale'>
@@ -49,12 +49,12 @@ export const CollateralSelector = ({
                                     <span className='typography-caption-2 flex h-6 w-full max-w-[200px] items-center justify-end pr-2 text-secondary7'>
                                         {formatOption(selected)}
                                     </span>
-                                    <DownIcon
-                                        className={`pointer-events-none absolute right-3 h-6 w-6 ${
-                                            open ? 'rotate-180' : ''
-                                        }`}
-                                        aria-hidden='true'
-                                    ></DownIcon>
+                                    <div className='absolute right-3'>
+                                        <ExpandIndicator
+                                            expanded={open}
+                                            variant='opaque'
+                                        />
+                                    </div>
                                 </Listbox.Button>
                                 <Transition
                                     as={Fragment}
