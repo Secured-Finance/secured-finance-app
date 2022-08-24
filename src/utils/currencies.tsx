@@ -4,7 +4,7 @@ import { CurrencyInfo, currencyMap, CurrencySymbol } from './currencyList';
 
 export type CollateralInfo = {
     indexCcy: number;
-    shortName: CurrencySymbol;
+    symbol: CurrencySymbol;
     name: string;
     available: number;
 };

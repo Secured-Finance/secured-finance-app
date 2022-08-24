@@ -16,7 +16,7 @@ interface BalanceProps {
 type ItemProps = BalanceContainerProps & BalanceProps;
 
 const BalanceInfo: React.FC<ItemProps> = ({ index, balance, value }) => {
-    const { symbol: shortName } = getCurrencyByIndex(index.toString());
+    const { symbol } = getCurrencyByIndex(index.toString());
 
     return (
         <div>
@@ -24,7 +24,7 @@ const BalanceInfo: React.FC<ItemProps> = ({ index, balance, value }) => {
                 <StyledWalletInfoContainer>
                     <StyledBalanceText>
                         {balance !== null ? ordinaryFormat(balance) : 0}{' '}
-                        {shortName}
+                        {symbol}
                     </StyledBalanceText>
                     <StyledBalanceSubtitle>
                         {value !== null ? usdFormat(value) : 0}
