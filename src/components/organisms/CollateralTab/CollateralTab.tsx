@@ -20,9 +20,9 @@ const generateCollateralList = (
     for (let i = 0; i < collateralList.length; i++) {
         const currencyInfo = collateralList[i];
         const collateralInfo = {
-            [currencyInfo.shortName]: {
+            [currencyInfo.symbol]: {
                 indexCcy: currencyInfo.indexCcy,
-                shortName: currencyInfo.shortName,
+                symbol: currencyInfo.symbol,
                 name: currencyInfo.name,
                 available: available,
             },

@@ -39,6 +39,9 @@ export const GasTabsAndTable: React.FC = () => {
     const updateGasPrices = useCallback(async () => {
         const cGasTabs = new Map(gasTabs);
         const gasPrices = await utils.currentGasPrices(oracle);
+        if (!gasPrices) {
+            return;
+        }
         cGasTabs.set('Standard', gasPrices.standard);
         cGasTabs.set('Fast', gasPrices.fast);
         cGasTabs.set('Instant', gasPrices.instant);
