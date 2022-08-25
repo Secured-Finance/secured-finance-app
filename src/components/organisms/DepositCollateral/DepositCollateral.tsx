@@ -131,7 +131,7 @@ export const DepositCollateral = ({
     );
 
     const handleChange = (v: CollateralInfo) => {
-        setAsset(v.shortName);
+        setAsset(v.symbol);
     };
 
     return (

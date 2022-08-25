@@ -127,7 +127,7 @@ export const WithdrawCollateral = ({
     );
 
     const handleChange = (v: CollateralInfo) => {
-        setAsset(v.shortName);
+        setAsset(v.symbol);
     };
 
     return (

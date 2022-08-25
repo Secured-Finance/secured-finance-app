@@ -57,7 +57,7 @@ const SendModal = ({
         )
     );
 
-    const { price } = useSelector(getAssetInfo(currencyInfo.shortName));
+    const { price } = useSelector(getAssetInfo(currencyInfo.symbol));
     const { hash, status, error } = useSelector(
         (state: RootState) => state.transaction
     );
@@ -143,7 +143,7 @@ const SendModal = ({
 
             setOngoingTx(true);
 
-            if (currencyInfo.shortName === CurrencySymbol.FIL) {
+            if (currencyInfo.symbol === CurrencySymbol.FIL) {
                 const tx = await sendFil();
                 if (
                     tx &&
@@ -163,7 +163,7 @@ const SendModal = ({
         recipientAddress,
         amountToSend,
         isValidAddress,
-        currencyInfo.shortName,
+        currencyInfo.symbol,
         sendFil,
         validateFilecoinTransaction,
         settleTransaction,
@@ -201,7 +201,7 @@ const SendModal = ({
                             Balance:
                             {renderBalance({
                                 balance,
-                                currency: currencyInfo.shortName,
+                                currency: currencyInfo.symbol,
                             })}
                         </StyledLabel>
                     </StyledLabelContainer>
@@ -226,7 +226,7 @@ const SendModal = ({
                         </StyledLabelContainer>
                         <StyledCurrencyInput>
                             <CurrencyImage
-                                selectedCcy={currencyInfo.shortName}
+                                selectedCcy={currencyInfo.symbol}
                                 showName
                             />
                             <StyledInput

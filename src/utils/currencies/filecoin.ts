@@ -13,7 +13,7 @@ export class Filecoin extends Token {
 
     private static instance: Filecoin;
 
-    public static get(): Filecoin {
+    public static onChain(): Filecoin {
         this.instance = this.instance || new Filecoin();
         return this.instance;
     }

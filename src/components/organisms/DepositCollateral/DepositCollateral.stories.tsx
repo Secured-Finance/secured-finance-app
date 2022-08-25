@@ -18,13 +18,13 @@ export default {
         collateralList: {
             ETH: {
                 indexCcy: 0,
-                shortName: CurrencySymbol.ETH,
+                symbol: CurrencySymbol.ETH,
                 available: 10,
                 name: 'Ethereum',
             },
             USDC: {
                 indexCcy: 2,
-                shortName: CurrencySymbol.USDC,
+                symbol: CurrencySymbol.USDC,
                 available: 50,
                 name: 'USDC',
             },

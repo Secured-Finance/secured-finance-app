@@ -57,7 +57,7 @@ export const LendingCard = ({
             getCurrencyMapAsList().reduce<Record<string, CurrencySymbol>>(
                 (acc, ccy) => ({
                     ...acc,
-                    [ccy.name]: ccy.shortName,
+                    [ccy.name]: ccy.symbol,
                 }),
                 {}
             ),
@@ -71,7 +71,7 @@ export const LendingCard = ({
             >(
                 (acc, ccy) => ({
                     ...acc,
-                    [ccy.shortName]: ccy.toBaseUnit,
+                    [ccy.symbol]: ccy.toBaseUnit,
                 }),
                 {} as Record<CurrencySymbol, (value: number) => BigNumber>
             ),
