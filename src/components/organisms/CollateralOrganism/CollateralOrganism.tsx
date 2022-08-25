@@ -13,7 +13,7 @@ export const CollateralOrganism = () => {
     const collateralBook = useCollateralBook(account);
 
     return (
-        <div className='h-[470px] w-[746px]'>
+        <div className='h-fit w-full'>
             <Tab tabDataArray={tabDataArray}>
                 <CollateralTab collateralBook={collateralBook} />
                 <div />

@@ -1,3 +1,4 @@
+export * from './AssetDisclosure';
 export * from './AssetSelector';
 export * from './CollateralTabLeftPane';
 export * from './CurrencySelector';
