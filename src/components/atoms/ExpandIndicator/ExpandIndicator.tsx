@@ -1,4 +1,5 @@
-import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/outline';
+import { ChevronDownIcon } from '@heroicons/react/outline';
+import classNames from 'classnames';
 
 export const ExpandIndicator = ({
     expanded,
@@ -11,19 +12,12 @@ export const ExpandIndicator = ({
         variant === 'solid'
             ? 'h-5 w-5 text-white'
             : 'h-3 w-3 text-white opacity-50';
-    if (!expanded) {
-        return (
-            <ChevronDownIcon
-                className={className}
-                data-testid='chevron-down-icon'
-            />
-        );
-    } else {
-        return (
-            <ChevronUpIcon
-                className={className}
-                data-testid='chevron-up-icon'
-            />
-        );
-    }
+    return (
+        <ChevronDownIcon
+            className={classNames(className, {
+                'rotate-180': expanded,
+            })}
+            data-testid='chevron-down-icon'
+        />
+    );
 };

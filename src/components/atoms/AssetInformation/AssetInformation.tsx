@@ -43,7 +43,15 @@ export const AssetInformation: React.FC<AssetInformationProps> = ({
     );
 };
 
-const Tab = ({ header = '', footer = '', align = 'left' }) => {
+const Tab = ({
+    header = '',
+    footer = '',
+    align = 'left',
+}: {
+    header: string;
+    footer: string;
+    align?: 'left' | 'right';
+}) => {
     return (
         <div
             className={`typography-caption-2 flex flex-col ${

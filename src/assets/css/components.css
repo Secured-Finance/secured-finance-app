@@ -63,4 +63,7 @@
     .typography-percentage-tab {
       @apply text-sm font-secondary leading-4 font-bold;
     }
+    .typography-portfolio-heading {
+      @apply text-smd font-secondary leading-7;
+    }
   }

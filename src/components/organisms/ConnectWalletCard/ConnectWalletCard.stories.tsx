@@ -12,7 +12,9 @@ export default {
 } as ComponentMeta<typeof ConnectWalletCard>;
 
 const Template: ComponentStory<typeof ConnectWalletCard> = () => (
-    <ConnectWalletCard />
+    <div className='w-[350px]'>
+        <ConnectWalletCard />
+    </div>
 );
 
 export const Default = Template.bind({});
