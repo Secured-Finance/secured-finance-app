@@ -52,7 +52,7 @@ export const PortfolioManagement = () => {
                 Portfolio Management
             </div>
             <div className='flex flex-row justify-between gap-6 pt-4'>
-                <div className='flex flex-grow flex-col gap-6'>
+                <div className='flex min-w-[800px] flex-grow flex-col gap-6'>
                     <PortfolioManagementTable />
                     <CollateralOrganism />
                 </div>

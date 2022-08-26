@@ -30,4 +30,10 @@ describe('NavTab component', () => {
         fireEvent.click(screen.getByRole('button'));
         expect(onClick).toHaveBeenCalled();
     });
+
+    it('should render a div in place of button', () => {
+        const onClick = jest.fn();
+        render(<MarketDashboard onClick={onClick} />);
+        expect(screen.queryByRole('button')).not.toBeInTheDocument();
+    });
 });
