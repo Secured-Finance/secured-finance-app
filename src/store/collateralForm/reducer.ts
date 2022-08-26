@@ -30,8 +30,8 @@ const collateralFormSlice = createSlice({
             state.isLoading = false;
         },
         updateCollateralCurrency(state, action: PayloadAction<CurrencyInfo>) {
-            const { shortName, indexCcy, name } = action.payload;
-            state.currencyShortName = shortName;
+            const { symbol, indexCcy, name } = action.payload;
+            state.currencyShortName = symbol;
             state.currencyIndex = indexCcy;
             state.currencyName = name;
         },

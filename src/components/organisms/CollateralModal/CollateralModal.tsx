@@ -212,10 +212,10 @@ const CollateralModal: React.FC<CombinedProps> = ({
                                         <img
                                             width={28}
                                             src={''}
-                                            alt={ccy.shortName}
+                                            alt={ccy.symbol}
                                         />
                                         <StyledCurrencyText>
-                                            {ccy.shortName}
+                                            {ccy.symbol}
                                         </StyledCurrencyText>
                                     </StyledDropdownItem>
                                 ))}

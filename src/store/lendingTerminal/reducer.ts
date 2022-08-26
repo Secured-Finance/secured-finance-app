@@ -100,9 +100,9 @@ const lendingTerminalSlice = createSlice({
             state.marketRate = action.payload;
         },
         updateLendingCurrency(state, action: PayloadAction<CurrencySymbol>) {
-            const { indexCcy, name, shortName } = currencyMap[action.payload];
+            const { indexCcy, name, symbol } = currencyMap[action.payload];
             state.currencyIndex = indexCcy;
-            state.selectedCcy = shortName;
+            state.selectedCcy = symbol;
             state.selectedCcyName = name;
         },
 

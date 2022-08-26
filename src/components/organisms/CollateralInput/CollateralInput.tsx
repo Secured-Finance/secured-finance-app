@@ -26,7 +26,7 @@ export const CollateralInput = ({
             >(
                 (acc, ccy) => ({
                     ...acc,
-                    [ccy.shortName]: ccy.toBaseUnit,
+                    [ccy.symbol]: ccy.toBaseUnit,
                 }),
                 {} as Record<CurrencySymbol, (value: number) => BigNumber>
             ),
