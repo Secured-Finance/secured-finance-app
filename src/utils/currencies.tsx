@@ -5,7 +5,7 @@ import { CurrencyInfo, currencyMap, CurrencySymbol } from './currencyList';
 
 export enum WalletSource {
     METAMASK = 'METAMASK',
-    LEDGER = 'LEDGER',
+    UTILWALLET = 'UTILWALLET',
 }
 
 export type CollateralInfo = {
@@ -49,16 +49,10 @@ export const collateralListDropdown = [
     },
 ];
 
-export const walletInformation = [
-    {
-        walletSource: WalletSource.METAMASK,
-        currencies: [CurrencySymbol.ETH],
-    },
-    {
-        walletSource: WalletSource.LEDGER,
-        currencies: [CurrencySymbol.FIL],
-    },
-];
+export const walletInformation: Record<WalletSource, CurrencySymbol[]> = {
+    [WalletSource.METAMASK]: [CurrencySymbol.ETH],
+    [WalletSource.UTILWALLET]: [CurrencySymbol.FIL],
+};
 
 export const collateralList = [currencyMap.ETH] as Array<CurrencyInfo>;
 
@@ -67,13 +61,14 @@ export const generateWalletInformation = (
     balance: Record<string, number>
 ): AssetDisclosureProps[] => {
     const collateralRecords = [];
-    for (let i = 0; i < walletInformation.length; i++) {
-        const wallet = walletInformation[i].walletSource;
+    const walletsArray = Object.keys(walletInformation) as WalletSource[];
+    for (let i = 0; i < walletsArray.length; i++) {
+        const wallet = walletsArray[i];
         const data = [];
         if (accounts[wallet]) {
-            const currenciesArray = walletInformation[i].currencies;
+            const currenciesArray = walletInformation[wallet];
             for (let j = 0; j < currenciesArray.length; j++) {
-                const asset = currenciesArray[j] as CurrencySymbol;
+                const asset = currenciesArray[j];
                 data.push({
                     asset: asset,
                     quantity: balance[asset] ? balance[asset] : 0,

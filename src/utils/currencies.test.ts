@@ -5,7 +5,7 @@ describe('currencies.generateWalletInformation', () => {
     it('should return walletInformation as AssetDisclosureProps', () => {
         const addressRecord = {
             [WalletSource.METAMASK]: 'ethAccount',
-            [WalletSource.LEDGER]: 'filAccount',
+            [WalletSource.UTILWALLET]: 'filAccount',
         };
 
         const balanceRecord = {
@@ -27,7 +27,7 @@ describe('currencies.generateWalletInformation', () => {
         });
         expect(options[1]).toEqual({
             account: 'filAccount',
-            walletSource: WalletSource.LEDGER,
+            walletSource: WalletSource.UTILWALLET,
             data: [
                 {
                     asset: CurrencySymbol.FIL,

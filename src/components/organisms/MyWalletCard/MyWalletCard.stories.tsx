@@ -18,7 +18,7 @@ export default {
             },
             {
                 data: [{ asset: CurrencySymbol.FIL, quantity: 1.2 }],
-                walletSource: WalletSource.LEDGER,
+                walletSource: WalletSource.UTILWALLET,
                 account: 'de926db3012af759b4f24b5',
             },
         ],
