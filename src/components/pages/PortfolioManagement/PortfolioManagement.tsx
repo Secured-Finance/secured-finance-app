@@ -33,7 +33,7 @@ export const PortfolioManagement = () => {
     const addressRecord = useMemo(() => {
         return {
             [WalletSource.METAMASK]: account ? account : '',
-            [WalletSource.LEDGER]: filecoinAddress,
+            [WalletSource.UTILWALLET]: filecoinAddress,
         };
     }, [account, filecoinAddress]);
 
