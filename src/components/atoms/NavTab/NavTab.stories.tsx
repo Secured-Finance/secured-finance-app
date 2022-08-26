@@ -27,4 +27,5 @@ MarketDashboard.args = {
     text: 'Market Dashboard',
     active: false,
     onClick: () => {},
+    as: 'div',
 };

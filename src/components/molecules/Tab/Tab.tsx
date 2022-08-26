@@ -33,6 +33,7 @@ export const Tab: React.FC<TabProps> = ({ tabDataArray, children }) => {
                                     <NavTab
                                         text={tabData.text}
                                         active={selected}
+                                        as='div'
                                     ></NavTab>
                                 )}
                             </HeadlessTab>
