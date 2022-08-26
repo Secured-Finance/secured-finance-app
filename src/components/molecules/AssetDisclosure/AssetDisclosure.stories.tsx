@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { WithAssetPrice } from 'src/../.storybook/decorators';
 import { updateLatestBlock } from 'src/store/blockchain';
-import { CurrencySymbol } from 'src/utils';
+import { CurrencySymbol, WalletSource } from 'src/utils';
 import { AssetDisclosure } from './AssetDisclosure';
 
 export default {
@@ -14,7 +14,7 @@ export default {
             { asset: CurrencySymbol.ETH, quantity: 1.2 },
             { asset: CurrencySymbol.USDC, quantity: 100 },
         ],
-        walletSource: 'metamask',
+        walletSource: WalletSource.METAMASK,
         account: 'de926db3012af759b4f24b5a51ef6afa397f04670f634aa4f',
     },
     decorators: [WithAssetPrice],
@@ -35,6 +35,6 @@ export const Default = Template.bind({});
 export const Ledger = Template.bind({});
 Ledger.args = {
     data: [{ asset: CurrencySymbol.FIL, quantity: 12 }],
-    walletSource: 'ledger',
+    walletSource: WalletSource.LEDGER,
     account: 'de926db3012af759b4f24b5a51ef6afa397f04670f634aa4f',
 };

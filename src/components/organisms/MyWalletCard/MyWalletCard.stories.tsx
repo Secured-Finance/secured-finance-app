@@ -1,6 +1,6 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { WithWalletProvider } from 'src/../.storybook/decorators';
-import { CurrencySymbol } from 'src/utils';
+import { CurrencySymbol, WalletSource } from 'src/utils';
 import { MyWalletCard } from './MyWalletCard';
 
 export default {
@@ -13,12 +13,12 @@ export default {
                     { asset: CurrencySymbol.ETH, quantity: 1.2 },
                     { asset: CurrencySymbol.USDC, quantity: 100 },
                 ],
-                walletSource: 'metamask',
+                walletSource: WalletSource.METAMASK,
                 account: 'de926db3012af759b4f24b5a51ef6afa397f04670f634aa4f',
             },
             {
                 data: [{ asset: CurrencySymbol.FIL, quantity: 1.2 }],
-                walletSource: 'ledger',
+                walletSource: WalletSource.LEDGER,
                 account: 'de926db3012af759b4f24b5',
             },
         ],
