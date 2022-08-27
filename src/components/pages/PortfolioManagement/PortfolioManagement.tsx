@@ -12,38 +12,41 @@ import {
 import { FIL_ADDRESS } from 'src/services/filecoin';
 import { RootState } from 'src/store/types';
 import { getFilAddress } from 'src/store/wallets/selectors';
-import { CurrencySymbol } from 'src/utils';
+import {
+    CurrencySymbol,
+    generateWalletInformation,
+    WalletSource,
+} from 'src/utils';
 import { useWallet } from 'use-wallet';
 
 export const PortfolioManagement = () => {
     const { account } = useWallet();
     const addressFromLocalStorage = localStorage.getItem(FIL_ADDRESS);
     const addressFromStore = useSelector(getFilAddress);
-    const address = addressFromLocalStorage || addressFromStore;
+    const filecoinAddress = addressFromLocalStorage || addressFromStore;
 
     const {
         ethereum: { balance: ethereumBalance },
         filecoin: { balance: filecoinBalance },
     } = useSelector((state: RootState) => state.wallets);
 
+    const addressRecord = useMemo(() => {
+        return {
+            [WalletSource.METAMASK]: account ? account : '',
+            [WalletSource.UTILWALLET]: filecoinAddress,
+        };
+    }, [account, filecoinAddress]);
+
+    const balanceRecord = useMemo(() => {
+        return {
+            [CurrencySymbol.ETH]: ethereumBalance,
+            [CurrencySymbol.FIL]: filecoinBalance,
+        };
+    }, [ethereumBalance, filecoinBalance]);
+
     const assetMap: AssetDisclosureProps[] = useMemo(
-        () => [
-            {
-                data: [
-                    { asset: CurrencySymbol.ETH, quantity: ethereumBalance },
-                ],
-                walletSource: 'metamask',
-                account: account ? account : '',
-            },
-            {
-                data: [
-                    { asset: CurrencySymbol.FIL, quantity: filecoinBalance },
-                ],
-                walletSource: 'ledger',
-                account: address,
-            },
-        ],
-        [account, address, ethereumBalance, filecoinBalance]
+        () => generateWalletInformation(addressRecord, balanceRecord),
+        [addressRecord, balanceRecord]
     );
 
     return (
@@ -52,7 +55,7 @@ export const PortfolioManagement = () => {
                 Portfolio Management
             </div>
             <div className='flex flex-row justify-between gap-6 pt-4'>
-                <div className='flex flex-grow flex-col gap-6'>
+                <div className='flex min-w-[800px] flex-grow flex-col gap-6'>
                     <PortfolioManagementTable />
                     <CollateralOrganism />
                 </div>

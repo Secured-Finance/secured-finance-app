@@ -9,11 +9,11 @@ import {
     ExpandIndicator,
 } from 'src/components/atoms';
 import { CollateralInformationProps } from 'src/components/atoms/CollateralInformation';
-import { AddressUtils } from 'src/utils';
+import { AddressUtils, WalletSource } from 'src/utils';
 
 export interface AssetDisclosureProps {
     data: CollateralInformationProps[];
-    walletSource: 'metamask' | 'ledger';
+    walletSource: WalletSource;
     account: string;
 }
 
@@ -28,7 +28,7 @@ export const AssetDisclosure = ({
                 <>
                     <div className='relative h-full'>
                         <HeadlessDisclosure.Button className='flex h-11 w-full flex-row items-center gap-3 focus:outline-none'>
-                            {walletSource === 'metamask' ? (
+                            {walletSource === WalletSource.METAMASK ? (
                                 <MetamaskFox className='h-11 w-11 p-[10px]' />
                             ) : (
                                 <Ledger className='h-11 w-11 p-[10px]' />
@@ -57,11 +57,8 @@ export const AssetDisclosure = ({
     );
 };
 
-const accountFormater = (
-    account: string,
-    walletSource: 'metamask' | 'ledger'
-) => {
-    return walletSource === 'metamask'
+const accountFormater = (account: string, walletSource: WalletSource) => {
+    return walletSource === WalletSource.METAMASK
         ? AddressUtils.format(account, 6)
         : AddressUtils.format(account, 12);
 };
