@@ -51,6 +51,7 @@ const WalletOption = ({
         </RadioGroup.Option>
     );
 };
+
 export const WalletRadioGroup = ({
     value,
     onChange,

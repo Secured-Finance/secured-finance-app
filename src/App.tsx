@@ -13,7 +13,6 @@ import SecuredFinanceProvider from './contexts/SecuredFinanceProvider';
 import store from './store';
 import theme from './theme';
 import { setUpSecuredFinanceSkd } from './utils';
-import Account from './views/Account';
 import Exchange from './views/Exchange';
 import Loan from './views/Loan';
 
@@ -25,10 +24,6 @@ const routes = [
     {
         path: '/history',
         component: <PortfolioManagement />,
-    },
-    {
-        path: '/account',
-        component: <Account />,
     },
     {
         path: '/loan/:loanId',
