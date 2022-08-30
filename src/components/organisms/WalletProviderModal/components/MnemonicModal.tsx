@@ -16,7 +16,6 @@ import { useNewFilWalletProvider } from 'src/services/filecoin';
 import { FilecoinWalletType } from 'src/services/filecoin/store/types';
 import { getFilecoinNetwork } from 'src/services/filecoin/utils';
 import { RootState } from 'src/store/types';
-import theme from 'src/theme';
 import styled from 'styled-components';
 import PrivateKeyModal from './PrivateKeyModal';
 
@@ -97,30 +96,11 @@ const MnemonicModal: React.FC<ModalProps> = ({ onDismiss }) => {
                 <RenderMnemonic mnemonic={mnemonic} />
                 <Spacer size={'md'} />
                 <StyledButtonContainer>
-                    <Button
-                        // onClick={saveProvider}
-                        style={{
-                            background: 'transparent',
-                            borderWidth: 1,
-                            borderColor: theme.colors.buttonBlue,
-                            borderBottom: theme.colors.buttonBlue,
-                            fontSize: theme.sizes.callout,
-                            fontWeight: 500,
-                            color: theme.colors.white,
-                        }}
-                    >
-                        Download
-                    </Button>
+                    <Button>Download</Button>
                     <Spacer size={'md'} />
                     <Button
                         data-cy='create-hd-wallet'
                         onClick={handleCreateFilHDWallet}
-                        style={{
-                            background: theme.colors.buttonBlue,
-                            fontSize: theme.sizes.callout,
-                            fontWeight: 500,
-                            color: theme.colors.white,
-                        }}
                         disabled={!isLoading}
                     >
                         Save
@@ -129,20 +109,7 @@ const MnemonicModal: React.FC<ModalProps> = ({ onDismiss }) => {
                 <Breaker />
             </ModalContent>
             <ModalActions>
-                <Button
-                    onClick={onPrivateKeyModal}
-                    style={{
-                        background: 'transparent',
-                        borderWidth: 1,
-                        borderColor: theme.colors.buttonBlue,
-                        borderBottom: theme.colors.buttonBlue,
-                        fontSize: theme.sizes.callout,
-                        fontWeight: 500,
-                        color: theme.colors.white,
-                    }}
-                >
-                    Import Wallet
-                </Button>
+                <Button onClick={onPrivateKeyModal}>Import Wallet</Button>
             </ModalActions>
         </Modal>
     );
