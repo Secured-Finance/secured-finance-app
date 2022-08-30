@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button, Modal, ModalProps, ModalTitle } from 'src/components/atoms';
+import { Button } from 'src/components/atoms';
+import { Modal, ModalProps, ModalTitle } from 'src/components/legacy';
 import connectWithLedger from 'src/services/ledger/connectLedger';
 import { AppDispatch } from 'src/store';
 import {

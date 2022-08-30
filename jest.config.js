@@ -22,6 +22,7 @@ const customJestConfig = {
         '!src/components/common/*.*',
         '!src/components/new/*.*',
         '!src/stories/**/*.*',
+        '!src/components/legacy/*.*',
     ],
     moduleNameMapper: {
         // .svg should have high priority

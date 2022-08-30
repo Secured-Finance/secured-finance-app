@@ -1,16 +1,16 @@
 import { validateMnemonic } from 'bip39';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { Button } from 'src/components/atoms';
 import {
     Breaker,
-    Button,
     Modal,
     ModalActions,
     ModalContent,
     ModalProps,
     ModalTitle,
     Spacer,
-} from 'src/components/atoms';
+} from 'src/components/legacy';
 import useFilWasm from 'src/hooks/useFilWasm';
 import useModal from 'src/hooks/useModal';
 import { TestNetPath, useNewFilWalletProvider } from 'src/services/filecoin';

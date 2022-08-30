@@ -1,11 +1,11 @@
 import React from 'react';
+import { Button } from 'src/components/atoms';
 import {
-    Button,
     Modal,
     ModalActions,
     ModalContent,
     ModalTitle,
-} from 'src/components/atoms';
+} from 'src/components/legacy';
 import theme from 'src/theme';
 import styled from 'styled-components';
 
