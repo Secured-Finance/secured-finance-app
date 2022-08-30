@@ -231,34 +231,7 @@ const PrivateKeyModal: React.FC<ModalProps> = ({ onDismiss }) => {
                 </StyledModalSubtitle>
                 <StyledTabButtons>
                     {ordersTabs.map((tab, i) => (
-                        <Button
-                            key={i}
-                            style={{
-                                background: 'transparent',
-                                color: theme.colors.lightText,
-                                borderWidth: 1,
-                                borderColor:
-                                    selectedTab === tab
-                                        ? theme.colors.darkBlue
-                                        : 'transparent',
-                                borderBottom:
-                                    selectedTab === tab
-                                        ? theme.colors.darkBlue
-                                        : 'transparent',
-                                textTransform: 'capitalize',
-                                fontWeight: 500,
-                                fontSize: 14,
-                                outline: 'none',
-                                height: 40,
-                                borderRadius: 4,
-                                marginRight: 0,
-                                width: '120px',
-                                textAlign: 'center',
-                                paddingLeft: 18,
-                                paddingRight: 18,
-                            }}
-                            onClick={handleSelectTab(tab)}
-                        >
+                        <Button key={i} onClick={handleSelectTab(tab)}>
                             {tab}
                         </Button>
                     ))}
@@ -266,20 +239,7 @@ const PrivateKeyModal: React.FC<ModalProps> = ({ onDismiss }) => {
                 <RenderPrivateKeyContainer selectedTab={selectedTab} />
             </ModalContent>
             <ModalActions>
-                <Button
-                    onClick={onMnemonicModal}
-                    style={{
-                        background: 'transparent',
-                        borderWidth: 1,
-                        borderColor: theme.colors.buttonBlue,
-                        borderBottom: theme.colors.buttonBlue,
-                        fontSize: theme.sizes.callout,
-                        fontWeight: 500,
-                        color: theme.colors.white,
-                    }}
-                >
-                    Generate Mnemonic
-                </Button>
+                <Button onClick={onMnemonicModal}>Generate Mnemonic</Button>
             </ModalActions>
         </Modal>
     );
