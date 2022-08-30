@@ -1,7 +1,8 @@
 import React, { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { Button, Label, ModalProps, Spacer } from 'src/components/atoms';
+import { Button, Label } from 'src/components/atoms';
+import { ModalProps, Spacer } from 'src/components/legacy';
 import { CACHED_PROVIDER_KEY } from 'src/contexts/SecuredFinanceProvider/SecuredFinanceProvider';
 import { RootState } from 'src/store/types';
 import { resetEthWallet } from 'src/store/wallets';

@@ -1,7 +1,8 @@
 import React, { useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { Button, Label, ModalProps, Spacer } from 'src/components/atoms';
+import { Button, Label } from 'src/components/atoms';
+import { ModalProps, Spacer } from 'src/components/legacy';
 import {
     FIL_ADDRESS,
     getBlockExplorerUrl,

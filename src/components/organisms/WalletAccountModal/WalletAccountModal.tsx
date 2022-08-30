@@ -1,12 +1,12 @@
 import React from 'react';
+import { Button } from 'src/components/atoms';
 import {
-    Button,
     Modal,
     ModalActions,
     ModalContent,
     ModalProps,
     ModalTitle,
-} from 'src/components/atoms';
+} from 'src/components/legacy';
 import theme from 'src/theme';
 import EthWallet from './components/EthWallet';
 import FilWallet from './components/FilWallet';

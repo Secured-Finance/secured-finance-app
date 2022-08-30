@@ -2,14 +2,14 @@
 import BigNumber from 'bignumber.js';
 import React, { useCallback, useMemo, useState } from 'react';
 import { connect, useDispatch, useSelector } from 'react-redux';
+import { Button } from 'src/components/atoms';
 import {
-    Button,
     Modal,
     ModalActions,
     ModalContent,
     ModalProps,
     ModalTitle,
-} from 'src/components/atoms';
+} from 'src/components/legacy';
 import { CurrencySelector } from 'src/components/molecules';
 import { useCollateralBook } from 'src/hooks';
 import { useDepositCollateral } from 'src/hooks/useDepositCollateral';

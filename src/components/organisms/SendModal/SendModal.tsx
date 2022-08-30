@@ -2,16 +2,16 @@ import { validateAddressString } from '@glif/filecoin-address';
 import BigNumber from 'bignumber.js';
 import React, { useCallback, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { Button } from 'src/components/atoms';
+import { CurrencyImage } from 'src/components/common/CurrencyImage';
 import {
-    Button,
     Modal,
     ModalActions,
     ModalContent,
     ModalProps,
     ModalTitle,
     Spacer,
-} from 'src/components/atoms';
-import { CurrencyImage } from 'src/components/common/CurrencyImage';
+} from 'src/components/legacy';
 import { useSendEth } from 'src/hooks/useSendEth';
 import { useSendFil } from 'src/hooks/useSendFil';
 import { getAssetInfo } from 'src/store/assetPrices/selectors';

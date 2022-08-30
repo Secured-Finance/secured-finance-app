@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import { Spacer } from 'src/components/atoms';
+import { Spacer } from 'src/components/legacy';
 
 export const ModalActions: React.FC = ({ children }) => {
     const l = React.Children.toArray(children).length;
