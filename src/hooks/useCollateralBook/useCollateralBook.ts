@@ -34,6 +34,9 @@ export const useCollateralBook = (
     const ethPrice = useSelector(
         (state: RootState) => state.assetPrices.ethereum.price
     );
+    const {
+        ethereum: { balance: ethereumBalance },
+    } = useSelector((state: RootState) => state.wallets);
 
     useEffect(() => {
         if (!securedFinance || !account) {
@@ -60,7 +63,7 @@ export const useCollateralBook = (
             });
         };
         getCollateralBook();
-    }, [account, ccy, securedFinance, ethPrice]);
+    }, [account, ccy, securedFinance, ethPrice, ethereumBalance]);
 
     return collateralBook;
 };
