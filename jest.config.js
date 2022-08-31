@@ -20,7 +20,6 @@ const customJestConfig = {
         '!src/**/index.ts',
         '!src/views/**/*.*',
         '!src/components/common/*.*',
-        '!src/components/new/*.*',
         '!src/stories/**/*.*',
         '!src/components/legacy/*.*',
     ],
