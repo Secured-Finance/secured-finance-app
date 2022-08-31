@@ -1,14 +1,11 @@
 import { BigNumber } from '@glif/filecoin-number';
-import { useCallback, useEffect, useMemo } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { WalletAccountModal } from 'src/components/organisms';
-import { useResetFilWalletProvider } from 'src/services/filecoin';
 import { FilecoinWalletType } from 'src/services/filecoin/store/types';
 import connectWithLedger from 'src/services/ledger/connectLedger';
 import { AppDispatch } from 'src/store';
 import { RootState } from 'src/store/types';
 import {
-    updateFilWalletActions,
     updateFilWalletAssetPrice,
     updateFilWalletDailyChange,
     updateFilWalletPortfolioShare,
@@ -17,7 +14,6 @@ import {
     updateFilWalletViaProvider,
     updateFilWalletViaRPC,
 } from 'src/store/wallets/helpers';
-import useModal from './useModal';
 
 export const useFilecoinWalletStore = (
     filAddr: string | null,
@@ -35,15 +31,6 @@ export const useFilecoinWalletStore = (
         filecoin: { usdBalance },
     } = useSelector((state: RootState) => state.wallets);
 
-    const [onPresentAccountModal] = useModal(WalletAccountModal);
-    const actObj = useMemo(() => {
-        return {
-            send: onPresentAccountModal,
-            placeCollateral: onPresentAccountModal,
-            signOut: useResetFilWalletProvider,
-        };
-    }, [onPresentAccountModal]);
-
     const connectExistingWallet = useCallback(async () => {
         if (!filAddr) return;
         if (!walletProvider) {
@@ -58,8 +45,7 @@ export const useFilecoinWalletStore = (
         } else {
             dispatch(updateFilWalletViaProvider(walletProvider, filAddr));
         }
-        dispatch(updateFilWalletActions(actObj));
-    }, [actObj, dispatch, filAddr, filWalletType, walletProvider]);
+    }, [dispatch, filAddr, filWalletType, walletProvider]);
 
     useEffect(() => {
         connectExistingWallet();
