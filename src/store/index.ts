@@ -9,7 +9,6 @@ import lastError from './lastError';
 import ledger from './ledger';
 import lendingTerminal from './lendingTerminal';
 import sendForm from './sendForm';
-import transaction from './transaction';
 import wallets from './wallets';
 
 export const rootReducers = {
@@ -21,7 +20,6 @@ export const rootReducers = {
     lendingTerminal,
     ledger,
     blockchain,
-    transaction,
     lastError,
     landingOrderForm,
 };
