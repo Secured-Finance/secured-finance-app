@@ -37,7 +37,7 @@ export const AssetDisclosure = ({
                                 <Ledger className='h-11 w-11 p-[10px]' />
                             )}
                             <span className='typography-caption text-grayScale'>
-                                {accountFormater(account, walletSource)}
+                                {accountFormatter(account, walletSource)}
                             </span>
                             <div className='absolute right-3'>
                                 <ExpandIndicator expanded={open} />
@@ -60,7 +60,7 @@ export const AssetDisclosure = ({
     );
 };
 
-const accountFormater = (account: string, walletSource: WalletSource) => {
+const accountFormatter = (account: string, walletSource: WalletSource) => {
     return walletSource === WalletSource.METAMASK
         ? AddressUtils.format(account, 6)
         : AddressUtils.format(account, 12);
