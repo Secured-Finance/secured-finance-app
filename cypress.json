@@ -1,10 +1,11 @@
 {
   "baseUrl": "http://localhost:3000",
   "testFiles": "**/*.spec.ts",
+  "experimentalStudio": true,
   "env": {
     "TENDERLY_ACCOUNT": "Reuven",
     "TENDERLY_PROJECT": "project"
   },
-  "viewportWidth": 1200,
-  "viewportHeight": 660
+  "viewportWidth": 1920,
+  "viewportHeight": 1440
 }

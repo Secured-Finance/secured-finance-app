@@ -27,7 +27,10 @@ export const AssetDisclosure = ({
             {({ open }) => (
                 <>
                     <div className='relative h-full'>
-                        <HeadlessDisclosure.Button className='flex h-11 w-full flex-row items-center gap-3 focus:outline-none'>
+                        <HeadlessDisclosure.Button
+                            className='flex h-11 w-full flex-row items-center gap-3 focus:outline-none'
+                            data-cy={`${walletSource.toLocaleLowerCase()}-disclosure-button`}
+                        >
                             {walletSource === WalletSource.METAMASK ? (
                                 <MetamaskFox className='h-11 w-11 p-[10px]' />
                             ) : (
