@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { WalletBase } from '.';
 import { defaultEthWallet, defaultFilWallet, WalletsStore } from './types';
 
 const initialStore: WalletsStore = {
@@ -30,12 +29,6 @@ const walletsSlice = createSlice({
         updateEthWalletAssetPrice(state, action: PayloadAction<number>) {
             state.ethereum.assetPrice = action.payload;
         },
-        updateEthWalletActions(
-            state,
-            action: PayloadAction<WalletBase['actions']>
-        ) {
-            state.ethereum.actions = action.payload;
-        },
         updateFilWalletBalance(state, action: PayloadAction<number>) {
             state.filecoin.balance = action.payload;
         },
@@ -53,12 +46,6 @@ const walletsSlice = createSlice({
         },
         updateFilWalletAssetPrice(state, action: PayloadAction<number>) {
             state.filecoin.assetPrice = action.payload;
-        },
-        updateFilWalletActions(
-            state,
-            action: PayloadAction<WalletBase['actions']>
-        ) {
-            state.filecoin.actions = action.payload;
         },
         updateTotalUSDBalance(state, action: PayloadAction<number>) {
             state.totalUSDBalance = action.payload;

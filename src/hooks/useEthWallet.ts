@@ -1,12 +1,10 @@
 import BigNumber from 'bignumber.js';
-import { useCallback, useEffect, useMemo } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { WalletAccountModal } from 'src/components/organisms';
 import { RootState } from 'src/store/types';
 import {
     connectEthWallet,
     resetEthWallet,
-    updateEthWalletActions,
     updateEthWalletAssetPrice,
     updateEthWalletBalance,
     updateEthWalletDailyChange,
@@ -15,26 +13,16 @@ import {
 } from 'src/store/wallets';
 import { recalculateTotalUSDBalance } from 'src/store/wallets/helpers';
 import { useWallet } from 'use-wallet';
-import useModal from './useModal';
 
 export const useEthereumWalletStore = () => {
     const dispatch = useDispatch();
-    const { account, balance, reset, status } = useWallet();
+    const { account, balance, status } = useWallet();
     const { price, change } = useSelector(
         (state: RootState) => state.assetPrices.ethereum
     );
     const { totalUSDBalance, ethereum: ethWallet } = useSelector(
         (state: RootState) => state.wallets
     );
-    const [onPresentAccountModal] = useModal(WalletAccountModal);
-
-    const actObj = useMemo(() => {
-        return {
-            send: onPresentAccountModal,
-            placeCollateral: onPresentAccountModal,
-            signOut: reset,
-        };
-    }, [onPresentAccountModal, reset]);
 
     const getWalletBalance = useCallback(
         (balance: number | string, price: number) => {
@@ -79,9 +67,8 @@ export const useEthereumWalletStore = () => {
     const connectWallet = useCallback(
         (account: string) => {
             dispatch(connectEthWallet(account));
-            dispatch(updateEthWalletActions(actObj));
         },
-        [dispatch, actObj]
+        [dispatch]
     );
 
     useEffect(() => {
