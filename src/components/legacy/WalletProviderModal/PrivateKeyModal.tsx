@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import { Button } from 'src/components/atoms';
 import {
     Breaker,
+    MnemonicModal,
     Modal,
     ModalActions,
     ModalContent,
@@ -22,7 +23,6 @@ import { toKebabCase } from 'src/utils';
 import styled from 'styled-components';
 import { isPrivate } from 'tiny-secp256k1';
 import isBase64 from 'validator/lib/isBase64';
-import MnemonicModal from './MnemonicModal';
 
 interface PrivateKeyContainerProps {
     selectedTab?: string;
@@ -327,4 +327,4 @@ const StyledTabButtons = styled.div`
     margin-bottom: 20px;
 `;
 
-export default PrivateKeyModal;
+export { PrivateKeyModal };

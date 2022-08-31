@@ -8,6 +8,7 @@ import {
     ModalContent,
     ModalProps,
     ModalTitle,
+    PrivateKeyModal,
     Spacer,
 } from 'src/components/legacy';
 import useFilWasm from 'src/hooks/useFilWasm';
@@ -17,7 +18,6 @@ import { FilecoinWalletType } from 'src/services/filecoin/store/types';
 import { getFilecoinNetwork } from 'src/services/filecoin/utils';
 import { RootState } from 'src/store/types';
 import styled from 'styled-components';
-import PrivateKeyModal from './PrivateKeyModal';
 
 const RenderMnemonic = ({ mnemonic }: { mnemonic: string }) => {
     const [mnemonicPhrase, setMnemonicPhrase] = useState([] as Array<string>);
@@ -154,4 +154,4 @@ const StyledWord = styled.div`
     justify-content: center;
 `;
 
-export default MnemonicModal;
+export { MnemonicModal };

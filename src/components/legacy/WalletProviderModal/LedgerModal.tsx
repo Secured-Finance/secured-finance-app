@@ -123,4 +123,4 @@ const ButtonsContainer = styled.div`
     padding: ${theme.spacing[4]}px;
 `;
 
-export default LedgerModal;
+export { LedgerModal };
