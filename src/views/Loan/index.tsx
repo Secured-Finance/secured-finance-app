@@ -1,13 +1,10 @@
 import BigNumber from 'bignumber.js';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { Button, Container, RenderTerms } from 'src/components/atoms';
 import { Spacer } from 'src/components/legacy';
-import { NextCouponPaymentCard } from 'src/components/organisms/Loan/NextCouponPaymentCard';
 import { useCollateralBook, useCrosschainAddressByChainId } from 'src/hooks';
 import { useLoanInformation } from 'src/hooks/useLoanHistory';
-import { RootState } from 'src/store/types';
 import theme from 'src/theme';
 import {
     AddressUtils,
@@ -36,12 +33,9 @@ const LoanScreen = () => {
     const loan: any = useLoanInformation(params.loanId);
 
     const { account } = useWallet();
-    const [couponPayment, setCouponPayment] = useState<CouponPayment>();
+    const [, setCouponPayment] = useState<CouponPayment>();
     const [counterpartyAddr, setCounterpartyAddr] = useState('');
     const [, setRecipientAddress] = useState('');
-    const filPrice = useSelector(
-        (state: RootState) => state.assetPrices.filecoin.price
-    );
     const colBook = useCollateralBook(counterpartyAddr);
 
     const counterPartyWallet = useMemo(() => {
@@ -308,15 +302,6 @@ const LoanScreen = () => {
                     </StyledColumn>
                     <Spacer size='lg' />
                     <StyledColumn>
-                        {couponPayment && (
-                            <NextCouponPaymentCard
-                                onClick={() => {}}
-                                couponPayment={couponPayment}
-                                filPrice={filPrice}
-                                totalAmount={format}
-                            ></NextCouponPaymentCard>
-                        )}
-
                         {colBook ? (
                             <CounterpartyContainer>
                                 <StyledSubcontainer>
