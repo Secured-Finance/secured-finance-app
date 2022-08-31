@@ -4,10 +4,9 @@ import SFLogo from 'src/assets/img/key.svg';
 import { Button, NavTab, TraderProTab } from 'src/components/atoms';
 import useSF from 'src/hooks/useSecuredFinance';
 
+import { WalletDialog, WalletPopover } from 'src/components/organisms';
 import { AddressUtils } from 'src/utils/address';
 import { useWallet } from 'use-wallet';
-import { WalletDialog } from '../WalletDialog';
-import { WalletPopover } from '../WalletPopover/WalletPopover';
 
 export const Header = () => {
     const [display, setDisplay] = useState(false);

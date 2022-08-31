@@ -8,13 +8,13 @@ import { useHistory } from 'react-router-dom';
 import FilecoinWallet from 'src/assets/icons/FilecoinWallet.svg';
 import MetamaskLogo from 'src/assets/img/metamask-fox.svg';
 import { ExpandIndicator, Separator, Toggle } from 'src/components/atoms';
+import { FilWalletDialog } from 'src/components/organisms';
 import { CACHED_PROVIDER_KEY } from 'src/contexts/SecuredFinanceProvider/SecuredFinanceProvider';
 import { RootState } from 'src/store/types';
 import { resetEthWallet } from 'src/store/wallets';
 import { isAnyWalletConnected } from 'src/store/wallets/selectors';
 import { formatDataCy } from 'src/utils';
 import { useWallet } from 'use-wallet';
-import { FilWalletDialog } from '../FilWalletDialog/FilWalletDialog';
 
 const MenuItem = ({
     label,

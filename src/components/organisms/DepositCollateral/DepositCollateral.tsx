@@ -5,6 +5,7 @@ import Check from 'src/assets/icons/check-mark.svg';
 import Loader from 'src/assets/img/gradient-loader.png';
 import { CollateralSelector } from 'src/components/atoms';
 import { Dialog } from 'src/components/molecules';
+import { CollateralInput } from 'src/components/organisms';
 import { useCheckCollateralBook } from 'src/hooks';
 import { useDepositCollateral } from 'src/hooks/useDepositCollateral';
 import { useRegisterUser } from 'src/hooks/useRegisterUser';
@@ -12,7 +13,6 @@ import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { RootState } from 'src/store/types';
 import { CollateralInfo, CurrencySymbol } from 'src/utils';
 import { useWallet } from 'use-wallet';
-import { CollateralInput } from '../CollateralInput';
 
 enum Step {
     depositCollateral = 1,
