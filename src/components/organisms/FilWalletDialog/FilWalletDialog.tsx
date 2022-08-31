@@ -2,11 +2,13 @@ import { useCallback, useState } from 'react';
 import KeyIcon from 'src/assets/img/key.svg';
 import LedgerIcon from 'src/assets/img/ledger.svg';
 import SeedIcon from 'src/assets/img/seed.svg';
+import {
+    LedgerModal,
+    MnemonicModal,
+    PrivateKeyModal,
+} from 'src/components/legacy';
 import { Dialog, WalletRadioGroup } from 'src/components/molecules';
 import useModal from 'src/hooks/useModal';
-import LedgerModal from '../WalletProviderModal/components/LedgerModal';
-import MnemonicModal from '../WalletProviderModal/components/MnemonicModal';
-import PrivateKeyModal from '../WalletProviderModal/components/PrivateKeyModal';
 export const FilWalletDialog = ({
     isOpen,
     onClose,
