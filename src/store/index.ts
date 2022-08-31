@@ -8,7 +8,6 @@ import landingOrderForm from './landingOrderForm';
 import lastError from './lastError';
 import ledger from './ledger';
 import lendingTerminal from './lendingTerminal';
-import sendForm from './sendForm';
 import wallets from './wallets';
 
 export const rootReducers = {
@@ -16,7 +15,6 @@ export const rootReducers = {
     wallets,
     assetPrices,
     filWalletProvider,
-    sendForm,
     lendingTerminal,
     ledger,
     blockchain,
