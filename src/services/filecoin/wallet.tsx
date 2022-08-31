@@ -2,15 +2,10 @@ import { Network } from '@glif/filecoin-address';
 import Filecoin, { WalletSubProvider } from '@glif/filecoin-wallet-provider';
 import { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useCrosschainAddressByChainId } from 'src/hooks';
-import { useUpdateCrossChainWallet } from 'src/hooks/useUpdateCrossChainWallet';
 import { updateFilWallet } from 'src/store/wallets/helpers';
-import { AddressUtils, CurrencySymbol } from 'src/utils';
-import { useWallet } from 'use-wallet';
 import useFilWasm from '../../hooks/useFilWasm';
 import { RootState } from '../../store/types';
 import { resetFilWallet } from '../../store/wallets';
-import { MAINNET_PATH_CODE } from '../ledger/constants';
 import {
     failFetchingFilWalletProvider,
     resetFilWalletProvider,
@@ -47,13 +42,6 @@ export const useNewFilWalletProvider = () => {
     );
     const dispatch = useDispatch();
     const { loaded } = useFilWasm();
-    const { account } = useWallet();
-    const { onRegisterCrossChainWallet } = useUpdateCrossChainWallet();
-
-    const filWalletAddr = useCrosschainAddressByChainId(
-        account,
-        CurrencySymbol.FIL
-    );
 
     const handleCreateFilWalletProvider = useCallback(
         async (
@@ -70,52 +58,20 @@ export const useNewFilWalletProvider = () => {
                 dispatch(setFilWalletProvider(filecoin));
                 dispatch(setFilWalletType(providerType));
                 const [filAddr] = await provider.getAccounts(0, 1, network);
-                const crossChainAddress = await registerCrossChainWallet(
-                    filWalletAddr,
-                    filAddr,
-                    onRegisterCrossChainWallet
-                );
-                setLocalStorage(crossChainAddress, providerType);
 
-                const balance = await filecoin.getBalance(crossChainAddress);
-                dispatch(updateFilWallet(balance, crossChainAddress));
+                setLocalStorage(filAddr, providerType);
+
+                const balance = await filecoin.getBalance(filAddr);
+                dispatch(updateFilWallet(balance, filAddr));
             } else {
                 dispatch(failFetchingFilWalletProvider());
             }
         },
-        [
-            dispatch,
-            filWalletAddr,
-            loaded,
-            onRegisterCrossChainWallet,
-            walletProvider,
-        ]
+        [dispatch, loaded, walletProvider]
     );
 
     return { onCreate: handleCreateFilWalletProvider };
 };
-
-export async function registerCrossChainWallet(
-    filWalletAddr: string,
-    filAddr: string,
-    register: (chainId: number, address: string) => Promise<unknown>
-) {
-    try {
-        // TODO: For now the protocol does not handle mainnet or testnet. Therefore we use the mainnet path code.
-        const chainId = MAINNET_PATH_CODE;
-        if (!filWalletAddr) {
-            await register(chainId, filAddr);
-            return filAddr;
-        } else if (!AddressUtils.equals(filWalletAddr, filAddr)) {
-            await register(chainId, filAddr);
-            return filAddr;
-        } else {
-            return filWalletAddr;
-        }
-    } catch (e) {
-        return filWalletAddr ? filWalletAddr : filAddr;
-    }
-}
 
 function setLocalStorage(filAddr: string, providerType: FilecoinWalletType) {
     localStorage.setItem(FIL_ADDRESS, filAddr);
