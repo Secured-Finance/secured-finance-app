@@ -19,10 +19,11 @@ describe('FilWalletDialog Component', () => {
 
     it('should display three option', () => {
         render(<Default />);
-        expect(screen.getAllByRole('radio')).toHaveLength(3);
-        expect(screen.getAllByRole('radio')[0]).toHaveTextContent('Ledger');
-        expect(screen.getAllByRole('radio')[1]).toHaveTextContent('Mnemonic');
-        expect(screen.getAllByRole('radio')[2]).toHaveTextContent('PrivateKey');
+        const radioButtons = screen.getAllByRole('radio');
+        expect(radioButtons).toHaveLength(3);
+        expect(radioButtons[0]).toHaveTextContent('Ledger');
+        expect(radioButtons[1]).toHaveTextContent('Mnemonic');
+        expect(radioButtons[2]).toHaveTextContent('PrivateKey');
     });
 
     it('should close after selecting an option', () => {
