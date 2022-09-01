@@ -15,9 +15,7 @@ describe('Filecoin Wallet', () => {
         cy.contains('PrivateKey').should('be.visible');
         cy.contains('Ledger').should('be.visible');
         cy.contains('Mnemonic').should('be.visible');
-        cy.get('[data-testid="dialog-action-button"]')
-            .should('be.visible')
-            .click();
+        cy.get('[data-testid="dialog-action-button"]').should('be.visible');
     });
 
     it('should connect to a new filecoin wallet when using mnemonic phrase and disconnect', () => {
