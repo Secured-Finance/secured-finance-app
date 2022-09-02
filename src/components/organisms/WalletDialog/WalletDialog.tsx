@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useReducer, useState } from 'react';
 import Check from 'src/assets/icons/check-mark.svg';
 import Loader from 'src/assets/img/gradient-loader.png';
+import MetaMaskIcon from 'src/assets/img/metamask-fox.svg';
+import WalletConnectIcon from 'src/assets/img/wallet-connect.svg';
 import { Dialog, WalletRadioGroup } from 'src/components/molecules';
 import { CACHED_PROVIDER_KEY } from 'src/contexts/SecuredFinanceProvider/SecuredFinanceProvider';
 import { useWallet } from 'use-wallet';
@@ -140,6 +142,16 @@ export const WalletDialog = ({
                             <WalletRadioGroup
                                 value={wallet}
                                 onChange={setWallet}
+                                options={[
+                                    {
+                                        name: 'Metamask',
+                                        Icon: MetaMaskIcon,
+                                    },
+                                    {
+                                        name: 'WalletConnect',
+                                        Icon: WalletConnectIcon,
+                                    },
+                                ]}
                             />
                         );
                     case Step.connecting:

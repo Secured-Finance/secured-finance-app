@@ -3,9 +3,7 @@ import { useSelector } from 'react-redux';
 import { Button } from 'src/components/atoms';
 import { Subheader } from 'src/components/common/Subheader';
 import { Cell, CellKey, CellValue, Table } from 'src/components/common/Table';
-import { CollateralModal } from 'src/components/organisms';
 import { useCollateralBook } from 'src/hooks';
-import useModal from 'src/hooks/useModal';
 import { RootState } from 'src/store/types';
 import { getTotalUSDBalance } from 'src/store/wallets/selectors';
 import { getDisplayBalance, ordinaryFormat, usdFormat } from 'src/utils';
@@ -21,10 +19,6 @@ export const Balances: React.FC = () => {
 
     const { account } = useWallet();
     const colBook = useCollateralBook(account);
-
-    const [onPresentCollateralModal] = useModal(
-        <CollateralModal ccyIndex={0} />
-    );
 
     return (
         <BalanceContainer>
@@ -72,7 +66,7 @@ export const Balances: React.FC = () => {
                     <CellValue>10 000 FIL</CellValue>
                 </Cell>
             </Table>
-            <Button onClick={onPresentCollateralModal}>
+            <Button onClick={() => alert('display the collateral modal')}>
                 Manage Collateral
             </Button>
         </BalanceContainer>
