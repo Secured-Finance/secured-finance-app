@@ -1,8 +1,7 @@
 import { RadioGroup } from '@headlessui/react';
 import { CheckIcon } from '@heroicons/react/outline';
 import CircleOutline from 'src/assets/icons/circle-outline.svg';
-import MetaMaskIcon from 'src/assets/img/metamask-fox.svg';
-import WalletConnectIcon from 'src/assets/img/wallet-connect.svg';
+
 import { formatDataCy } from 'src/utils';
 
 const WalletOption = ({
@@ -52,12 +51,15 @@ const WalletOption = ({
         </RadioGroup.Option>
     );
 };
+
 export const WalletRadioGroup = ({
     value,
     onChange,
+    options,
 }: {
     value: string;
     onChange: (v: string) => void;
+    options: { name: string; Icon: React.FunctionComponent }[];
 }) => {
     return (
         <RadioGroup
@@ -66,8 +68,13 @@ export const WalletRadioGroup = ({
             className='w-full rounded-lg border border-neutral py-4'
             data-cy='radio-group'
         >
-            <WalletOption name='Metamask' Icon={MetaMaskIcon} />
-            <WalletOption name='WalletConnect' Icon={WalletConnectIcon} />
+            {options.map(option => (
+                <WalletOption
+                    key={option.name}
+                    name={option.name}
+                    Icon={option.Icon}
+                />
+            ))}
         </RadioGroup>
     );
 };

@@ -1,14 +1,10 @@
 import BigNumber from 'bignumber.js';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { Button, Container, RenderTerms, Spacer } from 'src/components/atoms';
-import { SendModal } from 'src/components/organisms';
-import { NextCouponPaymentCard } from 'src/components/organisms/Loan/NextCouponPaymentCard';
+import { Button, Container, RenderTerms } from 'src/components/atoms';
+import { Spacer } from 'src/components/legacy';
 import { useCollateralBook, useCrosschainAddressByChainId } from 'src/hooks';
 import { useLoanInformation } from 'src/hooks/useLoanHistory';
-import useModal from 'src/hooks/useModal';
-import { RootState } from 'src/store/types';
 import theme from 'src/theme';
 import {
     AddressUtils,
@@ -37,12 +33,9 @@ const LoanScreen = () => {
     const loan: any = useLoanInformation(params.loanId);
 
     const { account } = useWallet();
-    const [couponPayment, setCouponPayment] = useState<CouponPayment>();
+    const [, setCouponPayment] = useState<CouponPayment>();
     const [counterpartyAddr, setCounterpartyAddr] = useState('');
-    const [recipientAddress, setRecipientAddress] = useState('');
-    const filPrice = useSelector(
-        (state: RootState) => state.assetPrices.filecoin.price
-    );
+    const [, setRecipientAddress] = useState('');
     const colBook = useCollateralBook(counterpartyAddr);
 
     const counterPartyWallet = useMemo(() => {
@@ -80,17 +73,6 @@ const LoanScreen = () => {
     const crossChainAddress = useCrosschainAddressByChainId(
         counterPartyWallet ? counterPartyWallet : '',
         loanCurrency.symbol
-    );
-
-    const [onPresentSendModal] = useModal(
-        <SendModal
-            currencyInfo={loanCurrency}
-            toAddress={recipientAddress}
-            amount={loan?.notional}
-            counterpartyAddress={counterpartyAddr}
-            nextCouponPaymentDate={couponPayment?.payment}
-            settleTransaction
-        />
     );
 
     const notional = useMemo(() => {
@@ -320,15 +302,6 @@ const LoanScreen = () => {
                     </StyledColumn>
                     <Spacer size='lg' />
                     <StyledColumn>
-                        {couponPayment && (
-                            <NextCouponPaymentCard
-                                onClick={onPresentSendModal}
-                                couponPayment={couponPayment}
-                                filPrice={filPrice}
-                                totalAmount={format}
-                            ></NextCouponPaymentCard>
-                        )}
-
                         {colBook ? (
                             <CounterpartyContainer>
                                 <StyledSubcontainer>

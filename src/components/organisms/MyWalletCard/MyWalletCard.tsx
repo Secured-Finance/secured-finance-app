@@ -2,7 +2,7 @@ import { Separator } from 'src/components/atoms';
 import {
     AssetDisclosure,
     AssetDisclosureProps,
-} from 'src/components/molecules/AssetDisclosure';
+} from 'src/components/molecules';
 
 interface MyWalletCardProps {
     assetMap: AssetDisclosureProps[];
