@@ -13,6 +13,12 @@ export default {
                 options: Object.values(CurrencySymbol),
             },
         },
+        variant: {
+            control: {
+                type: 'select',
+                options: ['default', 'large'],
+            },
+        },
     },
     parameters: {
         chromatic: { disableSnapshot: false },
@@ -24,3 +30,5 @@ const Template: ComponentStory<typeof CurrencyIcon> = args => (
 );
 
 export const Default = Template.bind({});
+export const Large = Template.bind({});
+Large.args = { variant: 'large' };

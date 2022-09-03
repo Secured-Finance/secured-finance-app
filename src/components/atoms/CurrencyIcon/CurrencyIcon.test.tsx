@@ -9,4 +9,14 @@ describe('CurrencyIcon Component', () => {
         render(<Default />);
         expect(screen.getByRole('img')).toBeInTheDocument();
     });
+
+    it('should render a CurrencyIcon with a large variant', () => {
+        render(<Default variant='large' />);
+        expect(screen.getByRole('img')).toHaveClass('h-10 w-10');
+    });
+
+    it('should render a CurrencyIcon with a default variant', () => {
+        render(<Default variant='default' />);
+        expect(screen.getByRole('img')).toHaveClass('h-6 w-6');
+    });
 });
