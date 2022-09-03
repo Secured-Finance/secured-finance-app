@@ -6,6 +6,7 @@ export * from './CollateralInformationTable';
 export * from './CollateralSelector';
 export * from './Container';
 export * from './CurrencyContainer';
+export * from './CurrencyIcon';
 export * from './CurveHeaderAsset';
 export * from './CurveHeaderTotal';
 export * from './DropdownSelector';
