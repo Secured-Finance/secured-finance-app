@@ -1,4 +1,5 @@
 import { useSelector } from 'react-redux';
+import { CurrencyIcon } from 'src/components/atoms';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { RootState } from 'src/store/types';
 import {
@@ -17,14 +18,13 @@ export const CollateralInformation = ({
     asset,
     quantity,
 }: CollateralInformationProps) => {
-    const currencyInfo = currencyMap[asset];
     const priceList = useSelector((state: RootState) => getPriceMap(state));
     const price = priceList[asset];
 
     return (
         <div className='flex h-11 w-full flex-row gap-5'>
             <div>
-                <currencyInfo.icon className='h-6 w-6' />
+                <CurrencyIcon ccy={asset} />
             </div>
             <div className='flex w-full flex-row justify-between'>
                 <Tab header={asset} footer={currencyMap[asset].name}></Tab>
