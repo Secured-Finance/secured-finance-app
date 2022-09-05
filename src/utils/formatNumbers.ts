@@ -1,5 +1,4 @@
-import { FilecoinNumber } from '@glif/filecoin-number';
-import { BigNumber, ethers, FixedNumber } from 'ethers';
+import { BigNumber, FixedNumber } from 'ethers';
 
 export const usdFormat = (number: number, digits = 0) => {
     return Intl.NumberFormat('en-US', {
@@ -55,36 +54,4 @@ export const formatUsdAmount = (number: number): string => {
 
 export const formatFixedNumber = (value: FixedNumber, decimals = 2): string => {
     return value.round(decimals).toString();
-};
-
-export const formatFilecoin = (
-    number: number,
-    unit: 'fil' | 'picofil' | 'attofil',
-    toUnit: 'fil' | 'picofil' | 'attofil' = 'fil'
-) => {
-    const filAmount = new FilecoinNumber(number, unit);
-    let amount: string;
-    switch (toUnit) {
-        case 'fil':
-            amount = filAmount.toFil();
-            break;
-        case 'picofil':
-            amount = filAmount.toPicoFil();
-            break;
-        case 'attofil':
-            amount = filAmount.toAttoFil();
-            break;
-        default:
-            throw new Error(`Unknown unit: ${unit}`);
-    }
-
-    const value =
-        toUnit === 'fil' && unit !== 'fil'
-            ? ethers.FixedNumber.from(amount)
-            : ethers.BigNumber.from(amount);
-
-    return {
-        value,
-        unit: toUnit.toUpperCase(),
-    };
 };
