@@ -5,9 +5,11 @@ import {
     PortfolioManagementTable,
 } from 'src/components/molecules';
 import {
+    ActiveTradeTable,
     CollateralOrganism,
     ConnectWalletCard,
     MyWalletCard,
+    Position,
 } from 'src/components/organisms';
 import { FIL_ADDRESS } from 'src/services/filecoin';
 import { RootState } from 'src/store/types';
@@ -49,9 +51,35 @@ export const PortfolioManagement = () => {
         [addressRecord, balanceRecord]
     );
 
+    const activeTrades = [
+        {
+            position: Position.Borrow,
+            contract: 'FIL-DEC2022',
+            apy: 0.2,
+            notional: 2000,
+            currency: CurrencySymbol.FIL,
+            presentValue: 2000,
+            dayToMaturity: 120,
+            forwardValue: 150,
+        },
+        {
+            position: Position.Lend,
+            contract: 'ETH-SEP2023',
+            apy: 0.1,
+            notional: 1000,
+            currency: CurrencySymbol.ETH,
+            presentValue: 1000,
+            dayToMaturity: 100,
+            forwardValue: 1000,
+        },
+    ];
+
     return (
-        <div className='mx-40 mt-7' data-cy='portfolio-management'>
-            <div className='typography-portfolio-heading flex h-12 w-fit items-center text-white'>
+        <div
+            className='mx-40 mt-7 flex flex-col gap-6'
+            data-cy='portfolio-management'
+        >
+            <div className='typography-portfolio-heading w-fit items-center text-white'>
                 Portfolio Management
             </div>
             <div className='flex flex-row justify-between gap-6 pt-4'>
@@ -66,6 +94,9 @@ export const PortfolioManagement = () => {
                         <ConnectWalletCard />
                     )}
                 </div>
+            </div>
+            <div>
+                <ActiveTradeTable data={activeTrades} />
             </div>
         </div>
     );

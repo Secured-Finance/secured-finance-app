@@ -17,6 +17,7 @@
     "@secured-finance/sf-core": "^0.2.0-beta.3",
     "@secured-finance/sf-graph-client": "^0.1.7-beta.21",
     "@svgr/webpack": "^6.2.1",
+    "@tanstack/react-table": "^8.5.13",
     "@zondax/filecoin-signing-tools": "^0.18.5",
     "@zondax/ledger-filecoin": "^0.11.2",
     "axios": "^0.21.1",
@@ -65,7 +66,11 @@
     "cypress:run": "cypress run"
   },
   "browserslist": {
-    "production": [">0.2%", "not dead", "not op_mini all"],
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
     "development": [
       "last 1 chrome version",
       "last 1 firefox version",
