@@ -18,9 +18,6 @@ export default {
             },
         },
     },
-    parameters: {
-        chromatic: { disableSnapshot: false },
-    },
 } as ComponentMeta<typeof CurveHeaderAsset>;
 
 const Template: ComponentStory<typeof CurveHeaderAsset> = args => (

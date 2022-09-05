@@ -35,7 +35,6 @@ export const parameters = {
             },
         ],
     },
-    chromatic: { disableSnapshot: true },
 };
 
 export const decorators = [

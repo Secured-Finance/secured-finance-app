@@ -19,9 +19,6 @@ export default {
             },
         },
     },
-    parameters: {
-        chromatic: { disableSnapshot: false },
-    },
 } as ComponentMeta<typeof CurrencyItem>;
 
 const Template: ComponentStory<typeof CurrencyItem> = args => (

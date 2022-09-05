@@ -5,9 +5,6 @@ import { ConnectWalletCard } from '.';
 export default {
     title: 'Organism/ConnectWalletCard',
     component: ConnectWalletCard,
-    parameters: {
-        chromatic: { disableSnapshot: false },
-    },
     decorators: [WithWalletProvider],
 } as ComponentMeta<typeof ConnectWalletCard>;
 

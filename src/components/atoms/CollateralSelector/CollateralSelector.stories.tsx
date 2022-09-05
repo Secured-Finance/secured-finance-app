@@ -25,9 +25,6 @@ export default {
         optionList: assetList,
         onChange: () => {},
     },
-    parameters: {
-        chromatic: { disableSnapshot: false },
-    },
 } as ComponentMeta<typeof CollateralSelector>;
 
 const Template: ComponentStory<typeof CollateralSelector> = args => (

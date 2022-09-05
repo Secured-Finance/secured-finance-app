@@ -7,9 +7,6 @@ export default {
     args: {
         label: 'Borrow',
     },
-    parameters: {
-        chromatic: { disableSnapshot: false },
-    },
 } as ComponentMeta<typeof Chip>;
 
 const Template: ComponentStory<typeof Chip> = args => <Chip {...args} />;

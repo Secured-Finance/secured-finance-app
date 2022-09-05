@@ -8,9 +8,6 @@ export default {
         header: 'Total Borrow (Asset)',
         footer: '80,000,009 FIL',
     },
-    parameters: {
-        chromatic: { disableSnapshot: false },
-    },
 } as ComponentMeta<typeof CurveHeaderTotal>;
 
 const Template: ComponentStory<typeof CurveHeaderTotal> = args => (

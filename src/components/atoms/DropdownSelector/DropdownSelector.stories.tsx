@@ -49,9 +49,6 @@ export default {
         },
         onChange: { control: { disable: true }, action: 'onChange' },
     },
-    parameters: {
-        chromatic: { disableSnapshot: false },
-    },
 } as ComponentMeta<typeof DropdownSelector>;
 
 const Template: ComponentStory<typeof DropdownSelector> = args => (

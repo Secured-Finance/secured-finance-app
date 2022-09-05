@@ -9,9 +9,6 @@ export default {
         value: '$8.02',
         orientation: 'center',
     },
-    parameters: {
-        chromatic: { disableSnapshot: false },
-    },
 } as ComponentMeta<typeof PortfolioTab>;
 
 const Template: ComponentStory<typeof PortfolioTab> = args => (

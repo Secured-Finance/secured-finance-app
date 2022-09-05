@@ -31,9 +31,6 @@ export default {
         },
     },
     decorators: [WithWalletProvider, WithAssetPrice],
-    parameters: {
-        chromatic: { disableSnapshot: false },
-    },
 } as ComponentMeta<typeof WithdrawCollateral>;
 
 const Template: ComponentStory<typeof WithdrawCollateral> = args => {

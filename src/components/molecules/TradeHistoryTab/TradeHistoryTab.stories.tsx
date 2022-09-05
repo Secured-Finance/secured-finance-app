@@ -5,9 +5,6 @@ export default {
     title: 'Molecules/TradeHistoryTab',
     component: TradeHistoryTab,
     args: {},
-    parameters: {
-        chromatic: { disableSnapshot: false },
-    },
 } as ComponentMeta<typeof TradeHistoryTab>;
 
 const Template: ComponentStory<typeof TradeHistoryTab> = () => (
