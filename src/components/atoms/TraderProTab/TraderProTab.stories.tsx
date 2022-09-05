@@ -8,9 +8,6 @@ export default {
         text: 'Trader Pro',
         onClick: () => {},
     },
-    parameters: {
-        chromatic: { disableSnapshot: false },
-    },
 } as ComponentMeta<typeof TraderProTab>;
 
 const Template: ComponentStory<typeof TraderProTab> = args => (

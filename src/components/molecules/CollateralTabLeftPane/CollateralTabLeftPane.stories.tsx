@@ -25,9 +25,6 @@ export default {
         },
     },
     decorators: [WithAssetPrice, WithWalletProvider],
-    parameters: {
-        chromatic: { disableSnapshot: false },
-    },
 } as ComponentMeta<typeof CollateralTabLeftPane>;
 
 const Template: ComponentStory<typeof CollateralTabLeftPane> = args => {

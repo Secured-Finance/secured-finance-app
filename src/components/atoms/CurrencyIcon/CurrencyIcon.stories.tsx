@@ -20,9 +20,6 @@ export default {
             },
         },
     },
-    parameters: {
-        chromatic: { disableSnapshot: false },
-    },
 } as ComponentMeta<typeof CurrencyIcon>;
 
 const Template: ComponentStory<typeof CurrencyIcon> = args => (

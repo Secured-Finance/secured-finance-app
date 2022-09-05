@@ -8,9 +8,6 @@ export default {
         isOpen: true,
         onClose: () => {},
     },
-    parameters: {
-        chromatic: { disableSnapshot: false },
-    },
 } as ComponentMeta<typeof FilWalletDialog>;
 
 const Template: ComponentStory<typeof FilWalletDialog> = args => (

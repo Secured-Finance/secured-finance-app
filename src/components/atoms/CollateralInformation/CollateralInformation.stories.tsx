@@ -13,9 +13,6 @@ export default {
         asset: CurrencySymbol.ETH,
         quantity: 1.2,
     },
-    parameters: {
-        chromatic: { disableSnapshot: false },
-    },
     decorators: [WithAssetPrice],
 } as ComponentMeta<typeof CollateralInformation>;
 

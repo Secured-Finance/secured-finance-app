@@ -25,9 +25,6 @@ export default {
     argTypes: {
         options: { control: { disable: true } },
     },
-    parameters: {
-        chromatic: { disableSnapshot: false },
-    },
 } as ComponentMeta<typeof TermSelector>;
 
 const Template: ComponentStory<typeof TermSelector> = args => (

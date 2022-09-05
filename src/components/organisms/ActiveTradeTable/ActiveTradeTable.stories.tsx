@@ -34,9 +34,6 @@ export default {
     args: {
         data: tradeData,
     },
-    parameters: {
-        chromatic: { disableSnapshot: false },
-    },
     decorators: [WithAssetPrice],
 } as ComponentMeta<typeof ActiveTradeTable>;
 
