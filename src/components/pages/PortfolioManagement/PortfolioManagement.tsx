@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 import {
     AssetDisclosureProps,
     PortfolioManagementTable,
+    TradeHistoryTab,
 } from 'src/components/molecules';
 import {
     ActiveTradeTable,
@@ -96,7 +97,12 @@ export const PortfolioManagement = () => {
                 </div>
             </div>
             <div>
-                <ActiveTradeTable data={activeTrades} />
+                <TradeHistoryTab
+                    tabTitles={['Active Contracts', 'Trade History']}
+                >
+                    <ActiveTradeTable data={activeTrades} />
+                    <div className='px-12 text-white'>Soon</div>
+                </TradeHistoryTab>
             </div>
         </div>
     );
