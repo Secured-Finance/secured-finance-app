@@ -1,3 +1,4 @@
+export * from './ActiveTradeTable';
 export * from './CollateralInput';
 export * from './CollateralOrganism';
 export * from './ConnectWalletCard';
