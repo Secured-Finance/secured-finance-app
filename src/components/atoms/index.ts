@@ -12,6 +12,7 @@ export * from './CurveHeaderAsset';
 export * from './CurveHeaderTotal';
 export * from './DropdownSelector';
 export * from './ExpandIndicator';
+export * from './HorizontalListItem';
 export * from './Label';
 export * from './NavTab';
 export * from './PercentageTab';

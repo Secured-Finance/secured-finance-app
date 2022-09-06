@@ -2,6 +2,14 @@ import { composeStories } from '@storybook/testing-react';
 import { render, screen } from 'src/test-utils.js';
 import * as stories from './ActiveTradeTable.stories';
 
+// @ts-expect-error: this is a mock for the IntersectionObserver.
+global.IntersectionObserver = class FakeIntersectionObserver {
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    observe() {}
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    disconnect() {}
+};
+
 const { Default } = composeStories(stories);
 
 describe('ActiveTradeTable Component', () => {
@@ -28,5 +36,11 @@ describe('ActiveTradeTable Component', () => {
         const sortedRowsDesc = screen.getAllByRole('row');
         expect(sortedRowsDesc[1]).toHaveTextContent('Lend');
         expect(sortedRowsDesc[2]).toHaveTextContent('Borrow');
+    });
+
+    it('should open the contract details dialog when clicking on a row', () => {
+        render(<Default />);
+        screen.getByText('Borrow').click();
+        expect(screen.getByRole('dialog')).toBeInTheDocument();
     });
 });

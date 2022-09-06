@@ -2,6 +2,7 @@ export * from './ActiveTradeTable';
 export * from './CollateralInput';
 export * from './CollateralOrganism';
 export * from './ConnectWalletCard';
+export * from './ContractDetailsDialog';
 export * from './DepositCollateral';
 export * from './FilWalletDialog';
 export * from './Header';
