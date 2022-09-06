@@ -1,7 +1,8 @@
 import { Disclosure } from '@headlessui/react';
 import React from 'react';
 import { ExpandIndicator, HorizontalListItem } from 'src/components/atoms';
-import { Dialog } from 'src/components/molecules';
+import { AmountCard, Dialog } from 'src/components/molecules';
+import { CurrencySymbol } from 'src/utils';
 
 const Section = ({ children }: { children: React.ReactNode }) => {
     return (
@@ -45,7 +46,11 @@ export const ContractDetailDialog = ({
         >
             <div className='grid w-full grid-cols-1 justify-items-stretch gap-3 text-white'>
                 <Section>
-                    <div>SOMETHING</div>
+                    <AmountCard
+                        ccy={CurrencySymbol.FIL}
+                        amount={5000}
+                        price={8.3}
+                    />
                 </Section>
                 <SectionWithItems
                     itemList={[
