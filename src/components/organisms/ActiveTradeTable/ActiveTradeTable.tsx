@@ -13,10 +13,11 @@ import { useSelector } from 'react-redux';
 import ArrowDownUp from 'src/assets/icons/arrows-down-up.svg';
 import ChevronDown from 'src/assets/icons/ChevronDown.svg';
 import { Chip, CurrencyIcon, CurrencyItem } from 'src/components/atoms';
+import { ContractDetailDialog } from 'src/components/organisms';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { RootState } from 'src/store/types';
-
 import { CurrencySymbol, percentFormat } from 'src/utils';
+
 export enum Position {
     Borrow = 'Borrow',
     Lend = 'Lend',
@@ -168,7 +169,6 @@ export const ActiveTradeTable = ({ data }: { data: Array<ActiveTrade> }) => {
     );
 
     const [sorting, setSorting] = useState<SortingState>([]);
-
     const table = useReactTable({
         data,
         columns,
@@ -179,38 +179,53 @@ export const ActiveTradeTable = ({ data }: { data: Array<ActiveTrade> }) => {
         getCoreRowModel: getCoreRowModel(),
         getSortedRowModel: getSortedRowModel(),
     });
+
+    const [displayContractDetails, setDisplayContractDetails] = useState(false);
     return (
-        <table className='w-full text-white'>
-            <thead className='typography-caption-2 h-14  border-b border-white-10 py-4 px-6 text-slateGray'>
-                {table.getHeaderGroups().map(headerGroup => (
-                    <tr key={headerGroup.id}>
-                        {headerGroup.headers.map(header => (
-                            <th key={header.id}>
-                                {header.isPlaceholder
-                                    ? null
-                                    : flexRender(
-                                          header.column.columnDef.header,
-                                          header.getContext()
-                                      )}
-                            </th>
-                        ))}
-                    </tr>
-                ))}
-            </thead>
-            <tbody>
-                {table.getRowModel().rows.map(row => (
-                    <tr key={row.id}>
-                        {row.getVisibleCells().map(cell => (
-                            <td key={cell.id} className='px-4 py-2 text-center'>
-                                {flexRender(
-                                    cell.column.columnDef.cell,
-                                    cell.getContext()
-                                )}
-                            </td>
-                        ))}
-                    </tr>
-                ))}
-            </tbody>
-        </table>
+        <>
+            <table className='w-full text-white'>
+                <thead className='typography-caption-2 h-14  border-b border-white-10 py-4 px-6 text-slateGray'>
+                    {table.getHeaderGroups().map(headerGroup => (
+                        <tr key={headerGroup.id}>
+                            {headerGroup.headers.map(header => (
+                                <th key={header.id}>
+                                    {header.isPlaceholder
+                                        ? null
+                                        : flexRender(
+                                              header.column.columnDef.header,
+                                              header.getContext()
+                                          )}
+                                </th>
+                            ))}
+                        </tr>
+                    ))}
+                </thead>
+                <tbody>
+                    {table.getRowModel().rows.map(row => (
+                        <tr
+                            key={row.id}
+                            className='cursor-pointer'
+                            onClick={() => setDisplayContractDetails(true)}
+                        >
+                            {row.getVisibleCells().map(cell => (
+                                <td
+                                    key={cell.id}
+                                    className='px-4 py-2 text-center'
+                                >
+                                    {flexRender(
+                                        cell.column.columnDef.cell,
+                                        cell.getContext()
+                                    )}
+                                </td>
+                            ))}
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+            <ContractDetailDialog
+                isOpen={displayContractDetails}
+                onClose={() => setDisplayContractDetails(false)}
+            />
+        </>
     );
 };
