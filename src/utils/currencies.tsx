@@ -49,9 +49,10 @@ export const collateralListDropdown = [
     },
 ];
 
-export const walletInformation: Record<WalletSource, CurrencySymbol[]> = {
+export const walletInformation: Partial<
+    Record<WalletSource, CurrencySymbol[]>
+> = {
     [WalletSource.METAMASK]: [CurrencySymbol.ETH],
-    [WalletSource.UTILWALLET]: [CurrencySymbol.FIL],
 };
 
 export const collateralList = [currencyMap.ETH] as Array<CurrencyInfo>;
@@ -67,6 +68,9 @@ export const generateWalletInformation = (
         const data = [];
         if (accounts[wallet]) {
             const currenciesArray = walletInformation[wallet];
+            if (!currenciesArray) {
+                continue;
+            }
             for (let j = 0; j < currenciesArray.length; j++) {
                 const asset = currenciesArray[j];
                 data.push({
