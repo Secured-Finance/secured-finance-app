@@ -32,14 +32,6 @@ describe('WalletPopover component', () => {
         });
     });
 
-    it('should display a dialog to connect a Filecoin Wallet and close the popover when clicking on Add Filecoin Wallet', () => {
-        render(<Primary />);
-        fireEvent.click(screen.getByRole('button'));
-        fireEvent.click(screen.getByText('Add Filecoin Wallet'));
-        expect(screen.queryByText('Rinkeby')).toBeNull();
-        expect(screen.getByRole('dialog')).toBeInTheDocument();
-    });
-
     it('should close the popover when clicking on finish KYC', () => {
         render(<Primary isKYC={false} />);
         fireEvent.click(screen.getByRole('button'));

@@ -1,10 +1,9 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { defaultEthWallet, defaultFilWallet, WalletsStore } from './types';
+import { defaultEthWallet, WalletsStore } from './types';
 
 const initialStore: WalletsStore = {
     totalUSDBalance: 0,
     ethereum: defaultEthWallet,
-    filecoin: defaultFilWallet,
 };
 
 const walletsSlice = createSlice({
@@ -29,32 +28,11 @@ const walletsSlice = createSlice({
         updateEthWalletAssetPrice(state, action: PayloadAction<number>) {
             state.ethereum.assetPrice = action.payload;
         },
-        updateFilWalletBalance(state, action: PayloadAction<number>) {
-            state.filecoin.balance = action.payload;
-        },
-        updateFilWalletUSDBalance(state, action: PayloadAction<number>) {
-            state.filecoin.usdBalance = action.payload;
-        },
-        updateFilWalletAddress(state, action: PayloadAction<string>) {
-            state.filecoin.address = action.payload;
-        },
-        updateFilWalletPortfolioShare(state, action: PayloadAction<number>) {
-            state.filecoin.portfolioShare = action.payload;
-        },
-        updateFilWalletDailyChange(state, action: PayloadAction<number>) {
-            state.filecoin.dailyChange = action.payload;
-        },
-        updateFilWalletAssetPrice(state, action: PayloadAction<number>) {
-            state.filecoin.assetPrice = action.payload;
-        },
         updateTotalUSDBalance(state, action: PayloadAction<number>) {
             state.totalUSDBalance = action.payload;
         },
         resetEthWallet(state) {
             state.ethereum = defaultEthWallet;
-        },
-        resetFilWallet(state) {
-            state.filecoin = defaultFilWallet;
         },
     },
 });

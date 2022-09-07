@@ -11,7 +11,6 @@ import {
     updateEthWalletPortfolioShare,
     updateEthWalletUSDBalance,
 } from 'src/store/wallets';
-import { recalculateTotalUSDBalance } from 'src/store/wallets/helpers';
 import { useWallet } from 'use-wallet';
 
 export const useEthereumWalletStore = () => {
@@ -59,7 +58,6 @@ export const useEthereumWalletStore = () => {
             ) {
                 dispatch(updateEthWalletPortfolioShare(portfolioShare));
             }
-            dispatch(recalculateTotalUSDBalance());
         },
         [getWalletBalance, balance, price, totalUSDBalance, dispatch, change]
     );
