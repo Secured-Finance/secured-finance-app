@@ -14,7 +14,7 @@ describe('currencies.generateWalletInformation', () => {
         };
 
         const options = generateWalletInformation(addressRecord, balanceRecord);
-        expect(options).toHaveLength(2);
+        expect(options).toHaveLength(1);
         expect(options[0]).toEqual({
             account: 'ethAccount',
             walletSource: WalletSource.METAMASK,
@@ -22,16 +22,6 @@ describe('currencies.generateWalletInformation', () => {
                 {
                     asset: CurrencySymbol.ETH,
                     quantity: 0.58,
-                },
-            ],
-        });
-        expect(options[1]).toEqual({
-            account: 'filAccount',
-            walletSource: WalletSource.UTILWALLET,
-            data: [
-                {
-                    asset: CurrencySymbol.FIL,
-                    quantity: 150,
                 },
             ],
         });
