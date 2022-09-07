@@ -14,13 +14,6 @@ export const {
     updateEthWalletPortfolioShare,
     updateEthWalletDailyChange,
     updateEthWalletAssetPrice,
-    updateFilWalletBalance,
-    updateFilWalletUSDBalance,
-    updateFilWalletAddress,
-    updateFilWalletPortfolioShare,
-    updateFilWalletDailyChange,
-    updateFilWalletAssetPrice,
     updateTotalUSDBalance,
     resetEthWallet,
-    resetFilWallet,
 } = walletsSlice.actions;

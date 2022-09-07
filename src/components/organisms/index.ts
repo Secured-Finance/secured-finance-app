@@ -4,7 +4,6 @@ export * from './CollateralOrganism';
 export * from './ConnectWalletCard';
 export * from './ContractDetailsDialog';
 export * from './DepositCollateral';
-export * from './FilWalletDialog';
 export * from './Header';
 export * from './LendingCard';
 export * from './MyWalletCard';

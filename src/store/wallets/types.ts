@@ -1,7 +1,6 @@
 export interface WalletsStore {
     totalUSDBalance: number;
     ethereum: WalletBase;
-    filecoin: WalletBase;
 }
 
 export interface WalletBase {
@@ -17,16 +16,6 @@ export type Coin = 'filecoin' | 'ethereum' | 'usdc';
 
 export const defaultEthWallet = {
     ccyIndex: 0,
-    address: '',
-    balance: 0,
-    usdBalance: 0,
-    assetPrice: 0,
-    portfolioShare: 0,
-    dailyChange: 0,
-};
-
-export const defaultFilWallet: WalletBase = {
-    ccyIndex: 1,
     address: '',
     balance: 0,
     usdBalance: 0,
