@@ -19,5 +19,6 @@ export * from './PercentageTab';
 export * from './PortfolioTab';
 export * from './RenderTerms';
 export * from './Separator';
+export * from './SortArrows';
 export * from './Toggle';
 export * from './TraderProTab';

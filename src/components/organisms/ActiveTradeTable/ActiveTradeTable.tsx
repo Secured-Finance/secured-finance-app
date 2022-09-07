@@ -7,12 +7,14 @@ import {
     SortingState,
     useReactTable,
 } from '@tanstack/react-table';
-import classNames from 'classnames';
 import { useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
-import ArrowDownUp from 'src/assets/icons/arrows-down-up.svg';
-import ChevronDown from 'src/assets/icons/ChevronDown.svg';
-import { Chip, CurrencyIcon, CurrencyItem } from 'src/components/atoms';
+import {
+    Chip,
+    CurrencyIcon,
+    CurrencyItem,
+    SortArrows,
+} from 'src/components/atoms';
 import { ContractDetailDialog } from 'src/components/organisms';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { RootState } from 'src/store/types';
@@ -48,20 +50,9 @@ const TableHeader = ({
     <button className='cursor-pointer select-none' onClick={sortingHandler}>
         <span className='flex flex-row items-center justify-center gap-1'>
             <span>{title}</span>
-            {!isSorted && (
-                <span>
-                    <ArrowDownUp className='h-4 w-4' />
-                </span>
-            )}
-            {isSorted && (
-                <span>
-                    <ChevronDown
-                        className={classNames('h-4 w-4', {
-                            'rotate-180': isSorted === 'desc',
-                        })}
-                    />
-                </span>
-            )}
+            <span>
+                <SortArrows isSorted={isSorted} />
+            </span>
         </span>
     </button>
 );
