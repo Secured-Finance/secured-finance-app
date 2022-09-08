@@ -4,10 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
     connectEthWallet,
     resetEthWallet,
-    updateEthWalletAssetPrice,
     updateEthWalletBalance,
-    updateEthWalletDailyChange,
-    updateEthWalletPortfolioShare,
     updateEthWalletUSDBalance,
 } from 'src/store/ethereumWallet';
 import { RootState } from 'src/store/types';
@@ -41,32 +38,11 @@ export const useEthereumWalletStore = () => {
     const fetchEthStore = useCallback(
         async (account: string) => {
             const { usdBalance, inEther } = getWalletBalance(balance, price);
-            const portfolioShare = new BigNumber(usdBalance)
-                .times(100)
-                .dividedBy(new BigNumber(ethereumWallet.usdBalance))
-                .toNumber();
-
             dispatch(connectEthWallet(account));
             dispatch(updateEthWalletBalance(inEther));
-            dispatch(updateEthWalletAssetPrice(price));
-            dispatch(updateEthWalletDailyChange(change));
             dispatch(updateEthWalletUSDBalance(usdBalance));
-
-            if (
-                !Number.isNaN(portfolioShare) &&
-                portfolioShare !== (null || Infinity)
-            ) {
-                dispatch(updateEthWalletPortfolioShare(portfolioShare));
-            }
         },
-        [
-            getWalletBalance,
-            balance,
-            price,
-            ethereumWallet.usdBalance,
-            dispatch,
-            change,
-        ]
+        [getWalletBalance, balance, price, dispatch]
     );
 
     const connectWallet = useCallback(

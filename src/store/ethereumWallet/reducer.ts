@@ -18,17 +18,10 @@ const walletsSlice = createSlice({
         connectEthWallet(state, action: PayloadAction<string>) {
             state.address = action.payload;
         },
-        updateEthWalletPortfolioShare(state, action: PayloadAction<number>) {
-            state.portfolioShare = action.payload;
-        },
-        updateEthWalletDailyChange(state, action: PayloadAction<number>) {
-            state.dailyChange = action.payload;
-        },
-        updateEthWalletAssetPrice(state, action: PayloadAction<number>) {
-            state.assetPrice = action.payload;
-        },
         resetEthWallet(state) {
-            state = defaultEthWallet;
+            state.address = defaultEthWallet.address;
+            state.balance = defaultEthWallet.balance;
+            state.usdBalance = defaultEthWallet.usdBalance;
         },
     },
 });
