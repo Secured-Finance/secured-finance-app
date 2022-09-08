@@ -8,9 +8,6 @@ export default {
         available: '100',
         usage: '50%',
     },
-    parameters: {
-        chromatic: { disableSnapshot: false },
-    },
 } as ComponentMeta<typeof CollateralUsageSection>;
 
 const Template: ComponentStory<typeof CollateralUsageSection> = args => (

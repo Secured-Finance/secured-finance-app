@@ -18,9 +18,6 @@ export default {
         account: 'de926db3012af759b4f24b5a51ef6afa397f04670f634aa4f',
     },
     decorators: [WithAssetPrice],
-    parameters: {
-        chromatic: { disableSnapshot: false },
-    },
 } as ComponentMeta<typeof AssetDisclosure>;
 
 const Template: ComponentStory<typeof AssetDisclosure> = args => {

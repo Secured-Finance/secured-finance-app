@@ -9,9 +9,6 @@ export default {
         active: true,
         onClick: () => {},
     },
-    parameters: {
-        chromatic: { disableSnapshot: false },
-    },
 } as ComponentMeta<typeof NavTab>;
 
 const Template: ComponentStory<typeof NavTab> = args => (

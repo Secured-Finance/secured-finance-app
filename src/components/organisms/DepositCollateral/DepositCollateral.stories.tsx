@@ -31,9 +31,6 @@ export default {
         },
     },
     decorators: [WithAssetPrice, WithWalletProvider],
-    parameters: {
-        chromatic: { disableSnapshot: false },
-    },
 } as ComponentMeta<typeof DepositCollateral>;
 
 const Template: ComponentStory<typeof DepositCollateral> = args => {

@@ -2,9 +2,6 @@ import { Meta, Story } from '@storybook/react';
 
 export default {
     title: 'Design System/Typography',
-    parameters: {
-        chromatic: { disableSnapshot: false },
-    },
 } as Meta;
 
 export const Typography: Story = () => (

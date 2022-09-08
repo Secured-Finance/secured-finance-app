@@ -12,9 +12,6 @@ export default {
         description:
             'Description goes here. Try to keep message to not more than three lines.',
         callToAction: 'Ok',
-        parameters: {
-            chromatic: { disableSnapshot: false },
-        },
     },
 } as ComponentMeta<typeof Dialog>;
 

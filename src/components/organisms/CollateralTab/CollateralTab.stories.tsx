@@ -22,9 +22,6 @@ export default {
             usdLocked: new BigNumber('50000000000000000000'),
         },
     },
-    parameters: {
-        chromatic: { disableSnapshot: false },
-    },
     decorators: [WithWalletProvider, WithAssetPrice],
 } as ComponentMeta<typeof CollateralTab>;
 

@@ -1,3 +1,4 @@
+export * from './AmountCard';
 export * from './AssetDisclosure';
 export * from './AssetSelector';
 export * from './CollateralTabLeftPane';
@@ -9,4 +10,5 @@ export * from './PercentageSelector';
 export * from './PortfolioManagementTable';
 export * from './Tab';
 export * from './TermSelector';
+export * from './TradeHistoryTab';
 export * from './WalletRadioGroup';

@@ -64,9 +64,6 @@ export default {
         onAssetChange: () => {},
         onAmountChange: () => {},
     },
-    parameters: {
-        chromatic: { disableSnapshot: false },
-    },
 } as ComponentMeta<typeof AssetSelector>;
 
 const Template: ComponentStory<typeof AssetSelector> = args => (

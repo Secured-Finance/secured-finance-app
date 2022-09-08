@@ -10,9 +10,6 @@ export default {
         availableAmount: 10,
         asset: CurrencySymbol.ETH,
     },
-    parameters: {
-        chromatic: { disableSnapshot: false },
-    },
 } as ComponentMeta<typeof CollateralInput>;
 
 const Template: ComponentStory<typeof CollateralInput> = args => (

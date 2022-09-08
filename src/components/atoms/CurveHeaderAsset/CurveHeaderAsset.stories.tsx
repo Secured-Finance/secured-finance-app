@@ -1,19 +1,22 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
-import FilecoinIcon from 'src/assets/coins/fil.svg';
-import BitcoinIcon from 'src/assets/coins/xbc.svg';
+import { CurrencySymbol } from 'src/utils';
 import { CurveHeaderAsset } from './';
 
 export default {
     title: 'Atoms/CurveHeaderAsset',
     component: CurveHeaderAsset,
     args: {
-        asset: 'Filecoin',
+        ccy: CurrencySymbol.FIL,
         value: 8.02,
         fluctuation: -2.45,
-        IconSVG: FilecoinIcon,
     },
-    parameters: {
-        chromatic: { disableSnapshot: false },
+    argTypes: {
+        ccy: {
+            control: {
+                type: 'select',
+                options: Object.values(CurrencySymbol),
+            },
+        },
     },
 } as ComponentMeta<typeof CurveHeaderAsset>;
 
@@ -25,8 +28,7 @@ export const Default = Template.bind({});
 
 export const PositiveFluctuation = Template.bind({});
 PositiveFluctuation.args = {
-    asset: 'Bitcoin',
+    ccy: CurrencySymbol.ETH,
     value: 8.02,
     fluctuation: 2.45,
-    IconSVG: BitcoinIcon,
 };
