@@ -40,13 +40,11 @@ export const CollateralTab = ({
     const { account } = useWallet();
     const [openModal, setOpenModal] = useState<'' | 'deposit' | 'withdraw'>('');
 
-    const {
-        ethereum: { balance: ethereumBalance },
-    } = useSelector((state: RootState) => state.wallets);
+    const { balance } = useSelector((state: RootState) => state.ethereumWallet);
 
     const depositCollateralList = useMemo(
-        () => generateCollateralList(ethereumBalance),
-        [ethereumBalance]
+        () => generateCollateralList(balance),
+        [balance]
     );
     const withdrawCollateralList = useMemo(
         () =>
