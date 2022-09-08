@@ -19,7 +19,9 @@ export const CurveHeaderAsset: React.FC<CurveHeaderAssetProps> = ({
 }) => {
     return (
         <div className='flex h-[44px] w-36 flex-row justify-between gap-3 py-0.5 '>
-            <CurrencyIcon ccy={ccy} variant='large' />
+            <div>
+                <CurrencyIcon ccy={ccy} variant='large' />
+            </div>
             <div className='flex h-full w-full flex-col'>
                 <span className='typography-caption-2 h-5 text-planetaryPurple'>
                     {currencyMap[ccy].name}
