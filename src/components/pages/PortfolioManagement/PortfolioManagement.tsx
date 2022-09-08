@@ -12,6 +12,7 @@ import {
     MyWalletCard,
     Position,
 } from 'src/components/organisms';
+import { selectEthereumBalance } from 'src/store/ethereumWallet';
 import { RootState } from 'src/store/types';
 import {
     CurrencySymbol,
@@ -23,7 +24,9 @@ import { useWallet } from 'use-wallet';
 export const PortfolioManagement = () => {
     const { account } = useWallet();
 
-    const { balance } = useSelector((state: RootState) => state.ethereumWallet);
+    const balance = useSelector((state: RootState) =>
+        selectEthereumBalance(state)
+    );
 
     const addressRecord = useMemo(() => {
         return {
