@@ -1,6 +1,6 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
-import { ThemeProvider } from 'styled-components';
 import theme from 'src/theme';
+import { ThemeProvider } from 'styled-components';
 
 import { CurrencySelector } from '.';
 
@@ -9,6 +9,9 @@ export default {
     component: CurrencySelector,
     args: {
         selectedCcy: 'ETH',
+    },
+    parameters: {
+        chromatic: { disableSnapshot: false },
     },
 } as ComponentMeta<typeof CurrencySelector>;
 

@@ -23,9 +23,6 @@ export default {
         },
         marketRate: 100,
     },
-    parameters: {
-        chromatic: { disableSnapshot: false },
-    },
     decorators: [WithAssetPrice],
 } as ComponentMeta<typeof LendingCard>;
 

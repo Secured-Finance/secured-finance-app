@@ -14,9 +14,6 @@ export default {
         asset: CurrencySymbol.FIL,
         quantity: 740,
     },
-    parameters: {
-        chromatic: { disableSnapshot: false },
-    },
     decorators: [WithAssetPrice],
 } as ComponentMeta<typeof AssetInformation>;
 

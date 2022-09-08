@@ -25,9 +25,6 @@ export default {
             ],
         },
         options,
-        parameters: {
-            chromatic: { disableSnapshot: false },
-        },
     },
 } as ComponentMeta<typeof LineChart>;
 

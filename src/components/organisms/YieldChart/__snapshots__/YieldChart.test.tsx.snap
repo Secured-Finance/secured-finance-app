@@ -18,6 +18,7 @@ exports[`YieldChart Component should render YieldChart 1`] = `
             <div>
               <svg
                 class="h-10 w-10"
+                role="img"
               />
             </div>
             <div

@@ -7,9 +7,6 @@ export default {
     args: {
         onClick: () => {},
     },
-    parameters: {
-        chromatic: { disableSnapshot: false },
-    },
 } as ComponentMeta<typeof CloseButton>;
 
 const Template: ComponentStory<typeof CloseButton> = args => (

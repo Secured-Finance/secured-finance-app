@@ -9,9 +9,6 @@ export default {
         active: true,
         onClick: () => {},
     },
-    parameters: {
-        chromatic: { disableSnapshot: false },
-    },
 } as ComponentMeta<typeof PercentageTab>;
 
 const Template: ComponentStory<typeof PercentageTab> = args => (

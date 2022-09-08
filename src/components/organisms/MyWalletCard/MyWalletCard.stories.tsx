@@ -24,9 +24,6 @@ export default {
         ],
     },
     decorators: [WithWalletProvider],
-    parameters: {
-        chromatic: { disableSnapshot: false },
-    },
 } as ComponentMeta<typeof MyWalletCard>;
 
 const Template: ComponentStory<typeof MyWalletCard> = args => (

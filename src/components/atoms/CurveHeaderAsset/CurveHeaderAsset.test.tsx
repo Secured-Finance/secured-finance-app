@@ -10,5 +10,6 @@ describe('test CurveHeaderAsset component', () => {
         expect(screen.getByText('Filecoin')).toBeInTheDocument();
         expect(screen.getByText('$8.02')).toBeInTheDocument();
         expect(screen.getByText('-2.45%')).toBeInTheDocument();
+        expect(screen.getByRole('img')).toBeInTheDocument();
     });
 });

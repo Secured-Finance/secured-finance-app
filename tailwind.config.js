@@ -16,6 +16,9 @@ module.exports = {
             dropShadow: {
                 tab: '0px 46px 64px rgba(31, 47, 70, 0.4)',
             },
+            margin: {
+                '0.5': '0.125rem',
+            },
         },
         fontFamily: {
             primary: ['GT Super Display', ...defaultTheme.fontFamily.serif],

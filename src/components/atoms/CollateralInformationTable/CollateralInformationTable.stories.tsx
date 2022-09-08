@@ -15,9 +15,6 @@ export default {
             { asset: CurrencySymbol.USDC, quantity: 100 },
         ],
     },
-    parameters: {
-        chromatic: { disableSnapshot: false },
-    },
     decorators: [WithAssetPrice],
 } as ComponentMeta<typeof CollateralInformationTable>;
 
