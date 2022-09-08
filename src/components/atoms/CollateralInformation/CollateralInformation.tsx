@@ -18,9 +18,7 @@ export const CollateralInformation = ({
 
     return (
         <div className='flex h-11 w-full flex-row gap-5'>
-            <div>
-                <CurrencyIcon ccy={asset} />
-            </div>
+            <CurrencyIcon ccy={asset} />
             <div className='flex w-full flex-row justify-between'>
                 <CurrencyItem ccy={asset} />
                 <CurrencyItem
