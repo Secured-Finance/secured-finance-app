@@ -1,5 +1,10 @@
 import classNames from 'classnames';
-import { currencyMap, CurrencySymbol, usdFormatAppendUSD } from 'src/utils';
+import {
+    currencyMap,
+    CurrencySymbol,
+    ordinaryFormat,
+    usdFormatAppendUSD,
+} from 'src/utils';
 
 export const CurrencyItem = ({
     amount,
@@ -21,7 +26,7 @@ export const CurrencyItem = ({
         secondLine = currencyMap[ccy].name;
     }
 
-    const firstLine = amount ? `${amount} ${ccy}` : `${ccy}`;
+    const firstLine = amount ? `${ordinaryFormat(amount)} ${ccy}` : ccy;
     return (
         <div
             data-testid='currency-amount-item'
