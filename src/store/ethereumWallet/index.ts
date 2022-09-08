@@ -1,10 +1,5 @@
 import walletsSlice from './reducer';
-import { WalletsStore } from './types';
-export type { WalletBase, WalletsStore } from './types';
-
-export const walletsSelector = (state: {
-    wallets: WalletsStore;
-}): WalletsStore => state.wallets;
+export type { WalletsStore as WalletBase, WalletsStore } from './types';
 
 export default walletsSlice.reducer;
 export const {
@@ -14,6 +9,5 @@ export const {
     updateEthWalletPortfolioShare,
     updateEthWalletDailyChange,
     updateEthWalletAssetPrice,
-    updateTotalUSDBalance,
     resetEthWallet,
 } = walletsSlice.actions;

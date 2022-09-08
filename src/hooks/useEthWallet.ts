@@ -1,7 +1,6 @@
 import BigNumber from 'bignumber.js';
 import { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from 'src/store/types';
 import {
     connectEthWallet,
     resetEthWallet,
@@ -10,7 +9,8 @@ import {
     updateEthWalletDailyChange,
     updateEthWalletPortfolioShare,
     updateEthWalletUSDBalance,
-} from 'src/store/wallets';
+} from 'src/store/ethereumWallet';
+import { RootState } from 'src/store/types';
 import { useWallet } from 'use-wallet';
 
 export const useEthereumWalletStore = () => {
@@ -19,8 +19,8 @@ export const useEthereumWalletStore = () => {
     const { price, change } = useSelector(
         (state: RootState) => state.assetPrices.ethereum
     );
-    const { totalUSDBalance, ethereum: ethWallet } = useSelector(
-        (state: RootState) => state.wallets
+    const ethereumWallet = useSelector(
+        (state: RootState) => state.ethereumWallet
     );
 
     const getWalletBalance = useCallback(
@@ -43,7 +43,7 @@ export const useEthereumWalletStore = () => {
             const { usdBalance, inEther } = getWalletBalance(balance, price);
             const portfolioShare = new BigNumber(usdBalance)
                 .times(100)
-                .dividedBy(new BigNumber(totalUSDBalance))
+                .dividedBy(new BigNumber(ethereumWallet.usdBalance))
                 .toNumber();
 
             dispatch(connectEthWallet(account));
@@ -59,7 +59,14 @@ export const useEthereumWalletStore = () => {
                 dispatch(updateEthWalletPortfolioShare(portfolioShare));
             }
         },
-        [getWalletBalance, balance, price, totalUSDBalance, dispatch, change]
+        [
+            getWalletBalance,
+            balance,
+            price,
+            ethereumWallet.usdBalance,
+            dispatch,
+            change,
+        ]
     );
 
     const connectWallet = useCallback(
@@ -79,7 +86,7 @@ export const useEthereumWalletStore = () => {
         if (account) {
             fetchEthStore(account);
         }
-    }, [account, balance, change, fetchEthStore, price, totalUSDBalance]);
+    }, [account, balance, change, fetchEthStore, price]);
 
     useEffect(() => {
         if (account === null) {
@@ -87,28 +94,5 @@ export const useEthereumWalletStore = () => {
         }
     }, [account, dispatch]);
 
-    return ethWallet;
-};
-
-export const useEthBalance = () => {
-    const { account, balance } = useWallet();
-    const dispatch = useDispatch();
-    const ethBalance = useSelector(
-        (state: RootState) => state.wallets.ethereum.balance
-    );
-
-    const fetchEthStore = useCallback(async () => {
-        const inEther = new BigNumber(balance)
-            .dividedBy(new BigNumber(10).pow(18))
-            .toNumber();
-        dispatch(updateEthWalletBalance(inEther));
-    }, [dispatch, balance]);
-
-    useEffect(() => {
-        if (account && balance) {
-            fetchEthStore();
-        }
-    }, [dispatch, account, balance, fetchEthStore]);
-
-    return ethBalance;
+    return ethereumWallet;
 };

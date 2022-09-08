@@ -23,23 +23,19 @@ import { useWallet } from 'use-wallet';
 export const PortfolioManagement = () => {
     const { account } = useWallet();
 
-    const {
-        ethereum: { balance: ethereumBalance },
-    } = useSelector((state: RootState) => state.wallets);
+    const { balance } = useSelector((state: RootState) => state.ethereumWallet);
 
     const addressRecord = useMemo(() => {
         return {
-            [WalletSource.METAMASK]: account ? account : '',
-            [WalletSource.UTILWALLET]: 'filecoinAddress',
+            [WalletSource.METAMASK]: account ?? '',
         };
     }, [account]);
 
     const balanceRecord = useMemo(() => {
         return {
-            [CurrencySymbol.ETH]: ethereumBalance,
-            [CurrencySymbol.FIL]: 0,
+            [CurrencySymbol.ETH]: balance,
         };
-    }, [ethereumBalance]);
+    }, [balance]);
 
     const assetMap: AssetDisclosureProps[] = useMemo(
         () => generateWalletInformation(addressRecord, balanceRecord),

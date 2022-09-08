@@ -8,9 +8,9 @@ import { useHistory } from 'react-router-dom';
 import MetamaskLogo from 'src/assets/img/metamask-fox.svg';
 import { ExpandIndicator, Separator, Toggle } from 'src/components/atoms';
 import { CACHED_PROVIDER_KEY } from 'src/contexts/SecuredFinanceProvider/SecuredFinanceProvider';
+import { resetEthWallet } from 'src/store/ethereumWallet';
+import { isAnyWalletConnected } from 'src/store/ethereumWallet/selectors';
 import { RootState } from 'src/store/types';
-import { resetEthWallet } from 'src/store/wallets';
-import { isAnyWalletConnected } from 'src/store/wallets/selectors';
 import { formatDataCy } from 'src/utils';
 import { useWallet } from 'use-wallet';
 

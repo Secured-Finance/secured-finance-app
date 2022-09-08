@@ -58,7 +58,7 @@ export const walletInformation: Partial<
 export const collateralList = [currencyMap.ETH] as Array<CurrencyInfo>;
 
 export const generateWalletInformation = (
-    accounts: Record<WalletSource, string>,
+    accounts: Partial<Record<WalletSource, string>>,
     balance: Record<string, number>
 ): AssetDisclosureProps[] => {
     const collateralRecords = [];
@@ -81,7 +81,7 @@ export const generateWalletInformation = (
             collateralRecords.push({
                 data: data,
                 walletSource: wallet,
-                account: accounts[wallet],
+                account: accounts[wallet] ?? '',
             });
         }
     }
