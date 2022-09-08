@@ -14,9 +14,9 @@ describe('CurrencyAmountItem Component', () => {
         expect(screen.getByText('$500.00 USD')).toBeInTheDocument();
     });
 
-    it('should render the currency amount in FIL', () => {
+    it('should render the formatted currency amount in FIL', () => {
         render(<Default />);
-        expect(screen.getByText('1000 FIL')).toBeInTheDocument();
+        expect(screen.getByText('1,000 FIL')).toBeInTheDocument();
     });
 
     it('should align the currency amount to the right', () => {
