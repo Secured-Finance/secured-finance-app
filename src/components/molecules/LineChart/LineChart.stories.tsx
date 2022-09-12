@@ -5,7 +5,7 @@ import { LineChart } from './';
 export default {
     title: 'Molecules/LineChart',
     component: LineChart,
-    chromatic: { diffThreshold: 0.8, delay: 500 },
+    chromatic: { diffThreshold: 1, delay: 500 },
     args: {
         data: {
             labels: [
