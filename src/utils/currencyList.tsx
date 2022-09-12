@@ -6,7 +6,6 @@ import EthIcon from 'src/assets/coins/eth2.svg';
 import FilecoinIcon from 'src/assets/coins/fil.svg';
 import UsdcIcon from 'src/assets/coins/usdc.svg';
 import { Option } from 'src/components/atoms';
-import { MAINNET_PATH_CODE } from 'src/services/ledger/constants';
 import { Filecoin } from './currencies/filecoin';
 import { USDC } from './currencies/usdc';
 
@@ -42,7 +41,7 @@ export const currencyMap: Readonly<
         icon: FilecoinIcon,
         symbol: CurrencySymbol.FIL,
         name: FIL.name,
-        chainId: MAINNET_PATH_CODE,
+        chainId: ETH_CHAIN_ID,
         toBaseUnit: (amount: number) => {
             const filAmount = new FilecoinNumber(amount, 'fil');
             return BigNumber.from(filAmount.toAttoFil());

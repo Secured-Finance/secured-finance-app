@@ -7,8 +7,6 @@ import { UseWalletProvider } from 'use-wallet';
 import { Header } from './components/organisms';
 import { Landing, PortfolioManagement } from './components/pages';
 import { Layout } from './components/templates';
-import FilecoinWalletProvider from './contexts/FilecoinWalletProvider';
-import ModalsProvider from './contexts/Modals';
 import SecuredFinanceProvider from './contexts/SecuredFinanceProvider';
 import store from './store';
 import theme from './theme';
@@ -62,11 +60,7 @@ const Providers: React.FC = ({ children }) => {
                         },
                     }}
                 >
-                    <FilecoinWalletProvider>
-                        <SecuredFinanceProvider>
-                            <ModalsProvider>{children}</ModalsProvider>
-                        </SecuredFinanceProvider>
-                    </FilecoinWalletProvider>
+                    <SecuredFinanceProvider>{children}</SecuredFinanceProvider>
                 </UseWalletProvider>
             </GraphClientProvider>
         </ThemeProvider>

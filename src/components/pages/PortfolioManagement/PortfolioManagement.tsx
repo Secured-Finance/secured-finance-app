@@ -12,9 +12,8 @@ import {
     MyWalletCard,
     Position,
 } from 'src/components/organisms';
-import { FIL_ADDRESS } from 'src/services/filecoin';
+import { selectEthereumBalance } from 'src/store/ethereumWallet';
 import { RootState } from 'src/store/types';
-import { getFilAddress } from 'src/store/wallets/selectors';
 import {
     CurrencySymbol,
     generateWalletInformation,
@@ -24,28 +23,22 @@ import { useWallet } from 'use-wallet';
 
 export const PortfolioManagement = () => {
     const { account } = useWallet();
-    const addressFromLocalStorage = localStorage.getItem(FIL_ADDRESS);
-    const addressFromStore = useSelector(getFilAddress);
-    const filecoinAddress = addressFromLocalStorage || addressFromStore;
 
-    const {
-        ethereum: { balance: ethereumBalance },
-        filecoin: { balance: filecoinBalance },
-    } = useSelector((state: RootState) => state.wallets);
+    const balance = useSelector((state: RootState) =>
+        selectEthereumBalance(state)
+    );
 
     const addressRecord = useMemo(() => {
         return {
-            [WalletSource.METAMASK]: account ? account : '',
-            [WalletSource.UTILWALLET]: filecoinAddress,
+            [WalletSource.METAMASK]: account ?? '',
         };
-    }, [account, filecoinAddress]);
+    }, [account]);
 
     const balanceRecord = useMemo(() => {
         return {
-            [CurrencySymbol.ETH]: ethereumBalance,
-            [CurrencySymbol.FIL]: filecoinBalance,
+            [CurrencySymbol.ETH]: balance,
         };
-    }, [ethereumBalance, filecoinBalance]);
+    }, [balance]);
 
     const assetMap: AssetDisclosureProps[] = useMemo(
         () => generateWalletInformation(addressRecord, balanceRecord),

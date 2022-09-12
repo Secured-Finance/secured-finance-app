@@ -2,17 +2,17 @@ import { Popover, Transition } from '@headlessui/react';
 import { LogoutIcon, UserIcon } from '@heroicons/react/outline';
 import { BadgeCheckIcon } from '@heroicons/react/solid';
 import classNames from 'classnames';
-import React, { Fragment, useCallback, useState } from 'react';
+import React, { Fragment, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import FilecoinWallet from 'src/assets/icons/FilecoinWallet.svg';
 import MetamaskLogo from 'src/assets/img/metamask-fox.svg';
 import { ExpandIndicator, Separator, Toggle } from 'src/components/atoms';
-import { FilWalletDialog } from 'src/components/organisms';
 import { CACHED_PROVIDER_KEY } from 'src/contexts/SecuredFinanceProvider/SecuredFinanceProvider';
+import {
+    isEthereumWalletConnected,
+    resetEthWallet,
+} from 'src/store/ethereumWallet';
 import { RootState } from 'src/store/types';
-import { resetEthWallet } from 'src/store/wallets';
-import { isAnyWalletConnected } from 'src/store/wallets/selectors';
 import { formatDataCy } from 'src/utils';
 import { useWallet } from 'use-wallet';
 
@@ -80,10 +80,8 @@ export const WalletPopover = ({
     const { reset } = useWallet();
     const dispatch = useDispatch();
     const history = useHistory();
-    const [displayFilWalletConnectDialog, setDisplayFilWalletConnectDialog] =
-        useState(false);
     const otherWalletConnected = useSelector((state: RootState) =>
-        isAnyWalletConnected(state, 'ethereum')
+        isEthereumWalletConnected(state)
     );
 
     const handleSignOutClick = useCallback(() => {
@@ -94,11 +92,6 @@ export const WalletPopover = ({
             history.push('/');
         }
     }, [dispatch, history, otherWalletConnected, reset]);
-
-    const handleAddFilecoinClick = useCallback(close => {
-        close();
-        setDisplayFilWalletConnectDialog(true);
-    }, []);
 
     return (
         <>
@@ -150,19 +143,6 @@ export const WalletPopover = ({
                                                     }
                                                 />
                                                 <Separator />
-                                                <MenuItem
-                                                    label='Filecoin Test Program'
-                                                    text='Add Filecoin Wallet'
-                                                    icon={
-                                                        <FilecoinWallet className='h-5 w-5 text-slateGray' />
-                                                    }
-                                                    onClick={() =>
-                                                        handleAddFilecoinClick(
-                                                            close
-                                                        )
-                                                    }
-                                                />
-                                                <Separator />
                                                 {isKYC ? (
                                                     <MenuItem
                                                         text='Account Verified'
@@ -209,10 +189,6 @@ export const WalletPopover = ({
                     )}
                 </Popover>
             </div>
-            <FilWalletDialog
-                isOpen={displayFilWalletConnectDialog}
-                onClose={() => setDisplayFilWalletConnectDialog(false)}
-            />
         </>
     );
 };

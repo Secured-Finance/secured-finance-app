@@ -84,7 +84,7 @@ jobs:
           install: false
           start: npm run preview
           wait-on: 'http://localhost:3000'
-          wait-on-timeout: 120
+          wait-on-timeout: 180
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CYPRESS_TENDERLY_KEY: ${{ secrets.TENDERLY_KEY }}
