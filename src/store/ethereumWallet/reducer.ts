@@ -5,8 +5,8 @@ const initialStore: WalletsStore = {
     ...defaultEthWallet,
 };
 
-const walletsSlice = createSlice({
-    name: 'wallets',
+const ethereumWalletSlice = createSlice({
+    name: 'ethereumWallet',
     initialState: initialStore,
     reducers: {
         updateEthWalletBalance(state, action: PayloadAction<number>) {
@@ -26,4 +26,4 @@ const walletsSlice = createSlice({
     },
 });
 
-export default walletsSlice;
+export default ethereumWalletSlice;
