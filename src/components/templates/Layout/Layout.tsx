@@ -13,9 +13,12 @@ export const Layout = ({
     navBar: React.ReactNode;
 }) => {
     return (
-        <div className='grid overflow-auto' data-testid='root-div'>
+        <div
+            className='grid h-screen overflow-x-auto pb-8'
+            data-testid='wrapper-div'
+        >
             <header>{navBar}</header>
-            <main className='h-screen'>
+            <main>
                 <Switch>
                     {routes.map(({ path, component }) => (
                         <Route path={path} key={path}>
