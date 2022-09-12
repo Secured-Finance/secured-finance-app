@@ -13,7 +13,7 @@ export const Layout = ({
     navBar: React.ReactNode;
 }) => {
     return (
-        <div className='grid'>
+        <div className='grid overflow-auto' data-testid='root-div'>
             <header>{navBar}</header>
             <main className='h-screen'>
                 <Switch>
