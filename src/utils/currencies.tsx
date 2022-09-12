@@ -65,8 +65,9 @@ export const generateWalletInformation = (
     const walletsArray = Object.keys(walletInformation) as WalletSource[];
     for (let i = 0; i < walletsArray.length; i++) {
         const wallet = walletsArray[i];
+        const account = accounts[wallet];
         const data = [];
-        if (accounts[wallet]) {
+        if (account) {
             const currenciesArray = walletInformation[wallet];
             if (!currenciesArray) {
                 continue;
@@ -81,7 +82,7 @@ export const generateWalletInformation = (
             collateralRecords.push({
                 data: data,
                 walletSource: wallet,
-                account: accounts[wallet] ?? '',
+                account: account,
             });
         }
     }

@@ -1,11 +1,11 @@
-import walletsSlice from './reducer';
+import ethereumWalletSlice from './reducer';
 export { isEthereumWalletConnected, selectEthereumBalance } from './selectors';
 export type { WalletsStore } from './types';
 
-export default walletsSlice.reducer;
+export default ethereumWalletSlice.reducer;
 export const {
     updateEthWalletBalance,
     updateEthWalletUSDBalance,
     connectEthWallet,
     resetEthWallet,
-} = walletsSlice.actions;
+} = ethereumWalletSlice.actions;
