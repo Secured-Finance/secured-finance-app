@@ -20,6 +20,8 @@ describe('Layout Component', () => {
 
     it('should be scrollable', () => {
         render(<Default />);
-        expect(screen.getByTestId('root-div')).toHaveClass('overflow-auto');
+        expect(screen.getByTestId('wrapper-div')).toHaveClass(
+            'overflow-x-auto'
+        );
     });
 });
