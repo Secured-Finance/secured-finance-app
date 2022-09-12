@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { RootState } from 'src/store/types';
 import theme from 'src/theme';
 import styled from 'styled-components';
-import { Balances } from './components/Balances';
 import LoanOrder from './components/LoanOrder';
 import MarketInfo from './components/MarketInfo';
 import { OrderBook } from './components/OrderBook';
@@ -15,7 +14,7 @@ const Exchange: React.FC = () => {
         <div data-cy='exchange-page'>
             <StyledTerminalContainer>
                 <ScrollableSideContainer>
-                    <Balances />
+                    {/* <Balances /> */}
                     <StyledDivider />
                     <LoanOrder />
                 </ScrollableSideContainer>

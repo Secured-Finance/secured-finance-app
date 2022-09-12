@@ -1,22 +1,18 @@
 import { configureStore } from '@reduxjs/toolkit';
-import filWalletProvider from '../services/filecoin/store';
 import assetPrices from './assetPrices';
 import blockchain from './blockchain';
 import { listenerMiddleware } from './blockchain/reducer';
+import ethereumWallet from './ethereumWallet';
 import history from './history';
 import landingOrderForm from './landingOrderForm';
 import lastError from './lastError';
-import ledger from './ledger';
 import lendingTerminal from './lendingTerminal';
-import wallets from './wallets';
 
 export const rootReducers = {
     history,
-    wallets,
+    ethereumWallet,
     assetPrices,
-    filWalletProvider,
     lendingTerminal,
-    ledger,
     blockchain,
     lastError,
     landingOrderForm,
