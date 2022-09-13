@@ -11,11 +11,7 @@ function EntryPoint() {
         return null;
     }
 
-    return (
-        <div>
-            <SecuredFinanceApp />
-        </div>
-    );
+    return <SecuredFinanceApp />;
 }
 
 export default EntryPoint;

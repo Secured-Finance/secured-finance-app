@@ -17,4 +17,11 @@ describe('Layout Component', () => {
         expect(screen.getByRole('banner')).toBeInTheDocument();
         expect(screen.getByRole('main')).toBeInTheDocument();
     });
+
+    it('should be scrollable', () => {
+        render(<Default />);
+        expect(screen.getByTestId('wrapper-div')).toHaveClass(
+            'overflow-y-auto'
+        );
+    });
 });
