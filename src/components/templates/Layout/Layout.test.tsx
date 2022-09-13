@@ -21,7 +21,7 @@ describe('Layout Component', () => {
     it('should be scrollable', () => {
         render(<Default />);
         expect(screen.getByTestId('wrapper-div')).toHaveClass(
-            'overflow-x-auto'
+            'overflow-y-auto'
         );
     });
 });
