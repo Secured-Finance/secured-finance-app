@@ -5,6 +5,8 @@ on:
     branches:
       - master
       - develop
+      # For testing
+      - SF-188-user-should-see-rate-and-yield-curve-populated-on-page-load
   pull_request:
     types:
       - opened
@@ -55,6 +57,8 @@ jobs:
           NPM_AUTH_TOKEN: ${{ secrets.PAT }}
       - name: Check Syntax with Prettier
         run: npm run prettier:check
+      - name: Copy .env
+        run: cp .env.sample .env
       - name: Check Style with ESLint
         run: npm run lint:check
       - name: Run Tests
@@ -88,11 +92,11 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CYPRESS_TENDERLY_KEY: ${{ secrets.TENDERLY_KEY }}
+          NEXT_PUBLIC_ALCHEMY_API_KEY: ${{ secrets.ALCHEMY_API_KEY }}
       - uses: actions/upload-artifact@v3
         if: failure()
         with:
           name: cypress-screenshots
-          path: cypress/screenshots
           retention-days: 3
       - uses: actions/upload-artifact@v3
         if: failure()

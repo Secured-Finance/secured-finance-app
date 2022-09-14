@@ -7,9 +7,10 @@ This repo contains a decentralized web application.
 ## Quick Start
 
 1. Clone this repository
-2. Login on the GitHub npm package repository with `npm login --registry=https://npm.pkg.github.com`
-3. Install all required dependencies using `npm install` command
-4. Run `npm run start` to start development mode
+2. Create a file `.env` at the root of the project. Please refer to `.env.sample` for the list of environment variables needed
+3. Login on the GitHub npm package repository with `npm login --registry=https://npm.pkg.github.com`
+4. Install all required dependencies using `npm install` command
+5. Run `npm run start` to start development mode
 
 ### Recommended Development Environment
 This repository provides a `.vscode/settings.json` which assumes you have the following extensions installed:
