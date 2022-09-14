@@ -30,10 +30,10 @@ jobs:
         run: npm ci
         env:
           NPM_AUTH_TOKEN: ${{ secrets.PAT }}
-      - name: Copy .env
-        run: cp .env.sample .env
       - name: Build Web App
         run: npm run build
+        env:
+          NEXT_PUBLIC_ALCHEMY_API_KEY: ${{ secrets.ALCHEMY_API_KEY }}
       - uses: chromaui/action@v1
         with:
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
@@ -59,8 +59,6 @@ jobs:
           NPM_AUTH_TOKEN: ${{ secrets.PAT }}
       - name: Check Syntax with Prettier
         run: npm run prettier:check
-      - name: Copy .env
-        run: cp .env.sample .env
       - name: Check Style with ESLint
         run: npm run lint:check
       - name: Run Tests
@@ -84,8 +82,6 @@ jobs:
         run: npm ci && npm install serve
         env:
           NPM_AUTH_TOKEN: ${{ secrets.PAT }}
-      - name: Copy .env
-        run: cp .env.sample .env
       - name: Cypress run
         uses: cypress-io/github-action@v3
         with:
