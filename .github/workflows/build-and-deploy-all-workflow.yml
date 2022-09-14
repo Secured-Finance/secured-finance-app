@@ -5,8 +5,6 @@ on:
     branches:
       - master
       - develop
-      # For testing
-      - SF-188-user-should-see-rate-and-yield-curve-populated-on-page-load
   pull_request:
     types:
       - opened
