@@ -2,9 +2,10 @@ import { SecuredFinanceClient } from '@secured-finance/sf-client';
 import { ethers } from 'ethers';
 import React, { createContext, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
+import { useLendingMarkets } from 'src/hooks';
 import { useEthereumWalletStore } from 'src/hooks/useEthWallet';
 import { updateLatestBlock } from 'src/store/blockchain';
-import { hexToDec } from 'src/utils';
+import { CurrencySymbol, hexToDec } from 'src/utils';
 import { ChainUnsupportedError, useWallet } from 'use-wallet';
 
 export const CACHED_PROVIDER_KEY = 'CACHED_PROVIDER_KEY';
@@ -32,6 +33,10 @@ const SecuredFinanceProvider: React.FC = ({ children }) => {
     const dispatch = useDispatch();
 
     useEthereumWalletStore();
+    Object.values(CurrencySymbol).forEach(ccy => {
+        // eslint-disable-next-line react-hooks/rules-of-hooks
+        useLendingMarkets(ccy, securedFinance);
+    });
 
     const handleNetworkChanged = (networkId: string) => {
         if (hexToDec(networkId) !== 4) {
