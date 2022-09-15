@@ -4,7 +4,7 @@ import React, { createContext, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useEthereumWalletStore } from 'src/hooks/useEthWallet';
 import { updateLatestBlock } from 'src/store/blockchain';
-import { hexToDec } from 'src/utils';
+import { getRpcEndpoint, hexToDec } from 'src/utils';
 import { ChainUnsupportedError, useWallet } from 'use-wallet';
 
 export const CACHED_PROVIDER_KEY = 'CACHED_PROVIDER_KEY';
@@ -25,7 +25,7 @@ declare global {
 
 const SecuredFinanceProvider: React.FC = ({ children }) => {
     const [web3Provider, setWeb3Provider] =
-        useState<ethers.providers.Web3Provider | null>(null);
+        useState<ethers.providers.BaseProvider | null>(null);
     const { error, status, connect, account, ethereum } = useWallet();
     const [securedFinance, setSecuredFinance] =
         useState<SecuredFinanceClient>();
@@ -40,23 +40,27 @@ const SecuredFinanceProvider: React.FC = ({ children }) => {
     };
 
     useEffect(() => {
-        const connectSFClient = async (chainId: number) => {
-            const provider = window.localStorage.getItem('FORK')
-                ? ethereum?.provider
-                : new ethers.providers.Web3Provider(ethereum, chainId);
+        const connectSFClient = async (
+            provider: ethers.providers.BaseProvider,
+            signer?: ethers.Signer
+        ) => {
             setWeb3Provider(provider);
             const network = await provider.getNetwork();
-            const signer = provider.getSigner();
 
             const securedFinanceLib = new SecuredFinanceClient();
-            await securedFinanceLib.init(signer, network);
+            await securedFinanceLib.init(signer || provider, network);
 
             setSecuredFinance(securedFinanceLib);
             window.securedFinanceSDK = securedFinanceLib;
         };
+
         if (ethereum) {
             const chainId = Number(ethereum.chainId);
-            connectSFClient(chainId);
+            const provider = window.localStorage.getItem('FORK')
+                ? ethereum?.provider
+                : new ethers.providers.Web3Provider(ethereum, chainId);
+            const signer = provider.getSigner();
+            connectSFClient(provider, signer);
             ethereum.on('chainChanged', handleNetworkChanged);
 
             return () => {
@@ -68,15 +72,20 @@ const SecuredFinanceProvider: React.FC = ({ children }) => {
                 }
             };
         } else {
-            if (status === 'error') {
-                if (error instanceof ChainUnsupportedError) {
-                    alert(
-                        'Unsupported network, please use Rinkeby (Chain ID: 4)'
-                    );
-                }
-            }
+            const provider = ethers.getDefaultProvider(getRpcEndpoint());
+            connectSFClient(provider);
         }
     }, [ethereum, status, error]);
+
+    useEffect(() => {
+        if (status === 'error') {
+            if (error instanceof ChainUnsupportedError) {
+                alert('Unsupported network, please use Rinkeby (Chain ID: 4)');
+            } else {
+                console.error(error);
+            }
+        }
+    }, [status, error]);
 
     useEffect(() => {
         if (account) {

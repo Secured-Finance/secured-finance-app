@@ -28,6 +28,10 @@ jobs:
         run: npm ci
         env:
           NPM_AUTH_TOKEN: ${{ secrets.PAT }}
+      - run: |
+          cat <<EOF > .env.local
+          NEXT_PUBLIC_ALCHEMY_API_KEY=${{ secrets.ALCHEMY_API_KEY }}
+          EOF
       - name: Build Web App
         run: npm run build
       - uses: chromaui/action@v1
@@ -88,6 +92,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CYPRESS_TENDERLY_KEY: ${{ secrets.TENDERLY_KEY }}
+          NEXT_PUBLIC_ALCHEMY_API_KEY: ${{ secrets.ALCHEMY_API_KEY }}
       - uses: actions/upload-artifact@v3
         if: failure()
         with:
