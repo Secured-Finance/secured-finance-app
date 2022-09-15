@@ -109,8 +109,8 @@ export const WithdrawCollateral = ({
                     console.error('Some error occured');
                     handleClose();
                 }
+                dispatch({ type: 'next' });
             }
-            dispatch({ type: 'next' });
         } catch (e) {
             console.error(e);
             handleClose();
