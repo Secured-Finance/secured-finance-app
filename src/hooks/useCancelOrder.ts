@@ -5,7 +5,7 @@ import useSF from './useSecuredFinance';
 
 export const useCancelOrder = (
     ccy: CurrencySymbol,
-    term: string,
+    maturity: number | BigNumber,
     orderId: number | BigNumber
 ) => {
     const securedFinance = useSF();
@@ -14,11 +14,11 @@ export const useCancelOrder = (
         if (!securedFinance) return;
         const tx = await securedFinance.cancelLendingOrder(
             toCurrency(ccy),
-            term,
+            maturity,
             orderId
         );
         return tx;
-    }, [securedFinance, ccy, term, orderId]);
+    }, [securedFinance, ccy, maturity, orderId]);
 
     return { onCancelOrder: handleCancelOrder };
 };

@@ -14,7 +14,7 @@ export interface CollateralBook {
     collateral: BigNumber;
     usdCollateral: BigNumber;
     locked: BigNumber;
-    usdLocked: BigNumber;
+    coverage: BigNumber;
 }
 
 const emptyBook: CollateralBook = {
@@ -23,7 +23,7 @@ const emptyBook: CollateralBook = {
     collateral: ZERO_BN,
     usdCollateral: ZERO_BN,
     locked: ZERO_BN,
-    usdLocked: ZERO_BN,
+    coverage: ZERO_BN,
 };
 
 export const useCollateralBook = (
@@ -42,8 +42,10 @@ export const useCollateralBook = (
         if (!securedFinance || !account) {
             return;
         }
+
+        // TODO: this is not taking care of what are really those numbers. This needs to be fixed
         const getCollateralBook = async () => {
-            const { independentCollateral, lockedCollateral } =
+            const { collateralAmount, collateralCoverage } =
                 await securedFinance.getCollateralBook(
                     account,
                     toCurrency(ccy)
@@ -52,14 +54,12 @@ export const useCollateralBook = (
             setCollateralBook({
                 ccyIndex: currencyMap[ccy].indexCcy,
                 ccyName: ccy,
-                collateral: new BigNumber(independentCollateral.toString()),
+                collateral: new BigNumber(collateralAmount.toString()),
                 usdCollateral: new BigNumber(
-                    independentCollateral.toString()
+                    collateralAmount.toString()
                 ).multipliedBy(ethPrice),
-                locked: new BigNumber(lockedCollateral.toString()),
-                usdLocked: new BigNumber(
-                    lockedCollateral.toString()
-                ).multipliedBy(ethPrice),
+                locked: new BigNumber(collateralCoverage.toString()),
+                coverage: new BigNumber(collateralCoverage.toString()),
             });
         };
         getCollateralBook();

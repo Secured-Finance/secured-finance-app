@@ -26,8 +26,8 @@ export const mockUseSF = () => {
         ),
         getCollateralBook: jest.fn(() =>
             Promise.resolve({
-                independentCollateral: new BigNumberJS('10000'),
-                lockedCollateral: new BigNumberJS('10000'),
+                collateralAmount: new BigNumberJS('10000'),
+                collateralCoverage: new BigNumberJS('10000'),
             })
         ),
         getLendingMarket: jest.fn(() =>
@@ -37,9 +37,34 @@ export const mockUseSF = () => {
                 },
             })
         ),
-        getCrosschainAddress: jest.fn(() => Promise.resolve('fil0x0')),
-        checkRegisteredUser: jest.fn<Promise<boolean> | undefined, []>(() =>
-            Promise.resolve(true)
+
+        getMaturities: jest.fn(() =>
+            Promise.resolve([
+                BigNumber.from('1000'),
+                BigNumber.from('2000'),
+                BigNumber.from('3000'),
+                BigNumber.from('4000'),
+                BigNumber.from('5000'),
+            ])
+        ),
+
+        getLendingMarkets: jest.fn(() =>
+            Promise.resolve([
+                {
+                    midRate: 100,
+                    lendRate: 200,
+                    borrowRate: 300,
+                    maturity: 1000,
+                    name: 'ETH-1000',
+                },
+                {
+                    midRate: 100,
+                    lendRate: 200,
+                    borrowRate: 300,
+                    maturity: 2000,
+                    name: 'ETH-2000',
+                },
+            ])
         ),
     };
 
