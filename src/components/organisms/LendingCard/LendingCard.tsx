@@ -18,6 +18,7 @@ import { setLastMessage } from 'src/store/lastError';
 import { RootState } from 'src/store/types';
 import {
     CurrencySymbol,
+    formatDate,
     getCurrencyMapAsList,
     getCurrencyMapAsOptions,
     percentFormat,
@@ -179,6 +180,12 @@ export const LendingCard = ({
                     options={maturitiesOptionList}
                     selected={selectedTerm}
                     onTermChange={v => dispatch(setTerm(v))}
+                    transformLabel={v => {
+                        const ts = maturitiesOptionList.find(
+                            o => o.label === v
+                        )?.value;
+                        return ts ? formatDate(Number(ts)) : v;
+                    }}
                 />
 
                 <CollateralUsageSection
