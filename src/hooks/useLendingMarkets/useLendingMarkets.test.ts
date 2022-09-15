@@ -1,28 +1,53 @@
-import { renderHook } from '@testing-library/react-hooks';
+import { SecuredFinanceClient } from '@secured-finance/sf-client';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
+import { renderHook } from 'src/test-utils';
 import { CurrencySymbol } from 'src/utils';
 import { useLendingMarkets } from './useLendingMarkets';
 
 const mock = mockUseSF();
-jest.mock('src/hooks/useSecuredFinance', () => () => mock);
 
 describe('useLendingMarkets', () => {
-    it('should return the lending markets for a given currency', async () => {
-        const { result, waitForNextUpdate } = renderHook(() =>
-            useLendingMarkets(CurrencySymbol.ETH)
+    it('should insert the lending market contract into the store', async () => {
+        const { store, waitFor } = renderHook(() =>
+            useLendingMarkets(
+                CurrencySymbol.ETH,
+                mock as unknown as SecuredFinanceClient
+            )
+        );
+        waitFor(() => {
+            expect(
+                store.getState().availableContracts.lendingMarkets[
+                    CurrencySymbol.ETH
+                ]
+            ).toEqual({
+                'ETH-1000': {
+                    ccy: CurrencySymbol.ETH,
+                    maturity: 1000,
+                    name: 'ETH-1000',
+                },
+                'ETH-2000': {
+                    ccy: CurrencySymbol.ETH,
+                    maturity: 2000,
+                    name: 'ETH-2000',
+                },
+            });
+        });
+    });
+
+    it('should return the initial state of the store if the client is not defined', async () => {
+        const { store } = renderHook(() =>
+            useLendingMarkets(CurrencySymbol.ETH, undefined)
         );
 
-        await waitForNextUpdate();
-        expect(result.current).toEqual({
-            'ETH-1000': {
+        expect(
+            store.getState().availableContracts.lendingMarkets[
+                CurrencySymbol.ETH
+            ]
+        ).toEqual({
+            DUMMY: {
                 ccy: CurrencySymbol.ETH,
-                maturity: 1000,
-                name: 'ETH-1000',
-            },
-            'ETH-2000': {
-                ccy: CurrencySymbol.ETH,
-                maturity: 2000,
-                name: 'ETH-2000',
+                maturity: 0,
+                name: 'DUMMY',
             },
         });
     });

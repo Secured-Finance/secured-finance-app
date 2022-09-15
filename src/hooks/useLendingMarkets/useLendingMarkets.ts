@@ -1,6 +1,9 @@
-import { useEffect, useState } from 'react';
+import { SecuredFinanceClient } from '@secured-finance/sf-client';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { updateLendingMarketContract } from 'src/store/availableContracts';
+import { RootState } from 'src/store/types';
 import { CurrencySymbol, toCurrency } from 'src/utils';
-import useSF from '../useSecuredFinance';
 
 export type LendingContract = {
     ccy: CurrencySymbol;
@@ -10,39 +13,41 @@ export type LendingContract = {
 
 export type ContractMap = Record<string, LendingContract>;
 
-const EmptyContractMap: ContractMap = {
-    'ETH-1000': {
-        ccy: CurrencySymbol.ETH,
-        maturity: 1000,
-        name: 'ETH-1000',
-    },
-};
+export const useLendingMarkets = (
+    ccy: CurrencySymbol,
+    securedFinance: SecuredFinanceClient | undefined
+) => {
+    const block = useSelector(
+        (state: RootState) => state.blockchain.latestBlock
+    );
+    const dispatch = useDispatch();
 
-export const useLendingMarkets = (ccy: CurrencySymbol) => {
-    const [lendingMarkets, setLendingMarkets] =
-        useState<ContractMap>(EmptyContractMap);
-    const securedFinance = useSF();
     useEffect(() => {
         const fetchLendingMarkets = async () => {
-            if (!securedFinance) return;
-            const lendingMarkets = await securedFinance.getLendingMarkets(
-                toCurrency(ccy)
-            );
-
-            if (lendingMarkets.length !== 0) {
-                setLendingMarkets(
-                    lendingMarkets.reduce<ContractMap>(
-                        (acc, { name, maturity }) => ({
-                            ...acc,
-                            [name]: { ccy, name, maturity },
-                        }),
-                        {}
-                    )
+            try {
+                const lendingMarkets = await securedFinance?.getLendingMarkets(
+                    toCurrency(ccy)
                 );
+
+                if (lendingMarkets && lendingMarkets.length !== 0) {
+                    dispatch(
+                        updateLendingMarketContract(
+                            lendingMarkets.reduce<ContractMap>(
+                                (acc, { name, maturity }) => ({
+                                    ...acc,
+                                    [name]: { ccy, name, maturity },
+                                }),
+                                {}
+                            ),
+                            ccy
+                        )
+                    );
+                }
+            } catch (e) {
+                console.error(e);
             }
         };
 
         fetchLendingMarkets();
-    }, [ccy, securedFinance]);
-    return lendingMarkets;
+    }, [ccy, securedFinance, block, dispatch]);
 };
