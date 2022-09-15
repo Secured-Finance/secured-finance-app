@@ -138,6 +138,17 @@ describe('LendingCard Component', () => {
         expect(screen.getByText('0.2 %')).toBeInTheDocument();
     });
 
+    it('should transform the contract label to a date', () => {
+        render(<Default />);
+        fireEvent.click(
+            screen.getByRole('button', {
+                name: 'MAR22',
+            })
+        );
+        fireEvent.click(screen.getByText('MAR23'));
+        expect(screen.getByText('Mar 1, 2023')).toBeInTheDocument();
+    });
+
     it.skip('should be mounted with a default rate', () => {
         render(<Default />);
         expect(screen.getByText('0 %')).toBeInTheDocument();
