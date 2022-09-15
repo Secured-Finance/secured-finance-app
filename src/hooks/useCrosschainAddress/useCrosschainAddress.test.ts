@@ -7,7 +7,7 @@ const mock = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mock);
 
 describe('useCrosschainAddress hook', () => {
-    it.only('should return lending market address', async () => {
+    it('should return lending market address', async () => {
         const { result, waitForNextUpdate } = renderHook(() =>
             useCrosschainAddressByChainId('0x0', CurrencySymbol.FIL)
         );
