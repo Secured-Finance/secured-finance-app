@@ -6,13 +6,10 @@ import Loader from 'src/assets/img/gradient-loader.png';
 import { CollateralSelector } from 'src/components/atoms';
 import { Dialog } from 'src/components/molecules';
 import { CollateralInput } from 'src/components/organisms';
-import { useCheckCollateralBook } from 'src/hooks';
 import { useDepositCollateral } from 'src/hooks/useDepositCollateral';
-import { useRegisterUser } from 'src/hooks/useRegisterUser';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { RootState } from 'src/store/types';
 import { CollateralInfo, CurrencySymbol } from 'src/utils';
-import { useWallet } from 'use-wallet';
 
 enum Step {
     depositCollateral = 1,
@@ -48,7 +45,7 @@ const stateRecord: Record<Step, State> = {
         nextStep: Step.depositCollateral,
         title: 'Success!',
         description:
-            'You have succesfully deposited collateral on Secured Finance.',
+            'You have successfully deposited collateral on Secured Finance.',
         buttonText: 'OK',
     },
 };
@@ -83,11 +80,8 @@ export const DepositCollateral = ({
     const [asset, setAsset] = useState(CurrencySymbol.ETH);
     const [collateral, setCollateral] = useState('0');
     const [state, dispatch] = useReducer(reducer, stateRecord[1]);
-    const { account } = useWallet();
-    const status = useCheckCollateralBook(account);
 
     const priceList = useSelector((state: RootState) => getPriceMap(state));
-    const { onRegisterUser } = useRegisterUser();
     const { onDepositCollateral } = useDepositCollateral(
         CurrencySymbol.ETH,
         BigNumber.from(collateral)
@@ -100,17 +94,13 @@ export const DepositCollateral = ({
 
     const handleDepositCollateral = useCallback(async () => {
         try {
-            if (status) {
-                await onDepositCollateral();
-            } else {
-                await onRegisterUser();
-            }
+            await onDepositCollateral();
             dispatch({ type: 'next' });
         } catch (e) {
             console.error(e);
             handleClose();
         }
-    }, [status, onDepositCollateral, onRegisterUser, handleClose]);
+    }, [onDepositCollateral, handleClose]);
 
     const onClick = useCallback(
         async (currentStep: Step) => {

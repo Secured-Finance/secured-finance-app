@@ -1,7 +1,12 @@
 import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { LendingCard, YieldChart } from 'src/components/organisms';
-import { OrderSide, useCollateralBook, usePlaceOrder } from 'src/hooks';
+import {
+    OrderSide,
+    useCollateralBook,
+    useLendingMarkets,
+    usePlaceOrder,
+} from 'src/hooks';
 import { useRates } from 'src/hooks/useRates';
 import { RootState } from 'src/store/types';
 import { CurrencySymbol, termMap } from 'src/utils';
@@ -10,13 +15,18 @@ import { useWallet } from 'use-wallet';
 export const Landing = () => {
     const { account } = useWallet();
     const { placeOrder } = usePlaceOrder();
-    const collateralBook = useCollateralBook(account);
-
     const { currency, side, term } = useSelector(
         (state: RootState) => state.landingOrderForm
     );
 
-    const rates = useRates(CurrencySymbol.FIL, side === OrderSide.Lend ? 1 : 0);
+    const collateralBook = useCollateralBook(account);
+    const lendingMarkets = useLendingMarkets(currency);
+    const optionList = Object.entries(lendingMarkets).map(o => ({
+        label: o[0],
+        value: o[1].maturity.toString(),
+    }));
+
+    const rates = useRates(CurrencySymbol.FIL, 2);
     const marketRate = useMemo(() => {
         if (!rates) {
             return 0;
@@ -46,10 +56,11 @@ export const Landing = () => {
                     onPlaceOrder={placeOrder}
                     collateralBook={collateralBook}
                     marketRate={marketRate}
+                    maturitiesOptionList={optionList}
                 />
                 <YieldChart
                     asset={currency}
-                    isBorrow={side === 1}
+                    isBorrow={side === OrderSide.Borrow}
                     rates={rates}
                 />
             </div>

@@ -3,7 +3,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Button, Container, RenderTerms } from 'src/components/atoms';
 import { Spacer } from 'src/components/legacy';
-import { useCollateralBook, useCrosschainAddressByChainId } from 'src/hooks';
+import { useCollateralBook } from 'src/hooks';
 import { useLoanInformation } from 'src/hooks/useLoanHistory';
 import theme from 'src/theme';
 import {
@@ -68,11 +68,6 @@ const LoanScreen = () => {
             );
         },
         [loanCurrency.symbol]
-    );
-
-    const crossChainAddress = useCrosschainAddressByChainId(
-        counterPartyWallet ? counterPartyWallet : '',
-        loanCurrency.symbol
     );
 
     const notional = useMemo(() => {
@@ -163,15 +158,7 @@ const LoanScreen = () => {
         if (loan !== null) {
             setCounterpartyAddr(counterPartyWallet);
             nextCouponPayment();
-            if (
-                crossChainAddress &&
-                loan?.currency &&
-                loanCurrency.symbol === CurrencySymbol.FIL
-            ) {
-                setRecipientAddress(crossChainAddress);
-            } else {
-                setRecipientAddress(counterPartyWallet);
-            }
+            setRecipientAddress(counterPartyWallet);
         }
     }, [
         setCouponPayment,
@@ -182,7 +169,6 @@ const LoanScreen = () => {
         counterpartyAddr,
         counterPartyWallet,
         loanCurrency,
-        crossChainAddress,
     ]);
 
     return (

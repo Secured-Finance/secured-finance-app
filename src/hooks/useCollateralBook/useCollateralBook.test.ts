@@ -51,8 +51,5 @@ describe('useCollateralBook hook', () => {
         expect(colBook.usdCollateral.toString()).toEqual(
             (colBook.collateral.toNumber() * ETH_PRICE).toString()
         );
-        expect(colBook.usdLocked.toString()).toEqual(
-            (colBook.locked.toNumber() * ETH_PRICE).toString()
-        );
     });
 });

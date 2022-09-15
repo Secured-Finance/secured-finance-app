@@ -6,12 +6,10 @@ import Loader from 'src/assets/img/gradient-loader.png';
 import { CollateralSelector } from 'src/components/atoms';
 import { Dialog } from 'src/components/molecules';
 import { CollateralInput } from 'src/components/organisms';
-import { useCheckCollateralBook } from 'src/hooks';
 import { useWithdrawCollateral } from 'src/hooks/useDepositCollateral';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { RootState } from 'src/store/types';
 import { CollateralInfo, CurrencySymbol } from 'src/utils';
-import { useWallet } from 'use-wallet';
 
 enum Step {
     withdrawCollateral = 1,
@@ -47,7 +45,7 @@ const stateRecord: Record<Step, State> = {
         nextStep: Step.withdrawCollateral,
         title: 'Success!',
         description:
-            'You have succesfully withdrawn collateral on Secured Finance.',
+            'You have successfully withdrawn collateral on Secured Finance.',
         buttonText: 'OK',
     },
 };
@@ -82,8 +80,6 @@ export const WithdrawCollateral = ({
     const [asset, setAsset] = useState(CurrencySymbol.ETH);
     const [state, dispatch] = useReducer(reducer, stateRecord[1]);
     const [collateral, setCollateral] = useState('0');
-    const { account } = useWallet();
-    const status = useCheckCollateralBook(account);
 
     const priceList = useSelector((state: RootState) => getPriceMap(state));
     const { onWithdrawCollateral } = useWithdrawCollateral(
@@ -98,15 +94,13 @@ export const WithdrawCollateral = ({
 
     const handleWithdrawCollateral = useCallback(async () => {
         try {
-            if (status) {
-                await onWithdrawCollateral();
-            }
+            await onWithdrawCollateral();
             dispatch({ type: 'next' });
         } catch (e) {
             console.error(e);
             handleClose();
         }
-    }, [status, onWithdrawCollateral, handleClose]);
+    }, [onWithdrawCollateral, handleClose]);
 
     const onClick = useCallback(
         async (currentStep: Step) => {

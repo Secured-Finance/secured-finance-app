@@ -11,7 +11,7 @@ import SecuredFinanceProvider from './contexts/SecuredFinanceProvider';
 import store from './store';
 import theme from './theme';
 import { setUpSecuredFinanceSkd } from './utils';
-import Exchange from './views/Exchange';
+import { Exchange } from './views/Exchange';
 import Loan from './views/Loan';
 
 const routes = [
