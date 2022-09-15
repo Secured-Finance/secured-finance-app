@@ -11,7 +11,11 @@ import { useDepositCollateral } from 'src/hooks/useDepositCollateral';
 import { useRegisterUser } from 'src/hooks/useRegisterUser';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { RootState } from 'src/store/types';
-import { CollateralInfo, CurrencySymbol } from 'src/utils';
+import {
+    CollateralInfo,
+    CurrencySymbol,
+    handleContractTransaction,
+} from 'src/utils';
 import { useWallet } from 'use-wallet';
 
 enum Step {
@@ -101,7 +105,12 @@ export const DepositCollateral = ({
     const handleDepositCollateral = useCallback(async () => {
         try {
             if (status) {
-                await onDepositCollateral();
+                const tx = await onDepositCollateral();
+                const transactionStatus = await handleContractTransaction(tx);
+                if (!transactionStatus) {
+                    console.error('Some error occured');
+                    handleClose();
+                }
             } else {
                 await onRegisterUser();
             }

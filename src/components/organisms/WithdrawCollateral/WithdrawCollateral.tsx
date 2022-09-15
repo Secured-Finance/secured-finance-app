@@ -10,7 +10,11 @@ import { useCheckCollateralBook } from 'src/hooks';
 import { useWithdrawCollateral } from 'src/hooks/useDepositCollateral';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { RootState } from 'src/store/types';
-import { CollateralInfo, CurrencySymbol } from 'src/utils';
+import {
+    CollateralInfo,
+    CurrencySymbol,
+    handleContractTransaction,
+} from 'src/utils';
 import { useWallet } from 'use-wallet';
 
 enum Step {
@@ -99,7 +103,12 @@ export const WithdrawCollateral = ({
     const handleWithdrawCollateral = useCallback(async () => {
         try {
             if (status) {
-                await onWithdrawCollateral();
+                const tx = await onWithdrawCollateral();
+                const transactionStatus = await handleContractTransaction(tx);
+                if (!transactionStatus) {
+                    console.error('Some error occured');
+                    handleClose();
+                }
             }
             dispatch({ type: 'next' });
         } catch (e) {
