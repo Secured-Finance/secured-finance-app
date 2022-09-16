@@ -18,7 +18,7 @@ export const CurveHeaderAsset: React.FC<CurveHeaderAssetProps> = ({
     fluctuation,
 }) => {
     return (
-        <div className='flex h-[44px] w-36 flex-row justify-between gap-3 py-0.5 '>
+        <div className='flex h-[44px] w-fit flex-row justify-between gap-3 py-0.5'>
             <div>
                 <CurrencyIcon ccy={ccy} variant='large' />
             </div>
@@ -26,7 +26,7 @@ export const CurveHeaderAsset: React.FC<CurveHeaderAssetProps> = ({
                 <span className='typography-caption-2 h-5 text-planetaryPurple'>
                     {currencyMap[ccy].name}
                 </span>
-                <div className='flex h-5 w-full flex-row items-center justify-between'>
+                <div className='flex h-5 w-full flex-row items-center justify-between gap-3'>
                     <span className='typography-caption flex h-full items-center text-neutral-8'>
                         {usdFormat(value, 2)}
                     </span>
