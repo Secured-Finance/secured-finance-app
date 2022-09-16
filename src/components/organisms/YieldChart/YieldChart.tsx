@@ -50,7 +50,7 @@ export const YieldChart: React.FC<YieldChartProps> = ({
                 <CurveHeader asset={asset} isBorrow={isBorrow}></CurveHeader>
             </div>
             <div className='flex w-full flex-grow items-center pl-[35px]'>
-                <div className='h-[350px] w-[500px]'>
+                <div className='h-[350px] w-[500px]' data-chromatic='ignore'>
                     {rates && (
                         <LineChart
                             type='line'
