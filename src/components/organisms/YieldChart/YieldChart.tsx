@@ -1,6 +1,8 @@
 import { ChartData } from 'chart.js';
+import { useSelector } from 'react-redux';
 import { CurveHeader, LineChart } from 'src/components/molecules';
-import { CurrencySymbol, getTermsAsOptions } from 'src/utils';
+import { RootState } from 'src/store/types';
+import { CurrencySymbol } from 'src/utils';
 
 interface YieldChartProps {
     asset: CurrencySymbol;
@@ -18,9 +20,13 @@ const refineArray = (array: Array<number>) => {
     return array;
 };
 
-const getData = (rates: number[], label: string): ChartData<'line'> => {
+const getData = (
+    rates: number[],
+    label: string,
+    labels: string[]
+): ChartData<'line'> => {
     return {
-        labels: getTermsAsOptions().map(o => o.label),
+        labels: labels,
         datasets: [
             {
                 label: label,
@@ -35,6 +41,9 @@ export const YieldChart: React.FC<YieldChartProps> = ({
     isBorrow,
     rates,
 }): JSX.Element => {
+    const lendingContracts = useSelector(
+        (state: RootState) => state.availableContracts.lendingMarkets[asset]
+    );
     return (
         <div className='flex h-[480px] w-[640px] flex-col items-start rounded-r-xl pl-8 shadow-[0_46px_64px_rgba(0,0,0,0.4)]'>
             <div className='h-20 w-full'>
@@ -45,7 +54,11 @@ export const YieldChart: React.FC<YieldChartProps> = ({
                     {rates && (
                         <LineChart
                             type='line'
-                            data={getData(rates, isBorrow ? 'Borrow' : 'Lend')}
+                            data={getData(
+                                rates,
+                                isBorrow ? 'Borrow' : 'Lend',
+                                Object.keys(lendingContracts)
+                            )}
                         ></LineChart>
                     )}
                 </div>

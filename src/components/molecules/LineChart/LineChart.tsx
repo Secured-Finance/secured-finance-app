@@ -12,13 +12,13 @@ import {
 } from 'chart.js';
 import React, { useRef } from 'react';
 import { ChartProps, getElementAtEvent, Line } from 'react-chartjs-2';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
     defaultDatasets,
     options as customOptions,
 } from 'src/components/molecules/LineChart/constants';
 import { setRate, setTerm } from 'src/store/landingOrderForm';
-import { Term, termMap } from 'src/utils';
+import { RootState } from 'src/store/types';
 
 ChartJS.register(
     LinearScale,
@@ -40,6 +40,13 @@ export const LineChart = ({
     style,
 }: LineChartProps) => {
     const dispatch = useDispatch();
+    const ccy = useSelector(
+        (state: RootState) => state.landingOrderForm.currency
+    );
+    const lendingContracts = useSelector(
+        (state: RootState) => state.availableContracts.lendingMarkets[ccy]
+    );
+
     const chartRef = useRef(null);
 
     const canvas: HTMLCanvasElement = document.createElement('canvas');
@@ -83,15 +90,10 @@ export const LineChart = ({
             const { datasetIndex, index } = element[0];
             const dataset = data.datasets[datasetIndex];
             const label = data.labels?.[index];
-            termMap;
 
-            const key = (Object.keys(termMap) as Array<Term>).find(
-                key => termMap[key].label === label
+            dispatch(
+                setTerm(lendingContracts[label as string].maturity.toString())
             );
-
-            if (key) {
-                dispatch(setTerm(key));
-            }
 
             const value = dataset.data[index];
             dispatch(setRate(value as number));
