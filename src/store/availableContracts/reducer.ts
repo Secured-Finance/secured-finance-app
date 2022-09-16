@@ -9,24 +9,24 @@ export type AvailableContracts = {
 const initialState: AvailableContracts = {
     lendingMarkets: {
         [CurrencySymbol.ETH]: {
-            DUMMY: {
+            '': {
                 ccy: CurrencySymbol.ETH,
                 maturity: '0',
-                name: 'DUMMY',
+                name: '',
             },
         },
         [CurrencySymbol.FIL]: {
-            DUMMY: {
+            '': {
                 ccy: CurrencySymbol.FIL,
                 maturity: '0',
-                name: 'DUMMY',
+                name: '',
             },
         },
         [CurrencySymbol.USDC]: {
-            DUMMY: {
+            '': {
                 ccy: CurrencySymbol.USDC,
                 maturity: '0',
-                name: 'DUMMY',
+                name: '',
             },
         },
     },

@@ -44,10 +44,10 @@ describe('useLendingMarkets', () => {
                 CurrencySymbol.ETH
             ]
         ).toEqual({
-            DUMMY: {
+            '': {
                 ccy: CurrencySymbol.ETH,
                 maturity: '0',
-                name: 'DUMMY',
+                name: '',
             },
         });
     });
