@@ -4,7 +4,7 @@ import { LendingCard, YieldChart } from 'src/components/organisms';
 import { OrderSide, useCollateralBook, usePlaceOrder } from 'src/hooks';
 import { useRates } from 'src/hooks/useRates';
 import { RootState } from 'src/store/types';
-import { CurrencySymbol, termMap } from 'src/utils';
+import { CurrencySymbol } from 'src/utils';
 import { useWallet } from 'use-wallet';
 
 export const Landing = () => {
@@ -29,8 +29,8 @@ export const Landing = () => {
         if (!rates) {
             return 0;
         }
-        return rates[Object.keys(termMap).indexOf(term)];
-    }, [rates, term]);
+        return rates[Object.keys(lendingContracts).indexOf(term)];
+    }, [lendingContracts, rates, term]);
 
     return (
         <div
