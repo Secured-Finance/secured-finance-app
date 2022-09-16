@@ -10,7 +10,7 @@ import { useWallet } from 'use-wallet';
 export const Landing = () => {
     const { account } = useWallet();
     const { placeOrder } = usePlaceOrder();
-    const { currency, side, term } = useSelector(
+    const { currency, side, maturity } = useSelector(
         (state: RootState) => state.landingOrderForm
     );
     const lendingContracts = useSelector(
@@ -21,7 +21,7 @@ export const Landing = () => {
 
     const optionList = Object.entries(lendingContracts).map(o => ({
         label: o[0],
-        value: o[1].maturity.toString(),
+        value: o[1].maturity,
     }));
 
     const rates = useRates(CurrencySymbol.FIL, 2);
@@ -29,8 +29,8 @@ export const Landing = () => {
         if (!rates) {
             return 0;
         }
-        return rates[Object.keys(lendingContracts).indexOf(term)];
-    }, [lendingContracts, rates, term]);
+        return rates[Object.keys(lendingContracts).indexOf(maturity)];
+    }, [lendingContracts, rates, maturity]);
 
     return (
         <div

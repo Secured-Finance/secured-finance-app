@@ -7,7 +7,7 @@ import { CurrencySymbol, toCurrency } from 'src/utils';
 
 export type LendingContract = {
     ccy: CurrencySymbol;
-    maturity: number;
+    maturity: string;
     name: string;
 };
 
@@ -35,7 +35,11 @@ export const useLendingMarkets = (
                             lendingMarkets.reduce<ContractMap>(
                                 (acc, { name, maturity }) => ({
                                     ...acc,
-                                    [name]: { ccy, name, maturity },
+                                    [name]: {
+                                        ccy,
+                                        name,
+                                        maturity: maturity.toString(),
+                                    },
                                 }),
                                 {}
                             ),

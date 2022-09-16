@@ -22,12 +22,12 @@ describe('useLendingMarkets', () => {
             ).toEqual({
                 'ETH-1000': {
                     ccy: CurrencySymbol.ETH,
-                    maturity: 1000,
+                    maturity: '1000',
                     name: 'ETH-1000',
                 },
                 'ETH-2000': {
                     ccy: CurrencySymbol.ETH,
-                    maturity: 2000,
+                    maturity: '2000',
                     name: 'ETH-2000',
                 },
             });
@@ -46,7 +46,7 @@ describe('useLendingMarkets', () => {
         ).toEqual({
             DUMMY: {
                 ccy: CurrencySymbol.ETH,
-                maturity: 0,
+                maturity: '0',
                 name: 'DUMMY',
             },
         });
