@@ -11,21 +11,21 @@ const initialState: AvailableContracts = {
         [CurrencySymbol.ETH]: {
             DUMMY: {
                 ccy: CurrencySymbol.ETH,
-                maturity: 0,
+                maturity: '0',
                 name: 'DUMMY',
             },
         },
         [CurrencySymbol.FIL]: {
             DUMMY: {
                 ccy: CurrencySymbol.FIL,
-                maturity: 0,
+                maturity: '0',
                 name: 'DUMMY',
             },
         },
         [CurrencySymbol.USDC]: {
             DUMMY: {
                 ccy: CurrencySymbol.USDC,
-                maturity: 0,
+                maturity: '0',
                 name: 'DUMMY',
             },
         },
