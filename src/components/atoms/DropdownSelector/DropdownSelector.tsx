@@ -49,7 +49,7 @@ export const DropdownSelector = <T extends string = string>({
     }, [selected.value]);
 
     return (
-        <Menu as='div' className='relative bg-red'>
+        <Menu as='div' className='relative'>
             {({ open }) => (
                 <>
                     <Menu.Button>
@@ -69,7 +69,7 @@ export const DropdownSelector = <T extends string = string>({
                             </span>
                         </div>
                     </Menu.Button>
-                    <Menu.Items className='absolute z-10 mt-2 flex max-h-96 w-52 flex-col overflow-y-auto rounded-lg bg-purple p-2 shadow-sm'>
+                    <Menu.Items className='absolute z-10 mt-2 flex max-h-96 w-52 flex-col overflow-y-auto rounded-lg bg-gunMetal p-2 shadow-sm'>
                         {optionList.map((asset, i) => (
                             <Menu.Item
                                 key={`${asset.label}_${i}`}
