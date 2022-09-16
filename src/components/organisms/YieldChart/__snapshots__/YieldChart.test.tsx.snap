@@ -84,6 +84,7 @@ exports[`YieldChart Component should render YieldChart 1`] = `
       >
         <div
           class="h-[350px] w-[500px]"
+          data-chromatic="ignore"
         >
           <canvas
             height="0"
