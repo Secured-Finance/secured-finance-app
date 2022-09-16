@@ -27,7 +27,8 @@ declare global {
 const SecuredFinanceProvider: React.FC = ({ children }) => {
     const [web3Provider, setWeb3Provider] =
         useState<ethers.providers.BaseProvider | null>(null);
-    const { error, status, connect, account, ethereum } = useWallet();
+    const { error, status, connect, account, ethereum, isConnected } =
+        useWallet();
     const [securedFinance, setSecuredFinance] =
         useState<SecuredFinanceClient>();
     const dispatch = useDispatch();
@@ -55,10 +56,22 @@ const SecuredFinanceProvider: React.FC = ({ children }) => {
             const securedFinanceLib = new SecuredFinanceClient();
             await securedFinanceLib.init(signer || provider, network);
 
-            setSecuredFinance(securedFinanceLib);
+            setSecuredFinance(previous => {
+                if (!previous) {
+                    return securedFinanceLib;
+                }
+
+                if (
+                    previous.config.signerOrProvider instanceof
+                    ethers.providers.BaseProvider
+                ) {
+                    return securedFinanceLib;
+                }
+
+                return previous;
+            });
             window.securedFinanceSDK = securedFinanceLib;
         };
-
         if (ethereum) {
             const chainId = Number(ethereum.chainId);
             const provider = window.localStorage.getItem('FORK')
@@ -76,11 +89,11 @@ const SecuredFinanceProvider: React.FC = ({ children }) => {
                     );
                 }
             };
-        } else {
+        } else if (!isConnected()) {
             const provider = ethers.getDefaultProvider(getRpcEndpoint());
             connectSFClient(provider);
         }
-    }, [ethereum, status, error]);
+    }, [ethereum, isConnected]);
 
     useEffect(() => {
         if (status === 'error') {
