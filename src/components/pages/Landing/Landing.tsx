@@ -29,7 +29,11 @@ export const Landing = () => {
         if (!rates) {
             return 0;
         }
-        return rates[Object.keys(lendingContracts).indexOf(maturity)];
+        return rates[
+            Object.keys(lendingContracts)
+                .map(k => lendingContracts[k].maturity)
+                .indexOf(maturity)
+        ];
     }, [lendingContracts, rates, maturity]);
 
     return (
