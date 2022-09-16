@@ -4,7 +4,7 @@ import { YieldChart } from './';
 export default {
     title: 'Organism/YieldChart',
     component: YieldChart,
-    chromatic: { diffThreshold: 0.8 },
+    chromatic: { diffThreshold: 1, delay: 500 },
     args: {
         asset: 'USDC',
         isBorrow: true,

@@ -1,10 +1,9 @@
 import { useState } from 'react';
 import { NavLink, useRouteMatch } from 'react-router-dom';
-import SFLogo from 'src/assets/img/key.svg';
+import SFLogo from 'src/assets/img/logo.svg';
 import { Button, NavTab, TraderProTab } from 'src/components/atoms';
-import useSF from 'src/hooks/useSecuredFinance';
-
 import { WalletDialog, WalletPopover } from 'src/components/organisms';
+import useSF from 'src/hooks/useSecuredFinance';
 import { AddressUtils } from 'src/utils/address';
 import { useWallet } from 'use-wallet';
 
