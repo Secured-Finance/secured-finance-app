@@ -13,7 +13,7 @@ const ETH_CHAIN_ID = 60;
 const ETH_TO_WEI = new BigNumberJS(10 ** 18);
 
 const ETH = Ether.onChain(
-    Number(process.env.NEXT_PUBLIC_ETHEREUM_CHAIN_ID) ?? 1
+    Number(process.env.NEXT_PUBLIC_ETHEREUM_CHAIN_ID ?? 1)
 );
 const FIL = Filecoin.onChain();
 const UsdCoin = USDC.onChain();
