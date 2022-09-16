@@ -14,11 +14,9 @@ export default {
             return Promise.resolve();
         },
         collateralBook: {
-            ccyIndex: 0,
             ccyName: 'ETH',
             collateral: new BigNumber('10000000000000000000'),
             usdCollateral: new BigNumber('100000000000000000000'),
-            locked: new BigNumber('5000000000000000000'),
             coverage: new BigNumber('80'),
         },
         marketRate: 100,

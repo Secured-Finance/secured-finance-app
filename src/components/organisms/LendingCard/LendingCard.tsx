@@ -23,10 +23,7 @@ import {
     getCurrencyMapAsOptions,
     percentFormat,
 } from 'src/utils';
-import {
-    collateralUsage,
-    computeAvailableToBorrow,
-} from 'src/utils/collateral';
+import { computeAvailableToBorrow } from 'src/utils/collateral';
 
 export const LendingCard = ({
     onPlaceOrder,
@@ -84,10 +81,7 @@ export const LendingCard = ({
     const collateralUsagePercent = useMemo(() => {
         //TODO: Remove the usage of BigNumber.js and use only Ethers.js
         return percentFormat(
-            collateralUsage(
-                BigNumber.from(collateralBook.locked?.toString()),
-                BigNumber.from(collateralBook.collateral.toString())
-            )
+            BigNumber.from(collateralBook.coverage.toString()).toNumber()
         );
     }, [collateralBook]);
 

@@ -3,26 +3,22 @@ import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import useSF from 'src/hooks/useSecuredFinance';
 import { selectEthereumBalance } from 'src/store/ethereumWallet';
-import { currencyMap, CurrencySymbol, toCurrency } from 'src/utils';
+import { CurrencySymbol, toCurrency } from 'src/utils';
 import { RootState } from '../../store/types';
 
 const ZERO_BN = new BigNumber('0');
 
 export interface CollateralBook {
-    ccyIndex: number;
     ccyName: string;
     collateral: BigNumber;
     usdCollateral: BigNumber;
-    locked: BigNumber;
     coverage: BigNumber;
 }
 
 const emptyBook: CollateralBook = {
-    ccyIndex: 0,
     ccyName: 'ETH',
     collateral: ZERO_BN,
     usdCollateral: ZERO_BN,
-    locked: ZERO_BN,
     coverage: ZERO_BN,
 };
 
@@ -52,14 +48,14 @@ export const useCollateralBook = (
                 );
 
             setCollateralBook({
-                ccyIndex: currencyMap[ccy].indexCcy,
                 ccyName: ccy,
                 collateral: new BigNumber(collateralAmount.toString()),
                 usdCollateral: new BigNumber(
                     collateralAmount.toString()
                 ).multipliedBy(ethPrice),
-                locked: new BigNumber(collateralCoverage.toString()),
                 coverage: new BigNumber(collateralCoverage.toString()),
+                // 0% collateral not used
+                // 100% collateral used BigNumber(10000)
             });
         };
         getCollateralBook();

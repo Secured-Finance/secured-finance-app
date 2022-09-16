@@ -16,11 +16,9 @@ export default {
         account: 'as',
         onClick: () => {},
         collateralBook: {
-            ccyIndex: 0,
             ccyName: 'ETH',
             collateral: new BigNumber('100000000000000000'),
             usdCollateral: new BigNumber('200030000000000000000'),
-            locked: new BigNumber('5000000000000000000'),
             coverage: new BigNumber('80'),
         },
     },
