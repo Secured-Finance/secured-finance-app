@@ -26,7 +26,6 @@ describe('useCollateralBook hook', () => {
             await waitForNextUpdate();
         });
         const colBook = result.current as CollateralBook;
-        expect(colBook.ccyIndex).toEqual(ETH.indexCcy);
         expect(colBook.ccyName).toEqual('ETH');
         expect(colBook.collateral.toString()).toEqual('10000');
     });
@@ -34,7 +33,6 @@ describe('useCollateralBook hook', () => {
     it('should return the empty book when given an null user', async () => {
         const { result } = renderHook(() => useCollateralBook(null));
         const colBook = result.current as CollateralBook;
-        expect(colBook.ccyIndex).toEqual(ETH.indexCcy);
         expect(colBook.ccyName).toEqual('ETH');
         expect(colBook.collateral).toEqual(new BigNumber('0'));
     });
