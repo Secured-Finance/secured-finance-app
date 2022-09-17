@@ -6,29 +6,12 @@ export type AvailableContracts = {
     lendingMarkets: Record<CurrencySymbol, ContractMap>;
 };
 
+const emptyContract = { '': '0' };
 const initialState: AvailableContracts = {
     lendingMarkets: {
-        [CurrencySymbol.ETH]: {
-            '': {
-                ccy: CurrencySymbol.ETH,
-                maturity: '0',
-                name: '',
-            },
-        },
-        [CurrencySymbol.FIL]: {
-            '': {
-                ccy: CurrencySymbol.FIL,
-                maturity: '0',
-                name: '',
-            },
-        },
-        [CurrencySymbol.USDC]: {
-            '': {
-                ccy: CurrencySymbol.USDC,
-                maturity: '0',
-                name: '',
-            },
-        },
+        [CurrencySymbol.ETH]: emptyContract,
+        [CurrencySymbol.FIL]: emptyContract,
+        [CurrencySymbol.USDC]: emptyContract,
     },
 };
 

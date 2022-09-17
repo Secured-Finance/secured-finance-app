@@ -20,16 +20,8 @@ describe('useLendingMarkets', () => {
                     CurrencySymbol.ETH
                 ]
             ).toEqual({
-                'ETH-1000': {
-                    ccy: CurrencySymbol.ETH,
-                    maturity: '1000',
-                    name: 'ETH-1000',
-                },
-                'ETH-2000': {
-                    ccy: CurrencySymbol.ETH,
-                    maturity: '2000',
-                    name: 'ETH-2000',
-                },
+                'ETH-1000': '1000',
+                'ETH-2000': '2000',
             });
         });
     });
@@ -44,11 +36,7 @@ describe('useLendingMarkets', () => {
                 CurrencySymbol.ETH
             ]
         ).toEqual({
-            '': {
-                ccy: CurrencySymbol.ETH,
-                maturity: '0',
-                name: '',
-            },
+            '': '0',
         });
     });
 });

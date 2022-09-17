@@ -21,7 +21,7 @@ export const Landing = () => {
 
     const optionList = Object.entries(lendingContracts).map(o => ({
         label: o[0],
-        value: o[1].maturity,
+        value: o[1],
     }));
 
     const rates = useRates(CurrencySymbol.FIL, 2);
@@ -29,11 +29,7 @@ export const Landing = () => {
         if (!rates) {
             return 0;
         }
-        return rates[
-            Object.keys(lendingContracts)
-                .map(k => lendingContracts[k].maturity)
-                .indexOf(maturity)
-        ];
+        return rates[Object.values(lendingContracts).indexOf(maturity)];
     }, [lendingContracts, rates, maturity]);
 
     return (
