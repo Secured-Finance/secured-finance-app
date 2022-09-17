@@ -21,6 +21,14 @@ export const mockUseSF = () => {
                 BigNumber.from('350'),
             ])
         ),
+        getMidRateYieldCurve: jest.fn(() =>
+            Promise.resolve([
+                BigNumber.from('50'),
+                BigNumber.from('150'),
+                BigNumber.from('250'),
+                BigNumber.from('350'),
+            ])
+        ),
         getCollateralBook: jest.fn(() =>
             Promise.resolve({
                 collateralAmount: new BigNumberJS('10000'),

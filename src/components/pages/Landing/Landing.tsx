@@ -1,8 +1,13 @@
 import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { LendingCard, YieldChart } from 'src/components/organisms';
-import { OrderSide, useCollateralBook, usePlaceOrder } from 'src/hooks';
-import { RateType, useRates } from 'src/hooks/useRates';
+import {
+    OrderSide,
+    RateType,
+    useCollateralBook,
+    usePlaceOrder,
+    useRates,
+} from 'src/hooks';
 import { RootState } from 'src/store/types';
 import { CurrencySymbol } from 'src/utils';
 import { useWallet } from 'use-wallet';
