@@ -4,7 +4,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from 'src/store/types';
 import { CurrencySymbol, toCurrency } from 'src/utils';
-import useSF from './useSecuredFinance';
+import useSF from '../useSecuredFinance';
 
 export enum RateType {
     Borrow = 0,
