@@ -90,7 +90,7 @@ export const LineChart = ({
             const { datasetIndex, index } = element[0];
             const dataset = data.datasets[datasetIndex];
             const label = data.labels?.[index];
-            dispatch(setMaturity(lendingContracts[label as string].maturity));
+            dispatch(setMaturity(lendingContracts[label as string]));
             const value = dataset.data[index];
             dispatch(setRate(value as number));
         }
