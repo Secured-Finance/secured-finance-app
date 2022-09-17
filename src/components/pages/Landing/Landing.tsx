@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { LendingCard, YieldChart } from 'src/components/organisms';
 import { OrderSide, useCollateralBook, usePlaceOrder } from 'src/hooks';
-import { useRates } from 'src/hooks/useRates';
+import { RateType, useRates } from 'src/hooks/useRates';
 import { RootState } from 'src/store/types';
 import { CurrencySymbol } from 'src/utils';
 import { useWallet } from 'use-wallet';
@@ -24,7 +24,10 @@ export const Landing = () => {
         value: o[1],
     }));
 
-    const rates = useRates(CurrencySymbol.FIL, 2);
+    const rates = useRates(
+        CurrencySymbol.FIL,
+        side === OrderSide.Borrow ? RateType.Borrow : RateType.Lend
+    );
     const marketRate = useMemo(() => {
         if (!rates) {
             return 0;
