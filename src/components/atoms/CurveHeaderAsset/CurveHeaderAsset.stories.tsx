@@ -29,6 +29,6 @@ export const Default = Template.bind({});
 export const PositiveFluctuation = Template.bind({});
 PositiveFluctuation.args = {
     ccy: CurrencySymbol.ETH,
-    value: 8.02,
+    value: 1511.45,
     fluctuation: 2.45,
 };
