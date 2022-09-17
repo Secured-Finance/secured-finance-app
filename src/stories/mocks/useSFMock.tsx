@@ -1,5 +1,6 @@
 import { BigNumber as BigNumberJS } from 'bignumber.js';
 import { BigNumber } from 'ethers';
+import * as jest from 'jest-mock';
 
 export const mockUseSF = () => {
     const mockSecuredFinance = {
@@ -10,8 +11,6 @@ export const mockUseSF = () => {
                 BigNumber.from('200'),
                 BigNumber.from('300'),
                 BigNumber.from('400'),
-                BigNumber.from('500'),
-                BigNumber.from('600'),
             ])
         ),
         getLendYieldCurve: jest.fn(() =>
@@ -20,8 +19,6 @@ export const mockUseSF = () => {
                 BigNumber.from('150'),
                 BigNumber.from('250'),
                 BigNumber.from('350'),
-                BigNumber.from('450'),
-                BigNumber.from('550'),
             ])
         ),
         getCollateralBook: jest.fn(() =>
