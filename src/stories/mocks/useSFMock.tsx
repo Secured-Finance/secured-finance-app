@@ -24,7 +24,7 @@ export const mockUseSF = () => {
         getCollateralBook: jest.fn(() =>
             Promise.resolve({
                 collateralAmount: new BigNumberJS('10000'),
-                collateralCoverage: new BigNumberJS('10000'),
+                collateralCoverage: new BigNumberJS('80'),
             })
         ),
         getLendingMarket: jest.fn(() =>
