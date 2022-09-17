@@ -13,7 +13,7 @@ exports[`YieldChart Component should render YieldChart 1`] = `
           class="flex h-20 w-[585px] flex-row justify-between p-4"
         >
           <div
-            class="flex h-[44px] w-36 flex-row justify-between gap-3 py-0.5 "
+            class="flex h-[44px] w-fit flex-row justify-between gap-3 py-0.5"
           >
             <div>
               <svg
@@ -30,7 +30,7 @@ exports[`YieldChart Component should render YieldChart 1`] = `
                 USDC
               </span>
               <div
-                class="flex h-5 w-full flex-row items-center justify-between"
+                class="flex h-5 w-full flex-row items-center justify-between gap-3"
               >
                 <span
                   class="typography-caption flex h-full items-center text-neutral-8"
