@@ -1,6 +1,7 @@
 import BigNumber from 'bignumber.js';
 import { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { getAsset } from 'src/store/assetPrices/selectors';
 import {
     connectEthWallet,
     resetEthWallet,
@@ -8,13 +9,14 @@ import {
     updateEthWalletUSDBalance,
 } from 'src/store/ethereumWallet';
 import { RootState } from 'src/store/types';
+import { CurrencySymbol } from 'src/utils';
 import { useWallet } from 'use-wallet';
 
 export const useEthereumWalletStore = () => {
     const dispatch = useDispatch();
     const { account, balance, status } = useWallet();
-    const { price, change } = useSelector(
-        (state: RootState) => state.assetPrices.ethereum
+    const { price, change } = useSelector((state: RootState) =>
+        getAsset(CurrencySymbol.ETH)(state)
     );
     const ethereumWallet = useSelector(
         (state: RootState) => state.ethereumWallet
