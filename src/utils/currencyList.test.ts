@@ -25,6 +25,11 @@ describe('currencyList.getCurrencyMapAsOptions', () => {
                 value: 'USDC',
                 iconSVG: 'svg',
             },
+            {
+                label: 'Bitcoin',
+                value: 'WBTC',
+                iconSVG: 'svg',
+            },
         ]);
     });
 });
@@ -32,11 +37,12 @@ describe('currencyList.getCurrencyMapAsOptions', () => {
 describe('currencyList.getCurrencyMapAsOptions', () => {
     it('should return the getCurrencyMapAsOptions as a list ordered by index', () => {
         const options = getCurrencyMapAsList();
-        expect(options).toHaveLength(3);
+        expect(options).toHaveLength(4);
 
         expect(options[currencyMap.FIL.index]).toEqual(currencyMap.FIL);
         expect(options[currencyMap.ETH.index]).toEqual(currencyMap.ETH);
         expect(options[currencyMap.USDC.index]).toEqual(currencyMap.USDC);
+        expect(options[currencyMap.WBTC.index]).toEqual(currencyMap.WBTC);
     });
 });
 

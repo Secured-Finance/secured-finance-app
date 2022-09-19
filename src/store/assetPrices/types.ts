@@ -1,11 +1,10 @@
+import { CurrencySymbol } from 'src/utils';
+
 export interface AssetPrice {
     price: number;
     change: number;
 }
 
-export interface AssetPrices {
-    ethereum: AssetPrice;
-    filecoin: AssetPrice;
-    usdc: AssetPrice;
+export type AssetPrices = Record<CurrencySymbol, AssetPrice> & {
     isLoading: boolean;
-}
+};

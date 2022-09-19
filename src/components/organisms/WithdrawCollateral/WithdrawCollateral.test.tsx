@@ -1,4 +1,5 @@
 import { composeStories } from '@storybook/testing-react';
+import { preloadedAssetPrices } from 'src/stories/mocks/fixtures';
 import { fireEvent, render, screen } from 'src/test-utils.js';
 import * as stories from './WithdrawCollateral.stories';
 
@@ -13,20 +14,7 @@ global.IntersectionObserver = class FakeIntersectionObserver {
 };
 
 const preloadedState = {
-    assetPrices: {
-        filecoin: {
-            price: 6.0,
-            change: -8.208519783216566,
-        },
-        ethereum: {
-            price: 2000.34,
-            change: 0.5162466489453748,
-        },
-        usdc: {
-            price: 1.0,
-            change: 0.042530768538486696,
-        },
-    },
+    ...preloadedAssetPrices,
 };
 
 describe('WithdrawCollateral component', () => {

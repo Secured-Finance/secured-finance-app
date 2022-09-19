@@ -1,6 +1,7 @@
 import { composeStories } from '@storybook/testing-react';
 import { BigNumber } from 'ethers';
 import { OrderSide } from 'src/hooks';
+import { preloadedAssetPrices } from 'src/stories/mocks/fixtures';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
 import { CurrencyInfo, currencyMap, CurrencySymbol } from 'src/utils';
@@ -22,22 +23,7 @@ const DEFAULT_CHOICE = Object.values(currencyMap).reduce<CurrencyInfo>(
 );
 
 describe('LendingCard Component', () => {
-    const preloadedState = {
-        assetPrices: {
-            filecoin: {
-                price: 5.87,
-                change: -8.208519783216566,
-            },
-            ethereum: {
-                price: 2000.34,
-                change: 0.5162466489453748,
-            },
-            usdc: {
-                price: 1.002,
-                change: 0.042530768538486696,
-            },
-        },
-    };
+    const preloadedState = { ...preloadedAssetPrices };
 
     const selectEthereum = () => {
         fireEvent.click(
@@ -140,7 +126,12 @@ describe('LendingCard Component', () => {
         render(<Default />, { preloadedState });
         const input = screen.getByRole('textbox');
         fireEvent.change(input, { target: { value: '10' } });
-        expect(screen.getByText('~ 58.7 USD')).toBeInTheDocument();
+
+        expect(
+            screen.getByText(
+                `~ ${preloadedAssetPrices.assetPrices.FIL.price * 10} USD`
+            )
+        ).toBeInTheDocument();
     });
 
     it('should display the rate from the prop', () => {

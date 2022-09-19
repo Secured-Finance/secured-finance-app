@@ -2,6 +2,7 @@ import { BigNumber } from 'bignumber.js';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import useSF from 'src/hooks/useSecuredFinance';
+import { getAssetPrice } from 'src/store/assetPrices/selectors';
 import { selectEthereumBalance } from 'src/store/ethereumWallet';
 import { CurrencySymbol, toCurrency } from 'src/utils';
 import { RootState } from '../../store/types';
@@ -28,8 +29,8 @@ export const useCollateralBook = (
 ) => {
     const [collateralBook, setCollateralBook] = useState(emptyBook);
     const securedFinance = useSF();
-    const ethPrice = useSelector(
-        (state: RootState) => state.assetPrices.ethereum.price
+    const ethPrice = useSelector((state: RootState) =>
+        getAssetPrice(CurrencySymbol.ETH)(state)
     );
     const balance = useSelector((state: RootState) =>
         selectEthereumBalance(state)

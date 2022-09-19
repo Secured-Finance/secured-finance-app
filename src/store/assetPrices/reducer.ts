@@ -1,20 +1,15 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { CurrencySymbol } from 'src/utils';
 import { coingeckoApi } from 'src/utils/coinGeckoApi';
 import { AssetPrices } from './types';
 
+const initialAssetPrice = { price: 0, change: 0 };
+
 const initialStore: AssetPrices = {
-    ethereum: {
-        price: 0,
-        change: 0,
-    },
-    filecoin: {
-        price: 0,
-        change: 0,
-    },
-    usdc: {
-        price: 0,
-        change: 0,
-    },
+    [CurrencySymbol.ETH]: initialAssetPrice,
+    [CurrencySymbol.FIL]: initialAssetPrice,
+    [CurrencySymbol.USDC]: initialAssetPrice,
+    [CurrencySymbol.WBTC]: initialAssetPrice,
     isLoading: false,
 };
 
@@ -54,13 +49,16 @@ const assetPricesSlice = createSlice({
                 ethereum: { usd: ethPrice, usd_24h_change: ethChange },
                 filecoin: { usd: filPrice, usd_24h_change: filChange },
                 'usd-coin': { usd: usdcPrice, usd_24h_change: usdcChange },
+                bitcoin: { usd: btcPrice, usd_24h_change: btcChange },
             } = action.payload;
-            state.ethereum.price = ethPrice;
-            state.ethereum.change = ethChange;
-            state.filecoin.price = filPrice;
-            state.filecoin.change = filChange;
-            state.usdc.price = usdcPrice;
-            state.usdc.change = usdcChange;
+            state.ETH.price = ethPrice;
+            state.ETH.change = ethChange;
+            state.FIL.price = filPrice;
+            state.FIL.change = filChange;
+            state.USDC.price = usdcPrice;
+            state.USDC.change = usdcChange;
+            state.WBTC.price = btcPrice;
+            state.WBTC.change = btcChange;
         },
         [fetchAssetPrice.pending.type]: state => {
             state.isLoading = true;
