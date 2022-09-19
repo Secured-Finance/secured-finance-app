@@ -75,10 +75,14 @@ export const WithAssetPrice = (Story: Story) => {
                         usd: 1.0,
                         usd_24h_change: 0.042530768538486696,
                     },
+                    bitcoin: {
+                        usd: 50000.0,
+                        usd_24h_change: 0.12,
+                    },
                 })
             }
         >
             <Story />
         </AxiosMock>
     );
-}
+};
