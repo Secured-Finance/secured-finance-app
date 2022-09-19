@@ -1,5 +1,6 @@
 import { composeStories } from '@storybook/testing-react';
 import { BigNumber } from 'ethers';
+import { OrderSide } from 'src/hooks';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
 import { currencyMap } from 'src/utils';
@@ -42,7 +43,9 @@ describe('LendingCard Component', () => {
 
     it('should render the component with Borrow as the default', () => {
         render(<Default />);
-        expect(screen.getByText('Borrow')).toBeInTheDocument();
+        expect(screen.getByTestId('place-order-button')).toHaveTextContent(
+            'Borrow'
+        );
     });
 
     it('should let the user choose between ETH, FIL and USDC when clicking on the asset selector', () => {
@@ -83,8 +86,8 @@ describe('LendingCard Component', () => {
         await waitFor(() =>
             expect(onPlaceOrder).toHaveBeenCalledWith(
                 'ETH',
-                '3 month',
-                0,
+                BigNumber.from(1),
+                OrderSide.Borrow,
                 BigNumber.from(0),
                 100
             )
@@ -102,8 +105,8 @@ describe('LendingCard Component', () => {
         await waitFor(() =>
             expect(onPlaceOrder).toHaveBeenCalledWith(
                 'FIL',
-                '3 month',
-                0,
+                BigNumber.from(1),
+                OrderSide.Borrow,
                 currencyMap.FIL.toBaseUnit(10),
                 100
             )
@@ -135,13 +138,15 @@ describe('LendingCard Component', () => {
         expect(screen.getByText('0.2 %')).toBeInTheDocument();
     });
 
-    it('should select the term from the store', () => {
-        render(<Default />, {
-            preloadedState: {
-                landingOrderForm: { term: '1Y', amount: '10' },
-            },
-        });
-        expect(screen.getAllByText('1 Year')).toHaveLength(2);
+    it('should transform the contract label to a date', () => {
+        render(<Default />);
+        fireEvent.click(
+            screen.getByRole('button', {
+                name: 'MAR22',
+            })
+        );
+        fireEvent.click(screen.getByText('MAR23'));
+        expect(screen.getByText('Mar 1, 2023')).toBeInTheDocument();
     });
 
     it.skip('should be mounted with a default rate', () => {

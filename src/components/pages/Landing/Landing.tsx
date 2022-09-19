@@ -1,28 +1,44 @@
 import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { LendingCard, YieldChart } from 'src/components/organisms';
-import { OrderSide, useCollateralBook, usePlaceOrder } from 'src/hooks';
-import { useRates } from 'src/hooks/useRates';
+import {
+    OrderSide,
+    RateType,
+    useCollateralBook,
+    usePlaceOrder,
+    useRates,
+} from 'src/hooks';
 import { RootState } from 'src/store/types';
-import { CurrencySymbol, termMap } from 'src/utils';
+import { CurrencySymbol } from 'src/utils';
 import { useWallet } from 'use-wallet';
 
 export const Landing = () => {
     const { account } = useWallet();
     const { placeOrder } = usePlaceOrder();
-    const collateralBook = useCollateralBook(account);
-
-    const { currency, side, term } = useSelector(
+    const { currency, side, maturity } = useSelector(
         (state: RootState) => state.landingOrderForm
     );
+    const lendingContracts = useSelector(
+        (state: RootState) => state.availableContracts.lendingMarkets[currency]
+    );
 
-    const rates = useRates(CurrencySymbol.FIL, side === OrderSide.Lend ? 1 : 0);
+    const collateralBook = useCollateralBook(account);
+
+    const optionList = Object.entries(lendingContracts).map(o => ({
+        label: o[0],
+        value: o[1],
+    }));
+
+    const rates = useRates(
+        CurrencySymbol.FIL,
+        side === OrderSide.Borrow ? RateType.Borrow : RateType.Lend
+    );
     const marketRate = useMemo(() => {
         if (!rates) {
             return 0;
         }
-        return rates[Object.keys(termMap).indexOf(term)];
-    }, [rates, term]);
+        return rates[Object.values(lendingContracts).indexOf(maturity)];
+    }, [lendingContracts, rates, maturity]);
 
     return (
         <div
@@ -46,10 +62,11 @@ export const Landing = () => {
                     onPlaceOrder={placeOrder}
                     collateralBook={collateralBook}
                     marketRate={marketRate}
+                    maturitiesOptionList={optionList}
                 />
                 <YieldChart
                     asset={currency}
-                    isBorrow={side === 1}
+                    isBorrow={side === OrderSide.Borrow}
                     rates={rates}
                 />
             </div>

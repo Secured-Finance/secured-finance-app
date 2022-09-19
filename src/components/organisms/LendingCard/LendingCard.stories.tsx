@@ -14,14 +14,19 @@ export default {
             return Promise.resolve();
         },
         collateralBook: {
-            ccyIndex: 0,
             ccyName: 'ETH',
             collateral: new BigNumber('10000000000000000000'),
             usdCollateral: new BigNumber('100000000000000000000'),
-            locked: new BigNumber('5000000000000000000'),
-            usdLocked: new BigNumber('50000000000000000000'),
+            coverage: new BigNumber('80'),
         },
         marketRate: 100,
+        maturitiesOptionList: [
+            { label: 'MAR22', value: '1' },
+            { label: 'JUN22', value: '2' },
+            { label: 'SEP22', value: '3' },
+            { label: 'DEC22', value: '1669856400' },
+            { label: 'MAR23', value: '1677632400' },
+        ],
     },
     decorators: [WithAssetPrice],
 } as ComponentMeta<typeof LendingCard>;

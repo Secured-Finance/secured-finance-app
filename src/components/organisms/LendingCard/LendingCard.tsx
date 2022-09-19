@@ -2,7 +2,7 @@ import { RadioGroup } from '@headlessui/react';
 import { BigNumber } from 'ethers';
 import { useCallback, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button, NavTab } from 'src/components/atoms';
+import { Button, NavTab, Option } from 'src/components/atoms';
 import { CollateralUsageSection } from 'src/components/atoms/CollateralUsageSection';
 import { AssetSelector, TermSelector } from 'src/components/molecules';
 import { CollateralBook, OrderSide } from 'src/hooks';
@@ -11,43 +11,40 @@ import {
     selectLandingOrderForm,
     setAmount,
     setCurrency,
+    setMaturity,
     setSide,
-    setTerm,
 } from 'src/store/landingOrderForm';
 import { setLastMessage } from 'src/store/lastError';
 import { RootState } from 'src/store/types';
 import {
     CurrencySymbol,
+    formatDate,
     getCurrencyMapAsList,
     getCurrencyMapAsOptions,
-    getTermsAsOptions,
     percentFormat,
-    Term,
-    termMap,
 } from 'src/utils';
-import {
-    collateralUsage,
-    computeAvailableToBorrow,
-} from 'src/utils/collateral';
+import { computeAvailableToBorrow } from 'src/utils/collateral';
 
 export const LendingCard = ({
     onPlaceOrder,
     collateralBook,
     marketRate,
+    maturitiesOptionList,
 }: {
     onPlaceOrder: (
         ccy: CurrencySymbol,
-        term: string,
+        maturity: number | BigNumber,
         side: OrderSide,
         amount: BigNumber,
         rate: number
     ) => Promise<unknown>;
     collateralBook: CollateralBook;
     marketRate: number;
+    maturitiesOptionList: Option[];
 }) => {
     const [pendingTransaction, setPendingTransaction] = useState(false);
-    const { currency, term, amount, side } = useSelector((state: RootState) =>
-        selectLandingOrderForm(state.landingOrderForm)
+    const { currency, maturity, amount, side } = useSelector(
+        (state: RootState) => selectLandingOrderForm(state.landingOrderForm)
     );
 
     const dispatch = useDispatch();
@@ -80,15 +77,11 @@ export const LendingCard = ({
 
     const assetPriceMap = useSelector((state: RootState) => getPriceMap(state));
     const assetList = useMemo(() => getCurrencyMapAsOptions(), []);
-    const optionList = useMemo(() => getTermsAsOptions(), []);
 
     const collateralUsagePercent = useMemo(() => {
         //TODO: Remove the usage of BigNumber.js and use only Ethers.js
         return percentFormat(
-            collateralUsage(
-                BigNumber.from(collateralBook.locked?.toString()),
-                BigNumber.from(collateralBook.collateral.toString())
-            )
+            BigNumber.from(collateralBook.coverage.toString()).toNumber()
         );
     }, [collateralBook]);
 
@@ -107,27 +100,22 @@ export const LendingCard = ({
     //TODO: strongly type the terms
     const selectedTerm = useMemo(() => {
         return (
-            optionList.find(option => option.value === term) || optionList[0]
+            maturitiesOptionList.find(option => option.value === maturity) ||
+            maturitiesOptionList[0]
         );
-    }, [term, optionList]);
+    }, [maturity, maturitiesOptionList]);
 
     const handlePlaceOrder = useCallback(
         async (
             ccy: CurrencySymbol,
-            term: Term,
-            side: number,
+            maturity: number | BigNumber,
+            side: OrderSide,
             amount: BigNumber,
             rate: number
         ) => {
             try {
                 setPendingTransaction(true);
-                await onPlaceOrder(
-                    ccy,
-                    termMap[term].value,
-                    side,
-                    amount,
-                    rate
-                );
+                await onPlaceOrder(ccy, maturity, side, amount, rate);
                 setPendingTransaction(false);
             } catch (e) {
                 if (e instanceof Error) {
@@ -143,7 +131,7 @@ export const LendingCard = ({
         <div className='w-80 flex-col space-y-6 rounded-b-xl border border-neutral bg-transparent pb-4 shadow-deep'>
             <RadioGroup
                 value={side}
-                onChange={(v: number) => dispatch(setSide(v))}
+                onChange={(v: OrderSide) => dispatch(setSide(v))}
                 as='div'
                 className='flex h-16 flex-row items-center justify-around'
             >
@@ -183,9 +171,15 @@ export const LendingCard = ({
                 />
 
                 <TermSelector
-                    options={optionList}
+                    options={maturitiesOptionList}
                     selected={selectedTerm}
-                    onTermChange={(v: Term) => dispatch(setTerm(v))}
+                    onTermChange={v => dispatch(setMaturity(v))}
+                    transformLabel={v => {
+                        const ts = maturitiesOptionList.find(
+                            o => o.label === v
+                        )?.value;
+                        return ts ? formatDate(Number(ts)) : v;
+                    }}
                 />
 
                 <CollateralUsageSection
@@ -198,7 +192,7 @@ export const LendingCard = ({
                     onClick={() =>
                         handlePlaceOrder(
                             currency,
-                            term,
+                            BigNumber.from(maturity),
                             side,
                             amount,
                             marketRate
@@ -207,7 +201,7 @@ export const LendingCard = ({
                     disabled={pendingTransaction}
                     data-testid='place-order-button'
                 >
-                    {side ? 'Borrow' : 'Lend'}
+                    {side}
                 </Button>
             </div>
         </div>
