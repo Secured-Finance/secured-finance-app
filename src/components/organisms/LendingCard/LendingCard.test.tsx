@@ -3,13 +3,23 @@ import { BigNumber } from 'ethers';
 import { OrderSide } from 'src/hooks';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
-import { currencyMap } from 'src/utils';
+import { CurrencyInfo, currencyMap, CurrencySymbol } from 'src/utils';
 import * as stories from './LendingCard.stories';
 
 const { Default, PendingTransaction } = composeStories(stories);
 
 const mockSecuredFinance = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mockSecuredFinance);
+
+const DEFAULT_CHOICE = Object.values(currencyMap).reduce<CurrencyInfo>(
+    (acc, ccy) => {
+        if (acc.index < ccy.index) {
+            return acc;
+        }
+        return ccy;
+    },
+    { ...currencyMap.ETH }
+);
 
 describe('LendingCard Component', () => {
     const preloadedState = {
@@ -29,13 +39,13 @@ describe('LendingCard Component', () => {
         },
     };
 
-    const selectFilecoin = () => {
+    const selectEthereum = () => {
         fireEvent.click(
             screen.getByRole('button', {
-                name: 'Ethereum',
+                name: DEFAULT_CHOICE.name,
             })
         );
-        fireEvent.click(screen.getByText('Filecoin'));
+        fireEvent.click(screen.getByText('Ethereum'));
     };
     it('should render a LendingCard', () => {
         render(<Default />);
@@ -50,23 +60,23 @@ describe('LendingCard Component', () => {
 
     it('should let the user choose between ETH, FIL and USDC when clicking on the asset selector', () => {
         render(<Default />);
-        expect(screen.getAllByText('Ethereum')).toHaveLength(1);
+        expect(screen.getAllByText(DEFAULT_CHOICE.name)).toHaveLength(1);
         expect(screen.queryByText('USDC')).not.toBeInTheDocument();
-        expect(screen.queryByText('Filecoin')).not.toBeInTheDocument();
+        expect(screen.queryByText('Ethereum')).not.toBeInTheDocument();
         fireEvent.click(
             screen.getByRole('button', {
-                name: 'Ethereum',
+                name: 'Filecoin',
             })
         );
-        expect(screen.getAllByText('Ethereum')).toHaveLength(2);
+        expect(screen.getAllByText('Filecoin')).toHaveLength(2);
         expect(screen.getByText('USDC')).toBeInTheDocument();
-        expect(screen.getByText('Filecoin')).toBeInTheDocument();
+        expect(screen.getByText('Ethereum')).toBeInTheDocument();
     });
 
-    it('should switch to Filecoin when selecting it from the option', () => {
+    it('should switch to Ethereum when selecting it from the option', () => {
         render(<Default />);
-        selectFilecoin();
-        expect(screen.getByText('Filecoin')).toBeInTheDocument();
+        selectEthereum();
+        expect(screen.getByText('Ethereum')).toBeInTheDocument();
     });
 
     it('should disable the action button when the transaction is pending', () => {
@@ -85,7 +95,7 @@ describe('LendingCard Component', () => {
         fireEvent.click(button);
         await waitFor(() =>
             expect(onPlaceOrder).toHaveBeenCalledWith(
-                'ETH',
+                DEFAULT_CHOICE.symbol,
                 BigNumber.from(1),
                 OrderSide.Borrow,
                 BigNumber.from(0),
@@ -97,14 +107,14 @@ describe('LendingCard Component', () => {
     it('should call the onPlaceOrder function with the argument selected asset and amount when clicking on the action button', async () => {
         const onPlaceOrder = jest.fn();
         render(<Default onPlaceOrder={onPlaceOrder} />);
-        selectFilecoin();
+        selectEthereum();
         const input = screen.getByRole('textbox');
         fireEvent.change(input, { target: { value: '10' } });
         fireEvent.click(screen.getByTestId('place-order-button'));
 
         await waitFor(() =>
             expect(onPlaceOrder).toHaveBeenCalledWith(
-                'FIL',
+                CurrencySymbol.ETH,
                 BigNumber.from(1),
                 OrderSide.Borrow,
                 currencyMap.FIL.toBaseUnit(10),
@@ -130,7 +140,7 @@ describe('LendingCard Component', () => {
         render(<Default />, { preloadedState });
         const input = screen.getByRole('textbox');
         fireEvent.change(input, { target: { value: '10' } });
-        expect(screen.getByText('~ 20,003.4 USD')).toBeInTheDocument();
+        expect(screen.getByText('~ 58.7 USD')).toBeInTheDocument();
     });
 
     it('should display the rate from the prop', () => {
