@@ -4,6 +4,7 @@ import { HashRouter as Router } from 'react-router-dom';
 import 'src/assets/css/index.css';
 import { withPerformance } from 'storybook-addon-performance';
 import store from './../src/store';
+import { MockSecuredFinanceProvider } from './../src/stories/mocks/MockSecuredFinanceProvider';
 
 export const parameters = {
     actions: { argTypesRegex: '^on.*' },
@@ -41,7 +42,9 @@ export const decorators = [
     Story => (
         <Router>
             <Provider store={store}>
-                <Story />
+                <MockSecuredFinanceProvider>
+                    <Story />
+                </MockSecuredFinanceProvider>
             </Provider>
         </Router>
     ),

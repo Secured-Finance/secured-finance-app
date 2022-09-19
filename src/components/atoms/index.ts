@@ -17,7 +17,6 @@ export * from './Label';
 export * from './NavTab';
 export * from './PercentageTab';
 export * from './PortfolioTab';
-export * from './RenderTerms';
 export * from './Separator';
 export * from './SortArrows';
 export * from './Toggle';

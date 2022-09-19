@@ -4,9 +4,14 @@ import { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from 'src/store/types';
 import { CurrencySymbol, toCurrency } from 'src/utils';
-import useSF from './useSecuredFinance';
+import useSF from '../useSecuredFinance';
 
-export const useRates = (ccy: CurrencySymbol, type: number) => {
+export enum RateType {
+    Borrow = 0,
+    Lend = 1,
+    MidRate = 2,
+}
+export const useRates = (ccy: CurrencySymbol, type: RateType) => {
     const securedFinance = useSF();
     const block = useSelector(
         (state: RootState) => state.blockchain.latestBlock
@@ -18,14 +23,14 @@ export const useRates = (ccy: CurrencySymbol, type: number) => {
             const currency = toCurrency(ccy);
             let ratesFn;
             switch (type) {
-                case 0:
+                case RateType.Borrow:
                     ratesFn = () =>
                         securedFinance.getBorrowYieldCurve(currency);
                     break;
-                case 1:
+                case RateType.Lend:
                     ratesFn = () => securedFinance.getLendYieldCurve(currency);
                     break;
-                case 2:
+                case RateType.MidRate:
                     ratesFn = () =>
                         securedFinance.getMidRateYieldCurve(currency);
                     break;

@@ -1,5 +1,4 @@
-export * from './useCheckCollateralBook';
 export * from './useCollateralBook';
-export * from './useCrosschainAddress';
-export * from './useLendingMarketAddress';
+export * from './useLendingMarkets';
 export * from './usePlaceOrder';
+export * from './useRates';

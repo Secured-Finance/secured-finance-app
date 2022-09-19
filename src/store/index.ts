@@ -1,5 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
 import assetPrices from './assetPrices';
+import availableContracts from './availableContracts';
 import blockchain from './blockchain';
 import { listenerMiddleware } from './blockchain/reducer';
 import ethereumWallet from './ethereumWallet';
@@ -16,6 +17,7 @@ export const rootReducers = {
     blockchain,
     lastError,
     landingOrderForm,
+    availableContracts,
 };
 
 const store = configureStore({

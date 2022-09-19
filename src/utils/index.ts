@@ -8,7 +8,6 @@ export * from './formatDate';
 export * from './formatNumbers';
 export * from './generateID';
 export * from './strings';
-export * from './terms';
 
 export const bnToDec = (bn: BigNumber, decimals = 18): number => {
     return bn.dividedBy(new BigNumber(10).pow(decimals)).toNumber();

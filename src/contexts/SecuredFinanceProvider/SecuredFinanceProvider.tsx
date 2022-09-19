@@ -2,9 +2,10 @@ import { SecuredFinanceClient } from '@secured-finance/sf-client';
 import { ethers } from 'ethers';
 import React, { createContext, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
+import { useLendingMarkets } from 'src/hooks';
 import { useEthereumWalletStore } from 'src/hooks/useEthWallet';
 import { updateLatestBlock } from 'src/store/blockchain';
-import { getRpcEndpoint, hexToDec } from 'src/utils';
+import { CurrencySymbol, getRpcEndpoint, hexToDec } from 'src/utils';
 import { ChainUnsupportedError, useWallet } from 'use-wallet';
 
 export const CACHED_PROVIDER_KEY = 'CACHED_PROVIDER_KEY';
@@ -26,12 +27,17 @@ declare global {
 const SecuredFinanceProvider: React.FC = ({ children }) => {
     const [web3Provider, setWeb3Provider] =
         useState<ethers.providers.BaseProvider | null>(null);
-    const { error, status, connect, account, ethereum } = useWallet();
+    const { error, status, connect, account, ethereum, isConnected } =
+        useWallet();
     const [securedFinance, setSecuredFinance] =
         useState<SecuredFinanceClient>();
     const dispatch = useDispatch();
 
     useEthereumWalletStore();
+    Object.values(CurrencySymbol).forEach(ccy => {
+        // eslint-disable-next-line react-hooks/rules-of-hooks
+        useLendingMarkets(ccy, securedFinance);
+    });
 
     const handleNetworkChanged = (networkId: string) => {
         if (hexToDec(networkId) !== 4) {
@@ -50,10 +56,22 @@ const SecuredFinanceProvider: React.FC = ({ children }) => {
             const securedFinanceLib = new SecuredFinanceClient();
             await securedFinanceLib.init(signer || provider, network);
 
-            setSecuredFinance(securedFinanceLib);
+            setSecuredFinance(previous => {
+                if (!previous) {
+                    return securedFinanceLib;
+                }
+
+                if (
+                    previous.config.signerOrProvider instanceof
+                    ethers.providers.BaseProvider
+                ) {
+                    return securedFinanceLib;
+                }
+
+                return previous;
+            });
             window.securedFinanceSDK = securedFinanceLib;
         };
-
         if (ethereum) {
             const chainId = Number(ethereum.chainId);
             const provider = window.localStorage.getItem('FORK')
@@ -71,11 +89,11 @@ const SecuredFinanceProvider: React.FC = ({ children }) => {
                     );
                 }
             };
-        } else {
+        } else if (!isConnected()) {
             const provider = ethers.getDefaultProvider(getRpcEndpoint());
             connectSFClient(provider);
         }
-    }, [ethereum, status, error]);
+    }, [ethereum, isConnected]);
 
     useEffect(() => {
         if (status === 'error') {
