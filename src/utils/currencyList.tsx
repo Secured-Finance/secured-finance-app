@@ -21,7 +21,7 @@ export enum CurrencySymbol {
     ETH = 'ETH',
     FIL = 'FIL',
     USDC = 'USDC',
-    WBTC = 'WBTC',
+    BTC = 'BTC',
 }
 
 export const currencyMap: Readonly<
@@ -57,9 +57,9 @@ export const currencyMap: Readonly<
         toBaseUnit: (amount: number) => convertEthToWei(amount),
         toCurrency: () => USDC.onChain(),
     },
-    [CurrencySymbol.WBTC]: {
+    [CurrencySymbol.BTC]: {
         index: 3,
-        symbol: CurrencySymbol.WBTC,
+        symbol: CurrencySymbol.BTC,
         name: WBTC.onChain().name,
         icon: BTCIcon,
         coinGeckoId: 'bitcoin',
