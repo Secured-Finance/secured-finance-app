@@ -9,7 +9,11 @@ import { CollateralInput } from 'src/components/organisms';
 import { useDepositCollateral } from 'src/hooks/useDepositCollateral';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { RootState } from 'src/store/types';
-import { CollateralInfo, CurrencySymbol } from 'src/utils';
+import {
+    CollateralInfo,
+    CurrencySymbol,
+    handleContractTransaction,
+} from 'src/utils';
 
 enum Step {
     depositCollateral = 1,
@@ -94,7 +98,12 @@ export const DepositCollateral = ({
 
     const handleDepositCollateral = useCallback(async () => {
         try {
-            await onDepositCollateral();
+            const tx = await onDepositCollateral();
+            const transactionStatus = await handleContractTransaction(tx);
+            if (!transactionStatus) {
+                console.error('Some error occured');
+                handleClose();
+            }
             dispatch({ type: 'next' });
         } catch (e) {
             console.error(e);
