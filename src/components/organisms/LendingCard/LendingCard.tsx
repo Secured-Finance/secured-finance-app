@@ -124,6 +124,7 @@ export const LendingCard = ({
                     rate
                 );
                 const transactionStatus = await handleContractTransaction(tx);
+                // TODO after placeOrder works
                 if (!transactionStatus) {
                     console.error('Some error occured');
                 }
