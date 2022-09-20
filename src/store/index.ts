@@ -4,16 +4,12 @@ import availableContracts from './availableContracts';
 import blockchain from './blockchain';
 import { listenerMiddleware } from './blockchain/reducer';
 import ethereumWallet from './ethereumWallet';
-import history from './history';
 import landingOrderForm from './landingOrderForm';
 import lastError from './lastError';
-import lendingTerminal from './lendingTerminal';
 
 export const rootReducers = {
-    history,
     ethereumWallet,
     assetPrices,
-    lendingTerminal,
     blockchain,
     lastError,
     landingOrderForm,

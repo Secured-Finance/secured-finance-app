@@ -2,7 +2,6 @@ export * from './AmountCard';
 export * from './AssetDisclosure';
 export * from './AssetSelector';
 export * from './CollateralTabLeftPane';
-export * from './CurrencySelector';
 export * from './CurveHeader';
 export * from './Dialog';
 export * from './LineChart';
