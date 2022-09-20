@@ -1,5 +1,5 @@
 import { RadioGroup } from '@headlessui/react';
-import { BigNumber } from 'ethers';
+import { BigNumber, ContractTransaction } from 'ethers';
 import { useCallback, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, NavTab, Option } from 'src/components/atoms';
@@ -21,6 +21,7 @@ import {
     formatDate,
     getCurrencyMapAsList,
     getCurrencyMapAsOptions,
+    handleContractTransaction,
     percentFormat,
 } from 'src/utils';
 import { computeAvailableToBorrow } from 'src/utils/collateral';
@@ -37,7 +38,7 @@ export const LendingCard = ({
         side: OrderSide,
         amount: BigNumber,
         rate: number
-    ) => Promise<unknown>;
+    ) => Promise<ContractTransaction | undefined>;
     collateralBook: CollateralBook;
     marketRate: number;
     maturitiesOptionList: Option[];
@@ -115,7 +116,17 @@ export const LendingCard = ({
         ) => {
             try {
                 setPendingTransaction(true);
-                await onPlaceOrder(ccy, maturity, side, amount, rate);
+                const tx = await onPlaceOrder(
+                    ccy,
+                    maturity,
+                    side,
+                    amount,
+                    rate
+                );
+                const transactionStatus = await handleContractTransaction(tx);
+                if (!transactionStatus) {
+                    console.error('Some error occured');
+                }
                 setPendingTransaction(false);
             } catch (e) {
                 if (e instanceof Error) {

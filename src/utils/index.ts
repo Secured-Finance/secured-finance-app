@@ -7,6 +7,7 @@ export * from './formatBalance';
 export * from './formatDate';
 export * from './formatNumbers';
 export * from './generateID';
+export * from './handleContractTransaction';
 export * from './strings';
 
 export const bnToDec = (bn: BigNumber, decimals = 18): number => {
