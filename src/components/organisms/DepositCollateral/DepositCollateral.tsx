@@ -103,8 +103,9 @@ export const DepositCollateral = ({
             if (!transactionStatus) {
                 console.error('Some error occured');
                 handleClose();
+            } else {
+                dispatch({ type: 'next' });
             }
-            dispatch({ type: 'next' });
         } catch (e) {
             console.error(e);
             handleClose();
