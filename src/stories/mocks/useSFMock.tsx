@@ -71,6 +71,20 @@ export const mockUseSF = () => {
                 },
             ])
         ),
+
+        depositCollateral: jest.fn(() =>
+            Promise.resolve({
+                wait: jest.fn(() => Promise.resolve({ blockNumber: 123 })),
+            })
+        ),
+
+        withdrawCollateral: jest.fn(() =>
+            Promise.resolve({
+                wait: jest.fn(() =>
+                    Promise.resolve({ blockNumber: undefined })
+                ),
+            })
+        ),
     };
 
     return mockSecuredFinance;
