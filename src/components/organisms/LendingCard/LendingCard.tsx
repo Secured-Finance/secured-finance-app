@@ -153,7 +153,7 @@ export const LendingCard = ({
             <div className='grid justify-center space-y-4 px-4'>
                 <div className='typography-body-2 flex flex-col text-center text-white-50'>
                     <span className='typography-big-body-bold text-white'>
-                        {marketRate && marketRate / 100} %
+                        {percentFormat(marketRate)}
                     </span>
                     <span>Fixed Rate APY</span>
                 </div>

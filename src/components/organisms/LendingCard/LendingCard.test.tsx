@@ -135,8 +135,8 @@ describe('LendingCard Component', () => {
     });
 
     it('should display the rate from the prop', () => {
-        render(<Default marketRate={20} />);
-        expect(screen.getByText('0.2 %')).toBeInTheDocument();
+        render(<Default marketRate={0.2} />);
+        expect(screen.getByText('0.2%')).toBeInTheDocument();
     });
 
     it('should transform the contract label to a date', () => {
