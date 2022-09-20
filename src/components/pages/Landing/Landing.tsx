@@ -54,7 +54,7 @@ export const Landing = () => {
                 <h2 className='typography-body-2 w-1/3 text-white-80'>
                     An elegant open-market digital asset lending solution
                     offering interoperability with traditional banking and
-                    decentralization via Web3
+                    decentralization via&nbsp;Web3
                 </h2>
             </div>
             <div className='flex flex-row items-center justify-center'>
