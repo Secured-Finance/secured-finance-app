@@ -1,7 +1,6 @@
 import { RadioGroup } from '@headlessui/react';
-import { CheckIcon } from '@heroicons/react/outline';
+import CheckIcon from 'src/assets/icons/check.svg';
 import CircleOutline from 'src/assets/icons/circle-outline.svg';
-
 import { formatDataCy } from 'src/utils';
 
 const WalletOption = ({
@@ -21,28 +20,20 @@ const WalletOption = ({
                 <>
                     <div className='flex w-full items-center justify-between space-x-12'>
                         <div className='flex items-center'>
-                            <div className='text-sm'>
-                                <RadioGroup.Label
-                                    className={`font-medium  ${
-                                        checked ? 'text-white' : 'text-black-30'
-                                    }`}
-                                >
-                                    <span className='flex'>
-                                        <Icon className='h-6 w-6' />
-                                        <p className='ml-6 text-white'>
-                                            {name}
-                                        </p>
-                                    </span>
-                                </RadioGroup.Label>
-                            </div>
+                            <RadioGroup.Label>
+                                <span className='flex'>
+                                    <Icon className='h-8 w-8' />
+                                    <p className='typography-body-2 ml-6 text-grayScale'>
+                                        {name}
+                                    </p>
+                                </span>
+                            </RadioGroup.Label>
                         </div>
                         {checked ? (
-                            <div className='rounded-full border-2 border-neutral bg-starBlue text-white'>
-                                <CheckIcon className='h-6 w-6' />
-                            </div>
+                            <CheckIcon className='h-6 w-6' />
                         ) : (
-                            <div className='rounded-full border-2 border-neutral text-white'>
-                                <CircleOutline className='h-6 w-6' />
+                            <div className='rounded-full border border-neutral'>
+                                <CircleOutline className='h-[22px] w-[22px]' />
                             </div>
                         )}
                     </div>
