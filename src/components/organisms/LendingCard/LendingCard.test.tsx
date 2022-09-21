@@ -85,7 +85,7 @@ describe('LendingCard Component', () => {
                 BigNumber.from(1),
                 OrderSide.Borrow,
                 BigNumber.from(0),
-                100
+                10000
             )
         );
     });
@@ -104,7 +104,7 @@ describe('LendingCard Component', () => {
                 BigNumber.from(1),
                 OrderSide.Borrow,
                 currencyMap.FIL.toBaseUnit(10),
-                100
+                10000
             )
         );
     });
