@@ -9,7 +9,6 @@ import {
     useRates,
 } from 'src/hooks';
 import { RootState } from 'src/store/types';
-import { CurrencySymbol } from 'src/utils';
 import { useWallet } from 'use-wallet';
 
 export const Landing = () => {
@@ -30,15 +29,16 @@ export const Landing = () => {
     }));
 
     const rates = useRates(
-        CurrencySymbol.FIL,
+        currency,
         side === OrderSide.Borrow ? RateType.Borrow : RateType.Lend
     );
+
     const marketRate = useMemo(() => {
         if (!rates) {
             return 0;
         }
         return rates[Object.values(lendingContracts).indexOf(maturity)];
-    }, [lendingContracts, rates, maturity]);
+    }, [rates, lendingContracts, maturity]);
 
     return (
         <div

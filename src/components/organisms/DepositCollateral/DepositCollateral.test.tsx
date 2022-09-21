@@ -1,4 +1,5 @@
 import { composeStories } from '@storybook/testing-react';
+import { preloadedAssetPrices } from 'src/stories/mocks/fixtures';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
 import * as stories from './DepositCollateral.stories';
@@ -13,22 +14,7 @@ global.IntersectionObserver = class FakeIntersectionObserver {
     disconnect() {}
 };
 
-const preloadedState = {
-    assetPrices: {
-        filecoin: {
-            price: 6.0,
-            change: -8.208519783216566,
-        },
-        ethereum: {
-            price: 2000.34,
-            change: 0.5162466489453748,
-        },
-        usdc: {
-            price: 1.0,
-            change: 0.042530768538486696,
-        },
-    },
-};
+const preloadedState = { ...preloadedAssetPrices };
 
 const mockSecuredFinance = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mockSecuredFinance);

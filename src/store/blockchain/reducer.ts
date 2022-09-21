@@ -3,6 +3,7 @@ import {
     createSlice,
     PayloadAction,
 } from '@reduxjs/toolkit';
+import { currencyMap } from 'src/utils';
 import { fetchAssetPrice } from '../assetPrices/reducer';
 import { RootState } from '../types';
 import { Blockchain } from './type';
@@ -34,7 +35,7 @@ listenerMiddleware.startListening({
     effect: async (action, listenerApi) => {
         listenerApi.cancelActiveListeners();
         listenerApi.dispatch(
-            fetchAssetPrice(['ethereum', 'filecoin', 'usd-coin'])
+            fetchAssetPrice(Object.values(currencyMap).map(c => c.coinGeckoId))
         );
     },
 });
