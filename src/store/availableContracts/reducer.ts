@@ -12,7 +12,7 @@ const initialState: AvailableContracts = {
         [CurrencySymbol.ETH]: emptyContract,
         [CurrencySymbol.FIL]: emptyContract,
         [CurrencySymbol.USDC]: emptyContract,
-        [CurrencySymbol.WBTC]: emptyContract,
+        [CurrencySymbol.BTC]: emptyContract,
     },
 };
 

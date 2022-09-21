@@ -5,4 +5,5 @@ export * from './env';
 export * from './formatBalance';
 export * from './formatDate';
 export * from './formatNumbers';
+export * from './handleContractTransaction';
 export * from './strings';

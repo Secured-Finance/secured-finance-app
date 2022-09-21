@@ -27,7 +27,7 @@ describe('currencyList.getCurrencyMapAsOptions', () => {
             },
             {
                 label: 'Bitcoin',
-                value: 'WBTC',
+                value: 'BTC',
                 iconSVG: 'svg',
             },
         ]);
@@ -42,7 +42,7 @@ describe('currencyList.getCurrencyMapAsOptions', () => {
         expect(options[currencyMap.FIL.index]).toEqual(currencyMap.FIL);
         expect(options[currencyMap.ETH.index]).toEqual(currencyMap.ETH);
         expect(options[currencyMap.USDC.index]).toEqual(currencyMap.USDC);
-        expect(options[currencyMap.WBTC.index]).toEqual(currencyMap.WBTC);
+        expect(options[currencyMap.BTC.index]).toEqual(currencyMap.BTC);
     });
 });
 

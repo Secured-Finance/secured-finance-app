@@ -9,7 +9,7 @@ const initialStore: AssetPrices = {
     [CurrencySymbol.ETH]: initialAssetPrice,
     [CurrencySymbol.FIL]: initialAssetPrice,
     [CurrencySymbol.USDC]: initialAssetPrice,
-    [CurrencySymbol.WBTC]: initialAssetPrice,
+    [CurrencySymbol.BTC]: initialAssetPrice,
     isLoading: false,
 };
 
@@ -57,8 +57,8 @@ const assetPricesSlice = createSlice({
             state.FIL.change = filChange;
             state.USDC.price = usdcPrice;
             state.USDC.change = usdcChange;
-            state.WBTC.price = btcPrice;
-            state.WBTC.change = btcChange;
+            state.BTC.price = btcPrice;
+            state.BTC.change = btcChange;
         },
         [fetchAssetPrice.pending.type]: state => {
             state.isLoading = true;

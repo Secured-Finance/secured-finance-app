@@ -7,26 +7,26 @@ export const mockUseSF = () => {
         placeLendingOrder: jest.fn(),
         getBorrowYieldCurve: jest.fn(() =>
             Promise.resolve([
-                BigNumber.from('100'),
-                BigNumber.from('200'),
-                BigNumber.from('300'),
-                BigNumber.from('400'),
+                BigNumber.from('10000'),
+                BigNumber.from('20000'),
+                BigNumber.from('30000'),
+                BigNumber.from('40000'),
             ])
         ),
         getLendYieldCurve: jest.fn(() =>
             Promise.resolve([
-                BigNumber.from('50'),
-                BigNumber.from('150'),
-                BigNumber.from('250'),
-                BigNumber.from('350'),
+                BigNumber.from('5000'),
+                BigNumber.from('15000'),
+                BigNumber.from('25000'),
+                BigNumber.from('35000'),
             ])
         ),
         getMidRateYieldCurve: jest.fn(() =>
             Promise.resolve([
-                BigNumber.from('50'),
-                BigNumber.from('150'),
-                BigNumber.from('250'),
-                BigNumber.from('350'),
+                BigNumber.from('5000'),
+                BigNumber.from('15000'),
+                BigNumber.from('25000'),
+                BigNumber.from('35000'),
             ])
         ),
         getCollateralBook: jest.fn(() =>
@@ -70,6 +70,20 @@ export const mockUseSF = () => {
                     name: 'ETH-2000',
                 },
             ])
+        ),
+
+        depositCollateral: jest.fn(() =>
+            Promise.resolve({
+                wait: jest.fn(() => Promise.resolve({ blockNumber: 123 })),
+            })
+        ),
+
+        withdrawCollateral: jest.fn(() =>
+            Promise.resolve({
+                wait: jest.fn(() =>
+                    Promise.resolve({ blockNumber: undefined })
+                ),
+            })
         ),
     };
 
