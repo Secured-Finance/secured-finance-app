@@ -126,7 +126,7 @@ export const LendingCard = ({
                 const transactionStatus = await handleContractTransaction(tx);
                 // TODO after placeOrder works
                 if (!transactionStatus) {
-                    console.error('Some error occured');
+                    console.error('Some error occurred');
                 }
                 setPendingTransaction(false);
             } catch (e) {
@@ -164,8 +164,11 @@ export const LendingCard = ({
 
             <div className='grid justify-center space-y-4 px-4'>
                 <div className='typography-body-2 flex flex-col text-center text-white-50'>
-                    <span className='typography-big-body-bold text-white'>
-                        {marketRate && marketRate / 100} %
+                    <span
+                        className='typography-big-body-bold text-white'
+                        data-testid='market-rate'
+                    >
+                        {percentFormat(marketRate, 1000000)}
                     </span>
                     <span>Fixed Rate APY</span>
                 </div>
@@ -213,7 +216,7 @@ export const LendingCard = ({
                     disabled={pendingTransaction}
                     data-testid='place-order-button'
                 >
-                    {side}
+                    {side === OrderSide.Borrow ? 'Borrow' : 'Lend'}
                 </Button>
             </div>
         </div>
