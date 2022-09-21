@@ -135,7 +135,7 @@ describe('LendingCard Component', () => {
     });
 
     it('should display the rate from the prop', () => {
-        render(<Default marketRate={20} />);
+        render(<Default marketRate={2000} />);
         expect(screen.getByText('0.2%')).toBeInTheDocument();
     });
 
