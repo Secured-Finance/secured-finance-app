@@ -1,43 +1,23 @@
 import {
     currencyMap,
     CurrencySymbol,
-    getCurrencyByIndex,
     getCurrencyMapAsList,
     getCurrencyMapAsOptions,
     toCurrency,
 } from './currencyList';
-
-describe('getCurrencyBy', () => {
-    const eth = currencyMap.ETH;
-    const fil = currencyMap.FIL;
-
-    it('should return the currency object for an existing string indexCcy', () => {
-        expect(getCurrencyByIndex('0')).toEqual(eth);
-        expect(getCurrencyByIndex('1')).toEqual(fil);
-    });
-
-    it('should return the currency object for an existing number indexCcy', () => {
-        expect(getCurrencyByIndex(0)).toEqual(eth);
-        expect(getCurrencyByIndex(1)).toEqual(fil);
-    });
-
-    it('should raise an error non existing indexCcy', () => {
-        expect(() => getCurrencyByIndex(3)).toThrow();
-    });
-});
 
 describe('currencyList.getCurrencyMapAsOptions', () => {
     it('should return the currencyList as a list of Option for the ComboBox', () => {
         const options = getCurrencyMapAsOptions();
         expect(options).toEqual([
             {
-                label: 'Ethereum',
-                value: 'ETH',
+                label: 'Filecoin',
+                value: 'FIL',
                 iconSVG: 'svg',
             },
             {
-                label: 'Filecoin',
-                value: 'FIL',
+                label: 'Ethereum',
+                value: 'ETH',
                 iconSVG: 'svg',
             },
             {
@@ -45,17 +25,24 @@ describe('currencyList.getCurrencyMapAsOptions', () => {
                 value: 'USDC',
                 iconSVG: 'svg',
             },
+            {
+                label: 'Bitcoin',
+                value: 'BTC',
+                iconSVG: 'svg',
+            },
         ]);
     });
 });
 
 describe('currencyList.getCurrencyMapAsOptions', () => {
-    it('should return the getCurrencyMapAsOptions as a list', () => {
+    it('should return the getCurrencyMapAsOptions as a list ordered by index', () => {
         const options = getCurrencyMapAsList();
-        expect(options).toHaveLength(3);
-        expect(options[0]).toEqual(currencyMap.ETH);
-        expect(options[1]).toEqual(currencyMap.FIL);
-        expect(options[2]).toEqual(currencyMap.USDC);
+        expect(options).toHaveLength(4);
+
+        expect(options[currencyMap.FIL.index]).toEqual(currencyMap.FIL);
+        expect(options[currencyMap.ETH.index]).toEqual(currencyMap.ETH);
+        expect(options[currencyMap.USDC.index]).toEqual(currencyMap.USDC);
+        expect(options[currencyMap.BTC.index]).toEqual(currencyMap.BTC);
     });
 });
 

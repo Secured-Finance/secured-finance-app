@@ -22,7 +22,6 @@ const generateCollateralList = (
         const currencyInfo = collateralList[i];
         const collateralInfo = {
             [currencyInfo.symbol]: {
-                indexCcy: currencyInfo.indexCcy,
                 symbol: currencyInfo.symbol,
                 name: currencyInfo.name,
                 available: available,
