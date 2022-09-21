@@ -92,7 +92,7 @@ export const LineChart = ({
             const label = data.labels?.[index];
             dispatch(setMaturity(lendingContracts[label as string]));
             const value = dataset.data[index];
-            dispatch(setRate(value as number));
+            dispatch(setRate((value as number) * 100));
         }
     };
 
