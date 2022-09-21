@@ -12,7 +12,7 @@ describe('useCollateralBook hook', () => {
     const ETH_PRICE = 2000;
     const preloadedState = {
         assetPrices: {
-            ethereum: {
+            ETH: {
                 price: ETH_PRICE,
                 change: 0.5162466489453748,
             },

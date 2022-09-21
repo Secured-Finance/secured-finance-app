@@ -1,9 +1,9 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
+import BitcoinIcon from 'src/assets/coins/btc.svg';
 import EthIcon from 'src/assets/coins/eth2.svg';
 import FilecoinIcon from 'src/assets/coins/fil.svg';
 import UsdcIcon from 'src/assets/coins/usdc.svg';
 import UsdtIcon from 'src/assets/coins/usdt.svg';
-import BitcoinIcon from 'src/assets/coins/xbc.svg';
 import { Option } from 'src/components/atoms/DropdownSelector/DropdownSelector';
 import { AssetSelector } from './AssetSelector';
 
