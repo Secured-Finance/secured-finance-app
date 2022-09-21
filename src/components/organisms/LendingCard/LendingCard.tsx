@@ -126,7 +126,7 @@ export const LendingCard = ({
                 const transactionStatus = await handleContractTransaction(tx);
                 // TODO after placeOrder works
                 if (!transactionStatus) {
-                    console.error('Some error occured');
+                    console.error('Some error occurred');
                 }
                 setPendingTransaction(false);
             } catch (e) {
@@ -216,7 +216,7 @@ export const LendingCard = ({
                     disabled={pendingTransaction}
                     data-testid='place-order-button'
                 >
-                    {side}
+                    {side === OrderSide.Borrow ? 'Borrow' : 'Lend'}
                 </Button>
             </div>
         </div>
