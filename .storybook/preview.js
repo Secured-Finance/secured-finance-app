@@ -16,7 +16,6 @@ export const parameters = {
     },
 
     backgrounds: {
-        default: 'secfin',
         values: [
             {
                 name: 'black',

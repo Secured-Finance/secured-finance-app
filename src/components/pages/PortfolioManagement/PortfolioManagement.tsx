@@ -12,17 +12,21 @@ import {
     MyWalletCard,
     Position,
 } from 'src/components/organisms';
+import { useTradeHistory } from 'src/hooks';
 import { selectEthereumBalance } from 'src/store/ethereumWallet';
 import { RootState } from 'src/store/types';
 import {
     CurrencySymbol,
     generateWalletInformation,
+    usdFormat,
     WalletSource,
 } from 'src/utils';
+import { computeNetValue, computeWeightedAverage } from 'src/utils/portfolio';
 import { useWallet } from 'use-wallet';
 
 export const PortfolioManagement = () => {
     const { account } = useWallet();
+    const tradeHistory = useTradeHistory(account);
 
     const balance = useSelector((state: RootState) =>
         selectEthereumBalance(state)
@@ -78,7 +82,18 @@ export const PortfolioManagement = () => {
             </div>
             <div className='flex flex-row justify-between gap-6 pt-4'>
                 <div className='flex min-w-[800px] flex-grow flex-col gap-6'>
-                    <PortfolioManagementTable />
+                    <PortfolioManagementTable
+                        values={[
+                            usdFormat(computeNetValue(tradeHistory)),
+                            computeWeightedAverage(tradeHistory)
+                                ? computeWeightedAverage(
+                                      tradeHistory
+                                  ).toString()
+                                : '--',
+                            tradeHistory.length.toString(),
+                            '0',
+                        ]}
+                    />
                     <CollateralOrganism />
                 </div>
                 <div className='w-[350px]'>

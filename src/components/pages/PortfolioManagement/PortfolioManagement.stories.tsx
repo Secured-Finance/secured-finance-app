@@ -1,3 +1,4 @@
+import { GraphClientProvider } from '@secured-finance/sf-graph-client';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import {
     WithAppLayout,
@@ -13,7 +14,9 @@ export default {
 } as ComponentMeta<typeof PortfolioManagement>;
 
 const Template: ComponentStory<typeof PortfolioManagement> = () => (
-    <PortfolioManagement />
+    <GraphClientProvider network={'4'}>
+        <PortfolioManagement />
+    </GraphClientProvider>
 );
 
 export const Default = Template.bind({});
