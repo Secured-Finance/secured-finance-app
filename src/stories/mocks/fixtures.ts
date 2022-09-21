@@ -14,7 +14,7 @@ export const preloadedAssetPrices: { assetPrices: AssetPrices } = {
             price: 1.0,
             change: 0.042530768538486696,
         },
-        WBTC: {
+        BTC: {
             price: 50000.0,
             change: 0.0,
         },

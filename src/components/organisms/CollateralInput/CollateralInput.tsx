@@ -16,7 +16,6 @@ export const CollateralInput = ({
     asset,
     onAmountChange,
 }: CollateralInputProps) => {
-    const [amount, setAmount] = useState(0);
     const [inputValue, setInputValue] = useState('');
 
     const amountFormatterMap = useMemo(
@@ -52,10 +51,9 @@ export const CollateralInput = ({
     const handleAmountChange = useCallback(
         (e: ChangeEvent<HTMLInputElement>) => {
             const maybeNumber = e.target.value;
-            let amount = 0;
-            isNaN(+maybeNumber) ? (amount = 0) : (amount = +maybeNumber);
-            setAmount(amount);
-            setInputValue(amount === 0 ? '0' : maybeNumber);
+            const amount =
+                isNaN(+maybeNumber) || maybeNumber === '' ? -1 : +maybeNumber;
+            setInputValue(amount === -1 ? '' : maybeNumber);
             if (onAmountChange) {
                 handleInputChange(amount, asset, onAmountChange);
             }
@@ -65,11 +63,8 @@ export const CollateralInput = ({
 
     const handleClick = useCallback(
         (percentage: number) => {
-            let amount = 0;
-            const maybeNumber = (percentage * availableAmount).toString();
-            isNaN(+maybeNumber) ? (amount = 0) : (amount = +maybeNumber);
-            setAmount(amount);
-            setInputValue(amount === 0 ? '0' : maybeNumber);
+            const amount = percentage * availableAmount;
+            setInputValue(amount === 0 ? '' : amount.toString());
             if (onAmountChange) {
                 handleInputChange(amount, asset, onAmountChange);
             }
@@ -92,7 +87,7 @@ export const CollateralInput = ({
                 />
                 <div className='typography-body-2'>
                     <span className='text-center text-neutral-8'>
-                        {usdFormat(price * amount, 2)}
+                        {usdFormat(price * +inputValue, 2)}
                     </span>
                     <span className='pl-2 text-center text-neutral-4'>USD</span>
                 </div>

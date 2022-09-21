@@ -23,7 +23,7 @@ export const AssetSelector = <AssetType extends string = string>({
 }) => {
     const [assetValue, setAssetValue] = useState(selected.value);
     const [amount, setAmount] = useState(0);
-    const [inputValue, setInputValue] = useState('0');
+    const [inputValue, setInputValue] = useState('');
 
     const selectedOption = useMemo(
         () => options.find(o => o.value === assetValue),
@@ -71,10 +71,10 @@ export const AssetSelector = <AssetType extends string = string>({
     const handleAmountChange = useCallback(
         (e: ChangeEvent<HTMLInputElement>) => {
             const maybeNumber = e.target.value;
-            let amount = 0;
-            isNaN(+maybeNumber) ? (amount = 0) : (amount = +maybeNumber);
+            const amount =
+                isNaN(+maybeNumber) || maybeNumber === '' ? -1 : +maybeNumber;
             setAmount(amount);
-            setInputValue(amount === 0 ? '0' : maybeNumber);
+            setInputValue(amount === -1 ? '' : maybeNumber);
             if (onAmountChange && selectedOption) {
                 handleInputChange(amount, selectedOption.value, onAmountChange);
             }
