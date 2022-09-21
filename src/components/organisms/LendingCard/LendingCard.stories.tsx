@@ -19,7 +19,7 @@ export default {
             usdCollateral: new BigNumber('100000000000000000000'),
             coverage: new BigNumber('80'),
         },
-        marketRate: 100,
+        marketRate: 100, // 1%
         maturitiesOptionList: [
             { label: 'MAR22', value: '1' },
             { label: 'JUN22', value: '2' },

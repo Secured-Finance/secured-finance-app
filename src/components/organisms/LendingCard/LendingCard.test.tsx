@@ -135,7 +135,7 @@ describe('LendingCard Component', () => {
     });
 
     it('should display the rate from the prop', () => {
-        render(<Default marketRate={0.2} />);
+        render(<Default marketRate={20} />);
         expect(screen.getByText('0.2%')).toBeInTheDocument();
     });
 
@@ -148,22 +148,5 @@ describe('LendingCard Component', () => {
         );
         fireEvent.click(screen.getByText('MAR23'));
         expect(screen.getByText('Mar 1, 2023')).toBeInTheDocument();
-    });
-
-    it.skip('should be mounted with a default rate', () => {
-        render(<Default />);
-        expect(screen.getByText('0 %')).toBeInTheDocument();
-    });
-
-    it.skip('should update the rate when changing the term', () => {
-        render(<Default />);
-        fireEvent.click(screen.getByText('1 Year'));
-        expect(screen.getByText('20 %')).toBeInTheDocument();
-    });
-
-    it.skip('should update the rate when changing the asset', () => {
-        render(<Default />);
-        fireEvent.click(screen.getByText('Ethereum'));
-        expect(screen.getByText('0 %')).toBeInTheDocument();
     });
 });
