@@ -168,7 +168,7 @@ export const LendingCard = ({
                         className='typography-big-body-bold text-white'
                         data-testid='market-rate'
                     >
-                        {percentFormat(marketRate, 10000)}
+                        {percentFormat(marketRate, 1000000)}
                     </span>
                     <span>Fixed Rate APY</span>
                 </div>

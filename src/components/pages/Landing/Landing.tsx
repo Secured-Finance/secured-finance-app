@@ -37,7 +37,7 @@ export const Landing = () => {
         if (!rates) {
             return 0;
         }
-        return rates[Object.values(lendingContracts).indexOf(maturity)] / 100;
+        return rates[Object.values(lendingContracts).indexOf(maturity)];
     }, [rates, lendingContracts, maturity]);
 
     return (
