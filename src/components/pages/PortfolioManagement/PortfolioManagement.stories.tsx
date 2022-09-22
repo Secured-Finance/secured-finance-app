@@ -1,7 +1,7 @@
-import { GraphClientProvider } from '@secured-finance/sf-graph-client';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import {
     WithAppLayout,
+    WithGraphClient,
     WithWalletProvider,
 } from 'src/../.storybook/decorators';
 import { PortfolioManagement } from './PortfolioManagement';
@@ -10,18 +10,17 @@ export default {
     title: 'Pages/PortfolioManagement',
     component: PortfolioManagement,
     args: {},
-    decorators: [WithAppLayout, WithWalletProvider],
+    decorators: [WithAppLayout, WithWalletProvider, WithGraphClient],
 } as ComponentMeta<typeof PortfolioManagement>;
 
 const Template: ComponentStory<typeof PortfolioManagement> = () => (
-    <GraphClientProvider network={'4'}>
-        <PortfolioManagement />
-    </GraphClientProvider>
+    <PortfolioManagement />
 );
 
 export const Default = Template.bind({});
 
-export const ConnectedToWallet = Template.bind({});
-ConnectedToWallet.parameters = {
-    connected: true,
-};
+// TODO: Add a way to manage the connected state of the wallet with the Apollo client
+// export const ConnectedToWallet = Template.bind({});
+// ConnectedToWallet.parameters = {
+//     connected: true,
+// };

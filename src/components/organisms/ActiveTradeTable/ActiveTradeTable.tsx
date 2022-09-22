@@ -7,6 +7,7 @@ import {
     SortingState,
     useReactTable,
 } from '@tanstack/react-table';
+import { BigNumber } from 'ethers';
 import { useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import {
@@ -18,22 +19,17 @@ import {
 import { ContractDetailDialog } from 'src/components/organisms';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { RootState } from 'src/store/types';
-import { CurrencySymbol, percentFormat } from 'src/utils';
+import { currencyMap, CurrencySymbol, Rate } from 'src/utils';
 
-export enum Position {
-    Borrow = 'Borrow',
-    Lend = 'Lend',
-}
-
-type ActiveTrade = {
-    position: Position;
+export type ActiveTrade = {
+    position: 'Borrow' | 'Lend';
     contract: string;
-    apy: number;
-    notional: number;
+    apy: Rate;
+    notional: BigNumber;
     currency: CurrencySymbol;
-    presentValue: number;
+    presentValue: BigNumber;
     dayToMaturity: number;
-    forwardValue: number;
+    forwardValue: BigNumber;
 };
 
 const columnHelper = createColumnHelper<ActiveTrade>();
@@ -87,7 +83,7 @@ export const ActiveTradeTable = ({ data }: { data: Array<ActiveTrade> }) => {
                 ),
             }),
             columnHelper.accessor('apy', {
-                cell: info => percentFormat(info.getValue(), 1),
+                cell: info => info.getValue().toPercent(),
                 header: header => (
                     <TableHeader
                         title='APY'
@@ -110,7 +106,9 @@ export const ActiveTradeTable = ({ data }: { data: Array<ActiveTrade> }) => {
                     return (
                         <CurrencyItem
                             ccy={ccy}
-                            amount={info.getValue()}
+                            amount={currencyMap[ccy].fromBaseUnit(
+                                BigNumber.from(info.getValue())
+                            )}
                             price={priceList[ccy]}
                             align='right'
                         />
@@ -141,7 +139,9 @@ export const ActiveTradeTable = ({ data }: { data: Array<ActiveTrade> }) => {
                     return (
                         <CurrencyItem
                             ccy={ccy}
-                            amount={info.getValue()}
+                            amount={currencyMap[ccy].fromBaseUnit(
+                                BigNumber.from(info.getValue())
+                            )}
                             price={priceList[ccy]}
                             align='right'
                         />

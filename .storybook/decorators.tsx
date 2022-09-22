@@ -1,3 +1,4 @@
+import { GraphClientProvider } from '@secured-finance/sf-graph-client';
 import { Story, StoryContext } from '@storybook/react';
 import { Wallet } from 'ethers';
 import { useEffect } from 'react';
@@ -86,3 +87,9 @@ export const WithAssetPrice = (Story: Story) => {
         </AxiosMock>
     );
 };
+
+export const WithGraphClient = (Story: Story) => (
+    <GraphClientProvider network='4'>
+        <Story />
+    </GraphClientProvider>
+);
