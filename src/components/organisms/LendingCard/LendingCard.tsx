@@ -140,7 +140,7 @@ export const LendingCard = ({
     );
 
     return (
-        <div className='w-80 flex-col space-y-6 rounded-b-xl border border-neutral bg-transparent pb-4 shadow-deep'>
+        <div className='w-80 flex-col space-y-6 rounded-b-xl border border-panelStroke bg-transparent pb-4 shadow-deep'>
             <RadioGroup
                 value={side}
                 onChange={(v: OrderSide) => dispatch(setSide(v))}

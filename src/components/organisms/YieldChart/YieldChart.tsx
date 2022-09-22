@@ -39,7 +39,7 @@ export const YieldChart: React.FC<YieldChartProps> = ({
         (state: RootState) => state.availableContracts.lendingMarkets[asset]
     );
     return (
-        <div className='flex h-[480px] w-[640px] flex-col items-start rounded-r-xl pl-8 shadow-[0_46px_64px_rgba(0,0,0,0.4)]'>
+        <div className='flex h-[480px] w-[640px] flex-col items-start rounded-r-xl border-y border-r border-panelStroke pl-8 shadow-[0_46px_64px_rgba(0,0,0,0.4)]'>
             <div className='h-20 w-full'>
                 <CurveHeader asset={asset} isBorrow={isBorrow}></CurveHeader>
             </div>
