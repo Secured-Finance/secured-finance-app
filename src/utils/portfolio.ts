@@ -11,7 +11,7 @@ export const computeWeightedAverage = (trades: TradeHistory) => {
         return 0;
     }
 
-    const totalAmount = trades.reduce((acc, trade) => acc + trade.amount, 0);
+    const totalAmount = computeNetValue(trades);
     const total = trades.reduce(
         (acc, trade) => acc + trade.rate * trade.amount,
         0
