@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { WithAssetPrice } from 'src/../.storybook/decorators';
 import { updateLatestBlock } from 'src/store/blockchain';
+import { Rate } from 'src/utils';
 import { LendingCard } from './LendingCard';
 
 export default {
@@ -19,7 +20,7 @@ export default {
             usdCollateral: new BigNumber('100000000000000000000'),
             coverage: new BigNumber('80'),
         },
-        marketRate: 10000, // 1%
+        marketRate: new Rate(10000), // 1%
         maturitiesOptionList: [
             { label: 'MAR22', value: '1' },
             { label: 'JUN22', value: '2' },

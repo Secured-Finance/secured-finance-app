@@ -23,6 +23,7 @@ import {
     getCurrencyMapAsOptions,
     handleContractTransaction,
     percentFormat,
+    Rate,
 } from 'src/utils';
 import { computeAvailableToBorrow } from 'src/utils/collateral';
 
@@ -40,7 +41,7 @@ export const LendingCard = ({
         rate: number
     ) => Promise<ContractTransaction | undefined>;
     collateralBook: CollateralBook;
-    marketRate: number;
+    marketRate: Rate;
     maturitiesOptionList: Option[];
 }) => {
     const [pendingTransaction, setPendingTransaction] = useState(false);
@@ -80,7 +81,6 @@ export const LendingCard = ({
     const assetList = useMemo(() => getCurrencyMapAsOptions(), []);
 
     const collateralUsagePercent = useMemo(() => {
-        //TODO: Remove the usage of BigNumber.js and use only Ethers.js
         return percentFormat(
             BigNumber.from(collateralBook.coverage.toString()).toNumber()
         );
@@ -168,7 +168,7 @@ export const LendingCard = ({
                         className='typography-big-body-bold text-white'
                         data-testid='market-rate'
                     >
-                        {percentFormat(marketRate, 1000000)}
+                        {marketRate.toPercent()}
                     </span>
                     <span>Fixed Rate APY</span>
                 </div>
@@ -210,7 +210,7 @@ export const LendingCard = ({
                             BigNumber.from(maturity),
                             side,
                             amount,
-                            marketRate
+                            marketRate.toNumber()
                         )
                     }
                     disabled={pendingTransaction}

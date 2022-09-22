@@ -10,7 +10,7 @@ export class USDC extends Token {
         super(
             1,
             process.env.NEXT_PUBLIC_USDC_CONTRACT_ADDRESS,
-            18,
+            6,
             'USDC',
             'USDC'
         );
