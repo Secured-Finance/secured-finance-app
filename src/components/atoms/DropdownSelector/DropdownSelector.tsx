@@ -53,7 +53,7 @@ export const DropdownSelector = <T extends string = string>({
             {({ open }) => (
                 <>
                     <Menu.Button>
-                        <div className='flex h-10 w-36 flex-row items-center justify-between space-x-2 rounded-lg bg-black-10 px-2'>
+                        <div className='flex h-10 w-36 flex-row items-center justify-between space-x-2 rounded-lg bg-white-5 px-2'>
                             {selectedOption?.iconSVG ? (
                                 <span>
                                     <selectedOption.iconSVG className='h-6 w-6' />
@@ -69,7 +69,7 @@ export const DropdownSelector = <T extends string = string>({
                             </span>
                         </div>
                     </Menu.Button>
-                    <Menu.Items className='absolute z-10 mt-2 flex max-h-96 w-52 flex-col overflow-y-auto rounded-lg bg-gunMetal p-2 shadow-sm'>
+                    <Menu.Items className='scrollbar absolute z-10 mt-2 flex max-h-60 w-52 flex-col overflow-y-auto rounded-lg bg-gunMetal p-2 shadow-sm'>
                         {optionList.map((asset, i) => (
                             <Menu.Item
                                 key={`${asset.label}_${i}`}
@@ -80,7 +80,7 @@ export const DropdownSelector = <T extends string = string>({
                                     <div>
                                         <div
                                             className={classNames(
-                                                'flex flex-row justify-start space-x-4 rounded-lg p-2 text-white-80',
+                                                'flex flex-row items-center justify-start space-x-4 rounded-lg p-2 text-white-80',
                                                 {
                                                     'bg-horizonBlue': active,
                                                 }
@@ -92,7 +92,7 @@ export const DropdownSelector = <T extends string = string>({
                                                 </span>
                                             ) : null}
 
-                                            <span className='typography-button-3'>
+                                            <span className='typography-button-1'>
                                                 {asset.label}
                                             </span>
                                         </div>
