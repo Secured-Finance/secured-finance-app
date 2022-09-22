@@ -4,7 +4,7 @@ import { OrderSide } from 'src/hooks';
 import { preloadedAssetPrices } from 'src/stories/mocks/fixtures';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
-import { CurrencyInfo, currencyMap, CurrencySymbol } from 'src/utils';
+import { CurrencyInfo, currencyMap, CurrencySymbol, Rate } from 'src/utils';
 import * as stories from './LendingCard.stories';
 
 const { Default, PendingTransaction } = composeStories(stories);
@@ -135,7 +135,8 @@ describe('LendingCard Component', () => {
     });
 
     it('should display the rate from the prop', () => {
-        render(<Default marketRate={2000} />);
+        const rate = new Rate(2000);
+        render(<Default marketRate={rate} />);
         expect(screen.getByText('0.2%')).toBeInTheDocument();
     });
 

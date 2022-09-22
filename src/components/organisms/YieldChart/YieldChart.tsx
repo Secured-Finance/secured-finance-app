@@ -2,24 +2,20 @@ import { ChartData } from 'chart.js';
 import { useSelector } from 'react-redux';
 import { CurveHeader, LineChart } from 'src/components/molecules';
 import { RootState } from 'src/store/types';
-import { CurrencySymbol } from 'src/utils';
+import { CurrencySymbol, Rate } from 'src/utils';
 
 interface YieldChartProps {
     asset: CurrencySymbol;
     isBorrow: boolean;
-    rates: Array<number>;
+    rates: Array<Rate>;
 }
 
-const refineArray = (array: Array<number>) => {
-    if (array.length > 0) {
-        return array.map((r: number) => +r / 10000);
-    }
-
-    return array;
+const refineArray = (array: Array<Rate>) => {
+    return array.map(r => r.toNormalizedNumber());
 };
 
 const getData = (
-    rates: number[],
+    rates: Rate[],
     label: string,
     labels: string[]
 ): ChartData<'line'> => {

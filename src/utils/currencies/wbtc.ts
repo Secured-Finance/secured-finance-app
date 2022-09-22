@@ -11,7 +11,7 @@ export class WBTC extends Token {
         super(
             1,
             process.env.NEXT_PUBLIC_WBTC_CONTRACT_ADDRESS,
-            18,
+            8,
             CurrencySymbol.BTC,
             'Bitcoin'
         );

@@ -17,7 +17,7 @@ import {
     defaultDatasets,
     options as customOptions,
 } from 'src/components/molecules/LineChart/constants';
-import { setMaturity, setRate } from 'src/store/landingOrderForm';
+import { setMaturity } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
 
 ChartJS.register(
@@ -87,12 +87,9 @@ export const LineChart = ({
 
         const element = getElementAtEvent(chartRef.current, event);
         if (element && element[0]) {
-            const { datasetIndex, index } = element[0];
-            const dataset = data.datasets[datasetIndex];
+            const { index } = element[0];
             const label = data.labels?.[index];
             dispatch(setMaturity(lendingContracts[label as string]));
-            const value = dataset.data[index];
-            dispatch(setRate(value as number));
         }
     };
 
