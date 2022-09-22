@@ -13,7 +13,7 @@ import { setUpSecuredFinanceSkd } from './utils';
 const routes = [
     {
         path: '/exchange',
-        component: <div data-cy='exchange-page'></div>,
+        component: <div data-cy='exchange-page'>exchange</div>,
     },
     {
         path: '/history',
