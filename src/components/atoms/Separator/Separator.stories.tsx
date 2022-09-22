@@ -8,7 +8,7 @@ export default {
     argTypes: {
         color: {
             control: 'select',
-            options: ['white', 'neutral', 'default'],
+            options: ['moonGrey', 'neutral', 'default'],
         },
     },
 } as ComponentMeta<typeof Separator>;
@@ -20,5 +20,5 @@ const Template: ComponentStory<typeof Separator> = args => (
 export const Default = Template.bind({});
 export const Primary = Template.bind({});
 Primary.args = {
-    color: 'white',
+    color: 'moonGrey',
 };
