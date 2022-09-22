@@ -1,6 +1,6 @@
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { renderHook } from 'src/test-utils';
-import { CurrencySymbol } from 'src/utils';
+import { CurrencySymbol, Rate } from 'src/utils';
 import { RateType, useRates } from './useRates';
 
 const mock = mockUseSF();
@@ -15,7 +15,7 @@ describe('useRates', () => {
 
         await waitForNextUpdate();
         result.current.forEach((rate: unknown) =>
-            expect(typeof rate).toBe('number')
+            expect(rate).toBeInstanceOf(Rate)
         );
     });
 
@@ -27,7 +27,7 @@ describe('useRates', () => {
 
         await waitForNextUpdate();
         result.current.forEach((rate: unknown) =>
-            expect(typeof rate).toBe('number')
+            expect(rate).toBeInstanceOf(Rate)
         );
     });
 
@@ -39,7 +39,7 @@ describe('useRates', () => {
 
         await waitForNextUpdate();
         result.current.forEach((rate: unknown) =>
-            expect(typeof rate).toBe('number')
+            expect(rate).toBeInstanceOf(Rate)
         );
     });
 });

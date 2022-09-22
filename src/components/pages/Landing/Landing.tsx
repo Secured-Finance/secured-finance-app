@@ -9,6 +9,7 @@ import {
     useRates,
 } from 'src/hooks';
 import { RootState } from 'src/store/types';
+import { Rate } from 'src/utils';
 import { useWallet } from 'use-wallet';
 
 export const Landing = () => {
@@ -35,9 +36,15 @@ export const Landing = () => {
 
     const marketRate = useMemo(() => {
         if (!rates) {
-            return 0;
+            return new Rate(0);
         }
-        return rates[Object.values(lendingContracts).indexOf(maturity)];
+
+        const rate = rates[Object.values(lendingContracts).indexOf(maturity)];
+        if (!rate) {
+            return new Rate(0);
+        }
+
+        return rate;
     }, [rates, lendingContracts, maturity]);
 
     return (

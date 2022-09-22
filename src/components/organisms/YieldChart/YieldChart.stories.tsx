@@ -1,4 +1,5 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { Rate } from 'src/utils';
 import { YieldChart } from './';
 
 export default {
@@ -8,7 +9,14 @@ export default {
     args: {
         asset: 'USDC',
         isBorrow: true,
-        rates: [100, 200, 300, 400, 500, 600],
+        rates: [
+            new Rate(100),
+            new Rate(200),
+            new Rate(300),
+            new Rate(400),
+            new Rate(500),
+            new Rate(600),
+        ],
     },
     argTypes: {},
 } as ComponentMeta<typeof YieldChart>;
