@@ -80,7 +80,6 @@ export const LendingCard = ({
     const assetList = useMemo(() => getCurrencyMapAsOptions(), []);
 
     const collateralUsagePercent = useMemo(() => {
-        //TODO: Remove the usage of BigNumber.js and use only Ethers.js
         return percentFormat(
             BigNumber.from(collateralBook.coverage.toString()).toNumber()
         );

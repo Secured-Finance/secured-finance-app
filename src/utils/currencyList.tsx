@@ -1,5 +1,9 @@
 import { FilecoinNumber } from '@glif/filecoin-number';
-import { Currency as CurrencyInterface, Ether } from '@secured-finance/sf-core';
+import {
+    Currency,
+    Currency as CurrencyInterface,
+    Ether,
+} from '@secured-finance/sf-core';
 import { BigNumber as BigNumberJS } from 'bignumber.js';
 import { BigNumber } from 'ethers';
 import BTCIcon from 'src/assets/coins/btc.svg';
@@ -10,8 +14,6 @@ import { Option } from 'src/components/atoms';
 import { Filecoin } from './currencies/filecoin';
 import { USDC } from './currencies/usdc';
 import { WBTC } from './currencies/wbtc';
-
-const ETH_TO_WEI = new BigNumberJS(10 ** 18);
 
 const ETH = Ether.onChain(
     Number(process.env.NEXT_PUBLIC_ETHEREUM_CHAIN_ID ?? 1)
@@ -37,6 +39,8 @@ export const currencyMap: Readonly<
             const filAmount = new FilecoinNumber(amount, 'fil');
             return BigNumber.from(filAmount.toAttoFil());
         },
+        fromBaseUnit: (amount: BigNumber) =>
+            convertFromBlockchainUnit(amount, Filecoin.onChain()),
         toCurrency: () => Filecoin.onChain(),
     },
     [CurrencySymbol.ETH]: {
@@ -45,7 +49,9 @@ export const currencyMap: Readonly<
         symbol: CurrencySymbol.ETH,
         name: ETH.name,
         coinGeckoId: 'ethereum',
-        toBaseUnit: (amount: number) => convertEthToWei(amount),
+        toBaseUnit: (amount: number) => convertToBlockchainUnit(amount, ETH),
+        fromBaseUnit: (amount: BigNumber) =>
+            convertFromBlockchainUnit(amount, ETH),
         toCurrency: () => ETH,
     },
     [CurrencySymbol.USDC]: {
@@ -54,7 +60,10 @@ export const currencyMap: Readonly<
         name: USDC.onChain().name,
         icon: UsdcIcon,
         coinGeckoId: 'usd-coin',
-        toBaseUnit: (amount: number) => convertEthToWei(amount),
+        toBaseUnit: (amount: number) =>
+            convertToBlockchainUnit(amount, USDC.onChain()),
+        fromBaseUnit: (amount: BigNumber) =>
+            convertFromBlockchainUnit(amount, USDC.onChain()),
         toCurrency: () => USDC.onChain(),
     },
     [CurrencySymbol.BTC]: {
@@ -63,7 +72,10 @@ export const currencyMap: Readonly<
         name: WBTC.onChain().name,
         icon: BTCIcon,
         coinGeckoId: 'bitcoin',
-        toBaseUnit: (amount: number) => convertEthToWei(amount),
+        toBaseUnit: (amount: number) =>
+            convertToBlockchainUnit(amount, WBTC.onChain()),
+        fromBaseUnit: (amount: BigNumber) =>
+            convertFromBlockchainUnit(amount, WBTC.onChain()),
         toCurrency: () => WBTC.onChain(),
     },
 };
@@ -89,6 +101,7 @@ export type CurrencyInfo = {
     coinGeckoId: string;
     icon: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
     toBaseUnit: (amount: number) => BigNumber;
+    fromBaseUnit: (amount: BigNumber) => number;
     toCurrency: () => CurrencyInterface;
 };
 
@@ -96,10 +109,17 @@ export const toCurrency = (ccy: CurrencySymbol) => {
     return currencyMap[ccy].toCurrency();
 };
 
-const convertEthToWei = (amount: number) => {
-    const wei = new BigNumberJS(amount).multipliedBy(ETH_TO_WEI);
-    if (wei.isLessThan(new BigNumberJS(1))) {
+const convertToBlockchainUnit = (amount: number, ccy: Currency) => {
+    const value = new BigNumberJS(amount).multipliedBy(10 ** ccy.decimals);
+    if (value.isLessThan(new BigNumberJS(1))) {
         return BigNumber.from(0);
     }
-    return BigNumber.from(wei.toString());
+    return BigNumber.from(value.toString());
+};
+
+const convertFromBlockchainUnit = (amount: BigNumber, ccy: Currency) => {
+    const value = new BigNumberJS(amount.toString()).dividedBy(
+        10 ** ccy.decimals
+    );
+    return value.toNumber();
 };

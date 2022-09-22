@@ -6,4 +6,6 @@ export * from './formatBalance';
 export * from './formatDate';
 export * from './formatNumbers';
 export * from './handleContractTransaction';
+export * from './portfolio';
+export * from './rate';
 export * from './strings';

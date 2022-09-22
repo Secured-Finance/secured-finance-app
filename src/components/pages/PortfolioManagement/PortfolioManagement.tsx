@@ -6,27 +6,29 @@ import {
     TradeHistoryTab,
 } from 'src/components/molecules';
 import {
+    ActiveTrade,
     ActiveTradeTable,
     CollateralOrganism,
     ConnectWalletCard,
     MyWalletCard,
-    Position,
 } from 'src/components/organisms';
 import { useTradeHistory } from 'src/hooks';
 import { selectEthereumBalance } from 'src/store/ethereumWallet';
 import { RootState } from 'src/store/types';
 import {
+    computeNetValue,
+    computeWeightedAverage,
+    convertTradeHistoryToTableData,
     CurrencySymbol,
     generateWalletInformation,
     usdFormat,
     WalletSource,
 } from 'src/utils';
-import { computeNetValue, computeWeightedAverage } from 'src/utils/portfolio';
 import { useWallet } from 'use-wallet';
 
 export const PortfolioManagement = () => {
     const { account } = useWallet();
-    const tradeHistory = useTradeHistory(account);
+    const tradeHistory = useTradeHistory(account ?? '');
 
     const balance = useSelector((state: RootState) =>
         selectEthereumBalance(state)
@@ -49,28 +51,10 @@ export const PortfolioManagement = () => {
         [addressRecord, balanceRecord]
     );
 
-    const activeTrades = [
-        {
-            position: Position.Borrow,
-            contract: 'FIL-DEC2022',
-            apy: 0.2,
-            notional: 2000,
-            currency: CurrencySymbol.FIL,
-            presentValue: 2000,
-            dayToMaturity: 120,
-            forwardValue: 150,
-        },
-        {
-            position: Position.Lend,
-            contract: 'ETH-SEP2023',
-            apy: 0.1,
-            notional: 1000,
-            currency: CurrencySymbol.ETH,
-            presentValue: 1000,
-            dayToMaturity: 100,
-            forwardValue: 1000,
-        },
-    ];
+    const activeTrades: Array<ActiveTrade> = [];
+    tradeHistory.forEach(trade => {
+        return activeTrades.push(convertTradeHistoryToTableData(trade));
+    });
 
     return (
         <div
