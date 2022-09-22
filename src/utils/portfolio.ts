@@ -4,7 +4,7 @@ import { ActiveTrade } from 'src/components/organisms';
 import { OrderSide, TradeHistory } from 'src/hooks';
 import { AssetPriceMap } from 'src/store/assetPrices/selectors';
 import Web3 from 'web3';
-import { CurrencySymbol } from './currencyList';
+import { currencyMap, CurrencySymbol } from './currencyList';
 import { Rate } from './rate';
 
 export const computeWeightedAverageRate = (trades: TradeHistory) => {
@@ -28,13 +28,14 @@ export const computeNetValue = (
         return 0;
     }
 
-    return trades.reduce(
-        (acc, { amount, currency }) =>
+    return trades.reduce((acc, { amount, currency }) => {
+        const ccy = Web3.utils.hexToString(currency) as CurrencySymbol;
+        return (
             acc +
-            amount *
-                priceList[Web3.utils.hexToString(currency) as CurrencySymbol],
-        0
-    );
+            currencyMap[ccy].fromBaseUnit(BigNumber.from(amount)) *
+                priceList[ccy]
+        );
+    }, 0);
 };
 
 export const convertTradeHistoryToTableData = (
