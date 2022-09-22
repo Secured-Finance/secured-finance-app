@@ -73,7 +73,7 @@ export const AssetSelector = <AssetType extends string = string>({
             const maybeNumber = e.target.value;
             const amount =
                 isNaN(+maybeNumber) || maybeNumber === '' ? -1 : +maybeNumber;
-            setAmount(amount);
+            setAmount(amount > 0 ? amount : 0);
             setInputValue(amount === -1 ? '' : maybeNumber);
             if (onAmountChange && selectedOption) {
                 handleInputChange(amount, selectedOption.value, onAmountChange);
