@@ -150,12 +150,13 @@ export const LendingCard = ({
                 <RadioGroup.Option
                     value={OrderSide.Borrow}
                     className='h-full w-1/2'
+                    as='button'
                 >
                     {({ checked }) => <NavTab text='Borrow' active={checked} />}
                 </RadioGroup.Option>
                 <RadioGroup.Option
                     value={OrderSide.Lend}
-                    as='div'
+                    as='button'
                     className='h-full w-1/2'
                 >
                     {({ checked }) => <NavTab text='Lend' active={checked} />}

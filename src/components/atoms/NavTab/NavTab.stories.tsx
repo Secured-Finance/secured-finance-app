@@ -7,7 +7,6 @@ export default {
     args: {
         text: 'OTC Lending',
         active: true,
-        onClick: () => {},
     },
 } as ComponentMeta<typeof NavTab>;
 
@@ -23,6 +22,4 @@ export const MarketDashboard = Template.bind({});
 MarketDashboard.args = {
     text: 'Market Dashboard',
     active: false,
-    onClick: () => {},
-    as: 'div',
 };
