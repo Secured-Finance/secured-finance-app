@@ -53,6 +53,25 @@ const TableHeader = ({
     </button>
 );
 
+const AmountCell = ({
+    ccy,
+    amount,
+    priceList,
+}: {
+    ccy: CurrencySymbol;
+    amount: BigNumber;
+    priceList: Record<CurrencySymbol, number>;
+}) => {
+    return (
+        <CurrencyItem
+            ccy={ccy}
+            amount={currencyMap[ccy].fromBaseUnit(amount)}
+            price={priceList[ccy]}
+            align='right'
+        />
+    );
+};
+
 export const ActiveTradeTable = ({ data }: { data: Array<ActiveTrade> }) => {
     const priceList = useSelector((state: RootState) => getPriceMap(state));
 
@@ -104,13 +123,10 @@ export const ActiveTradeTable = ({ data }: { data: Array<ActiveTrade> }) => {
                 cell: info => {
                     const ccy = info.row.original.currency;
                     return (
-                        <CurrencyItem
+                        <AmountCell
                             ccy={ccy}
-                            amount={currencyMap[ccy].fromBaseUnit(
-                                BigNumber.from(info.getValue())
-                            )}
-                            price={priceList[ccy]}
-                            align='right'
+                            amount={info.getValue()}
+                            priceList={priceList}
                         />
                     );
                 },
@@ -137,13 +153,10 @@ export const ActiveTradeTable = ({ data }: { data: Array<ActiveTrade> }) => {
                 cell: info => {
                     const ccy = info.row.original.currency;
                     return (
-                        <CurrencyItem
+                        <AmountCell
                             ccy={ccy}
-                            amount={currencyMap[ccy].fromBaseUnit(
-                                BigNumber.from(info.getValue())
-                            )}
-                            price={priceList[ccy]}
-                            align='right'
+                            amount={info.getValue()}
+                            priceList={priceList}
                         />
                     );
                 },
