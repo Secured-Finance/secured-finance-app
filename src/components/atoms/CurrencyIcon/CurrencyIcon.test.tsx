@@ -12,7 +12,7 @@ describe('CurrencyIcon Component', () => {
 
     it('should render a CurrencyIcon with a large variant', () => {
         render(<Default variant='large' />);
-        expect(screen.getByRole('img')).toHaveClass('h-10 w-10');
+        expect(screen.getByRole('img')).toHaveClass('h-9 w-9');
     });
 
     it('should render a CurrencyIcon with a default variant', () => {
