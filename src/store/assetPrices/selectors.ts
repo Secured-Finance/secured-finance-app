@@ -13,7 +13,8 @@ export const getAssetChange = (ccy: CurrencySymbol) => (state: RootState) => {
     return state.assetPrices[ccy].change;
 };
 
-export const getPriceMap = (state: RootState) => {
+export type AssetPriceMap = Record<CurrencySymbol, number>;
+export const getPriceMap = (state: RootState): AssetPriceMap => {
     return {
         [CurrencySymbol.ETH]: state.assetPrices.ETH.price,
         [CurrencySymbol.FIL]: state.assetPrices.FIL.price,
