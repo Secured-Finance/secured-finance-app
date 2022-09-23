@@ -18,7 +18,7 @@ export const MyWalletCard = ({ assetMap }: MyWalletCardProps) => {
                 </div>
                 {assetMap.length !== 0 && (
                     <div>
-                        <Separator color='white' />
+                        <Separator />
                         <div className='px-2 pt-1 pb-6'>
                             {assetMap.map((asset, index) => {
                                 return (
@@ -26,7 +26,7 @@ export const MyWalletCard = ({ assetMap }: MyWalletCardProps) => {
                                         <AssetDisclosure {...asset} />
                                         {assetMap.length - 1 !== index && (
                                             <div className='mt-2 mb-2'>
-                                                <Separator color='white' />
+                                                <Separator />
                                             </div>
                                         )}
                                     </div>

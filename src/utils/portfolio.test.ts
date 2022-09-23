@@ -1,4 +1,4 @@
-import { BigNumber, ethers } from 'ethers';
+import { ethers } from 'ethers';
 import { TradeHistory } from 'src/hooks';
 import { AssetPriceMap } from 'src/store/assetPrices/selectors';
 import { CurrencySymbol } from './currencyList';
@@ -7,7 +7,6 @@ import {
     computeWeightedAverageRate,
     convertTradeHistoryToTableData,
 } from './portfolio';
-import { Rate } from './rate';
 
 describe('computeWeightedAverage', () => {
     it('should return the weighted average', () => {
@@ -71,15 +70,8 @@ describe('convertTradeHistoryToTableData', () => {
                 '0x5553444300000000000000000000000000000000000000000000000000000000',
             maturity: 1669852800,
         };
-        expect(convertTradeHistoryToTableData(trade)).toEqual({
-            position: 'Borrow',
-            contract: 'USDC-DEC22',
-            apy: new Rate(1000),
-            notional: BigNumber.from(1000),
-            currency: 'USDC',
-            presentValue: BigNumber.from(1000),
-            dayToMaturity: 69,
-            forwardValue: BigNumber.from(1000),
-        });
+        expect(convertTradeHistoryToTableData(trade).contract).toEqual(
+            'USDC-DEC22'
+        );
     });
 });

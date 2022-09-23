@@ -38,11 +38,15 @@ export const options: ChartOptions<'line'> = {
         x: {
             beginAtZero: true,
             ticks: {
-                backdropColor: 'rgba(255, 255, 0, 0.6)',
+                color: 'rgba(255, 255, 255, 0.6)',
+                font: {
+                    lineHeight: 2.0,
+                },
                 padding: 10,
             },
             grid: {
                 display: false,
+                borderColor: 'transparent',
             },
         },
     },

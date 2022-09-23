@@ -71,7 +71,7 @@ export const CollateralSelector = ({
                                                     `relative cursor-default select-none ${
                                                         index !==
                                                         optionList.length - 1
-                                                            ? 'border-b border-moonGrey border-opacity-30'
+                                                            ? 'border-b border-white-5'
                                                             : ''
                                                     } py-4 px-4 ${
                                                         active
