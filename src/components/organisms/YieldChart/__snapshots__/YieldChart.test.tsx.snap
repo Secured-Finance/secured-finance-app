@@ -7,7 +7,7 @@ exports[`YieldChart Component should render YieldChart 1`] = `
       class="flex h-[480px] w-fit flex-row overflow-hidden rounded-r-xl border-y border-r border-panelStroke shadow-[0_46px_64px_rgba(0,0,0,0.4)]"
     >
       <div
-        class="flex flex-col items-start overflow-hidden duration-700 ease-out w-0 transition-[width]"
+        class="flex flex-col items-start overflow-hidden duration-700 ease-out w-[640px] pl-8 transition-width"
         data-testid="yield-chart-component"
       >
         <div
@@ -110,7 +110,7 @@ exports[`YieldChart Component should render YieldChart 1`] = `
         >
           <svg
             aria-hidden="true"
-            class="h-5 w-5 text-white rotate-180"
+            class="h-5 w-5 text-white"
             data-testid="chevron-down-icon"
             fill="none"
             stroke="currentColor"
