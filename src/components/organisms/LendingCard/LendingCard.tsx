@@ -140,7 +140,7 @@ export const LendingCard = ({
     );
 
     return (
-        <div className='w-80 flex-col space-y-6 rounded-b-xl border border-neutral bg-transparent pb-4 shadow-deep'>
+        <div className='w-80 flex-col space-y-6 rounded-b-xl border border-panelStroke bg-transparent pb-6 shadow-deep'>
             <RadioGroup
                 value={side}
                 onChange={(v: OrderSide) => dispatch(setSide(v))}
@@ -150,27 +150,30 @@ export const LendingCard = ({
                 <RadioGroup.Option
                     value={OrderSide.Borrow}
                     className='h-full w-1/2'
+                    as='button'
                 >
                     {({ checked }) => <NavTab text='Borrow' active={checked} />}
                 </RadioGroup.Option>
                 <RadioGroup.Option
                     value={OrderSide.Lend}
-                    as='div'
+                    as='button'
                     className='h-full w-1/2'
                 >
                     {({ checked }) => <NavTab text='Lend' active={checked} />}
                 </RadioGroup.Option>
             </RadioGroup>
 
-            <div className='grid justify-center space-y-4 px-4'>
-                <div className='typography-body-2 flex flex-col text-center text-white-50'>
+            <div className='grid justify-center space-y-6 px-4'>
+                <div className='flex flex-col text-center'>
                     <span
-                        className='typography-big-body-bold text-white'
+                        className='typography-amount-large text-white'
                         data-testid='market-rate'
                     >
                         {marketRate.toPercent()}
                     </span>
-                    <span>Fixed Rate APY</span>
+                    <span className='typography-caption uppercase text-planetaryPurple'>
+                        Fixed Rate APY
+                    </span>
                 </div>
 
                 <AssetSelector

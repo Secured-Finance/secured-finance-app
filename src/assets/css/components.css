@@ -66,4 +66,7 @@
     .typography-portfolio-heading {
       @apply text-smd font-secondary leading-7;
     }
+    .typography-amount-large {
+      @apply text-[40px] font-secondary leading-[44px] font-semibold;
+    }
   }

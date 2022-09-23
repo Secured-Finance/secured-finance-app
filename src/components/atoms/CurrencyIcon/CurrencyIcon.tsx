@@ -14,7 +14,7 @@ export const CurrencyIcon = ({
         <Icon
             className={classNames({
                 'h-6 w-6': variant === 'default',
-                'h-10 w-10': variant === 'large',
+                'h-9 w-9': variant === 'large',
             })}
             role='img'
         />

@@ -90,7 +90,8 @@ module.exports = {
             tabGradient2: 'rgba(106, 118, 177, 0.35)',
             tabGradient1: 'rgba(57, 77, 174, 0)',
             backgroundBlur: 'rgba(35, 43, 56, 0.6)',
-            cardBackground: 'rgba(41, 45, 63)',
+            cardBackground: 'rgb(41, 45, 63)',
+            panelStroke: 'rgb(45, 64, 100)',
 
             transparent: 'transparent',
             starBlue: {
@@ -125,6 +126,7 @@ module.exports = {
                 '30': 'rgba(255, 255, 255, 0.3)',
                 '20': 'rgba(255, 255, 255, 0.2)',
                 '10': 'rgba(255, 255, 255, 0.1)',
+                '5': 'rgba(255, 255, 255, 0.05)',
             },
         },
     },
