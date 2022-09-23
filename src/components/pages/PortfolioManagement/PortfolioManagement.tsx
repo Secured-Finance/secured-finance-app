@@ -13,11 +13,12 @@ import {
     MyWalletCard,
 } from 'src/components/organisms';
 import { useTradeHistory } from 'src/hooks';
+import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { selectEthereumBalance } from 'src/store/ethereumWallet';
 import { RootState } from 'src/store/types';
 import {
     computeNetValue,
-    computeWeightedAverage,
+    computeWeightedAverageRate,
     convertTradeHistoryToTableData,
     CurrencySymbol,
     generateWalletInformation,
@@ -33,6 +34,8 @@ export const PortfolioManagement = () => {
     const balance = useSelector((state: RootState) =>
         selectEthereumBalance(state)
     );
+
+    const priceMap = useSelector((state: RootState) => getPriceMap(state));
 
     const addressRecord = useMemo(() => {
         return {
@@ -68,12 +71,10 @@ export const PortfolioManagement = () => {
                 <div className='flex min-w-[800px] flex-grow flex-col gap-6'>
                     <PortfolioManagementTable
                         values={[
-                            usdFormat(computeNetValue(tradeHistory)),
-                            computeWeightedAverage(tradeHistory)
-                                ? computeWeightedAverage(
-                                      tradeHistory
-                                  ).toString()
-                                : '--',
+                            usdFormat(computeNetValue(tradeHistory, priceMap)),
+                            computeWeightedAverageRate(
+                                tradeHistory
+                            ).toPercent(),
                             tradeHistory.length.toString(),
                             '0',
                         ]}
