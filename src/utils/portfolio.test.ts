@@ -57,16 +57,6 @@ describe('convertTradeHistoryToTableData', () => {
                 '0x5553444300000000000000000000000000000000000000000000000000000000',
             maturity: 1669852800,
         };
-        // expect(convertTradeHistoryToTableData(trade)).toEqual({
-        //     position: 'Borrow',
-        //     contract: 'USDC-DEC22',
-        //     apy: new Rate(1000),
-        //     notional: BigNumber.from(1000),
-        //     currency: 'USDC',
-        //     presentValue: BigNumber.from(1000),
-        //     dayToMaturity: 69,
-        //     forwardValue: BigNumber.from(1000),
-        // });
         expect(convertTradeHistoryToTableData(trade).contract).toEqual(
             'USDC-DEC22'
         );
