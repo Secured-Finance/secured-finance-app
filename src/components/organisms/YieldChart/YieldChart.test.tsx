@@ -21,17 +21,19 @@ describe('YieldChart Component', () => {
         });
     });
 
-    it('should open and close YieldChart on button click', async () => {
+    it('should close and open YieldChart on button click', async () => {
         render(<Default />);
         const btn = screen.getByRole('button');
-        expect(screen.getByTestId('yield-chart-component')).toHaveClass('w-0');
-
-        fireEvent.click(btn);
         expect(screen.getByTestId('yield-chart-component')).toHaveClass(
             'w-[640px]'
         );
 
         fireEvent.click(btn);
         expect(screen.getByTestId('yield-chart-component')).toHaveClass('w-0');
+
+        fireEvent.click(btn);
+        expect(screen.getByTestId('yield-chart-component')).toHaveClass(
+            'w-[640px]'
+        );
     });
 });

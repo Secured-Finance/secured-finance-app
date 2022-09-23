@@ -19,6 +19,9 @@ module.exports = {
             margin: {
                 '0.5': '0.125rem',
             },
+            transitionProperty: {
+                width: 'width',
+            },
         },
         fontFamily: {
             primary: ['GT Super Display', ...defaultTheme.fontFamily.serif],
