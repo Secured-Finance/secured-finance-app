@@ -41,16 +41,17 @@ export const YieldChart: React.FC<YieldChartProps> = ({
     const lendingContracts = useSelector(
         (state: RootState) => state.availableContracts.lendingMarkets[asset]
     );
-    const [show, setShow] = useState(true);
+    const [show, setShow] = useState(false);
 
     return (
         <div className='flex h-[480px] w-fit flex-row overflow-hidden rounded-r-xl border-y border-r border-panelStroke shadow-[0_46px_64px_rgba(0,0,0,0.4)]'>
             <div
-                className={`flex flex-col items-start overflow-hidden ${
+                className={`flex flex-col items-start overflow-hidden duration-700 ease-out ${
                     show
-                        ? 'w-[640px] pl-8 transition-[width] duration-700 ease-out'
-                        : 'w-0 transition-[width] duration-700 ease-out'
+                        ? 'w-[640px] pl-8 transition-[width]'
+                        : 'w-0 transition-[width]'
                 }`}
+                data-testId='yield-chart-component'
             >
                 <div className='h-20'>
                     <CurveHeader
