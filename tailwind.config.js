@@ -19,6 +19,9 @@ module.exports = {
             margin: {
                 '0.5': '0.125rem',
             },
+            transitionProperty: {
+                width: 'width',
+            },
         },
         fontFamily: {
             primary: ['GT Super Display', ...defaultTheme.fontFamily.serif],
@@ -98,6 +101,7 @@ module.exports = {
                 '80': 'rgba(81, 98, 255, 0.8)',
                 '60': 'rgba(81, 98, 255, 0.6)',
                 '40': 'rgba(81, 98, 255, 0.4)',
+                '30': 'rgba(81, 98, 255, 0.3)',
                 '20': 'rgba(81, 98, 255, 0.2)',
                 '10': 'rgba(81, 98, 255, 0.1)',
                 DEFAULT: '#5162FF',

@@ -1,5 +1,12 @@
 import { composeStories } from '@storybook/testing-react';
-import { queries, render, RenderResult, waitFor } from 'src/test-utils.js';
+import {
+    fireEvent,
+    queries,
+    render,
+    RenderResult,
+    screen,
+    waitFor,
+} from 'src/test-utils.js';
 import * as stories from './YieldChart.stories';
 
 const { Default } = composeStories(stories);
@@ -12,5 +19,21 @@ describe('YieldChart Component', () => {
         }).then(() => {
             expect(ag.baseElement).toMatchSnapshot();
         });
+    });
+
+    it('should close and open YieldChart on button click', async () => {
+        render(<Default />);
+        const btn = screen.getByRole('button');
+        expect(screen.getByTestId('yield-chart-component')).toHaveClass(
+            'w-[640px]'
+        );
+
+        fireEvent.click(btn);
+        expect(screen.getByTestId('yield-chart-component')).toHaveClass('w-0');
+
+        fireEvent.click(btn);
+        expect(screen.getByTestId('yield-chart-component')).toHaveClass(
+            'w-[640px]'
+        );
     });
 });
