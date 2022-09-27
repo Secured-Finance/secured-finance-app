@@ -1,5 +1,4 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
-import { WithWalletProvider } from 'src/../.storybook/decorators';
 import { CurrencySymbol, WalletSource } from 'src/utils';
 import { MyWalletCard } from './MyWalletCard';
 
@@ -23,7 +22,6 @@ export default {
             },
         ],
     },
-    decorators: [WithWalletProvider],
 } as ComponentMeta<typeof MyWalletCard>;
 
 const Template: ComponentStory<typeof MyWalletCard> = args => (

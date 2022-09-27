@@ -19,12 +19,10 @@ describe('TradeHistoryTab Component', () => {
         expect(screen.getByRole('tab', { selected: true })).toHaveTextContent(
             'Active Contracts'
         );
-        expect(
-            screen.getByRole('button', { name: 'Active Contracts' })
-        ).toHaveClass('bg-black-30');
-        expect(
-            screen.getByRole('button', { name: 'Trade History' })
-        ).not.toHaveClass('bg-black-30');
+        expect(screen.getByText('Active Contracts')).toHaveClass('bg-black-30');
+        expect(screen.getByText('Trade History')).not.toHaveClass(
+            'bg-black-30'
+        );
         screen.getByText('Trade History').click();
         expect(screen.getByRole('tab', { selected: true })).toHaveTextContent(
             'Trade History'
