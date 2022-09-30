@@ -7,6 +7,6 @@ module.exports = {
     webpack: (config, options) => webpack.webpackOverride(config),
 
     env: {
-        SF_ENV: 'development',
+        SF_ENV: process.env.SF_ENV,
     },
 };
