@@ -11,6 +11,7 @@ module.exports = {
         '@storybook/addon-a11y',
         'storybook-addon-performance',
         'storybook-addon-next',
+        'storybook-addon-apollo-client',
     ],
     typescript: {
         reactDocgen: 'none',

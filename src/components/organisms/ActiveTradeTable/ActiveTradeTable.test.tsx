@@ -21,6 +21,7 @@ describe('ActiveTradeTable Component', () => {
     it('should render a ActiveTradeTable with 2 rows and a header row', () => {
         render(<Default />);
         expect(screen.getAllByRole('row')).toHaveLength(3);
+        expect(screen.getAllByTestId('active-trade-row')).toHaveLength(2);
     });
 
     it('should sort the table by position', () => {
