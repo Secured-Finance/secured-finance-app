@@ -6,6 +6,7 @@ import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { utils } from 'ethers';
 import {
     WithAppLayout,
+    WithAssetPrice,
     WithWalletProvider,
 } from 'src/../.storybook/decorators';
 import { PortfolioManagement } from './PortfolioManagement';
@@ -18,7 +19,7 @@ export default {
     title: 'Pages/PortfolioManagement',
     component: PortfolioManagement,
     args: {},
-    decorators: [WithAppLayout, WithWalletProvider],
+    decorators: [WithAssetPrice, WithAppLayout, WithWalletProvider],
     parameters: {
         apolloClient: {
             mocks: [
@@ -71,7 +72,7 @@ export default {
                                     currency: btc,
                                     side: '1',
                                     maturity: '1733011200',
-                                    amount: '100000',
+                                    amount: '1000000000',
                                     rate: '100000',
                                 },
                             ],

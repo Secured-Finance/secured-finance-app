@@ -1,8 +1,5 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
-import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
 import { WithAssetPrice } from 'src/../.storybook/decorators';
-import { updateLatestBlock } from 'src/store/blockchain';
 import { CurrencySymbol, WalletSource } from 'src/utils';
 import { AssetDisclosure } from './AssetDisclosure';
 
@@ -21,10 +18,6 @@ export default {
 } as ComponentMeta<typeof AssetDisclosure>;
 
 const Template: ComponentStory<typeof AssetDisclosure> = args => {
-    const dispatch = useDispatch();
-    useEffect(() => {
-        setTimeout(() => dispatch(updateLatestBlock(12345)), 100);
-    }, [dispatch]);
     return <AssetDisclosure {...args} />;
 };
 
