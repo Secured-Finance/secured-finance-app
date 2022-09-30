@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from 'src/test-utils.js';
+import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
 
 import { composeStories } from '@storybook/testing-react';
 import * as stories from './WalletPopover.stories';
@@ -32,11 +32,13 @@ describe('WalletPopover component', () => {
         });
     });
 
-    it('should close the popover when clicking on finish KYC', () => {
+    it('should close the popover when clicking on finish KYC', async () => {
         render(<Primary isKYC={false} />);
         fireEvent.click(screen.getByRole('button'));
         fireEvent.click(screen.getByText('Finish KYC'));
-        expect(screen.queryByText('Rinkeby')).toBeNull();
+        await waitFor(() => {
+            expect(screen.queryByText('Rinkeby')).toBeNull();
+        });
     });
 
     it('should show that the account if verified is the KYC is done', () => {

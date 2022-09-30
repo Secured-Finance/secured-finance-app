@@ -1,5 +1,5 @@
 import { composeStories } from '@storybook/testing-react';
-import { fireEvent, render, screen } from 'src/test-utils.js';
+import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
 import * as stories from './AssetDisclosure.stories';
 
 const { Default, Ledger } = composeStories(stories);
@@ -25,15 +25,19 @@ describe('test AssetDisclosure component', () => {
         expect(screen.getByText('100 USDC')).toBeInTheDocument();
     });
 
-    it('should open and close assets on button click', () => {
+    it('should open and close assets on button click', async () => {
         render(<Default />);
         fireEvent.click(screen.getByRole('button'));
-        expect(screen.getByText('Asset')).toBeInTheDocument();
-        expect(screen.getByText('Balance')).toBeInTheDocument();
+        await waitFor(() => {
+            expect(screen.getByText('Asset')).toBeInTheDocument();
+            expect(screen.getByText('Balance')).toBeInTheDocument();
+        });
 
         fireEvent.click(screen.getByRole('button'));
-        expect(screen.queryByText('Asset')).not.toBeInTheDocument();
-        expect(screen.queryByText('Balance')).not.toBeInTheDocument();
+        await waitFor(() => {
+            expect(screen.queryByText('Asset')).not.toBeInTheDocument();
+            expect(screen.queryByText('Balance')).not.toBeInTheDocument();
+        });
     });
 
     it('should format account depending on source metamask', () => {
