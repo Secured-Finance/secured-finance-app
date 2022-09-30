@@ -2,8 +2,10 @@ import { GraphClientProvider } from '@secured-finance/sf-graph-client';
 import { Story, StoryContext } from '@storybook/react';
 import { Wallet } from 'ethers';
 import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import { Header } from 'src/components/organisms';
 import { Layout } from 'src/components/templates';
+import { updateLatestBlock } from 'src/store/blockchain';
 import AxiosMock from 'src/stories/mocks/AxiosMock';
 import { CustomizedBridge } from 'src/stories/mocks/customBridge';
 import { coingeckoApi } from 'src/utils/coinGeckoApi';
@@ -67,6 +69,11 @@ export const WithWalletProvider = (Story: Story, Context: StoryContext) => {
 };
 
 export const WithAssetPrice = (Story: Story) => {
+    const dispatch = useDispatch();
+    useEffect(() => {
+        setTimeout(() => dispatch(updateLatestBlock(12345)), 100);
+    }, [dispatch]);
+
     return (
         <AxiosMock
             api={coingeckoApi}
