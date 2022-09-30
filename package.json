@@ -116,6 +116,7 @@
     "prettier": "^2.3.0",
     "prettier-plugin-tailwindcss": "^0.1.8",
     "process": "^0.11.10",
+    "storybook-addon-apollo-client": "^4.0.12",
     "storybook-addon-next": "^1.6.6",
     "storybook-addon-performance": "^0.16.1",
     "stream-browserify": "^3.0.0",

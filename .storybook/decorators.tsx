@@ -19,10 +19,18 @@ export const WithAppLayout = (Story: Story) => {
     return <Layout navBar={<Header />} routes={routes} />;
 };
 
-const provider = new CustomizedBridge(
+class ProviderMock {
+    constructor() {}
+    getBlockNumber() {
+        return 123;
+    }
+}
+
+const signer = new CustomizedBridge(
     new Wallet(
         'de926db3012af759b4f24b5a51ef6afa397f04670f634aa4f48d4480417007f3'
-    )
+    ),
+    new ProviderMock() as any
 );
 
 const WithConnectedWallet = ({
@@ -46,7 +54,7 @@ export const WithWalletProvider = (Story: Story, Context: StoryContext) => {
     return (
         <UseWalletProvider
             connectors={{
-                provided: { provider, chainId: [4] },
+                provided: { provider: signer, chainId: [4] },
             }}
         >
             <WithConnectedWallet
