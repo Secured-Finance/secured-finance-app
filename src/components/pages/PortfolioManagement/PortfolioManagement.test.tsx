@@ -2,7 +2,6 @@ import { MockedProvider } from '@apollo/client/testing';
 import { composeStories } from '@storybook/testing-react';
 import { render, screen, waitFor } from 'src/test-utils.js';
 import * as stories from './PortfolioManagement.stories';
-4;
 
 const { Default, ConnectedToWallet } = composeStories(stories);
 
@@ -32,7 +31,7 @@ describe('PortfolioManagement component', () => {
                 </MockedProvider>
             )
         );
-        expect(screen.getAllByRole('row')).toHaveLength(3);
-        expect(screen.getAllByTestId('active-trade-row')).toHaveLength(2);
+        expect(screen.getAllByRole('row')).toHaveLength(4);
+        expect(screen.getAllByTestId('active-trade-row')).toHaveLength(3);
     });
 });
