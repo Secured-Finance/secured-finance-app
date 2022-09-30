@@ -12,6 +12,7 @@ import { PortfolioManagement } from './PortfolioManagement';
 
 const fil = utils.formatBytes32String('FIL');
 const eth = utils.formatBytes32String('ETH');
+const btc = utils.formatBytes32String('BTC');
 
 export default {
     title: 'Pages/PortfolioManagement',
@@ -65,6 +66,13 @@ export default {
                                     maturity: '1733011200',
                                     amount: '1000000000000000000000',
                                     rate: '200000',
+                                },
+                                {
+                                    currency: btc,
+                                    side: '1',
+                                    maturity: '1733011200',
+                                    amount: '100000',
+                                    rate: '100000',
                                 },
                             ],
                         },
