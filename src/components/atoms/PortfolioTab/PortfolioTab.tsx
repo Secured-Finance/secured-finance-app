@@ -20,7 +20,10 @@ export const PortfolioTab: React.FC<PortfolioTabProps> = ({
                 <span className='typography-caption-2 h-5 w-full text-center text-secondary7'>
                     {name}
                 </span>
-                <span className='typography-body-1 h-8 w-full text-center text-white'>
+                <span
+                    className='typography-body-1 h-8 w-full text-center text-white'
+                    data-testid='portfolio-tab-value'
+                >
                     {value}
                 </span>
             </div>
