@@ -5,6 +5,7 @@
 import { loadEnvConfig } from '@next/env';
 import '@testing-library/jest-dom';
 import 'jest-canvas-mock';
+import failOnConsole from 'jest-fail-on-console';
 import { TextDecoder } from 'util';
 
 global.ResizeObserver = jest.fn().mockImplementation(() => ({
@@ -16,3 +17,4 @@ global.ResizeObserver = jest.fn().mockImplementation(() => ({
 global.TextDecoder = TextDecoder;
 
 loadEnvConfig(process.cwd());
+failOnConsole();
