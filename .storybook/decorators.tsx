@@ -71,7 +71,12 @@ export const WithWalletProvider = (Story: Story, Context: StoryContext) => {
 export const WithAssetPrice = (Story: Story) => {
     const dispatch = useDispatch();
     useEffect(() => {
-        setTimeout(() => dispatch(updateLatestBlock(12345)), 100);
+        const timeoutId = setTimeout(
+            () => dispatch(updateLatestBlock(12345)),
+            100
+        );
+
+        return () => clearTimeout(timeoutId);
     }, [dispatch]);
 
     return (
