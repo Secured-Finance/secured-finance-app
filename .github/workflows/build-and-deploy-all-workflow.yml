@@ -87,14 +87,14 @@ jobs:
           node-version-file: '.nvmrc'
           cache: 'npm'
 
-      - uses: actions/download-artifact@v3
+      - name: Download the build folders of the WebApp
+        uses: actions/download-artifact@v3
         with:
           name: WebApp
+          path: build
 
       - name: Install Dependencies for serving the Web App to Cypress
         run: npm install serve
-        env:
-          NPM_AUTH_TOKEN: ${{ secrets.PAT }}
 
       - name: Cypress run
         uses: cypress-io/github-action@v3
