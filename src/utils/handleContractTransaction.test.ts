@@ -1,11 +1,11 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+import { ContractTransaction } from 'ethers';
 import { handleContractTransaction } from './handleContractTransaction';
 
 describe('handleContractTransaction', () => {
     it('should return true when blockNumber is resolved', async () => {
         const tx = {
             wait: jest.fn(() => Promise.resolve({ blockNumber: 13115215 })),
-        } as any;
+        } as unknown as ContractTransaction;
         const transactionStatus = await handleContractTransaction(tx);
         expect(transactionStatus).toBeTruthy();
     });
@@ -13,7 +13,7 @@ describe('handleContractTransaction', () => {
     it('should return false when blockNumber is unresolved', async () => {
         const tx = {
             wait: jest.fn(() => Promise.resolve({ blockNumber: undefined })),
-        } as any;
+        } as unknown as ContractTransaction;
         const transactionStatus = await handleContractTransaction(tx);
         expect(transactionStatus).toBeFalsy();
     });

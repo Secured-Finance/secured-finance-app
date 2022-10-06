@@ -51,7 +51,7 @@ export const YieldChart: React.FC<YieldChartProps> = ({
                         ? 'w-[640px] pl-8 transition-width'
                         : 'w-0 transition-width'
                 }`}
-                data-testId='yield-chart-component'
+                data-testid='yield-chart-component'
             >
                 <div className='h-20'>
                     <CurveHeader

@@ -1,3 +1,4 @@
+import { MockedProvider } from '@apollo/client/testing';
 import '@storybook/addon-console';
 import { Provider } from 'react-redux';
 import { HashRouter as Router } from 'react-router-dom';
@@ -34,6 +35,10 @@ export const parameters = {
                 value: '#174e7a',
             },
         ],
+    },
+
+    apolloClient: {
+        MockedProvider,
     },
 };
 
