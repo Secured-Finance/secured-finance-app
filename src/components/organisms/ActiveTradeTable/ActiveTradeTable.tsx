@@ -210,6 +210,7 @@ export const ActiveTradeTable = ({ data }: { data: Array<ActiveTrade> }) => {
                             key={row.id}
                             className='cursor-pointer'
                             onClick={() => setDisplayContractDetails(true)}
+                            data-testid='active-trade-row'
                         >
                             {row.getVisibleCells().map(cell => (
                                 <td
