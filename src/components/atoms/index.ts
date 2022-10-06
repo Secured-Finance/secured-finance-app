@@ -12,6 +12,7 @@ export * from './CurveHeaderTotal';
 export * from './DropdownSelector';
 export * from './ExpandIndicator';
 export * from './HorizontalListItem';
+export * from './InformationPopover';
 export * from './NavTab';
 export * from './PercentageTab';
 export * from './PortfolioTab';

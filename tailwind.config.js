@@ -22,6 +22,9 @@ module.exports = {
             transitionProperty: {
                 width: 'width',
             },
+            height: {
+                '5px': '5px',
+            },
         },
         fontFamily: {
             primary: ['GT Super Display', ...defaultTheme.fontFamily.serif],
