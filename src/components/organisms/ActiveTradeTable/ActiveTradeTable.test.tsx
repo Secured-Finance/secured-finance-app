@@ -2,14 +2,6 @@ import { composeStories } from '@storybook/testing-react';
 import { render, screen } from 'src/test-utils.js';
 import * as stories from './ActiveTradeTable.stories';
 
-// @ts-expect-error: this is a mock for the IntersectionObserver.
-global.IntersectionObserver = class FakeIntersectionObserver {
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
-    observe() {}
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
-    disconnect() {}
-};
-
 const { Default } = composeStories(stories);
 
 describe('ActiveTradeTable Component', () => {
