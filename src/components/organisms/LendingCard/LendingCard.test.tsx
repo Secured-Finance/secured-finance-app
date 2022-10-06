@@ -75,7 +75,10 @@ describe('LendingCard Component', () => {
     });
 
     it('should call the onPlaceOrder with the initial value when click on the action button', async () => {
-        const onPlaceOrder = jest.fn();
+        const tx = {
+            wait: jest.fn(() => Promise.resolve({ blockNumber: 13115215 })),
+        } as unknown;
+        const onPlaceOrder = jest.fn().mockReturnValue(Promise.resolve(tx));
         render(<Default onPlaceOrder={onPlaceOrder} />);
         const button = screen.getByTestId('place-order-button');
         fireEvent.click(button);
@@ -91,7 +94,10 @@ describe('LendingCard Component', () => {
     });
 
     it('should call the onPlaceOrder function with the argument selected asset and amount when clicking on the action button', async () => {
-        const onPlaceOrder = jest.fn();
+        const tx = {
+            wait: jest.fn(() => Promise.resolve({ blockNumber: 13115215 })),
+        } as unknown;
+        const onPlaceOrder = jest.fn().mockReturnValue(Promise.resolve(tx));
         render(<Default onPlaceOrder={onPlaceOrder} />);
         selectEthereum();
         const input = screen.getByRole('textbox');

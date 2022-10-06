@@ -1,9 +1,6 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { BigNumber } from 'ethers';
-import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
 import { WithAssetPrice } from 'src/../.storybook/decorators';
-import { updateLatestBlock } from 'src/store/blockchain';
 import { Rate } from 'src/utils';
 import { ActiveTradeTable } from './ActiveTradeTable';
 
@@ -42,10 +39,6 @@ export default {
 } as ComponentMeta<typeof ActiveTradeTable>;
 
 const Template: ComponentStory<typeof ActiveTradeTable> = args => {
-    const dispatch = useDispatch();
-    useEffect(() => {
-        setTimeout(() => dispatch(updateLatestBlock(12345)), 100);
-    }, [dispatch]);
     return <ActiveTradeTable {...args} />;
 };
 

@@ -1,9 +1,6 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { BigNumber } from 'bignumber.js';
-import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
 import { WithAssetPrice } from 'src/../.storybook/decorators';
-import { updateLatestBlock } from 'src/store/blockchain';
 import { Rate } from 'src/utils';
 import { LendingCard } from './LendingCard';
 
@@ -33,14 +30,6 @@ export default {
 } as ComponentMeta<typeof LendingCard>;
 
 const Template: ComponentStory<typeof LendingCard> = args => {
-    const dispatch = useDispatch();
-
-    useEffect(() => {
-        // Quick and dirty way to wait for the Mock to be mounted.
-        // There must be another way but we barely use Axios in our code.
-        setTimeout(() => dispatch(updateLatestBlock(12345)), 100);
-    }, [dispatch]);
-
     return <LendingCard {...args} />;
 };
 

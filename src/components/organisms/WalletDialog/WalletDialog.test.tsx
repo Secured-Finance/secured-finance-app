@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from 'src/test-utils.js';
+import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
 
 import { composeStories } from '@storybook/testing-react';
 import * as stories from './WalletDialog.stories';
@@ -49,16 +49,18 @@ describe('Wallet Dialog component', () => {
         expect(screen.getAllByRole('radio')).toHaveLength(2);
     });
 
-    it('should move to the next step if an option was selected', () => {
+    it('should move to the next step if an option was selected', async () => {
         render(<Primary />);
         selectMetamaskOption();
         fireEvent.click(screen.getByTestId('dialog-action-button'));
-        expect(screen.getByText('Connecting...')).toBeInTheDocument();
-        expect(
-            screen.getByText(
-                'Please wait while we connect. Please make sure to accept the approvals on your browser.'
-            )
-        ).toBeInTheDocument();
+        await waitFor(() => {
+            expect(screen.getByText('Connecting...')).toBeInTheDocument();
+            expect(
+                screen.getByText(
+                    'Please wait while we connect. Please make sure to accept the approvals on your browser.'
+                )
+            ).toBeInTheDocument();
+        });
     });
 
     it('should close the modal after the last step', async () => {
@@ -68,6 +70,8 @@ describe('Wallet Dialog component', () => {
         selectMetamaskOption();
         const button = screen.getByTestId('dialog-action-button');
         fireEvent.click(button);
-        expect(onClose).not.toHaveBeenCalled();
+        await waitFor(() => {
+            expect(onClose).not.toHaveBeenCalled();
+        });
     });
 });

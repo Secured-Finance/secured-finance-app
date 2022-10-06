@@ -2,17 +2,14 @@
 // allows you to do things like:
 // expect(element).toHaveTextContent(/react/i)
 // learn more: https://github.com/testing-library/jest-dom
-import { loadEnvConfig } from '@next/env';
 import '@testing-library/jest-dom';
 import 'jest-canvas-mock';
-import { TextDecoder } from 'util';
+import failOnConsole from 'jest-fail-on-console';
 
-global.ResizeObserver = jest.fn().mockImplementation(() => ({
-    observe: jest.fn(),
-    unobserve: jest.fn(),
-    disconnect: jest.fn(),
-}));
+failOnConsole();
 
-global.TextDecoder = TextDecoder;
-
-loadEnvConfig(process.cwd());
+afterAll(() => {
+    global.gc && global.gc();
+    jest.clearAllMocks();
+    jest.clearAllTimers();
+});

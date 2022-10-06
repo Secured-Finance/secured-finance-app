@@ -44,15 +44,17 @@ describe('computeNetValue', () => {
             {
                 amount: '1000000000000000000',
                 currency: ethers.utils.formatBytes32String(CurrencySymbol.ETH),
+                side: 0,
             },
             {
                 amount: '100000000000000000000',
                 currency: ethers.utils.formatBytes32String(CurrencySymbol.FIL),
+                side: 1,
             },
         ];
         expect(
             computeNetValue(trades as unknown as TradeHistory, priceMap)
-        ).toEqual(1600);
+        ).toEqual(400);
     });
 
     it('should return 0 if no trades are provided', () => {

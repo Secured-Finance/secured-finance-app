@@ -10,14 +10,14 @@ const TitleChip = ({
     selected: boolean;
 }) => {
     return (
-        <button
+        <div
             className={classNames('typography-caption-2 w-fit py-3 px-5', {
                 'rounded-3xl bg-black-30 text-neutral-8': selected,
                 'text-neutral-4': !selected,
             })}
         >
             {title}
-        </button>
+        </div>
     );
 };
 export const TradeHistoryTab = ({
