@@ -29,7 +29,7 @@ const Template: ComponentStory<typeof Landing> = () => {
     );
     const dispatch = useDispatch();
     useEffect(() => {
-        setTimeout(() => {
+        const timerId = setTimeout(() => {
             dispatch(
                 updateLendingMarketContract(maturities, CurrencySymbol.FIL)
             );
@@ -40,6 +40,8 @@ const Template: ComponentStory<typeof Landing> = () => {
                 updateLendingMarketContract(maturities, CurrencySymbol.USDC)
             );
         }, 200);
+
+        return () => clearTimeout(timerId);
     }, [dispatch, maturities]);
     return <Landing />;
 };

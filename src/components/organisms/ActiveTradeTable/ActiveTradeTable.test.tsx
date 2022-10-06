@@ -2,14 +2,6 @@ import { composeStories } from '@storybook/testing-react';
 import { render, screen } from 'src/test-utils.js';
 import * as stories from './ActiveTradeTable.stories';
 
-// @ts-expect-error: this is a mock for the IntersectionObserver.
-global.IntersectionObserver = class FakeIntersectionObserver {
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
-    observe() {}
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
-    disconnect() {}
-};
-
 const { Default } = composeStories(stories);
 
 describe('ActiveTradeTable Component', () => {
@@ -21,6 +13,7 @@ describe('ActiveTradeTable Component', () => {
     it('should render a ActiveTradeTable with 2 rows and a header row', () => {
         render(<Default />);
         expect(screen.getAllByRole('row')).toHaveLength(3);
+        expect(screen.getAllByTestId('active-trade-row')).toHaveLength(2);
     });
 
     it('should sort the table by position', () => {

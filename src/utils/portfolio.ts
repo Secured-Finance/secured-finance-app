@@ -24,16 +24,13 @@ export const computeNetValue = (
     trades: TradeHistory,
     priceList: AssetPriceMap
 ) => {
-    if (!trades.length) {
-        return 0;
-    }
-
-    return trades.reduce((acc, { amount, currency }) => {
+    return trades.reduce((acc, { amount, currency, side }) => {
         const ccy = Web3.utils.hexToString(currency) as CurrencySymbol;
         return (
             acc +
             currencyMap[ccy].fromBaseUnit(BigNumber.from(amount)) *
-                priceList[ccy]
+                priceList[ccy] *
+                (side.toString() === OrderSide.Lend ? 1 : -1)
         );
     }, 0);
 };
