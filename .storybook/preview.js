@@ -1,7 +1,6 @@
 import { MockedProvider } from '@apollo/client/testing';
 import '@storybook/addon-console';
 import { Provider } from 'react-redux';
-import { HashRouter as Router } from 'react-router-dom';
 import 'src/assets/css/index.css';
 import { withPerformance } from 'storybook-addon-performance';
 import store from './../src/store';
@@ -44,13 +43,11 @@ export const parameters = {
 
 export const decorators = [
     Story => (
-        <Router>
-            <Provider store={store}>
-                <MockSecuredFinanceProvider>
-                    <Story />
-                </MockSecuredFinanceProvider>
-            </Provider>
-        </Router>
+        <Provider store={store}>
+            <MockSecuredFinanceProvider>
+                <Story />
+            </MockSecuredFinanceProvider>
+        </Provider>
     ),
     withPerformance,
 ];
