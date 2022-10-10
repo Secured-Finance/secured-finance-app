@@ -1,5 +1,6 @@
+import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { useState } from 'react';
-import { NavLink, useRouteMatch } from 'react-router-dom';
 import SFLogo from 'src/assets/img/logo.svg';
 import { Button, NavTab, TraderProTab } from 'src/components/atoms';
 import { WalletDialog, WalletPopover } from 'src/components/organisms';
@@ -19,12 +20,12 @@ export const Header = () => {
                 display ? 'blur-sm' : ''
             }`}
         >
-            <NavLink
+            <Link
                 className='ml-5 flex h-10 items-center justify-center'
-                to='/'
+                href='/'
             >
                 <SFLogo className='h-10 w-[200px]' />
-            </NavLink>
+            </Link>
             <div className='flex h-full items-center justify-center'>
                 <ItemLink text='OTC Lending' dataCy='lending' link='/' />
                 <ItemLink
@@ -70,17 +71,20 @@ const ItemLink = ({
     dataCy: string;
     link: string;
 }) => {
+    const router = useRouter();
     const useCheckActive = (): boolean => {
-        return useRouteMatch({ path: link, exact: true }) ? true : false;
+        return router.pathname === link;
     };
     return (
-        <NavLink
-            exact
+        <Link
             data-cy={dataCy.toLowerCase()}
-            to={link}
+            href={link}
             className='h-full'
+            passHref
         >
-            <NavTab text={text} active={useCheckActive()} />
-        </NavLink>
+            <a className='h-full' href='_'>
+                <NavTab text={text} active={useCheckActive()} />
+            </a>
+        </Link>
     );
 };
