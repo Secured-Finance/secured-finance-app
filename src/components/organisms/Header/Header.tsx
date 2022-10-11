@@ -20,11 +20,10 @@ export const Header = () => {
                 display ? 'blur-sm' : ''
             }`}
         >
-            <Link
-                className='ml-5 flex h-10 items-center justify-center'
-                href='/'
-            >
-                <SFLogo className='h-10 w-[200px]' />
+            <Link className='flex h-10' href='/' passHref>
+                <a href='_' className='ml-5'>
+                    <SFLogo className='h-10 w-[200px]' />
+                </a>
             </Link>
             <div className='flex h-full items-center justify-center'>
                 <ItemLink text='OTC Lending' dataCy='lending' link='/' />
