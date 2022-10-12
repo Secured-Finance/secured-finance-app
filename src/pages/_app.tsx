@@ -6,7 +6,7 @@ import { Header } from 'src/components/organisms';
 import { Layout } from 'src/components/templates';
 import SecuredFinanceProvider from 'src/contexts/SecuredFinanceProvider';
 import store from 'src/store';
-import { setUpSecuredFinanceSkd } from 'src/utils';
+import { getEnvVariable } from 'src/utils';
 import { UseWalletProvider } from 'use-wallet';
 import '../assets/css/index.css';
 
@@ -33,13 +33,14 @@ function App({ Component, pageProps }: AppProps) {
 }
 
 const Providers: React.FC = ({ children }) => {
-    const network = setUpSecuredFinanceSkd();
+    const network = getEnvVariable<string>('NEXT_PUBLIC_ETHEREUM_NETWORK');
+    const chainId = getEnvVariable<number>('NEXT_PUBLIC_ETHEREUM_CHAIN_ID');
     return (
         <GraphClientProvider network={network}>
             <UseWalletProvider
                 connectors={{
                     injected: {
-                        chainId: [4],
+                        chainId: [chainId],
                     },
                     walletconnect: {
                         rpcUrl: 'https://ropsten.eth.aragon.network/',
