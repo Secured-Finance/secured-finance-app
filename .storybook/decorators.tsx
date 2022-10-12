@@ -56,7 +56,7 @@ export const WithWalletProvider = (Story: Story, Context: StoryContext) => {
     return (
         <UseWalletProvider
             connectors={{
-                provided: { provider: signer, chainId: [4] },
+                provided: { provider: signer, chainId: [5] },
             }}
         >
             <WithConnectedWallet
@@ -109,7 +109,7 @@ export const WithAssetPrice = (Story: Story) => {
 };
 
 export const WithGraphClient = (Story: Story) => (
-    <GraphClientProvider network='rinkeby'>
+    <GraphClientProvider network='goerli'>
         <Story />
     </GraphClientProvider>
 );
