@@ -7,7 +7,7 @@ export default {
     component: WalletPopover,
     args: {
         wallet: '0x0123...321',
-        networkName: 'Rinkeby',
+        networkName: 'Goerli',
         status: 'connected',
         // children: 'Connect Wallet',
     },
@@ -28,6 +28,6 @@ export const Default = Template.bind({});
 export const Primary = Template.bind({});
 Primary.args = {
     wallet: '0x0123...321',
-    networkName: 'Rinkeby',
+    networkName: 'Goerli',
     isKYC: true,
 };

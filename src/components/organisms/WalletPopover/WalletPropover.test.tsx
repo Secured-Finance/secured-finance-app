@@ -15,9 +15,9 @@ global.IntersectionObserver = class FakeIntersectionObserver {
 describe('WalletPopover component', () => {
     it('should render when clicked on the the wallet button', () => {
         render(<Primary />);
-        expect(screen.queryByText('Rinkeby')).toBeNull();
+        expect(screen.queryByText('Goerli')).toBeNull();
         fireEvent.click(screen.getByRole('button'));
-        expect(screen.getByText('Rinkeby')).toBeInTheDocument();
+        expect(screen.getByText('Goerli')).toBeInTheDocument();
     });
 
     it('should have a default cursor if there is no onclick action', () => {
@@ -37,7 +37,7 @@ describe('WalletPopover component', () => {
         fireEvent.click(screen.getByRole('button'));
         fireEvent.click(screen.getByText('Finish KYC'));
         await waitFor(() => {
-            expect(screen.queryByText('Rinkeby')).toBeNull();
+            expect(screen.queryByText('Goerli')).toBeNull();
         });
     });
 
