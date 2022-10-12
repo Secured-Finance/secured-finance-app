@@ -44,7 +44,7 @@ const Providers: React.FC = ({ children }) => {
             <UseWalletProvider
                 connectors={{
                     injected: {
-                        chainId: [4],
+                        chainId: [5],
                     },
                     walletconnect: {
                         rpcUrl: 'https://ropsten.eth.aragon.network/',

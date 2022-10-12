@@ -1,6 +1,6 @@
 import {
-    BuyerTransactionTableDocument,
-    SellerTransactionTableDocument,
+    BuyerTransactionsDocument,
+    SellerTransactionsDocument,
 } from '@secured-finance/sf-graph-client/dist/graphclients';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { utils } from 'ethers';
@@ -25,33 +25,33 @@ export default {
             mocks: [
                 {
                     request: {
-                        query: BuyerTransactionTableDocument,
+                        query: BuyerTransactionsDocument,
                         variables: {
                             address: '',
                         },
                     },
                     result: {
                         data: {
-                            transactionTables: [],
+                            transactions: [],
                         },
                     },
                 },
                 {
                     request: {
-                        query: SellerTransactionTableDocument,
+                        query: SellerTransactionsDocument,
                         variables: {
                             address: '',
                         },
                     },
                     result: {
                         data: {
-                            transactionTables: [],
+                            transactions: [],
                         },
                     },
                 },
                 {
                     request: {
-                        query: BuyerTransactionTableDocument,
+                        query: BuyerTransactionsDocument,
                         variables: {
                             address:
                                 '0xb98bd7c7f656290071e52d1aa617d9cb4467fd6d',
@@ -60,7 +60,7 @@ export default {
 
                     result: {
                         data: {
-                            transactionTables: [
+                            transactions: [
                                 {
                                     currency: fil,
                                     side: '0',
@@ -81,7 +81,7 @@ export default {
                 },
                 {
                     request: {
-                        query: SellerTransactionTableDocument,
+                        query: SellerTransactionsDocument,
                         variables: {
                             address:
                                 '0xb98bd7c7f656290071e52d1aa617d9cb4467fd6d',
@@ -89,7 +89,7 @@ export default {
                     },
                     result: {
                         data: {
-                            transactionTables: [
+                            transactions: [
                                 {
                                     currency: eth,
                                     side: '1',

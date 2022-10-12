@@ -40,8 +40,8 @@ const SecuredFinanceProvider: React.FC = ({ children }) => {
     });
 
     const handleNetworkChanged = (networkId: string) => {
-        if (hexToDec(networkId) !== 4) {
-            alert('Unsupported network, please use Rinkeby (Chain ID: 4)');
+        if (hexToDec(networkId) !== 5) {
+            alert('Unsupported network, please use Goerli (Chain ID: 5)');
         }
     };
 
@@ -98,7 +98,7 @@ const SecuredFinanceProvider: React.FC = ({ children }) => {
     useEffect(() => {
         if (status === 'error') {
             if (error instanceof ChainUnsupportedError) {
-                alert('Unsupported network, please use Rinkeby (Chain ID: 4)');
+                alert('Unsupported network, please use Goerli (Chain ID: 5)');
             } else {
                 console.error(error);
             }

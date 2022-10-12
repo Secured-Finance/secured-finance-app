@@ -24,7 +24,7 @@ jest.mock('@secured-finance/sf-graph-client', () => {
         useBuyerTransactionHistory: jest.fn(() => {
             return {
                 data: {
-                    transactionTables: [trade],
+                    transactions: [trade],
                 },
                 error: null,
             };
@@ -32,7 +32,7 @@ jest.mock('@secured-finance/sf-graph-client', () => {
         useSellerTransactionHistory: jest.fn(() => {
             return {
                 data: {
-                    transactionTables: [trade],
+                    transactions: [trade],
                 },
                 error: null,
             };
