@@ -3,13 +3,13 @@ import {
     useSellerTransactionHistory,
 } from '@secured-finance/sf-graph-client';
 import {
-    BuyerTransactionTableQuery,
-    SellerTransactionTableQuery,
+    BuyerTransactionsQuery,
+    SellerTransactionsQuery,
 } from '@secured-finance/sf-graph-client/dist/graphclients';
 
 export type TradeHistory =
-    | SellerTransactionTableQuery['transactionTables']
-    | BuyerTransactionTableQuery['transactionTables'];
+    | SellerTransactionsQuery['transactions']
+    | BuyerTransactionsQuery['transactions'];
 
 export const useTradeHistory = (account: string | null) => {
     const { data: lendingHistory, error: lendingError } =
@@ -31,7 +31,7 @@ export const useTradeHistory = (account: string | null) => {
     }
 
     return [
-        ...(lendingHistory?.transactionTables ?? []),
-        ...(borrowingHistory?.transactionTables ?? []),
+        ...(lendingHistory?.transactions ?? []),
+        ...(borrowingHistory?.transactions ?? []),
     ];
 };
