@@ -12,13 +12,11 @@ import { coingeckoApi } from 'src/utils/coinGeckoApi';
 import { useWallet, UseWalletProvider } from 'use-wallet';
 
 export const WithAppLayout = (Story: Story) => {
-    const routes = [
-        {
-            path: '/',
-            component: () => <Story />,
-        },
-    ];
-    return <Layout navBar={<Header />} routes={routes} />;
+    return (
+        <Layout navBar={<Header />}>
+            <Story />
+        </Layout>
+    );
 };
 
 class ProviderMock {

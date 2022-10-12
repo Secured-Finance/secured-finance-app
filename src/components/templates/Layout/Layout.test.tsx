@@ -11,7 +11,9 @@ describe('Layout Component', () => {
 
     it('should render with header, main and content', () => {
         render(
-            <Default routes={[{ path: '/', component: <div>Content</div> }]} />
+            <Default>
+                <div>Content</div>
+            </Default>
         );
         expect(screen.getByText('Content')).toBeInTheDocument();
         expect(screen.getByRole('banner')).toBeInTheDocument();

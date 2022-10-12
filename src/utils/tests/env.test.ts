@@ -1,20 +1,37 @@
-import { getRpcEndpoint, setUpSecuredFinanceSkd } from 'src/utils';
+import {
+    getEthereumChainId,
+    getEthereumNetwork,
+    getRpcEndpoint,
+} from 'src/utils';
 
-describe('setUpSecuredFinanceSkd', () => {
-    beforeEach(() => {
+describe('getEthereumNetwork', () => {
+    it('should return the value of the environment variable', () => {
         process.env.NEXT_PUBLIC_ETHEREUM_NETWORK = 'goerli';
-        process.env.NEXT_PUBLIC_ALCHEMY_API_KEY = 'test';
-    });
-
-    it('should return network', () => {
-        const network = setUpSecuredFinanceSkd();
+        const network = getEthereumNetwork();
         expect(network).toBe('goerli');
+        expect(typeof network).toBe('string');
     });
 
-    it('should throw error if NEXT_PUBLIC_ETHEREUM_NETWORK is not set', () => {
+    it('should throw error if variable is not set', () => {
         process.env.NEXT_PUBLIC_ETHEREUM_NETWORK = '';
-        expect(() => setUpSecuredFinanceSkd()).toThrowError(
+        expect(() => getEthereumNetwork()).toThrowError(
             'NEXT_PUBLIC_ETHEREUM_NETWORK is not set'
+        );
+    });
+});
+
+describe('getEthereumChainId ', () => {
+    it('should return the value of the environment variable', () => {
+        process.env.NEXT_PUBLIC_ETHEREUM_CHAIN_ID = '5';
+        const chainId = getEthereumChainId();
+        expect(chainId).toBe(5);
+        expect(typeof chainId).toBe('number');
+    });
+
+    it('should throw error if variable is not set', () => {
+        process.env.NEXT_PUBLIC_ETHEREUM_CHAIN_ID = '';
+        expect(() => getEthereumChainId()).toThrowError(
+            'NEXT_PUBLIC_ETHEREUM_CHAIN_ID is not set'
         );
     });
 });

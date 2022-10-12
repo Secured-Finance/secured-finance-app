@@ -1,6 +1,5 @@
-import Head from 'next/head';
 import { useEffect, useState } from 'react';
-import SecuredFinanceApp from 'src/App';
+import { Landing } from 'src/components/pages';
 function EntryPoint() {
     const [isMounted, setIsMounted] = useState(false);
 
@@ -12,18 +11,7 @@ function EntryPoint() {
         return null;
     }
 
-    return (
-        <div>
-            <Head>
-                <title>Secured Finance</title>
-                <meta
-                    name='viewport'
-                    content='width=device-width, initial-scale=1.0'
-                />
-            </Head>
-            <SecuredFinanceApp />
-        </div>
-    );
+    return <Landing />;
 }
 
 export default EntryPoint;
