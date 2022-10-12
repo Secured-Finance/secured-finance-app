@@ -75,13 +75,8 @@ const ItemLink = ({
         return router.pathname === link;
     };
     return (
-        <Link
-            data-cy={dataCy.toLowerCase()}
-            href={link}
-            className='h-full'
-            passHref
-        >
-            <a className='h-full' href='_'>
+        <Link href={link} className='h-full' passHref>
+            <a className='h-full' href='_' data-cy={dataCy.toLowerCase()}>
                 <NavTab text={text} active={useCheckActive()} />
             </a>
         </Link>
