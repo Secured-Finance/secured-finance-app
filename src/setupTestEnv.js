@@ -10,5 +10,6 @@ global.TextDecoder = TextDecoder;
 
 global.IntersectionObserver = class FakeIntersectionObserver {
     observe() {}
+    unobserve() {}
     disconnect() {}
 };

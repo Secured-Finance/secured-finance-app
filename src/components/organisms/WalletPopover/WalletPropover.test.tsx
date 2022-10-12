@@ -4,13 +4,6 @@ import { composeStories } from '@storybook/testing-react';
 import * as stories from './WalletPopover.stories';
 
 const { Primary } = composeStories(stories);
-// @ts-expect-error: this is a mock for the IntersectionObserver.
-global.IntersectionObserver = class FakeIntersectionObserver {
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
-    observe() {}
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
-    disconnect() {}
-};
 
 describe('WalletPopover component', () => {
     it('should render when clicked on the the wallet button', () => {
