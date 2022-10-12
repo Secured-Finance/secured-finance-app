@@ -24,5 +24,5 @@ export const getRpcEndpoint = () => {
         'NEXT_PUBLIC_ALCHEMY_API_KEY is not set'
     );
 
-    return `https://eth-${NEXT_PUBLIC_ETHEREUM_NETWORK}.alchemyapi.io/v2/${NEXT_PUBLIC_ALCHEMY_API_KEY}`;
+    return `https://eth-${NEXT_PUBLIC_ETHEREUM_NETWORK}.g.alchemy.com/v2/${NEXT_PUBLIC_ALCHEMY_API_KEY}`;
 };

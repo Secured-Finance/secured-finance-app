@@ -2,13 +2,13 @@ import { getRpcEndpoint, setUpSecuredFinanceSkd } from 'src/utils';
 
 describe('setUpSecuredFinanceSkd', () => {
     beforeEach(() => {
-        process.env.NEXT_PUBLIC_ETHEREUM_NETWORK = 'rinkeby';
+        process.env.NEXT_PUBLIC_ETHEREUM_NETWORK = 'goerli';
         process.env.NEXT_PUBLIC_ALCHEMY_API_KEY = 'test';
     });
 
     it('should return network', () => {
         const network = setUpSecuredFinanceSkd();
-        expect(network).toBe('rinkeby');
+        expect(network).toBe('goerli');
     });
 
     it('should throw error if NEXT_PUBLIC_ETHEREUM_NETWORK is not set', () => {
@@ -21,13 +21,13 @@ describe('setUpSecuredFinanceSkd', () => {
 
 describe('getRpcEndpoint', () => {
     beforeEach(() => {
-        process.env.NEXT_PUBLIC_ETHEREUM_NETWORK = 'rinkeby';
+        process.env.NEXT_PUBLIC_ETHEREUM_NETWORK = 'goerli';
         process.env.NEXT_PUBLIC_ALCHEMY_API_KEY = 'test';
     });
 
     it('should return rpc endpoint', () => {
         const network = getRpcEndpoint();
-        expect(network).toBe(`https://eth-rinkeby.alchemyapi.io/v2/test`);
+        expect(network).toBe(`https://eth-goerli.g.alchemy.com/v2/test`);
     });
 
     it('should throw error if NEXT_PUBLIC_ETHEREUM_NETWORK is not set', () => {
