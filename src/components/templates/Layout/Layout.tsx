@@ -1,16 +1,9 @@
-import { Route, Switch } from 'react-router-dom';
-
 export const Layout = ({
-    routes,
     navBar,
+    children,
 }: {
-    routes: Readonly<
-        Array<{
-            path: string;
-            component: React.ReactNode;
-        }>
-    >;
     navBar: React.ReactNode;
+    children: React.ReactNode;
 }) => {
     return (
         <div
@@ -18,15 +11,7 @@ export const Layout = ({
             data-testid='wrapper-div'
         >
             <header>{navBar}</header>
-            <main>
-                <Switch>
-                    {routes.map(({ path, component }) => (
-                        <Route path={path} key={path}>
-                            {component}
-                        </Route>
-                    ))}
-                </Switch>
-            </main>
+            <main>{children}</main>
         </div>
     );
 };

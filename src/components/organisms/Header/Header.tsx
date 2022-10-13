@@ -1,5 +1,6 @@
+import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { useState } from 'react';
-import { NavLink, useRouteMatch } from 'react-router-dom';
 import SFLogo from 'src/assets/img/logo.svg';
 import { Button, NavTab, TraderProTab } from 'src/components/atoms';
 import { WalletDialog, WalletPopover } from 'src/components/organisms';
@@ -19,12 +20,11 @@ export const Header = () => {
                 display ? 'blur-sm' : ''
             }`}
         >
-            <NavLink
-                className='ml-5 flex h-10 items-center justify-center'
-                to='/'
-            >
-                <SFLogo className='h-10 w-[200px]' />
-            </NavLink>
+            <Link className='flex h-10' href='/' passHref>
+                <a href='_' className='ml-5'>
+                    <SFLogo className='h-10 w-[200px]' />
+                </a>
+            </Link>
             <div className='flex h-full items-center justify-center'>
                 <ItemLink text='OTC Lending' dataCy='lending' link='/' />
                 <ItemLink
@@ -70,17 +70,15 @@ const ItemLink = ({
     dataCy: string;
     link: string;
 }) => {
+    const router = useRouter();
     const useCheckActive = (): boolean => {
-        return useRouteMatch({ path: link, exact: true }) ? true : false;
+        return router.pathname === link;
     };
     return (
-        <NavLink
-            exact
-            data-cy={dataCy.toLowerCase()}
-            to={link}
-            className='h-full'
-        >
-            <NavTab text={text} active={useCheckActive()} />
-        </NavLink>
+        <Link href={link} className='h-full' passHref>
+            <a className='h-full' href='_' data-cy={dataCy.toLowerCase()}>
+                <NavTab text={text} active={useCheckActive()} />
+            </a>
+        </Link>
     );
 };

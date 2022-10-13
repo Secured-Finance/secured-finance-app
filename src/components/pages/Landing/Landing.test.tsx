@@ -4,6 +4,20 @@ import * as stories from './Landing.stories';
 
 const { Default } = composeStories(stories);
 
+jest.mock('next/router', () => ({
+    useRouter: jest.fn(() => ({
+        pathname: '/',
+        push: jest.fn(),
+    })),
+}));
+
+jest.mock(
+    'next/link',
+    () =>
+        ({ children }: { children: React.ReactNode }) =>
+            children
+);
+
 describe('Landing Component', () => {
     it('should render a Landing', () => {
         render(<Default />);

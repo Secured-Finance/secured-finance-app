@@ -12,13 +12,11 @@ import { coingeckoApi } from 'src/utils/coinGeckoApi';
 import { useWallet, UseWalletProvider } from 'use-wallet';
 
 export const WithAppLayout = (Story: Story) => {
-    const routes = [
-        {
-            path: '/',
-            component: () => <Story />,
-        },
-    ];
-    return <Layout navBar={<Header />} routes={routes} />;
+    return (
+        <Layout navBar={<Header />}>
+            <Story />
+        </Layout>
+    );
 };
 
 class ProviderMock {
@@ -56,7 +54,7 @@ export const WithWalletProvider = (Story: Story, Context: StoryContext) => {
     return (
         <UseWalletProvider
             connectors={{
-                provided: { provider: signer, chainId: [4] },
+                provided: { provider: signer, chainId: [5] },
             }}
         >
             <WithConnectedWallet
@@ -109,7 +107,7 @@ export const WithAssetPrice = (Story: Story) => {
 };
 
 export const WithGraphClient = (Story: Story) => (
-    <GraphClientProvider network='rinkeby'>
+    <GraphClientProvider network='goerli'>
         <Story />
     </GraphClientProvider>
 );

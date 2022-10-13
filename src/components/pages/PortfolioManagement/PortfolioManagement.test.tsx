@@ -5,6 +5,20 @@ import * as stories from './PortfolioManagement.stories';
 
 const { Default, ConnectedToWallet } = composeStories(stories);
 
+jest.mock('next/router', () => ({
+    useRouter: jest.fn(() => ({
+        pathname: '/',
+        push: jest.fn(),
+    })),
+}));
+
+jest.mock(
+    'next/link',
+    () =>
+        ({ children }: { children: React.ReactNode }) =>
+            children
+);
+
 describe('PortfolioManagement component', () => {
     it('should render PortfolioManagement', async () => {
         await waitFor(() =>

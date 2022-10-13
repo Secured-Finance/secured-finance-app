@@ -2,9 +2,10 @@ import { Popover, Transition } from '@headlessui/react';
 import { LogoutIcon, UserIcon } from '@heroicons/react/outline';
 import { BadgeCheckIcon } from '@heroicons/react/solid';
 import classNames from 'classnames';
+import { useRouter } from 'next/router';
+
 import React, { Fragment, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useHistory } from 'react-router-dom';
 import MetamaskLogo from 'src/assets/img/metamask-fox.svg';
 import { ExpandIndicator, Separator, Toggle } from 'src/components/atoms';
 import { CACHED_PROVIDER_KEY } from 'src/contexts/SecuredFinanceProvider/SecuredFinanceProvider';
@@ -79,7 +80,7 @@ export const WalletPopover = ({
 }) => {
     const { reset } = useWallet();
     const dispatch = useDispatch();
-    const history = useHistory();
+    const router = useRouter();
     const otherWalletConnected = useSelector((state: RootState) =>
         isEthereumWalletConnected(state)
     );
@@ -89,9 +90,9 @@ export const WalletPopover = ({
         dispatch(resetEthWallet());
         localStorage.removeItem(CACHED_PROVIDER_KEY);
         if (!otherWalletConnected) {
-            history.push('/');
+            router.push('/');
         }
-    }, [dispatch, history, otherWalletConnected, reset]);
+    }, [dispatch, otherWalletConnected, reset, router]);
 
     return (
         <>

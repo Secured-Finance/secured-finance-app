@@ -2,7 +2,6 @@ import { configureStore } from '@reduxjs/toolkit';
 import { render as rtlRender } from '@testing-library/react';
 import { renderHook as rtlRenderHook } from '@testing-library/react-hooks';
 import { Provider } from 'react-redux';
-import { HashRouter } from 'react-router-dom';
 import { rootReducers } from 'src/store';
 
 function render(
@@ -21,11 +20,7 @@ function render(
     } = {}
 ) {
     function Wrapper({ children }) {
-        return (
-            <HashRouter>
-                <Provider store={store}>{children}</Provider>
-            </HashRouter>
-        );
+        return <Provider store={store}>{children}</Provider>;
     }
     return { store, ...rtlRender(ui, { wrapper: Wrapper, ...renderOptions }) };
 }
@@ -46,11 +41,7 @@ function renderHook(
     } = {}
 ) {
     function Wrapper({ children }) {
-        return (
-            <HashRouter>
-                <Provider store={store}>{children}</Provider>
-            </HashRouter>
-        );
+        return <Provider store={store}>{children}</Provider>;
     }
     return {
         store,
