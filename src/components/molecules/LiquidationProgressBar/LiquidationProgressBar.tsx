@@ -21,7 +21,10 @@ export const LiquidationProgressBar = ({
     const informationText = formatInformationText(liquidationPercentage);
 
     return (
-        <div className='flex flex-col gap-3'>
+        <div
+            className='flex flex-col gap-3'
+            data-testid='liquidation-progress-bar'
+        >
             <div className='flex flex-row items-end justify-between'>
                 <span className='typography-body-2 text-slateGray'>
                     Liquidation Risk
@@ -30,13 +33,11 @@ export const LiquidationProgressBar = ({
                     {liquidationPercentage === 0 ? 'N/A' : 'Low'}
                 </span>
             </div>
-            <div
-                className='flex flex-col gap-[6px]'
-                data-testid='liquidation-progress-bar'
-            >
+            <div className='flex flex-col gap-[6px]'>
                 <div
                     style={{ width: `calc(100% * ${padding} + 4px )` }}
                     className='transition-width duration-700 ease-in'
+                    data-testid='liquidation-progress-bar-tick'
                 >
                     <Tick className='float-right h-5px w-2'></Tick>
                 </div>
