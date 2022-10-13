@@ -2,11 +2,11 @@ import { composeStories } from '@storybook/testing-react';
 import { render, screen } from 'src/test-utils.js';
 import * as stories from './CollateralTabRightPane.stories';
 
-const { Default } = composeStories(stories);
+const { Default, NotConnectedToWallet } = composeStories(stories);
 
 describe('CollateralTabRightPane component', () => {
     it('should render CollateralTabRightPane', () => {
-        render(<Default />);
+        render(<NotConnectedToWallet />);
         expect(
             screen.getByTestId('collateral-progress-bar')
         ).toBeInTheDocument();
