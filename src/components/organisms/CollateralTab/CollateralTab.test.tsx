@@ -14,5 +14,8 @@ describe('CollateralTab Component', () => {
                 'Connect your wallet to see your deposited collateral balance.'
             )
         ).toBeInTheDocument();
+        expect(
+            screen.getByTestId('collateral-tab-right-pane')
+        ).toBeInTheDocument();
     });
 });

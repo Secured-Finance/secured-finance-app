@@ -3,6 +3,7 @@ export * from './AssetDisclosure';
 export * from './AssetSelector';
 export * from './CollateralProgressBar';
 export * from './CollateralTabLeftPane';
+export * from './CollateralTabRightPane';
 export * from './CurveHeader';
 export * from './Dialog';
 export * from './LineChart';

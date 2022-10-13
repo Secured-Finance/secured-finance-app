@@ -5,8 +5,8 @@ export default {
     title: 'Molecules/CollateralProgressBar',
     component: CollateralProgressBar,
     args: {
-        collateralAmount: 4440,
-        totalCollateral: 12000,
+        collateralCoverage: 0,
+        totalCollateralInUSD: 0,
     },
 } as ComponentMeta<typeof CollateralProgressBar>;
 
@@ -15,3 +15,8 @@ const Template: ComponentStory<typeof CollateralProgressBar> = args => (
 );
 
 export const Default = Template.bind({});
+export const ConnectedToWallet = Template.bind({});
+ConnectedToWallet.args = {
+    collateralCoverage: 37,
+    totalCollateralInUSD: 100,
+};
