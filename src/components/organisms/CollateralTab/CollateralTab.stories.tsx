@@ -12,9 +12,9 @@ export default {
     args: {
         collateralBook: {
             ccyName: 'ETH',
-            collateral: new BigNumber('100000000000000000'),
-            usdCollateral: new BigNumber('200030000000000000000'),
-            coverage: new BigNumber('8000'), // 80%
+            collateral: new BigNumber('0'),
+            usdCollateral: new BigNumber('0'),
+            coverage: new BigNumber('0'), // 0%
         },
     },
     decorators: [WithWalletProvider, WithAssetPrice],
@@ -28,4 +28,13 @@ export const Default = Template.bind({});
 export const ConnectedToWallet = Template.bind({});
 ConnectedToWallet.parameters = {
     connected: true,
+};
+
+ConnectedToWallet.args = {
+    collateralBook: {
+        ccyName: 'ETH',
+        collateral: new BigNumber('100000000000000000'),
+        usdCollateral: new BigNumber('200030000000000000000'),
+        coverage: new BigNumber('7000'), // 70%
+    },
 };

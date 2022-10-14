@@ -82,7 +82,8 @@ export const LendingCard = ({
 
     const collateralUsagePercent = useMemo(() => {
         return percentFormat(
-            BigNumber.from(collateralBook.coverage.toString()).toNumber()
+            BigNumber.from(collateralBook.coverage.toString()).toNumber() /
+                100.0
         );
     }, [collateralBook]);
 

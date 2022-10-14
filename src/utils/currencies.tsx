@@ -51,3 +51,5 @@ export const generateWalletInformation = (
     }
     return collateralRecords;
 };
+
+export const COLLATERAL_THRESHOLD = 74; // in percentage %
