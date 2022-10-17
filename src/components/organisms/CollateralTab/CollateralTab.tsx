@@ -1,6 +1,9 @@
 import { useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { CollateralTabLeftPane } from 'src/components/molecules';
+import {
+    CollateralTabLeftPane,
+    CollateralTabRightPane,
+} from 'src/components/molecules';
 import { CollateralBook } from 'src/hooks';
 import { selectEthereumBalance } from 'src/store/ethereumWallet';
 import { RootState } from 'src/store/types';
@@ -57,9 +60,13 @@ export const CollateralTab = ({
     );
 
     return (
-        <div className='h-[410px] w-full'>
+        <div className='flex h-[410px] w-full flex-row'>
             <CollateralTabLeftPane
                 onClick={step => setOpenModal(step)}
+                account={account}
+                collateralBook={collateralBook}
+            />
+            <CollateralTabRightPane
                 account={account}
                 collateralBook={collateralBook}
             />
