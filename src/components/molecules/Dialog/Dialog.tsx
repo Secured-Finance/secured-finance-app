@@ -17,7 +17,7 @@ export const Dialog = ({
     onClick: () => void;
     isOpen: boolean;
     onClose: () => void;
-    disabled: boolean;
+    disabled?: boolean;
     children: JSX.Element;
 }) => {
     return (
