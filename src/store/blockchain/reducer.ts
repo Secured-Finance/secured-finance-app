@@ -10,6 +10,7 @@ import { Blockchain } from './type';
 
 const initialState: Blockchain = {
     latestBlock: 0,
+    chainError: false,
 };
 
 const blockchainSlice = createSlice({
@@ -18,6 +19,9 @@ const blockchainSlice = createSlice({
     reducers: {
         updateLatestBlock(state, action: PayloadAction<number>) {
             state.latestBlock = action.payload;
+        },
+        updateChainError(state, action: PayloadAction<boolean>) {
+            state.chainError = action.payload;
         },
     },
 });
