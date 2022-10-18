@@ -4,7 +4,7 @@ import React, { createContext, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useLendingMarkets } from 'src/hooks';
 import { useEthereumWalletStore } from 'src/hooks/useEthWallet';
-import { updateLatestBlock } from 'src/store/blockchain';
+import { updateChainError, updateLatestBlock } from 'src/store/blockchain';
 import { CurrencySymbol, getRpcEndpoint, hexToDec } from 'src/utils';
 import { ChainUnsupportedError, useWallet } from 'use-wallet';
 
@@ -98,12 +98,15 @@ const SecuredFinanceProvider: React.FC = ({ children }) => {
     useEffect(() => {
         if (status === 'error') {
             if (error instanceof ChainUnsupportedError) {
+                dispatch(updateChainError(true));
                 alert('Unsupported network, please use Goerli (Chain ID: 5)');
             } else {
                 console.error(error);
             }
+        } else {
+            dispatch(updateChainError(false));
         }
-    }, [status, error]);
+    }, [status, error, dispatch]);
 
     useEffect(() => {
         if (account) {
