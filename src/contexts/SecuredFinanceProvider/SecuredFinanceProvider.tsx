@@ -113,7 +113,7 @@ const SecuredFinanceProvider: React.FC = ({ children }) => {
                 console.error(error);
             }
         }
-    }, [status, error, dispatch]);
+    }, [status, error]);
 
     useEffect(() => {
         if (account) {

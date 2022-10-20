@@ -55,6 +55,7 @@ export const Header = () => {
                 ) : (
                     <Button
                         data-cy='wallet'
+                        data-testid='connect-wallet'
                         onClick={() => setDisplay(true)}
                         disabled={status}
                     >
