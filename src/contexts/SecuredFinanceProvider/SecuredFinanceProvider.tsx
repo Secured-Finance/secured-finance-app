@@ -1,11 +1,16 @@
 import { SecuredFinanceClient } from '@secured-finance/sf-client';
 import { ethers } from 'ethers';
-import React, { createContext, useEffect, useState } from 'react';
+import React, { createContext, useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useLendingMarkets } from 'src/hooks';
 import { useEthereumWalletStore } from 'src/hooks/useEthWallet';
-import { updateLatestBlock } from 'src/store/blockchain';
-import { CurrencySymbol, getRpcEndpoint, hexToDec } from 'src/utils';
+import { updateChainError, updateLatestBlock } from 'src/store/blockchain';
+import {
+    CurrencySymbol,
+    getEthereumChainId,
+    getRpcEndpoint,
+    hexToDec,
+} from 'src/utils';
 import { ChainUnsupportedError, useWallet } from 'use-wallet';
 
 export const CACHED_PROVIDER_KEY = 'CACHED_PROVIDER_KEY';
@@ -39,11 +44,15 @@ const SecuredFinanceProvider: React.FC = ({ children }) => {
         useLendingMarkets(ccy, securedFinance);
     });
 
-    const handleNetworkChanged = (networkId: string) => {
-        if (hexToDec(networkId) !== 5) {
-            alert('Unsupported network, please use Goerli (Chain ID: 5)');
-        }
-    };
+    const handleNetworkChanged = useCallback(
+        (networkId: string) => {
+            if (hexToDec(networkId) !== getEthereumChainId()) {
+                dispatch(updateChainError(true));
+                alert('Unsupported network, please use Goerli (Chain ID: 5)');
+            }
+        },
+        [dispatch]
+    );
 
     useEffect(() => {
         const connectSFClient = async (
@@ -87,13 +96,14 @@ const SecuredFinanceProvider: React.FC = ({ children }) => {
                         'chainChanged',
                         handleNetworkChanged
                     );
+                    dispatch(updateChainError(false));
                 }
             };
         } else if (!isConnected()) {
             const provider = ethers.getDefaultProvider(getRpcEndpoint());
             connectSFClient(provider);
         }
-    }, [ethereum, isConnected]);
+    }, [ethereum, isConnected, handleNetworkChanged, dispatch]);
 
     useEffect(() => {
         if (status === 'error') {

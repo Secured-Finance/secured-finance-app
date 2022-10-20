@@ -19,7 +19,7 @@ export const percentFormat = (number: number, dividedBy = 100) => {
               style: 'percent',
               maximumFractionDigits: 2,
           }).format(number / dividedBy)
-        : '0 %';
+        : '0%';
 };
 
 export const ordinaryFormat = (
