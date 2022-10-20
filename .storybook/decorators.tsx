@@ -71,7 +71,7 @@ export const WithAssetPrice = (Story: Story) => {
     useEffect(() => {
         const timeoutId = setTimeout(
             () => dispatch(updateLatestBlock(12345)),
-            100
+            1000
         );
 
         return () => clearTimeout(timeoutId);
