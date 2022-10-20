@@ -28,6 +28,7 @@ export default {
                         query: BuyerTransactionsDocument,
                         variables: {
                             address: '',
+                            awaitRefetchQueries: true,
                         },
                     },
                     result: {
@@ -41,6 +42,7 @@ export default {
                         query: SellerTransactionsDocument,
                         variables: {
                             address: '',
+                            awaitRefetchQueries: true,
                         },
                     },
                     result: {
@@ -55,6 +57,7 @@ export default {
                         variables: {
                             address:
                                 '0xb98bd7c7f656290071e52d1aa617d9cb4467fd6d',
+                            awaitRefetchQueries: true,
                         },
                     },
 
@@ -85,6 +88,7 @@ export default {
                         variables: {
                             address:
                                 '0xb98bd7c7f656290071e52d1aa617d9cb4467fd6d',
+                            awaitRefetchQueries: true,
                         },
                     },
                     result: {
