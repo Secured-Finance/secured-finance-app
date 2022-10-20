@@ -1,12 +1,10 @@
 import { useCallback, useEffect, useReducer, useState } from 'react';
-import { useSelector } from 'react-redux';
 import Check from 'src/assets/icons/check-mark.svg';
 import Loader from 'src/assets/img/gradient-loader.png';
 import MetaMaskIcon from 'src/assets/img/metamask-fox.svg';
 import WalletConnectIcon from 'src/assets/img/wallet-connect.svg';
 import { Dialog, WalletRadioGroup } from 'src/components/molecules';
 import { CACHED_PROVIDER_KEY } from 'src/contexts/SecuredFinanceProvider/SecuredFinanceProvider';
-import { RootState } from 'src/store/types';
 import { useWallet } from 'use-wallet';
 
 enum Step {
@@ -78,9 +76,6 @@ export const WalletDialog = ({
     const [state, dispatch] = useReducer(reducer, stateRecord[1]);
 
     const { account, connect } = useWallet();
-    const status = useSelector(
-        (state: RootState) => state.blockchain.chainError
-    );
 
     const handleConnect = useCallback(
         async (
@@ -133,7 +128,6 @@ export const WalletDialog = ({
 
     return (
         <Dialog
-            disabled={status}
             isOpen={isOpen}
             onClose={handleClose}
             title={state.title}

@@ -8,7 +8,6 @@ export const Dialog = ({
     onClick,
     isOpen = true,
     onClose,
-    disabled = false,
     children,
 }: {
     title: string;
@@ -17,7 +16,6 @@ export const Dialog = ({
     onClick: () => void;
     isOpen: boolean;
     onClose: () => void;
-    disabled?: boolean;
     children: JSX.Element;
 }) => {
     return (
@@ -49,7 +47,6 @@ export const Dialog = ({
                                 fullWidth
                                 onClick={onClick}
                                 data-testid='dialog-action-button'
-                                disabled={disabled}
                             >
                                 {callToAction}
                             </Button>
