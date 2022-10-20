@@ -17,6 +17,12 @@ jest.mock(
             children
 );
 
+const preloadedState = {
+    blockchain: {
+        chainError: true,
+    },
+};
+
 describe('Header component', () => {
     it('Should render the header', () => {
         (useRouter as jest.Mock).mockReturnValue({
@@ -54,5 +60,16 @@ describe('Header component', () => {
         expect(textElement.parentNode).toHaveClass(
             'bg-gradient-to-b from-tabGradient2 to-tabGradient1'
         );
+    });
+
+    it('should render a disabled connect wallet button on chainError', () => {
+        (useRouter as jest.Mock).mockImplementation(() => ({
+            pathname: '/',
+            push: jest.fn(),
+        }));
+
+        render(<Primary />, { preloadedState });
+        const button = screen.getByTestId('connect-wallet');
+        expect(button).toBeDisabled();
     });
 });
