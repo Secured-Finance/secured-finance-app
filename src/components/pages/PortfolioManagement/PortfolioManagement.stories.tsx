@@ -15,6 +15,33 @@ const fil = utils.formatBytes32String('FIL');
 const eth = utils.formatBytes32String('ETH');
 const btc = utils.formatBytes32String('BTC');
 
+const buyerTransactions = [
+    {
+        currency: fil,
+        side: '0',
+        maturity: '1733011200',
+        amount: '1000000000000000000000',
+        rate: '200000',
+    },
+    {
+        currency: btc,
+        side: '1',
+        maturity: '1733011200',
+        amount: '1000000000',
+        rate: '100000',
+    },
+];
+
+const sellerTransactions = [
+    {
+        currency: eth,
+        side: '1',
+        maturity: '1709251200',
+        amount: '100000000000000000000',
+        rate: '50000',
+    },
+];
+
 export default {
     title: 'Pages/PortfolioManagement',
     component: PortfolioManagement,
@@ -36,6 +63,13 @@ export default {
                             transactions: [],
                         },
                     },
+                    newData: () => {
+                        return {
+                            data: {
+                                transactions: [],
+                            },
+                        };
+                    },
                 },
                 {
                     request: {
@@ -50,6 +84,13 @@ export default {
                             transactions: [],
                         },
                     },
+                    newData: () => {
+                        return {
+                            data: {
+                                transactions: [],
+                            },
+                        };
+                    },
                 },
                 {
                     request: {
@@ -63,23 +104,15 @@ export default {
 
                     result: {
                         data: {
-                            transactions: [
-                                {
-                                    currency: fil,
-                                    side: '0',
-                                    maturity: '1733011200',
-                                    amount: '1000000000000000000000',
-                                    rate: '200000',
-                                },
-                                {
-                                    currency: btc,
-                                    side: '1',
-                                    maturity: '1733011200',
-                                    amount: '1000000000',
-                                    rate: '100000',
-                                },
-                            ],
+                            transactions: buyerTransactions,
                         },
+                    },
+                    newData: () => {
+                        return {
+                            data: {
+                                transactions: buyerTransactions,
+                            },
+                        };
                     },
                 },
                 {
@@ -93,16 +126,15 @@ export default {
                     },
                     result: {
                         data: {
-                            transactions: [
-                                {
-                                    currency: eth,
-                                    side: '1',
-                                    maturity: '1709251200',
-                                    amount: '100000000000000000000',
-                                    rate: '50000',
-                                },
-                            ],
+                            transactions: sellerTransactions,
                         },
+                    },
+                    newData: () => {
+                        return {
+                            data: {
+                                transactions: sellerTransactions,
+                            },
+                        };
                     },
                 },
             ],
