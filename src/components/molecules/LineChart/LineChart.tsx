@@ -141,8 +141,7 @@ export const LineChart = ({
                 triggerTooltip(chartRef.current, index);
             }
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [maturity]);
+    });
 
     return (
         <Line
