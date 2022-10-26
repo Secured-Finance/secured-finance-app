@@ -1,17 +1,2321 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`LineChart Component should render a LineChart 1`] = `
-[
-  {
-    "props": {
-      "a": 1,
-      "b": 0,
-      "c": 0,
-      "d": 1,
-      "e": 0,
-      "f": 0,
+CanvasRenderingContext2D {
+  "_canvas": <canvas
+    data-chromatic="ignore"
+    height="0"
+    role="img"
+    style="display: block; box-sizing: border-box; height: 0px; width: 0px;"
+    width="0"
+  />,
+  "_clipIndex": 1,
+  "_clipStack": [
+    [],
+  ],
+  "_directionStack": [
+    "inherit",
+  ],
+  "_drawCalls": [],
+  "_events": [
+    {
+      "props": {
+        "a": 1,
+        "b": 0,
+        "c": 0,
+        "d": 1,
+        "e": 0,
+        "f": 0,
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "setTransform",
     },
-    "transform": [
+    {
+      "props": {
+        "x0": 0,
+        "x1": 0,
+        "y0": 0,
+        "y1": 0,
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "createLinearGradient",
+    },
+    {
+      "props": {
+        "x0": 0,
+        "x1": 0,
+        "y0": 0,
+        "y1": 0,
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "createLinearGradient",
+    },
+    {
+      "props": {
+        "x0": 0,
+        "x1": 0,
+        "y0": 0,
+        "y1": 0,
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "createLinearGradient",
+    },
+    {
+      "props": {
+        "value": "12px "Helvetica Neue", 'Helvetica', 'Arial', sans-serif",
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "font",
+    },
+    {
+      "props": {
+        "value": "left",
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "textAlign",
+    },
+    {
+      "props": {
+        "value": "middle",
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "textBaseline",
+    },
+    {
+      "props": {
+        "text": "Borrow",
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "measureText",
+    },
+    {
+      "props": {
+        "value": "12px "Helvetica Neue", 'Helvetica', 'Arial', sans-serif",
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "font",
+    },
+    {
+      "props": {
+        "text": "0",
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "measureText",
+    },
+    {
+      "props": {
+        "value": "12px "Helvetica Neue", 'Helvetica', 'Arial', sans-serif",
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "font",
+    },
+    {
+      "props": {
+        "text": "50",
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "measureText",
+    },
+    {
+      "props": {
+        "x0": 0,
+        "x1": 0,
+        "y0": 0,
+        "y1": 0,
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "createLinearGradient",
+    },
+    {
+      "props": {
+        "value": "12px "Helvetica Neue", 'Helvetica', 'Arial', sans-serif",
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "font",
+    },
+    {
+      "props": {
+        "value": "left",
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "textAlign",
+    },
+    {
+      "props": {
+        "value": "middle",
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "textBaseline",
+    },
+    {
+      "props": {
+        "text": "Borrow",
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "measureText",
+    },
+    {
+      "props": {
+        "value": "12px "Helvetica Neue", 'Helvetica', 'Arial', sans-serif",
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "font",
+    },
+    {
+      "props": {
+        "text": "SEP22",
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "measureText",
+    },
+    {
+      "props": {
+        "value": "12px "Helvetica Neue", 'Helvetica', 'Arial', sans-serif",
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "font",
+    },
+    {
+      "props": {
+        "text": "DEC22",
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "measureText",
+    },
+    {
+      "props": {
+        "value": "12px "Helvetica Neue", 'Helvetica', 'Arial', sans-serif",
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "font",
+    },
+    {
+      "props": {
+        "text": "MAR23",
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "measureText",
+    },
+    {
+      "props": {
+        "value": "12px "Helvetica Neue", 'Helvetica', 'Arial', sans-serif",
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "font",
+    },
+    {
+      "props": {
+        "text": "JUN23",
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "measureText",
+    },
+    {
+      "props": {
+        "value": "12px "Helvetica Neue", 'Helvetica', 'Arial', sans-serif",
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "font",
+    },
+    {
+      "props": {
+        "text": "SEP23",
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "measureText",
+    },
+    {
+      "props": {
+        "value": "12px "Helvetica Neue", 'Helvetica', 'Arial', sans-serif",
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "font",
+    },
+    {
+      "props": {
+        "text": "DEC23",
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "measureText",
+    },
+    {
+      "props": {
+        "value": "12px "Helvetica Neue", 'Helvetica', 'Arial', sans-serif",
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "font",
+    },
+    {
+      "props": {
+        "text": "MAR24",
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "measureText",
+    },
+    {
+      "props": {
+        "value": "12px "Helvetica Neue", 'Helvetica', 'Arial', sans-serif",
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "font",
+    },
+    {
+      "props": {
+        "text": "JUN24",
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "measureText",
+    },
+    {
+      "props": {
+        "value": "12px "Helvetica Neue", 'Helvetica', 'Arial', sans-serif",
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "font",
+    },
+    {
+      "props": {
+        "x0": 0,
+        "x1": 0,
+        "y0": 0,
+        "y1": 0,
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "createLinearGradient",
+    },
+    {
+      "props": {
+        "x0": 0,
+        "x1": 0,
+        "y0": 0,
+        "y1": 0,
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "createLinearGradient",
+    },
+    {
+      "props": {
+        "x0": 0,
+        "x1": 0,
+        "y0": 0,
+        "y1": 0,
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "createLinearGradient",
+    },
+    {
+      "props": {
+        "x0": 0,
+        "x1": 0,
+        "y0": 0,
+        "y1": 0,
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "createLinearGradient",
+    },
+    {
+      "props": {
+        "x0": 0,
+        "x1": 0,
+        "y0": 0,
+        "y1": 0,
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "createLinearGradient",
+    },
+    {
+      "props": {
+        "x0": 0,
+        "x1": 0,
+        "y0": 0,
+        "y1": 0,
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "createLinearGradient",
+    },
+    {
+      "props": {
+        "x0": 0,
+        "x1": 0,
+        "y0": 0,
+        "y1": 0,
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "createLinearGradient",
+    },
+    {
+      "props": {
+        "x0": 0,
+        "x1": 0,
+        "y0": 0,
+        "y1": 0,
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "createLinearGradient",
+    },
+    {
+      "props": {
+        "x0": 0,
+        "x1": 0,
+        "y0": 0,
+        "y1": 0,
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "createLinearGradient",
+    },
+    {
+      "props": {
+        "x0": 0,
+        "x1": 0,
+        "y0": 0,
+        "y1": 0,
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "createLinearGradient",
+    },
+    {
+      "props": {
+        "x0": 0,
+        "x1": 0,
+        "y0": 0,
+        "y1": 0,
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "createLinearGradient",
+    },
+    {
+      "props": {
+        "x0": 0,
+        "x1": 0,
+        "y0": 0,
+        "y1": 0,
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "createLinearGradient",
+    },
+    {
+      "props": {
+        "x0": 0,
+        "x1": 0,
+        "y0": 0,
+        "y1": 0,
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "createLinearGradient",
+    },
+    {
+      "props": {
+        "x0": 0,
+        "x1": 0,
+        "y0": 0,
+        "y1": 0,
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "createLinearGradient",
+    },
+    {
+      "props": {
+        "x0": 0,
+        "x1": 0,
+        "y0": 0,
+        "y1": 0,
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "createLinearGradient",
+    },
+    {
+      "props": {
+        "x0": 0,
+        "x1": 0,
+        "y0": 0,
+        "y1": 0,
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "createLinearGradient",
+    },
+    {
+      "props": {
+        "x0": 0,
+        "x1": 0,
+        "y0": 0,
+        "y1": 0,
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "createLinearGradient",
+    },
+    {
+      "props": {
+        "x0": 0,
+        "x1": 0,
+        "y0": 0,
+        "y1": 0,
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "createLinearGradient",
+    },
+    {
+      "props": {
+        "x0": 0,
+        "x1": 0,
+        "y0": 0,
+        "y1": 0,
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "createLinearGradient",
+    },
+    {
+      "props": {
+        "x0": 0,
+        "x1": 0,
+        "y0": 0,
+        "y1": 0,
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "createLinearGradient",
+    },
+    {
+      "props": {
+        "x0": 0,
+        "x1": 0,
+        "y0": 0,
+        "y1": 0,
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "createLinearGradient",
+    },
+    {
+      "props": {
+        "x0": 0,
+        "x1": 0,
+        "y0": 0,
+        "y1": 0,
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "createLinearGradient",
+    },
+    {
+      "props": {
+        "x0": 0,
+        "x1": 0,
+        "y0": 0,
+        "y1": 0,
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "createLinearGradient",
+    },
+    {
+      "props": {
+        "x0": 0,
+        "x1": 0,
+        "y0": 0,
+        "y1": 0,
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "createLinearGradient",
+    },
+    {
+      "props": {
+        "x0": 0,
+        "x1": 0,
+        "y0": 0,
+        "y1": 0,
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "createLinearGradient",
+    },
+    {
+      "props": {
+        "x0": 0,
+        "x1": 0,
+        "y0": 0,
+        "y1": 0,
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "createLinearGradient",
+    },
+    {
+      "props": {
+        "x0": 0,
+        "x1": 0,
+        "y0": 0,
+        "y1": 0,
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "createLinearGradient",
+    },
+    {
+      "props": {
+        "x0": 0,
+        "x1": 0,
+        "y0": 0,
+        "y1": 0,
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "createLinearGradient",
+    },
+    {
+      "props": {
+        "value": "12px "Helvetica Neue", 'Helvetica', 'Arial', sans-serif",
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "font",
+    },
+    {
+      "props": {
+        "value": "left",
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "textAlign",
+    },
+    {
+      "props": {
+        "value": "middle",
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "textBaseline",
+    },
+    {
+      "props": {
+        "text": "Borrow",
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "measureText",
+    },
+    {
+      "props": {
+        "value": "12px "Helvetica Neue", 'Helvetica', 'Arial', sans-serif",
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "font",
+    },
+    {
+      "props": {
+        "value": "12px "Helvetica Neue", 'Helvetica', 'Arial', sans-serif",
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "font",
+    },
+    {
+      "props": {
+        "x0": 0,
+        "x1": 0,
+        "y0": 0,
+        "y1": 0,
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "createLinearGradient",
+    },
+    {
+      "props": {
+        "value": "12px "Helvetica Neue", 'Helvetica', 'Arial', sans-serif",
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "font",
+    },
+    {
+      "props": {
+        "value": "left",
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "textAlign",
+    },
+    {
+      "props": {
+        "value": "middle",
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "textBaseline",
+    },
+    {
+      "props": {
+        "text": "Borrow",
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "measureText",
+    },
+    {
+      "props": {
+        "value": "12px "Helvetica Neue", 'Helvetica', 'Arial', sans-serif",
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "font",
+    },
+    {
+      "props": {
+        "text": "SEP22",
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "measureText",
+    },
+    {
+      "props": {
+        "value": "12px "Helvetica Neue", 'Helvetica', 'Arial', sans-serif",
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "font",
+    },
+    {
+      "props": {
+        "text": "DEC22",
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "measureText",
+    },
+    {
+      "props": {
+        "value": "12px "Helvetica Neue", 'Helvetica', 'Arial', sans-serif",
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "font",
+    },
+    {
+      "props": {
+        "text": "MAR23",
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "measureText",
+    },
+    {
+      "props": {
+        "value": "12px "Helvetica Neue", 'Helvetica', 'Arial', sans-serif",
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "font",
+    },
+    {
+      "props": {
+        "text": "JUN23",
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "measureText",
+    },
+    {
+      "props": {
+        "value": "12px "Helvetica Neue", 'Helvetica', 'Arial', sans-serif",
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "font",
+    },
+    {
+      "props": {
+        "value": "12px "Helvetica Neue", 'Helvetica', 'Arial', sans-serif",
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "font",
+    },
+    {
+      "props": {
+        "value": "12px "Helvetica Neue", 'Helvetica', 'Arial', sans-serif",
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "font",
+    },
+    {
+      "props": {
+        "value": "12px "Helvetica Neue", 'Helvetica', 'Arial', sans-serif",
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "font",
+    },
+    {
+      "props": {
+        "value": "12px "Helvetica Neue", 'Helvetica', 'Arial', sans-serif",
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "font",
+    },
+    {
+      "props": {
+        "x0": 0,
+        "x1": 0,
+        "y0": 0,
+        "y1": 0,
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "createLinearGradient",
+    },
+    {
+      "props": {
+        "x0": 0,
+        "x1": 0,
+        "y0": 0,
+        "y1": 0,
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "createLinearGradient",
+    },
+    {
+      "props": {
+        "x0": 0,
+        "x1": 0,
+        "y0": 0,
+        "y1": 0,
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "createLinearGradient",
+    },
+    {
+      "props": {
+        "x0": 0,
+        "x1": 0,
+        "y0": 0,
+        "y1": 0,
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "createLinearGradient",
+    },
+    {
+      "props": {
+        "x0": 0,
+        "x1": 0,
+        "y0": 0,
+        "y1": 0,
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "createLinearGradient",
+    },
+    {
+      "props": {
+        "x0": 0,
+        "x1": 0,
+        "y0": 0,
+        "y1": 0,
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "createLinearGradient",
+    },
+    {
+      "props": {
+        "x0": 0,
+        "x1": 0,
+        "y0": 0,
+        "y1": 0,
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "createLinearGradient",
+    },
+    {
+      "props": {
+        "x0": 0,
+        "x1": 0,
+        "y0": 0,
+        "y1": 0,
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "createLinearGradient",
+    },
+    {
+      "props": {
+        "x0": 0,
+        "x1": 0,
+        "y0": 0,
+        "y1": 0,
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "createLinearGradient",
+    },
+    {
+      "props": {
+        "x0": 0,
+        "x1": 0,
+        "y0": 0,
+        "y1": 0,
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "createLinearGradient",
+    },
+    {
+      "props": {
+        "x0": 0,
+        "x1": 0,
+        "y0": 0,
+        "y1": 0,
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "createLinearGradient",
+    },
+    {
+      "props": {
+        "x0": 0,
+        "x1": 0,
+        "y0": 0,
+        "y1": 0,
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "createLinearGradient",
+    },
+    {
+      "props": {
+        "x0": 0,
+        "x1": 0,
+        "y0": 0,
+        "y1": 0,
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "createLinearGradient",
+    },
+    {
+      "props": {
+        "x0": 0,
+        "x1": 0,
+        "y0": 0,
+        "y1": 0,
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "createLinearGradient",
+    },
+    {
+      "props": {},
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "save",
+    },
+    {
+      "props": {
+        "value": "bold 12px "Helvetica Neue", 'Helvetica', 'Arial', sans-serif",
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "font",
+    },
+    {
+      "props": {
+        "value": "12px "Helvetica Neue", 'Helvetica', 'Arial', sans-serif",
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "font",
+    },
+    {
+      "props": {
+        "text": "50%",
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "measureText",
+    },
+    {
+      "props": {
+        "value": "bold 12px "Helvetica Neue", 'Helvetica', 'Arial', sans-serif",
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "font",
+    },
+    {
+      "props": {},
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "restore",
+    },
+    {
+      "props": {
+        "x0": 0,
+        "x1": 0,
+        "y0": 0,
+        "y1": 0,
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "createLinearGradient",
+    },
+    {
+      "props": {
+        "x0": 0,
+        "x1": 0,
+        "y0": 0,
+        "y1": 0,
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "createLinearGradient",
+    },
+    {
+      "props": {
+        "x0": 0,
+        "x1": 0,
+        "y0": 0,
+        "y1": 0,
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "createLinearGradient",
+    },
+    {
+      "props": {
+        "value": "12px "Helvetica Neue", 'Helvetica', 'Arial', sans-serif",
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "font",
+    },
+    {
+      "props": {
+        "value": "left",
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "textAlign",
+    },
+    {
+      "props": {
+        "value": "middle",
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "textBaseline",
+    },
+    {
+      "props": {
+        "text": "Borrow",
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "measureText",
+    },
+    {
+      "props": {
+        "value": "12px "Helvetica Neue", 'Helvetica', 'Arial', sans-serif",
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "font",
+    },
+    {
+      "props": {
+        "value": "12px "Helvetica Neue", 'Helvetica', 'Arial', sans-serif",
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "font",
+    },
+    {
+      "props": {
+        "x0": 0,
+        "x1": 0,
+        "y0": 0,
+        "y1": 0,
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "createLinearGradient",
+    },
+    {
+      "props": {
+        "value": "12px "Helvetica Neue", 'Helvetica', 'Arial', sans-serif",
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "font",
+    },
+    {
+      "props": {
+        "value": "left",
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "textAlign",
+    },
+    {
+      "props": {
+        "value": "middle",
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "textBaseline",
+    },
+    {
+      "props": {
+        "text": "Borrow",
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "measureText",
+    },
+    {
+      "props": {
+        "value": "12px "Helvetica Neue", 'Helvetica', 'Arial', sans-serif",
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "font",
+    },
+    {
+      "props": {
+        "value": "12px "Helvetica Neue", 'Helvetica', 'Arial', sans-serif",
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "font",
+    },
+    {
+      "props": {
+        "value": "12px "Helvetica Neue", 'Helvetica', 'Arial', sans-serif",
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "font",
+    },
+    {
+      "props": {
+        "value": "12px "Helvetica Neue", 'Helvetica', 'Arial', sans-serif",
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "font",
+    },
+    {
+      "props": {
+        "value": "12px "Helvetica Neue", 'Helvetica', 'Arial', sans-serif",
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "font",
+    },
+    {
+      "props": {
+        "text": "SEP23",
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "measureText",
+    },
+    {
+      "props": {
+        "value": "12px "Helvetica Neue", 'Helvetica', 'Arial', sans-serif",
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "font",
+    },
+    {
+      "props": {
+        "text": "DEC23",
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "measureText",
+    },
+    {
+      "props": {
+        "value": "12px "Helvetica Neue", 'Helvetica', 'Arial', sans-serif",
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "font",
+    },
+    {
+      "props": {
+        "text": "MAR24",
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "measureText",
+    },
+    {
+      "props": {
+        "value": "12px "Helvetica Neue", 'Helvetica', 'Arial', sans-serif",
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "font",
+    },
+    {
+      "props": {
+        "text": "JUN24",
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "measureText",
+    },
+    {
+      "props": {
+        "value": "12px "Helvetica Neue", 'Helvetica', 'Arial', sans-serif",
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "font",
+    },
+    {
+      "props": {
+        "x0": 0,
+        "x1": 0,
+        "y0": 0,
+        "y1": 0,
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "createLinearGradient",
+    },
+    {
+      "props": {
+        "x0": 0,
+        "x1": 0,
+        "y0": 0,
+        "y1": 0,
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "createLinearGradient",
+    },
+    {
+      "props": {
+        "x0": 0,
+        "x1": 0,
+        "y0": 0,
+        "y1": 0,
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "createLinearGradient",
+    },
+    {
+      "props": {
+        "x0": 0,
+        "x1": 0,
+        "y0": 0,
+        "y1": 0,
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "createLinearGradient",
+    },
+    {
+      "props": {
+        "x0": 0,
+        "x1": 0,
+        "y0": 0,
+        "y1": 0,
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "createLinearGradient",
+    },
+    {
+      "props": {
+        "x0": 0,
+        "x1": 0,
+        "y0": 0,
+        "y1": 0,
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "createLinearGradient",
+    },
+    {
+      "props": {
+        "x0": 0,
+        "x1": 0,
+        "y0": 0,
+        "y1": 0,
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "createLinearGradient",
+    },
+    {
+      "props": {
+        "x0": 0,
+        "x1": 0,
+        "y0": 0,
+        "y1": 0,
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "createLinearGradient",
+    },
+    {
+      "props": {
+        "x0": 0,
+        "x1": 0,
+        "y0": 0,
+        "y1": 0,
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "createLinearGradient",
+    },
+    {
+      "props": {
+        "x0": 0,
+        "x1": 0,
+        "y0": 0,
+        "y1": 0,
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "createLinearGradient",
+    },
+    {
+      "props": {
+        "x0": 0,
+        "x1": 0,
+        "y0": 0,
+        "y1": 0,
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "createLinearGradient",
+    },
+    {
+      "props": {
+        "x0": 0,
+        "x1": 0,
+        "y0": 0,
+        "y1": 0,
+      },
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "createLinearGradient",
+    },
+  ],
+  "_fillStyleStack": [
+    "#000000",
+  ],
+  "_filterStack": [
+    "none",
+  ],
+  "_fontStack": [
+    "12px "Helvetica Neue", 'Helvetica', 'Arial', sans-serif",
+  ],
+  "_globalAlphaStack": [
+    1,
+  ],
+  "_globalCompositeOperationStack": [
+    "source-over",
+  ],
+  "_imageSmoothingEnabledStack": [
+    true,
+  ],
+  "_imageSmoothingQualityStack": [
+    "low",
+  ],
+  "_lineCapStack": [
+    "butt",
+  ],
+  "_lineDashOffsetStack": [
+    0,
+  ],
+  "_lineDashStack": [
+    [],
+  ],
+  "_lineJoinStack": [
+    "miter",
+  ],
+  "_lineWidthStack": [
+    1,
+  ],
+  "_miterLimitStack": [
+    10,
+  ],
+  "_path": [
+    {
+      "props": {},
+      "transform": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "beginPath",
+    },
+  ],
+  "_shadowBlurStack": [
+    0,
+  ],
+  "_shadowColorStack": [
+    "rgba(0, 0, 0, 0)",
+  ],
+  "_shadowOffsetXStack": [
+    0,
+  ],
+  "_shadowOffsetYStack": [
+    0,
+  ],
+  "_stackIndex": 0,
+  "_strokeStyleStack": [
+    "#000000",
+  ],
+  "_textAlignStack": [
+    "left",
+  ],
+  "_textBaselineStack": [
+    "middle",
+  ],
+  "_transformStack": [
+    [
       1,
       0,
       0,
@@ -19,413 +2323,4188 @@ exports[`LineChart Component should render a LineChart 1`] = `
       0,
       0,
     ],
-    "type": "setTransform",
-  },
-  {
-    "props": {
-      "value": "12px "Helvetica Neue", 'Helvetica', 'Arial', sans-serif",
-    },
-    "transform": [
-      1,
-      0,
-      0,
-      1,
-      0,
-      0,
+  ],
+  "addHitRegion": [MockFunction],
+  "arc": [MockFunction],
+  "arcTo": [MockFunction],
+  "beginPath": [MockFunction],
+  "bezierCurveTo": [MockFunction],
+  "clearHitRegions": [MockFunction],
+  "clearRect": [MockFunction],
+  "clip": [MockFunction],
+  "closePath": [MockFunction],
+  "createImageData": [MockFunction],
+  "createLinearGradient": [MockFunction] {
+    "calls": [
+      [
+        0,
+        0,
+        0,
+        0,
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+      ],
     ],
-    "type": "font",
-  },
-  {
-    "props": {
-      "value": "left",
-    },
-    "transform": [
-      1,
-      0,
-      0,
-      1,
-      0,
-      0,
+    "results": [
+      {
+        "type": "return",
+        "value": CanvasGradient {
+          "addColorStop": [MockFunction] {
+            "calls": [
+              [
+                0,
+                "rgba(255, 89, 248, 0)",
+              ],
+              [
+                0.2,
+                "rgba(174, 114, 255, 1)",
+              ],
+              [
+                0.5,
+                "rgba(144, 233, 237, 1)",
+              ],
+              [
+                0.78,
+                "rgba(92, 209, 103, 1)",
+              ],
+              [
+                1,
+                "rgba(255, 238, 0, 0)",
+              ],
+            ],
+            "results": [
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+            ],
+          },
+        },
+      },
+      {
+        "type": "return",
+        "value": CanvasGradient {
+          "addColorStop": [MockFunction] {
+            "calls": [
+              [
+                0,
+                "rgba(255, 89, 248, 0)",
+              ],
+              [
+                0.2,
+                "rgba(174, 114, 255, 1)",
+              ],
+              [
+                0.5,
+                "rgba(144, 233, 237, 1)",
+              ],
+              [
+                0.78,
+                "rgba(92, 209, 103, 1)",
+              ],
+              [
+                1,
+                "rgba(255, 238, 0, 0)",
+              ],
+            ],
+            "results": [
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+            ],
+          },
+        },
+      },
+      {
+        "type": "return",
+        "value": CanvasGradient {
+          "addColorStop": [MockFunction] {
+            "calls": [
+              [
+                0,
+                "rgba(255, 89, 248, 0)",
+              ],
+              [
+                0.2,
+                "rgba(174, 114, 255, 1)",
+              ],
+              [
+                0.5,
+                "rgba(144, 233, 237, 1)",
+              ],
+              [
+                0.78,
+                "rgba(92, 209, 103, 1)",
+              ],
+              [
+                1,
+                "rgba(255, 238, 0, 0)",
+              ],
+            ],
+            "results": [
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+            ],
+          },
+        },
+      },
+      {
+        "type": "return",
+        "value": CanvasGradient {
+          "addColorStop": [MockFunction] {
+            "calls": [
+              [
+                0,
+                "rgba(255, 89, 248, 0)",
+              ],
+              [
+                0.2,
+                "rgba(174, 114, 255, 1)",
+              ],
+              [
+                0.5,
+                "rgba(144, 233, 237, 1)",
+              ],
+              [
+                0.78,
+                "rgba(92, 209, 103, 1)",
+              ],
+              [
+                1,
+                "rgba(255, 238, 0, 0)",
+              ],
+            ],
+            "results": [
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+            ],
+          },
+        },
+      },
+      {
+        "type": "return",
+        "value": CanvasGradient {
+          "addColorStop": [MockFunction] {
+            "calls": [
+              [
+                0,
+                "rgba(255, 89, 248, 0)",
+              ],
+              [
+                0.2,
+                "rgba(174, 114, 255, 1)",
+              ],
+              [
+                0.5,
+                "rgba(144, 233, 237, 1)",
+              ],
+              [
+                0.78,
+                "rgba(92, 209, 103, 1)",
+              ],
+              [
+                1,
+                "rgba(255, 238, 0, 0)",
+              ],
+            ],
+            "results": [
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+            ],
+          },
+        },
+      },
+      {
+        "type": "return",
+        "value": CanvasGradient {
+          "addColorStop": [MockFunction] {
+            "calls": [
+              [
+                0,
+                "rgba(255, 89, 248, 0)",
+              ],
+              [
+                0.2,
+                "rgba(174, 114, 255, 1)",
+              ],
+              [
+                0.5,
+                "rgba(144, 233, 237, 1)",
+              ],
+              [
+                0.78,
+                "rgba(92, 209, 103, 1)",
+              ],
+              [
+                1,
+                "rgba(255, 238, 0, 0)",
+              ],
+            ],
+            "results": [
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+            ],
+          },
+        },
+      },
+      {
+        "type": "return",
+        "value": CanvasGradient {
+          "addColorStop": [MockFunction] {
+            "calls": [
+              [
+                0,
+                "rgba(255, 89, 248, 0)",
+              ],
+              [
+                0.2,
+                "rgba(174, 114, 255, 1)",
+              ],
+              [
+                0.5,
+                "rgba(144, 233, 237, 1)",
+              ],
+              [
+                0.78,
+                "rgba(92, 209, 103, 1)",
+              ],
+              [
+                1,
+                "rgba(255, 238, 0, 0)",
+              ],
+            ],
+            "results": [
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+            ],
+          },
+        },
+      },
+      {
+        "type": "return",
+        "value": CanvasGradient {
+          "addColorStop": [MockFunction] {
+            "calls": [
+              [
+                0,
+                "rgba(255, 89, 248, 0)",
+              ],
+              [
+                0.2,
+                "rgba(174, 114, 255, 1)",
+              ],
+              [
+                0.5,
+                "rgba(144, 233, 237, 1)",
+              ],
+              [
+                0.78,
+                "rgba(92, 209, 103, 1)",
+              ],
+              [
+                1,
+                "rgba(255, 238, 0, 0)",
+              ],
+            ],
+            "results": [
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+            ],
+          },
+        },
+      },
+      {
+        "type": "return",
+        "value": CanvasGradient {
+          "addColorStop": [MockFunction] {
+            "calls": [
+              [
+                0,
+                "rgba(255, 89, 248, 0)",
+              ],
+              [
+                0.2,
+                "rgba(174, 114, 255, 1)",
+              ],
+              [
+                0.5,
+                "rgba(144, 233, 237, 1)",
+              ],
+              [
+                0.78,
+                "rgba(92, 209, 103, 1)",
+              ],
+              [
+                1,
+                "rgba(255, 238, 0, 0)",
+              ],
+            ],
+            "results": [
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+            ],
+          },
+        },
+      },
+      {
+        "type": "return",
+        "value": CanvasGradient {
+          "addColorStop": [MockFunction] {
+            "calls": [
+              [
+                0,
+                "rgba(255, 89, 248, 0)",
+              ],
+              [
+                0.2,
+                "rgba(174, 114, 255, 1)",
+              ],
+              [
+                0.5,
+                "rgba(144, 233, 237, 1)",
+              ],
+              [
+                0.78,
+                "rgba(92, 209, 103, 1)",
+              ],
+              [
+                1,
+                "rgba(255, 238, 0, 0)",
+              ],
+            ],
+            "results": [
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+            ],
+          },
+        },
+      },
+      {
+        "type": "return",
+        "value": CanvasGradient {
+          "addColorStop": [MockFunction] {
+            "calls": [
+              [
+                0,
+                "rgba(255, 89, 248, 0)",
+              ],
+              [
+                0.2,
+                "rgba(174, 114, 255, 1)",
+              ],
+              [
+                0.5,
+                "rgba(144, 233, 237, 1)",
+              ],
+              [
+                0.78,
+                "rgba(92, 209, 103, 1)",
+              ],
+              [
+                1,
+                "rgba(255, 238, 0, 0)",
+              ],
+            ],
+            "results": [
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+            ],
+          },
+        },
+      },
+      {
+        "type": "return",
+        "value": CanvasGradient {
+          "addColorStop": [MockFunction] {
+            "calls": [
+              [
+                0,
+                "rgba(255, 89, 248, 0)",
+              ],
+              [
+                0.2,
+                "rgba(174, 114, 255, 1)",
+              ],
+              [
+                0.5,
+                "rgba(144, 233, 237, 1)",
+              ],
+              [
+                0.78,
+                "rgba(92, 209, 103, 1)",
+              ],
+              [
+                1,
+                "rgba(255, 238, 0, 0)",
+              ],
+            ],
+            "results": [
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+            ],
+          },
+        },
+      },
+      {
+        "type": "return",
+        "value": CanvasGradient {
+          "addColorStop": [MockFunction] {
+            "calls": [
+              [
+                0,
+                "rgba(255, 89, 248, 0)",
+              ],
+              [
+                0.2,
+                "rgba(174, 114, 255, 1)",
+              ],
+              [
+                0.5,
+                "rgba(144, 233, 237, 1)",
+              ],
+              [
+                0.78,
+                "rgba(92, 209, 103, 1)",
+              ],
+              [
+                1,
+                "rgba(255, 238, 0, 0)",
+              ],
+            ],
+            "results": [
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+            ],
+          },
+        },
+      },
+      {
+        "type": "return",
+        "value": CanvasGradient {
+          "addColorStop": [MockFunction] {
+            "calls": [
+              [
+                0,
+                "rgba(255, 89, 248, 0)",
+              ],
+              [
+                0.2,
+                "rgba(174, 114, 255, 1)",
+              ],
+              [
+                0.5,
+                "rgba(144, 233, 237, 1)",
+              ],
+              [
+                0.78,
+                "rgba(92, 209, 103, 1)",
+              ],
+              [
+                1,
+                "rgba(255, 238, 0, 0)",
+              ],
+            ],
+            "results": [
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+            ],
+          },
+        },
+      },
+      {
+        "type": "return",
+        "value": CanvasGradient {
+          "addColorStop": [MockFunction] {
+            "calls": [
+              [
+                0,
+                "rgba(255, 89, 248, 0)",
+              ],
+              [
+                0.2,
+                "rgba(174, 114, 255, 1)",
+              ],
+              [
+                0.5,
+                "rgba(144, 233, 237, 1)",
+              ],
+              [
+                0.78,
+                "rgba(92, 209, 103, 1)",
+              ],
+              [
+                1,
+                "rgba(255, 238, 0, 0)",
+              ],
+            ],
+            "results": [
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+            ],
+          },
+        },
+      },
+      {
+        "type": "return",
+        "value": CanvasGradient {
+          "addColorStop": [MockFunction] {
+            "calls": [
+              [
+                0,
+                "rgba(255, 89, 248, 0)",
+              ],
+              [
+                0.2,
+                "rgba(174, 114, 255, 1)",
+              ],
+              [
+                0.5,
+                "rgba(144, 233, 237, 1)",
+              ],
+              [
+                0.78,
+                "rgba(92, 209, 103, 1)",
+              ],
+              [
+                1,
+                "rgba(255, 238, 0, 0)",
+              ],
+            ],
+            "results": [
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+            ],
+          },
+        },
+      },
+      {
+        "type": "return",
+        "value": CanvasGradient {
+          "addColorStop": [MockFunction] {
+            "calls": [
+              [
+                0,
+                "rgba(255, 89, 248, 0)",
+              ],
+              [
+                0.2,
+                "rgba(174, 114, 255, 1)",
+              ],
+              [
+                0.5,
+                "rgba(144, 233, 237, 1)",
+              ],
+              [
+                0.78,
+                "rgba(92, 209, 103, 1)",
+              ],
+              [
+                1,
+                "rgba(255, 238, 0, 0)",
+              ],
+            ],
+            "results": [
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+            ],
+          },
+        },
+      },
+      {
+        "type": "return",
+        "value": CanvasGradient {
+          "addColorStop": [MockFunction] {
+            "calls": [
+              [
+                0,
+                "rgba(255, 89, 248, 0)",
+              ],
+              [
+                0.2,
+                "rgba(174, 114, 255, 1)",
+              ],
+              [
+                0.5,
+                "rgba(144, 233, 237, 1)",
+              ],
+              [
+                0.78,
+                "rgba(92, 209, 103, 1)",
+              ],
+              [
+                1,
+                "rgba(255, 238, 0, 0)",
+              ],
+            ],
+            "results": [
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+            ],
+          },
+        },
+      },
+      {
+        "type": "return",
+        "value": CanvasGradient {
+          "addColorStop": [MockFunction] {
+            "calls": [
+              [
+                0,
+                "rgba(255, 89, 248, 0)",
+              ],
+              [
+                0.2,
+                "rgba(174, 114, 255, 1)",
+              ],
+              [
+                0.5,
+                "rgba(144, 233, 237, 1)",
+              ],
+              [
+                0.78,
+                "rgba(92, 209, 103, 1)",
+              ],
+              [
+                1,
+                "rgba(255, 238, 0, 0)",
+              ],
+            ],
+            "results": [
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+            ],
+          },
+        },
+      },
+      {
+        "type": "return",
+        "value": CanvasGradient {
+          "addColorStop": [MockFunction] {
+            "calls": [
+              [
+                0,
+                "rgba(255, 89, 248, 0)",
+              ],
+              [
+                0.2,
+                "rgba(174, 114, 255, 1)",
+              ],
+              [
+                0.5,
+                "rgba(144, 233, 237, 1)",
+              ],
+              [
+                0.78,
+                "rgba(92, 209, 103, 1)",
+              ],
+              [
+                1,
+                "rgba(255, 238, 0, 0)",
+              ],
+            ],
+            "results": [
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+            ],
+          },
+        },
+      },
+      {
+        "type": "return",
+        "value": CanvasGradient {
+          "addColorStop": [MockFunction] {
+            "calls": [
+              [
+                0,
+                "rgba(255, 89, 248, 0)",
+              ],
+              [
+                0.2,
+                "rgba(174, 114, 255, 1)",
+              ],
+              [
+                0.5,
+                "rgba(144, 233, 237, 1)",
+              ],
+              [
+                0.78,
+                "rgba(92, 209, 103, 1)",
+              ],
+              [
+                1,
+                "rgba(255, 238, 0, 0)",
+              ],
+            ],
+            "results": [
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+            ],
+          },
+        },
+      },
+      {
+        "type": "return",
+        "value": CanvasGradient {
+          "addColorStop": [MockFunction] {
+            "calls": [
+              [
+                0,
+                "rgba(255, 89, 248, 0)",
+              ],
+              [
+                0.2,
+                "rgba(174, 114, 255, 1)",
+              ],
+              [
+                0.5,
+                "rgba(144, 233, 237, 1)",
+              ],
+              [
+                0.78,
+                "rgba(92, 209, 103, 1)",
+              ],
+              [
+                1,
+                "rgba(255, 238, 0, 0)",
+              ],
+            ],
+            "results": [
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+            ],
+          },
+        },
+      },
+      {
+        "type": "return",
+        "value": CanvasGradient {
+          "addColorStop": [MockFunction] {
+            "calls": [
+              [
+                0,
+                "rgba(255, 89, 248, 0)",
+              ],
+              [
+                0.2,
+                "rgba(174, 114, 255, 1)",
+              ],
+              [
+                0.5,
+                "rgba(144, 233, 237, 1)",
+              ],
+              [
+                0.78,
+                "rgba(92, 209, 103, 1)",
+              ],
+              [
+                1,
+                "rgba(255, 238, 0, 0)",
+              ],
+            ],
+            "results": [
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+            ],
+          },
+        },
+      },
+      {
+        "type": "return",
+        "value": CanvasGradient {
+          "addColorStop": [MockFunction] {
+            "calls": [
+              [
+                0,
+                "rgba(255, 89, 248, 0)",
+              ],
+              [
+                0.2,
+                "rgba(174, 114, 255, 1)",
+              ],
+              [
+                0.5,
+                "rgba(144, 233, 237, 1)",
+              ],
+              [
+                0.78,
+                "rgba(92, 209, 103, 1)",
+              ],
+              [
+                1,
+                "rgba(255, 238, 0, 0)",
+              ],
+            ],
+            "results": [
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+            ],
+          },
+        },
+      },
+      {
+        "type": "return",
+        "value": CanvasGradient {
+          "addColorStop": [MockFunction] {
+            "calls": [
+              [
+                0,
+                "rgba(255, 89, 248, 0)",
+              ],
+              [
+                0.2,
+                "rgba(174, 114, 255, 1)",
+              ],
+              [
+                0.5,
+                "rgba(144, 233, 237, 1)",
+              ],
+              [
+                0.78,
+                "rgba(92, 209, 103, 1)",
+              ],
+              [
+                1,
+                "rgba(255, 238, 0, 0)",
+              ],
+            ],
+            "results": [
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+            ],
+          },
+        },
+      },
+      {
+        "type": "return",
+        "value": CanvasGradient {
+          "addColorStop": [MockFunction] {
+            "calls": [
+              [
+                0,
+                "rgba(255, 89, 248, 0)",
+              ],
+              [
+                0.2,
+                "rgba(174, 114, 255, 1)",
+              ],
+              [
+                0.5,
+                "rgba(144, 233, 237, 1)",
+              ],
+              [
+                0.78,
+                "rgba(92, 209, 103, 1)",
+              ],
+              [
+                1,
+                "rgba(255, 238, 0, 0)",
+              ],
+            ],
+            "results": [
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+            ],
+          },
+        },
+      },
+      {
+        "type": "return",
+        "value": CanvasGradient {
+          "addColorStop": [MockFunction] {
+            "calls": [
+              [
+                0,
+                "rgba(255, 89, 248, 0)",
+              ],
+              [
+                0.2,
+                "rgba(174, 114, 255, 1)",
+              ],
+              [
+                0.5,
+                "rgba(144, 233, 237, 1)",
+              ],
+              [
+                0.78,
+                "rgba(92, 209, 103, 1)",
+              ],
+              [
+                1,
+                "rgba(255, 238, 0, 0)",
+              ],
+            ],
+            "results": [
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+            ],
+          },
+        },
+      },
+      {
+        "type": "return",
+        "value": CanvasGradient {
+          "addColorStop": [MockFunction] {
+            "calls": [
+              [
+                0,
+                "rgba(255, 89, 248, 0)",
+              ],
+              [
+                0.2,
+                "rgba(174, 114, 255, 1)",
+              ],
+              [
+                0.5,
+                "rgba(144, 233, 237, 1)",
+              ],
+              [
+                0.78,
+                "rgba(92, 209, 103, 1)",
+              ],
+              [
+                1,
+                "rgba(255, 238, 0, 0)",
+              ],
+            ],
+            "results": [
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+            ],
+          },
+        },
+      },
+      {
+        "type": "return",
+        "value": CanvasGradient {
+          "addColorStop": [MockFunction] {
+            "calls": [
+              [
+                0,
+                "rgba(255, 89, 248, 0)",
+              ],
+              [
+                0.2,
+                "rgba(174, 114, 255, 1)",
+              ],
+              [
+                0.5,
+                "rgba(144, 233, 237, 1)",
+              ],
+              [
+                0.78,
+                "rgba(92, 209, 103, 1)",
+              ],
+              [
+                1,
+                "rgba(255, 238, 0, 0)",
+              ],
+            ],
+            "results": [
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+            ],
+          },
+        },
+      },
+      {
+        "type": "return",
+        "value": CanvasGradient {
+          "addColorStop": [MockFunction] {
+            "calls": [
+              [
+                0,
+                "rgba(255, 89, 248, 0)",
+              ],
+              [
+                0.2,
+                "rgba(174, 114, 255, 1)",
+              ],
+              [
+                0.5,
+                "rgba(144, 233, 237, 1)",
+              ],
+              [
+                0.78,
+                "rgba(92, 209, 103, 1)",
+              ],
+              [
+                1,
+                "rgba(255, 238, 0, 0)",
+              ],
+            ],
+            "results": [
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+            ],
+          },
+        },
+      },
+      {
+        "type": "return",
+        "value": CanvasGradient {
+          "addColorStop": [MockFunction] {
+            "calls": [
+              [
+                0,
+                "rgba(255, 89, 248, 0)",
+              ],
+              [
+                0.2,
+                "rgba(174, 114, 255, 1)",
+              ],
+              [
+                0.5,
+                "rgba(144, 233, 237, 1)",
+              ],
+              [
+                0.78,
+                "rgba(92, 209, 103, 1)",
+              ],
+              [
+                1,
+                "rgba(255, 238, 0, 0)",
+              ],
+            ],
+            "results": [
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+            ],
+          },
+        },
+      },
+      {
+        "type": "return",
+        "value": CanvasGradient {
+          "addColorStop": [MockFunction] {
+            "calls": [
+              [
+                0,
+                "rgba(255, 89, 248, 0)",
+              ],
+              [
+                0.2,
+                "rgba(174, 114, 255, 1)",
+              ],
+              [
+                0.5,
+                "rgba(144, 233, 237, 1)",
+              ],
+              [
+                0.78,
+                "rgba(92, 209, 103, 1)",
+              ],
+              [
+                1,
+                "rgba(255, 238, 0, 0)",
+              ],
+            ],
+            "results": [
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+            ],
+          },
+        },
+      },
+      {
+        "type": "return",
+        "value": CanvasGradient {
+          "addColorStop": [MockFunction] {
+            "calls": [
+              [
+                0,
+                "rgba(255, 89, 248, 0)",
+              ],
+              [
+                0.2,
+                "rgba(174, 114, 255, 1)",
+              ],
+              [
+                0.5,
+                "rgba(144, 233, 237, 1)",
+              ],
+              [
+                0.78,
+                "rgba(92, 209, 103, 1)",
+              ],
+              [
+                1,
+                "rgba(255, 238, 0, 0)",
+              ],
+            ],
+            "results": [
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+            ],
+          },
+        },
+      },
+      {
+        "type": "return",
+        "value": CanvasGradient {
+          "addColorStop": [MockFunction] {
+            "calls": [
+              [
+                0,
+                "rgba(255, 89, 248, 0)",
+              ],
+              [
+                0.2,
+                "rgba(174, 114, 255, 1)",
+              ],
+              [
+                0.5,
+                "rgba(144, 233, 237, 1)",
+              ],
+              [
+                0.78,
+                "rgba(92, 209, 103, 1)",
+              ],
+              [
+                1,
+                "rgba(255, 238, 0, 0)",
+              ],
+            ],
+            "results": [
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+            ],
+          },
+        },
+      },
+      {
+        "type": "return",
+        "value": CanvasGradient {
+          "addColorStop": [MockFunction] {
+            "calls": [
+              [
+                0,
+                "rgba(255, 89, 248, 0)",
+              ],
+              [
+                0.2,
+                "rgba(174, 114, 255, 1)",
+              ],
+              [
+                0.5,
+                "rgba(144, 233, 237, 1)",
+              ],
+              [
+                0.78,
+                "rgba(92, 209, 103, 1)",
+              ],
+              [
+                1,
+                "rgba(255, 238, 0, 0)",
+              ],
+            ],
+            "results": [
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+            ],
+          },
+        },
+      },
+      {
+        "type": "return",
+        "value": CanvasGradient {
+          "addColorStop": [MockFunction] {
+            "calls": [
+              [
+                0,
+                "rgba(255, 89, 248, 0)",
+              ],
+              [
+                0.2,
+                "rgba(174, 114, 255, 1)",
+              ],
+              [
+                0.5,
+                "rgba(144, 233, 237, 1)",
+              ],
+              [
+                0.78,
+                "rgba(92, 209, 103, 1)",
+              ],
+              [
+                1,
+                "rgba(255, 238, 0, 0)",
+              ],
+            ],
+            "results": [
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+            ],
+          },
+        },
+      },
+      {
+        "type": "return",
+        "value": CanvasGradient {
+          "addColorStop": [MockFunction] {
+            "calls": [
+              [
+                0,
+                "rgba(255, 89, 248, 0)",
+              ],
+              [
+                0.2,
+                "rgba(174, 114, 255, 1)",
+              ],
+              [
+                0.5,
+                "rgba(144, 233, 237, 1)",
+              ],
+              [
+                0.78,
+                "rgba(92, 209, 103, 1)",
+              ],
+              [
+                1,
+                "rgba(255, 238, 0, 0)",
+              ],
+            ],
+            "results": [
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+            ],
+          },
+        },
+      },
+      {
+        "type": "return",
+        "value": CanvasGradient {
+          "addColorStop": [MockFunction] {
+            "calls": [
+              [
+                0,
+                "rgba(255, 89, 248, 0)",
+              ],
+              [
+                0.2,
+                "rgba(174, 114, 255, 1)",
+              ],
+              [
+                0.5,
+                "rgba(144, 233, 237, 1)",
+              ],
+              [
+                0.78,
+                "rgba(92, 209, 103, 1)",
+              ],
+              [
+                1,
+                "rgba(255, 238, 0, 0)",
+              ],
+            ],
+            "results": [
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+            ],
+          },
+        },
+      },
+      {
+        "type": "return",
+        "value": CanvasGradient {
+          "addColorStop": [MockFunction] {
+            "calls": [
+              [
+                0,
+                "rgba(255, 89, 248, 0)",
+              ],
+              [
+                0.2,
+                "rgba(174, 114, 255, 1)",
+              ],
+              [
+                0.5,
+                "rgba(144, 233, 237, 1)",
+              ],
+              [
+                0.78,
+                "rgba(92, 209, 103, 1)",
+              ],
+              [
+                1,
+                "rgba(255, 238, 0, 0)",
+              ],
+            ],
+            "results": [
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+            ],
+          },
+        },
+      },
+      {
+        "type": "return",
+        "value": CanvasGradient {
+          "addColorStop": [MockFunction] {
+            "calls": [
+              [
+                0,
+                "rgba(255, 89, 248, 0)",
+              ],
+              [
+                0.2,
+                "rgba(174, 114, 255, 1)",
+              ],
+              [
+                0.5,
+                "rgba(144, 233, 237, 1)",
+              ],
+              [
+                0.78,
+                "rgba(92, 209, 103, 1)",
+              ],
+              [
+                1,
+                "rgba(255, 238, 0, 0)",
+              ],
+            ],
+            "results": [
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+            ],
+          },
+        },
+      },
+      {
+        "type": "return",
+        "value": CanvasGradient {
+          "addColorStop": [MockFunction] {
+            "calls": [
+              [
+                0,
+                "rgba(255, 89, 248, 0)",
+              ],
+              [
+                0.2,
+                "rgba(174, 114, 255, 1)",
+              ],
+              [
+                0.5,
+                "rgba(144, 233, 237, 1)",
+              ],
+              [
+                0.78,
+                "rgba(92, 209, 103, 1)",
+              ],
+              [
+                1,
+                "rgba(255, 238, 0, 0)",
+              ],
+            ],
+            "results": [
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+            ],
+          },
+        },
+      },
+      {
+        "type": "return",
+        "value": CanvasGradient {
+          "addColorStop": [MockFunction] {
+            "calls": [
+              [
+                0,
+                "rgba(255, 89, 248, 0)",
+              ],
+              [
+                0.2,
+                "rgba(174, 114, 255, 1)",
+              ],
+              [
+                0.5,
+                "rgba(144, 233, 237, 1)",
+              ],
+              [
+                0.78,
+                "rgba(92, 209, 103, 1)",
+              ],
+              [
+                1,
+                "rgba(255, 238, 0, 0)",
+              ],
+            ],
+            "results": [
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+            ],
+          },
+        },
+      },
+      {
+        "type": "return",
+        "value": CanvasGradient {
+          "addColorStop": [MockFunction] {
+            "calls": [
+              [
+                0,
+                "rgba(255, 89, 248, 0)",
+              ],
+              [
+                0.2,
+                "rgba(174, 114, 255, 1)",
+              ],
+              [
+                0.5,
+                "rgba(144, 233, 237, 1)",
+              ],
+              [
+                0.78,
+                "rgba(92, 209, 103, 1)",
+              ],
+              [
+                1,
+                "rgba(255, 238, 0, 0)",
+              ],
+            ],
+            "results": [
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+            ],
+          },
+        },
+      },
+      {
+        "type": "return",
+        "value": CanvasGradient {
+          "addColorStop": [MockFunction] {
+            "calls": [
+              [
+                0,
+                "rgba(255, 89, 248, 0)",
+              ],
+              [
+                0.2,
+                "rgba(174, 114, 255, 1)",
+              ],
+              [
+                0.5,
+                "rgba(144, 233, 237, 1)",
+              ],
+              [
+                0.78,
+                "rgba(92, 209, 103, 1)",
+              ],
+              [
+                1,
+                "rgba(255, 238, 0, 0)",
+              ],
+            ],
+            "results": [
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+            ],
+          },
+        },
+      },
+      {
+        "type": "return",
+        "value": CanvasGradient {
+          "addColorStop": [MockFunction] {
+            "calls": [
+              [
+                0,
+                "rgba(255, 89, 248, 0)",
+              ],
+              [
+                0.2,
+                "rgba(174, 114, 255, 1)",
+              ],
+              [
+                0.5,
+                "rgba(144, 233, 237, 1)",
+              ],
+              [
+                0.78,
+                "rgba(92, 209, 103, 1)",
+              ],
+              [
+                1,
+                "rgba(255, 238, 0, 0)",
+              ],
+            ],
+            "results": [
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+            ],
+          },
+        },
+      },
+      {
+        "type": "return",
+        "value": CanvasGradient {
+          "addColorStop": [MockFunction] {
+            "calls": [
+              [
+                0,
+                "rgba(255, 89, 248, 0)",
+              ],
+              [
+                0.2,
+                "rgba(174, 114, 255, 1)",
+              ],
+              [
+                0.5,
+                "rgba(144, 233, 237, 1)",
+              ],
+              [
+                0.78,
+                "rgba(92, 209, 103, 1)",
+              ],
+              [
+                1,
+                "rgba(255, 238, 0, 0)",
+              ],
+            ],
+            "results": [
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+            ],
+          },
+        },
+      },
+      {
+        "type": "return",
+        "value": CanvasGradient {
+          "addColorStop": [MockFunction] {
+            "calls": [
+              [
+                0,
+                "rgba(255, 89, 248, 0)",
+              ],
+              [
+                0.2,
+                "rgba(174, 114, 255, 1)",
+              ],
+              [
+                0.5,
+                "rgba(144, 233, 237, 1)",
+              ],
+              [
+                0.78,
+                "rgba(92, 209, 103, 1)",
+              ],
+              [
+                1,
+                "rgba(255, 238, 0, 0)",
+              ],
+            ],
+            "results": [
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+            ],
+          },
+        },
+      },
+      {
+        "type": "return",
+        "value": CanvasGradient {
+          "addColorStop": [MockFunction] {
+            "calls": [
+              [
+                0,
+                "rgba(255, 89, 248, 0)",
+              ],
+              [
+                0.2,
+                "rgba(174, 114, 255, 1)",
+              ],
+              [
+                0.5,
+                "rgba(144, 233, 237, 1)",
+              ],
+              [
+                0.78,
+                "rgba(92, 209, 103, 1)",
+              ],
+              [
+                1,
+                "rgba(255, 238, 0, 0)",
+              ],
+            ],
+            "results": [
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+            ],
+          },
+        },
+      },
+      {
+        "type": "return",
+        "value": CanvasGradient {
+          "addColorStop": [MockFunction] {
+            "calls": [
+              [
+                0,
+                "rgba(255, 89, 248, 0)",
+              ],
+              [
+                0.2,
+                "rgba(174, 114, 255, 1)",
+              ],
+              [
+                0.5,
+                "rgba(144, 233, 237, 1)",
+              ],
+              [
+                0.78,
+                "rgba(92, 209, 103, 1)",
+              ],
+              [
+                1,
+                "rgba(255, 238, 0, 0)",
+              ],
+            ],
+            "results": [
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+            ],
+          },
+        },
+      },
+      {
+        "type": "return",
+        "value": CanvasGradient {
+          "addColorStop": [MockFunction] {
+            "calls": [
+              [
+                0,
+                "rgba(255, 89, 248, 0)",
+              ],
+              [
+                0.2,
+                "rgba(174, 114, 255, 1)",
+              ],
+              [
+                0.5,
+                "rgba(144, 233, 237, 1)",
+              ],
+              [
+                0.78,
+                "rgba(92, 209, 103, 1)",
+              ],
+              [
+                1,
+                "rgba(255, 238, 0, 0)",
+              ],
+            ],
+            "results": [
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+            ],
+          },
+        },
+      },
+      {
+        "type": "return",
+        "value": CanvasGradient {
+          "addColorStop": [MockFunction] {
+            "calls": [
+              [
+                0,
+                "rgba(255, 89, 248, 0)",
+              ],
+              [
+                0.2,
+                "rgba(174, 114, 255, 1)",
+              ],
+              [
+                0.5,
+                "rgba(144, 233, 237, 1)",
+              ],
+              [
+                0.78,
+                "rgba(92, 209, 103, 1)",
+              ],
+              [
+                1,
+                "rgba(255, 238, 0, 0)",
+              ],
+            ],
+            "results": [
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+            ],
+          },
+        },
+      },
+      {
+        "type": "return",
+        "value": CanvasGradient {
+          "addColorStop": [MockFunction] {
+            "calls": [
+              [
+                0,
+                "rgba(255, 89, 248, 0)",
+              ],
+              [
+                0.2,
+                "rgba(174, 114, 255, 1)",
+              ],
+              [
+                0.5,
+                "rgba(144, 233, 237, 1)",
+              ],
+              [
+                0.78,
+                "rgba(92, 209, 103, 1)",
+              ],
+              [
+                1,
+                "rgba(255, 238, 0, 0)",
+              ],
+            ],
+            "results": [
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+            ],
+          },
+        },
+      },
+      {
+        "type": "return",
+        "value": CanvasGradient {
+          "addColorStop": [MockFunction] {
+            "calls": [
+              [
+                0,
+                "rgba(255, 89, 248, 0)",
+              ],
+              [
+                0.2,
+                "rgba(174, 114, 255, 1)",
+              ],
+              [
+                0.5,
+                "rgba(144, 233, 237, 1)",
+              ],
+              [
+                0.78,
+                "rgba(92, 209, 103, 1)",
+              ],
+              [
+                1,
+                "rgba(255, 238, 0, 0)",
+              ],
+            ],
+            "results": [
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+            ],
+          },
+        },
+      },
+      {
+        "type": "return",
+        "value": CanvasGradient {
+          "addColorStop": [MockFunction] {
+            "calls": [
+              [
+                0,
+                "rgba(255, 89, 248, 0)",
+              ],
+              [
+                0.2,
+                "rgba(174, 114, 255, 1)",
+              ],
+              [
+                0.5,
+                "rgba(144, 233, 237, 1)",
+              ],
+              [
+                0.78,
+                "rgba(92, 209, 103, 1)",
+              ],
+              [
+                1,
+                "rgba(255, 238, 0, 0)",
+              ],
+            ],
+            "results": [
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+            ],
+          },
+        },
+      },
+      {
+        "type": "return",
+        "value": CanvasGradient {
+          "addColorStop": [MockFunction] {
+            "calls": [
+              [
+                0,
+                "rgba(255, 89, 248, 0)",
+              ],
+              [
+                0.2,
+                "rgba(174, 114, 255, 1)",
+              ],
+              [
+                0.5,
+                "rgba(144, 233, 237, 1)",
+              ],
+              [
+                0.78,
+                "rgba(92, 209, 103, 1)",
+              ],
+              [
+                1,
+                "rgba(255, 238, 0, 0)",
+              ],
+            ],
+            "results": [
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+            ],
+          },
+        },
+      },
+      {
+        "type": "return",
+        "value": CanvasGradient {
+          "addColorStop": [MockFunction] {
+            "calls": [
+              [
+                0,
+                "rgba(255, 89, 248, 0)",
+              ],
+              [
+                0.2,
+                "rgba(174, 114, 255, 1)",
+              ],
+              [
+                0.5,
+                "rgba(144, 233, 237, 1)",
+              ],
+              [
+                0.78,
+                "rgba(92, 209, 103, 1)",
+              ],
+              [
+                1,
+                "rgba(255, 238, 0, 0)",
+              ],
+            ],
+            "results": [
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+            ],
+          },
+        },
+      },
+      {
+        "type": "return",
+        "value": CanvasGradient {
+          "addColorStop": [MockFunction] {
+            "calls": [
+              [
+                0,
+                "rgba(255, 89, 248, 0)",
+              ],
+              [
+                0.2,
+                "rgba(174, 114, 255, 1)",
+              ],
+              [
+                0.5,
+                "rgba(144, 233, 237, 1)",
+              ],
+              [
+                0.78,
+                "rgba(92, 209, 103, 1)",
+              ],
+              [
+                1,
+                "rgba(255, 238, 0, 0)",
+              ],
+            ],
+            "results": [
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+            ],
+          },
+        },
+      },
+      {
+        "type": "return",
+        "value": CanvasGradient {
+          "addColorStop": [MockFunction] {
+            "calls": [
+              [
+                0,
+                "rgba(255, 89, 248, 0)",
+              ],
+              [
+                0.2,
+                "rgba(174, 114, 255, 1)",
+              ],
+              [
+                0.5,
+                "rgba(144, 233, 237, 1)",
+              ],
+              [
+                0.78,
+                "rgba(92, 209, 103, 1)",
+              ],
+              [
+                1,
+                "rgba(255, 238, 0, 0)",
+              ],
+            ],
+            "results": [
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+            ],
+          },
+        },
+      },
+      {
+        "type": "return",
+        "value": CanvasGradient {
+          "addColorStop": [MockFunction] {
+            "calls": [
+              [
+                0,
+                "rgba(255, 89, 248, 0)",
+              ],
+              [
+                0.2,
+                "rgba(174, 114, 255, 1)",
+              ],
+              [
+                0.5,
+                "rgba(144, 233, 237, 1)",
+              ],
+              [
+                0.78,
+                "rgba(92, 209, 103, 1)",
+              ],
+              [
+                1,
+                "rgba(255, 238, 0, 0)",
+              ],
+            ],
+            "results": [
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+            ],
+          },
+        },
+      },
+      {
+        "type": "return",
+        "value": CanvasGradient {
+          "addColorStop": [MockFunction] {
+            "calls": [
+              [
+                0,
+                "rgba(255, 89, 248, 0)",
+              ],
+              [
+                0.2,
+                "rgba(174, 114, 255, 1)",
+              ],
+              [
+                0.5,
+                "rgba(144, 233, 237, 1)",
+              ],
+              [
+                0.78,
+                "rgba(92, 209, 103, 1)",
+              ],
+              [
+                1,
+                "rgba(255, 238, 0, 0)",
+              ],
+            ],
+            "results": [
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+            ],
+          },
+        },
+      },
+      {
+        "type": "return",
+        "value": CanvasGradient {
+          "addColorStop": [MockFunction] {
+            "calls": [
+              [
+                0,
+                "rgba(255, 89, 248, 0)",
+              ],
+              [
+                0.2,
+                "rgba(174, 114, 255, 1)",
+              ],
+              [
+                0.5,
+                "rgba(144, 233, 237, 1)",
+              ],
+              [
+                0.78,
+                "rgba(92, 209, 103, 1)",
+              ],
+              [
+                1,
+                "rgba(255, 238, 0, 0)",
+              ],
+            ],
+            "results": [
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+            ],
+          },
+        },
+      },
+      {
+        "type": "return",
+        "value": CanvasGradient {
+          "addColorStop": [MockFunction] {
+            "calls": [
+              [
+                0,
+                "rgba(255, 89, 248, 0)",
+              ],
+              [
+                0.2,
+                "rgba(174, 114, 255, 1)",
+              ],
+              [
+                0.5,
+                "rgba(144, 233, 237, 1)",
+              ],
+              [
+                0.78,
+                "rgba(92, 209, 103, 1)",
+              ],
+              [
+                1,
+                "rgba(255, 238, 0, 0)",
+              ],
+            ],
+            "results": [
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+            ],
+          },
+        },
+      },
+      {
+        "type": "return",
+        "value": CanvasGradient {
+          "addColorStop": [MockFunction] {
+            "calls": [
+              [
+                0,
+                "rgba(255, 89, 248, 0)",
+              ],
+              [
+                0.2,
+                "rgba(174, 114, 255, 1)",
+              ],
+              [
+                0.5,
+                "rgba(144, 233, 237, 1)",
+              ],
+              [
+                0.78,
+                "rgba(92, 209, 103, 1)",
+              ],
+              [
+                1,
+                "rgba(255, 238, 0, 0)",
+              ],
+            ],
+            "results": [
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+              {
+                "type": "return",
+                "value": undefined,
+              },
+            ],
+          },
+        },
+      },
     ],
-    "type": "textAlign",
   },
-  {
-    "props": {
-      "value": "middle",
-    },
-    "transform": [
-      1,
-      0,
-      0,
-      1,
-      0,
-      0,
+  "createPattern": [MockFunction],
+  "createRadialGradient": [MockFunction],
+  "drawFocusIfNeeded": [MockFunction],
+  "drawImage": [MockFunction],
+  "ellipse": [MockFunction],
+  "fill": [MockFunction],
+  "fillRect": [MockFunction],
+  "fillText": [MockFunction],
+  "getImageData": [MockFunction],
+  "getLineDash": [MockFunction],
+  "getTransform": [MockFunction],
+  "isPointInPath": [MockFunction],
+  "isPointInStroke": [MockFunction],
+  "lineTo": [MockFunction],
+  "measureText": [MockFunction] {
+    "calls": [
+      [
+        "Borrow",
+      ],
+      [
+        "0",
+      ],
+      [
+        "50",
+      ],
+      [
+        "Borrow",
+      ],
+      [
+        "SEP22",
+      ],
+      [
+        "DEC22",
+      ],
+      [
+        "MAR23",
+      ],
+      [
+        "JUN23",
+      ],
+      [
+        "SEP23",
+      ],
+      [
+        "DEC23",
+      ],
+      [
+        "MAR24",
+      ],
+      [
+        "JUN24",
+      ],
+      [
+        "Borrow",
+      ],
+      [
+        "Borrow",
+      ],
+      [
+        "SEP22",
+      ],
+      [
+        "DEC22",
+      ],
+      [
+        "MAR23",
+      ],
+      [
+        "JUN23",
+      ],
+      [
+        "50%",
+      ],
+      [
+        "Borrow",
+      ],
+      [
+        "Borrow",
+      ],
+      [
+        "SEP23",
+      ],
+      [
+        "DEC23",
+      ],
+      [
+        "MAR24",
+      ],
+      [
+        "JUN24",
+      ],
     ],
-    "type": "textBaseline",
-  },
-  {
-    "props": {
-      "text": "Borrow",
-    },
-    "transform": [
-      1,
-      0,
-      0,
-      1,
-      0,
-      0,
+    "results": [
+      {
+        "type": "return",
+        "value": TextMetrics {
+          "actualBoundingBoxAscent": 0,
+          "actualBoundingBoxDescent": 0,
+          "actualBoundingBoxLeft": 0,
+          "actualBoundingBoxRight": 0,
+          "alphabeticBaseline": 0,
+          "emHeightAscent": 0,
+          "emHeightDescent": 0,
+          "fontBoundingBoxAscent": 0,
+          "fontBoundingBoxDescent": 0,
+          "hangingBaseline": 0,
+          "ideographicBaseline": 0,
+          "width": 6,
+        },
+      },
+      {
+        "type": "return",
+        "value": TextMetrics {
+          "actualBoundingBoxAscent": 0,
+          "actualBoundingBoxDescent": 0,
+          "actualBoundingBoxLeft": 0,
+          "actualBoundingBoxRight": 0,
+          "alphabeticBaseline": 0,
+          "emHeightAscent": 0,
+          "emHeightDescent": 0,
+          "fontBoundingBoxAscent": 0,
+          "fontBoundingBoxDescent": 0,
+          "hangingBaseline": 0,
+          "ideographicBaseline": 0,
+          "width": 1,
+        },
+      },
+      {
+        "type": "return",
+        "value": TextMetrics {
+          "actualBoundingBoxAscent": 0,
+          "actualBoundingBoxDescent": 0,
+          "actualBoundingBoxLeft": 0,
+          "actualBoundingBoxRight": 0,
+          "alphabeticBaseline": 0,
+          "emHeightAscent": 0,
+          "emHeightDescent": 0,
+          "fontBoundingBoxAscent": 0,
+          "fontBoundingBoxDescent": 0,
+          "hangingBaseline": 0,
+          "ideographicBaseline": 0,
+          "width": 2,
+        },
+      },
+      {
+        "type": "return",
+        "value": TextMetrics {
+          "actualBoundingBoxAscent": 0,
+          "actualBoundingBoxDescent": 0,
+          "actualBoundingBoxLeft": 0,
+          "actualBoundingBoxRight": 0,
+          "alphabeticBaseline": 0,
+          "emHeightAscent": 0,
+          "emHeightDescent": 0,
+          "fontBoundingBoxAscent": 0,
+          "fontBoundingBoxDescent": 0,
+          "hangingBaseline": 0,
+          "ideographicBaseline": 0,
+          "width": 6,
+        },
+      },
+      {
+        "type": "return",
+        "value": TextMetrics {
+          "actualBoundingBoxAscent": 0,
+          "actualBoundingBoxDescent": 0,
+          "actualBoundingBoxLeft": 0,
+          "actualBoundingBoxRight": 0,
+          "alphabeticBaseline": 0,
+          "emHeightAscent": 0,
+          "emHeightDescent": 0,
+          "fontBoundingBoxAscent": 0,
+          "fontBoundingBoxDescent": 0,
+          "hangingBaseline": 0,
+          "ideographicBaseline": 0,
+          "width": 5,
+        },
+      },
+      {
+        "type": "return",
+        "value": TextMetrics {
+          "actualBoundingBoxAscent": 0,
+          "actualBoundingBoxDescent": 0,
+          "actualBoundingBoxLeft": 0,
+          "actualBoundingBoxRight": 0,
+          "alphabeticBaseline": 0,
+          "emHeightAscent": 0,
+          "emHeightDescent": 0,
+          "fontBoundingBoxAscent": 0,
+          "fontBoundingBoxDescent": 0,
+          "hangingBaseline": 0,
+          "ideographicBaseline": 0,
+          "width": 5,
+        },
+      },
+      {
+        "type": "return",
+        "value": TextMetrics {
+          "actualBoundingBoxAscent": 0,
+          "actualBoundingBoxDescent": 0,
+          "actualBoundingBoxLeft": 0,
+          "actualBoundingBoxRight": 0,
+          "alphabeticBaseline": 0,
+          "emHeightAscent": 0,
+          "emHeightDescent": 0,
+          "fontBoundingBoxAscent": 0,
+          "fontBoundingBoxDescent": 0,
+          "hangingBaseline": 0,
+          "ideographicBaseline": 0,
+          "width": 5,
+        },
+      },
+      {
+        "type": "return",
+        "value": TextMetrics {
+          "actualBoundingBoxAscent": 0,
+          "actualBoundingBoxDescent": 0,
+          "actualBoundingBoxLeft": 0,
+          "actualBoundingBoxRight": 0,
+          "alphabeticBaseline": 0,
+          "emHeightAscent": 0,
+          "emHeightDescent": 0,
+          "fontBoundingBoxAscent": 0,
+          "fontBoundingBoxDescent": 0,
+          "hangingBaseline": 0,
+          "ideographicBaseline": 0,
+          "width": 5,
+        },
+      },
+      {
+        "type": "return",
+        "value": TextMetrics {
+          "actualBoundingBoxAscent": 0,
+          "actualBoundingBoxDescent": 0,
+          "actualBoundingBoxLeft": 0,
+          "actualBoundingBoxRight": 0,
+          "alphabeticBaseline": 0,
+          "emHeightAscent": 0,
+          "emHeightDescent": 0,
+          "fontBoundingBoxAscent": 0,
+          "fontBoundingBoxDescent": 0,
+          "hangingBaseline": 0,
+          "ideographicBaseline": 0,
+          "width": 5,
+        },
+      },
+      {
+        "type": "return",
+        "value": TextMetrics {
+          "actualBoundingBoxAscent": 0,
+          "actualBoundingBoxDescent": 0,
+          "actualBoundingBoxLeft": 0,
+          "actualBoundingBoxRight": 0,
+          "alphabeticBaseline": 0,
+          "emHeightAscent": 0,
+          "emHeightDescent": 0,
+          "fontBoundingBoxAscent": 0,
+          "fontBoundingBoxDescent": 0,
+          "hangingBaseline": 0,
+          "ideographicBaseline": 0,
+          "width": 5,
+        },
+      },
+      {
+        "type": "return",
+        "value": TextMetrics {
+          "actualBoundingBoxAscent": 0,
+          "actualBoundingBoxDescent": 0,
+          "actualBoundingBoxLeft": 0,
+          "actualBoundingBoxRight": 0,
+          "alphabeticBaseline": 0,
+          "emHeightAscent": 0,
+          "emHeightDescent": 0,
+          "fontBoundingBoxAscent": 0,
+          "fontBoundingBoxDescent": 0,
+          "hangingBaseline": 0,
+          "ideographicBaseline": 0,
+          "width": 5,
+        },
+      },
+      {
+        "type": "return",
+        "value": TextMetrics {
+          "actualBoundingBoxAscent": 0,
+          "actualBoundingBoxDescent": 0,
+          "actualBoundingBoxLeft": 0,
+          "actualBoundingBoxRight": 0,
+          "alphabeticBaseline": 0,
+          "emHeightAscent": 0,
+          "emHeightDescent": 0,
+          "fontBoundingBoxAscent": 0,
+          "fontBoundingBoxDescent": 0,
+          "hangingBaseline": 0,
+          "ideographicBaseline": 0,
+          "width": 5,
+        },
+      },
+      {
+        "type": "return",
+        "value": TextMetrics {
+          "actualBoundingBoxAscent": 0,
+          "actualBoundingBoxDescent": 0,
+          "actualBoundingBoxLeft": 0,
+          "actualBoundingBoxRight": 0,
+          "alphabeticBaseline": 0,
+          "emHeightAscent": 0,
+          "emHeightDescent": 0,
+          "fontBoundingBoxAscent": 0,
+          "fontBoundingBoxDescent": 0,
+          "hangingBaseline": 0,
+          "ideographicBaseline": 0,
+          "width": 6,
+        },
+      },
+      {
+        "type": "return",
+        "value": TextMetrics {
+          "actualBoundingBoxAscent": 0,
+          "actualBoundingBoxDescent": 0,
+          "actualBoundingBoxLeft": 0,
+          "actualBoundingBoxRight": 0,
+          "alphabeticBaseline": 0,
+          "emHeightAscent": 0,
+          "emHeightDescent": 0,
+          "fontBoundingBoxAscent": 0,
+          "fontBoundingBoxDescent": 0,
+          "hangingBaseline": 0,
+          "ideographicBaseline": 0,
+          "width": 6,
+        },
+      },
+      {
+        "type": "return",
+        "value": TextMetrics {
+          "actualBoundingBoxAscent": 0,
+          "actualBoundingBoxDescent": 0,
+          "actualBoundingBoxLeft": 0,
+          "actualBoundingBoxRight": 0,
+          "alphabeticBaseline": 0,
+          "emHeightAscent": 0,
+          "emHeightDescent": 0,
+          "fontBoundingBoxAscent": 0,
+          "fontBoundingBoxDescent": 0,
+          "hangingBaseline": 0,
+          "ideographicBaseline": 0,
+          "width": 5,
+        },
+      },
+      {
+        "type": "return",
+        "value": TextMetrics {
+          "actualBoundingBoxAscent": 0,
+          "actualBoundingBoxDescent": 0,
+          "actualBoundingBoxLeft": 0,
+          "actualBoundingBoxRight": 0,
+          "alphabeticBaseline": 0,
+          "emHeightAscent": 0,
+          "emHeightDescent": 0,
+          "fontBoundingBoxAscent": 0,
+          "fontBoundingBoxDescent": 0,
+          "hangingBaseline": 0,
+          "ideographicBaseline": 0,
+          "width": 5,
+        },
+      },
+      {
+        "type": "return",
+        "value": TextMetrics {
+          "actualBoundingBoxAscent": 0,
+          "actualBoundingBoxDescent": 0,
+          "actualBoundingBoxLeft": 0,
+          "actualBoundingBoxRight": 0,
+          "alphabeticBaseline": 0,
+          "emHeightAscent": 0,
+          "emHeightDescent": 0,
+          "fontBoundingBoxAscent": 0,
+          "fontBoundingBoxDescent": 0,
+          "hangingBaseline": 0,
+          "ideographicBaseline": 0,
+          "width": 5,
+        },
+      },
+      {
+        "type": "return",
+        "value": TextMetrics {
+          "actualBoundingBoxAscent": 0,
+          "actualBoundingBoxDescent": 0,
+          "actualBoundingBoxLeft": 0,
+          "actualBoundingBoxRight": 0,
+          "alphabeticBaseline": 0,
+          "emHeightAscent": 0,
+          "emHeightDescent": 0,
+          "fontBoundingBoxAscent": 0,
+          "fontBoundingBoxDescent": 0,
+          "hangingBaseline": 0,
+          "ideographicBaseline": 0,
+          "width": 5,
+        },
+      },
+      {
+        "type": "return",
+        "value": TextMetrics {
+          "actualBoundingBoxAscent": 0,
+          "actualBoundingBoxDescent": 0,
+          "actualBoundingBoxLeft": 0,
+          "actualBoundingBoxRight": 0,
+          "alphabeticBaseline": 0,
+          "emHeightAscent": 0,
+          "emHeightDescent": 0,
+          "fontBoundingBoxAscent": 0,
+          "fontBoundingBoxDescent": 0,
+          "hangingBaseline": 0,
+          "ideographicBaseline": 0,
+          "width": 3,
+        },
+      },
+      {
+        "type": "return",
+        "value": TextMetrics {
+          "actualBoundingBoxAscent": 0,
+          "actualBoundingBoxDescent": 0,
+          "actualBoundingBoxLeft": 0,
+          "actualBoundingBoxRight": 0,
+          "alphabeticBaseline": 0,
+          "emHeightAscent": 0,
+          "emHeightDescent": 0,
+          "fontBoundingBoxAscent": 0,
+          "fontBoundingBoxDescent": 0,
+          "hangingBaseline": 0,
+          "ideographicBaseline": 0,
+          "width": 6,
+        },
+      },
+      {
+        "type": "return",
+        "value": TextMetrics {
+          "actualBoundingBoxAscent": 0,
+          "actualBoundingBoxDescent": 0,
+          "actualBoundingBoxLeft": 0,
+          "actualBoundingBoxRight": 0,
+          "alphabeticBaseline": 0,
+          "emHeightAscent": 0,
+          "emHeightDescent": 0,
+          "fontBoundingBoxAscent": 0,
+          "fontBoundingBoxDescent": 0,
+          "hangingBaseline": 0,
+          "ideographicBaseline": 0,
+          "width": 6,
+        },
+      },
+      {
+        "type": "return",
+        "value": TextMetrics {
+          "actualBoundingBoxAscent": 0,
+          "actualBoundingBoxDescent": 0,
+          "actualBoundingBoxLeft": 0,
+          "actualBoundingBoxRight": 0,
+          "alphabeticBaseline": 0,
+          "emHeightAscent": 0,
+          "emHeightDescent": 0,
+          "fontBoundingBoxAscent": 0,
+          "fontBoundingBoxDescent": 0,
+          "hangingBaseline": 0,
+          "ideographicBaseline": 0,
+          "width": 5,
+        },
+      },
+      {
+        "type": "return",
+        "value": TextMetrics {
+          "actualBoundingBoxAscent": 0,
+          "actualBoundingBoxDescent": 0,
+          "actualBoundingBoxLeft": 0,
+          "actualBoundingBoxRight": 0,
+          "alphabeticBaseline": 0,
+          "emHeightAscent": 0,
+          "emHeightDescent": 0,
+          "fontBoundingBoxAscent": 0,
+          "fontBoundingBoxDescent": 0,
+          "hangingBaseline": 0,
+          "ideographicBaseline": 0,
+          "width": 5,
+        },
+      },
+      {
+        "type": "return",
+        "value": TextMetrics {
+          "actualBoundingBoxAscent": 0,
+          "actualBoundingBoxDescent": 0,
+          "actualBoundingBoxLeft": 0,
+          "actualBoundingBoxRight": 0,
+          "alphabeticBaseline": 0,
+          "emHeightAscent": 0,
+          "emHeightDescent": 0,
+          "fontBoundingBoxAscent": 0,
+          "fontBoundingBoxDescent": 0,
+          "hangingBaseline": 0,
+          "ideographicBaseline": 0,
+          "width": 5,
+        },
+      },
+      {
+        "type": "return",
+        "value": TextMetrics {
+          "actualBoundingBoxAscent": 0,
+          "actualBoundingBoxDescent": 0,
+          "actualBoundingBoxLeft": 0,
+          "actualBoundingBoxRight": 0,
+          "alphabeticBaseline": 0,
+          "emHeightAscent": 0,
+          "emHeightDescent": 0,
+          "fontBoundingBoxAscent": 0,
+          "fontBoundingBoxDescent": 0,
+          "hangingBaseline": 0,
+          "ideographicBaseline": 0,
+          "width": 5,
+        },
+      },
     ],
-    "type": "measureText",
   },
-  {
-    "props": {
-      "value": "12px "Helvetica Neue", 'Helvetica', 'Arial', sans-serif",
-    },
-    "transform": [
-      1,
-      0,
-      0,
-      1,
-      0,
-      0,
+  "moveTo": [MockFunction],
+  "putImageData": [MockFunction],
+  "quadraticCurveTo": [MockFunction],
+  "rect": [MockFunction],
+  "removeHitRegion": [MockFunction],
+  "resetTransform": [MockFunction],
+  "restore": [MockFunction] {
+    "calls": [
+      [],
     ],
-    "type": "font",
-  },
-  {
-    "props": {
-      "text": "0",
-    },
-    "transform": [
-      1,
-      0,
-      0,
-      1,
-      0,
-      0,
+    "results": [
+      {
+        "type": "return",
+        "value": undefined,
+      },
     ],
-    "type": "measureText",
   },
-  {
-    "props": {
-      "value": "12px "Helvetica Neue", 'Helvetica', 'Arial', sans-serif",
-    },
-    "transform": [
-      1,
-      0,
-      0,
-      1,
-      0,
-      0,
+  "rotate": [MockFunction],
+  "save": [MockFunction] {
+    "calls": [
+      [],
     ],
-    "type": "font",
-  },
-  {
-    "props": {
-      "text": "50",
-    },
-    "transform": [
-      1,
-      0,
-      0,
-      1,
-      0,
-      0,
+    "results": [
+      {
+        "type": "return",
+        "value": undefined,
+      },
     ],
-    "type": "measureText",
   },
-  {
-    "props": {
-      "value": "12px "Helvetica Neue", 'Helvetica', 'Arial', sans-serif",
-    },
-    "transform": [
-      1,
-      0,
-      0,
-      1,
-      0,
-      0,
+  "scale": [MockFunction],
+  "scrollPathIntoView": [MockFunction],
+  "setLineDash": [MockFunction],
+  "setTransform": [MockFunction] {
+    "calls": [
+      [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
     ],
-    "type": "font",
-  },
-  {
-    "props": {
-      "value": "left",
-    },
-    "transform": [
-      1,
-      0,
-      0,
-      1,
-      0,
-      0,
+    "results": [
+      {
+        "type": "return",
+        "value": undefined,
+      },
     ],
-    "type": "textAlign",
   },
-  {
-    "props": {
-      "value": "middle",
-    },
-    "transform": [
-      1,
-      0,
-      0,
-      1,
-      0,
-      0,
-    ],
-    "type": "textBaseline",
-  },
-  {
-    "props": {
-      "text": "Borrow",
-    },
-    "transform": [
-      1,
-      0,
-      0,
-      1,
-      0,
-      0,
-    ],
-    "type": "measureText",
-  },
-  {
-    "props": {
-      "value": "12px "Helvetica Neue", 'Helvetica', 'Arial', sans-serif",
-    },
-    "transform": [
-      1,
-      0,
-      0,
-      1,
-      0,
-      0,
-    ],
-    "type": "font",
-  },
-  {
-    "props": {
-      "text": "SEP22",
-    },
-    "transform": [
-      1,
-      0,
-      0,
-      1,
-      0,
-      0,
-    ],
-    "type": "measureText",
-  },
-  {
-    "props": {
-      "value": "12px "Helvetica Neue", 'Helvetica', 'Arial', sans-serif",
-    },
-    "transform": [
-      1,
-      0,
-      0,
-      1,
-      0,
-      0,
-    ],
-    "type": "font",
-  },
-  {
-    "props": {
-      "text": "DEC22",
-    },
-    "transform": [
-      1,
-      0,
-      0,
-      1,
-      0,
-      0,
-    ],
-    "type": "measureText",
-  },
-  {
-    "props": {
-      "value": "12px "Helvetica Neue", 'Helvetica', 'Arial', sans-serif",
-    },
-    "transform": [
-      1,
-      0,
-      0,
-      1,
-      0,
-      0,
-    ],
-    "type": "font",
-  },
-  {
-    "props": {
-      "text": "MAR23",
-    },
-    "transform": [
-      1,
-      0,
-      0,
-      1,
-      0,
-      0,
-    ],
-    "type": "measureText",
-  },
-  {
-    "props": {
-      "value": "12px "Helvetica Neue", 'Helvetica', 'Arial', sans-serif",
-    },
-    "transform": [
-      1,
-      0,
-      0,
-      1,
-      0,
-      0,
-    ],
-    "type": "font",
-  },
-  {
-    "props": {
-      "text": "JUN23",
-    },
-    "transform": [
-      1,
-      0,
-      0,
-      1,
-      0,
-      0,
-    ],
-    "type": "measureText",
-  },
-  {
-    "props": {
-      "value": "12px "Helvetica Neue", 'Helvetica', 'Arial', sans-serif",
-    },
-    "transform": [
-      1,
-      0,
-      0,
-      1,
-      0,
-      0,
-    ],
-    "type": "font",
-  },
-  {
-    "props": {
-      "text": "SEP23",
-    },
-    "transform": [
-      1,
-      0,
-      0,
-      1,
-      0,
-      0,
-    ],
-    "type": "measureText",
-  },
-  {
-    "props": {
-      "value": "12px "Helvetica Neue", 'Helvetica', 'Arial', sans-serif",
-    },
-    "transform": [
-      1,
-      0,
-      0,
-      1,
-      0,
-      0,
-    ],
-    "type": "font",
-  },
-  {
-    "props": {
-      "text": "DEC23",
-    },
-    "transform": [
-      1,
-      0,
-      0,
-      1,
-      0,
-      0,
-    ],
-    "type": "measureText",
-  },
-  {
-    "props": {
-      "value": "12px "Helvetica Neue", 'Helvetica', 'Arial', sans-serif",
-    },
-    "transform": [
-      1,
-      0,
-      0,
-      1,
-      0,
-      0,
-    ],
-    "type": "font",
-  },
-  {
-    "props": {
-      "text": "MAR24",
-    },
-    "transform": [
-      1,
-      0,
-      0,
-      1,
-      0,
-      0,
-    ],
-    "type": "measureText",
-  },
-  {
-    "props": {
-      "value": "12px "Helvetica Neue", 'Helvetica', 'Arial', sans-serif",
-    },
-    "transform": [
-      1,
-      0,
-      0,
-      1,
-      0,
-      0,
-    ],
-    "type": "font",
-  },
-  {
-    "props": {
-      "text": "JUN24",
-    },
-    "transform": [
-      1,
-      0,
-      0,
-      1,
-      0,
-      0,
-    ],
-    "type": "measureText",
-  },
-  {
-    "props": {
-      "value": "12px "Helvetica Neue", 'Helvetica', 'Arial', sans-serif",
-    },
-    "transform": [
-      1,
-      0,
-      0,
-      1,
-      0,
-      0,
-    ],
-    "type": "font",
-  },
-]
+  "stroke": [MockFunction],
+  "strokeRect": [MockFunction],
+  "strokeText": [MockFunction],
+  "transform": [MockFunction],
+  "translate": [MockFunction],
+}
 `;
