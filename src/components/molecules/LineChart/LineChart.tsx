@@ -33,7 +33,7 @@ ChartJS.register(
     crossHairPlugin
 );
 
-function triggerHover(chart: ChartJS<'line'>, index: number) {
+const triggerHover = (chart: ChartJS<'line'>, index: number) => {
     chart.setActiveElements([
         {
             datasetIndex: 0,
@@ -41,9 +41,9 @@ function triggerHover(chart: ChartJS<'line'>, index: number) {
         },
     ]);
     chart.update();
-}
+};
 
-function triggerTooltip(chart: ChartJS<'line'>, index: number) {
+const triggerTooltip = (chart: ChartJS<'line'>, index: number) => {
     const tooltip = chart.tooltip;
     if (tooltip) {
         const chartArea = chart.chartArea;
@@ -61,7 +61,7 @@ function triggerTooltip(chart: ChartJS<'line'>, index: number) {
         );
     }
     chart.update();
-}
+};
 
 export type LineChartProps = {
     style?: React.CSSProperties;
