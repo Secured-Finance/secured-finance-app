@@ -11,7 +11,10 @@ describe('LineChart Component', () => {
             ag = render(<Default />);
         }).then(() => {
             expect(
-                ag.container.querySelector('canvas')?.getContext('2d')
+                ag.container
+                    .querySelector('canvas')
+                    ?.getContext('2d')
+                    ?.__getEvents()
             ).toMatchSnapshot();
         });
     });
