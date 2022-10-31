@@ -33,11 +33,11 @@ const getData = (
     };
 };
 
-export const YieldChart: React.FC<YieldChartProps> = ({
+export const YieldChart = ({
     asset,
     isBorrow,
     rates,
-}): JSX.Element => {
+}: YieldChartProps): JSX.Element => {
     const lendingContracts = useSelector(
         (state: RootState) => state.availableContracts.lendingMarkets[asset]
     );

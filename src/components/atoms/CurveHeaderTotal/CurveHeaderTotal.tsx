@@ -3,10 +3,7 @@ interface CurveHeaderTotalProps {
     footer: string;
 }
 
-export const CurveHeaderTotal: React.FC<CurveHeaderTotalProps> = ({
-    header,
-    footer,
-}) => {
+export const CurveHeaderTotal = ({ header, footer }: CurveHeaderTotalProps) => {
     return (
         <div className='flex h-[44px] w-[135px] flex-col p-0 text-center'>
             <div className='typography-caption-2 h-5 text-planetaryPurple'>
