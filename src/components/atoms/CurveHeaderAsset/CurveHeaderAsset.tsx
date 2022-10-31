@@ -12,11 +12,11 @@ interface CurveHeaderAssetProps {
     fluctuation: number;
 }
 
-export const CurveHeaderAsset: React.FC<CurveHeaderAssetProps> = ({
+export const CurveHeaderAsset = ({
     ccy,
     value,
     fluctuation,
-}) => {
+}: CurveHeaderAssetProps) => {
     return (
         <div className='flex h-[44px] w-fit flex-row items-center justify-between gap-3'>
             <div>

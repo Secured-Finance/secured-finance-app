@@ -12,10 +12,10 @@ interface CurveHeaderProps {
     isBorrow: boolean;
 }
 
-export const CurveHeader: React.FC<CurveHeaderProps> = ({
+export const CurveHeader = ({
     asset = CurrencySymbol.FIL,
     isBorrow,
-}): JSX.Element => {
+}: CurveHeaderProps): JSX.Element => {
     const priceList = useSelector((state: RootState) => getPriceMap(state));
     const priceChangeList = useSelector((state: RootState) =>
         getPriceChangeMap(state)
