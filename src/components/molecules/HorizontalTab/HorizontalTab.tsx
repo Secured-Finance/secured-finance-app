@@ -20,7 +20,7 @@ const TitleChip = ({
         </div>
     );
 };
-export const TradeHistoryTab = ({
+export const HorizontalTab = ({
     tabTitles,
     children,
 }: {

@@ -1,16 +1,16 @@
 import { composeStories } from '@storybook/testing-react';
 import { render, screen } from 'src/test-utils.js';
-import { TradeHistoryTab } from './TradeHistoryTab';
-import * as stories from './TradeHistoryTab.stories';
+import { HorizontalTab } from './HorizontalTab';
+import * as stories from './HorizontalTab.stories';
 
 const { Default } = composeStories(stories);
 
-describe('TradeHistoryTab Component', () => {
-    it('should render a TradeHistoryTab', () => {
+describe('HorizontalTab Component', () => {
+    it('should render a HorizontalTab', () => {
         render(<Default />);
     });
 
-    it('should render a TradeHistoryTab with 2 tabs', () => {
+    it('should render a HorizontalTab with 2 tabs', () => {
         render(<Default />);
         expect(screen.getAllByRole('tab')).toHaveLength(2);
     });
@@ -42,7 +42,7 @@ describe('TradeHistoryTab Component', () => {
     });
 
     it('should render the component even if it has no children', () => {
-        render(<TradeHistoryTab tabTitles={[]}></TradeHistoryTab>);
+        render(<HorizontalTab tabTitles={[]}></HorizontalTab>);
         expect(screen.getByRole('tablist')).toBeInTheDocument();
     });
 });
