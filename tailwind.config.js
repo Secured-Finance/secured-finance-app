@@ -48,22 +48,6 @@ module.exports = {
             '2xs': ['10px', { lineHeight: '15px' }],
         },
         colors: {
-            // Colors of the old design. TODO: remove them
-            background: '#060609',
-            lightBackground: '#FFFFFF',
-            darkGrey: '#1a1b1f',
-            strokeGrey: '#27282f',
-            turquoise: '#38afa8',
-            darkPurple: '#5b50de',
-            bluePurple: '#4557fb',
-            brightBlue: '#4faaff',
-            lightGrey: '#7a7c89',
-            middleGrey: '#9496a3',
-            lightSilver: '#b9b9c2',
-            darkenedBg: '#122735',
-            tableHeader: '#122735',
-            tableBorder: '#1c303f',
-
             // Primary
             universeBlue: '#002133',
             horizonBlue: '#3555AC',
