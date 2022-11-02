@@ -25,7 +25,7 @@ export const TradeHistoryTab = ({
     children,
 }: {
     tabTitles: string[];
-    children: React.ReactNode;
+    children?: React.ReactNode;
 }) => {
     const arrayChildren = Children.toArray(children);
     const [selectedIndex, setSelectedIndex] = useState(0);

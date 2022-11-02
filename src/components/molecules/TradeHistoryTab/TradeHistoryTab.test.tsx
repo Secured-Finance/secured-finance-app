@@ -1,5 +1,6 @@
 import { composeStories } from '@storybook/testing-react';
 import { render, screen } from 'src/test-utils.js';
+import { TradeHistoryTab } from './TradeHistoryTab';
 import * as stories from './TradeHistoryTab.stories';
 
 const { Default } = composeStories(stories);
@@ -38,5 +39,10 @@ describe('TradeHistoryTab Component', () => {
         expect(
             screen.getByText('This is the content of the second tab')
         ).toBeInTheDocument();
+    });
+
+    it('should render the component even if it has no children', () => {
+        render(<TradeHistoryTab tabTitles={[]}></TradeHistoryTab>);
+        expect(screen.getByRole('tablist')).toBeInTheDocument();
     });
 });
