@@ -82,3 +82,12 @@ LongSelectionDropdown.args = {
     ],
     selected: { label: 'Sep 2022', value: 'Sep2022' },
 };
+
+export const ButtonVersion2 = Template.bind({});
+ButtonVersion2.args = {
+    buttonVersion: 'v2',
+};
+export const ButtonVersion3 = Template.bind({});
+ButtonVersion3.args = {
+    buttonVersion: 'v3',
+};
