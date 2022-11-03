@@ -20,23 +20,11 @@ export const OrderWidget = ({ data }: { data: Array<OrderBookEntry> }) => {
         () => [
             columnHelper.accessor('amount', {
                 cell: info => <div>{info.getValue().toString()}</div>,
-                header: header => (
-                    <TableHeader
-                        title='Amount'
-                        sortingHandler={header.column.getToggleSortingHandler()}
-                        isSorted={header.column.getIsSorted()}
-                    />
-                ),
+                header: () => <TableHeader title='Amount' />,
             }),
             columnHelper.accessor('apy', {
                 cell: info => info.getValue().toPercent(),
-                header: header => (
-                    <TableHeader
-                        title='APY'
-                        sortingHandler={header.column.getToggleSortingHandler()}
-                        isSorted={header.column.getIsSorted()}
-                    />
-                ),
+                header: () => <TableHeader title='APY' />,
             }),
         ],
         []
@@ -55,7 +43,10 @@ export const OrderWidget = ({ data }: { data: Array<OrderBookEntry> }) => {
                             {percentFormat(20)}
                         </div>
                     </div>
-                    <CoreTable data={data} columns={columns} />
+                    <div className='flex flex-row'>
+                        <CoreTable data={data} columns={columns} />
+                        <CoreTable data={data} columns={columns} />
+                    </div>
                 </>
             </HorizontalTab>
         </>

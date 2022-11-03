@@ -15,4 +15,18 @@ describe('CoreTable Component', () => {
         expect(screen.getAllByTestId('core-table-row').length).toBe(2);
         expect(screen.getAllByTestId('core-table-header').length).toBe(1);
     });
+
+    it('should have the row clickable if onLineClick is provided', () => {
+        render(<Default onLineClick={() => {}} />);
+        screen.getAllByTestId('core-table-row').forEach(row => {
+            expect(row).toHaveClass('cursor-pointer');
+        });
+    });
+
+    it('should have the row not clickable if onLineClick is not provided', () => {
+        render(<Default />);
+        screen.getAllByTestId('core-table-row').forEach(row => {
+            expect(row).not.toHaveClass('cursor-pointer');
+        });
+    });
 });
