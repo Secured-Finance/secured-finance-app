@@ -6,8 +6,6 @@ export default {
     component: TableHeader,
     args: {
         title: 'Title',
-        sortingHandler: () => {},
-        isSorted: false,
     },
 } as ComponentMeta<typeof TableHeader>;
 
@@ -18,3 +16,9 @@ const Template: ComponentStory<typeof TableHeader> = args => (
 );
 
 export const Default = Template.bind({});
+export const Sorting = Template.bind({});
+Sorting.args = {
+    ...Default.args,
+    sortingHandler: () => {},
+    isSorted: true,
+};

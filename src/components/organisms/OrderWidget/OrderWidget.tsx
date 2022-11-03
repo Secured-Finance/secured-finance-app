@@ -47,15 +47,16 @@ export const OrderWidget = ({ data }: { data: Array<OrderBookEntry> }) => {
             <HorizontalTab
                 tabTitles={['Order Book', 'Market Trades', 'My Orders']}
             >
-                <div className='flex h-14 flex-row justify-center gap-1 border-b border-white-10 bg-black-20'>
-                    <ArrowUpIcon className='mt-1.5 flex h-4 text-green' />
+                <>
+                    <div className='flex h-14 flex-row justify-center gap-1 border-b border-white-10 bg-black-20'>
+                        <ArrowUpIcon className='mt-1.5 flex h-4 text-green' />
 
-                    <div className='typography-portfolio-heading flex text-white'>
-                        {percentFormat(20)}
+                        <div className='typography-portfolio-heading flex text-white'>
+                            {percentFormat(20)}
+                        </div>
                     </div>
-
                     <CoreTable data={data} columns={columns} />
-                </div>
+                </>
             </HorizontalTab>
         </>
     );

@@ -147,6 +147,7 @@ export const ActiveTradeTable = ({ data }: { data: Array<ActiveTrade> }) => {
             <CoreTable
                 data={data}
                 columns={columns}
+                name='active-trade-table'
                 onLineClick={() => setDisplayContractDetails(true)}
             />
             <ContractDetailDialog
