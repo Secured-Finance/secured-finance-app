@@ -7,6 +7,7 @@ import {
     TableOptions,
     useReactTable,
 } from '@tanstack/react-table';
+import classNames from 'classnames';
 import { useState } from 'react';
 
 export const CoreTable = <T,>({
@@ -56,7 +57,9 @@ export const CoreTable = <T,>({
                 {table.getRowModel().rows.map(row => (
                     <tr
                         key={row.id}
-                        className='cursor-pointer'
+                        className={classNames({
+                            'cursor-pointer': onLineClick,
+                        })}
                         onClick={onLineClick}
                         data-testid={`${name}-row`}
                     >
