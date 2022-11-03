@@ -46,7 +46,7 @@ describe('PortfolioManagement component', () => {
             )
         );
         expect(screen.getAllByRole('row')).toHaveLength(4);
-        expect(screen.getAllByTestId('core-table-row')).toHaveLength(3);
+        expect(screen.getAllByTestId('active-trade-table-row')).toHaveLength(3);
     });
 
     it('should display the correct number of active trades', async () => {

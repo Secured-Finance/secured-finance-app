@@ -4,6 +4,7 @@ import {
     getCoreRowModel,
     getSortedRowModel,
     SortingState,
+    TableOptions,
     useReactTable,
 } from '@tanstack/react-table';
 import { useState } from 'react';
@@ -12,28 +13,32 @@ export const CoreTable = <T,>({
     data,
     columns,
     onLineClick,
+    name = 'core-table',
 }: {
     data: Array<T>;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     columns: ColumnDef<T, any>[];
     onLineClick?: () => void;
+    name?: string;
 }) => {
     const [sorting, setSorting] = useState<SortingState>([]);
-    const table = useReactTable<T>({
+    const configuration = {
         data,
         columns,
+        getCoreRowModel: getCoreRowModel(),
         state: {
             sorting,
         },
         onSortingChange: setSorting,
-        getCoreRowModel: getCoreRowModel(),
         getSortedRowModel: getSortedRowModel(),
-    });
+    } as TableOptions<T>;
+
+    const table = useReactTable<T>(configuration);
     return (
-        <table className='w-full text-white'>
+        <table className='w-full text-white' data-testid={name}>
             <thead className='typography-caption-2 h-14 border-b border-white-10 py-4 px-6 text-slateGray'>
                 {table.getHeaderGroups().map(headerGroup => (
-                    <tr key={headerGroup.id} data-testid='core-table-header'>
+                    <tr key={headerGroup.id} data-testid={`${name}-header`}>
                         {headerGroup.headers.map(header => (
                             <th key={header.id}>
                                 {header.isPlaceholder
@@ -53,7 +58,7 @@ export const CoreTable = <T,>({
                         key={row.id}
                         className='cursor-pointer'
                         onClick={onLineClick}
-                        data-testid='core-table-row'
+                        data-testid={`${name}-row`}
                     >
                         {row.getVisibleCells().map(cell => (
                             <td key={cell.id} className='px-4 py-2 text-center'>
