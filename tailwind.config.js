@@ -23,7 +23,11 @@ module.exports = {
                 width: 'width',
             },
             height: {
+                '1px': '1px',
                 '5px': '5px',
+            },
+            width: {
+                '1px': '1px',
             },
         },
         fontFamily: {
@@ -93,6 +97,7 @@ module.exports = {
                 '8': '#FCFCFD',
             },
             grayScale: '#FAFAFA',
+            proGreen: '#2FBC81',
             tabGradient2: 'rgba(106, 118, 177, 0.35)',
             tabGradient1: 'rgba(57, 77, 174, 0)',
             backgroundBlur: 'rgba(35, 43, 56, 0.6)',

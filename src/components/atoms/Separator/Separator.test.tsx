@@ -12,10 +12,10 @@ describe('Separator Component', () => {
         );
     });
 
-    it('should render custom color Separator', () => {
+    it('should render custom color Separator with vertical orientation', () => {
         render(<Primary />);
         expect(screen.getByTestId('separator')).toHaveClass(
-            'border-b border-moonGrey border-opacity-30'
+            'border-l border-moonGrey border-opacity-30'
         );
     });
 });
