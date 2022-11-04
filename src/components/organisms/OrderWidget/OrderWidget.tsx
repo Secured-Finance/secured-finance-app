@@ -19,12 +19,16 @@ export const OrderWidget = ({ data }: { data: Array<OrderBookEntry> }) => {
     const columns = useMemo(
         () => [
             columnHelper.accessor('amount', {
-                cell: info => <div>{info.getValue().toString()}</div>,
+                cell: info => info.getValue().toString(),
                 header: () => <TableHeader title='Amount' />,
             }),
             columnHelper.accessor('apy', {
                 cell: info => info.getValue().toPercent(),
-                header: () => <TableHeader title='APY' />,
+                header: () => (
+                    <div className='px-4'>
+                        <TableHeader title='APY' />
+                    </div>
+                ),
             }),
         ],
         []
@@ -44,8 +48,20 @@ export const OrderWidget = ({ data }: { data: Array<OrderBookEntry> }) => {
                         </div>
                     </div>
                     <div className='flex flex-row'>
-                        <CoreTable data={data} columns={columns} />
-                        <CoreTable data={data} columns={columns} />
+                        <CoreTable
+                            data={data}
+                            columns={columns}
+                            options={{
+                                align: 'right',
+                            }}
+                        />
+                        <CoreTable
+                            data={data}
+                            columns={columns}
+                            options={{
+                                align: 'left',
+                            }}
+                        />
                     </div>
                 </>
             </HorizontalTab>
