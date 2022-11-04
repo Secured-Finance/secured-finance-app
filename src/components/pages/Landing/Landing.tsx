@@ -75,6 +75,7 @@ export const Landing = () => {
                     asset={currency}
                     isBorrow={side === OrderSide.Borrow}
                     rates={rates}
+                    maturitiesOptionList={optionList}
                 />
             </div>
         </div>
