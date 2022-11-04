@@ -26,6 +26,13 @@ export default {
             ],
         },
         options,
+        maturitiesOptionList: [
+            { label: 'MAR22', value: '1' },
+            { label: 'JUN22', value: '2' },
+            { label: 'SEP22', value: '3' },
+            { label: 'DEC22', value: '1669856400' },
+            { label: 'MAR23', value: '1677632400' },
+        ],
     },
 } as ComponentMeta<typeof LineChart>;
 

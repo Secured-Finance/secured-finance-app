@@ -10,11 +10,14 @@ import {
     Title,
     Tooltip,
 } from 'chart.js';
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { ChartProps, getElementAtEvent, Line } from 'react-chartjs-2';
 import { useDispatch, useSelector } from 'react-redux';
+import { Option } from 'src/components/atoms';
 import {
+    crossHairPlugin,
     defaultDatasets,
+    getCurveGradient,
     options as customOptions,
 } from 'src/components/molecules/LineChart/constants';
 import { setMaturity } from 'src/store/landingOrderForm';
@@ -26,18 +29,51 @@ ChartJS.register(
     LineElement,
     Title,
     CategoryScale,
-    Tooltip
+    Tooltip,
+    crossHairPlugin
 );
+
+const triggerHover = (chart: ChartJS<'line'>, index: number) => {
+    chart.setActiveElements([
+        {
+            datasetIndex: 0,
+            index: index,
+        },
+    ]);
+    chart.update();
+};
+
+const triggerTooltip = (chart: ChartJS<'line'>, index: number) => {
+    const tooltip = chart.tooltip;
+    if (tooltip) {
+        const chartArea = chart.chartArea;
+        tooltip.setActiveElements(
+            [
+                {
+                    datasetIndex: 0,
+                    index: index,
+                },
+            ],
+            {
+                x: (chartArea.left + chartArea.right) / 2,
+                y: (chartArea.top + chartArea.bottom) / 2,
+            }
+        );
+    }
+    chart.update();
+};
 
 export type LineChartProps = {
     style?: React.CSSProperties;
     data: ChartData<'line'>;
+    maturitiesOptionList: Option[];
 } & ChartProps;
 
 export const LineChart = ({
     data = { datasets: [], labels: [] },
     options = customOptions,
     style,
+    maturitiesOptionList,
 }: LineChartProps) => {
     const dispatch = useDispatch();
     const ccy = useSelector(
@@ -46,20 +82,11 @@ export const LineChart = ({
     const lendingContracts = useSelector(
         (state: RootState) => state.availableContracts.lendingMarkets[ccy]
     );
+    const maturity = useSelector(
+        (state: RootState) => state.landingOrderForm.maturity
+    );
 
-    const chartRef = useRef(null);
-
-    const canvas: HTMLCanvasElement = document.createElement('canvas');
-    const ctx = canvas.getContext('2d');
-
-    if (!ctx) return null;
-
-    const yieldCurveGradient = ctx.createLinearGradient(0, 0, 500, 0);
-    yieldCurveGradient.addColorStop(0, 'rgba(255, 89, 248, 0)');
-    yieldCurveGradient.addColorStop(0.2, 'rgba(174, 114, 255, 1)');
-    yieldCurveGradient.addColorStop(0.5, 'rgba(144, 233, 237, 1)');
-    yieldCurveGradient.addColorStop(0.78, 'rgba(92, 209, 103, 1)');
-    yieldCurveGradient.addColorStop(1, 'rgba(255, 238, 0, 0)');
+    const chartRef = useRef<ChartJS<'line'>>(null);
 
     const refinedDatasets = data.datasets.map(set => {
         if (defaultDatasets) {
@@ -68,7 +95,8 @@ export const LineChart = ({
                     CanvasLineCap,
                     ScriptableContext<'line'>
                 >,
-                borderColor: yieldCurveGradient,
+                borderColor: (context: ScriptableContext<'line'>) =>
+                    getCurveGradient(context),
                 ...defaultDatasets,
                 ...set,
             };
@@ -77,6 +105,7 @@ export const LineChart = ({
             ...set,
         };
     });
+
     const refinedData = {
         ...data,
         datasets: refinedDatasets,
@@ -92,6 +121,20 @@ export const LineChart = ({
             dispatch(setMaturity(lendingContracts[label as string]));
         }
     };
+
+    useEffect(() => {
+        if (!chartRef.current) return;
+
+        const numberOfElements = chartRef.current.data.datasets[0].data.length;
+        let index = maturitiesOptionList.findIndex(
+            (element: Option) => element.value === maturity
+        );
+        if (numberOfElements) {
+            index = index > 0 ? index : 0;
+            triggerHover(chartRef.current, index);
+            triggerTooltip(chartRef.current, index);
+        }
+    });
 
     return (
         <Line
