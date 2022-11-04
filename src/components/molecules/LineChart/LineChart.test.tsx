@@ -5,7 +5,7 @@ import * as stories from './LineChart.stories';
 const { Default } = composeStories(stories);
 
 describe('LineChart Component', () => {
-    it('should render a LineChart', async () => {
+    it.skip('should render a LineChart', async () => {
         let ag: RenderResult<typeof queries, HTMLElement>;
         await waitFor(() => {
             ag = render(<Default />);
