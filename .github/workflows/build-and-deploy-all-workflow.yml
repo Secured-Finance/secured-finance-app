@@ -15,7 +15,7 @@ on:
 jobs:
   build-and-test-all:
     name: Build and Publish
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
         with:
