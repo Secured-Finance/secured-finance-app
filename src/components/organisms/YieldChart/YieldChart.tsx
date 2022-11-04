@@ -2,7 +2,7 @@ import { ChartData } from 'chart.js';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import SFLogoSmall from 'src/assets/img/logo-small.svg';
-import { ExpandIndicator } from 'src/components/atoms';
+import { ExpandIndicator, Option } from 'src/components/atoms';
 import { CurveHeader, LineChart } from 'src/components/molecules';
 import { RootState } from 'src/store/types';
 import { CurrencySymbol, Rate } from 'src/utils';
@@ -11,6 +11,7 @@ interface YieldChartProps {
     asset: CurrencySymbol;
     isBorrow: boolean;
     rates: Array<Rate>;
+    maturitiesOptionList: Option[];
 }
 
 const refineArray = (array: Array<Rate>) => {
@@ -37,6 +38,7 @@ export const YieldChart: React.FC<YieldChartProps> = ({
     asset,
     isBorrow,
     rates,
+    maturitiesOptionList,
 }): JSX.Element => {
     const lendingContracts = useSelector(
         (state: RootState) => state.availableContracts.lendingMarkets[asset]
@@ -46,10 +48,8 @@ export const YieldChart: React.FC<YieldChartProps> = ({
     return (
         <div className='flex h-[480px] w-fit flex-row overflow-hidden rounded-r-xl border-y border-r border-panelStroke shadow-[0_46px_64px_rgba(0,0,0,0.4)]'>
             <div
-                className={`flex flex-col items-start overflow-hidden duration-700 ease-out ${
-                    show
-                        ? 'w-[640px] pl-8 transition-width'
-                        : 'w-0 transition-width'
+                className={`flex flex-col items-start overflow-hidden transition-width duration-700 ease-out ${
+                    show ? 'w-[640px] pl-8' : 'w-0'
                 }`}
                 data-testid='yield-chart-component'
             >
@@ -69,6 +69,7 @@ export const YieldChart: React.FC<YieldChartProps> = ({
                                     isBorrow ? 'Borrow' : 'Lend',
                                     Object.keys(lendingContracts)
                                 )}
+                                maturitiesOptionList={maturitiesOptionList}
                             ></LineChart>
                         )}
                     </div>
