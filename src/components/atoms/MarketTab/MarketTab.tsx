@@ -1,4 +1,5 @@
 import classNames from 'classnames';
+import { ordinaryFormat } from 'src/utils';
 
 export interface MarketTabProps {
     name: string | number;
@@ -30,7 +31,7 @@ export const MarketTab = ({ name, value }: MarketTabProps) => {
                         typeof value === 'string',
                 })}
             >
-                {value}
+                {typeof value === 'number' ? ordinaryFormat(value, 4) : value}
             </span>
         </div>
     );

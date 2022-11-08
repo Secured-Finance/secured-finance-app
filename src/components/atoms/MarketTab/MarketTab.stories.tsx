@@ -5,8 +5,8 @@ export default {
     title: 'Atoms/MarketTab',
     component: MarketTab,
     args: {
-        name: '24h High',
-        value: 0.7787,
+        name: '24h Volume',
+        value: 10000,
     },
 } as ComponentMeta<typeof MarketTab>;
 

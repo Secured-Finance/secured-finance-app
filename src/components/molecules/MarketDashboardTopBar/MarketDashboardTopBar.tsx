@@ -51,7 +51,7 @@ export const MarketDashboardTopBar = <TermType extends string = string>({
                         <DropdownSelector
                             optionList={options}
                             onChange={handleTermChange}
-                            buttonVersion='v3'
+                            variant='noLabel'
                             selected={selected}
                         />
                     </div>
@@ -65,13 +65,13 @@ export const MarketDashboardTopBar = <TermType extends string = string>({
                 <div className='flex flex-grow flex-row gap-6 pt-6 pb-8 pl-10'>
                     <MarketTab name={0.7977} value={'25.00% APY'} />
                     <Separator orientation='vertical' color='neutral-2' />
-                    <MarketTab name='24h High' value={getValue(values, 1)} />
+                    <MarketTab name='24h High' value={getValue(values, 0)} />
                     <Separator orientation='vertical' color='neutral-2' />
-                    <MarketTab name='24h Low' value={getValue(values, 2)} />
+                    <MarketTab name='24h Low' value={getValue(values, 1)} />
                     <Separator orientation='vertical' color='neutral-2' />
-                    <MarketTab name='24h Trades' value={getValue(values, 3)} />
+                    <MarketTab name='24h Trades' value={getValue(values, 2)} />
                     <Separator orientation='vertical' color='neutral-2' />
-                    <MarketTab name='24h Volume' value={getValue(values, 4)} />
+                    <MarketTab name='24h Volume' value={getValue(values, 3)} />
                 </div>
             </div>
         </div>

@@ -9,7 +9,7 @@ export type Option<T = string> = {
     iconSVG?: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
 };
 
-const ButtonV1 = ({
+const DefaultButton = ({
     selectedOption,
     open,
 }: {
@@ -33,7 +33,7 @@ const ButtonV1 = ({
     );
 };
 
-const ButtonV2 = ({
+const RoundedExpandButton = ({
     selectedOption,
     open,
 }: {
@@ -57,7 +57,7 @@ const ButtonV2 = ({
     );
 };
 
-const ButtonV3 = ({ open }: { open: boolean }) => {
+const NoLabelButton = ({ open }: { open: boolean }) => {
     return (
         <div className='flex rounded-[32px] border-2 border-neutral-3 p-2'>
             <ExpandIndicator expanded={open} variant='opaque' />
@@ -69,12 +69,12 @@ export const DropdownSelector = <T extends string = string>({
     selected,
     optionList,
     onChange,
-    buttonVersion = 'v1',
+    variant = 'default',
 }: {
     selected: Option<T>;
     optionList: Readonly<Array<Option<T>>>;
     onChange: (v: T) => void;
-    buttonVersion?: 'v1' | 'v2' | 'v3';
+    variant?: 'default' | 'roundedExpandButton' | 'noLabel';
 }) => {
     const [selectedOptionValue, setSelectedOptionValue] = useState<T>(
         selected.value
@@ -112,29 +112,29 @@ export const DropdownSelector = <T extends string = string>({
                 <>
                     <Menu.Button>
                         {() => {
-                            switch (buttonVersion) {
-                                case 'v1':
+                            switch (variant) {
+                                case 'default':
                                     return (
-                                        <ButtonV1
+                                        <DefaultButton
                                             selectedOption={selectedOption}
                                             open={open}
                                         />
                                     );
-                                case 'v2':
+                                case 'roundedExpandButton':
                                     return (
-                                        <ButtonV2
+                                        <RoundedExpandButton
                                             selectedOption={selectedOption}
                                             open={open}
                                         />
                                     );
-                                case 'v3':
-                                    return <ButtonV3 open={open} />;
+                                case 'noLabel':
+                                    return <NoLabelButton open={open} />;
                             }
                         }}
                     </Menu.Button>
                     <Menu.Items
                         className={`scrollbar absolute z-10 mt-2 flex max-h-60 w-52 flex-col overflow-y-auto rounded-lg bg-gunMetal p-2 shadow-sm ${
-                            buttonVersion === 'v3' ? 'right-0' : ''
+                            variant === 'noLabel' ? 'right-0' : ''
                         }`}
                     >
                         {optionList.map((asset, i) => (

@@ -135,7 +135,7 @@ const SecuredFinanceProvider: React.FC = ({ children }) => {
                 ? 0
                 : await web3Provider.getBlockNumber();
             dispatch(updateLatestBlock(block));
-        }, 2000);
+        }, 2000000);
 
         return () => clearInterval(interval);
     }, [dispatch, web3Provider]);
