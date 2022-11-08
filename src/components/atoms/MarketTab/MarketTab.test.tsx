@@ -7,12 +7,12 @@ const { Default, GreenMarketTab } = composeStories(stories);
 describe('test Market Tab component', () => {
     it('should render Market Tab', () => {
         render(<Default />);
-        expect(screen.getByText('24h High')).toBeInTheDocument();
-        expect(screen.getByText('24h High')).toHaveClass(
+        expect(screen.getByText('24h Volume')).toBeInTheDocument();
+        expect(screen.getByText('24h Volume')).toHaveClass(
             'typography-caption-2 text-slateGray'
         );
-        expect(screen.getByText('0.7787')).toBeInTheDocument();
-        expect(screen.getByText('0.7787')).toHaveClass(
+        expect(screen.getByText('10,000')).toBeInTheDocument();
+        expect(screen.getByText('10,000')).toHaveClass(
             'typography-caption font-medium text-neutral-8'
         );
     });

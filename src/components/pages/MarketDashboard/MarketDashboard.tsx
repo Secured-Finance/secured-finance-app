@@ -24,15 +24,12 @@ export const MarketDashboard = () => {
     const dispatch = useDispatch();
 
     return (
-        <div
-            className='mx-40 mt-7 flex flex-col gap-5'
-            data-cy='market-dashboard'
-        >
+        <div className='mx-40 mt-7 flex flex-col gap-5' data-cy='exchange-page'>
             <div className='mb-5'>
                 <DropdownSelector
                     optionList={assetList}
                     selected={assetList[0]}
-                    buttonVersion='v2'
+                    variant='roundedExpandButton'
                     onChange={(v: CurrencySymbol) => dispatch(setCurrency(v))}
                 />
             </div>
