@@ -8,6 +8,7 @@ export * from './CurveHeader';
 export * from './Dialog';
 export * from './LineChart';
 export * from './LiquidationProgressBar';
+export * from './MarketDashboardTopBar';
 export * from './PercentageSelector';
 export * from './PortfolioManagementTable';
 export * from './Tab';

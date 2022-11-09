@@ -10,11 +10,11 @@ interface AssetInformationProps {
     quantity: number;
 }
 
-export const AssetInformation: React.FC<AssetInformationProps> = ({
+export const AssetInformation = ({
     header,
     asset,
     quantity,
-}) => {
+}: AssetInformationProps) => {
     const priceList = useSelector((state: RootState) => getPriceMap(state));
     const price = priceList[asset];
 

@@ -17,14 +17,14 @@ export const CollateralInformationTable = ({
                 <span>Asset</span>
                 <span>Balance</span>
             </div>
-            <Separator color='neutral' />
+            <Separator color='neutral-3' />
             {data.map((asset, index) => {
                 return (
                     <div key={asset.asset} className='h-16 px-4'>
                         <CollateralInformation {...asset} />
                         {data.length - 1 !== index && (
                             <div className='mt-5'>
-                                <Separator color='neutral' />
+                                <Separator color='neutral-3' />
                             </div>
                         )}
                     </div>

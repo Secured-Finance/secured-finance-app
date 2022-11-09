@@ -8,7 +8,17 @@ export default {
     argTypes: {
         color: {
             control: 'select',
-            options: ['moonGrey', 'neutral', 'default'],
+            options: [
+                'neutral-2',
+                'neutral-3',
+                'moonGrey',
+                'white-10',
+                'default',
+            ],
+        },
+        orientation: {
+            control: 'select',
+            options: ['horizontal', 'vertical'],
         },
     },
 } as ComponentMeta<typeof Separator>;
@@ -21,4 +31,5 @@ export const Default = Template.bind({});
 export const Primary = Template.bind({});
 Primary.args = {
     color: 'moonGrey',
+    orientation: 'vertical',
 };
