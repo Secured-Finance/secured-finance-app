@@ -4,11 +4,11 @@ export interface PortfolioTabProps {
     orientation: 'left' | 'right' | 'center';
 }
 
-export const PortfolioTab: React.FC<PortfolioTabProps> = ({
+export const PortfolioTab = ({
     name,
     value,
     orientation,
-}) => {
+}: PortfolioTabProps) => {
     return (
         <div className='flex h-28 w-full flex-col items-center justify-center '>
             <div className='h-1 w-full bg-starBlue'></div>

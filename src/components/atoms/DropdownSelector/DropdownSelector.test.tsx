@@ -2,7 +2,7 @@ import { composeStories } from '@storybook/testing-react';
 import { fireEvent, render, screen } from 'src/test-utils.js';
 import * as stories from './DropdownSelector.stories';
 
-const { AssetDropdown, TermDropdown } = composeStories(stories);
+const { AssetDropdown, TermDropdown, NoLabel } = composeStories(stories);
 
 describe('Dropdown Asset Selection Component', () => {
     it('should render', () => {
@@ -68,5 +68,14 @@ describe('Dropdown Asset Selection Component', () => {
         const onChange = jest.fn();
         render(<AssetDropdown onChange={onChange} />);
         expect(onChange).toHaveBeenLastCalledWith('BTC');
+    });
+
+    it('should render different button for variant nolabel', () => {
+        render(<NoLabel />);
+        expect(screen.getByRole('button')).toBeInTheDocument();
+        expect(screen.queryByText('Bitcoin')).not.toBeInTheDocument();
+        fireEvent.click(screen.getByRole('button'));
+        fireEvent.click(screen.getByText('Ethereum'));
+        expect(screen.queryByText('Ethereum')).not.toBeInTheDocument();
     });
 });

@@ -1,4 +1,3 @@
-export * from './ArrowSVG';
 export * from './AssetInformation';
 export * from './Button';
 export * from './Chip';
@@ -13,6 +12,7 @@ export * from './DropdownSelector';
 export * from './ExpandIndicator';
 export * from './HorizontalListItem';
 export * from './InformationPopover';
+export * from './MarketTab';
 export * from './NavTab';
 export * from './PercentageTab';
 export * from './PortfolioTab';
