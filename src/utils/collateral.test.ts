@@ -1,5 +1,5 @@
 import { BigNumber } from 'ethers';
-import { computeAvailableToBorrow } from './collateral';
+import { calculatePercentage, computeAvailableToBorrow } from './collateral';
 
 const ONE_ETH = BigNumber.from('1000000000000000000');
 
@@ -15,6 +15,14 @@ describe('collateral.computeAvailableToBorrow', () => {
     it('should return show the formula when assetPrice and EthPrice are the same', () => {
         expect(computeAvailableToBorrow(1200, 1200, ONE_ETH.mul(10))).toEqual(
             6
+        );
+    });
+});
+
+describe('collateral.calculatePercentage', () => {
+    it('should compute the percentage', () => {
+        expect(calculatePercentage(ONE_ETH, ONE_ETH.mul(2))).toEqual(
+            BigNumber.from(50)
         );
     });
 });

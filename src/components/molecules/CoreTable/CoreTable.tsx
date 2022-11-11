@@ -49,7 +49,7 @@ export const CoreTable = <T,>({
                         {headerGroup.headers.map(header => (
                             <th
                                 key={header.id}
-                                className={classNames({
+                                className={classNames('px-4 py-2', {
                                     'text-left': options.align === 'left',
                                     'text-right': options.align === 'right',
                                     'text-center': options.align === 'center',
@@ -70,7 +70,7 @@ export const CoreTable = <T,>({
                 {table.getRowModel().rows.map(row => (
                     <tr
                         key={row.id}
-                        className={classNames({
+                        className={classNames('relative', {
                             'cursor-pointer': onLineClick,
                         })}
                         onClick={onLineClick}

@@ -11,3 +11,7 @@ export const computeAvailableToBorrow = (
         ((+maxToBorrowInEth / COLLATERAL_RATIO) * etherPrice) / assetPrice
     );
 };
+
+export const calculatePercentage = (value: BigNumber, total: BigNumber) => {
+    return value.mul(100).div(total);
+};

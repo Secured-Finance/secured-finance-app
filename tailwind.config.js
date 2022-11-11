@@ -60,7 +60,7 @@ module.exports = {
             primary7: '#11CABE',
 
             // Secondary
-            galacticOrange: '#F9AA4B',
+            galacticOrange: '#FF9FAE',
             planetaryPurple: '#ADB6FF',
             nebulaTeal: '#15D6E8',
             secondaryPurple: '#AE72FF',
@@ -74,6 +74,7 @@ module.exports = {
                 '2': '#23262F',
                 '3': '#353945',
                 '4': '#777E91',
+                '6': '#E6E8EC',
                 '8': '#FCFCFD',
             },
             grayScale: '#FAFAFA',
