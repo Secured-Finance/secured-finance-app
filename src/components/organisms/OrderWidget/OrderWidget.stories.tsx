@@ -1,27 +1,71 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { BigNumber } from 'ethers';
-import { Rate } from 'src/utils';
+import { CurrencySymbol, Rate } from 'src/utils';
 import { OrderBookEntry, OrderWidget } from './OrderWidget';
 
-const orderBookEntries: Array<OrderBookEntry> = [
+const borrowEntries: Array<OrderBookEntry> = [
     {
-        amount: BigNumber.from(100),
-        apy: new Rate(11000),
+        amount: BigNumber.from('43000000000000000000000'),
+        apy: new Rate(195000),
+        price: 80.55,
     },
     {
-        amount: BigNumber.from(200),
-        apy: new Rate(22000),
+        amount: BigNumber.from('23000000000000000000000'),
+        apy: new Rate(183000),
+        price: 81.6,
     },
     {
-        amount: BigNumber.from(300),
-        apy: new Rate(33000),
+        amount: BigNumber.from('15000000000000000000000'),
+        apy: new Rate(180000),
+        price: 81.28,
+    },
+    {
+        amount: BigNumber.from('12000000000000000000000'),
+        apy: new Rate(170000),
+        price: 94.6,
+    },
+    {
+        amount: BigNumber.from('1800000000000000000000'),
+        apy: new Rate(160000),
+        price: 82.31,
     },
 ];
+
+const lendEntries: Array<OrderBookEntry> = [
+    {
+        amount: BigNumber.from('43000000000000000000000'),
+        apy: new Rate(200000),
+        price: 79.77,
+    },
+    {
+        amount: BigNumber.from('55000000000000000000000'),
+        apy: new Rate(205000),
+        price: 79.41,
+    },
+    {
+        amount: BigNumber.from('3000000000000000000000'),
+        apy: new Rate(210000),
+        price: 79.05,
+    },
+    {
+        amount: BigNumber.from('15000000000000000000000'),
+        apy: new Rate(222000),
+        price: 78.2,
+    },
+    {
+        amount: BigNumber.from('21000000000000000000000'),
+        apy: new Rate(235000),
+        price: 77.28,
+    },
+];
+
 export default {
     title: 'Organism/OrderWidget',
     component: OrderWidget,
     args: {
-        data: orderBookEntries,
+        buyOrders: borrowEntries,
+        sellOrders: lendEntries,
+        currency: CurrencySymbol.FIL,
     },
 } as ComponentMeta<typeof OrderWidget>;
 
