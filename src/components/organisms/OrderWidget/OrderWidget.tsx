@@ -127,6 +127,20 @@ export const OrderWidget = ({
         [buyOrders]
     );
 
+    const totalSellAmount = useMemo(
+        () =>
+            sellOrders.reduce(
+                (acc, order) => acc.add(order.amount),
+                BigNumber.from(0)
+            ),
+        [sellOrders]
+    );
+
+    const lastMidPrice = useMemo(
+        () => (sellOrders[0].price + buyOrders[0].price) / 2,
+        [sellOrders, buyOrders]
+    );
+
     const buyColumns = useMemo(
         () => [
             columnHelper.accessor('apy', {
@@ -165,7 +179,7 @@ export const OrderWidget = ({
                     <PriceCell
                         value={info.getValue().toString()}
                         amount={info.row.original.amount}
-                        totalAmount={totalBuyAmount}
+                        totalAmount={totalSellAmount}
                         position='lend'
                     />
                 ),
@@ -186,7 +200,7 @@ export const OrderWidget = ({
                 header: () => <TableHeader title='% APY' />,
             }),
         ],
-        [currency, totalBuyAmount]
+        [currency, totalSellAmount]
     );
 
     return (
@@ -195,12 +209,14 @@ export const OrderWidget = ({
                 tabTitles={['Order Book', 'Market Trades', 'My Orders']}
             >
                 <>
-                    <div className='flex h-14 flex-row justify-center gap-1 border-b border-white-10 bg-black-20'>
-                        <ArrowUpIcon className='mt-1.5 flex h-4 text-green' />
-
-                        <div className='typography-portfolio-heading flex text-white'>
+                    <div className='flex h-14 flex-row items-center justify-center gap-1 border-b border-white-10 bg-black-20'>
+                        <ArrowUpIcon className='flex h-3 text-teal' />
+                        <span className='typography-portfolio-heading flex text-teal'>
+                            {lastMidPrice}
+                        </span>
+                        <span className='typography-portfolio-heading flex text-slateGray'>
                             {percentFormat(20)}
-                        </div>
+                        </span>
                     </div>
                     <div className='flex flex-row'>
                         <CoreTable
