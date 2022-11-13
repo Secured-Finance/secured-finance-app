@@ -24,6 +24,9 @@ export const YieldChart = ({
     const lendingContracts = useSelector(
         (state: RootState) => state.availableContracts.lendingMarkets[asset]
     );
+    const { maturity } = useSelector(
+        (state: RootState) => state.landingOrderForm
+    );
     const [show, setShow] = useState(true);
 
     return (
@@ -54,6 +57,7 @@ export const YieldChart = ({
                                 handleChartClick={maturity =>
                                     dispatch(setMaturity(maturity))
                                 }
+                                maturity={maturity}
                             ></LineChart>
                         )}
                     </div>

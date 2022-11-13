@@ -66,6 +66,7 @@ export type LineChartProps = {
     style?: React.CSSProperties;
     data: ChartData<'line'>;
     maturitiesOptionList: Option[];
+    maturity: string;
     handleChartClick: (maturity: string) => void;
 } & ChartProps;
 
@@ -74,6 +75,7 @@ export const LineChart = ({
     options = customOptions,
     style,
     maturitiesOptionList,
+    maturity = '',
     handleChartClick,
 }: LineChartProps) => {
     const ccy = useSelector(
@@ -81,9 +83,6 @@ export const LineChart = ({
     );
     const lendingContracts = useSelector(
         (state: RootState) => state.availableContracts.lendingMarkets[ccy]
-    );
-    const maturity = useSelector(
-        (state: RootState) => state.landingOrderForm.maturity
     );
 
     const chartRef = useRef<ChartJS<'line'>>(null);
