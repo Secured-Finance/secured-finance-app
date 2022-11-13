@@ -1,15 +1,37 @@
 import {
+    ChartData,
     ChartOptions,
     ChartTypeRegistry,
     ScriptableContext,
     TooltipItem,
 } from 'chart.js';
+import { Rate } from 'src/utils';
 
 export const defaultDatasets = {
     borderWidth: 3,
     radius: 0,
     lineTension: 0.4,
     pointRadius: 0.01,
+};
+
+const refineArray = (array: Array<Rate>) => {
+    return array.map(r => r.toNormalizedNumber());
+};
+
+export const getData = (
+    rates: Rate[],
+    label: string,
+    labels: string[]
+): ChartData<'line'> => {
+    return {
+        labels: labels,
+        datasets: [
+            {
+                label: label,
+                data: refineArray(rates),
+            },
+        ],
+    };
 };
 
 export const crossHairPlugin = {
