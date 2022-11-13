@@ -11,7 +11,7 @@ export const LineChartTab = ({
     maturitiesOptionList: Option[];
 }) => {
     const dispatch = useDispatch();
-    const { currency, side } = useSelector(
+    const { currency, side, maturity } = useSelector(
         (state: RootState) => state.marketDashboardForm
     );
 
@@ -40,6 +40,7 @@ export const LineChartTab = ({
                     handleChartClick={maturity =>
                         dispatch(setMaturity(maturity))
                     }
+                    maturity={maturity}
                 ></LineChart>
             )}
         </div>
