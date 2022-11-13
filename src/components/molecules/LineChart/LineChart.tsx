@@ -12,7 +12,7 @@ import {
 } from 'chart.js';
 import React, { useEffect, useRef } from 'react';
 import { ChartProps, getElementAtEvent, Line } from 'react-chartjs-2';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Option } from 'src/components/atoms';
 import {
     crossHairPlugin,
@@ -20,7 +20,6 @@ import {
     getCurveGradient,
     options as customOptions,
 } from 'src/components/molecules/LineChart/constants';
-import { setMaturity } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
 
 ChartJS.register(
@@ -67,6 +66,7 @@ export type LineChartProps = {
     style?: React.CSSProperties;
     data: ChartData<'line'>;
     maturitiesOptionList: Option[];
+    handleChartClick: (maturity: string) => void;
 } & ChartProps;
 
 export const LineChart = ({
@@ -74,8 +74,8 @@ export const LineChart = ({
     options = customOptions,
     style,
     maturitiesOptionList,
+    handleChartClick,
 }: LineChartProps) => {
-    const dispatch = useDispatch();
     const ccy = useSelector(
         (state: RootState) => state.landingOrderForm.currency
     );
@@ -118,7 +118,7 @@ export const LineChart = ({
         if (element && element[0]) {
             const { index } = element[0];
             const label = data.labels?.[index];
-            dispatch(setMaturity(lendingContracts[label as string]));
+            handleChartClick(lendingContracts[label as string]);
         }
     };
 

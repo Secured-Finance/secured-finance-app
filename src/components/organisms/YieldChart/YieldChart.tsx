@@ -1,9 +1,9 @@
-import { ChartData } from 'chart.js';
 import { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import SFLogoSmall from 'src/assets/img/logo-small.svg';
 import { ExpandIndicator, Option } from 'src/components/atoms';
-import { CurveHeader, LineChart } from 'src/components/molecules';
+import { CurveHeader, getData, LineChart } from 'src/components/molecules';
+import { setMaturity } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
 import { CurrencySymbol, Rate } from 'src/utils';
 
@@ -14,32 +14,13 @@ interface YieldChartProps {
     maturitiesOptionList: Option[];
 }
 
-const refineArray = (array: Array<Rate>) => {
-    return array.map(r => r.toNormalizedNumber());
-};
-
-const getData = (
-    rates: Rate[],
-    label: string,
-    labels: string[]
-): ChartData<'line'> => {
-    return {
-        labels: labels,
-        datasets: [
-            {
-                label: label,
-                data: refineArray(rates),
-            },
-        ],
-    };
-};
-
 export const YieldChart = ({
     asset,
     isBorrow,
     rates,
     maturitiesOptionList,
 }: YieldChartProps): JSX.Element => {
+    const dispatch = useDispatch();
     const lendingContracts = useSelector(
         (state: RootState) => state.availableContracts.lendingMarkets[asset]
     );
@@ -70,6 +51,9 @@ export const YieldChart = ({
                                     Object.keys(lendingContracts)
                                 )}
                                 maturitiesOptionList={maturitiesOptionList}
+                                handleChartClick={maturity =>
+                                    dispatch(setMaturity(maturity))
+                                }
                             ></LineChart>
                         )}
                     </div>

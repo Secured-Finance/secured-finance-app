@@ -6,6 +6,8 @@ export * from './ContractDetailsDialog';
 export * from './DepositCollateral';
 export * from './Header';
 export * from './LendingCard';
+export * from './LineChartTab';
+export * from './MarketOrganism';
 export * from './MyWalletCard';
 export * from './WalletDialog';
 export * from './WalletPopover';
