@@ -9,19 +9,13 @@ import {
     HorizontalTab,
     TableHeader,
 } from 'src/components/molecules';
+import { OrderBookEntry } from 'src/hooks/useOrderbook';
 import {
     currencyMap,
     CurrencySymbol,
     ordinaryFormat,
     percentFormat,
-    Rate,
 } from 'src/utils';
-
-export type OrderBookEntry = {
-    amount: BigNumber;
-    apy: Rate;
-    price: number;
-};
 
 const columnHelper = createColumnHelper<OrderBookEntry>();
 

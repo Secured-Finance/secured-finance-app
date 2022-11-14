@@ -1,7 +1,8 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { BigNumber } from 'ethers';
+import { OrderBookEntry } from 'src/hooks/useOrderbook';
 import { CurrencySymbol, Rate } from 'src/utils';
-import { OrderBookEntry, OrderWidget } from './OrderWidget';
+import { OrderWidget } from './OrderWidget';
 
 const borrowEntries: Array<OrderBookEntry> = [
     {

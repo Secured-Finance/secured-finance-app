@@ -1,7 +1,7 @@
 import { BigNumber } from 'ethers';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { renderHook } from 'src/test-utils';
-import { CurrencySymbol } from 'src/utils';
+import { CurrencySymbol, Rate } from 'src/utils';
 import { useOrderbook } from './useOrderbook';
 
 const mock = mockUseSF();
@@ -20,12 +20,32 @@ describe('useOrderbook', () => {
 
         await waitForNextUpdate();
 
-        result.current.borrowOrderbook.rates.forEach((rate: unknown) =>
-            expect(rate).toBeInstanceOf(BigNumber)
-        );
-
-        result.current.borrowOrderbook.amounts.forEach((rate: unknown) =>
-            expect(rate).toBeInstanceOf(BigNumber)
-        );
+        expect(result.current.borrowOrderbook).toEqual([
+            {
+                amount: BigNumber.from('43000000000000000000000'),
+                apy: new Rate(195000),
+                price: 100,
+            },
+            {
+                amount: BigNumber.from('23000000000000000000000'),
+                apy: new Rate(183000),
+                price: 101,
+            },
+            {
+                amount: BigNumber.from('15000000000000000000000'),
+                apy: new Rate(180000),
+                price: 102,
+            },
+            {
+                amount: BigNumber.from('12000000000000000000000'),
+                apy: new Rate(170000),
+                price: 103,
+            },
+            {
+                amount: BigNumber.from('1800000000000000000000'),
+                apy: new Rate(160000),
+                price: 104,
+            },
+        ]);
     });
 });
