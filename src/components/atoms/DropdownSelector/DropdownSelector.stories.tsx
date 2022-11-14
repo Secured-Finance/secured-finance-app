@@ -82,3 +82,12 @@ LongSelectionDropdown.args = {
     ],
     selected: { label: 'Sep 2022', value: 'Sep2022' },
 };
+
+export const RoundedExpandButton = Template.bind({});
+RoundedExpandButton.args = {
+    variant: 'roundedExpandButton',
+};
+export const NoLabel = Template.bind({});
+NoLabel.args = {
+    variant: 'noLabel',
+};

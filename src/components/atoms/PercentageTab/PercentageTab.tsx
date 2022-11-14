@@ -4,11 +4,11 @@ interface PercentageTabProps {
     onClick: () => void;
 }
 
-export const PercentageTab: React.FC<PercentageTabProps> = ({
+export const PercentageTab = ({
     percentage,
     active,
     onClick,
-}) => {
+}: PercentageTabProps) => {
     return (
         <button
             className={`typography-percentage-tab flex h-10 w-16 flex-row items-center justify-center rounded-[90px] border-2 border-neutral-3 px-4 py-3 hover:border-none hover:bg-neutral-8 hover:text-neutral-2 ${
