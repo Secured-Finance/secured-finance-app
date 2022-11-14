@@ -85,6 +85,22 @@ export const mockUseSF = () => {
                 ),
             })
         ),
+
+        getBorrowOrderBook: jest.fn(() =>
+            Promise.resolve({
+                rates: [BigNumber.from('1000'), BigNumber.from('2000')],
+                amounts: [BigNumber.from('1000'), BigNumber.from('2000')],
+                quantities: [BigNumber.from('1000'), BigNumber.from('2000')],
+            })
+        ),
+
+        getLendOrderBook: jest.fn(() =>
+            Promise.resolve({
+                rates: [BigNumber.from('1005'), BigNumber.from('2005')],
+                amounts: [BigNumber.from('1005'), BigNumber.from('2005')],
+                quantities: [BigNumber.from('1005'), BigNumber.from('2005')],
+            })
+        ),
     };
 
     return mockSecuredFinance;
