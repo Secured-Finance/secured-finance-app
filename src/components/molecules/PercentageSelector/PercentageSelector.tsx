@@ -7,9 +7,7 @@ interface PercentageSelectorProps {
 
 const percentage = [25, 50, 75, 100];
 
-export const PercentageSelector: React.FC<PercentageSelectorProps> = ({
-    onClick,
-}) => {
+export const PercentageSelector = ({ onClick }: PercentageSelectorProps) => {
     const [activeNumber, setActiveNumber] = useState(0);
 
     const handleClick = (percentage: number) => {
