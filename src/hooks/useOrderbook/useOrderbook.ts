@@ -3,14 +3,29 @@ import { BigNumber } from 'ethers';
 import { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from 'src/store/types';
-import { CurrencySymbol, toCurrency } from 'src/utils';
+import { CurrencySymbol, Rate, toCurrency } from 'src/utils';
 import useSF from '../useSecuredFinance';
 
-export interface Orderbook {
+interface SmartContractOrderbook {
     rates: BigNumber[];
     amounts: BigNumber[];
     quantities: BigNumber[];
 }
+export type OrderBookEntry = {
+    amount: BigNumber;
+    apy: Rate;
+    price: number;
+};
+
+export type OrderBook = Array<OrderBookEntry>;
+
+const transformOrderbook = (input: SmartContractOrderbook): OrderBook => {
+    return input.rates.map((rate, index) => ({
+        amount: input.amounts[index],
+        apy: new Rate(rate.toNumber()),
+        price: 100 + index,
+    }));
+};
 
 export const useOrderbook = (
     ccy: CurrencySymbol,
@@ -21,21 +36,29 @@ export const useOrderbook = (
     const block = useSelector(
         (state: RootState) => state.blockchain.latestBlock
     );
-    const [borrowOrderbook, setBorrowOrderbook] = useState<Orderbook | []>([]);
-    const [lendOrderbook, setLendOrderbook] = useState<Orderbook | []>([]);
+    const [borrowOrderbook, setBorrowOrderbook] = useState<OrderBook | []>([]);
+    const [lendOrderbook, setLendOrderbook] = useState<OrderBook | []>([]);
 
     const fetchOrderbook = useCallback(
         async (securedFinance: SecuredFinanceClient) => {
             const currency = toCurrency(ccy);
             setBorrowOrderbook(
-                await securedFinance.getBorrowOrderBook(
-                    currency,
-                    maturity,
-                    limit
+                transformOrderbook(
+                    await securedFinance.getBorrowOrderBook(
+                        currency,
+                        maturity,
+                        limit
+                    )
                 )
             );
             setLendOrderbook(
-                await securedFinance.getLendOrderBook(currency, maturity, limit)
+                transformOrderbook(
+                    await securedFinance.getLendOrderBook(
+                        currency,
+                        maturity,
+                        limit
+                    )
+                )
             );
         },
         [ccy, limit, maturity]

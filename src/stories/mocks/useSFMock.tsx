@@ -88,17 +88,53 @@ export const mockUseSF = () => {
 
         getBorrowOrderBook: jest.fn(() =>
             Promise.resolve({
-                rates: [BigNumber.from('1000'), BigNumber.from('2000')],
-                amounts: [BigNumber.from('1000'), BigNumber.from('2000')],
-                quantities: [BigNumber.from('1000'), BigNumber.from('2000')],
+                rates: [
+                    BigNumber.from(195000),
+                    BigNumber.from(183000),
+                    BigNumber.from(180000),
+                    BigNumber.from(170000),
+                    BigNumber.from(160000),
+                ],
+                amounts: [
+                    BigNumber.from('43000000000000000000000'),
+                    BigNumber.from('23000000000000000000000'),
+                    BigNumber.from('15000000000000000000000'),
+                    BigNumber.from('12000000000000000000000'),
+                    BigNumber.from('1800000000000000000000'),
+                ],
+                quantities: [
+                    BigNumber.from('1000'),
+                    BigNumber.from('2000'),
+                    BigNumber.from('3000'),
+                    BigNumber.from('4000'),
+                    BigNumber.from('5000'),
+                ],
             })
         ),
 
         getLendOrderBook: jest.fn(() =>
             Promise.resolve({
-                rates: [BigNumber.from('1005'), BigNumber.from('2005')],
-                amounts: [BigNumber.from('1005'), BigNumber.from('2005')],
-                quantities: [BigNumber.from('1005'), BigNumber.from('2005')],
+                rates: [
+                    BigNumber.from(195000),
+                    BigNumber.from(183000),
+                    BigNumber.from(180000),
+                    BigNumber.from(170000),
+                    BigNumber.from(160000),
+                ],
+                amounts: [
+                    BigNumber.from('43000000000000000000000'),
+                    BigNumber.from('23000000000000000000000'),
+                    BigNumber.from('15000000000000000000000'),
+                    BigNumber.from('12000000000000000000000'),
+                    BigNumber.from('1800000000000000000000'),
+                ],
+                quantities: [
+                    BigNumber.from('1000'),
+                    BigNumber.from('2000'),
+                    BigNumber.from('3000'),
+                    BigNumber.from('4000'),
+                    BigNumber.from('5000'),
+                ],
             })
         ),
     };
