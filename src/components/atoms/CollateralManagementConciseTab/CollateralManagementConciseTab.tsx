@@ -8,10 +8,12 @@ interface CollateralManagementConciseTabProps {
 }
 
 export const CollateralManagementConciseTab = ({
-    collateralCoverage = 0,
-    totalCollateralInUSD = 0,
-    liquidationPercentage = 0,
+    collateralCoverage,
+    totalCollateralInUSD,
+    liquidationPercentage,
 }: CollateralManagementConciseTabProps) => {
+    const info = getLiquidationInformation(liquidationPercentage);
+
     return (
         <div className='flex h-fit w-full flex-col bg-black-20 pt-2 pb-4'>
             <div className='mx-4 mb-5 mt-4 flex flex-col gap-3'>
@@ -53,12 +55,23 @@ export const CollateralManagementConciseTab = ({
                             )}`}
                         </span>
                     </div>
-                    <div className='typography-caption text-[#F9AA4B]'>
-                        Medium
+                    <div className={`typography-caption ${info.color}`}>
+                        {info.risk}
                     </div>
                 </div>
-                <div className='h-6px w-full rounded-full bg-gradient-to-r from-[rgba(48,224,161,1)] via-[rgba(247,147,26,1)] to-[rgba(250,34,86,1)]'></div>
+                <div className='h-6px w-full rounded-full bg-gradient-to-r from-progressBarStart via-progressBarVia to-progressBarEnd'></div>
             </div>
         </div>
     );
+};
+
+export const getLiquidationInformation = (liquidationPercentage: number) => {
+    if (liquidationPercentage === 0) {
+        return { color: 'text-white', risk: 'N/A' };
+    } else if (liquidationPercentage < 40) {
+        return { color: 'text-progressBarStart', risk: 'Low' };
+    } else if (liquidationPercentage >= 40 && liquidationPercentage < 60) {
+        return { color: 'text-progressBarVia', risk: 'Medium' };
+    }
+    return { color: 'text-progressBarEnd', risk: 'High' };
 };

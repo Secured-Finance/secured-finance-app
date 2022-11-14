@@ -4,7 +4,7 @@ import { SimpleAdvancedSelector } from '.';
 export default {
     title: 'Atoms/SimpleAdvancedSelector',
     component: SimpleAdvancedSelector,
-    args: { activeButton: 'Simple' },
+    args: { text: 'Simple' },
 } as ComponentMeta<typeof SimpleAdvancedSelector>;
 
 const Template: ComponentStory<typeof SimpleAdvancedSelector> = args => (

@@ -1,45 +1,57 @@
+import { RadioGroup } from '@headlessui/react';
+
 type ViewType = 'Simple' | 'Advanced';
 
 export const SimpleAdvancedSelector = ({
-    handleButtonClick,
-    activeButton = 'Simple',
+    handleClick,
+    text,
 }: {
-    handleButtonClick: (button: ViewType) => void;
-    activeButton: ViewType;
+    handleClick: (view: ViewType) => void;
+    text: ViewType;
 }) => {
     return (
-        <div className='flex h-10 w-fit flex-row items-center rounded-full bg-black-20 p-[2px] shadow-selector'>
-            <SimpelAdvancedButton
-                selected={activeButton === 'Simple'}
-                onClick={button => handleButtonClick(button)}
-                buttonText='Simple'
-            />
-            <SimpelAdvancedButton
-                selected={activeButton === 'Advanced'}
-                onClick={button => handleButtonClick(button)}
-                buttonText='Advanced'
-            />
-        </div>
+        <RadioGroup
+            value={text}
+            onChange={(v: ViewType) => handleClick(v)}
+            as='div'
+            className='flex h-10 w-fit flex-row items-center rounded-full bg-black-20 p-[2px] shadow-selector'
+        >
+            <RadioGroup.Option
+                value={'Simple'}
+                className='h-full w-1/2'
+                as='button'
+            >
+                {({ checked }) => (
+                    <SimpleAdvancedButton text='Simple' active={checked} />
+                )}
+            </RadioGroup.Option>
+            <RadioGroup.Option
+                value={'Advanced'}
+                className='h-full w-1/2'
+                as='button'
+            >
+                {({ checked }) => (
+                    <SimpleAdvancedButton text='Advanced' active={checked} />
+                )}
+            </RadioGroup.Option>
+        </RadioGroup>
     );
 };
 
-const SimpelAdvancedButton = ({
-    selected = false,
-    buttonText,
-    onClick,
+const SimpleAdvancedButton = ({
+    active,
+    text,
 }: {
-    selected: boolean;
-    buttonText: ViewType;
-    onClick: (button: ViewType) => void;
+    active: boolean;
+    text: ViewType;
 }) => {
     return (
-        <button
+        <div
             className={`typography-caption flex h-full w-[100px] items-center justify-center rounded-full duration-300 hover:opacity-100 hover:ease-in-out ${
-                selected ? 'bg-starBlue text-white' : 'text-white opacity-40'
+                active ? 'bg-starBlue text-white' : 'text-white opacity-40'
             }`}
-            onClick={() => onClick(buttonText)}
         >
-            {buttonText}
-        </button>
+            {text}
+        </div>
     );
 };

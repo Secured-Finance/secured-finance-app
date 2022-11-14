@@ -1,5 +1,8 @@
 import Tick from 'src/assets/icons/tick.svg';
-import { InformationPopover } from 'src/components/atoms';
+import {
+    getLiquidationInformation,
+    InformationPopover,
+} from 'src/components/atoms';
 
 interface LiquidationProgressBarProps {
     liquidationPercentage: number;
@@ -19,6 +22,7 @@ export const LiquidationProgressBar = ({
     }
 
     const informationText = formatInformationText(liquidationPercentage);
+    const info = getLiquidationInformation(liquidationPercentage);
 
     return (
         <div
@@ -29,8 +33,8 @@ export const LiquidationProgressBar = ({
                 <span className='typography-body-2 text-slateGray'>
                     Liquidation Risk
                 </span>
-                <span className='typography-body-1 text-white'>
-                    {liquidationPercentage === 0 ? 'N/A' : 'Low'}
+                <span className={`typography-body-1 ${info.color}`}>
+                    {info.risk}
                 </span>
             </div>
             <div className='flex flex-col gap-[6px]'>
@@ -41,18 +45,22 @@ export const LiquidationProgressBar = ({
                 >
                     <Tick className='float-right h-5px w-2'></Tick>
                 </div>
-                <div className='h-5px w-full rounded-full bg-gradient-to-r from-[rgba(48,224,161,1)] via-[rgba(247,147,26,1)] to-[rgba(250,34,86,1)]'></div>
+                <div className='h-5px w-full rounded-full bg-gradient-to-r from-progressBarStart via-progressBarVia to-progressBarEnd'></div>
                 {liquidationPercentage === 0 ? (
                     <div className='typography-caption mt-1 text-white'>
                         N/A
                     </div>
                 ) : (
                     <div className='mt-1 flex w-full flex-row items-center gap-1'>
-                        <div className='typography-caption text-planetaryPurple'>
-                            <span className='whitespace-pre font-semibold'>
+                        <div className='typography-caption'>
+                            <span
+                                className={`whitespace-pre font-semibold ${info.color}`}
+                            >
                                 {`${liquidationPercentage}% `}
                             </span>
-                            <span>threshold to liquidation</span>
+                            <span className='text-planetaryPurple'>
+                                threshold to liquidation
+                            </span>
                         </div>
                         <InformationPopover text={informationText} />
                     </div>

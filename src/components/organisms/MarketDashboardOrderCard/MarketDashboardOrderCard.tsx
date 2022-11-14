@@ -88,16 +88,9 @@ export const MarketDashboardOrderCard = ({
 
             <div className='flex w-full flex-col justify-center gap-6 px-4 pt-5'>
                 <BorrowLendSelector
-                    handleButtonClick={button =>
-                        dispatch(
-                            setSide(
-                                button === 'Borrow'
-                                    ? OrderSide.Borrow
-                                    : OrderSide.Lend
-                            )
-                        )
-                    }
-                    activeButton={side === OrderSide.Borrow ? 'Borrow' : 'Lend'}
+                    handleClick={side => dispatch(setSide(side))}
+                    side={side}
+                    variant='advanced'
                 />
                 <div className='flex flex-col gap-4'>
                     <OrderInputBox

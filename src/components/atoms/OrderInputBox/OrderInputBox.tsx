@@ -12,8 +12,8 @@ interface OrderInputBoxProps {
 }
 
 export const OrderInputBox = ({
-    field = '',
-    unit = '',
+    field,
+    unit,
     initialValue = '',
     asset,
     disabled = false,
@@ -67,7 +67,11 @@ export const OrderInputBox = ({
         <div className='typography-caption flex h-10 w-full flex-row items-center justify-between rounded-lg bg-black-20 py-2 pl-2 pr-4 text-white'>
             <div className='text-neutral-5'>{field}</div>
             <div className='flex flex-row gap-[10px]'>
-                {!disabled ? (
+                {disabled ? (
+                    <span className='text-right text-neutral-8'>
+                        {initialValue}
+                    </span>
+                ) : (
                     <input
                         type='text'
                         placeholder='0'
@@ -75,10 +79,6 @@ export const OrderInputBox = ({
                         onChange={handleAmountChange}
                         className='bg-transparent text-right text-neutral-8 focus:outline-none'
                     />
-                ) : (
-                    <span className='bg-transparent text-right text-neutral-8 focus:outline-none'>
-                        {initialValue}
-                    </span>
                 )}
                 <div className='text-neutral-4'>{unit}</div>
             </div>

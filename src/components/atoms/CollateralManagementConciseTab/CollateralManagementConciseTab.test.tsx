@@ -13,10 +13,28 @@ describe('CollateralManagementConciseTab component', () => {
 
         expect(screen.getByText('Liquidation Risk')).toBeInTheDocument();
         expect(screen.getByText('Threshold 23%')).toBeInTheDocument();
-        expect(screen.getByText('Medium')).toBeInTheDocument();
+        expect(screen.getByText('Low')).toBeInTheDocument();
+        expect(screen.getByText('Low')).toHaveClass('text-progressBarStart');
 
         expect(screen.getByTestId('collateral-progress-bar-track')).toHaveStyle(
             'width: calc(100% * 0.7)'
         );
+    });
+
+    it('should render correct color and risk status', () => {
+        render(<Default liquidationPercentage={0} />);
+        expect(screen.getByText('Threshold 0%')).toBeInTheDocument();
+        expect(screen.getByText('N/A')).toBeInTheDocument();
+        expect(screen.getByText('N/A')).toHaveClass('text-white');
+
+        render(<Default liquidationPercentage={50} />);
+        expect(screen.getByText('Threshold 50%')).toBeInTheDocument();
+        expect(screen.getByText('Medium')).toBeInTheDocument();
+        expect(screen.getByText('Medium')).toHaveClass('text-progressBarVia');
+
+        render(<Default liquidationPercentage={70} />);
+        expect(screen.getByText('Threshold 70%')).toBeInTheDocument();
+        expect(screen.getByText('High')).toBeInTheDocument();
+        expect(screen.getByText('High')).toHaveClass('text-progressBarEnd');
     });
 });

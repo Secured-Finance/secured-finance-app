@@ -106,6 +106,10 @@ module.exports = {
             cardBackground: 'rgb(41, 45, 63)',
             panelStroke: 'rgb(45, 64, 100)',
 
+            progressBarStart: 'rgba(48, 224, 161, 1)',
+            progressBarVia: 'rgba(247, 147, 26, 1)',
+            progressBarEnd: 'rgba(250, 34, 86, 1)',
+
             transparent: 'transparent',
             starBlue: {
                 '80': 'rgba(81, 98, 255, 0.8)',
