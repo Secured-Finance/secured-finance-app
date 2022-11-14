@@ -17,6 +17,7 @@
     "attofil",
     "bignumber",
     "chartjs",
+    "COLORBAR",
     "craco",
     "EFIL",
     "graphclient",
@@ -33,5 +34,6 @@
     "testid",
     "walletconnect",
     "zondax"
-  ]
+  ],
+  "jest.jestCommandLine": "npm run test -- --watch"
 }

@@ -3,6 +3,7 @@ import { createColumnHelper } from '@tanstack/react-table';
 import classNames from 'classnames';
 import { BigNumber } from 'ethers';
 import { useMemo } from 'react';
+import { ColorBar } from 'src/components/atoms';
 import {
     CoreTable,
     HorizontalTab,
@@ -15,7 +16,6 @@ import {
     percentFormat,
     Rate,
 } from 'src/utils';
-import { calculatePercentage } from 'src/utils/collateral';
 
 export type OrderBookEntry = {
     amount: BigNumber;
@@ -71,41 +71,13 @@ const PriceCell = ({
     return (
         <>
             <OrderBookCell value={value} color={color} />
-            <ColorBarCell
+            <ColorBar
                 value={amount}
                 total={totalAmount}
                 color={color}
                 align={align}
             />
         </>
-    );
-};
-
-const ColorBarCell = ({
-    value,
-    total,
-    color,
-    align,
-}: {
-    value: BigNumber;
-    total: BigNumber;
-    color: 'red' | 'green';
-    align: 'left' | 'right';
-}) => {
-    const width = Math.max(
-        3,
-        Math.trunc(calculatePercentage(value, total).toNumber() / 1.1)
-    );
-    return (
-        <div
-            className={classNames('absolute bottom-1  h-7 opacity-20', {
-                'bg-galacticOrange': color === 'red',
-                'bg-nebulaTeal': color === 'green',
-                'left-3': align === 'left',
-                'right-3': align === 'right',
-            })}
-            style={{ width: `${width}%` }}
-        ></div>
     );
 };
 
@@ -225,6 +197,7 @@ export const OrderWidget = ({
                             options={{
                                 align: 'right',
                             }}
+                            name='buyOrders'
                         />
                         <CoreTable
                             data={sellOrders}
@@ -232,6 +205,7 @@ export const OrderWidget = ({
                             options={{
                                 align: 'left',
                             }}
+                            name='sellOrders'
                         />
                     </div>
                 </>
