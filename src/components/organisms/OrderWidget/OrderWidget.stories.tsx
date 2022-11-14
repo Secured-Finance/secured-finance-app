@@ -30,6 +30,11 @@ const borrowEntries: Array<OrderBookEntry> = [
         apy: new Rate(160000),
         price: 82.31,
     },
+    {
+        amount: BigNumber.from('0'),
+        apy: new Rate(0),
+        price: 105,
+    },
 ];
 
 const lendEntries: Array<OrderBookEntry> = [

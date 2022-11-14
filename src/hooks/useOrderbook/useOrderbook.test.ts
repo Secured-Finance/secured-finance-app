@@ -10,7 +10,7 @@ jest.mock('src/hooks/useSecuredFinance', () => () => mock);
 describe('useOrderbook', () => {
     it('should return an array of number for borrow rates', async () => {
         const { result, waitForNextUpdate } = renderHook(() =>
-            useOrderbook(CurrencySymbol.ETH, 1, 1)
+            useOrderbook(CurrencySymbol.ETH, 1, 5)
         );
 
         expect(result.current).toEqual({

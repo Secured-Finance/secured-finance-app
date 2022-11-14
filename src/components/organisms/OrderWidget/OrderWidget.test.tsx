@@ -24,4 +24,9 @@ describe('OrderWidget Component', () => {
         render(<Default buyOrders={[]} />);
         expect(screen.getByTestId('last-mid-price')).toHaveTextContent('0');
     });
+
+    it('should display rows with - as the value if the order is empty', () => {
+        render(<Default />);
+        expect(screen.getAllByText('-')).toHaveLength(3);
+    });
 });
