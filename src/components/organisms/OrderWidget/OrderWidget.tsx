@@ -15,15 +15,16 @@ import {
     CurrencySymbol,
     ordinaryFormat,
     percentFormat,
+    Rate,
 } from 'src/utils';
 
 const columnHelper = createColumnHelper<OrderBookEntry>();
 
 const OrderBookCell = ({
-    value,
+    value = '-',
     color = 'neutral',
 }: {
-    value: string;
+    value?: string;
     color?: 'neutral' | 'red' | 'green';
 }) => (
     <span
@@ -43,11 +44,14 @@ const AmountCell = ({
 }: {
     value: BigNumber;
     currency: CurrencySymbol;
-}) => (
-    <OrderBookCell
-        value={ordinaryFormat(currencyMap[currency].fromBaseUnit(value))}
-    />
-);
+}) =>
+    value.eq(0) ? (
+        <OrderBookCell />
+    ) : (
+        <OrderBookCell
+            value={ordinaryFormat(currencyMap[currency].fromBaseUnit(value))}
+        />
+    );
 
 const PriceCell = ({
     value,
@@ -62,6 +66,7 @@ const PriceCell = ({
 }) => {
     const color = position === 'borrow' ? 'red' : 'green';
     const align = position === 'borrow' ? 'right' : 'left';
+    if (amount.eq(0)) return <OrderBookCell />;
     return (
         <>
             <OrderBookCell value={value} color={color} />
@@ -74,6 +79,9 @@ const PriceCell = ({
         </>
     );
 };
+
+const ApyCell = ({ value, display }: { value: Rate; display: boolean }) =>
+    display ? <OrderBookCell value={value.toPercent()} /> : <OrderBookCell />;
 
 export const OrderWidget = ({
     buyOrders,
@@ -114,8 +122,9 @@ export const OrderWidget = ({
         () => [
             columnHelper.accessor('apy', {
                 cell: info => (
-                    <OrderBookCell
-                        value={info.getValue().toPercent().toString()}
+                    <ApyCell
+                        value={info.getValue()}
+                        display={!info.row.original.amount.eq(0)}
                     />
                 ),
                 header: () => <TableHeader title='% APY' />,
@@ -162,8 +171,9 @@ export const OrderWidget = ({
             }),
             columnHelper.accessor('apy', {
                 cell: info => (
-                    <OrderBookCell
-                        value={info.getValue().toPercent().toString()}
+                    <ApyCell
+                        value={info.getValue()}
+                        display={!info.row.original.amount.eq(0)}
                     />
                 ),
                 header: () => <TableHeader title='% APY' />,
