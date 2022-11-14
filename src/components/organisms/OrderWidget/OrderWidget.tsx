@@ -108,10 +108,13 @@ export const OrderWidget = ({
         [sellOrders]
     );
 
-    const lastMidPrice = useMemo(
-        () => (sellOrders[0].price + buyOrders[0].price) / 2,
-        [sellOrders, buyOrders]
-    );
+    const lastMidPrice = useMemo(() => {
+        if (buyOrders.length === 0 || sellOrders.length === 0) {
+            return 0;
+        }
+
+        return (sellOrders[0].price + buyOrders[0].price) / 2;
+    }, [sellOrders, buyOrders]);
 
     const buyColumns = useMemo(
         () => [
@@ -183,7 +186,10 @@ export const OrderWidget = ({
                 <>
                     <div className='flex h-14 flex-row items-center justify-center gap-1 border-b border-white-10 bg-black-20'>
                         <ArrowUpIcon className='flex h-3 text-teal' />
-                        <span className='typography-portfolio-heading flex text-teal'>
+                        <span
+                            className='typography-portfolio-heading flex text-teal'
+                            data-testid='last-mid-price'
+                        >
                             {lastMidPrice}
                         </span>
                         <span className='typography-portfolio-heading flex text-slateGray'>
