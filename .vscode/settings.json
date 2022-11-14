@@ -35,5 +35,5 @@
     "walletconnect",
     "zondax"
   ],
-  "jest.jestCommandLine": "npm run test -- --watch"
+  "jest.jestCommandLine": "npm run test -- --watchAll"
 }
