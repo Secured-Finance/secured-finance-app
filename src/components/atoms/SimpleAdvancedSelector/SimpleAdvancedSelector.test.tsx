@@ -7,7 +7,8 @@ const { Default } = composeStories(stories);
 describe('SimpleAdvancedSelector component', () => {
     it('should render simple/advanced button', () => {
         render(<Default />);
-        expect(screen.queryAllByRole('button')).toHaveLength(2);
+        expect(screen.queryAllByRole('radiogroup')).toHaveLength(1);
+        expect(screen.queryAllByRole('radio')).toHaveLength(2);
         expect(screen.getByText('Simple')).toBeInTheDocument();
         expect(screen.getByText('Advanced')).toBeInTheDocument();
     });
@@ -22,7 +23,7 @@ describe('SimpleAdvancedSelector component', () => {
 
     it('should call onclick', () => {
         const onClick = jest.fn();
-        render(<Default handleButtonClick={onClick} />);
+        render(<Default handleClick={onClick} />);
 
         const advancedButton = screen.getByText('Advanced');
         fireEvent.click(advancedButton);

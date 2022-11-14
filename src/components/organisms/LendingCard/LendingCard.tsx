@@ -1,8 +1,7 @@
-import { RadioGroup } from '@headlessui/react';
 import { BigNumber, ContractTransaction } from 'ethers';
 import { useCallback, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button, NavTab, Option } from 'src/components/atoms';
+import { BorrowLendSelector, Button, Option } from 'src/components/atoms';
 import { CollateralUsageSection } from 'src/components/atoms/CollateralUsageSection';
 import { AssetSelector, TermSelector } from 'src/components/molecules';
 import { CollateralBook, OrderSide } from 'src/hooks';
@@ -142,27 +141,11 @@ export const LendingCard = ({
 
     return (
         <div className='w-80 flex-col space-y-6 rounded-b-xl border border-panelStroke bg-transparent pb-6 shadow-deep'>
-            <RadioGroup
-                value={side}
-                onChange={(v: OrderSide) => dispatch(setSide(v))}
-                as='div'
-                className='flex h-16 flex-row items-center justify-around'
-            >
-                <RadioGroup.Option
-                    value={OrderSide.Borrow}
-                    className='h-full w-1/2'
-                    as='button'
-                >
-                    {({ checked }) => <NavTab text='Borrow' active={checked} />}
-                </RadioGroup.Option>
-                <RadioGroup.Option
-                    value={OrderSide.Lend}
-                    as='button'
-                    className='h-full w-1/2'
-                >
-                    {({ checked }) => <NavTab text='Lend' active={checked} />}
-                </RadioGroup.Option>
-            </RadioGroup>
+            <BorrowLendSelector
+                handleClick={side => dispatch(setSide(side))}
+                side={side}
+                variant='simple'
+            />
 
             <div className='grid justify-center space-y-6 px-4'>
                 <div className='flex flex-col text-center'>

@@ -7,7 +7,8 @@ const { Default } = composeStories(stories);
 describe('BorrowLendSelector component', () => {
     it('should render borrow/lend button', () => {
         render(<Default />);
-        expect(screen.queryAllByRole('button')).toHaveLength(2);
+        expect(screen.queryAllByRole('radiogroup')).toHaveLength(1);
+        expect(screen.queryAllByRole('radio')).toHaveLength(2);
         expect(screen.getByText('Borrow')).toBeInTheDocument();
         expect(screen.getByText('Lend')).toBeInTheDocument();
     });
@@ -22,11 +23,11 @@ describe('BorrowLendSelector component', () => {
 
     it('should call onclick', () => {
         const onClick = jest.fn();
-        render(<Default handleButtonClick={onClick} />);
+        render(<Default handleClick={onClick} />);
 
         const lendButton = screen.getByText('Lend');
         fireEvent.click(lendButton);
         expect(onClick).toBeCalledTimes(1);
-        expect(onClick).toHaveBeenCalledWith('Lend');
+        expect(onClick).toHaveBeenCalledWith('0');
     });
 });
