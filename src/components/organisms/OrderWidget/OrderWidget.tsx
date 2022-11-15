@@ -21,17 +21,20 @@ import {
 const columnHelper = createColumnHelper<OrderBookEntry>();
 
 const OrderBookCell = ({
-    value = '-',
+    value = '',
     color = 'neutral',
+    fontWeight = 'normal',
 }: {
     value?: string;
     color?: 'neutral' | 'red' | 'green';
+    fontWeight?: 'normal' | 'semibold';
 }) => (
     <span
-        className={classNames('typography-caption-2 ', {
+        className={classNames('typography-caption-2', {
             'text-galacticOrange': color === 'red',
             'text-nebulaTeal': color === 'green',
             'text-neutral-6': color === 'neutral',
+            'font-semibold': fontWeight === 'semibold',
         })}
     >
         {value}
@@ -69,7 +72,7 @@ const PriceCell = ({
     if (amount.eq(0)) return <OrderBookCell />;
     return (
         <>
-            <OrderBookCell value={value} color={color} />
+            <OrderBookCell value={value} color={color} fontWeight='semibold' />
             <ColorBar
                 value={amount}
                 total={totalAmount}

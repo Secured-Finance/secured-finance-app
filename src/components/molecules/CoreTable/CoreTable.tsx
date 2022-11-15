@@ -42,7 +42,7 @@ export const CoreTable = <T,>({
 
     const table = useReactTable<T>(configuration);
     return (
-        <table className='w-full text-white' data-testid={name}>
+        <table className='h-full w-full text-white' data-testid={name}>
             <thead className='typography-caption-2 h-14 border-b border-white-10 py-4 px-6 text-slateGray'>
                 {table.getHeaderGroups().map(headerGroup => (
                     <tr key={headerGroup.id} data-testid={`${name}-header`}>
@@ -70,7 +70,7 @@ export const CoreTable = <T,>({
                 {table.getRowModel().rows.map(row => (
                     <tr
                         key={row.id}
-                        className={classNames('relative', {
+                        className={classNames('relative h-7', {
                             'cursor-pointer': onLineClick,
                         })}
                         onClick={onLineClick}
