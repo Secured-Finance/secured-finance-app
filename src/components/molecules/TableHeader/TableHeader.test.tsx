@@ -24,4 +24,18 @@ describe('TableHeader Component', () => {
         render(<Sorting />);
         expect(screen.getByTestId('sorting-icons')).toBeInTheDocument();
     });
+
+    it('should align the text to the right when align is right', () => {
+        render(<Default align='right' />);
+        expect(screen.getByTestId('table-header-wrapper')).toHaveClass(
+            'justify-end'
+        );
+    });
+
+    it('should not wrap the component in a div when align is not provided', () => {
+        render(<Default />);
+        expect(
+            screen.queryByTestId('table-header-wrapper')
+        ).not.toBeInTheDocument();
+    });
 });

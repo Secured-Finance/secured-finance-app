@@ -47,14 +47,19 @@ const AmountCell = ({
 }: {
     value: BigNumber;
     currency: CurrencySymbol;
-}) =>
-    value.eq(0) ? (
-        <OrderBookCell />
-    ) : (
-        <OrderBookCell
-            value={ordinaryFormat(currencyMap[currency].fromBaseUnit(value))}
-        />
-    );
+}) => (
+    <div className='flex justify-end'>
+        {value.eq(0) ? (
+            <OrderBookCell />
+        ) : (
+            <OrderBookCell
+                value={ordinaryFormat(
+                    currencyMap[currency].fromBaseUnit(value)
+                )}
+            />
+        )}{' '}
+    </div>
+);
 
 const PriceCell = ({
     value,
@@ -71,7 +76,12 @@ const PriceCell = ({
     const align = position === 'borrow' ? 'right' : 'left';
     if (amount.eq(0)) return <OrderBookCell />;
     return (
-        <>
+        <div
+            className={classNames('flex', {
+                'justify-start': align === 'left',
+                'justify-end': align === 'right',
+            })}
+        >
             <OrderBookCell value={value} color={color} fontWeight='semibold' />
             <ColorBar
                 value={amount}
@@ -79,12 +89,19 @@ const PriceCell = ({
                 color={color}
                 align={align}
             />
-        </>
+        </div>
     );
 };
 
-const ApyCell = ({ value, display }: { value: Rate; display: boolean }) =>
-    display ? <OrderBookCell value={value.toPercent()} /> : <OrderBookCell />;
+const ApyCell = ({ value, display }: { value: Rate; display: boolean }) => (
+    <div className='flex justify-end'>
+        {display ? (
+            <OrderBookCell value={value.toPercent()} />
+        ) : (
+            <OrderBookCell />
+        )}
+    </div>
+);
 
 export const OrderWidget = ({
     buyOrders,
@@ -130,13 +147,15 @@ export const OrderWidget = ({
                         display={!info.row.original.amount.eq(0)}
                     />
                 ),
-                header: () => <TableHeader title='% APY' />,
+                header: () => <TableHeader title='% APY' align='right' />,
             }),
             columnHelper.accessor('amount', {
                 cell: info => (
                     <AmountCell value={info.getValue()} currency={currency} />
                 ),
-                header: () => <TableHeader title={`Amount (${currency})`} />,
+                header: () => (
+                    <TableHeader title={`Amount (${currency})`} align='right' />
+                ),
             }),
             columnHelper.accessor('price', {
                 cell: info => (
@@ -147,7 +166,7 @@ export const OrderWidget = ({
                         position='borrow'
                     />
                 ),
-                header: () => <TableHeader title='Price' />,
+                header: () => <TableHeader title='Price' align='right' />,
             }),
         ],
         [currency, totalBuyAmount]
@@ -164,13 +183,15 @@ export const OrderWidget = ({
                         position='lend'
                     />
                 ),
-                header: () => <TableHeader title='Price' />,
+                header: () => <TableHeader title='Price' align='left' />,
             }),
             columnHelper.accessor('amount', {
                 cell: info => (
                     <AmountCell value={info.getValue()} currency={currency} />
                 ),
-                header: () => <TableHeader title={`Amount (${currency})`} />,
+                header: () => (
+                    <TableHeader title={`Amount (${currency})`} align='right' />
+                ),
             }),
             columnHelper.accessor('apy', {
                 cell: info => (
@@ -179,7 +200,7 @@ export const OrderWidget = ({
                         display={!info.row.original.amount.eq(0)}
                     />
                 ),
-                header: () => <TableHeader title='% APY' />,
+                header: () => <TableHeader title='% APY' align='right' />,
             }),
         ],
         [currency, totalSellAmount]
@@ -203,21 +224,15 @@ export const OrderWidget = ({
                             {percentFormat(20)}
                         </span>
                     </div>
-                    <div className='flex flex-row'>
+                    <div className='flex flex-row gap-6'>
                         <CoreTable
                             data={buyOrders}
                             columns={buyColumns}
-                            options={{
-                                align: 'right',
-                            }}
                             name='buyOrders'
                         />
                         <CoreTable
                             data={sellOrders}
                             columns={sellColumns}
-                            options={{
-                                align: 'left',
-                            }}
                             name='sellOrders'
                         />
                     </div>
