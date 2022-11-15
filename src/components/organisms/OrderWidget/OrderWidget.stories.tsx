@@ -63,6 +63,11 @@ const lendEntries: Array<OrderBookEntry> = [
         apy: new Rate(235000),
         price: 77.28,
     },
+    {
+        amount: BigNumber.from('51000000000000000000000'),
+        apy: new Rate(245000),
+        price: 76.28,
+    },
 ];
 
 export default {
@@ -76,7 +81,9 @@ export default {
 } as ComponentMeta<typeof OrderWidget>;
 
 const Template: ComponentStory<typeof OrderWidget> = args => (
-    <OrderWidget {...args} />
+    <div className='w-1/2'>
+        <OrderWidget {...args} />
+    </div>
 );
 
 export const Default = Template.bind({});
