@@ -29,11 +29,4 @@ describe('CoreTable Component', () => {
             expect(row).not.toHaveClass('cursor-pointer');
         });
     });
-
-    it('should align the text to the left if align is left', () => {
-        render(<Default options={{ align: 'left' }} />);
-        screen.getAllByRole('cell').forEach(row => {
-            expect(row).toHaveClass('text-left');
-        });
-    });
 });

@@ -15,18 +15,12 @@ export const CoreTable = <T,>({
     columns,
     onLineClick,
     name = 'core-table',
-    options = {
-        align: 'center',
-    },
 }: {
     data: Array<T>;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     columns: ColumnDef<T, any>[];
     onLineClick?: () => void;
     name?: string;
-    options?: {
-        align?: 'left' | 'right' | 'center';
-    };
 }) => {
     const [sorting, setSorting] = useState<SortingState>([]);
     const configuration = {
@@ -49,11 +43,7 @@ export const CoreTable = <T,>({
                         {headerGroup.headers.map(header => (
                             <th
                                 key={header.id}
-                                className={classNames('px-4 py-2', {
-                                    'text-left': options.align === 'left',
-                                    'text-right': options.align === 'right',
-                                    'text-center': options.align === 'center',
-                                })}
+                                className='px-4 py-2 text-center'
                             >
                                 {header.isPlaceholder
                                     ? null
@@ -77,14 +67,7 @@ export const CoreTable = <T,>({
                         data-testid={`${name}-row`}
                     >
                         {row.getVisibleCells().map(cell => (
-                            <td
-                                key={cell.id}
-                                className={classNames('px-4 py-2', {
-                                    'text-left': options.align === 'left',
-                                    'text-right': options.align === 'right',
-                                    'text-center': options.align === 'center',
-                                })}
-                            >
+                            <td key={cell.id} className='px-4 py-2 text-center'>
                                 {flexRender(
                                     cell.column.columnDef.cell,
                                     cell.getContext()
