@@ -6,6 +6,7 @@ export * from './CloseButton';
 export * from './CollateralInformationTable';
 export * from './CollateralManagementConciseTab';
 export * from './CollateralSelector';
+export * from './ColorBar';
 export * from './CurrencyIcon';
 export * from './CurrencyItem';
 export * from './CurveHeaderAsset';
