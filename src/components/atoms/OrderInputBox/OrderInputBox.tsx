@@ -1,5 +1,5 @@
 import { BigNumber } from 'ethers';
-import { ChangeEvent, useCallback, useMemo, useState } from 'react';
+import { ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react';
 import { CurrencySymbol, getCurrencyMapAsList } from 'src/utils';
 
 interface OrderInputBoxProps {
@@ -20,6 +20,10 @@ export const OrderInputBox = ({
     onValueChange,
 }: OrderInputBoxProps) => {
     const [inputValue, setInputValue] = useState(initialValue);
+
+    useEffect(() => {
+        setInputValue(initialValue);
+    }, [initialValue]);
 
     const amountFormatterMap = useMemo(
         () =>
@@ -57,7 +61,11 @@ export const OrderInputBox = ({
                 isNaN(+maybeNumber) || maybeNumber === '' ? -1 : +maybeNumber;
             setInputValue(amount === -1 ? '' : maybeNumber);
             if (onValueChange) {
-                handleInputChange(amount, asset, onValueChange);
+                handleInputChange(
+                    amount > 0 ? amount : 0,
+                    asset,
+                    onValueChange
+                );
             }
         },
         [onValueChange, handleInputChange, asset]

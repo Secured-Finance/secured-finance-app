@@ -8,6 +8,8 @@ export default {
     args: {
         field: 'Fixed Rate',
         unit: '%',
+        disabled: true,
+        initialValue: '1000',
     },
 } as ComponentMeta<typeof OrderInputBox>;
 
@@ -20,19 +22,16 @@ export const Default = Template.bind({});
 export const Amount = Template.bind({});
 Amount.args = {
     field: 'Amount',
-    unit: 'FIL',
+    unit: CurrencySymbol.FIL,
     asset: CurrencySymbol.FIL,
-};
-
-export const LimitPrice = Template.bind({});
-LimitPrice.args = {
-    field: 'Limit Price',
-    unit: 'ETH',
-    asset: CurrencySymbol.ETH,
+    disabled: false,
+    initialValue: '10',
 };
 
 export const Total = Template.bind({});
 Total.args = {
     field: 'Total',
     unit: 'USD',
+    disabled: true,
+    initialValue: '49.2',
 };

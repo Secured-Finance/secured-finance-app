@@ -11,6 +11,7 @@ import {
 import { BorrowLendSelector } from 'src/components/atoms/BorrowLendSelector';
 import { OrderInputBox } from 'src/components/atoms/OrderInputBox';
 import { CollateralBook, OrderSide, OrderType } from 'src/hooks';
+import { getPriceMap } from 'src/store/assetPrices/selectors';
 import {
     selectMarketDashboardForm,
     setAmount,
@@ -19,7 +20,12 @@ import {
     setSide,
 } from 'src/store/marketDashboardForm';
 import { RootState } from 'src/store/types';
-import { CurrencySymbol, getFullDisplayBalanceNumber } from 'src/utils';
+import {
+    CurrencySymbol,
+    getCurrencyMapAsList,
+    getFullDisplayBalanceNumber,
+    ordinaryFormat,
+} from 'src/utils';
 
 export const MarketDashboardOrderCard = ({
     collateralBook,
@@ -48,11 +54,38 @@ export const MarketDashboardOrderCard = ({
         collateralBook.usdCollateral.toNumber()
     );
 
+    const priceList = useSelector((state: RootState) => getPriceMap(state));
+    const price = priceList[currency];
+
+    const amountFormatterMap = useMemo(
+        () =>
+            getCurrencyMapAsList().reduce<
+                Record<CurrencySymbol, (value: BigNumber) => number>
+            >(
+                (acc, ccy) => ({
+                    ...acc,
+                    [ccy.symbol]: ccy.fromBaseUnit,
+                }),
+                {} as Record<CurrencySymbol, (value: BigNumber) => number>
+            ),
+        []
+    );
+
+    const getAmount = () => {
+        let format = (x: BigNumber) => x.toNumber();
+        if (currency && amountFormatterMap && amountFormatterMap[currency]) {
+            format = amountFormatterMap[currency];
+        }
+        return format(amount);
+    };
+
     return (
         <div className='w-[350px] rounded-b-xl border border-white-10 bg-cardBackground bg-opacity-60 pb-7 shadow-tab'>
             <RadioGroup
                 value={orderType}
-                onChange={(v: OrderType) => dispatch(setOrderType(v))}
+                onChange={(v: OrderType) => {
+                    dispatch(setOrderType(v));
+                }}
                 as='div'
                 className='flex h-[60px] flex-row items-center justify-around'
             >
@@ -97,20 +130,23 @@ export const MarketDashboardOrderCard = ({
                         field='Fixed Rate'
                         unit='%'
                         disabled={orderType === OrderType.MARKET}
-                        initialValue={rate.toString()}
-                        onValueChange={v => dispatch(setRate(v as number))}
+                        initialValue={(rate / 10000.0).toString()}
+                        onValueChange={v =>
+                            dispatch(setRate((v as number) * 10000.0))
+                        }
                     />
                     <OrderInputBox
                         field='Amount'
                         unit={currency}
                         asset={currency}
+                        initialValue={getAmount().toString()}
                         onValueChange={v => dispatch(setAmount(v as BigNumber))}
                     />
                     <OrderInputBox
                         field='Total'
                         unit='USD'
                         disabled={true}
-                        initialValue={amount.toString()}
+                        initialValue={ordinaryFormat(getAmount() * price, 4)}
                     />
                 </div>
 
