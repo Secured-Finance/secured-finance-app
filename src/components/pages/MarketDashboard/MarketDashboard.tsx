@@ -1,4 +1,5 @@
-import { useMemo } from 'react';
+import { BigNumber } from 'ethers';
+import { useCallback, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { DropdownSelector } from 'src/components/atoms';
 import { MarketDashboardTopBar } from 'src/components/molecules';
@@ -12,6 +13,7 @@ import {
     useRates,
 } from 'src/hooks';
 import {
+    setAmount,
     setCurrency,
     setMaturity,
     setRate,
@@ -34,10 +36,14 @@ export const MarketDashboard = () => {
         (state: RootState) => state.availableContracts.lendingMarkets[currency]
     );
 
-    const optionList = Object.entries(lendingContracts).map(o => ({
-        label: o[0],
-        value: o[1],
-    }));
+    const optionList = useMemo(
+        () =>
+            Object.entries(lendingContracts).map(o => ({
+                label: o[0],
+                value: o[1],
+            })),
+        [lendingContracts]
+    );
 
     const collateralBook = useCollateralBook(account);
 
@@ -69,6 +75,14 @@ export const MarketDashboard = () => {
         return rate;
     }, [rates, lendingContracts, maturity]);
 
+    const handleTermChange = useCallback(
+        (v: CurrencySymbol) => {
+            dispatch(setCurrency(v));
+            dispatch(setAmount(BigNumber.from(0)));
+        },
+        [dispatch]
+    );
+
     return (
         <div className='mx-40 mt-7 flex flex-col gap-5' data-cy='exchange-page'>
             <div className='mb-5'>
@@ -76,7 +90,7 @@ export const MarketDashboard = () => {
                     optionList={assetList}
                     selected={assetList[0]}
                     variant='roundedExpandButton'
-                    onChange={(v: CurrencySymbol) => dispatch(setCurrency(v))}
+                    onChange={handleTermChange}
                 />
             </div>
             <MarketDashboardTopBar

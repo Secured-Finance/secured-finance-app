@@ -13,8 +13,8 @@ export default {
         collateralBook: {
             ccyName: 'ETH',
             collateral: new BigNumber('10000000000000000000'),
-            usdCollateral: new BigNumber('100000000000000000000'),
-            coverage: new BigNumber('80'),
+            usdCollateral: new BigNumber('1000000000000000000000'),
+            coverage: new BigNumber('800'),
         },
     },
     decorators: [WithAssetPrice],
@@ -25,18 +25,3 @@ const Template: ComponentStory<typeof MarketDashboardOrderCard> = args => {
 };
 
 export const Default = Template.bind({});
-
-export const WithError = Template.bind({});
-WithError.args = {
-    onPlaceOrder: async () => {
-        throw Error('Something went wrong');
-    },
-};
-export const PendingTransaction = Template.bind({});
-PendingTransaction.args = {
-    onPlaceOrder: async () => {
-        return new Promise(resolve => {
-            setTimeout(resolve, 5000);
-        });
-    },
-};
