@@ -4,6 +4,7 @@ export * from './Chip';
 export * from './CloseButton';
 export * from './CollateralInformationTable';
 export * from './CollateralSelector';
+export * from './ColorBar';
 export * from './CurrencyIcon';
 export * from './CurrencyItem';
 export * from './CurveHeaderAsset';

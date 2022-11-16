@@ -20,12 +20,12 @@ const TitleChip = ({
         </div>
     );
 };
-export const TradeHistoryTab = ({
+export const HorizontalTab = ({
     tabTitles,
     children,
 }: {
     tabTitles: string[];
-    children: React.ReactNode;
+    children?: React.ReactNode;
 }) => {
     const arrayChildren = Children.toArray(children);
     const [selectedIndex, setSelectedIndex] = useState(0);
