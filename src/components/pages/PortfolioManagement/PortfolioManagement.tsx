@@ -2,8 +2,8 @@ import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import {
     AssetDisclosureProps,
+    HorizontalTab,
     PortfolioManagementTable,
-    TradeHistoryTab,
 } from 'src/components/molecules';
 import {
     ActiveTrade,
@@ -90,12 +90,12 @@ export const PortfolioManagement = () => {
                 </div>
             </div>
             <div>
-                <TradeHistoryTab
+                <HorizontalTab
                     tabTitles={['Active Contracts', 'Trade History']}
                 >
                     <ActiveTradeTable data={activeTrades} />
                     <div className='px-12 text-white'>Soon</div>
-                </TradeHistoryTab>
+                </HorizontalTab>
             </div>
         </div>
     );

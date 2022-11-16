@@ -1,21 +1,9 @@
-import {
-    createColumnHelper,
-    flexRender,
-    getCoreRowModel,
-    getSortedRowModel,
-    SortDirection,
-    SortingState,
-    useReactTable,
-} from '@tanstack/react-table';
+import { createColumnHelper } from '@tanstack/react-table';
 import { BigNumber } from 'ethers';
 import { useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
-import {
-    Chip,
-    CurrencyIcon,
-    CurrencyItem,
-    SortArrows,
-} from 'src/components/atoms';
+import { Chip, CurrencyIcon, CurrencyItem } from 'src/components/atoms';
+import { CoreTable, TableHeader } from 'src/components/molecules';
 import { ContractDetailDialog } from 'src/components/organisms';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { RootState } from 'src/store/types';
@@ -33,25 +21,6 @@ export type ActiveTrade = {
 };
 
 const columnHelper = createColumnHelper<ActiveTrade>();
-
-const TableHeader = ({
-    title,
-    sortingHandler,
-    isSorted,
-}: {
-    title: string;
-    sortingHandler: ((event: unknown) => void) | undefined;
-    isSorted: boolean | SortDirection;
-}) => (
-    <button className='cursor-pointer select-none' onClick={sortingHandler}>
-        <span className='flex flex-row items-center justify-center gap-1'>
-            <span>{title}</span>
-            <span>
-                <SortArrows isSorted={isSorted} />
-            </span>
-        </span>
-    </button>
-);
 
 const AmountCell = ({
     ccy,
@@ -172,61 +141,15 @@ export const ActiveTradeTable = ({ data }: { data: Array<ActiveTrade> }) => {
         [priceList]
     );
 
-    const [sorting, setSorting] = useState<SortingState>([]);
-    const table = useReactTable({
-        data,
-        columns,
-        state: {
-            sorting,
-        },
-        onSortingChange: setSorting,
-        getCoreRowModel: getCoreRowModel(),
-        getSortedRowModel: getSortedRowModel(),
-    });
-
     const [displayContractDetails, setDisplayContractDetails] = useState(false);
     return (
         <>
-            <table className='w-full text-white'>
-                <thead className='typography-caption-2 h-14  border-b border-white-10 py-4 px-6 text-slateGray'>
-                    {table.getHeaderGroups().map(headerGroup => (
-                        <tr key={headerGroup.id}>
-                            {headerGroup.headers.map(header => (
-                                <th key={header.id}>
-                                    {header.isPlaceholder
-                                        ? null
-                                        : flexRender(
-                                              header.column.columnDef.header,
-                                              header.getContext()
-                                          )}
-                                </th>
-                            ))}
-                        </tr>
-                    ))}
-                </thead>
-                <tbody>
-                    {table.getRowModel().rows.map(row => (
-                        <tr
-                            key={row.id}
-                            className='cursor-pointer'
-                            onClick={() => setDisplayContractDetails(true)}
-                            data-testid='active-trade-row'
-                        >
-                            {row.getVisibleCells().map(cell => (
-                                <td
-                                    key={cell.id}
-                                    className='px-4 py-2 text-center'
-                                >
-                                    {flexRender(
-                                        cell.column.columnDef.cell,
-                                        cell.getContext()
-                                    )}
-                                </td>
-                            ))}
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
+            <CoreTable
+                data={data}
+                columns={columns}
+                name='active-trade-table'
+                onLineClick={() => setDisplayContractDetails(true)}
+            />
             <ContractDetailDialog
                 isOpen={displayContractDetails}
                 onClose={() => setDisplayContractDetails(false)}
