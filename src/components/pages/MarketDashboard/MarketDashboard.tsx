@@ -5,6 +5,7 @@ import { DropdownSelector } from 'src/components/atoms';
 import { MarketDashboardTopBar } from 'src/components/molecules';
 import { MarketDashboardOrderCard } from 'src/components/organisms/MarketDashboardOrderCard';
 import { MarketOrganism } from 'src/components/organisms/MarketOrganism';
+import { OrderWidget } from 'src/components/organisms/OrderWidget';
 import {
     OrderSide,
     OrderType,
@@ -12,6 +13,7 @@ import {
     useCollateralBook,
     useRates,
 } from 'src/hooks';
+import { useOrderbook } from 'src/hooks/useOrderbook';
 import {
     setAmount,
     setCurrency,
@@ -49,6 +51,7 @@ export const MarketDashboard = () => {
 
     const assetList = useMemo(() => getCurrencyMapAsOptions(), []);
     const dispatch = useDispatch();
+    const orderBook = useOrderbook(currency, Number(optionList[0].value), 10);
 
     const selectedTerm = useMemo(() => {
         return (
@@ -110,7 +113,14 @@ export const MarketDashboard = () => {
             />
             <div className='flex flex-row gap-6'>
                 <MarketDashboardOrderCard collateralBook={collateralBook} />
-                <MarketOrganism maturitiesOptionList={optionList} />
+                <div className='flex flex-col gap-6'>
+                    <MarketOrganism maturitiesOptionList={optionList} />
+                    <OrderWidget
+                        buyOrders={orderBook.borrowOrderbook}
+                        sellOrders={orderBook.lendOrderbook}
+                        currency={currency}
+                    />
+                </div>
             </div>
         </div>
     );
