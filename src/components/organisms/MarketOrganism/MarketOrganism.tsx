@@ -13,11 +13,9 @@ export const MarketOrganism = ({
     maturitiesOptionList: Option[];
 }) => {
     return (
-        <div className='flex h-fit flex-grow'>
-            <Tab tabDataArray={tabDataArray}>
-                <LineChartTab maturitiesOptionList={maturitiesOptionList} />
-                <div />
-            </Tab>
-        </div>
+        <Tab tabDataArray={tabDataArray}>
+            <LineChartTab maturitiesOptionList={maturitiesOptionList} />
+            <div />
+        </Tab>
     );
 };
