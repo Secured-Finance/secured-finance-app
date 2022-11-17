@@ -13,9 +13,11 @@ export const MarketOrganism = ({
     maturitiesOptionList: Option[];
 }) => {
     return (
-        <Tab tabDataArray={tabDataArray}>
-            <LineChartTab maturitiesOptionList={maturitiesOptionList} />
-            <div />
-        </Tab>
+        <div className='w-full'>
+            <Tab tabDataArray={tabDataArray}>
+                <LineChartTab maturitiesOptionList={maturitiesOptionList} />
+                <div />
+            </Tab>
+        </div>
     );
 };
