@@ -113,7 +113,7 @@ export const MarketDashboard = () => {
             />
             <div className='flex flex-row gap-6'>
                 <MarketDashboardOrderCard collateralBook={collateralBook} />
-                <div className='flex flex-col gap-6'>
+                <div className='flex flex-grow flex-col gap-6'>
                     <MarketOrganism maturitiesOptionList={optionList} />
                     <OrderWidget
                         buyOrders={orderBook.borrowOrderbook}

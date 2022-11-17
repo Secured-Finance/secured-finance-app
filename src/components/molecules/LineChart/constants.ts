@@ -38,7 +38,11 @@ export const crossHairPlugin = {
     id: 'cross-hair',
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     afterDraw: (chart: any) => {
-        if (chart.tooltip._active && chart.tooltip._active.length) {
+        if (
+            chart.tooltip &&
+            chart.tooltip._active &&
+            chart.tooltip._active.length
+        ) {
             const activePoint = chart.tooltip._active[0];
             const ctx = chart.ctx;
             const x = activePoint.element.x;
