@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { BigNumber } from 'ethers';
-import { OrderSide } from 'src/hooks';
+import { OrderSide, OrderType } from 'src/hooks';
 import { CurrencySymbol } from 'src/utils';
 
 type MarketDashboardFormStore = {
@@ -9,6 +9,7 @@ type MarketDashboardFormStore = {
     side: OrderSide;
     amount: string;
     rate: number;
+    orderType: OrderType;
 };
 const initialStore: MarketDashboardFormStore = {
     currency: CurrencySymbol.FIL,
@@ -16,6 +17,7 @@ const initialStore: MarketDashboardFormStore = {
     side: OrderSide.Borrow,
     amount: '0',
     rate: 0,
+    orderType: OrderType.MARKET,
 };
 
 const marketDashboardFormSlice = createSlice({
@@ -36,6 +38,9 @@ const marketDashboardFormSlice = createSlice({
         },
         setRate: (state, action: PayloadAction<number>) => {
             state.rate = action.payload;
+        },
+        setOrderType: (state, action: PayloadAction<OrderType>) => {
+            state.orderType = action.payload;
         },
     },
 });

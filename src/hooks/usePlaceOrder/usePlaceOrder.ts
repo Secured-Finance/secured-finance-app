@@ -8,6 +8,12 @@ export enum OrderSide {
     Borrow = '1',
 }
 
+export enum OrderType {
+    MARKET = 'Market',
+    LIMIT = 'Limit',
+    STOP = 'Stop',
+}
+
 export const usePlaceOrder = () => {
     const securedFinance = useSF();
 
