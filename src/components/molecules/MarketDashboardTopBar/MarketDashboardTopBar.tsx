@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import {
     DropdownSelector,
     MarketTab,
@@ -32,12 +32,15 @@ export const MarketDashboardTopBar = <TermType extends string = string>({
         [options, termValue]
     );
 
-    const handleTermChange = (v: TermType) => {
-        setTermValue(v);
-        if (onTermChange) {
-            onTermChange(v);
-        }
-    };
+    const handleTermChange = useCallback(
+        (v: TermType) => {
+            setTermValue(v);
+            if (onTermChange) {
+                onTermChange(v);
+            }
+        },
+        [onTermChange]
+    );
 
     return (
         <div className='h-fit w-full'>

@@ -1,9 +1,11 @@
 import {
+    ChartData,
     ChartOptions,
     ChartTypeRegistry,
     ScriptableContext,
     TooltipItem,
 } from 'chart.js';
+import { Rate } from 'src/utils';
 
 export const defaultDatasets = {
     borderWidth: 3,
@@ -12,11 +14,35 @@ export const defaultDatasets = {
     pointRadius: 0.01,
 };
 
+const refineArray = (array: Array<Rate>) => {
+    return array.map(r => r.toNormalizedNumber());
+};
+
+export const getData = (
+    rates: Rate[],
+    label: string,
+    labels: string[]
+): ChartData<'line'> => {
+    return {
+        labels: labels,
+        datasets: [
+            {
+                label: label,
+                data: refineArray(rates),
+            },
+        ],
+    };
+};
+
 export const crossHairPlugin = {
     id: 'cross-hair',
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     afterDraw: (chart: any) => {
-        if (chart.tooltip._active && chart.tooltip._active.length) {
+        if (
+            chart.tooltip &&
+            chart.tooltip._active &&
+            chart.tooltip._active.length
+        ) {
             const activePoint = chart.tooltip._active[0];
             const ctx = chart.ctx;
             const x = activePoint.element.x;
