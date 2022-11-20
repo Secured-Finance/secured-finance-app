@@ -10,6 +10,7 @@ module.exports = {
                 dropdown: '0px 16px 64px -48px rgba(31, 47, 70, 0.4)',
                 tab: '0px 46px 64px rgba(31, 47, 70, 0.4)',
                 selector: 'inset 0px 2px 4px rgba(0, 0, 0, 0.25)',
+                sliderthumb: '0px 4px 16px -8px rgba(15, 15, 15, 0.1)',
             },
             borderWidth: {
                 '0.5': '0.5px',
@@ -25,11 +26,13 @@ module.exports = {
             },
             height: {
                 '1px': '1px',
+                '2px': '2px',
                 '5px': '5px',
                 '6px': '6px',
             },
             width: {
                 '1px': '1px',
+                '2px': '2px',
             },
         },
         fontFamily: {
