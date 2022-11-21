@@ -1,18 +1,16 @@
 import { Separator } from 'src/components/atoms/Separator';
-import { percentFormat, usdFormat } from 'src/utils';
+import { LIQUIDATION_THRESHOLD, percentFormat, usdFormat } from 'src/utils';
 
 interface CollateralManagementConciseTabProps {
     collateralCoverage: number;
     totalCollateralInUSD: number;
-    liquidationPercentage: number;
 }
 
 export const CollateralManagementConciseTab = ({
     collateralCoverage,
     totalCollateralInUSD,
-    liquidationPercentage,
 }: CollateralManagementConciseTabProps) => {
-    const info = getLiquidationInformation(liquidationPercentage);
+    const info = getLiquidationInformation(collateralCoverage);
 
     return (
         <div className='flex h-fit w-full flex-col bg-black-20 pt-2 pb-4'>
@@ -51,7 +49,9 @@ export const CollateralManagementConciseTab = ({
                         </span>
                         <span className='typography-caption-3 text-slateGray'>
                             {`Threshold ${percentFormat(
-                                liquidationPercentage
+                                LIQUIDATION_THRESHOLD > collateralCoverage
+                                    ? LIQUIDATION_THRESHOLD - collateralCoverage
+                                    : 0
                             )}`}
                         </span>
                     </div>
@@ -72,6 +72,8 @@ export const getLiquidationInformation = (liquidationPercentage: number) => {
         return { color: 'text-progressBarStart', risk: 'Low' };
     } else if (liquidationPercentage >= 40 && liquidationPercentage < 60) {
         return { color: 'text-progressBarVia', risk: 'Medium' };
+    } else if (liquidationPercentage >= 60 && liquidationPercentage < 80) {
+        return { color: 'text-progressBarEnd', risk: 'High' };
     }
-    return { color: 'text-progressBarEnd', risk: 'High' };
+    return { color: 'text-progressBarEnd', risk: 'Liquidated' };
 };

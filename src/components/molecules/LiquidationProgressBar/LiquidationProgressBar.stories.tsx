@@ -16,5 +16,5 @@ const Template: ComponentStory<typeof LiquidationProgressBar> = args => (
 export const Default = Template.bind({});
 export const ConnectedToWallet = Template.bind({});
 ConnectedToWallet.args = {
-    liquidationPercentage: 40,
+    liquidationPercentage: 45,
 };
