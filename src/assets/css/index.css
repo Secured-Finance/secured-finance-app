@@ -84,3 +84,9 @@
     border: 6px solid #292D3F;
   }
 }
+
+@layer components {
+  .slider-markActive {
+      background-color: #5162FF !important;
+  }
+}
