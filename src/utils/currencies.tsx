@@ -53,3 +53,4 @@ export const generateWalletInformation = (
 };
 
 export const COLLATERAL_THRESHOLD = 74; // in percentage %
+export const LIQUIDATION_THRESHOLD = 80; // in percentage %

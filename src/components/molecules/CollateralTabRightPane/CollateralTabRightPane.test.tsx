@@ -27,6 +27,7 @@ describe('CollateralTabRightPane component', () => {
         expect(screen.getByText('50%')).toBeInTheDocument();
 
         expect(screen.getByText('Liquidation Risk')).toBeInTheDocument();
-        expect(screen.getAllByText('N/A')).toHaveLength(2);
+        expect(screen.getByText('Low')).toBeInTheDocument();
+        expect(screen.getByText('43%')).toBeInTheDocument();
     });
 });

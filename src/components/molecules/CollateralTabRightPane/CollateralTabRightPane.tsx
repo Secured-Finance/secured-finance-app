@@ -32,7 +32,9 @@ export const CollateralTabRightPane = ({
                 totalCollateralInUSD={balance}
                 collateralCoverage={collateralUsagePercent}
             />
-            <LiquidationProgressBar liquidationPercentage={0} />
+            <LiquidationProgressBar
+                liquidationPercentage={collateralUsagePercent}
+            />
         </div>
     );
 };

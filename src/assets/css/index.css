@@ -5,8 +5,6 @@
 @tailwind components;
 @tailwind utilities;
 
-
-
 @layer base {
   @font-face {
     font-family: 'GT Super Display';
@@ -64,6 +62,7 @@
   body {
     @apply font-secondary;
     background-image: url(../img/app-bg.jpg);
+    background-color: #002133;
     background-size: cover;
     overflow: hidden;
   }
