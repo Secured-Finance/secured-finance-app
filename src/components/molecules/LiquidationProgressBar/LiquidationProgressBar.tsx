@@ -3,6 +3,7 @@ import {
     getLiquidationInformation,
     InformationPopover,
 } from 'src/components/atoms';
+import { LIQUIDATION_THRESHOLD } from 'src/utils';
 
 interface LiquidationProgressBarProps {
     liquidationPercentage: number;
@@ -10,13 +11,17 @@ interface LiquidationProgressBarProps {
 
 const formatInformationText = (liquidationPercentage: number) => {
     if (liquidationPercentage === 0) return '';
-    return `You are currently at ${liquidationPercentage}% to liquidation. Upon reaching the liquidation threshold (80% LTV), 50% of assets will automatically be liquidated to repay the lender. Liquidation will be subject to 5% liquation fee.`;
+    return `You are currently at ${
+        LIQUIDATION_THRESHOLD > liquidationPercentage
+            ? LIQUIDATION_THRESHOLD - liquidationPercentage
+            : 0
+    }% to liquidation. Upon reaching the liquidation threshold (80% LTV), 50% of assets will automatically be liquidated to repay the lender. Liquidation will be subject to 5% liquation fee.`;
 };
 
 export const LiquidationProgressBar = ({
     liquidationPercentage = 0,
 }: LiquidationProgressBarProps) => {
-    let padding = liquidationPercentage * 0.0125;
+    let padding = liquidationPercentage / LIQUIDATION_THRESHOLD;
     if (padding > 1) {
         padding = 1;
     }
@@ -56,7 +61,13 @@ export const LiquidationProgressBar = ({
                             <span
                                 className={`whitespace-pre font-semibold ${info.color}`}
                             >
-                                {`${liquidationPercentage}% `}
+                                {`${
+                                    LIQUIDATION_THRESHOLD >
+                                    liquidationPercentage
+                                        ? LIQUIDATION_THRESHOLD -
+                                          liquidationPercentage
+                                        : 0
+                                }% `}
                             </span>
                             <span className='text-planetaryPurple'>
                                 threshold to liquidation

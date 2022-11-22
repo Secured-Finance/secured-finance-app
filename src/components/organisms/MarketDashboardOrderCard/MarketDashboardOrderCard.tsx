@@ -167,7 +167,6 @@ export const MarketDashboardOrderCard = ({
                 <CollateralManagementConciseTab
                     collateralCoverage={collateralUsagePercent}
                     totalCollateralInUSD={balance}
-                    liquidationPercentage={0}
                 />
             </div>
         </div>

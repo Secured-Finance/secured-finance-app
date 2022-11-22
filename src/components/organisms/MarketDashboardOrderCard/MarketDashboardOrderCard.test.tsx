@@ -37,24 +37,8 @@ describe('MarketDashboardOrderCard Component', () => {
         expect(screen.getByText('$80')).toBeInTheDocument();
 
         expect(screen.getByText('Liquidation Risk')).toBeInTheDocument();
-        expect(screen.getByText('Threshold 0%')).toBeInTheDocument();
-        expect(screen.getByText('N/A')).toBeInTheDocument();
-
-        expect(screen.getByTestId('collateral-progress-bar-track')).toHaveStyle(
-            'width: calc(100% * 0.08)'
-        );
-    });
-
-    it('should render collateralmanagementconcisetab', () => {
-        render(<Default />);
-        expect(screen.getByText('Collateral Management')).toBeInTheDocument();
-        expect(screen.getByText('Collateral')).toBeInTheDocument();
-        expect(screen.getByText('Utilization 8%')).toBeInTheDocument();
-        expect(screen.getByText('$80')).toBeInTheDocument();
-
-        expect(screen.getByText('Liquidation Risk')).toBeInTheDocument();
-        expect(screen.getByText('Threshold 0%')).toBeInTheDocument();
-        expect(screen.getByText('N/A')).toBeInTheDocument();
+        expect(screen.getByText('Threshold 72%')).toBeInTheDocument();
+        expect(screen.getByText('Low')).toBeInTheDocument();
 
         expect(screen.getByTestId('collateral-progress-bar-track')).toHaveStyle(
             'width: calc(100% * 0.08)'
