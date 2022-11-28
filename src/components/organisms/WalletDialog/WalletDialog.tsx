@@ -5,6 +5,7 @@ import MetaMaskIcon from 'src/assets/img/metamask-fox.svg';
 import WalletConnectIcon from 'src/assets/img/wallet-connect.svg';
 import { Dialog, WalletRadioGroup } from 'src/components/molecules';
 import { CACHED_PROVIDER_KEY } from 'src/contexts/SecuredFinanceProvider/SecuredFinanceProvider';
+import { AddressUtils } from 'src/utils';
 import { useWallet } from 'use-wallet';
 
 enum Step {
@@ -34,8 +35,7 @@ const stateRecord: Record<Step, State> = {
         currentStep: Step.connecting,
         nextStep: Step.connected,
         title: 'Connecting...',
-        description:
-            'Please wait while we connect. Please make sure to accept the approvals on your browser.',
+        description: '',
         buttonText: '',
     },
     [Step.connected]: {
@@ -160,12 +160,37 @@ export const WalletDialog = ({
                             <img
                                 src={Loader.src}
                                 alt='Loader'
-                                className='animate-spin'
+                                className='h-16 w-16 animate-spin'
                             ></img>
                         );
                         break;
                     case Step.connected:
-                        return <Check className='h-[100px] w-[100px]' />;
+                        return (
+                            <div className='flex w-full flex-col items-center gap-6'>
+                                <Check className='h-[100px] w-[100px]' />
+                                <div className='flex h-28 w-full flex-row gap-8 rounded-xl border border-neutral p-6'>
+                                    <div className='typography-caption flex flex-col gap-10px'>
+                                        <span className='text-neutral-4'>
+                                            Status
+                                        </span>
+                                        <span className='leading-6 text-[#58BD7D]'>
+                                            Connected
+                                        </span>
+                                    </div>
+                                    <div className='typography-caption flex flex-col gap-10px'>
+                                        <span className='text-neutral-4'>
+                                            Ethereum Address
+                                        </span>
+                                        <span className='leading-6 text-neutral-8'>
+                                            {AddressUtils.format(
+                                                account ?? '',
+                                                16
+                                            )}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        );
                     default:
                         return <p>Unknown</p>;
                 }

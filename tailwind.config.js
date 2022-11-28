@@ -34,6 +34,9 @@ module.exports = {
                 '1px': '1px',
                 '2px': '2px',
             },
+            gap: {
+                '10px': '10px',
+            },
         },
         fontFamily: {
             primary: ['GT Super Display', ...defaultTheme.fontFamily.serif],

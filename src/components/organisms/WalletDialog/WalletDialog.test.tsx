@@ -55,11 +55,6 @@ describe('Wallet Dialog component', () => {
         fireEvent.click(screen.getByTestId('dialog-action-button'));
         await waitFor(() => {
             expect(screen.getByText('Connecting...')).toBeInTheDocument();
-            expect(
-                screen.getByText(
-                    'Please wait while we connect. Please make sure to accept the approvals on your browser.'
-                )
-            ).toBeInTheDocument();
         });
     });
 
