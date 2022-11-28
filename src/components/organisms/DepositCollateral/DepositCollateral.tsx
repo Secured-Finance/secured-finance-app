@@ -171,7 +171,7 @@ export const DepositCollateral = ({
                             <img
                                 src={Loader.src}
                                 alt='Loader'
-                                className='h-16 w-16 animate-spin'
+                                className='animate-spin'
                             ></img>
                         );
                         break;
