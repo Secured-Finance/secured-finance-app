@@ -50,7 +50,9 @@ export const Dialog = ({
                             >
                                 {callToAction}
                             </Button>
-                        ) : null}
+                        ) : (
+                            <div className='h-10' />
+                        )}
                     </div>
                 </HeadlessDialog.Panel>
             </div>

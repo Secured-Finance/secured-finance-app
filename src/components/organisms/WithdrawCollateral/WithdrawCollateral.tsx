@@ -177,7 +177,7 @@ export const WithdrawCollateral = ({
                             <img
                                 src={Loader.src}
                                 alt='Loader'
-                                className='animate-spin'
+                                className='h-16 w-16 animate-spin'
                             ></img>
                         );
                         break;
