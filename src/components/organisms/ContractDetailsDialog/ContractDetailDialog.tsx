@@ -6,8 +6,8 @@ import { CurrencySymbol } from 'src/utils';
 
 const Section = ({ children }: { children: React.ReactNode }) => {
     return (
-        <div className='rounded-xl border border-white-10'>
-            <div className='p-4'>{children}</div>
+        <div className='rounded-xl border border-neutral-3'>
+            <div className='py-4 px-6'>{children}</div>
         </div>
     );
 };
@@ -15,7 +15,7 @@ const Section = ({ children }: { children: React.ReactNode }) => {
 const SectionWithItems = ({ itemList }: { itemList: [string, string][] }) => {
     return (
         <Section>
-            <div className='grid grid-cols-1 gap-4'>
+            <div className='grid grid-cols-1 gap-2'>
                 {itemList.map(([label, value]) => (
                     <HorizontalListItem
                         key={label}
@@ -44,7 +44,7 @@ export const ContractDetailDialog = ({
             callToAction='Unwind Position'
             onClick={onClose}
         >
-            <div className='grid w-full grid-cols-1 justify-items-stretch gap-3 text-white'>
+            <div className='grid w-full grid-cols-1 justify-items-stretch gap-6 text-white'>
                 <Section>
                     <AmountCard
                         ccy={CurrencySymbol.FIL}
