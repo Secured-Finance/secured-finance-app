@@ -72,7 +72,7 @@ export const OrderInputBox = ({
     );
 
     return (
-        <div className='typography-caption flex h-10 w-full flex-row items-center justify-between rounded-lg bg-black-20 py-2 pl-2 pr-4 text-white'>
+        <div className='typography-caption flex h-10 w-full flex-row items-center justify-between rounded-lg bg-black-20 py-2 pl-2 pr-4 ring-starBlue focus-within:ring'>
             <div className='text-neutral-5'>{field}</div>
             <div className='flex flex-row gap-[10px]'>
                 {disabled ? (

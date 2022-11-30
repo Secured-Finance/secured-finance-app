@@ -83,7 +83,7 @@ export const CollateralInput = ({
                     placeholder='0'
                     value={inputValue}
                     onChange={handleAmountChange}
-                    className='typography-headline-4 focus: h-14 w-full bg-transparent text-center text-neutral-8 focus:outline-none'
+                    className='typography-headline-4 h-14 w-full bg-transparent text-center text-neutral-8 focus:outline-none'
                 />
                 <div className='typography-body-2'>
                     <span className='text-center text-neutral-8'>
