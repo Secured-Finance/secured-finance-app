@@ -58,7 +58,7 @@ export const ContractDetailDialog = ({
                         ['Contract Type', 'Borrow'],
                         ['Contract Status', 'Active'],
                         ['Contract Collateral', 'ETH'],
-                        ['Contract Collateral Amount', '0.1 ETH'],
+                        ['Borrow Limit Remaining', '0.1 ETH'],
                         ['Contract Collateral Ratio', '150%'],
                     ]}
                 />
@@ -68,8 +68,8 @@ export const ContractDetailDialog = ({
                 <Disclosure>
                     {({ open }) => (
                         <>
-                            <Disclosure.Button className='flex flex-row items-center justify-between'>
-                                <h2 className='typography-hairline-2 py-4 text-left text-white'>
+                            <Disclosure.Button className='flex h-6 flex-row items-center justify-between'>
+                                <h2 className='typography-hairline-2 text-neutral-8'>
                                     Additional Information
                                 </h2>
                                 <ExpandIndicator expanded={open} />

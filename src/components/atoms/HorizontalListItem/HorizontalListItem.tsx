@@ -6,9 +6,9 @@ export const HorizontalListItem = ({
     value: string;
 }) => {
     return (
-        <div className='typography-caption grid w-full grid-cols-2 justify-around'>
-            <span className='text-left text-planetaryPurple'>{label}</span>
-            <span className='text-right text-neutral-8'>{value}</span>
+        <div className='typography-caption flex justify-between'>
+            <span className='text-planetaryPurple'>{label}</span>
+            <span className='text-neutral-8'>{value}</span>
         </div>
     );
 };
