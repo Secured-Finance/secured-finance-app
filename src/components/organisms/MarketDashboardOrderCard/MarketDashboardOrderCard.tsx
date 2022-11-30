@@ -7,6 +7,7 @@ import {
     CollateralManagementConciseTab,
     NavTab,
     Separator,
+    Slider,
 } from 'src/components/atoms';
 import { BorrowLendSelector } from 'src/components/atoms/BorrowLendSelector';
 import { OrderInputBox } from 'src/components/atoms/OrderInputBox';
@@ -142,13 +143,14 @@ export const MarketDashboardOrderCard = ({
                         initialValue={getAmount().toString()}
                         onValueChange={v => dispatch(setAmount(v as BigNumber))}
                     />
-                    <OrderInputBox
-                        field='Total'
-                        unit='USD'
-                        disabled={true}
-                        initialValue={ordinaryFormat(getAmount() * price, 4)}
-                    />
                 </div>
+                <Slider onChange={() => {}} />
+                <OrderInputBox
+                    field='Total'
+                    unit='USD'
+                    disabled={true}
+                    initialValue={ordinaryFormat(getAmount() * price, 4)}
+                />
 
                 <Button
                     fullWidth
