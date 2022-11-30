@@ -1,5 +1,5 @@
 import { SecuredFinanceClient } from '@secured-finance/sf-client';
-import { ethers } from 'ethers';
+import { getDefaultProvider, providers, Signer } from 'ethers';
 import React, { createContext, useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useLendingMarkets } from 'src/hooks';
@@ -31,7 +31,7 @@ declare global {
 
 const SecuredFinanceProvider: React.FC = ({ children }) => {
     const [web3Provider, setWeb3Provider] =
-        useState<ethers.providers.BaseProvider | null>(null);
+        useState<providers.BaseProvider | null>(null);
     const { error, status, connect, account, ethereum, isConnected } =
         useWallet();
     const [securedFinance, setSecuredFinance] =
@@ -56,8 +56,8 @@ const SecuredFinanceProvider: React.FC = ({ children }) => {
 
     useEffect(() => {
         const connectSFClient = async (
-            provider: ethers.providers.BaseProvider,
-            signer?: ethers.Signer
+            provider: providers.BaseProvider,
+            signer?: Signer
         ) => {
             setWeb3Provider(provider);
             const network = await provider.getNetwork();
@@ -72,7 +72,7 @@ const SecuredFinanceProvider: React.FC = ({ children }) => {
 
                 if (
                     previous.config.signerOrProvider instanceof
-                    ethers.providers.BaseProvider
+                    providers.BaseProvider
                 ) {
                     return securedFinanceLib;
                 }
@@ -85,7 +85,7 @@ const SecuredFinanceProvider: React.FC = ({ children }) => {
             const chainId = Number(ethereum.chainId);
             const provider = window.localStorage.getItem('FORK')
                 ? ethereum?.provider
-                : new ethers.providers.Web3Provider(ethereum, chainId);
+                : new providers.Web3Provider(ethereum, chainId);
             const signer = provider.getSigner();
             connectSFClient(provider, signer);
             ethereum.on('chainChanged', handleNetworkChanged);
@@ -100,7 +100,7 @@ const SecuredFinanceProvider: React.FC = ({ children }) => {
                 }
             };
         } else if (!isConnected()) {
-            const provider = ethers.getDefaultProvider(getRpcEndpoint());
+            const provider = getDefaultProvider(getRpcEndpoint());
             connectSFClient(provider);
         }
     }, [ethereum, isConnected, handleNetworkChanged, dispatch]);
