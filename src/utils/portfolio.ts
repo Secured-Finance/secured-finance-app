@@ -3,7 +3,7 @@ import { BigNumber } from 'ethers';
 import { ActiveTrade } from 'src/components/organisms';
 import { OrderSide, TradeHistory } from 'src/hooks';
 import { AssetPriceMap } from 'src/store/assetPrices/selectors';
-import Web3 from 'web3';
+import { hexToString } from 'web3-utils';
 import { currencyMap, CurrencySymbol } from './currencyList';
 import { Rate } from './rate';
 
@@ -25,7 +25,7 @@ export const computeNetValue = (
     priceList: AssetPriceMap
 ) => {
     return trades.reduce((acc, { amount, currency, side }) => {
-        const ccy = Web3.utils.hexToString(currency) as CurrencySymbol;
+        const ccy = hexToString(currency) as CurrencySymbol;
         return (
             acc +
             currencyMap[ccy].fromBaseUnit(BigNumber.from(amount)) *
@@ -39,7 +39,7 @@ export const convertTradeHistoryToTableData = (
     trade: TradeHistory[number]
 ): ActiveTrade => {
     const { side, amount, rate, currency, maturity } = trade;
-    const ccy = Web3.utils.hexToString(currency) as CurrencySymbol;
+    const ccy = hexToString(currency) as CurrencySymbol;
     const apy = new Rate(rate);
 
     // TODO: add this function in the SDK
