@@ -38,34 +38,34 @@ const assetPricesSlice = createSlice({
     name: 'assetPrices',
     initialState: initialStore,
     reducers: {},
-    extraReducers: {
-        [fetchAssetPrice.fulfilled.type]: (
-            state,
-            action: PayloadAction<ICoinGeckoResponse>
-        ) => {
-            state.isLoading = false;
+    extraReducers: builder => {
+        builder.addCase(
+            fetchAssetPrice.fulfilled,
+            (state, action: PayloadAction<ICoinGeckoResponse>) => {
+                state.isLoading = false;
 
-            const {
-                ethereum: { usd: ethPrice, usd_24h_change: ethChange },
-                filecoin: { usd: filPrice, usd_24h_change: filChange },
-                'usd-coin': { usd: usdcPrice, usd_24h_change: usdcChange },
-                bitcoin: { usd: btcPrice, usd_24h_change: btcChange },
-            } = action.payload;
-            state.ETH.price = ethPrice;
-            state.ETH.change = ethChange;
-            state.FIL.price = filPrice;
-            state.FIL.change = filChange;
-            state.USDC.price = usdcPrice;
-            state.USDC.change = usdcChange;
-            state.BTC.price = btcPrice;
-            state.BTC.change = btcChange;
-        },
-        [fetchAssetPrice.pending.type]: state => {
+                const {
+                    ethereum: { usd: ethPrice, usd_24h_change: ethChange },
+                    filecoin: { usd: filPrice, usd_24h_change: filChange },
+                    'usd-coin': { usd: usdcPrice, usd_24h_change: usdcChange },
+                    bitcoin: { usd: btcPrice, usd_24h_change: btcChange },
+                } = action.payload;
+                state.ETH.price = ethPrice;
+                state.ETH.change = ethChange;
+                state.FIL.price = filPrice;
+                state.FIL.change = filChange;
+                state.USDC.price = usdcPrice;
+                state.USDC.change = usdcChange;
+                state.BTC.price = btcPrice;
+                state.BTC.change = btcChange;
+            }
+        );
+        builder.addCase(fetchAssetPrice.pending, state => {
             state.isLoading = true;
-        },
-        [fetchAssetPrice.rejected.type]: state => {
+        });
+        builder.addCase(fetchAssetPrice.rejected, state => {
             state.isLoading = false;
-        },
+        });
     },
 });
 
