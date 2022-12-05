@@ -7,7 +7,7 @@ import { CurrencySymbol, Rate, toCurrency } from 'src/utils';
 import useSF from '../useSecuredFinance';
 
 interface SmartContractOrderbook {
-    rates: BigNumber[];
+    unitPrices: BigNumber[];
     amounts: BigNumber[];
     quantities: BigNumber[];
 }
@@ -19,11 +19,14 @@ export type OrderBookEntry = {
 
 export type OrderBook = Array<OrderBookEntry>;
 
-const transformOrderbook = (input: SmartContractOrderbook): OrderBook => {
-    return input.rates.map((rate, index) => ({
+const transformOrderbook = (
+    input: SmartContractOrderbook,
+    maturity: number
+): OrderBook => {
+    return input.unitPrices.map((unitPrice, index) => ({
         amount: input.amounts[index],
-        apy: new Rate(rate.toNumber()),
-        price: 100 + index,
+        apy: Rate.fromPrice(unitPrice, BigNumber.from(maturity)),
+        price: unitPrice.toNumber(),
     }));
 };
 
@@ -48,7 +51,8 @@ export const useOrderbook = (
                         currency,
                         maturity,
                         limit
-                    )
+                    ),
+                    maturity
                 )
             );
             setLendOrderbook(
@@ -57,7 +61,8 @@ export const useOrderbook = (
                         currency,
                         maturity,
                         limit
-                    )
+                    ),
+                    maturity
                 )
             );
         },

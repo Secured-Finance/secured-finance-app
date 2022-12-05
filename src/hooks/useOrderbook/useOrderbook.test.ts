@@ -1,11 +1,16 @@
-import { BigNumber } from 'ethers';
+import mockDate from 'mockdate';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { renderHook } from 'src/test-utils';
-import { CurrencySymbol, Rate } from 'src/utils';
+import { CurrencySymbol } from 'src/utils';
 import { useOrderbook } from './useOrderbook';
 
 const mock = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mock);
+
+beforeAll(() => {
+    mockDate.reset();
+    mockDate.set('2022-12-01T11:00:00.00Z');
+});
 
 describe('useOrderbook', () => {
     it('should return an array of number for borrow rates', async () => {
@@ -20,32 +25,6 @@ describe('useOrderbook', () => {
 
         await waitForNextUpdate();
 
-        expect(result.current.borrowOrderbook).toEqual([
-            {
-                amount: BigNumber.from('43000000000000000000000'),
-                apy: new Rate(195000),
-                price: 100,
-            },
-            {
-                amount: BigNumber.from('23000000000000000000000'),
-                apy: new Rate(183000),
-                price: 101,
-            },
-            {
-                amount: BigNumber.from('15000000000000000000000'),
-                apy: new Rate(180000),
-                price: 102,
-            },
-            {
-                amount: BigNumber.from('12000000000000000000000'),
-                apy: new Rate(170000),
-                price: 103,
-            },
-            {
-                amount: BigNumber.from('1800000000000000000000'),
-                apy: new Rate(160000),
-                price: 104,
-            },
-        ]);
+        expect(result.current.borrowOrderbook.length).toBe(5);
     });
 });

@@ -1,6 +1,7 @@
 import { GraphClientProvider } from '@secured-finance/sf-graph-client';
 import { Story, StoryContext } from '@storybook/react';
 import { Wallet } from 'ethers';
+import mockDate from 'mockdate';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { Header } from 'src/components/organisms';
@@ -10,7 +11,6 @@ import AxiosMock from 'src/stories/mocks/AxiosMock';
 import { CustomizedBridge } from 'src/stories/mocks/customBridge';
 import { coingeckoApi } from 'src/utils/coinGeckoApi';
 import { useWallet, UseWalletProvider } from 'use-wallet';
-
 export const WithAppLayout = (Story: Story) => {
     return (
         <Layout navBar={<Header />}>
@@ -111,3 +111,12 @@ export const WithGraphClient = (Story: Story) => (
         <Story />
     </GraphClientProvider>
 );
+
+export const WithMockDate = (Story: Story, context: StoryContext) => {
+    mockDate.reset();
+    if (context.parameters && context.parameters.date instanceof Date) {
+        mockDate.set(context.parameters.date);
+    }
+
+    return <Story />;
+};

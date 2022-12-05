@@ -1,44 +1,61 @@
-import {
-    BuyerTransactionsDocument,
-    SellerTransactionsDocument,
-} from '@secured-finance/sf-graph-client/dist/graphclients';
+import { TransactionHistoryDocument } from '@secured-finance/sf-graph-client/dist/graphclients';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
-import { utils } from 'ethers';
+import { BigNumber, utils } from 'ethers';
 import {
     WithAppLayout,
     WithAssetPrice,
+    WithMockDate,
     WithWalletProvider,
 } from 'src/../.storybook/decorators';
+import { TradeHistory } from 'src/hooks';
 import { PortfolioManagement } from './PortfolioManagement';
 
 const fil = utils.formatBytes32String('FIL');
 const eth = utils.formatBytes32String('ETH');
 const btc = utils.formatBytes32String('BTC');
 
-const buyerTransactions = [
+const transactions: TradeHistory = [
     {
-        currency: fil,
-        side: '0',
-        maturity: '1733011200',
+        id: '0x123',
         amount: '1000000000000000000000',
-        rate: '200000',
+        averagePrice: BigNumber.from(8000),
+        side: 0,
+        orderPrice: 100000,
+        createdAt: 123,
+        blockNumber: 123,
+        taker: '0x123',
+        forwardValue: 100000,
+        txHash: '0x123',
+        currency: fil,
+        maturity: BigNumber.from(1733011200),
     },
     {
-        currency: btc,
-        side: '1',
-        maturity: '1733011200',
+        id: '0x123',
         amount: '1000000000',
-        rate: '100000',
+        averagePrice: BigNumber.from(9000),
+        side: 1,
+        orderPrice: 100000,
+        createdAt: 123,
+        blockNumber: 123,
+        taker: '0x123',
+        forwardValue: 100000,
+        txHash: '0x123',
+        currency: btc,
+        maturity: BigNumber.from(1733011200),
     },
-];
-
-const sellerTransactions = [
     {
+        id: '0x123',
+        amount: '1000000000',
+        averagePrice: BigNumber.from(9000),
+        side: 1,
+        orderPrice: 100000,
+        createdAt: 123,
+        blockNumber: 123,
+        taker: '0x123',
+        forwardValue: 100000,
+        txHash: '0x123',
         currency: eth,
-        side: '1',
-        maturity: '1709251200',
-        amount: '100000000000000000000',
-        rate: '50000',
+        maturity: BigNumber.from(1733011200),
     },
 ];
 
@@ -46,13 +63,19 @@ export default {
     title: 'Pages/PortfolioManagement',
     component: PortfolioManagement,
     args: {},
-    decorators: [WithAssetPrice, WithAppLayout, WithWalletProvider],
+    decorators: [
+        WithMockDate,
+        WithAssetPrice,
+        WithAppLayout,
+        WithWalletProvider,
+    ],
     parameters: {
+        date: new Date('2022-12-01T11:00:00.00Z'),
         apolloClient: {
             mocks: [
                 {
                     request: {
-                        query: BuyerTransactionsDocument,
+                        query: TransactionHistoryDocument,
                         variables: {
                             address: '',
                             awaitRefetchQueries: true,
@@ -73,28 +96,7 @@ export default {
                 },
                 {
                     request: {
-                        query: SellerTransactionsDocument,
-                        variables: {
-                            address: '',
-                            awaitRefetchQueries: true,
-                        },
-                    },
-                    result: {
-                        data: {
-                            transactions: [],
-                        },
-                    },
-                    newData: () => {
-                        return {
-                            data: {
-                                transactions: [],
-                            },
-                        };
-                    },
-                },
-                {
-                    request: {
-                        query: BuyerTransactionsDocument,
+                        query: TransactionHistoryDocument,
                         variables: {
                             address:
                                 '0xb98bd7c7f656290071e52d1aa617d9cb4467fd6d',
@@ -104,35 +106,13 @@ export default {
 
                     result: {
                         data: {
-                            transactions: buyerTransactions,
+                            transactions: transactions,
                         },
                     },
                     newData: () => {
                         return {
                             data: {
-                                transactions: buyerTransactions,
-                            },
-                        };
-                    },
-                },
-                {
-                    request: {
-                        query: SellerTransactionsDocument,
-                        variables: {
-                            address:
-                                '0xb98bd7c7f656290071e52d1aa617d9cb4467fd6d',
-                            awaitRefetchQueries: true,
-                        },
-                    },
-                    result: {
-                        data: {
-                            transactions: sellerTransactions,
-                        },
-                    },
-                    newData: () => {
-                        return {
-                            data: {
-                                transactions: sellerTransactions,
+                                transactions: transactions,
                             },
                         };
                     },

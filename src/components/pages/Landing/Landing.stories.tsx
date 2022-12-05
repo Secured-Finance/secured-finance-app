@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux';
 import {
     WithAppLayout,
     WithAssetPrice,
+    WithMockDate,
     WithWalletProvider,
 } from 'src/../.storybook/decorators';
 import { updateLendingMarketContract } from 'src/store/availableContracts';
@@ -14,7 +15,15 @@ export default {
     title: 'Pages/Landing',
     component: Landing,
     args: {},
-    decorators: [WithAppLayout, WithAssetPrice, WithWalletProvider],
+    decorators: [
+        WithMockDate,
+        WithAppLayout,
+        WithAssetPrice,
+        WithWalletProvider,
+    ],
+    parameters: {
+        date: new Date('2022-02-01T11:00:00.00Z'),
+    },
 } as ComponentMeta<typeof Landing>;
 
 const Template: ComponentStory<typeof Landing> = () => {
