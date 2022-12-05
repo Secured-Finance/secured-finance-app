@@ -1,4 +1,6 @@
-import { ethers } from 'ethers';
+import { BigNumber } from 'ethers';
+import { formatBytes32String } from 'ethers/lib/utils';
+import mockDate from 'mockdate';
 import { TradeHistory } from 'src/hooks';
 import { AssetPriceMap } from 'src/store/assetPrices/selectors';
 import { CurrencySymbol } from './currencyList';
@@ -8,23 +10,33 @@ import {
     convertTradeHistoryToTableData,
 } from './portfolio';
 
+beforeAll(() => {
+    mockDate.reset();
+    mockDate.set(new Date('2022-12-01T11:00:00.00Z'));
+});
+
 describe('computeWeightedAverage', () => {
     it('should return the weighted average', () => {
+        jest.spyOn(global.Date, 'now').mockImplementationOnce(() =>
+            new Date('2022-12-01T11:00:00.00Z').valueOf()
+        );
         const trades = [
             {
                 amount: 1000,
-                rate: 1,
+                averagePrice: BigNumber.from(9698),
+                maturity: BigNumber.from(1675252800),
             },
             {
                 amount: 9000,
-                rate: 2,
+                averagePrice: BigNumber.from(9674),
+                maturity: BigNumber.from(1675252800),
             },
         ];
         expect(
             computeWeightedAverageRate(
                 trades as unknown as TradeHistory
             ).toNumber()
-        ).toEqual(1.9);
+        ).toEqual(19365);
     });
 
     it('should return 0 if no trades are provided', () => {
@@ -43,12 +55,12 @@ describe('computeNetValue', () => {
         const trades = [
             {
                 amount: '1000000000000000000',
-                currency: ethers.utils.formatBytes32String(CurrencySymbol.ETH),
+                currency: formatBytes32String(CurrencySymbol.ETH),
                 side: 0,
             },
             {
                 amount: '100000000000000000000',
-                currency: ethers.utils.formatBytes32String(CurrencySymbol.FIL),
+                currency: formatBytes32String(CurrencySymbol.FIL),
                 side: 1,
             },
         ];
@@ -64,16 +76,23 @@ describe('computeNetValue', () => {
 
 describe('convertTradeHistoryToTableData', () => {
     it('should return the correct data', () => {
-        const trade = {
-            side: 1,
+        const trade: TradeHistory[number] = {
+            id: '0x123',
             amount: 1000,
-            rate: 1000,
+            averagePrice: BigNumber.from(9698),
+            side: 1,
+            orderPrice: 100000,
+            createdAt: 123,
+            blockNumber: 123,
+            taker: '0x123',
+            forwardValue: 100000,
+            txHash: '0x123',
             currency:
                 '0x5553444300000000000000000000000000000000000000000000000000000000',
-            maturity: 1669852800,
+            maturity: BigNumber.from(1675252800),
         };
         expect(convertTradeHistoryToTableData(trade).contract).toEqual(
-            'USDC-DEC22'
+            'USDC-FEB23'
         );
     });
 });

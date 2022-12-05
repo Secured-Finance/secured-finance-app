@@ -31,7 +31,8 @@ export const Landing = () => {
 
     const rates = useRates(
         currency,
-        side === OrderSide.Borrow ? RateType.Borrow : RateType.Lend
+        side === OrderSide.Borrow ? RateType.Borrow : RateType.Lend,
+        Number(maturity)
     );
 
     const marketRate = useMemo(() => {

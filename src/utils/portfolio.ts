@@ -14,7 +14,10 @@ export const computeWeightedAverageRate = (trades: TradeHistory) => {
 
     const totalAmount = trades.reduce((acc, trade) => acc + trade.amount, 0);
     const total = trades.reduce(
-        (acc, trade) => acc + trade.rate * trade.amount,
+        (acc, trade) =>
+            acc +
+            Rate.fromPrice(trade.averagePrice, trade.maturity).toNumber() *
+                trade.amount,
         0
     );
     return new Rate(total / totalAmount);
@@ -38,9 +41,9 @@ export const computeNetValue = (
 export const convertTradeHistoryToTableData = (
     trade: TradeHistory[number]
 ): ActiveTrade => {
-    const { side, amount, rate, currency, maturity } = trade;
+    const { side, amount, averagePrice, currency, maturity } = trade;
     const ccy = hexToString(currency) as CurrencySymbol;
-    const apy = new Rate(rate);
+    const apy = Rate.fromPrice(averagePrice, maturity);
 
     // TODO: add this function in the SDK
     const contract = `${ccy}-${dayjs

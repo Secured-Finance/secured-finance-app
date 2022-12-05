@@ -1,54 +1,30 @@
-import {
-    useBuyerTransactionHistory,
-    useSellerTransactionHistory,
-} from '@secured-finance/sf-graph-client';
-import {
-    BuyerTransactionsQuery,
-    SellerTransactionsQuery,
-} from '@secured-finance/sf-graph-client/dist/graphclients';
+import { useTransactionHistory } from '@secured-finance/sf-graph-client';
+import { TransactionHistoryQuery } from '@secured-finance/sf-graph-client/dist/graphclients';
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from 'src/store/types';
 
-export type TradeHistory =
-    | SellerTransactionsQuery['transactions']
-    | BuyerTransactionsQuery['transactions'];
+export type TradeHistory = TransactionHistoryQuery['transactions'];
 
-export const useTradeHistory = (account: string | null) => {
+export const useTradeHistory = (account: string | null): TradeHistory | [] => {
     const block = useSelector(
         (state: RootState) => state.blockchain.latestBlock
     );
     const {
-        data: lendingHistory,
-        error: lendingError,
+        data: transactionHistory,
+        error: error,
         refetch: refetchSeller,
-    } = useSellerTransactionHistory({
+    } = useTransactionHistory({
         account: account ?? '',
     });
 
-    const {
-        data: borrowingHistory,
-        error: borrowingError,
-        refetch: refetchBuyer,
-    } = useBuyerTransactionHistory({
-        account: account ?? '',
-    });
-
-    if (lendingError) {
-        console.error(lendingError);
-    }
-
-    if (borrowingError) {
-        console.error(borrowingError);
+    if (error) {
+        console.error(error);
     }
 
     useEffect(() => {
         refetchSeller?.();
-        refetchBuyer?.();
-    }, [block, refetchSeller, refetchBuyer]);
+    }, [block, refetchSeller]);
 
-    return [
-        ...(lendingHistory?.transactions ?? []),
-        ...(borrowingHistory?.transactions ?? []),
-    ];
+    return transactionHistory?.transactions ?? [];
 };

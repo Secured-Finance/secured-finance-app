@@ -21,7 +21,8 @@ export const LineChartTab = ({
 
     const rates = useRates(
         currency,
-        side === OrderSide.Borrow ? RateType.Borrow : RateType.Lend
+        side === OrderSide.Borrow ? RateType.Borrow : RateType.Lend,
+        Number(maturity)
     );
 
     const data = getData(
