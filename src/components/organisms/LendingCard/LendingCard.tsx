@@ -1,9 +1,10 @@
-import { BigNumber, ContractTransaction } from 'ethers';
-import { useCallback, useMemo, useState } from 'react';
+import { BigNumber } from 'ethers';
+import { useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { BorrowLendSelector, Button, Option } from 'src/components/atoms';
 import { CollateralUsageSection } from 'src/components/atoms/CollateralUsageSection';
 import { AssetSelector, TermSelector } from 'src/components/molecules';
+import { PlaceOrder } from 'src/components/organisms';
 import { CollateralBook, OrderSide } from 'src/hooks';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import {
@@ -13,39 +14,30 @@ import {
     setMaturity,
     setSide,
 } from 'src/store/landingOrderForm';
-import { setLastMessage } from 'src/store/lastError';
 import { RootState } from 'src/store/types';
 import {
     CurrencySymbol,
     formatDate,
     getCurrencyMapAsList,
     getCurrencyMapAsOptions,
-    handleContractTransaction,
     percentFormat,
     Rate,
 } from 'src/utils';
 import { computeAvailableToBorrow } from 'src/utils/collateral';
 
 export const LendingCard = ({
-    onPlaceOrder,
     collateralBook,
     marketRate,
     maturitiesOptionList,
 }: {
-    onPlaceOrder: (
-        ccy: CurrencySymbol,
-        maturity: number | BigNumber,
-        side: OrderSide,
-        amount: BigNumber,
-        rate: number
-    ) => Promise<ContractTransaction | undefined>;
     collateralBook: CollateralBook;
     marketRate: Rate;
     maturitiesOptionList: Option[];
 }) => {
-    const [pendingTransaction, setPendingTransaction] = useState(false);
-    const { currency, maturity, amount, side } = useSelector(
-        (state: RootState) => selectLandingOrderForm(state.landingOrderForm)
+    const [placeOrder, setPlaceOrder] = useState(false);
+
+    const { currency, maturity, side } = useSelector((state: RootState) =>
+        selectLandingOrderForm(state.landingOrderForm)
     );
 
     const dispatch = useDispatch();
@@ -106,39 +98,6 @@ export const LendingCard = ({
         );
     }, [maturity, maturitiesOptionList]);
 
-    const handlePlaceOrder = useCallback(
-        async (
-            ccy: CurrencySymbol,
-            maturity: number | BigNumber,
-            side: OrderSide,
-            amount: BigNumber,
-            rate: number
-        ) => {
-            try {
-                setPendingTransaction(true);
-                const tx = await onPlaceOrder(
-                    ccy,
-                    maturity,
-                    side,
-                    amount,
-                    rate
-                );
-                const transactionStatus = await handleContractTransaction(tx);
-                // TODO after placeOrder works
-                if (!transactionStatus) {
-                    console.error('Some error occurred');
-                }
-                setPendingTransaction(false);
-            } catch (e) {
-                if (e instanceof Error) {
-                    setPendingTransaction(false);
-                    dispatch(setLastMessage(e.message));
-                }
-            }
-        },
-        [onPlaceOrder, dispatch]
-    );
-
     return (
         <div className='w-80 flex-col space-y-6 rounded-b-xl border border-panelStroke bg-transparent pb-6 shadow-deep'>
             <BorrowLendSelector
@@ -191,20 +150,16 @@ export const LendingCard = ({
 
                 <Button
                     fullWidth
-                    onClick={() =>
-                        handlePlaceOrder(
-                            currency,
-                            BigNumber.from(maturity),
-                            side,
-                            amount,
-                            marketRate.toNumber()
-                        )
-                    }
-                    disabled={pendingTransaction}
+                    onClick={() => setPlaceOrder(true)}
                     data-testid='place-order-button'
                 >
                     {side === OrderSide.Borrow ? 'Borrow' : 'Lend'}
                 </Button>
+                <PlaceOrder
+                    isOpen={placeOrder}
+                    onClose={() => setPlaceOrder(false)}
+                    marketRate={marketRate}
+                />
             </div>
         </div>
     );

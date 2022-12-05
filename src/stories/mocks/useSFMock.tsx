@@ -4,7 +4,11 @@ import * as jest from 'jest-mock';
 
 export const mockUseSF = () => {
     const mockSecuredFinance = {
-        placeLendingOrder: jest.fn(),
+        placeLendingOrder: jest.fn(() =>
+            Promise.resolve({
+                wait: jest.fn(() => Promise.resolve({ blockNumber: 123 })),
+            })
+        ),
         getBorrowYieldCurve: jest.fn(() =>
             Promise.resolve([
                 BigNumber.from('10000'),

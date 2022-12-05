@@ -33,7 +33,7 @@ describe('PlaceOrder component', () => {
     it('should reach success screen when transaction receipt is received', async () => {
         const onClose = jest.fn();
         render(<Default onClose={onClose} />, { preloadedState });
-        fireEvent.click(screen.getByText('OK'));
+        fireEvent.click(screen.getByTestId('dialog-action-button'));
 
         await waitFor(() =>
             expect(screen.getByText('Success!')).toBeInTheDocument()

@@ -1,7 +1,22 @@
-import { useCallback, useReducer } from 'react';
+import { Disclosure } from '@headlessui/react';
+import { BigNumber } from 'ethers';
+import { useCallback, useMemo, useReducer } from 'react';
+import { useSelector } from 'react-redux';
 import Check from 'src/assets/icons/check-mark.svg';
 import Loader from 'src/assets/img/gradient-loader.png';
-import { Dialog } from 'src/components/molecules';
+import { ExpandIndicator, HorizontalListItem } from 'src/components/atoms';
+import { AmountCard, Dialog } from 'src/components/molecules';
+import { OrderSide, usePlaceOrder } from 'src/hooks';
+import { getPriceMap } from 'src/store/assetPrices/selectors';
+import { selectLandingOrderForm } from 'src/store/landingOrderForm';
+import { setLastMessage } from 'src/store/lastError';
+import { RootState } from 'src/store/types';
+import {
+    CurrencySymbol,
+    getCurrencyMapAsList,
+    handleContractTransaction,
+    Rate,
+} from 'src/utils';
 
 enum Step {
     orderConfirm = 1,
@@ -59,26 +74,114 @@ const reducer = (
     }
 };
 
+const Section = ({ children }: { children: React.ReactNode }) => {
+    return (
+        <div className='rounded-xl border border-neutral-3'>
+            <div className='py-4 px-6'>{children}</div>
+        </div>
+    );
+};
+
+const SectionWithItems = ({ itemList }: { itemList: [string, string][] }) => {
+    return (
+        <Section>
+            <div className='grid grid-cols-1 gap-2'>
+                {itemList.map(([label, value]) => (
+                    <HorizontalListItem
+                        key={label}
+                        label={label}
+                        value={value}
+                    />
+                ))}
+            </div>
+        </Section>
+    );
+};
+
 export const PlaceOrder = ({
     isOpen,
     onClose,
+    marketRate,
 }: {
     isOpen: boolean;
     onClose: () => void;
+    marketRate: Rate;
 }) => {
     const [state, dispatch] = useReducer(reducer, stateRecord[1]);
+    const { placeOrder } = usePlaceOrder();
+    const { currency, maturity, amount, side } = useSelector(
+        (state: RootState) => selectLandingOrderForm(state.landingOrderForm)
+    );
+
+    const amountFormatterMap = useMemo(
+        () =>
+            getCurrencyMapAsList().reduce<
+                Record<CurrencySymbol, (value: BigNumber) => number>
+            >(
+                (acc, ccy) => ({
+                    ...acc,
+                    [ccy.symbol]: ccy.fromBaseUnit,
+                }),
+                {} as Record<CurrencySymbol, (value: BigNumber) => number>
+            ),
+        []
+    );
+
+    const getAmount = () => {
+        let format = (x: BigNumber) => x.toNumber();
+        if (currency && amountFormatterMap && amountFormatterMap[currency]) {
+            format = amountFormatterMap[currency];
+        }
+        return format(amount);
+    };
+
+    const priceList = useSelector((state: RootState) => getPriceMap(state));
+    const price = priceList[currency];
 
     const handleClose = useCallback(() => {
         dispatch({ type: 'default' });
         onClose();
     }, [onClose]);
 
+    const handlePlaceOrder = useCallback(
+        async (
+            ccy: CurrencySymbol,
+            maturity: number | BigNumber,
+            side: OrderSide,
+            amount: BigNumber,
+            rate: number
+        ) => {
+            try {
+                const tx = await placeOrder(ccy, maturity, side, amount, rate);
+                const transactionStatus = await handleContractTransaction(tx);
+
+                if (!transactionStatus) {
+                    console.error('Some error occured');
+                    handleClose();
+                } else {
+                    dispatch({ type: 'next' });
+                }
+            } catch (e) {
+                if (e instanceof Error) {
+                    dispatch(setLastMessage(e.message));
+                }
+            }
+        },
+        [placeOrder, dispatch, handleClose]
+    );
+
     const onClick = useCallback(
         async (currentStep: Step) => {
             switch (currentStep) {
                 case Step.orderConfirm:
                     dispatch({ type: 'next' });
-                    dispatch({ type: 'next' });
+                    handlePlaceOrder(
+                        currency,
+                        BigNumber.from(maturity),
+                        side,
+                        amount,
+                        marketRate.toNumber()
+                    );
                     break;
                 case Step.orderProcessing:
                     break;
@@ -87,7 +190,15 @@ export const PlaceOrder = ({
                     break;
             }
         },
-        [handleClose]
+        [
+            amount,
+            currency,
+            handleClose,
+            handlePlaceOrder,
+            marketRate,
+            maturity,
+            side,
+        ]
     );
 
     return (
@@ -102,7 +213,70 @@ export const PlaceOrder = ({
             {(() => {
                 switch (state.currentStep) {
                     case Step.orderConfirm:
-                        return <div></div>;
+                        return (
+                            <div className='grid w-full grid-cols-1 justify-items-stretch gap-6 text-white'>
+                                <Section>
+                                    <AmountCard
+                                        ccy={currency}
+                                        amount={getAmount()}
+                                        price={price}
+                                    />
+                                </Section>
+                                <SectionWithItems
+                                    itemList={[
+                                        [
+                                            'Borrow Limit Remaining',
+                                            '$3,840 / $8,880',
+                                        ],
+                                        ['Collateral Usage', '50% → 57%'],
+                                        ['Borrow APR', marketRate.toPercent()],
+                                    ]}
+                                />
+                                <SectionWithItems
+                                    itemList={[
+                                        ['Borrow Fee %', '0.25 %'],
+                                        ['Total', '$601.25'],
+                                    ]}
+                                />
+                                <Disclosure>
+                                    {({ open }) => (
+                                        <>
+                                            <Disclosure.Button className='flex h-6 flex-row items-center justify-between'>
+                                                <h2 className='typography-hairline-2 text-neutral-8'>
+                                                    Additional Information
+                                                </h2>
+                                                <ExpandIndicator
+                                                    expanded={open}
+                                                />
+                                            </Disclosure.Button>
+                                            <Disclosure.Panel>
+                                                <SectionWithItems
+                                                    itemList={[
+                                                        ['Bond Price', '79.77'],
+                                                        [
+                                                            'Loan Start Date',
+                                                            'June 21, 2022',
+                                                        ],
+                                                        [
+                                                            'Loan Maturity Date',
+                                                            'Dec 22, 2022',
+                                                        ],
+                                                        [
+                                                            'Total Interest (USD)',
+                                                            '$120.00',
+                                                        ],
+                                                        [
+                                                            'Est. Total Debt (USD)',
+                                                            '$720.00',
+                                                        ],
+                                                    ]}
+                                                />
+                                            </Disclosure.Panel>
+                                        </>
+                                    )}
+                                </Disclosure>
+                            </div>
+                        );
                     case Step.orderProcessing:
                         return (
                             // eslint-disable-next-line @next/next/no-img-element
@@ -138,7 +312,7 @@ export const PlaceOrder = ({
                                             Amount
                                         </span>
                                         <span className='leading-6 text-neutral-8'>
-                                            740 FIL
+                                            {getAmount() + ' ' + currency}
                                         </span>
                                     </div>
                                 </div>
