@@ -16,6 +16,7 @@ import {
 } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
 import {
+    amountFormatterToBase,
     CurrencySymbol,
     formatDate,
     getCurrencyMapAsList,
@@ -50,20 +51,6 @@ export const LendingCard = ({
                     [ccy.name]: ccy.symbol,
                 }),
                 {}
-            ),
-        []
-    );
-
-    const amountFormatterMap = useMemo(
-        () =>
-            getCurrencyMapAsList().reduce<
-                Record<CurrencySymbol, (value: number) => BigNumber>
-            >(
-                (acc, ccy) => ({
-                    ...acc,
-                    [ccy.symbol]: ccy.toBaseUnit,
-                }),
-                {} as Record<CurrencySymbol, (value: number) => BigNumber>
             ),
         []
     );
@@ -125,7 +112,7 @@ export const LendingCard = ({
                     transformLabel={(v: string) => shortNames[v]}
                     priceList={assetPriceMap}
                     onAmountChange={(v: BigNumber) => dispatch(setAmount(v))}
-                    amountFormatterMap={amountFormatterMap}
+                    amountFormatterMap={amountFormatterToBase}
                     onAssetChange={(v: CurrencySymbol) => {
                         dispatch(setCurrency(v));
                     }}

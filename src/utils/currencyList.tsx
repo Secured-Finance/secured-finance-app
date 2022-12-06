@@ -94,6 +94,26 @@ export const getCurrencyMapAsOptions = () => {
     );
 };
 
+export const amountFormatterToBase = getCurrencyMapAsList().reduce<
+    Record<CurrencySymbol, (value: number) => BigNumber>
+>(
+    (acc, ccy) => ({
+        ...acc,
+        [ccy.symbol]: ccy.toBaseUnit,
+    }),
+    {} as Record<CurrencySymbol, (value: number) => BigNumber>
+);
+
+export const amountFormatterFromBase = getCurrencyMapAsList().reduce<
+    Record<CurrencySymbol, (value: BigNumber) => number>
+>(
+    (acc, ccy) => ({
+        ...acc,
+        [ccy.symbol]: ccy.fromBaseUnit,
+    }),
+    {} as Record<CurrencySymbol, (value: BigNumber) => number>
+);
+
 export type CurrencyInfo = {
     index: number;
     symbol: CurrencySymbol;
