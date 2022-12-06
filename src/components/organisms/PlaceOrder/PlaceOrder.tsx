@@ -1,5 +1,5 @@
 import { Disclosure } from '@headlessui/react';
-import { BigNumber } from 'ethers';
+import { BigNumber, ContractTransaction } from 'ethers';
 import { useCallback, useReducer } from 'react';
 import { useSelector } from 'react-redux';
 import Check from 'src/assets/icons/check-mark.svg';
@@ -10,7 +10,7 @@ import {
     SectionWithItems,
 } from 'src/components/atoms';
 import { AmountCard, Dialog } from 'src/components/molecules';
-import { OrderSide, usePlaceOrder } from 'src/hooks';
+import { OrderSide } from 'src/hooks';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { selectLandingOrderForm } from 'src/store/landingOrderForm';
 import { setLastMessage } from 'src/store/lastError';
@@ -82,13 +82,20 @@ export const PlaceOrder = ({
     isOpen,
     onClose,
     marketRate,
+    onPlaceOrder,
 }: {
     isOpen: boolean;
     onClose: () => void;
     marketRate: Rate;
+    onPlaceOrder: (
+        ccy: CurrencySymbol,
+        maturity: number | BigNumber,
+        side: OrderSide,
+        amount: BigNumber,
+        rate: number
+    ) => Promise<ContractTransaction | undefined>;
 }) => {
     const [state, dispatch] = useReducer(reducer, stateRecord[1]);
-    const { placeOrder } = usePlaceOrder();
     const { currency, maturity, amount, side } = useSelector(
         (state: RootState) => selectLandingOrderForm(state.landingOrderForm)
     );
@@ -122,9 +129,14 @@ export const PlaceOrder = ({
             rate: number
         ) => {
             try {
-                const tx = await placeOrder(ccy, maturity, side, amount, rate);
+                const tx = await onPlaceOrder(
+                    ccy,
+                    maturity,
+                    side,
+                    amount,
+                    rate
+                );
                 const transactionStatus = await handleContractTransaction(tx);
-
                 if (!transactionStatus) {
                     console.error('Some error occured');
                     handleClose();
@@ -137,7 +149,7 @@ export const PlaceOrder = ({
                 }
             }
         },
-        [placeOrder, dispatch, handleClose]
+        [onPlaceOrder, dispatch, handleClose]
     );
 
     const onClick = useCallback(
@@ -249,12 +261,14 @@ export const PlaceOrder = ({
                         );
                     case Step.orderProcessing:
                         return (
-                            // eslint-disable-next-line @next/next/no-img-element
-                            <img
-                                src={Loader.src}
-                                alt='Loader'
-                                className='animate-spin'
-                            ></img>
+                            <div className='py-9'>
+                                {/* eslint-disable-next-line @next/next/no-img-element */}
+                                <img
+                                    src={Loader.src}
+                                    alt='Loader'
+                                    className='animate-spin'
+                                ></img>
+                            </div>
                         );
                     case Step.orderPlaced:
                         return (

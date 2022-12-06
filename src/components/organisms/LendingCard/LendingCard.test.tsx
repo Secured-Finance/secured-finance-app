@@ -42,6 +42,17 @@ describe('LendingCard Component', () => {
         );
     });
 
+    it('should open confirm order dialog when borrow button is clicked', () => {
+        render(<Default />);
+        fireEvent.click(screen.getByTestId('place-order-button'));
+
+        expect(screen.getByRole('dialog')).toBeInTheDocument();
+        expect(screen.getByText('Confirm Order')).toBeInTheDocument();
+
+        const button = screen.getByTestId('dialog-action-button');
+        expect(button).toHaveTextContent('OK');
+    });
+
     it('should let the user choose between ETH, FIL and USDC when clicking on the asset selector', () => {
         render(<Default />);
         expect(screen.getAllByText(DEFAULT_CHOICE.name)).toHaveLength(1);
