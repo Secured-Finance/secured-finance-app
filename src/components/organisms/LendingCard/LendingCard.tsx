@@ -5,7 +5,7 @@ import { BorrowLendSelector, Button, Option } from 'src/components/atoms';
 import { CollateralUsageSection } from 'src/components/atoms/CollateralUsageSection';
 import { AssetSelector, TermSelector } from 'src/components/molecules';
 import { PlaceOrder } from 'src/components/organisms';
-import { CollateralBook, OrderSide } from 'src/hooks';
+import { CollateralBook, OrderSide, usePlaceOrder } from 'src/hooks';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import {
     selectLandingOrderForm,
@@ -35,7 +35,8 @@ export const LendingCard = ({
     marketRate: Rate;
     maturitiesOptionList: Option[];
 }) => {
-    const [placeOrder, setPlaceOrder] = useState(false);
+    const [openPlaceOrder, setOpenPlaceOrder] = useState(false);
+    const { placeOrder } = usePlaceOrder();
 
     const { currency, maturity, side } = useSelector((state: RootState) =>
         selectLandingOrderForm(state.landingOrderForm)
@@ -137,15 +138,16 @@ export const LendingCard = ({
 
                 <Button
                     fullWidth
-                    onClick={() => setPlaceOrder(true)}
+                    onClick={() => setOpenPlaceOrder(true)}
                     data-testid='place-order-button'
                 >
                     {side === OrderSide.Borrow ? 'Borrow' : 'Lend'}
                 </Button>
                 <PlaceOrder
-                    isOpen={placeOrder}
-                    onClose={() => setPlaceOrder(false)}
+                    isOpen={openPlaceOrder}
+                    onClose={() => setOpenPlaceOrder(false)}
                     marketRate={marketRate}
+                    onPlaceOrder={placeOrder}
                 />
             </div>
         </div>
