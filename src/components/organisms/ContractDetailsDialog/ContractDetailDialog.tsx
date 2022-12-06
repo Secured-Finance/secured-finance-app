@@ -1,32 +1,11 @@
 import { Disclosure } from '@headlessui/react';
-import React from 'react';
-import { ExpandIndicator, HorizontalListItem } from 'src/components/atoms';
+import {
+    ExpandIndicator,
+    Section,
+    SectionWithItems,
+} from 'src/components/atoms';
 import { AmountCard, Dialog } from 'src/components/molecules';
 import { CurrencySymbol } from 'src/utils';
-
-const Section = ({ children }: { children: React.ReactNode }) => {
-    return (
-        <div className='rounded-xl border border-neutral-3'>
-            <div className='py-4 px-6'>{children}</div>
-        </div>
-    );
-};
-
-const SectionWithItems = ({ itemList }: { itemList: [string, string][] }) => {
-    return (
-        <Section>
-            <div className='grid grid-cols-1 gap-2'>
-                {itemList.map(([label, value]) => (
-                    <HorizontalListItem
-                        key={label}
-                        label={label}
-                        value={value}
-                    />
-                ))}
-            </div>
-        </Section>
-    );
-};
 
 export const ContractDetailDialog = ({
     isOpen,
