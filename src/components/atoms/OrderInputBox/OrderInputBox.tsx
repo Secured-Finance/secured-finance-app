@@ -1,6 +1,6 @@
 import { BigNumber } from 'ethers';
-import { ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react';
-import { CurrencySymbol, getCurrencyMapAsList } from 'src/utils';
+import { ChangeEvent, useCallback, useEffect, useState } from 'react';
+import { amountFormatterToBase, CurrencySymbol } from 'src/utils';
 
 interface OrderInputBoxProps {
     field: string;
@@ -25,20 +25,6 @@ export const OrderInputBox = ({
         setInputValue(initialValue);
     }, [initialValue]);
 
-    const amountFormatterMap = useMemo(
-        () =>
-            getCurrencyMapAsList().reduce<
-                Record<CurrencySymbol, (value: number) => BigNumber>
-            >(
-                (acc, ccy) => ({
-                    ...acc,
-                    [ccy.symbol]: ccy.toBaseUnit,
-                }),
-                {} as Record<CurrencySymbol, (value: number) => BigNumber>
-            ),
-        []
-    );
-
     const handleInputChange = useCallback(
         (
             amount: number,
@@ -46,12 +32,16 @@ export const OrderInputBox = ({
             onValueChange: (v: number | BigNumber) => void
         ) => {
             let format = (x: number) => BigNumber.from(x);
-            if (asset && amountFormatterMap && amountFormatterMap[asset]) {
-                format = amountFormatterMap[asset];
+            if (
+                asset &&
+                amountFormatterToBase &&
+                amountFormatterToBase[asset]
+            ) {
+                format = amountFormatterToBase[asset];
             }
             asset ? onValueChange(format(amount)) : onValueChange(amount);
         },
-        [amountFormatterMap]
+        []
     );
 
     const handleAmountChange = useCallback(

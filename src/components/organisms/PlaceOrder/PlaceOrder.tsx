@@ -1,6 +1,6 @@
 import { Disclosure } from '@headlessui/react';
 import { BigNumber } from 'ethers';
-import { useCallback, useMemo, useReducer } from 'react';
+import { useCallback, useReducer } from 'react';
 import { useSelector } from 'react-redux';
 import Check from 'src/assets/icons/check-mark.svg';
 import Loader from 'src/assets/img/gradient-loader.png';
@@ -12,8 +12,8 @@ import { selectLandingOrderForm } from 'src/store/landingOrderForm';
 import { setLastMessage } from 'src/store/lastError';
 import { RootState } from 'src/store/types';
 import {
+    amountFormatterFromBase,
     CurrencySymbol,
-    getCurrencyMapAsList,
     handleContractTransaction,
     Rate,
 } from 'src/utils';
@@ -36,14 +36,14 @@ const stateRecord: Record<Step, State> = {
     [Step.orderConfirm]: {
         currentStep: Step.orderConfirm,
         nextStep: Step.orderProcessing,
-        title: 'Confirm Borrow',
+        title: 'Confirm Order',
         description: '',
         buttonText: 'OK',
     },
     [Step.orderProcessing]: {
         currentStep: Step.orderProcessing,
         nextStep: Step.orderPlaced,
-        title: 'Borrowing...',
+        title: 'Placing Order...',
         description: '',
         buttonText: '',
     },
@@ -113,24 +113,14 @@ export const PlaceOrder = ({
         (state: RootState) => selectLandingOrderForm(state.landingOrderForm)
     );
 
-    const amountFormatterMap = useMemo(
-        () =>
-            getCurrencyMapAsList().reduce<
-                Record<CurrencySymbol, (value: BigNumber) => number>
-            >(
-                (acc, ccy) => ({
-                    ...acc,
-                    [ccy.symbol]: ccy.fromBaseUnit,
-                }),
-                {} as Record<CurrencySymbol, (value: BigNumber) => number>
-            ),
-        []
-    );
-
     const getAmount = () => {
         let format = (x: BigNumber) => x.toNumber();
-        if (currency && amountFormatterMap && amountFormatterMap[currency]) {
-            format = amountFormatterMap[currency];
+        if (
+            currency &&
+            amountFormatterFromBase &&
+            amountFormatterFromBase[currency]
+        ) {
+            format = amountFormatterFromBase[currency];
         }
         return format(amount);
     };

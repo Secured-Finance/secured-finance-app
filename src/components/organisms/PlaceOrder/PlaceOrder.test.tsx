@@ -24,7 +24,7 @@ describe('PlaceOrder component', () => {
         render(<Default />);
 
         expect(screen.getByRole('dialog')).toBeInTheDocument();
-        expect(screen.getByText('Confirm Borrow')).toBeInTheDocument();
+        expect(screen.getByText('Confirm Order')).toBeInTheDocument();
 
         const button = screen.getByTestId('dialog-action-button');
         expect(button).toHaveTextContent('OK');
