@@ -5,14 +5,6 @@ import * as stories from './Dialog.stories';
 
 const { Default, NoButton } = composeStories(stories);
 
-// @ts-expect-error: this is a mock for the IntersectionObserver.
-global.IntersectionObserver = class FakeIntersectionObserver {
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
-    observe() {}
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
-    disconnect() {}
-};
-
 describe('Dialog component', () => {
     it('should render a dialog if isOpen', () => {
         const onClick = jest.fn();

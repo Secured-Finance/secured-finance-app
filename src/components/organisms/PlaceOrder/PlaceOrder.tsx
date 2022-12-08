@@ -1,7 +1,7 @@
 import { Disclosure } from '@headlessui/react';
 import { BigNumber, ContractTransaction } from 'ethers';
 import { useCallback, useReducer } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Check from 'src/assets/icons/check-mark.svg';
 import Loader from 'src/assets/img/gradient-loader.png';
 import {
@@ -19,6 +19,7 @@ import {
     amountFormatterFromBase,
     CurrencySymbol,
     handleContractTransaction,
+    ordinaryFormat,
     Rate,
 } from 'src/utils';
 
@@ -96,6 +97,7 @@ export const PlaceOrder = ({
     ) => Promise<ContractTransaction | undefined>;
 }) => {
     const [state, dispatch] = useReducer(reducer, stateRecord[1]);
+    const globalDispatch = useDispatch();
     const { currency, maturity, amount, side } = useSelector(
         (state: RootState) => selectLandingOrderForm(state.landingOrderForm)
     );
@@ -145,11 +147,11 @@ export const PlaceOrder = ({
                 }
             } catch (e) {
                 if (e instanceof Error) {
-                    dispatch(setLastMessage(e.message));
+                    globalDispatch(setLastMessage(e.message));
                 }
             }
         },
-        [onPlaceOrder, dispatch, handleClose]
+        [onPlaceOrder, dispatch, handleClose, globalDispatch]
     );
 
     const onClick = useCallback(
@@ -296,7 +298,9 @@ export const PlaceOrder = ({
                                             Amount
                                         </span>
                                         <span className='leading-6 text-neutral-8'>
-                                            {getAmount() + ' ' + currency}
+                                            {ordinaryFormat(getAmount()) +
+                                                ' ' +
+                                                currency}
                                         </span>
                                     </div>
                                 </div>
