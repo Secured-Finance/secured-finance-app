@@ -9,14 +9,6 @@ import * as stories from './PlaceOrder.stories';
 
 const { Default } = composeStories(stories);
 
-// @ts-expect-error: this is a mock for the IntersectionObserver.
-global.IntersectionObserver = class FakeIntersectionObserver {
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
-    observe() {}
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
-    disconnect() {}
-};
-
 const preloadedState = { ...preloadedAssetPrices };
 
 const mockSecuredFinance = mockUseSF();
@@ -76,14 +68,16 @@ describe('PlaceOrder component', () => {
         );
     });
 
-    it.skip('should write an error in the store if onPlaceOrder throw an error', async () => {
+    it('should write an error in the store if onPlaceOrder throw an error', async () => {
         const onPlaceOrder = jest.fn(() => {
             throw new Error('This is an error');
         });
         const { store } = render(<Default onPlaceOrder={onPlaceOrder} />);
         fireEvent.click(screen.getByTestId('dialog-action-button'));
         await waitFor(() =>
-            expect(store.getState()).toEqual('This is an error')
+            expect(store.getState().lastError.lastMessage).toEqual(
+                'This is an error'
+            )
         );
     });
 });

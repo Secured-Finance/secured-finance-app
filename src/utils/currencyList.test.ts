@@ -1,5 +1,7 @@
 import { BigNumber } from 'ethers';
 import {
+    amountFormatterFromBase,
+    amountFormatterToBase,
     currencyMap,
     CurrencySymbol,
     getCurrencyMapAsList,
@@ -154,5 +156,93 @@ describe('toCurrency', () => {
         expect(toCurrency(CurrencySymbol.FIL)).toEqual(
             currencyMap.FIL.toCurrency()
         );
+    });
+});
+
+describe('currencyList amountFormatterToBase', () => {
+    it('should return the value in wei for ETH', () => {
+        const format = amountFormatterToBase[CurrencySymbol.ETH];
+        expect(format(1).toString()).toEqual('1000000000000000000');
+        expect(format(1.23).toString()).toEqual('1230000000000000000');
+        expect(format(1.23456789).toString()).toEqual('1234567890000000000');
+        expect(format(0.00000001).toString()).toEqual('10000000000');
+        expect(format(0.000000000001).toString()).toEqual('1000000');
+        expect(format(0.000000000000000001).toString()).toEqual('1');
+    });
+
+    it('should return the value in attoFil for FIL', () => {
+        const format = amountFormatterToBase[CurrencySymbol.FIL];
+        expect(format(1).toString()).toEqual('1000000000000000000');
+        expect(format(1.23).toString()).toEqual('1230000000000000000');
+        expect(format(1.23456789).toString()).toEqual('1234567890000000000');
+        expect(format(0.00000001).toString()).toEqual('10000000000');
+        expect(format(0.000000000001).toString()).toEqual('1000000');
+        expect(format(0.000000000000000001).toString()).toEqual('1');
+    });
+
+    it('should return 0 if the input value is inferior to the base blockchain unit', () => {
+        const format = amountFormatterToBase[CurrencySymbol.FIL];
+        expect(format(0.0000000000000000001).toString()).toEqual('0');
+        expect(format(0.0000000000000000009).toString()).toEqual('0');
+        expect(format(0.000000000000000000001).toString()).toEqual('0');
+        expect(format(0.0000000000000000001).toString()).toEqual('0');
+        expect(format(0.000000000000000000001).toString()).toEqual('0');
+    });
+
+    it('should return the value in satoshi for BTC', () => {
+        const format = amountFormatterToBase[CurrencySymbol.BTC];
+        expect(format(1).toString()).toEqual('100000000');
+        expect(format(1.23).toString()).toEqual('123000000');
+        expect(format(1.23456789).toString()).toEqual('123456789');
+        expect(format(0.00000001).toString()).toEqual('1');
+        expect(format(0.000000000001).toString()).toEqual('0');
+        expect(format(0.000000000000000001).toString()).toEqual('0');
+    });
+});
+
+describe('currencyList amountFormatterFromBase', () => {
+    it('should return the value in ETH for wei amount', () => {
+        const format = amountFormatterFromBase[CurrencySymbol.ETH];
+        expect(
+            format(BigNumber.from('1000000000000000000')).toString()
+        ).toEqual('1');
+        expect(
+            format(BigNumber.from('1230000000000000000')).toString()
+        ).toEqual('1.23');
+        expect(
+            format(BigNumber.from('1234567890000000000')).toString()
+        ).toEqual('1.23456789');
+        expect(format(BigNumber.from('10000000000')).toString()).toEqual(
+            '1e-8'
+        );
+        expect(format(BigNumber.from('1000000')).toString()).toEqual('1e-12');
+    });
+
+    it('should return the value in FIL for attoFil amount', () => {
+        const format = amountFormatterFromBase[CurrencySymbol.FIL];
+        expect(
+            format(BigNumber.from('1000000000000000000')).toString()
+        ).toEqual('1');
+        expect(
+            format(BigNumber.from('1230000000000000000')).toString()
+        ).toEqual('1.23');
+        expect(
+            format(BigNumber.from('1234567890000000000')).toString()
+        ).toEqual('1.23456789');
+        expect(format(BigNumber.from('10000000000')).toString()).toEqual(
+            '1e-8'
+        );
+        expect(format(BigNumber.from('1000000')).toString()).toEqual('1e-12');
+    });
+
+    it('should return the value in BTC for satoshi amount', () => {
+        const format = amountFormatterFromBase[CurrencySymbol.BTC];
+        expect(format(BigNumber.from('100000000')).toString()).toEqual('1');
+        expect(format(BigNumber.from('123000000')).toString()).toEqual('1.23');
+        expect(format(BigNumber.from('123456789')).toString()).toEqual(
+            '1.23456789'
+        );
+        expect(format(BigNumber.from('1')).toString()).toEqual('1e-8');
+        expect(format(BigNumber.from('0')).toString()).toEqual('0');
     });
 });
