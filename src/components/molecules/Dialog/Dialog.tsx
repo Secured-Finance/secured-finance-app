@@ -27,19 +27,21 @@ export const Dialog = ({
             <div className='fixed inset-0 bg-backgroundBlur' />
             <div className='fixed inset-0 flex items-center justify-center'>
                 <HeadlessDialog.Panel
-                    className='w-96 rounded-xl bg-universeBlue p-6 pb-8 shadow-deep'
+                    className='w-[408px] rounded-xl bg-universeBlue p-8 shadow-deep'
                     data-cy='modal'
                 >
-                    <div className='text-right'>
+                    <div className='flex justify-end'>
                         <CloseButton onClick={onClose} />
                     </div>
-                    <div className='flex w-full flex-col items-center space-y-7'>
-                        <HeadlessDialog.Title className='typography-modal-title w-full text-center text-white opacity-80'>
+                    <div className='flex w-full flex-col items-center space-y-6'>
+                        <HeadlessDialog.Title className='typography-modal-title w-full text-center text-neutral-8 opacity-80'>
                             {title}
                         </HeadlessDialog.Title>
-                        <HeadlessDialog.Description className='typography-body-2 w-full text-center text-white-50'>
-                            {description}
-                        </HeadlessDialog.Description>
+                        {description ? (
+                            <HeadlessDialog.Description className='typography-body-2 w-full text-center text-white-50'>
+                                {description}
+                            </HeadlessDialog.Description>
+                        ) : null}
                         {children}
                         {callToAction ? (
                             <Button
@@ -50,7 +52,9 @@ export const Dialog = ({
                             >
                                 {callToAction}
                             </Button>
-                        ) : null}
+                        ) : (
+                            <div className='h-10' />
+                        )}
                     </div>
                 </HeadlessDialog.Panel>
             </div>
