@@ -1,32 +1,11 @@
 import { Disclosure } from '@headlessui/react';
-import React from 'react';
-import { ExpandIndicator, HorizontalListItem } from 'src/components/atoms';
+import {
+    ExpandIndicator,
+    Section,
+    SectionWithItems,
+} from 'src/components/atoms';
 import { AmountCard, Dialog } from 'src/components/molecules';
 import { CurrencySymbol } from 'src/utils';
-
-const Section = ({ children }: { children: React.ReactNode }) => {
-    return (
-        <div className='rounded-xl border border-white-10'>
-            <div className='p-4'>{children}</div>
-        </div>
-    );
-};
-
-const SectionWithItems = ({ itemList }: { itemList: [string, string][] }) => {
-    return (
-        <Section>
-            <div className='grid grid-cols-1 gap-4'>
-                {itemList.map(([label, value]) => (
-                    <HorizontalListItem
-                        key={label}
-                        label={label}
-                        value={value}
-                    />
-                ))}
-            </div>
-        </Section>
-    );
-};
 
 export const ContractDetailDialog = ({
     isOpen,
@@ -44,7 +23,7 @@ export const ContractDetailDialog = ({
             callToAction='Unwind Position'
             onClick={onClose}
         >
-            <div className='grid w-full grid-cols-1 justify-items-stretch gap-3 text-white'>
+            <div className='grid w-full grid-cols-1 justify-items-stretch gap-6 text-white'>
                 <Section>
                     <AmountCard
                         ccy={CurrencySymbol.FIL}
@@ -58,7 +37,7 @@ export const ContractDetailDialog = ({
                         ['Contract Type', 'Borrow'],
                         ['Contract Status', 'Active'],
                         ['Contract Collateral', 'ETH'],
-                        ['Contract Collateral Amount', '0.1 ETH'],
+                        ['Borrow Limit Remaining', '0.1 ETH'],
                         ['Contract Collateral Ratio', '150%'],
                     ]}
                 />
@@ -68,8 +47,8 @@ export const ContractDetailDialog = ({
                 <Disclosure>
                     {({ open }) => (
                         <>
-                            <Disclosure.Button className='flex flex-row items-center justify-between'>
-                                <h2 className='typography-hairline-2 py-4 text-left text-white'>
+                            <Disclosure.Button className='flex h-6 flex-row items-center justify-between'>
+                                <h2 className='typography-hairline-2 text-neutral-8'>
                                     Additional Information
                                 </h2>
                                 <ExpandIndicator expanded={open} />

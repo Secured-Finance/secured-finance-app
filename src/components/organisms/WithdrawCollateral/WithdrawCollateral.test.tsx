@@ -6,14 +6,6 @@ import * as stories from './WithdrawCollateral.stories';
 
 const { Default } = composeStories(stories);
 
-// @ts-expect-error: this is a mock for the IntersectionObserver.
-global.IntersectionObserver = class FakeIntersectionObserver {
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
-    observe() {}
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
-    disconnect() {}
-};
-
 const preloadedState = {
     ...preloadedAssetPrices,
 };

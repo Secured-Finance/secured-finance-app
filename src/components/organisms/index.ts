@@ -9,6 +9,7 @@ export * from './LendingCard';
 export * from './LineChartTab';
 export * from './MarketOrganism';
 export * from './MyWalletCard';
+export * from './PlaceOrder';
 export * from './WalletDialog';
 export * from './WalletPopover';
 export * from './WithdrawCollateral';

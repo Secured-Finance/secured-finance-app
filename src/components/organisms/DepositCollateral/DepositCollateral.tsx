@@ -167,12 +167,14 @@ export const DepositCollateral = ({
                         );
                     case Step.depositing:
                         return (
-                            // eslint-disable-next-line @next/next/no-img-element
-                            <img
-                                src={Loader.src}
-                                alt='Loader'
-                                className='animate-spin'
-                            ></img>
+                            <div className='py-9'>
+                                {/* eslint-disable-next-line @next/next/no-img-element */}
+                                <img
+                                    src={Loader.src}
+                                    alt='Loader'
+                                    className='animate-spin'
+                                ></img>
+                            </div>
                         );
                         break;
                     case Step.deposited:
