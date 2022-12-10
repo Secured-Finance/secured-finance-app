@@ -121,6 +121,16 @@ describe('LoanValue', () => {
             expect(loanValue.apy).toEqual(new Rate(36901));
         });
 
+        it('should return 0 if price is 0', () => {
+            const loanValue = LoanValue.fromPrice(0, 1675252800);
+            expect(loanValue.apy).toEqual(new Rate(0));
+        });
+
+        it('should return 0 if the maturity is 0', () => {
+            const loanValue = LoanValue.fromPrice(9690, 0);
+            expect(loanValue.apy).toEqual(new Rate(0));
+        });
+
         it('should throw an error if apy is undefined and price is undefined', () => {
             const loanValue = LoanValue.fromApr(new Rate(0.05));
             expect(() => loanValue.apy).toThrowError('cannot compute apy');

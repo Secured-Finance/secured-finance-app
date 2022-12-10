@@ -48,6 +48,10 @@ export class LoanValue {
         }
 
         if (this._apy === undefined) {
+            if (this.price === 0 || this._maturity === 0) {
+                return new Rate(0);
+            }
+
             this._apy = new Rate(
                 (Math.pow(
                     1 + this.apr.toNormalizedNumber() / this.DAYS_IN_YEAR,
