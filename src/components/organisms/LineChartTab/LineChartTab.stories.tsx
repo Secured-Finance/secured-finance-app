@@ -6,6 +6,7 @@ import {
     WithWalletProvider,
 } from 'src/../.storybook/decorators';
 import { updateLendingMarketContract } from 'src/store/availableContracts';
+import { maturityOptions } from 'src/stories/mocks/fixtures';
 import { CurrencySymbol } from 'src/utils';
 import { LineChartTab } from './LineChartTab';
 
@@ -13,13 +14,7 @@ export default {
     title: 'Organism/LineChartTab',
     component: LineChartTab,
     args: {
-        maturitiesOptionList: [
-            { label: 'MAR22', value: '1' },
-            { label: 'JUN22', value: '2' },
-            { label: 'SEP22', value: '3' },
-            { label: 'DEC22', value: '1669856400' },
-            { label: 'MAR23', value: '1677632400' },
-        ],
+        maturitiesOptionList: maturityOptions,
     },
     decorators: [WithWalletProvider, WithAssetPrice],
 } as ComponentMeta<typeof LineChartTab>;
@@ -27,10 +22,10 @@ export default {
 const Template: ComponentStory<typeof LineChartTab> = args => {
     const maturities = useMemo(
         () => ({
-            MAR22: '1616508800',
-            JUN22: '1625097600',
-            SEP22: '1633046400',
-            DEC22: '1640995200',
+            MAR22: 1616508800,
+            JUN22: 1625097600,
+            SEP22: 1633046400,
+            DEC22: 1640995200,
         }),
         []
     );

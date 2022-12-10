@@ -20,10 +20,10 @@ export default {
 const Template: ComponentStory<typeof MarketDashboard> = () => {
     const maturities = useMemo(
         () => ({
-            MAR22: '1616508800',
-            JUN22: '1625097600',
-            SEP22: '1633046400',
-            DEC22: '1640995200',
+            MAR22: 1616508800,
+            JUN22: 1625097600,
+            SEP22: 1633046400,
+            DEC22: 1640995200,
         }),
         []
     );

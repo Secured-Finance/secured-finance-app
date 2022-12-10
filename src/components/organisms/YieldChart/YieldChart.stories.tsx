@@ -2,6 +2,7 @@ import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { useEffect, useMemo } from 'react';
 import { useDispatch } from 'react-redux';
 import { updateLendingMarketContract } from 'src/store/availableContracts';
+import { maturityOptions } from 'src/stories/mocks/fixtures';
 import { CurrencySymbol, Rate } from 'src/utils';
 import { YieldChart } from './';
 
@@ -19,14 +20,10 @@ export default {
             new Rate(400000),
             new Rate(500000),
             new Rate(600000),
+            new Rate(700000),
+            new Rate(800000),
         ],
-        maturitiesOptionList: [
-            { label: 'MAR22', value: '1' },
-            { label: 'JUN22', value: '2' },
-            { label: 'SEP22', value: '3' },
-            { label: 'DEC22', value: '1669856400' },
-            { label: 'MAR23', value: '1677632400' },
-        ],
+        maturitiesOptionList: maturityOptions,
     },
     argTypes: {},
 } as ComponentMeta<typeof YieldChart>;
@@ -34,10 +31,10 @@ export default {
 const Template: ComponentStory<typeof YieldChart> = args => {
     const maturities = useMemo(
         () => ({
-            MAR22: '1616508800',
-            JUN22: '1625097600',
-            SEP22: '1633046400',
-            DEC22: '1640995200',
+            MAR22: 1616508800,
+            JUN22: 1625097600,
+            SEP22: 1633046400,
+            DEC22: 1640995200,
         }),
         []
     );

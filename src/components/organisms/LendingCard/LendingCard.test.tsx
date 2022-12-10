@@ -85,7 +85,7 @@ describe('LendingCard Component', () => {
         await waitFor(() =>
             expect(onPlaceOrder).toHaveBeenCalledWith(
                 DEFAULT_CHOICE.symbol,
-                BigNumber.from(1),
+                1669852800,
                 OrderSide.Borrow,
                 BigNumber.from(0),
                 10000
@@ -107,7 +107,7 @@ describe('LendingCard Component', () => {
         await waitFor(() =>
             expect(onPlaceOrder).toHaveBeenCalledWith(
                 CurrencySymbol.ETH,
-                BigNumber.from(1),
+                1669852800,
                 OrderSide.Borrow,
                 currencyMap.FIL.toBaseUnit(10),
                 10000
@@ -150,7 +150,7 @@ describe('LendingCard Component', () => {
         render(<Default />);
         fireEvent.click(
             screen.getByRole('button', {
-                name: 'MAR22',
+                name: 'DEC22',
             })
         );
         fireEvent.click(screen.getByText('MAR23'));

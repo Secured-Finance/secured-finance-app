@@ -1,16 +1,16 @@
 import { useMemo, useState } from 'react';
 import { DropdownSelector, Option } from 'src/components/atoms';
 
-export const TermSelector = <TermType extends string = string>({
+export const TermSelector = <T extends string = string>({
     options,
     selected,
     transformLabel = (v: string) => v,
     onTermChange,
 }: {
-    options: Array<Option<TermType>>;
-    selected: Option<TermType>;
+    options: Array<Option<T>>;
+    selected: Option<T>;
     transformLabel?: (v: string) => string;
-    onTermChange?: (v: TermType) => void;
+    onTermChange?: (v: T) => void;
 }) => {
     const [termValue, setTermValue] = useState(selected.value);
     const selectedTerm = useMemo(
@@ -18,7 +18,7 @@ export const TermSelector = <TermType extends string = string>({
         [options, termValue]
     );
 
-    const handleTermChange = (v: TermType) => {
+    const handleTermChange = (v: T) => {
         setTermValue(v);
         if (onTermChange) {
             onTermChange(v);

@@ -2,12 +2,13 @@ import mockDate from 'mockdate';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { renderHook } from 'src/test-utils';
 import { CurrencySymbol, Rate } from 'src/utils';
+import { Maturity } from 'src/utils/entities';
 import { RateType, useRates } from './useRates';
 
 const mock = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mock);
 
-const maturityMar23 = 1675252800;
+const maturityMar23 = new Maturity(1675252800);
 
 beforeAll(() => {
     mockDate.reset();

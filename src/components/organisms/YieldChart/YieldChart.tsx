@@ -1,17 +1,21 @@
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import SFLogoSmall from 'src/assets/img/logo-small.svg';
-import { ExpandIndicator, Option } from 'src/components/atoms';
+import { ExpandIndicator } from 'src/components/atoms';
 import { CurveHeader, getData, LineChart } from 'src/components/molecules';
-import { setMaturity } from 'src/store/landingOrderForm';
+import {
+    selectLandingOrderForm,
+    setMaturity,
+} from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
+import { MaturityOptionList } from 'src/types';
 import { CurrencySymbol, Rate } from 'src/utils';
 
 interface YieldChartProps {
     asset: CurrencySymbol;
     isBorrow: boolean;
     rates: Array<Rate>;
-    maturitiesOptionList: Option[];
+    maturitiesOptionList: MaturityOptionList;
 }
 
 export const YieldChart = ({
@@ -24,8 +28,8 @@ export const YieldChart = ({
     const lendingContracts = useSelector(
         (state: RootState) => state.availableContracts.lendingMarkets[asset]
     );
-    const { maturity } = useSelector(
-        (state: RootState) => state.landingOrderForm
+    const { maturity } = useSelector((state: RootState) =>
+        selectLandingOrderForm(state.landingOrderForm)
     );
     const [show, setShow] = useState(true);
 

@@ -20,8 +20,8 @@ describe('useLendingMarkets', () => {
                     CurrencySymbol.ETH
                 ]
             ).toEqual({
-                'ETH-1000': '1000',
-                'ETH-2000': '2000',
+                'ETH-1000': 1000,
+                'ETH-2000': 2000,
             });
         });
     });
@@ -36,7 +36,7 @@ describe('useLendingMarkets', () => {
                 CurrencySymbol.ETH
             ]
         ).toEqual({
-            '': '0',
+            '': 0,
         });
     });
 });

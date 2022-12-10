@@ -15,6 +15,7 @@ import {
 } from 'src/hooks';
 import { useOrderbook } from 'src/hooks/useOrderbook';
 import {
+    selectMarketDashboardForm,
     setAmount,
     setCurrency,
     setMaturity,
@@ -27,12 +28,14 @@ import {
     getCurrencyMapAsOptions,
     Rate,
 } from 'src/utils';
+import { Maturity } from 'src/utils/entities';
 import { useWallet } from 'use-wallet';
 
 export const MarketDashboard = () => {
     const { account } = useWallet();
     const { currency, maturity, side, orderType } = useSelector(
-        (state: RootState) => state.marketDashboardForm
+        (state: RootState) =>
+            selectMarketDashboardForm(state.marketDashboardForm)
     );
     const lendingContracts = useSelector(
         (state: RootState) => state.availableContracts.lendingMarkets[currency]
@@ -42,7 +45,7 @@ export const MarketDashboard = () => {
         () =>
             Object.entries(lendingContracts).map(o => ({
                 label: o[0],
-                value: o[1],
+                value: new Maturity(o[1]),
             })),
         [lendingContracts]
     );
@@ -51,11 +54,11 @@ export const MarketDashboard = () => {
 
     const assetList = useMemo(() => getCurrencyMapAsOptions(), []);
     const dispatch = useDispatch();
-    const orderBook = useOrderbook(currency, Number(optionList[0].value), 10);
+    const orderBook = useOrderbook(currency, optionList[0].value, 10);
 
     const selectedTerm = useMemo(() => {
         return (
-            optionList.find(option => option.value === maturity) ||
+            optionList.find(option => option.value.equals(maturity)) ||
             optionList[0]
         );
     }, [maturity, optionList]);
@@ -63,7 +66,7 @@ export const MarketDashboard = () => {
     const rates = useRates(
         currency,
         side === OrderSide.Borrow ? RateType.Borrow : RateType.Lend,
-        Number(maturity)
+        maturity
     );
 
     const marketRate = useMemo(() => {
@@ -71,7 +74,10 @@ export const MarketDashboard = () => {
             return new Rate(0);
         }
 
-        const rate = rates[Object.values(lendingContracts).indexOf(maturity)];
+        const rate =
+            rates[
+                Object.values(lendingContracts).indexOf(maturity.getMaturity())
+            ];
         if (!rate) {
             return new Rate(0);
         }
@@ -99,10 +105,16 @@ export const MarketDashboard = () => {
             </div>
             <MarketDashboardTopBar
                 asset={currency}
-                options={optionList}
-                selected={selectedTerm}
+                options={optionList.map(o => ({
+                    ...o,
+                    value: o.value.toString(),
+                }))}
+                selected={{
+                    ...selectedTerm,
+                    value: selectedTerm.value.toString(),
+                }}
                 onTermChange={v => {
-                    dispatch(setMaturity(v));
+                    dispatch(setMaturity(new Maturity(v)));
                     if (orderType === OrderType.MARKET) {
                         dispatch(setRate(marketRate.toNumber()));
                     }

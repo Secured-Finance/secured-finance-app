@@ -1,7 +1,7 @@
 import { BigNumber, ContractTransaction } from 'ethers';
 import { useCallback, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { BorrowLendSelector, Button, Option } from 'src/components/atoms';
+import { BorrowLendSelector, Button } from 'src/components/atoms';
 import { CollateralUsageSection } from 'src/components/atoms/CollateralUsageSection';
 import { AssetSelector, TermSelector } from 'src/components/molecules';
 import { CollateralBook, OrderSide } from 'src/hooks';
@@ -15,6 +15,7 @@ import {
 } from 'src/store/landingOrderForm';
 import { setLastMessage } from 'src/store/lastError';
 import { RootState } from 'src/store/types';
+import { MaturityOptionList } from 'src/types';
 import {
     CurrencySymbol,
     formatDate,
@@ -25,6 +26,7 @@ import {
     Rate,
 } from 'src/utils';
 import { computeAvailableToBorrow } from 'src/utils/collateral';
+import { Maturity } from 'src/utils/entities';
 
 export const LendingCard = ({
     onPlaceOrder,
@@ -41,7 +43,7 @@ export const LendingCard = ({
     ) => Promise<ContractTransaction | undefined>;
     collateralBook: CollateralBook;
     marketRate: Rate;
-    maturitiesOptionList: Option[];
+    maturitiesOptionList: MaturityOptionList;
 }) => {
     const [pendingTransaction, setPendingTransaction] = useState(false);
     const { currency, maturity, amount, side } = useSelector(
@@ -101,8 +103,9 @@ export const LendingCard = ({
     //TODO: strongly type the terms
     const selectedTerm = useMemo(() => {
         return (
-            maturitiesOptionList.find(option => option.value === maturity) ||
-            maturitiesOptionList[0]
+            maturitiesOptionList.find(option =>
+                option.value.equals(maturity)
+            ) || maturitiesOptionList[0]
         );
     }, [maturity, maturitiesOptionList]);
 
@@ -173,9 +176,15 @@ export const LendingCard = ({
                 />
 
                 <TermSelector
-                    options={maturitiesOptionList}
-                    selected={selectedTerm}
-                    onTermChange={v => dispatch(setMaturity(v))}
+                    options={maturitiesOptionList.map(o => ({
+                        ...o,
+                        value: o.value.toString(),
+                    }))}
+                    selected={{
+                        ...selectedTerm,
+                        value: selectedTerm.value.toString(),
+                    }}
+                    onTermChange={v => dispatch(setMaturity(new Maturity(v)))}
                     transformLabel={v => {
                         const ts = maturitiesOptionList.find(
                             o => o.label === v
@@ -194,7 +203,7 @@ export const LendingCard = ({
                     onClick={() =>
                         handlePlaceOrder(
                             currency,
-                            BigNumber.from(maturity),
+                            maturity.getMaturity(),
                             side,
                             amount,
                             marketRate.toNumber()

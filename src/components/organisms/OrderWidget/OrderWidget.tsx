@@ -135,12 +135,12 @@ export const OrderWidget = ({
             return 0;
         }
 
-        return (sellOrders[0].price + buyOrders[0].price) / 2;
+        return (sellOrders[0].value.price + buyOrders[0].value.price) / 2;
     }, [sellOrders, buyOrders]);
 
     const buyColumns = useMemo(
         () => [
-            columnHelper.accessor('apy', {
+            columnHelper.accessor('value.apy', {
                 cell: info => (
                     <ApyCell
                         value={info.getValue()}
@@ -157,7 +157,7 @@ export const OrderWidget = ({
                     <TableHeader title={`Amount (${currency})`} align='right' />
                 ),
             }),
-            columnHelper.accessor('price', {
+            columnHelper.accessor('value.price', {
                 cell: info => (
                     <PriceCell
                         value={info.getValue().toString()}
@@ -174,7 +174,7 @@ export const OrderWidget = ({
 
     const sellColumns = useMemo(
         () => [
-            columnHelper.accessor('price', {
+            columnHelper.accessor('value.price', {
                 cell: info => (
                     <PriceCell
                         value={info.getValue().toString()}
@@ -193,7 +193,7 @@ export const OrderWidget = ({
                     <TableHeader title={`Amount (${currency})`} align='right' />
                 ),
             }),
-            columnHelper.accessor('apy', {
+            columnHelper.accessor('value.apy', {
                 cell: info => (
                     <ApyCell
                         value={info.getValue()}
