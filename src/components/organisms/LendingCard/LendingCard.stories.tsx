@@ -9,9 +9,6 @@ export default {
     title: 'Organism/LendingCard',
     component: LendingCard,
     args: {
-        onPlaceOrder: async () => {
-            return Promise.resolve();
-        },
         collateralBook: {
             ccyName: 'ETH',
             collateral: new BigNumber('10000000000000000000'),
@@ -29,18 +26,3 @@ const Template: ComponentStory<typeof LendingCard> = args => {
 };
 
 export const Default = Template.bind({});
-
-export const WithError = Template.bind({});
-WithError.args = {
-    onPlaceOrder: async () => {
-        throw Error('Something went wrong');
-    },
-};
-export const PendingTransaction = Template.bind({});
-PendingTransaction.args = {
-    onPlaceOrder: async () => {
-        return new Promise(resolve => {
-            setTimeout(resolve, 5000);
-        });
-    },
-};

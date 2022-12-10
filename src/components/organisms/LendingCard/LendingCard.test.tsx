@@ -1,13 +1,11 @@
 import { composeStories } from '@storybook/testing-react';
-import { BigNumber } from 'ethers';
-import { OrderSide } from 'src/hooks';
 import { preloadedAssetPrices } from 'src/stories/mocks/fixtures';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
-import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
-import { CurrencyInfo, currencyMap, CurrencySymbol, Rate } from 'src/utils';
+import { fireEvent, render, screen } from 'src/test-utils.js';
+import { CurrencyInfo, currencyMap, Rate } from 'src/utils';
 import * as stories from './LendingCard.stories';
 
-const { Default, PendingTransaction } = composeStories(stories);
+const { Default } = composeStories(stories);
 
 const mockSecuredFinance = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mockSecuredFinance);
@@ -44,6 +42,17 @@ describe('LendingCard Component', () => {
         );
     });
 
+    it('should open confirm order dialog when borrow button is clicked', () => {
+        render(<Default />);
+        fireEvent.click(screen.getByTestId('place-order-button'));
+
+        expect(screen.getByRole('dialog')).toBeInTheDocument();
+        expect(screen.getByText('Confirm Order')).toBeInTheDocument();
+
+        const button = screen.getByTestId('dialog-action-button');
+        expect(button).toHaveTextContent('OK');
+    });
+
     it('should let the user choose between ETH, FIL and USDC when clicking on the asset selector', () => {
         render(<Default />);
         expect(screen.getAllByText(DEFAULT_CHOICE.name)).toHaveLength(1);
@@ -63,69 +72,6 @@ describe('LendingCard Component', () => {
         render(<Default />);
         selectEthereum();
         expect(screen.getByText('Ethereum')).toBeInTheDocument();
-    });
-
-    it('should disable the action button when the transaction is pending', () => {
-        render(<PendingTransaction />);
-        const button = screen.getByTestId('place-order-button');
-        expect(button).not.toBeDisabled();
-        fireEvent.click(button);
-
-        expect(screen.getByTestId('place-order-button')).toBeDisabled();
-    });
-
-    it('should call the onPlaceOrder with the initial value when click on the action button', async () => {
-        const tx = {
-            wait: jest.fn(() => Promise.resolve({ blockNumber: 13115215 })),
-        } as unknown;
-        const onPlaceOrder = jest.fn().mockReturnValue(Promise.resolve(tx));
-        render(<Default onPlaceOrder={onPlaceOrder} />);
-        const button = screen.getByTestId('place-order-button');
-        fireEvent.click(button);
-        await waitFor(() =>
-            expect(onPlaceOrder).toHaveBeenCalledWith(
-                DEFAULT_CHOICE.symbol,
-                1669852800,
-                OrderSide.Borrow,
-                BigNumber.from(0),
-                10000
-            )
-        );
-    });
-
-    it('should call the onPlaceOrder function with the argument selected asset and amount when clicking on the action button', async () => {
-        const tx = {
-            wait: jest.fn(() => Promise.resolve({ blockNumber: 13115215 })),
-        } as unknown;
-        const onPlaceOrder = jest.fn().mockReturnValue(Promise.resolve(tx));
-        render(<Default onPlaceOrder={onPlaceOrder} />);
-        selectEthereum();
-        const input = screen.getByRole('textbox');
-        fireEvent.change(input, { target: { value: '10' } });
-        fireEvent.click(screen.getByTestId('place-order-button'));
-
-        await waitFor(() =>
-            expect(onPlaceOrder).toHaveBeenCalledWith(
-                CurrencySymbol.ETH,
-                1669852800,
-                OrderSide.Borrow,
-                currencyMap.FIL.toBaseUnit(10),
-                10000
-            )
-        );
-    });
-
-    it('should write an error in the store if onPlaceOrder throw an error', async () => {
-        const onPlaceOrder = jest.fn(() => {
-            throw new Error('This is an error');
-        });
-        const { store } = render(<Default onPlaceOrder={onPlaceOrder} />);
-        fireEvent.click(screen.getByTestId('place-order-button'));
-        await waitFor(() =>
-            expect(store.getState().lastError.lastMessage).toEqual(
-                'This is an error'
-            )
-        );
     });
 
     it('should display the amount inputted by the user in USD', () => {

@@ -34,6 +34,9 @@ module.exports = {
                 '1px': '1px',
                 '2px': '2px',
             },
+            gap: {
+                '10px': '10px',
+            },
         },
         fontFamily: {
             primary: ['GT Super Display', ...defaultTheme.fontFamily.serif],
@@ -83,6 +86,7 @@ module.exports = {
                 '2': '#23262F',
                 '3': '#353945',
                 '4': '#777E91',
+                '5': '#B1B5C4',
                 '6': '#E6E8EC',
                 '8': '#FCFCFD',
             },

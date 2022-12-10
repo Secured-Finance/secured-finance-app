@@ -1,13 +1,7 @@
 import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { LendingCard, YieldChart } from 'src/components/organisms';
-import {
-    OrderSide,
-    RateType,
-    useCollateralBook,
-    usePlaceOrder,
-    useRates,
-} from 'src/hooks';
+import { OrderSide, RateType, useCollateralBook, useRates } from 'src/hooks';
 import { selectLandingOrderForm } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
 import { Rate } from 'src/utils';
@@ -16,8 +10,7 @@ import { useWallet } from 'use-wallet';
 
 export const Landing = () => {
     const { account } = useWallet();
-    const { placeOrder } = usePlaceOrder();
-    const { currency, maturity, side } = useSelector((state: RootState) =>
+    const { currency, side, maturity } = useSelector((state: RootState) =>
         selectLandingOrderForm(state.landingOrderForm)
     );
     const lendingContracts = useSelector(
@@ -72,7 +65,6 @@ export const Landing = () => {
             </div>
             <div className='flex flex-row items-center justify-center'>
                 <LendingCard
-                    onPlaceOrder={placeOrder}
                     collateralBook={collateralBook}
                     marketRate={marketRate}
                     maturitiesOptionList={optionList}

@@ -3,11 +3,11 @@ import { XIcon } from '@heroicons/react/outline';
 export const CloseButton = ({ onClick }: { onClick: () => void }) => {
     return (
         <button
-            className='h-8 w-8 rounded-full border-2 border-neutral'
+            className='flex h-8 w-8 items-center justify-center rounded-full border-2 border-neutral-3'
             onClick={onClick}
             data-testid='close-button'
         >
-            <XIcon className='h-7 w-7 pt-[3px] text-white' />
+            <XIcon className='h-4 w-4 text-neutral-8' />
         </button>
     );
 };
