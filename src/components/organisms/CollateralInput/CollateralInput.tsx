@@ -1,7 +1,7 @@
 import { BigNumber } from 'ethers';
-import { ChangeEvent, useCallback, useMemo, useState } from 'react';
+import { ChangeEvent, useCallback, useState } from 'react';
 import { PercentageSelector } from 'src/components/molecules';
-import { CurrencySymbol, getCurrencyMapAsList, usdFormat } from 'src/utils';
+import { amountFormatterToBase, CurrencySymbol, usdFormat } from 'src/utils';
 
 interface CollateralInputProps {
     price: number;
@@ -18,20 +18,6 @@ export const CollateralInput = ({
 }: CollateralInputProps) => {
     const [inputValue, setInputValue] = useState('');
 
-    const amountFormatterMap = useMemo(
-        () =>
-            getCurrencyMapAsList().reduce<
-                Record<CurrencySymbol, (value: number) => BigNumber>
-            >(
-                (acc, ccy) => ({
-                    ...acc,
-                    [ccy.symbol]: ccy.toBaseUnit,
-                }),
-                {} as Record<CurrencySymbol, (value: number) => BigNumber>
-            ),
-        []
-    );
-
     const handleInputChange = useCallback(
         (
             amount: number,
@@ -39,13 +25,13 @@ export const CollateralInput = ({
             onAmountChange: (v: BigNumber) => void
         ) => {
             let format = (x: number) => BigNumber.from(x);
-            if (amountFormatterMap && amountFormatterMap[asset]) {
-                format = amountFormatterMap[asset];
+            if (amountFormatterToBase && amountFormatterToBase[asset]) {
+                format = amountFormatterToBase[asset];
             }
 
             onAmountChange(format(amount));
         },
-        [amountFormatterMap]
+        []
     );
 
     const handleAmountChange = useCallback(
@@ -83,7 +69,7 @@ export const CollateralInput = ({
                     placeholder='0'
                     value={inputValue}
                     onChange={handleAmountChange}
-                    className='typography-headline-4 focus: h-14 w-full bg-transparent text-center text-neutral-8 focus:outline-none'
+                    className='typography-headline-4 h-14 w-full bg-transparent text-center text-neutral-8 focus:outline-none'
                 />
                 <div className='typography-body-2'>
                     <span className='text-center text-neutral-8'>

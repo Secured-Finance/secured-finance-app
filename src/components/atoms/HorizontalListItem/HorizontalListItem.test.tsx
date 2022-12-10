@@ -14,10 +14,4 @@ describe('HorizontalListItem Component', () => {
         expect(screen.getByText('Label')).toBeInTheDocument();
         expect(screen.getByText('Value')).toBeInTheDocument();
     });
-
-    it('should align the label to the left and the value to the right', () => {
-        render(<Default />);
-        expect(screen.getByText('Label')).toHaveClass('text-left');
-        expect(screen.getByText('Value')).toHaveClass('text-right');
-    });
 });

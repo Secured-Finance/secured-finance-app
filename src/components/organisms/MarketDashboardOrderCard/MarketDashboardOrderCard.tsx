@@ -7,6 +7,7 @@ import {
     CollateralManagementConciseTab,
     NavTab,
     Separator,
+    Slider,
 } from 'src/components/atoms';
 import { BorrowLendSelector } from 'src/components/atoms/BorrowLendSelector';
 import { OrderInputBox } from 'src/components/atoms/OrderInputBox';
@@ -21,8 +22,8 @@ import {
 } from 'src/store/marketDashboardForm';
 import { RootState } from 'src/store/types';
 import {
+    amountFormatterFromBase,
     CurrencySymbol,
-    getCurrencyMapAsList,
     getFullDisplayBalanceNumber,
     ordinaryFormat,
 } from 'src/utils';
@@ -57,24 +58,14 @@ export const MarketDashboardOrderCard = ({
     const priceList = useSelector((state: RootState) => getPriceMap(state));
     const price = priceList[currency];
 
-    const amountFormatterMap = useMemo(
-        () =>
-            getCurrencyMapAsList().reduce<
-                Record<CurrencySymbol, (value: BigNumber) => number>
-            >(
-                (acc, ccy) => ({
-                    ...acc,
-                    [ccy.symbol]: ccy.fromBaseUnit,
-                }),
-                {} as Record<CurrencySymbol, (value: BigNumber) => number>
-            ),
-        []
-    );
-
     const getAmount = () => {
         let format = (x: BigNumber) => x.toNumber();
-        if (currency && amountFormatterMap && amountFormatterMap[currency]) {
-            format = amountFormatterMap[currency];
+        if (
+            currency &&
+            amountFormatterFromBase &&
+            amountFormatterFromBase[currency]
+        ) {
+            format = amountFormatterFromBase[currency];
         }
         return format(amount);
     };
@@ -142,13 +133,14 @@ export const MarketDashboardOrderCard = ({
                         initialValue={getAmount().toString()}
                         onValueChange={v => dispatch(setAmount(v as BigNumber))}
                     />
-                    <OrderInputBox
-                        field='Total'
-                        unit='USD'
-                        disabled={true}
-                        initialValue={ordinaryFormat(getAmount() * price, 4)}
-                    />
                 </div>
+                <Slider onChange={() => {}} />
+                <OrderInputBox
+                    field='Total'
+                    unit='USD'
+                    disabled={true}
+                    initialValue={ordinaryFormat(getAmount() * price, 4)}
+                />
 
                 <Button
                     fullWidth

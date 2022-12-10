@@ -40,7 +40,7 @@
       @apply text-base leading-4 font-secondary uppercase;
     }
     .typography-hairline-2 {
-      @apply text-xs leading-3 font-secondary uppercase;
+      @apply text-xs leading-3 font-secondary uppercase font-semibold;
     }
     .typography-button-1 {
       @apply text-sm leading-4 font-secondary;

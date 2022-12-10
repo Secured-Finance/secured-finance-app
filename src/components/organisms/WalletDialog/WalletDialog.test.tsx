@@ -5,14 +5,6 @@ import * as stories from './WalletDialog.stories';
 
 const { Primary } = composeStories(stories);
 
-// @ts-expect-error: this is a mock for the IntersectionObserver.
-global.IntersectionObserver = class FakeIntersectionObserver {
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
-    observe() {}
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
-    disconnect() {}
-};
-
 const selectMetamaskOption = () => {
     const radio = screen.getAllByRole('radio');
     fireEvent.click(radio[0]);
@@ -55,11 +47,6 @@ describe('Wallet Dialog component', () => {
         fireEvent.click(screen.getByTestId('dialog-action-button'));
         await waitFor(() => {
             expect(screen.getByText('Connecting...')).toBeInTheDocument();
-            expect(
-                screen.getByText(
-                    'Please wait while we connect. Please make sure to accept the approvals on your browser.'
-                )
-            ).toBeInTheDocument();
         });
     });
 
