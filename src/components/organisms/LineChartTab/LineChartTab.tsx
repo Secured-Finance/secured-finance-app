@@ -1,18 +1,21 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { Option } from 'src/components/atoms';
 import { getData, LineChart } from 'src/components/molecules';
 import { OrderSide, RateType, useRates } from 'src/hooks';
-import { setMaturity } from 'src/store/marketDashboardForm';
+import {
+    selectMarketDashboardForm,
+    setMaturity,
+} from 'src/store/marketDashboardForm';
 import { RootState } from 'src/store/types';
+import { MaturityOptionList } from 'src/types';
 
 export const LineChartTab = ({
     maturitiesOptionList,
 }: {
-    maturitiesOptionList: Option[];
+    maturitiesOptionList: MaturityOptionList;
 }) => {
     const dispatch = useDispatch();
-    const { currency, side, maturity } = useSelector(
-        (state: RootState) => state.marketDashboardForm
+    const { currency, side, maturity } = useSelector((state: RootState) =>
+        selectMarketDashboardForm(state.marketDashboardForm)
     );
 
     const lendingContracts = useSelector(
@@ -22,7 +25,7 @@ export const LineChartTab = ({
     const rates = useRates(
         currency,
         side === OrderSide.Borrow ? RateType.Borrow : RateType.Lend,
-        Number(maturity)
+        maturity
     );
 
     const data = getData(

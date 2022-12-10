@@ -17,7 +17,9 @@ describe('OrderWidget Component', () => {
 
     it('should display the last mid price', () => {
         render(<Default />);
-        expect(screen.getByTestId('last-mid-price')).toHaveTextContent('80.16');
+        expect(screen.getByTestId('last-mid-price')).toHaveTextContent(
+            '9671.5'
+        );
     });
 
     it('should display 0 as the last mid price if any of the orders is empty', () => {

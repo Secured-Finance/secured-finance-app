@@ -1,6 +1,7 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { BigNumber } from 'bignumber.js';
 import { WithAssetPrice } from 'src/../.storybook/decorators';
+import { maturityOptions } from 'src/stories/mocks/fixtures';
 import { Rate } from 'src/utils';
 import { LendingCard } from './LendingCard';
 
@@ -18,13 +19,7 @@ export default {
             coverage: new BigNumber('80'),
         },
         marketRate: new Rate(10000), // 1%
-        maturitiesOptionList: [
-            { label: 'MAR22', value: '1' },
-            { label: 'JUN22', value: '2' },
-            { label: 'SEP22', value: '3' },
-            { label: 'DEC22', value: '1669856400' },
-            { label: 'MAR23', value: '1677632400' },
-        ],
+        maturitiesOptionList: maturityOptions,
     },
     decorators: [WithAssetPrice],
 } as ComponentMeta<typeof LendingCard>;

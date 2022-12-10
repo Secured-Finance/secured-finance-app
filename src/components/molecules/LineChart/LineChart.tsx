@@ -13,7 +13,6 @@ import {
 import React, { useEffect, useRef } from 'react';
 import { ChartProps, getElementAtEvent, Line } from 'react-chartjs-2';
 import { useSelector } from 'react-redux';
-import { Option } from 'src/components/atoms';
 import {
     crossHairPlugin,
     defaultDatasets,
@@ -21,6 +20,8 @@ import {
     options as customOptions,
 } from 'src/components/molecules/LineChart/constants';
 import { RootState } from 'src/store/types';
+import { MaturityOptionList } from 'src/types';
+import { EMPTY_MATURITY, Maturity } from 'src/utils/entities';
 
 ChartJS.register(
     LinearScale,
@@ -65,9 +66,9 @@ const triggerTooltip = (chart: ChartJS<'line'>, index: number) => {
 export type LineChartProps = {
     style?: React.CSSProperties;
     data: ChartData<'line'>;
-    maturitiesOptionList: Option[];
-    maturity: string;
-    handleChartClick: (maturity: string) => void;
+    maturitiesOptionList: MaturityOptionList;
+    maturity: Maturity;
+    handleChartClick: (maturity: Maturity) => void;
 } & ChartProps;
 
 export const LineChart = ({
@@ -75,7 +76,7 @@ export const LineChart = ({
     options = customOptions,
     style,
     maturitiesOptionList,
-    maturity = '',
+    maturity = EMPTY_MATURITY,
     handleChartClick,
 }: LineChartProps) => {
     const ccy = useSelector(
@@ -117,7 +118,7 @@ export const LineChart = ({
         if (element && element[0]) {
             const { index } = element[0];
             const label = data.labels?.[index];
-            handleChartClick(lendingContracts[label as string]);
+            handleChartClick(new Maturity(lendingContracts[label as string]));
         }
     };
 
@@ -125,8 +126,8 @@ export const LineChart = ({
         if (!chartRef.current) return;
 
         const numberOfElements = chartRef.current.data.datasets[0].data.length;
-        let index = maturitiesOptionList.findIndex(
-            (element: Option) => element.value === maturity
+        let index = maturitiesOptionList.findIndex(element =>
+            element.value.equals(maturity)
         );
         if (numberOfElements) {
             index = index > 0 ? index : 0;

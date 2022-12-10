@@ -2,10 +2,11 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { BigNumber } from 'ethers';
 import { OrderSide, OrderType } from 'src/hooks';
 import { CurrencySymbol } from 'src/utils';
+import { Maturity } from 'src/utils/entities';
 
 type MarketDashboardFormStore = {
     currency: CurrencySymbol;
-    maturity: string;
+    maturity: number;
     side: OrderSide;
     amount: string;
     rate: number;
@@ -13,7 +14,7 @@ type MarketDashboardFormStore = {
 };
 const initialStore: MarketDashboardFormStore = {
     currency: CurrencySymbol.FIL,
-    maturity: '0',
+    maturity: 0,
     side: OrderSide.Borrow,
     amount: '0',
     rate: 0,
@@ -27,8 +28,8 @@ const marketDashboardFormSlice = createSlice({
         setCurrency: (state, action: PayloadAction<CurrencySymbol>) => {
             state.currency = action.payload;
         },
-        setMaturity: (state, action: PayloadAction<string>) => {
-            state.maturity = action.payload;
+        setMaturity: (state, action: PayloadAction<Maturity>) => {
+            state.maturity = action.payload.getMaturity();
         },
         setSide: (state, action: PayloadAction<OrderSide>) => {
             state.side = action.payload;
@@ -49,6 +50,7 @@ export const selectMarketDashboardForm = (state: MarketDashboardFormStore) => {
     return {
         ...state,
         amount: BigNumber.from(state.amount),
+        maturity: new Maturity(state.maturity),
     };
 };
 

@@ -3,7 +3,9 @@ import { BigNumber } from 'ethers';
 import { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from 'src/store/types';
-import { CurrencySymbol, Rate, toCurrency } from 'src/utils';
+import { CurrencySymbol, toCurrency } from 'src/utils';
+import { Maturity } from 'src/utils/entities';
+import { LoanValue } from 'src/utils/entities/loanValue';
 import useSF from '../useSecuredFinance';
 
 export enum RateType {
@@ -15,7 +17,7 @@ export enum RateType {
 export const useRates = (
     ccy: CurrencySymbol,
     type: RateType,
-    maturity: number
+    maturity: Maturity
 ) => {
     const securedFinance = useSF();
     const block = useSelector(
@@ -54,6 +56,7 @@ export const useRates = (
     }, [fetchYieldCurve, securedFinance, block]);
 
     return unitPrices.map(unitPrice => {
-        return Rate.fromPrice(unitPrice, BigNumber.from(maturity));
+        return LoanValue.fromPrice(unitPrice.toNumber(), maturity.getMaturity())
+            .apy;
     });
 };

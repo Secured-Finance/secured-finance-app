@@ -4,7 +4,6 @@ import { BigNumber, utils } from 'ethers';
 import {
     WithAppLayout,
     WithAssetPrice,
-    WithMockDate,
     WithWalletProvider,
 } from 'src/../.storybook/decorators';
 import { TradeHistory } from 'src/hooks';
@@ -63,14 +62,8 @@ export default {
     title: 'Pages/PortfolioManagement',
     component: PortfolioManagement,
     args: {},
-    decorators: [
-        WithMockDate,
-        WithAssetPrice,
-        WithAppLayout,
-        WithWalletProvider,
-    ],
+    decorators: [WithAssetPrice, WithAppLayout, WithWalletProvider],
     parameters: {
-        date: new Date('2022-12-01T11:00:00.00Z'),
         apolloClient: {
             mocks: [
                 {

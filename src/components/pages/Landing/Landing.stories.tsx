@@ -4,7 +4,6 @@ import { useDispatch } from 'react-redux';
 import {
     WithAppLayout,
     WithAssetPrice,
-    WithMockDate,
     WithWalletProvider,
 } from 'src/../.storybook/decorators';
 import { updateLendingMarketContract } from 'src/store/availableContracts';
@@ -15,24 +14,16 @@ export default {
     title: 'Pages/Landing',
     component: Landing,
     args: {},
-    decorators: [
-        WithMockDate,
-        WithAppLayout,
-        WithAssetPrice,
-        WithWalletProvider,
-    ],
-    parameters: {
-        date: new Date('2022-02-01T11:00:00.00Z'),
-    },
+    decorators: [WithAppLayout, WithAssetPrice, WithWalletProvider],
 } as ComponentMeta<typeof Landing>;
 
 const Template: ComponentStory<typeof Landing> = () => {
     const maturities = useMemo(
         () => ({
-            MAR22: '1616508800',
-            JUN22: '1625097600',
-            SEP22: '1633046400',
-            DEC22: '1640995200',
+            MAR22: 1616508800,
+            JUN22: 1625097600,
+            SEP22: 1633046400,
+            DEC22: 1640995200,
         }),
         []
     );

@@ -5,6 +5,7 @@ import { OrderSide, TradeHistory } from 'src/hooks';
 import { AssetPriceMap } from 'src/store/assetPrices/selectors';
 import { hexToString } from 'web3-utils';
 import { currencyMap, CurrencySymbol } from './currencyList';
+import { LoanValue } from './entities';
 import { Rate } from './rate';
 
 export const computeWeightedAverageRate = (trades: TradeHistory) => {
@@ -16,7 +17,10 @@ export const computeWeightedAverageRate = (trades: TradeHistory) => {
     const total = trades.reduce(
         (acc, trade) =>
             acc +
-            Rate.fromPrice(trade.averagePrice, trade.maturity).toNumber() *
+            LoanValue.fromPrice(
+                trade.averagePrice,
+                trade.maturity
+            ).apy.toNumber() *
                 trade.amount,
         0
     );
@@ -43,7 +47,6 @@ export const convertTradeHistoryToTableData = (
 ): ActiveTrade => {
     const { side, amount, averagePrice, currency, maturity } = trade;
     const ccy = hexToString(currency) as CurrencySymbol;
-    const apy = Rate.fromPrice(averagePrice, maturity);
 
     // TODO: add this function in the SDK
     const contract = `${ccy}-${dayjs
@@ -58,7 +61,7 @@ export const convertTradeHistoryToTableData = (
     return {
         position,
         contract,
-        apy,
+        apy: LoanValue.fromPrice(averagePrice, maturity).apy,
         notional,
         currency: ccy,
         presentValue: notional,

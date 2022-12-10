@@ -10,7 +10,7 @@ const { Default } = composeStories(stories);
 const preloadedState = {
     marketDashboardForm: {
         currency: CurrencySymbol.BTC,
-        maturity: '0',
+        maturity: 0,
         side: OrderSide.Borrow,
         amount: '1200000000',
         rate: 10000,

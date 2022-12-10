@@ -8,15 +8,17 @@ import {
     usePlaceOrder,
     useRates,
 } from 'src/hooks';
+import { selectLandingOrderForm } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
 import { Rate } from 'src/utils';
+import { Maturity } from 'src/utils/entities';
 import { useWallet } from 'use-wallet';
 
 export const Landing = () => {
     const { account } = useWallet();
     const { placeOrder } = usePlaceOrder();
-    const { currency, side, maturity } = useSelector(
-        (state: RootState) => state.landingOrderForm
+    const { currency, maturity, side } = useSelector((state: RootState) =>
+        selectLandingOrderForm(state.landingOrderForm)
     );
     const lendingContracts = useSelector(
         (state: RootState) => state.availableContracts.lendingMarkets[currency]
@@ -26,13 +28,13 @@ export const Landing = () => {
 
     const optionList = Object.entries(lendingContracts).map(o => ({
         label: o[0],
-        value: o[1],
+        value: new Maturity(o[1]),
     }));
 
     const rates = useRates(
         currency,
         side === OrderSide.Borrow ? RateType.Borrow : RateType.Lend,
-        Number(maturity)
+        maturity
     );
 
     const marketRate = useMemo(() => {
@@ -40,7 +42,10 @@ export const Landing = () => {
             return new Rate(0);
         }
 
-        const rate = rates[Object.values(lendingContracts).indexOf(maturity)];
+        const rate =
+            rates[
+                Object.values(lendingContracts).indexOf(maturity.getMaturity())
+            ];
         if (!rate) {
             return new Rate(0);
         }
