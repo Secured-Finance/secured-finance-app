@@ -60,7 +60,7 @@ describe('PlaceOrder component', () => {
         await waitFor(() =>
             expect(onPlaceOrder).toHaveBeenCalledWith(
                 CurrencySymbol.FIL,
-                BigNumber.from(0),
+                0,
                 OrderSide.Borrow,
                 BigNumber.from(0),
                 10000

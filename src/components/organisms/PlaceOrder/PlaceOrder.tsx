@@ -22,6 +22,7 @@ import {
     ordinaryFormat,
     Rate,
 } from 'src/utils';
+import { Maturity } from 'src/utils/entities';
 
 enum Step {
     orderConfirm = 1,
@@ -125,7 +126,7 @@ export const PlaceOrder = ({
     const handlePlaceOrder = useCallback(
         async (
             ccy: CurrencySymbol,
-            maturity: number | BigNumber,
+            maturity: Maturity,
             side: OrderSide,
             amount: BigNumber,
             rate: number
@@ -133,7 +134,7 @@ export const PlaceOrder = ({
             try {
                 const tx = await onPlaceOrder(
                     ccy,
-                    maturity,
+                    maturity.getMaturity(),
                     side,
                     amount,
                     rate
@@ -161,7 +162,7 @@ export const PlaceOrder = ({
                     dispatch({ type: 'next' });
                     handlePlaceOrder(
                         currency,
-                        BigNumber.from(maturity),
+                        maturity,
                         side,
                         amount,
                         marketRate.toNumber()
