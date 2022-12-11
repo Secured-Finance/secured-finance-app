@@ -1,4 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit';
+import advancedLendingForm from './advancedLendingForm';
 import assetPrices from './assetPrices';
 import availableContracts from './availableContracts';
 import blockchain from './blockchain';
@@ -6,7 +7,6 @@ import { listenerMiddleware } from './blockchain/reducer';
 import ethereumWallet from './ethereumWallet';
 import landingOrderForm from './landingOrderForm';
 import lastError from './lastError';
-import marketDashboardForm from './marketDashboardForm';
 
 export const rootReducers = {
     ethereumWallet,
@@ -15,7 +15,7 @@ export const rootReducers = {
     lastError,
     landingOrderForm,
     availableContracts,
-    marketDashboardForm,
+    advancedLendingForm,
 };
 
 const store = configureStore({
