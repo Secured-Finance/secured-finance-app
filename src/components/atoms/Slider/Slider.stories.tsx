@@ -1,5 +1,5 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
-import { WithAssetPrice } from 'src/../.storybook/decorators';
+import { withAssetPrice } from 'src/../.storybook/decorators';
 import { Slider } from '.';
 
 export default {
@@ -8,7 +8,7 @@ export default {
     args: {
         onChange: () => {},
     },
-    decorators: [WithAssetPrice],
+    decorators: [withAssetPrice],
 } as ComponentMeta<typeof Slider>;
 
 const Template: ComponentStory<typeof Slider> = args => {

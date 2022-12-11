@@ -1,8 +1,8 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import {
-    WithAssetPrice,
+    withAssetPrice,
     withMaturities,
-    WithWalletProvider,
+    withWalletProvider,
 } from 'src/../.storybook/decorators';
 import { maturityOptions } from 'src/stories/mocks/fixtures';
 import { LineChartTab } from './LineChartTab';
@@ -13,7 +13,7 @@ export default {
     args: {
         maturitiesOptionList: maturityOptions,
     },
-    decorators: [WithWalletProvider, WithAssetPrice, withMaturities],
+    decorators: [withWalletProvider, withAssetPrice, withMaturities],
 } as ComponentMeta<typeof LineChartTab>;
 
 const Template: ComponentStory<typeof LineChartTab> = args => {

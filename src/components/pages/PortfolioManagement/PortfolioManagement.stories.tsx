@@ -2,9 +2,9 @@ import { TransactionHistoryDocument } from '@secured-finance/sf-graph-client/dis
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { BigNumber, utils } from 'ethers';
 import {
-    WithAppLayout,
-    WithAssetPrice,
-    WithWalletProvider,
+    withAppLayout,
+    withAssetPrice,
+    withWalletProvider,
 } from 'src/../.storybook/decorators';
 import { TradeHistory } from 'src/hooks';
 import { PortfolioManagement } from './PortfolioManagement';
@@ -62,7 +62,7 @@ export default {
     title: 'Pages/PortfolioManagement',
     component: PortfolioManagement,
     args: {},
-    decorators: [WithAssetPrice, WithAppLayout, WithWalletProvider],
+    decorators: [withAssetPrice, withAppLayout, withWalletProvider],
     parameters: {
         apolloClient: {
             mocks: [

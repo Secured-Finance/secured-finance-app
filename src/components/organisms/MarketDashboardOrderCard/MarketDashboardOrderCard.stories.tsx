@@ -1,6 +1,6 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { BigNumber } from 'bignumber.js';
-import { WithAssetPrice } from 'src/../.storybook/decorators';
+import { withAssetPrice } from 'src/../.storybook/decorators';
 import { MarketDashboardOrderCard } from './MarketDashboardOrderCard';
 
 export default {
@@ -17,7 +17,7 @@ export default {
             coverage: new BigNumber('800'),
         },
     },
-    decorators: [WithAssetPrice],
+    decorators: [withAssetPrice],
 } as ComponentMeta<typeof MarketDashboardOrderCard>;
 
 const Template: ComponentStory<typeof MarketDashboardOrderCard> = args => {

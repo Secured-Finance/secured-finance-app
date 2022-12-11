@@ -1,9 +1,9 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import {
-    WithAppLayout,
-    WithAssetPrice,
+    withAppLayout,
+    withAssetPrice,
     withMaturities,
-    WithWalletProvider,
+    withWalletProvider,
 } from 'src/../.storybook/decorators';
 import { Landing } from './Landing';
 
@@ -12,10 +12,10 @@ export default {
     component: Landing,
     args: {},
     decorators: [
-        WithAppLayout,
+        withAppLayout,
         withMaturities,
-        WithAssetPrice,
-        WithWalletProvider,
+        withAssetPrice,
+        withWalletProvider,
     ],
 } as ComponentMeta<typeof Landing>;
 

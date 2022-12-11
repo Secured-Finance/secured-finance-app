@@ -1,5 +1,5 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
-import { WithAssetPrice } from 'src/../.storybook/decorators';
+import { withAssetPrice } from 'src/../.storybook/decorators';
 import { CurrencySymbol } from 'src/utils';
 import { CollateralInformation } from './CollateralInformation';
 
@@ -10,7 +10,7 @@ export default {
         asset: CurrencySymbol.ETH,
         quantity: 1.2,
     },
-    decorators: [WithAssetPrice],
+    decorators: [withAssetPrice],
 } as ComponentMeta<typeof CollateralInformation>;
 
 const Template: ComponentStory<typeof CollateralInformation> = args => {
