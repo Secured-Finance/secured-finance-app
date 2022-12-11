@@ -1,7 +1,5 @@
-import { MarketDashboard } from 'src/components/pages';
-
 const Exchange = () => {
-    return <MarketDashboard />;
+    return <div data-cy='exchange-page'>Harry Potter</div>;
 };
 
 export default Exchange;

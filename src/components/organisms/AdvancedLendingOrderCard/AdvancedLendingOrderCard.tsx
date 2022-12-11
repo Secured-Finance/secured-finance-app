@@ -28,7 +28,7 @@ import {
     ordinaryFormat,
 } from 'src/utils';
 
-export const MarketDashboardOrderCard = ({
+export const AdvancedLendingOrderCard = ({
     collateralBook,
 }: {
     onPlaceOrder?: (
