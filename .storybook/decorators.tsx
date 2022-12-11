@@ -2,13 +2,15 @@ import { GraphClientProvider } from '@secured-finance/sf-graph-client';
 import { Story, StoryContext } from '@storybook/react';
 import { Wallet } from 'ethers';
 import mockDate from 'mockdate';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useDispatch } from 'react-redux';
 import { Header } from 'src/components/organisms';
 import { Layout } from 'src/components/templates';
+import { updateLendingMarketContract } from 'src/store/availableContracts';
 import { updateLatestBlock } from 'src/store/blockchain';
 import AxiosMock from 'src/stories/mocks/AxiosMock';
 import { CustomizedBridge } from 'src/stories/mocks/customBridge';
+import { CurrencySymbol } from 'src/utils';
 import { coingeckoApi } from 'src/utils/coinGeckoApi';
 import { useWallet, UseWalletProvider } from 'use-wallet';
 export const WithAppLayout = (Story: Story) => {
@@ -117,6 +119,36 @@ export const WithMockDate = (Story: Story, context: StoryContext) => {
     if (context.parameters && context.parameters.date instanceof Date) {
         mockDate.set(context.parameters.date);
     }
+
+    return <Story />;
+};
+
+export const withMaturities = (Story: Story) => {
+    const maturities = useMemo(
+        () => ({
+            MAR22: 1616508800,
+            JUN22: 1625097600,
+            SEP22: 1633046400,
+            DEC22: 1640995200,
+        }),
+        []
+    );
+    const dispatch = useDispatch();
+    useEffect(() => {
+        const timerId = setTimeout(() => {
+            dispatch(
+                updateLendingMarketContract(maturities, CurrencySymbol.FIL)
+            );
+            dispatch(
+                updateLendingMarketContract(maturities, CurrencySymbol.ETH)
+            );
+            dispatch(
+                updateLendingMarketContract(maturities, CurrencySymbol.USDC)
+            );
+        }, 200);
+
+        return () => clearTimeout(timerId);
+    }, [dispatch, maturities]);
 
     return <Story />;
 };
