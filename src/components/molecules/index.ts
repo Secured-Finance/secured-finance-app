@@ -11,6 +11,7 @@ export * from './Dialog';
 export * from './HorizontalTab';
 export * from './LineChart';
 export * from './LiquidationProgressBar';
+export * from './MarketDashboardTable';
 export * from './PercentageSelector';
 export * from './PortfolioManagementTable';
 export * from './Tab';
