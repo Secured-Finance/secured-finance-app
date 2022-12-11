@@ -1,6 +1,6 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { BigNumber } from 'bignumber.js';
-import { WithAssetPrice } from 'src/../.storybook/decorators';
+import { withAssetPrice } from 'src/../.storybook/decorators';
 import { maturityOptions } from 'src/stories/mocks/fixtures';
 import { Rate } from 'src/utils';
 import { LendingCard } from './LendingCard';
@@ -18,7 +18,7 @@ export default {
         marketRate: new Rate(10000), // 1%
         maturitiesOptionList: maturityOptions,
     },
-    decorators: [WithAssetPrice],
+    decorators: [withAssetPrice],
 } as ComponentMeta<typeof LendingCard>;
 
 const Template: ComponentStory<typeof LendingCard> = args => {

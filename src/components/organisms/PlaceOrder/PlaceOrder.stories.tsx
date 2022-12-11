@@ -1,7 +1,7 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import {
-    WithAssetPrice,
-    WithWalletProvider,
+    withAssetPrice,
+    withWalletProvider,
 } from 'src/../.storybook/decorators';
 import { Rate } from 'src/utils';
 import { PlaceOrder } from './PlaceOrder';
@@ -14,7 +14,7 @@ export default {
         onClose: () => {},
         marketRate: new Rate(10000),
     },
-    decorators: [WithAssetPrice, WithWalletProvider],
+    decorators: [withAssetPrice, withWalletProvider],
 } as ComponentMeta<typeof PlaceOrder>;
 
 const Template: ComponentStory<typeof PlaceOrder> = args => {

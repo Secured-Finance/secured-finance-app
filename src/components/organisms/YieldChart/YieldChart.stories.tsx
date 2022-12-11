@@ -1,5 +1,5 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
-import { WithAssetPrice, withMaturities } from 'src/../.storybook/decorators';
+import { withAssetPrice, withMaturities } from 'src/../.storybook/decorators';
 import { maturityOptions } from 'src/stories/mocks/fixtures';
 import { Rate } from 'src/utils';
 import { YieldChart } from './';
@@ -20,7 +20,7 @@ export default {
         maturitiesOptionList: maturityOptions,
     },
     argTypes: {},
-    decorators: [withMaturities, WithAssetPrice],
+    decorators: [withMaturities, withAssetPrice],
 } as ComponentMeta<typeof YieldChart>;
 
 const Template: ComponentStory<typeof YieldChart> = args => {

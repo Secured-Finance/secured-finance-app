@@ -13,7 +13,8 @@ import { CustomizedBridge } from 'src/stories/mocks/customBridge';
 import { CurrencySymbol } from 'src/utils';
 import { coingeckoApi } from 'src/utils/coinGeckoApi';
 import { useWallet, UseWalletProvider } from 'use-wallet';
-export const WithAppLayout = (Story: Story) => {
+
+export const withAppLayout = (Story: Story) => {
     return (
         <Layout navBar={<Header />}>
             <Story />
@@ -52,7 +53,7 @@ const WithConnectedWallet = ({
     return <>{children}</>;
 };
 
-export const WithWalletProvider = (Story: Story, Context: StoryContext) => {
+export const withWalletProvider = (Story: Story, Context: StoryContext) => {
     return (
         <UseWalletProvider
             connectors={{
@@ -68,7 +69,7 @@ export const WithWalletProvider = (Story: Story, Context: StoryContext) => {
     );
 };
 
-export const WithAssetPrice = (Story: Story) => {
+export const withAssetPrice = (Story: Story) => {
     const dispatch = useDispatch();
     useEffect(() => {
         const timeoutId = setTimeout(
@@ -114,7 +115,7 @@ export const WithGraphClient = (Story: Story) => (
     </GraphClientProvider>
 );
 
-export const WithMockDate = (Story: Story, context: StoryContext) => {
+export const withMockDate = (Story: Story, context: StoryContext) => {
     mockDate.reset();
     if (context.parameters && context.parameters.date instanceof Date) {
         mockDate.set(context.parameters.date);

@@ -1,6 +1,6 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { BigNumber } from 'ethers';
-import { WithAssetPrice } from 'src/../.storybook/decorators';
+import { withAssetPrice } from 'src/../.storybook/decorators';
 import { Rate } from 'src/utils';
 import { ActiveTradeTable } from './ActiveTradeTable';
 
@@ -35,7 +35,7 @@ export default {
     args: {
         data: tradeData,
     },
-    decorators: [WithAssetPrice],
+    decorators: [withAssetPrice],
 } as ComponentMeta<typeof ActiveTradeTable>;
 
 const Template: ComponentStory<typeof ActiveTradeTable> = args => {

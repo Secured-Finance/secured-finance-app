@@ -1,9 +1,9 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import {
-    WithAppLayout,
-    WithAssetPrice,
+    withAppLayout,
+    withAssetPrice,
     withMaturities,
-    WithWalletProvider,
+    withWalletProvider,
 } from 'src/../.storybook/decorators';
 import { MarketDashboard } from './MarketDashboard';
 
@@ -12,10 +12,10 @@ export default {
     component: MarketDashboard,
     args: {},
     decorators: [
-        WithAppLayout,
+        withAppLayout,
         withMaturities,
-        WithAssetPrice,
-        WithWalletProvider,
+        withAssetPrice,
+        withWalletProvider,
     ],
 } as ComponentMeta<typeof MarketDashboard>;
 

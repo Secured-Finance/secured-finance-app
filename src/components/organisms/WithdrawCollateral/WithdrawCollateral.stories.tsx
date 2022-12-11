@@ -1,7 +1,7 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import {
-    WithAssetPrice,
-    WithWalletProvider,
+    withAssetPrice,
+    withWalletProvider,
 } from 'src/../.storybook/decorators';
 import { CurrencySymbol } from 'src/utils';
 import { WithdrawCollateral } from './WithdrawCollateral';
@@ -27,7 +27,7 @@ export default {
             },
         },
     },
-    decorators: [WithWalletProvider, WithAssetPrice],
+    decorators: [withWalletProvider, withAssetPrice],
 } as ComponentMeta<typeof WithdrawCollateral>;
 
 const Template: ComponentStory<typeof WithdrawCollateral> = args => {

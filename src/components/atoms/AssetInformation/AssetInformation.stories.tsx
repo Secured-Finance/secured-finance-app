@@ -1,5 +1,5 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
-import { WithAssetPrice } from 'src/../.storybook/decorators';
+import { withAssetPrice } from 'src/../.storybook/decorators';
 import { CurrencySymbol } from 'src/utils';
 import { AssetInformation } from '.';
 
@@ -11,7 +11,7 @@ export default {
         asset: CurrencySymbol.FIL,
         quantity: 740,
     },
-    decorators: [WithAssetPrice],
+    decorators: [withAssetPrice],
 } as ComponentMeta<typeof AssetInformation>;
 
 const Template: ComponentStory<typeof AssetInformation> = args => {
