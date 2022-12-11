@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import SFLogo from 'src/assets/img/logo.svg';
-import { Button, NavTab, TraderProTab } from 'src/components/atoms';
+import { Button, NavTab } from 'src/components/atoms';
 import { WalletDialog, WalletPopover } from 'src/components/organisms';
 import useSF from 'src/hooks/useSecuredFinance';
 import { RootState } from 'src/store/types';
@@ -42,7 +42,6 @@ export const Header = () => {
                     dataCy='history'
                     link='/history'
                 />
-                <TraderProTab text='Trader Pro'></TraderProTab>
             </div>
             <div className='mr-5'>
                 {account ? (
