@@ -10,7 +10,7 @@ export const PortfolioTab = ({
     orientation,
 }: PortfolioTabProps) => {
     return (
-        <div className='flex h-28 w-full flex-col items-center justify-center '>
+        <div className='flex h-28 w-full flex-col items-center justify-center'>
             <div className='h-1 w-full bg-starBlue'></div>
             <div
                 className={`flex h-full w-full flex-col items-center justify-center overflow-hidden bg-gradient-to-b from-[rgba(106,118,177,0.1)] via-[rgba(106,118,177,0)] to-black-20 ${
