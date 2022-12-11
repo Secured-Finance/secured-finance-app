@@ -3,7 +3,7 @@ import { BigNumber } from 'ethers';
 import { OrderSide, OrderType } from 'src/hooks';
 import { CurrencySymbol } from 'src/utils';
 
-type MarketDashboardFormStore = {
+type AdvancedLendingFormStore = {
     currency: CurrencySymbol;
     maturity: string;
     side: OrderSide;
@@ -11,7 +11,7 @@ type MarketDashboardFormStore = {
     rate: number;
     orderType: OrderType;
 };
-const initialStore: MarketDashboardFormStore = {
+const initialStore: AdvancedLendingFormStore = {
     currency: CurrencySymbol.FIL,
     maturity: '0',
     side: OrderSide.Borrow,
@@ -20,8 +20,8 @@ const initialStore: MarketDashboardFormStore = {
     orderType: OrderType.MARKET,
 };
 
-const marketDashboardFormSlice = createSlice({
-    name: 'marketDashboardForm',
+const advancedLendingFormSlice = createSlice({
+    name: 'advancedLendingForm',
     initialState: initialStore,
     reducers: {
         setCurrency: (state, action: PayloadAction<CurrencySymbol>) => {
@@ -45,11 +45,11 @@ const marketDashboardFormSlice = createSlice({
     },
 });
 
-export const selectMarketDashboardForm = (state: MarketDashboardFormStore) => {
+export const selectAdvancedLendingForm = (state: AdvancedLendingFormStore) => {
     return {
         ...state,
         amount: BigNumber.from(state.amount),
     };
 };
 
-export default marketDashboardFormSlice;
+export default advancedLendingFormSlice;

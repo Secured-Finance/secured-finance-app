@@ -12,14 +12,14 @@ import {
 import { BorrowLendSelector } from 'src/components/atoms/BorrowLendSelector';
 import { OrderInputBox } from 'src/components/atoms/OrderInputBox';
 import { CollateralBook, OrderSide, OrderType } from 'src/hooks';
-import { getPriceMap } from 'src/store/assetPrices/selectors';
 import {
-    selectMarketDashboardForm,
+    selectAdvancedLendingForm,
     setAmount,
     setOrderType,
     setRate,
     setSide,
-} from 'src/store/marketDashboardForm';
+} from 'src/store/advancedLendingForm';
+import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { RootState } from 'src/store/types';
 import {
     amountFormatterFromBase,
@@ -42,7 +42,7 @@ export const AdvancedLendingOrderCard = ({
 }) => {
     const { currency, amount, side, orderType, rate } = useSelector(
         (state: RootState) =>
-            selectMarketDashboardForm(state.marketDashboardForm)
+            selectAdvancedLendingForm(state.advancedLendingForm)
     );
 
     const dispatch = useDispatch();

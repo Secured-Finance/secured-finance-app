@@ -21,7 +21,7 @@ import {
     setCurrency,
     setMaturity,
     setRate,
-} from 'src/store/marketDashboardForm';
+} from 'src/store/advancedLendingForm';
 import { RootState } from 'src/store/types';
 import {
     CurrencySymbol,
@@ -34,7 +34,7 @@ import { useWallet } from 'use-wallet';
 export const AdvancedLending = () => {
     const { account } = useWallet();
     const { currency, maturity, side, orderType } = useSelector(
-        (state: RootState) => state.marketDashboardForm
+        (state: RootState) => state.advancedLendingForm
     );
     const lendingContracts = useSelector(
         (state: RootState) => state.availableContracts.lendingMarkets[currency]
