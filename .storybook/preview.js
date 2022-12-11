@@ -5,7 +5,7 @@ import 'src/assets/css/index.css';
 import { withPerformance } from 'storybook-addon-performance';
 import store from './../src/store';
 import { MockSecuredFinanceProvider } from './../src/stories/mocks/MockSecuredFinanceProvider';
-import { WithMockDate } from './decorators';
+import { withMockDate } from './decorators';
 
 export const parameters = {
     actions: { argTypesRegex: '^on.*' },
@@ -54,5 +54,5 @@ export const decorators = [
         </Provider>
     ),
     withPerformance,
-    WithMockDate,
+    withMockDate,
 ];
