@@ -4,11 +4,11 @@ import { useDispatch } from 'react-redux';
 import { WithWalletProvider } from 'src/../.storybook/decorators';
 import { updateLendingMarketContract } from 'src/store/availableContracts';
 import { CurrencySymbol } from 'src/utils';
-import { MarketOrganism } from './MarketOrganism';
+import { AdvancedLendingOrganism } from './AdvancedLendingOrganism';
 
 export default {
-    title: 'Organism/MarketOrganism',
-    component: MarketOrganism,
+    title: 'Organism/AdvancedLendingOrganism',
+    component: AdvancedLendingOrganism,
     args: {
         maturitiesOptionList: [
             { label: 'MAR22', value: '1' },
@@ -19,9 +19,9 @@ export default {
         ],
     },
     decorators: [WithWalletProvider],
-} as ComponentMeta<typeof MarketOrganism>;
+} as ComponentMeta<typeof AdvancedLendingOrganism>;
 
-const Template: ComponentStory<typeof MarketOrganism> = args => {
+const Template: ComponentStory<typeof AdvancedLendingOrganism> = args => {
     const maturities = useMemo(
         () => ({
             MAR22: '1616508800',
@@ -47,7 +47,7 @@ const Template: ComponentStory<typeof MarketOrganism> = args => {
 
         return () => clearTimeout(timerId);
     }, [dispatch, maturities]);
-    return <MarketOrganism {...args} />;
+    return <AdvancedLendingOrganism {...args} />;
 };
 
 export const Default = Template.bind({});

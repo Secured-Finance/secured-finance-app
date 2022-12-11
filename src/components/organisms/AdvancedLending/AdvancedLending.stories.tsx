@@ -2,22 +2,21 @@ import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { useEffect, useMemo } from 'react';
 import { useDispatch } from 'react-redux';
 import {
-    WithAppLayout,
     WithAssetPrice,
     WithWalletProvider,
 } from 'src/../.storybook/decorators';
 import { updateLendingMarketContract } from 'src/store/availableContracts';
 import { CurrencySymbol } from 'src/utils';
-import { MarketDashboard } from './MarketDashboard';
+import { AdvancedLending } from './AdvancedLending';
 
 export default {
-    title: 'Pages/MarketDashboard',
-    component: MarketDashboard,
+    title: 'Organism/AdvancedLending',
+    component: AdvancedLending,
     args: {},
-    decorators: [WithAppLayout, WithAssetPrice, WithWalletProvider],
-} as ComponentMeta<typeof MarketDashboard>;
+    decorators: [WithAssetPrice, WithWalletProvider],
+} as ComponentMeta<typeof AdvancedLending>;
 
-const Template: ComponentStory<typeof MarketDashboard> = () => {
+const Template: ComponentStory<typeof AdvancedLending> = () => {
     const maturities = useMemo(
         () => ({
             MAR22: '1616508800',
@@ -43,7 +42,11 @@ const Template: ComponentStory<typeof MarketDashboard> = () => {
 
         return () => clearTimeout(timerId);
     }, [dispatch, maturities]);
-    return <MarketDashboard />;
+    return (
+        <div className='p-20'>
+            <AdvancedLending />
+        </div>
+    );
 };
 
 export const Default = Template.bind({});

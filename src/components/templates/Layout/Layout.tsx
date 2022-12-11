@@ -7,7 +7,7 @@ export const Layout = ({
 }) => {
     return (
         <div
-            className='grid h-screen overflow-y-auto pb-8'
+            className='h-screen overflow-y-auto pb-8'
             data-testid='wrapper-div'
         >
             <header>{navBar}</header>

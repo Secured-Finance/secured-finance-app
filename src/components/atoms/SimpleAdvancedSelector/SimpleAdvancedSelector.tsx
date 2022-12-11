@@ -1,6 +1,6 @@
 import { RadioGroup } from '@headlessui/react';
 
-type ViewType = 'Simple' | 'Advanced';
+export type ViewType = 'Simple' | 'Advanced';
 
 export const SimpleAdvancedSelector = ({
     handleClick,

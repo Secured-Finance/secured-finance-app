@@ -2,10 +2,12 @@ import { BigNumber } from 'ethers';
 import { useCallback, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { DropdownSelector } from 'src/components/atoms';
-import { MarketDashboardTopBar } from 'src/components/molecules';
-import { MarketDashboardOrderCard } from 'src/components/organisms/MarketDashboardOrderCard';
-import { MarketOrganism } from 'src/components/organisms/MarketOrganism';
-import { OrderWidget } from 'src/components/organisms/OrderWidget';
+import { AdvancedLendingTopBar } from 'src/components/molecules';
+import {
+    AdvancedLendingOrderCard,
+    AdvancedLendingOrganism,
+    OrderWidget,
+} from 'src/components/organisms';
 import {
     OrderSide,
     OrderType,
@@ -29,7 +31,7 @@ import {
 } from 'src/utils';
 import { useWallet } from 'use-wallet';
 
-export const MarketDashboard = () => {
+export const AdvancedLending = () => {
     const { account } = useWallet();
     const { currency, maturity, side, orderType } = useSelector(
         (state: RootState) => state.marketDashboardForm
@@ -87,7 +89,7 @@ export const MarketDashboard = () => {
     );
 
     return (
-        <div className='mx-40 mt-7 flex flex-col gap-5' data-cy='exchange-page'>
+        <div className='flex flex-col gap-5'>
             <div className='mb-5'>
                 <DropdownSelector
                     optionList={assetList}
@@ -96,7 +98,7 @@ export const MarketDashboard = () => {
                     onChange={handleTermChange}
                 />
             </div>
-            <MarketDashboardTopBar
+            <AdvancedLendingTopBar
                 asset={currency}
                 options={optionList}
                 selected={selectedTerm}
@@ -112,9 +114,11 @@ export const MarketDashboard = () => {
                 }}
             />
             <div className='flex flex-row gap-6'>
-                <MarketDashboardOrderCard collateralBook={collateralBook} />
+                <AdvancedLendingOrderCard collateralBook={collateralBook} />
                 <div className='flex flex-grow flex-col gap-6'>
-                    <MarketOrganism maturitiesOptionList={optionList} />
+                    <AdvancedLendingOrganism
+                        maturitiesOptionList={optionList}
+                    />
                     <OrderWidget
                         buyOrders={orderBook.borrowOrderbook}
                         sellOrders={orderBook.lendOrderbook}
