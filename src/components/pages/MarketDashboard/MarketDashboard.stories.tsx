@@ -11,6 +11,7 @@ export default {
     title: 'Pages/MarketDashboard',
     component: MarketDashboard,
     args: {},
+    parameters: { date: { tick: true } },
     decorators: [
         withAppLayout,
         withMaturities,

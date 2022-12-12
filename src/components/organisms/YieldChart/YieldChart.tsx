@@ -10,6 +10,7 @@ import {
 import { RootState } from 'src/store/types';
 import { MaturityOptionList } from 'src/types';
 import { CurrencySymbol, Rate } from 'src/utils';
+import { EMPTY_MATURITY } from 'src/utils/entities';
 
 interface YieldChartProps {
     asset: CurrencySymbol;
@@ -25,9 +26,7 @@ export const YieldChart = ({
     maturitiesOptionList,
 }: YieldChartProps): JSX.Element => {
     const dispatch = useDispatch();
-    const lendingContracts = useSelector(
-        (state: RootState) => state.availableContracts.lendingMarkets[asset]
-    );
+
     const { maturity } = useSelector((state: RootState) =>
         selectLandingOrderForm(state.landingOrderForm)
     );
@@ -55,14 +54,18 @@ export const YieldChart = ({
                                 data={getData(
                                     rates,
                                     isBorrow ? 'Borrow' : 'Lend',
-                                    Object.keys(lendingContracts)
+                                    maturitiesOptionList.map(o => o.label)
                                 )}
                                 maturitiesOptionList={maturitiesOptionList}
                                 handleChartClick={maturity =>
                                     dispatch(setMaturity(maturity))
                                 }
-                                maturity={maturity}
-                            ></LineChart>
+                                maturity={
+                                    maturity.equals(EMPTY_MATURITY)
+                                        ? maturitiesOptionList[0].value
+                                        : maturity
+                                }
+                            />
                         )}
                     </div>
                 </div>

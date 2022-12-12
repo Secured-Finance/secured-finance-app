@@ -7,26 +7,38 @@ export const mockUseSF = () => {
         placeLendingOrder: jest.fn(),
         getBorrowUnitPrices: jest.fn(() =>
             Promise.resolve([
-                BigNumber.from(9923),
-                BigNumber.from(9998),
-                BigNumber.from(9790),
+                BigNumber.from(9687),
                 BigNumber.from(9685),
+                BigNumber.from(9679),
+                BigNumber.from(9674),
+                BigNumber.from(9653),
+                BigNumber.from(9643),
+                BigNumber.from(9627),
+                BigNumber.from(9617),
             ])
         ),
         getLendUnitPrices: jest.fn(() =>
             Promise.resolve([
-                BigNumber.from(9979),
-                BigNumber.from(9974),
-                BigNumber.from(9770),
-                BigNumber.from(9668),
+                BigNumber.from(9685),
+                BigNumber.from(9683),
+                BigNumber.from(9677),
+                BigNumber.from(9672),
+                BigNumber.from(9651),
+                BigNumber.from(9641),
+                BigNumber.from(9625),
+                BigNumber.from(9615),
             ])
         ),
         getMidUnitPrices: jest.fn(() =>
             Promise.resolve([
-                BigNumber.from(9900),
-                BigNumber.from(9900),
-                BigNumber.from(9700),
-                BigNumber.from(9600),
+                BigNumber.from(9686),
+                BigNumber.from(9684),
+                BigNumber.from(9678),
+                BigNumber.from(9673),
+                BigNumber.from(9652),
+                BigNumber.from(9642),
+                BigNumber.from(9626),
+                BigNumber.from(9616),
             ])
         ),
         getCollateralBook: jest.fn(() =>

@@ -71,6 +71,34 @@ describe('LoanValue class', () => {
             expect(value.apy.toNumber()).toEqual(apy.toNumber());
         });
     });
+
+    it('should be able to build a yield curve from a list of prices', () => {
+        const maturityMar23 = new Maturity(1675252800);
+        const maturityJun23 = new Maturity(1680572800);
+        const maturitySep23 = new Maturity(1685892800);
+        const maturityDec23 = new Maturity(1691212800);
+        const maturityMar24 = new Maturity(1696532800);
+        const maturityJun24 = new Maturity(1701852800);
+        const maturitySep24 = new Maturity(1707172800);
+        const maturityDec24 = new Maturity(1712492800);
+
+        const prices: [number, Maturity, number][] = [
+            [9687, maturityMar23, 37326],
+            [9685, maturityJun23, 37660],
+            [9679, maturitySep23, 38537],
+            [9674, maturityDec23, 39259],
+            [9653, maturityMar24, 42324],
+            [9643, maturityJun24, 43801],
+            [9627, maturitySep24, 46219],
+            [9617, maturityDec24, 47746],
+        ];
+
+        prices.forEach(([price, maturity, apy]) => {
+            const value = LoanValue.fromPrice(price, maturity.getMaturity());
+            expect(value.price).toEqual(price);
+            expect(value.apy.toNumber()).toEqual(apy);
+        });
+    });
 });
 
 describe('LoanValue', () => {

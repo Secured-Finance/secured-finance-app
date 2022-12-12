@@ -11,6 +11,7 @@ export default {
     title: 'Pages/Landing',
     component: Landing,
     args: {},
+    parameters: { date: { tick: true } },
     decorators: [
         withAppLayout,
         withMaturities,

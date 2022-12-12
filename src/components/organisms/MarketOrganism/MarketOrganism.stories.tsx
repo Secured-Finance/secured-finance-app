@@ -3,7 +3,7 @@ import {
     withMaturities,
     withWalletProvider,
 } from 'src/../.storybook/decorators';
-import { maturityOptions } from 'src/stories/mocks/fixtures';
+import { maturityOptions, yieldCurveRates } from 'src/stories/mocks/fixtures';
 import { MarketOrganism } from './MarketOrganism';
 
 export default {
@@ -11,6 +11,10 @@ export default {
     component: MarketOrganism,
     args: {
         maturitiesOptionList: maturityOptions,
+        rates: yieldCurveRates,
+    },
+    parameters: {
+        date: { tick: true },
     },
     decorators: [withWalletProvider, withMaturities],
 } as ComponentMeta<typeof MarketOrganism>;
