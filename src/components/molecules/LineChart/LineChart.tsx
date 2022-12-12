@@ -12,16 +12,14 @@ import {
 } from 'chart.js';
 import React, { useEffect, useRef } from 'react';
 import { ChartProps, getElementAtEvent, Line } from 'react-chartjs-2';
-import { useSelector } from 'react-redux';
 import {
     crossHairPlugin,
     defaultDatasets,
     getCurveGradient,
     options as customOptions,
 } from 'src/components/molecules/LineChart/constants';
-import { RootState } from 'src/store/types';
 import { MaturityOptionList } from 'src/types';
-import { EMPTY_MATURITY, Maturity } from 'src/utils/entities';
+import { Maturity } from 'src/utils/entities';
 
 ChartJS.register(
     LinearScale,
@@ -76,16 +74,9 @@ export const LineChart = ({
     options = customOptions,
     style,
     maturitiesOptionList,
-    maturity = EMPTY_MATURITY,
+    maturity,
     handleChartClick,
 }: LineChartProps) => {
-    const ccy = useSelector(
-        (state: RootState) => state.landingOrderForm.currency
-    );
-    const lendingContracts = useSelector(
-        (state: RootState) => state.availableContracts.lendingMarkets[ccy]
-    );
-
     const chartRef = useRef<ChartJS<'line'>>(null);
 
     const refinedDatasets = data.datasets.map(set => {
@@ -118,7 +109,12 @@ export const LineChart = ({
         if (element && element[0]) {
             const { index } = element[0];
             const label = data.labels?.[index];
-            handleChartClick(new Maturity(lendingContracts[label as string]));
+            const selectedMaturity = maturitiesOptionList.find(
+                element => element.label === label
+            );
+            if (selectedMaturity) {
+                handleChartClick(selectedMaturity.value);
+            }
         }
     };
 
@@ -129,12 +125,13 @@ export const LineChart = ({
         let index = maturitiesOptionList.findIndex(element =>
             element.value.equals(maturity)
         );
+
         if (numberOfElements) {
             index = index > 0 ? index : 0;
             triggerHover(chartRef.current, index);
             triggerTooltip(chartRef.current, index);
         }
-    });
+    }, [maturity, maturitiesOptionList]);
 
     return (
         <Line

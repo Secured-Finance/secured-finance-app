@@ -4,7 +4,7 @@ import {
     withMaturities,
     withWalletProvider,
 } from 'src/../.storybook/decorators';
-import { maturityOptions } from 'src/stories/mocks/fixtures';
+import { maturityOptions, yieldCurveRates } from 'src/stories/mocks/fixtures';
 import { LineChartTab } from './LineChartTab';
 
 export default {
@@ -12,6 +12,12 @@ export default {
     component: LineChartTab,
     args: {
         maturitiesOptionList: maturityOptions,
+        rates: yieldCurveRates,
+    },
+    parameters: {
+        date: {
+            tick: true,
+        },
     },
     decorators: [withWalletProvider, withAssetPrice, withMaturities],
 } as ComponentMeta<typeof LineChartTab>;

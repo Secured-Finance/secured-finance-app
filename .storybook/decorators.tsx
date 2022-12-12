@@ -117,9 +117,21 @@ export const WithGraphClient = (Story: Story) => (
 
 export const withMockDate = (Story: Story, context: StoryContext) => {
     mockDate.reset();
-    if (context.parameters && context.parameters.date instanceof Date) {
-        mockDate.set(context.parameters.date);
+    if (context?.parameters?.date?.value instanceof Date) {
+        mockDate.set(context.parameters.date.value);
     }
+
+    useEffect(() => {
+        if (!context?.parameters?.date?.tick === true) {
+            return;
+        }
+        const timerId = setInterval(() => {
+            const myDate = new Date(new Date().getTime() + 50);
+            mockDate.set(myDate);
+        }, 50);
+
+        return () => clearInterval(timerId);
+    }, []);
 
     return <Story />;
 };
@@ -127,10 +139,14 @@ export const withMockDate = (Story: Story, context: StoryContext) => {
 export const withMaturities = (Story: Story) => {
     const maturities = useMemo(
         () => ({
-            MAR22: 1616508800,
-            JUN22: 1625097600,
-            SEP22: 1633046400,
-            DEC22: 1640995200,
+            DEC22: 1669852800,
+            MAR23: 1677628800,
+            JUN23: 1685577600,
+            SEP23: 1693526400,
+            DEC23: 1701388800,
+            MAR24: 1709251200,
+            JUN24: 1717200000,
+            SEP24: 1725148800,
         }),
         []
     );

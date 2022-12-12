@@ -1,9 +1,19 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
-import { withAssetPrice, withMaturities } from 'src/../.storybook/decorators';
+import { withAssetPrice } from 'src/../.storybook/decorators';
 import { maturityOptions } from 'src/stories/mocks/fixtures';
 import { Rate } from 'src/utils';
 import { YieldChart } from './';
 
+const rates = [
+    new Rate(10000),
+    new Rate(20000),
+    new Rate(30000),
+    new Rate(40000),
+    new Rate(50000),
+    new Rate(60000),
+    new Rate(70000),
+    new Rate(80000),
+];
 export default {
     title: 'Organism/YieldChart',
     component: YieldChart,
@@ -11,16 +21,16 @@ export default {
     args: {
         asset: 'USDC',
         isBorrow: true,
-        rates: [
-            new Rate(100000),
-            new Rate(200000),
-            new Rate(300000),
-            new Rate(400000),
-        ],
+        rates: rates,
         maturitiesOptionList: maturityOptions,
     },
     argTypes: {},
-    decorators: [withMaturities, withAssetPrice],
+    decorators: [withAssetPrice],
+    parameters: {
+        date: {
+            tick: true,
+        },
+    },
 } as ComponentMeta<typeof YieldChart>;
 
 const Template: ComponentStory<typeof YieldChart> = args => {
