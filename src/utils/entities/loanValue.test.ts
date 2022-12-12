@@ -65,7 +65,7 @@ describe('LoanValue class', () => {
             ];
 
         aprApyPriceMaturity.forEach(([apr, apy, price, maturity]) => {
-            const value = LoanValue.fromPrice(price, maturity.getMaturity());
+            const value = LoanValue.fromPrice(price, maturity.toNumber());
 
             expect(value.apr.toNumber()).toEqual(apr.toNumber());
             expect(value.apy.toNumber()).toEqual(apy.toNumber());
@@ -94,7 +94,7 @@ describe('LoanValue class', () => {
         ];
 
         prices.forEach(([price, maturity, apy]) => {
-            const value = LoanValue.fromPrice(price, maturity.getMaturity());
+            const value = LoanValue.fromPrice(price, maturity.toNumber());
             expect(value.price).toEqual(price);
             expect(value.apy.toNumber()).toEqual(apy);
         });

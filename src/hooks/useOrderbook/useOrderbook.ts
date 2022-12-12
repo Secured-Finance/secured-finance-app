@@ -85,7 +85,7 @@ export const useOrderbook = (
 
     useEffect(() => {
         if (securedFinance) {
-            fetchOrderbook(securedFinance, ccy, maturity.getMaturity(), limit);
+            fetchOrderbook(securedFinance, ccy, maturity.toNumber(), limit);
         }
     }, [fetchOrderbook, securedFinance, block, maturity, ccy, limit]);
 

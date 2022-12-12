@@ -134,7 +134,7 @@ export const PlaceOrder = ({
             try {
                 const tx = await onPlaceOrder(
                     ccy,
-                    maturity.getMaturity(),
+                    maturity.toNumber(),
                     side,
                     amount,
                     rate
