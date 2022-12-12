@@ -1,4 +1,5 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { BigNumber } from 'bignumber.js';
 import { useEffect, useMemo } from 'react';
 import { useDispatch } from 'react-redux';
 import {
@@ -6,17 +7,32 @@ import {
     WithWalletProvider,
 } from 'src/../.storybook/decorators';
 import { updateLendingMarketContract } from 'src/store/availableContracts';
-import { CurrencySymbol } from 'src/utils';
+import { CurrencySymbol, Rate } from 'src/utils';
 import { AdvancedLending } from './AdvancedLending';
 
 export default {
     title: 'Organism/AdvancedLending',
     component: AdvancedLending,
-    args: {},
+    args: {
+        collateralBook: {
+            ccyName: 'ETH',
+            collateral: new BigNumber('10000000000000000000'),
+            usdCollateral: new BigNumber('100000000000000000000'),
+            coverage: new BigNumber('80'),
+        },
+        marketRate: new Rate(10000), // 1%
+        maturitiesOptionList: [
+            { label: 'MAR22', value: '1' },
+            { label: 'JUN22', value: '2' },
+            { label: 'SEP22', value: '3' },
+            { label: 'DEC22', value: '1669856400' },
+            { label: 'MAR23', value: '1677632400' },
+        ],
+    },
     decorators: [WithAssetPrice, WithWalletProvider],
 } as ComponentMeta<typeof AdvancedLending>;
 
-const Template: ComponentStory<typeof AdvancedLending> = () => {
+const Template: ComponentStory<typeof AdvancedLending> = args => {
     const maturities = useMemo(
         () => ({
             MAR22: '1616508800',
@@ -44,7 +60,7 @@ const Template: ComponentStory<typeof AdvancedLending> = () => {
     }, [dispatch, maturities]);
     return (
         <div className='p-20'>
-            <AdvancedLending />
+            <AdvancedLending {...args} />
         </div>
     );
 };

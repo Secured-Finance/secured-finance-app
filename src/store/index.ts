@@ -1,5 +1,4 @@
 import { configureStore } from '@reduxjs/toolkit';
-import advancedLendingForm from './advancedLendingForm';
 import assetPrices from './assetPrices';
 import availableContracts from './availableContracts';
 import blockchain from './blockchain';
@@ -15,7 +14,6 @@ export const rootReducers = {
     lastError,
     landingOrderForm,
     availableContracts,
-    advancedLendingForm,
 };
 
 const store = configureStore({

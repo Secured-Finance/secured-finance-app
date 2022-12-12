@@ -13,7 +13,7 @@ export default {
         asset: 'USDC',
         isBorrow: true,
         rates: [
-            new Rate(100000000),
+            new Rate(100000),
             new Rate(200000),
             new Rate(300000),
             new Rate(400000),

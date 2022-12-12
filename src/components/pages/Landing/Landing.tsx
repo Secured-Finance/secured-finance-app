@@ -76,7 +76,11 @@ export const Landing = () => {
                     />
                 </div>
             ) : (
-                <AdvancedLending />
+                <AdvancedLending
+                    collateralBook={collateralBook}
+                    marketRate={marketRate}
+                    maturitiesOptionList={optionList}
+                />
             )}
         </div>
     );

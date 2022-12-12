@@ -8,7 +8,7 @@ import * as stories from './AdvancedLendingOrderCard.stories';
 const { Default } = composeStories(stories);
 
 const preloadedState = {
-    advancedLendingForm: {
+    landingOrderForm: {
         currency: CurrencySymbol.BTC,
         maturity: '0',
         side: OrderSide.Borrow,
