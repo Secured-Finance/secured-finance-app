@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Option } from 'src/components/atoms';
 import { getData, LineChart } from 'src/components/molecules';
 import { OrderSide, RateType, useRates } from 'src/hooks';
-import { setMaturity } from 'src/store/advancedLendingForm';
+import { setMaturity } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
 
 export const LineChartTab = ({
@@ -12,7 +12,7 @@ export const LineChartTab = ({
 }) => {
     const dispatch = useDispatch();
     const { currency, side, maturity } = useSelector(
-        (state: RootState) => state.advancedLendingForm
+        (state: RootState) => state.landingOrderForm
     );
 
     const lendingContracts = useSelector(
