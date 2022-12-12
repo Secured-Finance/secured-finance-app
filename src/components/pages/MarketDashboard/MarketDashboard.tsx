@@ -75,9 +75,7 @@ export const MarketDashboard = () => {
         }
 
         const rate =
-            rates[
-                Object.values(lendingContracts).indexOf(maturity.getMaturity())
-            ];
+            rates[Object.values(lendingContracts).indexOf(maturity.toNumber())];
         if (!rate) {
             return new Rate(0);
         }

@@ -56,7 +56,7 @@ export const useRates = (
     }, [fetchYieldCurve, securedFinance, block]);
 
     return unitPrices.map(unitPrice => {
-        return LoanValue.fromPrice(unitPrice.toNumber(), maturity.getMaturity())
+        return LoanValue.fromPrice(unitPrice.toNumber(), maturity.toNumber())
             .apy;
     });
 };

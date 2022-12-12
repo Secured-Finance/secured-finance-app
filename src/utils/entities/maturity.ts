@@ -12,7 +12,7 @@ export class Maturity {
         }
     }
 
-    public getMaturity(): number {
+    public toNumber(): number {
         return this.maturity;
     }
 

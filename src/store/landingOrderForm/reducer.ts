@@ -27,7 +27,7 @@ const landingOrderFormSlice = createSlice({
             state.currency = action.payload;
         },
         setMaturity: (state, action: PayloadAction<Maturity>) => {
-            state.maturity = action.payload.getMaturity();
+            state.maturity = action.payload.toNumber();
         },
         setSide: (state, action: PayloadAction<OrderSide>) => {
             state.side = action.payload;

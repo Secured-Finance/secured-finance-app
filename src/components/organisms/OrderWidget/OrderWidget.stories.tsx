@@ -10,54 +10,54 @@ const maturityMar23 = new Maturity(1675252800);
 const borrowEntries: Array<OrderBookEntry> = [
     {
         amount: BigNumber.from('43000000000000000000000'),
-        value: LoanValue.fromPrice(9690, maturityMar23.getMaturity()),
+        value: LoanValue.fromPrice(9690, maturityMar23.toNumber()),
     },
     {
         amount: BigNumber.from('23000000000000000000000'),
-        value: LoanValue.fromPrice(9687, maturityMar23.getMaturity()),
+        value: LoanValue.fromPrice(9687, maturityMar23.toNumber()),
     },
     {
         amount: BigNumber.from('15000000000000000000000'),
-        value: LoanValue.fromPrice(9685, maturityMar23.getMaturity()),
+        value: LoanValue.fromPrice(9685, maturityMar23.toNumber()),
     },
     {
         amount: BigNumber.from('12000000000000000000000'),
-        value: LoanValue.fromPrice(9679, maturityMar23.getMaturity()),
+        value: LoanValue.fromPrice(9679, maturityMar23.toNumber()),
     },
     {
         amount: BigNumber.from('1800000000000000000000'),
-        value: LoanValue.fromPrice(9674, maturityMar23.getMaturity()),
+        value: LoanValue.fromPrice(9674, maturityMar23.toNumber()),
     },
     {
         amount: BigNumber.from('0'),
-        value: LoanValue.fromPrice(9653, maturityMar23.getMaturity()),
+        value: LoanValue.fromPrice(9653, maturityMar23.toNumber()),
     },
 ];
 
 const lendEntries: Array<OrderBookEntry> = [
     {
         amount: BigNumber.from('43000000000000000000000'),
-        value: LoanValue.fromPrice(9653, maturityMar23.getMaturity()),
+        value: LoanValue.fromPrice(9653, maturityMar23.toNumber()),
     },
     {
         amount: BigNumber.from('55000000000000000000000'),
-        value: LoanValue.fromPrice(9674, maturityMar23.getMaturity()),
+        value: LoanValue.fromPrice(9674, maturityMar23.toNumber()),
     },
     {
         amount: BigNumber.from('3000000000000000000000'),
-        value: LoanValue.fromPrice(9679, maturityMar23.getMaturity()),
+        value: LoanValue.fromPrice(9679, maturityMar23.toNumber()),
     },
     {
         amount: BigNumber.from('15000000000000000000000'),
-        value: LoanValue.fromPrice(9685, maturityMar23.getMaturity()),
+        value: LoanValue.fromPrice(9685, maturityMar23.toNumber()),
     },
     {
         amount: BigNumber.from('21000000000000000000000'),
-        value: LoanValue.fromPrice(9687, maturityMar23.getMaturity()),
+        value: LoanValue.fromPrice(9687, maturityMar23.toNumber()),
     },
     {
         amount: BigNumber.from('51000000000000000000000'),
-        value: LoanValue.fromPrice(9690, maturityMar23.getMaturity()),
+        value: LoanValue.fromPrice(9690, maturityMar23.toNumber()),
     },
 ];
 
