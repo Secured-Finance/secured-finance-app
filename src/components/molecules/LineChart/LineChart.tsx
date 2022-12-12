@@ -135,7 +135,6 @@ export const LineChart = ({
 
     return (
         <Line
-            data-chromatic='ignore'
             style={style}
             data={refinedData}
             options={options}
