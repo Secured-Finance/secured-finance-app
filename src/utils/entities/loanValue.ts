@@ -15,6 +15,15 @@ export class LoanValue {
         // do nothing
     }
 
+    public static get ZERO(): LoanValue {
+        const loanValue = new LoanValue();
+        loanValue._price = 0;
+        loanValue._maturity = 0;
+        loanValue._apy = new Rate(0);
+        loanValue._apr = new Rate(0);
+        return loanValue;
+    }
+
     public static fromPrice(price: number, maturity: number): LoanValue {
         const loanValue = new LoanValue();
         loanValue._price = price;

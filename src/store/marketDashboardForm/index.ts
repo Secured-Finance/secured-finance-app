@@ -6,7 +6,7 @@ export const {
     setMaturity,
     setSide,
     setAmount,
-    setRate,
+    setUnitPrice,
     setOrderType,
 } = marketDashboardFormSlice.actions;
 

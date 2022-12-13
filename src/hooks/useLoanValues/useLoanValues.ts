@@ -14,7 +14,7 @@ export enum RateType {
     MidRate = 2,
 }
 
-export const useRates = (
+export const useLoanValues = (
     ccy: CurrencySymbol,
     type: RateType,
     maturity: Maturity
@@ -56,7 +56,6 @@ export const useRates = (
     }, [fetchYieldCurve, securedFinance, block]);
 
     return unitPrices.map(unitPrice => {
-        return LoanValue.fromPrice(unitPrice.toNumber(), maturity.toNumber())
-            .apy;
+        return LoanValue.fromPrice(unitPrice.toNumber(), maturity.toNumber());
     });
 };

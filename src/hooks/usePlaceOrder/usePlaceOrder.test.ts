@@ -20,7 +20,7 @@ describe('usePlaceOrder hook', () => {
             2022,
             OrderSide.Lend,
             currencyMap.ETH.toBaseUnit(1),
-            1
+            9863
         );
         expect(mockSecuredFinance.placeLendingOrder).toHaveBeenCalledTimes(1);
     });

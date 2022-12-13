@@ -94,7 +94,7 @@ export const PlaceOrder = ({
         maturity: number | BigNumber,
         side: OrderSide,
         amount: BigNumber,
-        rate: number
+        unitPrice: number
     ) => Promise<ContractTransaction | undefined>;
 }) => {
     const [state, dispatch] = useReducer(reducer, stateRecord[1]);
@@ -129,7 +129,7 @@ export const PlaceOrder = ({
             maturity: Maturity,
             side: OrderSide,
             amount: BigNumber,
-            rate: number
+            unitPrice: number
         ) => {
             try {
                 const tx = await onPlaceOrder(
@@ -137,7 +137,7 @@ export const PlaceOrder = ({
                     maturity.toNumber(),
                     side,
                     amount,
-                    rate
+                    unitPrice
                 );
                 const transactionStatus = await handleContractTransaction(tx);
                 if (!transactionStatus) {

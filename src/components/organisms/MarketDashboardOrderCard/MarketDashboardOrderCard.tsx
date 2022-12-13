@@ -17,8 +17,8 @@ import {
     selectMarketDashboardForm,
     setAmount,
     setOrderType,
-    setRate,
     setSide,
+    setUnitPrice,
 } from 'src/store/marketDashboardForm';
 import { RootState } from 'src/store/types';
 import {
@@ -36,11 +36,11 @@ export const MarketDashboardOrderCard = ({
         maturity: number | BigNumber,
         side: OrderSide,
         amount: BigNumber,
-        rate: number
+        unitPrice: number
     ) => Promise<ContractTransaction | undefined>;
     collateralBook: CollateralBook;
 }) => {
-    const { currency, amount, side, orderType, rate } = useSelector(
+    const { currency, amount, side, orderType, unitPrice } = useSelector(
         (state: RootState) =>
             selectMarketDashboardForm(state.marketDashboardForm)
     );
@@ -118,13 +118,11 @@ export const MarketDashboardOrderCard = ({
                 />
                 <div className='flex flex-col gap-4'>
                     <OrderInputBox
-                        field='Fixed Rate'
-                        unit='%'
+                        field='Unit Price'
+                        unit=''
                         disabled={orderType === OrderType.MARKET}
-                        initialValue={(rate / 10000.0).toString()}
-                        onValueChange={v =>
-                            dispatch(setRate((v as number) * 10000.0))
-                        }
+                        initialValue={unitPrice.toString()}
+                        onValueChange={v => dispatch(setUnitPrice(v as number))}
                     />
                     <OrderInputBox
                         field='Amount'

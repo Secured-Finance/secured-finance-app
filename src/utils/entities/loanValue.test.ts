@@ -176,4 +176,12 @@ describe('LoanValue', () => {
             expect(loanValue.apr).toEqual(new Rate(18538));
         });
     });
+
+    describe('ZERO', () => {
+        it('should return a new instance of LoanValue with price, apy and apr 0', () => {
+            expect(LoanValue.ZERO.price).toEqual(0);
+            expect(LoanValue.ZERO.apy).toEqual(new Rate(0));
+            expect(LoanValue.ZERO.apr).toEqual(new Rate(0));
+        });
+    });
 });
