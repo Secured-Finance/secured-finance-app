@@ -9,6 +9,7 @@ import { MarketOrganism } from './MarketOrganism';
 export default {
     title: 'Organism/MarketOrganism',
     component: MarketOrganism,
+    chromatic: { pauseAnimationAtEnd: true },
     args: {
         maturitiesOptionList: maturityOptions,
         rates: yieldCurveRates,
