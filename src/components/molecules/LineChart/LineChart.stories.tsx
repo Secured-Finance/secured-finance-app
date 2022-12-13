@@ -7,7 +7,7 @@ import { LineChart } from './';
 export default {
     title: 'Molecules/LineChart',
     component: LineChart,
-    chromatic: { diffThreshold: 1, delay: 2000 },
+    chromatic: { pauseAnimationAtEnd: true },
     args: {
         data: {
             labels: [
