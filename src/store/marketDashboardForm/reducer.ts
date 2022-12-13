@@ -9,7 +9,7 @@ type MarketDashboardFormStore = {
     maturity: number;
     side: OrderSide;
     amount: string;
-    rate: number;
+    unitPrice: number;
     orderType: OrderType;
 };
 const initialStore: MarketDashboardFormStore = {
@@ -17,7 +17,7 @@ const initialStore: MarketDashboardFormStore = {
     maturity: 0,
     side: OrderSide.Borrow,
     amount: '0',
-    rate: 0,
+    unitPrice: 0,
     orderType: OrderType.MARKET,
 };
 
@@ -37,8 +37,8 @@ const marketDashboardFormSlice = createSlice({
         setAmount: (state, action: PayloadAction<BigNumber>) => {
             state.amount = action.payload.toString();
         },
-        setRate: (state, action: PayloadAction<number>) => {
-            state.rate = action.payload;
+        setUnitPrice: (state, action: PayloadAction<number>) => {
+            state.unitPrice = action.payload;
         },
         setOrderType: (state, action: PayloadAction<OrderType>) => {
             state.orderType = action.payload;

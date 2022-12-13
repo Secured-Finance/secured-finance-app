@@ -9,14 +9,14 @@ type LandingOrderFormStore = {
     maturity: number;
     side: OrderSide;
     amount: string;
-    rate: number;
+    unitPrice: number;
 };
 const initialStore: LandingOrderFormStore = {
     currency: CurrencySymbol.FIL,
     maturity: 0,
     side: OrderSide.Borrow,
     amount: '0',
-    rate: 0,
+    unitPrice: 0,
 };
 
 const landingOrderFormSlice = createSlice({
@@ -35,8 +35,8 @@ const landingOrderFormSlice = createSlice({
         setAmount: (state, action: PayloadAction<BigNumber>) => {
             state.amount = action.payload.toString();
         },
-        setRate: (state, action: PayloadAction<number>) => {
-            state.rate = action.payload;
+        setUnitPrice: (state, action: PayloadAction<number>) => {
+            state.unitPrice = action.payload;
         },
     },
 });

@@ -11,7 +11,7 @@ import {
     OrderType,
     RateType,
     useCollateralBook,
-    useRates,
+    useLoanValues,
 } from 'src/hooks';
 import { useOrderbook } from 'src/hooks/useOrderbook';
 import {
@@ -19,16 +19,11 @@ import {
     setAmount,
     setCurrency,
     setMaturity,
-    setRate,
+    setUnitPrice,
 } from 'src/store/marketDashboardForm';
 import { RootState } from 'src/store/types';
-import {
-    CurrencySymbol,
-    formatDate,
-    getCurrencyMapAsOptions,
-    Rate,
-} from 'src/utils';
-import { Maturity } from 'src/utils/entities';
+import { CurrencySymbol, formatDate, getCurrencyMapAsOptions } from 'src/utils';
+import { LoanValue, Maturity } from 'src/utils/entities';
 import { useWallet } from 'use-wallet';
 
 export const MarketDashboard = () => {
@@ -63,25 +58,27 @@ export const MarketDashboard = () => {
         );
     }, [maturity, optionList]);
 
-    const rates = useRates(
+    const unitPrices = useLoanValues(
         currency,
         side === OrderSide.Borrow ? RateType.Borrow : RateType.Lend,
         maturity
     );
 
-    const marketRate = useMemo(() => {
-        if (!rates) {
-            return new Rate(0);
+    const marketValue = useMemo(() => {
+        if (!unitPrices) {
+            return LoanValue.ZERO;
         }
 
-        const rate =
-            rates[Object.values(lendingContracts).indexOf(maturity.toNumber())];
-        if (!rate) {
-            return new Rate(0);
+        const value =
+            unitPrices[
+                Object.values(lendingContracts).indexOf(maturity.toNumber())
+            ];
+        if (!value) {
+            return LoanValue.ZERO;
         }
 
-        return rate;
-    }, [rates, lendingContracts, maturity]);
+        return value;
+    }, [unitPrices, lendingContracts, maturity]);
 
     const handleTermChange = useCallback(
         (v: CurrencySymbol) => {
@@ -114,7 +111,7 @@ export const MarketDashboard = () => {
                 onTermChange={v => {
                     dispatch(setMaturity(new Maturity(v)));
                     if (orderType === OrderType.MARKET) {
-                        dispatch(setRate(marketRate.toNumber()));
+                        dispatch(setUnitPrice(marketValue.price));
                     }
                 }}
                 transformLabel={v => {
@@ -127,7 +124,7 @@ export const MarketDashboard = () => {
                 <div className='flex flex-grow flex-col gap-6'>
                     <MarketOrganism
                         maturitiesOptionList={optionList}
-                        rates={rates}
+                        rates={unitPrices.map(v => v.apy)}
                     />
                     <OrderWidget
                         buyOrders={orderBook.borrowOrderbook}

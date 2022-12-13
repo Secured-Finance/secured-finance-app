@@ -13,7 +13,7 @@ const preloadedState = {
         maturity: 0,
         side: OrderSide.Borrow,
         amount: '1200000000',
-        rate: 10000,
+        unitPrice: 0,
         orderType: OrderType.LIMIT,
     },
     ...preloadedAssetPrices,
@@ -49,8 +49,8 @@ describe('MarketDashboardOrderCard Component', () => {
         render(<Default />, { preloadedState });
 
         const inputs = screen.getAllByRole('textbox');
-        expect(screen.getByText('Fixed Rate')).toBeInTheDocument();
-        expect(inputs[0].getAttribute('value')).toBe('1');
+        expect(screen.getByText('Unit Price')).toBeInTheDocument();
+        expect(inputs[0].getAttribute('value')).toBe('0');
 
         expect(screen.getByText('Amount')).toBeInTheDocument();
         expect(inputs[1].getAttribute('value')).toBe('12');

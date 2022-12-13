@@ -23,7 +23,7 @@ export const usePlaceOrder = () => {
             maturity: BigNumber | number,
             side: OrderSide,
             amount: BigNumber,
-            rate: number
+            unitPrice: number
         ) => {
             try {
                 if (!securedFinance) return;
@@ -33,7 +33,7 @@ export const usePlaceOrder = () => {
                     maturity,
                     side.toString(),
                     amount,
-                    rate
+                    unitPrice
                 );
 
                 return tx;
