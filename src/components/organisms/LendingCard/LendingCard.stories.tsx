@@ -1,7 +1,7 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { BigNumber } from 'bignumber.js';
 import { withAssetPrice } from 'src/../.storybook/decorators';
-import { fixture_dec22, maturityOptions } from 'src/stories/mocks/fixtures';
+import { dec22Fixture, maturityOptions } from 'src/stories/mocks/fixtures';
 import { Rate } from 'src/utils';
 import { LoanValue } from 'src/utils/entities';
 import { LendingCard } from './LendingCard';
@@ -18,7 +18,7 @@ export default {
         },
         marketValue: LoanValue.fromApy(
             new Rate(10000),
-            fixture_dec22.toNumber()
+            dec22Fixture.toNumber()
         ),
         maturitiesOptionList: maturityOptions,
     },
