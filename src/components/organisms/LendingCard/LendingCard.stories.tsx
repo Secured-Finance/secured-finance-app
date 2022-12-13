@@ -1,8 +1,9 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { BigNumber } from 'bignumber.js';
 import { withAssetPrice } from 'src/../.storybook/decorators';
-import { maturityOptions } from 'src/stories/mocks/fixtures';
+import { fixture_dec22, maturityOptions } from 'src/stories/mocks/fixtures';
 import { Rate } from 'src/utils';
+import { LoanValue } from 'src/utils/entities';
 import { LendingCard } from './LendingCard';
 
 export default {
@@ -15,7 +16,10 @@ export default {
             usdCollateral: new BigNumber('100000000000000000000'),
             coverage: new BigNumber('80'),
         },
-        marketRate: new Rate(10000), // 1%
+        marketValue: LoanValue.fromApy(
+            new Rate(10000),
+            fixture_dec22.toNumber()
+        ),
         maturitiesOptionList: maturityOptions,
     },
     decorators: [withAssetPrice],

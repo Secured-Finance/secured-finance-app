@@ -1,6 +1,6 @@
 import { RadioGroup } from '@headlessui/react';
-import { BigNumber, ContractTransaction } from 'ethers';
-import { useMemo } from 'react';
+import { BigNumber } from 'ethers';
+import { useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
     Button,
@@ -11,7 +11,7 @@ import {
 } from 'src/components/atoms';
 import { BorrowLendSelector } from 'src/components/atoms/BorrowLendSelector';
 import { OrderInputBox } from 'src/components/atoms/OrderInputBox';
-import { CollateralBook, OrderSide, OrderType } from 'src/hooks';
+import { CollateralBook, OrderType, usePlaceOrder } from 'src/hooks';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import {
     selectMarketDashboardForm,
@@ -23,27 +23,33 @@ import {
 import { RootState } from 'src/store/types';
 import {
     amountFormatterFromBase,
-    CurrencySymbol,
     getFullDisplayBalanceNumber,
     ordinaryFormat,
 } from 'src/utils';
+import { LoanValue } from 'src/utils/entities';
+import { PlaceOrder } from '../PlaceOrder';
 
 export const MarketDashboardOrderCard = ({
     collateralBook,
 }: {
-    onPlaceOrder?: (
-        ccy: CurrencySymbol,
-        maturity: number | BigNumber,
-        side: OrderSide,
-        amount: BigNumber,
-        unitPrice: number
-    ) => Promise<ContractTransaction | undefined>;
     collateralBook: CollateralBook;
 }) => {
-    const { currency, amount, side, orderType, unitPrice } = useSelector(
-        (state: RootState) =>
+    const [openPlaceOrderDialog, setOpenPlaceOrderDialog] = useState(false);
+
+    const { currency, amount, side, orderType, unitPrice, maturity } =
+        useSelector((state: RootState) =>
             selectMarketDashboardForm(state.marketDashboardForm)
-    );
+        );
+
+    const loanValue = useMemo(() => {
+        if (unitPrice && maturity) {
+            return LoanValue.fromPrice(unitPrice, maturity.toNumber());
+        }
+
+        return LoanValue.ZERO;
+    }, [unitPrice, maturity]);
+
+    const { placeOrder } = usePlaceOrder();
 
     const dispatch = useDispatch();
 
@@ -142,11 +148,20 @@ export const MarketDashboardOrderCard = ({
 
                 <Button
                     fullWidth
-                    onClick={() => {}}
+                    onClick={() => {
+                        setOpenPlaceOrderDialog(true);
+                    }}
                     data-testid='place-order-button'
                 >
                     Place Order
                 </Button>
+
+                <PlaceOrder
+                    onPlaceOrder={placeOrder}
+                    isOpen={openPlaceOrderDialog}
+                    onClose={() => setOpenPlaceOrderDialog(false)}
+                    value={loanValue}
+                />
 
                 <Separator color='neutral-3'></Separator>
 

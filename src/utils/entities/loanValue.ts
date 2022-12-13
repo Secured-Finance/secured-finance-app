@@ -31,9 +31,10 @@ export class LoanValue {
         return loanValue;
     }
 
-    public static fromApy(apy: Rate): LoanValue {
+    public static fromApy(apy: Rate, maturity: number): LoanValue {
         const loanValue = new LoanValue();
         loanValue._apy = apy;
+        loanValue._maturity = maturity;
         return loanValue;
     }
 
@@ -44,8 +45,24 @@ export class LoanValue {
     }
 
     public get price(): number {
+        if (this._price === undefined && this._apy === undefined) {
+            throw new Error('cannot compute price');
+        }
+
         if (this._price === undefined) {
-            throw new Error('price is undefined');
+            if (this._apy.toNormalizedNumber() === 0) {
+                return 0;
+            }
+
+            this._price = Math.floor(
+                this.PAR_VALUE *
+                    Math.exp(
+                        -this.yearFraction() *
+                            Math.log(
+                                1 - this._apy.toNormalizedNumber() / 100000
+                            )
+                    )
+            );
         }
 
         return this._price;

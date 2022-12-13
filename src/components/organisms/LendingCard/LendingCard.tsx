@@ -23,18 +23,17 @@ import {
     getCurrencyMapAsList,
     getCurrencyMapAsOptions,
     percentFormat,
-    Rate,
 } from 'src/utils';
 import { computeAvailableToBorrow } from 'src/utils/collateral';
-import { Maturity } from 'src/utils/entities';
+import { LoanValue, Maturity } from 'src/utils/entities';
 
 export const LendingCard = ({
     collateralBook,
-    marketRate,
+    marketValue,
     maturitiesOptionList,
 }: {
     collateralBook: CollateralBook;
-    marketRate: Rate;
+    marketValue: LoanValue;
     maturitiesOptionList: MaturityOptionList;
 }) => {
     const [openPlaceOrder, setOpenPlaceOrder] = useState(false);
@@ -103,7 +102,7 @@ export const LendingCard = ({
                         className='typography-amount-large text-white'
                         data-testid='market-rate'
                     >
-                        {marketRate.toPercent()}
+                        {marketValue.apy.toPercent()}
                     </span>
                     <span className='typography-caption uppercase text-planetaryPurple'>
                         Fixed Rate APY
@@ -155,7 +154,7 @@ export const LendingCard = ({
                 <PlaceOrder
                     isOpen={openPlaceOrder}
                     onClose={() => setOpenPlaceOrder(false)}
-                    marketRate={marketRate}
+                    value={marketValue}
                     onPlaceOrder={placeOrder}
                 />
             </div>

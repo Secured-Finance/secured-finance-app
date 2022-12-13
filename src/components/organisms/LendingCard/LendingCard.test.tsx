@@ -1,8 +1,12 @@
 import { composeStories } from '@storybook/testing-react';
-import { preloadedAssetPrices } from 'src/stories/mocks/fixtures';
+import {
+    fixture_dec22,
+    preloadedAssetPrices,
+} from 'src/stories/mocks/fixtures';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { fireEvent, render, screen } from 'src/test-utils.js';
 import { CurrencyInfo, currencyMap, Rate } from 'src/utils';
+import { LoanValue } from 'src/utils/entities';
 import * as stories from './LendingCard.stories';
 
 const { Default } = composeStories(stories);
@@ -87,8 +91,11 @@ describe('LendingCard Component', () => {
     });
 
     it('should display the rate from the prop', () => {
-        const rate = new Rate(2000);
-        render(<Default marketRate={rate} />);
+        const rate = LoanValue.fromApy(
+            new Rate(2000),
+            fixture_dec22.toNumber()
+        );
+        render(<Default marketValue={rate} />);
         expect(screen.getByText('0.2%')).toBeInTheDocument();
     });
 

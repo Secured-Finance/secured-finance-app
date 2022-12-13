@@ -70,7 +70,7 @@ export const Landing = () => {
             <div className='flex flex-row items-center justify-center'>
                 <LendingCard
                     collateralBook={collateralBook}
-                    marketRate={marketValue.apy}
+                    marketValue={marketValue}
                     maturitiesOptionList={optionList}
                 />
                 <YieldChart

@@ -112,7 +112,7 @@ describe('LoanValue', () => {
 
     describe('fromApy', () => {
         it('should return a new instance of LoanValue with the given apy', () => {
-            const loanValue = LoanValue.fromApy(new Rate(10000));
+            const loanValue = LoanValue.fromApy(new Rate(10000), 100);
             expect(loanValue).toBeInstanceOf(LoanValue);
             expect(loanValue.apy).toEqual(new Rate(10000));
         });
@@ -131,16 +131,11 @@ describe('LoanValue', () => {
             const loanValue = LoanValue.fromPrice(10, 100);
             expect(loanValue.price).toEqual(10);
         });
-
-        it('should throw an error if price is undefined', () => {
-            const loanValue = LoanValue.fromApy(new Rate(0.01));
-            expect(() => loanValue.price).toThrowError('price is undefined');
-        });
     });
 
     describe('apy', () => {
         it('should return the apy when it was set', () => {
-            const loanValue = LoanValue.fromApy(new Rate(0.01));
+            const loanValue = LoanValue.fromApy(new Rate(0.01), 100);
             expect(loanValue.apy).toEqual(new Rate(0.01));
         });
 
