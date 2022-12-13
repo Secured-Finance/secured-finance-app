@@ -1,5 +1,5 @@
 import { Disclosure } from '@headlessui/react';
-import { BigNumber, ContractTransaction } from 'ethers';
+import { BigNumber } from 'ethers';
 import { useCallback, useReducer } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Check from 'src/assets/icons/check-mark.svg';
@@ -15,14 +15,14 @@ import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { selectLandingOrderForm } from 'src/store/landingOrderForm';
 import { setLastMessage } from 'src/store/lastError';
 import { RootState } from 'src/store/types';
+import { PlaceOrderFunction } from 'src/types';
 import {
     amountFormatterFromBase,
     CurrencySymbol,
     handleContractTransaction,
     ordinaryFormat,
-    Rate,
 } from 'src/utils';
-import { Maturity } from 'src/utils/entities';
+import { LoanValue, Maturity } from 'src/utils/entities';
 
 enum Step {
     orderConfirm = 1,
@@ -83,19 +83,13 @@ const reducer = (
 export const PlaceOrder = ({
     isOpen,
     onClose,
-    marketRate,
+    value,
     onPlaceOrder,
 }: {
     isOpen: boolean;
     onClose: () => void;
-    marketRate: Rate;
-    onPlaceOrder: (
-        ccy: CurrencySymbol,
-        maturity: number | BigNumber,
-        side: OrderSide,
-        amount: BigNumber,
-        unitPrice: number
-    ) => Promise<ContractTransaction | undefined>;
+    value: LoanValue;
+    onPlaceOrder: PlaceOrderFunction;
 }) => {
     const [state, dispatch] = useReducer(reducer, stateRecord[1]);
     const globalDispatch = useDispatch();
@@ -134,14 +128,14 @@ export const PlaceOrder = ({
             try {
                 const tx = await onPlaceOrder(
                     ccy,
-                    maturity.toNumber(),
+                    maturity,
                     side,
                     amount,
                     unitPrice
                 );
                 const transactionStatus = await handleContractTransaction(tx);
                 if (!transactionStatus) {
-                    console.error('Some error occured');
+                    console.error('Some error occurred');
                     handleClose();
                 } else {
                     dispatch({ type: 'next' });
@@ -165,7 +159,7 @@ export const PlaceOrder = ({
                         maturity,
                         side,
                         amount,
-                        marketRate.toNumber()
+                        value.price
                     );
                     break;
                 case Step.orderProcessing:
@@ -180,7 +174,7 @@ export const PlaceOrder = ({
             currency,
             handleClose,
             handlePlaceOrder,
-            marketRate,
+            value.price,
             maturity,
             side,
         ]
@@ -214,7 +208,7 @@ export const PlaceOrder = ({
                                             '$3,840 / $8,880',
                                         ],
                                         ['Collateral Usage', '50% → 57%'],
-                                        ['Borrow APR', marketRate.toPercent()],
+                                        ['Borrow APR', value.apy.toPercent()],
                                     ]}
                                 />
                                 <SectionWithItems
@@ -237,7 +231,10 @@ export const PlaceOrder = ({
                                             <Disclosure.Panel>
                                                 <SectionWithItems
                                                     itemList={[
-                                                        ['Bond Price', '79.77'],
+                                                        [
+                                                            'Bond Price',
+                                                            value.price.toString(),
+                                                        ],
                                                         [
                                                             'Loan Start Date',
                                                             'June 21, 2022',

@@ -5,6 +5,7 @@ import { preloadedAssetPrices } from 'src/stories/mocks/fixtures';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
 import { CurrencySymbol } from 'src/utils';
+import { Maturity } from 'src/utils/entities';
 import * as stories from './PlaceOrder.stories';
 
 const { Default } = composeStories(stories);
@@ -60,10 +61,10 @@ describe('PlaceOrder component', () => {
         await waitFor(() =>
             expect(onPlaceOrder).toHaveBeenCalledWith(
                 CurrencySymbol.FIL,
-                0,
+                new Maturity(0),
                 OrderSide.Borrow,
                 BigNumber.from(0),
-                10000
+                9999
             )
         );
     });

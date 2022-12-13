@@ -7,9 +7,6 @@ export default {
     title: 'Organism/MarketDashboardOrderCard',
     component: MarketDashboardOrderCard,
     args: {
-        onPlaceOrder: async () => {
-            return Promise.resolve();
-        },
         collateralBook: {
             ccyName: 'ETH',
             collateral: new BigNumber('10000000000000000000'),
