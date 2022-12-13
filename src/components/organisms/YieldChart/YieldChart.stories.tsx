@@ -17,7 +17,7 @@ const rates = [
 export default {
     title: 'Organism/YieldChart',
     component: YieldChart,
-    chromatic: { diffThreshold: 1, delay: 500 },
+    chromatic: { pauseAnimationAtEnd: true },
     args: {
         asset: 'USDC',
         isBorrow: true,

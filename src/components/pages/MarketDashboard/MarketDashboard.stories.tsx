@@ -10,6 +10,7 @@ import { MarketDashboard } from './MarketDashboard';
 export default {
     title: 'Pages/MarketDashboard',
     component: MarketDashboard,
+    chromatic: { pauseAnimationAtEnd: true },
     args: {},
     parameters: { date: { tick: true } },
     decorators: [
