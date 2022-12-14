@@ -81,7 +81,7 @@ export const AdvancedLendingOrderCard = ({
             >
                 <RadioGroup.Option
                     value={OrderType.MARKET}
-                    className='h-full w-1/3'
+                    className='h-full w-1/2'
                     as='button'
                 >
                     {({ checked }) => (
@@ -91,20 +91,10 @@ export const AdvancedLendingOrderCard = ({
                 <RadioGroup.Option
                     value={OrderType.LIMIT}
                     as='button'
-                    className='h-full w-1/3'
+                    className='h-full w-1/2'
                 >
                     {({ checked }) => (
                         <NavTab text={OrderType.LIMIT} active={checked} />
-                    )}
-                </RadioGroup.Option>
-                <RadioGroup.Option
-                    value={OrderType.STOP}
-                    as='button'
-                    className='h-full w-1/3'
-                    disabled
-                >
-                    {({ checked }) => (
-                        <NavTab text={OrderType.STOP} active={checked} />
                     )}
                 </RadioGroup.Option>
             </RadioGroup>

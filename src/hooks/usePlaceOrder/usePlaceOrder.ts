@@ -11,7 +11,6 @@ export enum OrderSide {
 export enum OrderType {
     MARKET = 'Market',
     LIMIT = 'Limit',
-    STOP = 'Stop',
 }
 
 export const usePlaceOrder = () => {

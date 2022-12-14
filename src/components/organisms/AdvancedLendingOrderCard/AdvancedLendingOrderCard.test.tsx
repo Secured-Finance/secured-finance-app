@@ -25,7 +25,7 @@ describe('AdvancedLendingOrderCard Component', () => {
         expect(screen.getByTestId('place-order-button')).toHaveTextContent(
             'Place Order'
         );
-        expect(screen.getAllByRole('radio')).toHaveLength(5);
+        expect(screen.getAllByRole('radio')).toHaveLength(4);
         expect(screen.getAllByRole('radiogroup')).toHaveLength(2);
     });
 
