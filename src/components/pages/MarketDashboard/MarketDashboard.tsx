@@ -1,3 +1,4 @@
+import { Side } from '@secured-finance/sf-client/dist/secured-finance-client';
 import { BigNumber } from 'ethers';
 import { useCallback, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -7,7 +8,6 @@ import { MarketDashboardOrderCard } from 'src/components/organisms/MarketDashboa
 import { MarketOrganism } from 'src/components/organisms/MarketOrganism';
 import { OrderWidget } from 'src/components/organisms/OrderWidget';
 import {
-    OrderSide,
     OrderType,
     RateType,
     useCollateralBook,
@@ -60,7 +60,7 @@ export const MarketDashboard = () => {
 
     const unitPrices = useLoanValues(
         currency,
-        side === OrderSide.Borrow ? RateType.Borrow : RateType.Lend,
+        side === Side.BORROW ? RateType.Borrow : RateType.Lend,
         maturity
     );
 

@@ -1,4 +1,5 @@
 import { Disclosure } from '@headlessui/react';
+import { Side } from '@secured-finance/sf-client/dist/secured-finance-client';
 import { BigNumber } from 'ethers';
 import { useCallback, useReducer } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -10,7 +11,6 @@ import {
     SectionWithItems,
 } from 'src/components/atoms';
 import { AmountCard, Dialog } from 'src/components/molecules';
-import { OrderSide } from 'src/hooks';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { selectLandingOrderForm } from 'src/store/landingOrderForm';
 import { setLastMessage } from 'src/store/lastError';
@@ -121,7 +121,7 @@ export const PlaceOrder = ({
         async (
             ccy: CurrencySymbol,
             maturity: Maturity,
-            side: OrderSide,
+            side: Side,
             amount: BigNumber,
             unitPrice: number
         ) => {

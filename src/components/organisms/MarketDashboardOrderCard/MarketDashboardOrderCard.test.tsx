@@ -1,5 +1,6 @@
+import { Side } from '@secured-finance/sf-client/dist/secured-finance-client';
 import { composeStories } from '@storybook/testing-react';
-import { OrderSide, OrderType } from 'src/hooks';
+import { OrderType } from 'src/hooks';
 import { preloadedAssetPrices } from 'src/stories/mocks/fixtures';
 import { render, screen } from 'src/test-utils.js';
 import { CurrencySymbol } from 'src/utils';
@@ -11,7 +12,7 @@ const preloadedState = {
     marketDashboardForm: {
         currency: CurrencySymbol.BTC,
         maturity: 0,
-        side: OrderSide.Borrow,
+        side: Side.BORROW,
         amount: '1200000000',
         unitPrice: 0,
         orderType: OrderType.LIMIT,

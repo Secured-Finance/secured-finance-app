@@ -1,6 +1,6 @@
+import { Side } from '@secured-finance/sf-client/dist/secured-finance-client';
 import { composeStories } from '@storybook/testing-react';
 import { BigNumber } from 'ethers';
-import { OrderSide } from 'src/hooks';
 import { preloadedAssetPrices } from 'src/stories/mocks/fixtures';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
@@ -62,7 +62,7 @@ describe('PlaceOrder component', () => {
             expect(onPlaceOrder).toHaveBeenCalledWith(
                 CurrencySymbol.FIL,
                 new Maturity(0),
-                OrderSide.Borrow,
+                Side.BORROW,
                 BigNumber.from(0),
                 9999
             )

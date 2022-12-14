@@ -1,7 +1,7 @@
 import { BigNumber } from 'ethers';
 
 export class Maturity {
-    readonly maturity: number;
+    private readonly maturity: number;
     public constructor(maturity: number | string | BigNumber) {
         if (typeof maturity === 'string') {
             this.maturity = parseInt(maturity);
