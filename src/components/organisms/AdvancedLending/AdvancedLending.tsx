@@ -52,6 +52,10 @@ export const AdvancedLending = ({
         );
     }, [maturity, maturitiesOptionList]);
 
+    const selectedAsset = useMemo(() => {
+        return assetList.find(option => option.value === currency);
+    }, [currency, assetList]);
+
     const handleTermChange = useCallback(
         (v: CurrencySymbol) => {
             dispatch(setCurrency(v));
@@ -65,7 +69,7 @@ export const AdvancedLending = ({
             <div className='mb-5'>
                 <DropdownSelector
                     optionList={assetList}
-                    selected={assetList[0]}
+                    selected={selectedAsset}
                     variant='roundedExpandButton'
                     onChange={handleTermChange}
                 />

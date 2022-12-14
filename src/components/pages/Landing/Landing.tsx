@@ -1,12 +1,19 @@
 import { useMemo, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { SimpleAdvancedSelector, ViewType } from 'src/components/atoms';
 import {
     AdvancedLending,
     LendingCard,
     YieldChart,
 } from 'src/components/organisms';
-import { OrderSide, RateType, useCollateralBook, useRates } from 'src/hooks';
+import {
+    OrderSide,
+    OrderType,
+    RateType,
+    useCollateralBook,
+    useRates,
+} from 'src/hooks';
+import { setOrderType } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
 import { Rate } from 'src/utils';
 import { useWallet } from 'use-wallet';
@@ -20,6 +27,7 @@ export const Landing = () => {
     const lendingContracts = useSelector(
         (state: RootState) => state.availableContracts.lendingMarkets[currency]
     );
+    const dispatch = useDispatch();
 
     const collateralBook = useCollateralBook(account);
 
@@ -57,7 +65,12 @@ export const Landing = () => {
                     OTC Lending
                 </span>
                 <SimpleAdvancedSelector
-                    handleClick={v => setView(v)}
+                    handleClick={v => {
+                        setView(v);
+                        if (v === 'Simple') {
+                            dispatch(setOrderType(OrderType.MARKET));
+                        }
+                    }}
                     text={view as ViewType}
                 />
             </div>
