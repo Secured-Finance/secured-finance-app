@@ -1,13 +1,9 @@
+import { Side } from '@secured-finance/sf-client/dist/secured-finance-client';
 import { BigNumber } from 'ethers';
 import { useCallback } from 'react';
 import useSF from 'src/hooks/useSecuredFinance';
 import { CurrencySymbol, toCurrency } from 'src/utils';
 import { Maturity } from 'src/utils/entities';
-
-export enum OrderSide {
-    Lend = '0',
-    Borrow = '1',
-}
 
 export enum OrderType {
     MARKET = 'Market',
@@ -22,10 +18,9 @@ export const usePlaceOrder = () => {
         async (
             ccy: CurrencySymbol,
             maturity: Maturity,
-            side: OrderSide,
+            side: Side,
             amount: BigNumber,
-            // eslint-disable-next-line @typescript-eslint/no-inferrable-types
-            unitPrice: number = 0
+            unitPrice?: number
         ) => {
             try {
                 if (!securedFinance) return;
@@ -33,7 +28,7 @@ export const usePlaceOrder = () => {
                 const tx = await securedFinance.placeLendingOrder(
                     toCurrency(ccy),
                     maturity.toNumber(),
-                    side.toString(),
+                    side,
                     amount,
                     unitPrice
                 );

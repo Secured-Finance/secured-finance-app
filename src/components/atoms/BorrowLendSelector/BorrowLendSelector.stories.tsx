@@ -1,11 +1,11 @@
+import { Side } from '@secured-finance/sf-client/dist/secured-finance-client';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
-import { OrderSide } from 'src/hooks';
 import { BorrowLendSelector } from '.';
 
 export default {
     title: 'Atoms/BorrowLendSelector',
     component: BorrowLendSelector,
-    args: { side: OrderSide.Borrow, variant: 'simple' },
+    args: { side: Side.BORROW, variant: 'simple' },
 } as ComponentMeta<typeof BorrowLendSelector>;
 
 const Template: ComponentStory<typeof BorrowLendSelector> = args => (
@@ -15,6 +15,6 @@ const Template: ComponentStory<typeof BorrowLendSelector> = args => (
 export const Simple = Template.bind({});
 export const Advanced = Template.bind({});
 Advanced.args = {
-    side: OrderSide.Lend,
+    side: Side.LEND,
     variant: 'advanced',
 };

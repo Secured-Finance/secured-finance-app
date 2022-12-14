@@ -1,9 +1,10 @@
+import { Side } from '@secured-finance/sf-client/dist/secured-finance-client';
 import { renderHook } from '@testing-library/react-hooks';
 import { BigNumber } from 'ethers';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { currencyMap, CurrencySymbol, toCurrency } from 'src/utils';
 import { Maturity } from 'src/utils/entities';
-import { OrderSide, usePlaceOrder } from './';
+import { usePlaceOrder } from './';
 
 const mockSecuredFinance = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mockSecuredFinance);
@@ -20,7 +21,7 @@ describe('usePlaceOrder hook', () => {
         await placeOrder(
             CurrencySymbol.ETH,
             new Maturity(2022),
-            OrderSide.Lend,
+            Side.LEND,
             currencyMap.ETH.toBaseUnit(1),
             9863
         );
@@ -40,7 +41,7 @@ describe('usePlaceOrder hook', () => {
         await placeOrder(
             CurrencySymbol.ETH,
             new Maturity(2022),
-            OrderSide.Lend,
+            Side.LEND,
             currencyMap.ETH.toBaseUnit(1)
         );
 

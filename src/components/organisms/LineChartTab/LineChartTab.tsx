@@ -1,6 +1,6 @@
+import { Side } from '@secured-finance/sf-client/dist/secured-finance-client';
 import { useDispatch, useSelector } from 'react-redux';
 import { getData, LineChart } from 'src/components/molecules';
-import { OrderSide } from 'src/hooks';
 import {
     selectMarketDashboardForm,
     setMaturity,
@@ -23,7 +23,7 @@ export const LineChartTab = ({
 
     const data = getData(
         rates,
-        side === OrderSide.Borrow ? 'Borrow' : 'Lend',
+        side === Side.BORROW ? 'Borrow' : 'Lend',
         maturitiesOptionList.map(o => o.label)
     );
 

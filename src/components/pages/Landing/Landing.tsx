@@ -1,12 +1,8 @@
+import { Side } from '@secured-finance/sf-client/dist/secured-finance-client';
 import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { LendingCard, YieldChart } from 'src/components/organisms';
-import {
-    OrderSide,
-    RateType,
-    useCollateralBook,
-    useLoanValues,
-} from 'src/hooks';
+import { RateType, useCollateralBook, useLoanValues } from 'src/hooks';
 import { selectLandingOrderForm } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
 import { LoanValue, Maturity } from 'src/utils/entities';
@@ -30,7 +26,7 @@ export const Landing = () => {
 
     const unitPrices = useLoanValues(
         currency,
-        side === OrderSide.Borrow ? RateType.Borrow : RateType.Lend,
+        side === Side.BORROW ? RateType.Borrow : RateType.Lend,
         maturity
     );
 
@@ -75,7 +71,7 @@ export const Landing = () => {
                 />
                 <YieldChart
                     asset={currency}
-                    isBorrow={side === OrderSide.Borrow}
+                    isBorrow={side === Side.BORROW}
                     rates={unitPrices.map(v => v.apy)}
                     maturitiesOptionList={optionList}
                 />
