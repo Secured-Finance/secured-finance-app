@@ -10,6 +10,7 @@ import { LineChartTab } from './LineChartTab';
 export default {
     title: 'Organism/LineChartTab',
     component: LineChartTab,
+    chromatic: { pauseAnimationAtEnd: true },
     args: {
         maturitiesOptionList: maturityOptions,
         rates: yieldCurveRates,
