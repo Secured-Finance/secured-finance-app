@@ -90,7 +90,7 @@ describe('LendingCard Component', () => {
     it('should display the rate from the prop', () => {
         const rate = LoanValue.fromApy(new Rate(2000), dec22Fixture.toNumber());
         render(<Default marketValue={rate} />);
-        expect(screen.getByText('0.2%')).toBeInTheDocument();
+        expect(screen.getByText('0.20%')).toBeInTheDocument();
     });
 
     it('should transform the contract label to a date', () => {

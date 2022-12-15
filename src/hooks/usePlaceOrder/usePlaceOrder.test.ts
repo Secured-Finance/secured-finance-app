@@ -9,6 +9,10 @@ import { usePlaceOrder } from './';
 const mockSecuredFinance = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mockSecuredFinance);
 
+beforeEach(() => {
+    mockSecuredFinance.placeLendingOrder.mockReset();
+});
+
 describe('usePlaceOrder hook', () => {
     it('should return the placeOrder function', () => {
         const { result } = renderHook(() => usePlaceOrder());
@@ -50,7 +54,7 @@ describe('usePlaceOrder hook', () => {
             2022,
             '0',
             BigNumber.from('1000000000000000000'),
-            0
+            undefined
         );
     });
 });

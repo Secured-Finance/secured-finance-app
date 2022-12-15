@@ -21,6 +21,7 @@ import {
     amountFormatterToBase,
     CurrencySymbol,
     formatDate,
+    formatLoanValue,
     getCurrencyMapAsList,
     getCurrencyMapAsOptions,
     percentFormat,
@@ -103,7 +104,7 @@ export const LendingCard = ({
                         className='typography-amount-large text-white'
                         data-testid='market-rate'
                     >
-                        {marketValue.apy.toPercent()}
+                        {formatLoanValue(marketValue, 'rate')}
                     </span>
                     <span className='typography-caption uppercase text-planetaryPurple'>
                         Fixed Rate APY

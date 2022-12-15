@@ -19,6 +19,7 @@ import { PlaceOrderFunction } from 'src/types';
 import {
     amountFormatterFromBase,
     CurrencySymbol,
+    formatLoanValue,
     handleContractTransaction,
     ordinaryFormat,
 } from 'src/utils';
@@ -211,7 +212,7 @@ export const PlaceOrder = ({
                                         [
                                             'Borrow APR',
                                             value
-                                                ? value.apy.toPercent()
+                                                ? formatLoanValue(value, 'rate')
                                                 : 'Market Order',
                                         ],
                                     ]}
