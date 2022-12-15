@@ -10,65 +10,35 @@ beforeEach(() => {
 });
 
 describe('LoanValue class', () => {
-    it('should build from the price and maturity', () => {
-        const maturityMar23 = new Maturity(1675252800);
-        const aprApyPriceMaturity: [BigNumber, BigNumber, number, Maturity][] =
-            [
-                [
-                    BigNumber.from(18538),
-                    BigNumber.from(36901),
-                    9690,
-                    maturityMar23,
-                ], // 96.90
-                [
-                    BigNumber.from(18721),
-                    BigNumber.from(37326),
-                    9687,
-                    maturityMar23,
-                ],
-                [
-                    BigNumber.from(18842),
-                    BigNumber.from(37607),
-                    9685,
-                    maturityMar23,
-                ],
-                [
-                    BigNumber.from(19207),
-                    BigNumber.from(38458),
-                    9679,
-                    maturityMar23,
-                ],
-                [
-                    BigNumber.from(19511),
-                    BigNumber.from(39171),
-                    9674,
-                    maturityMar23,
-                ],
-                [
-                    BigNumber.from(20791),
-                    BigNumber.from(42213),
-                    9653,
-                    maturityMar23,
-                ],
-                [
-                    BigNumber.from(21401),
-                    BigNumber.from(43686),
-                    9643,
-                    maturityMar23,
-                ],
-                [
-                    BigNumber.from(22378),
-                    BigNumber.from(46076),
-                    9627,
-                    maturityMar23,
-                ],
-            ];
+    const maturityMar23 = new Maturity(1675252800);
+    const aprApyPriceMaturity: [BigNumber, BigNumber, number, Maturity][] = [
+        [BigNumber.from(18538), BigNumber.from(36901), 9690, maturityMar23], // 96.90
+        [BigNumber.from(18721), BigNumber.from(37326), 9687, maturityMar23],
+        [BigNumber.from(18842), BigNumber.from(37607), 9685, maturityMar23],
+        [BigNumber.from(19207), BigNumber.from(38458), 9679, maturityMar23],
+        [BigNumber.from(19511), BigNumber.from(39171), 9674, maturityMar23],
+        [BigNumber.from(20791), BigNumber.from(42213), 9653, maturityMar23],
+        [BigNumber.from(21401), BigNumber.from(43686), 9643, maturityMar23],
+        [BigNumber.from(22378), BigNumber.from(46076), 9627, maturityMar23],
+    ];
 
+    it('should build from the price and maturity', () => {
         aprApyPriceMaturity.forEach(([apr, apy, price, maturity]) => {
             const value = LoanValue.fromPrice(price, maturity.toNumber());
 
             expect(value.apr.toNumber()).toEqual(apr.toNumber());
             expect(value.apy.toNumber()).toEqual(apy.toNumber());
+        });
+    });
+
+    it.todo('should build from the apy and the maturity', () => {
+        aprApyPriceMaturity.forEach(([apr, apy, price, maturity]) => {
+            const value = LoanValue.fromApy(
+                new Rate(apy.toNumber()),
+                maturity.toNumber()
+            );
+            expect(value.apr.toNumber()).toEqual(apr.toNumber());
+            expect(value.price).toEqual(price);
         });
     });
 

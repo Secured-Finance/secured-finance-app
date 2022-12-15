@@ -24,3 +24,7 @@ const Template: ComponentStory<typeof PlaceOrder> = args => {
 };
 
 export const Default = Template.bind({});
+export const MarketOrder = Template.bind({});
+MarketOrder.args = {
+    value: undefined,
+};

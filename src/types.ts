@@ -11,5 +11,5 @@ export type PlaceOrderFunction = (
     maturity: Maturity,
     side: Side,
     amount: BigNumber,
-    unitPrice: number
+    unitPrice?: number
 ) => Promise<ContractTransaction | undefined>;

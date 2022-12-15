@@ -8,12 +8,14 @@ import { CurrencySymbol } from 'src/utils';
 import { Maturity } from 'src/utils/entities';
 import * as stories from './PlaceOrder.stories';
 
-const { Default } = composeStories(stories);
+const { Default, MarketOrder } = composeStories(stories);
 
 const preloadedState = { ...preloadedAssetPrices };
 
 const mockSecuredFinance = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mockSecuredFinance);
+
+beforeEach(() => jest.resetAllMocks());
 
 describe('PlaceOrder component', () => {
     it('should display the Place Order Modal when open', () => {
@@ -78,6 +80,24 @@ describe('PlaceOrder component', () => {
         await waitFor(() =>
             expect(store.getState().lastError.lastMessage).toEqual(
                 'This is an error'
+            )
+        );
+    });
+
+    it('should call the onPlaceOrder function in a market order mode when no value is provided', async () => {
+        const tx = {
+            wait: jest.fn(() => Promise.resolve({ blockNumber: 13115215 })),
+        } as unknown;
+        const onPlaceOrder = jest.fn().mockReturnValue(Promise.resolve(tx));
+        render(<MarketOrder onPlaceOrder={onPlaceOrder} />);
+        fireEvent.click(screen.getByTestId('dialog-action-button'));
+        await waitFor(() =>
+            expect(onPlaceOrder).toHaveBeenCalledWith(
+                CurrencySymbol.FIL,
+                new Maturity(0),
+                Side.BORROW,
+                BigNumber.from(0),
+                undefined
             )
         );
     });
