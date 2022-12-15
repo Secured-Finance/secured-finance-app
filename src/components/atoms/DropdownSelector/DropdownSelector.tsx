@@ -66,13 +66,13 @@ const NoLabelButton = ({ open }: { open: boolean }) => {
 };
 
 export const DropdownSelector = <T extends string = string>({
-    selected,
     optionList,
+    selected = optionList[0],
     onChange,
     variant = 'default',
 }: {
-    selected: Option<T>;
     optionList: Readonly<Array<Option<T>>>;
+    selected?: Option<T>;
     onChange: (v: T) => void;
     variant?: 'default' | 'roundedExpandButton' | 'noLabel';
 }) => {

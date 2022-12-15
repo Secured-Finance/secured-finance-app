@@ -1,125 +1,21 @@
-import { BigNumber } from 'ethers';
-import { useCallback, useMemo } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { DropdownSelector } from 'src/components/atoms';
-import { MarketDashboardTopBar } from 'src/components/molecules';
-import { MarketDashboardOrderCard } from 'src/components/organisms/MarketDashboardOrderCard';
-import { MarketOrganism } from 'src/components/organisms/MarketOrganism';
-import { OrderWidget } from 'src/components/organisms/OrderWidget';
-import {
-    OrderSide,
-    OrderType,
-    RateType,
-    useCollateralBook,
-    useRates,
-} from 'src/hooks';
-import { useOrderbook } from 'src/hooks/useOrderbook';
-import {
-    setAmount,
-    setCurrency,
-    setMaturity,
-    setRate,
-} from 'src/store/marketDashboardForm';
-import { RootState } from 'src/store/types';
-import {
-    CurrencySymbol,
-    formatDate,
-    getCurrencyMapAsOptions,
-    Rate,
-} from 'src/utils';
+import { MarketDashboardTable } from 'src/components/molecules';
+import { ConnectWalletCard } from 'src/components/organisms';
 import { useWallet } from 'use-wallet';
 
 export const MarketDashboard = () => {
     const { account } = useWallet();
-    const { currency, maturity, side, orderType } = useSelector(
-        (state: RootState) => state.marketDashboardForm
-    );
-    const lendingContracts = useSelector(
-        (state: RootState) => state.availableContracts.lendingMarkets[currency]
-    );
-
-    const optionList = useMemo(
-        () =>
-            Object.entries(lendingContracts).map(o => ({
-                label: o[0],
-                value: o[1],
-            })),
-        [lendingContracts]
-    );
-
-    const collateralBook = useCollateralBook(account);
-
-    const assetList = useMemo(() => getCurrencyMapAsOptions(), []);
-    const dispatch = useDispatch();
-    const orderBook = useOrderbook(currency, Number(optionList[0].value), 10);
-
-    const selectedTerm = useMemo(() => {
-        return (
-            optionList.find(option => option.value === maturity) ||
-            optionList[0]
-        );
-    }, [maturity, optionList]);
-
-    const rates = useRates(
-        currency,
-        side === OrderSide.Borrow ? RateType.Borrow : RateType.Lend
-    );
-
-    const marketRate = useMemo(() => {
-        if (!rates) {
-            return new Rate(0);
-        }
-
-        const rate = rates[Object.values(lendingContracts).indexOf(maturity)];
-        if (!rate) {
-            return new Rate(0);
-        }
-
-        return rate;
-    }, [rates, lendingContracts, maturity]);
-
-    const handleTermChange = useCallback(
-        (v: CurrencySymbol) => {
-            dispatch(setCurrency(v));
-            dispatch(setAmount(BigNumber.from(0)));
-        },
-        [dispatch]
-    );
 
     return (
-        <div className='mx-40 mt-7 flex flex-col gap-5' data-cy='exchange-page'>
-            <div className='mb-5'>
-                <DropdownSelector
-                    optionList={assetList}
-                    selected={assetList[0]}
-                    variant='roundedExpandButton'
-                    onChange={handleTermChange}
-                />
+        <div className='flex flex-col gap-9 px-40 pt-9' data-cy='exchange-page'>
+            <div className='h-16 border-b-[0.5px] border-panelStroke font-secondary text-lg font-light leading-7 text-white'>
+                Market Dashboard
             </div>
-            <MarketDashboardTopBar
-                asset={currency}
-                options={optionList}
-                selected={selectedTerm}
-                onTermChange={v => {
-                    dispatch(setMaturity(v));
-                    if (orderType === OrderType.MARKET) {
-                        dispatch(setRate(marketRate.toNumber()));
-                    }
-                }}
-                transformLabel={v => {
-                    const ts = optionList.find(o => o.label === v)?.value;
-                    return ts ? formatDate(Number(ts)) : v;
-                }}
-            />
             <div className='flex flex-row gap-6'>
-                <MarketDashboardOrderCard collateralBook={collateralBook} />
-                <div className='flex flex-grow flex-col gap-6'>
-                    <MarketOrganism maturitiesOptionList={optionList} />
-                    <OrderWidget
-                        buyOrders={orderBook.borrowOrderbook}
-                        sellOrders={orderBook.lendOrderbook}
-                        currency={currency}
-                    />
+                <div className='flex min-w-[800px] flex-grow flex-col'>
+                    <MarketDashboardTable />
+                </div>
+                <div className='w-[350px]'>
+                    {account ? null : <ConnectWalletCard />}
                 </div>
             </div>
         </div>

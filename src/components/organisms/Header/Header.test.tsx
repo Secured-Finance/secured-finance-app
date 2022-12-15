@@ -33,7 +33,6 @@ describe('Header component', () => {
         expect(screen.getByText('Market Dashboard')).toBeInTheDocument();
         expect(screen.getByText('Portfolio Management')).toBeInTheDocument();
         expect(screen.getByText('Connect Wallet')).toBeInTheDocument();
-        expect(screen.getByText('Trader Pro')).toBeInTheDocument();
     });
 
     it('should highlight the landing page by default page', () => {

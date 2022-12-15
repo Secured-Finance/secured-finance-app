@@ -18,8 +18,8 @@ jest.mock(
             children
 );
 
-describe('Market Dashboard Component', () => {
-    it('should render a Market Dashboard', () => {
+describe('MarketDashboard Component', () => {
+    it('should render MarketDashboard', () => {
         render(<Default />);
     });
 });

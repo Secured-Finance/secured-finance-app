@@ -14,12 +14,12 @@ import { OrderInputBox } from 'src/components/atoms/OrderInputBox';
 import { CollateralBook, OrderSide, OrderType } from 'src/hooks';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import {
-    selectMarketDashboardForm,
+    selectLandingOrderForm,
     setAmount,
     setOrderType,
     setRate,
     setSide,
-} from 'src/store/marketDashboardForm';
+} from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
 import {
     amountFormatterFromBase,
@@ -28,7 +28,7 @@ import {
     ordinaryFormat,
 } from 'src/utils';
 
-export const MarketDashboardOrderCard = ({
+export const AdvancedLendingOrderCard = ({
     collateralBook,
 }: {
     onPlaceOrder?: (
@@ -41,8 +41,7 @@ export const MarketDashboardOrderCard = ({
     collateralBook: CollateralBook;
 }) => {
     const { currency, amount, side, orderType, rate } = useSelector(
-        (state: RootState) =>
-            selectMarketDashboardForm(state.marketDashboardForm)
+        (state: RootState) => selectLandingOrderForm(state.landingOrderForm)
     );
 
     const dispatch = useDispatch();
@@ -82,7 +81,7 @@ export const MarketDashboardOrderCard = ({
             >
                 <RadioGroup.Option
                     value={OrderType.MARKET}
-                    className='h-full w-1/3'
+                    className='h-full w-1/2'
                     as='button'
                 >
                     {({ checked }) => (
@@ -92,20 +91,10 @@ export const MarketDashboardOrderCard = ({
                 <RadioGroup.Option
                     value={OrderType.LIMIT}
                     as='button'
-                    className='h-full w-1/3'
+                    className='h-full w-1/2'
                 >
                     {({ checked }) => (
                         <NavTab text={OrderType.LIMIT} active={checked} />
-                    )}
-                </RadioGroup.Option>
-                <RadioGroup.Option
-                    value={OrderType.STOP}
-                    as='button'
-                    className='h-full w-1/3'
-                    disabled
-                >
-                    {({ checked }) => (
-                        <NavTab text={OrderType.STOP} active={checked} />
                     )}
                 </RadioGroup.Option>
             </RadioGroup>

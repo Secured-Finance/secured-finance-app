@@ -6,7 +6,6 @@ import { listenerMiddleware } from './blockchain/reducer';
 import ethereumWallet from './ethereumWallet';
 import landingOrderForm from './landingOrderForm';
 import lastError from './lastError';
-import marketDashboardForm from './marketDashboardForm';
 
 export const rootReducers = {
     ethereumWallet,
@@ -15,7 +14,6 @@ export const rootReducers = {
     lastError,
     landingOrderForm,
     availableContracts,
-    marketDashboardForm,
 };
 
 const store = configureStore({

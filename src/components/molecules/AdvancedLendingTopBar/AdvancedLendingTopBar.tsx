@@ -11,7 +11,7 @@ const getValue = (values: number[] | undefined, index: number) => {
     return values && values[index] ? values[index] : 0;
 };
 
-export const MarketDashboardTopBar = <TermType extends string = string>({
+export const AdvancedLendingTopBar = <TermType extends string = string>({
     asset,
     options,
     selected,

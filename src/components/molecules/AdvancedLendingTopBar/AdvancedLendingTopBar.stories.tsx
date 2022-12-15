@@ -1,7 +1,7 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { Option } from 'src/components/atoms';
 import { CurrencySymbol } from 'src/utils';
-import { MarketDashboardTopBar } from './';
+import { AdvancedLendingTopBar } from '.';
 
 const options: Array<Option> = [
     { label: 'SEP22', value: 'Sep2022' },
@@ -11,17 +11,17 @@ const options: Array<Option> = [
 ];
 
 export default {
-    title: 'Molecules/MarketDashboardTopBar',
-    component: MarketDashboardTopBar,
+    title: 'Molecules/AdvancedLendingTopBar',
+    component: AdvancedLendingTopBar,
     args: {
         asset: CurrencySymbol.FIL,
         options,
         selected: { label: 'SEP22', value: 'Sep2022' },
     },
-} as ComponentMeta<typeof MarketDashboardTopBar>;
+} as ComponentMeta<typeof AdvancedLendingTopBar>;
 
-const Template: ComponentStory<typeof MarketDashboardTopBar> = args => (
-    <MarketDashboardTopBar {...args} />
+const Template: ComponentStory<typeof AdvancedLendingTopBar> = args => (
+    <AdvancedLendingTopBar {...args} />
 );
 
 export const Default = Template.bind({});

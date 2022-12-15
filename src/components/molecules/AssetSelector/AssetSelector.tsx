@@ -6,7 +6,7 @@ type FormatFunction = (amount: number) => BigNumber;
 
 export const AssetSelector = <AssetType extends string = string>({
     options,
-    selected,
+    selected = options[0],
     priceList,
     transformLabel = (v: string) => v,
     amountFormatterMap,
@@ -14,7 +14,7 @@ export const AssetSelector = <AssetType extends string = string>({
     onAmountChange,
 }: {
     options: Readonly<Array<Option<AssetType>>>;
-    selected: Option<AssetType>;
+    selected?: Option<AssetType>;
     priceList: Record<AssetType, number>;
     amountFormatterMap?: Record<AssetType, FormatFunction>;
     transformLabel?: (v: string) => string;
