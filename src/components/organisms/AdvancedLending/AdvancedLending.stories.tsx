@@ -1,15 +1,26 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { BigNumber } from 'bignumber.js';
 import { useEffect, useMemo } from 'react';
 import { useDispatch } from 'react-redux';
-import { WithWalletProvider } from 'src/../.storybook/decorators';
+import {
+    WithAssetPrice,
+    WithWalletProvider,
+} from 'src/../.storybook/decorators';
 import { updateLendingMarketContract } from 'src/store/availableContracts';
-import { CurrencySymbol } from 'src/utils';
-import { MarketOrganism } from './MarketOrganism';
+import { CurrencySymbol, Rate } from 'src/utils';
+import { AdvancedLending } from './AdvancedLending';
 
 export default {
-    title: 'Organism/MarketOrganism',
-    component: MarketOrganism,
+    title: 'Organism/AdvancedLending',
+    component: AdvancedLending,
     args: {
+        collateralBook: {
+            ccyName: 'ETH',
+            collateral: new BigNumber('10000000000000000000'),
+            usdCollateral: new BigNumber('100000000000000000000'),
+            coverage: new BigNumber('80'),
+        },
+        marketRate: new Rate(10000), // 1%
         maturitiesOptionList: [
             { label: 'MAR22', value: '1' },
             { label: 'JUN22', value: '2' },
@@ -18,10 +29,10 @@ export default {
             { label: 'MAR23', value: '1677632400' },
         ],
     },
-    decorators: [WithWalletProvider],
-} as ComponentMeta<typeof MarketOrganism>;
+    decorators: [WithAssetPrice, WithWalletProvider],
+} as ComponentMeta<typeof AdvancedLending>;
 
-const Template: ComponentStory<typeof MarketOrganism> = args => {
+const Template: ComponentStory<typeof AdvancedLending> = args => {
     const maturities = useMemo(
         () => ({
             MAR22: '1616508800',
@@ -47,7 +58,16 @@ const Template: ComponentStory<typeof MarketOrganism> = args => {
 
         return () => clearTimeout(timerId);
     }, [dispatch, maturities]);
-    return <MarketOrganism {...args} />;
+    return (
+        <div className='p-20'>
+            <AdvancedLending {...args} />
+        </div>
+    );
 };
 
 export const Default = Template.bind({});
+
+export const ConnectedToWallet = Template.bind({});
+ConnectedToWallet.parameters = {
+    connected: true,
+};

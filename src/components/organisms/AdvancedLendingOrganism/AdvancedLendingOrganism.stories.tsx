@@ -1,25 +1,15 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { useEffect, useMemo } from 'react';
 import { useDispatch } from 'react-redux';
+import { WithWalletProvider } from 'src/../.storybook/decorators';
 import { updateLendingMarketContract } from 'src/store/availableContracts';
-import { CurrencySymbol, Rate } from 'src/utils';
-import { YieldChart } from './';
+import { CurrencySymbol } from 'src/utils';
+import { AdvancedLendingOrganism } from './AdvancedLendingOrganism';
 
 export default {
-    title: 'Organism/YieldChart',
-    component: YieldChart,
-    chromatic: { diffThreshold: 1, delay: 500 },
+    title: 'Organism/AdvancedLendingOrganism',
+    component: AdvancedLendingOrganism,
     args: {
-        asset: 'USDC',
-        isBorrow: true,
-        rates: [
-            new Rate(100000),
-            new Rate(200000),
-            new Rate(300000),
-            new Rate(400000),
-            new Rate(500000),
-            new Rate(600000),
-        ],
         maturitiesOptionList: [
             { label: 'MAR22', value: '1' },
             { label: 'JUN22', value: '2' },
@@ -28,10 +18,10 @@ export default {
             { label: 'MAR23', value: '1677632400' },
         ],
     },
-    argTypes: {},
-} as ComponentMeta<typeof YieldChart>;
+    decorators: [WithWalletProvider],
+} as ComponentMeta<typeof AdvancedLendingOrganism>;
 
-const Template: ComponentStory<typeof YieldChart> = args => {
+const Template: ComponentStory<typeof AdvancedLendingOrganism> = args => {
     const maturities = useMemo(
         () => ({
             MAR22: '1616508800',
@@ -45,13 +35,19 @@ const Template: ComponentStory<typeof YieldChart> = args => {
     useEffect(() => {
         const timerId = setTimeout(() => {
             dispatch(
+                updateLendingMarketContract(maturities, CurrencySymbol.FIL)
+            );
+            dispatch(
+                updateLendingMarketContract(maturities, CurrencySymbol.ETH)
+            );
+            dispatch(
                 updateLendingMarketContract(maturities, CurrencySymbol.USDC)
             );
         }, 200);
 
         return () => clearTimeout(timerId);
     }, [dispatch, maturities]);
-    return <YieldChart {...args} />;
+    return <AdvancedLendingOrganism {...args} />;
 };
 
 export const Default = Template.bind({});
