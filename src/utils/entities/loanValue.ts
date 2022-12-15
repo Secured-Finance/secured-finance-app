@@ -91,16 +91,33 @@ export class LoanValue {
     }
 
     public get apr(): Rate {
-        if (this._apr === undefined && this._price === undefined) {
+        if (
+            this._apr === undefined &&
+            this._price === undefined &&
+            this._apy === undefined
+        ) {
             throw new Error('cannot compute apr');
         }
-
         if (this._apr === undefined) {
-            this._apr = new Rate(
-                (-Math.log(this._price / this.PAR_VALUE) /
-                    this.yearFraction()) *
-                    100000
-            );
+            if (this.price !== undefined) {
+                this._apr = new Rate(
+                    (-Math.log(this._price / this.PAR_VALUE) /
+                        this.yearFraction()) *
+                        100000
+                );
+            }
+
+            if (this._apy !== undefined) {
+                this._apr = new Rate(
+                    (Math.pow(
+                        1 + this._apy.toNormalizedNumber(),
+                        1 / this.dayToMaturity()
+                    ) -
+                        1) *
+                        this.dayToMaturity() *
+                        100000
+                );
+            }
         }
 
         return this._apr;

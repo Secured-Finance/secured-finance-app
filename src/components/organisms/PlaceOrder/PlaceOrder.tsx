@@ -88,7 +88,7 @@ export const PlaceOrder = ({
 }: {
     isOpen: boolean;
     onClose: () => void;
-    value: LoanValue;
+    value?: LoanValue;
     onPlaceOrder: PlaceOrderFunction;
 }) => {
     const [state, dispatch] = useReducer(reducer, stateRecord[1]);
@@ -123,7 +123,7 @@ export const PlaceOrder = ({
             maturity: Maturity,
             side: Side,
             amount: BigNumber,
-            unitPrice: number
+            unitPrice?: number
         ) => {
             try {
                 const tx = await onPlaceOrder(
@@ -159,7 +159,7 @@ export const PlaceOrder = ({
                         maturity,
                         side,
                         amount,
-                        value.price
+                        value?.price
                     );
                     break;
                 case Step.orderProcessing:
@@ -174,7 +174,7 @@ export const PlaceOrder = ({
             currency,
             handleClose,
             handlePlaceOrder,
-            value.price,
+            value?.price,
             maturity,
             side,
         ]
@@ -208,7 +208,12 @@ export const PlaceOrder = ({
                                             '$3,840 / $8,880',
                                         ],
                                         ['Collateral Usage', '50% → 57%'],
-                                        ['Borrow APR', value.apy.toPercent()],
+                                        [
+                                            'Borrow APR',
+                                            value
+                                                ? value.apy.toPercent()
+                                                : 'Market Order',
+                                        ],
                                     ]}
                                 />
                                 <SectionWithItems
@@ -233,7 +238,9 @@ export const PlaceOrder = ({
                                                     itemList={[
                                                         [
                                                             'Bond Price',
-                                                            value.price.toString(),
+                                                            value
+                                                                ? value.price.toString()
+                                                                : 'Market Order',
                                                         ],
                                                         [
                                                             'Loan Start Date',
