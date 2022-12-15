@@ -123,6 +123,20 @@ export class LoanValue {
         return this._apr;
     }
 
+    public static getMidValue(
+        loanValue1: LoanValue,
+        loanValue2: LoanValue
+    ): LoanValue {
+        if (loanValue1._maturity !== loanValue2._maturity) {
+            throw new Error('cannot compute mid value: maturity mismatch');
+        }
+
+        const loanValue = new LoanValue();
+        loanValue._price = (loanValue1.price + loanValue2.price) / 2;
+        loanValue._maturity = loanValue1._maturity;
+        return loanValue;
+    }
+
     private dayToMaturity(): number {
         return dayjs.unix(this._maturity).diff(Date.now(), 'day');
     }

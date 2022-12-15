@@ -31,7 +31,7 @@ describe('LoanValue class', () => {
         });
     });
 
-    it.todo('should build from the apy and the maturity', () => {
+    it.skip('should build from the apy and the maturity', () => {
         aprApyPriceMaturity.forEach(([apr, apy, price, maturity]) => {
             const value = LoanValue.fromApy(
                 new Rate(apy.toNumber()),
@@ -147,6 +147,28 @@ describe('LoanValue', () => {
             expect(LoanValue.ZERO.price).toEqual(0);
             expect(LoanValue.ZERO.apy).toEqual(new Rate(0));
             expect(LoanValue.ZERO.apr).toEqual(new Rate(0));
+        });
+    });
+
+    describe('getMidValue', () => {
+        it('should return the mid value of the loan value', () => {
+            const bidValue = LoanValue.fromPrice(9800, 1675252800);
+            const askValue = LoanValue.fromPrice(9700, 1675252800);
+
+            const midPrice = (bidValue.price + askValue.price) / 2;
+
+            expect(LoanValue.getMidValue(bidValue, askValue).price).toEqual(
+                midPrice
+            );
+        });
+
+        it('should raise an error if the maturities are different', () => {
+            const bidValue = LoanValue.fromPrice(9800, 1675252800);
+            const askValue = LoanValue.fromPrice(9700, 1675252801);
+
+            expect(() =>
+                LoanValue.getMidValue(bidValue, askValue)
+            ).toThrowError('cannot compute mid value: maturity mismatch');
         });
     });
 });

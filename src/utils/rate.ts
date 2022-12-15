@@ -1,5 +1,3 @@
-import { percentFormat } from './formatNumbers';
-
 const ONE_PERCENT = 10000;
 
 export class Rate {
@@ -14,9 +12,5 @@ export class Rate {
 
     public toNormalizedNumber(): number {
         return this.rate / ONE_PERCENT;
-    }
-
-    public toPercent(): string {
-        return percentFormat(this.toNormalizedNumber(), 100);
     }
 }
