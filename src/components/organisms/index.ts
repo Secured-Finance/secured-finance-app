@@ -1,7 +1,6 @@
 export * from './ActiveTradeTable';
 export * from './AdvancedLending';
 export * from './AdvancedLendingOrderCard';
-export * from './AdvancedLendingOrganism';
 export * from './CollateralInput';
 export * from './CollateralOrganism';
 export * from './ConnectWalletCard';
