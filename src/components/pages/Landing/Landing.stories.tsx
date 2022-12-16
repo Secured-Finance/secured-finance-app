@@ -21,8 +21,8 @@ export default {
     ],
 } as ComponentMeta<typeof Landing>;
 
-const Template: ComponentStory<typeof Landing> = () => {
-    return <Landing />;
+const Template: ComponentStory<typeof Landing> = args => {
+    return <Landing {...args} />;
 };
 
 export const Default = Template.bind({});
@@ -30,4 +30,9 @@ export const Default = Template.bind({});
 export const ConnectedToWallet = Template.bind({});
 ConnectedToWallet.parameters = {
     connected: true,
+};
+
+export const AdvancedView = Template.bind({});
+AdvancedView.args = {
+    initialView: 'Advanced',
 };

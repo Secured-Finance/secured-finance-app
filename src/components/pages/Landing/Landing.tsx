@@ -1,12 +1,13 @@
 import { Side } from '@secured-finance/sf-client/dist/secured-finance-client';
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { SimpleAdvancedSelector, ViewType } from 'src/components/atoms';
+import { ViewType } from 'src/components/atoms';
 import {
     AdvancedLending,
     LendingCard,
     YieldChart,
 } from 'src/components/organisms';
+import { SimpleAdvancedView } from 'src/components/templates';
 import {
     OrderType,
     RateType,
@@ -21,9 +22,8 @@ import { RootState } from 'src/store/types';
 import { LoanValue, Maturity } from 'src/utils/entities';
 import { useWallet } from 'use-wallet';
 
-export const Landing = () => {
+export const Landing = ({ initialView }: { initialView?: ViewType }) => {
     const { account } = useWallet();
-    const [view, setView] = useState('Simple');
     const { currency, side, maturity } = useSelector((state: RootState) =>
         selectLandingOrderForm(state.landingOrderForm)
     );
@@ -67,42 +67,38 @@ export const Landing = () => {
             role='main'
             data-cy='lending-page'
         >
-            <div className='flex h-16 justify-between border-b-[0.5px] border-panelStroke'>
-                <span className='font-secondary text-lg font-light leading-7 text-white'>
-                    OTC Lending
-                </span>
-                <SimpleAdvancedSelector
-                    handleClick={v => {
-                        setView(v);
-                        if (v === 'Simple') {
-                            dispatch(setOrderType(OrderType.MARKET));
-                        }
-                    }}
-                    text={view as ViewType}
-                />
-            </div>
-            {view === 'Simple' ? (
-                <div className='flex flex-row items-center justify-center'>
-                    <LendingCard
+            <SimpleAdvancedView
+                title='OTC Lending'
+                simpleComponent={
+                    <div className='flex flex-row items-center justify-center'>
+                        <LendingCard
+                            collateralBook={collateralBook}
+                            marketValue={marketValue}
+                            maturitiesOptionList={optionList}
+                        />
+                        <YieldChart
+                            asset={currency}
+                            isBorrow={side === Side.BORROW}
+                            rates={unitPrices.map(v => v.apy)}
+                            maturitiesOptionList={optionList}
+                        />
+                    </div>
+                }
+                advanceComponent={
+                    <AdvancedLending
                         collateralBook={collateralBook}
-                        marketValue={marketValue}
-                        maturitiesOptionList={optionList}
-                    />
-                    <YieldChart
-                        asset={currency}
-                        isBorrow={side === Side.BORROW}
+                        loanValue={marketValue}
                         rates={unitPrices.map(v => v.apy)}
                         maturitiesOptionList={optionList}
                     />
-                </div>
-            ) : (
-                <AdvancedLending
-                    collateralBook={collateralBook}
-                    loanValue={marketValue}
-                    rates={unitPrices.map(v => v.apy)}
-                    maturitiesOptionList={optionList}
-                />
-            )}
+                }
+                onModeChange={v => {
+                    if (v === 'Simple') {
+                        dispatch(setOrderType(OrderType.MARKET));
+                    }
+                }}
+                initialView={initialView}
+            />
         </div>
     );
 };
