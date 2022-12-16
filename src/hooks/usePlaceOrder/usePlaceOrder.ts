@@ -8,7 +8,6 @@ import { Maturity } from 'src/utils/entities';
 export enum OrderType {
     MARKET = 'Market',
     LIMIT = 'Limit',
-    STOP = 'Stop',
 }
 
 export const usePlaceOrder = () => {

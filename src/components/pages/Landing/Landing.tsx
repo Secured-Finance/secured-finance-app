@@ -1,21 +1,36 @@
 import { Side } from '@secured-finance/sf-client/dist/secured-finance-client';
-import { useMemo } from 'react';
-import { useSelector } from 'react-redux';
-import { LendingCard, YieldChart } from 'src/components/organisms';
-import { RateType, useCollateralBook, useLoanValues } from 'src/hooks';
-import { selectLandingOrderForm } from 'src/store/landingOrderForm';
+import { useMemo, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { SimpleAdvancedSelector, ViewType } from 'src/components/atoms';
+import {
+    AdvancedLending,
+    LendingCard,
+    YieldChart,
+} from 'src/components/organisms';
+import {
+    OrderType,
+    RateType,
+    useCollateralBook,
+    useLoanValues,
+} from 'src/hooks';
+import {
+    selectLandingOrderForm,
+    setOrderType,
+} from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
 import { LoanValue, Maturity } from 'src/utils/entities';
 import { useWallet } from 'use-wallet';
 
 export const Landing = () => {
     const { account } = useWallet();
+    const [view, setView] = useState('Simple');
     const { currency, side, maturity } = useSelector((state: RootState) =>
         selectLandingOrderForm(state.landingOrderForm)
     );
     const lendingContracts = useSelector(
         (state: RootState) => state.availableContracts.lendingMarkets[currency]
     );
+    const dispatch = useDispatch();
 
     const collateralBook = useCollateralBook(account);
 
@@ -48,34 +63,46 @@ export const Landing = () => {
 
     return (
         <div
-            className='flex-col items-center space-y-20 py-20'
+            className='flex flex-col gap-16 px-40 pt-12'
             role='main'
             data-cy='lending-page'
         >
-            <div className='flex flex-col items-center justify-center space-y-5 text-center'>
-                <h1 className='typography-headline-1 text-white'>
-                    Interbank-grade Lending <br />
-                    Now Democratized
-                </h1>
-                <h2 className='typography-body-2 w-1/3 text-white-80'>
-                    An elegant open-market digital asset lending solution
-                    offering interoperability with traditional banking and
-                    decentralization via&nbsp;Web3
-                </h2>
-            </div>
-            <div className='flex flex-row items-center justify-center'>
-                <LendingCard
-                    collateralBook={collateralBook}
-                    marketValue={marketValue}
-                    maturitiesOptionList={optionList}
+            <div className='flex h-16 justify-between border-b-[0.5px] border-panelStroke'>
+                <span className='font-secondary text-lg font-light leading-7 text-white'>
+                    OTC Lending
+                </span>
+                <SimpleAdvancedSelector
+                    handleClick={v => {
+                        setView(v);
+                        if (v === 'Simple') {
+                            dispatch(setOrderType(OrderType.MARKET));
+                        }
+                    }}
+                    text={view as ViewType}
                 />
-                <YieldChart
-                    asset={currency}
-                    isBorrow={side === Side.BORROW}
+            </div>
+            {view === 'Simple' ? (
+                <div className='flex flex-row items-center justify-center'>
+                    <LendingCard
+                        collateralBook={collateralBook}
+                        marketValue={marketValue}
+                        maturitiesOptionList={optionList}
+                    />
+                    <YieldChart
+                        asset={currency}
+                        isBorrow={side === Side.BORROW}
+                        rates={unitPrices.map(v => v.apy)}
+                        maturitiesOptionList={optionList}
+                    />
+                </div>
+            ) : (
+                <AdvancedLending
+                    collateralBook={collateralBook}
+                    loanValue={marketValue}
                     rates={unitPrices.map(v => v.apy)}
                     maturitiesOptionList={optionList}
                 />
-            </div>
+            )}
         </div>
     );
 };

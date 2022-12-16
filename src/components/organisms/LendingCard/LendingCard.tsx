@@ -90,6 +90,10 @@ export const LendingCard = ({
         );
     }, [maturity, maturitiesOptionList]);
 
+    const selectedAsset = useMemo(() => {
+        return assetList.find(option => option.value === currency);
+    }, [currency, assetList]);
+
     return (
         <div className='w-80 flex-col space-y-6 rounded-b-xl border border-panelStroke bg-transparent pb-6 shadow-deep'>
             <BorrowLendSelector
@@ -113,7 +117,7 @@ export const LendingCard = ({
 
                 <AssetSelector
                     options={assetList}
-                    selected={assetList[0]}
+                    selected={selectedAsset}
                     transformLabel={(v: string) => shortNames[v]}
                     priceList={assetPriceMap}
                     onAmountChange={(v: BigNumber) => dispatch(setAmount(v))}

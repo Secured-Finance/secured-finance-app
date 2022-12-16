@@ -10,7 +10,6 @@ import {
 import { RootState } from 'src/store/types';
 import { MaturityOptionList } from 'src/types';
 import { CurrencySymbol, Rate } from 'src/utils';
-import { EMPTY_MATURITY } from 'src/utils/entities';
 
 interface YieldChartProps {
     asset: CurrencySymbol;
@@ -61,7 +60,7 @@ export const YieldChart = ({
                                     dispatch(setMaturity(maturity))
                                 }
                                 maturity={
-                                    maturity.equals(EMPTY_MATURITY)
+                                    maturity.isZero()
                                         ? maturitiesOptionList[0].value
                                         : maturity
                                 }

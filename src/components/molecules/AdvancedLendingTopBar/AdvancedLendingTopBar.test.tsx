@@ -1,11 +1,11 @@
 import { composeStories } from '@storybook/testing-react';
 import { render, screen } from 'src/test-utils.js';
-import * as stories from './MarketDashboardTopBar.stories';
+import * as stories from './AdvancedLendingTopBar.stories';
 
 const { Default, Values } = composeStories(stories);
 
-describe('MarketDashboardTopBar Component', () => {
-    it('should render a default MarketDashboardTopBar', () => {
+describe('AdvancedLendingTopBar Component', () => {
+    it('should render a default AdvancedLendingTopBar', () => {
         render(<Default />);
 
         expect(screen.getByText('FIL-SEP22')).toBeInTheDocument();
@@ -20,7 +20,7 @@ describe('MarketDashboardTopBar Component', () => {
         expect(screen.getAllByText('0')).toHaveLength(4);
     });
 
-    it('should render the values on the MarketDashboardTopBar', () => {
+    it('should render the values on the AdvancedLendingTopBar', () => {
         render(<Values />);
 
         expect(screen.getByText('26.16')).toBeInTheDocument();
