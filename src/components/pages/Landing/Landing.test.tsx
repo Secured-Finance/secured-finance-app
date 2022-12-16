@@ -38,4 +38,14 @@ describe('Landing Component', () => {
             expect(screen.getByTestId('rate')).toHaveTextContent('2%');
         });
     });
+
+    it('should select the market order type when the user change to advance mode', () => {
+        render(<Default />);
+        waitFor(() => {
+            fireEvent.click(screen.getByText('Advanced'));
+        });
+
+        expect(screen.getByRole('radio', { name: 'Market' })).toBeChecked();
+        expect(screen.getByRole('radio', { name: 'Limit' })).not.toBeChecked();
+    });
 });
