@@ -8,7 +8,7 @@ const tabDataArray = [
     { text: 'Price History', disabled: true },
 ];
 
-export const MarketOrganism = ({
+export const AdvancedLendingOrganism = ({
     maturitiesOptionList,
     rates,
 }: {

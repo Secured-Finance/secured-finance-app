@@ -2,9 +2,9 @@ import { Side } from '@secured-finance/sf-client/dist/secured-finance-client';
 import { useDispatch, useSelector } from 'react-redux';
 import { getData, LineChart } from 'src/components/molecules';
 import {
-    selectMarketDashboardForm,
+    selectLandingOrderForm,
     setMaturity,
-} from 'src/store/marketDashboardForm';
+} from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
 import { MaturityOptionList } from 'src/types';
 import { Rate } from 'src/utils';
@@ -18,7 +18,7 @@ export const LineChartTab = ({
 }) => {
     const dispatch = useDispatch();
     const { side, maturity } = useSelector((state: RootState) =>
-        selectMarketDashboardForm(state.marketDashboardForm)
+        selectLandingOrderForm(state.landingOrderForm)
     );
 
     const data = getData(

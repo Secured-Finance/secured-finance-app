@@ -1,11 +1,11 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { BigNumber } from 'bignumber.js';
 import { withAssetPrice } from 'src/../.storybook/decorators';
-import { MarketDashboardOrderCard } from './MarketDashboardOrderCard';
+import { AdvancedLendingOrderCard } from './AdvancedLendingOrderCard';
 
 export default {
-    title: 'Organism/MarketDashboardOrderCard',
-    component: MarketDashboardOrderCard,
+    title: 'Organism/AdvancedLendingOrderCard',
+    component: AdvancedLendingOrderCard,
     args: {
         collateralBook: {
             ccyName: 'ETH',
@@ -15,10 +15,10 @@ export default {
         },
     },
     decorators: [withAssetPrice],
-} as ComponentMeta<typeof MarketDashboardOrderCard>;
+} as ComponentMeta<typeof AdvancedLendingOrderCard>;
 
-const Template: ComponentStory<typeof MarketDashboardOrderCard> = args => {
-    return <MarketDashboardOrderCard {...args} />;
+const Template: ComponentStory<typeof AdvancedLendingOrderCard> = args => {
+    return <AdvancedLendingOrderCard {...args} />;
 };
 
 export const Default = Template.bind({});

@@ -65,7 +65,7 @@ export const PortfolioManagement = () => {
             className='mx-40 mt-7 flex flex-col gap-6'
             data-cy='portfolio-management'
         >
-            <div className='typography-portfolio-heading w-fit items-center text-white'>
+            <div className='h-16 border-b-[0.5px] border-panelStroke font-secondary text-lg font-light leading-7 text-white'>
                 Portfolio Management
             </div>
             <div className='flex flex-row justify-between gap-6 pt-4'>

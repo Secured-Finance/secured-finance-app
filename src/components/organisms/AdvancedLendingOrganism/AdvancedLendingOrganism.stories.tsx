@@ -4,11 +4,11 @@ import {
     withWalletProvider,
 } from 'src/../.storybook/decorators';
 import { maturityOptions, yieldCurveRates } from 'src/stories/mocks/fixtures';
-import { MarketOrganism } from './MarketOrganism';
+import { AdvancedLendingOrganism } from './AdvancedLendingOrganism';
 
 export default {
-    title: 'Organism/MarketOrganism',
-    component: MarketOrganism,
+    title: 'Organism/AdvancedLendingOrganism',
+    component: AdvancedLendingOrganism,
     chromatic: { pauseAnimationAtEnd: true },
     args: {
         maturitiesOptionList: maturityOptions,
@@ -18,10 +18,10 @@ export default {
         date: { tick: true },
     },
     decorators: [withWalletProvider, withMaturities],
-} as ComponentMeta<typeof MarketOrganism>;
+} as ComponentMeta<typeof AdvancedLendingOrganism>;
 
-const Template: ComponentStory<typeof MarketOrganism> = args => {
-    return <MarketOrganism {...args} />;
+const Template: ComponentStory<typeof AdvancedLendingOrganism> = args => {
+    return <AdvancedLendingOrganism {...args} />;
 };
 
 export const Default = Template.bind({});

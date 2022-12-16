@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Side } from '@secured-finance/sf-client/dist/secured-finance-client';
 import { BigNumber } from 'ethers';
+import { OrderType } from 'src/hooks';
 import { CurrencySymbol } from 'src/utils';
 import { Maturity } from 'src/utils/entities';
 
@@ -10,6 +11,7 @@ type LandingOrderFormStore = {
     side: Side;
     amount: string;
     unitPrice: number;
+    orderType: OrderType;
 };
 const initialStore: LandingOrderFormStore = {
     currency: CurrencySymbol.FIL,
@@ -17,6 +19,7 @@ const initialStore: LandingOrderFormStore = {
     side: Side.BORROW,
     amount: '0',
     unitPrice: 0,
+    orderType: OrderType.MARKET,
 };
 
 const landingOrderFormSlice = createSlice({
@@ -37,6 +40,9 @@ const landingOrderFormSlice = createSlice({
         },
         setUnitPrice: (state, action: PayloadAction<number>) => {
             state.unitPrice = action.payload;
+        },
+        setOrderType: (state, action: PayloadAction<OrderType>) => {
+            state.orderType = action.payload;
         },
     },
 });

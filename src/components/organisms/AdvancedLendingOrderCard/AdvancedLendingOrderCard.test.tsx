@@ -4,12 +4,12 @@ import { OrderType } from 'src/hooks';
 import { preloadedAssetPrices } from 'src/stories/mocks/fixtures';
 import { render, screen } from 'src/test-utils.js';
 import { CurrencySymbol } from 'src/utils';
-import * as stories from './MarketDashboardOrderCard.stories';
+import * as stories from './AdvancedLendingOrderCard.stories';
 
 const { Default } = composeStories(stories);
 
 const preloadedState = {
-    marketDashboardForm: {
+    landingOrderForm: {
         currency: CurrencySymbol.BTC,
         maturity: 0,
         side: Side.BORROW,
@@ -20,13 +20,13 @@ const preloadedState = {
     ...preloadedAssetPrices,
 };
 
-describe('MarketDashboardOrderCard Component', () => {
-    it('should render a MarketDashboardOrderCard', () => {
+describe('AdvancedLendingOrderCard Component', () => {
+    it('should render an AdvancedLendingOrderCard', () => {
         render(<Default />);
         expect(screen.getByTestId('place-order-button')).toHaveTextContent(
             'Place Order'
         );
-        expect(screen.getAllByRole('radio')).toHaveLength(5);
+        expect(screen.getAllByRole('radio')).toHaveLength(4);
         expect(screen.getAllByRole('radiogroup')).toHaveLength(2);
     });
 
