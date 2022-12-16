@@ -1,10 +1,10 @@
 import { useCallback, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { DropdownSelector } from 'src/components/atoms';
-import { AdvancedLendingTopBar } from 'src/components/molecules';
+import { AdvancedLendingTopBar, Tab } from 'src/components/molecules';
 import {
     AdvancedLendingOrderCard,
-    AdvancedLendingOrganism,
+    LineChartTab,
     OrderWidget,
 } from 'src/components/organisms';
 import { CollateralBook, OrderType } from 'src/hooks';
@@ -102,10 +102,20 @@ export const AdvancedLending = ({
             <div className='flex flex-row gap-6'>
                 <AdvancedLendingOrderCard collateralBook={collateralBook} />
                 <div className='flex flex-grow flex-col gap-6'>
-                    <AdvancedLendingOrganism
-                        maturitiesOptionList={maturitiesOptionList}
-                        rates={rates}
-                    />
+                    <div className='w-full'>
+                        <Tab
+                            tabDataArray={[
+                                { text: 'Yield Curve' },
+                                { text: 'Price History', disabled: true },
+                            ]}
+                        >
+                            <LineChartTab
+                                maturitiesOptionList={maturitiesOptionList}
+                                rates={rates}
+                            />
+                            <div />
+                        </Tab>
+                    </div>
                     <OrderWidget
                         buyOrders={orderBook.borrowOrderbook}
                         sellOrders={orderBook.lendOrderbook}
