@@ -76,6 +76,7 @@ export const OrderInputBox = ({
                         value={inputValue}
                         onChange={handleAmountChange}
                         className='bg-transparent text-right text-neutral-8 focus:outline-none'
+                        aria-label={field}
                     />
                 )}
                 <div className='text-neutral-4'>{unit}</div>

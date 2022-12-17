@@ -38,4 +38,11 @@ describe('OrderInputBox component', () => {
         expect(screen.getByText('49.2')).toBeInTheDocument();
         expect(screen.getByText('USD')).toBeInTheDocument();
     });
+
+    it('should render a input with a name from the field', () => {
+        render(<Amount field='great name' />);
+        expect(
+            screen.getByRole('textbox', { name: 'great name' })
+        ).toBeInTheDocument();
+    });
 });
