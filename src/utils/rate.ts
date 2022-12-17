@@ -1,9 +1,12 @@
 const ONE_PERCENT = 10000;
+const MIN_RATE = 0;
+const MAX_RATE = 1000 * ONE_PERCENT;
 
 export class Rate {
     readonly rate: number;
     public constructor(value: number) {
-        this.rate = Math.floor(value);
+        // cap and floor the value between 0 and 1000%
+        this.rate = Math.min(Math.max(Math.floor(value), MIN_RATE), MAX_RATE);
     }
 
     public toNumber(): number {
