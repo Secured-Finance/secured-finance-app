@@ -149,7 +149,7 @@ export const AdvancedLendingOrderCard = ({
                     onPlaceOrder={placeOrder}
                     isOpen={openPlaceOrderDialog}
                     onClose={() => setOpenPlaceOrderDialog(false)}
-                    value={loanValue}
+                    loanValue={loanValue}
                 />
 
                 <Separator color='neutral-3'></Separator>
