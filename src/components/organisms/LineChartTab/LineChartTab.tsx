@@ -1,33 +1,30 @@
+import { Side } from '@secured-finance/sf-client/dist/secured-finance-client';
 import { useDispatch, useSelector } from 'react-redux';
-import { Option } from 'src/components/atoms';
 import { getData, LineChart } from 'src/components/molecules';
-import { OrderSide, RateType, useRates } from 'src/hooks';
-import { setMaturity } from 'src/store/landingOrderForm';
+import {
+    selectLandingOrderForm,
+    setMaturity,
+} from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
+import { MaturityOptionList } from 'src/types';
+import { Rate } from 'src/utils';
 
 export const LineChartTab = ({
     maturitiesOptionList,
+    rates,
 }: {
-    maturitiesOptionList: Option[];
+    maturitiesOptionList: MaturityOptionList;
+    rates: Rate[];
 }) => {
     const dispatch = useDispatch();
-    const { currency, side, maturity } = useSelector(
-        (state: RootState) => state.landingOrderForm
-    );
-
-    const lendingContracts = useSelector(
-        (state: RootState) => state.availableContracts.lendingMarkets[currency]
-    );
-
-    const rates = useRates(
-        currency,
-        side === OrderSide.Borrow ? RateType.Borrow : RateType.Lend
+    const { side, maturity } = useSelector((state: RootState) =>
+        selectLandingOrderForm(state.landingOrderForm)
     );
 
     const data = getData(
         rates,
-        side === OrderSide.Borrow ? 'Borrow' : 'Lend',
-        Object.keys(lendingContracts)
+        side === Side.BORROW ? 'Borrow' : 'Lend',
+        maturitiesOptionList.map(o => o.label)
     );
 
     return (

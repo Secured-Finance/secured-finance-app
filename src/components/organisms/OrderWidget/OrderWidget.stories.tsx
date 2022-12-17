@@ -1,72 +1,63 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { BigNumber } from 'ethers';
 import { OrderBookEntry } from 'src/hooks/useOrderbook';
-import { CurrencySymbol, Rate } from 'src/utils';
+import { CurrencySymbol } from 'src/utils';
+import { LoanValue, Maturity } from 'src/utils/entities';
 import { OrderWidget } from './OrderWidget';
+
+const maturityMar23 = new Maturity(1675252800);
 
 const borrowEntries: Array<OrderBookEntry> = [
     {
         amount: BigNumber.from('43000000000000000000000'),
-        apy: new Rate(195000),
-        price: 80.55,
+        value: LoanValue.fromPrice(9690, maturityMar23.toNumber()),
     },
     {
         amount: BigNumber.from('23000000000000000000000'),
-        apy: new Rate(183000),
-        price: 81.6,
+        value: LoanValue.fromPrice(9687, maturityMar23.toNumber()),
     },
     {
         amount: BigNumber.from('15000000000000000000000'),
-        apy: new Rate(180000),
-        price: 81.28,
+        value: LoanValue.fromPrice(9685, maturityMar23.toNumber()),
     },
     {
         amount: BigNumber.from('12000000000000000000000'),
-        apy: new Rate(170000),
-        price: 94.6,
+        value: LoanValue.fromPrice(9679, maturityMar23.toNumber()),
     },
     {
         amount: BigNumber.from('1800000000000000000000'),
-        apy: new Rate(160000),
-        price: 82.31,
+        value: LoanValue.fromPrice(9674, maturityMar23.toNumber()),
     },
     {
         amount: BigNumber.from('0'),
-        apy: new Rate(0),
-        price: 105,
+        value: LoanValue.fromPrice(9653, maturityMar23.toNumber()),
     },
 ];
 
 const lendEntries: Array<OrderBookEntry> = [
     {
         amount: BigNumber.from('43000000000000000000000'),
-        apy: new Rate(200000),
-        price: 79.77,
+        value: LoanValue.fromPrice(9653, maturityMar23.toNumber()),
     },
     {
         amount: BigNumber.from('55000000000000000000000'),
-        apy: new Rate(205000),
-        price: 79.41,
+        value: LoanValue.fromPrice(9674, maturityMar23.toNumber()),
     },
     {
         amount: BigNumber.from('3000000000000000000000'),
-        apy: new Rate(210000),
-        price: 79.05,
+        value: LoanValue.fromPrice(9679, maturityMar23.toNumber()),
     },
     {
         amount: BigNumber.from('15000000000000000000000'),
-        apy: new Rate(222000),
-        price: 78.2,
+        value: LoanValue.fromPrice(9685, maturityMar23.toNumber()),
     },
     {
         amount: BigNumber.from('21000000000000000000000'),
-        apy: new Rate(235000),
-        price: 77.28,
+        value: LoanValue.fromPrice(9687, maturityMar23.toNumber()),
     },
     {
         amount: BigNumber.from('51000000000000000000000'),
-        apy: new Rate(245000),
-        price: 76.28,
+        value: LoanValue.fromPrice(9690, maturityMar23.toNumber()),
     },
 ];
 

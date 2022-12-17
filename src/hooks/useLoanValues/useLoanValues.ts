@@ -3,7 +3,9 @@ import { BigNumber } from 'ethers';
 import { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from 'src/store/types';
-import { CurrencySymbol, Rate, toCurrency } from 'src/utils';
+import { CurrencySymbol, toCurrency } from 'src/utils';
+import { Maturity } from 'src/utils/entities';
+import { LoanValue } from 'src/utils/entities/loanValue';
 import useSF from '../useSecuredFinance';
 
 export enum RateType {
@@ -11,34 +13,38 @@ export enum RateType {
     Lend = 1,
     MidRate = 2,
 }
-export const useRates = (ccy: CurrencySymbol, type: RateType) => {
+
+export const useLoanValues = (
+    ccy: CurrencySymbol,
+    type: RateType,
+    maturity: Maturity
+) => {
     const securedFinance = useSF();
     const block = useSelector(
         (state: RootState) => state.blockchain.latestBlock
     );
-    const [rates, setRates] = useState<BigNumber[]>([]);
+    const [unitPrices, setUnitPrices] = useState<BigNumber[]>([]);
 
     const fetchYieldCurve = useCallback(
         async (securedFinance: SecuredFinanceClient) => {
             const currency = toCurrency(ccy);
-            let ratesFn;
+            let priceFn;
             switch (type) {
                 case RateType.Borrow:
-                    ratesFn = () =>
-                        securedFinance.getBorrowYieldCurve(currency);
+                    priceFn = () => securedFinance.getLendUnitPrices(currency);
                     break;
                 case RateType.Lend:
-                    ratesFn = () => securedFinance.getLendYieldCurve(currency);
+                    priceFn = () =>
+                        securedFinance.getBorrowUnitPrices(currency);
                     break;
                 case RateType.MidRate:
-                    ratesFn = () =>
-                        securedFinance.getMidRateYieldCurve(currency);
+                    priceFn = () => securedFinance.getMidUnitPrices(currency);
                     break;
                 default:
-                    ratesFn = () => Promise.resolve([]);
+                    priceFn = () => Promise.resolve([]);
                     break;
             }
-            setRates(await ratesFn());
+            setUnitPrices(await priceFn());
         },
         [type, ccy]
     );
@@ -49,5 +55,7 @@ export const useRates = (ccy: CurrencySymbol, type: RateType) => {
         }
     }, [fetchYieldCurve, securedFinance, block]);
 
-    return rates.map(rate => new Rate(rate.toNumber()));
+    return unitPrices.map(unitPrice => {
+        return LoanValue.fromPrice(unitPrice.toNumber(), maturity.toNumber());
+    });
 };

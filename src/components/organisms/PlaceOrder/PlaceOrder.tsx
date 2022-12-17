@@ -1,5 +1,6 @@
 import { Disclosure } from '@headlessui/react';
-import { BigNumber, ContractTransaction } from 'ethers';
+import { Side } from '@secured-finance/sf-client/dist/secured-finance-client';
+import { BigNumber } from 'ethers';
 import { useCallback, useReducer } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Check from 'src/assets/icons/check-mark.svg';
@@ -10,18 +11,19 @@ import {
     SectionWithItems,
 } from 'src/components/atoms';
 import { AmountCard, Dialog } from 'src/components/molecules';
-import { OrderSide } from 'src/hooks';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { selectLandingOrderForm } from 'src/store/landingOrderForm';
 import { setLastMessage } from 'src/store/lastError';
 import { RootState } from 'src/store/types';
+import { PlaceOrderFunction } from 'src/types';
 import {
     amountFormatterFromBase,
     CurrencySymbol,
+    formatLoanValue,
     handleContractTransaction,
     ordinaryFormat,
-    Rate,
 } from 'src/utils';
+import { LoanValue, Maturity } from 'src/utils/entities';
 
 enum Step {
     orderConfirm = 1,
@@ -82,19 +84,13 @@ const reducer = (
 export const PlaceOrder = ({
     isOpen,
     onClose,
-    marketRate,
+    value,
     onPlaceOrder,
 }: {
     isOpen: boolean;
     onClose: () => void;
-    marketRate: Rate;
-    onPlaceOrder: (
-        ccy: CurrencySymbol,
-        maturity: number | BigNumber,
-        side: OrderSide,
-        amount: BigNumber,
-        rate: number
-    ) => Promise<ContractTransaction | undefined>;
+    value?: LoanValue;
+    onPlaceOrder: PlaceOrderFunction;
 }) => {
     const [state, dispatch] = useReducer(reducer, stateRecord[1]);
     const globalDispatch = useDispatch();
@@ -125,10 +121,10 @@ export const PlaceOrder = ({
     const handlePlaceOrder = useCallback(
         async (
             ccy: CurrencySymbol,
-            maturity: number | BigNumber,
-            side: OrderSide,
+            maturity: Maturity,
+            side: Side,
             amount: BigNumber,
-            rate: number
+            unitPrice?: number
         ) => {
             try {
                 const tx = await onPlaceOrder(
@@ -136,11 +132,11 @@ export const PlaceOrder = ({
                     maturity,
                     side,
                     amount,
-                    rate
+                    unitPrice
                 );
                 const transactionStatus = await handleContractTransaction(tx);
                 if (!transactionStatus) {
-                    console.error('Some error occured');
+                    console.error('Some error occurred');
                     handleClose();
                 } else {
                     dispatch({ type: 'next' });
@@ -161,10 +157,10 @@ export const PlaceOrder = ({
                     dispatch({ type: 'next' });
                     handlePlaceOrder(
                         currency,
-                        BigNumber.from(maturity),
+                        maturity,
                         side,
                         amount,
-                        marketRate.toNumber()
+                        value?.price
                     );
                     break;
                 case Step.orderProcessing:
@@ -179,7 +175,7 @@ export const PlaceOrder = ({
             currency,
             handleClose,
             handlePlaceOrder,
-            marketRate,
+            value?.price,
             maturity,
             side,
         ]
@@ -213,7 +209,12 @@ export const PlaceOrder = ({
                                             '$3,840 / $8,880',
                                         ],
                                         ['Collateral Usage', '50% → 57%'],
-                                        ['Borrow APR', marketRate.toPercent()],
+                                        [
+                                            'Borrow APR',
+                                            value
+                                                ? formatLoanValue(value, 'rate')
+                                                : 'Market Order',
+                                        ],
                                     ]}
                                 />
                                 <SectionWithItems
@@ -236,7 +237,12 @@ export const PlaceOrder = ({
                                             <Disclosure.Panel>
                                                 <SectionWithItems
                                                     itemList={[
-                                                        ['Bond Price', '79.77'],
+                                                        [
+                                                            'Bond Price',
+                                                            value
+                                                                ? value.price.toString()
+                                                                : 'Market Order',
+                                                        ],
                                                         [
                                                             'Loan Start Date',
                                                             'June 21, 2022',

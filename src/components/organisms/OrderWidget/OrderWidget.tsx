@@ -13,10 +13,10 @@ import { OrderBookEntry } from 'src/hooks/useOrderbook';
 import {
     currencyMap,
     CurrencySymbol,
+    formatLoanValue,
     ordinaryFormat,
-    percentFormat,
-    Rate,
 } from 'src/utils';
+import { LoanValue } from 'src/utils/entities';
 
 const columnHelper = createColumnHelper<OrderBookEntry>();
 
@@ -67,7 +67,7 @@ const PriceCell = ({
     totalAmount,
     position,
 }: {
-    value: string;
+    value: LoanValue;
     amount: BigNumber;
     totalAmount: BigNumber;
     position: 'borrow' | 'lend';
@@ -82,7 +82,11 @@ const PriceCell = ({
                 'justify-end': align === 'right',
             })}
         >
-            <OrderBookCell value={value} color={color} fontWeight='semibold' />
+            <OrderBookCell
+                value={formatLoanValue(value, 'price')}
+                color={color}
+                fontWeight='semibold'
+            />
             <ColorBar
                 value={amount}
                 total={totalAmount}
@@ -93,10 +97,16 @@ const PriceCell = ({
     );
 };
 
-const ApyCell = ({ value, display }: { value: Rate; display: boolean }) => (
+const ApyCell = ({
+    value,
+    display,
+}: {
+    value: LoanValue;
+    display: boolean;
+}) => (
     <div className='flex justify-end'>
         {display ? (
-            <OrderBookCell value={value.toPercent()} />
+            <OrderBookCell value={formatLoanValue(value, 'rate')} />
         ) : (
             <OrderBookCell />
         )}
@@ -130,17 +140,18 @@ export const OrderWidget = ({
         [sellOrders]
     );
 
-    const lastMidPrice = useMemo(() => {
+    const lastMidValue = useMemo(() => {
         if (buyOrders.length === 0 || sellOrders.length === 0) {
-            return 0;
+            return LoanValue.ZERO;
         }
 
-        return (sellOrders[0].price + buyOrders[0].price) / 2;
+        return LoanValue.getMidValue(sellOrders[0].value, buyOrders[0].value);
     }, [sellOrders, buyOrders]);
 
     const buyColumns = useMemo(
         () => [
-            columnHelper.accessor('apy', {
+            columnHelper.accessor('value', {
+                id: 'apy',
                 cell: info => (
                     <ApyCell
                         value={info.getValue()}
@@ -157,10 +168,11 @@ export const OrderWidget = ({
                     <TableHeader title={`Amount (${currency})`} align='right' />
                 ),
             }),
-            columnHelper.accessor('price', {
+            columnHelper.accessor('value', {
+                id: 'price',
                 cell: info => (
                     <PriceCell
-                        value={info.getValue().toString()}
+                        value={info.getValue()}
                         amount={info.row.original.amount}
                         totalAmount={totalBuyAmount}
                         position='borrow'
@@ -174,10 +186,11 @@ export const OrderWidget = ({
 
     const sellColumns = useMemo(
         () => [
-            columnHelper.accessor('price', {
+            columnHelper.accessor('value', {
+                id: 'price',
                 cell: info => (
                     <PriceCell
-                        value={info.getValue().toString()}
+                        value={info.getValue()}
                         amount={info.row.original.amount}
                         totalAmount={totalSellAmount}
                         position='lend'
@@ -193,7 +206,8 @@ export const OrderWidget = ({
                     <TableHeader title={`Amount (${currency})`} align='right' />
                 ),
             }),
-            columnHelper.accessor('apy', {
+            columnHelper.accessor('value', {
+                id: 'apy',
                 cell: info => (
                     <ApyCell
                         value={info.getValue()}
@@ -218,10 +232,10 @@ export const OrderWidget = ({
                             className='typography-portfolio-heading flex text-teal'
                             data-testid='last-mid-price'
                         >
-                            {lastMidPrice}
+                            {formatLoanValue(lastMidValue, 'price')}
                         </span>
                         <span className='typography-portfolio-heading flex text-slateGray'>
-                            {percentFormat(20)}
+                            {formatLoanValue(lastMidValue, 'rate')}
                         </span>
                     </div>
                     <div className='flex flex-row gap-6'>

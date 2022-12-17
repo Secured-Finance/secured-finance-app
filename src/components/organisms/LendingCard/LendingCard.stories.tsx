@@ -1,7 +1,9 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { BigNumber } from 'bignumber.js';
-import { WithAssetPrice } from 'src/../.storybook/decorators';
+import { withAssetPrice } from 'src/../.storybook/decorators';
+import { dec22Fixture, maturityOptions } from 'src/stories/mocks/fixtures';
 import { Rate } from 'src/utils';
+import { LoanValue } from 'src/utils/entities';
 import { LendingCard } from './LendingCard';
 
 export default {
@@ -14,16 +16,13 @@ export default {
             usdCollateral: new BigNumber('100000000000000000000'),
             coverage: new BigNumber('80'),
         },
-        marketRate: new Rate(10000), // 1%
-        maturitiesOptionList: [
-            { label: 'MAR22', value: '1' },
-            { label: 'JUN22', value: '2' },
-            { label: 'SEP22', value: '3' },
-            { label: 'DEC22', value: '1669856400' },
-            { label: 'MAR23', value: '1677632400' },
-        ],
+        marketValue: LoanValue.fromApy(
+            new Rate(10000),
+            dec22Fixture.toNumber()
+        ),
+        maturitiesOptionList: maturityOptions,
     },
-    decorators: [WithAssetPrice],
+    decorators: [withAssetPrice],
 } as ComponentMeta<typeof LendingCard>;
 
 const Template: ComponentStory<typeof LendingCard> = args => {

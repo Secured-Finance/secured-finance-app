@@ -1,9 +1,11 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import {
-    WithAssetPrice,
-    WithWalletProvider,
+    withAssetPrice,
+    withWalletProvider,
 } from 'src/../.storybook/decorators';
+import { dec22Fixture } from 'src/stories/mocks/fixtures';
 import { Rate } from 'src/utils';
+import { LoanValue } from 'src/utils/entities';
 import { PlaceOrder } from './PlaceOrder';
 
 export default {
@@ -12,9 +14,9 @@ export default {
     args: {
         isOpen: true,
         onClose: () => {},
-        marketRate: new Rate(10000),
+        value: LoanValue.fromApy(new Rate(10000), dec22Fixture.toNumber()),
     },
-    decorators: [WithAssetPrice, WithWalletProvider],
+    decorators: [withAssetPrice, withWalletProvider],
 } as ComponentMeta<typeof PlaceOrder>;
 
 const Template: ComponentStory<typeof PlaceOrder> = args => {
@@ -22,3 +24,7 @@ const Template: ComponentStory<typeof PlaceOrder> = args => {
 };
 
 export const Default = Template.bind({});
+export const MarketOrder = Template.bind({});
+MarketOrder.args = {
+    value: undefined,
+};

@@ -5,28 +5,40 @@ import * as jest from 'jest-mock';
 export const mockUseSF = () => {
     const mockSecuredFinance = {
         placeLendingOrder: jest.fn(),
-        getBorrowYieldCurve: jest.fn(() =>
+        getBorrowUnitPrices: jest.fn(() =>
             Promise.resolve([
-                BigNumber.from('10000'),
-                BigNumber.from('20000'),
-                BigNumber.from('30000'),
-                BigNumber.from('40000'),
+                BigNumber.from(9687),
+                BigNumber.from(9685),
+                BigNumber.from(9679),
+                BigNumber.from(9674),
+                BigNumber.from(9653),
+                BigNumber.from(9643),
+                BigNumber.from(9627),
+                BigNumber.from(9617),
             ])
         ),
-        getLendYieldCurve: jest.fn(() =>
+        getLendUnitPrices: jest.fn(() =>
             Promise.resolve([
-                BigNumber.from('5000'),
-                BigNumber.from('15000'),
-                BigNumber.from('25000'),
-                BigNumber.from('35000'),
+                BigNumber.from(9685),
+                BigNumber.from(9683),
+                BigNumber.from(9677),
+                BigNumber.from(9672),
+                BigNumber.from(9651),
+                BigNumber.from(9641),
+                BigNumber.from(9625),
+                BigNumber.from(9615),
             ])
         ),
-        getMidRateYieldCurve: jest.fn(() =>
+        getMidUnitPrices: jest.fn(() =>
             Promise.resolve([
-                BigNumber.from('5000'),
-                BigNumber.from('15000'),
-                BigNumber.from('25000'),
-                BigNumber.from('35000'),
+                BigNumber.from(9686),
+                BigNumber.from(9684),
+                BigNumber.from(9678),
+                BigNumber.from(9673),
+                BigNumber.from(9652),
+                BigNumber.from(9642),
+                BigNumber.from(9626),
+                BigNumber.from(9616),
             ])
         ),
         getCollateralBook: jest.fn(() =>
@@ -88,12 +100,12 @@ export const mockUseSF = () => {
 
         getBorrowOrderBook: jest.fn(() =>
             Promise.resolve({
-                rates: [
-                    BigNumber.from(195000),
-                    BigNumber.from(183000),
-                    BigNumber.from(180000),
-                    BigNumber.from(170000),
-                    BigNumber.from(160000),
+                unitPrices: [
+                    BigNumber.from(9690),
+                    BigNumber.from(9687),
+                    BigNumber.from(9685),
+                    BigNumber.from(9679),
+                    BigNumber.from(9674),
                 ],
                 amounts: [
                     BigNumber.from('43000000000000000000000'),
@@ -114,12 +126,12 @@ export const mockUseSF = () => {
 
         getLendOrderBook: jest.fn(() =>
             Promise.resolve({
-                rates: [
-                    BigNumber.from(195000),
-                    BigNumber.from(183000),
-                    BigNumber.from(180000),
-                    BigNumber.from(170000),
-                    BigNumber.from(160000),
+                unitPrices: [
+                    BigNumber.from(9690),
+                    BigNumber.from(9687),
+                    BigNumber.from(9685),
+                    BigNumber.from(9679),
+                    BigNumber.from(9674),
                 ],
                 amounts: [
                     BigNumber.from('43000000000000000000000'),

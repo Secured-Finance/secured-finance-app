@@ -7,7 +7,7 @@ import { CoreTable, TableHeader } from 'src/components/molecules';
 import { ContractDetailDialog } from 'src/components/organisms';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { RootState } from 'src/store/types';
-import { currencyMap, CurrencySymbol, Rate } from 'src/utils';
+import { currencyMap, CurrencySymbol, percentFormat, Rate } from 'src/utils';
 
 export type ActiveTrade = {
     position: 'Borrow' | 'Lend';
@@ -71,7 +71,8 @@ export const ActiveTradeTable = ({ data }: { data: Array<ActiveTrade> }) => {
                 ),
             }),
             columnHelper.accessor('apy', {
-                cell: info => info.getValue().toPercent(),
+                cell: info =>
+                    percentFormat(info.getValue().toNormalizedNumber(), 100),
                 header: header => (
                     <TableHeader
                         title='APY'

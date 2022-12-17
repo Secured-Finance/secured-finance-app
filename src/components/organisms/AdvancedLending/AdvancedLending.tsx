@@ -1,7 +1,6 @@
-import { BigNumber } from 'ethers';
 import { useCallback, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { DropdownSelector, Option } from 'src/components/atoms';
+import { DropdownSelector } from 'src/components/atoms';
 import { AdvancedLendingTopBar } from 'src/components/molecules';
 import {
     AdvancedLendingOrderCard,
@@ -11,46 +10,49 @@ import {
 import { CollateralBook, OrderType } from 'src/hooks';
 import { useOrderbook } from 'src/hooks/useOrderbook';
 import {
+    selectLandingOrderForm,
     setAmount,
     setCurrency,
     setMaturity,
-    setRate,
+    setUnitPrice,
 } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
+import { MaturityOptionList } from 'src/types';
 import {
     CurrencySymbol,
     formatDate,
     getCurrencyMapAsOptions,
     Rate,
 } from 'src/utils';
+import { LoanValue, Maturity } from 'src/utils/entities';
 
 export const AdvancedLending = ({
     collateralBook,
-    marketRate,
+    loanValue,
     maturitiesOptionList,
+    rates,
 }: {
     collateralBook: CollateralBook;
-    marketRate: Rate;
-    maturitiesOptionList: Option[];
+    loanValue: LoanValue;
+    maturitiesOptionList: MaturityOptionList;
+    rates: Rate[];
 }) => {
-    const { currency, maturity, orderType } = useSelector(
-        (state: RootState) => state.landingOrderForm
+    const { currency, maturity, orderType, amount } = useSelector(
+        (state: RootState) => selectLandingOrderForm(state.landingOrderForm)
     );
 
     const assetList = useMemo(() => getCurrencyMapAsOptions(), []);
     const dispatch = useDispatch();
-    const orderBook = useOrderbook(
-        currency,
-        Number(maturitiesOptionList[0].value),
-        10
-    );
 
     const selectedTerm = useMemo(() => {
         return (
-            maturitiesOptionList.find(option => option.value === maturity) ||
-            maturitiesOptionList[0]
+            maturitiesOptionList.find(option =>
+                option.value.equals(maturity)
+            ) || maturitiesOptionList[0]
         );
     }, [maturity, maturitiesOptionList]);
+
+    const orderBook = useOrderbook(currency, selectedTerm.value, 10);
 
     const selectedAsset = useMemo(() => {
         return assetList.find(option => option.value === currency);
@@ -59,9 +61,9 @@ export const AdvancedLending = ({
     const handleTermChange = useCallback(
         (v: CurrencySymbol) => {
             dispatch(setCurrency(v));
-            dispatch(setAmount(BigNumber.from(0)));
+            dispatch(setAmount(amount));
         },
-        [dispatch]
+        [amount, dispatch]
     );
 
     return (
@@ -76,19 +78,25 @@ export const AdvancedLending = ({
             </div>
             <AdvancedLendingTopBar
                 asset={currency}
-                options={maturitiesOptionList}
-                selected={selectedTerm}
+                options={maturitiesOptionList.map(o => ({
+                    label: o.label,
+                    value: o.value.toString(),
+                }))}
+                selected={{
+                    label: selectedTerm.label,
+                    value: selectedTerm.value.toString(),
+                }}
                 onTermChange={v => {
-                    dispatch(setMaturity(v));
+                    dispatch(setMaturity(new Maturity(v)));
                     if (orderType === OrderType.MARKET) {
-                        dispatch(setRate(marketRate.toNumber()));
+                        dispatch(setUnitPrice(loanValue.price));
                     }
                 }}
                 transformLabel={v => {
-                    const ts = maturitiesOptionList.find(
-                        o => o.label === v
+                    const ts = maturitiesOptionList.find(o =>
+                        o.value.equals(new Maturity(v))
                     )?.value;
-                    return ts ? formatDate(Number(ts)) : v;
+                    return ts ? formatDate(ts.toNumber()) : v;
                 }}
             />
             <div className='flex flex-row gap-6'>
@@ -96,6 +104,7 @@ export const AdvancedLending = ({
                 <div className='flex flex-grow flex-col gap-6'>
                     <AdvancedLendingOrganism
                         maturitiesOptionList={maturitiesOptionList}
+                        rates={rates}
                     />
                     <OrderWidget
                         buyOrders={orderBook.borrowOrderbook}

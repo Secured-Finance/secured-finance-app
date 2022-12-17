@@ -1,15 +1,16 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { maturityOptions } from 'src/stories/mocks/fixtures';
+
 import { options } from '../../molecules/LineChart/constants';
 import { LineChart } from './';
 
 export default {
     title: 'Molecules/LineChart',
     component: LineChart,
-    chromatic: { diffThreshold: 1, delay: 500 },
+    chromatic: { pauseAnimationAtEnd: true },
     args: {
         data: {
             labels: [
-                'SEP22',
                 'DEC22',
                 'MAR23',
                 'JUN23',
@@ -17,6 +18,7 @@ export default {
                 'DEC23',
                 'MAR24',
                 'JUN24',
+                'SEP24',
             ],
             datasets: [
                 {
@@ -26,20 +28,22 @@ export default {
             ],
         },
         options,
-        maturitiesOptionList: [
-            { label: 'MAR22', value: '1' },
-            { label: 'JUN22', value: '2' },
-            { label: 'SEP22', value: '3' },
-            { label: 'DEC22', value: '1669856400' },
-            { label: 'MAR23', value: '1677632400' },
-        ],
+        maturitiesOptionList: maturityOptions,
+        maturity: maturityOptions[0].value,
+    },
+    parameters: {
+        date: {
+            tick: true,
+        },
     },
 } as ComponentMeta<typeof LineChart>;
 
-const Template: ComponentStory<typeof LineChart> = args => (
-    <div style={{ width: 500, height: 350 }}>
-        <LineChart {...args} />
-    </div>
-);
+const Template: ComponentStory<typeof LineChart> = args => {
+    return (
+        <div style={{ width: 500, height: 350 }}>
+            <LineChart {...args} />
+        </div>
+    );
+};
 
 export const Default = Template.bind({});

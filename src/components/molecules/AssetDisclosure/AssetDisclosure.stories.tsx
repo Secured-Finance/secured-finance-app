@@ -1,5 +1,5 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
-import { WithAssetPrice } from 'src/../.storybook/decorators';
+import { withAssetPrice } from 'src/../.storybook/decorators';
 import { CurrencySymbol, WalletSource } from 'src/utils';
 import { AssetDisclosure } from './AssetDisclosure';
 
@@ -14,7 +14,7 @@ export default {
         walletSource: WalletSource.METAMASK,
         account: 'de926db3012af759b4f24b5a51ef6afa397f04670f634aa4f',
     },
-    decorators: [WithAssetPrice],
+    decorators: [withAssetPrice],
 } as ComponentMeta<typeof AssetDisclosure>;
 
 const Template: ComponentStory<typeof AssetDisclosure> = args => {

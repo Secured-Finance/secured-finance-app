@@ -1,6 +1,6 @@
 import { RadioGroup } from '@headlessui/react';
-import { BigNumber, ContractTransaction } from 'ethers';
-import { useMemo } from 'react';
+import { BigNumber } from 'ethers';
+import { useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
     Button,
@@ -11,38 +11,44 @@ import {
 } from 'src/components/atoms';
 import { BorrowLendSelector } from 'src/components/atoms/BorrowLendSelector';
 import { OrderInputBox } from 'src/components/atoms/OrderInputBox';
-import { CollateralBook, OrderSide, OrderType } from 'src/hooks';
+import { CollateralBook, OrderType, usePlaceOrder } from 'src/hooks';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import {
     selectLandingOrderForm,
     setAmount,
     setOrderType,
-    setRate,
     setSide,
+    setUnitPrice,
 } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
 import {
     amountFormatterFromBase,
-    CurrencySymbol,
     getFullDisplayBalanceNumber,
     ordinaryFormat,
 } from 'src/utils';
+import { LoanValue } from 'src/utils/entities';
+import { PlaceOrder } from '../PlaceOrder';
 
 export const AdvancedLendingOrderCard = ({
     collateralBook,
 }: {
-    onPlaceOrder?: (
-        ccy: CurrencySymbol,
-        maturity: number | BigNumber,
-        side: OrderSide,
-        amount: BigNumber,
-        rate: number
-    ) => Promise<ContractTransaction | undefined>;
     collateralBook: CollateralBook;
 }) => {
-    const { currency, amount, side, orderType, rate } = useSelector(
-        (state: RootState) => selectLandingOrderForm(state.landingOrderForm)
-    );
+    const [openPlaceOrderDialog, setOpenPlaceOrderDialog] = useState(false);
+
+    const { placeOrder } = usePlaceOrder();
+    const { currency, amount, side, orderType, unitPrice, maturity } =
+        useSelector((state: RootState) =>
+            selectLandingOrderForm(state.landingOrderForm)
+        );
+
+    const loanValue = useMemo(() => {
+        if (unitPrice && maturity) {
+            return LoanValue.fromPrice(unitPrice, maturity.toNumber());
+        }
+
+        return LoanValue.ZERO;
+    }, [unitPrice, maturity]);
 
     const dispatch = useDispatch();
 
@@ -107,13 +113,11 @@ export const AdvancedLendingOrderCard = ({
                 />
                 <div className='flex flex-col gap-4'>
                     <OrderInputBox
-                        field='Fixed Rate'
-                        unit='%'
+                        field='Unit Price'
+                        unit=''
                         disabled={orderType === OrderType.MARKET}
-                        initialValue={(rate / 10000.0).toString()}
-                        onValueChange={v =>
-                            dispatch(setRate((v as number) * 10000.0))
-                        }
+                        initialValue={unitPrice.toString()}
+                        onValueChange={v => dispatch(setUnitPrice(v as number))}
                     />
                     <OrderInputBox
                         field='Amount'
@@ -133,11 +137,20 @@ export const AdvancedLendingOrderCard = ({
 
                 <Button
                     fullWidth
-                    onClick={() => {}}
+                    onClick={() => {
+                        setOpenPlaceOrderDialog(true);
+                    }}
                     data-testid='place-order-button'
                 >
                     Place Order
                 </Button>
+
+                <PlaceOrder
+                    onPlaceOrder={placeOrder}
+                    isOpen={openPlaceOrderDialog}
+                    onClose={() => setOpenPlaceOrderDialog(false)}
+                    value={loanValue}
+                />
 
                 <Separator color='neutral-3'></Separator>
 

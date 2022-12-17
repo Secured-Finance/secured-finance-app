@@ -1,4 +1,4 @@
-import { TextDecoder } from 'util';
+import { TextDecoder, TextEncoder } from 'util';
 
 global.ResizeObserver = jest.fn().mockImplementation(() => ({
     observe: jest.fn(),
@@ -7,6 +7,7 @@ global.ResizeObserver = jest.fn().mockImplementation(() => ({
 }));
 
 global.TextDecoder = TextDecoder;
+global.TextEncoder = TextEncoder;
 
 global.IntersectionObserver = class FakeIntersectionObserver {
     observe() {}

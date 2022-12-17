@@ -1,5 +1,5 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
-import { WithAssetPrice } from 'src/../.storybook/decorators';
+import { withAssetPrice } from 'src/../.storybook/decorators';
 import { CurrencySymbol } from 'src/utils';
 import { CurveHeader } from './CurveHeader';
 
@@ -11,7 +11,7 @@ export default {
         isBorrow: true,
     },
     argTypes: {},
-    decorators: [WithAssetPrice],
+    decorators: [withAssetPrice],
 } as ComponentMeta<typeof CurveHeader>;
 
 const Template: ComponentStory<typeof CurveHeader> = args => {

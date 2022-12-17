@@ -5,7 +5,7 @@ import { updateLendingMarketContract } from 'src/store/availableContracts';
 import { RootState } from 'src/store/types';
 import { CurrencySymbol, toCurrency } from 'src/utils';
 
-export type ContractMap = Record<string, string>;
+export type ContractMap = Record<string, number>;
 
 export const useLendingMarkets = (
     ccy: CurrencySymbol,
@@ -29,7 +29,7 @@ export const useLendingMarkets = (
                             lendingMarkets.reduce<ContractMap>(
                                 (acc, { name, maturity }) => ({
                                     ...acc,
-                                    [name]: maturity.toString(),
+                                    [name]: maturity,
                                 }),
                                 {}
                             ),

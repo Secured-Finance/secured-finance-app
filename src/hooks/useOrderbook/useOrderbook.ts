@@ -3,72 +3,91 @@ import { BigNumber } from 'ethers';
 import { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from 'src/store/types';
-import { CurrencySymbol, Rate, toCurrency } from 'src/utils';
+import { CurrencySymbol, toCurrency } from 'src/utils';
+import { LoanValue, Maturity } from 'src/utils/entities';
 import useSF from '../useSecuredFinance';
 
 interface SmartContractOrderbook {
-    rates: BigNumber[];
+    unitPrices: BigNumber[];
     amounts: BigNumber[];
     quantities: BigNumber[];
 }
 export type OrderBookEntry = {
     amount: BigNumber;
-    apy: Rate;
-    price: number;
+    value: LoanValue;
 };
 
 export type OrderBook = Array<OrderBookEntry>;
 
-const transformOrderbook = (input: SmartContractOrderbook): OrderBook => {
-    return input.rates.map((rate, index) => ({
+const transformOrderbook = (
+    input: SmartContractOrderbook,
+    maturity: number
+): OrderBook => {
+    return input.unitPrices.map((unitPrice, index) => ({
         amount: input.amounts[index],
-        apy: new Rate(rate.toNumber()),
-        price: 100 + index,
+        value: LoanValue.fromPrice(unitPrice.toNumber(), maturity),
     }));
+};
+
+const emptyOrderbook = {
+    lendOrderbook: [],
+    borrowOrderbook: [],
 };
 
 export const useOrderbook = (
     ccy: CurrencySymbol,
-    maturity: number,
+    maturity: Maturity,
     limit: number
 ) => {
     const securedFinance = useSF();
     const block = useSelector(
         (state: RootState) => state.blockchain.latestBlock
     );
-    const [borrowOrderbook, setBorrowOrderbook] = useState<OrderBook | []>([]);
-    const [lendOrderbook, setLendOrderbook] = useState<OrderBook | []>([]);
+
+    const [orderbook, setOrderbook] = useState<{
+        borrowOrderbook: OrderBook | [];
+        lendOrderbook: OrderBook | [];
+    }>(emptyOrderbook);
 
     const fetchOrderbook = useCallback(
-        async (securedFinance: SecuredFinanceClient) => {
+        async (
+            securedFinance: SecuredFinanceClient,
+            ccy: CurrencySymbol,
+            maturity: number,
+            limit: number
+        ) => {
             const currency = toCurrency(ccy);
-            setBorrowOrderbook(
-                transformOrderbook(
-                    await securedFinance.getBorrowOrderBook(
-                        currency,
-                        maturity,
-                        limit
-                    )
-                )
+            const borrowOrderbook = transformOrderbook(
+                await securedFinance.getBorrowOrderBook(
+                    currency,
+                    maturity,
+                    limit
+                ),
+                maturity
             );
-            setLendOrderbook(
-                transformOrderbook(
-                    await securedFinance.getLendOrderBook(
-                        currency,
-                        maturity,
-                        limit
-                    )
-                )
+
+            const lendOrderbook = transformOrderbook(
+                await securedFinance.getLendOrderBook(
+                    currency,
+                    maturity,
+                    limit
+                ),
+                maturity
             );
+
+            setOrderbook({
+                lendOrderbook,
+                borrowOrderbook,
+            });
         },
-        [ccy, limit, maturity]
+        []
     );
 
     useEffect(() => {
-        if (securedFinance) {
-            fetchOrderbook(securedFinance);
+        if (securedFinance && !maturity.isZero()) {
+            fetchOrderbook(securedFinance, ccy, maturity.toNumber(), limit);
         }
-    }, [fetchOrderbook, securedFinance, block]);
+    }, [fetchOrderbook, securedFinance, block, maturity, ccy, limit]);
 
-    return { borrowOrderbook, lendOrderbook };
+    return orderbook;
 };

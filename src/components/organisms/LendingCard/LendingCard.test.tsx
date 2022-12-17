@@ -1,8 +1,9 @@
 import { composeStories } from '@storybook/testing-react';
-import { preloadedAssetPrices } from 'src/stories/mocks/fixtures';
+import { dec22Fixture, preloadedAssetPrices } from 'src/stories/mocks/fixtures';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { fireEvent, render, screen } from 'src/test-utils.js';
 import { CurrencyInfo, currencyMap, Rate } from 'src/utils';
+import { LoanValue } from 'src/utils/entities';
 import * as stories from './LendingCard.stories';
 
 const { Default } = composeStories(stories);
@@ -87,16 +88,16 @@ describe('LendingCard Component', () => {
     });
 
     it('should display the rate from the prop', () => {
-        const rate = new Rate(2000);
-        render(<Default marketRate={rate} />);
-        expect(screen.getByText('0.2%')).toBeInTheDocument();
+        const rate = LoanValue.fromApy(new Rate(2000), dec22Fixture.toNumber());
+        render(<Default marketValue={rate} />);
+        expect(screen.getByText('0.20%')).toBeInTheDocument();
     });
 
     it('should transform the contract label to a date', () => {
         render(<Default />);
         fireEvent.click(
             screen.getByRole('button', {
-                name: 'MAR22',
+                name: 'DEC22',
             })
         );
         fireEvent.click(screen.getByText('MAR23'));

@@ -1,3 +1,4 @@
+import { Side } from '@secured-finance/sf-client/dist/secured-finance-client';
 import { useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { SimpleAdvancedSelector, ViewType } from 'src/components/atoms';
@@ -7,22 +8,24 @@ import {
     YieldChart,
 } from 'src/components/organisms';
 import {
-    OrderSide,
     OrderType,
     RateType,
     useCollateralBook,
-    useRates,
+    useLoanValues,
 } from 'src/hooks';
-import { setOrderType } from 'src/store/landingOrderForm';
+import {
+    selectLandingOrderForm,
+    setOrderType,
+} from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
-import { Rate } from 'src/utils';
+import { LoanValue, Maturity } from 'src/utils/entities';
 import { useWallet } from 'use-wallet';
 
 export const Landing = () => {
     const { account } = useWallet();
     const [view, setView] = useState('Simple');
-    const { currency, side, maturity } = useSelector(
-        (state: RootState) => state.landingOrderForm
+    const { currency, side, maturity } = useSelector((state: RootState) =>
+        selectLandingOrderForm(state.landingOrderForm)
     );
     const lendingContracts = useSelector(
         (state: RootState) => state.availableContracts.lendingMarkets[currency]
@@ -33,26 +36,30 @@ export const Landing = () => {
 
     const optionList = Object.entries(lendingContracts).map(o => ({
         label: o[0],
-        value: o[1],
+        value: new Maturity(o[1]),
     }));
 
-    const rates = useRates(
+    const unitPrices = useLoanValues(
         currency,
-        side === OrderSide.Borrow ? RateType.Borrow : RateType.Lend
+        side === Side.BORROW ? RateType.Borrow : RateType.Lend,
+        maturity
     );
 
-    const marketRate = useMemo(() => {
-        if (!rates) {
-            return new Rate(0);
+    const marketValue = useMemo(() => {
+        if (!unitPrices) {
+            return LoanValue.ZERO;
         }
 
-        const rate = rates[Object.values(lendingContracts).indexOf(maturity)];
-        if (!rate) {
-            return new Rate(0);
+        const value =
+            unitPrices[
+                Object.values(lendingContracts).indexOf(maturity.toNumber())
+            ];
+        if (!value) {
+            return LoanValue.ZERO;
         }
 
-        return rate;
-    }, [rates, lendingContracts, maturity]);
+        return value;
+    }, [unitPrices, lendingContracts, maturity]);
 
     return (
         <div
@@ -78,20 +85,21 @@ export const Landing = () => {
                 <div className='flex flex-row items-center justify-center'>
                     <LendingCard
                         collateralBook={collateralBook}
-                        marketRate={marketRate}
+                        marketValue={marketValue}
                         maturitiesOptionList={optionList}
                     />
                     <YieldChart
                         asset={currency}
-                        isBorrow={side === OrderSide.Borrow}
-                        rates={rates}
+                        isBorrow={side === Side.BORROW}
+                        rates={unitPrices.map(v => v.apy)}
                         maturitiesOptionList={optionList}
                     />
                 </div>
             ) : (
                 <AdvancedLending
                     collateralBook={collateralBook}
-                    marketRate={marketRate}
+                    loanValue={marketValue}
+                    rates={unitPrices.map(v => v.apy)}
                     maturitiesOptionList={optionList}
                 />
             )}
