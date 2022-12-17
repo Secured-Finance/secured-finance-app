@@ -1,3 +1,4 @@
+import { BigNumber } from 'ethers';
 import { useCallback, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { DropdownSelector } from 'src/components/atoms';
@@ -37,8 +38,8 @@ export const AdvancedLending = ({
     maturitiesOptionList: MaturityOptionList;
     rates: Rate[];
 }) => {
-    const { currency, maturity, orderType, amount } = useSelector(
-        (state: RootState) => selectLandingOrderForm(state.landingOrderForm)
+    const { currency, maturity, orderType } = useSelector((state: RootState) =>
+        selectLandingOrderForm(state.landingOrderForm)
     );
 
     const assetList = useMemo(() => getCurrencyMapAsOptions(), []);
@@ -58,12 +59,12 @@ export const AdvancedLending = ({
         return assetList.find(option => option.value === currency);
     }, [currency, assetList]);
 
-    const handleTermChange = useCallback(
+    const handleCurrencyChange = useCallback(
         (v: CurrencySymbol) => {
             dispatch(setCurrency(v));
-            dispatch(setAmount(amount));
+            dispatch(setAmount(BigNumber.from(0)));
         },
-        [amount, dispatch]
+        [dispatch]
     );
 
     return (
@@ -73,7 +74,7 @@ export const AdvancedLending = ({
                     optionList={assetList}
                     selected={selectedAsset}
                     variant='roundedExpandButton'
-                    onChange={handleTermChange}
+                    onChange={handleCurrencyChange}
                 />
             </div>
             <AdvancedLendingTopBar
