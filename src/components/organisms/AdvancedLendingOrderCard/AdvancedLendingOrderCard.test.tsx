@@ -64,10 +64,12 @@ describe('AdvancedLendingOrderCard Component', () => {
 
     it('should display the PlaceOrder Dialog when clicking on the Place Order button', () => {
         render(<Default />, { preloadedState });
-        expect(
-            screen.queryByTestId('place-order-dialog')
-        ).not.toBeInTheDocument();
+        expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
         screen.getByTestId('place-order-button').click();
-        expect(screen.getByRole('dialog')).toBeInTheDocument();
+        expect(
+            screen.getByRole('dialog', {
+                name: 'Confirm Order',
+            })
+        ).toBeInTheDocument();
     });
 });
