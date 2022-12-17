@@ -12,15 +12,14 @@ import {
 } from 'chart.js';
 import React, { useEffect, useRef } from 'react';
 import { ChartProps, getElementAtEvent, Line } from 'react-chartjs-2';
-import { useSelector } from 'react-redux';
-import { Option } from 'src/components/atoms';
 import {
     crossHairPlugin,
     defaultDatasets,
     getCurveGradient,
     options as customOptions,
 } from 'src/components/molecules/LineChart/constants';
-import { RootState } from 'src/store/types';
+import { MaturityOptionList } from 'src/types';
+import { Maturity } from 'src/utils/entities';
 
 ChartJS.register(
     LinearScale,
@@ -65,9 +64,9 @@ const triggerTooltip = (chart: ChartJS<'line'>, index: number) => {
 export type LineChartProps = {
     style?: React.CSSProperties;
     data: ChartData<'line'>;
-    maturitiesOptionList: Option[];
-    maturity: string;
-    handleChartClick: (maturity: string) => void;
+    maturitiesOptionList: MaturityOptionList;
+    maturity: Maturity;
+    handleChartClick: (maturity: Maturity) => void;
 } & ChartProps;
 
 export const LineChart = ({
@@ -75,16 +74,9 @@ export const LineChart = ({
     options = customOptions,
     style,
     maturitiesOptionList,
-    maturity = '',
+    maturity,
     handleChartClick,
 }: LineChartProps) => {
-    const ccy = useSelector(
-        (state: RootState) => state.landingOrderForm.currency
-    );
-    const lendingContracts = useSelector(
-        (state: RootState) => state.availableContracts.lendingMarkets[ccy]
-    );
-
     const chartRef = useRef<ChartJS<'line'>>(null);
 
     const refinedDatasets = data.datasets.map(set => {
@@ -117,7 +109,12 @@ export const LineChart = ({
         if (element && element[0]) {
             const { index } = element[0];
             const label = data.labels?.[index];
-            handleChartClick(lendingContracts[label as string]);
+            const selectedMaturity = maturitiesOptionList.find(
+                element => element.label === label
+            );
+            if (selectedMaturity) {
+                handleChartClick(selectedMaturity.value);
+            }
         }
     };
 
@@ -125,19 +122,19 @@ export const LineChart = ({
         if (!chartRef.current) return;
 
         const numberOfElements = chartRef.current.data.datasets[0].data.length;
-        let index = maturitiesOptionList.findIndex(
-            (element: Option) => element.value === maturity
+        let index = maturitiesOptionList.findIndex(element =>
+            element.value.equals(maturity)
         );
+
         if (numberOfElements) {
             index = index > 0 ? index : 0;
             triggerHover(chartRef.current, index);
             triggerTooltip(chartRef.current, index);
         }
-    });
+    }, [maturity, maturitiesOptionList]);
 
     return (
         <Line
-            data-chromatic='ignore'
             style={style}
             data={refinedData}
             options={options}

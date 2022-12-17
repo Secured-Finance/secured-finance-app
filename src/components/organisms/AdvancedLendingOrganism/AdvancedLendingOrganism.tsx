@@ -1,6 +1,7 @@
-import { Option } from 'src/components/atoms';
 import { Tab } from 'src/components/molecules';
 import { LineChartTab } from 'src/components/organisms';
+import { MaturityOptionList } from 'src/types';
+import { Rate } from 'src/utils';
 
 const tabDataArray = [
     { text: 'Yield Curve' },
@@ -9,13 +10,18 @@ const tabDataArray = [
 
 export const AdvancedLendingOrganism = ({
     maturitiesOptionList,
+    rates,
 }: {
-    maturitiesOptionList: Option[];
+    maturitiesOptionList: MaturityOptionList;
+    rates: Rate[];
 }) => {
     return (
         <div className='w-full'>
             <Tab tabDataArray={tabDataArray}>
-                <LineChartTab maturitiesOptionList={maturitiesOptionList} />
+                <LineChartTab
+                    maturitiesOptionList={maturitiesOptionList}
+                    rates={rates}
+                />
                 <div />
             </Tab>
         </div>

@@ -1,23 +1,16 @@
-import assert from 'assert';
-import { percentFormat } from './formatNumbers';
+const ONE_PERCENT = 10000;
 
 export class Rate {
-    ONE_PERCENT = 10000;
     readonly rate: number;
     public constructor(value: number) {
-        assert(value >= 0, 'Rate must be positive');
-        this.rate = value;
+        this.rate = Math.floor(value);
     }
 
     public toNumber(): number {
-        return this.rate;
+        return Math.floor(this.rate);
     }
 
     public toNormalizedNumber(): number {
-        return this.rate / this.ONE_PERCENT;
-    }
-
-    public toPercent(): string {
-        return percentFormat(this.toNormalizedNumber(), 100);
+        return this.rate / ONE_PERCENT;
     }
 }

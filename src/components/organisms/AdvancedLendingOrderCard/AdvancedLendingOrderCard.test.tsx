@@ -1,5 +1,6 @@
+import { Side } from '@secured-finance/sf-client/dist/secured-finance-client';
 import { composeStories } from '@storybook/testing-react';
-import { OrderSide, OrderType } from 'src/hooks';
+import { OrderType } from 'src/hooks';
 import { preloadedAssetPrices } from 'src/stories/mocks/fixtures';
 import { render, screen } from 'src/test-utils.js';
 import { CurrencySymbol } from 'src/utils';
@@ -10,10 +11,10 @@ const { Default } = composeStories(stories);
 const preloadedState = {
     landingOrderForm: {
         currency: CurrencySymbol.BTC,
-        maturity: '0',
-        side: OrderSide.Borrow,
+        maturity: 0,
+        side: Side.BORROW,
         amount: '1200000000',
-        rate: 10000,
+        unitPrice: 0,
         orderType: OrderType.LIMIT,
     },
     ...preloadedAssetPrices,
@@ -49,8 +50,8 @@ describe('AdvancedLendingOrderCard Component', () => {
         render(<Default />, { preloadedState });
 
         const inputs = screen.getAllByRole('textbox');
-        expect(screen.getByText('Fixed Rate')).toBeInTheDocument();
-        expect(inputs[0].getAttribute('value')).toBe('1');
+        expect(screen.getByText('Unit Price')).toBeInTheDocument();
+        expect(inputs[0].getAttribute('value')).toBe('0');
 
         expect(screen.getByText('Amount')).toBeInTheDocument();
         expect(inputs[1].getAttribute('value')).toBe('12');
@@ -59,5 +60,14 @@ describe('AdvancedLendingOrderCard Component', () => {
         expect(screen.getByText('Total')).toBeInTheDocument();
         expect(screen.getByText('600,000')).toBeInTheDocument();
         expect(screen.getByText('USD')).toBeInTheDocument();
+    });
+
+    it('should display the PlaceOrder Dialog when clicking on the Place Order button', () => {
+        render(<Default />, { preloadedState });
+        expect(
+            screen.queryByTestId('place-order-dialog')
+        ).not.toBeInTheDocument();
+        screen.getByTestId('place-order-button').click();
+        expect(screen.getByRole('dialog')).toBeInTheDocument();
     });
 });

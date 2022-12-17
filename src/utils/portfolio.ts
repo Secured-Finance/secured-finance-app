@@ -1,10 +1,12 @@
+import { Side } from '@secured-finance/sf-client/dist/secured-finance-client';
 import * as dayjs from 'dayjs';
 import { BigNumber } from 'ethers';
 import { ActiveTrade } from 'src/components/organisms';
-import { OrderSide, TradeHistory } from 'src/hooks';
+import { TradeHistory } from 'src/hooks';
 import { AssetPriceMap } from 'src/store/assetPrices/selectors';
-import Web3 from 'web3';
+import { hexToString } from 'web3-utils';
 import { currencyMap, CurrencySymbol } from './currencyList';
+import { LoanValue } from './entities';
 import { Rate } from './rate';
 
 export const computeWeightedAverageRate = (trades: TradeHistory) => {
@@ -14,7 +16,13 @@ export const computeWeightedAverageRate = (trades: TradeHistory) => {
 
     const totalAmount = trades.reduce((acc, trade) => acc + trade.amount, 0);
     const total = trades.reduce(
-        (acc, trade) => acc + trade.rate * trade.amount,
+        (acc, trade) =>
+            acc +
+            LoanValue.fromPrice(
+                trade.averagePrice,
+                trade.maturity
+            ).apy.toNumber() *
+                trade.amount,
         0
     );
     return new Rate(total / totalAmount);
@@ -25,12 +33,12 @@ export const computeNetValue = (
     priceList: AssetPriceMap
 ) => {
     return trades.reduce((acc, { amount, currency, side }) => {
-        const ccy = Web3.utils.hexToString(currency) as CurrencySymbol;
+        const ccy = hexToString(currency) as CurrencySymbol;
         return (
             acc +
             currencyMap[ccy].fromBaseUnit(BigNumber.from(amount)) *
                 priceList[ccy] *
-                (side.toString() === OrderSide.Lend ? 1 : -1)
+                (side.toString() === Side.LEND ? 1 : -1)
         );
     }, 0);
 };
@@ -38,9 +46,8 @@ export const computeNetValue = (
 export const convertTradeHistoryToTableData = (
     trade: TradeHistory[number]
 ): ActiveTrade => {
-    const { side, amount, rate, currency, maturity } = trade;
-    const ccy = Web3.utils.hexToString(currency) as CurrencySymbol;
-    const apy = new Rate(rate);
+    const { side, amount, averagePrice, currency, maturity } = trade;
+    const ccy = hexToString(currency) as CurrencySymbol;
 
     // TODO: add this function in the SDK
     const contract = `${ccy}-${dayjs
@@ -50,12 +57,12 @@ export const convertTradeHistoryToTableData = (
 
     const dayToMaturity = dayjs.unix(maturity).diff(Date.now(), 'day');
     const notional = BigNumber.from(amount);
-    const position = side.toString() === OrderSide.Lend ? 'Lend' : 'Borrow';
+    const position = side.toString() === Side.LEND ? 'Lend' : 'Borrow';
 
     return {
         position,
         contract,
-        apy,
+        apy: LoanValue.fromPrice(averagePrice, maturity).apy,
         notional,
         currency: ccy,
         presentValue: notional,

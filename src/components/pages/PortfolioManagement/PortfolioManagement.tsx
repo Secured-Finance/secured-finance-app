@@ -22,6 +22,7 @@ import {
     convertTradeHistoryToTableData,
     CurrencySymbol,
     generateWalletInformation,
+    percentFormat,
     usdFormat,
     WalletSource,
 } from 'src/utils';
@@ -72,9 +73,11 @@ export const PortfolioManagement = () => {
                     <PortfolioManagementTable
                         values={[
                             usdFormat(computeNetValue(tradeHistory, priceMap)),
-                            computeWeightedAverageRate(
-                                tradeHistory
-                            ).toPercent(),
+                            percentFormat(
+                                computeWeightedAverageRate(
+                                    tradeHistory
+                                ).toNormalizedNumber()
+                            ),
                             tradeHistory.length.toString(),
                             '0',
                         ]}

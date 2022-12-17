@@ -1,11 +1,12 @@
+import { Side } from '@secured-finance/sf-client/dist/secured-finance-client';
 import { BigNumber } from 'ethers';
 import { useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { BorrowLendSelector, Button, Option } from 'src/components/atoms';
+import { BorrowLendSelector, Button } from 'src/components/atoms';
 import { CollateralUsageSection } from 'src/components/atoms/CollateralUsageSection';
 import { AssetSelector, TermSelector } from 'src/components/molecules';
 import { PlaceOrder } from 'src/components/organisms';
-import { CollateralBook, OrderSide, usePlaceOrder } from 'src/hooks';
+import { CollateralBook, usePlaceOrder } from 'src/hooks';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import {
     selectLandingOrderForm,
@@ -15,25 +16,27 @@ import {
     setSide,
 } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
+import { MaturityOptionList } from 'src/types';
 import {
     amountFormatterToBase,
     CurrencySymbol,
     formatDate,
+    formatLoanValue,
     getCurrencyMapAsList,
     getCurrencyMapAsOptions,
     percentFormat,
-    Rate,
 } from 'src/utils';
 import { computeAvailableToBorrow } from 'src/utils/collateral';
+import { LoanValue, Maturity } from 'src/utils/entities';
 
 export const LendingCard = ({
     collateralBook,
-    marketRate,
+    marketValue,
     maturitiesOptionList,
 }: {
     collateralBook: CollateralBook;
-    marketRate: Rate;
-    maturitiesOptionList: Option[];
+    marketValue: LoanValue;
+    maturitiesOptionList: MaturityOptionList;
 }) => {
     const [openPlaceOrder, setOpenPlaceOrder] = useState(false);
     const { placeOrder } = usePlaceOrder();
@@ -81,8 +84,9 @@ export const LendingCard = ({
     //TODO: strongly type the terms
     const selectedTerm = useMemo(() => {
         return (
-            maturitiesOptionList.find(option => option.value === maturity) ||
-            maturitiesOptionList[0]
+            maturitiesOptionList.find(option =>
+                option.value.equals(maturity)
+            ) || maturitiesOptionList[0]
         );
     }, [maturity, maturitiesOptionList]);
 
@@ -104,7 +108,7 @@ export const LendingCard = ({
                         className='typography-amount-large text-white'
                         data-testid='market-rate'
                     >
-                        {marketRate.toPercent()}
+                        {formatLoanValue(marketValue, 'rate')}
                     </span>
                     <span className='typography-caption uppercase text-planetaryPurple'>
                         Fixed Rate APY
@@ -124,9 +128,15 @@ export const LendingCard = ({
                 />
 
                 <TermSelector
-                    options={maturitiesOptionList}
-                    selected={selectedTerm}
-                    onTermChange={v => dispatch(setMaturity(v))}
+                    options={maturitiesOptionList.map(o => ({
+                        ...o,
+                        value: o.value.toString(),
+                    }))}
+                    selected={{
+                        ...selectedTerm,
+                        value: selectedTerm.value.toString(),
+                    }}
+                    onTermChange={v => dispatch(setMaturity(new Maturity(v)))}
                     transformLabel={v => {
                         const ts = maturitiesOptionList.find(
                             o => o.label === v
@@ -145,12 +155,12 @@ export const LendingCard = ({
                     onClick={() => setOpenPlaceOrder(true)}
                     data-testid='place-order-button'
                 >
-                    {side === OrderSide.Borrow ? 'Borrow' : 'Lend'}
+                    {side === Side.BORROW ? 'Borrow' : 'Lend'}
                 </Button>
                 <PlaceOrder
                     isOpen={openPlaceOrder}
                     onClose={() => setOpenPlaceOrder(false)}
-                    marketRate={marketRate}
+                    value={marketValue}
                     onPlaceOrder={placeOrder}
                 />
             </div>

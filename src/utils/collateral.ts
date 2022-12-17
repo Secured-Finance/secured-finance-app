@@ -1,4 +1,6 @@
-import { BigNumber, utils } from 'ethers';
+import { formatEther } from '@ethersproject/units';
+import { BigNumber } from 'ethers';
+
 const COLLATERAL_RATIO = 1.5;
 
 export const computeAvailableToBorrow = (
@@ -6,7 +8,7 @@ export const computeAvailableToBorrow = (
     etherPrice: number,
     collateral: BigNumber
 ) => {
-    const maxToBorrowInEth = utils.formatEther(collateral);
+    const maxToBorrowInEth = formatEther(collateral);
     return Math.floor(
         ((+maxToBorrowInEth / COLLATERAL_RATIO) * etherPrice) / assetPrice
     );

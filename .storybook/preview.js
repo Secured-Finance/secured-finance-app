@@ -5,6 +5,7 @@ import 'src/assets/css/index.css';
 import { withPerformance } from 'storybook-addon-performance';
 import store from './../src/store';
 import { MockSecuredFinanceProvider } from './../src/stories/mocks/MockSecuredFinanceProvider';
+import { withMockDate } from './decorators';
 
 export const parameters = {
     actions: { argTypesRegex: '^on.*' },
@@ -39,6 +40,9 @@ export const parameters = {
     apolloClient: {
         MockedProvider,
     },
+    // Date is set to 1st Feb 2022 for all stories
+    // This can be overridden in individual stories
+    date: { value: new Date('2022-02-01T11:00:00.00Z') },
 };
 
 export const decorators = [
@@ -50,4 +54,5 @@ export const decorators = [
         </Provider>
     ),
     withPerformance,
+    withMockDate,
 ];

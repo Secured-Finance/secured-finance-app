@@ -1,15 +1,12 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { BigNumber } from 'bignumber.js';
-import { WithAssetPrice } from 'src/../.storybook/decorators';
+import { withAssetPrice } from 'src/../.storybook/decorators';
 import { AdvancedLendingOrderCard } from './AdvancedLendingOrderCard';
 
 export default {
     title: 'Organism/AdvancedLendingOrderCard',
     component: AdvancedLendingOrderCard,
     args: {
-        onPlaceOrder: async () => {
-            return Promise.resolve();
-        },
         collateralBook: {
             ccyName: 'ETH',
             collateral: new BigNumber('10000000000000000000'),
@@ -17,7 +14,7 @@ export default {
             coverage: new BigNumber('800'),
         },
     },
-    decorators: [WithAssetPrice],
+    decorators: [withAssetPrice],
 } as ComponentMeta<typeof AdvancedLendingOrderCard>;
 
 const Template: ComponentStory<typeof AdvancedLendingOrderCard> = args => {

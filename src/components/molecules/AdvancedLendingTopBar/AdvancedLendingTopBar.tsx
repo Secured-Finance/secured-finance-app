@@ -11,7 +11,7 @@ const getValue = (values: number[] | undefined, index: number) => {
     return values && values[index] ? values[index] : 0;
 };
 
-export const AdvancedLendingTopBar = <TermType extends string = string>({
+export const AdvancedLendingTopBar = <T extends string = string>({
     asset,
     options,
     selected,
@@ -20,10 +20,10 @@ export const AdvancedLendingTopBar = <TermType extends string = string>({
     values,
 }: {
     asset: CurrencySymbol;
-    options: Array<Option<TermType>>;
-    selected: Option<TermType>;
+    options: Array<Option<T>>;
+    selected: Option<T>;
     transformLabel?: (v: string) => string;
-    onTermChange?: (v: TermType) => void;
+    onTermChange?: (v: T) => void;
     values?: number[];
 }) => {
     const [termValue, setTermValue] = useState(selected.value);
@@ -33,7 +33,7 @@ export const AdvancedLendingTopBar = <TermType extends string = string>({
     );
 
     const handleTermChange = useCallback(
-        (v: TermType) => {
+        (v: T) => {
             setTermValue(v);
             if (onTermChange) {
                 onTermChange(v);

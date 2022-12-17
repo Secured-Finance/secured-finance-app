@@ -1,8 +1,8 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import BigNumber from 'bignumber.js';
 import {
-    WithAssetPrice,
-    WithWalletProvider,
+    withAssetPrice,
+    withWalletProvider,
 } from 'src/../.storybook/decorators';
 import { CollateralTab } from './CollateralTab';
 
@@ -17,7 +17,7 @@ export default {
             coverage: new BigNumber('0'), // 0%
         },
     },
-    decorators: [WithWalletProvider, WithAssetPrice],
+    decorators: [withWalletProvider, withAssetPrice],
 } as ComponentMeta<typeof CollateralTab>;
 
 const Template: ComponentStory<typeof CollateralTab> = args => {

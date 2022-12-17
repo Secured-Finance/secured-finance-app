@@ -1,56 +1,39 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
-import { useEffect, useMemo } from 'react';
-import { useDispatch } from 'react-redux';
-import { updateLendingMarketContract } from 'src/store/availableContracts';
-import { CurrencySymbol, Rate } from 'src/utils';
+import { withAssetPrice } from 'src/../.storybook/decorators';
+import { maturityOptions } from 'src/stories/mocks/fixtures';
+import { Rate } from 'src/utils';
 import { YieldChart } from './';
 
+const rates = [
+    new Rate(10000),
+    new Rate(20000),
+    new Rate(30000),
+    new Rate(40000),
+    new Rate(50000),
+    new Rate(60000),
+    new Rate(70000),
+    new Rate(80000),
+];
 export default {
     title: 'Organism/YieldChart',
     component: YieldChart,
-    chromatic: { diffThreshold: 1, delay: 500 },
+    chromatic: { pauseAnimationAtEnd: true },
     args: {
         asset: 'USDC',
         isBorrow: true,
-        rates: [
-            new Rate(100000),
-            new Rate(200000),
-            new Rate(300000),
-            new Rate(400000),
-            new Rate(500000),
-            new Rate(600000),
-        ],
-        maturitiesOptionList: [
-            { label: 'MAR22', value: '1' },
-            { label: 'JUN22', value: '2' },
-            { label: 'SEP22', value: '3' },
-            { label: 'DEC22', value: '1669856400' },
-            { label: 'MAR23', value: '1677632400' },
-        ],
+        rates: rates,
+        maturitiesOptionList: maturityOptions,
     },
     argTypes: {},
+    decorators: [withAssetPrice],
+    parameters: {
+        date: {
+            tick: true,
+        },
+    },
 } as ComponentMeta<typeof YieldChart>;
 
 const Template: ComponentStory<typeof YieldChart> = args => {
-    const maturities = useMemo(
-        () => ({
-            MAR22: '1616508800',
-            JUN22: '1625097600',
-            SEP22: '1633046400',
-            DEC22: '1640995200',
-        }),
-        []
-    );
-    const dispatch = useDispatch();
-    useEffect(() => {
-        const timerId = setTimeout(() => {
-            dispatch(
-                updateLendingMarketContract(maturities, CurrencySymbol.USDC)
-            );
-        }, 200);
-
-        return () => clearTimeout(timerId);
-    }, [dispatch, maturities]);
     return <YieldChart {...args} />;
 };
 

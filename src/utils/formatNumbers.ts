@@ -1,4 +1,5 @@
 import { BigNumber, FixedNumber } from 'ethers';
+import { LoanValue } from './entities';
 
 export const usdFormat = (number: number, digits = 0) => {
     return Intl.NumberFormat('en-US', {
@@ -13,13 +14,18 @@ export const usdFormatAppendUSD = (number: number, digits = 0) => {
     return `${usdFormat(number, digits)} USD`;
 };
 
-export const percentFormat = (number: number, dividedBy = 100) => {
-    return number !== 0
-        ? Intl.NumberFormat('en-US', {
-              style: 'percent',
-              maximumFractionDigits: 2,
-          }).format(number / dividedBy)
-        : '0%';
+export const percentFormat = (
+    number: number,
+    dividedBy = 100,
+    minimumFractionDigits = 0,
+    maximumFractionDigits = 2
+) => {
+    const value = dividedBy === 0 ? 0 : number / dividedBy;
+    return Intl.NumberFormat('en-US', {
+        style: 'percent',
+        minimumFractionDigits,
+        maximumFractionDigits,
+    }).format(value);
 };
 
 export const ordinaryFormat = (
@@ -36,5 +42,13 @@ export const ordinaryFormat = (
         return Intl.NumberFormat('en-US', {
             maximumFractionDigits: decimals,
         }).format(number);
+    }
+};
+
+export const formatLoanValue = (value: LoanValue, type: 'price' | 'rate') => {
+    if (type === 'price') {
+        return (value.price / 100).toFixed(2).toString();
+    } else {
+        return percentFormat(value.apy.toNormalizedNumber(), 100, 2, 2);
     }
 };
