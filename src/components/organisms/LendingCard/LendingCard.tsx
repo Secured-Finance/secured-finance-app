@@ -160,7 +160,6 @@ export const LendingCard = ({
                 <PlaceOrder
                     isOpen={openPlaceOrder}
                     onClose={() => setOpenPlaceOrder(false)}
-                    value={marketValue}
                     onPlaceOrder={placeOrder}
                 />
             </div>
