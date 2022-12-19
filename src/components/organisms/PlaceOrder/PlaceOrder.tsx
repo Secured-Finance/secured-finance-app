@@ -1,5 +1,5 @@
 import { Disclosure } from '@headlessui/react';
-import { Side } from '@secured-finance/sf-client/dist/secured-finance-client';
+import { OrderSide } from '@secured-finance/sf-client';
 import { BigNumber } from 'ethers';
 import { useCallback, useReducer } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -84,12 +84,12 @@ const reducer = (
 export const PlaceOrder = ({
     isOpen,
     onClose,
-    value,
+    loanValue,
     onPlaceOrder,
 }: {
     isOpen: boolean;
     onClose: () => void;
-    value?: LoanValue;
+    loanValue?: LoanValue;
     onPlaceOrder: PlaceOrderFunction;
 }) => {
     const [state, dispatch] = useReducer(reducer, stateRecord[1]);
@@ -122,7 +122,7 @@ export const PlaceOrder = ({
         async (
             ccy: CurrencySymbol,
             maturity: Maturity,
-            side: Side,
+            side: OrderSide,
             amount: BigNumber,
             unitPrice?: number
         ) => {
@@ -160,7 +160,7 @@ export const PlaceOrder = ({
                         maturity,
                         side,
                         amount,
-                        value?.price
+                        loanValue?.price
                     );
                     break;
                 case Step.orderProcessing:
@@ -175,7 +175,7 @@ export const PlaceOrder = ({
             currency,
             handleClose,
             handlePlaceOrder,
-            value?.price,
+            loanValue?.price,
             maturity,
             side,
         ]
@@ -211,8 +211,11 @@ export const PlaceOrder = ({
                                         ['Collateral Usage', '50% → 57%'],
                                         [
                                             'Borrow APR',
-                                            value
-                                                ? formatLoanValue(value, 'rate')
+                                            loanValue
+                                                ? formatLoanValue(
+                                                      loanValue,
+                                                      'rate'
+                                                  )
                                                 : 'Market Order',
                                         ],
                                     ]}
@@ -239,8 +242,8 @@ export const PlaceOrder = ({
                                                     itemList={[
                                                         [
                                                             'Bond Price',
-                                                            value
-                                                                ? value.price.toString()
+                                                            loanValue
+                                                                ? loanValue.price.toString()
                                                                 : 'Market Order',
                                                         ],
                                                         [

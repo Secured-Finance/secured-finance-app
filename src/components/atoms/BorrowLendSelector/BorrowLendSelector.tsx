@@ -1,5 +1,5 @@
 import { RadioGroup } from '@headlessui/react';
-import { Side } from '@secured-finance/sf-client/dist/secured-finance-client';
+import { OrderSide } from '@secured-finance/sf-client';
 import classNames from 'classnames';
 import { NavTab } from 'src/components/atoms';
 
@@ -8,14 +8,14 @@ export const BorrowLendSelector = ({
     side,
     variant,
 }: {
-    handleClick: (side: Side) => void;
-    side: Side;
+    handleClick: (side: OrderSide) => void;
+    side: OrderSide;
     variant: 'simple' | 'advanced';
 }) => {
     return (
         <RadioGroup
             value={side}
-            onChange={(v: Side) => handleClick(v)}
+            onChange={(v: OrderSide) => handleClick(v)}
             as='div'
             className={classNames('flex flex-row items-center', {
                 'h-16': variant === 'simple',
@@ -23,7 +23,7 @@ export const BorrowLendSelector = ({
             })}
         >
             <RadioGroup.Option
-                value={Side.BORROW}
+                value={OrderSide.BORROW}
                 className='h-full w-1/2'
                 as='button'
             >
@@ -36,7 +36,7 @@ export const BorrowLendSelector = ({
                 }
             </RadioGroup.Option>
             <RadioGroup.Option
-                value={Side.LEND}
+                value={OrderSide.LEND}
                 className='h-full w-1/2'
                 as='button'
             >

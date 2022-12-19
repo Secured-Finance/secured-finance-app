@@ -1,10 +1,11 @@
+import { BigNumber } from 'ethers';
 import { useCallback, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { DropdownSelector } from 'src/components/atoms';
-import { AdvancedLendingTopBar } from 'src/components/molecules';
+import { AdvancedLendingTopBar, Tab } from 'src/components/molecules';
 import {
     AdvancedLendingOrderCard,
-    AdvancedLendingOrganism,
+    LineChartTab,
     OrderWidget,
 } from 'src/components/organisms';
 import { CollateralBook, OrderType } from 'src/hooks';
@@ -37,8 +38,8 @@ export const AdvancedLending = ({
     maturitiesOptionList: MaturityOptionList;
     rates: Rate[];
 }) => {
-    const { currency, maturity, orderType, amount } = useSelector(
-        (state: RootState) => selectLandingOrderForm(state.landingOrderForm)
+    const { currency, maturity, orderType } = useSelector((state: RootState) =>
+        selectLandingOrderForm(state.landingOrderForm)
     );
 
     const assetList = useMemo(() => getCurrencyMapAsOptions(), []);
@@ -58,12 +59,12 @@ export const AdvancedLending = ({
         return assetList.find(option => option.value === currency);
     }, [currency, assetList]);
 
-    const handleTermChange = useCallback(
+    const handleCurrencyChange = useCallback(
         (v: CurrencySymbol) => {
             dispatch(setCurrency(v));
-            dispatch(setAmount(amount));
+            dispatch(setAmount(BigNumber.from(0)));
         },
-        [amount, dispatch]
+        [dispatch]
     );
 
     return (
@@ -73,7 +74,7 @@ export const AdvancedLending = ({
                     optionList={assetList}
                     selected={selectedAsset}
                     variant='roundedExpandButton'
-                    onChange={handleTermChange}
+                    onChange={handleCurrencyChange}
                 />
             </div>
             <AdvancedLendingTopBar
@@ -102,10 +103,20 @@ export const AdvancedLending = ({
             <div className='flex flex-row gap-6'>
                 <AdvancedLendingOrderCard collateralBook={collateralBook} />
                 <div className='flex flex-grow flex-col gap-6'>
-                    <AdvancedLendingOrganism
-                        maturitiesOptionList={maturitiesOptionList}
-                        rates={rates}
-                    />
+                    <div className='w-full'>
+                        <Tab
+                            tabDataArray={[
+                                { text: 'Yield Curve' },
+                                { text: 'Price History', disabled: true },
+                            ]}
+                        >
+                            <LineChartTab
+                                maturitiesOptionList={maturitiesOptionList}
+                                rates={rates}
+                            />
+                            <div />
+                        </Tab>
+                    </div>
                     <OrderWidget
                         buyOrders={orderBook.borrowOrderbook}
                         sellOrders={orderBook.lendOrderbook}
