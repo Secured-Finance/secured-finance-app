@@ -1,4 +1,4 @@
-import { Side } from '@secured-finance/sf-client/dist/secured-finance-client';
+import { OrderSide } from '@secured-finance/sf-client';
 import { BigNumber, ContractTransaction } from 'ethers';
 import { Option } from 'src/components/atoms';
 import { Maturity } from 'src/utils/entities';
@@ -9,7 +9,7 @@ export type MaturityOptionList = Option<Maturity>[];
 export type PlaceOrderFunction = (
     ccy: CurrencySymbol,
     maturity: Maturity,
-    side: Side,
+    side: OrderSide,
     amount: BigNumber,
     unitPrice?: number
 ) => Promise<ContractTransaction | undefined>;

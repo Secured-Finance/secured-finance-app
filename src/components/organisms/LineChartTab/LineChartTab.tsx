@@ -1,4 +1,4 @@
-import { Side } from '@secured-finance/sf-client/dist/secured-finance-client';
+import { OrderSide } from '@secured-finance/sf-client';
 import { useDispatch, useSelector } from 'react-redux';
 import { getData, LineChart } from 'src/components/molecules';
 import {
@@ -23,7 +23,7 @@ export const LineChartTab = ({
 
     const data = getData(
         rates,
-        side === Side.BORROW ? 'Borrow' : 'Lend',
+        side === OrderSide.BORROW ? 'Borrow' : 'Lend',
         maturitiesOptionList.map(o => o.label)
     );
 

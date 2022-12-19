@@ -1,4 +1,4 @@
-import { Side } from '@secured-finance/sf-client/dist/secured-finance-client';
+import { OrderSide } from '@secured-finance/sf-client';
 import { composeStories } from '@storybook/testing-react';
 import { BigNumber } from 'ethers';
 import { preloadedAssetPrices } from 'src/stories/mocks/fixtures';
@@ -64,7 +64,7 @@ describe('PlaceOrder component', () => {
             expect(onPlaceOrder).toHaveBeenCalledWith(
                 CurrencySymbol.FIL,
                 new Maturity(0),
-                Side.BORROW,
+                OrderSide.BORROW,
                 BigNumber.from(0),
                 9999
             )
@@ -95,7 +95,7 @@ describe('PlaceOrder component', () => {
             expect(onPlaceOrder).toHaveBeenCalledWith(
                 CurrencySymbol.FIL,
                 new Maturity(0),
-                Side.BORROW,
+                OrderSide.BORROW,
                 BigNumber.from(0),
                 undefined
             )

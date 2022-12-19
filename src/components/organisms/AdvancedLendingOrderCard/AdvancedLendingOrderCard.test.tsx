@@ -1,4 +1,4 @@
-import { Side } from '@secured-finance/sf-client/dist/secured-finance-client';
+import { OrderSide } from '@secured-finance/sf-client';
 import { composeStories } from '@storybook/testing-react';
 import { OrderType } from 'src/hooks';
 import { preloadedAssetPrices } from 'src/stories/mocks/fixtures';
@@ -12,7 +12,7 @@ const preloadedState = {
     landingOrderForm: {
         currency: CurrencySymbol.BTC,
         maturity: 0,
-        side: Side.BORROW,
+        side: OrderSide.BORROW,
         amount: '1200000000',
         unitPrice: 0,
         orderType: OrderType.LIMIT,

@@ -1,4 +1,4 @@
-import { Side } from '@secured-finance/sf-client/dist/secured-finance-client';
+import { OrderSide } from '@secured-finance/sf-client';
 import { useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { ViewType } from 'src/components/atoms';
@@ -41,7 +41,7 @@ export const Landing = ({ initialView }: { initialView?: ViewType }) => {
 
     const unitPrices = useLoanValues(
         currency,
-        side === Side.BORROW ? RateType.Borrow : RateType.Lend,
+        side === OrderSide.BORROW ? RateType.Borrow : RateType.Lend,
         maturity
     );
 
@@ -78,7 +78,7 @@ export const Landing = ({ initialView }: { initialView?: ViewType }) => {
                         />
                         <YieldChart
                             asset={currency}
-                            isBorrow={side === Side.BORROW}
+                            isBorrow={side === OrderSide.BORROW}
                             rates={unitPrices.map(v => v.apy)}
                             maturitiesOptionList={optionList}
                         />
