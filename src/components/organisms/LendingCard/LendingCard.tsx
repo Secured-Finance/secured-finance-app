@@ -1,4 +1,4 @@
-import { Side } from '@secured-finance/sf-client/dist/secured-finance-client';
+import { OrderSide } from '@secured-finance/sf-client';
 import { BigNumber } from 'ethers';
 import { useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -155,12 +155,11 @@ export const LendingCard = ({
                     onClick={() => setOpenPlaceOrder(true)}
                     data-testid='place-order-button'
                 >
-                    {side === Side.BORROW ? 'Borrow' : 'Lend'}
+                    {side === OrderSide.BORROW ? 'Borrow' : 'Lend'}
                 </Button>
                 <PlaceOrder
                     isOpen={openPlaceOrder}
                     onClose={() => setOpenPlaceOrder(false)}
-                    value={marketValue}
                     onPlaceOrder={placeOrder}
                 />
             </div>

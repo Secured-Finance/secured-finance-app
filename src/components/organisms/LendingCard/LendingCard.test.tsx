@@ -103,4 +103,11 @@ describe('LendingCard Component', () => {
         fireEvent.click(screen.getByText('MAR23'));
         expect(screen.getByText('Mar 1, 2023')).toBeInTheDocument();
     });
+
+    it('should open the confirm order dialog to place a market order when the borrow button is clicked', () => {
+        render(<Default />);
+        fireEvent.click(screen.getByTestId('place-order-button'));
+        expect(screen.getByText('Confirm Order')).toBeInTheDocument();
+        expect(screen.getByText('Market Order')).toBeInTheDocument();
+    });
 });

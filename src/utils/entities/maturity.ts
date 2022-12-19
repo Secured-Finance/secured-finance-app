@@ -23,9 +23,8 @@ export class Maturity {
     public equals(other: Maturity): boolean {
         return this.maturity === other.maturity;
     }
+
     public isZero(): boolean {
         return this.maturity === 0;
     }
 }
-
-export const EMPTY_MATURITY = new Maturity(0);

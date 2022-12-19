@@ -14,7 +14,7 @@ export default {
     args: {
         isOpen: true,
         onClose: () => {},
-        value: LoanValue.fromApy(new Rate(10000), dec22Fixture.toNumber()),
+        loanValue: LoanValue.fromApy(new Rate(10000), dec22Fixture.toNumber()),
     },
     decorators: [withAssetPrice, withWalletProvider],
 } as ComponentMeta<typeof PlaceOrder>;
@@ -26,5 +26,5 @@ const Template: ComponentStory<typeof PlaceOrder> = args => {
 export const Default = Template.bind({});
 export const MarketOrder = Template.bind({});
 MarketOrder.args = {
-    value: undefined,
+    loanValue: undefined,
 };

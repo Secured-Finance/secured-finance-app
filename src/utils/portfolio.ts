@@ -1,4 +1,4 @@
-import { Side } from '@secured-finance/sf-client/dist/secured-finance-client';
+import { OrderSide } from '@secured-finance/sf-client';
 import * as dayjs from 'dayjs';
 import { BigNumber } from 'ethers';
 import { ActiveTrade } from 'src/components/organisms';
@@ -38,7 +38,7 @@ export const computeNetValue = (
             acc +
             currencyMap[ccy].fromBaseUnit(BigNumber.from(amount)) *
                 priceList[ccy] *
-                (side.toString() === Side.LEND ? 1 : -1)
+                (side.toString() === OrderSide.LEND ? 1 : -1)
         );
     }, 0);
 };
@@ -57,7 +57,7 @@ export const convertTradeHistoryToTableData = (
 
     const dayToMaturity = dayjs.unix(maturity).diff(Date.now(), 'day');
     const notional = BigNumber.from(amount);
-    const position = side.toString() === Side.LEND ? 'Lend' : 'Borrow';
+    const position = side.toString() === OrderSide.LEND ? 'Lend' : 'Borrow';
 
     return {
         position,

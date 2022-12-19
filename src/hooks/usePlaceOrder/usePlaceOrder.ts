@@ -1,4 +1,4 @@
-import { Side } from '@secured-finance/sf-client/dist/secured-finance-client';
+import { OrderSide } from '@secured-finance/sf-client';
 import { BigNumber } from 'ethers';
 import { useCallback } from 'react';
 import useSF from 'src/hooks/useSecuredFinance';
@@ -17,7 +17,7 @@ export const usePlaceOrder = () => {
         async (
             ccy: CurrencySymbol,
             maturity: Maturity,
-            side: Side,
+            side: OrderSide,
             amount: BigNumber,
             unitPrice?: number
         ) => {
