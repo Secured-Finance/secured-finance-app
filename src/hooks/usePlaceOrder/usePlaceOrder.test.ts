@@ -1,4 +1,4 @@
-import { Side } from '@secured-finance/sf-client/dist/secured-finance-client';
+import { OrderSide } from '@secured-finance/sf-client';
 import { renderHook } from '@testing-library/react-hooks';
 import { BigNumber } from 'ethers';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
@@ -25,7 +25,7 @@ describe('usePlaceOrder hook', () => {
         await placeOrder(
             CurrencySymbol.ETH,
             new Maturity(2022),
-            Side.LEND,
+            OrderSide.LEND,
             currencyMap.ETH.toBaseUnit(1),
             9863
         );
@@ -45,7 +45,7 @@ describe('usePlaceOrder hook', () => {
         await placeOrder(
             CurrencySymbol.ETH,
             new Maturity(2022),
-            Side.LEND,
+            OrderSide.LEND,
             currencyMap.ETH.toBaseUnit(1)
         );
 

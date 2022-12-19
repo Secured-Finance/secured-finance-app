@@ -1,5 +1,5 @@
 import { Disclosure } from '@headlessui/react';
-import { Side } from '@secured-finance/sf-client/dist/secured-finance-client';
+import { OrderSide } from '@secured-finance/sf-client';
 import { BigNumber } from 'ethers';
 import { useCallback, useReducer } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -122,7 +122,7 @@ export const PlaceOrder = ({
         async (
             ccy: CurrencySymbol,
             maturity: Maturity,
-            side: Side,
+            side: OrderSide,
             amount: BigNumber,
             unitPrice?: number
         ) => {
