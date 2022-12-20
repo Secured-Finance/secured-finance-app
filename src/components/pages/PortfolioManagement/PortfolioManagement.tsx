@@ -1,3 +1,5 @@
+import { useTransactionHistory } from '@secured-finance/sf-graph-client';
+import { useOrderHistory } from '@secured-finance/sf-graph-client/dist/hooks/useOrderHistory';
 import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import {
@@ -11,8 +13,9 @@ import {
     CollateralOrganism,
     ConnectWalletCard,
     MyWalletCard,
+    OrderHistoryTable,
 } from 'src/components/organisms';
-import { useTradeHistory } from 'src/hooks';
+import { useGraphClientHook } from 'src/hooks';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { selectEthereumBalance } from 'src/store/ethereumWallet';
 import { RootState } from 'src/store/types';
@@ -30,7 +33,16 @@ import { useWallet } from 'use-wallet';
 
 export const PortfolioManagement = () => {
     const { account } = useWallet();
-    const tradeHistory = useTradeHistory(account ?? '');
+    const tradeHistory = useGraphClientHook(
+        account ?? '',
+        useTransactionHistory,
+        'transactions'
+    );
+    const oderHistory = useGraphClientHook(
+        account ?? '',
+        useOrderHistory,
+        'orders'
+    );
 
     const balance = useSelector((state: RootState) =>
         selectEthereumBalance(state)
@@ -97,7 +109,7 @@ export const PortfolioManagement = () => {
                     tabTitles={['Active Contracts', 'Trade History']}
                 >
                     <ActiveTradeTable data={activeTrades} />
-                    <div className='px-12 text-white'>Soon</div>
+                    <OrderHistoryTable data={oderHistory} />
                 </HorizontalTab>
             </div>
         </div>

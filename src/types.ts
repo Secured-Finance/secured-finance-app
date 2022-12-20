@@ -1,4 +1,9 @@
 import { OrderSide } from '@secured-finance/sf-client';
+import {
+    OrderHistoryQuery,
+    TransactionHistoryQuery,
+} from '@secured-finance/sf-graph-client/dist/graphclients';
+
 import { BigNumber, ContractTransaction } from 'ethers';
 import { Option } from 'src/components/atoms';
 import { Maturity } from 'src/utils/entities';
@@ -13,3 +18,6 @@ export type PlaceOrderFunction = (
     amount: BigNumber,
     unitPrice?: number
 ) => Promise<ContractTransaction | undefined>;
+
+export type Order = OrderHistoryQuery['orders'];
+export type TradeHistory = TransactionHistoryQuery['transactions'];
