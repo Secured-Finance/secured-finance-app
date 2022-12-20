@@ -10,6 +10,7 @@ export * from './Header';
 export * from './LendingCard';
 export * from './LineChartTab';
 export * from './MyWalletCard';
+export * from './OrderHistoryTable';
 export * from './OrderWidget';
 export * from './PlaceOrder';
 export * from './WalletDialog';

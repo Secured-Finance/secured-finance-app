@@ -6,7 +6,7 @@ import {
     withAssetPrice,
     withWalletProvider,
 } from 'src/../.storybook/decorators';
-import { TradeHistory } from 'src/hooks';
+import { TradeHistory } from 'src/types';
 import { PortfolioManagement } from './PortfolioManagement';
 
 const fil = utils.formatBytes32String('FIL');

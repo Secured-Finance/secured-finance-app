@@ -1,8 +1,8 @@
 import { BigNumber } from 'ethers';
 import { formatBytes32String } from 'ethers/lib/utils';
 import mockDate from 'mockdate';
-import { TradeHistory } from 'src/hooks';
 import { AssetPriceMap } from 'src/store/assetPrices/selectors';
+import { TradeHistory } from 'src/types';
 import { CurrencySymbol } from './currencyList';
 import {
     computeNetValue,
