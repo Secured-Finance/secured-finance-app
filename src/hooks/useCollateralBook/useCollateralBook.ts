@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import useSF from 'src/hooks/useSecuredFinance';
 import { getAssetPrice } from 'src/store/assetPrices/selectors';
 import { selectEthereumBalance } from 'src/store/ethereumWallet';
-import { CurrencySymbol, toCurrency } from 'src/utils';
+import { CurrencySymbol } from 'src/utils';
 import { RootState } from '../../store/types';
 
 const ZERO_BN = new BigNumber('0');
@@ -42,11 +42,10 @@ export const useCollateralBook = (
 
         // TODO: this is not taking care of what are really those numbers. This needs to be fixed
         const getCollateralBook = async () => {
-            const { collateralAmount, collateralCoverage } =
-                await securedFinance.getCollateralBook(
-                    account,
-                    toCurrency(ccy)
-                );
+            const { collateralAmount, collateralCoverage } = {
+                collateralAmount: '0',
+                collateralCoverage: '0',
+            };
 
             setCollateralBook({
                 ccyName: ccy,
