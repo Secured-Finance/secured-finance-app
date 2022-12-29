@@ -89,11 +89,11 @@ const Faucet = () => {
         try {
             const tx = await sf.mintERC20Token(token);
             const transactionStatus = await handleContractTransaction(tx);
-            setTxHash(tx.hash);
 
             if (!transactionStatus) {
                 console.error('Some error occurred');
             } else {
+                setTxHash(tx.hash);
                 setIsOpen(true);
             }
         } catch (e) {
@@ -136,7 +136,7 @@ const Faucet = () => {
 
                     <div className='flex justify-center'>
                         <Button onClick={mint} disabled={isPending}>
-                            {isPending ? 'Sending...' : 'Mint tokens'}
+                            {isPending ? 'Minting...' : 'Mint tokens'}
                         </Button>
                     </div>
 
@@ -175,7 +175,7 @@ const Faucet = () => {
                             href='https://metamask.zendesk.com/hc/en-us/articles/360015489031-How-to-display-tokens-in-MetaMask#h_01FWH492CHY60HWPC28RW0872H'
                             target='_blank'
                             rel='noreferrer'
-                            className='ypography-modal-title text-md text-galacticOrange hover:bg-galacticOrange hover:text-grayScale'
+                            className='typography-modal-title text-md text-galacticOrange hover:bg-galacticOrange hover:text-grayScale'
                         >
                             this guide
                         </a>
