@@ -19,5 +19,5 @@ export type PlaceOrderFunction = (
     unitPrice?: number
 ) => Promise<ContractTransaction | undefined>;
 
-export type Order = OrderHistoryQuery['orders'];
+export type OrderList = OrderHistoryQuery['orders'];
 export type TradeHistory = TransactionHistoryQuery['transactions'];

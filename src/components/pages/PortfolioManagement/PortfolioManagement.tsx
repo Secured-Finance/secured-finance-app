@@ -106,7 +106,11 @@ export const PortfolioManagement = () => {
             </div>
             <div>
                 <HorizontalTab
-                    tabTitles={['Active Contracts', 'Trade History']}
+                    tabTitles={[
+                        'Active Contracts',
+                        'Open Orders',
+                        'My Transactions',
+                    ]}
                 >
                     <ActiveTradeTable data={activeTrades} />
                     <OrderHistoryTable data={oderHistory} />
