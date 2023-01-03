@@ -169,3 +169,9 @@ export const withMaturities = (Story: Story) => {
 
     return <Story />;
 };
+
+export const withFullPage = (Story: Story) => (
+    <div className='h-full w-full pb-10'>
+        <Story />
+    </div>
+);
