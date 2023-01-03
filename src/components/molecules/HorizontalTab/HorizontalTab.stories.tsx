@@ -2,7 +2,7 @@ import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { HorizontalTab } from './HorizontalTab';
 
 export default {
-    title: 'Molecules/TradeHistoryTab',
+    title: 'Molecules/HorizontalTab',
     component: HorizontalTab,
     args: {},
 } as ComponentMeta<typeof HorizontalTab>;
