@@ -1,5 +1,6 @@
+import { BigNumber, utils } from 'ethers';
 import { AssetPrices } from 'src/store/assetPrices';
-import { MaturityOptionList } from 'src/types';
+import { MaturityOptionList, OrderList, TradeHistory } from 'src/types';
 import { Rate } from 'src/utils';
 import { Maturity } from 'src/utils/entities';
 
@@ -54,4 +55,101 @@ export const yieldCurveRates = [
     new Rate(43801),
     new Rate(46219),
     new Rate(47746),
+];
+
+const fil = utils.formatBytes32String('FIL');
+const eth = utils.formatBytes32String('ETH');
+const btc = utils.formatBytes32String('BTC');
+
+export const orderHistoryList: OrderList = [
+    {
+        id: '1',
+        orderId: BigNumber.from('1'),
+        originalOrderId: BigNumber.from('1'),
+        maker: '0xb98bd7c7f656290071e52d1aa617d9cb4467fd6d',
+        currency: fil,
+        side: 1,
+        maturity: BigNumber.from(dec22Fixture.toString()),
+        unitPrice: BigNumber.from('9800'),
+        amount: BigNumber.from('1'),
+        status: 'Filled',
+        createdAt: BigNumber.from('1'),
+        blockNumber: BigNumber.from('1'),
+        txHash: '1',
+    },
+    {
+        id: '2',
+        orderId: BigNumber.from('1'),
+        originalOrderId: BigNumber.from('1'),
+        maker: '0xb98bd7c7f656290071e52d1aa617d9cb4467fd6d',
+        currency: fil,
+        side: 1,
+        maturity: BigNumber.from(dec22Fixture.toString()),
+        unitPrice: BigNumber.from('9600'),
+        amount: BigNumber.from('1'),
+        status: 'Open',
+        createdAt: BigNumber.from('1'),
+        blockNumber: BigNumber.from('1'),
+        txHash: '1',
+    },
+    {
+        id: '3',
+        orderId: BigNumber.from('1'),
+        originalOrderId: BigNumber.from('1'),
+        maker: '0xb98bd7c7f656290071e52d1aa617d9cb4467fd6d',
+        currency: eth,
+        side: 0,
+        maturity: BigNumber.from(dec22Fixture.toString()),
+        unitPrice: BigNumber.from('9800'),
+        amount: BigNumber.from('1'),
+        status: 'Filled',
+        createdAt: BigNumber.from('1'),
+        blockNumber: BigNumber.from('1'),
+        txHash: '1',
+    },
+];
+
+export const transactions: TradeHistory = [
+    {
+        id: '0x123',
+        amount: '1000000000000000000000',
+        averagePrice: BigNumber.from(8000),
+        side: 0,
+        orderPrice: 100000,
+        createdAt: 123,
+        blockNumber: 123,
+        taker: '0x123',
+        forwardValue: 100000,
+        txHash: '0x123',
+        currency: fil,
+        maturity: BigNumber.from(1733011200),
+    },
+    {
+        id: '0x123',
+        amount: '1000000000',
+        averagePrice: BigNumber.from(9000),
+        side: 1,
+        orderPrice: 100000,
+        createdAt: 123,
+        blockNumber: 123,
+        taker: '0x123',
+        forwardValue: 100000,
+        txHash: '0x123',
+        currency: btc,
+        maturity: BigNumber.from(1733011200),
+    },
+    {
+        id: '0x123',
+        amount: '1000000000',
+        averagePrice: BigNumber.from(9000),
+        side: 1,
+        orderPrice: 100000,
+        createdAt: 123,
+        blockNumber: 123,
+        taker: '0x123',
+        forwardValue: 100000,
+        txHash: '0x123',
+        currency: eth,
+        maturity: BigNumber.from(1733011200),
+    },
 ];
