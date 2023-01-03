@@ -21,3 +21,7 @@ export type PlaceOrderFunction = (
 
 export type OrderList = OrderHistoryQuery['orders'];
 export type TradeHistory = TransactionHistoryQuery['transactions'];
+
+export interface ColorFormat {
+    color?: 'neutral' | 'positive' | 'negative';
+}

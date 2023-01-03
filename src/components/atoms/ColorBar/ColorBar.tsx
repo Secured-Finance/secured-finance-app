@@ -1,5 +1,6 @@
 import classNames from 'classnames';
 import { BigNumber } from 'ethers';
+import { ColorFormat } from 'src/types';
 import { calculatePercentage } from 'src/utils/collateral';
 
 const COLORBAR_MIN_WIDTH = 3;
@@ -11,9 +12,8 @@ export const ColorBar = ({
 }: {
     value: BigNumber;
     total: BigNumber;
-    color: 'red' | 'green';
     align: 'left' | 'right';
-}) => {
+} & Required<ColorFormat>) => {
     const width = Math.max(
         COLORBAR_MIN_WIDTH,
         Math.trunc(calculatePercentage(value, total).toNumber() / 1.1)
@@ -21,8 +21,8 @@ export const ColorBar = ({
     return (
         <div
             className={classNames('absolute bottom-1 -z-10 h-4/6 opacity-20', {
-                'bg-galacticOrange': color === 'red',
-                'bg-nebulaTeal': color === 'green',
+                'bg-galacticOrange': color === 'negative',
+                'bg-nebulaTeal': color === 'positive',
                 'left-3': align === 'left',
                 'right-3': align === 'right',
             })}

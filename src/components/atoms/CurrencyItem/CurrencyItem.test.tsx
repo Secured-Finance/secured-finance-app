@@ -51,4 +51,25 @@ describe('CurrencyAmountItem Component', () => {
         expect(screen.getByText('FIL')).toBeInTheDocument();
         expect(screen.getByText('Filecoin')).toBeInTheDocument();
     });
+
+    it('should display the currency amount in neutral by default', () => {
+        render(<Default />);
+        expect(
+            screen.getByTestId('currency-amount-item').firstChild
+        ).toHaveClass('text-neutral-8');
+    });
+
+    it('should display the currency amount in green', () => {
+        render(<Default color='positive' />);
+        expect(
+            screen.getByTestId('currency-amount-item').firstChild
+        ).toHaveClass('text-nebulaTeal');
+    });
+
+    it('should display the currency amount in red', () => {
+        render(<Default color='negative' />);
+        expect(
+            screen.getByTestId('currency-amount-item').firstChild
+        ).toHaveClass('text-galacticOrange');
+    });
 });
