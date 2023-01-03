@@ -26,11 +26,6 @@ export default {
     },
     argTypes: {},
     decorators: [withAssetPrice],
-    parameters: {
-        date: {
-            tick: true,
-        },
-    },
 } as ComponentMeta<typeof YieldChart>;
 
 const Template: ComponentStory<typeof YieldChart> = args => {

@@ -1,8 +1,8 @@
 import { BigNumber } from 'ethers';
 import { formatBytes32String } from 'ethers/lib/utils';
-import mockDate from 'mockdate';
 import { AssetPriceMap } from 'src/store/assetPrices/selectors';
 import { TradeHistory } from 'src/types';
+import timemachine from 'timemachine';
 import { CurrencySymbol } from './currencyList';
 import {
     computeNetValue,
@@ -11,8 +11,10 @@ import {
 } from './portfolio';
 
 beforeAll(() => {
-    mockDate.reset();
-    mockDate.set(new Date('2022-12-01T11:00:00.00Z'));
+    timemachine.reset();
+    timemachine.config({
+        dateString: '2022-12-01T11:00:00.00Z',
+    });
 });
 
 describe('computeWeightedAverage', () => {
