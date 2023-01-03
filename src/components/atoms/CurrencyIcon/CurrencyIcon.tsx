@@ -17,6 +17,7 @@ export const CurrencyIcon = ({
                 'h-9 w-9': variant === 'large',
             })}
             role='img'
+            aria-label={ccy}
         />
     );
 };
