@@ -10,6 +10,7 @@ import {
     TableHeader,
 } from 'src/components/molecules';
 import { OrderBookEntry } from 'src/hooks/useOrderbook';
+import { ColorFormat } from 'src/types';
 import {
     currencyMap,
     CurrencySymbol,
@@ -22,17 +23,16 @@ const columnHelper = createColumnHelper<OrderBookEntry>();
 
 const OrderBookCell = ({
     value = '',
-    color = 'neutral',
     fontWeight = 'normal',
+    color = 'neutral',
 }: {
     value?: string;
-    color?: 'neutral' | 'red' | 'green';
     fontWeight?: 'normal' | 'semibold';
-}) => (
+} & ColorFormat) => (
     <span
         className={classNames('typography-caption-2', {
-            'text-galacticOrange': color === 'red',
-            'text-nebulaTeal': color === 'green',
+            'text-galacticOrange': color === 'negative',
+            'text-nebulaTeal': color === 'positive',
             'text-neutral-6': color === 'neutral',
             'font-semibold': fontWeight === 'semibold',
         })}
@@ -72,7 +72,7 @@ const PriceCell = ({
     totalAmount: BigNumber;
     position: 'borrow' | 'lend';
 }) => {
-    const color = position === 'borrow' ? 'red' : 'green';
+    const color = position === 'borrow' ? 'negative' : 'positive';
     const align = position === 'borrow' ? 'right' : 'left';
     if (amount.eq(0)) return <OrderBookCell />;
     return (

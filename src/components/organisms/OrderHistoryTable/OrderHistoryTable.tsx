@@ -87,6 +87,11 @@ export const OrderHistoryTable = ({ data }: { data: OrderList }) => {
                             }
                             price={2}
                             align='right'
+                            color={
+                                info.row.original.side === 1
+                                    ? 'negative'
+                                    : 'positive'
+                            }
                         />
                     </div>
                 ),
