@@ -1,4 +1,5 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { within } from '@storybook/testing-library';
 import {
     withAppLayout,
     withAssetPrice,
@@ -31,4 +32,14 @@ export const Default = Template.bind({});
 export const ConnectedToWallet = Template.bind({});
 ConnectedToWallet.parameters = {
     connected: true,
+};
+
+export const DisplayOrderHistory = Template.bind({});
+DisplayOrderHistory.parameters = {
+    connected: true,
+};
+DisplayOrderHistory.play = async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const orderHistoryTab = canvas.getByText('Open Orders');
+    orderHistoryTab.click();
 };
