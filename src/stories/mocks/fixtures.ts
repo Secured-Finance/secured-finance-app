@@ -27,7 +27,7 @@ export const preloadedAssetPrices: { assetPrices: AssetPrices } = {
 };
 
 export const dec22Fixture = new Maturity(1669852800);
-const mar23Fixture = new Maturity(1677628800);
+export const mar23Fixture = new Maturity(1677628800);
 const jun23Fixture = new Maturity(1685577600);
 const sep23Fixture = new Maturity(1693526400);
 const dec23Fixture = new Maturity(1701388800);
