@@ -11,7 +11,6 @@ export default {
     title: 'Pages/Landing',
     component: Landing,
     args: {},
-    chromatic: { pauseAnimationAtEnd: true },
     parameters: { date: { tick: true } },
     decorators: [
         withAppLayout,
