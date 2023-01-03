@@ -1,12 +1,14 @@
 import { BigNumber } from 'ethers';
-import mockDate from 'mockdate';
+import timemachine from 'timemachine';
 import { Maturity } from '.';
 import { Rate } from '../rate';
 import { LoanValue } from './loanValue';
 
 beforeEach(() => {
-    mockDate.reset();
-    mockDate.set('2022-12-01T11:00:00.00Z');
+    timemachine.reset();
+    timemachine.config({
+        dateString: '2022-12-01T11:00:00.00Z',
+    });
 });
 
 describe('LoanValue class', () => {

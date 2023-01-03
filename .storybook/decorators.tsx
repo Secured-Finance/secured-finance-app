@@ -1,7 +1,6 @@
 import { GraphClientProvider } from '@secured-finance/sf-graph-client';
 import { Story, StoryContext } from '@storybook/react';
 import { Wallet } from 'ethers';
-import mockDate from 'mockdate';
 import { useEffect, useMemo } from 'react';
 import { useDispatch } from 'react-redux';
 import { Header } from 'src/components/organisms';
@@ -12,6 +11,7 @@ import AxiosMock from 'src/stories/mocks/AxiosMock';
 import { CustomizedBridge } from 'src/stories/mocks/customBridge';
 import { CurrencySymbol } from 'src/utils';
 import { coingeckoApi } from 'src/utils/coinGeckoApi';
+import timemachine from 'timemachine';
 import { useWallet, UseWalletProvider } from 'use-wallet';
 
 export const withAppLayout = (Story: Story) => {
@@ -116,22 +116,13 @@ export const WithGraphClient = (Story: Story) => (
 );
 
 export const withMockDate = (Story: Story, context: StoryContext) => {
-    mockDate.reset();
+    timemachine.reset();
     if (context?.parameters?.date?.value instanceof Date) {
-        mockDate.set(context.parameters.date.value);
+        timemachine.config({
+            dateString: context.parameters.date.value,
+            tick: true,
+        });
     }
-
-    useEffect(() => {
-        if (!context?.parameters?.date?.tick === true) {
-            return;
-        }
-        const timerId = setInterval(() => {
-            const myDate = new Date(new Date().getTime() + 50);
-            mockDate.set(myDate);
-        }, 50);
-
-        return () => clearInterval(timerId);
-    }, []);
 
     return <Story />;
 };
