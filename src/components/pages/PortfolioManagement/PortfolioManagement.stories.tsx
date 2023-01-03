@@ -3,6 +3,7 @@ import { within } from '@storybook/testing-library';
 import {
     withAppLayout,
     withAssetPrice,
+    withFullPage,
     withWalletProvider,
 } from 'src/../.storybook/decorators';
 import {
@@ -15,7 +16,12 @@ export default {
     title: 'Pages/PortfolioManagement',
     component: PortfolioManagement,
     args: {},
-    decorators: [withAssetPrice, withAppLayout, withWalletProvider],
+    decorators: [
+        withFullPage,
+        withAssetPrice,
+        withAppLayout,
+        withWalletProvider,
+    ],
     parameters: {
         apolloClient: {
             mocks: [...mockTransactionHistory, ...mockOrderHistory],
