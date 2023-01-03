@@ -19,6 +19,9 @@ export default {
         withAssetPrice,
         withWalletProvider,
     ],
+    play: async () => {
+        await new Promise(resolve => setTimeout(resolve, 5000));
+    },
 } as ComponentMeta<typeof Landing>;
 
 const Template: ComponentStory<typeof Landing> = args => {
