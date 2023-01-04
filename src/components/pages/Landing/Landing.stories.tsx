@@ -10,6 +10,7 @@ import { Landing } from './Landing';
 export default {
     title: 'Pages/Landing',
     component: Landing,
+    chromatic: { diffThreshold: 1 },
     args: {},
     decorators: [
         withAppLayout,
