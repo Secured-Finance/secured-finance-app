@@ -8,10 +8,10 @@ import { CollateralBook } from 'src/hooks';
 import { selectEthereumBalance } from 'src/store/ethereumWallet';
 import { RootState } from 'src/store/types';
 import {
+    amountFormatterFromBase,
     CollateralInfo,
     collateralList,
     CurrencySymbol,
-    getFullDisplayBalanceNumber,
 } from 'src/utils';
 import { useWallet } from 'use-wallet';
 import { DepositCollateral } from '../DepositCollateral';
@@ -54,7 +54,9 @@ export const CollateralTab = ({
     const withdrawCollateralList = useMemo(
         () =>
             generateCollateralList(
-                getFullDisplayBalanceNumber(collateralBook.collateral)
+                amountFormatterFromBase[CurrencySymbol.ETH](
+                    collateralBook.collateral
+                )
             ),
         [collateralBook.collateral]
     );
