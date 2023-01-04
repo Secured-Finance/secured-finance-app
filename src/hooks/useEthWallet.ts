@@ -6,14 +6,9 @@ import {
     connectEthWallet,
     resetEthWallet,
     updateEthWalletBalance,
-    updateEthWalletUSDBalance,
 } from 'src/store/ethereumWallet';
 import { RootState } from 'src/store/types';
-import {
-    amountFormatterFromBase,
-    CurrencySymbol,
-    getETHPrice,
-} from 'src/utils';
+import { amountFormatterFromBase, CurrencySymbol } from 'src/utils';
 import { useWallet } from 'use-wallet';
 
 export const useEthereumWalletStore = () => {
@@ -27,26 +22,24 @@ export const useEthereumWalletStore = () => {
     );
 
     const getWalletBalance = useCallback(
-        (balance: number | string, price: number) => {
-            if (!account) return { usdBalance: 0, inEther: 0 };
+        (balance: number | string) => {
+            if (!account) return { inEther: 0 };
 
             const inEther = amountFormatterFromBase[CurrencySymbol.ETH](
                 BigNumber.from(balance)
             );
-            const usdBalance = getETHPrice(inEther, price);
-            return { usdBalance, inEther };
+            return { inEther };
         },
         [account]
     );
 
     const fetchEthStore = useCallback(
         async (account: string) => {
-            const { usdBalance, inEther } = getWalletBalance(balance, price);
+            const { inEther } = getWalletBalance(balance);
             dispatch(connectEthWallet(account));
             dispatch(updateEthWalletBalance(inEther));
-            dispatch(updateEthWalletUSDBalance(usdBalance));
         },
-        [getWalletBalance, balance, price, dispatch]
+        [getWalletBalance, balance, dispatch]
     );
 
     const connectWallet = useCallback(

@@ -1,10 +1,6 @@
 import { AssetInformation, Button } from 'src/components/atoms';
 import { CollateralBook } from 'src/hooks';
-import {
-    CurrencySymbol,
-    getFullDisplayBalanceNumber,
-    usdFormat,
-} from 'src/utils';
+import { amountFormatterFromBase, CurrencySymbol, usdFormat } from 'src/utils';
 
 interface CollateralTabLeftPaneProps {
     account: string | null;
@@ -20,7 +16,7 @@ export const CollateralTabLeftPane = ({
     const balance = account ? collateralBook.usdCollateral : 0;
 
     const quantity = collateralBook
-        ? getFullDisplayBalanceNumber(collateralBook.collateral)
+        ? amountFormatterFromBase[CurrencySymbol.ETH](collateralBook.collateral)
         : 0;
 
     return (

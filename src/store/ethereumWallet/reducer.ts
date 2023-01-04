@@ -12,16 +12,12 @@ const ethereumWalletSlice = createSlice({
         updateEthWalletBalance(state, action: PayloadAction<number>) {
             state.balance = action.payload;
         },
-        updateEthWalletUSDBalance(state, action: PayloadAction<number>) {
-            state.usdBalance = action.payload;
-        },
         connectEthWallet(state, action: PayloadAction<string>) {
             state.address = action.payload;
         },
         resetEthWallet(state) {
             state.address = defaultEthWallet.address;
             state.balance = defaultEthWallet.balance;
-            state.usdBalance = defaultEthWallet.usdBalance;
         },
     },
 });
