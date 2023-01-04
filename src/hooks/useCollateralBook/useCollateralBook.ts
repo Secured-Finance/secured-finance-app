@@ -1,25 +1,30 @@
-import { BigNumber } from 'bignumber.js';
+import { BigNumber } from 'ethers';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import useSF from 'src/hooks/useSecuredFinance';
 import { getAssetPrice } from 'src/store/assetPrices/selectors';
 import { selectEthereumBalance } from 'src/store/ethereumWallet';
-import { CurrencySymbol, toCurrency } from 'src/utils';
+import {
+    amountFormatterFromBase,
+    CurrencySymbol,
+    getETHPrice,
+    toCurrency,
+} from 'src/utils';
 import { RootState } from '../../store/types';
 
-const ZERO_BN = new BigNumber('0');
+const ZERO_BN = BigNumber.from('0');
 
 export interface CollateralBook {
     ccyName: string;
     collateral: BigNumber;
-    usdCollateral: BigNumber;
+    usdCollateral: number;
     coverage: BigNumber;
 }
 
 const emptyBook: CollateralBook = {
     ccyName: 'ETH',
     collateral: ZERO_BN,
-    usdCollateral: ZERO_BN,
+    usdCollateral: 0,
     coverage: ZERO_BN,
 };
 
@@ -50,11 +55,14 @@ export const useCollateralBook = (
 
             setCollateralBook({
                 ccyName: ccy,
-                collateral: new BigNumber(collateralAmount.toString()),
-                usdCollateral: new BigNumber(
-                    collateralAmount.toString()
-                ).multipliedBy(ethPrice),
-                coverage: new BigNumber(collateralCoverage.toString()),
+                collateral: collateralAmount,
+                usdCollateral: getETHPrice(
+                    amountFormatterFromBase[CurrencySymbol.ETH](
+                        collateralAmount
+                    ),
+                    ethPrice
+                ),
+                coverage: collateralCoverage,
                 // 0% collateral not used
                 // 100% collateral used BigNumber(10000)
             });

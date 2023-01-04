@@ -21,11 +21,7 @@ import {
     setUnitPrice,
 } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
-import {
-    amountFormatterFromBase,
-    getFullDisplayBalanceNumber,
-    ordinaryFormat,
-} from 'src/utils';
+import { amountFormatterFromBase, ordinaryFormat } from 'src/utils';
 import { LoanValue } from 'src/utils/entities';
 import { PlaceOrder } from '../PlaceOrder';
 
@@ -56,9 +52,7 @@ export const AdvancedLendingOrderCard = ({
         return collateralBook.coverage.toNumber() / 100.0;
     }, [collateralBook]);
 
-    const balance = getFullDisplayBalanceNumber(
-        collateralBook.usdCollateral.toNumber()
-    );
+    const balance = collateralBook.usdCollateral;
 
     const priceList = useSelector((state: RootState) => getPriceMap(state));
     const price = priceList[currency];

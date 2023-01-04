@@ -1,5 +1,5 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
-import BigNumber from 'bignumber.js';
+import { BigNumber } from 'ethers';
 import {
     withAssetPrice,
     withWalletProvider,
@@ -13,9 +13,9 @@ export default {
         account: 'as',
         collateralBook: {
             ccyName: 'ETH',
-            collateral: new BigNumber('100000000000000000'),
-            usdCollateral: new BigNumber('100000000000000000000'),
-            coverage: new BigNumber('3700'),
+            collateral: BigNumber.from('100000000000000000'),
+            usdCollateral: 100,
+            coverage: BigNumber.from('3700'),
         },
     },
     decorators: [withAssetPrice, withWalletProvider],
@@ -31,8 +31,8 @@ NotConnectedToWallet.args = {
     account: null,
     collateralBook: {
         ccyName: 'ETH',
-        collateral: new BigNumber('0'),
-        usdCollateral: new BigNumber('0'),
-        coverage: new BigNumber('0'), // 0%
+        collateral: BigNumber.from('0'),
+        usdCollateral: 0,
+        coverage: BigNumber.from('0'), // 0%
     },
 };
