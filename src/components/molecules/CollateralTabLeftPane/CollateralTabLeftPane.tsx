@@ -17,12 +17,10 @@ export const CollateralTabLeftPane = ({
     onClick,
     collateralBook,
 }: CollateralTabLeftPaneProps) => {
-    const balance = account
-        ? getFullDisplayBalanceNumber(collateralBook.usdCollateral.toNumber())
-        : 0;
+    const balance = account ? collateralBook.usdCollateral : 0;
 
     const quantity = collateralBook
-        ? getFullDisplayBalanceNumber(collateralBook.collateral.toNumber())
+        ? getFullDisplayBalanceNumber(collateralBook.collateral)
         : 0;
 
     return (

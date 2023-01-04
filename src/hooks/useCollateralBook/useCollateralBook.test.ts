@@ -1,7 +1,11 @@
-import BigNumber from 'bignumber.js';
+import { BigNumber } from 'ethers';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { act, renderHook } from 'src/test-utils';
-import { currencyMap } from 'src/utils';
+import {
+    amountFormatterFromBase,
+    currencyMap,
+    CurrencySymbol,
+} from 'src/utils';
 import { CollateralBook, useCollateralBook } from './';
 
 const mock = mockUseSF();
@@ -34,7 +38,7 @@ describe('useCollateralBook hook', () => {
         const { result } = renderHook(() => useCollateralBook(null));
         const colBook = result.current as CollateralBook;
         expect(colBook.ccyName).toEqual('ETH');
-        expect(colBook.collateral).toEqual(new BigNumber('0'));
+        expect(colBook.collateral).toEqual(BigNumber.from('0'));
     });
 
     it('should compute the collaterals in USD', async () => {
@@ -47,7 +51,11 @@ describe('useCollateralBook hook', () => {
         });
         const colBook = result.current as CollateralBook;
         expect(colBook.usdCollateral.toString()).toEqual(
-            (colBook.collateral.toNumber() * ETH_PRICE).toString()
+            (
+                amountFormatterFromBase[CurrencySymbol.ETH](
+                    colBook.collateral
+                ) * ETH_PRICE
+            ).toString()
         );
     });
 });

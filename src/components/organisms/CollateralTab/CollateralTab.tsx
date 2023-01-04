@@ -11,7 +11,7 @@ import {
     CollateralInfo,
     collateralList,
     CurrencySymbol,
-    getDisplayBalance,
+    getFullDisplayBalanceNumber,
 } from 'src/utils';
 import { useWallet } from 'use-wallet';
 import { DepositCollateral } from '../DepositCollateral';
@@ -54,7 +54,7 @@ export const CollateralTab = ({
     const withdrawCollateralList = useMemo(
         () =>
             generateCollateralList(
-                parseFloat(getDisplayBalance(collateralBook.collateral))
+                getFullDisplayBalanceNumber(collateralBook.collateral)
             ),
         [collateralBook.collateral]
     );

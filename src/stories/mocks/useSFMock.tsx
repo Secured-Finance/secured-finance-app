@@ -1,4 +1,3 @@
-import { BigNumber as BigNumberJS } from 'bignumber.js';
 import { BigNumber } from 'ethers';
 import * as jest from 'jest-mock';
 
@@ -43,8 +42,8 @@ export const mockUseSF = () => {
         ),
         getCollateralBook: jest.fn(() =>
             Promise.resolve({
-                collateralAmount: new BigNumberJS('10000'),
-                collateralCoverage: new BigNumberJS('80'),
+                collateralAmount: BigNumber.from('10000'),
+                collateralCoverage: BigNumber.from('80'),
             })
         ),
         getLendingMarket: jest.fn(() =>

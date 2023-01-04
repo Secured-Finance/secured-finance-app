@@ -1,5 +1,5 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
-import { BigNumber } from 'bignumber.js';
+import { BigNumber } from 'ethers';
 import { withAssetPrice } from 'src/../.storybook/decorators';
 import { AdvancedLendingOrderCard } from './AdvancedLendingOrderCard';
 
@@ -9,9 +9,9 @@ export default {
     args: {
         collateralBook: {
             ccyName: 'ETH',
-            collateral: new BigNumber('10000000000000000000'),
-            usdCollateral: new BigNumber('1000000000000000000000'),
-            coverage: new BigNumber('800'),
+            collateral: BigNumber.from('10000000000000000000'),
+            usdCollateral: 1000,
+            coverage: BigNumber.from('800'),
         },
     },
     decorators: [withAssetPrice],

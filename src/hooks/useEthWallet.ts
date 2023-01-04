@@ -1,4 +1,4 @@
-import BigNumber from 'bignumber.js';
+import { BigNumber } from 'ethers';
 import { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAsset } from 'src/store/assetPrices/selectors';
@@ -9,7 +9,11 @@ import {
     updateEthWalletUSDBalance,
 } from 'src/store/ethereumWallet';
 import { RootState } from 'src/store/types';
-import { CurrencySymbol } from 'src/utils';
+import {
+    amountFormatterFromBase,
+    CurrencySymbol,
+    getETHPrice,
+} from 'src/utils';
 import { useWallet } from 'use-wallet';
 
 export const useEthereumWalletStore = () => {
@@ -26,12 +30,10 @@ export const useEthereumWalletStore = () => {
         (balance: number | string, price: number) => {
             if (!account) return { usdBalance: 0, inEther: 0 };
 
-            const inEther = new BigNumber(balance)
-                .dividedBy(new BigNumber(10).pow(18))
-                .toNumber();
-            const usdBalance = new BigNumber(inEther)
-                .times(new BigNumber(price))
-                .toNumber();
+            const inEther = amountFormatterFromBase[CurrencySymbol.ETH](
+                BigNumber.from(balance)
+            );
+            const usdBalance = getETHPrice(inEther, price);
             return { usdBalance, inEther };
         },
         [account]
