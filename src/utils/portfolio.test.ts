@@ -4,11 +4,7 @@ import { AssetPriceMap } from 'src/store/assetPrices/selectors';
 import { TradeHistory } from 'src/types';
 import timemachine from 'timemachine';
 import { CurrencySymbol } from './currencyList';
-import {
-    computeNetValue,
-    computeWeightedAverageRate,
-    convertTradeHistoryToTableData,
-} from './portfolio';
+import { computeNetValue, computeWeightedAverageRate } from './portfolio';
 
 beforeAll(() => {
     timemachine.reset();
@@ -73,28 +69,5 @@ describe('computeNetValue', () => {
 
     it('should return 0 if no trades are provided', () => {
         expect(computeNetValue([], priceMap)).toEqual(0);
-    });
-});
-
-describe('convertTradeHistoryToTableData', () => {
-    it('should return the correct data', () => {
-        const trade: TradeHistory[number] = {
-            id: '0x123',
-            amount: 1000,
-            averagePrice: BigNumber.from(9698),
-            side: 1,
-            orderPrice: 100000,
-            createdAt: 123,
-            blockNumber: 123,
-            taker: '0x123',
-            forwardValue: 100000,
-            txHash: '0x123',
-            currency:
-                '0x5553444300000000000000000000000000000000000000000000000000000000',
-            maturity: BigNumber.from(1675252800),
-        };
-        expect(convertTradeHistoryToTableData(trade).contract).toEqual(
-            'USDC-FEB23'
-        );
     });
 });

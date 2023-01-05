@@ -8,7 +8,6 @@ import {
     PortfolioManagementTable,
 } from 'src/components/molecules';
 import {
-    ActiveTrade,
     ActiveTradeTable,
     CollateralOrganism,
     ConnectWalletCard,
@@ -22,7 +21,6 @@ import { RootState } from 'src/store/types';
 import {
     computeNetValue,
     computeWeightedAverageRate,
-    convertTradeHistoryToTableData,
     CurrencySymbol,
     generateWalletInformation,
     percentFormat,
@@ -67,11 +65,6 @@ export const PortfolioManagement = () => {
         [addressRecord, balanceRecord]
     );
 
-    const activeTrades: Array<ActiveTrade> = [];
-    tradeHistory.forEach(trade => {
-        return activeTrades.push(convertTradeHistoryToTableData(trade));
-    });
-
     return (
         <div
             className='mx-40 mt-7 flex flex-col gap-6'
@@ -112,7 +105,7 @@ export const PortfolioManagement = () => {
                         'My Transactions',
                     ]}
                 >
-                    <ActiveTradeTable data={activeTrades} />
+                    <ActiveTradeTable data={tradeHistory} />
                     <OrderHistoryTable data={oderHistory} />
                 </HorizontalTab>
             </div>

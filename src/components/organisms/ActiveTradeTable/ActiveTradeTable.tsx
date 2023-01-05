@@ -1,67 +1,58 @@
 import { createColumnHelper } from '@tanstack/react-table';
-import { BigNumber } from 'ethers';
+import * as dayjs from 'dayjs';
 import { useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { Chip, CurrencyIcon, CurrencyItem } from 'src/components/atoms';
-import { CoreTable, TableHeader } from 'src/components/molecules';
+import { Chip, CurrencyItem, PriceYieldItem } from 'src/components/atoms';
+import {
+    CoreTable,
+    TableContractCell,
+    TableHeader,
+} from 'src/components/molecules';
 import { ContractDetailDialog } from 'src/components/organisms';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { RootState } from 'src/store/types';
-import { currencyMap, CurrencySymbol, percentFormat, Rate } from 'src/utils';
+import { TradeHistory } from 'src/types';
+import { currencyMap, CurrencySymbol } from 'src/utils';
+import { LoanValue } from 'src/utils/entities';
+import { hexToString } from 'web3-utils';
 
-export type ActiveTrade = {
-    position: 'Borrow' | 'Lend';
-    contract: string;
-    apy: Rate;
-    notional: BigNumber;
-    currency: CurrencySymbol;
-    presentValue: BigNumber;
-    dayToMaturity: number;
-    forwardValue: BigNumber;
-};
+const columnHelper = createColumnHelper<TradeHistory[0]>();
 
-const columnHelper = createColumnHelper<ActiveTrade>();
-
-const AmountCell = ({
-    ccy,
-    amount,
-    priceList,
-}: {
-    ccy: CurrencySymbol;
-    amount: BigNumber;
-    priceList: Record<CurrencySymbol, number>;
-}) => {
-    return (
-        <CurrencyItem
-            ccy={ccy}
-            amount={currencyMap[ccy].fromBaseUnit(amount)}
-            price={priceList[ccy]}
-            align='right'
-        />
-    );
-};
-
-export const ActiveTradeTable = ({ data }: { data: Array<ActiveTrade> }) => {
+export const ActiveTradeTable = ({ data }: { data: TradeHistory }) => {
     const priceList = useSelector((state: RootState) => getPriceMap(state));
 
     const columns = useMemo(
         () => [
-            columnHelper.accessor('position', {
+            columnHelper.accessor('side', {
                 cell: info => (
                     <div className='flex justify-center'>
-                        <Chip label={info.getValue()} />
+                        <Chip
+                            label={
+                                info.getValue().toString() === '1'
+                                    ? 'Borrow'
+                                    : 'Lend'
+                            }
+                        />
                     </div>
                 ),
                 header: header => (
                     <TableHeader
-                        title='Position'
+                        title='Type'
                         sortingHandler={header.column.getToggleSortingHandler()}
                         isSorted={header.column.getIsSorted()}
                     />
                 ),
             }),
-            columnHelper.accessor('contract', {
-                cell: info => info.getValue(),
+            columnHelper.accessor('maturity', {
+                id: 'contract',
+                cell: info => (
+                    <div className='flex justify-center'>
+                        <TableContractCell
+                            maturity={info.getValue()}
+                            ccyByte32={info.row.original.currency}
+                        />
+                    </div>
+                ),
                 header: header => (
                     <TableHeader
                         title='Contract'
@@ -70,50 +61,17 @@ export const ActiveTradeTable = ({ data }: { data: Array<ActiveTrade> }) => {
                     />
                 ),
             }),
-            columnHelper.accessor('apy', {
-                cell: info =>
-                    percentFormat(info.getValue().toNormalizedNumber(), 100),
-                header: header => (
-                    <TableHeader
-                        title='APY'
-                        sortingHandler={header.column.getToggleSortingHandler()}
-                        isSorted={header.column.getIsSorted()}
-                    />
-                ),
-            }),
-            columnHelper.accessor('currency', {
-                cell: info => (
-                    <div className='flex justify-center'>
-                        <CurrencyIcon ccy={info.getValue()} />
-                    </div>
-                ),
-                header: () => '',
-            }),
-            columnHelper.accessor('presentValue', {
+            columnHelper.accessor('maturity', {
                 cell: info => {
-                    const ccy = info.row.original.currency;
-                    return (
-                        <AmountCell
-                            ccy={ccy}
-                            amount={info.getValue()}
-                            priceList={priceList}
-                        />
-                    );
-                },
+                    const dayToMaturity = dayjs
+                        .unix(info.getValue())
+                        .diff(Date.now(), 'day');
 
+                    return <>{dayToMaturity} Days</>;
+                },
                 header: header => (
                     <TableHeader
-                        title='Present Value'
-                        sortingHandler={header.column.getToggleSortingHandler()}
-                        isSorted={header.column.getIsSorted()}
-                    />
-                ),
-            }),
-            columnHelper.accessor('dayToMaturity', {
-                cell: info => `${info.getValue()} Days`,
-                header: header => (
-                    <TableHeader
-                        title='DTM'
+                        title='D.T.M.'
                         sortingHandler={header.column.getToggleSortingHandler()}
                         isSorted={header.column.getIsSorted()}
                     />
@@ -121,22 +79,90 @@ export const ActiveTradeTable = ({ data }: { data: Array<ActiveTrade> }) => {
             }),
             columnHelper.accessor('forwardValue', {
                 cell: info => {
-                    const ccy = info.row.original.currency;
+                    const ccy = hexToString(
+                        info.row.original.currency
+                    ) as CurrencySymbol;
+
                     return (
-                        <AmountCell
-                            ccy={ccy}
-                            amount={info.getValue()}
-                            priceList={priceList}
-                        />
+                        <div className='flex justify-end'>
+                            <CurrencyItem
+                                amount={currencyMap[ccy].fromBaseUnit(
+                                    info.getValue()
+                                )}
+                                ccy={ccy}
+                                price={priceList[ccy]}
+                                align='right'
+                                color={
+                                    info.row.original.side === 1
+                                        ? 'negative'
+                                        : 'positive'
+                                }
+                            />
+                        </div>
                     );
                 },
                 header: header => (
                     <TableHeader
-                        title='Forward Value'
+                        title='F.V.'
                         sortingHandler={header.column.getToggleSortingHandler()}
                         isSorted={header.column.getIsSorted()}
                     />
                 ),
+            }),
+            columnHelper.accessor('averagePrice', {
+                cell: info => {
+                    return (
+                        <div className='flex justify-center'>
+                            <PriceYieldItem
+                                loanValue={LoanValue.fromPrice(
+                                    Number(info.getValue().toString()),
+                                    Number(
+                                        info.row.original.maturity.toString()
+                                    )
+                                )}
+                            />
+                        </div>
+                    );
+                },
+                header: header => (
+                    <TableHeader
+                        title='M.T.M'
+                        sortingHandler={header.column.getToggleSortingHandler()}
+                        isSorted={header.column.getIsSorted()}
+                    />
+                ),
+            }),
+            columnHelper.accessor('amount', {
+                cell: info => {
+                    const ccy = hexToString(
+                        info.row.original.currency
+                    ) as CurrencySymbol;
+
+                    return (
+                        <div className='flex justify-end'>
+                            <CurrencyItem
+                                amount={currencyMap[ccy].fromBaseUnit(
+                                    info.getValue()
+                                )}
+                                ccy={ccy}
+                                price={priceList[ccy]}
+                                align='right'
+                            />
+                        </div>
+                    );
+                },
+                header: header => (
+                    <TableHeader
+                        title='P.V.'
+                        sortingHandler={header.column.getToggleSortingHandler()}
+                        isSorted={header.column.getIsSorted()}
+                    />
+                ),
+            }),
+            columnHelper.display({
+                id: 'actions',
+                cell: () => <div>...</div>,
+                header: () => <div>Actions</div>,
             }),
         ],
         [priceList]

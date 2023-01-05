@@ -43,7 +43,7 @@ export const CoreTable = <T,>({
                         {headerGroup.headers.map(header => (
                             <th
                                 key={header.id}
-                                className='px-4 py-2 text-center'
+                                className='px-1 py-2 text-center'
                             >
                                 {header.isPlaceholder
                                     ? null
@@ -67,7 +67,7 @@ export const CoreTable = <T,>({
                         data-testid={`${name}-row`}
                     >
                         {row.getVisibleCells().map(cell => (
-                            <td key={cell.id} className='px-4 py-2 text-center'>
+                            <td key={cell.id} className='px-1 py-2 text-center'>
                                 {flexRender(
                                     cell.column.columnDef.cell,
                                     cell.getContext()
