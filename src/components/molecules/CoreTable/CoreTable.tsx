@@ -60,7 +60,7 @@ export const CoreTable = <T,>({
                 {table.getRowModel().rows.map(row => (
                     <tr
                         key={row.id}
-                        className={classNames('relative h-7', {
+                        className={classNames('relative h-7 scale-100', {
                             'cursor-pointer': onLineClick,
                         })}
                         onClick={onLineClick}
