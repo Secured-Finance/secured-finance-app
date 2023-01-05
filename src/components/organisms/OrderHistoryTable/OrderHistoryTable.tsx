@@ -77,7 +77,7 @@ export const OrderHistoryTable = ({ data }: { data: OrderList }) => {
             }),
             columnHelper.accessor('amount', {
                 cell: info => (
-                    <div>
+                    <div className='flex justify-center'>
                         <CurrencyItem
                             amount={info.getValue().toString()}
                             ccy={

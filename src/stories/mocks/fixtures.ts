@@ -58,7 +58,7 @@ export const yieldCurveRates = [
 ];
 
 const fil = utils.formatBytes32String('FIL');
-const eth = utils.formatBytes32String('ETH');
+export const ethBytes32 = utils.formatBytes32String('ETH');
 const btc = utils.formatBytes32String('BTC');
 
 export const orderHistoryList: OrderList = [
@@ -97,7 +97,7 @@ export const orderHistoryList: OrderList = [
         orderId: BigNumber.from('1'),
         originalOrderId: BigNumber.from('1'),
         maker: '0xb98bd7c7f656290071e52d1aa617d9cb4467fd6d',
-        currency: eth,
+        currency: ethBytes32,
         side: 0,
         maturity: BigNumber.from(dec22Fixture.toString()),
         unitPrice: BigNumber.from('9800'),
@@ -149,7 +149,7 @@ export const transactions: TradeHistory = [
         taker: '0x123',
         forwardValue: 100000,
         txHash: '0x123',
-        currency: eth,
+        currency: ethBytes32,
         maturity: BigNumber.from(1733011200),
     },
 ];

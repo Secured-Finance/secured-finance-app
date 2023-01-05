@@ -17,10 +17,10 @@ export const PriceYieldItem = ({
                 'text-left': align === 'left',
             })}
         >
-            <div className='typography-caption-2 flex text-neutral-6'>
+            <div className='typography-caption-2 flex h-6 text-neutral-6'>
                 {formatLoanValue(loanValue, 'price')}
             </div>
-            <div className='typography-caption-2 flex text-neutral-4'>
+            <div className='typography-caption-2 flex h-5 text-neutral-4'>
                 {formatLoanValue(loanValue, 'rate')}
             </div>
         </div>
