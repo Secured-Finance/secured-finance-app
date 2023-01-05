@@ -23,8 +23,8 @@ export const ColorBar = ({
             className={classNames('absolute bottom-1 -z-10 h-4/6 opacity-20', {
                 'bg-galacticOrange': color === 'negative',
                 'bg-nebulaTeal': color === 'positive',
-                'left-3': align === 'left',
-                'right-3': align === 'right',
+                'left-0.5': align === 'left',
+                'right-0.5': align === 'right',
             })}
             data-testid='color-bar'
             style={{ width: `${width}%` }}
