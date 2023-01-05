@@ -27,32 +27,28 @@ export const useEthereumWalletStore = (
     const { getERC20Balance } = useERC20Balance(securedFinance);
 
     const getWalletBalance = useCallback(
-        (balance: number | string) => {
-            if (!account) return { inEther: 0 };
+        async (balance: number | string) => {
+            if (!account) return { inEther: 0, inUsdc: 0 };
 
             const inEther = amountFormatterFromBase[CurrencySymbol.ETH](
                 BigNumber.from(balance)
             );
-            return { inEther };
+            const usdcBalance = await getERC20Balance(account, USDC.onChain());
+            const inUsdc =
+                amountFormatterFromBase[CurrencySymbol.USDC](usdcBalance);
+            return { inEther, inUsdc };
         },
-        [account]
+        [account, getERC20Balance]
     );
 
     const fetchEthStore = useCallback(
         async (account: string) => {
-            const { inEther } = getWalletBalance(balance);
-            const a = await getERC20Balance(account, USDC.onChain());
+            const { inEther, inUsdc } = await getWalletBalance(balance);
             dispatch(connectEthWallet(account));
-            dispatch(
-                updateUsdcBalance(
-                    amountFormatterFromBase[CurrencySymbol.USDC](
-                        a ?? BigNumber.from(0)
-                    )
-                )
-            );
+            dispatch(updateUsdcBalance(inUsdc));
             dispatch(updateEthBalance(inEther));
         },
-        [getWalletBalance, balance, dispatch, getERC20Balance]
+        [getWalletBalance, balance, dispatch]
     );
 
     const connectWallet = useCallback(

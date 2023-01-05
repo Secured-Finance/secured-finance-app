@@ -52,8 +52,6 @@ export const AdvancedLendingOrderCard = ({
         return collateralBook.coverage.toNumber() / 100.0;
     }, [collateralBook]);
 
-    const balance = collateralBook.usdCollateral;
-
     const priceList = useSelector((state: RootState) => getPriceMap(state));
     const price = priceList[currency];
 
@@ -154,7 +152,7 @@ export const AdvancedLendingOrderCard = ({
 
                 <CollateralManagementConciseTab
                     collateralCoverage={collateralUsagePercent}
-                    totalCollateralInUSD={balance}
+                    totalCollateralInUSD={collateralBook.usdCollateral}
                 />
             </div>
         </div>

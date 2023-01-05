@@ -10,6 +10,7 @@ import { useDepositCollateral } from 'src/hooks/useDepositCollateral';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { RootState } from 'src/store/types';
 import {
+    amountFormatterFromBase,
     CollateralInfo,
     CurrencySymbol,
     handleContractTransaction,
@@ -87,7 +88,7 @@ export const DepositCollateral = ({
 
     const priceList = useSelector((state: RootState) => getPriceMap(state));
     const { onDepositCollateral } = useDepositCollateral(
-        CurrencySymbol.USDC,
+        asset,
         BigNumber.from(collateral)
     );
 
@@ -178,7 +179,39 @@ export const DepositCollateral = ({
                         );
                         break;
                     case Step.deposited:
-                        return <Check className='h-[100px] w-[100px]' />;
+                        return (
+                            <div className='flex w-full flex-col items-center gap-6'>
+                                <Check className='h-[100px] w-[100px]' />
+                                <div className='flex h-28 w-full flex-row gap-8 rounded-xl border border-neutral p-6'>
+                                    <div className='typography-caption flex flex-col gap-10px'>
+                                        <span className='text-neutral-4'>
+                                            Status
+                                        </span>
+                                        <span className='leading-6 text-[#58BD7D]'>
+                                            Complete
+                                        </span>
+                                    </div>
+                                    <div className='typography-caption flex flex-col gap-10px'>
+                                        <span className='text-neutral-4'>
+                                            Deposit Address
+                                        </span>
+                                        <span className='leading-6 text-neutral-8'>
+                                            {'arpit'}
+                                        </span>
+                                    </div>
+                                    <div className='typography-caption flex flex-col gap-10px'>
+                                        <span className='text-neutral-4'>
+                                            Amount
+                                        </span>
+                                        <span className='leading-6 text-neutral-8'>
+                                            {amountFormatterFromBase[asset](
+                                                BigNumber.from(collateral)
+                                            )}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        );
                     default:
                         return <p>Unknown</p>;
                 }

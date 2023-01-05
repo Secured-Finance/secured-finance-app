@@ -64,10 +64,8 @@ export const useCollateralBook = (account: string | null) => {
 
     useEffect(() => {
         getCollateralBook();
-        return () => {
-            setCollateralBook(emptyBook);
-        };
     }, [getCollateralBook]);
+
     return collateralBook;
 };
 
@@ -75,13 +73,13 @@ const formatCollateral = (
     collateral: Record<string, BigNumber>,
     priceList: AssetPriceMap
 ) => {
-    let collateralBook = {};
+    let collateralBook: Partial<Record<CurrencySymbol, BigNumber>> = {};
     let usdCollateral = 0;
     const currencies = Object.keys(collateral);
     currencies.forEach((ccy: string) => {
         collateralBook = {
             ...collateralBook,
-            [ccy as CurrencySymbol]: collateral[ccy],
+            [ccy as CurrencySymbol]: collateral[ccy] ?? BigNumber.from(0),
         };
         usdCollateral +=
             amountFormatterFromBase[ccy as CurrencySymbol](

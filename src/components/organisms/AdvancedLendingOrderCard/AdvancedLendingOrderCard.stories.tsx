@@ -10,9 +10,9 @@ export default {
         collateralBook: {
             collateral: {
                 ETH: BigNumber.from('1000000000000000000'),
-                USDC: BigNumber.from('10000000'),
+                USDC: BigNumber.from('100000000'),
             },
-            usdCollateral: 1000,
+            usdCollateral: 2100.34,
             coverage: BigNumber.from('800'),
         },
     },
