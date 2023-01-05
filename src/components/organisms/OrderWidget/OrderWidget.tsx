@@ -243,11 +243,13 @@ export const OrderWidget = ({
                             data={buyOrders}
                             columns={buyColumns}
                             name='buyOrders'
+                            border={false}
                         />
                         <CoreTable
                             data={sellOrders}
                             columns={sellColumns}
                             name='sellOrders'
+                            border={false}
                         />
                     </div>
                 </>

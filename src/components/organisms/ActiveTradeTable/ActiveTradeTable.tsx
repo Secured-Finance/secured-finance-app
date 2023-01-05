@@ -170,17 +170,33 @@ export const ActiveTradeTable = ({ data }: { data: TradeHistory }) => {
 
     const [displayContractDetails, setDisplayContractDetails] = useState(false);
     return (
-        <>
+        <div className='pb-2'>
             <CoreTable
                 data={data}
                 columns={columns}
                 name='active-trade-table'
+                border
                 onLineClick={() => setDisplayContractDetails(true)}
             />
             <ContractDetailDialog
                 isOpen={displayContractDetails}
                 onClose={() => setDisplayContractDetails(false)}
             />
-        </>
+            <div className='typography-dropdown-selection-label mx-10 my-6 bg-cardBackground/60 text-justify text-secondary7 '>
+                <p className='p-3'>
+                    Secured Finance lending contract includes an auto-roll
+                    feature. If no action is taken by the user prior to the
+                    contract&apos;s maturation date, it will automatically roll
+                    over into the next closest expiration date. This convenience
+                    comes with a 0.25% fee for the auto-roll transaction.{' '}
+                </p>
+                <p className='p-3'>
+                    It is the user&apos;s responsibility to take action to
+                    unwind the contract prior to its maturation date. Failure to
+                    do so will result in the contract being automatically rolled
+                    over, incurring the aforementioned fee.
+                </p>
+            </div>
+        </div>
     );
 };

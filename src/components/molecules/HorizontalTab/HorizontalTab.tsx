@@ -53,7 +53,7 @@ export const HorizontalTab = ({
                         );
                     })}
                 </HeadlessTab.List>
-                <HeadlessTab.Panels className='bg-black-20'>
+                <HeadlessTab.Panels className='bg-black-20 px-2'>
                     {arrayChildren[selectedIndex]}
                 </HeadlessTab.Panels>
             </HeadlessTab.Group>
