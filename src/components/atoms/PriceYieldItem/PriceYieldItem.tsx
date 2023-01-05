@@ -11,18 +11,18 @@ export const PriceYieldItem = ({
 }) => {
     return (
         <div
-            className={classNames('flex flex-col', {
+            className={classNames('flex w-12 flex-col', {
                 'text-right': align === 'right',
                 'text-center': align === 'center',
                 'text-left': align === 'left',
             })}
         >
-            <div className='typography-caption-2 flex h-6 text-neutral-6'>
+            <span className='typography-caption-2 h-6 text-neutral-6'>
                 {formatLoanValue(loanValue, 'price')}
-            </div>
-            <div className='typography-caption-2 flex h-5 text-neutral-4'>
+            </span>
+            <span className='typography-caption-2 h-5 text-neutral-4'>
                 {formatLoanValue(loanValue, 'rate')}
-            </div>
+            </span>
         </div>
     );
 };
