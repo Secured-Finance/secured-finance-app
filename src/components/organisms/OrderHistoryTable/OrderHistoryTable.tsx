@@ -122,5 +122,5 @@ export const OrderHistoryTable = ({ data }: { data: OrderList }) => {
         []
     );
 
-    return <CoreTable columns={columns} data={data} />;
+    return <CoreTable columns={columns} data={data} border />;
 };

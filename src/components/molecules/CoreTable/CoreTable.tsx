@@ -14,12 +14,14 @@ export const CoreTable = <T,>({
     data,
     columns,
     onLineClick,
+    border,
     name = 'core-table',
 }: {
     data: Array<T>;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     columns: ColumnDef<T, any>[];
     onLineClick?: () => void;
+    border: boolean;
     name?: string;
 }) => {
     const [sorting, setSorting] = useState<SortingState>([]);
@@ -62,6 +64,8 @@ export const CoreTable = <T,>({
                         key={row.id}
                         className={classNames('relative h-7 scale-100', {
                             'cursor-pointer': onLineClick,
+                            'hover:bg-black-30': onLineClick,
+                            'border-b border-white-10': border,
                         })}
                         onClick={onLineClick}
                         data-testid={`${name}-row`}
