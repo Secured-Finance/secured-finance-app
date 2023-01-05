@@ -25,11 +25,13 @@ export const AmountCard = ({
                     {currencyMap[ccy].name}
                 </span>
             </div>
-            <div className='flex flex-row items-center justify-end gap-2'>
+            <div className='flex h-6 flex-row items-center justify-end gap-2'>
                 <span className='typography-body-1 font-bold text-white'>
                     {ordinaryFormat(amount)}
                 </span>
-                <span className='typography-caption text-white-60'>{ccy}</span>
+                <span className='typography-caption h-5 text-white-60'>
+                    {ccy}
+                </span>
             </div>
             <div></div>
             <div className='typography-caption-3 text-right text-white-60'>

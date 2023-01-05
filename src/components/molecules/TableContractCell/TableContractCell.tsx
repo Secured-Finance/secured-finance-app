@@ -26,13 +26,15 @@ export const TableContractCell = ({
     );
     return (
         <div className='flex flex-col'>
-            <div className='flex flex-row gap-2'>
-                <CurrencyIcon ccy={ccy} />
+            <div className='flex h-6 w-40 flex-row justify-start gap-2'>
+                <div className='mt-1'>
+                    <CurrencyIcon ccy={ccy} />
+                </div>
                 <span className='typography-caption-2 text-neutral-6'>
                     {contract}
                 </span>
             </div>
-            <div className='typography-caption-2 ml-8 text-neutral-4'>
+            <div className='typography-caption-2 ml-8 text-left text-neutral-4'>
                 {currencyMap[ccy].name}
             </div>
         </div>
