@@ -11,8 +11,10 @@ export default {
     component: LendingCard,
     args: {
         collateralBook: {
-            ccyName: 'ETH',
-            collateral: BigNumber.from('10000000000000000000'),
+            collateral: {
+                ETH: BigNumber.from('1000000000000000000'),
+                USDC: BigNumber.from('10000000'),
+            },
             usdCollateral: 100,
             coverage: BigNumber.from('80'),
         },

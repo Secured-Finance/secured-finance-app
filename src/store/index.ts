@@ -3,17 +3,17 @@ import assetPrices from './assetPrices';
 import availableContracts from './availableContracts';
 import blockchain from './blockchain';
 import { listenerMiddleware } from './blockchain/reducer';
-import ethereumWallet from './ethereumWallet';
 import landingOrderForm from './landingOrderForm';
 import lastError from './lastError';
+import wallet from './wallet';
 
 export const rootReducers = {
-    ethereumWallet,
     assetPrices,
-    blockchain,
-    lastError,
-    landingOrderForm,
     availableContracts,
+    blockchain,
+    landingOrderForm,
+    lastError,
+    wallet,
 };
 
 const store = configureStore({

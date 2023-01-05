@@ -8,8 +8,10 @@ export default {
     component: AdvancedLendingOrderCard,
     args: {
         collateralBook: {
-            ccyName: 'ETH',
-            collateral: BigNumber.from('10000000000000000000'),
+            collateral: {
+                ETH: BigNumber.from('1000000000000000000'),
+                USDC: BigNumber.from('10000000'),
+            },
             usdCollateral: 1000,
             coverage: BigNumber.from('800'),
         },

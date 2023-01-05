@@ -15,8 +15,10 @@ export const CollateralTabLeftPane = ({
 }: CollateralTabLeftPaneProps) => {
     const balance = account ? collateralBook.usdCollateral : 0;
 
-    const quantity = collateralBook
-        ? amountFormatterFromBase[CurrencySymbol.ETH](collateralBook.collateral)
+    const quantity = collateralBook.collateral.ETH
+        ? amountFormatterFromBase[CurrencySymbol.ETH](
+              collateralBook.collateral.ETH
+          )
         : 0;
 
     return (

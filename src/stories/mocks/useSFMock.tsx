@@ -42,7 +42,10 @@ export const mockUseSF = () => {
         ),
         getCollateralBook: jest.fn(() =>
             Promise.resolve({
-                collateralAmount: BigNumber.from('10000'),
+                collateral: {
+                    ETH: BigNumber.from('1000000000000000000'),
+                    USDC: BigNumber.from('10000000'),
+                },
                 collateralCoverage: BigNumber.from('80'),
             })
         ),
@@ -148,6 +151,8 @@ export const mockUseSF = () => {
                 ],
             })
         ),
+
+        getERC20Balance: jest.fn(() => Promise.resolve({ balance: 100 })),
     };
 
     return mockSecuredFinance;

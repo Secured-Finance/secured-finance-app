@@ -11,8 +11,10 @@ export default {
     component: CollateralTab,
     args: {
         collateralBook: {
-            ccyName: 'ETH',
-            collateral: BigNumber.from('0'),
+            collateral: {
+                ETH: BigNumber.from('0'),
+                USDC: BigNumber.from('0'),
+            },
             usdCollateral: 0,
             coverage: BigNumber.from('0'), // 0%
         },
@@ -32,8 +34,10 @@ ConnectedToWallet.parameters = {
 
 ConnectedToWallet.args = {
     collateralBook: {
-        ccyName: 'ETH',
-        collateral: BigNumber.from('100000000000000000'),
+        collateral: {
+            ETH: BigNumber.from('1000000000000000000'),
+            USDC: BigNumber.from('10000000'),
+        },
         usdCollateral: 200.03,
         coverage: BigNumber.from('7000'), // 70%
     },

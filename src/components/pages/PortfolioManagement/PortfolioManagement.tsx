@@ -14,8 +14,8 @@ import {
 } from 'src/components/organisms';
 import { useTradeHistory } from 'src/hooks';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
-import { selectEthereumBalance } from 'src/store/ethereumWallet';
 import { RootState } from 'src/store/types';
+import { selectEthereumBalance, selectUSDCBalance } from 'src/store/wallet';
 import {
     computeNetValue,
     computeWeightedAverageRate,
@@ -32,8 +32,12 @@ export const PortfolioManagement = () => {
     const { account } = useWallet();
     const tradeHistory = useTradeHistory(account ?? '');
 
-    const balance = useSelector((state: RootState) =>
+    const ethBalance = useSelector((state: RootState) =>
         selectEthereumBalance(state)
+    );
+
+    const usdcBalance = useSelector((state: RootState) =>
+        selectUSDCBalance(state)
     );
 
     const priceMap = useSelector((state: RootState) => getPriceMap(state));
@@ -46,9 +50,10 @@ export const PortfolioManagement = () => {
 
     const balanceRecord = useMemo(() => {
         return {
-            [CurrencySymbol.ETH]: balance,
+            [CurrencySymbol.ETH]: ethBalance,
+            [CurrencySymbol.USDC]: usdcBalance,
         };
-    }, [balance]);
+    }, [ethBalance, usdcBalance]);
 
     const assetMap: AssetDisclosureProps[] = useMemo(
         () => generateWalletInformation(addressRecord, balanceRecord),

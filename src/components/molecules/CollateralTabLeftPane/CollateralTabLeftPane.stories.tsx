@@ -13,8 +13,10 @@ export default {
         account: 'as',
         onClick: () => {},
         collateralBook: {
-            ccyName: 'ETH',
-            collateral: BigNumber.from('100000000000000000'),
+            collateral: {
+                ETH: BigNumber.from('1000000000000000000'),
+                USDC: BigNumber.from('10000000'),
+            },
             usdCollateral: 200.03,
             coverage: BigNumber.from('80'),
         },
