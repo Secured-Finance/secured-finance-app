@@ -87,7 +87,7 @@ export const DepositCollateral = ({
 
     const priceList = useSelector((state: RootState) => getPriceMap(state));
     const { onDepositCollateral } = useDepositCollateral(
-        CurrencySymbol.ETH,
+        CurrencySymbol.USDC,
         BigNumber.from(collateral)
     );
 

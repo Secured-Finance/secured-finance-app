@@ -12,8 +12,10 @@ export default {
     args: {
         account: 'as',
         collateralBook: {
-            ccyName: 'ETH',
-            collateral: BigNumber.from('100000000000000000'),
+            collateral: {
+                ETH: BigNumber.from('1000000000000000000'),
+                USDC: BigNumber.from('10000000'),
+            },
             usdCollateral: 100,
             coverage: BigNumber.from('3700'),
         },
@@ -30,8 +32,10 @@ export const NotConnectedToWallet = Template.bind({});
 NotConnectedToWallet.args = {
     account: null,
     collateralBook: {
-        ccyName: 'ETH',
-        collateral: BigNumber.from('0'),
+        collateral: {
+            ETH: BigNumber.from('0'),
+            USDC: BigNumber.from('0'),
+        },
         usdCollateral: 0,
         coverage: BigNumber.from('0'), // 0%
     },

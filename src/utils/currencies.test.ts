@@ -10,7 +10,7 @@ describe('currencies.generateWalletInformation', () => {
 
         const balanceRecord = {
             [CurrencySymbol.ETH]: 0.58,
-            [CurrencySymbol.FIL]: 150,
+            [CurrencySymbol.USDC]: 150,
         };
 
         const options = generateWalletInformation(addressRecord, balanceRecord);
@@ -22,6 +22,10 @@ describe('currencies.generateWalletInformation', () => {
                 {
                     asset: CurrencySymbol.ETH,
                     quantity: 0.58,
+                },
+                {
+                    asset: CurrencySymbol.USDC,
+                    quantity: 150,
                 },
             ],
         });

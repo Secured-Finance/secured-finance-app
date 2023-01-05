@@ -1,74 +1,95 @@
 import { BigNumber } from 'ethers';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import useSF from 'src/hooks/useSecuredFinance';
-import { getAssetPrice } from 'src/store/assetPrices/selectors';
-import { selectEthereumBalance } from 'src/store/ethereumWallet';
-import {
-    amountFormatterFromBase,
-    CurrencySymbol,
-    getETHPrice,
-    toCurrency,
-} from 'src/utils';
+import { AssetPriceMap, getPriceMap } from 'src/store/assetPrices/selectors';
+import { amountFormatterFromBase, CurrencySymbol } from 'src/utils';
 import { RootState } from '../../store/types';
 
 const ZERO_BN = BigNumber.from('0');
 
 export interface CollateralBook {
-    ccyName: string;
-    collateral: BigNumber;
+    collateral: Partial<Record<CurrencySymbol, BigNumber>>;
     usdCollateral: number;
     coverage: BigNumber;
 }
 
 const emptyBook: CollateralBook = {
-    ccyName: 'ETH',
-    collateral: ZERO_BN,
+    collateral: {
+        [CurrencySymbol.ETH]: ZERO_BN,
+        [CurrencySymbol.USDC]: ZERO_BN,
+    },
     usdCollateral: 0,
     coverage: ZERO_BN,
 };
 
-export const useCollateralBook = (
-    account: string | null,
-    ccy = CurrencySymbol.ETH
-) => {
+export const useCollateralBook = (account: string | null) => {
     const [collateralBook, setCollateralBook] = useState(emptyBook);
     const securedFinance = useSF();
-    const ethPrice = useSelector((state: RootState) =>
-        getAssetPrice(CurrencySymbol.ETH)(state)
+
+    const { ethBalance, usdcBalance } = useSelector(
+        (state: RootState) => state.wallet
     );
-    const balance = useSelector((state: RootState) =>
-        selectEthereumBalance(state)
-    );
-    useEffect(() => {
+
+    const priceList = useSelector((state: RootState) => getPriceMap(state));
+
+    const getCollateralBook = useCallback(async () => {
         if (!securedFinance || !account) {
             return;
         }
 
-        // TODO: this is not taking care of what are really those numbers. This needs to be fixed
-        const getCollateralBook = async () => {
-            const { collateralAmount, collateralCoverage } =
-                await securedFinance.getCollateralBook(
-                    account,
-                    toCurrency(ccy)
-                );
+        const { collateral, collateralCoverage } =
+            await securedFinance.getCollateralBook(account);
+        const { collateralBook, usdCollateral } = formatCollateral(
+            collateral,
+            priceList
+        );
 
-            setCollateralBook({
-                ccyName: ccy,
-                collateral: collateralAmount,
-                usdCollateral: getETHPrice(
-                    amountFormatterFromBase[CurrencySymbol.ETH](
-                        collateralAmount
-                    ),
-                    ethPrice
-                ),
-                coverage: collateralCoverage,
-                // 0% collateral not used
-                // 100% collateral used BigNumber(10000)
-            });
-        };
+        setCollateralBook({
+            collateral: collateralBook,
+            usdCollateral: usdCollateral,
+            coverage: collateralCoverage,
+            // 0% collateral not used
+            // 100% collateral used BigNumber(10000)
+        });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [
+        account,
+        securedFinance,
+        ethBalance,
+        usdcBalance,
+        priceList.ETH,
+        priceList.USDC,
+    ]);
+
+    useEffect(() => {
         getCollateralBook();
-    }, [account, ccy, securedFinance, ethPrice, balance]);
-
+        return () => {
+            setCollateralBook(emptyBook);
+        };
+    }, [getCollateralBook]);
     return collateralBook;
+};
+
+const formatCollateral = (
+    collateral: Record<string, BigNumber>,
+    priceList: AssetPriceMap
+) => {
+    let collateralBook = {};
+    let usdCollateral = 0;
+    const currencies = Object.keys(collateral);
+    currencies.forEach((ccy: string) => {
+        collateralBook = {
+            ...collateralBook,
+            [ccy as CurrencySymbol]: collateral[ccy],
+        };
+        usdCollateral +=
+            amountFormatterFromBase[ccy as CurrencySymbol](
+                collateral[ccy as CurrencySymbol]
+            ) * priceList[ccy as CurrencySymbol];
+    });
+    return {
+        collateralBook,
+        usdCollateral,
+    };
 };
