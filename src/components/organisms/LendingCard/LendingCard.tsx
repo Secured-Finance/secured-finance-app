@@ -74,9 +74,7 @@ export const LendingCard = ({
         return `${computeAvailableToBorrow(
             assetPriceMap[currency],
             assetPriceMap[CurrencySymbol.ETH],
-            BigNumber.from(
-                (collateralBook.collateral[CurrencySymbol.ETH] ?? 0).toString()
-            )
+            collateralBook.collateral.ETH ?? BigNumber.from(0)
         )}  ${currency}`;
     }, [assetPriceMap, collateralBook.collateral, currency]);
 

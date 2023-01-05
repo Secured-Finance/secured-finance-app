@@ -1,6 +1,6 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { BigNumber } from 'ethers';
 import { withAssetPrice } from 'src/../.storybook/decorators';
-import { CurrencySymbol } from 'src/utils';
 import { AssetInformation } from '.';
 
 export default {
@@ -8,8 +8,10 @@ export default {
     component: AssetInformation,
     args: {
         header: 'Collateral Assets',
-        asset: CurrencySymbol.FIL,
-        quantity: 740,
+        collateralBook: {
+            ETH: BigNumber.from('1200000000000000000'),
+            USDC: BigNumber.from('10000000'),
+        },
     },
     decorators: [withAssetPrice],
 } as ComponentMeta<typeof AssetInformation>;
@@ -19,10 +21,3 @@ const Template: ComponentStory<typeof AssetInformation> = args => {
 };
 
 export const Default = Template.bind({});
-
-export const CollateralUtil = Template.bind({});
-CollateralUtil.args = {
-    header: 'Borrowed Assets',
-    asset: CurrencySymbol.USDC,
-    quantity: 12000,
-};

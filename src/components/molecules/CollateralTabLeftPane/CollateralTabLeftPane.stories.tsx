@@ -17,7 +17,7 @@ export default {
                 ETH: BigNumber.from('1000000000000000000'),
                 USDC: BigNumber.from('10000000'),
             },
-            usdCollateral: 200.03,
+            usdCollateral: 2100.34,
             coverage: BigNumber.from('80'),
         },
     },

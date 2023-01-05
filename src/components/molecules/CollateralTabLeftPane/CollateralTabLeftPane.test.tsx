@@ -24,7 +24,7 @@ describe('CollateralTabLeftPane component', () => {
 
     it('should render balance when wallet is connected and collateral is deposited', () => {
         render(<Default />);
-        expect(screen.getByText('$200.03')).toBeInTheDocument();
+        expect(screen.getByText('$2,100.34')).toBeInTheDocument();
     });
 
     it('should render enabled buttons when wallet is connected', () => {

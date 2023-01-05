@@ -28,12 +28,13 @@ const generateCollateralList = (
             [currencyInfo]: {
                 symbol: currencyInfo,
                 name: currencyInfo,
-                available:
-                    typeof balance[currencyInfo] === 'number'
+                available: balance[currencyInfo]
+                    ? typeof balance[currencyInfo] === 'number'
                         ? (balance[currencyInfo] as number)
                         : amountFormatterFromBase[currencyInfo](
-                              BigNumber.from(balance[currencyInfo])
-                          ),
+                              balance[currencyInfo] as BigNumber
+                          )
+                    : 0,
             },
         };
         collateralRecords = { ...collateralRecords, ...collateralInfo };
@@ -64,20 +65,14 @@ export const CollateralTab = ({
         };
     }, [ethBalance, usdcBalance]);
 
-    const collateralRecord = useMemo(() => {
-        return {
-            [CurrencySymbol.ETH]: collateralBook.collateral.ETH ?? 0,
-            [CurrencySymbol.USDC]: collateralBook.collateral.USDC ?? 0,
-        };
-    }, [collateralBook.collateral.ETH, collateralBook.collateral.USDC]);
-
     const depositCollateralList = useMemo(
         () => generateCollateralList(balanceRecord),
         [balanceRecord]
     );
+
     const withdrawCollateralList = useMemo(
-        () => generateCollateralList(collateralRecord),
-        [collateralRecord]
+        () => generateCollateralList(collateralBook.collateral),
+        [collateralBook.collateral]
     );
 
     return (

@@ -87,7 +87,7 @@ export const WithdrawCollateral = ({
 
     const priceList = useSelector((state: RootState) => getPriceMap(state));
     const { onWithdrawCollateral } = useWithdrawCollateral(
-        CurrencySymbol.USDC,
+        asset,
         BigNumber.from(collateral)
     );
 
