@@ -1,7 +1,5 @@
 import { OrderSide } from '@secured-finance/sf-client';
-import * as dayjs from 'dayjs';
 import { BigNumber } from 'ethers';
-import { ActiveTrade } from 'src/components/organisms';
 import { AssetPriceMap } from 'src/store/assetPrices/selectors';
 import { TradeHistory } from 'src/types';
 import { hexToString } from 'web3-utils';
@@ -41,32 +39,4 @@ export const computeNetValue = (
                 (side.toString() === OrderSide.LEND ? 1 : -1)
         );
     }, 0);
-};
-
-export const convertTradeHistoryToTableData = (
-    trade: TradeHistory[number]
-): ActiveTrade => {
-    const { side, amount, averagePrice, currency, maturity } = trade;
-    const ccy = hexToString(currency) as CurrencySymbol;
-
-    // TODO: add this function in the SDK
-    const contract = `${ccy}-${dayjs
-        .unix(maturity)
-        .format('MMMYY')
-        .toUpperCase()}`;
-
-    const dayToMaturity = dayjs.unix(maturity).diff(Date.now(), 'day');
-    const notional = BigNumber.from(amount);
-    const position = side.toString() === OrderSide.LEND ? 'Lend' : 'Borrow';
-
-    return {
-        position,
-        contract,
-        apy: LoanValue.fromPrice(averagePrice, maturity).apy,
-        notional,
-        currency: ccy,
-        presentValue: notional,
-        dayToMaturity,
-        forwardValue: notional,
-    };
 };

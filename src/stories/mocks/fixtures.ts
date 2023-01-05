@@ -29,7 +29,7 @@ export const preloadedAssetPrices: { assetPrices: AssetPrices } = {
 export const dec22Fixture = new Maturity(1669852800);
 export const mar23Fixture = new Maturity(1677628800);
 const jun23Fixture = new Maturity(1685577600);
-const sep23Fixture = new Maturity(1693526400);
+export const sep23Fixture = new Maturity(1693526400);
 const dec23Fixture = new Maturity(1701388800);
 const mar24Fixture = new Maturity(1709251200);
 const jun24Fixture = new Maturity(1717200000);
@@ -57,7 +57,7 @@ export const yieldCurveRates = [
     new Rate(47746),
 ];
 
-const fil = utils.formatBytes32String('FIL');
+export const filBytes32 = utils.formatBytes32String('FIL');
 export const ethBytes32 = utils.formatBytes32String('ETH');
 const btc = utils.formatBytes32String('BTC');
 
@@ -67,7 +67,7 @@ export const orderHistoryList: OrderList = [
         orderId: BigNumber.from('1'),
         originalOrderId: BigNumber.from('1'),
         maker: '0xb98bd7c7f656290071e52d1aa617d9cb4467fd6d',
-        currency: fil,
+        currency: filBytes32,
         side: 1,
         maturity: BigNumber.from(dec22Fixture.toString()),
         unitPrice: BigNumber.from('9800'),
@@ -82,7 +82,7 @@ export const orderHistoryList: OrderList = [
         orderId: BigNumber.from('1'),
         originalOrderId: BigNumber.from('1'),
         maker: '0xb98bd7c7f656290071e52d1aa617d9cb4467fd6d',
-        currency: fil,
+        currency: filBytes32,
         side: 1,
         maturity: BigNumber.from(dec22Fixture.toString()),
         unitPrice: BigNumber.from('9600'),
@@ -119,9 +119,9 @@ export const transactions: TradeHistory = [
         createdAt: 123,
         blockNumber: 123,
         taker: '0x123',
-        forwardValue: 100000,
+        forwardValue: BigNumber.from('1020000000000000000000'),
         txHash: '0x123',
-        currency: fil,
+        currency: filBytes32,
         maturity: BigNumber.from(1733011200),
     },
     {
@@ -133,7 +133,7 @@ export const transactions: TradeHistory = [
         createdAt: 123,
         blockNumber: 123,
         taker: '0x123',
-        forwardValue: 100000,
+        forwardValue: BigNumber.from('1040000000'),
         txHash: '0x123',
         currency: btc,
         maturity: BigNumber.from(1733011200),
@@ -141,13 +141,13 @@ export const transactions: TradeHistory = [
     {
         id: '0x123',
         amount: '1000000000',
-        averagePrice: BigNumber.from(9000),
+        averagePrice: BigNumber.from(9203),
         side: 1,
         orderPrice: 100000,
         createdAt: 123,
         blockNumber: 123,
         taker: '0x123',
-        forwardValue: 100000,
+        forwardValue: BigNumber.from('1040000000'),
         txHash: '0x123',
         currency: ethBytes32,
         maturity: BigNumber.from(1733011200),
