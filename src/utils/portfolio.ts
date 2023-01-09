@@ -4,7 +4,7 @@ import { AssetPriceMap } from 'src/store/assetPrices/selectors';
 import { TradeHistory } from 'src/types';
 import { hexToString } from 'web3-utils';
 import { currencyMap, CurrencySymbol } from './currencyList';
-import { LoanValue, Maturity } from './entities';
+import { LoanValue } from './entities';
 import { Rate } from './rate';
 
 export const computeWeightedAverageRate = (trades: TradeHistory) => {
@@ -43,7 +43,7 @@ export const computeNetValue = (
 
 export type TradeSummary = {
     currency: string;
-    maturity: Maturity;
+    maturity: string;
     amount: BigNumber;
     forwardValue: BigNumber;
     averagePrice: BigNumber;
@@ -58,7 +58,7 @@ export const aggregateTrades = (trades: TradeHistory): TradeSummary[] => {
         if (!summary) {
             summary = {
                 currency: trade.currency,
-                maturity: new Maturity(trade.maturity),
+                maturity: trade.maturity,
                 amount: BigNumber.from(0),
                 forwardValue: BigNumber.from(0),
                 averagePrice: BigNumber.from(0),

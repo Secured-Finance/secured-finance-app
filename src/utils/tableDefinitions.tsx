@@ -1,0 +1,186 @@
+/* eslint-disable react/display-name */
+import { AccessorFn, ColumnHelper, HeaderContext } from '@tanstack/react-table';
+import { BigNumber } from 'ethers';
+import { Chip, CurrencyItem, PriceYieldItem } from 'src/components/atoms';
+import { TableContractCell, TableHeader } from 'src/components/molecules';
+import { AssetPriceMap } from 'src/store/assetPrices/selectors';
+import { ColorFormat } from 'src/types';
+import { hexToString } from 'web3-utils';
+import { currencyMap, CurrencySymbol } from './currencyList';
+import { LoanValue, Maturity } from './entities';
+
+export const tableHeaderDefinition =
+    <TData,>(title: string) =>
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (header: HeaderContext<TData, any>) =>
+        (
+            <TableHeader
+                title={title}
+                sortingHandler={header.column.getToggleSortingHandler()}
+                isSorted={header.column.getIsSorted()}
+            />
+        );
+
+type CurrencyProperty = {
+    currency: string;
+};
+type SideProperty = {
+    side: number;
+};
+type AmountProperty = {
+    amount: BigNumber;
+};
+type AmountColumnType = (AmountProperty | SideProperty) & CurrencyProperty;
+
+function hasAmountProperty<T extends AmountColumnType>(
+    obj: T
+): obj is T & AmountProperty {
+    return (obj as AmountProperty).amount !== undefined;
+}
+
+function hasSideProperty<T extends AmountColumnType>(
+    obj: T
+): obj is T & SideProperty {
+    return (obj as SideProperty).side !== undefined;
+}
+export const amountColumnDefinition = <T extends AmountColumnType>(
+    columnHelper: ColumnHelper<T>,
+    title: string,
+    id: string,
+    accessor: AccessorFn<T, BigNumber>,
+    options: {
+        color: boolean;
+        compact: boolean;
+        priceList?: AssetPriceMap;
+    }
+) => {
+    return columnHelper.accessor(accessor, {
+        id: id,
+        cell: info => {
+            const ccy = hexToString(
+                info.row.original.currency
+            ) as CurrencySymbol;
+
+            let color: ColorFormat['color'];
+            if (hasSideProperty(info.row.original)) {
+                color = info.row.original.side === 1 ? 'negative' : 'positive';
+            } else if (hasAmountProperty(info.row.original)) {
+                color = info.row.original.amount.isNegative()
+                    ? 'negative'
+                    : 'positive';
+            } else {
+                // do nothing
+            }
+
+            return (
+                <div className='flex justify-end'>
+                    <CurrencyItem
+                        amount={currencyMap[ccy].fromBaseUnit(
+                            info.getValue() as BigNumber
+                        )}
+                        ccy={ccy}
+                        align='right'
+                        price={options.priceList?.[ccy]}
+                        color={options.color ? color : undefined}
+                        compact={options.compact}
+                    />
+                </div>
+            );
+        },
+        header: tableHeaderDefinition(title),
+    });
+};
+
+export const loanTypeColumnDefinition = <T extends SideProperty>(
+    columnHelper: ColumnHelper<T>,
+    title: string,
+    id: string
+) => {
+    const assessorFn: AccessorFn<T, number> = row => row.side;
+
+    return columnHelper.accessor(assessorFn, {
+        id: id,
+        cell: info => {
+            const value = info.getValue();
+            return (
+                <div className='flex justify-center'>
+                    <Chip
+                        label={value.toString() === '1' ? 'Borrow' : 'Lend'}
+                    />
+                </div>
+            );
+        },
+        header: tableHeaderDefinition(title),
+    });
+};
+
+export const loanTypeFromAmountColumnDefinition = <T extends AmountProperty>(
+    columnHelper: ColumnHelper<T>,
+    title: string,
+    id: string
+) => {
+    const assessorFn: AccessorFn<T, BigNumber> = row => row.amount;
+
+    return columnHelper.accessor(assessorFn, {
+        id: id,
+        cell: info => {
+            return (
+                <div className='flex justify-center'>
+                    <Chip
+                        label={info.getValue().isNegative() ? 'Borrow' : 'Lend'}
+                    />
+                </div>
+            );
+        },
+        header: tableHeaderDefinition(title),
+    });
+};
+
+export const contractColumnDefinition = <
+    T extends { maturity: string; currency: string }
+>(
+    columnHelper: ColumnHelper<T>,
+    title: string,
+    id: string,
+    variant: 'compact' | 'default' = 'default'
+) => {
+    const assessorFn: AccessorFn<T, string> = row => row.maturity;
+
+    return columnHelper.accessor(assessorFn, {
+        id: id,
+        cell: info => (
+            <div className='flex justify-center'>
+                <TableContractCell
+                    maturity={new Maturity(info.getValue())}
+                    ccyByte32={info.row.original.currency}
+                    variant={variant}
+                />
+            </div>
+        ),
+        header: tableHeaderDefinition(title),
+    });
+};
+
+export const priceYieldColumnDefinition = <T extends { maturity: string }>(
+    columnHelper: ColumnHelper<T>,
+    title: string,
+    id: string,
+    accessor: AccessorFn<T, BigNumber>
+) => {
+    return columnHelper.accessor(accessor, {
+        id: id,
+        cell: info => {
+            return (
+                <div className='flex justify-center'>
+                    <PriceYieldItem
+                        loanValue={LoanValue.fromPrice(
+                            Number(info.getValue().toString()),
+                            Number(info.row.original.maturity.toString())
+                        )}
+                    />
+                </div>
+            );
+        },
+        header: tableHeaderDefinition(title),
+    });
+};
