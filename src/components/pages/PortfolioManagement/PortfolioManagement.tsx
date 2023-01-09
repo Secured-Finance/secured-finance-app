@@ -19,6 +19,7 @@ import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { selectEthereumBalance } from 'src/store/ethereumWallet';
 import { RootState } from 'src/store/types';
 import {
+    aggregateTrades,
     computeNetValue,
     computeWeightedAverageRate,
     CurrencySymbol,
@@ -105,7 +106,7 @@ export const PortfolioManagement = () => {
                         'My Transactions',
                     ]}
                 >
-                    <ActiveTradeTable data={tradeHistory} />
+                    <ActiveTradeTable data={aggregateTrades(tradeHistory)} />
                     <OrderHistoryTable data={oderHistory} />
                 </HorizontalTab>
             </div>

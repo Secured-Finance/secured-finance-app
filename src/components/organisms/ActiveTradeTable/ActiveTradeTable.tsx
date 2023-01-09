@@ -11,26 +11,24 @@ import {
 import { ContractDetailDialog } from 'src/components/organisms';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { RootState } from 'src/store/types';
-import { TradeHistory } from 'src/types';
-import { currencyMap, CurrencySymbol } from 'src/utils';
+import { currencyMap, CurrencySymbol, TradeSummary } from 'src/utils';
 import { LoanValue } from 'src/utils/entities';
 import { hexToString } from 'web3-utils';
 
-const columnHelper = createColumnHelper<TradeHistory[0]>();
+const columnHelper = createColumnHelper<TradeSummary>();
 
-export const ActiveTradeTable = ({ data }: { data: TradeHistory }) => {
+export const ActiveTradeTable = ({ data }: { data: TradeSummary[] }) => {
     const priceList = useSelector((state: RootState) => getPriceMap(state));
 
     const columns = useMemo(
         () => [
-            columnHelper.accessor('side', {
+            columnHelper.accessor('amount', {
+                id: 'side',
                 cell: info => (
                     <div className='flex justify-center'>
                         <Chip
                             label={
-                                info.getValue().toString() === '1'
-                                    ? 'Borrow'
-                                    : 'Lend'
+                                info.getValue().isNegative() ? 'Borrow' : 'Lend'
                             }
                         />
                     </div>
@@ -64,7 +62,7 @@ export const ActiveTradeTable = ({ data }: { data: TradeHistory }) => {
             columnHelper.accessor('maturity', {
                 cell: info => {
                     const dayToMaturity = dayjs
-                        .unix(info.getValue())
+                        .unix(info.getValue().toNumber())
                         .diff(Date.now(), 'day');
 
                     return <>{dayToMaturity} Days</>;
@@ -93,7 +91,7 @@ export const ActiveTradeTable = ({ data }: { data: TradeHistory }) => {
                                 price={priceList[ccy]}
                                 align='right'
                                 color={
-                                    info.row.original.side === 1
+                                    info.row.original.amount.isNegative()
                                         ? 'negative'
                                         : 'positive'
                                 }

@@ -1,10 +1,15 @@
 import { BigNumber } from 'ethers';
 import { formatBytes32String } from 'ethers/lib/utils';
 import { AssetPriceMap } from 'src/store/assetPrices/selectors';
+import { aggregatedTrades, transactions } from 'src/stories/mocks/fixtures';
 import { TradeHistory } from 'src/types';
 import timemachine from 'timemachine';
 import { CurrencySymbol } from './currencyList';
-import { computeNetValue, computeWeightedAverageRate } from './portfolio';
+import {
+    aggregateTrades,
+    computeNetValue,
+    computeWeightedAverageRate,
+} from './portfolio';
 
 beforeAll(() => {
     timemachine.reset();
@@ -69,5 +74,34 @@ describe('computeNetValue', () => {
 
     it('should return 0 if no trades are provided', () => {
         expect(computeNetValue([], priceMap)).toEqual(0);
+    });
+});
+
+describe('aggregateTrades', () => {
+    it('should aggregate trades', () => {
+        // Forward value is ignored in the comparison because I am not sure yet what we are getting for the Graph
+        expect(
+            aggregateTrades(transactions).map(
+                ({ amount, forwardValue, currency, maturity }) => ({
+                    amount,
+                    forwardValue,
+                    currency,
+                    maturity,
+                })
+            )
+        ).toEqual(
+            aggregatedTrades.map(
+                ({ amount, forwardValue, currency, maturity }) => ({
+                    amount,
+                    forwardValue,
+                    currency,
+                    maturity,
+                })
+            )
+        );
+    });
+
+    it('should return an empty array if no trades are provided', () => {
+        expect(aggregateTrades([])).toEqual([]);
     });
 });
