@@ -29,6 +29,8 @@ const Template: ComponentStory<typeof CurrencyIcon> = args => (
 export const Default = Template.bind({});
 export const Large = Template.bind({});
 Large.args = { variant: 'large' };
+export const Small = Template.bind({});
+Small.args = { variant: 'small' };
 
 export const All = () => (
     <div className='flex flex-row gap-2'>
