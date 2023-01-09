@@ -1,13 +1,13 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { withAssetPrice } from 'src/../.storybook/decorators';
-import { transactions } from 'src/stories/mocks/fixtures';
+import { aggregatedTrades } from 'src/stories/mocks/fixtures';
 import { ActiveTradeTable } from './ActiveTradeTable';
 
 export default {
     title: 'Organism/ActiveTradeTable',
     component: ActiveTradeTable,
     args: {
-        data: transactions,
+        data: aggregatedTrades,
     },
     decorators: [withAssetPrice],
 } as ComponentMeta<typeof ActiveTradeTable>;

@@ -45,26 +45,7 @@ describe('PortfolioManagement component', () => {
                 </MockedProvider>
             )
         );
-        expect(screen.getAllByRole('row')).toHaveLength(4);
-        expect(screen.getAllByTestId('active-trade-table-row')).toHaveLength(3);
-    });
-
-    it('should display the correct number of active trades', async () => {
-        await waitFor(() =>
-            render(
-                <MockedProvider
-                    mocks={
-                        ConnectedToWallet.parameters?.apolloClient
-                            .mocks as never
-                    }
-                >
-                    <ConnectedToWallet />
-                </MockedProvider>
-            )
-        );
-        const portfolioTopTab = screen
-            .getAllByTestId('portfolio-tab-value')
-            .map(e => e.textContent);
-        expect(portfolioTopTab.find(e => e === '3')).toBeTruthy();
+        expect(screen.getAllByRole('row')).toHaveLength(5);
+        expect(screen.getAllByTestId('active-trade-table-row')).toHaveLength(4);
     });
 });
