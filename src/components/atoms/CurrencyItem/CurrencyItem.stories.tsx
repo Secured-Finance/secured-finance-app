@@ -50,3 +50,12 @@ CurrencyAmountInColor.args = {
     align: 'left',
     color: 'positive',
 };
+
+export const Compact = Template.bind({});
+Compact.args = {
+    amount: 1000,
+    ccy: CurrencySymbol.FIL,
+    price: 8.2,
+    align: 'left',
+    compact: true,
+};

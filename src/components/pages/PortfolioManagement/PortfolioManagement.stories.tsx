@@ -49,3 +49,12 @@ DisplayOrderHistory.play = async ({ canvasElement }) => {
     const orderHistoryTab = canvas.getByText('Open Orders');
     orderHistoryTab.click();
 };
+export const DisplayMyTransactions = Template.bind({});
+DisplayMyTransactions.parameters = {
+    connected: true,
+};
+DisplayMyTransactions.play = async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const myTransactionsTab = canvas.getByText('My Transactions');
+    myTransactionsTab.click();
+};

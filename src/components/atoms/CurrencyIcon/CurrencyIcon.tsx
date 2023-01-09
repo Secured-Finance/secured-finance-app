@@ -7,7 +7,7 @@ export const CurrencyIcon = ({
     variant = 'default',
 }: {
     ccy: CurrencySymbol;
-    variant?: 'default' | 'large';
+    variant?: 'default' | 'large' | 'small';
 }) => {
     const Icon = useMemo(() => currencyMap[ccy].icon, [ccy]);
     return (
@@ -15,6 +15,7 @@ export const CurrencyIcon = ({
             className={classNames({
                 'h-6 w-6': variant === 'default',
                 'h-9 w-9': variant === 'large',
+                'h-5 w-5': variant === 'small',
             })}
             role='img'
             aria-label={ccy}

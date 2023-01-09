@@ -9,6 +9,7 @@ export * from './DepositCollateral';
 export * from './Header';
 export * from './LendingCard';
 export * from './LineChartTab';
+export * from './MyTransactionsTable';
 export * from './MyWalletCard';
 export * from './OrderHistoryTable';
 export * from './OrderWidget';

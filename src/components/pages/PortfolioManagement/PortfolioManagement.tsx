@@ -11,6 +11,7 @@ import {
     ActiveTradeTable,
     CollateralOrganism,
     ConnectWalletCard,
+    MyTransactionsTable,
     MyWalletCard,
     OrderHistoryTable,
 } from 'src/components/organisms';
@@ -108,6 +109,7 @@ export const PortfolioManagement = () => {
                 >
                     <ActiveTradeTable data={aggregateTrades(tradeHistory)} />
                     <OrderHistoryTable data={oderHistory} />
+                    <MyTransactionsTable data={tradeHistory} />
                 </HorizontalTab>
             </div>
         </div>

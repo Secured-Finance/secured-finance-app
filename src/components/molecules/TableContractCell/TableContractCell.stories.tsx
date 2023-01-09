@@ -16,3 +16,7 @@ const Template: ComponentStory<typeof TableContractCell> = args => (
 );
 
 export const Default = Template.bind({});
+export const Compact = Template.bind({});
+Compact.args = {
+    variant: 'compact',
+};

@@ -13,11 +13,13 @@ export const CurrencyItem = ({
     price,
     align = 'left',
     color = 'neutral',
+    compact = false,
 }: {
     amount?: number;
     ccy: CurrencySymbol;
     price?: number;
     align?: 'left' | 'right' | 'center';
+    compact?: boolean;
 } & ColorFormat) => {
     let secondLine: string;
     if (amount !== undefined && price !== undefined) {
@@ -47,9 +49,11 @@ export const CurrencyItem = ({
             >
                 {firstLine}
             </span>
-            <span className='typography-caption-2 h-5 text-[#6F74B0]'>
-                {secondLine}
-            </span>
+            {compact === false ? (
+                <span className='typography-caption-2 h-5 text-[#6F74B0]'>
+                    {secondLine}
+                </span>
+            ) : null}
         </div>
     );
 };
