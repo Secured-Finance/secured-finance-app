@@ -1,5 +1,4 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
-import { withAssetPrice } from 'src/../.storybook/decorators';
 import { transactions } from 'src/stories/mocks/fixtures';
 import { MyTransactionsTable } from './MyTransactionsTable';
 
@@ -9,7 +8,6 @@ export default {
     args: {
         data: transactions,
     },
-    decorators: [withAssetPrice],
 } as ComponentMeta<typeof MyTransactionsTable>;
 
 const Template: ComponentStory<typeof MyTransactionsTable> = args => (
