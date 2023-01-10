@@ -83,6 +83,8 @@ export const aggregateTrades = (trades: TradeHistory): TradeSummary[] => {
     return Array.from(tradeMap.values()).map(summary => ({
         ...summary,
         forwardValue: BigNumber.from(summary.forwardValue),
-        averagePrice: summary.averagePrice.div(summary.amount),
+        averagePrice: !summary.amount.isZero
+            ? summary.averagePrice.div(summary.amount)
+            : BigNumber.from(0),
     }));
 };
