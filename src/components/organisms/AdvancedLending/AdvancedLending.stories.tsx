@@ -28,7 +28,6 @@ export default {
         maturitiesOptionList: maturityOptions,
         rates: yieldCurveRates,
     },
-    parameters: { date: { tick: true } },
     decorators: [withAssetPrice, withWalletProvider],
 } as ComponentMeta<typeof AdvancedLending>;
 

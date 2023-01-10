@@ -1,116 +1,30 @@
-import { TransactionHistoryDocument } from '@secured-finance/sf-graph-client/dist/graphclients';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
-import { BigNumber, utils } from 'ethers';
+import { within } from '@storybook/testing-library';
 import {
     withAppLayout,
     withAssetPrice,
+    withFullPage,
     withWalletProvider,
 } from 'src/../.storybook/decorators';
-import { TradeHistory } from 'src/hooks';
+import {
+    mockOrderHistory,
+    mockTransactionHistory,
+} from 'src/stories/mocks/queries';
 import { PortfolioManagement } from './PortfolioManagement';
-
-const fil = utils.formatBytes32String('FIL');
-const eth = utils.formatBytes32String('ETH');
-const btc = utils.formatBytes32String('BTC');
-
-const transactions: TradeHistory = [
-    {
-        id: '0x123',
-        amount: '1000000000000000000000',
-        averagePrice: BigNumber.from(8000),
-        side: 0,
-        orderPrice: 100000,
-        createdAt: 123,
-        blockNumber: 123,
-        taker: '0x123',
-        forwardValue: 100000,
-        txHash: '0x123',
-        currency: fil,
-        maturity: BigNumber.from(1733011200),
-    },
-    {
-        id: '0x123',
-        amount: '1000000000',
-        averagePrice: BigNumber.from(9000),
-        side: 1,
-        orderPrice: 100000,
-        createdAt: 123,
-        blockNumber: 123,
-        taker: '0x123',
-        forwardValue: 100000,
-        txHash: '0x123',
-        currency: btc,
-        maturity: BigNumber.from(1733011200),
-    },
-    {
-        id: '0x123',
-        amount: '1000000000',
-        averagePrice: BigNumber.from(9000),
-        side: 1,
-        orderPrice: 100000,
-        createdAt: 123,
-        blockNumber: 123,
-        taker: '0x123',
-        forwardValue: 100000,
-        txHash: '0x123',
-        currency: eth,
-        maturity: BigNumber.from(1733011200),
-    },
-];
 
 export default {
     title: 'Pages/PortfolioManagement',
     component: PortfolioManagement,
     args: {},
-    decorators: [withAssetPrice, withAppLayout, withWalletProvider],
+    decorators: [
+        withFullPage,
+        withAssetPrice,
+        withAppLayout,
+        withWalletProvider,
+    ],
     parameters: {
         apolloClient: {
-            mocks: [
-                {
-                    request: {
-                        query: TransactionHistoryDocument,
-                        variables: {
-                            address: '',
-                            awaitRefetchQueries: true,
-                        },
-                    },
-                    result: {
-                        data: {
-                            transactions: [],
-                        },
-                    },
-                    newData: () => {
-                        return {
-                            data: {
-                                transactions: [],
-                            },
-                        };
-                    },
-                },
-                {
-                    request: {
-                        query: TransactionHistoryDocument,
-                        variables: {
-                            address:
-                                '0xb98bd7c7f656290071e52d1aa617d9cb4467fd6d',
-                            awaitRefetchQueries: true,
-                        },
-                    },
-
-                    result: {
-                        data: {
-                            transactions: transactions,
-                        },
-                    },
-                    newData: () => {
-                        return {
-                            data: {
-                                transactions: transactions,
-                            },
-                        };
-                    },
-                },
-            ],
+            mocks: [...mockTransactionHistory, ...mockOrderHistory],
         },
     },
 } as ComponentMeta<typeof PortfolioManagement>;
@@ -124,4 +38,23 @@ export const Default = Template.bind({});
 export const ConnectedToWallet = Template.bind({});
 ConnectedToWallet.parameters = {
     connected: true,
+};
+
+export const DisplayOrderHistory = Template.bind({});
+DisplayOrderHistory.parameters = {
+    connected: true,
+};
+DisplayOrderHistory.play = async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const orderHistoryTab = canvas.getByText('Open Orders');
+    orderHistoryTab.click();
+};
+export const DisplayMyTransactions = Template.bind({});
+DisplayMyTransactions.parameters = {
+    connected: true,
+};
+DisplayMyTransactions.play = async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const myTransactionsTab = canvas.getByText('My Transactions');
+    myTransactionsTab.click();
 };

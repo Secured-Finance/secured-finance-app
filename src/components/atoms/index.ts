@@ -19,6 +19,7 @@ export * from './MarketTab';
 export * from './NavTab';
 export * from './PercentageTab';
 export * from './PortfolioTab';
+export * from './PriceYieldItem';
 export * from './SectionWithItems';
 export * from './Separator';
 export * from './SimpleAdvancedSelector';
