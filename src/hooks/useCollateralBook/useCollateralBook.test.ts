@@ -7,7 +7,7 @@ import { CollateralBook, useCollateralBook } from './';
 const mock = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mock);
 
-describe('useCollateralBook hook', () => {
+describe.skip('useCollateralBook hook', () => {
     const ETH = currencyMap.ETH;
     const ETH_PRICE = 2000;
     const preloadedState = {

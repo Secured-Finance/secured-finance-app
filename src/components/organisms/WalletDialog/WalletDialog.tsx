@@ -1,9 +1,12 @@
 import { useCallback, useEffect, useReducer, useState } from 'react';
-import Check from 'src/assets/icons/check-mark.svg';
 import Loader from 'src/assets/img/gradient-loader.png';
 import MetaMaskIcon from 'src/assets/img/metamask-fox.svg';
 import WalletConnectIcon from 'src/assets/img/wallet-connect.svg';
-import { Dialog, WalletRadioGroup } from 'src/components/molecules';
+import {
+    Dialog,
+    SuccessPanel,
+    WalletRadioGroup,
+} from 'src/components/molecules';
 import { CACHED_PROVIDER_KEY } from 'src/contexts/SecuredFinanceProvider/SecuredFinanceProvider';
 import { AddressUtils } from 'src/utils';
 import { useWallet } from 'use-wallet';
@@ -168,30 +171,15 @@ export const WalletDialog = ({
                         break;
                     case Step.connected:
                         return (
-                            <div className='flex w-full flex-col items-center gap-6'>
-                                <Check className='h-[100px] w-[100px]' />
-                                <div className='flex h-28 w-full flex-row gap-8 rounded-xl border border-neutral p-6'>
-                                    <div className='typography-caption flex flex-col gap-10px'>
-                                        <span className='text-neutral-4'>
-                                            Status
-                                        </span>
-                                        <span className='leading-6 text-[#58BD7D]'>
-                                            Connected
-                                        </span>
-                                    </div>
-                                    <div className='typography-caption flex flex-col gap-10px'>
-                                        <span className='text-neutral-4'>
-                                            Ethereum Address
-                                        </span>
-                                        <span className='leading-6 text-neutral-8'>
-                                            {AddressUtils.format(
-                                                account ?? '',
-                                                16
-                                            )}
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
+                            <SuccessPanel
+                                itemList={[
+                                    ['Status', 'Connected'],
+                                    [
+                                        'Ethereum Address',
+                                        AddressUtils.format(account ?? '', 16),
+                                    ],
+                                ]}
+                            />
                         );
                     default:
                         return <p>Unknown</p>;
