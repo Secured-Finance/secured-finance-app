@@ -10,15 +10,17 @@ import { Landing } from './Landing';
 export default {
     title: 'Pages/Landing',
     component: Landing,
+    chromatic: { pauseAnimationAtEnd: true, diffThreshold: 1 },
     args: {},
-    chromatic: { pauseAnimationAtEnd: true },
-    parameters: { date: { tick: true } },
     decorators: [
         withAppLayout,
         withMaturities,
         withAssetPrice,
         withWalletProvider,
     ],
+    play: async () => {
+        await new Promise(resolve => setTimeout(resolve, 5000));
+    },
 } as ComponentMeta<typeof Landing>;
 
 const Template: ComponentStory<typeof Landing> = args => {

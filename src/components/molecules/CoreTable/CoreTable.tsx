@@ -14,12 +14,14 @@ export const CoreTable = <T,>({
     data,
     columns,
     onLineClick,
+    border,
     name = 'core-table',
 }: {
     data: Array<T>;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     columns: ColumnDef<T, any>[];
     onLineClick?: () => void;
+    border: boolean;
     name?: string;
 }) => {
     const [sorting, setSorting] = useState<SortingState>([]);
@@ -43,7 +45,7 @@ export const CoreTable = <T,>({
                         {headerGroup.headers.map(header => (
                             <th
                                 key={header.id}
-                                className='px-4 py-2 text-center'
+                                className='px-1 py-2 text-center'
                             >
                                 {header.isPlaceholder
                                     ? null
@@ -60,14 +62,16 @@ export const CoreTable = <T,>({
                 {table.getRowModel().rows.map(row => (
                     <tr
                         key={row.id}
-                        className={classNames('relative h-7', {
+                        className={classNames('relative h-7 scale-100', {
                             'cursor-pointer': onLineClick,
+                            'hover:bg-black-30': onLineClick,
+                            'border-b border-white-10': border,
                         })}
                         onClick={onLineClick}
                         data-testid={`${name}-row`}
                     >
                         {row.getVisibleCells().map(cell => (
-                            <td key={cell.id} className='px-4 py-2 text-center'>
+                            <td key={cell.id} className='px-1 py-2 text-center'>
                                 {flexRender(
                                     cell.column.columnDef.cell,
                                     cell.getContext()

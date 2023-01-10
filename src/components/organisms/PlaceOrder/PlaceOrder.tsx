@@ -3,14 +3,13 @@ import { OrderSide } from '@secured-finance/sf-client';
 import { BigNumber } from 'ethers';
 import { useCallback, useReducer } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import Check from 'src/assets/icons/check-mark.svg';
 import Loader from 'src/assets/img/gradient-loader.png';
 import {
     ExpandIndicator,
     Section,
     SectionWithItems,
 } from 'src/components/atoms';
-import { AmountCard, Dialog } from 'src/components/molecules';
+import { AmountCard, Dialog, SuccessPanel } from 'src/components/molecules';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { selectLandingOrderForm } from 'src/store/landingOrderForm';
 import { setLastMessage } from 'src/store/lastError';
@@ -283,37 +282,18 @@ export const PlaceOrder = ({
                         );
                     case Step.orderPlaced:
                         return (
-                            <div className='flex w-full flex-col items-center gap-6'>
-                                <Check className='h-[100px] w-[100px]' />
-                                <div className='flex h-28 w-full flex-row gap-6 rounded-xl border border-neutral-3 p-6'>
-                                    <div className='typography-caption flex flex-col gap-10px'>
-                                        <span className='text-neutral-4'>
-                                            Status
-                                        </span>
-                                        <span className='leading-6 text-[#58BD7D]'>
-                                            Complete
-                                        </span>
-                                    </div>
-                                    <div className='typography-caption flex flex-col gap-10px'>
-                                        <span className='text-neutral-4'>
-                                            Deposit Address
-                                        </span>
-                                        <span className='text-neutral-8'>
-                                            t1wtz1if6k24XE...
-                                        </span>
-                                    </div>
-                                    <div className='typography-caption flex flex-col gap-10px'>
-                                        <span className='text-neutral-4'>
-                                            Amount
-                                        </span>
-                                        <span className='leading-6 text-neutral-8'>
-                                            {ordinaryFormat(getAmount()) +
-                                                ' ' +
-                                                currency}
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
+                            <SuccessPanel
+                                itemList={[
+                                    ['Status', 'Complete'],
+                                    ['Deposit Address', 't1wtz1if6k24XE...'],
+                                    [
+                                        'Amount',
+                                        `${ordinaryFormat(
+                                            getAmount()
+                                        )} ${currency}`,
+                                    ],
+                                ]}
+                            />
                         );
                     default:
                         return <p>Unknown</p>;

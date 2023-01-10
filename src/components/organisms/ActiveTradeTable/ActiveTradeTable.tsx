@@ -1,142 +1,67 @@
 import { createColumnHelper } from '@tanstack/react-table';
-import { BigNumber } from 'ethers';
+import * as dayjs from 'dayjs';
 import { useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { Chip, CurrencyIcon, CurrencyItem } from 'src/components/atoms';
-import { CoreTable, TableHeader } from 'src/components/molecules';
+import { CoreTable } from 'src/components/molecules';
 import { ContractDetailDialog } from 'src/components/organisms';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { RootState } from 'src/store/types';
-import { currencyMap, CurrencySymbol, percentFormat, Rate } from 'src/utils';
+import { TradeSummary } from 'src/utils';
+import {
+    amountColumnDefinition,
+    contractColumnDefinition,
+    loanTypeFromAmountColumnDefinition,
+    priceYieldColumnDefinition,
+    tableHeaderDefinition,
+} from 'src/utils/tableDefinitions';
 
-export type ActiveTrade = {
-    position: 'Borrow' | 'Lend';
-    contract: string;
-    apy: Rate;
-    notional: BigNumber;
-    currency: CurrencySymbol;
-    presentValue: BigNumber;
-    dayToMaturity: number;
-    forwardValue: BigNumber;
-};
+const columnHelper = createColumnHelper<TradeSummary>();
 
-const columnHelper = createColumnHelper<ActiveTrade>();
-
-const AmountCell = ({
-    ccy,
-    amount,
-    priceList,
-}: {
-    ccy: CurrencySymbol;
-    amount: BigNumber;
-    priceList: Record<CurrencySymbol, number>;
-}) => {
-    return (
-        <CurrencyItem
-            ccy={ccy}
-            amount={currencyMap[ccy].fromBaseUnit(amount)}
-            price={priceList[ccy]}
-            align='right'
-        />
-    );
-};
-
-export const ActiveTradeTable = ({ data }: { data: Array<ActiveTrade> }) => {
+export const ActiveTradeTable = ({ data }: { data: TradeSummary[] }) => {
     const priceList = useSelector((state: RootState) => getPriceMap(state));
 
     const columns = useMemo(
         () => [
-            columnHelper.accessor('position', {
-                cell: info => (
-                    <div className='flex justify-center'>
-                        <Chip label={info.getValue()} />
-                    </div>
-                ),
-                header: header => (
-                    <TableHeader
-                        title='Position'
-                        sortingHandler={header.column.getToggleSortingHandler()}
-                        isSorted={header.column.getIsSorted()}
-                    />
-                ),
-            }),
-            columnHelper.accessor('contract', {
-                cell: info => info.getValue(),
-                header: header => (
-                    <TableHeader
-                        title='Contract'
-                        sortingHandler={header.column.getToggleSortingHandler()}
-                        isSorted={header.column.getIsSorted()}
-                    />
-                ),
-            }),
-            columnHelper.accessor('apy', {
-                cell: info =>
-                    percentFormat(info.getValue().toNormalizedNumber(), 100),
-                header: header => (
-                    <TableHeader
-                        title='APY'
-                        sortingHandler={header.column.getToggleSortingHandler()}
-                        isSorted={header.column.getIsSorted()}
-                    />
-                ),
-            }),
-            columnHelper.accessor('currency', {
-                cell: info => (
-                    <div className='flex justify-center'>
-                        <CurrencyIcon ccy={info.getValue()} />
-                    </div>
-                ),
-                header: () => '',
-            }),
-            columnHelper.accessor('presentValue', {
+            loanTypeFromAmountColumnDefinition(columnHelper, 'Type', 'side'),
+            contractColumnDefinition(columnHelper, 'Contract', 'contract'),
+            columnHelper.accessor('maturity', {
                 cell: info => {
-                    const ccy = info.row.original.currency;
-                    return (
-                        <AmountCell
-                            ccy={ccy}
-                            amount={info.getValue()}
-                            priceList={priceList}
-                        />
-                    );
-                },
+                    const dayToMaturity = dayjs
+                        .unix(Number(info.getValue()))
+                        .diff(Date.now(), 'day');
 
-                header: header => (
-                    <TableHeader
-                        title='Present Value'
-                        sortingHandler={header.column.getToggleSortingHandler()}
-                        isSorted={header.column.getIsSorted()}
-                    />
-                ),
-            }),
-            columnHelper.accessor('dayToMaturity', {
-                cell: info => `${info.getValue()} Days`,
-                header: header => (
-                    <TableHeader
-                        title='DTM'
-                        sortingHandler={header.column.getToggleSortingHandler()}
-                        isSorted={header.column.getIsSorted()}
-                    />
-                ),
-            }),
-            columnHelper.accessor('forwardValue', {
-                cell: info => {
-                    const ccy = info.row.original.currency;
-                    return (
-                        <AmountCell
-                            ccy={ccy}
-                            amount={info.getValue()}
-                            priceList={priceList}
-                        />
-                    );
+                    return <>{dayToMaturity} Days</>;
                 },
-                header: header => (
-                    <TableHeader
-                        title='Forward Value'
-                        sortingHandler={header.column.getToggleSortingHandler()}
-                        isSorted={header.column.getIsSorted()}
-                    />
-                ),
+                header: tableHeaderDefinition('D.T.M.'),
+            }),
+            amountColumnDefinition(
+                columnHelper,
+                'F.V',
+                'forwardValue',
+                row => row.forwardValue,
+                { color: true, priceList: priceList, compact: false }
+            ),
+            priceYieldColumnDefinition(
+                columnHelper,
+                'M.T.M.',
+                'averagePrice',
+                row => row.averagePrice
+            ),
+            amountColumnDefinition(
+                columnHelper,
+                'P.V',
+                'amount',
+                row => row.amount,
+                {
+                    color: false,
+                    priceList: priceList,
+                    compact: false,
+                }
+            ),
+            columnHelper.display({
+                id: 'actions',
+                cell: () => <div>...</div>,
+                header: () => <div>Actions</div>,
             }),
         ],
         [priceList]
@@ -144,17 +69,33 @@ export const ActiveTradeTable = ({ data }: { data: Array<ActiveTrade> }) => {
 
     const [displayContractDetails, setDisplayContractDetails] = useState(false);
     return (
-        <>
+        <div className='pb-2'>
             <CoreTable
                 data={data}
                 columns={columns}
                 name='active-trade-table'
+                border
                 onLineClick={() => setDisplayContractDetails(true)}
             />
             <ContractDetailDialog
                 isOpen={displayContractDetails}
                 onClose={() => setDisplayContractDetails(false)}
             />
-        </>
+            <div className='typography-dropdown-selection-label mx-10 my-6 bg-cardBackground/60 text-justify text-secondary7 '>
+                <p className='p-3'>
+                    Secured Finance lending contract includes an auto-roll
+                    feature. If no action is taken by the user prior to the
+                    contract&apos;s maturation date, it will automatically roll
+                    over into the next closest expiration date. This convenience
+                    comes with a 0.25% fee for the auto-roll transaction.{' '}
+                </p>
+                <p className='p-3'>
+                    It is the user&apos;s responsibility to take action to
+                    unwind the contract prior to its maturation date. Failure to
+                    do so will result in the contract being automatically rolled
+                    over, incurring the aforementioned fee.
+                </p>
+            </div>
+        </div>
     );
 };

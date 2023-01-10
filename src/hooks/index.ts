@@ -1,5 +1,5 @@
 export * from './useCollateralBook';
+export * from './useGraphClientHook';
 export * from './useLendingMarkets';
-export * from './usePlaceOrder';
 export * from './useLoanValues';
-export * from './useTradeHistory';
+export * from './usePlaceOrder';
