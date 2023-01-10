@@ -1,5 +1,6 @@
 import { Token } from '@secured-finance/sf-core';
-import { useRouter } from 'next/router';
+import { GetStaticProps } from 'next';
+import { ParsedUrlQuery } from 'querystring';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import {
@@ -19,7 +20,40 @@ import {
 } from 'src/utils';
 import { useWallet } from 'use-wallet';
 
-const Faucet = () => {
+interface Params extends ParsedUrlQuery {
+    ccy: string;
+}
+
+export async function getStaticPaths() {
+    const env = process.env.SF_ENV;
+    const tokens =
+        env === 'production'
+            ? []
+            : Object.values(currencyMap).filter(
+                  v => v.toCurrency() instanceof Token
+              );
+
+    return {
+        paths: tokens.map(v => ({
+            params: { ccy: v.symbol.toLowerCase() },
+        })),
+        fallback: false,
+    };
+}
+
+export const getStaticProps: GetStaticProps<{
+    ccy: CurrencySymbol;
+}> = async context => {
+    const { ccy } = context.params as Params;
+    const currency = ccy.toUpperCase() as CurrencySymbol;
+
+    return {
+        // Passed to the page component as props
+        props: { ccy: currency },
+    };
+};
+
+export const Faucet = ({ ccy }: { ccy: CurrencySymbol }) => {
     const { account } = useWallet();
     const [isPending, setIsPending] = useState(false);
     const [txHash, setTxHash] = useState('');
@@ -29,8 +63,6 @@ const Faucet = () => {
     const [isOpen, setIsOpen] = useState(false);
 
     const sf = useSF();
-    const router = useRouter();
-    const { ccy } = router.query;
 
     const priceList = useSelector((state: RootState) => getPriceMap(state));
     const block = useSelector(
@@ -38,19 +70,8 @@ const Faucet = () => {
     );
 
     const token = useMemo(() => {
-        if (!ccy) return null;
-        const asset = ccy.toString().toUpperCase();
-        if (!asset) {
-            setError('Invalid currency');
-            return null;
-        }
-        const currency = currencyMap[asset as CurrencySymbol]?.toCurrency();
-        if (!currency) {
-            setError('Invalid currency');
-            return null;
-        }
-        if (currency instanceof Token) {
-            return currency;
+        if (currencyMap[ccy].toCurrency() instanceof Token) {
+            return currencyMap[ccy].toCurrency();
         }
 
         setError('Invalid currency');
@@ -58,7 +79,7 @@ const Faucet = () => {
     }, [ccy]);
 
     const getBalance = useCallback(async () => {
-        if (!account || !sf || !token) return;
+        if (!account || !sf || !token || !(token instanceof Token)) return;
         const balance = await sf.getERC20Balance(token, account);
         setBalance(
             currencyMap[token.symbol as CurrencySymbol]
@@ -71,7 +92,7 @@ const Faucet = () => {
 
     useEffect(() => {
         const getContractAddress = async () => {
-            if (!sf || !token) return '';
+            if (!sf || !token || !(token instanceof Token)) return '';
             const address = await sf.getERC20TokenContractAddress(token);
             return address;
         };
@@ -82,7 +103,7 @@ const Faucet = () => {
     }, [sf, token]);
 
     const mint = useCallback(async () => {
-        if (!account || !token || !sf) return;
+        if (!account || !sf || !token || !(token instanceof Token)) return;
 
         setIsPending(true);
         setError('');
