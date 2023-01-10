@@ -15,11 +15,6 @@ export default {
         maturitiesOptionList: maturityOptions,
         rates: yieldCurveRates,
     },
-    parameters: {
-        date: {
-            tick: true,
-        },
-    },
     decorators: [withWalletProvider, withAssetPrice, withMaturities],
 } as ComponentMeta<typeof LineChartTab>;
 

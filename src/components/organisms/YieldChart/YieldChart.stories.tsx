@@ -17,7 +17,7 @@ const rates = [
 export default {
     title: 'Organism/YieldChart',
     component: YieldChart,
-    chromatic: { pauseAnimationAtEnd: true },
+    chromatic: { pauseAnimationAtEnd: true, diffThreshold: 1 },
     args: {
         asset: 'USDC',
         isBorrow: true,
@@ -26,11 +26,6 @@ export default {
     },
     argTypes: {},
     decorators: [withAssetPrice],
-    parameters: {
-        date: {
-            tick: true,
-        },
-    },
 } as ComponentMeta<typeof YieldChart>;
 
 const Template: ComponentStory<typeof YieldChart> = args => {

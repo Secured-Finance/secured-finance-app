@@ -12,6 +12,7 @@ module.exports = {
         'storybook-addon-performance',
         'storybook-addon-next',
         'storybook-addon-apollo-client',
+        '@storybook/addon-interactions',
     ],
     typescript: {
         reactDocgen: 'none',

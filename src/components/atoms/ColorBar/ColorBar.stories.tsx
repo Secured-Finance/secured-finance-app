@@ -8,13 +8,18 @@ export default {
     args: {
         value: BigNumber.from(100000),
         total: BigNumber.from(1000000),
-        color: 'red',
+        color: 'negative',
         align: 'left',
     },
     argTypes: {
         value: { control: 'number', defaultValue: 100000 },
         total: { control: 'number', defaultValue: 1000000 },
-        color: { control: { type: 'select', options: ['red', 'green'] } },
+        color: {
+            control: {
+                type: 'select',
+                options: ['positive', 'negative', 'neutral'],
+            },
+        },
         align: { control: { type: 'select', options: ['left', 'right'] } },
     },
 } as ComponentMeta<typeof ColorBar>;

@@ -19,4 +19,9 @@ describe('CurrencyIcon Component', () => {
         render(<Default variant='default' />);
         expect(screen.getByRole('img')).toHaveClass('h-6 w-6');
     });
+
+    it('should render a CurrencyIcon with a small variant', () => {
+        render(<Default variant='small' />);
+        expect(screen.getByRole('img')).toHaveClass('h-5 w-5');
+    });
 });

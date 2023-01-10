@@ -1,18 +1,21 @@
 import { BigNumber } from 'ethers';
 import { formatBytes32String } from 'ethers/lib/utils';
-import mockDate from 'mockdate';
-import { TradeHistory } from 'src/hooks';
 import { AssetPriceMap } from 'src/store/assetPrices/selectors';
+import { aggregatedTrades, transactions } from 'src/stories/mocks/fixtures';
+import { TradeHistory } from 'src/types';
+import timemachine from 'timemachine';
 import { CurrencySymbol } from './currencyList';
 import {
+    aggregateTrades,
     computeNetValue,
     computeWeightedAverageRate,
-    convertTradeHistoryToTableData,
 } from './portfolio';
 
 beforeAll(() => {
-    mockDate.reset();
-    mockDate.set(new Date('2022-12-01T11:00:00.00Z'));
+    timemachine.reset();
+    timemachine.config({
+        dateString: '2022-12-01T11:00:00.00Z',
+    });
 });
 
 describe('computeWeightedAverage', () => {
@@ -74,25 +77,31 @@ describe('computeNetValue', () => {
     });
 });
 
-describe('convertTradeHistoryToTableData', () => {
-    it('should return the correct data', () => {
-        const trade: TradeHistory[number] = {
-            id: '0x123',
-            amount: 1000,
-            averagePrice: BigNumber.from(9698),
-            side: 1,
-            orderPrice: 100000,
-            createdAt: 123,
-            blockNumber: 123,
-            taker: '0x123',
-            forwardValue: 100000,
-            txHash: '0x123',
-            currency:
-                '0x5553444300000000000000000000000000000000000000000000000000000000',
-            maturity: BigNumber.from(1675252800),
-        };
-        expect(convertTradeHistoryToTableData(trade).contract).toEqual(
-            'USDC-FEB23'
+describe('aggregateTrades', () => {
+    it('should aggregate trades', () => {
+        // Forward value is ignored in the comparison because I am not sure yet what we are getting for the Graph
+        expect(
+            aggregateTrades(transactions).map(
+                ({ amount, forwardValue, currency, maturity }) => ({
+                    amount,
+                    forwardValue,
+                    currency,
+                    maturity,
+                })
+            )
+        ).toEqual(
+            aggregatedTrades.map(
+                ({ amount, forwardValue, currency, maturity }) => ({
+                    amount,
+                    forwardValue,
+                    currency,
+                    maturity,
+                })
+            )
         );
+    });
+
+    it('should return an empty array if no trades are provided', () => {
+        expect(aggregateTrades([])).toEqual([]);
     });
 });
