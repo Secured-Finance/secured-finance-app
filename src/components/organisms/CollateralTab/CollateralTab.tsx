@@ -22,23 +22,23 @@ const generateCollateralList = (
     balance: Partial<Record<CurrencySymbol, number | BigNumber>>
 ): Record<CurrencySymbol, CollateralInfo> => {
     let collateralRecords: Record<string, CollateralInfo> = {};
-    for (let i = 0; i < collateralList.length; i++) {
-        const currencyInfo = collateralList[i];
+    collateralList.forEach((ccy: CurrencySymbol) => {
         const collateralInfo = {
-            [currencyInfo]: {
-                symbol: currencyInfo,
-                name: currencyInfo,
-                available: balance[currencyInfo]
-                    ? typeof balance[currencyInfo] === 'number'
-                        ? (balance[currencyInfo] as number)
-                        : amountFormatterFromBase[currencyInfo](
-                              balance[currencyInfo] as BigNumber
+            [ccy]: {
+                symbol: ccy,
+                name: ccy,
+                available: balance[ccy]
+                    ? typeof balance[ccy] === 'number'
+                        ? (balance[ccy] as number)
+                        : amountFormatterFromBase[ccy](
+                              balance[ccy] as BigNumber
                           )
                     : 0,
             },
         };
         collateralRecords = { ...collateralRecords, ...collateralInfo };
-    }
+    });
+
     return collateralRecords;
 };
 
@@ -58,16 +58,13 @@ export const CollateralTab = ({
         selectUSDCBalance(state)
     );
 
-    const balanceRecord = useMemo(() => {
-        return {
-            [CurrencySymbol.ETH]: ethBalance,
-            [CurrencySymbol.USDC]: usdcBalance,
-        };
-    }, [ethBalance, usdcBalance]);
-
     const depositCollateralList = useMemo(
-        () => generateCollateralList(balanceRecord),
-        [balanceRecord]
+        () =>
+            generateCollateralList({
+                [CurrencySymbol.ETH]: ethBalance,
+                [CurrencySymbol.USDC]: usdcBalance,
+            }),
+        [ethBalance, usdcBalance]
     );
 
     const withdrawCollateralList = useMemo(
