@@ -35,7 +35,7 @@ export async function getStaticPaths() {
 
     return {
         paths: tokens.map(v => ({
-            params: { ccy: v.symbol.toLocaleLowerCase() },
+            params: { ccy: v.symbol.toLowerCase() },
         })),
         fallback: false,
     };
