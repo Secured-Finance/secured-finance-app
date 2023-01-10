@@ -14,6 +14,7 @@ export * from './LiquidationProgressBar';
 export * from './MarketDashboardTable';
 export * from './PercentageSelector';
 export * from './PortfolioManagementTable';
+export * from './SuccessPanel';
 export * from './Tab';
 export * from './TableHeader';
 export * from './TermSelector';
