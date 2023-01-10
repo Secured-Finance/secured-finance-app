@@ -16,6 +16,7 @@ export * from './PercentageSelector';
 export * from './PortfolioManagementTable';
 export * from './SuccessPanel';
 export * from './Tab';
+export * from './TableContractCell';
 export * from './TableHeader';
 export * from './TermSelector';
 export * from './WalletRadioGroup';

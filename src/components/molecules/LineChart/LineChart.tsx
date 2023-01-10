@@ -140,6 +140,7 @@ export const LineChart = ({
             options={options}
             ref={chartRef}
             onClick={handleClick}
+            data-chromatic='ignore'
         />
     );
 };

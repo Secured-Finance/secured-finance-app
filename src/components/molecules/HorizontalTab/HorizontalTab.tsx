@@ -36,7 +36,7 @@ export const HorizontalTab = ({
                 selectedIndex={selectedIndex}
                 onChange={setSelectedIndex}
             >
-                <HeadlessTab.List className='flex justify-start border-b border-white-10 py-3 px-8'>
+                <HeadlessTab.List className='flex h-16 justify-start border-b border-white-10 py-3 px-5'>
                     {tabTitles.map(title => {
                         return (
                             <HeadlessTab
@@ -53,7 +53,7 @@ export const HorizontalTab = ({
                         );
                     })}
                 </HeadlessTab.List>
-                <HeadlessTab.Panels>
+                <HeadlessTab.Panels className='bg-black-20 px-2'>
                     {arrayChildren[selectedIndex]}
                 </HeadlessTab.Panels>
             </HeadlessTab.Group>

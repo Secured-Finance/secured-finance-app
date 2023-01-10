@@ -41,3 +41,21 @@ CurrencyName.args = {
     price: undefined,
     align: 'left',
 };
+
+export const CurrencyAmountInColor = Template.bind({});
+CurrencyAmountInColor.args = {
+    amount: 1000,
+    ccy: CurrencySymbol.FIL,
+    price: 8.2,
+    align: 'left',
+    color: 'positive',
+};
+
+export const Compact = Template.bind({});
+Compact.args = {
+    amount: 1000,
+    ccy: CurrencySymbol.FIL,
+    price: 8.2,
+    align: 'left',
+    compact: true,
+};

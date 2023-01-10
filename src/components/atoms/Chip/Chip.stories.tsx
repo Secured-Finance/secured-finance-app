@@ -7,6 +7,14 @@ export default {
     args: {
         label: 'Borrow',
     },
+    argTypes: {
+        label: {
+            control: {
+                type: 'select',
+                options: ['Borrow', 'Lend'],
+            },
+        },
+    },
 } as ComponentMeta<typeof Chip>;
 
 const Template: ComponentStory<typeof Chip> = args => <Chip {...args} />;

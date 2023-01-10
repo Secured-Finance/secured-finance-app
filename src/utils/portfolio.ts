@@ -1,9 +1,7 @@
 import { OrderSide } from '@secured-finance/sf-client';
-import * as dayjs from 'dayjs';
 import { BigNumber } from 'ethers';
-import { ActiveTrade } from 'src/components/organisms';
-import { TradeHistory } from 'src/hooks';
 import { AssetPriceMap } from 'src/store/assetPrices/selectors';
+import { TradeHistory } from 'src/types';
 import { hexToString } from 'web3-utils';
 import { currencyMap, CurrencySymbol } from './currencyList';
 import { LoanValue } from './entities';
@@ -43,30 +41,50 @@ export const computeNetValue = (
     }, 0);
 };
 
-export const convertTradeHistoryToTableData = (
-    trade: TradeHistory[number]
-): ActiveTrade => {
-    const { side, amount, averagePrice, currency, maturity } = trade;
-    const ccy = hexToString(currency) as CurrencySymbol;
+export type TradeSummary = {
+    currency: string;
+    maturity: string;
+    amount: BigNumber;
+    forwardValue: BigNumber;
+    averagePrice: BigNumber;
+};
 
-    // TODO: add this function in the SDK
-    const contract = `${ccy}-${dayjs
-        .unix(maturity)
-        .format('MMMYY')
-        .toUpperCase()}`;
+export const aggregateTrades = (trades: TradeHistory): TradeSummary[] => {
+    const tradeMap: Map<string, TradeSummary> = new Map();
 
-    const dayToMaturity = dayjs.unix(maturity).diff(Date.now(), 'day');
-    const notional = BigNumber.from(amount);
-    const position = side.toString() === OrderSide.LEND ? 'Lend' : 'Borrow';
+    for (const trade of trades) {
+        const key = trade.currency + trade.maturity.toString();
+        let summary = tradeMap.get(key);
+        if (!summary) {
+            summary = {
+                currency: trade.currency,
+                maturity: trade.maturity,
+                amount: BigNumber.from(0),
+                forwardValue: BigNumber.from(0),
+                averagePrice: BigNumber.from(0),
+            };
+            tradeMap.set(key, summary);
+        }
 
-    return {
-        position,
-        contract,
-        apy: LoanValue.fromPrice(averagePrice, maturity).apy,
-        notional,
-        currency: ccy,
-        presentValue: notional,
-        dayToMaturity,
-        forwardValue: notional,
-    };
+        // 1 = borrow, 0 = lend
+        summary.amount = summary.amount.add(
+            BigNumber.from(trade.amount).mul(trade.side === 1 ? -1 : 1)
+        );
+        summary.averagePrice = summary.averagePrice.add(
+            BigNumber.from(trade.orderPrice)
+                .mul(trade.side === 1 ? -1 : 1)
+                .mul(trade.amount)
+        );
+        summary.forwardValue = summary.forwardValue.add(
+            BigNumber.from(trade.forwardValue).mul(trade.side === 1 ? -1 : 1)
+        );
+    }
+
+    return Array.from(tradeMap.values()).map(summary => ({
+        ...summary,
+        forwardValue: BigNumber.from(summary.forwardValue),
+        averagePrice: !summary.amount.isZero
+            ? summary.averagePrice.div(summary.amount)
+            : BigNumber.from(0),
+    }));
 };

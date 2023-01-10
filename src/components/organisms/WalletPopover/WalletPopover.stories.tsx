@@ -1,4 +1,6 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { within } from '@storybook/testing-library';
+
 import { withWalletProvider } from 'src/../.storybook/decorators';
 import { WalletPopover } from './WalletPopover';
 
@@ -25,6 +27,13 @@ const Template: ComponentStory<typeof WalletPopover> = args => (
 );
 
 export const Default = Template.bind({});
+export const Expanded = Template.bind({});
+Expanded.play = ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const walletButton = canvas.getByRole('button');
+    walletButton.click();
+};
+
 export const Primary = Template.bind({});
 Primary.args = {
     wallet: '0x0123...321',

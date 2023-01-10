@@ -31,11 +31,6 @@ export default {
         maturitiesOptionList: maturityOptions,
         maturity: maturityOptions[0].value,
     },
-    parameters: {
-        date: {
-            tick: true,
-        },
-    },
 } as ComponentMeta<typeof LineChart>;
 
 const Template: ComponentStory<typeof LineChart> = args => {

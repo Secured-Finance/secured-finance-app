@@ -1,8 +1,12 @@
 import { composeStories } from '@storybook/testing-react';
-import { dec22Fixture, preloadedAssetPrices } from 'src/stories/mocks/fixtures';
+import {
+    dec22Fixture,
+    mar23Fixture,
+    preloadedAssetPrices,
+} from 'src/stories/mocks/fixtures';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { fireEvent, render, screen } from 'src/test-utils.js';
-import { CurrencyInfo, currencyMap, Rate } from 'src/utils';
+import { CurrencyInfo, currencyMap, formatDate, Rate } from 'src/utils';
 import { LoanValue } from 'src/utils/entities';
 import * as stories from './LendingCard.stories';
 
@@ -101,7 +105,8 @@ describe('LendingCard Component', () => {
             })
         );
         fireEvent.click(screen.getByText('MAR23'));
-        expect(screen.getByText('Mar 1, 2023')).toBeInTheDocument();
+        const dateWithTimezone = formatDate(mar23Fixture.toNumber());
+        expect(screen.getByText(dateWithTimezone)).toBeInTheDocument();
     });
 
     it('should open the confirm order dialog to place a market order when the borrow button is clicked', () => {

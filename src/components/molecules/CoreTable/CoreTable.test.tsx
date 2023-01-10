@@ -29,4 +29,11 @@ describe('CoreTable Component', () => {
             expect(row).not.toHaveClass('cursor-pointer');
         });
     });
+
+    it('should have borders  for each row if border is true', () => {
+        render(<Default border />);
+        screen.getAllByTestId('core-table-row').forEach(row => {
+            expect(row).toHaveClass('border-b border-white-10');
+        });
+    });
 });

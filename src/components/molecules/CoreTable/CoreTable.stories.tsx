@@ -22,6 +22,7 @@ export default {
     args: {
         data,
         columns,
+        border: true,
     },
 } as ComponentMeta<typeof CoreTable>;
 
@@ -30,3 +31,7 @@ const Template: ComponentStory<typeof CoreTable> = args => (
 );
 
 export const Default = Template.bind({});
+export const NoBorder = Template.bind({});
+NoBorder.args = {
+    border: false,
+};
