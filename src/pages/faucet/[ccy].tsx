@@ -25,9 +25,13 @@ interface Params extends ParsedUrlQuery {
 }
 
 export async function getStaticPaths() {
-    const tokens = Object.values(currencyMap).filter(
-        v => v.toCurrency() instanceof Token
-    );
+    const env = process.env.SF_ENV;
+    const tokens =
+        env === 'production'
+            ? []
+            : Object.values(currencyMap).filter(
+                  v => v.toCurrency() instanceof Token
+              );
 
     return {
         paths: tokens.map(v => ({
