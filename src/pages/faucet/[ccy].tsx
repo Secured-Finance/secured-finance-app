@@ -19,6 +19,22 @@ import {
 } from 'src/utils';
 import { useWallet } from 'use-wallet';
 
+export async function getStaticPaths() {
+    return {
+        paths: Object.values(currencyMap).map(v => ({
+            params: { ccy: v.symbol },
+        })),
+        fallback: true,
+    };
+}
+
+export async function getStaticProps() {
+    return {
+        // Passed to the page component as props
+        props: { ccy: {} },
+    };
+}
+
 const Faucet = () => {
     const { account } = useWallet();
     const [isPending, setIsPending] = useState(false);
