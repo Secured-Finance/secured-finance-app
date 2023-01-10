@@ -4,7 +4,6 @@ import {
     withWalletProvider,
 } from 'src/../.storybook/decorators';
 import { dec22Fixture } from 'src/stories/mocks/fixtures';
-import { Rate } from 'src/utils';
 import { LoanValue } from 'src/utils/entities';
 import { PlaceOrder } from './PlaceOrder';
 
@@ -14,7 +13,7 @@ export default {
     args: {
         isOpen: true,
         onClose: () => {},
-        loanValue: LoanValue.fromApy(new Rate(10000), dec22Fixture.toNumber()),
+        loanValue: LoanValue.fromPrice(9410, dec22Fixture.toNumber()),
     },
     decorators: [withAssetPrice, withWalletProvider],
 } as ComponentMeta<typeof PlaceOrder>;

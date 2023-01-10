@@ -2,7 +2,8 @@ import { composeStories } from '@storybook/testing-react';
 import { render, screen } from 'src/test-utils.js';
 import * as stories from './CurrencyItem.stories';
 
-const { Default, CurrencyPrice, CurrencyName } = composeStories(stories);
+const { Default, CurrencyPrice, CurrencyName, Compact } =
+    composeStories(stories);
 
 describe('CurrencyAmountItem Component', () => {
     it('should render a CurrencyAmountItem', () => {
@@ -50,5 +51,31 @@ describe('CurrencyAmountItem Component', () => {
         render(<CurrencyName />);
         expect(screen.getByText('FIL')).toBeInTheDocument();
         expect(screen.getByText('Filecoin')).toBeInTheDocument();
+    });
+
+    it('should display the currency amount in neutral by default', () => {
+        render(<Default />);
+        expect(
+            screen.getByTestId('currency-amount-item').firstChild
+        ).toHaveClass('text-neutral-8');
+    });
+
+    it('should display the currency amount in green', () => {
+        render(<Default color='positive' />);
+        expect(
+            screen.getByTestId('currency-amount-item').firstChild
+        ).toHaveClass('text-nebulaTeal');
+    });
+
+    it('should display the currency amount in red', () => {
+        render(<Default color='negative' />);
+        expect(
+            screen.getByTestId('currency-amount-item').firstChild
+        ).toHaveClass('text-galacticOrange');
+    });
+
+    it('should display only one line of text when Compact is true', () => {
+        render(<Compact />);
+        expect(screen.getByText('1,000 FIL')).toBeInTheDocument();
     });
 });

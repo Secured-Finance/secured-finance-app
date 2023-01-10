@@ -1,4 +1,5 @@
 import classNames from 'classnames';
+import { ColorFormat } from 'src/types';
 import {
     currencyMap,
     CurrencySymbol,
@@ -11,12 +12,15 @@ export const CurrencyItem = ({
     ccy,
     price,
     align = 'left',
+    color = 'neutral',
+    compact = false,
 }: {
     amount?: number;
     ccy: CurrencySymbol;
     price?: number;
     align?: 'left' | 'right' | 'center';
-}) => {
+    compact?: boolean;
+} & ColorFormat) => {
     let secondLine: string;
     if (amount !== undefined && price !== undefined) {
         secondLine = usdFormatAppendUSD(amount * price, 2);
@@ -36,12 +40,20 @@ export const CurrencyItem = ({
                 'text-left': align === 'left',
             })}
         >
-            <span className='typography-caption h-6 text-neutral-8'>
+            <span
+                className={classNames('typography-caption h-6', {
+                    'text-galacticOrange': color === 'negative',
+                    'text-nebulaTeal': color === 'positive',
+                    'text-neutral-8': color === 'neutral',
+                })}
+            >
                 {firstLine}
             </span>
-            <span className='typography-caption-2 h-5 text-[#6F74B0]'>
-                {secondLine}
-            </span>
+            {compact === false ? (
+                <span className='typography-caption-2 h-5 text-[#6F74B0]'>
+                    {secondLine}
+                </span>
+            ) : null}
         </div>
     );
 };
