@@ -10,7 +10,6 @@ export default {
     component: MarketDashboard,
     chromatic: { pauseAnimationAtEnd: true },
     args: {},
-    parameters: { date: { tick: true } },
     decorators: [withAppLayout, withWalletProvider],
 } as ComponentMeta<typeof MarketDashboard>;
 

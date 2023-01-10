@@ -1,3 +1,5 @@
+import { useTransactionHistory } from '@secured-finance/sf-graph-client';
+import { useOrderHistory } from '@secured-finance/sf-graph-client/dist/hooks/useOrderHistory';
 import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import {
@@ -6,20 +8,21 @@ import {
     PortfolioManagementTable,
 } from 'src/components/molecules';
 import {
-    ActiveTrade,
     ActiveTradeTable,
     CollateralOrganism,
     ConnectWalletCard,
+    MyTransactionsTable,
     MyWalletCard,
+    OrderHistoryTable,
 } from 'src/components/organisms';
-import { useTradeHistory } from 'src/hooks';
+import { useGraphClientHook } from 'src/hooks';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { selectEthereumBalance } from 'src/store/ethereumWallet';
 import { RootState } from 'src/store/types';
 import {
+    aggregateTrades,
     computeNetValue,
     computeWeightedAverageRate,
-    convertTradeHistoryToTableData,
     CurrencySymbol,
     generateWalletInformation,
     percentFormat,
@@ -30,7 +33,16 @@ import { useWallet } from 'use-wallet';
 
 export const PortfolioManagement = () => {
     const { account } = useWallet();
-    const tradeHistory = useTradeHistory(account ?? '');
+    const tradeHistory = useGraphClientHook(
+        account ?? '',
+        useTransactionHistory,
+        'transactions'
+    );
+    const oderHistory = useGraphClientHook(
+        account ?? '',
+        useOrderHistory,
+        'orders'
+    );
 
     const balance = useSelector((state: RootState) =>
         selectEthereumBalance(state)
@@ -54,11 +66,6 @@ export const PortfolioManagement = () => {
         () => generateWalletInformation(addressRecord, balanceRecord),
         [addressRecord, balanceRecord]
     );
-
-    const activeTrades: Array<ActiveTrade> = [];
-    tradeHistory.forEach(trade => {
-        return activeTrades.push(convertTradeHistoryToTableData(trade));
-    });
 
     return (
         <div
@@ -94,10 +101,15 @@ export const PortfolioManagement = () => {
             </div>
             <div>
                 <HorizontalTab
-                    tabTitles={['Active Contracts', 'Trade History']}
+                    tabTitles={[
+                        'Active Contracts',
+                        'Open Orders',
+                        'My Transactions',
+                    ]}
                 >
-                    <ActiveTradeTable data={activeTrades} />
-                    <div className='px-12 text-white'>Soon</div>
+                    <ActiveTradeTable data={aggregateTrades(tradeHistory)} />
+                    <OrderHistoryTable data={oderHistory} />
+                    <MyTransactionsTable data={tradeHistory} />
                 </HorizontalTab>
             </div>
         </div>
