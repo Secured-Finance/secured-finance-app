@@ -64,6 +64,7 @@ const SecuredFinanceProvider: React.FC = ({ children }) => {
 
             const securedFinanceLib = new SecuredFinanceClient();
             await securedFinanceLib.init(signer || provider, network);
+
             setSecuredFinance(previous => {
                 if (!previous) {
                     return securedFinanceLib;

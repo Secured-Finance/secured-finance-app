@@ -16,30 +16,35 @@ export const AssetInformation = ({
 }: AssetInformationProps) => {
     const priceList = useSelector((state: RootState) => getPriceMap(state));
     return (
-        <div className='flex h-fit w-full flex-col gap-3'>
+        <div className='flex h-fit w-full flex-col gap-2'>
             <div className='typography-caption-3 h-[26px] w-full border-b border-white-10 text-white-50'>
                 {header}
             </div>
             {collateralBook &&
-                Object.entries(collateralBook).map(([asset, quantity]) => (
+                (
+                    Object.entries(collateralBook) as [
+                        CurrencySymbol,
+                        BigNumber
+                    ][]
+                ).map(([asset, quantity]) => (
                     <div
-                        className='flex h-10 w-full flex-row items-center gap-3'
+                        className='flex h-10 w-full flex-row items-center gap-2'
                         key={asset}
                     >
                         <div>
-                            <CurrencyIcon ccy={asset as CurrencySymbol} />
+                            <CurrencyIcon ccy={asset} />
                         </div>
                         <div className='flex w-full flex-row justify-between'>
                             <CurrencyItem
-                                ccy={asset as CurrencySymbol}
-                                price={priceList[asset as CurrencySymbol]}
+                                ccy={asset}
+                                price={priceList[asset]}
                             />
                             <CurrencyItem
-                                amount={amountFormatterFromBase[
-                                    asset as CurrencySymbol
-                                ](quantity)}
-                                ccy={asset as CurrencySymbol}
-                                price={priceList[asset as CurrencySymbol]}
+                                amount={amountFormatterFromBase[asset](
+                                    quantity
+                                )}
+                                ccy={asset}
+                                price={priceList[asset]}
                                 align='right'
                             />
                         </div>

@@ -49,7 +49,9 @@ export const CollateralInput = ({
 
     const handleClick = useCallback(
         (percentage: number) => {
-            const amount = percentage * availableAmount;
+            const amount = parseFloat(
+                (percentage * availableAmount).toFixed(2)
+            );
             setInputValue(amount === 0 ? '' : amount.toString());
             if (onAmountChange) {
                 handleInputChange(amount, asset, onAmountChange);

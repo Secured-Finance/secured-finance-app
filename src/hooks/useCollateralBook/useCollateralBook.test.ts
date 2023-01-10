@@ -14,6 +14,7 @@ describe('useCollateralBook hook', () => {
     const preloadedState = {
         ...preloadedAssetPrices,
     };
+
     it('should return the collateral book for an user', async () => {
         const { result, waitForNextUpdate } = renderHook(() =>
             useCollateralBook('0x0')
@@ -25,12 +26,21 @@ describe('useCollateralBook hook', () => {
         expect(colBook.collateral.ETH).toEqual(
             BigNumber.from('1000000000000000000')
         );
+        expect(colBook.collateral.USDC).toEqual(BigNumber.from('100000000'));
+        expect(colBook.coverage).toEqual(BigNumber.from(80));
     });
 
     it('should return the empty book when given an null user', async () => {
         const { result } = renderHook(() => useCollateralBook(null));
         const colBook = result.current as CollateralBook;
-        expect(colBook.collateral.ETH).toEqual(BigNumber.from('0'));
+        expect(colBook).toEqual({
+            collateral: {
+                ETH: BigNumber.from(0),
+                USDC: BigNumber.from(0),
+            },
+            usdCollateral: 0,
+            coverage: BigNumber.from(0),
+        });
     });
 
     it('should compute the collaterals in USD', async () => {
@@ -42,17 +52,15 @@ describe('useCollateralBook hook', () => {
             await waitForNextUpdate();
         });
         const colBook = result.current as CollateralBook;
-        expect(colBook.usdCollateral.toString()).toEqual(
-            (
-                amountFormatterFromBase[CurrencySymbol.ETH](
-                    colBook.collateral.ETH ?? BigNumber.from(0)
-                ) *
-                    ETH_PRICE +
+        expect(colBook.usdCollateral).toEqual(
+            amountFormatterFromBase[CurrencySymbol.ETH](
+                colBook.collateral.ETH ?? BigNumber.from(0)
+            ) *
+                ETH_PRICE +
                 amountFormatterFromBase[CurrencySymbol.USDC](
                     colBook.collateral.USDC ?? BigNumber.from(0)
                 ) *
                     USDC_PRICE
-            ).toString()
         );
     });
 });

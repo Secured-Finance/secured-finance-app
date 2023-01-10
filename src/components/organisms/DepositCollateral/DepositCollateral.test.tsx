@@ -69,9 +69,24 @@ describe('DepositCollateral component', () => {
         const button = screen.getByTestId('dialog-action-button');
         fireEvent.click(button);
 
-        await waitFor(() =>
-            expect(screen.getByText('Success!')).toBeInTheDocument()
-        );
+        await waitFor(() => {
+            expect(screen.getByText('Success!')).toBeInTheDocument();
+            expect(
+                screen.getByText(
+                    'You have successfully deposited collateral on Secured Finance.'
+                )
+            ).toBeInTheDocument();
+            expect(screen.getByText('Status')).toBeInTheDocument();
+            expect(screen.getByText('Complete')).toBeInTheDocument();
+            expect(screen.getByText('Deposit Address')).toBeInTheDocument();
+            expect(screen.getByText('0xb98b...fd6d')).toBeInTheDocument();
+            expect(screen.getByText('Amount')).toBeInTheDocument();
+            expect(screen.getByText('37.5')).toBeInTheDocument();
+
+            expect(
+                screen.getByTestId('dialog-action-button')
+            ).toHaveTextContent('OK');
+        });
 
         await waitFor(() => expect(onClose).not.toHaveBeenCalled());
     });

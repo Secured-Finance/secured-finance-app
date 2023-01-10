@@ -89,6 +89,7 @@ export const mockUseSF = () => {
         depositCollateral: jest.fn(() =>
             Promise.resolve({
                 wait: jest.fn(() => Promise.resolve({ blockNumber: 123 })),
+                to: '0xb98bd7c7f656290071e52d1aa617d9cb4467fd6d',
             })
         ),
 

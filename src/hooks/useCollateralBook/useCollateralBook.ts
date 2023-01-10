@@ -40,6 +40,7 @@ export const useCollateralBook = (account: string | null) => {
 
         const { collateral, collateralCoverage } =
             await securedFinance.getCollateralBook(account);
+
         const { collateralBook, usdCollateral } = formatCollateral(
             collateral,
             priceList
@@ -64,6 +65,9 @@ export const useCollateralBook = (account: string | null) => {
 
     useEffect(() => {
         getCollateralBook();
+        return () => {
+            setCollateralBook(emptyBook);
+        };
     }, [getCollateralBook]);
 
     return collateralBook;
@@ -75,17 +79,17 @@ const formatCollateral = (
 ) => {
     let collateralBook: Partial<Record<CurrencySymbol, BigNumber>> = {};
     let usdCollateral = 0;
-    const currencies = Object.keys(collateral);
-    currencies.forEach((ccy: string) => {
+    Object.keys(collateral).forEach((ccy: string) => {
+        const currency = ccy as CurrencySymbol;
         collateralBook = {
             ...collateralBook,
-            [ccy as CurrencySymbol]: collateral[ccy] ?? BigNumber.from(0),
+            [currency]: collateral[ccy] ?? BigNumber.from(0),
         };
         usdCollateral +=
-            amountFormatterFromBase[ccy as CurrencySymbol](
-                collateral[ccy as CurrencySymbol]
-            ) * priceList[ccy as CurrencySymbol];
+            amountFormatterFromBase[currency](collateral[currency]) *
+            priceList[currency];
     });
+
     return {
         collateralBook,
         usdCollateral,

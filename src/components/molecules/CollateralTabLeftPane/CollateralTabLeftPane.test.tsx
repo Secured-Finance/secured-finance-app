@@ -39,4 +39,11 @@ describe('CollateralTabLeftPane component', () => {
         fireEvent.click(screen.getByTestId('deposit-collateral'));
         expect(onClick).toHaveBeenCalledWith('deposit');
     });
+
+    it('should call onClick with withdraw when withdraw button is clicked', () => {
+        const onClick = jest.fn();
+        render(<Default onClick={onClick} />);
+        fireEvent.click(screen.getByTestId('withdraw-collateral'));
+        expect(onClick).toHaveBeenCalledWith('withdraw');
+    });
 });

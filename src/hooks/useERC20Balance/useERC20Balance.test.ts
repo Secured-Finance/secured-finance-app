@@ -7,8 +7,8 @@ import { useERC20Balance } from './useERC20Balance';
 const mock = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mock);
 
-describe('useLendingMarkets', () => {
-    it('should insert the lending market contract into the store', async () => {
+describe('useERC20Balance', () => {
+    it('should call ERC20 balance method with account and token', async () => {
         const { result } = renderHook(() =>
             useERC20Balance(mock as unknown as SecuredFinanceClient)
         );
