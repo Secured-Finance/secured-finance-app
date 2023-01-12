@@ -1,10 +1,6 @@
 import { AssetInformation, Button } from 'src/components/atoms';
 import { CollateralBook } from 'src/hooks';
-import {
-    CurrencySymbol,
-    getFullDisplayBalanceNumber,
-    usdFormat,
-} from 'src/utils';
+import { usdFormat } from 'src/utils';
 
 interface CollateralTabLeftPaneProps {
     account: string | null;
@@ -17,13 +13,7 @@ export const CollateralTabLeftPane = ({
     onClick,
     collateralBook,
 }: CollateralTabLeftPaneProps) => {
-    const balance = account
-        ? getFullDisplayBalanceNumber(collateralBook.usdCollateral.toNumber())
-        : 0;
-
-    const quantity = collateralBook
-        ? getFullDisplayBalanceNumber(collateralBook.collateral.toNumber())
-        : 0;
+    const balance = account ? collateralBook.usdCollateral : 0;
 
     return (
         <div className='flex h-full flex-row'>
@@ -44,11 +34,10 @@ export const CollateralTabLeftPane = ({
                         </div>
                     )}
                     {balance > 0 && (
-                        <div className='ml-5 mt-6'>
+                        <div className='mx-5 mt-6'>
                             <AssetInformation
                                 header='Collateral Assets'
-                                asset={CurrencySymbol.ETH}
-                                quantity={quantity}
+                                collateralBook={collateralBook.collateral}
                             ></AssetInformation>
                         </div>
                     )}

@@ -1,3 +1,4 @@
+import { BigNumber } from 'ethers';
 import { useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import {
@@ -5,33 +6,39 @@ import {
     CollateralTabRightPane,
 } from 'src/components/molecules';
 import { CollateralBook } from 'src/hooks';
-import { selectEthereumBalance } from 'src/store/ethereumWallet';
 import { RootState } from 'src/store/types';
+import { selectEthereumBalance, selectUSDCBalance } from 'src/store/wallet';
 import {
+    amountFormatterFromBase,
     CollateralInfo,
     collateralList,
     CurrencySymbol,
-    getDisplayBalance,
 } from 'src/utils';
 import { useWallet } from 'use-wallet';
 import { DepositCollateral } from '../DepositCollateral';
 import { WithdrawCollateral } from '../WithdrawCollateral';
 
 const generateCollateralList = (
-    available: number
+    balance: Partial<Record<CurrencySymbol, number | BigNumber>>
 ): Record<CurrencySymbol, CollateralInfo> => {
     let collateralRecords: Record<string, CollateralInfo> = {};
-    for (let i = 0; i < collateralList.length; i++) {
-        const currencyInfo = collateralList[i];
+    collateralList.forEach((ccy: CurrencySymbol) => {
         const collateralInfo = {
-            [currencyInfo.symbol]: {
-                symbol: currencyInfo.symbol,
-                name: currencyInfo.name,
-                available: available,
+            [ccy]: {
+                symbol: ccy,
+                name: ccy,
+                available: balance[ccy]
+                    ? typeof balance[ccy] === 'number'
+                        ? (balance[ccy] as number)
+                        : amountFormatterFromBase[ccy](
+                              balance[ccy] as BigNumber
+                          )
+                    : 0,
             },
         };
         collateralRecords = { ...collateralRecords, ...collateralInfo };
-    }
+    });
+
     return collateralRecords;
 };
 
@@ -43,19 +50,25 @@ export const CollateralTab = ({
     const { account } = useWallet();
     const [openModal, setOpenModal] = useState<'' | 'deposit' | 'withdraw'>('');
 
-    const balance = useSelector((state: RootState) =>
+    const ethBalance = useSelector((state: RootState) =>
         selectEthereumBalance(state)
     );
 
-    const depositCollateralList = useMemo(
-        () => generateCollateralList(balance),
-        [balance]
+    const usdcBalance = useSelector((state: RootState) =>
+        selectUSDCBalance(state)
     );
-    const withdrawCollateralList = useMemo(
+
+    const depositCollateralList = useMemo(
         () =>
-            generateCollateralList(
-                parseFloat(getDisplayBalance(collateralBook.collateral))
-            ),
+            generateCollateralList({
+                [CurrencySymbol.ETH]: ethBalance,
+                [CurrencySymbol.USDC]: usdcBalance,
+            }),
+        [ethBalance, usdcBalance]
+    );
+
+    const withdrawCollateralList = useMemo(
+        () => generateCollateralList(collateralBook.collateral),
         [collateralBook.collateral]
     );
 

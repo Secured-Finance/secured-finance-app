@@ -1,15 +1,16 @@
 import { BigNumber } from 'ethers';
 import { useCallback, useReducer, useState } from 'react';
 import { useSelector } from 'react-redux';
-import Check from 'src/assets/icons/check-mark.svg';
 import Loader from 'src/assets/img/gradient-loader.png';
 import { CollateralSelector } from 'src/components/atoms';
-import { Dialog } from 'src/components/molecules';
+import { Dialog, SuccessPanel } from 'src/components/molecules';
 import { CollateralInput } from 'src/components/organisms';
 import { useDepositCollateral } from 'src/hooks/useDepositCollateral';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { RootState } from 'src/store/types';
 import {
+    AddressUtils,
+    amountFormatterFromBase,
     CollateralInfo,
     CurrencySymbol,
     handleContractTransaction,
@@ -82,14 +83,12 @@ export const DepositCollateral = ({
     collateralList: Record<string, CollateralInfo>;
 }) => {
     const [asset, setAsset] = useState(CurrencySymbol.ETH);
-    const [collateral, setCollateral] = useState('0');
+    const [collateral, setCollateral] = useState(BigNumber.from(0));
+    const [depositAddress, setDepositAddress] = useState('');
     const [state, dispatch] = useReducer(reducer, stateRecord[1]);
 
     const priceList = useSelector((state: RootState) => getPriceMap(state));
-    const { onDepositCollateral } = useDepositCollateral(
-        CurrencySymbol.ETH,
-        BigNumber.from(collateral)
-    );
+    const { onDepositCollateral } = useDepositCollateral(asset, collateral);
 
     const handleClose = useCallback(() => {
         dispatch({ type: 'default' });
@@ -104,6 +103,7 @@ export const DepositCollateral = ({
                 console.error('Some error occured');
                 handleClose();
             } else {
+                setDepositAddress(tx?.to ?? '');
                 dispatch({ type: 'next' });
             }
         } catch (e) {
@@ -116,7 +116,7 @@ export const DepositCollateral = ({
         async (currentStep: Step) => {
             switch (currentStep) {
                 case Step.depositCollateral:
-                    if (!collateral || collateral === '0') return;
+                    if (!collateral || collateral.isZero()) return;
                     dispatch({ type: 'next' });
                     handleDepositCollateral();
                     break;
@@ -157,7 +157,7 @@ export const DepositCollateral = ({
                                     price={priceList[asset]}
                                     asset={asset}
                                     onAmountChange={(v: BigNumber) =>
-                                        setCollateral(v.toString())
+                                        setCollateral(v)
                                     }
                                     availableAmount={
                                         collateralList[asset].available
@@ -178,7 +178,26 @@ export const DepositCollateral = ({
                         );
                         break;
                     case Step.deposited:
-                        return <Check className='h-[100px] w-[100px]' />;
+                        return (
+                            <SuccessPanel
+                                itemList={[
+                                    ['Status', 'Complete'],
+                                    [
+                                        'Deposit Address',
+                                        AddressUtils.format(
+                                            depositAddress ?? '',
+                                            6
+                                        ),
+                                    ],
+                                    [
+                                        'Amount',
+                                        amountFormatterFromBase[asset](
+                                            collateral
+                                        ).toString(),
+                                    ],
+                                ]}
+                            />
+                        );
                     default:
                         return <p>Unknown</p>;
                 }

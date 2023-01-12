@@ -24,7 +24,7 @@ describe('CollateralTabLeftPane component', () => {
 
     it('should render balance when wallet is connected and collateral is deposited', () => {
         render(<Default />);
-        expect(screen.getByText('$200.03')).toBeInTheDocument();
+        expect(screen.getByText('$2,100.34')).toBeInTheDocument();
     });
 
     it('should render enabled buttons when wallet is connected', () => {
@@ -38,5 +38,12 @@ describe('CollateralTabLeftPane component', () => {
         render(<Default onClick={onClick} />);
         fireEvent.click(screen.getByTestId('deposit-collateral'));
         expect(onClick).toHaveBeenCalledWith('deposit');
+    });
+
+    it('should call onClick with withdraw when withdraw button is clicked', () => {
+        const onClick = jest.fn();
+        render(<Default onClick={onClick} />);
+        fireEvent.click(screen.getByTestId('withdraw-collateral'));
+        expect(onClick).toHaveBeenCalledWith('withdraw');
     });
 });

@@ -1,50 +1,53 @@
-import BigNumber from 'bignumber.js';
+import { SecuredFinanceClient } from '@secured-finance/sf-client';
+import { BigNumber } from 'ethers';
 import { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAsset } from 'src/store/assetPrices/selectors';
+import { RootState } from 'src/store/types';
 import {
     connectEthWallet,
     resetEthWallet,
-    updateEthWalletBalance,
-    updateEthWalletUSDBalance,
-} from 'src/store/ethereumWallet';
-import { RootState } from 'src/store/types';
-import { CurrencySymbol } from 'src/utils';
+    updateEthBalance,
+    updateUsdcBalance,
+} from 'src/store/wallet';
+import { amountFormatterFromBase, CurrencySymbol } from 'src/utils';
+import { USDC } from 'src/utils/currencies/usdc';
 import { useWallet } from 'use-wallet';
+import { useERC20Balance } from './useERC20Balance';
 
-export const useEthereumWalletStore = () => {
+export const useEthereumWalletStore = (
+    securedFinance: SecuredFinanceClient | undefined
+) => {
     const dispatch = useDispatch();
-    const { account, balance, status } = useWallet();
+    const { account, balance: ethBalance, status } = useWallet();
     const { price, change } = useSelector((state: RootState) =>
         getAsset(CurrencySymbol.ETH)(state)
     );
-    const ethereumWallet = useSelector(
-        (state: RootState) => state.ethereumWallet
-    );
+    const wallet = useSelector((state: RootState) => state.wallet);
+    const { getERC20Balance } = useERC20Balance(securedFinance);
 
-    const getWalletBalance = useCallback(
-        (balance: number | string, price: number) => {
-            if (!account) return { usdBalance: 0, inEther: 0 };
+    const getWalletBalance = useCallback(async () => {
+        if (!account) return { inEther: 0, inUsdc: 0 };
 
-            const inEther = new BigNumber(balance)
-                .dividedBy(new BigNumber(10).pow(18))
-                .toNumber();
-            const usdBalance = new BigNumber(inEther)
-                .times(new BigNumber(price))
-                .toNumber();
-            return { usdBalance, inEther };
-        },
-        [account]
-    );
+        const usdcBalance = await getERC20Balance(account, USDC.onChain());
 
-    const fetchEthStore = useCallback(
+        const inEther = amountFormatterFromBase[CurrencySymbol.ETH](
+            BigNumber.from(ethBalance)
+        );
+        const inUsdc =
+            amountFormatterFromBase[CurrencySymbol.USDC](usdcBalance);
+
+        return { inEther, inUsdc };
+    }, [account, getERC20Balance, ethBalance]);
+
+    const fetchWalletStore = useCallback(
         async (account: string) => {
-            const { usdBalance, inEther } = getWalletBalance(balance, price);
+            const { inEther, inUsdc } = await getWalletBalance();
             dispatch(connectEthWallet(account));
-            dispatch(updateEthWalletBalance(inEther));
-            dispatch(updateEthWalletUSDBalance(usdBalance));
+            dispatch(updateUsdcBalance(inUsdc));
+            dispatch(updateEthBalance(inEther));
         },
-        [getWalletBalance, balance, price, dispatch]
+        [getWalletBalance, dispatch]
     );
 
     const connectWallet = useCallback(
@@ -62,9 +65,9 @@ export const useEthereumWalletStore = () => {
 
     useEffect(() => {
         if (account) {
-            fetchEthStore(account);
+            fetchWalletStore(account);
         }
-    }, [account, balance, change, fetchEthStore, price]);
+    }, [account, ethBalance, change, fetchWalletStore, price]);
 
     useEffect(() => {
         if (account === null) {
@@ -72,5 +75,5 @@ export const useEthereumWalletStore = () => {
         }
     }, [account, dispatch]);
 
-    return ethereumWallet;
+    return wallet;
 };

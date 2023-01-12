@@ -63,10 +63,7 @@ export const LendingCard = ({
     const assetList = useMemo(() => getCurrencyMapAsOptions(), []);
 
     const collateralUsagePercent = useMemo(() => {
-        return percentFormat(
-            BigNumber.from(collateralBook.coverage.toString()).toNumber() /
-                100.0
-        );
+        return percentFormat(collateralBook.coverage.toNumber() / 100.0);
     }, [collateralBook]);
 
     const availableToBorrow = useMemo(() => {
@@ -77,7 +74,7 @@ export const LendingCard = ({
         return `${computeAvailableToBorrow(
             assetPriceMap[currency],
             assetPriceMap[CurrencySymbol.ETH],
-            BigNumber.from(collateralBook.collateral.toString())
+            collateralBook.collateral.ETH ?? BigNumber.from(0)
         )}  ${currency}`;
     }, [assetPriceMap, collateralBook.collateral, currency]);
 

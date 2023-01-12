@@ -1,4 +1,3 @@
-import { BigNumber as BigNumberJS } from 'bignumber.js';
 import { BigNumber } from 'ethers';
 import * as jest from 'jest-mock';
 
@@ -43,8 +42,11 @@ export const mockUseSF = () => {
         ),
         getCollateralBook: jest.fn(() =>
             Promise.resolve({
-                collateralAmount: new BigNumberJS('10000'),
-                collateralCoverage: new BigNumberJS('80'),
+                collateral: {
+                    ETH: BigNumber.from('1000000000000000000'),
+                    USDC: BigNumber.from('100000000'),
+                },
+                collateralCoverage: BigNumber.from('80'),
             })
         ),
         getLendingMarket: jest.fn(() =>
@@ -87,6 +89,7 @@ export const mockUseSF = () => {
         depositCollateral: jest.fn(() =>
             Promise.resolve({
                 wait: jest.fn(() => Promise.resolve({ blockNumber: 123 })),
+                to: '0xb98bd7c7f656290071e52d1aa617d9cb4467fd6d',
             })
         ),
 
@@ -149,6 +152,8 @@ export const mockUseSF = () => {
                 ],
             })
         ),
+
+        getERC20Balance: jest.fn(() => Promise.resolve({ balance: 10000000 })),
     };
 
     return mockSecuredFinance;

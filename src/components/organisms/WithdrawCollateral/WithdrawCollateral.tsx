@@ -1,19 +1,21 @@
 import { BigNumber } from 'ethers';
 import { useCallback, useReducer, useState } from 'react';
 import { useSelector } from 'react-redux';
-import Check from 'src/assets/icons/check-mark.svg';
 import Loader from 'src/assets/img/gradient-loader.png';
 import { CollateralSelector } from 'src/components/atoms';
-import { Dialog } from 'src/components/molecules';
+import { Dialog, SuccessPanel } from 'src/components/molecules';
 import { CollateralInput } from 'src/components/organisms';
 import { useWithdrawCollateral } from 'src/hooks/useDepositCollateral';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { RootState } from 'src/store/types';
 import {
+    AddressUtils,
+    amountFormatterFromBase,
     CollateralInfo,
     CurrencySymbol,
     handleContractTransaction,
 } from 'src/utils';
+import { useWallet } from 'use-wallet';
 
 enum Step {
     withdrawCollateral = 1,
@@ -81,15 +83,13 @@ export const WithdrawCollateral = ({
     onClose: () => void;
     collateralList: Record<string, CollateralInfo>;
 }) => {
+    const { account } = useWallet();
     const [asset, setAsset] = useState(CurrencySymbol.ETH);
     const [state, dispatch] = useReducer(reducer, stateRecord[1]);
-    const [collateral, setCollateral] = useState('0');
+    const [collateral, setCollateral] = useState(BigNumber.from(0));
 
     const priceList = useSelector((state: RootState) => getPriceMap(state));
-    const { onWithdrawCollateral } = useWithdrawCollateral(
-        CurrencySymbol.ETH,
-        BigNumber.from(collateral)
-    );
+    const { onWithdrawCollateral } = useWithdrawCollateral(asset, collateral);
 
     const handleClose = useCallback(() => {
         dispatch({ type: 'default' });
@@ -116,7 +116,7 @@ export const WithdrawCollateral = ({
         async (currentStep: Step) => {
             switch (currentStep) {
                 case Step.withdrawCollateral:
-                    if (!collateral || collateral === '0') return;
+                    if (!collateral || collateral.isZero()) return;
                     dispatch({ type: 'next' });
                     handleWithdrawCollateral();
                     break;
@@ -157,7 +157,7 @@ export const WithdrawCollateral = ({
                                     price={priceList[asset]}
                                     asset={asset}
                                     onAmountChange={(v: BigNumber) =>
-                                        setCollateral(v.toString())
+                                        setCollateral(v)
                                     }
                                     availableAmount={
                                         collateralList[asset].available
@@ -184,7 +184,23 @@ export const WithdrawCollateral = ({
                         );
                         break;
                     case Step.withdrawn:
-                        return <Check className='h-[100px] w-[100px]' />;
+                        return (
+                            <SuccessPanel
+                                itemList={[
+                                    ['Status', 'Complete'],
+                                    [
+                                        'Ethereum Address',
+                                        AddressUtils.format(account ?? '', 6),
+                                    ],
+                                    [
+                                        'Amount',
+                                        amountFormatterFromBase[asset](
+                                            collateral
+                                        ).toString(),
+                                    ],
+                                ]}
+                            />
+                        );
                     default:
                         return <p>Unknown</p>;
                 }
