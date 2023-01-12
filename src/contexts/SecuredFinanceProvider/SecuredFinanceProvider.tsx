@@ -38,7 +38,7 @@ const SecuredFinanceProvider: React.FC = ({ children }) => {
         useState<SecuredFinanceClient>();
     const dispatch = useDispatch();
 
-    useEthereumWalletStore();
+    useEthereumWalletStore(securedFinance);
     Object.values(CurrencySymbol).forEach(ccy => {
         // eslint-disable-next-line react-hooks/rules-of-hooks
         useLendingMarkets(ccy, securedFinance);

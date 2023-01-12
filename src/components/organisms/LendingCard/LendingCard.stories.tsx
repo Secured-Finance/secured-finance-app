@@ -1,5 +1,5 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
-import { BigNumber } from 'bignumber.js';
+import { BigNumber } from 'ethers';
 import { withAssetPrice } from 'src/../.storybook/decorators';
 import { dec22Fixture, maturityOptions } from 'src/stories/mocks/fixtures';
 import { Rate } from 'src/utils';
@@ -11,10 +11,12 @@ export default {
     component: LendingCard,
     args: {
         collateralBook: {
-            ccyName: 'ETH',
-            collateral: new BigNumber('10000000000000000000'),
-            usdCollateral: new BigNumber('100000000000000000000'),
-            coverage: new BigNumber('80'),
+            collateral: {
+                ETH: BigNumber.from('1000000000000000000'),
+                USDC: BigNumber.from('100000000'),
+            },
+            usdCollateral: 2100.34,
+            coverage: BigNumber.from('80'),
         },
         marketValue: LoanValue.fromApy(
             new Rate(10000),
