@@ -13,7 +13,6 @@ export default {
     title: 'Pages/Landing',
     component: Landing,
     chromatic: { pauseAnimationAtEnd: true, diffThreshold: 1 },
-    args: {},
     decorators: [
         withAppLayout,
         withMaturities,
@@ -25,13 +24,10 @@ export default {
             mocks: [...mockOrderHistory],
         },
     },
-    play: async () => {
-        await new Promise(resolve => setTimeout(resolve, 5000));
-    },
 } as ComponentMeta<typeof Landing>;
 
-const Template: ComponentStory<typeof Landing> = args => {
-    return <Landing {...args} />;
+const Template: ComponentStory<typeof Landing> = () => {
+    return <Landing />;
 };
 
 export const Default = Template.bind({});
@@ -42,18 +38,18 @@ ConnectedToWallet.parameters = {
 };
 
 export const AdvancedView = Template.bind({});
-AdvancedView.args = {
-    initialView: 'Advanced',
+AdvancedView.play = async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    canvas.getByText('Advanced').click();
 };
 
 export const MyOrders = Template.bind({});
 MyOrders.parameters = {
     connected: true,
 };
-MyOrders.args = {
-    initialView: 'Advanced',
-};
+
 MyOrders.play = async ({ canvasElement }) => {
     const canvas = within(canvasElement);
+    canvas.getByText('Advanced').click();
     canvas.getByText('My Orders').click();
 };
