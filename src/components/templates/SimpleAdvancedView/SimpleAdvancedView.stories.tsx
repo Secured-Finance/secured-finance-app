@@ -1,4 +1,5 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { within } from '@storybook/testing-library';
 import { SimpleAdvancedView } from './SimpleAdvancedView';
 
 export default {
@@ -20,3 +21,8 @@ const Template: ComponentStory<typeof SimpleAdvancedView> = args => (
 );
 
 export const Default = Template.bind({});
+export const Advanced = Template.bind({});
+Advanced.play = async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    canvas.getByText('Advanced').click();
+};
