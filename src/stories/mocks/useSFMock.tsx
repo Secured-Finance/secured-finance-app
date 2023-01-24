@@ -154,6 +154,12 @@ export const mockUseSF = () => {
         ),
 
         getERC20Balance: jest.fn(() => Promise.resolve({ balance: 10000000 })),
+
+        cancelLendingOrder: jest.fn(() =>
+            Promise.resolve({
+                wait: jest.fn(() => Promise.resolve({ blockNumber: 123 })),
+            })
+        ),
     };
 
     return mockSecuredFinance;

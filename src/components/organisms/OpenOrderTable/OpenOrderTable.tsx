@@ -1,15 +1,17 @@
-import { PencilIcon, TrashIcon } from '@heroicons/react/outline';
 import { createColumnHelper } from '@tanstack/react-table';
 import { useMemo } from 'react';
-import { CoreTable } from 'src/components/molecules';
+import { CoreTable, OpenOrderActionCell } from 'src/components/molecules';
 import { Order } from 'src/components/organisms';
 import { OrderList } from 'src/types';
+import { CurrencySymbol } from 'src/utils';
+import { Maturity } from 'src/utils/entities';
 import {
     amountColumnDefinition,
     contractColumnDefinition,
     loanTypeColumnDefinition,
     priceYieldColumnDefinition,
 } from 'src/utils/tableDefinitions';
+import { hexToString } from 'web3-utils';
 
 const columnHelper = createColumnHelper<Order>();
 
@@ -47,12 +49,19 @@ export const OpenOrderTable = ({ data }: { data: OrderList }) => {
             ),
             columnHelper.display({
                 id: 'actions',
-                cell: () => (
-                    <div className='flex flex-row justify-center gap-3 text-planetaryPurple'>
-                        <PencilIcon className='h-4' />
-                        <TrashIcon className='h-4' />
-                    </div>
-                ),
+                cell: info => {
+                    const ccy = hexToString(
+                        info.row.original.currency
+                    ) as CurrencySymbol;
+
+                    return (
+                        <OpenOrderActionCell
+                            ccy={ccy}
+                            maturity={new Maturity(info.row.original.maturity)}
+                            orderId={info.row.original.orderId}
+                        />
+                    );
+                },
                 header: () => <div>Actions</div>,
             }),
         ],
