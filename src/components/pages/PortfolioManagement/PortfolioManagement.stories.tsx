@@ -26,6 +26,7 @@ export default {
         apolloClient: {
             mocks: [...mockTransactionHistory, ...mockOrderHistory],
         },
+        connected: true,
     },
 } as ComponentMeta<typeof PortfolioManagement>;
 
@@ -34,25 +35,18 @@ const Template: ComponentStory<typeof PortfolioManagement> = () => (
 );
 
 export const Default = Template.bind({});
+Default.parameters = {
+    connected: false,
+};
 
 export const ConnectedToWallet = Template.bind({});
-ConnectedToWallet.parameters = {
-    connected: true,
-};
-
 export const DisplayOrderHistory = Template.bind({});
-DisplayOrderHistory.parameters = {
-    connected: true,
-};
 DisplayOrderHistory.play = async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     const orderHistoryTab = canvas.getByText('Open Orders');
     orderHistoryTab.click();
 };
 export const DisplayMyTransactions = Template.bind({});
-DisplayMyTransactions.parameters = {
-    connected: true,
-};
 DisplayMyTransactions.play = async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     const myTransactionsTab = canvas.getByText('My Transactions');

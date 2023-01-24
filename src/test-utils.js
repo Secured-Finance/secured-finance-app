@@ -1,3 +1,4 @@
+import { MockedProvider } from '@apollo/client/testing';
 import { configureStore } from '@reduxjs/toolkit';
 import { render as rtlRender } from '@testing-library/react';
 import { renderHook as rtlRenderHook } from '@testing-library/react-hooks';
@@ -16,11 +17,18 @@ function render(
                     serializableCheck: false,
                 }),
         }),
+        apolloMocks = null,
         ...renderOptions
     } = {}
 ) {
     function Wrapper({ children }) {
-        return <Provider store={store}>{children}</Provider>;
+        const component = <Provider store={store}>{children}</Provider>;
+        if (apolloMocks) {
+            return (
+                <MockedProvider mocks={apolloMocks}>{component}</MockedProvider>
+            );
+        }
+        return component;
     }
     return { store, ...rtlRender(ui, { wrapper: Wrapper, ...renderOptions }) };
 }
