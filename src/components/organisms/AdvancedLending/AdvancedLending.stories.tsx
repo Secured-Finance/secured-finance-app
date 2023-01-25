@@ -1,12 +1,12 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { within } from '@storybook/testing-library';
-import { BigNumber } from 'ethers';
 import {
     withAssetPrice,
     withFullPage,
     withWalletProvider,
 } from 'src/../.storybook/decorators';
 import {
+    collateralBook80,
     dec22Fixture,
     maturityOptions,
     yieldCurveRates,
@@ -21,14 +21,7 @@ export default {
     component: AdvancedLending,
     chromatic: { pauseAnimationAtEnd: true },
     args: {
-        collateralBook: {
-            collateral: {
-                ETH: BigNumber.from('1000000000000000000'),
-                USDC: BigNumber.from('10000000'),
-            },
-            usdCollateral: 100,
-            coverage: BigNumber.from('80'),
-        },
+        collateralBook: collateralBook80,
         loanValue: LoanValue.fromApy(new Rate(10000), dec22Fixture.toNumber()), // 1%
         maturitiesOptionList: maturityOptions,
         rates: yieldCurveRates,
