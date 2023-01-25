@@ -228,7 +228,7 @@ export const collateralBook37: CollateralBook = {
         ETH: BigNumber.from('1000000000000000000'),
         USDC: BigNumber.from('10000000'),
     },
-    usdCollateral: 100,
+    usdCollateral: 2300,
     coverage: BigNumber.from('3700'),
 };
 

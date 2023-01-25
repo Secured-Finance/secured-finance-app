@@ -77,7 +77,7 @@ const formatCollateral = (
     collateral: Record<string, BigNumber>,
     priceList: AssetPriceMap
 ) => {
-    let collateralBook: Partial<Record<CurrencySymbol, BigNumber>> = {};
+    let collateralBook: CollateralBook['collateral'] = {};
     let usdCollateral = 0;
     Object.keys(collateral).forEach((ccy: string) => {
         const currency = ccy as CurrencySymbol;
