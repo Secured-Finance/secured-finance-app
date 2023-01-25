@@ -43,9 +43,4 @@ describe('SimpleAdvancedView Component', () => {
         render(<Default />);
         expect(screen.getByText('Simple Component')).toBeInTheDocument();
     });
-
-    it('should display the advanced component if the mode is advanced', () => {
-        render(<Default initialView='Advanced' />);
-        expect(screen.getByText('Advanced Component')).toBeInTheDocument();
-    });
 });

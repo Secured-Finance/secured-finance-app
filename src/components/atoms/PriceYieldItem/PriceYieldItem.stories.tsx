@@ -25,3 +25,7 @@ const Template: ComponentStory<typeof PriceYieldItem> = args => (
 );
 
 export const Default = Template.bind({});
+export const Compact = Template.bind({});
+Compact.args = {
+    compact: true,
+};

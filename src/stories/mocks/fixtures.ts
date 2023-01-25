@@ -86,7 +86,7 @@ export const orderHistoryList: OrderList = [
         side: 1,
         maturity: BigNumber.from(dec22Fixture.toString()),
         unitPrice: BigNumber.from('9600'),
-        amount: BigNumber.from('500000000000000000000'),
+        amount: BigNumber.from('5000000000000000000000'),
         status: 'Open',
         createdAt: BigNumber.from('1'),
         blockNumber: BigNumber.from('1'),
