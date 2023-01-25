@@ -45,6 +45,14 @@ export const ordinaryFormat = (
     }
 };
 
+export const formatWithCurrency = (
+    number: number | bigint | BigNumber | FixedNumber,
+    currency: string,
+    decimals = 2
+) => {
+    return `${ordinaryFormat(number, decimals)} ${currency}`;
+};
+
 export const formatLoanValue = (value: LoanValue, type: 'price' | 'rate') => {
     if (type === 'price') {
         return (value.price / 100).toFixed(2).toString();

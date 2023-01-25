@@ -1,23 +1,19 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
-import { BigNumber } from 'ethers';
 import {
     withAssetPrice,
     withWalletProvider,
 } from 'src/../.storybook/decorators';
+import {
+    collateralBook80,
+    emptyCollateralBook,
+} from 'src/stories/mocks/fixtures';
 import { CollateralTab } from './CollateralTab';
 
 export default {
     title: 'Organism/CollateralTab',
     component: CollateralTab,
     args: {
-        collateralBook: {
-            collateral: {
-                ETH: BigNumber.from('0'),
-                USDC: BigNumber.from('0'),
-            },
-            usdCollateral: 0,
-            coverage: BigNumber.from('0'), // 0%
-        },
+        collateralBook: emptyCollateralBook,
     },
     decorators: [withWalletProvider, withAssetPrice],
 } as ComponentMeta<typeof CollateralTab>;
@@ -33,12 +29,5 @@ ConnectedToWallet.parameters = {
 };
 
 ConnectedToWallet.args = {
-    collateralBook: {
-        collateral: {
-            ETH: BigNumber.from('1000000000000000000'),
-            USDC: BigNumber.from('100000000'),
-        },
-        usdCollateral: 2100.34,
-        coverage: BigNumber.from('7000'), // 70%
-    },
+    collateralBook: collateralBook80,
 };
