@@ -21,7 +21,7 @@ describe('CollateralUsageSection Component', () => {
         render(<Default />, { preloadedState: preloadedAssetPrices });
 
         expect(screen.getByText('Available to borrow')).toBeInTheDocument();
-        const available = await screen.findByText('233.37 FIL');
+        const available = await screen.findByText('46.67 FIL');
         expect(available).toBeInTheDocument();
     });
 
@@ -31,7 +31,7 @@ describe('CollateralUsageSection Component', () => {
         });
 
         expect(screen.getByText('Available to borrow')).toBeInTheDocument();
-        const available = await screen.findByText('1,400.23 USDC');
+        const available = await screen.findByText('280.05 USDC');
         expect(available).toBeInTheDocument();
     });
 });

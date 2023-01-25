@@ -26,11 +26,12 @@ export const CollateralUsageSection = ({
         if (currency && assetPriceMap) {
             result = computeAvailableToBorrow(
                 assetPriceMap[currency],
-                usdCollateral
+                usdCollateral,
+                collateralCoverage
             );
         }
         return formatWithCurrency(isNaN(result) ? 0 : result, currency);
-    }, [assetPriceMap, currency, usdCollateral]);
+    }, [assetPriceMap, collateralCoverage, currency, usdCollateral]);
 
     return (
         <div className='flex max-w-sm flex-row justify-between'>
