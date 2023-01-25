@@ -1,14 +1,20 @@
+import { useOrderHistory } from '@secured-finance/sf-graph-client/dist/hooks/useOrderHistory';
 import { BigNumber } from 'ethers';
 import { useCallback, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { DropdownSelector } from 'src/components/atoms';
-import { AdvancedLendingTopBar, Tab } from 'src/components/molecules';
+import {
+    AdvancedLendingTopBar,
+    HorizontalTab,
+    Tab,
+} from 'src/components/molecules';
 import {
     AdvancedLendingOrderCard,
     LineChartTab,
+    OpenOrderTable,
     OrderWidget,
 } from 'src/components/organisms';
-import { CollateralBook, OrderType } from 'src/hooks';
+import { CollateralBook, OrderType, useGraphClientHook } from 'src/hooks';
 import { useOrderbook } from 'src/hooks/useOrderbook';
 import {
     selectLandingOrderForm,
@@ -26,6 +32,7 @@ import {
     Rate,
 } from 'src/utils';
 import { LoanValue, Maturity } from 'src/utils/entities';
+import { useWallet } from 'use-wallet';
 
 export const AdvancedLending = ({
     collateralBook,
@@ -41,6 +48,7 @@ export const AdvancedLending = ({
     const { currency, maturity, orderType } = useSelector((state: RootState) =>
         selectLandingOrderForm(state.landingOrderForm)
     );
+    const { account } = useWallet();
 
     const assetList = useMemo(() => getCurrencyMapAsOptions(), []);
     const dispatch = useDispatch();
@@ -54,6 +62,11 @@ export const AdvancedLending = ({
     }, [maturity, maturitiesOptionList]);
 
     const orderBook = useOrderbook(currency, selectedTerm.value, 10);
+    const oderHistory = useGraphClientHook(
+        account ?? '',
+        useOrderHistory,
+        'orders'
+    );
 
     const selectedAsset = useMemo(() => {
         return assetList.find(option => option.value === currency);
@@ -117,11 +130,22 @@ export const AdvancedLending = ({
                             <div />
                         </Tab>
                     </div>
-                    <OrderWidget
-                        buyOrders={orderBook.borrowOrderbook}
-                        sellOrders={orderBook.lendOrderbook}
-                        currency={currency}
-                    />
+                    <HorizontalTab
+                        tabTitles={[
+                            'Order Book',
+                            'Market Trades',
+                            'My Orders',
+                            'My Trades',
+                        ]}
+                    >
+                        <OrderWidget
+                            buyOrders={orderBook.borrowOrderbook}
+                            sellOrders={orderBook.lendOrderbook}
+                            currency={currency}
+                        />
+                        <></>
+                        <OpenOrderTable data={oderHistory} />
+                    </HorizontalTab>
                 </div>
             </div>
         </div>

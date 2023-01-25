@@ -165,7 +165,9 @@ export const priceYieldColumnDefinition = <T extends { maturity: string }>(
     columnHelper: ColumnHelper<T>,
     title: string,
     id: string,
-    accessor: AccessorFn<T, BigNumber>
+    accessor: AccessorFn<T, BigNumber>,
+    variant: 'compact' | 'default' = 'default',
+    type: Parameters<typeof PriceYieldItem>[0]['firstLineType'] = 'price'
 ) => {
     return columnHelper.accessor(accessor, {
         id: id,
@@ -177,6 +179,8 @@ export const priceYieldColumnDefinition = <T extends { maturity: string }>(
                             Number(info.getValue().toString()),
                             Number(info.row.original.maturity.toString())
                         )}
+                        compact={variant === 'compact'}
+                        firstLineType={type}
                     />
                 </div>
             );

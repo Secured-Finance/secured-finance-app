@@ -39,9 +39,11 @@ describe('Landing Component', () => {
         });
     });
 
-    it('should select the market order type when the user change to advance mode', () => {
-        render(<Default />);
+    it('should select the market order type when the user change to advance mode', async () => {
         waitFor(() => {
+            render(<Default />, {
+                apolloMocks: Default.parameters?.apolloClient.mocks,
+            });
             fireEvent.click(screen.getByText('Advanced'));
         });
 

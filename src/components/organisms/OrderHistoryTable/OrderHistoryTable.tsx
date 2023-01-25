@@ -13,7 +13,7 @@ import {
     tableHeaderDefinition,
 } from 'src/utils/tableDefinitions';
 
-type Order = OrderList[0];
+export type Order = OrderList[0];
 
 const columnHelper = createColumnHelper<Order>();
 

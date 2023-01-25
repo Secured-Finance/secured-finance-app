@@ -1,7 +1,9 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { within } from '@storybook/testing-library';
 import { BigNumber } from 'ethers';
 import {
     withAssetPrice,
+    withFullPage,
     withWalletProvider,
 } from 'src/../.storybook/decorators';
 import {
@@ -9,6 +11,7 @@ import {
     maturityOptions,
     yieldCurveRates,
 } from 'src/stories/mocks/fixtures';
+import { mockOrderHistory } from 'src/stories/mocks/queries';
 import { Rate } from 'src/utils';
 import { LoanValue } from 'src/utils/entities';
 import { AdvancedLending } from './AdvancedLending';
@@ -30,7 +33,12 @@ export default {
         maturitiesOptionList: maturityOptions,
         rates: yieldCurveRates,
     },
-    decorators: [withAssetPrice, withWalletProvider],
+    parameters: {
+        apolloClient: {
+            mocks: [...mockOrderHistory],
+        },
+    },
+    decorators: [withFullPage, withAssetPrice, withWalletProvider],
 } as ComponentMeta<typeof AdvancedLending>;
 
 const Template: ComponentStory<typeof AdvancedLending> = args => {
@@ -46,4 +54,19 @@ export const Default = Template.bind({});
 export const ConnectedToWallet = Template.bind({});
 ConnectedToWallet.parameters = {
     connected: true,
+};
+
+export const MyOrders = Template.bind({});
+MyOrders.play = async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    canvas.getByText('My Orders').click();
+};
+
+export const MyOrdersConnectedToWallet = Template.bind({});
+MyOrdersConnectedToWallet.parameters = {
+    connected: true,
+};
+MyOrdersConnectedToWallet.play = async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    canvas.getByText('My Orders').click();
 };
