@@ -3,8 +3,11 @@ import { BigNumber } from 'ethers';
 import { useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { BorrowLendSelector, Button } from 'src/components/atoms';
-import { CollateralUsageSection } from 'src/components/atoms/CollateralUsageSection';
-import { AssetSelector, TermSelector } from 'src/components/molecules';
+import {
+    AssetSelector,
+    CollateralUsageSection,
+    TermSelector,
+} from 'src/components/molecules';
 import { PlaceOrder } from 'src/components/organisms';
 import { CollateralBook, usePlaceOrder } from 'src/hooks';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
