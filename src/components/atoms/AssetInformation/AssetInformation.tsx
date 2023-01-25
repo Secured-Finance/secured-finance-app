@@ -1,13 +1,14 @@
 import { BigNumber } from 'ethers';
 import { useSelector } from 'react-redux';
 import { CurrencyIcon, CurrencyItem } from 'src/components/atoms';
+import { CollateralBook } from 'src/hooks';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { RootState } from 'src/store/types';
 import { amountFormatterFromBase, CurrencySymbol } from 'src/utils';
 
 interface AssetInformationProps {
     header: string;
-    collateralBook: Partial<Record<CurrencySymbol, BigNumber>>;
+    collateralBook: CollateralBook['collateral'];
 }
 
 export const AssetInformation = ({

@@ -35,7 +35,7 @@ describe('AdvancedLendingOrderCard Component', () => {
         expect(screen.getByText('Collateral Management')).toBeInTheDocument();
         expect(screen.getByText('Collateral')).toBeInTheDocument();
         expect(screen.getByText('Utilization 37%')).toBeInTheDocument();
-        expect(screen.getByText('$37')).toBeInTheDocument();
+        expect(screen.getByText('$851')).toBeInTheDocument();
 
         expect(screen.getByText('Liquidation Risk')).toBeInTheDocument();
         expect(screen.getByText('Threshold 43%')).toBeInTheDocument();
