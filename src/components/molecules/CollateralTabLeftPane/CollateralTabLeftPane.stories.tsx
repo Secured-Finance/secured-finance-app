@@ -1,9 +1,9 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
-import { BigNumber } from 'ethers';
 import {
     withAssetPrice,
     withWalletProvider,
 } from 'src/../.storybook/decorators';
+import { collateralBook80 } from 'src/stories/mocks/fixtures';
 import { CollateralTabLeftPane } from './CollateralTabLeftPane';
 
 export default {
@@ -12,14 +12,7 @@ export default {
     args: {
         account: 'as',
         onClick: () => {},
-        collateralBook: {
-            collateral: {
-                ETH: BigNumber.from('1000000000000000000'),
-                USDC: BigNumber.from('10000000'),
-            },
-            usdCollateral: 2100.34,
-            coverage: BigNumber.from('80'),
-        },
+        collateralBook: collateralBook80,
     },
     decorators: [withAssetPrice, withWalletProvider],
 } as ComponentMeta<typeof CollateralTabLeftPane>;

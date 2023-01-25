@@ -1,4 +1,5 @@
 import { BigNumber, utils } from 'ethers';
+import { CollateralBook } from 'src/hooks';
 import { AssetPrices } from 'src/store/assetPrices';
 import { MaturityOptionList, OrderList, TradeHistory } from 'src/types';
 import { Rate, TradeSummary } from 'src/utils';
@@ -212,3 +213,30 @@ export const aggregatedTrades: TradeSummary[] = [
         maturity: mar23Fixture.toString(),
     },
 ];
+
+export const collateralBook80: CollateralBook = {
+    collateral: {
+        ETH: BigNumber.from('1000000000000000000'),
+        USDC: BigNumber.from('100000000'),
+    },
+    usdCollateral: 2100.34,
+    coverage: BigNumber.from('8000'), // 80%,
+};
+
+export const collateralBook37: CollateralBook = {
+    collateral: {
+        ETH: BigNumber.from('1000000000000000000'),
+        USDC: BigNumber.from('10000000'),
+    },
+    usdCollateral: 100,
+    coverage: BigNumber.from('3700'),
+};
+
+export const emptyCollateralBook: CollateralBook = {
+    collateral: {
+        ETH: BigNumber.from('0'),
+        USDC: BigNumber.from('0'),
+    },
+    usdCollateral: 0,
+    coverage: BigNumber.from('0'), // 0%
+};

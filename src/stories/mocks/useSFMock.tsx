@@ -1,5 +1,6 @@
 import { BigNumber } from 'ethers';
 import * as jest from 'jest-mock';
+import { collateralBook80 } from './fixtures';
 
 export const mockUseSF = () => {
     const mockSecuredFinance = {
@@ -42,11 +43,8 @@ export const mockUseSF = () => {
         ),
         getCollateralBook: jest.fn(() =>
             Promise.resolve({
-                collateral: {
-                    ETH: BigNumber.from('1000000000000000000'),
-                    USDC: BigNumber.from('100000000'),
-                },
-                collateralCoverage: BigNumber.from('80'),
+                collateral: collateralBook80.collateral,
+                collateralCoverage: collateralBook80.coverage,
             })
         ),
         getLendingMarket: jest.fn(() =>
