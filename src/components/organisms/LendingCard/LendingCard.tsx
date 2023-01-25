@@ -3,8 +3,11 @@ import { BigNumber } from 'ethers';
 import { useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { BorrowLendSelector, Button } from 'src/components/atoms';
-import { CollateralUsageSection } from 'src/components/atoms/CollateralUsageSection';
-import { AssetSelector, TermSelector } from 'src/components/molecules';
+import {
+    AssetSelector,
+    CollateralUsageSection,
+    TermSelector,
+} from 'src/components/molecules';
 import { PlaceOrder } from 'src/components/organisms';
 import { CollateralBook, usePlaceOrder } from 'src/hooks';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
@@ -24,9 +27,7 @@ import {
     formatLoanValue,
     getCurrencyMapAsList,
     getCurrencyMapAsOptions,
-    percentFormat,
 } from 'src/utils';
-import { computeAvailableToBorrow } from 'src/utils/collateral';
 import { LoanValue, Maturity } from 'src/utils/entities';
 
 export const LendingCard = ({
@@ -62,23 +63,6 @@ export const LendingCard = ({
     const assetPriceMap = useSelector((state: RootState) => getPriceMap(state));
     const assetList = useMemo(() => getCurrencyMapAsOptions(), []);
 
-    const collateralUsagePercent = useMemo(() => {
-        return percentFormat(collateralBook.coverage.toNumber() / 100.0);
-    }, [collateralBook]);
-
-    const availableToBorrow = useMemo(() => {
-        if (!currency) {
-            return 0;
-        }
-        //TODO: Remove the usage of BigNumber.js and use only Ethers.js
-        return `${computeAvailableToBorrow(
-            assetPriceMap[currency],
-            assetPriceMap[CurrencySymbol.ETH],
-            collateralBook.collateral.ETH ?? BigNumber.from(0)
-        )}  ${currency}`;
-    }, [assetPriceMap, collateralBook.collateral, currency]);
-
-    //TODO: strongly type the terms
     const selectedTerm = useMemo(() => {
         return (
             maturitiesOptionList.find(option =>
@@ -143,8 +127,9 @@ export const LendingCard = ({
                 />
 
                 <CollateralUsageSection
-                    available={availableToBorrow.toString()}
-                    usage={collateralUsagePercent.toString()}
+                    usdCollateral={collateralBook.usdCollateral}
+                    collateralCoverage={collateralBook.coverage.toNumber()}
+                    currency={currency}
                 />
 
                 <Button

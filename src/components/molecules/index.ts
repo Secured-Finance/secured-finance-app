@@ -5,6 +5,7 @@ export * from './AssetSelector';
 export * from './CollateralProgressBar';
 export * from './CollateralTabLeftPane';
 export * from './CollateralTabRightPane';
+export * from './CollateralUsageSection';
 export * from './CoreTable';
 export * from './CurveHeader';
 export * from './Dialog';

@@ -1,9 +1,12 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
-import { BigNumber } from 'ethers';
 import {
     withAssetPrice,
     withWalletProvider,
 } from 'src/../.storybook/decorators';
+import {
+    collateralBook37,
+    emptyCollateralBook,
+} from 'src/stories/mocks/fixtures';
 import { CollateralTabRightPane } from './CollateralTabRightPane';
 
 export default {
@@ -11,14 +14,7 @@ export default {
     component: CollateralTabRightPane,
     args: {
         account: 'as',
-        collateralBook: {
-            collateral: {
-                ETH: BigNumber.from('1000000000000000000'),
-                USDC: BigNumber.from('10000000'),
-            },
-            usdCollateral: 100,
-            coverage: BigNumber.from('3700'),
-        },
+        collateralBook: collateralBook37,
     },
     decorators: [withAssetPrice, withWalletProvider],
 } as ComponentMeta<typeof CollateralTabRightPane>;
@@ -31,12 +27,5 @@ export const Default = Template.bind({});
 export const NotConnectedToWallet = Template.bind({});
 NotConnectedToWallet.args = {
     account: null,
-    collateralBook: {
-        collateral: {
-            ETH: BigNumber.from('0'),
-            USDC: BigNumber.from('0'),
-        },
-        usdCollateral: 0,
-        coverage: BigNumber.from('0'), // 0%
-    },
+    collateralBook: emptyCollateralBook,
 };
