@@ -15,7 +15,7 @@ import {
     MyWalletCard,
     OrderHistoryTable,
 } from 'src/components/organisms';
-import { Page } from 'src/components/templates';
+import { Page, TwoColumns } from 'src/components/templates';
 import { useGraphClientHook } from 'src/hooks';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { RootState } from 'src/store/types';
@@ -74,9 +74,9 @@ export const PortfolioManagement = () => {
     );
 
     return (
-        <Page title='Portfolio Management' name={'portfolio-management'}>
-            <div className='flex flex-row justify-between gap-6 pt-4'>
-                <div className='flex min-w-[800px] flex-grow flex-col gap-6'>
+        <Page title='Portfolio Management' name='portfolio-management'>
+            <TwoColumns>
+                <div className='flex flex-col gap-6'>
                     <PortfolioManagementTable
                         values={[
                             usdFormat(computeNetValue(tradeHistory, priceMap)),
@@ -91,14 +91,12 @@ export const PortfolioManagement = () => {
                     />
                     <CollateralOrganism />
                 </div>
-                <div className='w-[350px]'>
-                    {account ? (
-                        <MyWalletCard assetMap={assetMap} />
-                    ) : (
-                        <ConnectWalletCard />
-                    )}
-                </div>
-            </div>
+                {account ? (
+                    <MyWalletCard assetMap={assetMap} />
+                ) : (
+                    <ConnectWalletCard />
+                )}
+            </TwoColumns>
             <div>
                 <HorizontalTab
                     tabTitles={[
