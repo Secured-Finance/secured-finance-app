@@ -1,4 +1,5 @@
 import { SecuredFinanceClient } from '@secured-finance/sf-client';
+import { Token } from '@secured-finance/sf-core';
 import { BigNumber } from 'ethers';
 import { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -7,13 +8,22 @@ import { RootState } from 'src/store/types';
 import {
     connectEthWallet,
     resetEthWallet,
-    updateEthBalance,
-    updateUsdcBalance,
+    updateBalance,
 } from 'src/store/wallet';
-import { amountFormatterFromBase, CurrencySymbol } from 'src/utils';
-import { USDC } from 'src/utils/currencies/usdc';
+import {
+    amountFormatterFromBase,
+    CurrencySymbol,
+    getCurrencyMapAsList,
+} from 'src/utils';
 import { useWallet } from 'use-wallet';
 import { useERC20Balance } from './useERC20Balance';
+
+export const zeroBalances = {
+    ETH: 0,
+    USDC: 0,
+    FIL: 0,
+    BTC: 0,
+};
 
 export const useEthereumWalletStore = (
     securedFinance: SecuredFinanceClient | undefined
@@ -27,25 +37,38 @@ export const useEthereumWalletStore = (
     const { getERC20Balance } = useERC20Balance(securedFinance);
 
     const getWalletBalance = useCallback(async () => {
-        if (!account) return { inEther: 0, inUsdc: 0 };
+        if (!account) return zeroBalances;
 
-        const usdcBalance = await getERC20Balance(account, USDC.onChain());
+        const result: Record<string, number> = {};
 
-        const inEther = amountFormatterFromBase[CurrencySymbol.ETH](
-            BigNumber.from(ethBalance)
-        );
-        const inUsdc =
-            amountFormatterFromBase[CurrencySymbol.USDC](usdcBalance);
+        getCurrencyMapAsList().forEach(async currency => {
+            if (currency.toCurrency().isToken) {
+                result[currency.symbol] = amountFormatterFromBase[
+                    currency.symbol
+                ](
+                    await getERC20Balance(
+                        account,
+                        currency.toCurrency() as Token
+                    )
+                );
+            } else {
+                result[currency.symbol] = amountFormatterFromBase[
+                    currency.symbol
+                ](BigNumber.from(ethBalance));
+            }
+        });
 
-        return { inEther, inUsdc };
+        return result as Record<CurrencySymbol, number>;
     }, [account, getERC20Balance, ethBalance]);
 
     const fetchWalletStore = useCallback(
         async (account: string) => {
-            const { inEther, inUsdc } = await getWalletBalance();
+            const balances = await getWalletBalance();
             dispatch(connectEthWallet(account));
-            dispatch(updateUsdcBalance(inUsdc));
-            dispatch(updateEthBalance(inEther));
+
+            for (const currency of Object.keys(balances) as CurrencySymbol[]) {
+                dispatch(updateBalance(balances[currency], currency));
+            }
         },
         [getWalletBalance, dispatch]
     );

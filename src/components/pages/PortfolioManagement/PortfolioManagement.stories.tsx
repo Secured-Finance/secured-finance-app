@@ -4,6 +4,7 @@ import {
     withAppLayout,
     withAssetPrice,
     withFullPage,
+    withWalletBalances,
     withWalletProvider,
 } from 'src/../.storybook/decorators';
 import {
@@ -18,6 +19,7 @@ export default {
     args: {},
     decorators: [
         withFullPage,
+        withWalletBalances,
         withAssetPrice,
         withAppLayout,
         withWalletProvider,

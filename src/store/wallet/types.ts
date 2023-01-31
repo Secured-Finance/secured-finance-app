@@ -1,11 +1,12 @@
+import { zeroBalances } from 'src/hooks/useEthWallet';
+import { CurrencySymbol } from 'src/utils';
+
 export interface WalletsStore {
     address: string;
-    ethBalance: number;
-    usdcBalance: number;
+    balances: Record<CurrencySymbol, number>;
 }
 
 export const defaultWallet: WalletsStore = {
     address: '',
-    ethBalance: 0,
-    usdcBalance: 0,
+    balances: zeroBalances,
 };

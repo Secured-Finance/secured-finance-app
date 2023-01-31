@@ -35,6 +35,7 @@ export const currencyMap: Readonly<
         symbol: CurrencySymbol.FIL,
         name: Filecoin.onChain().name,
         coinGeckoId: 'filecoin',
+        isCollateral: false,
         toBaseUnit: (amount: number) => {
             const filAmount = new FilecoinNumber(amount, 'fil');
             return BigNumber.from(filAmount.toAttoFil());
@@ -49,6 +50,7 @@ export const currencyMap: Readonly<
         symbol: CurrencySymbol.ETH,
         name: ETH.name,
         coinGeckoId: 'ethereum',
+        isCollateral: true,
         toBaseUnit: (amount: number) => convertToBlockchainUnit(amount, ETH),
         fromBaseUnit: (amount: BigNumber) =>
             convertFromBlockchainUnit(amount, ETH),
@@ -60,6 +62,7 @@ export const currencyMap: Readonly<
         name: USDC.onChain().name,
         icon: UsdcIcon,
         coinGeckoId: 'usd-coin',
+        isCollateral: true,
         toBaseUnit: (amount: number) =>
             convertToBlockchainUnit(amount, USDC.onChain()),
         fromBaseUnit: (amount: BigNumber) =>
@@ -72,6 +75,7 @@ export const currencyMap: Readonly<
         name: WBTC.onChain().name,
         icon: BTCIcon,
         coinGeckoId: 'bitcoin',
+        isCollateral: false,
         toBaseUnit: (amount: number) =>
             convertToBlockchainUnit(amount, WBTC.onChain()),
         fromBaseUnit: (amount: BigNumber) =>
@@ -120,6 +124,7 @@ export type CurrencyInfo = {
     name: string;
     coinGeckoId: string;
     icon: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
+    isCollateral: boolean;
     toBaseUnit: (amount: number) => BigNumber;
     fromBaseUnit: (amount: BigNumber) => number;
     toCurrency: () => CurrencyInterface;
