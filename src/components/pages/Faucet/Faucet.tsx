@@ -78,7 +78,7 @@ export const Faucet = () => {
 
     const mint = useCallback(async () => {
         if (!account || !sf || !token || !(token instanceof Token)) return;
-
+        setIsPending(false);
         try {
             const tx = await sf.mintERC20Token(token);
             const transactionStatus = await handleContractTransaction(tx);
@@ -144,7 +144,7 @@ export const Faucet = () => {
                                         navigator.clipboard.writeText(address);
                                     }}
                                 >
-                                    <ClipboardCopyIcon className='h-4 w-4 text-slateGray hover:text-white-60' />
+                                    <ClipboardCopyIcon className='h-4 w-4 text-slateGray hover:text-slateGray/80' />
                                 </button>
                             </div>
                             <div className='flex h-14 flex-row items-center justify-between gap-3 rounded-xl border border-neutral-3 bg-black-20 px-3'>
@@ -188,6 +188,8 @@ export const Faucet = () => {
                                 <a
                                     className='text-nebulaTeal underline'
                                     href='https://goerli-faucet.pk910.de/'
+                                    target='_blank'
+                                    rel='noreferrer'
                                 >
                                     Goerli PoW Faucet
                                 </a>
