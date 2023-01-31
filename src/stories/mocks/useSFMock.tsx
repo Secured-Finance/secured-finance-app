@@ -158,6 +158,16 @@ export const mockUseSF = () => {
                 wait: jest.fn(() => Promise.resolve({ blockNumber: 123 })),
             })
         ),
+
+        getERC20TokenContractAddress: jest.fn(() =>
+            Promise.resolve('0xEd4733fE7BAc4C2934F7e9CE4e0696b2169701D8')
+        ),
+
+        mintERC20Token: jest.fn(() =>
+            Promise.resolve({
+                wait: jest.fn(() => Promise.resolve({ blockNumber: 123 })),
+            })
+        ),
     };
 
     return mockSecuredFinance;
