@@ -1,6 +1,6 @@
 import { MarketDashboardTable } from 'src/components/molecules';
 import { ConnectWalletCard } from 'src/components/organisms';
-import { TitlePage } from 'src/components/templates';
+import { Page } from 'src/components/templates';
 import { useWallet } from 'use-wallet';
 
 export const MarketDashboard = () => {
@@ -8,7 +8,7 @@ export const MarketDashboard = () => {
 
     return (
         <div className='flex flex-col gap-9 px-40 pt-9' data-cy='exchange-page'>
-            <TitlePage title='Market Dashboard'>
+            <Page title='Market Dashboard'>
                 <div className='flex flex-row gap-6'>
                     <div className='flex min-w-[800px] flex-grow flex-col'>
                         <MarketDashboardTable />
@@ -17,7 +17,7 @@ export const MarketDashboard = () => {
                         {account ? null : <ConnectWalletCard />}
                     </div>
                 </div>
-            </TitlePage>
+            </Page>
         </div>
     );
 };

@@ -15,7 +15,7 @@ import {
     MyWalletCard,
     OrderHistoryTable,
 } from 'src/components/organisms';
-import { TitlePage } from 'src/components/templates';
+import { Page } from 'src/components/templates';
 import { useGraphClientHook } from 'src/hooks';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { RootState } from 'src/store/types';
@@ -78,7 +78,7 @@ export const PortfolioManagement = () => {
             className='mx-40 mt-7 flex flex-col gap-6'
             data-cy='portfolio-management'
         >
-            <TitlePage title='Portfolio Management'>
+            <Page title='Portfolio Management'>
                 <div className='flex flex-row justify-between gap-6 pt-4'>
                     <div className='flex min-w-[800px] flex-grow flex-col gap-6'>
                         <PortfolioManagementTable
@@ -120,7 +120,7 @@ export const PortfolioManagement = () => {
                         <MyTransactionsTable data={tradeHistory} />
                     </HorizontalTab>
                 </div>
-            </TitlePage>
+            </Page>
         </div>
     );
 };
