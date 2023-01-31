@@ -9,6 +9,7 @@ import {
     connectEthWallet,
     resetEthWallet,
     updateBalance,
+    zeroBalances,
 } from 'src/store/wallet';
 import {
     amountFormatterFromBase,
@@ -17,13 +18,6 @@ import {
 } from 'src/utils';
 import { useWallet } from 'use-wallet';
 import { useERC20Balance } from './useERC20Balance';
-
-export const zeroBalances = {
-    ETH: 0,
-    USDC: 0,
-    FIL: 0,
-    BTC: 0,
-};
 
 export const useEthereumWalletStore = (
     securedFinance: SecuredFinanceClient | undefined

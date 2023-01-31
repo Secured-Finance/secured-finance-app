@@ -4,6 +4,7 @@ import {
     withAppLayout,
     withAssetPrice,
     withMaturities,
+    withWalletBalances,
     withWalletProvider,
 } from 'src/../.storybook/decorators';
 import { mockOrderHistory } from 'src/stories/mocks/queries';
@@ -17,6 +18,7 @@ export default {
         withAppLayout,
         withMaturities,
         withAssetPrice,
+        withWalletBalances,
         withWalletProvider,
     ],
     parameters: {
