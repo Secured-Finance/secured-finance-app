@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import SFLogo from 'src/assets/img/logo.svg';
 import SFSphere from 'src/assets/img/sf-sphere.png';
-import { Button } from 'src/components/atoms';
+import { Button, GradientBox } from 'src/components/atoms';
 import { WalletDialog } from 'src/components/organisms';
 
 export const ConnectWalletCard = () => {
@@ -9,9 +9,8 @@ export const ConnectWalletCard = () => {
 
     return (
         <div className='h-fit w-full'>
-            <div className='h-1 w-full bg-starBlue'></div>
-            <div className='h-full w-full rounded-b-2xl border border-white-10 bg-gradient-to-b from-[rgba(106,118,177,0.1)] via-[rgba(106,118,177,0)] to-black-20 px-6'>
-                <div className='flex h-full flex-col items-center gap-4 pt-5 pb-6'>
+            <GradientBox>
+                <div className='flex h-full flex-col items-center gap-4 px-6 pt-5 pb-6'>
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                         src={SFSphere.src}
@@ -31,7 +30,7 @@ export const ConnectWalletCard = () => {
                         Connect Wallet to Get Started
                     </Button>
                 </div>
-            </div>
+            </GradientBox>
             <WalletDialog
                 isOpen={display}
                 onClose={() => setDisplay(false)}
