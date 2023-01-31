@@ -1,4 +1,4 @@
-import { Separator } from 'src/components/atoms';
+import { GradientBox, Separator } from 'src/components/atoms';
 import {
     AssetDisclosure,
     AssetDisclosureProps,
@@ -11,8 +11,7 @@ interface MyWalletCardProps {
 export const MyWalletCard = ({ assetMap }: MyWalletCardProps) => {
     return (
         <div className='h-fit w-full bg-transparent'>
-            <div className='h-1 w-full bg-starBlue'></div>
-            <div className='rounded-b-2xl border border-t-0 border-white-10 shadow-tab'>
+            <GradientBox>
                 <div className='typography-body-2 mx-2 flex h-14 items-center justify-center text-white'>
                     My Wallet
                 </div>
@@ -35,7 +34,7 @@ export const MyWalletCard = ({ assetMap }: MyWalletCardProps) => {
                         </div>
                     </div>
                 )}
-            </div>
+            </GradientBox>
         </div>
     );
 };
