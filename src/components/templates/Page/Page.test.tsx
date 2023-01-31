@@ -18,4 +18,14 @@ describe('Page Component', () => {
         render(<Default title='title' />);
         screen.getByText('title');
     });
+
+    it('should add data-testid attribute to the page if name is entered', () => {
+        render(<Default name='name' />);
+        screen.getByTestId('name');
+    });
+
+    it('should not have data-testid attribute to the page if name is not entered', () => {
+        render(<Default />);
+        expect(screen.queryByTestId('name')).toBeNull();
+    });
 });
