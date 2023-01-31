@@ -1,3 +1,4 @@
+import { ClipboardCopyIcon } from '@heroicons/react/outline';
 import { Token } from '@secured-finance/sf-core';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -129,7 +130,7 @@ export const Faucet = () => {
                             Test Token Faucet
                         </h1>
                         <div className='flex flex-col gap-10'>
-                            <div className='flex h-14 flex-row items-center justify-between gap-3 rounded-xl border border-neutral-3 bg-black-20 px-3'>
+                            <div className='relative flex h-14 flex-row items-center justify-between gap-3 rounded-xl border border-neutral-3 bg-black-20 px-3'>
                                 <DropdownSelector
                                     optionList={assetList}
                                     selected={assetList[0]}
@@ -150,6 +151,14 @@ export const Faucet = () => {
                                 <span className='w-22 pr-7 text-white-60'>
                                     {address}
                                 </span>
+                                <button
+                                    className='absolute right-4'
+                                    onClick={() => {
+                                        navigator.clipboard.writeText(address);
+                                    }}
+                                >
+                                    <ClipboardCopyIcon className='h-4 w-4 text-slateGray hover:text-white-60' />
+                                </button>
                             </div>
                             <div className='flex h-14 flex-row items-center justify-between gap-3 rounded-xl border border-neutral-3 bg-black-20 px-3'>
                                 <div className='flex h-10 w-36 flex-row items-center justify-between space-x-2 rounded-lg bg-white-5 px-2'>
