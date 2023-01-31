@@ -1,4 +1,4 @@
-export const TitlePage = ({
+export const Page = ({
     title,
     titleComponent,
     children,

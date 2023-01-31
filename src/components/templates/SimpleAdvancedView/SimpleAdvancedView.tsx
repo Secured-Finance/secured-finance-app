@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { SimpleAdvancedSelector, ViewType } from 'src/components/atoms';
-import { TitlePage } from 'src/components/templates';
+import { Page } from 'src/components/templates';
 
 export const SimpleAdvancedView = ({
     title,
@@ -18,7 +18,7 @@ export const SimpleAdvancedView = ({
     const component = view === 'Simple' ? simpleComponent : advanceComponent;
 
     return (
-        <TitlePage
+        <Page
             title={title}
             titleComponent={
                 <SimpleAdvancedSelector
@@ -31,6 +31,6 @@ export const SimpleAdvancedView = ({
             }
         >
             {component}
-        </TitlePage>
+        </Page>
     );
 };
