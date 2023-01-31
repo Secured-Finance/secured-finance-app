@@ -18,11 +18,6 @@ export const walletInformation: Partial<
     [WalletSource.METAMASK]: [CurrencySymbol.ETH, CurrencySymbol.USDC],
 };
 
-export const collateralList = [
-    CurrencySymbol.ETH,
-    CurrencySymbol.USDC,
-] as Array<CurrencySymbol>;
-
 export const generateWalletInformation = (
     accounts: Partial<Record<WalletSource, string>>,
     balance: Record<string, number>,

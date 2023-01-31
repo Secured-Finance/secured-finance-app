@@ -19,12 +19,11 @@ import { Page, TwoColumns } from 'src/components/templates';
 import { useGraphClientHook } from 'src/hooks';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { RootState } from 'src/store/types';
-import { selectEthereumBalance, selectUSDCBalance } from 'src/store/wallet';
+import { selectCollateralCurrencyBalance } from 'src/store/wallet';
 import {
     aggregateTrades,
     computeNetValue,
     computeWeightedAverageRate,
-    CurrencySymbol,
     generateWalletInformation,
     percentFormat,
     usdFormat,
@@ -45,12 +44,8 @@ export const PortfolioManagement = () => {
         'orders'
     );
 
-    const ethBalance = useSelector((state: RootState) =>
-        selectEthereumBalance(state)
-    );
-
-    const usdcBalance = useSelector((state: RootState) =>
-        selectUSDCBalance(state)
+    const balanceRecord = useSelector((state: RootState) =>
+        selectCollateralCurrencyBalance(state)
     );
 
     const priceMap = useSelector((state: RootState) => getPriceMap(state));
@@ -60,13 +55,6 @@ export const PortfolioManagement = () => {
             [WalletSource.METAMASK]: account ?? '',
         };
     }, [account]);
-
-    const balanceRecord = useMemo(() => {
-        return {
-            [CurrencySymbol.ETH]: ethBalance,
-            [CurrencySymbol.USDC]: usdcBalance,
-        };
-    }, [ethBalance, usdcBalance]);
 
     const assetMap: AssetDisclosureProps[] = useMemo(
         () => generateWalletInformation(addressRecord, balanceRecord),

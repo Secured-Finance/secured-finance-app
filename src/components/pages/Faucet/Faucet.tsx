@@ -19,7 +19,7 @@ import { ConnectWalletCard, MyWalletCard } from 'src/components/organisms';
 import { Page, TwoColumns } from 'src/components/templates';
 import useSF from 'src/hooks/useSecuredFinance';
 import { RootState } from 'src/store/types';
-import { selectEthereumBalance, selectUSDCBalance } from 'src/store/wallet';
+import { selectAllBalances } from 'src/store/wallet';
 import {
     AddressUtils,
     currencyMap,
@@ -36,12 +36,8 @@ export const Faucet = () => {
     const { account } = useWallet();
     const sf = useSF();
 
-    const ethBalance = useSelector((state: RootState) =>
-        selectEthereumBalance(state)
-    );
-
-    const usdcBalance = useSelector((state: RootState) =>
-        selectUSDCBalance(state)
+    const balanceRecord = useSelector((state: RootState) =>
+        selectAllBalances(state)
     );
 
     const addressRecord = useMemo(() => {
@@ -49,15 +45,6 @@ export const Faucet = () => {
             [WalletSource.METAMASK]: account ?? '',
         };
     }, [account]);
-
-    const balanceRecord = useMemo(() => {
-        return {
-            [CurrencySymbol.ETH]: ethBalance,
-            [CurrencySymbol.USDC]: usdcBalance,
-            [CurrencySymbol.FIL]: usdcBalance,
-            [CurrencySymbol.BTC]: usdcBalance,
-        };
-    }, [ethBalance, usdcBalance]);
 
     const assetList = useMemo(
         () =>
