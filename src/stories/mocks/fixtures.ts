@@ -27,6 +27,17 @@ export const preloadedAssetPrices: { assetPrices: AssetPrices } = {
     },
 };
 
+export const preloadedBalances = {
+    wallet: {
+        balances: {
+            FIL: 1000,
+            ETH: 10,
+            USDC: 100000,
+            BTC: 50,
+        },
+    },
+};
+
 export const dec22Fixture = new Maturity(1669852800);
 export const mar23Fixture = new Maturity(1677628800);
 export const jun23Fixture = new Maturity(1685577600);
