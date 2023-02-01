@@ -135,7 +135,7 @@ export const Faucet = () => {
                                         }
                                     }}
                                 />
-                                <span className='w-22 pr-7 text-white-60'>
+                                <span className='pr-7 text-white-60'>
                                     {address}
                                 </span>
                                 <button
