@@ -27,7 +27,7 @@ export const ConnectWalletCard = () => {
                         fullWidth={true}
                         onClick={() => setDisplay(true)}
                     >
-                        Connect Wallet to Get Started
+                        Connect Wallet
                     </Button>
                 </div>
             </GradientBox>
