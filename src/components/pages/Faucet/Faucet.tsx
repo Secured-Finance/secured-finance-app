@@ -112,8 +112,8 @@ export const Faucet = () => {
         <Page title='Market Dashboard'>
             <TwoColumns>
                 <GradientBox>
-                    <div className='flex flex-col items-center gap-12 px-16 pb-4'>
-                        <h1 className='typography-headline-4 py-8 text-2xl font-bold text-white'>
+                    <div className='grid grid-cols-1 gap-12 px-16 pb-4'>
+                        <h1 className='typography-headline-4 py-8 text-center text-2xl font-bold text-white'>
                             Test Token Faucet
                         </h1>
                         <div className='flex flex-col gap-10'>
