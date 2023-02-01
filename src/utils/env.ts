@@ -22,3 +22,16 @@ export const getRpcEndpoint = () => {
 
     return `https://eth-${NEXT_PUBLIC_ETHEREUM_NETWORK}.g.alchemy.com/v2/${NEXT_PUBLIC_ALCHEMY_API_KEY}`;
 };
+
+export const getAmplitudeApiKey = () => {
+    const NEXT_PUBLIC_AMPLITUDE_API_KEY =
+        process.env.NEXT_PUBLIC_AMPLITUDE_API_KEY;
+
+    if (!NEXT_PUBLIC_AMPLITUDE_API_KEY) {
+        // eslint-disable-next-line no-console
+        console.warn('Amplitude API is not set: no analytics will be sent');
+        return '';
+    }
+
+    return NEXT_PUBLIC_AMPLITUDE_API_KEY;
+};

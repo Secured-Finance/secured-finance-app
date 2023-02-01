@@ -1,3 +1,4 @@
+import { identify, Identify, track } from '@amplitude/analytics-browser';
 import { useCallback, useEffect, useReducer, useState } from 'react';
 import Loader from 'src/assets/img/gradient-loader.png';
 import MetaMaskIcon from 'src/assets/img/metamask-fox.svg';
@@ -8,7 +9,12 @@ import {
     WalletRadioGroup,
 } from 'src/components/molecules';
 import { CACHED_PROVIDER_KEY } from 'src/contexts/SecuredFinanceProvider/SecuredFinanceProvider';
-import { AddressUtils } from 'src/utils';
+import {
+    AddressUtils,
+    InterfaceEvents,
+    InterfaceProperties,
+    WalletConnectionResult,
+} from 'src/utils';
 import { useWallet } from 'use-wallet';
 
 enum Step {
@@ -99,7 +105,21 @@ export const WalletDialog = ({
         if (state.currentStep === Step.connecting) {
             const provider =
                 wallet === 'Metamask' ? 'injected' : 'walletconnect';
-            handleConnect(provider, account);
+            handleConnect(provider, account)
+                .then(() => {
+                    if (!account) return;
+                    track(InterfaceEvents.CONNECT_WALLET_BUTTON_CLICKED, {
+                        [InterfaceProperties.WALLET_CONNECTION_RESULT]:
+                            WalletConnectionResult.SUCCEEDED,
+                        [InterfaceProperties.WALLET_ADDRESS]: account,
+                    });
+                })
+                .catch(() => {
+                    track(InterfaceEvents.CONNECT_WALLET_BUTTON_CLICKED, {
+                        [InterfaceProperties.WALLET_CONNECTION_RESULT]:
+                            WalletConnectionResult.FAILED,
+                    });
+                });
         }
     }, [state, account, handleConnect, wallet]);
 
@@ -116,12 +136,17 @@ export const WalletDialog = ({
                 case Step.connecting:
                     break;
                 case Step.connected:
+                    if (account) {
+                        const event = new Identify();
+                        event.set('wallet_address', account);
+                        identify(event);
+                    }
                     dispatch({ type: 'next' });
                     onClose();
                     break;
             }
         },
-        [onClose, wallet]
+        [account, onClose, wallet]
     );
 
     const handleClose = () => {
