@@ -35,7 +35,7 @@ export const useEthereumWalletStore = (
 
         const result: Record<string, number> = {};
 
-        getCurrencyMapAsList().forEach(async currency => {
+        for (const currency of getCurrencyMapAsList()) {
             if (currency.toCurrency().isToken) {
                 result[currency.symbol] = amountFormatterFromBase[
                     currency.symbol
@@ -50,7 +50,7 @@ export const useEthereumWalletStore = (
                     currency.symbol
                 ](BigNumber.from(ethBalance));
             }
-        });
+        }
 
         return result as Record<CurrencySymbol, number>;
     }, [account, getERC20Balance, ethBalance]);
@@ -58,6 +58,7 @@ export const useEthereumWalletStore = (
     const fetchWalletStore = useCallback(
         async (account: string) => {
             const balances = await getWalletBalance();
+            console.log('balances', balances);
             dispatch(connectEthWallet(account));
 
             for (const currency of Object.keys(balances) as CurrencySymbol[]) {
