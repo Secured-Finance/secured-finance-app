@@ -58,7 +58,6 @@ export const useEthereumWalletStore = (
     const fetchWalletStore = useCallback(
         async (account: string) => {
             const balances = await getWalletBalance();
-            console.log('balances', balances);
             dispatch(connectEthWallet(account));
 
             for (const currency of Object.keys(balances) as CurrencySymbol[]) {
