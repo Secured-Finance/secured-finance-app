@@ -4,6 +4,7 @@
   "private": true,
   "homepage": ".",
   "dependencies": {
+    "@amplitude/analytics-browser": "^1.7.0",
     "@glif/filecoin-number": "^1.1.0-beta.11",
     "@headlessui/react": "^1.6.4",
     "@heroicons/react": "^1.0.6",
