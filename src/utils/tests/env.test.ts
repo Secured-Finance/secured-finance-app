@@ -64,9 +64,8 @@ describe('getRpcEndpoint', () => {
 });
 
 describe('getAmplitudeApiKey', () => {
-    beforeEach(() => (process.env.NEXT_PUBLIC_AMPLITUDE_API_KEY = 'test'));
-
     it('should return the value of the environment variable', () => {
+        process.env.NEXT_PUBLIC_AMPLITUDE_API_KEY = 'test';
         const apiKey = getAmplitudeApiKey();
         expect(apiKey).toBe('test');
         expect(typeof apiKey).toBe('string');
