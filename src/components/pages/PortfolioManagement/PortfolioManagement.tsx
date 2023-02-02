@@ -15,15 +15,15 @@ import {
     MyWalletCard,
     OrderHistoryTable,
 } from 'src/components/organisms';
+import { Page, TwoColumns } from 'src/components/templates';
 import { useGraphClientHook } from 'src/hooks';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { RootState } from 'src/store/types';
-import { selectEthereumBalance, selectUSDCBalance } from 'src/store/wallet';
+import { selectCollateralCurrencyBalance } from 'src/store/wallet';
 import {
     aggregateTrades,
     computeNetValue,
     computeWeightedAverageRate,
-    CurrencySymbol,
     generateWalletInformation,
     percentFormat,
     usdFormat,
@@ -44,12 +44,8 @@ export const PortfolioManagement = () => {
         'orders'
     );
 
-    const ethBalance = useSelector((state: RootState) =>
-        selectEthereumBalance(state)
-    );
-
-    const usdcBalance = useSelector((state: RootState) =>
-        selectUSDCBalance(state)
+    const balanceRecord = useSelector((state: RootState) =>
+        selectCollateralCurrencyBalance(state)
     );
 
     const priceMap = useSelector((state: RootState) => getPriceMap(state));
@@ -60,28 +56,15 @@ export const PortfolioManagement = () => {
         };
     }, [account]);
 
-    const balanceRecord = useMemo(() => {
-        return {
-            [CurrencySymbol.ETH]: ethBalance,
-            [CurrencySymbol.USDC]: usdcBalance,
-        };
-    }, [ethBalance, usdcBalance]);
-
     const assetMap: AssetDisclosureProps[] = useMemo(
         () => generateWalletInformation(addressRecord, balanceRecord),
         [addressRecord, balanceRecord]
     );
 
     return (
-        <div
-            className='mx-40 mt-7 flex flex-col gap-6'
-            data-cy='portfolio-management'
-        >
-            <div className='h-16 border-b-[0.5px] border-panelStroke font-secondary text-lg font-light leading-7 text-white'>
-                Portfolio Management
-            </div>
-            <div className='flex flex-row justify-between gap-6 pt-4'>
-                <div className='flex min-w-[800px] flex-grow flex-col gap-6'>
+        <Page title='Portfolio Management' name='portfolio-management'>
+            <TwoColumns>
+                <div className='flex flex-col gap-6'>
                     <PortfolioManagementTable
                         values={[
                             usdFormat(computeNetValue(tradeHistory, priceMap)),
@@ -96,14 +79,12 @@ export const PortfolioManagement = () => {
                     />
                     <CollateralOrganism />
                 </div>
-                <div className='w-[350px]'>
-                    {account ? (
-                        <MyWalletCard assetMap={assetMap} />
-                    ) : (
-                        <ConnectWalletCard />
-                    )}
-                </div>
-            </div>
+                {account ? (
+                    <MyWalletCard assetMap={assetMap} />
+                ) : (
+                    <ConnectWalletCard />
+                )}
+            </TwoColumns>
             <div>
                 <HorizontalTab
                     tabTitles={[
@@ -117,6 +98,6 @@ export const PortfolioManagement = () => {
                     <MyTransactionsTable data={tradeHistory} />
                 </HorizontalTab>
             </div>
-        </div>
+        </Page>
     );
 };

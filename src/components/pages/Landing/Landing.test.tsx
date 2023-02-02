@@ -1,4 +1,5 @@
 import { composeStories } from '@storybook/testing-react';
+import { preloadedBalances } from 'src/stories/mocks/fixtures';
 import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
 import * as stories from './Landing.stories';
 
@@ -18,13 +19,15 @@ jest.mock(
             children
 );
 
+const preloadedState = preloadedBalances;
+
 describe('Landing Component', () => {
     it('should render a Landing', () => {
-        render(<Default />);
+        render(<Default />, { preloadedState });
     });
 
     it('should change the rate when the user changes the maturity', () => {
-        render(<Default />);
+        render(<Default />, { preloadedState });
         waitFor(() => {
             expect(screen.getByTestId('rate')).toHaveTextContent('1%');
         });
@@ -43,6 +46,7 @@ describe('Landing Component', () => {
         waitFor(() => {
             render(<Default />, {
                 apolloMocks: Default.parameters?.apolloClient.mocks,
+                preloadedState,
             });
             fireEvent.click(screen.getByText('Advanced'));
         });

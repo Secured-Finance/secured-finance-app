@@ -7,12 +7,12 @@ import {
 } from 'src/components/molecules';
 import { CollateralBook } from 'src/hooks';
 import { RootState } from 'src/store/types';
-import { selectEthereumBalance, selectUSDCBalance } from 'src/store/wallet';
+import { selectCollateralCurrencyBalance } from 'src/store/wallet';
 import {
     amountFormatterFromBase,
     CollateralInfo,
-    collateralList,
     CurrencySymbol,
+    getCurrencyMapAsList,
 } from 'src/utils';
 import { useWallet } from 'use-wallet';
 import { DepositCollateral } from '../DepositCollateral';
@@ -22,22 +22,26 @@ const generateCollateralList = (
     balance: Partial<Record<CurrencySymbol, number | BigNumber>>
 ): Record<CurrencySymbol, CollateralInfo> => {
     let collateralRecords: Record<string, CollateralInfo> = {};
-    collateralList.forEach((ccy: CurrencySymbol) => {
-        const collateralInfo = {
-            [ccy]: {
-                symbol: ccy,
-                name: ccy,
-                available: balance[ccy]
-                    ? typeof balance[ccy] === 'number'
-                        ? (balance[ccy] as number)
-                        : amountFormatterFromBase[ccy](
-                              balance[ccy] as BigNumber
-                          )
-                    : 0,
-            },
-        };
-        collateralRecords = { ...collateralRecords, ...collateralInfo };
-    });
+
+    getCurrencyMapAsList()
+        .filter(ccy => ccy.isCollateral)
+        .forEach(currencyInfo => {
+            const ccy = currencyInfo.symbol;
+            const collateralInfo = {
+                [ccy]: {
+                    symbol: ccy,
+                    name: ccy,
+                    available: balance[ccy]
+                        ? typeof balance[ccy] === 'number'
+                            ? (balance[ccy] as number)
+                            : amountFormatterFromBase[ccy](
+                                  balance[ccy] as BigNumber
+                              )
+                        : 0,
+                },
+            };
+            collateralRecords = { ...collateralRecords, ...collateralInfo };
+        });
 
     return collateralRecords;
 };
@@ -50,21 +54,13 @@ export const CollateralTab = ({
     const { account } = useWallet();
     const [openModal, setOpenModal] = useState<'' | 'deposit' | 'withdraw'>('');
 
-    const ethBalance = useSelector((state: RootState) =>
-        selectEthereumBalance(state)
-    );
-
-    const usdcBalance = useSelector((state: RootState) =>
-        selectUSDCBalance(state)
+    const balances = useSelector((state: RootState) =>
+        selectCollateralCurrencyBalance(state)
     );
 
     const depositCollateralList = useMemo(
-        () =>
-            generateCollateralList({
-                [CurrencySymbol.ETH]: ethBalance,
-                [CurrencySymbol.USDC]: usdcBalance,
-            }),
-        [ethBalance, usdcBalance]
+        () => generateCollateralList(balances),
+        [balances]
     );
 
     const withdrawCollateralList = useMemo(
