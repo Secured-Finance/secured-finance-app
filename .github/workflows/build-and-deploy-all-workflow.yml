@@ -38,6 +38,7 @@ jobs:
       - run: |
           cat <<EOF > .env.local
           NEXT_PUBLIC_ALCHEMY_API_KEY=${{ secrets.ALCHEMY_API_KEY }}
+          NEXT_PUBLIC_AMPLITUDE_API_KEY=${{ secrets.AMPLITUDE_API_KEY }}
           EOF
           if [ ${{ steps.extract_branch.outputs.branch }} = main ]; then
             echo "SF_ENV=staging" >> .env.local
