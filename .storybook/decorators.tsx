@@ -7,6 +7,7 @@ import { Header } from 'src/components/organisms';
 import { Layout } from 'src/components/templates';
 import { updateLendingMarketContract } from 'src/store/availableContracts';
 import { updateLatestBlock } from 'src/store/blockchain';
+import { updateBalance } from 'src/store/wallet';
 import AxiosMock from 'src/stories/mocks/AxiosMock';
 import { CustomizedBridge } from 'src/stories/mocks/customBridge';
 import { CurrencySymbol } from 'src/utils';
@@ -166,3 +167,19 @@ export const withFullPage = (Story: Story) => (
         <Story />
     </div>
 );
+
+export const withWalletBalances = (Story: Story) => {
+    const dispatch = useDispatch();
+    useEffect(() => {
+        const timeoutId = setTimeout(() => {
+            dispatch(updateBalance(10000, CurrencySymbol.FIL));
+            dispatch(updateBalance(2000, CurrencySymbol.ETH));
+            dispatch(updateBalance(300, CurrencySymbol.BTC));
+            dispatch(updateBalance(4000, CurrencySymbol.USDC));
+        }, 300);
+
+        return () => clearTimeout(timeoutId);
+    }, [dispatch]);
+
+    return <Story />;
+};

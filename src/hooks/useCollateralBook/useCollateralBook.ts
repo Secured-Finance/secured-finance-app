@@ -3,6 +3,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import useSF from 'src/hooks/useSecuredFinance';
 import { AssetPriceMap, getPriceMap } from 'src/store/assetPrices/selectors';
+import { selectAllBalances } from 'src/store/wallet';
 import { amountFormatterFromBase, CurrencySymbol } from 'src/utils';
 import { RootState } from '../../store/types';
 
@@ -27,8 +28,8 @@ export const useCollateralBook = (account: string | null) => {
     const [collateralBook, setCollateralBook] = useState(emptyBook);
     const securedFinance = useSF();
 
-    const { ethBalance, usdcBalance } = useSelector(
-        (state: RootState) => state.wallet
+    const { ETH: ethBalance, USDC: usdcBalance } = useSelector(
+        (state: RootState) => selectAllBalances(state)
     );
 
     const priceList = useSelector((state: RootState) => getPriceMap(state));

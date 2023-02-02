@@ -61,42 +61,37 @@ export const Landing = () => {
     }, [unitPrices, lendingContracts, maturity]);
 
     return (
-        <div
-            className='flex flex-col gap-16 px-40 pt-12'
-            role='main'
-            data-cy='lending-page'
-        >
-            <SimpleAdvancedView
-                title='OTC Lending'
-                simpleComponent={
-                    <div className='flex flex-row items-center justify-center'>
-                        <LendingCard
-                            collateralBook={collateralBook}
-                            marketValue={marketValue}
-                            maturitiesOptionList={optionList}
-                        />
-                        <YieldChart
-                            asset={currency}
-                            isBorrow={side === OrderSide.BORROW}
-                            rates={unitPrices.map(v => v.apy)}
-                            maturitiesOptionList={optionList}
-                        />
-                    </div>
-                }
-                advanceComponent={
-                    <AdvancedLending
+        <SimpleAdvancedView
+            title='OTC Lending'
+            simpleComponent={
+                <div className='flex flex-row items-center justify-center'>
+                    <LendingCard
                         collateralBook={collateralBook}
-                        loanValue={marketValue}
+                        marketValue={marketValue}
+                        maturitiesOptionList={optionList}
+                    />
+                    <YieldChart
+                        asset={currency}
+                        isBorrow={side === OrderSide.BORROW}
                         rates={unitPrices.map(v => v.apy)}
                         maturitiesOptionList={optionList}
                     />
+                </div>
+            }
+            advanceComponent={
+                <AdvancedLending
+                    collateralBook={collateralBook}
+                    loanValue={marketValue}
+                    rates={unitPrices.map(v => v.apy)}
+                    maturitiesOptionList={optionList}
+                />
+            }
+            onModeChange={v => {
+                if (v === 'Simple') {
+                    dispatch(setOrderType(OrderType.MARKET));
                 }
-                onModeChange={v => {
-                    if (v === 'Simple') {
-                        dispatch(setOrderType(OrderType.MARKET));
-                    }
-                }}
-            />
-        </div>
+            }}
+            pageName='lending-page'
+        />
     );
 };

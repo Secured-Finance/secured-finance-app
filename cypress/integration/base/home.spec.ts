@@ -11,16 +11,16 @@ describe('The Home Page', () => {
         cy.get('[data-cy="terminal"]').should('be.visible');
         cy.get('[data-cy="history"]').should('be.visible');
         cy.get('[data-cy="wallet"]').should('be.visible');
-        cy.get('[data-cy="lending-page"]').should('be.visible');
+        cy.get('[data-testid="lending-page"]').should('be.visible');
     });
 
     it('can follow links on header buttons', () => {
         cy.get('[data-cy="terminal"]').click();
         cy.url().should('include', '/exchange');
-        cy.get('[data-cy="exchange-page"]').should('be.visible');
+        cy.get('[data-testid="exchange-page"]').should('be.visible');
 
         cy.get('[data-cy="lending"]').click();
-        cy.get('[data-cy="lending-page"]').should('be.visible');
+        cy.get('[data-testid="lending-page"]').should('be.visible');
     });
 
     it('display two wallet providers when clicking unlocking wallet', () => {

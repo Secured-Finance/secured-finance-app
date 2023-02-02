@@ -18,23 +18,20 @@ export const walletInformation: Partial<
     [WalletSource.METAMASK]: [CurrencySymbol.ETH, CurrencySymbol.USDC],
 };
 
-export const collateralList = [
-    CurrencySymbol.ETH,
-    CurrencySymbol.USDC,
-] as Array<CurrencySymbol>;
-
 export const generateWalletInformation = (
     accounts: Partial<Record<WalletSource, string>>,
-    balance: Record<string, number>
+    balance: Record<string, number>,
+    information?: Partial<Record<WalletSource, CurrencySymbol[]>>
 ): AssetDisclosureProps[] => {
     const collateralRecords = [];
-    const walletsArray = Object.keys(walletInformation) as WalletSource[];
+    const walletConfiguration = information ?? walletInformation;
+    const walletsArray = Object.keys(walletConfiguration) as WalletSource[];
     for (let i = 0; i < walletsArray.length; i++) {
         const wallet = walletsArray[i];
         const account = accounts[wallet];
         const data = [];
         if (account) {
-            const currenciesArray = walletInformation[wallet];
+            const currenciesArray = walletConfiguration[wallet];
             if (!currenciesArray) {
                 continue;
             }

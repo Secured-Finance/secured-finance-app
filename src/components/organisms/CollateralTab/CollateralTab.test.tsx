@@ -1,4 +1,5 @@
 import { composeStories } from '@storybook/testing-react';
+import { preloadedBalances } from 'src/stories/mocks/fixtures';
 import { render, screen } from 'src/test-utils.js';
 import * as stories from './CollateralTab.stories';
 
@@ -6,7 +7,7 @@ const { Default } = composeStories(stories);
 
 describe('CollateralTab Component', () => {
     it('should render CollateralTab', () => {
-        render(<Default />);
+        render(<Default />, { preloadedState: preloadedBalances });
         expect(screen.getByText('Collateral Balance')).toBeInTheDocument();
         expect(screen.getByText('$0.00')).toBeInTheDocument();
         expect(
