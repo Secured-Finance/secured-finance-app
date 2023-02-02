@@ -1,4 +1,5 @@
 import {
+    getAmplitudeApiKey,
     getEthereumChainId,
     getEthereumNetwork,
     getRpcEndpoint,
@@ -59,5 +60,24 @@ describe('getRpcEndpoint', () => {
         expect(() => getRpcEndpoint()).toThrowError(
             'NEXT_PUBLIC_ALCHEMY_API_KEY is not set'
         );
+    });
+});
+
+describe('getAmplitudeApiKey', () => {
+    it('should return the value of the environment variable', () => {
+        process.env.NEXT_PUBLIC_AMPLITUDE_API_KEY = 'test';
+        const apiKey = getAmplitudeApiKey();
+        expect(apiKey).toBe('test');
+        expect(typeof apiKey).toBe('string');
+    });
+
+    it('should return empty string if variable is not set', () => {
+        process.env.NEXT_PUBLIC_AMPLITUDE_API_KEY = '';
+        const spy = jest.spyOn(console, 'warn').mockImplementation();
+
+        const apiKey = getAmplitudeApiKey();
+        expect(apiKey).toBe('');
+        expect(typeof apiKey).toBe('string');
+        expect(spy).toHaveBeenCalled();
     });
 });

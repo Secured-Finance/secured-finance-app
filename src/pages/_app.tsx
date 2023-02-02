@@ -1,3 +1,4 @@
+import { init } from '@amplitude/analytics-browser';
 import { GraphClientProvider } from '@secured-finance/sf-graph-client';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
@@ -6,9 +7,17 @@ import { Header } from 'src/components/organisms';
 import { Layout } from 'src/components/templates';
 import SecuredFinanceProvider from 'src/contexts/SecuredFinanceProvider';
 import store from 'src/store';
-import { getEthereumChainId, getEthereumNetwork } from 'src/utils';
+import {
+    getAmplitudeApiKey,
+    getEthereumChainId,
+    getEthereumNetwork,
+} from 'src/utils';
 import { UseWalletProvider } from 'use-wallet';
 import '../assets/css/index.css';
+
+init(getAmplitudeApiKey(), undefined, {
+    appVersion: 'dev',
+});
 
 function App({ Component, pageProps }: AppProps) {
     return (
