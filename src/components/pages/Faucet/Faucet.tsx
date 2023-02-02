@@ -109,7 +109,7 @@ export const Faucet = () => {
     }, [sf, token]);
 
     return (
-        <Page title='Market Dashboard'>
+        <Page title='Test Pilot Program'>
             <TwoColumns>
                 <GradientBox>
                     <div className='grid grid-cols-1 gap-12 px-16 pb-4'>
