@@ -78,7 +78,7 @@ export const Faucet = () => {
 
     const mint = useCallback(async () => {
         if (!account || !sf || !token || !(token instanceof Token)) return;
-        setIsPending(false);
+        setIsPending(true);
         try {
             const tx = await sf.mintERC20Token(token);
             const transactionStatus = await handleContractTransaction(tx);
