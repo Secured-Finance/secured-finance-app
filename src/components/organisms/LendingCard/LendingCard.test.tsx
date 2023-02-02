@@ -1,3 +1,4 @@
+import { formatDate } from '@secured-finance/sf-core';
 import { composeStories } from '@storybook/testing-react';
 import {
     dec22Fixture,
@@ -6,7 +7,7 @@ import {
 } from 'src/stories/mocks/fixtures';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { fireEvent, render, screen } from 'src/test-utils.js';
-import { CurrencyInfo, currencyMap, formatDate, Rate } from 'src/utils';
+import { CurrencyInfo, currencyMap, Rate } from 'src/utils';
 import { LoanValue } from 'src/utils/entities';
 import * as stories from './LendingCard.stories';
 

@@ -1,4 +1,5 @@
 import { OrderSide } from '@secured-finance/sf-client';
+import { formatDate } from '@secured-finance/sf-core';
 import { BigNumber } from 'ethers';
 import { useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -23,7 +24,6 @@ import { MaturityOptionList } from 'src/types';
 import {
     amountFormatterToBase,
     CurrencySymbol,
-    formatDate,
     formatLoanValue,
     getCurrencyMapAsList,
     getCurrencyMapAsOptions,
