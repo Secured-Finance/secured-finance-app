@@ -1,7 +1,7 @@
 import {
     OrderHistoryDocument,
     TransactionHistoryDocument,
-} from '@secured-finance/sf-graph-client/dist/graphclients';
+} from '@secured-finance/sf-graph-client/dist/graphclient';
 import { orderHistoryList, transactions } from './fixtures';
 
 export const mockTransactionHistory = [

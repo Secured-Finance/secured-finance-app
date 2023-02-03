@@ -1,3 +1,4 @@
+import { formatDate } from '@secured-finance/sf-core';
 import { useOrderHistory } from '@secured-finance/sf-graph-client/dist/hooks/useOrderHistory';
 import { BigNumber } from 'ethers';
 import { useCallback, useMemo } from 'react';
@@ -25,12 +26,7 @@ import {
 } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
 import { MaturityOptionList } from 'src/types';
-import {
-    CurrencySymbol,
-    formatDate,
-    getCurrencyMapAsOptions,
-    Rate,
-} from 'src/utils';
+import { CurrencySymbol, getCurrencyMapAsOptions, Rate } from 'src/utils';
 import { LoanValue, Maturity } from 'src/utils/entities';
 import { useWallet } from 'use-wallet';
 
