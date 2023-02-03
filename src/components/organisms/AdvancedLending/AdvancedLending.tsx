@@ -3,7 +3,6 @@ import { useOrderHistory } from '@secured-finance/sf-graph-client/dist/hooks/use
 import { BigNumber } from 'ethers';
 import { useCallback, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { DropdownSelector } from 'src/components/atoms';
 import {
     AdvancedLendingTopBar,
     HorizontalTab,
@@ -70,24 +69,18 @@ export const AdvancedLending = ({
 
     const handleCurrencyChange = useCallback(
         (v: CurrencySymbol) => {
+            if (v === currency) return;
             dispatch(setCurrency(v));
             dispatch(setAmount(BigNumber.from(0)));
         },
-        [dispatch]
+        [currency, dispatch]
     );
 
     return (
         <div className='flex flex-col gap-5'>
-            <div className='mb-5'>
-                <DropdownSelector
-                    optionList={assetList}
-                    selected={selectedAsset}
-                    variant='roundedExpandButton'
-                    onChange={handleCurrencyChange}
-                />
-            </div>
             <AdvancedLendingTopBar
-                asset={currency}
+                selectedAsset={selectedAsset}
+                assetList={assetList}
                 options={maturitiesOptionList.map(o => ({
                     label: o.label,
                     value: o.value.toString(),
@@ -95,6 +88,9 @@ export const AdvancedLending = ({
                 selected={{
                     label: selectedTerm.label,
                     value: selectedTerm.value.toString(),
+                }}
+                onAssetChange={v => {
+                    handleCurrencyChange(v);
                 }}
                 onTermChange={v => {
                     dispatch(setMaturity(new Maturity(v)));

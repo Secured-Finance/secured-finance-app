@@ -6,24 +6,29 @@ import {
     Option,
     Separator,
 } from 'src/components/atoms';
-import { CurrencySymbol } from 'src/utils';
+import { setCurrency } from 'src/store/landingOrderForm';
+import { currencyMap, CurrencySymbol } from 'src/utils';
 
 const getValue = (values: number[] | undefined, index: number) => {
     return values && values[index] ? values[index] : 0;
 };
 
 export const AdvancedLendingTopBar = <T extends string = string>({
-    asset,
+    selectedAsset,
+    assetList,
     options,
     selected,
     transformLabel = (v: string) => v,
+    onAssetChange,
     onTermChange,
     values,
 }: {
-    asset: CurrencySymbol;
+    selectedAsset: Option<CurrencySymbol> | undefined;
+    assetList: Array<Option<CurrencySymbol>>;
     options: Array<Option<T>>;
     selected: Option<T>;
     transformLabel?: (v: string) => string;
+    onAssetChange?: (v: CurrencySymbol) => void;
     onTermChange?: (v: T) => void;
     values?: number[];
 }) => {
@@ -36,31 +41,42 @@ export const AdvancedLendingTopBar = <T extends string = string>({
     const handleTermChange = useCallback(
         (v: T) => {
             setTermValue(v);
-            if (onTermChange) {
-                onTermChange(v);
-            }
+            onTermChange?.(v);
         },
         [onTermChange]
     );
 
+    const handleAssetChange = useCallback(
+        (v: CurrencySymbol) => {
+            setCurrency(v);
+            onAssetChange?.(v);
+        },
+        [onAssetChange]
+    );
+
     return (
         <div className='h-fit w-full'>
-            <GradientBox>
+            <GradientBox shape='rectangle'>
                 <div className='flex flex-row'>
-                    <div className='flex w-[350px] flex-col gap-1 px-6 pt-5 pb-7'>
-                        <div className='flex h-fit flex-row items-center justify-between'>
-                            <div className='typography-body-1 text-neutral-8'>
-                                {`${asset}-${selectedTerm?.label}`}
-                            </div>
-                            <DropdownSelector
-                                optionList={options}
-                                onChange={handleTermChange}
-                                variant='noLabel'
-                                selected={selected}
-                            />
+                    <div className='typography-caption-2 grid w-[350px] grid-cols-2 flex-col gap-1 px-6 pt-5 pb-7 text-neutral-4'>
+                        <DropdownSelector
+                            optionList={assetList}
+                            selected={selectedAsset}
+                            onChange={handleAssetChange}
+                        />
+
+                        <DropdownSelector
+                            optionList={options}
+                            onChange={handleTermChange}
+                            selected={selected}
+                        />
+                        <div>
+                            {selectedAsset
+                                ? currencyMap[selectedAsset.value].name
+                                : undefined}
                         </div>
-                        <div className='typography-caption-2 text-neutral-4'>
-                            {`Zero-coupon loan expires ${
+                        <div className='text-left'>
+                            {`Maturity ${
                                 selectedTerm &&
                                 transformLabel(selectedTerm.label)
                             }`}

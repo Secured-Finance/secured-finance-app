@@ -1,41 +1,8 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
-import BitcoinIcon from 'src/assets/coins/btc.svg';
-import EthIcon from 'src/assets/coins/eth2.svg';
-import FilecoinIcon from 'src/assets/coins/fil.svg';
-import UsdcIcon from 'src/assets/coins/usdc.svg';
-import UsdtIcon from 'src/assets/coins/usdt.svg';
-import { Option } from 'src/components/atoms/DropdownSelector/DropdownSelector';
+import { assetList } from 'src/stories/mocks/fixtures';
 import { AssetSelector } from './AssetSelector';
 
 type AllowedCcy = 'BTC' | 'ETH' | 'FIL' | 'USDC' | 'USDT';
-
-const options: Array<Option<AllowedCcy>> = [
-    {
-        label: 'Bitcoin',
-        iconSVG: BitcoinIcon,
-        value: 'BTC',
-    },
-    {
-        label: 'Ethereum',
-        iconSVG: EthIcon,
-        value: 'ETH',
-    },
-    {
-        label: 'Filecoin',
-        iconSVG: FilecoinIcon,
-        value: 'FIL',
-    },
-    {
-        label: 'USDC',
-        iconSVG: UsdcIcon,
-        value: 'USDC',
-    },
-    {
-        label: 'USD Tether',
-        iconSVG: UsdtIcon,
-        value: 'USDT',
-    },
-];
 
 const shortNames: Record<string, string> = {
     Bitcoin: 'BTC',
@@ -57,8 +24,8 @@ export default {
     title: 'Molecules/AssetSelector',
     component: AssetSelector<AllowedCcy>,
     args: {
-        options,
-        selected: options[0],
+        options: assetList,
+        selected: assetList[0],
         transformLabel: (v: string) => shortNames[v],
         priceList,
         onAssetChange: () => {},
