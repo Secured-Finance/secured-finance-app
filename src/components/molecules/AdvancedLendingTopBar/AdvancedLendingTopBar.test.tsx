@@ -8,10 +8,10 @@ describe('AdvancedLendingTopBar Component', () => {
     it('should render a default AdvancedLendingTopBar', () => {
         render(<Default />);
 
-        expect(screen.getByText('FIL-SEP22')).toBeInTheDocument();
         expect(
-            screen.getByText('Zero-coupon loan expires SEP22')
+            screen.getByRole('button', { name: 'Bitcoin' })
         ).toBeInTheDocument();
+        expect(screen.getByText('Maturity DEC22')).toBeInTheDocument();
 
         expect(screen.getByText('24h High')).toBeInTheDocument();
         expect(screen.getByText('24h Low')).toBeInTheDocument();

@@ -14,3 +14,7 @@ const Template: ComponentStory<typeof GradientBox> = () => (
 );
 
 export const Default = Template.bind({});
+export const Rectangle = Template.bind({});
+Rectangle.args = {
+    shape: 'rectangle',
+};
