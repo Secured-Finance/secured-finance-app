@@ -2,7 +2,7 @@ import { OrderSide } from '@secured-finance/sf-client';
 import {
     OrderHistoryQuery,
     TransactionHistoryQuery,
-} from '@secured-finance/sf-graph-client/dist/graphclients';
+} from '@secured-finance/sf-graph-client/dist/graphclient';
 
 import { BigNumber, ContractTransaction } from 'ethers';
 import { Option } from 'src/components/atoms';
