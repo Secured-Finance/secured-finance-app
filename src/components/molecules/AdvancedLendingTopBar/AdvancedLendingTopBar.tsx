@@ -7,9 +7,25 @@ import {
     Separator,
 } from 'src/components/atoms';
 import { setCurrency } from 'src/store/landingOrderForm';
+import { IndexOf } from 'src/types';
 import { currencyMap, CurrencySymbol } from 'src/utils';
 
-const getValue = (values: number[] | undefined, index: number) => {
+type ValueField = number | string;
+type AdvancedLendingTopBarProp<T> = {
+    selectedAsset: Option<CurrencySymbol> | undefined;
+    assetList: Array<Option<CurrencySymbol>>;
+    options: Array<Option<T>>;
+    selected: Option<T>;
+    transformLabel?: (v: string) => string;
+    onAssetChange?: (v: CurrencySymbol) => void;
+    onTermChange?: (v: T) => void;
+    values?: [ValueField, ValueField, ValueField, ValueField, ValueField];
+};
+
+const getValue = (
+    values: AdvancedLendingTopBarProp<unknown>['values'],
+    index: IndexOf<NonNullable<AdvancedLendingTopBarProp<unknown>['values']>>
+) => {
     return values && values[index] ? values[index] : 0;
 };
 
@@ -22,16 +38,7 @@ export const AdvancedLendingTopBar = <T extends string = string>({
     onAssetChange,
     onTermChange,
     values,
-}: {
-    selectedAsset: Option<CurrencySymbol> | undefined;
-    assetList: Array<Option<CurrencySymbol>>;
-    options: Array<Option<T>>;
-    selected: Option<T>;
-    transformLabel?: (v: string) => string;
-    onAssetChange?: (v: CurrencySymbol) => void;
-    onTermChange?: (v: T) => void;
-    values?: number[];
-}) => {
+}: AdvancedLendingTopBarProp<T>) => {
     const [termValue, setTermValue] = useState(selected.value);
     const selectedTerm = useMemo(
         () => options.find(o => o.value === termValue),
@@ -104,6 +111,11 @@ export const AdvancedLendingTopBar = <T extends string = string>({
                         <MarketTab
                             name='24h Volume'
                             value={getValue(values, 3)}
+                        />
+                        <Separator orientation='vertical' color='neutral-2' />
+                        <MarketTab
+                            name={`${selectedAsset?.value} Price`}
+                            value={getValue(values, 4)}
                         />
                     </div>
                 </div>

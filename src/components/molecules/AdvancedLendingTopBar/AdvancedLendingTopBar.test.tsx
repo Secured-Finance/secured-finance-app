@@ -17,7 +17,7 @@ describe('AdvancedLendingTopBar Component', () => {
         expect(screen.getByText('24h Low')).toBeInTheDocument();
         expect(screen.getByText('24h Trades')).toBeInTheDocument();
         expect(screen.getByText('24h Volume')).toBeInTheDocument();
-        expect(screen.getAllByText('0')).toHaveLength(4);
+        expect(screen.getAllByText('0')).toHaveLength(5);
     });
 
     it('should render the values on the AdvancedLendingTopBar', () => {
@@ -27,5 +27,6 @@ describe('AdvancedLendingTopBar Component', () => {
         expect(screen.getByText('24.2')).toBeInTheDocument();
         expect(screen.getByText('894')).toBeInTheDocument();
         expect(screen.getByText('10,000,000')).toBeInTheDocument();
+        expect(screen.getByText('23000')).toBeInTheDocument();
     });
 });

@@ -16,6 +16,7 @@ import {
 } from 'src/components/organisms';
 import { CollateralBook, OrderType, useGraphClientHook } from 'src/hooks';
 import { useOrderbook } from 'src/hooks/useOrderbook';
+import { getAssetPrice } from 'src/store/assetPrices/selectors';
 import {
     selectLandingOrderForm,
     setAmount,
@@ -25,7 +26,12 @@ import {
 } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
 import { MaturityOptionList } from 'src/types';
-import { CurrencySymbol, getCurrencyMapAsOptions, Rate } from 'src/utils';
+import {
+    CurrencySymbol,
+    getCurrencyMapAsOptions,
+    Rate,
+    usdFormat,
+} from 'src/utils';
 import { LoanValue, Maturity } from 'src/utils/entities';
 import { useWallet } from 'use-wallet';
 
@@ -43,6 +49,11 @@ export const AdvancedLending = ({
     const { currency, maturity, orderType } = useSelector((state: RootState) =>
         selectLandingOrderForm(state.landingOrderForm)
     );
+
+    const currencyPrice = useSelector((state: RootState) =>
+        getAssetPrice(currency)(state)
+    );
+
     const { account } = useWallet();
 
     const assetList = useMemo(() => getCurrencyMapAsOptions(), []);
@@ -104,6 +115,7 @@ export const AdvancedLending = ({
                     )?.value;
                     return ts ? formatDate(ts.toNumber()) : v;
                 }}
+                values={[0, 0, 0, 0, usdFormat(currencyPrice, 2)]}
             />
             <div className='flex flex-row gap-6'>
                 <AdvancedLendingOrderCard collateralBook={collateralBook} />
