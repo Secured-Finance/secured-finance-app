@@ -8,7 +8,8 @@ import {
 } from 'src/components/atoms';
 import { setCurrency } from 'src/store/landingOrderForm';
 import { IndexOf } from 'src/types';
-import { currencyMap, CurrencySymbol } from 'src/utils';
+import { currencyMap, CurrencySymbol, formatLoanValue } from 'src/utils';
+import { LoanValue, Maturity } from 'src/utils/entities';
 
 type ValueField = number | string;
 type AdvancedLendingTopBarProp<T> = {
@@ -61,11 +62,16 @@ export const AdvancedLendingTopBar = <T extends string = string>({
         [onAssetChange]
     );
 
+    const midLoanValue = LoanValue.fromPrice(
+        9800,
+        new Maturity(termValue).toNumber()
+    );
+
     return (
         <div className='h-fit w-full'>
             <GradientBox shape='rectangle'>
-                <div className='flex flex-row'>
-                    <div className='typography-caption-2 grid w-[350px] grid-cols-2 flex-col gap-1 px-6 pt-5 pb-7 text-neutral-4'>
+                <div className='flex flex-row pb-3'>
+                    <div className='typography-caption-2 grid w-[350px] grid-cols-2 flex-col gap-1 px-6 pt-5 text-neutral-4'>
                         <DropdownSelector
                             optionList={assetList}
                             selected={selectedAsset}
@@ -89,12 +95,16 @@ export const AdvancedLendingTopBar = <T extends string = string>({
                             }`}
                         </div>
                     </div>
-                    <Separator
-                        orientation='vertical'
-                        color='white-10'
-                    ></Separator>
-                    <div className='flex flex-grow flex-row gap-6 pt-6 pb-8 pl-10'>
-                        <MarketTab name={0.7977} value={'25.00% APY'} />
+                    <div className='flex flex-grow flex-row gap-6 pt-6 pl-10'>
+                        <MarketTab
+                            name={Number(
+                                formatLoanValue(midLoanValue, 'price')
+                            )}
+                            value={`${formatLoanValue(
+                                midLoanValue,
+                                'rate'
+                            )} APY`}
+                        />
                         <Separator orientation='vertical' color='neutral-2' />
                         <MarketTab
                             name='24h High'
