@@ -25,3 +25,10 @@ export type TradeHistory = TransactionHistoryQuery['transactions'];
 export interface ColorFormat {
     color?: 'neutral' | 'positive' | 'negative';
 }
+
+export type IndexOf<T extends unknown[]> = Exclude<
+    keyof T,
+    keyof unknown[]
+> extends `${infer I extends number}`
+    ? I
+    : never;
