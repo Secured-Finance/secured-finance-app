@@ -1,5 +1,6 @@
 import { RadioGroup } from '@headlessui/react';
 import { BigNumber } from 'ethers';
+import Link from 'next/link';
 import { useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -146,8 +147,15 @@ export const AdvancedLendingOrderCard = ({
 
                 <Separator color='neutral-3'></Separator>
 
-                <div className='typography-nav-menu-default text-neutral-8'>
-                    Collateral Management
+                <div className='typography-nav-menu-default flex flex-row justify-between'>
+                    <div className='flex text-neutral-8'>
+                        Collateral Management
+                    </div>
+                    <Link className='flex ' href='/history'>
+                        <button className='text-planetaryPurple'>
+                            Manage &gt;&gt;
+                        </button>
+                    </Link>
                 </div>
 
                 <CollateralManagementConciseTab
