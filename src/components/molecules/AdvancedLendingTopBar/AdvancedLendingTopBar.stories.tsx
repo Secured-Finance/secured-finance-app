@@ -1,7 +1,7 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { withMidPrice } from 'src/../.storybook/decorators';
 import { currencyList, maturityOptions } from 'src/stories/mocks/fixtures';
 import { AdvancedLendingTopBar } from '.';
-
 export default {
     title: 'Molecules/AdvancedLendingTopBar',
     component: AdvancedLendingTopBar,
@@ -17,6 +17,7 @@ export default {
             value: maturityOptions[0].value.toString(),
         },
     },
+    decorators: [withMidPrice],
 } as ComponentMeta<typeof AdvancedLendingTopBar>;
 
 const Template: ComponentStory<typeof AdvancedLendingTopBar> = args => (
