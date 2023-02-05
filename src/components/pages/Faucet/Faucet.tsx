@@ -22,12 +22,12 @@ import { RootState } from 'src/store/types';
 import { selectAllBalances } from 'src/store/wallet';
 import {
     AddressUtils,
-    currencyMap,
     CurrencySymbol,
     generateWalletInformation,
     getCurrencyMapAsList,
     getCurrencyMapAsOptions,
     handleContractTransaction,
+    toCurrency,
     WalletSource,
 } from 'src/utils';
 import { useWallet } from 'use-wallet';
@@ -49,7 +49,7 @@ export const Faucet = () => {
     const assetList = useMemo(
         () =>
             getCurrencyMapAsOptions().filter(
-                option => currencyMap[option.value].toCurrency().isToken
+                option => toCurrency(option.value).isToken
             ),
         []
     );
@@ -69,8 +69,9 @@ export const Faucet = () => {
 
     const token = useMemo(() => {
         if (!ccy) return null;
-        if (currencyMap[ccy].toCurrency() instanceof Token) {
-            return currencyMap[ccy].toCurrency();
+        const currency = toCurrency(ccy);
+        if (currency instanceof Token) {
+            return currency;
         }
 
         return null;
