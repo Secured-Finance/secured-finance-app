@@ -2,10 +2,13 @@ import { ArrowUpIcon } from '@heroicons/react/outline';
 import { createColumnHelper } from '@tanstack/react-table';
 import classNames from 'classnames';
 import { BigNumber } from 'ethers';
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
+import { useDispatch } from 'react-redux';
 import { ColorBar } from 'src/components/atoms';
 import { CoreTable, TableHeader } from 'src/components/molecules';
 import { OrderBookEntry } from 'src/hooks/useOrderbook';
+import { setMidPrice } from 'src/store/analytics';
+
 import { ColorFormat } from 'src/types';
 import {
     currencyMap,
@@ -118,6 +121,7 @@ export const OrderWidget = ({
     sellOrders: Array<OrderBookEntry>;
     currency: CurrencySymbol;
 }) => {
+    const dispatch = useDispatch();
     const totalBuyAmount = useMemo(
         () =>
             buyOrders.reduce(
@@ -215,6 +219,10 @@ export const OrderWidget = ({
         ],
         [currency, totalSellAmount]
     );
+
+    useEffect(() => {
+        dispatch(setMidPrice(lastMidValue.price));
+    }, [dispatch, lastMidValue.price]);
 
     return (
         <>

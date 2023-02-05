@@ -1,4 +1,5 @@
 import { useCallback, useMemo, useState } from 'react';
+import { useSelector } from 'react-redux';
 import {
     DropdownSelector,
     GradientBox,
@@ -7,6 +8,7 @@ import {
     Separator,
 } from 'src/components/atoms';
 import { setCurrency } from 'src/store/landingOrderForm';
+import { RootState } from 'src/store/types';
 import { IndexOf } from 'src/types';
 import { currencyMap, CurrencySymbol, formatLoanValue } from 'src/utils';
 import { LoanValue, Maturity } from 'src/utils/entities';
@@ -41,6 +43,9 @@ export const AdvancedLendingTopBar = <T extends string = string>({
     values,
 }: AdvancedLendingTopBarProp<T>) => {
     const [termValue, setTermValue] = useState(selected.value);
+    const midPrice = useSelector(
+        (state: RootState) => state.analytics.midPrice
+    );
     const selectedTerm = useMemo(
         () => options.find(o => o.value === termValue),
         [options, termValue]
@@ -63,7 +68,7 @@ export const AdvancedLendingTopBar = <T extends string = string>({
     );
 
     const midLoanValue = LoanValue.fromPrice(
-        9800,
+        midPrice,
         new Maturity(termValue).toNumber()
     );
 
