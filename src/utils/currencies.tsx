@@ -1,5 +1,5 @@
 import { AssetDisclosureProps } from 'src/components/molecules';
-import { CurrencySymbol } from './currencyList';
+import { CurrencySymbol, getCurrencyMapAsOptions } from './currencyList';
 
 export enum WalletSource {
     METAMASK = 'METAMASK',
@@ -15,7 +15,7 @@ export type CollateralInfo = {
 export const walletInformation: Partial<
     Record<WalletSource, CurrencySymbol[]>
 > = {
-    [WalletSource.METAMASK]: [CurrencySymbol.ETH, CurrencySymbol.USDC],
+    [WalletSource.METAMASK]: getCurrencyMapAsOptions().map(ccy => ccy.value),
 };
 
 export const generateWalletInformation = (
