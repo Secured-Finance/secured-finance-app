@@ -75,8 +75,8 @@ export const AdvancedLendingTopBar = <T extends string = string>({
     return (
         <div className='h-fit w-full'>
             <GradientBox shape='rectangle'>
-                <div className='flex flex-row pb-3'>
-                    <div className='typography-caption-2 grid w-[350px] grid-cols-2 flex-col gap-1 px-6 pt-5 text-neutral-4'>
+                <div className='flex flex-row px-6 pb-3 pt-4'>
+                    <div className='typography-caption-2 grid w-[350px] grid-cols-2 flex-col text-neutral-4'>
                         <DropdownSelector
                             optionList={assetList}
                             selected={selectedAsset}
@@ -93,14 +93,14 @@ export const AdvancedLendingTopBar = <T extends string = string>({
                                 ? currencyMap[selectedAsset.value].name
                                 : undefined}
                         </div>
-                        <div className='text-left'>
+                        <div>
                             {`Maturity ${
                                 selectedTerm &&
                                 transformLabel(selectedTerm.label)
                             }`}
                         </div>
                     </div>
-                    <div className='flex flex-grow flex-row gap-6 pt-6 pl-10'>
+                    <div className='flex flex-grow flex-row gap-6'>
                         <MarketTab
                             name={Number(
                                 formatLoanValue(midLoanValue, 'price')

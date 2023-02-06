@@ -148,13 +148,11 @@ export const AdvancedLendingOrderCard = ({
                 <Separator color='neutral-3'></Separator>
 
                 <div className='typography-nav-menu-default flex flex-row justify-between'>
-                    <div className='flex text-neutral-8'>
-                        Collateral Management
-                    </div>
-                    <Link className='flex ' href='/history'>
-                        <button className='text-planetaryPurple'>
+                    <div className='text-neutral-8'>Collateral Management</div>
+                    <Link href='/history' passHref>
+                        <a className='text-planetaryPurple' href='_'>
                             Manage &gt;&gt;
-                        </button>
+                        </a>
                     </Link>
                 </div>
 
