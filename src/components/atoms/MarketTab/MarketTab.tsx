@@ -21,7 +21,7 @@ export const MarketTab = ({ name, value }: MarketTabProps) => {
                         typeof name === 'string',
                 })}
             >
-                {name}
+                {typeof name === 'number' ? name.toFixed(2) : name}
             </span>
             <span
                 className={classNames({

@@ -1,45 +1,13 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
-import BitcoinIcon from 'src/assets/coins/btc.svg';
-import EthIcon from 'src/assets/coins/eth2.svg';
-import FilecoinIcon from 'src/assets/coins/fil.svg';
-import UsdcIcon from 'src/assets/coins/usdc.svg';
-import UsdtIcon from 'src/assets/coins/usdt.svg';
-import { DropdownSelector, Option } from './DropdownSelector';
-
-const optionList = [
-    {
-        label: 'Bitcoin',
-        iconSVG: BitcoinIcon,
-        value: 'BTC',
-    },
-    {
-        label: 'Ethereum',
-        iconSVG: EthIcon,
-        value: 'ETH',
-    },
-    {
-        label: 'Filecoin',
-        iconSVG: FilecoinIcon,
-        value: 'FIL',
-    },
-    {
-        label: 'USDC',
-        iconSVG: UsdcIcon,
-        value: 'USDC',
-    },
-    {
-        label: 'USD Tether',
-        iconSVG: UsdtIcon,
-        value: 'USDT',
-    },
-] as Array<Option>;
+import { assetList } from 'src/stories/mocks/fixtures';
+import { DropdownSelector } from './DropdownSelector';
 
 export default {
     title: 'Atoms/DropdownSelector',
     component: DropdownSelector,
     args: {
-        optionList,
-        selected: optionList[0],
+        optionList: assetList,
+        selected: assetList[0],
         onChange: (_v: string) => {},
     },
     argTypes: {

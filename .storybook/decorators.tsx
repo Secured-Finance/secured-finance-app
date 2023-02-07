@@ -5,6 +5,7 @@ import { useEffect, useMemo } from 'react';
 import { useDispatch } from 'react-redux';
 import { Header } from 'src/components/organisms';
 import { Layout } from 'src/components/templates';
+import { setMidPrice } from 'src/store/analytics';
 import { updateLendingMarketContract } from 'src/store/availableContracts';
 import { updateLatestBlock } from 'src/store/blockchain';
 import { updateBalance } from 'src/store/wallet';
@@ -176,6 +177,19 @@ export const withWalletBalances = (Story: Story) => {
             dispatch(updateBalance(2000, CurrencySymbol.ETH));
             dispatch(updateBalance(300, CurrencySymbol.BTC));
             dispatch(updateBalance(4000, CurrencySymbol.USDC));
+        }, 300);
+
+        return () => clearTimeout(timeoutId);
+    }, [dispatch]);
+
+    return <Story />;
+};
+
+export const withMidPrice = (Story: Story) => {
+    const dispatch = useDispatch();
+    useEffect(() => {
+        const timeoutId = setTimeout(() => {
+            dispatch(setMidPrice(9780));
         }, 300);
 
         return () => clearTimeout(timeoutId);
