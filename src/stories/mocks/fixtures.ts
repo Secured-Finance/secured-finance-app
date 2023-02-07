@@ -1,8 +1,14 @@
 import { BigNumber, utils } from 'ethers';
+import BitcoinIcon from 'src/assets/coins/btc.svg';
+import EthIcon from 'src/assets/coins/eth2.svg';
+import FilecoinIcon from 'src/assets/coins/fil.svg';
+import UsdcIcon from 'src/assets/coins/usdc.svg';
+import UsdtIcon from 'src/assets/coins/usdt.svg';
+import { Option } from 'src/components/atoms';
 import { CollateralBook } from 'src/hooks';
 import { AssetPrices } from 'src/store/assetPrices';
 import { MaturityOptionList, OrderList, TradeHistory } from 'src/types';
-import { Rate, TradeSummary } from 'src/utils';
+import { CurrencySymbol, Rate, TradeSummary } from 'src/utils';
 import { Maturity } from 'src/utils/entities';
 
 export const preloadedAssetPrices: { assetPrices: AssetPrices } = {
@@ -57,6 +63,57 @@ export const maturityOptions: MaturityOptionList = [
     { label: 'JUN24', value: jun24Fixture },
     { label: 'SEP24', value: sep24Fixture },
 ];
+
+export const assetList = [
+    {
+        label: 'Bitcoin',
+        iconSVG: BitcoinIcon,
+        value: 'BTC',
+    },
+    {
+        label: 'Ethereum',
+        iconSVG: EthIcon,
+        value: 'ETH',
+    },
+    {
+        label: 'Filecoin',
+        iconSVG: FilecoinIcon,
+        value: 'FIL',
+    },
+    {
+        label: 'USDC',
+        iconSVG: UsdcIcon,
+        value: 'USDC',
+    },
+    {
+        label: 'USD Tether',
+        iconSVG: UsdtIcon,
+        value: 'USDT',
+    },
+] as Array<Option>;
+
+export const currencyList = [
+    {
+        label: 'Bitcoin',
+        iconSVG: BitcoinIcon,
+        value: CurrencySymbol.BTC,
+    },
+    {
+        label: 'Ethereum',
+        iconSVG: EthIcon,
+        value: CurrencySymbol.ETH,
+    },
+    {
+        label: 'Filecoin',
+        iconSVG: FilecoinIcon,
+        value: CurrencySymbol.FIL,
+    },
+    {
+        label: 'USDC',
+        iconSVG: UsdcIcon,
+        value: CurrencySymbol.USDC,
+    },
+] as Array<Option>;
 
 export const yieldCurveRates = [
     new Rate(37326),
