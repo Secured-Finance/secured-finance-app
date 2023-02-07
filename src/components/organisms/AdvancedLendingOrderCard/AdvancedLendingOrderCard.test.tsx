@@ -72,4 +72,11 @@ describe('AdvancedLendingOrderCard Component', () => {
             })
         ).toBeInTheDocument();
     });
+
+    it('should show a button to manage collateral', () => {
+        render(<Default />);
+        expect(
+            screen.getByRole('button', { name: 'Manage >>' })
+        ).toBeInTheDocument();
+    });
 });
