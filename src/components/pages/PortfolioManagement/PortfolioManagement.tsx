@@ -19,7 +19,7 @@ import { Page, TwoColumns } from 'src/components/templates';
 import { useGraphClientHook } from 'src/hooks';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { RootState } from 'src/store/types';
-import { selectCollateralCurrencyBalance } from 'src/store/wallet';
+import { selectAllBalances } from 'src/store/wallet';
 import {
     aggregateTrades,
     computeNetValue,
@@ -45,7 +45,7 @@ export const PortfolioManagement = () => {
     );
 
     const balanceRecord = useSelector((state: RootState) =>
-        selectCollateralCurrencyBalance(state)
+        selectAllBalances(state)
     );
 
     const priceMap = useSelector((state: RootState) => getPriceMap(state));
