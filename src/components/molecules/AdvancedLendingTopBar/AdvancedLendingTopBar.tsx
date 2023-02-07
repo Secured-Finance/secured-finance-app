@@ -1,4 +1,5 @@
 import { useCallback, useMemo, useState } from 'react';
+import { useSelector } from 'react-redux';
 import {
     DropdownSelector,
     GradientBox,
@@ -6,28 +7,45 @@ import {
     Option,
     Separator,
 } from 'src/components/atoms';
-import { CurrencySymbol } from 'src/utils';
+import { setCurrency } from 'src/store/landingOrderForm';
+import { RootState } from 'src/store/types';
+import { IndexOf } from 'src/types';
+import { currencyMap, CurrencySymbol, formatLoanValue } from 'src/utils';
+import { LoanValue, Maturity } from 'src/utils/entities';
 
-const getValue = (values: number[] | undefined, index: number) => {
+type ValueField = number | string;
+type AdvancedLendingTopBarProp<T> = {
+    selectedAsset: Option<CurrencySymbol> | undefined;
+    assetList: Array<Option<CurrencySymbol>>;
+    options: Array<Option<T>>;
+    selected: Option<T>;
+    transformLabel?: (v: string) => string;
+    onAssetChange?: (v: CurrencySymbol) => void;
+    onTermChange?: (v: T) => void;
+    values?: [ValueField, ValueField, ValueField, ValueField, ValueField];
+};
+
+const getValue = (
+    values: AdvancedLendingTopBarProp<unknown>['values'],
+    index: IndexOf<NonNullable<AdvancedLendingTopBarProp<unknown>['values']>>
+) => {
     return values && values[index] ? values[index] : 0;
 };
 
 export const AdvancedLendingTopBar = <T extends string = string>({
-    asset,
+    selectedAsset,
+    assetList,
     options,
     selected,
     transformLabel = (v: string) => v,
+    onAssetChange,
     onTermChange,
     values,
-}: {
-    asset: CurrencySymbol;
-    options: Array<Option<T>>;
-    selected: Option<T>;
-    transformLabel?: (v: string) => string;
-    onTermChange?: (v: T) => void;
-    values?: number[];
-}) => {
+}: AdvancedLendingTopBarProp<T>) => {
     const [termValue, setTermValue] = useState(selected.value);
+    const midPrice = useSelector(
+        (state: RootState) => state.analytics.midPrice
+    );
     const selectedTerm = useMemo(
         () => options.find(o => o.value === termValue),
         [options, termValue]
@@ -36,42 +54,62 @@ export const AdvancedLendingTopBar = <T extends string = string>({
     const handleTermChange = useCallback(
         (v: T) => {
             setTermValue(v);
-            if (onTermChange) {
-                onTermChange(v);
-            }
+            onTermChange?.(v);
         },
         [onTermChange]
     );
 
+    const handleAssetChange = useCallback(
+        (v: CurrencySymbol) => {
+            setCurrency(v);
+            onAssetChange?.(v);
+        },
+        [onAssetChange]
+    );
+
+    const midLoanValue = LoanValue.fromPrice(
+        midPrice,
+        new Maturity(termValue).toNumber()
+    );
+
     return (
         <div className='h-fit w-full'>
-            <GradientBox>
-                <div className='flex flex-row'>
-                    <div className='flex w-[350px] flex-col gap-1 px-6 pt-5 pb-7'>
-                        <div className='flex h-fit flex-row items-center justify-between'>
-                            <div className='typography-body-1 text-neutral-8'>
-                                {`${asset}-${selectedTerm?.label}`}
-                            </div>
-                            <DropdownSelector
-                                optionList={options}
-                                onChange={handleTermChange}
-                                variant='noLabel'
-                                selected={selected}
-                            />
+            <GradientBox shape='rectangle'>
+                <div className='flex flex-row px-6 pb-3 pt-4'>
+                    <div className='typography-caption-2 grid w-[350px] grid-cols-2 flex-col text-neutral-4'>
+                        <DropdownSelector
+                            optionList={assetList}
+                            selected={selectedAsset}
+                            onChange={handleAssetChange}
+                        />
+
+                        <DropdownSelector
+                            optionList={options}
+                            onChange={handleTermChange}
+                            selected={selected}
+                        />
+                        <div>
+                            {selectedAsset
+                                ? currencyMap[selectedAsset.value].name
+                                : undefined}
                         </div>
-                        <div className='typography-caption-2 text-neutral-4'>
-                            {`Zero-coupon loan expires ${
+                        <div>
+                            {`Maturity ${
                                 selectedTerm &&
                                 transformLabel(selectedTerm.label)
                             }`}
                         </div>
                     </div>
-                    <Separator
-                        orientation='vertical'
-                        color='white-10'
-                    ></Separator>
-                    <div className='flex flex-grow flex-row gap-6 pt-6 pb-8 pl-10'>
-                        <MarketTab name={0.7977} value={'25.00% APY'} />
+                    <div className='flex flex-grow flex-row gap-6'>
+                        <MarketTab
+                            name={Number(
+                                formatLoanValue(midLoanValue, 'price')
+                            )}
+                            value={`${formatLoanValue(
+                                midLoanValue,
+                                'rate'
+                            )} APY`}
+                        />
                         <Separator orientation='vertical' color='neutral-2' />
                         <MarketTab
                             name='24h High'
@@ -88,6 +126,11 @@ export const AdvancedLendingTopBar = <T extends string = string>({
                         <MarketTab
                             name='24h Volume'
                             value={getValue(values, 3)}
+                        />
+                        <Separator orientation='vertical' color='neutral-2' />
+                        <MarketTab
+                            name={`${selectedAsset?.value} Price`}
+                            value={getValue(values, 4)}
                         />
                     </div>
                 </div>
