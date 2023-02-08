@@ -10,11 +10,33 @@ import { useWallet } from 'use-wallet';
 
 export const MarketDashboard = () => {
     const { account } = useWallet();
-
     return (
         <Page title='Market Dashboard' name='exchange-page'>
             <TwoColumns>
-                <MarketDashboardTable />
+                <MarketDashboardTable
+                    values={[
+                        {
+                            name: 'Digital Assets',
+                            value: '4',
+                            orientation: 'center',
+                        },
+                        {
+                            name: 'Total Value Locked',
+                            value: '1.2B',
+                            orientation: 'center',
+                        },
+                        {
+                            name: 'Total Volume',
+                            value: '356M',
+                            orientation: 'center',
+                        },
+                        {
+                            name: 'Total Users',
+                            value: '900K',
+                            orientation: 'center',
+                        },
+                    ]}
+                />
                 <section className='flex flex-col gap-5'>
                     <div>
                         {account ? (
