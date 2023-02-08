@@ -1,11 +1,14 @@
 import classNames from 'classnames';
 import React from 'react';
+import { Separator } from 'src/components/atoms';
 
 export const GradientBox = ({
     shape = 'rounded-bottom',
+    header,
     children,
 }: {
     shape?: 'rectangle' | 'rounded-bottom';
+    header?: string;
     children: React.ReactNode;
 }) => {
     return (
@@ -19,6 +22,14 @@ export const GradientBox = ({
                     }
                 )}
             >
+                {header ? (
+                    <>
+                        <div className='typography-body-2 flex items-center justify-center py-5 text-white'>
+                            {header}
+                        </div>
+                        <Separator />
+                    </>
+                ) : null}
                 {children}
             </div>
         </>
