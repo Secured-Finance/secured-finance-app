@@ -9,7 +9,6 @@ describe('test MyWalletCard component', () => {
         await waitFor(() => render(<Default />));
         expect(screen.getByText('My Wallet')).toBeInTheDocument();
         expect(screen.getByText('de926d...aa4f')).toBeInTheDocument();
-        expect(screen.getByText('de926db3012a...24b5')).toBeInTheDocument();
-        expect(screen.getAllByRole('button')).toHaveLength(2);
+        expect(screen.getAllByRole('button')).toHaveLength(1);
     });
 });
