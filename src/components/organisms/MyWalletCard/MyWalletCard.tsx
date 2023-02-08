@@ -11,13 +11,9 @@ interface MyWalletCardProps {
 export const MyWalletCard = ({ assetMap }: MyWalletCardProps) => {
     return (
         <div className='h-fit w-full bg-transparent'>
-            <GradientBox>
-                <div className='typography-body-2 mx-2 flex h-14 items-center justify-center text-white'>
-                    My Wallet
-                </div>
+            <GradientBox header='My Wallet'>
                 {assetMap.length !== 0 && (
                     <div>
-                        <Separator />
                         <div className='px-2 pt-1 pb-6'>
                             {assetMap.map((asset, index) => {
                                 return (
