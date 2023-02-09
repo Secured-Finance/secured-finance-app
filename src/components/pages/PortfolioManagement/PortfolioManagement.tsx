@@ -49,9 +49,6 @@ export const PortfolioManagement = () => {
         selectAllBalances(state)
     );
 
-    const open = useSelector(
-        (state: RootState) => state.interactions.walletDialogOpen
-    );
     const priceMap = useSelector((state: RootState) => getPriceMap(state));
 
     const addressRecord = useMemo(() => {
