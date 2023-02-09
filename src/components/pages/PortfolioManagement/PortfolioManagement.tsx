@@ -14,6 +14,7 @@ import {
     MyTransactionsTable,
     MyWalletCard,
     OrderHistoryTable,
+    WalletDialog,
 } from 'src/components/organisms';
 import { Page, TwoColumns } from 'src/components/templates';
 import { useGraphClientHook } from 'src/hooks';
@@ -48,6 +49,9 @@ export const PortfolioManagement = () => {
         selectAllBalances(state)
     );
 
+    const open = useSelector(
+        (state: RootState) => state.interactions.walletDialogOpen
+    );
     const priceMap = useSelector((state: RootState) => getPriceMap(state));
 
     const addressRecord = useMemo(() => {
@@ -98,6 +102,7 @@ export const PortfolioManagement = () => {
                     <MyTransactionsTable data={tradeHistory} />
                 </HorizontalTab>
             </div>
+            <WalletDialog />
         </Page>
     );
 };

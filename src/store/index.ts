@@ -4,6 +4,7 @@ import assetPrices from './assetPrices';
 import availableContracts from './availableContracts';
 import blockchain from './blockchain';
 import { listenerMiddleware } from './blockchain/reducer';
+import interactions from './interactions';
 import landingOrderForm from './landingOrderForm';
 import lastError from './lastError';
 import wallet from './wallet';
@@ -13,6 +14,7 @@ export const rootReducers = {
     assetPrices,
     availableContracts,
     blockchain,
+    interactions,
     landingOrderForm,
     lastError,
     wallet,

@@ -1,11 +1,11 @@
-import { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import SFLogo from 'src/assets/img/logo.svg';
 import SFSphere from 'src/assets/img/sf-sphere.png';
 import { Button, GradientBox } from 'src/components/atoms';
-import { WalletDialog } from 'src/components/organisms';
+import { setWalletDialogOpen } from 'src/store/interactions';
 
 export const ConnectWalletCard = () => {
-    const [display, setDisplay] = useState(false);
+    const dispatch = useDispatch();
 
     return (
         <div className='h-fit w-full'>
@@ -25,16 +25,12 @@ export const ConnectWalletCard = () => {
                     <Button
                         className='h-12'
                         fullWidth={true}
-                        onClick={() => setDisplay(true)}
+                        onClick={() => dispatch(setWalletDialogOpen(true))}
                     >
                         Connect Wallet
                     </Button>
                 </div>
             </GradientBox>
-            <WalletDialog
-                isOpen={display}
-                onClose={() => setDisplay(false)}
-            ></WalletDialog>
         </div>
     );
 };

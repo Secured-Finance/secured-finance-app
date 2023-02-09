@@ -1,5 +1,5 @@
 import { composeStories } from '@storybook/testing-react';
-import { fireEvent, render, screen } from 'src/test-utils.js';
+import { render, screen } from 'src/test-utils.js';
 import * as stories from './ConnectWalletCard.stories';
 
 const { Default } = composeStories(stories);
@@ -12,8 +12,7 @@ describe('test ConnectWalletCard component', () => {
                 'Welcome to the future of DeFi. Secured Finance brings Interbank-grade lending solution to Web3.'
             )
         ).toBeInTheDocument();
-        const button = screen.getByRole('button');
-        fireEvent.click(button);
-        expect(screen.getByText('Select Wallet Provider')).toBeInTheDocument();
+        expect(screen.getByRole('button')).toBeInTheDocument();
+        expect(screen.getByText('Connect Wallet')).toBeInTheDocument();
     });
 });

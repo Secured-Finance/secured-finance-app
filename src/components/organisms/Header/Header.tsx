@@ -1,28 +1,31 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import SFLogo from 'src/assets/img/logo.svg';
 import { Button, NavTab } from 'src/components/atoms';
 import { WalletDialog, WalletPopover } from 'src/components/organisms';
 import useSF from 'src/hooks/useSecuredFinance';
+import { setWalletDialogOpen } from 'src/store/interactions';
 import { RootState } from 'src/store/types';
 import { AddressUtils } from 'src/utils/address';
 import { useWallet } from 'use-wallet';
 
 export const Header = () => {
-    const [display, setDisplay] = useState(false);
+    const dispatch = useDispatch();
     const { account } = useWallet();
     const securedFinance = useSF();
     const status = useSelector(
         (state: RootState) => state.blockchain.chainError
+    );
+    const open = useSelector(
+        (state: RootState) => state.interactions.walletDialogOpen
     );
 
     return (
         <nav
             data-cy='header'
             className={`flex h-20 w-full flex-row items-center justify-between border-b border-neutral-1 ${
-                display ? 'blur-sm' : ''
+                open ? 'blur-sm' : ''
             }`}
         >
             <Link className='flex h-10' href='/' passHref>
@@ -55,17 +58,14 @@ export const Header = () => {
                     <Button
                         data-cy='wallet'
                         data-testid='connect-wallet'
-                        onClick={() => setDisplay(true)}
+                        onClick={() => dispatch(setWalletDialogOpen(true))}
                         disabled={status}
                     >
                         Connect Wallet
                     </Button>
                 )}
             </div>
-            <WalletDialog
-                isOpen={display}
-                onClose={() => setDisplay(false)}
-            ></WalletDialog>
+            <WalletDialog />
         </nav>
     );
 };

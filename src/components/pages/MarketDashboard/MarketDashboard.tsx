@@ -1,10 +1,15 @@
+import { useSelector } from 'react-redux';
 import { MarketDashboardTable } from 'src/components/molecules';
-import { ConnectWalletCard } from 'src/components/organisms';
+import { ConnectWalletCard, WalletDialog } from 'src/components/organisms';
 import { Page } from 'src/components/templates';
+import { RootState } from 'src/store/types';
 import { useWallet } from 'use-wallet';
 
 export const MarketDashboard = () => {
     const { account } = useWallet();
+    const open = useSelector(
+        (state: RootState) => state.interactions.walletDialogOpen
+    );
 
     return (
         <Page title='Market Dashboard' name='exchange-page'>
@@ -15,6 +20,7 @@ export const MarketDashboard = () => {
                 <div className='w-[350px]'>
                     {account ? null : <ConnectWalletCard />}
                 </div>
+                <WalletDialog />
             </div>
         </Page>
     );
