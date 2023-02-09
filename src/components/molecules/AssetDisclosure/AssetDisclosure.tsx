@@ -23,7 +23,7 @@ export const AssetDisclosure = ({
     account,
 }: AssetDisclosureProps) => {
     return (
-        <HeadlessDisclosure>
+        <HeadlessDisclosure defaultOpen={true}>
             {({ open }) => (
                 <>
                     <div className='relative h-full'>
