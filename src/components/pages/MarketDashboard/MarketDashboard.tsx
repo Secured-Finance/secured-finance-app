@@ -1,3 +1,6 @@
+import { BigNumber } from 'ethers';
+import { useMemo } from 'react';
+import { useSelector } from 'react-redux';
 import {
     CollateralManagementConciseTab,
     GradientBox,
@@ -5,11 +8,43 @@ import {
 import { MarketDashboardTable } from 'src/components/molecules';
 import { ConnectWalletCard, MyWalletCard } from 'src/components/organisms';
 import { Page, TwoColumns } from 'src/components/templates';
-import { WalletSource } from 'src/utils';
+import { useProtocolInformation } from 'src/hooks';
+import { getPriceMap } from 'src/store/assetPrices/selectors';
+import { RootState } from 'src/store/types';
+import {
+    currencyMap,
+    CurrencySymbol,
+    usdFormat,
+    WalletSource,
+} from 'src/utils';
 import { useWallet } from 'use-wallet';
 
 export const MarketDashboard = () => {
     const { account } = useWallet();
+
+    const protocolInformation = useProtocolInformation();
+    const priceList = useSelector((state: RootState) => getPriceMap(state));
+
+    const totalValueLockedInUSD = useMemo(() => {
+        let val = BigNumber.from(0);
+        if (protocolInformation.valueLockedByCurrency) {
+            for (const key of Object.keys(
+                protocolInformation.valueLockedByCurrency
+            )) {
+                const ccy = key as CurrencySymbol;
+                val = val.add(
+                    Math.floor(
+                        currencyMap[ccy].fromBaseUnit(
+                            protocolInformation.valueLockedByCurrency[ccy]
+                        ) * priceList[ccy]
+                    )
+                );
+            }
+        }
+        return val;
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [JSON.stringify(priceList), protocolInformation.valueLockedByCurrency]);
+
     return (
         <Page title='Market Dashboard' name='exchange-page'>
             <TwoColumns>
@@ -17,12 +52,16 @@ export const MarketDashboard = () => {
                     values={[
                         {
                             name: 'Digital Assets',
-                            value: '4',
+                            value: protocolInformation.totalNumberOfAsset.toString(),
                             orientation: 'center',
                         },
                         {
                             name: 'Total Value Locked',
-                            value: '1.2B',
+                            value: usdFormat(
+                                totalValueLockedInUSD,
+                                0,
+                                'compact'
+                            ),
                             orientation: 'center',
                         },
                         {

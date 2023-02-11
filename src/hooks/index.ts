@@ -4,3 +4,4 @@ export * from './useGraphClientHook';
 export * from './useLendingMarkets';
 export * from './useLoanValues';
 export * from './usePlaceOrder';
+export * from './useProtocolInformation';

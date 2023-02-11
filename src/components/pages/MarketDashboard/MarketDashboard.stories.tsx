@@ -1,6 +1,7 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import {
     withAppLayout,
+    withAssetPrice,
     withWalletProvider,
 } from 'src/../.storybook/decorators';
 import { MarketDashboard } from './MarketDashboard';
@@ -10,7 +11,7 @@ export default {
     component: MarketDashboard,
     chromatic: { pauseAnimationAtEnd: true },
     args: {},
-    decorators: [withAppLayout, withWalletProvider],
+    decorators: [withAppLayout, withWalletProvider, withAssetPrice],
 } as ComponentMeta<typeof MarketDashboard>;
 
 const Template: ComponentStory<typeof MarketDashboard> = () => {
