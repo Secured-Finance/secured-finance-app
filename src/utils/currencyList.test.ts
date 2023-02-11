@@ -204,6 +204,9 @@ describe('currencyList amountFormatterFromBase', () => {
     it('should return the value in ETH for wei amount', () => {
         const format = amountFormatterFromBase[CurrencySymbol.ETH];
         expect(
+            format(BigNumber.from('1000000000000000000000000')).toString()
+        ).toEqual('1000000');
+        expect(
             format(BigNumber.from('1000000000000000000')).toString()
         ).toEqual('1');
         expect(
@@ -241,6 +244,9 @@ describe('currencyList amountFormatterFromBase', () => {
         expect(format(BigNumber.from('123000000')).toString()).toEqual('1.23');
         expect(format(BigNumber.from('123456789')).toString()).toEqual(
             '1.23456789'
+        );
+        expect(format(BigNumber.from('100000000000')).toString()).toEqual(
+            '1000'
         );
         expect(format(BigNumber.from('1')).toString()).toEqual('1e-8');
         expect(format(BigNumber.from('0')).toString()).toEqual('0');
