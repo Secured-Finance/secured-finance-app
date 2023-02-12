@@ -52,12 +52,4 @@ describe('Wallet Dialog component', () => {
             expect(screen.getByText('Connecting...')).toBeInTheDocument();
         });
     });
-
-    it.skip('should close the modal after the last step', async () => {
-        render(<Primary />, { preloadedState });
-
-        selectMetamaskOption();
-        const button = screen.getByTestId('dialog-action-button');
-        fireEvent.click(button);
-    });
 });
