@@ -1,5 +1,6 @@
 import { identify, Identify, track } from '@amplitude/analytics-browser';
 import { useCallback, useEffect, useReducer, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import Loader from 'src/assets/img/gradient-loader.png';
 import MetaMaskIcon from 'src/assets/img/metamask-fox.svg';
 import WalletConnectIcon from 'src/assets/img/wallet-connect.svg';
@@ -9,6 +10,8 @@ import {
     WalletRadioGroup,
 } from 'src/components/molecules';
 import { CACHED_PROVIDER_KEY } from 'src/contexts/SecuredFinanceProvider/SecuredFinanceProvider';
+import { setWalletDialogOpen } from 'src/store/interactions';
+import { RootState } from 'src/store/types';
 import {
     AddressUtils,
     InterfaceEvents,
@@ -74,17 +77,20 @@ const reducer = (
     }
 };
 
-export const WalletDialog = ({
-    isOpen,
-    onClose,
-}: {
-    isOpen: boolean;
-    onClose: () => void;
-}) => {
+export const WalletDialog = () => {
     const [wallet, setWallet] = useState<string>('');
     const [state, dispatch] = useReducer(reducer, stateRecord[1]);
+    const isOpen = useSelector(
+        (state: RootState) => state.interactions.walletDialogOpen
+    );
+    const globalDispatch = useDispatch();
 
     const { account, connect } = useWallet();
+
+    const handleClose = useCallback(() => {
+        dispatch({ type: 'default' });
+        globalDispatch(setWalletDialogOpen(false));
+    }, [globalDispatch]);
 
     const handleConnect = useCallback(
         async (
@@ -141,18 +147,12 @@ export const WalletDialog = ({
                         event.set('wallet_address', account);
                         identify(event);
                     }
-                    dispatch({ type: 'next' });
-                    onClose();
+                    handleClose();
                     break;
             }
         },
-        [account, onClose, wallet]
+        [account, handleClose, wallet]
     );
-
-    const handleClose = () => {
-        dispatch({ type: 'default' });
-        onClose();
-    };
 
     return (
         <Dialog

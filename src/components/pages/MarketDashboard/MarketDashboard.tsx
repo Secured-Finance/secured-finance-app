@@ -1,5 +1,5 @@
 import { MarketDashboardTable } from 'src/components/molecules';
-import { ConnectWalletCard } from 'src/components/organisms';
+import { ConnectWalletCard, WalletDialog } from 'src/components/organisms';
 import { Page } from 'src/components/templates';
 import { useWallet } from 'use-wallet';
 
@@ -15,6 +15,7 @@ export const MarketDashboard = () => {
                 <div className='w-[350px]'>
                     {account ? null : <ConnectWalletCard />}
                 </div>
+                <WalletDialog />
             </div>
         </Page>
     );
