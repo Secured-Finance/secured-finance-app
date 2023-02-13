@@ -14,6 +14,7 @@ import {
     MyTransactionsTable,
     MyWalletCard,
     OrderHistoryTable,
+    WalletDialog,
 } from 'src/components/organisms';
 import { Page, TwoColumns } from 'src/components/templates';
 import { useGraphClientHook } from 'src/hooks';
@@ -98,6 +99,7 @@ export const PortfolioManagement = () => {
                     <MyTransactionsTable data={tradeHistory} />
                 </HorizontalTab>
             </div>
+            <WalletDialog />
         </Page>
     );
 };
