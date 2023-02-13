@@ -27,30 +27,32 @@ export const AssetInformation = ({
                         CurrencySymbol,
                         BigNumber
                     ][]
-                ).map(([asset, quantity]) => (
-                    <div
-                        className='flex h-10 w-full flex-row items-center gap-2'
-                        key={asset}
-                    >
-                        <div>
-                            <CurrencyIcon ccy={asset} />
+                )
+                    .filter(([_asset, quantity]) => !quantity.isZero())
+                    .map(([asset, quantity]) => (
+                        <div
+                            className='flex h-10 w-full flex-row items-center gap-2'
+                            key={asset}
+                        >
+                            <div>
+                                <CurrencyIcon ccy={asset} />
+                            </div>
+                            <div className='flex w-full flex-row justify-between'>
+                                <CurrencyItem
+                                    ccy={asset}
+                                    price={priceList[asset]}
+                                />
+                                <CurrencyItem
+                                    amount={amountFormatterFromBase[asset](
+                                        quantity
+                                    )}
+                                    ccy={asset}
+                                    price={priceList[asset]}
+                                    align='right'
+                                />
+                            </div>
                         </div>
-                        <div className='flex w-full flex-row justify-between'>
-                            <CurrencyItem
-                                ccy={asset}
-                                price={priceList[asset]}
-                            />
-                            <CurrencyItem
-                                amount={amountFormatterFromBase[asset](
-                                    quantity
-                                )}
-                                ccy={asset}
-                                price={priceList[asset]}
-                                align='right'
-                            />
-                        </div>
-                    </div>
-                ))}
+                    ))}
         </div>
     );
 };
