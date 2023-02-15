@@ -1,5 +1,5 @@
 import { formatDate } from '@secured-finance/sf-core';
-import { useOrderHistory } from '@secured-finance/sf-graph-client/dist/hooks/useOrderHistory';
+import { OrderHistoryDocument } from '@secured-finance/sf-graph-client/dist/graphclient';
 import { BigNumber } from 'ethers';
 import { useCallback, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -69,8 +69,8 @@ export const AdvancedLending = ({
 
     const orderBook = useOrderbook(currency, selectedTerm.value, 10);
     const oderHistory = useGraphClientHook(
-        account ?? '',
-        useOrderHistory,
+        { address: account ?? '' },
+        OrderHistoryDocument,
         'orders'
     );
 
@@ -148,7 +148,7 @@ export const AdvancedLending = ({
                             currency={currency}
                         />
                         <></>
-                        <OpenOrderTable data={oderHistory} />
+                        <OpenOrderTable data={oderHistory.data ?? []} />
                     </HorizontalTab>
                 </div>
             </div>

@@ -1,25 +1,26 @@
-import {
-    AccountVariable,
-    GraphApolloClient,
-    QueryResult,
-} from '@secured-finance/sf-graph-client';
+import { GraphApolloClient, useQuery } from '@secured-finance/sf-graph-client';
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from 'src/store/types';
 
 export const useGraphClientHook = <T, K extends keyof T>(
-    account: string | null,
-    graphClientHook: (
-        { account }: AccountVariable,
-        client?: GraphApolloClient
-    ) => QueryResult<T>,
-    entity: K
+    variables: { [key: string]: unknown },
+    queryDocument: Parameters<typeof useQuery<T>>[0],
+    entity: K,
+    client?: GraphApolloClient
 ) => {
     const block = useSelector(
         (state: RootState) => state.blockchain.latestBlock
     );
-    const { data, error, refetch } = graphClientHook({
-        account: account ?? '',
+
+    const { error, data, refetch, networkStatus } = useQuery<T>(queryDocument, {
+        client: client,
+        variables: {
+            ...variables,
+            awaitRefetchQueries: true,
+        },
+        fetchPolicy: 'network-only',
+        notifyOnNetworkStatusChange: true,
     });
 
     if (error) {
@@ -30,5 +31,12 @@ export const useGraphClientHook = <T, K extends keyof T>(
         refetch?.();
     }, [block, refetch]);
 
-    return data?.[entity] ?? [];
+    const isExists = data?.[entity];
+
+    return {
+        data: isExists ? data[entity] : undefined,
+        error,
+        refetch,
+        networkStatus,
+    };
 };
