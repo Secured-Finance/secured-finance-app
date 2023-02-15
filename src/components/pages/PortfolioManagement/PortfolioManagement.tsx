@@ -1,7 +1,4 @@
-import {
-    OrderHistoryDocument,
-    TransactionHistoryDocument,
-} from '@secured-finance/sf-graph-client/dist/graphclient/.graphclient';
+import { UserHistoryDocument } from '@secured-finance/sf-graph-client/dist/graphclient/.graphclient';
 import { useSelector } from 'react-redux';
 import {
     HorizontalTab,
@@ -32,19 +29,14 @@ import { useWallet } from 'use-wallet';
 
 export const PortfolioManagement = () => {
     const { account } = useWallet();
-    const tradeHistory = useGraphClientHook(
-        { address: account ?? '' },
-        TransactionHistoryDocument,
-        'transactions'
-    );
-    const oderHistory = useGraphClientHook(
-        { address: account ?? '' },
-        OrderHistoryDocument,
-        'orders'
+    const userHistory = useGraphClientHook(
+        { address: account?.toLowerCase() ?? '' },
+        UserHistoryDocument,
+        'user'
     );
 
-    const tradeHistoryList = tradeHistory.data ?? [];
-    const orderHistoryList = oderHistory.data ?? [];
+    const tradeHistory = userHistory.data?.transactions ?? [];
+    const orderHistory = userHistory.data?.orders ?? [];
 
     const priceMap = useSelector((state: RootState) => getPriceMap(state));
 
@@ -54,15 +46,13 @@ export const PortfolioManagement = () => {
                 <div className='flex flex-col gap-6'>
                     <PortfolioManagementTable
                         values={[
-                            usdFormat(
-                                computeNetValue(tradeHistoryList, priceMap)
-                            ),
+                            usdFormat(computeNetValue(tradeHistory, priceMap)),
                             percentFormat(
                                 computeWeightedAverageRate(
-                                    tradeHistoryList
+                                    tradeHistory
                                 ).toNormalizedNumber()
                             ),
-                            tradeHistoryList.length.toString(),
+                            tradeHistory.length.toString(),
                             '0',
                         ]}
                     />
@@ -86,11 +76,9 @@ export const PortfolioManagement = () => {
                         'My Transactions',
                     ]}
                 >
-                    <ActiveTradeTable
-                        data={aggregateTrades(tradeHistoryList)}
-                    />
-                    <OrderHistoryTable data={orderHistoryList} />
-                    <MyTransactionsTable data={tradeHistoryList} />
+                    <ActiveTradeTable data={aggregateTrades(tradeHistory)} />
+                    <OrderHistoryTable data={orderHistory} />
+                    <MyTransactionsTable data={tradeHistory} />
                 </HorizontalTab>
             </div>
             <WalletDialog />

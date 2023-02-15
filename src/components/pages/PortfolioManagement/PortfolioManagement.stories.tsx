@@ -7,10 +7,7 @@ import {
     withWalletBalances,
     withWalletProvider,
 } from 'src/../.storybook/decorators';
-import {
-    mockOrderHistory,
-    mockTransactionHistory,
-} from 'src/stories/mocks/queries';
+import { mockUserHistory } from 'src/stories/mocks/queries';
 import { PortfolioManagement } from './PortfolioManagement';
 
 export default {
@@ -26,7 +23,7 @@ export default {
     ],
     parameters: {
         apolloClient: {
-            mocks: [...mockTransactionHistory, ...mockOrderHistory],
+            mocks: mockUserHistory,
         },
         connected: true,
     },

@@ -1,13 +1,10 @@
-import {
-    OrderHistoryDocument,
-    TransactionHistoryDocument,
-} from '@secured-finance/sf-graph-client/dist/graphclient';
+import { UserHistoryDocument } from '@secured-finance/sf-graph-client/dist/graphclient/.graphclient';
 import { orderHistoryList, transactions } from './fixtures';
 
-export const mockTransactionHistory = [
+export const mockUserHistory = [
     {
         request: {
-            query: TransactionHistoryDocument,
+            query: UserHistoryDocument,
             variables: {
                 address: '',
                 awaitRefetchQueries: true,
@@ -15,79 +12,46 @@ export const mockTransactionHistory = [
         },
         result: {
             data: {
-                transactions: [],
-            },
-        },
-        newData: () => {
-            return {
-                data: {
+                user: {
+                    orders: [],
                     transactions: [],
                 },
-            };
-        },
-    },
-    {
-        request: {
-            query: TransactionHistoryDocument,
-            variables: {
-                address: '0xB98bD7C7f656290071E52D1aA617D9cB4467Fd6D',
-                awaitRefetchQueries: true,
-            },
-        },
-        result: {
-            data: {
-                transactions: transactions,
             },
         },
         newData: () => {
             return {
                 data: {
+                    user: {
+                        orders: [],
+                        transactions: [],
+                    },
+                },
+            };
+        },
+    },
+    {
+        request: {
+            query: UserHistoryDocument,
+            variables: {
+                address: '0xb98bd7c7f656290071e52d1aa617d9cb4467fd6d',
+                awaitRefetchQueries: true,
+            },
+        },
+        result: {
+            data: {
+                user: {
+                    orders: orderHistoryList,
                     transactions: transactions,
                 },
-            };
-        },
-    },
-];
-
-export const mockOrderHistory = [
-    {
-        request: {
-            query: OrderHistoryDocument,
-            variables: {
-                address: '',
-                awaitRefetchQueries: true,
-            },
-        },
-        result: {
-            data: {
-                orders: [],
             },
         },
         newData: () => {
             return {
                 data: {
-                    orders: [],
-                },
-            };
-        },
-    },
-    {
-        request: {
-            query: OrderHistoryDocument,
-            variables: {
-                address: '0xB98bD7C7f656290071E52D1aA617D9cB4467Fd6D',
-                awaitRefetchQueries: true,
-            },
-        },
-        result: {
-            data: {
-                orders: orderHistoryList,
-            },
-        },
-        newData: () => {
-            return {
-                data: {
-                    orders: orderHistoryList,
+                    user: {
+                        orders: orderHistoryList,
+                        transactions: transactions,
+                    },
                 },
             };
         },
