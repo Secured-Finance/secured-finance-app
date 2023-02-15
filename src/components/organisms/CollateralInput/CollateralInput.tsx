@@ -66,9 +66,7 @@ export const CollateralInput = ({
                 <InputBase
                     value={amount}
                     className='typography-headline-4 h-14 w-full text-center text-neutral-8'
-                    onValueChange={(v: number | undefined) =>
-                        handleAmountChange(v)
-                    }
+                    onValueChange={handleAmountChange}
                 />
                 <div className='typography-body-2'>
                     <span className='text-center text-neutral-8'>
