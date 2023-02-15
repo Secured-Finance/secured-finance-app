@@ -1,4 +1,6 @@
+import { UserCountDocument } from '@secured-finance/sf-graph-client/dist/graphclient';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { BigNumber } from 'ethers';
 import {
     withAppLayout,
     withAssetPrice,
@@ -11,6 +13,27 @@ export default {
     component: MarketDashboard,
     chromatic: { pauseAnimationAtEnd: true },
     args: {},
+    parameters: {
+        apolloClient: {
+            mocks: [
+                {
+                    request: {
+                        query: UserCountDocument,
+                        variables: {
+                            awaitRefetchQueries: true,
+                        },
+                    },
+                    result: {
+                        data: {
+                            protocol: {
+                                totalUsers: BigNumber.from(900000),
+                            },
+                        },
+                    },
+                },
+            ],
+        },
+    },
     decorators: [withAppLayout, withWalletProvider, withAssetPrice],
 } as ComponentMeta<typeof MarketDashboard>;
 
