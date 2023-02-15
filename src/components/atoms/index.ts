@@ -16,6 +16,7 @@ export * from './ExpandIndicator';
 export * from './GradientBox';
 export * from './HorizontalListItem';
 export * from './InformationPopover';
+export * from './InputBase';
 export * from './MarketTab';
 export * from './NavTab';
 export * from './PercentageTab';
