@@ -30,7 +30,7 @@ export const mockTransactionHistory = [
         request: {
             query: TransactionHistoryDocument,
             variables: {
-                address: '0xb98bd7c7f656290071e52d1aa617d9cb4467fd6d',
+                address: '0xB98bD7C7f656290071E52D1aA617D9cB4467Fd6D',
                 awaitRefetchQueries: true,
             },
         },
@@ -75,7 +75,7 @@ export const mockOrderHistory = [
         request: {
             query: OrderHistoryDocument,
             variables: {
-                address: '0xb98bd7c7f656290071e52d1aa617d9cb4467fd6d',
+                address: '0xB98bD7C7f656290071E52D1aA617D9cB4467Fd6D',
                 awaitRefetchQueries: true,
             },
         },

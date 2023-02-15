@@ -81,7 +81,7 @@ export const MarketDashboard = () => {
                         {account ? (
                             <MyWalletCard
                                 addressRecord={{
-                                    [WalletSource.METAMASK]: account ?? '',
+                                    [WalletSource.METAMASK]: account,
                                 }}
                             />
                         ) : (
