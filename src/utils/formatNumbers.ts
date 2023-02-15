@@ -41,17 +41,20 @@ export const percentFormat = (
 
 export const ordinaryFormat = (
     number: number | bigint | BigNumber | FixedNumber,
-    decimals = 2
+    decimals = 2,
+    notation: 'standard' | 'compact' = 'standard'
 ) => {
     if (number instanceof BigNumber) {
         return Intl.NumberFormat('en-US', {
             maximumFractionDigits: decimals,
+            notation: notation,
         }).format(number.toBigInt());
     } else if (number instanceof FixedNumber) {
         return number.toString();
     } else {
         return Intl.NumberFormat('en-US', {
             maximumFractionDigits: decimals,
+            notation: notation,
         }).format(number);
     }
 };

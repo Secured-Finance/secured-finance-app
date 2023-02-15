@@ -1,3 +1,4 @@
+import { UserCountDocument } from '@secured-finance/sf-graph-client/dist/graphclient';
 import { BigNumber } from 'ethers';
 import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
@@ -8,12 +9,13 @@ import {
 import { MarketDashboardTable } from 'src/components/molecules';
 import { ConnectWalletCard, MyWalletCard } from 'src/components/organisms';
 import { Page, TwoColumns } from 'src/components/templates';
-import { useProtocolInformation } from 'src/hooks';
+import { useGraphClientHook, useProtocolInformation } from 'src/hooks';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { RootState } from 'src/store/types';
 import {
     currencyMap,
     CurrencySymbol,
+    ordinaryFormat,
     usdFormat,
     WalletSource,
 } from 'src/utils';
@@ -23,6 +25,11 @@ export const MarketDashboard = () => {
     const { account } = useWallet();
 
     const protocolInformation = useProtocolInformation();
+    const totalUser = useGraphClientHook(
+        {}, // no variables
+        UserCountDocument,
+        'protocol'
+    );
     const priceList = useSelector((state: RootState) => getPriceMap(state));
 
     const totalValueLockedInUSD = useMemo(() => {
@@ -66,12 +73,20 @@ export const MarketDashboard = () => {
                         },
                         {
                             name: 'Total Volume',
-                            value: '356M',
+                            value: ordinaryFormat(
+                                BigNumber.from(100000),
+                                0,
+                                'compact'
+                            ),
                             orientation: 'center',
                         },
                         {
                             name: 'Total Users',
-                            value: '900K',
+                            value: ordinaryFormat(
+                                totalUser.data?.totalUsers ?? 0,
+                                0,
+                                'compact'
+                            ),
                             orientation: 'center',
                         },
                     ]}
