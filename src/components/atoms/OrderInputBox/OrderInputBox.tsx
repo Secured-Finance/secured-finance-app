@@ -64,14 +64,6 @@ export const OrderInputBox = ({
                         {initialValue}
                     </span>
                 ) : (
-                    // <input
-                    //     type='text'
-                    //     placeholder='0'
-                    //     value={inputValue}
-                    //     onChange={handleAmountChange}
-                    //     className='bg-transparent  focus:outline-none'
-                    //     aria-label={field}
-                    // />
                     <InputBase
                         value={inputValue as number}
                         className='text-right text-neutral-8'

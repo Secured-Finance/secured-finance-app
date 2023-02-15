@@ -22,7 +22,7 @@ export const AssetSelector = <AssetType extends string = string>({
     onAmountChange?: (v: BigNumber) => void;
 }) => {
     const [assetValue, setAssetValue] = useState(selected.value);
-    const [amount, setAmount] = useState(0);
+    const [amount, setAmount] = useState<number | undefined>();
 
     const selectedOption = useMemo(
         () => options.find(o => o.value === assetValue),
@@ -35,7 +35,7 @@ export const AssetSelector = <AssetType extends string = string>({
         }
         return new Intl.NumberFormat('en-us', {
             minimumFractionDigits: 0,
-        }).format(priceList[selectedOption.value] * amount);
+        }).format(priceList[selectedOption.value] * (amount ?? 0));
     }, [selectedOption?.value, priceList, amount]);
 
     const handleInputChange = useCallback(
@@ -61,17 +61,21 @@ export const AssetSelector = <AssetType extends string = string>({
                 onAssetChange(v);
             }
             if (onAmountChange) {
-                handleInputChange(amount, v, onAmountChange);
+                handleInputChange(amount ?? 0, v, onAmountChange);
             }
         },
         [onAssetChange, onAmountChange, handleInputChange, amount]
     );
 
     const handleAmountChange = useCallback(
-        (amount: number) => {
+        (amount: number | undefined) => {
             setAmount(amount);
             if (onAmountChange && selectedOption) {
-                handleInputChange(amount, selectedOption.value, onAmountChange);
+                handleInputChange(
+                    amount ?? 0,
+                    selectedOption.value,
+                    onAmountChange
+                );
             }
         },
         [handleInputChange, onAmountChange, selectedOption]
@@ -96,9 +100,7 @@ export const AssetSelector = <AssetType extends string = string>({
                 />
                 <InputBase
                     className='typography-body-1 h-8 w-20 rounded-lg text-right font-bold text-white'
-                    onValueChange={(v: number | undefined) =>
-                        handleAmountChange(v ?? 0)
-                    }
+                    onValueChange={handleAmountChange}
                     value={amount}
                     data-cy='asset-selector-input'
                 />
