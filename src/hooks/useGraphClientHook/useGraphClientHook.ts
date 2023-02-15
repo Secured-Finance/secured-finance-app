@@ -9,10 +9,6 @@ export const useGraphClientHook = <T, K extends keyof T>(
     entity: K,
     client?: GraphApolloClient
 ) => {
-    const block = useSelector(
-        (state: RootState) => state.blockchain.latestBlock
-    );
-
     const { error, data, refetch, networkStatus } = useQuery<T>(queryDocument, {
         client: client,
         variables: {
@@ -22,6 +18,10 @@ export const useGraphClientHook = <T, K extends keyof T>(
         fetchPolicy: 'network-only',
         notifyOnNetworkStatusChange: true,
     });
+
+    const block = useSelector(
+        (state: RootState) => state.blockchain.latestBlock
+    );
 
     if (error) {
         console.error(error);
