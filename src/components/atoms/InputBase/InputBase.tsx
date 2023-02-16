@@ -5,7 +5,7 @@ import NumericFormat, {
 } from 'react-number-format';
 
 interface InputBaseProps {
-    className: string;
+    className?: string;
     value?: number;
     onValueChange: (v: number | undefined) => void;
     label?: string;
