@@ -4,6 +4,7 @@ import { BigNumber } from 'ethers';
 import {
     withAppLayout,
     withAssetPrice,
+    withWalletBalances,
     withWalletProvider,
 } from 'src/../.storybook/decorators';
 import { MarketDashboard } from './MarketDashboard';
@@ -34,7 +35,12 @@ export default {
             ],
         },
     },
-    decorators: [withAppLayout, withWalletProvider, withAssetPrice],
+    decorators: [
+        withAppLayout,
+        withWalletProvider,
+        withWalletBalances,
+        withAssetPrice,
+    ],
 } as ComponentMeta<typeof MarketDashboard>;
 
 const Template: ComponentStory<typeof MarketDashboard> = () => {
