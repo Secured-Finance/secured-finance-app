@@ -1,11 +1,12 @@
 import { BigNumber } from 'ethers';
-import { ChangeEvent, useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+import { InputBase } from 'src/components/atoms';
 import { amountFormatterToBase, CurrencySymbol } from 'src/utils';
 
 interface OrderInputBoxProps {
     field: string;
     unit: string;
-    initialValue?: string;
+    initialValue?: number | string;
     asset?: CurrencySymbol;
     disabled?: boolean;
     onValueChange?: (v: number | BigNumber) => void;
@@ -14,7 +15,7 @@ interface OrderInputBoxProps {
 export const OrderInputBox = ({
     field,
     unit,
-    initialValue = '',
+    initialValue = 0,
     asset,
     disabled = false,
     onValueChange,
@@ -45,17 +46,10 @@ export const OrderInputBox = ({
     );
 
     const handleAmountChange = useCallback(
-        (e: ChangeEvent<HTMLInputElement>) => {
-            const maybeNumber = e.target.value;
-            const amount =
-                isNaN(+maybeNumber) || maybeNumber === '' ? -1 : +maybeNumber;
-            setInputValue(amount === -1 ? '' : maybeNumber);
+        (amount: number) => {
+            setInputValue(amount);
             if (onValueChange) {
-                handleInputChange(
-                    amount > 0 ? amount : 0,
-                    asset,
-                    onValueChange
-                );
+                handleInputChange(amount, asset, onValueChange);
             }
         },
         [onValueChange, handleInputChange, asset]
@@ -70,13 +64,13 @@ export const OrderInputBox = ({
                         {initialValue}
                     </span>
                 ) : (
-                    <input
-                        type='text'
-                        placeholder='0'
-                        value={inputValue}
-                        onChange={handleAmountChange}
-                        className='bg-transparent text-right text-neutral-8 focus:outline-none'
-                        aria-label={field}
+                    <InputBase
+                        value={inputValue as number}
+                        className='text-right text-neutral-8'
+                        label={field}
+                        onValueChange={(v: number | undefined) =>
+                            handleAmountChange(v ?? 0)
+                        }
                     />
                 )}
                 <div className='text-neutral-4'>{unit}</div>
