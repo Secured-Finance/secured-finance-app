@@ -1,6 +1,6 @@
 import { BigNumber } from 'ethers';
-import { ChangeEvent, useCallback, useMemo, useState } from 'react';
-import { DropdownSelector, Option } from 'src/components/atoms';
+import { useCallback, useMemo, useState } from 'react';
+import { DropdownSelector, InputBase, Option } from 'src/components/atoms';
 
 type FormatFunction = (amount: number) => BigNumber;
 
@@ -22,8 +22,7 @@ export const AssetSelector = <AssetType extends string = string>({
     onAmountChange?: (v: BigNumber) => void;
 }) => {
     const [assetValue, setAssetValue] = useState(selected.value);
-    const [amount, setAmount] = useState(0);
-    const [inputValue, setInputValue] = useState('');
+    const [amount, setAmount] = useState<number | undefined>();
 
     const selectedOption = useMemo(
         () => options.find(o => o.value === assetValue),
@@ -36,7 +35,7 @@ export const AssetSelector = <AssetType extends string = string>({
         }
         return new Intl.NumberFormat('en-us', {
             minimumFractionDigits: 0,
-        }).format(priceList[selectedOption.value] * amount);
+        }).format(priceList[selectedOption.value] * (amount ?? 0));
     }, [selectedOption?.value, priceList, amount]);
 
     const handleInputChange = useCallback(
@@ -62,21 +61,21 @@ export const AssetSelector = <AssetType extends string = string>({
                 onAssetChange(v);
             }
             if (onAmountChange) {
-                handleInputChange(amount, v, onAmountChange);
+                handleInputChange(amount ?? 0, v, onAmountChange);
             }
         },
         [onAssetChange, onAmountChange, handleInputChange, amount]
     );
 
     const handleAmountChange = useCallback(
-        (e: ChangeEvent<HTMLInputElement>) => {
-            const maybeNumber = e.target.value;
-            const amount =
-                isNaN(+maybeNumber) || maybeNumber === '' ? -1 : +maybeNumber;
-            setAmount(amount > 0 ? amount : 0);
-            setInputValue(amount === -1 ? '' : maybeNumber);
+        (amount: number | undefined) => {
+            setAmount(amount);
             if (onAmountChange && selectedOption) {
-                handleInputChange(amount, selectedOption.value, onAmountChange);
+                handleInputChange(
+                    amount ?? 0,
+                    selectedOption.value,
+                    onAmountChange
+                );
             }
         },
         [handleInputChange, onAmountChange, selectedOption]
@@ -99,12 +98,10 @@ export const AssetSelector = <AssetType extends string = string>({
                     selected={selected}
                     onChange={handleAssetChange}
                 />
-                <input
-                    type='text'
-                    placeholder='0'
-                    className='typography-body-1 h-8 w-20 rounded-lg bg-transparent text-right font-bold text-white placeholder-opacity-50 focus:outline-none'
-                    onChange={handleAmountChange}
-                    value={inputValue}
+                <InputBase
+                    className='typography-body-1 h-8 w-20 rounded-lg text-right font-bold text-white'
+                    onValueChange={handleAmountChange}
+                    value={amount}
                     data-cy='asset-selector-input'
                 />
 
