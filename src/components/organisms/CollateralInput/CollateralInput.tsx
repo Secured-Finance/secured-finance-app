@@ -1,5 +1,6 @@
 import { BigNumber } from 'ethers';
-import { ChangeEvent, useCallback, useState } from 'react';
+import { useCallback, useState } from 'react';
+import { InputBase } from 'src/components/atoms';
 import { PercentageSelector } from 'src/components/molecules';
 import { amountFormatterToBase, CurrencySymbol, usdFormat } from 'src/utils';
 
@@ -16,7 +17,7 @@ export const CollateralInput = ({
     asset,
     onAmountChange,
 }: CollateralInputProps) => {
-    const [inputValue, setInputValue] = useState('');
+    const [amount, setAmount] = useState<number | undefined>();
 
     const handleInputChange = useCallback(
         (
@@ -35,24 +36,20 @@ export const CollateralInput = ({
     );
 
     const handleAmountChange = useCallback(
-        (e: ChangeEvent<HTMLInputElement>) => {
-            const maybeNumber = e.target.value;
-            const amount =
-                isNaN(+maybeNumber) || maybeNumber === '' ? -1 : +maybeNumber;
-            setInputValue(amount === -1 ? '' : maybeNumber);
+        (amount: number | undefined) => {
+            setAmount(amount);
             if (onAmountChange) {
-                handleInputChange(amount, asset, onAmountChange);
+                handleInputChange(amount ?? 0, asset, onAmountChange);
             }
         },
-        [asset, onAmountChange, handleInputChange]
+        [asset, handleInputChange, onAmountChange]
     );
 
     const handleClick = useCallback(
         (percentage: number) => {
-            const amount = parseFloat(
-                (percentage * availableAmount).toFixed(2)
-            );
-            setInputValue(amount === 0 ? '' : amount.toString());
+            const amount =
+                Math.floor(percentage * availableAmount * 10000) / 10000.0;
+            setAmount(amount);
             if (onAmountChange) {
                 handleInputChange(amount, asset, onAmountChange);
             }
@@ -66,16 +63,14 @@ export const CollateralInput = ({
                 Amount
             </span>
             <div className='flex h-full flex-1 flex-col items-center gap-1'>
-                <input
-                    type='text'
-                    placeholder='0'
-                    value={inputValue}
-                    onChange={handleAmountChange}
-                    className='typography-headline-4 h-14 w-full bg-transparent text-center text-neutral-8 focus:outline-none'
+                <InputBase
+                    value={amount}
+                    className='typography-headline-4 h-14 w-full text-center text-neutral-8'
+                    onValueChange={handleAmountChange}
                 />
                 <div className='typography-body-2'>
                     <span className='text-center text-neutral-8'>
-                        {usdFormat(price * +inputValue, 2)}
+                        {usdFormat(price * (amount ?? 0), 2)}
                     </span>
                     <span className='pl-2 text-center text-neutral-4'>USD</span>
                 </div>

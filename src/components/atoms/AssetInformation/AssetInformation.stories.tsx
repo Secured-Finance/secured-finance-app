@@ -21,3 +21,10 @@ const Template: ComponentStory<typeof AssetInformation> = args => {
 };
 
 export const Default = Template.bind({});
+export const ZeroUsdcCollateral = Template.bind({});
+ZeroUsdcCollateral.args = {
+    collateralBook: {
+        ETH: BigNumber.from('1200000000000000000'),
+        USDC: BigNumber.from('0'),
+    },
+};

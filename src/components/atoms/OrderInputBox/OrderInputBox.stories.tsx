@@ -9,7 +9,7 @@ export default {
         field: 'Fixed Rate',
         unit: '%',
         disabled: true,
-        initialValue: '1000',
+        initialValue: 1000,
     },
 } as ComponentMeta<typeof OrderInputBox>;
 
@@ -25,7 +25,7 @@ Amount.args = {
     unit: CurrencySymbol.FIL,
     asset: CurrencySymbol.FIL,
     disabled: false,
-    initialValue: '10',
+    initialValue: 10,
 };
 
 export const Total = Template.bind({});
