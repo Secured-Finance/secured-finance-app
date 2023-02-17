@@ -31,6 +31,15 @@ export default {
                             },
                         },
                     },
+                    newData: () => {
+                        return {
+                            data: {
+                                protocol: {
+                                    totalUsers: BigNumber.from(900000),
+                                },
+                            },
+                        };
+                    },
                 },
             ],
         },
