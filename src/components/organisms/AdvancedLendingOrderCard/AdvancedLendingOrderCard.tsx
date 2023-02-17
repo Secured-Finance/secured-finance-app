@@ -109,14 +109,14 @@ export const AdvancedLendingOrderCard = ({
                         field='Unit Price'
                         unit=''
                         disabled={orderType === OrderType.MARKET}
-                        initialValue={unitPrice.toString()}
+                        initialValue={unitPrice}
                         onValueChange={v => dispatch(setUnitPrice(v as number))}
                     />
                     <OrderInputBox
                         field='Amount'
                         unit={currency}
                         asset={currency}
-                        initialValue={getAmount().toString()}
+                        initialValue={getAmount()}
                         onValueChange={v => dispatch(setAmount(v as BigNumber))}
                     />
                 </div>
