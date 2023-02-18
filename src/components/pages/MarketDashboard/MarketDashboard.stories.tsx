@@ -9,6 +9,33 @@ import {
 } from 'src/../.storybook/decorators';
 import { MarketDashboard } from './MarketDashboard';
 
+const totalUser = [
+    {
+        request: {
+            query: UserCountDocument,
+            variables: {
+                awaitRefetchQueries: true,
+            },
+        },
+        result: {
+            data: {
+                protocol: {
+                    totalUsers: BigNumber.from(900000),
+                },
+            },
+        },
+        newData: () => {
+            return {
+                data: {
+                    protocol: {
+                        totalUsers: BigNumber.from(900000),
+                    },
+                },
+            };
+        },
+    },
+];
+
 export default {
     title: 'Pages/MarketDashboard',
     component: MarketDashboard,
@@ -16,32 +43,7 @@ export default {
     args: {},
     parameters: {
         apolloClient: {
-            mocks: [
-                {
-                    request: {
-                        query: UserCountDocument,
-                        variables: {
-                            awaitRefetchQueries: true,
-                        },
-                    },
-                    result: {
-                        data: {
-                            protocol: {
-                                totalUsers: BigNumber.from(900000),
-                            },
-                        },
-                    },
-                    newData: () => {
-                        return {
-                            data: {
-                                protocol: {
-                                    totalUsers: BigNumber.from(900000),
-                                },
-                            },
-                        };
-                    },
-                },
-            ],
+            mocks: totalUser,
         },
     },
     decorators: [

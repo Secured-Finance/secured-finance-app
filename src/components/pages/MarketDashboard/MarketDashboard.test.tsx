@@ -3,7 +3,7 @@ import {
     preloadedAssetPrices,
     preloadedBalances,
 } from 'src/stories/mocks/fixtures';
-import { render, waitFor } from 'src/test-utils.js';
+import { render, screen, waitFor } from 'src/test-utils.js';
 import * as stories from './MarketDashboard.stories';
 
 const { Default } = composeStories(stories);
@@ -22,16 +22,26 @@ jest.mock(
             children
 );
 
+const renderDefault = async () => {
+    await waitFor(() =>
+        render(<Default />, {
+            apolloMocks: Default.parameters?.apolloClient.mocks,
+            preloadedState: {
+                ...preloadedBalances,
+                ...preloadedAssetPrices,
+            },
+        })
+    );
+};
+
 describe('MarketDashboard Component', () => {
     it('should render MarketDashboard', async () => {
-        waitFor(() =>
-            render(<Default />, {
-                apolloMocks: Default.parameters?.apolloClient.mocks,
-                preloadedState: {
-                    ...preloadedBalances,
-                    ...preloadedAssetPrices,
-                },
-            })
-        );
+        await renderDefault();
+    });
+
+    it('should render the total users', async () => {
+        await renderDefault();
+        const totalUsers = await screen.findByText('900K');
+        expect(totalUsers).toBeInTheDocument();
     });
 });
