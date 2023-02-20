@@ -12,7 +12,7 @@ export const InformationPopover = ({
     return (
         <>
             <div
-                className='w-full max-w-[256px]'
+                className='pointer-events-auto w-full max-w-[256px]'
                 data-testid='information-popover'
             >
                 <Popover className='relative'>
