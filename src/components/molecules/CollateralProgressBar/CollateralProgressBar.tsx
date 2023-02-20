@@ -44,7 +44,7 @@ export const CollateralProgressBar = ({
 
     return (
         <div
-            className='flex flex-col gap-3'
+            className='pointer-events-none flex flex-col gap-3 rounded-lg px-5 pt-6 pb-12 hover:bg-black-20'
             data-testid='collateral-progress-bar'
         >
             <div className='flex flex-row items-end justify-between'>
