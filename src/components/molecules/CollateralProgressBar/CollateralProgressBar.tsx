@@ -1,4 +1,3 @@
-import BlockedCollateral from 'src/assets/icons/blocked-collateral.svg';
 import Tick from 'src/assets/icons/tick.svg';
 import { InformationPopover } from 'src/components/atoms';
 import { COLLATERAL_THRESHOLD, percentFormat, usdFormat } from 'src/utils';
@@ -30,20 +29,10 @@ export const CollateralProgressBar = ({
     collateralCoverage = 0,
     totalCollateralInUSD = 0,
 }: CollateralProgressBarProps) => {
-    let collateralToTotalRatio = 0;
-    let borrowLimit = 0;
-    let collateralLimitPercentage = 0;
-    const collateralAmount =
-        (collateralCoverage * totalCollateralInUSD) / 100.0;
+    collateralCoverage /= 100.0;
+    const collateralAmount = collateralCoverage * totalCollateralInUSD;
 
-    if (totalCollateralInUSD !== 0) {
-        collateralToTotalRatio =
-            collateralAmount > totalCollateralInUSD
-                ? 1
-                : collateralAmount / totalCollateralInUSD;
-        borrowLimit = (totalCollateralInUSD * COLLATERAL_THRESHOLD) / 100.0;
-        collateralLimitPercentage = collateralAmount / borrowLimit;
-    }
+    const borrowLimit = (totalCollateralInUSD * COLLATERAL_THRESHOLD) / 100.0;
 
     const informationText = formatInformationText(
         collateralAmount,
@@ -63,13 +52,13 @@ export const CollateralProgressBar = ({
                 <span className='typography-body-1 text-white'>
                     {totalCollateralInUSD === 0
                         ? 'N/A'
-                        : percentFormat(collateralLimitPercentage, 1)}
+                        : percentFormat(collateralCoverage, 1)}
                 </span>
             </div>
             <div className='flex flex-col gap-[6px]'>
                 <div
                     style={{
-                        width: `calc(100% * ${collateralToTotalRatio} + 4px )`,
+                        width: `calc(100% * ${collateralCoverage} + 4px )`,
                     }}
                     className='transition-width duration-700 ease-in'
                     data-testid='collateral-progress-bar-tick'
@@ -78,16 +67,12 @@ export const CollateralProgressBar = ({
                 </div>
                 <div className='relative h-5px w-full overflow-hidden rounded-full bg-black-60'>
                     <div
-                        className='float-left h-full bg-gradient-to-l from-purple to-[#833EA8] transition-width duration-700 ease-in'
+                        className='float-left h-full bg-nebulaTeal transition-width duration-700 ease-in'
                         style={{
-                            width: `calc(100% * ${collateralToTotalRatio})`,
+                            width: `calc(100% * ${collateralCoverage})`,
                         }}
                         data-testid='collateral-progress-bar-track'
                     ></div>
-                    <BlockedCollateral
-                        preserveAspectRatio='xMidYMid slice'
-                        className='absolute right-0 h-full w-[calc(100%_*_0.26)]'
-                    ></BlockedCollateral>
                 </div>
                 {totalCollateralInUSD === 0 ? (
                     <div className='typography-caption mt-1 text-white'>
@@ -96,7 +81,7 @@ export const CollateralProgressBar = ({
                 ) : (
                     <div className='mt-1 flex w-full flex-row items-center gap-1'>
                         <div className='typography-caption flex flex-row text-planetaryPurple'>
-                            <span className='whitespace-pre font-semibold text-purple'>
+                            <span className='whitespace-pre font-semibold text-nebulaTeal'>
                                 {`${usdFormat(
                                     borrowLimit - collateralAmount,
                                     2
