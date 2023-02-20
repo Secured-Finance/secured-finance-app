@@ -6,5 +6,6 @@ export * from './events/interface';
 export * from './formatNumbers';
 export * from './handleContractTransaction';
 export * from './portfolio';
+export * from './protocol';
 export * from './rate';
 export * from './strings';

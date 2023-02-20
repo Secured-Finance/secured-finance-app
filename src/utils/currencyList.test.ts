@@ -7,6 +7,7 @@ import {
     getCurrencyMapAsList,
     getCurrencyMapAsOptions,
     toCurrency,
+    toCurrencySymbol,
 } from './currencyList';
 
 const fil = currencyMap.FIL;
@@ -250,5 +251,20 @@ describe('currencyList amountFormatterFromBase', () => {
         );
         expect(format(BigNumber.from('1')).toString()).toEqual('1e-8');
         expect(format(BigNumber.from('0')).toString()).toEqual('0');
+    });
+});
+
+describe('toCurrencySymbol', () => {
+    it('should convert a currency string to a currency symbol', () => {
+        expect(toCurrencySymbol('ETH')).toEqual(CurrencySymbol.ETH);
+        expect(toCurrencySymbol('FIL')).toEqual(CurrencySymbol.FIL);
+        expect(toCurrencySymbol('BTC')).toEqual(CurrencySymbol.BTC);
+        expect(toCurrencySymbol('USDC')).toEqual(CurrencySymbol.USDC);
+    });
+
+    it('should return undefined if the currency is not supported', () => {
+        expect(toCurrencySymbol('')).toBeUndefined();
+        expect(toCurrencySymbol('XRP')).toBeUndefined();
+        expect(toCurrencySymbol('EUR')).toBeUndefined();
     });
 });
