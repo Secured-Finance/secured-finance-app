@@ -1,5 +1,6 @@
 import { BigNumber } from 'ethers';
 import * as jest from 'jest-mock';
+import { getCurrencyMapAsList } from 'src/utils';
 import { collateralBook80 } from './fixtures';
 
 export const mockUseSF = () => {
@@ -166,6 +167,21 @@ export const mockUseSF = () => {
         mintERC20Token: jest.fn(() =>
             Promise.resolve({
                 wait: jest.fn(() => Promise.resolve({ blockNumber: 123 })),
+            })
+        ),
+
+        getCurrencies: jest.fn(() =>
+            Promise.resolve(
+                getCurrencyMapAsList().map(currency => currency.symbol)
+            )
+        ),
+
+        getProtocolDepositAmount: jest.fn(() =>
+            Promise.resolve({
+                ETH: BigNumber.from('100000000000000000000'), // 100 ETH
+                FIL: BigNumber.from('100000000000000000000000'), // 100 000 FIL
+                USDC: BigNumber.from('1000000000000'), // 1 000 000 USDC
+                BTC: BigNumber.from('1000000000000'), // 1000 BTC
             })
         ),
     };
