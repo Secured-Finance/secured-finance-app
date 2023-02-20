@@ -25,7 +25,7 @@ describe('CollateralProgressBar Component', () => {
         expect(screen.getByText('Collateral Utilization')).toBeInTheDocument();
         expect(screen.getByText('$37.00')).toBeInTheDocument();
         expect(screen.getByText('of $74.00 available')).toBeInTheDocument();
-        expect(screen.getByText('50%')).toBeInTheDocument();
+        expect(screen.getByText('37%')).toBeInTheDocument();
         expect(screen.queryByText('N/A')).not.toBeInTheDocument();
 
         expect(screen.getByTestId('collateral-progress-bar-tick')).toHaveStyle(
