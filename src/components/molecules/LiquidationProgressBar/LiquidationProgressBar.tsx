@@ -3,19 +3,33 @@ import {
     getLiquidationInformation,
     InformationPopover,
 } from 'src/components/atoms';
-import { LIQUIDATION_THRESHOLD } from 'src/utils';
+import { LIQUIDATION_THRESHOLD, percentFormat } from 'src/utils';
 
 interface LiquidationProgressBarProps {
     liquidationPercentage: number;
 }
 
-const formatInformationText = (liquidationPercentage: number) => {
-    if (liquidationPercentage === 0) return '';
-    return `You are currently at ${
-        LIQUIDATION_THRESHOLD > liquidationPercentage
-            ? LIQUIDATION_THRESHOLD - liquidationPercentage
-            : 0
-    }% to liquidation. Upon reaching the liquidation threshold (80% LTV), 50% of assets will automatically be liquidated to repay the lender. Liquidation will be subject to 5% liquation fee.`;
+const getInformationText = (liquidationPercentage: number) => {
+    if (liquidationPercentage === 0) return;
+    return (
+        <div className='flex flex-col gap-4'>
+            <div>
+                Liquidation threshold is the limit where your collateral will be
+                eligible for liquidation.
+            </div>
+            <div>
+                <span>You are currently </span>
+                <span className='text-nebulaTeal'>
+                    {percentFormat(
+                        LIQUIDATION_THRESHOLD > liquidationPercentage
+                            ? LIQUIDATION_THRESHOLD - liquidationPercentage
+                            : 0
+                    )}
+                </span>
+                <span>{` under the liquidation threshold (${LIQUIDATION_THRESHOLD}% of deposit balance).`}</span>
+            </div>
+        </div>
+    );
 };
 
 export const LiquidationProgressBar = ({
@@ -26,7 +40,6 @@ export const LiquidationProgressBar = ({
         padding = 1;
     }
 
-    const informationText = formatInformationText(liquidationPercentage);
     const info = getLiquidationInformation(liquidationPercentage);
 
     return (
@@ -73,7 +86,9 @@ export const LiquidationProgressBar = ({
                                 threshold to liquidation
                             </span>
                         </div>
-                        <InformationPopover text={informationText} />
+                        <InformationPopover>
+                            {getInformationText(liquidationPercentage)}
+                        </InformationPopover>
                     </div>
                 )}
             </div>

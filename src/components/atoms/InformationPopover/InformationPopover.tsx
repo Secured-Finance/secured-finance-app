@@ -2,16 +2,19 @@ import { Popover } from '@headlessui/react';
 import { useState } from 'react';
 import InformationCircle from 'src/assets/icons/information-circle.svg';
 
-interface InformationPopoverProps {
-    text: string;
-}
-
-export const InformationPopover = ({ text = '' }: InformationPopoverProps) => {
+export const InformationPopover = ({
+    children,
+}: {
+    children: React.ReactNode;
+}) => {
     const [open, setOpen] = useState(false);
 
     return (
         <>
-            <div className='w-full max-w-[256px]'>
+            <div
+                className='w-full max-w-[256px]'
+                data-testid='information-popover'
+            >
                 <Popover className='relative'>
                     {() => (
                         <>
@@ -23,14 +26,14 @@ export const InformationPopover = ({ text = '' }: InformationPopoverProps) => {
                                     onMouseLeave={() => setOpen(false)}
                                 />
                             </Popover.Button>
-                            {open && text && (
+                            {open && children && (
                                 <Popover.Panel
                                     className='absolute z-10 mt-2'
                                     static
                                 >
                                     {() => (
-                                        <div className='typography-dropdown-selection-label relative w-fit overflow-hidden rounded-xl border border-black-60 bg-gunMetal p-4 text-neutral-8 shadow-dropdown'>
-                                            {text}
+                                        <div className='typography-caption-3 relative w-fit overflow-hidden rounded-lg border border-black-20 bg-gunMetal p-4 text-neutral-8 shadow-dropdown'>
+                                            {children}
                                         </div>
                                     )}
                                 </Popover.Panel>

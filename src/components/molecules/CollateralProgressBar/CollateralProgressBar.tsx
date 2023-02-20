@@ -7,22 +7,30 @@ interface CollateralProgressBarProps {
     totalCollateralInUSD: number;
 }
 
-const formatInformationText = (
+const getInformationText = (
     collateralAmount: number,
     totalCollateralInUSD: number,
     borrowLimit: number
 ) => {
-    if (totalCollateralInUSD === 0) return '';
-    return `You currently have ${usdFormat(
-        borrowLimit - collateralAmount,
-        2
-    )} available to borrow. Your total borrow limit is at ${usdFormat(
-        borrowLimit,
-        2
-    )} which is equivalent to ${COLLATERAL_THRESHOLD}% of your collateral deposit (${usdFormat(
-        totalCollateralInUSD,
-        2
-    )}).`;
+    if (totalCollateralInUSD === 0) return;
+    return (
+        <div className='flex flex-col gap-4'>
+            <div>
+                <span>Your total borrow limit is at </span>
+                <span className='text-nebulaTeal'>
+                    {usdFormat(borrowLimit - collateralAmount, 2)}
+                </span>
+                <span>{` which is ${COLLATERAL_THRESHOLD}% of your ${usdFormat(
+                    totalCollateralInUSD,
+                    2
+                )} collateral deposit.`}</span>
+            </div>
+            <div>
+                {`Increasing collateral deposit will increase your borrow limit by
+                ${COLLATERAL_THRESHOLD}% of its value.`}
+            </div>
+        </div>
+    );
 };
 
 export const CollateralProgressBar = ({
@@ -33,12 +41,6 @@ export const CollateralProgressBar = ({
     const collateralAmount = collateralCoverage * totalCollateralInUSD;
 
     const borrowLimit = (totalCollateralInUSD * COLLATERAL_THRESHOLD) / 100.0;
-
-    const informationText = formatInformationText(
-        collateralAmount,
-        totalCollateralInUSD,
-        borrowLimit
-    );
 
     return (
         <div
@@ -92,7 +94,13 @@ export const CollateralProgressBar = ({
                                 2
                             )} available`}</span>
                         </div>
-                        <InformationPopover text={informationText} />
+                        <InformationPopover>
+                            {getInformationText(
+                                collateralAmount,
+                                totalCollateralInUSD,
+                                borrowLimit
+                            )}
+                        </InformationPopover>
                     </div>
                 )}
             </div>
