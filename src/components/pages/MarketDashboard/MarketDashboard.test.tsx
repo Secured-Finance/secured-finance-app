@@ -1,5 +1,9 @@
 import { composeStories } from '@storybook/testing-react';
-import { render } from 'src/test-utils.js';
+import {
+    preloadedAssetPrices,
+    preloadedBalances,
+} from 'src/stories/mocks/fixtures';
+import { render, screen, waitFor } from 'src/test-utils.js';
 import * as stories from './MarketDashboard.stories';
 
 const { Default } = composeStories(stories);
@@ -18,8 +22,26 @@ jest.mock(
             children
 );
 
+const renderDefault = async () => {
+    await waitFor(() =>
+        render(<Default />, {
+            apolloMocks: Default.parameters?.apolloClient.mocks,
+            preloadedState: {
+                ...preloadedBalances,
+                ...preloadedAssetPrices,
+            },
+        })
+    );
+};
+
 describe('MarketDashboard Component', () => {
-    it('should render MarketDashboard', () => {
-        render(<Default />);
+    it('should render MarketDashboard', async () => {
+        await renderDefault();
+    });
+
+    it('should render the total users', async () => {
+        await renderDefault();
+        const totalUsers = await screen.findByText('900K');
+        expect(totalUsers).toBeInTheDocument();
     });
 });

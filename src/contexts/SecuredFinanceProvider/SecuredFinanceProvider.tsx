@@ -5,12 +5,7 @@ import { useDispatch } from 'react-redux';
 import { useLendingMarkets } from 'src/hooks';
 import { useEthereumWalletStore } from 'src/hooks/useEthWallet';
 import { updateChainError, updateLatestBlock } from 'src/store/blockchain';
-import {
-    CurrencySymbol,
-    getEthereumChainId,
-    getRpcEndpoint,
-    hexToDec,
-} from 'src/utils';
+import { getEthereumChainId, getRpcEndpoint, hexToDec } from 'src/utils';
 import { ChainUnsupportedError, useWallet } from 'use-wallet';
 
 export const CACHED_PROVIDER_KEY = 'CACHED_PROVIDER_KEY';
@@ -39,10 +34,7 @@ const SecuredFinanceProvider: React.FC = ({ children }) => {
     const dispatch = useDispatch();
 
     useEthereumWalletStore(securedFinance);
-    Object.values(CurrencySymbol).forEach(ccy => {
-        // eslint-disable-next-line react-hooks/rules-of-hooks
-        useLendingMarkets(ccy, securedFinance);
-    });
+    useLendingMarkets(securedFinance);
 
     const handleNetworkChanged = useCallback(
         (networkId: string) => {

@@ -3,12 +3,11 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateLendingMarketContract } from 'src/store/availableContracts';
 import { RootState } from 'src/store/types';
-import { CurrencySymbol, toCurrency } from 'src/utils';
+import { CurrencySymbol, getCurrencyMapAsList, toCurrency } from 'src/utils';
 
 export type ContractMap = Record<string, number>;
 
 export const useLendingMarkets = (
-    ccy: CurrencySymbol,
     securedFinance: SecuredFinanceClient | undefined
 ) => {
     const block = useSelector(
@@ -17,7 +16,7 @@ export const useLendingMarkets = (
     const dispatch = useDispatch();
 
     useEffect(() => {
-        const fetchLendingMarkets = async () => {
+        const fetchLendingMarkets = async (ccy: CurrencySymbol) => {
             try {
                 const lendingMarkets = await securedFinance?.getLendingMarkets(
                     toCurrency(ccy)
@@ -41,7 +40,8 @@ export const useLendingMarkets = (
                 console.error(e);
             }
         };
-
-        fetchLendingMarkets();
-    }, [ccy, securedFinance, block, dispatch]);
+        for (const currency of getCurrencyMapAsList()) {
+            fetchLendingMarkets(currency.symbol);
+        }
+    }, [securedFinance, block, dispatch]);
 };

@@ -1,23 +1,44 @@
+import { useMemo } from 'react';
+import { useSelector } from 'react-redux';
 import { GradientBox, Separator } from 'src/components/atoms';
 import {
     AssetDisclosure,
     AssetDisclosureProps,
 } from 'src/components/molecules';
+import { RootState } from 'src/store/types';
+import { selectAllBalances } from 'src/store/wallet';
+import {
+    CurrencySymbol,
+    generateWalletInformation,
+    WalletSource,
+} from 'src/utils';
 
-interface MyWalletCardProps {
-    assetMap: AssetDisclosureProps[];
-}
+export const MyWalletCard = ({
+    addressRecord,
+    information,
+}: {
+    addressRecord: Partial<Record<WalletSource, string>>;
+    information?: Partial<Record<WalletSource, CurrencySymbol[]>>;
+}) => {
+    const balanceRecord = useSelector((state: RootState) =>
+        selectAllBalances(state)
+    );
 
-export const MyWalletCard = ({ assetMap }: MyWalletCardProps) => {
+    const assetMap: AssetDisclosureProps[] = useMemo(
+        () =>
+            generateWalletInformation(
+                addressRecord,
+                balanceRecord,
+                information
+            ),
+        [addressRecord, balanceRecord, information]
+    );
+
     return (
         <div className='h-fit w-full bg-transparent'>
-            <GradientBox>
-                <div className='typography-body-2 mx-2 flex h-14 items-center justify-center text-white'>
-                    My Wallet
-                </div>
+            <GradientBox header='My Wallet'>
                 {assetMap.length !== 0 && (
                     <div>
-                        <Separator />
                         <div className='px-2 pt-1 pb-6'>
                             {assetMap.map((asset, index) => {
                                 return (

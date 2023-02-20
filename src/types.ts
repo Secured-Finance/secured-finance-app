@@ -1,8 +1,5 @@
 import { OrderSide } from '@secured-finance/sf-client';
-import {
-    OrderHistoryQuery,
-    TransactionHistoryQuery,
-} from '@secured-finance/sf-graph-client/dist/graphclient';
+import { UserHistoryQuery } from '@secured-finance/sf-graph-client/dist/graphclient';
 
 import { BigNumber, ContractTransaction } from 'ethers';
 import { Option } from 'src/components/atoms';
@@ -19,8 +16,9 @@ export type PlaceOrderFunction = (
     unitPrice?: number
 ) => Promise<ContractTransaction | undefined>;
 
-export type OrderList = OrderHistoryQuery['orders'];
-export type TradeHistory = TransactionHistoryQuery['transactions'];
+type User = NonNullable<UserHistoryQuery['user']>;
+export type OrderList = User['orders'];
+export type TradeHistory = User['transactions'];
 
 export interface ColorFormat {
     color?: 'neutral' | 'positive' | 'negative';

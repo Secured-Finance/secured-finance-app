@@ -5,7 +5,28 @@ export default {
     title: 'Molecules/MarketDashboardTable',
     component: MarketDashboardTable,
     args: {
-        values: ['$560M', '$485M', '$1.2B', '4'],
+        values: [
+            {
+                name: 'Digital Assets',
+                value: '4',
+                orientation: 'center',
+            },
+            {
+                name: 'Total Value Locked',
+                value: '1.2B',
+                orientation: 'center',
+            },
+            {
+                name: 'Total Volume',
+                value: '356M',
+                orientation: 'center',
+            },
+            {
+                name: 'Total Users',
+                value: '900K',
+                orientation: 'center',
+            },
+        ],
     },
 } as ComponentMeta<typeof MarketDashboardTable>;
 
