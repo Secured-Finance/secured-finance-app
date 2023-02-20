@@ -1,5 +1,8 @@
-import { UserHistoryDocument } from '@secured-finance/sf-graph-client/dist/graphclient/.graphclient';
-import { orderHistoryList, transactions } from './fixtures';
+import {
+    DailyVolumesDocument,
+    UserHistoryDocument,
+} from '@secured-finance/sf-graph-client/dist/graphclient/.graphclient';
+import { dailyVolumes, orderHistoryList, transactions } from './fixtures';
 
 export const mockUserHistory = [
     {
@@ -52,6 +55,29 @@ export const mockUserHistory = [
                         orders: orderHistoryList,
                         transactions: transactions,
                     },
+                },
+            };
+        },
+    },
+];
+
+export const mockDailyVolumes = [
+    {
+        request: {
+            query: DailyVolumesDocument,
+            variables: {
+                awaitRefetchQueries: true,
+            },
+        },
+        result: {
+            data: {
+                dailyVolumes: dailyVolumes,
+            },
+        },
+        newData: () => {
+            return {
+                data: {
+                    dailyVolumes: dailyVolumes,
                 },
             };
         },

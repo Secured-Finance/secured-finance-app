@@ -7,6 +7,7 @@ export const useGraphClientHook = <T, K extends keyof T>(
     variables: { [key: string]: unknown },
     queryDocument: Parameters<typeof useQuery<T>>[0],
     entity: K,
+    realTime = false,
     client?: GraphApolloClient
 ) => {
     const { error, data, refetch, networkStatus } = useQuery<T>(queryDocument, {
@@ -28,8 +29,8 @@ export const useGraphClientHook = <T, K extends keyof T>(
     }
 
     useEffect(() => {
-        refetch?.();
-    }, [block, refetch]);
+        if (realTime) refetch?.();
+    }, [block, realTime, refetch]);
 
     const isExists = data?.[entity];
 
