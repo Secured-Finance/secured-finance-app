@@ -1,13 +1,24 @@
 import { BigNumber, FixedNumber } from 'ethers';
 import { LoanValue } from './entities';
 
-export const usdFormat = (number: number, digits = 0) => {
+export const usdFormat = (
+    number: number | BigNumber,
+    digits = 0,
+    notation: 'standard' | 'compact' = 'standard'
+) => {
+    let val;
+    if (number instanceof BigNumber) {
+        val = number.toBigInt();
+    } else {
+        val = number;
+    }
     return Intl.NumberFormat('en-US', {
         style: 'currency',
         currency: 'USD',
         currencySign: 'accounting',
         maximumFractionDigits: digits,
-    }).format(number);
+        notation: notation,
+    }).format(val);
 };
 
 export const usdFormatAppendUSD = (number: number, digits = 0) => {
@@ -30,17 +41,20 @@ export const percentFormat = (
 
 export const ordinaryFormat = (
     number: number | bigint | BigNumber | FixedNumber,
-    decimals = 2
+    decimals = 2,
+    notation: 'standard' | 'compact' = 'standard'
 ) => {
     if (number instanceof BigNumber) {
         return Intl.NumberFormat('en-US', {
             maximumFractionDigits: decimals,
+            notation: notation,
         }).format(number.toBigInt());
     } else if (number instanceof FixedNumber) {
         return number.toString();
     } else {
         return Intl.NumberFormat('en-US', {
             maximumFractionDigits: decimals,
+            notation: notation,
         }).format(number);
     }
 };

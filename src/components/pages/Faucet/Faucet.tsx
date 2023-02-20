@@ -1,7 +1,6 @@
 import { ClipboardCopyIcon } from '@heroicons/react/outline';
 import { Token } from '@secured-finance/sf-core';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useSelector } from 'react-redux';
 import MetaMaskIcon from 'src/assets/img/metamask-fox.svg';
 
 import {
@@ -10,20 +9,13 @@ import {
     GradientBox,
     Separator,
 } from 'src/components/atoms';
-import {
-    AssetDisclosureProps,
-    Dialog,
-    SuccessPanel,
-} from 'src/components/molecules';
+import { Dialog, SuccessPanel } from 'src/components/molecules';
 import { ConnectWalletCard, MyWalletCard } from 'src/components/organisms';
 import { Page, TwoColumns } from 'src/components/templates';
 import useSF from 'src/hooks/useSecuredFinance';
-import { RootState } from 'src/store/types';
-import { selectAllBalances } from 'src/store/wallet';
 import {
     AddressUtils,
     CurrencySymbol,
-    generateWalletInformation,
     getCurrencyMapAsList,
     getCurrencyMapAsOptions,
     handleContractTransaction,
@@ -36,30 +28,12 @@ export const Faucet = () => {
     const { account } = useWallet();
     const sf = useSF();
 
-    const balanceRecord = useSelector((state: RootState) =>
-        selectAllBalances(state)
-    );
-
-    const addressRecord = useMemo(() => {
-        return {
-            [WalletSource.METAMASK]: account ?? '',
-        };
-    }, [account]);
-
     const assetList = useMemo(
         () =>
             getCurrencyMapAsOptions().filter(
                 option => toCurrency(option.value).isToken
             ),
         []
-    );
-
-    const assetMap: AssetDisclosureProps[] = useMemo(
-        () =>
-            generateWalletInformation(addressRecord, balanceRecord, {
-                [WalletSource.METAMASK]: assetList.map(ccy => ccy.value),
-            }),
-        [addressRecord, assetList, balanceRecord]
     );
 
     const [ccy, setCcy] = useState<CurrencySymbol | null>(null);
@@ -216,7 +190,16 @@ export const Faucet = () => {
                     </div>
                 </GradientBox>
                 {account ? (
-                    <MyWalletCard assetMap={assetMap} />
+                    <MyWalletCard
+                        information={{
+                            [WalletSource.METAMASK]: assetList.map(
+                                ccy => ccy.value
+                            ),
+                        }}
+                        addressRecord={{
+                            [WalletSource.METAMASK]: account ?? '',
+                        }}
+                    />
                 ) : (
                     <ConnectWalletCard />
                 )}

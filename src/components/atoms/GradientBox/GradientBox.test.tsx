@@ -1,8 +1,8 @@
 import { composeStories } from '@storybook/testing-react';
-import { render } from 'src/test-utils.js';
+import { render, screen } from 'src/test-utils.js';
 import * as stories from './GradientBox.stories';
 
-const { Default, Rectangle } = composeStories(stories);
+const { Default, Rectangle, Header } = composeStories(stories);
 
 describe('GradientBox Component', () => {
     it('should render a GradientBox', () => {
@@ -11,5 +11,10 @@ describe('GradientBox Component', () => {
 
     it('should render a solid rectangle GradientBox', () => {
         render(<Rectangle />);
+    });
+
+    it('should render a GradientBox with a header', () => {
+        render(<Header />);
+        expect(screen.getByText('Header')).toBeInTheDocument();
     });
 });

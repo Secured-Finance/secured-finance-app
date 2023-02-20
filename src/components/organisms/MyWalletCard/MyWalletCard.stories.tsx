@@ -1,4 +1,5 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { withWalletBalances } from 'src/../.storybook/decorators';
 import { CurrencySymbol, WalletSource } from 'src/utils';
 import { MyWalletCard } from './MyWalletCard';
 
@@ -6,22 +7,12 @@ export default {
     title: 'Organism/MyWalletCard',
     component: MyWalletCard,
     args: {
-        assetMap: [
-            {
-                data: [
-                    { asset: CurrencySymbol.ETH, quantity: 1.2 },
-                    { asset: CurrencySymbol.USDC, quantity: 100 },
-                ],
-                walletSource: WalletSource.METAMASK,
-                account: 'de926db3012af759b4f24b5a51ef6afa397f04670f634aa4f',
-            },
-            {
-                data: [{ asset: CurrencySymbol.FIL, quantity: 1.2 }],
-                walletSource: WalletSource.UTILWALLET,
-                account: 'de926db3012af759b4f24b5',
-            },
-        ],
+        addressRecord: {
+            [WalletSource.METAMASK]:
+                'de926db3012af759b4f24b5a51ef6afa397f04670f634aa4f',
+        },
     },
+    decorators: [withWalletBalances],
 } as ComponentMeta<typeof MyWalletCard>;
 
 const Template: ComponentStory<typeof MyWalletCard> = args => (
@@ -33,4 +24,11 @@ const Template: ComponentStory<typeof MyWalletCard> = args => (
 export const Default = Template.bind({});
 Default.parameters = {
     connected: true,
+};
+
+export const Custom = Template.bind({});
+Custom.args = {
+    information: {
+        [WalletSource.METAMASK]: [CurrencySymbol.ETH, CurrencySymbol.USDC],
+    },
 };

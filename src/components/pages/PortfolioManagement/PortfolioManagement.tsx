@@ -1,9 +1,6 @@
-import { useTransactionHistory } from '@secured-finance/sf-graph-client';
-import { useOrderHistory } from '@secured-finance/sf-graph-client/dist/hooks/useOrderHistory';
-import { useMemo } from 'react';
+import { UserHistoryDocument } from '@secured-finance/sf-graph-client/dist/graphclient/.graphclient';
 import { useSelector } from 'react-redux';
 import {
-    AssetDisclosureProps,
     HorizontalTab,
     PortfolioManagementTable,
 } from 'src/components/molecules';
@@ -20,12 +17,10 @@ import { Page, TwoColumns } from 'src/components/templates';
 import { useGraphClientHook } from 'src/hooks';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { RootState } from 'src/store/types';
-import { selectAllBalances } from 'src/store/wallet';
 import {
     aggregateTrades,
     computeNetValue,
     computeWeightedAverageRate,
-    generateWalletInformation,
     percentFormat,
     usdFormat,
     WalletSource,
@@ -34,33 +29,16 @@ import { useWallet } from 'use-wallet';
 
 export const PortfolioManagement = () => {
     const { account } = useWallet();
-    const tradeHistory = useGraphClientHook(
-        account ?? '',
-        useTransactionHistory,
-        'transactions'
-    );
-    const oderHistory = useGraphClientHook(
-        account ?? '',
-        useOrderHistory,
-        'orders'
+    const userHistory = useGraphClientHook(
+        { address: account?.toLowerCase() ?? '' },
+        UserHistoryDocument,
+        'user'
     );
 
-    const balanceRecord = useSelector((state: RootState) =>
-        selectAllBalances(state)
-    );
+    const tradeHistory = userHistory.data?.transactions ?? [];
+    const orderHistory = userHistory.data?.orders ?? [];
 
     const priceMap = useSelector((state: RootState) => getPriceMap(state));
-
-    const addressRecord = useMemo(() => {
-        return {
-            [WalletSource.METAMASK]: account ?? '',
-        };
-    }, [account]);
-
-    const assetMap: AssetDisclosureProps[] = useMemo(
-        () => generateWalletInformation(addressRecord, balanceRecord),
-        [addressRecord, balanceRecord]
-    );
 
     return (
         <Page title='Portfolio Management' name='portfolio-management'>
@@ -81,7 +59,11 @@ export const PortfolioManagement = () => {
                     <CollateralOrganism />
                 </div>
                 {account ? (
-                    <MyWalletCard assetMap={assetMap} />
+                    <MyWalletCard
+                        addressRecord={{
+                            [WalletSource.METAMASK]: account,
+                        }}
+                    />
                 ) : (
                     <ConnectWalletCard />
                 )}
@@ -95,7 +77,7 @@ export const PortfolioManagement = () => {
                     ]}
                 >
                     <ActiveTradeTable data={aggregateTrades(tradeHistory)} />
-                    <OrderHistoryTable data={oderHistory} />
+                    <OrderHistoryTable data={orderHistory} />
                     <MyTransactionsTable data={tradeHistory} />
                 </HorizontalTab>
             </div>

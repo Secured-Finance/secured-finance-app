@@ -7,9 +7,9 @@ export default {
     args: {},
 } as ComponentMeta<typeof GradientBox>;
 
-const Template: ComponentStory<typeof GradientBox> = () => (
-    <GradientBox>
-        <div className='text-white'>Box</div>
+const Template: ComponentStory<typeof GradientBox> = args => (
+    <GradientBox {...args}>
+        <div className='p-5 text-white'>Box</div>
     </GradientBox>
 );
 
@@ -17,4 +17,9 @@ export const Default = Template.bind({});
 export const Rectangle = Template.bind({});
 Rectangle.args = {
     shape: 'rectangle',
+};
+
+export const Header = Template.bind({});
+Header.args = {
+    header: 'Header',
 };

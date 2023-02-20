@@ -1,16 +1,57 @@
+import { UserCountDocument } from '@secured-finance/sf-graph-client/dist/graphclient';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { BigNumber } from 'ethers';
 import {
     withAppLayout,
+    withAssetPrice,
+    withWalletBalances,
     withWalletProvider,
 } from 'src/../.storybook/decorators';
 import { MarketDashboard } from './MarketDashboard';
+
+const totalUser = [
+    {
+        request: {
+            query: UserCountDocument,
+            variables: {
+                awaitRefetchQueries: true,
+            },
+        },
+        result: {
+            data: {
+                protocol: {
+                    totalUsers: BigNumber.from(900000),
+                },
+            },
+        },
+        newData: () => {
+            return {
+                data: {
+                    protocol: {
+                        totalUsers: BigNumber.from(900000),
+                    },
+                },
+            };
+        },
+    },
+];
 
 export default {
     title: 'Pages/MarketDashboard',
     component: MarketDashboard,
     chromatic: { pauseAnimationAtEnd: true },
     args: {},
-    decorators: [withAppLayout, withWalletProvider],
+    parameters: {
+        apolloClient: {
+            mocks: totalUser,
+        },
+    },
+    decorators: [
+        withAppLayout,
+        withWalletProvider,
+        withWalletBalances,
+        withAssetPrice,
+    ],
 } as ComponentMeta<typeof MarketDashboard>;
 
 const Template: ComponentStory<typeof MarketDashboard> = () => {
