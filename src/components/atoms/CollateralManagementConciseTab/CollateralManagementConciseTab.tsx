@@ -1,5 +1,11 @@
+import Tick from 'src/assets/icons/tick.svg';
 import { Separator } from 'src/components/atoms/Separator';
-import { LIQUIDATION_THRESHOLD, percentFormat, usdFormat } from 'src/utils';
+import {
+    COLLATERAL_THRESHOLD,
+    LIQUIDATION_THRESHOLD,
+    percentFormat,
+    usdFormat,
+} from 'src/utils';
 
 interface CollateralManagementConciseTabProps {
     collateralCoverage: number;
@@ -10,56 +16,61 @@ export const CollateralManagementConciseTab = ({
     collateralCoverage,
     totalCollateralInUSD,
 }: CollateralManagementConciseTabProps) => {
+    let padding = collateralCoverage / 100.0;
+    if (padding > 1) {
+        padding = 1;
+    }
     const info = getLiquidationInformation(collateralCoverage);
+    const borrowLimit = (totalCollateralInUSD * COLLATERAL_THRESHOLD) / 100.0;
+    const collateralAmount =
+        (collateralCoverage * totalCollateralInUSD) / 100.0;
 
     return (
-        <div className='flex h-fit w-full flex-col bg-black-20 pt-2 pb-4'>
-            <div className='mx-4 mb-5 mt-4 flex flex-col gap-3'>
-                <div className='flex flex-row items-center justify-between'>
-                    <div className='flex flex-col gap-[2px]'>
-                        <span className='typography-caption text-grayScale'>
-                            Collateral
-                        </span>
-                        <span className='typography-caption-3 text-slateGray'>
-                            {`Utilization ${percentFormat(collateralCoverage)}`}
-                        </span>
-                    </div>
-                    <div className='typography-caption text-grayScale'>
-                        {usdFormat(
-                            (collateralCoverage * totalCollateralInUSD) / 100.0
-                        )}
-                    </div>
+        <div className='flex h-fit w-full flex-col rounded-b bg-black-20 pt-2 pb-4'>
+            <div className='mx-4 mb-5 mt-4 flex flex-col'>
+                <div className='typography-caption mb-3 flex flex-row justify-between text-grayScale'>
+                    <span>Collateral Utilization</span>
+                    <span>{percentFormat(collateralCoverage, 100)}</span>
                 </div>
                 <div className='h-6px w-full overflow-hidden rounded-full bg-[#2A313C]'>
                     <div
-                        className='h-full rounded-full bg-purple transition-width duration-700 ease-in'
+                        className='h-full rounded-full bg-nebulaTeal transition-width duration-700 ease-in'
                         style={{
-                            width: `calc(100% * ${collateralCoverage / 100.0})`,
+                            width: `calc(100% * ${padding})`,
                         }}
                         data-testid='collateral-progress-bar-track'
                     ></div>
                 </div>
+                <div className='typography-caption-2 mt-1 leading-6 text-planetaryPurple'>
+                    {`Available: ${usdFormat(
+                        borrowLimit - collateralAmount,
+                        2
+                    )}`}
+                </div>
             </div>
             <Separator color='neutral-3' />
-            <div className='mx-4 mb-4 mt-5 flex flex-col gap-3'>
-                <div className='flex flex-row items-center justify-between'>
-                    <div className='flex flex-col gap-[2px]'>
-                        <span className='typography-caption text-grayScale'>
-                            Liquidation Risk
-                        </span>
-                        <span className='typography-caption-3 text-slateGray'>
-                            {`Threshold ${percentFormat(
-                                LIQUIDATION_THRESHOLD > collateralCoverage
-                                    ? LIQUIDATION_THRESHOLD - collateralCoverage
-                                    : 0
-                            )}`}
-                        </span>
-                    </div>
-                    <div className={`typography-caption ${info.color}`}>
-                        {info.risk}
-                    </div>
+            <div className='mx-4 mb-4 mt-5 flex flex-col'>
+                <div className='typography-caption mb-1 flex flex-row justify-between'>
+                    <span className='text-grayScale'>Liquidation Risk</span>
+                    <span className={`${info.color}`}>{info.risk}</span>
                 </div>
-                <div className='h-6px w-full rounded-full bg-gradient-to-r from-progressBarStart via-progressBarVia to-progressBarEnd'></div>
+                <div
+                    style={{
+                        width: `calc(100% * ${padding} + 4px )`,
+                    }}
+                    className='transition-width duration-700 ease-in'
+                    data-testid='liquidation-progress-bar-tick'
+                >
+                    <Tick className='float-right h-5px w-2'></Tick>
+                </div>
+                <div className='mt-2 h-6px w-full rounded-full bg-gradient-to-r from-progressBarStart via-progressBarVia to-progressBarEnd'></div>
+                <div className='typography-caption-2 mt-1 leading-6 text-planetaryPurple'>
+                    {`Threshold: ${percentFormat(
+                        LIQUIDATION_THRESHOLD > collateralCoverage
+                            ? LIQUIDATION_THRESHOLD - collateralCoverage
+                            : 0
+                    )}`}
+                </div>
             </div>
         </div>
     );

@@ -5,7 +5,7 @@ export default {
     title: 'Atoms/CollateralManagementConciseTab',
     component: CollateralManagementConciseTab,
     args: {
-        collateralCoverage: 70,
+        collateralCoverage: 37,
         totalCollateralInUSD: 100,
     },
 } as ComponentMeta<typeof CollateralManagementConciseTab>;
