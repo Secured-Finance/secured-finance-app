@@ -22,7 +22,7 @@ export const CollateralTabRightPane = ({
 
     return (
         <div
-            className='m-9 flex flex-grow flex-col justify-center gap-20'
+            className='m-4 flex flex-grow flex-col justify-center gap-3'
             data-testid='collateral-tab-right-pane'
         >
             <CollateralProgressBar

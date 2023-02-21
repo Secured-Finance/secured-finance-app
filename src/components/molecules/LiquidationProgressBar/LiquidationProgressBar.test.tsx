@@ -35,11 +35,11 @@ describe('LiquidationProgressBar Component', () => {
         const information = screen.getByTestId('information-circle');
         fireEvent.mouseEnter(information);
 
-        expect(
-            screen.getByText(
-                'You are currently at 35% to liquidation. Upon reaching the liquidation threshold (80% LTV), 50% of assets will automatically be liquidated to repay the lender. Liquidation will be subject to 5% liquation fee.'
-            )
-        ).toBeInTheDocument();
+        const informationPopover = screen.getByTestId('information-popover');
+
+        expect(informationPopover).toHaveTextContent(
+            'Liquidation threshold is the limit where your collateral will be eligible for liquidation.You are currently 35% under the liquidation threshold (80% of deposit balance).'
+        );
     });
 
     it('should render correct color and risk status', () => {
