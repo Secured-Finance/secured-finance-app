@@ -25,7 +25,7 @@ describe('CollateralProgressBar Component', () => {
         expect(screen.getByText('Collateral Utilization')).toBeInTheDocument();
         expect(screen.getByText('$37.00')).toBeInTheDocument();
         expect(screen.getByText('of $74.00 available')).toBeInTheDocument();
-        expect(screen.getByText('50%')).toBeInTheDocument();
+        expect(screen.getByText('37%')).toBeInTheDocument();
         expect(screen.queryByText('N/A')).not.toBeInTheDocument();
 
         expect(screen.getByTestId('collateral-progress-bar-tick')).toHaveStyle(
@@ -38,10 +38,10 @@ describe('CollateralProgressBar Component', () => {
         const information = screen.getByTestId('information-circle');
         fireEvent.mouseEnter(information);
 
-        expect(
-            screen.getByText(
-                'You currently have $37.00 available to borrow. Your total borrow limit is at $74.00 which is equivalent to 74% of your collateral deposit ($100.00).'
-            )
-        ).toBeInTheDocument();
+        const informationPopover = screen.getByTestId('information-popover');
+
+        expect(informationPopover).toHaveTextContent(
+            'Your total borrow limit is at $37.00 which is 74% of your $100.00 collateral deposit.Increasing collateral deposit will increase your borrow limit by 74% of its value.'
+        );
     });
 });
