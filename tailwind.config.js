@@ -98,9 +98,9 @@ module.exports = {
             cardBackground: 'rgb(41, 45, 63)',
             panelStroke: 'rgb(45, 64, 100)',
 
-            progressBarStart: 'rgba(48, 224, 161, 1)',
-            progressBarVia: 'rgba(247, 147, 26, 1)',
-            progressBarEnd: 'rgba(250, 34, 86, 1)',
+            progressBarStart: 'rgba(21, 214, 232, 1)',
+            progressBarVia: 'rgba(255, 188, 107, 1)',
+            progressBarEnd: 'rgba(255, 101, 138, 1)',
 
             transparent: 'transparent',
             starBlue: {
