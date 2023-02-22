@@ -5,8 +5,16 @@
 import '@testing-library/jest-dom';
 import 'jest-canvas-mock';
 import failOnConsole from 'jest-fail-on-console';
+import timemachine from 'timemachine';
 
 failOnConsole();
+
+beforeAll(() => {
+    timemachine.reset();
+    timemachine.config({
+        dateString: '2021-12-01T11:00:00.00Z',
+    });
+});
 
 afterAll(() => {
     global.gc && global.gc();

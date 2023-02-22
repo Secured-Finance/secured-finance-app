@@ -1,4 +1,5 @@
 import { fromBytes32 } from '@secured-finance/sf-graph-client';
+import { TradesQuery } from '@secured-finance/sf-graph-client/dist/graphclient';
 import { BigNumber, utils } from 'ethers';
 import BitcoinIcon from 'src/assets/coins/btc.svg';
 import EthIcon from 'src/assets/coins/eth2.svg';
@@ -139,9 +140,10 @@ export const yieldCurveRates = [
     new Rate(47746),
 ];
 
-export const filBytes32 = utils.formatBytes32String('FIL');
+export const filBytes32 = utils.formatBytes32String('FIL'); //0x46494c0000000000000000000000000000000000000000000000000000000000
 export const ethBytes32 = utils.formatBytes32String('ETH');
 export const btcBytes32 = utils.formatBytes32String('BTC');
+export const usdcBytes32 = utils.formatBytes32String('USDC'); // '0x5553444300000000000000000000000000000000000000000000000000000000'
 
 export const orderHistoryList: OrderList = [
     {
@@ -329,3 +331,7 @@ function generateDailyVolumes(days: number) {
 }
 
 export const dailyVolumes: DailyVolumes = generateDailyVolumes(365 * 4);
+
+export const trades: NonNullable<TradesQuery> = {
+    transactions: [],
+};
