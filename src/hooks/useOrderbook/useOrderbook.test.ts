@@ -22,5 +22,11 @@ describe('useOrderbook', () => {
         await waitForNextUpdate();
 
         expect(result.current.borrowOrderbook.length).toBe(5);
+        expect(result.current.borrowOrderbook[0].value.price).toBe(9674);
+        expect(result.current.borrowOrderbook[4].value.price).toBe(9690);
+
+        expect(result.current.lendOrderbook.length).toBe(5);
+        expect(result.current.lendOrderbook[0].value.price).toBe(9690);
+        expect(result.current.lendOrderbook[4].value.price).toBe(9674);
     });
 });
