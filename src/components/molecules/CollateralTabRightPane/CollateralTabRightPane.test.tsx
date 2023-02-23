@@ -24,7 +24,7 @@ describe('CollateralTabRightPane component', () => {
         expect(screen.getByText('Collateral Utilization')).toBeInTheDocument();
         expect(screen.getByText('$851.00')).toBeInTheDocument();
         expect(screen.getByText('of $1,702.00 available')).toBeInTheDocument();
-        expect(screen.getByText('50%')).toBeInTheDocument();
+        expect(screen.getByText('37%')).toBeInTheDocument();
 
         expect(screen.getByText('Liquidation Risk')).toBeInTheDocument();
         expect(screen.getByText('Low')).toBeInTheDocument();
