@@ -19,14 +19,33 @@ export type OrderBookEntry = {
 
 export type OrderBook = Array<OrderBookEntry>;
 
+const sortOrders = (
+    a: OrderBookEntry,
+    b: OrderBookEntry,
+    order: 'asc' | 'desc'
+) => {
+    if (
+        a.value.price === 0 ||
+        b.value.price === 0 ||
+        a.amount.isZero() ||
+        b.amount.isZero()
+    )
+        return 1;
+    return order === 'asc'
+        ? a.value.price - b.value.price
+        : b.value.price - a.value.price;
+};
+
 const transformOrderbook = (
     input: SmartContractOrderbook,
-    maturity: number
+    maturity: number,
+    direction: 'asc' | 'desc'
 ): OrderBook => {
-    return input.unitPrices.map((unitPrice, index) => ({
+    const orderBook = input.unitPrices.map((unitPrice, index) => ({
         amount: input.amounts[index],
         value: LoanValue.fromPrice(unitPrice.toNumber(), maturity),
     }));
+    return orderBook.sort((a, b) => sortOrders(a, b, direction));
 };
 
 const emptyOrderbook = {
@@ -63,7 +82,8 @@ export const useOrderbook = (
                     maturity,
                     limit
                 ),
-                maturity
+                maturity,
+                'asc'
             );
 
             const lendOrderbook = transformOrderbook(
@@ -72,7 +92,8 @@ export const useOrderbook = (
                     maturity,
                     limit
                 ),
-                maturity
+                maturity,
+                'desc'
             );
 
             setOrderbook({

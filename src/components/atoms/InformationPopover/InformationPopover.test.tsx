@@ -16,6 +16,7 @@ describe('InformationPopover Component', () => {
         const information = screen.getByTestId('information-circle');
         fireEvent.mouseEnter(information);
 
+        expect(screen.getByTestId('information-popover')).toBeInTheDocument();
         expect(
             screen.getByText('You are currently at 43% to liquidation.')
         ).toBeInTheDocument();

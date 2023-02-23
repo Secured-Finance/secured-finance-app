@@ -33,16 +33,19 @@ describe('AdvancedLendingOrderCard Component', () => {
     it('should render CollateralManagementConciseTab', () => {
         render(<Default />);
         expect(screen.getByText('Collateral Management')).toBeInTheDocument();
-        expect(screen.getByText('Collateral')).toBeInTheDocument();
-        expect(screen.getByText('Utilization 37%')).toBeInTheDocument();
-        expect(screen.getByText('$851')).toBeInTheDocument();
-
-        expect(screen.getByText('Liquidation Risk')).toBeInTheDocument();
-        expect(screen.getByText('Threshold 43%')).toBeInTheDocument();
-        expect(screen.getByText('Low')).toBeInTheDocument();
-
+        expect(screen.getByText('Collateral Utilization')).toBeInTheDocument();
+        expect(screen.getByText('37%')).toBeInTheDocument();
         expect(screen.getByTestId('collateral-progress-bar-track')).toHaveStyle(
             'width: calc(100% * 0.37)'
+        );
+        expect(screen.getByText('Available: $851.00')).toBeInTheDocument();
+
+        expect(screen.getByText('Liquidation Risk')).toBeInTheDocument();
+        expect(screen.getByText('Low')).toBeInTheDocument();
+        expect(screen.getByText('Low')).toHaveClass('text-progressBarStart');
+        expect(screen.getByText('Threshold: 43%')).toBeInTheDocument();
+        expect(screen.getByTestId('liquidation-progress-bar-tick')).toHaveStyle(
+            'width: calc(100% * 0.37 + 4px )'
         );
     });
 

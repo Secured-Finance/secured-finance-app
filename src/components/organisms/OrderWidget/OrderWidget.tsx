@@ -72,7 +72,7 @@ const PriceCell = ({
     position: 'borrow' | 'lend';
 }) => {
     const color = position === 'borrow' ? 'negative' : 'positive';
-    const align = position === 'borrow' ? 'right' : 'left';
+    const align = position === 'borrow' ? 'left' : 'right';
     if (amount.eq(0)) return <OrderBookCell />;
     return (
         <div
@@ -151,24 +151,6 @@ export const OrderWidget = ({
     const buyColumns = useMemo(
         () => [
             columnHelper.accessor('value', {
-                id: 'apy',
-                cell: info => (
-                    <ApyCell
-                        value={info.getValue()}
-                        display={!info.row.original.amount.eq(0)}
-                    />
-                ),
-                header: () => <TableHeader title='% APY' align='right' />,
-            }),
-            columnHelper.accessor('amount', {
-                cell: info => (
-                    <AmountCell value={info.getValue()} currency={currency} />
-                ),
-                header: () => (
-                    <TableHeader title={`Amount (${currency})`} align='right' />
-                ),
-            }),
-            columnHelper.accessor('value', {
                 id: 'price',
                 cell: info => (
                     <PriceCell
@@ -176,24 +158,6 @@ export const OrderWidget = ({
                         amount={info.row.original.amount}
                         totalAmount={totalBuyAmount}
                         position='borrow'
-                    />
-                ),
-                header: () => <TableHeader title='Price' align='right' />,
-            }),
-        ],
-        [currency, totalBuyAmount]
-    );
-
-    const sellColumns = useMemo(
-        () => [
-            columnHelper.accessor('value', {
-                id: 'price',
-                cell: info => (
-                    <PriceCell
-                        value={info.getValue()}
-                        amount={info.row.original.amount}
-                        totalAmount={totalSellAmount}
-                        position='lend'
                     />
                 ),
                 header: () => <TableHeader title='Price' align='left' />,
@@ -215,6 +179,42 @@ export const OrderWidget = ({
                     />
                 ),
                 header: () => <TableHeader title='% APY' align='right' />,
+            }),
+        ],
+        [currency, totalBuyAmount]
+    );
+
+    const sellColumns = useMemo(
+        () => [
+            columnHelper.accessor('value', {
+                id: 'apy',
+                cell: info => (
+                    <ApyCell
+                        value={info.getValue()}
+                        display={!info.row.original.amount.eq(0)}
+                    />
+                ),
+                header: () => <TableHeader title='% APY' align='right' />,
+            }),
+            columnHelper.accessor('amount', {
+                cell: info => (
+                    <AmountCell value={info.getValue()} currency={currency} />
+                ),
+                header: () => (
+                    <TableHeader title={`Amount (${currency})`} align='right' />
+                ),
+            }),
+            columnHelper.accessor('value', {
+                id: 'price',
+                cell: info => (
+                    <PriceCell
+                        value={info.getValue()}
+                        amount={info.row.original.amount}
+                        totalAmount={totalSellAmount}
+                        position='lend'
+                    />
+                ),
+                header: () => <TableHeader title='Price' align='right' />,
             }),
         ],
         [currency, totalSellAmount]
@@ -240,15 +240,15 @@ export const OrderWidget = ({
             </div>
             <div className='flex flex-row gap-6'>
                 <CoreTable
-                    data={buyOrders}
-                    columns={buyColumns}
-                    name='buyOrders'
-                    border={false}
-                />
-                <CoreTable
                     data={sellOrders}
                     columns={sellColumns}
                     name='sellOrders'
+                    border={false}
+                />
+                <CoreTable
+                    data={buyOrders}
+                    columns={buyColumns}
+                    name='buyOrders'
                     border={false}
                 />
             </div>
