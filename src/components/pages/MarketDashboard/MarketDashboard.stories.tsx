@@ -7,6 +7,7 @@ import {
     withWalletBalances,
     withWalletProvider,
 } from 'src/../.storybook/decorators';
+import { mockDailyVolumes } from 'src/stories/mocks/queries';
 import { MarketDashboard } from './MarketDashboard';
 
 const totalUser = [
@@ -43,7 +44,7 @@ export default {
     args: {},
     parameters: {
         apolloClient: {
-            mocks: totalUser,
+            mocks: [...totalUser, ...mockDailyVolumes],
         },
     },
     decorators: [

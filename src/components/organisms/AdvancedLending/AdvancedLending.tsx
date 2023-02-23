@@ -1,5 +1,10 @@
 import { formatDate } from '@secured-finance/sf-core';
-import { UserHistoryDocument } from '@secured-finance/sf-graph-client/dist/graphclient/.graphclient';
+import { toBytes32 } from '@secured-finance/sf-graph-client';
+import {
+    TradesDocument,
+    TradesQuery,
+    UserHistoryDocument,
+} from '@secured-finance/sf-graph-client/dist/graphclient/.graphclient';
 import { BigNumber } from 'ethers';
 import { useCallback, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -27,13 +32,43 @@ import {
 import { RootState } from 'src/store/types';
 import { MaturityOptionList } from 'src/types';
 import {
+    currencyMap,
     CurrencySymbol,
+    formatLoanValue,
     getCurrencyMapAsOptions,
+    ordinaryFormat,
     Rate,
     usdFormat,
 } from 'src/utils';
 import { LoanValue, Maturity } from 'src/utils/entities';
 import { useWallet } from 'use-wallet';
+
+const useTradeHistoryDetails = (
+    transactions: NonNullable<TradesQuery>['transactions'],
+    currency: CurrencySymbol,
+    maturity: Maturity
+) => {
+    return useMemo(() => {
+        let min = 10000;
+        let max = 0;
+        let sum = BigNumber.from(0);
+        let count = 0;
+        for (const t of transactions) {
+            const price = t.averagePrice * 10000;
+            if (price < min) min = price;
+            if (price > max) max = price;
+            sum = sum.add(BigNumber.from(t.amount));
+            count++;
+        }
+
+        return {
+            min: LoanValue.fromPrice(min, maturity.toNumber()),
+            max: LoanValue.fromPrice(max, maturity.toNumber()),
+            sum: currencyMap[currency].fromBaseUnit(sum),
+            count,
+        };
+    }, [currency, maturity, transactions]);
+};
 
 export const AdvancedLending = ({
     collateralBook,
@@ -72,6 +107,28 @@ export const AdvancedLending = ({
         { address: account?.toLowerCase() ?? '' },
         UserHistoryDocument,
         'user'
+    );
+
+    const ts = Math.round(new Date().getTime() / 1000);
+    const tsYesterday = ts - 24 * 3600;
+
+    const last24hoursTrades =
+        useGraphClientHook(
+            {
+                currency: toBytes32(currency),
+                maturity: maturity.toNumber(),
+                from: tsYesterday,
+                to: ts,
+            },
+            TradesDocument,
+            'transactions',
+            false
+        ).data ?? [];
+
+    const tradeHistoryDetails = useTradeHistoryDetails(
+        last24hoursTrades,
+        currency,
+        selectedTerm.value
     );
 
     const selectedAsset = useMemo(() => {
@@ -115,7 +172,13 @@ export const AdvancedLending = ({
                     )?.value;
                     return ts ? formatDate(ts.toNumber()) : v;
                 }}
-                values={[0, 0, 0, 0, usdFormat(currencyPrice, 2)]}
+                values={[
+                    formatLoanValue(tradeHistoryDetails.max, 'price'),
+                    formatLoanValue(tradeHistoryDetails.min, 'price'),
+                    tradeHistoryDetails.count,
+                    ordinaryFormat(tradeHistoryDetails.sum),
+                    usdFormat(currencyPrice, 2),
+                ]}
             />
             <div className='flex flex-row gap-6'>
                 <AdvancedLendingOrderCard collateralBook={collateralBook} />

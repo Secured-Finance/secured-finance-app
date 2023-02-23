@@ -1,4 +1,7 @@
-import { UserCountDocument } from '@secured-finance/sf-graph-client/dist/graphclient';
+import {
+    DailyVolumesDocument,
+    UserCountDocument,
+} from '@secured-finance/sf-graph-client/dist/graphclient';
 import { BigNumber } from 'ethers';
 import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
@@ -13,6 +16,7 @@ import { useGraphClientHook, useProtocolInformation } from 'src/hooks';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { RootState } from 'src/store/types';
 import {
+    computeTotalDailyVolumeInUSD,
     currencyMap,
     CurrencySymbol,
     ordinaryFormat,
@@ -28,9 +32,26 @@ export const MarketDashboard = () => {
     const totalUser = useGraphClientHook(
         {}, // no variables
         UserCountDocument,
-        'protocol'
+        'protocol',
+        false
     );
+    const dailyVolumes = useGraphClientHook(
+        {}, // no variables
+        DailyVolumesDocument,
+        'dailyVolumes',
+        false
+    );
+
     const priceList = useSelector((state: RootState) => getPriceMap(state));
+
+    const totalVolume = useMemo(() => {
+        return ordinaryFormat(
+            computeTotalDailyVolumeInUSD(dailyVolumes.data ?? [], priceList),
+            0,
+            'compact'
+        );
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [JSON.stringify(priceList), dailyVolumes.data]);
 
     const totalValueLockedInUSD = useMemo(() => {
         let val = BigNumber.from(0);
@@ -73,11 +94,7 @@ export const MarketDashboard = () => {
                         },
                         {
                             name: 'Total Volume',
-                            value: ordinaryFormat(
-                                BigNumber.from(100000),
-                                0,
-                                'compact'
-                            ),
+                            value: totalVolume,
                             orientation: 'center',
                         },
                         {
