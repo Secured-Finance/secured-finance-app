@@ -134,6 +134,21 @@ export const toCurrency = (ccy: CurrencySymbol) => {
     return currencyMap[ccy].toCurrency();
 };
 
+export function toCurrencySymbol(ccy: string) {
+    switch (ccy) {
+        case CurrencySymbol.ETH:
+            return CurrencySymbol.ETH;
+        case CurrencySymbol.FIL:
+            return CurrencySymbol.FIL;
+        case CurrencySymbol.USDC:
+            return CurrencySymbol.USDC;
+        case CurrencySymbol.BTC:
+            return CurrencySymbol.BTC;
+        default:
+            return undefined;
+    }
+}
+
 const convertToBlockchainUnit = (amount: number, ccy: Currency) => {
     const value = new BigNumberJS(amount).multipliedBy(10 ** ccy.decimals);
     if (value.isLessThan(new BigNumberJS(1))) {

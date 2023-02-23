@@ -1,3 +1,5 @@
+import { fromBytes32 } from '@secured-finance/sf-graph-client';
+import { TradesQuery } from '@secured-finance/sf-graph-client/dist/graphclient';
 import { BigNumber, utils } from 'ethers';
 import BitcoinIcon from 'src/assets/coins/btc.svg';
 import EthIcon from 'src/assets/coins/eth2.svg';
@@ -7,7 +9,12 @@ import UsdtIcon from 'src/assets/coins/usdt.svg';
 import { Option } from 'src/components/atoms';
 import { CollateralBook } from 'src/hooks';
 import { AssetPrices } from 'src/store/assetPrices';
-import { MaturityOptionList, OrderList, TradeHistory } from 'src/types';
+import {
+    DailyVolumes,
+    MaturityOptionList,
+    OrderList,
+    TradeHistory,
+} from 'src/types';
 import { CurrencySymbol, Rate, TradeSummary } from 'src/utils';
 import { Maturity } from 'src/utils/entities';
 
@@ -31,6 +38,13 @@ export const preloadedAssetPrices: { assetPrices: AssetPrices } = {
         },
         isLoading: false,
     },
+};
+
+export const assetPriceMap = {
+    FIL: 6.0,
+    ETH: 2000.34,
+    USDC: 1.0,
+    BTC: 50000.0,
 };
 
 export const preloadedBalances = {
@@ -126,9 +140,10 @@ export const yieldCurveRates = [
     new Rate(47746),
 ];
 
-export const filBytes32 = utils.formatBytes32String('FIL');
+export const filBytes32 = utils.formatBytes32String('FIL'); //0x46494c0000000000000000000000000000000000000000000000000000000000
 export const ethBytes32 = utils.formatBytes32String('ETH');
 export const btcBytes32 = utils.formatBytes32String('BTC');
+export const usdcBytes32 = utils.formatBytes32String('USDC'); // '0x5553444300000000000000000000000000000000000000000000000000000000'
 
 export const orderHistoryList: OrderList = [
     {
@@ -289,4 +304,34 @@ export const emptyCollateralBook: CollateralBook = {
     },
     usdCollateral: 0,
     coverage: BigNumber.from('0'), // 0%
+};
+
+function generateDailyVolumes(days: number) {
+    const volumes: DailyVolumes = [];
+    for (let i = 0; i < days; i++) {
+        for (const currency of [filBytes32, btcBytes32, ethBytes32]) {
+            for (const maturity of [
+                dec22Fixture,
+                mar23Fixture,
+                jun23Fixture,
+                sep23Fixture,
+                dec23Fixture,
+            ])
+                volumes.push({
+                    id: `${fromBytes32(currency)}-1677628800-2023-02-${i}`,
+                    currency: filBytes32,
+                    maturity: dec22Fixture,
+                    day: `2023-02-${i}`,
+                    timestamp: maturity.toString(),
+                    volume: '30000000000000000000',
+                });
+        }
+    }
+    return volumes;
+}
+
+export const dailyVolumes: DailyVolumes = generateDailyVolumes(365 * 4);
+
+export const trades: NonNullable<TradesQuery> = {
+    transactions: [],
 };
