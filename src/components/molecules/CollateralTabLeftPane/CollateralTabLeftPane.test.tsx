@@ -1,4 +1,5 @@
 import { composeStories } from '@storybook/testing-react';
+import { emptyCollateralBook } from 'src/stories/mocks/fixtures';
 import { fireEvent, render, screen } from 'src/test-utils.js';
 import * as stories from './CollateralTabLeftPane.stories';
 
@@ -25,6 +26,18 @@ describe('CollateralTabLeftPane component', () => {
     it('should render balance when wallet is connected and collateral is deposited', () => {
         render(<Default />);
         expect(screen.getByText('$2,100.34')).toBeInTheDocument();
+        expect(screen.getByText('Collateral Assets')).toBeInTheDocument();
+        expect(screen.getByText('Non-collateral Assets')).toBeInTheDocument();
+    });
+
+    it('should prompt user to deposit collateral when wallet is connected', () => {
+        render(<Default collateralBook={emptyCollateralBook} />);
+        expect(screen.getByText('$0.00')).toBeInTheDocument();
+        expect(
+            screen.getByText(
+                'Deposit collateral from your connected wallet to enable lending service on Secured Finance.'
+            )
+        ).toBeInTheDocument();
     });
 
     it('should render enabled buttons when wallet is connected', () => {

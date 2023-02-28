@@ -25,13 +25,15 @@ export const AssetInformation = ({
     return (
         collateralBook && (
             <div className='flex h-fit w-full flex-col gap-2'>
-                <div className='flex h-7 flex-row items-center gap-2 border-b border-white-10'>
+                <div className='flex h-7 flex-row gap-2 border-b border-white-10'>
                     <div className='typography-caption-2 leading-4 text-white-50'>
                         {header}
                     </div>
-                    <InformationPopover>
-                        <div>{informationText}</div>
-                    </InformationPopover>
+                    <div className='mt-[2px]'>
+                        <InformationPopover>
+                            <div>{informationText}</div>
+                        </InformationPopover>
+                    </div>
                 </div>
                 {collateralBook &&
                     (

@@ -99,22 +99,22 @@ const formatCollateral = (
     let usdNonCollateral = 0;
     Object.keys(collateral).forEach((ccy: string) => {
         const currency = ccy as CurrencySymbol;
+        const amount = collateral[ccy];
+        const usdValue =
+            amountFormatterFromBase[currency](amount) * priceList[currency];
+
         if (currencyMap[currency].isCollateral) {
             collateralBook = {
                 ...collateralBook,
-                [currency]: collateral[ccy] ?? BigNumber.from(0),
+                [currency]: amount,
             };
-            usdCollateral +=
-                amountFormatterFromBase[currency](collateral[currency]) *
-                priceList[currency];
+            usdCollateral += usdValue;
         } else {
             nonCollateralBook = {
                 ...nonCollateralBook,
-                [currency]: collateral[ccy] ?? BigNumber.from(0),
+                [currency]: amount,
             };
-            usdNonCollateral +=
-                amountFormatterFromBase[currency](collateral[currency]) *
-                priceList[currency];
+            usdNonCollateral += usdValue;
         }
     });
 
