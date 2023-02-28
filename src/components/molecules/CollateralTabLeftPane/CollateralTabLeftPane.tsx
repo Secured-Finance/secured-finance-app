@@ -17,8 +17,8 @@ export const CollateralTabLeftPane = ({
     const nonCollateralBalance = account ? collateralBook.usdNonCollateral : 0;
 
     return (
-        <div className='flex flex-col justify-end border-r border-white-10'>
-            <div className='h-full w-64 border-b border-white-10'>
+        <div className='flex w-64 flex-col border-r border-white-10'>
+            <div className='h-full border-b border-white-10'>
                 <div className='m-6 flex flex-col gap-1'>
                     <span className='typography-body-2 h-6 w-fit text-slateGray'>
                         Collateral Balance
@@ -28,12 +28,12 @@ export const CollateralTabLeftPane = ({
                     </span>
                 </div>
                 {!account ? (
-                    <div className='typography-caption ml-5 mt-8 w-40 text-grayScale'>
+                    <div className='typography-caption ml-5 w-40 pt-2 text-grayScale'>
                         Connect your wallet to see your deposited collateral
                         balance.
                     </div>
                 ) : collateralBalance > 0 ? (
-                    <div className='mx-5 mt-6 flex flex-col gap-6'>
+                    <div className='mx-5 my-6 flex flex-col gap-6'>
                         <AssetInformation
                             header='Collateral Assets'
                             informationText='Only USDC and ETH are eligible as collateral.'
@@ -48,7 +48,7 @@ export const CollateralTabLeftPane = ({
                         )}
                     </div>
                 ) : (
-                    <div className='typography-caption ml-5 mt-8 w-40 text-grayScale'>
+                    <div className='typography-caption ml-5 w-40 text-grayScale'>
                         Deposit collateral from your connected wallet to enable
                         lending service on Secured Finance.
                     </div>
