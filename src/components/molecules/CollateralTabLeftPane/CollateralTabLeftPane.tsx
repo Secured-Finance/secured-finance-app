@@ -13,53 +13,64 @@ export const CollateralTabLeftPane = ({
     onClick,
     collateralBook,
 }: CollateralTabLeftPaneProps) => {
-    const balance = account ? collateralBook.usdCollateral : 0;
+    const collateralBalance = account ? collateralBook.usdCollateral : 0;
+    const nonCollateralBalance = account ? collateralBook.usdNonCollateral : 0;
 
     return (
-        <div className='flex h-full flex-row'>
-            <div className='flex flex-col border-r border-white-10'>
-                <div className='h-80 w-64 border-b border-white-10'>
-                    <div className='m-6 flex flex-col gap-1'>
-                        <span className='typography-body-2 h-6 w-fit text-slateGray'>
-                            Collateral Balance
-                        </span>
-                        <span className='typography-big-body-bold w-fit text-white'>
-                            {usdFormat(balance, 2)}
-                        </span>
+        <div className='flex flex-col justify-end border-r border-white-10'>
+            <div className='h-full w-64 border-b border-white-10'>
+                <div className='m-6 flex flex-col gap-1'>
+                    <span className='typography-body-2 h-6 w-fit text-slateGray'>
+                        Collateral Balance
+                    </span>
+                    <span className='typography-big-body-bold w-fit text-white'>
+                        {usdFormat(collateralBalance, 2)}
+                    </span>
+                </div>
+                {!account ? (
+                    <div className='typography-caption ml-5 mt-8 w-40 text-grayScale'>
+                        Connect your wallet to see your deposited collateral
+                        balance.
                     </div>
-                    {!account && (
-                        <div className='typography-caption ml-5 mt-8 w-40 text-grayScale'>
-                            Connect your wallet to see your deposited collateral
-                            balance.
-                        </div>
-                    )}
-                    {balance > 0 && (
-                        <div className='mx-5 mt-6'>
+                ) : collateralBalance > 0 ? (
+                    <div className='mx-5 mt-6 flex flex-col gap-6'>
+                        <AssetInformation
+                            header='Collateral Assets'
+                            informationText='Only USDC and ETH are eligible as collateral.'
+                            collateralBook={collateralBook.collateral}
+                        ></AssetInformation>
+                        {nonCollateralBalance > 0 && (
                             <AssetInformation
-                                header='Collateral Assets'
-                                collateralBook={collateralBook.collateral}
+                                header='Non-collateral Assets'
+                                informationText='Not eligible as collateral'
+                                collateralBook={collateralBook.nonCollateral}
                             ></AssetInformation>
-                        </div>
-                    )}
-                </div>
-                <div className='flex h-full flex-1 flex-row items-center justify-center gap-4'>
-                    <Button
-                        size='sm'
-                        onClick={() => onClick('deposit')}
-                        disabled={!account}
-                        data-testid='deposit-collateral'
-                    >
-                        Deposit
-                    </Button>
-                    <Button
-                        size='sm'
-                        disabled={!account || balance <= 0}
-                        onClick={() => onClick('withdraw')}
-                        data-testid='withdraw-collateral'
-                    >
-                        Withdraw
-                    </Button>
-                </div>
+                        )}
+                    </div>
+                ) : (
+                    <div className='typography-caption ml-5 mt-8 w-40 text-grayScale'>
+                        Deposit collateral from your connected wallet to enable
+                        lending service on Secured Finance.
+                    </div>
+                )}
+            </div>
+            <div className='flex h-24 flex-row items-center justify-center gap-4'>
+                <Button
+                    size='sm'
+                    onClick={() => onClick('deposit')}
+                    disabled={!account}
+                    data-testid='deposit-collateral'
+                >
+                    Deposit
+                </Button>
+                <Button
+                    size='sm'
+                    disabled={!account || collateralBalance <= 0}
+                    onClick={() => onClick('withdraw')}
+                    data-testid='withdraw-collateral'
+                >
+                    Withdraw
+                </Button>
             </div>
         </div>
     );

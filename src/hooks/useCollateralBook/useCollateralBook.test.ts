@@ -14,6 +14,8 @@ jest.mock('src/hooks/useSecuredFinance', () => () => mock);
 describe('useCollateralBook hook', () => {
     const ETH_PRICE = 2000.34;
     const USDC_PRICE = 1;
+    const BTC_PRICE = 50000.0;
+    const FIL_PRICE = 6.0;
     const preloadedState = {
         ...preloadedAssetPrices,
     };
@@ -30,6 +32,10 @@ describe('useCollateralBook hook', () => {
             BigNumber.from('1000000000000000000')
         );
         expect(colBook.collateral.USDC).toEqual(BigNumber.from('100000000'));
+        expect(colBook.nonCollateral.BTC).toEqual(BigNumber.from('20000000'));
+        expect(colBook.nonCollateral.FIL).toEqual(
+            BigNumber.from('100000000000000000000')
+        );
         expect(colBook.coverage.toString()).toEqual('8000');
     });
 
@@ -57,6 +63,27 @@ describe('useCollateralBook hook', () => {
                     colBook.collateral.USDC ?? BigNumber.from(0)
                 ) *
                     USDC_PRICE
+        );
+    });
+
+    it('should compute the non collaterals in USD', async () => {
+        const { result, waitForNextUpdate } = renderHook(
+            () => useCollateralBook('0x0'),
+            { preloadedState }
+        );
+        await act(async () => {
+            await waitForNextUpdate();
+        });
+        const colBook = result.current as CollateralBook;
+        expect(colBook.usdNonCollateral).toEqual(
+            amountFormatterFromBase[CurrencySymbol.BTC](
+                colBook.nonCollateral.BTC ?? BigNumber.from(0)
+            ) *
+                BTC_PRICE +
+                amountFormatterFromBase[CurrencySymbol.FIL](
+                    colBook.nonCollateral.FIL ?? BigNumber.from(0)
+                ) *
+                    FIL_PRICE
         );
     });
 });
