@@ -1,6 +1,6 @@
 import { composeStories } from '@storybook/testing-react';
 import { preloadedAssetPrices } from 'src/stories/mocks/fixtures';
-import { render, screen } from 'src/test-utils.js';
+import { fireEvent, render, screen } from 'src/test-utils.js';
 import * as stories from './AssetInformation.stories';
 
 const { Default, ZeroUsdcCollateral } = composeStories(stories);
@@ -19,6 +19,13 @@ describe('test AssetInformation component', () => {
         expect(screen.getByText('$1.00 USD')).toBeInTheDocument();
         expect(screen.getByText('10 USDC')).toBeInTheDocument();
         expect(screen.getByText('$10.00 USD')).toBeInTheDocument();
+
+        const information = screen.getByTestId('information-circle');
+        fireEvent.mouseEnter(information);
+        const informationPopover = screen.getByTestId('information-popover');
+        expect(informationPopover).toHaveTextContent(
+            'Only USDC and ETH are eligible as collateral.'
+        );
     });
 
     it('should not render currencies with zero collateral', () => {

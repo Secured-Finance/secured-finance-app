@@ -3,10 +3,7 @@ import { useCollateralBook } from 'src/hooks';
 import { useWallet } from 'use-wallet';
 import { CollateralTab } from '../CollateralTab';
 
-const tabDataArray = [
-    { text: 'Collateral Management' },
-    { text: 'Scenario Analysis', disabled: true },
-];
+const tabDataArray = [{ text: 'Asset Management' }];
 
 export const CollateralOrganism = () => {
     const { account } = useWallet();
@@ -16,7 +13,6 @@ export const CollateralOrganism = () => {
         <div className='h-fit w-full'>
             <Tab tabDataArray={tabDataArray}>
                 <CollateralTab collateralBook={collateralBook} />
-                <div />
             </Tab>
         </div>
     );

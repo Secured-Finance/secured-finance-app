@@ -44,7 +44,10 @@ export const mockUseSF = () => {
         ),
         getCollateralBook: jest.fn(() =>
             Promise.resolve({
-                collateral: collateralBook80.collateral,
+                collateral: {
+                    ...collateralBook80.collateral,
+                    ...collateralBook80.nonCollateral,
+                },
                 collateralCoverage: collateralBook80.coverage,
             })
         ),

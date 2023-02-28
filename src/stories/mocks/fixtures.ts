@@ -284,7 +284,12 @@ export const collateralBook80: CollateralBook = {
         ETH: BigNumber.from('1000000000000000000'),
         USDC: BigNumber.from('100000000'),
     },
+    nonCollateral: {
+        FIL: BigNumber.from('100000000000000000000'),
+        BTC: BigNumber.from('20000000'),
+    },
     usdCollateral: 2100.34,
+    usdNonCollateral: 10600,
     coverage: BigNumber.from('8000'), // 80%,
 };
 
@@ -293,7 +298,12 @@ export const collateralBook37: CollateralBook = {
         ETH: BigNumber.from('1000000000000000000'),
         USDC: BigNumber.from('10000000'),
     },
+    nonCollateral: {
+        FIL: BigNumber.from('100000000000000000000'),
+        BTC: BigNumber.from('20000000'),
+    },
     usdCollateral: 2300,
+    usdNonCollateral: 10600,
     coverage: BigNumber.from('3700'),
 };
 
@@ -302,7 +312,12 @@ export const emptyCollateralBook: CollateralBook = {
         ETH: BigNumber.from('0'),
         USDC: BigNumber.from('0'),
     },
+    nonCollateral: {
+        FIL: BigNumber.from('0'),
+        BTC: BigNumber.from('0'),
+    },
     usdCollateral: 0,
+    usdNonCollateral: 0,
     coverage: BigNumber.from('0'), // 0%
 };
 
