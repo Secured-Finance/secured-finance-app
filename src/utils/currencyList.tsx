@@ -149,7 +149,7 @@ export function toCurrencySymbol(ccy: string) {
     }
 }
 
-const convertToBlockchainUnit = (amount: number, ccy: Currency) => {
+const convertToBlockchainUnit = (amount: number | string, ccy: Currency) => {
     const value = new BigNumberJS(amount).multipliedBy(10 ** ccy.decimals);
     if (value.isLessThan(new BigNumberJS(1))) {
         return BigNumber.from(0);

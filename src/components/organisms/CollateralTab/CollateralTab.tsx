@@ -19,12 +19,13 @@ import { DepositCollateral } from '../DepositCollateral';
 import { WithdrawCollateral } from '../WithdrawCollateral';
 
 const generateCollateralList = (
-    balance: Partial<Record<CurrencySymbol, number | BigNumber>>
+    balance: Partial<Record<CurrencySymbol, number | BigNumber>>,
+    useAllCurrencies: boolean
 ): Record<CurrencySymbol, CollateralInfo> => {
     let collateralRecords: Record<string, CollateralInfo> = {};
 
     getCurrencyMapAsList()
-        .filter(ccy => ccy.isCollateral)
+        .filter(ccy => ccy.isCollateral || useAllCurrencies)
         .forEach(currencyInfo => {
             const ccy = currencyInfo.symbol;
             const collateralInfo = {
@@ -59,17 +60,24 @@ export const CollateralTab = ({
     );
 
     const depositCollateralList = useMemo(
-        () => generateCollateralList(balances),
+        () => generateCollateralList(balances, false),
         [balances]
     );
 
     const withdrawCollateralList = useMemo(
-        () => generateCollateralList(collateralBook.collateral),
-        [collateralBook.collateral]
+        () =>
+            generateCollateralList(
+                {
+                    ...collateralBook.collateral,
+                    ...collateralBook.nonCollateral,
+                },
+                true
+            ),
+        [collateralBook.collateral, collateralBook.nonCollateral]
     );
 
     return (
-        <div className='flex h-[410px] w-full flex-row'>
+        <div className='flex h-fit min-h-[400px] w-full flex-row'>
             <CollateralTabLeftPane
                 onClick={step => setOpenModal(step)}
                 account={account}

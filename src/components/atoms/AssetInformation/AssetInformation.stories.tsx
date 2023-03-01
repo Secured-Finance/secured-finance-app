@@ -12,6 +12,7 @@ export default {
             ETH: BigNumber.from('1200000000000000000'),
             USDC: BigNumber.from('10000000'),
         },
+        informationText: 'Only USDC and ETH are eligible as collateral.',
     },
     decorators: [withAssetPrice],
 } as ComponentMeta<typeof AssetInformation>;

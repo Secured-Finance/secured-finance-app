@@ -4,14 +4,20 @@ import { useSelector } from 'react-redux';
 import useSF from 'src/hooks/useSecuredFinance';
 import { AssetPriceMap, getPriceMap } from 'src/store/assetPrices/selectors';
 import { selectAllBalances } from 'src/store/wallet';
-import { amountFormatterFromBase, CurrencySymbol } from 'src/utils';
+import {
+    amountFormatterFromBase,
+    currencyMap,
+    CurrencySymbol,
+} from 'src/utils';
 import { RootState } from '../../store/types';
 
 const ZERO_BN = BigNumber.from('0');
 
 export interface CollateralBook {
     collateral: Partial<Record<CurrencySymbol, BigNumber>>;
+    nonCollateral: Partial<Record<CurrencySymbol, BigNumber>>;
     usdCollateral: number;
+    usdNonCollateral: number;
     coverage: BigNumber;
 }
 
@@ -20,7 +26,12 @@ const emptyBook: CollateralBook = {
         [CurrencySymbol.ETH]: ZERO_BN,
         [CurrencySymbol.USDC]: ZERO_BN,
     },
+    nonCollateral: {
+        [CurrencySymbol.FIL]: ZERO_BN,
+        [CurrencySymbol.BTC]: ZERO_BN,
+    },
     usdCollateral: 0,
+    usdNonCollateral: 0,
     coverage: ZERO_BN,
 };
 
@@ -42,14 +53,18 @@ export const useCollateralBook = (account: string | null) => {
         const { collateral, collateralCoverage } =
             await securedFinance.getCollateralBook(account);
 
-        const { collateralBook, usdCollateral } = formatCollateral(
-            collateral,
-            priceList
-        );
+        const {
+            collateralBook,
+            nonCollateralBook,
+            usdCollateral,
+            usdNonCollateral,
+        } = formatCollateral(collateral, priceList);
 
         setCollateralBook({
             collateral: collateralBook,
+            nonCollateral: nonCollateralBook,
             usdCollateral: usdCollateral,
+            usdNonCollateral: usdNonCollateral,
             coverage: collateralCoverage,
             // 0% collateral not used
             // 100% collateral used BigNumber(10000)
@@ -79,20 +94,34 @@ const formatCollateral = (
     priceList: AssetPriceMap
 ) => {
     let collateralBook: CollateralBook['collateral'] = {};
+    let nonCollateralBook: CollateralBook['nonCollateral'] = {};
     let usdCollateral = 0;
+    let usdNonCollateral = 0;
     Object.keys(collateral).forEach((ccy: string) => {
         const currency = ccy as CurrencySymbol;
-        collateralBook = {
-            ...collateralBook,
-            [currency]: collateral[ccy] ?? BigNumber.from(0),
-        };
-        usdCollateral +=
-            amountFormatterFromBase[currency](collateral[currency]) *
-            priceList[currency];
+        const amount = collateral[ccy];
+        const usdValue =
+            amountFormatterFromBase[currency](amount) * priceList[currency];
+
+        if (currencyMap[currency].isCollateral) {
+            collateralBook = {
+                ...collateralBook,
+                [currency]: amount,
+            };
+            usdCollateral += usdValue;
+        } else {
+            nonCollateralBook = {
+                ...nonCollateralBook,
+                [currency]: amount,
+            };
+            usdNonCollateral += usdValue;
+        }
     });
 
     return {
         collateralBook,
+        nonCollateralBook,
         usdCollateral,
+        usdNonCollateral,
     };
 };

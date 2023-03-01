@@ -18,11 +18,7 @@ export default {
 } as ComponentMeta<typeof CollateralTabLeftPane>;
 
 const Template: ComponentStory<typeof CollateralTabLeftPane> = args => {
-    return (
-        <div className='h-[412px]'>
-            <CollateralTabLeftPane {...args} />
-        </div>
-    );
+    return <CollateralTabLeftPane {...args} />;
 };
 
 export const Default = Template.bind({});
