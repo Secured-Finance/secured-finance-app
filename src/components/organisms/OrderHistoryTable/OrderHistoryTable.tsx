@@ -6,7 +6,7 @@ import { useCancelOrder } from 'src/hooks';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { RootState } from 'src/store/types';
 import { OrderList } from 'src/types';
-import { CurrencySymbol, toCurrencySymbol } from 'src/utils';
+import { hexToCurrencySymbol } from 'src/utils';
 import { Maturity } from 'src/utils/entities';
 import {
     amountColumnDefinition,
@@ -15,7 +15,6 @@ import {
     priceYieldColumnDefinition,
     tableHeaderDefinition,
 } from 'src/utils/tableDefinitions';
-import { hexToString } from 'web3-utils';
 
 export type Order = OrderList[0];
 
@@ -49,6 +48,9 @@ export const OrderHistoryTable = ({ data }: { data: OrderList }) => {
             columnHelper.display({
                 id: 'actions',
                 cell: info => {
+                    const ccy = hexToCurrencySymbol(info.row.original.currency);
+                    const orderId = Number(info.row.original.id);
+                    const maturity = new Maturity(info.row.original.maturity);
                     return (
                         <div className='flex justify-center'>
                             <TableActionMenu
@@ -60,19 +62,15 @@ export const OrderHistoryTable = ({ data }: { data: OrderList }) => {
                                     },
                                     {
                                         text: 'Cancel Order',
-                                        onClick: () =>
-                                            handleCancelOrder(
-                                                Number(info.row.original.id),
-                                                toCurrencySymbol(
-                                                    hexToString(
-                                                        info.row.original
-                                                            .currency
-                                                    )
-                                                ) ?? CurrencySymbol.FIL,
-                                                new Maturity(
-                                                    info.row.original.maturity
-                                                )
-                                            ),
+                                        onClick: () => {
+                                            if (ccy) {
+                                                handleCancelOrder(
+                                                    orderId,
+                                                    ccy,
+                                                    maturity
+                                                );
+                                            }
+                                        },
                                     },
                                 ]}
                             />
