@@ -2,7 +2,7 @@ import { composeStories } from '@storybook/testing-react';
 import { fireEvent, render, screen } from 'src/test-utils.js';
 import * as stories from './OrderInputBox.stories';
 
-const { Default, Amount, Total } = composeStories(stories);
+const { Default, Amount, Total, WithInformationText } = composeStories(stories);
 
 describe('OrderInputBox component', () => {
     it('should render OrderInputBox', () => {
@@ -44,5 +44,34 @@ describe('OrderInputBox component', () => {
         expect(
             screen.getByRole('textbox', { name: 'great name' })
         ).toBeInTheDocument();
+    });
+
+    it('should display hint when mouse enter on information circle', () => {
+        render(<WithInformationText />);
+        const information = screen.getByTestId('information-circle');
+        fireEvent.mouseEnter(information);
+        expect(screen.getByTestId('information-popover')).toHaveTextContent(
+            'Input value from 0 to 100'
+        );
+    });
+
+    it('should restrict decimal places', () => {
+        render(<Amount decimalPlacesAllowed={2} />);
+        expect(screen.getByText('Amount')).toBeInTheDocument();
+        const input = screen.getByRole('textbox');
+
+        expect(input.getAttribute('value')).toBe('10');
+        fireEvent.change(input, { target: { value: '100.2312' } });
+        expect(input.getAttribute('value')).toBe('100.23');
+    });
+
+    it('should restrict amount if greater than max limit', () => {
+        render(<Amount maxLimit={100} />);
+        expect(screen.getByText('Amount')).toBeInTheDocument();
+        const input = screen.getByRole('textbox');
+
+        expect(input.getAttribute('value')).toBe('10');
+        fireEvent.change(input, { target: { value: '101' } });
+        expect(input.getAttribute('value')).toBe('10');
     });
 });
