@@ -109,8 +109,13 @@ export const AdvancedLendingOrderCard = ({
                         field='Unit Price'
                         unit=''
                         disabled={orderType === OrderType.MARKET}
-                        initialValue={unitPrice}
-                        onValueChange={v => dispatch(setUnitPrice(v as number))}
+                        initialValue={unitPrice / 100.0}
+                        onValueChange={v =>
+                            dispatch(setUnitPrice((v as number) * 100.0))
+                        }
+                        informationText='Input value from 0 to 100'
+                        decimalPlacesAllowed={2}
+                        maxLimit={100}
                     />
                     <OrderInputBox
                         field='Amount'

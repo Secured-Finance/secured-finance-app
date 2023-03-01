@@ -9,6 +9,8 @@ interface InputBaseProps {
     value?: number;
     onValueChange: (v: number | undefined) => void;
     label?: string;
+    decimalPlacesAllowed?: number;
+    maxLimit?: number;
 }
 
 export const InputBase = ({
@@ -16,6 +18,8 @@ export const InputBase = ({
     value,
     onValueChange,
     label,
+    decimalPlacesAllowed = 4,
+    maxLimit = Number.MAX_SAFE_INTEGER, // we should have a better estimation of this maxLimit
 }: InputBaseProps) => {
     const handleValueChange = (
         values: NumberFormatValues,
@@ -40,6 +44,11 @@ export const InputBase = ({
             displayType='input'
             onValueChange={handleValueChange}
             aria-label={label}
+            decimalScale={decimalPlacesAllowed}
+            isAllowed={values => {
+                const { floatValue = 0 } = values;
+                return floatValue <= maxLimit;
+            }}
         />
     );
 };
