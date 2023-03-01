@@ -18,6 +18,7 @@ export * from './PercentageSelector';
 export * from './PortfolioManagementTable';
 export * from './SuccessPanel';
 export * from './Tab';
+export * from './TableActionMenu';
 export * from './TableContractCell';
 export * from './TableHeader';
 export * from './TermSelector';
