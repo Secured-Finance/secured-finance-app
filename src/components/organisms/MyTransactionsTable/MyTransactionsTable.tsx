@@ -65,11 +65,6 @@ export const MyTransactionsTable = ({ data }: { data: TradeHistory }) => {
                 row => row.forwardValue,
                 { compact: true, color: true }
             ),
-            columnHelper.display({
-                id: 'actions',
-                cell: () => <div>...</div>,
-                header: () => <div>Actions</div>,
-            }),
         ],
         []
     );
