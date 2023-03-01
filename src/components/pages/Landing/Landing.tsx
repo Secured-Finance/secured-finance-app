@@ -16,16 +16,17 @@ import {
 } from 'src/hooks';
 import {
     selectLandingOrderForm,
+    setLastView,
     setOrderType,
 } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
 import { LoanValue, Maturity } from 'src/utils/entities';
 import { useWallet } from 'use-wallet';
 
-export const Landing = ({ view = 'Simple' }: { view?: ViewType }) => {
+export const Landing = ({ view }: { view?: ViewType }) => {
     const { account } = useWallet();
-    const { currency, side, maturity } = useSelector((state: RootState) =>
-        selectLandingOrderForm(state.landingOrderForm)
+    const { currency, side, maturity, lastView } = useSelector(
+        (state: RootState) => selectLandingOrderForm(state.landingOrderForm)
     );
     const lendingContracts = useSelector(
         (state: RootState) => state.availableContracts.lendingMarkets[currency]
@@ -87,8 +88,9 @@ export const Landing = ({ view = 'Simple' }: { view?: ViewType }) => {
                     maturitiesOptionList={optionList}
                 />
             }
-            initialView={view}
+            initialView={view ?? lastView}
             onModeChange={v => {
+                dispatch(setLastView(v));
                 if (v === 'Simple') {
                     dispatch(setOrderType(OrderType.MARKET));
                 }
