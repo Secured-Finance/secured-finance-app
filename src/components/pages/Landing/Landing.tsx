@@ -1,6 +1,7 @@
 import { OrderSide } from '@secured-finance/sf-client';
 import { useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { ViewType } from 'src/components/atoms';
 import {
     AdvancedLending,
     LendingCard,
@@ -21,7 +22,7 @@ import { RootState } from 'src/store/types';
 import { LoanValue, Maturity } from 'src/utils/entities';
 import { useWallet } from 'use-wallet';
 
-export const Landing = () => {
+export const Landing = ({ view = 'Simple' }: { view?: ViewType }) => {
     const { account } = useWallet();
     const { currency, side, maturity } = useSelector((state: RootState) =>
         selectLandingOrderForm(state.landingOrderForm)
@@ -86,6 +87,7 @@ export const Landing = () => {
                     maturitiesOptionList={optionList}
                 />
             }
+            initialView={view}
             onModeChange={v => {
                 if (v === 'Simple') {
                     dispatch(setOrderType(OrderType.MARKET));

@@ -43,4 +43,14 @@ describe('SimpleAdvancedView Component', () => {
         render(<Default />);
         expect(screen.getByText('Simple Component')).toBeInTheDocument();
     });
+
+    it('should open on the advanced view if the initialView is set to Advanced', () => {
+        render(<Default initialView='Advanced' />);
+        expect(screen.getByText('Advanced Component')).toBeInTheDocument();
+    });
+
+    it('should open on the simple view by default', () => {
+        render(<Default />);
+        expect(screen.getByText('Simple Component')).toBeInTheDocument();
+    });
 });

@@ -34,7 +34,12 @@ export const Header = () => {
                 </a>
             </Link>
             <div className='flex h-full items-center justify-center'>
-                <ItemLink text='OTC Lending' dataCy='lending' link='/' />
+                <ItemLink
+                    text='OTC Lending'
+                    dataCy='lending'
+                    link='/'
+                    alternateLink='/advanced'
+                />
                 <ItemLink
                     text='Market Dashboard'
                     dataCy='terminal'
@@ -74,14 +79,16 @@ const ItemLink = ({
     text,
     dataCy,
     link,
+    alternateLink,
 }: {
     text: string;
     dataCy: string;
     link: string;
+    alternateLink?: string;
 }) => {
     const router = useRouter();
-    const useCheckActive = (): boolean => {
-        return router.pathname === link;
+    const useCheckActive = () => {
+        return router.pathname === link || router.pathname === alternateLink;
     };
     return (
         <Link href={link} className='h-full' passHref>
