@@ -73,7 +73,7 @@ export const ActiveTradeTable = ({ data }: { data: TradeSummary[] }) => {
                                 {
                                     text: 'Add/Reduce Position',
                                     onClick: () => {
-                                        router.push('/');
+                                        router.push('/advanced/');
                                     },
                                 },
                                 { text: 'Unwind Position', onClick: () => {} },
