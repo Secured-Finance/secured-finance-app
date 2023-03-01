@@ -1,9 +1,9 @@
 import { createColumnHelper } from '@tanstack/react-table';
 import * as dayjs from 'dayjs';
-import { useMemo, useState } from 'react';
+import { useRouter } from 'next/router';
+import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
-import { CoreTable } from 'src/components/molecules';
-import { ContractDetailDialog } from 'src/components/organisms';
+import { CoreTable, TableActionMenu } from 'src/components/molecules';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { RootState } from 'src/store/types';
 import { TradeSummary } from 'src/utils';
@@ -19,6 +19,7 @@ const columnHelper = createColumnHelper<TradeSummary>();
 
 export const ActiveTradeTable = ({ data }: { data: TradeSummary[] }) => {
     const priceList = useSelector((state: RootState) => getPriceMap(state));
+    const router = useRouter();
 
     const columns = useMemo(
         () => [
@@ -60,14 +61,32 @@ export const ActiveTradeTable = ({ data }: { data: TradeSummary[] }) => {
             ),
             columnHelper.display({
                 id: 'actions',
-                cell: () => <div>...</div>,
+                cell: () => (
+                    <div className='flex justify-center'>
+                        <TableActionMenu
+                            items={[
+                                {
+                                    text: 'View Contract',
+                                    onClick: () => {},
+                                    disabled: true,
+                                },
+                                {
+                                    text: 'Add/Reduce Position',
+                                    onClick: () => {
+                                        router.push('/');
+                                    },
+                                },
+                                { text: 'Unwind Position', onClick: () => {} },
+                            ]}
+                        />
+                    </div>
+                ),
                 header: () => <div>Actions</div>,
             }),
         ],
-        [priceList]
+        [priceList, router]
     );
 
-    const [displayContractDetails, setDisplayContractDetails] = useState(false);
     return (
         <div className='pb-2'>
             <CoreTable
@@ -75,11 +94,6 @@ export const ActiveTradeTable = ({ data }: { data: TradeSummary[] }) => {
                 columns={columns}
                 name='active-trade-table'
                 border
-                onLineClick={() => setDisplayContractDetails(true)}
-            />
-            <ContractDetailDialog
-                isOpen={displayContractDetails}
-                onClose={() => setDisplayContractDetails(false)}
             />
             <div className='typography-dropdown-selection-label mx-10 my-6 bg-cardBackground/60 text-justify text-secondary7 '>
                 <p className='p-3'>
