@@ -8,19 +8,16 @@ type MenuItem = { text: string; onClick: () => void; disabled?: boolean };
 const MenuItem = ({ text, onClick, disabled = false }: MenuItem) => {
     return (
         <div
-            className={classNames('flex w-full rounded-md py-3 px-3', {
+            className={classNames('z-10 flex w-full rounded-md py-3 px-3', {
                 'cursor-pointer hover:bg-horizonBlue': !disabled,
             })}
         >
             <button
                 aria-label='Menu Item'
                 onClick={onClick}
-                className={classNames(
-                    'flex flex-row items-center justify-start'
-                )}
                 disabled={disabled}
             >
-                <p className='typography-caption-2 capitalize text-neutral-8'>
+                <p className='typography-caption-2 text-center capitalize text-neutral-8'>
                     {text}
                 </p>
             </button>
@@ -29,14 +26,14 @@ const MenuItem = ({ text, onClick, disabled = false }: MenuItem) => {
 };
 export const TableActionMenu = ({ items }: { items: MenuItem[] }) => {
     return (
-        <div>
+        <div className='relative'>
             <Menu>
-                <Menu.Button>
+                <Menu.Button as='button' aria-label='More options'>
                     <MoreIcon className='text-starBlue' />
                 </Menu.Button>
                 <Menu.Items
                     as='div'
-                    className='w-fit min-w-[150px] rounded-xl bg-gunMetal focus:outline-none'
+                    className='absolute top-8 z-50 w-fit min-w-[150px] rounded-xl bg-gunMetal focus:outline-none'
                 >
                     {items.map((item, index) => (
                         <Menu.Item key={index} as='div'>
