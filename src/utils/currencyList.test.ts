@@ -1,11 +1,18 @@
 import { BigNumber } from 'ethers';
 import {
+    btcBytes32,
+    ethBytes32,
+    filBytes32,
+    usdcBytes32,
+} from 'src/stories/mocks/fixtures';
+import {
     amountFormatterFromBase,
     amountFormatterToBase,
     currencyMap,
     CurrencySymbol,
     getCurrencyMapAsList,
     getCurrencyMapAsOptions,
+    hexToCurrencySymbol,
     toCurrency,
     toCurrencySymbol,
 } from './currencyList';
@@ -266,5 +273,19 @@ describe('toCurrencySymbol', () => {
         expect(toCurrencySymbol('')).toBeUndefined();
         expect(toCurrencySymbol('XRP')).toBeUndefined();
         expect(toCurrencySymbol('EUR')).toBeUndefined();
+    });
+});
+
+describe('hexToCurrencySymbol', () => {
+    it('should convert a hex string to a currency symbol', () => {
+        expect(hexToCurrencySymbol(ethBytes32)).toEqual(CurrencySymbol.ETH);
+        expect(hexToCurrencySymbol(filBytes32)).toEqual(CurrencySymbol.FIL);
+        expect(hexToCurrencySymbol(btcBytes32)).toEqual(CurrencySymbol.BTC);
+        expect(hexToCurrencySymbol(usdcBytes32)).toEqual(CurrencySymbol.USDC);
+    });
+
+    it('should return undefined if the currency is not supported', () => {
+        expect(hexToCurrencySymbol('0x585250')).toBeUndefined();
+        expect(hexToCurrencySymbol('0x455552')).toBeUndefined();
     });
 });

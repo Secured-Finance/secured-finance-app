@@ -2,11 +2,13 @@ import { createColumnHelper } from '@tanstack/react-table';
 import * as dayjs from 'dayjs';
 import { useRouter } from 'next/router';
 import { useMemo } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { CoreTable, TableActionMenu } from 'src/components/molecules';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
+import { setCurrency, setMaturity } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
-import { TradeSummary } from 'src/utils';
+import { hexToCurrencySymbol, TradeSummary } from 'src/utils';
+import { Maturity } from 'src/utils/entities';
 import {
     amountColumnDefinition,
     contractColumnDefinition,
@@ -20,6 +22,7 @@ const columnHelper = createColumnHelper<TradeSummary>();
 export const ActiveTradeTable = ({ data }: { data: TradeSummary[] }) => {
     const priceList = useSelector((state: RootState) => getPriceMap(state));
     const router = useRouter();
+    const dispatch = useDispatch();
 
     const columns = useMemo(
         () => [
@@ -61,30 +64,40 @@ export const ActiveTradeTable = ({ data }: { data: TradeSummary[] }) => {
             ),
             columnHelper.display({
                 id: 'actions',
-                cell: () => (
-                    <div className='flex justify-center'>
-                        <TableActionMenu
-                            items={[
-                                {
-                                    text: 'View Contract',
-                                    onClick: () => {},
-                                    disabled: true,
-                                },
-                                {
-                                    text: 'Add/Reduce Position',
-                                    onClick: () => {
-                                        router.push('/advanced/');
+                cell: info => {
+                    const maturity = new Maturity(info.row.original.maturity);
+                    const ccy = hexToCurrencySymbol(info.row.original.currency);
+                    if (!ccy) return null;
+                    return (
+                        <div className='flex justify-center'>
+                            <TableActionMenu
+                                items={[
+                                    {
+                                        text: 'View Contract',
+                                        onClick: () => {},
+                                        disabled: true,
                                     },
-                                },
-                                { text: 'Unwind Position', onClick: () => {} },
-                            ]}
-                        />
-                    </div>
-                ),
+                                    {
+                                        text: 'Add/Reduce Position',
+                                        onClick: () => {
+                                            dispatch(setMaturity(maturity));
+                                            dispatch(setCurrency(ccy));
+                                            router.push('/advanced/');
+                                        },
+                                    },
+                                    {
+                                        text: 'Unwind Position',
+                                        onClick: () => {},
+                                    },
+                                ]}
+                            />
+                        </div>
+                    );
+                },
                 header: () => <div>Actions</div>,
             }),
         ],
-        [priceList, router]
+        [dispatch, priceList, router]
     );
 
     return (
