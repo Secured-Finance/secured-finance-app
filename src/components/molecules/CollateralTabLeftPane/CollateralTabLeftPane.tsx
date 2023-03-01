@@ -1,12 +1,39 @@
 import { AssetInformation, Button } from 'src/components/atoms';
 import { CollateralBook } from 'src/hooks';
-import { usdFormat } from 'src/utils';
+import { getCurrencyMapAsList, usdFormat } from 'src/utils';
 
 interface CollateralTabLeftPaneProps {
     account: string | null;
     onClick: (step: 'deposit' | 'withdraw') => void;
     collateralBook: CollateralBook;
 }
+
+const getInformationText = () => {
+    let article = '';
+    let currencyString = '';
+    const collateralCurrencies = getCurrencyMapAsList()
+        .filter(ccy => ccy.isCollateral)
+        .map(ccy => ccy.symbol);
+
+    const length = collateralCurrencies.length;
+
+    if (length === 1) {
+        currencyString = collateralCurrencies[0];
+        article = 'is';
+    } else {
+        for (let i = 0; i < length - 1; i++) {
+            currencyString += collateralCurrencies[i];
+            if (i === length - 2) {
+                currencyString += ' and ';
+            } else {
+                currencyString += ', ';
+            }
+        }
+        currencyString += collateralCurrencies[length - 1];
+        article = 'are';
+    }
+    return `Only ${currencyString} ${article} eligible as collateral.`;
+};
 
 export const CollateralTabLeftPane = ({
     account,
@@ -36,7 +63,7 @@ export const CollateralTabLeftPane = ({
                     <div className='mx-5 my-6 flex flex-col gap-6'>
                         <AssetInformation
                             header='Collateral Assets'
-                            informationText='Only USDC and ETH are eligible as collateral.'
+                            informationText={getInformationText()}
                             collateralBook={collateralBook.collateral}
                         ></AssetInformation>
                         {nonCollateralBalance > 0 && (

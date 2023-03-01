@@ -19,7 +19,10 @@ describe('test AssetInformation component', () => {
         expect(screen.getByText('$1.00 USD')).toBeInTheDocument();
         expect(screen.getByText('10 USDC')).toBeInTheDocument();
         expect(screen.getByText('$10.00 USD')).toBeInTheDocument();
+    });
 
+    it('should display the information popover on mouse enter', () => {
+        render(<Default />);
         const information = screen.getByTestId('information-circle');
         fireEvent.mouseEnter(information);
         const informationPopover = screen.getByTestId('information-popover');
