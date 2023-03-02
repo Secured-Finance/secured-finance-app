@@ -1,7 +1,7 @@
 import { BigNumber } from 'ethers';
 
 const COLLATERAL_RATIO = 1.5;
-const MAX_COVERAGE = 10000;
+export const MAX_COVERAGE = 10000;
 
 export const computeAvailableToBorrow = (
     assetPrice: number,
@@ -20,3 +20,17 @@ export const computeAvailableToBorrow = (
 export const calculatePercentage = (value: BigNumber, total: BigNumber) => {
     return value.mul(100).div(total);
 };
+
+export function recomputeCollateralUtilization(
+    totalCollateralInUsd: number,
+    coverageRatio: number,
+    newTradeUsdValue: number
+) {
+    const availableToBorrowInUsd =
+        computeAvailableToBorrow(1, totalCollateralInUsd, coverageRatio) +
+        newTradeUsdValue;
+
+    return Math.floor(
+        (availableToBorrowInUsd / totalCollateralInUsd) * MAX_COVERAGE
+    );
+}
