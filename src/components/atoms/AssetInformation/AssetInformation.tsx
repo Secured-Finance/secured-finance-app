@@ -31,7 +31,7 @@ export const AssetInformation = ({
                     </div>
                     <div className='mt-[2px]'>
                         <InformationPopover>
-                            <div>{informationText}</div>
+                            {informationText}
                         </InformationPopover>
                     </div>
                 </div>

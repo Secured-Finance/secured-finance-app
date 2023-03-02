@@ -8,7 +8,7 @@ export default {
 
 const Template: ComponentStory<typeof InformationPopover> = () => (
     <InformationPopover>
-        {<span>You are currently at 43% to liquidation.</span>}
+        You are currently at 43% to liquidation.
     </InformationPopover>
 );
 
