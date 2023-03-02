@@ -9,7 +9,12 @@ import {
     Section,
     SectionWithItems,
 } from 'src/components/atoms';
-import { AmountCard, Dialog, SuccessPanel } from 'src/components/molecules';
+import {
+    AmountCard,
+    Dialog,
+    DialogState,
+    SuccessPanel,
+} from 'src/components/molecules';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { selectLandingOrderForm } from 'src/store/landingOrderForm';
 import { setLastMessage } from 'src/store/lastError';
@@ -86,11 +91,9 @@ export const PlaceOrder = ({
     loanValue,
     onPlaceOrder,
 }: {
-    isOpen: boolean;
-    onClose: () => void;
     loanValue?: LoanValue;
     onPlaceOrder: PlaceOrderFunction;
-}) => {
+} & DialogState) => {
     const [state, dispatch] = useReducer(reducer, stateRecord[1]);
     const globalDispatch = useDispatch();
     const { currency, maturity, amount, side } = useSelector(
