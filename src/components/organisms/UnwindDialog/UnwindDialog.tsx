@@ -1,42 +1,46 @@
 import { Disclosure } from '@headlessui/react';
+import { useSelector } from 'react-redux';
 import {
     ExpandIndicator,
     Section,
     SectionWithItems,
 } from 'src/components/atoms';
 import { AmountCard, Dialog, DialogState } from 'src/components/molecules';
+import { getPriceMap } from 'src/store/assetPrices/selectors';
+import { RootState } from 'src/store/types';
 import { CurrencySymbol } from 'src/utils';
+import { Amount } from 'src/utils/entities';
 
-export const ContractDetailDialog = ({ isOpen, onClose }: DialogState) => {
+export const UnwindDialog = ({
+    isOpen,
+    onClose,
+    amount,
+}: { currency: CurrencySymbol; amount: Amount } & DialogState) => {
+    const priceList = useSelector((state: RootState) => getPriceMap(state));
+    const price = priceList[amount.currency];
+
     return (
         <Dialog
-            isOpen={isOpen}
-            onClose={onClose}
-            title='Contract Details'
+            title='Unwind Position'
             description=''
             callToAction='Unwind Position'
-            onClick={onClose}
+            onClose={onClose}
+            isOpen={isOpen}
+            onClick={() => {}}
         >
             <div className='grid w-full grid-cols-1 justify-items-stretch gap-6 text-white'>
                 <Section>
                     <AmountCard
-                        ccy={CurrencySymbol.FIL}
-                        amount={5000}
-                        price={8.3}
+                        ccy={amount.currency}
+                        amount={amount.value}
+                        price={price}
                     />
                 </Section>
                 <SectionWithItems
                     itemList={[
-                        ['Contract Address', '0x0x1234567890'],
-                        ['Contract Type', 'Borrow'],
-                        ['Contract Status', 'Active'],
-                        ['Contract Collateral', 'ETH'],
-                        ['Borrow Limit Remaining', '0.1 ETH'],
-                        ['Contract Collateral Ratio', '150%'],
+                        ['Borrow Remaining', '151 / 162'],
+                        ['Collateral Usage', '45 -> 12'],
                     ]}
-                />
-                <SectionWithItems
-                    itemList={[['Contract Borrowed Amount', '0.1 ETH']]}
                 />
                 <Disclosure>
                     {({ open }) => (
