@@ -8,21 +8,26 @@ import {
 import { AmountCard, Dialog, DialogState } from 'src/components/molecules';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { RootState } from 'src/store/types';
-import { CurrencySymbol } from 'src/utils';
-import { Amount } from 'src/utils/entities';
+import { Amount, Maturity } from 'src/utils/entities';
 
 export const UnwindDialog = ({
     isOpen,
     onClose,
     amount,
-}: { currency: CurrencySymbol; amount: Amount } & DialogState) => {
+    maturity,
+}: {
+    amount: Amount | undefined;
+    maturity: Maturity | undefined;
+} & DialogState) => {
+    if (!amount || !maturity) return null;
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     const priceList = useSelector((state: RootState) => getPriceMap(state));
     const price = priceList[amount.currency];
 
     return (
         <Dialog
             title='Unwind Position'
-            description=''
+            description={maturity.toString()}
             callToAction='Unwind Position'
             onClose={onClose}
             isOpen={isOpen}

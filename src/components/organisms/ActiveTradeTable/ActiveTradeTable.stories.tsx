@@ -13,7 +13,11 @@ export default {
 } as ComponentMeta<typeof ActiveTradeTable>;
 
 const Template: ComponentStory<typeof ActiveTradeTable> = args => {
-    return <ActiveTradeTable {...args} />;
+    return (
+        <div className='px-24'>
+            <ActiveTradeTable {...args} />
+        </div>
+    );
 };
 
 export const Default = Template.bind({});
