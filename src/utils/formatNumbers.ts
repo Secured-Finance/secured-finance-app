@@ -1,4 +1,5 @@
 import { BigNumber, FixedNumber } from 'ethers';
+import { MAX_COVERAGE } from './collateral';
 import { LoanValue } from './entities';
 
 export const usdFormat = (
@@ -74,3 +75,7 @@ export const formatLoanValue = (value: LoanValue, type: 'price' | 'rate') => {
         return percentFormat(value.apy.toNormalizedNumber(), 100, 2, 2);
     }
 };
+
+export function formatCollateralRatio(collateral: number) {
+    return percentFormat(collateral, MAX_COVERAGE, 0);
+}

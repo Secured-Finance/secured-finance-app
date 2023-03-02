@@ -1,5 +1,10 @@
 import { BigNumber } from 'ethers';
-import { formatWithCurrency, ordinaryFormat, usdFormat } from './formatNumbers';
+import {
+    formatCollateralRatio,
+    formatWithCurrency,
+    ordinaryFormat,
+    usdFormat,
+} from './formatNumbers';
 
 describe('formatWithCurrency', () => {
     it('should format the number with the given currency and decimals', () => {
@@ -73,5 +78,15 @@ describe('ordinaryFormat', () => {
 
     it('should format a BigNumber with default decimals and notation', () => {
         expect(ordinaryFormat(BigNumber.from(1234567))).toEqual('1,234,567');
+    });
+});
+
+describe('formatCollateralRatio', () => {
+    it('should format the collateral ratio', () => {
+        expect(formatCollateralRatio(10000)).toEqual('100%');
+        expect(formatCollateralRatio(1000)).toEqual('10%');
+        expect(formatCollateralRatio(100)).toEqual('1%');
+        expect(formatCollateralRatio(10)).toEqual('0.1%');
+        expect(formatCollateralRatio(1)).toEqual('0.01%');
     });
 });

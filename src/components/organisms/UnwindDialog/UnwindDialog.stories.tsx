@@ -1,6 +1,9 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { BigNumber } from 'ethers';
-import { withAssetPrice } from 'src/../.storybook/decorators';
+import {
+    withAssetPrice,
+    withWalletProvider,
+} from 'src/../.storybook/decorators';
 import { dec22Fixture } from 'src/stories/mocks/fixtures';
 import { CurrencySymbol } from 'src/utils';
 import { Amount } from 'src/utils/entities';
@@ -17,7 +20,7 @@ export default {
             CurrencySymbol.FIL
         ),
     },
-    decorators: [withAssetPrice],
+    decorators: [withAssetPrice, withWalletProvider],
 } as ComponentMeta<typeof UnwindDialog>;
 
 const Template: ComponentStory<typeof UnwindDialog> = args => (

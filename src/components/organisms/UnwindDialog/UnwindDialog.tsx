@@ -6,9 +6,17 @@ import {
     SectionWithItems,
 } from 'src/components/atoms';
 import { AmountCard, Dialog, DialogState } from 'src/components/molecules';
+import { useCollateralBook } from 'src/hooks';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { RootState } from 'src/store/types';
+import { formatCollateralRatio, ordinaryFormat } from 'src/utils';
+import {
+    computeAvailableToBorrow,
+    MAX_COVERAGE,
+    recomputeCollateralUtilization,
+} from 'src/utils/collateral';
 import { Amount, Maturity } from 'src/utils/entities';
+import { useWallet } from 'use-wallet';
 
 export const UnwindDialog = ({
     isOpen,
@@ -16,13 +24,34 @@ export const UnwindDialog = ({
     amount,
     maturity,
 }: {
-    amount: Amount | undefined;
-    maturity: Maturity | undefined;
+    amount: Amount;
+    maturity: Maturity;
 } & DialogState) => {
-    if (!amount || !maturity) return null;
-    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const { account } = useWallet();
+    const collateral = useCollateralBook(account);
     const priceList = useSelector((state: RootState) => getPriceMap(state));
     const price = priceList[amount.currency];
+
+    const collateralUsageText = `${formatCollateralRatio(
+        collateral.coverage.toNumber()
+    )} -> ${formatCollateralRatio(
+        recomputeCollateralUtilization(
+            collateral.usdCollateral,
+            collateral.coverage.toNumber(),
+            -1 * amount.toUSD(price)
+        )
+    )}`;
+
+    const remainingToBorrowText = `${ordinaryFormat(
+        (collateral.usdCollateral * collateral.coverage.toNumber()) /
+            MAX_COVERAGE
+    )} / ${ordinaryFormat(
+        computeAvailableToBorrow(
+            1,
+            collateral.coverage.toNumber(),
+            collateral.usdCollateral
+        )
+    )}`;
 
     return (
         <Dialog
@@ -43,8 +72,8 @@ export const UnwindDialog = ({
                 </Section>
                 <SectionWithItems
                     itemList={[
-                        ['Borrow Remaining', '151 / 162'],
-                        ['Collateral Usage', '45 -> 12'],
+                        ['Borrow Remaining', remainingToBorrowText],
+                        ['Collateral Usage', collateralUsageText],
                     ]}
                 />
                 <Disclosure>
