@@ -44,4 +44,16 @@ describe('ActiveTradeTable Component', () => {
         expect(screen.getByText('Add/Reduce Position')).toBeInTheDocument();
         expect(screen.getByText('Unwind Position')).toBeInTheDocument();
     });
+
+    it('should display the unwind dialog when clicking on the Unwind Position button', () => {
+        render(<Default />);
+        expect(screen.queryByText('Unwind Position')).not.toBeInTheDocument();
+        const moreOptionsButton = screen.getAllByRole('button', {
+            name: 'More options',
+        });
+        expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+        fireEvent.click(moreOptionsButton[0]);
+        fireEvent.click(screen.getByText('Unwind Position'));
+        expect(screen.getByRole('dialog')).toBeInTheDocument();
+    });
 });

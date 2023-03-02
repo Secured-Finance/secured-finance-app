@@ -1,14 +1,16 @@
 import { createColumnHelper } from '@tanstack/react-table';
 import * as dayjs from 'dayjs';
+import { BigNumber } from 'ethers';
 import { useRouter } from 'next/router';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { CoreTable, TableActionMenu } from 'src/components/molecules';
+import { UnwindDialog } from 'src/components/organisms';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { setCurrency, setMaturity } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
 import { hexToCurrencySymbol, TradeSummary } from 'src/utils';
-import { Maturity } from 'src/utils/entities';
+import { Amount, Maturity } from 'src/utils/entities';
 import {
     amountColumnDefinition,
     contractColumnDefinition,
@@ -20,6 +22,11 @@ import {
 const columnHelper = createColumnHelper<TradeSummary>();
 
 export const ActiveTradeTable = ({ data }: { data: TradeSummary[] }) => {
+    const [unwindDialogData, setUnwindDialogData] = useState<{
+        maturity: Maturity;
+        amount: Amount;
+        show: boolean;
+    }>();
     const priceList = useSelector((state: RootState) => getPriceMap(state));
     const router = useRouter();
     const dispatch = useDispatch();
@@ -67,6 +74,7 @@ export const ActiveTradeTable = ({ data }: { data: TradeSummary[] }) => {
                 cell: info => {
                     const maturity = new Maturity(info.row.original.maturity);
                     const ccy = hexToCurrencySymbol(info.row.original.currency);
+                    const amount = BigNumber.from(info.row.original.amount);
                     if (!ccy) return null;
                     return (
                         <div className='flex justify-center'>
@@ -87,7 +95,13 @@ export const ActiveTradeTable = ({ data }: { data: TradeSummary[] }) => {
                                     },
                                     {
                                         text: 'Unwind Position',
-                                        onClick: () => {},
+                                        onClick: () => {
+                                            setUnwindDialogData({
+                                                maturity,
+                                                amount: new Amount(amount, ccy),
+                                                show: true,
+                                            });
+                                        },
                                     },
                                 ]}
                             />
@@ -123,6 +137,19 @@ export const ActiveTradeTable = ({ data }: { data: TradeSummary[] }) => {
                     over, incurring the aforementioned fee.
                 </p>
             </div>
+            {unwindDialogData && (
+                <UnwindDialog
+                    isOpen={unwindDialogData.show}
+                    onClose={() =>
+                        setUnwindDialogData({
+                            ...unwindDialogData,
+                            show: false,
+                        })
+                    }
+                    maturity={unwindDialogData.maturity}
+                    amount={unwindDialogData.amount}
+                />
+            )}
         </div>
     );
 };
