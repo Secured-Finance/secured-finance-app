@@ -2,7 +2,7 @@ import { createColumnHelper } from '@tanstack/react-table';
 import { useMemo } from 'react';
 import { CoreTable } from 'src/components/molecules';
 import { TradeHistory } from 'src/types';
-import { formatLoanValue } from 'src/utils';
+import { formatLoanValue, formatTimestamp } from 'src/utils';
 import { LoanValue } from 'src/utils/entities';
 import {
     amountColumnDefinition,
@@ -10,16 +10,6 @@ import {
     loanTypeColumnDefinition,
     tableHeaderDefinition,
 } from 'src/utils/tableDefinitions';
-
-const formatDate = (timestamp: number) => {
-    if (timestamp) {
-        const date = new Date(timestamp * 1000);
-        return `${date.toLocaleDateString(
-            'en-US'
-        )} ${date.toLocaleTimeString()}`;
-    }
-    return '';
-};
 
 const columnHelper = createColumnHelper<TradeHistory[0]>();
 
@@ -54,7 +44,7 @@ const timestampColumnDef = (headerTitle: string) => {
         cell: info => {
             return (
                 <div className='typography-caption text-slateGray'>
-                    {formatDate(+info.getValue().toString())}
+                    {formatTimestamp(+info.getValue().toString())}
                 </div>
             );
         },

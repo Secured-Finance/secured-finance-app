@@ -74,3 +74,10 @@ export const formatLoanValue = (value: LoanValue, type: 'price' | 'rate') => {
         return percentFormat(value.apy.toNormalizedNumber(), 100, 2, 2);
     }
 };
+
+export const formatTimestamp = (timestamp: number) => {
+    const date = new Date(timestamp * 1000);
+    return `${date.toLocaleDateString('en-US', {
+        timeZone: 'UTC',
+    })} ${date.toLocaleTimeString('en-GB', { timeZone: 'UTC' })}`;
+};
