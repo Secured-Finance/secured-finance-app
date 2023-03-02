@@ -1,6 +1,6 @@
 import { BigNumber } from 'ethers';
 import { useCallback, useEffect, useState } from 'react';
-import { InputBase } from 'src/components/atoms';
+import { InformationPopover, InputBase } from 'src/components/atoms';
 import { amountFormatterToBase, CurrencySymbol } from 'src/utils';
 
 interface OrderInputBoxProps {
@@ -9,6 +9,9 @@ interface OrderInputBoxProps {
     initialValue?: number | string;
     asset?: CurrencySymbol;
     disabled?: boolean;
+    informationText?: string;
+    decimalPlacesAllowed?: number;
+    maxLimit?: number;
     onValueChange?: (v: number | BigNumber) => void;
 }
 
@@ -18,6 +21,9 @@ export const OrderInputBox = ({
     initialValue = 0,
     asset,
     disabled = false,
+    informationText,
+    decimalPlacesAllowed,
+    maxLimit,
     onValueChange,
 }: OrderInputBoxProps) => {
     const [inputValue, setInputValue] = useState(initialValue);
@@ -57,7 +63,12 @@ export const OrderInputBox = ({
 
     return (
         <div className='typography-caption flex h-10 w-full flex-row items-center justify-between rounded-lg bg-black-20 py-2 pl-2 pr-4 ring-starBlue focus-within:ring'>
-            <div className='text-neutral-5'>{field}</div>
+            <div className='flex flex-row items-center gap-2'>
+                <div className='text-neutral-5'>{field}</div>
+                {informationText && (
+                    <InformationPopover>{informationText}</InformationPopover>
+                )}
+            </div>
             <div className='flex flex-row gap-[10px]'>
                 {disabled ? (
                     <span className='text-right text-neutral-8'>
@@ -71,6 +82,8 @@ export const OrderInputBox = ({
                         onValueChange={(v: number | undefined) =>
                             handleAmountChange(v ?? 0)
                         }
+                        decimalPlacesAllowed={decimalPlacesAllowed}
+                        maxLimit={maxLimit}
                     />
                 )}
                 <div className='text-neutral-4'>{unit}</div>

@@ -20,3 +20,13 @@ export const WithValue = Template.bind({});
 WithValue.args = {
     value: 50,
 };
+
+export const DecimalPlacesAllowed = Template.bind({});
+DecimalPlacesAllowed.args = {
+    decimalPlacesAllowed: 2,
+};
+
+export const MaxLimit = Template.bind({});
+MaxLimit.args = {
+    maxLimit: 1000,
+};
