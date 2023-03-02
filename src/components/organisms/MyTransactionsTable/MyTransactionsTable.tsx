@@ -11,6 +11,16 @@ import {
     tableHeaderDefinition,
 } from 'src/utils/tableDefinitions';
 
+const formatDate = (timestamp: number) => {
+    if (timestamp) {
+        const date = new Date(timestamp * 1000);
+        return `${date.toLocaleDateString(
+            'en-US'
+        )} ${date.toLocaleTimeString()}`;
+    }
+    return '';
+};
+
 const columnHelper = createColumnHelper<TradeHistory[0]>();
 
 const priceYieldColumnDef = (
@@ -32,6 +42,19 @@ const priceYieldColumnDef = (
                             formatType
                         )}
                     </span>
+                </div>
+            );
+        },
+        header: tableHeaderDefinition(headerTitle),
+    });
+};
+
+const timestampColumnDef = (headerTitle: string) => {
+    return columnHelper.accessor('createdAt', {
+        cell: info => {
+            return (
+                <div className='typography-caption text-slateGray'>
+                    {formatDate(+info.getValue().toString())}
                 </div>
             );
         },
@@ -65,11 +88,7 @@ export const MyTransactionsTable = ({ data }: { data: TradeHistory }) => {
                 row => row.forwardValue,
                 { compact: true, color: true }
             ),
-            columnHelper.display({
-                id: 'actions',
-                cell: () => <div>...</div>,
-                header: () => <div>Actions</div>,
-            }),
+            timestampColumnDef('Date and Time'),
         ],
         []
     );
