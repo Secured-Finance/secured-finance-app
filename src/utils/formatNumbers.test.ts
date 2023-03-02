@@ -1,5 +1,10 @@
 import { BigNumber } from 'ethers';
-import { formatWithCurrency, ordinaryFormat, usdFormat } from './formatNumbers';
+import {
+    formatTimestamp,
+    formatWithCurrency,
+    ordinaryFormat,
+    usdFormat,
+} from './formatNumbers';
 
 describe('formatWithCurrency', () => {
     it('should format the number with the given currency and decimals', () => {
@@ -73,5 +78,13 @@ describe('ordinaryFormat', () => {
 
     it('should format a BigNumber with default decimals and notation', () => {
         expect(ordinaryFormat(BigNumber.from(1234567))).toEqual('1,234,567');
+    });
+});
+
+describe('formatTimestamp', () => {
+    it('should format a timestamp in utc timezone', () => {
+        expect(formatTimestamp(0)).toEqual('1/1/1970 00:00:00');
+        expect(formatTimestamp(86400)).toEqual('1/2/1970 00:00:00');
+        expect(formatTimestamp(1671859344)).toEqual('12/24/2022 05:22:24');
     });
 });
