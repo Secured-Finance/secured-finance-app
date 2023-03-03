@@ -145,6 +145,7 @@ export const AdvancedLendingOrderCard = ({
 
                 <PlaceOrder
                     onPlaceOrder={placeOrder}
+                    collateral={collateralBook}
                     isOpen={openPlaceOrderDialog}
                     onClose={() => setOpenPlaceOrderDialog(false)}
                     loanValue={loanValue}

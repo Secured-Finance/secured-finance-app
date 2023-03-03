@@ -1,4 +1,4 @@
-import { BigNumber } from 'ethers';
+import { BigNumber, BigNumberish } from 'ethers';
 import { CurrencyInfo, currencyMap, CurrencySymbol } from '../currencyList';
 
 export class Amount {
@@ -6,8 +6,8 @@ export class Amount {
     private readonly _formatterFromBase: CurrencyInfo['fromBaseUnit'];
     private readonly _currency: CurrencySymbol;
 
-    constructor(value: BigNumber, ccy: CurrencySymbol) {
-        this._baseValue = value;
+    constructor(value: BigNumberish, ccy: CurrencySymbol) {
+        this._baseValue = BigNumber.from(value);
         this._currency = ccy;
         this._formatterFromBase = currencyMap[ccy].fromBaseUnit;
     }

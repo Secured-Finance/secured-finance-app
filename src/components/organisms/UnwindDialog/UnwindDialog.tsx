@@ -1,20 +1,20 @@
 import { Disclosure } from '@headlessui/react';
+import { OrderSide } from '@secured-finance/sf-client';
 import { useSelector } from 'react-redux';
 import {
     ExpandIndicator,
     Section,
     SectionWithItems,
 } from 'src/components/atoms';
-import { AmountCard, Dialog, DialogState } from 'src/components/molecules';
+import {
+    AmountCard,
+    CollateralSimulationSection,
+    Dialog,
+    DialogState,
+} from 'src/components/molecules';
 import { useCollateralBook } from 'src/hooks';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { RootState } from 'src/store/types';
-import { formatCollateralRatio, ordinaryFormat } from 'src/utils';
-import {
-    computeAvailableToBorrow,
-    MAX_COVERAGE,
-    recomputeCollateralUtilization,
-} from 'src/utils/collateral';
 import { Amount, Maturity } from 'src/utils/entities';
 import { useWallet } from 'use-wallet';
 
@@ -31,27 +31,6 @@ export const UnwindDialog = ({
     const collateral = useCollateralBook(account);
     const priceList = useSelector((state: RootState) => getPriceMap(state));
     const price = priceList[amount.currency];
-
-    const collateralUsageText = `${formatCollateralRatio(
-        collateral.coverage.toNumber()
-    )} -> ${formatCollateralRatio(
-        recomputeCollateralUtilization(
-            collateral.usdCollateral,
-            collateral.coverage.toNumber(),
-            -1 * amount.toUSD(price)
-        )
-    )}`;
-
-    const remainingToBorrowText = `${ordinaryFormat(
-        (collateral.usdCollateral * collateral.coverage.toNumber()) /
-            MAX_COVERAGE
-    )} / ${ordinaryFormat(
-        computeAvailableToBorrow(
-            1,
-            collateral.coverage.toNumber(),
-            collateral.usdCollateral
-        )
-    )}`;
 
     return (
         <Dialog
@@ -70,11 +49,12 @@ export const UnwindDialog = ({
                         price={price}
                     />
                 </Section>
-                <SectionWithItems
-                    itemList={[
-                        ['Borrow Remaining', remainingToBorrowText],
-                        ['Collateral Usage', collateralUsageText],
-                    ]}
+                <CollateralSimulationSection
+                    collateral={collateral}
+                    tradeAmount={amount}
+                    tradePosition={OrderSide.BORROW}
+                    assetPrice={price}
+                    type='unwind'
                 />
                 <Disclosure>
                     {({ open }) => (
