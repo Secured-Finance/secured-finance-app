@@ -5,6 +5,7 @@ on:
     branches:
       - main
       - develop
+      - SF-227
   pull_request:
     types:
       - opened
@@ -120,3 +121,41 @@ jobs:
           name: cypress-videos
           path: cypress/videos
           retention-days: 3
+
+  deploy-on-fleek:
+    runs-on: ubuntu-latest
+    name: Deploy on Fleek only for push on main or develop
+    if: ${{ github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/SF-227') }}
+    needs: build-and-test-all
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Extract branch name
+        shell: bash
+        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+        id: extract_branch
+
+      - name: Set env for development environment
+        if : ${{ steps.extract_branch.outputs.branch == 'develop' }}
+        run: |
+          echo "ENV=dev" >> $GITHUB_ENV
+
+      - name: Set env for staging environment
+        if : ${{ steps.extract_branch.outputs.branch == 'SF-227' }}
+        run: |
+          echo "ENV=stg" >> $GITHUB_ENV
+
+      - name: Retrieve artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: WebApp
+          path: .deploy/$ENV
+
+      - name: Deploy the WebApp on IPFS
+        id: deploy
+        uses: fleekhq/action-deploy@v1
+        with:
+          apiKey: ${{ secrets.FLEEK_API_KEY }}
+          workDir: .deploy/$ENV/
+      - name: Get the output url
+        run: echo "Deploy url is ${{ steps.deploy.outputs.deployUrl }}"
