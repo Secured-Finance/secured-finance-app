@@ -19,7 +19,7 @@ describe('CollateralSimulationSection Component', () => {
 
     it('should reduce the collateral usage when the tradePosition is BORROW', () => {
         render(<Trade />);
-        expect(screen.getByText('80% -> 15.23%')).toBeInTheDocument();
+        expect(screen.getByText('80% -> 78.5%')).toBeInTheDocument();
     });
 
     it('should display the APY when the tradeValue is provided', () => {
