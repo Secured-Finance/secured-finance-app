@@ -1,0 +1,14 @@
+{
+  "site": {
+    "id": "964a1b0a-b18e-4954-badd-f442ce099a12",
+    "team": "bahadylbekov-team",
+    "platform": "ipfs",
+    "source": "ipfs",
+    "name": "bold-hall-4849"
+  },
+  "build": {
+    "baseDir": "",
+    "publicDir": "build",
+    "rootDir": ""
+  }
+}
