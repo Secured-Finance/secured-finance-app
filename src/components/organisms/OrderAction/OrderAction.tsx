@@ -2,7 +2,11 @@ import { OrderSide } from '@secured-finance/sf-client';
 import { useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button } from 'src/components/atoms';
-import { DepositCollateral, PlaceOrder } from 'src/components/organisms';
+import {
+    DepositCollateral,
+    generateCollateralList,
+    PlaceOrder,
+} from 'src/components/organisms';
 import { CollateralBook, usePlaceOrder } from 'src/hooks';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { setWalletDialogOpen } from 'src/store/interactions';
@@ -13,7 +17,6 @@ import { amountFormatterFromBase } from 'src/utils';
 import { computeAvailableToBorrow } from 'src/utils/collateral';
 import { LoanValue } from 'src/utils/entities';
 import { useWallet } from 'use-wallet';
-import { generateCollateralList } from '../CollateralTab';
 
 interface OrderActionProps {
     loanValue?: LoanValue;

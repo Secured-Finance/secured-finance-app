@@ -6,11 +6,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
     CollateralManagementConciseTab,
     NavTab,
+    OrderInputBox,
     Separator,
     Slider,
 } from 'src/components/atoms';
 import { BorrowLendSelector } from 'src/components/atoms/BorrowLendSelector';
-import { OrderInputBox } from 'src/components/atoms/OrderInputBox';
 import { CollateralBook, OrderType } from 'src/hooks';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import {

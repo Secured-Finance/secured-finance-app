@@ -3,6 +3,7 @@ export * from './AdvancedLending';
 export * from './AdvancedLendingOrderCard';
 export * from './CollateralInput';
 export * from './CollateralOrganism';
+export * from './CollateralTab';
 export * from './ConnectWalletCard';
 export * from './ContractDetailsDialog';
 export * from './DepositCollateral';
