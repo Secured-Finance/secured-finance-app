@@ -7,7 +7,7 @@ import {
     withAssetPrice,
     withWalletProvider,
 } from 'src/../.storybook/decorators';
-import { setAmount, setCurrency } from 'src/store/landingOrderForm';
+import { setAmount, setCurrency, setSide } from 'src/store/landingOrderForm';
 import {
     collateralBook37,
     collateralBook80,
@@ -32,6 +32,7 @@ const Template: ComponentStory<typeof OrderAction> = args => {
         const timerId = setTimeout(() => {
             dispatch(setCurrency(CurrencySymbol.USDC));
             dispatch(setAmount(BigNumber.from(500000000)));
+            dispatch(setSide(OrderSide.BORROW));
         }, 200);
 
         return () => clearTimeout(timerId);
@@ -56,11 +57,11 @@ NotEnoughCollateral.parameters = {
     connected: true,
 };
 
-export const OrderSideButton = Template.bind({});
-OrderSideButton.args = {
+export const RenderOrderSideButton = Template.bind({});
+RenderOrderSideButton.args = {
     collateralBook: collateralBook37,
-    orderSide: OrderSide.BORROW,
+    renderSide: true,
 };
-OrderSideButton.parameters = {
+RenderOrderSideButton.parameters = {
     connected: true,
 };

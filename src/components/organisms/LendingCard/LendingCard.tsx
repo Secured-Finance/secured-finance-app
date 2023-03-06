@@ -128,7 +128,7 @@ export const LendingCard = ({
                     currency={currency}
                 />
 
-                <OrderAction collateralBook={collateralBook} orderSide={side} />
+                <OrderAction collateralBook={collateralBook} renderSide />
             </div>
         </div>
     );
