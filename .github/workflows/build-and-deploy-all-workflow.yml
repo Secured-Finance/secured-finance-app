@@ -13,6 +13,9 @@ on:
       - synchronize
       - reopened
 
+env:
+  DEPLOY: ${{ github.event_name == 'push' && (github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/SF-227') }}
+
 jobs:
   build-and-test-all:
     name: Build and Publish
@@ -125,7 +128,7 @@ jobs:
   deploy-on-fleek:
     runs-on: ubuntu-latest
     name: Deploy on Fleek only for push on main or develop
-    if: ${{ github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/SF-227') }}
+    if: ${{ env.DEPLOY }}
     needs: build-and-test-all
     steps:
       - uses: actions/checkout@v2
@@ -138,24 +141,24 @@ jobs:
       - name: Set env for development environment
         if : ${{ steps.extract_branch.outputs.branch == 'develop' }}
         run: |
-          echo "ENV=dev" >> $GITHUB_ENV
+          echo "FLEEK_ENV=dev" >> $GITHUB_ENV
 
       - name: Set env for staging environment
         if : ${{ steps.extract_branch.outputs.branch == 'SF-227' }}
         run: |
-          echo "ENV=stg" >> $GITHUB_ENV
+          echo "FLEEK_ENV=stg" >> $GITHUB_ENV
 
       - name: Retrieve artifact
         uses: actions/download-artifact@v3
         with:
           name: WebApp
-          path: .deploy/$ENV
+          path: .deploy/${{ env.FLEEK_ENV }}
 
       - name: Deploy the WebApp on IPFS
         id: deploy
         uses: fleekhq/action-deploy@v1
         with:
           apiKey: ${{ secrets.FLEEK_API_KEY }}
-          workDir: .deploy/$ENV/
+          workDir: .deploy/${{ env.FLEEK_ENV }}
       - name: Get the output url
         run: echo "Deploy url is ${{ steps.deploy.outputs.deployUrl }}"
