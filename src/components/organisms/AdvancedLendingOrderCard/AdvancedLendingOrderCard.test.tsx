@@ -2,7 +2,7 @@ import { OrderSide } from '@secured-finance/sf-client';
 import { composeStories } from '@storybook/testing-react';
 import { OrderType } from 'src/hooks';
 import { preloadedAssetPrices } from 'src/stories/mocks/fixtures';
-import { render, screen } from 'src/test-utils.js';
+import { render, screen, waitFor } from 'src/test-utils.js';
 import { CurrencySymbol } from 'src/utils';
 import * as stories from './AdvancedLendingOrderCard.stories';
 
@@ -10,10 +10,10 @@ const { Default } = composeStories(stories);
 
 const preloadedState = {
     landingOrderForm: {
-        currency: CurrencySymbol.BTC,
+        currency: CurrencySymbol.USDC,
         maturity: 0,
         side: OrderSide.BORROW,
-        amount: '1200000000',
+        amount: '500000000',
         unitPrice: 0,
         orderType: OrderType.LIMIT,
     },
@@ -21,8 +21,9 @@ const preloadedState = {
 };
 
 describe('AdvancedLendingOrderCard Component', () => {
-    it('should render an AdvancedLendingOrderCard', () => {
-        render(<Default />);
+    it('should render an AdvancedLendingOrderCard', async () => {
+        await waitFor(() => render(<Default />, { preloadedState }));
+
         expect(screen.getByTestId('place-order-button')).toHaveTextContent(
             'Place Order'
         );
@@ -30,8 +31,9 @@ describe('AdvancedLendingOrderCard Component', () => {
         expect(screen.getAllByRole('radiogroup')).toHaveLength(2);
     });
 
-    it('should render CollateralManagementConciseTab', () => {
-        render(<Default />);
+    it('should render CollateralManagementConciseTab', async () => {
+        await waitFor(() => render(<Default />, { preloadedState }));
+
         expect(screen.getByText('Collateral Management')).toBeInTheDocument();
         expect(screen.getByText('Collateral Utilization')).toBeInTheDocument();
         expect(screen.getByText('37%')).toBeInTheDocument();
@@ -49,24 +51,24 @@ describe('AdvancedLendingOrderCard Component', () => {
         );
     });
 
-    it('should render order form', () => {
-        render(<Default />, { preloadedState });
+    it('should render order form', async () => {
+        await waitFor(() => render(<Default />, { preloadedState }));
 
         const inputs = screen.getAllByRole('textbox');
         expect(screen.getByText('Unit Price')).toBeInTheDocument();
         expect(inputs[0].getAttribute('value')).toBe('0');
 
         expect(screen.getByText('Amount')).toBeInTheDocument();
-        expect(inputs[1].getAttribute('value')).toBe('12');
-        expect(screen.getByText('BTC')).toBeInTheDocument();
+        expect(inputs[1].getAttribute('value')).toBe('500');
+        expect(screen.getByText('USDC')).toBeInTheDocument();
 
         expect(screen.getByText('Total')).toBeInTheDocument();
-        expect(screen.getByText('600,000')).toBeInTheDocument();
+        expect(screen.getByText('500')).toBeInTheDocument();
         expect(screen.getByText('USD')).toBeInTheDocument();
     });
 
-    it('should display the PlaceOrder Dialog when clicking on the Place Order button', () => {
-        render(<Default />, { preloadedState });
+    it('should display the PlaceOrder Dialog when clicking on the Place Order button', async () => {
+        await waitFor(() => render(<Default />, { preloadedState }));
         expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
         screen.getByTestId('place-order-button').click();
         expect(
@@ -76,8 +78,8 @@ describe('AdvancedLendingOrderCard Component', () => {
         ).toBeInTheDocument();
     });
 
-    it('should show a button to manage collateral', () => {
-        render(<Default />);
+    it('should show a button to manage collateral', async () => {
+        await waitFor(() => render(<Default />));
         expect(
             screen.getByRole('button', { name: 'Manage >>' })
         ).toBeInTheDocument();

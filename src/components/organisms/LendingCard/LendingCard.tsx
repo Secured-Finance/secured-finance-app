@@ -1,16 +1,14 @@
-import { OrderSide } from '@secured-finance/sf-client';
 import { formatDate } from '@secured-finance/sf-core';
 import { BigNumber } from 'ethers';
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { BorrowLendSelector, Button } from 'src/components/atoms';
+import { BorrowLendSelector } from 'src/components/atoms';
 import {
     AssetSelector,
     CollateralUsageSection,
     TermSelector,
 } from 'src/components/molecules';
-import { PlaceOrder } from 'src/components/organisms';
-import { CollateralBook, usePlaceOrder } from 'src/hooks';
+import { CollateralBook } from 'src/hooks';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import {
     selectLandingOrderForm,
@@ -29,6 +27,7 @@ import {
     getCurrencyMapAsOptions,
 } from 'src/utils';
 import { LoanValue, Maturity } from 'src/utils/entities';
+import { OrderAction } from '../OrderAction';
 
 export const LendingCard = ({
     collateralBook,
@@ -39,9 +38,6 @@ export const LendingCard = ({
     marketValue: LoanValue;
     maturitiesOptionList: MaturityOptionList;
 }) => {
-    const [openPlaceOrder, setOpenPlaceOrder] = useState(false);
-    const { placeOrder } = usePlaceOrder();
-
     const { currency, maturity, side } = useSelector((state: RootState) =>
         selectLandingOrderForm(state.landingOrderForm)
     );
@@ -132,18 +128,7 @@ export const LendingCard = ({
                     currency={currency}
                 />
 
-                <Button
-                    fullWidth
-                    onClick={() => setOpenPlaceOrder(true)}
-                    data-testid='place-order-button'
-                >
-                    {side === OrderSide.BORROW ? 'Borrow' : 'Lend'}
-                </Button>
-                <PlaceOrder
-                    isOpen={openPlaceOrder}
-                    onClose={() => setOpenPlaceOrder(false)}
-                    onPlaceOrder={placeOrder}
-                />
+                <OrderAction collateralBook={collateralBook} orderSide={side} />
             </div>
         </div>
     );

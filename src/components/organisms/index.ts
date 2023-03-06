@@ -12,6 +12,7 @@ export * from './LineChartTab';
 export * from './MyTransactionsTable';
 export * from './MyWalletCard';
 export * from './OpenOrderTable';
+export * from './OrderAction';
 export * from './OrderHistoryTable';
 export * from './OrderWidget';
 export * from './PlaceOrder';
