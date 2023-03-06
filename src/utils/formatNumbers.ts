@@ -79,3 +79,9 @@ export const formatLoanValue = (value: LoanValue, type: 'price' | 'rate') => {
 export function formatCollateralRatio(collateral: number) {
     return percentFormat(collateral, MAX_COVERAGE, 0);
 }
+export const formatTimestamp = (timestamp: number) => {
+    const date = new Date(timestamp * 1000);
+    return `${date.toLocaleDateString('en-US', {
+        timeZone: 'UTC',
+    })} ${date.toLocaleTimeString('en-GB', { timeZone: 'UTC' })}`;
+};

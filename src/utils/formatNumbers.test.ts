@@ -1,6 +1,7 @@
 import { BigNumber } from 'ethers';
 import {
     formatCollateralRatio,
+    formatTimestamp,
     formatWithCurrency,
     ordinaryFormat,
     usdFormat,
@@ -88,5 +89,13 @@ describe('formatCollateralRatio', () => {
         expect(formatCollateralRatio(100)).toEqual('1%');
         expect(formatCollateralRatio(10)).toEqual('0.1%');
         expect(formatCollateralRatio(1)).toEqual('0.01%');
+    });
+});
+
+describe('formatTimestamp', () => {
+    it('should format a timestamp in utc timezone', () => {
+        expect(formatTimestamp(0)).toEqual('1/1/1970 00:00:00');
+        expect(formatTimestamp(86400)).toEqual('1/2/1970 00:00:00');
+        expect(formatTimestamp(1671859344)).toEqual('12/24/2022 05:22:24');
     });
 });

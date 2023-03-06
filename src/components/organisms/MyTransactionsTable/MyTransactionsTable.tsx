@@ -2,7 +2,7 @@ import { createColumnHelper } from '@tanstack/react-table';
 import { useMemo } from 'react';
 import { CoreTable } from 'src/components/molecules';
 import { TradeHistory } from 'src/types';
-import { formatLoanValue } from 'src/utils';
+import { formatLoanValue, formatTimestamp } from 'src/utils';
 import { LoanValue } from 'src/utils/entities';
 import {
     amountColumnDefinition,
@@ -39,6 +39,19 @@ const priceYieldColumnDef = (
     });
 };
 
+const timestampColumnDef = (headerTitle: string) => {
+    return columnHelper.accessor('createdAt', {
+        cell: info => {
+            return (
+                <div className='typography-caption text-slateGray'>
+                    {formatTimestamp(+info.getValue().toString())}
+                </div>
+            );
+        },
+        header: tableHeaderDefinition(headerTitle),
+    });
+};
+
 export const MyTransactionsTable = ({ data }: { data: TradeHistory }) => {
     const columns = useMemo(
         () => [
@@ -65,6 +78,7 @@ export const MyTransactionsTable = ({ data }: { data: TradeHistory }) => {
                 row => row.forwardValue,
                 { compact: true, color: true }
             ),
+            timestampColumnDef('Date and Time'),
         ],
         []
     );
