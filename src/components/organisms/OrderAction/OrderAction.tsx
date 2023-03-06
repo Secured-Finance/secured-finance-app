@@ -21,13 +21,13 @@ import { useWallet } from 'use-wallet';
 interface OrderActionProps {
     loanValue?: LoanValue;
     collateralBook: CollateralBook;
-    orderSide?: OrderSide;
+    renderSide?: boolean;
 }
 
 export const OrderAction = ({
     loanValue,
     collateralBook,
-    orderSide,
+    renderSide = false,
 }: OrderActionProps) => {
     const { account } = useWallet();
     const dispatch = useDispatch();
@@ -37,7 +37,7 @@ export const OrderAction = ({
         useState(false);
     const [openPlaceOrderDialog, setOpenPlaceOrderDialog] = useState(false);
 
-    const { currency, amount } = useSelector((state: RootState) =>
+    const { currency, amount, side } = useSelector((state: RootState) =>
         selectLandingOrderForm(state.landingOrderForm)
     );
 
@@ -70,7 +70,7 @@ export const OrderAction = ({
     return (
         <div>
             {account ? (
-                canBorrow ? (
+                canBorrow || side === OrderSide.LEND ? (
                     <Button
                         fullWidth
                         onClick={() => {
@@ -78,8 +78,8 @@ export const OrderAction = ({
                         }}
                         data-testid='place-order-button'
                     >
-                        {orderSide
-                            ? orderSide === OrderSide.BORROW
+                        {renderSide
+                            ? side === OrderSide.BORROW
                                 ? 'Borrow'
                                 : 'Lend'
                             : 'Place Order'}
