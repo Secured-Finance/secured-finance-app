@@ -16,6 +16,6 @@ jobs:
         uses: fleekhq/action-deploy@v1
         with:
           apiKey: ${{ secrets.FLEEK_API_KEY }}
-          workingDir: ./deploy/stg
+          workDir: ./deploy/stg
       - name: Get the output url
         run: echo "Deploy url is ${{ steps.deploy.outputs.deployUrl }}"
