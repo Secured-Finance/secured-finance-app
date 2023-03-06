@@ -9,6 +9,6 @@
   "build": {
     "baseDir": "",
     "publicDir": "build",
-    "rootDir": ""
+    "rootDir": "../../"
   }
 }
