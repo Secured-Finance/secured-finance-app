@@ -31,7 +31,21 @@ describe('collateral.calculatePercentage', () => {
 });
 
 describe('recomputeCollateralUtilization', () => {
-    it('should recompute the collateral utilization', () => {
-        expect(recomputeCollateralUtilization(1000, 5000, 100)).toEqual(4333);
+    it('should decrease the collateral utilization when the new usdTradeValue is positive', () => {
+        expect(recomputeCollateralUtilization(1000, 5000, 100)).toEqual(4545);
+        expect(recomputeCollateralUtilization(1000, 5000, 200)).toEqual(4166);
+    });
+
+    it('should increase the collateral utilization when the new usdTradeValue is negative', () => {
+        expect(recomputeCollateralUtilization(1000, 5000, -100)).toEqual(5555);
+        expect(recomputeCollateralUtilization(1000, 5000, -200)).toEqual(6250);
+    });
+
+    it('should not change the collateral utilization when the new usdTradeValue is 0', () => {
+        expect(recomputeCollateralUtilization(1000, 5000, 0)).toEqual(5000);
+    });
+
+    it('should return 0 if the new usdTradeValue is bigger than the collateral and negative', () => {
+        expect(recomputeCollateralUtilization(1000, 5000, -2000)).toEqual(0);
     });
 });

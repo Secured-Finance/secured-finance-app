@@ -26,11 +26,11 @@ export function recomputeCollateralUtilization(
     coverageRatio: number,
     newTradeUsdValue: number
 ) {
-    const availableToBorrowInUsd =
-        computeAvailableToBorrow(1, totalCollateralInUsd, coverageRatio) +
-        newTradeUsdValue;
-
-    return Math.floor(
-        (availableToBorrowInUsd / totalCollateralInUsd) * MAX_COVERAGE
+    return Math.max(
+        0,
+        Math.floor(
+            (totalCollateralInUsd * coverageRatio) /
+                (totalCollateralInUsd + newTradeUsdValue)
+        )
     );
 }
