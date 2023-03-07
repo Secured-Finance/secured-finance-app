@@ -10,91 +10,17 @@ on:
 
 jobs:
   build-and-test-all:
+    name: Build and Test
     uses: ./.github/workflows/build.yml
     with:
-      artifact-name: WebApp
+      artifact_name: WebApp
       branch_name: ${{ github.ref }}
     secrets: inherit
 
   cypress-run:
     name: Cypress Run Tests
-    runs-on: ubuntu-latest
     needs: build-and-test-all
-    steps:
-      - uses: actions/checkout@v3
-
-      - uses: actions/setup-node@v3
-        with:
-          node-version-file: '.nvmrc'
-          cache: 'npm'
-
-      - name: Download the build folders of the WebApp
-        uses: actions/download-artifact@v3
-        with:
-          name: WebApp
-          path: build
-
-      - name: Install Dependencies for serving the Web App to Cypress
-        run: npm install serve
-
-      - name: Cypress run
-        uses: cypress-io/github-action@v3
-        with:
-          install: false
-          start: npx serve ./build
-          wait-on: 'http://localhost:3000'
-          wait-on-timeout: 180
-        env:
-          CYPRESS_TENDERLY_KEY: ${{ secrets.TENDERLY_KEY }}
-
-      - uses: actions/upload-artifact@v3
-        if: failure()
-        with:
-          name: cypress-screenshots
-          path: cypress/screenshots
-          retention-days: 3
-
-      - uses: actions/upload-artifact@v3
-        if: failure()
-        with:
-          name: cypress-videos
-          path: cypress/videos
-          retention-days: 3
-
-  deploy-on-fleek:
-    runs-on: ubuntu-latest
-    name: Deploy on Fleek only for push on main or develop
-    needs: build-and-test-all
-    if: ${{ github.event_name == 'push' && (github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/SF-227') }}
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: Extract branch name
-        shell: bash
-        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
-        id: extract_branch
-
-      - name: Set env for development environment
-        if : ${{ steps.extract_branch.outputs.branch == 'develop' }}
-        run: |
-          echo "FLEEK_ENV=dev" >> $GITHUB_ENV
-
-      - name: Set env for staging environment
-        if : ${{ steps.extract_branch.outputs.branch == 'SF-227' }}
-        run: |
-          echo "FLEEK_ENV=stg" >> $GITHUB_ENV
-
-      - name: Retrieve artifact
-        uses: actions/download-artifact@v3
-        with:
-          name: WebApp
-          path: .deploy/${{ env.FLEEK_ENV }}/build
-
-      - name: Deploy the WebApp on IPFS
-        id: deploy
-        uses: fleekhq/action-deploy@v1
-        with:
-          apiKey: ${{ secrets.FLEEK_API_KEY }}
-          workDir: .deploy/${{ env.FLEEK_ENV }}
-      - name: Get the output url
-        run: echo "Deploy url is ${{ steps.deploy.outputs.deployUrl }}"
+    uses: ./.github/workflows/cypress-test.yml
+    with:
+      artifact_name: WebApp
+    secrets: inherit

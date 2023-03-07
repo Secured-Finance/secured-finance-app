@@ -2,7 +2,7 @@ name: Build Web App and Storybook
 on:
   workflow_call:
     inputs:
-      artifact-name:
+      artifact_name:
         required: true
         type: string
       branch_name:
@@ -29,11 +29,6 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Extract branch name
-        shell: bash
-        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
-        id: extract_branch
-
       - uses: actions/setup-node@v3
         with:
           node-version-file: '.nvmrc'
@@ -48,7 +43,7 @@ jobs:
           NEXT_PUBLIC_ALCHEMY_API_KEY=${{ secrets.ALCHEMY_API_KEY }}
           NEXT_PUBLIC_AMPLITUDE_API_KEY=${{ secrets.AMPLITUDE_API_KEY }}
           EOF
-          if [ ${{ inputs.branch_name }} = main ]; then
+          if [ ${{ inputs.branch_name }} = refs/heads/main ]; then
             echo "SF_ENV=staging" >> .env.local
           fi
 
@@ -79,7 +74,7 @@ jobs:
       - name: Publish Web App
         uses: actions/upload-artifact@v3
         with:
-          name: ${{ inputs.artifact-name }}
+          name: ${{ inputs.artifact_name }}
           path: build
           retention-days: 10
           if-no-files-found: error

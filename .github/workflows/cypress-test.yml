@@ -1,0 +1,55 @@
+name: Cypress Run Tests
+on:
+  workflow_call:
+    inputs:
+      artifact_name:
+        required: true
+        type: string
+    secrets:
+      TENDERLY_KEY:
+        required: true
+
+jobs:
+  cypress-run:
+    name: Cypress Run Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'npm'
+
+      - name: Download the build folders of the WebApp
+        uses: actions/download-artifact@v3
+        with:
+          name: ${{ inputs.artifact_name }}
+          path: build
+
+      - name: Install Dependencies for serving the Web App to Cypress
+        run: npm install serve
+
+      - name: Cypress run
+        uses: cypress-io/github-action@v3
+        with:
+          install: false
+          start: npx serve ./build
+          wait-on: 'http://localhost:3000'
+          wait-on-timeout: 180
+        env:
+          CYPRESS_TENDERLY_KEY: ${{ secrets.TENDERLY_KEY }}
+
+      - uses: actions/upload-artifact@v3
+        if: failure()
+        with:
+          name: cypress-screenshots
+          path: cypress/screenshots
+          retention-days: 3
+
+      - uses: actions/upload-artifact@v3
+        if: failure()
+        with:
+          name: cypress-videos
+          path: cypress/videos
+          retention-days: 3
