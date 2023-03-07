@@ -43,4 +43,25 @@ describe('SimpleAdvancedView Component', () => {
         render(<Default />);
         expect(screen.getByText('Simple Component')).toBeInTheDocument();
     });
+
+    it('should open on the advanced view if the initialView is set to Advanced', () => {
+        render(<Default initialView='Advanced' />);
+        expect(screen.getByText('Advanced Component')).toBeInTheDocument();
+    });
+
+    it('should open on the simple view by default', () => {
+        render(<Default />);
+        expect(screen.getByText('Simple Component')).toBeInTheDocument();
+    });
+
+    it('should highlight the selected view', () => {
+        render(<Default />);
+        expect(screen.getByRole('radio', { name: 'Simple' })).toBeChecked();
+        expect(
+            screen.getByRole('radio', { name: 'Advanced' })
+        ).not.toBeChecked();
+        fireEvent.click(screen.getByText('Advanced'));
+        expect(screen.getByRole('radio', { name: 'Simple' })).not.toBeChecked();
+        expect(screen.getByRole('radio', { name: 'Advanced' })).toBeChecked();
+    });
 });

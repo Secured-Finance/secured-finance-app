@@ -142,6 +142,7 @@ export const LendingCard = ({
                 <PlaceOrder
                     isOpen={openPlaceOrder}
                     onClose={() => setOpenPlaceOrder(false)}
+                    collateral={collateralBook}
                     onPlaceOrder={placeOrder}
                 />
             </div>
