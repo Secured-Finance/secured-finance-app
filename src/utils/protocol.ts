@@ -1,8 +1,7 @@
 import { BigNumber } from 'ethers';
 import { AssetPriceMap } from 'src/store/assetPrices/selectors';
 import { DailyVolumes } from 'src/types';
-import { hexToString } from 'web3-utils';
-import { currencyMap, toCurrencySymbol } from './currencyList';
+import { currencyMap, hexToCurrencySymbol } from './currencyList';
 
 export function computeTotalDailyVolumeInUSD(
     dailyVolumes: DailyVolumes,
@@ -10,7 +9,7 @@ export function computeTotalDailyVolumeInUSD(
 ): BigNumber {
     return dailyVolumes.reduce((acc, dailyVolume) => {
         const { currency, volume } = dailyVolume;
-        const ccy = toCurrencySymbol(hexToString(currency));
+        const ccy = hexToCurrencySymbol(currency);
         if (!ccy) {
             return acc;
         }

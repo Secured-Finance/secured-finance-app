@@ -61,6 +61,19 @@ describe('Header component', () => {
         );
     });
 
+    it('should highlight the landing page when on advanced page', () => {
+        (useRouter as jest.Mock).mockImplementation(() => ({
+            pathname: '/advanced',
+            push: jest.fn(),
+        }));
+
+        render(<Primary />);
+        const textElement = screen.getByText('OTC Lending');
+        expect(textElement.parentNode).toHaveClass(
+            'bg-gradient-to-b from-tabGradient2 to-tabGradient1'
+        );
+    });
+
     it('should render a disabled connect wallet button on chainError', () => {
         (useRouter as jest.Mock).mockImplementation(() => ({
             pathname: '/',

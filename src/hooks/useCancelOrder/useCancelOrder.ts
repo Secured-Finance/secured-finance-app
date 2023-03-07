@@ -4,22 +4,25 @@ import { CurrencySymbol, toCurrency } from 'src/utils';
 import { Maturity } from 'src/utils/entities';
 import useSF from '../useSecuredFinance';
 
-export const useCancelOrder = (
-    ccy: CurrencySymbol,
-    maturity: Maturity,
-    orderId: number | BigNumber
-) => {
+export const useCancelOrder = () => {
     const securedFinance = useSF();
 
-    const handleCancelOrder = useCallback(async () => {
-        if (!securedFinance) return;
-        const tx = await securedFinance.cancelLendingOrder(
-            toCurrency(ccy),
-            maturity.toNumber(),
-            orderId
-        );
-        return tx;
-    }, [securedFinance, ccy, maturity, orderId]);
+    const handleCancelOrder = useCallback(
+        async (
+            orderId: number | BigNumber,
+            ccy: CurrencySymbol,
+            maturity: Maturity
+        ) => {
+            if (!securedFinance) return;
+            const tx = await securedFinance.cancelLendingOrder(
+                toCurrency(ccy),
+                maturity.toNumber(),
+                orderId
+            );
+            return tx;
+        },
+        [securedFinance]
+    );
 
-    return { onCancelOrder: handleCancelOrder };
+    return { handleCancelOrder };
 };

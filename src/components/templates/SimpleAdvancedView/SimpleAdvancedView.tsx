@@ -6,16 +6,18 @@ export const SimpleAdvancedView = ({
     title,
     simpleComponent,
     advanceComponent,
+    initialView = 'Simple',
     onModeChange,
     pageName,
 }: {
     title: string;
     simpleComponent: React.ReactNode;
     advanceComponent: React.ReactNode;
+    initialView?: ViewType;
     onModeChange?: (v: ViewType) => void;
     pageName?: string;
 }) => {
-    const [view, setView] = useState<ViewType>('Simple');
+    const [view, setView] = useState<ViewType>(initialView);
 
     const component = view === 'Simple' ? simpleComponent : advanceComponent;
 

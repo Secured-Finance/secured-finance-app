@@ -1,4 +1,5 @@
 import { BigNumber, FixedNumber } from 'ethers';
+import { MAX_COVERAGE } from './collateral';
 import { LoanValue } from './entities';
 
 export const usdFormat = (
@@ -75,6 +76,9 @@ export const formatLoanValue = (value: LoanValue, type: 'price' | 'rate') => {
     }
 };
 
+export function formatCollateralRatio(collateral: number) {
+    return percentFormat(collateral, MAX_COVERAGE, 0);
+}
 export const formatTimestamp = (timestamp: number) => {
     const date = new Date(timestamp * 1000);
     return `${date.toLocaleDateString('en-US', {
