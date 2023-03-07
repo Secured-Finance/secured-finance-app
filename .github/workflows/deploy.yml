@@ -1,12 +1,11 @@
-name: Build Web App and Storybook
+name: Deploy on Fleek
 
 on:
-  pull_request:
-    types:
-      - opened
-      - edited
-      - synchronize
-      - reopened
+  push:
+    branches:
+      - main
+      - develop
+      - SF-227
 
 jobs:
   build-and-test-all:
@@ -65,7 +64,6 @@ jobs:
     runs-on: ubuntu-latest
     name: Deploy on Fleek only for push on main or develop
     needs: build-and-test-all
-    if: ${{ github.event_name == 'push' && (github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/SF-227') }}
     steps:
       - uses: actions/checkout@v2
 
@@ -75,12 +73,12 @@ jobs:
         id: extract_branch
 
       - name: Set env for development environment
-        if : ${{ steps.extract_branch.outputs.branch == 'develop' }}
+        if : ${{ github.ref == 'develop' }}
         run: |
           echo "FLEEK_ENV=dev" >> $GITHUB_ENV
 
       - name: Set env for staging environment
-        if : ${{ steps.extract_branch.outputs.branch == 'SF-227' }}
+        if : ${{ github.ref == 'SF-227' }}
         run: |
           echo "FLEEK_ENV=stg" >> $GITHUB_ENV
 
