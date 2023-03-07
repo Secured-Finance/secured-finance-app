@@ -5,7 +5,6 @@ on:
     branches:
       - main
       - develop
-      - SF-227
 
 jobs:
   build-and-test-all:
@@ -18,11 +17,11 @@ jobs:
 
   cypress-run:
     name: Cypress Run Tests
+    needs: build-and-test-all
     uses: ./.github/workflows/cypress-test.yml
     with:
       artifact_name: WebApp
     secrets: inherit
-    needs: build-and-test-all
 
   deploy-on-fleek:
     runs-on: ubuntu-latest
@@ -37,7 +36,7 @@ jobs:
           echo "FLEEK_ENV=dev" >> $GITHUB_ENV
 
       - name: Set env for staging environment
-        if : ${{ github.ref == 'refs/heads/SF-227' }}
+        if : ${{ github.ref == 'refs/heads/main' }}
         run: |
           echo "FLEEK_ENV=stg" >> $GITHUB_ENV
 
