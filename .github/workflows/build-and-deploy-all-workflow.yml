@@ -151,7 +151,7 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: WebApp
-          path: .deploy/${{ env.FLEEK_ENV }}
+          path: .deploy/${{ env.FLEEK_ENV }}/build
 
       - name: Deploy the WebApp on IPFS
         id: deploy
