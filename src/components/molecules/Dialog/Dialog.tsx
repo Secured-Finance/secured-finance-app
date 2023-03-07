@@ -1,6 +1,10 @@
 import { Dialog as HeadlessDialog } from '@headlessui/react';
 import { Button, CloseButton } from 'src/components/atoms';
 
+export type DialogState = {
+    isOpen: boolean;
+    onClose: () => void;
+};
 export const Dialog = ({
     title,
     description,
@@ -14,10 +18,8 @@ export const Dialog = ({
     description: string;
     callToAction: string;
     onClick: () => void;
-    isOpen: boolean;
-    onClose: () => void;
     children: JSX.Element;
-}) => {
+} & DialogState) => {
     return (
         <HeadlessDialog
             open={isOpen}

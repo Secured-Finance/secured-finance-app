@@ -17,7 +17,8 @@ export const SimpleAdvancedSelector = ({
             className='flex h-10 w-fit flex-row items-center rounded-full bg-black-20 p-[2px] shadow-selector'
         >
             <RadioGroup.Option
-                value={'Simple'}
+                aria-label='Simple'
+                value='Simple'
                 className='h-full w-1/2'
                 as='button'
             >
@@ -26,7 +27,8 @@ export const SimpleAdvancedSelector = ({
                 )}
             </RadioGroup.Option>
             <RadioGroup.Option
-                value={'Advanced'}
+                aria-label='Advanced'
+                value='Advanced'
                 className='h-full w-1/2'
                 as='button'
             >

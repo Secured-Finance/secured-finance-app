@@ -5,8 +5,7 @@ import { Chip, CurrencyItem, PriceYieldItem } from 'src/components/atoms';
 import { TableContractCell, TableHeader } from 'src/components/molecules';
 import { AssetPriceMap } from 'src/store/assetPrices/selectors';
 import { ColorFormat } from 'src/types';
-import { hexToString } from 'web3-utils';
-import { currencyMap, CurrencySymbol } from './currencyList';
+import { currencyMap, hexToCurrencySymbol } from './currencyList';
 import { LoanValue, Maturity } from './entities';
 
 export const tableHeaderDefinition =
@@ -57,9 +56,8 @@ export const amountColumnDefinition = <T extends AmountColumnType>(
     return columnHelper.accessor(accessor, {
         id: id,
         cell: info => {
-            const ccy = hexToString(
-                info.row.original.currency
-            ) as CurrencySymbol;
+            const ccy = hexToCurrencySymbol(info.row.original.currency);
+            if (!ccy) return null;
 
             let color: ColorFormat['color'];
             if (hasSideProperty(info.row.original)) {

@@ -3,7 +3,7 @@ import {
     withAssetPrice,
     withWalletProvider,
 } from 'src/../.storybook/decorators';
-import { dec22Fixture } from 'src/stories/mocks/fixtures';
+import { collateralBook37, dec22Fixture } from 'src/stories/mocks/fixtures';
 import { LoanValue } from 'src/utils/entities';
 import { PlaceOrder } from './PlaceOrder';
 
@@ -13,6 +13,7 @@ export default {
     args: {
         isOpen: true,
         onClose: () => {},
+        collateral: collateralBook37,
         loanValue: LoanValue.fromPrice(9410, dec22Fixture.toNumber()),
     },
     decorators: [withAssetPrice, withWalletProvider],
