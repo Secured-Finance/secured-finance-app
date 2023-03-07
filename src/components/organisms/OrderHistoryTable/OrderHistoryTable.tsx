@@ -1,10 +1,13 @@
 import { createColumnHelper } from '@tanstack/react-table';
 import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
-import { CoreTable } from 'src/components/molecules';
+import { CoreTable, TableActionMenu } from 'src/components/molecules';
+import { useCancelOrder } from 'src/hooks';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { RootState } from 'src/store/types';
 import { OrderList } from 'src/types';
+import { hexToCurrencySymbol } from 'src/utils';
+import { Maturity } from 'src/utils/entities';
 import {
     amountColumnDefinition,
     contractColumnDefinition,
@@ -19,6 +22,7 @@ const columnHelper = createColumnHelper<Order>();
 
 export const OrderHistoryTable = ({ data }: { data: OrderList }) => {
     const priceList = useSelector((state: RootState) => getPriceMap(state));
+    const { handleCancelOrder } = useCancelOrder();
 
     const columns = useMemo(
         () => [
@@ -43,11 +47,40 @@ export const OrderHistoryTable = ({ data }: { data: OrderList }) => {
             }),
             columnHelper.display({
                 id: 'actions',
-                cell: () => <div>...</div>,
+                cell: info => {
+                    const ccy = hexToCurrencySymbol(info.row.original.currency);
+                    const orderId = Number(info.row.original.id);
+                    const maturity = new Maturity(info.row.original.maturity);
+                    return (
+                        <div className='flex justify-center'>
+                            <TableActionMenu
+                                items={[
+                                    {
+                                        text: 'Edit Order',
+                                        onClick: () => {},
+                                        disabled: true,
+                                    },
+                                    {
+                                        text: 'Cancel Order',
+                                        onClick: () => {
+                                            if (ccy) {
+                                                handleCancelOrder(
+                                                    orderId,
+                                                    ccy,
+                                                    maturity
+                                                );
+                                            }
+                                        },
+                                    },
+                                ]}
+                            />
+                        </div>
+                    );
+                },
                 header: () => <div>Actions</div>,
             }),
         ],
-        [priceList]
+        [handleCancelOrder, priceList]
     );
 
     return <CoreTable columns={columns} data={data} border />;

@@ -17,6 +17,7 @@ export * from './OrderAction';
 export * from './OrderHistoryTable';
 export * from './OrderWidget';
 export * from './PlaceOrder';
+export * from './UnwindDialog';
 export * from './WalletDialog';
 export * from './WalletPopover';
 export * from './WithdrawCollateral';

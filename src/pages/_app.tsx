@@ -15,9 +15,10 @@ import {
 import { UseWalletProvider } from 'use-wallet';
 import '../assets/css/index.css';
 
-init(getAmplitudeApiKey(), undefined, {
-    appVersion: 'dev',
-});
+getAmplitudeApiKey() ??
+    init(getAmplitudeApiKey(), undefined, {
+        appVersion: process.env.SF_ENV,
+    });
 
 function App({ Component, pageProps }: AppProps) {
     return (

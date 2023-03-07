@@ -4,16 +4,10 @@ import {
     Section,
     SectionWithItems,
 } from 'src/components/atoms';
-import { AmountCard, Dialog } from 'src/components/molecules';
+import { AmountCard, Dialog, DialogState } from 'src/components/molecules';
 import { CurrencySymbol } from 'src/utils';
 
-export const ContractDetailDialog = ({
-    isOpen,
-    onClose,
-}: {
-    isOpen: boolean;
-    onClose: () => void;
-}) => {
+export const ContractDetailDialog = ({ isOpen, onClose }: DialogState) => {
     return (
         <Dialog
             isOpen={isOpen}

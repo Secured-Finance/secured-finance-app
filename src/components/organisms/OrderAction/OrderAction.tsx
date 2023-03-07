@@ -107,6 +107,7 @@ export const OrderAction = ({
                 isOpen={openPlaceOrderDialog}
                 onClose={() => setOpenPlaceOrderDialog(false)}
                 loanValue={loanValue}
+                collateral={collateralBook}
             />
 
             <DepositCollateral

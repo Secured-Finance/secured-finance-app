@@ -9,7 +9,14 @@ import {
     Section,
     SectionWithItems,
 } from 'src/components/atoms';
-import { AmountCard, Dialog, SuccessPanel } from 'src/components/molecules';
+import {
+    AmountCard,
+    CollateralSimulationSection,
+    Dialog,
+    DialogState,
+    SuccessPanel,
+} from 'src/components/molecules';
+import { CollateralBook } from 'src/hooks';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { selectLandingOrderForm } from 'src/store/landingOrderForm';
 import { setLastMessage } from 'src/store/lastError';
@@ -18,11 +25,10 @@ import { PlaceOrderFunction } from 'src/types';
 import {
     amountFormatterFromBase,
     CurrencySymbol,
-    formatLoanValue,
     handleContractTransaction,
     ordinaryFormat,
 } from 'src/utils';
-import { LoanValue, Maturity } from 'src/utils/entities';
+import { Amount, LoanValue, Maturity } from 'src/utils/entities';
 
 enum Step {
     orderConfirm = 1,
@@ -83,14 +89,14 @@ const reducer = (
 export const PlaceOrder = ({
     isOpen,
     onClose,
+    collateral,
     loanValue,
     onPlaceOrder,
 }: {
-    isOpen: boolean;
-    onClose: () => void;
+    collateral: CollateralBook;
     loanValue?: LoanValue;
     onPlaceOrder: PlaceOrderFunction;
-}) => {
+} & DialogState) => {
     const [state, dispatch] = useReducer(reducer, stateRecord[1]);
     const globalDispatch = useDispatch();
     const { currency, maturity, amount, side } = useSelector(
@@ -201,23 +207,15 @@ export const PlaceOrder = ({
                                         price={price}
                                     />
                                 </Section>
-                                <SectionWithItems
-                                    itemList={[
-                                        [
-                                            'Borrow Limit Remaining',
-                                            '$3,840 / $8,880',
-                                        ],
-                                        ['Collateral Usage', '50% → 57%'],
-                                        [
-                                            'Borrow APR',
-                                            loanValue
-                                                ? formatLoanValue(
-                                                      loanValue,
-                                                      'rate'
-                                                  )
-                                                : 'Market Order',
-                                        ],
-                                    ]}
+                                <CollateralSimulationSection
+                                    collateral={collateral}
+                                    tradeAmount={
+                                        new Amount(getAmount(), currency)
+                                    }
+                                    tradePosition={side}
+                                    assetPrice={price}
+                                    tradeValue={loanValue}
+                                    type='trade'
                                 />
                                 <SectionWithItems
                                     itemList={[

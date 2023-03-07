@@ -1,6 +1,9 @@
+import { OrderSide } from '@secured-finance/sf-client';
 import { composeStories } from '@storybook/testing-react';
+import { OrderType } from 'src/hooks';
 import { preloadedBalances } from 'src/stories/mocks/fixtures';
 import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
+import { CurrencySymbol } from 'src/utils';
 import * as stories from './Landing.stories';
 
 const { Default } = composeStories(stories);
@@ -53,5 +56,38 @@ describe('Landing Component', () => {
 
         expect(screen.getByRole('radio', { name: 'Market' })).toBeChecked();
         expect(screen.getByRole('radio', { name: 'Limit' })).not.toBeChecked();
+    });
+
+    it('should open the landing page with the mode set in the store', async () => {
+        waitFor(() => {
+            render(<Default />, {
+                apolloMocks: Default.parameters?.apolloClient.mocks,
+                preloadedState: {
+                    ...preloadedState,
+                    landingOrderForm: {
+                        currency: CurrencySymbol.FIL,
+                        maturity: 0,
+                        side: OrderSide.BORROW,
+                        amount: '0',
+                        unitPrice: 0,
+                        orderType: OrderType.MARKET,
+                        lastView: 'Advanced',
+                    },
+                },
+            });
+        });
+        expect(screen.getByRole('radio', { name: 'Advanced' })).toBeChecked();
+    });
+
+    it('should save in the store the last view used', async () => {
+        waitFor(() => {
+            const { store } = render(<Default />, {
+                apolloMocks: Default.parameters?.apolloClient.mocks,
+                preloadedState,
+            });
+            expect(store.getState().landingOrderForm.lastView).toBe('Simple');
+            fireEvent.click(screen.getByText('Advanced'));
+            expect(store.getState().landingOrderForm.lastView).toBe('Advanced');
+        });
     });
 });

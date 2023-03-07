@@ -1,5 +1,5 @@
 import { composeStories } from '@storybook/testing-react';
-import { render, screen } from 'src/test-utils.js';
+import { fireEvent, render, screen } from 'src/test-utils.js';
 import * as stories from './ActiveTradeTable.stories';
 
 const { Default } = composeStories(stories);
@@ -31,9 +31,29 @@ describe('ActiveTradeTable Component', () => {
         expect(sortedRowsDesc[4]).toHaveTextContent('Lend');
     });
 
-    it('should open the contract details dialog when clicking on a row', () => {
+    it('should display more options when clicking on the ... button', () => {
         render(<Default />);
-        screen.getByText('Lend').click();
+        expect(screen.queryByRole('menu')).not.toBeInTheDocument();
+        const moreOptionsButton = screen.getAllByRole('button', {
+            name: 'More options',
+        });
+        expect(moreOptionsButton).toHaveLength(4);
+        fireEvent.click(moreOptionsButton[0]);
+        expect(screen.getByRole('menu')).toBeInTheDocument();
+        expect(screen.getByText('View Contract')).toBeInTheDocument();
+        expect(screen.getByText('Add/Reduce Position')).toBeInTheDocument();
+        expect(screen.getByText('Unwind Position')).toBeInTheDocument();
+    });
+
+    it('should display the unwind dialog when clicking on the Unwind Position button', () => {
+        render(<Default />);
+        expect(screen.queryByText('Unwind Position')).not.toBeInTheDocument();
+        const moreOptionsButton = screen.getAllByRole('button', {
+            name: 'More options',
+        });
+        expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+        fireEvent.click(moreOptionsButton[0]);
+        fireEvent.click(screen.getByText('Unwind Position'));
         expect(screen.getByRole('dialog')).toBeInTheDocument();
     });
 });
