@@ -13,9 +13,6 @@ on:
       - synchronize
       - reopened
 
-env:
-  DEPLOY: ${{ github.event_name == 'push' && (github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/SF-227') }}
-
 jobs:
   build-and-test-all:
     name: Build and Publish
@@ -129,6 +126,7 @@ jobs:
     runs-on: ubuntu-latest
     name: Deploy on Fleek only for push on main or develop
     needs: build-and-test-all
+    if: ${{ github.event_name == 'push' && (github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/SF-227') }}
     steps:
       - uses: actions/checkout@v2
 
