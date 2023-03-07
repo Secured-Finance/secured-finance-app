@@ -3,7 +3,7 @@ import { useMemo } from 'react';
 import { CoreTable, OpenOrderActionCell } from 'src/components/molecules';
 import { Order } from 'src/components/organisms';
 import { OrderList } from 'src/types';
-import { CurrencySymbol } from 'src/utils';
+import { hexToCurrencySymbol } from 'src/utils';
 import { Maturity } from 'src/utils/entities';
 import {
     amountColumnDefinition,
@@ -11,7 +11,6 @@ import {
     loanTypeColumnDefinition,
     priceYieldColumnDefinition,
 } from 'src/utils/tableDefinitions';
-import { hexToString } from 'web3-utils';
 
 const columnHelper = createColumnHelper<Order>();
 
@@ -50,9 +49,8 @@ export const OpenOrderTable = ({ data }: { data: OrderList }) => {
             columnHelper.display({
                 id: 'actions',
                 cell: info => {
-                    const ccy = hexToString(
-                        info.row.original.currency
-                    ) as CurrencySymbol;
+                    const ccy = hexToCurrencySymbol(info.row.original.currency);
+                    if (!ccy) return null;
 
                     return (
                         <OpenOrderActionCell
