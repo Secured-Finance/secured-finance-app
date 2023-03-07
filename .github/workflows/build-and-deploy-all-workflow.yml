@@ -128,7 +128,7 @@ jobs:
   deploy-on-fleek:
     runs-on: ubuntu-latest
     name: Deploy on Fleek only for push on main or develop
-    if: ${{ vars.DEPLOY == 'true' }}
+    if: ${{ vars.DEPLOY }}
     needs: build-and-test-all
     steps:
       - uses: actions/checkout@v2
