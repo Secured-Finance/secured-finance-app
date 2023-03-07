@@ -3,7 +3,7 @@ import { useCallback, useReducer, useState } from 'react';
 import { useSelector } from 'react-redux';
 import Loader from 'src/assets/img/gradient-loader.png';
 import { CollateralSelector } from 'src/components/atoms';
-import { Dialog, SuccessPanel } from 'src/components/molecules';
+import { Dialog, DialogState, SuccessPanel } from 'src/components/molecules';
 import { CollateralInput } from 'src/components/organisms';
 import { useDepositCollateral } from 'src/hooks/useDepositCollateral';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
@@ -78,10 +78,8 @@ export const DepositCollateral = ({
     onClose,
     collateralList,
 }: {
-    isOpen: boolean;
-    onClose: () => void;
     collateralList: Record<string, CollateralInfo>;
-}) => {
+} & DialogState) => {
     const [asset, setAsset] = useState(CurrencySymbol.ETH);
     const [collateral, setCollateral] = useState(BigNumber.from(0));
     const [depositAddress, setDepositAddress] = useState('');

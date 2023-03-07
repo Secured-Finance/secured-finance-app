@@ -1,42 +1,60 @@
 import { Disclosure } from '@headlessui/react';
+import { OrderSide } from '@secured-finance/sf-client';
+import { useSelector } from 'react-redux';
 import {
     ExpandIndicator,
     Section,
     SectionWithItems,
 } from 'src/components/atoms';
-import { AmountCard, Dialog, DialogState } from 'src/components/molecules';
-import { CurrencySymbol } from 'src/utils';
+import {
+    AmountCard,
+    CollateralSimulationSection,
+    Dialog,
+    DialogState,
+} from 'src/components/molecules';
+import { useCollateralBook } from 'src/hooks';
+import { getPriceMap } from 'src/store/assetPrices/selectors';
+import { RootState } from 'src/store/types';
+import { Amount, Maturity } from 'src/utils/entities';
+import { useWallet } from 'use-wallet';
 
-export const ContractDetailDialog = ({ isOpen, onClose }: DialogState) => {
+export const UnwindDialog = ({
+    isOpen,
+    onClose,
+    amount,
+    maturity,
+}: {
+    amount: Amount;
+    maturity: Maturity;
+} & DialogState) => {
+    const { account } = useWallet();
+    const collateral = useCollateralBook(account);
+    const priceList = useSelector((state: RootState) => getPriceMap(state));
+    const price = priceList[amount.currency];
+
     return (
         <Dialog
-            isOpen={isOpen}
-            onClose={onClose}
-            title='Contract Details'
-            description=''
+            title='Unwind Position'
+            description={maturity.toString()}
             callToAction='Unwind Position'
-            onClick={onClose}
+            onClose={onClose}
+            isOpen={isOpen}
+            onClick={() => {}}
         >
             <div className='grid w-full grid-cols-1 justify-items-stretch gap-6 text-white'>
                 <Section>
                     <AmountCard
-                        ccy={CurrencySymbol.FIL}
-                        amount={5000}
-                        price={8.3}
+                        ccy={amount.currency}
+                        amount={amount.value}
+                        price={price}
                     />
                 </Section>
-                <SectionWithItems
-                    itemList={[
-                        ['Contract Address', '0x0x1234567890'],
-                        ['Contract Type', 'Borrow'],
-                        ['Contract Status', 'Active'],
-                        ['Contract Collateral', 'ETH'],
-                        ['Borrow Limit Remaining', '0.1 ETH'],
-                        ['Contract Collateral Ratio', '150%'],
-                    ]}
-                />
-                <SectionWithItems
-                    itemList={[['Contract Borrowed Amount', '0.1 ETH']]}
+                <CollateralSimulationSection
+                    collateral={collateral}
+                    tradeAmount={amount}
+                    tradePosition={OrderSide.BORROW}
+                    assetPrice={price}
+                    type='unwind'
                 />
                 <Disclosure>
                     {({ open }) => (

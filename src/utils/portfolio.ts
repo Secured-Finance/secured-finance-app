@@ -2,8 +2,7 @@ import { OrderSide } from '@secured-finance/sf-client';
 import { BigNumber } from 'ethers';
 import { AssetPriceMap } from 'src/store/assetPrices/selectors';
 import { TradeHistory } from 'src/types';
-import { hexToString } from 'web3-utils';
-import { currencyMap, CurrencySymbol } from './currencyList';
+import { currencyMap, hexToCurrencySymbol } from './currencyList';
 import { LoanValue } from './entities';
 import { Rate } from './rate';
 
@@ -31,7 +30,8 @@ export const computeNetValue = (
     priceList: AssetPriceMap
 ) => {
     return trades.reduce((acc, { amount, currency, side }) => {
-        const ccy = hexToString(currency) as CurrencySymbol;
+        const ccy = hexToCurrencySymbol(currency);
+        if (!ccy) return acc;
         return (
             acc +
             currencyMap[ccy].fromBaseUnit(BigNumber.from(amount)) *

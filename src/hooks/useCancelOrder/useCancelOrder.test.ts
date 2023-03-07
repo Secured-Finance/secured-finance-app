@@ -9,17 +9,13 @@ jest.mock('src/hooks/useSecuredFinance', () => () => mockSecuredFinance);
 
 describe('usePlaceOrder hook', () => {
     it('should return the placeOrder function', () => {
-        const { result } = renderHook(() =>
-            useCancelOrder(CurrencySymbol.ETH, dec22Fixture, 123)
-        );
-        expect(result.current.onCancelOrder).toBeInstanceOf(Function);
+        const { result } = renderHook(() => useCancelOrder());
+        expect(result.current.handleCancelOrder).toBeInstanceOf(Function);
     });
 
     it('should call the cancelOrder function', () => {
-        const { result } = renderHook(() =>
-            useCancelOrder(CurrencySymbol.ETH, dec22Fixture, 123)
-        );
-        result.current.onCancelOrder();
+        const { result } = renderHook(() => useCancelOrder());
+        result.current.handleCancelOrder(123, CurrencySymbol.ETH, dec22Fixture);
         expect(mockSecuredFinance.cancelLendingOrder).toBeCalled();
     });
 });
