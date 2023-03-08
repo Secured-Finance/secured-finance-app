@@ -1,4 +1,4 @@
-import { identify, Identify, track } from '@amplitude/analytics-browser';
+import { track } from '@amplitude/analytics-browser';
 import { useCallback, useEffect, useReducer, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Loader from 'src/assets/img/gradient-loader.png';
@@ -18,6 +18,7 @@ import {
     InterfaceProperties,
     WalletConnectionResult,
 } from 'src/utils';
+import { associateWallet } from 'src/utils/events';
 import { useWallet } from 'use-wallet';
 
 enum Step {
@@ -119,6 +120,7 @@ export const WalletDialog = () => {
                             WalletConnectionResult.SUCCEEDED,
                         [InterfaceProperties.WALLET_ADDRESS]: account,
                     });
+                    associateWallet(account);
                 })
                 .catch(() => {
                     track(InterfaceEvents.CONNECT_WALLET_BUTTON_CLICKED, {
@@ -142,16 +144,11 @@ export const WalletDialog = () => {
                 case Step.connecting:
                     break;
                 case Step.connected:
-                    if (account) {
-                        const event = new Identify();
-                        event.set('wallet_address', account);
-                        identify(event);
-                    }
                     handleClose();
                     break;
             }
         },
-        [account, handleClose, wallet]
+        [handleClose, wallet]
     );
 
     return (
