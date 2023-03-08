@@ -1,18 +1,17 @@
 import { RadioGroup } from '@headlessui/react';
 import { BigNumber } from 'ethers';
 import Link from 'next/link';
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
-    Button,
     CollateralManagementConciseTab,
     NavTab,
+    OrderInputBox,
     Separator,
     Slider,
 } from 'src/components/atoms';
 import { BorrowLendSelector } from 'src/components/atoms/BorrowLendSelector';
-import { OrderInputBox } from 'src/components/atoms/OrderInputBox';
-import { CollateralBook, OrderType, usePlaceOrder } from 'src/hooks';
+import { CollateralBook, OrderType } from 'src/hooks';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import {
     selectLandingOrderForm,
@@ -24,16 +23,13 @@ import {
 import { RootState } from 'src/store/types';
 import { amountFormatterFromBase, ordinaryFormat } from 'src/utils';
 import { LoanValue } from 'src/utils/entities';
-import { PlaceOrder } from '../PlaceOrder';
+import { OrderAction } from '../OrderAction';
 
 export const AdvancedLendingOrderCard = ({
     collateralBook,
 }: {
     collateralBook: CollateralBook;
 }) => {
-    const [openPlaceOrderDialog, setOpenPlaceOrderDialog] = useState(false);
-
-    const { placeOrder } = usePlaceOrder();
     const { currency, amount, side, orderType, unitPrice, maturity } =
         useSelector((state: RootState) =>
             selectLandingOrderForm(state.landingOrderForm)
@@ -133,22 +129,9 @@ export const AdvancedLendingOrderCard = ({
                     initialValue={ordinaryFormat(getAmount() * price, 4)}
                 />
 
-                <Button
-                    fullWidth
-                    onClick={() => {
-                        setOpenPlaceOrderDialog(true);
-                    }}
-                    data-testid='place-order-button'
-                >
-                    Place Order
-                </Button>
-
-                <PlaceOrder
-                    onPlaceOrder={placeOrder}
-                    collateral={collateralBook}
-                    isOpen={openPlaceOrderDialog}
-                    onClose={() => setOpenPlaceOrderDialog(false)}
+                <OrderAction
                     loanValue={loanValue}
+                    collateralBook={collateralBook}
                 />
 
                 <Separator color='neutral-3'></Separator>

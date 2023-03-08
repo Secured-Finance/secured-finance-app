@@ -1,7 +1,7 @@
 import { Tab } from 'src/components/molecules';
+import { CollateralTab } from 'src/components/organisms';
 import { useCollateralBook } from 'src/hooks';
 import { useWallet } from 'use-wallet';
-import { CollateralTab } from '../CollateralTab';
 
 const tabDataArray = [{ text: 'Asset Management' }];
 

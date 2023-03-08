@@ -1,5 +1,8 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
-import { withAssetPrice } from 'src/../.storybook/decorators';
+import {
+    withAssetPrice,
+    withWalletProvider,
+} from 'src/../.storybook/decorators';
 import {
     collateralBook80,
     dec22Fixture,
@@ -20,7 +23,7 @@ export default {
         ),
         maturitiesOptionList: maturityOptions,
     },
-    decorators: [withAssetPrice],
+    decorators: [withAssetPrice, withWalletProvider],
 } as ComponentMeta<typeof LendingCard>;
 
 const Template: ComponentStory<typeof LendingCard> = args => {
@@ -28,3 +31,6 @@ const Template: ComponentStory<typeof LendingCard> = args => {
 };
 
 export const Default = Template.bind({});
+Default.parameters = {
+    connected: true,
+};

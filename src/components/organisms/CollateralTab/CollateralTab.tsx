@@ -18,7 +18,7 @@ import { useWallet } from 'use-wallet';
 import { DepositCollateral } from '../DepositCollateral';
 import { WithdrawCollateral } from '../WithdrawCollateral';
 
-const generateCollateralList = (
+export const generateCollateralList = (
     balance: Partial<Record<CurrencySymbol, number | BigNumber>>,
     useAllCurrencies: boolean
 ): Record<CurrencySymbol, CollateralInfo> => {
