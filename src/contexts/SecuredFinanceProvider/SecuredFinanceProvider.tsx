@@ -6,6 +6,7 @@ import { useLendingMarkets } from 'src/hooks';
 import { useEthereumWalletStore } from 'src/hooks/useEthWallet';
 import { updateChainError, updateLatestBlock } from 'src/store/blockchain';
 import { getEthereumChainId, getRpcEndpoint, hexToDec } from 'src/utils';
+import { associateWallet } from 'src/utils/events';
 import { ChainUnsupportedError, useWallet } from 'use-wallet';
 
 export const CACHED_PROVIDER_KEY = 'CACHED_PROVIDER_KEY';
@@ -113,7 +114,9 @@ const SecuredFinanceProvider: React.FC = ({ children }) => {
         }
         const cachedProvider = localStorage.getItem(CACHED_PROVIDER_KEY);
         if (cachedProvider !== null) {
-            connect('injected');
+            connect('injected').then(() => {
+                associateWallet(account);
+            });
         }
     }, [connect, account]);
 
