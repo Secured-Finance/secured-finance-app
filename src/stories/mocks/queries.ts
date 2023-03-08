@@ -1,8 +1,4 @@
-import {
-    DailyVolumesDocument,
-    TradesDocument,
-    UserHistoryDocument,
-} from '@secured-finance/sf-graph-client/dist/graphclient/.graphclient';
+import queries from '@secured-finance/sf-graph-client/dist/graphclients';
 import {
     btcBytes32,
     dailyVolumes,
@@ -18,7 +14,7 @@ import {
 export const mockUserHistory = [
     {
         request: {
-            query: UserHistoryDocument,
+            query: queries.UserHistoryDocument,
             variables: {
                 address: '',
                 awaitRefetchQueries: true,
@@ -45,7 +41,7 @@ export const mockUserHistory = [
     },
     {
         request: {
-            query: UserHistoryDocument,
+            query: queries.UserHistoryDocument,
             variables: {
                 address: '0xb98bd7c7f656290071e52d1aa617d9cb4467fd6d',
                 awaitRefetchQueries: true,
@@ -75,7 +71,7 @@ export const mockUserHistory = [
 export const mockDailyVolumes = [
     {
         request: {
-            query: DailyVolumesDocument,
+            query: queries.DailyVolumesDocument,
             variables: {
                 awaitRefetchQueries: true,
             },
@@ -100,7 +96,7 @@ const yesterday = 1638270000;
 export const mockTrades = [
     {
         request: {
-            query: TradesDocument,
+            query: queries.TradesDocument,
             variables: {
                 currency: filBytes32,
                 maturity: dec22Fixture.toNumber(),
@@ -124,7 +120,7 @@ export const mockTrades = [
     },
     {
         request: {
-            query: TradesDocument,
+            query: queries.TradesDocument,
             variables: {
                 currency: filBytes32,
                 maturity: 0,
@@ -148,7 +144,7 @@ export const mockTrades = [
     },
     {
         request: {
-            query: TradesDocument,
+            query: queries.TradesDocument,
             variables: {
                 currency: ethBytes32,
                 maturity: dec22Fixture.toNumber(),
@@ -172,7 +168,7 @@ export const mockTrades = [
     },
     {
         request: {
-            query: TradesDocument,
+            query: queries.TradesDocument,
             variables: {
                 currency: btcBytes32,
                 maturity: dec22Fixture.toNumber(),
@@ -196,7 +192,7 @@ export const mockTrades = [
     },
     {
         request: {
-            query: TradesDocument,
+            query: queries.TradesDocument,
             variables: {
                 currency: usdcBytes32,
                 maturity: dec22Fixture.toNumber(),
