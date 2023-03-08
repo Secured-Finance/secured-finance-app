@@ -1,8 +1,8 @@
 import {
     CollateralInformation,
     CollateralInformationProps,
-} from '../CollateralInformation';
-import { Separator } from '../Separator';
+    Separator,
+} from 'src/components/atoms';
 
 interface CollateralInformationTableProps {
     data: CollateralInformationProps[];
