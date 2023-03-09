@@ -5,7 +5,7 @@ on:
       artifact_name:
         required: true
         type: string
-      branch_name:
+      environment_name:
         required: false
         type: string
     secrets:
@@ -24,6 +24,7 @@ jobs:
   build-and-test-all:
     name: Build and Test
     runs-on: ubuntu-latest
+    environment: ${{ inputs.environment_name }}
     steps:
       - uses: actions/checkout@v3
         with:
@@ -38,14 +39,13 @@ jobs:
         run: npm ci
         env:
           NPM_AUTH_TOKEN: ${{ secrets.PAT }}
+
       - run: |
           cat <<EOF > .env.local
           NEXT_PUBLIC_ALCHEMY_API_KEY=${{ secrets.ALCHEMY_API_KEY }}
           NEXT_PUBLIC_AMPLITUDE_API_KEY=${{ secrets.AMPLITUDE_API_KEY }}
+          SF_ENV=${{ vars.SF_ENV }}
           EOF
-          if [ ${{ inputs.branch_name }} = refs/heads/main ]; then
-            echo "SF_ENV=staging" >> .env.local
-          fi
 
       - name: Check Syntax with Prettier
         run: npm run prettier:check
