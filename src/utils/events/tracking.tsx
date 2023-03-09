@@ -1,4 +1,10 @@
-import { identify, Identify, setUserId } from '@amplitude/analytics-browser';
+import {
+    identify,
+    Identify,
+    setUserId,
+    track,
+} from '@amplitude/analytics-browser';
+import { InterfaceEvents, InterfaceProperties } from './interface';
 
 export async function associateWallet(account: string | null) {
     if (!account) return;
@@ -6,4 +12,8 @@ export async function associateWallet(account: string | null) {
     const user = new Identify();
     user.set('wallet_address', account);
     identify(user);
+
+    track(InterfaceEvents.WALLET_CONNECTED, {
+        [InterfaceProperties.WALLET_ADDRESS]: account,
+    });
 }
