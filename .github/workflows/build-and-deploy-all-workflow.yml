@@ -17,6 +17,7 @@ jobs:
 
   build-and-test-all:
     name: Build and Test
+    needs: identify-env
     uses: ./.github/workflows/build.yml
     with:
       artifact_name: WebApp
