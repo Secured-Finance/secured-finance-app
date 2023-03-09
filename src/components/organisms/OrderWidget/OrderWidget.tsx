@@ -178,7 +178,7 @@ export const OrderWidget = ({
                         display={!info.row.original.amount.eq(0)}
                     />
                 ),
-                header: () => <TableHeader title='% APY' align='right' />,
+                header: () => <TableHeader title='Borrow APY' align='right' />,
             }),
         ],
         [currency, totalBuyAmount]
@@ -194,7 +194,7 @@ export const OrderWidget = ({
                         display={!info.row.original.amount.eq(0)}
                     />
                 ),
-                header: () => <TableHeader title='% APY' align='right' />,
+                header: () => <TableHeader title='Lend APY' align='right' />,
             }),
             columnHelper.accessor('amount', {
                 cell: info => (
