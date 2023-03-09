@@ -38,6 +38,6 @@ describe('AdvancedLendingTopBar Component', () => {
         });
 
         expect(screen.getByText('98.00')).toBeInTheDocument();
-        expect(screen.getByText('2.24% APY')).toBeInTheDocument();
+        expect(screen.getByText('0.20% APY')).toBeInTheDocument();
     });
 });

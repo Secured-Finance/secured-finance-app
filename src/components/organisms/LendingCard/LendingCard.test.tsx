@@ -95,7 +95,10 @@ describe('LendingCard Component', () => {
     });
 
     it('should display the rate from the prop', async () => {
-        const rate = LoanValue.fromApy(new Rate(2000), dec22Fixture.toNumber());
+        const rate = LoanValue.fromApy(
+            new Rate(20000),
+            dec22Fixture.toNumber()
+        );
         await waitFor(() => render(<Default marketValue={rate} />));
         expect(screen.getByText('0.20%')).toBeInTheDocument();
     });

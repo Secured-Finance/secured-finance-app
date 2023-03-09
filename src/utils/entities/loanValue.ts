@@ -9,6 +9,7 @@ export class LoanValue {
     protected _maturity!: number;
 
     private PAR_VALUE = 10000;
+    private PAR_VALUE_RATE = 1000000;
     private DAYS_IN_YEAR = 365;
 
     private constructor() {
@@ -58,9 +59,12 @@ export class LoanValue {
                 this.PAR_VALUE *
                     Math.exp(
                         -this.yearFraction() *
-                            Math.log(
-                                1 - this._apy.toNormalizedNumber() / 100000
-                            )
+                            this.dayToMaturity() *
+                            (Math.pow(
+                                1 + this._apy.toAbsoluteNumber(),
+                                1 / this.dayToMaturity()
+                            ) -
+                                1)
                     )
             );
         }
@@ -80,11 +84,11 @@ export class LoanValue {
 
             this._apy = new Rate(
                 (Math.pow(
-                    1 + this.apr.toNormalizedNumber() / this.DAYS_IN_YEAR,
+                    1 + this.apr.toAbsoluteNumber() / this.dayToMaturity(),
                     this.dayToMaturity()
                 ) -
                     1) *
-                    100000
+                    this.PAR_VALUE_RATE
             );
         }
         return this._apy;
@@ -103,19 +107,19 @@ export class LoanValue {
                 this._apr = new Rate(
                     (-Math.log(this._price / this.PAR_VALUE) /
                         this.yearFraction()) *
-                        100000
+                        this.PAR_VALUE_RATE
                 );
             }
 
             if (this._apy !== undefined) {
                 this._apr = new Rate(
                     (Math.pow(
-                        1 + this._apy.toNormalizedNumber(),
+                        1 + this._apy.toAbsoluteNumber(),
                         1 / this.dayToMaturity()
                     ) -
                         1) *
                         this.dayToMaturity() *
-                        100000
+                        this.PAR_VALUE_RATE
                 );
             }
         }
