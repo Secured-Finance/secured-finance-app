@@ -1,4 +1,3 @@
-import { formatDate } from '@secured-finance/sf-core';
 import { toBytes32 } from '@secured-finance/sf-graph-client';
 import queries from '@secured-finance/sf-graph-client/dist/graphclients/';
 import { BigNumber } from 'ethers';
@@ -32,6 +31,7 @@ import {
     CurrencySymbol,
     formatLoanValue,
     getCurrencyMapAsOptions,
+    getTransformMaturityOption,
     ordinaryFormat,
     Rate,
     usdFormat,
@@ -162,12 +162,9 @@ export const AdvancedLending = ({
                         dispatch(setUnitPrice(loanValue.price));
                     }
                 }}
-                transformLabel={v => {
-                    const ts = maturitiesOptionList.find(o =>
-                        o.value.equals(new Maturity(v))
-                    )?.value;
-                    return ts ? formatDate(ts.toNumber()) : v;
-                }}
+                transformLabel={getTransformMaturityOption(
+                    maturitiesOptionList
+                )}
                 values={[
                     formatLoanValue(tradeHistoryDetails.max, 'price'),
                     formatLoanValue(tradeHistoryDetails.min, 'price'),
