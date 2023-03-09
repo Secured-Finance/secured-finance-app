@@ -16,4 +16,8 @@ export class Rate {
     public toNormalizedNumber(): number {
         return this.rate / ONE_PERCENT;
     }
+
+    public toAbsoluteNumber(): number {
+        return this.toNormalizedNumber() / 100.0;
+    }
 }

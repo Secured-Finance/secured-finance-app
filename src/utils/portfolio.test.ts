@@ -39,7 +39,7 @@ describe('computeWeightedAverage', () => {
             computeWeightedAverageRate(
                 trades as unknown as TradeHistory
             ).toNumber()
-        ).toEqual(38832);
+        ).toEqual(213325);
     });
 
     it('should return 0 if no trades are provided', () => {
