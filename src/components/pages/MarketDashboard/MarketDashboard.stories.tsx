@@ -1,4 +1,4 @@
-import { UserCountDocument } from '@secured-finance/sf-graph-client/dist/graphclient';
+import queries from '@secured-finance/sf-graph-client/dist/graphclients';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { BigNumber } from 'ethers';
 import {
@@ -13,7 +13,7 @@ import { MarketDashboard } from './MarketDashboard';
 const totalUser = [
     {
         request: {
-            query: UserCountDocument,
+            query: queries.UserCountDocument,
             variables: {
                 awaitRefetchQueries: true,
             },

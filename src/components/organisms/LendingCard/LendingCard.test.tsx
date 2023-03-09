@@ -121,4 +121,15 @@ describe('LendingCard Component', () => {
         expect(screen.getByText('Confirm Order')).toBeInTheDocument();
         expect(screen.getByText('Market Order')).toBeInTheDocument();
     });
+
+    it('should support orders with decimal amounts', async () => {
+        await waitFor(() => render(<Default />, { preloadedState }));
+        const input = screen.getByRole('textbox');
+        fireEvent.change(input, { target: { value: '10.5' } });
+        expect(
+            screen.getByText(
+                `~ ${preloadedAssetPrices.assetPrices.FIL.price * 10.5} USD`
+            )
+        ).toBeInTheDocument();
+    });
 });
