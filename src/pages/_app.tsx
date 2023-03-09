@@ -1,4 +1,5 @@
 import { init } from '@amplitude/analytics-browser';
+import { LogLevel } from '@amplitude/analytics-types';
 import { GraphClientProvider } from '@secured-finance/sf-graph-client';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
@@ -15,10 +16,10 @@ import {
 import { UseWalletProvider } from 'use-wallet';
 import '../assets/css/index.css';
 
-getAmplitudeApiKey() ??
-    init(getAmplitudeApiKey(), undefined, {
-        appVersion: process.env.SF_ENV,
-    });
+init(getAmplitudeApiKey(), undefined, {
+    appVersion: process.env.SF_ENV,
+    logLevel: LogLevel.None,
+});
 
 function App({ Component, pageProps }: AppProps) {
     return (
