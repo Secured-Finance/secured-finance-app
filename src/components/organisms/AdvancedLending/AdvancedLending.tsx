@@ -1,10 +1,6 @@
 import { formatDate } from '@secured-finance/sf-core';
 import { toBytes32 } from '@secured-finance/sf-graph-client';
-import {
-    TradesDocument,
-    TradesQuery,
-    UserHistoryDocument,
-} from '@secured-finance/sf-graph-client/dist/graphclient/.graphclient';
+import queries from '@secured-finance/sf-graph-client/dist/graphclients/';
 import { BigNumber } from 'ethers';
 import { useCallback, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -30,7 +26,7 @@ import {
     setUnitPrice,
 } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
-import { MaturityOptionList } from 'src/types';
+import { MaturityOptionList, TradesQuery } from 'src/types';
 import {
     currencyMap,
     CurrencySymbol,
@@ -105,7 +101,7 @@ export const AdvancedLending = ({
     const orderBook = useOrderbook(currency, selectedTerm.value, 10);
     const oderHistory = useGraphClientHook(
         { address: account?.toLowerCase() ?? '' },
-        UserHistoryDocument,
+        queries.UserHistoryDocument,
         'user'
     );
 
@@ -120,7 +116,7 @@ export const AdvancedLending = ({
                 from: tsYesterday,
                 to: ts,
             },
-            TradesDocument,
+            queries.TradesDocument,
             'transactions',
             false
         ).data ?? [];

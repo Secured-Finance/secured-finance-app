@@ -1,7 +1,4 @@
-import {
-    DailyVolumesDocument,
-    UserCountDocument,
-} from '@secured-finance/sf-graph-client/dist/graphclient';
+import queries from '@secured-finance/sf-graph-client/dist/graphclients';
 import { BigNumber } from 'ethers';
 import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
@@ -31,13 +28,13 @@ export const MarketDashboard = () => {
     const protocolInformation = useProtocolInformation();
     const totalUser = useGraphClientHook(
         {}, // no variables
-        UserCountDocument,
+        queries.UserCountDocument,
         'protocol',
         false
     );
     const dailyVolumes = useGraphClientHook(
         {}, // no variables
-        DailyVolumesDocument,
+        queries.DailyVolumesDocument,
         'dailyVolumes',
         false
     );
