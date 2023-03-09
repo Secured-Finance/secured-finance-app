@@ -20,7 +20,7 @@ jobs:
     - id: identify-env
       run: |
         if [[ ${{ inputs.branch_name }} == refs/heads/main ]]; then
-          echo "name=environment_name::staging"
+          echo "environment_name=staging"
         else
-          echo "name=environment_name::development"
+          echo "environment_name=development"
         fi
