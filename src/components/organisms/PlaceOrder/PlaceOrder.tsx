@@ -23,7 +23,6 @@ import { setLastMessage } from 'src/store/lastError';
 import { RootState } from 'src/store/types';
 import { PlaceOrderFunction } from 'src/types';
 import {
-    amountFormatterFromBase,
     CurrencySymbol,
     handleContractTransaction,
     ordinaryFormat,
@@ -103,17 +102,7 @@ export const PlaceOrder = ({
         (state: RootState) => selectLandingOrderForm(state.landingOrderForm)
     );
 
-    const getAmount = () => {
-        let format = (x: BigNumber) => x.toNumber();
-        if (
-            currency &&
-            amountFormatterFromBase &&
-            amountFormatterFromBase[currency]
-        ) {
-            format = amountFormatterFromBase[currency];
-        }
-        return format(amount);
-    };
+    const orderAmount = new Amount(amount, currency);
 
     const priceList = useSelector((state: RootState) => getPriceMap(state));
     const price = priceList[currency];
@@ -202,16 +191,13 @@ export const PlaceOrder = ({
                             <div className='grid w-full grid-cols-1 justify-items-stretch gap-6 text-white'>
                                 <Section>
                                     <AmountCard
-                                        ccy={currency}
-                                        amount={getAmount()}
+                                        amount={orderAmount}
                                         price={price}
                                     />
                                 </Section>
                                 <CollateralSimulationSection
                                     collateral={collateral}
-                                    tradeAmount={
-                                        new Amount(getAmount(), currency)
-                                    }
+                                    tradeAmount={orderAmount}
                                     tradePosition={side}
                                     assetPrice={price}
                                     tradeValue={loanValue}
@@ -287,7 +273,7 @@ export const PlaceOrder = ({
                                     [
                                         'Amount',
                                         `${ordinaryFormat(
-                                            getAmount()
+                                            orderAmount.value
                                         )} ${currency}`,
                                     ],
                                 ]}
