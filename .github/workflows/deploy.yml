@@ -33,7 +33,7 @@ jobs:
   deploy-on-fleek:
     runs-on: ubuntu-latest
     name: Deploy on Fleek
-    environment: ${{ github.event.inputs.environment_name }}
+    environment: ${{ needs.identify-env.outputs.environment_name }}
     needs: build-and-test-all
     steps:
       - uses: actions/checkout@v2
