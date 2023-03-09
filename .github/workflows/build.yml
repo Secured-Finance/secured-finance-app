@@ -24,7 +24,7 @@ jobs:
   build-and-test-all:
     name: Build and Test
     runs-on: ubuntu-latest
-    environment: ${{ github.event.inputs.environment_name }}
+    environment: ${{ inputs.environment_name }}
     steps:
       - uses: actions/checkout@v3
         with:
