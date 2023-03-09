@@ -43,11 +43,7 @@ export const UnwindDialog = ({
         >
             <div className='grid w-full grid-cols-1 justify-items-stretch gap-6 text-white'>
                 <Section>
-                    <AmountCard
-                        ccy={amount.currency}
-                        amount={amount.value}
-                        price={price}
-                    />
+                    <AmountCard amount={amount} price={price} />
                 </Section>
                 <CollateralSimulationSection
                     collateral={collateral}

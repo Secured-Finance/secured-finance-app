@@ -6,6 +6,7 @@ import {
 } from 'src/components/atoms';
 import { AmountCard, Dialog, DialogState } from 'src/components/molecules';
 import { CurrencySymbol } from 'src/utils';
+import { Amount } from 'src/utils/entities';
 
 export const ContractDetailDialog = ({ isOpen, onClose }: DialogState) => {
     return (
@@ -20,8 +21,12 @@ export const ContractDetailDialog = ({ isOpen, onClose }: DialogState) => {
             <div className='grid w-full grid-cols-1 justify-items-stretch gap-6 text-white'>
                 <Section>
                     <AmountCard
-                        ccy={CurrencySymbol.FIL}
-                        amount={5000}
+                        amount={
+                            new Amount(
+                                '5000000000000000000000',
+                                CurrencySymbol.FIL
+                            )
+                        }
                         price={8.3}
                     />
                 </Section>
