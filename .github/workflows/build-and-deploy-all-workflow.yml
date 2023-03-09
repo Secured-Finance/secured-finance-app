@@ -9,12 +9,18 @@ on:
       - reopened
 
 jobs:
+  identify-env:
+    name: Identify the environment
+    uses: ./.github/workflows/identify-env.yml
+    with:
+      branch_name: ${{ github.ref }}
+
   build-and-test-all:
     name: Build and Test
     uses: ./.github/workflows/build.yml
     with:
       artifact_name: WebApp
-      branch_name: ${{ github.ref }}
+      environment_name: ${{ needs.identify-env.outputs.environment_name }}
     secrets: inherit
 
   cypress-run:
