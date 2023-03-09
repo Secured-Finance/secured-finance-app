@@ -34,7 +34,7 @@ describe('LoanValue class', () => {
     });
 
     it('should build from the apy and the maturity', () => {
-        aprApyPriceMaturity.forEach(([apr, apy, price, maturity]) => {
+        aprApyPriceMaturity.forEach(([_apr, apy, price, maturity]) => {
             const value = LoanValue.fromApy(
                 new Rate(apy.toNumber()),
                 maturity.toNumber()
