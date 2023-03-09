@@ -1,9 +1,9 @@
+import { reset as resetTracking } from '@amplitude/analytics-browser';
 import { Popover, Transition } from '@headlessui/react';
 import { LogoutIcon, UserIcon } from '@heroicons/react/outline';
 import { BadgeCheckIcon } from '@heroicons/react/solid';
 import classNames from 'classnames';
 import { useRouter } from 'next/router';
-
 import React, { Fragment, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import MetamaskLogo from 'src/assets/img/metamask-fox.svg';
@@ -83,9 +83,11 @@ export const WalletPopover = ({
     );
 
     const handleSignOutClick = useCallback(() => {
+        resetTracking();
         reset();
         dispatch(resetEthWallet());
         localStorage.removeItem(CACHED_PROVIDER_KEY);
+
         if (!otherWalletConnected) {
             router.push('/');
         }

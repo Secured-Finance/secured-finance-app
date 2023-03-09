@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import { GraphApolloClient, useQuery } from '@secured-finance/sf-graph-client';
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
@@ -10,6 +11,14 @@ export const useGraphClientHook = <T, TVariables, K extends keyof T>(
     realTime = false,
     client?: GraphApolloClient
 ) => {
+    if (!queryDocument) {
+        return {
+            data: undefined,
+            error: undefined,
+            refetch: undefined,
+            networkStatus: undefined,
+        };
+    }
     const { error, data, refetch, networkStatus } = useQuery<T, TVariables>(
         queryDocument,
         {

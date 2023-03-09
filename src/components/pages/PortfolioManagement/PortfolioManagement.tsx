@@ -1,4 +1,4 @@
-import { UserHistoryDocument } from '@secured-finance/sf-graph-client/dist/graphclient/.graphclient';
+import queries from '@secured-finance/sf-graph-client/dist/graphclients';
 import { useSelector } from 'react-redux';
 import {
     HorizontalTab,
@@ -31,7 +31,7 @@ export const PortfolioManagement = () => {
     const { account } = useWallet();
     const userHistory = useGraphClientHook(
         { address: account?.toLowerCase() ?? '' },
-        UserHistoryDocument,
+        queries.UserHistoryDocument,
         'user'
     );
 

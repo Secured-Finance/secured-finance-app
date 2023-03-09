@@ -1,5 +1,4 @@
 import { fromBytes32 } from '@secured-finance/sf-graph-client';
-import { TradesQuery } from '@secured-finance/sf-graph-client/dist/graphclient';
 import { BigNumber, utils } from 'ethers';
 import BitcoinIcon from 'src/assets/coins/btc.svg';
 import EthIcon from 'src/assets/coins/eth2.svg';
@@ -14,6 +13,7 @@ import {
     MaturityOptionList,
     OrderList,
     TradeHistory,
+    TradesQuery,
 } from 'src/types';
 import { CurrencySymbol, Rate, TradeSummary } from 'src/utils';
 import { Maturity } from 'src/utils/entities';
