@@ -7,12 +7,19 @@ on:
       - develop
 
 jobs:
+  identify-env:
+    name: Identify the environment
+    uses: ./.github/workflows/identify-env.yml
+    with:
+      branch_name: ${{ github.ref }}
+
   build-and-test-all:
     name: Build and Test
+    needs: identify-env
     uses: ./.github/workflows/build.yml
     with:
       artifact_name: WebApp
-      branch_name: ${{ github.ref }}
+      environment_name: ${{ needs.identify-env.outputs.environment_name }}
     secrets: inherit
 
   cypress-run:
@@ -26,31 +33,22 @@ jobs:
   deploy-on-fleek:
     runs-on: ubuntu-latest
     name: Deploy on Fleek
+    environment: ${{ needs.identify-env.outputs.environment_name }}
     needs: build-and-test-all
     steps:
       - uses: actions/checkout@v2
-
-      - name: Set env for development environment
-        if : ${{ github.ref == 'refs/heads/develop' }}
-        run: |
-          echo "FLEEK_ENV=dev" >> $GITHUB_ENV
-
-      - name: Set env for staging environment
-        if : ${{ github.ref == 'refs/heads/main' }}
-        run: |
-          echo "FLEEK_ENV=stg" >> $GITHUB_ENV
 
       - name: Retrieve artifact
         uses: actions/download-artifact@v3
         with:
           name: WebApp
-          path: .deploy/${{ env.FLEEK_ENV }}/build
+          path: .deploy/${{ vars.FLEEK_ENV }}/build
 
       - name: Deploy the WebApp on IPFS
         id: deploy
         uses: fleekhq/action-deploy@v1
         with:
           apiKey: ${{ secrets.FLEEK_API_KEY }}
-          workDir: .deploy/${{ env.FLEEK_ENV }}
+          workDir: .deploy/${{ vars.FLEEK_ENV }}
       - name: Get the output url
         run: echo "Deploy url is ${{ steps.deploy.outputs.deployUrl }}"
