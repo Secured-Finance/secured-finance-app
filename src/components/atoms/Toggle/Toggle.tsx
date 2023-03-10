@@ -1,16 +1,22 @@
 import { Switch } from '@headlessui/react';
+import classNames from 'classnames';
 import { useState } from 'react';
 
-export const Toggle = () => {
-    const [enabled, setEnabled] = useState(false);
+export const Toggle = ({ disabled = false }: { disabled?: boolean }) => {
+    const [enabled, setEnabled] = useState(true);
 
     return (
         <Switch
             checked={enabled}
-            onChange={setEnabled}
-            className={`${
-                enabled ? 'bg-starBlue-60' : 'bg-starBlue'
-            } relative inline-flex h-6 w-11 items-center rounded-full`}
+            onChange={disabled ? () => {} : setEnabled}
+            className={classNames(
+                'relative inline-flex h-6 w-11 items-center rounded-full',
+                {
+                    'bg-gradient-to-r from-[#246CF9]/60 to-[#2334D2]/60':
+                        enabled,
+                    'bg-horizonBlue/30': !enabled,
+                }
+            )}
         >
             <span
                 className={`transform transition duration-200 ease-in-out ${
