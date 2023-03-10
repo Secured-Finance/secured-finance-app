@@ -34,7 +34,7 @@ jobs:
     runs-on: ubuntu-latest
     name: Deploy on Fleek
     environment: ${{ needs.identify-env.outputs.environment_name }}
-    needs: build-and-test-all
+    needs: [identify-env, build-and-test-all]
     steps:
       - uses: actions/checkout@v2
 
