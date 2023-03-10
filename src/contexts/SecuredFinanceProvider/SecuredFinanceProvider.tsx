@@ -1,3 +1,4 @@
+import { reset, track } from '@amplitude/analytics-browser';
 import { SecuredFinanceClient } from '@secured-finance/sf-client';
 import { getDefaultProvider, providers, Signer } from 'ethers';
 import React, { createContext, useCallback, useEffect, useState } from 'react';
@@ -6,7 +7,7 @@ import { useLendingMarkets } from 'src/hooks';
 import { useEthereumWalletStore } from 'src/hooks/useEthWallet';
 import { updateChainError, updateLatestBlock } from 'src/store/blockchain';
 import { getEthereumChainId, getRpcEndpoint, hexToDec } from 'src/utils';
-import { associateWallet } from 'src/utils/events';
+import { associateWallet, InterfaceEvents } from 'src/utils/events';
 import { ChainUnsupportedError, useWallet } from 'use-wallet';
 
 export const CACHED_PROVIDER_KEY = 'CACHED_PROVIDER_KEY';
@@ -47,6 +48,14 @@ const SecuredFinanceProvider: React.FC = ({ children }) => {
         [dispatch]
     );
 
+    const handleAccountChanged = useCallback((accounts: string[]) => {
+        track(InterfaceEvents.WALLET_CHANGED_THROUGH_PROVIDER);
+        reset();
+        if (accounts.length > 0) {
+            associateWallet(accounts[0]);
+        }
+    }, []);
+
     useEffect(() => {
         const connectSFClient = async (
             provider: providers.BaseProvider,
@@ -82,12 +91,17 @@ const SecuredFinanceProvider: React.FC = ({ children }) => {
             const signer = provider.getSigner();
             connectSFClient(provider, signer);
             ethereum.on('chainChanged', handleNetworkChanged);
+            ethereum.on('accountsChanged', handleAccountChanged);
 
             return () => {
                 if (ethereum.removeListener) {
                     ethereum.removeListener(
                         'chainChanged',
                         handleNetworkChanged
+                    );
+                    ethereum.removeListener(
+                        'accountsChanged',
+                        handleAccountChanged
                     );
                     dispatch(updateChainError(false));
                 }
@@ -96,7 +110,13 @@ const SecuredFinanceProvider: React.FC = ({ children }) => {
             const provider = getDefaultProvider(getRpcEndpoint());
             connectSFClient(provider);
         }
-    }, [ethereum, isConnected, handleNetworkChanged, dispatch]);
+    }, [
+        ethereum,
+        isConnected,
+        handleNetworkChanged,
+        dispatch,
+        handleAccountChanged,
+    ]);
 
     useEffect(() => {
         if (status === 'error') {
@@ -114,9 +134,7 @@ const SecuredFinanceProvider: React.FC = ({ children }) => {
         }
         const cachedProvider = localStorage.getItem(CACHED_PROVIDER_KEY);
         if (cachedProvider !== null) {
-            connect('injected').then(() => {
-                associateWallet(account);
-            });
+            connect('injected');
         }
     }, [connect, account]);
 
