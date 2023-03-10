@@ -15,7 +15,7 @@ export const defaultDatasets = {
 };
 
 const refineArray = (array: Array<Rate>) => {
-    return array.map(r => r.toNormalizedNumber() / 10.0);
+    return array.map(r => r.toNormalizedNumber());
 };
 
 export const getData = (
