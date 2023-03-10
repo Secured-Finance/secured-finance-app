@@ -1,4 +1,3 @@
-import { formatDate } from '@secured-finance/sf-core';
 import { BigNumber } from 'ethers';
 import { useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -25,6 +24,7 @@ import {
     formatLoanValue,
     getCurrencyMapAsList,
     getCurrencyMapAsOptions,
+    getTransformMaturityOption,
 } from 'src/utils';
 import { LoanValue, Maturity } from 'src/utils/entities';
 import { OrderAction } from '../OrderAction';
@@ -114,12 +114,9 @@ export const LendingCard = ({
                         value: selectedTerm.value.toString(),
                     }}
                     onTermChange={v => dispatch(setMaturity(new Maturity(v)))}
-                    transformLabel={v => {
-                        const ts = maturitiesOptionList.find(
-                            o => o.label === v
-                        )?.value;
-                        return ts ? formatDate(Number(ts)) : v;
-                    }}
+                    transformLabel={getTransformMaturityOption(
+                        maturitiesOptionList
+                    )}
                 />
 
                 <CollateralUsageSection
