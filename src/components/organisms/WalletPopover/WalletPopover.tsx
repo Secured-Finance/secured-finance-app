@@ -1,7 +1,6 @@
 import { reset as resetTracking } from '@amplitude/analytics-browser';
 import { Popover, Transition } from '@headlessui/react';
-import { LogoutIcon, UserIcon } from '@heroicons/react/outline';
-import { BadgeCheckIcon } from '@heroicons/react/solid';
+import { LogoutIcon } from '@heroicons/react/outline';
 import classNames from 'classnames';
 import { useRouter } from 'next/router';
 import React, { Fragment, useCallback } from 'react';
@@ -69,11 +68,9 @@ const MenuItem = ({
 export const WalletPopover = ({
     wallet,
     networkName,
-    isKYC = false,
 }: {
     wallet: string;
     networkName: string;
-    isKYC?: boolean;
 }) => {
     const { reset } = useWallet();
     const dispatch = useDispatch();
@@ -132,57 +129,34 @@ export const WalletPopover = ({
                                 leaveTo='opacity-0 translate-y-5'
                             >
                                 <Popover.Panel className='absolute left-9 z-10 mt-3 w-64 -translate-x-1/2'>
-                                    {({ close }) => (
-                                        <div className='overflow-hidden rounded-lg shadow-sm'>
-                                            <div className='relative flex flex-col space-y-2 border border-black bg-universeBlue p-2 text-white shadow-dropdown'>
-                                                <MenuItem
-                                                    label='Network'
-                                                    text={networkName}
-                                                    icon={
-                                                        <div className='h-2 w-2 rounded-full bg-green' />
-                                                    }
-                                                />
-                                                <Separator />
-                                                {isKYC ? (
-                                                    <MenuItem
-                                                        text='Account Verified'
-                                                        icon={
-                                                            <UserIcon className='h-5 w-5 text-slateGray' />
-                                                        }
-                                                        badge={
-                                                            <BadgeCheckIcon className='h-6 w-6 text-white' />
-                                                        }
-                                                    />
-                                                ) : (
-                                                    <MenuItem
-                                                        text='Finish KYC'
-                                                        icon={
-                                                            <UserIcon className='h-5 w-5 text-slateGray' />
-                                                        }
-                                                        onClick={() => {
-                                                            close();
-                                                        }}
-                                                    />
-                                                )}
-                                                <MenuItem
-                                                    text='Disconnect Wallet'
-                                                    onClick={handleSignOutClick}
-                                                    icon={
-                                                        <LogoutIcon className='h-5 w-5 text-slateGray' />
-                                                    }
-                                                />
-                                                <Separator />
-                                                <p className='flex flex-row items-center justify-between rounded-md p-2 transition duration-150 ease-in-out hover:bg-horizonBlue'>
-                                                    <span className=''>
-                                                        Dark Mode
-                                                    </span>
-                                                    <span>
-                                                        <Toggle />
-                                                    </span>
-                                                </p>
-                                            </div>
+                                    <div className='overflow-hidden rounded-lg shadow-sm'>
+                                        <div className='relative flex flex-col space-y-2 border border-black bg-universeBlue p-2 text-white shadow-dropdown'>
+                                            <MenuItem
+                                                label='Network'
+                                                text={networkName}
+                                                icon={
+                                                    <div className='h-2 w-2 rounded-full bg-green' />
+                                                }
+                                            />
+                                            <Separator />
+                                            <MenuItem
+                                                text='Disconnect Wallet'
+                                                onClick={handleSignOutClick}
+                                                icon={
+                                                    <LogoutIcon className='h-5 w-5 text-slateGray' />
+                                                }
+                                            />
+                                            <Separator />
+                                            <p className='flex flex-row items-center justify-between rounded-md p-2 transition duration-150 ease-in-out hover:bg-horizonBlue'>
+                                                <span className=''>
+                                                    Dark Mode
+                                                </span>
+                                                <span>
+                                                    <Toggle disabled />
+                                                </span>
+                                            </p>
                                         </div>
-                                    )}
+                                    </div>
                                 </Popover.Panel>
                             </Transition>
                         </>
