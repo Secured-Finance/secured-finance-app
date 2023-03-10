@@ -21,6 +21,8 @@ jobs:
       run: |
         if [[ ${{ inputs.branch_name }} == refs/heads/main ]]; then
           echo "environment_name=staging" >> $GITHUB_OUTPUT
-        else
+        elif [[ ${{ inputs.branch_name }} == refs/heads/develop ]]; then
           echo "environment_name=development" >> $GITHUB_OUTPUT
+        else
+          echo "environment_name=ci-build" >> $GITHUB_OUTPUT
         fi
