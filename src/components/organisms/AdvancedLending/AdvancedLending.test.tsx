@@ -33,4 +33,16 @@ describe('Advanced Lending Component', () => {
             '0'
         );
     });
+
+    it('should show the maturity as a date for the selected maturity', async () => {
+        await waitFor(() =>
+            render(<Default />, {
+                apolloMocks: Default.parameters?.apolloClient.mocks,
+            })
+        );
+        expect(
+            screen.getByRole('button', { name: 'DEC22' })
+        ).toBeInTheDocument();
+        expect(screen.getByText('Maturity Dec 1, 2022')).toBeInTheDocument();
+    });
 });
