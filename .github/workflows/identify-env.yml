@@ -1,0 +1,26 @@
+name: Identify Environment to Build
+on:
+  workflow_call:
+    inputs:
+      branch_name:
+        required: true
+        type: string
+    outputs:
+      environment_name:
+        description: 'The environment name'
+        value: ${{ jobs.identify-env.outputs.environment_name }}
+
+jobs:
+  identify-env:
+    runs-on: ubuntu-latest
+    name: Identify the environment
+    outputs:
+      environment_name: ${{ steps.identify-env.outputs.environment_name }}
+    steps:
+    - id: identify-env
+      run: |
+        if [[ ${{ inputs.branch_name }} == refs/heads/main ]]; then
+          echo "environment_name=staging" >> $GITHUB_OUTPUT
+        else
+          echo "environment_name=development" >> $GITHUB_OUTPUT
+        fi
