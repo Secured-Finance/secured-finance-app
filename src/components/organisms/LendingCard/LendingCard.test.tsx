@@ -100,7 +100,7 @@ describe('LendingCard Component', () => {
             dec22Fixture.toNumber()
         );
         await waitFor(() => render(<Default marketValue={rate} />));
-        expect(screen.getByText('0.20%')).toBeInTheDocument();
+        expect(screen.getByText('2.00%')).toBeInTheDocument();
     });
 
     it('should transform the contract label to a date', async () => {

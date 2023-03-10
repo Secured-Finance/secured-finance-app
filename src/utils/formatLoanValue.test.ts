@@ -19,13 +19,13 @@ describe('formatNumbers', () => {
                     LoanValue.fromApy(new Rate(515000), 100),
                     'rate'
                 )
-            ).toEqual('5.15%');
+            ).toEqual('51.50%');
             expect(
                 formatLoanValue(
                     LoanValue.fromApy(new Rate(500000), 100),
                     'rate'
                 )
-            ).toEqual('5.00%');
+            ).toEqual('50.00%');
         });
     });
 });
