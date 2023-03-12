@@ -33,10 +33,3 @@ Expanded.play = ({ canvasElement }) => {
     const walletButton = canvas.getByRole('button');
     walletButton.click();
 };
-
-export const Primary = Template.bind({});
-Primary.args = {
-    wallet: '0x0123...321',
-    networkName: 'Goerli',
-    isKYC: true,
-};
