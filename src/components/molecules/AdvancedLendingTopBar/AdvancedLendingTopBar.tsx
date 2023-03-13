@@ -76,7 +76,7 @@ export const AdvancedLendingTopBar = <T extends string = string>({
         <div className='h-fit w-full'>
             <GradientBox shape='rectangle'>
                 <div className='flex flex-row px-6 pb-3 pt-4'>
-                    <div className='typography-caption-2 grid w-[350px] grid-cols-2 flex-col text-neutral-4'>
+                    <div className='typography-caption-2 grid grid-cols-2 flex-col text-neutral-4'>
                         <DropdownSelector
                             optionList={assetList}
                             selected={selectedAsset}
@@ -100,7 +100,7 @@ export const AdvancedLendingTopBar = <T extends string = string>({
                             }`}
                         </div>
                     </div>
-                    <div className='flex flex-grow flex-row gap-6'>
+                    <div className='flex flex-row gap-6'>
                         <MarketTab
                             name={Number(
                                 formatLoanValue(midLoanValue, 'price')

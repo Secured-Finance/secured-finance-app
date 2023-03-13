@@ -141,7 +141,7 @@ export const AdvancedLending = ({
     );
 
     return (
-        <div className='flex flex-col gap-5'>
+        <div className='flex w-full flex-col gap-5'>
             <AdvancedLendingTopBar
                 selectedAsset={selectedAsset}
                 assetList={assetList}
@@ -175,21 +175,19 @@ export const AdvancedLending = ({
             />
             <div className='flex flex-row gap-6'>
                 <AdvancedLendingOrderCard collateralBook={collateralBook} />
-                <div className='flex flex-grow flex-col gap-6'>
-                    <div className='w-full'>
-                        <Tab
-                            tabDataArray={[
-                                { text: 'Yield Curve' },
-                                { text: 'Price History', disabled: true },
-                            ]}
-                        >
-                            <LineChartTab
-                                maturitiesOptionList={maturitiesOptionList}
-                                rates={rates}
-                            />
-                            <div />
-                        </Tab>
-                    </div>
+                <div className='flex min-w-0 flex-grow flex-col gap-6'>
+                    <Tab
+                        tabDataArray={[
+                            { text: 'Yield Curve' },
+                            { text: 'Price History', disabled: true },
+                        ]}
+                    >
+                        <LineChartTab
+                            maturitiesOptionList={maturitiesOptionList}
+                            rates={rates}
+                        />
+                        <div />
+                    </Tab>
                     <HorizontalTab
                         tabTitles={[
                             'Order Book',
