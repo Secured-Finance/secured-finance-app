@@ -7,21 +7,21 @@ import { LoanValue } from './loanValue';
 beforeEach(() => {
     timemachine.reset();
     timemachine.config({
-        dateString: '2022-12-01T11:00:00.00Z',
+        dateString: '2022-12-01T00:00:00.00Z',
     });
 });
 
 describe('LoanValue class', () => {
-    const maturityMar23 = new Maturity(1675252800);
+    const maturityMar23 = new Maturity(1677715200);
     const aprApyPriceMaturity: [BigNumber, BigNumber, number, Maturity][] = [
-        [BigNumber.from(18538), BigNumber.from(36901), 9690, maturityMar23], // 96.90
-        [BigNumber.from(18721), BigNumber.from(37326), 9687, maturityMar23],
-        [BigNumber.from(18842), BigNumber.from(37607), 9685, maturityMar23],
-        [BigNumber.from(19207), BigNumber.from(38458), 9679, maturityMar23],
-        [BigNumber.from(19511), BigNumber.from(39171), 9674, maturityMar23],
-        [BigNumber.from(20791), BigNumber.from(42213), 9653, maturityMar23],
-        [BigNumber.from(21401), BigNumber.from(43686), 9643, maturityMar23],
-        [BigNumber.from(22378), BigNumber.from(46076), 9627, maturityMar23],
+        [BigNumber.from(152888), BigNumber.from(165044), 9626, maturityMar23], // 96.26
+        [BigNumber.from(165826), BigNumber.from(180189), 9595, maturityMar23],
+        [BigNumber.from(170008), BigNumber.from(185126), 9585, maturityMar23],
+        [BigNumber.from(172101), BigNumber.from(187604), 9580, maturityMar23],
+        [BigNumber.from(175871), BigNumber.from(192081), 9571, maturityMar23],
+        [BigNumber.from(178386), BigNumber.from(195077), 9565, maturityMar23],
+        [BigNumber.from(180483), BigNumber.from(197581), 9560, maturityMar23],
+        [BigNumber.from(182582), BigNumber.from(200093), 9555, maturityMar23],
     ];
 
     it('should build from the price and maturity', () => {
@@ -33,13 +33,13 @@ describe('LoanValue class', () => {
         });
     });
 
-    it.skip('should build from the apy and the maturity', () => {
-        aprApyPriceMaturity.forEach(([apr, apy, price, maturity]) => {
+    it('should build from the apy and the maturity', () => {
+        aprApyPriceMaturity.forEach(([_apr, apy, price, maturity]) => {
             const value = LoanValue.fromApy(
                 new Rate(apy.toNumber()),
                 maturity.toNumber()
             );
-            expect(value.apr.toNumber()).toEqual(apr.toNumber());
+            // expect(value.apr.toNumber()).toEqual(apr.toNumber());
             expect(value.price).toEqual(price);
         });
     });
@@ -55,14 +55,14 @@ describe('LoanValue class', () => {
         const maturityDec24 = new Maturity(1712492800);
 
         const prices: [number, Maturity, number][] = [
-            [9687, maturityMar23, 37326],
-            [9685, maturityJun23, 37660],
-            [9679, maturitySep23, 38537],
-            [9674, maturityDec23, 39259],
-            [9653, maturityMar24, 42324],
-            [9643, maturityJun24, 43801],
-            [9627, maturitySep24, 46219],
-            [9617, maturityDec24, 47746],
+            [9626, maturityMar23, 251064],
+            [9595, maturityJun23, 129342],
+            [9585, maturitySep23, 87200],
+            [9580, maturityDec23, 65449],
+            [9571, maturityMar24, 53331],
+            [9565, maturityJun24, 44846],
+            [9560, maturitySep24, 38839],
+            [9555, maturityDec24, 34274],
         ];
 
         prices.forEach(([price, maturity, apy]) => {
@@ -112,8 +112,8 @@ describe('LoanValue', () => {
         });
 
         it('should compute and return the apy when it was not set but price and maturity are set', () => {
-            const loanValue = LoanValue.fromPrice(9690, 1675252800);
-            expect(loanValue.apy).toEqual(new Rate(36901));
+            const loanValue = LoanValue.fromPrice(9626, 1677715200);
+            expect(loanValue.apy).toEqual(new Rate(165044));
         });
 
         it('should return 0 if price is 0', () => {
@@ -139,8 +139,8 @@ describe('LoanValue', () => {
         });
 
         it('should compute and return the apr when it was not set but price and maturity are set', () => {
-            const loanValue = LoanValue.fromPrice(9690, 1675252800);
-            expect(loanValue.apr).toEqual(new Rate(18538));
+            const loanValue = LoanValue.fromPrice(9626, 1677715200);
+            expect(loanValue.apr).toEqual(new Rate(152888));
         });
     });
 

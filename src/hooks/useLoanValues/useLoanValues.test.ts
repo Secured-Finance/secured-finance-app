@@ -8,12 +8,12 @@ import { RateType, useLoanValues } from './useLoanValues';
 const mock = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mock);
 
-const maturityMar23 = new Maturity(1675252800);
+const maturityMar23 = [new Maturity(1675252800)];
 
 beforeAll(() => {
     timemachine.reset();
     timemachine.config({
-        dateString: '2021-12-01T11:00:00.00Z',
+        dateString: '2021-12-01T00:00:00.00Z',
     });
 });
 
