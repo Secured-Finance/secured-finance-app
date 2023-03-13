@@ -5,7 +5,6 @@ import {
     GradientBox,
     MarketTab,
     Option,
-    Separator,
 } from 'src/components/atoms';
 import { setCurrency } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
@@ -75,14 +74,13 @@ export const AdvancedLendingTopBar = <T extends string = string>({
     return (
         <div className='h-fit w-full'>
             <GradientBox shape='rectangle'>
-                <div className='flex flex-row px-6 pb-3 pt-4'>
-                    <div className='typography-caption-2 grid grid-cols-2 flex-col text-neutral-4'>
+                <div className='flex flex-row items-center justify-start gap-10 px-6 py-4'>
+                    <div className='typography-caption-2 grid min-w-fit grid-cols-2 gap-x-5 gap-y-1 text-neutral-4'>
                         <DropdownSelector
                             optionList={assetList}
                             selected={selectedAsset}
                             onChange={handleAssetChange}
                         />
-
                         <DropdownSelector
                             optionList={options}
                             onChange={handleTermChange}
@@ -93,14 +91,14 @@ export const AdvancedLendingTopBar = <T extends string = string>({
                                 ? currencyMap[selectedAsset.value].name
                                 : undefined}
                         </div>
-                        <div>
+                        <div className='whitespace-nowrap'>
                             {`Maturity ${
                                 selectedTerm &&
                                 transformLabel(selectedTerm.label)
                             }`}
                         </div>
                     </div>
-                    <div className='flex flex-row gap-6'>
+                    <div className='grid grid-cols-6 gap-7'>
                         <MarketTab
                             name={Number(
                                 formatLoanValue(midLoanValue, 'price')
@@ -110,24 +108,19 @@ export const AdvancedLendingTopBar = <T extends string = string>({
                                 'rate'
                             )} APY`}
                         />
-                        <Separator orientation='vertical' color='neutral-2' />
                         <MarketTab
                             name='24h High'
                             value={getValue(values, 0)}
                         />
-                        <Separator orientation='vertical' color='neutral-2' />
                         <MarketTab name='24h Low' value={getValue(values, 1)} />
-                        <Separator orientation='vertical' color='neutral-2' />
                         <MarketTab
                             name='24h Trades'
                             value={getValue(values, 2)}
                         />
-                        <Separator orientation='vertical' color='neutral-2' />
                         <MarketTab
                             name='24h Volume'
                             value={getValue(values, 3)}
                         />
-                        <Separator orientation='vertical' color='neutral-2' />
                         <MarketTab
                             name={`${selectedAsset?.value} Price`}
                             value={getValue(values, 4)}
