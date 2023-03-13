@@ -43,7 +43,7 @@ export const Landing = ({ view }: { view?: ViewType }) => {
     const unitPrices = useLoanValues(
         currency,
         side === OrderSide.BORROW ? RateType.Borrow : RateType.Lend,
-        maturity
+        optionList.map(o => o.value)
     );
 
     const marketValue = useMemo(() => {

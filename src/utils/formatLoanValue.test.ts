@@ -15,11 +15,17 @@ describe('formatNumbers', () => {
 
         it('should format the rate correctly', () => {
             expect(
-                formatLoanValue(LoanValue.fromApy(new Rate(51500), 100), 'rate')
-            ).toEqual('5.15%');
+                formatLoanValue(
+                    LoanValue.fromApy(new Rate(515000), 100),
+                    'rate'
+                )
+            ).toEqual('51.50%');
             expect(
-                formatLoanValue(LoanValue.fromApy(new Rate(50000), 100), 'rate')
-            ).toEqual('5.00%');
+                formatLoanValue(
+                    LoanValue.fromApy(new Rate(500000), 100),
+                    'rate'
+                )
+            ).toEqual('50.00%');
         });
     });
 });
