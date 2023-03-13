@@ -110,8 +110,8 @@ export const Faucet = () => {
                                         }
                                     }}
                                 />
-                                <span className='pr-7 text-white-60'>
-                                    {address}
+                                <span className='pr-10 text-white-60'>
+                                    {AddressUtils.format(address, 6)}
                                 </span>
                                 <button
                                     className='absolute right-4'
@@ -131,8 +131,10 @@ export const Faucet = () => {
                                         Address
                                     </span>
                                 </div>
-                                <span className='pr-7 text-white-60'>
-                                    {account}
+                                <span className='pr-10 text-white-60'>
+                                    {account
+                                        ? AddressUtils.format(account, 6)
+                                        : ''}
                                 </span>
                             </div>
                             <div className='flex justify-center'>
