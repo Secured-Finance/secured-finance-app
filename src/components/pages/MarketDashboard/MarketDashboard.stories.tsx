@@ -40,7 +40,7 @@ const totalUser = [
 export default {
     title: 'Pages/MarketDashboard',
     component: MarketDashboard,
-    chromatic: { pauseAnimationAtEnd: true },
+    chromatic: { pauseAnimationAtEnd: true, viewports: [1024, 1440] },
     args: {},
     parameters: {
         apolloClient: {

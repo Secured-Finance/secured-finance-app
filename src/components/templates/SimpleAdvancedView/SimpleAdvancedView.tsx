@@ -30,7 +30,7 @@ export const SimpleAdvancedView = ({
                         setView(v);
                         onModeChange?.(v);
                     }}
-                    text={view as ViewType}
+                    text={view}
                 />
             }
             name={pageName}

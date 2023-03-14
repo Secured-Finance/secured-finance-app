@@ -27,8 +27,8 @@
     "headlessui",
     "heroicons",
     "ledgerhq",
-    "nvmrc",
     "Numberish",
+    "nvmrc",
     "Orderbook",
     "picofil",
     "reduxjs",
@@ -38,6 +38,7 @@
     "tanstack",
     "testid",
     "timemachine",
+    "viewports",
     "walletconnect",
     "zondax"
   ],
