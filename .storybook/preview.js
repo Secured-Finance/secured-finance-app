@@ -1,5 +1,6 @@
 import { MockedProvider } from '@apollo/client/testing';
 import '@storybook/addon-console';
+import { INITIAL_VIEWPORTS } from '@storybook/addon-viewport';
 import { Provider } from 'react-redux';
 import 'src/assets/css/index.css';
 import { withPerformance } from 'storybook-addon-performance';
@@ -14,6 +15,10 @@ export const parameters = {
             color: /(background|color)$/i,
             date: /Date$/,
         },
+    },
+
+    viewport: {
+        viewports: INITIAL_VIEWPORTS,
     },
 
     backgrounds: {
