@@ -1,4 +1,5 @@
 import { RadioGroup } from '@headlessui/react';
+import { OrderSide } from '@secured-finance/sf-client';
 import { BigNumber } from 'ethers';
 import Link from 'next/link';
 import { useMemo } from 'react';
@@ -6,6 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
     CollateralManagementConciseTab,
     NavTab,
+    OrderDisplayBox,
     OrderInputBox,
     Separator,
     Slider,
@@ -21,7 +23,12 @@ import {
     setUnitPrice,
 } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
-import { amountFormatterFromBase, ordinaryFormat } from 'src/utils';
+import {
+    amountFormatterFromBase,
+    amountFormatterToBase,
+    percentFormat,
+    usdFormat,
+} from 'src/utils';
 import { LoanValue } from 'src/utils/entities';
 import { OrderAction } from '../OrderAction';
 
@@ -30,10 +37,17 @@ export const AdvancedLendingOrderCard = ({
 }: {
     collateralBook: CollateralBook;
 }) => {
-    const { currency, amount, side, orderType, unitPrice, maturity } =
-        useSelector((state: RootState) =>
-            selectLandingOrderForm(state.landingOrderForm)
-        );
+    const {
+        currency,
+        amount,
+        side,
+        orderType,
+        unitPrice,
+        maturity,
+        availableToBorrow,
+    } = useSelector((state: RootState) =>
+        selectLandingOrderForm(state.landingOrderForm)
+    );
 
     const loanValue = useMemo(() => {
         if (unitPrice && maturity) {
@@ -62,6 +76,20 @@ export const AdvancedLendingOrderCard = ({
             format = amountFormatterFromBase[currency];
         }
         return format(amount);
+    };
+
+    const handleAmountChange = (percentage: number) => {
+        if (side === OrderSide.BORROW) {
+            dispatch(
+                setAmount(
+                    amountFormatterToBase[currency](
+                        Math.floor(percentage * availableToBorrow) / 100.0
+                    )
+                )
+            );
+        } else {
+            dispatch(setAmount(BigNumber.from(0)));
+        }
     };
 
     return (
@@ -100,10 +128,9 @@ export const AdvancedLendingOrderCard = ({
                     side={side}
                     variant='advanced'
                 />
-                <div className='flex flex-col gap-4'>
+                <div className='flex flex-col gap-[10px]'>
                     <OrderInputBox
-                        field='Unit Price'
-                        unit=''
+                        field='Bond Price'
                         disabled={orderType === OrderType.MARKET}
                         initialValue={unitPrice / 100.0}
                         onValueChange={v =>
@@ -113,21 +140,43 @@ export const AdvancedLendingOrderCard = ({
                         decimalPlacesAllowed={2}
                         maxLimit={100}
                     />
-                    <OrderInputBox
-                        field='Amount'
-                        unit={currency}
-                        asset={currency}
-                        initialValue={getAmount()}
-                        onValueChange={v => dispatch(setAmount(v as BigNumber))}
+                    <div className='mx-[10px]'>
+                        <OrderDisplayBox
+                            field='Fixed Rate (APY)'
+                            value={percentFormat(
+                                LoanValue.fromPrice(
+                                    unitPrice,
+                                    maturity.toNumber()
+                                ).apy.toNormalizedNumber()
+                            )}
+                        />
+                    </div>
+                </div>
+                <Slider onChange={handleAmountChange} />
+                <OrderInputBox
+                    field='Amount'
+                    unit={currency}
+                    asset={currency}
+                    initialValue={getAmount()}
+                    onValueChange={v => dispatch(setAmount(v as BigNumber))}
+                />
+                <div className='mx-[10px] flex flex-col gap-6'>
+                    <OrderDisplayBox
+                        field='Est. Present Value'
+                        value={usdFormat(getAmount() * price, 2)}
+                    />
+                    <OrderDisplayBox
+                        field='Future Value'
+                        value='1,049.86 SF_FIL'
+                        informationText='Future Value is the expected return value of the contract at time of maturity.'
                     />
                 </div>
-                <Slider onChange={() => {}} />
-                <OrderInputBox
+                {/* <OrderInputBox
                     field='Total'
                     unit='USD'
                     disabled={true}
                     initialValue={ordinaryFormat(getAmount() * price, 4)}
-                />
+                /> */}
 
                 <OrderAction
                     loanValue={loanValue}

@@ -11,7 +11,7 @@ export default {
 
 const Template: ComponentStory<typeof Slider> = args => {
     return (
-        <div className='w-80'>
+        <div className='mt-10 w-80'>
             <Slider {...args} />
         </div>
     );
