@@ -20,6 +20,7 @@ export * from './InformationPopover';
 export * from './InputBase';
 export * from './MarketTab';
 export * from './NavTab';
+export * from './OrderDisplayBox';
 export * from './OrderInputBox';
 export * from './PercentageTab';
 export * from './PortfolioTab';
