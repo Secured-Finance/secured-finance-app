@@ -1,6 +1,6 @@
 import { PencilIcon, TrashIcon } from '@heroicons/react/outline';
 import { BigNumber } from 'ethers';
-import { useCancelOrder } from 'src/hooks';
+import { useOrders } from 'src/hooks';
 import { CurrencySymbol } from 'src/utils';
 import { Maturity } from 'src/utils/entities';
 
@@ -13,7 +13,7 @@ export const OpenOrderActionCell = ({
     maturity: Maturity;
     orderId: BigNumber;
 }) => {
-    const { handleCancelOrder } = useCancelOrder();
+    const { handleCancelOrder } = useOrders();
 
     return (
         <div className='flex flex-row justify-center gap-3 text-planetaryPurple'>
