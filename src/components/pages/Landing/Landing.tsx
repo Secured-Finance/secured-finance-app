@@ -73,6 +73,10 @@ export const Landing = ({ view }: { view?: ViewType }) => {
         return value;
     }, [unitPrices, lendingContracts, maturity]);
 
+    const maturityOptionList = useMemo(() => {
+        return optionList.length > 0 ? optionList : emptyOptionList;
+    }, [optionList]);
+
     return (
         <SimpleAdvancedView
             title='OTC Lending'
@@ -81,17 +85,13 @@ export const Landing = ({ view }: { view?: ViewType }) => {
                     <LendingCard
                         collateralBook={collateralBook}
                         marketValue={marketValue}
-                        maturitiesOptionList={
-                            optionList.length > 0 ? optionList : emptyOptionList
-                        }
+                        maturitiesOptionList={maturityOptionList}
                     />
                     <YieldChart
                         asset={currency}
                         isBorrow={side === OrderSide.BORROW}
                         rates={unitPrices.map(v => v.apy)}
-                        maturitiesOptionList={
-                            optionList.length > 0 ? optionList : emptyOptionList
-                        }
+                        maturitiesOptionList={maturityOptionList}
                     />
                 </div>
             }
@@ -100,7 +100,7 @@ export const Landing = ({ view }: { view?: ViewType }) => {
                     collateralBook={collateralBook}
                     loanValue={marketValue}
                     rates={unitPrices.map(v => v.apy)}
-                    maturitiesOptionList={optionList}
+                    maturitiesOptionList={maturityOptionList}
                 />
             }
             initialView={view ?? lastView}
