@@ -7,7 +7,7 @@ import {
     generateCollateralList,
     PlaceOrder,
 } from 'src/components/organisms';
-import { CollateralBook, usePlaceOrder } from 'src/hooks';
+import { CollateralBook, useOrders } from 'src/hooks';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { setWalletDialogOpen } from 'src/store/interactions';
 import { selectLandingOrderForm } from 'src/store/landingOrderForm';
@@ -31,7 +31,7 @@ export const OrderAction = ({
 }: OrderActionProps) => {
     const { account } = useWallet();
     const dispatch = useDispatch();
-    const { placeOrder } = usePlaceOrder();
+    const { placeOrder } = useOrders();
 
     const [openDepositCollateralDialog, setOpenDepositCollateralDialog] =
         useState(false);
