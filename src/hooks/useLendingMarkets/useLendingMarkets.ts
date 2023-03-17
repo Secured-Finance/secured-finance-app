@@ -4,8 +4,15 @@ import { useDispatch, useSelector } from 'react-redux';
 import { updateLendingMarketContract } from 'src/store/availableContracts';
 import { RootState } from 'src/store/types';
 import { CurrencySymbol, getCurrencyMapAsList, toCurrency } from 'src/utils';
+import { isPastDate } from 'src/utils/date';
 
-export type ContractMap = Record<string, number>;
+type Market = {
+    name: string;
+    maturity: number;
+    isActive: boolean;
+    utcOpeningDate: number;
+};
+export type ContractMap = Record<string, Market>;
 
 export const useLendingMarkets = (
     securedFinance: SecuredFinanceClient | undefined
@@ -23,13 +30,22 @@ export const useLendingMarkets = (
                 );
 
                 if (lendingMarkets && lendingMarkets.length !== 0) {
+                    console.log('lendingMarkets', lendingMarkets);
                     dispatch(
                         updateLendingMarketContract(
                             lendingMarkets.reduce<ContractMap>(
-                                (acc, { name, maturity }) => ({
-                                    ...acc,
-                                    [name]: maturity,
-                                }),
+                                (acc, { name, maturity, utcOpeningDate }) => {
+                                    return {
+                                        ...acc,
+                                        [name]: {
+                                            name,
+                                            maturity,
+                                            utcOpeningDate,
+                                            isActive:
+                                                isPastDate(utcOpeningDate),
+                                        },
+                                    };
+                                },
                                 {}
                             ),
                             ccy
