@@ -4,7 +4,7 @@ import { CurrencySymbol, toCurrency } from 'src/utils';
 import { Maturity } from 'src/utils/entities';
 import useSF from '../useSecuredFinance';
 
-export const useCancelOrder = () => {
+export const useOrders = () => {
     const securedFinance = useSF();
 
     const handleCancelOrder = useCallback(
