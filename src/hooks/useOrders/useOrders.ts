@@ -13,7 +13,7 @@ export enum OrderType {
 export const useOrders = () => {
     const securedFinance = useSF();
 
-    const handleCancelOrder = useCallback(
+    const cancelOrder = useCallback(
         async (
             orderId: number | BigNumber,
             ccy: CurrencySymbol,
@@ -57,5 +57,5 @@ export const useOrders = () => {
         [securedFinance]
     );
 
-    return { handleCancelOrder, placeOrder };
+    return { cancelOrder, placeOrder };
 };

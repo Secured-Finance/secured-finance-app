@@ -13,12 +13,12 @@ export const OpenOrderActionCell = ({
     maturity: Maturity;
     orderId: BigNumber;
 }) => {
-    const { handleCancelOrder } = useOrders();
+    const { cancelOrder } = useOrders();
 
     return (
         <div className='flex flex-row justify-center gap-3 text-planetaryPurple'>
             <PencilIcon className='h-4' />
-            <button onClick={() => handleCancelOrder(orderId, ccy, maturity)}>
+            <button onClick={() => cancelOrder(orderId, ccy, maturity)}>
                 <TrashIcon className='h-4' />
             </button>
         </div>
