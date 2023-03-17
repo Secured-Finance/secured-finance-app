@@ -58,6 +58,32 @@ export const preloadedBalances = {
     },
 };
 
+export const preloadedLendingMarkets = {
+    availableContracts: {
+        lendingMarkets: {
+            [CurrencySymbol.FIL]: {
+                DEC22: {
+                    name: 'DEC22',
+                    maturity: 1669852800,
+                    isActive: true,
+                    utcOpeningDate: 1677628800,
+                },
+                MAR23: {
+                    name: 'MAR23',
+                    maturity: 1677628800,
+                    isActive: true,
+                    utcOpeningDate: 1677628800,
+                },
+                JUN23: {
+                    name: 'JUN23',
+                    maturity: 1685577600,
+                    isActive: false,
+                    utcOpeningDate: 1677628800,
+                },
+            },
+        },
+    },
+};
 export const dec22Fixture = new Maturity(1669852800);
 export const mar23Fixture = new Maturity(1677628800);
 export const jun23Fixture = new Maturity(1685577600);

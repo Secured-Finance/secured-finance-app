@@ -6,7 +6,9 @@ export type AvailableContracts = {
     lendingMarkets: Record<CurrencySymbol, ContractMap>;
 };
 
-const emptyContract = { '': 0 };
+const emptyContract = {
+    EMPTY: { name: 'EMPTY', maturity: 0, isActive: false, utcOpeningDate: 0 },
+};
 const initialState: AvailableContracts = {
     lendingMarkets: {
         [CurrencySymbol.ETH]: emptyContract,
