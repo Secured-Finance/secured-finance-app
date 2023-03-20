@@ -1,14 +1,14 @@
 import queries from '@secured-finance/sf-graph-client/dist/graphclients';
 import {
-    btcBytes32,
     dailyVolumes,
     dec22Fixture,
-    ethBytes32,
     filBytes32,
+    ethBytes32,
     orderHistoryList,
     trades,
     transactions,
     usdcBytes32,
+    wbtcBytes32,
 } from './fixtures';
 
 export const mockUserHistory = [
@@ -170,7 +170,7 @@ export const mockTrades = [
         request: {
             query: queries.TradesDocument,
             variables: {
-                currency: btcBytes32,
+                currency: wbtcBytes32,
                 maturity: dec22Fixture.toNumber(),
                 from: yesterday,
                 to: today,

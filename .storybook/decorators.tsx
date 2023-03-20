@@ -99,7 +99,7 @@ export const withAssetPrice = (Story: Story) => {
                         usd: 1.0,
                         usd_24h_change: 0.042530768538486696,
                     },
-                    bitcoin: {
+                    'wrapped-bitcoin': {
                         usd: 50000.0,
                         usd_24h_change: 0.12,
                     },
@@ -221,7 +221,7 @@ export const withWalletBalances = (Story: Story) => {
         const timeoutId = setTimeout(() => {
             dispatch(updateBalance(10000, CurrencySymbol.FIL));
             dispatch(updateBalance(2000, CurrencySymbol.ETH));
-            dispatch(updateBalance(300, CurrencySymbol.BTC));
+            dispatch(updateBalance(300, CurrencySymbol.WBTC));
             dispatch(updateBalance(4000, CurrencySymbol.USDC));
         }, 300);
 
