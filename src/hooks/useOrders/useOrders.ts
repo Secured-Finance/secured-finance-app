@@ -57,5 +57,23 @@ export const useOrders = () => {
         [securedFinance]
     );
 
-    return { cancelOrder, placeOrder };
+    const unwindOrder = useCallback(
+        async (ccy: CurrencySymbol, maturity: Maturity) => {
+            try {
+                if (!securedFinance) return;
+
+                const tx = await securedFinance.unwindOrder(
+                    toCurrency(ccy),
+                    maturity.toNumber()
+                );
+
+                return tx;
+            } catch (error) {
+                console.error(error);
+            }
+        },
+        [securedFinance]
+    );
+
+    return { cancelOrder, placeOrder, unwindOrder };
 };
