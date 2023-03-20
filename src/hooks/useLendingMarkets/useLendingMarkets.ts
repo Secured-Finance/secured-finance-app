@@ -30,7 +30,6 @@ export const useLendingMarkets = (
                 );
 
                 if (lendingMarkets && lendingMarkets.length !== 0) {
-                    console.log('lendingMarkets', lendingMarkets);
                     dispatch(
                         updateLendingMarketContract(
                             lendingMarkets.reduce<ContractMap>(
