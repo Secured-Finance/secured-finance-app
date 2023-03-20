@@ -21,7 +21,6 @@ export const Slider = ({ onChange }: { onChange: (value: number) => void }) => {
             marks={marks}
             onChange={handleChange}
             classes={{ markActive: 'slider-markActive' }}
-            // slots={{ valueLabel: SliderValueLabel }}
             slotProps={{
                 thumb: {
                     className:
@@ -42,18 +41,5 @@ export const Slider = ({ onChange }: { onChange: (value: number) => void }) => {
                 },
             }}
         />
-    );
-};
-
-interface SliderValueLabelProps {
-    children: React.ReactElement;
-}
-
-const SliderValueLabel = ({ children }: SliderValueLabelProps) => {
-    console.log(children);
-    return (
-        <span className='label'>
-            <div className='value h-12 w-12'>{children}</div>
-        </span>
     );
 };
