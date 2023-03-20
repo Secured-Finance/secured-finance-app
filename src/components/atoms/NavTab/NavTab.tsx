@@ -1,3 +1,5 @@
+import classNames from 'classnames';
+
 interface NavTabProps {
     text: string;
     active: boolean;
@@ -14,14 +16,18 @@ export const NavTab = ({ text, active = false }: NavTabProps) => {
                         : ''
                 }`}
             >
-                <div
-                    className={`typography-nav-menu-default h-4 text-neutral-8 ${
-                        active ? 'opacity-100' : 'opacity-70'
-                    } duration-300 group-hover:opacity-100 group-hover:ease-in-out`}
+                <p
+                    className={classNames(
+                        'typography-nav-menu-default h-4 whitespace-nowrap text-neutral-8 duration-300 group-hover:opacity-100 group-hover:ease-in-out',
+                        {
+                            'opacity-100': active,
+                            'opacity-70': !active,
+                        }
+                    )}
                     data-testid={`${text}-tab`}
                 >
                     {text}
-                </div>
+                </p>
             </div>
         </div>
     );
