@@ -19,7 +19,7 @@ export const getPriceMap = (state: RootState): AssetPriceMap => {
         [CurrencySymbol.ETH]: state.assetPrices.ETH.price,
         [CurrencySymbol.FIL]: state.assetPrices.FIL.price,
         [CurrencySymbol.USDC]: state.assetPrices.USDC.price,
-        [CurrencySymbol.BTC]: state.assetPrices.BTC.price,
+        [CurrencySymbol.WBTC]: state.assetPrices.WBTC.price,
     };
 };
 
@@ -28,6 +28,6 @@ export const getPriceChangeMap = (state: RootState) => {
         [CurrencySymbol.ETH]: state.assetPrices.ETH.change,
         [CurrencySymbol.FIL]: state.assetPrices.FIL.change,
         [CurrencySymbol.USDC]: state.assetPrices.USDC.change,
-        [CurrencySymbol.BTC]: state.assetPrices.BTC.change,
+        [CurrencySymbol.WBTC]: state.assetPrices.WBTC.change,
     };
 };

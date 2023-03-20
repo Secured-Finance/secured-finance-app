@@ -9,7 +9,7 @@ const initialStore: AssetPrices = {
     [CurrencySymbol.ETH]: initialAssetPrice,
     [CurrencySymbol.FIL]: initialAssetPrice,
     [CurrencySymbol.USDC]: initialAssetPrice,
-    [CurrencySymbol.BTC]: initialAssetPrice,
+    [CurrencySymbol.WBTC]: initialAssetPrice,
     isLoading: false,
 };
 
@@ -48,7 +48,10 @@ const assetPricesSlice = createSlice({
                     ethereum: { usd: ethPrice, usd_24h_change: ethChange },
                     filecoin: { usd: filPrice, usd_24h_change: filChange },
                     'usd-coin': { usd: usdcPrice, usd_24h_change: usdcChange },
-                    bitcoin: { usd: btcPrice, usd_24h_change: btcChange },
+                    'wrapped-bitcoin': {
+                        usd: btcPrice,
+                        usd_24h_change: btcChange,
+                    },
                 } = action.payload;
                 state.ETH.price = ethPrice;
                 state.ETH.change = ethChange;
@@ -56,8 +59,8 @@ const assetPricesSlice = createSlice({
                 state.FIL.change = filChange;
                 state.USDC.price = usdcPrice;
                 state.USDC.change = usdcChange;
-                state.BTC.price = btcPrice;
-                state.BTC.change = btcChange;
+                state.WBTC.price = btcPrice;
+                state.WBTC.change = btcChange;
             }
         );
         builder.addCase(fetchAssetPrice.pending, state => {

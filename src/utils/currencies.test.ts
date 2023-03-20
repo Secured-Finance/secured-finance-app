@@ -32,7 +32,7 @@ describe('currencies.generateWalletInformation', () => {
                     quantity: 150,
                 },
                 {
-                    asset: CurrencySymbol.BTC,
+                    asset: CurrencySymbol.WBTC,
                     quantity: 0,
                 },
             ],

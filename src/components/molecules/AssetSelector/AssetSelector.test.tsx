@@ -7,7 +7,7 @@ const { Default } = composeStories(stories);
 
 describe('AssetSelector Component', () => {
     const amountFormatterMap = {
-        ['BTC']: (amount: number) => BigNumber.from(amount * 100),
+        ['WBTC']: (amount: number) => BigNumber.from(amount * 100),
         ['ETH']: (amount: number) => BigNumber.from(amount * 1000),
     };
 
@@ -30,7 +30,7 @@ describe('AssetSelector Component', () => {
         render(<Default />);
         expect(
             screen.getByTestId('asset-selector-transformed-value')
-        ).toHaveTextContent('BTC');
+        ).toHaveTextContent('WBTC');
         fireEvent.click(screen.getByRole('button'));
 
         fireEvent.click(screen.getByText('Filecoin'));
@@ -88,7 +88,7 @@ describe('AssetSelector Component', () => {
     it('should call the onAssetChange function when the asset is changed', () => {
         const onAssetChange = jest.fn();
         render(<Default onAssetChange={onAssetChange} />);
-        expect(onAssetChange).toHaveBeenCalledWith('BTC');
+        expect(onAssetChange).toHaveBeenCalledWith('WBTC');
         fireEvent.click(screen.getByRole('button'));
         fireEvent.click(screen.getByText('Ethereum'));
         expect(onAssetChange).toHaveBeenLastCalledWith('ETH');

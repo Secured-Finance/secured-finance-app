@@ -1,10 +1,10 @@
 import { fromBytes32 } from '@secured-finance/sf-graph-client';
 import { BigNumber, utils } from 'ethers';
-import BitcoinIcon from 'src/assets/coins/btc.svg';
 import EthIcon from 'src/assets/coins/eth2.svg';
 import FilecoinIcon from 'src/assets/coins/fil.svg';
 import UsdcIcon from 'src/assets/coins/usdc.svg';
 import UsdtIcon from 'src/assets/coins/usdt.svg';
+import WrappedBitcoinIcon from 'src/assets/coins/wbtc.svg';
 import { Option } from 'src/components/atoms';
 import { CollateralBook } from 'src/hooks';
 import { AssetPrices } from 'src/store/assetPrices';
@@ -32,7 +32,7 @@ export const preloadedAssetPrices: { assetPrices: AssetPrices } = {
             price: 1.0,
             change: 0.042530768538486696,
         },
-        BTC: {
+        WBTC: {
             price: 50000.0,
             change: 0.0,
         },
@@ -44,7 +44,7 @@ export const assetPriceMap = {
     FIL: 6.0,
     ETH: 2000.34,
     USDC: 1.0,
-    BTC: 50000.0,
+    WBTC: 50000.0,
 };
 
 export const preloadedBalances = {
@@ -53,7 +53,7 @@ export const preloadedBalances = {
             FIL: 1000,
             ETH: 10,
             USDC: 100000,
-            BTC: 50,
+            WBTC: 50,
         },
     },
 };
@@ -106,9 +106,9 @@ export const maturityOptions: MaturityOptionList = [
 
 export const assetList = [
     {
-        label: 'Bitcoin',
-        iconSVG: BitcoinIcon,
-        value: 'BTC',
+        label: 'Wrapped Bitcoin',
+        iconSVG: WrappedBitcoinIcon,
+        value: 'WBTC',
     },
     {
         label: 'Ethereum',
@@ -134,9 +134,9 @@ export const assetList = [
 
 export const currencyList = [
     {
-        label: 'Bitcoin',
-        iconSVG: BitcoinIcon,
-        value: CurrencySymbol.BTC,
+        label: 'Wrapped Bitcoin',
+        iconSVG: WrappedBitcoinIcon,
+        value: CurrencySymbol.WBTC,
     },
     {
         label: 'Ethereum',
@@ -168,7 +168,7 @@ export const yieldCurveRates = [
 
 export const filBytes32 = utils.formatBytes32String('FIL'); //0x46494c0000000000000000000000000000000000000000000000000000000000
 export const ethBytes32 = utils.formatBytes32String('ETH');
-export const btcBytes32 = utils.formatBytes32String('BTC');
+export const wbtcBytes32 = utils.formatBytes32String('WBTC');
 export const usdcBytes32 = utils.formatBytes32String('USDC'); // '0x5553444300000000000000000000000000000000000000000000000000000000'
 
 export const orderHistoryList: OrderList = [
@@ -204,7 +204,7 @@ export const orderHistoryList: OrderList = [
         id: '3',
         orderId: BigNumber.from('1'),
         originalOrderId: BigNumber.from('1'),
-        currency: btcBytes32,
+        currency: wbtcBytes32,
         side: 0,
         maturity: BigNumber.from(dec22Fixture.toString()),
         unitPrice: BigNumber.from('9800'),
@@ -258,7 +258,7 @@ export const transactions: TradeHistory = [
         orderPrice: '9700',
         createdAt: '1671427140',
         forwardValue: '1040000000',
-        currency: btcBytes32,
+        currency: wbtcBytes32,
         maturity: jun23Fixture.toString(),
     },
     {
@@ -293,7 +293,7 @@ export const aggregatedTrades: TradeSummary[] = [
         amount: BigNumber.from('-1000000000'),
         averagePrice: BigNumber.from(9700),
         forwardValue: BigNumber.from('-1040000000'),
-        currency: btcBytes32,
+        currency: wbtcBytes32,
         maturity: jun23Fixture.toString(),
     },
     {
@@ -312,7 +312,7 @@ export const collateralBook80: CollateralBook = {
     },
     nonCollateral: {
         FIL: BigNumber.from('100000000000000000000'),
-        BTC: BigNumber.from('20000000'),
+        WBTC: BigNumber.from('20000000'),
     },
     usdCollateral: 2100.34,
     usdNonCollateral: 10600,
@@ -326,7 +326,7 @@ export const collateralBook37: CollateralBook = {
     },
     nonCollateral: {
         FIL: BigNumber.from('100000000000000000000'),
-        BTC: BigNumber.from('20000000'),
+        WBTC: BigNumber.from('20000000'),
     },
     usdCollateral: 2300,
     usdNonCollateral: 10600,
@@ -340,7 +340,7 @@ export const emptyCollateralBook: CollateralBook = {
     },
     nonCollateral: {
         FIL: BigNumber.from('0'),
-        BTC: BigNumber.from('0'),
+        WBTC: BigNumber.from('0'),
     },
     usdCollateral: 0,
     usdNonCollateral: 0,
@@ -350,7 +350,7 @@ export const emptyCollateralBook: CollateralBook = {
 function generateDailyVolumes(days: number) {
     const volumes: DailyVolumes = [];
     for (let i = 0; i < days; i++) {
-        for (const currency of [filBytes32, btcBytes32, ethBytes32]) {
+        for (const currency of [filBytes32, wbtcBytes32, ethBytes32]) {
             for (const maturity of [
                 dec22Fixture,
                 mar23Fixture,

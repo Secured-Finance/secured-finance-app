@@ -6,10 +6,10 @@ import {
 } from '@secured-finance/sf-core';
 import { BigNumber as BigNumberJS } from 'bignumber.js';
 import { BigNumber } from 'ethers';
-import BTCIcon from 'src/assets/coins/btc.svg';
 import EthIcon from 'src/assets/coins/eth2.svg';
 import FilecoinIcon from 'src/assets/coins/fil.svg';
 import UsdcIcon from 'src/assets/coins/usdc.svg';
+import WBTCIcon from 'src/assets/coins/wbtc.svg';
 import { Option } from 'src/components/atoms';
 import { hexToString } from 'web3-utils';
 import { Filecoin } from './currencies/filecoin';
@@ -24,7 +24,7 @@ export enum CurrencySymbol {
     ETH = 'ETH',
     FIL = 'FIL',
     USDC = 'USDC',
-    BTC = 'BTC',
+    WBTC = 'WBTC',
 }
 
 export const currencyMap: Readonly<
@@ -70,12 +70,12 @@ export const currencyMap: Readonly<
             convertFromBlockchainUnit(amount, USDC.onChain()),
         toCurrency: () => USDC.onChain(),
     },
-    [CurrencySymbol.BTC]: {
+    [CurrencySymbol.WBTC]: {
         index: 3,
-        symbol: CurrencySymbol.BTC,
+        symbol: CurrencySymbol.WBTC,
         name: WBTC.onChain().name,
-        icon: BTCIcon,
-        coinGeckoId: 'bitcoin',
+        icon: WBTCIcon,
+        coinGeckoId: 'wrapped-bitcoin',
         isCollateral: false,
         toBaseUnit: (amount: number) =>
             convertToBlockchainUnit(amount, WBTC.onChain()),
@@ -143,8 +143,8 @@ export function toCurrencySymbol(ccy: string) {
             return CurrencySymbol.FIL;
         case CurrencySymbol.USDC:
             return CurrencySymbol.USDC;
-        case CurrencySymbol.BTC:
-            return CurrencySymbol.BTC;
+        case CurrencySymbol.WBTC:
+            return CurrencySymbol.WBTC;
         default:
             return undefined;
     }

@@ -4,7 +4,7 @@ export const zeroBalances = {
     ETH: 0,
     USDC: 0,
     FIL: 0,
-    BTC: 0,
+    WBTC: 0,
 };
 
 export interface WalletsStore {
