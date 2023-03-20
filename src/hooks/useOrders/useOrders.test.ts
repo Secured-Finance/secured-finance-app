@@ -11,18 +11,14 @@ const mockSecuredFinance = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mockSecuredFinance);
 
 describe('useOrders hook', () => {
-    it('should return two functions', () => {
+    it('should return three functions', () => {
         const { result } = renderHook(() => useOrders());
         expect(result.current.cancelOrder).toBeInstanceOf(Function);
         expect(result.current.placeOrder).toBeInstanceOf(Function);
+        expect(result.current.unwindOrder).toBeInstanceOf(Function);
     });
 
     describe('cancel order', () => {
-        it('should return the cancelOrder function', () => {
-            const { result } = renderHook(() => useOrders());
-            expect(result.current.cancelOrder).toBeInstanceOf(Function);
-        });
-
         it('should call the cancelOrder function', () => {
             const { result } = renderHook(() => useOrders());
             result.current.cancelOrder(123, CurrencySymbol.ETH, dec22Fixture);
@@ -31,11 +27,6 @@ describe('useOrders hook', () => {
     });
 
     describe('place order', () => {
-        it('should return the placeOrder function', () => {
-            const { result } = renderHook(() => useOrders());
-            expect(result.current.placeOrder).toBeInstanceOf(Function);
-        });
-
         it('should call the SDK in wei when used with ETH', async () => {
             const { result } = renderHook(() => useOrders());
             const placeOrder = result.current.placeOrder;
@@ -75,6 +66,14 @@ describe('useOrders hook', () => {
                 BigNumber.from('1000000000000000000'),
                 undefined
             );
+        });
+    });
+
+    describe('unwind order', () => {
+        it('should call the unwindOrder function', () => {
+            const { result } = renderHook(() => useOrders());
+            result.current.unwindOrder(CurrencySymbol.FIL, dec22Fixture);
+            expect(mockSecuredFinance.unwindOrder).toBeCalled();
         });
     });
 });
