@@ -132,14 +132,60 @@ export const withMockDate = (Story: Story, context: StoryContext) => {
 export const withMaturities = (Story: Story) => {
     const maturities = useMemo(
         () => ({
-            DEC22: 1669852800,
-            MAR23: 1677628800,
-            JUN23: 1685577600,
-            SEP23: 1693526400,
-            DEC23: 1701388800,
-            MAR24: 1709251200,
-            JUN24: 1717200000,
-            SEP24: 1725148800,
+            DEC22: {
+                name: 'DEC22',
+                maturity: 1669852800,
+                isActive: true,
+                utcOpeningDate: 1677628800,
+            },
+            MAR23: {
+                name: 'MAR23',
+                maturity: 1677628800,
+                isActive: true,
+                utcOpeningDate: 1677628800,
+            },
+            JUN23: {
+                name: 'JUN23',
+                maturity: 1685577600,
+                isActive: true,
+                utcOpeningDate: 1677628800,
+            },
+            SEP23: {
+                name: 'SEP23',
+                maturity: 1693526400,
+                isActive: true,
+                utcOpeningDate: 1677628800,
+            },
+            DEC23: {
+                name: 'DEC23',
+                maturity: 1701388800,
+                isActive: true,
+                utcOpeningDate: 1677628800,
+            },
+            MAR24: {
+                name: 'MAR24',
+                maturity: 1709251200,
+                isActive: true,
+                utcOpeningDate: 1677628800,
+            },
+            JUN24: {
+                name: 'JUN24',
+                maturity: 1717200000,
+                isActive: true,
+                utcOpeningDate: 1677628800,
+            },
+            SEP24: {
+                name: 'SEP24',
+                maturity: 1725148800,
+                isActive: true,
+                utcOpeningDate: 1677628800,
+            },
+            DEC24: {
+                name: 'DEC24',
+                maturity: 1733011200,
+                isActive: false,
+                utcOpeningDate: 1685577600,
+            },
         }),
         []
     );
