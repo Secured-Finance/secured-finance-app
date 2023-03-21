@@ -126,8 +126,8 @@ export const ActiveTradeTable = ({ data }: { data: TradeSummary[] }) => {
                 <p className='p-3'>
                     Secured Finance lending contract includes an auto-roll
                     feature. If no action is taken by the user prior to the
-                    contract&apos;s maturation date, it will automatically roll
-                    over into the next closest expiration date. This convenience
+                    contract&apos;s maturity, it will automatically roll over
+                    into the next closest expiration date. This convenience
                     comes with a 0.25% fee for the auto-roll transaction.{' '}
                 </p>
                 <p className='p-3'>
