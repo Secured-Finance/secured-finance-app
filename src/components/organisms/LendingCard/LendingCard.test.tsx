@@ -7,7 +7,7 @@ import {
 } from 'src/stories/mocks/fixtures';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
-import { CurrencyInfo, currencyMap, Rate } from 'src/utils';
+import { currencyMap, Rate } from 'src/utils';
 import { LoanValue } from 'src/utils/entities';
 import * as stories from './LendingCard.stories';
 
@@ -16,15 +16,17 @@ const { Default } = composeStories(stories);
 const mockSecuredFinance = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mockSecuredFinance);
 
-const DEFAULT_CHOICE = Object.values(currencyMap).reduce<CurrencyInfo>(
-    (acc, ccy) => {
-        if (acc.index < ccy.index) {
-            return acc;
-        }
-        return ccy;
-    },
-    { ...currencyMap.ETH }
-);
+// const DEFAULT_CHOICE = Object.values(currencyMap).reduce<CurrencyInfo>(
+//     (acc, ccy) => {
+//         if (acc.index < ccy.index) {
+//             return acc;
+//         }
+//         return ccy;
+//     },
+//     { ...currencyMap.ETH }
+// );
+
+const DEFAULT_CHOICE = currencyMap.FIL;
 
 describe('LendingCard Component', () => {
     const preloadedState = { ...preloadedAssetPrices };
@@ -62,7 +64,6 @@ describe('LendingCard Component', () => {
 
     it('should let the user choose between ETH, FIL and USDC when clicking on the asset selector', async () => {
         await waitFor(() => render(<Default />));
-
         expect(screen.getAllByText(DEFAULT_CHOICE.name)).toHaveLength(1);
         expect(screen.queryByText('USDC')).not.toBeInTheDocument();
         expect(screen.queryByText('Ethereum')).not.toBeInTheDocument();
