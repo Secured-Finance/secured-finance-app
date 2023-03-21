@@ -30,8 +30,21 @@ export enum CurrencySymbol {
 export const currencyMap: Readonly<
     Record<CurrencySymbol, Readonly<CurrencyInfo>>
 > = {
-    [CurrencySymbol.FIL]: {
+    [CurrencySymbol.USDC]: {
         index: 0,
+        symbol: CurrencySymbol.USDC,
+        name: USDC.onChain().name,
+        icon: UsdcIcon,
+        coinGeckoId: 'usd-coin',
+        isCollateral: true,
+        toBaseUnit: (amount: number) =>
+            convertToBlockchainUnit(amount, USDC.onChain()),
+        fromBaseUnit: (amount: BigNumber) =>
+            convertFromBlockchainUnit(amount, USDC.onChain()),
+        toCurrency: () => USDC.onChain(),
+    },
+    [CurrencySymbol.FIL]: {
+        index: 1,
         icon: FilecoinIcon,
         symbol: CurrencySymbol.FIL,
         name: Filecoin.onChain().name,
@@ -46,7 +59,7 @@ export const currencyMap: Readonly<
         toCurrency: () => Filecoin.onChain(),
     },
     [CurrencySymbol.ETH]: {
-        index: 1,
+        index: 2,
         icon: EthIcon,
         symbol: CurrencySymbol.ETH,
         name: ETH.name,
@@ -56,19 +69,6 @@ export const currencyMap: Readonly<
         fromBaseUnit: (amount: BigNumber) =>
             convertFromBlockchainUnit(amount, ETH),
         toCurrency: () => ETH,
-    },
-    [CurrencySymbol.USDC]: {
-        index: 2,
-        symbol: CurrencySymbol.USDC,
-        name: USDC.onChain().name,
-        icon: UsdcIcon,
-        coinGeckoId: 'usd-coin',
-        isCollateral: true,
-        toBaseUnit: (amount: number) =>
-            convertToBlockchainUnit(amount, USDC.onChain()),
-        fromBaseUnit: (amount: BigNumber) =>
-            convertFromBlockchainUnit(amount, USDC.onChain()),
-        toCurrency: () => USDC.onChain(),
     },
     [CurrencySymbol.BTC]: {
         index: 3,

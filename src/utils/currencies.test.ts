@@ -20,16 +20,16 @@ describe('currencies.generateWalletInformation', () => {
             walletSource: WalletSource.METAMASK,
             data: [
                 {
+                    asset: CurrencySymbol.USDC,
+                    quantity: 150,
+                },
+                {
                     asset: CurrencySymbol.FIL,
                     quantity: 0,
                 },
                 {
                     asset: CurrencySymbol.ETH,
                     quantity: 0.58,
-                },
-                {
-                    asset: CurrencySymbol.USDC,
-                    quantity: 150,
                 },
                 {
                     asset: CurrencySymbol.BTC,
