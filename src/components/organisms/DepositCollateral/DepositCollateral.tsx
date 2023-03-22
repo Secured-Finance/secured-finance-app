@@ -78,7 +78,7 @@ export const DepositCollateral = ({
     onClose,
     collateralList,
 }: {
-    collateralList: Record<CurrencySymbol, CollateralInfo>;
+    collateralList: Partial<Record<CurrencySymbol, CollateralInfo>>;
 } & DialogState) => {
     const [asset, setAsset] = useState(CurrencySymbol.ETH);
     const [collateral, setCollateral] = useState(BigNumber.from(0));
@@ -167,7 +167,7 @@ export const DepositCollateral = ({
                                         setCollateral(v)
                                     }
                                     availableAmount={
-                                        collateralList[asset].available
+                                        collateralList[asset]?.available
                                     }
                                 />
                             </div>
