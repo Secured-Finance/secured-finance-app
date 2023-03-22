@@ -45,7 +45,7 @@ describe('DepositCollateral component', () => {
     it('should select asset and update amount', () => {
         render(<Default />, { preloadedState });
         fireEvent.click(screen.getByTestId('collateral-selector-button'));
-        fireEvent.click(screen.getByTestId('option-1'));
+        fireEvent.click(screen.getByTestId('option-0'));
         expect(screen.getByText('USDC')).toBeInTheDocument();
         expect(screen.getByText('50 USDC Available')).toBeInTheDocument();
 
@@ -58,7 +58,7 @@ describe('DepositCollateral component', () => {
         const onClose = jest.fn();
         render(<Default onClose={onClose} />, { preloadedState });
         fireEvent.click(screen.getByTestId('collateral-selector-button'));
-        fireEvent.click(screen.getByTestId('option-1'));
+        fireEvent.click(screen.getByTestId('option-0'));
         expect(screen.getByText('USDC')).toBeInTheDocument();
         expect(screen.getByText('50 USDC Available')).toBeInTheDocument();
 

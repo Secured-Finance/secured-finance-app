@@ -132,6 +132,13 @@ export const DepositCollateral = ({
         setAsset(v.symbol);
     };
 
+    const optionList = Object.values(collateralList);
+    const defaultCcyIndex = optionList.findIndex(col => col.name === 'USDC');
+    [optionList[0], optionList[defaultCcyIndex]] = [
+        optionList[defaultCcyIndex],
+        optionList[0],
+    ];
+
     return (
         <Dialog
             isOpen={isOpen}
@@ -149,7 +156,7 @@ export const DepositCollateral = ({
                                 <CollateralSelector
                                     headerText='Select Asset'
                                     onChange={v => handleChange(v)}
-                                    optionList={Object.values(collateralList)}
+                                    optionList={optionList}
                                 />
                                 <CollateralInput
                                     price={priceList[asset]}
