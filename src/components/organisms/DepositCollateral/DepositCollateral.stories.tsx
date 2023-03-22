@@ -19,23 +19,11 @@ export default {
                 available: 10,
                 name: 'Ethereum',
             },
-            [CurrencySymbol.FIL]: {
-                indexCcy: 1,
-                symbol: CurrencySymbol.FIL,
-                available: 50,
-                name: 'FIL',
-            },
             [CurrencySymbol.USDC]: {
                 indexCcy: 2,
                 symbol: CurrencySymbol.USDC,
                 available: 50,
                 name: 'USDC',
-            },
-            [CurrencySymbol.BTC]: {
-                indexCcy: 3,
-                symbol: CurrencySymbol.BTC,
-                available: 50,
-                name: 'BTC',
             },
         },
     },

@@ -6,7 +6,7 @@ import { amountFormatterToBase, CurrencySymbol, usdFormat } from 'src/utils';
 
 interface CollateralInputProps {
     price: number;
-    availableAmount: number;
+    availableAmount?: number;
     asset: CurrencySymbol;
     onAmountChange?: (v: BigNumber) => void;
 }
@@ -47,6 +47,10 @@ export const CollateralInput = ({
 
     const handleClick = useCallback(
         (percentage: number) => {
+            if (!availableAmount) {
+                setAmount(0);
+                return;
+            }
             const amount =
                 Math.floor(percentage * availableAmount * 10000) / 10000.0;
             setAmount(amount);
