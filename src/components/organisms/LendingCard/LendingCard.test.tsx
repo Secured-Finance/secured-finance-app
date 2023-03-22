@@ -16,16 +16,6 @@ const { Default } = composeStories(stories);
 const mockSecuredFinance = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mockSecuredFinance);
 
-// const DEFAULT_CHOICE = Object.values(currencyMap).reduce<CurrencyInfo>(
-//     (acc, ccy) => {
-//         if (acc.index < ccy.index) {
-//             return acc;
-//         }
-//         return ccy;
-//     },
-//     { ...currencyMap.ETH }
-// );
-
 const DEFAULT_CHOICE = currencyMap.FIL;
 
 describe('LendingCard Component', () => {
