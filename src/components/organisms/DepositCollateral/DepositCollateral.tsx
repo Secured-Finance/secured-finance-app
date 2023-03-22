@@ -78,7 +78,7 @@ export const DepositCollateral = ({
     onClose,
     collateralList,
 }: {
-    collateralList: Record<string, CollateralInfo>;
+    collateralList: Record<CurrencySymbol, CollateralInfo>;
 } & DialogState) => {
     const [asset, setAsset] = useState(CurrencySymbol.ETH);
     const [collateral, setCollateral] = useState(BigNumber.from(0));
@@ -133,7 +133,9 @@ export const DepositCollateral = ({
     };
 
     const optionList = Object.values(collateralList);
-    const defaultCcyIndex = optionList.findIndex(col => col.name === 'USDC');
+    const defaultCcyIndex = optionList.findIndex(
+        col => col.symbol === CurrencySymbol.USDC
+    );
     [optionList[0], optionList[defaultCcyIndex]] = [
         optionList[defaultCcyIndex],
         optionList[0],
