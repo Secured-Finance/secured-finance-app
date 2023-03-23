@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
+    BorrowLendSelector,
     CollateralManagementConciseTab,
     NavTab,
     OrderDisplayBox,
@@ -12,7 +13,7 @@ import {
     Separator,
     Slider,
 } from 'src/components/atoms';
-import { BorrowLendSelector } from 'src/components/atoms/BorrowLendSelector';
+import { OrderAction } from 'src/components/organisms';
 import { CollateralBook, OrderType } from 'src/hooks';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import {
@@ -23,30 +24,28 @@ import {
     setUnitPrice,
 } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
+import { selectAllBalances } from 'src/store/wallet';
 import {
     amountFormatterFromBase,
     amountFormatterToBase,
     percentFormat,
     usdFormat,
 } from 'src/utils';
+import { computeAvailableToBorrow } from 'src/utils/collateral';
 import { LoanValue } from 'src/utils/entities';
-import { OrderAction } from '../OrderAction';
 
 export const AdvancedLendingOrderCard = ({
     collateralBook,
 }: {
     collateralBook: CollateralBook;
 }) => {
-    const {
-        currency,
-        amount,
-        side,
-        orderType,
-        unitPrice,
-        maturity,
-        availableToBorrow,
-    } = useSelector((state: RootState) =>
-        selectLandingOrderForm(state.landingOrderForm)
+    const { currency, amount, side, orderType, unitPrice, maturity } =
+        useSelector((state: RootState) =>
+            selectLandingOrderForm(state.landingOrderForm)
+        );
+
+    const balanceRecord = useSelector((state: RootState) =>
+        selectAllBalances(state)
     );
 
     const loanValue = useMemo(() => {
@@ -64,6 +63,8 @@ export const AdvancedLendingOrderCard = ({
     }, [collateralBook]);
 
     const priceList = useSelector((state: RootState) => getPriceMap(state));
+    const assetPriceMap = useSelector((state: RootState) => getPriceMap(state));
+
     const price = priceList[currency];
 
     const getAmount = () => {
@@ -78,18 +79,28 @@ export const AdvancedLendingOrderCard = ({
         return format(amount);
     };
 
+    const availableToBorrow = useMemo(() => {
+        return currency && assetPriceMap
+            ? computeAvailableToBorrow(
+                  assetPriceMap[currency],
+                  collateralBook.usdCollateral,
+                  collateralBook.coverage.toNumber()
+              )
+            : 0;
+    }, [assetPriceMap, collateralBook, currency]);
+
     const handleAmountChange = (percentage: number) => {
-        if (side === OrderSide.BORROW) {
-            dispatch(
-                setAmount(
-                    amountFormatterToBase[currency](
-                        Math.floor(percentage * availableToBorrow) / 100.0
-                    )
+        const available =
+            side === OrderSide.BORROW
+                ? availableToBorrow
+                : balanceRecord[currency];
+        dispatch(
+            setAmount(
+                amountFormatterToBase[currency](
+                    Math.floor(percentage * available) / 100.0
                 )
-            );
-        } else {
-            dispatch(setAmount(BigNumber.from(0)));
-        }
+            )
+        );
     };
 
     return (

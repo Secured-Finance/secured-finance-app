@@ -7,6 +7,7 @@ import {
     CollateralUsageSection,
     TermSelector,
 } from 'src/components/molecules';
+import { OrderAction } from 'src/components/organisms';
 import { CollateralBook } from 'src/hooks';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import {
@@ -27,7 +28,6 @@ import {
     getTransformMaturityOption,
 } from 'src/utils';
 import { LoanValue, Maturity } from 'src/utils/entities';
-import { OrderAction } from '../OrderAction';
 
 export const LendingCard = ({
     collateralBook,

@@ -21,6 +21,7 @@ const preloadedState = {
         amount: '500000000',
         unitPrice: 0,
         orderType: OrderType.LIMIT,
+        availableToBorrow: 500,
     },
     ...preloadedAssetPrices,
 };
