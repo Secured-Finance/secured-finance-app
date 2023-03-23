@@ -9,7 +9,6 @@ export const {
     setUnitPrice,
     setOrderType,
     setLastView,
-    setAvailableToBorrow,
 } = landingOrderFormSlice.actions;
 
 export { selectLandingOrderForm };

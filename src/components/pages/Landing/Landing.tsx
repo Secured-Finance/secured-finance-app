@@ -1,5 +1,5 @@
 import { OrderSide } from '@secured-finance/sf-client';
-import { useEffect, useMemo } from 'react';
+import { useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { ViewType } from 'src/components/atoms';
 import {
@@ -14,15 +14,12 @@ import {
     useCollateralBook,
     useLoanValues,
 } from 'src/hooks';
-import { getPriceMap } from 'src/store/assetPrices/selectors';
 import {
     selectLandingOrderForm,
-    setAvailableToBorrow,
     setLastView,
     setOrderType,
 } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
-import { computeAvailableToBorrow } from 'src/utils/collateral';
 import { LoanValue, Maturity } from 'src/utils/entities';
 import { useWallet } from 'use-wallet';
 
@@ -75,22 +72,6 @@ export const Landing = ({ view }: { view?: ViewType }) => {
 
         return value;
     }, [unitPrices, lendingContracts, maturity]);
-
-    const assetPriceMap = useSelector((state: RootState) => getPriceMap(state));
-
-    const availableToBorrow = useMemo(() => {
-        return currency && assetPriceMap
-            ? computeAvailableToBorrow(
-                  assetPriceMap[currency],
-                  collateralBook.usdCollateral,
-                  collateralBook.coverage.toNumber()
-              )
-            : 0;
-    }, [assetPriceMap, collateralBook, currency]);
-
-    useEffect(() => {
-        dispatch(setAvailableToBorrow(availableToBorrow));
-    }, [availableToBorrow, dispatch]);
 
     const maturityOptionList = useMemo(() => {
         return optionList.length > 0 ? optionList : emptyOptionList;

@@ -14,7 +14,6 @@ type LandingOrderFormStore = {
     unitPrice: number;
     orderType: OrderType;
     lastView: ViewType;
-    availableToBorrow: number;
 };
 const initialStore: LandingOrderFormStore = {
     currency: CurrencySymbol.FIL,
@@ -24,7 +23,6 @@ const initialStore: LandingOrderFormStore = {
     unitPrice: 0,
     orderType: OrderType.MARKET,
     lastView: 'Simple',
-    availableToBorrow: 0,
 };
 
 const landingOrderFormSlice = createSlice({
@@ -51,9 +49,6 @@ const landingOrderFormSlice = createSlice({
         },
         setLastView: (state, action: PayloadAction<ViewType>) => {
             state.lastView = action.payload;
-        },
-        setAvailableToBorrow: (state, action: PayloadAction<number>) => {
-            state.availableToBorrow = action.payload;
         },
     },
 });
