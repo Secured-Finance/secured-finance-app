@@ -1,7 +1,7 @@
 import { fromBytes32 } from '@secured-finance/sf-graph-client';
 import { BigNumber, utils } from 'ethers';
+import FilecoinIcon from 'src/assets/coins/efil.svg';
 import EthIcon from 'src/assets/coins/eth2.svg';
-import FilecoinIcon from 'src/assets/coins/fil.svg';
 import UsdcIcon from 'src/assets/coins/usdc.svg';
 import UsdtIcon from 'src/assets/coins/usdt.svg';
 import WrappedBitcoinIcon from 'src/assets/coins/wbtc.svg';
@@ -20,7 +20,7 @@ import { Maturity } from 'src/utils/entities';
 
 export const preloadedAssetPrices: { assetPrices: AssetPrices } = {
     assetPrices: {
-        FIL: {
+        EFIL: {
             price: 6.0,
             change: -8.208519783216566,
         },
@@ -41,7 +41,7 @@ export const preloadedAssetPrices: { assetPrices: AssetPrices } = {
 };
 
 export const assetPriceMap = {
-    FIL: 6.0,
+    EFIL: 6.0,
     ETH: 2000.34,
     USDC: 1.0,
     WBTC: 50000.0,
@@ -50,7 +50,7 @@ export const assetPriceMap = {
 export const preloadedBalances = {
     wallet: {
         balances: {
-            FIL: 1000,
+            EFIL: 1000,
             ETH: 10,
             USDC: 100000,
             WBTC: 50,
@@ -61,7 +61,7 @@ export const preloadedBalances = {
 export const preloadedLendingMarkets = {
     availableContracts: {
         lendingMarkets: {
-            [CurrencySymbol.FIL]: {
+            [CurrencySymbol.EFIL]: {
                 DEC22: {
                     name: 'DEC22',
                     maturity: 1669852800,
@@ -116,9 +116,9 @@ export const assetList = [
         value: 'ETH',
     },
     {
-        label: 'Filecoin',
+        label: 'EFIL',
         iconSVG: FilecoinIcon,
-        value: 'FIL',
+        value: 'EFIL',
     },
     {
         label: 'USDC',
@@ -144,9 +144,9 @@ export const currencyList = [
         value: CurrencySymbol.ETH,
     },
     {
-        label: 'Filecoin',
+        label: 'EFIL',
         iconSVG: FilecoinIcon,
-        value: CurrencySymbol.FIL,
+        value: CurrencySymbol.EFIL,
     },
     {
         label: 'USDC',
@@ -166,7 +166,7 @@ export const yieldCurveRates = [
     new Rate(47746),
 ];
 
-export const filBytes32 = utils.formatBytes32String('FIL'); //0x46494c0000000000000000000000000000000000000000000000000000000000
+export const filBytes32 = utils.formatBytes32String('EFIL'); //0x46494c0000000000000000000000000000000000000000000000000000000000
 export const ethBytes32 = utils.formatBytes32String('ETH');
 export const wbtcBytes32 = utils.formatBytes32String('WBTC');
 export const usdcBytes32 = utils.formatBytes32String('USDC'); // '0x5553444300000000000000000000000000000000000000000000000000000000'
@@ -311,7 +311,7 @@ export const collateralBook80: CollateralBook = {
         USDC: BigNumber.from('100000000'),
     },
     nonCollateral: {
-        FIL: BigNumber.from('100000000000000000000'),
+        EFIL: BigNumber.from('100000000000000000000'),
         WBTC: BigNumber.from('20000000'),
     },
     usdCollateral: 2100.34,
@@ -325,7 +325,7 @@ export const collateralBook37: CollateralBook = {
         USDC: BigNumber.from('10000000'),
     },
     nonCollateral: {
-        FIL: BigNumber.from('100000000000000000000'),
+        EFIL: BigNumber.from('100000000000000000000'),
         WBTC: BigNumber.from('20000000'),
     },
     usdCollateral: 2300,
@@ -339,7 +339,7 @@ export const emptyCollateralBook: CollateralBook = {
         USDC: BigNumber.from('0'),
     },
     nonCollateral: {
-        FIL: BigNumber.from('0'),
+        EFIL: BigNumber.from('0'),
         WBTC: BigNumber.from('0'),
     },
     usdCollateral: 0,

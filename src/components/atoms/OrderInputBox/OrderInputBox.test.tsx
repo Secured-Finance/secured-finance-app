@@ -28,7 +28,7 @@ describe('OrderInputBox component', () => {
         fireEvent.change(input, { target: { value: '100' } });
         expect(input.getAttribute('value')).toBe('100');
 
-        expect(screen.getByText('FIL')).toBeInTheDocument();
+        expect(screen.getByText('EFIL')).toBeInTheDocument();
     });
 
     it('should render total orderInputBox', () => {

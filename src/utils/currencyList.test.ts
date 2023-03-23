@@ -1,7 +1,7 @@
 import { BigNumber } from 'ethers';
 import {
-    filBytes32,
     ethBytes32,
+    filBytes32,
     usdcBytes32,
     wbtcBytes32,
 } from 'src/stories/mocks/fixtures';
@@ -17,7 +17,7 @@ import {
     toCurrencySymbol,
 } from './currencyList';
 
-const fil = currencyMap.FIL;
+const fil = currencyMap.EFIL;
 const eth = currencyMap.ETH;
 const wbtc = currencyMap.WBTC;
 
@@ -26,8 +26,8 @@ describe('currencyList.getCurrencyMapAsOptions', () => {
         const options = getCurrencyMapAsOptions();
         expect(options).toEqual([
             {
-                label: 'Filecoin',
-                value: 'FIL',
+                label: 'EFIL',
+                value: 'EFIL',
                 iconSVG: 'svg',
             },
             {
@@ -54,7 +54,7 @@ describe('currencyList.getCurrencyMapAsOptions', () => {
         const options = getCurrencyMapAsList();
         expect(options).toHaveLength(4);
 
-        expect(options[currencyMap.FIL.index]).toEqual(currencyMap.FIL);
+        expect(options[currencyMap.EFIL.index]).toEqual(currencyMap.EFIL);
         expect(options[currencyMap.ETH.index]).toEqual(currencyMap.ETH);
         expect(options[currencyMap.USDC.index]).toEqual(currencyMap.USDC);
         expect(options[currencyMap.WBTC.index]).toEqual(currencyMap.WBTC);
@@ -161,8 +161,8 @@ describe('toCurrency', () => {
         expect(toCurrency(CurrencySymbol.ETH)).toEqual(
             currencyMap.ETH.toCurrency()
         );
-        expect(toCurrency(CurrencySymbol.FIL)).toEqual(
-            currencyMap.FIL.toCurrency()
+        expect(toCurrency(CurrencySymbol.EFIL)).toEqual(
+            currencyMap.EFIL.toCurrency()
         );
     });
 });
@@ -179,7 +179,7 @@ describe('currencyList amountFormatterToBase', () => {
     });
 
     it('should return the value in attoFil for FIL', () => {
-        const format = amountFormatterToBase[CurrencySymbol.FIL];
+        const format = amountFormatterToBase[CurrencySymbol.EFIL];
         expect(format(1).toString()).toEqual('1000000000000000000');
         expect(format(1.23).toString()).toEqual('1230000000000000000');
         expect(format(1.23456789).toString()).toEqual('1234567890000000000');
@@ -189,7 +189,7 @@ describe('currencyList amountFormatterToBase', () => {
     });
 
     it('should return 0 if the input value is inferior to the base blockchain unit', () => {
-        const format = amountFormatterToBase[CurrencySymbol.FIL];
+        const format = amountFormatterToBase[CurrencySymbol.EFIL];
         expect(format(0.0000000000000000001).toString()).toEqual('0');
         expect(format(0.0000000000000000009).toString()).toEqual('0');
         expect(format(0.000000000000000000001).toString()).toEqual('0');
@@ -230,7 +230,7 @@ describe('currencyList amountFormatterFromBase', () => {
     });
 
     it('should return the value in FIL for attoFil amount', () => {
-        const format = amountFormatterFromBase[CurrencySymbol.FIL];
+        const format = amountFormatterFromBase[CurrencySymbol.EFIL];
         expect(
             format(BigNumber.from('1000000000000000000')).toString()
         ).toEqual('1');
@@ -264,7 +264,7 @@ describe('currencyList amountFormatterFromBase', () => {
 describe('toCurrencySymbol', () => {
     it('should convert a currency string to a currency symbol', () => {
         expect(toCurrencySymbol('ETH')).toEqual(CurrencySymbol.ETH);
-        expect(toCurrencySymbol('FIL')).toEqual(CurrencySymbol.FIL);
+        expect(toCurrencySymbol('EFIL')).toEqual(CurrencySymbol.EFIL);
         expect(toCurrencySymbol('WBTC')).toEqual(CurrencySymbol.WBTC);
         expect(toCurrencySymbol('USDC')).toEqual(CurrencySymbol.USDC);
     });
@@ -279,7 +279,7 @@ describe('toCurrencySymbol', () => {
 describe('hexToCurrencySymbol', () => {
     it('should convert a hex string to a currency symbol', () => {
         expect(hexToCurrencySymbol(ethBytes32)).toEqual(CurrencySymbol.ETH);
-        expect(hexToCurrencySymbol(filBytes32)).toEqual(CurrencySymbol.FIL);
+        expect(hexToCurrencySymbol(filBytes32)).toEqual(CurrencySymbol.EFIL);
         expect(hexToCurrencySymbol(wbtcBytes32)).toEqual(CurrencySymbol.WBTC);
         expect(hexToCurrencySymbol(usdcBytes32)).toEqual(CurrencySymbol.USDC);
     });

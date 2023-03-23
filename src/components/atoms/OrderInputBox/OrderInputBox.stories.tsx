@@ -22,8 +22,8 @@ export const Default = Template.bind({});
 export const Amount = Template.bind({});
 Amount.args = {
     field: 'Amount',
-    unit: CurrencySymbol.FIL,
-    asset: CurrencySymbol.FIL,
+    unit: CurrencySymbol.EFIL,
+    asset: CurrencySymbol.EFIL,
     disabled: false,
     initialValue: 10,
 };
