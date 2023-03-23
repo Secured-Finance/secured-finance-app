@@ -2,7 +2,7 @@ import { composeStories } from '@storybook/testing-react';
 import { render, screen } from 'src/test-utils.js';
 import * as stories from './Page.stories';
 
-const { Default } = composeStories(stories);
+const { Default, WithMultipleChildren } = composeStories(stories);
 
 describe('Page Component', () => {
     it('should render a Page', () => {
@@ -27,5 +27,12 @@ describe('Page Component', () => {
     it('should not have data-testid attribute to the page if name is not entered', () => {
         render(<Default />);
         expect(screen.queryByTestId('name')).toBeNull();
+    });
+
+    it('should render a Page with multiple children', () => {
+        render(<WithMultipleChildren />);
+        screen.getByText('Child 1');
+        screen.getByText('Child 2');
+        screen.getByText('Child 3');
     });
 });
