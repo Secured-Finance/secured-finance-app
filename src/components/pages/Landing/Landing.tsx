@@ -23,6 +23,13 @@ import { RootState } from 'src/store/types';
 import { LoanValue, Maturity } from 'src/utils/entities';
 import { useWallet } from 'use-wallet';
 
+const emptyOptionList = [
+    {
+        label: '',
+        value: new Maturity(0),
+    },
+];
+
 export const Landing = ({ view }: { view?: ViewType }) => {
     const { account } = useWallet();
     const { currency, side, maturity, lastView } = useSelector(
@@ -35,10 +42,12 @@ export const Landing = ({ view }: { view?: ViewType }) => {
 
     const collateralBook = useCollateralBook(account);
 
-    const optionList = Object.entries(lendingContracts).map(o => ({
-        label: o[0],
-        value: new Maturity(o[1]),
-    }));
+    const optionList = Object.entries(lendingContracts)
+        .filter(o => o[1].isActive)
+        .map(o => ({
+            label: o[0],
+            value: new Maturity(o[1].maturity),
+        }));
 
     const unitPrices = useLoanValues(
         currency,
@@ -53,7 +62,9 @@ export const Landing = ({ view }: { view?: ViewType }) => {
 
         const value =
             unitPrices[
-                Object.values(lendingContracts).indexOf(maturity.toNumber())
+                Object.values(lendingContracts).findIndex(
+                    v => v.maturity === maturity.toNumber()
+                )
             ];
         if (!value) {
             return LoanValue.ZERO;
@@ -61,6 +72,10 @@ export const Landing = ({ view }: { view?: ViewType }) => {
 
         return value;
     }, [unitPrices, lendingContracts, maturity]);
+
+    const maturityOptionList = useMemo(() => {
+        return optionList.length > 0 ? optionList : emptyOptionList;
+    }, [optionList]);
 
     return (
         <SimpleAdvancedView
@@ -70,13 +85,13 @@ export const Landing = ({ view }: { view?: ViewType }) => {
                     <LendingCard
                         collateralBook={collateralBook}
                         marketValue={marketValue}
-                        maturitiesOptionList={optionList}
+                        maturitiesOptionList={maturityOptionList}
                     />
                     <YieldChart
                         asset={currency}
                         isBorrow={side === OrderSide.BORROW}
                         rates={unitPrices.map(v => v.apy)}
-                        maturitiesOptionList={optionList}
+                        maturitiesOptionList={maturityOptionList}
                     />
                 </div>
             }
@@ -85,7 +100,7 @@ export const Landing = ({ view }: { view?: ViewType }) => {
                     collateralBook={collateralBook}
                     loanValue={marketValue}
                     rates={unitPrices.map(v => v.apy)}
-                    maturitiesOptionList={optionList}
+                    maturitiesOptionList={maturityOptionList}
                 />
             }
             initialView={view ?? lastView}
