@@ -1,7 +1,10 @@
 import { OrderSide } from '@secured-finance/sf-client';
 import { composeStories } from '@storybook/testing-react';
 import { OrderType } from 'src/hooks';
-import { preloadedBalances } from 'src/stories/mocks/fixtures';
+import {
+    preloadedBalances,
+    preloadedLendingMarkets,
+} from 'src/stories/mocks/fixtures';
 import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
 import { CurrencySymbol } from 'src/utils';
 import * as stories from './Landing.stories';
@@ -22,7 +25,7 @@ jest.mock(
             children
 );
 
-const preloadedState = preloadedBalances;
+const preloadedState = { ...preloadedBalances, ...preloadedLendingMarkets };
 
 describe('Landing Component', () => {
     it('should render a Landing', () => {
@@ -89,5 +92,19 @@ describe('Landing Component', () => {
             fireEvent.click(screen.getByText('Advanced'));
             expect(store.getState().landingOrderForm.lastView).toBe('Advanced');
         });
+    });
+
+    it('should filter out inactive markets', async () => {
+        waitFor(() => {
+            render(<Default />, {
+                apolloMocks: Default.parameters?.apolloClient.mocks,
+                preloadedState,
+            });
+        });
+
+        expect(screen.getByText('DEC22')).toBeInTheDocument();
+        fireEvent.click(screen.getByText('DEC22'));
+        expect(screen.getByText('MAR23')).toBeInTheDocument();
+        expect(screen.queryByText('JUN23')).not.toBeInTheDocument();
     });
 });

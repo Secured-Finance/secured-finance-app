@@ -77,6 +77,7 @@ export const mockUseSF = () => {
                     borrowRate: 300,
                     maturity: 1000,
                     name: 'ETH-1000',
+                    utcOpeningDate: 1620000000,
                 },
                 {
                     midRate: 100,
@@ -84,6 +85,7 @@ export const mockUseSF = () => {
                     borrowRate: 300,
                     maturity: 2000,
                     name: 'ETH-2000',
+                    utcOpeningDate: 1720000000,
                 },
             ])
         ),
