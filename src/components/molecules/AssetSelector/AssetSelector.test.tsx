@@ -33,10 +33,10 @@ describe('AssetSelector Component', () => {
         ).toHaveTextContent('WBTC');
         fireEvent.click(screen.getByRole('button'));
 
-        fireEvent.click(screen.getByText('Filecoin'));
+        fireEvent.click(screen.getByText('EFIL'));
         expect(
             screen.getByTestId('asset-selector-transformed-value')
-        ).toHaveTextContent('FIL');
+        ).toHaveTextContent('EFIL');
     });
 
     it('should call the onAmountChange function when the amount is changed', () => {
@@ -81,7 +81,7 @@ describe('AssetSelector Component', () => {
         expect(onAmountChange).toHaveBeenCalledTimes(2);
 
         fireEvent.click(screen.getByRole('button'));
-        fireEvent.click(screen.getByText('Filecoin'));
+        fireEvent.click(screen.getByText('EFIL'));
         expect(onAmountChange).toHaveBeenCalledTimes(3);
     });
 
@@ -93,8 +93,8 @@ describe('AssetSelector Component', () => {
         fireEvent.click(screen.getByText('Ethereum'));
         expect(onAssetChange).toHaveBeenLastCalledWith('ETH');
         fireEvent.click(screen.getByRole('button'));
-        fireEvent.click(screen.getByText('Filecoin'));
-        expect(onAssetChange).toHaveBeenLastCalledWith('FIL');
+        fireEvent.click(screen.getByText('EFIL'));
+        expect(onAssetChange).toHaveBeenLastCalledWith('EFIL');
         expect(onAssetChange).toHaveBeenCalledTimes(3);
     });
 
@@ -114,7 +114,7 @@ describe('AssetSelector Component', () => {
         fireEvent.click(screen.getByText('Ethereum'));
         expect(onAmountChange).toHaveBeenLastCalledWith(BigNumber.from(1000));
         fireEvent.click(screen.getByRole('button'));
-        fireEvent.click(screen.getByText('Filecoin'));
+        fireEvent.click(screen.getByText('EFIL'));
         expect(onAmountChange).toHaveBeenLastCalledWith(BigNumber.from(1));
     });
 });

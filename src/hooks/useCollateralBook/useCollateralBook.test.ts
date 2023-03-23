@@ -33,7 +33,7 @@ describe('useCollateralBook hook', () => {
         );
         expect(colBook.collateral.USDC).toEqual(BigNumber.from('100000000'));
         expect(colBook.nonCollateral.WBTC).toEqual(BigNumber.from('20000000'));
-        expect(colBook.nonCollateral.FIL).toEqual(
+        expect(colBook.nonCollateral.EFIL).toEqual(
             BigNumber.from('100000000000000000000')
         );
         expect(colBook.coverage.toString()).toEqual('8000');
@@ -80,8 +80,8 @@ describe('useCollateralBook hook', () => {
                 colBook.nonCollateral.WBTC ?? BigNumber.from(0)
             ) *
                 WBTC_PRICE +
-                amountFormatterFromBase[CurrencySymbol.FIL](
-                    colBook.nonCollateral.FIL ?? BigNumber.from(0)
+                amountFormatterFromBase[CurrencySymbol.EFIL](
+                    colBook.nonCollateral.EFIL ?? BigNumber.from(0)
                 ) *
                     FIL_PRICE
         );

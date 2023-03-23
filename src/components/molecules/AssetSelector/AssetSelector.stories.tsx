@@ -2,12 +2,12 @@ import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { assetList } from 'src/stories/mocks/fixtures';
 import { AssetSelector } from './AssetSelector';
 
-type AllowedCcy = 'WBTC' | 'ETH' | 'FIL' | 'USDC' | 'USDT';
+type AllowedCcy = 'WBTC' | 'ETH' | 'EFIL' | 'USDC' | 'USDT';
 
 const shortNames: Record<string, string> = {
     'Wrapped Bitcoin': 'WBTC',
     Ethereum: 'ETH',
-    Filecoin: 'FIL',
+    EFIL: 'EFIL',
     'USD Coin': 'USDC',
     'USD Tether': 'USDT',
 };
@@ -15,7 +15,7 @@ const shortNames: Record<string, string> = {
 const priceList: Record<AllowedCcy, number> = {
     WBTC: 20515,
     ETH: 1012,
-    FIL: 4.85,
+    EFIL: 4.85,
     USDC: 1.0,
     USDT: 0.99,
 };

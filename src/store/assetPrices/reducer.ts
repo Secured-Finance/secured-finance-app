@@ -7,7 +7,7 @@ const initialAssetPrice = { price: 0, change: 0 };
 
 const initialStore: AssetPrices = {
     [CurrencySymbol.ETH]: initialAssetPrice,
-    [CurrencySymbol.FIL]: initialAssetPrice,
+    [CurrencySymbol.EFIL]: initialAssetPrice,
     [CurrencySymbol.USDC]: initialAssetPrice,
     [CurrencySymbol.WBTC]: initialAssetPrice,
     isLoading: false,
@@ -55,8 +55,8 @@ const assetPricesSlice = createSlice({
                 } = action.payload;
                 state.ETH.price = ethPrice;
                 state.ETH.change = ethChange;
-                state.FIL.price = filPrice;
-                state.FIL.change = filChange;
+                state.EFIL.price = filPrice;
+                state.EFIL.change = filChange;
                 state.USDC.price = usdcPrice;
                 state.USDC.change = usdcChange;
                 state.WBTC.price = btcPrice;

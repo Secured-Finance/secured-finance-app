@@ -1,5 +1,5 @@
 import { composeStories } from '@storybook/react';
-import Filecoin from 'src/assets/coins/fil.svg';
+import Filecoin from 'src/assets/coins/efil.svg';
 import { render, screen } from 'src/test-utils.js';
 import * as stories from './Button.stories';
 

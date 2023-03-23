@@ -6,8 +6,8 @@ import {
 } from '@secured-finance/sf-core';
 import { BigNumber as BigNumberJS } from 'bignumber.js';
 import { BigNumber } from 'ethers';
+import FilecoinIcon from 'src/assets/coins/efil.svg';
 import EthIcon from 'src/assets/coins/eth2.svg';
-import FilecoinIcon from 'src/assets/coins/fil.svg';
 import UsdcIcon from 'src/assets/coins/usdc.svg';
 import WBTCIcon from 'src/assets/coins/wbtc.svg';
 import { Option } from 'src/components/atoms';
@@ -22,7 +22,7 @@ const ETH = Ether.onChain(
 
 export enum CurrencySymbol {
     ETH = 'ETH',
-    FIL = 'FIL',
+    EFIL = 'EFIL',
     USDC = 'USDC',
     WBTC = 'WBTC',
 }
@@ -30,10 +30,10 @@ export enum CurrencySymbol {
 export const currencyMap: Readonly<
     Record<CurrencySymbol, Readonly<CurrencyInfo>>
 > = {
-    [CurrencySymbol.FIL]: {
+    [CurrencySymbol.EFIL]: {
         index: 0,
         icon: FilecoinIcon,
-        symbol: CurrencySymbol.FIL,
+        symbol: CurrencySymbol.EFIL,
         name: Filecoin.onChain().name,
         coinGeckoId: 'filecoin',
         isCollateral: false,
@@ -139,8 +139,8 @@ export function toCurrencySymbol(ccy: string) {
     switch (ccy) {
         case CurrencySymbol.ETH:
             return CurrencySymbol.ETH;
-        case CurrencySymbol.FIL:
-            return CurrencySymbol.FIL;
+        case CurrencySymbol.EFIL:
+            return CurrencySymbol.EFIL;
         case CurrencySymbol.USDC:
             return CurrencySymbol.USDC;
         case CurrencySymbol.WBTC:

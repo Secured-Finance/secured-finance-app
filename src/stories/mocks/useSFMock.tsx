@@ -184,7 +184,7 @@ export const mockUseSF = () => {
         getProtocolDepositAmount: jest.fn(() =>
             Promise.resolve({
                 ETH: BigNumber.from('100000000000000000000'), // 100 ETH
-                FIL: BigNumber.from('100000000000000000000000'), // 100 000 FIL
+                EFIL: BigNumber.from('100000000000000000000000'), // 100 000 EFIL
                 USDC: BigNumber.from('1000000000000'), // 1 000 000 USDC
                 WBTC: BigNumber.from('1000000000000'), // 1000 BTC
             })

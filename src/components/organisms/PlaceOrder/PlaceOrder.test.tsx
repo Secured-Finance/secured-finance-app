@@ -62,7 +62,7 @@ describe('PlaceOrder component', () => {
         fireEvent.click(screen.getByTestId('dialog-action-button'));
         await waitFor(() =>
             expect(onPlaceOrder).toHaveBeenCalledWith(
-                CurrencySymbol.FIL,
+                CurrencySymbol.EFIL,
                 new Maturity(0),
                 OrderSide.BORROW,
                 BigNumber.from(0),
@@ -93,7 +93,7 @@ describe('PlaceOrder component', () => {
         fireEvent.click(screen.getByTestId('dialog-action-button'));
         await waitFor(() =>
             expect(onPlaceOrder).toHaveBeenCalledWith(
-                CurrencySymbol.FIL,
+                CurrencySymbol.EFIL,
                 new Maturity(0),
                 OrderSide.BORROW,
                 BigNumber.from(0),

@@ -10,7 +10,7 @@ export default {
     args: {
         usdCollateral: collateralBook80.usdCollateral,
         collateralCoverage: collateralBook80.coverage.toNumber(),
-        currency: CurrencySymbol.FIL,
+        currency: CurrencySymbol.EFIL,
     },
     decorators: [withAssetPrice],
 } as ComponentMeta<typeof CollateralUsageSection>;

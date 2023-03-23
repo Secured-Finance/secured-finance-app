@@ -193,7 +193,7 @@ export const withMaturities = (Story: Story) => {
     useEffect(() => {
         const timerId = setTimeout(() => {
             dispatch(
-                updateLendingMarketContract(maturities, CurrencySymbol.FIL)
+                updateLendingMarketContract(maturities, CurrencySymbol.EFIL)
             );
             dispatch(
                 updateLendingMarketContract(maturities, CurrencySymbol.ETH)
@@ -219,7 +219,7 @@ export const withWalletBalances = (Story: Story) => {
     const dispatch = useDispatch();
     useEffect(() => {
         const timeoutId = setTimeout(() => {
-            dispatch(updateBalance(10000, CurrencySymbol.FIL));
+            dispatch(updateBalance(10000, CurrencySymbol.EFIL));
             dispatch(updateBalance(2000, CurrencySymbol.ETH));
             dispatch(updateBalance(300, CurrencySymbol.WBTC));
             dispatch(updateBalance(4000, CurrencySymbol.USDC));
