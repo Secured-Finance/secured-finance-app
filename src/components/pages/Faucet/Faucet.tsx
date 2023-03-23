@@ -144,7 +144,7 @@ export const Faucet = () => {
                             </div>
                         </div>
                         <Separator />
-                        <div className='typography-body-2 flex flex-col gap-4 pt-5 font-primary font-light text-planetaryPurple'>
+                        <div className='typography-body-2 flex flex-col gap-4 pt-5 text-planetaryPurple'>
                             <h1 className='text-neutral-8'>
                                 How does it work?
                             </h1>
@@ -172,7 +172,7 @@ export const Faucet = () => {
                                 </a>
                                 .
                             </p>
-                            <p>Thank you for choosing Secured</p>
+                            <p>Thank you for choosing Secured Finance!</p>
                             <h1 className='pt-2 text-neutral-8'>
                                 Add our ERC20 Tokens to Metamask
                             </h1>

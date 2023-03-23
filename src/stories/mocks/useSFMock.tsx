@@ -189,6 +189,17 @@ export const mockUseSF = () => {
                 BTC: BigNumber.from('1000000000000'), // 1000 BTC
             })
         ),
+
+        unwindOrder: jest.fn(() =>
+            Promise.resolve({
+                hash: '0x123',
+                wait: jest.fn(() =>
+                    Promise.resolve({
+                        blockNumber: 123,
+                    })
+                ),
+            })
+        ),
     };
 
     return mockSecuredFinance;
