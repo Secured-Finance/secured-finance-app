@@ -1,7 +1,13 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { Page } from './Page';
 
-const Content = () => <div className='bg-red p-10 text-white'>Content</div>;
+const Content = ({
+    color,
+    content,
+}: {
+    color: 'red' | 'green';
+    content: string;
+}) => <div className={`bg-${color} p-10 text-white`}>{content}</div>;
 
 const TitleComponent = () => (
     <div className='bg-teal p-10 text-white'>Title Component</div>
@@ -12,7 +18,7 @@ export default {
     component: Page,
     args: {
         title: 'Title',
-        children: <Content />,
+        children: <Content color='red' content='Content' />,
     },
 } as ComponentMeta<typeof Page>;
 
@@ -22,4 +28,15 @@ export const Default = Template.bind({});
 export const WithTitleComponent = Template.bind({});
 WithTitleComponent.args = {
     titleComponent: <TitleComponent />,
+};
+
+export const WithMultipleChildren = Template.bind({});
+WithMultipleChildren.args = {
+    children: (
+        <>
+            <Content color='red' content='Child 1' />
+            <Content color='green' content='Child 2' />
+            <Content color='red' content='Child 3' />
+        </>
+    ),
 };
