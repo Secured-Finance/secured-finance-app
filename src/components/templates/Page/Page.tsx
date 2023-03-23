@@ -1,3 +1,5 @@
+import React from 'react';
+
 export const Page = ({
     title,
     titleComponent,
@@ -20,7 +22,18 @@ export const Page = ({
                 </span>
                 {titleComponent ? titleComponent : null}
             </div>
-            <div className='min-w-[744px]'>{children}</div>
+            <div className='flex flex-col gap-6'>
+                {React.Children.map(children, (child, index) => {
+                    return (
+                        <div
+                            className='min-w-[744px]'
+                            key={`page-${name}-${index}`}
+                        >
+                            {child}
+                        </div>
+                    );
+                })}
+            </div>
         </div>
     );
 };

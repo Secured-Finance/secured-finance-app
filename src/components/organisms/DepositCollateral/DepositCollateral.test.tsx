@@ -45,7 +45,7 @@ describe('DepositCollateral component', () => {
     it('should select asset and update amount', () => {
         render(<Default />, { preloadedState });
         fireEvent.click(screen.getByTestId('collateral-selector-button'));
-        fireEvent.click(screen.getByTestId('option-1'));
+        fireEvent.click(screen.getByTestId('option-0'));
         expect(screen.getByText('USDC')).toBeInTheDocument();
         expect(screen.getByText('50 USDC Available')).toBeInTheDocument();
 
@@ -58,7 +58,7 @@ describe('DepositCollateral component', () => {
         const onClose = jest.fn();
         render(<Default onClose={onClose} />, { preloadedState });
         fireEvent.click(screen.getByTestId('collateral-selector-button'));
-        fireEvent.click(screen.getByTestId('option-1'));
+        fireEvent.click(screen.getByTestId('option-0'));
         expect(screen.getByText('USDC')).toBeInTheDocument();
         expect(screen.getByText('50 USDC Available')).toBeInTheDocument();
 
@@ -89,5 +89,17 @@ describe('DepositCollateral component', () => {
         });
 
         await waitFor(() => expect(onClose).not.toHaveBeenCalled());
+    });
+
+    it('should open with USDC as default currency', () => {
+        render(<Default />, { preloadedState });
+        expect(screen.getByText('USDC')).toBeInTheDocument();
+        expect(screen.getByText('50 USDC Available')).toBeInTheDocument();
+        expect(screen.queryByText('ETH')).not.toBeInTheDocument();
+        expect(screen.queryByText('ETH Available')).not.toBeInTheDocument();
+        expect(screen.queryByText('FIL')).not.toBeInTheDocument();
+        expect(screen.queryByText('FIL Available')).not.toBeInTheDocument();
+        expect(screen.queryByText('BTC')).not.toBeInTheDocument();
+        expect(screen.queryByText('BTC Available')).not.toBeInTheDocument();
     });
 });

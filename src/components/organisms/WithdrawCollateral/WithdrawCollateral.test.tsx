@@ -1,6 +1,5 @@
 import { composeStories } from '@storybook/testing-react';
 import { preloadedAssetPrices } from 'src/stories/mocks/fixtures';
-import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
 import * as stories from './WithdrawCollateral.stories';
 
@@ -9,9 +8,6 @@ const { Default } = composeStories(stories);
 const preloadedState = {
     ...preloadedAssetPrices,
 };
-
-const mockSecuredFinance = mockUseSF();
-jest.mock('src/hooks/useSecuredFinance', () => () => mockSecuredFinance);
 
 describe('WithdrawCollateral component', () => {
     it('should display the WithdrawCollateral Modal when open', () => {
