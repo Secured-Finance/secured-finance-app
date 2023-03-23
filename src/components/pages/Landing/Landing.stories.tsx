@@ -13,7 +13,7 @@ import { Landing } from './Landing';
 export default {
     title: 'Pages/Landing',
     component: Landing,
-    chromatic: { pauseAnimationAtEnd: true, diffThreshold: 1 },
+    chromatic: { pauseAnimationAtEnd: true },
     decorators: [
         withAppLayout,
         withMaturities,
