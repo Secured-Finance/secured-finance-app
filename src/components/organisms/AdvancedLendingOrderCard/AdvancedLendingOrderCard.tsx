@@ -25,14 +25,9 @@ import {
 } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
 import { selectAllBalances } from 'src/store/wallet';
-import {
-    amountFormatterFromBase,
-    amountFormatterToBase,
-    percentFormat,
-    usdFormat,
-} from 'src/utils';
+import { amountFormatterToBase, percentFormat, usdFormat } from 'src/utils';
 import { computeAvailableToBorrow } from 'src/utils/collateral';
-import { LoanValue } from 'src/utils/entities';
+import { Amount, LoanValue } from 'src/utils/entities';
 
 export const AdvancedLendingOrderCard = ({
     collateralBook,
@@ -67,17 +62,7 @@ export const AdvancedLendingOrderCard = ({
 
     const price = priceList[currency];
 
-    const getAmount = () => {
-        let format = (x: BigNumber) => x.toNumber();
-        if (
-            currency &&
-            amountFormatterFromBase &&
-            amountFormatterFromBase[currency]
-        ) {
-            format = amountFormatterFromBase[currency];
-        }
-        return format(amount);
-    };
+    const orderAmount = new Amount(amount, currency);
 
     const availableToBorrow = useMemo(() => {
         return currency && assetPriceMap
@@ -151,7 +136,7 @@ export const AdvancedLendingOrderCard = ({
                         decimalPlacesAllowed={2}
                         maxLimit={100}
                     />
-                    <div className='mx-[10px]'>
+                    <div className='mx-10px'>
                         <OrderDisplayBox
                             field='Fixed Rate (APY)'
                             value={percentFormat(
@@ -168,26 +153,20 @@ export const AdvancedLendingOrderCard = ({
                     field='Amount'
                     unit={currency}
                     asset={currency}
-                    initialValue={getAmount()}
+                    initialValue={orderAmount.value}
                     onValueChange={v => dispatch(setAmount(v as BigNumber))}
                 />
-                <div className='mx-[10px] flex flex-col gap-6'>
+                <div className='mx-10px flex flex-col gap-6'>
                     <OrderDisplayBox
                         field='Est. Present Value'
-                        value={usdFormat(getAmount() * price, 2)}
+                        value={usdFormat(orderAmount.toUSD(price), 2)}
                     />
                     <OrderDisplayBox
                         field='Future Value'
-                        value='1,049.86 SF_FIL'
+                        value='--' // todo after apy -> apr
                         informationText='Future Value is the expected return value of the contract at time of maturity.'
                     />
                 </div>
-                {/* <OrderInputBox
-                    field='Total'
-                    unit='USD'
-                    disabled={true}
-                    initialValue={ordinaryFormat(getAmount() * price, 4)}
-                /> */}
 
                 <OrderAction
                     loanValue={loanValue}
