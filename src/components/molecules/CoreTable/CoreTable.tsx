@@ -1,3 +1,4 @@
+import { OrderSide } from '@secured-finance/sf-client';
 import {
     ColumnDef,
     flexRender,
@@ -16,13 +17,15 @@ export const CoreTable = <T,>({
     onLineClick,
     border,
     name = 'core-table',
+    side,
 }: {
     data: Array<T>;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     columns: ColumnDef<T, any>[];
-    onLineClick?: () => void;
+    onLineClick?: (rowId: string, side?: OrderSide) => void;
     border: boolean;
     name?: string;
+    side?: OrderSide;
 }) => {
     const [sorting, setSorting] = useState<SortingState>([]);
     const configuration = {
@@ -67,7 +70,9 @@ export const CoreTable = <T,>({
                             'hover:bg-black-30': onLineClick,
                             'border-b border-white-10': border,
                         })}
-                        onClick={onLineClick}
+                        onClick={() =>
+                            onLineClick ? onLineClick(row.id, side) : null
+                        }
                         data-testid={`${name}-row`}
                     >
                         {row.getVisibleCells().map(cell => (
