@@ -17,12 +17,11 @@ export const CoreTable = <T,>({
     onLineClick,
     border,
     name = 'core-table',
-    side,
 }: {
     data: Array<T>;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     columns: ColumnDef<T, any>[];
-    onLineClick?: (rowId: string, side?: OrderSide) => void;
+    onLineClick?: (rowId: string) => void;
     border: boolean;
     name?: string;
     side?: OrderSide;
@@ -71,7 +70,7 @@ export const CoreTable = <T,>({
                             'border-b border-white-10': border,
                         })}
                         onClick={() =>
-                            onLineClick ? onLineClick(row.id, side) : null
+                            onLineClick ? onLineClick(row.id) : null
                         }
                         data-testid={`${name}-row`}
                     >
