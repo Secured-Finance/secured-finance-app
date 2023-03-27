@@ -1,4 +1,3 @@
-import { OrderSide } from '@secured-finance/sf-client';
 import {
     ColumnDef,
     flexRender,
@@ -17,6 +16,7 @@ export const CoreTable = <T,>({
     onLineClick,
     border,
     name = 'core-table',
+    hoverRow,
 }: {
     data: Array<T>;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -24,7 +24,7 @@ export const CoreTable = <T,>({
     onLineClick?: (rowId: string) => void;
     border: boolean;
     name?: string;
-    side?: OrderSide;
+    hoverRow?: (rowId: string) => boolean;
 }) => {
     const [sorting, setSorting] = useState<SortingState>([]);
     const configuration = {
@@ -65,12 +65,12 @@ export const CoreTable = <T,>({
                     <tr
                         key={row.id}
                         className={classNames('relative h-7 scale-100', {
-                            'cursor-pointer': onLineClick,
-                            'hover:bg-black-30': onLineClick,
+                            'cursor-pointer': hoverRow?.(row.id),
+                            'hover:bg-black-30': hoverRow?.(row.id),
                             'border-b border-white-10': border,
                         })}
                         onClick={() =>
-                            onLineClick ? onLineClick(row.id) : null
+                            hoverRow?.(row.id) && onLineClick?.(row.id)
                         }
                         data-testid={`${name}-row`}
                     >
