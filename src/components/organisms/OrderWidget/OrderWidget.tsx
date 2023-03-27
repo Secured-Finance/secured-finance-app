@@ -243,6 +243,14 @@ export const OrderWidget = ({
         dispatch(setAmount(rowData.amount));
     };
 
+    const handleSellOrdersClick = (rowId: string) => {
+        handleClick(rowId, OrderSide.BORROW);
+    };
+
+    const handleBuyOrdersClick = (rowId: string) => {
+        handleClick(rowId, OrderSide.LEND);
+    };
+
     return (
         <>
             <div className='flex h-14 flex-row items-center justify-center gap-1 border-b border-white-10 bg-black-20'>
@@ -263,16 +271,14 @@ export const OrderWidget = ({
                     columns={sellColumns}
                     name='sellOrders'
                     border={false}
-                    onLineClick={handleClick}
-                    side={OrderSide.BORROW}
+                    onLineClick={handleSellOrdersClick}
                 />
                 <CoreTable
                     data={buyOrders}
                     columns={buyColumns}
                     name='buyOrders'
                     border={false}
-                    onLineClick={handleClick}
-                    side={OrderSide.LEND}
+                    onLineClick={handleBuyOrdersClick}
                 />
             </div>
         </>

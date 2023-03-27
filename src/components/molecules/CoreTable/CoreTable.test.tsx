@@ -1,5 +1,5 @@
 import { composeStories } from '@storybook/testing-react';
-import { render, screen } from 'src/test-utils.js';
+import { fireEvent, render, screen } from 'src/test-utils.js';
 import * as stories from './CoreTable.stories';
 
 const { Default } = composeStories(stories);
@@ -35,5 +35,13 @@ describe('CoreTable Component', () => {
         screen.getAllByTestId('core-table-row').forEach(row => {
             expect(row).toHaveClass('border-b border-white-10');
         });
+    });
+
+    it('should call onLineClick when a row is clicked', () => {
+        const onLineClick = jest.fn();
+        render(<Default onLineClick={onLineClick} />);
+        const row = screen.getAllByTestId('core-table-row')[0];
+        fireEvent.click(row);
+        expect(onLineClick).toBeCalledWith('0');
     });
 });
