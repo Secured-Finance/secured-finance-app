@@ -171,6 +171,7 @@ export const OrderWidget = ({
                 header: () => <TableHeader title='Price' align='left' />,
             }),
             columnHelper.accessor('amount', {
+                id: 'amount',
                 cell: info => (
                     <AmountCell value={info.getValue()} currency={currency} />
                 ),
@@ -205,6 +206,7 @@ export const OrderWidget = ({
                 header: () => <TableHeader title='Lend APY' align='right' />,
             }),
             columnHelper.accessor('amount', {
+                id: 'amount',
                 cell: info => (
                     <AmountCell value={info.getValue()} currency={currency} />
                 ),
@@ -232,7 +234,7 @@ export const OrderWidget = ({
         dispatch(setMidPrice(lastMidValue.price));
     }, [dispatch, lastMidValue.price]);
 
-    const handleClick = (rowId: string, side?: OrderSide): void => {
+    const handleClick = (rowId: string, side: OrderSide): void => {
         const rowData =
             side === OrderSide.BORROW
                 ? sellOrders[parseInt(rowId)]
@@ -249,6 +251,16 @@ export const OrderWidget = ({
 
     const handleBuyOrdersClick = (rowId: string) => {
         handleClick(rowId, OrderSide.LEND);
+    };
+
+    const handleSellOrdersHoverRow = (rowId: string) => {
+        const rowData = sellOrders[parseInt(rowId)];
+        return !rowData.amount.isZero();
+    };
+
+    const handleBuyOrdersHoverRow = (rowId: string) => {
+        const rowData = buyOrders[parseInt(rowId)];
+        return !rowData.amount.isZero();
     };
 
     return (
@@ -272,6 +284,7 @@ export const OrderWidget = ({
                     name='sellOrders'
                     border={false}
                     onLineClick={handleSellOrdersClick}
+                    hoverRow={handleSellOrdersHoverRow}
                 />
                 <CoreTable
                     data={buyOrders}
@@ -279,6 +292,7 @@ export const OrderWidget = ({
                     name='buyOrders'
                     border={false}
                     onLineClick={handleBuyOrdersClick}
+                    hoverRow={handleBuyOrdersHoverRow}
                 />
             </div>
         </>
