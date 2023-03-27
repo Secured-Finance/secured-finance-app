@@ -16,6 +16,7 @@ import {
     DialogState,
     SuccessPanel,
 } from 'src/components/molecules';
+import { FailurePanel } from 'src/components/molecules/FailurePanel';
 import { CollateralBook } from 'src/hooks';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { selectLandingOrderForm } from 'src/store/landingOrderForm';
@@ -33,6 +34,7 @@ enum Step {
     orderConfirm = 1,
     orderProcessing,
     orderPlaced,
+    error,
 }
 
 type State = {
@@ -65,6 +67,13 @@ const stateRecord: Record<Step, State> = {
         description: 'Your transaction request was successful.',
         buttonText: 'OK',
     },
+    [Step.error]: {
+        currentStep: Step.error,
+        nextStep: Step.orderConfirm,
+        title: 'Failed!',
+        description: 'Your transaction request has failed.',
+        buttonText: 'OK',
+    },
 };
 
 const reducer = (
@@ -78,6 +87,8 @@ const reducer = (
             return {
                 ...stateRecord[state.nextStep],
             };
+        case 'error':
+            return { ...stateRecord[Step.error] };
         default:
             return {
                 ...stateRecord[Step.orderConfirm],
@@ -131,17 +142,18 @@ export const PlaceOrder = ({
                 const transactionStatus = await handleContractTransaction(tx);
                 if (!transactionStatus) {
                     console.error('Some error occurred');
-                    handleClose();
+                    dispatch({ type: 'error' });
                 } else {
                     dispatch({ type: 'next' });
                 }
             } catch (e) {
+                dispatch({ type: 'error' });
                 if (e instanceof Error) {
                     globalDispatch(setLastMessage(e.message));
                 }
             }
         },
-        [onPlaceOrder, dispatch, handleClose, globalDispatch]
+        [onPlaceOrder, dispatch, globalDispatch]
     );
 
     const onClick = useCallback(
@@ -160,6 +172,9 @@ export const PlaceOrder = ({
                 case Step.orderProcessing:
                     break;
                 case Step.orderPlaced:
+                    handleClose();
+                    break;
+                case Step.error:
                     handleClose();
                     break;
             }
@@ -269,6 +284,21 @@ export const PlaceOrder = ({
                             <SuccessPanel
                                 itemList={[
                                     ['Status', 'Complete'],
+                                    ['Deposit Address', 't1wtz1if6k24XE...'],
+                                    [
+                                        'Amount',
+                                        `${ordinaryFormat(
+                                            orderAmount.value
+                                        )} ${currency}`,
+                                    ],
+                                ]}
+                            />
+                        );
+                    case Step.error:
+                        return (
+                            <FailurePanel
+                                itemList={[
+                                    ['Status', 'Failed'],
                                     ['Deposit Address', 't1wtz1if6k24XE...'],
                                     [
                                         'Amount',

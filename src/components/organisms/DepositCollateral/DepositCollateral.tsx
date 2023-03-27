@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import Loader from 'src/assets/img/gradient-loader.png';
 import { CollateralSelector } from 'src/components/atoms';
 import { Dialog, DialogState, SuccessPanel } from 'src/components/molecules';
+import { FailurePanel } from 'src/components/molecules/FailurePanel';
 import { CollateralInput } from 'src/components/organisms';
 import { useDepositCollateral } from 'src/hooks/useDepositCollateral';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
@@ -20,6 +21,7 @@ enum Step {
     depositCollateral = 1,
     depositing,
     deposited,
+    error,
 }
 
 type State = {
@@ -53,6 +55,13 @@ const stateRecord: Record<Step, State> = {
             'You have successfully deposited collateral on Secured Finance.',
         buttonText: 'OK',
     },
+    [Step.error]: {
+        currentStep: Step.error,
+        nextStep: Step.depositCollateral,
+        title: 'Failed!',
+        description: 'Your transaction has failed',
+        buttonText: 'OK',
+    },
 };
 
 const reducer = (
@@ -65,6 +74,10 @@ const reducer = (
         case 'next':
             return {
                 ...stateRecord[state.nextStep],
+            };
+        case 'error':
+            return {
+                ...stateRecord[Step.error],
             };
         default:
             return {
@@ -99,16 +112,16 @@ export const DepositCollateral = ({
             const transactionStatus = await handleContractTransaction(tx);
             if (!transactionStatus) {
                 console.error('Some error occured');
-                handleClose();
+                dispatch({ type: 'error' });
             } else {
                 setDepositAddress(tx?.to ?? '');
                 dispatch({ type: 'next' });
             }
         } catch (e) {
             console.error(e);
-            handleClose();
+            dispatch({ type: 'error' });
         }
-    }, [onDepositCollateral, handleClose]);
+    }, [onDepositCollateral]);
 
     const onClick = useCallback(
         async (currentStep: Step) => {
@@ -121,6 +134,9 @@ export const DepositCollateral = ({
                 case Step.depositing:
                     break;
                 case Step.deposited:
+                    handleClose();
+                    break;
+                case Step.error:
                     handleClose();
                     break;
             }
@@ -205,6 +221,28 @@ export const DepositCollateral = ({
                                 ]}
                             />
                         );
+                    case Step.error:
+                        return (
+                            <FailurePanel
+                                itemList={[
+                                    ['Status', 'Failed'],
+                                    [
+                                        'Deposit Address',
+                                        AddressUtils.format(
+                                            depositAddress ?? '',
+                                            6
+                                        ),
+                                    ],
+                                    [
+                                        'Amount',
+                                        amountFormatterFromBase[asset](
+                                            collateral
+                                        ).toString(),
+                                    ],
+                                ]}
+                            />
+                        );
+
                     default:
                         return <p>Unknown</p>;
                 }

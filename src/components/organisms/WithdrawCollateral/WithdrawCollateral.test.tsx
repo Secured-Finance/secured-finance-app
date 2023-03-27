@@ -73,6 +73,12 @@ describe('WithdrawCollateral component', () => {
             expect(screen.queryByText('Success!')).not.toBeInTheDocument()
         );
         await waitFor(() => expect(spy).toHaveBeenCalled());
-        await waitFor(() => expect(onClose).toHaveBeenCalled());
+        await waitFor(() =>
+            expect(screen.queryByText('Failed!')).toBeInTheDocument()
+        );
+        const onCloseButton = screen.getByTestId('dialog-action-button');
+        fireEvent.click(onCloseButton);
+
+        await waitFor(() => expect(onClose).toBeCalled());
     });
 });
