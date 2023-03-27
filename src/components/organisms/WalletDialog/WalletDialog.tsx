@@ -9,6 +9,7 @@ import {
     SuccessPanel,
     WalletRadioGroup,
 } from 'src/components/molecules';
+import { FailurePanel } from 'src/components/molecules/FailurePanel';
 import { CACHED_PROVIDER_KEY } from 'src/contexts/SecuredFinanceProvider/SecuredFinanceProvider';
 import { setWalletDialogOpen } from 'src/store/interactions';
 import { RootState } from 'src/store/types';
@@ -25,6 +26,7 @@ enum Step {
     selectWallet = 1,
     connecting,
     connected,
+    error,
 }
 
 type State = {
@@ -58,6 +60,13 @@ const stateRecord: Record<Step, State> = {
         description: 'Your wallet has been connected successfully.',
         buttonText: 'OK',
     },
+    [Step.error]: {
+        currentStep: Step.error,
+        nextStep: Step.selectWallet,
+        title: 'Success!',
+        description: 'Your wallet could not be connected.',
+        buttonText: 'OK',
+    },
 };
 
 const reducer = (
@@ -70,6 +79,10 @@ const reducer = (
         case 'next':
             return {
                 ...stateRecord[state.nextStep],
+            };
+        case 'error':
+            return {
+                ...stateRecord[Step.error],
             };
         default:
             return {
@@ -127,6 +140,7 @@ export const WalletDialog = () => {
                         [InterfaceProperties.WALLET_CONNECTION_RESULT]:
                             WalletConnectionResult.FAILED,
                     });
+                    dispatch({ type: 'error' });
                 });
         }
     }, [state, account, handleConnect, wallet]);
@@ -144,6 +158,9 @@ export const WalletDialog = () => {
                 case Step.connecting:
                     break;
                 case Step.connected:
+                    handleClose();
+                    break;
+                case Step.error:
                     handleClose();
                     break;
             }
@@ -196,6 +213,18 @@ export const WalletDialog = () => {
                             <SuccessPanel
                                 itemList={[
                                     ['Status', 'Connected'],
+                                    [
+                                        'Ethereum Address',
+                                        AddressUtils.format(account ?? '', 16),
+                                    ],
+                                ]}
+                            />
+                        );
+                    case Step.error:
+                        return (
+                            <FailurePanel
+                                itemList={[
+                                    ['Status', 'Failed'],
                                     [
                                         'Ethereum Address',
                                         AddressUtils.format(account ?? '', 16),
