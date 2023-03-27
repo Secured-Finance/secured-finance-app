@@ -20,6 +20,7 @@ module.exports = {
             },
             margin: {
                 '0.5': '0.125rem',
+                '10px': '10px',
             },
             transitionProperty: {
                 width: 'width',

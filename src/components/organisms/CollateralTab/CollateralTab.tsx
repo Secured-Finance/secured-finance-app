@@ -5,6 +5,10 @@ import {
     CollateralTabLeftPane,
     CollateralTabRightPane,
 } from 'src/components/molecules';
+import {
+    DepositCollateral,
+    WithdrawCollateral,
+} from 'src/components/organisms';
 import { CollateralBook } from 'src/hooks';
 import { RootState } from 'src/store/types';
 import { selectCollateralCurrencyBalance } from 'src/store/wallet';
@@ -15,8 +19,6 @@ import {
     getCurrencyMapAsList,
 } from 'src/utils';
 import { useWallet } from 'use-wallet';
-import { DepositCollateral } from '../DepositCollateral';
-import { WithdrawCollateral } from '../WithdrawCollateral';
 
 export const generateCollateralList = (
     balance: Partial<Record<CurrencySymbol, number | BigNumber>>,
