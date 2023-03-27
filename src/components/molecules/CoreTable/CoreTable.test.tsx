@@ -44,4 +44,12 @@ describe('CoreTable Component', () => {
         fireEvent.click(row);
         expect(onLineClick).toBeCalledWith('0');
     });
+
+    it('should not call onLineClick when an empty row is clicked', () => {
+        const onLineClick = jest.fn();
+        render(<Default onLineClick={onLineClick} hoverRow={() => false} />);
+        const row = screen.getAllByTestId('core-table-row')[0];
+        fireEvent.click(row);
+        expect(onLineClick).not.toBeCalled();
+    });
 });
