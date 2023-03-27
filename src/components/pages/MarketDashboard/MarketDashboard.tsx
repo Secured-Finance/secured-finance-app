@@ -6,24 +6,52 @@ import {
     CollateralManagementConciseTab,
     GradientBox,
 } from 'src/components/atoms';
-import { MarketDashboardTable } from 'src/components/molecules';
-import { ConnectWalletCard, MyWalletCard } from 'src/components/organisms';
+import { HorizontalTab, MarketDashboardTable } from 'src/components/molecules';
+import {
+    ConnectWalletCard,
+    MultiCurveChart,
+    MyWalletCard,
+} from 'src/components/organisms';
 import { Page, TwoColumns } from 'src/components/templates';
-import { useGraphClientHook, useProtocolInformation } from 'src/hooks';
+import {
+    RateType,
+    useGraphClientHook,
+    useLoanValues,
+    useProtocolInformation,
+} from 'src/hooks';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { RootState } from 'src/store/types';
 import {
     computeTotalDailyVolumeInUSD,
     currencyMap,
     CurrencySymbol,
+    getCurrencyMapAsList,
     ordinaryFormat,
+    Rate,
     usdFormat,
     WalletSource,
 } from 'src/utils';
+import { Maturity } from 'src/utils/entities';
 import { useWallet } from 'use-wallet';
 
 export const MarketDashboard = () => {
     const { account } = useWallet();
+
+    const curves: Record<string, Rate[]> = {};
+    const lendingContracts = useSelector(
+        (state: RootState) => state.availableContracts.lendingMarkets
+    );
+
+    getCurrencyMapAsList().forEach(ccy => {
+        // eslint-disable-next-line react-hooks/rules-of-hooks
+        curves[ccy.symbol] = useLoanValues(
+            ccy.symbol,
+            RateType.MidRate,
+            Object.values(lendingContracts[ccy.symbol])
+                .filter(o => o.isActive)
+                .map(o => new Maturity(o.maturity))
+        ).map(r => r.apy);
+    });
 
     const protocolInformation = useProtocolInformation();
     const totalUser = useGraphClientHook(
@@ -73,38 +101,53 @@ export const MarketDashboard = () => {
     return (
         <Page title='Market Dashboard' name='exchange-page'>
             <TwoColumns>
-                <MarketDashboardTable
-                    values={[
-                        {
-                            name: 'Digital Assets',
-                            value: protocolInformation.totalNumberOfAsset.toString(),
-                            orientation: 'center',
-                        },
-                        {
-                            name: 'Total Value Locked',
-                            value: usdFormat(
-                                totalValueLockedInUSD,
-                                0,
-                                'compact'
-                            ),
-                            orientation: 'center',
-                        },
-                        {
-                            name: 'Total Volume',
-                            value: totalVolume,
-                            orientation: 'center',
-                        },
-                        {
-                            name: 'Total Users',
-                            value: ordinaryFormat(
-                                totalUser.data?.totalUsers ?? 0,
-                                0,
-                                'compact'
-                            ),
-                            orientation: 'center',
-                        },
-                    ]}
-                />
+                <div className='grid grid-cols-1 gap-y-7'>
+                    <MarketDashboardTable
+                        values={[
+                            {
+                                name: 'Digital Assets',
+                                value: protocolInformation.totalNumberOfAsset.toString(),
+                                orientation: 'center',
+                            },
+                            {
+                                name: 'Total Value Locked',
+                                value: usdFormat(
+                                    totalValueLockedInUSD,
+                                    0,
+                                    'compact'
+                                ),
+                                orientation: 'center',
+                            },
+                            {
+                                name: 'Total Volume',
+                                value: totalVolume,
+                                orientation: 'center',
+                            },
+                            {
+                                name: 'Total Users',
+                                value: ordinaryFormat(
+                                    totalUser.data?.totalUsers ?? 0,
+                                    0,
+                                    'compact'
+                                ),
+                                orientation: 'center',
+                            },
+                        ]}
+                    />
+                    <div className='bg-[rgba(41, 45, 63, 0.2)] h-[400px] w-full border'>
+                        <MultiCurveChart
+                            curves={curves}
+                            labels={Object.values(
+                                lendingContracts[CurrencySymbol.FIL]
+                            )
+                                .filter(o => o.isActive)
+                                .map(o => o.name)}
+                        />
+                    </div>
+                    <HorizontalTab tabTitles={['Loans']}>
+                        <div>There will be a tab here</div>
+                    </HorizontalTab>
+                </div>
                 <section className='flex flex-col gap-5'>
                     <div>
                         {account ? (

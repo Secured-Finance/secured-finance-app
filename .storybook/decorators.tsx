@@ -201,6 +201,9 @@ export const withMaturities = (Story: Story) => {
             dispatch(
                 updateLendingMarketContract(maturities, CurrencySymbol.USDC)
             );
+            dispatch(
+                updateLendingMarketContract(maturities, CurrencySymbol.BTC)
+            );
         }, 200);
 
         return () => clearTimeout(timerId);
