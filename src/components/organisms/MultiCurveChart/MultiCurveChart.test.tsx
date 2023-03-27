@@ -1,11 +1,15 @@
 import { composeStories } from '@storybook/testing-react';
 import { queries, render, RenderResult, waitFor } from 'src/test-utils.js';
-import * as stories from './LineChart.stories';
+import * as stories from './MultiCurveChart.stories';
 
 const { Default } = composeStories(stories);
 
-describe('LineChart Component', () => {
-    it('should render a LineChart', async () => {
+describe('MultiCurveChart Component', () => {
+    it('should render a MultiCurveChart', () => {
+        render(<Default />);
+    });
+
+    it('should render a match the snapshot', async () => {
         let ag: RenderResult<typeof queries, HTMLElement>;
         await waitFor(() => {
             ag = render(<Default />);

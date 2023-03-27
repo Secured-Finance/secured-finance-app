@@ -10,6 +10,7 @@ export * from './DepositCollateral';
 export * from './Header';
 export * from './LendingCard';
 export * from './LineChartTab';
+export * from './MultiCurveChart';
 export * from './MyTransactionsTable';
 export * from './MyWalletCard';
 export * from './OpenOrderTable';
