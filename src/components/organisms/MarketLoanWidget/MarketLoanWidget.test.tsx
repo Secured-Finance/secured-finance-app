@@ -12,7 +12,7 @@ describe('MarketLoanWidget Component', () => {
     it('should filter by currency', () => {
         render(<Default />);
         expect(screen.queryByText('BTC')).toBeInTheDocument();
-        screen.getByRole('button', { name: 'All Ccy' }).click();
+        screen.getByRole('button', { name: 'All Assets' }).click();
         screen.getByRole('menuitem', { name: 'Filecoin' }).click();
         expect(screen.queryByText('BTC')).not.toBeInTheDocument();
     });
