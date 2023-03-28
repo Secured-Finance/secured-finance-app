@@ -13,7 +13,10 @@ import {
 import classNames from 'classnames';
 import { useRef, useState } from 'react';
 import { Line } from 'react-chartjs-2';
-import { crossHairPlugin } from 'src/components/molecules/LineChart/constants';
+import {
+    crossHairPlugin,
+    defaultDatasets,
+} from 'src/components/molecules/LineChart/constants';
 import { currencyMap, CurrencySymbol, Rate, toCurrencySymbol } from 'src/utils';
 
 ChartJS.register(
@@ -125,6 +128,7 @@ const getData = (
                     data: curves[ccy].map(r => r.toNormalizedNumber()),
                     borderColor: currencyMap[ccy].chartColor,
                     backgroundColor: currencyMap[ccy].chartColor,
+                    ...defaultDatasets,
                 };
             }),
     };
@@ -145,10 +149,9 @@ const CurveChip = ({
                 data-testid='curve-chip'
                 style={{ backgroundColor: currencyMap[ccy].chartColor }}
                 className={classNames(
-                    `typography-body-small w-14 rounded-2xl py-3 pt-2 pb-[6px] font-secondary text-xs font-semibold uppercase`,
+                    `typography-body-small w-14 rounded-2xl py-3 pt-2 pb-[6px] font-secondary text-xs font-semibold uppercase text-white`,
                     {
-                        'text-white': active,
-                        'text-slateGray': !active,
+                        'opacity-50': !active,
                     }
                 )}
                 onClick={() => {
