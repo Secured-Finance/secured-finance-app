@@ -16,7 +16,7 @@ import {
     DialogState,
     SuccessPanel,
 } from 'src/components/molecules';
-import { CollateralBook } from 'src/hooks';
+import { CollateralBook, OrderType } from 'src/hooks';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { selectLandingOrderForm } from 'src/store/landingOrderForm';
 import { setLastMessage } from 'src/store/lastError';
@@ -98,7 +98,7 @@ export const PlaceOrder = ({
 } & DialogState) => {
     const [state, dispatch] = useReducer(reducer, stateRecord[1]);
     const globalDispatch = useDispatch();
-    const { currency, maturity, amount, side } = useSelector(
+    const { currency, maturity, amount, side, orderType } = useSelector(
         (state: RootState) => selectLandingOrderForm(state.landingOrderForm)
     );
 
@@ -149,13 +149,20 @@ export const PlaceOrder = ({
             switch (currentStep) {
                 case Step.orderConfirm:
                     dispatch({ type: 'next' });
-                    handlePlaceOrder(
-                        currency,
-                        maturity,
-                        side,
-                        amount,
-                        loanValue?.price
-                    );
+                    if (orderType === OrderType.MARKET) {
+                        handlePlaceOrder(currency, maturity, side, amount);
+                    } else if (orderType === OrderType.LIMIT && loanValue) {
+                        handlePlaceOrder(
+                            currency,
+                            maturity,
+                            side,
+                            amount,
+                            loanValue.price
+                        );
+                    } else {
+                        console.error('Invalid order type');
+                    }
+
                     break;
                 case Step.orderProcessing:
                     break;
@@ -169,8 +176,9 @@ export const PlaceOrder = ({
             currency,
             handleClose,
             handlePlaceOrder,
-            loanValue?.price,
+            loanValue,
             maturity,
+            orderType,
             side,
         ]
     );
