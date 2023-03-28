@@ -105,7 +105,7 @@ export const AdvancedLendingTopBar = <T extends string = string>({
                     </div>
                     <MarketTab
                         name={Number(formatLoanValue(midLoanValue, 'price'))}
-                        value={`${formatLoanValue(midLoanValue, 'rate')} APY`}
+                        value={`${formatLoanValue(midLoanValue, 'rate')} APR`}
                     />
                     <Separator />
                     <MarketTab name='24h High' value={getValue(values, 0)} />

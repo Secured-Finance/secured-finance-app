@@ -70,7 +70,7 @@ export const MyTransactionsTable = ({ data }: { data: TradeHistory }) => {
                 { compact: true, color: true }
             ),
             priceYieldColumnDef('Price/DF', 'price', 'price'),
-            priceYieldColumnDef('APY%', 'apy', 'rate'),
+            priceYieldColumnDef('APR%', 'apr', 'rate'),
             amountColumnDefinition(
                 columnHelper,
                 'F.V.',

@@ -63,7 +63,7 @@ export const CollateralSimulationSection = ({
 
     if (type === 'trade') {
         items.push([
-            'APY',
+            'APR',
             tradeValue ? formatLoanValue(tradeValue, 'rate') : 'Market Order',
         ]);
     }
