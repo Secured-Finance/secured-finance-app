@@ -138,7 +138,7 @@ export const MarketLoanWidget = ({ loans }: { loans: Loan[] }) => {
         [dispatch, router]
     );
     return (
-        <div className='h-fit rounded-2xl border drop-shadow-tab'>
+        <div className='h-fit rounded-2xl border border-white-10 bg-cardBackground/60 shadow-tab'>
             <div className='flex flex-row justify-between border-b border-neutral-3 pb-2'>
                 <div className='h-16 w-28'>
                     <NavTab text='Loans' active />
@@ -146,7 +146,7 @@ export const MarketLoanWidget = ({ loans }: { loans: Loan[] }) => {
                 <div className='flex flex-row gap-3 pt-4 pr-3'>
                     <DropdownSelector<string>
                         optionList={[
-                            { label: 'All Ccy', value: '' },
+                            { label: 'All Assets', value: '' },
                             ...getCurrencyMapAsOptions(),
                         ]}
                         onChange={v => setSelectedCurrency(toCurrencySymbol(v))}
