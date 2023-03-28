@@ -8,6 +8,7 @@ import UsdtIcon from 'src/assets/coins/usdt.svg';
 import { Option } from 'src/components/atoms';
 import { CollateralBook } from 'src/hooks';
 import { AssetPrices } from 'src/store/assetPrices';
+import { RootState } from 'src/store/types';
 import {
     DailyVolumes,
     MaturityOptionList,
@@ -58,7 +59,7 @@ export const preloadedBalances = {
     },
 };
 
-export const preloadedLendingMarkets = {
+export const preloadedLendingMarkets: Partial<RootState> = {
     availableContracts: {
         lendingMarkets: {
             [CurrencySymbol.FIL]: {
@@ -67,18 +68,90 @@ export const preloadedLendingMarkets = {
                     maturity: 1669852800,
                     isActive: true,
                     utcOpeningDate: 1677628800,
+                    midUnitPrice: 9801,
                 },
                 MAR23: {
                     name: 'MAR23',
                     maturity: 1677628800,
                     isActive: true,
                     utcOpeningDate: 1677628800,
+                    midUnitPrice: 9701,
                 },
                 JUN23: {
                     name: 'JUN23',
                     maturity: 1685577600,
                     isActive: false,
                     utcOpeningDate: 1677628800,
+                    midUnitPrice: 9601,
+                },
+            },
+            [CurrencySymbol.BTC]: {
+                DEC22: {
+                    name: 'DEC22',
+                    maturity: 1669852800,
+                    isActive: true,
+                    utcOpeningDate: 1677628800,
+                    midUnitPrice: 9801,
+                },
+                MAR23: {
+                    name: 'MAR23',
+                    maturity: 1677628800,
+                    isActive: true,
+                    utcOpeningDate: 1677628800,
+                    midUnitPrice: 9701,
+                },
+                JUN23: {
+                    name: 'JUN23',
+                    maturity: 1685577600,
+                    isActive: false,
+                    utcOpeningDate: 1677628800,
+                    midUnitPrice: 9601,
+                },
+            },
+            [CurrencySymbol.USDC]: {
+                DEC22: {
+                    name: 'DEC22',
+                    maturity: 1669852800,
+                    isActive: true,
+                    utcOpeningDate: 1677628800,
+                    midUnitPrice: 9801,
+                },
+                MAR23: {
+                    name: 'MAR23',
+                    maturity: 1677628800,
+                    isActive: true,
+                    utcOpeningDate: 1677628800,
+                    midUnitPrice: 9701,
+                },
+                JUN23: {
+                    name: 'JUN23',
+                    maturity: 1685577600,
+                    isActive: false,
+                    utcOpeningDate: 1677628800,
+                    midUnitPrice: 9601,
+                },
+            },
+            [CurrencySymbol.ETH]: {
+                DEC22: {
+                    name: 'DEC22',
+                    maturity: 1669852800,
+                    isActive: true,
+                    utcOpeningDate: 1677628800,
+                    midUnitPrice: 9801,
+                },
+                MAR23: {
+                    name: 'MAR23',
+                    maturity: 1677628800,
+                    isActive: true,
+                    utcOpeningDate: 1677628800,
+                    midUnitPrice: 9701,
+                },
+                JUN23: {
+                    name: 'JUN23',
+                    maturity: 1685577600,
+                    isActive: false,
+                    utcOpeningDate: 1677628800,
+                    midUnitPrice: 9601,
                 },
             },
         },

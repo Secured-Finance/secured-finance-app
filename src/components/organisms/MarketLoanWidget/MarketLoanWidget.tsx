@@ -1,0 +1,170 @@
+import { formatDate, getUTCMonthYear } from '@secured-finance/sf-core';
+import { fromBytes32 } from '@secured-finance/sf-graph-client';
+import { createColumnHelper } from '@tanstack/react-table';
+import { useRouter } from 'next/router';
+import { useMemo, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { Button, DropdownSelector, NavTab, Option } from 'src/components/atoms';
+import { CoreTable } from 'src/components/molecules';
+import { LendingMarket } from 'src/hooks';
+import { setCurrency, setMaturity } from 'src/store/landingOrderForm';
+import {
+    CurrencySymbol,
+    formatLoanValue,
+    getCurrencyMapAsOptions,
+    toCurrencySymbol,
+} from 'src/utils';
+import { LoanValue, Maturity } from 'src/utils/entities';
+import {
+    contractColumnDefinition,
+    tableHeaderDefinition,
+} from 'src/utils/tableDefinitions';
+export type Loan = LendingMarket & {
+    currency: string;
+    ccy: CurrencySymbol;
+};
+const columnHelper = createColumnHelper<Loan>();
+
+export const MarketLoanWidget = ({ loans }: { loans: Loan[] }) => {
+    const dispatch = useDispatch();
+    const router = useRouter();
+
+    const [selectedCurrency, setSelectedCurrency] = useState<
+        CurrencySymbol | ''
+    >();
+    const [selectedTerm, setSelectedTerm] = useState<number>();
+    const filteredLoans = useMemo(
+        () =>
+            loans.filter(
+                loan =>
+                    (!selectedCurrency || loan.ccy === selectedCurrency) &&
+                    (!selectedTerm || loan.maturity === selectedTerm)
+            ),
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        [JSON.stringify(loans), selectedCurrency, selectedTerm]
+    );
+
+    const maturityOptionList = useMemo(
+        () => {
+            const res: Option<string>[] = [];
+
+            loans.forEach(loan => {
+                if (!res.find(m => m.value === loan.maturity.toString())) {
+                    res.push({
+                        label: loan.name,
+                        value: loan.maturity.toString(),
+                    });
+                }
+            });
+
+            return res;
+        },
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        [JSON.stringify(loans)]
+    );
+
+    const columns = useMemo(
+        () => [
+            contractColumnDefinition(
+                columnHelper,
+                'Asset',
+                'contract',
+                'currencyOnly'
+            ),
+            columnHelper.accessor('maturity', {
+                id: 'maturity',
+                cell: info => {
+                    return (
+                        <div className='flex flex-col items-start'>
+                            <div className='typography-caption text-neutral-8'>
+                                {getUTCMonthYear(info.getValue())}
+                            </div>
+                            <div className='typography-caption-2 text-slateGray'>
+                                {formatDate(info.getValue())}
+                            </div>
+                        </div>
+                    );
+                },
+                header: tableHeaderDefinition('Maturity'),
+            }),
+            columnHelper.accessor('midUnitPrice', {
+                id: 'apy',
+                cell: info => {
+                    return (
+                        <div className='typography-body-2 flex justify-center'>
+                            {info.getValue() && info.row.original.maturity
+                                ? formatLoanValue(
+                                      LoanValue.fromPrice(
+                                          info.getValue(),
+                                          info.row.original.maturity
+                                      ),
+                                      'rate'
+                                  )
+                                : 'N/A'}
+                        </div>
+                    );
+                },
+                header: tableHeaderDefinition('APY'),
+            }),
+            columnHelper.accessor('currency', {
+                id: 'action',
+                cell: info => {
+                    return (
+                        <div className='flex justify-center'>
+                            <Button
+                                onClick={() => {
+                                    const ccy = fromBytes32(
+                                        info.getValue()
+                                    ) as CurrencySymbol;
+                                    dispatch(
+                                        setMaturity(
+                                            new Maturity(
+                                                info.row.original.maturity
+                                            )
+                                        )
+                                    );
+                                    dispatch(setCurrency(ccy));
+                                    router.push('/advanced/');
+                                }}
+                            >
+                                Trade
+                            </Button>
+                        </div>
+                    );
+                },
+                header: tableHeaderDefinition('Action'),
+            }),
+        ],
+        [dispatch, router]
+    );
+    return (
+        <div className='h-fit rounded-2xl border drop-shadow-tab'>
+            <div className='flex flex-row justify-between border-b border-neutral-3 pb-2'>
+                <div className='h-16 w-28'>
+                    <NavTab text='Loans' active />
+                </div>
+                <div className='flex flex-row gap-3 pt-4 pr-3'>
+                    <DropdownSelector<string>
+                        optionList={[
+                            { label: 'All Ccy', value: '' },
+                            ...getCurrencyMapAsOptions(),
+                        ]}
+                        onChange={v => setSelectedCurrency(toCurrencySymbol(v))}
+                    />
+                    <DropdownSelector
+                        optionList={maturityOptionList}
+                        selected={maturityOptionList[0]}
+                        onChange={v => setSelectedTerm(parseInt(v))}
+                    />
+                </div>
+            </div>
+            <div className='p-6'>
+                <CoreTable
+                    columns={columns}
+                    data={filteredLoans}
+                    border={false}
+                />
+            </div>
+        </div>
+    );
+};
