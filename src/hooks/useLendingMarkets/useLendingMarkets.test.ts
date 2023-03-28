@@ -26,6 +26,7 @@ describe('useLendingMarkets', () => {
                 maturity: 0,
                 name: 'EMPTY',
                 utcOpeningDate: 0,
+                midUnitPrice: 0,
             },
         });
     });
