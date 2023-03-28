@@ -78,9 +78,9 @@ export const DepositCollateral = ({
     onClose,
     collateralList,
 }: {
-    collateralList: Record<string, CollateralInfo>;
+    collateralList: Partial<Record<CurrencySymbol, CollateralInfo>>;
 } & DialogState) => {
-    const [asset, setAsset] = useState(CurrencySymbol.ETH);
+    const [asset, setAsset] = useState(CurrencySymbol.USDC);
     const [collateral, setCollateral] = useState(BigNumber.from(0));
     const [depositAddress, setDepositAddress] = useState('');
     const [state, dispatch] = useReducer(reducer, stateRecord[1]);
@@ -132,6 +132,15 @@ export const DepositCollateral = ({
         setAsset(v.symbol);
     };
 
+    const optionList = Object.values(collateralList);
+    const defaultCcyIndex = optionList.findIndex(
+        col => col.symbol === CurrencySymbol.USDC
+    );
+    [optionList[0], optionList[defaultCcyIndex]] = [
+        optionList[defaultCcyIndex],
+        optionList[0],
+    ];
+
     return (
         <Dialog
             isOpen={isOpen}
@@ -149,7 +158,7 @@ export const DepositCollateral = ({
                                 <CollateralSelector
                                     headerText='Select Asset'
                                     onChange={v => handleChange(v)}
-                                    optionList={Object.values(collateralList)}
+                                    optionList={optionList}
                                 />
                                 <CollateralInput
                                     price={priceList[asset]}
@@ -158,7 +167,7 @@ export const DepositCollateral = ({
                                         setCollateral(v)
                                     }
                                     availableAmount={
-                                        collateralList[asset].available
+                                        collateralList[asset]?.available ?? 0
                                     }
                                 />
                             </div>

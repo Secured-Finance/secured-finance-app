@@ -2,7 +2,7 @@ import { createColumnHelper } from '@tanstack/react-table';
 import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { CoreTable, TableActionMenu } from 'src/components/molecules';
-import { useCancelOrder } from 'src/hooks';
+import { useOrders } from 'src/hooks';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { RootState } from 'src/store/types';
 import { OrderList } from 'src/types';
@@ -22,7 +22,7 @@ const columnHelper = createColumnHelper<Order>();
 
 export const OrderHistoryTable = ({ data }: { data: OrderList }) => {
     const priceList = useSelector((state: RootState) => getPriceMap(state));
-    const { handleCancelOrder } = useCancelOrder();
+    const { cancelOrder } = useOrders();
 
     const columns = useMemo(
         () => [
@@ -64,7 +64,7 @@ export const OrderHistoryTable = ({ data }: { data: OrderList }) => {
                                         text: 'Cancel Order',
                                         onClick: () => {
                                             if (ccy) {
-                                                handleCancelOrder(
+                                                cancelOrder(
                                                     orderId,
                                                     ccy,
                                                     maturity
@@ -80,7 +80,7 @@ export const OrderHistoryTable = ({ data }: { data: OrderList }) => {
                 header: () => <div>Actions</div>,
             }),
         ],
-        [handleCancelOrder, priceList]
+        [cancelOrder, priceList]
     );
 
     return <CoreTable columns={columns} data={data} border />;

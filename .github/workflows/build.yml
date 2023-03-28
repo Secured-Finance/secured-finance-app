@@ -45,6 +45,9 @@ jobs:
           NEXT_PUBLIC_ALCHEMY_API_KEY=${{ secrets.ALCHEMY_API_KEY }}
           NEXT_PUBLIC_AMPLITUDE_API_KEY=${{ secrets.AMPLITUDE_API_KEY }}
           SF_ENV=${{ vars.SF_ENV }}
+          NEXT_PUBLIC_EFIL_CONTRACT_ADDRESS=${{ vars.TOKEN_EFIL }}
+          NEXT_PUBLIC_USDC_CONTRACT_ADDRESS=${{ vars.TOKEN_USDC }}
+          NEXT_PUBLIC_WBTC_CONTRACT_ADDRESS=${{ vars.TOKEN_WBTC }}
           EOF
 
       - name: Check Syntax with Prettier

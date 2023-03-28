@@ -1,4 +1,5 @@
 import { ArrowUpIcon } from '@heroicons/react/outline';
+import { OrderSide } from '@secured-finance/sf-client';
 import { createColumnHelper } from '@tanstack/react-table';
 import classNames from 'classnames';
 import { BigNumber } from 'ethers';
@@ -6,8 +7,15 @@ import { useEffect, useMemo } from 'react';
 import { useDispatch } from 'react-redux';
 import { ColorBar } from 'src/components/atoms';
 import { CoreTable, TableHeader } from 'src/components/molecules';
+import { OrderType } from 'src/hooks';
 import { OrderBookEntry } from 'src/hooks/useOrderbook';
 import { setMidPrice } from 'src/store/analytics';
+import {
+    setAmount,
+    setOrderType,
+    setSide,
+    setUnitPrice,
+} from 'src/store/landingOrderForm';
 
 import { ColorFormat } from 'src/types';
 import {
@@ -163,6 +171,7 @@ export const OrderWidget = ({
                 header: () => <TableHeader title='Price' align='left' />,
             }),
             columnHelper.accessor('amount', {
+                id: 'amount',
                 cell: info => (
                     <AmountCell value={info.getValue()} currency={currency} />
                 ),
@@ -197,6 +206,7 @@ export const OrderWidget = ({
                 header: () => <TableHeader title='Lend APY' align='right' />,
             }),
             columnHelper.accessor('amount', {
+                id: 'amount',
                 cell: info => (
                     <AmountCell value={info.getValue()} currency={currency} />
                 ),
@@ -224,6 +234,35 @@ export const OrderWidget = ({
         dispatch(setMidPrice(lastMidValue.price));
     }, [dispatch, lastMidValue.price]);
 
+    const handleClick = (rowId: string, side: OrderSide): void => {
+        const rowData =
+            side === OrderSide.BORROW
+                ? sellOrders[parseInt(rowId)]
+                : buyOrders[parseInt(rowId)];
+        dispatch(setOrderType(OrderType.LIMIT));
+        side ? dispatch(setSide(side)) : null;
+        dispatch(setUnitPrice(rowData.value.price));
+        dispatch(setAmount(rowData.amount));
+    };
+
+    const handleSellOrdersClick = (rowId: string) => {
+        handleClick(rowId, OrderSide.BORROW);
+    };
+
+    const handleBuyOrdersClick = (rowId: string) => {
+        handleClick(rowId, OrderSide.LEND);
+    };
+
+    const handleSellOrdersHoverRow = (rowId: string) => {
+        const rowData = sellOrders[parseInt(rowId)];
+        return !rowData.amount.isZero();
+    };
+
+    const handleBuyOrdersHoverRow = (rowId: string) => {
+        const rowData = buyOrders[parseInt(rowId)];
+        return !rowData.amount.isZero();
+    };
+
     return (
         <>
             <div className='flex h-14 flex-row items-center justify-center gap-1 border-b border-white-10 bg-black-20'>
@@ -244,12 +283,16 @@ export const OrderWidget = ({
                     columns={sellColumns}
                     name='sellOrders'
                     border={false}
+                    onLineClick={handleSellOrdersClick}
+                    hoverRow={handleSellOrdersHoverRow}
                 />
                 <CoreTable
                     data={buyOrders}
                     columns={buyColumns}
                     name='buyOrders'
                     border={false}
+                    onLineClick={handleBuyOrdersClick}
+                    hoverRow={handleBuyOrdersHoverRow}
                 />
             </div>
         </>
