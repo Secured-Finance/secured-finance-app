@@ -138,12 +138,12 @@ export const AdvancedLendingOrderCard = ({
                     />
                     <div className='mx-10px'>
                         <OrderDisplayBox
-                            field='Fixed Rate (APY)'
+                            field='Fixed Rate (APR)'
                             value={percentFormat(
                                 LoanValue.fromPrice(
                                     unitPrice,
                                     maturity.toNumber()
-                                ).apy.toNormalizedNumber()
+                                ).apr.toNormalizedNumber()
                             )}
                         />
                     </div>
