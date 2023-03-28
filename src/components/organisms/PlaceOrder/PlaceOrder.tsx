@@ -1,5 +1,7 @@
+import { track } from '@amplitude/analytics-browser';
 import { Disclosure } from '@headlessui/react';
 import { OrderSide } from '@secured-finance/sf-client';
+import { getUTCMonthYear } from '@secured-finance/sf-core';
 import { BigNumber } from 'ethers';
 import { useCallback, useReducer } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -25,6 +27,8 @@ import { PlaceOrderFunction } from 'src/types';
 import {
     CurrencySymbol,
     handleContractTransaction,
+    OrderEvents,
+    OrderProperties,
     ordinaryFormat,
 } from 'src/utils';
 import { Amount, LoanValue, Maturity } from 'src/utils/entities';
@@ -133,6 +137,17 @@ export const PlaceOrder = ({
                     console.error('Some error occurred');
                     handleClose();
                 } else {
+                    track(OrderEvents.ORDER_PLACED, {
+                        [OrderProperties.ORDER_SIDE]:
+                            side === OrderSide.BORROW ? 'Borrow' : 'Lend',
+                        [OrderProperties.ORDER_TYPE]: orderType,
+                        [OrderProperties.ASSET_TYPE]: ccy,
+                        [OrderProperties.ORDER_MATURITY]: getUTCMonthYear(
+                            maturity.toNumber()
+                        ),
+                        [OrderProperties.ORDER_AMOUNT]: orderAmount.value,
+                        [OrderProperties.ORDER_PRICE]: unitPrice ?? 0,
+                    });
                     dispatch({ type: 'next' });
                 }
             } catch (e) {
@@ -141,7 +156,13 @@ export const PlaceOrder = ({
                 }
             }
         },
-        [onPlaceOrder, dispatch, handleClose, globalDispatch]
+        [
+            onPlaceOrder,
+            handleClose,
+            orderType,
+            orderAmount.value,
+            globalDispatch,
+        ]
     );
 
     const onClick = useCallback(
