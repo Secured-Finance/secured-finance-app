@@ -1,5 +1,5 @@
+import { getUTCMonthYear } from '@secured-finance/sf-core';
 import classNames from 'classnames';
-import * as dayjs from 'dayjs';
 import { useMemo } from 'react';
 import { CurrencyIcon } from 'src/components/atoms';
 import { currencyMap, hexToCurrencySymbol } from 'src/utils';
@@ -17,10 +17,7 @@ export const TableContractCell = ({
     const ccy = useMemo(() => hexToCurrencySymbol(ccyByte32), [ccyByte32]);
     const contract = useMemo(() => {
         if (variant === 'currencyOnly') return `${ccy}`;
-        return `${ccy}-${dayjs
-            .unix(maturity.toNumber())
-            .format('MMMYYYY')
-            .toUpperCase()}`;
+        return `${ccy}-${getUTCMonthYear(maturity.toNumber())}`;
     }, [ccy, maturity, variant]);
 
     const iconSize = useMemo(() => {
