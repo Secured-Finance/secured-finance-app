@@ -1,7 +1,7 @@
 import { PortfolioManagement } from 'src/components/pages';
 
-const History = () => {
+const Portfolio = () => {
     return <PortfolioManagement />;
 };
 
-export default History;
+export default Portfolio;

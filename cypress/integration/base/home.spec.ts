@@ -16,8 +16,8 @@ describe('The Home Page', () => {
 
     it('can follow links on header buttons', () => {
         cy.get('[data-cy="terminal"]').click();
-        cy.url().should('include', '/exchange');
-        cy.get('[data-testid="exchange-page"]').should('be.visible');
+        cy.url().should('include', '/dashboard');
+        cy.get('[data-testid="dashboard-page"]').should('be.visible');
 
         cy.get('[data-cy="lending"]').click();
         cy.get('[data-testid="lending-page"]').should('be.visible');
