@@ -10,7 +10,8 @@ import {
     Tooltip,
     TooltipItem,
 } from 'chart.js';
-import { useRef } from 'react';
+import classNames from 'classnames';
+import { useRef, useState } from 'react';
 import { Line } from 'react-chartjs-2';
 import { crossHairPlugin } from 'src/components/molecules/LineChart/constants';
 import { currencyMap, CurrencySymbol, Rate, toCurrencySymbol } from 'src/utils';
@@ -27,7 +28,7 @@ ChartJS.register(
 
 export const options: ChartOptions<'line'> = {
     responsive: true,
-    maintainAspectRatio: false,
+    maintainAspectRatio: true,
     interaction: {
         mode: 'index',
         intersect: false,
@@ -104,41 +105,123 @@ export const options: ChartOptions<'line'> = {
     events: ['click', 'mousemove'],
 };
 
-const getData = (curves: Record<CurrencySymbol, Rate[]>, labels: string[]) => {
+const getData = (
+    curves: Record<CurrencySymbol, Rate[]>,
+    currencies: CurrencySymbol[],
+    labels: string[]
+) => {
     return {
         labels: labels,
-        datasets: Object.keys(curves).map(key => {
-            const ccy = toCurrencySymbol(key);
-            if (ccy === undefined) {
-                throw new Error(`Invalid currency symbol: ${key}`);
-            }
+        datasets: Object.keys(curves)
+            .filter(v => currencies.includes(v as CurrencySymbol))
+            .map(key => {
+                const ccy = toCurrencySymbol(key);
+                if (ccy === undefined) {
+                    throw new Error(`Invalid currency symbol: ${key}`);
+                }
 
-            return {
-                label: key,
-                data: curves[ccy].map(r => r.toNormalizedNumber()),
-                borderColor: currencyMap[ccy].chartColor,
-                backgroundColor: currencyMap[ccy].chartColor,
-            };
-        }),
+                return {
+                    label: key,
+                    data: curves[ccy].map(r => r.toNormalizedNumber()),
+                    borderColor: currencyMap[ccy].chartColor,
+                    backgroundColor: currencyMap[ccy].chartColor,
+                };
+            }),
     };
 };
 
+const CurveChip = ({
+    ccy,
+    onClick,
+}: {
+    ccy: CurrencySymbol;
+    active: boolean;
+    onClick: (ccy: CurrencySymbol) => void;
+}) => {
+    const [active, setActive] = useState(true);
+    return (
+        <div key={ccy} className='flex flex-row items-center justify-center'>
+            <button
+                data-testid='curve-chip'
+                className={classNames(
+                    `typography-body-small w-14 bg-[${currencyMap[ccy].chartColor}] rounded-2xl py-3 pt-2 pb-[6px] font-secondary text-xs font-semibold uppercase`,
+                    {
+                        'text-white': active,
+                        'text-slateGray': !active,
+                    }
+                )}
+                onClick={() => {
+                    setActive(!active);
+                    onClick(ccy);
+                }}
+            >
+                <p>{ccy}</p>
+            </button>
+        </div>
+    );
+};
+
 export const MultiCurveChart = ({
+    title,
     curves,
     labels,
 }: {
+    title: string;
     curves: Record<CurrencySymbol, Rate[]>;
     labels: string[];
 }) => {
     const chartRef = useRef<ChartJS<'line'>>(null);
+    const [activeCurrencies, setActiveCurrencies] = useState<
+        Set<CurrencySymbol>
+    >(new Set(Object.keys(curves) as CurrencySymbol[]));
+
+    const handleCurrencyClick = (ccy: CurrencySymbol) => {
+        if (activeCurrencies.has(ccy)) {
+            setActiveCurrencies(prev => {
+                const newSet = new Set(prev);
+                newSet.delete(ccy);
+                return newSet;
+            });
+        } else {
+            setActiveCurrencies(prev => {
+                const newSet = new Set(prev);
+                newSet.add(ccy);
+                return newSet;
+            });
+        }
+    };
 
     return (
-        <Line
-            data={getData(curves, labels)}
-            options={options}
-            ref={chartRef}
-            onClick={() => {}}
-            data-chromatic='ignore'
-        />
+        <div className='box-border rounded-b-2xl border border-[#2D4064] bg-[#2D4064]/20 px-6 py-7'>
+            <div className='flex flex-row justify-between pb-8'>
+                <h1 className='typography-modal-title flex text-[20px] capitalize leading-6 text-white'>
+                    {title}
+                </h1>
+                <div className='flex flex-row items-center justify-evenly gap-3'>
+                    {Object.keys(curves).map(key => {
+                        const ccy = toCurrencySymbol(key);
+                        if (ccy === undefined) {
+                            throw new Error(`Invalid currency symbol: ${key}`);
+                        }
+                        return (
+                            <CurveChip
+                                key={ccy}
+                                ccy={ccy}
+                                active={true}
+                                onClick={handleCurrencyClick}
+                            />
+                        );
+                    })}
+                </div>
+            </div>
+            <Line
+                className='rounded-2xl bg-black-20 p-5'
+                data={getData(curves, Array.from(activeCurrencies), labels)}
+                options={options}
+                ref={chartRef}
+                onClick={() => {}}
+                data-chromatic='ignore'
+            />
+        </div>
     );
 };

@@ -6,6 +6,7 @@ export default {
     title: 'Organism/MultiCurveChart',
     component: MultiCurveChart,
     args: {
+        title: 'Yield Curve Title',
         curves: {
             FIL: [
                 new Rate(9486),
