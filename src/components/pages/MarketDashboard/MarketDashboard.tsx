@@ -1,14 +1,16 @@
 import queries from '@secured-finance/sf-graph-client/dist/graphclients';
-import { BigNumber } from 'ethers';
+import { BigNumber, utils } from 'ethers';
 import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import {
     CollateralManagementConciseTab,
     GradientBox,
 } from 'src/components/atoms';
-import { HorizontalTab, MarketDashboardTable } from 'src/components/molecules';
+import { MarketDashboardTable } from 'src/components/molecules';
 import {
     ConnectWalletCard,
+    Loan,
+    MarketLoanWidget,
     MultiCurveChart,
     MyWalletCard,
 } from 'src/components/organisms';
@@ -145,9 +147,30 @@ export const MarketDashboard = () => {
                                 .map(o => o.name)}
                         />
                     </div>
-                    <HorizontalTab tabTitles={['Loans']}>
-                        <div>There will be a tab here</div>
-                    </HorizontalTab>
+
+                    <MarketLoanWidget
+                        loans={(
+                            Object.keys(lendingContracts) as CurrencySymbol[]
+                        ).reduce((acc, ccy) => {
+                            const toto = ccy as CurrencySymbol;
+                            const currencyContracts = Object.keys(
+                                lendingContracts[toto]
+                            ).map(contractName => {
+                                const contract =
+                                    lendingContracts[toto][contractName];
+                                return {
+                                    name: contract.name,
+                                    maturity: contract.maturity,
+                                    isActive: contract.isActive,
+                                    utcOpeningDate: contract.utcOpeningDate,
+                                    midUnitPrice: contract.midUnitPrice,
+                                    currency: utils.formatBytes32String(ccy),
+                                    ccy: ccy,
+                                };
+                            });
+                            return [...acc, ...currencyContracts];
+                        }, [] as Loan[])}
+                    />
                 </div>
                 <section className='flex flex-col gap-5'>
                     <div>
