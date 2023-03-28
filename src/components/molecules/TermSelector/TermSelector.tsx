@@ -28,7 +28,7 @@ export const TermSelector = <T extends string = string>({
     return (
         <div className='flex flex-col items-start justify-start space-y-2'>
             <div className='typography-caption-2 ml-2 text-planetaryPurple'>
-                Loan Term
+                Maturity
             </div>
             <div className='flex h-14 w-72 flex-row items-center justify-between rounded-lg bg-black-20 py-2 pl-2 pr-4 ring-starBlue focus-within:ring'>
                 <div>
