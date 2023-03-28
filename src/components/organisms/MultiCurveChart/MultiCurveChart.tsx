@@ -143,8 +143,9 @@ const CurveChip = ({
         <div key={ccy} className='flex flex-row items-center justify-center'>
             <button
                 data-testid='curve-chip'
+                style={{ backgroundColor: currencyMap[ccy].chartColor }}
                 className={classNames(
-                    `typography-body-small w-14 bg-[${currencyMap[ccy].chartColor}] rounded-2xl py-3 pt-2 pb-[6px] font-secondary text-xs font-semibold uppercase`,
+                    `typography-body-small w-14 rounded-2xl py-3 pt-2 pb-[6px] font-secondary text-xs font-semibold uppercase`,
                     {
                         'text-white': active,
                         'text-slateGray': !active,
