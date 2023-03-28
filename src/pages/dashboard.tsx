@@ -1,7 +1,7 @@
 import { MarketDashboard } from 'src/components/pages';
 
-const Exchange = () => {
+const Dashboard = () => {
     return <MarketDashboard />;
 };
 
-export default Exchange;
+export default Dashboard;
