@@ -22,4 +22,19 @@ describe('MultiCurveChart Component', () => {
             ).toMatchSnapshot();
         });
     });
+
+    it('should deactivate a curve when clicking on a chip', async () => {
+        let ag: RenderResult<typeof queries, HTMLElement>;
+        await waitFor(() => {
+            ag = render(<Default />);
+        }).then(() => {
+            ag.getByText('BTC').click();
+            expect(
+                ag.container
+                    .querySelector('canvas')
+                    ?.getContext('2d')
+                    ?.__getEvents()
+            ).toMatchSnapshot();
+        });
+    });
 });

@@ -134,8 +134,9 @@ export const MarketDashboard = () => {
                             },
                         ]}
                     />
-                    <div className='bg-[rgba(41, 45, 63, 0.2)] h-[400px] w-full border'>
+                    <div className='w-full'>
                         <MultiCurveChart
+                            title='Yield Curve'
                             curves={curves}
                             labels={Object.values(
                                 lendingContracts[CurrencySymbol.FIL]
