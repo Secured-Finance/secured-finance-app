@@ -177,7 +177,7 @@ export const AdvancedLendingOrderCard = ({
 
                 <div className='typography-nav-menu-default flex flex-row justify-between'>
                     <div className='text-neutral-8'>Collateral Management</div>
-                    <Link href='/history' passHref>
+                    <Link href='/portfolio' passHref>
                         <a
                             className='text-planetaryPurple'
                             href='_'
