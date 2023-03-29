@@ -89,7 +89,7 @@ export const AdvancedLendingOrderCard = ({
     };
 
     return (
-        <div className='h-fit w-[350px] rounded-b-xl border border-white-10 bg-cardBackground bg-opacity-60 pb-7 shadow-tab'>
+        <div className='h-fit rounded-b-xl border border-white-10 bg-cardBackground bg-opacity-60 pb-7 shadow-tab'>
             <RadioGroup
                 value={orderType}
                 onChange={(v: OrderType) => {
