@@ -2,7 +2,7 @@ import { composeStories } from '@storybook/testing-react';
 import { fireEvent, render, screen } from 'src/test-utils.js';
 import * as stories from './CoreTable.stories';
 
-const { Default } = composeStories(stories);
+const { Default, WithHiddenColumn } = composeStories(stories);
 
 describe('CoreTable Component', () => {
     it('should render a CoreTable', () => {
@@ -51,5 +51,12 @@ describe('CoreTable Component', () => {
         const row = screen.getAllByTestId('core-table-row')[0];
         fireEvent.click(row);
         expect(onLineClick).not.toBeCalled();
+    });
+
+    it('should hide a column if we pass a column id in the hiddenColumns prop', () => {
+        render(<WithHiddenColumn />);
+        const header = screen.getAllByTestId('core-table-header')[0];
+        expect(header).not.toHaveTextContent('age');
+        expect(header).toHaveTextContent('name');
     });
 });
