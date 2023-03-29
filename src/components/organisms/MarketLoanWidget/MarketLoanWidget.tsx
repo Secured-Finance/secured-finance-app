@@ -14,6 +14,7 @@ import {
     getCurrencyMapAsOptions,
     toCurrencySymbol,
 } from 'src/utils';
+import { countdown } from 'src/utils/date';
 import { LoanValue, Maturity } from 'src/utils/entities';
 import {
     contractColumnDefinition,
@@ -33,6 +34,7 @@ export const MarketLoanWidget = ({ loans }: { loans: Loan[] }) => {
         CurrencySymbol | ''
     >();
     const [selectedTerm, setSelectedTerm] = useState<number>();
+    const [isItayoseMarket, setIsItayoseMarket] = useState(false);
     const filteredLoans = useMemo(
         () =>
             loans.filter(
@@ -106,29 +108,45 @@ export const MarketLoanWidget = ({ loans }: { loans: Loan[] }) => {
                 },
                 header: tableHeaderDefinition('APY'),
             }),
+            columnHelper.accessor('utcOpeningDate', {
+                id: 'openingDate',
+                cell: info => {
+                    return (
+                        <div>{`starts in ${countdown(
+                            info.getValue() * 1000
+                        )}`}</div>
+                    );
+                },
+                enableHiding: true,
+                header: tableHeaderDefinition('Market Open'),
+            }),
             columnHelper.accessor('currency', {
                 id: 'action',
                 cell: info => {
                     return (
                         <div className='flex justify-center'>
-                            <Button
-                                onClick={() => {
-                                    const ccy = fromBytes32(
-                                        info.getValue()
-                                    ) as CurrencySymbol;
-                                    dispatch(
-                                        setMaturity(
-                                            new Maturity(
-                                                info.row.original.maturity
+                            {info.row.original.isActive ? (
+                                <Button
+                                    onClick={() => {
+                                        const ccy = fromBytes32(
+                                            info.getValue()
+                                        ) as CurrencySymbol;
+                                        dispatch(
+                                            setMaturity(
+                                                new Maturity(
+                                                    info.row.original.maturity
+                                                )
                                             )
-                                        )
-                                    );
-                                    dispatch(setCurrency(ccy));
-                                    router.push('/advanced/');
-                                }}
-                            >
-                                Trade
-                            </Button>
+                                        );
+                                        dispatch(setCurrency(ccy));
+                                        router.push('/advanced/');
+                                    }}
+                                >
+                                    Trade
+                                </Button>
+                            ) : (
+                                <Button>Pre-Open Order</Button>
+                            )}
                         </div>
                     );
                 },
@@ -154,7 +172,19 @@ export const MarketLoanWidget = ({ loans }: { loans: Loan[] }) => {
                     <DropdownSelector
                         optionList={maturityOptionList}
                         selected={maturityOptionList[0]}
-                        onChange={v => setSelectedTerm(parseInt(v))}
+                        onChange={v => {
+                            const maturity = parseInt(v);
+                            setSelectedTerm(maturity);
+                            for (const loan of loans) {
+                                if (loan.maturity === maturity) {
+                                    if (!loan.isActive) {
+                                        setIsItayoseMarket(true);
+                                        break;
+                                    }
+                                }
+                                setIsItayoseMarket(false);
+                            }
+                        }}
                     />
                 </div>
             </div>
@@ -163,6 +193,7 @@ export const MarketLoanWidget = ({ loans }: { loans: Loan[] }) => {
                     columns={columns}
                     data={filteredLoans}
                     border={false}
+                    hideColumnIds={isItayoseMarket ? ['apy'] : ['openingDate']}
                 />
             </div>
         </div>

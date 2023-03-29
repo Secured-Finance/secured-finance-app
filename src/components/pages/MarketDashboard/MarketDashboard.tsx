@@ -30,6 +30,7 @@ import {
     getCurrencyMapAsList,
     ordinaryFormat,
     Rate,
+    toCurrencySymbol,
     usdFormat,
     WalletSource,
 } from 'src/utils';
@@ -152,12 +153,13 @@ export const MarketDashboard = () => {
                         loans={(
                             Object.keys(lendingContracts) as CurrencySymbol[]
                         ).reduce((acc, ccy) => {
-                            const toto = ccy as CurrencySymbol;
+                            const currency = toCurrencySymbol(ccy);
+                            if (!currency) return acc;
                             const currencyContracts = Object.keys(
-                                lendingContracts[toto]
+                                lendingContracts[currency]
                             ).map(contractName => {
                                 const contract =
-                                    lendingContracts[toto][contractName];
+                                    lendingContracts[currency][contractName];
                                 return {
                                     name: contract.name,
                                     maturity: contract.maturity,
