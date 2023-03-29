@@ -71,7 +71,7 @@ export const MarketDashboard = () => {
     }, [JSON.stringify(priceList), protocolInformation.valueLockedByCurrency]);
 
     return (
-        <Page title='Market Dashboard' name='exchange-page'>
+        <Page title='Market Dashboard' name='dashboard-page'>
             <TwoColumns>
                 <MarketDashboardTable
                     values={[
