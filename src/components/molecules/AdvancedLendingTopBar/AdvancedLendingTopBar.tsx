@@ -77,7 +77,7 @@ export const AdvancedLendingTopBar = <T extends string = string>({
     );
 
     return (
-        <div className='h-fit'>
+        <div className='h-fit w-full'>
             <GradientBox shape='rectangle'>
                 <div className='flex flex-row items-stretch justify-start gap-10 px-6 py-3'>
                     <div className='typography-caption-2 grid min-w-fit grid-cols-2 gap-x-5 gap-y-1 text-neutral-4'>
