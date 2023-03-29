@@ -135,14 +135,14 @@ export const loanTypeFromAmountColumnDefinition = <T extends AmountProperty>(
 };
 
 export const contractColumnDefinition = <
-    T extends { maturity: string; currency: string }
+    T extends { maturity: string | number; currency: string }
 >(
     columnHelper: ColumnHelper<T>,
     title: string,
     id: string,
-    variant: 'compact' | 'default' = 'default'
+    variant: 'compact' | 'default' | 'currencyOnly' = 'default'
 ) => {
-    const assessorFn: AccessorFn<T, string> = row => row.maturity;
+    const assessorFn: AccessorFn<T, string> = row => row.maturity.toString();
 
     return columnHelper.accessor(assessorFn, {
         id: id,

@@ -1,7 +1,6 @@
 const defaultTheme = require('tailwindcss/defaultTheme');
 
 module.exports = {
-    darkMode: 'media',
     content: ['./src/**/*.{ts,tsx,js,jsx}', './public/index.html'],
     theme: {
         extend: {
@@ -138,6 +137,12 @@ module.exports = {
                 '20': 'rgba(255, 255, 255, 0.2)',
                 '10': 'rgba(255, 255, 255, 0.1)',
                 '5': 'rgba(255, 255, 255, 0.05)',
+            },
+            chart: {
+                fil: '#0090FF',
+                btc: '#F9A137',
+                eth: '#B9BDEA',
+                usdc: '#2775CA',
             },
         },
     },
