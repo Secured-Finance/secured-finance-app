@@ -1,7 +1,7 @@
 import { BigNumber } from 'ethers';
 import {
+    efilBytes32,
     ethBytes32,
-    filBytes32,
     usdcBytes32,
     wbtcBytes32,
 } from 'src/stories/mocks/fixtures';
@@ -279,7 +279,7 @@ describe('toCurrencySymbol', () => {
 describe('hexToCurrencySymbol', () => {
     it('should convert a hex string to a currency symbol', () => {
         expect(hexToCurrencySymbol(ethBytes32)).toEqual(CurrencySymbol.ETH);
-        expect(hexToCurrencySymbol(filBytes32)).toEqual(CurrencySymbol.EFIL);
+        expect(hexToCurrencySymbol(efilBytes32)).toEqual(CurrencySymbol.EFIL);
         expect(hexToCurrencySymbol(wbtcBytes32)).toEqual(CurrencySymbol.WBTC);
         expect(hexToCurrencySymbol(usdcBytes32)).toEqual(CurrencySymbol.USDC);
     });

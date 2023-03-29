@@ -2,7 +2,7 @@ import queries from '@secured-finance/sf-graph-client/dist/graphclients';
 import {
     dailyVolumes,
     dec22Fixture,
-    filBytes32,
+    efilBytes32,
     ethBytes32,
     orderHistoryList,
     trades,
@@ -98,7 +98,7 @@ export const mockTrades = [
         request: {
             query: queries.TradesDocument,
             variables: {
-                currency: filBytes32,
+                currency: efilBytes32,
                 maturity: dec22Fixture.toNumber(),
                 from: yesterday,
                 to: today,
@@ -122,7 +122,7 @@ export const mockTrades = [
         request: {
             query: queries.TradesDocument,
             variables: {
-                currency: filBytes32,
+                currency: efilBytes32,
                 maturity: 0,
                 from: yesterday,
                 to: today,

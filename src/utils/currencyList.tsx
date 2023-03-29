@@ -6,10 +6,11 @@ import {
 } from '@secured-finance/sf-core';
 import { BigNumber as BigNumberJS } from 'bignumber.js';
 import { BigNumber } from 'ethers';
-import FilecoinIcon from 'src/assets/coins/efil.svg';
-import EthIcon from 'src/assets/coins/eth2.svg';
-import UsdcIcon from 'src/assets/coins/usdc.svg';
+import tailwindConfig from 'src/../tailwind.config';
 import WBTCIcon from 'src/assets/coins/wbtc.svg';
+import EthIcon from 'src/assets/coins/eth2.svg';
+import FilecoinIcon from 'src/assets/coins/efil.svg';
+import UsdcIcon from 'src/assets/coins/usdc.svg';
 import { Option } from 'src/components/atoms';
 import { hexToString } from 'web3-utils';
 import { Filecoin } from './currencies/filecoin';
@@ -44,6 +45,7 @@ export const currencyMap: Readonly<
         fromBaseUnit: (amount: BigNumber) =>
             convertFromBlockchainUnit(amount, Filecoin.onChain()),
         toCurrency: () => Filecoin.onChain(),
+        chartColor: tailwindConfig.theme.colors.chart.fil,
     },
     [CurrencySymbol.ETH]: {
         index: 1,
@@ -56,6 +58,7 @@ export const currencyMap: Readonly<
         fromBaseUnit: (amount: BigNumber) =>
             convertFromBlockchainUnit(amount, ETH),
         toCurrency: () => ETH,
+        chartColor: tailwindConfig.theme.colors.chart.eth,
     },
     [CurrencySymbol.USDC]: {
         index: 2,
@@ -69,6 +72,7 @@ export const currencyMap: Readonly<
         fromBaseUnit: (amount: BigNumber) =>
             convertFromBlockchainUnit(amount, USDC.onChain()),
         toCurrency: () => USDC.onChain(),
+        chartColor: tailwindConfig.theme.colors.chart.usdc,
     },
     [CurrencySymbol.WBTC]: {
         index: 3,
@@ -82,6 +86,7 @@ export const currencyMap: Readonly<
         fromBaseUnit: (amount: BigNumber) =>
             convertFromBlockchainUnit(amount, WBTC.onChain()),
         toCurrency: () => WBTC.onChain(),
+        chartColor: tailwindConfig.theme.colors.chart.btc,
     },
 };
 
@@ -129,6 +134,7 @@ export type CurrencyInfo = {
     toBaseUnit: (amount: number) => BigNumber;
     fromBaseUnit: (amount: BigNumber) => number;
     toCurrency: () => CurrencyInterface;
+    chartColor: string;
 };
 
 export const toCurrency = (ccy: CurrencySymbol) => {
