@@ -1,13 +1,19 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { ContractMap } from 'src/hooks';
+import { ContractMap, LendingMarket } from 'src/hooks';
 import { CurrencySymbol } from 'src/utils';
 
 export type AvailableContracts = {
     lendingMarkets: Record<CurrencySymbol, ContractMap>;
 };
 
-const emptyContract = {
-    EMPTY: { name: 'EMPTY', maturity: 0, isActive: false, utcOpeningDate: 0 },
+const emptyContract: { EMPTY: LendingMarket } = {
+    EMPTY: {
+        name: 'EMPTY',
+        maturity: 0,
+        isActive: false,
+        utcOpeningDate: 0,
+        midUnitPrice: 0,
+    },
 };
 const initialState: AvailableContracts = {
     lendingMarkets: {

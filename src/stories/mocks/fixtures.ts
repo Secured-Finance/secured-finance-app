@@ -8,6 +8,7 @@ import WrappedBitcoinIcon from 'src/assets/coins/wbtc.svg';
 import { Option } from 'src/components/atoms';
 import { CollateralBook } from 'src/hooks';
 import { AssetPrices } from 'src/store/assetPrices';
+import { RootState } from 'src/store/types';
 import {
     DailyVolumes,
     MaturityOptionList,
@@ -58,7 +59,7 @@ export const preloadedBalances = {
     },
 };
 
-export const preloadedLendingMarkets = {
+export const preloadedLendingMarkets: Partial<RootState> = {
     availableContracts: {
         lendingMarkets: {
             [CurrencySymbol.EFIL]: {
@@ -67,18 +68,90 @@ export const preloadedLendingMarkets = {
                     maturity: 1669852800,
                     isActive: true,
                     utcOpeningDate: 1677628800,
+                    midUnitPrice: 9801,
                 },
                 MAR23: {
                     name: 'MAR23',
                     maturity: 1677628800,
                     isActive: true,
                     utcOpeningDate: 1677628800,
+                    midUnitPrice: 9701,
                 },
                 JUN23: {
                     name: 'JUN23',
                     maturity: 1685577600,
                     isActive: false,
                     utcOpeningDate: 1677628800,
+                    midUnitPrice: 9601,
+                },
+            },
+            [CurrencySymbol.WBTC]: {
+                DEC22: {
+                    name: 'DEC22',
+                    maturity: 1669852800,
+                    isActive: true,
+                    utcOpeningDate: 1677628800,
+                    midUnitPrice: 9801,
+                },
+                MAR23: {
+                    name: 'MAR23',
+                    maturity: 1677628800,
+                    isActive: true,
+                    utcOpeningDate: 1677628800,
+                    midUnitPrice: 9701,
+                },
+                JUN23: {
+                    name: 'JUN23',
+                    maturity: 1685577600,
+                    isActive: false,
+                    utcOpeningDate: 1677628800,
+                    midUnitPrice: 9601,
+                },
+            },
+            [CurrencySymbol.USDC]: {
+                DEC22: {
+                    name: 'DEC22',
+                    maturity: 1669852800,
+                    isActive: true,
+                    utcOpeningDate: 1677628800,
+                    midUnitPrice: 9801,
+                },
+                MAR23: {
+                    name: 'MAR23',
+                    maturity: 1677628800,
+                    isActive: true,
+                    utcOpeningDate: 1677628800,
+                    midUnitPrice: 9701,
+                },
+                JUN23: {
+                    name: 'JUN23',
+                    maturity: 1685577600,
+                    isActive: false,
+                    utcOpeningDate: 1677628800,
+                    midUnitPrice: 9601,
+                },
+            },
+            [CurrencySymbol.ETH]: {
+                DEC22: {
+                    name: 'DEC22',
+                    maturity: 1669852800,
+                    isActive: true,
+                    utcOpeningDate: 1677628800,
+                    midUnitPrice: 9801,
+                },
+                MAR23: {
+                    name: 'MAR23',
+                    maturity: 1677628800,
+                    isActive: true,
+                    utcOpeningDate: 1677628800,
+                    midUnitPrice: 9701,
+                },
+                JUN23: {
+                    name: 'JUN23',
+                    maturity: 1685577600,
+                    isActive: false,
+                    utcOpeningDate: 1677628800,
+                    midUnitPrice: 9601,
                 },
             },
         },
@@ -166,7 +239,7 @@ export const yieldCurveRates = [
     new Rate(47746),
 ];
 
-export const filBytes32 = utils.formatBytes32String('EFIL'); //0x46494c0000000000000000000000000000000000000000000000000000000000
+export const efilBytes32 = utils.formatBytes32String('EFIL'); //0x46494c0000000000000000000000000000000000000000000000000000000000
 export const ethBytes32 = utils.formatBytes32String('ETH');
 export const wbtcBytes32 = utils.formatBytes32String('WBTC');
 export const usdcBytes32 = utils.formatBytes32String('USDC'); // '0x5553444300000000000000000000000000000000000000000000000000000000'
@@ -176,7 +249,7 @@ export const orderHistoryList: OrderList = [
         id: '1',
         orderId: BigNumber.from('1'),
         originalOrderId: BigNumber.from('1'),
-        currency: filBytes32,
+        currency: efilBytes32,
         side: 1,
         maturity: BigNumber.from(dec22Fixture.toString()),
         unitPrice: BigNumber.from('9800'),
@@ -190,7 +263,7 @@ export const orderHistoryList: OrderList = [
         id: '2',
         orderId: BigNumber.from('1'),
         originalOrderId: BigNumber.from('1'),
-        currency: filBytes32,
+        currency: efilBytes32,
         side: 1,
         maturity: BigNumber.from(dec22Fixture.toString()),
         unitPrice: BigNumber.from('9600'),
@@ -225,7 +298,7 @@ export const transactions: TradeHistory = [
         orderPrice: '9800',
         createdAt: '1671859344',
         forwardValue: '1020000000000000000000',
-        currency: filBytes32,
+        currency: efilBytes32,
         maturity: jun23Fixture.toString(),
     },
     {
@@ -236,7 +309,7 @@ export const transactions: TradeHistory = [
         orderPrice: '9543',
         createdAt: '1671080520',
         forwardValue: '520000000000000000000',
-        currency: filBytes32,
+        currency: efilBytes32,
         maturity: jun23Fixture.toString(),
     },
     {
@@ -247,7 +320,7 @@ export const transactions: TradeHistory = [
         orderPrice: '9543',
         createdAt: '1671080520',
         forwardValue: '520000000000000000000',
-        currency: filBytes32,
+        currency: efilBytes32,
         maturity: mar23Fixture.toString(),
     },
     {
@@ -277,14 +350,14 @@ export const transactions: TradeHistory = [
 export const aggregatedTrades: TradeSummary[] = [
     {
         amount: BigNumber.from('500000000000000000000'),
-        currency: filBytes32,
+        currency: efilBytes32,
         forwardValue: BigNumber.from('500000000000000000000'),
         maturity: jun23Fixture.toString(),
         averagePrice: BigNumber.from(9671),
     },
     {
         amount: BigNumber.from('-500000000000000000000'),
-        currency: filBytes32,
+        currency: efilBytes32,
         forwardValue: BigNumber.from('-520000000000000000000'),
         maturity: mar23Fixture.toString(),
         averagePrice: BigNumber.from(9698),
@@ -350,7 +423,7 @@ export const emptyCollateralBook: CollateralBook = {
 function generateDailyVolumes(days: number) {
     const volumes: DailyVolumes = [];
     for (let i = 0; i < days; i++) {
-        for (const currency of [filBytes32, wbtcBytes32, ethBytes32]) {
+        for (const currency of [efilBytes32, wbtcBytes32, ethBytes32]) {
             for (const maturity of [
                 dec22Fixture,
                 mar23Fixture,
@@ -360,7 +433,7 @@ function generateDailyVolumes(days: number) {
             ])
                 volumes.push({
                     id: `${fromBytes32(currency)}-1677628800-2023-02-${i}`,
-                    currency: filBytes32,
+                    currency: efilBytes32,
                     maturity: dec22Fixture,
                     day: `2023-02-${i}`,
                     timestamp: maturity.toString(),

@@ -44,4 +44,10 @@ describe('MarketDashboard Component', () => {
         const totalUsers = await screen.findByText('900K');
         expect(totalUsers).toBeInTheDocument();
     });
+
+    it('should show the yield curves', async () => {
+        await renderDefault();
+        const yieldCurves = await screen.findAllByTestId('curve-chip');
+        expect(yieldCurves).toHaveLength(4);
+    });
 });
