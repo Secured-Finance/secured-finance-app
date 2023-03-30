@@ -17,7 +17,7 @@ export default {
     component: LendingCard,
     args: {
         collateralBook: collateralBook80,
-        marketValue: LoanValue.fromApy(
+        marketValue: LoanValue.fromApr(
             new Rate(10000),
             dec22Fixture.toNumber()
         ),
