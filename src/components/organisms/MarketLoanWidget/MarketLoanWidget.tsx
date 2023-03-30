@@ -193,7 +193,7 @@ export const MarketLoanWidget = ({ loans }: { loans: Loan[] }) => {
                     columns={columns}
                     data={filteredLoans}
                     border={false}
-                    hideColumnIds={isItayoseMarket ? ['apy'] : ['openingDate']}
+                    hideColumnIds={isItayoseMarket ? ['apr'] : ['openingDate']}
                 />
             </div>
         </div>
