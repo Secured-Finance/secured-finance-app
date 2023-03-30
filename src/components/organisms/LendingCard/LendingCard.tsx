@@ -88,7 +88,7 @@ export const LendingCard = ({
                         {formatLoanValue(marketValue, 'rate')}
                     </span>
                     <span className='typography-caption uppercase text-planetaryPurple'>
-                        Fixed Rate APY
+                        Fixed Rate APR
                     </span>
                 </div>
 
