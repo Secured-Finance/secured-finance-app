@@ -32,7 +32,6 @@ import {
     CurrencySymbol,
     formatLoanValue,
     getCurrencyMapAsOptions,
-    getTransformMaturityOption,
     ordinaryFormat,
     Rate,
     usdFormat,
@@ -164,9 +163,6 @@ export const AdvancedLending = ({
                             dispatch(setUnitPrice(loanValue.price));
                         }
                     }}
-                    transformLabel={getTransformMaturityOption(
-                        maturitiesOptionList
-                    )}
                     values={[
                         formatLoanValue(tradeHistoryDetails.max, 'price'),
                         formatLoanValue(tradeHistoryDetails.min, 'price'),
