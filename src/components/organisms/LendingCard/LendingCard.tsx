@@ -115,7 +115,10 @@ export const LendingCard = ({
                     }}
                     onTermChange={v => dispatch(setMaturity(new Maturity(v)))}
                     transformLabel={getTransformMaturityOption(
-                        maturitiesOptionList
+                        maturitiesOptionList.map(o => ({
+                            ...o,
+                            value: o.value.toString(),
+                        }))
                     )}
                 />
 

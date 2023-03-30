@@ -95,4 +95,33 @@ describe('AdvancedLendingOrderCard Component', () => {
             screen.getByRole('button', { name: 'Manage >>' })
         ).toBeInTheDocument();
     });
+
+    it('should show both market and limit order when in default mode', async () => {
+        await waitFor(() => render(<Default />, { preloadedState }));
+        expect(screen.getByRole('radio', { name: 'Market' })).not.toHaveClass(
+            'hidden'
+        );
+        expect(screen.getByRole('radio', { name: 'Limit' })).not.toHaveClass(
+            'hidden'
+        );
+    });
+
+    it('should show only limit order when in onlyLimitOrder mode', async () => {
+        await waitFor(() =>
+            render(<Default onlyLimitOrder />, {
+                preloadedState: {
+                    ...preloadedState,
+                    landingOrderForm: {
+                        ...preloadedState.landingOrderForm,
+                    },
+                },
+            })
+        );
+        expect(screen.queryByRole('radio', { name: 'Market' })).toHaveClass(
+            'hidden'
+        );
+        expect(screen.getByRole('radio', { name: 'Limit' })).not.toHaveClass(
+            'hidden'
+        );
+    });
 });

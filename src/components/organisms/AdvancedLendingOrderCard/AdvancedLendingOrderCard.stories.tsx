@@ -23,3 +23,7 @@ const Template: ComponentStory<typeof AdvancedLendingOrderCard> = args => {
 };
 
 export const Default = Template.bind({});
+export const OnlyLimitOrder = Template.bind({});
+OnlyLimitOrder.args = {
+    onlyLimitOrder: true,
+};

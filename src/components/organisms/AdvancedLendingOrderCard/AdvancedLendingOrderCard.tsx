@@ -1,5 +1,6 @@
 import { RadioGroup } from '@headlessui/react';
 import { OrderSide } from '@secured-finance/sf-client';
+import classNames from 'classnames';
 import { BigNumber } from 'ethers';
 import Link from 'next/link';
 import { useMemo } from 'react';
@@ -31,8 +32,10 @@ import { Amount, LoanValue } from 'src/utils/entities';
 
 export const AdvancedLendingOrderCard = ({
     collateralBook,
+    onlyLimitOrder = false,
 }: {
     collateralBook: CollateralBook;
+    onlyLimitOrder?: boolean;
 }) => {
     const { currency, amount, side, orderType, unitPrice, maturity } =
         useSelector((state: RootState) =>
@@ -100,7 +103,9 @@ export const AdvancedLendingOrderCard = ({
             >
                 <RadioGroup.Option
                     value={OrderType.MARKET}
-                    className='h-full w-1/2'
+                    className={classNames('h-full w-1/2', {
+                        hidden: onlyLimitOrder,
+                    })}
                     as='button'
                 >
                     {({ checked }) => (
@@ -110,7 +115,10 @@ export const AdvancedLendingOrderCard = ({
                 <RadioGroup.Option
                     value={OrderType.LIMIT}
                     as='button'
-                    className='h-full w-1/2'
+                    className={classNames('h-full', {
+                        'w-full': onlyLimitOrder,
+                        'w-1/2': !onlyLimitOrder,
+                    })}
                 >
                     {({ checked }) => (
                         <NavTab text={OrderType.LIMIT} active={checked} />

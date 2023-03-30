@@ -23,7 +23,7 @@ import { RootState } from 'src/store/types';
 import { LoanValue, Maturity } from 'src/utils/entities';
 import { useWallet } from 'use-wallet';
 
-const emptyOptionList = [
+export const emptyOptionList = [
     {
         label: '',
         value: new Maturity(0),
