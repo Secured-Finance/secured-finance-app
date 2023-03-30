@@ -18,7 +18,7 @@ export const computeWeightedAverageRate = (trades: TradeHistory) => {
             LoanValue.fromPrice(
                 trade.averagePrice,
                 trade.maturity
-            ).apy.toNumber() *
+            ).apr.toNumber() *
                 trade.amount,
         0
     );
