@@ -14,7 +14,7 @@ import { selectLandingOrderForm } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
 import { selectCollateralCurrencyBalance } from 'src/store/wallet';
 import { amountFormatterFromBase } from 'src/utils';
-import { computeAvailableToBorrow } from 'src/utils/collateral';
+import { computeAvailableToBorrow, MAX_COVERAGE } from 'src/utils/collateral';
 import { LoanValue } from 'src/utils/entities';
 import { useWallet } from 'use-wallet';
 
@@ -57,7 +57,7 @@ export const OrderAction = ({
             ? computeAvailableToBorrow(
                   assetPriceMap[currency],
                   collateralBook.usdCollateral,
-                  collateralBook.coverage.toNumber()
+                  collateralBook.coverage.toNumber() / MAX_COVERAGE
               )
             : 0;
     }, [assetPriceMap, collateralBook, currency]);

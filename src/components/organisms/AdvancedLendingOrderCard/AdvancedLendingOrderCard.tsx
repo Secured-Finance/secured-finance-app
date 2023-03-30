@@ -69,7 +69,7 @@ export const AdvancedLendingOrderCard = ({
             ? computeAvailableToBorrow(
                   assetPriceMap[currency],
                   collateralBook.usdCollateral,
-                  collateralBook.coverage.toNumber()
+                  collateralBook.coverage.toNumber() / 100.0
               )
             : 0;
     }, [assetPriceMap, collateralBook, currency]);
