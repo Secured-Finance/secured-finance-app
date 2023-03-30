@@ -49,8 +49,8 @@ export const CollateralSimulationSection = ({
             )} / ${ordinaryFormat(
                 computeAvailableToBorrow(
                     1,
-                    collateral.coverage.toNumber(),
-                    collateral.usdCollateral
+                    collateral.usdCollateral,
+                    collateral.coverage.toNumber() / MAX_COVERAGE
                 )
             )}`,
         [collateral.coverage, collateral.usdCollateral]

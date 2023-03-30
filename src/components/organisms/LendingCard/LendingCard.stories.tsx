@@ -4,7 +4,7 @@ import {
     withWalletProvider,
 } from 'src/../.storybook/decorators';
 import {
-    collateralBook80,
+    collateralBook37,
     dec22Fixture,
     maturityOptions,
 } from 'src/stories/mocks/fixtures';
@@ -16,7 +16,7 @@ export default {
     title: 'Organism/LendingCard',
     component: LendingCard,
     args: {
-        collateralBook: collateralBook80,
+        collateralBook: collateralBook37,
         marketValue: LoanValue.fromApr(
             new Rate(10000),
             dec22Fixture.toNumber()
