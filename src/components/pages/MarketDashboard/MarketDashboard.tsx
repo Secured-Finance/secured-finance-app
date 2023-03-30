@@ -53,7 +53,7 @@ export const MarketDashboard = () => {
             Object.values(lendingContracts[ccy.symbol])
                 .filter(o => o.isActive)
                 .map(o => new Maturity(o.maturity))
-        ).map(r => r.apy);
+        ).map(r => r.apr);
     });
 
     const protocolInformation = useProtocolInformation();

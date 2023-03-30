@@ -90,7 +90,7 @@ export const Landing = ({ view }: { view?: ViewType }) => {
                     <YieldChart
                         asset={currency}
                         isBorrow={side === OrderSide.BORROW}
-                        rates={unitPrices.map(v => v.apy)}
+                        rates={unitPrices.map(v => v.apr)}
                         maturitiesOptionList={maturityOptionList}
                     />
                 </div>
@@ -99,7 +99,7 @@ export const Landing = ({ view }: { view?: ViewType }) => {
                 <AdvancedLending
                     collateralBook={collateralBook}
                     loanValue={marketValue}
-                    rates={unitPrices.map(v => v.apy)}
+                    rates={unitPrices.map(v => v.apr)}
                     maturitiesOptionList={maturityOptionList}
                 />
             }

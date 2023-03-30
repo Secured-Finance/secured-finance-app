@@ -90,7 +90,7 @@ export const MarketLoanWidget = ({ loans }: { loans: Loan[] }) => {
                 header: tableHeaderDefinition('Maturity'),
             }),
             columnHelper.accessor('midUnitPrice', {
-                id: 'apy',
+                id: 'apr',
                 cell: info => {
                     return (
                         <div className='typography-body-2 flex justify-center'>
@@ -106,7 +106,7 @@ export const MarketLoanWidget = ({ loans }: { loans: Loan[] }) => {
                         </div>
                     );
                 },
-                header: tableHeaderDefinition('APY'),
+                header: tableHeaderDefinition('APR'),
             }),
             columnHelper.accessor('utcOpeningDate', {
                 id: 'openingDate',

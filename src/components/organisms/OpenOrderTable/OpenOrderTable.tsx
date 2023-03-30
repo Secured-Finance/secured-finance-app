@@ -33,7 +33,7 @@ export const OpenOrderTable = ({ data }: { data: OrderList }) => {
             ),
             priceYieldColumnDefinition(
                 columnHelper,
-                'APY%',
+                'APR%',
                 'yield',
                 row => row.unitPrice,
                 'compact',
