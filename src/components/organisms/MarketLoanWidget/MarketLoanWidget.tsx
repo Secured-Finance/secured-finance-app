@@ -125,28 +125,28 @@ export const MarketLoanWidget = ({ loans }: { loans: Loan[] }) => {
                 cell: info => {
                     return (
                         <div className='flex justify-center'>
-                            {info.row.original.isActive ? (
-                                <Button
-                                    onClick={() => {
-                                        const ccy = fromBytes32(
-                                            info.getValue()
-                                        ) as CurrencySymbol;
-                                        dispatch(
-                                            setMaturity(
-                                                new Maturity(
-                                                    info.row.original.maturity
-                                                )
+                            <Button
+                                onClick={() => {
+                                    const ccy = fromBytes32(
+                                        info.getValue()
+                                    ) as CurrencySymbol;
+                                    dispatch(
+                                        setMaturity(
+                                            new Maturity(
+                                                info.row.original.maturity
                                             )
-                                        );
-                                        dispatch(setCurrency(ccy));
-                                        router.push('/advanced/');
-                                    }}
-                                >
-                                    Trade
-                                </Button>
-                            ) : (
-                                <Button>Pre-Open Order</Button>
-                            )}
+                                        )
+                                    );
+                                    dispatch(setCurrency(ccy));
+                                    info.row.original.isActive
+                                        ? router.push('/advanced/')
+                                        : router.push('/itayose/');
+                                }}
+                            >
+                                {info.row.original.isActive
+                                    ? 'Open Order'
+                                    : 'Pre-Open Order'}
+                            </Button>
                         </div>
                     );
                 },

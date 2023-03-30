@@ -1,5 +1,6 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import {
+    withAssetPrice,
     withMaturities,
     withWalletProvider,
 } from 'src/../.storybook/decorators';
@@ -9,7 +10,7 @@ export default {
     title: 'Pages/Itayose',
     component: Itayose,
     args: {},
-    decorators: [withMaturities, withWalletProvider],
+    decorators: [withMaturities, withAssetPrice, withWalletProvider],
 } as ComponentMeta<typeof Itayose>;
 
 const Template: ComponentStory<typeof Itayose> = () => <Itayose />;

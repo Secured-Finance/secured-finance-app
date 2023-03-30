@@ -1,6 +1,11 @@
 import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
-import { GradientBox, Option, Separator } from 'src/components/atoms';
+import {
+    GradientBox,
+    MarketTab,
+    Option,
+    Separator,
+} from 'src/components/atoms';
 import {
     HorizontalAssetSelector,
     HorizontalTab,
@@ -13,13 +18,15 @@ import { Page } from 'src/components/templates';
 import { TwoColumnsWithTopBar } from 'src/components/templates/TwoColumnsWithTopBar';
 import { useCollateralBook } from 'src/hooks';
 import { useOrderbook } from 'src/hooks/useOrderbook';
+import { getAssetPrice } from 'src/store/assetPrices/selectors';
 import {
     selectLandingOrderForm,
     setCurrency,
     setMaturity,
 } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
-import { CurrencySymbol, getCurrencyMapAsOptions } from 'src/utils';
+import { CurrencySymbol, getCurrencyMapAsOptions, usdFormat } from 'src/utils';
+import { countdown } from 'src/utils/date';
 import { Maturity } from 'src/utils/entities';
 import { useWallet } from 'use-wallet';
 import { emptyOptionList } from '..';
@@ -28,15 +35,22 @@ const Toolbar = ({
     assetList,
     options,
     selected,
+    openDate,
+    currency,
 }: {
     selectedAsset: Option<CurrencySymbol> | undefined;
     assetList: Array<Option<CurrencySymbol>>;
     options: Array<Option<string>>;
     selected: Option<string>;
+    openDate: number;
+    currency: CurrencySymbol;
 }) => {
+    const currencyPrice = useSelector((state: RootState) =>
+        getAssetPrice(currency)(state)
+    );
     return (
         <GradientBox shape='rectangle'>
-            <div className='flex min-w-fit flex-row items-center justify-between px-6 py-3'>
+            <div className='flex min-w-fit flex-row items-center justify-between gap-20 px-6 py-3'>
                 <HorizontalAssetSelector
                     assetList={assetList}
                     selectedAsset={selectedAsset}
@@ -49,9 +63,20 @@ const Toolbar = ({
                         setMaturity(new Maturity(v));
                     }}
                 />
-                <div className='flex flex-row items-center justify-start'>
-                    <div className='flex'>Pre Open</div>
-                    <div className='flex'>Open</div>
+                <div className='flex w-full flex-row items-center justify-between'>
+                    <div>
+                        <MarketTab
+                            name='Pre-Open'
+                            value={countdown(openDate * 1000)}
+                        />
+                    </div>
+
+                    <div>
+                        <MarketTab
+                            name={`${currency} price`}
+                            value={usdFormat(currencyPrice, 2)}
+                        />
+                    </div>
                 </div>
             </div>
         </GradientBox>
@@ -94,10 +119,13 @@ export const Itayose = () => {
     const collateralBook = useCollateralBook(account);
 
     return (
-        <Page title='Itayose'>
+        <Page title='Pre-Open Order Book'>
             <TwoColumnsWithTopBar
                 topBar={
                     <Toolbar
+                        openDate={
+                            lendingContracts[selectedTerm.label].utcOpeningDate
+                        }
                         assetList={assetList}
                         selectedAsset={selectedAsset}
                         options={maturityOptionList.map(o => ({
@@ -108,6 +136,7 @@ export const Itayose = () => {
                             label: selectedTerm.label,
                             value: selectedTerm.value.toString(),
                         }}
+                        currency={currency}
                     />
                 }
             >
