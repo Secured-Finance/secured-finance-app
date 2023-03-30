@@ -32,17 +32,17 @@ describe('MarketLoanWidget Component', () => {
         expect(screen.getAllByRole('menuitem').length).toBe(3);
     });
 
-    it('should display the APY column when the market is open', () => {
+    it('should display the APR column when the market is open', () => {
         render(<Default />);
-        expect(screen.queryByText('APY')).toBeInTheDocument();
+        expect(screen.queryByText('APR')).toBeInTheDocument();
         expect(screen.queryByText('Market Open')).not.toBeInTheDocument();
     });
 
-    it('should hide the APY column when the market is not open', () => {
+    it('should hide the APR column when the market is not open', () => {
         render(<Default />);
         screen.getByRole('button', { name: 'DEC22' }).click();
         screen.getByRole('menuitem', { name: 'JUN23' }).click();
-        expect(screen.queryByText('APY')).not.toBeInTheDocument();
+        expect(screen.queryByText('APR')).not.toBeInTheDocument();
         expect(screen.queryByText('Market Open')).toBeInTheDocument();
     });
 });
