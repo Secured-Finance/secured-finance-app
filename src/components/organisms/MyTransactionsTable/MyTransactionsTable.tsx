@@ -26,7 +26,7 @@ const priceYieldColumnDef = (
                     <span className='typography-caption-2 h-6 text-neutral-6'>
                         {formatLoanValue(
                             LoanValue.fromPrice(
-                                Number(info.getValue().toString()),
+                                Number(info.getValue().toString() * 10000), //TODO: remove this hack
                                 Number(info.row.original.maturity)
                             ),
                             formatType
