@@ -6,13 +6,14 @@ import { RootState } from 'src/store/types';
 import { CurrencySymbol, getCurrencyMapAsList, toCurrency } from 'src/utils';
 import { isPastDate } from 'src/utils/date';
 
-type Market = {
+export type LendingMarket = {
     name: string;
     maturity: number;
     isActive: boolean;
     utcOpeningDate: number;
+    midUnitPrice: number;
 };
-export type ContractMap = Record<string, Market>;
+export type ContractMap = Record<string, LendingMarket>;
 
 export const useLendingMarkets = (
     securedFinance: SecuredFinanceClient | undefined
@@ -33,7 +34,15 @@ export const useLendingMarkets = (
                     dispatch(
                         updateLendingMarketContract(
                             lendingMarkets.reduce<ContractMap>(
-                                (acc, { name, maturity, utcOpeningDate }) => {
+                                (
+                                    acc,
+                                    {
+                                        name,
+                                        maturity,
+                                        utcOpeningDate,
+                                        midUnitPrice,
+                                    }
+                                ) => {
                                     return {
                                         ...acc,
                                         [name]: {
@@ -42,6 +51,8 @@ export const useLendingMarkets = (
                                             utcOpeningDate,
                                             isActive:
                                                 isPastDate(utcOpeningDate),
+                                            midUnitPrice:
+                                                midUnitPrice.toNumber(),
                                         },
                                     };
                                 },

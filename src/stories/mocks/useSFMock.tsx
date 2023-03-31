@@ -1,6 +1,7 @@
+import { Currency } from '@secured-finance/sf-core';
 import { BigNumber } from 'ethers';
 import * as jest from 'jest-mock';
-import { getCurrencyMapAsList } from 'src/utils';
+import { CurrencySymbol, getCurrencyMapAsList } from 'src/utils';
 import { collateralBook80 } from './fixtures';
 
 export const mockUseSF = () => {
@@ -30,18 +31,58 @@ export const mockUseSF = () => {
                 BigNumber.from(9615),
             ])
         ),
-        getMidUnitPrices: jest.fn(() =>
-            Promise.resolve([
-                BigNumber.from(9686),
-                BigNumber.from(9684),
-                BigNumber.from(9678),
-                BigNumber.from(9673),
-                BigNumber.from(9652),
-                BigNumber.from(9642),
-                BigNumber.from(9626),
-                BigNumber.from(9616),
-            ])
-        ),
+        getMidUnitPrices: jest
+            .fn<Promise<BigNumber[]>, Currency[]>()
+            .mockImplementation((ccy: Currency) => {
+                switch (ccy.symbol) {
+                    case CurrencySymbol.ETH:
+                        return Promise.resolve([
+                            BigNumber.from(9686),
+                            BigNumber.from(9684),
+                            BigNumber.from(9678),
+                            BigNumber.from(9673),
+                            BigNumber.from(9652),
+                            BigNumber.from(9642),
+                            BigNumber.from(9626),
+                            BigNumber.from(9616),
+                        ]);
+                    case CurrencySymbol.FIL:
+                        return Promise.resolve([
+                            BigNumber.from(9586),
+                            BigNumber.from(9584),
+                            BigNumber.from(9578),
+                            BigNumber.from(9573),
+                            BigNumber.from(9552),
+                            BigNumber.from(9542),
+                            BigNumber.from(9526),
+                            BigNumber.from(9516),
+                        ]);
+                    case CurrencySymbol.USDC:
+                        return Promise.resolve([
+                            BigNumber.from(9486),
+                            BigNumber.from(9484),
+                            BigNumber.from(9478),
+                            BigNumber.from(9473),
+                            BigNumber.from(9452),
+                            BigNumber.from(9442),
+                            BigNumber.from(9426),
+                            BigNumber.from(9416),
+                        ]);
+                    case CurrencySymbol.BTC:
+                        return Promise.resolve([
+                            BigNumber.from(9386),
+                            BigNumber.from(9384),
+                            BigNumber.from(9378),
+                            BigNumber.from(9373),
+                            BigNumber.from(9352),
+                            BigNumber.from(9342),
+                            BigNumber.from(9326),
+                            BigNumber.from(9316),
+                        ]);
+                    default:
+                        throw new Error('Not implemented');
+                }
+            }),
         getCollateralBook: jest.fn(() =>
             Promise.resolve({
                 collateral: {

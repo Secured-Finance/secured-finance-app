@@ -48,7 +48,7 @@ describe('AdvancedLendingOrderCard Component', () => {
         expect(screen.getByTestId('collateral-progress-bar-track')).toHaveStyle(
             'width: calc(100% * 0.37)'
         );
-        expect(screen.getByText('Available: $851.00')).toBeInTheDocument();
+        expect(screen.getByText('Available: $989.00')).toBeInTheDocument();
 
         expect(screen.getByText('Liquidation Risk')).toBeInTheDocument();
         expect(screen.getByText('Low')).toBeInTheDocument();
@@ -66,8 +66,8 @@ describe('AdvancedLendingOrderCard Component', () => {
         expect(screen.getByText('Bond Price')).toBeInTheDocument();
         expect(inputs[0].getAttribute('value')).toBe('95');
 
-        expect(screen.getByText('Fixed Rate (APY)')).toBeInTheDocument();
-        expect(screen.getByText('18.01%')).toBeInTheDocument();
+        expect(screen.getByText('Fixed Rate (APR)')).toBeInTheDocument();
+        expect(screen.getByText('17%')).toBeInTheDocument();
 
         expect(screen.getByText('Amount')).toBeInTheDocument();
         expect(inputs[1].getAttribute('value')).toBe('500');

@@ -7,7 +7,7 @@ const tableArray: PortfolioTabProps[] = [
         orientation: 'left',
     },
     {
-        name: 'Net APY',
+        name: 'Net APR',
         value: '--',
         orientation: 'center',
     },

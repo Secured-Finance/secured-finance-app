@@ -1,6 +1,7 @@
 import { OrderSide } from '@secured-finance/sf-client';
 import { composeStories } from '@storybook/testing-react';
 import { BigNumber } from 'ethers';
+import { OrderType } from 'src/hooks';
 import { preloadedAssetPrices } from 'src/stories/mocks/fixtures';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
@@ -10,7 +11,17 @@ import * as stories from './PlaceOrder.stories';
 
 const { Default, MarketOrder } = composeStories(stories);
 
-const preloadedState = { ...preloadedAssetPrices };
+const preloadedState = {
+    landingOrderForm: {
+        currency: CurrencySymbol.USDC,
+        maturity: 0,
+        side: OrderSide.BORROW,
+        amount: '500000000',
+        unitPrice: 0,
+        orderType: OrderType.LIMIT,
+    },
+    ...preloadedAssetPrices,
+};
 
 const mockSecuredFinance = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mockSecuredFinance);
@@ -86,21 +97,58 @@ describe('PlaceOrder component', () => {
         expect(screen.getByText('This is an error')).toBeInTheDocument();
     });
 
-    it('should call the onPlaceOrder function in a market order mode when no value is provided', async () => {
+    it('should call the onPlaceOrder function in a market order mode orderType in the store is Market Order', async () => {
         const tx = {
             wait: jest.fn(() => Promise.resolve({ blockNumber: 13115215 })),
         } as unknown;
         const onPlaceOrder = jest.fn().mockReturnValue(Promise.resolve(tx));
-        render(<MarketOrder onPlaceOrder={onPlaceOrder} />);
+        render(<MarketOrder onPlaceOrder={onPlaceOrder} />, {
+            preloadedState: {
+                ...preloadedState,
+                landingOrderForm: {
+                    ...preloadedState.landingOrderForm,
+                    orderType: OrderType.MARKET,
+                },
+            },
+        });
         fireEvent.click(screen.getByTestId('dialog-action-button'));
         await waitFor(() =>
             expect(onPlaceOrder).toHaveBeenCalledWith(
-                CurrencySymbol.FIL,
+                CurrencySymbol.USDC,
                 new Maturity(0),
                 OrderSide.BORROW,
-                BigNumber.from(0),
+                BigNumber.from(500000000),
                 undefined
             )
         );
+    });
+
+    it('should call the onPlaceOrder function in a limit order mode if the orderType in the store is Limit Order', async () => {
+        const tx = {
+            wait: jest.fn(() => Promise.resolve({ blockNumber: 13115215 })),
+        } as unknown;
+        const onPlaceOrder = jest.fn().mockReturnValue(Promise.resolve(tx));
+        render(<Default onPlaceOrder={onPlaceOrder} />, { preloadedState });
+        fireEvent.click(screen.getByTestId('dialog-action-button'));
+        await waitFor(() =>
+            expect(onPlaceOrder).toHaveBeenCalledWith(
+                CurrencySymbol.USDC,
+                new Maturity(0),
+                OrderSide.BORROW,
+                BigNumber.from(500000000),
+                9410
+            )
+        );
+    });
+
+    it('should raise an error if the order price is missing but we are in a limit order mode', async () => {
+        const onPlaceOrder = jest.fn();
+        const spy = jest.spyOn(console, 'error').mockImplementation();
+        render(<MarketOrder onPlaceOrder={onPlaceOrder} />, {
+            preloadedState,
+        });
+        fireEvent.click(screen.getByTestId('dialog-action-button'));
+        await waitFor(() => expect(spy).toHaveBeenCalled());
+        await waitFor(() => expect(onPlaceOrder).not.toHaveBeenCalled());
     });
 });

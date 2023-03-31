@@ -22,7 +22,7 @@ export default {
     chromatic: { pauseAnimationAtEnd: true },
     args: {
         collateralBook: collateralBook80,
-        loanValue: LoanValue.fromApy(new Rate(10000), dec22Fixture.toNumber()), // 1%
+        loanValue: LoanValue.fromApr(new Rate(10000), dec22Fixture.toNumber()), // 1%
         maturitiesOptionList: maturityOptions,
         rates: yieldCurveRates,
     },
