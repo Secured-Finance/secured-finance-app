@@ -130,8 +130,10 @@ const SecuredFinanceProvider: React.FC = ({ children }) => {
 
     useEffect(() => {
         if (account) {
+            associateWallet(account, false);
             return;
         }
+
         const cachedProvider = localStorage.getItem(CACHED_PROVIDER_KEY);
         if (cachedProvider !== null) {
             connect('injected');

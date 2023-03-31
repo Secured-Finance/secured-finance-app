@@ -67,13 +67,13 @@ export const OrderInputBox = ({
                 <div className='typography-caption text-planetaryPurple'>
                     {field}
                 </div>
-                {informationText && (
+                {informationText && !disabled && (
                     <InformationPopover>{informationText}</InformationPopover>
                 )}
             </div>
             <div className='flex flex-row gap-[10px]'>
                 {disabled ? (
-                    <span className='text-right text-[18px] font-semibold leading-6 text-neutral-8'>
+                    <span className='text-right text-[18px] font-semibold leading-6 text-neutral-8/30'>
                         {initialValue}
                     </span>
                 ) : (

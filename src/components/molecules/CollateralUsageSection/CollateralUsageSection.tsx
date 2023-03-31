@@ -4,7 +4,7 @@ import { CollateralBook } from 'src/hooks';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { RootState } from 'src/store/types';
 import { CurrencySymbol, formatWithCurrency, percentFormat } from 'src/utils';
-import { computeAvailableToBorrow } from 'src/utils/collateral';
+import { computeAvailableToBorrow, MAX_COVERAGE } from 'src/utils/collateral';
 
 export const CollateralUsageSection = ({
     usdCollateral,
@@ -27,7 +27,7 @@ export const CollateralUsageSection = ({
             result = computeAvailableToBorrow(
                 assetPriceMap[currency],
                 usdCollateral,
-                collateralCoverage
+                collateralCoverage / MAX_COVERAGE
             );
         }
         return formatWithCurrency(isNaN(result) ? 0 : result, currency);

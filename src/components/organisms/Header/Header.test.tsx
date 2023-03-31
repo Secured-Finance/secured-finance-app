@@ -46,9 +46,9 @@ describe('Header component', () => {
         );
     });
 
-    it('should highlight the exchange page when on exchange page', () => {
+    it('should highlight the dashboard page when on dashboard page', () => {
         (useRouter as jest.Mock).mockImplementation(() => ({
-            pathname: '/exchange',
+            pathname: '/dashboard',
             push: jest.fn(),
         }));
 
