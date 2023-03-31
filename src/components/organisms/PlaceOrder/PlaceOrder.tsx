@@ -1,7 +1,7 @@
 import { Disclosure } from '@headlessui/react';
 import { OrderSide } from '@secured-finance/sf-client';
 import { BigNumber } from 'ethers';
-import { useCallback, useReducer } from 'react';
+import { useCallback, useReducer, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Loader from 'src/assets/img/gradient-loader.png';
 import {
@@ -71,7 +71,7 @@ const stateRecord: Record<Step, State> = {
         currentStep: Step.error,
         nextStep: Step.orderConfirm,
         title: 'Failed!',
-        description: 'Your transaction request has failed.',
+        description: '',
         buttonText: 'OK',
     },
 };
@@ -117,6 +117,9 @@ export const PlaceOrder = ({
 
     const priceList = useSelector((state: RootState) => getPriceMap(state));
     const price = priceList[currency];
+    const [errorMessage, setErrorMessage] = useState(
+        'Your order could not be placed'
+    );
 
     const handleClose = useCallback(() => {
         dispatch({ type: 'default' });
@@ -141,7 +144,6 @@ export const PlaceOrder = ({
                 );
                 const transactionStatus = await handleContractTransaction(tx);
                 if (!transactionStatus) {
-                    console.error('Some error occurred');
                     dispatch({ type: 'error' });
                 } else {
                     dispatch({ type: 'next' });
@@ -149,6 +151,7 @@ export const PlaceOrder = ({
             } catch (e) {
                 dispatch({ type: 'error' });
                 if (e instanceof Error) {
+                    setErrorMessage(e.message);
                     globalDispatch(setLastMessage(e.message));
                 }
             }
@@ -295,20 +298,7 @@ export const PlaceOrder = ({
                             />
                         );
                     case Step.error:
-                        return (
-                            <FailurePanel
-                                itemList={[
-                                    ['Status', 'Failed'],
-                                    ['Deposit Address', 't1wtz1if6k24XE...'],
-                                    [
-                                        'Amount',
-                                        `${ordinaryFormat(
-                                            orderAmount.value
-                                        )} ${currency}`,
-                                    ],
-                                ]}
-                            />
-                        );
+                        return <FailurePanel errorMessage={errorMessage} />;
                     default:
                         return <p>Unknown</p>;
                 }

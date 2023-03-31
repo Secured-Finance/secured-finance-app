@@ -5,11 +5,7 @@ export default {
     title: 'Molecules/FailurePanel',
     component: FailurePanel,
     args: {
-        itemList: [
-            ['From', '0.000000000000000000'],
-            ['To', '0.000000000000000000'],
-            ['Price', '0.000000000000000000'],
-        ],
+        errorMessage: 'This is an error',
     },
 } as ComponentMeta<typeof FailurePanel>;
 

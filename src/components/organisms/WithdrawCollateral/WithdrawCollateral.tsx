@@ -60,7 +60,7 @@ const stateRecord: Record<Step, State> = {
         currentStep: Step.error,
         nextStep: Step.withdrawCollateral,
         title: 'Failed!',
-        description: 'Your transaction has failed.',
+        description: '',
         buttonText: 'OK',
     },
 };
@@ -98,6 +98,9 @@ export const WithdrawCollateral = ({
     const [asset, setAsset] = useState(CurrencySymbol.ETH);
     const [state, dispatch] = useReducer(reducer, stateRecord[1]);
     const [collateral, setCollateral] = useState(BigNumber.from(0));
+    const [errorMessage, setErrorMessage] = useState(
+        'Your withdrawal transaction has failed.'
+    );
 
     const priceList = useSelector((state: RootState) => getPriceMap(state));
     const { onWithdrawCollateral } = useWithdrawCollateral(asset, collateral);
@@ -112,13 +115,14 @@ export const WithdrawCollateral = ({
             const tx = await onWithdrawCollateral();
             const transactionStatus = await handleContractTransaction(tx);
             if (!transactionStatus) {
-                console.error('Some error occured');
                 dispatch({ type: 'error' });
             } else {
                 dispatch({ type: 'next' });
             }
         } catch (e) {
-            console.error(e);
+            if (e instanceof Error) {
+                setErrorMessage(e.message);
+            }
             dispatch({ type: 'error' });
         }
     }, [onWithdrawCollateral]);
@@ -216,23 +220,7 @@ export const WithdrawCollateral = ({
                             />
                         );
                     case Step.error:
-                        return (
-                            <FailurePanel
-                                itemList={[
-                                    ['Status', 'Failed'],
-                                    [
-                                        'Ethereum Address',
-                                        AddressUtils.format(account ?? '', 6),
-                                    ],
-                                    [
-                                        'Amount',
-                                        amountFormatterFromBase[asset](
-                                            collateral
-                                        ).toString(),
-                                    ],
-                                ]}
-                            />
-                        );
+                        return <FailurePanel errorMessage={errorMessage} />;
                     default:
                         return <p>Unknown</p>;
                 }

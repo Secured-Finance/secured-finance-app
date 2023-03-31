@@ -63,8 +63,8 @@ const stateRecord: Record<Step, State> = {
     [Step.error]: {
         currentStep: Step.error,
         nextStep: Step.selectWallet,
-        title: 'Success!',
-        description: 'Your wallet could not be connected.',
+        title: 'Failed!',
+        description: '',
         buttonText: 'OK',
     },
 };
@@ -93,6 +93,9 @@ const reducer = (
 
 export const WalletDialog = () => {
     const [wallet, setWallet] = useState<string>('');
+    const [errorMessage, setErrorMessage] = useState(
+        'Your wallet could not be connected.'
+    );
     const [state, dispatch] = useReducer(reducer, stateRecord[1]);
     const isOpen = useSelector(
         (state: RootState) => state.interactions.walletDialogOpen
@@ -111,11 +114,18 @@ export const WalletDialog = () => {
             provider: 'injected' | 'walletconnect',
             account: string | null
         ) => {
-            if (!account) {
-                await connect(provider);
-                localStorage.setItem(CACHED_PROVIDER_KEY, 'connected');
-            } else {
-                dispatch({ type: 'next' });
+            try {
+                if (!account) {
+                    await connect(provider);
+                    localStorage.setItem(CACHED_PROVIDER_KEY, 'connected');
+                } else {
+                    dispatch({ type: 'next' });
+                }
+            } catch (e) {
+                if (e instanceof Error) {
+                    setErrorMessage(e.message);
+                    dispatch({ type: 'error' });
+                }
             }
         },
         [connect, dispatch]
@@ -135,11 +145,14 @@ export const WalletDialog = () => {
                     });
                     associateWallet(account);
                 })
-                .catch(() => {
+                .catch(e => {
                     track(InterfaceEvents.CONNECT_WALLET_BUTTON_CLICKED, {
                         [InterfaceProperties.WALLET_CONNECTION_RESULT]:
                             WalletConnectionResult.FAILED,
                     });
+                    if (e instanceof Error) {
+                        setErrorMessage(e.message);
+                    }
                     dispatch({ type: 'error' });
                 });
         }
@@ -221,17 +234,7 @@ export const WalletDialog = () => {
                             />
                         );
                     case Step.error:
-                        return (
-                            <FailurePanel
-                                itemList={[
-                                    ['Status', 'Failed'],
-                                    [
-                                        'Ethereum Address',
-                                        AddressUtils.format(account ?? '', 16),
-                                    ],
-                                ]}
-                            />
-                        );
+                        return <FailurePanel errorMessage={errorMessage} />;
                     default:
                         return <p>Unknown</p>;
                 }
