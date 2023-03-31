@@ -3,7 +3,6 @@ import { useCallback, useEffect, useReducer, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Loader from 'src/assets/img/gradient-loader.png';
 import MetaMaskIcon from 'src/assets/img/metamask-fox.svg';
-import WalletConnectIcon from 'src/assets/img/wallet-connect.svg';
 import {
     Dialog,
     SuccessPanel,
