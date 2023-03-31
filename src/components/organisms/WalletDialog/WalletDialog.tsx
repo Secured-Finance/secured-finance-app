@@ -202,10 +202,6 @@ export const WalletDialog = () => {
                                         name: 'Metamask',
                                         Icon: MetaMaskIcon,
                                     },
-                                    {
-                                        name: 'WalletConnect',
-                                        Icon: WalletConnectIcon,
-                                    },
                                 ]}
                             />
                         );
