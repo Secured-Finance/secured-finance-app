@@ -2,11 +2,6 @@ import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
 
 import { composeStories } from '@storybook/testing-react';
 import * as stories from './WalletDialog.stories';
-// import { mockUSeWallet } from 'src/stories/mocks/mockUSeWallet';
-// import { useWallet } from 'use-wallet';
-
-// const useWalletMock = mockUSeWallet();
-// jest.mock('use-wallet', () => () => useWalletMock);
 
 const { Primary } = composeStories(stories);
 
@@ -58,14 +53,16 @@ describe('Wallet Dialog component', () => {
         });
     });
 
-    // it.only('should proceed to failure screen if something goes wrong', async () => {
-    //     useWalletMock.connect.mockRejectedValueOnce(new Error('error'));
-    //     render(<Primary />, { preloadedState });
-    //     selectMetamaskOption();
-    //     fireEvent.click(screen.getByTestId('dialog-action-button'));
-    //     await waitFor(() => {
-    //         expect(useWalletMock.connect).toBeCalled();
-    //         expect(screen.getByText('Failed!')).toBeInTheDocument();
-    //     });
-    // });
+    it.skip('should proceed to failure screen if something goes wrong', async () => {
+        const useWalletMock = {
+            connect: jest.fn().mockRejectedValueOnce(new Error('failed')),
+        };
+        render(<Primary />, { preloadedState });
+        selectMetamaskOption();
+        fireEvent.click(screen.getByTestId('dialog-action-button'));
+        await waitFor(() => {
+            expect(useWalletMock.connect).toBeCalled();
+            expect(screen.getByText('Failed!')).toBeInTheDocument();
+        });
+    });
 });
