@@ -15,6 +15,7 @@ import {
     DialogState,
     SuccessPanel,
 } from 'src/components/molecules';
+import { FailurePanel } from 'src/components/molecules/FailurePanel';
 import { useCollateralBook, useOrders } from 'src/hooks';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { setLastMessage } from 'src/store/lastError';
@@ -27,6 +28,7 @@ enum Step {
     confirm = 1,
     processing,
     placed,
+    error,
 }
 
 type State = {
@@ -59,6 +61,13 @@ const stateRecord: Record<Step, State> = {
         description: 'Your position was successfully unwound.',
         buttonText: 'OK',
     },
+    [Step.error]: {
+        currentStep: Step.error,
+        nextStep: Step.confirm,
+        title: 'Failed!',
+        description: '',
+        buttonText: 'OK',
+    },
 };
 
 const reducer = (
@@ -71,6 +80,10 @@ const reducer = (
         case 'next':
             return {
                 ...stateRecord[state.nextStep],
+            };
+        case 'error':
+            return {
+                ...stateRecord[Step.error],
             };
         default:
             return {
@@ -90,6 +103,9 @@ export const UnwindDialog = ({
     const { account } = useWallet();
     const [state, dispatch] = useReducer(reducer, stateRecord[1]);
     const [txHash, setTxHash] = useState<string | undefined>(undefined);
+    const [errorMessage, setErrorMessage] = useState(
+        'Your position could not be unwound.'
+    );
     const globalDispatch = useDispatch();
 
     const collateral = useCollateralBook(account);
@@ -109,19 +125,19 @@ export const UnwindDialog = ({
                 const tx = await unwindOrder(ccy, maturity);
                 const transactionStatus = await handleContractTransaction(tx);
                 if (!transactionStatus) {
-                    console.error('Some error occurred');
-                    handleClose();
+                    dispatch({ type: 'error' });
                 } else {
                     setTxHash(tx?.hash);
                     dispatch({ type: 'next' });
                 }
             } catch (e) {
                 if (e instanceof Error) {
+                    setErrorMessage(e.message);
                     globalDispatch(setLastMessage(e.message));
                 }
             }
         },
-        [unwindOrder, handleClose, globalDispatch]
+        [unwindOrder, globalDispatch]
     );
 
     const onClick = useCallback(
@@ -134,6 +150,9 @@ export const UnwindDialog = ({
                 case Step.processing:
                     break;
                 case Step.placed:
+                    handleClose();
+                    break;
+                case Step.error:
                     handleClose();
                     break;
             }
@@ -208,6 +227,8 @@ export const UnwindDialog = ({
                         ]}
                     />
                 );
+            case Step.error:
+                return <FailurePanel errorMessage={errorMessage} />;
         }
     };
 

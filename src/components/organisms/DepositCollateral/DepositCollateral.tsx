@@ -59,7 +59,7 @@ const stateRecord: Record<Step, State> = {
         currentStep: Step.error,
         nextStep: Step.depositCollateral,
         title: 'Failed!',
-        description: 'Your transaction has failed',
+        description: '',
         buttonText: 'OK',
     },
 };
@@ -97,6 +97,9 @@ export const DepositCollateral = ({
     const [collateral, setCollateral] = useState(BigNumber.from(0));
     const [depositAddress, setDepositAddress] = useState('');
     const [state, dispatch] = useReducer(reducer, stateRecord[1]);
+    const [errorMessage, setErrorMessage] = useState(
+        'Your deposit transaction has failed.'
+    );
 
     const priceList = useSelector((state: RootState) => getPriceMap(state));
     const { onDepositCollateral } = useDepositCollateral(asset, collateral);
@@ -111,14 +114,16 @@ export const DepositCollateral = ({
             const tx = await onDepositCollateral();
             const transactionStatus = await handleContractTransaction(tx);
             if (!transactionStatus) {
-                console.error('Some error occured');
                 dispatch({ type: 'error' });
             } else {
                 setDepositAddress(tx?.to ?? '');
                 dispatch({ type: 'next' });
             }
         } catch (e) {
-            console.error(e);
+            if (e instanceof Error) {
+                setErrorMessage(e.message);
+            }
+
             dispatch({ type: 'error' });
         }
     }, [onDepositCollateral]);
@@ -222,26 +227,7 @@ export const DepositCollateral = ({
                             />
                         );
                     case Step.error:
-                        return (
-                            <FailurePanel
-                                itemList={[
-                                    ['Status', 'Failed'],
-                                    [
-                                        'Deposit Address',
-                                        AddressUtils.format(
-                                            depositAddress ?? '',
-                                            6
-                                        ),
-                                    ],
-                                    [
-                                        'Amount',
-                                        amountFormatterFromBase[asset](
-                                            collateral
-                                        ).toString(),
-                                    ],
-                                ]}
-                            />
-                        );
+                        return <FailurePanel errorMessage={errorMessage} />;
 
                     default:
                         return <p>Unknown</p>;
