@@ -52,4 +52,17 @@ describe('Wallet Dialog component', () => {
             expect(screen.getByText('Connecting...')).toBeInTheDocument();
         });
     });
+
+    it.skip('should proceed to failure screen if something goes wrong', async () => {
+        const useWalletMock = {
+            connect: jest.fn().mockRejectedValueOnce(new Error('failed')),
+        };
+        render(<Primary />, { preloadedState });
+        selectMetamaskOption();
+        fireEvent.click(screen.getByTestId('dialog-action-button'));
+        await waitFor(() => {
+            expect(useWalletMock.connect).toBeCalled();
+            expect(screen.getByText('Failed!')).toBeInTheDocument();
+        });
+    });
 });
