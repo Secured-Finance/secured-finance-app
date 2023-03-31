@@ -30,7 +30,7 @@ const totalUser = [
             return {
                 data: {
                     protocol: {
-                        totalUsers: BigNumber.from(900000),
+                        totalUsers: BigNumber.from(12145),
                     },
                 },
             };

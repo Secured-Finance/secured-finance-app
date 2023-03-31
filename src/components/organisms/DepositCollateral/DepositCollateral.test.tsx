@@ -102,4 +102,27 @@ describe('DepositCollateral component', () => {
         expect(screen.queryByText('BTC')).not.toBeInTheDocument();
         expect(screen.queryByText('BTC Available')).not.toBeInTheDocument();
     });
+
+    it('should reach failure screen when transaction fails', async () => {
+        mockSecuredFinance.depositCollateral.mockRejectedValueOnce(
+            new Error('error')
+        );
+        const onClose = jest.fn();
+        render(<Default onClose={onClose} />, { preloadedState });
+        fireEvent.click(screen.getByTestId('collateral-selector-button'));
+        fireEvent.click(screen.getByTestId('option-0'));
+        expect(screen.getByText('USDC')).toBeInTheDocument();
+        expect(screen.getByText('50 USDC Available')).toBeInTheDocument();
+
+        const tab = screen.getByTestId(75);
+        fireEvent.click(tab);
+        expect(screen.getByText('$37.50')).toBeInTheDocument();
+
+        const button = screen.getByTestId('dialog-action-button');
+        fireEvent.click(button);
+        await waitFor(() => {
+            expect(screen.getByText('Failed!')).toBeInTheDocument();
+            expect(screen.getByText('error')).toBeInTheDocument();
+        });
+    });
 });

@@ -64,7 +64,7 @@ describe('PlaceOrder component', () => {
         await waitFor(() => expect(onClose).not.toHaveBeenCalled());
     });
 
-    it('should write an error in the store if onPlaceOrder throw an error', async () => {
+    it('should write an error in the store and proceed to failure screen if onPlaceOrder throw an error', async () => {
         const onPlaceOrder = jest.fn(() => {
             throw new Error('This is an error');
         });
@@ -75,6 +75,8 @@ describe('PlaceOrder component', () => {
                 'This is an error'
             )
         );
+        expect(screen.getByText('Failed!')).toBeInTheDocument();
+        expect(screen.getByText('This is an error')).toBeInTheDocument();
     });
 
     it('should call the onPlaceOrder function in a market order mode orderType in the store is Market Order', async () => {
