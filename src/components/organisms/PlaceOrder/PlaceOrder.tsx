@@ -1,7 +1,9 @@
+import { track } from '@amplitude/analytics-browser';
 import { Disclosure } from '@headlessui/react';
 import { OrderSide } from '@secured-finance/sf-client';
+import { getUTCMonthYear } from '@secured-finance/sf-core';
 import { BigNumber } from 'ethers';
-import { useCallback, useReducer } from 'react';
+import { useCallback, useReducer, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Loader from 'src/assets/img/gradient-loader.png';
 import {
@@ -16,7 +18,8 @@ import {
     DialogState,
     SuccessPanel,
 } from 'src/components/molecules';
-import { CollateralBook } from 'src/hooks';
+import { FailurePanel } from 'src/components/molecules/FailurePanel';
+import { CollateralBook, OrderType } from 'src/hooks';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { selectLandingOrderForm } from 'src/store/landingOrderForm';
 import { setLastMessage } from 'src/store/lastError';
@@ -25,6 +28,8 @@ import { PlaceOrderFunction } from 'src/types';
 import {
     CurrencySymbol,
     handleContractTransaction,
+    OrderEvents,
+    OrderProperties,
     ordinaryFormat,
 } from 'src/utils';
 import { Amount, LoanValue, Maturity } from 'src/utils/entities';
@@ -33,6 +38,7 @@ enum Step {
     orderConfirm = 1,
     orderProcessing,
     orderPlaced,
+    error,
 }
 
 type State = {
@@ -65,6 +71,13 @@ const stateRecord: Record<Step, State> = {
         description: 'Your transaction request was successful.',
         buttonText: 'OK',
     },
+    [Step.error]: {
+        currentStep: Step.error,
+        nextStep: Step.orderConfirm,
+        title: 'Failed!',
+        description: '',
+        buttonText: 'OK',
+    },
 };
 
 const reducer = (
@@ -78,6 +91,8 @@ const reducer = (
             return {
                 ...stateRecord[state.nextStep],
             };
+        case 'error':
+            return { ...stateRecord[Step.error] };
         default:
             return {
                 ...stateRecord[Step.orderConfirm],
@@ -98,7 +113,7 @@ export const PlaceOrder = ({
 } & DialogState) => {
     const [state, dispatch] = useReducer(reducer, stateRecord[1]);
     const globalDispatch = useDispatch();
-    const { currency, maturity, amount, side } = useSelector(
+    const { currency, maturity, amount, side, orderType } = useSelector(
         (state: RootState) => selectLandingOrderForm(state.landingOrderForm)
     );
 
@@ -106,6 +121,9 @@ export const PlaceOrder = ({
 
     const priceList = useSelector((state: RootState) => getPriceMap(state));
     const price = priceList[currency];
+    const [errorMessage, setErrorMessage] = useState(
+        'Your order could not be placed'
+    );
 
     const handleClose = useCallback(() => {
         dispatch({ type: 'default' });
@@ -130,18 +148,30 @@ export const PlaceOrder = ({
                 );
                 const transactionStatus = await handleContractTransaction(tx);
                 if (!transactionStatus) {
-                    console.error('Some error occurred');
-                    handleClose();
+                    dispatch({ type: 'error' });
                 } else {
+                    track(OrderEvents.ORDER_PLACED, {
+                        [OrderProperties.ORDER_SIDE]:
+                            side === OrderSide.BORROW ? 'Borrow' : 'Lend',
+                        [OrderProperties.ORDER_TYPE]: orderType,
+                        [OrderProperties.ASSET_TYPE]: ccy,
+                        [OrderProperties.ORDER_MATURITY]: getUTCMonthYear(
+                            maturity.toNumber()
+                        ),
+                        [OrderProperties.ORDER_AMOUNT]: orderAmount.value,
+                        [OrderProperties.ORDER_PRICE]: unitPrice ?? 0,
+                    });
                     dispatch({ type: 'next' });
                 }
             } catch (e) {
+                dispatch({ type: 'error' });
                 if (e instanceof Error) {
+                    setErrorMessage(e.message);
                     globalDispatch(setLastMessage(e.message));
                 }
             }
         },
-        [onPlaceOrder, dispatch, handleClose, globalDispatch]
+        [onPlaceOrder, orderType, orderAmount.value, globalDispatch]
     );
 
     const onClick = useCallback(
@@ -149,17 +179,27 @@ export const PlaceOrder = ({
             switch (currentStep) {
                 case Step.orderConfirm:
                     dispatch({ type: 'next' });
-                    handlePlaceOrder(
-                        currency,
-                        maturity,
-                        side,
-                        amount,
-                        loanValue?.price
-                    );
+                    if (orderType === OrderType.MARKET) {
+                        handlePlaceOrder(currency, maturity, side, amount);
+                    } else if (orderType === OrderType.LIMIT && loanValue) {
+                        handlePlaceOrder(
+                            currency,
+                            maturity,
+                            side,
+                            amount,
+                            loanValue.price
+                        );
+                    } else {
+                        console.error('Invalid order type');
+                    }
+
                     break;
                 case Step.orderProcessing:
                     break;
                 case Step.orderPlaced:
+                    handleClose();
+                    break;
+                case Step.error:
                     handleClose();
                     break;
             }
@@ -169,8 +209,9 @@ export const PlaceOrder = ({
             currency,
             handleClose,
             handlePlaceOrder,
-            loanValue?.price,
+            loanValue,
             maturity,
+            orderType,
             side,
         ]
     );
@@ -279,6 +320,8 @@ export const PlaceOrder = ({
                                 ]}
                             />
                         );
+                    case Step.error:
+                        return <FailurePanel errorMessage={errorMessage} />;
                     default:
                         return <p>Unknown</p>;
                 }

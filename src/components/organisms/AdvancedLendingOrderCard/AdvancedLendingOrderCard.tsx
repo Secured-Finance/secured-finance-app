@@ -1,16 +1,19 @@
 import { RadioGroup } from '@headlessui/react';
+import { OrderSide } from '@secured-finance/sf-client';
 import { BigNumber } from 'ethers';
 import Link from 'next/link';
 import { useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
+    BorrowLendSelector,
     CollateralManagementConciseTab,
     NavTab,
+    OrderDisplayBox,
     OrderInputBox,
     Separator,
     Slider,
 } from 'src/components/atoms';
-import { BorrowLendSelector } from 'src/components/atoms/BorrowLendSelector';
+import { OrderAction } from 'src/components/organisms';
 import { CollateralBook, OrderType } from 'src/hooks';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import {
@@ -21,9 +24,10 @@ import {
     setUnitPrice,
 } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
-import { amountFormatterFromBase, ordinaryFormat } from 'src/utils';
-import { LoanValue } from 'src/utils/entities';
-import { OrderAction } from '../OrderAction';
+import { selectAllBalances } from 'src/store/wallet';
+import { amountFormatterToBase, percentFormat, usdFormat } from 'src/utils';
+import { computeAvailableToBorrow } from 'src/utils/collateral';
+import { Amount, LoanValue } from 'src/utils/entities';
 
 export const AdvancedLendingOrderCard = ({
     collateralBook,
@@ -34,6 +38,10 @@ export const AdvancedLendingOrderCard = ({
         useSelector((state: RootState) =>
             selectLandingOrderForm(state.landingOrderForm)
         );
+
+    const balanceRecord = useSelector((state: RootState) =>
+        selectAllBalances(state)
+    );
 
     const loanValue = useMemo(() => {
         if (unitPrice && maturity) {
@@ -50,18 +58,34 @@ export const AdvancedLendingOrderCard = ({
     }, [collateralBook]);
 
     const priceList = useSelector((state: RootState) => getPriceMap(state));
+    const assetPriceMap = useSelector((state: RootState) => getPriceMap(state));
+
     const price = priceList[currency];
 
-    const getAmount = () => {
-        let format = (x: BigNumber) => x.toNumber();
-        if (
-            currency &&
-            amountFormatterFromBase &&
-            amountFormatterFromBase[currency]
-        ) {
-            format = amountFormatterFromBase[currency];
-        }
-        return format(amount);
+    const orderAmount = new Amount(amount, currency);
+
+    const availableToBorrow = useMemo(() => {
+        return currency && assetPriceMap
+            ? computeAvailableToBorrow(
+                  assetPriceMap[currency],
+                  collateralBook.usdCollateral,
+                  collateralBook.coverage.toNumber() / 100.0
+              )
+            : 0;
+    }, [assetPriceMap, collateralBook, currency]);
+
+    const handleAmountChange = (percentage: number) => {
+        const available =
+            side === OrderSide.BORROW
+                ? availableToBorrow
+                : balanceRecord[currency];
+        dispatch(
+            setAmount(
+                amountFormatterToBase[currency](
+                    Math.floor(percentage * available) / 100.0
+                )
+            )
+        );
     };
 
     return (
@@ -100,10 +124,9 @@ export const AdvancedLendingOrderCard = ({
                     side={side}
                     variant='advanced'
                 />
-                <div className='flex flex-col gap-4'>
+                <div className='flex flex-col gap-[10px]'>
                     <OrderInputBox
-                        field='Unit Price'
-                        unit=''
+                        field='Bond Price'
                         disabled={orderType === OrderType.MARKET}
                         initialValue={unitPrice / 100.0}
                         onValueChange={v =>
@@ -113,21 +136,37 @@ export const AdvancedLendingOrderCard = ({
                         decimalPlacesAllowed={2}
                         maxLimit={100}
                     />
-                    <OrderInputBox
-                        field='Amount'
-                        unit={currency}
-                        asset={currency}
-                        initialValue={getAmount()}
-                        onValueChange={v => dispatch(setAmount(v as BigNumber))}
+                    <div className='mx-10px'>
+                        <OrderDisplayBox
+                            field='Fixed Rate (APR)'
+                            value={percentFormat(
+                                LoanValue.fromPrice(
+                                    unitPrice,
+                                    maturity.toNumber()
+                                ).apr.toNormalizedNumber()
+                            )}
+                        />
+                    </div>
+                </div>
+                <Slider onChange={handleAmountChange} />
+                <OrderInputBox
+                    field='Amount'
+                    unit={currency}
+                    asset={currency}
+                    initialValue={orderAmount.value}
+                    onValueChange={v => dispatch(setAmount(v as BigNumber))}
+                />
+                <div className='mx-10px flex flex-col gap-6'>
+                    <OrderDisplayBox
+                        field='Est. Present Value'
+                        value={usdFormat(orderAmount.toUSD(price), 2)}
+                    />
+                    <OrderDisplayBox
+                        field='Future Value'
+                        value='--' // todo after apy -> apr
+                        informationText='Future Value is the expected return value of the contract at time of maturity.'
                     />
                 </div>
-                <Slider onChange={() => {}} />
-                <OrderInputBox
-                    field='Total'
-                    unit='USD'
-                    disabled={true}
-                    initialValue={ordinaryFormat(getAmount() * price, 4)}
-                />
 
                 <OrderAction
                     loanValue={loanValue}
@@ -138,7 +177,7 @@ export const AdvancedLendingOrderCard = ({
 
                 <div className='typography-nav-menu-default flex flex-row justify-between'>
                     <div className='text-neutral-8'>Collateral Management</div>
-                    <Link href='/history' passHref>
+                    <Link href='/portfolio' passHref>
                         <a
                             className='text-planetaryPurple'
                             href='_'

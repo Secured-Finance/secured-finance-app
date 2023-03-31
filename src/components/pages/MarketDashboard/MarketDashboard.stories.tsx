@@ -4,6 +4,7 @@ import { BigNumber } from 'ethers';
 import {
     withAppLayout,
     withAssetPrice,
+    withMaturities,
     withWalletBalances,
     withWalletProvider,
 } from 'src/../.storybook/decorators';
@@ -29,7 +30,7 @@ const totalUser = [
             return {
                 data: {
                     protocol: {
-                        totalUsers: BigNumber.from(900000),
+                        totalUsers: BigNumber.from(12145),
                     },
                 },
             };
@@ -51,6 +52,7 @@ export default {
         withAppLayout,
         withWalletProvider,
         withWalletBalances,
+        withMaturities,
         withAssetPrice,
     ],
 } as ComponentMeta<typeof MarketDashboard>;

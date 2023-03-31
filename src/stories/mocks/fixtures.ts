@@ -8,6 +8,7 @@ import UsdtIcon from 'src/assets/coins/usdt.svg';
 import { Option } from 'src/components/atoms';
 import { CollateralBook } from 'src/hooks';
 import { AssetPrices } from 'src/store/assetPrices';
+import { RootState } from 'src/store/types';
 import {
     DailyVolumes,
     MaturityOptionList,
@@ -58,7 +59,7 @@ export const preloadedBalances = {
     },
 };
 
-export const preloadedLendingMarkets = {
+export const preloadedLendingMarkets: Partial<RootState> = {
     availableContracts: {
         lendingMarkets: {
             [CurrencySymbol.FIL]: {
@@ -67,18 +68,90 @@ export const preloadedLendingMarkets = {
                     maturity: 1669852800,
                     isActive: true,
                     utcOpeningDate: 1677628800,
+                    midUnitPrice: 9801,
                 },
                 MAR23: {
                     name: 'MAR23',
                     maturity: 1677628800,
                     isActive: true,
                     utcOpeningDate: 1677628800,
+                    midUnitPrice: 9701,
                 },
                 JUN23: {
                     name: 'JUN23',
                     maturity: 1685577600,
                     isActive: false,
                     utcOpeningDate: 1677628800,
+                    midUnitPrice: 9601,
+                },
+            },
+            [CurrencySymbol.BTC]: {
+                DEC22: {
+                    name: 'DEC22',
+                    maturity: 1669852800,
+                    isActive: true,
+                    utcOpeningDate: 1677628800,
+                    midUnitPrice: 9801,
+                },
+                MAR23: {
+                    name: 'MAR23',
+                    maturity: 1677628800,
+                    isActive: true,
+                    utcOpeningDate: 1677628800,
+                    midUnitPrice: 9701,
+                },
+                JUN23: {
+                    name: 'JUN23',
+                    maturity: 1685577600,
+                    isActive: false,
+                    utcOpeningDate: 1677628800,
+                    midUnitPrice: 9601,
+                },
+            },
+            [CurrencySymbol.USDC]: {
+                DEC22: {
+                    name: 'DEC22',
+                    maturity: 1669852800,
+                    isActive: true,
+                    utcOpeningDate: 1677628800,
+                    midUnitPrice: 9801,
+                },
+                MAR23: {
+                    name: 'MAR23',
+                    maturity: 1677628800,
+                    isActive: true,
+                    utcOpeningDate: 1677628800,
+                    midUnitPrice: 9701,
+                },
+                JUN23: {
+                    name: 'JUN23',
+                    maturity: 1685577600,
+                    isActive: false,
+                    utcOpeningDate: 1677628800,
+                    midUnitPrice: 9601,
+                },
+            },
+            [CurrencySymbol.ETH]: {
+                DEC22: {
+                    name: 'DEC22',
+                    maturity: 1669852800,
+                    isActive: true,
+                    utcOpeningDate: 1677628800,
+                    midUnitPrice: 9801,
+                },
+                MAR23: {
+                    name: 'MAR23',
+                    maturity: 1677628800,
+                    isActive: true,
+                    utcOpeningDate: 1677628800,
+                    midUnitPrice: 9701,
+                },
+                JUN23: {
+                    name: 'JUN23',
+                    maturity: 1685577600,
+                    isActive: false,
+                    utcOpeningDate: 1677628800,
+                    midUnitPrice: 9601,
                 },
             },
         },
@@ -220,7 +293,7 @@ export const transactions: TradeHistory = [
     {
         id: '0x123',
         amount: '1000000000000000000000',
-        averagePrice: '8000',
+        averagePrice: '0.8000', // TODO: rework the unit in the graph. This is changed only for a dirty fix
         side: 0,
         orderPrice: '9800',
         createdAt: '1671859344',
@@ -231,7 +304,7 @@ export const transactions: TradeHistory = [
     {
         id: '0x124',
         amount: '500000000000000000000',
-        averagePrice: '8000',
+        averagePrice: '0.8000', // TODO: rework the unit in the graph. This is changed only for a dirty fix
         side: 1,
         orderPrice: '9543',
         createdAt: '1671080520',
@@ -242,7 +315,7 @@ export const transactions: TradeHistory = [
     {
         id: '0x124',
         amount: '500000000000000000000',
-        averagePrice: '8000',
+        averagePrice: '0.8000', // TODO: rework the unit in the graph. This is changed only for a dirty fix
         side: 1,
         orderPrice: '9543',
         createdAt: '1671080520',
@@ -253,7 +326,7 @@ export const transactions: TradeHistory = [
     {
         id: '0x123',
         amount: '1000000000',
-        averagePrice: '9000',
+        averagePrice: '0.9000', // TODO: rework the unit in the graph. This is changed only for a dirty fix
         side: 1,
         orderPrice: '9700',
         createdAt: '1671427140',
@@ -264,7 +337,7 @@ export const transactions: TradeHistory = [
     {
         id: '0x123',
         amount: '1000000000',
-        averagePrice: '9203',
+        averagePrice: '0.9203', // TODO: rework the unit in the graph. This is changed only for a dirty fix
         side: 1,
         orderPrice: '0',
         createdAt: '1671080556',

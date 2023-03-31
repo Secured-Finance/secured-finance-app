@@ -39,4 +39,5 @@ Total.args = {
 export const WithInformationText = Template.bind({});
 WithInformationText.args = {
     informationText: 'Input value from 0 to 100',
+    disabled: false,
 };

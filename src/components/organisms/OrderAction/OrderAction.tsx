@@ -7,14 +7,14 @@ import {
     generateCollateralList,
     PlaceOrder,
 } from 'src/components/organisms';
-import { CollateralBook, usePlaceOrder } from 'src/hooks';
+import { CollateralBook, useOrders } from 'src/hooks';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { setWalletDialogOpen } from 'src/store/interactions';
 import { selectLandingOrderForm } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
 import { selectCollateralCurrencyBalance } from 'src/store/wallet';
 import { amountFormatterFromBase } from 'src/utils';
-import { computeAvailableToBorrow } from 'src/utils/collateral';
+import { computeAvailableToBorrow, MAX_COVERAGE } from 'src/utils/collateral';
 import { LoanValue } from 'src/utils/entities';
 import { useWallet } from 'use-wallet';
 
@@ -31,7 +31,7 @@ export const OrderAction = ({
 }: OrderActionProps) => {
     const { account } = useWallet();
     const dispatch = useDispatch();
-    const { placeOrder } = usePlaceOrder();
+    const { placeOrder } = useOrders();
 
     const [openDepositCollateralDialog, setOpenDepositCollateralDialog] =
         useState(false);
@@ -57,7 +57,7 @@ export const OrderAction = ({
             ? computeAvailableToBorrow(
                   assetPriceMap[currency],
                   collateralBook.usdCollateral,
-                  collateralBook.coverage.toNumber()
+                  collateralBook.coverage.toNumber() / MAX_COVERAGE
               )
             : 0;
     }, [assetPriceMap, collateralBook, currency]);

@@ -74,16 +74,16 @@ export const LiquidationProgressBar = ({
                             <span
                                 className={`whitespace-pre font-semibold ${info.color}`}
                             >
-                                {`${
+                                {percentFormat(
                                     LIQUIDATION_THRESHOLD >
-                                    liquidationPercentage
+                                        liquidationPercentage
                                         ? LIQUIDATION_THRESHOLD -
-                                          liquidationPercentage
+                                              liquidationPercentage
                                         : 0
-                                }% `}
+                                )}
                             </span>
                             <span className='text-planetaryPurple'>
-                                threshold to liquidation
+                                {` threshold to liquidation`}
                             </span>
                         </div>
                         <InformationPopover>

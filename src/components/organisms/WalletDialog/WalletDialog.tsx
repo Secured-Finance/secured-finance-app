@@ -9,6 +9,7 @@ import {
     SuccessPanel,
     WalletRadioGroup,
 } from 'src/components/molecules';
+import { FailurePanel } from 'src/components/molecules/FailurePanel';
 import { CACHED_PROVIDER_KEY } from 'src/contexts/SecuredFinanceProvider/SecuredFinanceProvider';
 import { setWalletDialogOpen } from 'src/store/interactions';
 import { RootState } from 'src/store/types';
@@ -25,6 +26,7 @@ enum Step {
     selectWallet = 1,
     connecting,
     connected,
+    error,
 }
 
 type State = {
@@ -58,6 +60,13 @@ const stateRecord: Record<Step, State> = {
         description: 'Your wallet has been connected successfully.',
         buttonText: 'OK',
     },
+    [Step.error]: {
+        currentStep: Step.error,
+        nextStep: Step.selectWallet,
+        title: 'Failed!',
+        description: '',
+        buttonText: 'OK',
+    },
 };
 
 const reducer = (
@@ -71,6 +80,10 @@ const reducer = (
             return {
                 ...stateRecord[state.nextStep],
             };
+        case 'error':
+            return {
+                ...stateRecord[Step.error],
+            };
         default:
             return {
                 ...stateRecord[Step.selectWallet],
@@ -80,6 +93,9 @@ const reducer = (
 
 export const WalletDialog = () => {
     const [wallet, setWallet] = useState<string>('');
+    const [errorMessage, setErrorMessage] = useState(
+        'Your wallet could not be connected.'
+    );
     const [state, dispatch] = useReducer(reducer, stateRecord[1]);
     const isOpen = useSelector(
         (state: RootState) => state.interactions.walletDialogOpen
@@ -98,11 +114,18 @@ export const WalletDialog = () => {
             provider: 'injected' | 'walletconnect',
             account: string | null
         ) => {
-            if (!account) {
-                await connect(provider);
-                localStorage.setItem(CACHED_PROVIDER_KEY, 'connected');
-            } else {
-                dispatch({ type: 'next' });
+            try {
+                if (!account) {
+                    await connect(provider);
+                    localStorage.setItem(CACHED_PROVIDER_KEY, 'connected');
+                } else {
+                    dispatch({ type: 'next' });
+                }
+            } catch (e) {
+                if (e instanceof Error) {
+                    setErrorMessage(e.message);
+                    dispatch({ type: 'error' });
+                }
             }
         },
         [connect, dispatch]
@@ -122,11 +145,15 @@ export const WalletDialog = () => {
                     });
                     associateWallet(account);
                 })
-                .catch(() => {
+                .catch(e => {
                     track(InterfaceEvents.CONNECT_WALLET_BUTTON_CLICKED, {
                         [InterfaceProperties.WALLET_CONNECTION_RESULT]:
                             WalletConnectionResult.FAILED,
                     });
+                    if (e instanceof Error) {
+                        setErrorMessage(e.message);
+                    }
+                    dispatch({ type: 'error' });
                 });
         }
     }, [state, account, handleConnect, wallet]);
@@ -144,6 +171,9 @@ export const WalletDialog = () => {
                 case Step.connecting:
                     break;
                 case Step.connected:
+                    handleClose();
+                    break;
+                case Step.error:
                     handleClose();
                     break;
             }
@@ -203,6 +233,8 @@ export const WalletDialog = () => {
                                 ]}
                             />
                         );
+                    case Step.error:
+                        return <FailurePanel errorMessage={errorMessage} />;
                     default:
                         return <p>Unknown</p>;
                 }

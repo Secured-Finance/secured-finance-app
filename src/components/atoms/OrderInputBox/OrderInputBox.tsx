@@ -5,7 +5,7 @@ import { amountFormatterToBase, CurrencySymbol } from 'src/utils';
 
 interface OrderInputBoxProps {
     field: string;
-    unit: string;
+    unit?: string;
     initialValue?: number | string;
     asset?: CurrencySymbol;
     disabled?: boolean;
@@ -64,20 +64,22 @@ export const OrderInputBox = ({
     return (
         <div className='typography-caption flex h-10 w-full flex-row items-center justify-between rounded-lg bg-black-20 py-2 pl-2 pr-4 ring-starBlue focus-within:ring'>
             <div className='flex flex-row items-center gap-2'>
-                <div className='text-neutral-5'>{field}</div>
-                {informationText && (
+                <div className='typography-caption text-planetaryPurple'>
+                    {field}
+                </div>
+                {informationText && !disabled && (
                     <InformationPopover>{informationText}</InformationPopover>
                 )}
             </div>
             <div className='flex flex-row gap-[10px]'>
                 {disabled ? (
-                    <span className='text-right text-neutral-8'>
+                    <span className='text-right text-[18px] font-semibold leading-6 text-neutral-8/30'>
                         {initialValue}
                     </span>
                 ) : (
                     <InputBase
                         value={inputValue as number}
-                        className='text-right text-neutral-8'
+                        className='w-32 text-right text-[18px] font-semibold leading-6 text-neutral-8'
                         label={field}
                         onValueChange={(v: number | undefined) =>
                             handleAmountChange(v ?? 0)
@@ -86,7 +88,7 @@ export const OrderInputBox = ({
                         maxLimit={maxLimit}
                     />
                 )}
-                <div className='text-neutral-4'>{unit}</div>
+                {unit && <div className='text-neutral-4'>{unit}</div>}
             </div>
         </div>
     );

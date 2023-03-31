@@ -19,20 +19,20 @@ describe('CollateralSimulationSection Component', () => {
 
     it('should reduce the collateral usage when the tradePosition is BORROW', () => {
         render(<Trade />);
-        expect(screen.getByText('80% -> 78.5%')).toBeInTheDocument();
+        expect(screen.getByText('37% -> 36.36%')).toBeInTheDocument();
     });
 
-    it('should display the APY when the tradeValue is provided', () => {
+    it('should display the APR when the tradeValue is provided', () => {
         render(
             <Trade
                 tradeValue={LoanValue.fromPrice(9800, dec22Fixture.toNumber())}
             />
         );
-        expect(screen.getByText('APY')).toBeInTheDocument();
+        expect(screen.getByText('APR')).toBeInTheDocument();
     });
 
-    it('should not display the APY for an unwind', () => {
+    it('should not display the APR for an unwind', () => {
         render(<Unwind />);
-        expect(screen.queryByText('APY')).not.toBeInTheDocument();
+        expect(screen.queryByText('APR')).not.toBeInTheDocument();
     });
 });
