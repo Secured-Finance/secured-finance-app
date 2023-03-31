@@ -19,13 +19,17 @@ export const useOrders = () => {
             ccy: CurrencySymbol,
             maturity: Maturity
         ) => {
-            if (!securedFinance) return;
-            const tx = await securedFinance.cancelLendingOrder(
-                toCurrency(ccy),
-                maturity.toNumber(),
-                orderId
-            );
-            return tx;
+            try {
+                if (!securedFinance) return;
+                const tx = await securedFinance.cancelLendingOrder(
+                    toCurrency(ccy),
+                    maturity.toNumber(),
+                    orderId
+                );
+                return tx;
+            } catch (error) {
+                console.error(error);
+            }
         },
         [securedFinance]
     );
