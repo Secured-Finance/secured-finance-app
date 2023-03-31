@@ -50,6 +50,7 @@ export const Header = () => {
                     dataCy='history'
                     link='/portfolio'
                 />
+                <ItemLink text='Faucet' dataCy='faucet' link='/faucet' />
             </div>
             <div className='mr-5'>
                 {account ? (
