@@ -43,13 +43,14 @@ export const Header = () => {
                 <ItemLink
                     text='Market Dashboard'
                     dataCy='terminal'
-                    link='/exchange'
+                    link='/dashboard'
                 />
                 <ItemLink
                     text='Portfolio Management'
                     dataCy='history'
-                    link='/history'
+                    link='/portfolio'
                 />
+                <ItemLink text='Faucet' dataCy='faucet' link='/faucet' />
             </div>
             <div className='mr-5'>
                 {account ? (

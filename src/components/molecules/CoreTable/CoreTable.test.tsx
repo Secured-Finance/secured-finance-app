@@ -1,5 +1,5 @@
 import { composeStories } from '@storybook/testing-react';
-import { render, screen } from 'src/test-utils.js';
+import { fireEvent, render, screen } from 'src/test-utils.js';
 import * as stories from './CoreTable.stories';
 
 const { Default } = composeStories(stories);
@@ -16,15 +16,15 @@ describe('CoreTable Component', () => {
         expect(screen.getAllByTestId('core-table-header').length).toBe(1);
     });
 
-    it('should have the row clickable if onLineClick is provided', () => {
-        render(<Default onLineClick={() => {}} />);
+    it('should have the row clickable if hoverRow returns true', () => {
+        render(<Default hoverRow={() => true} />);
         screen.getAllByTestId('core-table-row').forEach(row => {
             expect(row).toHaveClass('cursor-pointer');
         });
     });
 
-    it('should have the row not clickable if onLineClick is not provided', () => {
-        render(<Default />);
+    it('should have the row not clickable if hoverRow returns false', () => {
+        render(<Default hoverRow={() => false} />);
         screen.getAllByTestId('core-table-row').forEach(row => {
             expect(row).not.toHaveClass('cursor-pointer');
         });
@@ -35,5 +35,21 @@ describe('CoreTable Component', () => {
         screen.getAllByTestId('core-table-row').forEach(row => {
             expect(row).toHaveClass('border-b border-white-10');
         });
+    });
+
+    it('should call onLineClick when a row is clicked and row is clickable', () => {
+        const onLineClick = jest.fn();
+        render(<Default onLineClick={onLineClick} hoverRow={() => true} />);
+        const row = screen.getAllByTestId('core-table-row')[0];
+        fireEvent.click(row);
+        expect(onLineClick).toBeCalledWith('0');
+    });
+
+    it('should not call onLineClick when an empty row is clicked', () => {
+        const onLineClick = jest.fn();
+        render(<Default onLineClick={onLineClick} hoverRow={() => false} />);
+        const row = screen.getAllByTestId('core-table-row')[0];
+        fireEvent.click(row);
+        expect(onLineClick).not.toBeCalled();
     });
 });

@@ -4,6 +4,7 @@ import { OrderType } from 'src/hooks';
 import { preloadedAssetPrices } from 'src/stories/mocks/fixtures';
 import { render, screen, waitFor } from 'src/test-utils.js';
 import { CurrencySymbol } from 'src/utils';
+import timemachine from 'timemachine';
 import * as stories from './AdvancedLendingOrderCard.stories';
 
 const { Default } = composeStories(stories);
@@ -11,14 +12,21 @@ const { Default } = composeStories(stories);
 const preloadedState = {
     landingOrderForm: {
         currency: CurrencySymbol.USDC,
-        maturity: 0,
+        maturity: 1679665616,
         side: OrderSide.BORROW,
         amount: '500000000',
-        unitPrice: 0,
+        unitPrice: 9500,
         orderType: OrderType.LIMIT,
     },
     ...preloadedAssetPrices,
 };
+
+beforeEach(() => {
+    timemachine.reset();
+    timemachine.config({
+        dateString: '2022-12-01T00:00:00.00Z',
+    });
+});
 
 describe('AdvancedLendingOrderCard Component', () => {
     it('should render an AdvancedLendingOrderCard', async () => {
@@ -40,7 +48,7 @@ describe('AdvancedLendingOrderCard Component', () => {
         expect(screen.getByTestId('collateral-progress-bar-track')).toHaveStyle(
             'width: calc(100% * 0.37)'
         );
-        expect(screen.getByText('Available: $851.00')).toBeInTheDocument();
+        expect(screen.getByText('Available: $989.00')).toBeInTheDocument();
 
         expect(screen.getByText('Liquidation Risk')).toBeInTheDocument();
         expect(screen.getByText('Low')).toBeInTheDocument();
@@ -55,16 +63,19 @@ describe('AdvancedLendingOrderCard Component', () => {
         await waitFor(() => render(<Default />, { preloadedState }));
 
         const inputs = screen.getAllByRole('textbox');
-        expect(screen.getByText('Unit Price')).toBeInTheDocument();
-        expect(inputs[0].getAttribute('value')).toBe('0');
+        expect(screen.getByText('Bond Price')).toBeInTheDocument();
+        expect(inputs[0].getAttribute('value')).toBe('95');
+
+        expect(screen.getByText('Fixed Rate (APR)')).toBeInTheDocument();
+        expect(screen.getByText('17%')).toBeInTheDocument();
 
         expect(screen.getByText('Amount')).toBeInTheDocument();
         expect(inputs[1].getAttribute('value')).toBe('500');
         expect(screen.getByText('USDC')).toBeInTheDocument();
 
-        expect(screen.getByText('Total')).toBeInTheDocument();
-        expect(screen.getByText('500')).toBeInTheDocument();
-        expect(screen.getByText('USD')).toBeInTheDocument();
+        expect(screen.getByText('Est. Present Value')).toBeInTheDocument();
+        expect(screen.getByText('$500.00')).toBeInTheDocument();
+        expect(screen.getByText('Future Value')).toBeInTheDocument();
     });
 
     it('should display the PlaceOrder Dialog when clicking on the Place Order button', async () => {

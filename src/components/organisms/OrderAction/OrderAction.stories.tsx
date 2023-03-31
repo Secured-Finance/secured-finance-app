@@ -20,7 +20,6 @@ export default {
     title: 'Organism/OrderAction',
     component: OrderAction,
     args: {
-        availableToBorrow: 0,
         collateralBook: emptyCollateralBook,
     },
     decorators: [withAssetPrice, withWalletProvider],

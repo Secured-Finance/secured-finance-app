@@ -1,5 +1,5 @@
 import queries from '@secured-finance/sf-graph-client/dist/graphclients';
-import { BigNumber } from 'ethers';
+import { BigNumber, utils } from 'ethers';
 import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import {
@@ -7,23 +7,53 @@ import {
     GradientBox,
 } from 'src/components/atoms';
 import { MarketDashboardTable } from 'src/components/molecules';
-import { ConnectWalletCard, MyWalletCard } from 'src/components/organisms';
+import {
+    ConnectWalletCard,
+    Loan,
+    MarketLoanWidget,
+    MultiCurveChart,
+    MyWalletCard,
+} from 'src/components/organisms';
 import { Page, TwoColumns } from 'src/components/templates';
-import { useGraphClientHook, useProtocolInformation } from 'src/hooks';
+import {
+    RateType,
+    useGraphClientHook,
+    useLoanValues,
+    useProtocolInformation,
+} from 'src/hooks';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { RootState } from 'src/store/types';
 import {
     computeTotalDailyVolumeInUSD,
     currencyMap,
     CurrencySymbol,
+    getCurrencyMapAsList,
     ordinaryFormat,
+    Rate,
     usdFormat,
     WalletSource,
 } from 'src/utils';
+import { Maturity } from 'src/utils/entities';
 import { useWallet } from 'use-wallet';
 
 export const MarketDashboard = () => {
     const { account } = useWallet();
+
+    const curves: Record<string, Rate[]> = {};
+    const lendingContracts = useSelector(
+        (state: RootState) => state.availableContracts.lendingMarkets
+    );
+
+    getCurrencyMapAsList().forEach(ccy => {
+        // eslint-disable-next-line react-hooks/rules-of-hooks
+        curves[ccy.symbol] = useLoanValues(
+            ccy.symbol,
+            RateType.MidRate,
+            Object.values(lendingContracts[ccy.symbol])
+                .filter(o => o.isActive)
+                .map(o => new Maturity(o.maturity))
+        ).map(r => r.apr);
+    });
 
     const protocolInformation = useProtocolInformation();
     const totalUser = useGraphClientHook(
@@ -44,7 +74,7 @@ export const MarketDashboard = () => {
     const totalVolume = useMemo(() => {
         return ordinaryFormat(
             computeTotalDailyVolumeInUSD(dailyVolumes.data ?? [], priceList),
-            0,
+            2,
             'compact'
         );
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -71,40 +101,77 @@ export const MarketDashboard = () => {
     }, [JSON.stringify(priceList), protocolInformation.valueLockedByCurrency]);
 
     return (
-        <Page title='Market Dashboard' name='exchange-page'>
+        <Page title='Market Dashboard' name='dashboard-page'>
             <TwoColumns>
-                <MarketDashboardTable
-                    values={[
-                        {
-                            name: 'Digital Assets',
-                            value: protocolInformation.totalNumberOfAsset.toString(),
-                            orientation: 'center',
-                        },
-                        {
-                            name: 'Total Value Locked',
-                            value: usdFormat(
-                                totalValueLockedInUSD,
-                                0,
-                                'compact'
-                            ),
-                            orientation: 'center',
-                        },
-                        {
-                            name: 'Total Volume',
-                            value: totalVolume,
-                            orientation: 'center',
-                        },
-                        {
-                            name: 'Total Users',
-                            value: ordinaryFormat(
-                                totalUser.data?.totalUsers ?? 0,
-                                0,
-                                'compact'
-                            ),
-                            orientation: 'center',
-                        },
-                    ]}
-                />
+                <div className='grid grid-cols-1 gap-y-7'>
+                    <MarketDashboardTable
+                        values={[
+                            {
+                                name: 'Digital Assets',
+                                value: protocolInformation.totalNumberOfAsset.toString(),
+                                orientation: 'center',
+                            },
+                            {
+                                name: 'Total Value Locked',
+                                value: usdFormat(
+                                    totalValueLockedInUSD,
+                                    2,
+                                    'compact'
+                                ),
+                                orientation: 'center',
+                            },
+                            {
+                                name: 'Total Volume',
+                                value: totalVolume,
+                                orientation: 'center',
+                            },
+                            {
+                                name: 'Total Users',
+                                value: ordinaryFormat(
+                                    totalUser.data?.totalUsers ?? 0,
+                                    2,
+                                    'compact'
+                                ),
+                                orientation: 'center',
+                            },
+                        ]}
+                    />
+                    <div className='w-full'>
+                        <MultiCurveChart
+                            title='Yield Curve'
+                            curves={curves}
+                            labels={Object.values(
+                                lendingContracts[CurrencySymbol.FIL]
+                            )
+                                .filter(o => o.isActive)
+                                .map(o => o.name)}
+                        />
+                    </div>
+
+                    <MarketLoanWidget
+                        loans={(
+                            Object.keys(lendingContracts) as CurrencySymbol[]
+                        ).reduce((acc, ccy) => {
+                            const toto = ccy as CurrencySymbol;
+                            const currencyContracts = Object.keys(
+                                lendingContracts[toto]
+                            ).map(contractName => {
+                                const contract =
+                                    lendingContracts[toto][contractName];
+                                return {
+                                    name: contract.name,
+                                    maturity: contract.maturity,
+                                    isActive: contract.isActive,
+                                    utcOpeningDate: contract.utcOpeningDate,
+                                    midUnitPrice: contract.midUnitPrice,
+                                    currency: utils.formatBytes32String(ccy),
+                                    ccy: ccy,
+                                };
+                            });
+                            return [...acc, ...currencyContracts];
+                        }, [] as Loan[])}
+                    />
+                </div>
                 <section className='flex flex-col gap-5'>
                     <div>
                         {account ? (

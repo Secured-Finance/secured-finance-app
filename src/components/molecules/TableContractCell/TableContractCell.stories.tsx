@@ -20,3 +20,8 @@ export const Compact = Template.bind({});
 Compact.args = {
     variant: 'compact',
 };
+
+export const CurrencyOnly = Template.bind({});
+CurrencyOnly.args = {
+    variant: 'currencyOnly',
+};

@@ -12,7 +12,7 @@ describe('CollateralManagementConciseTab component', () => {
         expect(screen.getByTestId('collateral-progress-bar-track')).toHaveStyle(
             'width: calc(100% * 0.37)'
         );
-        expect(screen.getByText('Available: $37.00')).toBeInTheDocument();
+        expect(screen.getByText('Available: $43.00')).toBeInTheDocument();
 
         expect(screen.getByText('Liquidation Risk')).toBeInTheDocument();
         expect(screen.getByText('Low')).toBeInTheDocument();

@@ -55,6 +55,13 @@ describe('OrderInputBox component', () => {
         );
     });
 
+    it('should not display hint when the input is disabled', () => {
+        render(<WithInformationText disabled={true} />);
+        expect(
+            screen.queryByTestId('information-circle')
+        ).not.toBeInTheDocument();
+    });
+
     it('should restrict decimal places', () => {
         render(<Amount decimalPlacesAllowed={2} />);
         expect(screen.getByText('Amount')).toBeInTheDocument();

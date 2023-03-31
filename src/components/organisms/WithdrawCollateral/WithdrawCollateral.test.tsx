@@ -1,6 +1,5 @@
 import { composeStories } from '@storybook/testing-react';
 import { preloadedAssetPrices } from 'src/stories/mocks/fixtures';
-import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
 import * as stories from './WithdrawCollateral.stories';
 
@@ -9,9 +8,6 @@ const { Default } = composeStories(stories);
 const preloadedState = {
     ...preloadedAssetPrices,
 };
-
-const mockSecuredFinance = mockUseSF();
-jest.mock('src/hooks/useSecuredFinance', () => () => mockSecuredFinance);
 
 describe('WithdrawCollateral component', () => {
     it('should display the WithdrawCollateral Modal when open', () => {
@@ -57,9 +53,8 @@ describe('WithdrawCollateral component', () => {
         expect(screen.getByText('$50.00')).toBeInTheDocument();
     });
 
-    it('should call onclose when block number is undefined', async () => {
+    it('should proceed to failure screen and call onclose when block number is undefined', async () => {
         const onClose = jest.fn();
-        const spy = jest.spyOn(console, 'error').mockImplementation();
         render(<Default onClose={onClose} />, { preloadedState });
         fireEvent.click(screen.getByTestId('collateral-selector-button'));
         fireEvent.click(screen.getByTestId('option-1'));
@@ -76,7 +71,12 @@ describe('WithdrawCollateral component', () => {
         await waitFor(() =>
             expect(screen.queryByText('Success!')).not.toBeInTheDocument()
         );
-        await waitFor(() => expect(spy).toHaveBeenCalled());
-        await waitFor(() => expect(onClose).toHaveBeenCalled());
+        await waitFor(() =>
+            expect(screen.queryByText('Failed!')).toBeInTheDocument()
+        );
+        const onCloseButton = screen.getByTestId('dialog-action-button');
+        fireEvent.click(onCloseButton);
+
+        await waitFor(() => expect(onClose).toBeCalled());
     });
 });

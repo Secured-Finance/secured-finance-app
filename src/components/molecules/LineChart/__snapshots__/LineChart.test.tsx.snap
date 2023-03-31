@@ -273,34 +273,6 @@ exports[`LineChart Component should render a LineChart 1`] = `
   },
   {
     "props": {
-      "text": "SEP22",
-    },
-    "transform": [
-      1,
-      0,
-      0,
-      1,
-      0,
-      0,
-    ],
-    "type": "measureText",
-  },
-  {
-    "props": {
-      "value": "12px "Helvetica Neue", 'Helvetica', 'Arial', sans-serif",
-    },
-    "transform": [
-      1,
-      0,
-      0,
-      1,
-      0,
-      0,
-    ],
-    "type": "font",
-  },
-  {
-    "props": {
       "text": "DEC22",
     },
     "transform": [
@@ -497,6 +469,34 @@ exports[`LineChart Component should render a LineChart 1`] = `
   },
   {
     "props": {
+      "text": "SEP24",
+    },
+    "transform": [
+      1,
+      0,
+      0,
+      1,
+      0,
+      0,
+    ],
+    "type": "measureText",
+  },
+  {
+    "props": {
+      "value": "12px "Helvetica Neue", 'Helvetica', 'Arial', sans-serif",
+    },
+    "transform": [
+      1,
+      0,
+      0,
+      1,
+      0,
+      0,
+    ],
+    "type": "font",
+  },
+  {
+    "props": {
       "x0": 0,
       "x1": 0,
       "y0": 0,
@@ -1117,34 +1117,6 @@ exports[`LineChart Component should render a LineChart 1`] = `
   {
     "props": {
       "text": "Borrow",
-    },
-    "transform": [
-      1,
-      0,
-      0,
-      1,
-      0,
-      0,
-    ],
-    "type": "measureText",
-  },
-  {
-    "props": {
-      "value": "12px "Helvetica Neue", 'Helvetica', 'Arial', sans-serif",
-    },
-    "transform": [
-      1,
-      0,
-      0,
-      1,
-      0,
-      0,
-    ],
-    "type": "font",
-  },
-  {
-    "props": {
-      "text": "SEP22",
     },
     "transform": [
       1,
@@ -1229,6 +1201,34 @@ exports[`LineChart Component should render a LineChart 1`] = `
   {
     "props": {
       "text": "JUN23",
+    },
+    "transform": [
+      1,
+      0,
+      0,
+      1,
+      0,
+      0,
+    ],
+    "type": "measureText",
+  },
+  {
+    "props": {
+      "value": "12px "Helvetica Neue", 'Helvetica', 'Arial', sans-serif",
+    },
+    "transform": [
+      1,
+      0,
+      0,
+      1,
+      0,
+      0,
+    ],
+    "type": "font",
+  },
+  {
+    "props": {
+      "text": "SEP23",
     },
     "transform": [
       1,
@@ -1908,34 +1908,6 @@ exports[`LineChart Component should render a LineChart 1`] = `
   },
   {
     "props": {
-      "text": "SEP23",
-    },
-    "transform": [
-      1,
-      0,
-      0,
-      1,
-      0,
-      0,
-    ],
-    "type": "measureText",
-  },
-  {
-    "props": {
-      "value": "12px "Helvetica Neue", 'Helvetica', 'Arial', sans-serif",
-    },
-    "transform": [
-      1,
-      0,
-      0,
-      1,
-      0,
-      0,
-    ],
-    "type": "font",
-  },
-  {
-    "props": {
       "text": "DEC23",
     },
     "transform": [
@@ -1993,6 +1965,34 @@ exports[`LineChart Component should render a LineChart 1`] = `
   {
     "props": {
       "text": "JUN24",
+    },
+    "transform": [
+      1,
+      0,
+      0,
+      1,
+      0,
+      0,
+    ],
+    "type": "measureText",
+  },
+  {
+    "props": {
+      "value": "12px "Helvetica Neue", 'Helvetica', 'Arial', sans-serif",
+    },
+    "transform": [
+      1,
+      0,
+      0,
+      1,
+      0,
+      0,
+    ],
+    "type": "font",
+  },
+  {
+    "props": {
+      "text": "SEP24",
     },
     "transform": [
       1,

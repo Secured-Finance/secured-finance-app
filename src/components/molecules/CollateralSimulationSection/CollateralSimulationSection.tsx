@@ -49,8 +49,8 @@ export const CollateralSimulationSection = ({
             )} / ${ordinaryFormat(
                 computeAvailableToBorrow(
                     1,
-                    collateral.coverage.toNumber(),
-                    collateral.usdCollateral
+                    collateral.usdCollateral,
+                    collateral.coverage.toNumber() / MAX_COVERAGE
                 )
             )}`,
         [collateral.coverage, collateral.usdCollateral]
@@ -63,7 +63,7 @@ export const CollateralSimulationSection = ({
 
     if (type === 'trade') {
         items.push([
-            'APY',
+            'APR',
             tradeValue ? formatLoanValue(tradeValue, 'rate') : 'Market Order',
         ]);
     }
