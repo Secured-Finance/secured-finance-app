@@ -142,18 +142,20 @@ const SecuredFinanceProvider: React.FC = ({ children }) => {
 
     // Update the latest block every 2 seconds with the latest block number.
     // If we are working with a fork, we just update it once with a hardcoded block number.
+    // If the user is not connected, we update the latest block every 10 seconds.
     useEffect(() => {
         if (!web3Provider) return;
+        const updateIntervalTime = account ? 2000 : 10000;
 
         const interval = setInterval(async () => {
             const block = window.localStorage.getItem('FORK')
                 ? 0
                 : await web3Provider.getBlockNumber();
             dispatch(updateLatestBlock(block));
-        }, 2000);
+        }, updateIntervalTime);
 
         return () => clearInterval(interval);
-    }, [dispatch, web3Provider]);
+    }, [account, dispatch, web3Provider]);
 
     return (
         <Context.Provider value={{ securedFinance }}>
