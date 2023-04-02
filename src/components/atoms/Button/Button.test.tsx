@@ -1,5 +1,5 @@
 import { composeStories } from '@storybook/react';
-import Filecoin from 'src/assets/coins/efil.svg';
+import EFIL from 'src/assets/coins/efil.svg';
 import { render, screen } from 'src/test-utils.js';
 import * as stories from './Button.stories';
 
@@ -48,12 +48,12 @@ describe('test Button component', () => {
     });
 
     it('should render an icon when startIcon is set', () => {
-        render(<Default StartIcon={Filecoin} />);
+        render(<Default StartIcon={EFIL} />);
         expect(screen.getByRole('img')).toBeInTheDocument();
     });
 
     it('should render an icon when endIcon is set', () => {
-        render(<Default EndIcon={Filecoin} />);
+        render(<Default EndIcon={EFIL} />);
         expect(screen.getByRole('img')).toBeInTheDocument();
     });
 });

@@ -1,6 +1,6 @@
 import { fromBytes32 } from '@secured-finance/sf-graph-client';
 import { BigNumber, utils } from 'ethers';
-import FilecoinIcon from 'src/assets/coins/efil.svg';
+import Efilcon from 'src/assets/coins/efil.svg';
 import EthIcon from 'src/assets/coins/eth2.svg';
 import UsdcIcon from 'src/assets/coins/usdc.svg';
 import UsdtIcon from 'src/assets/coins/usdt.svg';
@@ -190,7 +190,7 @@ export const assetList = [
     },
     {
         label: 'EFIL',
-        iconSVG: FilecoinIcon,
+        iconSVG: Efilcon,
         value: 'EFIL',
     },
     {
@@ -218,7 +218,7 @@ export const currencyList = [
     },
     {
         label: 'EFIL',
-        iconSVG: FilecoinIcon,
+        iconSVG: Efilcon,
         value: CurrencySymbol.EFIL,
     },
     {

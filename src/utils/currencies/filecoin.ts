@@ -1,7 +1,7 @@
 import { Token } from '@secured-finance/sf-core';
 import assert from 'assert';
 
-export class Filecoin extends Token {
+export class EFIL extends Token {
     private constructor() {
         assert(
             process.env.NEXT_PUBLIC_EFIL_CONTRACT_ADDRESS,
@@ -16,10 +16,10 @@ export class Filecoin extends Token {
         );
     }
 
-    private static instance: Filecoin;
+    private static instance: EFIL;
 
-    public static onChain(): Filecoin {
-        this.instance = this.instance || new Filecoin();
+    public static onChain(): EFIL {
+        this.instance = this.instance || new EFIL();
         return this.instance;
     }
 }
