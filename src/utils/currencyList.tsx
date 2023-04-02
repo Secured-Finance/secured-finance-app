@@ -7,13 +7,13 @@ import {
 import { BigNumber as BigNumberJS } from 'bignumber.js';
 import { BigNumber } from 'ethers';
 import tailwindConfig from 'src/../tailwind.config';
-import WBTCIcon from 'src/assets/coins/wbtc.svg';
+import EfilIcon from 'src/assets/coins/efil.svg';
 import EthIcon from 'src/assets/coins/eth2.svg';
-import FilecoinIcon from 'src/assets/coins/efil.svg';
 import UsdcIcon from 'src/assets/coins/usdc.svg';
+import WBTCIcon from 'src/assets/coins/wbtc.svg';
 import { Option } from 'src/components/atoms';
 import { hexToString } from 'web3-utils';
-import { Filecoin } from './currencies/filecoin';
+import { EFIL } from './currencies/filecoin';
 import { USDC } from './currencies/usdc';
 import { WBTC } from './currencies/wbtc';
 
@@ -33,9 +33,9 @@ export const currencyMap: Readonly<
 > = {
     [CurrencySymbol.EFIL]: {
         index: 0,
-        icon: FilecoinIcon,
+        icon: EfilIcon,
         symbol: CurrencySymbol.EFIL,
-        name: Filecoin.onChain().name,
+        name: EFIL.onChain().name,
         coinGeckoId: 'filecoin',
         isCollateral: false,
         toBaseUnit: (amount: number) => {
@@ -43,8 +43,8 @@ export const currencyMap: Readonly<
             return BigNumber.from(filAmount.toAttoFil());
         },
         fromBaseUnit: (amount: BigNumber) =>
-            convertFromBlockchainUnit(amount, Filecoin.onChain()),
-        toCurrency: () => Filecoin.onChain(),
+            convertFromBlockchainUnit(amount, EFIL.onChain()),
+        toCurrency: () => EFIL.onChain(),
         chartColor: tailwindConfig.theme.colors.chart.fil,
     },
     [CurrencySymbol.ETH]: {
