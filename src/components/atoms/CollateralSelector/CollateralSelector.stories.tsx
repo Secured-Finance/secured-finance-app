@@ -4,13 +4,11 @@ import { CollateralSelector } from './CollateralSelector';
 
 const assetList = [
     {
-        indexCcy: 0,
         symbol: CurrencySymbol.USDC,
         available: 1000,
         name: 'USDC',
     },
     {
-        indexCcy: 2,
         symbol: CurrencySymbol.ETH,
         available: 120,
         name: 'Ethereum',

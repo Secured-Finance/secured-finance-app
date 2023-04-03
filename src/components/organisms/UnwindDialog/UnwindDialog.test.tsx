@@ -20,4 +20,22 @@ describe('UnwindDialog Component', () => {
             expect(mockSecuredFinance.unwindOrder).toHaveBeenCalled()
         );
     });
+
+    it('should proceed to failure screen if unwindOrder throws an error', async () => {
+        mockSecuredFinance.unwindOrder.mockRejectedValueOnce(
+            new Error('error')
+        );
+        const spy = jest.spyOn(console, 'error').mockImplementation();
+        render(<Default />);
+
+        screen.getByText('Confirm').click();
+        await waitFor(() =>
+            expect(mockSecuredFinance.unwindOrder).toHaveBeenCalled()
+        );
+        await waitFor(() => expect(spy).toHaveBeenCalled());
+        await waitFor(() => {
+            expect(mockSecuredFinance.unwindOrder).toHaveBeenCalled();
+            expect(screen.getByText('Failed!')).toBeInTheDocument();
+        });
+    });
 });
