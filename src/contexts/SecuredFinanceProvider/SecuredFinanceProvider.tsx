@@ -1,13 +1,18 @@
 import { reset, track } from '@amplitude/analytics-browser';
 import { SecuredFinanceClient } from '@secured-finance/sf-client';
-import { getDefaultProvider, providers, Signer } from 'ethers';
+import { Signer, getDefaultProvider, providers } from 'ethers';
 import React, { createContext, useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useLendingMarkets } from 'src/hooks';
 import { useEthereumWalletStore } from 'src/hooks/useEthWallet';
 import { updateChainError, updateLatestBlock } from 'src/store/blockchain';
-import { getEthereumChainId, getRpcEndpoint, hexToDec } from 'src/utils';
-import { associateWallet, InterfaceEvents } from 'src/utils/events';
+import {
+    getEthereumBlockTimer,
+    getEthereumChainId,
+    getRpcEndpoint,
+    hexToDec,
+} from 'src/utils';
+import { InterfaceEvents, associateWallet } from 'src/utils/events';
 import { ChainUnsupportedError, useWallet } from 'use-wallet';
 
 export const CACHED_PROVIDER_KEY = 'CACHED_PROVIDER_KEY';
@@ -145,7 +150,7 @@ const SecuredFinanceProvider: React.FC = ({ children }) => {
     // If the user is not connected, we update the latest block every 10 seconds.
     useEffect(() => {
         if (!web3Provider) return;
-        const updateIntervalTime = account ? 2000 : 10000;
+        const updateIntervalTime = getEthereumBlockTimer();
 
         const interval = setInterval(async () => {
             const block = window.localStorage.getItem('FORK')
