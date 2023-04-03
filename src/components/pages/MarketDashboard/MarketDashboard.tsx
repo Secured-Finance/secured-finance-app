@@ -74,7 +74,7 @@ export const MarketDashboard = () => {
     const totalVolume = useMemo(() => {
         return ordinaryFormat(
             computeTotalDailyVolumeInUSD(dailyVolumes.data ?? [], priceList),
-            0,
+            2,
             'compact'
         );
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -115,7 +115,7 @@ export const MarketDashboard = () => {
                                 name: 'Total Value Locked',
                                 value: usdFormat(
                                     totalValueLockedInUSD,
-                                    0,
+                                    2,
                                     'compact'
                                 ),
                                 orientation: 'center',
@@ -129,7 +129,7 @@ export const MarketDashboard = () => {
                                 name: 'Total Users',
                                 value: ordinaryFormat(
                                     totalUser.data?.totalUsers ?? 0,
-                                    0,
+                                    2,
                                     'compact'
                                 ),
                                 orientation: 'center',

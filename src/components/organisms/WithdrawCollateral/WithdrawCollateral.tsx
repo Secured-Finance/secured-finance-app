@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import Loader from 'src/assets/img/gradient-loader.png';
 import { CollateralSelector } from 'src/components/atoms';
 import { Dialog, DialogState, SuccessPanel } from 'src/components/molecules';
+import { FailurePanel } from 'src/components/molecules/FailurePanel';
 import { CollateralInput } from 'src/components/organisms';
 import { useWithdrawCollateral } from 'src/hooks/useDepositCollateral';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
@@ -21,6 +22,7 @@ enum Step {
     withdrawCollateral = 1,
     withdrawing,
     withdrawn,
+    error,
 }
 
 type State = {
@@ -54,6 +56,13 @@ const stateRecord: Record<Step, State> = {
             'You have successfully withdrawn collateral on Secured Finance.',
         buttonText: 'OK',
     },
+    [Step.error]: {
+        currentStep: Step.error,
+        nextStep: Step.withdrawCollateral,
+        title: 'Failed!',
+        description: '',
+        buttonText: 'OK',
+    },
 };
 
 const reducer = (
@@ -66,6 +75,10 @@ const reducer = (
         case 'next':
             return {
                 ...stateRecord[state.nextStep],
+            };
+        case 'error':
+            return {
+                ...stateRecord[Step.error],
             };
         default:
             return {
@@ -85,6 +98,9 @@ export const WithdrawCollateral = ({
     const [asset, setAsset] = useState(CurrencySymbol.ETH);
     const [state, dispatch] = useReducer(reducer, stateRecord[1]);
     const [collateral, setCollateral] = useState(BigNumber.from(0));
+    const [errorMessage, setErrorMessage] = useState(
+        'Your withdrawal transaction has failed.'
+    );
 
     const priceList = useSelector((state: RootState) => getPriceMap(state));
     const { onWithdrawCollateral } = useWithdrawCollateral(asset, collateral);
@@ -99,16 +115,17 @@ export const WithdrawCollateral = ({
             const tx = await onWithdrawCollateral();
             const transactionStatus = await handleContractTransaction(tx);
             if (!transactionStatus) {
-                console.error('Some error occured');
-                handleClose();
+                dispatch({ type: 'error' });
             } else {
                 dispatch({ type: 'next' });
             }
         } catch (e) {
-            console.error(e);
-            handleClose();
+            if (e instanceof Error) {
+                setErrorMessage(e.message);
+            }
+            dispatch({ type: 'error' });
         }
-    }, [onWithdrawCollateral, handleClose]);
+    }, [onWithdrawCollateral]);
 
     const onClick = useCallback(
         async (currentStep: Step) => {
@@ -121,6 +138,9 @@ export const WithdrawCollateral = ({
                 case Step.withdrawing:
                     break;
                 case Step.withdrawn:
+                    handleClose();
+                    break;
+                case Step.error:
                     handleClose();
                     break;
             }
@@ -199,6 +219,8 @@ export const WithdrawCollateral = ({
                                 ]}
                             />
                         );
+                    case Step.error:
+                        return <FailurePanel errorMessage={errorMessage} />;
                     default:
                         return <p>Unknown</p>;
                 }
