@@ -1,5 +1,5 @@
 import { Listbox, Transition } from '@headlessui/react';
-import { Fragment, useCallback, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { CollateralInfo, ordinaryFormat } from 'src/utils';
 import { ExpandIndicator } from '../ExpandIndicator';
 
@@ -21,13 +21,10 @@ export const CollateralSelector = ({
     onChange,
 }: CollateralSelectorProps) => {
     const [selected, setSelected] = useState(optionList[0]);
-    const handleSelect = useCallback(
-        (option: CollateralInfo) => {
-            setSelected(option);
-            onChange(option);
-        },
-        [onChange]
-    );
+
+    useEffect(() => {
+        onChange(selected);
+    }, [selected, onChange]);
 
     return (
         <div className='flex h-20 w-full flex-col justify-between'>
@@ -80,9 +77,6 @@ export const CollateralSelector = ({
                                                     }`
                                                 }
                                                 value={assetObj}
-                                                onClick={() =>
-                                                    handleSelect(assetObj)
-                                                }
                                             >
                                                 {() => (
                                                     <div className='flex gap-3'>
