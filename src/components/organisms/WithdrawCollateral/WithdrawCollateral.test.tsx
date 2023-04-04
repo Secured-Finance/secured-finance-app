@@ -79,4 +79,19 @@ describe('WithdrawCollateral component', () => {
 
         await waitFor(() => expect(onClose).toBeCalled());
     });
+
+    it('should do nothing when collateral amount is greater than available amount and continue button is clicked', () => {
+        const onClose = jest.fn();
+        render(<Default onClose={onClose} />);
+        const input = screen.getByRole('textbox');
+        fireEvent.click(screen.getByTestId('collateral-selector-button'));
+        fireEvent.click(screen.getByTestId('option-0'));
+        expect(screen.getByText('Ethereum')).toBeInTheDocument();
+        expect(screen.getByText('1 Ethereum Available')).toBeInTheDocument();
+        fireEvent.change(input, { target: { value: '10' } });
+        const button = screen.getByTestId('dialog-action-button');
+        fireEvent.click(button);
+        expect(onClose).not.toHaveBeenCalled();
+        expect(input).toBeInTheDocument();
+    });
 });
