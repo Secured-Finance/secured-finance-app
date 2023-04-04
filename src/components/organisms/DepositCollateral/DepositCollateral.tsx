@@ -128,11 +128,33 @@ export const DepositCollateral = ({
         }
     }, [onDepositCollateral]);
 
+    const optionList = Object.values(collateralList);
+    const defaultCcyIndex = optionList.findIndex(
+        col => col.symbol === CurrencySymbol.USDC
+    );
+    [optionList[0], optionList[defaultCcyIndex]] = [
+        optionList[defaultCcyIndex],
+        optionList[0],
+    ];
+
     const onClick = useCallback(
         async (currentStep: Step) => {
             switch (currentStep) {
                 case Step.depositCollateral:
-                    if (!collateral || collateral.isZero()) return;
+                    const availableAmount = optionList.find(
+                        op => op.symbol === asset
+                    )?.available;
+                    if (
+                        !collateral ||
+                        collateral.isZero() ||
+                        (availableAmount &&
+                            collateral.gt(
+                                BigNumber.from(
+                                    Math.floor(availableAmount * 1e6).toString()
+                                )
+                            ))
+                    )
+                        return;
                     dispatch({ type: 'next' });
                     handleDepositCollateral();
                     break;
@@ -146,21 +168,12 @@ export const DepositCollateral = ({
                     break;
             }
         },
-        [collateral, handleClose, handleDepositCollateral]
+        [asset, collateral, handleClose, handleDepositCollateral, optionList]
     );
 
     const handleChange = (v: CollateralInfo) => {
         setAsset(v.symbol);
     };
-
-    const optionList = Object.values(collateralList);
-    const defaultCcyIndex = optionList.findIndex(
-        col => col.symbol === CurrencySymbol.USDC
-    );
-    [optionList[0], optionList[defaultCcyIndex]] = [
-        optionList[defaultCcyIndex],
-        optionList[0],
-    ];
 
     return (
         <Dialog

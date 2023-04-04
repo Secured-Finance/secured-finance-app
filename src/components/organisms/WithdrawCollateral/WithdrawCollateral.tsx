@@ -131,7 +131,17 @@ export const WithdrawCollateral = ({
         async (currentStep: Step) => {
             switch (currentStep) {
                 case Step.withdrawCollateral:
-                    if (!collateral || collateral.isZero()) return;
+                    const availableAmount = collateralList[asset].available;
+                    if (
+                        !collateral ||
+                        collateral.isZero() ||
+                        collateral.gt(
+                            BigNumber.from(
+                                Math.floor(availableAmount * 1e6).toString()
+                            )
+                        )
+                    )
+                        return;
                     dispatch({ type: 'next' });
                     handleWithdrawCollateral();
                     break;
@@ -145,7 +155,13 @@ export const WithdrawCollateral = ({
                     break;
             }
         },
-        [collateral, handleWithdrawCollateral, handleClose]
+        [
+            collateralList,
+            asset,
+            collateral,
+            handleWithdrawCollateral,
+            handleClose,
+        ]
     );
 
     const handleChange = (v: CollateralInfo) => {
