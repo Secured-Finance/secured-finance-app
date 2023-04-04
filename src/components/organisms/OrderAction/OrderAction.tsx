@@ -1,4 +1,5 @@
 import { OrderSide } from '@secured-finance/sf-client';
+import { BigNumber } from 'ethers';
 import { useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button } from 'src/components/atoms';
@@ -72,6 +73,7 @@ export const OrderAction = ({
             {account ? (
                 canBorrow || side === OrderSide.LEND ? (
                     <Button
+                        disabled={!amount.gt(BigNumber.from('0'))}
                         fullWidth
                         onClick={() => {
                             setOpenPlaceOrderDialog(true);
