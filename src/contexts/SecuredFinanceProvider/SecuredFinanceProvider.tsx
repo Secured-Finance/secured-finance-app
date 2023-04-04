@@ -145,9 +145,8 @@ const SecuredFinanceProvider: React.FC = ({ children }) => {
         }
     }, [connect, account]);
 
-    // Update the latest block every 2 seconds with the latest block number.
+    // Update the latest block every 10 seconds with the latest block number.
     // If we are working with a fork, we just update it once with a hardcoded block number.
-    // If the user is not connected, we update the latest block every 10 seconds.
     useEffect(() => {
         if (!web3Provider) return;
         const updateIntervalTime = getEthereumBlockTimer();
@@ -160,7 +159,7 @@ const SecuredFinanceProvider: React.FC = ({ children }) => {
         }, updateIntervalTime);
 
         return () => clearInterval(interval);
-    }, [account, dispatch, web3Provider]);
+    }, [dispatch, web3Provider]);
 
     return (
         <Context.Provider value={{ securedFinance }}>

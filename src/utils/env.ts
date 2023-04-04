@@ -48,5 +48,5 @@ export const getEthereumBlockTimer = () => {
         return 10000;
     }
 
-    return parseInt(NEXT_PUBLIC_ETHEREUM_BLOCK_TIMER, 10);
+    return parseInt(NEXT_PUBLIC_ETHEREUM_BLOCK_TIMER);
 };
