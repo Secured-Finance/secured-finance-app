@@ -215,7 +215,7 @@ export const AdvancedLendingOrderCard = ({
                             href='_'
                             role='button'
                         >
-                            Manage &gt;&gt;
+                            {'Manage \u00BB'}
                         </a>
                     </Link>
                 </div>
