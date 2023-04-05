@@ -5,7 +5,10 @@ import EthIcon from 'src/assets/coins/eth2.svg';
 import FilecoinIcon from 'src/assets/coins/fil.svg';
 import UsdcIcon from 'src/assets/coins/usdc.svg';
 import UsdtIcon from 'src/assets/coins/usdt.svg';
+import SFLogoSmall from 'src/assets/img/logo-small.svg';
+import MetamaskIcon from 'src/assets/img/metamask-fox.svg';
 import { Option } from 'src/components/atoms';
+import { WalletSourceOption } from 'src/components/atoms/WalletSourceSelector';
 import { CollateralBook } from 'src/hooks';
 import { AssetPrices } from 'src/store/assetPrices';
 import { RootState } from 'src/store/types';
@@ -16,7 +19,7 @@ import {
     TradeHistory,
     TradesQuery,
 } from 'src/types';
-import { CurrencySymbol, Rate, TradeSummary } from 'src/utils';
+import { CurrencySymbol, Rate, TradeSummary, WalletSource } from 'src/utils';
 import { Maturity } from 'src/utils/entities';
 
 export const preloadedAssetPrices: { assetPrices: AssetPrices } = {
@@ -175,6 +178,21 @@ export const maturityOptions: MaturityOptionList = [
     { label: 'MAR24', value: mar24Fixture },
     { label: 'JUN24', value: jun24Fixture },
     { label: 'SEP24', value: sep24Fixture },
+];
+
+export const walletSourceList: WalletSourceOption[] = [
+    {
+        source: WalletSource.METAMASK,
+        available: BigNumber.from(100000000000),
+        asset: CurrencySymbol.BTC,
+        iconSVG: MetamaskIcon,
+    },
+    {
+        source: WalletSource.SF_VAULT,
+        available: BigNumber.from(400000000000),
+        asset: CurrencySymbol.BTC,
+        iconSVG: SFLogoSmall,
+    },
 ];
 
 export const assetList = [

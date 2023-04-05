@@ -14,6 +14,7 @@ import {
     setAmount,
     setOrderType,
     setSide,
+    setSourceAccount,
     setUnitPrice,
 } from 'src/store/landingOrderForm';
 
@@ -23,6 +24,7 @@ import {
     CurrencySymbol,
     formatLoanValue,
     ordinaryFormat,
+    WalletSource,
 } from 'src/utils';
 import { LoanValue } from 'src/utils/entities';
 
@@ -241,6 +243,9 @@ export const OrderWidget = ({
                 : buyOrders[parseInt(rowId)];
         dispatch(setOrderType(OrderType.LIMIT));
         side ? dispatch(setSide(side)) : null;
+        side === OrderSide.BORROW
+            ? dispatch(setSourceAccount(WalletSource.METAMASK))
+            : null;
         dispatch(setUnitPrice(rowData.value.price));
         dispatch(setAmount(rowData.amount));
     };

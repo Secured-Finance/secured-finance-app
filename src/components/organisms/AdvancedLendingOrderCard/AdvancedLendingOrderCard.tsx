@@ -13,6 +13,7 @@ import {
     Separator,
     Slider,
 } from 'src/components/atoms';
+import { WalletSourceSelector } from 'src/components/atoms/WalletSourceSelector';
 import { OrderAction } from 'src/components/organisms';
 import { CollateralBook, OrderType } from 'src/hooks';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
@@ -21,11 +22,18 @@ import {
     setAmount,
     setOrderType,
     setSide,
+    setSourceAccount,
     setUnitPrice,
 } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
 import { selectAllBalances } from 'src/store/wallet';
-import { amountFormatterToBase, percentFormat, usdFormat } from 'src/utils';
+import { walletSourceList } from 'src/stories/mocks/fixtures';
+import {
+    WalletSource,
+    amountFormatterToBase,
+    percentFormat,
+    usdFormat,
+} from 'src/utils';
 import { computeAvailableToBorrow } from 'src/utils/collateral';
 import { Amount, LoanValue } from 'src/utils/entities';
 
@@ -34,10 +42,17 @@ export const AdvancedLendingOrderCard = ({
 }: {
     collateralBook: CollateralBook;
 }) => {
-    const { currency, amount, side, orderType, unitPrice, maturity } =
-        useSelector((state: RootState) =>
-            selectLandingOrderForm(state.landingOrderForm)
-        );
+    const {
+        currency,
+        amount,
+        side,
+        orderType,
+        unitPrice,
+        maturity,
+        sourceAccount,
+    } = useSelector((state: RootState) =>
+        selectLandingOrderForm(state.landingOrderForm)
+    );
 
     const balanceRecord = useSelector((state: RootState) =>
         selectAllBalances(state)
@@ -73,6 +88,13 @@ export const AdvancedLendingOrderCard = ({
               )
             : 0;
     }, [assetPriceMap, collateralBook, currency]);
+
+    const selectedWalletSource = useMemo(() => {
+        return (
+            walletSourceList.find(w => w.source === sourceAccount) ||
+            walletSourceList[0]
+        );
+    }, [sourceAccount]);
 
     const handleAmountChange = (percentage: number) => {
         const available =
@@ -120,10 +142,20 @@ export const AdvancedLendingOrderCard = ({
 
             <div className='flex w-full flex-col justify-center gap-6 px-4 pt-5'>
                 <BorrowLendSelector
-                    handleClick={side => dispatch(setSide(side))}
+                    handleClick={side => {
+                        dispatch(setSide(side));
+                        dispatch(setSourceAccount(WalletSource.METAMASK));
+                    }}
                     side={side}
                     variant='advanced'
                 />
+                {side === OrderSide.LEND && (
+                    <WalletSourceSelector
+                        optionList={walletSourceList}
+                        selected={selectedWalletSource}
+                        onChange={v => dispatch(setSourceAccount(v))}
+                    />
+                )}
                 <div className='flex flex-col gap-[10px]'>
                     <OrderInputBox
                         field='Bond Price'

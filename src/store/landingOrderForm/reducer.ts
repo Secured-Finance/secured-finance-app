@@ -3,7 +3,7 @@ import { OrderSide } from '@secured-finance/sf-client';
 import { BigNumber } from 'ethers';
 import { ViewType } from 'src/components/atoms';
 import { OrderType } from 'src/hooks';
-import { CurrencySymbol } from 'src/utils';
+import { CurrencySymbol, WalletSource } from 'src/utils';
 import { Maturity } from 'src/utils/entities';
 
 type LandingOrderFormStore = {
@@ -14,6 +14,7 @@ type LandingOrderFormStore = {
     unitPrice: number;
     orderType: OrderType;
     lastView: ViewType;
+    sourceAccount: WalletSource;
 };
 const initialStore: LandingOrderFormStore = {
     currency: CurrencySymbol.FIL,
@@ -23,6 +24,7 @@ const initialStore: LandingOrderFormStore = {
     unitPrice: 0,
     orderType: OrderType.MARKET,
     lastView: 'Simple',
+    sourceAccount: WalletSource.METAMASK,
 };
 
 const landingOrderFormSlice = createSlice({
@@ -49,6 +51,9 @@ const landingOrderFormSlice = createSlice({
         },
         setLastView: (state, action: PayloadAction<ViewType>) => {
             state.lastView = action.payload;
+        },
+        setSourceAccount: (state, action: PayloadAction<WalletSource>) => {
+            state.sourceAccount = action.payload;
         },
     },
 });
