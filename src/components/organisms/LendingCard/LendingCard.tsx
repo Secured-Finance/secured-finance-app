@@ -1,7 +1,9 @@
+import { OrderSide } from '@secured-finance/sf-client';
 import { BigNumber } from 'ethers';
 import { useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { BorrowLendSelector } from 'src/components/atoms';
+import { WalletSourceSelector } from 'src/components/atoms/WalletSourceSelector';
 import {
     AssetSelector,
     CollateralUsageSection,
@@ -16,12 +18,15 @@ import {
     setCurrency,
     setMaturity,
     setSide,
+    setSourceAccount,
 } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
+import { walletSourceList } from 'src/stories/mocks/fixtures';
 import { MaturityOptionList } from 'src/types';
 import {
-    amountFormatterToBase,
     CurrencySymbol,
+    WalletSource,
+    amountFormatterToBase,
     formatLoanValue,
     getCurrencyMapAsList,
     getCurrencyMapAsOptions,
@@ -38,8 +43,8 @@ export const LendingCard = ({
     marketValue: LoanValue;
     maturitiesOptionList: MaturityOptionList;
 }) => {
-    const { currency, maturity, side } = useSelector((state: RootState) =>
-        selectLandingOrderForm(state.landingOrderForm)
+    const { currency, maturity, side, sourceAccount } = useSelector(
+        (state: RootState) => selectLandingOrderForm(state.landingOrderForm)
     );
 
     const dispatch = useDispatch();
@@ -67,6 +72,13 @@ export const LendingCard = ({
         );
     }, [maturity, maturitiesOptionList]);
 
+    const selectedWalletSource = useMemo(() => {
+        return (
+            walletSourceList.find(w => w.source === sourceAccount) ||
+            walletSourceList[0]
+        );
+    }, [sourceAccount]);
+
     const selectedAsset = useMemo(() => {
         return assetList.find(option => option.value === currency);
     }, [currency, assetList]);
@@ -74,7 +86,10 @@ export const LendingCard = ({
     return (
         <div className='w-80 flex-col space-y-6 rounded-b-xl border border-panelStroke bg-transparent pb-6 shadow-deep'>
             <BorrowLendSelector
-                handleClick={side => dispatch(setSide(side))}
+                handleClick={side => {
+                    dispatch(setSide(side));
+                    dispatch(setSourceAccount(WalletSource.METAMASK));
+                }}
                 side={side}
                 variant='simple'
             />
@@ -118,6 +133,14 @@ export const LendingCard = ({
                         maturitiesOptionList
                     )}
                 />
+
+                {side === OrderSide.LEND && (
+                    <WalletSourceSelector
+                        optionList={walletSourceList}
+                        selected={selectedWalletSource}
+                        onChange={v => dispatch(setSourceAccount(v))}
+                    />
+                )}
 
                 <CollateralUsageSection
                     usdCollateral={collateralBook.usdCollateral}

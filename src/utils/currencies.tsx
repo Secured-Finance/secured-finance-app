@@ -3,7 +3,7 @@ import { CurrencySymbol, getCurrencyMapAsOptions } from './currencyList';
 
 export enum WalletSource {
     METAMASK = 'METAMASK',
-    UTILWALLET = 'UTILWALLET',
+    SF_VAULT = 'SF Vault',
 }
 
 export type CollateralInfo = {
