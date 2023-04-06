@@ -95,7 +95,7 @@ describe('LendingCard Component', () => {
     });
 
     it('should display the rate from the prop', async () => {
-        const rate = LoanValue.fromApy(
+        const rate = LoanValue.fromApr(
             new Rate(20000),
             dec22Fixture.toNumber()
         );

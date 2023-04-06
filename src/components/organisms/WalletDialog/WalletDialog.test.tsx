@@ -26,7 +26,7 @@ describe('Wallet Dialog component', () => {
         const button = screen.getByTestId('dialog-action-button');
         expect(button).toHaveTextContent('Connect Wallet');
 
-        expect(screen.getAllByRole('radio')).toHaveLength(2);
+        expect(screen.getAllByRole('radio')).toHaveLength(1);
     });
 
     it('should open with nothing selected', () => {
@@ -41,7 +41,7 @@ describe('Wallet Dialog component', () => {
 
         const button = screen.getByTestId('dialog-action-button');
         fireEvent.click(button);
-        expect(screen.getAllByRole('radio')).toHaveLength(2);
+        expect(screen.getAllByRole('radio')).toHaveLength(1);
     });
 
     it('should move to the next step if an option was selected', async () => {
@@ -50,6 +50,19 @@ describe('Wallet Dialog component', () => {
         fireEvent.click(screen.getByTestId('dialog-action-button'));
         await waitFor(() => {
             expect(screen.getByText('Connecting...')).toBeInTheDocument();
+        });
+    });
+
+    it.skip('should proceed to failure screen if something goes wrong', async () => {
+        const useWalletMock = {
+            connect: jest.fn().mockRejectedValueOnce(new Error('failed')),
+        };
+        render(<Primary />, { preloadedState });
+        selectMetamaskOption();
+        fireEvent.click(screen.getByTestId('dialog-action-button'));
+        await waitFor(() => {
+            expect(useWalletMock.connect).toBeCalled();
+            expect(screen.getByText('Failed!')).toBeInTheDocument();
         });
     });
 });

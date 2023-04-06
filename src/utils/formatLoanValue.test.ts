@@ -16,13 +16,13 @@ describe('formatNumbers', () => {
         it('should format the rate correctly', () => {
             expect(
                 formatLoanValue(
-                    LoanValue.fromApy(new Rate(515000), 100),
+                    LoanValue.fromApr(new Rate(515000), 100),
                     'rate'
                 )
             ).toEqual('51.50%');
             expect(
                 formatLoanValue(
-                    LoanValue.fromApy(new Rate(500000), 100),
+                    LoanValue.fromApr(new Rate(500000), 100),
                     'rate'
                 )
             ).toEqual('50.00%');

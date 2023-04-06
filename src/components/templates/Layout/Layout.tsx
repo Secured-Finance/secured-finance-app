@@ -10,6 +10,9 @@ export const Layout = ({
             className='h-screen overflow-y-auto pb-8'
             data-testid='wrapper-div'
         >
+            <div className='typography-caption-2 bg-horizonBlue/100 p-[1px] text-center text-neutral-8'>
+                You are visiting Secured Finance on testnet
+            </div>
             <header>{navBar}</header>
             <main>{children}</main>
         </div>

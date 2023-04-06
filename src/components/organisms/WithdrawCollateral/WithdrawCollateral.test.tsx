@@ -53,9 +53,8 @@ describe('WithdrawCollateral component', () => {
         expect(screen.getByText('$50.00')).toBeInTheDocument();
     });
 
-    it('should call onclose when block number is undefined', async () => {
+    it('should proceed to failure screen and call onclose when block number is undefined', async () => {
         const onClose = jest.fn();
-        const spy = jest.spyOn(console, 'error').mockImplementation();
         render(<Default onClose={onClose} />, { preloadedState });
         fireEvent.click(screen.getByTestId('collateral-selector-button'));
         fireEvent.click(screen.getByTestId('option-1'));
@@ -72,7 +71,12 @@ describe('WithdrawCollateral component', () => {
         await waitFor(() =>
             expect(screen.queryByText('Success!')).not.toBeInTheDocument()
         );
-        await waitFor(() => expect(spy).toHaveBeenCalled());
-        await waitFor(() => expect(onClose).toHaveBeenCalled());
+        await waitFor(() =>
+            expect(screen.queryByText('Failed!')).toBeInTheDocument()
+        );
+        const onCloseButton = screen.getByTestId('dialog-action-button');
+        fireEvent.click(onCloseButton);
+
+        await waitFor(() => expect(onClose).toBeCalled());
     });
 });

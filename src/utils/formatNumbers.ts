@@ -72,7 +72,7 @@ export const formatLoanValue = (value: LoanValue, type: 'price' | 'rate') => {
     if (type === 'price') {
         return (value.price / 100).toFixed(2).toString();
     } else {
-        return percentFormat(value.apy.toNormalizedNumber(), 100, 2, 2);
+        return percentFormat(value.apr.toNormalizedNumber(), 100, 2, 2);
     }
 };
 

@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import Loader from 'src/assets/img/gradient-loader.png';
 import { CollateralSelector } from 'src/components/atoms';
 import { Dialog, DialogState, SuccessPanel } from 'src/components/molecules';
+import { FailurePanel } from 'src/components/molecules/FailurePanel';
 import { CollateralInput } from 'src/components/organisms';
 import { useDepositCollateral } from 'src/hooks/useDepositCollateral';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
@@ -20,6 +21,7 @@ enum Step {
     depositCollateral = 1,
     depositing,
     deposited,
+    error,
 }
 
 type State = {
@@ -53,6 +55,13 @@ const stateRecord: Record<Step, State> = {
             'You have successfully deposited collateral on Secured Finance.',
         buttonText: 'OK',
     },
+    [Step.error]: {
+        currentStep: Step.error,
+        nextStep: Step.depositCollateral,
+        title: 'Failed!',
+        description: '',
+        buttonText: 'OK',
+    },
 };
 
 const reducer = (
@@ -65,6 +74,10 @@ const reducer = (
         case 'next':
             return {
                 ...stateRecord[state.nextStep],
+            };
+        case 'error':
+            return {
+                ...stateRecord[Step.error],
             };
         default:
             return {
@@ -84,6 +97,9 @@ export const DepositCollateral = ({
     const [collateral, setCollateral] = useState(BigNumber.from(0));
     const [depositAddress, setDepositAddress] = useState('');
     const [state, dispatch] = useReducer(reducer, stateRecord[1]);
+    const [errorMessage, setErrorMessage] = useState(
+        'Your deposit transaction has failed.'
+    );
 
     const priceList = useSelector((state: RootState) => getPriceMap(state));
     const { onDepositCollateral } = useDepositCollateral(asset, collateral);
@@ -98,17 +114,19 @@ export const DepositCollateral = ({
             const tx = await onDepositCollateral();
             const transactionStatus = await handleContractTransaction(tx);
             if (!transactionStatus) {
-                console.error('Some error occured');
-                handleClose();
+                dispatch({ type: 'error' });
             } else {
                 setDepositAddress(tx?.to ?? '');
                 dispatch({ type: 'next' });
             }
         } catch (e) {
-            console.error(e);
-            handleClose();
+            if (e instanceof Error) {
+                setErrorMessage(e.message);
+            }
+
+            dispatch({ type: 'error' });
         }
-    }, [onDepositCollateral, handleClose]);
+    }, [onDepositCollateral]);
 
     const onClick = useCallback(
         async (currentStep: Step) => {
@@ -121,6 +139,9 @@ export const DepositCollateral = ({
                 case Step.depositing:
                     break;
                 case Step.deposited:
+                    handleClose();
+                    break;
+                case Step.error:
                     handleClose();
                     break;
             }
@@ -205,6 +226,9 @@ export const DepositCollateral = ({
                                 ]}
                             />
                         );
+                    case Step.error:
+                        return <FailurePanel errorMessage={errorMessage} />;
+
                     default:
                         return <p>Unknown</p>;
                 }

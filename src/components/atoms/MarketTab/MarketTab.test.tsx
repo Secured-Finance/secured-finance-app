@@ -23,8 +23,8 @@ describe('test Market Tab component', () => {
         expect(screen.getByText('7977.00')).toHaveClass(
             'typography-button-3 leading-7 text-proGreen'
         );
-        expect(screen.getByText('25.00% APY')).toBeInTheDocument();
-        expect(screen.getByText('25.00% APY')).toHaveClass(
+        expect(screen.getByText('25.00% APR')).toBeInTheDocument();
+        expect(screen.getByText('25.00% APR')).toHaveClass(
             'typography-caption-2 font-semibold text-white'
         );
     });

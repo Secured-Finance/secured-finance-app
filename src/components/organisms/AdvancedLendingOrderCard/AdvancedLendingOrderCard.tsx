@@ -69,7 +69,7 @@ export const AdvancedLendingOrderCard = ({
             ? computeAvailableToBorrow(
                   assetPriceMap[currency],
                   collateralBook.usdCollateral,
-                  collateralBook.coverage.toNumber()
+                  collateralBook.coverage.toNumber() / 100.0
               )
             : 0;
     }, [assetPriceMap, collateralBook, currency]);
@@ -138,12 +138,12 @@ export const AdvancedLendingOrderCard = ({
                     />
                     <div className='mx-10px'>
                         <OrderDisplayBox
-                            field='Fixed Rate (APY)'
+                            field='Fixed Rate (APR)'
                             value={percentFormat(
                                 LoanValue.fromPrice(
                                     unitPrice,
                                     maturity.toNumber()
-                                ).apy.toNormalizedNumber()
+                                ).apr.toNormalizedNumber()
                             )}
                         />
                     </div>
@@ -183,7 +183,7 @@ export const AdvancedLendingOrderCard = ({
                             href='_'
                             role='button'
                         >
-                            Manage &gt;&gt;
+                            {'Manage \u00BB'}
                         </a>
                     </Link>
                 </div>

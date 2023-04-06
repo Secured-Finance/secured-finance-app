@@ -1,5 +1,6 @@
 import {
     getAmplitudeApiKey,
+    getEthereumBlockTimer,
     getEthereumChainId,
     getEthereumNetwork,
     getRpcEndpoint,
@@ -78,6 +79,25 @@ describe('getAmplitudeApiKey', () => {
         const apiKey = getAmplitudeApiKey();
         expect(apiKey).toBe('');
         expect(typeof apiKey).toBe('string');
+        expect(spy).toHaveBeenCalled();
+    });
+});
+
+describe('getEthereumBlockTimer', () => {
+    it('should return the value of the environment variable', () => {
+        process.env.NEXT_PUBLIC_ETHEREUM_BLOCK_TIMER = '10000';
+        const timer = getEthereumBlockTimer();
+        expect(timer).toBe(10000);
+        expect(typeof timer).toBe('number');
+    });
+
+    it('should return 10000 if variable is not set', () => {
+        process.env.NEXT_PUBLIC_ETHEREUM_BLOCK_TIMER = '';
+        const spy = jest.spyOn(console, 'warn').mockImplementation();
+
+        const timer = getEthereumBlockTimer();
+        expect(timer).toBe(10000);
+        expect(typeof timer).toBe('number');
         expect(spy).toHaveBeenCalled();
     });
 });
