@@ -141,7 +141,7 @@ export const MarketDashboard = () => {
                             title='Yield Curve'
                             curves={curves}
                             labels={Object.values(
-                                lendingContracts[CurrencySymbol.FIL]
+                                lendingContracts[CurrencySymbol.EFIL]
                             )
                                 .filter(o => o.isActive)
                                 .map(o => o.name)}

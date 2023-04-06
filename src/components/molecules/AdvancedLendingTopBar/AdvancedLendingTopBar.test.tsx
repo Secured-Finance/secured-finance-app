@@ -9,7 +9,7 @@ describe('AdvancedLendingTopBar Component', () => {
         render(<Default />);
 
         expect(
-            screen.getByRole('button', { name: 'Bitcoin' })
+            screen.getByRole('button', { name: 'Wrapped Bitcoin' })
         ).toBeInTheDocument();
         expect(screen.getByText('Maturity DEC22')).toBeInTheDocument();
 
