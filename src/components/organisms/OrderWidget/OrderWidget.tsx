@@ -104,7 +104,7 @@ const PriceCell = ({
     );
 };
 
-const ApyCell = ({
+const AprCell = ({
     value,
     display,
 }: {
@@ -180,14 +180,14 @@ export const OrderWidget = ({
                 ),
             }),
             columnHelper.accessor('value', {
-                id: 'apy',
+                id: 'apr',
                 cell: info => (
-                    <ApyCell
+                    <AprCell
                         value={info.getValue()}
                         display={!info.row.original.amount.eq(0)}
                     />
                 ),
-                header: () => <TableHeader title='Borrow APY' align='right' />,
+                header: () => <TableHeader title='Borrow APR' align='right' />,
             }),
         ],
         [currency, totalBuyAmount]
@@ -196,14 +196,14 @@ export const OrderWidget = ({
     const sellColumns = useMemo(
         () => [
             columnHelper.accessor('value', {
-                id: 'apy',
+                id: 'apr',
                 cell: info => (
-                    <ApyCell
+                    <AprCell
                         value={info.getValue()}
                         display={!info.row.original.amount.eq(0)}
                     />
                 ),
-                header: () => <TableHeader title='Lend APY' align='right' />,
+                header: () => <TableHeader title='Lend APR' align='right' />,
             }),
             columnHelper.accessor('amount', {
                 id: 'amount',

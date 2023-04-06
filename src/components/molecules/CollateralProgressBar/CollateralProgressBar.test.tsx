@@ -23,8 +23,8 @@ describe('CollateralProgressBar Component', () => {
         render(<ConnectedToWallet />);
 
         expect(screen.getByText('Collateral Utilization')).toBeInTheDocument();
-        expect(screen.getByText('$37.00')).toBeInTheDocument();
-        expect(screen.getByText('of $74.00 available')).toBeInTheDocument();
+        expect(screen.getByText('$43.00')).toBeInTheDocument();
+        expect(screen.getByText('of $80.00 available')).toBeInTheDocument();
         expect(screen.getByText('37%')).toBeInTheDocument();
         expect(screen.queryByText('N/A')).not.toBeInTheDocument();
 
@@ -41,7 +41,7 @@ describe('CollateralProgressBar Component', () => {
         const informationPopover = screen.getByTestId('information-popover');
 
         expect(informationPopover).toHaveTextContent(
-            'Your total borrow limit is at $37.00 which is 74% of your $100.00 collateral deposit.Increasing collateral deposit will increase your borrow limit by 74% of its value.'
+            'Your total borrow limit is at $80.00 which is 80% of your $100.00 collateral deposit.Increasing collateral deposit will increase your borrow limit by 80% of its value.'
         );
     });
 });

@@ -24,10 +24,26 @@ describe('CollateralSelector component', () => {
     });
 
     it('should change the button when a dropdown item is selected', () => {
-        render(<Default />);
+        const onChange = jest.fn();
+        render(<Default onChange={onChange} />);
+
+        expect(onChange).toBeCalledTimes(1);
+        expect(onChange).toHaveBeenLastCalledWith({
+            available: 1000,
+            name: 'USDC',
+            symbol: 'USDC',
+        });
+
         fireEvent.click(screen.getByTestId('collateral-selector-button'));
         fireEvent.click(screen.getByTestId('option-1'));
         expect(screen.getByText('Ethereum')).toBeInTheDocument();
         expect(screen.getByText('120 Ethereum Available')).toBeInTheDocument();
+
+        expect(onChange).toBeCalledTimes(2);
+        expect(onChange).toHaveBeenLastCalledWith({
+            available: 120,
+            name: 'Ethereum',
+            symbol: 'ETH',
+        });
     });
 });

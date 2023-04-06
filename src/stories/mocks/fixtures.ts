@@ -293,7 +293,7 @@ export const transactions: TradeHistory = [
     {
         id: '0x123',
         amount: '1000000000000000000000',
-        averagePrice: '8000',
+        averagePrice: '0.8000', // TODO: rework the unit in the graph. This is changed only for a dirty fix
         side: 0,
         orderPrice: '9800',
         createdAt: '1671859344',
@@ -304,7 +304,7 @@ export const transactions: TradeHistory = [
     {
         id: '0x124',
         amount: '500000000000000000000',
-        averagePrice: '8000',
+        averagePrice: '0.8000', // TODO: rework the unit in the graph. This is changed only for a dirty fix
         side: 1,
         orderPrice: '9543',
         createdAt: '1671080520',
@@ -315,7 +315,7 @@ export const transactions: TradeHistory = [
     {
         id: '0x124',
         amount: '500000000000000000000',
-        averagePrice: '8000',
+        averagePrice: '0.8000', // TODO: rework the unit in the graph. This is changed only for a dirty fix
         side: 1,
         orderPrice: '9543',
         createdAt: '1671080520',
@@ -326,7 +326,7 @@ export const transactions: TradeHistory = [
     {
         id: '0x123',
         amount: '1000000000',
-        averagePrice: '9000',
+        averagePrice: '0.9000', // TODO: rework the unit in the graph. This is changed only for a dirty fix
         side: 1,
         orderPrice: '9700',
         createdAt: '1671427140',
@@ -337,7 +337,7 @@ export const transactions: TradeHistory = [
     {
         id: '0x123',
         amount: '1000000000',
-        averagePrice: '9203',
+        averagePrice: '0.9203', // TODO: rework the unit in the graph. This is changed only for a dirty fix
         side: 1,
         orderPrice: '0',
         createdAt: '1671080556',
