@@ -14,7 +14,7 @@ describe('CurveHeader component', () => {
 
     it('should display the full name of the asset', () => {
         render(<Default />);
-        expect(screen.getByText('Filecoin')).toBeInTheDocument();
+        expect(screen.getByText('EFIL')).toBeInTheDocument();
     });
 
     it('should display the price of the asset', () => {

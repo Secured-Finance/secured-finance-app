@@ -24,7 +24,7 @@ export const ContractDetailDialog = ({ isOpen, onClose }: DialogState) => {
                         amount={
                             new Amount(
                                 '5000000000000000000000',
-                                CurrencySymbol.FIL
+                                CurrencySymbol.EFIL
                             )
                         }
                         price={8.3}
