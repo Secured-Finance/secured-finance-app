@@ -7,7 +7,7 @@ export default {
     title: 'Molecules/CurveHeader',
     component: CurveHeader,
     args: {
-        asset: CurrencySymbol.FIL,
+        asset: CurrencySymbol.EFIL,
         isBorrow: true,
     },
     argTypes: {},

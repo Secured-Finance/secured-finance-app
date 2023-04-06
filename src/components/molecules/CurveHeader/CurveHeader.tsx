@@ -13,7 +13,7 @@ interface CurveHeaderProps {
 }
 
 export const CurveHeader = ({
-    asset = CurrencySymbol.FIL,
+    asset = CurrencySymbol.EFIL,
     isBorrow,
 }: CurveHeaderProps): JSX.Element => {
     const priceList = useSelector((state: RootState) => getPriceMap(state));

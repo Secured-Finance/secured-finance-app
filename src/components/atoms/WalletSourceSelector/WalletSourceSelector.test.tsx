@@ -11,7 +11,7 @@ describe('WalletSourceSelector component', () => {
         expect(screen.getByText('Lending Source')).toBeInTheDocument();
         expect(screen.getByText('Available to Lend')).toBeInTheDocument();
         expect(screen.getByText('METAMASK')).toBeInTheDocument();
-        expect(screen.getByText('1,000 BTC')).toBeInTheDocument();
+        expect(screen.getByText('1,000 WBTC')).toBeInTheDocument();
     });
 
     it('should render a clickable button', () => {

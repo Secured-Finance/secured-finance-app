@@ -3,8 +3,8 @@ import { CurrencySymbol } from 'src/utils';
 export const zeroBalances = {
     ETH: 0,
     USDC: 0,
-    FIL: 0,
-    BTC: 0,
+    EFIL: 0,
+    WBTC: 0,
 };
 
 export interface WalletsStore {
