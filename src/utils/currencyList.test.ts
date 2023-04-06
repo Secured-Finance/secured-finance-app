@@ -17,7 +17,7 @@ import {
     toCurrencySymbol,
 } from './currencyList';
 
-const fil = currencyMap.EFIL;
+const efil = currencyMap.EFIL;
 const eth = currencyMap.ETH;
 const wbtc = currencyMap.WBTC;
 
@@ -74,20 +74,22 @@ describe('currencyList toBaseUnit', () => {
     });
 
     it('should return the value in attoFil for FIL', () => {
-        expect(fil.toBaseUnit(1).toString()).toEqual('1000000000000000000');
-        expect(fil.toBaseUnit(1.23).toString()).toEqual('1230000000000000000');
-        expect(fil.toBaseUnit(1.23456789).toString()).toEqual(
+        expect(efil.toBaseUnit(1).toString()).toEqual('1000000000000000000');
+        expect(efil.toBaseUnit(1.23).toString()).toEqual('1230000000000000000');
+        expect(efil.toBaseUnit(1.23456789).toString()).toEqual(
             '1234567890000000000'
         );
-        expect(fil.toBaseUnit(0.00000001).toString()).toEqual('10000000000');
-        expect(fil.toBaseUnit(0.000000000001).toString()).toEqual('1000000');
-        expect(fil.toBaseUnit(0.000000000000000001).toString()).toEqual('1');
+        expect(efil.toBaseUnit(0.00000001).toString()).toEqual('10000000000');
+        expect(efil.toBaseUnit(0.000000000001).toString()).toEqual('1000000');
+        expect(efil.toBaseUnit(0.000000000000000001).toString()).toEqual('1');
     });
 
     it('should return 0 if the input value is inferior to the base blockchain unit', () => {
-        expect(fil.toBaseUnit(0.0000000000000000001).toString()).toEqual('0');
-        expect(fil.toBaseUnit(0.0000000000000000009).toString()).toEqual('0');
-        expect(fil.toBaseUnit(0.000000000000000000001).toString()).toEqual('0');
+        expect(efil.toBaseUnit(0.0000000000000000001).toString()).toEqual('0');
+        expect(efil.toBaseUnit(0.0000000000000000009).toString()).toEqual('0');
+        expect(efil.toBaseUnit(0.000000000000000000001).toString()).toEqual(
+            '0'
+        );
         expect(eth.toBaseUnit(0.0000000000000000001).toString()).toEqual('0');
         expect(eth.toBaseUnit(0.000000000000000000001).toString()).toEqual('0');
     });
@@ -123,18 +125,18 @@ describe('currencyList fromBaseUnit', () => {
 
     it('should return the value in FIL for attoFil amount', () => {
         expect(
-            fil.fromBaseUnit(BigNumber.from('1000000000000000000')).toString()
+            efil.fromBaseUnit(BigNumber.from('1000000000000000000')).toString()
         ).toEqual('1');
         expect(
-            fil.fromBaseUnit(BigNumber.from('1230000000000000000')).toString()
+            efil.fromBaseUnit(BigNumber.from('1230000000000000000')).toString()
         ).toEqual('1.23');
         expect(
-            fil.fromBaseUnit(BigNumber.from('1234567890000000000')).toString()
+            efil.fromBaseUnit(BigNumber.from('1234567890000000000')).toString()
         ).toEqual('1.23456789');
         expect(
-            fil.fromBaseUnit(BigNumber.from('10000000000')).toString()
+            efil.fromBaseUnit(BigNumber.from('10000000000')).toString()
         ).toEqual('1e-8');
-        expect(fil.fromBaseUnit(BigNumber.from('1000000')).toString()).toEqual(
+        expect(efil.fromBaseUnit(BigNumber.from('1000000')).toString()).toEqual(
             '1e-12'
         );
     });
