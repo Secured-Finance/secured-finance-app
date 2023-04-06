@@ -1,10 +1,10 @@
 import { fromBytes32 } from '@secured-finance/sf-graph-client';
 import { BigNumber, utils } from 'ethers';
-import BitcoinIcon from 'src/assets/coins/btc.svg';
+import EfilIcon from 'src/assets/coins/efil.svg';
 import EthIcon from 'src/assets/coins/eth2.svg';
-import FilecoinIcon from 'src/assets/coins/fil.svg';
 import UsdcIcon from 'src/assets/coins/usdc.svg';
 import UsdtIcon from 'src/assets/coins/usdt.svg';
+import WrappedBitcoinIcon from 'src/assets/coins/wbtc.svg';
 import SFLogoSmall from 'src/assets/img/logo-small.svg';
 import MetamaskIcon from 'src/assets/img/metamask-fox.svg';
 import { Option } from 'src/components/atoms';
@@ -24,7 +24,7 @@ import { Maturity } from 'src/utils/entities';
 
 export const preloadedAssetPrices: { assetPrices: AssetPrices } = {
     assetPrices: {
-        FIL: {
+        EFIL: {
             price: 6.0,
             change: -8.208519783216566,
         },
@@ -36,7 +36,7 @@ export const preloadedAssetPrices: { assetPrices: AssetPrices } = {
             price: 1.0,
             change: 0.042530768538486696,
         },
-        BTC: {
+        WBTC: {
             price: 50000.0,
             change: 0.0,
         },
@@ -45,19 +45,19 @@ export const preloadedAssetPrices: { assetPrices: AssetPrices } = {
 };
 
 export const assetPriceMap = {
-    FIL: 6.0,
+    EFIL: 6.0,
     ETH: 2000.34,
     USDC: 1.0,
-    BTC: 50000.0,
+    WBTC: 50000.0,
 };
 
 export const preloadedBalances = {
     wallet: {
         balances: {
-            FIL: 1000,
+            EFIL: 1000,
             ETH: 10,
             USDC: 100000,
-            BTC: 50,
+            WBTC: 50,
         },
     },
 };
@@ -65,7 +65,7 @@ export const preloadedBalances = {
 export const preloadedLendingMarkets: Partial<RootState> = {
     availableContracts: {
         lendingMarkets: {
-            [CurrencySymbol.FIL]: {
+            [CurrencySymbol.EFIL]: {
                 DEC22: {
                     name: 'DEC22',
                     maturity: 1669852800,
@@ -88,7 +88,7 @@ export const preloadedLendingMarkets: Partial<RootState> = {
                     midUnitPrice: 9601,
                 },
             },
-            [CurrencySymbol.BTC]: {
+            [CurrencySymbol.WBTC]: {
                 DEC22: {
                     name: 'DEC22',
                     maturity: 1669852800,
@@ -184,22 +184,22 @@ export const walletSourceList: WalletSourceOption[] = [
     {
         source: WalletSource.METAMASK,
         available: BigNumber.from(100000000000),
-        asset: CurrencySymbol.BTC,
+        asset: CurrencySymbol.WBTC,
         iconSVG: MetamaskIcon,
     },
     {
         source: WalletSource.SF_VAULT,
         available: BigNumber.from(400000000000),
-        asset: CurrencySymbol.BTC,
+        asset: CurrencySymbol.WBTC,
         iconSVG: SFLogoSmall,
     },
 ];
 
 export const assetList = [
     {
-        label: 'Bitcoin',
-        iconSVG: BitcoinIcon,
-        value: 'BTC',
+        label: 'Wrapped Bitcoin',
+        iconSVG: WrappedBitcoinIcon,
+        value: 'WBTC',
     },
     {
         label: 'Ethereum',
@@ -207,9 +207,9 @@ export const assetList = [
         value: 'ETH',
     },
     {
-        label: 'Filecoin',
-        iconSVG: FilecoinIcon,
-        value: 'FIL',
+        label: 'EFIL',
+        iconSVG: EfilIcon,
+        value: 'EFIL',
     },
     {
         label: 'USDC',
@@ -225,9 +225,9 @@ export const assetList = [
 
 export const currencyList = [
     {
-        label: 'Bitcoin',
-        iconSVG: BitcoinIcon,
-        value: CurrencySymbol.BTC,
+        label: 'Wrapped Bitcoin',
+        iconSVG: WrappedBitcoinIcon,
+        value: CurrencySymbol.WBTC,
     },
     {
         label: 'Ethereum',
@@ -235,9 +235,9 @@ export const currencyList = [
         value: CurrencySymbol.ETH,
     },
     {
-        label: 'Filecoin',
-        iconSVG: FilecoinIcon,
-        value: CurrencySymbol.FIL,
+        label: 'EFIL',
+        iconSVG: EfilIcon,
+        value: CurrencySymbol.EFIL,
     },
     {
         label: 'USDC',
@@ -257,9 +257,9 @@ export const yieldCurveRates = [
     new Rate(47746),
 ];
 
-export const filBytes32 = utils.formatBytes32String('FIL'); //0x46494c0000000000000000000000000000000000000000000000000000000000
+export const efilBytes32 = utils.formatBytes32String('EFIL'); //0x46494c0000000000000000000000000000000000000000000000000000000000
 export const ethBytes32 = utils.formatBytes32String('ETH');
-export const btcBytes32 = utils.formatBytes32String('BTC');
+export const wbtcBytes32 = utils.formatBytes32String('WBTC');
 export const usdcBytes32 = utils.formatBytes32String('USDC'); // '0x5553444300000000000000000000000000000000000000000000000000000000'
 
 export const orderHistoryList: OrderList = [
@@ -267,7 +267,7 @@ export const orderHistoryList: OrderList = [
         id: '1',
         orderId: BigNumber.from('1'),
         originalOrderId: BigNumber.from('1'),
-        currency: filBytes32,
+        currency: efilBytes32,
         side: 1,
         maturity: BigNumber.from(dec22Fixture.toString()),
         unitPrice: BigNumber.from('9800'),
@@ -281,7 +281,7 @@ export const orderHistoryList: OrderList = [
         id: '2',
         orderId: BigNumber.from('1'),
         originalOrderId: BigNumber.from('1'),
-        currency: filBytes32,
+        currency: efilBytes32,
         side: 1,
         maturity: BigNumber.from(dec22Fixture.toString()),
         unitPrice: BigNumber.from('9600'),
@@ -295,7 +295,7 @@ export const orderHistoryList: OrderList = [
         id: '3',
         orderId: BigNumber.from('1'),
         originalOrderId: BigNumber.from('1'),
-        currency: btcBytes32,
+        currency: wbtcBytes32,
         side: 0,
         maturity: BigNumber.from(dec22Fixture.toString()),
         unitPrice: BigNumber.from('9800'),
@@ -316,7 +316,7 @@ export const transactions: TradeHistory = [
         orderPrice: '9800',
         createdAt: '1671859344',
         forwardValue: '1020000000000000000000',
-        currency: filBytes32,
+        currency: efilBytes32,
         maturity: jun23Fixture.toString(),
     },
     {
@@ -327,7 +327,7 @@ export const transactions: TradeHistory = [
         orderPrice: '9543',
         createdAt: '1671080520',
         forwardValue: '520000000000000000000',
-        currency: filBytes32,
+        currency: efilBytes32,
         maturity: jun23Fixture.toString(),
     },
     {
@@ -338,7 +338,7 @@ export const transactions: TradeHistory = [
         orderPrice: '9543',
         createdAt: '1671080520',
         forwardValue: '520000000000000000000',
-        currency: filBytes32,
+        currency: efilBytes32,
         maturity: mar23Fixture.toString(),
     },
     {
@@ -349,7 +349,7 @@ export const transactions: TradeHistory = [
         orderPrice: '9700',
         createdAt: '1671427140',
         forwardValue: '1040000000',
-        currency: btcBytes32,
+        currency: wbtcBytes32,
         maturity: jun23Fixture.toString(),
     },
     {
@@ -368,14 +368,14 @@ export const transactions: TradeHistory = [
 export const aggregatedTrades: TradeSummary[] = [
     {
         amount: BigNumber.from('500000000000000000000'),
-        currency: filBytes32,
+        currency: efilBytes32,
         forwardValue: BigNumber.from('500000000000000000000'),
         maturity: jun23Fixture.toString(),
         averagePrice: BigNumber.from(9671),
     },
     {
         amount: BigNumber.from('-500000000000000000000'),
-        currency: filBytes32,
+        currency: efilBytes32,
         forwardValue: BigNumber.from('-520000000000000000000'),
         maturity: mar23Fixture.toString(),
         averagePrice: BigNumber.from(9698),
@@ -384,7 +384,7 @@ export const aggregatedTrades: TradeSummary[] = [
         amount: BigNumber.from('-1000000000'),
         averagePrice: BigNumber.from(9700),
         forwardValue: BigNumber.from('-1040000000'),
-        currency: btcBytes32,
+        currency: wbtcBytes32,
         maturity: jun23Fixture.toString(),
     },
     {
@@ -402,8 +402,8 @@ export const collateralBook80: CollateralBook = {
         USDC: BigNumber.from('100000000'),
     },
     nonCollateral: {
-        FIL: BigNumber.from('100000000000000000000'),
-        BTC: BigNumber.from('20000000'),
+        EFIL: BigNumber.from('100000000000000000000'),
+        WBTC: BigNumber.from('20000000'),
     },
     usdCollateral: 2100.34,
     usdNonCollateral: 10600,
@@ -416,8 +416,8 @@ export const collateralBook37: CollateralBook = {
         USDC: BigNumber.from('10000000'),
     },
     nonCollateral: {
-        FIL: BigNumber.from('100000000000000000000'),
-        BTC: BigNumber.from('20000000'),
+        EFIL: BigNumber.from('100000000000000000000'),
+        WBTC: BigNumber.from('20000000'),
     },
     usdCollateral: 2300,
     usdNonCollateral: 10600,
@@ -430,8 +430,8 @@ export const emptyCollateralBook: CollateralBook = {
         USDC: BigNumber.from('0'),
     },
     nonCollateral: {
-        FIL: BigNumber.from('0'),
-        BTC: BigNumber.from('0'),
+        EFIL: BigNumber.from('0'),
+        WBTC: BigNumber.from('0'),
     },
     usdCollateral: 0,
     usdNonCollateral: 0,
@@ -441,7 +441,7 @@ export const emptyCollateralBook: CollateralBook = {
 function generateDailyVolumes(days: number) {
     const volumes: DailyVolumes = [];
     for (let i = 0; i < days; i++) {
-        for (const currency of [filBytes32, btcBytes32, ethBytes32]) {
+        for (const currency of [efilBytes32, wbtcBytes32, ethBytes32]) {
             for (const maturity of [
                 dec22Fixture,
                 mar23Fixture,
@@ -451,7 +451,7 @@ function generateDailyVolumes(days: number) {
             ])
                 volumes.push({
                     id: `${fromBytes32(currency)}-1677628800-2023-02-${i}`,
-                    currency: filBytes32,
+                    currency: efilBytes32,
                     maturity: dec22Fixture,
                     day: `2023-02-${i}`,
                     timestamp: maturity.toString(),

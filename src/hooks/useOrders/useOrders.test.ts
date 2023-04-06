@@ -6,6 +6,7 @@ import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { currencyMap, CurrencySymbol, toCurrency } from 'src/utils';
 import { Maturity } from 'src/utils/entities';
 import { useOrders } from '.';
+import { WalletSource } from '@secured-finance/sf-client/dist/secured-finance-client';
 
 const mockSecuredFinance = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mockSecuredFinance);
@@ -45,6 +46,7 @@ describe('useOrders hook', () => {
                 2022,
                 '0',
                 BigNumber.from('1000000000000000000'),
+                WalletSource.METAMASK,
                 9863
             );
         });
@@ -64,6 +66,7 @@ describe('useOrders hook', () => {
                 2022,
                 '0',
                 BigNumber.from('1000000000000000000'),
+                WalletSource.METAMASK,
                 undefined
             );
         });
@@ -72,7 +75,7 @@ describe('useOrders hook', () => {
     describe('unwind order', () => {
         it('should call the unwindOrder function', () => {
             const { result } = renderHook(() => useOrders());
-            result.current.unwindOrder(CurrencySymbol.FIL, dec22Fixture);
+            result.current.unwindOrder(CurrencySymbol.EFIL, dec22Fixture);
             expect(mockSecuredFinance.unwindOrder).toBeCalled();
         });
     });

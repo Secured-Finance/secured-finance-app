@@ -15,9 +15,9 @@ describe('CurrencyAmountItem Component', () => {
         expect(screen.getByText('$500.00 USD')).toBeInTheDocument();
     });
 
-    it('should render the formatted currency amount in FIL', () => {
+    it('should render the formatted currency amount in EFIL', () => {
         render(<Default />);
-        expect(screen.getByText('1,000 FIL')).toBeInTheDocument();
+        expect(screen.getByText('1,000 EFIL')).toBeInTheDocument();
     });
 
     it('should align the currency amount to the right', () => {
@@ -43,14 +43,13 @@ describe('CurrencyAmountItem Component', () => {
 
     it('should render information about the currency when no amount is defined', () => {
         render(<CurrencyPrice />);
-        expect(screen.getByText('FIL')).toBeInTheDocument();
+        expect(screen.getByText('EFIL')).toBeInTheDocument();
         expect(screen.getByText('$8.20 USD')).toBeInTheDocument();
     });
 
     it('should render the currency name when no amount and no price are defined', () => {
         render(<CurrencyName />);
-        expect(screen.getByText('FIL')).toBeInTheDocument();
-        expect(screen.getByText('Filecoin')).toBeInTheDocument();
+        expect(screen.getAllByText('EFIL')).toHaveLength(2);
     });
 
     it('should display the currency amount in neutral by default', () => {
@@ -76,6 +75,6 @@ describe('CurrencyAmountItem Component', () => {
 
     it('should display only one line of text when Compact is true', () => {
         render(<Compact />);
-        expect(screen.getByText('1,000 FIL')).toBeInTheDocument();
+        expect(screen.getByText('1,000 EFIL')).toBeInTheDocument();
     });
 });
