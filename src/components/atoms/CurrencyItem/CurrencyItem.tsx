@@ -4,7 +4,7 @@ import {
     currencyMap,
     CurrencySymbol,
     ordinaryFormat,
-    usdFormatAppendUSD,
+    usdFormat,
 } from 'src/utils';
 
 export const CurrencyItem = ({
@@ -23,9 +23,9 @@ export const CurrencyItem = ({
 } & ColorFormat) => {
     let secondLine: string;
     if (amount !== undefined && price !== undefined) {
-        secondLine = usdFormatAppendUSD(amount * price, 2);
+        secondLine = usdFormat(amount * price, 2);
     } else if (price) {
-        secondLine = usdFormatAppendUSD(price, 2);
+        secondLine = usdFormat(price, 2);
     } else {
         secondLine = currencyMap[ccy].name;
     }
