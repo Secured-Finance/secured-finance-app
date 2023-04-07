@@ -185,7 +185,7 @@ export const MarketDashboard = () => {
                         )}
                     </div>
                     <div>
-                        {account ? (
+                        {account && (
                             <GradientBox header='My Collateral'>
                                 <div className='px-3 py-6'>
                                     <CollateralManagementConciseTab
@@ -194,8 +194,6 @@ export const MarketDashboard = () => {
                                     />
                                 </div>
                             </GradientBox>
-                        ) : (
-                            <div />
                         )}
                     </div>
                 </section>
