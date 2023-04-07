@@ -185,14 +185,18 @@ export const MarketDashboard = () => {
                         )}
                     </div>
                     <div>
-                        <GradientBox header='My Collateral'>
-                            <div className='px-3 py-6'>
-                                <CollateralManagementConciseTab
-                                    collateralCoverage={98000}
-                                    totalCollateralInUSD={123}
-                                />
-                            </div>
-                        </GradientBox>
+                        {account ? (
+                            <GradientBox header='My Collateral'>
+                                <div className='px-3 py-6'>
+                                    <CollateralManagementConciseTab
+                                        collateralCoverage={98000}
+                                        totalCollateralInUSD={123}
+                                    />
+                                </div>
+                            </GradientBox>
+                        ) : (
+                            <div />
+                        )}
                     </div>
                 </section>
             </TwoColumns>
