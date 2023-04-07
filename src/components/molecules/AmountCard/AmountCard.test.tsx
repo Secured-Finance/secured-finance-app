@@ -26,6 +26,6 @@ describe('AmountCard Component', () => {
 
     it('should render a AmountCard with the amount in USD', () => {
         render(<Default />);
-        expect(screen.getByText('~ $41,500')).toBeInTheDocument();
+        expect(screen.getByText('~ $41,500 USD')).toBeInTheDocument();
     });
 });
