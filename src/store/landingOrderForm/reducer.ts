@@ -16,7 +16,7 @@ type LandingOrderFormStore = {
     lastView: ViewType;
 };
 const initialStore: LandingOrderFormStore = {
-    currency: CurrencySymbol.FIL,
+    currency: CurrencySymbol.EFIL,
     maturity: 0,
     side: OrderSide.BORROW,
     amount: '0',

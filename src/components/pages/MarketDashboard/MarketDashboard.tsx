@@ -141,7 +141,7 @@ export const MarketDashboard = () => {
                             title='Yield Curve'
                             curves={curves}
                             labels={Object.values(
-                                lendingContracts[CurrencySymbol.FIL]
+                                lendingContracts[CurrencySymbol.EFIL]
                             )
                                 .filter(o => o.isActive)
                                 .map(o => o.name)}
@@ -185,14 +185,16 @@ export const MarketDashboard = () => {
                         )}
                     </div>
                     <div>
-                        <GradientBox header='My Collateral'>
-                            <div className='px-3 py-6'>
-                                <CollateralManagementConciseTab
-                                    collateralCoverage={98000}
-                                    totalCollateralInUSD={123}
-                                />
-                            </div>
-                        </GradientBox>
+                        {account && (
+                            <GradientBox header='My Collateral'>
+                                <div className='px-3 py-6'>
+                                    <CollateralManagementConciseTab
+                                        collateralCoverage={98000}
+                                        totalCollateralInUSD={123}
+                                    />
+                                </div>
+                            </GradientBox>
+                        )}
                     </div>
                 </section>
             </TwoColumns>
