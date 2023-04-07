@@ -4,6 +4,7 @@ import { useCallback } from 'react';
 import { CurrencySymbol, toCurrency } from 'src/utils';
 import { Maturity } from 'src/utils/entities';
 import useSF from '../useSecuredFinance';
+import { WalletSource } from '@secured-finance/sf-client/dist/secured-finance-client';
 
 export enum OrderType {
     MARKET = 'Market',
@@ -19,13 +20,17 @@ export const useOrders = () => {
             ccy: CurrencySymbol,
             maturity: Maturity
         ) => {
-            if (!securedFinance) return;
-            const tx = await securedFinance.cancelLendingOrder(
-                toCurrency(ccy),
-                maturity.toNumber(),
-                orderId
-            );
-            return tx;
+            try {
+                if (!securedFinance) return;
+                const tx = await securedFinance.cancelLendingOrder(
+                    toCurrency(ccy),
+                    maturity.toNumber(),
+                    orderId
+                );
+                return tx;
+            } catch (error) {
+                console.error(error);
+            }
         },
         [securedFinance]
     );
@@ -46,6 +51,7 @@ export const useOrders = () => {
                     maturity.toNumber(),
                     side,
                     amount,
+                    WalletSource.METAMASK,
                     unitPrice
                 );
 

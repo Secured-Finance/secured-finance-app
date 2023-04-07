@@ -99,7 +99,7 @@ export const withAssetPrice = (Story: Story) => {
                         usd: 1.0,
                         usd_24h_change: 0.042530768538486696,
                     },
-                    bitcoin: {
+                    'wrapped-bitcoin': {
                         usd: 50000.0,
                         usd_24h_change: 0.12,
                     },
@@ -202,7 +202,7 @@ export const withMaturities = (Story: Story) => {
     useEffect(() => {
         const timerId = setTimeout(() => {
             dispatch(
-                updateLendingMarketContract(maturities, CurrencySymbol.FIL)
+                updateLendingMarketContract(maturities, CurrencySymbol.EFIL)
             );
             dispatch(
                 updateLendingMarketContract(maturities, CurrencySymbol.ETH)
@@ -211,7 +211,7 @@ export const withMaturities = (Story: Story) => {
                 updateLendingMarketContract(maturities, CurrencySymbol.USDC)
             );
             dispatch(
-                updateLendingMarketContract(maturities, CurrencySymbol.BTC)
+                updateLendingMarketContract(maturities, CurrencySymbol.WBTC)
             );
         }, 200);
 
@@ -231,9 +231,9 @@ export const withWalletBalances = (Story: Story) => {
     const dispatch = useDispatch();
     useEffect(() => {
         const timeoutId = setTimeout(() => {
-            dispatch(updateBalance(10000, CurrencySymbol.FIL));
+            dispatch(updateBalance(10000, CurrencySymbol.EFIL));
             dispatch(updateBalance(2000, CurrencySymbol.ETH));
-            dispatch(updateBalance(300, CurrencySymbol.BTC));
+            dispatch(updateBalance(300, CurrencySymbol.WBTC));
             dispatch(updateBalance(4000, CurrencySymbol.USDC));
         }, 300);
 

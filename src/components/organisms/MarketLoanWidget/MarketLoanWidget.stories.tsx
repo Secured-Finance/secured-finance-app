@@ -1,9 +1,9 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { within } from '@storybook/testing-library';
 import {
-    btcBytes32,
-    filBytes32,
+    efilBytes32,
     preloadedLendingMarkets,
+    wbtcBytes32,
 } from 'src/stories/mocks/fixtures';
 import { CurrencySymbol } from 'src/utils';
 import { MarketLoanWidget } from './MarketLoanWidget';
@@ -11,21 +11,21 @@ import { MarketLoanWidget } from './MarketLoanWidget';
 const filMarkets = preloadedLendingMarkets?.availableContracts?.lendingMarkets
     ? Object.values(
           preloadedLendingMarkets?.availableContracts?.lendingMarkets[
-              CurrencySymbol.FIL
+              CurrencySymbol.EFIL
           ]
       ).map(m => ({
           ...m,
-          currency: filBytes32,
+          currency: efilBytes32,
       }))
     : [];
 const btcMarkets = preloadedLendingMarkets?.availableContracts?.lendingMarkets
     ? Object.values(
           preloadedLendingMarkets?.availableContracts?.lendingMarkets[
-              CurrencySymbol.BTC
+              CurrencySymbol.WBTC
           ]
       ).map(m => ({
           ...m,
-          currency: btcBytes32,
+          currency: wbtcBytes32,
       }))
     : [];
 

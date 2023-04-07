@@ -8,7 +8,7 @@ export default {
     title: 'Molecules/OpenOrderActionCell',
     component: OpenOrderActionCell,
     args: {
-        ccy: CurrencySymbol.FIL,
+        ccy: CurrencySymbol.EFIL,
         maturity: dec22Fixture,
         orderId: BigNumber.from(1),
     },
@@ -16,7 +16,7 @@ export default {
         ccy: {
             control: {
                 type: 'select',
-                options: [CurrencySymbol.FIL, CurrencySymbol.ETH],
+                options: [CurrencySymbol.EFIL, CurrencySymbol.ETH],
             },
         },
     },

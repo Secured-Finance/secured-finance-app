@@ -11,10 +11,10 @@ describe('MarketLoanWidget Component', () => {
 
     it('should filter by currency', () => {
         render(<Default />);
-        expect(screen.queryByText('BTC')).toBeInTheDocument();
+        expect(screen.queryByText('WBTC')).toBeInTheDocument();
         screen.getByRole('button', { name: 'All Assets' }).click();
-        screen.getByRole('menuitem', { name: 'Filecoin' }).click();
-        expect(screen.queryByText('BTC')).not.toBeInTheDocument();
+        screen.getByRole('menuitem', { name: 'EFIL' }).click();
+        expect(screen.queryByText('WBTC')).not.toBeInTheDocument();
     });
 
     it('should filter by maturity', () => {

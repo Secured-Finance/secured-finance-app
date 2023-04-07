@@ -7,7 +7,7 @@ const { Default } = composeStories(stories);
 describe('test CurveHeaderAsset component', () => {
     it('should render CurveHeaderAsset', () => {
         render(<Default />);
-        expect(screen.getByText('Filecoin')).toBeInTheDocument();
+        expect(screen.getByText('EFIL')).toBeInTheDocument();
         expect(screen.getByText('$8.02')).toBeInTheDocument();
         expect(screen.getByText('-2.45%')).toBeInTheDocument();
         expect(screen.getByRole('img')).toBeInTheDocument();
