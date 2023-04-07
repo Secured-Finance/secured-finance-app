@@ -92,7 +92,7 @@ export const WithdrawCollateral = ({
     onClose,
     collateralList,
 }: {
-    collateralList: Record<string, CollateralInfo>;
+    collateralList: Partial<Record<CurrencySymbol, CollateralInfo>>;
 } & DialogState) => {
     const { account } = useWallet();
     const [asset, setAsset] = useState(CurrencySymbol.ETH);
@@ -131,13 +131,15 @@ export const WithdrawCollateral = ({
         async (currentStep: Step) => {
             switch (currentStep) {
                 case Step.withdrawCollateral:
-                    const availableAmount = collateralList[asset].available;
+                    const availableAmount = collateralList[asset]?.available;
                     if (
                         !collateral ||
                         collateral.isZero() ||
                         collateral.gt(
                             BigNumber.from(
-                                Math.floor(availableAmount * 1e6).toString()
+                                Math.floor(
+                                    availableAmount ?? 0 * 1e6
+                                ).toString()
                             )
                         )
                     )
@@ -194,7 +196,7 @@ export const WithdrawCollateral = ({
                                         setCollateral(v)
                                     }
                                     availableAmount={
-                                        collateralList[asset].available
+                                        collateralList[asset]?.available ?? 0
                                     }
                                 />
                                 <div className='typography-caption-2 h-fit rounded-xl border border-red px-3 py-2 text-slateGray'>
