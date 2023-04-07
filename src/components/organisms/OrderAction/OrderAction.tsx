@@ -72,6 +72,7 @@ export const OrderAction = ({
             {account ? (
                 canBorrow || side === OrderSide.LEND ? (
                     <Button
+                        disabled={amount.isZero()}
                         fullWidth
                         onClick={() => {
                             setOpenPlaceOrderDialog(true);
