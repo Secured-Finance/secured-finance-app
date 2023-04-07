@@ -8,7 +8,7 @@ export default {
     args: {
         title: 'Yield Curve Title',
         curves: {
-            FIL: [
+            EFIL: [
                 new Rate(9486),
                 new Rate(8484),
                 new Rate(7478),
@@ -18,7 +18,7 @@ export default {
                 new Rate(9426),
                 new Rate(9416),
             ],
-            BTC: [
+            WBTC: [
                 new Rate(11386),
                 new Rate(12384),
                 new Rate(13378),

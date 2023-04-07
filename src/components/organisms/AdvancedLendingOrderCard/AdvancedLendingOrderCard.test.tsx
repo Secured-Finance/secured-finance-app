@@ -92,7 +92,7 @@ describe('AdvancedLendingOrderCard Component', () => {
     it('should show a button to manage collateral', async () => {
         await waitFor(() => render(<Default />));
         expect(
-            screen.getByRole('button', { name: 'Manage >>' })
+            screen.getByRole('button', { name: 'Manage »' })
         ).toBeInTheDocument();
     });
 
