@@ -42,7 +42,6 @@ export const InputBase = ({
             allowNegative={false}
             value={value}
             displayType='input'
-            data-testid={label}
             onValueChange={handleValueChange}
             aria-label={label}
             decimalScale={decimalPlacesAllowed}

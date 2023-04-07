@@ -101,7 +101,7 @@ describe('AdvancedLendingOrderCard Component', () => {
         const button = screen.getByTestId('place-order-button');
         expect(button).toBeInTheDocument();
         expect(screen.getByText('Place Order')).toBeInTheDocument();
-        const input = screen.getByTestId('Amount');
+        const input = screen.getByRole('textbox', { name: 'Amount' });
         fireEvent.change(input, { target: { value: '0' } });
         expect(button).toBeDisabled();
     });
