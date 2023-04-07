@@ -22,12 +22,12 @@ describe('Dropdown Asset Selection Component', () => {
 
     it('should render a dropdown with the value prop as the selected default option', () => {
         render(<AssetDropdown />);
-        expect(screen.getByText('Bitcoin')).toBeInTheDocument();
+        expect(screen.getByText('Wrapped Bitcoin')).toBeInTheDocument();
     });
 
     it('should change the value of selected option when rerendered with a different selected option', () => {
         render(<AssetDropdown />);
-        expect(screen.getByText('Bitcoin')).toBeInTheDocument();
+        expect(screen.getByText('Wrapped Bitcoin')).toBeInTheDocument();
         render(
             <AssetDropdown selected={{ label: 'Ethereum', value: 'ETH' }} />
         );
@@ -67,7 +67,7 @@ describe('Dropdown Asset Selection Component', () => {
     it('should call onChange function with the initial value', () => {
         const onChange = jest.fn();
         render(<AssetDropdown onChange={onChange} />);
-        expect(onChange).toHaveBeenLastCalledWith('BTC');
+        expect(onChange).toHaveBeenLastCalledWith('WBTC');
     });
 
     it('should render different button for variant nolabel', () => {

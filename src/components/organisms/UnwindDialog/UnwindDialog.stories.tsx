@@ -17,7 +17,7 @@ export default {
         maturity: dec22Fixture,
         amount: new Amount(
             BigNumber.from('1000000000000000000000'),
-            CurrencySymbol.FIL
+            CurrencySymbol.EFIL
         ),
     },
     decorators: [withAssetPrice, withWalletProvider],
