@@ -32,16 +32,6 @@ describe('DepositCollateral component', () => {
         );
     });
 
-    it('should do nothing when collateral amount is 0 and continue button is clicked', () => {
-        const onClose = jest.fn();
-        render(<Default onClose={onClose} />);
-
-        const button = screen.getByTestId('dialog-action-button');
-        fireEvent.click(button);
-        expect(onClose).not.toHaveBeenCalled();
-        expect(screen.getByRole('textbox')).toBeInTheDocument();
-    });
-
     it('should select asset and update amount', () => {
         render(<Default />, { preloadedState });
         fireEvent.click(screen.getByTestId('collateral-selector-button'));
@@ -126,7 +116,7 @@ describe('DepositCollateral component', () => {
         });
     });
 
-    it('should do nothing when collateral amount is greater than available amount and continue button is clicked', () => {
+    it('should disable the button when collateral amount is greater than available amount and continue button is clicked', () => {
         const onClose = jest.fn();
         render(<Default onClose={onClose} />);
         const input = screen.getByRole('textbox');
@@ -136,8 +126,14 @@ describe('DepositCollateral component', () => {
         expect(screen.getByText('50 USDC Available')).toBeInTheDocument();
         fireEvent.change(input, { target: { value: '100' } });
         const button = screen.getByTestId('dialog-action-button');
-        fireEvent.click(button);
-        expect(onClose).not.toHaveBeenCalled();
-        expect(input).toBeInTheDocument();
+        expect(button).toBeDisabled();
+    });
+
+    it('should disable the button when collateral is zero', () => {
+        const onClose = jest.fn();
+        render(<Default onClose={onClose} />);
+
+        const button = screen.getByTestId('dialog-action-button');
+        expect(button).toBeDisabled();
     });
 });
