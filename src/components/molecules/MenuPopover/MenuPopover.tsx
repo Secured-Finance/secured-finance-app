@@ -17,7 +17,7 @@ export const MenuPopover = ({}) => {
                         <>
                             <Popover.Button
                                 data-cy='popover-button'
-                                className='typography-nav-menu-default h-4 whitespace-nowrap text-neutral-8 opacity-70 duration-300 focus:outline-none group-hover:opacity-100 group-hover:ease-in-out'
+                                className='typography-nav-menu-default mt-1 h-4 whitespace-nowrap text-neutral-8 opacity-70 duration-300 focus:outline-none group-hover:opacity-100 group-hover:ease-in-out'
                             >
                                 More...
                             </Popover.Button>
