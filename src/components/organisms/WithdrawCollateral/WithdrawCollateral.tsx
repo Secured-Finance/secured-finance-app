@@ -124,6 +124,10 @@ export const WithdrawCollateral = ({
         setDisableButton(false);
     }, [collateralList, asset, collateral]);
 
+    useEffect(() => {
+        setCollateral(BigNumber.from('0'));
+    }, [asset]);
+
     const handleWithdrawCollateral = useCallback(async () => {
         try {
             const tx = await onWithdrawCollateral();
@@ -162,9 +166,9 @@ export const WithdrawCollateral = ({
         [collateral, handleWithdrawCollateral, handleClose]
     );
 
-    const handleChange = (v: CollateralInfo) => {
+    const handleChange = useCallback((v: CollateralInfo) => {
         setAsset(v.symbol);
-    };
+    }, []);
 
     return (
         <Dialog
