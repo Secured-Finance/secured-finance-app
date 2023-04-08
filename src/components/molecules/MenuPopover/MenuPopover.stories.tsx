@@ -22,6 +22,6 @@ export const Default = Template.bind({});
 export const Expanded = Template.bind({});
 Expanded.play = ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    const walletButton = canvas.getByRole('button');
-    walletButton.click();
+    const menuButton = canvas.getByRole('button');
+    menuButton.click();
 };
