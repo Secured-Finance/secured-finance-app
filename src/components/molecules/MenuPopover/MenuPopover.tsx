@@ -32,7 +32,7 @@ export const MenuPopover = ({}) => {
                             >
                                 <Popover.Panel className='absolute left-40 z-10 mt-2 w-80 -translate-x-1/2'>
                                     <div className='overflow-hidden rounded-lg shadow-sm'>
-                                        <div className='relative flex flex-col space-y-2 border border-black bg-universeBlue p-2 text-white shadow-dropdown'>
+                                        <div className='relative flex flex-col space-y-2 border border-black bg-universeBlue p-2  shadow-dropdown'>
                                             <MenuItem
                                                 text='Secured Finance landing page'
                                                 icon={
