@@ -13,12 +13,14 @@ export const Dialog = ({
     isOpen = true,
     onClose,
     children,
+    disableButton,
 }: {
     title: string;
     description: string;
     callToAction: string;
     onClick: () => void;
     children: JSX.Element;
+    disableButton?: boolean;
 } & DialogState) => {
     return (
         <HeadlessDialog
@@ -51,6 +53,7 @@ export const Dialog = ({
                                 fullWidth
                                 onClick={onClick}
                                 data-testid='dialog-action-button'
+                                disabled={disableButton}
                             >
                                 {callToAction}
                             </Button>

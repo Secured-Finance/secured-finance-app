@@ -1,5 +1,5 @@
 import { BigNumber } from 'ethers';
-import { useCallback, useReducer, useState } from 'react';
+import { useCallback, useEffect, useReducer, useState } from 'react';
 import { useSelector } from 'react-redux';
 import Loader from 'src/assets/img/gradient-loader.png';
 import { CollateralSelector } from 'src/components/atoms';
@@ -12,6 +12,7 @@ import { RootState } from 'src/store/types';
 import {
     AddressUtils,
     amountFormatterFromBase,
+    amountFormatterToBase,
     CollateralInfo,
     CurrencySymbol,
     handleContractTransaction,
@@ -101,6 +102,7 @@ export const WithdrawCollateral = ({
     const [errorMessage, setErrorMessage] = useState(
         'Your withdrawal transaction has failed.'
     );
+    const [disableButton, setDisableButton] = useState(false);
 
     const priceList = useSelector((state: RootState) => getPriceMap(state));
     const { onWithdrawCollateral } = useWithdrawCollateral(asset, collateral);
@@ -109,6 +111,18 @@ export const WithdrawCollateral = ({
         dispatch({ type: 'default' });
         onClose();
     }, [onClose]);
+
+    useEffect(() => {
+        const availableAmount = collateralList[asset]?.available;
+        if (
+            collateral.isZero() ||
+            collateral.gt(amountFormatterToBase[asset](availableAmount ?? 0))
+        ) {
+            setDisableButton(true);
+            return;
+        }
+        setDisableButton(false);
+    }, [collateralList, asset, collateral]);
 
     const handleWithdrawCollateral = useCallback(async () => {
         try {
@@ -131,19 +145,7 @@ export const WithdrawCollateral = ({
         async (currentStep: Step) => {
             switch (currentStep) {
                 case Step.withdrawCollateral:
-                    const availableAmount = collateralList[asset]?.available;
-                    if (
-                        !collateral ||
-                        collateral.isZero() ||
-                        collateral.gt(
-                            BigNumber.from(
-                                Math.floor(
-                                    availableAmount ?? 0 * 1e6
-                                ).toString()
-                            )
-                        )
-                    )
-                        return;
+                    if (!collateral) return;
                     dispatch({ type: 'next' });
                     handleWithdrawCollateral();
                     break;
@@ -157,13 +159,7 @@ export const WithdrawCollateral = ({
                     break;
             }
         },
-        [
-            collateralList,
-            asset,
-            collateral,
-            handleWithdrawCollateral,
-            handleClose,
-        ]
+        [collateral, handleWithdrawCollateral, handleClose]
     );
 
     const handleChange = (v: CollateralInfo) => {
@@ -178,6 +174,7 @@ export const WithdrawCollateral = ({
             description={state.description}
             callToAction={state.buttonText}
             onClick={() => onClick(state.currentStep)}
+            disableButton={disableButton}
         >
             {(() => {
                 switch (state.currentStep) {

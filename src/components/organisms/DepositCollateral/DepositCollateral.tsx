@@ -1,5 +1,5 @@
 import { BigNumber } from 'ethers';
-import { useCallback, useReducer, useState } from 'react';
+import { useCallback, useEffect, useReducer, useState } from 'react';
 import { useSelector } from 'react-redux';
 import Loader from 'src/assets/img/gradient-loader.png';
 import { CollateralSelector } from 'src/components/atoms';
@@ -12,6 +12,7 @@ import { RootState } from 'src/store/types';
 import {
     AddressUtils,
     amountFormatterFromBase,
+    amountFormatterToBase,
     CollateralInfo,
     CurrencySymbol,
     handleContractTransaction,
@@ -100,6 +101,7 @@ export const DepositCollateral = ({
     const [errorMessage, setErrorMessage] = useState(
         'Your deposit transaction has failed.'
     );
+    const [disableButton, setDisableButton] = useState(false);
 
     const priceList = useSelector((state: RootState) => getPriceMap(state));
     const { onDepositCollateral } = useDepositCollateral(asset, collateral);
@@ -108,6 +110,29 @@ export const DepositCollateral = ({
         dispatch({ type: 'default' });
         onClose();
     }, [onClose]);
+
+    const optionList = Object.values(collateralList);
+    const defaultCcyIndex = optionList.findIndex(
+        col => col.symbol === CurrencySymbol.USDC
+    );
+    [optionList[0], optionList[defaultCcyIndex]] = [
+        optionList[defaultCcyIndex],
+        optionList[0],
+    ];
+
+    useEffect(() => {
+        const availableAmount = optionList.find(
+            op => op.symbol === asset
+        )?.available;
+        if (
+            collateral.isZero() ||
+            collateral.gt(amountFormatterToBase[asset](availableAmount ?? 0))
+        ) {
+            setDisableButton(true);
+            return;
+        }
+        setDisableButton(false);
+    }, [asset, collateral, optionList]);
 
     const handleDepositCollateral = useCallback(async () => {
         try {
@@ -128,33 +153,11 @@ export const DepositCollateral = ({
         }
     }, [onDepositCollateral]);
 
-    const optionList = Object.values(collateralList);
-    const defaultCcyIndex = optionList.findIndex(
-        col => col.symbol === CurrencySymbol.USDC
-    );
-    [optionList[0], optionList[defaultCcyIndex]] = [
-        optionList[defaultCcyIndex],
-        optionList[0],
-    ];
-
     const onClick = useCallback(
         async (currentStep: Step) => {
             switch (currentStep) {
                 case Step.depositCollateral:
-                    const availableAmount = optionList.find(
-                        op => op.symbol === asset
-                    )?.available;
-                    if (
-                        !collateral ||
-                        collateral.isZero() ||
-                        (availableAmount &&
-                            collateral.gt(
-                                BigNumber.from(
-                                    Math.floor(availableAmount * 1e6).toString()
-                                )
-                            ))
-                    )
-                        return;
+                    if (!collateral) return;
                     dispatch({ type: 'next' });
                     handleDepositCollateral();
                     break;
@@ -168,7 +171,7 @@ export const DepositCollateral = ({
                     break;
             }
         },
-        [asset, collateral, handleClose, handleDepositCollateral, optionList]
+        [collateral, handleClose, handleDepositCollateral]
     );
 
     const handleChange = (v: CollateralInfo) => {
@@ -183,6 +186,7 @@ export const DepositCollateral = ({
             description={state.description}
             callToAction={state.buttonText}
             onClick={() => onClick(state.currentStep)}
+            disableButton={disableButton}
         >
             {(() => {
                 switch (state.currentStep) {
