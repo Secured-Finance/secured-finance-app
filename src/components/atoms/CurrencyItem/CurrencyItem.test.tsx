@@ -44,7 +44,7 @@ describe('CurrencyAmountItem Component', () => {
     it('should render information about the currency when no amount is defined', () => {
         render(<CurrencyPrice />);
         expect(screen.getByText('EFIL')).toBeInTheDocument();
-        expect(screen.getByText('$8.20')).toBeInTheDocument();
+        expect(screen.getByText('$8.20 USD')).toBeInTheDocument();
     });
 
     it('should render the currency name when no amount and no price are defined', () => {
