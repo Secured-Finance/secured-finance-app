@@ -166,9 +166,9 @@ export const WithdrawCollateral = ({
         [collateral, handleWithdrawCollateral, handleClose]
     );
 
-    const handleChange = useCallback((v: CollateralInfo) => {
+    const handleChange = (v: CollateralInfo) => {
         setAsset(v.symbol);
-    }, []);
+    };
 
     return (
         <Dialog
