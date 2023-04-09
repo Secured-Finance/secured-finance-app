@@ -50,12 +50,11 @@ describe('LendingCard Component', () => {
 
     it('should open confirm order dialog when borrow button is clicked', async () => {
         await waitFor(() => render(<Default />, { preloadedState }));
-
+        const input = screen.getByRole('textbox');
+        fireEvent.change(input, { target: { value: '10' } });
         fireEvent.click(screen.getByTestId('place-order-button'));
-
         expect(screen.getByRole('dialog')).toBeInTheDocument();
         expect(screen.getByText('Confirm Order')).toBeInTheDocument();
-
         const button = screen.getByTestId('dialog-action-button');
         expect(button).toHaveTextContent('OK');
     });
@@ -117,6 +116,8 @@ describe('LendingCard Component', () => {
 
     it('should open the confirm order dialog to place a market order when the borrow button is clicked', async () => {
         await waitFor(() => render(<Default />, { preloadedState }));
+        const input = screen.getByRole('textbox');
+        fireEvent.change(input, { target: { value: '10' } });
         fireEvent.click(screen.getByTestId('place-order-button'));
         expect(screen.getByText('Confirm Order')).toBeInTheDocument();
         expect(screen.getByText('Market Order')).toBeInTheDocument();
@@ -131,5 +132,12 @@ describe('LendingCard Component', () => {
                 `~ ${preloadedAssetPrices.assetPrices.EFIL.price * 10.5} USD`
             )
         ).toBeInTheDocument();
+    });
+
+    it('should render a disabled button if amount is zero', async () => {
+        await waitFor(() => render(<Default />, { preloadedState }));
+        const input = screen.getByRole('textbox');
+        expect(input).toHaveValue('');
+        expect(screen.getByTestId('place-order-button')).toBeDisabled();
     });
 });
