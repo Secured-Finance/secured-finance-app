@@ -46,7 +46,7 @@ export const mockUseSF = () => {
                             BigNumber.from(9626),
                             BigNumber.from(9616),
                         ]);
-                    case CurrencySymbol.FIL:
+                    case CurrencySymbol.EFIL:
                         return Promise.resolve([
                             BigNumber.from(9586),
                             BigNumber.from(9584),
@@ -68,7 +68,7 @@ export const mockUseSF = () => {
                             BigNumber.from(9426),
                             BigNumber.from(9416),
                         ]);
-                    case CurrencySymbol.BTC:
+                    case CurrencySymbol.WBTC:
                         return Promise.resolve([
                             BigNumber.from(9386),
                             BigNumber.from(9384),
@@ -225,9 +225,9 @@ export const mockUseSF = () => {
         getProtocolDepositAmount: jest.fn(() =>
             Promise.resolve({
                 ETH: BigNumber.from('100000000000000000000'), // 100 ETH
-                FIL: BigNumber.from('100000000000000000000000'), // 100 000 FIL
+                EFIL: BigNumber.from('100000000000000000000000'), // 100 000 EFIL
                 USDC: BigNumber.from('1000000000000'), // 1 000 000 USDC
-                BTC: BigNumber.from('1000000000000'), // 1000 BTC
+                WBTC: BigNumber.from('1000000000000'), // 1000 BTC
             })
         ),
 
