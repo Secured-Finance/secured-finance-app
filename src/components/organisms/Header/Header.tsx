@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import { useDispatch, useSelector } from 'react-redux';
 import SFLogo from 'src/assets/img/logo.svg';
 import { Button, NavTab } from 'src/components/atoms';
+import { MenuPopover } from 'src/components/molecules';
 import { WalletDialog, WalletPopover } from 'src/components/organisms';
 import useSF from 'src/hooks/useSecuredFinance';
 import { setWalletDialogOpen } from 'src/store/interactions';
@@ -51,6 +52,7 @@ export const Header = () => {
                     link='/portfolio'
                 />
                 <ItemLink text='Faucet' dataCy='faucet' link='/faucet' />
+                <MenuPopover />
             </div>
             <div className='mr-5'>
                 {account ? (
