@@ -5,8 +5,7 @@ import Discord from 'src/assets/icons/discord.svg';
 import Medium from 'src/assets/icons/medium.svg';
 import SF from 'src/assets/icons/SF-KO.svg';
 import Twitter from 'src/assets/icons/twitter.svg';
-import { MenuItem } from 'src/components/atoms/MenuItem';
-import { Separator } from '../../atoms/Separator';
+import { MenuItem, Separator } from 'src/components/atoms';
 
 export const MenuPopover = ({}) => {
     return (
@@ -34,7 +33,7 @@ export const MenuPopover = ({}) => {
                                     <div className='overflow-hidden rounded-lg shadow-sm'>
                                         <div className='relative flex flex-col space-y-2 border border-black bg-universeBlue p-2  shadow-dropdown'>
                                             <MenuItem
-                                                text='Secured Finance landing page'
+                                                text='Secured Finance Landing page'
                                                 icon={
                                                     <SF className='h-6 w-6 rounded-full ' />
                                                 }
@@ -52,7 +51,7 @@ export const MenuPopover = ({}) => {
                                             />
                                             <Separator />
                                             <MenuItem
-                                                text='Follow us on twitter'
+                                                text='Follow us on Twitter'
                                                 icon={
                                                     <Twitter className='h-6 w-6 text-slateGray' />
                                                 }
