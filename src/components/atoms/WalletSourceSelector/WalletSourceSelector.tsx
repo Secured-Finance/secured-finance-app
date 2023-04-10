@@ -1,7 +1,7 @@
 import { Listbox, Transition } from '@headlessui/react';
 import { WalletSource } from '@secured-finance/sf-client/dist/secured-finance-client';
 import classNames from 'classnames';
-import { Fragment, useEffect, useState } from 'react';
+import { Fragment, useEffect, useMemo, useState } from 'react';
 import { ExpandIndicator, Separator } from 'src/components/atoms';
 import { AddressUtils, CurrencySymbol, ordinaryFormat } from 'src/utils';
 
@@ -35,11 +35,24 @@ export const WalletSourceSelector = ({
     account,
     onChange,
 }: WalletSourceSelectorProps) => {
-    const [selectedOption, setSelectedOption] = useState(selected);
+    const [selectedValue, setSelectedValue] = useState(selected);
+    const list = useMemo(
+        () =>
+            optionList.filter(
+                (obj, _index) =>
+                    obj.available > 0 || obj.source === WalletSource.METAMASK
+            ),
+        [optionList]
+    );
+
+    const selectedOption = useMemo(
+        () => list.find(o => o === selectedValue) || list[0],
+        [list, selectedValue]
+    );
 
     useEffect(() => {
-        onChange(selectedOption.source);
-    }, [selectedOption, onChange]);
+        onChange(selectedValue.source);
+    }, [selectedValue, onChange]);
 
     return (
         <div className='flex h-20 w-full flex-col justify-between'>
@@ -48,7 +61,7 @@ export const WalletSourceSelector = ({
                 <span className='mr-1'>Available to Lend</span>
             </div>
             <div className='w-full'>
-                <Listbox value={selected} onChange={setSelectedOption}>
+                <Listbox value={selectedOption} onChange={setSelectedValue}>
                     {({ open }) => (
                         <>
                             <div className='relative h-full'>
@@ -58,11 +71,11 @@ export const WalletSourceSelector = ({
                                 >
                                     <div className='flex h-10 flex-row items-center gap-2 rounded-lg bg-white-5 px-2'>
                                         <span>
-                                            <selected.iconSVG className='h-5 w-5' />
+                                            <selectedOption.iconSVG className='h-5 w-5' />
                                         </span>
                                         <span className='typography-caption-2 min-w-[80px] items-center leading-4 text-grayScale'>
                                             {formatSource(
-                                                selected.source,
+                                                selectedOption.source,
                                                 account
                                             )}
                                         </span>
@@ -70,8 +83,8 @@ export const WalletSourceSelector = ({
                                     </div>
                                     <div className='typography-caption w-fit max-w-[200px] items-center justify-end text-white-60'>
                                         {formatOption(
-                                            selected.available,
-                                            selected.asset
+                                            selectedOption.available,
+                                            selectedOption.asset
                                         )}
                                     </div>
                                 </Listbox.Button>
@@ -82,7 +95,7 @@ export const WalletSourceSelector = ({
                                     leaveTo='opacity-0'
                                 >
                                     <Listbox.Options className='absolute z-10 mt-1 max-h-60 w-full gap-1 overflow-auto rounded-xl bg-gunMetal px-2 py-2 pt-2 focus:outline-none'>
-                                        {optionList.map((assetObj, index) => (
+                                        {list.map((assetObj, index) => (
                                             <Listbox.Option
                                                 key={index}
                                                 data-testid={`option-${index}`}
@@ -116,8 +129,7 @@ export const WalletSourceSelector = ({
                                                             </span>
                                                         </div>
                                                         {index !==
-                                                        optionList.length -
-                                                            1 ? (
+                                                        list.length - 1 ? (
                                                             <div className='py-2'>
                                                                 <Separator />
                                                             </div>
