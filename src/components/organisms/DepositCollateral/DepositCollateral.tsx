@@ -1,5 +1,5 @@
 import { BigNumber } from 'ethers';
-import { useCallback, useEffect, useReducer, useState } from 'react';
+import { useCallback, useReducer, useState } from 'react';
 import { useSelector } from 'react-redux';
 import Loader from 'src/assets/img/gradient-loader.png';
 import { CollateralSelector } from 'src/components/atoms';
@@ -95,14 +95,17 @@ export const DepositCollateral = ({
     collateralList: Partial<Record<CurrencySymbol, CollateralInfo>>;
 } & DialogState) => {
     const [asset, setAsset] = useState(CurrencySymbol.USDC);
-    const [collateral, setCollateral] = useState(BigNumber.from(0));
+    const [collateral, setCollateral] = useState('0');
     const [depositAddress, setDepositAddress] = useState('');
     const [state, dispatch] = useReducer(reducer, stateRecord[1]);
     const [errorMessage, setErrorMessage] = useState(
         'Your deposit transaction has failed.'
     );
     const priceList = useSelector((state: RootState) => getPriceMap(state));
-    const { onDepositCollateral } = useDepositCollateral(asset, collateral);
+    const { onDepositCollateral } = useDepositCollateral(
+        asset,
+        BigNumber.from(collateral)
+    );
 
     const handleClose = useCallback(() => {
         dispatch({ type: 'default' });
@@ -117,18 +120,22 @@ export const DepositCollateral = ({
         optionList[defaultCcyIndex],
         optionList[0],
     ];
-    useEffect(() => {
-        setCollateral(BigNumber.from('0'));
-    }, [asset]);
 
     const isDisabled = useCallback(() => {
-        const availableAmount = collateralList[asset]?.available;
-        return (
-            !collateral ||
-            collateral.isZero() ||
-            collateral.gt(amountFormatterToBase[asset](availableAmount ?? 0))
-        );
-    }, [asset, collateral, collateralList]);
+        if (!collateral) {
+            return true;
+        }
+        const col = BigNumber.from(collateral);
+        const availableAmount = optionList.find(
+            op => op.symbol === asset
+        )?.available;
+        if (
+            col.isZero() ||
+            col.gt(amountFormatterToBase[asset](availableAmount ?? 0))
+        ) {
+            return true;
+        }
+    }, [asset, collateral, optionList]);
 
     const handleDepositCollateral = useCallback(async () => {
         try {
@@ -171,6 +178,7 @@ export const DepositCollateral = ({
 
     const handleChange = (v: CollateralInfo) => {
         setAsset(v.symbol);
+        setCollateral('0');
     };
 
     return (
@@ -197,7 +205,7 @@ export const DepositCollateral = ({
                                     price={priceList[asset]}
                                     asset={asset}
                                     onAmountChange={(v: BigNumber) =>
-                                        setCollateral(v)
+                                        setCollateral(v.toString())
                                     }
                                     availableAmount={
                                         collateralList[asset]?.available ?? 0
@@ -232,7 +240,7 @@ export const DepositCollateral = ({
                                     [
                                         'Amount',
                                         amountFormatterFromBase[asset](
-                                            collateral
+                                            BigNumber.from(collateral)
                                         ).toString(),
                                     ],
                                 ]}

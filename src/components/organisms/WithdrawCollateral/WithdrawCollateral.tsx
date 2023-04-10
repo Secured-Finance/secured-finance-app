@@ -1,5 +1,5 @@
 import { BigNumber } from 'ethers';
-import { useCallback, useEffect, useReducer, useState } from 'react';
+import { useCallback, useReducer, useState } from 'react';
 import { useSelector } from 'react-redux';
 import Loader from 'src/assets/img/gradient-loader.png';
 import { CollateralSelector } from 'src/components/atoms';
@@ -98,13 +98,16 @@ export const WithdrawCollateral = ({
     const { account } = useWallet();
     const [asset, setAsset] = useState(CurrencySymbol.ETH);
     const [state, dispatch] = useReducer(reducer, stateRecord[1]);
-    const [collateral, setCollateral] = useState(BigNumber.from(0));
+    const [collateral, setCollateral] = useState('0');
     const [errorMessage, setErrorMessage] = useState(
         'Your withdrawal transaction has failed.'
     );
 
     const priceList = useSelector((state: RootState) => getPriceMap(state));
-    const { onWithdrawCollateral } = useWithdrawCollateral(asset, collateral);
+    const { onWithdrawCollateral } = useWithdrawCollateral(
+        asset,
+        BigNumber.from(collateral)
+    );
 
     const handleClose = useCallback(() => {
         dispatch({ type: 'default' });
@@ -112,20 +115,20 @@ export const WithdrawCollateral = ({
     }, [onClose]);
 
     const isDisabled = useCallback(() => {
+        if (!collateral) {
+            return true;
+        }
+        const col = BigNumber.from(collateral);
         return (
-            !collateral ||
-            collateral.isZero() ||
-            collateral.gt(
+            !col ||
+            col.isZero() ||
+            col.gt(
                 amountFormatterToBase[asset](
                     collateralList[asset]?.available ?? 0
                 )
             )
         );
     }, [collateralList, asset, collateral]);
-
-    useEffect(() => {
-        setCollateral(BigNumber.from('0'));
-    }, [asset]);
 
     const handleWithdrawCollateral = useCallback(async () => {
         try {
@@ -166,6 +169,7 @@ export const WithdrawCollateral = ({
 
     const handleChange = (v: CollateralInfo) => {
         setAsset(v.symbol);
+        setCollateral('0');
     };
 
     return (
@@ -192,7 +196,7 @@ export const WithdrawCollateral = ({
                                     price={priceList[asset]}
                                     asset={asset}
                                     onAmountChange={(v: BigNumber) =>
-                                        setCollateral(v)
+                                        setCollateral(v.toString())
                                     }
                                     availableAmount={
                                         collateralList[asset]?.available ?? 0
@@ -230,7 +234,7 @@ export const WithdrawCollateral = ({
                                     [
                                         'Amount',
                                         amountFormatterFromBase[asset](
-                                            collateral
+                                            BigNumber.from(collateral)
                                         ).toString(),
                                     ],
                                 ]}
