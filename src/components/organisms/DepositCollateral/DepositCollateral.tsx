@@ -117,22 +117,18 @@ export const DepositCollateral = ({
         optionList[defaultCcyIndex],
         optionList[0],
     ];
-
     useEffect(() => {
         setCollateral(BigNumber.from('0'));
     }, [asset]);
 
     const isDisabled = useCallback(() => {
-        const availableAmount = optionList.find(
-            op => op.symbol === asset
-        )?.available;
-        if (
+        const availableAmount = collateralList[asset]?.available;
+        return (
+            !collateral ||
             collateral.isZero() ||
             collateral.gt(amountFormatterToBase[asset](availableAmount ?? 0))
-        ) {
-            return true;
-        }
-    }, [asset, collateral, optionList]);
+        );
+    }, [asset, collateral, collateralList]);
 
     const handleDepositCollateral = useCallback(async () => {
         try {
@@ -157,7 +153,6 @@ export const DepositCollateral = ({
         async (currentStep: Step) => {
             switch (currentStep) {
                 case Step.depositCollateral:
-                    if (!collateral) return;
                     dispatch({ type: 'next' });
                     handleDepositCollateral();
                     break;
@@ -171,7 +166,7 @@ export const DepositCollateral = ({
                     break;
             }
         },
-        [collateral, handleClose, handleDepositCollateral]
+        [handleClose, handleDepositCollateral]
     );
 
     const handleChange = (v: CollateralInfo) => {
@@ -186,7 +181,7 @@ export const DepositCollateral = ({
             description={state.description}
             callToAction={state.buttonText}
             onClick={() => onClick(state.currentStep)}
-            disableButton={isDisabled()}
+            disableActionButton={isDisabled()}
         >
             {(() => {
                 switch (state.currentStep) {

@@ -42,7 +42,7 @@ describe('WithdrawCollateral component', () => {
         render(<Default />, { preloadedState });
 
         fireEvent.click(screen.getByTestId('collateral-selector-button'));
-        fireEvent.click(screen.getByTestId('option-1'));
+        fireEvent.click(screen.getByTestId('option-2'));
         expect(screen.getByText('USDC')).toBeInTheDocument();
         expect(screen.getByText('50 USDC Available')).toBeInTheDocument();
 
@@ -55,7 +55,7 @@ describe('WithdrawCollateral component', () => {
         const onClose = jest.fn();
         render(<Default onClose={onClose} />, { preloadedState });
         fireEvent.click(screen.getByTestId('collateral-selector-button'));
-        fireEvent.click(screen.getByTestId('option-1'));
+        fireEvent.click(screen.getByTestId('option-2'));
         expect(screen.getByText('USDC')).toBeInTheDocument();
         expect(screen.getByText('50 USDC Available')).toBeInTheDocument();
 

@@ -93,7 +93,7 @@ export const WithdrawCollateral = ({
     onClose,
     collateralList,
 }: {
-    collateralList: Partial<Record<CurrencySymbol, CollateralInfo>>;
+    collateralList: Record<CurrencySymbol, CollateralInfo>;
 } & DialogState) => {
     const { account } = useWallet();
     const [asset, setAsset] = useState(CurrencySymbol.ETH);
@@ -112,13 +112,15 @@ export const WithdrawCollateral = ({
     }, [onClose]);
 
     const isDisabled = useCallback(() => {
-        const availableAmount = collateralList[asset]?.available;
-        if (
+        return (
+            !collateral ||
             collateral.isZero() ||
-            collateral.gt(amountFormatterToBase[asset](availableAmount ?? 0))
-        ) {
-            return true;
-        }
+            collateral.gt(
+                amountFormatterToBase[asset](
+                    collateralList[asset]?.available ?? 0
+                )
+            )
+        );
     }, [collateralList, asset, collateral]);
 
     useEffect(() => {
@@ -146,7 +148,6 @@ export const WithdrawCollateral = ({
         async (currentStep: Step) => {
             switch (currentStep) {
                 case Step.withdrawCollateral:
-                    if (!collateral) return;
                     dispatch({ type: 'next' });
                     handleWithdrawCollateral();
                     break;
@@ -160,7 +161,7 @@ export const WithdrawCollateral = ({
                     break;
             }
         },
-        [collateral, handleWithdrawCollateral, handleClose]
+        [handleWithdrawCollateral, handleClose]
     );
 
     const handleChange = (v: CollateralInfo) => {
@@ -175,7 +176,7 @@ export const WithdrawCollateral = ({
             description={state.description}
             callToAction={state.buttonText}
             onClick={() => onClick(state.currentStep)}
-            disableButton={isDisabled()}
+            disableActionButton={isDisabled()}
         >
             {(() => {
                 switch (state.currentStep) {
