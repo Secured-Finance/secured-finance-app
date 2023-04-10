@@ -15,7 +15,7 @@ export const MenuItem = ({
     return (
         <div
             data-cy={formatDataCy(text)}
-            className='group relative flex w-full cursor-pointer items-center rounded-md p-2 transition hover:bg-horizonBlue focus:outline-none'
+            className='group relative flex w-full cursor-pointer items-center rounded-md p-2 opacity-100 transition hover:bg-horizonBlue focus:outline-none'
         >
             <Link
                 href={link}
@@ -29,7 +29,7 @@ export const MenuItem = ({
                     target='_blank'
                     rel='noopener noreferrer'
                 >
-                    <div className=' group relative flex w-full cursor-pointer items-center'>
+                    <div className=' group relative flex w-full cursor-pointer items-center opacity-100'>
                         <div className='flex h-10 w-10 items-center justify-center'>
                             {icon}
                         </div>
