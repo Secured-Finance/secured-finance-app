@@ -23,7 +23,7 @@ export const usdFormat = (
 };
 
 export const usdFormatAppendUSD = (number: number, digits = 0) => {
-    return `${usdFormat(number, digits)}`;
+    return `${usdFormat(number, digits)} USD`;
 };
 
 export const percentFormat = (
