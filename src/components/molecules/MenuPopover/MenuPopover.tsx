@@ -5,7 +5,6 @@ import Discord from 'src/assets/icons/discord.svg';
 import Medium from 'src/assets/icons/medium.svg';
 import Twitter from 'src/assets/icons/twitter.svg';
 import SF from 'src/assets/icons/SF-KO.svg';
-import { ExternalLinkIcon } from '@heroicons/react/outline';
 import { MenuItem } from 'src/components/atoms/MenuItem';
 
 export const MenuPopover = ({}) => {
@@ -38,9 +37,6 @@ export const MenuPopover = ({}) => {
                                                 icon={
                                                     <SF className='h-6 w-6 rounded-full ' />
                                                 }
-                                                badge={
-                                                    <ExternalLinkIcon className='h-4 w-4 text-slateGray' />
-                                                }
                                                 link='https://secured.finance/'
                                             />
                                             <Separator />
@@ -48,9 +44,6 @@ export const MenuPopover = ({}) => {
                                                 text='Documentation'
                                                 icon={
                                                     <Medium className='h-6 w-6 text-slateGray' />
-                                                }
-                                                badge={
-                                                    <ExternalLinkIcon className='h-4 w-4 text-slateGray' />
                                                 }
                                                 link='https://blog.secured.finance/'
                                             />
@@ -60,9 +53,6 @@ export const MenuPopover = ({}) => {
                                                 icon={
                                                     <Twitter className='h-6 w-6 text-slateGray' />
                                                 }
-                                                badge={
-                                                    <ExternalLinkIcon className='h-4 w-4 text-slateGray' />
-                                                }
                                                 link='https://twitter.com/Secured_Fi'
                                             />
                                             <Separator />
@@ -70,9 +60,6 @@ export const MenuPopover = ({}) => {
                                                 text='Join us on Discord'
                                                 icon={
                                                     <Discord className='h-6 w-6 text-slateGray' />
-                                                }
-                                                badge={
-                                                    <ExternalLinkIcon className='h-4 w-4 text-slateGray' />
                                                 }
                                                 link='https://discord.com/invite/FqrdfQgmjT'
                                             />
