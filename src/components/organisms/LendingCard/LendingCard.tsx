@@ -1,4 +1,5 @@
 import { OrderSide } from '@secured-finance/sf-client';
+import { WalletSource } from '@secured-finance/sf-client/dist/secured-finance-client';
 import { BigNumber } from 'ethers';
 import { useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -21,18 +22,19 @@ import {
     setSourceAccount,
 } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
-import { walletSourceList } from 'src/stories/mocks/fixtures';
+import { selectAllBalances } from 'src/store/wallet';
 import { MaturityOptionList } from 'src/types';
 import {
-    CurrencySymbol,
-    WalletSource,
     amountFormatterToBase,
+    CurrencySymbol,
     formatLoanValue,
+    generateWalletSourceInformation,
     getCurrencyMapAsList,
     getCurrencyMapAsOptions,
     getTransformMaturityOption,
 } from 'src/utils';
 import { LoanValue, Maturity } from 'src/utils/entities';
+import { useWallet } from 'use-wallet';
 
 export const LendingCard = ({
     collateralBook,
@@ -48,6 +50,7 @@ export const LendingCard = ({
     );
 
     const dispatch = useDispatch();
+    const { account } = useWallet();
 
     const shortNames = useMemo(
         () =>
@@ -64,6 +67,10 @@ export const LendingCard = ({
     const assetPriceMap = useSelector((state: RootState) => getPriceMap(state));
     const assetList = useMemo(() => getCurrencyMapAsOptions(), []);
 
+    const balanceRecord = useSelector((state: RootState) =>
+        selectAllBalances(state)
+    );
+
     const selectedTerm = useMemo(() => {
         return (
             maturitiesOptionList.find(option =>
@@ -72,12 +79,20 @@ export const LendingCard = ({
         );
     }, [maturity, maturitiesOptionList]);
 
+    const walletSourceList = useMemo(() => {
+        return generateWalletSourceInformation(
+            currency,
+            balanceRecord[currency],
+            collateralBook.nonCollateral[currency] ?? BigNumber.from(0)
+        );
+    }, [balanceRecord, collateralBook.nonCollateral, currency]);
+
     const selectedWalletSource = useMemo(() => {
         return (
             walletSourceList.find(w => w.source === sourceAccount) ||
             walletSourceList[0]
         );
-    }, [sourceAccount]);
+    }, [sourceAccount, walletSourceList]);
 
     const selectedAsset = useMemo(() => {
         return assetList.find(option => option.value === currency);
@@ -138,6 +153,7 @@ export const LendingCard = ({
                     <WalletSourceSelector
                         optionList={walletSourceList}
                         selected={selectedWalletSource}
+                        account={account ?? ''}
                         onChange={v => dispatch(setSourceAccount(v))}
                     />
                 )}

@@ -1,9 +1,10 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { OrderSide } from '@secured-finance/sf-client';
+import { WalletSource } from '@secured-finance/sf-client/dist/secured-finance-client';
 import { BigNumber } from 'ethers';
 import { ViewType } from 'src/components/atoms';
 import { OrderType } from 'src/hooks';
-import { CurrencySymbol, WalletSource } from 'src/utils';
+import { CurrencySymbol } from 'src/utils';
 import { Maturity } from 'src/utils/entities';
 
 type LandingOrderFormStore = {

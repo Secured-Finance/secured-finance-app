@@ -1,3 +1,4 @@
+import { WalletSource } from '@secured-finance/sf-client/dist/secured-finance-client';
 import { fromBytes32 } from '@secured-finance/sf-graph-client';
 import { BigNumber, utils } from 'ethers';
 import EfilIcon from 'src/assets/coins/efil.svg';
@@ -19,7 +20,7 @@ import {
     TradeHistory,
     TradesQuery,
 } from 'src/types';
-import { CurrencySymbol, Rate, TradeSummary, WalletSource } from 'src/utils';
+import { CurrencySymbol, Rate, TradeSummary } from 'src/utils';
 import { Maturity } from 'src/utils/entities';
 
 export const preloadedAssetPrices: { assetPrices: AssetPrices } = {
@@ -183,13 +184,13 @@ export const maturityOptions: MaturityOptionList = [
 export const walletSourceList: WalletSourceOption[] = [
     {
         source: WalletSource.METAMASK,
-        available: BigNumber.from(100000000000),
+        available: 1000,
         asset: CurrencySymbol.WBTC,
         iconSVG: MetamaskIcon,
     },
     {
         source: WalletSource.SF_VAULT,
-        available: BigNumber.from(400000000000),
+        available: 4000,
         asset: CurrencySymbol.WBTC,
         iconSVG: SFLogoSmall,
     },

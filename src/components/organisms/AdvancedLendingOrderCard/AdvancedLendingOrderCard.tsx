@@ -1,5 +1,6 @@
 import { RadioGroup } from '@headlessui/react';
 import { OrderSide } from '@secured-finance/sf-client';
+import { WalletSource } from '@secured-finance/sf-client/dist/secured-finance-client';
 import { BigNumber } from 'ethers';
 import Link from 'next/link';
 import { useMemo } from 'react';
@@ -27,15 +28,15 @@ import {
 } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
 import { selectAllBalances } from 'src/store/wallet';
-import { walletSourceList } from 'src/stories/mocks/fixtures';
 import {
-    WalletSource,
     amountFormatterToBase,
+    generateWalletSourceInformation,
     percentFormat,
     usdFormat,
 } from 'src/utils';
-import { computeAvailableToBorrow } from 'src/utils/collateral';
+import { computeAvailableToBorrow, MAX_COVERAGE } from 'src/utils/collateral';
 import { Amount, LoanValue } from 'src/utils/entities';
+import { useWallet } from 'use-wallet';
 
 export const AdvancedLendingOrderCard = ({
     collateralBook,
@@ -67,6 +68,7 @@ export const AdvancedLendingOrderCard = ({
     }, [unitPrice, maturity]);
 
     const dispatch = useDispatch();
+    const { account } = useWallet();
 
     const collateralUsagePercent = useMemo(() => {
         return collateralBook.coverage.toNumber() / 100.0;
@@ -84,17 +86,25 @@ export const AdvancedLendingOrderCard = ({
             ? computeAvailableToBorrow(
                   assetPriceMap[currency],
                   collateralBook.usdCollateral,
-                  collateralBook.coverage.toNumber() / 100.0
+                  collateralBook.coverage.toNumber() / MAX_COVERAGE
               )
             : 0;
     }, [assetPriceMap, collateralBook, currency]);
+
+    const walletSourceList = useMemo(() => {
+        return generateWalletSourceInformation(
+            currency,
+            balanceRecord[currency],
+            collateralBook.nonCollateral[currency] ?? BigNumber.from(0)
+        );
+    }, [balanceRecord, collateralBook.nonCollateral, currency]);
 
     const selectedWalletSource = useMemo(() => {
         return (
             walletSourceList.find(w => w.source === sourceAccount) ||
             walletSourceList[0]
         );
-    }, [sourceAccount]);
+    }, [sourceAccount, walletSourceList]);
 
     const handleAmountChange = (percentage: number) => {
         const available =
@@ -153,6 +163,7 @@ export const AdvancedLendingOrderCard = ({
                     <WalletSourceSelector
                         optionList={walletSourceList}
                         selected={selectedWalletSource}
+                        account={account ?? ''}
                         onChange={v => dispatch(setSourceAccount(v))}
                     />
                 )}

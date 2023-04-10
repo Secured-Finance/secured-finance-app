@@ -1,6 +1,6 @@
+import { WalletSource } from '@secured-finance/sf-client/dist/secured-finance-client';
 import { composeStories } from '@storybook/testing-react';
 import { fireEvent, render, screen } from 'src/test-utils.js';
-import { WalletSource } from 'src/utils';
 import * as stories from './WalletSourceSelector.stories';
 
 const { Default } = composeStories(stories);
@@ -10,7 +10,7 @@ describe('WalletSourceSelector component', () => {
         render(<Default />);
         expect(screen.getByText('Lending Source')).toBeInTheDocument();
         expect(screen.getByText('Available to Lend')).toBeInTheDocument();
-        expect(screen.getByText('METAMASK')).toBeInTheDocument();
+        expect(screen.getByText('0xb98b...fd6d')).toBeInTheDocument();
         expect(screen.getByText('1,000 WBTC')).toBeInTheDocument();
     });
 

@@ -1,38 +1,38 @@
 import { Listbox, Transition } from '@headlessui/react';
+import { WalletSource } from '@secured-finance/sf-client/dist/secured-finance-client';
 import classNames from 'classnames';
-import { BigNumber } from 'ethers';
 import { Fragment, useEffect, useState } from 'react';
 import { ExpandIndicator, Separator } from 'src/components/atoms';
-import {
-    CurrencySymbol,
-    WalletSource,
-    amountFormatterFromBase,
-    ordinaryFormat,
-} from 'src/utils';
+import { AddressUtils, CurrencySymbol, ordinaryFormat } from 'src/utils';
 
 interface WalletSourceSelectorProps {
     optionList: WalletSourceOption[];
     selected: WalletSourceOption;
+    account: string;
     onChange: (v: WalletSource) => void;
 }
 
 export type WalletSourceOption = {
     source: WalletSource;
-    available: BigNumber;
+    available: number;
     asset: CurrencySymbol;
     iconSVG: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
 };
 
-const formatOption = (available: BigNumber, asset: CurrencySymbol) => {
-    return `${ordinaryFormat(
-        amountFormatterFromBase[asset](available),
-        4
-    )} ${asset}`;
+const formatOption = (available: number, asset: CurrencySymbol) => {
+    return `${ordinaryFormat(available, 4)} ${asset}`;
+};
+
+const formatSource = (walletSource: WalletSource, account: string) => {
+    return walletSource === WalletSource.METAMASK
+        ? AddressUtils.format(account, 6)
+        : walletSource;
 };
 
 export const WalletSourceSelector = ({
     optionList,
     selected,
+    account,
     onChange,
 }: WalletSourceSelectorProps) => {
     const [selectedOption, setSelectedOption] = useState(selected);
@@ -61,7 +61,10 @@ export const WalletSourceSelector = ({
                                             <selected.iconSVG className='h-5 w-5' />
                                         </span>
                                         <span className='typography-caption-2 min-w-[80px] items-center leading-4 text-grayScale'>
-                                            {selected.source}
+                                            {formatSource(
+                                                selected.source,
+                                                account
+                                            )}
                                         </span>
                                         <ExpandIndicator expanded={open} />
                                     </div>
@@ -100,9 +103,10 @@ export const WalletSourceSelector = ({
                                                                 <assetObj.iconSVG className='h-6 w-6' />
                                                             </span>
                                                             <span className='typography-caption-2 min-w-[100px] leading-4 text-grayScale'>
-                                                                {
-                                                                    assetObj.source
-                                                                }
+                                                                {formatSource(
+                                                                    assetObj.source,
+                                                                    account
+                                                                )}
                                                             </span>
                                                             <span className='typography-caption-2 flex w-full max-w-[200px] items-center justify-end leading-4 text-planetaryPurple'>
                                                                 {formatOption(
