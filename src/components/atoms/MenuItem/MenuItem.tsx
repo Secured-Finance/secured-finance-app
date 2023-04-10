@@ -1,4 +1,3 @@
-import { ExternalLinkIcon } from '@heroicons/react/outline';
 import Link from 'next/link';
 import { formatDataCy } from 'src/utils';
 
@@ -6,10 +5,12 @@ export const MenuItem = ({
     text,
     icon,
     link,
+    badge,
 }: {
     text: string;
     icon: React.ReactNode;
     link: string;
+    badge: React.ReactNode;
 }) => {
     return (
         <div
@@ -36,10 +37,11 @@ export const MenuItem = ({
                             <p className='typography-caption flex w-[90%] capitalize text-white'>
                                 {text}
                             </p>
-
-                            <span className='absolute right-0 my-1 h-full transform align-top transition-opacity group-hover:opacity-100'>
-                                <ExternalIcon />
-                            </span>
+                            {badge && (
+                                <span className='absolute right-0 my-1 h-full transform align-top transition-opacity group-hover:opacity-100'>
+                                    {badge}
+                                </span>
+                            )}
                         </div>
                     </div>
                 </a>
@@ -47,7 +49,3 @@ export const MenuItem = ({
         </div>
     );
 };
-
-const ExternalIcon = () => (
-    <ExternalLinkIcon className='h-4 w-4 text-slateGray' />
-);
