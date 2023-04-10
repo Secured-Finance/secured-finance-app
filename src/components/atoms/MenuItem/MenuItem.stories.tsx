@@ -1,9 +1,9 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 
-import { withWalletProvider } from 'src/../.storybook/decorators';
-import { MenuItem } from './MenuItem';
-import SF from 'src/assets/icons/SF-KO.svg';
 import { ExternalLinkIcon } from '@heroicons/react/outline';
+import { withWalletProvider } from 'src/../.storybook/decorators';
+import SF from 'src/assets/icons/SF-KO.svg';
+import { MenuItem } from './MenuItem';
 
 export default {
     title: 'Atoms/MenuItem',
@@ -18,7 +18,7 @@ export default {
 } as ComponentMeta<typeof MenuItem>;
 
 const Template: ComponentStory<typeof MenuItem> = args => (
-    <div className='ml-[1000px]'>
+    <div>
         <MenuItem {...args} />
     </div>
 );
