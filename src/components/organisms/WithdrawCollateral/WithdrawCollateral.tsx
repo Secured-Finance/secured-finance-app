@@ -102,7 +102,6 @@ export const WithdrawCollateral = ({
     const [errorMessage, setErrorMessage] = useState(
         'Your withdrawal transaction has failed.'
     );
-    const [disableButton, setDisableButton] = useState(false);
 
     const priceList = useSelector((state: RootState) => getPriceMap(state));
     const { onWithdrawCollateral } = useWithdrawCollateral(asset, collateral);
@@ -112,16 +111,14 @@ export const WithdrawCollateral = ({
         onClose();
     }, [onClose]);
 
-    useEffect(() => {
+    const isDisabled = useCallback(() => {
         const availableAmount = collateralList[asset]?.available;
         if (
             collateral.isZero() ||
             collateral.gt(amountFormatterToBase[asset](availableAmount ?? 0))
         ) {
-            setDisableButton(true);
-            return;
+            return true;
         }
-        setDisableButton(false);
     }, [collateralList, asset, collateral]);
 
     useEffect(() => {
@@ -178,7 +175,7 @@ export const WithdrawCollateral = ({
             description={state.description}
             callToAction={state.buttonText}
             onClick={() => onClick(state.currentStep)}
-            disableButton={disableButton}
+            disableButton={isDisabled()}
         >
             {(() => {
                 switch (state.currentStep) {

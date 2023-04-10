@@ -101,8 +101,6 @@ export const DepositCollateral = ({
     const [errorMessage, setErrorMessage] = useState(
         'Your deposit transaction has failed.'
     );
-    const [disableButton, setDisableButton] = useState(false);
-
     const priceList = useSelector((state: RootState) => getPriceMap(state));
     const { onDepositCollateral } = useDepositCollateral(asset, collateral);
 
@@ -121,6 +119,10 @@ export const DepositCollateral = ({
     ];
 
     useEffect(() => {
+        setCollateral(BigNumber.from('0'));
+    }, [asset]);
+
+    const isDisabled = useCallback(() => {
         const availableAmount = optionList.find(
             op => op.symbol === asset
         )?.available;
@@ -128,10 +130,8 @@ export const DepositCollateral = ({
             collateral.isZero() ||
             collateral.gt(amountFormatterToBase[asset](availableAmount ?? 0))
         ) {
-            setDisableButton(true);
-            return;
+            return true;
         }
-        setDisableButton(false);
     }, [asset, collateral, optionList]);
 
     const handleDepositCollateral = useCallback(async () => {
@@ -186,7 +186,7 @@ export const DepositCollateral = ({
             description={state.description}
             callToAction={state.buttonText}
             onClick={() => onClick(state.currentStep)}
-            disableButton={disableButton}
+            disableButton={isDisabled()}
         >
             {(() => {
                 switch (state.currentStep) {
