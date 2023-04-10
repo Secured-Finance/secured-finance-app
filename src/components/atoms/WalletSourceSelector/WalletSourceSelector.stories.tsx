@@ -8,6 +8,7 @@ export default {
     args: {
         optionList: walletSourceList,
         selected: walletSourceList[0],
+        account: '0xb98bd7c7f656290071e52d1aa617d9cb4467fd6d',
         onChange: () => {},
     },
 } as ComponentMeta<typeof WalletSourceSelector>;

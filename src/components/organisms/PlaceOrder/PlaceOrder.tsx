@@ -1,6 +1,7 @@
 import { track } from '@amplitude/analytics-browser';
 import { Disclosure } from '@headlessui/react';
 import { OrderSide } from '@secured-finance/sf-client';
+import { WalletSource } from '@secured-finance/sf-client/dist/secured-finance-client';
 import { getUTCMonthYear } from '@secured-finance/sf-core';
 import { BigNumber } from 'ethers';
 import { useCallback, useReducer, useState } from 'react';
@@ -113,9 +114,10 @@ export const PlaceOrder = ({
 } & DialogState) => {
     const [state, dispatch] = useReducer(reducer, stateRecord[1]);
     const globalDispatch = useDispatch();
-    const { currency, maturity, amount, side, orderType } = useSelector(
-        (state: RootState) => selectLandingOrderForm(state.landingOrderForm)
-    );
+    const { currency, maturity, amount, side, orderType, sourceAccount } =
+        useSelector((state: RootState) =>
+            selectLandingOrderForm(state.landingOrderForm)
+        );
 
     const orderAmount = new Amount(amount, currency);
 
@@ -136,6 +138,7 @@ export const PlaceOrder = ({
             maturity: Maturity,
             side: OrderSide,
             amount: BigNumber,
+            walletSource: WalletSource,
             unitPrice?: number
         ) => {
             try {
@@ -144,6 +147,7 @@ export const PlaceOrder = ({
                     maturity,
                     side,
                     amount,
+                    walletSource,
                     unitPrice
                 );
                 const transactionStatus = await handleContractTransaction(tx);
@@ -180,13 +184,20 @@ export const PlaceOrder = ({
                 case Step.orderConfirm:
                     dispatch({ type: 'next' });
                     if (orderType === OrderType.MARKET) {
-                        handlePlaceOrder(currency, maturity, side, amount);
+                        handlePlaceOrder(
+                            currency,
+                            maturity,
+                            side,
+                            amount,
+                            sourceAccount
+                        );
                     } else if (orderType === OrderType.LIMIT && loanValue) {
                         handlePlaceOrder(
                             currency,
                             maturity,
                             side,
                             amount,
+                            sourceAccount,
                             loanValue.price
                         );
                     } else {
@@ -213,6 +224,7 @@ export const PlaceOrder = ({
             maturity,
             orderType,
             side,
+            sourceAccount,
         ]
     );
 

@@ -5,7 +5,7 @@ describe('currencies.generateWalletInformation', () => {
     it('should return walletInformation as AssetDisclosureProps', () => {
         const addressRecord = {
             [WalletSource.METAMASK]: 'ethAccount',
-            [WalletSource.SF_VAULT]: 'filAccount',
+            [WalletSource.UTILWALLET]: 'filAccount',
         };
 
         const balanceRecord = {

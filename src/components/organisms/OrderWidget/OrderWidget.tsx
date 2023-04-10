@@ -18,13 +18,13 @@ import {
     setUnitPrice,
 } from 'src/store/landingOrderForm';
 
+import { WalletSource } from '@secured-finance/sf-client/dist/secured-finance-client';
 import { ColorFormat } from 'src/types';
 import {
     currencyMap,
     CurrencySymbol,
     formatLoanValue,
     ordinaryFormat,
-    WalletSource,
 } from 'src/utils';
 import { LoanValue } from 'src/utils/entities';
 

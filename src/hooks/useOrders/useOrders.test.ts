@@ -1,4 +1,5 @@
 import { OrderSide } from '@secured-finance/sf-client';
+import { WalletSource } from '@secured-finance/sf-client/dist/secured-finance-client';
 import { renderHook } from '@testing-library/react-hooks';
 import { BigNumber } from 'ethers';
 import { dec22Fixture } from 'src/stories/mocks/fixtures';
@@ -6,7 +7,6 @@ import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { currencyMap, CurrencySymbol, toCurrency } from 'src/utils';
 import { Maturity } from 'src/utils/entities';
 import { useOrders } from '.';
-import { WalletSource } from '@secured-finance/sf-client/dist/secured-finance-client';
 
 const mockSecuredFinance = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mockSecuredFinance);
@@ -36,6 +36,7 @@ describe('useOrders hook', () => {
                 new Maturity(2022),
                 OrderSide.LEND,
                 currencyMap.ETH.toBaseUnit(1),
+                WalletSource.METAMASK,
                 9863
             );
             expect(mockSecuredFinance.placeLendingOrder).toHaveBeenCalledTimes(
@@ -58,7 +59,8 @@ describe('useOrders hook', () => {
                 CurrencySymbol.ETH,
                 new Maturity(2022),
                 OrderSide.LEND,
-                currencyMap.ETH.toBaseUnit(1)
+                currencyMap.ETH.toBaseUnit(1),
+                WalletSource.METAMASK
             );
 
             expect(mockSecuredFinance.placeLendingOrder).toHaveBeenCalledWith(
