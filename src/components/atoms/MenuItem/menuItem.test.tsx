@@ -5,7 +5,7 @@ import * as stories from './MenuItem.stories';
 
 const { Default } = composeStories(stories);
 
-describe('MenuPopover component', () => {
+describe('MenuItem component', () => {
     it('should render with correct text', async () => {
         render(<Default />);
         expect(screen.getByText('Example')).toBeInTheDocument();
