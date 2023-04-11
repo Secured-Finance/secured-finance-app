@@ -194,9 +194,9 @@ export const DepositCollateral = ({
                                 <CollateralInput
                                     price={priceList[asset]}
                                     asset={asset}
-                                    onAmountChange={(v: BigNumber) => {
-                                        setCollateral(v);
-                                    }}
+                                    onAmountChange={(v: BigNumber) =>
+                                        setCollateral(v)
+                                    }
                                     availableAmount={
                                         collateralList[asset]?.available ?? 0
                                     }
