@@ -109,6 +109,7 @@ export const DepositCollateral = ({
 
     const handleClose = useCallback(() => {
         dispatch({ type: 'default' });
+        setCollateral('0');
         onClose();
     }, [onClose]);
 
@@ -122,20 +123,14 @@ export const DepositCollateral = ({
     ];
 
     const isDisabled = useCallback(() => {
-        if (!collateral) {
-            return true;
-        }
         const col = BigNumber.from(collateral);
-        const availableAmount = optionList.find(
-            op => op.symbol === asset
-        )?.available;
-        if (
+        const availableAmount = collateralList[asset]?.available;
+        return (
+            !col ||
             col.isZero() ||
             col.gt(amountFormatterToBase[asset](availableAmount ?? 0))
-        ) {
-            return true;
-        }
-    }, [asset, collateral, optionList]);
+        );
+    }, [asset, collateral, collateralList]);
 
     const handleDepositCollateral = useCallback(async () => {
         try {
@@ -176,10 +171,10 @@ export const DepositCollateral = ({
         [handleClose, handleDepositCollateral]
     );
 
-    const handleChange = (v: CollateralInfo) => {
-        setAsset(v.symbol);
+    const handleChange = useCallback((v: CollateralInfo) => {
         setCollateral('0');
-    };
+        setAsset(v.symbol);
+    }, []);
 
     return (
         <Dialog
@@ -198,15 +193,15 @@ export const DepositCollateral = ({
                             <div className='flex flex-col gap-6'>
                                 <CollateralSelector
                                     headerText='Select Asset'
-                                    onChange={v => handleChange(v)}
+                                    onChange={handleChange}
                                     optionList={optionList}
                                 />
                                 <CollateralInput
                                     price={priceList[asset]}
                                     asset={asset}
-                                    onAmountChange={(v: BigNumber) =>
-                                        setCollateral(v.toString())
-                                    }
+                                    onAmountChange={(v: BigNumber) => {
+                                        setCollateral(v.toString());
+                                    }}
                                     availableAmount={
                                         collateralList[asset]?.available ?? 0
                                     }
