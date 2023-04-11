@@ -98,29 +98,24 @@ export const WithdrawCollateral = ({
     const { account } = useWallet();
     const [asset, setAsset] = useState(CurrencySymbol.ETH);
     const [state, dispatch] = useReducer(reducer, stateRecord[1]);
-    const [collateral, setCollateral] = useState('0');
+    const [collateral, setCollateral] = useState(BigNumber.from(0));
     const [errorMessage, setErrorMessage] = useState(
         'Your withdrawal transaction has failed.'
     );
 
     const priceList = useSelector((state: RootState) => getPriceMap(state));
-    const { onWithdrawCollateral } = useWithdrawCollateral(
-        asset,
-        BigNumber.from(collateral)
-    );
+    const { onWithdrawCollateral } = useWithdrawCollateral(asset, collateral);
 
     const handleClose = useCallback(() => {
         dispatch({ type: 'default' });
-        setCollateral('0');
         onClose();
     }, [onClose]);
 
     const isDisabled = useCallback(() => {
-        const col = BigNumber.from(collateral);
         return (
-            !col ||
-            col.isZero() ||
-            col.gt(
+            !collateral ||
+            collateral.isZero() ||
+            collateral.gt(
                 amountFormatterToBase[asset](
                     collateralList[asset]?.available ?? 0
                 )
@@ -167,7 +162,7 @@ export const WithdrawCollateral = ({
 
     const handleChange = useCallback((v: CollateralInfo) => {
         setAsset(v.symbol);
-        setCollateral('0');
+        setCollateral(BigNumber.from(0));
     }, []);
 
     return (
@@ -194,7 +189,7 @@ export const WithdrawCollateral = ({
                                     price={priceList[asset]}
                                     asset={asset}
                                     onAmountChange={(v: BigNumber) =>
-                                        setCollateral(v.toString())
+                                        setCollateral(v)
                                     }
                                     availableAmount={
                                         collateralList[asset]?.available ?? 0
@@ -232,7 +227,7 @@ export const WithdrawCollateral = ({
                                     [
                                         'Amount',
                                         amountFormatterFromBase[asset](
-                                            BigNumber.from(collateral)
+                                            collateral
                                         ).toString(),
                                     ],
                                 ]}
