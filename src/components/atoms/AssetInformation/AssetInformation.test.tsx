@@ -13,12 +13,12 @@ describe('test AssetInformation component', () => {
         expect(screen.getByText('ETH')).toBeInTheDocument();
         expect(screen.getByText('$2,000.34 USD')).toBeInTheDocument();
         expect(screen.getByText('1.2 ETH')).toBeInTheDocument();
-        expect(screen.getByText('$2,400.41 USD')).toBeInTheDocument();
+        expect(screen.getByText('$2,400.41')).toBeInTheDocument();
 
         expect(screen.getByText('USDC')).toBeInTheDocument();
         expect(screen.getByText('$1.00 USD')).toBeInTheDocument();
         expect(screen.getByText('10 USDC')).toBeInTheDocument();
-        expect(screen.getByText('$10.00 USD')).toBeInTheDocument();
+        expect(screen.getByText('$10.00')).toBeInTheDocument();
     });
 
     it('should display the information popover on mouse enter', () => {
@@ -38,11 +38,11 @@ describe('test AssetInformation component', () => {
         expect(screen.getByText('ETH')).toBeInTheDocument();
         expect(screen.getByText('$2,000.34 USD')).toBeInTheDocument();
         expect(screen.getByText('1.2 ETH')).toBeInTheDocument();
-        expect(screen.getByText('$2,400.41 USD')).toBeInTheDocument();
+        expect(screen.getByText('$2,400.41')).toBeInTheDocument();
 
         expect(screen.queryByText('USDC')).not.toBeInTheDocument();
         expect(screen.queryByText('$1.00 USD')).not.toBeInTheDocument();
         expect(screen.queryByText('10 USDC')).not.toBeInTheDocument();
-        expect(screen.queryByText('$10.00 USD')).not.toBeInTheDocument();
+        expect(screen.queryByText('$10.00')).not.toBeInTheDocument();
     });
 });

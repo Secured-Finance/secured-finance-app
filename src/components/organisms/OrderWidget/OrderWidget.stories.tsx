@@ -67,7 +67,7 @@ export default {
     args: {
         buyOrders: borrowEntries,
         sellOrders: lendEntries,
-        currency: CurrencySymbol.FIL,
+        currency: CurrencySymbol.EFIL,
     },
 } as ComponentMeta<typeof OrderWidget>;
 

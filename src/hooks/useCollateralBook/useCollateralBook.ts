@@ -27,8 +27,8 @@ const emptyBook: CollateralBook = {
         [CurrencySymbol.USDC]: ZERO_BN,
     },
     nonCollateral: {
-        [CurrencySymbol.FIL]: ZERO_BN,
-        [CurrencySymbol.BTC]: ZERO_BN,
+        [CurrencySymbol.EFIL]: ZERO_BN,
+        [CurrencySymbol.WBTC]: ZERO_BN,
     },
     usdCollateral: 0,
     usdNonCollateral: 0,

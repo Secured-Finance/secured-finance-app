@@ -68,7 +68,7 @@ describe('Landing Component', () => {
                 preloadedState: {
                     ...preloadedState,
                     landingOrderForm: {
-                        currency: CurrencySymbol.FIL,
+                        currency: CurrencySymbol.EFIL,
                         maturity: 0,
                         side: OrderSide.BORROW,
                         amount: '0',
