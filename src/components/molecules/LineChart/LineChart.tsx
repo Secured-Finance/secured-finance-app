@@ -20,6 +20,7 @@ import {
 } from 'src/components/molecules/LineChart/constants';
 import { MaturityOptionList } from 'src/types';
 import { Maturity } from 'src/utils/entities';
+import ChartTooltip from 'chart.js/auto';
 
 ChartJS.register(
     LinearScale,
@@ -42,21 +43,15 @@ const triggerHover = (chart: ChartJS<'line'>, index: number) => {
 };
 
 const triggerTooltip = (chart: ChartJS<'line'>, index: number) => {
-    const tooltip = chart.tooltip;
+    const tooltip = chart.tooltip as unknown as ChartTooltip<'line'>;
     if (tooltip) {
-        const chartArea = chart.chartArea;
-        tooltip.setActiveElements(
-            [
-                {
-                    datasetIndex: 0,
-                    index: index,
-                },
-            ],
+        tooltip.setActiveElements([
             {
-                x: (chartArea.left + chartArea.right) / 2,
-                y: (chartArea.top + chartArea.bottom) / 2,
-            }
-        );
+                datasetIndex: 0,
+                index: index,
+            },
+        ]);
+        tooltip.update();
     }
     chart.update();
 };

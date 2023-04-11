@@ -19,6 +19,7 @@ export * from './HorizontalListItem';
 export * from './InformationPopover';
 export * from './InputBase';
 export * from './MarketTab';
+export * from './MenuItem';
 export * from './NavTab';
 export * from './OrderDisplayBox';
 export * from './OrderInputBox';

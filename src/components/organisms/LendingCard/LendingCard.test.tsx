@@ -50,28 +50,27 @@ describe('LendingCard Component', () => {
 
     it('should open confirm order dialog when borrow button is clicked', async () => {
         await waitFor(() => render(<Default />, { preloadedState }));
-
+        const input = screen.getByRole('textbox');
+        fireEvent.change(input, { target: { value: '10' } });
         fireEvent.click(screen.getByTestId('place-order-button'));
-
         expect(screen.getByRole('dialog')).toBeInTheDocument();
         expect(screen.getByText('Confirm Order')).toBeInTheDocument();
-
         const button = screen.getByTestId('dialog-action-button');
         expect(button).toHaveTextContent('OK');
     });
 
-    it('should let the user choose between ETH, FIL and USDC when clicking on the asset selector', async () => {
+    it('should let the user choose between ETH, EFIL and USDC when clicking on the asset selector', async () => {
         await waitFor(() => render(<Default />));
 
-        expect(screen.getAllByText(DEFAULT_CHOICE.name)).toHaveLength(1);
+        expect(screen.getAllByText(DEFAULT_CHOICE.name)).toHaveLength(2);
         expect(screen.queryByText('USDC')).not.toBeInTheDocument();
         expect(screen.queryByText('Ethereum')).not.toBeInTheDocument();
         fireEvent.click(
             screen.getByRole('button', {
-                name: 'Filecoin',
+                name: 'EFIL',
             })
         );
-        expect(screen.getAllByText('Filecoin')).toHaveLength(2);
+        expect(screen.getAllByText('EFIL')).toHaveLength(3);
         expect(screen.getByText('USDC')).toBeInTheDocument();
         expect(screen.getByText('Ethereum')).toBeInTheDocument();
     });
@@ -89,7 +88,7 @@ describe('LendingCard Component', () => {
 
         expect(
             screen.getByText(
-                `~ ${preloadedAssetPrices.assetPrices.FIL.price * 10} USD`
+                `~ ${preloadedAssetPrices.assetPrices.EFIL.price * 10} USD`
             )
         ).toBeInTheDocument();
     });
@@ -117,6 +116,8 @@ describe('LendingCard Component', () => {
 
     it('should open the confirm order dialog to place a market order when the borrow button is clicked', async () => {
         await waitFor(() => render(<Default />, { preloadedState }));
+        const input = screen.getByRole('textbox');
+        fireEvent.change(input, { target: { value: '10' } });
         fireEvent.click(screen.getByTestId('place-order-button'));
         expect(screen.getByText('Confirm Order')).toBeInTheDocument();
         expect(screen.getByText('Market Order')).toBeInTheDocument();
@@ -128,8 +129,15 @@ describe('LendingCard Component', () => {
         fireEvent.change(input, { target: { value: '10.5' } });
         expect(
             screen.getByText(
-                `~ ${preloadedAssetPrices.assetPrices.FIL.price * 10.5} USD`
+                `~ ${preloadedAssetPrices.assetPrices.EFIL.price * 10.5} USD`
             )
         ).toBeInTheDocument();
+    });
+
+    it('should render a disabled button if amount is zero', async () => {
+        await waitFor(() => render(<Default />, { preloadedState }));
+        const input = screen.getByRole('textbox');
+        expect(input).toHaveValue('');
+        expect(screen.getByTestId('place-order-button')).toBeDisabled();
     });
 });

@@ -7,13 +7,13 @@ import {
 import { BigNumber as BigNumberJS } from 'bignumber.js';
 import { BigNumber } from 'ethers';
 import tailwindConfig from 'src/../tailwind.config';
-import BTCIcon from 'src/assets/coins/btc.svg';
+import EfilIcon from 'src/assets/coins/efil.svg';
 import EthIcon from 'src/assets/coins/eth2.svg';
-import FilecoinIcon from 'src/assets/coins/fil.svg';
 import UsdcIcon from 'src/assets/coins/usdc.svg';
+import WBTCIcon from 'src/assets/coins/wbtc.svg';
 import { Option } from 'src/components/atoms';
 import { hexToString } from 'web3-utils';
-import { Filecoin } from './currencies/filecoin';
+import { EFIL } from './currencies/filecoin';
 import { USDC } from './currencies/usdc';
 import { WBTC } from './currencies/wbtc';
 
@@ -23,19 +23,19 @@ const ETH = Ether.onChain(
 
 export enum CurrencySymbol {
     ETH = 'ETH',
-    FIL = 'FIL',
+    EFIL = 'EFIL',
     USDC = 'USDC',
-    BTC = 'BTC',
+    WBTC = 'WBTC',
 }
 
 export const currencyMap: Readonly<
     Record<CurrencySymbol, Readonly<CurrencyInfo>>
 > = {
-    [CurrencySymbol.FIL]: {
+    [CurrencySymbol.EFIL]: {
         index: 0,
-        icon: FilecoinIcon,
-        symbol: CurrencySymbol.FIL,
-        name: Filecoin.onChain().name,
+        icon: EfilIcon,
+        symbol: CurrencySymbol.EFIL,
+        name: EFIL.onChain().name,
         coinGeckoId: 'filecoin',
         isCollateral: false,
         toBaseUnit: (amount: number) => {
@@ -43,8 +43,8 @@ export const currencyMap: Readonly<
             return BigNumber.from(filAmount.toAttoFil());
         },
         fromBaseUnit: (amount: BigNumber) =>
-            convertFromBlockchainUnit(amount, Filecoin.onChain()),
-        toCurrency: () => Filecoin.onChain(),
+            convertFromBlockchainUnit(amount, EFIL.onChain()),
+        toCurrency: () => EFIL.onChain(),
         chartColor: tailwindConfig.theme.colors.chart.fil,
     },
     [CurrencySymbol.ETH]: {
@@ -74,12 +74,12 @@ export const currencyMap: Readonly<
         toCurrency: () => USDC.onChain(),
         chartColor: tailwindConfig.theme.colors.chart.usdc,
     },
-    [CurrencySymbol.BTC]: {
+    [CurrencySymbol.WBTC]: {
         index: 3,
-        symbol: CurrencySymbol.BTC,
+        symbol: CurrencySymbol.WBTC,
         name: WBTC.onChain().name,
-        icon: BTCIcon,
-        coinGeckoId: 'bitcoin',
+        icon: WBTCIcon,
+        coinGeckoId: 'wrapped-bitcoin',
         isCollateral: false,
         toBaseUnit: (amount: number) =>
             convertToBlockchainUnit(amount, WBTC.onChain()),
@@ -145,12 +145,12 @@ export function toCurrencySymbol(ccy: string) {
     switch (ccy) {
         case CurrencySymbol.ETH:
             return CurrencySymbol.ETH;
-        case CurrencySymbol.FIL:
-            return CurrencySymbol.FIL;
+        case CurrencySymbol.EFIL:
+            return CurrencySymbol.EFIL;
         case CurrencySymbol.USDC:
             return CurrencySymbol.USDC;
-        case CurrencySymbol.BTC:
-            return CurrencySymbol.BTC;
+        case CurrencySymbol.WBTC:
+            return CurrencySymbol.WBTC;
         default:
             return undefined;
     }
