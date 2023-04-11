@@ -102,6 +102,9 @@ export const WithdrawCollateral = ({
     const [errorMessage, setErrorMessage] = useState(
         'Your withdrawal transaction has failed.'
     );
+    const [collateralAmount, setCollateralAmount] = useState<
+        number | undefined
+    >(0);
 
     const priceList = useSelector((state: RootState) => getPriceMap(state));
     const { onWithdrawCollateral } = useWithdrawCollateral(asset, collateral);
@@ -163,6 +166,7 @@ export const WithdrawCollateral = ({
     const handleChange = useCallback((v: CollateralInfo) => {
         setAsset(v.symbol);
         setCollateral(BigNumber.from(0));
+        setCollateralAmount(0);
     }, []);
 
     return (
@@ -194,6 +198,8 @@ export const WithdrawCollateral = ({
                                     availableAmount={
                                         collateralList[asset]?.available ?? 0
                                     }
+                                    amount={collateralAmount}
+                                    setAmount={setCollateralAmount}
                                 />
                                 <div className='typography-caption-2 h-fit rounded-xl border border-red px-3 py-2 text-slateGray'>
                                     Please note that withdrawal will impact the

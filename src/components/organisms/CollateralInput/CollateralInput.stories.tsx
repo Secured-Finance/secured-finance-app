@@ -9,6 +9,8 @@ export default {
         price: 100,
         availableAmount: 10,
         asset: CurrencySymbol.ETH,
+        amount: 100,
+        setAmount: () => {},
     },
 } as ComponentMeta<typeof CollateralInput>;
 

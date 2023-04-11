@@ -24,7 +24,7 @@ describe('WithdrawCollateral component', () => {
 
     it('should open with collateral amount 0', () => {
         render(<Default />);
-        expect(screen.getByRole('textbox').getAttribute('value')).toBe('');
+        expect(screen.getByRole('textbox').getAttribute('value')).toBe('0');
         expect(screen.getByRole('textbox').getAttribute('placeholder')).toBe(
             '0'
         );
