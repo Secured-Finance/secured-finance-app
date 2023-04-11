@@ -4,4 +4,4 @@
 npm run typecheck
 npm run lint:check
 npm run prettier:check
-npm run test -- --watchAll=false
+npm run test -- --watchAll=false --bail 

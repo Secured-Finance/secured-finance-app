@@ -43,6 +43,16 @@ export const useLendingMarkets = (
                                         midUnitPrice,
                                     }
                                 ) => {
+                                    if (acc[name]) {
+                                        // If the name already exists in the accumulator
+                                        // Increment the name by appending a number
+                                        let i = 1;
+                                        while (acc[`${name}-${i}`]) {
+                                            i++;
+                                        }
+                                        name = `${name}-${i}`;
+                                    }
+
                                     return {
                                         ...acc,
                                         [name]: {
@@ -58,6 +68,7 @@ export const useLendingMarkets = (
                                 },
                                 {}
                             ),
+
                             ccy
                         )
                     );

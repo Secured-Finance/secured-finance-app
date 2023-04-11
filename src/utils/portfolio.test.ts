@@ -50,9 +50,9 @@ describe('computeWeightedAverage', () => {
 describe('computeNetValue', () => {
     const priceMap: AssetPriceMap = {
         [CurrencySymbol.ETH]: 1000,
-        [CurrencySymbol.FIL]: 6,
+        [CurrencySymbol.EFIL]: 6,
         [CurrencySymbol.USDC]: 1,
-        [CurrencySymbol.BTC]: 30000,
+        [CurrencySymbol.WBTC]: 30000,
     };
     it('should return the net value', () => {
         const trades = [
@@ -63,7 +63,7 @@ describe('computeNetValue', () => {
             },
             {
                 amount: '100000000000000000000',
-                currency: formatBytes32String(CurrencySymbol.FIL),
+                currency: formatBytes32String(CurrencySymbol.EFIL),
                 side: 1,
             },
         ];
