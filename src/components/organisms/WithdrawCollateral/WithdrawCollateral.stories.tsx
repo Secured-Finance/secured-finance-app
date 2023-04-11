@@ -19,11 +19,11 @@ export default {
                 available: 1,
                 name: 'Ethereum',
             },
-            FIL: {
+            EFIL: {
                 indexCcy: 1,
-                symbol: CurrencySymbol.FIL,
+                symbol: CurrencySymbol.EFIL,
                 available: 100,
-                name: 'Filecoin',
+                name: 'filecoin',
             },
             USDC: {
                 indexCcy: 2,
@@ -32,9 +32,9 @@ export default {
                 name: 'USDC',
             },
 
-            BTC: {
+            WBTC: {
                 indexCcy: 3,
-                symbol: CurrencySymbol.BTC,
+                symbol: CurrencySymbol.WBTC,
                 available: 1,
                 name: 'Bitcoin',
             },
