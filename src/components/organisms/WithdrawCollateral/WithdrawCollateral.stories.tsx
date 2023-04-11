@@ -13,27 +13,23 @@ export default {
         isOpen: true,
         onClose: () => {},
         collateralList: {
-            ETH: {
-                indexCcy: 0,
+            [CurrencySymbol.ETH]: {
                 symbol: CurrencySymbol.ETH,
                 available: 1,
                 name: 'Ethereum',
             },
-            EFIL: {
-                indexCcy: 1,
+            [CurrencySymbol.EFIL]: {
                 symbol: CurrencySymbol.EFIL,
                 available: 100,
                 name: 'filecoin',
             },
-            USDC: {
-                indexCcy: 2,
+            [CurrencySymbol.USDC]: {
                 symbol: CurrencySymbol.USDC,
                 available: 50,
                 name: 'USDC',
             },
 
-            WBTC: {
-                indexCcy: 3,
+            [CurrencySymbol.WBTC]: {
                 symbol: CurrencySymbol.WBTC,
                 available: 1,
                 name: 'Bitcoin',
