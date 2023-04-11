@@ -101,6 +101,10 @@ export const DepositCollateral = ({
     const [errorMessage, setErrorMessage] = useState(
         'Your deposit transaction has failed.'
     );
+    const [collateralAmount, setCollateralAmount] = useState<
+        number | undefined
+    >();
+
     const priceList = useSelector((state: RootState) => getPriceMap(state));
     const { onDepositCollateral } = useDepositCollateral(asset, collateral);
 
@@ -169,6 +173,7 @@ export const DepositCollateral = ({
     const handleChange = useCallback((v: CollateralInfo) => {
         setCollateral(BigNumber.from(0));
         setAsset(v.symbol);
+        setCollateralAmount(0);
     }, []);
 
     return (
@@ -200,6 +205,8 @@ export const DepositCollateral = ({
                                     availableAmount={
                                         collateralList[asset]?.available ?? 0
                                     }
+                                    amount={collateralAmount}
+                                    setAmount={setCollateralAmount}
                                 />
                             </div>
                         );
