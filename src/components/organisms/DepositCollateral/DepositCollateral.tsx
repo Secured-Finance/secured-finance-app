@@ -95,21 +95,17 @@ export const DepositCollateral = ({
     collateralList: Partial<Record<CurrencySymbol, CollateralInfo>>;
 } & DialogState) => {
     const [asset, setAsset] = useState(CurrencySymbol.USDC);
-    const [collateral, setCollateral] = useState('0');
+    const [collateral, setCollateral] = useState(BigNumber.from(0));
     const [depositAddress, setDepositAddress] = useState('');
     const [state, dispatch] = useReducer(reducer, stateRecord[1]);
     const [errorMessage, setErrorMessage] = useState(
         'Your deposit transaction has failed.'
     );
     const priceList = useSelector((state: RootState) => getPriceMap(state));
-    const { onDepositCollateral } = useDepositCollateral(
-        asset,
-        BigNumber.from(collateral)
-    );
+    const { onDepositCollateral } = useDepositCollateral(asset, collateral);
 
     const handleClose = useCallback(() => {
         dispatch({ type: 'default' });
-        setCollateral('0');
         onClose();
     }, [onClose]);
 
@@ -123,12 +119,11 @@ export const DepositCollateral = ({
     ];
 
     const isDisabled = useCallback(() => {
-        const col = BigNumber.from(collateral);
         const availableAmount = collateralList[asset]?.available;
         return (
-            !col ||
-            col.isZero() ||
-            col.gt(amountFormatterToBase[asset](availableAmount ?? 0))
+            !collateral ||
+            collateral.isZero() ||
+            collateral.gt(amountFormatterToBase[asset](availableAmount ?? 0))
         );
     }, [asset, collateral, collateralList]);
 
@@ -172,7 +167,7 @@ export const DepositCollateral = ({
     );
 
     const handleChange = useCallback((v: CollateralInfo) => {
-        setCollateral('0');
+        setCollateral(BigNumber.from(0));
         setAsset(v.symbol);
     }, []);
 
@@ -200,7 +195,7 @@ export const DepositCollateral = ({
                                     price={priceList[asset]}
                                     asset={asset}
                                     onAmountChange={(v: BigNumber) => {
-                                        setCollateral(v.toString());
+                                        setCollateral(v);
                                     }}
                                     availableAmount={
                                         collateralList[asset]?.available ?? 0
@@ -235,7 +230,7 @@ export const DepositCollateral = ({
                                     [
                                         'Amount',
                                         amountFormatterFromBase[asset](
-                                            BigNumber.from(collateral)
+                                            collateral
                                         ).toString(),
                                     ],
                                 ]}
