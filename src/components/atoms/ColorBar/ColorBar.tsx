@@ -20,7 +20,7 @@ export const ColorBar = ({
     );
     return (
         <div
-            className={classNames('absolute bottom-1 -z-10 h-4/6 opacity-20', {
+            className={classNames('absolute bottom-1 h-4/6 opacity-20', {
                 'bg-galacticOrange': color === 'negative',
                 'bg-nebulaTeal': color === 'positive',
                 'left-0.5': align === 'left',
