@@ -64,7 +64,7 @@ export const CoreTable = <T,>({
                 {table.getRowModel().rows.map(row => (
                     <tr
                         key={row.id}
-                        className={classNames('relative h-7', {
+                        className={classNames('relative h-7 transform-none', {
                             'cursor-pointer': hoverRow?.(row.id),
                             'hover:bg-black-30': hoverRow?.(row.id),
                             'border-b border-white-10': border,
