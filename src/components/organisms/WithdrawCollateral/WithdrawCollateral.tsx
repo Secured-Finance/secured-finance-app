@@ -111,13 +111,11 @@ export const WithdrawCollateral = ({
 
     const handleClose = useCallback(() => {
         dispatch({ type: 'default' });
+        setCollateral('0');
         onClose();
     }, [onClose]);
 
     const isDisabled = useCallback(() => {
-        if (!collateral) {
-            return true;
-        }
         const col = BigNumber.from(collateral);
         return (
             !col ||
@@ -167,10 +165,10 @@ export const WithdrawCollateral = ({
         [handleWithdrawCollateral, handleClose]
     );
 
-    const handleChange = (v: CollateralInfo) => {
+    const handleChange = useCallback((v: CollateralInfo) => {
         setAsset(v.symbol);
         setCollateral('0');
-    };
+    }, []);
 
     return (
         <Dialog
@@ -189,7 +187,7 @@ export const WithdrawCollateral = ({
                             <div className='flex flex-col gap-6'>
                                 <CollateralSelector
                                     headerText='Select Asset'
-                                    onChange={v => handleChange(v)}
+                                    onChange={handleChange}
                                     optionList={Object.values(collateralList)}
                                 />
                                 <CollateralInput
