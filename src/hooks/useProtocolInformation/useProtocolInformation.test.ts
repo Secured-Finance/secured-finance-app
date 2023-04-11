@@ -22,9 +22,9 @@ describe('useProtocolInformation', () => {
         expect(result.current.totalNumberOfAsset).toBe(4);
         expect(result.current.valueLockedByCurrency).toEqual({
             ETH: BigNumber.from('100000000000000000000'), // 100 ETH
-            FIL: BigNumber.from('100000000000000000000000'), // 100 000 FIL
+            EFIL: BigNumber.from('100000000000000000000000'), // 100 000 FIL
             USDC: BigNumber.from('1000000000000'), // 1 000 000 USDC
-            BTC: BigNumber.from('1000000000000'), // 1000 BTC
+            WBTC: BigNumber.from('1000000000000'), // 1000 BTC
         });
     });
 });
