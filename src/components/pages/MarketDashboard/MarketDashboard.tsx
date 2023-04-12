@@ -39,6 +39,9 @@ import { Maturity } from 'src/utils/entities';
 import { useWallet } from 'use-wallet';
 
 const computeTotalUsers = (users: string) => {
+    if (!users) {
+        return '0';
+    }
     const totalUsers =
         getEnvironment() === 'development' ? +users : +users + TOTAL_USERS_V4;
     return ordinaryFormat(totalUsers ?? 0, 2, 'compact');
