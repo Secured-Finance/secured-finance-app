@@ -174,3 +174,15 @@ const convertFromBlockchainUnit = (amount: BigNumber, ccy: Currency) => {
     );
     return value.toNumber();
 };
+
+export const multiply = (valueA: number, valueB: number, precision = 2) => {
+    return parseFloat(
+        new BigNumberJS(valueA).multipliedBy(valueB).toFixed(precision)
+    );
+};
+
+export const divide = (valueA: number, valueB: number, precision = 2) => {
+    return parseFloat(
+        new BigNumberJS(valueA).dividedBy(valueB).toFixed(precision)
+    );
+};
