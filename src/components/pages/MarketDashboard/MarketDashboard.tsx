@@ -24,17 +24,25 @@ import {
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { RootState } from 'src/store/types';
 import {
+    CurrencySymbol,
+    Rate,
+    TOTAL_USERS_V4,
+    WalletSource,
     computeTotalDailyVolumeInUSD,
     currencyMap,
-    CurrencySymbol,
     getCurrencyMapAsList,
+    getEnvironment,
     ordinaryFormat,
-    Rate,
     usdFormat,
-    WalletSource,
 } from 'src/utils';
 import { Maturity } from 'src/utils/entities';
 import { useWallet } from 'use-wallet';
+
+const computeTotalUsers = (users: string) => {
+    const totalUsers =
+        getEnvironment() === 'development' ? +users : +users + TOTAL_USERS_V4;
+    return ordinaryFormat(totalUsers ?? 0, 2, 'compact');
+};
 
 export const MarketDashboard = () => {
     const { account } = useWallet();
@@ -127,10 +135,8 @@ export const MarketDashboard = () => {
                             },
                             {
                                 name: 'Total Users',
-                                value: ordinaryFormat(
-                                    totalUser.data?.totalUsers ?? 0,
-                                    2,
-                                    'compact'
+                                value: computeTotalUsers(
+                                    totalUser.data?.totalUsers
                                 ),
                                 orientation: 'center',
                             },
