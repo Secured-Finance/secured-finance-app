@@ -25,6 +25,7 @@ import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { RootState } from 'src/store/types';
 import {
     CurrencySymbol,
+    Environment,
     Rate,
     TOTAL_USERS_V4,
     WalletSource,
@@ -43,7 +44,9 @@ const computeTotalUsers = (users: string) => {
         return '0';
     }
     const totalUsers =
-        getEnvironment() === 'development' ? +users : +users + TOTAL_USERS_V4;
+        getEnvironment().toLowerCase() === Environment.DEVELOPMENT
+            ? +users
+            : +users + TOTAL_USERS_V4;
     return ordinaryFormat(totalUsers ?? 0, 2, 'compact');
 };
 
