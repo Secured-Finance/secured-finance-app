@@ -54,3 +54,4 @@ export const generateWalletInformation = (
 
 export const COLLATERAL_THRESHOLD = 80; // in percentage %
 export const LIQUIDATION_THRESHOLD = 80; // in percentage %
+export const TOTAL_USERS_V4 = 6824;
