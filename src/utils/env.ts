@@ -50,3 +50,15 @@ export const getEthereumBlockTimer = () => {
 
     return parseInt(NEXT_PUBLIC_ETHEREUM_BLOCK_TIMER);
 };
+
+export const getEnvironment = () => {
+    const SF_ENV = process.env.SF_ENV;
+
+    if (!SF_ENV) {
+        // eslint-disable-next-line no-console
+        console.warn('SF_ENV is not set, defaulting to development');
+        return 'development';
+    }
+
+    return SF_ENV;
+};
