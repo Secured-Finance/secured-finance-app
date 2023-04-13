@@ -17,6 +17,7 @@ import {
 import { Page, TwoColumns } from 'src/components/templates';
 import {
     RateType,
+    useCollateralBook,
     useGraphClientHook,
     useLoanValues,
     useProtocolInformation,
@@ -24,20 +25,21 @@ import {
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { RootState } from 'src/store/types';
 import {
+    CurrencySymbol,
+    Rate,
+    WalletSource,
     computeTotalDailyVolumeInUSD,
     currencyMap,
-    CurrencySymbol,
     getCurrencyMapAsList,
     ordinaryFormat,
-    Rate,
     usdFormat,
-    WalletSource,
 } from 'src/utils';
 import { Maturity } from 'src/utils/entities';
 import { useWallet } from 'use-wallet';
 
 export const MarketDashboard = () => {
     const { account } = useWallet();
+    const collateralBook = useCollateralBook(account);
 
     const curves: Record<string, Rate[]> = {};
     const lendingContracts = useSelector(
@@ -189,8 +191,13 @@ export const MarketDashboard = () => {
                             <GradientBox header='My Collateral'>
                                 <div className='px-3 py-6'>
                                     <CollateralManagementConciseTab
-                                        collateralCoverage={98000}
-                                        totalCollateralInUSD={123}
+                                        collateralCoverage={
+                                            collateralBook.coverage.toNumber() /
+                                            100
+                                        }
+                                        totalCollateralInUSD={
+                                            collateralBook.usdCollateral
+                                        }
                                     />
                                 </div>
                             </GradientBox>
