@@ -1,5 +1,5 @@
 import { BigNumber } from 'ethers';
-import { useCallback, useState } from 'react';
+import { useCallback } from 'react';
 import { InputBase } from 'src/components/atoms';
 import { PercentageSelector } from 'src/components/molecules';
 import { amountFormatterToBase, CurrencySymbol, usdFormat } from 'src/utils';
@@ -9,6 +9,8 @@ interface CollateralInputProps {
     availableAmount: number;
     asset: CurrencySymbol;
     onAmountChange?: (v: BigNumber) => void;
+    amount: number | undefined;
+    setAmount: (amt: number | undefined) => void;
 }
 
 export const CollateralInput = ({
@@ -16,9 +18,9 @@ export const CollateralInput = ({
     availableAmount,
     asset,
     onAmountChange,
+    amount,
+    setAmount,
 }: CollateralInputProps) => {
-    const [amount, setAmount] = useState<number | undefined>();
-
     const handleInputChange = useCallback(
         (
             amount: number,
@@ -42,7 +44,7 @@ export const CollateralInput = ({
                 handleInputChange(amount ?? 0, asset, onAmountChange);
             }
         },
-        [asset, handleInputChange, onAmountChange]
+        [asset, handleInputChange, onAmountChange, setAmount]
     );
 
     const handleClick = useCallback(
@@ -54,7 +56,7 @@ export const CollateralInput = ({
                 handleInputChange(amount, asset, onAmountChange);
             }
         },
-        [availableAmount, onAmountChange, asset, handleInputChange]
+        [availableAmount, setAmount, onAmountChange, handleInputChange, asset]
     );
 
     return (
