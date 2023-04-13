@@ -8,7 +8,7 @@ import { WalletDialog, WalletPopover } from 'src/components/organisms';
 import useSF from 'src/hooks/useSecuredFinance';
 import { setWalletDialogOpen } from 'src/store/interactions';
 import { RootState } from 'src/store/types';
-import { getEnvShort, getEnvironment } from 'src/utils';
+import { getEnvShort } from 'src/utils';
 import { AddressUtils } from 'src/utils/address';
 import { useWallet } from 'use-wallet';
 
@@ -22,7 +22,7 @@ export const Header = () => {
     const open = useSelector(
         (state: RootState) => state.interactions.walletDialogOpen
     );
-    const envShort = getEnvShort(getEnvironment());
+    const envShort = getEnvShort();
 
     return (
         <nav

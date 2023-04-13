@@ -2,6 +2,7 @@ import { formatDate } from '@secured-finance/sf-core';
 import { Option } from 'src/components/atoms';
 import { hexToNumber } from 'web3-utils';
 import { Maturity } from './entities';
+import { getEnvironment } from './env';
 
 export enum Environment {
     DEVELOPMENT = 'development',
@@ -29,7 +30,8 @@ export function getTransformMaturityOption(options: Option<Maturity>[]) {
     };
 }
 
-export const getEnvShort = (env: string) => {
+export const getEnvShort = () => {
+    const env = getEnvironment();
     switch (env.toLowerCase()) {
         case Environment.DEVELOPMENT:
             return 'dev';
