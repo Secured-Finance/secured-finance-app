@@ -17,9 +17,9 @@ import {
     CollateralSimulationSection,
     Dialog,
     DialogState,
+    FailurePanel,
     SuccessPanel,
 } from 'src/components/molecules';
-import { FailurePanel } from 'src/components/molecules/FailurePanel';
 import { CollateralBook, OrderType } from 'src/hooks';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { selectLandingOrderForm } from 'src/store/landingOrderForm';
@@ -28,9 +28,9 @@ import { RootState } from 'src/store/types';
 import { PlaceOrderFunction } from 'src/types';
 import {
     CurrencySymbol,
-    handleContractTransaction,
     OrderEvents,
     OrderProperties,
+    handleContractTransaction,
     ordinaryFormat,
 } from 'src/utils';
 import { Amount, LoanValue, Maturity } from 'src/utils/entities';

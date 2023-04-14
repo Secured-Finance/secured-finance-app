@@ -2,7 +2,7 @@ import { WalletSource as Source } from '@secured-finance/sf-client/dist/secured-
 import { BigNumber } from 'ethers';
 import SFLogoSmall from 'src/assets/img/logo-small.svg';
 import MetamaskIcon from 'src/assets/img/metamask-fox.svg';
-import { WalletSourceOption } from 'src/components/atoms/WalletSourceSelector';
+import { WalletSourceOption } from 'src/components/atoms';
 import { AssetDisclosureProps } from 'src/components/molecules';
 import {
     amountFormatterFromBase,

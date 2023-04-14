@@ -13,8 +13,8 @@ import {
     OrderInputBox,
     Separator,
     Slider,
+    WalletSourceSelector,
 } from 'src/components/atoms';
-import { WalletSourceSelector } from 'src/components/atoms/WalletSourceSelector';
 import { OrderAction } from 'src/components/organisms';
 import { CollateralBook, OrderType } from 'src/hooks';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
@@ -34,7 +34,7 @@ import {
     percentFormat,
     usdFormat,
 } from 'src/utils';
-import { computeAvailableToBorrow, MAX_COVERAGE } from 'src/utils/collateral';
+import { MAX_COVERAGE, computeAvailableToBorrow } from 'src/utils/collateral';
 import { Amount, LoanValue } from 'src/utils/entities';
 import { useWallet } from 'use-wallet';
 
