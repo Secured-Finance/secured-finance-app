@@ -1,5 +1,5 @@
 import Tick from 'src/assets/icons/tick.svg';
-import { Separator } from 'src/components/atoms/Separator';
+import { Separator } from 'src/components/atoms';
 import { LIQUIDATION_THRESHOLD, percentFormat, usdFormat } from 'src/utils';
 import { computeAvailableToBorrow } from 'src/utils/collateral';
 

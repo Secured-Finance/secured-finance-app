@@ -3,8 +3,7 @@ import { WalletSource } from '@secured-finance/sf-client/dist/secured-finance-cl
 import { BigNumber } from 'ethers';
 import { useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { BorrowLendSelector } from 'src/components/atoms';
-import { WalletSourceSelector } from 'src/components/atoms/WalletSourceSelector';
+import { BorrowLendSelector, WalletSourceSelector } from 'src/components/atoms';
 import {
     AssetSelector,
     CollateralUsageSection,
@@ -25,8 +24,8 @@ import { RootState } from 'src/store/types';
 import { selectAllBalances } from 'src/store/wallet';
 import { MaturityOptionList } from 'src/types';
 import {
-    amountFormatterToBase,
     CurrencySymbol,
+    amountFormatterToBase,
     formatLoanValue,
     generateWalletSourceInformation,
     getCurrencyMapAsList,
