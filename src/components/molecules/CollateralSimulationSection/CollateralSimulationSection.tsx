@@ -3,6 +3,7 @@ import { useMemo } from 'react';
 import { SectionWithItems } from 'src/components/atoms';
 import { CollateralBook } from 'src/hooks';
 import {
+    COLLATERAL_THRESHOLD,
     formatCollateralRatio,
     formatLoanValue,
     ordinaryFormat,
@@ -34,27 +35,36 @@ export const CollateralSimulationSection = ({
     )} -> ${formatCollateralRatio(
         recomputeCollateralUtilization(
             collateral.usdCollateral,
-            collateral.coverage.toNumber(),
+            collateral.coverage.toNumber() / 10000,
             tradePosition === OrderSide.BORROW
                 ? tradeAmount.toUSD(assetPrice)
                 : -1 * tradeAmount.toUSD(assetPrice)
-        )
+        ) * 10000
     )}`;
 
-    const remainingToBorrowText = useMemo(
-        () =>
-            `${ordinaryFormat(
-                (collateral.usdCollateral * collateral.coverage.toNumber()) /
-                    MAX_COVERAGE
-            )} / ${ordinaryFormat(
-                computeAvailableToBorrow(
-                    1,
-                    collateral.usdCollateral,
-                    collateral.coverage.toNumber() / MAX_COVERAGE
-                )
-            )}`,
-        [collateral.coverage, collateral.usdCollateral]
-    );
+    const remainingToBorrowText = useMemo(() => {
+        const availableAssetMultiplier = collateral.coverage.isZero()
+            ? COLLATERAL_THRESHOLD / 100
+            : (COLLATERAL_THRESHOLD - collateral.coverage.toNumber() / 100) /
+              100;
+
+        return `${ordinaryFormat(
+            (collateral.usdCollateral * availableAssetMultiplier -
+                tradeAmount.toUSD(assetPrice)) /
+                assetPrice
+        )} / ${ordinaryFormat(
+            computeAvailableToBorrow(
+                assetPrice,
+                collateral.usdCollateral,
+                collateral.coverage.toNumber() / MAX_COVERAGE
+            )
+        )}`;
+    }, [
+        assetPrice,
+        collateral.coverage,
+        collateral.usdCollateral,
+        tradeAmount,
+    ]);
 
     const items: [string, string][] = [
         ['Borrow Remaining', remainingToBorrowText],
