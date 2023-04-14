@@ -24,21 +24,21 @@ export const MenuItem = ({
             >
                 <a
                     href={link}
-                    className='h-full w-full'
+                    className='group h-full w-full'
                     aria-label='Menu Item'
                     target='_blank'
                     rel='noopener noreferrer'
                 >
-                    <div className=' group relative flex w-full cursor-pointer items-center opacity-100'>
+                    <div className='relative flex w-full cursor-pointer items-center'>
                         <div className='flex h-10 w-10 items-center justify-center'>
                             {icon}
                         </div>
                         <div className='flex w-full justify-between'>
-                            <p className='typography-caption flex w-[90%] capitalize text-white'>
+                            <p className='typography-caption flex w-[90%] text-white'>
                                 {text}
                             </p>
                             {badge && (
-                                <span className='absolute right-0 my-1 h-full transform align-top transition-opacity group-hover:opacity-100'>
+                                <span className='absolute right-0 my-1 h-full align-top opacity-0 group-hover:opacity-100'>
                                     {badge}
                                 </span>
                             )}
