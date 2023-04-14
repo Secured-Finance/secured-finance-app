@@ -1,5 +1,5 @@
 import { Listbox, Transition } from '@headlessui/react';
-import { WalletSource } from '@secured-finance/sf-client/dist/secured-finance-client';
+import { WalletSource } from '@secured-finance/sf-client';
 import classNames from 'classnames';
 import { Fragment, useEffect, useMemo, useState } from 'react';
 import { ExpandIndicator, Separator } from 'src/components/atoms';

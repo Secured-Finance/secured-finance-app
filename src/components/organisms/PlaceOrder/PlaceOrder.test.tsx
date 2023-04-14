@@ -1,5 +1,4 @@
-import { OrderSide } from '@secured-finance/sf-client';
-import { WalletSource } from '@secured-finance/sf-client/dist/secured-finance-client';
+import { OrderSide, WalletSource } from '@secured-finance/sf-client';
 import { composeStories } from '@storybook/testing-react';
 import { BigNumber } from 'ethers';
 import { OrderType } from 'src/hooks';

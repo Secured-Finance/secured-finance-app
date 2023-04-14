@@ -1,5 +1,4 @@
-import { OrderSide } from '@secured-finance/sf-client';
-import { WalletSource } from '@secured-finance/sf-client/dist/secured-finance-client';
+import { OrderSide, WalletSource } from '@secured-finance/sf-client';
 import queries from '@secured-finance/sf-graph-client/dist/graphclients';
 import { BigNumber, ContractTransaction } from 'ethers';
 import { Option } from 'src/components/atoms';
