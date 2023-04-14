@@ -26,20 +26,10 @@ describe('DepositCollateral component', () => {
 
     it('should open with collateral amount 0', () => {
         render(<Default />);
-        expect(screen.getByRole('textbox').getAttribute('value')).toBe('');
+        expect(screen.getByRole('textbox').getAttribute('value')).toBe('0');
         expect(screen.getByRole('textbox').getAttribute('placeholder')).toBe(
             '0'
         );
-    });
-
-    it('should do nothing when collateral amount is 0 and continue button is clicked', () => {
-        const onClose = jest.fn();
-        render(<Default onClose={onClose} />);
-
-        const button = screen.getByTestId('dialog-action-button');
-        fireEvent.click(button);
-        expect(onClose).not.toHaveBeenCalled();
-        expect(screen.getByRole('textbox')).toBeInTheDocument();
     });
 
     it('should select asset and update amount', () => {
@@ -124,5 +114,26 @@ describe('DepositCollateral component', () => {
             expect(screen.getByText('Failed!')).toBeInTheDocument();
             expect(screen.getByText('error')).toBeInTheDocument();
         });
+    });
+
+    it('should disable the button when collateral amount is greater than available amount and continue button is clicked', () => {
+        const onClose = jest.fn();
+        render(<Default onClose={onClose} />);
+        const input = screen.getByRole('textbox');
+        fireEvent.click(screen.getByTestId('collateral-selector-button'));
+        fireEvent.click(screen.getByTestId('option-0'));
+        expect(screen.getByText('USDC')).toBeInTheDocument();
+        expect(screen.getByText('50 USDC Available')).toBeInTheDocument();
+        fireEvent.change(input, { target: { value: '100' } });
+        const button = screen.getByTestId('dialog-action-button');
+        expect(button).toBeDisabled();
+    });
+
+    it('should disable the button when collateral is zero', () => {
+        const onClose = jest.fn();
+        render(<Default onClose={onClose} />);
+
+        const button = screen.getByTestId('dialog-action-button');
+        expect(button).toBeDisabled();
     });
 });

@@ -18,6 +18,7 @@ import {
     CollateralInfo,
     CurrencySymbol,
     amountFormatterFromBase,
+    amountFormatterToBase,
     handleContractTransaction,
 } from 'src/utils';
 import { useWallet } from 'use-wallet';
@@ -96,7 +97,7 @@ export const WithdrawCollateral = ({
     onClose,
     collateralList,
 }: {
-    collateralList: Record<string, CollateralInfo>;
+    collateralList: Record<CurrencySymbol, CollateralInfo>;
 } & DialogState) => {
     const { account } = useWallet();
     const [asset, setAsset] = useState(CurrencySymbol.ETH);
@@ -105,6 +106,9 @@ export const WithdrawCollateral = ({
     const [errorMessage, setErrorMessage] = useState(
         'Your withdrawal transaction has failed.'
     );
+    const [collateralAmount, setCollateralAmount] = useState<
+        number | undefined
+    >(0);
 
     const priceList = useSelector((state: RootState) => getPriceMap(state));
     const { onWithdrawCollateral } = useWithdrawCollateral(asset, collateral);
@@ -113,6 +117,18 @@ export const WithdrawCollateral = ({
         dispatch({ type: 'default' });
         onClose();
     }, [onClose]);
+
+    const isDisabled = useCallback(() => {
+        return (
+            !collateral ||
+            collateral.isZero() ||
+            collateral.gt(
+                amountFormatterToBase[asset](
+                    collateralList[asset]?.available ?? 0
+                )
+            )
+        );
+    }, [collateralList, asset, collateral]);
 
     const handleWithdrawCollateral = useCallback(async () => {
         try {
@@ -135,7 +151,6 @@ export const WithdrawCollateral = ({
         async (currentStep: Step) => {
             switch (currentStep) {
                 case Step.withdrawCollateral:
-                    if (!collateral || collateral.isZero()) return;
                     dispatch({ type: 'next' });
                     handleWithdrawCollateral();
                     break;
@@ -149,12 +164,14 @@ export const WithdrawCollateral = ({
                     break;
             }
         },
-        [collateral, handleWithdrawCollateral, handleClose]
+        [handleWithdrawCollateral, handleClose]
     );
 
-    const handleChange = (v: CollateralInfo) => {
+    const handleChange = useCallback((v: CollateralInfo) => {
         setAsset(v.symbol);
-    };
+        setCollateral(BigNumber.from(0));
+        setCollateralAmount(0);
+    }, []);
 
     return (
         <Dialog
@@ -164,6 +181,7 @@ export const WithdrawCollateral = ({
             description={state.description}
             callToAction={state.buttonText}
             onClick={() => onClick(state.currentStep)}
+            disableActionButton={isDisabled()}
         >
             {(() => {
                 switch (state.currentStep) {
@@ -172,7 +190,7 @@ export const WithdrawCollateral = ({
                             <div className='flex flex-col gap-6'>
                                 <CollateralSelector
                                     headerText='Select Asset'
-                                    onChange={v => handleChange(v)}
+                                    onChange={handleChange}
                                     optionList={Object.values(collateralList)}
                                 />
                                 <CollateralInput
@@ -182,8 +200,10 @@ export const WithdrawCollateral = ({
                                         setCollateral(v)
                                     }
                                     availableAmount={
-                                        collateralList[asset].available
+                                        collateralList[asset]?.available ?? 0
                                     }
+                                    amount={collateralAmount}
+                                    setAmount={setCollateralAmount}
                                 />
                                 <div className='typography-caption-2 h-fit rounded-xl border border-red px-3 py-2 text-slateGray'>
                                     Please note that withdrawal will impact the

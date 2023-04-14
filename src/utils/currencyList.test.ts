@@ -6,13 +6,15 @@ import {
     wbtcBytes32,
 } from 'src/stories/mocks/fixtures';
 import {
+    CurrencySymbol,
     amountFormatterFromBase,
     amountFormatterToBase,
     currencyMap,
-    CurrencySymbol,
+    divide,
     getCurrencyMapAsList,
     getCurrencyMapAsOptions,
     hexToCurrencySymbol,
+    multiply,
     toCurrency,
     toCurrencySymbol,
 } from './currencyList';
@@ -289,5 +291,19 @@ describe('hexToCurrencySymbol', () => {
     it('should return undefined if the currency is not supported', () => {
         expect(hexToCurrencySymbol('0x585250')).toBeUndefined();
         expect(hexToCurrencySymbol('0x455552')).toBeUndefined();
+    });
+});
+
+describe('multiple', () => {
+    it('should multiply two numbers with precision', () => {
+        expect(multiply(80.6, 100)).toEqual(8060);
+        expect(multiply(80.612, 99.12345, 4)).toEqual(7990.5396);
+    });
+});
+
+describe('divide', () => {
+    it('should divide two numbers with precision', () => {
+        expect(divide(8060, 100)).toEqual(80.6);
+        expect(divide(80.612, 99.12345, 4)).toEqual(0.8132);
     });
 });
