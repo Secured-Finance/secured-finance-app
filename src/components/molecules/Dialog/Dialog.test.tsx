@@ -42,4 +42,14 @@ describe('Dialog component', () => {
         render(<NoButton />);
         expect(screen.queryByTestId('dialog-action-button')).toBeNull();
     });
+
+    it('should disable the action button if disableActionButton is true', () => {
+        render(<Default disableActionButton={true} />);
+        expect(screen.getByTestId('dialog-action-button')).toBeDisabled();
+    });
+
+    it('should not disable the action button if disableActionButton is false', () => {
+        render(<Default disableActionButton={false} />);
+        expect(screen.getByTestId('dialog-action-button')).not.toBeDisabled();
+    });
 });
