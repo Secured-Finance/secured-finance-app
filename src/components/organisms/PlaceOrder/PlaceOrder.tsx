@@ -1,7 +1,7 @@
 import { track } from '@amplitude/analytics-browser';
 import { Disclosure } from '@headlessui/react';
 import { OrderSide } from '@secured-finance/sf-client';
-import { getUTCMonthYear } from '@secured-finance/sf-core';
+import { getUTCMonthYear, formatDate } from '@secured-finance/sf-core';
 import { BigNumber } from 'ethers';
 import { useCallback, useReducer, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -216,6 +216,33 @@ export const PlaceOrder = ({
         ]
     );
 
+    const itemList: [string, string][] = loanValue
+        ? [
+              [
+                  'Bond Price',
+                  loanValue
+                      ? (loanValue.price / 100).toString()
+                      : 'Market Order',
+              ],
+              ['Loan Start Date', formatDate(Date.now() / 1000)],
+              ['Loan Maturity Date', formatDate(maturity.toNumber())],
+              [
+                  'Total Interest (USD)',
+                  ordinaryFormat(
+                      orderAmount.value * loanValue?.apr.toNormalizedNumber()
+                  ).toString(),
+              ],
+              [
+                  'Est. Total Debt (USD)',
+                  ordinaryFormat(
+                      orderAmount.value +
+                          orderAmount.value *
+                              loanValue?.apr.toNormalizedNumber()
+                  ).toString(),
+              ],
+          ]
+        : [['Loan Maturity Date', formatDate(maturity.toNumber())]];
+
     return (
         <Dialog
             isOpen={isOpen}
@@ -245,10 +272,7 @@ export const PlaceOrder = ({
                                     type='trade'
                                 />
                                 <SectionWithItems
-                                    itemList={[
-                                        ['Borrow Fee %', '0.25 %'],
-                                        ['Total', '$601.25'],
-                                    ]}
+                                    itemList={[['Borrow Fee %', '0.25 %']]}
                                 />
                                 <Disclosure>
                                     {({ open }) => (
@@ -263,30 +287,7 @@ export const PlaceOrder = ({
                                             </Disclosure.Button>
                                             <Disclosure.Panel>
                                                 <SectionWithItems
-                                                    itemList={[
-                                                        [
-                                                            'Bond Price',
-                                                            loanValue
-                                                                ? loanValue.price.toString()
-                                                                : 'Market Order',
-                                                        ],
-                                                        [
-                                                            'Loan Start Date',
-                                                            'June 21, 2022',
-                                                        ],
-                                                        [
-                                                            'Loan Maturity Date',
-                                                            'Dec 22, 2022',
-                                                        ],
-                                                        [
-                                                            'Total Interest (USD)',
-                                                            '$120.00',
-                                                        ],
-                                                        [
-                                                            'Est. Total Debt (USD)',
-                                                            '$720.00',
-                                                        ],
-                                                    ]}
+                                                    itemList={itemList}
                                                 />
                                             </Disclosure.Panel>
                                         </>
