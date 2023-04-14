@@ -1,4 +1,4 @@
-import { WalletSource } from '@secured-finance/sf-client/dist/secured-finance-client';
+import { WalletSource } from '@secured-finance/sf-client';
 import { fromBytes32 } from '@secured-finance/sf-graph-client';
 import { BigNumber, utils } from 'ethers';
 import EfilIcon from 'src/assets/coins/efil.svg';

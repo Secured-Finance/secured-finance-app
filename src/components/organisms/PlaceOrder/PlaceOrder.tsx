@@ -1,7 +1,6 @@
 import { track } from '@amplitude/analytics-browser';
 import { Disclosure } from '@headlessui/react';
-import { OrderSide } from '@secured-finance/sf-client';
-import { WalletSource } from '@secured-finance/sf-client/dist/secured-finance-client';
+import { OrderSide, WalletSource } from '@secured-finance/sf-client';
 import { getUTCMonthYear } from '@secured-finance/sf-core';
 import { BigNumber } from 'ethers';
 import { useCallback, useReducer, useState } from 'react';

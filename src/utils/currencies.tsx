@@ -1,4 +1,4 @@
-import { WalletSource as Source } from '@secured-finance/sf-client/dist/secured-finance-client';
+import { WalletSource as Source } from '@secured-finance/sf-client';
 import { BigNumber } from 'ethers';
 import SFLogoSmall from 'src/assets/img/logo-small.svg';
 import MetamaskIcon from 'src/assets/img/metamask-fox.svg';

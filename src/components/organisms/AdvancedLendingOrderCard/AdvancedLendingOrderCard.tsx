@@ -1,6 +1,5 @@
 import { RadioGroup } from '@headlessui/react';
-import { OrderSide } from '@secured-finance/sf-client';
-import { WalletSource } from '@secured-finance/sf-client/dist/secured-finance-client';
+import { OrderSide, WalletSource } from '@secured-finance/sf-client';
 import { BigNumber } from 'ethers';
 import Link from 'next/link';
 import { useMemo } from 'react';

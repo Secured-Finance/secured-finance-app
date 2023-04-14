@@ -1,4 +1,4 @@
-import { WalletSource } from '@secured-finance/sf-client/dist/secured-finance-client';
+import { WalletSource } from '@secured-finance/sf-client';
 import { composeStories } from '@storybook/testing-react';
 import SFLogoSmall from 'src/assets/img/logo-small.svg';
 import MetamaskIcon from 'src/assets/img/metamask-fox.svg';

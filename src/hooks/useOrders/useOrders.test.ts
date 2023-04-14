@@ -1,10 +1,9 @@
-import { OrderSide } from '@secured-finance/sf-client';
-import { WalletSource } from '@secured-finance/sf-client/dist/secured-finance-client';
+import { OrderSide, WalletSource } from '@secured-finance/sf-client';
 import { renderHook } from '@testing-library/react-hooks';
 import { BigNumber } from 'ethers';
 import { dec22Fixture } from 'src/stories/mocks/fixtures';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
-import { currencyMap, CurrencySymbol, toCurrency } from 'src/utils';
+import { CurrencySymbol, currencyMap, toCurrency } from 'src/utils';
 import { Maturity } from 'src/utils/entities';
 import { useOrders } from '.';
 
@@ -39,10 +38,8 @@ describe('useOrders hook', () => {
                 WalletSource.METAMASK,
                 9863
             );
-            expect(mockSecuredFinance.placeLendingOrder).toHaveBeenCalledTimes(
-                1
-            );
-            expect(mockSecuredFinance.placeLendingOrder).toHaveBeenCalledWith(
+            expect(mockSecuredFinance.placeOrder).toHaveBeenCalledTimes(1);
+            expect(mockSecuredFinance.placeOrder).toHaveBeenCalledWith(
                 toCurrency(CurrencySymbol.ETH),
                 2022,
                 '0',
@@ -63,7 +60,7 @@ describe('useOrders hook', () => {
                 WalletSource.METAMASK
             );
 
-            expect(mockSecuredFinance.placeLendingOrder).toHaveBeenCalledWith(
+            expect(mockSecuredFinance.placeOrder).toHaveBeenCalledWith(
                 toCurrency(CurrencySymbol.ETH),
                 2022,
                 '0',

@@ -1,5 +1,4 @@
-import { OrderSide } from '@secured-finance/sf-client';
-import { WalletSource } from '@secured-finance/sf-client/dist/secured-finance-client';
+import { OrderSide, WalletSource } from '@secured-finance/sf-client';
 import { BigNumber } from 'ethers';
 import { useCallback } from 'react';
 import { CurrencySymbol, toCurrency } from 'src/utils';
@@ -47,7 +46,7 @@ export const useOrders = () => {
             try {
                 if (!securedFinance) return;
 
-                const tx = await securedFinance.placeLendingOrder(
+                const tx = await securedFinance.placeOrder(
                     toCurrency(ccy),
                     maturity.toNumber(),
                     side,

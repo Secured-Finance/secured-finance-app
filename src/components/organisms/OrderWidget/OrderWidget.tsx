@@ -1,5 +1,5 @@
 import { ArrowUpIcon } from '@heroicons/react/outline';
-import { OrderSide } from '@secured-finance/sf-client';
+import { OrderSide, WalletSource } from '@secured-finance/sf-client';
 import { createColumnHelper } from '@tanstack/react-table';
 import classNames from 'classnames';
 import { BigNumber } from 'ethers';
@@ -17,12 +17,10 @@ import {
     setSourceAccount,
     setUnitPrice,
 } from 'src/store/landingOrderForm';
-
-import { WalletSource } from '@secured-finance/sf-client/dist/secured-finance-client';
 import { ColorFormat } from 'src/types';
 import {
-    currencyMap,
     CurrencySymbol,
+    currencyMap,
     formatLoanValue,
     ordinaryFormat,
 } from 'src/utils';
