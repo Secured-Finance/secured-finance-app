@@ -9,7 +9,7 @@ describe('Layout Component', () => {
         render(<Default />);
     });
 
-    it('should render with header, main and content', () => {
+    it('should render with header, main, footer and content', () => {
         render(
             <Default>
                 <div>Content</div>
@@ -18,6 +18,7 @@ describe('Layout Component', () => {
         expect(screen.getByText('Content')).toBeInTheDocument();
         expect(screen.getByRole('banner')).toBeInTheDocument();
         expect(screen.getByRole('main')).toBeInTheDocument();
+        expect(screen.getByRole('contentinfo')).toBeInTheDocument();
     });
 
     it('should be scrollable', () => {
