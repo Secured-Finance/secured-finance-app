@@ -10,7 +10,12 @@ import {
 import { setCurrency } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
 import { IndexOf } from 'src/types';
-import { currencyMap, CurrencySymbol, formatLoanValue } from 'src/utils';
+import {
+    COIN_GECKO_SOURCE,
+    currencyMap,
+    CurrencySymbol,
+    formatLoanValue,
+} from 'src/utils';
 import { LoanValue, Maturity } from 'src/utils/entities';
 
 type ValueField = number | string;
@@ -76,6 +81,10 @@ export const AdvancedLendingTopBar = <T extends string = string>({
         new Maturity(termValue).toNumber()
     );
 
+    const handleSource = () =>
+        selectedAsset &&
+        COIN_GECKO_SOURCE.concat(currencyMap[selectedAsset.value].coinGeckoId);
+
     return (
         <div className='h-fit'>
             <GradientBox shape='rectangle'>
@@ -119,12 +128,7 @@ export const AdvancedLendingTopBar = <T extends string = string>({
                     <MarketTab
                         name={`${selectedAsset?.value} Price`}
                         value={getValue(values, 4)}
-                        source={
-                            selectedAsset &&
-                            'https://www.coingecko.com/en/coins/'.concat(
-                                currencyMap[selectedAsset.value].coinGeckoId
-                            )
-                        }
+                        source={handleSource()}
                     />
                 </div>
             </GradientBox>
