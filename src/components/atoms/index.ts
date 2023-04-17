@@ -14,6 +14,7 @@ export * from './CurveHeaderAsset';
 export * from './CurveHeaderTotal';
 export * from './DropdownSelector';
 export * from './ExpandIndicator';
+export * from './Footer';
 export * from './GradientBox';
 export * from './HorizontalListItem';
 export * from './InformationPopover';
