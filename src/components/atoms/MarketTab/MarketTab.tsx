@@ -1,6 +1,6 @@
 import classNames from 'classnames';
-import { ordinaryFormat } from 'src/utils';
 import ArrowUpSquare from 'src/assets/icons/arrow-up-square.svg';
+import { ordinaryFormat } from 'src/utils';
 
 export interface MarketTabProps {
     name: string | number;
@@ -33,7 +33,7 @@ export const MarketTab = ({ name, value, source }: MarketTabProps) => {
                         'typography-caption-2 whitespace-nowrap font-semibold text-white':
                             typeof value === 'string',
                     },
-                    'flex items-center justify-center'
+                    'flex items-center'
                 )}
             >
                 {typeof value === 'number' ? ordinaryFormat(value, 4) : value}
