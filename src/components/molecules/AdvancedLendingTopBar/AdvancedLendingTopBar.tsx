@@ -81,10 +81,6 @@ export const AdvancedLendingTopBar = <T extends string = string>({
         new Maturity(termValue).toNumber()
     );
 
-    const handleSource = () =>
-        selectedAsset &&
-        COIN_GECKO_SOURCE.concat(currencyMap[selectedAsset.value].coinGeckoId);
-
     return (
         <div className='h-fit'>
             <GradientBox shape='rectangle'>
@@ -128,10 +124,13 @@ export const AdvancedLendingTopBar = <T extends string = string>({
                     <MarketTab
                         name={`${selectedAsset?.value} Price`}
                         value={getValue(values, 4)}
-                        source={handleSource()}
+                        source={handleSource(selectedAsset?.value)}
                     />
                 </div>
             </GradientBox>
         </div>
     );
 };
+
+const handleSource = (asset: CurrencySymbol | undefined) =>
+    asset && COIN_GECKO_SOURCE.concat(currencyMap[asset].coinGeckoId);
