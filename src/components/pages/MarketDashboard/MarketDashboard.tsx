@@ -17,6 +17,7 @@ import {
 import { Page, TwoColumns } from 'src/components/templates';
 import {
     RateType,
+    useCollateralBook,
     useGraphClientHook,
     useLoanValues,
     useProtocolInformation,
@@ -52,6 +53,7 @@ const computeTotalUsers = (users: string) => {
 
 export const MarketDashboard = () => {
     const { account } = useWallet();
+    const collateralBook = useCollateralBook(account);
 
     const curves: Record<string, Rate[]> = {};
     const lendingContracts = useSelector(
@@ -201,8 +203,13 @@ export const MarketDashboard = () => {
                             <GradientBox header='My Collateral'>
                                 <div className='px-3 py-6'>
                                     <CollateralManagementConciseTab
-                                        collateralCoverage={98000}
-                                        totalCollateralInUSD={123}
+                                        collateralCoverage={
+                                            collateralBook.coverage.toNumber() /
+                                            100
+                                        }
+                                        totalCollateralInUSD={
+                                            collateralBook.usdCollateral
+                                        }
                                     />
                                 </div>
                             </GradientBox>
