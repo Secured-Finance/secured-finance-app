@@ -4,6 +4,7 @@ import { GraphClientProvider } from '@secured-finance/sf-graph-client';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
 import { Provider } from 'react-redux';
+import { Footer } from 'src/components/atoms';
 import { Header } from 'src/components/organisms';
 import { Layout } from 'src/components/templates';
 import SecuredFinanceProvider from 'src/contexts/SecuredFinanceProvider';
@@ -34,7 +35,7 @@ function App({ Component, pageProps }: AppProps) {
 
             <Provider store={store}>
                 <Providers>
-                    <Layout navBar={<Header />}>
+                    <Layout navBar={<Header />} footer={<Footer />}>
                         <Component {...pageProps} />
                     </Layout>
                 </Providers>
