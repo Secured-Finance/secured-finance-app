@@ -76,6 +76,13 @@ export const AdvancedLendingTopBar = <T extends string = string>({
         new Maturity(termValue).toNumber()
     );
 
+    const assetPriceToSourceMap: Record<CurrencySymbol, string> = {
+        [CurrencySymbol.WBTC]: 'https://www.coingecko.com/en/coins/bitcoin',
+        [CurrencySymbol.ETH]: 'https://www.coingecko.com/en/coins/ethereum',
+        [CurrencySymbol.USDC]: 'https://www.coingecko.com/en/coins/usd-coin',
+        [CurrencySymbol.EFIL]: 'https://www.coingecko.com/en/coins/filecoin',
+    };
+
     return (
         <div className='h-fit'>
             <GradientBox shape='rectangle'>
@@ -119,6 +126,10 @@ export const AdvancedLendingTopBar = <T extends string = string>({
                     <MarketTab
                         name={`${selectedAsset?.value} Price`}
                         value={getValue(values, 4)}
+                        source={
+                            selectedAsset &&
+                            assetPriceToSourceMap[selectedAsset.value]
+                        }
                     />
                 </div>
             </GradientBox>
