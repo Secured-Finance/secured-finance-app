@@ -20,12 +20,15 @@ export const ColorBar = ({
     );
     return (
         <div
-            className={classNames('absolute bottom-1 h-4/6 opacity-20', {
-                'bg-galacticOrange': color === 'negative',
-                'bg-nebulaTeal': color === 'positive',
-                'left-0.5': align === 'left',
-                'right-0.5': align === 'right',
-            })}
+            className={classNames(
+                'absolute bottom-1 h-4/6 scale-100 opacity-20',
+                {
+                    'bg-galacticOrange': color === 'negative',
+                    'bg-nebulaTeal': color === 'positive',
+                    'left-0.5': align === 'left',
+                    'right-0.5': align === 'right',
+                }
+            )}
             data-testid='color-bar'
             style={{ width: `${width}%` }}
         ></div>
