@@ -77,7 +77,8 @@ export const AdvancedLendingTopBar = <T extends string = string>({
     );
 
     const assetPriceToSourceMap: Record<CurrencySymbol, string> = {
-        [CurrencySymbol.WBTC]: 'https://www.coingecko.com/en/coins/bitcoin',
+        [CurrencySymbol.WBTC]:
+            'https://www.coingecko.com/en/coins/wrapped-bitcoin',
         [CurrencySymbol.ETH]: 'https://www.coingecko.com/en/coins/ethereum',
         [CurrencySymbol.USDC]: 'https://www.coingecko.com/en/coins/usd-coin',
         [CurrencySymbol.EFIL]: 'https://www.coingecko.com/en/coins/filecoin',
