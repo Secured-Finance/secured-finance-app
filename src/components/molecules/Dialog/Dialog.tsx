@@ -4,6 +4,7 @@ import { Button, CloseButton } from 'src/components/atoms';
 export type DialogState = {
     isOpen: boolean;
     onClose: () => void;
+    source?: string;
 };
 export const Dialog = ({
     title,
