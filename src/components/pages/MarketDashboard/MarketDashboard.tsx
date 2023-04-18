@@ -17,6 +17,7 @@ import {
 import { Page, TwoColumns } from 'src/components/templates';
 import {
     RateType,
+    useCollateralBook,
     useGraphClientHook,
     useLoanValues,
     useProtocolInformation,
@@ -25,11 +26,14 @@ import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { RootState } from 'src/store/types';
 import {
     CurrencySymbol,
+    Environment,
     Rate,
+    TOTAL_USERS_V4,
     WalletSource,
     computeTotalDailyVolumeInUSD,
     currencyMap,
     getCurrencyMapAsList,
+    getEnvironment,
     ordinaryFormat,
     toCurrencySymbol,
     usdFormat,
@@ -37,8 +41,20 @@ import {
 import { Maturity } from 'src/utils/entities';
 import { useWallet } from 'use-wallet';
 
+const computeTotalUsers = (users: string) => {
+    if (!users) {
+        return '0';
+    }
+    const totalUsers =
+        getEnvironment().toLowerCase() === Environment.DEVELOPMENT
+            ? +users
+            : +users + TOTAL_USERS_V4;
+    return ordinaryFormat(totalUsers ?? 0, 2, 'compact');
+};
+
 export const MarketDashboard = () => {
     const { account } = useWallet();
+    const collateralBook = useCollateralBook(account);
 
     const curves: Record<string, Rate[]> = {};
     const lendingContracts = useSelector(
@@ -128,10 +144,8 @@ export const MarketDashboard = () => {
                             },
                             {
                                 name: 'Total Users',
-                                value: ordinaryFormat(
-                                    totalUser.data?.totalUsers ?? 0,
-                                    2,
-                                    'compact'
+                                value: computeTotalUsers(
+                                    totalUser.data?.totalUsers
                                 ),
                                 orientation: 'center',
                             },
@@ -188,14 +202,21 @@ export const MarketDashboard = () => {
                         )}
                     </div>
                     <div>
-                        <GradientBox header='My Collateral'>
-                            <div className='px-3 py-6'>
-                                <CollateralManagementConciseTab
-                                    collateralCoverage={98000}
-                                    totalCollateralInUSD={123}
-                                />
-                            </div>
-                        </GradientBox>
+                        {account && (
+                            <GradientBox header='My Collateral'>
+                                <div className='px-3 py-6'>
+                                    <CollateralManagementConciseTab
+                                        collateralCoverage={
+                                            collateralBook.coverage.toNumber() /
+                                            100
+                                        }
+                                        totalCollateralInUSD={
+                                            collateralBook.usdCollateral
+                                        }
+                                    />
+                                </div>
+                            </GradientBox>
+                        )}
                     </div>
                 </section>
             </TwoColumns>

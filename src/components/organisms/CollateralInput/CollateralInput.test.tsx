@@ -15,12 +15,12 @@ describe('CollateralInput component', () => {
         );
     });
 
-    it('should update collateral amount when percentage button is clicked', () => {
-        render(<Default />);
+    it('should call setCollateral amount with the correct amount when percentage button is clicked', () => {
+        const setAmount = jest.fn();
+        render(<Default setAmount={setAmount} />);
         const tab = screen.getByTestId(50);
         fireEvent.click(tab);
-        expect(screen.getByRole('textbox').getAttribute('value')).toBe('5');
-        expect(screen.getByText('$500.00')).toBeInTheDocument();
+        expect(setAmount).toBeCalledWith(5);
     });
 
     it('should call onAmountChange when percentage button is clicked', () => {

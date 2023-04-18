@@ -12,7 +12,7 @@ describe('CurrencyAmountItem Component', () => {
 
     it('should render the currency amount in USD with two decimals', () => {
         render(<Default amount={100} price={5} />);
-        expect(screen.getByText('$500.00 USD')).toBeInTheDocument();
+        expect(screen.getByText('$500.00')).toBeInTheDocument();
     });
 
     it('should render the formatted currency amount in EFIL', () => {

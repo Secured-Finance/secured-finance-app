@@ -72,6 +72,7 @@ export const OrderAction = ({
             {account ? (
                 canBorrow || side === OrderSide.LEND ? (
                     <Button
+                        disabled={amount.isZero()}
                         fullWidth
                         onClick={() => {
                             setOpenPlaceOrderDialog(true);
@@ -116,6 +117,7 @@ export const OrderAction = ({
                 isOpen={openDepositCollateralDialog}
                 onClose={() => setOpenDepositCollateralDialog(false)}
                 collateralList={depositCollateralList}
+                source='Order Action Button'
             ></DepositCollateral>
         </div>
     );

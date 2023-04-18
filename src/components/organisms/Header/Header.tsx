@@ -3,10 +3,12 @@ import { useRouter } from 'next/router';
 import { useDispatch, useSelector } from 'react-redux';
 import SFLogo from 'src/assets/img/logo.svg';
 import { Button, NavTab } from 'src/components/atoms';
+import { MenuPopover } from 'src/components/molecules';
 import { WalletDialog, WalletPopover } from 'src/components/organisms';
 import useSF from 'src/hooks/useSecuredFinance';
 import { setWalletDialogOpen } from 'src/store/interactions';
 import { RootState } from 'src/store/types';
+import { getEnvShort } from 'src/utils';
 import { AddressUtils } from 'src/utils/address';
 import { useWallet } from 'use-wallet';
 
@@ -20,6 +22,7 @@ export const Header = () => {
     const open = useSelector(
         (state: RootState) => state.interactions.walletDialogOpen
     );
+    const envShort = getEnvShort();
 
     return (
         <nav
@@ -28,11 +31,18 @@ export const Header = () => {
                 open ? 'blur-sm' : ''
             }`}
         >
-            <Link className='flex h-10' href='/' passHref>
-                <a href='_' className='ml-5'>
-                    <SFLogo className='h-10 w-[200px]' />
-                </a>
-            </Link>
+            <div className='ml-5 flex flex-row items-center gap-3'>
+                <Link href='/' passHref>
+                    <a href='_'>
+                        <SFLogo className='h-10 w-[200px]' />
+                    </a>
+                </Link>
+                {envShort && (
+                    <div className='typography-dropdown-selection-label flex h-5 w-10 items-center justify-center rounded-3xl bg-starBlue font-semibold uppercase text-white'>
+                        {envShort}
+                    </div>
+                )}
+            </div>
             <div className='flex h-full items-center justify-center'>
                 <ItemLink
                     text='OTC Lending'
@@ -51,6 +61,7 @@ export const Header = () => {
                     link='/portfolio'
                 />
                 <ItemLink text='Faucet' dataCy='faucet' link='/faucet' />
+                <MenuPopover />
             </div>
             <div className='mr-5'>
                 {account ? (

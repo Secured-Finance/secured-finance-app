@@ -26,7 +26,13 @@ import {
 } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
 import { selectAllBalances } from 'src/store/wallet';
-import { amountFormatterToBase, percentFormat, usdFormat } from 'src/utils';
+import {
+    amountFormatterToBase,
+    divide,
+    multiply,
+    percentFormat,
+    usdFormat,
+} from 'src/utils';
 import { computeAvailableToBorrow } from 'src/utils/collateral';
 import { Amount, LoanValue } from 'src/utils/entities';
 
@@ -136,9 +142,9 @@ export const AdvancedLendingOrderCard = ({
                     <OrderInputBox
                         field='Bond Price'
                         disabled={orderType === OrderType.MARKET}
-                        initialValue={unitPrice / 100.0}
+                        initialValue={divide(unitPrice, 100)}
                         onValueChange={v =>
-                            dispatch(setUnitPrice((v as number) * 100.0))
+                            dispatch(setUnitPrice(multiply(v as number, 100)))
                         }
                         informationText='Input value from 0 to 100'
                         decimalPlacesAllowed={2}

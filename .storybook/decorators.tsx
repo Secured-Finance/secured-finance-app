@@ -3,6 +3,7 @@ import { Story, StoryContext } from '@storybook/react';
 import { Wallet } from 'ethers';
 import { useEffect, useMemo } from 'react';
 import { useDispatch } from 'react-redux';
+import { Footer } from 'src/components/atoms';
 import { Header } from 'src/components/organisms';
 import { Layout } from 'src/components/templates';
 import { setMidPrice } from 'src/store/analytics';
@@ -18,7 +19,7 @@ import { UseWalletProvider, useWallet } from 'use-wallet';
 
 export const withAppLayout = (Story: Story) => {
     return (
-        <Layout navBar={<Header />}>
+        <Layout navBar={<Header />} footer={<Footer/>}>
             <Story />
         </Layout>
     );
