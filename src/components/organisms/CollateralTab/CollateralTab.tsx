@@ -13,9 +13,9 @@ import { CollateralBook } from 'src/hooks';
 import { RootState } from 'src/store/types';
 import { selectCollateralCurrencyBalance } from 'src/store/wallet';
 import {
-    amountFormatterFromBase,
     CollateralInfo,
     CurrencySymbol,
+    amountFormatterFromBase,
     getCurrencyMapAsList,
 } from 'src/utils';
 import { useWallet } from 'use-wallet';
@@ -93,11 +93,13 @@ export const CollateralTab = ({
                 isOpen={openModal === 'deposit'}
                 onClose={() => setOpenModal('')}
                 collateralList={depositCollateralList}
+                source='Collateral Tab'
             ></DepositCollateral>
             <WithdrawCollateral
                 isOpen={openModal === 'withdraw'}
                 onClose={() => setOpenModal('')}
                 collateralList={withdrawCollateralList}
+                source='Collateral Tab'
             ></WithdrawCollateral>
         </div>
     );
