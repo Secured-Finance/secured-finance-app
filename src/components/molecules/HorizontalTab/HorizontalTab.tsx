@@ -34,7 +34,7 @@ export const HorizontalTab = ({
     const [selectedIndex, setSelectedIndex] = useState(0);
 
     return (
-        <div className='border border-white-10 bg-cardBackground/60 shadow-tab'>
+        <div className='min-h-[30vh] border border-white-10 bg-cardBackground/60 shadow-tab'>
             <HeadlessTab.Group
                 selectedIndex={selectedIndex}
                 onChange={setSelectedIndex}
