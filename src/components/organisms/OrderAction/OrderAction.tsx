@@ -15,7 +15,7 @@ import { RootState } from 'src/store/types';
 import { selectCollateralCurrencyBalance } from 'src/store/wallet';
 import { amountFormatterFromBase } from 'src/utils';
 import { MAX_COVERAGE, computeAvailableToBorrow } from 'src/utils/collateral';
-import { LoanValue } from 'src/utils/entities';
+import { Amount, LoanValue } from 'src/utils/entities';
 import { useWallet } from 'use-wallet';
 
 interface OrderActionProps {
@@ -37,9 +37,10 @@ export const OrderAction = ({
         useState(false);
     const [openPlaceOrderDialog, setOpenPlaceOrderDialog] = useState(false);
 
-    const { currency, amount, side, marketTiming } = useSelector(
-        (state: RootState) => selectLandingOrderForm(state.landingOrderForm)
-    );
+    const { currency, amount, side, marketTiming, maturity, orderType } =
+        useSelector((state: RootState) =>
+            selectLandingOrderForm(state.landingOrderForm)
+        );
 
     const balances = useSelector((state: RootState) =>
         selectCollateralCurrencyBalance(state)
@@ -111,6 +112,11 @@ export const OrderAction = ({
                 onClose={() => setOpenPlaceOrderDialog(false)}
                 loanValue={loanValue}
                 collateral={collateralBook}
+                assetPrice={assetPriceMap?.[currency]}
+                maturity={maturity}
+                orderAmount={new Amount(amount, currency)}
+                side={side}
+                orderType={orderType}
             />
 
             <DepositCollateral
