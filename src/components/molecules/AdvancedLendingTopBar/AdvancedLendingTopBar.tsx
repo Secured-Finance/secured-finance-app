@@ -10,7 +10,12 @@ import {
 import { setCurrency } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
 import { IndexOf } from 'src/types';
-import { currencyMap, CurrencySymbol, formatLoanValue } from 'src/utils';
+import {
+    COIN_GECKO_SOURCE,
+    currencyMap,
+    CurrencySymbol,
+    formatLoanValue,
+} from 'src/utils';
 import { LoanValue, Maturity } from 'src/utils/entities';
 
 type ValueField = number | string;
@@ -119,9 +124,13 @@ export const AdvancedLendingTopBar = <T extends string = string>({
                     <MarketTab
                         name={`${selectedAsset?.value} Price`}
                         value={getValue(values, 4)}
+                        source={handleSource(selectedAsset?.value)}
                     />
                 </div>
             </GradientBox>
         </div>
     );
 };
+
+const handleSource = (asset: CurrencySymbol | undefined) =>
+    asset && COIN_GECKO_SOURCE.concat(currencyMap[asset].coinGeckoId);

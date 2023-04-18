@@ -138,11 +138,16 @@ export const mockUseSF = () => {
             })
         ),
 
-        withdrawCollateral: jest.fn(() =>
+        withdrawCollateral: jest.fn<
+            Promise<{
+                wait: () => Promise<{
+                    blockNumber: number | undefined;
+                }>;
+            }>,
+            []
+        >(() =>
             Promise.resolve({
-                wait: jest.fn(() =>
-                    Promise.resolve({ blockNumber: undefined })
-                ),
+                wait: () => Promise.resolve({ blockNumber: 123 }),
             })
         ),
 

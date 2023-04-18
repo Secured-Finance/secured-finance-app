@@ -55,3 +55,4 @@ export const generateWalletInformation = (
 export const COLLATERAL_THRESHOLD = 80; // in percentage %
 export const LIQUIDATION_THRESHOLD = 80; // in percentage %
 export const TOTAL_USERS_V4 = 6824;
+export const COIN_GECKO_SOURCE = 'https://www.coingecko.com/en/coins/';
