@@ -75,7 +75,7 @@ describe('PlaceOrder component', () => {
         expect(screen.queryByText('Borrow Remaining')).not.toBeInTheDocument();
     });
 
-    it('should render collateral utilization and borrow remaining in borrow orders in market orders', () => {
+    it('should render collateral utilization and borrow remaining in borrow orders', () => {
         render(<Default />, {
             preloadedState: {
                 ...preloadedState,
@@ -89,7 +89,7 @@ describe('PlaceOrder component', () => {
         expect(screen.queryByText('Borrow Remaining')).toBeInTheDocument();
     });
 
-    it(' should display Est. Total Loan value (USD) instead of Est. Total Loan Value in lend orders in limit orders', () => {
+    it(' should display Est. Total Loan value (USD) instead of Est. Total Debt (USD) in lend orders when order type is LIMIT', () => {
         render(<Default />, {
             preloadedState: {
                 ...preloadedState,
