@@ -1,10 +1,10 @@
 import { OrderSide } from '@secured-finance/sf-client';
+import { WalletSource } from '@secured-finance/sf-client/dist/secured-finance-client';
 import { BigNumber } from 'ethers';
 import { useCallback } from 'react';
 import { CurrencySymbol, toCurrency } from 'src/utils';
 import { Maturity } from 'src/utils/entities';
 import useSF from '../useSecuredFinance';
-import { WalletSource } from '@secured-finance/sf-client/dist/secured-finance-client';
 
 export enum OrderType {
     MARKET = 'Market',

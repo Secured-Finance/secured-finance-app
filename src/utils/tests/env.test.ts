@@ -1,5 +1,7 @@
 import {
+    Environment,
     getAmplitudeApiKey,
+    getEnvironment,
     getEthereumBlockTimer,
     getEthereumChainId,
     getEthereumNetwork,
@@ -98,6 +100,25 @@ describe('getEthereumBlockTimer', () => {
         const timer = getEthereumBlockTimer();
         expect(timer).toBe(10000);
         expect(typeof timer).toBe('number');
+        expect(spy).toHaveBeenCalled();
+    });
+});
+
+describe('getEnvironment', () => {
+    it('should return the value of the environment variable', () => {
+        process.env.SF_ENV = 'testnet';
+        const env = getEnvironment();
+        expect(env).toBe('testnet');
+        expect(typeof env).toBe('string');
+    });
+
+    it('should return development if variable is not set', () => {
+        process.env.SF_ENV = '';
+        const spy = jest.spyOn(console, 'warn').mockImplementation();
+
+        const env = getEnvironment();
+        expect(env).toBe(Environment.DEVELOPMENT);
+        expect(typeof env).toBe('string');
         expect(spy).toHaveBeenCalled();
     });
 });

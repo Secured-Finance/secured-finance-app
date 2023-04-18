@@ -14,15 +14,25 @@ export default {
         navBar: (
             <div className='bg-red text-center text-4xl text-white'>NavBar</div>
         ),
+        footer: (
+            <div className='bg-teal text-center text-2xl text-white'>
+                Footer
+            </div>
+        ),
     },
     argTypes: {
         children: { control: { disable: true } },
         navBar: { control: { disable: true } },
     },
+    parameters: {
+        layout: 'fullscreen',
+    },
 } as ComponentMeta<typeof Layout>;
 
 const Template: ComponentStory<typeof Layout> = args => (
-    <Layout navBar={args.navBar}>{args.children}</Layout>
+    <Layout navBar={args.navBar} footer={args.footer}>
+        {args.children}
+    </Layout>
 );
 
 export const Default = Template.bind({});

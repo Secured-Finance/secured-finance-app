@@ -28,4 +28,17 @@ describe('test Market Tab component', () => {
             'typography-caption-2 font-semibold text-white'
         );
     });
+
+    it('should not render source link if source is not provided', () => {
+        render(<Default />);
+        const source = screen.queryByRole('link');
+        expect(source).not.toBeInTheDocument();
+    });
+
+    it('should render source link icon if source link is provided', () => {
+        render(<Default source='https://secured.finance/' />);
+        const source = screen.getByRole('link');
+        expect(source).toBeInTheDocument();
+        expect(source).toHaveAttribute('href', 'https://secured.finance/');
+    });
 });
