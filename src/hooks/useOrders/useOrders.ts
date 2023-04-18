@@ -1,10 +1,10 @@
 import { OrderSide } from '@secured-finance/sf-client';
+import { WalletSource } from '@secured-finance/sf-client/dist/secured-finance-client';
 import { BigNumber } from 'ethers';
 import { useCallback } from 'react';
 import { CurrencySymbol, toCurrency } from 'src/utils';
 import { Maturity } from 'src/utils/entities';
 import useSF from '../useSecuredFinance';
-import { WalletSource } from '@secured-finance/sf-client/dist/secured-finance-client';
 
 export enum OrderType {
     MARKET = 'Market',
@@ -41,18 +41,18 @@ export const useOrders = () => {
             maturity: Maturity,
             side: OrderSide,
             amount: BigNumber,
-            unitPrice?: number
+            unitPrice: number
         ) => {
             try {
                 if (!securedFinance) return;
 
-                const tx = await securedFinance.placeLendingOrder(
+                const tx = await securedFinance.placeOrder(
                     toCurrency(ccy),
                     maturity.toNumber(),
                     side,
                     amount,
                     WalletSource.METAMASK,
-                    unitPrice
+                    unitPrice || undefined
                 );
 
                 return tx;
@@ -81,5 +81,33 @@ export const useOrders = () => {
         [securedFinance]
     );
 
-    return { cancelOrder, placeOrder, unwindOrder };
+    const placePreOrder = useCallback(
+        async (
+            ccy: CurrencySymbol,
+            maturity: Maturity,
+            side: OrderSide,
+            amount: BigNumber,
+            unitPrice: number
+        ) => {
+            try {
+                if (!securedFinance) return;
+
+                const tx = await securedFinance.placePreOrder(
+                    toCurrency(ccy),
+                    maturity.toNumber(),
+                    side,
+                    amount,
+                    WalletSource.METAMASK,
+                    unitPrice
+                );
+
+                return tx;
+            } catch (error) {
+                console.error(error);
+            }
+        },
+        [securedFinance]
+    );
+
+    return { cancelOrder, placeOrder, unwindOrder, placePreOrder };
 };

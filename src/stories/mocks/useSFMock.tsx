@@ -6,7 +6,8 @@ import { collateralBook80 } from './fixtures';
 
 export const mockUseSF = () => {
     const mockSecuredFinance = {
-        placeLendingOrder: jest.fn(),
+        placeOrder: jest.fn(),
+        placePreOrder: jest.fn(),
         getBorrowUnitPrices: jest.fn(() =>
             Promise.resolve([
                 BigNumber.from(9687),

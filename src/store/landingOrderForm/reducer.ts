@@ -13,6 +13,7 @@ type LandingOrderFormStore = {
     amount: string;
     unitPrice: number;
     orderType: OrderType;
+    marketTiming: 'PreOrder' | 'Order';
     lastView: ViewType;
 };
 const initialStore: LandingOrderFormStore = {
@@ -22,6 +23,7 @@ const initialStore: LandingOrderFormStore = {
     amount: '0',
     unitPrice: 0,
     orderType: OrderType.MARKET,
+    marketTiming: 'Order',
     lastView: 'Simple',
 };
 
@@ -49,6 +51,12 @@ const landingOrderFormSlice = createSlice({
         },
         setLastView: (state, action: PayloadAction<ViewType>) => {
             state.lastView = action.payload;
+        },
+        setMarketTiming: (
+            state,
+            action: PayloadAction<'PreOrder' | 'Order'>
+        ) => {
+            state.marketTiming = action.payload;
         },
     },
 });

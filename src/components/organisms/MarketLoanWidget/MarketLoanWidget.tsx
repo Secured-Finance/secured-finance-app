@@ -7,7 +7,11 @@ import { useDispatch } from 'react-redux';
 import { Button, DropdownSelector, NavTab, Option } from 'src/components/atoms';
 import { CoreTable } from 'src/components/molecules';
 import { LendingMarket } from 'src/hooks';
-import { setCurrency, setMaturity } from 'src/store/landingOrderForm';
+import {
+    setCurrency,
+    setMarketTiming,
+    setMaturity,
+} from 'src/store/landingOrderForm';
 import {
     CurrencySymbol,
     formatLoanValue,
@@ -138,12 +142,16 @@ export const MarketLoanWidget = ({ loans }: { loans: Loan[] }) => {
                                         )
                                     );
                                     dispatch(setCurrency(ccy));
-                                    info.row.original.isActive
-                                        ? router.push('/advanced/')
-                                        : router.push('/itayose/');
+                                    if (info.row.original.isReady) {
+                                        dispatch(setMarketTiming('Order'));
+                                        router.push('/advanced/');
+                                    } else {
+                                        dispatch(setMarketTiming('PreOrder'));
+                                        router.push('/itayose/');
+                                    }
                                 }}
                             >
-                                {info.row.original.isActive
+                                {info.row.original.isReady
                                     ? 'Open Order'
                                     : 'Pre-Open Order'}
                             </Button>
@@ -177,7 +185,7 @@ export const MarketLoanWidget = ({ loans }: { loans: Loan[] }) => {
                             setSelectedTerm(maturity);
                             for (const loan of loans) {
                                 if (loan.maturity === maturity) {
-                                    if (!loan.isActive) {
+                                    if (!loan.isReady) {
                                         setIsItayoseMarket(true);
                                         break;
                                     }

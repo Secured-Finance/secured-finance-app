@@ -4,8 +4,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Button } from 'src/components/atoms';
 import {
     DepositCollateral,
-    generateCollateralList,
     PlaceOrder,
+    generateCollateralList,
 } from 'src/components/organisms';
 import { CollateralBook, useOrders } from 'src/hooks';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
@@ -14,7 +14,7 @@ import { selectLandingOrderForm } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
 import { selectCollateralCurrencyBalance } from 'src/store/wallet';
 import { amountFormatterFromBase } from 'src/utils';
-import { computeAvailableToBorrow, MAX_COVERAGE } from 'src/utils/collateral';
+import { MAX_COVERAGE, computeAvailableToBorrow } from 'src/utils/collateral';
 import { LoanValue } from 'src/utils/entities';
 import { useWallet } from 'use-wallet';
 
@@ -31,14 +31,14 @@ export const OrderAction = ({
 }: OrderActionProps) => {
     const { account } = useWallet();
     const dispatch = useDispatch();
-    const { placeOrder } = useOrders();
+    const { placeOrder, placePreOrder } = useOrders();
 
     const [openDepositCollateralDialog, setOpenDepositCollateralDialog] =
         useState(false);
     const [openPlaceOrderDialog, setOpenPlaceOrderDialog] = useState(false);
 
-    const { currency, amount, side } = useSelector((state: RootState) =>
-        selectLandingOrderForm(state.landingOrderForm)
+    const { currency, amount, side, marketTiming } = useSelector(
+        (state: RootState) => selectLandingOrderForm(state.landingOrderForm)
     );
 
     const balances = useSelector((state: RootState) =>
@@ -103,7 +103,9 @@ export const OrderAction = ({
             )}
 
             <PlaceOrder
-                onPlaceOrder={placeOrder}
+                onPlaceOrder={
+                    marketTiming === 'Order' ? placeOrder : placePreOrder
+                }
                 isOpen={openPlaceOrderDialog}
                 onClose={() => setOpenPlaceOrderDialog(false)}
                 loanValue={loanValue}

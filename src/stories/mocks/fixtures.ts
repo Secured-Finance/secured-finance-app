@@ -69,6 +69,7 @@ export const preloadedLendingMarkets: Partial<RootState> = {
                     isActive: true,
                     utcOpeningDate: 1677628800,
                     midUnitPrice: 9801,
+                    isReady: true,
                 },
                 MAR23: {
                     name: 'MAR23',
@@ -76,6 +77,7 @@ export const preloadedLendingMarkets: Partial<RootState> = {
                     isActive: true,
                     utcOpeningDate: 1677628800,
                     midUnitPrice: 9701,
+                    isReady: true,
                 },
                 JUN23: {
                     name: 'JUN23',
@@ -83,6 +85,7 @@ export const preloadedLendingMarkets: Partial<RootState> = {
                     isActive: false,
                     utcOpeningDate: 1677628800,
                     midUnitPrice: 9601,
+                    isReady: false,
                 },
             },
             [CurrencySymbol.WBTC]: {
@@ -92,6 +95,7 @@ export const preloadedLendingMarkets: Partial<RootState> = {
                     isActive: true,
                     utcOpeningDate: 1677628800,
                     midUnitPrice: 9801,
+                    isReady: true,
                 },
                 MAR23: {
                     name: 'MAR23',
@@ -99,6 +103,7 @@ export const preloadedLendingMarkets: Partial<RootState> = {
                     isActive: true,
                     utcOpeningDate: 1677628800,
                     midUnitPrice: 9701,
+                    isReady: true,
                 },
                 JUN23: {
                     name: 'JUN23',
@@ -106,6 +111,7 @@ export const preloadedLendingMarkets: Partial<RootState> = {
                     isActive: false,
                     utcOpeningDate: 1677628800,
                     midUnitPrice: 9601,
+                    isReady: false,
                 },
             },
             [CurrencySymbol.USDC]: {
@@ -115,6 +121,7 @@ export const preloadedLendingMarkets: Partial<RootState> = {
                     isActive: true,
                     utcOpeningDate: 1677628800,
                     midUnitPrice: 9801,
+                    isReady: true,
                 },
                 MAR23: {
                     name: 'MAR23',
@@ -122,6 +129,7 @@ export const preloadedLendingMarkets: Partial<RootState> = {
                     isActive: true,
                     utcOpeningDate: 1677628800,
                     midUnitPrice: 9701,
+                    isReady: true,
                 },
                 JUN23: {
                     name: 'JUN23',
@@ -129,6 +137,7 @@ export const preloadedLendingMarkets: Partial<RootState> = {
                     isActive: false,
                     utcOpeningDate: 1677628800,
                     midUnitPrice: 9601,
+                    isReady: false,
                 },
             },
             [CurrencySymbol.ETH]: {
@@ -138,6 +147,7 @@ export const preloadedLendingMarkets: Partial<RootState> = {
                     isActive: true,
                     utcOpeningDate: 1677628800,
                     midUnitPrice: 9801,
+                    isReady: true,
                 },
                 MAR23: {
                     name: 'MAR23',
@@ -145,6 +155,7 @@ export const preloadedLendingMarkets: Partial<RootState> = {
                     isActive: true,
                     utcOpeningDate: 1677628800,
                     midUnitPrice: 9701,
+                    isReady: true,
                 },
                 JUN23: {
                     name: 'JUN23',
@@ -152,6 +163,7 @@ export const preloadedLendingMarkets: Partial<RootState> = {
                     isActive: false,
                     utcOpeningDate: 1677628800,
                     midUnitPrice: 9601,
+                    isReady: false,
                 },
             },
         },

@@ -94,7 +94,7 @@ describe('Landing Component', () => {
         });
     });
 
-    it('should filter out inactive markets', async () => {
+    it('should filter out non ready markets', async () => {
         waitFor(() => {
             render(<Default />, {
                 apolloMocks: Default.parameters?.apolloClient.mocks,
@@ -105,6 +105,6 @@ describe('Landing Component', () => {
         expect(screen.getByText('DEC22')).toBeInTheDocument();
         fireEvent.click(screen.getByText('DEC22'));
         expect(screen.getByText('MAR23')).toBeInTheDocument();
-        expect(screen.queryByText('JUN23')).not.toBeInTheDocument();
+        expect(screen.queryByText('DEC24')).not.toBeInTheDocument();
     });
 });

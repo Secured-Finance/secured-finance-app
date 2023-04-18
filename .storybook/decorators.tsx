@@ -14,7 +14,7 @@ import { CustomizedBridge } from 'src/stories/mocks/customBridge';
 import { CurrencySymbol } from 'src/utils';
 import { coingeckoApi } from 'src/utils/coinGeckoApi';
 import timemachine from 'timemachine';
-import { useWallet, UseWalletProvider } from 'use-wallet';
+import { UseWalletProvider, useWallet } from 'use-wallet';
 
 export const withAppLayout = (Story: Story) => {
     return (
@@ -138,6 +138,7 @@ export const withMaturities = (Story: Story) => {
                 isActive: true,
                 utcOpeningDate: 1677628800,
                 midUnitPrice: 9801,
+                isReady: true,
             },
             MAR23: {
                 name: 'MAR23',
@@ -145,6 +146,7 @@ export const withMaturities = (Story: Story) => {
                 isActive: true,
                 utcOpeningDate: 1677628800,
                 midUnitPrice: 9701,
+                isReady: true,
             },
             JUN23: {
                 name: 'JUN23',
@@ -152,6 +154,7 @@ export const withMaturities = (Story: Story) => {
                 isActive: true,
                 utcOpeningDate: 1677628800,
                 midUnitPrice: 9601,
+                isReady: true,
             },
             SEP23: {
                 name: 'SEP23',
@@ -159,6 +162,7 @@ export const withMaturities = (Story: Story) => {
                 isActive: true,
                 utcOpeningDate: 1677628800,
                 midUnitPrice: 9501,
+                isReady: true,
             },
             DEC23: {
                 name: 'DEC23',
@@ -166,6 +170,7 @@ export const withMaturities = (Story: Story) => {
                 isActive: true,
                 utcOpeningDate: 1677628800,
                 midUnitPrice: 9401,
+                isReady: true,
             },
             MAR24: {
                 name: 'MAR24',
@@ -173,6 +178,7 @@ export const withMaturities = (Story: Story) => {
                 isActive: true,
                 utcOpeningDate: 1677628800,
                 midUnitPrice: 9301,
+                isReady: true,
             },
             JUN24: {
                 name: 'JUN24',
@@ -180,6 +186,7 @@ export const withMaturities = (Story: Story) => {
                 isActive: true,
                 utcOpeningDate: 1677628800,
                 midUnitPrice: 9201,
+                isReady: true,
             },
             SEP24: {
                 name: 'SEP24',
@@ -187,6 +194,7 @@ export const withMaturities = (Story: Story) => {
                 isActive: true,
                 utcOpeningDate: 1677628800,
                 midUnitPrice: 9101,
+                isReady: true,
             },
             DEC24: {
                 name: 'DEC24',
@@ -194,6 +202,7 @@ export const withMaturities = (Story: Story) => {
                 isActive: false,
                 utcOpeningDate: 1685577600,
                 midUnitPrice: 9001,
+                isReady: false,
             },
         }),
         []

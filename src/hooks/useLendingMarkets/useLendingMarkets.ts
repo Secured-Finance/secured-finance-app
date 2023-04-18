@@ -12,6 +12,7 @@ export type LendingMarket = {
     isActive: boolean;
     utcOpeningDate: number;
     midUnitPrice: number;
+    isReady: boolean;
 };
 export type ContractMap = Record<string, LendingMarket>;
 
@@ -39,8 +40,9 @@ export const useLendingMarkets = (
                                     {
                                         name,
                                         maturity,
-                                        utcOpeningDate,
+                                        openingDate,
                                         midUnitPrice,
+                                        isReady,
                                     }
                                 ) => {
                                     if (acc[name]) {
@@ -57,12 +59,15 @@ export const useLendingMarkets = (
                                         ...acc,
                                         [name]: {
                                             name,
-                                            maturity,
-                                            utcOpeningDate,
-                                            isActive:
-                                                isPastDate(utcOpeningDate),
+                                            maturity: maturity.toNumber(),
+                                            utcOpeningDate:
+                                                openingDate.toNumber(),
+                                            isActive: isPastDate(
+                                                openingDate.toNumber()
+                                            ),
                                             midUnitPrice:
                                                 midUnitPrice.toNumber(),
+                                            isReady,
                                         },
                                     };
                                 },

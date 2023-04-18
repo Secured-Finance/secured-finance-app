@@ -1,5 +1,5 @@
-import { useMemo } from 'react';
-import { useSelector } from 'react-redux';
+import { useEffect, useMemo } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import {
     GradientBox,
     MarketTab,
@@ -16,13 +16,15 @@ import {
 } from 'src/components/organisms';
 import { Page } from 'src/components/templates';
 import { TwoColumnsWithTopBar } from 'src/components/templates/TwoColumnsWithTopBar';
-import { useCollateralBook } from 'src/hooks';
+import { OrderType, useCollateralBook } from 'src/hooks';
 import { useOrderbook } from 'src/hooks/useOrderbook';
 import { getAssetPrice } from 'src/store/assetPrices/selectors';
 import {
     selectLandingOrderForm,
     setCurrency,
+    setMarketTiming,
     setMaturity,
+    setOrderType,
 } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
 import { CurrencySymbol, getCurrencyMapAsOptions, usdFormat } from 'src/utils';
@@ -84,6 +86,7 @@ const Toolbar = ({
 };
 export const Itayose = () => {
     const { account } = useWallet();
+    const dispatch = useDispatch();
 
     const { currency, maturity } = useSelector((state: RootState) =>
         selectLandingOrderForm(state.landingOrderForm)
@@ -93,7 +96,7 @@ export const Itayose = () => {
     );
 
     const optionList = Object.entries(lendingContracts)
-        .filter(o => !o[1].isActive)
+        .filter(o => !o[1].isReady)
         .map(o => ({
             label: o[0],
             value: new Maturity(o[1].maturity),
@@ -118,13 +121,19 @@ export const Itayose = () => {
     const orderBook = useOrderbook(currency, selectedTerm.value, 10);
     const collateralBook = useCollateralBook(account);
 
+    // TODO: replace this ugly way of doing things
+    useEffect(() => {
+        dispatch(setMarketTiming('PreOrder'));
+        dispatch(setOrderType(OrderType.LIMIT));
+    }, [dispatch]);
+
     return (
         <Page title='Pre-Open Order Book'>
             <TwoColumnsWithTopBar
                 topBar={
                     <Toolbar
                         openDate={
-                            lendingContracts[selectedTerm.label].utcOpeningDate
+                            lendingContracts[selectedTerm.label]?.utcOpeningDate
                         }
                         assetList={assetList}
                         selectedAsset={selectedAsset}

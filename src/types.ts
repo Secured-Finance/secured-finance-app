@@ -13,7 +13,7 @@ export type PlaceOrderFunction = (
     maturity: Maturity,
     side: OrderSide,
     amount: BigNumber,
-    unitPrice?: number
+    unitPrice: number
 ) => Promise<ContractTransaction | undefined>;
 
 type UserHistoryQuery = Awaited<
