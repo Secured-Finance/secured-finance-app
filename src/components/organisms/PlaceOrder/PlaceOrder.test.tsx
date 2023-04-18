@@ -39,6 +39,120 @@ describe('PlaceOrder component', () => {
         expect(button).toHaveTextContent('OK');
     });
 
+    it('should display all the fields in Limit order', () => {
+        render(<Default />);
+        expect(screen.queryByText('Bond Price')).not.toBeInTheDocument();
+        expect(screen.queryByText('Loan Start Date')).not.toBeInTheDocument();
+        expect(
+            screen.queryByText('Loan Maturity Date')
+        ).not.toBeInTheDocument();
+        expect(
+            screen.queryByText('Total Interest (USD)')
+        ).not.toBeInTheDocument();
+        expect(
+            screen.queryByText('Est. Total Debt (USD)')
+        ).not.toBeInTheDocument();
+        const button = screen.getByText('Additional Information');
+        fireEvent.click(button);
+        expect(screen.getByText('Bond Price')).toBeInTheDocument();
+        expect(screen.getByText('Loan Start Date')).toBeInTheDocument();
+        expect(screen.getByText('Loan Maturity Date')).toBeInTheDocument();
+        expect(screen.getByText('Total Interest (USD)')).toBeInTheDocument();
+        expect(screen.getByText('Est. Total Debt (USD)')).toBeInTheDocument();
+    });
+
+    it('should render collateral utilization and not Borrow remaining in lend orders', () => {
+        render(<Default />, {
+            preloadedState: {
+                ...preloadedState,
+                landingOrderForm: {
+                    ...preloadedState.landingOrderForm,
+                    side: OrderSide.LEND,
+                },
+            },
+        });
+        expect(screen.getByText('Collateral Usage')).toBeInTheDocument();
+        expect(screen.queryByText('Borrow Remaining')).not.toBeInTheDocument();
+    });
+
+    it('should render collateral utilization and borrow remaining in borrow orders in market orders', () => {
+        render(<Default />, {
+            preloadedState: {
+                ...preloadedState,
+                landingOrderForm: {
+                    ...preloadedState.landingOrderForm,
+                    side: OrderSide.BORROW,
+                },
+            },
+        });
+        expect(screen.getByText('Collateral Usage')).toBeInTheDocument();
+        expect(screen.queryByText('Borrow Remaining')).toBeInTheDocument();
+    });
+
+    it(' should display Est. Total Loan value (USD) instead of Est. Total Loan Value in lend orders in limit orders', () => {
+        render(<Default />, {
+            preloadedState: {
+                ...preloadedState,
+                landingOrderForm: {
+                    ...preloadedState.landingOrderForm,
+                    side: OrderSide.LEND,
+                },
+            },
+        });
+        expect(screen.queryByText('Bond Price')).not.toBeInTheDocument();
+        expect(screen.queryByText('Loan Start Date')).not.toBeInTheDocument();
+        expect(
+            screen.queryByText('Loan Maturity Date')
+        ).not.toBeInTheDocument();
+        expect(
+            screen.queryByText('Total Interest (USD)')
+        ).not.toBeInTheDocument();
+        expect(
+            screen.queryByText('Est. Total Debt (USD)')
+        ).not.toBeInTheDocument();
+        expect(
+            screen.queryByText('Est. Total Loan value (USD)')
+        ).not.toBeInTheDocument();
+        const button = screen.getByText('Additional Information');
+        fireEvent.click(button);
+        expect(screen.getByText('Bond Price')).toBeInTheDocument();
+        expect(screen.getByText('Loan Start Date')).toBeInTheDocument();
+        expect(screen.getByText('Loan Maturity Date')).toBeInTheDocument();
+        expect(screen.getByText('Total Interest (USD)')).toBeInTheDocument();
+        expect(
+            screen.queryByText('Est. Total Debt (USD)')
+        ).not.toBeInTheDocument();
+        expect(
+            screen.getByText('Est. Total Loan value (USD)')
+        ).toBeInTheDocument();
+    });
+
+    it(' should only display Loan Maturity date in Market Order', () => {
+        render(<MarketOrder />);
+        expect(screen.queryByText('Bond Price')).not.toBeInTheDocument();
+        expect(screen.queryByText('Loan Start Date')).not.toBeInTheDocument();
+        expect(
+            screen.queryByText('Loan Maturity Date')
+        ).not.toBeInTheDocument();
+        expect(
+            screen.queryByText('Total Interest (USD)')
+        ).not.toBeInTheDocument();
+        expect(
+            screen.queryByText('Est. Total Debt (USD)')
+        ).not.toBeInTheDocument();
+        const button = screen.getByText('Additional Information');
+        fireEvent.click(button);
+        expect(screen.queryByText('Bond Price')).not.toBeInTheDocument();
+        expect(screen.queryByText('Loan Start Date')).not.toBeInTheDocument();
+        expect(screen.getByText('Loan Maturity Date')).toBeInTheDocument();
+        expect(
+            screen.queryByText('Total Interest (USD)')
+        ).not.toBeInTheDocument();
+        expect(
+            screen.queryByText('Est. Total Debt (USD)')
+        ).not.toBeInTheDocument();
+    });
+
     it('should reach success screen when transaction receipt is received', async () => {
         const onClose = jest.fn();
         const tx = {
