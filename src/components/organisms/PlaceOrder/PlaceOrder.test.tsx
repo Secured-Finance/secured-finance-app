@@ -100,7 +100,7 @@ describe('PlaceOrder component', () => {
                 new Maturity(0),
                 OrderSide.BORROW,
                 BigNumber.from(500000000),
-                undefined
+                0
             )
         );
     });

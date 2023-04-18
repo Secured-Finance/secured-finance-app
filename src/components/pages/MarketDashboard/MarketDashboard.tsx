@@ -24,15 +24,15 @@ import {
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { RootState } from 'src/store/types';
 import {
+    CurrencySymbol,
+    Rate,
+    WalletSource,
     computeTotalDailyVolumeInUSD,
     currencyMap,
-    CurrencySymbol,
     getCurrencyMapAsList,
     ordinaryFormat,
-    Rate,
     toCurrencySymbol,
     usdFormat,
-    WalletSource,
 } from 'src/utils';
 import { Maturity } from 'src/utils/entities';
 import { useWallet } from 'use-wallet';
@@ -51,7 +51,7 @@ export const MarketDashboard = () => {
             ccy.symbol,
             RateType.MidRate,
             Object.values(lendingContracts[ccy.symbol])
-                .filter(o => o.isActive)
+                .filter(o => o.isReady)
                 .map(o => new Maturity(o.maturity))
         ).map(r => r.apr);
     });
@@ -167,6 +167,7 @@ export const MarketDashboard = () => {
                                     utcOpeningDate: contract.utcOpeningDate,
                                     midUnitPrice: contract.midUnitPrice,
                                     currency: utils.formatBytes32String(ccy),
+                                    isReady: contract.isReady,
                                     ccy: ccy,
                                 };
                             });

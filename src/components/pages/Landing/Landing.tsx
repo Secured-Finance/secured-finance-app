@@ -43,7 +43,7 @@ export const Landing = ({ view }: { view?: ViewType }) => {
     const collateralBook = useCollateralBook(account);
 
     const optionList = Object.entries(lendingContracts)
-        .filter(o => o[1].isActive)
+        .filter(o => o[1].isReady)
         .map(o => ({
             label: o[0],
             value: new Maturity(o[1].maturity),

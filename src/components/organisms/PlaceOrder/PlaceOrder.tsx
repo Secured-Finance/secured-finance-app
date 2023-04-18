@@ -27,9 +27,9 @@ import { RootState } from 'src/store/types';
 import { PlaceOrderFunction } from 'src/types';
 import {
     CurrencySymbol,
-    handleContractTransaction,
     OrderEvents,
     OrderProperties,
+    handleContractTransaction,
     ordinaryFormat,
 } from 'src/utils';
 import { Amount, LoanValue, Maturity } from 'src/utils/entities';
@@ -136,7 +136,7 @@ export const PlaceOrder = ({
             maturity: Maturity,
             side: OrderSide,
             amount: BigNumber,
-            unitPrice?: number
+            unitPrice: number
         ) => {
             try {
                 const tx = await onPlaceOrder(
@@ -180,7 +180,7 @@ export const PlaceOrder = ({
                 case Step.orderConfirm:
                     dispatch({ type: 'next' });
                     if (orderType === OrderType.MARKET) {
-                        handlePlaceOrder(currency, maturity, side, amount);
+                        handlePlaceOrder(currency, maturity, side, amount, 0);
                     } else if (orderType === OrderType.LIMIT && loanValue) {
                         handlePlaceOrder(
                             currency,
