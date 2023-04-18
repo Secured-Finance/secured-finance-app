@@ -31,7 +31,7 @@ export const CollateralSimulationSection = ({
     assetPrice: number;
     type: 'unwind' | 'trade';
     tradeValue?: LoanValue;
-    side: OrderSide;
+    side?: OrderSide;
 }) => {
     const collateralUsageText = `${formatCollateralRatio(
         collateral.coverage.toNumber()
