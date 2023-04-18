@@ -1,3 +1,4 @@
+import { track } from '@amplitude/analytics-browser';
 import { ClipboardCopyIcon } from '@heroicons/react/outline';
 import { Token } from '@secured-finance/sf-core';
 import { useCallback, useEffect, useMemo, useState } from 'react';
@@ -16,11 +17,11 @@ import useSF from 'src/hooks/useSecuredFinance';
 import {
     AddressUtils,
     CurrencySymbol,
+    WalletSource,
     getCurrencyMapAsList,
     getCurrencyMapAsOptions,
     handleContractTransaction,
     toCurrency,
-    WalletSource,
 } from 'src/utils';
 import { useWallet } from 'use-wallet';
 
@@ -61,6 +62,9 @@ export const Faucet = () => {
             if (!transactionStatus) {
                 console.error('Some error occurred');
             } else {
+                track('Mint Tokens', {
+                    'Asset Type': token.symbol,
+                });
                 setIsOpen(true);
             }
         } catch (e) {
