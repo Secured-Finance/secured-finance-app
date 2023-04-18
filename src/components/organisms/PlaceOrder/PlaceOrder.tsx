@@ -233,7 +233,9 @@ export const PlaceOrder = ({
                   ).toString(),
               ],
               [
-                  'Est. Total Debt (USD)',
+                  side === OrderSide.BORROW
+                      ? 'Est. Total Debt (USD)'
+                      : 'Est. Total Loan value (USD)',
                   ordinaryFormat(
                       orderAmount.value +
                           orderAmount.value *
@@ -270,6 +272,7 @@ export const PlaceOrder = ({
                                     assetPrice={price}
                                     tradeValue={loanValue}
                                     type='trade'
+                                    side={side}
                                 />
                                 <SectionWithItems
                                     itemList={[['Borrow Fee %', '0.25 %']]}
