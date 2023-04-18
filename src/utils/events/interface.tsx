@@ -8,6 +8,11 @@ export enum OrderEvents {
     ORDER_PLACED = 'Order Placed',
 }
 
+export enum CollateralEvents {
+    DEPOSIT_COLLATERAL = 'Deposit Collateral',
+    WITHDRAW_COLLATERAL = 'Withdraw Collateral',
+}
+
 export enum OrderProperties {
     ORDER_SIDE = 'Order Side',
     ORDER_TYPE = 'Order Type',
@@ -15,6 +20,12 @@ export enum OrderProperties {
     ORDER_MATURITY = 'Order Maturity',
     ORDER_AMOUNT = 'Order Amount',
     ORDER_PRICE = 'Order Price',
+}
+
+export enum CollateralProperties {
+    ASSET_TYPE = 'Asset Type',
+    AMOUNT = 'Amount',
+    SOURCE = 'Source',
 }
 
 export enum InterfaceProperties {
