@@ -4,7 +4,7 @@ import { OrderSide } from '@secured-finance/sf-client';
 import { getUTCMonthYear } from '@secured-finance/sf-core';
 import { BigNumber } from 'ethers';
 import { useCallback, useReducer, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import Loader from 'src/assets/img/gradient-loader.png';
 import {
     ExpandIndicator,
@@ -20,10 +20,7 @@ import {
 } from 'src/components/molecules';
 import { FailurePanel } from 'src/components/molecules/FailurePanel';
 import { CollateralBook, OrderType } from 'src/hooks';
-import { getPriceMap } from 'src/store/assetPrices/selectors';
-import { selectLandingOrderForm } from 'src/store/landingOrderForm';
 import { setLastMessage } from 'src/store/lastError';
-import { RootState } from 'src/store/types';
 import { PlaceOrderFunction } from 'src/types';
 import {
     CurrencySymbol,
@@ -106,21 +103,24 @@ export const PlaceOrder = ({
     collateral,
     loanValue,
     onPlaceOrder,
+    orderAmount,
+    side,
+    maturity,
+    orderType,
+    assetPrice,
 }: {
     collateral: CollateralBook;
     loanValue?: LoanValue;
     onPlaceOrder: PlaceOrderFunction;
+    orderAmount: Amount;
+    maturity: Maturity;
+    side: OrderSide;
+    orderType: OrderType;
+    assetPrice: number;
 } & DialogState) => {
     const [state, dispatch] = useReducer(reducer, stateRecord[1]);
     const globalDispatch = useDispatch();
-    const { currency, maturity, amount, side, orderType } = useSelector(
-        (state: RootState) => selectLandingOrderForm(state.landingOrderForm)
-    );
 
-    const orderAmount = new Amount(amount, currency);
-
-    const priceList = useSelector((state: RootState) => getPriceMap(state));
-    const price = priceList[currency];
     const [errorMessage, setErrorMessage] = useState(
         'Your order could not be placed'
     );
@@ -180,13 +180,19 @@ export const PlaceOrder = ({
                 case Step.orderConfirm:
                     dispatch({ type: 'next' });
                     if (orderType === OrderType.MARKET) {
-                        handlePlaceOrder(currency, maturity, side, amount, 0);
-                    } else if (orderType === OrderType.LIMIT && loanValue) {
                         handlePlaceOrder(
-                            currency,
+                            orderAmount.currency,
                             maturity,
                             side,
-                            amount,
+                            orderAmount.toBigNumber(),
+                            0
+                        );
+                    } else if (orderType === OrderType.LIMIT && loanValue) {
+                        handlePlaceOrder(
+                            orderAmount.currency,
+                            maturity,
+                            side,
+                            orderAmount.toBigNumber(),
                             loanValue.price
                         );
                     } else {
@@ -205,12 +211,11 @@ export const PlaceOrder = ({
             }
         },
         [
-            amount,
-            currency,
             handleClose,
             handlePlaceOrder,
             loanValue,
             maturity,
+            orderAmount,
             orderType,
             side,
         ]
@@ -233,14 +238,14 @@ export const PlaceOrder = ({
                                 <Section>
                                     <AmountCard
                                         amount={orderAmount}
-                                        price={price}
+                                        price={assetPrice}
                                     />
                                 </Section>
                                 <CollateralSimulationSection
                                     collateral={collateral}
                                     tradeAmount={orderAmount}
                                     tradePosition={side}
-                                    assetPrice={price}
+                                    assetPrice={assetPrice}
                                     tradeValue={loanValue}
                                     type='trade'
                                 />
@@ -313,9 +318,9 @@ export const PlaceOrder = ({
                                     ['Deposit Address', 't1wtz1if6k24XE...'],
                                     [
                                         'Amount',
-                                        `${ordinaryFormat(
-                                            orderAmount.value
-                                        )} ${currency}`,
+                                        `${ordinaryFormat(orderAmount.value)} ${
+                                            orderAmount.currency
+                                        }`,
                                     ],
                                 ]}
                             />
