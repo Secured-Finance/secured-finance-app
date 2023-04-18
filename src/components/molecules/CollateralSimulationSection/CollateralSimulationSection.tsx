@@ -7,6 +7,7 @@ import {
     formatCollateralRatio,
     formatLoanValue,
     ordinaryFormat,
+    percentFormat,
 } from 'src/utils';
 import {
     computeAvailableToBorrow,
@@ -22,6 +23,7 @@ export const CollateralSimulationSection = ({
     assetPrice,
     tradeValue,
     type,
+    side,
 }: {
     collateral: CollateralBook;
     tradeAmount: Amount;
@@ -29,24 +31,23 @@ export const CollateralSimulationSection = ({
     assetPrice: number;
     type: 'unwind' | 'trade';
     tradeValue?: LoanValue;
+    side: OrderSide;
 }) => {
     const collateralUsageText = `${formatCollateralRatio(
         collateral.coverage.toNumber()
-    )} -> ${formatCollateralRatio(
+    )} -> ${percentFormat(
         recomputeCollateralUtilization(
             collateral.usdCollateral,
-            collateral.coverage.toNumber() / 10000,
+            collateral.coverage.toNumber(),
             tradePosition === OrderSide.BORROW
                 ? tradeAmount.toUSD(assetPrice)
                 : -1 * tradeAmount.toUSD(assetPrice)
-        ) * 10000
+        )
     )}`;
 
     const remainingToBorrowText = useMemo(() => {
-        const availableAssetMultiplier = collateral.coverage.isZero()
-            ? COLLATERAL_THRESHOLD / 100
-            : (COLLATERAL_THRESHOLD - collateral.coverage.toNumber() / 100) /
-              100;
+        const availableAssetMultiplier =
+            (COLLATERAL_THRESHOLD - collateral.coverage.toNumber() / 100) / 100;
 
         return `${ordinaryFormat(
             (collateral.usdCollateral * availableAssetMultiplier -
@@ -66,10 +67,13 @@ export const CollateralSimulationSection = ({
         tradeAmount,
     ]);
 
-    const items: [string, string][] = [
-        ['Borrow Remaining', remainingToBorrowText],
-        ['Collateral Usage', collateralUsageText],
-    ];
+    const items: [string, string][] =
+        side === OrderSide.BORROW
+            ? [
+                  ['Borrow Remaining', remainingToBorrowText],
+                  ['Collateral Usage', collateralUsageText],
+              ]
+            : [['Collateral Usage', collateralUsageText]];
 
     if (type === 'trade') {
         items.push([
