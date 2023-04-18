@@ -10,7 +10,12 @@ import { HorizontalAssetSelector } from 'src/components/molecules/HorizontalAsse
 import { setCurrency } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
 import { IndexOf } from 'src/types';
-import { CurrencySymbol, formatLoanValue } from 'src/utils';
+import {
+    COIN_GECKO_SOURCE,
+    CurrencySymbol,
+    currencyMap,
+    formatLoanValue,
+} from 'src/utils';
 import { LoanValue, Maturity } from 'src/utils/entities';
 
 type ValueField = number | string;
@@ -98,8 +103,12 @@ export const AdvancedLendingTopBar = <T extends string = string>({
                 <MarketTab
                     name={`${selectedAsset?.value} Price`}
                     value={getValue(values, 4)}
+                    source={handleSource(selectedAsset?.value)}
                 />
             </div>
         </GradientBox>
     );
 };
+
+const handleSource = (asset: CurrencySymbol | undefined) =>
+    asset && COIN_GECKO_SOURCE.concat(currencyMap[asset].coinGeckoId);
