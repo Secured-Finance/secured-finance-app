@@ -4,8 +4,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Button } from 'src/components/atoms';
 import {
     DepositCollateral,
-    generateCollateralList,
     PlaceOrder,
+    generateCollateralList,
 } from 'src/components/organisms';
 import { CollateralBook, useOrders } from 'src/hooks';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
@@ -14,7 +14,7 @@ import { selectLandingOrderForm } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
 import { selectCollateralCurrencyBalance } from 'src/store/wallet';
 import { amountFormatterFromBase } from 'src/utils';
-import { computeAvailableToBorrow, MAX_COVERAGE } from 'src/utils/collateral';
+import { MAX_COVERAGE, computeAvailableToBorrow } from 'src/utils/collateral';
 import { LoanValue } from 'src/utils/entities';
 import { useWallet } from 'use-wallet';
 
@@ -115,6 +115,7 @@ export const OrderAction = ({
                 isOpen={openDepositCollateralDialog}
                 onClose={() => setOpenDepositCollateralDialog(false)}
                 collateralList={depositCollateralList}
+                source='Order Action Button'
             ></DepositCollateral>
         </div>
     );

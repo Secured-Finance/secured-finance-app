@@ -1,4 +1,5 @@
 import assert from 'assert';
+import { Environment } from './strings';
 
 export const getEthereumNetwork = (): string => {
     const network = process.env.NEXT_PUBLIC_ETHEREUM_NETWORK;
@@ -49,4 +50,16 @@ export const getEthereumBlockTimer = () => {
     }
 
     return parseInt(NEXT_PUBLIC_ETHEREUM_BLOCK_TIMER);
+};
+
+export const getEnvironment = () => {
+    const SF_ENV = process.env.SF_ENV;
+
+    if (!SF_ENV) {
+        // eslint-disable-next-line no-console
+        console.warn('SF_ENV is not set, defaulting to development');
+        return Environment.DEVELOPMENT;
+    }
+
+    return SF_ENV;
 };
