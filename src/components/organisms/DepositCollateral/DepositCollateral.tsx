@@ -15,12 +15,14 @@ import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { RootState } from 'src/store/types';
 import {
     AddressUtils,
+    CollateralEvents,
     CollateralInfo,
     CurrencySymbol,
     amountFormatterFromBase,
     amountFormatterToBase,
     handleContractTransaction,
 } from 'src/utils';
+import { trackCollateralEvent } from 'src/utils/events';
 
 enum Step {
     depositCollateral = 1,
@@ -95,6 +97,7 @@ export const DepositCollateral = ({
     isOpen,
     onClose,
     collateralList,
+    source,
 }: {
     collateralList: Partial<Record<CurrencySymbol, CollateralInfo>>;
 } & DialogState) => {
@@ -143,6 +146,12 @@ export const DepositCollateral = ({
                 dispatch({ type: 'error' });
             } else {
                 setDepositAddress(tx?.to ?? '');
+                trackCollateralEvent(
+                    CollateralEvents.DEPOSIT_COLLATERAL,
+                    asset,
+                    collateral,
+                    source ?? ''
+                );
                 dispatch({ type: 'next' });
             }
         } catch (e) {
@@ -152,7 +161,7 @@ export const DepositCollateral = ({
 
             dispatch({ type: 'error' });
         }
-    }, [onDepositCollateral]);
+    }, [asset, collateral, onDepositCollateral, source]);
 
     const onClick = useCallback(
         async (currentStep: Step) => {

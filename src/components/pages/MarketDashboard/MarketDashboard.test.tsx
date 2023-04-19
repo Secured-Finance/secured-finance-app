@@ -52,7 +52,6 @@ describe('MarketDashboard Component', () => {
     });
 
     it('should render the total users', async () => {
-        process.env.SF_ENV = 'development';
         await renderDefault();
         const totalUsers = await screen.findByText('12.15K');
         expect(totalUsers).toBeInTheDocument();

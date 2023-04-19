@@ -1,7 +1,9 @@
+import * as analytics from '@amplitude/analytics-browser';
 import { composeStories } from '@storybook/testing-react';
 import { preloadedAssetPrices } from 'src/stories/mocks/fixtures';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
+import { CollateralEvents, CollateralProperties } from 'src/utils';
 import * as stories from './DepositCollateral.stories';
 
 const { Default } = composeStories(stories);
@@ -135,5 +137,29 @@ describe('DepositCollateral component', () => {
 
         const button = screen.getByTestId('dialog-action-button');
         expect(button).toBeDisabled();
+    });
+
+    it('should track the deposit collateral', async () => {
+        const track = jest.spyOn(analytics, 'track');
+        const onClose = jest.fn();
+        render(<Default onClose={onClose} source='Source Of Deposit' />, {
+            preloadedState,
+        });
+        fireEvent.click(screen.getByTestId('collateral-selector-button'));
+        fireEvent.click(screen.getByTestId('option-0'));
+        fireEvent.click(screen.getByTestId(75));
+
+        const button = screen.getByTestId('dialog-action-button');
+        fireEvent.click(button);
+        await waitFor(() =>
+            expect(track).toHaveBeenCalledWith(
+                CollateralEvents.DEPOSIT_COLLATERAL,
+                {
+                    [CollateralProperties.ASSET_TYPE]: 'USDC',
+                    [CollateralProperties.AMOUNT]: '37.5',
+                    [CollateralProperties.SOURCE]: 'Source Of Deposit',
+                }
+            )
+        );
     });
 });

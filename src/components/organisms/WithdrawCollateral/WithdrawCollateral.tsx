@@ -21,6 +21,7 @@ import {
     amountFormatterToBase,
     handleContractTransaction,
 } from 'src/utils';
+import { CollateralEvents, trackCollateralEvent } from 'src/utils/events';
 import { useWallet } from 'use-wallet';
 
 enum Step {
@@ -96,6 +97,7 @@ export const WithdrawCollateral = ({
     isOpen,
     onClose,
     collateralList,
+    source,
 }: {
     collateralList: Record<CurrencySymbol, CollateralInfo>;
 } & DialogState) => {
@@ -137,6 +139,12 @@ export const WithdrawCollateral = ({
             if (!transactionStatus) {
                 dispatch({ type: 'error' });
             } else {
+                trackCollateralEvent(
+                    CollateralEvents.WITHDRAW_COLLATERAL,
+                    asset,
+                    collateral,
+                    source ?? ''
+                );
                 dispatch({ type: 'next' });
             }
         } catch (e) {
@@ -145,7 +153,7 @@ export const WithdrawCollateral = ({
             }
             dispatch({ type: 'error' });
         }
-    }, [onWithdrawCollateral]);
+    }, [asset, collateral, onWithdrawCollateral, source]);
 
     const onClick = useCallback(
         async (currentStep: Step) => {
