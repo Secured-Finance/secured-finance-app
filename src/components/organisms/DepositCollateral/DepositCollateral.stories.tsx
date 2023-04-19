@@ -14,13 +14,11 @@ export default {
         onClose: () => {},
         collateralList: {
             [CurrencySymbol.ETH]: {
-                indexCcy: 0,
                 symbol: CurrencySymbol.ETH,
                 available: 10,
                 name: 'Ethereum',
             },
             [CurrencySymbol.USDC]: {
-                indexCcy: 2,
                 symbol: CurrencySymbol.USDC,
                 available: 50,
                 name: 'USDC',

@@ -4,7 +4,14 @@ import {
     setUserId,
     track,
 } from '@amplitude/analytics-browser';
-import { InterfaceEvents, InterfaceProperties } from './interface';
+import { BigNumber } from 'ethers';
+import { amountFormatterFromBase, CurrencySymbol } from '../currencyList';
+import {
+    CollateralEvents,
+    CollateralProperties,
+    InterfaceEvents,
+    InterfaceProperties,
+} from './interface';
 
 export async function associateWallet(
     account: string | null,
@@ -21,4 +28,18 @@ export async function associateWallet(
             [InterfaceProperties.WALLET_ADDRESS]: account,
         });
     }
+}
+
+export function trackCollateralEvent(
+    event: CollateralEvents,
+    assetType: CurrencySymbol,
+    amount: BigNumber,
+    source: string
+) {
+    track(event, {
+        [CollateralProperties.ASSET_TYPE]: assetType,
+        [CollateralProperties.AMOUNT]:
+            amountFormatterFromBase[assetType](amount).toString(),
+        [CollateralProperties.SOURCE]: source,
+    });
 }
