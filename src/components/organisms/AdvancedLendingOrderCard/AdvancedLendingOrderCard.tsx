@@ -161,7 +161,7 @@ export const AdvancedLendingOrderCard = ({
                     side={side}
                     variant='advanced'
                 />
-                {side === OrderSide.LEND && (
+                {account && side === OrderSide.LEND && (
                     <WalletSourceSelector
                         optionList={walletSourceList}
                         selected={selectedWalletSource}
