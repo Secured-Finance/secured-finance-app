@@ -22,13 +22,11 @@ export function recomputeCollateralUtilization(
     coverageRatio: number,
     newTradeUsdValue: number
 ) {
-    return (
-        Math.max(
-            0,
+    return Math.max(
+        0,
 
-            ((totalCollateralInUsd * coverageRatio) / 10000 +
-                newTradeUsdValue) /
-                totalCollateralInUsd
-        ) * 100
+        (totalCollateralInUsd * coverageRatio +
+            newTradeUsdValue * MAX_COVERAGE) /
+            totalCollateralInUsd
     );
 }

@@ -7,7 +7,6 @@ import {
     formatCollateralRatio,
     formatLoanValue,
     ordinaryFormat,
-    percentFormat,
 } from 'src/utils';
 import {
     computeAvailableToBorrow,
@@ -35,7 +34,7 @@ export const CollateralSimulationSection = ({
 }) => {
     const collateralUsageText = `${formatCollateralRatio(
         collateral.coverage.toNumber()
-    )} -> ${percentFormat(
+    )} -> ${formatCollateralRatio(
         recomputeCollateralUtilization(
             collateral.usdCollateral,
             collateral.coverage.toNumber(),
