@@ -59,6 +59,16 @@ export const preloadedBalances = {
     },
 };
 
+export const dec22Fixture = new Maturity(1669852800);
+export const mar23Fixture = new Maturity(1677628800);
+export const jun23Fixture = new Maturity(1685577600);
+export const sep23Fixture = new Maturity(1693526400);
+const dec23Fixture = new Maturity(1701388800);
+const mar24Fixture = new Maturity(1709251200);
+const jun24Fixture = new Maturity(1717200000);
+const sep24Fixture = new Maturity(1725148800);
+export const dec24Fixture = new Maturity(1733011200);
+
 export const maturities = {
     DEC22: {
         name: 'DEC22',
@@ -134,7 +144,7 @@ export const maturities = {
     },
     DEC24: {
         name: 'DEC24',
-        maturity: 1733011200,
+        maturity: dec24Fixture.toNumber(),
         isActive: false,
         utcOpeningDate: 1685577600,
         midUnitPrice: 9001,
@@ -153,14 +163,6 @@ export const preloadedLendingMarkets: Partial<RootState> = {
         },
     },
 };
-export const dec22Fixture = new Maturity(1669852800);
-export const mar23Fixture = new Maturity(1677628800);
-export const jun23Fixture = new Maturity(1685577600);
-export const sep23Fixture = new Maturity(1693526400);
-const dec23Fixture = new Maturity(1701388800);
-const mar24Fixture = new Maturity(1709251200);
-const jun24Fixture = new Maturity(1717200000);
-const sep24Fixture = new Maturity(1725148800);
 
 export const maturityOptions: MaturityOptionList = [
     { label: 'DEC22', value: dec22Fixture },
