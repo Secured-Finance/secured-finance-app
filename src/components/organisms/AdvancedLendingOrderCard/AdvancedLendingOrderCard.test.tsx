@@ -18,6 +18,9 @@ const preloadedState = {
         unitPrice: 9500,
         orderType: OrderType.LIMIT,
     },
+    wallet: {
+        balances: { [CurrencySymbol.USDC]: 10000 },
+    },
     ...preloadedAssetPrices,
 };
 
@@ -104,5 +107,13 @@ describe('AdvancedLendingOrderCard Component', () => {
         const input = screen.getByRole('textbox', { name: 'Amount' });
         fireEvent.change(input, { target: { value: '0' } });
         expect(button).toBeDisabled();
+    });
+
+    it('should render wallet source when side is lend', async () => {
+        await waitFor(() => render(<Default />, { preloadedState }));
+        const lendTab = screen.getByText('Lend');
+        fireEvent.click(lendTab);
+        expect(screen.getByText('Lending Source')).toBeInTheDocument();
+        expect(screen.getByText('10,000 USDC')).toBeInTheDocument();
     });
 });

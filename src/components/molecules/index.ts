@@ -10,6 +10,7 @@ export * from './CollateralUsageSection';
 export * from './CoreTable';
 export * from './CurveHeader';
 export * from './Dialog';
+export * from './FailurePanel';
 export * from './HorizontalTab';
 export * from './LineChart';
 export * from './LiquidationProgressBar';
