@@ -1,3 +1,4 @@
+import { WalletSource } from '@secured-finance/sf-client';
 import { fromBytes32 } from '@secured-finance/sf-graph-client';
 import { BigNumber, utils } from 'ethers';
 import EfilIcon from 'src/assets/coins/efil.svg';
@@ -5,7 +6,9 @@ import EthIcon from 'src/assets/coins/eth2.svg';
 import UsdcIcon from 'src/assets/coins/usdc.svg';
 import UsdtIcon from 'src/assets/coins/usdt.svg';
 import WrappedBitcoinIcon from 'src/assets/coins/wbtc.svg';
-import { Option } from 'src/components/atoms';
+import SFLogoSmall from 'src/assets/img/logo-small.svg';
+import MetamaskIcon from 'src/assets/img/metamask-fox.svg';
+import { Option, WalletSourceOption } from 'src/components/atoms';
 import { CollateralBook } from 'src/hooks';
 import { AssetPrices } from 'src/store/assetPrices';
 import { RootState } from 'src/store/types';
@@ -175,6 +178,21 @@ export const maturityOptions: MaturityOptionList = [
     { label: 'MAR24', value: mar24Fixture },
     { label: 'JUN24', value: jun24Fixture },
     { label: 'SEP24', value: sep24Fixture },
+];
+
+export const walletSourceList: WalletSourceOption[] = [
+    {
+        source: WalletSource.METAMASK,
+        available: 1000,
+        asset: CurrencySymbol.WBTC,
+        iconSVG: MetamaskIcon,
+    },
+    {
+        source: WalletSource.SF_VAULT,
+        available: 4000,
+        asset: CurrencySymbol.WBTC,
+        iconSVG: SFLogoSmall,
+    },
 ];
 
 export const assetList = [

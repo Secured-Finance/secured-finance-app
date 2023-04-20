@@ -1,5 +1,5 @@
 import { ArrowUpIcon } from '@heroicons/react/outline';
-import { OrderSide } from '@secured-finance/sf-client';
+import { OrderSide, WalletSource } from '@secured-finance/sf-client';
 import { createColumnHelper } from '@tanstack/react-table';
 import classNames from 'classnames';
 import { BigNumber } from 'ethers';
@@ -14,13 +14,13 @@ import {
     setAmount,
     setOrderType,
     setSide,
+    setSourceAccount,
     setUnitPrice,
 } from 'src/store/landingOrderForm';
-
 import { ColorFormat } from 'src/types';
 import {
-    currencyMap,
     CurrencySymbol,
+    currencyMap,
     formatLoanValue,
     ordinaryFormat,
 } from 'src/utils';
@@ -241,6 +241,9 @@ export const OrderWidget = ({
                 : buyOrders[parseInt(rowId)];
         dispatch(setOrderType(OrderType.LIMIT));
         side ? dispatch(setSide(side)) : null;
+        side === OrderSide.BORROW
+            ? dispatch(setSourceAccount(WalletSource.METAMASK))
+            : null;
         dispatch(setUnitPrice(rowData.value.price));
         dispatch(setAmount(rowData.amount));
     };
