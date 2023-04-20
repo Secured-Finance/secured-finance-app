@@ -2,7 +2,7 @@ import { Currency } from '@secured-finance/sf-core';
 import { BigNumber } from 'ethers';
 import * as jest from 'jest-mock';
 import { CurrencySymbol, getCurrencyMapAsList } from 'src/utils';
-import { collateralBook80 } from './fixtures';
+import { collateralBook80, dec24Fixture } from './fixtures';
 
 export const mockUseSF = () => {
     const mockSecuredFinance = {
@@ -94,13 +94,21 @@ export const mockUseSF = () => {
             })
         ),
 
-        getLendingMarket: jest.fn(() =>
-            Promise.resolve({
-                isItayosePeriod: jest.fn(() => Promise.resolve(false)),
-                isOpened: jest.fn(() => Promise.resolve(true)),
-                isPreOrderPeriod: jest.fn(() => Promise.resolve(false)),
-            })
-        ),
+        getLendingMarket: jest.fn((_, maturity: number) => {
+            if (maturity === dec24Fixture.toNumber()) {
+                return Promise.resolve({
+                    isItayosePeriod: jest.fn(() => Promise.resolve(false)),
+                    isOpened: jest.fn(() => Promise.resolve(false)),
+                    isPreOrderPeriod: jest.fn(() => Promise.resolve(true)),
+                });
+            } else {
+                return Promise.resolve({
+                    isItayosePeriod: jest.fn(() => Promise.resolve(false)),
+                    isOpened: jest.fn(() => Promise.resolve(true)),
+                    isPreOrderPeriod: jest.fn(() => Promise.resolve(false)),
+                });
+            }
+        }),
 
         getMaturities: jest.fn(() =>
             Promise.resolve([
