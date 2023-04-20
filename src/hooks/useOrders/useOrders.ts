@@ -1,5 +1,4 @@
-import { OrderSide } from '@secured-finance/sf-client';
-import { WalletSource } from '@secured-finance/sf-client/dist/secured-finance-client';
+import { OrderSide, WalletSource } from '@secured-finance/sf-client';
 import { BigNumber } from 'ethers';
 import { useCallback } from 'react';
 import { CurrencySymbol, toCurrency } from 'src/utils';
@@ -41,7 +40,8 @@ export const useOrders = () => {
             maturity: Maturity,
             side: OrderSide,
             amount: BigNumber,
-            unitPrice: number
+            unitPrice: number,
+            sourceWallet: WalletSource
         ) => {
             try {
                 if (!securedFinance) return;
@@ -51,8 +51,8 @@ export const useOrders = () => {
                     maturity.toNumber(),
                     side,
                     amount,
-                    WalletSource.METAMASK,
-                    unitPrice || undefined
+                    sourceWallet,
+                    unitPrice
                 );
 
                 return tx;
@@ -87,7 +87,8 @@ export const useOrders = () => {
             maturity: Maturity,
             side: OrderSide,
             amount: BigNumber,
-            unitPrice: number
+            unitPrice: number,
+            sourceWallet: WalletSource
         ) => {
             try {
                 if (!securedFinance) return;
@@ -97,7 +98,7 @@ export const useOrders = () => {
                     maturity.toNumber(),
                     side,
                     amount,
-                    WalletSource.METAMASK,
+                    sourceWallet,
                     unitPrice
                 );
 

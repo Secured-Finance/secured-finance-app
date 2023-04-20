@@ -5,10 +5,10 @@ import {
 import Ledger from 'src/assets/img/ledger.svg';
 import MetamaskFox from 'src/assets/img/metamask-fox.svg';
 import {
+    CollateralInformationProps,
     CollateralInformationTable,
     ExpandIndicator,
 } from 'src/components/atoms';
-import { CollateralInformationProps } from 'src/components/atoms/CollateralInformation';
 import { AddressUtils, WalletSource } from 'src/utils';
 
 export interface AssetDisclosureProps {

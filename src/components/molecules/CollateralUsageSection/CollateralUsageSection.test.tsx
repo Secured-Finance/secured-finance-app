@@ -34,4 +34,22 @@ describe('CollateralUsageSection Component', () => {
         const available = await screen.findByText('989 USDC');
         expect(available).toBeInTheDocument();
     });
+
+    it('should render correct color on collateral usage', () => {
+        render(<Default collateralCoverage={0} />);
+        expect(screen.getByText('0%')).toBeInTheDocument();
+        expect(screen.getByText('0%')).toHaveClass('text-white');
+
+        render(<Default collateralCoverage={1000} />);
+        expect(screen.getByText('10%')).toBeInTheDocument();
+        expect(screen.getByText('10%')).toHaveClass('text-progressBarStart');
+
+        render(<Default collateralCoverage={5000} />);
+        expect(screen.getByText('50%')).toBeInTheDocument();
+        expect(screen.getByText('50%')).toHaveClass('text-progressBarVia');
+
+        render(<Default collateralCoverage={9000} />);
+        expect(screen.getByText('90%')).toBeInTheDocument();
+        expect(screen.getByText('90%')).toHaveClass('text-progressBarEnd');
+    });
 });

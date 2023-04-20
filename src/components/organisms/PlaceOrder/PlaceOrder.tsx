@@ -1,6 +1,6 @@
 import { track } from '@amplitude/analytics-browser';
 import { Disclosure } from '@headlessui/react';
-import { OrderSide } from '@secured-finance/sf-client';
+import { OrderSide, WalletSource } from '@secured-finance/sf-client';
 import { getUTCMonthYear } from '@secured-finance/sf-core';
 import { BigNumber } from 'ethers';
 import { useCallback, useReducer, useState } from 'react';
@@ -16,9 +16,9 @@ import {
     CollateralSimulationSection,
     Dialog,
     DialogState,
+    FailurePanel,
     SuccessPanel,
 } from 'src/components/molecules';
-import { FailurePanel } from 'src/components/molecules/FailurePanel';
 import { CollateralBook, OrderType } from 'src/hooks';
 import { setLastMessage } from 'src/store/lastError';
 import { PlaceOrderFunction } from 'src/types';
@@ -108,6 +108,7 @@ export const PlaceOrder = ({
     maturity,
     orderType,
     assetPrice,
+    walletSource,
 }: {
     collateral: CollateralBook;
     loanValue?: LoanValue;
@@ -117,6 +118,7 @@ export const PlaceOrder = ({
     side: OrderSide;
     orderType: OrderType;
     assetPrice: number;
+    walletSource: WalletSource;
 } & DialogState) => {
     const [state, dispatch] = useReducer(reducer, stateRecord[1]);
     const globalDispatch = useDispatch();
@@ -136,7 +138,8 @@ export const PlaceOrder = ({
             maturity: Maturity,
             side: OrderSide,
             amount: BigNumber,
-            unitPrice: number
+            unitPrice: number,
+            walletSource: WalletSource
         ) => {
             try {
                 const tx = await onPlaceOrder(
@@ -144,7 +147,8 @@ export const PlaceOrder = ({
                     maturity,
                     side,
                     amount,
-                    unitPrice
+                    unitPrice,
+                    walletSource
                 );
                 const transactionStatus = await handleContractTransaction(tx);
                 if (!transactionStatus) {
@@ -185,7 +189,8 @@ export const PlaceOrder = ({
                             maturity,
                             side,
                             orderAmount.toBigNumber(),
-                            0
+                            0,
+                            walletSource
                         );
                     } else if (orderType === OrderType.LIMIT && loanValue) {
                         handlePlaceOrder(
@@ -193,7 +198,8 @@ export const PlaceOrder = ({
                             maturity,
                             side,
                             orderAmount.toBigNumber(),
-                            loanValue.price
+                            loanValue.price,
+                            walletSource
                         );
                     } else {
                         console.error('Invalid order type');
@@ -218,6 +224,7 @@ export const PlaceOrder = ({
             orderAmount,
             orderType,
             side,
+            walletSource,
         ]
     );
 

@@ -1,4 +1,5 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { within } from '@storybook/testing-library';
 import {
     withAssetPrice,
     withWalletProvider,
@@ -26,4 +27,11 @@ export const Default = Template.bind({});
 export const OnlyLimitOrder = Template.bind({});
 OnlyLimitOrder.args = {
     onlyLimitOrder: true,
+};
+
+export const Lend = Template.bind({});
+Lend.play = async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const lendTab = canvas.getByText('Lend');
+    lendTab.click();
 };
