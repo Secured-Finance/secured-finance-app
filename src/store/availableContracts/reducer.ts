@@ -14,6 +14,7 @@ const emptyContract: { EMPTY: LendingMarket } = {
         utcOpeningDate: 0,
         midUnitPrice: 0,
         isReady: false,
+        preOpenDate: 0,
     },
 };
 const initialState: AvailableContracts = {
