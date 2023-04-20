@@ -7,7 +7,6 @@ import { useEffect, useMemo } from 'react';
 import { useDispatch } from 'react-redux';
 import { ColorBar } from 'src/components/atoms';
 import { CoreTable, TableHeader } from 'src/components/molecules';
-import { OrderType } from 'src/hooks';
 import { OrderBookEntry } from 'src/hooks/useOrderbook';
 import { setMidPrice } from 'src/store/analytics';
 import {
@@ -17,7 +16,7 @@ import {
     setSourceAccount,
     setUnitPrice,
 } from 'src/store/landingOrderForm';
-import { ColorFormat } from 'src/types';
+import { ColorFormat, OrderType } from 'src/types';
 import {
     CurrencySymbol,
     currencyMap,

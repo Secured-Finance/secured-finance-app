@@ -1,11 +1,11 @@
 import { OrderSide } from '@secured-finance/sf-client';
 import { composeStories } from '@storybook/testing-react';
-import { OrderType } from 'src/hooks';
 import { preloadedAssetPrices } from 'src/stories/mocks/fixtures';
 import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
 import { CurrencySymbol } from 'src/utils';
 import timemachine from 'timemachine';
 import * as stories from './AdvancedLendingOrderCard.stories';
+import { OrderType } from 'src/types';
 
 const { Default } = composeStories(stories);
 

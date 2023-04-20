@@ -5,11 +5,6 @@ import { CurrencySymbol, toCurrency } from 'src/utils';
 import { Maturity } from 'src/utils/entities';
 import useSF from '../useSecuredFinance';
 
-export enum OrderType {
-    MARKET = 'Market',
-    LIMIT = 'Limit',
-}
-
 export const useOrders = () => {
     const securedFinance = useSF();
 

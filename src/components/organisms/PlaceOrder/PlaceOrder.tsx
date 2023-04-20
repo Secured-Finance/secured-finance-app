@@ -19,9 +19,9 @@ import {
     FailurePanel,
     SuccessPanel,
 } from 'src/components/molecules';
-import { CollateralBook, OrderType } from 'src/hooks';
+import { CollateralBook } from 'src/hooks';
 import { setLastMessage } from 'src/store/lastError';
-import { PlaceOrderFunction } from 'src/types';
+import { OrderType, PlaceOrderFunction } from 'src/types';
 import {
     CurrencySymbol,
     OrderEvents,

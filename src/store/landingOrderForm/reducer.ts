@@ -2,11 +2,10 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { OrderSide, WalletSource } from '@secured-finance/sf-client';
 import { BigNumber } from 'ethers';
 import { ViewType } from 'src/components/atoms';
-import { OrderType } from 'src/hooks';
+import { MarketPhase, OrderType } from 'src/types';
 import { CurrencySymbol } from 'src/utils';
 import { Maturity } from 'src/utils/entities';
 
-export type MarketPhase = 'Closed' | 'PreOrder' | 'Itayose' | 'Open';
 type LandingOrderFormStore = {
     currency: CurrencySymbol;
     maturity: number;

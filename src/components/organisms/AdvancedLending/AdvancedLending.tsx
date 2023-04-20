@@ -15,7 +15,7 @@ import {
     OrderWidget,
 } from 'src/components/organisms';
 import { TwoColumnsWithTopBar } from 'src/components/templates';
-import { CollateralBook, OrderType, useGraphClientHook } from 'src/hooks';
+import { CollateralBook, useGraphClientHook } from 'src/hooks';
 import { useOrderbook } from 'src/hooks/useOrderbook';
 import { getAssetPrice } from 'src/store/assetPrices/selectors';
 import {
@@ -26,14 +26,14 @@ import {
     setUnitPrice,
 } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
-import { MaturityOptionList, TradesQuery } from 'src/types';
+import { MaturityOptionList, OrderType, TradesQuery } from 'src/types';
 import {
-    currencyMap,
     CurrencySymbol,
+    Rate,
+    currencyMap,
     formatLoanValue,
     getCurrencyMapAsOptions,
     ordinaryFormat,
-    Rate,
     usdFormat,
 } from 'src/utils';
 import { LoanValue, Maturity } from 'src/utils/entities';

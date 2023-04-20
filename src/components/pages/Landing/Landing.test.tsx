@@ -1,11 +1,11 @@
 import { OrderSide } from '@secured-finance/sf-client';
 import { composeStories } from '@storybook/testing-react';
-import { OrderType } from 'src/hooks';
 import {
     preloadedBalances,
     preloadedLendingMarkets,
 } from 'src/stories/mocks/fixtures';
 import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
+import { OrderType } from 'src/types';
 import { CurrencySymbol } from 'src/utils';
 import * as stories from './Landing.stories';
 

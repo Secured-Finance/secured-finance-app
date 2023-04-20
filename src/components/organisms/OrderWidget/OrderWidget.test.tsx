@@ -1,7 +1,7 @@
 import { OrderSide } from '@secured-finance/sf-client';
 import { composeStories } from '@storybook/testing-react';
-import { OrderType } from 'src/hooks';
 import { fireEvent, render, screen } from 'src/test-utils.js';
+import { OrderType } from 'src/types';
 import * as stories from './OrderWidget.stories';
 
 const { Default } = composeStories(stories);
