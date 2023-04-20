@@ -37,10 +37,17 @@ export const OrderAction = ({
         useState(false);
     const [openPlaceOrderDialog, setOpenPlaceOrderDialog] = useState(false);
 
-    const { currency, amount, side, marketPhase, maturity, orderType } =
-        useSelector((state: RootState) =>
-            selectLandingOrderForm(state.landingOrderForm)
-        );
+    const {
+        currency,
+        amount,
+        side,
+        marketPhase,
+        maturity,
+        orderType,
+        sourceAccount,
+    } = useSelector((state: RootState) =>
+        selectLandingOrderForm(state.landingOrderForm)
+    );
 
     const balances = useSelector((state: RootState) =>
         selectCollateralCurrencyBalance(state)
@@ -117,6 +124,7 @@ export const OrderAction = ({
                 orderAmount={new Amount(amount, currency)}
                 side={side}
                 orderType={orderType}
+                walletSource={sourceAccount}
             />
 
             <DepositCollateral

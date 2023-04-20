@@ -1,4 +1,4 @@
-import { OrderSide } from '@secured-finance/sf-client';
+import { OrderSide, WalletSource } from '@secured-finance/sf-client';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import {
     withAssetPrice,
@@ -23,6 +23,7 @@ export default {
         orderType: OrderType.LIMIT,
         side: OrderSide.BORROW,
         assetPrice: 6.12,
+        walletSource: WalletSource.METAMASK,
     },
     decorators: [withAssetPrice, withWalletProvider],
 } as ComponentMeta<typeof PlaceOrder>;
