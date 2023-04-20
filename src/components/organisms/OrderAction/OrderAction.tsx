@@ -37,7 +37,7 @@ export const OrderAction = ({
         useState(false);
     const [openPlaceOrderDialog, setOpenPlaceOrderDialog] = useState(false);
 
-    const { currency, amount, side, marketTiming, maturity, orderType } =
+    const { currency, amount, side, marketPhase, maturity, orderType } =
         useSelector((state: RootState) =>
             selectLandingOrderForm(state.landingOrderForm)
         );
@@ -106,7 +106,7 @@ export const OrderAction = ({
 
             <PlaceOrder
                 onPlaceOrder={
-                    marketTiming === 'Order' ? placeOrder : placePreOrder
+                    marketPhase === 'Open' ? placeOrder : placePreOrder
                 }
                 isOpen={openPlaceOrderDialog}
                 onClose={() => setOpenPlaceOrderDialog(false)}

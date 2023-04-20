@@ -93,11 +93,12 @@ export const mockUseSF = () => {
                 collateralCoverage: collateralBook80.coverage,
             })
         ),
+
         getLendingMarket: jest.fn(() =>
             Promise.resolve({
-                contract: {
-                    address: '0x0',
-                },
+                isItayosePeriod: jest.fn(() => Promise.resolve(false)),
+                isOpened: jest.fn(() => Promise.resolve(true)),
+                isPreOrderPeriod: jest.fn(() => Promise.resolve(false)),
             })
         ),
 

@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react';
+import { useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
     GradientBox,
@@ -16,15 +16,13 @@ import {
 } from 'src/components/organisms';
 import { Page } from 'src/components/templates';
 import { TwoColumnsWithTopBar } from 'src/components/templates/TwoColumnsWithTopBar';
-import { OrderType, useCollateralBook } from 'src/hooks';
+import { useCollateralBook } from 'src/hooks';
 import { useOrderbook } from 'src/hooks/useOrderbook';
 import { getAssetPrice } from 'src/store/assetPrices/selectors';
 import {
     selectLandingOrderForm,
     setCurrency,
-    setMarketTiming,
     setMaturity,
-    setOrderType,
 } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
 import { CurrencySymbol, getCurrencyMapAsOptions, usdFormat } from 'src/utils';
@@ -32,24 +30,29 @@ import { countdown } from 'src/utils/date';
 import { Maturity } from 'src/utils/entities';
 import { useWallet } from 'use-wallet';
 import { emptyOptionList } from '..';
+
 const Toolbar = ({
     selectedAsset,
     assetList,
     options,
     selected,
-    openDate,
+    date,
+    nextMarketPhase,
     currency,
 }: {
     selectedAsset: Option<CurrencySymbol> | undefined;
     assetList: Array<Option<CurrencySymbol>>;
     options: Array<Option<string>>;
     selected: Option<string>;
-    openDate: number;
+    date: number;
+    nextMarketPhase: string;
     currency: CurrencySymbol;
 }) => {
     const currencyPrice = useSelector((state: RootState) =>
         getAssetPrice(currency)(state)
     );
+    const dispatch = useDispatch();
+
     return (
         <GradientBox shape='rectangle'>
             <div className='flex min-w-fit flex-row items-center justify-between gap-20 px-6 py-3'>
@@ -59,17 +62,17 @@ const Toolbar = ({
                     options={options}
                     selected={selected}
                     onAssetChange={v => {
-                        setCurrency(v);
+                        dispatch(setCurrency(v));
                     }}
                     onTermChange={v => {
-                        setMaturity(new Maturity(v));
+                        dispatch(setMaturity(new Maturity(v)));
                     }}
                 />
                 <div className='flex w-full flex-row items-center justify-between'>
                     <div>
                         <MarketTab
-                            name='Pre-Open'
-                            value={countdown(openDate * 1000)}
+                            name={nextMarketPhase}
+                            value={countdown(date * 1000)}
                         />
                     </div>
 
@@ -86,11 +89,11 @@ const Toolbar = ({
 };
 export const Itayose = () => {
     const { account } = useWallet();
-    const dispatch = useDispatch();
 
-    const { currency, maturity } = useSelector((state: RootState) =>
-        selectLandingOrderForm(state.landingOrderForm)
+    const { currency, maturity, marketPhase } = useSelector(
+        (state: RootState) => selectLandingOrderForm(state.landingOrderForm)
     );
+
     const lendingContracts = useSelector(
         (state: RootState) => state.availableContracts.lendingMarkets[currency]
     );
@@ -121,19 +124,20 @@ export const Itayose = () => {
     const orderBook = useOrderbook(currency, selectedTerm.value, 10);
     const collateralBook = useCollateralBook(account);
 
-    // TODO: replace this ugly way of doing things
-    useEffect(() => {
-        dispatch(setMarketTiming('PreOrder'));
-        dispatch(setOrderType(OrderType.LIMIT));
-    }, [dispatch]);
-
     return (
         <Page title='Pre-Open Order Book'>
             <TwoColumnsWithTopBar
                 topBar={
                     <Toolbar
-                        openDate={
-                            lendingContracts[selectedTerm.label]?.utcOpeningDate
+                        date={
+                            marketPhase === 'PreOrder'
+                                ? lendingContracts[selectedTerm.label]
+                                      ?.preOpenDate
+                                : lendingContracts[selectedTerm.label]
+                                      ?.utcOpeningDate
+                        }
+                        nextMarketPhase={
+                            marketPhase === 'PreOrder' ? 'PreOrder' : 'Open in'
                         }
                         assetList={assetList}
                         selectedAsset={selectedAsset}

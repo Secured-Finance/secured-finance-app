@@ -6,6 +6,7 @@ import { OrderType } from 'src/hooks';
 import { CurrencySymbol } from 'src/utils';
 import { Maturity } from 'src/utils/entities';
 
+export type MarketPhase = 'Closed' | 'PreOrder' | 'Itayose' | 'Open';
 type LandingOrderFormStore = {
     currency: CurrencySymbol;
     maturity: number;
@@ -13,7 +14,7 @@ type LandingOrderFormStore = {
     amount: string;
     unitPrice: number;
     orderType: OrderType;
-    marketTiming: 'PreOrder' | 'Order';
+    marketPhase: MarketPhase;
     lastView: ViewType;
 };
 const initialStore: LandingOrderFormStore = {
@@ -23,7 +24,7 @@ const initialStore: LandingOrderFormStore = {
     amount: '0',
     unitPrice: 0,
     orderType: OrderType.MARKET,
-    marketTiming: 'Order',
+    marketPhase: 'Open',
     lastView: 'Simple',
 };
 
@@ -52,11 +53,8 @@ const landingOrderFormSlice = createSlice({
         setLastView: (state, action: PayloadAction<ViewType>) => {
             state.lastView = action.payload;
         },
-        setMarketTiming: (
-            state,
-            action: PayloadAction<'PreOrder' | 'Order'>
-        ) => {
-            state.marketTiming = action.payload;
+        setMarketPhase: (state, action: PayloadAction<MarketPhase>) => {
+            state.marketPhase = action.payload;
         },
     },
 });
