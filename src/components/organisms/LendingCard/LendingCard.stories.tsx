@@ -1,4 +1,5 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { within } from '@storybook/testing-library';
 import {
     withAssetPrice,
     withWalletProvider,
@@ -24,6 +25,9 @@ export default {
         maturitiesOptionList: maturityOptions,
     },
     decorators: [withAssetPrice, withWalletProvider],
+    parameters: {
+        connected: true,
+    },
 } as ComponentMeta<typeof LendingCard>;
 
 const Template: ComponentStory<typeof LendingCard> = args => {
@@ -31,6 +35,10 @@ const Template: ComponentStory<typeof LendingCard> = args => {
 };
 
 export const Default = Template.bind({});
-Default.parameters = {
-    connected: true,
+
+export const Lend = Template.bind({});
+Lend.play = async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const lendTab = canvas.getByText('Lend');
+    lendTab.click();
 };

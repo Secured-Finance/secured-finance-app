@@ -1,4 +1,4 @@
-import { OrderSide } from '@secured-finance/sf-client';
+import { OrderSide, WalletSource } from '@secured-finance/sf-client';
 import { composeStories } from '@storybook/testing-react';
 import { BigNumber } from 'ethers';
 import { OrderType } from 'src/hooks';
@@ -18,6 +18,7 @@ const preloadedState = {
         amount: '500000000',
         unitPrice: 0,
         orderType: OrderType.LIMIT,
+        sourceAccount: WalletSource.METAMASK,
     },
     ...preloadedAssetPrices,
 };
@@ -97,7 +98,8 @@ describe('PlaceOrder component', () => {
                 dec22Fixture,
                 OrderSide.BORROW,
                 BigNumber.from('1000000000'),
-                0
+                0,
+                WalletSource.METAMASK
             )
         );
     });
@@ -118,7 +120,8 @@ describe('PlaceOrder component', () => {
                 dec22Fixture,
                 OrderSide.BORROW,
                 BigNumber.from('1000000000'),
-                9410
+                9410,
+                WalletSource.METAMASK
             )
         );
     });

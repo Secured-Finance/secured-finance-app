@@ -1,10 +1,11 @@
 import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
+import { getLiquidationInformation } from 'src/components/atoms';
 import { CollateralBook } from 'src/hooks';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { RootState } from 'src/store/types';
 import { CurrencySymbol, formatWithCurrency, percentFormat } from 'src/utils';
-import { computeAvailableToBorrow, MAX_COVERAGE } from 'src/utils/collateral';
+import { computeAvailableToBorrow } from 'src/utils/collateral';
 
 export const CollateralUsageSection = ({
     usdCollateral,
@@ -15,10 +16,11 @@ export const CollateralUsageSection = ({
     collateralCoverage: number;
     currency: CurrencySymbol;
 }) => {
+    collateralCoverage = collateralCoverage / 100.0;
     const assetPriceMap = useSelector((state: RootState) => getPriceMap(state));
 
     const collateralUsagePercent = useMemo(() => {
-        return percentFormat(collateralCoverage / 100.0);
+        return percentFormat(collateralCoverage);
     }, [collateralCoverage]);
 
     const availableToBorrow = useMemo(() => {
@@ -27,11 +29,13 @@ export const CollateralUsageSection = ({
             result = computeAvailableToBorrow(
                 assetPriceMap[currency],
                 usdCollateral,
-                collateralCoverage / MAX_COVERAGE
+                collateralCoverage / 100.0
             );
         }
         return formatWithCurrency(isNaN(result) ? 0 : result, currency);
     }, [assetPriceMap, collateralCoverage, currency, usdCollateral]);
+
+    const info = getLiquidationInformation(collateralCoverage);
 
     return (
         <div className='flex max-w-sm flex-row justify-between'>
@@ -47,7 +51,9 @@ export const CollateralUsageSection = ({
                 <h3 className='typography-caption-2 text-planetaryPurple'>
                     Collateral Usage
                 </h3>
-                <p className='typography-caption mr-1 text-right font-bold text-white'>
+                <p
+                    className={`typography-caption mr-1 text-right font-bold ${info.color}`}
+                >
                     {collateralUsagePercent}
                 </p>
             </div>

@@ -4,7 +4,7 @@ import { renderHook } from '@testing-library/react-hooks';
 import { BigNumber } from 'ethers';
 import { dec22Fixture } from 'src/stories/mocks/fixtures';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
-import { currencyMap, CurrencySymbol, toCurrency } from 'src/utils';
+import { CurrencySymbol, currencyMap, toCurrency } from 'src/utils';
 import { Maturity } from 'src/utils/entities';
 import { useOrders } from '.';
 
@@ -37,7 +37,8 @@ describe('useOrders hook', () => {
                 new Maturity(2022),
                 OrderSide.LEND,
                 currencyMap.ETH.toBaseUnit(1),
-                9863
+                9863,
+                WalletSource.METAMASK
             );
             expect(mockSecuredFinance.placeOrder).toHaveBeenCalledTimes(1);
             expect(mockSecuredFinance.placeOrder).toHaveBeenCalledWith(
@@ -58,7 +59,8 @@ describe('useOrders hook', () => {
                 new Maturity(2022),
                 OrderSide.LEND,
                 currencyMap.ETH.toBaseUnit(1),
-                0
+                0,
+                WalletSource.METAMASK
             );
 
             expect(mockSecuredFinance.placeOrder).toHaveBeenCalledWith(
@@ -67,7 +69,7 @@ describe('useOrders hook', () => {
                 '0',
                 BigNumber.from('1000000000000000000'),
                 WalletSource.METAMASK,
-                undefined
+                0
             );
         });
     });
@@ -89,7 +91,8 @@ describe('useOrders hook', () => {
                 new Maturity(2022),
                 OrderSide.LEND,
                 currencyMap.ETH.toBaseUnit(1),
-                9863
+                9863,
+                WalletSource.METAMASK
             );
             expect(mockSecuredFinance.placePreOrder).toHaveBeenCalledTimes(1);
             expect(mockSecuredFinance.placePreOrder).toHaveBeenCalledWith(
