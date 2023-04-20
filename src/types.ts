@@ -46,3 +46,10 @@ export type IndexOf<T extends unknown[]> = Exclude<
 > extends `${infer I extends number}`
     ? I
     : never;
+
+export type MarketPhase = 'Closed' | 'PreOrder' | 'Itayose' | 'Open';
+
+export enum OrderType {
+    MARKET = 'Market',
+    LIMIT = 'Limit',
+}

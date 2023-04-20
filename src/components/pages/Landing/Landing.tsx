@@ -8,18 +8,14 @@ import {
     YieldChart,
 } from 'src/components/organisms';
 import { SimpleAdvancedView } from 'src/components/templates';
-import {
-    OrderType,
-    RateType,
-    useCollateralBook,
-    useLoanValues,
-} from 'src/hooks';
+import { RateType, useCollateralBook, useLoanValues } from 'src/hooks';
 import {
     selectLandingOrderForm,
     setLastView,
     setOrderType,
 } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
+import { OrderType } from 'src/types';
 import { LoanValue, Maturity } from 'src/utils/entities';
 import { useWallet } from 'use-wallet';
 

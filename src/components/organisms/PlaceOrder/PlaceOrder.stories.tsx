@@ -4,8 +4,8 @@ import {
     withAssetPrice,
     withWalletProvider,
 } from 'src/../.storybook/decorators';
-import { OrderType } from 'src/hooks';
 import { collateralBook37, dec22Fixture } from 'src/stories/mocks/fixtures';
+import { OrderType } from 'src/types';
 import { CurrencySymbol } from 'src/utils';
 import { Amount, LoanValue } from 'src/utils/entities';
 import { PlaceOrder } from './PlaceOrder';

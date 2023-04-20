@@ -8,7 +8,7 @@ import { Button, DropdownSelector, NavTab, Option } from 'src/components/atoms';
 import { CoreTable } from 'src/components/molecules';
 import { LendingMarket } from 'src/hooks';
 import { setCurrency, setMaturity } from 'src/store/landingOrderForm';
-import { MarketPhase } from 'src/store/landingOrderForm/reducer';
+import { MarketPhase } from 'src/types';
 import {
     CurrencySymbol,
     formatLoanValue,

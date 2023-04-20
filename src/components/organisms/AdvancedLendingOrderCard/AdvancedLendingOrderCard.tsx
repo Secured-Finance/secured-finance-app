@@ -16,7 +16,7 @@ import {
     WalletSourceSelector,
 } from 'src/components/atoms';
 import { OrderAction } from 'src/components/organisms';
-import { CollateralBook, OrderType } from 'src/hooks';
+import { CollateralBook } from 'src/hooks';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import {
     selectLandingOrderForm,
@@ -28,6 +28,7 @@ import {
 } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
 import { selectAllBalances } from 'src/store/wallet';
+import { OrderType } from 'src/types';
 import {
     MAX_COVERAGE,
     amountFormatterToBase,
