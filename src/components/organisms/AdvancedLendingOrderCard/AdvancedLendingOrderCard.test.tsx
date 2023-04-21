@@ -17,6 +17,7 @@ const preloadedState = {
         amount: '500000000',
         unitPrice: 9500,
         orderType: OrderType.LIMIT,
+        marketPhase: 'Open',
     },
     wallet: {
         balances: { [CurrencySymbol.USDC]: 10000 },

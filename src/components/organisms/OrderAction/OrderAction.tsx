@@ -80,7 +80,11 @@ export const OrderAction = ({
             {account ? (
                 canBorrow || side === OrderSide.LEND ? (
                     <Button
-                        disabled={amount.isZero()}
+                        disabled={
+                            amount.isZero() ||
+                            (marketPhase !== 'Open' &&
+                                marketPhase !== 'PreOrder')
+                        }
                         fullWidth
                         onClick={() => {
                             setOpenPlaceOrderDialog(true);
