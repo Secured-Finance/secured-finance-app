@@ -2,10 +2,10 @@ import { OrderSide } from '@secured-finance/sf-client';
 import { composeStories } from '@storybook/testing-react';
 import { preloadedAssetPrices } from 'src/stories/mocks/fixtures';
 import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
+import { OrderType } from 'src/types';
 import { CurrencySymbol } from 'src/utils';
 import timemachine from 'timemachine';
 import * as stories from './AdvancedLendingOrderCard.stories';
-import { OrderType } from 'src/types';
 
 const { Default } = composeStories(stories);
 
@@ -110,22 +110,17 @@ describe('AdvancedLendingOrderCard Component', () => {
     });
 
     it('should show only limit order when in onlyLimitOrder mode', async () => {
-        await waitFor(() =>
-            render(<Default onlyLimitOrder />, {
-                preloadedState: {
-                    ...preloadedState,
-                    landingOrderForm: {
-                        ...preloadedState.landingOrderForm,
-                    },
-                },
-            })
-        );
+        await waitFor(() => render(<Default onlyLimitOrder />));
         expect(screen.queryByRole('radio', { name: 'Market' })).toHaveClass(
             'hidden'
         );
         expect(screen.getByRole('radio', { name: 'Limit' })).not.toHaveClass(
             'hidden'
         );
+        expect(screen.getByRole('radio', { name: 'Limit' })).toBeChecked();
+        expect(
+            screen.getByRole('textbox', { name: 'Bond Price' })
+        ).not.toBeDisabled();
     });
 
     it('place order button should be disabled if amount is zero', async () => {

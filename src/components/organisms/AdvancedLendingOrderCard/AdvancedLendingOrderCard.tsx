@@ -3,7 +3,7 @@ import { OrderSide, WalletSource } from '@secured-finance/sf-client';
 import classNames from 'classnames';
 import { BigNumber } from 'ethers';
 import Link from 'next/link';
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
     BorrowLendSelector,
@@ -125,6 +125,12 @@ export const AdvancedLendingOrderCard = ({
             )
         );
     };
+
+    useEffect(() => {
+        if (onlyLimitOrder) {
+            dispatch(setOrderType(OrderType.LIMIT));
+        }
+    }, [dispatch, onlyLimitOrder]);
 
     return (
         <div className='h-fit rounded-b-xl border border-white-10 bg-cardBackground bg-opacity-60 pb-7 shadow-tab'>
