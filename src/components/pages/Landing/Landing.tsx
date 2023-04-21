@@ -8,22 +8,18 @@ import {
     YieldChart,
 } from 'src/components/organisms';
 import { SimpleAdvancedView } from 'src/components/templates';
-import {
-    OrderType,
-    RateType,
-    useCollateralBook,
-    useLoanValues,
-} from 'src/hooks';
+import { RateType, useCollateralBook, useLoanValues } from 'src/hooks';
 import {
     selectLandingOrderForm,
     setLastView,
     setOrderType,
 } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
+import { OrderType } from 'src/types';
 import { LoanValue, Maturity } from 'src/utils/entities';
 import { useWallet } from 'use-wallet';
 
-const emptyOptionList = [
+export const emptyOptionList = [
     {
         label: '',
         value: new Maturity(0),
@@ -43,7 +39,7 @@ export const Landing = ({ view }: { view?: ViewType }) => {
     const collateralBook = useCollateralBook(account);
 
     const optionList = Object.entries(lendingContracts)
-        .filter(o => o[1].isActive)
+        .filter(o => o[1].isReady)
         .map(o => ({
             label: o[0],
             value: new Maturity(o[1].maturity),

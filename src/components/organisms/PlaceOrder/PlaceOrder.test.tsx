@@ -1,12 +1,11 @@
 import { OrderSide, WalletSource } from '@secured-finance/sf-client';
 import { composeStories } from '@storybook/testing-react';
 import { BigNumber } from 'ethers';
-import { OrderType } from 'src/hooks';
-import { preloadedAssetPrices } from 'src/stories/mocks/fixtures';
+import { dec22Fixture, preloadedAssetPrices } from 'src/stories/mocks/fixtures';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
+import { OrderType } from 'src/types';
 import { CurrencySymbol } from 'src/utils';
-import { Maturity } from 'src/utils/entities';
 import * as stories from './PlaceOrder.stories';
 
 const { Default, MarketOrder } = composeStories(stories);
@@ -80,48 +79,49 @@ describe('PlaceOrder component', () => {
         expect(screen.getByText('This is an error')).toBeInTheDocument();
     });
 
-    it('should call the onPlaceOrder function in a market order mode orderType in the store is Market Order', async () => {
+    it('should call the onPlaceOrder function in market order mode if the orderType is MARKET', async () => {
         const tx = {
             wait: jest.fn(() => Promise.resolve({ blockNumber: 13115215 })),
         } as unknown;
         const onPlaceOrder = jest.fn().mockReturnValue(Promise.resolve(tx));
-        render(<MarketOrder onPlaceOrder={onPlaceOrder} />, {
-            preloadedState: {
-                ...preloadedState,
-                landingOrderForm: {
-                    ...preloadedState.landingOrderForm,
-                    orderType: OrderType.MARKET,
-                },
-            },
-        });
+        render(
+            <MarketOrder
+                onPlaceOrder={onPlaceOrder}
+                orderType={OrderType.MARKET}
+            />,
+            { preloadedState }
+        );
         fireEvent.click(screen.getByTestId('dialog-action-button'));
         await waitFor(() =>
             expect(onPlaceOrder).toHaveBeenCalledWith(
                 CurrencySymbol.USDC,
-                new Maturity(0),
+                dec22Fixture,
                 OrderSide.BORROW,
-                BigNumber.from(500000000),
-                WalletSource.METAMASK,
-                undefined
+                BigNumber.from('1000000000'),
+                0,
+                WalletSource.METAMASK
             )
         );
     });
 
-    it('should call the onPlaceOrder function in a limit order mode if the orderType in the store is Limit Order', async () => {
+    it('should call the onPlaceOrder function in limit order mode if the orderType is LIMIT', async () => {
         const tx = {
             wait: jest.fn(() => Promise.resolve({ blockNumber: 13115215 })),
         } as unknown;
         const onPlaceOrder = jest.fn().mockReturnValue(Promise.resolve(tx));
-        render(<Default onPlaceOrder={onPlaceOrder} />, { preloadedState });
+        render(
+            <Default onPlaceOrder={onPlaceOrder} orderType={OrderType.LIMIT} />,
+            { preloadedState }
+        );
         fireEvent.click(screen.getByTestId('dialog-action-button'));
         await waitFor(() =>
             expect(onPlaceOrder).toHaveBeenCalledWith(
                 CurrencySymbol.USDC,
-                new Maturity(0),
+                dec22Fixture,
                 OrderSide.BORROW,
-                BigNumber.from(500000000),
-                WalletSource.METAMASK,
-                9410
+                BigNumber.from('1000000000'),
+                9410,
+                WalletSource.METAMASK
             )
         );
     });

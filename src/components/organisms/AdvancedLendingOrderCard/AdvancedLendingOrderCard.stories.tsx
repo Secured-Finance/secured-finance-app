@@ -24,6 +24,10 @@ const Template: ComponentStory<typeof AdvancedLendingOrderCard> = args => {
 };
 
 export const Default = Template.bind({});
+export const OnlyLimitOrder = Template.bind({});
+OnlyLimitOrder.args = {
+    onlyLimitOrder: true,
+};
 
 export const Lend = Template.bind({});
 Lend.play = async ({ canvasElement }) => {

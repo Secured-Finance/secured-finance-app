@@ -78,3 +78,7 @@ const Template: ComponentStory<typeof OrderWidget> = args => (
 );
 
 export const Default = Template.bind({});
+export const HideMidPrice = Template.bind({});
+HideMidPrice.args = {
+    hideMidPrice: true,
+};

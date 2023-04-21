@@ -10,9 +10,11 @@ const data = [
 ];
 const columns = [
     columnHelper.accessor('name', {
+        id: 'name',
         cell: info => info.getValue(),
     }),
     columnHelper.accessor('age', {
+        id: 'age',
         cell: info => info.getValue(),
     }),
 ];
@@ -34,4 +36,9 @@ export const Default = Template.bind({});
 export const NoBorder = Template.bind({});
 NoBorder.args = {
     border: false,
+};
+
+export const WithHiddenColumn = Template.bind({});
+WithHiddenColumn.args = {
+    hideColumnIds: ['age'],
 };
