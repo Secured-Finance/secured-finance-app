@@ -4,10 +4,12 @@ import { Maturity } from '.';
 import { Rate } from '../rate';
 import { LoanValue } from './loanValue';
 
+const TEST_DATE = '2022-12-01T00:00:00.00Z';
+
 beforeEach(() => {
     timemachine.reset();
     timemachine.config({
-        dateString: '2022-12-01T00:00:00.00Z',
+        dateString: TEST_DATE,
     });
 });
 
@@ -69,6 +71,13 @@ describe('LoanValue class', () => {
             expect(value.price).toEqual(price);
             expect(value.apr.toNumber()).toEqual(apr);
         });
+    });
+});
+
+describe('APR calculation edge cases', () => {
+    it('should return an o APR if the price is 100', () => {
+        const loanValue = LoanValue.fromPrice(10000, 1712492800);
+        expect(loanValue.apr.toNumber()).toEqual(0);
     });
 });
 
