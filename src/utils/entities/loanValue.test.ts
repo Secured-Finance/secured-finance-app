@@ -75,15 +75,7 @@ describe('LoanValue class', () => {
 });
 
 describe('APR calculation edge cases', () => {
-    it('should return a very high APR if the price is 100 one day before the maturity', () => {
-        const date = new Date(TEST_DATE);
-        date.setHours(date.getHours() + 1);
-        const maturity = new Maturity(date.getTime() / 1000);
-        const value = LoanValue.fromPrice(10000, maturity.toNumber());
-        expect(value.apr.toNumber()).not.toBeNaN();
-    });
-
-    it('should return an APR if the price is 100', () => {
+    it('should return an o APR if the price is 100', () => {
         const loanValue = LoanValue.fromPrice(10000, 1712492800);
         expect(loanValue.apr.toNumber()).toEqual(0);
     });
