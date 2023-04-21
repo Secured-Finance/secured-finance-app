@@ -34,7 +34,7 @@ export const HorizontalTab = ({
     const [selectedIndex, setSelectedIndex] = useState(0);
 
     return (
-        <div className='border border-white-10 bg-cardBackground/60 shadow-tab'>
+        <div className='rounded-b-2xl border border-white-10 bg-cardBackground/60 shadow-tab'>
             <HeadlessTab.Group
                 selectedIndex={selectedIndex}
                 onChange={setSelectedIndex}
@@ -56,7 +56,7 @@ export const HorizontalTab = ({
                         );
                     })}
                 </HeadlessTab.List>
-                <HeadlessTab.Panels className='bg-black-20 px-2'>
+                <HeadlessTab.Panels className='rounded-b-2xl bg-black-20 px-2'>
                     {arrayChildren[selectedIndex]}
                 </HeadlessTab.Panels>
             </HeadlessTab.Group>
