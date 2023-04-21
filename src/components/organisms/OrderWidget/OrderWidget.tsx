@@ -7,7 +7,6 @@ import { useEffect, useMemo } from 'react';
 import { useDispatch } from 'react-redux';
 import { ColorBar } from 'src/components/atoms';
 import { CoreTable, TableHeader } from 'src/components/molecules';
-import { OrderType } from 'src/hooks';
 import { OrderBookEntry } from 'src/hooks/useOrderbook';
 import { setMidPrice } from 'src/store/analytics';
 import {
@@ -17,7 +16,7 @@ import {
     setSourceAccount,
     setUnitPrice,
 } from 'src/store/landingOrderForm';
-import { ColorFormat } from 'src/types';
+import { ColorFormat, OrderType } from 'src/types';
 import {
     CurrencySymbol,
     currencyMap,
@@ -124,10 +123,12 @@ export const OrderWidget = ({
     buyOrders,
     sellOrders,
     currency,
+    hideMidPrice = false,
 }: {
     buyOrders: Array<OrderBookEntry>;
     sellOrders: Array<OrderBookEntry>;
     currency: CurrencySymbol;
+    hideMidPrice?: boolean;
 }) => {
     const dispatch = useDispatch();
     const totalBuyAmount = useMemo(
@@ -268,18 +269,20 @@ export const OrderWidget = ({
 
     return (
         <>
-            <div className='flex h-14 flex-row items-center justify-center gap-1 border-b border-white-10 bg-black-20'>
-                <ArrowUpIcon className='flex h-3 text-teal' />
-                <span
-                    className='typography-portfolio-heading flex text-teal'
-                    data-testid='last-mid-price'
-                >
-                    {formatLoanValue(lastMidValue, 'price')}
-                </span>
-                <span className='typography-portfolio-heading flex text-slateGray'>
-                    {formatLoanValue(lastMidValue, 'rate')}
-                </span>
-            </div>
+            {!hideMidPrice && (
+                <div className='flex h-14 flex-row items-center justify-center gap-1 border-b border-white-10 bg-black-20'>
+                    <ArrowUpIcon className='flex h-3 text-teal' />
+                    <span
+                        className='typography-portfolio-heading flex text-teal'
+                        data-testid='last-mid-price'
+                    >
+                        {formatLoanValue(lastMidValue, 'price')}
+                    </span>
+                    <span className='typography-portfolio-heading flex text-slateGray'>
+                        {formatLoanValue(lastMidValue, 'rate')}
+                    </span>
+                </div>
+            )}
             <div className='flex flex-row gap-6'>
                 <CoreTable
                     data={sellOrders}

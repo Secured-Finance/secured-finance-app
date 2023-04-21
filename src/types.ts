@@ -12,8 +12,8 @@ export type PlaceOrderFunction = (
     maturity: Maturity,
     side: OrderSide,
     amount: BigNumber,
-    sourceWallet: WalletSource,
-    unitPrice?: number
+    unitPrice: number,
+    sourceWallet: WalletSource
 ) => Promise<ContractTransaction | undefined>;
 
 type UserHistoryQuery = Awaited<
@@ -46,3 +46,10 @@ export type IndexOf<T extends unknown[]> = Exclude<
 > extends `${infer I extends number}`
     ? I
     : never;
+
+export type MarketPhase = 'Closed' | 'PreOrder' | 'Itayose' | 'Open';
+
+export enum OrderType {
+    MARKET = 'Market',
+    LIMIT = 'Limit',
+}

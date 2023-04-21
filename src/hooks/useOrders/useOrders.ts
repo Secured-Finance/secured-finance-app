@@ -5,11 +5,6 @@ import { CurrencySymbol, toCurrency } from 'src/utils';
 import { Maturity } from 'src/utils/entities';
 import useSF from '../useSecuredFinance';
 
-export enum OrderType {
-    MARKET = 'Market',
-    LIMIT = 'Limit',
-}
-
 export const useOrders = () => {
     const securedFinance = useSF();
 
@@ -40,8 +35,8 @@ export const useOrders = () => {
             maturity: Maturity,
             side: OrderSide,
             amount: BigNumber,
-            sourceWallet: WalletSource,
-            unitPrice?: number
+            unitPrice: number,
+            sourceWallet: WalletSource
         ) => {
             try {
                 if (!securedFinance) return;
@@ -81,5 +76,34 @@ export const useOrders = () => {
         [securedFinance]
     );
 
-    return { cancelOrder, placeOrder, unwindOrder };
+    const placePreOrder = useCallback(
+        async (
+            ccy: CurrencySymbol,
+            maturity: Maturity,
+            side: OrderSide,
+            amount: BigNumber,
+            unitPrice: number,
+            sourceWallet: WalletSource
+        ) => {
+            try {
+                if (!securedFinance) return;
+
+                const tx = await securedFinance.placePreOrder(
+                    toCurrency(ccy),
+                    maturity.toNumber(),
+                    side,
+                    amount,
+                    sourceWallet,
+                    unitPrice
+                );
+
+                return tx;
+            } catch (error) {
+                console.error(error);
+            }
+        },
+        [securedFinance]
+    );
+
+    return { cancelOrder, placeOrder, unwindOrder, placePreOrder };
 };
