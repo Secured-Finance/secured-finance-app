@@ -15,7 +15,7 @@ import { RootState } from 'src/store/types';
 import { selectCollateralCurrencyBalance } from 'src/store/wallet';
 import { amountFormatterFromBase } from 'src/utils';
 import { MAX_COVERAGE, computeAvailableToBorrow } from 'src/utils/collateral';
-import { LoanValue } from 'src/utils/entities';
+import { Amount, LoanValue } from 'src/utils/entities';
 import { useWallet } from 'use-wallet';
 
 interface OrderActionProps {
@@ -31,13 +31,21 @@ export const OrderAction = ({
 }: OrderActionProps) => {
     const { account } = useWallet();
     const dispatch = useDispatch();
-    const { placeOrder } = useOrders();
+    const { placeOrder, placePreOrder } = useOrders();
 
     const [openDepositCollateralDialog, setOpenDepositCollateralDialog] =
         useState(false);
     const [openPlaceOrderDialog, setOpenPlaceOrderDialog] = useState(false);
 
-    const { currency, amount, side } = useSelector((state: RootState) =>
+    const {
+        currency,
+        amount,
+        side,
+        marketPhase,
+        maturity,
+        orderType,
+        sourceAccount,
+    } = useSelector((state: RootState) =>
         selectLandingOrderForm(state.landingOrderForm)
     );
 
@@ -72,7 +80,11 @@ export const OrderAction = ({
             {account ? (
                 canBorrow || side === OrderSide.LEND ? (
                     <Button
-                        disabled={amount.isZero()}
+                        disabled={
+                            amount.isZero() ||
+                            (marketPhase !== 'Open' &&
+                                marketPhase !== 'PreOrder')
+                        }
                         fullWidth
                         onClick={() => {
                             setOpenPlaceOrderDialog(true);
@@ -104,11 +116,19 @@ export const OrderAction = ({
             )}
 
             <PlaceOrder
-                onPlaceOrder={placeOrder}
+                onPlaceOrder={
+                    marketPhase === 'Open' ? placeOrder : placePreOrder
+                }
                 isOpen={openPlaceOrderDialog}
                 onClose={() => setOpenPlaceOrderDialog(false)}
                 loanValue={loanValue}
                 collateral={collateralBook}
+                assetPrice={assetPriceMap?.[currency]}
+                maturity={maturity}
+                orderAmount={new Amount(amount, currency)}
+                side={side}
+                orderType={orderType}
+                walletSource={sourceAccount}
             />
 
             <DepositCollateral

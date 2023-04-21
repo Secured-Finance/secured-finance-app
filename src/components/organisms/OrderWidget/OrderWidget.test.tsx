@@ -1,7 +1,7 @@
 import { OrderSide } from '@secured-finance/sf-client';
 import { composeStories } from '@storybook/testing-react';
-import { OrderType } from 'src/hooks';
 import { fireEvent, render, screen } from 'src/test-utils.js';
+import { OrderType } from 'src/types';
 import * as stories from './OrderWidget.stories';
 
 const { Default } = composeStories(stories);
@@ -67,5 +67,10 @@ describe('OrderWidget Component', () => {
         expect(store.getState().landingOrderForm.unitPrice).toEqual(9653);
 
         expect(store.getState().landingOrderForm.side).toEqual(OrderSide.LEND);
+    });
+
+    it('should hide the mid price when hideMidPrice is true', () => {
+        render(<Default hideMidPrice />);
+        expect(screen.queryByTestId('last-mid-price')).not.toBeInTheDocument();
     });
 });

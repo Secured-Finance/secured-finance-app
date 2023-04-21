@@ -1,5 +1,5 @@
 import { BigNumber, BigNumberish } from 'ethers';
-import { CurrencyInfo, currencyMap, CurrencySymbol } from '../currencyList';
+import { CurrencyInfo, CurrencySymbol, currencyMap } from '../currencyList';
 
 export class Amount {
     private readonly _baseValue: BigNumber;
@@ -22,5 +22,9 @@ export class Amount {
 
     toUSD(price: number) {
         return this.value * price;
+    }
+
+    toBigNumber() {
+        return this._baseValue;
     }
 }

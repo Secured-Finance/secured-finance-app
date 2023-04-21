@@ -1,4 +1,5 @@
-import { OrderSide, WalletSource } from '@secured-finance/sf-client';
+import { OrderSide } from '@secured-finance/sf-client';
+import { WalletSource } from '@secured-finance/sf-client/dist/secured-finance-client';
 import { renderHook } from '@testing-library/react-hooks';
 import { BigNumber } from 'ethers';
 import { dec22Fixture } from 'src/stories/mocks/fixtures';
@@ -11,11 +12,12 @@ const mockSecuredFinance = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mockSecuredFinance);
 
 describe('useOrders hook', () => {
-    it('should return three functions', () => {
+    it('should return four functions', () => {
         const { result } = renderHook(() => useOrders());
         expect(result.current.cancelOrder).toBeInstanceOf(Function);
         expect(result.current.placeOrder).toBeInstanceOf(Function);
         expect(result.current.unwindOrder).toBeInstanceOf(Function);
+        expect(result.current.placePreOrder).toBeInstanceOf(Function);
     });
 
     describe('cancel order', () => {
@@ -35,8 +37,8 @@ describe('useOrders hook', () => {
                 new Maturity(2022),
                 OrderSide.LEND,
                 currencyMap.ETH.toBaseUnit(1),
-                WalletSource.METAMASK,
-                9863
+                9863,
+                WalletSource.METAMASK
             );
             expect(mockSecuredFinance.placeOrder).toHaveBeenCalledTimes(1);
             expect(mockSecuredFinance.placeOrder).toHaveBeenCalledWith(
@@ -57,6 +59,7 @@ describe('useOrders hook', () => {
                 new Maturity(2022),
                 OrderSide.LEND,
                 currencyMap.ETH.toBaseUnit(1),
+                0,
                 WalletSource.METAMASK
             );
 
@@ -66,7 +69,7 @@ describe('useOrders hook', () => {
                 '0',
                 BigNumber.from('1000000000000000000'),
                 WalletSource.METAMASK,
-                undefined
+                0
             );
         });
     });
@@ -76,6 +79,30 @@ describe('useOrders hook', () => {
             const { result } = renderHook(() => useOrders());
             result.current.unwindOrder(CurrencySymbol.EFIL, dec22Fixture);
             expect(mockSecuredFinance.unwindOrder).toBeCalled();
+        });
+    });
+
+    describe('place pre-order', () => {
+        it('should call the SDK in wei when used with ETH', async () => {
+            const { result } = renderHook(() => useOrders());
+            const placePreOrder = result.current.placePreOrder;
+            await placePreOrder(
+                CurrencySymbol.ETH,
+                new Maturity(2022),
+                OrderSide.LEND,
+                currencyMap.ETH.toBaseUnit(1),
+                9863,
+                WalletSource.METAMASK
+            );
+            expect(mockSecuredFinance.placePreOrder).toHaveBeenCalledTimes(1);
+            expect(mockSecuredFinance.placePreOrder).toHaveBeenCalledWith(
+                toCurrency(CurrencySymbol.ETH),
+                2022,
+                '0',
+                BigNumber.from('1000000000000000000'),
+                WalletSource.METAMASK,
+                9863
+            );
         });
     });
 });

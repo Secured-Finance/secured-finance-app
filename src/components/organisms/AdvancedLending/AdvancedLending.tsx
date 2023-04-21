@@ -14,7 +14,8 @@ import {
     OpenOrderTable,
     OrderWidget,
 } from 'src/components/organisms';
-import { CollateralBook, OrderType, useGraphClientHook } from 'src/hooks';
+import { TwoColumnsWithTopBar } from 'src/components/templates';
+import { CollateralBook, useGraphClientHook } from 'src/hooks';
 import { useOrderbook } from 'src/hooks/useOrderbook';
 import { getAssetPrice } from 'src/store/assetPrices/selectors';
 import {
@@ -25,15 +26,14 @@ import {
     setUnitPrice,
 } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
-import { MaturityOptionList, TradesQuery } from 'src/types';
+import { MaturityOptionList, OrderType, TradesQuery } from 'src/types';
 import {
-    currencyMap,
     CurrencySymbol,
+    Rate,
+    currencyMap,
     formatLoanValue,
     getCurrencyMapAsOptions,
-    getTransformMaturityOption,
     ordinaryFormat,
-    Rate,
     usdFormat,
 } from 'src/utils';
 import { LoanValue, Maturity } from 'src/utils/entities';
@@ -141,71 +141,68 @@ export const AdvancedLending = ({
     );
 
     return (
-        <div className='flex w-full flex-col gap-5'>
-            <AdvancedLendingTopBar
-                selectedAsset={selectedAsset}
-                assetList={assetList}
-                options={maturitiesOptionList.map(o => ({
-                    label: o.label,
-                    value: o.value.toString(),
-                }))}
-                selected={{
-                    label: selectedTerm.label,
-                    value: selectedTerm.value.toString(),
-                }}
-                onAssetChange={v => {
-                    handleCurrencyChange(v);
-                }}
-                onTermChange={v => {
-                    dispatch(setMaturity(new Maturity(v)));
-                    if (orderType === OrderType.MARKET) {
-                        dispatch(setUnitPrice(loanValue.price));
-                    }
-                }}
-                transformLabel={getTransformMaturityOption(
-                    maturitiesOptionList
-                )}
-                values={[
-                    formatLoanValue(tradeHistoryDetails.max, 'price'),
-                    formatLoanValue(tradeHistoryDetails.min, 'price'),
-                    tradeHistoryDetails.count,
-                    ordinaryFormat(tradeHistoryDetails.sum),
-                    usdFormat(currencyPrice, 2),
-                ]}
-            />
-            <div className='flex flex-row gap-6'>
-                <AdvancedLendingOrderCard collateralBook={collateralBook} />
-                <div className='flex min-w-0 flex-grow flex-col gap-6'>
-                    <Tab
-                        tabDataArray={[
-                            { text: 'Yield Curve' },
-                            { text: 'Price History', disabled: true },
-                        ]}
-                    >
-                        <LineChartTab
-                            maturitiesOptionList={maturitiesOptionList}
-                            rates={rates}
-                        />
-                        <div />
-                    </Tab>
-                    <HorizontalTab
-                        tabTitles={[
-                            'Order Book',
-                            'Market Trades',
-                            'My Orders',
-                            'My Trades',
-                        ]}
-                    >
-                        <OrderWidget
-                            buyOrders={orderBook.borrowOrderbook}
-                            sellOrders={orderBook.lendOrderbook}
-                            currency={currency}
-                        />
-                        <></>
-                        <OpenOrderTable data={oderHistory.data?.orders ?? []} />
-                    </HorizontalTab>
-                </div>
+        <TwoColumnsWithTopBar
+            topBar={
+                <AdvancedLendingTopBar
+                    selectedAsset={selectedAsset}
+                    assetList={assetList}
+                    options={maturitiesOptionList.map(o => ({
+                        label: o.label,
+                        value: o.value.toString(),
+                    }))}
+                    selected={{
+                        label: selectedTerm.label,
+                        value: selectedTerm.value.toString(),
+                    }}
+                    onAssetChange={v => {
+                        handleCurrencyChange(v);
+                    }}
+                    onTermChange={v => {
+                        dispatch(setMaturity(new Maturity(v)));
+                        if (orderType === OrderType.MARKET) {
+                            dispatch(setUnitPrice(loanValue.price));
+                        }
+                    }}
+                    values={[
+                        formatLoanValue(tradeHistoryDetails.max, 'price'),
+                        formatLoanValue(tradeHistoryDetails.min, 'price'),
+                        tradeHistoryDetails.count,
+                        ordinaryFormat(tradeHistoryDetails.sum),
+                        usdFormat(currencyPrice, 2),
+                    ]}
+                />
+            }
+        >
+            <AdvancedLendingOrderCard collateralBook={collateralBook} />
+            <div className='flex min-w-0 flex-grow flex-col gap-6'>
+                <Tab
+                    tabDataArray={[
+                        { text: 'Yield Curve' },
+                        { text: 'Price History', disabled: true },
+                    ]}
+                >
+                    <LineChartTab
+                        maturitiesOptionList={maturitiesOptionList}
+                        rates={rates}
+                    />
+                    <div />
+                </Tab>
+                <HorizontalTab
+                    tabTitles={[
+                        'Order Book',
+                        'Market Trades',
+                        'My Orders',
+                        'My Trades',
+                    ]}
+                >
+                    <OrderWidget
+                        buyOrders={orderBook.borrowOrderbook}
+                        sellOrders={orderBook.lendOrderbook}
+                        currency={currency}
+                    />
+                    <OpenOrderTable data={oderHistory.data?.orders ?? []} />
+                </HorizontalTab>
             </div>
-        </div>
+        </TwoColumnsWithTopBar>
     );
 };

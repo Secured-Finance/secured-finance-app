@@ -6,12 +6,16 @@ import { RootState } from 'src/store/types';
 import { CurrencySymbol, getCurrencyMapAsList, toCurrency } from 'src/utils';
 import { isPastDate } from 'src/utils/date';
 
+const PRE_OPEN_TIME = 60 * 60 * 48 * 1000; // 2 days
+
 export type LendingMarket = {
     name: string;
     maturity: number;
     isActive: boolean;
     utcOpeningDate: number;
     midUnitPrice: number;
+    isReady: boolean;
+    preOpenDate: number;
 };
 export type ContractMap = Record<string, LendingMarket>;
 
@@ -39,8 +43,9 @@ export const useLendingMarkets = (
                                     {
                                         name,
                                         maturity,
-                                        utcOpeningDate,
+                                        openingDate,
                                         midUnitPrice,
+                                        isReady,
                                     }
                                 ) => {
                                     if (acc[name]) {
@@ -57,12 +62,18 @@ export const useLendingMarkets = (
                                         ...acc,
                                         [name]: {
                                             name,
-                                            maturity,
-                                            utcOpeningDate,
-                                            isActive:
-                                                isPastDate(utcOpeningDate),
+                                            maturity: maturity.toNumber(),
+                                            utcOpeningDate:
+                                                openingDate.toNumber(),
+                                            isActive: isPastDate(
+                                                openingDate.toNumber()
+                                            ),
                                             midUnitPrice:
                                                 midUnitPrice.toNumber(),
+                                            isReady,
+                                            preOpenDate:
+                                                openingDate.toNumber() -
+                                                PRE_OPEN_TIME,
                                         },
                                     };
                                 },
