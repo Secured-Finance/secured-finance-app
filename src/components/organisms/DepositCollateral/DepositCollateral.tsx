@@ -3,8 +3,12 @@ import { useCallback, useReducer, useState } from 'react';
 import { useSelector } from 'react-redux';
 import Loader from 'src/assets/img/gradient-loader.png';
 import { CollateralSelector } from 'src/components/atoms';
-import { Dialog, DialogState, SuccessPanel } from 'src/components/molecules';
-import { FailurePanel } from 'src/components/molecules/FailurePanel';
+import {
+    Dialog,
+    DialogState,
+    FailurePanel,
+    SuccessPanel,
+} from 'src/components/molecules';
 import { CollateralInput } from 'src/components/organisms';
 import { useDepositCollateral } from 'src/hooks/useDepositCollateral';
 import { getPriceMap } from 'src/store/assetPrices/selectors';

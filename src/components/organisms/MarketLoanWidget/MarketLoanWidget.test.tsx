@@ -29,6 +29,20 @@ describe('MarketLoanWidget Component', () => {
     it('should dedupe maturity', () => {
         render(<Default />);
         screen.getByRole('button', { name: 'DEC22' }).click();
-        expect(screen.getAllByRole('menuitem').length).toBe(3);
+        expect(screen.getAllByRole('menuitem').length).toBe(9);
+    });
+
+    it('should display the APR column when the market is open', () => {
+        render(<Default />);
+        expect(screen.queryByText('APR')).toBeInTheDocument();
+        expect(screen.queryByText('Market Open')).not.toBeInTheDocument();
+    });
+
+    it('should hide the APR column when the market is not open', () => {
+        render(<Default />);
+        screen.getByRole('button', { name: 'DEC22' }).click();
+        screen.getByRole('menuitem', { name: 'DEC24' }).click();
+        expect(screen.queryByText('APR')).not.toBeInTheDocument();
+        expect(screen.queryByText('Market Open')).toBeInTheDocument();
     });
 });

@@ -34,3 +34,4 @@ export * from './Slider';
 export * from './SortArrows';
 export * from './Toggle';
 export * from './TraderProTab';
+export * from './WalletSourceSelector';

@@ -5,10 +5,10 @@ import Loader from 'src/assets/img/gradient-loader.png';
 import MetaMaskIcon from 'src/assets/img/metamask-fox.svg';
 import {
     Dialog,
+    FailurePanel,
     SuccessPanel,
     WalletRadioGroup,
 } from 'src/components/molecules';
-import { FailurePanel } from 'src/components/molecules/FailurePanel';
 import { CACHED_PROVIDER_KEY } from 'src/contexts/SecuredFinanceProvider/SecuredFinanceProvider';
 import { setWalletDialogOpen } from 'src/store/interactions';
 import { RootState } from 'src/store/types';

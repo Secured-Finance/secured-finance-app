@@ -1,11 +1,11 @@
 import { OrderSide } from '@secured-finance/sf-client';
 import { composeStories } from '@storybook/testing-react';
-import { OrderType } from 'src/hooks';
 import {
     preloadedBalances,
     preloadedLendingMarkets,
 } from 'src/stories/mocks/fixtures';
 import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
+import { OrderType } from 'src/types';
 import { CurrencySymbol } from 'src/utils';
 import * as stories from './Landing.stories';
 
@@ -94,7 +94,7 @@ describe('Landing Component', () => {
         });
     });
 
-    it('should filter out inactive markets', async () => {
+    it('should filter out non ready markets', async () => {
         waitFor(() => {
             render(<Default />, {
                 apolloMocks: Default.parameters?.apolloClient.mocks,
@@ -105,6 +105,6 @@ describe('Landing Component', () => {
         expect(screen.getByText('DEC22')).toBeInTheDocument();
         fireEvent.click(screen.getByText('DEC22'));
         expect(screen.getByText('MAR23')).toBeInTheDocument();
-        expect(screen.queryByText('JUN23')).not.toBeInTheDocument();
+        expect(screen.queryByText('DEC24')).not.toBeInTheDocument();
     });
 });

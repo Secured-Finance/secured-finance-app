@@ -1,5 +1,14 @@
+import { WalletSource as Source } from '@secured-finance/sf-client';
+import { BigNumber } from 'ethers';
+import SFLogoSmall from 'src/assets/img/logo-small.svg';
+import MetamaskIcon from 'src/assets/img/metamask-fox.svg';
+import { WalletSourceOption } from 'src/components/atoms';
 import { AssetDisclosureProps } from 'src/components/molecules';
-import { CurrencySymbol, getCurrencyMapAsOptions } from './currencyList';
+import {
+    amountFormatterFromBase,
+    CurrencySymbol,
+    getCurrencyMapAsOptions,
+} from './currencyList';
 
 export enum WalletSource {
     METAMASK = 'METAMASK',
@@ -50,6 +59,27 @@ export const generateWalletInformation = (
         }
     }
     return collateralRecords;
+};
+
+export const generateWalletSourceInformation = (
+    asset: CurrencySymbol,
+    metamaskBalance: number,
+    nonCollateralBalance: BigNumber
+): WalletSourceOption[] => {
+    return [
+        {
+            source: Source.METAMASK,
+            available: metamaskBalance,
+            asset: asset,
+            iconSVG: MetamaskIcon,
+        },
+        {
+            source: Source.SF_VAULT,
+            available: amountFormatterFromBase[asset](nonCollateralBalance),
+            asset: asset,
+            iconSVG: SFLogoSmall,
+        },
+    ];
 };
 
 export const COLLATERAL_THRESHOLD = 80; // in percentage %

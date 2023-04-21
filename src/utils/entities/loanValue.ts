@@ -66,7 +66,7 @@ export class LoanValue {
         }
         if (this._apr === undefined) {
             if (this.price !== undefined) {
-                if (this.price === 0) {
+                if (this.price === 10000 || this.price === 0) {
                     this._apr = new Rate(0);
                     return this._apr;
                 }

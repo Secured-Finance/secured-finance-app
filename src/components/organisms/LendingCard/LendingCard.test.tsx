@@ -7,7 +7,7 @@ import {
 } from 'src/stories/mocks/fixtures';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
-import { CurrencyInfo, currencyMap, Rate } from 'src/utils';
+import { CurrencyInfo, CurrencySymbol, Rate, currencyMap } from 'src/utils';
 import { LoanValue } from 'src/utils/entities';
 import * as stories from './LendingCard.stories';
 
@@ -27,7 +27,12 @@ const DEFAULT_CHOICE = Object.values(currencyMap).reduce<CurrencyInfo>(
 );
 
 describe('LendingCard Component', () => {
-    const preloadedState = { ...preloadedAssetPrices };
+    const preloadedState = {
+        ...preloadedAssetPrices,
+        wallet: {
+            balances: { [CurrencySymbol.EFIL]: 10000 },
+        },
+    };
 
     const selectEthereum = () => {
         fireEvent.click(
@@ -139,5 +144,13 @@ describe('LendingCard Component', () => {
         const input = screen.getByRole('textbox');
         expect(input).toHaveValue('');
         expect(screen.getByTestId('place-order-button')).toBeDisabled();
+    });
+
+    it('should render wallet source when side is lend', async () => {
+        await waitFor(() => render(<Default />, { preloadedState }));
+        const lendTab = screen.getByText('Lend');
+        fireEvent.click(lendTab);
+        expect(screen.getByText('Lending Source')).toBeInTheDocument();
+        expect(screen.getByText('10,000 EFIL')).toBeInTheDocument();
     });
 });
