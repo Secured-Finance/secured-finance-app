@@ -8,7 +8,6 @@ import { Button, DropdownSelector, NavTab, Option } from 'src/components/atoms';
 import { CoreTable } from 'src/components/molecules';
 import { LendingMarket } from 'src/hooks';
 import { setCurrency, setMaturity } from 'src/store/landingOrderForm';
-import { MarketPhase } from 'src/types';
 import {
     CurrencySymbol,
     formatLoanValue,
@@ -24,7 +23,6 @@ import {
 export type Loan = LendingMarket & {
     currency: string;
     ccy: CurrencySymbol;
-    phase: MarketPhase;
 };
 const columnHelper = createColumnHelper<Loan>();
 
@@ -128,10 +126,6 @@ export const MarketLoanWidget = ({ loans }: { loans: Loan[] }) => {
                     return (
                         <div className='flex justify-center'>
                             <Button
-                                disabled={
-                                    info.row.original.phase === 'Closed' ||
-                                    info.row.original.phase === 'Itayose'
-                                }
                                 onClick={() => {
                                     const ccy = fromBytes32(
                                         info.getValue()
@@ -144,6 +138,7 @@ export const MarketLoanWidget = ({ loans }: { loans: Loan[] }) => {
                                         )
                                     );
                                     dispatch(setCurrency(ccy));
+
                                     info.row.original.isReady
                                         ? router.push('/advanced/')
                                         : router.push('/itayose/');

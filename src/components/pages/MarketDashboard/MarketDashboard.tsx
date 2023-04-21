@@ -23,7 +23,6 @@ import {
     useProtocolInformation,
 } from 'src/hooks';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
-import { selectLandingOrderForm } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
 import {
     CurrencySymbol,
@@ -60,9 +59,6 @@ export const MarketDashboard = () => {
     const curves: Record<string, Rate[]> = {};
     const lendingContracts = useSelector(
         (state: RootState) => state.availableContracts.lendingMarkets
-    );
-    const { marketPhase } = useSelector((state: RootState) =>
-        selectLandingOrderForm(state.landingOrderForm)
     );
 
     getCurrencyMapAsList().forEach(ccy => {
@@ -187,7 +183,6 @@ export const MarketDashboard = () => {
                                     midUnitPrice: contract.midUnitPrice,
                                     currency: utils.formatBytes32String(ccy),
                                     isReady: contract.isReady,
-                                    phase: marketPhase,
                                     ccy: ccy,
                                 };
                             });
