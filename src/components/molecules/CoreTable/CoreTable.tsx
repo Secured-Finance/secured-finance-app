@@ -4,7 +4,6 @@ import {
     getCoreRowModel,
     getSortedRowModel,
     SortingState,
-    TableOptions,
     useReactTable,
 } from '@tanstack/react-table';
 import classNames from 'classnames';
@@ -17,6 +16,7 @@ export const CoreTable = <T,>({
     border,
     name = 'core-table',
     hoverRow,
+    hideColumnIds,
 }: {
     data: Array<T>;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -25,18 +25,27 @@ export const CoreTable = <T,>({
     border: boolean;
     name?: string;
     hoverRow?: (rowId: string) => boolean;
+    hideColumnIds?: string[];
 }) => {
     const [sorting, setSorting] = useState<SortingState>([]);
+
+    const filteredColumns = columns.filter(column => {
+        if (hideColumnIds === undefined || column.id === undefined) {
+            return true;
+        }
+        return !hideColumnIds.includes(column.id);
+    });
+
     const configuration = {
         data,
-        columns,
+        columns: filteredColumns,
         getCoreRowModel: getCoreRowModel(),
         state: {
             sorting,
         },
         onSortingChange: setSorting,
         getSortedRowModel: getSortedRowModel(),
-    } as TableOptions<T>;
+    };
 
     const table = useReactTable<T>(configuration);
     return (

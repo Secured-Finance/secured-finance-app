@@ -1,8 +1,9 @@
 import { RadioGroup } from '@headlessui/react';
 import { OrderSide, WalletSource } from '@secured-finance/sf-client';
+import classNames from 'classnames';
 import { BigNumber } from 'ethers';
 import Link from 'next/link';
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
     BorrowLendSelector,
@@ -15,7 +16,7 @@ import {
     WalletSourceSelector,
 } from 'src/components/atoms';
 import { OrderAction } from 'src/components/organisms';
-import { CollateralBook, OrderType } from 'src/hooks';
+import { CollateralBook } from 'src/hooks';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import {
     selectLandingOrderForm,
@@ -27,6 +28,7 @@ import {
 } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
 import { selectAllBalances } from 'src/store/wallet';
+import { OrderType } from 'src/types';
 import {
     MAX_COVERAGE,
     amountFormatterToBase,
@@ -42,8 +44,10 @@ import { useWallet } from 'use-wallet';
 
 export const AdvancedLendingOrderCard = ({
     collateralBook,
+    onlyLimitOrder = false,
 }: {
     collateralBook: CollateralBook;
+    onlyLimitOrder?: boolean;
 }) => {
     const {
         currency,
@@ -122,8 +126,14 @@ export const AdvancedLendingOrderCard = ({
         );
     };
 
+    useEffect(() => {
+        if (onlyLimitOrder) {
+            dispatch(setOrderType(OrderType.LIMIT));
+        }
+    }, [dispatch, onlyLimitOrder]);
+
     return (
-        <div className='h-fit w-[350px] rounded-b-xl border border-white-10 bg-cardBackground bg-opacity-60 pb-7 shadow-tab'>
+        <div className='h-fit rounded-b-xl border border-white-10 bg-cardBackground bg-opacity-60 pb-7 shadow-tab'>
             <RadioGroup
                 value={orderType}
                 onChange={(v: OrderType) => {
@@ -134,7 +144,9 @@ export const AdvancedLendingOrderCard = ({
             >
                 <RadioGroup.Option
                     value={OrderType.MARKET}
-                    className='h-full w-1/2'
+                    className={classNames('h-full w-1/2', {
+                        hidden: onlyLimitOrder,
+                    })}
                     as='button'
                 >
                     {({ checked }) => (
@@ -144,7 +156,10 @@ export const AdvancedLendingOrderCard = ({
                 <RadioGroup.Option
                     value={OrderType.LIMIT}
                     as='button'
-                    className='h-full w-1/2'
+                    className={classNames('h-full', {
+                        'w-full': onlyLimitOrder,
+                        'w-1/2': !onlyLimitOrder,
+                    })}
                 >
                     {({ checked }) => (
                         <NavTab text={OrderType.LIMIT} active={checked} />

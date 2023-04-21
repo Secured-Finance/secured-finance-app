@@ -62,104 +62,6 @@ export const preloadedBalances = {
     },
 };
 
-export const preloadedLendingMarkets: Partial<RootState> = {
-    availableContracts: {
-        lendingMarkets: {
-            [CurrencySymbol.EFIL]: {
-                DEC22: {
-                    name: 'DEC22',
-                    maturity: 1669852800,
-                    isActive: true,
-                    utcOpeningDate: 1677628800,
-                    midUnitPrice: 9801,
-                },
-                MAR23: {
-                    name: 'MAR23',
-                    maturity: 1677628800,
-                    isActive: true,
-                    utcOpeningDate: 1677628800,
-                    midUnitPrice: 9701,
-                },
-                JUN23: {
-                    name: 'JUN23',
-                    maturity: 1685577600,
-                    isActive: false,
-                    utcOpeningDate: 1677628800,
-                    midUnitPrice: 9601,
-                },
-            },
-            [CurrencySymbol.WBTC]: {
-                DEC22: {
-                    name: 'DEC22',
-                    maturity: 1669852800,
-                    isActive: true,
-                    utcOpeningDate: 1677628800,
-                    midUnitPrice: 9801,
-                },
-                MAR23: {
-                    name: 'MAR23',
-                    maturity: 1677628800,
-                    isActive: true,
-                    utcOpeningDate: 1677628800,
-                    midUnitPrice: 9701,
-                },
-                JUN23: {
-                    name: 'JUN23',
-                    maturity: 1685577600,
-                    isActive: false,
-                    utcOpeningDate: 1677628800,
-                    midUnitPrice: 9601,
-                },
-            },
-            [CurrencySymbol.USDC]: {
-                DEC22: {
-                    name: 'DEC22',
-                    maturity: 1669852800,
-                    isActive: true,
-                    utcOpeningDate: 1677628800,
-                    midUnitPrice: 9801,
-                },
-                MAR23: {
-                    name: 'MAR23',
-                    maturity: 1677628800,
-                    isActive: true,
-                    utcOpeningDate: 1677628800,
-                    midUnitPrice: 9701,
-                },
-                JUN23: {
-                    name: 'JUN23',
-                    maturity: 1685577600,
-                    isActive: false,
-                    utcOpeningDate: 1677628800,
-                    midUnitPrice: 9601,
-                },
-            },
-            [CurrencySymbol.ETH]: {
-                DEC22: {
-                    name: 'DEC22',
-                    maturity: 1669852800,
-                    isActive: true,
-                    utcOpeningDate: 1677628800,
-                    midUnitPrice: 9801,
-                },
-                MAR23: {
-                    name: 'MAR23',
-                    maturity: 1677628800,
-                    isActive: true,
-                    utcOpeningDate: 1677628800,
-                    midUnitPrice: 9701,
-                },
-                JUN23: {
-                    name: 'JUN23',
-                    maturity: 1685577600,
-                    isActive: false,
-                    utcOpeningDate: 1677628800,
-                    midUnitPrice: 9601,
-                },
-            },
-        },
-    },
-};
 export const dec22Fixture = new Maturity(1669852800);
 export const mar23Fixture = new Maturity(1677628800);
 export const jun23Fixture = new Maturity(1685577600);
@@ -168,6 +70,102 @@ const dec23Fixture = new Maturity(1701388800);
 const mar24Fixture = new Maturity(1709251200);
 const jun24Fixture = new Maturity(1717200000);
 const sep24Fixture = new Maturity(1725148800);
+export const dec24Fixture = new Maturity(1733011200);
+
+export const maturities = {
+    DEC22: {
+        name: 'DEC22',
+        maturity: 1669852800,
+        isActive: true,
+        utcOpeningDate: 1677628800,
+        midUnitPrice: 9801,
+        isReady: true,
+        preOpenDate: 1504828800,
+    },
+    MAR23: {
+        name: 'MAR23',
+        maturity: 1677628800,
+        isActive: true,
+        utcOpeningDate: 1677628800,
+        midUnitPrice: 9701,
+        isReady: true,
+        preOpenDate: 1504828800,
+    },
+    JUN23: {
+        name: 'JUN23',
+        maturity: 1685577600,
+        isActive: true,
+        utcOpeningDate: 1677628800,
+        midUnitPrice: 9601,
+        isReady: true,
+        preOpenDate: 1504828800,
+    },
+    SEP23: {
+        name: 'SEP23',
+        maturity: 1693526400,
+        isActive: true,
+        utcOpeningDate: 1677628800,
+        midUnitPrice: 9501,
+        isReady: true,
+        preOpenDate: 1504828800,
+    },
+    DEC23: {
+        name: 'DEC23',
+        maturity: 1701388800,
+        isActive: true,
+        utcOpeningDate: 1677628800,
+        midUnitPrice: 9401,
+        isReady: true,
+        preOpenDate: 1504828800,
+    },
+    MAR24: {
+        name: 'MAR24',
+        maturity: 1709251200,
+        isActive: true,
+        utcOpeningDate: 1677628800,
+        midUnitPrice: 9301,
+        isReady: true,
+        preOpenDate: 1504828800,
+    },
+    JUN24: {
+        name: 'JUN24',
+        maturity: 1717200000,
+        isActive: true,
+        utcOpeningDate: 1677628800,
+        midUnitPrice: 9201,
+        isReady: true,
+        preOpenDate: 1504828800,
+    },
+    SEP24: {
+        name: 'SEP24',
+        maturity: 1725148800,
+        isActive: true,
+        utcOpeningDate: 1677628800,
+        midUnitPrice: 9101,
+        isReady: true,
+        preOpenDate: 1504828800,
+    },
+    DEC24: {
+        name: 'DEC24',
+        maturity: dec24Fixture.toNumber(),
+        isActive: false,
+        utcOpeningDate: 1685577600,
+        midUnitPrice: 9001,
+        isReady: false,
+        preOpenDate: 1512777600,
+    },
+};
+
+export const preloadedLendingMarkets: Partial<RootState> = {
+    availableContracts: {
+        lendingMarkets: {
+            [CurrencySymbol.EFIL]: maturities,
+            [CurrencySymbol.WBTC]: maturities,
+            [CurrencySymbol.USDC]: maturities,
+            [CurrencySymbol.ETH]: maturities,
+        },
+    },
+};
 
 export const maturityOptions: MaturityOptionList = [
     { label: 'DEC22', value: dec22Fixture },
