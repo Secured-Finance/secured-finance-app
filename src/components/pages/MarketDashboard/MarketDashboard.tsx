@@ -35,6 +35,7 @@ import {
     getCurrencyMapAsList,
     getEnvironment,
     ordinaryFormat,
+    toCurrencySymbol,
     usdFormat,
 } from 'src/utils';
 import { Maturity } from 'src/utils/entities';
@@ -66,7 +67,7 @@ export const MarketDashboard = () => {
             ccy.symbol,
             RateType.MidRate,
             Object.values(lendingContracts[ccy.symbol])
-                .filter(o => o.isActive)
+                .filter(o => o.isReady)
                 .map(o => new Maturity(o.maturity))
         ).map(r => r.apr);
     });
@@ -166,19 +167,22 @@ export const MarketDashboard = () => {
                         loans={(
                             Object.keys(lendingContracts) as CurrencySymbol[]
                         ).reduce((acc, ccy) => {
-                            const toto = ccy as CurrencySymbol;
+                            const currency = toCurrencySymbol(ccy);
+                            if (!currency) return acc;
                             const currencyContracts = Object.keys(
-                                lendingContracts[toto]
+                                lendingContracts[currency]
                             ).map(contractName => {
                                 const contract =
-                                    lendingContracts[toto][contractName];
+                                    lendingContracts[currency][contractName];
                                 return {
                                     name: contract.name,
                                     maturity: contract.maturity,
                                     isActive: contract.isActive,
                                     utcOpeningDate: contract.utcOpeningDate,
+                                    preOpenDate: contract.preOpenDate,
                                     midUnitPrice: contract.midUnitPrice,
                                     currency: utils.formatBytes32String(ccy),
+                                    isReady: contract.isReady,
                                     ccy: ccy,
                                 };
                             });

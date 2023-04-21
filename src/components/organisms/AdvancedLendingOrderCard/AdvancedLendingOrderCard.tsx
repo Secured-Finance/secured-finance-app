@@ -1,8 +1,9 @@
 import { RadioGroup } from '@headlessui/react';
-import { OrderSide } from '@secured-finance/sf-client';
+import { OrderSide, WalletSource } from '@secured-finance/sf-client';
+import classNames from 'classnames';
 import { BigNumber } from 'ethers';
 import Link from 'next/link';
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
     BorrowLendSelector,
@@ -12,38 +13,53 @@ import {
     OrderInputBox,
     Separator,
     Slider,
+    WalletSourceSelector,
 } from 'src/components/atoms';
 import { OrderAction } from 'src/components/organisms';
-import { CollateralBook, OrderType } from 'src/hooks';
+import { CollateralBook } from 'src/hooks';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import {
     selectLandingOrderForm,
     setAmount,
     setOrderType,
     setSide,
+    setSourceAccount,
     setUnitPrice,
 } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
 import { selectAllBalances } from 'src/store/wallet';
+import { OrderType } from 'src/types';
 import {
+    MAX_COVERAGE,
     amountFormatterToBase,
+    computeAvailableToBorrow,
     divide,
+    generateWalletSourceInformation,
     multiply,
     percentFormat,
     usdFormat,
 } from 'src/utils';
-import { computeAvailableToBorrow } from 'src/utils/collateral';
 import { Amount, LoanValue } from 'src/utils/entities';
+import { useWallet } from 'use-wallet';
 
 export const AdvancedLendingOrderCard = ({
     collateralBook,
+    onlyLimitOrder = false,
 }: {
     collateralBook: CollateralBook;
+    onlyLimitOrder?: boolean;
 }) => {
-    const { currency, amount, side, orderType, unitPrice, maturity } =
-        useSelector((state: RootState) =>
-            selectLandingOrderForm(state.landingOrderForm)
-        );
+    const {
+        currency,
+        amount,
+        side,
+        orderType,
+        unitPrice,
+        maturity,
+        sourceAccount,
+    } = useSelector((state: RootState) =>
+        selectLandingOrderForm(state.landingOrderForm)
+    );
 
     const balanceRecord = useSelector((state: RootState) =>
         selectAllBalances(state)
@@ -58,6 +74,7 @@ export const AdvancedLendingOrderCard = ({
     }, [unitPrice, maturity]);
 
     const dispatch = useDispatch();
+    const { account } = useWallet();
 
     const collateralUsagePercent = useMemo(() => {
         return collateralBook.coverage.toNumber() / 100.0;
@@ -75,10 +92,25 @@ export const AdvancedLendingOrderCard = ({
             ? computeAvailableToBorrow(
                   assetPriceMap[currency],
                   collateralBook.usdCollateral,
-                  collateralBook.coverage.toNumber() / 100.0
+                  collateralBook.coverage.toNumber() / MAX_COVERAGE
               )
             : 0;
     }, [assetPriceMap, collateralBook, currency]);
+
+    const walletSourceList = useMemo(() => {
+        return generateWalletSourceInformation(
+            currency,
+            balanceRecord[currency],
+            collateralBook.nonCollateral[currency] ?? BigNumber.from(0)
+        );
+    }, [balanceRecord, collateralBook.nonCollateral, currency]);
+
+    const selectedWalletSource = useMemo(() => {
+        return (
+            walletSourceList.find(w => w.source === sourceAccount) ||
+            walletSourceList[0]
+        );
+    }, [sourceAccount, walletSourceList]);
 
     const handleAmountChange = (percentage: number) => {
         const available =
@@ -94,8 +126,14 @@ export const AdvancedLendingOrderCard = ({
         );
     };
 
+    useEffect(() => {
+        if (onlyLimitOrder) {
+            dispatch(setOrderType(OrderType.LIMIT));
+        }
+    }, [dispatch, onlyLimitOrder]);
+
     return (
-        <div className='h-fit w-[350px] rounded-b-xl border border-white-10 bg-cardBackground bg-opacity-60 pb-7 shadow-tab'>
+        <div className='h-fit rounded-b-xl border border-white-10 bg-cardBackground bg-opacity-60 pb-7 shadow-tab'>
             <RadioGroup
                 value={orderType}
                 onChange={(v: OrderType) => {
@@ -106,7 +144,9 @@ export const AdvancedLendingOrderCard = ({
             >
                 <RadioGroup.Option
                     value={OrderType.MARKET}
-                    className='h-full w-1/2'
+                    className={classNames('h-full w-1/2', {
+                        hidden: onlyLimitOrder,
+                    })}
                     as='button'
                 >
                     {({ checked }) => (
@@ -116,7 +156,10 @@ export const AdvancedLendingOrderCard = ({
                 <RadioGroup.Option
                     value={OrderType.LIMIT}
                     as='button'
-                    className='h-full w-1/2'
+                    className={classNames('h-full', {
+                        'w-full': onlyLimitOrder,
+                        'w-1/2': !onlyLimitOrder,
+                    })}
                 >
                     {({ checked }) => (
                         <NavTab text={OrderType.LIMIT} active={checked} />
@@ -126,10 +169,21 @@ export const AdvancedLendingOrderCard = ({
 
             <div className='flex w-full flex-col justify-center gap-6 px-4 pt-5'>
                 <BorrowLendSelector
-                    handleClick={side => dispatch(setSide(side))}
+                    handleClick={side => {
+                        dispatch(setSide(side));
+                        dispatch(setSourceAccount(WalletSource.METAMASK));
+                    }}
                     side={side}
                     variant='advanced'
                 />
+                {account && side === OrderSide.LEND && (
+                    <WalletSourceSelector
+                        optionList={walletSourceList}
+                        selected={selectedWalletSource}
+                        account={account ?? ''}
+                        onChange={v => dispatch(setSourceAccount(v))}
+                    />
+                )}
                 <div className='flex flex-col gap-[10px]'>
                     <OrderInputBox
                         field='Bond Price'

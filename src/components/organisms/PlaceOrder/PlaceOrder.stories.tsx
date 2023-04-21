@@ -1,10 +1,13 @@
+import { OrderSide, WalletSource } from '@secured-finance/sf-client';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import {
     withAssetPrice,
     withWalletProvider,
 } from 'src/../.storybook/decorators';
 import { collateralBook37, dec22Fixture } from 'src/stories/mocks/fixtures';
-import { LoanValue } from 'src/utils/entities';
+import { OrderType } from 'src/types';
+import { CurrencySymbol } from 'src/utils';
+import { Amount, LoanValue } from 'src/utils/entities';
 import { PlaceOrder } from './PlaceOrder';
 
 export default {
@@ -15,6 +18,12 @@ export default {
         onClose: () => {},
         collateral: collateralBook37,
         loanValue: LoanValue.fromPrice(9410, dec22Fixture.toNumber()),
+        orderAmount: new Amount('1000000000', CurrencySymbol.USDC),
+        maturity: dec22Fixture,
+        orderType: OrderType.LIMIT,
+        side: OrderSide.BORROW,
+        assetPrice: 6.12,
+        walletSource: WalletSource.METAMASK,
     },
     decorators: [withAssetPrice, withWalletProvider],
 } as ComponentMeta<typeof PlaceOrder>;

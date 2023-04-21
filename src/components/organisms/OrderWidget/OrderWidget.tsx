@@ -1,5 +1,5 @@
 import { ArrowUpIcon } from '@heroicons/react/outline';
-import { OrderSide } from '@secured-finance/sf-client';
+import { OrderSide, WalletSource } from '@secured-finance/sf-client';
 import { createColumnHelper } from '@tanstack/react-table';
 import classNames from 'classnames';
 import { BigNumber } from 'ethers';
@@ -7,20 +7,19 @@ import { useEffect, useMemo } from 'react';
 import { useDispatch } from 'react-redux';
 import { ColorBar } from 'src/components/atoms';
 import { CoreTable, TableHeader } from 'src/components/molecules';
-import { OrderType } from 'src/hooks';
 import { OrderBookEntry } from 'src/hooks/useOrderbook';
 import { setMidPrice } from 'src/store/analytics';
 import {
     setAmount,
     setOrderType,
     setSide,
+    setSourceAccount,
     setUnitPrice,
 } from 'src/store/landingOrderForm';
-
-import { ColorFormat } from 'src/types';
+import { ColorFormat, OrderType } from 'src/types';
 import {
-    currencyMap,
     CurrencySymbol,
+    currencyMap,
     formatLoanValue,
     ordinaryFormat,
 } from 'src/utils';
@@ -124,10 +123,12 @@ export const OrderWidget = ({
     buyOrders,
     sellOrders,
     currency,
+    hideMidPrice = false,
 }: {
     buyOrders: Array<OrderBookEntry>;
     sellOrders: Array<OrderBookEntry>;
     currency: CurrencySymbol;
+    hideMidPrice?: boolean;
 }) => {
     const dispatch = useDispatch();
     const totalBuyAmount = useMemo(
@@ -241,6 +242,9 @@ export const OrderWidget = ({
                 : buyOrders[parseInt(rowId)];
         dispatch(setOrderType(OrderType.LIMIT));
         side ? dispatch(setSide(side)) : null;
+        side === OrderSide.BORROW
+            ? dispatch(setSourceAccount(WalletSource.METAMASK))
+            : null;
         dispatch(setUnitPrice(rowData.value.price));
         dispatch(setAmount(rowData.amount));
     };
@@ -265,18 +269,20 @@ export const OrderWidget = ({
 
     return (
         <>
-            <div className='flex h-14 flex-row items-center justify-center gap-1 border-b border-white-10 bg-black-20'>
-                <ArrowUpIcon className='flex h-3 text-teal' />
-                <span
-                    className='typography-portfolio-heading flex text-teal'
-                    data-testid='last-mid-price'
-                >
-                    {formatLoanValue(lastMidValue, 'price')}
-                </span>
-                <span className='typography-portfolio-heading flex text-slateGray'>
-                    {formatLoanValue(lastMidValue, 'rate')}
-                </span>
-            </div>
+            {!hideMidPrice && (
+                <div className='flex h-14 flex-row items-center justify-center gap-1 border-b border-white-10 bg-black-20'>
+                    <ArrowUpIcon className='flex h-3 text-teal' />
+                    <span
+                        className='typography-portfolio-heading flex text-teal'
+                        data-testid='last-mid-price'
+                    >
+                        {formatLoanValue(lastMidValue, 'price')}
+                    </span>
+                    <span className='typography-portfolio-heading flex text-slateGray'>
+                        {formatLoanValue(lastMidValue, 'rate')}
+                    </span>
+                </div>
+            )}
             <div className='flex flex-row gap-6'>
                 <CoreTable
                     data={sellOrders}

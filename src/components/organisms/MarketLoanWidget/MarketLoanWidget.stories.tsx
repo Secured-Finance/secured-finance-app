@@ -1,4 +1,5 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { within } from '@storybook/testing-library';
 import {
     efilBytes32,
     preloadedLendingMarkets,
@@ -41,3 +42,9 @@ const Template: ComponentStory<typeof MarketLoanWidget> = args => (
 );
 
 export const Default = Template.bind({});
+export const ItayoseMarket = Template.bind({});
+ItayoseMarket.play = async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    canvas.getByRole('button', { name: 'DEC22' }).click();
+    canvas.getByRole('menuitem', { name: 'JUN23' }).click();
+};
