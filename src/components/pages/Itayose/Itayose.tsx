@@ -197,6 +197,7 @@ export const Itayose = () => {
                                 currency={currency}
                                 buyOrders={orderBook.borrowOrderbook}
                                 sellOrders={orderBook.lendOrderbook}
+                                hideMidPrice
                             />
                         </HorizontalTab>
                     </div>
