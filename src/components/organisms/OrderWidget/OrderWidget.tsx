@@ -123,10 +123,12 @@ export const OrderWidget = ({
     buyOrders,
     sellOrders,
     currency,
+    hideMidPrice = false,
 }: {
     buyOrders: Array<OrderBookEntry>;
     sellOrders: Array<OrderBookEntry>;
     currency: CurrencySymbol;
+    hideMidPrice?: boolean;
 }) => {
     const dispatch = useDispatch();
     const totalBuyAmount = useMemo(
@@ -267,18 +269,20 @@ export const OrderWidget = ({
 
     return (
         <>
-            <div className='flex h-14 flex-row items-center justify-center gap-1 border-b border-white-10 bg-black-20'>
-                <ArrowUpIcon className='flex h-3 text-teal' />
-                <span
-                    className='typography-portfolio-heading flex text-teal'
-                    data-testid='last-mid-price'
-                >
-                    {formatLoanValue(lastMidValue, 'price')}
-                </span>
-                <span className='typography-portfolio-heading flex text-slateGray'>
-                    {formatLoanValue(lastMidValue, 'rate')}
-                </span>
-            </div>
+            {!hideMidPrice && (
+                <div className='flex h-14 flex-row items-center justify-center gap-1 border-b border-white-10 bg-black-20'>
+                    <ArrowUpIcon className='flex h-3 text-teal' />
+                    <span
+                        className='typography-portfolio-heading flex text-teal'
+                        data-testid='last-mid-price'
+                    >
+                        {formatLoanValue(lastMidValue, 'price')}
+                    </span>
+                    <span className='typography-portfolio-heading flex text-slateGray'>
+                        {formatLoanValue(lastMidValue, 'rate')}
+                    </span>
+                </div>
+            )}
             <div className='flex flex-row gap-6'>
                 <CoreTable
                     data={sellOrders}

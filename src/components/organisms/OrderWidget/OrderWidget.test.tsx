@@ -68,4 +68,9 @@ describe('OrderWidget Component', () => {
 
         expect(store.getState().landingOrderForm.side).toEqual(OrderSide.LEND);
     });
+
+    it('should hide the mid price when hideMidPrice is true', () => {
+        render(<Default hideMidPrice />);
+        expect(screen.queryByTestId('last-mid-price')).not.toBeInTheDocument();
+    });
 });
