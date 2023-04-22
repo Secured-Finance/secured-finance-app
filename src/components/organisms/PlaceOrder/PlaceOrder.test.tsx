@@ -62,15 +62,7 @@ describe('PlaceOrder component', () => {
     });
 
     it('should render collateral utilization and not Borrow remaining in lend orders', () => {
-        render(<Default />, {
-            preloadedState: {
-                ...preloadedState,
-                landingOrderForm: {
-                    ...preloadedState.landingOrderForm,
-                    side: OrderSide.LEND,
-                },
-            },
-        });
+        render(<Default side={OrderSide.LEND} />);
         expect(screen.getByText('Collateral Usage')).toBeInTheDocument();
         expect(screen.queryByText('Borrow Remaining')).not.toBeInTheDocument();
     });
@@ -90,15 +82,7 @@ describe('PlaceOrder component', () => {
     });
 
     it(' should display Est. Total Loan value (USD) instead of Est. Total Debt (USD) in lend orders when order type is LIMIT', () => {
-        render(<Default />, {
-            preloadedState: {
-                ...preloadedState,
-                landingOrderForm: {
-                    ...preloadedState.landingOrderForm,
-                    side: OrderSide.LEND,
-                },
-            },
-        });
+        render(<Default side={OrderSide.LEND} />);
         expect(screen.queryByText('Bond Price')).not.toBeInTheDocument();
         expect(screen.queryByText('Loan Start Date')).not.toBeInTheDocument();
         expect(
