@@ -23,6 +23,7 @@ export default {
             dec22Fixture.toNumber()
         ),
         maturitiesOptionList: maturityOptions,
+        collateralThreshold: 80,
     },
     decorators: [withAssetPrice, withWalletProvider],
     parameters: {

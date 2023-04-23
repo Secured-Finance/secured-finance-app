@@ -21,6 +21,7 @@ export const CollateralSimulationSection = ({
     assetPrice,
     tradeValue,
     type,
+    collateralThreshold,
 }: {
     collateral: CollateralBook;
     tradeAmount: Amount;
@@ -28,6 +29,7 @@ export const CollateralSimulationSection = ({
     assetPrice: number;
     type: 'unwind' | 'trade';
     tradeValue?: LoanValue;
+    collateralThreshold?: number;
 }) => {
     const collateralUsageText = `${formatCollateralRatio(
         collateral.coverage.toNumber()
@@ -50,10 +52,11 @@ export const CollateralSimulationSection = ({
                 computeAvailableToBorrow(
                     1,
                     collateral.usdCollateral,
-                    collateral.coverage.toNumber() / MAX_COVERAGE
+                    collateral.coverage.toNumber() / MAX_COVERAGE,
+                    collateralThreshold ?? 0
                 )
             )}`,
-        [collateral.coverage, collateral.usdCollateral]
+        [collateral.coverage, collateral.usdCollateral, collateralThreshold]
     );
 
     const items: [string, string][] = [

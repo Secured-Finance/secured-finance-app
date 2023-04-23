@@ -1,14 +1,14 @@
 import { BigNumber } from 'ethers';
-import { COLLATERAL_THRESHOLD } from './currencies';
 
 export const MAX_COVERAGE = 10000;
 
 export const computeAvailableToBorrow = (
     assetPrice: number,
     totalCollateralInUsd: number,
-    coverageRatio: number // [0,1]
+    coverageRatio: number, // [0,1]
+    collateralThreshold: number
 ) => {
-    const threshold = COLLATERAL_THRESHOLD / 100.0;
+    const threshold = collateralThreshold / 100.0;
     if (assetPrice === 0 || threshold < coverageRatio) return 0;
     return ((threshold - coverageRatio) * totalCollateralInUsd) / assetPrice;
 };

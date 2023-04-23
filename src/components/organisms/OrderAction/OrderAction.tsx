@@ -4,8 +4,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Button } from 'src/components/atoms';
 import {
     DepositCollateral,
-    PlaceOrder,
     generateCollateralList,
+    PlaceOrder,
 } from 'src/components/organisms';
 import { CollateralBook, useOrders } from 'src/hooks';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
@@ -14,7 +14,7 @@ import { selectLandingOrderForm } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
 import { selectCollateralCurrencyBalance } from 'src/store/wallet';
 import { amountFormatterFromBase } from 'src/utils';
-import { MAX_COVERAGE, computeAvailableToBorrow } from 'src/utils/collateral';
+import { computeAvailableToBorrow, MAX_COVERAGE } from 'src/utils/collateral';
 import { Amount, LoanValue } from 'src/utils/entities';
 import { useWallet } from 'use-wallet';
 
@@ -22,12 +22,14 @@ interface OrderActionProps {
     loanValue?: LoanValue;
     collateralBook: CollateralBook;
     renderSide?: boolean;
+    collateralThreshold?: number;
 }
 
 export const OrderAction = ({
     loanValue,
     collateralBook,
     renderSide = false,
+    collateralThreshold,
 }: OrderActionProps) => {
     const { account } = useWallet();
     const dispatch = useDispatch();
@@ -65,10 +67,17 @@ export const OrderAction = ({
             ? computeAvailableToBorrow(
                   assetPriceMap[currency],
                   collateralBook.usdCollateral,
-                  collateralBook.coverage.toNumber() / MAX_COVERAGE
+                  collateralBook.coverage.toNumber() / MAX_COVERAGE,
+                  collateralThreshold ?? 0
               )
             : 0;
-    }, [assetPriceMap, collateralBook, currency]);
+    }, [
+        assetPriceMap,
+        collateralBook.coverage,
+        collateralBook.usdCollateral,
+        collateralThreshold,
+        currency,
+    ]);
 
     const canBorrow = useMemo(
         () => availableToBorrow > amountFormatterFromBase[currency](amount),
@@ -129,6 +138,7 @@ export const OrderAction = ({
                 side={side}
                 orderType={orderType}
                 walletSource={sourceAccount}
+                collateralThreshold={collateralThreshold}
             />
 
             <DepositCollateral

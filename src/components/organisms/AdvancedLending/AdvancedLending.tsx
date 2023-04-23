@@ -28,12 +28,12 @@ import {
 import { RootState } from 'src/store/types';
 import { MaturityOptionList, OrderType, TradesQuery } from 'src/types';
 import {
-    CurrencySymbol,
-    Rate,
     currencyMap,
+    CurrencySymbol,
     formatLoanValue,
     getCurrencyMapAsOptions,
     ordinaryFormat,
+    Rate,
     usdFormat,
 } from 'src/utils';
 import { LoanValue, Maturity } from 'src/utils/entities';
@@ -71,11 +71,13 @@ export const AdvancedLending = ({
     loanValue,
     maturitiesOptionList,
     rates,
+    collateralThreshold,
 }: {
     collateralBook: CollateralBook;
     loanValue: LoanValue;
     maturitiesOptionList: MaturityOptionList;
     rates: Rate[];
+    collateralThreshold?: number;
 }) => {
     const { currency, maturity, orderType } = useSelector((state: RootState) =>
         selectLandingOrderForm(state.landingOrderForm)
@@ -173,7 +175,10 @@ export const AdvancedLending = ({
                 />
             }
         >
-            <AdvancedLendingOrderCard collateralBook={collateralBook} />
+            <AdvancedLendingOrderCard
+                collateralBook={collateralBook}
+                collateralThreshold={collateralThreshold}
+            />
             <div className='flex min-w-0 flex-grow flex-col gap-6'>
                 <Tab
                     tabDataArray={[

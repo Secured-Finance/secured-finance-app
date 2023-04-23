@@ -4,6 +4,7 @@ import {
     LiquidationProgressBar,
 } from 'src/components/molecules';
 import { CollateralBook } from 'src/hooks';
+import { useCollateralParameters } from 'src/hooks/useCollateralParameters';
 
 interface CollateralTabRightPaneProps {
     account: string | null;
@@ -20,6 +21,8 @@ export const CollateralTabRightPane = ({
         return collateralBook.coverage.toNumber() / 100.0;
     }, [collateralBook]);
 
+    const collateralThreshold = useCollateralParameters();
+
     return (
         <div
             className='m-4 flex h-full flex-grow flex-col justify-center gap-3'
@@ -28,9 +31,11 @@ export const CollateralTabRightPane = ({
             <CollateralProgressBar
                 totalCollateralInUSD={balance}
                 collateralCoverage={collateralUsagePercent}
+                collateralThreshold={collateralThreshold}
             />
             <LiquidationProgressBar
                 liquidationPercentage={collateralUsagePercent}
+                liquidationThreshold={collateralThreshold}
             />
         </div>
     );

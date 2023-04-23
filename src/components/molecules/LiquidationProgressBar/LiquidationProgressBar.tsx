@@ -3,13 +3,17 @@ import {
     getLiquidationInformation,
     InformationPopover,
 } from 'src/components/atoms';
-import { LIQUIDATION_THRESHOLD, percentFormat } from 'src/utils';
+import { percentFormat } from 'src/utils';
 
 interface LiquidationProgressBarProps {
     liquidationPercentage: number;
+    liquidationThreshold: number;
 }
 
-const getInformationText = (liquidationPercentage: number) => {
+const getInformationText = (
+    liquidationPercentage: number,
+    liquidationThreshold?: number
+) => {
     if (liquidationPercentage === 0) return;
     return (
         <div className='flex flex-col gap-4'>
@@ -21,12 +25,13 @@ const getInformationText = (liquidationPercentage: number) => {
                 <span>You are currently </span>
                 <span className='text-nebulaTeal'>
                     {percentFormat(
-                        LIQUIDATION_THRESHOLD > liquidationPercentage
-                            ? LIQUIDATION_THRESHOLD - liquidationPercentage
+                        liquidationThreshold &&
+                            liquidationThreshold > liquidationPercentage
+                            ? liquidationThreshold - liquidationPercentage
                             : 0
                     )}
                 </span>
-                <span>{` under the liquidation threshold (${LIQUIDATION_THRESHOLD}% of deposit balance).`}</span>
+                <span>{` under the liquidation threshold (${liquidationThreshold}% of deposit balance).`}</span>
             </div>
         </div>
     );
@@ -34,8 +39,11 @@ const getInformationText = (liquidationPercentage: number) => {
 
 export const LiquidationProgressBar = ({
     liquidationPercentage = 0,
+    liquidationThreshold,
 }: LiquidationProgressBarProps) => {
-    let padding = liquidationPercentage / LIQUIDATION_THRESHOLD;
+    let padding = liquidationThreshold
+        ? liquidationPercentage / liquidationThreshold
+        : 0;
     if (padding > 1) {
         padding = 1;
     }
@@ -75,9 +83,8 @@ export const LiquidationProgressBar = ({
                                 className={`whitespace-pre font-semibold ${info.color}`}
                             >
                                 {percentFormat(
-                                    LIQUIDATION_THRESHOLD >
-                                        liquidationPercentage
-                                        ? LIQUIDATION_THRESHOLD -
+                                    liquidationThreshold > liquidationPercentage
+                                        ? liquidationThreshold -
                                               liquidationPercentage
                                         : 0
                                 )}
@@ -87,7 +94,10 @@ export const LiquidationProgressBar = ({
                             </span>
                         </div>
                         <InformationPopover>
-                            {getInformationText(liquidationPercentage)}
+                            {getInformationText(
+                                liquidationPercentage,
+                                liquidationThreshold
+                            )}
                         </InformationPopover>
                     </div>
                 )}
