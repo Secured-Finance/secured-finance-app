@@ -30,11 +30,11 @@ import { RootState } from 'src/store/types';
 import { selectAllBalances } from 'src/store/wallet';
 import { OrderType } from 'src/types';
 import {
-    MAX_COVERAGE,
     amountFormatterToBase,
     computeAvailableToBorrow,
     divide,
     generateWalletSourceInformation,
+    MAX_COVERAGE,
     multiply,
     percentFormat,
     usdFormat,
@@ -45,9 +45,11 @@ import { useWallet } from 'use-wallet';
 export const AdvancedLendingOrderCard = ({
     collateralBook,
     onlyLimitOrder = false,
+    collateralThreshold,
 }: {
     collateralBook: CollateralBook;
     onlyLimitOrder?: boolean;
+    collateralThreshold?: number;
 }) => {
     const {
         currency,
@@ -92,10 +94,17 @@ export const AdvancedLendingOrderCard = ({
             ? computeAvailableToBorrow(
                   assetPriceMap[currency],
                   collateralBook.usdCollateral,
-                  collateralBook.coverage.toNumber() / MAX_COVERAGE
+                  collateralBook.coverage.toNumber() / MAX_COVERAGE,
+                  collateralThreshold ?? 0
               )
             : 0;
-    }, [assetPriceMap, collateralBook, currency]);
+    }, [
+        assetPriceMap,
+        collateralBook.coverage,
+        collateralBook.usdCollateral,
+        collateralThreshold,
+        currency,
+    ]);
 
     const walletSourceList = useMemo(() => {
         return generateWalletSourceInformation(
@@ -231,6 +240,7 @@ export const AdvancedLendingOrderCard = ({
                 <OrderAction
                     loanValue={loanValue}
                     collateralBook={collateralBook}
+                    collateralThreshold={collateralThreshold}
                 />
 
                 <Separator color='neutral-3'></Separator>
@@ -251,6 +261,7 @@ export const AdvancedLendingOrderCard = ({
                 <CollateralManagementConciseTab
                     collateralCoverage={collateralUsagePercent}
                     totalCollateralInUSD={collateralBook.usdCollateral}
+                    collateralThreshold={collateralThreshold}
                 />
             </div>
         </div>

@@ -23,8 +23,8 @@ import { RootState } from 'src/store/types';
 import { selectAllBalances } from 'src/store/wallet';
 import { MaturityOptionList } from 'src/types';
 import {
-    CurrencySymbol,
     amountFormatterToBase,
+    CurrencySymbol,
     formatLoanValue,
     generateWalletSourceInformation,
     getCurrencyMapAsList,
@@ -38,10 +38,12 @@ export const LendingCard = ({
     collateralBook,
     marketValue,
     maturitiesOptionList,
+    collateralThreshold,
 }: {
     collateralBook: CollateralBook;
     marketValue: LoanValue;
     maturitiesOptionList: MaturityOptionList;
+    collateralThreshold?: number;
 }) => {
     const { currency, maturity, side, sourceAccount } = useSelector(
         (state: RootState) => selectLandingOrderForm(state.landingOrderForm)
@@ -163,9 +165,14 @@ export const LendingCard = ({
                     usdCollateral={collateralBook.usdCollateral}
                     collateralCoverage={collateralBook.coverage.toNumber()}
                     currency={currency}
+                    collateralThreshold={collateralThreshold}
                 />
 
-                <OrderAction collateralBook={collateralBook} renderSide />
+                <OrderAction
+                    collateralBook={collateralBook}
+                    renderSide
+                    collateralThreshold={collateralThreshold}
+                />
             </div>
         </div>
     );

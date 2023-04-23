@@ -1,16 +1,18 @@
 import Tick from 'src/assets/icons/tick.svg';
 import { InformationPopover } from 'src/components/atoms';
-import { COLLATERAL_THRESHOLD, percentFormat, usdFormat } from 'src/utils';
+import { percentFormat, usdFormat } from 'src/utils';
 import { computeAvailableToBorrow } from 'src/utils/collateral';
 
 interface CollateralProgressBarProps {
     collateralCoverage: number;
     totalCollateralInUSD: number;
+    collateralThreshold?: number;
 }
 
 const getInformationText = (
     totalCollateralInUSD: number,
-    borrowLimit: number
+    borrowLimit: number,
+    collateralThreshold: number
 ) => {
     if (totalCollateralInUSD === 0) return;
     return (
@@ -20,14 +22,14 @@ const getInformationText = (
                 <span className='text-nebulaTeal'>
                     {usdFormat(borrowLimit, 2)}
                 </span>
-                <span>{` which is ${COLLATERAL_THRESHOLD}% of your ${usdFormat(
+                <span>{` which is ${collateralThreshold}% of your ${usdFormat(
                     totalCollateralInUSD,
                     2
                 )} collateral deposit.`}</span>
             </div>
             <div>
                 {`Increasing collateral deposit will increase your borrow limit by
-                ${COLLATERAL_THRESHOLD}% of its value.`}
+                ${collateralThreshold}% of its value.`}
             </div>
         </div>
     );
@@ -36,13 +38,17 @@ const getInformationText = (
 export const CollateralProgressBar = ({
     collateralCoverage = 0,
     totalCollateralInUSD = 0,
+    collateralThreshold = 0,
 }: CollateralProgressBarProps) => {
     collateralCoverage /= 100.0;
-    const borrowLimit = (totalCollateralInUSD * COLLATERAL_THRESHOLD) / 100.0;
+
+    const borrowLimit = (totalCollateralInUSD * collateralThreshold) / 100.0;
+
     const availableToBorrow = computeAvailableToBorrow(
         1,
         totalCollateralInUSD,
-        collateralCoverage
+        collateralCoverage,
+        collateralThreshold
     );
 
     return (
@@ -97,7 +103,8 @@ export const CollateralProgressBar = ({
                         <InformationPopover>
                             {getInformationText(
                                 totalCollateralInUSD,
-                                borrowLimit
+                                borrowLimit,
+                                collateralThreshold
                             )}
                         </InformationPopover>
                     </div>

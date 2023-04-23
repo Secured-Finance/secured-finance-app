@@ -4,6 +4,7 @@ import {
     preloadedBalances,
     preloadedLendingMarkets,
 } from 'src/stories/mocks/fixtures';
+import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
 import { OrderType } from 'src/types';
 import { CurrencySymbol } from 'src/utils';
@@ -27,9 +28,14 @@ jest.mock(
 
 const preloadedState = { ...preloadedBalances, ...preloadedLendingMarkets };
 
+const mockSecuredFinance = mockUseSF();
+jest.mock('src/hooks/useSecuredFinance', () => () => mockSecuredFinance);
+
 describe('Landing Component', () => {
-    it('should render a Landing', () => {
-        render(<Default />, { preloadedState });
+    it('should render a Landing', async () => {
+        waitFor(() => {
+            render(<Default />, { preloadedState });
+        });
     });
 
     it('should change the rate when the user changes the maturity', () => {

@@ -24,9 +24,9 @@ import { setLastMessage } from 'src/store/lastError';
 import { OrderType, PlaceOrderFunction } from 'src/types';
 import {
     CurrencySymbol,
+    handleContractTransaction,
     OrderEvents,
     OrderProperties,
-    handleContractTransaction,
     ordinaryFormat,
 } from 'src/utils';
 import { Amount, LoanValue, Maturity } from 'src/utils/entities';
@@ -109,6 +109,7 @@ export const PlaceOrder = ({
     orderType,
     assetPrice,
     walletSource,
+    collateralThreshold,
 }: {
     collateral: CollateralBook;
     loanValue?: LoanValue;
@@ -119,6 +120,7 @@ export const PlaceOrder = ({
     orderType: OrderType;
     assetPrice: number;
     walletSource: WalletSource;
+    collateralThreshold?: number;
 } & DialogState) => {
     const [state, dispatch] = useReducer(reducer, stateRecord[1]);
     const globalDispatch = useDispatch();
@@ -255,6 +257,7 @@ export const PlaceOrder = ({
                                     assetPrice={assetPrice}
                                     tradeValue={loanValue}
                                     type='trade'
+                                    collateralThreshold={collateralThreshold}
                                 />
                                 <SectionWithItems
                                     itemList={[
