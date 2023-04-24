@@ -22,6 +22,8 @@ export const CollateralSimulationSection = ({
     tradeValue,
     type,
     collateralThreshold,
+    side,
+
 }: {
     collateral: CollateralBook;
     tradeAmount: Amount;
@@ -30,6 +32,7 @@ export const CollateralSimulationSection = ({
     type: 'unwind' | 'trade';
     tradeValue?: LoanValue;
     collateralThreshold?: number;
+    side?: OrderSide;
 }) => {
     const collateralUsageText = `${formatCollateralRatio(
         collateral.coverage.toNumber()
@@ -43,26 +46,35 @@ export const CollateralSimulationSection = ({
         )
     )}`;
 
-    const remainingToBorrowText = useMemo(
-        () =>
-            `${ordinaryFormat(
-                (collateral.usdCollateral * collateral.coverage.toNumber()) /
-                    MAX_COVERAGE
-            )} / ${ordinaryFormat(
-                computeAvailableToBorrow(
-                    1,
-                    collateral.usdCollateral,
-                    collateral.coverage.toNumber() / MAX_COVERAGE,
-                    collateralThreshold ?? 0
-                )
-            )}`,
-        [collateral.coverage, collateral.usdCollateral, collateralThreshold]
-    );
+    const remainingToBorrowText = useMemo(() => {
+        const availableAssetMultiplier =collateralThreshold
+            (collateralThreshold - collateral.coverage.toNumber() / 100) / 100:0
 
-    const items: [string, string][] = [
-        ['Borrow Remaining', remainingToBorrowText],
-        ['Collateral Usage', collateralUsageText],
-    ];
+        return `${ordinaryFormat(
+            (collateral.usdCollateral * availableAssetMultiplier -
+                tradeAmount.toUSD(assetPrice)) /
+                assetPrice
+        )} / ${ordinaryFormat(
+            computeAvailableToBorrow(
+                assetPrice,
+                collateral.usdCollateral,
+                collateral.coverage.toNumber() / MAX_COVERAGE
+            )
+        )}`;
+    }, [
+        assetPrice,
+        collateral.coverage,
+        collateral.usdCollateral,
+        tradeAmount,
+    ]);
+
+    const items: [string, string][] =
+        side === OrderSide.BORROW
+            ? [
+                  ['Borrow Remaining', remainingToBorrowText],
+                  ['Collateral Usage', collateralUsageText],
+              ]
+            : [['Collateral Usage', collateralUsageText]];
 
     if (type === 'trade') {
         items.push([
