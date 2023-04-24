@@ -35,7 +35,7 @@ export const CollateralTabRightPane = ({
             />
             <LiquidationProgressBar
                 liquidationPercentage={collateralUsagePercent}
-                liquidationThreshold={collateralThreshold}
+                collateralThreshold={collateralThreshold}
             />
         </div>
     );
