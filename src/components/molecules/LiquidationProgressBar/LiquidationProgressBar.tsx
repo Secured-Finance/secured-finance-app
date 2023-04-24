@@ -7,12 +7,12 @@ import { percentFormat } from 'src/utils';
 
 interface LiquidationProgressBarProps {
     liquidationPercentage: number;
-    liquidationThreshold: number;
+    collateralThreshold: number;
 }
 
 const getInformationText = (
     liquidationPercentage: number,
-    liquidationThreshold?: number
+    collateralThreshold?: number
 ) => {
     if (liquidationPercentage === 0) return;
     return (
@@ -25,13 +25,13 @@ const getInformationText = (
                 <span>You are currently </span>
                 <span className='text-nebulaTeal'>
                     {percentFormat(
-                        liquidationThreshold &&
-                            liquidationThreshold > liquidationPercentage
-                            ? liquidationThreshold - liquidationPercentage
+                        collateralThreshold &&
+                            collateralThreshold > liquidationPercentage
+                            ? collateralThreshold - liquidationPercentage
                             : 0
                     )}
                 </span>
-                <span>{` under the liquidation threshold (${liquidationThreshold}% of deposit balance).`}</span>
+                <span>{` under the liquidation threshold (${collateralThreshold}% of deposit balance).`}</span>
             </div>
         </div>
     );
@@ -39,10 +39,10 @@ const getInformationText = (
 
 export const LiquidationProgressBar = ({
     liquidationPercentage = 0,
-    liquidationThreshold,
+    collateralThreshold,
 }: LiquidationProgressBarProps) => {
-    let padding = liquidationThreshold
-        ? liquidationPercentage / liquidationThreshold
+    let padding = collateralThreshold
+        ? liquidationPercentage / collateralThreshold
         : 0;
     if (padding > 1) {
         padding = 1;
@@ -83,8 +83,8 @@ export const LiquidationProgressBar = ({
                                 className={`whitespace-pre font-semibold ${info.color}`}
                             >
                                 {percentFormat(
-                                    liquidationThreshold > liquidationPercentage
-                                        ? liquidationThreshold -
+                                    collateralThreshold > liquidationPercentage
+                                        ? collateralThreshold -
                                               liquidationPercentage
                                         : 0
                                 )}
@@ -96,7 +96,7 @@ export const LiquidationProgressBar = ({
                         <InformationPopover>
                             {getInformationText(
                                 liquidationPercentage,
-                                liquidationThreshold
+                                collateralThreshold
                             )}
                         </InformationPopover>
                     </div>
