@@ -23,7 +23,6 @@ export const CollateralSimulationSection = ({
     type,
     collateralThreshold,
     side,
-
 }: {
     collateral: CollateralBook;
     tradeAmount: Amount;
@@ -47,8 +46,9 @@ export const CollateralSimulationSection = ({
     )}`;
 
     const remainingToBorrowText = useMemo(() => {
-        const availableAssetMultiplier =collateralThreshold
-            (collateralThreshold - collateral.coverage.toNumber() / 100) / 100:0
+        const availableAssetMultiplier = collateralThreshold
+            ? (collateralThreshold - collateral.coverage.toNumber() / 100) / 100
+            : 0;
 
         return `${ordinaryFormat(
             (collateral.usdCollateral * availableAssetMultiplier -
@@ -58,13 +58,15 @@ export const CollateralSimulationSection = ({
             computeAvailableToBorrow(
                 assetPrice,
                 collateral.usdCollateral,
-                collateral.coverage.toNumber() / MAX_COVERAGE
+                collateral.coverage.toNumber() / MAX_COVERAGE,
+                collateralThreshold ?? 0
             )
         )}`;
     }, [
         assetPrice,
         collateral.coverage,
         collateral.usdCollateral,
+        collateralThreshold,
         tradeAmount,
     ]);
 
