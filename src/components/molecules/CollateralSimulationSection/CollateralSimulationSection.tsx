@@ -3,6 +3,7 @@ import { useMemo } from 'react';
 import { SectionWithItems } from 'src/components/atoms';
 import { CollateralBook } from 'src/hooks';
 import {
+    COLLATERAL_THRESHOLD,
     formatCollateralRatio,
     formatLoanValue,
     ordinaryFormat,
@@ -21,6 +22,7 @@ export const CollateralSimulationSection = ({
     assetPrice,
     tradeValue,
     type,
+    side,
 }: {
     collateral: CollateralBook;
     tradeAmount: Amount;
@@ -28,6 +30,7 @@ export const CollateralSimulationSection = ({
     assetPrice: number;
     type: 'unwind' | 'trade';
     tradeValue?: LoanValue;
+    side?: OrderSide;
 }) => {
     const collateralUsageText = `${formatCollateralRatio(
         collateral.coverage.toNumber()
@@ -41,25 +44,35 @@ export const CollateralSimulationSection = ({
         )
     )}`;
 
-    const remainingToBorrowText = useMemo(
-        () =>
-            `${ordinaryFormat(
-                (collateral.usdCollateral * collateral.coverage.toNumber()) /
-                    MAX_COVERAGE
-            )} / ${ordinaryFormat(
-                computeAvailableToBorrow(
-                    1,
-                    collateral.usdCollateral,
-                    collateral.coverage.toNumber() / MAX_COVERAGE
-                )
-            )}`,
-        [collateral.coverage, collateral.usdCollateral]
-    );
+    const remainingToBorrowText = useMemo(() => {
+        const availableAssetMultiplier =
+            (COLLATERAL_THRESHOLD - collateral.coverage.toNumber() / 100) / 100;
 
-    const items: [string, string][] = [
-        ['Borrow Remaining', remainingToBorrowText],
-        ['Collateral Usage', collateralUsageText],
-    ];
+        return `${ordinaryFormat(
+            (collateral.usdCollateral * availableAssetMultiplier -
+                tradeAmount.toUSD(assetPrice)) /
+                assetPrice
+        )} / ${ordinaryFormat(
+            computeAvailableToBorrow(
+                assetPrice,
+                collateral.usdCollateral,
+                collateral.coverage.toNumber() / MAX_COVERAGE
+            )
+        )}`;
+    }, [
+        assetPrice,
+        collateral.coverage,
+        collateral.usdCollateral,
+        tradeAmount,
+    ]);
+
+    const items: [string, string][] =
+        side === OrderSide.BORROW
+            ? [
+                  ['Borrow Remaining', remainingToBorrowText],
+                  ['Collateral Usage', collateralUsageText],
+              ]
+            : [['Collateral Usage', collateralUsageText]];
 
     if (type === 'trade') {
         items.push([
