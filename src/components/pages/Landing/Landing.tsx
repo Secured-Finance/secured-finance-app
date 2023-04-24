@@ -8,8 +8,12 @@ import {
     YieldChart,
 } from 'src/components/organisms';
 import { SimpleAdvancedView } from 'src/components/templates';
-import { RateType, useCollateralBook, useLoanValues } from 'src/hooks';
-import { useCollateralParameters } from 'src/hooks/useCollateralParameters';
+import {
+    RateType,
+    useCollateralBook,
+    useCollateralParameters,
+    useLoanValues,
+} from 'src/hooks';
 import {
     selectLandingOrderForm,
     setLastView,

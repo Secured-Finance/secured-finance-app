@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import useSF from './useSecuredFinance';
+import useSF from '../useSecuredFinance';
 
 export const useCollateralParameters = () => {
     const securedFinance = useSF();

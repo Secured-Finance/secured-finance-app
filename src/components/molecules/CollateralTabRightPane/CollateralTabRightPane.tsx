@@ -3,8 +3,7 @@ import {
     CollateralProgressBar,
     LiquidationProgressBar,
 } from 'src/components/molecules';
-import { CollateralBook } from 'src/hooks';
-import { useCollateralParameters } from 'src/hooks/useCollateralParameters';
+import { CollateralBook, useCollateralParameters } from 'src/hooks';
 
 interface CollateralTabRightPaneProps {
     account: string | null;

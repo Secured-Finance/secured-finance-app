@@ -1,4 +1,5 @@
 export * from './useCollateralBook';
+export * from './useCollateralParameters';
 export * from './useGraphClientHook';
 export * from './useLendingMarkets';
 export * from './useLoanValues';
