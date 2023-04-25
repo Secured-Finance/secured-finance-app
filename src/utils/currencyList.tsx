@@ -17,6 +17,8 @@ import { EFIL } from './currencies/filecoin';
 import { USDC } from './currencies/usdc';
 import { WBTC } from './currencies/wbtc';
 
+BigNumberJS.set({ EXPONENTIAL_AT: 30 }); // setting to a decent limit
+
 const ETH = Ether.onChain(
     Number(process.env.NEXT_PUBLIC_ETHEREUM_CHAIN_ID ?? 1)
 );
