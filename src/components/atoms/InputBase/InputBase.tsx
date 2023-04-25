@@ -31,11 +31,25 @@ export const InputBase = ({
         }
     };
 
+    const fontSizeClass = classNames({
+        'text-xs': value && value.toString().length >= 20,
+        'text-sm':
+            value &&
+            value.toString().length >= 15 &&
+            value.toString().length < 20,
+        'text-md':
+            value &&
+            value.toString().length >= 8 &&
+            value.toString().length < 15,
+        'text-lg': value && value.toString().length < 8,
+    });
+
     return (
         <NumericFormat
             className={classNames(
                 'bg-transparent placeholder-opacity-50 focus:outline-none',
-                className
+                className,
+                fontSizeClass
             )}
             placeholder='0'
             thousandSeparator={true}
