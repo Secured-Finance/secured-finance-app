@@ -1,4 +1,5 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { useState } from 'react';
 import { InputBase } from '.';
 
 export default {
@@ -12,7 +13,12 @@ export default {
 } as ComponentMeta<typeof InputBase>;
 
 const Template: ComponentStory<typeof InputBase> = args => {
-    return <InputBase {...args} />;
+    const [value, setValue] = useState(args.value);
+    const handleChange = (newValue: number | undefined) => {
+        setValue(newValue);
+        args.onValueChange(newValue);
+    };
+    return <InputBase {...args} value={value} onValueChange={handleChange} />;
 };
 
 export const Default = Template.bind({});

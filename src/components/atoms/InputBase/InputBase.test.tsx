@@ -1,4 +1,4 @@
-import { userEvent } from '@storybook/testing-library';
+import { fireEvent, userEvent } from '@storybook/testing-library';
 import { composeStories } from '@storybook/testing-react';
 import { render, screen } from 'src/test-utils.js';
 import * as stories from './InputBase.stories';
@@ -55,5 +55,17 @@ describe('test InputBase component', () => {
 
         userEvent.type(input, '10001');
         expect(input.getAttribute('value')).toBe('1,000');
+    });
+
+    it('should change font size as input length changes', async () => {
+        const { getByRole } = render(<WithValue />);
+        const input = getByRole('textbox');
+        expect(input).toHaveClass('text-lg');
+        fireEvent.input(input, { target: { value: '1234567890' } });
+        expect(input).toHaveClass('text-md');
+        fireEvent.input(input, { target: { value: '1234567890123456' } });
+        expect(input).toHaveClass('text-sm');
+        fireEvent.input(input, { target: { value: '12345' } });
+        expect(input).toHaveClass('text-lg');
     });
 });
