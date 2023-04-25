@@ -79,13 +79,14 @@ export const OrderInputBox = ({
                 ) : (
                     <InputBase
                         value={inputValue as number}
-                        className='w-32 text-right text-[18px] font-semibold leading-6 text-neutral-8'
+                        className='text-right font-semibold leading-6 text-neutral-8'
                         label={field}
                         onValueChange={(v: number | undefined) =>
                             handleAmountChange(v ?? 0)
                         }
                         decimalPlacesAllowed={decimalPlacesAllowed}
                         maxLimit={maxLimit}
+                        resizeInputText={true}
                     />
                 )}
                 {unit && <div className='text-neutral-4'>{unit}</div>}

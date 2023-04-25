@@ -15,10 +15,10 @@ import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { RootState } from 'src/store/types';
 import {
     AddressUtils,
-    CollateralInfo,
-    CurrencySymbol,
     amountFormatterFromBase,
     amountFormatterToBase,
+    CollateralInfo,
+    CurrencySymbol,
     handleContractTransaction,
 } from 'src/utils';
 import { CollateralEvents, trackCollateralEvent } from 'src/utils/events';
@@ -195,7 +195,7 @@ export const WithdrawCollateral = ({
                 switch (state.currentStep) {
                     case Step.withdrawCollateral:
                         return (
-                            <div className='flex flex-col gap-6'>
+                            <div className='flex w-full flex-col gap-6'>
                                 <CollateralSelector
                                     headerText='Select Asset'
                                     onChange={handleChange}

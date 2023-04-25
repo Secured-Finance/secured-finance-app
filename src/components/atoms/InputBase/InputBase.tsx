@@ -11,6 +11,7 @@ interface InputBaseProps {
     label?: string;
     decimalPlacesAllowed?: number;
     maxLimit?: number;
+    resizeInputText?: boolean;
 }
 
 export const InputBase = ({
@@ -20,6 +21,7 @@ export const InputBase = ({
     label,
     decimalPlacesAllowed = 4,
     maxLimit = Number.MAX_SAFE_INTEGER, // we should have a better estimation of this maxLimit
+    resizeInputText,
 }: InputBaseProps) => {
     const handleValueChange = (
         values: NumberFormatValues,
@@ -32,16 +34,12 @@ export const InputBase = ({
     };
 
     const fontSizeClass = classNames({
-        'text-xs': value && value.toString().length >= 20,
-        'text-sm':
-            value &&
-            value.toString().length >= 15 &&
-            value.toString().length < 20,
+        'text-smd': value && value.toString().length >= 15,
         'text-md':
             value &&
-            value.toString().length >= 8 &&
+            value.toString().length >= 10 &&
             value.toString().length < 15,
-        'text-lg': value && value.toString().length < 8,
+        'text-lg': value && value.toString().length < 10,
     });
 
     return (
@@ -49,7 +47,7 @@ export const InputBase = ({
             className={classNames(
                 'bg-transparent placeholder-opacity-50 focus:outline-none',
                 className,
-                fontSizeClass
+                resizeInputText ? fontSizeClass : null
             )}
             placeholder='0'
             thousandSeparator={true}
