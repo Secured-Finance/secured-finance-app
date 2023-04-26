@@ -36,7 +36,8 @@ jobs:
           git switch main
           git merge ${{ github.event.inputs.commit || 'develop' }}
           if [ "${{ github.event.inputs.hotfix }}" = "true" ]; then
-            npm version patch
+            npm version patch -m "Hotfix: %s"
           else
-            npm version minor
+            npm version minor -m "Release: %s"
           fi
+          git push --follow-tags
