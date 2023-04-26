@@ -300,7 +300,7 @@ export const OrderWidget = ({
                     </span>
                 </div>
             )}
-            <div className='flex flex-row gap-6 p-2'>
+            <div className='flex flex-row gap-6 px-2'>
                 <CoreTable
                     data={sellOrders}
                     columns={sellColumns}
