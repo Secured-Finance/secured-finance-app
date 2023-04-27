@@ -49,7 +49,7 @@ describe('CurrencyAmountItem Component', () => {
 
     it('should render the currency name when no amount and no price are defined', () => {
         render(<CurrencyName />);
-        expect(screen.getAllByText('EFIL')).toHaveLength(2);
+        expect(screen.getByText('Filecoin')).toBeInTheDocument();
     });
 
     it('should display the currency amount in neutral by default', () => {

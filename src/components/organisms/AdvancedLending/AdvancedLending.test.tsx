@@ -26,7 +26,7 @@ describe('Advanced Lending Component', () => {
         expect(store.getState().landingOrderForm.amount).toEqual(
             '1000000000000000000'
         );
-        fireEvent.click(screen.getByRole('button', { name: 'EFIL' }));
+        fireEvent.click(screen.getByRole('button', { name: 'Filecoin' }));
         fireEvent.click(screen.getByText('USDC'));
         expect(store.getState().landingOrderForm.amount).toEqual('0');
         expect(screen.getByRole('textbox', { name: 'Amount' })).toHaveValue(
