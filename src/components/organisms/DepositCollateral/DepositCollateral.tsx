@@ -3,19 +3,26 @@ import { useCallback, useReducer, useState } from 'react';
 import { useSelector } from 'react-redux';
 import Loader from 'src/assets/img/gradient-loader.png';
 import { CollateralSelector } from 'src/components/atoms';
-import { Dialog, DialogState, SuccessPanel } from 'src/components/molecules';
-import { FailurePanel } from 'src/components/molecules/FailurePanel';
+import {
+    Dialog,
+    DialogState,
+    FailurePanel,
+    SuccessPanel,
+} from 'src/components/molecules';
 import { CollateralInput } from 'src/components/organisms';
 import { useDepositCollateral } from 'src/hooks/useDepositCollateral';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { RootState } from 'src/store/types';
 import {
     AddressUtils,
-    amountFormatterFromBase,
+    CollateralEvents,
     CollateralInfo,
     CurrencySymbol,
+    amountFormatterFromBase,
+    amountFormatterToBase,
     handleContractTransaction,
 } from 'src/utils';
+import { trackCollateralEvent } from 'src/utils/events';
 
 enum Step {
     depositCollateral = 1,
@@ -90,6 +97,7 @@ export const DepositCollateral = ({
     isOpen,
     onClose,
     collateralList,
+    source,
 }: {
     collateralList: Partial<Record<CurrencySymbol, CollateralInfo>>;
 } & DialogState) => {
@@ -100,6 +108,9 @@ export const DepositCollateral = ({
     const [errorMessage, setErrorMessage] = useState(
         'Your deposit transaction has failed.'
     );
+    const [collateralAmount, setCollateralAmount] = useState<
+        number | undefined
+    >();
 
     const priceList = useSelector((state: RootState) => getPriceMap(state));
     const { onDepositCollateral } = useDepositCollateral(asset, collateral);
@@ -109,6 +120,24 @@ export const DepositCollateral = ({
         onClose();
     }, [onClose]);
 
+    const optionList = Object.values(collateralList);
+    const defaultCcyIndex = optionList.findIndex(
+        col => col.symbol === CurrencySymbol.USDC
+    );
+    [optionList[0], optionList[defaultCcyIndex]] = [
+        optionList[defaultCcyIndex],
+        optionList[0],
+    ];
+
+    const isDisabled = useCallback(() => {
+        const availableAmount = collateralList[asset]?.available;
+        return (
+            !collateral ||
+            collateral.isZero() ||
+            collateral.gt(amountFormatterToBase[asset](availableAmount ?? 0))
+        );
+    }, [asset, collateral, collateralList]);
+
     const handleDepositCollateral = useCallback(async () => {
         try {
             const tx = await onDepositCollateral();
@@ -117,6 +146,12 @@ export const DepositCollateral = ({
                 dispatch({ type: 'error' });
             } else {
                 setDepositAddress(tx?.to ?? '');
+                trackCollateralEvent(
+                    CollateralEvents.DEPOSIT_COLLATERAL,
+                    asset,
+                    collateral,
+                    source ?? ''
+                );
                 dispatch({ type: 'next' });
             }
         } catch (e) {
@@ -126,13 +161,12 @@ export const DepositCollateral = ({
 
             dispatch({ type: 'error' });
         }
-    }, [onDepositCollateral]);
+    }, [asset, collateral, onDepositCollateral, source]);
 
     const onClick = useCallback(
         async (currentStep: Step) => {
             switch (currentStep) {
                 case Step.depositCollateral:
-                    if (!collateral || collateral.isZero()) return;
                     dispatch({ type: 'next' });
                     handleDepositCollateral();
                     break;
@@ -146,21 +180,14 @@ export const DepositCollateral = ({
                     break;
             }
         },
-        [collateral, handleClose, handleDepositCollateral]
+        [handleClose, handleDepositCollateral]
     );
 
-    const handleChange = (v: CollateralInfo) => {
+    const handleChange = useCallback((v: CollateralInfo) => {
+        setCollateral(BigNumber.from(0));
         setAsset(v.symbol);
-    };
-
-    const optionList = Object.values(collateralList);
-    const defaultCcyIndex = optionList.findIndex(
-        col => col.symbol === CurrencySymbol.USDC
-    );
-    [optionList[0], optionList[defaultCcyIndex]] = [
-        optionList[defaultCcyIndex],
-        optionList[0],
-    ];
+        setCollateralAmount(0);
+    }, []);
 
     return (
         <Dialog
@@ -170,6 +197,7 @@ export const DepositCollateral = ({
             description={state.description}
             callToAction={state.buttonText}
             onClick={() => onClick(state.currentStep)}
+            disableActionButton={isDisabled()}
         >
             {(() => {
                 switch (state.currentStep) {
@@ -178,7 +206,7 @@ export const DepositCollateral = ({
                             <div className='flex flex-col gap-6'>
                                 <CollateralSelector
                                     headerText='Select Asset'
-                                    onChange={v => handleChange(v)}
+                                    onChange={handleChange}
                                     optionList={optionList}
                                 />
                                 <CollateralInput
@@ -190,6 +218,8 @@ export const DepositCollateral = ({
                                     availableAmount={
                                         collateralList[asset]?.available ?? 0
                                     }
+                                    amount={collateralAmount}
+                                    setAmount={setCollateralAmount}
                                 />
                             </div>
                         );

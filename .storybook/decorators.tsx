@@ -1,8 +1,9 @@
 import { GraphClientProvider } from '@secured-finance/sf-graph-client';
 import { Story, StoryContext } from '@storybook/react';
 import { Wallet } from 'ethers';
-import { useEffect, useMemo } from 'react';
+import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
+import { Footer } from 'src/components/atoms';
 import { Header } from 'src/components/organisms';
 import { Layout } from 'src/components/templates';
 import { setMidPrice } from 'src/store/analytics';
@@ -11,14 +12,15 @@ import { updateLatestBlock } from 'src/store/blockchain';
 import { updateBalance } from 'src/store/wallet';
 import AxiosMock from 'src/stories/mocks/AxiosMock';
 import { CustomizedBridge } from 'src/stories/mocks/customBridge';
+import { maturities } from 'src/stories/mocks/fixtures';
 import { CurrencySymbol } from 'src/utils';
 import { coingeckoApi } from 'src/utils/coinGeckoApi';
 import timemachine from 'timemachine';
-import { useWallet, UseWalletProvider } from 'use-wallet';
+import { UseWalletProvider, useWallet } from 'use-wallet';
 
 export const withAppLayout = (Story: Story) => {
     return (
-        <Layout navBar={<Header />}>
+        <Layout navBar={<Header />} footer={<Footer />}>
             <Story />
         </Layout>
     );
@@ -130,74 +132,6 @@ export const withMockDate = (Story: Story, context: StoryContext) => {
 };
 
 export const withMaturities = (Story: Story) => {
-    const maturities = useMemo(
-        () => ({
-            DEC22: {
-                name: 'DEC22',
-                maturity: 1669852800,
-                isActive: true,
-                utcOpeningDate: 1677628800,
-                midUnitPrice: 9801,
-            },
-            MAR23: {
-                name: 'MAR23',
-                maturity: 1677628800,
-                isActive: true,
-                utcOpeningDate: 1677628800,
-                midUnitPrice: 9701,
-            },
-            JUN23: {
-                name: 'JUN23',
-                maturity: 1685577600,
-                isActive: true,
-                utcOpeningDate: 1677628800,
-                midUnitPrice: 9601,
-            },
-            SEP23: {
-                name: 'SEP23',
-                maturity: 1693526400,
-                isActive: true,
-                utcOpeningDate: 1677628800,
-                midUnitPrice: 9501,
-            },
-            DEC23: {
-                name: 'DEC23',
-                maturity: 1701388800,
-                isActive: true,
-                utcOpeningDate: 1677628800,
-                midUnitPrice: 9401,
-            },
-            MAR24: {
-                name: 'MAR24',
-                maturity: 1709251200,
-                isActive: true,
-                utcOpeningDate: 1677628800,
-                midUnitPrice: 9301,
-            },
-            JUN24: {
-                name: 'JUN24',
-                maturity: 1717200000,
-                isActive: true,
-                utcOpeningDate: 1677628800,
-                midUnitPrice: 9201,
-            },
-            SEP24: {
-                name: 'SEP24',
-                maturity: 1725148800,
-                isActive: true,
-                utcOpeningDate: 1677628800,
-                midUnitPrice: 9101,
-            },
-            DEC24: {
-                name: 'DEC24',
-                maturity: 1733011200,
-                isActive: false,
-                utcOpeningDate: 1685577600,
-                midUnitPrice: 9001,
-            },
-        }),
-        []
-    );
     const dispatch = useDispatch();
     useEffect(() => {
         const timerId = setTimeout(() => {

@@ -23,4 +23,10 @@ describe('Amount class', () => {
         const usdValue = amount.toUSD(mockPrice);
         expect(usdValue).toEqual(2000);
     });
+
+    it('should return the correct BigNumber value', () => {
+        const amount = new Amount(mockValue, mockCurrency);
+        const bigNumberValue = amount.toBigNumber();
+        expect(bigNumberValue).toEqual(mockValue);
+    });
 });

@@ -13,9 +13,9 @@ import {
     CollateralSimulationSection,
     Dialog,
     DialogState,
+    FailurePanel,
     SuccessPanel,
 } from 'src/components/molecules';
-import { FailurePanel } from 'src/components/molecules/FailurePanel';
 import { useCollateralBook, useOrders } from 'src/hooks';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { setLastMessage } from 'src/store/lastError';

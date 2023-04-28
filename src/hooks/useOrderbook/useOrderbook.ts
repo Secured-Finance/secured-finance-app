@@ -104,11 +104,22 @@ export const useOrderbook = (
         []
     );
 
-    useEffect(() => {
-        if (securedFinance && !maturity.isZero()) {
-            fetchOrderbook(securedFinance, ccy, maturity.toNumber(), limit);
-        }
-    }, [fetchOrderbook, securedFinance, block, maturity, ccy, limit]);
+    useEffect(
+        () => {
+            if (securedFinance && !maturity.isZero()) {
+                fetchOrderbook(securedFinance, ccy, maturity.toNumber(), limit);
+            }
+        }, // eslint-disable-next-line react-hooks/exhaustive-deps
+        [
+            fetchOrderbook,
+            securedFinance,
+            block,
+            // eslint-disable-next-line react-hooks/exhaustive-deps
+            maturity.toNumber(),
+            ccy,
+            limit,
+        ]
+    );
 
     return orderbook;
 };

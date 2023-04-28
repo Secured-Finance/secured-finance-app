@@ -1,8 +1,8 @@
 import { OrderSide } from '@secured-finance/sf-client';
 import { composeStories } from '@storybook/testing-react';
-import { OrderType } from 'src/hooks';
 import { preloadedAssetPrices } from 'src/stories/mocks/fixtures';
 import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
+import { OrderType } from 'src/types';
 import { CurrencySymbol } from 'src/utils';
 import timemachine from 'timemachine';
 import * as stories from './AdvancedLendingOrderCard.stories';
@@ -17,6 +17,10 @@ const preloadedState = {
         amount: '500000000',
         unitPrice: 9500,
         orderType: OrderType.LIMIT,
+        marketPhase: 'Open',
+    },
+    wallet: {
+        balances: { [CurrencySymbol.USDC]: 10000 },
     },
     ...preloadedAssetPrices,
 };
@@ -96,6 +100,30 @@ describe('AdvancedLendingOrderCard Component', () => {
         ).toBeInTheDocument();
     });
 
+    it('should show both market and limit order when in default mode', async () => {
+        await waitFor(() => render(<Default />, { preloadedState }));
+        expect(screen.getByRole('radio', { name: 'Market' })).not.toHaveClass(
+            'hidden'
+        );
+        expect(screen.getByRole('radio', { name: 'Limit' })).not.toHaveClass(
+            'hidden'
+        );
+    });
+
+    it('should show only limit order when in onlyLimitOrder mode', async () => {
+        await waitFor(() => render(<Default onlyLimitOrder />));
+        expect(screen.queryByRole('radio', { name: 'Market' })).toHaveClass(
+            'hidden'
+        );
+        expect(screen.getByRole('radio', { name: 'Limit' })).not.toHaveClass(
+            'hidden'
+        );
+        expect(screen.getByRole('radio', { name: 'Limit' })).toBeChecked();
+        expect(
+            screen.getByRole('textbox', { name: 'Bond Price' })
+        ).not.toBeDisabled();
+    });
+
     it('place order button should be disabled if amount is zero', async () => {
         await waitFor(() => render(<Default />, { preloadedState }));
         const button = screen.getByTestId('place-order-button');
@@ -104,5 +132,13 @@ describe('AdvancedLendingOrderCard Component', () => {
         const input = screen.getByRole('textbox', { name: 'Amount' });
         fireEvent.change(input, { target: { value: '0' } });
         expect(button).toBeDisabled();
+    });
+
+    it('should render wallet source when side is lend', async () => {
+        await waitFor(() => render(<Default />, { preloadedState }));
+        const lendTab = screen.getByText('Lend');
+        fireEvent.click(lendTab);
+        expect(screen.getByText('Lending Source')).toBeInTheDocument();
+        expect(screen.getByText('10,000 USDC')).toBeInTheDocument();
     });
 });

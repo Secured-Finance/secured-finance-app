@@ -1,12 +1,11 @@
-import { OrderSide } from '@secured-finance/sf-client';
+import { OrderSide, WalletSource } from '@secured-finance/sf-client';
 import { composeStories } from '@storybook/testing-react';
 import { BigNumber } from 'ethers';
-import { OrderType } from 'src/hooks';
-import { preloadedAssetPrices } from 'src/stories/mocks/fixtures';
+import { dec22Fixture, preloadedAssetPrices } from 'src/stories/mocks/fixtures';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
+import { OrderType } from 'src/types';
 import { CurrencySymbol } from 'src/utils';
-import { Maturity } from 'src/utils/entities';
 import * as stories from './PlaceOrder.stories';
 
 const { Default, MarketOrder } = composeStories(stories);
@@ -19,6 +18,7 @@ const preloadedState = {
         amount: '500000000',
         unitPrice: 0,
         orderType: OrderType.LIMIT,
+        sourceAccount: WalletSource.METAMASK,
     },
     ...preloadedAssetPrices,
 };
@@ -37,6 +37,104 @@ describe('PlaceOrder component', () => {
 
         const button = screen.getByTestId('dialog-action-button');
         expect(button).toHaveTextContent('OK');
+    });
+
+    it('should display all the fields in Limit order', () => {
+        render(<Default />);
+        expect(screen.queryByText('Bond Price')).not.toBeInTheDocument();
+        expect(screen.queryByText('Loan Start Date')).not.toBeInTheDocument();
+        expect(
+            screen.queryByText('Loan Maturity Date')
+        ).not.toBeInTheDocument();
+        expect(
+            screen.queryByText('Total Interest (USD)')
+        ).not.toBeInTheDocument();
+        expect(
+            screen.queryByText('Est. Total Debt (USD)')
+        ).not.toBeInTheDocument();
+        const button = screen.getByText('Additional Information');
+        fireEvent.click(button);
+        expect(screen.getByText('Bond Price')).toBeInTheDocument();
+        expect(screen.getByText('Loan Start Date')).toBeInTheDocument();
+        expect(screen.getByText('Loan Maturity Date')).toBeInTheDocument();
+        expect(screen.getByText('Total Interest (USD)')).toBeInTheDocument();
+        expect(screen.getByText('Est. Total Debt (USD)')).toBeInTheDocument();
+    });
+
+    it('should render collateral utilization and not Borrow remaining in lend orders', () => {
+        render(<Default side={OrderSide.LEND} />);
+        expect(screen.getByText('Collateral Usage')).toBeInTheDocument();
+        expect(screen.queryByText('Borrow Remaining')).not.toBeInTheDocument();
+    });
+
+    it('should render collateral utilization and borrow remaining in borrow orders', () => {
+        render(<Default />, {
+            preloadedState: {
+                ...preloadedState,
+                landingOrderForm: {
+                    ...preloadedState.landingOrderForm,
+                    side: OrderSide.BORROW,
+                },
+            },
+        });
+        expect(screen.getByText('Collateral Usage')).toBeInTheDocument();
+        expect(screen.queryByText('Borrow Remaining')).toBeInTheDocument();
+    });
+
+    it(' should display Est. Total Loan value (USD) instead of Est. Total Debt (USD) in lend orders when order type is LIMIT', () => {
+        render(<Default side={OrderSide.LEND} />);
+        expect(screen.queryByText('Bond Price')).not.toBeInTheDocument();
+        expect(screen.queryByText('Loan Start Date')).not.toBeInTheDocument();
+        expect(
+            screen.queryByText('Loan Maturity Date')
+        ).not.toBeInTheDocument();
+        expect(
+            screen.queryByText('Total Interest (USD)')
+        ).not.toBeInTheDocument();
+        expect(
+            screen.queryByText('Est. Total Debt (USD)')
+        ).not.toBeInTheDocument();
+        expect(
+            screen.queryByText('Est. Total Loan value (USD)')
+        ).not.toBeInTheDocument();
+        const button = screen.getByText('Additional Information');
+        fireEvent.click(button);
+        expect(screen.getByText('Bond Price')).toBeInTheDocument();
+        expect(screen.getByText('Loan Start Date')).toBeInTheDocument();
+        expect(screen.getByText('Loan Maturity Date')).toBeInTheDocument();
+        expect(screen.getByText('Total Interest (USD)')).toBeInTheDocument();
+        expect(
+            screen.queryByText('Est. Total Debt (USD)')
+        ).not.toBeInTheDocument();
+        expect(
+            screen.getByText('Est. Total Loan value (USD)')
+        ).toBeInTheDocument();
+    });
+
+    it(' should only display Loan Maturity date in Market Order', () => {
+        render(<MarketOrder />);
+        expect(screen.queryByText('Bond Price')).not.toBeInTheDocument();
+        expect(screen.queryByText('Loan Start Date')).not.toBeInTheDocument();
+        expect(
+            screen.queryByText('Loan Maturity Date')
+        ).not.toBeInTheDocument();
+        expect(
+            screen.queryByText('Total Interest (USD)')
+        ).not.toBeInTheDocument();
+        expect(
+            screen.queryByText('Est. Total Debt (USD)')
+        ).not.toBeInTheDocument();
+        const button = screen.getByText('Additional Information');
+        fireEvent.click(button);
+        expect(screen.queryByText('Bond Price')).not.toBeInTheDocument();
+        expect(screen.queryByText('Loan Start Date')).not.toBeInTheDocument();
+        expect(screen.getByText('Loan Maturity Date')).toBeInTheDocument();
+        expect(
+            screen.queryByText('Total Interest (USD)')
+        ).not.toBeInTheDocument();
+        expect(
+            screen.queryByText('Est. Total Debt (USD)')
+        ).not.toBeInTheDocument();
     });
 
     it('should reach success screen when transaction receipt is received', async () => {
@@ -79,46 +177,49 @@ describe('PlaceOrder component', () => {
         expect(screen.getByText('This is an error')).toBeInTheDocument();
     });
 
-    it('should call the onPlaceOrder function in a market order mode orderType in the store is Market Order', async () => {
+    it('should call the onPlaceOrder function in market order mode if the orderType is MARKET', async () => {
         const tx = {
             wait: jest.fn(() => Promise.resolve({ blockNumber: 13115215 })),
         } as unknown;
         const onPlaceOrder = jest.fn().mockReturnValue(Promise.resolve(tx));
-        render(<MarketOrder onPlaceOrder={onPlaceOrder} />, {
-            preloadedState: {
-                ...preloadedState,
-                landingOrderForm: {
-                    ...preloadedState.landingOrderForm,
-                    orderType: OrderType.MARKET,
-                },
-            },
-        });
+        render(
+            <MarketOrder
+                onPlaceOrder={onPlaceOrder}
+                orderType={OrderType.MARKET}
+            />,
+            { preloadedState }
+        );
         fireEvent.click(screen.getByTestId('dialog-action-button'));
         await waitFor(() =>
             expect(onPlaceOrder).toHaveBeenCalledWith(
                 CurrencySymbol.USDC,
-                new Maturity(0),
+                dec22Fixture,
                 OrderSide.BORROW,
-                BigNumber.from(500000000),
-                undefined
+                BigNumber.from('1000000000'),
+                0,
+                WalletSource.METAMASK
             )
         );
     });
 
-    it('should call the onPlaceOrder function in a limit order mode if the orderType in the store is Limit Order', async () => {
+    it('should call the onPlaceOrder function in limit order mode if the orderType is LIMIT', async () => {
         const tx = {
             wait: jest.fn(() => Promise.resolve({ blockNumber: 13115215 })),
         } as unknown;
         const onPlaceOrder = jest.fn().mockReturnValue(Promise.resolve(tx));
-        render(<Default onPlaceOrder={onPlaceOrder} />, { preloadedState });
+        render(
+            <Default onPlaceOrder={onPlaceOrder} orderType={OrderType.LIMIT} />,
+            { preloadedState }
+        );
         fireEvent.click(screen.getByTestId('dialog-action-button'));
         await waitFor(() =>
             expect(onPlaceOrder).toHaveBeenCalledWith(
                 CurrencySymbol.USDC,
-                new Maturity(0),
+                dec22Fixture,
                 OrderSide.BORROW,
-                BigNumber.from(500000000),
-                9410
+                BigNumber.from('1000000000'),
+                9410,
+                WalletSource.METAMASK
             )
         );
     });

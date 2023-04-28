@@ -1,4 +1,5 @@
 import assert from 'assert';
+import { Environment } from './strings';
 
 export const getEthereumNetwork = (): string => {
     const network = process.env.NEXT_PUBLIC_ETHEREUM_NETWORK;
@@ -57,7 +58,7 @@ export const getEnvironment = () => {
     if (!SF_ENV) {
         // eslint-disable-next-line no-console
         console.warn('SF_ENV is not set, defaulting to development');
-        return 'development';
+        return Environment.DEVELOPMENT;
     }
 
     return SF_ENV;

@@ -7,6 +7,10 @@ on:
         description: 'Commit ID'
         required: false
         type: string
+      hotfix:
+        description: 'Hotfix'
+        required: false
+        type: boolean
 
 jobs:
   deploy:
@@ -24,11 +28,16 @@ jobs:
           fetch-depth: 0
           ref: develop
           token: ${{ steps.generate_token.outputs.token }}
-      - name: Merge into main
+      - name: Merge into main and tag the version
         shell: bash
         run: |
           git config user.name "SF Machine User[bot]"
           git config user.email "${{ secrets.MACHINE_USER_APP_ID }}+sf-machine-user[bot]@users.noreply.github.com"
           git switch main
           git merge ${{ github.event.inputs.commit || 'develop' }}
-          git push
+          if [ "${{ github.event.inputs.hotfix }}" = "true" ]; then
+            npm version patch -m "Hotfix: %s"
+          else
+            npm version minor -m "Release: %s"
+          fi
+          git push --follow-tags

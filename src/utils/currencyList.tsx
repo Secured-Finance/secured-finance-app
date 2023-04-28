@@ -7,10 +7,10 @@ import {
 import { BigNumber as BigNumberJS } from 'bignumber.js';
 import { BigNumber } from 'ethers';
 import tailwindConfig from 'src/../tailwind.config';
-import EfilIcon from 'src/assets/coins/efil.svg';
+import BTCIcon from 'src/assets/coins/btc.svg';
 import EthIcon from 'src/assets/coins/eth2.svg';
+import FilIcon from 'src/assets/coins/fil.svg';
 import UsdcIcon from 'src/assets/coins/usdc.svg';
-import WBTCIcon from 'src/assets/coins/wbtc.svg';
 import { Option } from 'src/components/atoms';
 import { hexToString } from 'web3-utils';
 import { EFIL } from './currencies/filecoin';
@@ -33,7 +33,7 @@ export const currencyMap: Readonly<
 > = {
     [CurrencySymbol.EFIL]: {
         index: 0,
-        icon: EfilIcon,
+        icon: FilIcon,
         symbol: CurrencySymbol.EFIL,
         name: EFIL.onChain().name,
         coinGeckoId: 'filecoin',
@@ -51,7 +51,8 @@ export const currencyMap: Readonly<
         index: 1,
         icon: EthIcon,
         symbol: CurrencySymbol.ETH,
-        name: ETH.name,
+        // TODO: update sf-core to use the right name
+        name: 'Ether',
         coinGeckoId: 'ethereum',
         isCollateral: true,
         toBaseUnit: (amount: number) => convertToBlockchainUnit(amount, ETH),
@@ -78,7 +79,7 @@ export const currencyMap: Readonly<
         index: 3,
         symbol: CurrencySymbol.WBTC,
         name: WBTC.onChain().name,
-        icon: WBTCIcon,
+        icon: BTCIcon,
         coinGeckoId: 'wrapped-bitcoin',
         isCollateral: false,
         toBaseUnit: (amount: number) =>

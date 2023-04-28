@@ -11,7 +11,7 @@ describe('AdvancedLendingTopBar Component', () => {
         expect(
             screen.getByRole('button', { name: 'Wrapped Bitcoin' })
         ).toBeInTheDocument();
-        expect(screen.getByText('Maturity DEC22')).toBeInTheDocument();
+        expect(screen.getByText('Maturity Dec 1, 2022')).toBeInTheDocument();
 
         expect(screen.getByText('24h High')).toBeInTheDocument();
         expect(screen.getByText('24h Low')).toBeInTheDocument();
@@ -39,5 +39,19 @@ describe('AdvancedLendingTopBar Component', () => {
 
         expect(screen.getByText('98.00')).toBeInTheDocument();
         expect(screen.getByText('2.05% APR')).toBeInTheDocument();
+    });
+
+    it('should render source link for the selected asset', () => {
+        render(<Default />);
+
+        expect(
+            screen.getByRole('button', { name: 'Wrapped Bitcoin' })
+        ).toBeInTheDocument();
+        const source = screen.getByRole('link');
+        expect(source).toBeInTheDocument();
+        expect(source).toHaveAttribute(
+            'href',
+            'https://www.coingecko.com/en/coins/wrapped-bitcoin'
+        );
     });
 });

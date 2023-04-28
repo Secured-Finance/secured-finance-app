@@ -6,7 +6,7 @@ import {
 import { render, screen, waitFor } from 'src/test-utils.js';
 import * as stories from './MarketDashboard.stories';
 
-const { Default } = composeStories(stories);
+const { Default, ConnectedToWallet } = composeStories(stories);
 
 jest.mock('next/router', () => ({
     useRouter: jest.fn(() => ({
@@ -34,13 +34,24 @@ const renderDefault = async () => {
     );
 };
 
+const renderConnected = async () => {
+    await waitFor(() =>
+        render(<ConnectedToWallet />, {
+            apolloMocks: ConnectedToWallet.parameters?.apolloClient.mocks,
+            preloadedState: {
+                ...preloadedBalances,
+                ...preloadedAssetPrices,
+            },
+        })
+    );
+};
+
 describe('MarketDashboard Component', () => {
     it('should render MarketDashboard', async () => {
         await renderDefault();
     });
 
     it('should render the total users', async () => {
-        process.env.SF_ENV = 'development';
         await renderDefault();
         const totalUsers = await screen.findByText('12.15K');
         expect(totalUsers).toBeInTheDocument();
@@ -50,5 +61,13 @@ describe('MarketDashboard Component', () => {
         await renderDefault();
         const yieldCurves = await screen.findAllByTestId('curve-chip');
         expect(yieldCurves).toHaveLength(4);
+    });
+
+    it('should render the collateral widget when connected', async () => {
+        await renderConnected();
+        const collateralWidget = await screen.findByText(
+            'Collateral Utilization'
+        );
+        expect(collateralWidget).toBeInTheDocument();
     });
 });
