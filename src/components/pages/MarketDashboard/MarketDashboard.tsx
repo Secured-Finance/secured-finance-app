@@ -17,6 +17,7 @@ import {
 import { Page, TwoColumns } from 'src/components/templates';
 import {
     RateType,
+    useCollateralBook,
     useGraphClientHook,
     useLoanValues,
     useProtocolInformation,
@@ -25,6 +26,7 @@ import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { RootState } from 'src/store/types';
 import {
     CurrencySymbol,
+    Environment,
     Rate,
     TOTAL_USERS_V4,
     WalletSource,
@@ -33,6 +35,7 @@ import {
     getCurrencyMapAsList,
     getEnvironment,
     ordinaryFormat,
+    toCurrencySymbol,
     usdFormat,
 } from 'src/utils';
 import { Maturity } from 'src/utils/entities';
@@ -43,12 +46,15 @@ const computeTotalUsers = (users: string) => {
         return '0';
     }
     const totalUsers =
-        getEnvironment() === 'development' ? +users : +users + TOTAL_USERS_V4;
+        getEnvironment().toLowerCase() === Environment.DEVELOPMENT
+            ? +users
+            : +users + TOTAL_USERS_V4;
     return ordinaryFormat(totalUsers ?? 0, 2, 'compact');
 };
 
 export const MarketDashboard = () => {
     const { account } = useWallet();
+    const collateralBook = useCollateralBook(account);
 
     const curves: Record<string, Rate[]> = {};
     const lendingContracts = useSelector(
@@ -61,7 +67,7 @@ export const MarketDashboard = () => {
             ccy.symbol,
             RateType.MidRate,
             Object.values(lendingContracts[ccy.symbol])
-                .filter(o => o.isActive)
+                .filter(o => o.isReady)
                 .map(o => new Maturity(o.maturity))
         ).map(r => r.apr);
     });
@@ -161,19 +167,22 @@ export const MarketDashboard = () => {
                         loans={(
                             Object.keys(lendingContracts) as CurrencySymbol[]
                         ).reduce((acc, ccy) => {
-                            const toto = ccy as CurrencySymbol;
+                            const currency = toCurrencySymbol(ccy);
+                            if (!currency) return acc;
                             const currencyContracts = Object.keys(
-                                lendingContracts[toto]
+                                lendingContracts[currency]
                             ).map(contractName => {
                                 const contract =
-                                    lendingContracts[toto][contractName];
+                                    lendingContracts[currency][contractName];
                                 return {
                                     name: contract.name,
                                     maturity: contract.maturity,
                                     isActive: contract.isActive,
                                     utcOpeningDate: contract.utcOpeningDate,
+                                    preOpenDate: contract.preOpenDate,
                                     midUnitPrice: contract.midUnitPrice,
                                     currency: utils.formatBytes32String(ccy),
+                                    isReady: contract.isReady,
                                     ccy: ccy,
                                 };
                             });
@@ -198,8 +207,13 @@ export const MarketDashboard = () => {
                             <GradientBox header='My Collateral'>
                                 <div className='px-3 py-6'>
                                     <CollateralManagementConciseTab
-                                        collateralCoverage={98000}
-                                        totalCollateralInUSD={123}
+                                        collateralCoverage={
+                                            collateralBook.coverage.toNumber() /
+                                            100
+                                        }
+                                        totalCollateralInUSD={
+                                            collateralBook.usdCollateral
+                                        }
                                     />
                                 </div>
                             </GradientBox>

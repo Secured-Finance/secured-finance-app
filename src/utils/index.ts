@@ -1,4 +1,5 @@
 export * from './address';
+export * from './collateral';
 export * from './currencies';
 export * from './currencyList';
 export * from './env';

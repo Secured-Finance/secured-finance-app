@@ -4,8 +4,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Button } from 'src/components/atoms';
 import {
     DepositCollateral,
-    generateCollateralList,
     PlaceOrder,
+    generateCollateralList,
 } from 'src/components/organisms';
 import { CollateralBook, useOrders } from 'src/hooks';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
@@ -14,8 +14,8 @@ import { selectLandingOrderForm } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
 import { selectCollateralCurrencyBalance } from 'src/store/wallet';
 import { amountFormatterFromBase } from 'src/utils';
-import { computeAvailableToBorrow, MAX_COVERAGE } from 'src/utils/collateral';
-import { LoanValue } from 'src/utils/entities';
+import { MAX_COVERAGE, computeAvailableToBorrow } from 'src/utils/collateral';
+import { Amount, LoanValue } from 'src/utils/entities';
 import { useWallet } from 'use-wallet';
 
 interface OrderActionProps {
@@ -31,13 +31,21 @@ export const OrderAction = ({
 }: OrderActionProps) => {
     const { account } = useWallet();
     const dispatch = useDispatch();
-    const { placeOrder } = useOrders();
+    const { placeOrder, placePreOrder } = useOrders();
 
     const [openDepositCollateralDialog, setOpenDepositCollateralDialog] =
         useState(false);
     const [openPlaceOrderDialog, setOpenPlaceOrderDialog] = useState(false);
 
-    const { currency, amount, side } = useSelector((state: RootState) =>
+    const {
+        currency,
+        amount,
+        side,
+        marketPhase,
+        maturity,
+        orderType,
+        sourceAccount,
+    } = useSelector((state: RootState) =>
         selectLandingOrderForm(state.landingOrderForm)
     );
 
@@ -72,7 +80,11 @@ export const OrderAction = ({
             {account ? (
                 canBorrow || side === OrderSide.LEND ? (
                     <Button
-                        disabled={amount.isZero()}
+                        disabled={
+                            amount.isZero() ||
+                            (marketPhase !== 'Open' &&
+                                marketPhase !== 'PreOrder')
+                        }
                         fullWidth
                         onClick={() => {
                             setOpenPlaceOrderDialog(true);
@@ -104,17 +116,26 @@ export const OrderAction = ({
             )}
 
             <PlaceOrder
-                onPlaceOrder={placeOrder}
+                onPlaceOrder={
+                    marketPhase === 'Open' ? placeOrder : placePreOrder
+                }
                 isOpen={openPlaceOrderDialog}
                 onClose={() => setOpenPlaceOrderDialog(false)}
                 loanValue={loanValue}
                 collateral={collateralBook}
+                assetPrice={assetPriceMap?.[currency]}
+                maturity={maturity}
+                orderAmount={new Amount(amount, currency)}
+                side={side}
+                orderType={orderType}
+                walletSource={sourceAccount}
             />
 
             <DepositCollateral
                 isOpen={openDepositCollateralDialog}
                 onClose={() => setOpenDepositCollateralDialog(false)}
                 collateralList={depositCollateralList}
+                source='Order Action Button'
             ></DepositCollateral>
         </div>
     );

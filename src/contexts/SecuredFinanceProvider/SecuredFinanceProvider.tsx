@@ -3,7 +3,7 @@ import { SecuredFinanceClient } from '@secured-finance/sf-client';
 import { Signer, getDefaultProvider, providers } from 'ethers';
 import React, { createContext, useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { useLendingMarkets } from 'src/hooks';
+import { useLendingMarkets, useMarketPhase } from 'src/hooks';
 import { useEthereumWalletStore } from 'src/hooks/useEthWallet';
 import { updateChainError, updateLatestBlock } from 'src/store/blockchain';
 import {
@@ -40,8 +40,10 @@ const SecuredFinanceProvider: React.FC = ({ children }) => {
         useState<SecuredFinanceClient>();
     const dispatch = useDispatch();
 
+    //TODO: move this to redux listener to reduce the number of calls and rerenders
     useEthereumWalletStore(securedFinance);
     useLendingMarkets(securedFinance);
+    useMarketPhase(securedFinance);
 
     const handleNetworkChanged = useCallback(
         (networkId: string) => {

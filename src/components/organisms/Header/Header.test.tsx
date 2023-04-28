@@ -24,7 +24,7 @@ const preloadedState = {
 };
 
 describe('Header component', () => {
-    it('Should render the header', () => {
+    it('should render the header', () => {
         (useRouter as jest.Mock).mockReturnValue({
             pathname: '/',
         });
@@ -33,6 +33,7 @@ describe('Header component', () => {
         expect(screen.getByText('Market Dashboard')).toBeInTheDocument();
         expect(screen.getByText('Portfolio Management')).toBeInTheDocument();
         expect(screen.getByText('Connect Wallet')).toBeInTheDocument();
+        expect(screen.getByText('dev')).toBeInTheDocument();
     });
 
     it('should highlight the landing page by default page', () => {

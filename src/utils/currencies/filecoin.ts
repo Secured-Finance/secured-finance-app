@@ -12,7 +12,7 @@ export class EFIL extends Token {
             process.env.NEXT_PUBLIC_EFIL_CONTRACT_ADDRESS,
             18,
             'EFIL',
-            'EFIL'
+            'Filecoin'
         );
     }
 

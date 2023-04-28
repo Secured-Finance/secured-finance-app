@@ -33,6 +33,7 @@ module.exports = {
             width: {
                 '1px': '1px',
                 '2px': '2px',
+                '6px': '6px',
             },
             gap: {
                 '10px': '10px',
