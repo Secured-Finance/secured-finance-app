@@ -52,12 +52,6 @@ export const ActiveTradeTable = ({ data }: { data: TradeSummary[] }) => {
                 row => row.forwardValue,
                 { color: true, priceList: priceList, compact: false }
             ),
-            priceYieldColumnDefinition(
-                columnHelper,
-                'M.T.M.',
-                'averagePrice',
-                row => row.averagePrice
-            ),
             amountColumnDefinition(
                 columnHelper,
                 'P.V',
@@ -68,6 +62,12 @@ export const ActiveTradeTable = ({ data }: { data: TradeSummary[] }) => {
                     priceList: priceList,
                     compact: false,
                 }
+            ),
+            priceYieldColumnDefinition(
+                columnHelper,
+                'M.T.M.',
+                'averagePrice',
+                row => row.averagePrice
             ),
             columnHelper.display({
                 id: 'actions',
