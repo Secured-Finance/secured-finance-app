@@ -28,12 +28,12 @@ describe('currencyList.getCurrencyMapAsOptions', () => {
         const options = getCurrencyMapAsOptions();
         expect(options).toEqual([
             {
-                label: 'EFIL',
+                label: 'Filecoin',
                 value: 'EFIL',
                 iconSVG: 'svg',
             },
             {
-                label: 'Ethereum',
+                label: 'Ether',
                 value: 'ETH',
                 iconSVG: 'svg',
             },
@@ -43,7 +43,7 @@ describe('currencyList.getCurrencyMapAsOptions', () => {
                 iconSVG: 'svg',
             },
             {
-                label: 'Wrapped Bitcoin',
+                label: 'Bitcoin',
                 value: 'WBTC',
                 iconSVG: 'svg',
             },
