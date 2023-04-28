@@ -71,7 +71,7 @@ export const amountColumnDefinition = <T extends AmountColumnType>(
             }
 
             return (
-                <div className='flex justify-end'>
+                <div className='flex justify-center'>
                     <CurrencyItem
                         amount={currencyMap[ccy].fromBaseUnit(
                             info.getValue() as BigNumber
