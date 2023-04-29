@@ -18,8 +18,8 @@ import {
 } from 'src/store/landingOrderForm';
 import { ColorFormat, OrderType } from 'src/types';
 import {
-    currencyMap,
     CurrencySymbol,
+    currencyMap,
     formatLoanValue,
     ordinaryFormat,
 } from 'src/utils';
@@ -178,7 +178,7 @@ export const OrderWidget = ({
                         position='borrow'
                     />
                 ),
-                header: () => <TableHeader align='left' title='Price' />,
+                header: () => <TableHeader title='Price' align='left' />,
             }),
             columnHelper.accessor('amount', {
                 id: 'amount',
