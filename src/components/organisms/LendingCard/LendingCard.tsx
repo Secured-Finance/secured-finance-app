@@ -23,8 +23,8 @@ import { RootState } from 'src/store/types';
 import { selectAllBalances } from 'src/store/wallet';
 import { MaturityOptionList } from 'src/types';
 import {
-    amountFormatterToBase,
     CurrencySymbol,
+    amountFormatterToBase,
     formatLoanValue,
     generateWalletSourceInformation,
     getCurrencyMapAsList,
