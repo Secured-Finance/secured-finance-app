@@ -29,6 +29,9 @@ describe('Header component', () => {
             pathname: '/',
         });
         render(<Primary />);
+        expect(
+            screen.getByText('You are visiting Secured Finance on testnet')
+        ).toBeInTheDocument();
         expect(screen.getByText('OTC Lending')).toBeInTheDocument();
         expect(screen.getByText('Market Dashboard')).toBeInTheDocument();
         expect(screen.getByText('Portfolio Management')).toBeInTheDocument();
@@ -84,5 +87,17 @@ describe('Header component', () => {
         render(<Primary />, { preloadedState });
         const button = screen.getByTestId('connect-wallet');
         expect(button).toBeDisabled();
+    });
+
+    it('should not render testnet header on chainError', () => {
+        (useRouter as jest.Mock).mockImplementation(() => ({
+            pathname: '/',
+            push: jest.fn(),
+        }));
+
+        render(<Primary />, { preloadedState });
+        expect(
+            screen.queryByText('You are visiting Secured Finance on testnet')
+        ).not.toBeInTheDocument();
     });
 });

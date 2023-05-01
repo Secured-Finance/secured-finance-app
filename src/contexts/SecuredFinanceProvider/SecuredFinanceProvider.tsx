@@ -13,7 +13,7 @@ import {
     hexToDec,
 } from 'src/utils';
 import { InterfaceEvents, associateWallet } from 'src/utils/events';
-import { ChainUnsupportedError, useWallet } from 'use-wallet';
+import { useWallet } from 'use-wallet';
 
 export const CACHED_PROVIDER_KEY = 'CACHED_PROVIDER_KEY';
 
@@ -45,16 +45,6 @@ const SecuredFinanceProvider: React.FC = ({ children }) => {
     useLendingMarkets(securedFinance);
     useMarketPhase(securedFinance);
 
-    const handleNetworkChanged = useCallback(
-        (networkId: string) => {
-            if (hexToDec(networkId) !== getEthereumChainId()) {
-                dispatch(updateChainError(true));
-                alert('Unsupported network, please use Goerli (Chain ID: 5)');
-            }
-        },
-        [dispatch]
-    );
-
     const handleAccountChanged = useCallback((accounts: string[]) => {
         track(InterfaceEvents.WALLET_CHANGED_THROUGH_PROVIDER);
         reset();
@@ -62,6 +52,40 @@ const SecuredFinanceProvider: React.FC = ({ children }) => {
             associateWallet(accounts[0]);
         }
     }, []);
+
+    const dispatchChainError = useCallback(
+        (chainId: string) => {
+            if (hexToDec(chainId) !== getEthereumChainId()) {
+                alert('Unsupported network, please use Goerli (Chain ID: 5)');
+                dispatch(updateChainError(true));
+            } else {
+                dispatch(updateChainError(false));
+            }
+        },
+        [dispatch]
+    );
+
+    const handleChainChanged = useCallback(
+        (chainId: string) => {
+            dispatchChainError(chainId);
+        },
+        [dispatchChainError]
+    );
+
+    useEffect(() => {
+        // this is required to get the chainId on initial page load
+        const fetchChainId = async () => {
+            const chainId = await window.ethereum.request({
+                method: 'eth_chainId',
+            });
+            dispatchChainError(chainId);
+        };
+        fetchChainId();
+        window.ethereum?.on('chainChanged', handleChainChanged);
+        return () => {
+            window.ethereum?.removeListener('chainChanged', handleChainChanged);
+        };
+    }, [dispatchChainError, handleChainChanged]);
 
     useEffect(() => {
         const connectSFClient = async (
@@ -97,41 +121,25 @@ const SecuredFinanceProvider: React.FC = ({ children }) => {
                 : new providers.Web3Provider(ethereum, chainId);
             const signer = provider.getSigner();
             connectSFClient(provider, signer);
-            ethereum.on('chainChanged', handleNetworkChanged);
             ethereum.on('accountsChanged', handleAccountChanged);
 
             return () => {
                 if (ethereum.removeListener) {
                     ethereum.removeListener(
-                        'chainChanged',
-                        handleNetworkChanged
-                    );
-                    ethereum.removeListener(
                         'accountsChanged',
                         handleAccountChanged
                     );
-                    dispatch(updateChainError(false));
                 }
             };
         } else if (!isConnected()) {
             const provider = getDefaultProvider(getRpcEndpoint());
             connectSFClient(provider);
         }
-    }, [
-        ethereum,
-        isConnected,
-        handleNetworkChanged,
-        dispatch,
-        handleAccountChanged,
-    ]);
+    }, [ethereum, isConnected, dispatch, handleAccountChanged]);
 
     useEffect(() => {
         if (status === 'error') {
-            if (error instanceof ChainUnsupportedError) {
-                alert('Unsupported network, please use Goerli (Chain ID: 5)');
-            } else {
-                console.error(error);
-            }
+            console.error(error);
         }
     }, [status, error]);
 

@@ -16,7 +16,7 @@ export const Header = () => {
     const dispatch = useDispatch();
     const { account } = useWallet();
     const securedFinance = useSF();
-    const status = useSelector(
+    const chainError = useSelector(
         (state: RootState) => state.blockchain.chainError
     );
     const open = useSelector(
@@ -25,65 +25,72 @@ export const Header = () => {
     const envShort = getEnvShort();
 
     return (
-        <nav
-            data-cy='header'
-            className={`flex h-20 w-full flex-row items-center justify-between border-b border-neutral-1 ${
-                open ? 'blur-sm' : ''
-            }`}
-        >
-            <div className='ml-5 flex flex-row items-center gap-3'>
-                <Link href='/' passHref>
-                    <a href='_'>
-                        <SFLogo className='h-10 w-[200px]' />
-                    </a>
-                </Link>
-                {envShort && (
-                    <div className='typography-dropdown-selection-label flex h-5 w-10 items-center justify-center rounded-3xl bg-starBlue font-semibold uppercase text-white'>
-                        {envShort}
-                    </div>
-                )}
-            </div>
-            <div className='flex h-full items-center justify-center'>
-                <ItemLink
-                    text='OTC Lending'
-                    dataCy='lending'
-                    link='/'
-                    alternateLink='/advanced'
-                />
-                <ItemLink
-                    text='Market Dashboard'
-                    dataCy='terminal'
-                    link='/dashboard'
-                />
-                <ItemLink
-                    text='Portfolio Management'
-                    dataCy='history'
-                    link='/portfolio'
-                />
-                <ItemLink text='Faucet' dataCy='faucet' link='/faucet' />
-                <MenuPopover />
-            </div>
-            <div className='mr-5'>
-                {account ? (
-                    <WalletPopover
-                        wallet={AddressUtils.format(account, 6)}
-                        networkName={
-                            securedFinance?.config?.network ?? 'Unknown'
-                        }
+        <div>
+            {!chainError && (
+                <div className='typography-caption-2 bg-horizonBlue/100 p-[1px] text-center text-neutral-8'>
+                    You are visiting Secured Finance on testnet
+                </div>
+            )}
+            <nav
+                data-cy='header'
+                className={`flex h-20 w-full flex-row items-center justify-between border-b border-neutral-1 ${
+                    open ? 'blur-sm' : ''
+                }`}
+            >
+                <div className='ml-5 flex flex-row items-center gap-3'>
+                    <Link href='/' passHref>
+                        <a href='_'>
+                            <SFLogo className='h-10 w-[200px]' />
+                        </a>
+                    </Link>
+                    {envShort && (
+                        <div className='typography-dropdown-selection-label flex h-5 w-10 items-center justify-center rounded-3xl bg-starBlue font-semibold uppercase text-white'>
+                            {envShort}
+                        </div>
+                    )}
+                </div>
+                <div className='flex h-full items-center justify-center'>
+                    <ItemLink
+                        text='OTC Lending'
+                        dataCy='lending'
+                        link='/'
+                        alternateLink='/advanced'
                     />
-                ) : (
-                    <Button
-                        data-cy='wallet'
-                        data-testid='connect-wallet'
-                        onClick={() => dispatch(setWalletDialogOpen(true))}
-                        disabled={status}
-                    >
-                        Connect Wallet
-                    </Button>
-                )}
-            </div>
-            <WalletDialog />
-        </nav>
+                    <ItemLink
+                        text='Market Dashboard'
+                        dataCy='terminal'
+                        link='/dashboard'
+                    />
+                    <ItemLink
+                        text='Portfolio Management'
+                        dataCy='history'
+                        link='/portfolio'
+                    />
+                    <ItemLink text='Faucet' dataCy='faucet' link='/faucet' />
+                    <MenuPopover />
+                </div>
+                <div className='mr-5'>
+                    {account ? (
+                        <WalletPopover
+                            wallet={AddressUtils.format(account, 6)}
+                            networkName={
+                                securedFinance?.config?.network ?? 'Unknown'
+                            }
+                        />
+                    ) : (
+                        <Button
+                            data-cy='wallet'
+                            data-testid='connect-wallet'
+                            onClick={() => dispatch(setWalletDialogOpen(true))}
+                            disabled={chainError}
+                        >
+                            Connect Wallet
+                        </Button>
+                    )}
+                </div>
+                <WalletDialog />
+            </nav>
+        </div>
     );
 };
 
