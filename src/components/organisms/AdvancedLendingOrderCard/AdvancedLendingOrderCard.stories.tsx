@@ -12,7 +12,6 @@ export default {
     component: AdvancedLendingOrderCard,
     args: {
         collateralBook: collateralBook37,
-        collateralThreshold: 80,
     },
     parameters: {
         connected: true,
@@ -28,7 +27,6 @@ export const Default = Template.bind({});
 export const OnlyLimitOrder = Template.bind({});
 OnlyLimitOrder.args = {
     onlyLimitOrder: true,
-    collateralThreshold: 80,
 };
 
 export const Lend = Template.bind({});

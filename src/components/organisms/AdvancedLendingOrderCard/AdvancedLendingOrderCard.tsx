@@ -45,11 +45,9 @@ import { useWallet } from 'use-wallet';
 export const AdvancedLendingOrderCard = ({
     collateralBook,
     onlyLimitOrder = false,
-    collateralThreshold,
 }: {
     collateralBook: CollateralBook;
     onlyLimitOrder?: boolean;
-    collateralThreshold?: number;
 }) => {
     const {
         currency,
@@ -95,14 +93,14 @@ export const AdvancedLendingOrderCard = ({
                   assetPriceMap[currency],
                   collateralBook.usdCollateral,
                   collateralBook.coverage.toNumber() / MAX_COVERAGE,
-                  collateralThreshold ?? 0
+                  collateralBook.collateralThreshold
               )
             : 0;
     }, [
         assetPriceMap,
+        collateralBook.collateralThreshold,
         collateralBook.coverage,
         collateralBook.usdCollateral,
-        collateralThreshold,
         currency,
     ]);
 
@@ -240,7 +238,6 @@ export const AdvancedLendingOrderCard = ({
                 <OrderAction
                     loanValue={loanValue}
                     collateralBook={collateralBook}
-                    collateralThreshold={collateralThreshold}
                 />
 
                 <Separator color='neutral-3'></Separator>
@@ -261,7 +258,7 @@ export const AdvancedLendingOrderCard = ({
                 <CollateralManagementConciseTab
                     collateralCoverage={collateralUsagePercent}
                     totalCollateralInUSD={collateralBook.usdCollateral}
-                    collateralThreshold={collateralThreshold}
+                    collateralThreshold={collateralBook.collateralThreshold}
                 />
             </div>
         </div>

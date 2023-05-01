@@ -6,7 +6,7 @@ import { computeAvailableToBorrow } from 'src/utils/collateral';
 interface CollateralManagementConciseTabProps {
     collateralCoverage: number;
     totalCollateralInUSD: number;
-    collateralThreshold?: number;
+    collateralThreshold: number;
 }
 
 export const CollateralManagementConciseTab = ({
@@ -23,7 +23,7 @@ export const CollateralManagementConciseTab = ({
         1,
         totalCollateralInUSD,
         collateralCoverage / 100.0,
-        collateralThreshold ?? 0
+        collateralThreshold
     );
 
     return (

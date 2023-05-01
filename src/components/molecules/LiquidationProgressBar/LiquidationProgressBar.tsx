@@ -12,7 +12,7 @@ interface LiquidationProgressBarProps {
 
 const getInformationText = (
     liquidationPercentage: number,
-    collateralThreshold?: number
+    collateralThreshold: number
 ) => {
     if (liquidationPercentage === 0) return;
     return (
@@ -25,8 +25,7 @@ const getInformationText = (
                 <span>You are currently </span>
                 <span className='text-nebulaTeal'>
                     {percentFormat(
-                        collateralThreshold &&
-                            collateralThreshold > liquidationPercentage
+                        collateralThreshold > liquidationPercentage
                             ? collateralThreshold - liquidationPercentage
                             : 0
                     )}
@@ -41,9 +40,10 @@ export const LiquidationProgressBar = ({
     liquidationPercentage = 0,
     collateralThreshold,
 }: LiquidationProgressBarProps) => {
-    let padding = collateralThreshold
-        ? liquidationPercentage / collateralThreshold
-        : 0;
+    let padding =
+        collateralThreshold !== 0
+            ? liquidationPercentage / collateralThreshold
+            : 0;
     if (padding > 1) {
         padding = 1;
     }

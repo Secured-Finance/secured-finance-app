@@ -14,7 +14,6 @@ export default {
         tradePosition: OrderSide.BORROW,
         assetPrice: 8,
         type: 'trade',
-        collateralThreshold: 80,
     },
 } as ComponentMeta<typeof CollateralSimulationSection>;
 
@@ -26,5 +25,4 @@ export const Trade = Template.bind({});
 export const Unwind = Template.bind({});
 Unwind.args = {
     type: 'unwind',
-    collateralThreshold: 80,
 };

@@ -1,7 +1,7 @@
 import { track } from '@amplitude/analytics-browser';
 import { Disclosure } from '@headlessui/react';
 import { OrderSide, WalletSource } from '@secured-finance/sf-client';
-import { getUTCMonthYear, formatDate } from '@secured-finance/sf-core';
+import { formatDate, getUTCMonthYear } from '@secured-finance/sf-core';
 import { BigNumber } from 'ethers';
 import { useCallback, useReducer, useState } from 'react';
 import { useDispatch } from 'react-redux';
@@ -109,7 +109,6 @@ export const PlaceOrder = ({
     orderType,
     assetPrice,
     walletSource,
-    collateralThreshold,
 }: {
     collateral: CollateralBook;
     loanValue?: LoanValue;
@@ -120,7 +119,6 @@ export const PlaceOrder = ({
     orderType: OrderType;
     assetPrice: number;
     walletSource: WalletSource;
-    collateralThreshold?: number;
 } & DialogState) => {
     const [state, dispatch] = useReducer(reducer, stateRecord[1]);
     const globalDispatch = useDispatch();
@@ -286,7 +284,6 @@ export const PlaceOrder = ({
                                     assetPrice={assetPrice}
                                     tradeValue={loanValue}
                                     type='trade'
-                                    collateralThreshold={collateralThreshold}
                                     side={side}
                                 />
                                 <SectionWithItems

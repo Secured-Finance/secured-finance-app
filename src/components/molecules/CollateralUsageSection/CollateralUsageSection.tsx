@@ -16,7 +16,7 @@ export const CollateralUsageSection = ({
     usdCollateral: CollateralBook['usdCollateral'];
     collateralCoverage: number;
     currency: CurrencySymbol;
-    collateralThreshold?: number;
+    collateralThreshold: number;
 }) => {
     collateralCoverage = collateralCoverage / 100.0;
     const assetPriceMap = useSelector((state: RootState) => getPriceMap(state));
@@ -32,7 +32,7 @@ export const CollateralUsageSection = ({
                 assetPriceMap[currency],
                 usdCollateral,
                 collateralCoverage / 100.0,
-                collateralThreshold ?? 0
+                collateralThreshold
             );
         }
         return formatWithCurrency(isNaN(result) ? 0 : result, currency);
