@@ -82,6 +82,16 @@
     border-radius: 100vh;
     border: 6px solid #292D3F;
   }
+
+  .horizontal-scrollbar::-webkit-scrollbar {
+    height: 5px;
+  }
+
+  .horizontal-scrollbar::-webkit-scrollbar-thumb {
+    background: rgba(119, 126, 144, 1);
+    width: 200px;
+    border-radius: 50px;
+  }
 }
 
 @layer components {
