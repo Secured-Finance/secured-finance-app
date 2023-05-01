@@ -8,12 +8,7 @@ import {
     YieldChart,
 } from 'src/components/organisms';
 import { SimpleAdvancedView } from 'src/components/templates';
-import {
-    RateType,
-    useCollateralBook,
-    useCollateralParameters,
-    useLoanValues,
-} from 'src/hooks';
+import { RateType, useCollateralBook, useLoanValues } from 'src/hooks';
 import {
     selectLandingOrderForm,
     setLastView,
@@ -42,8 +37,6 @@ export const Landing = ({ view }: { view?: ViewType }) => {
     const dispatch = useDispatch();
 
     const collateralBook = useCollateralBook(account);
-
-    const collateralThreshold = useCollateralParameters();
 
     const optionList = Object.entries(lendingContracts)
         .filter(o => o[1].isReady)
@@ -89,7 +82,6 @@ export const Landing = ({ view }: { view?: ViewType }) => {
                         collateralBook={collateralBook}
                         marketValue={marketValue}
                         maturitiesOptionList={maturityOptionList}
-                        collateralThreshold={collateralThreshold}
                     />
                     <YieldChart
                         asset={currency}
@@ -105,7 +97,6 @@ export const Landing = ({ view }: { view?: ViewType }) => {
                     loanValue={marketValue}
                     rates={unitPrices.map(v => v.apr)}
                     maturitiesOptionList={maturityOptionList}
-                    collateralThreshold={collateralThreshold}
                 />
             }
             initialView={view ?? lastView}

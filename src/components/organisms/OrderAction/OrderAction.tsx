@@ -22,14 +22,12 @@ interface OrderActionProps {
     loanValue?: LoanValue;
     collateralBook: CollateralBook;
     renderSide?: boolean;
-    collateralThreshold?: number;
 }
 
 export const OrderAction = ({
     loanValue,
     collateralBook,
     renderSide = false,
-    collateralThreshold,
 }: OrderActionProps) => {
     const { account } = useWallet();
     const dispatch = useDispatch();
@@ -68,14 +66,14 @@ export const OrderAction = ({
                   assetPriceMap[currency],
                   collateralBook.usdCollateral,
                   collateralBook.coverage.toNumber() / MAX_COVERAGE,
-                  collateralThreshold ?? 0
+                  collateralBook.collateralThreshold
               )
             : 0;
     }, [
         assetPriceMap,
         collateralBook.coverage,
         collateralBook.usdCollateral,
-        collateralThreshold,
+        collateralBook.collateralThreshold,
         currency,
     ]);
 
@@ -138,7 +136,6 @@ export const OrderAction = ({
                 side={side}
                 orderType={orderType}
                 walletSource={sourceAccount}
-                collateralThreshold={collateralThreshold}
             />
 
             <DepositCollateral

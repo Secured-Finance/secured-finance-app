@@ -24,7 +24,6 @@ export default {
         side: OrderSide.BORROW,
         assetPrice: 6.12,
         walletSource: WalletSource.METAMASK,
-        collateralThreshold: 80,
     },
     decorators: [withAssetPrice, withWalletProvider],
 } as ComponentMeta<typeof PlaceOrder>;

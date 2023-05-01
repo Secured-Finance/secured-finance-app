@@ -38,12 +38,10 @@ export const LendingCard = ({
     collateralBook,
     marketValue,
     maturitiesOptionList,
-    collateralThreshold,
 }: {
     collateralBook: CollateralBook;
     marketValue: LoanValue;
     maturitiesOptionList: MaturityOptionList;
-    collateralThreshold?: number;
 }) => {
     const { currency, maturity, side, sourceAccount } = useSelector(
         (state: RootState) => selectLandingOrderForm(state.landingOrderForm)
@@ -165,14 +163,10 @@ export const LendingCard = ({
                     usdCollateral={collateralBook.usdCollateral}
                     collateralCoverage={collateralBook.coverage.toNumber()}
                     currency={currency}
-                    collateralThreshold={collateralThreshold}
+                    collateralThreshold={collateralBook.collateralThreshold}
                 />
 
-                <OrderAction
-                    collateralBook={collateralBook}
-                    renderSide
-                    collateralThreshold={collateralThreshold}
-                />
+                <OrderAction collateralBook={collateralBook} renderSide />
             </div>
         </div>
     );

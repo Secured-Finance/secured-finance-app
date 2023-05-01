@@ -6,7 +6,7 @@ import { computeAvailableToBorrow } from 'src/utils/collateral';
 interface CollateralProgressBarProps {
     collateralCoverage: number;
     totalCollateralInUSD: number;
-    collateralThreshold?: number;
+    collateralThreshold: number;
 }
 
 const getInformationText = (
