@@ -1,7 +1,7 @@
 import { track } from '@amplitude/analytics-browser';
 import { Disclosure } from '@headlessui/react';
 import { OrderSide, WalletSource } from '@secured-finance/sf-client';
-import { formatDate, getUTCMonthYear } from '@secured-finance/sf-core';
+import { getUTCMonthYear, formatDate } from '@secured-finance/sf-core';
 import { BigNumber } from 'ethers';
 import { useCallback, useReducer, useState } from 'react';
 import { useDispatch } from 'react-redux';
@@ -24,9 +24,9 @@ import { setLastMessage } from 'src/store/lastError';
 import { OrderType, PlaceOrderFunction } from 'src/types';
 import {
     CurrencySymbol,
-    handleContractTransaction,
     OrderEvents,
     OrderProperties,
+    handleContractTransaction,
     ordinaryFormat,
 } from 'src/utils';
 import { Amount, LoanValue, Maturity } from 'src/utils/entities';

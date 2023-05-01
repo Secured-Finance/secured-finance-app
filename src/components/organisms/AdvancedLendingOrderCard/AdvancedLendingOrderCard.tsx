@@ -30,11 +30,11 @@ import { RootState } from 'src/store/types';
 import { selectAllBalances } from 'src/store/wallet';
 import { OrderType } from 'src/types';
 import {
+    MAX_COVERAGE,
     amountFormatterToBase,
     computeAvailableToBorrow,
     divide,
     generateWalletSourceInformation,
-    MAX_COVERAGE,
     multiply,
     percentFormat,
     usdFormat,
