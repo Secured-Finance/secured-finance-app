@@ -23,7 +23,7 @@ const initialStore: LandingOrderFormStore = {
     side: OrderSide.BORROW,
     amount: '0',
     unitPrice: 0,
-    orderType: OrderType.LIMIT,
+    orderType: OrderType.MARKET,
     marketPhase: 'Open',
     lastView: 'Simple',
     sourceAccount: WalletSource.METAMASK,
