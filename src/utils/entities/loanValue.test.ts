@@ -154,5 +154,27 @@ describe('LoanValue', () => {
                 LoanValue.getMidValue(bidValue, askValue)
             ).toThrowError('cannot compute mid value: maturity mismatch');
         });
+
+        it('should use 0 as the bid price if it is not set', () => {
+            const bidValue = LoanValue.fromPrice(0, 1675252800);
+            const askValue = LoanValue.fromPrice(9700, 1675252800);
+
+            const midPrice = (0 + askValue.price) / 2;
+
+            expect(LoanValue.getMidValue(bidValue, askValue).price).toEqual(
+                midPrice
+            );
+        });
+
+        it('should use 10000 (100) as the ask price if it is not set', () => {
+            const bidValue = LoanValue.fromPrice(9800, 1675252800);
+            const askValue = LoanValue.fromPrice(0, 1675252800);
+
+            const midPrice = (bidValue.price + 10000) / 2;
+
+            expect(LoanValue.getMidValue(bidValue, askValue).price).toEqual(
+                midPrice
+            );
+        });
     });
 });
