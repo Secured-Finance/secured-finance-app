@@ -65,10 +65,17 @@ export const OrderAction = ({
             ? computeAvailableToBorrow(
                   assetPriceMap[currency],
                   collateralBook.usdCollateral,
-                  collateralBook.coverage.toNumber() / MAX_COVERAGE
+                  collateralBook.coverage.toNumber() / MAX_COVERAGE,
+                  collateralBook.collateralThreshold
               )
             : 0;
-    }, [assetPriceMap, collateralBook, currency]);
+    }, [
+        assetPriceMap,
+        collateralBook.coverage,
+        collateralBook.usdCollateral,
+        collateralBook.collateralThreshold,
+        currency,
+    ]);
 
     const canBorrow = useMemo(
         () => availableToBorrow > amountFormatterFromBase[currency](amount),
