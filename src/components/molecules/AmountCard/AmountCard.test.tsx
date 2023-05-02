@@ -11,7 +11,7 @@ describe('AmountCard Component', () => {
 
     it('should render a AmountCard with the name of the currency', () => {
         render(<Default />);
-        expect(screen.getAllByText('EFIL')).toHaveLength(2);
+        expect(screen.getByText('EFIL')).toBeInTheDocument();
     });
 
     it('should render a AmountCard with the amount of the currency', () => {
@@ -21,7 +21,7 @@ describe('AmountCard Component', () => {
 
     it('should render a AmountCard with the symbol of the currency', () => {
         render(<Default />);
-        expect(screen.getAllByText('EFIL')).toHaveLength(2);
+        expect(screen.getByText('EFIL')).toBeInTheDocument();
     });
 
     it('should render a AmountCard with the amount in USD', () => {
