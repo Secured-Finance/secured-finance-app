@@ -11,6 +11,7 @@ export default {
         usdCollateral: collateralBook37.usdCollateral,
         collateralCoverage: collateralBook37.coverage.toNumber(),
         currency: CurrencySymbol.EFIL,
+        collateralThreshold: 80,
     },
     decorators: [withAssetPrice],
 } as ComponentMeta<typeof CollateralUsageSection>;
