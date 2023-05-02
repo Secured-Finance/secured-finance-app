@@ -11,16 +11,25 @@ Object.assign(navigator, {
 });
 
 describe('FailurePanel Component', () => {
-    it('should render a FailurePanel', () => {
+    it('should render a failure panel', () => {
+        render(<Default />);
+        expect(screen.getByText('Error Details')).toBeInTheDocument();
+        expect(screen.getByRole('button')).toBeInTheDocument();
+        expect(screen.getByText('Copy')).toBeInTheDocument();
+        expect(screen.getByText('This is an error.')).toBeInTheDocument();
+    });
+
+    it('should render copy button with appropriate on click behaviour', () => {
         render(<Default />);
         jest.spyOn(navigator.clipboard, 'writeText');
         expect(screen.getByRole('button')).toBeInTheDocument();
+        expect(screen.getByText('Copy')).toBeInTheDocument();
         const copyButton = screen.getByRole('button');
         fireEvent.click(copyButton);
+        expect(screen.getByText('Copied!')).toBeInTheDocument();
         expect(navigator.clipboard.writeText).toHaveBeenCalledWith(
             'This is an error.'
         );
-        expect(screen.getByText('This is an error.')).toBeInTheDocument();
     });
 
     it('should render a long message failure panel', () => {
