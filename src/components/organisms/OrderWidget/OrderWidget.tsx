@@ -54,7 +54,7 @@ const AmountCell = ({
     value: BigNumber;
     currency: CurrencySymbol;
 }) => (
-    <div className='flex justify-end'>
+    <div className='flex justify-center'>
         {value.eq(0) ? (
             <OrderBookCell />
         ) : (
@@ -106,18 +106,27 @@ const PriceCell = ({
 const AprCell = ({
     value,
     display,
+    align,
 }: {
     value: LoanValue;
     display: boolean;
-}) => (
-    <div className='flex justify-end'>
-        {display ? (
-            <OrderBookCell value={formatLoanValue(value, 'rate')} />
-        ) : (
-            <OrderBookCell />
-        )}
-    </div>
-);
+    align: 'left' | 'right';
+}) => {
+    return (
+        <div
+            className={classNames('flex', {
+                'justify-start': align === 'left',
+                'justify-end': align === 'right',
+            })}
+        >
+            {display ? (
+                <OrderBookCell value={formatLoanValue(value, 'rate')} />
+            ) : (
+                <OrderBookCell />
+            )}
+        </div>
+    );
+};
 
 export const OrderWidget = ({
     buyOrders,
@@ -177,7 +186,10 @@ export const OrderWidget = ({
                     <AmountCell value={info.getValue()} currency={currency} />
                 ),
                 header: () => (
-                    <TableHeader title={`Amount (${currency})`} align='right' />
+                    <TableHeader
+                        title={`Amount (${currency})`}
+                        align='center'
+                    />
                 ),
             }),
             columnHelper.accessor('value', {
@@ -186,6 +198,7 @@ export const OrderWidget = ({
                     <AprCell
                         value={info.getValue()}
                         display={!info.row.original.amount.eq(0)}
+                        align='right'
                     />
                 ),
                 header: () => <TableHeader title='Borrow APR' align='right' />,
@@ -202,9 +215,10 @@ export const OrderWidget = ({
                     <AprCell
                         value={info.getValue()}
                         display={!info.row.original.amount.eq(0)}
+                        align='left'
                     />
                 ),
-                header: () => <TableHeader title='Lend APR' align='right' />,
+                header: () => <TableHeader title='Lend APR' align='left' />,
             }),
             columnHelper.accessor('amount', {
                 id: 'amount',
@@ -212,7 +226,10 @@ export const OrderWidget = ({
                     <AmountCell value={info.getValue()} currency={currency} />
                 ),
                 header: () => (
-                    <TableHeader title={`Amount (${currency})`} align='right' />
+                    <TableHeader
+                        title={`Amount (${currency})`}
+                        align='center'
+                    />
                 ),
             }),
             columnHelper.accessor('value', {
@@ -283,7 +300,7 @@ export const OrderWidget = ({
                     </span>
                 </div>
             )}
-            <div className='flex flex-row gap-6'>
+            <div className='flex flex-row gap-6 px-2'>
                 <CoreTable
                     data={sellOrders}
                     columns={sellColumns}
