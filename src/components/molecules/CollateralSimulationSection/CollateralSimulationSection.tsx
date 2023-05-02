@@ -3,7 +3,6 @@ import { useMemo } from 'react';
 import { SectionWithItems } from 'src/components/atoms';
 import { CollateralBook } from 'src/hooks';
 import {
-    COLLATERAL_THRESHOLD,
     formatCollateralRatio,
     formatLoanValue,
     ordinaryFormat,
@@ -45,8 +44,11 @@ export const CollateralSimulationSection = ({
     )}`;
 
     const remainingToBorrowText = useMemo(() => {
-        const availableAssetMultiplier =
-            (COLLATERAL_THRESHOLD - collateral.coverage.toNumber() / 100) / 100;
+        const availableAssetMultiplier = collateral.collateralThreshold
+            ? (collateral.collateralThreshold -
+                  collateral.coverage.toNumber() / 100) /
+              100
+            : 0;
 
         return `${ordinaryFormat(
             (collateral.usdCollateral * availableAssetMultiplier -
@@ -56,13 +58,15 @@ export const CollateralSimulationSection = ({
             computeAvailableToBorrow(
                 assetPrice,
                 collateral.usdCollateral,
-                collateral.coverage.toNumber() / MAX_COVERAGE
+                collateral.coverage.toNumber() / MAX_COVERAGE,
+                collateral.collateralThreshold
             )
         )}`;
     }, [
         assetPrice,
         collateral.coverage,
         collateral.usdCollateral,
+        collateral.collateralThreshold,
         tradeAmount,
     ]);
 

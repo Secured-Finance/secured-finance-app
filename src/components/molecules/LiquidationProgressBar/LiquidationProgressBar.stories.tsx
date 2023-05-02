@@ -6,6 +6,7 @@ export default {
     component: LiquidationProgressBar,
     args: {
         liquidationPercentage: 0,
+        collateralThreshold: 80,
     },
 } as ComponentMeta<typeof LiquidationProgressBar>;
 
@@ -17,4 +18,5 @@ export const Default = Template.bind({});
 export const ConnectedToWallet = Template.bind({});
 ConnectedToWallet.args = {
     liquidationPercentage: 45,
+    collateralThreshold: 80,
 };

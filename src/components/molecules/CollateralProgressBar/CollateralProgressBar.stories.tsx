@@ -7,6 +7,7 @@ export default {
     args: {
         collateralCoverage: 0,
         totalCollateralInUSD: 0,
+        collateralThreshold: 80,
     },
 } as ComponentMeta<typeof CollateralProgressBar>;
 
@@ -19,4 +20,5 @@ export const ConnectedToWallet = Template.bind({});
 ConnectedToWallet.args = {
     collateralCoverage: 37,
     totalCollateralInUSD: 100,
+    collateralThreshold: 80,
 };
