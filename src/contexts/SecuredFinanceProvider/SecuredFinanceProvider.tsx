@@ -56,8 +56,8 @@ const SecuredFinanceProvider: React.FC = ({ children }) => {
     const dispatchChainError = useCallback(
         (chainId: string) => {
             if (hexToDec(chainId) !== getEthereumChainId()) {
-                alert('Unsupported network, please use Goerli (Chain ID: 5)');
                 dispatch(updateChainError(true));
+                alert('Unsupported network, please use Goerli (Chain ID: 5)');
             } else {
                 dispatch(updateChainError(false));
             }
@@ -75,10 +75,12 @@ const SecuredFinanceProvider: React.FC = ({ children }) => {
     useEffect(() => {
         // this is required to get the chainId on initial page load
         const fetchChainId = async () => {
-            const chainId = await window.ethereum.request({
-                method: 'eth_chainId',
-            });
-            dispatchChainError(chainId);
+            if (window.ethereum) {
+                const chainId = await window.ethereum.request({
+                    method: 'eth_chainId',
+                });
+                dispatchChainError(chainId);
+            }
         };
         fetchChainId();
         window.ethereum?.on('chainChanged', handleChainChanged);
