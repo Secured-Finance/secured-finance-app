@@ -40,7 +40,7 @@ describe('LendingCard Component', () => {
                 name: DEFAULT_CHOICE.name,
             })
         );
-        fireEvent.click(screen.getByText('Ethereum'));
+        fireEvent.click(screen.getByRole('menuitem', { name: 'Ether' }));
     };
     it('should render a LendingCard', async () => {
         await waitFor(() => render(<Default />));
@@ -64,26 +64,33 @@ describe('LendingCard Component', () => {
         expect(button).toHaveTextContent('OK');
     });
 
-    it('should let the user choose between ETH, EFIL and USDC when clicking on the asset selector', async () => {
+    it('should let the user choose between ETH, Filecoin and USDC when clicking on the asset selector', async () => {
         await waitFor(() => render(<Default />));
 
-        expect(screen.getAllByText(DEFAULT_CHOICE.name)).toHaveLength(2);
+        expect(screen.getByText(DEFAULT_CHOICE.name)).toBeInTheDocument();
         expect(screen.queryByText('USDC')).not.toBeInTheDocument();
         expect(screen.queryByText('Ethereum')).not.toBeInTheDocument();
         fireEvent.click(
             screen.getByRole('button', {
-                name: 'EFIL',
+                name: 'Filecoin',
             })
         );
-        expect(screen.getAllByText('EFIL')).toHaveLength(3);
-        expect(screen.getByText('USDC')).toBeInTheDocument();
-        expect(screen.getByText('Ethereum')).toBeInTheDocument();
+
+        expect(
+            screen.getByRole('menuitem', { name: 'USDC' })
+        ).toBeInTheDocument();
+        expect(
+            screen.getByRole('menuitem', { name: 'Filecoin' })
+        ).toBeInTheDocument();
+        expect(
+            screen.getByRole('menuitem', { name: 'Ether' })
+        ).toBeInTheDocument();
     });
 
     it('should switch to Ethereum when selecting it from the option', async () => {
         await waitFor(() => render(<Default />));
         selectEthereum();
-        expect(screen.getByText('Ethereum')).toBeInTheDocument();
+        expect(screen.getByText('Ether')).toBeInTheDocument();
     });
 
     it('should display the amount inputted by the user in USD', async () => {
