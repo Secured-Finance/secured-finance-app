@@ -17,18 +17,21 @@ describe('ActiveTradeTable Component', () => {
         expect(initialRows[2]).toHaveTextContent('Borrow');
         expect(initialRows[3]).toHaveTextContent('Borrow');
         expect(initialRows[4]).toHaveTextContent('Borrow');
+        expect(initialRows[5]).toHaveTextContent('Lend');
         screen.getByText('Type').click();
         const sortedRowsAsc = screen.getAllByRole('row');
         expect(sortedRowsAsc[1]).toHaveTextContent('Lend');
-        expect(sortedRowsAsc[2]).toHaveTextContent('Borrow');
+        expect(sortedRowsAsc[2]).toHaveTextContent('Lend');
         expect(sortedRowsAsc[3]).toHaveTextContent('Borrow');
         expect(sortedRowsAsc[4]).toHaveTextContent('Borrow');
+        expect(sortedRowsAsc[5]).toHaveTextContent('Borrow');
         screen.getByText('Type').click();
         const sortedRowsDesc = screen.getAllByRole('row');
         expect(sortedRowsDesc[1]).toHaveTextContent('Borrow');
         expect(sortedRowsDesc[2]).toHaveTextContent('Borrow');
         expect(sortedRowsDesc[3]).toHaveTextContent('Borrow');
         expect(sortedRowsDesc[4]).toHaveTextContent('Lend');
+        expect(sortedRowsDesc[5]).toHaveTextContent('Lend');
     });
 
     it('should display more options when clicking on the ... button', () => {
@@ -37,7 +40,7 @@ describe('ActiveTradeTable Component', () => {
         const moreOptionsButton = screen.getAllByRole('button', {
             name: 'More options',
         });
-        expect(moreOptionsButton).toHaveLength(4);
+        expect(moreOptionsButton).toHaveLength(5);
         fireEvent.click(moreOptionsButton[0]);
         expect(screen.getByRole('menu')).toBeInTheDocument();
         expect(screen.getByText('View Contract')).toBeInTheDocument();

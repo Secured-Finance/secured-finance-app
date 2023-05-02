@@ -1,3 +1,4 @@
+import { formatDate } from '@secured-finance/sf-core';
 import { createColumnHelper } from '@tanstack/react-table';
 import * as dayjs from 'dayjs';
 import { BigNumber } from 'ethers';
@@ -41,6 +42,25 @@ export const ActiveTradeTable = ({ data }: { data: TradeSummary[] }) => {
                         .unix(Number(info.getValue()))
                         .diff(Date.now(), 'day');
 
+                    if (dayToMaturity < 1) {
+                        const maturityTimestamp = Number(info.getValue());
+                        const maturityDate = new Date(maturityTimestamp * 1000);
+
+                        const diffMs = maturityDate.getTime() - Date.now();
+                        const diffHours = Math.floor(diffMs / 1000 / 60 / 60);
+                        const diffMinutes = Math.floor(
+                            (diffMs / 1000 / 60) % 60
+                        );
+
+                        return (
+                            <div className='grid'>
+                                {diffHours}h-{diffMinutes}m
+                                <span className='typography-caption-2 h-5 text-[#6F74B0]'>
+                                    {formatDate(maturityTimestamp)}
+                                </span>
+                            </div>
+                        );
+                    }
                     return <>{dayToMaturity} Days</>;
                 },
                 header: tableHeaderDefinition('D.T.M.'),
