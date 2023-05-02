@@ -214,6 +214,9 @@ export const MarketDashboard = () => {
                                         totalCollateralInUSD={
                                             collateralBook.usdCollateral
                                         }
+                                        collateralThreshold={
+                                            collateralBook.collateralThreshold
+                                        }
                                     />
                                 </div>
                             </GradientBox>
