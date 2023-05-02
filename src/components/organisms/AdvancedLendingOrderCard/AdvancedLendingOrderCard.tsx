@@ -92,10 +92,17 @@ export const AdvancedLendingOrderCard = ({
             ? computeAvailableToBorrow(
                   assetPriceMap[currency],
                   collateralBook.usdCollateral,
-                  collateralBook.coverage.toNumber() / MAX_COVERAGE
+                  collateralBook.coverage.toNumber() / MAX_COVERAGE,
+                  collateralBook.collateralThreshold
               )
             : 0;
-    }, [assetPriceMap, collateralBook, currency]);
+    }, [
+        assetPriceMap,
+        collateralBook.collateralThreshold,
+        collateralBook.coverage,
+        collateralBook.usdCollateral,
+        currency,
+    ]);
 
     const walletSourceList = useMemo(() => {
         return generateWalletSourceInformation(
@@ -251,6 +258,7 @@ export const AdvancedLendingOrderCard = ({
                 <CollateralManagementConciseTab
                     collateralCoverage={collateralUsagePercent}
                     totalCollateralInUSD={collateralBook.usdCollateral}
+                    collateralThreshold={collateralBook.collateralThreshold}
                 />
             </div>
         </div>
