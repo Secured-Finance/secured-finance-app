@@ -1,8 +1,16 @@
 import { composeStories } from '@storybook/testing-react';
 import { fireEvent, render, screen } from 'src/test-utils.js';
+import timemachine from 'timemachine';
 import * as stories from './ActiveTradeTable.stories';
 
 const { Default } = composeStories(stories);
+
+beforeAll(() => {
+    timemachine.reset();
+    timemachine.config({
+        dateString: '2022-02-01T15:00:00.00Z',
+    });
+});
 
 describe('ActiveTradeTable Component', () => {
     it('should render a ActiveTradeTable as a table', () => {
@@ -58,5 +66,11 @@ describe('ActiveTradeTable Component', () => {
         fireEvent.click(moreOptionsButton[0]);
         fireEvent.click(screen.getByText('Unwind Position'));
         expect(screen.getByRole('dialog')).toBeInTheDocument();
+    });
+    it('should display hours and minutes when maturity is less than 24 hours', () => {
+        render(<Default />);
+        const closeToMaturityRow = screen.getAllByRole('row')[5];
+        expect(closeToMaturityRow).toHaveTextContent('Feb 2, 2022');
+        expect(closeToMaturityRow).toHaveTextContent('22h');
     });
 });
