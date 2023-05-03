@@ -150,17 +150,6 @@ export const AdvancedLendingOrderCard = ({
                 className='flex h-[60px] flex-row items-center justify-around'
             >
                 <RadioGroup.Option
-                    value={OrderType.MARKET}
-                    className={classNames('h-full w-1/2', {
-                        hidden: onlyLimitOrder,
-                    })}
-                    as='button'
-                >
-                    {({ checked }) => (
-                        <NavTab text={OrderType.MARKET} active={checked} />
-                    )}
-                </RadioGroup.Option>
-                <RadioGroup.Option
                     value={OrderType.LIMIT}
                     as='button'
                     className={classNames('h-full', {
@@ -170,6 +159,18 @@ export const AdvancedLendingOrderCard = ({
                 >
                     {({ checked }) => (
                         <NavTab text={OrderType.LIMIT} active={checked} />
+                    )}
+                </RadioGroup.Option>
+                <RadioGroup.Option
+                    value={OrderType.MARKET}
+                    className={classNames('h-full', {
+                        hidden: onlyLimitOrder,
+                        'w-1/2': !onlyLimitOrder,
+                    })}
+                    as='button'
+                >
+                    {({ checked }) => (
+                        <NavTab text={OrderType.MARKET} active={checked} />
                     )}
                 </RadioGroup.Option>
             </RadioGroup>
