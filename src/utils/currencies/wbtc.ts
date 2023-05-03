@@ -13,7 +13,7 @@ export class WBTC extends Token {
             process.env.NEXT_PUBLIC_WBTC_CONTRACT_ADDRESS,
             8,
             CurrencySymbol.WBTC,
-            'Wrapped Bitcoin'
+            'Bitcoin'
         );
     }
 

@@ -406,6 +406,7 @@ export const collateralBook80: CollateralBook = {
     usdCollateral: 2100.34,
     usdNonCollateral: 10600,
     coverage: BigNumber.from('8000'), // 80%,
+    collateralThreshold: 80,
 };
 
 export const collateralBook37: CollateralBook = {
@@ -420,6 +421,7 @@ export const collateralBook37: CollateralBook = {
     usdCollateral: 2300,
     usdNonCollateral: 10600,
     coverage: BigNumber.from('3700'),
+    collateralThreshold: 80,
 };
 
 export const emptyCollateralBook: CollateralBook = {
@@ -434,6 +436,7 @@ export const emptyCollateralBook: CollateralBook = {
     usdCollateral: 0,
     usdNonCollateral: 0,
     coverage: BigNumber.from('0'), // 0%
+    collateralThreshold: 0,
 };
 
 function generateDailyVolumes(days: number) {
