@@ -11,7 +11,7 @@ export interface MarketTabProps {
 export const MarketTab = ({ name, value, source }: MarketTabProps) => {
     return (
         <div
-            className={`flex h-fit flex-grow flex-col ${
+            className={`flex h-fit flex-grow flex-col px-3 ${
                 typeof name === 'string' ? 'gap-1' : ''
             }`}
         >
