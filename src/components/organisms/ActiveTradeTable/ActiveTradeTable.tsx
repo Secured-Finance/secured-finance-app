@@ -41,9 +41,9 @@ export const ActiveTradeTable = ({ data }: { data: TradeSummary[] }) => {
                     const dayToMaturity = dayjs
                         .unix(Number(info.getValue()))
                         .diff(Date.now(), 'day');
-
+                    const maturityTimestamp = Number(info.getValue());
+                    let maturity = <>{dayToMaturity} Days</>;
                     if (dayToMaturity < 1) {
-                        const maturityTimestamp = Number(info.getValue());
                         const maturityDate = new Date(maturityTimestamp * 1000);
 
                         const diffMs = maturityDate.getTime() - Date.now();
@@ -51,17 +51,23 @@ export const ActiveTradeTable = ({ data }: { data: TradeSummary[] }) => {
                         const diffMinutes = Math.floor(
                             (diffMs / 1000 / 60) % 60
                         );
-
-                        return (
-                            <div className='grid'>
-                                {diffHours}h-{diffMinutes}m
-                                <span className='typography-caption-2 h-5 text-[#6F74B0]'>
-                                    {formatDate(maturityTimestamp)}
-                                </span>
-                            </div>
-                        );
+                        maturity =
+                            diffMinutes > 0 ? (
+                                <>
+                                    {diffHours}h-{diffMinutes}m
+                                </>
+                            ) : (
+                                <>{diffHours}h</>
+                            );
                     }
-                    return <>{dayToMaturity} Days</>;
+                    return (
+                        <div className='grid'>
+                            {maturity}
+                            <span className='typography-caption-2 h-5 text-[#6F74B0]'>
+                                {formatDate(maturityTimestamp)}
+                            </span>
+                        </div>
+                    );
                 },
                 header: tableHeaderDefinition('D.T.M.'),
             }),
