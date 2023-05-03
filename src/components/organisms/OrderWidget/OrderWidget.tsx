@@ -36,7 +36,7 @@ const OrderBookCell = ({
     fontWeight?: 'normal' | 'semibold';
 } & ColorFormat) => (
     <span
-        className={classNames('typography-caption-2', {
+        className={classNames('typography-caption-2 z-[1]', {
             'text-galacticOrange': color === 'negative',
             'text-nebulaTeal': color === 'positive',
             'text-neutral-6': color === 'neutral',
