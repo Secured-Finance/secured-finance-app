@@ -76,39 +76,37 @@ export const AdvancedLendingTopBar = <T extends string = string>({
     );
 
     return (
-        <div className='min-w-[800px]'>
-            <GradientBox shape='rectangle'>
-                <div className='flex min-w-full flex-row items-stretch justify-between gap-2 px-6 py-3'>
-                    <HorizontalAssetSelector
-                        selectedAsset={selectedAsset}
-                        assetList={assetList}
-                        options={options}
-                        selected={selected}
-                        onAssetChange={handleAssetChange}
-                        onTermChange={handleTermChange}
-                    />
+        <GradientBox shape='rectangle'>
+            <div className='flex min-w-full flex-row items-stretch justify-between gap-2 px-6 py-3'>
+                <HorizontalAssetSelector
+                    selectedAsset={selectedAsset}
+                    assetList={assetList}
+                    options={options}
+                    selected={selected}
+                    onAssetChange={handleAssetChange}
+                    onTermChange={handleTermChange}
+                />
 
-                    <MarketTab
-                        name={Number(formatLoanValue(midLoanValue, 'price'))}
-                        value={`${formatLoanValue(midLoanValue, 'rate')} APR`}
-                    />
-                    <Separator />
-                    <MarketTab name='24h High' value={getValue(values, 0)} />
-                    <Separator />
-                    <MarketTab name='24h Low' value={getValue(values, 1)} />
-                    <Separator />
-                    <MarketTab name='24h Trades' value={getValue(values, 2)} />
-                    <Separator />
-                    <MarketTab name='24h Volume' value={getValue(values, 3)} />
-                    <Separator />
-                    <MarketTab
-                        name={`${selectedAsset?.value} Price`}
-                        value={getValue(values, 4)}
-                        source={handleSource(selectedAsset?.value)}
-                    />
-                </div>
-            </GradientBox>
-        </div>
+                <MarketTab
+                    name={Number(formatLoanValue(midLoanValue, 'price'))}
+                    value={`${formatLoanValue(midLoanValue, 'rate')} APR`}
+                />
+                <Separator />
+                <MarketTab name='24h High' value={getValue(values, 0)} />
+                <Separator />
+                <MarketTab name='24h Low' value={getValue(values, 1)} />
+                <Separator />
+                <MarketTab name='24h Trades' value={getValue(values, 2)} />
+                <Separator />
+                <MarketTab name='24h Volume' value={getValue(values, 3)} />
+                <Separator />
+                <MarketTab
+                    name={`${selectedAsset?.value} Price`}
+                    value={getValue(values, 4)}
+                    source={handleSource(selectedAsset?.value)}
+                />
+            </div>
+        </GradientBox>
     );
 };
 
