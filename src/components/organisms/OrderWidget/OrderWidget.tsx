@@ -287,15 +287,18 @@ export const OrderWidget = ({
     return (
         <>
             {!hideMidPrice && (
-                <div className='flex h-14 flex-row items-center justify-center gap-1 border-b border-white-10 bg-black-20'>
-                    <ArrowUpIcon className='flex h-3 text-teal' />
-                    <span
-                        className='typography-portfolio-heading flex text-teal'
-                        data-testid='last-mid-price'
-                    >
-                        {formatLoanValue(lastMidValue, 'price')}
-                    </span>
-                    <span className='typography-portfolio-heading flex text-slateGray'>
+                <div className='flex h-14 flex-row items-center justify-center gap-4 border-b border-white-10 bg-black-20'>
+                    <div className='flex flex-row items-center gap-1'>
+                        <ArrowUpIcon className='flex h-3 text-teal' />
+                        <span
+                            className='typography-portfolio-heading font-semibold text-teal'
+                            data-testid='last-mid-price'
+                        >
+                            {formatLoanValue(lastMidValue, 'price')}
+                        </span>
+                    </div>
+
+                    <span className='typography-portfolio-heading font-normal text-slateGray'>
                         {formatLoanValue(lastMidValue, 'rate')}
                     </span>
                 </div>
