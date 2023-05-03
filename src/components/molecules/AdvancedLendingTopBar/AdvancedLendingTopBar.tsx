@@ -77,7 +77,7 @@ export const AdvancedLendingTopBar = <T extends string = string>({
 
     return (
         <GradientBox shape='rectangle'>
-            <div className='flex min-w-full flex-row items-stretch justify-between gap-2 px-6 py-3'>
+            <div className='flex min-w-full flex-row items-stretch justify-between gap-3 px-6 py-3'>
                 <HorizontalAssetSelector
                     selectedAsset={selectedAsset}
                     assetList={assetList}
