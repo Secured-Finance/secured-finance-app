@@ -57,8 +57,8 @@ describe('Landing Component', () => {
             fireEvent.click(screen.getByText('Advanced'));
         });
 
-        expect(screen.getByRole('radio', { name: 'Market' })).toBeChecked();
-        expect(screen.getByRole('radio', { name: 'Limit' })).not.toBeChecked();
+        expect(screen.getByRole('radio', { name: 'Limit' })).toBeChecked();
+        expect(screen.getByRole('radio', { name: 'Market' })).not.toBeChecked();
     });
 
     it('should open the landing page with the mode set in the store', async () => {
