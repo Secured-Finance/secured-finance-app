@@ -43,7 +43,7 @@ exports[`YieldChart Component should render YieldChart 1`] = `
                     $0.00
                   </span>
                   <span
-                    class="typography-caption flex h-full items-center text-red"
+                    class="typography-caption flex h-full items-center text-galacticOrange"
                   >
                     0%
                   </span>
