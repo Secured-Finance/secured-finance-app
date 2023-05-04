@@ -62,31 +62,30 @@ export const ActiveTradeTable = ({ data }: { data: TradeSummary[] }) => {
                             'minutes',
                             currentTime
                         ) % 60;
-                    let maturity;
-
-                    if (dayToMaturity === 1) {
-                        maturity = (
-                            <div className='typography-caption-2 text-neutral-6'>
-                                {dayToMaturity} Day
-                            </div>
-                        );
-                    } else if (dayToMaturity > 1) {
+                    let maturity = (
+                        <div className='typography-caption-2 text-neutral-6'>
+                            {dayToMaturity} Day
+                        </div>
+                    );
+                    if (dayToMaturity > 1) {
                         maturity = (
                             <div className='typography-caption text-neutral-6'>
                                 {dayToMaturity} Days
                             </div>
                         );
-                    } else if (dayToMaturity < 1) {
-                        maturity =
-                            diffMinutes > 0 ? (
-                                <div className='typography-caption text-neutral-6'>
-                                    {diffHours}h-{diffMinutes}m
-                                </div>
-                            ) : (
-                                <div className='typography-caption text-neutral-6'>
-                                    {diffHours}h
-                                </div>
-                            );
+                    } else {
+                        maturity = (
+                            <div className='typography-caption text-neutral-6'>
+                                {diffHours > 0 ? (
+                                    <span className='mx-0.5'>{diffHours}h</span>
+                                ) : null}
+                                {diffMinutes > 0 ? (
+                                    <span className='mx-0.5'>
+                                        {diffMinutes}m
+                                    </span>
+                                ) : null}
+                            </div>
+                        );
                     }
                     return (
                         <div className='grid'>
