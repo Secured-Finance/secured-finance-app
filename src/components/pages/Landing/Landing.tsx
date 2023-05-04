@@ -104,6 +104,8 @@ export const Landing = ({ view }: { view?: ViewType }) => {
                 dispatch(setLastView(v));
                 if (v === 'Simple') {
                     dispatch(setOrderType(OrderType.MARKET));
+                } else if (v === 'Advanced') {
+                    dispatch(setOrderType(OrderType.LIMIT));
                 }
             }}
             pageName='lending-page'
