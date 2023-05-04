@@ -1,51 +1,55 @@
-import { PortfolioTab, PortfolioTabProps } from 'src/components/atoms';
+import React from 'react';
+import {
+    GradientBox,
+    PortfolioTab,
+    PortfolioTabProps,
+    Separator,
+} from 'src/components/atoms';
 
 const tableArray: PortfolioTabProps[] = [
     {
         name: 'Net Value',
         value: '$0.00',
-        orientation: 'left',
     },
     {
         name: 'Net APR',
         value: '--',
-        orientation: 'center',
     },
     {
         name: 'Active Contracts',
         value: '--',
-        orientation: 'center',
     },
     {
         name: 'Net Interest Accrued*',
         value: '--',
-        orientation: 'right',
     },
 ];
 
-interface PortfolioManagementTableProps {
-    values?: string[];
-}
-
-export const PortfolioManagementTable = ({
-    values,
-}: PortfolioManagementTableProps) => {
+export const PortfolioManagementTable = ({ values }: { values?: string[] }) => {
     return (
-        <div
-            className='flex flex-row drop-shadow-tab'
-            data-testid='portfolio-management-table'
-        >
-            {tableArray.map((item, index) => {
-                return (
-                    <PortfolioTab
-                        key={item.name}
-                        {...item}
-                        value={
-                            values && values[index] ? values[index] : item.value
-                        }
-                    />
-                );
-            })}
-        </div>
+        <GradientBox data-testid='portfolio-management-table'>
+            <div className='flex flex-row' role='grid'>
+                {tableArray.map((item, index) => {
+                    return (
+                        <React.Fragment
+                            key={`portfolio-management-tab-${index}`}
+                        >
+                            <PortfolioTab
+                                key={item.name}
+                                {...item}
+                                value={
+                                    values && values[index]
+                                        ? values[index]
+                                        : item.value
+                                }
+                            />
+                            {tableArray.length - 1 !== index && (
+                                <Separator orientation='vertical' />
+                            )}
+                        </React.Fragment>
+                    );
+                })}
+            </div>
+        </GradientBox>
     );
 };
