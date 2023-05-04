@@ -17,7 +17,7 @@ export const MarketTab = ({ name, value, source }: MarketTabProps) => {
         >
             <span
                 className={classNames({
-                    'typography-button-3 whitespace-nowrap leading-7 text-proGreen':
+                    'typography-button-3 whitespace-nowrap leading-7 text-nebulaTeal':
                         typeof name === 'number',
                     'typography-caption-2 whitespace-nowrap text-slateGray':
                         typeof name === 'string',
