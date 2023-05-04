@@ -18,14 +18,6 @@ export default {
 } as ComponentMeta<typeof ActiveTradeTable>;
 
 const Template: ComponentStory<typeof ActiveTradeTable> = args => {
-    const now = new Date();
-    const getFutureTimeStamp = (hours: number) => {
-        const futureTimestamp = new Date(
-            now.getTime() + hours * 60 * 60 * 1000
-        );
-        return Math.floor(futureTimestamp.getTime() / 1000);
-    };
-
     args.data = [
         ...args.data,
         {
@@ -52,3 +44,9 @@ const Template: ComponentStory<typeof ActiveTradeTable> = args => {
 };
 
 export const Default = Template.bind({});
+
+const getFutureTimeStamp = (hours: number) => {
+    const now = new Date();
+    const futureTimestamp = new Date(now.getTime() + hours * 60 * 60 * 1000);
+    return Math.floor(futureTimestamp.getTime() / 1000);
+};
