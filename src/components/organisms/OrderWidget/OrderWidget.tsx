@@ -36,7 +36,7 @@ const OrderBookCell = ({
     fontWeight?: 'normal' | 'semibold';
 } & ColorFormat) => (
     <span
-        className={classNames('typography-caption-2', {
+        className={classNames('typography-caption-2 z-[1]', {
             'text-galacticOrange': color === 'negative',
             'text-nebulaTeal': color === 'positive',
             'text-neutral-6': color === 'neutral',
@@ -54,7 +54,7 @@ const AmountCell = ({
     value: BigNumber;
     currency: CurrencySymbol;
 }) => (
-    <div className='flex justify-end'>
+    <div className='flex justify-center'>
         {value.eq(0) ? (
             <OrderBookCell />
         ) : (
@@ -106,18 +106,27 @@ const PriceCell = ({
 const AprCell = ({
     value,
     display,
+    align,
 }: {
     value: LoanValue;
     display: boolean;
-}) => (
-    <div className='flex justify-end'>
-        {display ? (
-            <OrderBookCell value={formatLoanValue(value, 'rate')} />
-        ) : (
-            <OrderBookCell />
-        )}
-    </div>
-);
+    align: 'left' | 'right';
+}) => {
+    return (
+        <div
+            className={classNames('flex', {
+                'justify-start': align === 'left',
+                'justify-end': align === 'right',
+            })}
+        >
+            {display ? (
+                <OrderBookCell value={formatLoanValue(value, 'rate')} />
+            ) : (
+                <OrderBookCell />
+            )}
+        </div>
+    );
+};
 
 export const OrderWidget = ({
     buyOrders,
@@ -177,7 +186,10 @@ export const OrderWidget = ({
                     <AmountCell value={info.getValue()} currency={currency} />
                 ),
                 header: () => (
-                    <TableHeader title={`Amount (${currency})`} align='right' />
+                    <TableHeader
+                        title={`Amount (${currency})`}
+                        align='center'
+                    />
                 ),
             }),
             columnHelper.accessor('value', {
@@ -186,6 +198,7 @@ export const OrderWidget = ({
                     <AprCell
                         value={info.getValue()}
                         display={!info.row.original.amount.eq(0)}
+                        align='right'
                     />
                 ),
                 header: () => <TableHeader title='Borrow APR' align='right' />,
@@ -202,9 +215,10 @@ export const OrderWidget = ({
                     <AprCell
                         value={info.getValue()}
                         display={!info.row.original.amount.eq(0)}
+                        align='left'
                     />
                 ),
-                header: () => <TableHeader title='Lend APR' align='right' />,
+                header: () => <TableHeader title='Lend APR' align='left' />,
             }),
             columnHelper.accessor('amount', {
                 id: 'amount',
@@ -212,7 +226,10 @@ export const OrderWidget = ({
                     <AmountCell value={info.getValue()} currency={currency} />
                 ),
                 header: () => (
-                    <TableHeader title={`Amount (${currency})`} align='right' />
+                    <TableHeader
+                        title={`Amount (${currency})`}
+                        align='center'
+                    />
                 ),
             }),
             columnHelper.accessor('value', {
@@ -270,20 +287,23 @@ export const OrderWidget = ({
     return (
         <>
             {!hideMidPrice && (
-                <div className='flex h-14 flex-row items-center justify-center gap-1 border-b border-white-10 bg-black-20'>
-                    <ArrowUpIcon className='flex h-3 text-teal' />
-                    <span
-                        className='typography-portfolio-heading flex text-teal'
-                        data-testid='last-mid-price'
-                    >
-                        {formatLoanValue(lastMidValue, 'price')}
-                    </span>
-                    <span className='typography-portfolio-heading flex text-slateGray'>
+                <div className='flex h-14 flex-row items-center justify-center gap-4 border-b border-white-10 bg-black-20'>
+                    <div className='flex flex-row items-center gap-1'>
+                        <ArrowUpIcon className='flex h-3 text-teal' />
+                        <span
+                            className='typography-portfolio-heading font-semibold text-teal'
+                            data-testid='last-mid-price'
+                        >
+                            {formatLoanValue(lastMidValue, 'price')}
+                        </span>
+                    </div>
+
+                    <span className='typography-portfolio-heading font-normal text-slateGray'>
                         {formatLoanValue(lastMidValue, 'rate')}
                     </span>
                 </div>
             )}
-            <div className='flex flex-row gap-6'>
+            <div className='flex flex-row gap-6 px-2'>
                 <CoreTable
                     data={sellOrders}
                     columns={sellColumns}

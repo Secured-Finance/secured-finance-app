@@ -19,6 +19,7 @@ export interface CollateralBook {
     usdCollateral: number;
     usdNonCollateral: number;
     coverage: BigNumber;
+    collateralThreshold: number;
 }
 
 const emptyBook: CollateralBook = {
@@ -33,6 +34,7 @@ const emptyBook: CollateralBook = {
     usdCollateral: 0,
     usdNonCollateral: 0,
     coverage: ZERO_BN,
+    collateralThreshold: 0,
 };
 
 export const useCollateralBook = (account: string | null) => {
@@ -53,6 +55,14 @@ export const useCollateralBook = (account: string | null) => {
         const { collateral, collateralCoverage } =
             await securedFinance.getCollateralBook(account);
 
+        const { liquidationThresholdRate } =
+            await securedFinance.getCollateralParameters();
+
+        const collateralThreshold =
+            liquidationThresholdRate && !liquidationThresholdRate.isZero()
+                ? 1000000 / liquidationThresholdRate.toNumber()
+                : 0;
+
         const {
             collateralBook,
             nonCollateralBook,
@@ -66,6 +76,7 @@ export const useCollateralBook = (account: string | null) => {
             usdCollateral: usdCollateral,
             usdNonCollateral: usdNonCollateral,
             coverage: collateralCoverage,
+            collateralThreshold: collateralThreshold,
             // 0% collateral not used
             // 100% collateral used BigNumber(10000)
         });

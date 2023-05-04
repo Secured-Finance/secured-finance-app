@@ -7,7 +7,7 @@ export class LoanValue {
 
     protected _maturity!: number;
 
-    private PAR_VALUE = 10000;
+    private static PAR_VALUE = 10000;
     private PAR_VALUE_RATE = 1000000;
     private DAYS_IN_YEAR = 365;
 
@@ -46,12 +46,12 @@ export class LoanValue {
             const yearFraction = this.yearFraction();
             if (yearFraction <= 1) {
                 this._price = Math.floor(
-                    this.PAR_VALUE /
+                    LoanValue.PAR_VALUE /
                         (1 + this._apr.toAbsoluteNumber() * yearFraction)
                 );
             } else {
                 this._price = Math.floor(
-                    this.PAR_VALUE /
+                    LoanValue.PAR_VALUE /
                         Math.pow(1 + this._apr.toAbsoluteNumber(), yearFraction)
                 );
             }
@@ -73,13 +73,14 @@ export class LoanValue {
                 const yearFraction = this.yearFraction();
                 if (yearFraction <= 1) {
                     this._apr = new Rate(
-                        ((this.PAR_VALUE / this._price - 1) / yearFraction) *
+                        ((LoanValue.PAR_VALUE / this._price - 1) /
+                            yearFraction) *
                             this.PAR_VALUE_RATE
                     );
                 } else {
                     this._apr = new Rate(
                         (Math.pow(
-                            this.PAR_VALUE / this._price,
+                            LoanValue.PAR_VALUE / this._price,
                             1 / yearFraction
                         ) -
                             1) *
@@ -92,17 +93,17 @@ export class LoanValue {
         return this._apr;
     }
 
-    public static getMidValue(
-        loanValue1: LoanValue,
-        loanValue2: LoanValue
-    ): LoanValue {
-        if (loanValue1._maturity !== loanValue2._maturity) {
+    public static getMidValue(bid: LoanValue, ask: LoanValue): LoanValue {
+        if (bid._maturity !== ask._maturity) {
             throw new Error('cannot compute mid value: maturity mismatch');
         }
 
+        const bidPrice = bid.price ?? 0;
+        const askPrice = ask.price === 0 ? LoanValue.PAR_VALUE : ask.price;
+
         const loanValue = new LoanValue();
-        loanValue._price = (loanValue1.price + loanValue2.price) / 2;
-        loanValue._maturity = loanValue1._maturity;
+        loanValue._price = (bidPrice + askPrice) / 2;
+        loanValue._maturity = bid._maturity;
         return loanValue;
     }
 

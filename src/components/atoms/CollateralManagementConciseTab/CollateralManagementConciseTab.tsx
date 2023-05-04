@@ -1,16 +1,18 @@
 import Tick from 'src/assets/icons/tick.svg';
 import { Separator } from 'src/components/atoms';
-import { LIQUIDATION_THRESHOLD, percentFormat, usdFormat } from 'src/utils';
+import { percentFormat, usdFormat } from 'src/utils';
 import { computeAvailableToBorrow } from 'src/utils/collateral';
 
 interface CollateralManagementConciseTabProps {
     collateralCoverage: number;
     totalCollateralInUSD: number;
+    collateralThreshold: number;
 }
 
 export const CollateralManagementConciseTab = ({
     collateralCoverage,
     totalCollateralInUSD,
+    collateralThreshold,
 }: CollateralManagementConciseTabProps) => {
     let padding = collateralCoverage / 100.0;
     if (padding > 1) {
@@ -20,7 +22,8 @@ export const CollateralManagementConciseTab = ({
     const availableToBorrow = computeAvailableToBorrow(
         1,
         totalCollateralInUSD,
-        collateralCoverage / 100.0
+        collateralCoverage / 100.0,
+        collateralThreshold
     );
 
     return (
@@ -61,8 +64,9 @@ export const CollateralManagementConciseTab = ({
                 <div className='mt-2 h-6px w-full rounded-full bg-gradient-to-r from-progressBarStart via-progressBarVia to-progressBarEnd'></div>
                 <div className='typography-caption-2 mt-1 leading-6 text-planetaryPurple'>
                     {`Threshold: ${percentFormat(
-                        LIQUIDATION_THRESHOLD > collateralCoverage
-                            ? LIQUIDATION_THRESHOLD - collateralCoverage
+                        collateralThreshold &&
+                            collateralThreshold > collateralCoverage
+                            ? collateralThreshold - collateralCoverage
                             : 0
                     )}`}
                 </div>

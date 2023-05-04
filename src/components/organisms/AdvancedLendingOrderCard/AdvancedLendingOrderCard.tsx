@@ -92,10 +92,17 @@ export const AdvancedLendingOrderCard = ({
             ? computeAvailableToBorrow(
                   assetPriceMap[currency],
                   collateralBook.usdCollateral,
-                  collateralBook.coverage.toNumber() / MAX_COVERAGE
+                  collateralBook.coverage.toNumber() / MAX_COVERAGE,
+                  collateralBook.collateralThreshold
               )
             : 0;
-    }, [assetPriceMap, collateralBook, currency]);
+    }, [
+        assetPriceMap,
+        collateralBook.collateralThreshold,
+        collateralBook.coverage,
+        collateralBook.usdCollateral,
+        currency,
+    ]);
 
     const walletSourceList = useMemo(() => {
         return generateWalletSourceInformation(
@@ -143,17 +150,6 @@ export const AdvancedLendingOrderCard = ({
                 className='flex h-[60px] flex-row items-center justify-around'
             >
                 <RadioGroup.Option
-                    value={OrderType.MARKET}
-                    className={classNames('h-full w-1/2', {
-                        hidden: onlyLimitOrder,
-                    })}
-                    as='button'
-                >
-                    {({ checked }) => (
-                        <NavTab text={OrderType.MARKET} active={checked} />
-                    )}
-                </RadioGroup.Option>
-                <RadioGroup.Option
                     value={OrderType.LIMIT}
                     as='button'
                     className={classNames('h-full', {
@@ -163,6 +159,18 @@ export const AdvancedLendingOrderCard = ({
                 >
                     {({ checked }) => (
                         <NavTab text={OrderType.LIMIT} active={checked} />
+                    )}
+                </RadioGroup.Option>
+                <RadioGroup.Option
+                    value={OrderType.MARKET}
+                    className={classNames('h-full', {
+                        hidden: onlyLimitOrder,
+                        'w-1/2': !onlyLimitOrder,
+                    })}
+                    as='button'
+                >
+                    {({ checked }) => (
+                        <NavTab text={OrderType.MARKET} active={checked} />
                     )}
                 </RadioGroup.Option>
             </RadioGroup>
@@ -251,6 +259,7 @@ export const AdvancedLendingOrderCard = ({
                 <CollateralManagementConciseTab
                     collateralCoverage={collateralUsagePercent}
                     totalCollateralInUSD={collateralBook.usdCollateral}
+                    collateralThreshold={collateralBook.collateralThreshold}
                 />
             </div>
         </div>

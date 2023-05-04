@@ -11,10 +11,12 @@ export const CollateralUsageSection = ({
     usdCollateral,
     collateralCoverage,
     currency,
+    collateralThreshold,
 }: {
     usdCollateral: CollateralBook['usdCollateral'];
     collateralCoverage: number;
     currency: CurrencySymbol;
+    collateralThreshold: number;
 }) => {
     collateralCoverage = collateralCoverage / 100.0;
     const assetPriceMap = useSelector((state: RootState) => getPriceMap(state));
@@ -29,11 +31,18 @@ export const CollateralUsageSection = ({
             result = computeAvailableToBorrow(
                 assetPriceMap[currency],
                 usdCollateral,
-                collateralCoverage / 100.0
+                collateralCoverage / 100.0,
+                collateralThreshold
             );
         }
         return formatWithCurrency(isNaN(result) ? 0 : result, currency);
-    }, [assetPriceMap, collateralCoverage, currency, usdCollateral]);
+    }, [
+        assetPriceMap,
+        collateralCoverage,
+        collateralThreshold,
+        currency,
+        usdCollateral,
+    ]);
 
     const info = getLiquidationInformation(collateralCoverage);
 
