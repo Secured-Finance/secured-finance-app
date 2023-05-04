@@ -32,12 +32,6 @@ export const ActiveTradeTable = ({ data }: { data: TradeSummary[] }) => {
     const router = useRouter();
     const dispatch = useDispatch();
 
-    const formatMaturity = (
-        maturityTimeStamp: number,
-        timeUnit: 'day' | 'hours' | 'minutes',
-        currentTime: number
-    ) => dayjs.unix(maturityTimeStamp).diff(currentTime, timeUnit);
-
     const columns = useMemo(
         () => [
             loanTypeFromAmountColumnDefinition(columnHelper, 'Type', 'side'),
@@ -62,35 +56,27 @@ export const ActiveTradeTable = ({ data }: { data: TradeSummary[] }) => {
                             'minutes',
                             currentTime
                         ) % 60;
-                    let maturity = (
-                        <div className='typography-caption-2 text-neutral-6'>
-                            {dayToMaturity} Day
-                        </div>
-                    );
+                    let maturity;
                     if (dayToMaturity > 1) {
+                        maturity = `${dayToMaturity} Days`;
+                    } else if (dayToMaturity === 1) {
+                        maturity = `${dayToMaturity} Day`;
+                    } else if (dayToMaturity < 1) {
                         maturity = (
-                            <div className='typography-caption text-neutral-6'>
-                                {dayToMaturity} Days
-                            </div>
-                        );
-                    } else {
-                        maturity = (
-                            <div className='typography-caption text-neutral-6'>
+                            <>
                                 {diffHours > 0 ? (
-                                    <span className='mx-0.5'>{diffHours}h</span>
+                                    <span className='mx-1'>{diffHours}h</span>
                                 ) : null}
-                                {diffMinutes > 0 ? (
-                                    <span className='mx-0.5'>
-                                        {diffMinutes}m
-                                    </span>
-                                ) : null}
-                            </div>
+                                {diffMinutes > 0 ? <>{diffMinutes}m</> : null}
+                            </>
                         );
                     }
                     return (
                         <div className='grid'>
-                            {maturity}
-                            <span className='typography-caption-2 h-5 text-[#6F74B0]'>
+                            <div className='typography-caption text-neutral-7'>
+                                {maturity}
+                            </div>
+                            <span className='typography-caption-2 h-5 text-neutral-4'>
                                 {formatDate(maturityTimestamp)}
                             </span>
                         </div>
@@ -206,3 +192,9 @@ export const ActiveTradeTable = ({ data }: { data: TradeSummary[] }) => {
         </div>
     );
 };
+
+const formatMaturity = (
+    maturityTimeStamp: number,
+    timeUnit: 'day' | 'hours' | 'minutes',
+    currentTime: number
+) => dayjs.unix(maturityTimeStamp).diff(currentTime, timeUnit);

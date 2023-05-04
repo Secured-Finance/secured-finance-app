@@ -26,13 +26,15 @@ describe('ActiveTradeTable Component', () => {
         expect(initialRows[3]).toHaveTextContent('Borrow');
         expect(initialRows[4]).toHaveTextContent('Borrow');
         expect(initialRows[5]).toHaveTextContent('Lend');
+        expect(initialRows[6]).toHaveTextContent('Lend');
         screen.getByText('Type').click();
         const sortedRowsAsc = screen.getAllByRole('row');
         expect(sortedRowsAsc[1]).toHaveTextContent('Lend');
         expect(sortedRowsAsc[2]).toHaveTextContent('Lend');
-        expect(sortedRowsAsc[3]).toHaveTextContent('Borrow');
+        expect(sortedRowsAsc[3]).toHaveTextContent('Lend');
         expect(sortedRowsAsc[4]).toHaveTextContent('Borrow');
         expect(sortedRowsAsc[5]).toHaveTextContent('Borrow');
+        expect(sortedRowsAsc[6]).toHaveTextContent('Borrow');
         screen.getByText('Type').click();
         const sortedRowsDesc = screen.getAllByRole('row');
         expect(sortedRowsDesc[1]).toHaveTextContent('Borrow');
@@ -40,6 +42,7 @@ describe('ActiveTradeTable Component', () => {
         expect(sortedRowsDesc[3]).toHaveTextContent('Borrow');
         expect(sortedRowsDesc[4]).toHaveTextContent('Lend');
         expect(sortedRowsDesc[5]).toHaveTextContent('Lend');
+        expect(sortedRowsDesc[6]).toHaveTextContent('Lend');
     });
 
     it('should display more options when clicking on the ... button', () => {
@@ -48,7 +51,7 @@ describe('ActiveTradeTable Component', () => {
         const moreOptionsButton = screen.getAllByRole('button', {
             name: 'More options',
         });
-        expect(moreOptionsButton).toHaveLength(5);
+        expect(moreOptionsButton).toHaveLength(6);
         fireEvent.click(moreOptionsButton[0]);
         expect(screen.getByRole('menu')).toBeInTheDocument();
         expect(screen.getByText('View Contract')).toBeInTheDocument();
@@ -74,6 +77,14 @@ describe('ActiveTradeTable Component', () => {
         expect(closeToMaturityRow).toHaveTextContent('Feb 2, 2022');
         waitFor(() => {
             expect(closeToMaturityRow).toHaveTextContent('21h-59m');
+        });
+    });
+    it('should display 1 day when maturity is less than 48 hours and greater than 24 hours', async () => {
+        render(<Default />);
+        const closeToMaturityRow = screen.getAllByRole('row')[6];
+        expect(closeToMaturityRow).toHaveTextContent('Feb 2, 2022');
+        waitFor(() => {
+            expect(closeToMaturityRow).toHaveTextContent('1 Day');
         });
     });
 });
