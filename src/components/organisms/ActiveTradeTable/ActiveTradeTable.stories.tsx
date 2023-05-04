@@ -19,8 +19,12 @@ export default {
 
 const Template: ComponentStory<typeof ActiveTradeTable> = args => {
     const now = new Date();
-    const twentyTwoHoursFromNow = new Date(now.getTime() + 22 * 60 * 60 * 1000);
-    const epochTimestamp = Math.floor(twentyTwoHoursFromNow.getTime() / 1000);
+    const getFutureTimeStamp = (hours: number) => {
+        const futureTimestamp = new Date(
+            now.getTime() + hours * 60 * 60 * 1000
+        );
+        return Math.floor(futureTimestamp.getTime() / 1000);
+    };
 
     args.data = [
         ...args.data,
@@ -28,7 +32,14 @@ const Template: ComponentStory<typeof ActiveTradeTable> = args => {
             amount: BigNumber.from('500000000000000000000'),
             currency: efilBytes32,
             forwardValue: BigNumber.from('500000000000000000000'),
-            maturity: new Maturity(epochTimestamp).toString(),
+            maturity: new Maturity(getFutureTimeStamp(22)).toString(),
+            averagePrice: BigNumber.from(9671),
+        },
+        {
+            amount: BigNumber.from('500000000000000000000'),
+            currency: efilBytes32,
+            forwardValue: BigNumber.from('500000000000000000000'),
+            maturity: new Maturity(getFutureTimeStamp(28)).toString(),
             averagePrice: BigNumber.from(9671),
         },
     ];
