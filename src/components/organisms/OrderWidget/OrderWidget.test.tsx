@@ -4,7 +4,7 @@ import { fireEvent, render, screen } from 'src/test-utils.js';
 import { OrderType } from 'src/types';
 import * as stories from './OrderWidget.stories';
 
-const { Default } = composeStories(stories);
+const { Default, Loading } = composeStories(stories);
 
 describe('OrderWidget Component', () => {
     it('should render a OrderWidget', () => {
@@ -72,5 +72,12 @@ describe('OrderWidget Component', () => {
     it('should hide the mid price when hideMidPrice is true', () => {
         render(<Default hideMidPrice />);
         expect(screen.queryByTestId('last-mid-price')).not.toBeInTheDocument();
+    });
+
+    it('should display the spinner when loading', () => {
+        render(<Loading />);
+        expect(
+            screen.getByRole('alertdialog', { name: 'Loading' })
+        ).toBeInTheDocument();
     });
 });
