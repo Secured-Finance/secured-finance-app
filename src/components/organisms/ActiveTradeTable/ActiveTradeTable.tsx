@@ -32,6 +32,12 @@ export const ActiveTradeTable = ({ data }: { data: TradeSummary[] }) => {
     const router = useRouter();
     const dispatch = useDispatch();
 
+    const formatMaturity = (
+        maturityTimeStamp: number,
+        timeUnit: 'day' | 'hours' | 'minutes',
+        currentTime: number
+    ) => dayjs.unix(maturityTimeStamp).diff(currentTime, timeUnit);
+
     const columns = useMemo(
         () => [
             loanTypeFromAmountColumnDefinition(columnHelper, 'Type', 'side'),
@@ -39,32 +45,47 @@ export const ActiveTradeTable = ({ data }: { data: TradeSummary[] }) => {
             columnHelper.accessor('maturity', {
                 cell: info => {
                     const currentTime = Date.now();
-                    const dayToMaturity = dayjs
-                        .unix(Number(info.getValue()))
-                        .diff(currentTime, 'day');
                     const maturityTimestamp = Number(info.getValue());
-                    let maturity =
-                        dayToMaturity > 1 ? (
-                            <>{dayToMaturity} Days</>
-                        ) : (
-                            <>{dayToMaturity} Day</>
-                        );
+                    const dayToMaturity = formatMaturity(
+                        maturityTimestamp,
+                        'day',
+                        currentTime
+                    );
+                    const diffHours = formatMaturity(
+                        maturityTimestamp,
+                        'hours',
+                        currentTime
+                    );
+                    const diffMinutes =
+                        formatMaturity(
+                            maturityTimestamp,
+                            'minutes',
+                            currentTime
+                        ) % 60;
+                    let maturity;
 
-                    if (dayToMaturity < 1) {
-                        const diffHours = dayjs
-                            .unix(maturityTimestamp)
-                            .diff(currentTime, 'hours');
-                        const diffMinutes =
-                            dayjs
-                                .unix(maturityTimestamp)
-                                .diff(currentTime, 'minutes') % 60;
+                    if (dayToMaturity === 1) {
+                        maturity = (
+                            <div className='typography-caption-2 text-neutral-6'>
+                                {dayToMaturity} Day
+                            </div>
+                        );
+                    } else if (dayToMaturity > 1) {
+                        maturity = (
+                            <div className='typography-caption text-neutral-6'>
+                                {dayToMaturity} Days
+                            </div>
+                        );
+                    } else if (dayToMaturity < 1) {
                         maturity =
                             diffMinutes > 0 ? (
-                                <>
+                                <div className='typography-caption text-neutral-6'>
                                     {diffHours}h-{diffMinutes}m
-                                </>
+                                </div>
                             ) : (
-                                <>{diffHours}h</>
+                                <div className='typography-caption text-neutral-6'>
+                                    {diffHours}h
+                                </div>
                             );
                     }
                     return (
