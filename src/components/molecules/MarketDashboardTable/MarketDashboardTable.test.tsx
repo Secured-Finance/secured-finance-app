@@ -7,7 +7,12 @@ const { Default } = composeStories(stories);
 describe('test MarketDashboardComponent', () => {
     it('should render Market Dashboard Table', () => {
         render(<Default />);
-        const item = screen.getByTestId('market-dashboard-table');
-        expect(item.childElementCount).toEqual(4);
+    });
+
+    it('should display one grid with 4 tabs', () => {
+        render(<Default />);
+        expect(screen.getByRole('grid')).toBeInTheDocument();
+        const tabs = screen.getAllByRole('gridcell');
+        expect(tabs.length).toBe(4);
     });
 });
