@@ -8,7 +8,7 @@ const { Default } = composeStories(stories);
 beforeAll(() => {
     timemachine.reset();
     timemachine.config({
-        dateString: '2022-02-01T15:00:00.00Z',
+        dateString: '2022-02-01T11:00:00.00Z',
     });
 });
 
