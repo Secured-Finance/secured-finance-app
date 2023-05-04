@@ -21,7 +21,7 @@ describe('test Market Tab component', () => {
         render(<GreenMarketTab />);
         expect(screen.getByText('7977.00')).toBeInTheDocument();
         expect(screen.getByText('7977.00')).toHaveClass(
-            'typography-button-3 leading-7 text-proGreen'
+            'typography-button-3 leading-7 text-nebulaTeal'
         );
         expect(screen.getByText('25.00% APR')).toBeInTheDocument();
         expect(screen.getByText('25.00% APR')).toHaveClass(
