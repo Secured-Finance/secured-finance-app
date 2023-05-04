@@ -38,19 +38,26 @@ export const ActiveTradeTable = ({ data }: { data: TradeSummary[] }) => {
             contractColumnDefinition(columnHelper, 'Contract', 'contract'),
             columnHelper.accessor('maturity', {
                 cell: info => {
+                    const currentTime = Date.now();
                     const dayToMaturity = dayjs
                         .unix(Number(info.getValue()))
-                        .diff(Date.now(), 'day');
+                        .diff(currentTime, 'day');
                     const maturityTimestamp = Number(info.getValue());
-                    let maturity = <>{dayToMaturity} Days</>;
-                    if (dayToMaturity < 1) {
-                        const maturityDate = new Date(maturityTimestamp * 1000);
-
-                        const diffMs = maturityDate.getTime() - Date.now();
-                        const diffHours = Math.floor(diffMs / 1000 / 60 / 60);
-                        const diffMinutes = Math.floor(
-                            (diffMs / 1000 / 60) % 60
+                    let maturity =
+                        dayToMaturity > 1 ? (
+                            <>{dayToMaturity} Days</>
+                        ) : (
+                            <>{dayToMaturity} Day</>
                         );
+
+                    if (dayToMaturity < 1) {
+                        const diffHours = dayjs
+                            .unix(maturityTimestamp)
+                            .diff(currentTime, 'hours');
+                        const diffMinutes =
+                            dayjs
+                                .unix(maturityTimestamp)
+                                .diff(currentTime, 'minutes') % 60;
                         maturity =
                             diffMinutes > 0 ? (
                                 <>

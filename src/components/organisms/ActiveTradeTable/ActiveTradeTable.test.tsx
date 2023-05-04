@@ -1,5 +1,5 @@
 import { composeStories } from '@storybook/testing-react';
-import { fireEvent, render, screen } from 'src/test-utils.js';
+import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
 import timemachine from 'timemachine';
 import * as stories from './ActiveTradeTable.stories';
 
@@ -67,10 +67,13 @@ describe('ActiveTradeTable Component', () => {
         fireEvent.click(screen.getByText('Unwind Position'));
         expect(screen.getByRole('dialog')).toBeInTheDocument();
     });
-    it('should display hours and minutes when maturity is less than 24 hours', () => {
+
+    it('should display hours and minutes when maturity is less than 24 hours', async () => {
         render(<Default />);
         const closeToMaturityRow = screen.getAllByRole('row')[5];
         expect(closeToMaturityRow).toHaveTextContent('Feb 2, 2022');
-        expect(closeToMaturityRow).toHaveTextContent('22h');
+        waitFor(() => {
+            expect(closeToMaturityRow).toHaveTextContent('21h-59m');
+        });
     });
 });
