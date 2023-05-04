@@ -23,7 +23,10 @@ export const MarketDashboardTable = ({
                                 value={item.value}
                             />
                             {values.length - 1 !== index && (
-                                <Separator orientation='vertical' />
+                                <Separator
+                                    orientation='vertical'
+                                    color='white-10'
+                                />
                             )}
                         </React.Fragment>
                     );
