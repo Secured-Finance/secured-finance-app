@@ -28,12 +28,12 @@ describe('currencyList.getCurrencyMapAsOptions', () => {
         const options = getCurrencyMapAsOptions();
         expect(options).toEqual([
             {
-                label: 'EFIL',
+                label: 'Filecoin',
                 value: 'EFIL',
                 iconSVG: 'svg',
             },
             {
-                label: 'Ethereum',
+                label: 'Ether',
                 value: 'ETH',
                 iconSVG: 'svg',
             },
@@ -43,7 +43,7 @@ describe('currencyList.getCurrencyMapAsOptions', () => {
                 iconSVG: 'svg',
             },
             {
-                label: 'Wrapped Bitcoin',
+                label: 'Bitcoin',
                 value: 'WBTC',
                 iconSVG: 'svg',
             },
@@ -69,6 +69,9 @@ describe('currencyList toBaseUnit', () => {
         expect(eth.toBaseUnit(1.23).toString()).toEqual('1230000000000000000');
         expect(eth.toBaseUnit(1.23456789).toString()).toEqual(
             '1234567890000000000'
+        );
+        expect(eth.toBaseUnit(9999999).toString()).toEqual(
+            '9999999000000000000000000'
         );
         expect(eth.toBaseUnit(0.00000001).toString()).toEqual('10000000000');
         expect(eth.toBaseUnit(0.000000000001).toString()).toEqual('1000000');
@@ -117,6 +120,11 @@ describe('currencyList fromBaseUnit', () => {
         expect(
             eth.fromBaseUnit(BigNumber.from('1234567890000000000')).toString()
         ).toEqual('1.23456789');
+        expect(
+            eth
+                .fromBaseUnit(BigNumber.from('9999999000000000000000000'))
+                .toString()
+        ).toEqual('9999999');
         expect(
             eth.fromBaseUnit(BigNumber.from('10000000000')).toString()
         ).toEqual('1e-8');

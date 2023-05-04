@@ -7,6 +7,7 @@ export default {
     args: {
         collateralCoverage: 37,
         totalCollateralInUSD: 100,
+        collateralThreshold: 80,
     },
 } as ComponentMeta<typeof CollateralManagementConciseTab>;
 

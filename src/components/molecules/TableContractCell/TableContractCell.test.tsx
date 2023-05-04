@@ -11,7 +11,7 @@ describe('TableContractCell Component', () => {
 
     it('should display the name of the currency by default', () => {
         render(<Default />);
-        expect(screen.getByText('Ethereum')).toBeInTheDocument();
+        expect(screen.getByText('Ether')).toBeInTheDocument();
     });
 
     it('should display the name of the contract with the currency', () => {
