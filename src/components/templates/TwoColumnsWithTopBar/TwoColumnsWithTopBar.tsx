@@ -1,3 +1,5 @@
+import { TwoColumns } from 'src/components/templates';
+
 export const TwoColumnsWithTopBar = ({
     topBar,
     children,
@@ -8,10 +10,10 @@ export const TwoColumnsWithTopBar = ({
     return (
         <div className='h-fit'>
             <div className='w-full'>{topBar}</div>
-            <div className='flex flex-row justify-between gap-6 pt-4'>
-                <div className='w-1/3'>{children[0]}</div>
-                <div className='w-2/3'>{children[1]}</div>
-            </div>
+            <TwoColumns>
+                {children[0]}
+                {children[1]}
+            </TwoColumns>
         </div>
     );
 };
