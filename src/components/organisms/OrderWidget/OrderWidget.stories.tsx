@@ -82,3 +82,9 @@ export const HideMidPrice = Template.bind({});
 HideMidPrice.args = {
     hideMidPrice: true,
 };
+
+export const Loading = Template.bind({});
+Loading.args = {
+    buyOrders: [],
+    sellOrders: [],
+};
