@@ -1,8 +1,8 @@
 import { track } from '@amplitude/analytics-browser';
 import { useCallback, useEffect, useReducer, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import Loader from 'src/assets/img/gradient-loader.png';
 import MetaMaskIcon from 'src/assets/img/metamask-fox.svg';
+import { Spinner } from 'src/components/atoms';
 import {
     Dialog,
     FailurePanel,
@@ -207,12 +207,7 @@ export const WalletDialog = () => {
                     case Step.connecting:
                         return (
                             <div className='py-9'>
-                                {/* eslint-disable-next-line @next/next/no-img-element */}
-                                <img
-                                    src={Loader.src}
-                                    alt='Loader'
-                                    className='animate-spin'
-                                ></img>
+                                <Spinner />
                             </div>
                         );
                         break;

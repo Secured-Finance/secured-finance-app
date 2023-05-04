@@ -1,8 +1,7 @@
 import { BigNumber } from 'ethers';
 import { useCallback, useReducer, useState } from 'react';
 import { useSelector } from 'react-redux';
-import Loader from 'src/assets/img/gradient-loader.png';
-import { CollateralSelector } from 'src/components/atoms';
+import { CollateralSelector, Spinner } from 'src/components/atoms';
 import {
     Dialog,
     DialogState,
@@ -230,12 +229,7 @@ export const DepositCollateral = ({
                     case Step.depositing:
                         return (
                             <div className='py-9'>
-                                {/* eslint-disable-next-line @next/next/no-img-element */}
-                                <img
-                                    src={Loader.src}
-                                    alt='Loader'
-                                    className='animate-spin'
-                                ></img>
+                                <Spinner />
                             </div>
                         );
                         break;
