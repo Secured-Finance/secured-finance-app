@@ -10,7 +10,7 @@ export const TwoColumnsWithTopBar = ({
     return (
         <div className='h-fit'>
             <div className='w-full'>{topBar}</div>
-            <TwoColumns>
+            <TwoColumns narrowFirstColumn>
                 {children[0]}
                 {children[1]}
             </TwoColumns>
