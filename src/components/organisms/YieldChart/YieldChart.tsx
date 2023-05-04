@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import SFLogoSmall from 'src/assets/img/logo-small.svg';
 import { ExpandIndicator } from 'src/components/atoms';
-import { CurveHeader, getData, LineChart } from 'src/components/molecules';
+import { CurveHeader, LineChart, getData } from 'src/components/molecules';
 import {
     selectLandingOrderForm,
     setMaturity,
