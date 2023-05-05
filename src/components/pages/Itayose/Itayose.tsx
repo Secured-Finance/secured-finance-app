@@ -177,9 +177,9 @@ export const Itayose = () => {
                                 to the start of trading.
                             </p>
                             <p className='typography-nav-menu-default pb-7 pr-7 text-white'>
-                                Finance does not charge any fees for placing
-                                orders during the pre-order period. To learn
-                                more about pre-market orders and how we
+                                Secured Finance does not charge any fees for
+                                placing orders during the pre-order period. To
+                                learn more about pre-market orders and how we
                                 determine prices in Secured Finance GitBook.
                             </p>
                         </div>

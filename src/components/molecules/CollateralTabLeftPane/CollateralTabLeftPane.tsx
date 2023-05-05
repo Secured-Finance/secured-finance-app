@@ -44,7 +44,7 @@ export const CollateralTabLeftPane = ({
     const nonCollateralBalance = account ? collateralBook.usdNonCollateral : 0;
 
     return (
-        <div className='flex w-64 flex-col border-r border-white-10'>
+        <div className='flex w-[18rem] flex-col border-r border-white-10'>
             <div className='h-full border-b border-white-10'>
                 <div className='m-6 flex flex-col gap-1'>
                     <span className='typography-body-2 h-6 w-fit text-slateGray'>
