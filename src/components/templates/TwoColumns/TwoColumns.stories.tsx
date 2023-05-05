@@ -24,3 +24,7 @@ const Template: ComponentStory<typeof TwoColumns> = args => (
 );
 
 export const Default = Template.bind({});
+export const NarrowFirstColumn = Template.bind({});
+NarrowFirstColumn.args = {
+    narrowFirstColumn: true,
+};

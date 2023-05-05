@@ -18,12 +18,12 @@ import { useGraphClientHook } from 'src/hooks';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { RootState } from 'src/store/types';
 import {
+    WalletSource,
     aggregateTrades,
     computeNetValue,
     computeWeightedAverageRate,
     percentFormat,
     usdFormat,
-    WalletSource,
 } from 'src/utils';
 import { useWallet } from 'use-wallet';
 
@@ -71,7 +71,7 @@ export const PortfolioManagement = () => {
             <div>
                 <HorizontalTab
                     tabTitles={[
-                        'Active Contracts',
+                        'Active Positions',
                         'Open Orders',
                         'My Transactions',
                     ]}
