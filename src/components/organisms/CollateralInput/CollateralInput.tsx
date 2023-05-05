@@ -2,6 +2,7 @@ import { BigNumber } from 'ethers';
 import { useCallback } from 'react';
 import { InputBase } from 'src/components/atoms';
 import { PercentageSelector } from 'src/components/molecules';
+import { FontSize } from 'src/types';
 import { amountFormatterToBase, CurrencySymbol, usdFormat } from 'src/utils';
 
 interface CollateralInputProps {
@@ -11,6 +12,7 @@ interface CollateralInputProps {
     onAmountChange?: (v: BigNumber) => void;
     amount: number | undefined;
     setAmount: (amt: number | undefined) => void;
+    fontSize?: Record<FontSize, string>;
 }
 
 export const CollateralInput = ({
@@ -20,6 +22,7 @@ export const CollateralInput = ({
     onAmountChange,
     amount,
     setAmount,
+    fontSize,
 }: CollateralInputProps) => {
     const handleInputChange = useCallback(
         (
@@ -69,7 +72,7 @@ export const CollateralInput = ({
                     value={amount}
                     className='typography-headline-4 h-14 w-full text-center text-neutral-8'
                     onValueChange={handleAmountChange}
-                    resizeInputText={true}
+                    fontSize={fontSize}
                 />
                 <div className='typography-body-2'>
                     <span className='text-center text-neutral-8'>

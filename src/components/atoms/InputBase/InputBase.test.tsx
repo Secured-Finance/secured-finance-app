@@ -58,13 +58,15 @@ describe('test InputBase component', () => {
     });
 
     it('should change font size as input length changes', async () => {
-        const { getByRole } = render(<WithValue resizeInputText={true} />);
+        const { getByRole } = render(
+            <WithValue fontSize={{ small: 'text-sm', large: 'text-lg' }} />
+        );
         const input = getByRole('textbox');
         expect(input).toHaveClass('text-lg');
-        fireEvent.input(input, { target: { value: '1234567890' } });
-        expect(input).toHaveClass('text-md');
-        fireEvent.input(input, { target: { value: '1234567890123456' } });
-        expect(input).toHaveClass('text-smd');
+        fireEvent.input(input, { target: { value: '123456789' } });
+        expect(input).toHaveClass('text-lg');
+        fireEvent.input(input, { target: { value: '123456789.123' } });
+        expect(input).toHaveClass('text-sm');
         fireEvent.input(input, { target: { value: '12345' } });
         expect(input).toHaveClass('text-lg');
     });

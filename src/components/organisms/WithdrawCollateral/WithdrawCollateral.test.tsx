@@ -129,4 +129,18 @@ describe('WithdrawCollateral component', () => {
             )
         );
     });
+    it('should resize text when the length changes', async () => {
+        render(<Default />);
+        const input = screen.getByRole('textbox');
+        expect(input).toHaveClass('text-xl');
+        fireEvent.input(input, { target: { value: '123456789' } });
+        expect(input).toHaveClass('text-xl');
+        waitFor(() => {
+            fireEvent.input(input, { target: { value: '123456789.123' } });
+            expect(input).toHaveClass('text-lg');
+        });
+
+        fireEvent.input(input, { target: { value: '12345' } });
+        expect(input).toHaveClass('text-xl');
+    });
 });
