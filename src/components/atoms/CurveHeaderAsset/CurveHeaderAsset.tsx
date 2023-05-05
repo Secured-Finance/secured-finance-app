@@ -32,7 +32,9 @@ export const CurveHeaderAsset = ({
                     </span>
                     <span
                         className={`typography-caption flex h-full items-center ${
-                            fluctuation > 0 ? 'text-green' : 'text-red'
+                            fluctuation > 0
+                                ? 'text-nebulaTeal'
+                                : 'text-galacticOrange'
                         }`}
                     >
                         {percentFormat(fluctuation)}

@@ -14,4 +14,24 @@ describe('TwoColumns Component', () => {
         expect(screen.getByText('Column 1')).toBeInTheDocument();
         expect(screen.getByText('Column 2')).toBeInTheDocument();
     });
+
+    it('should display the two columns with the first one being the bigger one', () => {
+        render(<Default />);
+        expect(screen.getByText('Column 1').parentElement).toHaveClass(
+            'w-[70%]'
+        );
+        expect(screen.getByText('Column 2').parentElement).toHaveClass(
+            'w-[30%]'
+        );
+    });
+
+    it('should display the two columns with the first one being the smaller one when narrowFirstColumn is true', () => {
+        render(<Default narrowFirstColumn />);
+        expect(screen.getByText('Column 1').parentElement).toHaveClass(
+            'w-[30%]'
+        );
+        expect(screen.getByText('Column 2').parentElement).toHaveClass(
+            'w-[70%]'
+        );
+    });
 });
