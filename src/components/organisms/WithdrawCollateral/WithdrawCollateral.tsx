@@ -1,8 +1,7 @@
 import { BigNumber } from 'ethers';
 import { useCallback, useReducer, useState } from 'react';
 import { useSelector } from 'react-redux';
-import Loader from 'src/assets/img/gradient-loader.png';
-import { CollateralSelector } from 'src/components/atoms';
+import { CollateralSelector, Spinner } from 'src/components/atoms';
 import {
     Dialog,
     DialogState,
@@ -122,15 +121,16 @@ export const WithdrawCollateral = ({
 
     const isDisabled = useCallback(() => {
         return (
-            !collateral ||
-            collateral.isZero() ||
-            collateral.gt(
-                amountFormatterToBase[asset](
-                    collateralList[asset]?.available ?? 0
-                )
-            )
+            state.currentStep === Step.withdrawCollateral &&
+            (!collateral ||
+                collateral.isZero() ||
+                collateral.gt(
+                    amountFormatterToBase[asset](
+                        collateralList[asset]?.available ?? 0
+                    )
+                ))
         );
-    }, [collateralList, asset, collateral]);
+    }, [collateralList, asset, collateral, state.currentStep]);
 
     const handleWithdrawCollateral = useCallback(async () => {
         try {
@@ -224,12 +224,7 @@ export const WithdrawCollateral = ({
                     case Step.withdrawing:
                         return (
                             <div className='py-9'>
-                                {/* eslint-disable-next-line @next/next/no-img-element */}
-                                <img
-                                    src={Loader.src}
-                                    alt='Loader'
-                                    className='animate-spin'
-                                ></img>
+                                <Spinner />
                             </div>
                         );
                         break;

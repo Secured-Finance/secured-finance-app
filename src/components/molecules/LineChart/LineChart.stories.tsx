@@ -42,3 +42,24 @@ const Template: ComponentStory<typeof LineChart> = args => {
 };
 
 export const Default = Template.bind({});
+export const Loading = Template.bind({});
+Loading.args = {
+    data: {
+        labels: [
+            'DEC22',
+            'MAR23',
+            'JUN23',
+            'SEP23',
+            'DEC23',
+            'MAR24',
+            'JUN24',
+            'SEP24',
+        ],
+        datasets: [
+            {
+                label: 'Borrow',
+                data: [],
+            },
+        ],
+    },
+};
