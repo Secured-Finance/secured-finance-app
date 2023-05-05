@@ -15,4 +15,14 @@ describe('TwoColumnsWithTopBar Component', () => {
         expect(screen.getByText('Column 2')).toBeInTheDocument();
         expect(screen.getByText('This is a great top bar')).toBeInTheDocument();
     });
+
+    it('should display the two columns with the first one being the smaller one', () => {
+        render(<Default />);
+        expect(screen.getByText('Column 1').parentElement).toHaveClass(
+            'w-[30%]'
+        );
+        expect(screen.getByText('Column 2').parentElement).toHaveClass(
+            'w-[70%]'
+        );
+    });
 });
