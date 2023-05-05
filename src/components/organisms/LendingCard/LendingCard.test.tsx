@@ -160,4 +160,15 @@ describe('LendingCard Component', () => {
         expect(screen.getByText('Lending Source')).toBeInTheDocument();
         expect(screen.getByText('10,000 EFIL')).toBeInTheDocument();
     });
+    it('should show Collateral Usage and Available to Borrow only in Borrow order', async () => {
+        await waitFor(() => render(<Default />, { preloadedState }));
+        expect(screen.queryByText('Available to borrow')).toBeInTheDocument();
+        expect(screen.queryByText('Collateral Usage')).toBeInTheDocument();
+        const lendTab = screen.getByText('Lend');
+        fireEvent.click(lendTab);
+        expect(
+            screen.queryByText('Available to borrow')
+        ).not.toBeInTheDocument();
+        expect(screen.queryByText('Collateral Usage')).not.toBeInTheDocument();
+    });
 });
