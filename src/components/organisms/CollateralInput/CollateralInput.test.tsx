@@ -1,6 +1,6 @@
 import { composeStories } from '@storybook/testing-react';
 import { BigNumber } from 'ethers';
-import { fireEvent, render, screen } from 'src/test-utils.js';
+import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
 import * as stories from './CollateralInput.stories';
 
 const { Default } = composeStories(stories);
@@ -31,5 +31,19 @@ describe('CollateralInput component', () => {
         expect(onChange).toHaveBeenCalledWith(
             BigNumber.from('5000000000000000000')
         );
+    });
+    it('should resize the text when length of the text changes', async () => {
+        render(<Default fontSize={{ small: 'text-sm', large: 'text-lg' }} />);
+        const input = screen.getByRole('textbox');
+        expect(input).toHaveClass('text-lg');
+        fireEvent.input(input, { target: { value: '123456789' } });
+        expect(input).toHaveClass('text-lg');
+        waitFor(() => {
+            fireEvent.input(input, { target: { value: '123456789.123' } });
+            expect(input).toHaveClass('text-sm');
+        });
+
+        fireEvent.input(input, { target: { value: '12345' } });
+        expect(input).toHaveClass('text-lg');
     });
 });

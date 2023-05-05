@@ -1,6 +1,7 @@
 import { BigNumber } from 'ethers';
 import { useCallback, useMemo, useState } from 'react';
 import { DropdownSelector, InputBase, Option } from 'src/components/atoms';
+import { FontSize } from 'src/types';
 
 type FormatFunction = (amount: number) => BigNumber;
 
@@ -12,6 +13,7 @@ export const AssetSelector = <AssetType extends string = string>({
     amountFormatterMap,
     onAssetChange,
     onAmountChange,
+    fontSize,
 }: {
     options: Readonly<Array<Option<AssetType>>>;
     selected?: Option<AssetType>;
@@ -20,6 +22,7 @@ export const AssetSelector = <AssetType extends string = string>({
     transformLabel?: (v: string) => string;
     onAssetChange?: (v: AssetType) => void;
     onAmountChange?: (v: BigNumber) => void;
+    fontSize?: Record<FontSize, string>;
 }) => {
     const [assetValue, setAssetValue] = useState(selected.value);
     const [amount, setAmount] = useState<number | undefined>();
@@ -103,6 +106,7 @@ export const AssetSelector = <AssetType extends string = string>({
                     onValueChange={handleAmountChange}
                     value={amount}
                     data-cy='asset-selector-input'
+                    fontSize={fontSize}
                 />
 
                 <div

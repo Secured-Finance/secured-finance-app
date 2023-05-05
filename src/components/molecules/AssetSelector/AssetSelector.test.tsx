@@ -117,4 +117,22 @@ describe('AssetSelector Component', () => {
         fireEvent.click(screen.getByText('EFIL'));
         expect(onAmountChange).toHaveBeenLastCalledWith(BigNumber.from(1));
     });
+    it('should resize the text when length of text changes', async () => {
+        render(<Default fontSize={{ small: 'text-sm', large: 'text-lg' }} />);
+        expect(
+            screen.getByTestId('asset-selector-transformed-value')
+        ).toHaveTextContent('WBTC');
+        fireEvent.click(screen.getByRole('button'));
+
+        fireEvent.click(screen.getByText('EFIL'));
+        const input = screen.getByRole('textbox');
+        fireEvent.change(input, { target: { value: '1' } });
+        expect(input).toHaveClass('text-lg');
+        fireEvent.input(input, { target: { value: '123456789' } });
+        expect(input).toHaveClass('text-lg');
+        fireEvent.input(input, { target: { value: '1234567890' } });
+        expect(input).toHaveClass('text-sm');
+        fireEvent.input(input, { target: { value: '12345' } });
+        expect(input).toHaveClass('text-lg');
+    });
 });

@@ -23,6 +23,7 @@ import {
 } from 'src/utils';
 import { CollateralEvents, trackCollateralEvent } from 'src/utils/events';
 import { useWallet } from 'use-wallet';
+import { FontSize } from 'src/types';
 
 enum Step {
     withdrawCollateral = 1,
@@ -182,6 +183,11 @@ export const WithdrawCollateral = ({
         setCollateralAmount(0);
     }, []);
 
+    const fontSize: Record<FontSize, string> = {
+        small: 'text-lg',
+        large: 'text-xl',
+    };
+
     return (
         <Dialog
             isOpen={isOpen}
@@ -213,6 +219,7 @@ export const WithdrawCollateral = ({
                                     }
                                     amount={collateralAmount}
                                     setAmount={setCollateralAmount}
+                                    fontSize={fontSize}
                                 />
                                 <div className='typography-caption-2 h-fit rounded-xl border border-red px-3 py-2 text-slateGray'>
                                     Please note that withdrawal will impact the

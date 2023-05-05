@@ -96,6 +96,8 @@ export const LendingCard = ({
         return assetList.find(option => option.value === currency);
     }, [currency, assetList]);
 
+    const fontSize = { small: 'text-sm', large: 'text-md' };
+
     return (
         <div className='w-80 flex-col space-y-6 rounded-b-xl border border-panelStroke bg-transparent pb-6 shadow-deep'>
             <BorrowLendSelector
@@ -130,6 +132,7 @@ export const LendingCard = ({
                     onAssetChange={(v: CurrencySymbol) => {
                         dispatch(setCurrency(v));
                     }}
+                    fontSize={fontSize}
                 />
 
                 <TermSelector

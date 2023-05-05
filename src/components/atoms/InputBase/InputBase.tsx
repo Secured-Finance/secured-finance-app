@@ -3,6 +3,7 @@ import NumericFormat, {
     NumberFormatValues,
     SourceInfo,
 } from 'react-number-format';
+import { FontSize } from 'src/types';
 
 interface InputBaseProps {
     className?: string;
@@ -11,7 +12,7 @@ interface InputBaseProps {
     label?: string;
     decimalPlacesAllowed?: number;
     maxLimit?: number;
-    resizeInputText?: boolean;
+    fontSize?: Record<FontSize, string>;
 }
 
 export const InputBase = ({
@@ -20,8 +21,8 @@ export const InputBase = ({
     onValueChange,
     label,
     decimalPlacesAllowed = 4,
-    maxLimit = Number.MAX_SAFE_INTEGER, // we should have a better estimation of this maxLimit
-    resizeInputText,
+    maxLimit = 10 ** 10, // we should have a better estimation of this maxLimit
+    fontSize,
 }: InputBaseProps) => {
     const handleValueChange = (
         values: NumberFormatValues,
@@ -33,21 +34,19 @@ export const InputBase = ({
         }
     };
 
-    const fontSizeClass = classNames({
-        'text-smd': value && value.toString().length >= 15,
-        'text-md':
-            value &&
-            value.toString().length >= 10 &&
-            value.toString().length < 15,
-        'text-lg': value && value.toString().length < 10,
-    });
-
+    const fontSizeClass = fontSize
+        ? classNames({
+              [fontSize.small]: value && value.toString().length >= 10,
+              [fontSize.large]:
+                  !value || (value && value.toString().length < 10),
+          })
+        : null;
     return (
         <NumericFormat
             className={classNames(
                 'bg-transparent placeholder-opacity-50 focus:outline-none',
                 className,
-                resizeInputText ? fontSizeClass : null
+                fontSizeClass
             )}
             placeholder='0'
             thousandSeparator={true}

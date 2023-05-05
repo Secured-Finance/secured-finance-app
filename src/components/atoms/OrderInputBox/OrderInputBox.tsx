@@ -86,7 +86,6 @@ export const OrderInputBox = ({
                         }
                         decimalPlacesAllowed={decimalPlacesAllowed}
                         maxLimit={maxLimit}
-                        resizeInputText={true}
                     />
                 )}
                 {unit && <div className='text-neutral-4'>{unit}</div>}

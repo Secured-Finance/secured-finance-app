@@ -13,6 +13,7 @@ import { CollateralInput } from 'src/components/organisms';
 import { useDepositCollateral } from 'src/hooks/useDepositCollateral';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { RootState } from 'src/store/types';
+import { FontSize } from 'src/types';
 import {
     AddressUtils,
     amountFormatterFromBase,
@@ -193,6 +194,11 @@ export const DepositCollateral = ({
         setCollateralAmount(0);
     }, []);
 
+    const fontSize: Record<FontSize, string> = {
+        small: 'text-lg',
+        large: 'text-xl',
+    };
+
     return (
         <Dialog
             isOpen={isOpen}
@@ -224,6 +230,7 @@ export const DepositCollateral = ({
                                     }
                                     amount={collateralAmount}
                                     setAmount={setCollateralAmount}
+                                    fontSize={fontSize}
                                 />
                             </div>
                         );
