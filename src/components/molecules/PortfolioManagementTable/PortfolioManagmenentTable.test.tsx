@@ -4,10 +4,15 @@ import * as stories from './PortfolioManagementTable.stories';
 
 const { Default } = composeStories(stories);
 
-describe('test PortfolioManagmentcomponent', () => {
+describe('test PortfolioManagementComponent', () => {
     it('should render Portfolio Tab', () => {
         render(<Default />);
-        const item = screen.getByTestId('portfolio-management-table');
-        expect(item.childElementCount).toEqual(4);
+    });
+
+    it('should display one grid with  tabs', () => {
+        render(<Default />);
+        expect(screen.getByRole('grid')).toBeInTheDocument();
+        const tabs = screen.getAllByRole('gridcell');
+        expect(tabs.length).toBe(4);
     });
 });

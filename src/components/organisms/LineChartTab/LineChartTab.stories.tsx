@@ -23,3 +23,7 @@ const Template: ComponentStory<typeof LineChartTab> = args => {
 };
 
 export const Default = Template.bind({});
+export const Loading = Template.bind({});
+Loading.args = {
+    rates: [],
+};

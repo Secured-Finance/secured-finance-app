@@ -12,7 +12,7 @@ export const GradientBox = ({
     children: React.ReactNode;
 }) => {
     return (
-        <>
+        <div>
             <div className='h-1 bg-starBlue'></div>
             <div
                 className={classNames(
@@ -32,6 +32,6 @@ export const GradientBox = ({
                 ) : null}
                 {children}
             </div>
-        </>
+        </div>
     );
 };

@@ -9,7 +9,7 @@ import {
 } from 'src/test-utils.js';
 import * as stories from './YieldChart.stories';
 
-const { Default } = composeStories(stories);
+const { Default, Loading } = composeStories(stories);
 
 describe('YieldChart Component', () => {
     it('should render YieldChart', async () => {
@@ -35,5 +35,12 @@ describe('YieldChart Component', () => {
         expect(screen.getByTestId('yield-chart-component')).toHaveClass(
             'w-[640px]'
         );
+    });
+
+    it('should show the spinner when loading', async () => {
+        render(<Loading />);
+        expect(
+            screen.getByRole('alertdialog', { name: 'Loading' })
+        ).toBeInTheDocument();
     });
 });
