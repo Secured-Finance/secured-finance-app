@@ -163,6 +163,7 @@ export const LendingCard = ({
                     usdCollateral={collateralBook.usdCollateral}
                     collateralCoverage={collateralBook.coverage.toNumber()}
                     currency={currency}
+                    collateralThreshold={collateralBook.collateralThreshold}
                 />
 
                 <OrderAction collateralBook={collateralBook} renderSide />

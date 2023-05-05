@@ -1,26 +1,27 @@
 import {
     CategoryScale,
-    Chart as ChartJS,
     ChartData,
-    LinearScale,
+    Chart as ChartJS,
     LineElement,
+    LinearScale,
     PointElement,
     Scriptable,
     ScriptableContext,
     Title,
     Tooltip,
 } from 'chart.js';
+import ChartTooltip from 'chart.js/auto';
 import React, { useEffect, useRef } from 'react';
-import { ChartProps, getElementAtEvent, Line } from 'react-chartjs-2';
+import { ChartProps, Line, getElementAtEvent } from 'react-chartjs-2';
+import { Spinner } from 'src/components/atoms';
 import {
     crossHairPlugin,
+    options as customOptions,
     defaultDatasets,
     getCurveGradient,
-    options as customOptions,
 } from 'src/components/molecules/LineChart/constants';
 import { MaturityOptionList } from 'src/types';
 import { Maturity } from 'src/utils/entities';
-import ChartTooltip from 'chart.js/auto';
 
 ChartJS.register(
     LinearScale,
@@ -129,13 +130,22 @@ export const LineChart = ({
     }, [maturity, maturitiesOptionList]);
 
     return (
-        <Line
-            style={style}
-            data={refinedData}
-            options={options}
-            ref={chartRef}
-            onClick={handleClick}
-            data-chromatic='ignore'
-        />
+        <>
+            {refinedData.datasets.length > 0 &&
+            refinedData.datasets[0].data.length > 0 ? (
+                <Line
+                    style={style}
+                    data={refinedData}
+                    options={options}
+                    ref={chartRef}
+                    onClick={handleClick}
+                    data-chromatic='ignore'
+                />
+            ) : (
+                <div className='flex h-full w-full items-center justify-center'>
+                    <Spinner />
+                </div>
+            )}
+        </>
     );
 };

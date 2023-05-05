@@ -126,7 +126,6 @@ export const MarketDashboard = () => {
                             {
                                 name: 'Digital Assets',
                                 value: protocolInformation.totalNumberOfAsset.toString(),
-                                orientation: 'center',
                             },
                             {
                                 name: 'Total Value Locked',
@@ -135,19 +134,16 @@ export const MarketDashboard = () => {
                                     2,
                                     'compact'
                                 ),
-                                orientation: 'center',
                             },
                             {
                                 name: 'Total Volume',
                                 value: totalVolume,
-                                orientation: 'center',
                             },
                             {
                                 name: 'Total Users',
                                 value: computeTotalUsers(
                                     totalUser.data?.totalUsers
                                 ),
-                                orientation: 'center',
                             },
                         ]}
                     />
@@ -213,6 +209,9 @@ export const MarketDashboard = () => {
                                         }
                                         totalCollateralInUSD={
                                             collateralBook.usdCollateral
+                                        }
+                                        collateralThreshold={
+                                            collateralBook.collateralThreshold
                                         }
                                     />
                                 </div>

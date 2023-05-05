@@ -37,6 +37,7 @@ describe('useCollateralBook hook', () => {
             BigNumber.from('100000000000000000000')
         );
         expect(colBook.coverage.toString()).toEqual('8000');
+        expect(colBook.collateralThreshold).toEqual(80);
     });
 
     it('should return the empty book when given an null user', async () => {
