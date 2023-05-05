@@ -1,15 +1,15 @@
 import { track } from '@amplitude/analytics-browser';
 import { Disclosure } from '@headlessui/react';
 import { OrderSide, WalletSource } from '@secured-finance/sf-client';
-import { getUTCMonthYear, formatDate } from '@secured-finance/sf-core';
+import { formatDate, getUTCMonthYear } from '@secured-finance/sf-core';
 import { BigNumber } from 'ethers';
 import { useCallback, useReducer, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import Loader from 'src/assets/img/gradient-loader.png';
 import {
     ExpandIndicator,
     Section,
     SectionWithItems,
+    Spinner,
 } from 'src/components/atoms';
 import {
     AmountCard,
@@ -313,12 +313,7 @@ export const PlaceOrder = ({
                     case Step.orderProcessing:
                         return (
                             <div className='py-9'>
-                                {/* eslint-disable-next-line @next/next/no-img-element */}
-                                <img
-                                    src={Loader.src}
-                                    alt='Loader'
-                                    className='animate-spin'
-                                ></img>
+                                <Spinner />
                             </div>
                         );
                     case Step.orderPlaced:

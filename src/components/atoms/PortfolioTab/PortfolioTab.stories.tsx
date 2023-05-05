@@ -16,17 +16,3 @@ const Template: ComponentStory<typeof PortfolioTab> = args => (
 );
 
 export const Default = Template.bind({});
-
-export const LeftPortfolioTab = Template.bind({});
-LeftPortfolioTab.args = {
-    name: 'Net Value',
-    value: '$8.02',
-    orientation: 'left',
-};
-
-export const RightPortfolioTab = Template.bind({});
-RightPortfolioTab.args = {
-    name: 'Net Interest Accrued*',
-    value: '$8.02',
-    orientation: 'right',
-};

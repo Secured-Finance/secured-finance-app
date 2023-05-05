@@ -5,7 +5,7 @@ import classNames from 'classnames';
 import { BigNumber } from 'ethers';
 import { useEffect, useMemo } from 'react';
 import { useDispatch } from 'react-redux';
-import { ColorBar } from 'src/components/atoms';
+import { ColorBar, Spinner } from 'src/components/atoms';
 import { CoreTable, TableHeader } from 'src/components/molecules';
 import { OrderBookEntry } from 'src/hooks/useOrderbook';
 import { setMidPrice } from 'src/store/analytics';
@@ -284,6 +284,8 @@ export const OrderWidget = ({
         return !rowData.amount.isZero();
     };
 
+    const isLoading = buyOrders.length === 0 || sellOrders.length === 0;
+
     return (
         <>
             {!hideMidPrice && (
@@ -304,22 +306,30 @@ export const OrderWidget = ({
                 </div>
             )}
             <div className='flex flex-row gap-6 px-2'>
-                <CoreTable
-                    data={sellOrders}
-                    columns={sellColumns}
-                    name='sellOrders'
-                    border={false}
-                    onLineClick={handleSellOrdersClick}
-                    hoverRow={handleSellOrdersHoverRow}
-                />
-                <CoreTable
-                    data={buyOrders}
-                    columns={buyColumns}
-                    name='buyOrders'
-                    border={false}
-                    onLineClick={handleBuyOrdersClick}
-                    hoverRow={handleBuyOrdersHoverRow}
-                />
+                {isLoading ? (
+                    <div className='flex h-full w-full items-center justify-center pt-24'>
+                        <Spinner />
+                    </div>
+                ) : (
+                    <>
+                        <CoreTable
+                            data={sellOrders}
+                            columns={sellColumns}
+                            name='sellOrders'
+                            border={false}
+                            onLineClick={handleSellOrdersClick}
+                            hoverRow={handleSellOrdersHoverRow}
+                        />
+                        <CoreTable
+                            data={buyOrders}
+                            columns={buyColumns}
+                            name='buyOrders'
+                            border={false}
+                            onLineClick={handleBuyOrdersClick}
+                            hoverRow={handleBuyOrdersHoverRow}
+                        />
+                    </>
+                )}
             </div>
         </>
     );
