@@ -79,7 +79,7 @@ export const OrderInputBox = ({
                 ) : (
                     <InputBase
                         value={inputValue as number}
-                        className='text-right font-semibold leading-6 text-neutral-8'
+                        className='w-[32] text-right text-[18px] font-semibold leading-6 text-neutral-8'
                         label={field}
                         onValueChange={(v: number | undefined) =>
                             handleAmountChange(v ?? 0)
