@@ -16,11 +16,11 @@ import { RootState } from 'src/store/types';
 import { FontSize } from 'src/types';
 import {
     AddressUtils,
-    amountFormatterFromBase,
-    amountFormatterToBase,
     CollateralEvents,
     CollateralInfo,
     CurrencySymbol,
+    amountFormatterFromBase,
+    amountFormatterToBase,
     handleContractTransaction,
 } from 'src/utils';
 import { trackCollateralEvent } from 'src/utils/events';
@@ -213,7 +213,7 @@ export const DepositCollateral = ({
                 switch (state.currentStep) {
                     case Step.depositCollateral:
                         return (
-                            <div className='flex w-full flex-col gap-6'>
+                            <div className='flex flex-col gap-6'>
                                 <CollateralSelector
                                     headerText='Select Asset'
                                     onChange={handleChange}

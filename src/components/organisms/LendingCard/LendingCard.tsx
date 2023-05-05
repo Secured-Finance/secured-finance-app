@@ -21,7 +21,7 @@ import {
 } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
 import { selectAllBalances } from 'src/store/wallet';
-import { MaturityOptionList } from 'src/types';
+import { FontSize, MaturityOptionList } from 'src/types';
 import {
     CurrencySymbol,
     amountFormatterToBase,
@@ -96,7 +96,10 @@ export const LendingCard = ({
         return assetList.find(option => option.value === currency);
     }, [currency, assetList]);
 
-    const fontSize = { small: 'text-sm', large: 'text-md' };
+    const fontSize: Record<FontSize, string> = {
+        small: 'text-sm',
+        large: 'text-md',
+    };
 
     return (
         <div className='w-80 flex-col space-y-6 rounded-b-xl border border-panelStroke bg-transparent pb-6 shadow-deep'>
