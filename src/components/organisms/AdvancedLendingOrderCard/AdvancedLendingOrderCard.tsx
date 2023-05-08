@@ -37,7 +37,7 @@ import {
     generateWalletSourceInformation,
     multiply,
     percentFormat,
-    usdFormat,
+    usdFormatAppendUSD,
 } from 'src/utils';
 import { Amount, LoanValue } from 'src/utils/entities';
 import { useWallet } from 'use-wallet';
@@ -204,17 +204,15 @@ export const AdvancedLendingOrderCard = ({
                         decimalPlacesAllowed={2}
                         maxLimit={100}
                     />
-                    <div className='mx-10px'>
-                        <OrderDisplayBox
-                            field='Fixed Rate (APR)'
-                            value={percentFormat(
-                                LoanValue.fromPrice(
-                                    unitPrice,
-                                    maturity.toNumber()
-                                ).apr.toNormalizedNumber()
-                            )}
-                        />
-                    </div>
+                    <OrderDisplayBox
+                        field='Fixed Rate'
+                        value={percentFormat(
+                            LoanValue.fromPrice(
+                                unitPrice,
+                                maturity.toNumber()
+                            ).apr.toNormalizedNumber()
+                        )}
+                    />
                 </div>
                 <Slider onChange={handleAmountChange} />
                 <OrderInputBox
@@ -224,18 +222,10 @@ export const AdvancedLendingOrderCard = ({
                     initialValue={orderAmount.value}
                     onValueChange={v => dispatch(setAmount(v as BigNumber))}
                 />
-                <div className='mx-10px flex flex-col gap-6'>
-                    <OrderDisplayBox
-                        field='Est. Present Value'
-                        value={usdFormat(orderAmount.toUSD(price), 2)}
-                    />
-                    <OrderDisplayBox
-                        field='Future Value'
-                        value='--' // todo after apy -> apr
-                        informationText='Future Value is the expected return value of the contract at time of maturity.'
-                    />
-                </div>
-
+                <OrderDisplayBox
+                    field='Total Value'
+                    value={usdFormatAppendUSD(orderAmount.toUSD(price), 2)}
+                />
                 <OrderAction
                     loanValue={loanValue}
                     collateralBook={collateralBook}

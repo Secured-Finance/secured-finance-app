@@ -62,11 +62,9 @@ export const OrderInputBox = ({
     );
 
     return (
-        <div className='typography-caption flex h-10 w-full flex-row items-center justify-between rounded-lg bg-black-20 py-2 pl-2 pr-4 ring-starBlue focus-within:ring'>
+        <div className='flex h-10 w-full flex-row items-center justify-between rounded-lg bg-black-20 py-2 pl-2 pr-4 ring-starBlue focus-within:ring'>
             <div className='flex flex-row items-center gap-2'>
-                <div className='typography-caption text-planetaryPurple'>
-                    {field}
-                </div>
+                <div className='typography-caption text-neutral-5'>{field}</div>
                 {informationText && !disabled && (
                     <InformationPopover>{informationText}</InformationPopover>
                 )}

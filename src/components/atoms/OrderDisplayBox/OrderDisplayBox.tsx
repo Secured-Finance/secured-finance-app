@@ -12,14 +12,18 @@ export const OrderDisplayBox = ({
     informationText,
 }: OrderDisplayBoxProps) => {
     return (
-        <div className='typography-caption flex h-6 w-full flex-row items-center justify-between bg-transparent'>
+        <div className='flex h-10 w-full flex-row items-center justify-between rounded-lg bg-black-20 py-2 pl-2 pr-4'>
             <div className='flex flex-row items-center gap-2'>
-                <div className='text-slateGray'>{field}</div>
+                <div className='typography-caption w-full text-neutral-5'>
+                    {field}
+                </div>
                 {informationText && (
                     <InformationPopover>{informationText}</InformationPopover>
                 )}
             </div>
-            <div className='text-right text-planetaryPurple'>{value}</div>
+            <div className=' text-right text-[16px] font-semibold leading-6 text-neutral-4'>
+                {value}
+            </div>
         </div>
     );
 };

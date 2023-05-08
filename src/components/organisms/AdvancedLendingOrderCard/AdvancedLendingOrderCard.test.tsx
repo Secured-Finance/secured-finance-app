@@ -70,16 +70,15 @@ describe('AdvancedLendingOrderCard Component', () => {
         expect(screen.getByText('Bond Price')).toBeInTheDocument();
         expect(inputs[0].getAttribute('value')).toBe('95');
 
-        expect(screen.getByText('Fixed Rate (APR)')).toBeInTheDocument();
+        expect(screen.getByText('Fixed Rate')).toBeInTheDocument();
         expect(screen.getByText('17%')).toBeInTheDocument();
 
         expect(screen.getByText('Amount')).toBeInTheDocument();
         expect(inputs[1].getAttribute('value')).toBe('500');
         expect(screen.getByText('USDC')).toBeInTheDocument();
 
-        expect(screen.getByText('Est. Present Value')).toBeInTheDocument();
-        expect(screen.getByText('$500.00')).toBeInTheDocument();
-        expect(screen.getByText('Future Value')).toBeInTheDocument();
+        expect(screen.getByText('Total Value')).toBeInTheDocument();
+        expect(screen.getByText('$500.00 USD')).toBeInTheDocument();
     });
 
     it('should display the PlaceOrder Dialog when clicking on the Place Order button', async () => {
