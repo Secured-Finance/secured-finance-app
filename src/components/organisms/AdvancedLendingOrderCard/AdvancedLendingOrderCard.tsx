@@ -224,7 +224,10 @@ export const AdvancedLendingOrderCard = ({
                 />
                 <OrderDisplayBox
                     field='Total Value'
-                    value={usdFormatAppendUSD(orderAmount.toUSD(price), 2)}
+                    value={usdFormatAppendUSD(
+                        orderAmount.toUSD(price),
+                        2
+                    ).slice(1)}
                 />
                 <OrderAction
                     loanValue={loanValue}
