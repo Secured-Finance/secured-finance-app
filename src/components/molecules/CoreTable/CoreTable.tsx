@@ -50,7 +50,7 @@ export const CoreTable = <T,>({
     const table = useReactTable<T>(configuration);
     return (
         <table className='h-full w-full text-white' data-testid={name}>
-            <thead className='typography-caption-2 h-14 border-b border-white-10 py-4 px-6 text-slateGray'>
+            <thead className='typography-caption-2 h-14 border-b border-white-10 px-6 py-4 text-slateGray'>
                 {table.getHeaderGroups().map(headerGroup => (
                     <tr key={headerGroup.id} data-testid={`${name}-header`}>
                         {headerGroup.headers.map(header => (
