@@ -27,7 +27,7 @@ export const CollateralManagementConciseTab = ({
     );
 
     return (
-        <div className='flex h-fit w-full flex-col rounded-b bg-black-20 pt-2 pb-4'>
+        <div className='flex h-fit w-full flex-col rounded-b bg-black-20 pb-4 pt-2'>
             <div className='mx-4 mb-5 mt-4 flex flex-col'>
                 <div className='typography-caption mb-3 flex flex-row justify-between text-grayScale'>
                     <span>Collateral Utilization</span>

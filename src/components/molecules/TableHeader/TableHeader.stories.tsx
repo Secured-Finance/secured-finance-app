@@ -10,7 +10,7 @@ export default {
 } as ComponentMeta<typeof TableHeader>;
 
 const Template: ComponentStory<typeof TableHeader> = args => (
-    <div className='typography-caption-2 h-14 w-1/3 border-b border-white-10 py-4 px-6 text-slateGray'>
+    <div className='typography-caption-2 h-14 w-1/3 border-b border-white-10 px-6 py-4 text-slateGray'>
         <TableHeader {...args} />
     </div>
 );
