@@ -8,7 +8,7 @@ type MenuItem = { text: string; onClick: () => void; disabled?: boolean };
 const MenuItem = ({ text, onClick, disabled = false }: MenuItem) => {
     return (
         <div
-            className={classNames('z-10 flex w-full rounded-md py-3 px-3', {
+            className={classNames('z-10 flex w-full rounded-md px-3 py-3', {
                 'cursor-pointer hover:bg-horizonBlue': !disabled,
             })}
         >

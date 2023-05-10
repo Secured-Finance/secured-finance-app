@@ -162,7 +162,7 @@ export const Itayose = () => {
                 <div className='flex flex-col gap-4'>
                     <div>
                         <div className='h-1 bg-starBlue'></div>
-                        <div className='rounded-b-2xl border-l border-r border-b border-white-10 bg-gradient-to-b from-[rgba(111,116,176,0.35)] to-[rgba(57,77,174,0)] px-5 shadow-tab'>
+                        <div className='rounded-b-2xl border-b border-l border-r border-white-10 bg-gradient-to-b from-[rgba(111,116,176,0.35)] to-[rgba(57,77,174,0)] px-5 shadow-tab'>
                             <h1 className='typography-nav-menu-default whitespace-nowrap py-5 text-left text-neutral-8'>
                                 Pre-Open Orders
                             </h1>
