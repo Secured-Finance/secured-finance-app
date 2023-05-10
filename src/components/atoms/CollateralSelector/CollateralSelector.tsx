@@ -37,7 +37,7 @@ export const CollateralSelector = ({
                         <>
                             <div className='relative h-full'>
                                 <Listbox.Button
-                                    className='flex w-full cursor-default items-center gap-2 rounded-lg border-2 border-white-40 py-3 px-4 focus:outline-none'
+                                    className='flex w-full cursor-default items-center gap-2 rounded-lg border-2 border-white-40 px-4 py-3 focus:outline-none'
                                     data-testid='collateral-selector-button'
                                 >
                                     <span className='typography-caption-2 flex h-6 min-w-[80px] items-center text-grayScale'>
@@ -70,7 +70,7 @@ export const CollateralSelector = ({
                                                         optionList.length - 1
                                                             ? 'border-b border-white-5'
                                                             : ''
-                                                    } py-4 px-4 ${
+                                                    } px-4 py-4 ${
                                                         active
                                                             ? 'bg-starBlue'
                                                             : ''
