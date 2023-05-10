@@ -12,7 +12,7 @@ const TitleChip = ({
     return (
         <div
             className={classNames(
-                'typography-caption-2 w-fit whitespace-nowrap py-3 px-5',
+                'typography-caption-2 w-fit whitespace-nowrap px-5 py-3',
                 {
                     'rounded-3xl bg-black-30 text-neutral-8': selected,
                     'text-neutral-4': !selected,
@@ -39,7 +39,7 @@ export const HorizontalTab = ({
                 selectedIndex={selectedIndex}
                 onChange={setSelectedIndex}
             >
-                <HeadlessTab.List className='flex h-16 justify-start border-b border-white-10 py-3 px-5'>
+                <HeadlessTab.List className='flex h-16 justify-start border-b border-white-10 px-5 py-3'>
                     {tabTitles.map(title => {
                         return (
                             <HeadlessTab

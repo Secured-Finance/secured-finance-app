@@ -162,7 +162,7 @@ export const MarketLoanWidget = ({ loans }: { loans: Loan[] }) => {
                 <div className='h-16 w-28'>
                     <NavTab text='Loans' active />
                 </div>
-                <div className='flex flex-row gap-3 pt-4 pr-3'>
+                <div className='flex flex-row gap-3 pr-3 pt-4'>
                     <DropdownSelector<string>
                         optionList={[
                             { label: 'All Assets', value: '' },
