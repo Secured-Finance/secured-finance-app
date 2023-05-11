@@ -1,5 +1,8 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
-import { orderHistoryList } from 'src/stories/mocks/fixtures';
+import {
+    openOrderHistoryList,
+    orderHistoryList,
+} from 'src/stories/mocks/fixtures';
 import { OpenOrderTable } from './OpenOrderTable';
 
 export default {
@@ -15,3 +18,7 @@ const Template: ComponentStory<typeof OpenOrderTable> = args => (
 );
 
 export const Default = Template.bind({});
+export const SortContract = Template.bind({});
+SortContract.args = {
+    data: openOrderHistoryList,
+};
