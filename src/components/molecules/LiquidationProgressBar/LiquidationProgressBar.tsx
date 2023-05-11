@@ -71,7 +71,7 @@ export const LiquidationProgressBar = ({
                 >
                     <Tick className='float-right h-5px w-2'></Tick>
                 </div>
-                <div className='h-5px w-full rounded-full bg-gradient-to-r from-progressBarStart via-progressBarVia to-progressBarEnd'></div>
+                <div className='h-5px w-full rounded-full bg-gradient-to-r from-progressBarStart from-0% via-progressBarVia via-45% to-progressBarEnd to-80%'></div>
                 {liquidationPercentage === 0 ? (
                     <div className='typography-caption mt-1 text-white'>
                         N/A
