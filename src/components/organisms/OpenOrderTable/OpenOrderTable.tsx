@@ -46,6 +46,13 @@ export const OpenOrderTable = ({ data }: { data: OrderList }) => {
                 row => row.amount,
                 { compact: true, color: false }
             ),
+            amountColumnDefinition(
+                columnHelper,
+                'Filled Amount',
+                'filledAmount',
+                row => row.filledAmount,
+                { compact: true, color: false }
+            ),
             columnHelper.display({
                 id: 'actions',
                 cell: info => {
