@@ -1,5 +1,10 @@
 /* eslint-disable react/display-name */
-import { AccessorFn, ColumnHelper, HeaderContext } from '@tanstack/react-table';
+import {
+    AccessorFn,
+    ColumnHelper,
+    HeaderContext,
+    Row,
+} from '@tanstack/react-table';
 import { BigNumber } from 'ethers';
 import { Chip, CurrencyItem, PriceYieldItem } from 'src/components/atoms';
 import { TableContractCell, TableHeader } from 'src/components/molecules';
@@ -156,7 +161,27 @@ export const contractColumnDefinition = <
             </div>
         ),
         header: tableHeaderDefinition(title),
+        sortingFn: contractSortingFn,
     });
+};
+
+const contractSortingFn = <
+    T extends { maturity: string | number; currency: string }
+>(
+    rowA: Row<T>,
+    rowB: Row<T>,
+    _column: string
+) => {
+    const ccyA = hexToCurrencySymbol(rowA.original.currency)?.toString() ?? '';
+    const ccyB = hexToCurrencySymbol(rowB.original.currency)?.toString() ?? '';
+
+    if (ccyA === ccyB) {
+        const matA = rowA.original.maturity.toString();
+        const matB = rowB.original.maturity.toString();
+        return matA.localeCompare(matB);
+    }
+
+    return ccyA.localeCompare(ccyB);
 };
 
 export const priceYieldColumnDefinition = <T extends { maturity: string }>(
