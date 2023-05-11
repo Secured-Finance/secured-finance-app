@@ -160,18 +160,4 @@ describe('LendingCard Component', () => {
         expect(screen.getByText('Lending Source')).toBeInTheDocument();
         expect(screen.getByText('10,000 EFIL')).toBeInTheDocument();
     });
-    it('should resize text when the length changes', async () => {
-        render(<Default />);
-        const input = screen.getByRole('textbox');
-        expect(input).toHaveClass('text-md');
-        fireEvent.input(input, { target: { value: '123456789' } });
-        expect(input).toHaveClass('text-md');
-        waitFor(() => {
-            fireEvent.input(input, { target: { value: '123456789.123' } });
-            expect(input).toHaveClass('text-sm');
-        });
-
-        fireEvent.input(input, { target: { value: '12345' } });
-        expect(input).toHaveClass('text-md');
-    });
 });

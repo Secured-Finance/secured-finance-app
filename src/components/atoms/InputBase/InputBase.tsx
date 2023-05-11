@@ -12,17 +12,20 @@ interface InputBaseProps {
     label?: string;
     decimalPlacesAllowed?: number;
     maxLimit?: number;
-    fontSize?: Record<FontSize, string>;
+    fontSize?: Record<FontSize, number>;
 }
-
+const DEFAULT_FONTSIZE: Record<FontSize, number> = {
+    small: 12,
+    large: 15,
+};
 export const InputBase = ({
     className,
     value,
     onValueChange,
     label,
     decimalPlacesAllowed = 4,
-    maxLimit = 10 ** 10, // we should have a better estimation of this maxLimit
-    fontSize,
+    maxLimit = 10 ** 10,
+    fontSize = DEFAULT_FONTSIZE,
 }: InputBaseProps) => {
     const handleValueChange = (
         values: NumberFormatValues,
@@ -34,13 +37,15 @@ export const InputBase = ({
         }
     };
 
-    const fontSizeClass = fontSize
-        ? classNames({
-              [fontSize.small]: value && value.toString().length >= 10,
-              [fontSize.large]:
-                  !value || (value && value.toString().length < 10),
-          })
-        : null;
+    const fontSizeClass = classNames({
+        'text-md': value && value.toString().length >= fontSize.large,
+        'text-lg':
+            value &&
+            value.toString().length >= fontSize.small &&
+            value.toString().length < fontSize.large,
+        'text-xl':
+            !value || (value && value.toString().length < fontSize.small),
+    });
     return (
         <NumericFormat
             className={classNames(
