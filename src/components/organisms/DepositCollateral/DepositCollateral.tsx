@@ -207,7 +207,7 @@ export const DepositCollateral = ({
                 switch (state.currentStep) {
                     case Step.depositCollateral:
                         return (
-                            <div className='flex flex-col gap-6'>
+                            <div className='flex min-w-full flex-col gap-6'>
                                 <CollateralSelector
                                     headerText='Select Asset'
                                     onChange={handleChange}
