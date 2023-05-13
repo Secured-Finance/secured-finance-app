@@ -32,6 +32,7 @@ export * from './Separator';
 export * from './SimpleAdvancedSelector';
 export * from './Slider';
 export * from './SortArrows';
+export * from './Spinner';
 export * from './Toggle';
 export * from './TraderProTab';
 export * from './WalletSourceSelector';

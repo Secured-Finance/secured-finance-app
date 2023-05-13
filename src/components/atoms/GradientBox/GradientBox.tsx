@@ -12,11 +12,11 @@ export const GradientBox = ({
     children: React.ReactNode;
 }) => {
     return (
-        <>
+        <div>
             <div className='h-1 bg-starBlue'></div>
             <div
                 className={classNames(
-                    'border-l border-r border-b border-white-10 bg-gradient-to-b from-[rgba(106,118,177,0.1)] via-[rgba(106,118,177,0)] to-black-20 shadow-tab',
+                    'border-b border-l border-r border-white-10 bg-black-20 bg-gradient-to-b from-[rgba(106,118,177,0.1)] from-0% to-[rgba(106,118,177,0)] to-70%',
                     {
                         'rounded-b-2xl': shape === 'rounded-bottom',
                     }
@@ -32,6 +32,6 @@ export const GradientBox = ({
                 ) : null}
                 {children}
             </div>
-        </>
+        </div>
     );
 };

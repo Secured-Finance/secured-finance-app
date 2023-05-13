@@ -149,7 +149,7 @@ const CurveChip = ({
                 data-testid='curve-chip'
                 style={{ backgroundColor: currencyMap[ccy].chartColor }}
                 className={classNames(
-                    `typography-body-small w-14 rounded-2xl py-3 pt-2 pb-[6px] font-secondary text-xs font-semibold uppercase text-white`,
+                    `typography-body-small w-14 rounded-2xl py-3 pb-[6px] pt-2 font-secondary text-xs font-semibold uppercase text-white`,
                     {
                         'opacity-50': !active,
                     }

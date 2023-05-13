@@ -12,7 +12,7 @@ export const CollateralInformationTable = ({
     data,
 }: CollateralInformationTableProps) => {
     return (
-        <div className='flex w-full flex-col gap-2 rounded-b bg-cardBackground/[0.74] pt-2'>
+        <div className='flex w-full flex-col gap-2 rounded-b bg-black-20 pt-2'>
             <div className='typography-dropdown-selection-label flex h-5 justify-between px-4 text-white-50'>
                 <span>Asset</span>
                 <span>Balance</span>
