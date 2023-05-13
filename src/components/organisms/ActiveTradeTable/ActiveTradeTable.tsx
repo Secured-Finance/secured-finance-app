@@ -1,3 +1,4 @@
+import { formatDate } from '@secured-finance/sf-core';
 import { createColumnHelper } from '@tanstack/react-table';
 import * as dayjs from 'dayjs';
 import { BigNumber } from 'ethers';
@@ -37,11 +38,49 @@ export const ActiveTradeTable = ({ data }: { data: TradeSummary[] }) => {
             contractColumnDefinition(columnHelper, 'Contract', 'contract'),
             columnHelper.accessor('maturity', {
                 cell: info => {
-                    const dayToMaturity = dayjs
-                        .unix(Number(info.getValue()))
-                        .diff(Date.now(), 'day');
-
-                    return <>{dayToMaturity} Days</>;
+                    const currentTime = Date.now();
+                    const maturityTimestamp = Number(info.getValue());
+                    const dayToMaturity = formatMaturity(
+                        maturityTimestamp,
+                        'day',
+                        currentTime
+                    );
+                    const diffHours = formatMaturity(
+                        maturityTimestamp,
+                        'hours',
+                        currentTime
+                    );
+                    const diffMinutes =
+                        formatMaturity(
+                            maturityTimestamp,
+                            'minutes',
+                            currentTime
+                        ) % 60;
+                    let maturity;
+                    if (dayToMaturity > 1) {
+                        maturity = `${dayToMaturity} Days`;
+                    } else if (dayToMaturity === 1) {
+                        maturity = `${dayToMaturity} Day`;
+                    } else if (dayToMaturity < 1) {
+                        maturity = (
+                            <>
+                                {diffHours > 0 ? (
+                                    <span className='mx-1'>{diffHours}h</span>
+                                ) : null}
+                                {diffMinutes > 0 ? <>{diffMinutes}m</> : null}
+                            </>
+                        );
+                    }
+                    return (
+                        <div className='grid'>
+                            <div className='typography-caption text-neutral-7'>
+                                {maturity}
+                            </div>
+                            <span className='typography-caption-2 h-5 text-neutral-4'>
+                                {formatDate(maturityTimestamp)}
+                            </span>
+                        </div>
+                    );
                 },
                 header: tableHeaderDefinition('D.T.M.'),
             }),
@@ -51,12 +90,6 @@ export const ActiveTradeTable = ({ data }: { data: TradeSummary[] }) => {
                 'forwardValue',
                 row => row.forwardValue,
                 { color: true, priceList: priceList, compact: false }
-            ),
-            priceYieldColumnDefinition(
-                columnHelper,
-                'M.T.M.',
-                'averagePrice',
-                row => row.averagePrice
             ),
             amountColumnDefinition(
                 columnHelper,
@@ -68,6 +101,12 @@ export const ActiveTradeTable = ({ data }: { data: TradeSummary[] }) => {
                     priceList: priceList,
                     compact: false,
                 }
+            ),
+            priceYieldColumnDefinition(
+                columnHelper,
+                'M.T.M.',
+                'averagePrice',
+                row => row.averagePrice
             ),
             columnHelper.display({
                 id: 'actions',
@@ -153,3 +192,9 @@ export const ActiveTradeTable = ({ data }: { data: TradeSummary[] }) => {
         </div>
     );
 };
+
+const formatMaturity = (
+    maturityTimeStamp: number,
+    timeUnit: 'day' | 'hours' | 'minutes',
+    currentTime: number
+) => dayjs.unix(maturityTimeStamp).diff(currentTime, timeUnit);

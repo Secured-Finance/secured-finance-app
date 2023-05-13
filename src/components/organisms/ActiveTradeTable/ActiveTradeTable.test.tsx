@@ -1,8 +1,16 @@
 import { composeStories } from '@storybook/testing-react';
-import { fireEvent, render, screen } from 'src/test-utils.js';
+import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
+import timemachine from 'timemachine';
 import * as stories from './ActiveTradeTable.stories';
 
 const { Default } = composeStories(stories);
+
+beforeAll(() => {
+    timemachine.reset();
+    timemachine.config({
+        dateString: '2022-02-01T11:00:00.00Z',
+    });
+});
 
 describe('ActiveTradeTable Component', () => {
     it('should render a ActiveTradeTable as a table', () => {
@@ -17,18 +25,24 @@ describe('ActiveTradeTable Component', () => {
         expect(initialRows[2]).toHaveTextContent('Borrow');
         expect(initialRows[3]).toHaveTextContent('Borrow');
         expect(initialRows[4]).toHaveTextContent('Borrow');
+        expect(initialRows[5]).toHaveTextContent('Lend');
+        expect(initialRows[6]).toHaveTextContent('Lend');
         screen.getByText('Type').click();
         const sortedRowsAsc = screen.getAllByRole('row');
         expect(sortedRowsAsc[1]).toHaveTextContent('Lend');
-        expect(sortedRowsAsc[2]).toHaveTextContent('Borrow');
-        expect(sortedRowsAsc[3]).toHaveTextContent('Borrow');
+        expect(sortedRowsAsc[2]).toHaveTextContent('Lend');
+        expect(sortedRowsAsc[3]).toHaveTextContent('Lend');
         expect(sortedRowsAsc[4]).toHaveTextContent('Borrow');
+        expect(sortedRowsAsc[5]).toHaveTextContent('Borrow');
+        expect(sortedRowsAsc[6]).toHaveTextContent('Borrow');
         screen.getByText('Type').click();
         const sortedRowsDesc = screen.getAllByRole('row');
         expect(sortedRowsDesc[1]).toHaveTextContent('Borrow');
         expect(sortedRowsDesc[2]).toHaveTextContent('Borrow');
         expect(sortedRowsDesc[3]).toHaveTextContent('Borrow');
         expect(sortedRowsDesc[4]).toHaveTextContent('Lend');
+        expect(sortedRowsDesc[5]).toHaveTextContent('Lend');
+        expect(sortedRowsDesc[6]).toHaveTextContent('Lend');
     });
 
     it('should display more options when clicking on the ... button', () => {
@@ -37,7 +51,7 @@ describe('ActiveTradeTable Component', () => {
         const moreOptionsButton = screen.getAllByRole('button', {
             name: 'More options',
         });
-        expect(moreOptionsButton).toHaveLength(4);
+        expect(moreOptionsButton).toHaveLength(6);
         fireEvent.click(moreOptionsButton[0]);
         expect(screen.getByRole('menu')).toBeInTheDocument();
         expect(screen.getByText('View Contract')).toBeInTheDocument();
@@ -55,5 +69,22 @@ describe('ActiveTradeTable Component', () => {
         fireEvent.click(moreOptionsButton[0]);
         fireEvent.click(screen.getByText('Unwind Position'));
         expect(screen.getByRole('dialog')).toBeInTheDocument();
+    });
+
+    it('should display hours and minutes when maturity is less than 24 hours', async () => {
+        render(<Default />);
+        const closeToMaturityRow = screen.getAllByRole('row')[5];
+        expect(closeToMaturityRow).toHaveTextContent('Feb 2, 2022');
+        waitFor(() => {
+            expect(closeToMaturityRow).toHaveTextContent('21h-59m');
+        });
+    });
+    it('should display 1 day when maturity is less than 48 hours and greater than 24 hours', async () => {
+        render(<Default />);
+        const closeToMaturityRow = screen.getAllByRole('row')[6];
+        expect(closeToMaturityRow).toHaveTextContent('Feb 2, 2022');
+        waitFor(() => {
+            expect(closeToMaturityRow).toHaveTextContent('1 Day');
+        });
     });
 });

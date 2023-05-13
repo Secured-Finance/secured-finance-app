@@ -23,7 +23,7 @@ export const SectionWithItems = ({
 export const Section = ({ children }: { children: React.ReactNode }) => {
     return (
         <div className='rounded-xl border border-neutral-3'>
-            <div className='py-4 px-6'>{children}</div>
+            <div className='px-6 py-4'>{children}</div>
         </div>
     );
 };

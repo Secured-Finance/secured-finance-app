@@ -14,7 +14,7 @@ export const ConnectWalletCard = () => {
     return (
         <div className='h-fit w-full'>
             <GradientBox>
-                <div className='flex h-full flex-col items-center gap-4 px-6 pt-5 pb-6'>
+                <div className='flex h-full flex-col items-center gap-4 px-6 pb-6 pt-5'>
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                         src={SFSphere.src}
