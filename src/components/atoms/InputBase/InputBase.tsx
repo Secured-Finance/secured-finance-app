@@ -34,12 +34,12 @@ export const InputBase = ({
 
     const fontSizeClass = fontSize
         ? classNames({
-              'text-md': value && value.toString().length >= fontSize.large,
-              'text-lg':
+              'text-xl': value && value.toString().length >= fontSize.large,
+              'text-2xl':
                   value &&
                   value.toString().length >= fontSize.small &&
                   value.toString().length < fontSize.large,
-              'text-xl':
+              'text-3xl':
                   !value || (value && value.toString().length < fontSize.small),
           })
         : null;
