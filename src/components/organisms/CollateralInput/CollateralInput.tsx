@@ -1,6 +1,6 @@
 import { BigNumber } from 'ethers';
 import { useCallback } from 'react';
-import { InputBase } from 'src/components/atoms';
+import { FontSize, InputBase } from 'src/components/atoms';
 import { PercentageSelector } from 'src/components/molecules';
 import { amountFormatterToBase, CurrencySymbol, usdFormat } from 'src/utils';
 
@@ -59,6 +59,11 @@ export const CollateralInput = ({
         [availableAmount, setAmount, onAmountChange, handleInputChange, asset]
     );
 
+    const fontSize: Record<FontSize, number> = {
+        small: 12,
+        large: 15,
+    };
+
     return (
         <div className='flex h-[168px] w-full flex-col items-center'>
             <span className='typography-caption flex h-6 text-center text-secondary7'>
@@ -69,6 +74,7 @@ export const CollateralInput = ({
                     value={amount}
                     className='typography-headline-4 h-14 w-full text-center text-neutral-8'
                     onValueChange={handleAmountChange}
+                    fontSize={fontSize}
                 />
                 <div className='typography-body-2'>
                     <span className='text-center text-neutral-8'>

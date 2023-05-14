@@ -3,7 +3,6 @@ import NumericFormat, {
     NumberFormatValues,
     SourceInfo,
 } from 'react-number-format';
-import { FontSize } from 'src/types';
 
 interface InputBaseProps {
     className?: string;
@@ -14,10 +13,6 @@ interface InputBaseProps {
     maxLimit?: number;
     fontSize?: Record<FontSize, number>;
 }
-const DEFAULT_FONTSIZE: Record<FontSize, number> = {
-    small: 12,
-    large: 15,
-};
 export const InputBase = ({
     className,
     value,
@@ -25,7 +20,7 @@ export const InputBase = ({
     label,
     decimalPlacesAllowed = 4,
     maxLimit = 10 ** 10,
-    fontSize = DEFAULT_FONTSIZE,
+    fontSize,
 }: InputBaseProps) => {
     const handleValueChange = (
         values: NumberFormatValues,
@@ -37,15 +32,17 @@ export const InputBase = ({
         }
     };
 
-    const fontSizeClass = classNames({
-        'text-md': value && value.toString().length >= fontSize.large,
-        'text-lg':
-            value &&
-            value.toString().length >= fontSize.small &&
-            value.toString().length < fontSize.large,
-        'text-xl':
-            !value || (value && value.toString().length < fontSize.small),
-    });
+    const fontSizeClass = fontSize
+        ? classNames({
+              'text-md': value && value.toString().length >= fontSize.large,
+              'text-lg':
+                  value &&
+                  value.toString().length >= fontSize.small &&
+                  value.toString().length < fontSize.large,
+              'text-xl':
+                  !value || (value && value.toString().length < fontSize.small),
+          })
+        : null;
     return (
         <NumericFormat
             className={classNames(
@@ -68,3 +65,5 @@ export const InputBase = ({
         />
     );
 };
+
+export type FontSize = 'large' | 'small';
