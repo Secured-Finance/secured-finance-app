@@ -62,13 +62,15 @@ describe('test InputBase component', () => {
             <WithValue fontSize={{ small: 5, large: 10 }} />
         );
         const input = getByRole('textbox');
-        expect(input).toHaveClass('text-xl');
+        expect(input).toHaveClass('text-3xl');
         fireEvent.input(input, { target: { value: '1234' } });
-        expect(input).toHaveClass('text-xl');
+        expect(input).toHaveClass('text-3xl');
         fireEvent.input(input, { target: { value: '123456' } });
-        expect(input).toHaveClass('text-lg');
-        fireEvent.input(input, { target: { value: '1234' } });
+        expect(input).toHaveClass('text-2xl');
+        fireEvent.input(input, { target: { value: '123456789.123' } });
         expect(input).toHaveClass('text-xl');
+        fireEvent.input(input, { target: { value: '1234' } });
+        expect(input).toHaveClass('text-3xl');
     });
 
     it('should not change font size as input length changes if fontSize is not provided', async () => {
