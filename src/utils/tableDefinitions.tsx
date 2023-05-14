@@ -76,17 +76,19 @@ export const amountColumnDefinition = <T extends AmountColumnType>(
             }
 
             return (
-                <div className='flex justify-center'>
-                    <CurrencyItem
-                        amount={currencyMap[ccy].fromBaseUnit(
-                            info.getValue() as BigNumber
-                        )}
-                        ccy={ccy}
-                        align='right'
-                        price={options.priceList?.[ccy]}
-                        color={options.color ? color : undefined}
-                        compact={options.compact}
-                    />
+                <div className='flex w-full items-center justify-end pr-[15%]'>
+                    <div className='flex justify-end'>
+                        <CurrencyItem
+                            amount={currencyMap[ccy].fromBaseUnit(
+                                info.getValue() as BigNumber
+                            )}
+                            ccy={ccy}
+                            align='right'
+                            price={options.priceList?.[ccy]}
+                            color={options.color ? color : undefined}
+                            compact={options.compact}
+                        />
+                    </div>
                 </div>
             );
         },
