@@ -52,11 +52,11 @@ describe('WithdrawCollateral component', () => {
         fireEvent.click(screen.getByTestId('collateral-selector-button'));
         fireEvent.click(screen.getByTestId('option-2'));
         expect(screen.getByText('USDC')).toBeInTheDocument();
-        expect(screen.getByText('50 USDC Available')).toBeInTheDocument();
+        expect(screen.getByText('30 USDC Available')).toBeInTheDocument();
 
         const tab = screen.getByTestId(100);
         fireEvent.click(tab);
-        expect(screen.getByText('$50.00')).toBeInTheDocument();
+        expect(screen.getByText('$30.00')).toBeInTheDocument();
     });
 
     it('should proceed to failure screen and call onclose when block number is undefined', async () => {
@@ -68,11 +68,11 @@ describe('WithdrawCollateral component', () => {
         fireEvent.click(screen.getByTestId('collateral-selector-button'));
         fireEvent.click(screen.getByTestId('option-2'));
         expect(screen.getByText('USDC')).toBeInTheDocument();
-        expect(screen.getByText('50 USDC Available')).toBeInTheDocument();
+        expect(screen.getByText('30 USDC Available')).toBeInTheDocument();
 
         const tab = screen.getByTestId(75);
         fireEvent.click(tab);
-        expect(screen.getByText('$37.50')).toBeInTheDocument();
+        expect(screen.getByText('$22.50')).toBeInTheDocument();
 
         const button = screen.getByTestId('dialog-action-button');
         fireEvent.click(button);
@@ -96,7 +96,7 @@ describe('WithdrawCollateral component', () => {
         fireEvent.click(screen.getByTestId('collateral-selector-button'));
         fireEvent.click(screen.getByTestId('option-0'));
         expect(screen.getByText('Ethereum')).toBeInTheDocument();
-        expect(screen.getByText('1 Ethereum Available')).toBeInTheDocument();
+        expect(screen.getByText('0.05 Ethereum Available')).toBeInTheDocument();
         fireEvent.change(input, { target: { value: '10' } });
         const button = screen.getByTestId('dialog-action-button');
         expect(button).toBeDisabled();
@@ -123,7 +123,7 @@ describe('WithdrawCollateral component', () => {
                 CollateralEvents.WITHDRAW_COLLATERAL,
                 {
                     [CollateralProperties.ASSET_TYPE]: 'USDC',
-                    [CollateralProperties.AMOUNT]: '37.5',
+                    [CollateralProperties.AMOUNT]: '22.5',
                     [CollateralProperties.SOURCE]: 'Source of Withdrawal',
                 }
             )

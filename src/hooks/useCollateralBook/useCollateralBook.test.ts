@@ -38,6 +38,10 @@ describe('useCollateralBook hook', () => {
         );
         expect(colBook.coverage.toString()).toEqual('8000');
         expect(colBook.collateralThreshold).toEqual(80);
+        expect(colBook.withdrawableCollateral).toEqual({
+            [CurrencySymbol.USDC]: 1000000,
+            [CurrencySymbol.ETH]: 0.000001,
+        });
     });
 
     it('should return the empty book when given an null user', async () => {

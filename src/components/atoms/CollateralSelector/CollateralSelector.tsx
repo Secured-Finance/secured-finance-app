@@ -7,18 +7,18 @@ interface CollateralSelectorProps {
     headerText: string;
     optionList: CollateralInfo[];
     onChange: (v: CollateralInfo) => void;
+    availableAmount?: number;
 }
 
-const formatOption = (collateralObject: CollateralInfo) => {
-    return `${ordinaryFormat(collateralObject.available, 4)} ${
-        collateralObject.name
-    } Available`;
+const formatOption = (availableAmount: number, name: string) => {
+    return `${ordinaryFormat(availableAmount, 4)} ${name} Available`;
 };
 
 export const CollateralSelector = ({
     headerText,
     optionList,
     onChange,
+    availableAmount,
 }: CollateralSelectorProps) => {
     const [selected, setSelected] = useState(optionList[0]);
 
@@ -44,7 +44,11 @@ export const CollateralSelector = ({
                                         {selected.name}
                                     </span>
                                     <span className='typography-caption-2 flex h-6 w-full max-w-[200px] items-center justify-end pr-2 text-secondary7'>
-                                        {formatOption(selected)}
+                                        {formatOption(
+                                            availableAmount ??
+                                                selected.available,
+                                            selected.name
+                                        )}
                                     </span>
                                     <div className='absolute right-3'>
                                         <ExpandIndicator
@@ -85,7 +89,9 @@ export const CollateralSelector = ({
                                                         </span>
                                                         <span className='typography-caption-2 flex h-6 w-full max-w-[200px] items-center justify-end text-secondary7'>
                                                             {formatOption(
-                                                                assetObj
+                                                                availableAmount ??
+                                                                    selected.available,
+                                                                assetObj.name
                                                             )}
                                                         </span>
                                                     </div>
