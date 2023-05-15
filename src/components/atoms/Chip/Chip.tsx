@@ -13,7 +13,7 @@ export const Chip = ({ label }: { label: 'Borrow' | 'Lend' }) => {
         >
             <span
                 className={classNames(
-                    'typography-pill-label py-1 px-2 text-center',
+                    'typography-pill-label px-2 py-1 text-center',
                     {
                         'text-galacticOrange': label === 'Borrow',
                         'text-nebulaTeal': label === 'Lend',

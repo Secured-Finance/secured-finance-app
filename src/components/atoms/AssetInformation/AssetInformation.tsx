@@ -8,7 +8,7 @@ import {
 import { CollateralBook } from 'src/hooks';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { RootState } from 'src/store/types';
-import { amountFormatterFromBase, CurrencySymbol } from 'src/utils';
+import { CurrencySymbol, amountFormatterFromBase } from 'src/utils';
 
 interface AssetInformationProps {
     header: string;
