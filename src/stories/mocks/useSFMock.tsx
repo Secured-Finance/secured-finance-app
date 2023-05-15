@@ -262,6 +262,10 @@ export const mockUseSF = () => {
                 liquidationThresholdRate: BigNumber.from('12500'),
             })
         ),
+
+        getWithdrawableCollateral: jest.fn(() =>
+            Promise.resolve(1000000000000)
+        ),
     };
 
     return mockSecuredFinance;

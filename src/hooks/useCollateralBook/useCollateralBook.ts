@@ -8,6 +8,7 @@ import {
     amountFormatterFromBase,
     currencyMap,
     CurrencySymbol,
+    toCurrency,
 } from 'src/utils';
 import { RootState } from '../../store/types';
 
@@ -20,6 +21,7 @@ export interface CollateralBook {
     usdNonCollateral: number;
     coverage: BigNumber;
     collateralThreshold: number;
+    withdrawableCollateral: Partial<Record<CurrencySymbol, number>>;
 }
 
 const emptyBook: CollateralBook = {
@@ -35,6 +37,10 @@ const emptyBook: CollateralBook = {
     usdNonCollateral: 0,
     coverage: ZERO_BN,
     collateralThreshold: 0,
+    withdrawableCollateral: {
+        [CurrencySymbol.USDC]: 0,
+        [CurrencySymbol.ETH]: 0,
+    },
 };
 
 export const useCollateralBook = (account: string | null) => {
@@ -58,6 +64,17 @@ export const useCollateralBook = (account: string | null) => {
         const { liquidationThresholdRate } =
             await securedFinance.getCollateralParameters();
 
+        const withdrawableCollateralInUSD =
+            await securedFinance.getWithdrawableCollateral(
+                toCurrency(CurrencySymbol.USDC),
+                account
+            );
+        const withdrawableCollateralInEth =
+            await securedFinance.getWithdrawableCollateral(
+                toCurrency(CurrencySymbol.ETH),
+                account
+            );
+
         const collateralThreshold =
             liquidationThresholdRate && !liquidationThresholdRate.isZero()
                 ? 1000000 / liquidationThresholdRate.toNumber()
@@ -77,6 +94,15 @@ export const useCollateralBook = (account: string | null) => {
             usdNonCollateral: usdNonCollateral,
             coverage: collateralCoverage,
             collateralThreshold: collateralThreshold,
+            withdrawableCollateral: {
+                [CurrencySymbol.USDC]: amountFormatterFromBase[
+                    CurrencySymbol.USDC
+                ](withdrawableCollateralInUSD),
+                [CurrencySymbol.ETH]: amountFormatterFromBase[
+                    CurrencySymbol.ETH
+                ](withdrawableCollateralInEth),
+            },
+
             // 0% collateral not used
             // 100% collateral used BigNumber(10000)
         });
