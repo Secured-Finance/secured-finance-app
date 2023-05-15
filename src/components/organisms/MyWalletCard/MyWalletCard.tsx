@@ -9,8 +9,8 @@ import { RootState } from 'src/store/types';
 import { selectAllBalances } from 'src/store/wallet';
 import {
     CurrencySymbol,
-    generateWalletInformation,
     WalletSource,
+    generateWalletInformation,
 } from 'src/utils';
 
 export const MyWalletCard = ({
@@ -39,13 +39,13 @@ export const MyWalletCard = ({
             <GradientBox header='My Wallet'>
                 {assetMap.length !== 0 && (
                     <div>
-                        <div className='px-2 pt-1 pb-6'>
+                        <div className='px-2 pb-6 pt-1'>
                             {assetMap.map((asset, index) => {
                                 return (
                                     <div key={asset.account}>
                                         <AssetDisclosure {...asset} />
                                         {assetMap.length - 1 !== index && (
-                                            <div className='mt-2 mb-2'>
+                                            <div className='mb-2 mt-2'>
                                                 <Separator />
                                             </div>
                                         )}
