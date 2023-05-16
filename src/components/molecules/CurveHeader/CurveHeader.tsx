@@ -54,13 +54,13 @@ export const CurveHeader = ({
             ></CurveHeaderAsset>
             <div className='flex flex-row gap-2'>
                 <CurveHeaderTotal
-                    header='Total Volume(Asset)'
+                    header='Total Volume (Asset)'
                     footer={totalVolume.totalVolumeAsset}
                 />
 
                 <CurveHeaderTotal
-                    header='Total Volume(USD)'
-                    footer={totalVolume.totalVolumeUSD}
+                    header='Total Volume (USD)'
+                    footer={`$${totalVolume.totalVolumeUSD}`}
                 />
             </div>
         </div>
