@@ -59,12 +59,12 @@ exports[`YieldChart Component should render YieldChart 1`] = `
                 <div
                   class="typography-caption-2 h-5 text-planetaryPurple"
                 >
-                  Total Borrow (Asset)
+                  Total Volume (Asset)
                 </div>
                 <div
                   class="typography-caption h-6 text-white-60"
                 >
-                  80,000,009 FIL
+                  657,000 FIL
                 </div>
               </div>
               <div
@@ -73,12 +73,12 @@ exports[`YieldChart Component should render YieldChart 1`] = `
                 <div
                   class="typography-caption-2 h-5 text-planetaryPurple"
                 >
-                  Total Borrow (USD)
+                  Total Volume (USD)
                 </div>
                 <div
                   class="typography-caption h-6 text-white-60"
                 >
-                  $650,400,073
+                  $3,942,000
                 </div>
               </div>
             </div>
