@@ -7,7 +7,11 @@ import {
     withWalletBalances,
     withWalletProvider,
 } from 'src/../.storybook/decorators';
-import { mockTrades, mockUserHistory } from 'src/stories/mocks/queries';
+import {
+    mockDailyVolumes,
+    mockTrades,
+    mockUserHistory,
+} from 'src/stories/mocks/queries';
 import { Landing } from './Landing';
 
 export default {
@@ -23,7 +27,7 @@ export default {
     ],
     parameters: {
         apolloClient: {
-            mocks: [...mockUserHistory, ...mockTrades],
+            mocks: [...mockUserHistory, ...mockTrades, ...mockDailyVolumes],
         },
     },
 } as ComponentMeta<typeof Landing>;
