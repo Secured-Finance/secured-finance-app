@@ -1,6 +1,7 @@
 import { composeStories } from '@storybook/testing-react';
 import { preloadedAssetPrices } from 'src/stories/mocks/fixtures';
 import { render, screen } from 'src/test-utils.js';
+import { CurrencySymbol } from 'src/utils';
 import * as stories from './CurveHeader.stories';
 
 const { Default } = composeStories(stories);
@@ -33,15 +34,44 @@ describe('CurveHeader component', () => {
         expect(screen.getByText('-8.21%')).toBeInTheDocument();
     });
 
-    it('should display Total Volume (Asset) and Total Volume (USD) and their values', async () => {
+    it('should display Total Volume (Asset) for EFIL and Total Volume (USD) when asset is EFIL', async () => {
         render(<Default />, {
             preloadedState: {
                 ...preloadedAssetPrices,
             },
         });
-        expect(screen.getByText('Total Volume (Asset)')).toBeInTheDocument();
-        expect(screen.getByText('657,000 EFIL')).toBeInTheDocument();
-        expect(screen.getByText('Total Volume (USD)')).toBeInTheDocument();
-        expect(screen.getByText('$3,942,000')).toBeInTheDocument();
+
+        assertAssetVolume('657,000 EFIL');
+    });
+    it('should display Total Volume (Asset) for USDC and Total Volume (USD) when asset is USDC', async () => {
+        render(<Default asset={CurrencySymbol.USDC} />, {
+            preloadedState: {
+                ...preloadedAssetPrices,
+            },
+        });
+        assertAssetVolume('0 USDC');
+    });
+    it('should display Total Volume (Asset) for ETH and Total Volume (USD) when asset is ETH', async () => {
+        render(<Default asset={CurrencySymbol.ETH} />, {
+            preloadedState: {
+                ...preloadedAssetPrices,
+            },
+        });
+        assertAssetVolume('0 ETH');
+    });
+    it('should display Total Volume (Asset) for WBTC and Total Volume (USD) when asset is WBTC', async () => {
+        render(<Default asset={CurrencySymbol.WBTC} />, {
+            preloadedState: {
+                ...preloadedAssetPrices,
+            },
+        });
+        assertAssetVolume('0 WBTC');
     });
 });
+
+const assertAssetVolume = (amount: string) => {
+    expect(screen.getByText('Total Volume (Asset)')).toBeInTheDocument();
+    expect(screen.getByText(amount)).toBeInTheDocument();
+    expect(screen.getByText('Total Volume (USD)')).toBeInTheDocument();
+    expect(screen.getByText('$3,942,000')).toBeInTheDocument();
+};

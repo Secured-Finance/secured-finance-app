@@ -38,7 +38,7 @@ export const CurveHeader = ({
 
         return { totalVolumeUSD, totalVolumeAsset };
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [JSON.stringify(priceList), dailyVolumes]);
+    }, [JSON.stringify(priceList), dailyVolumes, asset]);
 
     return (
         <div className='flex h-20 w-[585px] flex-row justify-between p-4'>
