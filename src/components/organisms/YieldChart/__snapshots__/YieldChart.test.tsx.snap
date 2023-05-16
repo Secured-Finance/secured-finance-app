@@ -21,7 +21,7 @@ exports[`YieldChart Component should render YieldChart 1`] = `
             >
               <div>
                 <svg
-                  aria-label="USDC"
+                  aria-label="EFIL"
                   class="h-9 w-9"
                   role="img"
                 />
@@ -32,7 +32,7 @@ exports[`YieldChart Component should render YieldChart 1`] = `
                 <span
                   class="typography-caption-2 h-5 text-planetaryPurple"
                 >
-                  USDC
+                  Filecoin
                 </span>
                 <div
                   class="flex h-6 w-full flex-row items-center justify-between gap-3"
@@ -40,12 +40,12 @@ exports[`YieldChart Component should render YieldChart 1`] = `
                   <span
                     class="typography-caption flex h-full items-center text-neutral-8"
                   >
-                    $0.00
+                    $6.00
                   </span>
                   <span
                     class="typography-caption flex h-full items-center text-galacticOrange"
                   >
-                    0%
+                    -8.21%
                   </span>
                 </div>
               </div>
@@ -64,7 +64,7 @@ exports[`YieldChart Component should render YieldChart 1`] = `
                 <div
                   class="typography-caption h-6 text-white-60"
                 >
-                  657,000 FIL
+                  657,000 EFIL
                 </div>
               </div>
               <div

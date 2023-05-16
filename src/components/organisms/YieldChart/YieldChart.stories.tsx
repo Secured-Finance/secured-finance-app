@@ -1,7 +1,6 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { withAssetPrice } from 'src/../.storybook/decorators';
-import { maturityOptions } from 'src/stories/mocks/fixtures';
-import { mockDailyVolumes } from 'src/stories/mocks/queries';
+import { dailyVolumes, maturityOptions } from 'src/stories/mocks/fixtures';
 import { CurrencySymbol, Rate } from 'src/utils';
 import { YieldChart } from './';
 
@@ -20,15 +19,11 @@ export default {
     component: YieldChart,
     chromatic: { pauseAnimationAtEnd: true, diffThreshold: 1 },
     args: {
-        asset: CurrencySymbol.USDC,
+        asset: CurrencySymbol.EFIL,
         isBorrow: true,
         rates: rates,
         maturitiesOptionList: maturityOptions,
-    },
-    parameters: {
-        apolloClient: {
-            mocks: [...mockDailyVolumes],
-        },
+        dailyVolumes: dailyVolumes,
     },
     argTypes: {},
     decorators: [withAssetPrice],

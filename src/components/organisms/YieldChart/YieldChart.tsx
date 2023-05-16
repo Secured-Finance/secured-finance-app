@@ -8,7 +8,7 @@ import {
     setMaturity,
 } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
-import { MaturityOptionList } from 'src/types';
+import { DailyVolumes, MaturityOptionList } from 'src/types';
 import { CurrencySymbol, Rate } from 'src/utils';
 import { Maturity } from 'src/utils/entities';
 
@@ -17,6 +17,7 @@ interface YieldChartProps {
     isBorrow: boolean;
     rates: Array<Rate>;
     maturitiesOptionList: MaturityOptionList;
+    dailyVolumes: DailyVolumes;
 }
 
 export const YieldChart = ({
@@ -24,6 +25,7 @@ export const YieldChart = ({
     isBorrow,
     rates,
     maturitiesOptionList,
+    dailyVolumes,
 }: YieldChartProps): JSX.Element => {
     const dispatch = useDispatch();
 
@@ -41,7 +43,10 @@ export const YieldChart = ({
                 data-testid='yield-chart-component'
             >
                 <div className='h-20'>
-                    <CurveHeader asset={asset}></CurveHeader>
+                    <CurveHeader
+                        asset={asset}
+                        dailyVolumes={dailyVolumes}
+                    ></CurveHeader>
                 </div>
                 <div className='flex flex-grow items-center pl-[35px]'>
                     <div className='h-[350px] w-[500px]'>
