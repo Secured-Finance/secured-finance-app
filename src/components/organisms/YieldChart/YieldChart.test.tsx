@@ -1,4 +1,5 @@
 import { composeStories } from '@storybook/testing-react';
+import { preloadedAssetPrices } from 'src/stories/mocks/fixtures';
 import {
     fireEvent,
     queries,
@@ -12,11 +13,13 @@ import * as stories from './YieldChart.stories';
 const { Default, Loading } = composeStories(stories);
 
 describe('YieldChart Component', () => {
-    it.skip('should render YieldChart', async () => {
+    it('should render YieldChart', async () => {
         let ag: RenderResult<typeof queries, HTMLElement>;
         await waitFor(async () => {
-            ag = await render(<Default />, {
-                apolloMocks: Default.parameters?.apolloClient.mocks,
+            ag = render(<Default />, {
+                preloadedState: {
+                    ...preloadedAssetPrices,
+                },
             });
         }).then(() => {
             expect(ag.baseElement).toMatchSnapshot();
@@ -24,9 +27,7 @@ describe('YieldChart Component', () => {
     });
 
     it('should close and open YieldChart on button click', async () => {
-        render(<Default />, {
-            apolloMocks: Default.parameters?.apolloClient.mocks,
-        });
+        render(<Default />);
         const btn = screen.getByRole('button');
         expect(screen.getByTestId('yield-chart-component')).toHaveClass(
             'w-[640px]'
@@ -42,9 +43,7 @@ describe('YieldChart Component', () => {
     });
 
     it('should show the spinner when loading', async () => {
-        render(<Loading />, {
-            apolloMocks: Default.parameters?.apolloClient.mocks,
-        });
+        render(<Loading />);
         expect(
             screen.getByRole('alertdialog', { name: 'Loading' })
         ).toBeInTheDocument();

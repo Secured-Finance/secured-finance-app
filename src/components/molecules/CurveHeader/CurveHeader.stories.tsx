@@ -1,6 +1,6 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { withAssetPrice } from 'src/../.storybook/decorators';
-import { mockDailyVolumes } from 'src/stories/mocks/queries';
+import { dailyVolumes } from 'src/stories/mocks/fixtures';
 import { CurrencySymbol } from 'src/utils';
 import { CurveHeader } from './CurveHeader';
 
@@ -10,11 +10,7 @@ export default {
     args: {
         asset: CurrencySymbol.EFIL,
         isBorrow: true,
-    },
-    parameters: {
-        apolloClient: {
-            mocks: [...mockDailyVolumes],
-        },
+        dailyVolumes: dailyVolumes,
     },
     argTypes: {},
     decorators: [withAssetPrice],
