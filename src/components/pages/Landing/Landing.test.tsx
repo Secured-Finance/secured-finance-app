@@ -28,12 +28,18 @@ jest.mock(
 const preloadedState = { ...preloadedBalances, ...preloadedLendingMarkets };
 
 describe('Landing Component', () => {
-    it('should render a Landing', () => {
-        render(<Default />, { preloadedState });
+    it('should render a Landing', async () => {
+        await render(<Default />, {
+            apolloMocks: Default.parameters?.apolloClient.mocks,
+            preloadedState,
+        });
     });
 
-    it('should change the rate when the user changes the maturity', () => {
-        render(<Default />, { preloadedState });
+    it('should change the rate when the user changes the maturity', async () => {
+        await render(<Default />, {
+            apolloMocks: Default.parameters?.apolloClient.mocks,
+            preloadedState,
+        });
         waitFor(() => {
             expect(screen.getByTestId('rate')).toHaveTextContent('1%');
         });

@@ -40,10 +40,7 @@ export const YieldChart = ({
                 data-testid='yield-chart-component'
             >
                 <div className='h-20'>
-                    <CurveHeader
-                        asset={asset}
-                        isBorrow={isBorrow}
-                    ></CurveHeader>
+                    <CurveHeader asset={asset}></CurveHeader>
                 </div>
                 <div className='flex flex-grow items-center pl-[35px]'>
                     <div className='h-[350px] w-[500px]'>
