@@ -29,8 +29,7 @@ ChartJS.register(
     LineElement,
     Title,
     CategoryScale,
-    Tooltip,
-    crossHairPlugin
+    Tooltip
 );
 
 const triggerHover = (chart: ChartJS<'line'>, index: number) => {
@@ -140,6 +139,7 @@ export const LineChart = ({
                     ref={chartRef}
                     onClick={handleClick}
                     data-chromatic='ignore'
+                    plugins={[crossHairPlugin]}
                 />
             ) : (
                 <div className='flex h-full w-full items-center justify-center'>

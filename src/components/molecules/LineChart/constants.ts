@@ -37,7 +37,7 @@ export const getData = (
 export const crossHairPlugin = {
     id: 'cross-hair',
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    afterDraw: (chart: any) => {
+    beforeDraw: (chart: any) => {
         if (
             chart.tooltip &&
             chart.tooltip._active &&
@@ -50,11 +50,39 @@ export const crossHairPlugin = {
             const bottomY = chart.scales.y.bottom;
             ctx.save();
             ctx.beginPath();
-            ctx.moveTo(x, y + 12);
+            ctx.moveTo(x, y);
             ctx.lineTo(x, bottomY + 15);
             ctx.lineWidth = 1;
             ctx.setLineDash([8, 8]);
-            ctx.strokeStyle = 'rgba(252, 252, 253, 0.7)';
+            ctx.strokeStyle = 'rgba(252, 252, 253, 1)';
+            ctx.stroke();
+            ctx.restore();
+        }
+    },
+};
+
+export const crossHairMultiPlugin = {
+    id: 'cross-hair-multi',
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    beforeDraw: (chart: any) => {
+        if (
+            chart.tooltip &&
+            chart.tooltip._active &&
+            chart.tooltip._active.length
+        ) {
+            const activePoint = chart.tooltip._active[0];
+            const ctx = chart.ctx;
+            const x = activePoint.element.x;
+            const topY = chart.scales.y.top;
+            const bottomY = chart.scales.y.bottom;
+            ctx.save();
+            ctx.beginPath();
+            ctx.moveTo(x, topY);
+            ctx.lineTo(x, bottomY);
+            ctx.lineWidth = 1;
+            ctx.setLineDash([8, 8]);
+            ctx.strokeStyle = '#B9BDEA';
+            ctx.zIndex = 1;
             ctx.stroke();
             ctx.restore();
         }

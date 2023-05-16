@@ -14,7 +14,7 @@ import classNames from 'classnames';
 import { useRef, useState } from 'react';
 import { Line } from 'react-chartjs-2';
 import {
-    crossHairPlugin,
+    crossHairMultiPlugin,
     defaultDatasets,
 } from 'src/components/molecules/LineChart/constants';
 import { currencyMap, CurrencySymbol, Rate, toCurrencySymbol } from 'src/utils';
@@ -25,8 +25,7 @@ ChartJS.register(
     LineElement,
     Title,
     CategoryScale,
-    Tooltip,
-    crossHairPlugin
+    Tooltip
 );
 
 export const options: ChartOptions<'line'> = {
@@ -38,7 +37,7 @@ export const options: ChartOptions<'line'> = {
     },
     layout: {
         padding: {
-            top: 50,
+            top: 20,
         },
     },
     elements: {
@@ -46,7 +45,6 @@ export const options: ChartOptions<'line'> = {
             hoverRadius: 6,
             hoverBorderColor: '#FFFFFF',
             hoverBorderWidth: 2,
-            backgroundColor: '#5162FF',
         },
     },
     scales: {
@@ -57,26 +55,32 @@ export const options: ChartOptions<'line'> = {
                 callback: function (value: string | number) {
                     return value.toString() + '%';
                 },
+                color: '#5D6588',
+                font: {
+                    lineHeight: 1.0,
+                },
+                padding: 8,
             },
             grid: {
-                borderDash: [2],
+                borderDash: [8, 8],
                 drawBorder: false,
-                borderColor: 'rgba(255, 255, 255, 0.1)',
+                color: 'rgba(255, 255, 255, 0.1)',
+                drawTicks: false,
             },
         },
 
         x: {
-            beginAtZero: true,
+            beginAtZero: false,
             ticks: {
-                color: 'rgba(255, 255, 255, 0.6)',
+                color: '#5D6588',
                 font: {
                     lineHeight: 2.0,
                 },
-                padding: 10,
+                padding: 16,
             },
             grid: {
                 display: false,
-                borderColor: 'rgba(255, 255, 255, 0.1)',
+                drawBorder: false,
             },
         },
     },
@@ -144,24 +148,22 @@ const CurveChip = ({
 }) => {
     const [active, setActive] = useState(true);
     return (
-        <div key={ccy} className='flex flex-row items-center justify-center'>
-            <button
-                data-testid='curve-chip'
-                style={{ backgroundColor: currencyMap[ccy].chartColor }}
-                className={classNames(
-                    `typography-body-small w-14 rounded-2xl py-3 pb-[6px] pt-2 font-secondary text-xs font-semibold uppercase text-white`,
-                    {
-                        'opacity-50': !active,
-                    }
-                )}
-                onClick={() => {
-                    setActive(!active);
-                    onClick(ccy);
-                }}
-            >
-                <p>{ccy}</p>
-            </button>
-        </div>
+        <button
+            data-testid='curve-chip'
+            style={{ backgroundColor: currencyMap[ccy].chartColor }}
+            className={classNames(
+                `flex w-fit items-center justify-center rounded-xl px-3 py-2 font-secondary text-xs font-semibold uppercase leading-3 text-neutral-8`,
+                {
+                    'opacity-50': !active,
+                }
+            )}
+            onClick={() => {
+                setActive(!active);
+                onClick(ccy);
+            }}
+        >
+            <p>{ccy}</p>
+        </button>
     );
 };
 
@@ -196,12 +198,12 @@ export const MultiCurveChart = ({
     };
 
     return (
-        <div className='box-border rounded-b-2xl border border-[#2D4064] bg-[#2D4064]/20 px-6 py-7'>
+        <div className='box-border rounded-b-2xl border border-[#2D4064] bg-cardBackground/20 px-6 py-7'>
             <div className='flex flex-row justify-between pb-8'>
-                <h1 className='typography-modal-title flex text-[20px] capitalize leading-6 text-white'>
+                <h1 className='typography-body-2 text-[20px] capitalize text-white'>
                     {title}
                 </h1>
-                <div className='flex flex-row items-center justify-evenly gap-3'>
+                <div className='flex flex-row items-center gap-3'>
                     {Object.keys(curves).map(key => {
                         const ccy = toCurrencySymbol(key);
                         if (ccy === undefined) {
@@ -219,12 +221,13 @@ export const MultiCurveChart = ({
                 </div>
             </div>
             <Line
-                className='rounded-2xl bg-black-20 p-5'
+                className='rounded-b-2xl bg-black-20 p-5'
                 data={getData(curves, Array.from(activeCurrencies), labels)}
                 options={options}
                 ref={chartRef}
                 onClick={() => {}}
                 data-chromatic='ignore'
+                plugins={[crossHairMultiPlugin]}
             />
         </div>
     );
