@@ -28,12 +28,12 @@ import {
 import { RootState } from 'src/store/types';
 import { MaturityOptionList, OrderType, TradesQuery } from 'src/types';
 import {
-    currencyMap,
     CurrencySymbol,
+    Rate,
+    currencyMap,
     formatLoanValue,
     getCurrencyMapAsOptions,
     ordinaryFormat,
-    Rate,
     usdFormat,
 } from 'src/utils';
 import { LoanValue, Maturity } from 'src/utils/entities';
@@ -99,7 +99,7 @@ export const AdvancedLending = ({
     }, [maturity, maturitiesOptionList]);
 
     const orderBook = useOrderbook(currency, selectedTerm.value, 10);
-    const oderHistory = useGraphClientHook(
+    const orderHistory = useGraphClientHook(
         { address: account?.toLowerCase() ?? '' },
         queries.UserHistoryDocument,
         'user'
@@ -200,7 +200,8 @@ export const AdvancedLending = ({
                         sellOrders={orderBook.lendOrderbook}
                         currency={currency}
                     />
-                    <OpenOrderTable data={oderHistory.data?.orders ?? []} />
+                    <></>
+                    <OpenOrderTable data={orderHistory.data?.orders ?? []} />
                 </HorizontalTab>
             </div>
         </TwoColumnsWithTopBar>

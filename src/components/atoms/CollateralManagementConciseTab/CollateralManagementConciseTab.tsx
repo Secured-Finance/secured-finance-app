@@ -27,7 +27,7 @@ export const CollateralManagementConciseTab = ({
     );
 
     return (
-        <div className='flex h-fit w-full flex-col rounded-b bg-black-20 pt-2 pb-4'>
+        <div className='flex h-fit w-full flex-col rounded-b bg-black-20 pb-4 pt-2'>
             <div className='mx-4 mb-5 mt-4 flex flex-col'>
                 <div className='typography-caption mb-3 flex flex-row justify-between text-grayScale'>
                     <span>Collateral Utilization</span>
@@ -61,7 +61,7 @@ export const CollateralManagementConciseTab = ({
                 >
                     <Tick className='float-right h-5px w-2'></Tick>
                 </div>
-                <div className='mt-2 h-6px w-full rounded-full bg-gradient-to-r from-progressBarStart via-progressBarVia to-progressBarEnd'></div>
+                <div className='mt-2 h-6px w-full rounded-full bg-gradient-to-r from-progressBarStart from-0% via-progressBarVia via-45% to-progressBarEnd to-80%'></div>
                 <div className='typography-caption-2 mt-1 leading-6 text-planetaryPurple'>
                     {`Threshold: ${percentFormat(
                         collateralThreshold &&

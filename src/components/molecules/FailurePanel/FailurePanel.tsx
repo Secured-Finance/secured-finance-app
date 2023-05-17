@@ -6,7 +6,7 @@ export const FailurePanel = ({ errorMessage }: { errorMessage: string }) => {
     return (
         <div className='flex w-full flex-col items-center gap-6'>
             <Fail className='h-[100px] w-[100px]' />
-            <div className='flex h-fit w-full flex-col gap-2 rounded-xl border border-neutral-3 bg-black-20 pl-6 pt-4 pb-7 pr-2'>
+            <div className='flex h-fit w-full flex-col gap-2 rounded-xl border border-neutral-3 bg-black-20 pb-7 pl-6 pr-2 pt-4'>
                 <div className='flex flex-row items-center justify-between pr-2'>
                     <div className='typography-caption-2 text-slateGray'>
                         Error Details
