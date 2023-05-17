@@ -6,7 +6,7 @@ import {
     Option,
     Separator as SeparatorAtom,
 } from 'src/components/atoms';
-import { HorizontalAssetSelector } from 'src/components/molecules/HorizontalAssetSelector';
+import { HorizontalAssetSelector } from 'src/components/molecules';
 import { setCurrency } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
 import { IndexOf } from 'src/types';
@@ -78,14 +78,16 @@ export const AdvancedLendingTopBar = <T extends string = string>({
     return (
         <GradientBox shape='rectangle'>
             <div className='flex min-w-full flex-row items-stretch justify-between gap-6 px-6 py-3'>
-                <HorizontalAssetSelector
-                    selectedAsset={selectedAsset}
-                    assetList={assetList}
-                    options={options}
-                    selected={selected}
-                    onAssetChange={handleAssetChange}
-                    onTermChange={handleTermChange}
-                />
+                <div className='pr-5'>
+                    <HorizontalAssetSelector
+                        selectedAsset={selectedAsset}
+                        assetList={assetList}
+                        options={options}
+                        selected={selected}
+                        onAssetChange={handleAssetChange}
+                        onTermChange={handleTermChange}
+                    />
+                </div>
 
                 <MarketTab
                     name={Number(formatLoanValue(midLoanValue, 'price'))}
