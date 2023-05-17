@@ -7,7 +7,7 @@ describe('computeTotalDailyVolumeInUSD', () => {
     it('should return 0 if no daily volumes', () => {
         expect(computeTotalDailyVolumeInUSD([], assetPriceMap)).toEqual({
             totalUSD: BigNumber.from(0),
-            individualVolumes: {
+            volumePerCurrency: {
                 [CurrencySymbol.USDC]: BigNumber.from(0),
                 [CurrencySymbol.ETH]: BigNumber.from(0),
                 [CurrencySymbol.EFIL]: BigNumber.from(0),
@@ -21,7 +21,7 @@ describe('computeTotalDailyVolumeInUSD', () => {
             computeTotalDailyVolumeInUSD(dailyVolumes, assetPriceMap)
         ).toEqual({
             totalUSD: BigNumber.from(3942000),
-            individualVolumes: {
+            volumePerCurrency: {
                 [CurrencySymbol.USDC]: BigNumber.from(0),
                 [CurrencySymbol.ETH]: BigNumber.from(0),
                 [CurrencySymbol.EFIL]: BigNumber.from(657000),

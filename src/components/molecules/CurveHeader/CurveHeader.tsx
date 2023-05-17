@@ -28,13 +28,13 @@ export const CurveHeader = ({
     );
 
     const totalVolume = useMemo(() => {
-        const { totalUSD, individualVolumes } = computeTotalDailyVolumeInUSD(
+        const { totalUSD, volumePerCurrency } = computeTotalDailyVolumeInUSD(
             dailyVolumes,
             priceList
         );
 
         const totalVolumeUSD = ordinaryFormat(totalUSD, 2, 'standard');
-        const totalVolumeAsset = ordinaryFormat(individualVolumes[asset], 2);
+        const totalVolumeAsset = ordinaryFormat(volumePerCurrency[asset], 2);
 
         return { totalVolumeUSD, totalVolumeAsset };
         // eslint-disable-next-line react-hooks/exhaustive-deps
