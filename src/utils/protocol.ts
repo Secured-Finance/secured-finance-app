@@ -13,9 +13,9 @@ export function computeTotalDailyVolumeInUSD(
     priceMap: AssetPriceMap
 ): {
     totalUSD: BigNumber;
-    individualVolumes: Record<CurrencySymbol, BigNumber>;
+    volumePerCurrency: Record<CurrencySymbol, BigNumber>;
 } {
-    const individualVolumes: Record<CurrencySymbol, BigNumber> = {
+    const volumePerCurrency: Record<CurrencySymbol, BigNumber> = {
         [CurrencySymbol.ETH]: BigNumber.from(0),
         [CurrencySymbol.EFIL]: BigNumber.from(0),
         [CurrencySymbol.USDC]: BigNumber.from(0),
@@ -34,11 +34,11 @@ export function computeTotalDailyVolumeInUSD(
         );
         const valueInUSD = volumeInBaseUnit * priceMap[ccy];
 
-        individualVolumes[ccy] = individualVolumes[ccy]
-            ? individualVolumes[ccy].add(Math.floor(volumeInBaseUnit))
+        volumePerCurrency[ccy] = volumePerCurrency[ccy]
+            ? volumePerCurrency[ccy].add(Math.floor(volumeInBaseUnit))
             : amountFormatterToBase[ccy](volumeInBaseUnit);
 
         return acc.add(Math.floor(valueInUSD));
     }, BigNumber.from(0));
-    return { totalUSD, individualVolumes };
+    return { totalUSD, volumePerCurrency };
 }
