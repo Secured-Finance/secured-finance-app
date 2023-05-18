@@ -7,7 +7,6 @@ interface CollateralSelectorProps {
     headerText: string;
     optionList: CollateralInfo[];
     onChange: (v: CollateralInfo) => void;
-    availableAmount?: number;
 }
 
 const formatOption = (availableAmount: number, name: string) => {
@@ -18,7 +17,6 @@ export const CollateralSelector = ({
     headerText,
     optionList,
     onChange,
-    availableAmount,
 }: CollateralSelectorProps) => {
     const [selected, setSelected] = useState(optionList[0]);
 
@@ -45,8 +43,7 @@ export const CollateralSelector = ({
                                     </span>
                                     <span className='typography-caption-2 flex h-6 w-full max-w-[200px] items-center justify-end pr-2 text-secondary7'>
                                         {formatOption(
-                                            availableAmount ??
-                                                selected.available,
+                                            selected.available,
                                             selected.name
                                         )}
                                     </span>
@@ -89,8 +86,7 @@ export const CollateralSelector = ({
                                                         </span>
                                                         <span className='typography-caption-2 flex h-6 w-full max-w-[200px] items-center justify-end text-secondary7'>
                                                             {formatOption(
-                                                                availableAmount ??
-                                                                    selected.available,
+                                                                selected.available,
                                                                 assetObj.name
                                                             )}
                                                         </span>

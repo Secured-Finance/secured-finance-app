@@ -97,10 +97,8 @@ export const WithdrawCollateral = ({
     onClose,
     collateralList,
     source,
-    withdrawableCollateral,
 }: {
     collateralList: Record<CurrencySymbol, CollateralInfo>;
-    withdrawableCollateral: Partial<Record<CurrencySymbol, number>>;
 } & DialogState) => {
     const { account } = useWallet();
     const [asset, setAsset] = useState(CurrencySymbol.ETH);
@@ -202,10 +200,6 @@ export const WithdrawCollateral = ({
                                     headerText='Select Asset'
                                     onChange={handleChange}
                                     optionList={Object.values(collateralList)}
-                                    availableAmount={
-                                        withdrawableCollateral[asset] ??
-                                        collateralList[asset]?.available
-                                    }
                                 />
                                 <CollateralInput
                                     price={priceList[asset]}
@@ -214,7 +208,6 @@ export const WithdrawCollateral = ({
                                         setCollateral(v)
                                     }
                                     availableAmount={
-                                        withdrawableCollateral[asset] ??
                                         collateralList[asset]?.available
                                     }
                                     amount={collateralAmount}

@@ -17,11 +17,11 @@ const ZERO_BN = BigNumber.from('0');
 export interface CollateralBook {
     collateral: Partial<Record<CurrencySymbol, BigNumber>>;
     nonCollateral: Partial<Record<CurrencySymbol, BigNumber>>;
+    withdrawableCollateral: Partial<Record<CurrencySymbol, BigNumber>>;
     usdCollateral: number;
     usdNonCollateral: number;
     coverage: BigNumber;
     collateralThreshold: number;
-    withdrawableCollateral: Partial<Record<CurrencySymbol, number>>;
 }
 
 const emptyBook: CollateralBook = {
@@ -38,8 +38,8 @@ const emptyBook: CollateralBook = {
     coverage: ZERO_BN,
     collateralThreshold: 0,
     withdrawableCollateral: {
-        [CurrencySymbol.USDC]: 0,
-        [CurrencySymbol.ETH]: 0,
+        [CurrencySymbol.USDC]: BigNumber.from(0),
+        [CurrencySymbol.ETH]: BigNumber.from(0),
     },
 };
 
@@ -64,7 +64,7 @@ export const useCollateralBook = (account: string | null) => {
         const { liquidationThresholdRate } =
             await securedFinance.getCollateralParameters();
 
-        const withdrawableCollateralInUSD =
+        const withdrawableCollateralInUSDC =
             await securedFinance.getWithdrawableCollateral(
                 toCurrency(CurrencySymbol.USDC),
                 account
@@ -95,12 +95,8 @@ export const useCollateralBook = (account: string | null) => {
             coverage: collateralCoverage,
             collateralThreshold: collateralThreshold,
             withdrawableCollateral: {
-                [CurrencySymbol.USDC]: amountFormatterFromBase[
-                    CurrencySymbol.USDC
-                ](withdrawableCollateralInUSD),
-                [CurrencySymbol.ETH]: amountFormatterFromBase[
-                    CurrencySymbol.ETH
-                ](withdrawableCollateralInEth),
+                [CurrencySymbol.USDC]: withdrawableCollateralInUSDC,
+                [CurrencySymbol.ETH]: withdrawableCollateralInEth,
             },
 
             // 0% collateral not used
