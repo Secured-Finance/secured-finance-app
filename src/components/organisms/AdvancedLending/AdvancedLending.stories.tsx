@@ -11,7 +11,7 @@ import {
     maturityOptions,
     yieldCurveRates,
 } from 'src/stories/mocks/fixtures';
-import { mockTrades, mockUserHistory } from 'src/stories/mocks/queries';
+import { mockTrades } from 'src/stories/mocks/queries';
 import { Rate } from 'src/utils';
 import { LoanValue } from 'src/utils/entities';
 import { AdvancedLending } from './AdvancedLending';
@@ -28,7 +28,7 @@ export default {
     },
     parameters: {
         apolloClient: {
-            mocks: [...mockUserHistory, ...mockTrades],
+            mocks: [...mockTrades],
         },
     },
     decorators: [withFullPage, withAssetPrice, withWalletProvider],

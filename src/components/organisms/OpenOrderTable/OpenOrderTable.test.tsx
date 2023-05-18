@@ -2,7 +2,7 @@ import { composeStories } from '@storybook/testing-react';
 import { render, screen } from 'src/test-utils.js';
 import * as stories from './OpenOrderTable.stories';
 
-const { Default, SortContract } = composeStories(stories);
+const { Default } = composeStories(stories);
 
 describe('OpenOrderTable Component', () => {
     it('should render a OpenOrderTable', () => {
@@ -11,11 +11,6 @@ describe('OpenOrderTable Component', () => {
 
     it('should only display the open orders', () => {
         render(<Default />);
-        expect(screen.getAllByTestId('open-order-table-row')).toHaveLength(1);
-    });
-
-    it('should sort the open orders contract column correctly according to currency and maturity', () => {
-        render(<SortContract />);
         expect(screen.getAllByTestId('open-order-table-row')).toHaveLength(5);
 
         const initialRows = screen.getAllByRole('row');

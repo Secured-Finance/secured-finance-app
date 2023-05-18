@@ -1,0 +1,33 @@
+import { mockUseSF } from 'src/stories/mocks/useSFMock';
+import { act, renderHook } from 'src/test-utils';
+import { useOrderList } from './useOrderList';
+import { ethBytes32, efilBytes32 } from 'src/stories/mocks/fixtures';
+
+const mock = mockUseSF();
+jest.mock('src/hooks/useSecuredFinance', () => () => mock);
+
+describe('useOrderList', () => {
+    it('should return an array of activeOrders and inactiveOrders', async () => {
+        const { result, waitForNextUpdate } = renderHook(() =>
+            useOrderList('0x1')
+        );
+
+        expect(result.current).toEqual({
+            activeOrderList: [],
+            inactiveOrderList: [],
+        });
+
+        await act(async () => {
+            await waitForNextUpdate();
+        });
+
+        expect(result.current.activeOrderList.length).toBe(3);
+        expect(result.current.activeOrderList[0].currency).toBe(ethBytes32);
+        expect(result.current.activeOrderList[1].currency).toBe(ethBytes32);
+        expect(result.current.activeOrderList[2].currency).toBe(efilBytes32);
+
+        expect(result.current.inactiveOrderList.length).toBe(2);
+        expect(result.current.inactiveOrderList[0].currency).toBe(ethBytes32);
+        expect(result.current.inactiveOrderList[1].currency).toBe(efilBytes32);
+    });
+});
