@@ -43,6 +43,7 @@ export const InputBase = ({
                   !value || (value && value.toString().length < fontSize.small),
           })
         : null;
+
     return (
         <NumericFormat
             className={classNames(

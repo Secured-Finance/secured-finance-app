@@ -45,6 +45,7 @@ const Template: ComponentStory<typeof WithdrawCollateral> = args => {
 };
 
 export const Default = Template.bind({});
+
 export const LongInput = Template.bind({});
 LongInput.play = async () => {
     const input = screen.getByRole('textbox');
