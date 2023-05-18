@@ -59,11 +59,6 @@ export const CollateralInput = ({
         [availableAmount, setAmount, onAmountChange, handleInputChange, asset]
     );
 
-    const fontSize: Record<FontSize, number> = {
-        small: 12,
-        large: 15,
-    };
-
     return (
         <div className='flex h-[168px] w-full flex-col items-center'>
             <span className='typography-caption flex h-6 text-center text-secondary7'>
@@ -88,4 +83,9 @@ export const CollateralInput = ({
             ></PercentageSelector>
         </div>
     );
+};
+
+const fontSize: Record<FontSize, number> = {
+    small: 12,
+    large: 15,
 };
