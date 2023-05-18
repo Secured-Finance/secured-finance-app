@@ -41,37 +41,40 @@ describe('CurveHeader component', () => {
             },
         });
 
-        assertAssetVolume('657,000 EFIL');
+        assertAssetVolume('300 EFIL', '$1,800.00');
     });
+
     it('should display Total Volume (Asset) for USDC and Total Volume (USD) when asset is USDC', async () => {
         render(<Default asset={CurrencySymbol.USDC} />, {
             preloadedState: {
                 ...preloadedAssetPrices,
             },
         });
-        assertAssetVolume('0 USDC');
+        assertAssetVolume('0 USDC', '$0.00');
     });
+
     it('should display Total Volume (Asset) for ETH and Total Volume (USD) when asset is ETH', async () => {
         render(<Default asset={CurrencySymbol.ETH} />, {
             preloadedState: {
                 ...preloadedAssetPrices,
             },
         });
-        assertAssetVolume('0 ETH');
+        assertAssetVolume('0 ETH', '$0.00');
     });
+
     it('should display Total Volume (Asset) for WBTC and Total Volume (USD) when asset is WBTC', async () => {
         render(<Default asset={CurrencySymbol.WBTC} />, {
             preloadedState: {
                 ...preloadedAssetPrices,
             },
         });
-        assertAssetVolume('0 WBTC');
+        assertAssetVolume('0 WBTC', '$0.00');
     });
 });
 
-const assertAssetVolume = (amount: string) => {
+const assertAssetVolume = (assetVolume: string, usdVolume: string) => {
     expect(screen.getByText('Total Volume (Asset)')).toBeInTheDocument();
-    expect(screen.getByText(amount)).toBeInTheDocument();
+    expect(screen.getByText(assetVolume)).toBeInTheDocument();
     expect(screen.getByText('Total Volume (USD)')).toBeInTheDocument();
-    expect(screen.getByText('$3,942,000')).toBeInTheDocument();
+    expect(screen.getByText(usdVolume)).toBeInTheDocument();
 };

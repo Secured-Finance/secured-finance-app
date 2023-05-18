@@ -10,7 +10,7 @@ export default {
     args: {
         asset: CurrencySymbol.EFIL,
         isBorrow: true,
-        dailyVolumes: dailyVolumes,
+        dailyVolumes: dailyVolumes.slice(0, 10),
     },
     argTypes: {},
     decorators: [withAssetPrice],

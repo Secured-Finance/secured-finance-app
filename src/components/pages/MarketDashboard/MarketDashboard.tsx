@@ -91,7 +91,7 @@ export const MarketDashboard = () => {
     const totalVolume = useMemo(() => {
         return ordinaryFormat(
             computeTotalDailyVolumeInUSD(dailyVolumes.data ?? [], priceList)
-                .totalUSD,
+                .totalVolumeUSD,
             2,
             'compact'
         );

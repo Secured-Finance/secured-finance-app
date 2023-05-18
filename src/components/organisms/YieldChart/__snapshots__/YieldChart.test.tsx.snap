@@ -64,7 +64,7 @@ exports[`YieldChart Component should render YieldChart 1`] = `
                 <div
                   class="typography-caption h-6 text-white-60"
                 >
-                  657,000 EFIL
+                  300 EFIL
                 </div>
               </div>
               <div
@@ -78,7 +78,7 @@ exports[`YieldChart Component should render YieldChart 1`] = `
                 <div
                   class="typography-caption h-6 text-white-60"
                 >
-                  $3,942,000
+                  $1,800.00
                 </div>
               </div>
             </div>

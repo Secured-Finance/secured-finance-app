@@ -23,7 +23,7 @@ export default {
         isBorrow: true,
         rates: rates,
         maturitiesOptionList: maturityOptions,
-        dailyVolumes: dailyVolumes,
+        dailyVolumes: dailyVolumes.slice(0, 10),
     },
     argTypes: {},
     decorators: [withAssetPrice],
@@ -34,6 +34,7 @@ const Template: ComponentStory<typeof YieldChart> = args => {
 };
 
 export const Default = Template.bind({});
+
 export const Loading = Template.bind({});
 Loading.args = {
     rates: [],
