@@ -10,7 +10,8 @@ import { DailyVolumes } from 'src/types';
 import {
     computeTotalDailyVolumeInUSD,
     CurrencySymbol,
-    ordinaryFormat,
+    formatWithCurrency,
+    usdFormat,
 } from 'src/utils';
 
 interface CurveHeaderProps {
@@ -28,15 +29,12 @@ export const CurveHeader = ({
     );
 
     const totalVolume = useMemo(() => {
-        const { totalUSD, volumePerCurrency } = computeTotalDailyVolumeInUSD(
+        const { volumePerCurrency } = computeTotalDailyVolumeInUSD(
             dailyVolumes,
             priceList
         );
 
-        const totalVolumeUSD = ordinaryFormat(totalUSD, 2, 'standard');
-        const totalVolumeAsset = ordinaryFormat(volumePerCurrency[asset], 2);
-
-        return { totalVolumeUSD, totalVolumeAsset };
+        return { volumePerCurrency };
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [JSON.stringify(priceList), dailyVolumes, asset]);
 
@@ -50,12 +48,19 @@ export const CurveHeader = ({
             <div className='flex flex-row gap-2'>
                 <CurveHeaderTotal
                     header='Total Volume (Asset)'
-                    footer={`${totalVolume.totalVolumeAsset} ${asset}`}
+                    footer={formatWithCurrency(
+                        totalVolume.volumePerCurrency[asset],
+                        asset.toString()
+                    )}
                 />
 
                 <CurveHeaderTotal
                     header='Total Volume (USD)'
-                    footer={`$${totalVolume.totalVolumeUSD}`}
+                    footer={usdFormat(
+                        totalVolume.volumePerCurrency[asset].toNumber() *
+                            priceList[asset],
+                        2
+                    )}
                 />
             </div>
         </div>

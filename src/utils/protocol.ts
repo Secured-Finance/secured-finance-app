@@ -12,7 +12,7 @@ export function computeTotalDailyVolumeInUSD(
     dailyVolumes: DailyVolumes,
     priceMap: AssetPriceMap
 ): {
-    totalUSD: BigNumber;
+    totalVolumeUSD: BigNumber;
     volumePerCurrency: Record<CurrencySymbol, BigNumber>;
 } {
     const volumePerCurrency: Record<CurrencySymbol, BigNumber> = {
@@ -22,7 +22,7 @@ export function computeTotalDailyVolumeInUSD(
         [CurrencySymbol.WBTC]: BigNumber.from(0),
     };
 
-    const totalUSD = dailyVolumes.reduce((acc, dailyVolume) => {
+    const totalVolumeUSD = dailyVolumes.reduce((acc, dailyVolume) => {
         const { currency, volume } = dailyVolume;
         const ccy = hexToCurrencySymbol(currency);
         if (!ccy) {
@@ -32,6 +32,7 @@ export function computeTotalDailyVolumeInUSD(
         const volumeInBaseUnit = currencyMap[ccy].fromBaseUnit(
             BigNumber.from(volume)
         );
+
         const valueInUSD = volumeInBaseUnit * priceMap[ccy];
 
         volumePerCurrency[ccy] = volumePerCurrency[ccy]
@@ -40,5 +41,5 @@ export function computeTotalDailyVolumeInUSD(
 
         return acc.add(Math.floor(valueInUSD));
     }, BigNumber.from(0));
-    return { totalUSD, volumePerCurrency };
+    return { totalVolumeUSD, volumePerCurrency };
 }
