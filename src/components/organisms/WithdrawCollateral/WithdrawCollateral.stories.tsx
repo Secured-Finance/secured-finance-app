@@ -35,10 +35,6 @@ export default {
                 name: 'Bitcoin',
             },
         },
-        withdrawableCollateral: {
-            [CurrencySymbol.USDC]: 30,
-            [CurrencySymbol.ETH]: 0.05,
-        },
     },
     decorators: [withWalletProvider, withAssetPrice],
 } as ComponentMeta<typeof WithdrawCollateral>;

@@ -70,12 +70,12 @@ export const CollateralTab = ({
         () =>
             generateCollateralList(
                 {
-                    ...collateralBook.collateral,
+                    ...collateralBook.withdrawableCollateral,
                     ...collateralBook.nonCollateral,
                 },
                 true
             ),
-        [collateralBook.collateral, collateralBook.nonCollateral]
+        [collateralBook.nonCollateral, collateralBook.withdrawableCollateral]
     );
 
     return (
@@ -99,7 +99,6 @@ export const CollateralTab = ({
                 isOpen={openModal === 'withdraw'}
                 onClose={() => setOpenModal('')}
                 collateralList={withdrawCollateralList}
-                withdrawableCollateral={collateralBook.withdrawableCollateral}
                 source='Collateral Tab'
             ></WithdrawCollateral>
         </div>
