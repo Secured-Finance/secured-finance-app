@@ -311,9 +311,7 @@ export const activeOrders: Order[] = [
 
 export const orderHistoryList: OrderList = [
     {
-        id: '1',
         orderId: BigNumber.from('1'),
-        originalOrderId: BigNumber.from('1'),
         currency: efilBytes32,
         side: 1,
         maturity: BigNumber.from(dec22Fixture.toString()),
@@ -321,27 +319,19 @@ export const orderHistoryList: OrderList = [
         amount: BigNumber.from('1000000000000000000000'),
         status: 'Filled',
         createdAt: BigNumber.from('1'),
-        blockNumber: BigNumber.from('1'),
-        txHash: '1',
     },
     {
-        id: '2',
         orderId: BigNumber.from('1'),
-        originalOrderId: BigNumber.from('1'),
         currency: efilBytes32,
         side: 1,
         maturity: BigNumber.from(dec22Fixture.toString()),
         unitPrice: BigNumber.from('9600'),
         amount: BigNumber.from('5000000000000000000000'),
-        status: 'Open',
+        status: 'Expired',
         createdAt: BigNumber.from('1'),
-        blockNumber: BigNumber.from('1'),
-        txHash: '1',
     },
     {
-        id: '3',
         orderId: BigNumber.from('1'),
-        originalOrderId: BigNumber.from('1'),
         currency: wbtcBytes32,
         side: 0,
         maturity: BigNumber.from(dec22Fixture.toString()),
@@ -349,87 +339,64 @@ export const orderHistoryList: OrderList = [
         amount: BigNumber.from('1000000000'),
         status: 'Filled',
         createdAt: BigNumber.from('1'),
-        blockNumber: BigNumber.from('1'),
-        txHash: '1',
     },
 ];
 
 export const openOrderHistoryList: OrderList = [
     {
-        id: '1',
         orderId: BigNumber.from('1'),
-        originalOrderId: BigNumber.from('1'),
         currency: efilBytes32,
         side: 1,
         maturity: BigNumber.from(dec23Fixture.toString()),
         unitPrice: BigNumber.from('9800'),
         amount: BigNumber.from('1000000000000000000000'),
-        status: 'Open',
+        status: 'Filled',
         createdAt: BigNumber.from('1'),
-        blockNumber: BigNumber.from('1'),
-        txHash: '1',
     },
     {
-        id: '2',
         orderId: BigNumber.from('1'),
-        originalOrderId: BigNumber.from('1'),
         currency: efilBytes32,
         side: 1,
         maturity: BigNumber.from(mar23Fixture.toString()),
         unitPrice: BigNumber.from('9600'),
         amount: BigNumber.from('5000000000000000000000'),
-        status: 'Open',
+        status: 'Filled',
         createdAt: BigNumber.from('1'),
-        blockNumber: BigNumber.from('1'),
-        txHash: '1',
     },
     {
-        id: '3',
         orderId: BigNumber.from('1'),
-        originalOrderId: BigNumber.from('1'),
         currency: efilBytes32,
         side: 0,
         maturity: BigNumber.from(dec22Fixture.toString()),
         unitPrice: BigNumber.from('9800'),
         amount: BigNumber.from('1000000000'),
-        status: 'Open',
+        status: 'Expired',
         createdAt: BigNumber.from('1'),
-        blockNumber: BigNumber.from('1'),
-        txHash: '1',
     },
     {
-        id: '4',
         orderId: BigNumber.from('1'),
-        originalOrderId: BigNumber.from('1'),
         currency: wbtcBytes32,
         side: 1,
         maturity: BigNumber.from(mar23Fixture.toString()),
         unitPrice: BigNumber.from('9600'),
         amount: BigNumber.from('5000000000000000000000'),
-        status: 'Open',
+        status: 'Expired',
         createdAt: BigNumber.from('1'),
-        blockNumber: BigNumber.from('1'),
-        txHash: '1',
     },
     {
-        id: '5',
         orderId: BigNumber.from('1'),
-        originalOrderId: BigNumber.from('1'),
         currency: ethBytes32,
         side: 0,
         maturity: BigNumber.from(dec23Fixture.toString()),
         unitPrice: BigNumber.from('9800'),
         amount: BigNumber.from('1000000000'),
-        status: 'Open',
+        status: 'Filled',
         createdAt: BigNumber.from('1'),
-        blockNumber: BigNumber.from('1'),
-        txHash: '1',
     },
 ];
 
 export const transactions: TradeHistory = [
     {
-        id: '0x123',
         amount: '1000000000000000000000',
         averagePrice: '0.8000', // TODO: rework the unit in the graph. This is changed only for a dirty fix
         side: 0,
@@ -440,7 +407,6 @@ export const transactions: TradeHistory = [
         maturity: jun23Fixture.toString(),
     },
     {
-        id: '0x124',
         amount: '500000000000000000000',
         averagePrice: '0.8000', // TODO: rework the unit in the graph. This is changed only for a dirty fix
         side: 1,
@@ -451,7 +417,6 @@ export const transactions: TradeHistory = [
         maturity: jun23Fixture.toString(),
     },
     {
-        id: '0x124',
         amount: '500000000000000000000',
         averagePrice: '0.8000', // TODO: rework the unit in the graph. This is changed only for a dirty fix
         side: 1,
@@ -462,7 +427,6 @@ export const transactions: TradeHistory = [
         maturity: mar23Fixture.toString(),
     },
     {
-        id: '0x123',
         amount: '1000000000',
         averagePrice: '0.9000', // TODO: rework the unit in the graph. This is changed only for a dirty fix
         side: 1,
@@ -473,7 +437,6 @@ export const transactions: TradeHistory = [
         maturity: jun23Fixture.toString(),
     },
     {
-        id: '0x123',
         amount: '1000000000',
         averagePrice: '0.9203', // TODO: rework the unit in the graph. This is changed only for a dirty fix
         side: 1,
