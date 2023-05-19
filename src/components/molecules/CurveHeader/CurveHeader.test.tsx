@@ -7,38 +7,33 @@ import * as stories from './CurveHeader.stories';
 const { Default } = composeStories(stories);
 
 describe('CurveHeader component', () => {
+    const preloadedState = { ...preloadedAssetPrices };
     it('should render CurveHeader', async () => {
         render(<Default />);
     });
 
-    it('should display the full name of the asset', async () => {
+    it('should display the full name of the asset', () => {
         render(<Default />);
         expect(screen.getByText('Filecoin')).toBeInTheDocument();
     });
 
     it('should display the price of the asset', async () => {
         render(<Default />, {
-            preloadedState: {
-                ...preloadedAssetPrices,
-            },
+            preloadedState,
         });
         expect(screen.getByText('$6.00')).toBeInTheDocument();
     });
 
     it('should display the change of the asset and round up the second decimal', async () => {
         render(<Default />, {
-            preloadedState: {
-                ...preloadedAssetPrices,
-            },
+            preloadedState,
         });
         expect(screen.getByText('-8.21%')).toBeInTheDocument();
     });
 
     it('should display Total Volume (Asset) for EFIL and Total Volume (USD) when asset is EFIL', async () => {
         render(<Default />, {
-            preloadedState: {
-                ...preloadedAssetPrices,
-            },
+            preloadedState,
         });
 
         assertAssetVolume('300 EFIL', '$1,800.00');
@@ -46,27 +41,21 @@ describe('CurveHeader component', () => {
 
     it('should display Total Volume (Asset) for USDC and Total Volume (USD) when asset is USDC', async () => {
         render(<Default asset={CurrencySymbol.USDC} />, {
-            preloadedState: {
-                ...preloadedAssetPrices,
-            },
+            preloadedState,
         });
         assertAssetVolume('0 USDC', '$0.00');
     });
 
     it('should display Total Volume (Asset) for ETH and Total Volume (USD) when asset is ETH', async () => {
         render(<Default asset={CurrencySymbol.ETH} />, {
-            preloadedState: {
-                ...preloadedAssetPrices,
-            },
+            preloadedState,
         });
         assertAssetVolume('0 ETH', '$0.00');
     });
 
     it('should display Total Volume (Asset) for WBTC and Total Volume (USD) when asset is WBTC', async () => {
         render(<Default asset={CurrencySymbol.WBTC} />, {
-            preloadedState: {
-                ...preloadedAssetPrices,
-            },
+            preloadedState,
         });
         assertAssetVolume('0 WBTC', '$0.00');
     });

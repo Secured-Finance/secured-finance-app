@@ -2,7 +2,6 @@ import { BigNumber } from 'ethers';
 import { AssetPriceMap } from 'src/store/assetPrices/selectors';
 import { DailyVolumes } from 'src/types';
 import {
-    amountFormatterToBase,
     currencyMap,
     CurrencySymbol,
     hexToCurrencySymbol,
@@ -22,11 +21,13 @@ export function computeTotalDailyVolumeInUSD(
         [CurrencySymbol.WBTC]: BigNumber.from(0),
     };
 
-    const totalVolumeUSD = dailyVolumes.reduce((acc, dailyVolume) => {
+    let totalVolumeUSD = BigNumber.from(0);
+
+    dailyVolumes.forEach(dailyVolume => {
         const { currency, volume } = dailyVolume;
         const ccy = hexToCurrencySymbol(currency);
         if (!ccy) {
-            return acc;
+            return;
         }
 
         const volumeInBaseUnit = currencyMap[ccy].fromBaseUnit(
@@ -35,11 +36,11 @@ export function computeTotalDailyVolumeInUSD(
 
         const valueInUSD = volumeInBaseUnit * priceMap[ccy];
 
-        volumePerCurrency[ccy] = volumePerCurrency[ccy]
-            ? volumePerCurrency[ccy].add(Math.floor(volumeInBaseUnit))
-            : amountFormatterToBase[ccy](volumeInBaseUnit);
+        volumePerCurrency[ccy] = volumePerCurrency[ccy].add(
+            Math.floor(volumeInBaseUnit)
+        );
 
-        return acc.add(Math.floor(valueInUSD));
-    }, BigNumber.from(0));
+        totalVolumeUSD = totalVolumeUSD.add(Math.floor(valueInUSD));
+    });
     return { totalVolumeUSD, volumePerCurrency };
 }

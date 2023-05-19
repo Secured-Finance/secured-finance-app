@@ -9,7 +9,6 @@ export default {
     component: CurveHeader,
     args: {
         asset: CurrencySymbol.EFIL,
-        isBorrow: true,
         dailyVolumes: dailyVolumes.slice(0, 10),
     },
     argTypes: {},
