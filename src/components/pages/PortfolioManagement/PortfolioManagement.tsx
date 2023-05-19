@@ -30,16 +30,27 @@ import { useWallet } from 'use-wallet';
 import { useOrderList } from 'src/hooks/useOrderList';
 import { TradeHistory } from 'src/types';
 import { OrderList } from 'src/hooks/useOrderList';
-import { BigNumber } from 'ethers';
+import { ethers } from 'ethers';
 
 export type Trade = TradeHistory[0];
 
-function calculateForwardValue(
-    amount: BigNumber,
-    unitPrice: BigNumber
-): BigNumber {
-    return amount.mul(100).div(unitPrice);
-}
+const calculateForwardValue = (
+    amount: ethers.BigNumber,
+    unitPrice: ethers.BigNumber
+): ethers.BigNumber => {
+    return amount.mul(10000).div(unitPrice);
+};
+
+const calculateAveragePrice = (
+    amount: ethers.BigNumber,
+    unitPrice: ethers.BigNumber
+): number => {
+    const filledFutureValue = calculateForwardValue(amount, unitPrice);
+    const averagePrice = !filledFutureValue.isZero()
+        ? amount.mul(100).div(filledFutureValue)
+        : ethers.constants.Zero;
+    return Number(averagePrice) / 100;
+};
 
 const formatOrders = (orders: OrderList): TradeHistory => {
     return orders?.map(order => ({
@@ -50,7 +61,7 @@ const formatOrders = (orders: OrderList): TradeHistory => {
         currency: order.currency,
         maturity: order.maturity,
         forwardValue: calculateForwardValue(order.amount, order.unitPrice),
-        averagePrice: '0.00',
+        averagePrice: calculateAveragePrice(order.amount, order.unitPrice),
     }));
 };
 
@@ -104,6 +115,7 @@ export const PortfolioManagement = () => {
                     tabTitles={[
                         'Active Positions',
                         'Open Orders',
+                        'Order History',
                         'My Transactions',
                     ]}
                 >
