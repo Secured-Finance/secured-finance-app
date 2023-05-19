@@ -8,6 +8,7 @@ import {
     amountFormatterFromBase,
     currencyMap,
     CurrencySymbol,
+    getCurrencyMapAsList,
     toCurrency,
 } from 'src/utils';
 import { RootState } from '../../store/types';
@@ -33,14 +34,14 @@ const emptyBook: CollateralBook = {
         [CurrencySymbol.EFIL]: ZERO_BN,
         [CurrencySymbol.WBTC]: ZERO_BN,
     },
+    withdrawableCollateral: {
+        [CurrencySymbol.USDC]: ZERO_BN,
+        [CurrencySymbol.ETH]: ZERO_BN,
+    },
     usdCollateral: 0,
     usdNonCollateral: 0,
     coverage: ZERO_BN,
     collateralThreshold: 0,
-    withdrawableCollateral: {
-        [CurrencySymbol.USDC]: BigNumber.from(0),
-        [CurrencySymbol.ETH]: BigNumber.from(0),
-    },
 };
 
 export const useCollateralBook = (account: string | null) => {
@@ -64,16 +65,31 @@ export const useCollateralBook = (account: string | null) => {
         const { liquidationThresholdRate } =
             await securedFinance.getCollateralParameters();
 
-        const withdrawableCollateralInUSDC =
-            await securedFinance.getWithdrawableCollateral(
-                toCurrency(CurrencySymbol.USDC),
-                account
+        const getWithdrawableCollateral = async () => {
+            let withdrawableCollateral: Partial<
+                Record<CurrencySymbol, BigNumber>
+            > = {};
+            const currencyList = getCurrencyMapAsList().filter(
+                ccy => ccy.isCollateral
             );
-        const withdrawableCollateralInEth =
-            await securedFinance.getWithdrawableCollateral(
-                toCurrency(CurrencySymbol.ETH),
-                account
+
+            await Promise.all(
+                currencyList.map(async currencyInfo => {
+                    const ccy = currencyInfo.symbol;
+                    const collateral =
+                        await securedFinance.getWithdrawableCollateral(
+                            toCurrency(ccy),
+                            account
+                        );
+
+                    withdrawableCollateral = {
+                        ...withdrawableCollateral,
+                        [ccy]: collateral,
+                    };
+                })
             );
+            return withdrawableCollateral;
+        };
 
         const collateralThreshold =
             liquidationThresholdRate && !liquidationThresholdRate.isZero()
@@ -94,10 +110,7 @@ export const useCollateralBook = (account: string | null) => {
             usdNonCollateral: usdNonCollateral,
             coverage: collateralCoverage,
             collateralThreshold: collateralThreshold,
-            withdrawableCollateral: {
-                [CurrencySymbol.USDC]: withdrawableCollateralInUSDC,
-                [CurrencySymbol.ETH]: withdrawableCollateralInEth,
-            },
+            withdrawableCollateral: await getWithdrawableCollateral(),
 
             // 0% collateral not used
             // 100% collateral used BigNumber(10000)
