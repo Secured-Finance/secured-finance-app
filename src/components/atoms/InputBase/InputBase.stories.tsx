@@ -1,4 +1,6 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { userEvent, within } from '@storybook/testing-library';
+import { useState } from 'react';
 import { InputBase } from '.';
 
 export default {
@@ -12,7 +14,12 @@ export default {
 } as ComponentMeta<typeof InputBase>;
 
 const Template: ComponentStory<typeof InputBase> = args => {
-    return <InputBase {...args} />;
+    const [value, setValue] = useState(args.value);
+    const handleChange = (newValue: number | undefined) => {
+        setValue(newValue);
+        args.onValueChange(newValue);
+    };
+    return <InputBase {...args} value={value} onValueChange={handleChange} />;
 };
 
 export const Default = Template.bind({});
@@ -29,4 +36,19 @@ DecimalPlacesAllowed.args = {
 export const MaxLimit = Template.bind({});
 MaxLimit.args = {
     maxLimit: 1000,
+};
+
+export const LongInput = Template.bind({});
+LongInput.args = {
+    fontSize: {
+        large: 15,
+        small: 5,
+    },
+};
+LongInput.play = async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const input = canvas.getByRole('textbox');
+    await userEvent.type(input, '123456789.123', {
+        delay: 100,
+    });
 };
