@@ -8,6 +8,8 @@ import {
     amountFormatterFromBase,
     currencyMap,
     CurrencySymbol,
+    getCurrencyMapAsList,
+    toCurrency,
 } from 'src/utils';
 import { RootState } from '../../store/types';
 
@@ -16,6 +18,7 @@ const ZERO_BN = BigNumber.from('0');
 export interface CollateralBook {
     collateral: Partial<Record<CurrencySymbol, BigNumber>>;
     nonCollateral: Partial<Record<CurrencySymbol, BigNumber>>;
+    withdrawableCollateral: Partial<Record<CurrencySymbol, BigNumber>>;
     usdCollateral: number;
     usdNonCollateral: number;
     coverage: BigNumber;
@@ -30,6 +33,10 @@ const emptyBook: CollateralBook = {
     nonCollateral: {
         [CurrencySymbol.EFIL]: ZERO_BN,
         [CurrencySymbol.WBTC]: ZERO_BN,
+    },
+    withdrawableCollateral: {
+        [CurrencySymbol.USDC]: ZERO_BN,
+        [CurrencySymbol.ETH]: ZERO_BN,
     },
     usdCollateral: 0,
     usdNonCollateral: 0,
@@ -58,6 +65,32 @@ export const useCollateralBook = (account: string | null) => {
         const { liquidationThresholdRate } =
             await securedFinance.getCollateralParameters();
 
+        const getWithdrawableCollateral = async () => {
+            let withdrawableCollateral: Partial<
+                Record<CurrencySymbol, BigNumber>
+            > = {};
+            const currencyList = getCurrencyMapAsList().filter(
+                ccy => ccy.isCollateral
+            );
+
+            await Promise.all(
+                currencyList.map(async currencyInfo => {
+                    const ccy = currencyInfo.symbol;
+                    const collateral =
+                        await securedFinance.getWithdrawableCollateral(
+                            toCurrency(ccy),
+                            account
+                        );
+
+                    withdrawableCollateral = {
+                        ...withdrawableCollateral,
+                        [ccy]: collateral,
+                    };
+                })
+            );
+            return withdrawableCollateral;
+        };
+
         const collateralThreshold =
             liquidationThresholdRate && !liquidationThresholdRate.isZero()
                 ? 1000000 / liquidationThresholdRate.toNumber()
@@ -77,6 +110,8 @@ export const useCollateralBook = (account: string | null) => {
             usdNonCollateral: usdNonCollateral,
             coverage: collateralCoverage,
             collateralThreshold: collateralThreshold,
+            withdrawableCollateral: await getWithdrawableCollateral(),
+
             // 0% collateral not used
             // 100% collateral used BigNumber(10000)
         });
