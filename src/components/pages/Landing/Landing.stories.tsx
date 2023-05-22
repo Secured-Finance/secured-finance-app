@@ -43,6 +43,7 @@ TabletDefault.parameters = tabletParameters;
 export const ConnectedToWallet = Template.bind({});
 ConnectedToWallet.parameters = {
     connected: true,
+    chromatic: { viewPort: [390, 768, 1024] },
 };
 
 export const AdvancedView = Template.bind({});
