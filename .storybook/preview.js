@@ -8,6 +8,23 @@ import store from './../src/store';
 import { MockSecuredFinanceProvider } from './../src/stories/mocks/MockSecuredFinanceProvider';
 import { withMockDate } from './decorators';
 
+const customViewports = {
+    mobile: {
+        name: 'Mobile',
+        styles: {
+            width: '375px',
+            height: '667px',
+        },
+    },
+    tablet: {
+        name: 'Tablet',
+        styles: {
+            width: '768px',
+            height: '1024px',
+        },
+    },
+};
+
 export const parameters = {
     actions: { argTypesRegex: '^on.*' },
     controls: {
@@ -18,7 +35,7 @@ export const parameters = {
     },
 
     viewport: {
-        viewports: INITIAL_VIEWPORTS,
+        viewports: { ...customViewports, ...INITIAL_VIEWPORTS },
         defaultViewport: 'responsive',
     },
 
@@ -62,17 +79,3 @@ export const decorators = [
     withPerformance,
     withMockDate,
 ];
-
-export const mobileParameters = {
-    viewport: {
-        defaultViewport: 'iphone12',
-    },
-    layout: 'fullscreen',
-};
-
-export const tabletParameters = {
-    viewport: {
-        defaultViewport: 'ipad',
-    },
-    layout: 'fullscreen',
-};
