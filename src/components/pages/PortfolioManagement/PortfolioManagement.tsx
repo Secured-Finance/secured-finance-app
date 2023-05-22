@@ -63,8 +63,8 @@ export const PortfolioManagement = () => {
                                     collateralBook.usdCollateral
                             ),
                             tradeHistory.length.toString(),
-                            usdFormat(borrowedPV),
                             usdFormat(lentPV),
+                            usdFormat(borrowedPV),
                         ]}
                     />
                     <CollateralOrganism collateralBook={collateralBook} />

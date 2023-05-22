@@ -16,11 +16,11 @@ const tableArray: PortfolioTabProps[] = [
         value: '--',
     },
     {
-        name: 'Borrow PV',
+        name: 'Lending PV',
         value: '--',
     },
     {
-        name: 'Lend PV',
+        name: 'Borrowing PV',
         value: '--',
     },
 ];
