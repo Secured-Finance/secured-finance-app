@@ -1,8 +1,8 @@
 import { formatDate, getUTCMonthYear } from '@secured-finance/sf-core';
 import { fromBytes32 } from '@secured-finance/sf-graph-client';
-import { createColumnHelper } from '@tanstack/react-table';
+import { CellContext, createColumnHelper } from '@tanstack/react-table';
 import { useRouter } from 'next/router';
-import { useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Button, DropdownSelector, NavTab, Option } from 'src/components/atoms';
 import { CoreTable } from 'src/components/molecules';
@@ -65,6 +65,19 @@ export const MarketLoanWidget = ({ loans }: { loans: Loan[] }) => {
         [JSON.stringify(loans)]
     );
 
+    const handleClick = useCallback(
+        (info: CellContext<Loan, string>) => {
+            const ccy = fromBytes32(info.getValue()) as CurrencySymbol;
+            dispatch(setMaturity(new Maturity(info.row.original.maturity)));
+            dispatch(setCurrency(ccy));
+
+            info.row.original.isReady
+                ? router.push('/advanced/')
+                : router.push('/itayose/');
+        },
+        [dispatch, router]
+    );
+
     const columns = useMemo(
         () => [
             contractColumnDefinition(
@@ -77,12 +90,14 @@ export const MarketLoanWidget = ({ loans }: { loans: Loan[] }) => {
                 id: 'maturity',
                 cell: info => {
                     return (
-                        <div className='flex flex-col items-start'>
-                            <div className='typography-caption text-neutral-8'>
-                                {getUTCMonthYear(info.getValue())}
-                            </div>
-                            <div className='typography-caption-2 text-slateGray'>
-                                {formatDate(info.getValue())}
+                        <div className='flex flex-col items-center justify-center'>
+                            <div className='flex flex-col items-end justify-end'>
+                                <div className='typography-caption text-neutral-8'>
+                                    {getUTCMonthYear(info.getValue())}
+                                </div>
+                                <div className='typography-caption-2 text-slateGray'>
+                                    {formatDate(info.getValue())}
+                                </div>
                             </div>
                         </div>
                     );
@@ -125,25 +140,7 @@ export const MarketLoanWidget = ({ loans }: { loans: Loan[] }) => {
                 cell: info => {
                     return (
                         <div className='flex justify-center'>
-                            <Button
-                                onClick={() => {
-                                    const ccy = fromBytes32(
-                                        info.getValue()
-                                    ) as CurrencySymbol;
-                                    dispatch(
-                                        setMaturity(
-                                            new Maturity(
-                                                info.row.original.maturity
-                                            )
-                                        )
-                                    );
-                                    dispatch(setCurrency(ccy));
-
-                                    info.row.original.isReady
-                                        ? router.push('/advanced/')
-                                        : router.push('/itayose/');
-                                }}
-                            >
+                            <Button onClick={() => handleClick(info)} size='sm'>
                                 {info.row.original.isReady
                                     ? 'Open Order'
                                     : 'Pre-Open Order'}
@@ -154,7 +151,7 @@ export const MarketLoanWidget = ({ loans }: { loans: Loan[] }) => {
                 header: tableHeaderDefinition('Action'),
             }),
         ],
-        [dispatch, router]
+        [handleClick]
     );
     return (
         <div className='h-fit rounded-2xl border border-white-10 bg-cardBackground/60 shadow-tab'>
