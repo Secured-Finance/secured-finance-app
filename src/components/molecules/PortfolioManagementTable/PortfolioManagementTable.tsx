@@ -8,19 +8,19 @@ import {
 
 const tableArray: PortfolioTabProps[] = [
     {
-        name: 'Net Value',
+        name: 'Net Asset Value',
         value: '$0.00',
-    },
-    {
-        name: 'Net APR',
-        value: '--',
     },
     {
         name: 'Active Contracts',
         value: '--',
     },
     {
-        name: 'Net Interest Accrued*',
+        name: 'Borrow PV',
+        value: '--',
+    },
+    {
+        name: 'Lend PV',
         value: '--',
     },
 ];

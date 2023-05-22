@@ -21,10 +21,9 @@ import {
     WalletSource,
     aggregateTrades,
     computeNetValue,
-    computeWeightedAverageRate,
-    percentFormat,
     usdFormat,
 } from 'src/utils';
+import { useCollateralBook } from 'src/hooks';
 import { useWallet } from 'use-wallet';
 
 export const PortfolioManagement = () => {
@@ -40,23 +39,35 @@ export const PortfolioManagement = () => {
 
     const priceMap = useSelector((state: RootState) => getPriceMap(state));
 
+    const borrowedPV = computeNetValue(
+        tradeHistory.filter(trade => trade.side === 1),
+        priceMap
+    );
+
+    const lentPV = computeNetValue(
+        tradeHistory.filter(trade => trade.side === 0),
+        priceMap
+    );
+
+    const collateralBook = useCollateralBook(account);
+
     return (
         <Page title='Portfolio Management' name='portfolio-management'>
             <TwoColumns>
                 <div className='flex flex-col gap-6'>
                     <PortfolioManagementTable
                         values={[
-                            usdFormat(computeNetValue(tradeHistory, priceMap)),
-                            percentFormat(
-                                computeWeightedAverageRate(
-                                    tradeHistory
-                                ).toNormalizedNumber()
+                            usdFormat(
+                                borrowedPV +
+                                    lentPV +
+                                    collateralBook.usdCollateral
                             ),
                             tradeHistory.length.toString(),
-                            '0',
+                            usdFormat(borrowedPV),
+                            usdFormat(lentPV),
                         ]}
                     />
-                    <CollateralOrganism />
+                    <CollateralOrganism collateralBook={collateralBook} />
                 </div>
                 {account ? (
                     <MyWalletCard
