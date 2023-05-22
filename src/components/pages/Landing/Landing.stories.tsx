@@ -7,14 +7,13 @@ import {
     withWalletBalances,
     withWalletProvider,
 } from 'src/../.storybook/decorators';
-import { mobileParameters, tabletParameters } from 'src/../.storybook/preview';
 import { mockTrades, mockUserHistory } from 'src/stories/mocks/queries';
 import { Landing } from './Landing';
 
 export default {
     title: 'Pages/Landing',
     component: Landing,
-    chromatic: { pauseAnimationAtEnd: true },
+    chromatic: { pauseAnimationAtEnd: true, viewports: [390, 768, 1024] },
     decorators: [
         withAppLayout,
         withMaturities,
@@ -34,16 +33,10 @@ const Template: ComponentStory<typeof Landing> = () => {
 };
 
 export const Default = Template.bind({});
-export const MobileDefault = Template.bind({});
-MobileDefault.parameters = mobileParameters;
-
-export const TabletDefault = Template.bind({});
-TabletDefault.parameters = tabletParameters;
 
 export const ConnectedToWallet = Template.bind({});
 ConnectedToWallet.parameters = {
     connected: true,
-    chromatic: { viewPort: [390, 768, 1024] },
 };
 
 export const AdvancedView = Template.bind({});
