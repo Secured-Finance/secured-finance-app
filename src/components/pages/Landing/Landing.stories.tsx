@@ -13,7 +13,6 @@ import { Landing } from './Landing';
 export default {
     title: 'Pages/Landing',
     component: Landing,
-    chromatic: { pauseAnimationAtEnd: true, viewports: [390, 768, 1024] },
     decorators: [
         withAppLayout,
         withMaturities,
@@ -22,6 +21,7 @@ export default {
         withWalletProvider,
     ],
     parameters: {
+        chromatic: { pauseAnimationAtEnd: true, viewports: [390, 768, 1024] },
         apolloClient: {
             mocks: [...mockUserHistory, ...mockTrades],
         },
