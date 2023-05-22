@@ -8,6 +8,7 @@ const { Default } = composeStories(stories);
 
 describe('CurveHeader component', () => {
     const preloadedState = { ...preloadedAssetPrices };
+
     it('should render CurveHeader', async () => {
         render(<Default />);
     });
