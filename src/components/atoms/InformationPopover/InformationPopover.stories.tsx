@@ -1,4 +1,5 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { userEvent, within } from '@storybook/testing-library';
 import { InformationPopover } from './InformationPopover';
 
 export default {
@@ -13,3 +14,8 @@ const Template: ComponentStory<typeof InformationPopover> = () => (
 );
 
 export const Default = Template.bind({});
+Default.play = async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const button = canvas.getByTestId('information-circle');
+    await userEvent.hover(button);
+};
