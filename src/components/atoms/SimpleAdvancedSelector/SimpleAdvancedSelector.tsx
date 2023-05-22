@@ -49,7 +49,7 @@ const SimpleAdvancedButton = ({
 }) => {
     return (
         <div
-            className={`typography-caption flex h-full w-[100px] items-center justify-center rounded-full duration-300 hover:opacity-100 hover:ease-in-out ${
+            className={`typography-caption flex h-full w-[100px] items-center justify-center rounded-full duration-300 hover:opacity-100 hover:ease-in-out mobile:w-16 ${
                 active ? 'bg-starBlue text-white' : 'text-white opacity-40'
             }`}
         >

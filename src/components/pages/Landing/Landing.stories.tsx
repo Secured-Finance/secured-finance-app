@@ -7,6 +7,7 @@ import {
     withWalletBalances,
     withWalletProvider,
 } from 'src/../.storybook/decorators';
+import { mobileParameters, tabletParameters } from 'src/../.storybook/preview';
 import { mockTrades, mockUserHistory } from 'src/stories/mocks/queries';
 import { Landing } from './Landing';
 
@@ -33,6 +34,11 @@ const Template: ComponentStory<typeof Landing> = () => {
 };
 
 export const Default = Template.bind({});
+export const MobileDefault = Template.bind({});
+MobileDefault.parameters = mobileParameters;
+
+export const TabletDefault = Template.bind({});
+TabletDefault.parameters = tabletParameters;
 
 export const ConnectedToWallet = Template.bind({});
 ConnectedToWallet.parameters = {

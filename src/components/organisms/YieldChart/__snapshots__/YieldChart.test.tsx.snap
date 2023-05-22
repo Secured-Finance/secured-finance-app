@@ -4,7 +4,7 @@ exports[`YieldChart Component should render YieldChart 1`] = `
 <body>
   <div>
     <div
-      class="flex h-[480px] w-fit flex-row overflow-hidden rounded-r-xl border-y border-r border-panelStroke shadow-[0_46px_64px_rgba(0,0,0,0.4)]"
+      class="flex h-[480px] w-fit flex-row overflow-hidden rounded-r-xl border-y border-r border-panelStroke shadow-[0_46px_64px_rgba(0,0,0,0.4)] mobile:hidden"
     >
       <div
         class="flex flex-col items-start overflow-hidden transition-width duration-700 ease-out w-[640px] pl-8"

@@ -46,6 +46,12 @@ module.exports = {
                 ...defaultTheme.fontFamily.sans,
             ],
         },
+
+        screens: {
+            mobile: { max: '767px' },
+            tablet: { max: '1023px' },
+        },
+
         fontSize: {
             '5xl': ['86px', { lineHeight: '96px', letterSpacing: '-0.02em' }],
             '4xl': ['54px', { lineHeight: '64px', letterSpacing: '-0.02em' }],

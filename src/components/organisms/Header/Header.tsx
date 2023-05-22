@@ -40,7 +40,7 @@ export const Header = () => {
                 <div className='ml-5 flex flex-row items-center gap-3'>
                     <Link href='/' passHref>
                         <a href='_'>
-                            <SFLogo className='h-10 w-[200px]' />
+                            <SFLogo className='h-10 w-[200px] mobile:hidden' />
                         </a>
                     </Link>
                     {envShort && (
@@ -49,7 +49,7 @@ export const Header = () => {
                         </div>
                     )}
                 </div>
-                <div className='flex h-full items-center justify-center'>
+                <div className='flex h-full items-center justify-center mobile:hidden'>
                     <ItemLink
                         text='OTC Lending'
                         dataCy='lending'
