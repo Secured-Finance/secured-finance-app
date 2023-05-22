@@ -1,4 +1,5 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { userEvent, within } from '@storybook/testing-library';
 import { TableHeader } from './TableHeader';
 
 export default {
@@ -33,4 +34,9 @@ export const TitleHint = Template.bind({});
 TitleHint.args = {
     ...Default.args,
     titleHint: 'This is a title hint.',
+};
+TitleHint.play = async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const button = canvas.getByRole('button');
+    await userEvent.hover(button);
 };
