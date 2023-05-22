@@ -28,3 +28,9 @@ Aligned.args = {
     ...Default.args,
     align: 'right',
 };
+
+export const TitleHint = Template.bind({});
+TitleHint.args = {
+    ...Default.args,
+    titleHint: 'This is a title hint.',
+};
