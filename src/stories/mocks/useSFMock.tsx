@@ -269,6 +269,10 @@ export const mockUseSF = () => {
             })
         ),
 
+        getWithdrawableCollateral: jest.fn(() =>
+            Promise.resolve(1000000000000)
+        ),
+
         getUsedCurrenciesForOrders: jest.fn(() =>
             Promise.resolve([ethBytes32, efilBytes32])
         ),

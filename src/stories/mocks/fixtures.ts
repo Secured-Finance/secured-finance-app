@@ -492,6 +492,10 @@ export const collateralBook80: CollateralBook = {
     usdNonCollateral: 10600,
     coverage: BigNumber.from('8000'), // 80%,
     collateralThreshold: 80,
+    withdrawableCollateral: {
+        [CurrencySymbol.USDC]: BigNumber.from(100000),
+        [CurrencySymbol.ETH]: BigNumber.from(100000),
+    },
 };
 
 export const collateralBook37: CollateralBook = {
@@ -507,6 +511,10 @@ export const collateralBook37: CollateralBook = {
     usdNonCollateral: 10600,
     coverage: BigNumber.from('3700'),
     collateralThreshold: 80,
+    withdrawableCollateral: {
+        [CurrencySymbol.USDC]: BigNumber.from(100000),
+        [CurrencySymbol.ETH]: BigNumber.from(100000),
+    },
 };
 
 export const emptyCollateralBook: CollateralBook = {
@@ -522,6 +530,10 @@ export const emptyCollateralBook: CollateralBook = {
     usdNonCollateral: 0,
     coverage: BigNumber.from('0'), // 0%
     collateralThreshold: 0,
+    withdrawableCollateral: {
+        [CurrencySymbol.USDC]: BigNumber.from(0),
+        [CurrencySymbol.ETH]: BigNumber.from(0),
+    },
 };
 
 function generateDailyVolumes(days: number) {

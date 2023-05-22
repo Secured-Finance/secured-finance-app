@@ -208,7 +208,7 @@ export const WithdrawCollateral = ({
                                         setCollateral(v)
                                     }
                                     availableAmount={
-                                        collateralList[asset]?.available ?? 0
+                                        collateralList[asset]?.available
                                     }
                                     amount={collateralAmount}
                                     setAmount={setCollateralAmount}
