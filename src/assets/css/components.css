@@ -17,9 +17,8 @@
     .typography-big-body-bold {
       @apply text-xl font-secondary font-semibold;
     }
-
     .typography-modal-title {
-      @apply font-secondary text-lg font-semibold sm:text-smd sm:leading-7;
+      @apply font-secondary text-lg font-semibold mobile:text-smd mobile:leading-7;
     }
     .typography-body-1 {
       @apply text-md font-secondary font-semibold;

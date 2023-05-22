@@ -19,6 +19,7 @@ export const parameters = {
 
     viewport: {
         viewports: INITIAL_VIEWPORTS,
+        defaultViewport: 'responsive',
     },
 
     backgrounds: {
@@ -61,3 +62,17 @@ export const decorators = [
     withPerformance,
     withMockDate,
 ];
+
+export const mobileParameters = {
+    viewport: {
+        defaultViewport: 'iphone12',
+    },
+    layout: 'fullscreen',
+};
+
+export const tabletParameters = {
+    viewport: {
+        defaultViewport: 'ipad',
+    },
+    layout: 'fullscreen',
+};
