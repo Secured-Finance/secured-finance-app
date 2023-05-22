@@ -4,6 +4,7 @@ import {
     preloadedBalances,
     preloadedLendingMarkets,
 } from 'src/stories/mocks/fixtures';
+import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
 import { OrderType } from 'src/types';
 import { CurrencySymbol } from 'src/utils';
@@ -25,33 +26,47 @@ jest.mock(
             children
 );
 
+const mock = mockUseSF();
+jest.mock('src/hooks/useSecuredFinance', () => () => mock);
+
 const preloadedState = { ...preloadedBalances, ...preloadedLendingMarkets };
 
 describe('Landing Component', () => {
     it('should render a Landing', async () => {
-        await render(<Default />, {
-            apolloMocks: Default.parameters?.apolloClient.mocks,
-            preloadedState,
+        await waitFor(() => {
+            render(<Default />, {
+                apolloMocks: Default.parameters?.apolloClient.mocks,
+                preloadedState,
+            });
         });
     });
 
     it('should change the rate when the user changes the maturity', async () => {
-        await render(<Default />, {
-            apolloMocks: Default.parameters?.apolloClient.mocks,
-            preloadedState,
+        await waitFor(() => {
+            render(<Default />, {
+                apolloMocks: Default.parameters?.apolloClient.mocks,
+                preloadedState: {
+                    ...preloadedState,
+                    landingOrderForm: {
+                        currency: CurrencySymbol.EFIL,
+                        maturity: 1669852800,
+                        side: OrderSide.BORROW,
+                        amount: '500000000',
+                        unitPrice: 9500,
+                        orderType: OrderType.LIMIT,
+                        marketPhase: 'Open',
+                    },
+                },
+            });
         });
-        waitFor(() => {
-            expect(screen.getByTestId('rate')).toHaveTextContent('1%');
+        expect(screen.getByTestId('market-rate')).toHaveTextContent('3.26%');
+
+        await waitFor(() => {
+            fireEvent.click(screen.getByRole('button', { name: 'DEC22' }));
+            fireEvent.click(screen.getByText('MAR23'));
         });
 
-        waitFor(() => {
-            fireEvent.click(screen.getByText('MAR22'));
-            fireEvent.click(screen.getByText('DEC22'));
-        });
-
-        waitFor(() => {
-            expect(screen.getByTestId('rate')).toHaveTextContent('2%');
-        });
+        expect(screen.getByTestId('market-rate')).toHaveTextContent('2.62%');
     });
 
     it('should select the market order type when the user change to advance mode', async () => {
@@ -68,7 +83,7 @@ describe('Landing Component', () => {
     });
 
     it('should open the landing page with the mode set in the store', async () => {
-        waitFor(() => {
+        await waitFor(() => {
             render(<Default />, {
                 apolloMocks: Default.parameters?.apolloClient.mocks,
                 preloadedState: {
@@ -89,7 +104,7 @@ describe('Landing Component', () => {
     });
 
     it('should save in the store the last view used', async () => {
-        waitFor(() => {
+        await waitFor(() => {
             const { store } = render(<Default />, {
                 apolloMocks: Default.parameters?.apolloClient.mocks,
                 preloadedState,
@@ -101,7 +116,7 @@ describe('Landing Component', () => {
     });
 
     it('should filter out non ready markets', async () => {
-        waitFor(() => {
+        await waitFor(() => {
             render(<Default />, {
                 apolloMocks: Default.parameters?.apolloClient.mocks,
                 preloadedState,
