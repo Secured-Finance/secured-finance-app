@@ -1,5 +1,6 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { BigNumber } from 'ethers';
+import { CHROMATIC_VIEWPORTS } from 'src/../.storybook/preview';
 import { OrderBookEntry } from 'src/hooks/useOrderbook';
 import { CurrencySymbol } from 'src/utils';
 import { LoanValue, Maturity } from 'src/utils/entities';
@@ -68,6 +69,10 @@ export default {
         buyOrders: borrowEntries,
         sellOrders: lendEntries,
         currency: CurrencySymbol.EFIL,
+    },
+    parameters: {
+        layout: 'fullscreen',
+        chromatic: { CHROMATIC_VIEWPORTS },
     },
 } as ComponentMeta<typeof OrderWidget>;
 
