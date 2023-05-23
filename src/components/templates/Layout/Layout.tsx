@@ -9,7 +9,7 @@ export const Layout = ({
 }) => {
     return (
         <div
-            className='tablet:max-tablet:min-w-[768px] flex h-screen min-w-[375px] flex-col justify-between overflow-y-auto desktop:min-w-[1024px]'
+            className='flex h-screen min-w-[375px] flex-col justify-between overflow-y-auto tablet:min-w-[768px] desktop:min-w-[1024px]'
             data-testid='wrapper-div'
         >
             <div className='w-full'>
