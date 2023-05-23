@@ -7,6 +7,7 @@ import { useEffect, useMemo } from 'react';
 import { useDispatch } from 'react-redux';
 import { ColorBar, Spinner } from 'src/components/atoms';
 import { CoreTable, TableHeader } from 'src/components/molecules';
+import { useBreakpoint } from 'src/hooks';
 import { OrderBookEntry } from 'src/hooks/useOrderbook';
 import { setMidPrice } from 'src/store/analytics';
 import {
@@ -72,14 +73,15 @@ const PriceCell = ({
     amount,
     totalAmount,
     position,
+    align,
 }: {
     value: LoanValue;
     amount: BigNumber;
     totalAmount: BigNumber;
     position: 'borrow' | 'lend';
+    align: 'left' | 'right';
 }) => {
     const color = position === 'borrow' ? 'negative' : 'positive';
-    const align = position === 'borrow' ? 'left' : 'right';
     if (amount.eq(0)) return <OrderBookCell />;
     return (
         <div
@@ -140,6 +142,16 @@ export const OrderWidget = ({
     hideMidPrice?: boolean;
 }) => {
     const dispatch = useDispatch();
+    const isTabletOrMobile = useBreakpoint('tablet');
+    const tableAlign = useMemo(
+        () => (isTabletOrMobile ? 'left' : 'right'),
+        [isTabletOrMobile]
+    );
+    const oppositeTableAlign = useMemo(
+        () => (isTabletOrMobile ? 'right' : 'left'),
+        [isTabletOrMobile]
+    );
+
     const totalBuyAmount = useMemo(
         () =>
             buyOrders.reduce(
@@ -176,6 +188,7 @@ export const OrderWidget = ({
                         amount={info.row.original.amount}
                         totalAmount={totalBuyAmount}
                         position='borrow'
+                        align='left'
                     />
                 ),
                 header: () => <TableHeader title='Price' align='left' />,
@@ -215,10 +228,12 @@ export const OrderWidget = ({
                     <AprCell
                         value={info.getValue()}
                         display={!info.row.original.amount.eq(0)}
-                        align='left'
+                        align={oppositeTableAlign}
                     />
                 ),
-                header: () => <TableHeader title='Lend APR' align='left' />,
+                header: () => (
+                    <TableHeader title='Lend APR' align={oppositeTableAlign} />
+                ),
             }),
             columnHelper.accessor('amount', {
                 id: 'amount',
@@ -240,12 +255,13 @@ export const OrderWidget = ({
                         amount={info.row.original.amount}
                         totalAmount={totalSellAmount}
                         position='lend'
+                        align={tableAlign}
                     />
                 ),
-                header: () => <TableHeader title='Price' align='right' />,
+                header: () => <TableHeader title='Price' align={tableAlign} />,
             }),
         ],
-        [currency, totalSellAmount]
+        [currency, oppositeTableAlign, tableAlign, totalSellAmount]
     );
 
     useEffect(() => {
@@ -287,50 +303,54 @@ export const OrderWidget = ({
     const isLoading = buyOrders.length === 0 || sellOrders.length === 0;
 
     return (
-        <>
-            {!hideMidPrice && (
-                <div className='flex h-14 flex-row items-center justify-center gap-4 border-b border-white-10 bg-black-20'>
-                    <div className='flex flex-row items-center gap-1'>
-                        <ArrowUpIcon className='flex h-3 text-teal' />
-                        <span
-                            className='typography-portfolio-heading font-semibold text-teal'
-                            data-testid='last-mid-price'
-                        >
-                            {formatLoanValue(lastMidValue, 'price')}
-                        </span>
-                    </div>
-
-                    <span className='typography-portfolio-heading font-normal text-slateGray'>
-                        {formatLoanValue(lastMidValue, 'rate')}
-                    </span>
-                </div>
-            )}
-            <div className='flex flex-row gap-6 px-2'>
-                {isLoading ? (
-                    <div className='flex h-full w-full items-center justify-center pt-24'>
-                        <Spinner />
-                    </div>
-                ) : (
+        <div className='grid w-full grid-cols-1 place-content-center gap-x-4 tablet:grid-cols-2'>
+            <div className='row-start-2 flex h-14 flex-row items-center justify-center gap-4 border-b border-white-10 bg-black-20 tablet:col-span-2 tablet:row-start-1'>
+                {!hideMidPrice && (
                     <>
-                        <CoreTable
-                            data={sellOrders}
-                            columns={sellColumns}
-                            name='sellOrders'
-                            border={false}
-                            onLineClick={handleSellOrdersClick}
-                            hoverRow={handleSellOrdersHoverRow}
-                        />
-                        <CoreTable
-                            data={buyOrders}
-                            columns={buyColumns}
-                            name='buyOrders'
-                            border={false}
-                            onLineClick={handleBuyOrdersClick}
-                            hoverRow={handleBuyOrdersHoverRow}
-                        />
+                        <div className='flex flex-row items-center gap-1'>
+                            <ArrowUpIcon className='flex h-3 text-teal' />
+                            <span
+                                className='typography-portfolio-heading font-semibold text-teal'
+                                data-testid='last-mid-price'
+                            >
+                                {formatLoanValue(lastMidValue, 'price')}
+                            </span>
+                        </div>
+
+                        <span className='typography-portfolio-heading font-normal text-slateGray'>
+                            {formatLoanValue(lastMidValue, 'rate')}
+                        </span>
                     </>
                 )}
             </div>
-        </>
+            {isLoading ? (
+                <div className='flex h-full w-full items-center justify-center pt-24'>
+                    <Spinner />
+                </div>
+            ) : (
+                <>
+                    <CoreTable
+                        data={sellOrders}
+                        columns={
+                            isTabletOrMobile
+                                ? [...sellColumns].reverse()
+                                : sellColumns
+                        }
+                        name='sellOrders'
+                        border={false}
+                        onLineClick={handleSellOrdersClick}
+                        hoverRow={handleSellOrdersHoverRow}
+                    />
+                    <CoreTable
+                        data={buyOrders}
+                        columns={buyColumns}
+                        name='buyOrders'
+                        border={false}
+                        onLineClick={handleBuyOrdersClick}
+                        hoverRow={handleBuyOrdersHoverRow}
+                    />
+                </>
+            )}
+        </div>
     );
 };
