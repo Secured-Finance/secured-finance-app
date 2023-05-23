@@ -77,9 +77,7 @@ export default {
 } as ComponentMeta<typeof OrderWidget>;
 
 const Template: ComponentStory<typeof OrderWidget> = args => (
-    <div className='w-1/2'>
-        <OrderWidget {...args} />
-    </div>
+    <OrderWidget {...args} />
 );
 
 export const Default = Template.bind({});
