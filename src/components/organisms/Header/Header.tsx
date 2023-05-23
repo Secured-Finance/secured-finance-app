@@ -1,7 +1,9 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useDispatch, useSelector } from 'react-redux';
+import Burger from 'src/assets/img/burger.svg';
 import SFLogo from 'src/assets/img/logo.svg';
+import SFLogoSmall from 'src/assets/img/small-logo.svg';
 import { Button, NavTab } from 'src/components/atoms';
 import { MenuPopover } from 'src/components/molecules';
 import { WalletDialog, WalletPopover } from 'src/components/organisms';
@@ -27,7 +29,7 @@ export const Header = () => {
     return (
         <div>
             {!chainError && (
-                <div className='typography-caption-2 bg-horizonBlue/100 p-[1px] text-center text-neutral-8'>
+                <div className='typography-caption-2 w-full bg-horizonBlue/100 p-[1px] text-center text-neutral-8'>
                     You are visiting Secured Finance on testnet
                 </div>
             )}
@@ -40,7 +42,8 @@ export const Header = () => {
                 <div className='ml-5 flex flex-row items-center gap-3'>
                     <Link href='/' passHref>
                         <a href='_'>
-                            <SFLogo className='invisible h-10 w-[200px] tablet:visible' />
+                            <SFLogo className='hidden tablet:inline tablet:h-5 tablet:w-[100px] desktop:h-10 desktop:w-[200px]' />
+                            <SFLogoSmall className='inline h-10 w-10 tablet:hidden' />
                         </a>
                     </Link>
                     {envShort && (
@@ -49,7 +52,7 @@ export const Header = () => {
                         </div>
                     )}
                 </div>
-                <div className='hidden h-full items-center justify-center tablet:visible tablet:flex'>
+                <div className='hidden h-full items-center justify-center tablet:flex desktop:gap-8'>
                     <ItemLink
                         text='OTC Lending'
                         dataCy='lending'
@@ -66,10 +69,9 @@ export const Header = () => {
                         dataCy='history'
                         link='/portfolio'
                     />
-                    <ItemLink text='Faucet' dataCy='faucet' link='/faucet' />
                     <MenuPopover />
                 </div>
-                <div className='mr-5'>
+                <div className='flex flex-row items-center justify-end gap-2 pr-2'>
                     {account ? (
                         <WalletPopover
                             wallet={AddressUtils.format(account, 6)}
@@ -87,6 +89,9 @@ export const Header = () => {
                             Connect Wallet
                         </Button>
                     )}
+                    <button className='inline tablet:hidden'>
+                        <Burger className='h-8 w-8' />
+                    </button>
                 </div>
                 <WalletDialog />
             </nav>

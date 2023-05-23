@@ -7,14 +7,18 @@ interface NavTabProps {
 
 export const NavTab = ({ text, active = false }: NavTabProps) => {
     return (
-        <div className='group flex h-full w-full flex-col p-0 text-center'>
-            <div className={`h-1 w-full ${active ? 'bg-starBlue' : ''}`}></div>
+        <div className='group flex h-full w-fit flex-col text-center'>
             <div
-                className={`flex h-full items-center justify-center px-8 ${
-                    active
-                        ? 'bg-gradient-to-b from-tabGradient2 to-tabGradient1'
-                        : ''
-                }`}
+                className={classNames('h-1 w-full', { 'bg-starBlue': active })}
+            ></div>
+            <div
+                className={classNames(
+                    'flex h-full items-center justify-center px-4',
+                    {
+                        'bg-gradient-to-b from-tabGradient2 to-tabGradient1':
+                            active,
+                    }
+                )}
             >
                 <p
                     className={classNames(
