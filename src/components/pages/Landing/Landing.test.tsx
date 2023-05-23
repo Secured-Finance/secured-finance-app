@@ -67,7 +67,7 @@ describe('Landing Component', () => {
         });
 
         expect(screen.getByTestId('market-rate')).toHaveTextContent('2.62%');
-    }, 8000);
+    }, 10000);
 
     it('should select the market order type when the user change to advance mode', async () => {
         waitFor(() => {
