@@ -1,14 +1,14 @@
 import { Tab } from 'src/components/molecules';
 import { CollateralTab } from 'src/components/organisms';
-import { useCollateralBook } from 'src/hooks';
-import { useWallet } from 'use-wallet';
+import { CollateralBook } from 'src/hooks';
 
 const tabDataArray = [{ text: 'Asset Management' }];
 
-export const CollateralOrganism = () => {
-    const { account } = useWallet();
-    const collateralBook = useCollateralBook(account);
-
+export const CollateralOrganism = ({
+    collateralBook,
+}: {
+    collateralBook: CollateralBook;
+}) => {
     return (
         <div className='h-fit w-full'>
             <Tab tabDataArray={tabDataArray}>
