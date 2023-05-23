@@ -82,7 +82,6 @@ export const Header = () => {
                             data-cy='wallet'
                             data-testid='connect-wallet'
                             onClick={() => dispatch(setWalletDialogOpen(true))}
-                            disabled={chainError}
                         >
                             Connect Wallet
                         </Button>
