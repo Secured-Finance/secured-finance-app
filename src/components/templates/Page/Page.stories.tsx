@@ -20,6 +20,9 @@ export default {
         title: 'Title',
         children: <Content color='red' content='Content' />,
     },
+    parameters: {
+        layout: 'fullscreen',
+    },
 } as ComponentMeta<typeof Page>;
 
 const Template: ComponentStory<typeof Page> = args => <Page {...args} />;

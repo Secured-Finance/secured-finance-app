@@ -39,6 +39,7 @@ module.exports = {
                 '10px': '10px',
             },
         },
+
         fontFamily: {
             primary: ['GT Super Display', ...defaultTheme.fontFamily.serif],
             secondary: [
@@ -48,8 +49,8 @@ module.exports = {
         },
 
         screens: {
-            mobile: { max: '767px' },
-            tablet: { max: '1023px' },
+            tablet: '768px',
+            desktop: '1024p',
         },
 
         fontSize: {

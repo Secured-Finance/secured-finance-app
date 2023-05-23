@@ -7,6 +7,7 @@ import {
     withWalletBalances,
     withWalletProvider,
 } from 'src/../.storybook/decorators';
+import { CHROMATIC_VIEWPORTS } from 'src/../.storybook/preview';
 import { mockTrades, mockUserHistory } from 'src/stories/mocks/queries';
 import { Landing } from './Landing';
 
@@ -21,10 +22,11 @@ export default {
         withWalletProvider,
     ],
     parameters: {
-        chromatic: { pauseAnimationAtEnd: true, viewports: [390, 768, 1024] },
+        chromatic: { pauseAnimationAtEnd: true, ...CHROMATIC_VIEWPORTS },
         apolloClient: {
             mocks: [...mockUserHistory, ...mockTrades],
         },
+        layout: 'fullscreen',
     },
 } as ComponentMeta<typeof Landing>;
 

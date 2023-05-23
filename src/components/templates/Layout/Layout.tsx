@@ -9,14 +9,14 @@ export const Layout = ({
 }) => {
     return (
         <div
-            className='flex h-screen flex-col justify-between overflow-y-auto'
+            className='tablet:max-tablet:min-w-[768px] flex h-screen min-w-[375px] flex-col justify-between overflow-y-auto desktop:min-w-[1024px]'
             data-testid='wrapper-div'
         >
-            <div>
-                <header>{navBar}</header>
-                <main className='pb-8'>{children}</main>
+            <div className='w-full'>
+                <header className='w-full'>{navBar}</header>
+                <main className='w-full pb-8'>{children}</main>
             </div>
-            <footer>{footer}</footer>
+            <footer className='w-full'>{footer}</footer>
         </div>
     );
 };

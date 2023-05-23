@@ -23,7 +23,16 @@ const customViewports = {
             height: '1024px',
         },
     },
+    desktop: {
+        name: 'Desktop',
+        styles: {
+            width: '1440px',
+            height: '1024px',
+        },
+    },
 };
+
+export const CHROMATIC_VIEWPORTS = { viewports: [390, 768, 1440] };
 
 export const parameters = {
     actions: { argTypesRegex: '^on.*' },
