@@ -76,7 +76,7 @@ describe('computeNetValue', () => {
         expect(computeNetValue([], priceMap)).toEqual(0);
     });
 
-    it('should return the net value', () => {
+    it('should return the net value of borrow and lend trades', () => {
         const trades = [
             {
                 amount: '10000000000000000000',
