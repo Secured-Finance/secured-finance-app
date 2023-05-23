@@ -57,8 +57,7 @@ export const CurveHeader = ({
                     header='Total Volume (USD)'
                     footer={usdFormat(
                         totalVolume.volumePerCurrency[asset].toNumber() *
-                            priceList[asset],
-                        2
+                            priceList[asset]
                     )}
                 />
             </div>

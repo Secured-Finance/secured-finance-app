@@ -37,28 +37,28 @@ describe('CurveHeader component', () => {
             preloadedState,
         });
 
-        assertAssetVolume('300 EFIL', '$1,800.00');
+        assertAssetVolume('300 EFIL', '$1,800');
     });
 
     it('should display Total Volume (Asset) for USDC and Total Volume (USD) when asset is USDC', () => {
         render(<Default asset={CurrencySymbol.USDC} />, {
             preloadedState,
         });
-        assertAssetVolume('0 USDC', '$0.00');
+        assertAssetVolume('0 USDC', '$0');
     });
 
     it('should display Total Volume (Asset) for ETH and Total Volume (USD) when asset is ETH', () => {
         render(<Default asset={CurrencySymbol.ETH} />, {
             preloadedState,
         });
-        assertAssetVolume('0 ETH', '$0.00');
+        assertAssetVolume('0 ETH', '$0');
     });
 
     it('should display Total Volume (Asset) for WBTC and Total Volume (USD) when asset is WBTC', () => {
         render(<Default asset={CurrencySymbol.WBTC} />, {
             preloadedState,
         });
-        assertAssetVolume('0 WBTC', '$0.00');
+        assertAssetVolume('0 WBTC', '$0');
     });
 });
 
