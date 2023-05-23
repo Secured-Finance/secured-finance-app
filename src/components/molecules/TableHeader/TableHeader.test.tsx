@@ -1,8 +1,8 @@
 import { composeStories } from '@storybook/testing-react';
-import { render, screen } from 'src/test-utils.js';
+import { fireEvent, render, screen } from 'src/test-utils.js';
 import * as stories from './TableHeader.stories';
 
-const { Default, Sorting } = composeStories(stories);
+const { Default, Sorting, TitleHint } = composeStories(stories);
 
 describe('TableHeader Component', () => {
     it('should render a TableHeader', () => {
@@ -36,6 +36,25 @@ describe('TableHeader Component', () => {
         render(<Default />);
         expect(
             screen.queryByTestId('table-header-wrapper')
+        ).not.toBeInTheDocument();
+    });
+
+    it('should display title hint on mouse enter', () => {
+        render(<TitleHint />);
+        const button = screen.getByRole('button');
+        fireEvent.mouseEnter(button);
+
+        expect(screen.getByText('This is a title hint.')).toBeInTheDocument();
+    });
+
+    it('should not display title hint on mouse out', () => {
+        render(<TitleHint />);
+        const button = screen.getByRole('button');
+        fireEvent.mouseEnter(button);
+        fireEvent.mouseOut(button);
+
+        expect(
+            screen.queryByText('This is a title hint.')
         ).not.toBeInTheDocument();
     });
 });

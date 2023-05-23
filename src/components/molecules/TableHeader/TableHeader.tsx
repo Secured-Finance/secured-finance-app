@@ -1,31 +1,49 @@
 import { SortDirection } from '@tanstack/react-table';
 import classNames from 'classnames';
+import { useState } from 'react';
 import { SortArrows } from 'src/components/atoms';
 
 export const TableHeader = ({
     title,
+    titleHint,
     sortingHandler,
     isSorted,
     align,
 }: {
     title: string;
+    titleHint?: string;
     sortingHandler?: ((event: unknown) => void) | undefined;
     isSorted?: boolean | SortDirection;
     align?: 'left' | 'center' | 'right';
-}) => (
-    <Container align={align}>
-        <button className='cursor-pointer select-none' onClick={sortingHandler}>
-            <span className='flex flex-row items-center justify-center gap-1'>
-                <span>{title}</span>
-                {isSorted !== undefined && (
-                    <span data-testid='sorting-icons'>
-                        <SortArrows isSorted={isSorted} />
-                    </span>
+}) => {
+    const [open, setOpen] = useState(false);
+
+    return (
+        <Container align={align}>
+            <button
+                className='relative cursor-pointer select-none'
+                onClick={sortingHandler}
+                onMouseEnter={() => setOpen(true)}
+                onMouseLeave={() => setOpen(false)}
+            >
+                <span className='flex flex-row items-center justify-center gap-1'>
+                    <span>{title}</span>
+                    {isSorted !== undefined && (
+                        <span data-testid='sorting-icons'>
+                            <SortArrows isSorted={isSorted} />
+                        </span>
+                    )}
+                </span>
+                {open && titleHint && (
+                    <div className='typography-caption-3 absolute z-50 mt-2 h-fit w-[180px] rounded-lg border border-black-20 bg-gunMetal p-4 text-left font-normal text-neutral-8 shadow-dropdown'>
+                        {titleHint}
+                    </div>
                 )}
-            </span>
-        </button>
-    </Container>
-);
+            </button>
+        </Container>
+    );
+};
+
 const Container = ({
     align,
     children,
