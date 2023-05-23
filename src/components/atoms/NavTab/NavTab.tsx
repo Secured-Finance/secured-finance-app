@@ -7,7 +7,7 @@ interface NavTabProps {
 
 export const NavTab = ({ text, active = false }: NavTabProps) => {
     return (
-        <div className='group flex h-full w-fit flex-col text-center'>
+        <div className='group flex h-full w-full flex-col text-center'>
             <div
                 className={classNames('h-1 w-full', { 'bg-starBlue': active })}
             ></div>
