@@ -23,46 +23,14 @@ import {
     aggregateTrades,
     computeNetValue,
     usdFormat,
+    formatOrders,
 } from 'src/utils';
 import { useCollateralBook } from 'src/hooks';
 import { useWallet } from 'use-wallet';
 import { useOrderList } from 'src/hooks/useOrderList';
 import { TradeHistory } from 'src/types';
-import { OrderList } from 'src/hooks/useOrderList';
-import { ethers } from 'ethers';
 
 export type Trade = TradeHistory[0];
-
-const calculateForwardValue = (
-    amount: ethers.BigNumber,
-    unitPrice: ethers.BigNumber
-): ethers.BigNumber => {
-    return amount.mul(10000).div(unitPrice);
-};
-
-const calculateAveragePrice = (
-    amount: ethers.BigNumber,
-    unitPrice: ethers.BigNumber
-): number => {
-    const filledFutureValue = calculateForwardValue(amount, unitPrice);
-    const averagePrice = !filledFutureValue.isZero()
-        ? amount.mul(100).div(filledFutureValue)
-        : ethers.constants.Zero;
-    return Number(averagePrice) / 100;
-};
-
-const formatOrders = (orders: OrderList): TradeHistory => {
-    return orders?.map(order => ({
-        amount: order.amount,
-        side: order.side,
-        orderPrice: order.unitPrice,
-        createdAt: order.timestamp,
-        currency: order.currency,
-        maturity: order.maturity,
-        forwardValue: calculateForwardValue(order.amount, order.unitPrice),
-        averagePrice: calculateAveragePrice(order.amount, order.unitPrice),
-    }));
-};
 
 export const PortfolioManagement = () => {
     const { account } = useWallet();
