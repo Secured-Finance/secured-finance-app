@@ -75,6 +75,48 @@ describe('computeNetValue', () => {
     it('should return 0 if no trades are provided', () => {
         expect(computeNetValue([], priceMap)).toEqual(0);
     });
+
+    it('should return the net value of borrow and lend trades', () => {
+        const trades = [
+            {
+                amount: '10000000000000000000',
+                currency: formatBytes32String(CurrencySymbol.ETH),
+                side: 1,
+            },
+            {
+                amount: '1000000000000000000000',
+                currency: formatBytes32String(CurrencySymbol.EFIL),
+                side: 1,
+            },
+            {
+                amount: '100000000',
+                currency: formatBytes32String(CurrencySymbol.WBTC),
+                side: 0,
+            },
+            {
+                amount: '1000000000',
+                currency: formatBytes32String(CurrencySymbol.USDC),
+                side: 1,
+            },
+        ];
+        expect(
+            computeNetValue(
+                trades.filter(
+                    trade => trade.side === 1
+                ) as unknown as TradeHistory,
+                priceMap
+            )
+        ).toEqual(-17000);
+
+        expect(
+            computeNetValue(
+                trades.filter(
+                    trade => trade.side === 0
+                ) as unknown as TradeHistory,
+                priceMap
+            )
+        ).toEqual(30000);
+    });
 });
 
 describe('aggregateTrades', () => {
