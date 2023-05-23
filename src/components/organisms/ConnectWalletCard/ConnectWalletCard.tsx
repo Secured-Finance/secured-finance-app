@@ -1,15 +1,11 @@
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import SFLogo from 'src/assets/img/logo.svg';
 import SFSphere from 'src/assets/img/sf-sphere.png';
 import { Button, GradientBox } from 'src/components/atoms';
 import { setWalletDialogOpen } from 'src/store/interactions';
-import { RootState } from 'src/store/types';
 
 export const ConnectWalletCard = () => {
     const dispatch = useDispatch();
-    const chainError = useSelector(
-        (state: RootState) => state.blockchain.chainError
-    );
 
     return (
         <div className='h-fit w-full'>
@@ -30,7 +26,6 @@ export const ConnectWalletCard = () => {
                         className='h-12'
                         fullWidth={true}
                         onClick={() => dispatch(setWalletDialogOpen(true))}
-                        disabled={chainError}
                     >
                         Connect Wallet
                     </Button>
