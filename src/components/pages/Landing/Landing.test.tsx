@@ -32,6 +32,8 @@ jest.mock('src/hooks/useSecuredFinance', () => () => mock);
 const preloadedState = { ...preloadedBalances, ...preloadedLendingMarkets };
 
 describe('Landing Component', () => {
+    jest.setTimeout(8000);
+
     it('should render a Landing', async () => {
         await waitFor(() => {
             render(<Default />, {
@@ -67,7 +69,7 @@ describe('Landing Component', () => {
         });
 
         expect(screen.getByTestId('market-rate')).toHaveTextContent('2.62%');
-    }, 10000);
+    });
 
     it('should select the market order type when the user change to advance mode', async () => {
         waitFor(() => {
