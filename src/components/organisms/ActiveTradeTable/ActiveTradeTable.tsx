@@ -10,7 +10,7 @@ import { UnwindDialog } from 'src/components/organisms';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { setCurrency, setMaturity } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
-import { hexToCurrencySymbol, TradeSummary } from 'src/utils';
+import { TradeSummary, hexToCurrencySymbol } from 'src/utils';
 import { Amount, Maturity } from 'src/utils/entities';
 import {
     amountColumnDefinition,
@@ -82,14 +82,18 @@ export const ActiveTradeTable = ({ data }: { data: TradeSummary[] }) => {
                         </div>
                     );
                 },
-                header: tableHeaderDefinition('D.T.M.'),
+                header: tableHeaderDefinition(
+                    'D.T.M.',
+                    'Days to Maturity (DTM) of a loan contract is the date on which the contract is set to expire.'
+                ),
             }),
             amountColumnDefinition(
                 columnHelper,
                 'F.V',
                 'forwardValue',
                 row => row.forwardValue,
-                { color: true, priceList: priceList, compact: false }
+                { color: true, priceList: priceList, compact: false },
+                'Future Value (F.V) of a loan contract is the obligation value of the contract at time of maturity.'
             ),
             amountColumnDefinition(
                 columnHelper,
@@ -100,13 +104,17 @@ export const ActiveTradeTable = ({ data }: { data: TradeSummary[] }) => {
                     color: false,
                     priceList: priceList,
                     compact: false,
-                }
+                },
+                'Present Value (P.V) is the current worth of the contract, taking into account the time value of money.'
             ),
             priceYieldColumnDefinition(
                 columnHelper,
                 'M.T.M.',
                 'averagePrice',
-                row => row.averagePrice
+                row => row.averagePrice,
+                'default',
+                'price',
+                'Mark to Market (MTM) is the estimated current value of a loan based on prevailing market conditions.'
             ),
             columnHelper.display({
                 id: 'actions',

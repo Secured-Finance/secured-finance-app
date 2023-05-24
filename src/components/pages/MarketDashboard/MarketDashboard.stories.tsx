@@ -4,6 +4,7 @@ import { BigNumber } from 'ethers';
 import {
     withAppLayout,
     withAssetPrice,
+    withChainErrorDisabled,
     withMaturities,
     withWalletBalances,
     withWalletProvider,
@@ -54,6 +55,7 @@ export default {
         withWalletBalances,
         withMaturities,
         withAssetPrice,
+        withChainErrorDisabled,
     ],
 } as ComponentMeta<typeof MarketDashboard>;
 

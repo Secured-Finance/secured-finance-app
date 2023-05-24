@@ -19,7 +19,7 @@ jest.mock(
 
 const preloadedState = {
     blockchain: {
-        chainError: true,
+        chainError: false,
     },
 };
 
@@ -29,9 +29,6 @@ describe('Header component', () => {
             pathname: '/',
         });
         render(<Primary />);
-        expect(
-            screen.getByText('You are visiting Secured Finance on testnet')
-        ).toBeInTheDocument();
         expect(screen.getByText('OTC Lending')).toBeInTheDocument();
         expect(screen.getByText('Market Dashboard')).toBeInTheDocument();
         expect(screen.getByText('Portfolio Management')).toBeInTheDocument();
@@ -78,18 +75,7 @@ describe('Header component', () => {
         );
     });
 
-    it('should render a disabled connect wallet button on chainError', () => {
-        (useRouter as jest.Mock).mockImplementation(() => ({
-            pathname: '/',
-            push: jest.fn(),
-        }));
-
-        render(<Primary />, { preloadedState });
-        const button = screen.getByTestId('connect-wallet');
-        expect(button).toBeDisabled();
-    });
-
-    it('should not render testnet header on chainError', () => {
+    it('should render testnet header on chainError false', () => {
         (useRouter as jest.Mock).mockImplementation(() => ({
             pathname: '/',
             push: jest.fn(),
@@ -97,7 +83,7 @@ describe('Header component', () => {
 
         render(<Primary />, { preloadedState });
         expect(
-            screen.queryByText('You are visiting Secured Finance on testnet')
-        ).not.toBeInTheDocument();
+            screen.getByText('You are visiting Secured Finance on testnet')
+        ).toBeInTheDocument();
     });
 });

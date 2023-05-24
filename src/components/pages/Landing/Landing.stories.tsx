@@ -3,6 +3,7 @@ import { within } from '@storybook/testing-library';
 import {
     withAppLayout,
     withAssetPrice,
+    withChainErrorDisabled,
     withMaturities,
     withWalletBalances,
     withWalletProvider,
@@ -20,6 +21,7 @@ export default {
         withAssetPrice,
         withWalletBalances,
         withWalletProvider,
+        withChainErrorDisabled,
     ],
     parameters: {
         chromatic: { pauseAnimationAtEnd: true, ...CHROMATIC_VIEWPORTS },

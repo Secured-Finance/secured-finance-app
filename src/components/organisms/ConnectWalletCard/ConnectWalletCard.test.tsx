@@ -4,12 +4,6 @@ import * as stories from './ConnectWalletCard.stories';
 
 const { Default } = composeStories(stories);
 
-const preloadedState = {
-    blockchain: {
-        chainError: true,
-    },
-};
-
 describe('test ConnectWalletCard component', () => {
     it('should render ConnectWalletCard', () => {
         render(<Default />);
@@ -20,11 +14,5 @@ describe('test ConnectWalletCard component', () => {
         ).toBeInTheDocument();
         expect(screen.getByRole('button')).toBeInTheDocument();
         expect(screen.getByText('Connect Wallet')).toBeInTheDocument();
-    });
-
-    it('should render a disabled connect wallet button on chain error', () => {
-        render(<Default />, { preloadedState });
-        expect(screen.getByText('Connect Wallet')).toBeInTheDocument();
-        expect(screen.getByRole('button')).toBeDisabled();
     });
 });

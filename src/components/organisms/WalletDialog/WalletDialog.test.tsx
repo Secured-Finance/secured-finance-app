@@ -9,6 +9,9 @@ const preloadedState = {
     interactions: {
         walletDialogOpen: true,
     },
+    blockchain: {
+        chainError: false,
+    },
 };
 
 const selectMetamaskOption = () => {
