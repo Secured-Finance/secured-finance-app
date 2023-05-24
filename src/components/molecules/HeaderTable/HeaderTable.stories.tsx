@@ -24,6 +24,9 @@ export default {
             },
         ],
     },
+    parameters: {
+        delay: 3000,
+    },
 } as ComponentMeta<typeof HeaderTable>;
 
 const Template: ComponentStory<typeof HeaderTable> = args => (

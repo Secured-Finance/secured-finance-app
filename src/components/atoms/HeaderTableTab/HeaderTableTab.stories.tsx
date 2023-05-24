@@ -9,6 +9,9 @@ export default {
         value: '$8.02',
         orientation: 'center',
     },
+    parameters: {
+        delay: 3000,
+    },
 } as ComponentMeta<typeof HeaderTableTab>;
 
 const Template: ComponentStory<typeof HeaderTableTab> = args => (
