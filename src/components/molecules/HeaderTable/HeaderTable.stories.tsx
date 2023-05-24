@@ -1,9 +1,9 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
-import { MarketDashboardTable } from './MarketDashboardTable';
+import { HeaderTable } from './HeaderTable';
 
 export default {
-    title: 'Molecules/MarketDashboardTable',
-    component: MarketDashboardTable,
+    title: 'Molecules/HeaderTable',
+    component: HeaderTable,
     args: {
         values: [
             {
@@ -24,10 +24,10 @@ export default {
             },
         ],
     },
-} as ComponentMeta<typeof MarketDashboardTable>;
+} as ComponentMeta<typeof HeaderTable>;
 
-const Template: ComponentStory<typeof MarketDashboardTable> = args => (
-    <MarketDashboardTable {...args} />
+const Template: ComponentStory<typeof HeaderTable> = args => (
+    <HeaderTable {...args} />
 );
 
 export const Default = Template.bind({});

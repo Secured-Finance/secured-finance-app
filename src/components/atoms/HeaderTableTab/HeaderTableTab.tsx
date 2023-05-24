@@ -1,6 +1,6 @@
 import { Counter } from 'src/components/atoms/Counter';
 
-export interface PortfolioTabProps {
+export interface HeaderTableTabProps {
     name: string;
     value: string;
 }
@@ -16,7 +16,7 @@ const getCounterValues = (value: string) => {
     };
 };
 
-export const PortfolioTab = ({ name, value }: PortfolioTabProps) => {
+export const HeaderTableTab = ({ name, value }: HeaderTableTabProps) => {
     const counterValues = getCounterValues(value);
 
     return (
