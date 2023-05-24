@@ -25,7 +25,7 @@ export default {
         ],
     },
     parameters: {
-        delay: 3000,
+        chromatic: { delay: 3000 },
     },
 } as ComponentMeta<typeof HeaderTable>;
 

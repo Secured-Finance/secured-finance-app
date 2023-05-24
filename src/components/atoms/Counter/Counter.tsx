@@ -39,7 +39,6 @@ export const Counter = ({
         <div
             className='typography-body-1 h-8 w-full text-center text-white'
             ref={countupRef}
-            data-chromatic='ignore'
         ></div>
     );
 };
