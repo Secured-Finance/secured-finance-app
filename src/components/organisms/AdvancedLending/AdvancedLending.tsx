@@ -68,7 +68,7 @@ const useTradeHistoryDetails = (
             max: LoanValue.fromPrice(max, maturity.toNumber()),
             sum: currencyMap[currency].fromBaseUnit(sum),
             count,
-            lastTradePrice: LoanValue.fromPrice(
+            lastTradeLoan: LoanValue.fromPrice(
                 lastTradePrice,
                 maturity.toNumber()
             ),
@@ -173,20 +173,13 @@ export const AdvancedLending = ({
                             dispatch(setUnitPrice(loanValue.price));
                         }
                     }}
+                    lastTradeLoan={tradeHistoryDetails.lastTradeLoan}
                     values={[
                         formatLoanValue(tradeHistoryDetails.max, 'price'),
                         formatLoanValue(tradeHistoryDetails.min, 'price'),
                         tradeHistoryDetails.count,
                         ordinaryFormat(tradeHistoryDetails.sum),
                         usdFormat(currencyPrice, 2),
-                        formatLoanValue(
-                            tradeHistoryDetails.lastTradePrice,
-                            'price'
-                        ),
-                        formatLoanValue(
-                            tradeHistoryDetails.lastTradePrice,
-                            'rate'
-                        ),
                     ]}
                 />
             }

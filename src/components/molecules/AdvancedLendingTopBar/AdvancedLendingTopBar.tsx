@@ -9,6 +9,8 @@ import { HorizontalAssetSelector } from 'src/components/molecules';
 import { setCurrency } from 'src/store/landingOrderForm';
 import { IndexOf } from 'src/types';
 import { COIN_GECKO_SOURCE, CurrencySymbol, currencyMap } from 'src/utils';
+import { LoanValue } from 'src/utils/entities';
+import { formatLoanValue } from 'src/utils';
 
 type ValueField = number | string;
 type AdvancedLendingTopBarProp<T> = {
@@ -18,15 +20,8 @@ type AdvancedLendingTopBarProp<T> = {
     selected: Option<T>;
     onAssetChange?: (v: CurrencySymbol) => void;
     onTermChange?: (v: T) => void;
-    values?: [
-        ValueField,
-        ValueField,
-        ValueField,
-        ValueField,
-        ValueField,
-        ValueField,
-        ValueField
-    ];
+    lastTradeLoan?: LoanValue;
+    values?: [ValueField, ValueField, ValueField, ValueField, ValueField];
 };
 
 const getValue = (
@@ -47,6 +42,7 @@ export const AdvancedLendingTopBar = <T extends string = string>({
     selected,
     onAssetChange,
     onTermChange,
+    lastTradeLoan,
     values,
 }: AdvancedLendingTopBarProp<T>) => {
     const handleTermChange = useCallback(
@@ -64,6 +60,13 @@ export const AdvancedLendingTopBar = <T extends string = string>({
         [onAssetChange]
     );
 
+    const lastTradePrice = lastTradeLoan
+        ? Number(formatLoanValue(lastTradeLoan, 'price'))
+        : 0.0;
+    const lastTradeRate = lastTradeLoan
+        ? `${formatLoanValue(lastTradeLoan, 'rate')} APR`
+        : '0.00 % APR';
+
     return (
         <GradientBox shape='rectangle'>
             <div className='flex min-w-full flex-row items-stretch justify-between gap-6 px-6 py-3'>
@@ -78,10 +81,7 @@ export const AdvancedLendingTopBar = <T extends string = string>({
                     />
                 </div>
 
-                <MarketTab
-                    name={getValue(values, 5)}
-                    value={`${getValue(values, 6)} APR`}
-                />
+                <MarketTab name={lastTradePrice} value={lastTradeRate} />
                 <Separator />
                 <MarketTab name='24h High' value={getValue(values, 0)} />
                 <Separator />
