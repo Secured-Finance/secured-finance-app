@@ -1,9 +1,6 @@
 import queries from '@secured-finance/sf-graph-client/dist/graphclients';
 import { useSelector } from 'react-redux';
-import {
-    HorizontalTab,
-    PortfolioManagementTable,
-} from 'src/components/molecules';
+import { HeaderTable, HorizontalTab } from 'src/components/molecules';
 import {
     ActiveTradeTable,
     CollateralOrganism,
@@ -14,7 +11,7 @@ import {
     WalletDialog,
 } from 'src/components/organisms';
 import { Page, TwoColumns } from 'src/components/templates';
-import { useGraphClientHook } from 'src/hooks';
+import { useCollateralBook, useGraphClientHook } from 'src/hooks';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { RootState } from 'src/store/types';
 import {
@@ -23,7 +20,6 @@ import {
     computeNetValue,
     usdFormat,
 } from 'src/utils';
-import { useCollateralBook } from 'src/hooks';
 import { useWallet } from 'use-wallet';
 
 export const PortfolioManagement = () => {
@@ -55,16 +51,29 @@ export const PortfolioManagement = () => {
         <Page title='Portfolio Management' name='portfolio-management'>
             <TwoColumns>
                 <div className='flex flex-col gap-6'>
-                    <PortfolioManagementTable
+                    <HeaderTable
+                        testid='portfolio-management'
                         values={[
-                            usdFormat(
-                                borrowedPV +
-                                    lentPV +
-                                    collateralBook.usdCollateral
-                            ),
-                            tradeHistory.length.toString(),
-                            usdFormat(lentPV),
-                            usdFormat(borrowedPV),
+                            {
+                                name: 'Net Asset Value',
+                                value: usdFormat(
+                                    borrowedPV +
+                                        lentPV +
+                                        collateralBook.usdCollateral
+                                ),
+                            },
+                            {
+                                name: 'Active Contracts',
+                                value: tradeHistory.length.toString(),
+                            },
+                            {
+                                name: 'Lending PV',
+                                value: usdFormat(lentPV),
+                            },
+                            {
+                                name: 'Borrowing PV',
+                                value: usdFormat(borrowedPV),
+                            },
                         ]}
                     />
                     <CollateralOrganism collateralBook={collateralBook} />

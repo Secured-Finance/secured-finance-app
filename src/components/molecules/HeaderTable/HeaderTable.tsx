@@ -1,23 +1,25 @@
 import React from 'react';
 import {
     GradientBox,
-    PortfolioTab,
-    PortfolioTabProps,
+    HeaderTableTab,
+    HeaderTableTabProps,
     Separator,
 } from 'src/components/atoms';
 
-export const MarketDashboardTable = ({
+export const HeaderTable = ({
     values,
+    testid,
 }: {
-    values: Array<PortfolioTabProps>;
+    values: Array<HeaderTableTabProps>;
+    testid: string;
 }) => {
     return (
-        <GradientBox data-testid='market-dashboard-table'>
+        <GradientBox data-testid={`${testid}-table`}>
             <div className='flex flex-row' role='grid'>
                 {values.map((item, index) => {
                     return (
-                        <React.Fragment key={`market-dashboard-table-${index}`}>
-                            <PortfolioTab
+                        <React.Fragment key={`${testid}-table-${index}`}>
+                            <HeaderTableTab
                                 key={item.name}
                                 {...item}
                                 value={item.value}
