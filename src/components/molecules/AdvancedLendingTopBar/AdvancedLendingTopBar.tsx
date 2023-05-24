@@ -62,7 +62,7 @@ export const AdvancedLendingTopBar = <T extends string = string>({
 
     const lastTradePrice = lastTradeLoan
         ? Number(formatLoanValue(lastTradeLoan, 'price'))
-        : 0.0;
+        : 0;
     const lastTradeRate = lastTradeLoan
         ? `${formatLoanValue(lastTradeLoan, 'rate')} APR`
         : '0.00 % APR';
