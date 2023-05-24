@@ -22,57 +22,57 @@ jest.mock(
             children
 );
 
-const renderDefault = () => {
-    render(<Default />, {
-        apolloMocks: Default.parameters?.apolloClient.mocks,
-        preloadedState: {
-            ...preloadedBalances,
-            ...preloadedAssetPrices,
-        },
-    });
+const renderDefault = async () => {
+    await waitFor(() =>
+        render(<Default />, {
+            apolloMocks: Default.parameters?.apolloClient.mocks,
+            preloadedState: {
+                ...preloadedBalances,
+                ...preloadedAssetPrices,
+            },
+        })
+    );
 };
 
-const renderConnected = () => {
-    render(<ConnectedToWallet />, {
-        apolloMocks: ConnectedToWallet.parameters?.apolloClient.mocks,
-        preloadedState: {
-            ...preloadedBalances,
-            ...preloadedAssetPrices,
-        },
-    });
+const renderConnected = async () => {
+    await waitFor(() =>
+        render(<ConnectedToWallet />, {
+            apolloMocks: ConnectedToWallet.parameters?.apolloClient.mocks,
+            preloadedState: {
+                ...preloadedBalances,
+                ...preloadedAssetPrices,
+            },
+        })
+    );
 };
 
 describe('MarketDashboard Component', () => {
     it('should render MarketDashboard', async () => {
-        renderDefault();
+        await renderDefault();
     });
 
     it('should render the total users', async () => {
-        renderDefault();
+        await renderDefault();
         await waitFor(
             async () =>
                 expect(await screen.findByText('12.15K')).toBeInTheDocument(),
             {
-                timeout: 5000,
+                timeout: 3000,
             }
         );
     });
 
     it('should show the yield curves', async () => {
-        renderDefault();
-        await waitFor(async () => {
-            const yieldCurves = await screen.findAllByTestId('curve-chip');
-            expect(yieldCurves).toHaveLength(4);
-        });
+        await renderDefault();
+        const yieldCurves = await screen.findAllByTestId('curve-chip');
+        expect(yieldCurves).toHaveLength(4);
     });
 
     it('should render the collateral widget when connected', async () => {
-        renderConnected();
-        await waitFor(async () => {
-            const collateralWidget = await screen.findByText(
-                'Collateral Utilization'
-            );
-            expect(collateralWidget).toBeInTheDocument();
-        });
+        await renderConnected();
+        const collateralWidget = await screen.findByText(
+            'Collateral Utilization'
+        );
+        expect(collateralWidget).toBeInTheDocument();
     });
 });
