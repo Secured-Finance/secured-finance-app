@@ -8,6 +8,7 @@ export * from './CollateralInformationTable';
 export * from './CollateralManagementConciseTab';
 export * from './CollateralSelector';
 export * from './ColorBar';
+export * from './Counter';
 export * from './CurrencyIcon';
 export * from './CurrencyItem';
 export * from './CurveHeaderAsset';
