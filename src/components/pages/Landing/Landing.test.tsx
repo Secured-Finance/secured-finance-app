@@ -61,13 +61,10 @@ describe('Landing Component', () => {
                 },
             });
         });
+
         expect(screen.getByTestId('market-rate')).toHaveTextContent('3.26%');
-
-        await waitFor(() => {
-            fireEvent.click(screen.getByRole('button', { name: 'DEC22' }));
-            fireEvent.click(screen.getByText('MAR23'));
-        });
-
+        fireEvent.click(screen.getByRole('button', { name: 'DEC22' }));
+        fireEvent.click(screen.getByText('MAR23'));
         expect(screen.getByTestId('market-rate')).toHaveTextContent('2.62%');
     });
 
