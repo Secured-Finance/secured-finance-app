@@ -324,7 +324,7 @@ export const OrderWidget = ({
                 )}
             </div>
             {isLoading ? (
-                <div className='flex h-full w-full items-center justify-center pt-24'>
+                <div className='col-span-2 row-start-3 flex h-full w-full items-center justify-center pt-24'>
                     <Spinner />
                 </div>
             ) : (
