@@ -1,5 +1,4 @@
-import { useCallback, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useCallback } from 'react';
 import {
     GradientBox,
     MarketTab,
@@ -8,15 +7,8 @@ import {
 } from 'src/components/atoms';
 import { HorizontalAssetSelector } from 'src/components/molecules';
 import { setCurrency } from 'src/store/landingOrderForm';
-import { RootState } from 'src/store/types';
 import { IndexOf } from 'src/types';
-import {
-    COIN_GECKO_SOURCE,
-    CurrencySymbol,
-    currencyMap,
-    formatLoanValue,
-} from 'src/utils';
-import { LoanValue, Maturity } from 'src/utils/entities';
+import { COIN_GECKO_SOURCE, CurrencySymbol, currencyMap } from 'src/utils';
 
 type ValueField = number | string;
 type AdvancedLendingTopBarProp<T> = {
@@ -26,7 +18,15 @@ type AdvancedLendingTopBarProp<T> = {
     selected: Option<T>;
     onAssetChange?: (v: CurrencySymbol) => void;
     onTermChange?: (v: T) => void;
-    values?: [ValueField, ValueField, ValueField, ValueField, ValueField];
+    values?: [
+        ValueField,
+        ValueField,
+        ValueField,
+        ValueField,
+        ValueField,
+        ValueField,
+        ValueField
+    ];
 };
 
 const getValue = (
@@ -49,14 +49,8 @@ export const AdvancedLendingTopBar = <T extends string = string>({
     onTermChange,
     values,
 }: AdvancedLendingTopBarProp<T>) => {
-    const [termValue, setTermValue] = useState(selected.value);
-    const midPrice = useSelector(
-        (state: RootState) => state.analytics.midPrice
-    );
-
     const handleTermChange = useCallback(
         (v: T) => {
-            setTermValue(v);
             onTermChange?.(v);
         },
         [onTermChange]
@@ -68,11 +62,6 @@ export const AdvancedLendingTopBar = <T extends string = string>({
             onAssetChange?.(v);
         },
         [onAssetChange]
-    );
-
-    const midLoanValue = LoanValue.fromPrice(
-        midPrice,
-        new Maturity(termValue).toNumber()
     );
 
     return (
@@ -90,8 +79,8 @@ export const AdvancedLendingTopBar = <T extends string = string>({
                 </div>
 
                 <MarketTab
-                    name={Number(formatLoanValue(midLoanValue, 'price'))}
-                    value={`${formatLoanValue(midLoanValue, 'rate')} APR`}
+                    name={getValue(values, 5)}
+                    value={`${getValue(values, 6)} APR`}
                 />
                 <Separator />
                 <MarketTab name='24h High' value={getValue(values, 0)} />
