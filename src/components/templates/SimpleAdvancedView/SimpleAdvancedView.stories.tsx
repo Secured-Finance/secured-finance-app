@@ -17,6 +17,7 @@ export default {
     },
     parameters: {
         ...RESPONSIVE_PARAMETERS,
+        layout: 'fullscreen',
     },
 } as ComponentMeta<typeof SimpleAdvancedView>;
 

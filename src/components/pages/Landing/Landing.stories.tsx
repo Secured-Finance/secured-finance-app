@@ -28,6 +28,7 @@ export default {
             mocks: [...mockUserHistory, ...mockTrades],
         },
         ...RESPONSIVE_PARAMETERS,
+        layout: 'fullscreen',
     },
 } as ComponentMeta<typeof Landing>;
 
