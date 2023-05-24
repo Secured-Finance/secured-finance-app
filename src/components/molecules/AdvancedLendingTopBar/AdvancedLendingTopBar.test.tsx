@@ -2,7 +2,7 @@ import { composeStories } from '@storybook/testing-react';
 import { render, screen } from 'src/test-utils.js';
 import * as stories from './AdvancedLendingTopBar.stories';
 
-const { Default, Values } = composeStories(stories);
+const { Default, Values, LastTradePrice } = composeStories(stories);
 
 describe('AdvancedLendingTopBar Component', () => {
     it('should render a default AdvancedLendingTopBar', () => {
@@ -28,8 +28,12 @@ describe('AdvancedLendingTopBar Component', () => {
         expect(screen.getByText('894')).toBeInTheDocument();
         expect(screen.getByText('10,000,000')).toBeInTheDocument();
         expect(screen.getByText('23000')).toBeInTheDocument();
-        expect(screen.getByText('25.20')).toBeInTheDocument();
-        expect(screen.getByText('40.2% APR')).toBeInTheDocument();
+    });
+
+    it('should compute the lastTradePrice and display it', () => {
+        render(<LastTradePrice />);
+        expect(screen.getByText('80.00')).toBeInTheDocument();
+        expect(screen.getByText('8.45% APR')).toBeInTheDocument();
     });
 
     it('should render source link for the selected asset', () => {
