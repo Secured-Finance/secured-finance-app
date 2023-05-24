@@ -7,11 +7,11 @@ export const TwoColumns = ({
     children: [React.ReactNode, React.ReactNode];
     narrowFirstColumn?: boolean;
 }) => {
-    const bigSize = 'w-[70%]';
-    const smallSize = 'w-[30%]';
+    const bigSize = 'tablet:w-[70%]';
+    const smallSize = 'tablet:w-[30%]';
 
     return (
-        <div className='flex flex-row justify-between gap-6 pt-4'>
+        <div className='flex flex-col justify-between gap-6 pt-4 tablet:flex-row'>
             <div
                 className={classNames({
                     [bigSize]: !narrowFirstColumn,
