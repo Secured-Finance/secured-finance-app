@@ -8,7 +8,7 @@ import { Header } from 'src/components/organisms';
 import { Layout } from 'src/components/templates';
 import { setMidPrice } from 'src/store/analytics';
 import { updateLendingMarketContract } from 'src/store/availableContracts';
-import { updateLatestBlock } from 'src/store/blockchain';
+import { updateChainError, updateLatestBlock } from 'src/store/blockchain';
 import { updateBalance } from 'src/store/wallet';
 import AxiosMock from 'src/stories/mocks/AxiosMock';
 import { CustomizedBridge } from 'src/stories/mocks/customBridge';
@@ -182,6 +182,19 @@ export const withMidPrice = (Story: Story) => {
     useEffect(() => {
         const timeoutId = setTimeout(() => {
             dispatch(setMidPrice(9780));
+        }, 300);
+
+        return () => clearTimeout(timeoutId);
+    }, [dispatch]);
+
+    return <Story />;
+};
+
+export const withChainErrorDisabled = (Story: Story) => {
+    const dispatch = useDispatch();
+    useEffect(() => {
+        const timeoutId = setTimeout(() => {
+            dispatch(updateChainError(false));
         }, 300);
 
         return () => clearTimeout(timeoutId);

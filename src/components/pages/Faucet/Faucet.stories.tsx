@@ -2,6 +2,7 @@ import { ComponentMeta, ComponentStory } from '@storybook/react';
 import {
     withAppLayout,
     withAssetPrice,
+    withChainErrorDisabled,
     withWalletBalances,
     withWalletProvider,
 } from 'src/../.storybook/decorators';
@@ -16,6 +17,7 @@ export default {
         withWalletBalances,
         withAssetPrice,
         withWalletProvider,
+        withChainErrorDisabled,
     ],
 } as ComponentMeta<typeof Faucet>;
 
