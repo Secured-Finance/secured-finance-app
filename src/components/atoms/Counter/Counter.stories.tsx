@@ -9,6 +9,9 @@ export default {
         prefix: '$',
         suffix: 'M',
     },
+    parameters: {
+        delay: 3000,
+    },
 } as ComponentMeta<typeof Counter>;
 
 const Template: ComponentStory<typeof Counter> = args => <Counter {...args} />;
