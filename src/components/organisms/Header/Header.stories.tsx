@@ -1,9 +1,9 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { RESPONSIVE_PARAMETERS } from 'src/../.storybook/constants';
 import {
     withChainErrorDisabled,
     withWalletProvider,
 } from 'src/../.storybook/decorators';
-import { CHROMATIC_VIEWPORTS } from 'src/../.storybook/preview';
 import { Header } from './';
 
 export default {
@@ -12,8 +12,7 @@ export default {
     args: {},
     decorators: [withWalletProvider, withChainErrorDisabled],
     parameters: {
-        layout: 'fullscreen',
-        chromatic: { CHROMATIC_VIEWPORTS },
+        ...RESPONSIVE_PARAMETERS,
     },
 } as ComponentMeta<typeof Header>;
 

@@ -1,4 +1,5 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { RESPONSIVE_PARAMETERS } from 'src/../.storybook/constants';
 import { TwoColumnsWithTopBar } from './TwoColumnsWithTopBar';
 
 const column1 = (
@@ -21,6 +22,9 @@ export default {
                 This is a great top bar
             </div>
         ),
+    },
+    parameters: {
+        ...RESPONSIVE_PARAMETERS,
     },
 } as ComponentMeta<typeof TwoColumnsWithTopBar>;
 
