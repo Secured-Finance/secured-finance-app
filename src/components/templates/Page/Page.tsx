@@ -13,11 +13,11 @@ export const Page = ({
 }) => {
     return (
         <div
-            className='mt-7 flex flex-col gap-4 px-10 desktop:gap-6 desktop:px-40'
+            className='mt-7 flex flex-col gap-4 px-5 desktop:gap-6 desktop:px-40'
             data-testid={name}
         >
-            <div className='flex h-16 items-center justify-around border-b-[0.5px] border-panelStroke tablet:justify-between'>
-                <span className='font-secondary text-smd font-light leading-7 text-white tablet:text-lg'>
+            <div className='flex h-16 items-center justify-between border-b-[0.5px] border-panelStroke'>
+                <span className='font-secondary text-smd font-light leading-7 text-white tablet:text-md desktop:text-lg'>
                     {title}
                 </span>
                 {titleComponent ? titleComponent : null}
