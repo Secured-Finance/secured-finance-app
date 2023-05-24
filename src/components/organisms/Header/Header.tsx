@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useDispatch, useSelector } from 'react-redux';
@@ -35,11 +36,14 @@ export const Header = () => {
             )}
             <nav
                 data-cy='header'
-                className={`flex h-20 w-full flex-row items-center justify-between border-b border-neutral-1 ${
-                    open ? 'blur-sm' : ''
-                }`}
+                className={classNames(
+                    'grid h-20 w-full grid-cols-4 items-center justify-between border-b border-neutral-1 tablet:grid-cols-7',
+                    {
+                        'blur-sm': open,
+                    }
+                )}
             >
-                <div className='ml-5 flex flex-row items-center gap-3'>
+                <div className='col-span-2 ml-5 flex flex-row items-center gap-3'>
                     <Link href='/' passHref>
                         <a href='_'>
                             <SFLogo className='hidden tablet:inline tablet:h-5 tablet:w-[100px] desktop:h-10 desktop:w-[200px]' />
@@ -52,26 +56,32 @@ export const Header = () => {
                         </div>
                     )}
                 </div>
-                <div className='hidden h-full items-center justify-center tablet:flex desktop:gap-8'>
+                <div className='hidden h-full w-full tablet:inline'>
                     <ItemLink
                         text='OTC Lending'
                         dataCy='lending'
                         link='/'
                         alternateLink='/advanced'
                     />
+                </div>
+                <div className='hidden h-full w-full tablet:inline'>
                     <ItemLink
                         text='Market Dashboard'
                         dataCy='terminal'
                         link='/dashboard'
                     />
+                </div>
+                <div className='hidden h-full w-full tablet:inline'>
                     <ItemLink
                         text='Portfolio Management'
                         dataCy='history'
                         link='/portfolio'
                     />
+                </div>
+                <div className='hidden h-full w-full tablet:inline'>
                     <MenuPopover />
                 </div>
-                <div className='flex flex-row items-center justify-end gap-2 pr-2'>
+                <div className='col-span-2 flex flex-row items-center justify-end gap-2 pr-2 tablet:col-span-1'>
                     {account ? (
                         <WalletPopover
                             wallet={AddressUtils.format(account, 6)}
