@@ -5,7 +5,7 @@ export default {
     title: 'Molecules/PortfolioManagementTable',
     component: PortfolioManagementTable,
     args: {
-        values: ['$11,996', '20%', '1', '$3.25'],
+        values: ['$11,996', '10', '$1100.25', '$1113.25'],
     },
 } as ComponentMeta<typeof PortfolioManagementTable>;
 
