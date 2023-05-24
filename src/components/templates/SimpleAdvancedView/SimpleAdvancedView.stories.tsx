@@ -1,5 +1,6 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { within } from '@storybook/testing-library';
+import { RESPONSIVE_PARAMETERS } from 'src/../.storybook/constants';
 import { SimpleAdvancedView } from './SimpleAdvancedView';
 
 export default {
@@ -13,6 +14,9 @@ export default {
         advanceComponent: (
             <div className='p-10 text-white'>Advanced Component</div>
         ),
+    },
+    parameters: {
+        ...RESPONSIVE_PARAMETERS,
     },
 } as ComponentMeta<typeof SimpleAdvancedView>;
 

@@ -1,38 +1,11 @@
 import { MockedProvider } from '@apollo/client/testing';
 import '@storybook/addon-console';
-import { INITIAL_VIEWPORTS } from '@storybook/addon-viewport';
 import { Provider } from 'react-redux';
 import 'src/assets/css/index.css';
 import { withPerformance } from 'storybook-addon-performance';
 import store from './../src/store';
 import { MockSecuredFinanceProvider } from './../src/stories/mocks/MockSecuredFinanceProvider';
 import { withMockDate } from './decorators';
-
-const customViewports = {
-    mobile: {
-        name: 'Mobile',
-        styles: {
-            width: '375px',
-            height: '667px',
-        },
-    },
-    tablet: {
-        name: 'Tablet',
-        styles: {
-            width: '768px',
-            height: '1024px',
-        },
-    },
-    desktop: {
-        name: 'Desktop',
-        styles: {
-            width: '1440px',
-            height: '1024px',
-        },
-    },
-};
-
-export const CHROMATIC_VIEWPORTS = { viewports: [390, 768, 1440] };
 
 export const parameters = {
     actions: { argTypesRegex: '^on.*' },
@@ -44,7 +17,7 @@ export const parameters = {
     },
 
     viewport: {
-        viewports: { ...customViewports, ...INITIAL_VIEWPORTS },
+        disable: true,
         defaultViewport: 'responsive',
     },
 

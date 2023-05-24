@@ -1,5 +1,6 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { within } from '@storybook/testing-library';
+import { RESPONSIVE_PARAMETERS } from 'src/../.storybook/constants';
 import {
     withAppLayout,
     withAssetPrice,
@@ -8,7 +9,6 @@ import {
     withWalletBalances,
     withWalletProvider,
 } from 'src/../.storybook/decorators';
-import { CHROMATIC_VIEWPORTS } from 'src/../.storybook/preview';
 import { mockTrades, mockUserHistory } from 'src/stories/mocks/queries';
 import { Landing } from './Landing';
 
@@ -24,11 +24,10 @@ export default {
         withChainErrorDisabled,
     ],
     parameters: {
-        chromatic: { pauseAnimationAtEnd: true, ...CHROMATIC_VIEWPORTS },
         apolloClient: {
             mocks: [...mockUserHistory, ...mockTrades],
         },
-        layout: 'fullscreen',
+        ...RESPONSIVE_PARAMETERS,
     },
 } as ComponentMeta<typeof Landing>;
 
