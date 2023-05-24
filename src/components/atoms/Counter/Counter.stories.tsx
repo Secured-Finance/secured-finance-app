@@ -10,7 +10,7 @@ export default {
         suffix: 'M',
     },
     parameters: {
-        chromatic: { delay: 6000 },
+        chromatic: { delay: 3000 },
     },
 } as ComponentMeta<typeof Counter>;
 

@@ -10,7 +10,7 @@ export default {
         orientation: 'center',
     },
     parameters: {
-        chromatic: { pauseAnimationAtEnd: true },
+        chromatic: { delay: 3000 },
     },
 } as ComponentMeta<typeof HeaderTableTab>;
 
