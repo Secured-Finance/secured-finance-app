@@ -14,8 +14,3 @@ const Template: ComponentStory<typeof PortfolioManagementTable> = args => (
 );
 
 export const Default = Template.bind({});
-
-export const NoWalletConnected = Template.bind({});
-NoWalletConnected.args = {
-    values: [],
-};

@@ -19,6 +19,7 @@
     "bignumber.js": "^9.0.1",
     "chart.js": "^3.8.0",
     "classnames": "^2.3.1",
+    "countup.js": "2.6.0",
     "ethers": "^5.7.1",
     "next": "12.1.6",
     "react": "^17.0.2",
