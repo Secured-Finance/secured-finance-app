@@ -18,7 +18,7 @@
       @apply text-xl font-secondary font-semibold;
     }
     .typography-modal-title {
-      @apply font-secondary text-lg font-semibold;
+      @apply font-secondary text-smd font-semibold leading-7;
     }
     .typography-body-1 {
       @apply text-md font-secondary font-semibold;
@@ -27,7 +27,7 @@
       @apply text-base font-secondary leading-6;
     }
     .typography-caption {
-      @apply text-sm font-secondary leading-6;
+      @apply desktop:text-sm text-xs font-secondary leading-6;
     }
     .typography-caption-2 {
       @apply text-xs font-secondary leading-5;
