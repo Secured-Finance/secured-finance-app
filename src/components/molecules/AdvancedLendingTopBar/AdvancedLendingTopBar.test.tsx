@@ -28,17 +28,8 @@ describe('AdvancedLendingTopBar Component', () => {
         expect(screen.getByText('894')).toBeInTheDocument();
         expect(screen.getByText('10,000,000')).toBeInTheDocument();
         expect(screen.getByText('23000')).toBeInTheDocument();
-    });
-
-    it('should compute the midPrice and display it', () => {
-        render(<Values />, {
-            preloadedState: {
-                analytics: { midPrice: 9800 },
-            },
-        });
-
-        expect(screen.getByText('98.00')).toBeInTheDocument();
-        expect(screen.getByText('2.05% APR')).toBeInTheDocument();
+        expect(screen.getByText('25.20')).toBeInTheDocument();
+        expect(screen.getByText('40.2% APR')).toBeInTheDocument();
     });
 
     it('should render source link for the selected asset', () => {
