@@ -1,11 +1,6 @@
 import { useCallback, useState } from 'react';
 import { useSelector } from 'react-redux';
-import {
-    GradientBox,
-    MarketTab,
-    Option,
-    Separator as SeparatorAtom,
-} from 'src/components/atoms';
+import { GradientBox, MarketTab, Option } from 'src/components/atoms';
 import { HorizontalAssetSelector } from 'src/components/molecules';
 import { setCurrency } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
@@ -35,10 +30,6 @@ const getValue = (
 ) => {
     return values && values[index] ? values[index] : 0;
 };
-
-const Separator = () => (
-    <SeparatorAtom orientation='vertical' color='neutral-2' />
-);
 
 export const AdvancedLendingTopBar = <T extends string = string>({
     selectedAsset,
@@ -77,8 +68,8 @@ export const AdvancedLendingTopBar = <T extends string = string>({
 
     return (
         <GradientBox shape='rectangle'>
-            <div className='flex min-w-full flex-row items-stretch justify-between gap-6 px-6 py-3'>
-                <div className='pr-5'>
+            <div className='grid-col-3 grid space-y-6 px-5 pb-3 pt-6 tablet:grid-flow-col tablet:place-content-around tablet:items-start tablet:space-y-0 tablet:pt-4'>
+                <div className='col-span-3 pr-5'>
                     <HorizontalAssetSelector
                         selectedAsset={selectedAsset}
                         assetList={assetList}
@@ -88,25 +79,31 @@ export const AdvancedLendingTopBar = <T extends string = string>({
                         onTermChange={handleTermChange}
                     />
                 </div>
-
-                <MarketTab
-                    name={Number(formatLoanValue(midLoanValue, 'price'))}
-                    value={`${formatLoanValue(midLoanValue, 'rate')} APR`}
-                />
-                <Separator />
-                <MarketTab name='24h High' value={getValue(values, 0)} />
-                <Separator />
-                <MarketTab name='24h Low' value={getValue(values, 1)} />
-                <Separator />
-                <MarketTab name='24h Trades' value={getValue(values, 2)} />
-                <Separator />
-                <MarketTab name='24h Volume' value={getValue(values, 3)} />
-                <Separator />
-                <MarketTab
-                    name={`${selectedAsset?.value} Price`}
-                    value={getValue(values, 4)}
-                    source={handleSource(selectedAsset?.value)}
-                />
+                <div className='col-span-3 tablet:col-span-2 tablet:border-r tablet:border-white-10 tablet:pr-5'>
+                    <MarketTab
+                        name={Number(formatLoanValue(midLoanValue, 'price'))}
+                        value={`${formatLoanValue(midLoanValue, 'rate')} APR`}
+                    />
+                </div>
+                <div className='border-r border-white-10 pr-5 tablet:px-5'>
+                    <MarketTab name='24h High' value={getValue(values, 0)} />
+                </div>
+                <div className='border-r border-white-10 px-5'>
+                    <MarketTab name='24h Low' value={getValue(values, 1)} />
+                </div>
+                <div className='px-5 tablet:border-r tablet:border-white-10'>
+                    <MarketTab name='24h Trades' value={getValue(values, 2)} />
+                </div>
+                <div className='border-r border-white-10 pr-5 tablet:px-5'>
+                    <MarketTab name='24h Volume' value={getValue(values, 3)} />
+                </div>
+                <div className='border-white-10 px-5'>
+                    <MarketTab
+                        name={`${selectedAsset?.value} Price`}
+                        value={getValue(values, 4)}
+                        source={handleSource(selectedAsset?.value)}
+                    />
+                </div>
             </div>
         </GradientBox>
     );
