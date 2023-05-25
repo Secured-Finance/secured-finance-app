@@ -17,7 +17,7 @@ import {
     MaturityOptionList,
     OrderList,
     TradeHistory,
-    TradesQuery,
+    Trades,
 } from 'src/types';
 import { CurrencySymbol, Rate, TradeSummary } from 'src/utils';
 import { Maturity } from 'src/utils/entities';
@@ -550,6 +550,78 @@ function generateDailyVolumes(days: number) {
 
 export const dailyVolumes: DailyVolumes = generateDailyVolumes(365 * 4);
 
-export const trades: NonNullable<TradesQuery> = {
-    transactions: [],
-};
+export const tradesEFIL: Trades = [
+    {
+        amount: 100000000000,
+        maturity: dec22Fixture,
+        side: 0,
+        createdAt: 1638356100,
+        currency: efilBytes32,
+        averagePrice: 0.8,
+    },
+    {
+        amount: 1000000000000,
+        maturity: dec22Fixture,
+        side: 1,
+        createdAt: 1638355100,
+        currency: efilBytes32,
+        averagePrice: 0.9,
+    },
+];
+
+export const tradesETH: Trades = [
+    {
+        amount: 100000000000,
+        maturity: dec22Fixture,
+        side: 0,
+        createdAt: 1638356100,
+        currency: ethBytes32,
+        averagePrice: 0.8,
+    },
+    {
+        amount: 1000000000000,
+        maturity: dec22Fixture,
+        side: 1,
+        createdAt: 1638355100,
+        currency: ethBytes32,
+        averagePrice: 0.9,
+    },
+];
+
+export const tradesUSDC: Trades = [
+    {
+        amount: 100000000000,
+        maturity: dec22Fixture,
+        side: 0,
+        createdAt: 1638356100,
+        currency: usdcBytes32,
+        averagePrice: 0.8,
+    },
+    {
+        amount: 1000000000000,
+        maturity: dec22Fixture,
+        side: 1,
+        createdAt: 1638355100,
+        currency: usdcBytes32,
+        averagePrice: 0.9,
+    },
+];
+
+export const tradesWBTC: Trades = [
+    {
+        amount: 100000000000,
+        maturity: dec22Fixture,
+        side: 0,
+        createdAt: 1638356100,
+        currency: wbtcBytes32,
+        averagePrice: 0.8,
+    },
+    {
+        amount: 1000000000000,
+        maturity: dec22Fixture,
+        side: 1,
+        createdAt: 1638355100,
+        currency: wbtcBytes32,
+        averagePrice: 0.9,
+    },
+];

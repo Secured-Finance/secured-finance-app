@@ -5,7 +5,10 @@ import {
     efilBytes32,
     ethBytes32,
     orderHistoryList,
-    trades,
+    tradesEFIL,
+    tradesETH,
+    tradesUSDC,
+    tradesWBTC,
     transactions,
     usdcBytes32,
     wbtcBytes32,
@@ -107,13 +110,13 @@ export const mockTrades = [
         },
         result: {
             data: {
-                trades,
+                transactions: tradesEFIL,
             },
         },
         newData: () => {
             return {
                 data: {
-                    trades,
+                    transactions: tradesEFIL,
                 },
             };
         },
@@ -131,13 +134,13 @@ export const mockTrades = [
         },
         result: {
             data: {
-                trades,
+                tradesEFIL,
             },
         },
         newData: () => {
             return {
                 data: {
-                    trades,
+                    tradesEFIL,
                 },
             };
         },
@@ -155,13 +158,13 @@ export const mockTrades = [
         },
         result: {
             data: {
-                trades,
+                transactions: tradesETH,
             },
         },
         newData: () => {
             return {
                 data: {
-                    trades,
+                    transactions: tradesETH,
                 },
             };
         },
@@ -179,13 +182,13 @@ export const mockTrades = [
         },
         result: {
             data: {
-                trades,
+                transactions: tradesWBTC,
             },
         },
         newData: () => {
             return {
                 data: {
-                    trades,
+                    transactions: tradesWBTC,
                 },
             };
         },
@@ -203,13 +206,13 @@ export const mockTrades = [
         },
         result: {
             data: {
-                trades,
+                transactions: tradesUSDC,
             },
         },
         newData: () => {
             return {
                 data: {
-                    trades,
+                    transactions: tradesUSDC,
                 },
             };
         },
