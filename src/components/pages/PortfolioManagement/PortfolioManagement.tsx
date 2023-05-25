@@ -12,7 +12,7 @@ import {
     MyWalletCard,
     OrderHistoryTable,
     WalletDialog,
-    OpenOrderTable,
+    OrderTable,
 } from 'src/components/organisms';
 import { Page, TwoColumns } from 'src/components/templates';
 import { useGraphClientHook } from 'src/hooks';
@@ -98,7 +98,7 @@ export const PortfolioManagement = () => {
                     ]}
                 >
                     <ActiveTradeTable data={aggregateTrades(tradeHistory)} />
-                    <OpenOrderTable data={orderList.activeOrderList} />
+                    <OrderTable data={orderList.activeOrderList} />
                     <OrderHistoryTable data={orderHistory} />
                     <MyTransactionsTable data={tradeHistory} />
                 </HorizontalTab>
