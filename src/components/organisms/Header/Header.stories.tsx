@@ -19,3 +19,7 @@ export default {
 const Template: ComponentStory<typeof Header> = () => <Header />;
 
 export const Primary = Template.bind({});
+export const Connected = Template.bind({});
+Connected.parameters = {
+    connected: true,
+};
