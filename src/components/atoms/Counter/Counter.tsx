@@ -10,18 +10,17 @@ export const Counter = ({
     prefix: string;
     suffix: string;
 }) => {
-    const countupRef = useRef(null);
     let countUpAnim: CountUp;
-    const decimalPlaces = Number.isInteger(value)
-        ? 0
-        : value.toString().split('.')[1].length;
+    const countupRef = useRef(null);
+    const prevValue = usePrevious(value);
 
     const initCountUp = () => {
         countUpAnim = new CountUp(countupRef.current ?? '', value, {
-            decimalPlaces: decimalPlaces,
+            decimalPlaces: Number.isInteger(value) ? 0 : 2,
             duration: 2,
             prefix: prefix,
             suffix: suffix,
+            startVal: prevValue ?? 0,
         });
         if (!countUpAnim.error) {
             countUpAnim.start();
@@ -33,7 +32,7 @@ export const Counter = ({
     useEffect(() => {
         initCountUp();
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [value]);
 
     return (
         <div
@@ -41,4 +40,12 @@ export const Counter = ({
             ref={countupRef}
         ></div>
     );
+};
+
+const usePrevious = (value: number) => {
+    const ref = useRef<number>();
+    useEffect(() => {
+        ref.current = value;
+    }, [value]);
+    return ref.current;
 };
