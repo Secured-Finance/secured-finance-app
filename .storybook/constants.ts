@@ -15,16 +15,23 @@ const customViewports = {
             height: '1024px',
         },
     },
+    laptop: {
+        name: 'Laptop',
+        styles: {
+            width: '1024px',
+            height: '768px',
+        },
+    },
     desktop: {
         name: 'Desktop',
         styles: {
             width: '1440px',
-            height: '1024px',
+            height: '1512px',
         },
     },
 };
 
-const CHROMATIC_VIEWPORTS = { viewports: [390, 768, 1440] };
+const CHROMATIC_VIEWPORTS = { viewports: [390, 768, 1024, 1440] };
 
 export const RESPONSIVE_PARAMETERS = {
     viewport: {

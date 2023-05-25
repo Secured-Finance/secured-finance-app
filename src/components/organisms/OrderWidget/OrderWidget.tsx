@@ -303,8 +303,8 @@ export const OrderWidget = ({
     const isLoading = buyOrders.length === 0 || sellOrders.length === 0;
 
     return (
-        <div className='grid w-full grid-cols-1 place-content-center gap-x-4 tablet:grid-cols-2'>
-            <div className='row-start-2 tablet:col-span-2 tablet:row-start-1'>
+        <div className='grid w-full grid-cols-1 place-content-center gap-x-4 laptop:grid-cols-2'>
+            <div className='row-start-2 laptop:col-span-2 laptop:row-start-1'>
                 {!hideMidPrice && (
                     <div className='flex h-14 flex-row items-center justify-center gap-4 border-b border-white-10 bg-black-20'>
                         <div className='flex flex-row items-center gap-1'>
