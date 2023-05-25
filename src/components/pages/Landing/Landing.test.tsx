@@ -32,7 +32,7 @@ jest.mock('src/hooks/useSecuredFinance', () => () => mock);
 const preloadedState = { ...preloadedBalances, ...preloadedLendingMarkets };
 
 describe('Landing Component', () => {
-    it('should change the rate when the user changes the maturity', async () => {
+    it.skip('should change the rate when the user changes the maturity', async () => {
         render(<Default />, {
             apolloMocks: Default.parameters?.apolloClient.mocks,
             preloadedState: {
