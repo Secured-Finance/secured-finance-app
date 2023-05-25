@@ -5,7 +5,7 @@ import { TradeHistory } from 'src/types';
 import { currencyMap, hexToCurrencySymbol } from './currencyList';
 import { LoanValue } from './entities';
 import { Rate } from './rate';
-import { OrderList } from 'src/hooks/useOrderList';
+import { OrderList } from 'src/hooks';
 
 export const computeWeightedAverageRate = (trades: TradeHistory) => {
     if (!trades.length) {

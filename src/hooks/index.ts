@@ -6,3 +6,4 @@ export * from './useMarket';
 export * from './useMarketPhase';
 export * from './useOrders';
 export * from './useProtocolInformation';
+export * from './useOrderList';

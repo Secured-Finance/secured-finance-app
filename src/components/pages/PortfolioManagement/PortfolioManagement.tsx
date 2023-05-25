@@ -25,9 +25,8 @@ import {
     usdFormat,
     formatOrders,
 } from 'src/utils';
-import { useCollateralBook } from 'src/hooks';
+import { useCollateralBook, useOrderList } from 'src/hooks';
 import { useWallet } from 'use-wallet';
-import { useOrderList } from 'src/hooks/useOrderList';
 import { TradeHistory } from 'src/types';
 
 export type Trade = TradeHistory[0];
