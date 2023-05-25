@@ -8,7 +8,7 @@ describe('test Counter component', () => {
     it('should render default counter', async () => {
         render(<Default />);
         await waitFor(
-            () => expect(screen.getByText('$12.234M')).toBeInTheDocument(),
+            () => expect(screen.getByText('$12.23M')).toBeInTheDocument(),
             {
                 timeout: 3000,
             }
@@ -38,7 +38,7 @@ describe('test Counter component', () => {
     it('should render only suffix counter', async () => {
         render(<OnlySuffix />);
         await waitFor(
-            () => expect(screen.getByText('40.2K')).toBeInTheDocument(),
+            () => expect(screen.getByText('40.20K')).toBeInTheDocument(),
             {
                 timeout: 3000,
             }

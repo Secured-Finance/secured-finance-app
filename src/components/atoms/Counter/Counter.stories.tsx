@@ -5,7 +5,7 @@ export default {
     title: 'Atoms/Counter',
     component: Counter,
     args: {
-        value: 12.234,
+        value: 12.23,
         prefix: '$',
         suffix: 'M',
     },
