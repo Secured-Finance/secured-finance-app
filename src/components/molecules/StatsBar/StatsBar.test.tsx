@@ -1,11 +1,11 @@
 import { composeStories } from '@storybook/testing-react';
 import { render, screen } from 'src/test-utils.js';
-import * as stories from './HeaderTable.stories';
+import * as stories from './StatsBar.stories';
 
 const { Default } = composeStories(stories);
 
-describe('test Header Component', () => {
-    it('should render Header Table', () => {
+describe('test Stats Bar Component', () => {
+    it('should render Stats Bar', () => {
         render(<Default />);
     });
 

@@ -1,9 +1,9 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
-import { HeaderTable } from './HeaderTable';
+import { StatsBar } from './StatsBar';
 
 export default {
-    title: 'Molecules/HeaderTable',
-    component: HeaderTable,
+    title: 'Molecules/StatsBar',
+    component: StatsBar,
     args: {
         values: [
             {
@@ -27,10 +27,10 @@ export default {
     parameters: {
         chromatic: { delay: 3000 },
     },
-} as ComponentMeta<typeof HeaderTable>;
+} as ComponentMeta<typeof StatsBar>;
 
-const Template: ComponentStory<typeof HeaderTable> = args => (
-    <HeaderTable {...args} />
+const Template: ComponentStory<typeof StatsBar> = args => (
+    <StatsBar {...args} />
 );
 
 export const Default = Template.bind({});

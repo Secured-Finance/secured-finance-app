@@ -1,6 +1,6 @@
 import queries from '@secured-finance/sf-graph-client/dist/graphclients';
 import { useSelector } from 'react-redux';
-import { HeaderTable, HorizontalTab } from 'src/components/molecules';
+import { HorizontalTab, StatsBar } from 'src/components/molecules';
 import {
     ActiveTradeTable,
     CollateralOrganism,
@@ -51,7 +51,7 @@ export const PortfolioManagement = () => {
         <Page title='Portfolio Management' name='portfolio-management'>
             <TwoColumns>
                 <div className='flex flex-col gap-6'>
-                    <HeaderTable
+                    <StatsBar
                         testid='portfolio-management'
                         values={[
                             {

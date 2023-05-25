@@ -6,7 +6,7 @@ import {
     CollateralManagementConciseTab,
     GradientBox,
 } from 'src/components/atoms';
-import { HeaderTable } from 'src/components/molecules';
+import { StatsBar } from 'src/components/molecules';
 import {
     ConnectWalletCard,
     Loan,
@@ -121,7 +121,7 @@ export const MarketDashboard = () => {
         <Page title='Market Dashboard' name='dashboard-page'>
             <TwoColumns>
                 <div className='grid grid-cols-1 gap-y-7'>
-                    <HeaderTable
+                    <StatsBar
                         testid='market-dashboard'
                         values={[
                             {
