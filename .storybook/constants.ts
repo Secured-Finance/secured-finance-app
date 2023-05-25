@@ -31,7 +31,21 @@ const customViewports = {
     },
 };
 
-const CHROMATIC_VIEWPORTS = { viewports: [390, 768, 1024, 1440] };
+export enum VIEWPORTS {
+    MOBILE = 390,
+    TABLET = 768,
+    LAPTOP = 1024,
+    DESKTOP = 1440,
+}
+
+const CHROMATIC_VIEWPORTS = {
+    viewports: [
+        VIEWPORTS.MOBILE,
+        VIEWPORTS.TABLET,
+        VIEWPORTS.LAPTOP,
+        VIEWPORTS.DESKTOP,
+    ],
+};
 
 export const RESPONSIVE_PARAMETERS = {
     viewport: {

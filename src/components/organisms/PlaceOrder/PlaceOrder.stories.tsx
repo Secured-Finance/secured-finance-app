@@ -1,4 +1,4 @@
-import { RESPONSIVE_PARAMETERS } from '.storybook/constants';
+import { RESPONSIVE_PARAMETERS, VIEWPORTS } from '.storybook/constants';
 import { withAssetPrice, withWalletProvider } from '.storybook/decorators';
 import { OrderSide, WalletSource } from '@secured-finance/sf-client';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
@@ -26,6 +26,9 @@ export default {
     decorators: [withAssetPrice, withWalletProvider],
     parameters: {
         ...RESPONSIVE_PARAMETERS,
+        chromatic: {
+            viewports: [VIEWPORTS.MOBILE, VIEWPORTS.TABLET],
+        },
     },
 } as ComponentMeta<typeof PlaceOrder>;
 
