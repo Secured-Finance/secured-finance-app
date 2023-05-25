@@ -37,17 +37,17 @@ export const Header = () => {
             <nav
                 data-cy='header'
                 className={classNames(
-                    'grid h-20 w-full grid-cols-4 items-center justify-between border-b border-neutral-1 tablet:grid-cols-7',
+                    'grid h-20 w-full grid-flow-col border-b border-neutral-1 laptop:grid-cols-7',
                     {
                         'blur-sm': open,
                     }
                 )}
             >
-                <div className='col-span-2 ml-5 flex flex-row items-center gap-3'>
+                <div className='col-span-2 flex flex-row items-center gap-3'>
                     <Link href='/' passHref>
                         <a href='_'>
-                            <SFLogo className='hidden tablet:inline tablet:h-5 tablet:w-[100px] desktop:h-10 desktop:w-[200px]' />
-                            <SFLogoSmall className='inline h-10 w-10 tablet:hidden' />
+                            <SFLogo className='hidden tablet:inline tablet:h-10 tablet:w-[200px]' />
+                            <SFLogoSmall className='inline h-7 w-7 tablet:hidden' />
                         </a>
                     </Link>
                     {envShort && (
@@ -56,7 +56,7 @@ export const Header = () => {
                         </div>
                     )}
                 </div>
-                <div className='hidden h-full w-full tablet:inline'>
+                <div className='hidden h-full w-full laptop:inline'>
                     <ItemLink
                         text='OTC Lending'
                         dataCy='lending'
@@ -64,24 +64,24 @@ export const Header = () => {
                         alternateLink='/advanced'
                     />
                 </div>
-                <div className='hidden h-full w-full tablet:inline'>
+                <div className='hidden h-full w-full laptop:inline'>
                     <ItemLink
                         text='Market Dashboard'
                         dataCy='terminal'
                         link='/dashboard'
                     />
                 </div>
-                <div className='hidden h-full w-full tablet:inline'>
+                <div className='hidden h-full w-full laptop:inline'>
                     <ItemLink
                         text='Portfolio Management'
                         dataCy='history'
                         link='/portfolio'
                     />
                 </div>
-                <div className='hidden h-full w-full tablet:inline'>
+                <div className='hidden h-full w-full laptop:inline'>
                     <MenuPopover />
                 </div>
-                <div className='col-span-2 flex flex-row items-center justify-end gap-2 pr-2 tablet:col-span-1'>
+                <div className='col-span-2 flex flex-row items-center justify-end gap-2 laptop:col-span-1'>
                     {account ? (
                         <WalletPopover
                             wallet={AddressUtils.format(account, 6)}
@@ -98,7 +98,8 @@ export const Header = () => {
                             Connect Wallet
                         </Button>
                     )}
-                    <button className='inline tablet:hidden'>
+
+                    <button className='inline laptop:hidden'>
                         <Burger className='h-8 w-8' />
                     </button>
                 </div>
