@@ -60,9 +60,6 @@ export const AdvancedLendingTopBar = <T extends string = string>({
         [onAssetChange]
     );
 
-    const lastTradePrice = Number(formatLoanValue(lastTradeLoan, 'price'));
-    const lastTradeRate = `${formatLoanValue(lastTradeLoan, 'rate')} APR`;
-
     return (
         <GradientBox shape='rectangle'>
             <div className='flex min-w-full flex-row items-stretch justify-between gap-6 px-6 py-3'>
@@ -77,7 +74,10 @@ export const AdvancedLendingTopBar = <T extends string = string>({
                     />
                 </div>
 
-                <MarketTab name={lastTradePrice} value={lastTradeRate} />
+                <MarketTab
+                    name={Number(formatLoanValue(lastTradeLoan, 'price'))}
+                    value={`${formatLoanValue(lastTradeLoan, 'rate')} APR`}
+                />
                 <Separator />
                 <MarketTab name='24h High' value={getValue(values, 0)} />
                 <Separator />
