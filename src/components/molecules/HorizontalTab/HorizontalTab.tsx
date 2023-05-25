@@ -27,7 +27,7 @@ export const HorizontalTab = ({
     tabTitles,
     children,
 }: {
-    tabTitles: string[];
+    tabTitles: [string, string][] | string[];
     children?: React.ReactNode;
 }) => {
     const arrayChildren = Children.toArray(children);
@@ -41,16 +41,23 @@ export const HorizontalTab = ({
             >
                 <HeadlessTab.List className='flex h-16 justify-start border-b border-white-10 px-5 py-3'>
                     {tabTitles.map(title => {
+                        const chipTitle =
+                            typeof title === 'string' ? title : title[0];
+                        const chipClassName =
+                            typeof title === 'string' ? '' : title[1];
+
                         return (
                             <HeadlessTab
-                                key={title}
+                                key={chipTitle}
                                 className='h-full focus:outline-none'
                             >
                                 {({ selected }) => (
-                                    <TitleChip
-                                        title={title}
-                                        selected={selected}
-                                    />
+                                    <div className={chipClassName}>
+                                        <TitleChip
+                                            title={chipTitle}
+                                            selected={selected}
+                                        />
+                                    </div>
                                 )}
                             </HeadlessTab>
                         );
