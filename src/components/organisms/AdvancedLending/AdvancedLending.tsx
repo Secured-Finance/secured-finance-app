@@ -17,7 +17,7 @@ import {
 import { TwoColumnsWithTopBar } from 'src/components/templates';
 import { CollateralBook, useGraphClientHook } from 'src/hooks';
 import { useOrderbook } from 'src/hooks/useOrderbook';
-import { useOrderList } from 'src/hooks/useOrderList';
+import { useOrderList } from 'src/hooks';
 import { getAssetPrice } from 'src/store/assetPrices/selectors';
 import {
     selectLandingOrderForm,

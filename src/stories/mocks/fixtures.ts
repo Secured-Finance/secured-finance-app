@@ -9,7 +9,7 @@ import WrappedBitcoinIcon from 'src/assets/coins/wbtc.svg';
 import SFLogoSmall from 'src/assets/img/logo-small.svg';
 import MetamaskIcon from 'src/assets/img/metamask-fox.svg';
 import { Option, WalletSourceOption } from 'src/components/atoms';
-import { CollateralBook } from 'src/hooks';
+import { CollateralBook, Order } from 'src/hooks';
 import { AssetPrices } from 'src/store/assetPrices';
 import { RootState } from 'src/store/types';
 import {
@@ -21,7 +21,6 @@ import {
 } from 'src/types';
 import { CurrencySymbol, Rate, TradeSummary } from 'src/utils';
 import { Maturity } from 'src/utils/entities';
-import { Order } from 'src/hooks/useOrderList';
 
 export const preloadedAssetPrices: { assetPrices: AssetPrices } = {
     assetPrices: {

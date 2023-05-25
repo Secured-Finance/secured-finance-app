@@ -1,7 +1,7 @@
 import { createColumnHelper } from '@tanstack/react-table';
 import { useMemo } from 'react';
 import { CoreTable, OpenOrderActionCell } from 'src/components/molecules';
-import { Order } from 'src/hooks/useOrderList';
+import { Order } from 'src/hooks';
 import { hexToCurrencySymbol } from 'src/utils';
 import { Maturity } from 'src/utils/entities';
 import {
