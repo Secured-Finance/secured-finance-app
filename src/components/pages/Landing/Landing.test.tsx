@@ -32,8 +32,6 @@ jest.mock('src/hooks/useSecuredFinance', () => () => mock);
 const preloadedState = { ...preloadedBalances, ...preloadedLendingMarkets };
 
 describe('Landing Component', () => {
-    jest.setTimeout(8000);
-
     it('should render a Landing', async () => {
         await waitFor(() => {
             render(<Default />, {
@@ -44,25 +42,28 @@ describe('Landing Component', () => {
     });
 
     it('should change the rate when the user changes the maturity', async () => {
-        await waitFor(() => {
-            render(<Default />, {
-                apolloMocks: Default.parameters?.apolloClient.mocks,
-                preloadedState: {
-                    ...preloadedState,
-                    landingOrderForm: {
-                        currency: CurrencySymbol.EFIL,
-                        maturity: 1669852800,
-                        side: OrderSide.BORROW,
-                        amount: '500000000',
-                        unitPrice: 9500,
-                        orderType: OrderType.LIMIT,
-                        marketPhase: 'Open',
-                    },
+        render(<Default />, {
+            apolloMocks: Default.parameters?.apolloClient.mocks,
+            preloadedState: {
+                ...preloadedState,
+                landingOrderForm: {
+                    currency: CurrencySymbol.EFIL,
+                    maturity: 1669852800,
+                    side: OrderSide.BORROW,
+                    amount: '500000000',
+                    unitPrice: 9500,
+                    orderType: OrderType.LIMIT,
+                    marketPhase: 'Open',
                 },
-            });
+            },
         });
 
-        expect(screen.getByTestId('market-rate')).toHaveTextContent('3.26%');
+        await waitFor(() => {
+            expect(screen.getByTestId('market-rate')).toHaveTextContent(
+                '3.26%'
+            );
+        });
+
         fireEvent.click(screen.getByRole('button', { name: 'DEC22' }));
         fireEvent.click(screen.getByText('MAR23'));
         expect(screen.getByTestId('market-rate')).toHaveTextContent('2.62%');
