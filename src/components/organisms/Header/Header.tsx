@@ -2,11 +2,10 @@ import classNames from 'classnames';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useDispatch, useSelector } from 'react-redux';
-import Burger from 'src/assets/img/burger.svg';
 import SFLogo from 'src/assets/img/logo.svg';
 import SFLogoSmall from 'src/assets/img/small-logo.svg';
 import { Button, NavTab } from 'src/components/atoms';
-import { MenuPopover } from 'src/components/molecules';
+import { HamburgerMenu, MenuPopover } from 'src/components/molecules';
 import { WalletDialog, WalletPopover } from 'src/components/organisms';
 import useSF from 'src/hooks/useSecuredFinance';
 import { setWalletDialogOpen } from 'src/store/interactions';
@@ -14,6 +13,25 @@ import { RootState } from 'src/store/types';
 import { getEnvShort } from 'src/utils';
 import { AddressUtils } from 'src/utils/address';
 import { useWallet } from 'use-wallet';
+
+const LINKS = [
+    {
+        text: 'OTC Lending',
+        link: '/',
+        alternateLink: '/advanced',
+        dataCy: 'lending',
+    },
+    {
+        text: 'Market Dashboard',
+        link: '/dashboard',
+        dataCy: 'terminal',
+    },
+    {
+        text: 'Portfolio Management',
+        link: '/portfolio',
+        dataCy: 'history',
+    },
+];
 
 export const Header = () => {
     const dispatch = useDispatch();
@@ -28,7 +46,7 @@ export const Header = () => {
     const envShort = getEnvShort();
 
     return (
-        <div>
+        <div className='relative'>
             {!chainError && (
                 <div className='typography-caption-2 w-full bg-horizonBlue/100 p-[1px] text-center text-neutral-8'>
                     You are visiting Secured Finance on testnet
@@ -56,28 +74,19 @@ export const Header = () => {
                         </div>
                     )}
                 </div>
-                <div className='hidden h-full w-full laptop:inline'>
-                    <ItemLink
-                        text='OTC Lending'
-                        dataCy='lending'
-                        link='/'
-                        alternateLink='/advanced'
-                    />
-                </div>
-                <div className='hidden h-full w-full laptop:inline'>
-                    <ItemLink
-                        text='Market Dashboard'
-                        dataCy='terminal'
-                        link='/dashboard'
-                    />
-                </div>
-                <div className='hidden h-full w-full laptop:inline'>
-                    <ItemLink
-                        text='Portfolio Management'
-                        dataCy='history'
-                        link='/portfolio'
-                    />
-                </div>
+                {LINKS.map(link => (
+                    <div
+                        key={link.text}
+                        className='hidden h-full w-full laptop:inline'
+                    >
+                        <ItemLink
+                            text={link.text}
+                            dataCy={link.dataCy}
+                            link={link.link}
+                            alternateLink={link?.alternateLink}
+                        />
+                    </div>
+                ))}
                 <div className='hidden h-full w-full laptop:inline'>
                     <MenuPopover />
                 </div>
@@ -99,9 +108,14 @@ export const Header = () => {
                         </Button>
                     )}
 
-                    <button className='inline laptop:hidden'>
-                        <Burger className='h-8 w-8' />
-                    </button>
+                    <div className='inline laptop:hidden'>
+                        <HamburgerMenu
+                            links={LINKS.map(link => ({
+                                label: link.text,
+                                link: link.link,
+                            }))}
+                        />
+                    </div>
                 </div>
                 <WalletDialog />
             </nav>
