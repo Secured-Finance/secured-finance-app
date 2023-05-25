@@ -1,16 +1,16 @@
 import React from 'react';
 import {
     GradientBox,
-    HeaderTableTab,
-    HeaderTableTabProps,
     Separator,
+    StatsBox,
+    StatsBoxProps,
 } from 'src/components/atoms';
 
-export const HeaderTable = ({
+export const StatsBar = ({
     values,
     testid,
 }: {
-    values: Array<HeaderTableTabProps>;
+    values: Array<StatsBoxProps>;
     testid: string;
 }) => {
     return (
@@ -19,7 +19,7 @@ export const HeaderTable = ({
                 {values.map((item, index) => {
                     return (
                         <React.Fragment key={`${testid}-table-${index}`}>
-                            <HeaderTableTab
+                            <StatsBox
                                 key={item.name}
                                 {...item}
                                 value={item.value}
