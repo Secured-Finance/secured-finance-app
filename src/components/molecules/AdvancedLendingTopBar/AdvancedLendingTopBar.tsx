@@ -20,7 +20,7 @@ type AdvancedLendingTopBarProp<T> = {
     selected: Option<T>;
     onAssetChange?: (v: CurrencySymbol) => void;
     onTermChange?: (v: T) => void;
-    lastTradeLoan?: LoanValue;
+    lastTradeLoan: LoanValue;
     values?: [ValueField, ValueField, ValueField, ValueField, ValueField];
 };
 
@@ -60,12 +60,8 @@ export const AdvancedLendingTopBar = <T extends string = string>({
         [onAssetChange]
     );
 
-    const lastTradePrice = lastTradeLoan
-        ? Number(formatLoanValue(lastTradeLoan, 'price'))
-        : 0;
-    const lastTradeRate = lastTradeLoan
-        ? `${formatLoanValue(lastTradeLoan, 'rate')} APR`
-        : '0.00 % APR';
+    const lastTradePrice = Number(formatLoanValue(lastTradeLoan, 'price'));
+    const lastTradeRate = `${formatLoanValue(lastTradeLoan, 'rate')} APR`;
 
     return (
         <GradientBox shape='rectangle'>
