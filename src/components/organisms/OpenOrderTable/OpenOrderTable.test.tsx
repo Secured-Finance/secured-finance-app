@@ -9,7 +9,7 @@ describe('OpenOrderTable Component', () => {
         render(<Default />);
     });
 
-    it('should only display the open orders', () => {
+    it('should display all the active orders', () => {
         render(<Default />);
         expect(screen.getAllByTestId('open-order-table-row')).toHaveLength(5);
 
