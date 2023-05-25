@@ -48,7 +48,7 @@ export default {
         apolloClient: {
             mocks: [...totalUser, ...mockDailyVolumes],
         },
-        chromatic: { delay: 3000 },
+        chromatic: { delay: 5000 },
     },
     decorators: [
         withAppLayout,

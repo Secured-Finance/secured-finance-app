@@ -35,10 +35,10 @@ export const Counter = ({
     }, [value]);
 
     return (
-        <span
+        <div
             className='typography-body-1 h-8 w-full text-center text-white'
             ref={countupRef}
-        ></span>
+        ></div>
     );
 };
 
