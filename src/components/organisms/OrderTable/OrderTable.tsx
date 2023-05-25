@@ -13,7 +13,7 @@ import {
 
 const columnHelper = createColumnHelper<Order>();
 
-export const OpenOrderTable = ({ data }: { data: Order[] }) => {
+export const OrderTable = ({ data }: { data: Order[] }) => {
     const columns = useMemo(
         () => [
             loanTypeColumnDefinition(columnHelper, 'Type', 'type'),

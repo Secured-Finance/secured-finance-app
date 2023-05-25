@@ -1,16 +1,17 @@
 import { composeStories } from '@storybook/testing-react';
 import { render, screen } from 'src/test-utils.js';
-import * as stories from './OpenOrderTable.stories';
+import * as stories from './OrderTable.stories';
 
 const { Default } = composeStories(stories);
 
-describe('OpenOrderTable Component', () => {
-    it('should render a OpenOrderTable', () => {
+describe('OrderTable Component', () => {
+    it('should render a OrderTable', () => {
         render(<Default />);
     });
 
-    it('should display all the active orders', () => {
+    it('should sort the open orders contract column correctly according to currency and maturity', () => {
         render(<Default />);
+
         expect(screen.getAllByTestId('open-order-table-row')).toHaveLength(5);
 
         const initialRows = screen.getAllByRole('row');

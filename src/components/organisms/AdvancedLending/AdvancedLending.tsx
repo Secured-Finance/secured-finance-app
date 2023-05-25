@@ -11,7 +11,7 @@ import {
 import {
     AdvancedLendingOrderCard,
     LineChartTab,
-    OpenOrderTable,
+    OrderTable,
     OrderWidget,
 } from 'src/components/organisms';
 import { TwoColumnsWithTopBar } from 'src/components/templates';
@@ -198,7 +198,7 @@ export const AdvancedLending = ({
                         currency={currency}
                     />
                     <></>
-                    <OpenOrderTable data={orderList.activeOrderList} />
+                    <OrderTable data={orderList.activeOrderList} />
                 </HorizontalTab>
             </div>
         </TwoColumnsWithTopBar>
