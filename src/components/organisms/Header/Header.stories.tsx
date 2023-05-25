@@ -1,9 +1,11 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
-import { RESPONSIVE_PARAMETERS } from 'src/../.storybook/constants';
+import { RESPONSIVE_PARAMETERS, VIEWPORTS } from '.storybook/constants';
 import {
     withChainErrorDisabled,
     withWalletProvider,
-} from 'src/../.storybook/decorators';
+} from '.storybook/decorators';
+import { expect } from '@storybook/jest';
+import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { within } from '@storybook/testing-library';
 import { Header } from './';
 
 export default {
@@ -22,4 +24,22 @@ export const Primary = Template.bind({});
 export const Connected = Template.bind({});
 Connected.parameters = {
     connected: true,
+};
+
+export const MenuExpanded = Template.bind({});
+MenuExpanded.play = async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    canvas.getByRole('button', { name: 'Hamburger Menu' }).click();
+    await expect(
+        canvas.getByRole('link', { name: 'Market Dashboard' })
+    ).toBeVisible();
+    await expect(
+        canvas.getByRole('link', { name: 'OTC Lending' })
+    ).toBeVisible();
+    await expect(
+        canvas.getByRole('link', { name: 'Portfolio Management' })
+    ).toBeVisible();
+};
+MenuExpanded.parameters = {
+    chromatic: [VIEWPORTS.MOBILE, VIEWPORTS.TABLET],
 };
