@@ -1,6 +1,5 @@
 import { MockedProvider } from '@apollo/client/testing';
 import '@storybook/addon-console';
-import { INITIAL_VIEWPORTS } from '@storybook/addon-viewport';
 import { Provider } from 'react-redux';
 import 'src/assets/css/index.css';
 import { withPerformance } from 'storybook-addon-performance';
@@ -18,7 +17,8 @@ export const parameters = {
     },
 
     viewport: {
-        viewports: INITIAL_VIEWPORTS,
+        disable: true,
+        defaultViewport: 'responsive',
     },
 
     backgrounds: {

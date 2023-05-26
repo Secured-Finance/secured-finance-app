@@ -114,7 +114,7 @@ export const withAssetPrice = (Story: Story) => {
 };
 
 export const WithGraphClient = (Story: Story) => (
-    <GraphClientProvider network='goerli'>
+    <GraphClientProvider network='sepolia'>
         <Story />
     </GraphClientProvider>
 );

@@ -12,11 +12,11 @@ export const Layout = ({
             className='flex h-screen flex-col justify-between overflow-y-auto'
             data-testid='wrapper-div'
         >
-            <div>
-                <header>{navBar}</header>
-                <main className='pb-8'>{children}</main>
+            <div className='w-full'>
+                <header className='w-full'>{navBar}</header>
+                <main className='w-full pb-8'>{children}</main>
             </div>
-            <footer>{footer}</footer>
+            <footer className='w-full'>{footer}</footer>
         </div>
     );
 };
