@@ -14,12 +14,13 @@ import { currencyMap, hexToCurrencySymbol } from './currencyList';
 import { LoanValue, Maturity } from './entities';
 
 export const tableHeaderDefinition =
-    <TData,>(title: string) =>
+    <TData,>(title: string, titleHint?: string) =>
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (header: HeaderContext<TData, any>) =>
         (
             <TableHeader
                 title={title}
+                titleHint={titleHint}
                 sortingHandler={header.column.getToggleSortingHandler()}
                 isSorted={header.column.getIsSorted()}
             />
@@ -56,7 +57,8 @@ export const amountColumnDefinition = <T extends AmountColumnType>(
         color: boolean;
         compact: boolean;
         priceList?: AssetPriceMap;
-    }
+    },
+    titleHint?: string
 ) => {
     return columnHelper.accessor(accessor, {
         id: id,
@@ -76,21 +78,23 @@ export const amountColumnDefinition = <T extends AmountColumnType>(
             }
 
             return (
-                <div className='flex justify-center'>
-                    <CurrencyItem
-                        amount={currencyMap[ccy].fromBaseUnit(
-                            info.getValue() as BigNumber
-                        )}
-                        ccy={ccy}
-                        align='right'
-                        price={options.priceList?.[ccy]}
-                        color={options.color ? color : undefined}
-                        compact={options.compact}
-                    />
+                <div className='flex w-full items-center justify-end pr-[15%]'>
+                    <div className='flex justify-end'>
+                        <CurrencyItem
+                            amount={currencyMap[ccy].fromBaseUnit(
+                                info.getValue() as BigNumber
+                            )}
+                            ccy={ccy}
+                            align='right'
+                            price={options.priceList?.[ccy]}
+                            color={options.color ? color : undefined}
+                            compact={options.compact}
+                        />
+                    </div>
                 </div>
             );
         },
-        header: tableHeaderDefinition(title),
+        header: tableHeaderDefinition(title, titleHint),
     });
 };
 
@@ -190,7 +194,8 @@ export const priceYieldColumnDefinition = <T extends { maturity: string }>(
     id: string,
     accessor: AccessorFn<T, BigNumber>,
     variant: 'compact' | 'default' = 'default',
-    type: Parameters<typeof PriceYieldItem>[0]['firstLineType'] = 'price'
+    type: Parameters<typeof PriceYieldItem>[0]['firstLineType'] = 'price',
+    titleHint?: string
 ) => {
     return columnHelper.accessor(accessor, {
         id: id,
@@ -208,6 +213,6 @@ export const priceYieldColumnDefinition = <T extends { maturity: string }>(
                 </div>
             );
         },
-        header: tableHeaderDefinition(title),
+        header: tableHeaderDefinition(title, titleHint),
     });
 };

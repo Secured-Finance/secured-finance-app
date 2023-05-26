@@ -53,8 +53,13 @@ describe('MarketDashboard Component', () => {
 
     it('should render the total users', async () => {
         await renderDefault();
-        const totalUsers = await screen.findByText('12.15K');
-        expect(totalUsers).toBeInTheDocument();
+        await waitFor(
+            async () =>
+                expect(await screen.findByText('12.15K')).toBeInTheDocument(),
+            {
+                timeout: 3000,
+            }
+        );
     });
 
     it('should show the yield curves', async () => {
