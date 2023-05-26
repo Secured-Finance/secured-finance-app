@@ -12,10 +12,11 @@ import {
     maturityOptions,
     yieldCurveRates,
 } from 'src/stories/mocks/fixtures';
-import { mockTrades, mockUserHistory } from 'src/stories/mocks/queries';
+import { mockTrades, mockUserHistory, today } from 'src/stories/mocks/queries';
 import { Rate } from 'src/utils';
 import { LoanValue } from 'src/utils/entities';
 import { AdvancedLending } from './AdvancedLending';
+import * as jest from 'jest-mock';
 
 export default {
     title: 'Organism/AdvancedLending',
@@ -36,6 +37,7 @@ export default {
 } as ComponentMeta<typeof AdvancedLending>;
 
 const Template: ComponentStory<typeof AdvancedLending> = args => {
+    jest.spyOn(Date.prototype, 'getTime').mockReturnValue(today * 1000);
     return <AdvancedLending {...args} />;
 };
 
