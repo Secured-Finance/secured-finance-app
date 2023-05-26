@@ -29,6 +29,7 @@ export default {
             mocks: mockUserHistory,
         },
         connected: true,
+        chromatic: { delay: 3000 },
     },
 } as ComponentMeta<typeof PortfolioManagement>;
 
