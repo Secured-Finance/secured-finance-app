@@ -1,8 +1,10 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { within } from '@storybook/testing-library';
+import { RESPONSIVE_PARAMETERS } from 'src/../.storybook/constants';
 import {
     withAppLayout,
     withAssetPrice,
+    withChainErrorDisabled,
     withMaturities,
     withWalletBalances,
     withWalletProvider,
@@ -17,19 +19,21 @@ import { Landing } from './Landing';
 export default {
     title: 'Pages/Landing',
     component: Landing,
-    chromatic: { pauseAnimationAtEnd: true },
     decorators: [
         withAppLayout,
         withMaturities,
         withAssetPrice,
         withWalletBalances,
         withWalletProvider,
+        withChainErrorDisabled,
     ],
     parameters: {
         apolloClient: {
             mocks: [...mockUserHistory, ...mockTrades, ...mockDailyVolumes],
         },
         date: { value: new Date('2021-12-01T11:00:00.00Z') },
+        ...RESPONSIVE_PARAMETERS,
+        layout: 'fullscreen',
     },
 } as ComponentMeta<typeof Landing>;
 

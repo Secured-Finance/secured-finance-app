@@ -9,7 +9,7 @@ describe('AdvancedLendingTopBar Component', () => {
         render(<Default />);
 
         expect(
-            screen.getByRole('button', { name: 'Wrapped Bitcoin' })
+            screen.getByRole('button', { name: 'EFIL' })
         ).toBeInTheDocument();
         expect(screen.getByText('Maturity Dec 1, 2022')).toBeInTheDocument();
 
@@ -45,13 +45,13 @@ describe('AdvancedLendingTopBar Component', () => {
         render(<Default />);
 
         expect(
-            screen.getByRole('button', { name: 'Wrapped Bitcoin' })
+            screen.getByRole('button', { name: 'EFIL' })
         ).toBeInTheDocument();
         const source = screen.getByRole('link');
         expect(source).toBeInTheDocument();
         expect(source).toHaveAttribute(
             'href',
-            'https://www.coingecko.com/en/coins/wrapped-bitcoin'
+            'https://www.coingecko.com/en/coins/filecoin'
         );
     });
 });

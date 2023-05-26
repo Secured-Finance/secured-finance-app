@@ -10,7 +10,7 @@ import { Blockchain } from './type';
 
 const initialState: Blockchain = {
     latestBlock: 0,
-    chainError: false,
+    chainError: true,
 };
 
 const blockchainSlice = createSlice({

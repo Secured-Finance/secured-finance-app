@@ -189,10 +189,10 @@ export const AdvancedLending = ({
                 </Tab>
                 <HorizontalTab
                     tabTitles={[
-                        'Order Book',
-                        'Market Trades',
-                        'My Orders',
-                        'My Trades',
+                        ['Order Book', ''],
+                        ['Market Trades', ''],
+                        ['My Orders', 'hidden tablet:inline'],
+                        ['My Trades', 'hidden tablet:inline'],
                     ]}
                 >
                     <OrderWidget

@@ -10,9 +10,9 @@ import {
 
 describe('getEthereumNetwork', () => {
     it('should return the value of the environment variable', () => {
-        process.env.NEXT_PUBLIC_ETHEREUM_NETWORK = 'goerli';
+        process.env.NEXT_PUBLIC_ETHEREUM_NETWORK = 'sepolia';
         const network = getEthereumNetwork();
-        expect(network).toBe('goerli');
+        expect(network).toBe('sepolia');
         expect(typeof network).toBe('string');
     });
 
@@ -42,13 +42,13 @@ describe('getEthereumChainId ', () => {
 
 describe('getRpcEndpoint', () => {
     beforeEach(() => {
-        process.env.NEXT_PUBLIC_ETHEREUM_NETWORK = 'goerli';
+        process.env.NEXT_PUBLIC_ETHEREUM_NETWORK = 'sepolia';
         process.env.NEXT_PUBLIC_ALCHEMY_API_KEY = 'test';
     });
 
     it('should return rpc endpoint', () => {
         const network = getRpcEndpoint();
-        expect(network).toBe(`https://eth-goerli.g.alchemy.com/v2/test`);
+        expect(network).toBe(`https://eth-sepolia.g.alchemy.com/v2/test`);
     });
 
     it('should throw error if NEXT_PUBLIC_ETHEREUM_NETWORK is not set', () => {
