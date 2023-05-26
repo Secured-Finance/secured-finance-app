@@ -32,7 +32,7 @@ jest.mock('src/hooks/useSecuredFinance', () => () => mock);
 const preloadedState = { ...preloadedBalances, ...preloadedLendingMarkets };
 
 describe('Landing Component', () => {
-    it.skip('should change the rate when the user changes the maturity', async () => {
+    it('should change the rate when the user changes the maturity', async () => {
         render(<Default />, {
             apolloMocks: Default.parameters?.apolloClient.mocks,
             preloadedState: {
@@ -58,7 +58,7 @@ describe('Landing Component', () => {
         fireEvent.click(screen.getByRole('button', { name: 'DEC22' }));
         fireEvent.click(screen.getByText('MAR23'));
         expect(screen.getByTestId('market-rate')).toHaveTextContent('2.62%');
-    });
+    }, 10000); //TODO: TEST THROWS TIMEOUT EXCEEDED WARNING ON GITHUB ACTIONS
 
     it('should select the market order type when the user change to advance mode', async () => {
         waitFor(() => {

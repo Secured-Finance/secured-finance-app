@@ -69,5 +69,5 @@ describe('MarketDashboard Component', () => {
             'Collateral Utilization'
         );
         expect(collateralWidget).toBeInTheDocument();
-    });
+    }, 10000); //TODO: TEST THROWS TIMEOUT EXCEEDED WARNING ON GITHUB ACTIONS
 });
