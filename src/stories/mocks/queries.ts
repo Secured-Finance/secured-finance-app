@@ -94,8 +94,8 @@ export const mockDailyVolumes = [
     },
 ];
 
-const today = 1638356400;
-const yesterday = 1638270000;
+export const today = 162187200;
+const yesterday = today - 24 * 3600;
 export const mockTrades = [
     {
         request: {
