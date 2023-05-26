@@ -27,6 +27,9 @@ Connected.parameters = {
 };
 
 export const MenuExpanded = Template.bind({});
+MenuExpanded.parameters = {
+    chromatic: { viewports: [VIEWPORTS.MOBILE, VIEWPORTS.TABLET] },
+};
 MenuExpanded.play = async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     canvas.getByRole('button', { name: 'Hamburger Menu' }).click();
