@@ -1,9 +1,7 @@
+import { RESPONSIVE_PARAMETERS, VIEWPORTS } from '.storybook/constants';
+import { withAssetPrice, withWalletProvider } from '.storybook/decorators';
 import { OrderSide, WalletSource } from '@secured-finance/sf-client';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
-import {
-    withAssetPrice,
-    withWalletProvider,
-} from 'src/../.storybook/decorators';
 import { collateralBook37, dec22Fixture } from 'src/stories/mocks/fixtures';
 import { OrderType } from 'src/types';
 import { CurrencySymbol } from 'src/utils';
@@ -26,6 +24,12 @@ export default {
         walletSource: WalletSource.METAMASK,
     },
     decorators: [withAssetPrice, withWalletProvider],
+    parameters: {
+        ...RESPONSIVE_PARAMETERS,
+        chromatic: {
+            viewports: [VIEWPORTS.MOBILE, VIEWPORTS.TABLET],
+        },
+    },
 } as ComponentMeta<typeof PlaceOrder>;
 
 const Template: ComponentStory<typeof PlaceOrder> = args => {

@@ -98,6 +98,7 @@ export const WalletPopover = ({
                         <>
                             <Popover.Button
                                 data-cy='popover-button'
+                                aria-label='Wallet Popover Button'
                                 className={classNames(
                                     'flex items-center space-x-3 rounded-xl bg-transparent p-3 ring ring-neutral hover:bg-neutral',
                                     { 'bg-neutral': open }

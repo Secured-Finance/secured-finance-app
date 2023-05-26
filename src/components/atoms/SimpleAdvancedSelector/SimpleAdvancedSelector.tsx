@@ -1,4 +1,5 @@
 import { RadioGroup } from '@headlessui/react';
+import classNames from 'classnames';
 
 export type ViewType = 'Simple' | 'Advanced';
 
@@ -29,7 +30,7 @@ export const SimpleAdvancedSelector = ({
             <RadioGroup.Option
                 aria-label='Advanced'
                 value='Advanced'
-                className='h-full w-1/2'
+                className='-ml-3 h-full w-1/2'
                 as='button'
             >
                 {({ checked }) => (
@@ -49,9 +50,13 @@ const SimpleAdvancedButton = ({
 }) => {
     return (
         <div
-            className={`typography-caption flex h-full w-[100px] items-center justify-center rounded-full duration-300 hover:opacity-100 hover:ease-in-out ${
-                active ? 'bg-starBlue text-white' : 'text-white opacity-40'
-            }`}
+            className={classNames(
+                'typography-caption flex h-full w-fit items-center justify-center rounded-full px-4 duration-300 hover:opacity-100 hover:ease-in-out',
+                {
+                    'bg-starBlue text-white': active,
+                    'text-white opacity-40': !active,
+                }
+            )}
         >
             {text}
         </div>

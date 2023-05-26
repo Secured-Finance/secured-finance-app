@@ -45,4 +45,11 @@ describe('HorizontalTab Component', () => {
         render(<HorizontalTab tabTitles={[]}></HorizontalTab>);
         expect(screen.getByRole('tablist')).toBeInTheDocument();
     });
+
+    it('should style the chip parent div if specified', () => {
+        render(<Default tabTitles={[['This is a tab title', 'px-3']]} />);
+        expect(
+            screen.getByText('This is a tab title').parentElement
+        ).toHaveClass('px-3');
+    });
 });
