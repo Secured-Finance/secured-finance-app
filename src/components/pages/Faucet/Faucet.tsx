@@ -26,7 +26,7 @@ import {
 import { useWallet } from 'use-wallet';
 
 export const Faucet = () => {
-    const { account } = useWallet();
+    const { account, ethereum } = useWallet();
     const sf = useSF();
 
     const assetList = useMemo(
@@ -74,6 +74,24 @@ export const Faucet = () => {
         }
         setIsPending(false);
     }, [account, token, sf]);
+
+    const addToMetamask = useCallback(
+        async (token: Token | null) => {
+            if (!account || !token) return;
+            await ethereum.request({
+                method: 'wallet_watchAsset',
+                params: {
+                    type: 'ERC20',
+                    options: {
+                        address: token.address,
+                        symbol: token.symbol,
+                        decimals: token.decimals,
+                    },
+                },
+            });
+        },
+        [account, ethereum]
+    );
 
     useEffect(() => {
         const getContractAddress = async () => {
@@ -127,14 +145,17 @@ export const Faucet = () => {
                                 </button>
                             </div>
                             <div className='flex h-14 flex-row items-center justify-between gap-3 rounded-xl border border-neutral-3 bg-black-20 px-3'>
-                                <div className='flex h-10 w-36 flex-row items-center justify-between space-x-2 rounded-lg bg-white-5 px-2'>
+                                <button
+                                    className='flex h-10 w-36 flex-row items-center justify-between space-x-2 rounded-lg bg-white-5 px-2 hover:bg-white-40'
+                                    onClick={() => addToMetamask(token)}
+                                >
                                     <span>
                                         <MetaMaskIcon className='h-6 w-6' />
                                     </span>
-                                    <span className='typography-caption w-20 text-white'>
-                                        Address
+                                    <span className='typography-caption-3 w-20 whitespace-nowrap text-white'>
+                                        Add to Metamask
                                     </span>
-                                </div>
+                                </button>
                                 <span className='pr-10 text-white-60'>
                                     {account
                                         ? AddressUtils.format(account, 6)
