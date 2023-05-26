@@ -1,11 +1,15 @@
+import { RESPONSIVE_PARAMETERS } from '.storybook/constants';
 import { Meta, Story } from '@storybook/react';
 
 export default {
     title: 'Design System/Typography',
+    parameters: {
+        ...RESPONSIVE_PARAMETERS,
+    },
 } as Meta;
 
 export const Typography: Story = () => (
-    <div className='grid grid-cols-2 place-items-stretch space-y-4 text-white'>
+    <div className='grid grid-cols-2 place-items-stretch gap-y-4 text-white'>
         <div className='border-b'>Class Name:</div>
         <div className='border-b'>Usage</div>
 
