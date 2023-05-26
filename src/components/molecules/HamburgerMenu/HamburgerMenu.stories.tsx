@@ -40,5 +40,15 @@ export const Default = Template.bind({});
 export const Expanded = Template.bind({});
 Expanded.play = async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    canvas.getByRole('button').click();
+    canvas.getByRole('button', { name: 'Hamburger Menu' }).click();
+};
+
+export const FullyExpanded = Template.bind({});
+FullyExpanded.play = async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    canvas.getByRole('button', { name: 'Hamburger Menu' }).click();
+    const MoreButton = await canvas.findByRole('button', {
+        name: 'Show More',
+    });
+    MoreButton.click();
 };

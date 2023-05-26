@@ -7,6 +7,25 @@ import { useState } from 'react';
 
 import Burger from 'src/assets/img/burger.svg';
 
+const EXTRA_LINKS = [
+    {
+        text: 'Secured Finance Landing page',
+        href: 'https://secured.finance/',
+    },
+    {
+        text: 'Documentation',
+        href: 'https://blog.secured.finance/',
+    },
+    {
+        text: 'Follow us on Twitter',
+        href: 'https://twitter.com/Secured_Fi',
+    },
+    {
+        text: 'Join our Discord',
+        href: 'https://discord.com/invite/FqrdfQgmjT',
+    },
+];
+
 const MobileItemLink = ({
     text,
     link,
@@ -51,6 +70,28 @@ const MobileItemLink = ({
 
     return anchor;
 };
+
+const MenuItem = ({
+    text,
+    href,
+    onClick,
+}: {
+    text: string;
+    href: string;
+    onClick: () => void;
+}) => {
+    return (
+        <div className='flex items-center'>
+            <MobileItemLink text={text} href={href} onClick={onClick} />
+            <ArrowUpIcon
+                className='hidden h-5 w-5 rotate-45 text-white'
+                role='img'
+                aria-label='Arrow pointing out of the menu indicating that the link will open in a new tab'
+            />
+        </div>
+    );
+};
+
 export const HamburgerMenu = ({
     links,
 }: {
@@ -69,6 +110,7 @@ export const HamburgerMenu = ({
                         )}
                     </Popover.Button>
                     <Popover.Panel
+                        role='navigation'
                         className={classNames(
                             'typography-body-1 absolute inset-x-0 inset-y-28 z-50 flex h-screen w-full flex-col items-start bg-universeBlue text-neutral-4'
                         )}
@@ -84,6 +126,7 @@ export const HamburgerMenu = ({
                         <button
                             className='flex h-16 w-full items-center justify-between px-9 py-4 text-center hover:border-l-4 hover:border-starBlue hover:border-transparent hover:bg-gradient-to-r hover:from-[#6A76B159] hover:via-[#4A5BAF1F] hover:to-[#394DAE00] hover:text-neutral-8'
                             onClick={() => setShowMore(!showMore)}
+                            aria-label='Show More'
                         >
                             <p
                                 className={classNames({
@@ -96,37 +139,14 @@ export const HamburgerMenu = ({
                         </button>
                         {showMore && (
                             <div className='w-full px-4'>
-                                <div className='flex items-center'>
-                                    <MobileItemLink
-                                        text='Secured Finance Landing page'
-                                        href='https://secured.finance/'
+                                {EXTRA_LINKS.map(link => (
+                                    <MenuItem
+                                        key={link.text}
+                                        text={link.text}
+                                        href={link.href}
                                         onClick={() => close()}
                                     />
-                                </div>
-                                <div className='flex items-center'>
-                                    <MobileItemLink
-                                        text='Documentation'
-                                        href='https://blog.secured.finance/'
-                                        onClick={() => close()}
-                                    />
-                                    <ArrowUpIcon className='hidden h-5 w-5 rotate-45 text-white' />
-                                </div>
-                                <div className='flex items-center'>
-                                    <MobileItemLink
-                                        text='Follow us on Twitter'
-                                        href='https://twitter.com/Secured_Fi/'
-                                        onClick={() => close()}
-                                    />
-                                    <ArrowUpIcon className='hidden h-5 w-5 rotate-45 text-white' />
-                                </div>
-                                <div className='flex items-center'>
-                                    <MobileItemLink
-                                        text='Join us on Discord'
-                                        href='https://discord.com/invite/FqrdfQgmjT'
-                                        onClick={() => close()}
-                                    />
-                                    <ArrowUpIcon className='hidden h-5 w-5 rotate-45 text-white' />
-                                </div>
+                                ))}
                             </div>
                         )}
                     </Popover.Panel>
