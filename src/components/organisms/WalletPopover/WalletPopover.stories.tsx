@@ -9,7 +9,7 @@ export default {
     component: WalletPopover,
     args: {
         wallet: '0x0123...321',
-        networkName: 'Goerli',
+        networkName: 'Sepolia',
         status: 'connected',
         // children: 'Connect Wallet',
     },

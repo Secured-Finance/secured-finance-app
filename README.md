@@ -69,6 +69,17 @@ you need to install unstoppable domain [browser extension](https://chrome.google
 
 Deployed to ipfs using Fleek.
 
+## Note
+The following file it a tentative patch created by `patch-package` for `use-wallet` to support the Sepolia testnet, because it doesn't support Sepolia.
+
+[patches/use-wallet+0.13.4.patch](patches/use-wallet+0.13.4.patch)
+
+After `use-wallet` starts to support the Sepolia testnet, we need to do the followings:
+
+- Uninstall the `patch-package` module
+- Remove the `patches` folder.
+- Update the `use-wallet` version.
+
 # License
 
 This project is licensed under the MIT license, Copyright (c) 2020 Secured Finance. For more information see `LICENSE.md`.

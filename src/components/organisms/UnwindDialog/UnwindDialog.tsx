@@ -112,17 +112,17 @@ export const UnwindDialog = ({
     const priceList = useSelector((state: RootState) => getPriceMap(state));
     const price = priceList[amount.currency];
 
-    const { unwindOrder } = useOrders();
+    const { unwindPosition } = useOrders();
 
     const handleClose = useCallback(() => {
         dispatch({ type: 'default' });
         onClose();
     }, [onClose]);
 
-    const handleUnwindOrder = useCallback(
+    const handleUnwindPosition = useCallback(
         async (ccy: CurrencySymbol, maturity: Maturity) => {
             try {
-                const tx = await unwindOrder(ccy, maturity);
+                const tx = await unwindPosition(ccy, maturity);
                 const transactionStatus = await handleContractTransaction(tx);
                 if (!transactionStatus) {
                     dispatch({ type: 'error' });
@@ -137,7 +137,7 @@ export const UnwindDialog = ({
                 }
             }
         },
-        [unwindOrder, globalDispatch]
+        [unwindPosition, globalDispatch]
     );
 
     const onClick = useCallback(
@@ -145,7 +145,7 @@ export const UnwindDialog = ({
             switch (currentStep) {
                 case Step.confirm:
                     dispatch({ type: 'next' });
-                    handleUnwindOrder(amount.currency, maturity);
+                    handleUnwindPosition(amount.currency, maturity);
                     break;
                 case Step.processing:
                     break;
@@ -157,7 +157,7 @@ export const UnwindDialog = ({
                     break;
             }
         },
-        [amount.currency, handleClose, handleUnwindOrder, maturity]
+        [amount.currency, handleClose, handleUnwindPosition, maturity]
     );
 
     const renderSelection = () => {
