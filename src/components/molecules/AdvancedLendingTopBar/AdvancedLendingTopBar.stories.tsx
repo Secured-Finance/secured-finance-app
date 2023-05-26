@@ -1,3 +1,4 @@
+import { RESPONSIVE_PARAMETERS } from '.storybook/constants';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { currencyList, maturityOptions } from 'src/stories/mocks/fixtures';
 import { AdvancedLendingTopBar } from '.';
@@ -9,7 +10,7 @@ export default {
     title: 'Molecules/AdvancedLendingTopBar',
     component: AdvancedLendingTopBar,
     args: {
-        selectedAsset: currencyList[0],
+        selectedAsset: currencyList[2],
         assetList: currencyList,
         options: maturityOptions.map(o => ({
             label: o.label,
@@ -23,6 +24,9 @@ export default {
             lastTradePrice,
             maturityOptions[0].value.toNumber()
         ),
+    },
+    parameters: {
+        ...RESPONSIVE_PARAMETERS,
     },
 } as ComponentMeta<typeof AdvancedLendingTopBar>;
 
