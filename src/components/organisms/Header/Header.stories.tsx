@@ -1,4 +1,5 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { RESPONSIVE_PARAMETERS } from 'src/../.storybook/constants';
 import {
     withChainErrorDisabled,
     withWalletProvider,
@@ -10,6 +11,9 @@ export default {
     component: Header,
     args: {},
     decorators: [withWalletProvider, withChainErrorDisabled],
+    parameters: {
+        ...RESPONSIVE_PARAMETERS,
+    },
 } as ComponentMeta<typeof Header>;
 
 const Template: ComponentStory<typeof Header> = () => <Header />;

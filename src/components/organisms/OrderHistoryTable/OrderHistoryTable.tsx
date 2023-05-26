@@ -49,7 +49,7 @@ export const OrderHistoryTable = ({ data }: { data: OrderList }) => {
                 id: 'actions',
                 cell: info => {
                     const ccy = hexToCurrencySymbol(info.row.original.currency);
-                    const orderId = Number(info.row.original.id);
+                    const orderId = Number(info.row.original.orderId);
                     const maturity = new Maturity(info.row.original.maturity);
                     return (
                         <div className='flex justify-center'>
