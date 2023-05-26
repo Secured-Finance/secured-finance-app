@@ -43,6 +43,3 @@ MenuExpanded.play = async ({ canvasElement }) => {
         canvas.getByRole('link', { name: 'Portfolio Management' })
     ).toBeVisible();
 };
-MenuExpanded.parameters = {
-    chromatic: [VIEWPORTS.MOBILE, VIEWPORTS.TABLET],
-};
