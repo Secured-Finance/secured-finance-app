@@ -31,6 +31,11 @@ const LINKS = [
         link: '/portfolio',
         dataCy: 'history',
     },
+    {
+        text: 'Faucet',
+        link: '/faucet',
+        dataCy: 'faucet',
+    },
 ];
 
 export const Header = () => {
@@ -55,7 +60,7 @@ export const Header = () => {
             <nav
                 data-cy='header'
                 className={classNames(
-                    'grid h-20 w-full grid-flow-col border-b border-neutral-1 laptop:grid-cols-7',
+                    'grid h-20 w-full grid-flow-col border-b border-neutral-1 laptop:grid-flow-col',
                     {
                         'blur-sm': open,
                     }
@@ -87,7 +92,7 @@ export const Header = () => {
                         />
                     </div>
                 ))}
-                <div className='hidden h-full w-full laptop:inline'>
+                <div className='hidden laptop:inline'>
                     <MenuPopover />
                 </div>
                 <div className='col-span-2 flex flex-row items-center justify-end gap-2 laptop:col-span-1'>
