@@ -39,6 +39,7 @@ module.exports = {
                 '10px': '10px',
             },
         },
+
         fontFamily: {
             primary: ['GT Super Display', ...defaultTheme.fontFamily.serif],
             secondary: [
@@ -46,6 +47,13 @@ module.exports = {
                 ...defaultTheme.fontFamily.sans,
             ],
         },
+
+        screens: {
+            tablet: '768px',
+            laptop: '1024px',
+            desktop: '1440px',
+        },
+
         fontSize: {
             '5xl': ['86px', { lineHeight: '96px', letterSpacing: '-0.02em' }],
             '4xl': ['54px', { lineHeight: '64px', letterSpacing: '-0.02em' }],

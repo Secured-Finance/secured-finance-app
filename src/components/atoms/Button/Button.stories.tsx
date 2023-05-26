@@ -15,6 +15,11 @@ export default {
         StartIcon: { control: false },
         EndIcon: { control: false },
     },
+    parameters: {
+        viewport: {
+            disable: true,
+        },
+    },
 } as ComponentMeta<typeof Button>;
 
 const Template: ComponentStory<typeof Button> = args => (
