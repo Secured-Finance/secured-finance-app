@@ -1,15 +1,15 @@
 import { composeStories } from '@storybook/testing-react';
 import { render, screen } from 'src/test-utils.js';
-import * as stories from './PortfolioManagementTable.stories';
+import * as stories from './StatsBar.stories';
 
 const { Default } = composeStories(stories);
 
-describe('test PortfolioManagementComponent', () => {
-    it('should render Portfolio Tab', () => {
+describe('test Stats Bar Component', () => {
+    it('should render Stats Bar', () => {
         render(<Default />);
     });
 
-    it('should display one grid with  tabs', () => {
+    it('should display one grid with 4 tabs', () => {
         render(<Default />);
         expect(screen.getByRole('grid')).toBeInTheDocument();
         const tabs = screen.getAllByRole('gridcell');
