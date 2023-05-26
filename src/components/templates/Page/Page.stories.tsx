@@ -1,4 +1,5 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { RESPONSIVE_PARAMETERS } from 'src/../.storybook/constants';
 import { Page } from './Page';
 
 const Content = ({
@@ -19,6 +20,10 @@ export default {
     args: {
         title: 'Title',
         children: <Content color='red' content='Content' />,
+    },
+    parameters: {
+        ...RESPONSIVE_PARAMETERS,
+        layout: 'fullscreen',
     },
 } as ComponentMeta<typeof Page>;
 

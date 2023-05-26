@@ -5,6 +5,11 @@ import { MenuPopover } from './MenuPopover';
 export default {
     title: 'Organism/MenuPopover',
     component: MenuPopover,
+    parameters: {
+        viewport: {
+            disable: true,
+        },
+    },
 } as ComponentMeta<typeof MenuPopover>;
 
 const Template: ComponentStory<typeof MenuPopover> = () => (

@@ -10,7 +10,7 @@ import { MenuItem, Separator } from 'src/components/atoms';
 export const MenuPopover = ({}) => {
     return (
         <>
-            <div className='flex h-full items-center justify-center px-8'>
+            <div className='flex h-full w-fit items-center justify-center px-4'>
                 <Popover className='relative'>
                     {({}) => (
                         <>
