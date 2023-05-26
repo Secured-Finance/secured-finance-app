@@ -61,7 +61,7 @@ export const CollateralManagementConciseTab = ({
                 >
                     <Tick className='float-right h-5px w-2'></Tick>
                 </div>
-                <div className='mt-2 h-6px w-full rounded-full bg-gradient-to-r from-progressBarStart from-0% via-progressBarVia via-45% to-progressBarEnd to-80%'></div>
+                <div className='from-0% via-45% to-80% mt-2 h-6px w-full rounded-full bg-gradient-to-r from-progressBarStart via-progressBarVia to-progressBarEnd'></div>
                 <div className='typography-caption-2 mt-1 leading-6 text-planetaryPurple'>
                     {`Threshold: ${percentFormat(
                         collateralThreshold &&
