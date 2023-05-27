@@ -1,8 +1,6 @@
 import { BigNumber } from 'ethers';
 import { useEffect, useState, useCallback } from 'react';
 import useSF from '../useSecuredFinance';
-import { useSelector } from 'react-redux';
-import { RootState } from 'src/store/types';
 import { Currency } from '@secured-finance/sf-core';
 import { toCurrency, hexToCurrencySymbol } from 'src/utils';
 
@@ -30,10 +28,6 @@ export const useOrderList = (account: string | null) => {
         activeOrderList: OrderList | [];
         inactiveOrderList: OrderList | [];
     }>(emptyOrderList);
-
-    const block = useSelector(
-        (state: RootState) => state.blockchain.latestBlock
-    );
 
     const fetchOrdersList = useCallback(async () => {
         if (!securedFinance || !account) {
@@ -84,7 +78,7 @@ export const useOrderList = (account: string | null) => {
         return () => {
             setOrderList(emptyOrderList);
         };
-    }, [fetchOrdersList, block]);
+    }, [fetchOrdersList]);
 
     return orderList;
 };
