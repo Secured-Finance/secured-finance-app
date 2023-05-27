@@ -4,12 +4,13 @@ import { ArrowUpIcon, ChevronDownIcon } from '@heroicons/react/solid';
 import classNames from 'classnames';
 import Link from 'next/link';
 import { useState } from 'react';
-
 import Burger from 'src/assets/img/burger.svg';
+import SFLogoSmall from 'src/assets/img/small-logo.svg';
+import { CloseButton } from 'src/components/atoms';
 
 const EXTRA_LINKS = [
     {
-        text: 'Secured Finance Landing page',
+        text: 'Landing Page',
         href: 'https://secured.finance/',
     },
     {
@@ -112,17 +113,23 @@ export const HamburgerMenu = ({
                     <Popover.Panel
                         role='navigation'
                         className={classNames(
-                            'typography-body-1 absolute inset-x-0 inset-y-28 z-50 flex h-screen w-full flex-col items-start bg-universeBlue text-neutral-4'
+                            'typography-body-1 fixed inset-x-0 bottom-0 z-50 flex h-screen w-full flex-col gap-4 bg-universeBlue pt-8 text-neutral-4'
                         )}
                     >
-                        {links.map(link => (
-                            <MobileItemLink
-                                key={link.label}
-                                text={link.label}
-                                link={link.link}
-                                onClick={() => close()}
-                            />
-                        ))}
+                        <div className='flex items-center justify-between px-4'>
+                            <SFLogoSmall className='h-7 w-7' />
+                            <CloseButton onClick={() => close()} />
+                        </div>
+                        <div className='w-full flex-col items-start'>
+                            {links.map(link => (
+                                <MobileItemLink
+                                    key={link.label}
+                                    text={link.label}
+                                    link={link.link}
+                                    onClick={() => close()}
+                                />
+                            ))}
+                        </div>
                         <button
                             className='flex h-16 w-full items-center justify-between px-9 py-4 text-center hover:border-l-4 hover:border-starBlue hover:border-transparent hover:bg-gradient-to-r hover:from-[#6A76B159] hover:via-[#4A5BAF1F] hover:to-[#394DAE00] hover:text-neutral-8'
                             onClick={() => setShowMore(!showMore)}
