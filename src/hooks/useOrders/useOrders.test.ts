@@ -16,7 +16,7 @@ describe('useOrders hook', () => {
         const { result } = renderHook(() => useOrders());
         expect(result.current.cancelOrder).toBeInstanceOf(Function);
         expect(result.current.placeOrder).toBeInstanceOf(Function);
-        expect(result.current.unwindOrder).toBeInstanceOf(Function);
+        expect(result.current.unwindPosition).toBeInstanceOf(Function);
         expect(result.current.placePreOrder).toBeInstanceOf(Function);
     });
 
@@ -75,10 +75,10 @@ describe('useOrders hook', () => {
     });
 
     describe('unwind order', () => {
-        it('should call the unwindOrder function', () => {
+        it('should call the unwindPosition function', () => {
             const { result } = renderHook(() => useOrders());
-            result.current.unwindOrder(CurrencySymbol.EFIL, dec22Fixture);
-            expect(mockSecuredFinance.unwindOrder).toBeCalled();
+            result.current.unwindPosition(CurrencySymbol.EFIL, dec22Fixture);
+            expect(mockSecuredFinance.unwindPosition).toBeCalled();
         });
     });
 

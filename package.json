@@ -10,9 +10,9 @@
     "@heroicons/react": "^1.0.6",
     "@mui/base": "^5.0.0-alpha.106",
     "@reduxjs/toolkit": "^1.8.1",
-    "@secured-finance/sf-client": "0.2.0-beta.69",
+    "@secured-finance/sf-client": "0.2.0-beta.71",
     "@secured-finance/sf-core": "0.2.0-beta.40",
-    "@secured-finance/sf-graph-client": "0.2.0-beta.70",
+    "@secured-finance/sf-graph-client": "0.2.0-beta.71",
     "@svgr/webpack": "^6.2.1",
     "@tanstack/react-table": "^8.5.13",
     "axios": "^0.21.1",
@@ -52,7 +52,8 @@
     "build-storybook": "build-storybook -s public",
     "prepare": "husky install",
     "cypress:open": "cypress open",
-    "cypress:run": "cypress run"
+    "cypress:run": "cypress run",
+    "postinstall": "patch-package && rm -rf .next/cache"
   },
   "browserslist": {
     "production": [
@@ -115,6 +116,7 @@
     "jest-environment-jsdom": "^29.1.2",
     "jest-fail-on-console": "^3.0.1",
     "os-browserify": "^0.3.0",
+    "patch-package": "^7.0.0",
     "postcss": "^8.4.14",
     "postcss-import": "^14.1.0",
     "prettier": "^2.3.0",
