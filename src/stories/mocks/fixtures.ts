@@ -306,7 +306,6 @@ export const openOrderHistoryList: OrderList = [
     },
     {
         orderId: BigNumber.from('1'),
-
         currency: efilBytes32,
         side: 1,
         maturity: BigNumber.from(mar23Fixture.toString()),
