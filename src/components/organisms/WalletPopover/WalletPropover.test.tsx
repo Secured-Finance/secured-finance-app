@@ -8,9 +8,9 @@ const { Default } = composeStories(stories);
 describe('WalletPopover component', () => {
     it('should render when clicked on the the wallet button', () => {
         render(<Default />);
-        expect(screen.queryByText('Goerli')).toBeNull();
+        expect(screen.queryByText('Sepolia')).toBeNull();
         fireEvent.click(screen.getByRole('button'));
-        expect(screen.getByText('Goerli')).toBeInTheDocument();
+        expect(screen.getByText('Sepolia')).toBeInTheDocument();
     });
 
     it('should have a default cursor if there is no onclick action', () => {

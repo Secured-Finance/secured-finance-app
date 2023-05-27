@@ -1,4 +1,5 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { RESPONSIVE_PARAMETERS } from 'src/../.storybook/constants';
 import { TwoColumns } from './TwoColumns';
 
 const column1 = (
@@ -16,6 +17,10 @@ export default {
     component: TwoColumns,
     args: {
         children: [column1, column2],
+    },
+    parameters: {
+        ...RESPONSIVE_PARAMETERS,
+        layout: 'fullscreen',
     },
 } as ComponentMeta<typeof TwoColumns>;
 

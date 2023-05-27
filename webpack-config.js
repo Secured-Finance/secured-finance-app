@@ -1,4 +1,5 @@
 const webpack = require('webpack');
+const path = require('path');
 
 module.exports = { webpackOverride };
 
@@ -40,6 +41,11 @@ function webpackOverride(config) {
             Buffer: ['buffer', 'Buffer'],
         })
     );
+
+    config.resolve.alias = {
+        ...config.resolve.alias,
+        '.storybook': path.resolve(__dirname, './.storybook/'),
+    };
 
     return config;
 }

@@ -168,11 +168,11 @@ export const Faucet = () => {
                                 the{' '}
                                 <a
                                     className='text-nebulaTeal underline'
-                                    href='https://goerli-faucet.pk910.de/'
+                                    href='https://sepolia-faucet.pk910.de/'
                                     target='_blank'
                                     rel='noreferrer'
                                 >
-                                    Goerli PoW Faucet
+                                    Sepolia PoW Faucet
                                 </a>
                                 .
                             </p>

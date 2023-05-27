@@ -1,9 +1,6 @@
 import queries from '@secured-finance/sf-graph-client/dist/graphclients';
 import { useSelector } from 'react-redux';
-import {
-    HorizontalTab,
-    PortfolioManagementTable,
-} from 'src/components/molecules';
+import { HorizontalTab, StatsBar } from 'src/components/molecules';
 import {
     ActiveTradeTable,
     CollateralOrganism,
@@ -64,16 +61,29 @@ export const PortfolioManagement = () => {
         <Page title='Portfolio Management' name='portfolio-management'>
             <TwoColumns>
                 <div className='flex flex-col gap-6'>
-                    <PortfolioManagementTable
+                    <StatsBar
+                        testid='portfolio-management'
                         values={[
-                            usdFormat(
-                                borrowedPV +
-                                    lentPV +
-                                    collateralBook.usdCollateral
-                            ),
-                            tradeHistory.length.toString(),
-                            usdFormat(lentPV),
-                            usdFormat(borrowedPV),
+                            {
+                                name: 'Net Asset Value',
+                                value: usdFormat(
+                                    borrowedPV +
+                                        lentPV +
+                                        collateralBook.usdCollateral
+                                ),
+                            },
+                            {
+                                name: 'Active Contracts',
+                                value: tradeHistory.length.toString(),
+                            },
+                            {
+                                name: 'Lending PV',
+                                value: usdFormat(lentPV),
+                            },
+                            {
+                                name: 'Borrowing PV',
+                                value: usdFormat(borrowedPV),
+                            },
                         ]}
                     />
                     <CollateralOrganism collateralBook={collateralBook} />
