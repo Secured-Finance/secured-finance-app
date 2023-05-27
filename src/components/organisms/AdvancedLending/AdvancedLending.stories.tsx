@@ -1,10 +1,11 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
-import { within } from '@storybook/testing-library';
+import { RESPONSIVE_PARAMETERS } from '.storybook/constants';
 import {
     withAssetPrice,
     withFullPage,
     withWalletProvider,
-} from 'src/../.storybook/decorators';
+} from '.storybook/decorators';
+import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { within } from '@storybook/testing-library';
 import {
     collateralBook80,
     dec22Fixture,
@@ -19,7 +20,6 @@ import { AdvancedLending } from './AdvancedLending';
 export default {
     title: 'Organism/AdvancedLending',
     component: AdvancedLending,
-    chromatic: { pauseAnimationAtEnd: true },
     args: {
         collateralBook: collateralBook80,
         loanValue: LoanValue.fromApr(new Rate(10000), dec22Fixture.toNumber()), // 1%
@@ -30,16 +30,13 @@ export default {
         apolloClient: {
             mocks: [...mockTrades],
         },
+        ...RESPONSIVE_PARAMETERS,
     },
     decorators: [withFullPage, withAssetPrice, withWalletProvider],
 } as ComponentMeta<typeof AdvancedLending>;
 
 const Template: ComponentStory<typeof AdvancedLending> = args => {
-    return (
-        <div className='p-20'>
-            <AdvancedLending {...args} />
-        </div>
-    );
+    return <AdvancedLending {...args} />;
 };
 
 export const Default = Template.bind({});

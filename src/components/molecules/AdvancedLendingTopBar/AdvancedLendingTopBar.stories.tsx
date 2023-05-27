@@ -1,12 +1,13 @@
+import { RESPONSIVE_PARAMETERS } from '.storybook/constants';
+import { withMidPrice } from '.storybook/decorators';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
-import { withMidPrice } from 'src/../.storybook/decorators';
 import { currencyList, maturityOptions } from 'src/stories/mocks/fixtures';
 import { AdvancedLendingTopBar } from '.';
 export default {
     title: 'Molecules/AdvancedLendingTopBar',
     component: AdvancedLendingTopBar,
     args: {
-        selectedAsset: currencyList[0],
+        selectedAsset: currencyList[2],
         assetList: currencyList,
         options: maturityOptions.map(o => ({
             label: o.label,
@@ -18,6 +19,9 @@ export default {
         },
     },
     decorators: [withMidPrice],
+    parameters: {
+        ...RESPONSIVE_PARAMETERS,
+    },
 } as ComponentMeta<typeof AdvancedLendingTopBar>;
 
 const Template: ComponentStory<typeof AdvancedLendingTopBar> = args => (

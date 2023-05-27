@@ -1,5 +1,6 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import Link from 'next/link';
+import { RESPONSIVE_PARAMETERS } from 'src/../.storybook/constants';
 import { Layout } from './Layout';
 
 export default {
@@ -25,6 +26,7 @@ export default {
         navBar: { control: { disable: true } },
     },
     parameters: {
+        ...RESPONSIVE_PARAMETERS,
         layout: 'fullscreen',
     },
 } as ComponentMeta<typeof Layout>;

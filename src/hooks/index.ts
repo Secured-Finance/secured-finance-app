@@ -1,3 +1,4 @@
+export * from './useBreakpoint';
 export * from './useCollateralBook';
 export * from './useGraphClientHook';
 export * from './useLendingMarkets';

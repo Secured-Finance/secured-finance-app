@@ -13,11 +13,11 @@ export const Page = ({
 }) => {
     return (
         <div
-            className='mt-7 flex min-w-[1024px] flex-col gap-6 px-40'
+            className='mt-7 flex flex-col gap-4 px-3 tablet:min-w-[728px] tablet:px-5 laptop:min-w-[970px] laptop:px-7 desktop:min-w-[1120px] desktop:px-40'
             data-testid={name}
         >
-            <div className='flex h-16 min-w-[1024px] justify-between border-b-[0.5px] border-panelStroke'>
-                <span className='font-secondary text-lg font-light leading-7 text-white'>
+            <div className='flex h-16 items-center justify-between border-b-[0.5px] border-panelStroke'>
+                <span className='font-secondary text-smd font-light leading-7 text-white tablet:text-md laptop:text-lg'>
                     {title}
                 </span>
                 {titleComponent ? titleComponent : null}
@@ -25,10 +25,7 @@ export const Page = ({
             <div className='flex flex-col gap-6'>
                 {React.Children.map(children, (child, index) => {
                     return (
-                        <div
-                            className='min-w-[1024px]'
-                            key={`page-${name}-${index}`}
-                        >
+                        <div className='' key={`page-${name}-${index}`}>
                             {child}
                         </div>
                     );
