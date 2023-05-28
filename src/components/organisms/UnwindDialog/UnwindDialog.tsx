@@ -119,7 +119,7 @@ export const UnwindDialog = ({
         onClose();
     }, [onClose]);
 
-    const handleunwindPosition = useCallback(
+    const handleUnwindPosition = useCallback(
         async (ccy: CurrencySymbol, maturity: Maturity) => {
             try {
                 const tx = await unwindPosition(ccy, maturity);
@@ -145,7 +145,7 @@ export const UnwindDialog = ({
             switch (currentStep) {
                 case Step.confirm:
                     dispatch({ type: 'next' });
-                    handleunwindPosition(amount.currency, maturity);
+                    handleUnwindPosition(amount.currency, maturity);
                     break;
                 case Step.processing:
                     break;
@@ -157,7 +157,7 @@ export const UnwindDialog = ({
                     break;
             }
         },
-        [amount.currency, handleClose, handleunwindPosition, maturity]
+        [amount.currency, handleClose, handleUnwindPosition, maturity]
     );
 
     const renderSelection = () => {

@@ -1,5 +1,5 @@
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
-import { act, renderHook } from 'src/test-utils';
+import { renderHook } from 'src/test-utils';
 import { useOrderList } from './useOrderList';
 import { ethBytes32, efilBytes32 } from 'src/stories/mocks/fixtures';
 
@@ -17,9 +17,7 @@ describe('useOrderList', () => {
             inactiveOrderList: [],
         });
 
-        await act(async () => {
-            await waitForNextUpdate();
-        });
+        await waitForNextUpdate();
 
         expect(result.current.activeOrderList.length).toBe(3);
         expect(result.current.activeOrderList[0].currency).toBe(ethBytes32);
