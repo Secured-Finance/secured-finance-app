@@ -31,7 +31,6 @@ export default {
         apolloClient: {
             mocks: [...mockUserHistory, ...mockTrades, ...mockDailyVolumes],
         },
-        date: { value: new Date('2021-12-01T11:00:00.00Z') },
         ...RESPONSIVE_PARAMETERS,
         layout: 'fullscreen',
     },
