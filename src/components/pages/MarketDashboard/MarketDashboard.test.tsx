@@ -62,7 +62,6 @@ describe('MarketDashboard Component', () => {
         );
     }, 8000);
 
-
     it('should show the yield curves', async () => {
         await renderDefault();
         const yieldCurves = await screen.findAllByTestId('curve-chip');
