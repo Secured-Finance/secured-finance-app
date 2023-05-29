@@ -1,5 +1,6 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { BigNumber } from 'ethers';
+import { RESPONSIVE_PARAMETERS } from 'src/../.storybook/constants';
 import { OrderBookEntry } from 'src/hooks/useOrderbook';
 import { CurrencySymbol } from 'src/utils';
 import { LoanValue, Maturity } from 'src/utils/entities';
@@ -69,12 +70,13 @@ export default {
         sellOrders: lendEntries,
         currency: CurrencySymbol.EFIL,
     },
+    parameters: {
+        ...RESPONSIVE_PARAMETERS,
+    },
 } as ComponentMeta<typeof OrderWidget>;
 
 const Template: ComponentStory<typeof OrderWidget> = args => (
-    <div className='w-1/2'>
-        <OrderWidget {...args} />
-    </div>
+    <OrderWidget {...args} />
 );
 
 export const Default = Template.bind({});

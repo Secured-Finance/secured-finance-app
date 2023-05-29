@@ -3,6 +3,7 @@ import { within } from '@storybook/testing-library';
 import {
     withAppLayout,
     withAssetPrice,
+    withChainErrorDisabled,
     withFullPage,
     withWalletBalances,
     withWalletProvider,
@@ -21,12 +22,14 @@ export default {
         withAssetPrice,
         withAppLayout,
         withWalletProvider,
+        withChainErrorDisabled,
     ],
     parameters: {
         apolloClient: {
             mocks: mockUserHistory,
         },
         connected: true,
+        chromatic: { delay: 3000 },
     },
 } as ComponentMeta<typeof PortfolioManagement>;
 
