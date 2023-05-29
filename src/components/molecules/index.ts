@@ -11,6 +11,7 @@ export * from './CoreTable';
 export * from './CurveHeader';
 export * from './Dialog';
 export * from './FailurePanel';
+export * from './HamburgerMenu';
 export * from './HorizontalAssetSelector';
 export * from './HorizontalTab';
 export * from './LineChart';

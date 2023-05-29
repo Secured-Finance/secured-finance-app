@@ -4,9 +4,11 @@ import {
     preloadedBalances,
     preloadedLendingMarkets,
 } from 'src/stories/mocks/fixtures';
+import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
 import { OrderType } from 'src/types';
 import { CurrencySymbol } from 'src/utils';
+import timemachine from 'timemachine';
 import * as stories from './Landing.stories';
 
 const { Default } = composeStories(stories);
@@ -25,28 +27,45 @@ jest.mock(
             children
 );
 
+const mock = mockUseSF();
+jest.mock('src/hooks/useSecuredFinance', () => () => mock);
+
 const preloadedState = { ...preloadedBalances, ...preloadedLendingMarkets };
 
 describe('Landing Component', () => {
-    it('should render a Landing', () => {
-        render(<Default />, { preloadedState });
-    });
-
-    it('should change the rate when the user changes the maturity', () => {
-        render(<Default />, { preloadedState });
-        waitFor(() => {
-            expect(screen.getByTestId('rate')).toHaveTextContent('1%');
+    it('should change the rate when the user changes the maturity', async () => {
+        timemachine.config({
+            dateString: '2022-02-01T11:00:00.00Z',
+        });
+        render(<Default />, {
+            apolloMocks: Default.parameters?.apolloClient.mocks,
+            preloadedState: {
+                ...preloadedState,
+                landingOrderForm: {
+                    currency: CurrencySymbol.EFIL,
+                    maturity: 1669852800,
+                    side: OrderSide.BORROW,
+                    amount: '500000000',
+                    unitPrice: 9500,
+                    orderType: OrderType.LIMIT,
+                    marketPhase: 'Open',
+                },
+            },
         });
 
-        waitFor(() => {
-            fireEvent.click(screen.getByText('MAR22'));
-            fireEvent.click(screen.getByText('DEC22'));
+        await waitFor(() => {
+            expect(screen.getByTestId('market-rate')).toHaveTextContent(
+                '3.93%'
+            );
         });
 
-        waitFor(() => {
-            expect(screen.getByTestId('rate')).toHaveTextContent('2%');
+        fireEvent.click(screen.getByRole('button', { name: 'DEC22' }));
+        fireEvent.click(screen.getByText('MAR23'));
+        expect(screen.getByTestId('market-rate')).toHaveTextContent('3.04%');
+        timemachine.config({
+            dateString: '2021-12-01T11:00:00.00Z',
         });
-    });
+    }, 10000); //TODO: TEST THROWS TIMEOUT EXCEEDED WARNING ON GITHUB ACTIONS
 
     it('should select the market order type when the user change to advance mode', async () => {
         waitFor(() => {
@@ -62,7 +81,7 @@ describe('Landing Component', () => {
     });
 
     it('should open the landing page with the mode set in the store', async () => {
-        waitFor(() => {
+        await waitFor(() => {
             render(<Default />, {
                 apolloMocks: Default.parameters?.apolloClient.mocks,
                 preloadedState: {
@@ -83,7 +102,7 @@ describe('Landing Component', () => {
     });
 
     it('should save in the store the last view used', async () => {
-        waitFor(() => {
+        await waitFor(() => {
             const { store } = render(<Default />, {
                 apolloMocks: Default.parameters?.apolloClient.mocks,
                 preloadedState,
@@ -95,7 +114,7 @@ describe('Landing Component', () => {
     });
 
     it('should filter out non ready markets', async () => {
-        waitFor(() => {
+        await waitFor(() => {
             render(<Default />, {
                 apolloMocks: Default.parameters?.apolloClient.mocks,
                 preloadedState,

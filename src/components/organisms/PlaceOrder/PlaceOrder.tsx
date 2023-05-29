@@ -312,7 +312,7 @@ export const PlaceOrder = ({
                         );
                     case Step.orderProcessing:
                         return (
-                            <div className='py-9'>
+                            <div className='flex h-full w-full items-center justify-center py-9'>
                                 <Spinner />
                             </div>
                         );
