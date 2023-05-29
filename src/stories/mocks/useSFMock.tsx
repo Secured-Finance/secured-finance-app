@@ -3,6 +3,12 @@ import { BigNumber } from 'ethers';
 import * as jest from 'jest-mock';
 import { CurrencySymbol, getCurrencyMapAsList } from 'src/utils';
 import { collateralBook80, dec24Fixture } from './fixtures';
+import {
+    dec22Fixture,
+    mar23Fixture,
+    ethBytes32,
+    efilBytes32,
+} from './fixtures';
 
 export const mockUseSF = () => {
     const mockSecuredFinance = {
@@ -265,6 +271,64 @@ export const mockUseSF = () => {
 
         getWithdrawableCollateral: jest.fn(() =>
             Promise.resolve(1000000000000)
+        ),
+
+        getUsedCurrenciesForOrders: jest.fn(() =>
+            Promise.resolve([ethBytes32, efilBytes32])
+        ),
+
+        getOrderList: jest.fn(() =>
+            Promise.resolve({
+                activeOrders: [
+                    {
+                        orderId: 1,
+                        ccy: ethBytes32,
+                        side: 0,
+                        maturity: BigNumber.from(dec22Fixture.toString()),
+                        unitPrice: BigNumber.from('9800'),
+                        amount: BigNumber.from('1000000000000000000'),
+                        timestamp: BigNumber.from('1609295092'),
+                    },
+                    {
+                        orderId: 2,
+                        ccy: ethBytes32,
+                        side: 0,
+                        maturity: BigNumber.from(mar23Fixture.toString()),
+                        unitPrice: BigNumber.from('9800'),
+                        amount: BigNumber.from('100000000000000000'),
+                        timestamp: BigNumber.from('1609295092'),
+                    },
+                    {
+                        orderId: 1,
+                        ccy: efilBytes32,
+                        side: 1,
+                        maturity: BigNumber.from(dec22Fixture.toString()),
+                        unitPrice: BigNumber.from('9800'),
+                        amount: BigNumber.from('100000000000000000000'),
+                        timestamp: BigNumber.from('1609295092'),
+                    },
+                ],
+                inactiveOrders: [
+                    {
+                        orderId: 4,
+                        ccy: ethBytes32,
+                        side: 0,
+                        maturity: BigNumber.from(dec22Fixture.toString()),
+                        unitPrice: BigNumber.from('9800'),
+                        amount: BigNumber.from('1000000000000000000'),
+                        timestamp: BigNumber.from('1609295092'),
+                    },
+                    {
+                        orderId: 5,
+                        ccy: efilBytes32,
+                        side: 0,
+                        maturity: BigNumber.from(dec22Fixture.toString()),
+                        unitPrice: BigNumber.from('9800'),
+                        amount: BigNumber.from('1000000000000000000000'),
+                        timestamp: BigNumber.from('1609295092'),
+                    },
+                ],
+            })
         ),
     };
 

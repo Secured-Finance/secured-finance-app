@@ -1,4 +1,5 @@
 import { composeStories } from '@storybook/testing-react';
+import { preloadedAssetPrices } from 'src/stories/mocks/fixtures';
 import {
     fireEvent,
     queries,
@@ -15,7 +16,11 @@ describe('YieldChart Component', () => {
     it('should render YieldChart', async () => {
         let ag: RenderResult<typeof queries, HTMLElement>;
         await waitFor(() => {
-            ag = render(<Default />);
+            ag = render(<Default />, {
+                preloadedState: {
+                    ...preloadedAssetPrices,
+                },
+            });
         }).then(() => {
             expect(ag.baseElement).toMatchSnapshot();
         });
