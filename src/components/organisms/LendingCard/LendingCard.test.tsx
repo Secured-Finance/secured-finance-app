@@ -52,6 +52,10 @@ describe('LendingCard Component', () => {
             'Borrow'
         );
     });
+    it('should show correct market rate', async () => {
+        await waitFor(() => render(<Default />, { preloadedState }));
+        expect(screen.getByTestId('market-rate')).toHaveTextContent('1.00%');
+    });
 
     it('should open confirm order dialog when borrow button is clicked', async () => {
         await waitFor(() => render(<Default />, { preloadedState }));

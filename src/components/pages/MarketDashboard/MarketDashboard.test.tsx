@@ -60,7 +60,7 @@ describe('MarketDashboard Component', () => {
                 timeout: 3000,
             }
         );
-    });
+    }, 10000); //TODO: TEST THROWS TIMEOUT EXCEEDED WARNING ON GITHUB ACTIONS
 
     it('should show the yield curves', async () => {
         await renderDefault();
@@ -74,5 +74,5 @@ describe('MarketDashboard Component', () => {
             'Collateral Utilization'
         );
         expect(collateralWidget).toBeInTheDocument();
-    });
+    }, 10000); //TODO: TEST THROWS TIMEOUT EXCEEDED WARNING ON GITHUB ACTIONS
 });

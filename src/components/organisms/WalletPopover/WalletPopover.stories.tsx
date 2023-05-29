@@ -21,7 +21,7 @@ export default {
 } as ComponentMeta<typeof WalletPopover>;
 
 const Template: ComponentStory<typeof WalletPopover> = args => (
-    <div className='ml-[1000px]'>
+    <div className='px-[100px]'>
         <WalletPopover {...args} />
     </div>
 );
