@@ -55,11 +55,11 @@ export const OrderInputBox = ({
 
     const handleAmountChange = useCallback(
         (amount: number | undefined) => {
-            amount ? setInputValue(amount) : setInputValue('');
+            amount === undefined ? setInputValue('') : setInputValue(amount);
             if (onValueChange) {
-                amount
-                    ? handleInputChange(amount, asset, onValueChange)
-                    : handleInputChange(0, asset, onValueChange);
+                amount === undefined
+                    ? handleInputChange(0, asset, onValueChange)
+                    : handleInputChange(amount, asset, onValueChange);
             }
         },
         [onValueChange, handleInputChange, asset]
