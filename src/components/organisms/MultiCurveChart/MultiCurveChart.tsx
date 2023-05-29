@@ -50,9 +50,9 @@ export const options: ChartOptions<'line'> = {
     },
     elements: {
         point: {
-            hoverRadius: 6,
+            hoverRadius: 4.5,
             hoverBorderColor: '#FFFFFF',
-            hoverBorderWidth: 2,
+            hoverBorderWidth: 1.5,
         },
     },
     scales: {
@@ -166,7 +166,7 @@ export const MultiCurveChart = ({
     const chartRef = useRef<ChartJS<'line'>>(null);
     const [tooltipVisible, setTooltipVisible] = useState(false);
     const [tooltipData, setTooltipData] = useState<TooltipItem<'line'>[]>();
-    const [tooltipPos, setTooltipPos] = useState<Position | null>(null);
+    const [tooltipPos, setTooltipPos] = useState<Position>();
 
     const [activeCurrencies, setActiveCurrencies] = useState<
         Set<CurrencySymbol>
@@ -202,19 +202,19 @@ export const MultiCurveChart = ({
             }
 
             const canvas = chart.canvas;
-            if (canvas) {
-                setTooltipVisible(true);
 
+            if (canvas) {
                 const left = tooltip.x;
                 const top = tooltip.y;
 
-                if (tooltipPos?.top !== top) {
+                if (tooltipPos?.top !== top || tooltipPos?.left !== left) {
                     setTooltipPos({ top: top, left: left });
                     setTooltipData(tooltip.dataPoints);
+                    setTooltipVisible(true);
                 }
             }
         },
-        [tooltipPos]
+        [tooltipPos?.left, tooltipPos?.top]
     );
 
     const dataOptions: ChartOptions<'line'> = {
@@ -223,6 +223,8 @@ export const MultiCurveChart = ({
             tooltip: {
                 enabled: false,
                 external: customTooltip,
+                xAlign: 'left',
+                yAlign: 'center',
             },
         },
     };
@@ -283,7 +285,7 @@ const GraphTooltip = ({
 }) => {
     return (
         <div
-            className={`absolute flex w-40 flex-col gap-5 overflow-hidden rounded-[10px] border border-[#34384C] bg-[rgba(47,50,65,0.6)] px-3 pb-5 pt-4 shadow-curvetooltip backdrop-blur-[3px] transition-all duration-300 hover:!visible
+            className={`absolute ml-8 flex w-40 flex-col gap-5 overflow-hidden rounded-[10px] border border-[#34384C] bg-[rgba(47,50,65,0.6)] px-3 pb-5 pt-4 shadow-curvetooltip backdrop-blur-[3px] transition-all duration-300 hover:!visible
         ${visibility ? 'visible' : 'invisible'}
           `}
             style={{
@@ -307,7 +309,7 @@ const GraphTooltip = ({
                                         variant='small'
                                     />
                                     <span className='text-white'>
-                                        {val.dataset.label}
+                                        {val.dataset.label as CurrencySymbol}
                                     </span>
                                 </div>
                                 <span className='text-nebulaTeal'>
