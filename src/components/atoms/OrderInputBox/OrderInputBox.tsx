@@ -29,7 +29,9 @@ export const OrderInputBox = ({
     const [inputValue, setInputValue] = useState(initialValue);
 
     useEffect(() => {
-        setInputValue(initialValue);
+        if (inputValue !== '' || initialValue !== 0)
+            setInputValue(initialValue);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [initialValue]);
 
     const handleInputChange = useCallback(
@@ -52,10 +54,12 @@ export const OrderInputBox = ({
     );
 
     const handleAmountChange = useCallback(
-        (amount: number) => {
-            setInputValue(amount);
+        (amount: number | undefined) => {
+            amount ? setInputValue(amount) : setInputValue('');
             if (onValueChange) {
-                handleInputChange(amount, asset, onValueChange);
+                amount
+                    ? handleInputChange(amount, asset, onValueChange)
+                    : handleInputChange(0, asset, onValueChange);
             }
         },
         [onValueChange, handleInputChange, asset]
@@ -82,7 +86,7 @@ export const OrderInputBox = ({
                         className='w-32 text-right text-[18px] font-semibold leading-6 text-neutral-8'
                         label={field}
                         onValueChange={(v: number | undefined) =>
-                            handleAmountChange(v ?? 0)
+                            handleAmountChange(v)
                         }
                         decimalPlacesAllowed={decimalPlacesAllowed}
                         maxLimit={maxLimit}
