@@ -55,12 +55,9 @@ const SecuredFinanceProvider: React.FC = ({ children }) => {
 
     const dispatchChainError = useCallback(
         (chainId: string) => {
-            if (hexToDec(chainId) !== getEthereumChainId()) {
-                dispatch(updateChainError(true));
-                alert('Unsupported network, please use Goerli (Chain ID: 5)');
-            } else {
-                dispatch(updateChainError(false));
-            }
+            dispatch(
+                updateChainError(hexToDec(chainId) !== getEthereumChainId())
+            );
         },
         [dispatch]
     );
