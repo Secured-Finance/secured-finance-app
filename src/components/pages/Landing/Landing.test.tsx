@@ -10,7 +10,6 @@ import { OrderType } from 'src/types';
 import { CurrencySymbol } from 'src/utils';
 import timemachine from 'timemachine';
 import * as stories from './Landing.stories';
-import { today } from 'src/stories/mocks/queries';
 
 const { Default } = composeStories(stories);
 
@@ -27,8 +26,6 @@ jest.mock(
         ({ children }: { children: React.ReactNode }) =>
             children
 );
-
-jest.spyOn(Date.prototype, 'getTime').mockReturnValue(today * 1000);
 
 const mock = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mock);

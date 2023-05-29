@@ -94,8 +94,11 @@ export const mockDailyVolumes = [
     },
 ];
 
-export const today = 162187200;
+const today = 1643713200;
 const yesterday = today - 24 * 3600;
+const today2 = 1638356400;
+const yesterday2 = today2 - 24 * 3600;
+
 export const mockTrades = [
     {
         request: {
@@ -201,6 +204,126 @@ export const mockTrades = [
                 maturity: dec22Fixture.toNumber(),
                 from: yesterday,
                 to: today,
+                awaitRefetchQueries: true,
+            },
+        },
+        result: {
+            data: {
+                transactions: tradesUSDC,
+            },
+        },
+        newData: () => {
+            return {
+                data: {
+                    transactions: tradesUSDC,
+                },
+            };
+        },
+    },
+    {
+        request: {
+            query: queries.TradesDocument,
+            variables: {
+                currency: efilBytes32,
+                maturity: dec22Fixture.toNumber(),
+                from: yesterday2,
+                to: today2,
+                awaitRefetchQueries: true,
+            },
+        },
+        result: {
+            data: {
+                transactions: tradesEFIL,
+            },
+        },
+        newData: () => {
+            return {
+                data: {
+                    transactions: tradesEFIL,
+                },
+            };
+        },
+    },
+    {
+        request: {
+            query: queries.TradesDocument,
+            variables: {
+                currency: efilBytes32,
+                maturity: 0,
+                from: yesterday2,
+                to: today2,
+                awaitRefetchQueries: true,
+            },
+        },
+        result: {
+            data: {
+                tradesEFIL,
+            },
+        },
+        newData: () => {
+            return {
+                data: {
+                    tradesEFIL,
+                },
+            };
+        },
+    },
+    {
+        request: {
+            query: queries.TradesDocument,
+            variables: {
+                currency: ethBytes32,
+                maturity: dec22Fixture.toNumber(),
+                from: yesterday2,
+                to: today2,
+                awaitRefetchQueries: true,
+            },
+        },
+        result: {
+            data: {
+                transactions: tradesETH,
+            },
+        },
+        newData: () => {
+            return {
+                data: {
+                    transactions: tradesETH,
+                },
+            };
+        },
+    },
+    {
+        request: {
+            query: queries.TradesDocument,
+            variables: {
+                currency: wbtcBytes32,
+                maturity: dec22Fixture.toNumber(),
+                from: yesterday2,
+                to: today2,
+                awaitRefetchQueries: true,
+            },
+        },
+        result: {
+            data: {
+                transactions: tradesWBTC,
+            },
+        },
+        newData: () => {
+            return {
+                data: {
+                    transactions: tradesWBTC,
+                },
+            };
+        },
+    },
+    {
+        request: {
+            query: queries.TradesDocument,
+            variables: {
+                currency: usdcBytes32,
+                maturity: dec22Fixture.toNumber(),
+                from: yesterday2,
+                to: today2,
                 awaitRefetchQueries: true,
             },
         },
