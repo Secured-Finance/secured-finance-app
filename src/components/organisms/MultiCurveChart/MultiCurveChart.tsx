@@ -2,17 +2,17 @@ import {
     CategoryScale,
     Chart as ChartJS,
     ChartOptions,
-    ChartTypeRegistry,
     LinearScale,
     LineElement,
     PointElement,
     Title,
     Tooltip,
-    TooltipItem,
 } from 'chart.js';
+import { TooltipItem, TooltipModel } from 'chart.js/auto';
 import classNames from 'classnames';
-import { useRef, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import { Line } from 'react-chartjs-2';
+import { CurrencyIcon } from 'src/components/atoms';
 import {
     crossHairMultiPlugin,
     defaultDatasets,
@@ -28,6 +28,11 @@ ChartJS.register(
     Tooltip
 );
 
+type Position = {
+    top: number;
+    left: number;
+};
+
 export const options: ChartOptions<'line'> = {
     responsive: true,
     maintainAspectRatio: true,
@@ -37,7 +42,10 @@ export const options: ChartOptions<'line'> = {
     },
     layout: {
         padding: {
-            top: 20,
+            top: 44,
+            right: 30,
+            left: 20,
+            bottom: 20,
         },
     },
     elements: {
@@ -57,12 +65,12 @@ export const options: ChartOptions<'line'> = {
                 },
                 color: '#5D6588',
                 font: {
-                    lineHeight: 1.0,
+                    lineHeight: 2.0,
                 },
                 padding: 8,
             },
             grid: {
-                borderDash: [8, 8],
+                borderDash: [8, 4],
                 drawBorder: false,
                 color: 'rgba(255, 255, 255, 0.1)',
                 drawTicks: false,
@@ -70,13 +78,14 @@ export const options: ChartOptions<'line'> = {
         },
 
         x: {
-            beginAtZero: false,
+            beginAtZero: true,
+            offset: true,
             ticks: {
                 color: '#5D6588',
                 font: {
                     lineHeight: 2.0,
                 },
-                padding: 16,
+                padding: 8,
             },
             grid: {
                 display: false,
@@ -86,28 +95,6 @@ export const options: ChartOptions<'line'> = {
     },
     hover: {
         intersect: false,
-    },
-    plugins: {
-        tooltip: {
-            yAlign: 'bottom',
-            caretPadding: 16,
-            backgroundColor: 'rgba(47, 50, 65, 1)',
-            borderWidth: 1,
-            borderColor: 'rgba(52, 56, 76, 1)',
-            displayColors: false,
-            cornerRadius: 10,
-            padding: 8,
-            callbacks: {
-                label: (item: TooltipItem<keyof ChartTypeRegistry>) => {
-                    return `${item.dataset?.label || ''} ${
-                        item.formattedValue
-                    }%`;
-                },
-                title: () => {
-                    return '';
-                },
-            },
-        },
     },
     events: ['click', 'mousemove'],
 };
@@ -150,7 +137,7 @@ const CurveChip = ({
     return (
         <button
             data-testid='curve-chip'
-            style={{ backgroundColor: currencyMap[ccy].chartColor }}
+            style={{ backgroundColor: currencyMap[ccy].pillColor }}
             className={classNames(
                 `flex w-fit items-center justify-center rounded-xl px-3 py-2 font-secondary text-xs font-semibold uppercase leading-3 text-neutral-8`,
                 {
@@ -177,6 +164,10 @@ export const MultiCurveChart = ({
     labels: string[];
 }) => {
     const chartRef = useRef<ChartJS<'line'>>(null);
+    const [tooltipVisible, setTooltipVisible] = useState(false);
+    const [tooltipData, setTooltipData] = useState<TooltipItem<'line'>[]>();
+    const [tooltipPos, setTooltipPos] = useState<Position | null>(null);
+
     const [activeCurrencies, setActiveCurrencies] = useState<
         Set<CurrencySymbol>
     >(new Set(Object.keys(curves) as CurrencySymbol[]));
@@ -197,9 +188,48 @@ export const MultiCurveChart = ({
         }
     };
 
+    const customTooltip = useCallback(
+        ({
+            chart,
+            tooltip,
+        }: {
+            chart: ChartJS<'line'>;
+            tooltip: TooltipModel<'line'>;
+        }) => {
+            if (tooltip.opacity === 0) {
+                setTooltipVisible(false);
+                return;
+            }
+
+            const canvas = chart.canvas;
+            if (canvas) {
+                setTooltipVisible(true);
+
+                const left = tooltip.x;
+                const top = tooltip.y;
+
+                if (tooltipPos?.top !== top) {
+                    setTooltipPos({ top: top, left: left });
+                    setTooltipData(tooltip.dataPoints);
+                }
+            }
+        },
+        [tooltipPos]
+    );
+
+    const dataOptions: ChartOptions<'line'> = {
+        ...options,
+        plugins: {
+            tooltip: {
+                enabled: false,
+                external: customTooltip,
+            },
+        },
+    };
+
     return (
-        <div className='box-border rounded-b-2xl border border-[#2D4064] bg-cardBackground/20 px-6 py-7'>
-            <div className='flex flex-row justify-between pb-8'>
+        <div className='box-border rounded-b-2xl border border-[#2D4064] bg-cardBackground/20 drop-shadow-tab'>
+            <div className='flex flex-row justify-between bg-gradient-to-b from-[rgba(106,118,177,0.15)] from-0% to-[rgba(106,118,177,0)] to-70% pb-8 pl-7 pr-5 pt-7'>
                 <h1 className='typography-body-2 text-[20px] capitalize text-white'>
                     {title}
                 </h1>
@@ -220,15 +250,74 @@ export const MultiCurveChart = ({
                     })}
                 </div>
             </div>
-            <Line
-                className='rounded-b-2xl bg-black-20 p-5'
-                data={getData(curves, Array.from(activeCurrencies), labels)}
-                options={options}
-                ref={chartRef}
-                onClick={() => {}}
-                data-chromatic='ignore'
-                plugins={[crossHairMultiPlugin]}
-            />
+            <div className='relative pb-7 pl-6 pr-5'>
+                <Line
+                    className='rounded-b-xl bg-black-20'
+                    data={getData(curves, Array.from(activeCurrencies), labels)}
+                    options={dataOptions}
+                    ref={chartRef}
+                    onClick={() => {}}
+                    data-chromatic='ignore'
+                    plugins={[crossHairMultiPlugin]}
+                />
+                {tooltipPos && (
+                    <GraphTooltip
+                        data={tooltipData}
+                        position={tooltipPos}
+                        visibility={tooltipVisible}
+                    />
+                )}
+            </div>
+        </div>
+    );
+};
+
+const GraphTooltip = ({
+    data,
+    position,
+    visibility,
+}: {
+    data: TooltipItem<'line'>[] | undefined;
+    position: Position;
+    visibility: boolean;
+}) => {
+    return (
+        <div
+            className={`absolute flex w-40 flex-col gap-5 overflow-hidden rounded-[10px] border border-[#34384C] bg-[rgba(47,50,65,0.6)] px-3 pb-5 pt-4 shadow-curvetooltip backdrop-blur-[3px] transition-all duration-300 hover:!visible
+        ${visibility ? 'visible' : 'invisible'}
+          `}
+            style={{
+                top: position?.top,
+                left: position?.left,
+            }}
+        >
+            {data && (
+                <>
+                    {data.map((val, index) => {
+                        return (
+                            <div
+                                className='typography-button-1 flex h-5 flex-row items-center justify-between leading-[22px]'
+                                key={index}
+                            >
+                                <div className='flex items-center gap-2'>
+                                    <CurrencyIcon
+                                        ccy={
+                                            val.dataset.label as CurrencySymbol
+                                        }
+                                        variant='small'
+                                    />
+                                    <span className='text-white'>
+                                        {val.dataset.label}
+                                    </span>
+                                </div>
+                                <span className='text-nebulaTeal'>
+                                    {`${val.formattedValue}%`}
+                                </span>
+                            </div>
+                        );
+                    })}
+                </>
+            )}
         </div>
     );
 };
