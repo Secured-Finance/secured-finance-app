@@ -62,6 +62,7 @@ describe('MarketDashboard Component', () => {
         );
     }, 8000);
 
+
     it('should show the yield curves', async () => {
         await renderDefault();
         const yieldCurves = await screen.findAllByTestId('curve-chip');
@@ -74,5 +75,5 @@ describe('MarketDashboard Component', () => {
             'Collateral Utilization'
         );
         expect(collateralWidget).toBeInTheDocument();
-    });
+    }, 10000); //TODO: TEST THROWS TIMEOUT EXCEEDED WARNING ON GITHUB ACTIONS
 });
