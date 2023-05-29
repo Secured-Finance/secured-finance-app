@@ -1,6 +1,6 @@
 import { formatDate } from '@secured-finance/sf-core';
 import { Option } from 'src/components/atoms';
-import { hexToNumber } from 'web3-utils';
+import { hexToNumber, numberToHex } from 'web3-utils';
 import { getEnvironment } from './env';
 
 export enum Environment {
@@ -11,6 +11,12 @@ export enum Environment {
 export const hexToDec = (key: string) => {
     if (key !== null) {
         return hexToNumber(key);
+    }
+};
+
+export const decToHex = (key: number) => {
+    if (key !== null) {
+        return numberToHex(key);
     }
 };
 

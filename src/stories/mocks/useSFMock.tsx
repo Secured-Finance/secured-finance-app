@@ -246,7 +246,7 @@ export const mockUseSF = () => {
             })
         ),
 
-        unwindOrder: jest.fn(() =>
+        unwindPosition: jest.fn(() =>
             Promise.resolve({
                 hash: '0x123',
                 wait: jest.fn(() =>
@@ -261,6 +261,10 @@ export const mockUseSF = () => {
             Promise.resolve({
                 liquidationThresholdRate: BigNumber.from('12500'),
             })
+        ),
+
+        getWithdrawableCollateral: jest.fn(() =>
+            Promise.resolve(1000000000000)
         ),
     };
 

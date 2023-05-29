@@ -9,10 +9,8 @@ interface CollateralSelectorProps {
     onChange: (v: CollateralInfo) => void;
 }
 
-const formatOption = (collateralObject: CollateralInfo) => {
-    return `${ordinaryFormat(collateralObject.available, 4)} ${
-        collateralObject.name
-    } Available`;
+const formatOption = (availableAmount: number, name: string) => {
+    return `${ordinaryFormat(availableAmount, 4)} ${name} Available`;
 };
 
 export const CollateralSelector = ({
@@ -44,7 +42,10 @@ export const CollateralSelector = ({
                                         {selected.name}
                                     </span>
                                     <span className='typography-caption-2 flex h-6 w-full max-w-[200px] items-center justify-end pr-2 text-secondary7'>
-                                        {formatOption(selected)}
+                                        {formatOption(
+                                            selected.available,
+                                            selected.name
+                                        )}
                                     </span>
                                     <div className='absolute right-3'>
                                         <ExpandIndicator
@@ -85,7 +86,8 @@ export const CollateralSelector = ({
                                                         </span>
                                                         <span className='typography-caption-2 flex h-6 w-full max-w-[200px] items-center justify-end text-secondary7'>
                                                             {formatOption(
-                                                                assetObj
+                                                                assetObj.available,
+                                                                assetObj.name
                                                             )}
                                                         </span>
                                                     </div>

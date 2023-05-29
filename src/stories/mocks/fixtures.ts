@@ -262,9 +262,7 @@ export const usdcBytes32 = utils.formatBytes32String('USDC'); // '0x555344430000
 
 export const orderHistoryList: OrderList = [
     {
-        id: '1',
         orderId: BigNumber.from('1'),
-        originalOrderId: BigNumber.from('1'),
         currency: efilBytes32,
         side: 1,
         maturity: BigNumber.from(dec22Fixture.toString()),
@@ -272,13 +270,9 @@ export const orderHistoryList: OrderList = [
         amount: BigNumber.from('1000000000000000000000'),
         status: 'Filled',
         createdAt: BigNumber.from('1'),
-        blockNumber: BigNumber.from('1'),
-        txHash: '1',
     },
     {
-        id: '2',
         orderId: BigNumber.from('1'),
-        originalOrderId: BigNumber.from('1'),
         currency: efilBytes32,
         side: 1,
         maturity: BigNumber.from(dec22Fixture.toString()),
@@ -286,13 +280,9 @@ export const orderHistoryList: OrderList = [
         amount: BigNumber.from('5000000000000000000000'),
         status: 'Open',
         createdAt: BigNumber.from('1'),
-        blockNumber: BigNumber.from('1'),
-        txHash: '1',
     },
     {
-        id: '3',
         orderId: BigNumber.from('1'),
-        originalOrderId: BigNumber.from('1'),
         currency: wbtcBytes32,
         side: 0,
         maturity: BigNumber.from(dec22Fixture.toString()),
@@ -300,16 +290,12 @@ export const orderHistoryList: OrderList = [
         amount: BigNumber.from('1000000000'),
         status: 'Filled',
         createdAt: BigNumber.from('1'),
-        blockNumber: BigNumber.from('1'),
-        txHash: '1',
     },
 ];
 
 export const openOrderHistoryList: OrderList = [
     {
-        id: '1',
         orderId: BigNumber.from('1'),
-        originalOrderId: BigNumber.from('1'),
         currency: efilBytes32,
         side: 1,
         maturity: BigNumber.from(dec23Fixture.toString()),
@@ -317,13 +303,9 @@ export const openOrderHistoryList: OrderList = [
         amount: BigNumber.from('1000000000000000000000'),
         status: 'Open',
         createdAt: BigNumber.from('1'),
-        blockNumber: BigNumber.from('1'),
-        txHash: '1',
     },
     {
-        id: '2',
         orderId: BigNumber.from('1'),
-        originalOrderId: BigNumber.from('1'),
         currency: efilBytes32,
         side: 1,
         maturity: BigNumber.from(mar23Fixture.toString()),
@@ -331,13 +313,9 @@ export const openOrderHistoryList: OrderList = [
         amount: BigNumber.from('5000000000000000000000'),
         status: 'Open',
         createdAt: BigNumber.from('1'),
-        blockNumber: BigNumber.from('1'),
-        txHash: '1',
     },
     {
-        id: '3',
         orderId: BigNumber.from('1'),
-        originalOrderId: BigNumber.from('1'),
         currency: efilBytes32,
         side: 0,
         maturity: BigNumber.from(dec22Fixture.toString()),
@@ -345,13 +323,9 @@ export const openOrderHistoryList: OrderList = [
         amount: BigNumber.from('1000000000'),
         status: 'Open',
         createdAt: BigNumber.from('1'),
-        blockNumber: BigNumber.from('1'),
-        txHash: '1',
     },
     {
-        id: '4',
         orderId: BigNumber.from('1'),
-        originalOrderId: BigNumber.from('1'),
         currency: wbtcBytes32,
         side: 1,
         maturity: BigNumber.from(mar23Fixture.toString()),
@@ -359,13 +333,9 @@ export const openOrderHistoryList: OrderList = [
         amount: BigNumber.from('5000000000000000000000'),
         status: 'Open',
         createdAt: BigNumber.from('1'),
-        blockNumber: BigNumber.from('1'),
-        txHash: '1',
     },
     {
-        id: '5',
         orderId: BigNumber.from('1'),
-        originalOrderId: BigNumber.from('1'),
         currency: ethBytes32,
         side: 0,
         maturity: BigNumber.from(dec23Fixture.toString()),
@@ -373,14 +343,11 @@ export const openOrderHistoryList: OrderList = [
         amount: BigNumber.from('1000000000'),
         status: 'Open',
         createdAt: BigNumber.from('1'),
-        blockNumber: BigNumber.from('1'),
-        txHash: '1',
     },
 ];
 
 export const transactions: TradeHistory = [
     {
-        id: '0x123',
         amount: '1000000000000000000000',
         averagePrice: '0.8000', // TODO: rework the unit in the graph. This is changed only for a dirty fix
         side: 0,
@@ -391,7 +358,6 @@ export const transactions: TradeHistory = [
         maturity: jun23Fixture.toString(),
     },
     {
-        id: '0x124',
         amount: '500000000000000000000',
         averagePrice: '0.8000', // TODO: rework the unit in the graph. This is changed only for a dirty fix
         side: 1,
@@ -402,7 +368,6 @@ export const transactions: TradeHistory = [
         maturity: jun23Fixture.toString(),
     },
     {
-        id: '0x124',
         amount: '500000000000000000000',
         averagePrice: '0.8000', // TODO: rework the unit in the graph. This is changed only for a dirty fix
         side: 1,
@@ -413,7 +378,6 @@ export const transactions: TradeHistory = [
         maturity: mar23Fixture.toString(),
     },
     {
-        id: '0x123',
         amount: '1000000000',
         averagePrice: '0.9000', // TODO: rework the unit in the graph. This is changed only for a dirty fix
         side: 1,
@@ -424,7 +388,6 @@ export const transactions: TradeHistory = [
         maturity: jun23Fixture.toString(),
     },
     {
-        id: '0x123',
         amount: '1000000000',
         averagePrice: '0.9203', // TODO: rework the unit in the graph. This is changed only for a dirty fix
         side: 1,
@@ -480,6 +443,10 @@ export const collateralBook80: CollateralBook = {
     usdNonCollateral: 10600,
     coverage: BigNumber.from('8000'), // 80%,
     collateralThreshold: 80,
+    withdrawableCollateral: {
+        [CurrencySymbol.USDC]: BigNumber.from(100000),
+        [CurrencySymbol.ETH]: BigNumber.from(100000),
+    },
 };
 
 export const collateralBook37: CollateralBook = {
@@ -495,6 +462,10 @@ export const collateralBook37: CollateralBook = {
     usdNonCollateral: 10600,
     coverage: BigNumber.from('3700'),
     collateralThreshold: 80,
+    withdrawableCollateral: {
+        [CurrencySymbol.USDC]: BigNumber.from(100000),
+        [CurrencySymbol.ETH]: BigNumber.from(100000),
+    },
 };
 
 export const emptyCollateralBook: CollateralBook = {
@@ -510,6 +481,10 @@ export const emptyCollateralBook: CollateralBook = {
     usdNonCollateral: 0,
     coverage: BigNumber.from('0'), // 0%
     collateralThreshold: 0,
+    withdrawableCollateral: {
+        [CurrencySymbol.USDC]: BigNumber.from(0),
+        [CurrencySymbol.ETH]: BigNumber.from(0),
+    },
 };
 
 function generateDailyVolumes(days: number) {

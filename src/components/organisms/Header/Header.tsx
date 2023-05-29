@@ -1,7 +1,10 @@
+import classNames from 'classnames';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useDispatch, useSelector } from 'react-redux';
+import Burger from 'src/assets/img/burger.svg';
 import SFLogo from 'src/assets/img/logo.svg';
+import SFLogoSmall from 'src/assets/img/small-logo.svg';
 import { Button, NavTab } from 'src/components/atoms';
 import { MenuPopover } from 'src/components/molecules';
 import { WalletDialog, WalletPopover } from 'src/components/organisms';
@@ -27,20 +30,24 @@ export const Header = () => {
     return (
         <div>
             {!chainError && (
-                <div className='typography-caption-2 bg-horizonBlue/100 p-[1px] text-center text-neutral-8'>
+                <div className='typography-caption-2 w-full bg-horizonBlue/100 p-[1px] text-center text-neutral-8'>
                     You are visiting Secured Finance on testnet
                 </div>
             )}
             <nav
                 data-cy='header'
-                className={`flex h-20 w-full flex-row items-center justify-between border-b border-neutral-1 ${
-                    open ? 'blur-sm' : ''
-                }`}
+                className={classNames(
+                    'grid h-20 w-full grid-cols-4 items-center justify-between border-b border-neutral-1 tablet:grid-cols-7',
+                    {
+                        'blur-sm': open,
+                    }
+                )}
             >
-                <div className='ml-5 flex flex-row items-center gap-3'>
+                <div className='col-span-2 ml-5 flex flex-row items-center gap-3'>
                     <Link href='/' passHref>
                         <a href='_'>
-                            <SFLogo className='h-10 w-[200px]' />
+                            <SFLogo className='hidden tablet:inline tablet:h-5 tablet:w-[100px] desktop:h-10 desktop:w-[200px]' />
+                            <SFLogoSmall className='inline h-10 w-10 tablet:hidden' />
                         </a>
                     </Link>
                     {envShort && (
@@ -49,27 +56,32 @@ export const Header = () => {
                         </div>
                     )}
                 </div>
-                <div className='flex h-full items-center justify-center'>
+                <div className='hidden h-full w-full tablet:inline'>
                     <ItemLink
                         text='OTC Lending'
                         dataCy='lending'
                         link='/'
                         alternateLink='/advanced'
                     />
+                </div>
+                <div className='hidden h-full w-full tablet:inline'>
                     <ItemLink
                         text='Market Dashboard'
                         dataCy='terminal'
                         link='/dashboard'
                     />
+                </div>
+                <div className='hidden h-full w-full tablet:inline'>
                     <ItemLink
                         text='Portfolio Management'
                         dataCy='history'
                         link='/portfolio'
                     />
-                    <ItemLink text='Faucet' dataCy='faucet' link='/faucet' />
+                </div>
+                <div className='hidden h-full w-full tablet:inline'>
                     <MenuPopover />
                 </div>
-                <div className='mr-5'>
+                <div className='col-span-2 flex flex-row items-center justify-end gap-2 pr-2 tablet:col-span-1'>
                     {account ? (
                         <WalletPopover
                             wallet={AddressUtils.format(account, 6)}
@@ -82,11 +94,13 @@ export const Header = () => {
                             data-cy='wallet'
                             data-testid='connect-wallet'
                             onClick={() => dispatch(setWalletDialogOpen(true))}
-                            disabled={chainError}
                         >
                             Connect Wallet
                         </Button>
                     )}
+                    <button className='inline tablet:hidden'>
+                        <Burger className='h-8 w-8' />
+                    </button>
                 </div>
                 <WalletDialog />
             </nav>

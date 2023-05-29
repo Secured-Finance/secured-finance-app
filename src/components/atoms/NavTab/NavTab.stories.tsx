@@ -8,6 +8,11 @@ export default {
         text: 'OTC Lending',
         active: true,
     },
+    parameters: {
+        viewport: {
+            disable: true,
+        },
+    },
 } as ComponentMeta<typeof NavTab>;
 
 const Template: ComponentStory<typeof NavTab> = args => (

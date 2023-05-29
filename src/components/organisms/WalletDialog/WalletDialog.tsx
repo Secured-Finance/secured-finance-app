@@ -17,6 +17,8 @@ import {
     InterfaceEvents,
     InterfaceProperties,
     WalletConnectionResult,
+    decToHex,
+    getEthereumChainId,
 } from 'src/utils';
 import { associateWallet } from 'src/utils/events';
 import { useWallet } from 'use-wallet';
@@ -99,6 +101,9 @@ export const WalletDialog = () => {
     const isOpen = useSelector(
         (state: RootState) => state.interactions.walletDialogOpen
     );
+    const chainError = useSelector(
+        (state: RootState) => state.blockchain.chainError
+    );
     const globalDispatch = useDispatch();
 
     const { account, connect } = useWallet();
@@ -165,7 +170,36 @@ export const WalletDialog = () => {
 
             switch (currentStep) {
                 case Step.selectWallet:
-                    dispatch({ type: 'next' });
+                    if (chainError) {
+                        const provider = window.ethereum;
+                        if (provider) {
+                            try {
+                                await provider.request({
+                                    method: 'wallet_switchEthereumChain',
+                                    params: [
+                                        {
+                                            chainId: decToHex(
+                                                getEthereumChainId()
+                                            ),
+                                        },
+                                    ],
+                                });
+                                dispatch({ type: 'next' });
+                            } catch (e) {
+                                if (e instanceof Error) {
+                                    setErrorMessage(e.message);
+                                    dispatch({ type: 'error' });
+                                }
+                            }
+                        } else {
+                            window.open(
+                                'https://metamask.io/',
+                                'inst_metamask'
+                            );
+                        }
+                    } else {
+                        dispatch({ type: 'next' });
+                    }
                     break;
                 case Step.connecting:
                     break;
@@ -177,7 +211,7 @@ export const WalletDialog = () => {
                     break;
             }
         },
-        [handleClose, wallet]
+        [handleClose, wallet, chainError]
     );
 
     return (

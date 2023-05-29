@@ -4,6 +4,7 @@ import { BigNumber } from 'ethers';
 import {
     withAppLayout,
     withAssetPrice,
+    withChainErrorDisabled,
     withMaturities,
     withWalletBalances,
     withWalletProvider,
@@ -47,6 +48,7 @@ export default {
         apolloClient: {
             mocks: [...totalUser, ...mockDailyVolumes],
         },
+        chromatic: { delay: 3000 },
     },
     decorators: [
         withAppLayout,
@@ -54,6 +56,7 @@ export default {
         withWalletBalances,
         withMaturities,
         withAssetPrice,
+        withChainErrorDisabled,
     ],
 } as ComponentMeta<typeof MarketDashboard>;
 

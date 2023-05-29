@@ -1,3 +1,4 @@
+import { RESPONSIVE_PARAMETERS, VIEWPORTS } from '.storybook/constants';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { Dialog } from './Dialog';
 
@@ -12,6 +13,12 @@ export default {
         description:
             'Description goes here. Try to keep message to not more than three lines.',
         callToAction: 'Ok',
+    },
+    parameters: {
+        ...RESPONSIVE_PARAMETERS,
+        chromatic: {
+            viewports: [VIEWPORTS.MOBILE, VIEWPORTS.TABLET],
+        },
     },
 } as ComponentMeta<typeof Dialog>;
 
