@@ -1,8 +1,7 @@
 import { createColumnHelper } from '@tanstack/react-table';
 import { useMemo } from 'react';
 import { CoreTable, OpenOrderActionCell } from 'src/components/molecules';
-import { Order } from 'src/components/organisms';
-import { OrderList } from 'src/types';
+import { Order } from 'src/hooks';
 import { hexToCurrencySymbol } from 'src/utils';
 import { Maturity } from 'src/utils/entities';
 import {
@@ -14,7 +13,7 @@ import {
 
 const columnHelper = createColumnHelper<Order>();
 
-export const OpenOrderTable = ({ data }: { data: OrderList }) => {
+export const OrderTable = ({ data }: { data: Order[] }) => {
     const columns = useMemo(
         () => [
             loanTypeColumnDefinition(columnHelper, 'Type', 'type'),
@@ -69,7 +68,7 @@ export const OpenOrderTable = ({ data }: { data: OrderList }) => {
     return (
         <CoreTable
             columns={columns}
-            data={data.filter(order => order.status === 'Open')}
+            data={data}
             name='open-order-table'
             border={false}
         />

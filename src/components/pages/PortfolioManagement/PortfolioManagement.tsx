@@ -9,9 +9,10 @@ import {
     MyWalletCard,
     OrderHistoryTable,
     WalletDialog,
+    OrderTable,
 } from 'src/components/organisms';
 import { Page, TwoColumns } from 'src/components/templates';
-import { useCollateralBook, useGraphClientHook } from 'src/hooks';
+import { useGraphClientHook } from 'src/hooks';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { RootState } from 'src/store/types';
 import {
@@ -19,8 +20,13 @@ import {
     aggregateTrades,
     computeNetValue,
     usdFormat,
+    formatOrders,
 } from 'src/utils';
+import { useCollateralBook, useOrderList } from 'src/hooks';
 import { useWallet } from 'use-wallet';
+import { TradeHistory } from 'src/types';
+
+export type Trade = TradeHistory[0];
 
 export const PortfolioManagement = () => {
     const { account } = useWallet();
@@ -29,8 +35,12 @@ export const PortfolioManagement = () => {
         queries.UserHistoryDocument,
         'user'
     );
+    const orderList = useOrderList(account);
 
-    const tradeHistory = userHistory.data?.transactions ?? [];
+    const tradesFromCon = formatOrders(orderList.inactiveOrderList);
+    const tradeFromSub = userHistory.data?.transactions ?? [];
+    const tradeHistory = [...tradeFromSub, ...tradesFromCon];
+
     const orderHistory = userHistory.data?.orders ?? [];
 
     const priceMap = useSelector((state: RootState) => getPriceMap(state));
@@ -93,10 +103,12 @@ export const PortfolioManagement = () => {
                     tabTitles={[
                         'Active Positions',
                         'Open Orders',
+                        'Order History',
                         'My Transactions',
                     ]}
                 >
                     <ActiveTradeTable data={aggregateTrades(tradeHistory)} />
+                    <OrderTable data={orderList.activeOrderList} />
                     <OrderHistoryTable data={orderHistory} />
                     <MyTransactionsTable data={tradeHistory} />
                 </HorizontalTab>

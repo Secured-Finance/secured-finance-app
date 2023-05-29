@@ -11,12 +11,13 @@ import {
 import {
     AdvancedLendingOrderCard,
     LineChartTab,
-    OpenOrderTable,
+    OrderTable,
     OrderWidget,
 } from 'src/components/organisms';
 import { TwoColumnsWithTopBar } from 'src/components/templates';
 import { CollateralBook, useGraphClientHook } from 'src/hooks';
 import { useOrderbook } from 'src/hooks/useOrderbook';
+import { useOrderList } from 'src/hooks';
 import { getAssetPrice } from 'src/store/assetPrices/selectors';
 import {
     selectLandingOrderForm,
@@ -109,11 +110,7 @@ export const AdvancedLending = ({
     }, [maturity, maturitiesOptionList]);
 
     const orderBook = useOrderbook(currency, selectedTerm.value, 10);
-    const orderHistory = useGraphClientHook(
-        { address: account?.toLowerCase() ?? '' },
-        queries.UserHistoryDocument,
-        'user'
-    );
+    const orderList = useOrderList(account);
 
     const ts = Math.round(new Date().getTime() / 1000);
     const tsYesterday = ts - 24 * 3600;
@@ -212,7 +209,7 @@ export const AdvancedLending = ({
                         currency={currency}
                     />
                     <></>
-                    <OpenOrderTable data={orderHistory.data?.orders ?? []} />
+                    <OrderTable data={orderList.activeOrderList} />
                 </HorizontalTab>
             </div>
         </TwoColumnsWithTopBar>
