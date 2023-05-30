@@ -1,4 +1,4 @@
-import { Menu } from '@headlessui/react';
+import { Menu, Transition } from '@headlessui/react';
 import { ArrowUpIcon } from '@heroicons/react/solid';
 import classNames from 'classnames';
 import Link from 'next/link';
@@ -110,68 +110,79 @@ export const HamburgerMenu = ({
                     <Menu.Button aria-label='Hamburger Menu'>
                         <Burger className='h-8 w-8' />
                     </Menu.Button>
-                    <Menu.Items
-                        as='div'
-                        className={classNames(
-                            'typography-body-1 fixed inset-x-0 bottom-0 z-50 flex h-screen w-full flex-col gap-4 bg-universeBlue p-8 text-neutral-4'
-                        )}
+                    <Transition
+                        className='fixed inset-0'
+                        enter='transition duration-100 ease-out'
+                        enterFrom='transform scale-95 opacity-0'
+                        enterTo='transform scale-100 opacity-100'
+                        leave='transition duration-75 ease-out'
+                        leaveFrom='transform scale-100 opacity-100'
+                        leaveTo='transform scale-95 opacity-0'
                     >
-                        <Closable onClose={close}>
-                            <div className='fixed'>
-                                <SFLogoSmall className='h-7 w-7' />
-                            </div>
-                            <div className='w-full flex-col items-start'>
-                                {links.map(link => (
-                                    <MenuItemLink
-                                        key={link.label}
-                                        text={link.label}
-                                        link={link.link}
-                                    />
-                                ))}
+                        <Menu.Items
+                            as='div'
+                            className={classNames(
+                                'typography-body-1 fixed inset-x-0 z-50 flex h-screen w-full flex-col gap-4 bg-universeBlue p-8 text-neutral-4'
+                            )}
+                        >
+                            <Closable onClose={close}>
+                                <div className='fixed'>
+                                    <SFLogoSmall className='h-7 w-7' />
+                                </div>
+                                <div className='w-full flex-col items-start'>
+                                    {links.map(link => (
+                                        <MenuItemLink
+                                            key={link.label}
+                                            text={link.label}
+                                            link={link.link}
+                                        />
+                                    ))}
 
-                                <Menu.Item as='div' className='w-full'>
-                                    {({ active }) => (
-                                        <button
-                                            onClick={e => {
-                                                e.preventDefault();
-                                                setShowMore(!showMore);
-                                            }}
-                                            aria-label='Show More'
-                                            className={classNames(
-                                                'flex h-16 w-full items-center justify-between px-9 py-4 text-center',
-                                                {
-                                                    'border-l-4 border-starBlue bg-gradient-to-r from-[#6A76B159] via-[#4A5BAF1F] to-[#394DAE00] text-neutral-8':
-                                                        active,
-                                                }
-                                            )}
-                                        >
-                                            More
-                                            <ArrowUpIcon
+                                    <Menu.Item as='div' className='w-full'>
+                                        {({ active }) => (
+                                            <button
+                                                onClick={e => {
+                                                    e.preventDefault();
+                                                    setShowMore(!showMore);
+                                                }}
+                                                aria-label='Show More'
                                                 className={classNames(
-                                                    'mt-2 inline h-5 w-5 text-neutral-4',
+                                                    'flex h-16 w-full items-center justify-between px-9 py-4 text-center',
                                                     {
-                                                        'rotate-180': showMore,
+                                                        'border-l-4 border-starBlue bg-gradient-to-r from-[#6A76B159] via-[#4A5BAF1F] to-[#394DAE00] text-neutral-8':
+                                                            active,
                                                     }
                                                 )}
-                                            />
-                                        </button>
-                                    )}
-                                </Menu.Item>
+                                            >
+                                                More
+                                                <ArrowUpIcon
+                                                    className={classNames(
+                                                        'mt-2 inline h-5 w-5 text-neutral-4',
+                                                        {
+                                                            'rotate-180':
+                                                                showMore,
+                                                        }
+                                                    )}
+                                                />
+                                            </button>
+                                        )}
+                                    </Menu.Item>
 
-                                {showMore && (
-                                    <div className='w-full px-4'>
-                                        {EXTRA_LINKS.map(link => (
-                                            <MobileItemLink
-                                                key={link.text}
-                                                text={link.text}
-                                                href={link.href}
-                                            />
-                                        ))}
-                                    </div>
-                                )}
-                            </div>
-                        </Closable>
-                    </Menu.Items>
+                                    {showMore && (
+                                        <div className='w-full px-4'>
+                                            {EXTRA_LINKS.map(link => (
+                                                <MobileItemLink
+                                                    key={link.text}
+                                                    text={link.text}
+                                                    href={link.href}
+                                                />
+                                            ))}
+                                        </div>
+                                    )}
+                                </div>
+                            </Closable>
+                        </Menu.Items>
+                    </Transition>
                 </>
             )}
         </Menu>
