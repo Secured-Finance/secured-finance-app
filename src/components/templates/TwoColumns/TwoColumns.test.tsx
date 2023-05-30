@@ -18,20 +18,20 @@ describe('TwoColumns Component', () => {
     it('should display the two columns with the first one being the bigger one', () => {
         render(<Default />);
         expect(screen.getByText('Column 1').parentElement).toHaveClass(
-            'tablet:w-[70%]'
+            'w-full tablet:w-[70%]'
         );
         expect(screen.getByText('Column 2').parentElement).toHaveClass(
-            'tablet:w-[30%]'
+            'w-full tablet:w-[30%]'
         );
     });
 
     it('should display the two columns with the first one being the smaller one when narrowFirstColumn is true', () => {
         render(<Default narrowFirstColumn />);
         expect(screen.getByText('Column 1').parentElement).toHaveClass(
-            'tablet:w-[30%]'
+            'w-full tablet:w-[30%]'
         );
         expect(screen.getByText('Column 2').parentElement).toHaveClass(
-            'tablet:w-[70%]'
+            'w-full tablet:w-[70%]'
         );
     });
 });

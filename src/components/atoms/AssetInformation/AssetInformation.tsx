@@ -45,7 +45,7 @@ export const AssetInformation = ({
                         .filter(([_asset, quantity]) => !quantity.isZero())
                         .map(([asset, quantity]) => (
                             <div
-                                className='flex h-10 w-full flex-row items-center gap-2'
+                                className='my-1 flex h-10 w-full flex-row items-center gap-2 border-b border-white-10 pb-4 tablet:border-none'
                                 key={asset}
                             >
                                 <div>
