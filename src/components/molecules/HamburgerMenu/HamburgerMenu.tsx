@@ -51,7 +51,7 @@ const MenuItemLink = ({ text, link }: { text: string; link: string }) => {
                 <NextLink
                     href={link}
                     className={classNames(
-                        'flex h-16 w-full items-center justify-start px-9 py-4 text-center',
+                        'flex h-16 w-full items-center justify-start whitespace-nowrap px-9 py-4 text-center',
                         {
                             'border-l-4 border-starBlue bg-gradient-to-r from-[#6A76B159] via-[#4A5BAF1F] to-[#394DAE00] text-neutral-8':
                                 active,
@@ -71,9 +71,9 @@ const MobileItemLink = ({ text, href }: { text: string; href: string }) => {
             {({ active }) => (
                 <a
                     className={classNames(
-                        'flex h-16 w-full flex-row items-center justify-start gap-3 whitespace-nowrap px-9 py-4 text-center',
+                        'flex h-16 w-full flex-row items-center justify-start gap-3 whitespace-nowrap p-4 text-center',
                         {
-                            'border-l-4 bg-[#233447] text-neutral-8': active,
+                            'rounded-2xl bg-[#233447] text-neutral-8': active,
                         }
                     )}
                     href={href}
@@ -83,7 +83,7 @@ const MobileItemLink = ({ text, href }: { text: string; href: string }) => {
                     <p>{text}</p>
                     <ArrowUpIcon
                         className={classNames(
-                            'mt-2 h-5 w-5 rotate-45 text-white',
+                            'mt-1 h-4 w-4 rotate-45 text-white',
                             {
                                 inline: active,
                                 hidden: !active,
@@ -111,7 +111,7 @@ export const HamburgerMenu = ({
                         <Burger className='h-8 w-8' />
                     </Menu.Button>
                     <Transition
-                        className='fixed inset-0'
+                        className='fixed inset-0 z-50'
                         enter='transition duration-100 ease-out'
                         enterFrom='transform scale-95 opacity-0'
                         enterTo='transform scale-100 opacity-100'
@@ -122,7 +122,7 @@ export const HamburgerMenu = ({
                         <Menu.Items
                             as='div'
                             className={classNames(
-                                'typography-body-1 fixed inset-x-0 z-50 flex h-screen w-full flex-col gap-4 bg-universeBlue p-8 text-neutral-4'
+                                'typography-body-1 flex h-screen w-full flex-col gap-4 bg-universeBlue p-8 text-neutral-4'
                             )}
                         >
                             <Closable onClose={close}>
