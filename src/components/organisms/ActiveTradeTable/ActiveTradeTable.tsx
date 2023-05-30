@@ -7,6 +7,7 @@ import { useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { CoreTable, TableActionMenu } from 'src/components/molecules';
 import { UnwindDialog } from 'src/components/organisms';
+import { useBreakpoint } from 'src/hooks';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { setCurrency, setMaturity } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
@@ -31,6 +32,7 @@ export const ActiveTradeTable = ({ data }: { data: TradeSummary[] }) => {
     const priceList = useSelector((state: RootState) => getPriceMap(state));
     const router = useRouter();
     const dispatch = useDispatch();
+    const isTablet = useBreakpoint('tablet');
 
     const columns = useMemo(
         () => [
@@ -72,11 +74,11 @@ export const ActiveTradeTable = ({ data }: { data: TradeSummary[] }) => {
                         );
                     }
                     return (
-                        <div className='grid'>
-                            <div className='typography-caption text-neutral-7'>
+                        <div className='grid w-40 justify-center tablet:w-full'>
+                            <div className='typography-caption w-full text-neutral-7'>
                                 {maturity}
                             </div>
-                            <span className='typography-caption-2 h-5 text-neutral-4'>
+                            <span className='typography-caption-2 h-5 w-full text-neutral-4'>
                                 {formatDate(maturityTimestamp)}
                             </span>
                         </div>
@@ -161,15 +163,17 @@ export const ActiveTradeTable = ({ data }: { data: TradeSummary[] }) => {
         [dispatch, priceList, router]
     );
 
+    const columnsForMobile = [columns[1], columns[0], ...columns.slice(2)];
+
     return (
         <div className='pb-2'>
             <CoreTable
                 data={data}
-                columns={columns}
+                columns={isTablet ? columnsForMobile : columns}
                 name='active-trade-table'
                 border
             />
-            <div className='typography-dropdown-selection-label mx-10 my-6 bg-cardBackground/60 text-justify text-secondary7 '>
+            <div className='typography-dropdown-selection-label mt-16 w-full rounded-xl bg-cardBackground/60 text-justify text-secondary7 '>
                 <p className='p-3'>
                     Secured Finance lending contract includes an auto-roll
                     feature. If no action is taken by the user prior to the

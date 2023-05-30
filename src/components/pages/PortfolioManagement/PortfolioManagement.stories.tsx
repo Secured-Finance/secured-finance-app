@@ -1,3 +1,4 @@
+import { RESPONSIVE_PARAMETERS, VIEWPORTS } from '.storybook/constants';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { within } from '@storybook/testing-library';
 import {
@@ -29,7 +30,11 @@ export default {
             mocks: mockUserHistory,
         },
         connected: true,
-        chromatic: { delay: 3000 },
+        ...RESPONSIVE_PARAMETERS,
+        chromatic: {
+            delay: 3000,
+            viewports: [VIEWPORTS.MOBILE, VIEWPORTS.TABLET],
+        },
     },
 } as ComponentMeta<typeof PortfolioManagement>;
 
