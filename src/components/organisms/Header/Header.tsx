@@ -1,4 +1,3 @@
-import classNames from 'classnames';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useDispatch, useSelector } from 'react-redux';
@@ -45,9 +44,6 @@ export const Header = () => {
     const chainError = useSelector(
         (state: RootState) => state.blockchain.chainError
     );
-    const open = useSelector(
-        (state: RootState) => state.interactions.walletDialogOpen
-    );
     const envShort = getEnvShort();
 
     return (
@@ -59,12 +55,7 @@ export const Header = () => {
             )}
             <nav
                 data-cy='header'
-                className={classNames(
-                    'grid h-20 w-full grid-flow-col border-b border-neutral-1 laptop:grid-flow-col',
-                    {
-                        'blur-sm': open,
-                    }
-                )}
+                className='grid h-20 w-full grid-flow-col border-b border-neutral-1 laptop:grid-flow-col'
             >
                 <div className='col-span-2 flex flex-row items-center gap-3'>
                     <Link href='/' passHref>
