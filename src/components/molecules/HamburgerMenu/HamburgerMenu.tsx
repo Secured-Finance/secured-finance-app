@@ -2,7 +2,7 @@ import { Menu } from '@headlessui/react';
 import { ArrowUpIcon } from '@heroicons/react/solid';
 import classNames from 'classnames';
 import Link from 'next/link';
-import React, { HTMLAttributes, LegacyRef, useState } from 'react';
+import React, { HTMLAttributes, LegacyRef } from 'react';
 import Burger from 'src/assets/img/burger.svg';
 import SFLogoSmall from 'src/assets/img/small-logo.svg';
 import { Closable } from 'src/components/templates';
@@ -71,7 +71,7 @@ const MobileItemLink = ({ text, href }: { text: string; href: string }) => {
             {({ active }) => (
                 <a
                     className={classNames(
-                        'flex h-16 w-full flex-row items-center justify-start gap-3 px-9 py-4 text-center',
+                        'flex h-16 w-full flex-row items-center justify-start gap-3 whitespace-nowrap px-9 py-4 text-center',
                         {
                             'border-l-4 bg-[#233447] text-neutral-8': active,
                         }
@@ -101,7 +101,8 @@ export const HamburgerMenu = ({
 }: {
     links: { label: string; link: string }[];
 }) => {
-    const [showMore] = useState(true);
+    const [showMore, setShowMore] = React.useState(false);
+
     return (
         <Menu>
             {({ close }) => (
@@ -109,7 +110,6 @@ export const HamburgerMenu = ({
                     <Menu.Button aria-label='Hamburger Menu'>
                         <Burger className='h-8 w-8' />
                     </Menu.Button>
-
                     <Menu.Items
                         as='div'
                         className={classNames(
@@ -129,7 +129,35 @@ export const HamburgerMenu = ({
                                     />
                                 ))}
 
-                                <MenuItemLink text='More' link='#' />
+                                <Menu.Item as='div' className='w-full'>
+                                    {({ active }) => (
+                                        <button
+                                            onClick={e => {
+                                                e.preventDefault();
+                                                setShowMore(!showMore);
+                                            }}
+                                            aria-label='Show More'
+                                            className={classNames(
+                                                'flex h-16 w-full items-center justify-between px-9 py-4 text-center',
+                                                {
+                                                    'border-l-4 border-starBlue bg-gradient-to-r from-[#6A76B159] via-[#4A5BAF1F] to-[#394DAE00] text-neutral-8':
+                                                        active,
+                                                }
+                                            )}
+                                        >
+                                            More
+                                            <ArrowUpIcon
+                                                className={classNames(
+                                                    'mt-2 inline h-5 w-5 text-neutral-4',
+                                                    {
+                                                        'rotate-180': showMore,
+                                                    }
+                                                )}
+                                            />
+                                        </button>
+                                    )}
+                                </Menu.Item>
+
                                 {showMore && (
                                     <div className='w-full px-4'>
                                         {EXTRA_LINKS.map(link => (

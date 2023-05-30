@@ -28,7 +28,7 @@ describe('HamburgerMenu Component', () => {
         expect(screen.getByRole('menu')).toBeInTheDocument();
     });
 
-    it.skip('should open the sub menu when the More button is clicked', () => {
+    it('should open the sub menu when the More button is clicked', () => {
         render(<Default />);
         screen.getByRole('button', { expanded: false }).click();
         expect(screen.queryByText('Documentation')).not.toBeInTheDocument();
