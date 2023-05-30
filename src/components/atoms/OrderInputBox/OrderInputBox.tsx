@@ -55,11 +55,9 @@ export const OrderInputBox = ({
 
     const handleAmountChange = useCallback(
         (amount: number | undefined) => {
-            amount === undefined ? setInputValue('') : setInputValue(amount);
+            setInputValue(amount ?? '');
             if (onValueChange) {
-                amount === undefined
-                    ? handleInputChange(0, asset, onValueChange)
-                    : handleInputChange(amount, asset, onValueChange);
+                handleInputChange(amount ?? 0, asset, onValueChange);
             }
         },
         [onValueChange, handleInputChange, asset]
@@ -85,9 +83,7 @@ export const OrderInputBox = ({
                         value={inputValue as number}
                         className='w-32 text-right text-[18px] font-semibold leading-6 text-neutral-8'
                         label={field}
-                        onValueChange={(v: number | undefined) =>
-                            handleAmountChange(v)
-                        }
+                        onValueChange={handleAmountChange}
                         decimalPlacesAllowed={decimalPlacesAllowed}
                         maxLimit={maxLimit}
                     />
