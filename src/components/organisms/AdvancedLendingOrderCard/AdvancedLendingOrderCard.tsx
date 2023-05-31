@@ -44,11 +44,9 @@ import { useWallet } from 'use-wallet';
 
 export const AdvancedLendingOrderCard = ({
     collateralBook,
-    onOrderTypeChange,
     onlyLimitOrder = false,
 }: {
     collateralBook: CollateralBook;
-    onOrderTypeChange?: (v: OrderType) => void;
     onlyLimitOrder?: boolean;
 }) => {
     const {
@@ -147,7 +145,6 @@ export const AdvancedLendingOrderCard = ({
                 value={orderType}
                 onChange={(v: OrderType) => {
                     dispatch(setOrderType(v));
-                    if (onOrderTypeChange) onOrderTypeChange(v);
                 }}
                 as='div'
                 className='flex h-[60px] flex-row items-center justify-around'
