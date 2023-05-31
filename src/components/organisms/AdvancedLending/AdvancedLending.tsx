@@ -27,7 +27,7 @@ import {
     setUnitPrice,
 } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
-import { MaturityOptionList, OrderType, TradesQuery } from 'src/types';
+import { MaturityOptionList, TradesQuery } from 'src/types';
 import {
     CurrencySymbol,
     Rate,
@@ -78,7 +78,7 @@ export const AdvancedLending = ({
     maturitiesOptionList: MaturityOptionList;
     rates: Rate[];
 }) => {
-    const { currency, maturity } = useSelector((state: RootState) =>
+    const { currency, maturity, orderType } = useSelector((state: RootState) =>
         selectLandingOrderForm(state.landingOrderForm)
     );
 
@@ -143,20 +143,13 @@ export const AdvancedLending = ({
             if (v === maturity.toString()) return;
             dispatch(setMaturity(new Maturity(v)));
             dispatch(setAmount(BigNumber.from(0)));
-            dispatch(setUnitPrice(loanValue.price));
         },
-        [maturity, dispatch, loanValue.price]
+        [maturity, dispatch]
     );
-
-    const handleOrderTypeChange = (v: OrderType) => {
-        if (v === OrderType.MARKET) {
-            dispatch(setUnitPrice(loanValue.price));
-        }
-    };
 
     useEffect(() => {
         dispatch(setUnitPrice(loanValue.price));
-    }, [dispatch, loanValue.price]);
+    }, [dispatch, loanValue.price, orderType]);
 
     return (
         <TwoColumnsWithTopBar
@@ -184,10 +177,7 @@ export const AdvancedLending = ({
                 />
             }
         >
-            <AdvancedLendingOrderCard
-                collateralBook={collateralBook}
-                onOrderTypeChange={handleOrderTypeChange}
-            />
+            <AdvancedLendingOrderCard collateralBook={collateralBook} />
             <div className='flex min-w-0 flex-grow flex-col gap-6'>
                 <Tab
                     tabDataArray={[
