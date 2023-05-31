@@ -76,7 +76,7 @@ export const CollateralTab = ({
     );
 
     return (
-        <div className='flex h-fit min-h-[400px] w-full flex-col tablet:flex-row'>
+        <div className='flex h-fit min-h-[400px] w-full flex-col'>
             <CollateralTabLeftPane
                 onClick={step => setOpenModal(step)}
                 account={account}

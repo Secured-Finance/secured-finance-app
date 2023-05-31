@@ -1,6 +1,7 @@
 import { createColumnHelper } from '@tanstack/react-table';
 import { useMemo } from 'react';
 import { CoreTable } from 'src/components/molecules';
+import { useBreakpoint } from 'src/hooks';
 import { TradeHistory } from 'src/types';
 import { formatLoanValue, formatTimestamp } from 'src/utils';
 import { LoanValue } from 'src/utils/entities';
@@ -53,6 +54,7 @@ const timestampColumnDef = (headerTitle: string) => {
 };
 
 export const MyTransactionsTable = ({ data }: { data: TradeHistory }) => {
+    const isTablet = useBreakpoint('tablet');
     const columns = useMemo(
         () => [
             loanTypeColumnDefinition(columnHelper, 'Type', 'type'),
@@ -83,11 +85,17 @@ export const MyTransactionsTable = ({ data }: { data: TradeHistory }) => {
         []
     );
 
+    const columnsForTabletMobile = [
+        columns[1],
+        columns[0],
+        ...columns.slice(2),
+    ];
+
     return (
         <div className='pb-2'>
             <CoreTable
                 data={data}
-                columns={columns}
+                columns={isTablet ? columnsForTabletMobile : columns}
                 name='active-trade-table'
                 border={false}
             />

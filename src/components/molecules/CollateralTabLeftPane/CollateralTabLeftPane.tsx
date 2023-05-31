@@ -1,5 +1,5 @@
 import { AssetInformation, Button } from 'src/components/atoms';
-import { CollateralBook, useBreakpoint } from 'src/hooks';
+import { CollateralBook } from 'src/hooks';
 import { getCurrencyMapAsList, usdFormat } from 'src/utils';
 import { CollateralTabRightPane } from '../CollateralTabRightPane';
 
@@ -44,8 +44,6 @@ export const CollateralTabLeftPane = ({
     const collateralBalance = account ? collateralBook.usdCollateral : 0;
     const nonCollateralBalance = account ? collateralBook.usdNonCollateral : 0;
 
-    const isTablet = useBreakpoint('tablet');
-
     return (
         <div className='flex flex-col border-white-10 tablet:flex-row tablet:border-r'>
             <div className='flex w-[18rem] flex-col border-white-10 tablet:border-r'>
@@ -87,13 +85,13 @@ export const CollateralTabLeftPane = ({
                         </div>
                     )}
                 </div>
-                <div className='flex h-24 flex-row items-center justify-center gap-4'>
+                <div className='ml-4 flex h-24 w-full flex-row items-center justify-center gap-4 tablet:ml-3 tablet:w-[90%]'>
                     <Button
                         size='sm'
                         onClick={() => onClick('deposit')}
                         disabled={!account}
                         data-testid='deposit-collateral'
-                        fullWidth={!isTablet}
+                        fullWidth={true}
                     >
                         Deposit
                     </Button>
@@ -102,7 +100,7 @@ export const CollateralTabLeftPane = ({
                         disabled={!account || collateralBalance <= 0}
                         onClick={() => onClick('withdraw')}
                         data-testid='withdraw-collateral'
-                        fullWidth={!isTablet}
+                        fullWidth={true}
                     >
                         Withdraw
                     </Button>

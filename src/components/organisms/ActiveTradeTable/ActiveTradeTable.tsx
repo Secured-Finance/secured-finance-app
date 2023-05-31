@@ -163,13 +163,17 @@ export const ActiveTradeTable = ({ data }: { data: TradeSummary[] }) => {
         [dispatch, priceList, router]
     );
 
-    const columnsForMobile = [columns[1], columns[0], ...columns.slice(2)];
+    const columnsForTabletMobile = [
+        columns[1],
+        columns[0],
+        ...columns.slice(2),
+    ];
 
     return (
         <div className='pb-2'>
             <CoreTable
                 data={data}
-                columns={isTablet ? columnsForMobile : columns}
+                columns={isTablet ? columnsForTabletMobile : columns}
                 name='active-trade-table'
                 border
             />

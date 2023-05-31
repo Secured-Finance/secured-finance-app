@@ -1,3 +1,4 @@
+import { RESPONSIVE_PARAMETERS, VIEWPORTS } from '.storybook/constants';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { BigNumber } from 'ethers';
 import {
@@ -13,6 +14,12 @@ export default {
     component: ActiveTradeTable,
     args: {
         data: aggregatedTrades,
+    },
+    parameters: {
+        ...RESPONSIVE_PARAMETERS,
+        chromatic: {
+            viewports: [VIEWPORTS.MOBILE, VIEWPORTS.TABLET],
+        },
     },
     decorators: [withAssetPrice, withWalletProvider],
 } as ComponentMeta<typeof ActiveTradeTable>;

@@ -19,10 +19,10 @@ describe('TwoColumnsWithTopBar Component', () => {
     it('should display the two columns with the first one being the smaller one', () => {
         render(<Default />);
         expect(screen.getByText('Column 1').parentElement).toHaveClass(
-            ' w-full tablet:w-[30%]'
+            ' w-full laptop:w-[30%]'
         );
         expect(screen.getByText('Column 2').parentElement).toHaveClass(
-            ' w-full tablet:w-[70%]'
+            ' w-full laptop:w-[70%]'
         );
     });
 });

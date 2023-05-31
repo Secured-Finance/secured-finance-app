@@ -1,4 +1,4 @@
-import { RESPONSIVE_PARAMETERS, VIEWPORTS } from '.storybook/constants';
+import { RESPONSIVE_PARAMETERS } from '.storybook/constants';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { within } from '@storybook/testing-library';
 import {
@@ -31,10 +31,7 @@ export default {
         },
         connected: true,
         ...RESPONSIVE_PARAMETERS,
-        chromatic: {
-            delay: 3000,
-            viewports: [VIEWPORTS.MOBILE, VIEWPORTS.TABLET],
-        },
+        layout: 'fullscreen',
     },
 } as ComponentMeta<typeof PortfolioManagement>;
 
