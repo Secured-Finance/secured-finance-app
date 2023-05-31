@@ -46,7 +46,7 @@ export const CollateralTabLeftPane = ({
 
     return (
         <div className='flex flex-col border-white-10 tablet:flex-row tablet:border-r'>
-            <div className='flex w-[18rem] flex-col border-white-10 tablet:border-r'>
+            <div className=' grid w-[90%] border-white-10 tablet:w-[18rem] tablet:border-r'>
                 <div className='h-full border-white-10 tablet:border-b'>
                     <div className='m-6 flex flex-col gap-1'>
                         <span className='typography-body-2 h-6 w-fit text-slateGray'>

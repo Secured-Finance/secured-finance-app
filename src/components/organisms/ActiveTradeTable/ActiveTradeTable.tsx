@@ -126,7 +126,7 @@ export const ActiveTradeTable = ({ data }: { data: TradeSummary[] }) => {
                     const amount = BigNumber.from(info.row.original.amount);
                     if (!ccy) return null;
                     return (
-                        <div className='flex justify-center'>
+                        <div className='relative flex justify-center'>
                             <TableActionMenu
                                 items={[
                                     {

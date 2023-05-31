@@ -1,4 +1,3 @@
-import { RESPONSIVE_PARAMETERS, VIEWPORTS } from '.storybook/constants';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { Tab } from './Tab';
 
@@ -13,9 +12,8 @@ export default {
         ],
     },
     parameters: {
-        ...RESPONSIVE_PARAMETERS,
-        chromatic: {
-            viewports: [VIEWPORTS.MOBILE, VIEWPORTS.TABLET],
+        viewport: {
+            disable: true,
         },
     },
 } as ComponentMeta<typeof Tab>;
