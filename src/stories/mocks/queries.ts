@@ -243,7 +243,7 @@ export const mockTrades = [
         request: {
             query: queries.TradesDocument,
             variables: {
-                currency: efilBytes32,
+                currency: usdcBytes32,
                 maturity: 0,
                 from: yesterday,
                 to: today,
