@@ -1,7 +1,7 @@
 import { toBytes32 } from '@secured-finance/sf-graph-client';
 import queries from '@secured-finance/sf-graph-client/dist/graphclients/';
 import { BigNumber } from 'ethers';
-import { useCallback, useMemo } from 'react';
+import { useCallback, useMemo, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
     AdvancedLendingTopBar,
@@ -78,7 +78,7 @@ export const AdvancedLending = ({
     maturitiesOptionList: MaturityOptionList;
     rates: Rate[];
 }) => {
-    const { currency, maturity, orderType } = useSelector((state: RootState) =>
+    const { currency, maturity } = useSelector((state: RootState) =>
         selectLandingOrderForm(state.landingOrderForm)
     );
 
@@ -133,9 +133,30 @@ export const AdvancedLending = ({
             if (v === currency) return;
             dispatch(setCurrency(v));
             dispatch(setAmount(BigNumber.from(0)));
+            dispatch(setUnitPrice(loanValue.price));
         },
-        [currency, dispatch]
+        [currency, dispatch, loanValue.price]
     );
+
+    const handleTermChange = useCallback(
+        (v: string) => {
+            if (v === maturity.toString()) return;
+            dispatch(setMaturity(new Maturity(v)));
+            dispatch(setAmount(BigNumber.from(0)));
+            dispatch(setUnitPrice(loanValue.price));
+        },
+        [maturity, dispatch, loanValue.price]
+    );
+
+    const handleOrderTypeChange = (v: OrderType) => {
+        if (v === OrderType.MARKET) {
+            dispatch(setUnitPrice(loanValue.price));
+        }
+    };
+
+    useEffect(() => {
+        dispatch(setUnitPrice(loanValue.price));
+    }, [dispatch, loanValue.price]);
 
     return (
         <TwoColumnsWithTopBar
@@ -151,15 +172,8 @@ export const AdvancedLending = ({
                         label: selectedTerm.label,
                         value: selectedTerm.value.toString(),
                     }}
-                    onAssetChange={v => {
-                        handleCurrencyChange(v);
-                    }}
-                    onTermChange={v => {
-                        dispatch(setMaturity(new Maturity(v)));
-                        if (orderType === OrderType.MARKET) {
-                            dispatch(setUnitPrice(loanValue.price));
-                        }
-                    }}
+                    onAssetChange={handleCurrencyChange}
+                    onTermChange={handleTermChange}
                     values={[
                         formatLoanValue(tradeHistoryDetails.max, 'price'),
                         formatLoanValue(tradeHistoryDetails.min, 'price'),
@@ -170,7 +184,10 @@ export const AdvancedLending = ({
                 />
             }
         >
-            <AdvancedLendingOrderCard collateralBook={collateralBook} />
+            <AdvancedLendingOrderCard
+                collateralBook={collateralBook}
+                onOrderTypeChange={handleOrderTypeChange}
+            />
             <div className='flex min-w-0 flex-grow flex-col gap-6'>
                 <Tab
                     tabDataArray={[

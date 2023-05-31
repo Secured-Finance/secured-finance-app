@@ -34,6 +34,27 @@ describe('Advanced Lending Component', () => {
         );
     });
 
+    it('should reset the amount when the user change the maturity', async () => {
+        const { store } = await waitFor(() =>
+            render(<Default />, {
+                apolloMocks: Default.parameters?.apolloClient.mocks,
+            })
+        );
+        expect(store.getState().landingOrderForm.amount).toEqual('0');
+        fireEvent.change(screen.getByRole('textbox', { name: 'Amount' }), {
+            target: { value: '1' },
+        });
+        expect(store.getState().landingOrderForm.amount).toEqual(
+            '1000000000000000000'
+        );
+        fireEvent.click(screen.getByRole('button', { name: 'DEC22' }));
+        fireEvent.click(screen.getByText('MAR23'));
+        expect(store.getState().landingOrderForm.amount).toEqual('0');
+        expect(screen.getByRole('textbox', { name: 'Amount' })).toHaveValue(
+            '0'
+        );
+    });
+
     it('should show the maturity as a date for the selected maturity', async () => {
         await waitFor(() =>
             render(<Default />, {

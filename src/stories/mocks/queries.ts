@@ -2,6 +2,7 @@ import queries from '@secured-finance/sf-graph-client/dist/graphclients';
 import {
     dailyVolumes,
     dec22Fixture,
+    mar23Fixture,
     efilBytes32,
     ethBytes32,
     orderHistoryList,
@@ -196,6 +197,126 @@ export const mockTrades = [
             variables: {
                 currency: usdcBytes32,
                 maturity: dec22Fixture.toNumber(),
+                from: yesterday,
+                to: today,
+                awaitRefetchQueries: true,
+            },
+        },
+        result: {
+            data: {
+                trades,
+            },
+        },
+        newData: () => {
+            return {
+                data: {
+                    trades,
+                },
+            };
+        },
+    },
+    {
+        request: {
+            query: queries.TradesDocument,
+            variables: {
+                currency: efilBytes32,
+                maturity: mar23Fixture.toNumber(),
+                from: yesterday,
+                to: today,
+                awaitRefetchQueries: true,
+            },
+        },
+        result: {
+            data: {
+                trades,
+            },
+        },
+        newData: () => {
+            return {
+                data: {
+                    trades,
+                },
+            };
+        },
+    },
+    {
+        request: {
+            query: queries.TradesDocument,
+            variables: {
+                currency: efilBytes32,
+                maturity: 0,
+                from: yesterday,
+                to: today,
+                awaitRefetchQueries: true,
+            },
+        },
+        result: {
+            data: {
+                trades,
+            },
+        },
+        newData: () => {
+            return {
+                data: {
+                    trades,
+                },
+            };
+        },
+    },
+    {
+        request: {
+            query: queries.TradesDocument,
+            variables: {
+                currency: ethBytes32,
+                maturity: mar23Fixture.toNumber(),
+                from: yesterday,
+                to: today,
+                awaitRefetchQueries: true,
+            },
+        },
+        result: {
+            data: {
+                trades,
+            },
+        },
+        newData: () => {
+            return {
+                data: {
+                    trades,
+                },
+            };
+        },
+    },
+    {
+        request: {
+            query: queries.TradesDocument,
+            variables: {
+                currency: wbtcBytes32,
+                maturity: mar23Fixture.toNumber(),
+                from: yesterday,
+                to: today,
+                awaitRefetchQueries: true,
+            },
+        },
+        result: {
+            data: {
+                trades,
+            },
+        },
+        newData: () => {
+            return {
+                data: {
+                    trades,
+                },
+            };
+        },
+    },
+    {
+        request: {
+            query: queries.TradesDocument,
+            variables: {
+                currency: usdcBytes32,
+                maturity: mar23Fixture.toNumber(),
                 from: yesterday,
                 to: today,
                 awaitRefetchQueries: true,
