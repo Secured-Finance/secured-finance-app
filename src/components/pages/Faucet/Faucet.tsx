@@ -141,7 +141,6 @@ export const Faucet = () => {
                                     </span>
                                 </div>
                                 <button
-                                    className=''
                                     onClick={() => {
                                         navigator.clipboard.writeText(address);
                                     }}
@@ -149,16 +148,16 @@ export const Faucet = () => {
                                     <ClipboardCopyIcon className='h-4 w-4 text-slateGray hover:text-slateGray/80' />
                                 </button>
                             </div>
-                            <div className='grid h-14 grid-flow-col items-center justify-between gap-x-3 rounded-xl border border-neutral-3 bg-black-20 px-3'>
+                            <div className='grid h-14 grid-flow-col items-center justify-between gap-x-3 rounded-xl border border-neutral-3 bg-black-20 px-2'>
                                 <button
-                                    className='flex h-10 w-36 flex-row items-center justify-between space-x-2 rounded-lg bg-white-5 px-2 hover:bg-white-40'
+                                    className='flex h-10 w-36 flex-row items-center justify-start gap-x-2 rounded-lg bg-white-5 px-2 hover:bg-white-40'
                                     onClick={() => addToMetamask(token)}
                                 >
                                     <span>
                                         <MetaMaskIcon className='h-6 w-6' />
                                     </span>
-                                    <span className='typography-caption-3 w-20 whitespace-nowrap text-white'>
-                                        Add to Metamask
+                                    <span className='typography-caption w-20 whitespace-nowrap pl-2 text-left text-white'>
+                                        Wallet
                                     </span>
                                 </button>
                                 <div className='typography-caption text-white-60 tablet:pr-10'>
