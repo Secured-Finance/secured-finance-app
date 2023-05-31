@@ -10,6 +10,7 @@ module.exports = {
                 tab: '0px 46px 64px rgba(31, 47, 70, 0.4)',
                 selector: 'inset 0px 2px 4px rgba(0, 0, 0, 0.25)',
                 sliderthumb: '0px 4px 16px -8px rgba(15, 15, 15, 0.1)',
+                curvetooltip: '0px 4px 4px rgba(0, 0, 0, 0.25)',
             },
             borderWidth: {
                 '0.5': '0.5px',
@@ -151,6 +152,12 @@ module.exports = {
                 fil: '#0090FF',
                 btc: '#F9A137',
                 eth: '#B9BDEA',
+                usdc: '#2775CA',
+            },
+            pill: {
+                fil: 'rgba(0, 144, 255, 0.7)',
+                btc: 'rgba(249, 159, 50, 0.7)',
+                eth: 'rgba(131, 131, 133, 0.7)',
                 usdc: '#2775CA',
             },
         },

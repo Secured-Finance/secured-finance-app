@@ -9,7 +9,7 @@ import WrappedBitcoinIcon from 'src/assets/coins/wbtc.svg';
 import SFLogoSmall from 'src/assets/img/logo-small.svg';
 import MetamaskIcon from 'src/assets/img/metamask-fox.svg';
 import { Option, WalletSourceOption } from 'src/components/atoms';
-import { CollateralBook } from 'src/hooks';
+import { CollateralBook, Order } from 'src/hooks';
 import { AssetPrices } from 'src/store/assetPrices';
 import { RootState } from 'src/store/types';
 import {
@@ -260,6 +260,54 @@ export const ethBytes32 = utils.formatBytes32String('ETH');
 export const wbtcBytes32 = utils.formatBytes32String('WBTC');
 export const usdcBytes32 = utils.formatBytes32String('USDC'); // '0x5553444300000000000000000000000000000000000000000000000000000000'
 
+export const activeOrders: Order[] = [
+    {
+        orderId: BigNumber.from('1'),
+        currency: efilBytes32,
+        side: 1,
+        maturity: dec23Fixture.toString(),
+        unitPrice: BigNumber.from('9800'),
+        amount: BigNumber.from('1000000000000000000000'),
+        timestamp: BigNumber.from('1609292873'),
+    },
+    {
+        orderId: BigNumber.from('2'),
+        currency: efilBytes32,
+        side: 1,
+        maturity: mar23Fixture.toString(),
+        unitPrice: BigNumber.from('9600'),
+        amount: BigNumber.from('5000000000000000000000'),
+        timestamp: BigNumber.from('1609292092'),
+    },
+    {
+        orderId: BigNumber.from('3'),
+        currency: efilBytes32,
+        side: 0,
+        maturity: dec22Fixture.toString(),
+        unitPrice: BigNumber.from('9800'),
+        amount: BigNumber.from('1000000000'),
+        timestamp: BigNumber.from('1609297019'),
+    },
+    {
+        orderId: BigNumber.from('4'),
+        currency: wbtcBytes32,
+        side: 1,
+        maturity: mar23Fixture.toString(),
+        unitPrice: BigNumber.from('9600'),
+        amount: BigNumber.from('5000000000000000000000'),
+        timestamp: BigNumber.from('1609290981'),
+    },
+    {
+        orderId: BigNumber.from('1'),
+        currency: ethBytes32,
+        side: 0,
+        maturity: dec23Fixture.toString(),
+        unitPrice: BigNumber.from('9800'),
+        amount: BigNumber.from('1000000000'),
+        timestamp: BigNumber.from('1609295092'),
+    },
+];
+
 export const orderHistoryList: OrderList = [
     {
         orderId: BigNumber.from('1'),
@@ -278,7 +326,7 @@ export const orderHistoryList: OrderList = [
         maturity: BigNumber.from(dec22Fixture.toString()),
         unitPrice: BigNumber.from('9600'),
         amount: BigNumber.from('5000000000000000000000'),
-        status: 'Open',
+        status: 'Expired',
         createdAt: BigNumber.from('1'),
     },
     {
@@ -301,18 +349,17 @@ export const openOrderHistoryList: OrderList = [
         maturity: BigNumber.from(dec23Fixture.toString()),
         unitPrice: BigNumber.from('9800'),
         amount: BigNumber.from('1000000000000000000000'),
-        status: 'Open',
+        status: 'Filled',
         createdAt: BigNumber.from('1'),
     },
     {
         orderId: BigNumber.from('1'),
-
         currency: efilBytes32,
         side: 1,
         maturity: BigNumber.from(mar23Fixture.toString()),
         unitPrice: BigNumber.from('9600'),
         amount: BigNumber.from('5000000000000000000000'),
-        status: 'Open',
+        status: 'Filled',
         createdAt: BigNumber.from('1'),
     },
     {
@@ -322,7 +369,7 @@ export const openOrderHistoryList: OrderList = [
         maturity: BigNumber.from(dec22Fixture.toString()),
         unitPrice: BigNumber.from('9800'),
         amount: BigNumber.from('1000000000'),
-        status: 'Open',
+        status: 'Expired',
         createdAt: BigNumber.from('1'),
     },
     {
@@ -332,7 +379,7 @@ export const openOrderHistoryList: OrderList = [
         maturity: BigNumber.from(mar23Fixture.toString()),
         unitPrice: BigNumber.from('9600'),
         amount: BigNumber.from('5000000000000000000000'),
-        status: 'Open',
+        status: 'Expired',
         createdAt: BigNumber.from('1'),
     },
     {
@@ -342,7 +389,7 @@ export const openOrderHistoryList: OrderList = [
         maturity: BigNumber.from(dec23Fixture.toString()),
         unitPrice: BigNumber.from('9800'),
         amount: BigNumber.from('1000000000'),
-        status: 'Open',
+        status: 'Filled',
         createdAt: BigNumber.from('1'),
     },
 ];

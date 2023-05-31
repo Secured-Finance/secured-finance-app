@@ -5,6 +5,7 @@ import { TradeHistory } from 'src/types';
 import { currencyMap, hexToCurrencySymbol } from './currencyList';
 import { LoanValue } from './entities';
 import { Rate } from './rate';
+import { OrderList } from 'src/hooks';
 
 export const computeWeightedAverageRate = (trades: TradeHistory) => {
     if (!trades.length) {
@@ -86,5 +87,29 @@ export const aggregateTrades = (trades: TradeHistory): TradeSummary[] => {
         averagePrice: !summary.amount.isZero
             ? summary.averagePrice.div(summary.amount)
             : BigNumber.from(0),
+    }));
+};
+
+export const calculateForwardValue = (
+    amount: BigNumber,
+    unitPrice: BigNumber
+): BigNumber => {
+    return amount.mul(10000).div(unitPrice);
+};
+
+export const calculateAveragePrice = (unitPrice: BigNumber): number => {
+    return Number(unitPrice) / 10000;
+};
+
+export const formatOrders = (orders: OrderList): TradeHistory => {
+    return orders?.map(order => ({
+        amount: order.amount,
+        side: order.side,
+        orderPrice: order.unitPrice,
+        createdAt: order.timestamp,
+        currency: order.currency,
+        maturity: order.maturity,
+        forwardValue: calculateForwardValue(order.amount, order.unitPrice),
+        averagePrice: calculateAveragePrice(order.unitPrice),
     }));
 };

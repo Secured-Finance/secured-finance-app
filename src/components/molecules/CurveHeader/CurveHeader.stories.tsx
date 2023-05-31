@@ -1,5 +1,6 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { withAssetPrice } from 'src/../.storybook/decorators';
+import { dailyVolumes } from 'src/stories/mocks/fixtures';
 import { CurrencySymbol } from 'src/utils';
 import { CurveHeader } from './CurveHeader';
 
@@ -8,7 +9,7 @@ export default {
     component: CurveHeader,
     args: {
         asset: CurrencySymbol.EFIL,
-        isBorrow: true,
+        dailyVolumes: dailyVolumes.slice(0, 10),
     },
     argTypes: {},
     decorators: [withAssetPrice],

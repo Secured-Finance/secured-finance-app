@@ -30,7 +30,7 @@ export const Dialog = ({
             onClose={onClose}
             className='relative z-50'
         >
-            <div className='fixed inset-0 bg-backgroundBlur' />
+            <div className='fixed inset-0 bg-backgroundBlur backdrop-blur-sm' />
             <div className='fixed inset-0 flex items-center justify-center'>
                 <HeadlessDialog.Panel
                     className='h-full w-full rounded-xl bg-universeBlue p-8 shadow-deep tablet:h-fit tablet:w-[408px]'

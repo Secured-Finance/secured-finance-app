@@ -1,4 +1,5 @@
 import { OrderSide } from '@secured-finance/sf-client';
+import queries from '@secured-finance/sf-graph-client/dist/graphclients';
 import { useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { ViewType } from 'src/components/atoms';
@@ -8,7 +9,12 @@ import {
     YieldChart,
 } from 'src/components/organisms';
 import { SimpleAdvancedView } from 'src/components/templates';
-import { RateType, useCollateralBook, useLoanValues } from 'src/hooks';
+import {
+    RateType,
+    useCollateralBook,
+    useGraphClientHook,
+    useLoanValues,
+} from 'src/hooks';
 import {
     selectLandingOrderForm,
     setLastView,
@@ -73,6 +79,13 @@ export const Landing = ({ view }: { view?: ViewType }) => {
         return optionList.length > 0 ? optionList : emptyOptionList;
     }, [optionList]);
 
+    const dailyVolumes = useGraphClientHook(
+        {}, // no variables
+        queries.DailyVolumesDocument,
+        'dailyVolumes',
+        false
+    );
+
     return (
         <SimpleAdvancedView
             title='OTC Lending'
@@ -88,6 +101,7 @@ export const Landing = ({ view }: { view?: ViewType }) => {
                         isBorrow={side === OrderSide.BORROW}
                         rates={unitPrices.map(v => v.apr)}
                         maturitiesOptionList={maturityOptionList}
+                        dailyVolumes={dailyVolumes.data ?? []}
                     />
                 </div>
             }
