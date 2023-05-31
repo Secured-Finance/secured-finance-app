@@ -26,7 +26,7 @@ export const Tab: React.FC<TabProps> = ({ tabDataArray, children }) => {
                         return (
                             <HeadlessTab
                                 key={tabData.text}
-                                className='h-full focus:outline-none'
+                                className='h-full w-full focus:outline-none tablet:w-fit'
                                 disabled={tabData.disabled}
                             >
                                 {({ selected }) => (

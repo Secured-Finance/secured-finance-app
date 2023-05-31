@@ -1,3 +1,4 @@
+import { RESPONSIVE_PARAMETERS, VIEWPORTS } from '.storybook/constants';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { BigNumber } from 'ethers';
 import { withAssetPrice } from 'src/../.storybook/decorators';
@@ -13,6 +14,12 @@ export default {
             USDC: BigNumber.from('10000000'),
         },
         informationText: 'Only USDC and ETH are eligible as collateral.',
+    },
+    parameters: {
+        ...RESPONSIVE_PARAMETERS,
+        chromatic: {
+            viewports: [VIEWPORTS.MOBILE, VIEWPORTS.TABLET],
+        },
     },
     decorators: [withAssetPrice],
 } as ComponentMeta<typeof AssetInformation>;

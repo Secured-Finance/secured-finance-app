@@ -1,3 +1,4 @@
+import { RESPONSIVE_PARAMETERS, VIEWPORTS } from '.storybook/constants';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { createColumnHelper } from '@tanstack/react-table';
 import { CoreTable } from './CoreTable';
@@ -25,6 +26,12 @@ export default {
         data,
         columns,
         border: true,
+    },
+    parameters: {
+        ...RESPONSIVE_PARAMETERS,
+        chromatic: {
+            viewports: [VIEWPORTS.MOBILE, VIEWPORTS.TABLET],
+        },
     },
 } as ComponentMeta<typeof CoreTable>;
 
