@@ -1,4 +1,3 @@
-import { RESPONSIVE_PARAMETERS, VIEWPORTS } from '.storybook/constants';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { HorizontalTab } from './HorizontalTab';
 
@@ -7,13 +6,6 @@ export default {
     component: HorizontalTab,
     args: {
         tabTitles: ['Active Contracts', 'Trade History'],
-    },
-    parameters: {
-        ...RESPONSIVE_PARAMETERS,
-        chromatic: {
-            delay: 3000,
-            viewports: [VIEWPORTS.MOBILE, VIEWPORTS.TABLET],
-        },
     },
 } as ComponentMeta<typeof HorizontalTab>;
 
@@ -29,5 +21,5 @@ const Template: ComponentStory<typeof HorizontalTab> = args => (
 export const Default = Template.bind({});
 export const WithStyling = Template.bind({});
 WithStyling.args = {
-    tabTitles: [['Test', 'px-8']],
+    tabTitles: ['Test'],
 };
