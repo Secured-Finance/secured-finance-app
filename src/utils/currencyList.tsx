@@ -48,6 +48,7 @@ export const currencyMap: Readonly<
             convertFromBlockchainUnit(amount, EFIL.onChain()),
         toCurrency: () => EFIL.onChain(),
         chartColor: tailwindConfig.theme.colors.chart.fil,
+        pillColor: tailwindConfig.theme.colors.pill.fil,
     },
     [CurrencySymbol.ETH]: {
         index: 1,
@@ -62,6 +63,7 @@ export const currencyMap: Readonly<
             convertFromBlockchainUnit(amount, ETH),
         toCurrency: () => ETH,
         chartColor: tailwindConfig.theme.colors.chart.eth,
+        pillColor: tailwindConfig.theme.colors.pill.eth,
     },
     [CurrencySymbol.USDC]: {
         index: 2,
@@ -76,6 +78,7 @@ export const currencyMap: Readonly<
             convertFromBlockchainUnit(amount, USDC.onChain()),
         toCurrency: () => USDC.onChain(),
         chartColor: tailwindConfig.theme.colors.chart.usdc,
+        pillColor: tailwindConfig.theme.colors.pill.usdc,
     },
     [CurrencySymbol.WBTC]: {
         index: 3,
@@ -90,6 +93,7 @@ export const currencyMap: Readonly<
             convertFromBlockchainUnit(amount, WBTC.onChain()),
         toCurrency: () => WBTC.onChain(),
         chartColor: tailwindConfig.theme.colors.chart.btc,
+        pillColor: tailwindConfig.theme.colors.pill.btc,
     },
 };
 
@@ -138,6 +142,7 @@ export type CurrencyInfo = {
     fromBaseUnit: (amount: BigNumber) => number;
     toCurrency: () => CurrencyInterface;
     chartColor: string;
+    pillColor: string;
 };
 
 export const toCurrency = (ccy: CurrencySymbol) => {
