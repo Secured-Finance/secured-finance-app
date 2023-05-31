@@ -18,7 +18,7 @@ export default {
     parameters: {
         ...RESPONSIVE_PARAMETERS,
         chromatic: {
-            viewports: [VIEWPORTS.MOBILE, VIEWPORTS.TABLET],
+            viewports: [VIEWPORTS.MOBILE, VIEWPORTS.TABLET, VIEWPORTS.LAPTOP],
         },
     },
     decorators: [withAssetPrice, withWalletProvider],
