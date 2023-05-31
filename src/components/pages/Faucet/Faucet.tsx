@@ -109,12 +109,12 @@ export const Faucet = () => {
         <Page title='Test Pilot Program'>
             <TwoColumns>
                 <GradientBox>
-                    <div className='grid grid-cols-1 gap-12 px-16 pb-4'>
+                    <div className='grid grid-cols-1 gap-12 px-5 pb-4 desktop:px-[70px]'>
                         <h1 className='typography-headline-4 py-8 text-center text-2xl font-bold text-white'>
                             Test Token Faucet
                         </h1>
                         <div className='flex flex-col gap-10'>
-                            <div className='relative flex h-14 flex-row items-center justify-between gap-3 rounded-xl border border-neutral-3 bg-black-20 px-3'>
+                            <div className='grid h-14 grid-flow-col items-center justify-between gap-x-3 rounded-xl border border-neutral-3 bg-black-20 px-2'>
                                 <DropdownSelector
                                     optionList={assetList}
                                     selected={assetList[0]}
@@ -132,11 +132,16 @@ export const Faucet = () => {
                                         }
                                     }}
                                 />
-                                <span className='pr-10 text-white-60'>
-                                    {AddressUtils.format(address, 6)}
-                                </span>
+                                <div className='typography-caption text-white-60 tablet:pr-10'>
+                                    <span className='hidden tablet:inline'>
+                                        {address}
+                                    </span>
+                                    <span className='inline tablet:hidden'>
+                                        {AddressUtils.format(address, 6)}
+                                    </span>
+                                </div>
                                 <button
-                                    className='absolute right-4'
+                                    className=''
                                     onClick={() => {
                                         navigator.clipboard.writeText(address);
                                     }}
@@ -144,7 +149,7 @@ export const Faucet = () => {
                                     <ClipboardCopyIcon className='h-4 w-4 text-slateGray hover:text-slateGray/80' />
                                 </button>
                             </div>
-                            <div className='flex h-14 flex-row items-center justify-between gap-3 rounded-xl border border-neutral-3 bg-black-20 px-3'>
+                            <div className='grid h-14 grid-flow-col items-center justify-between gap-x-3 rounded-xl border border-neutral-3 bg-black-20 px-3'>
                                 <button
                                     className='flex h-10 w-36 flex-row items-center justify-between space-x-2 rounded-lg bg-white-5 px-2 hover:bg-white-40'
                                     onClick={() => addToMetamask(token)}
@@ -156,11 +161,17 @@ export const Faucet = () => {
                                         Add to Metamask
                                     </span>
                                 </button>
-                                <span className='pr-10 text-white-60'>
-                                    {account
-                                        ? AddressUtils.format(account, 6)
-                                        : ''}
-                                </span>
+                                <div className='typography-caption text-white-60 tablet:pr-10'>
+                                    <span className='inline tablet:hidden'>
+                                        {account
+                                            ? AddressUtils.format(account, 6)
+                                            : ''}
+                                    </span>
+                                    <span className='hidden tablet:inline'>
+                                        {account ?? ''}
+                                    </span>
+                                </div>
+                                <div></div>
                             </div>
                             <div className='flex justify-center'>
                                 <Button onClick={mint} disabled={isPending}>
