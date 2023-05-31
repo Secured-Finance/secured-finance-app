@@ -1,3 +1,4 @@
+import { RESPONSIVE_PARAMETERS, VIEWPORTS } from '.storybook/constants';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import {
     withAssetPrice,
@@ -14,6 +15,13 @@ export default {
     component: CollateralTab,
     args: {
         collateralBook: emptyCollateralBook,
+    },
+    parameters: {
+        ...RESPONSIVE_PARAMETERS,
+        chromatic: {
+            viewports: [VIEWPORTS.MOBILE, VIEWPORTS.TABLET],
+        },
+        layout: 'fullscreen',
     },
     decorators: [withWalletProvider, withAssetPrice],
 } as ComponentMeta<typeof CollateralTab>;
