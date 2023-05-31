@@ -48,12 +48,12 @@ export const ConnectedToWallet = Template.bind({});
 export const DisplayOrderHistory = Template.bind({});
 DisplayOrderHistory.play = async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    const orderHistoryTab = canvas.getByText('Open Orders');
+    const orderHistoryTab = canvas.getByTestId('Open Orders');
     orderHistoryTab.click();
 };
 export const DisplayMyTransactions = Template.bind({});
 DisplayMyTransactions.play = async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    const myTransactionsTab = canvas.getByText('My Transactions');
+    const myTransactionsTab = canvas.getByTestId('My Transactions');
     myTransactionsTab.click();
 };
