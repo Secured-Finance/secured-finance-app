@@ -12,6 +12,7 @@ import EthIcon from 'src/assets/coins/eth2.svg';
 import FilIcon from 'src/assets/coins/fil.svg';
 import UsdcIcon from 'src/assets/coins/usdc.svg';
 import { Option } from 'src/components/atoms';
+import { SvgIcon } from 'src/types';
 import { hexToString } from 'web3-utils';
 import { EFIL } from './currencies/filecoin';
 import { USDC } from './currencies/usdc';
@@ -136,7 +137,7 @@ export type CurrencyInfo = {
     symbol: CurrencySymbol;
     name: string;
     coinGeckoId: string;
-    icon: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
+    icon: SvgIcon;
     isCollateral: boolean;
     toBaseUnit: (amount: number) => BigNumber;
     fromBaseUnit: (amount: BigNumber) => number;

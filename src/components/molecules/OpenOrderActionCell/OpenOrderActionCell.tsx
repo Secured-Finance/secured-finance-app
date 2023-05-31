@@ -1,4 +1,4 @@
-import { PencilIcon, TrashIcon } from '@heroicons/react/outline';
+import { PencilIcon, TrashIcon } from '@heroicons/react/24/outline';
 import { BigNumber } from 'ethers';
 import { useOrders } from 'src/hooks';
 import { CurrencySymbol } from 'src/utils';
