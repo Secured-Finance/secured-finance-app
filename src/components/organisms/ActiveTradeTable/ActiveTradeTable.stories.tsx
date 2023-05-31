@@ -44,7 +44,7 @@ const Template: ComponentStory<typeof ActiveTradeTable> = args => {
     ];
 
     return (
-        <div className='px-24'>
+        <div>
             <ActiveTradeTable {...args} />
         </div>
     );
