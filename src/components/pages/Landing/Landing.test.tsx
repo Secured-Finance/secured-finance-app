@@ -151,7 +151,7 @@ describe('Landing Component', () => {
         );
 
         fireEvent.click(screen.getByRole('button', { name: 'Filecoin' }));
-        fireEvent.click(screen.getByRole('menuitem', { name: 'Ether' }));
+        fireEvent.click(screen.getByRole('menuitem', { name: 'USDC' }));
 
         expect(screen.getByRole('textbox', { name: 'Amount' })).toHaveValue(
             '0'
