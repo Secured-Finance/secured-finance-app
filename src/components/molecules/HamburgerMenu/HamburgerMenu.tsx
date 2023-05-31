@@ -1,5 +1,6 @@
 import { Menu, Transition } from '@headlessui/react';
-import { ArrowUpIcon, ChevronUpIcon } from '@heroicons/react/solid';
+import { ChevronDownIcon } from '@heroicons/react/outline';
+import { ArrowUpIcon } from '@heroicons/react/solid';
 import classNames from 'classnames';
 import Link from 'next/link';
 import React, { HTMLAttributes, LegacyRef } from 'react';
@@ -155,9 +156,9 @@ export const HamburgerMenu = ({
                                                 )}
                                             >
                                                 More
-                                                <ChevronUpIcon
+                                                <ChevronDownIcon
                                                     className={classNames(
-                                                        'mt-2 inline h-5 w-5 text-neutral-4',
+                                                        'mt-2 inline h-6 w-6 text-neutral-4',
                                                         {
                                                             'rotate-180':
                                                                 showMore,
