@@ -1,6 +1,5 @@
 import { Popover } from '@headlessui/react';
-import { XIcon } from '@heroicons/react/outline';
-import { ArrowUpIcon, ChevronDownIcon } from '@heroicons/react/solid';
+import { ArrowUpIcon, ChevronDownIcon } from '@heroicons/react/24/solid';
 import classNames from 'classnames';
 import Link from 'next/link';
 import { useState } from 'react';
@@ -101,14 +100,10 @@ export const HamburgerMenu = ({
     const [showMore, setShowMore] = useState(false);
     return (
         <Popover>
-            {({ open, close }) => (
+            {({ close }) => (
                 <>
                     <Popover.Button aria-label='Hamburger Menu'>
-                        {!open ? (
-                            <Burger className='h-8 w-8' />
-                        ) : (
-                            <XIcon className='h-8 w-8 text-white' />
-                        )}
+                        <Burger className='h-8 w-8' />
                     </Popover.Button>
                     <Popover.Panel
                         role='navigation'
