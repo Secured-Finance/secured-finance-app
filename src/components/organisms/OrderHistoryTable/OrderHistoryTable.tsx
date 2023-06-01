@@ -57,7 +57,6 @@ export const OrderHistoryTable = ({ data }: { data: OrderList }) => {
         <CoreTable
             columns={isTablet ? columnsForTabletMobile : columns}
             data={data}
-            border
         />
     );
 };
