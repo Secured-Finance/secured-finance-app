@@ -80,6 +80,21 @@ describe('Landing Component', () => {
         expect(screen.getByRole('radio', { name: 'Market' })).not.toBeChecked();
     });
 
+    it('should select the market order type when the user clicks on market tab', async () => {
+        waitFor(() => {
+            render(<Default />, {
+                apolloMocks: Default.parameters?.apolloClient.mocks,
+                preloadedState,
+            });
+            fireEvent.click(screen.getByText('Advanced'));
+        });
+
+        expect(screen.getByRole('radio', { name: 'Limit' })).toBeChecked();
+
+        fireEvent.click(screen.getByRole('radio', { name: 'Market' }));
+        expect(screen.getByRole('radio', { name: 'Market' })).toBeChecked();
+    });
+
     it('should display the best price as bond price when user change to advance mode', async () => {
         await waitFor(() => {
             render(<Default />, {
