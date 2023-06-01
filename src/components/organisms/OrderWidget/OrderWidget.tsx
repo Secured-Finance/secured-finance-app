@@ -337,6 +337,7 @@ export const OrderWidget = ({
                                 : sellColumns
                         }
                         options={{
+                            responsive: false,
                             name: 'sellOrders',
                             border: false,
                             onLineClick: handleSellOrdersClick,
@@ -347,6 +348,7 @@ export const OrderWidget = ({
                         data={buyOrders}
                         columns={buyColumns}
                         options={{
+                            responsive: false,
                             name: 'buyOrders',
                             border: false,
                             onLineClick: handleBuyOrdersClick,
