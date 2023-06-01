@@ -133,9 +133,8 @@ export const AdvancedLending = ({
             if (v === currency) return;
             dispatch(setCurrency(v));
             dispatch(setAmount(BigNumber.from(0)));
-            dispatch(setUnitPrice(loanValue.price));
         },
-        [currency, dispatch, loanValue.price]
+        [currency, dispatch]
     );
 
     const handleTermChange = useCallback(
@@ -149,7 +148,8 @@ export const AdvancedLending = ({
 
     useEffect(() => {
         dispatch(setUnitPrice(loanValue.price));
-    }, [dispatch, loanValue.price, orderType]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [dispatch, loanValue.price, orderType, currency, maturity.toString()]);
 
     return (
         <TwoColumnsWithTopBar
