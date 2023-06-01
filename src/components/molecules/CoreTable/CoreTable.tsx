@@ -66,89 +66,98 @@ export const CoreTable = <T,>({
     };
 
     const table = useReactTable<T>(configuration);
-    return (
-        <div
-            className={classNames({
-                'overflow-x-auto tablet:overflow-hidden':
-                    coreTableOptions.responsive,
-            })}
-        >
-            <table
-                className='h-full w-full text-white'
-                data-testid={coreTableOptions.name}
-            >
-                <thead className='typography-caption-2 h-14 border-b border-white-10 px-6 py-4 text-slateGray'>
-                    {table.getHeaderGroups().map(headerGroup => (
-                        <tr
-                            key={headerGroup.id}
-                            data-testid={`${coreTableOptions.name}-header`}
-                        >
-                            {headerGroup.headers.map((header, columnIndex) => (
-                                <td
-                                    data-testid={`${coreTableOptions.name}-header-cell`}
-                                    key={header.id}
-                                    className={classNames(
-                                        'relative px-1 py-2 text-center',
-                                        {
-                                            'sticky left-0 z-10 bg-black-20/100 tablet:bg-transparent':
-                                                columnIndex === 0 &&
-                                                coreTableOptions.responsive,
-                                        }
-                                    )}
-                                >
-                                    {header.isPlaceholder
-                                        ? null
-                                        : flexRender(
-                                              header.column.columnDef.header,
-                                              header.getContext()
-                                          )}
-                                </td>
-                            ))}
-                        </tr>
-                    ))}
-                </thead>
 
-                <tbody>
-                    {table.getRowModel().rows.map(row => (
-                        <tr
-                            key={row.id}
-                            className={classNames('relative h-7', {
-                                'cursor-pointer': coreTableOptions.hoverRow?.(
-                                    row.id
-                                ),
-                                'hover:bg-black-30':
-                                    coreTableOptions.hoverRow?.(row.id),
-                                'border-b border-white-10':
-                                    coreTableOptions.border,
-                            })}
-                            onClick={() =>
-                                coreTableOptions.hoverRow?.(row.id) &&
-                                coreTableOptions.onLineClick?.(row.id)
-                            }
-                            data-testid={`${coreTableOptions.name}-row`}
-                        >
-                            {row.getVisibleCells().map((cell, cellIndex) => (
-                                <td
-                                    key={cell.id}
-                                    className={classNames(
-                                        'min-w-fit whitespace-nowrap px-1 py-2 text-center',
-                                        {
-                                            'sticky left-0 z-10 bg-black-20/100 tablet:bg-transparent':
-                                                cellIndex === 0 &&
-                                                coreTableOptions.responsive,
-                                        }
-                                    )}
-                                >
-                                    {flexRender(
-                                        cell.column.columnDef.cell,
-                                        cell.getContext()
-                                    )}
-                                </td>
-                            ))}
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
-        </div>
+    const coreTable = (
+        <table
+            className='h-full w-full text-white'
+            data-testid={coreTableOptions.name}
+        >
+            <thead className='typography-caption-2 h-14 border-b border-white-10 px-6 py-4 text-slateGray'>
+                {table.getHeaderGroups().map(headerGroup => (
+                    <tr
+                        key={headerGroup.id}
+                        data-testid={`${coreTableOptions.name}-header`}
+                    >
+                        {headerGroup.headers.map((header, columnIndex) => (
+                            <td
+                                data-testid={`${coreTableOptions.name}-header-cell`}
+                                key={header.id}
+                                className={classNames(
+                                    'relative px-1 py-2 text-center',
+                                    {
+                                        'sticky left-0 z-10 bg-black-20/100 tablet:bg-transparent':
+                                            columnIndex === 0 &&
+                                            coreTableOptions.responsive,
+                                    }
+                                )}
+                            >
+                                {header.isPlaceholder
+                                    ? null
+                                    : flexRender(
+                                          header.column.columnDef.header,
+                                          header.getContext()
+                                      )}
+                            </td>
+                        ))}
+                    </tr>
+                ))}
+            </thead>
+
+            <tbody>
+                {table.getRowModel().rows.map(row => (
+                    <tr
+                        key={row.id}
+                        className={classNames('relative h-7', {
+                            'cursor-pointer': coreTableOptions.hoverRow?.(
+                                row.id
+                            ),
+                            'hover:bg-black-30': coreTableOptions.hoverRow?.(
+                                row.id
+                            ),
+                            'border-b border-white-10': coreTableOptions.border,
+                        })}
+                        onClick={() =>
+                            coreTableOptions.hoverRow?.(row.id) &&
+                            coreTableOptions.onLineClick?.(row.id)
+                        }
+                        data-testid={`${coreTableOptions.name}-row`}
+                    >
+                        {row.getVisibleCells().map((cell, cellIndex) => (
+                            <td
+                                key={cell.id}
+                                className={classNames(
+                                    'min-w-fit whitespace-nowrap px-1 py-2 text-center',
+                                    {
+                                        'sticky left-0 z-10 bg-black-20/100 tablet:bg-transparent':
+                                            cellIndex === 0 &&
+                                            coreTableOptions.responsive,
+                                    }
+                                )}
+                            >
+                                {flexRender(
+                                    cell.column.columnDef.cell,
+                                    cell.getContext()
+                                )}
+                            </td>
+                        ))}
+                    </tr>
+                ))}
+            </tbody>
+        </table>
     );
+
+    if (coreTableOptions.responsive) {
+        return (
+            <div
+                className={classNames({
+                    'overflow-x-auto tablet:overflow-hidden':
+                        coreTableOptions.responsive,
+                })}
+            >
+                {coreTable}
+            </div>
+        );
+    }
+
+    return coreTable;
 };
