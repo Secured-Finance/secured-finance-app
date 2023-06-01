@@ -1,7 +1,10 @@
 declare module '*.svg' {
-    const ReactComponent: React.FunctionComponent<
-        React.SVGProps<SVGSVGElement>
+    const SvgIcon: React.ForwardRefExoticComponent<
+        React.PropsWithoutRef<React.SVGProps<SVGSVGElement>> & {
+            title?: string;
+            titleId?: string;
+        } & React.RefAttributes<SVGSVGElement>
     >;
-    export { ReactComponent };
-    export default ReactComponent;
+    export { SvgIcon };
+    //export default SvgIcon;
 }

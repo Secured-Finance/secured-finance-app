@@ -1,6 +1,5 @@
 import { Menu, Transition } from '@headlessui/react';
-import { ChevronDownIcon } from '@heroicons/react/outline';
-import { ArrowUpIcon } from '@heroicons/react/solid';
+import { ArrowUpIcon, ChevronDownIcon } from '@heroicons/react/24/solid';
 import classNames from 'classnames';
 import Link from 'next/link';
 import React, { HTMLAttributes, LegacyRef } from 'react';
