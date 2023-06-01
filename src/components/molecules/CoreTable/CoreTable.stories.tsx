@@ -72,10 +72,21 @@ const Template: ComponentStory<typeof CoreTable> = args => (
 export const Default = Template.bind({});
 export const NoBorder = Template.bind({});
 NoBorder.args = {
-    border: false,
+    options: {
+        border: false,
+    },
 };
 
 export const WithHiddenColumn = Template.bind({});
 WithHiddenColumn.args = {
-    hideColumnIds: ['age'],
+    options: {
+        hideColumnIds: ['age'],
+    },
+};
+
+export const NonResponsive = Template.bind({});
+NonResponsive.args = {
+    options: {
+        responsive: false,
+    },
 };
