@@ -30,6 +30,7 @@ export default {
             mocks: mockUserHistory,
         },
         connected: true,
+        delay: 3000,
         ...RESPONSIVE_PARAMETERS,
         layout: 'fullscreen',
     },
