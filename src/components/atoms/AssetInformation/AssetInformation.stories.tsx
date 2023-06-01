@@ -14,11 +14,6 @@ export default {
         },
         informationText: 'Only USDC and ETH are eligible as collateral.',
     },
-    parameters: {
-        viewport: {
-            disable: true,
-        },
-    },
     decorators: [withAssetPrice],
 } as ComponentMeta<typeof AssetInformation>;
 
