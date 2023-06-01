@@ -3,6 +3,7 @@ import { WalletSource } from '@secured-finance/sf-client';
 import classNames from 'classnames';
 import { Fragment, useEffect, useMemo, useState } from 'react';
 import { ExpandIndicator, Separator } from 'src/components/atoms';
+import { SvgIcon } from 'src/types';
 import { AddressUtils, CurrencySymbol, ordinaryFormat } from 'src/utils';
 
 interface WalletSourceSelectorProps {
@@ -16,7 +17,7 @@ export type WalletSourceOption = {
     source: WalletSource;
     available: number;
     asset: CurrencySymbol;
-    iconSVG: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
+    iconSVG: SvgIcon;
 };
 
 const formatOption = (available: number, asset: CurrencySymbol) => {

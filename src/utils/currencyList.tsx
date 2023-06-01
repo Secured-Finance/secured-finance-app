@@ -12,6 +12,7 @@ import EthIcon from 'src/assets/coins/eth2.svg';
 import FilIcon from 'src/assets/coins/fil.svg';
 import UsdcIcon from 'src/assets/coins/usdc.svg';
 import { Option } from 'src/components/atoms';
+import { SvgIcon } from 'src/types';
 import { hexToString } from 'web3-utils';
 import { EFIL } from './currencies/filecoin';
 import { USDC } from './currencies/usdc';
@@ -48,6 +49,7 @@ export const currencyMap: Readonly<
             convertFromBlockchainUnit(amount, EFIL.onChain()),
         toCurrency: () => EFIL.onChain(),
         chartColor: tailwindConfig.theme.colors.chart.fil,
+        pillColor: tailwindConfig.theme.colors.pill.fil,
     },
     [CurrencySymbol.ETH]: {
         index: 1,
@@ -62,6 +64,7 @@ export const currencyMap: Readonly<
             convertFromBlockchainUnit(amount, ETH),
         toCurrency: () => ETH,
         chartColor: tailwindConfig.theme.colors.chart.eth,
+        pillColor: tailwindConfig.theme.colors.pill.eth,
     },
     [CurrencySymbol.USDC]: {
         index: 2,
@@ -76,6 +79,7 @@ export const currencyMap: Readonly<
             convertFromBlockchainUnit(amount, USDC.onChain()),
         toCurrency: () => USDC.onChain(),
         chartColor: tailwindConfig.theme.colors.chart.usdc,
+        pillColor: tailwindConfig.theme.colors.pill.usdc,
     },
     [CurrencySymbol.WBTC]: {
         index: 3,
@@ -90,6 +94,7 @@ export const currencyMap: Readonly<
             convertFromBlockchainUnit(amount, WBTC.onChain()),
         toCurrency: () => WBTC.onChain(),
         chartColor: tailwindConfig.theme.colors.chart.btc,
+        pillColor: tailwindConfig.theme.colors.pill.btc,
     },
 };
 
@@ -132,12 +137,13 @@ export type CurrencyInfo = {
     symbol: CurrencySymbol;
     name: string;
     coinGeckoId: string;
-    icon: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
+    icon: SvgIcon;
     isCollateral: boolean;
     toBaseUnit: (amount: number) => BigNumber;
     fromBaseUnit: (amount: BigNumber) => number;
     toCurrency: () => CurrencyInterface;
     chartColor: string;
+    pillColor: string;
 };
 
 export const toCurrency = (ccy: CurrencySymbol) => {
