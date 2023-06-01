@@ -36,38 +36,37 @@ export const HorizontalTab = ({
     const [selectedIndex, setSelectedIndex] = useState(0);
 
     return (
-        <div>
-            <div className='h-16 border-white-10 bg-cardBackground/60 shadow-tab  tablet:hidden'>
-                <GradientBox shape='rectangle'>
-                    <select
-                        value={selectedIndex}
-                        onChange={event =>
-                            setSelectedIndex(Number(event.target.value))
-                        }
-                        className='mx-2 my-3 h-10 w-[95%] justify-start rounded-xl  bg-black-30 p-2 text-neutral-8 focus:outline-none'
-                    >
-                        {tabTitles.map((title, index) => {
-                            return (
-                                <option
-                                    key={title}
-                                    value={index}
-                                    className='rounded-xl bg-black-30 text-neutral-8 '
-                                    data-testid={`${title}-mobile`}
-                                >
-                                    {title}
-                                </option>
-                            );
-                        })}
-                    </select>
-                </GradientBox>
-            </div>
-
-            <div className='rounded-b-2xl border border-white-10 bg-cardBackground/60 shadow-tab'>
-                <HeadlessTab.Group
-                    selectedIndex={selectedIndex}
-                    onChange={setSelectedIndex}
-                >
-                    <HeadlessTab.List className='hidden h-0 justify-start border-b border-white-10 px-5 tablet:block tablet:h-16 tablet:py-3'>
+        <div className='rounded-b-2xl border border-white-10 bg-cardBackground/60 shadow-tab'>
+            <HeadlessTab.Group
+                selectedIndex={selectedIndex}
+                onChange={setSelectedIndex}
+            >
+                <HeadlessTab.List className='justify-start border-b border-white-10 tablet:py-3'>
+                    <div className='h-16 w-full border-white-10 bg-cardBackground/60 shadow-tab  tablet:hidden'>
+                        <GradientBox shape='rectangle'>
+                            <select
+                                value={selectedIndex}
+                                onChange={event =>
+                                    setSelectedIndex(Number(event.target.value))
+                                }
+                                className='mx-2 my-3 h-10 w-[95%] justify-start rounded-xl  bg-black-30 p-2 text-neutral-8 focus:outline-none'
+                            >
+                                {tabTitles.map((title, index) => {
+                                    return (
+                                        <option
+                                            key={title}
+                                            value={index}
+                                            className='rounded-xl bg-black-30 text-neutral-8 '
+                                            data-testid={`${title}-mobile`}
+                                        >
+                                            {title}
+                                        </option>
+                                    );
+                                })}
+                            </select>
+                        </GradientBox>
+                    </div>
+                    <div className='hidden tablet:block'>
                         {tabTitles.map((title, index) => {
                             return (
                                 <HeadlessTab
@@ -83,12 +82,12 @@ export const HorizontalTab = ({
                                 </HeadlessTab>
                             );
                         })}
-                    </HeadlessTab.List>
-                    <HeadlessTab.Panels className='min-h-[30vh] rounded-b-2xl bg-black-20 px-2'>
-                        {arrayChildren[selectedIndex]}
-                    </HeadlessTab.Panels>
-                </HeadlessTab.Group>
-            </div>
+                    </div>
+                </HeadlessTab.List>
+                <HeadlessTab.Panels className='min-h-[30vh] rounded-b-2xl bg-black-20 px-2'>
+                    {arrayChildren[selectedIndex]}
+                </HeadlessTab.Panels>
+            </HeadlessTab.Group>
         </div>
     );
 };
