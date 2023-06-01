@@ -11,11 +11,6 @@ export default {
             { text: 'Tab C', disabled: true },
         ],
     },
-    parameters: {
-        viewport: {
-            disable: true,
-        },
-    },
 } as ComponentMeta<typeof Tab>;
 
 const Template: ComponentStory<typeof Tab> = args => (
