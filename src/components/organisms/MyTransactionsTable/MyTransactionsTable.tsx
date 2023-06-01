@@ -96,8 +96,10 @@ export const MyTransactionsTable = ({ data }: { data: TradeHistory }) => {
             <CoreTable
                 data={data}
                 columns={isTablet ? columnsForTabletMobile : columns}
-                name='active-trade-table'
-                border={false}
+                options={{
+                    name: 'active-trade-table',
+                    border: false,
+                }}
             />
         </div>
     );

@@ -190,8 +190,12 @@ export const MarketLoanWidget = ({ loans }: { loans: Loan[] }) => {
                 <CoreTable
                     columns={columns}
                     data={filteredLoans}
-                    border={false}
-                    hideColumnIds={isItayoseMarket ? ['apr'] : ['openingDate']}
+                    options={{
+                        border: false,
+                        hideColumnIds: isItayoseMarket
+                            ? ['apr']
+                            : ['openingDate'],
+                    }}
                 />
             </div>
         </div>
