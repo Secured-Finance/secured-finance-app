@@ -1,3 +1,4 @@
+import { RESPONSIVE_PARAMETERS, VIEWPORTS } from '.storybook/constants';
 import queries from '@secured-finance/sf-graph-client/dist/graphclients';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { BigNumber } from 'ethers';
@@ -48,7 +49,17 @@ export default {
         apolloClient: {
             mocks: [...totalUser, ...mockDailyVolumes],
         },
-        chromatic: { delay: 3000 },
+        ...RESPONSIVE_PARAMETERS,
+        chromatic: {
+            delay: 3000,
+            viewports: [
+                VIEWPORTS.MOBILE,
+                VIEWPORTS.TABLET,
+                VIEWPORTS.LAPTOP,
+                VIEWPORTS.DESKTOP,
+            ],
+        },
+        layout: 'fullscreen',
     },
     decorators: [
         withAppLayout,

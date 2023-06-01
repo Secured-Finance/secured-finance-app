@@ -4,7 +4,7 @@ const customViewports = {
     mobile: {
         name: 'Mobile',
         styles: {
-            width: '375px',
+            width: '390px',
             height: '667px',
         },
     },
