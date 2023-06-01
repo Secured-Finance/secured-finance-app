@@ -47,11 +47,10 @@ export const AdvancedLendingTopBar = <T extends string = string>({
 
     const handleTermChange = useCallback(
         (v: T) => {
-            if (v === termValue) return;
             setTermValue(v);
             onTermChange?.(v);
         },
-        [onTermChange, termValue]
+        [onTermChange]
     );
 
     const handleAssetChange = useCallback(
