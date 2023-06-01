@@ -1,5 +1,5 @@
 import { track } from '@amplitude/analytics-browser';
-import { ClipboardCopyIcon } from '@heroicons/react/outline';
+import { ClipboardDocumentIcon } from '@heroicons/react/24/outline';
 import { Token } from '@secured-finance/sf-core';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import MetaMaskIcon from 'src/assets/img/metamask-fox.svg';
@@ -145,7 +145,7 @@ export const Faucet = () => {
                                         navigator.clipboard.writeText(address);
                                     }}
                                 >
-                                    <ClipboardCopyIcon className='h-4 w-4 text-slateGray hover:text-slateGray/80' />
+                                    <ClipboardDocumentIcon className='h-4 w-4 text-slateGray hover:text-slateGray/80' />
                                 </button>
                             </div>
                             <div className='grid h-14 grid-flow-col items-center justify-between gap-x-3 rounded-xl border border-neutral-3 bg-black-20 px-2'>

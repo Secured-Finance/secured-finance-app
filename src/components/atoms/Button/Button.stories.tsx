@@ -1,4 +1,4 @@
-import { StarIcon } from '@heroicons/react/solid';
+import { StarIcon } from '@heroicons/react/24/solid';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { Button } from './';
 
