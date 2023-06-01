@@ -1,4 +1,4 @@
-import { ArrowUpIcon } from '@heroicons/react/outline';
+import { ArrowUpIcon } from '@heroicons/react/24/outline';
 import { OrderSide, WalletSource } from '@secured-finance/sf-client';
 import { createColumnHelper } from '@tanstack/react-table';
 import classNames from 'classnames';
