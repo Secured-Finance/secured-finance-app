@@ -336,18 +336,24 @@ export const OrderWidget = ({
                                 ? [...sellColumns].reverse()
                                 : sellColumns
                         }
-                        name='sellOrders'
-                        border={false}
-                        onLineClick={handleSellOrdersClick}
-                        hoverRow={handleSellOrdersHoverRow}
+                        options={{
+                            responsive: false,
+                            name: 'sellOrders',
+                            border: false,
+                            onLineClick: handleSellOrdersClick,
+                            hoverRow: handleSellOrdersHoverRow,
+                        }}
                     />
                     <CoreTable
                         data={buyOrders}
                         columns={buyColumns}
-                        name='buyOrders'
-                        border={false}
-                        onLineClick={handleBuyOrdersClick}
-                        hoverRow={handleBuyOrdersHoverRow}
+                        options={{
+                            responsive: false,
+                            name: 'buyOrders',
+                            border: false,
+                            onLineClick: handleBuyOrdersClick,
+                            hoverRow: handleBuyOrdersHoverRow,
+                        }}
                     />
                 </>
             )}
