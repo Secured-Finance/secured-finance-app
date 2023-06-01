@@ -2,11 +2,12 @@ import { Menu } from '@headlessui/react';
 import classNames from 'classnames';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { ExpandIndicator, Separator } from 'src/components/atoms';
+import { SvgIcon } from 'src/types';
 
 export type Option<T = string> = {
     label: string;
     value: T;
-    iconSVG?: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
+    iconSVG?: SvgIcon;
 };
 
 const DefaultButton = ({
