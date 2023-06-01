@@ -1,6 +1,6 @@
 import { reset as resetTracking } from '@amplitude/analytics-browser';
 import { Popover, Transition } from '@headlessui/react';
-import { LogoutIcon } from '@heroicons/react/outline';
+import { ArrowLeftOnRectangleIcon } from '@heroicons/react/24/outline';
 import classNames from 'classnames';
 import { useRouter } from 'next/router';
 import React, { Fragment, useCallback } from 'react';
@@ -143,7 +143,7 @@ export const WalletPopover = ({
                                             text='Disconnect Wallet'
                                             onClick={handleSignOutClick}
                                             icon={
-                                                <LogoutIcon className='h-5 w-5 text-slateGray' />
+                                                <ArrowLeftOnRectangleIcon className='h-5 w-5 text-slateGray' />
                                             }
                                         />
                                         <Separator />
