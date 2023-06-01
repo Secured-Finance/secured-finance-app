@@ -1,3 +1,4 @@
+import { RESPONSIVE_PARAMETERS } from '.storybook/constants';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { within } from '@storybook/testing-library';
 import {
@@ -29,7 +30,9 @@ export default {
             mocks: mockUserHistory,
         },
         connected: true,
-        chromatic: { delay: 3000 },
+        delay: 3000,
+        ...RESPONSIVE_PARAMETERS,
+        layout: 'fullscreen',
     },
 } as ComponentMeta<typeof PortfolioManagement>;
 
@@ -46,12 +49,12 @@ export const ConnectedToWallet = Template.bind({});
 export const DisplayOrderHistory = Template.bind({});
 DisplayOrderHistory.play = async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    const orderHistoryTab = canvas.getByText('Open Orders');
+    const orderHistoryTab = canvas.getByTestId('Open Orders');
     orderHistoryTab.click();
 };
 export const DisplayMyTransactions = Template.bind({});
 DisplayMyTransactions.play = async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    const myTransactionsTab = canvas.getByText('My Transactions');
+    const myTransactionsTab = canvas.getByTestId('My Transactions');
     myTransactionsTab.click();
 };

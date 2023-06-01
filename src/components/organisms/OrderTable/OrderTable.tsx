@@ -69,8 +69,10 @@ export const OrderTable = ({ data }: { data: Order[] }) => {
         <CoreTable
             columns={columns}
             data={data}
-            name='open-order-table'
-            border={false}
+            options={{
+                name: 'open-order-table',
+                border: false,
+            }}
         />
     );
 };

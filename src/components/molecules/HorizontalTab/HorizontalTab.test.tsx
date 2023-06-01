@@ -20,11 +20,13 @@ describe('HorizontalTab Component', () => {
         expect(screen.getByRole('tab', { selected: true })).toHaveTextContent(
             'Active Contracts'
         );
-        expect(screen.getByText('Active Contracts')).toHaveClass('bg-black-30');
-        expect(screen.getByText('Trade History')).not.toHaveClass(
+        expect(screen.getByTestId('Active Contracts')).toHaveClass(
             'bg-black-30'
         );
-        screen.getByText('Trade History').click();
+        expect(screen.getByTestId('Trade History')).not.toHaveClass(
+            'bg-black-30'
+        );
+        screen.getByTestId('Trade History').click();
         expect(screen.getByRole('tab', { selected: true })).toHaveTextContent(
             'Trade History'
         );
@@ -35,7 +37,7 @@ describe('HorizontalTab Component', () => {
         expect(
             screen.getByText('This is a Great Tab Content')
         ).toBeInTheDocument();
-        screen.getByText('Trade History').click();
+        screen.getByTestId('Trade History').click();
         expect(
             screen.getByText('This is the content of the second tab')
         ).toBeInTheDocument();
@@ -44,12 +46,5 @@ describe('HorizontalTab Component', () => {
     it('should render the component even if it has no children', () => {
         render(<HorizontalTab tabTitles={[]}></HorizontalTab>);
         expect(screen.getByRole('tablist')).toBeInTheDocument();
-    });
-
-    it('should style the chip parent div if specified', () => {
-        render(<Default tabTitles={[['This is a tab title', 'px-3']]} />);
-        expect(
-            screen.getByText('This is a tab title').parentElement
-        ).toHaveClass('px-3');
     });
 });

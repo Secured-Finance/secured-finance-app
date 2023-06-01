@@ -49,7 +49,7 @@ ConnectedToWallet.parameters = {
 export const MyOrders = Template.bind({});
 MyOrders.play = async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    canvas.getByText('My Orders').click();
+    canvas.getByTestId('My Orders').click();
 };
 
 export const MyOrdersConnectedToWallet = Template.bind({});
@@ -58,5 +58,5 @@ MyOrdersConnectedToWallet.parameters = {
 };
 MyOrdersConnectedToWallet.play = async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    canvas.getByText('My Orders').click();
+    canvas.getByTestId('My Orders').click();
 };
