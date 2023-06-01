@@ -154,12 +154,12 @@ export const MarketLoanWidget = ({ loans }: { loans: Loan[] }) => {
         [handleClick]
     );
     return (
-        <div className='h-fit rounded-2xl border border-white-10 bg-cardBackground/60 shadow-tab'>
-            <div className='flex flex-row justify-between border-b border-neutral-3 pb-2'>
-                <div className='h-16 w-28'>
+        <div className='h-fit rounded-b-2xl border border-white-10 bg-cardBackground/60 shadow-tab'>
+            <div className='flex flex-col gap-2 border-b border-neutral-3 tablet:flex-row tablet:items-center tablet:justify-between'>
+                <div className='h-16 w-full border-b border-neutral-3 tablet:w-28 tablet:border-none'>
                     <NavTab text='Loans' active />
                 </div>
-                <div className='flex flex-row gap-3 pr-3 pt-4'>
+                <div className='flex w-full flex-row justify-center gap-4 pb-3 tablet:w-fit tablet:pb-0 tablet:pr-3'>
                     <DropdownSelector<string>
                         optionList={[
                             { label: 'All Assets', value: '' },
@@ -186,7 +186,7 @@ export const MarketLoanWidget = ({ loans }: { loans: Loan[] }) => {
                     />
                 </div>
             </div>
-            <div className='p-6'>
+            <div className='p-6 pt-3'>
                 <CoreTable
                     columns={columns}
                     data={filteredLoans}

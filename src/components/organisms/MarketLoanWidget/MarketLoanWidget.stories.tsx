@@ -1,3 +1,4 @@
+import { RESPONSIVE_PARAMETERS, VIEWPORTS } from '.storybook/constants';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { within } from '@storybook/testing-library';
 import {
@@ -32,10 +33,16 @@ const btcMarkets = preloadedLendingMarkets?.availableContracts?.lendingMarkets
 export default {
     title: 'Organism/MarketLoanWidget',
     component: MarketLoanWidget,
+    parameters: {
+        ...RESPONSIVE_PARAMETERS,
+        chromatic: {
+            viewports: [VIEWPORTS.MOBILE, VIEWPORTS.TABLET],
+        },
+    },
     args: {
         loans: [...filMarkets, ...btcMarkets],
     },
-} as ComponentMeta<typeof MarketLoanWidget>;
+} as unknown as ComponentMeta<typeof MarketLoanWidget>;
 
 const Template: ComponentStory<typeof MarketLoanWidget> = args => (
     <MarketLoanWidget {...args} />
