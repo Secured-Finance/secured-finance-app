@@ -55,7 +55,7 @@ export const Header = () => {
             )}
             <nav
                 data-cy='header'
-                className='grid h-20 w-full grid-flow-col border-b border-neutral-1 laptop:grid-flow-col'
+                className='grid h-20 w-full grid-flow-col border-b border-neutral-1 px-5 laptop:grid-flow-col'
             >
                 <div className='col-span-2 flex flex-row items-center gap-3'>
                     <Link href='/' passHref>
