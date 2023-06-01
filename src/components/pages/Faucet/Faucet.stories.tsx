@@ -1,3 +1,4 @@
+import { RESPONSIVE_PARAMETERS } from '.storybook/constants';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import {
     withAppLayout,
@@ -19,6 +20,10 @@ export default {
         withWalletProvider,
         withChainErrorDisabled,
     ],
+    parameters: {
+        ...RESPONSIVE_PARAMETERS,
+        layout: 'fullscreen',
+    },
 } as ComponentMeta<typeof Faucet>;
 
 const Template: ComponentStory<typeof Faucet> = () => <Faucet />;
