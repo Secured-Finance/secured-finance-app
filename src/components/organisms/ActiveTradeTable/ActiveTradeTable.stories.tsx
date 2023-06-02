@@ -1,3 +1,4 @@
+import { RESPONSIVE_PARAMETERS, VIEWPORTS } from '.storybook/constants';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { BigNumber } from 'ethers';
 import {
@@ -13,6 +14,12 @@ export default {
     component: ActiveTradeTable,
     args: {
         data: aggregatedTrades,
+    },
+    parameters: {
+        ...RESPONSIVE_PARAMETERS,
+        chromatic: {
+            viewports: [VIEWPORTS.MOBILE, VIEWPORTS.TABLET, VIEWPORTS.LAPTOP],
+        },
     },
     decorators: [withAssetPrice, withWalletProvider],
 } as ComponentMeta<typeof ActiveTradeTable>;
@@ -36,11 +43,7 @@ const Template: ComponentStory<typeof ActiveTradeTable> = args => {
         },
     ];
 
-    return (
-        <div className='px-24'>
-            <ActiveTradeTable {...args} />
-        </div>
-    );
+    return <ActiveTradeTable {...args} />;
 };
 
 export const Default = Template.bind({});

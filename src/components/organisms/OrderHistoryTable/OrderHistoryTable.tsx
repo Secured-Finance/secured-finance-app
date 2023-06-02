@@ -2,6 +2,7 @@ import { createColumnHelper } from '@tanstack/react-table';
 import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { CoreTable } from 'src/components/molecules';
+import { useBreakpoint } from 'src/hooks';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { RootState } from 'src/store/types';
 import { OrderList } from 'src/types';
@@ -19,6 +20,7 @@ const columnHelper = createColumnHelper<Order>();
 
 export const OrderHistoryTable = ({ data }: { data: OrderList }) => {
     const priceList = useSelector((state: RootState) => getPriceMap(state));
+    const isTablet = useBreakpoint('tablet');
 
     const columns = useMemo(
         () => [
@@ -45,5 +47,16 @@ export const OrderHistoryTable = ({ data }: { data: OrderList }) => {
         [priceList]
     );
 
-    return <CoreTable columns={columns} data={data} border />;
+    const columnsForTabletMobile = [
+        columns[1],
+        columns[0],
+        ...columns.slice(2),
+    ];
+
+    return (
+        <CoreTable
+            columns={isTablet ? columnsForTabletMobile : columns}
+            data={data}
+        />
+    );
 };
