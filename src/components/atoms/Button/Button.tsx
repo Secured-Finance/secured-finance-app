@@ -1,5 +1,6 @@
 import classNames from 'classnames';
 import React from 'react';
+import { SvgIcon } from 'src/types';
 
 export const Button = ({
     href, //do nothing
@@ -15,8 +16,8 @@ export const Button = ({
         href?: string;
         size?: 'sm' | 'md';
     } & {
-        StartIcon?: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
-        EndIcon?: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
+        StartIcon?: SvgIcon;
+        EndIcon?: SvgIcon;
     }) => {
     const Tag = href ? 'a' : 'button';
     const tagProps = href

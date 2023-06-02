@@ -1,5 +1,5 @@
 import { Popover, Transition } from '@headlessui/react';
-import { ExternalLinkIcon } from '@heroicons/react/outline';
+import { ClipboardDocumentIcon } from '@heroicons/react/24/outline';
 import { Fragment } from 'react';
 import Discord from 'src/assets/icons/discord.svg';
 import Medium from 'src/assets/icons/medium.svg';
@@ -81,5 +81,5 @@ export const MenuPopover = ({}) => {
 };
 
 const ExternalIcon = () => (
-    <ExternalLinkIcon className='h-4 w-4 text-slateGray' />
+    <ClipboardDocumentIcon className='h-4 w-4 text-slateGray' />
 );
