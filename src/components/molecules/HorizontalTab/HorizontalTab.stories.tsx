@@ -26,7 +26,3 @@ const Template: ComponentStory<typeof HorizontalTab> = args => (
 );
 
 export const Default = Template.bind({});
-export const WithStyling = Template.bind({});
-WithStyling.args = {
-    tabTitles: ['Test'],
-};

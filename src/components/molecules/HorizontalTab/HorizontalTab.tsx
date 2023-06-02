@@ -1,4 +1,5 @@
 import { Menu, Tab as HeadlessTab } from '@headlessui/react';
+import ChevronDownIcon from '@heroicons/react/24/outline/ChevronDownIcon';
 import classNames from 'classnames';
 import React, { Children, useState } from 'react';
 import { Separator } from 'src/components/atoms';
@@ -41,20 +42,21 @@ export const HorizontalTab = ({
                 selectedIndex={selectedIndex}
                 onChange={setSelectedIndex}
             >
-                <HeadlessTab.List className='justify-start border-b border-white-10 tablet:py-3'>
+                <HeadlessTab.List className='h-16 justify-start border-b border-white-10 p-3'>
                     <div className='w-full tablet:hidden'>
                         <Menu as='div' className='relative'>
-                            <Menu.Button className='mx-2 my-3 h-10 w-[95%] justify-start rounded-xl  bg-black-30 p-2 text-neutral-8 focus:outline-none'>
+                            <Menu.Button className=' flex h-10 w-full flex-row items-center justify-between rounded-xl bg-black-30 p-2 text-neutral-8 focus:outline-none'>
                                 {tabTitles[selectedIndex]}
+                                <ChevronDownIcon className='h-4' />
                             </Menu.Button>
-                            <Menu.Items className='z-15 absolute mt-0.5 flex w-full flex-col rounded-lg bg-gunMetal p-2 shadow-sm'>
+                            <Menu.Items className='z-15 absolute mt-1 flex w-full flex-col rounded-lg bg-gunMetal p-2 shadow-sm'>
                                 {tabTitles.map((title, index) => (
                                     <Menu.Item key={title}>
                                         {({ active }) => (
                                             <div>
                                                 <div
                                                     className={classNames(
-                                                        'flex flex-row items-center justify-start space-x-4 rounded-lg p-2 text-white-80',
+                                                        'flex flex-row items-center justify-between space-x-4 rounded-lg p-2 text-white-80',
                                                         {
                                                             'bg-horizonBlue':
                                                                 active,
@@ -72,6 +74,7 @@ export const HorizontalTab = ({
                                                     >
                                                         {title}
                                                     </button>
+                                                    <ChevronDownIcon className='h-4' />
                                                 </div>
                                                 {index !==
                                                 tabTitles.length - 1 ? (
