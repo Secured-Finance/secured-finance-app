@@ -4,12 +4,12 @@ import { userEvent, within } from '@storybook/testing-library';
 import { Tooltip } from './Tooltip';
 
 const InformationCircle = (
-    <div
+    <button
         className='flex items-center rounded-full bg-teal p-5'
         data-testid='button-icon'
     >
         <ChevronDoubleDownIcon className='h-6 w-6 text-white' />
-    </div>
+    </button>
 );
 
 const children = (

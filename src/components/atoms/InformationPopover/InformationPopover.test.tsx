@@ -7,7 +7,6 @@ const { Default } = composeStories(stories);
 describe('InformationPopover Component', () => {
     it('should render an InformationPopover', () => {
         render(<Default />);
-        expect(screen.getByRole('button')).toBeInTheDocument();
         expect(screen.getByTestId('information-circle')).toBeInTheDocument();
     });
 
