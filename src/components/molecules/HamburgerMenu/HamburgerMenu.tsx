@@ -1,12 +1,12 @@
-import { Popover } from '@headlessui/react';
-import { XIcon } from '@heroicons/react/outline';
-import { ArrowUpIcon, ChevronDownIcon } from '@heroicons/react/solid';
+import { Menu, Transition } from '@headlessui/react';
+import { ArrowUpIcon, ChevronDownIcon } from '@heroicons/react/24/solid';
 import classNames from 'classnames';
 import Link from 'next/link';
-import { useState } from 'react';
+import React, { HTMLAttributes, LegacyRef } from 'react';
 import Burger from 'src/assets/img/burger.svg';
 import SFLogoSmall from 'src/assets/img/small-logo.svg';
-import { CloseButton } from 'src/components/atoms';
+import { Closable } from 'src/components/templates';
+import { UrlObject } from 'url';
 
 const EXTRA_LINKS = [
     {
@@ -27,69 +27,72 @@ const EXTRA_LINKS = [
     },
 ];
 
-const MobileItemLink = ({
-    text,
-    link,
-    href,
-    onClick,
-}: {
-    text: string;
-    link?: string;
-    href?: string;
-    onClick: () => void;
-}) => {
-    const url = href ?? '_';
-    const extraProps = href ? { target: '_blank', rel: 'noopener' } : {};
-    const anchor = (
-        <a
-            className={classNames(
-                'flex h-16 w-full items-center justify-start px-9 py-4 text-center hover:text-neutral-8',
-                {
-                    'hover:border-l-4 hover:border-starBlue hover:border-transparent hover:bg-gradient-to-r hover:from-[#6A76B159] hover:via-[#4A5BAF1F] hover:to-[#394DAE00]':
-                        link,
-                    'group flex flex-row items-center gap-3 hover:bg-[#233447]':
-                        href,
-                }
-            )}
-            href={url}
-            {...extraProps}
-            onClick={onClick}
-        >
-            <p>{text}</p>
-            {href && (
-                <ArrowUpIcon className='mt-2 hidden h-5 w-5 rotate-45 text-white group-hover:inline' />
-            )}
-        </a>
-    );
-    if (link) {
+const NextLink = React.forwardRef(
+    (
+        props: HTMLAttributes<HTMLAnchorElement> & { href: string | UrlObject },
+        ref: LegacyRef<HTMLAnchorElement>
+    ) => {
+        const { href, children, ...rest } = props;
         return (
-            <Link href={link} className='flex h-full' passHref>
-                {anchor}
+            <Link href={href}>
+                <a {...rest} ref={ref}>
+                    {children}
+                </a>
             </Link>
         );
     }
+);
+NextLink.displayName = 'NextLink';
 
-    return anchor;
+const MenuItemLink = ({ text, link }: { text: string; link: string }) => {
+    return (
+        <Menu.Item>
+            {({ active }) => (
+                <NextLink
+                    href={link}
+                    className={classNames(
+                        'flex h-16 w-full items-center justify-start whitespace-nowrap px-9 py-4 text-center',
+                        {
+                            'border-l-4 border-starBlue bg-gradient-to-r from-[#6A76B159] via-[#4A5BAF1F] to-[#394DAE00] text-neutral-8':
+                                active,
+                        }
+                    )}
+                >
+                    {text}
+                </NextLink>
+            )}
+        </Menu.Item>
+    );
 };
 
-const MenuItem = ({
-    text,
-    href,
-    onClick,
-}: {
-    text: string;
-    href: string;
-    onClick: () => void;
-}) => {
+const MobileItemLink = ({ text, href }: { text: string; href: string }) => {
     return (
-        <div className='flex items-center'>
-            <MobileItemLink text={text} href={href} onClick={onClick} />
-            <ArrowUpIcon
-                className='hidden h-5 w-5 rotate-45 text-white'
-                role='img'
-                aria-label='Arrow pointing out of the menu indicating that the link will open in a new tab'
-            />
-        </div>
+        <Menu.Item>
+            {({ active }) => (
+                <a
+                    className={classNames(
+                        'flex h-16 w-full flex-row items-center justify-start gap-3 whitespace-nowrap p-4 text-center',
+                        {
+                            'rounded-2xl bg-[#233447] text-neutral-8': active,
+                        }
+                    )}
+                    href={href}
+                    target='_blank'
+                    rel='noreferrer'
+                >
+                    <p>{text}</p>
+                    <ArrowUpIcon
+                        className={classNames(
+                            'mt-1 h-4 w-4 rotate-45 text-white',
+                            {
+                                inline: active,
+                                hidden: !active,
+                            }
+                        )}
+                    />
+                </a>
+            )}
+        </Menu.Item>
     );
 };
 
@@ -98,67 +101,90 @@ export const HamburgerMenu = ({
 }: {
     links: { label: string; link: string }[];
 }) => {
-    const [showMore, setShowMore] = useState(false);
+    const [showMore, setShowMore] = React.useState(false);
+
     return (
-        <Popover>
-            {({ open, close }) => (
+        <Menu>
+            {({ close }) => (
                 <>
-                    <Popover.Button aria-label='Hamburger Menu'>
-                        {!open ? (
-                            <Burger className='h-8 w-8' />
-                        ) : (
-                            <XIcon className='h-8 w-8 text-white' />
-                        )}
-                    </Popover.Button>
-                    <Popover.Panel
-                        role='navigation'
-                        className={classNames(
-                            'typography-body-1 fixed inset-x-0 bottom-0 z-50 flex h-screen w-full flex-col gap-4 bg-universeBlue pt-8 text-neutral-4'
-                        )}
+                    <Menu.Button aria-label='Hamburger Menu'>
+                        <Burger className='h-8 w-8' />
+                    </Menu.Button>
+                    <Transition
+                        className='fixed inset-0 z-50'
+                        enter='transition duration-100 ease-out'
+                        enterFrom='transform scale-95 opacity-0'
+                        enterTo='transform scale-100 opacity-100'
+                        leave='transition duration-75 ease-out'
+                        leaveFrom='transform scale-100 opacity-100'
+                        leaveTo='transform scale-95 opacity-0'
                     >
-                        <div className='flex items-center justify-between px-4'>
-                            <SFLogoSmall className='h-7 w-7' />
-                            <CloseButton onClick={() => close()} />
-                        </div>
-                        <div className='w-full flex-col items-start'>
-                            {links.map(link => (
-                                <MobileItemLink
-                                    key={link.label}
-                                    text={link.label}
-                                    link={link.link}
-                                    onClick={() => close()}
-                                />
-                            ))}
-                        </div>
-                        <button
-                            className='flex h-16 w-full items-center justify-between px-9 py-4 text-center hover:border-l-4 hover:border-starBlue hover:border-transparent hover:bg-gradient-to-r hover:from-[#6A76B159] hover:via-[#4A5BAF1F] hover:to-[#394DAE00] hover:text-neutral-8'
-                            onClick={() => setShowMore(!showMore)}
-                            aria-label='Show More'
+                        <Menu.Items
+                            as='div'
+                            className={classNames(
+                                'typography-body-1 flex h-screen w-full flex-col gap-4 bg-universeBlue p-8 text-neutral-4'
+                            )}
                         >
-                            <p
-                                className={classNames({
-                                    'text-neutral-8': showMore,
-                                })}
-                            >
-                                More
-                            </p>
-                            <ChevronDownIcon className='h-8 w-8' />
-                        </button>
-                        {showMore && (
-                            <div className='w-full px-4'>
-                                {EXTRA_LINKS.map(link => (
-                                    <MenuItem
-                                        key={link.text}
-                                        text={link.text}
-                                        href={link.href}
-                                        onClick={() => close()}
-                                    />
-                                ))}
-                            </div>
-                        )}
-                    </Popover.Panel>
+                            <Closable onClose={close}>
+                                <div className='fixed'>
+                                    <SFLogoSmall className='h-7 w-7' />
+                                </div>
+                                <div className='w-full flex-col items-start'>
+                                    {links.map(link => (
+                                        <MenuItemLink
+                                            key={link.label}
+                                            text={link.label}
+                                            link={link.link}
+                                        />
+                                    ))}
+
+                                    <Menu.Item as='div' className='w-full'>
+                                        {({ active }) => (
+                                            <button
+                                                onClick={e => {
+                                                    e.preventDefault();
+                                                    setShowMore(!showMore);
+                                                }}
+                                                aria-label='Show More'
+                                                className={classNames(
+                                                    'flex h-16 w-full items-center justify-between px-9 py-4 text-center',
+                                                    {
+                                                        'border-l-4 border-starBlue bg-gradient-to-r from-[#6A76B159] via-[#4A5BAF1F] to-[#394DAE00] text-neutral-8':
+                                                            active,
+                                                    }
+                                                )}
+                                            >
+                                                More
+                                                <ChevronDownIcon
+                                                    className={classNames(
+                                                        'mt-2 inline h-6 w-6 text-neutral-4',
+                                                        {
+                                                            'rotate-180':
+                                                                showMore,
+                                                        }
+                                                    )}
+                                                />
+                                            </button>
+                                        )}
+                                    </Menu.Item>
+
+                                    {showMore && (
+                                        <div className='w-full px-4'>
+                                            {EXTRA_LINKS.map(link => (
+                                                <MobileItemLink
+                                                    key={link.text}
+                                                    text={link.text}
+                                                    href={link.href}
+                                                />
+                                            ))}
+                                        </div>
+                                    )}
+                                </div>
+                            </Closable>
+                        </Menu.Items>
+                    </Transition>
                 </>
             )}
-        </Popover>
+        </Menu>
     );
 };
