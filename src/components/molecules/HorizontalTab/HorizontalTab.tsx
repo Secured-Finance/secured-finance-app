@@ -1,5 +1,5 @@
 import { Menu, Tab as HeadlessTab } from '@headlessui/react';
-import { ChevronDownIcon } from '@heroicons/react/outline';
+import ChevronDownIcon from '@heroicons/react/24/outline/ChevronDownIcon';
 import classNames from 'classnames';
 import React, { Children, useState } from 'react';
 import { Separator } from 'src/components/atoms';
