@@ -30,11 +30,9 @@ export default {
             mocks: mockUserHistory,
         },
         connected: true,
-        ...{
-            ...RESPONSIVE_PARAMETERS,
-            chromatic: {
-                delay: 3000,
-            },
+        ...RESPONSIVE_PARAMETERS,
+        chromatic: {
+            delay: 3000,
         },
         layout: 'fullscreen',
     },
