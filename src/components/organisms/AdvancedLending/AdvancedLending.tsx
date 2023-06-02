@@ -1,7 +1,7 @@
 import { toBytes32 } from '@secured-finance/sf-graph-client';
 import queries from '@secured-finance/sf-graph-client/dist/graphclients/';
 import { BigNumber } from 'ethers';
-import { useCallback, useMemo } from 'react';
+import { useCallback, useMemo, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
     AdvancedLendingTopBar,
@@ -27,7 +27,7 @@ import {
     setUnitPrice,
 } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
-import { MaturityOptionList, OrderType, TradesQuery } from 'src/types';
+import { MaturityOptionList, TradesQuery } from 'src/types';
 import {
     CurrencySymbol,
     Rate,
@@ -137,6 +137,20 @@ export const AdvancedLending = ({
         [currency, dispatch]
     );
 
+    const handleTermChange = useCallback(
+        (v: string) => {
+            if (v === maturity.toString()) return;
+            dispatch(setMaturity(new Maturity(v)));
+            dispatch(setAmount(BigNumber.from(0)));
+        },
+        [maturity, dispatch]
+    );
+
+    useEffect(() => {
+        dispatch(setUnitPrice(loanValue.price));
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [dispatch, loanValue.price, orderType, currency, maturity.toString()]);
+
     return (
         <TwoColumnsWithTopBar
             topBar={
@@ -151,15 +165,8 @@ export const AdvancedLending = ({
                         label: selectedTerm.label,
                         value: selectedTerm.value.toString(),
                     }}
-                    onAssetChange={v => {
-                        handleCurrencyChange(v);
-                    }}
-                    onTermChange={v => {
-                        dispatch(setMaturity(new Maturity(v)));
-                        if (orderType === OrderType.MARKET) {
-                            dispatch(setUnitPrice(loanValue.price));
-                        }
-                    }}
+                    onAssetChange={handleCurrencyChange}
+                    onTermChange={handleTermChange}
                     values={[
                         formatLoanValue(tradeHistoryDetails.max, 'price'),
                         formatLoanValue(tradeHistoryDetails.min, 'price'),
