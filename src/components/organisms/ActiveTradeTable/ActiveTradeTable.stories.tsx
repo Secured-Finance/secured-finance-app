@@ -43,11 +43,7 @@ const Template: ComponentStory<typeof ActiveTradeTable> = args => {
         },
     ];
 
-    return (
-        <div>
-            <ActiveTradeTable {...args} />
-        </div>
-    );
+    return <ActiveTradeTable {...args} />;
 };
 
 export const Default = Template.bind({});
