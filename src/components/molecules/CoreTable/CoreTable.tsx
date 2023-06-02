@@ -79,11 +79,11 @@ export const CoreTable = <T,>({
                         data-testid={`${coreTableOptions.name}-header`}
                     >
                         {headerGroup.headers.map((header, columnIndex) => (
-                            <td
+                            <th
                                 data-testid={`${coreTableOptions.name}-header-cell`}
                                 key={header.id}
                                 className={classNames(
-                                    'relative px-1 py-2 text-center',
+                                    'relative px-1 py-2 text-center font-bold',
                                     {
                                         'sticky left-0 z-10 bg-black-20/100 tablet:bg-transparent':
                                             columnIndex === 0 &&
@@ -97,7 +97,7 @@ export const CoreTable = <T,>({
                                           header.column.columnDef.header,
                                           header.getContext()
                                       )}
-                            </td>
+                            </th>
                         ))}
                     </tr>
                 ))}
@@ -126,7 +126,7 @@ export const CoreTable = <T,>({
                             <td
                                 key={cell.id}
                                 className={classNames(
-                                    'min-w-fit whitespace-nowrap px-1 py-2 text-center',
+                                    'min-w-fit whitespace-nowrap px-1 py-2 text-center font-medium',
                                     {
                                         'sticky left-0 z-10 bg-black-20/100 tablet:bg-transparent':
                                             cellIndex === 0 &&
