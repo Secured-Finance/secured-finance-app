@@ -1,4 +1,3 @@
-import React from 'react';
 import {
     GradientBox,
     Separator,
@@ -15,24 +14,30 @@ export const StatsBar = ({
 }) => {
     return (
         <GradientBox data-testid={`${testid}-table`}>
-            <div className='flex flex-row' role='grid'>
-                {values.map((item, index) => {
-                    return (
-                        <React.Fragment key={`${testid}-table-${index}`}>
-                            <StatsBox
-                                key={item.name}
-                                {...item}
-                                value={item.value}
-                            />
-                            {values.length - 1 !== index && (
+            <div
+                className='grid grid-cols-2 grid-rows-2 tablet:grid-cols-4 tablet:grid-rows-1 '
+                role='grid'
+            >
+                {values.map((item, index) => (
+                    <div
+                        key={`${testid}-table-${index}`}
+                        className='border-r border-white-10'
+                    >
+                        <StatsBox
+                            key={item.name}
+                            {...item}
+                            value={item.value}
+                        />
+                        {values.length - 2 > index && (
+                            <div className='tablet:hidden'>
                                 <Separator
-                                    orientation='vertical'
+                                    orientation='horizontal'
                                     color='white-10'
                                 />
-                            )}
-                        </React.Fragment>
-                    );
-                })}
+                            </div>
+                        )}
+                    </div>
+                ))}
             </div>
         </GradientBox>
     );

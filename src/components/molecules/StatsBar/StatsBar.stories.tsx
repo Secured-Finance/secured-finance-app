@@ -1,3 +1,4 @@
+import { RESPONSIVE_PARAMETERS, VIEWPORTS } from '.storybook/constants';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { StatsBar } from './StatsBar';
 
@@ -25,7 +26,11 @@ export default {
         ],
     },
     parameters: {
-        chromatic: { delay: 3000 },
+        ...RESPONSIVE_PARAMETERS,
+        chromatic: {
+            delay: 3000,
+            viewports: [VIEWPORTS.MOBILE, VIEWPORTS.TABLET],
+        },
     },
 } as ComponentMeta<typeof StatsBar>;
 
