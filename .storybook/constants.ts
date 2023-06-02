@@ -4,7 +4,7 @@ const customViewports = {
     mobile: {
         name: 'Mobile',
         styles: {
-            width: '390px',
+            width: '375px',
             height: '667px',
         },
     },
@@ -32,7 +32,7 @@ const customViewports = {
 };
 
 export enum VIEWPORTS {
-    MOBILE = 390,
+    MOBILE = 375,
     TABLET = 768,
     LAPTOP = 1024,
     DESKTOP = 1440,
