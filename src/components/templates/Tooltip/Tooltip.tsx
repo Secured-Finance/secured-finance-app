@@ -15,7 +15,10 @@ export const Tooltip = ({
             <Popover className='relative'>
                 {() => (
                     <>
-                        <Popover.Button className='flex items-center focus:outline-none'>
+                        <Popover.Button
+                            className='flex items-center focus:outline-none'
+                            as='div'
+                        >
                             {React.cloneElement(
                                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                                 iconElement as React.ReactElement<any>,
