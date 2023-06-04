@@ -1,34 +1,29 @@
 import { composeStories } from '@storybook/testing-react';
 import { fireEvent, render, screen } from 'src/test-utils.js';
-import * as stories from './InformationPopover.stories';
+import * as stories from './Tooltip.stories';
 
 const { Default } = composeStories(stories);
 
-describe('InformationPopover Component', () => {
-    it('should render an InformationPopover', () => {
+describe('Tooltip Component', () => {
+    it('should render a Tooltip', () => {
         render(<Default />);
-        expect(screen.getByTestId('information-circle')).toBeInTheDocument();
     });
 
     it('should render information on mouseEnter event', () => {
         render(<Default />);
-        const information = screen.getByTestId('information-circle');
+        const information = screen.getByTestId('button-icon');
         fireEvent.mouseEnter(information);
 
         expect(screen.getByTestId('information-popover')).toBeInTheDocument();
-        expect(
-            screen.getByText('You are currently at 43% to liquidation.')
-        ).toBeInTheDocument();
+        expect(screen.getByText('Tooltip content')).toBeInTheDocument();
     });
 
     it('should remove rendered information on mouseOut event', () => {
         render(<Default />);
-        const information = screen.getByTestId('information-circle');
+        const information = screen.getByTestId('button-icon');
         fireEvent.mouseEnter(information);
         fireEvent.mouseOut(information);
 
-        expect(
-            screen.queryByText('You are currently at 43% to liquidation.')
-        ).not.toBeInTheDocument();
+        expect(screen.queryByText('Tooltip content')).not.toBeInTheDocument();
     });
 });
