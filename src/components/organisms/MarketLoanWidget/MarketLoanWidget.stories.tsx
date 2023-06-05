@@ -17,6 +17,7 @@ const filMarkets = preloadedLendingMarkets?.availableContracts?.lendingMarkets
       ).map(m => ({
           ...m,
           currency: efilBytes32,
+          ccy: CurrencySymbol.EFIL,
       }))
     : [];
 const btcMarkets = preloadedLendingMarkets?.availableContracts?.lendingMarkets
@@ -27,6 +28,7 @@ const btcMarkets = preloadedLendingMarkets?.availableContracts?.lendingMarkets
       ).map(m => ({
           ...m,
           currency: wbtcBytes32,
+          ccy: CurrencySymbol.WBTC,
       }))
     : [];
 
@@ -42,7 +44,7 @@ export default {
     args: {
         loans: [...filMarkets, ...btcMarkets],
     },
-} as unknown as ComponentMeta<typeof MarketLoanWidget>;
+} as ComponentMeta<typeof MarketLoanWidget>;
 
 const Template: ComponentStory<typeof MarketLoanWidget> = args => (
     <MarketLoanWidget {...args} />
