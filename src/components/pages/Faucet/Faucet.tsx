@@ -1,9 +1,14 @@
 import { track } from '@amplitude/analytics-browser';
-import { ClipboardDocumentIcon } from '@heroicons/react/24/outline';
+import { Menu } from '@headlessui/react';
+import {
+    ClipboardDocumentIcon,
+    EllipsisHorizontalIcon,
+    WalletIcon,
+} from '@heroicons/react/24/outline';
 import { Token } from '@secured-finance/sf-core';
+import classNames from 'classnames';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import MetaMaskIcon from 'src/assets/img/metamask-fox.svg';
-
 import {
     Button,
     DropdownSelector,
@@ -12,7 +17,7 @@ import {
 } from 'src/components/atoms';
 import { Dialog, SuccessPanel } from 'src/components/molecules';
 import { ConnectWalletCard, MyWalletCard } from 'src/components/organisms';
-import { Page, TwoColumns } from 'src/components/templates';
+import { Page, Tooltip, TwoColumns } from 'src/components/templates';
 import useSF from 'src/hooks/useSecuredFinance';
 import {
     AddressUtils,
@@ -25,6 +30,58 @@ import {
 } from 'src/utils';
 import { useWallet } from 'use-wallet';
 
+const MenuAddToken = ({
+    address,
+    onClick,
+}: {
+    address: string;
+    onClick: () => void;
+}) => {
+    return (
+        <Menu as='div' className='relative inline tablet:hidden'>
+            <Menu.Button className='flex flex-row items-center justify-between gap-2'>
+                <span>{AddressUtils.format(address, 6)}</span>
+                <EllipsisHorizontalIcon className='h-6 w-6' />
+            </Menu.Button>
+            <Menu.Items className='typography-caption-2 absolute -left-4 -top-20 z-50 w-fit min-w-[150px] whitespace-nowrap rounded-md bg-gunMetal text-neutral-8 shadow-dropdown focus:outline-none'>
+                <Menu.Item>
+                    {({ active }) => (
+                        <button
+                            onClick={onClick}
+                            className={classNames(
+                                'flex w-full flex-row items-center justify-start gap-2 rounded-md px-4 py-2 text-left text-white-60 focus:outline-none',
+                                {
+                                    'bg-slateGray': active,
+                                }
+                            )}
+                        >
+                            <ClipboardDocumentIcon className='h-6 w-6 text-planetaryPurple' />
+                            <div>Copy Contract ID</div>
+                        </button>
+                    )}
+                </Menu.Item>
+                <Menu.Item>
+                    {({ active }) => (
+                        <button
+                            onClick={() => {
+                                navigator.clipboard.writeText(address);
+                            }}
+                            className={classNames(
+                                'flex w-full flex-row items-center justify-start gap-2 rounded-md px-4 py-2 text-left text-white-60 focus:outline-none',
+                                {
+                                    'bg-slateGray': active,
+                                }
+                            )}
+                        >
+                            <WalletIcon className='h-6 w-6 text-planetaryPurple' />
+                            <div>Copy Contract ID</div>
+                        </button>
+                    )}
+                </Menu.Item>
+            </Menu.Items>
+        </Menu>
+    );
+};
 export const Faucet = () => {
     const { account, ethereum } = useWallet();
     const sf = useSF();
@@ -114,7 +171,7 @@ export const Faucet = () => {
                             Test Token Faucet
                         </h1>
                         <div className='flex flex-col gap-10'>
-                            <div className='grid h-14 grid-flow-col items-center justify-between gap-x-3 rounded-xl border border-neutral-3 bg-black-20 px-2'>
+                            <div className='grid h-14 grid-flow-col items-center justify-start gap-x-3 rounded-xl border border-neutral-3 bg-black-20 px-2 tablet:justify-stretch'>
                                 <DropdownSelector
                                     optionList={assetList}
                                     selected={assetList[0]}
@@ -132,21 +189,47 @@ export const Faucet = () => {
                                         }
                                     }}
                                 />
-                                <div className='typography-caption text-white-60 tablet:pr-10'>
-                                    <span className='hidden tablet:inline'>
-                                        {address}
-                                    </span>
-                                    <span className='inline tablet:hidden'>
-                                        {AddressUtils.format(address, 6)}
-                                    </span>
+                                <div className='typography-caption text-white-60'>
+                                    <div className='hidden tablet:flex tablet:w-full tablet:flex-row tablet:items-center  tablet:justify-between'>
+                                        <div>{address}</div>
+                                        <div className='flex flex-row items-center gap-2'>
+                                            <Tooltip
+                                                iconElement={
+                                                    <button
+                                                        className='flex h-9 w-9 items-center justify-center rounded-2xl bg-gunMetal'
+                                                        onClick={() =>
+                                                            navigator.clipboard.writeText(
+                                                                address
+                                                            )
+                                                        }
+                                                    >
+                                                        <ClipboardDocumentIcon className='h-5 w-5 text-slateGray hover:text-planetaryPurple' />
+                                                    </button>
+                                                }
+                                            >
+                                                Copy Contract ID
+                                            </Tooltip>
+                                            <Tooltip
+                                                iconElement={
+                                                    <button
+                                                        className='flex h-9 w-9 items-center justify-center rounded-2xl bg-gunMetal'
+                                                        onClick={() =>
+                                                            addToMetamask(token)
+                                                        }
+                                                    >
+                                                        <WalletIcon className='h-5 w-5 text-slateGray hover:text-planetaryPurple' />
+                                                    </button>
+                                                }
+                                            >
+                                                Add Token to Wallet
+                                            </Tooltip>
+                                        </div>
+                                    </div>
+                                    <MenuAddToken
+                                        address={address}
+                                        onClick={() => addToMetamask(token)}
+                                    />
                                 </div>
-                                <button
-                                    onClick={() => {
-                                        navigator.clipboard.writeText(address);
-                                    }}
-                                >
-                                    <ClipboardDocumentIcon className='h-4 w-4 text-slateGray hover:text-slateGray/80' />
-                                </button>
                             </div>
                             <div className='grid h-14 grid-flow-col items-center justify-between gap-x-3 rounded-xl border border-neutral-3 bg-black-20 px-2'>
                                 <button
