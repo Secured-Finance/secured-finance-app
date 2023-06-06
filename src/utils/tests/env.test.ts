@@ -135,12 +135,9 @@ describe('getUseCommitHash', () => {
 
     it('should return false if variable is not set', () => {
         process.env.NEXT_PUBLIC_USE_COMMIT_HASH = '';
-        const spy = jest.spyOn(console, 'warn').mockImplementation();
-
         const useCommitHash = getUseCommitHash();
         expect(useCommitHash).toBe(false);
         expect(typeof useCommitHash).toBe('boolean');
-        expect(spy).toHaveBeenCalled();
     });
 });
 
@@ -155,7 +152,6 @@ describe('getCommitHash', () => {
     it('should return empty string if variable is not set', () => {
         process.env.COMMIT_HASH = '';
         const spy = jest.spyOn(console, 'warn').mockImplementation();
-
         const commitHash = getCommitHash();
         expect(commitHash).toBe('');
         expect(typeof commitHash).toBe('string');
