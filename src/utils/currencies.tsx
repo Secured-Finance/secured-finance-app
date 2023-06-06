@@ -82,5 +82,8 @@ export const generateWalletSourceInformation = (
     ];
 };
 
-export const TOTAL_USERS_V4 = 6824;
+// NOTE: Here are the user counts for previous versions of the app
+// Goerli v0.0.4: 6824
+// Goerli v0.0.5: 3060
+export const PREVIOUS_TOTAL_USERS = 6824 + 3060;
 export const COIN_GECKO_SOURCE = 'https://www.coingecko.com/en/coins/';
