@@ -1,11 +1,13 @@
 import {
     Environment,
     getAmplitudeApiKey,
+    getCommitHash,
     getEnvironment,
     getEthereumBlockTimer,
     getEthereumChainId,
     getEthereumNetwork,
     getRpcEndpoint,
+    getUseCommitHash,
 } from 'src/utils';
 
 describe('getEthereumNetwork', () => {
@@ -119,6 +121,44 @@ describe('getEnvironment', () => {
         const env = getEnvironment();
         expect(env).toBe(Environment.DEVELOPMENT);
         expect(typeof env).toBe('string');
+        expect(spy).toHaveBeenCalled();
+    });
+});
+
+describe('getUseCommitHash', () => {
+    it('should return the value of the environment variable', () => {
+        process.env.NEXT_PUBLIC_USE_COMMIT_HASH = 'true';
+        const useCommitHash = getUseCommitHash();
+        expect(useCommitHash).toBe(true);
+        expect(typeof useCommitHash).toBe('boolean');
+    });
+
+    it('should return false if variable is not set', () => {
+        process.env.NEXT_PUBLIC_USE_COMMIT_HASH = '';
+        const spy = jest.spyOn(console, 'warn').mockImplementation();
+
+        const useCommitHash = getUseCommitHash();
+        expect(useCommitHash).toBe(false);
+        expect(typeof useCommitHash).toBe('boolean');
+        expect(spy).toHaveBeenCalled();
+    });
+});
+
+describe('getCommitHash', () => {
+    it('should return the value of the environment variable', () => {
+        process.env.COMMIT_HASH = 'test';
+        const commitHash = getCommitHash();
+        expect(commitHash).toBe('test');
+        expect(typeof commitHash).toBe('string');
+    });
+
+    it('should return empty string if variable is not set', () => {
+        process.env.COMMIT_HASH = '';
+        const spy = jest.spyOn(console, 'warn').mockImplementation();
+
+        const commitHash = getCommitHash();
+        expect(commitHash).toBe('');
+        expect(typeof commitHash).toBe('string');
         expect(spy).toHaveBeenCalled();
     });
 });
