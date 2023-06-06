@@ -1,0 +1,50 @@
+name: Deploy a specific environment
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to deploy'
+        required: true
+        default: 'uat'
+
+jobs:
+  build-and-test-all:
+    name: Build and Test
+    needs: identify-env
+    uses: ./.github/workflows/build.yml
+    with:
+      artifact_name: WebApp
+      environment_name: ${{ github.event.inputs.environment }}
+    secrets: inherit
+
+  cypress-run:
+    name: Cypress Run Tests
+    needs: build-and-test-all
+    uses: ./.github/workflows/cypress-test.yml
+    with:
+      artifact_name: WebApp
+    secrets: inherit
+
+  deploy-on-fleek:
+    runs-on: ubuntu-latest
+    name: Deploy on Fleek
+    environment: ${{ github.event.inputs.environment }}
+    needs: [build-and-test-all, cypress-run]
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Retrieve artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: WebApp
+          path: .deploy/${{ vars.FLEEK_ENV }}/build
+
+      - name: Deploy the WebApp on IPFS
+        id: deploy
+        uses: fleekhq/action-deploy@v1
+        with:
+          apiKey: ${{ secrets.FLEEK_API_KEY }}
+          workDir: .deploy/${{ vars.FLEEK_ENV }}
+      - name: Get the output url
+        run: echo "Deploy url is ${{ steps.deploy.outputs.deployUrl }}"
