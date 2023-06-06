@@ -7,7 +7,7 @@ import {
     getEthereumChainId,
     getEthereumNetwork,
     getRpcEndpoint,
-    getUseCommitHash,
+    getUsePackageVersion,
 } from 'src/utils';
 
 describe('getEthereumNetwork', () => {
@@ -125,17 +125,17 @@ describe('getEnvironment', () => {
     });
 });
 
-describe('getUseCommitHash', () => {
+describe('getUsePackageVersion', () => {
     it('should return the value of the environment variable', () => {
-        process.env.NEXT_PUBLIC_USE_COMMIT_HASH = 'true';
-        const useCommitHash = getUseCommitHash();
+        process.env.NEXT_PUBLIC_USE_PACKAGE_VERSION = 'true';
+        const useCommitHash = getUsePackageVersion();
         expect(useCommitHash).toBe(true);
         expect(typeof useCommitHash).toBe('boolean');
     });
 
     it('should return false if variable is not set', () => {
-        process.env.NEXT_PUBLIC_USE_COMMIT_HASH = '';
-        const useCommitHash = getUseCommitHash();
+        process.env.NEXT_PUBLIC_USE_PACKAGE_VERSION = '';
+        const useCommitHash = getUsePackageVersion();
         expect(useCommitHash).toBe(false);
         expect(typeof useCommitHash).toBe('boolean');
     });
