@@ -68,8 +68,6 @@ export const getUseCommitHash = () => {
     const NEXT_PUBLIC_USE_COMMIT_HASH = process.env.NEXT_PUBLIC_USE_COMMIT_HASH;
 
     if (!NEXT_PUBLIC_USE_COMMIT_HASH) {
-        // eslint-disable-next-line no-console
-        console.warn('USE_COMMIT_HASH is not set, defaulting to false');
         return false;
     }
 
