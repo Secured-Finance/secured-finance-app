@@ -1,6 +1,13 @@
 import packageJson from 'package.json';
-import { getEnvShort } from 'src/utils';
+import { getCommitHash, getEnvShort, getUseCommitHash } from 'src/utils';
 
+const getVersion = () => {
+    if (getUseCommitHash()) {
+        return getCommitHash();
+    }
+
+    return packageJson.version;
+};
 export const Footer = () => {
     return (
         <div
@@ -9,7 +16,7 @@ export const Footer = () => {
         >
             <span className='h-6px w-6px rounded-full bg-green'></span>
             <div className='typography-caption-2 text-planetaryPurple'>
-                <span>{`Secured Finance v${packageJson.version} `}</span>
+                <span>{`Secured Finance v${getVersion()} `}</span>
                 <span className='capitalize'>{`(${getEnvShort()})`}</span>
             </div>
         </div>
