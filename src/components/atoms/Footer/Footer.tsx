@@ -1,12 +1,12 @@
 import packageJson from 'package.json';
-import { getCommitHash, getEnvShort, getUseCommitHash } from 'src/utils';
+import { getCommitHash, getEnvShort, getUsePackageVersion } from 'src/utils';
 
 const getVersion = () => {
-    if (getUseCommitHash()) {
-        return getCommitHash();
+    if (getUsePackageVersion()) {
+        return packageJson.version;
     }
 
-    return packageJson.version;
+    return getCommitHash();
 };
 export const Footer = () => {
     return (
