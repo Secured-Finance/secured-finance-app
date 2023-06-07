@@ -20,7 +20,11 @@ import { useCollateralBook, useOrders } from 'src/hooks';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { setLastMessage } from 'src/store/lastError';
 import { RootState } from 'src/store/types';
-import { CurrencySymbol, handleContractTransaction } from 'src/utils';
+import {
+    AddressUtils,
+    CurrencySymbol,
+    handleContractTransaction,
+} from 'src/utils';
 import { Amount, Maturity } from 'src/utils/entities';
 import { useWallet } from 'use-wallet';
 
@@ -223,8 +227,12 @@ export const UnwindDialog = ({
                     <SuccessPanel
                         itemList={[
                             ['Status', 'Complete'],
-                            ['Transaction Hash', txHash ?? ''],
+                            [
+                                'Transaction Hash',
+                                AddressUtils.format(txHash ?? '', 16),
+                            ],
                         ]}
+                        txHash={txHash}
                     />
                 );
             case Step.error:

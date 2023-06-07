@@ -104,6 +104,7 @@ export const WithdrawCollateral = ({
     const [asset, setAsset] = useState(CurrencySymbol.ETH);
     const [state, dispatch] = useReducer(reducer, stateRecord[1]);
     const [collateral, setCollateral] = useState(BigNumber.from(0));
+    const [txHash, setTxHash] = useState<string | undefined>(undefined);
     const [errorMessage, setErrorMessage] = useState(
         'Your withdrawal transaction has failed.'
     );
@@ -137,6 +138,7 @@ export const WithdrawCollateral = ({
             const tx = await onWithdrawCollateral();
             const transactionStatus = await handleContractTransaction(tx);
             if (!transactionStatus) {
+                setTxHash(tx?.hash);
                 dispatch({ type: 'error' });
             } else {
                 trackCollateralEvent(
@@ -244,6 +246,7 @@ export const WithdrawCollateral = ({
                                         ).toString(),
                                     ],
                                 ]}
+                                txHash={txHash}
                             />
                         );
                     case Step.error:

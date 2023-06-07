@@ -107,6 +107,7 @@ export const DepositCollateral = ({
     const [errorMessage, setErrorMessage] = useState(
         'Your deposit transaction has failed.'
     );
+    const [txHash, setTxHash] = useState<string | undefined>();
     const [collateralAmount, setCollateralAmount] = useState<
         number | undefined
     >();
@@ -149,6 +150,7 @@ export const DepositCollateral = ({
                 dispatch({ type: 'error' });
             } else {
                 setDepositAddress(tx?.to ?? '');
+                setTxHash(tx?.hash);
                 trackCollateralEvent(
                     CollateralEvents.DEPOSIT_COLLATERAL,
                     asset,
@@ -252,6 +254,7 @@ export const DepositCollateral = ({
                                         ).toString(),
                                     ],
                                 ]}
+                                txHash={txHash}
                             />
                         );
                     case Step.error:
