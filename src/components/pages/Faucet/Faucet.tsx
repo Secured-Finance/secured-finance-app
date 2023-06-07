@@ -98,6 +98,7 @@ export const Faucet = () => {
     const [address, setAddress] = useState<string>('');
     const [isPending, setIsPending] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
+    const [txHash, setTxHash] = useState<string | undefined>(undefined);
 
     const token = useMemo(() => {
         if (!ccy) return null;
@@ -119,6 +120,7 @@ export const Faucet = () => {
             if (!transactionStatus) {
                 console.error('Some error occurred');
             } else {
+                setTxHash(tx?.to);
                 track('Mint Tokens', {
                     'Asset Type': token.symbol,
                 });
@@ -340,6 +342,7 @@ export const Faucet = () => {
                             AddressUtils.format(account ?? '', 16),
                         ],
                     ]}
+                    txHash={txHash}
                 />
             </Dialog>
         </Page>

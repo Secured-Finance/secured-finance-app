@@ -18,3 +18,8 @@ const Template: ComponentStory<typeof SuccessPanel> = args => (
 );
 
 export const Default = Template.bind({});
+export const WithTransactionHash = Template.bind({});
+
+WithTransactionHash.args = {
+    txHash: '1123456789',
+};

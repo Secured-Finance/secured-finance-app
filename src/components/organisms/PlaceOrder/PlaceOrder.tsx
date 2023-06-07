@@ -28,8 +28,10 @@ import {
     OrderProperties,
     handleContractTransaction,
     ordinaryFormat,
+    AddressUtils,
 } from 'src/utils';
 import { Amount, LoanValue, Maturity } from 'src/utils/entities';
+import { useWallet } from 'use-wallet';
 
 enum Step {
     orderConfirm = 1,
@@ -120,7 +122,9 @@ export const PlaceOrder = ({
     assetPrice: number;
     walletSource: WalletSource;
 } & DialogState) => {
+    const { account } = useWallet();
     const [state, dispatch] = useReducer(reducer, stateRecord[1]);
+    const [txHash, setTxHash] = useState<string | undefined>(undefined);
     const globalDispatch = useDispatch();
 
     const [errorMessage, setErrorMessage] = useState(
@@ -154,6 +158,7 @@ export const PlaceOrder = ({
                 if (!transactionStatus) {
                     dispatch({ type: 'error' });
                 } else {
+                    setTxHash(tx?.hash);
                     track(OrderEvents.ORDER_PLACED, {
                         [OrderProperties.ORDER_SIDE]:
                             side === OrderSide.BORROW ? 'Borrow' : 'Lend',
@@ -321,7 +326,10 @@ export const PlaceOrder = ({
                             <SuccessPanel
                                 itemList={[
                                     ['Status', 'Complete'],
-                                    ['Deposit Address', 't1wtz1if6k24XE...'],
+                                    [
+                                        'Deposit Address',
+                                        AddressUtils.format(account ?? '', 16),
+                                    ],
                                     [
                                         'Amount',
                                         `${ordinaryFormat(orderAmount.value)} ${
@@ -329,6 +337,7 @@ export const PlaceOrder = ({
                                         }`,
                                     ],
                                 ]}
+                                txHash={txHash}
                             />
                         );
                     case Step.error:
