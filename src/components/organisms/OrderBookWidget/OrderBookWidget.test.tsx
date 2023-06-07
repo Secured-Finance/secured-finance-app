@@ -2,12 +2,12 @@ import { OrderSide } from '@secured-finance/sf-client';
 import { composeStories } from '@storybook/testing-react';
 import { fireEvent, render, screen } from 'src/test-utils.js';
 import { OrderType } from 'src/types';
-import * as stories from './OrderWidget.stories';
+import * as stories from './OrderBookWidget.stories';
 
 const { Default, Loading } = composeStories(stories);
 
-describe('OrderWidget Component', () => {
-    it('should render a OrderWidget', () => {
+describe('OrderBookWidget Component', () => {
+    it('should render a OrderBookWidget', () => {
         render(<Default />);
     });
 

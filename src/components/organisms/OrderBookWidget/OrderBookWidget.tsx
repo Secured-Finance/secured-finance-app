@@ -135,7 +135,7 @@ const AprCell = ({
     );
 };
 
-export const OrderWidget = ({
+export const OrderBookWidget = ({
     buyOrders,
     sellOrders,
     currency,
