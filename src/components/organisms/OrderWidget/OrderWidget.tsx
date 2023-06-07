@@ -61,7 +61,9 @@ const AmountCell = ({
         ) : (
             <OrderBookCell
                 value={ordinaryFormat(
-                    currencyMap[currency].fromBaseUnit(value)
+                    currencyMap[currency].fromBaseUnit(value),
+                    currencyMap[currency].roundingDecimal,
+                    currencyMap[currency].roundingDecimal
                 )}
             />
         )}{' '}
