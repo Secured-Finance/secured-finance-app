@@ -1,5 +1,6 @@
 import { RESPONSIVE_PARAMETERS, VIEWPORTS } from '.storybook/constants';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { within } from '@storybook/testing-library';
 import { HorizontalTab } from './HorizontalTab';
 
 export default {
@@ -26,3 +27,15 @@ const Template: ComponentStory<typeof HorizontalTab> = args => (
 );
 
 export const Default = Template.bind({});
+
+export const MobileViewport = Template.bind({});
+
+MobileViewport.parameters = {
+    viewport: {
+        defaultViewport: 'mobile',
+    },
+};
+MobileViewport.play = async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    canvas.getByTestId('menu').click();
+};
