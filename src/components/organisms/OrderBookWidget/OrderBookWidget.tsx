@@ -37,7 +37,7 @@ const OrderBookCell = ({
     fontWeight?: 'normal' | 'semibold';
 } & ColorFormat) => (
     <span
-        className={classNames('typography-caption-2 z-[1]', {
+        className={classNames('typography-caption-2 z-[1] text-right', {
             'text-galacticOrange': color === 'negative',
             'text-nebulaTeal': color === 'positive',
             'text-neutral-6': color === 'neutral',
@@ -55,7 +55,7 @@ const AmountCell = ({
     value: BigNumber;
     currency: CurrencySymbol;
 }) => (
-    <div className='flex justify-center'>
+    <div className='flex justify-end pr-[25%]'>
         {value.eq(0) ? (
             <OrderBookCell />
         ) : (
@@ -308,7 +308,7 @@ export const OrderBookWidget = ({
     const isLoading = buyOrders.length === 0 || sellOrders.length === 0;
 
     return (
-        <div className='grid w-full grid-cols-1 place-content-center gap-x-4 laptop:grid-cols-2'>
+        <div className='grid w-full grid-cols-1 place-content-start gap-x-4 laptop:grid-cols-2'>
             <div className='row-start-2 laptop:col-span-2 laptop:row-start-1'>
                 {!hideMidPrice && (
                     <div className='flex h-14 flex-row items-center justify-center gap-4 border-b border-white-10 bg-black-20'>

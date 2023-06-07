@@ -1,4 +1,4 @@
-import { RESPONSIVE_PARAMETERS, VIEWPORTS } from '.storybook/constants';
+import { RESPONSIVE_PARAMETERS } from '.storybook/constants';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { BigNumber } from 'ethers';
 import { OrderBookEntry } from 'src/hooks/useOrderbook';
@@ -132,25 +132,12 @@ Bitcoin.args = {
     sellOrders: btcEntries,
     currency: CurrencySymbol.WBTC,
 };
-Bitcoin.parameters = {
-    viewport: {
-        disable: true,
-        defaultViewport: 'responsive',
-    },
-    chromatic: [VIEWPORTS.LAPTOP],
-};
+
 export const Eth = Template.bind({});
 Eth.args = {
     buyOrders: ethEntries,
     sellOrders: ethEntries,
     currency: CurrencySymbol.ETH,
-};
-Eth.parameters = {
-    viewport: {
-        disable: true,
-        defaultViewport: 'responsive',
-    },
-    chromatic: [VIEWPORTS.LAPTOP],
 };
 
 export const HideMidPrice = Template.bind({});
