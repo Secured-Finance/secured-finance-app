@@ -126,7 +126,6 @@ export const options: ChartOptions<'line'> = {
     },
     scales: {
         y: {
-            beginAtZero: true,
             display: false,
         },
 
