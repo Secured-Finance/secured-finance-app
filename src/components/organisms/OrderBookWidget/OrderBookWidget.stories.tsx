@@ -4,7 +4,7 @@ import { BigNumber } from 'ethers';
 import { OrderBookEntry } from 'src/hooks/useOrderbook';
 import { CurrencySymbol } from 'src/utils';
 import { LoanValue, Maturity } from 'src/utils/entities';
-import { OrderWidget } from './OrderWidget';
+import { OrderBookWidget } from './OrderBookWidget';
 
 const maturityMar23 = new Maturity(1675252800);
 
@@ -109,8 +109,8 @@ const ethEntries: Array<OrderBookEntry> = [
 ];
 
 export default {
-    title: 'Organism/OrderWidget',
-    component: OrderWidget,
+    title: 'Organism/OrderBookWidget',
+    component: OrderBookWidget,
     args: {
         buyOrders: borrowEntries,
         sellOrders: lendEntries,
@@ -119,10 +119,10 @@ export default {
     parameters: {
         ...RESPONSIVE_PARAMETERS,
     },
-} as ComponentMeta<typeof OrderWidget>;
+} as ComponentMeta<typeof OrderBookWidget>;
 
-const Template: ComponentStory<typeof OrderWidget> = args => (
-    <OrderWidget {...args} />
+const Template: ComponentStory<typeof OrderBookWidget> = args => (
+    <OrderBookWidget {...args} />
 );
 
 export const Default = Template.bind({});
