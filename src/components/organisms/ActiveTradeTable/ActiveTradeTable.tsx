@@ -11,7 +11,7 @@ import { useBreakpoint } from 'src/hooks';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { setCurrency, setMaturity } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
-import { TradeSummary, hexToCurrencySymbol } from 'src/utils';
+import { hexToCurrencySymbol, TradeSummary } from 'src/utils';
 import { Amount, Maturity } from 'src/utils/entities';
 import {
     amountColumnDefinition,
@@ -126,7 +126,7 @@ export const ActiveTradeTable = ({ data }: { data: TradeSummary[] }) => {
                     const amount = BigNumber.from(info.row.original.amount);
                     if (!ccy) return null;
                     return (
-                        <div className='relative flex justify-center'>
+                        <div className='relative z-20 flex justify-center'>
                             <TableActionMenu
                                 items={[
                                     {

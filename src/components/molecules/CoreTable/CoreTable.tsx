@@ -90,7 +90,7 @@ export const CoreTable = <T,>({
                                         sticky:
                                             columnIndex === lastColumnIndex &&
                                             coreTableOptions.responsive,
-                                        'right-0 bg-black-20/100':
+                                        'right-0 bg-black-20/100 tablet:bg-transparent':
                                             columnIndex === lastColumnIndex &&
                                             coreTableOptions.responsive,
                                     }
@@ -136,7 +136,7 @@ export const CoreTable = <T,>({
                                         sticky:
                                             cellIndex === lastColumnIndex &&
                                             coreTableOptions.responsive,
-                                        'right-0 bg-black-20/100':
+                                        'right-0 bg-black-20/100 tablet:bg-transparent':
                                             cellIndex === lastColumnIndex &&
                                             coreTableOptions.responsive,
                                     }
@@ -158,7 +158,7 @@ export const CoreTable = <T,>({
         return (
             <div
                 className={classNames({
-                    'overflow-x-auto tablet:overflow-hidden':
+                    'overflow-x-auto tablet:overflow-hidden laptop:overflow-visible':
                         coreTableOptions.responsive,
                 })}
             >
