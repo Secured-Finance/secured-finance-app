@@ -1,5 +1,8 @@
 import {
+    ActiveElement,
+    Chart,
     ChartData,
+    ChartEvent,
     ChartOptions,
     ChartTypeRegistry,
     ScriptableContext,
@@ -146,6 +149,13 @@ export const options: ChartOptions<'line'> = {
     },
     hover: {
         intersect: false,
+    },
+    onHover: (
+        _event: ChartEvent,
+        _elements: ActiveElement[],
+        chart: Chart<'line'>
+    ) => {
+        chart.canvas.style.cursor = 'pointer';
     },
     plugins: {
         tooltip: {
