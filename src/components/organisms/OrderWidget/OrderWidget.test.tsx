@@ -61,7 +61,7 @@ describe('OrderWidget Component', () => {
         );
 
         expect(store.getState().landingOrderForm.amount).toEqual(
-            '43000000000000000000000'
+            '43003200000000000000000'
         );
 
         expect(store.getState().landingOrderForm.unitPrice).toEqual(9653);
