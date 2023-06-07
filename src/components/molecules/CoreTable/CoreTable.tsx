@@ -87,9 +87,12 @@ export const CoreTable = <T,>({
                                 className={classNames(
                                     'relative px-1 py-2 text-center font-bold',
                                     {
-                                        sticky: columnIndex === lastColumnIndex,
+                                        sticky:
+                                            columnIndex === lastColumnIndex &&
+                                            coreTableOptions.responsive,
                                         'right-0 bg-black-20/100':
-                                            columnIndex === lastColumnIndex,
+                                            columnIndex === lastColumnIndex &&
+                                            coreTableOptions.responsive,
                                     }
                                 )}
                             >
@@ -130,9 +133,12 @@ export const CoreTable = <T,>({
                                 className={classNames(
                                     'min-w-fit whitespace-nowrap px-1 py-2 text-center font-medium',
                                     {
-                                        sticky: cellIndex === lastColumnIndex,
+                                        sticky:
+                                            cellIndex === lastColumnIndex &&
+                                            coreTableOptions.responsive,
                                         'right-0 bg-black-20/100':
-                                            cellIndex === lastColumnIndex,
+                                            cellIndex === lastColumnIndex &&
+                                            coreTableOptions.responsive,
                                     }
                                 )}
                             >
