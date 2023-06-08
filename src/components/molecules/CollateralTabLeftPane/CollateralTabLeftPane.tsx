@@ -1,7 +1,17 @@
-import { AssetInformation, Button } from 'src/components/atoms';
+import { BigNumber } from 'ethers';
+import {
+    AssetInformation,
+    Button,
+    CollateralInformationTable,
+    CollateralManagementConciseTab,
+} from 'src/components/atoms';
 import { CollateralBook } from 'src/hooks';
-import { getCurrencyMapAsList, usdFormat } from 'src/utils';
-import { CollateralTabRightPane } from '../CollateralTabRightPane';
+import {
+    CurrencySymbol,
+    amountFormatterFromBase,
+    getCurrencyMapAsList,
+    usdFormat,
+} from 'src/utils';
 
 interface CollateralTabLeftPaneProps {
     account: string | null;
@@ -45,24 +55,24 @@ export const CollateralTabLeftPane = ({
     const nonCollateralBalance = account ? collateralBook.usdNonCollateral : 0;
 
     return (
-        <div className='flex flex-col border-white-10 tablet:flex-row tablet:border-r'>
-            <div className=' grid w-[90%] border-white-10 tablet:w-[18rem] tablet:border-r'>
-                <div className='h-full border-white-10 tablet:border-b'>
-                    <div className='m-6 flex flex-col gap-1'>
-                        <span className='typography-body-2 h-6 w-fit text-slateGray'>
-                            Collateral Balance
-                        </span>
-                        <span className='typography-big-body-bold w-fit text-white'>
-                            {usdFormat(collateralBalance, 2)}
-                        </span>
+        <div className='flex flex-grow flex-col border-white-10 tablet:w-64 tablet:flex-grow-0 tablet:border-r'>
+            <div className='flex-grow tablet:border-b tablet:border-white-10'>
+                <div className='m-6 flex flex-col gap-1'>
+                    <span className='typography-body-2 h-6 w-fit text-slateGray'>
+                        Collateral Balance
+                    </span>
+                    <span className='typography-big-body-bold w-fit text-white'>
+                        {usdFormat(collateralBalance, 2)}
+                    </span>
+                </div>
+                {!account ? (
+                    <div className='typography-caption ml-5 w-40 pt-2 text-grayScale'>
+                        Connect your wallet to see your deposited collateral
+                        balance.
                     </div>
-                    {!account ? (
-                        <div className='typography-caption ml-5 w-40 pt-2 text-grayScale'>
-                            Connect your wallet to see your deposited collateral
-                            balance.
-                        </div>
-                    ) : collateralBalance > 0 ? (
-                        <div className='ml-4 flex w-full flex-col gap-6 bg-black-20 p-2 tablet:m-5 tablet:w-[90%] tablet:bg-transparent'>
+                ) : collateralBalance > 0 ? (
+                    <div>
+                        <div className='mx-5 my-6 hidden flex-col gap-6 tablet:flex'>
                             <AssetInformation
                                 header='Collateral Assets'
                                 informationText={getInformationText()}
@@ -78,39 +88,62 @@ export const CollateralTabLeftPane = ({
                                 ></AssetInformation>
                             )}
                         </div>
-                    ) : (
-                        <div className='typography-caption ml-5 w-40 text-grayScale'>
-                            Deposit collateral from your connected wallet to
-                            enable lending service on Secured Finance.
+                        <div className='mx-3 mt-6 flex flex-col gap-3 tablet:hidden'>
+                            <CollateralManagementConciseTab
+                                collateralCoverage={
+                                    collateralBook.coverage.toNumber() / 100
+                                }
+                                totalCollateralInUSD={
+                                    collateralBook.usdCollateral
+                                }
+                                collateralThreshold={
+                                    collateralBook.collateralThreshold
+                                }
+                            />
+                            <CollateralInformationTable
+                                data={(
+                                    Object.entries(
+                                        collateralBook.collateral
+                                    ) as [CurrencySymbol, BigNumber][]
+                                ).map(([asset, quantity]) => {
+                                    return {
+                                        asset: asset,
+                                        quantity:
+                                            amountFormatterFromBase[asset](
+                                                quantity
+                                            ),
+                                    };
+                                })}
+                            />
                         </div>
-                    )}
-                </div>
-                <div className='ml-4 flex h-24 w-full flex-row items-center justify-center gap-4 tablet:ml-3 tablet:w-[90%]'>
-                    <Button
-                        size='sm'
-                        onClick={() => onClick('deposit')}
-                        disabled={!account}
-                        data-testid='deposit-collateral'
-                        fullWidth={true}
-                    >
-                        Deposit
-                    </Button>
-                    <Button
-                        size='sm'
-                        disabled={!account || collateralBalance <= 0}
-                        onClick={() => onClick('withdraw')}
-                        data-testid='withdraw-collateral'
-                        fullWidth={true}
-                    >
-                        Withdraw
-                    </Button>
-                </div>
+                    </div>
+                ) : (
+                    <div className='typography-caption ml-5 w-40 text-grayScale'>
+                        Deposit collateral from your connected wallet to enable
+                        lending service on Secured Finance.
+                    </div>
+                )}
             </div>
-
-            <CollateralTabRightPane
-                account={account}
-                collateralBook={collateralBook}
-            />
+            <div className='flex h-24 flex-row items-center justify-center gap-4 px-6'>
+                <Button
+                    size='sm'
+                    onClick={() => onClick('deposit')}
+                    disabled={!account}
+                    data-testid='deposit-collateral'
+                    fullWidth={true}
+                >
+                    Deposit
+                </Button>
+                <Button
+                    size='sm'
+                    disabled={!account || collateralBalance <= 0}
+                    onClick={() => onClick('withdraw')}
+                    data-testid='withdraw-collateral'
+                    fullWidth={true}
+                >
+                    Withdraw
+                </Button>
+            </div>
         </div>
     );
 };
