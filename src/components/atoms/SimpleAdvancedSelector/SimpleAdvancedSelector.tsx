@@ -51,7 +51,7 @@ const SimpleAdvancedButton = ({
     return (
         <div
             className={classNames(
-                'typography-caption flex h-full w-fit items-center justify-center rounded-full px-4 duration-300 hover:opacity-100 hover:ease-in-out',
+                'typography-caption flex h-full w-fit items-center justify-center rounded-full px-4 duration-300 hover:opacity-100 hover:ease-in-out desktop:px-5',
                 {
                     'bg-starBlue text-white': active,
                     'text-white opacity-40': !active,
