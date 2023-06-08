@@ -33,7 +33,7 @@ export const TableActionMenu = ({ items }: { items: MenuItem[] }) => {
                 </Menu.Button>
                 <Menu.Items
                     as='div'
-                    className='absolute top-8 z-50 w-fit min-w-[150px] rounded-xl bg-gunMetal focus:outline-none'
+                    className='absolute right-0 top-8 z-50 w-fit min-w-[150px] rounded-xl bg-gunMetal/100 focus:outline-none laptop:right-auto'
                 >
                     {items.map((item, index) => (
                         <Menu.Item key={index} as='div'>
