@@ -39,7 +39,7 @@ export const Button = ({
                 'enabled:hover:bg-gradient-to-t enabled:hover:from-black-20 enabled:hover:via-black-20 enabled:hover:to-starBlue ',
                 'disabled:bg-opacity-50',
                 {
-                    'h-10 px-5 py-3': size === 'sm',
+                    'h-10 px-4 py-3': size === 'sm',
                     'h-11 px-6 py-4': size === 'md',
                     'w-full': fullWidth,
                     'w-fit': !fullWidth,
