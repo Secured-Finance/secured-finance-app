@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import { BigNumber } from 'ethers';
 import {
     AssetInformation,
@@ -55,13 +56,26 @@ export const CollateralTabLeftPane = ({
     const nonCollateralBalance = account ? collateralBook.usdNonCollateral : 0;
 
     return (
-        <div className='flex min-h-[400px] flex-grow flex-col border-white-10 tablet:w-64 tablet:flex-grow-0 tablet:border-r'>
+        <div className='flex min-h-[400px] w-full flex-col border-white-10 tablet:w-64 tablet:border-r'>
             <div className='flex-grow tablet:border-b tablet:border-white-10'>
                 <div className='m-6 flex flex-col gap-1'>
                     <span className='typography-body-2 h-6 w-fit text-slateGray'>
                         Collateral Balance
                     </span>
-                    <span className='typography-big-body-bold w-fit text-white'>
+                    <span
+                        className={classNames(
+                            'w-fit font-secondary font-semibold text-white',
+                            {
+                                'text-xl':
+                                    collateralBalance.toString().length <= 6,
+                                'text-xl tablet:text-md':
+                                    collateralBalance.toString().length > 6 &&
+                                    collateralBalance.toString().length <= 9,
+                                'text-md tablet:text-smd':
+                                    collateralBalance.toString().length > 9,
+                            }
+                        )}
+                    >
                         {usdFormat(collateralBalance, 2)}
                     </span>
                 </div>
