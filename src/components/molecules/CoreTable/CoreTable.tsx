@@ -87,7 +87,7 @@ export const CoreTable = <T,>({
                                 className={classNames(
                                     'px-1 py-2 text-center font-bold',
                                     {
-                                        'sticky right-0 z-10 bg-black-20/100 tablet:bg-transparent':
+                                        'sticky right-0 z-10 bg-black-20/100 tablet:relative tablet:bg-transparent':
                                             columnIndex === lastColumnIndex &&
                                             coreTableOptions.responsive,
                                     }
@@ -130,7 +130,7 @@ export const CoreTable = <T,>({
                                 className={classNames(
                                     'min-w-fit whitespace-nowrap px-1 py-2 text-center font-medium',
                                     {
-                                        'sticky right-0 z-10 bg-black-20/100 tablet:bg-transparent':
+                                        'sticky right-0 z-10 bg-black-20/100 tablet:relative tablet:bg-transparent':
                                             cellIndex === lastColumnIndex &&
                                             coreTableOptions.responsive,
                                     }
@@ -152,7 +152,7 @@ export const CoreTable = <T,>({
         return (
             <div
                 className={classNames({
-                    'overflow-x-auto tablet:overflow-hidden laptop:overflow-visible':
+                    'overflow-x-auto overflow-y-visible laptop:overflow-visible':
                         coreTableOptions.responsive,
                 })}
             >
