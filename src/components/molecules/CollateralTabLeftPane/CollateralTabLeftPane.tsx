@@ -55,7 +55,7 @@ export const CollateralTabLeftPane = ({
     const nonCollateralBalance = account ? collateralBook.usdNonCollateral : 0;
 
     return (
-        <div className='flex flex-grow flex-col border-white-10 tablet:w-64 tablet:flex-grow-0 tablet:border-r'>
+        <div className='flex min-h-[400px] flex-grow flex-col border-white-10 tablet:w-64 tablet:flex-grow-0 tablet:border-r'>
             <div className='flex-grow tablet:border-b tablet:border-white-10'>
                 <div className='m-6 flex flex-col gap-1'>
                     <span className='typography-body-2 h-6 w-fit text-slateGray'>
