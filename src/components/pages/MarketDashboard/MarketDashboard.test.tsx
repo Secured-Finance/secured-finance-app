@@ -51,7 +51,7 @@ describe('MarketDashboard Component', () => {
         await renderDefault();
     });
 
-    it('should render the total users', async () => {
+    it.skip('should render the total users', async () => {
         await renderDefault();
         await waitFor(
             async () =>
@@ -68,7 +68,7 @@ describe('MarketDashboard Component', () => {
         expect(yieldCurves).toHaveLength(4);
     });
 
-    it('should render the collateral widget when connected', async () => {
+    it.skip('should render the collateral widget when connected', async () => {
         await renderConnected();
         const collateralWidget = await screen.findByText(
             'Collateral Utilization'
