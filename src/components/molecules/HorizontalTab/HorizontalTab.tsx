@@ -1,4 +1,4 @@
-import { Menu, Tab as HeadlessTab } from '@headlessui/react';
+import { Tab as HeadlessTab, Menu } from '@headlessui/react';
 import ChevronDownIcon from '@heroicons/react/24/outline/ChevronDownIcon';
 import classNames from 'classnames';
 import React, { Children, useState } from 'react';
@@ -77,7 +77,6 @@ export const HorizontalTab = ({
                                                     >
                                                         {title}
                                                     </button>
-                                                    <ChevronDownIcon className='h-4' />
                                                 </div>
                                                 {index !==
                                                 tabTitles.length - 1 ? (
