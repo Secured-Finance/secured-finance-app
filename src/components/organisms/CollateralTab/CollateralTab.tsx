@@ -1,7 +1,10 @@
 import { BigNumber } from 'ethers';
 import { useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { CollateralTabLeftPane } from 'src/components/molecules';
+import {
+    CollateralTabLeftPane,
+    CollateralTabRightPane,
+} from 'src/components/molecules';
 import {
     DepositCollateral,
     WithdrawCollateral,
@@ -76,9 +79,13 @@ export const CollateralTab = ({
     );
 
     return (
-        <div className='flex h-fit min-h-[400px] w-full flex-col'>
+        <div className='flex w-full flex-row items-center'>
             <CollateralTabLeftPane
                 onClick={step => setOpenModal(step)}
+                account={account}
+                collateralBook={collateralBook}
+            />
+            <CollateralTabRightPane
                 account={account}
                 collateralBook={collateralBook}
             />
