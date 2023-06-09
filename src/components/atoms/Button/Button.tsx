@@ -52,7 +52,7 @@ export const Button = ({
                 </span>
             )}
             <p
-                className={classNames('whitespace-nowrap text-white', {
+                className={classNames('whitespace-nowrap text-neutral-8', {
                     'typography-button-2': size === 'sm',
                     'typography-button-1`': size === 'md',
                 })}
