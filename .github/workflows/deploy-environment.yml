@@ -7,6 +7,15 @@ on:
         description: 'Environment to deploy'
         required: true
         default: 'uat'
+        type: choice
+        options:
+          - 'uat'
+          - 'staging'
+          - 'ci-build'
+      ref:
+        description: 'Branch, tag or commit to deploy'
+        required: true
+        default: 'develop'
 
 jobs:
   build-and-test-all:
@@ -15,6 +24,7 @@ jobs:
     with:
       artifact_name: WebApp
       environment_name: ${{ github.event.inputs.environment }}
+      ref: ${{ github.event.inputs.ref }}
     secrets: inherit
 
   cypress-run:
