@@ -431,11 +431,11 @@ export const aggregatedTrades: TradeSummary[] = [
         maturity: jun23Fixture.toString(),
     },
     {
-        amount: BigNumber.from('-1000000000'),
-        averagePrice: BigNumber.from(0),
-        forwardValue: BigNumber.from('-1040000000'),
-        currency: ethBytes32,
-        maturity: mar23Fixture.toString(),
+        amount: BigNumber.from('500000000'),
+        averagePrice: BigNumber.from(9800),
+        forwardValue: BigNumber.from('505000000'),
+        currency: wbtcBytes32,
+        maturity: dec22Fixture.toString(),
     },
 ];
 
