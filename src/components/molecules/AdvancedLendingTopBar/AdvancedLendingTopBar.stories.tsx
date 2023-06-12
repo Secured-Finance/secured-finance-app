@@ -24,6 +24,7 @@ export default {
             lastTradePrice,
             maturityOptions[0].value.toNumber()
         ),
+        lastTradeTime: 1643713200,
     },
     parameters: {
         ...RESPONSIVE_PARAMETERS,

@@ -5,7 +5,7 @@ import { setCurrency } from 'src/store/landingOrderForm';
 import { IndexOf } from 'src/types';
 import { COIN_GECKO_SOURCE, CurrencySymbol, currencyMap } from 'src/utils';
 import { LoanValue } from 'src/utils/entities';
-import { formatLoanValue } from 'src/utils';
+import { formatLoanValue, formatTimestamp } from 'src/utils';
 
 type ValueField = number | string;
 type AdvancedLendingTopBarProp<T> = {
@@ -16,6 +16,7 @@ type AdvancedLendingTopBarProp<T> = {
     onAssetChange?: (v: CurrencySymbol) => void;
     onTermChange?: (v: T) => void;
     lastTradeLoan: LoanValue;
+    lastTradeTime: number;
     values?: [ValueField, ValueField, ValueField, ValueField, ValueField];
 };
 
@@ -34,6 +35,7 @@ export const AdvancedLendingTopBar = <T extends string = string>({
     onAssetChange,
     onTermChange,
     lastTradeLoan,
+    lastTradeTime,
     values,
 }: AdvancedLendingTopBarProp<T>) => {
     const handleTermChange = useCallback(
@@ -69,6 +71,11 @@ export const AdvancedLendingTopBar = <T extends string = string>({
                         name={Number(formatLoanValue(lastTradeLoan, 'price'))}
                         value={`${formatLoanValue(lastTradeLoan, 'rate')} APR`}
                     />
+                    {lastTradeTime !== 0 && (
+                        <div className='typography-caption-2 whitespace-nowrap text-neutral-4'>
+                            {formatTimestamp(lastTradeTime)}
+                        </div>
+                    )}
                 </div>
                 <div className='border-r border-white-10 pr-5 tablet:col-start-4 tablet:row-start-1 laptop:col-start-auto laptop:row-start-auto laptop:px-5'>
                     <MarketTab name='24h High' value={getValue(values, 0)} />
