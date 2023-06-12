@@ -354,13 +354,13 @@ export const mockTrades = [
         },
         result: {
             data: {
-                trades,
+                tradesEFIL,
             },
         },
         newData: () => {
             return {
                 data: {
-                    trades,
+                    tradesEFIL,
                 },
             };
         },
@@ -378,13 +378,13 @@ export const mockTrades = [
         },
         result: {
             data: {
-                trades,
+                tradesUSDC,
             },
         },
         newData: () => {
             return {
                 data: {
-                    trades,
+                    tradesUSDC,
                 },
             };
         },
@@ -402,13 +402,13 @@ export const mockTrades = [
         },
         result: {
             data: {
-                trades,
+                tradesETH,
             },
         },
         newData: () => {
             return {
                 data: {
-                    trades,
+                    tradesETH,
                 },
             };
         },
@@ -426,13 +426,13 @@ export const mockTrades = [
         },
         result: {
             data: {
-                trades,
+                tradesWBTC,
             },
         },
         newData: () => {
             return {
                 data: {
-                    trades,
+                    tradesWBTC,
                 },
             };
         },
@@ -450,13 +450,133 @@ export const mockTrades = [
         },
         result: {
             data: {
-                trades,
+                tradesUSDC,
             },
         },
         newData: () => {
             return {
                 data: {
-                    trades,
+                    tradesUSDC,
+                },
+            };
+        },
+    },
+    {
+        request: {
+            query: queries.TradesDocument,
+            variables: {
+                currency: efilBytes32,
+                maturity: mar23Fixture.toNumber(),
+                from: yesterday2,
+                to: today2,
+                awaitRefetchQueries: true,
+            },
+        },
+        result: {
+            data: {
+                tradesEFIL,
+            },
+        },
+        newData: () => {
+            return {
+                data: {
+                    tradesEFIL,
+                },
+            };
+        },
+    },
+    {
+        request: {
+            query: queries.TradesDocument,
+            variables: {
+                currency: usdcBytes32,
+                maturity: 0,
+                from: yesterday2,
+                to: today2,
+                awaitRefetchQueries: true,
+            },
+        },
+        result: {
+            data: {
+                tradesUSDC,
+            },
+        },
+        newData: () => {
+            return {
+                data: {
+                    tradesUSDC,
+                },
+            };
+        },
+    },
+    {
+        request: {
+            query: queries.TradesDocument,
+            variables: {
+                currency: ethBytes32,
+                maturity: mar23Fixture.toNumber(),
+                from: yesterday2,
+                to: today2,
+                awaitRefetchQueries: true,
+            },
+        },
+        result: {
+            data: {
+                tradesETH,
+            },
+        },
+        newData: () => {
+            return {
+                data: {
+                    tradesETH,
+                },
+            };
+        },
+    },
+    {
+        request: {
+            query: queries.TradesDocument,
+            variables: {
+                currency: wbtcBytes32,
+                maturity: mar23Fixture.toNumber(),
+                from: yesterday2,
+                to: today2,
+                awaitRefetchQueries: true,
+            },
+        },
+        result: {
+            data: {
+                tradesWBTC,
+            },
+        },
+        newData: () => {
+            return {
+                data: {
+                    tradesWBTC,
+                },
+            };
+        },
+    },
+    {
+        request: {
+            query: queries.TradesDocument,
+            variables: {
+                currency: usdcBytes32,
+                maturity: mar23Fixture.toNumber(),
+                from: yesterday2,
+                to: today2,
+                awaitRefetchQueries: true,
+            },
+        },
+        result: {
+            data: {
+                tradesUSDC,
+            },
+        },
+        newData: () => {
+            return {
+                data: {
+                    tradesUSDC,
                 },
             };
         },

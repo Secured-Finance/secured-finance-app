@@ -73,6 +73,7 @@ const useTradeHistoryDetails = (
                 lastTradePrice,
                 maturity.toNumber()
             ),
+            lastTradeTime,
         };
     }, [currency, maturity, transactions]);
 };
@@ -177,6 +178,8 @@ export const AdvancedLending = ({
                     }}
                     onAssetChange={handleCurrencyChange}
                     onTermChange={handleTermChange}
+                    lastTradeLoan={tradeHistoryDetails.lastTradeLoan}
+                    lastTradeTime={tradeHistoryDetails.lastTradeTime}
                     values={[
                         formatLoanValue(tradeHistoryDetails.max, 'price'),
                         formatLoanValue(tradeHistoryDetails.min, 'price'),
