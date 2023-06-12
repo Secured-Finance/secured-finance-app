@@ -11,7 +11,7 @@ import { CurrencySymbol } from 'src/utils';
 import timemachine from 'timemachine';
 import * as stories from './Landing.stories';
 
-const { Default } = composeStories(stories);
+const { Default, ConnectedToWallet } = composeStories(stories);
 
 jest.mock('next/router', () => ({
     useRouter: jest.fn(() => ({
@@ -221,5 +221,40 @@ describe('Landing Component', () => {
         fireEvent.click(screen.getByText('DEC22'));
         expect(screen.getByText('MAR23')).toBeInTheDocument();
         expect(screen.queryByText('DEC24')).not.toBeInTheDocument();
+    });
+
+    it('should change the amount slider when amount input changes and user has balance', async () => {
+        await waitFor(() => {
+            render(<ConnectedToWallet />, {
+                apolloMocks: Default.parameters?.apolloClient.mocks,
+                preloadedState,
+            });
+            fireEvent.click(screen.getByText('Advanced'));
+        });
+        expect(screen.getByRole('slider')).toHaveValue('0');
+        fireEvent.click(screen.getByRole('radio', { name: 'Lend' }));
+        fireEvent.change(screen.getByRole('textbox', { name: 'Amount' }), {
+            target: { value: '100' },
+        });
+        expect(screen.getByRole('slider')).toHaveValue('10');
+        fireEvent.change(screen.getByRole('textbox', { name: 'Amount' }), {
+            target: { value: '500' },
+        });
+        expect(screen.getByRole('slider')).toHaveValue('50');
+    });
+
+    it('should not change the amount slider when amount input changes and user do not have balance', async () => {
+        await waitFor(() => {
+            render(<ConnectedToWallet />, {
+                apolloMocks: Default.parameters?.apolloClient.mocks,
+                preloadedState,
+            });
+            fireEvent.click(screen.getByText('Advanced'));
+        });
+        expect(screen.getByRole('slider')).toHaveValue('0');
+        fireEvent.change(screen.getByRole('textbox', { name: 'Amount' }), {
+            target: { value: '100' },
+        });
+        expect(screen.getByRole('slider')).toHaveValue('0');
     });
 });

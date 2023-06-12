@@ -3,7 +3,7 @@ import { OrderSide, WalletSource } from '@secured-finance/sf-client';
 import classNames from 'classnames';
 import { BigNumber } from 'ethers';
 import Link from 'next/link';
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
     BorrowLendSelector,
@@ -38,6 +38,7 @@ import {
     multiply,
     percentFormat,
     usdFormat,
+    amountFormatterFromBase,
 } from 'src/utils';
 import { Amount, LoanValue } from 'src/utils/entities';
 import { useWallet } from 'use-wallet';
@@ -60,6 +61,7 @@ export const AdvancedLendingOrderCard = ({
     } = useSelector((state: RootState) =>
         selectLandingOrderForm(state.landingOrderForm)
     );
+    const [sliderValue, setSliderValue] = useState(0.0);
 
     const balanceRecord = useSelector((state: RootState) =>
         selectAllBalances(state)
@@ -131,8 +133,20 @@ export const AdvancedLendingOrderCard = ({
                 )
             )
         );
+        setSliderValue(percentage);
     };
 
+    const handleInputChange = (v: number | BigNumber) => {
+        dispatch(setAmount(v as BigNumber));
+        const available =
+            side === OrderSide.BORROW
+                ? availableToBorrow
+                : balanceRecord[currency];
+        const inputValue = amountFormatterFromBase[currency](v as BigNumber);
+        available > 0
+            ? setSliderValue(Math.min(100.0, (inputValue * 100.0) / available))
+            : setSliderValue(0.0);
+    };
     useEffect(() => {
         if (onlyLimitOrder) {
             dispatch(setOrderType(OrderType.LIMIT));
@@ -216,13 +230,13 @@ export const AdvancedLendingOrderCard = ({
                         />
                     </div>
                 </div>
-                <Slider onChange={handleAmountChange} />
+                <Slider onChange={handleAmountChange} value={sliderValue} />
                 <OrderInputBox
                     field='Amount'
                     unit={currency}
                     asset={currency}
                     initialValue={orderAmount.value}
-                    onValueChange={v => dispatch(setAmount(v as BigNumber))}
+                    onValueChange={handleInputChange}
                 />
                 <div className='mx-10px flex flex-col gap-6'>
                     <OrderDisplayBox
