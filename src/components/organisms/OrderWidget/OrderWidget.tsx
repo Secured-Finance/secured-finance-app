@@ -85,10 +85,13 @@ const PriceCell = ({
     if (amount.eq(0)) return <OrderBookCell />;
     return (
         <div
-            className={classNames('flex', {
-                'justify-start': align === 'left',
-                'justify-end': align === 'right',
-            })}
+            className={classNames(
+                'relative flex items-center overflow-visible',
+                {
+                    'justify-start': align === 'left',
+                    'justify-end': align === 'right',
+                }
+            )}
         >
             <OrderBookCell
                 value={formatLoanValue(value, 'price')}
