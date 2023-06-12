@@ -61,5 +61,5 @@ MyOrders.parameters = {
 MyOrders.play = async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     canvas.getByText('Advanced').click();
-    canvas.getByText('My Orders').click();
+    canvas.getByTestId('My Orders').click();
 };

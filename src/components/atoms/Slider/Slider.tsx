@@ -9,7 +9,13 @@ const marks = [
     { value: 100 },
 ];
 
-export const Slider = ({ onChange }: { onChange: (value: number) => void }) => {
+export const Slider = ({
+    onChange,
+    value = 0,
+}: {
+    onChange: (v: number) => void;
+    value: number;
+}) => {
     const handleChange = useCallback(
         (_event: Event, value: number | number[], _activeThumb: number) => {
             onChange(value as number);
@@ -18,6 +24,7 @@ export const Slider = ({ onChange }: { onChange: (value: number) => void }) => {
     );
     return (
         <SliderUnstyled
+            value={value}
             marks={marks}
             onChange={handleChange}
             classes={{ markActive: 'slider-markActive' }}

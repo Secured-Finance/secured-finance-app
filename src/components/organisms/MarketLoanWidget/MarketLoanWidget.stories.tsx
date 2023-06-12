@@ -1,3 +1,4 @@
+import { RESPONSIVE_PARAMETERS, VIEWPORTS } from '.storybook/constants';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { within } from '@storybook/testing-library';
 import {
@@ -16,6 +17,7 @@ const filMarkets = preloadedLendingMarkets?.availableContracts?.lendingMarkets
       ).map(m => ({
           ...m,
           currency: efilBytes32,
+          ccy: CurrencySymbol.EFIL,
       }))
     : [];
 const btcMarkets = preloadedLendingMarkets?.availableContracts?.lendingMarkets
@@ -26,12 +28,19 @@ const btcMarkets = preloadedLendingMarkets?.availableContracts?.lendingMarkets
       ).map(m => ({
           ...m,
           currency: wbtcBytes32,
+          ccy: CurrencySymbol.WBTC,
       }))
     : [];
 
 export default {
     title: 'Organism/MarketLoanWidget',
     component: MarketLoanWidget,
+    parameters: {
+        ...RESPONSIVE_PARAMETERS,
+        chromatic: {
+            viewports: [VIEWPORTS.MOBILE, VIEWPORTS.TABLET],
+        },
+    },
     args: {
         loans: [...filMarkets, ...btcMarkets],
     },

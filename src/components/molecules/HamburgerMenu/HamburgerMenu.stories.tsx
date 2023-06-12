@@ -28,7 +28,10 @@ export default {
     },
     parameters: {
         ...RESPONSIVE_PARAMETERS,
-        chromatic: { viewports: [VIEWPORTS.MOBILE, VIEWPORTS.TABLET] },
+        chromatic: {
+            viewports: [VIEWPORTS.MOBILE, VIEWPORTS.TABLET],
+            delay: 1000,
+        },
     },
 } as ComponentMeta<typeof HamburgerMenu>;
 

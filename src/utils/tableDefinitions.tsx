@@ -78,7 +78,7 @@ export const amountColumnDefinition = <T extends AmountColumnType>(
             }
 
             return (
-                <div className='flex w-full items-center justify-end pr-[15%]'>
+                <div className='flex w-full items-center justify-end whitespace-nowrap pr-[15%]'>
                     <div className='flex justify-end'>
                         <CurrencyItem
                             amount={currencyMap[ccy].fromBaseUnit(
