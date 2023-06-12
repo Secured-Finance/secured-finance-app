@@ -34,6 +34,13 @@ export const OrderHistoryTable = ({ data }: { data: OrderList }) => {
             ),
             amountColumnDefinition(
                 columnHelper,
+                'Filled Amount',
+                'filledAmount',
+                row => row.filledAmount,
+                { compact: false, color: true, priceList: priceList }
+            ),
+            amountColumnDefinition(
+                columnHelper,
                 'Amount',
                 'amount',
                 row => row.amount,
