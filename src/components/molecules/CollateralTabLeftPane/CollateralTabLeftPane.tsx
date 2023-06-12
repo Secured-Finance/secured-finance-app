@@ -1,6 +1,18 @@
-import { AssetInformation, Button } from 'src/components/atoms';
+import classNames from 'classnames';
+import { BigNumber } from 'ethers';
+import {
+    AssetInformation,
+    Button,
+    CollateralInformationTable,
+    CollateralManagementConciseTab,
+} from 'src/components/atoms';
 import { CollateralBook } from 'src/hooks';
-import { getCurrencyMapAsList, usdFormat } from 'src/utils';
+import {
+    CurrencySymbol,
+    amountFormatterFromBase,
+    getCurrencyMapAsList,
+    usdFormat,
+} from 'src/utils';
 
 interface CollateralTabLeftPaneProps {
     account: string | null;
@@ -44,13 +56,26 @@ export const CollateralTabLeftPane = ({
     const nonCollateralBalance = account ? collateralBook.usdNonCollateral : 0;
 
     return (
-        <div className='flex w-[18rem] flex-col border-r border-white-10'>
-            <div className='h-full border-b border-white-10'>
+        <div className='flex min-h-[400px] w-full flex-col border-white-10 tablet:w-64 tablet:border-r'>
+            <div className='flex-grow tablet:border-b tablet:border-white-10'>
                 <div className='m-6 flex flex-col gap-1'>
                     <span className='typography-body-2 h-6 w-fit text-slateGray'>
                         Collateral Balance
                     </span>
-                    <span className='typography-big-body-bold w-fit text-white'>
+                    <span
+                        className={classNames(
+                            'w-fit font-secondary font-semibold text-white',
+                            {
+                                'text-xl':
+                                    collateralBalance.toString().length <= 6,
+                                'text-xl tablet:text-md':
+                                    collateralBalance.toString().length > 6 &&
+                                    collateralBalance.toString().length <= 9,
+                                'text-md tablet:text-smd':
+                                    collateralBalance.toString().length > 9,
+                            }
+                        )}
+                    >
                         {usdFormat(collateralBalance, 2)}
                     </span>
                 </div>
@@ -60,19 +85,51 @@ export const CollateralTabLeftPane = ({
                         balance.
                     </div>
                 ) : collateralBalance > 0 ? (
-                    <div className='mx-5 my-6 flex flex-col gap-6'>
-                        <AssetInformation
-                            header='Collateral Assets'
-                            informationText={getInformationText()}
-                            collateralBook={collateralBook.collateral}
-                        ></AssetInformation>
-                        {nonCollateralBalance > 0 && (
+                    <div>
+                        <div className='mx-5 my-6 hidden flex-col gap-6 tablet:flex'>
                             <AssetInformation
-                                header='Non-collateral Assets'
-                                informationText='Not eligible as collateral'
-                                collateralBook={collateralBook.nonCollateral}
+                                header='Collateral Assets'
+                                informationText={getInformationText()}
+                                collateralBook={collateralBook.collateral}
                             ></AssetInformation>
-                        )}
+                            {nonCollateralBalance > 0 && (
+                                <AssetInformation
+                                    header='Non-collateral Assets'
+                                    informationText='Not eligible as collateral'
+                                    collateralBook={
+                                        collateralBook.nonCollateral
+                                    }
+                                ></AssetInformation>
+                            )}
+                        </div>
+                        <div className='mx-3 mt-6 flex flex-col gap-3 tablet:hidden'>
+                            <CollateralManagementConciseTab
+                                collateralCoverage={
+                                    collateralBook.coverage.toNumber() / 100
+                                }
+                                totalCollateralInUSD={
+                                    collateralBook.usdCollateral
+                                }
+                                collateralThreshold={
+                                    collateralBook.collateralThreshold
+                                }
+                            />
+                            <CollateralInformationTable
+                                data={(
+                                    Object.entries(
+                                        collateralBook.collateral
+                                    ) as [CurrencySymbol, BigNumber][]
+                                ).map(([asset, quantity]) => {
+                                    return {
+                                        asset: asset,
+                                        quantity:
+                                            amountFormatterFromBase[asset](
+                                                quantity
+                                            ),
+                                    };
+                                })}
+                            />
+                        </div>
                     </div>
                 ) : (
                     <div className='typography-caption ml-5 w-40 text-grayScale'>
@@ -81,12 +138,13 @@ export const CollateralTabLeftPane = ({
                     </div>
                 )}
             </div>
-            <div className='flex h-24 flex-row items-center justify-center gap-4'>
+            <div className='flex h-24 flex-row items-center justify-center gap-4 px-6'>
                 <Button
                     size='sm'
                     onClick={() => onClick('deposit')}
                     disabled={!account}
                     data-testid='deposit-collateral'
+                    fullWidth={true}
                 >
                     Deposit
                 </Button>
@@ -95,6 +153,7 @@ export const CollateralTabLeftPane = ({
                     disabled={!account || collateralBalance <= 0}
                     onClick={() => onClick('withdraw')}
                     data-testid='withdraw-collateral'
+                    fullWidth={true}
                 >
                     Withdraw
                 </Button>

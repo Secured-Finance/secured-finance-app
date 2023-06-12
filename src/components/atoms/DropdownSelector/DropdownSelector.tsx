@@ -134,7 +134,7 @@ export const DropdownSelector = <T extends string = string>({
                         }}
                     </Menu.Button>
                     <Menu.Items
-                        className={`scrollbar absolute z-10 mt-2 flex max-h-60 w-52 flex-col overflow-y-auto rounded-lg bg-gunMetal p-2 shadow-sm ${
+                        className={`scrollbar absolute z-50 mt-2 flex max-h-60 w-52 flex-col overflow-y-auto rounded-lg bg-gunMetal p-2 shadow-sm ${
                             variant === 'noLabel' ? 'right-0' : ''
                         }`}
                     >

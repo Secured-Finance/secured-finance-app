@@ -85,10 +85,13 @@ const PriceCell = ({
     if (amount.eq(0)) return <OrderBookCell />;
     return (
         <div
-            className={classNames('flex', {
-                'justify-start': align === 'left',
-                'justify-end': align === 'right',
-            })}
+            className={classNames(
+                'relative flex items-center overflow-visible',
+                {
+                    'justify-start': align === 'left',
+                    'justify-end': align === 'right',
+                }
+            )}
         >
             <OrderBookCell
                 value={formatLoanValue(value, 'price')}
@@ -336,18 +339,24 @@ export const OrderWidget = ({
                                 ? [...sellColumns].reverse()
                                 : sellColumns
                         }
-                        name='sellOrders'
-                        border={false}
-                        onLineClick={handleSellOrdersClick}
-                        hoverRow={handleSellOrdersHoverRow}
+                        options={{
+                            responsive: false,
+                            name: 'sellOrders',
+                            border: false,
+                            onLineClick: handleSellOrdersClick,
+                            hoverRow: handleSellOrdersHoverRow,
+                        }}
                     />
                     <CoreTable
                         data={buyOrders}
                         columns={buyColumns}
-                        name='buyOrders'
-                        border={false}
-                        onLineClick={handleBuyOrdersClick}
-                        hoverRow={handleBuyOrdersHoverRow}
+                        options={{
+                            responsive: false,
+                            name: 'buyOrders',
+                            border: false,
+                            onLineClick: handleBuyOrdersClick,
+                            hoverRow: handleBuyOrdersHoverRow,
+                        }}
                     />
                 </>
             )}

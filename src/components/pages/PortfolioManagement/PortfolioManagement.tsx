@@ -87,32 +87,36 @@ export const PortfolioManagement = () => {
                         ]}
                     />
                     <CollateralOrganism collateralBook={collateralBook} />
+                    <div>
+                        <HorizontalTab
+                            tabTitles={[
+                                'Active Positions',
+                                'Open Orders',
+                                'Order History',
+                                'My Transactions',
+                            ]}
+                        >
+                            <ActiveTradeTable
+                                data={aggregateTrades(tradeHistory)}
+                            />
+                            <OrderTable data={orderList.activeOrderList} />
+                            <OrderHistoryTable data={orderHistory} />
+                            <MyTransactionsTable data={tradeHistory} />
+                        </HorizontalTab>
+                    </div>
                 </div>
-                {account ? (
-                    <MyWalletCard
-                        addressRecord={{
-                            [WalletSource.METAMASK]: account,
-                        }}
-                    />
-                ) : (
-                    <ConnectWalletCard />
-                )}
+                <div className='my-4 laptop:my-0'>
+                    {account ? (
+                        <MyWalletCard
+                            addressRecord={{
+                                [WalletSource.METAMASK]: account,
+                            }}
+                        />
+                    ) : (
+                        <ConnectWalletCard />
+                    )}
+                </div>
             </TwoColumns>
-            <div>
-                <HorizontalTab
-                    tabTitles={[
-                        'Active Positions',
-                        'Open Orders',
-                        'Order History',
-                        'My Transactions',
-                    ]}
-                >
-                    <ActiveTradeTable data={aggregateTrades(tradeHistory)} />
-                    <OrderTable data={orderList.activeOrderList} />
-                    <OrderHistoryTable data={orderHistory} />
-                    <MyTransactionsTable data={tradeHistory} />
-                </HorizontalTab>
-            </div>
             <WalletDialog />
         </Page>
     );

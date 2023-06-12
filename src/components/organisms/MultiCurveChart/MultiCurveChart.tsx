@@ -35,7 +35,7 @@ type Position = {
 
 export const options: ChartOptions<'line'> = {
     responsive: true,
-    maintainAspectRatio: true,
+    maintainAspectRatio: false,
     interaction: {
         mode: 'index',
         intersect: false,
@@ -235,7 +235,7 @@ export const MultiCurveChart = ({
                 <h1 className='typography-body-2 text-[20px] capitalize text-white'>
                     {title}
                 </h1>
-                <div className='flex flex-row items-center gap-3'>
+                <div className='hidden flex-row items-center gap-3 tablet:flex'>
                     {Object.keys(curves).map(key => {
                         const ccy = toCurrencySymbol(key);
                         if (ccy === undefined) {
@@ -254,7 +254,7 @@ export const MultiCurveChart = ({
             </div>
             <div className='relative pb-7 pl-6 pr-5'>
                 <Line
-                    className='rounded-b-xl bg-black-20'
+                    className='h-[354px] rounded-b-xl bg-black-20'
                     data={getData(curves, Array.from(activeCurrencies), labels)}
                     options={dataOptions}
                     ref={chartRef}

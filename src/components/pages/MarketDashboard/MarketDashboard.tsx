@@ -27,8 +27,8 @@ import { RootState } from 'src/store/types';
 import {
     CurrencySymbol,
     Environment,
+    PREVIOUS_TOTAL_USERS,
     Rate,
-    TOTAL_USERS_V4,
     WalletSource,
     computeTotalDailyVolumeInUSD,
     currencyMap,
@@ -48,7 +48,7 @@ const computeTotalUsers = (users: string) => {
     const totalUsers =
         getEnvironment().toLowerCase() === Environment.DEVELOPMENT
             ? +users
-            : +users + TOTAL_USERS_V4;
+            : +users + PREVIOUS_TOTAL_USERS;
     return ordinaryFormat(totalUsers ?? 0, 2, 'compact');
 };
 
@@ -189,37 +189,32 @@ export const MarketDashboard = () => {
                     />
                 </div>
                 <section className='flex flex-col gap-5'>
-                    <div>
-                        {account ? (
-                            <MyWalletCard
-                                addressRecord={{
-                                    [WalletSource.METAMASK]: account,
-                                }}
-                            />
-                        ) : (
-                            <ConnectWalletCard />
-                        )}
-                    </div>
-                    <div>
-                        {account && (
-                            <GradientBox header='My Collateral'>
-                                <div className='px-3 py-6'>
-                                    <CollateralManagementConciseTab
-                                        collateralCoverage={
-                                            collateralBook.coverage.toNumber() /
-                                            100
-                                        }
-                                        totalCollateralInUSD={
-                                            collateralBook.usdCollateral
-                                        }
-                                        collateralThreshold={
-                                            collateralBook.collateralThreshold
-                                        }
-                                    />
-                                </div>
-                            </GradientBox>
-                        )}
-                    </div>
+                    {account && (
+                        <GradientBox header='My Collateral'>
+                            <div className='px-3 py-6'>
+                                <CollateralManagementConciseTab
+                                    collateralCoverage={
+                                        collateralBook.coverage.toNumber() / 100
+                                    }
+                                    totalCollateralInUSD={
+                                        collateralBook.usdCollateral
+                                    }
+                                    collateralThreshold={
+                                        collateralBook.collateralThreshold
+                                    }
+                                />
+                            </div>
+                        </GradientBox>
+                    )}
+                    {account ? (
+                        <MyWalletCard
+                            addressRecord={{
+                                [WalletSource.METAMASK]: account,
+                            }}
+                        />
+                    ) : (
+                        <ConnectWalletCard />
+                    )}
                 </section>
             </TwoColumns>
         </Page>

@@ -11,7 +11,7 @@ import { CurrencySymbol } from 'src/utils';
 import timemachine from 'timemachine';
 import * as stories from './Landing.stories';
 
-const { Default } = composeStories(stories);
+const { Default, ConnectedToWallet } = composeStories(stories);
 
 jest.mock('next/router', () => ({
     useRouter: jest.fn(() => ({
@@ -67,7 +67,7 @@ describe('Landing Component', () => {
         });
     }, 10000); //TODO: TEST THROWS TIMEOUT EXCEEDED WARNING ON GITHUB ACTIONS
 
-    it('should select the market order type when the user change to advance mode', async () => {
+    it('should select the limit order type when the user change to advance mode', async () => {
         waitFor(() => {
             render(<Default />, {
                 apolloMocks: Default.parameters?.apolloClient.mocks,
@@ -78,6 +78,102 @@ describe('Landing Component', () => {
 
         expect(screen.getByRole('radio', { name: 'Limit' })).toBeChecked();
         expect(screen.getByRole('radio', { name: 'Market' })).not.toBeChecked();
+    });
+
+    it('should select the market order type when the user clicks on market tab', async () => {
+        waitFor(() => {
+            render(<Default />, {
+                apolloMocks: Default.parameters?.apolloClient.mocks,
+                preloadedState,
+            });
+            fireEvent.click(screen.getByText('Advanced'));
+        });
+
+        expect(screen.getByRole('radio', { name: 'Limit' })).toBeChecked();
+
+        fireEvent.click(screen.getByRole('radio', { name: 'Market' }));
+        expect(screen.getByRole('radio', { name: 'Market' })).toBeChecked();
+    });
+
+    it('should display the best price as bond price when user change to advance mode', async () => {
+        await waitFor(() => {
+            render(<Default />, {
+                apolloMocks: Default.parameters?.apolloClient.mocks,
+                preloadedState,
+            });
+            fireEvent.click(screen.getByText('Advanced'));
+        });
+        expect(screen.getByRole('textbox', { name: 'Amount' })).toHaveValue(
+            '0'
+        );
+        expect(screen.getByRole('textbox', { name: 'Bond Price' })).toHaveValue(
+            '96.85'
+        );
+    });
+
+    it('should reset the amount and bond price when user changes maturity', async () => {
+        await waitFor(() => {
+            render(<Default />, {
+                apolloMocks: Default.parameters?.apolloClient.mocks,
+                preloadedState,
+            });
+            fireEvent.click(screen.getByText('Advanced'));
+        });
+        fireEvent.change(screen.getByRole('textbox', { name: 'Amount' }), {
+            target: { value: '1' },
+        });
+        fireEvent.change(screen.getByRole('textbox', { name: 'Bond Price' }), {
+            target: { value: '80' },
+        });
+        expect(screen.getByRole('textbox', { name: 'Amount' })).toHaveValue(
+            '1'
+        );
+        expect(screen.getByRole('textbox', { name: 'Bond Price' })).toHaveValue(
+            '80'
+        );
+
+        fireEvent.click(screen.getByRole('button', { name: 'DEC22' }));
+        fireEvent.click(screen.getByText('MAR23'));
+        expect(screen.getByText('MAR23')).toBeInTheDocument();
+
+        expect(screen.getByRole('textbox', { name: 'Amount' })).toHaveValue(
+            '0'
+        );
+        expect(screen.getByRole('textbox', { name: 'Bond Price' })).toHaveValue(
+            '96.83'
+        );
+    });
+
+    it('should reset the amount and bond price when user changes currency', async () => {
+        await waitFor(() => {
+            render(<Default />, {
+                apolloMocks: Default.parameters?.apolloClient.mocks,
+                preloadedState,
+            });
+            fireEvent.click(screen.getByText('Advanced'));
+        });
+        fireEvent.change(screen.getByRole('textbox', { name: 'Amount' }), {
+            target: { value: '1' },
+        });
+        fireEvent.change(screen.getByRole('textbox', { name: 'Bond Price' }), {
+            target: { value: '80' },
+        });
+        expect(screen.getByRole('textbox', { name: 'Amount' })).toHaveValue(
+            '1'
+        );
+        expect(screen.getByRole('textbox', { name: 'Bond Price' })).toHaveValue(
+            '80'
+        );
+
+        fireEvent.click(screen.getByRole('button', { name: 'Filecoin' }));
+        fireEvent.click(screen.getByRole('menuitem', { name: 'USDC' }));
+
+        expect(screen.getByRole('textbox', { name: 'Amount' })).toHaveValue(
+            '0'
+        );
+        expect(screen.getByRole('textbox', { name: 'Bond Price' })).toHaveValue(
+            '96.85'
+        );
     });
 
     it('should open the landing page with the mode set in the store', async () => {
@@ -125,5 +221,40 @@ describe('Landing Component', () => {
         fireEvent.click(screen.getByText('DEC22'));
         expect(screen.getByText('MAR23')).toBeInTheDocument();
         expect(screen.queryByText('DEC24')).not.toBeInTheDocument();
+    });
+
+    it('should change the amount slider when amount input changes and user has balance', async () => {
+        await waitFor(() => {
+            render(<ConnectedToWallet />, {
+                apolloMocks: Default.parameters?.apolloClient.mocks,
+                preloadedState,
+            });
+            fireEvent.click(screen.getByText('Advanced'));
+        });
+        expect(screen.getByRole('slider')).toHaveValue('0');
+        fireEvent.click(screen.getByRole('radio', { name: 'Lend' }));
+        fireEvent.change(screen.getByRole('textbox', { name: 'Amount' }), {
+            target: { value: '100' },
+        });
+        expect(screen.getByRole('slider')).toHaveValue('10');
+        fireEvent.change(screen.getByRole('textbox', { name: 'Amount' }), {
+            target: { value: '500' },
+        });
+        expect(screen.getByRole('slider')).toHaveValue('50');
+    });
+
+    it('should not change the amount slider when amount input changes and user do not have balance', async () => {
+        await waitFor(() => {
+            render(<ConnectedToWallet />, {
+                apolloMocks: Default.parameters?.apolloClient.mocks,
+                preloadedState,
+            });
+            fireEvent.click(screen.getByText('Advanced'));
+        });
+        expect(screen.getByRole('slider')).toHaveValue('0');
+        fireEvent.change(screen.getByRole('textbox', { name: 'Amount' }), {
+            target: { value: '100' },
+        });
+        expect(screen.getByRole('slider')).toHaveValue('0');
     });
 });
