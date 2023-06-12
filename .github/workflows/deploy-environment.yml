@@ -29,6 +29,7 @@ jobs:
   build-and-test-all:
     name: Build and Test
     uses: ./.github/workflows/build.yml
+    needs: print-env
     with:
       artifact_name: WebApp
       environment_name: ${{ github.event.inputs.environment }}
