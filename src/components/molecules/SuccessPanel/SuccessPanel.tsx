@@ -1,7 +1,7 @@
+import { ArrowUpRightIcon } from '@heroicons/react/24/outline';
 import classNames from 'classnames';
 import Check from 'src/assets/icons/check-mark.svg';
 import { Tooltip } from 'src/components/templates';
-import { ArrowUpRightIcon } from '@heroicons/react/24/outline';
 import useSF from 'src/hooks/useSecuredFinance';
 
 export const SuccessPanel = ({
@@ -36,7 +36,7 @@ export const SuccessPanel = ({
                             <Tooltip
                                 iconElement={
                                     <button
-                                        className='leading-6 text-neutral-8'
+                                        className='cursor-pointer leading-6 text-neutral-8'
                                         onClick={handleButtonClick}
                                     >
                                         {value}

@@ -138,7 +138,6 @@ export const WithdrawCollateral = ({
             const tx = await onWithdrawCollateral();
             const transactionStatus = await handleContractTransaction(tx);
             if (!transactionStatus) {
-                setTxHash(tx?.hash);
                 dispatch({ type: 'error' });
             } else {
                 trackCollateralEvent(
@@ -147,6 +146,7 @@ export const WithdrawCollateral = ({
                     collateral,
                     source ?? ''
                 );
+                setTxHash(tx?.hash);
                 dispatch({ type: 'next' });
             }
         } catch (e) {
