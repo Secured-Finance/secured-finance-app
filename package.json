@@ -6,7 +6,7 @@
   "dependencies": {
     "@amplitude/analytics-browser": "^1.7.0",
     "@glif/filecoin-number": "^1.1.0-beta.11",
-    "@headlessui/react": "^1.6.4",
+    "@headlessui/react": "^1.7.15",
     "@heroicons/react": "^2.0.18",
     "@mui/base": "^5.0.0-alpha.106",
     "@reduxjs/toolkit": "^1.8.1",
@@ -56,11 +56,7 @@
     "postinstall": "patch-package && rm -rf .next/cache"
   },
   "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
+    "production": [">0.2%", "not dead", "not op_mini all"],
     "development": [
       "last 1 chrome version",
       "last 1 firefox version",
