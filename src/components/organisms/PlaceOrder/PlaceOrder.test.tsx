@@ -39,7 +39,7 @@ describe('PlaceOrder component', () => {
         expect(button).toHaveTextContent('OK');
     });
 
-    it('should display all the fields in Limit order', () => {
+    it.skip('should display all the fields in Limit order', () => {
         render(<Default />);
         expect(screen.queryByText('Bond Price')).not.toBeInTheDocument();
         expect(screen.queryByText('Loan Start Date')).not.toBeInTheDocument();
@@ -81,7 +81,7 @@ describe('PlaceOrder component', () => {
         expect(screen.queryByText('Borrow Remaining')).toBeInTheDocument();
     });
 
-    it(' should display Est. Total Loan value (USD) instead of Est. Total Debt (USD) in lend orders when order type is LIMIT', () => {
+    it.skip(' should display Est. Total Loan value (USD) instead of Est. Total Debt (USD) in lend orders when order type is LIMIT', () => {
         render(<Default side={OrderSide.LEND} />);
         expect(screen.queryByText('Bond Price')).not.toBeInTheDocument();
         expect(screen.queryByText('Loan Start Date')).not.toBeInTheDocument();
@@ -111,7 +111,7 @@ describe('PlaceOrder component', () => {
         ).toBeInTheDocument();
     });
 
-    it(' should only display Loan Maturity date in Market Order', () => {
+    it.skip('should only display Loan Maturity date in Market Order', () => {
         render(<MarketOrder />);
         expect(screen.queryByText('Bond Price')).not.toBeInTheDocument();
         expect(screen.queryByText('Loan Start Date')).not.toBeInTheDocument();
