@@ -7,10 +7,10 @@ import { Currency } from '@secured-finance/sf-core';
 import { toCurrency, hexToCurrencySymbol } from 'src/utils';
 
 export type Position = {
-    ccy: string;
-    maturity: BigNumber;
-    presentValue: BigNumber;
-    futureValue: BigNumber;
+    currency: string;
+    maturity: string;
+    amount: BigNumber;
+    forwardValue: BigNumber;
 };
 
 export type Positions = Array<Position>;
@@ -43,7 +43,13 @@ export const usePositions = (account: string | null) => {
             account,
             convertedCurrencies
         );
-        setPositions(positions);
+        const mappedPositions = positions.map(position => ({
+            currency: position.ccy,
+            maturity: position.maturity.toString(),
+            amount: position.presentValue,
+            forwardValue: position.futureValue,
+        }));
+        setPositions(mappedPositions);
     }, [account, securedFinance]);
 
     useEffect(() => {

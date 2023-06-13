@@ -7,23 +7,22 @@ import { useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { CoreTable, TableActionMenu } from 'src/components/molecules';
 import { UnwindDialog } from 'src/components/organisms';
-import { useBreakpoint } from 'src/hooks';
+import { useBreakpoint, Positions, Position } from 'src/hooks';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { setCurrency, setMaturity } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
-import { TradeSummary, hexToCurrencySymbol } from 'src/utils';
+import { hexToCurrencySymbol } from 'src/utils';
 import { Amount, Maturity } from 'src/utils/entities';
 import {
     amountColumnDefinition,
     contractColumnDefinition,
     loanTypeFromAmountColumnDefinition,
-    priceYieldColumnDefinition,
     tableHeaderDefinition,
 } from 'src/utils/tableDefinitions';
 
-const columnHelper = createColumnHelper<TradeSummary>();
+const columnHelper = createColumnHelper<Position>();
 
-export const ActiveTradeTable = ({ data }: { data: TradeSummary[] }) => {
+export const ActiveTradeTable = ({ data }: { data: Positions }) => {
     const [unwindDialogData, setUnwindDialogData] = useState<{
         maturity: Maturity;
         amount: Amount;
@@ -108,15 +107,6 @@ export const ActiveTradeTable = ({ data }: { data: TradeSummary[] }) => {
                     compact: false,
                 },
                 'Present Value (P.V) is the current worth of the contract, taking into account the time value of money.'
-            ),
-            priceYieldColumnDefinition(
-                columnHelper,
-                'M.T.M.',
-                'averagePrice',
-                row => row.averagePrice,
-                'default',
-                'price',
-                'Mark to Market (MTM) is the estimated current value of a loan based on prevailing market conditions.'
             ),
             columnHelper.display({
                 id: 'actions',

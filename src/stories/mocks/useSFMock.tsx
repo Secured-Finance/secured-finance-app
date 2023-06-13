@@ -330,6 +330,34 @@ export const mockUseSF = () => {
                 ],
             })
         ),
+        getPositions: jest.fn(() =>
+            Promise.resolve([
+                {
+                    ccy: ethBytes32,
+                    maturity: dec22Fixture.toString(),
+                    presentValue: BigNumber.from('10000000000000000000'),
+                    futureValue: BigNumber.from('10210000000000000000'),
+                },
+                {
+                    ccy: ethBytes32,
+                    maturity: mar23Fixture.toString(),
+                    presentValue: BigNumber.from('-10000000000000000000'),
+                    futureValue: BigNumber.from('-10210000000000000000'),
+                },
+                {
+                    ccy: efilBytes32,
+                    maturity: dec22Fixture.toString(),
+                    presentValue: BigNumber.from('10000000000000000000'),
+                    futureValue: BigNumber.from('10210000000000000000'),
+                },
+                {
+                    ccy: efilBytes32,
+                    maturity: mar23Fixture.toString(),
+                    presentValue: BigNumber.from('-10000000000000000000'),
+                    futureValue: BigNumber.from('-10210000000000000000'),
+                },
+            ])
+        ),
     };
 
     return mockSecuredFinance;

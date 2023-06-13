@@ -9,7 +9,7 @@ import WrappedBitcoinIcon from 'src/assets/coins/wbtc.svg';
 import SFLogoSmall from 'src/assets/img/logo-small.svg';
 import MetamaskIcon from 'src/assets/img/metamask-fox.svg';
 import { Option, WalletSourceOption } from 'src/components/atoms';
-import { CollateralBook, Order } from 'src/hooks';
+import { CollateralBook, Order, Positions } from 'src/hooks';
 import { AssetPrices } from 'src/store/assetPrices';
 import { RootState } from 'src/store/types';
 import {
@@ -19,7 +19,7 @@ import {
     TradeHistory,
     TradesQuery,
 } from 'src/types';
-import { CurrencySymbol, Rate, TradeSummary } from 'src/utils';
+import { CurrencySymbol, Rate } from 'src/utils';
 import { Maturity } from 'src/utils/entities';
 
 export const preloadedAssetPrices: { assetPrices: AssetPrices } = {
@@ -447,31 +447,27 @@ export const transactions: TradeHistory = [
     },
 ];
 
-export const aggregatedTrades: TradeSummary[] = [
+export const positions: Positions = [
     {
         amount: BigNumber.from('500000000000000000000'),
         currency: efilBytes32,
         forwardValue: BigNumber.from('500000000000000000000'),
         maturity: jun23Fixture.toString(),
-        averagePrice: BigNumber.from(9671),
     },
     {
         amount: BigNumber.from('-500000000000000000000'),
         currency: efilBytes32,
         forwardValue: BigNumber.from('-520000000000000000000'),
         maturity: mar23Fixture.toString(),
-        averagePrice: BigNumber.from(9698),
     },
     {
         amount: BigNumber.from('-1000000000'),
-        averagePrice: BigNumber.from(9700),
         forwardValue: BigNumber.from('-1040000000'),
         currency: wbtcBytes32,
         maturity: jun23Fixture.toString(),
     },
     {
         amount: BigNumber.from('-1000000000'),
-        averagePrice: BigNumber.from(0),
         forwardValue: BigNumber.from('-1040000000'),
         currency: ethBytes32,
         maturity: mar23Fixture.toString(),
