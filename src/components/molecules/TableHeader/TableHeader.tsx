@@ -1,7 +1,7 @@
 import { SortDirection } from '@tanstack/react-table';
 import classNames from 'classnames';
-import { useState } from 'react';
 import { SortArrows } from 'src/components/atoms';
+import { Tooltip } from 'src/components/templates';
 
 export const TableHeader = ({
     title,
@@ -16,32 +16,31 @@ export const TableHeader = ({
     isSorted?: boolean | SortDirection;
     align?: 'left' | 'center' | 'right';
 }) => {
-    const [open, setOpen] = useState(false);
-
-    return (
-        <Container align={align}>
-            <button
-                className='relative cursor-pointer select-none'
-                onClick={sortingHandler}
-                onMouseEnter={() => setOpen(true)}
-                onMouseLeave={() => setOpen(false)}
-            >
-                <span className='flex flex-row items-center justify-center gap-1'>
-                    <span>{title}</span>
-                    {isSorted !== undefined && (
-                        <span data-testid='sorting-icons'>
-                            <SortArrows isSorted={isSorted} />
-                        </span>
-                    )}
-                </span>
-                {open && titleHint && (
-                    <div className='typography-caption-3 absolute z-50 mt-2 h-fit w-[180px] rounded-lg border border-black-20 bg-gunMetal p-4 text-left font-normal text-neutral-8 shadow-dropdown'>
-                        {titleHint}
-                    </div>
+    const titleComponent = (
+        <button
+            className='relative cursor-pointer select-none'
+            onClick={sortingHandler}
+        >
+            <span className='flex flex-row items-center justify-center gap-1'>
+                <span>{title}</span>
+                {isSorted !== undefined && (
+                    <span data-testid='sorting-icons'>
+                        <SortArrows isSorted={isSorted} />
+                    </span>
                 )}
-            </button>
-        </Container>
+            </span>
+        </button>
     );
+
+    if (titleHint) {
+        return (
+            <Container align={align}>
+                <Tooltip iconElement={titleComponent}>{titleHint}</Tooltip>
+            </Container>
+        );
+    }
+
+    return <Container align={align}>{titleComponent}</Container>;
 };
 
 const Container = ({
