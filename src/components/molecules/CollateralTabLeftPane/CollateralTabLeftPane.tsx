@@ -84,14 +84,22 @@ export const CollateralTabLeftPane = ({
                         Connect your wallet to see your deposited collateral
                         balance.
                     </div>
-                ) : collateralBalance > 0 ? (
+                ) : (
                     <div>
                         <div className='mx-5 my-6 hidden flex-col gap-6 tablet:flex'>
-                            <AssetInformation
-                                header='Collateral Assets'
-                                informationText={getInformationText()}
-                                collateralBook={collateralBook.collateral}
-                            ></AssetInformation>
+                            {collateralBalance > 0 ? (
+                                <AssetInformation
+                                    header='Collateral Assets'
+                                    informationText={getInformationText()}
+                                    collateralBook={collateralBook.collateral}
+                                ></AssetInformation>
+                            ) : (
+                                <div className='typography-caption w-40 text-grayScale'>
+                                    Deposit collateral from your connected
+                                    wallet to enable lending service on Secured
+                                    Finance.
+                                </div>
+                            )}
                             {nonCollateralBalance > 0 && (
                                 <AssetInformation
                                     header='Non-collateral Assets'
@@ -130,11 +138,6 @@ export const CollateralTabLeftPane = ({
                                 })}
                             />
                         </div>
-                    </div>
-                ) : (
-                    <div className='typography-caption ml-5 w-40 text-grayScale'>
-                        Deposit collateral from your connected wallet to enable
-                        lending service on Secured Finance.
                     </div>
                 )}
             </div>
