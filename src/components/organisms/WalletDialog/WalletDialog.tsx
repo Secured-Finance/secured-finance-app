@@ -257,7 +257,9 @@ export const WalletDialog = () => {
                                         AddressUtils.format(account ?? '', 16),
                                     ],
                                 ]}
-                                network={securedFinance?.config?.network}
+                                network={
+                                    securedFinance?.config?.network ?? 'unknown'
+                                }
                             />
                         );
                     case Step.error:
