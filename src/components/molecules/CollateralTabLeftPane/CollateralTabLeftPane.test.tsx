@@ -1,5 +1,8 @@
 import { composeStories } from '@storybook/testing-react';
-import { emptyCollateralBook } from 'src/stories/mocks/fixtures';
+import {
+    emptyCollateralBook,
+    emptyUSDCollateral,
+} from 'src/stories/mocks/fixtures';
 import { fireEvent, render, screen } from 'src/test-utils.js';
 import * as stories from './CollateralTabLeftPane.stories';
 
@@ -30,16 +33,6 @@ describe('CollateralTabLeftPane component', () => {
         expect(screen.getByText('Non-collateral Assets')).toBeInTheDocument();
     });
 
-    it('should prompt user to deposit collateral when wallet is connected', () => {
-        render(<Default collateralBook={emptyCollateralBook} />);
-        expect(screen.getByText('$0.00')).toBeInTheDocument();
-        expect(
-            screen.getByText(
-                'Deposit collateral from your connected wallet to enable lending service on Secured Finance.'
-            )
-        ).toBeInTheDocument();
-    });
-
     it('should render enabled buttons when wallet is connected', () => {
         render(<Default />);
         expect(screen.getByTestId('deposit-collateral')).toBeEnabled();
@@ -58,5 +51,25 @@ describe('CollateralTabLeftPane component', () => {
         render(<Default onClick={onClick} />);
         fireEvent.click(screen.getByTestId('withdraw-collateral'));
         expect(onClick).toHaveBeenCalledWith('withdraw');
+    });
+
+    it('should prompt user to deposit collateral when wallet is connected', () => {
+        render(<Default collateralBook={emptyCollateralBook} />);
+        expect(screen.getByText('Collateral Balance')).toBeInTheDocument();
+        expect(
+            screen.getByText(
+                'Deposit collateral from your connected wallet to enable lending service on Secured Finance.'
+            )
+        ).toBeInTheDocument();
+    });
+
+    it('should render non-collateral asset if usdCollateral is zero and usdNonCollateral is not zero', () => {
+        render(<Default collateralBook={emptyUSDCollateral} />);
+        expect(
+            screen.getByText(
+                'Deposit collateral from your connected wallet to enable lending service on Secured Finance.'
+            )
+        ).toBeInTheDocument();
+        expect(screen.getByText('Non-collateral Assets')).toBeInTheDocument();
     });
 });
