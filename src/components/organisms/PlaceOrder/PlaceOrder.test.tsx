@@ -27,15 +27,6 @@ const mockSecuredFinance = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mockSecuredFinance);
 
 describe('PlaceOrder component', () => {
-    beforeEach(() => {
-        jest.resetAllMocks();
-        window.ResizeObserver = jest.fn().mockImplementation(() => ({
-            observe: jest.fn(),
-            unobserve: jest.fn(),
-            disconnect: jest.fn(),
-        }));
-    });
-
     it('should display the Place Order Modal when open', () => {
         render(<Default />);
 
