@@ -18,6 +18,10 @@ export type Order = OrderList[0];
 
 const columnHelper = createColumnHelper<Order>();
 
+const getStatus = (status: string) => {
+    return status === 'PartiallyFilled' ? 'Partially Filled' : status;
+};
+
 export const OrderHistoryTable = ({ data }: { data: OrderList }) => {
     const priceList = useSelector((state: RootState) => getPriceMap(state));
     const isTablet = useBreakpoint('tablet');
@@ -47,7 +51,7 @@ export const OrderHistoryTable = ({ data }: { data: OrderList }) => {
                 { compact: false, color: true, priceList: priceList }
             ),
             columnHelper.accessor('status', {
-                cell: info => <div>{info.getValue().toString()}</div>,
+                cell: info => <div>{getStatus(info.getValue())}</div>,
                 header: tableHeaderDefinition('Status'),
             }),
         ],
