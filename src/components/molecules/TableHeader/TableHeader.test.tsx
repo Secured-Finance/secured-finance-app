@@ -39,12 +39,13 @@ describe('TableHeader Component', () => {
         ).not.toBeInTheDocument();
     });
 
-    it('should display title hint on mouse enter', () => {
+    it('should display title hint on mouse enter as a tooltip', () => {
         render(<TitleHint />);
         const button = screen.getByRole('button');
         fireEvent.mouseEnter(button);
 
         expect(screen.getByText('This is a title hint.')).toBeInTheDocument();
+        expect(screen.getByRole('tooltip')).toBeInTheDocument();
     });
 
     it('should not display title hint on mouse out', () => {
@@ -56,5 +57,6 @@ describe('TableHeader Component', () => {
         expect(
             screen.queryByText('This is a title hint.')
         ).not.toBeInTheDocument();
+        expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
     });
 });
