@@ -17,7 +17,6 @@ import {
     amountColumnDefinition,
     contractColumnDefinition,
     loanTypeFromAmountColumnDefinition,
-    priceYieldColumnDefinition,
     tableHeaderDefinition,
 } from 'src/utils/tableDefinitions';
 
@@ -85,13 +84,13 @@ export const ActiveTradeTable = ({ data }: { data: TradeSummary[] }) => {
                     );
                 },
                 header: tableHeaderDefinition(
-                    'D.T.M.',
-                    'Days to Maturity (DTM) of a loan contract is the date on which the contract is set to expire.'
+                    'Maturity',
+                    'Maturity of a loan contract is the date on which the contract is set to expire.'
                 ),
             }),
             amountColumnDefinition(
                 columnHelper,
-                'F.V',
+                'FV',
                 'forwardValue',
                 row => row.forwardValue,
                 { color: true, priceList: priceList, compact: false },
@@ -99,7 +98,7 @@ export const ActiveTradeTable = ({ data }: { data: TradeSummary[] }) => {
             ),
             amountColumnDefinition(
                 columnHelper,
-                'P.V',
+                'PV',
                 'amount',
                 row => row.amount,
                 {
@@ -108,15 +107,6 @@ export const ActiveTradeTable = ({ data }: { data: TradeSummary[] }) => {
                     compact: false,
                 },
                 'Present Value (P.V) is the current worth of the contract, taking into account the time value of money.'
-            ),
-            priceYieldColumnDefinition(
-                columnHelper,
-                'M.T.M.',
-                'averagePrice',
-                row => row.averagePrice,
-                'default',
-                'price',
-                'Mark to Market (MTM) is the estimated current value of a loan based on prevailing market conditions.'
             ),
             columnHelper.display({
                 id: 'actions',
