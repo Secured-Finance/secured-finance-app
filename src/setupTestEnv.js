@@ -14,3 +14,5 @@ global.IntersectionObserver = class FakeIntersectionObserver {
     unobserve() {}
     disconnect() {}
 };
+
+window.ResizeObserver = global.ResizeObserver;
