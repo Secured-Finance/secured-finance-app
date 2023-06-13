@@ -43,24 +43,22 @@ describe('LiquidationProgressBar Component', () => {
     });
 
     it('should render correct color and risk status', () => {
-        render(<Default liquidationPercentage={10} />);
-        expect(screen.getByText('70%')).toBeInTheDocument();
-        expect(screen.getByText('70%')).toHaveClass('text-progressBarStart');
+        render(<Default liquidationPercentage={30} />);
+        expect(screen.getByText('50%')).toBeInTheDocument();
+        expect(screen.getByText('50%')).toHaveClass('text-progressBarStart');
         expect(screen.getByText('Low')).toBeInTheDocument();
         expect(screen.getByText('Low')).toHaveClass('text-progressBarStart');
 
-        render(<Default liquidationPercentage={70} />);
-        expect(screen.getByText('10%')).toBeInTheDocument();
-        expect(screen.getByText('10%')).toHaveClass('text-progressBarEnd');
-        expect(screen.getByText('High')).toBeInTheDocument();
-        expect(screen.getByText('High')).toHaveClass('text-progressBarEnd');
+        render(<Default liquidationPercentage={50} />);
+        expect(screen.getByText('30%')).toBeInTheDocument();
+        expect(screen.getByText('30%')).toHaveClass('text-progressBarVia');
+        expect(screen.getByText('Medium')).toBeInTheDocument();
+        expect(screen.getByText('Medium')).toHaveClass('text-progressBarVia');
 
         render(<Default liquidationPercentage={90} />);
         expect(screen.getByText('0%')).toBeInTheDocument();
         expect(screen.getByText('0%')).toHaveClass('text-progressBarEnd');
-        expect(screen.getByText('Liquidated')).toBeInTheDocument();
-        expect(screen.getByText('Liquidated')).toHaveClass(
-            'text-progressBarEnd'
-        );
+        expect(screen.getByText('High')).toBeInTheDocument();
+        expect(screen.getByText('High')).toHaveClass('text-progressBarEnd');
     });
 });
