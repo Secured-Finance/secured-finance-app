@@ -1,4 +1,4 @@
-name: Deploy a specific environment
+name: Deploy Environment
 
 on:
   workflow_dispatch:
@@ -7,14 +7,33 @@ on:
         description: 'Environment to deploy'
         required: true
         default: 'uat'
+        type: choice
+        options:
+          - 'uat'
+          - 'staging'
+          - 'ci-build'
+          - 'development'
+      ref:
+        description: 'Branch, tag or commit to deploy'
+        required: true
+        default: 'develop'
 
 jobs:
+  print-env:
+    runs-on: ubuntu-latest
+    name: Print Environment
+    steps:
+      - name: Print Environment
+        run: echo "Deploying ${{ github.event.inputs.ref }} on ${{ github.event.inputs.environment }} Environment"
+
   build-and-test-all:
     name: Build and Test
     uses: ./.github/workflows/build.yml
+    needs: print-env
     with:
       artifact_name: WebApp
       environment_name: ${{ github.event.inputs.environment }}
+      ref: ${{ github.event.inputs.ref }}
     secrets: inherit
 
   cypress-run:
@@ -28,6 +47,7 @@ jobs:
   deploy-on-fleek:
     runs-on: ubuntu-latest
     name: Deploy on Fleek
+    if: github.event.inputs.environment != 'ci-build'
     environment: ${{ github.event.inputs.environment }}
     needs: [build-and-test-all, cypress-run]
     steps:
