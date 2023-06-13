@@ -3,7 +3,6 @@ name: Deploy on Fleek
 on:
   push:
     branches:
-      - main
       - develop
 
 jobs:
