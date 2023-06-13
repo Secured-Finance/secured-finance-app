@@ -6,9 +6,9 @@ export default {
     component: SuccessPanel,
     args: {
         itemList: [
-            ['From', '0.000000000000000000'],
-            ['To', '0.000000000000000000'],
-            ['Price', '0.000000000000000000'],
+            ['From', '123456789987654321'],
+            ['To', '987654321123456789'],
+            ['Price', '10'],
         ],
     },
 } as ComponentMeta<typeof SuccessPanel>;
