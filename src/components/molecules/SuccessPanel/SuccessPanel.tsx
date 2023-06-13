@@ -2,17 +2,16 @@ import { ArrowUpRightIcon } from '@heroicons/react/24/outline';
 import classNames from 'classnames';
 import Check from 'src/assets/icons/check-mark.svg';
 import { Tooltip } from 'src/components/templates';
-import useSF from 'src/hooks/useSecuredFinance';
 
 export const SuccessPanel = ({
     itemList,
     txHash,
+    network,
 }: {
     itemList: [string, string][];
     txHash?: string;
+    network?: string;
 }) => {
-    const securedFinance = useSF();
-    const network = securedFinance?.config?.network ?? 'unknown';
     const baseUrl = `https://${
         network !== 'mainnet' ? network + '.' : ''
     }etherscan.io`;
@@ -44,7 +43,7 @@ export const SuccessPanel = ({
                                 }
                             >
                                 <div className='typography flex items-center justify-between gap-1 text-white'>
-                                    <p> View on Etherscan</p>
+                                    <p>View on Etherscan</p>
                                     <ArrowUpRightIcon className='h-3 w-3' />
                                 </div>
                             </Tooltip>

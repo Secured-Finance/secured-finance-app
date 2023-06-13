@@ -17,6 +17,7 @@ export const Tooltip = ({
                     <>
                         <Popover.Button
                             className='flex items-center focus:outline-none'
+                            role='tooltip'
                             as='div'
                         >
                             {React.cloneElement(
