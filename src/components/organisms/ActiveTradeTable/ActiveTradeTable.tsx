@@ -94,7 +94,7 @@ export const ActiveTradeTable = ({ data }: { data: TradeSummary[] }) => {
                 'forwardValue',
                 row => row.forwardValue,
                 { color: true, priceList: priceList, compact: false },
-                'Future Value (F.V) of a loan contract is the obligation value of the contract at time of maturity.'
+                'Future Value (FV) of a loan contract is the obligation value of the contract at time of maturity.'
             ),
             amountColumnDefinition(
                 columnHelper,
@@ -106,7 +106,7 @@ export const ActiveTradeTable = ({ data }: { data: TradeSummary[] }) => {
                     priceList: priceList,
                     compact: false,
                 },
-                'Present Value (P.V) is the current worth of the contract, taking into account the time value of money.'
+                'Present Value (PV) is the current worth of the contract, taking into account the time value of money.'
             ),
             columnHelper.display({
                 id: 'actions',
