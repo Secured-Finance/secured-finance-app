@@ -257,7 +257,9 @@ export const DepositCollateral = ({
                                     ],
                                 ]}
                                 txHash={txHash}
-                                network={securedFinance?.config?.network}
+                                network={
+                                    securedFinance?.config?.network ?? 'unknown'
+                                }
                             />
                         );
                     case Step.error:

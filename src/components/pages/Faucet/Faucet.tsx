@@ -344,7 +344,7 @@ export const Faucet = () => {
                         ],
                     ]}
                     txHash={txHash}
-                    network={securedFinance?.config?.network}
+                    network={securedFinance?.config?.network ?? 'unknown'}
                 />
             </Dialog>
         </Page>

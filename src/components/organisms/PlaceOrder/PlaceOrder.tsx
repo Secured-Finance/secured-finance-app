@@ -340,7 +340,9 @@ export const PlaceOrder = ({
                                     ],
                                 ]}
                                 txHash={txHash}
-                                network={securedFinance?.config?.network}
+                                network={
+                                    securedFinance?.config?.network ?? 'unknown'
+                                }
                             />
                         );
                     case Step.error:
