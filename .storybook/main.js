@@ -23,4 +23,9 @@ module.exports = {
     },
 
     webpackFinal: (config, options) => webpack.webpackOverride(config),
+
+    env: config => ({
+        ...config,
+        COMMIT_HASH: '.storybook',
+    }),
 };
