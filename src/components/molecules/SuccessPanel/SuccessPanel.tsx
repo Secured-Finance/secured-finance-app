@@ -19,7 +19,7 @@ export const SuccessPanel = ({
     const etherscanLink = `${baseUrl}/tx/${txHash}`;
 
     const handleButtonClick = () => {
-        window.open(etherscanLink);
+        window.open(etherscanLink, '_blank');
     };
 
     return (

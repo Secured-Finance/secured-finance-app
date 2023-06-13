@@ -28,6 +28,7 @@ jest.mock('src/hooks/useSecuredFinance', () => () => mockSecuredFinance);
 
 describe('PlaceOrder component', () => {
     beforeEach(() => {
+        jest.resetAllMocks();
         window.ResizeObserver = jest.fn().mockImplementation(() => ({
             observe: jest.fn(),
             unobserve: jest.fn(),
@@ -35,7 +36,7 @@ describe('PlaceOrder component', () => {
         }));
     });
 
-    it('should display the Place Order Modal when open', async () => {
+    it('should display the Place Order Modal when open', () => {
         render(<Default />);
 
         expect(screen.getByRole('dialog')).toBeInTheDocument();
@@ -45,9 +46,8 @@ describe('PlaceOrder component', () => {
         expect(button).toHaveTextContent('OK');
     });
 
-    it('should display all the fields in Limit order', async () => {
+    it('should display all the fields in Limit order', () => {
         render(<Default />);
-
         expect(screen.queryByText('Bond Price')).not.toBeInTheDocument();
         expect(screen.queryByText('Loan Start Date')).not.toBeInTheDocument();
         expect(
