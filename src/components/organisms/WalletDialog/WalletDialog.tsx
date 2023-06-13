@@ -10,6 +10,7 @@ import {
     WalletRadioGroup,
 } from 'src/components/molecules';
 import { CACHED_PROVIDER_KEY } from 'src/contexts/SecuredFinanceProvider/SecuredFinanceProvider';
+import useSF from 'src/hooks/useSecuredFinance';
 import { setWalletDialogOpen } from 'src/store/interactions';
 import { RootState } from 'src/store/types';
 import {
@@ -93,6 +94,7 @@ const reducer = (
 };
 
 export const WalletDialog = () => {
+    const securedFinance = useSF();
     const [wallet, setWallet] = useState<string>('');
     const [errorMessage, setErrorMessage] = useState(
         'Your wallet could not be connected.'
@@ -255,6 +257,7 @@ export const WalletDialog = () => {
                                         AddressUtils.format(account ?? '', 16),
                                     ],
                                 ]}
+                                network={securedFinance?.config?.network}
                             />
                         );
                     case Step.error:

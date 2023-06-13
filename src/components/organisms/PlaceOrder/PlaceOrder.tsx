@@ -20,6 +20,7 @@ import {
     SuccessPanel,
 } from 'src/components/molecules';
 import { CollateralBook } from 'src/hooks';
+import useSF from 'src/hooks/useSecuredFinance';
 import { setLastMessage } from 'src/store/lastError';
 import { OrderType, PlaceOrderFunction } from 'src/types';
 import {
@@ -122,6 +123,7 @@ export const PlaceOrder = ({
     assetPrice: number;
     walletSource: WalletSource;
 } & DialogState) => {
+    const securedFinance = useSF();
     const { account } = useWallet();
     const [state, dispatch] = useReducer(reducer, stateRecord[1]);
     const [txHash, setTxHash] = useState<string | undefined>(undefined);
@@ -338,6 +340,7 @@ export const PlaceOrder = ({
                                     ],
                                 ]}
                                 txHash={txHash}
+                                network={securedFinance?.config?.network}
                             />
                         );
                     case Step.error:

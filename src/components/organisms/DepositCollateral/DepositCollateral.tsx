@@ -10,6 +10,7 @@ import {
 } from 'src/components/molecules';
 import { CollateralInput } from 'src/components/organisms';
 import { useDepositCollateral } from 'src/hooks/useDepositCollateral';
+import useSF from 'src/hooks/useSecuredFinance';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { RootState } from 'src/store/types';
 import {
@@ -100,6 +101,7 @@ export const DepositCollateral = ({
 }: {
     collateralList: Partial<Record<CurrencySymbol, CollateralInfo>>;
 } & DialogState) => {
+    const securedFinance = useSF();
     const [asset, setAsset] = useState(CurrencySymbol.USDC);
     const [collateral, setCollateral] = useState(BigNumber.from(0));
     const [depositAddress, setDepositAddress] = useState('');
@@ -255,6 +257,7 @@ export const DepositCollateral = ({
                                     ],
                                 ]}
                                 txHash={txHash}
+                                network={securedFinance?.config?.network}
                             />
                         );
                     case Step.error:
