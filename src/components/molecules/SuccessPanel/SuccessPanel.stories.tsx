@@ -1,4 +1,5 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { userEvent, waitFor, within } from '@storybook/testing-library';
 import { SuccessPanel } from './SuccessPanel';
 
 export default {
@@ -22,4 +23,13 @@ export const WithTransactionHash = Template.bind({});
 
 WithTransactionHash.args = {
     txHash: '1123456789',
+    network: 'sepolia',
+};
+
+WithTransactionHash.play = async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const tooltip = canvas.getByText('987654321123456789');
+    await waitFor(async () => {
+        await userEvent.hover(tooltip);
+    });
 };
