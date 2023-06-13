@@ -1,4 +1,4 @@
-import { Menu, Tab as HeadlessTab } from '@headlessui/react';
+import { Tab as HeadlessTab, Menu } from '@headlessui/react';
 import ChevronDownIcon from '@heroicons/react/24/outline/ChevronDownIcon';
 import classNames from 'classnames';
 import React, { Children, useState } from 'react';
@@ -45,11 +45,14 @@ export const HorizontalTab = ({
                 <HeadlessTab.List className='h-16 justify-start border-b border-white-10 p-3'>
                     <div className='w-full tablet:hidden'>
                         <Menu as='div' className='relative'>
-                            <Menu.Button className=' flex h-10 w-full flex-row items-center justify-between rounded-xl bg-black-30 p-2 text-neutral-8 focus:outline-none'>
+                            <Menu.Button
+                                data-testid='menu'
+                                className=' flex h-10 w-full flex-row items-center justify-between rounded-xl bg-black-30 p-2 text-neutral-8 focus:outline-none'
+                            >
                                 {tabTitles[selectedIndex]}
                                 <ChevronDownIcon className='h-4' />
                             </Menu.Button>
-                            <Menu.Items className='z-15 absolute mt-1 flex w-full flex-col rounded-lg bg-gunMetal p-2 shadow-sm'>
+                            <Menu.Items className='absolute z-20 mt-1 flex w-full flex-col rounded-lg bg-gunMetal p-2 shadow-sm'>
                                 {tabTitles.map((title, index) => (
                                     <Menu.Item key={title}>
                                         {({ active }) => (
@@ -74,7 +77,6 @@ export const HorizontalTab = ({
                                                     >
                                                         {title}
                                                     </button>
-                                                    <ChevronDownIcon className='h-4' />
                                                 </div>
                                                 {index !==
                                                 tabTitles.length - 1 ? (

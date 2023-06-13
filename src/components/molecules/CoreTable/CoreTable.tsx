@@ -83,7 +83,7 @@ export const CoreTable = <T,>({
                                 data-testid={`${coreTableOptions.name}-header-cell`}
                                 key={header.id}
                                 className={classNames(
-                                    'relative px-1 py-2 text-center font-bold',
+                                    'px-1 py-2 text-center font-bold',
                                     {
                                         'sticky left-0 z-10 bg-black-20/100 tablet:bg-transparent':
                                             columnIndex === 0 &&
@@ -107,7 +107,7 @@ export const CoreTable = <T,>({
                 {table.getRowModel().rows.map(row => (
                     <tr
                         key={row.id}
-                        className={classNames('relative h-7', {
+                        className={classNames('h-7', {
                             'cursor-pointer': coreTableOptions.hoverRow?.(
                                 row.id
                             ),

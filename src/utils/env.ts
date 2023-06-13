@@ -63,3 +63,26 @@ export const getEnvironment = () => {
 
     return SF_ENV;
 };
+
+export const getUsePackageVersion = () => {
+    const NEXT_PUBLIC_USE_PACKAGE_VERSION =
+        process.env.NEXT_PUBLIC_USE_PACKAGE_VERSION;
+
+    if (!NEXT_PUBLIC_USE_PACKAGE_VERSION) {
+        return false;
+    }
+
+    return NEXT_PUBLIC_USE_PACKAGE_VERSION === 'true';
+};
+
+export const getCommitHash = () => {
+    const NEXT_PUBLIC_COMMIT_HASH = process.env.COMMIT_HASH;
+
+    if (!NEXT_PUBLIC_COMMIT_HASH) {
+        // eslint-disable-next-line no-console
+        console.warn('COMMIT_HASH is not set');
+        return '';
+    }
+
+    return NEXT_PUBLIC_COMMIT_HASH;
+};
