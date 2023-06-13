@@ -12,6 +12,9 @@ import {
 
 export const mockUseSF = () => {
     const mockSecuredFinance = {
+        config: {
+            network: 'sepolia',
+        },
         placeOrder: jest.fn(),
         placePreOrder: jest.fn(),
         getBorrowUnitPrices: jest.fn(() =>

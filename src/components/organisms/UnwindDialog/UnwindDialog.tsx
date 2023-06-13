@@ -17,6 +17,7 @@ import {
     SuccessPanel,
 } from 'src/components/molecules';
 import { useCollateralBook, useOrders } from 'src/hooks';
+import useSF from 'src/hooks/useSecuredFinance';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { setLastMessage } from 'src/store/lastError';
 import { RootState } from 'src/store/types';
@@ -104,6 +105,7 @@ export const UnwindDialog = ({
     amount: Amount;
     maturity: Maturity;
 } & DialogState) => {
+    const securedFinance = useSF();
     const { account } = useWallet();
     const [state, dispatch] = useReducer(reducer, stateRecord[1]);
     const [txHash, setTxHash] = useState<string | undefined>(undefined);
@@ -233,6 +235,7 @@ export const UnwindDialog = ({
                             ],
                         ]}
                         txHash={txHash}
+                        network={securedFinance?.config?.network}
                     />
                 );
             case Step.error:

@@ -83,6 +83,7 @@ const MenuAddToken = ({
     );
 };
 export const Faucet = () => {
+    const securedFinance = useSF();
     const { account, ethereum } = useWallet();
     const sf = useSF();
 
@@ -343,6 +344,7 @@ export const Faucet = () => {
                         ],
                     ]}
                     txHash={txHash}
+                    network={securedFinance?.config?.network}
                 />
             </Dialog>
         </Page>
