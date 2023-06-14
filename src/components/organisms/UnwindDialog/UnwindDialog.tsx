@@ -108,7 +108,7 @@ export const UnwindDialog = ({
     const securedFinance = useSF();
     const { account } = useWallet();
     const [state, dispatch] = useReducer(reducer, stateRecord[1]);
-    const [txHash, setTxHash] = useState<string | undefined>(undefined);
+    const [txHash, setTxHash] = useState<string | undefined>();
     const [errorMessage, setErrorMessage] = useState(
         'Your position could not be unwound.'
     );
