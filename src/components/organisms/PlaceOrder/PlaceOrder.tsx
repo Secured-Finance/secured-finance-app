@@ -1,16 +1,10 @@
 import { track } from '@amplitude/analytics-browser';
-import { Disclosure } from '@headlessui/react';
 import { OrderSide, WalletSource } from '@secured-finance/sf-client';
 import { formatDate, getUTCMonthYear } from '@secured-finance/sf-core';
 import { BigNumber } from 'ethers';
 import { useCallback, useReducer, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import {
-    ExpandIndicator,
-    Section,
-    SectionWithItems,
-    Spinner,
-} from 'src/components/atoms';
+import { Section, SectionWithItems, Spinner } from 'src/components/atoms';
 import {
     AmountCard,
     CollateralSimulationSection,
@@ -228,6 +222,7 @@ export const PlaceOrder = ({
         ]
     );
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const itemList: [string, string][] = loanValue
         ? [
               [
@@ -289,7 +284,7 @@ export const PlaceOrder = ({
                                 <SectionWithItems
                                     itemList={[['Borrow Fee %', '0.25 %']]}
                                 />
-                                <Disclosure>
+                                {/* <Disclosure>
                                     {({ open }) => (
                                         <>
                                             <Disclosure.Button className='flex h-6 flex-row items-center justify-between'>
@@ -307,7 +302,7 @@ export const PlaceOrder = ({
                                             </Disclosure.Panel>
                                         </>
                                     )}
-                                </Disclosure>
+                                </Disclosure> */}
                             </div>
                         );
                     case Step.orderProcessing:
