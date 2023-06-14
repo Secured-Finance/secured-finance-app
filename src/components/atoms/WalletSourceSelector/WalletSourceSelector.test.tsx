@@ -25,6 +25,10 @@ const walletSourceList: WalletSourceOption[] = [
 ];
 
 describe('WalletSourceSelector component', () => {
+    beforeEach(() => {
+        jest.clearAllMocks();
+        jest.resetModules();
+    });
     it('should render WalletSourceSelector', () => {
         render(<Default />);
         expect(screen.getByText('Lending Source')).toBeInTheDocument();
@@ -38,17 +42,21 @@ describe('WalletSourceSelector component', () => {
         expect(screen.getByRole('button')).toBeInTheDocument();
     });
 
-    it('should render a dropdown', () => {
+    it('should render a dropdown', async () => {
         render(<Default />);
         fireEvent.click(screen.getByRole('button'));
-        waitFor(() => {
+        await waitFor(() => {
             expect(screen.getByRole('listbox')).toBeInTheDocument();
         });
     });
 
     it('should change the button when a dropdown item is selected', async () => {
         const onChange = jest.fn();
+
         render(<Default onChange={onChange} />);
+
+        expect(onChange).toBeCalledTimes(1);
+        expect(onChange).toHaveBeenLastCalledWith(WalletSource.METAMASK);
 
         fireEvent.click(screen.getByTestId('wallet-source-selector-button'));
         fireEvent.click(screen.getByTestId('option-1'));

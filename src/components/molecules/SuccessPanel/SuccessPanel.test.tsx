@@ -5,7 +5,7 @@ import * as stories from './SuccessPanel.stories';
 
 const { Default, WithTransactionHash } = composeStories(stories);
 
-global.open = jest.fn();
+window.open = jest.fn();
 
 describe('SuccessPanel Component', () => {
     it('should render a SuccessPanel', () => {
@@ -30,7 +30,7 @@ describe('SuccessPanel Component', () => {
         expect(address.tagName).toBe('BUTTON');
         address.click();
 
-        expect(global.open).toHaveBeenCalledWith(
+        expect(window.open).toHaveBeenCalledWith(
             'https://sepolia.etherscan.io/tx/1123456789',
             '_blank'
         );

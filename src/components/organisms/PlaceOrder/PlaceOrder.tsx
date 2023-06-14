@@ -126,7 +126,7 @@ export const PlaceOrder = ({
     const securedFinance = useSF();
     const { account } = useWallet();
     const [state, dispatch] = useReducer(reducer, stateRecord[1]);
-    const [txHash, setTxHash] = useState<string | undefined>(undefined);
+    const [txHash, setTxHash] = useState<string | undefined>();
     const globalDispatch = useDispatch();
 
     const [errorMessage, setErrorMessage] = useState(

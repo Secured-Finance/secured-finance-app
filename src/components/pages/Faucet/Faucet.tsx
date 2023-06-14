@@ -99,7 +99,7 @@ export const Faucet = () => {
     const [address, setAddress] = useState<string>('');
     const [isPending, setIsPending] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
-    const [txHash, setTxHash] = useState<string | undefined>(undefined);
+    const [txHash, setTxHash] = useState<string | undefined>();
 
     const token = useMemo(() => {
         if (!ccy) return null;

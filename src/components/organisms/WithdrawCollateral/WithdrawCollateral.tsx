@@ -106,7 +106,7 @@ export const WithdrawCollateral = ({
     const [asset, setAsset] = useState(CurrencySymbol.ETH);
     const [state, dispatch] = useReducer(reducer, stateRecord[1]);
     const [collateral, setCollateral] = useState(BigNumber.from(0));
-    const [txHash, setTxHash] = useState<string | undefined>(undefined);
+    const [txHash, setTxHash] = useState<string | undefined>();
     const [errorMessage, setErrorMessage] = useState(
         'Your withdrawal transaction has failed.'
     );
