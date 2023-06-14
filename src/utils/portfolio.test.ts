@@ -4,7 +4,18 @@ import { AssetPriceMap } from 'src/store/assetPrices/selectors';
 import { TradeHistory } from 'src/types';
 import timemachine from 'timemachine';
 import { CurrencySymbol } from './currencyList';
-import { computeNetValue, computeWeightedAverageRate } from './portfolio';
+import {
+    computeNetValue,
+    computeWeightedAverageRate,
+    calculateForwardValue,
+    calculateAveragePrice,
+    formatOrders,
+} from './portfolio';
+import {
+    dec22Fixture,
+    ethBytes32,
+    efilBytes32,
+} from 'src/stories/mocks/fixtures';
 
 beforeAll(() => {
     timemachine.reset();
@@ -111,5 +122,64 @@ describe('computeNetValue', () => {
                 priceMap
             )
         ).toEqual(30000);
+    });
+});
+
+describe('formatOrders', () => {
+    it('should return forward value', () => {
+        expect(
+            calculateForwardValue(BigNumber.from(900), BigNumber.from(9000))
+        ).toEqual(BigNumber.from(1000));
+    });
+
+    it('should return average price', () => {
+        expect(calculateAveragePrice(BigNumber.from(9000))).toEqual(0.9);
+    });
+
+    it('should format orders to trades', () => {
+        const orders = [
+            {
+                orderId: BigNumber.from(1),
+                currency: ethBytes32,
+                side: 0,
+                maturity: dec22Fixture.toString(),
+                unitPrice: BigNumber.from('9000'),
+                amount: BigNumber.from('900'),
+                timestamp: BigNumber.from('1609295092'),
+            },
+            {
+                orderId: BigNumber.from(2),
+                currency: efilBytes32,
+                side: 1,
+                maturity: dec22Fixture.toString(),
+                unitPrice: BigNumber.from('8000'),
+                amount: BigNumber.from('10000'),
+                timestamp: BigNumber.from('1609295092'),
+            },
+        ];
+        const trades = [
+            {
+                amount: BigNumber.from('900'),
+                side: 0,
+                orderPrice: BigNumber.from('9000'),
+                createdAt: BigNumber.from('1609295092'),
+                currency: ethBytes32,
+                maturity: dec22Fixture.toString(),
+                forwardValue: BigNumber.from(1000),
+                averagePrice: 0.9,
+            },
+            {
+                amount: BigNumber.from('10000'),
+                side: 1,
+                orderPrice: BigNumber.from('8000'),
+                createdAt: BigNumber.from('1609295092'),
+                currency: efilBytes32,
+                maturity: dec22Fixture.toString(),
+                forwardValue: BigNumber.from(12500),
+                averagePrice: 0.8,
+            },
+        ];
+
+        expect(formatOrders(orders)).toEqual(trades);
     });
 });
