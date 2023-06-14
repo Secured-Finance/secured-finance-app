@@ -1,13 +1,8 @@
-import { Disclosure } from '@headlessui/react';
 import { OrderSide } from '@secured-finance/sf-client';
 import { useCallback, useReducer, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Loader from 'src/assets/img/gradient-loader.png';
-import {
-    ExpandIndicator,
-    Section,
-    SectionWithItems,
-} from 'src/components/atoms';
+import { Section } from 'src/components/atoms';
 import {
     AmountCard,
     CollateralSimulationSection,
@@ -175,7 +170,7 @@ export const UnwindDialog = ({
                             assetPrice={price}
                             type='unwind'
                         />
-                        <Disclosure>
+                        {/* <Disclosure>
                             {({ open }) => (
                                 <>
                                     <Disclosure.Button className='flex h-6 flex-row items-center justify-between'>
@@ -204,7 +199,7 @@ export const UnwindDialog = ({
                                     </Disclosure.Panel>
                                 </>
                             )}
-                        </Disclosure>
+                        </Disclosure> */}
                     </div>
                 );
             case Step.processing:
