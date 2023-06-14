@@ -33,7 +33,7 @@ export const MenuItem = ({
                         <div className='flex h-10 w-10 items-center justify-center'>
                             {icon}
                         </div>
-                        <div className='flex w-full justify-between'>
+                        <div className='flex w-full items-center justify-between'>
                             <p className='typography-caption flex w-[90%] text-white'>
                                 {text}
                             </p>

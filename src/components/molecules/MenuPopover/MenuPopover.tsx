@@ -1,5 +1,8 @@
 import { Popover, Transition } from '@headlessui/react';
-import { ClipboardDocumentIcon } from '@heroicons/react/24/outline';
+import {
+    ArrowUpRightIcon,
+    EllipsisHorizontalIcon,
+} from '@heroicons/react/24/solid';
 import { Fragment } from 'react';
 import { MenuItem, Separator } from 'src/components/atoms';
 import { LinkList } from 'src/utils';
@@ -13,9 +16,10 @@ export const MenuPopover = ({}) => {
                         <>
                             <Popover.Button
                                 data-cy='popover-button'
-                                className='typography-nav-menu-default mt-1 h-4 whitespace-nowrap text-neutral-8 opacity-70 duration-300 focus:outline-none group-hover:opacity-100 group-hover:ease-in-out'
+                                className='typography-nav-menu-default mt-1 flex h-4 flex-row items-center whitespace-nowrap text-planetaryPurple opacity-70 duration-300 focus:outline-none group-hover:opacity-100 group-hover:ease-in-out'
                             >
-                                More...
+                                <p>More</p>
+                                <EllipsisHorizontalIcon className='ml-1 h-5 w-5' />
                             </Popover.Button>
                             <Transition
                                 as={Fragment}
@@ -28,7 +32,7 @@ export const MenuPopover = ({}) => {
                             >
                                 <Popover.Panel className='absolute left-40 z-10 mt-2 w-80 -translate-x-1/2'>
                                     <div className='overflow-hidden rounded-lg shadow-sm'>
-                                        <div className='relative flex flex-col space-y-2 border border-black bg-universeBlue p-2  shadow-dropdown'>
+                                        <div className='relative flex flex-col space-y-2 border border-black bg-gunMetal p-2 shadow-dropdown'>
                                             {LinkList.map((link, index) => {
                                                 return (
                                                     <div key={index}>
@@ -61,5 +65,5 @@ export const MenuPopover = ({}) => {
 };
 
 const ExternalIcon = () => (
-    <ClipboardDocumentIcon className='h-4 w-4 text-slateGray' />
+    <ArrowUpRightIcon className='mt-1.5 h-4 w-4 text-white' />
 );
