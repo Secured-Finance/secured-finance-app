@@ -84,21 +84,21 @@ export const ActiveTradeTable = ({ data }: { data: Positions }) => {
                     );
                 },
                 header: tableHeaderDefinition(
-                    'D.T.M.',
-                    'Days to Maturity (DTM) of a loan contract is the date on which the contract is set to expire.'
+                    'Maturity',
+                    'Maturity of a loan contract is the date on which the contract is set to expire.'
                 ),
             }),
             amountColumnDefinition(
                 columnHelper,
-                'F.V',
+                'FV',
                 'forwardValue',
                 row => row.forwardValue,
                 { color: true, priceList: priceList, compact: false },
-                'Future Value (F.V) of a loan contract is the obligation value of the contract at time of maturity.'
+                'Future Value (FV) of a loan contract is the obligation value of the contract at time of maturity.'
             ),
             amountColumnDefinition(
                 columnHelper,
-                'P.V',
+                'PV',
                 'amount',
                 row => row.amount,
                 {
@@ -106,7 +106,7 @@ export const ActiveTradeTable = ({ data }: { data: Positions }) => {
                     priceList: priceList,
                     compact: false,
                 },
-                'Present Value (P.V) is the current worth of the contract, taking into account the time value of money.'
+                'Present Value (PV) is the current worth of the contract, taking into account the time value of money.'
             ),
             columnHelper.display({
                 id: 'actions',
