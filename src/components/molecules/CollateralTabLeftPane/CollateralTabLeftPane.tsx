@@ -122,21 +122,48 @@ export const CollateralTabLeftPane = ({
                                     collateralBook.collateralThreshold
                                 }
                             />
-                            <CollateralInformationTable
-                                data={(
-                                    Object.entries(
-                                        collateralBook.collateral
-                                    ) as [CurrencySymbol, BigNumber][]
-                                ).map(([asset, quantity]) => {
-                                    return {
-                                        asset: asset,
-                                        quantity:
-                                            amountFormatterFromBase[asset](
-                                                quantity
-                                            ),
-                                    };
-                                })}
-                            />
+                            {collateralBalance > 0 ? (
+                                <CollateralInformationTable
+                                    data={(
+                                        Object.entries(
+                                            collateralBook.collateral
+                                        ) as [CurrencySymbol, BigNumber][]
+                                    ).map(([asset, quantity]) => {
+                                        return {
+                                            asset: asset,
+                                            quantity:
+                                                amountFormatterFromBase[asset](
+                                                    quantity
+                                                ),
+                                        };
+                                    })}
+                                />
+                            ) : (
+                                <div className='flex w-full flex-col gap-2 rounded-b bg-black-20'>
+                                    <div className='mx-4 my-5 text-grayScale'>
+                                        Deposit collateral from your connected
+                                        wallet to enable lending service on
+                                        Secured Finance.
+                                    </div>
+                                </div>
+                            )}
+                            {nonCollateralBalance > 0 && (
+                                <CollateralInformationTable
+                                    data={(
+                                        Object.entries(
+                                            collateralBook.nonCollateral
+                                        ) as [CurrencySymbol, BigNumber][]
+                                    ).map(([asset, quantity]) => {
+                                        return {
+                                            asset: asset,
+                                            quantity:
+                                                amountFormatterFromBase[asset](
+                                                    quantity
+                                                ),
+                                        };
+                                    })}
+                                />
+                            )}
                         </div>
                     </div>
                 )}
