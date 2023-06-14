@@ -25,10 +25,6 @@ const walletSourceList: WalletSourceOption[] = [
 ];
 
 describe('WalletSourceSelector component', () => {
-    beforeEach(() => {
-        jest.clearAllMocks();
-        jest.resetModules();
-    });
     it('should render WalletSourceSelector', () => {
         render(<Default />);
         expect(screen.getByText('Lending Source')).toBeInTheDocument();
@@ -52,7 +48,6 @@ describe('WalletSourceSelector component', () => {
 
     it('should change the button when a dropdown item is selected', async () => {
         const onChange = jest.fn();
-
         render(<Default onChange={onChange} />);
 
         expect(onChange).toBeCalledTimes(1);
