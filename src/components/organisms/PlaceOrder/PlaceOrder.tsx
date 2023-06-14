@@ -1,16 +1,10 @@
 import { track } from '@amplitude/analytics-browser';
-import { Disclosure } from '@headlessui/react';
 import { OrderSide, WalletSource } from '@secured-finance/sf-client';
 import { formatDate, getUTCMonthYear } from '@secured-finance/sf-core';
 import { BigNumber } from 'ethers';
 import { useCallback, useReducer, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import {
-    ExpandIndicator,
-    Section,
-    SectionWithItems,
-    Spinner,
-} from 'src/components/atoms';
+import { Section, SectionWithItems, Spinner } from 'src/components/atoms';
 import {
     AmountCard,
     CollateralSimulationSection,
@@ -20,6 +14,7 @@ import {
     SuccessPanel,
 } from 'src/components/molecules';
 import { CollateralBook } from 'src/hooks';
+import useSF from 'src/hooks/useSecuredFinance';
 import { setLastMessage } from 'src/store/lastError';
 import { OrderType, PlaceOrderFunction } from 'src/types';
 import {
@@ -28,6 +23,7 @@ import {
     OrderProperties,
     handleContractTransaction,
     ordinaryFormat,
+    AddressUtils,
 } from 'src/utils';
 import { Amount, LoanValue, Maturity } from 'src/utils/entities';
 
@@ -120,7 +116,9 @@ export const PlaceOrder = ({
     assetPrice: number;
     walletSource: WalletSource;
 } & DialogState) => {
+    const securedFinance = useSF();
     const [state, dispatch] = useReducer(reducer, stateRecord[1]);
+    const [txHash, setTxHash] = useState<string | undefined>();
     const globalDispatch = useDispatch();
 
     const [errorMessage, setErrorMessage] = useState(
@@ -154,6 +152,7 @@ export const PlaceOrder = ({
                 if (!transactionStatus) {
                     dispatch({ type: 'error' });
                 } else {
+                    setTxHash(tx?.hash);
                     track(OrderEvents.ORDER_PLACED, {
                         [OrderProperties.ORDER_SIDE]:
                             side === OrderSide.BORROW ? 'Borrow' : 'Lend',
@@ -228,6 +227,7 @@ export const PlaceOrder = ({
         ]
     );
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const itemList: [string, string][] = loanValue
         ? [
               [
@@ -289,7 +289,7 @@ export const PlaceOrder = ({
                                 <SectionWithItems
                                     itemList={[['Borrow Fee %', '0.25 %']]}
                                 />
-                                <Disclosure>
+                                {/* <Disclosure>
                                     {({ open }) => (
                                         <>
                                             <Disclosure.Button className='flex h-6 flex-row items-center justify-between'>
@@ -307,7 +307,7 @@ export const PlaceOrder = ({
                                             </Disclosure.Panel>
                                         </>
                                     )}
-                                </Disclosure>
+                                </Disclosure> */}
                             </div>
                         );
                     case Step.orderProcessing:
@@ -321,7 +321,10 @@ export const PlaceOrder = ({
                             <SuccessPanel
                                 itemList={[
                                     ['Status', 'Complete'],
-                                    ['Deposit Address', 't1wtz1if6k24XE...'],
+                                    [
+                                        'Transaction hash',
+                                        AddressUtils.format(txHash ?? '', 8),
+                                    ],
                                     [
                                         'Amount',
                                         `${ordinaryFormat(orderAmount.value)} ${
@@ -329,6 +332,10 @@ export const PlaceOrder = ({
                                         }`,
                                     ],
                                 ]}
+                                txHash={txHash}
+                                network={
+                                    securedFinance?.config?.network ?? 'unknown'
+                                }
                             />
                         );
                     case Step.error:

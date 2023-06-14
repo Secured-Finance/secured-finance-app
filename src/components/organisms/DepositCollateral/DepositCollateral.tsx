@@ -10,6 +10,7 @@ import {
 } from 'src/components/molecules';
 import { CollateralInput } from 'src/components/organisms';
 import { useDepositCollateral } from 'src/hooks/useDepositCollateral';
+import useSF from 'src/hooks/useSecuredFinance';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { RootState } from 'src/store/types';
 import {
@@ -100,13 +101,14 @@ export const DepositCollateral = ({
 }: {
     collateralList: Partial<Record<CurrencySymbol, CollateralInfo>>;
 } & DialogState) => {
+    const securedFinance = useSF();
     const [asset, setAsset] = useState(CurrencySymbol.USDC);
     const [collateral, setCollateral] = useState(BigNumber.from(0));
-    const [depositAddress, setDepositAddress] = useState('');
     const [state, dispatch] = useReducer(reducer, stateRecord[1]);
     const [errorMessage, setErrorMessage] = useState(
         'Your deposit transaction has failed.'
     );
+    const [txHash, setTxHash] = useState<string | undefined>();
     const [collateralAmount, setCollateralAmount] = useState<
         number | undefined
     >();
@@ -148,7 +150,7 @@ export const DepositCollateral = ({
             if (!transactionStatus) {
                 dispatch({ type: 'error' });
             } else {
-                setDepositAddress(tx?.to ?? '');
+                setTxHash(tx?.hash);
                 trackCollateralEvent(
                     CollateralEvents.DEPOSIT_COLLATERAL,
                     asset,
@@ -239,11 +241,8 @@ export const DepositCollateral = ({
                                 itemList={[
                                     ['Status', 'Complete'],
                                     [
-                                        'Deposit Address',
-                                        AddressUtils.format(
-                                            depositAddress ?? '',
-                                            6
-                                        ),
+                                        'Transaction hash',
+                                        AddressUtils.format(txHash ?? '', 8),
                                     ],
                                     [
                                         'Amount',
@@ -252,6 +251,10 @@ export const DepositCollateral = ({
                                         ).toString(),
                                     ],
                                 ]}
+                                txHash={txHash}
+                                network={
+                                    securedFinance?.config?.network ?? 'unknown'
+                                }
                             />
                         );
                     case Step.error:
