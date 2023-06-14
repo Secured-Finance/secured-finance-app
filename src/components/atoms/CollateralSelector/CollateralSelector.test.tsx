@@ -1,5 +1,5 @@
 import { composeStories } from '@storybook/testing-react';
-import { fireEvent, render, screen } from 'src/test-utils.js';
+import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
 import * as stories from './CollateralSelector.stories';
 
 const { Default } = composeStories(stories);
@@ -17,10 +17,12 @@ describe('CollateralSelector component', () => {
         expect(screen.getByRole('button')).toBeInTheDocument();
     });
 
-    it('should render a dropdown', () => {
+    it('should render a dropdown', async () => {
         render(<Default />);
         fireEvent.click(screen.getByRole('button'));
-        expect(screen.getByRole('listbox')).toBeInTheDocument();
+        await waitFor(() => {
+            expect(screen.getByRole('listbox')).toBeInTheDocument();
+        });
     });
 
     it('should change the button when a dropdown item is selected', () => {
