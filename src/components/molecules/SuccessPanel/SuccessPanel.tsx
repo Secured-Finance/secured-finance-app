@@ -35,7 +35,7 @@ export const SuccessPanel = ({
                             <Tooltip
                                 iconElement={
                                     <button
-                                        className='cursor-pointer leading-6 text-neutral-8'
+                                        className='secondary cursor-pointer text-planetaryPurple underline'
                                         onClick={handleButtonClick}
                                     >
                                         {value}

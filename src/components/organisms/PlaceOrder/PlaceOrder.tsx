@@ -327,8 +327,8 @@ export const PlaceOrder = ({
                                 itemList={[
                                     ['Status', 'Complete'],
                                     [
-                                        'Transaction Hash',
-                                        AddressUtils.format(txHash ?? '', 16),
+                                        'Transaction hash',
+                                        AddressUtils.format(txHash ?? '', 8),
                                     ],
                                     [
                                         'Amount',

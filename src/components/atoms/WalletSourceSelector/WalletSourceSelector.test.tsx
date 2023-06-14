@@ -70,12 +70,14 @@ describe('WalletSourceSelector component', () => {
         });
     });
 
-    it('should not render options which have zero balance except metamask', () => {
+    it('should not render options which have zero balance except metamask', async () => {
         render(<Default optionList={walletSourceList} />);
         expect(screen.getByText('0xb98b...fd6d')).toBeInTheDocument();
         expect(screen.getByText('1,000 WBTC')).toBeInTheDocument();
 
         fireEvent.click(screen.getByTestId('wallet-source-selector-button'));
-        expect(screen.queryByTestId('option-1')).not.toBeInTheDocument();
+        await waitFor(() => {
+            expect(screen.queryByTestId('option-1')).not.toBeInTheDocument();
+        });
     });
 });
