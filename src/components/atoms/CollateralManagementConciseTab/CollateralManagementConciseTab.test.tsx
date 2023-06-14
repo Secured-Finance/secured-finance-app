@@ -41,9 +41,7 @@ describe('CollateralManagementConciseTab component', () => {
 
         render(<Default collateralCoverage={90} />);
         expect(screen.getByText('Threshold: 0%')).toBeInTheDocument();
-        expect(screen.getByText('Liquidated')).toBeInTheDocument();
-        expect(screen.getByText('Liquidated')).toHaveClass(
-            'text-progressBarEnd'
-        );
+        expect(screen.getByText('High')).toBeInTheDocument();
+        expect(screen.getByText('High')).toHaveClass('text-progressBarEnd');
     });
 });
