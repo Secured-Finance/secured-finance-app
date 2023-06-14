@@ -49,7 +49,7 @@ const computeTotalUsers = (users: string) => {
         getEnvironment().toLowerCase() === Environment.DEVELOPMENT
             ? +users
             : +users + PREVIOUS_TOTAL_USERS;
-    return ordinaryFormat(totalUsers ?? 0, 2, 'compact');
+    return ordinaryFormat(totalUsers ?? 0, 0, 2, 'compact');
 };
 
 export const MarketDashboard = () => {
@@ -92,6 +92,7 @@ export const MarketDashboard = () => {
         return ordinaryFormat(
             computeTotalDailyVolumeInUSD(dailyVolumes.data ?? [], priceList)
                 .totalVolumeUSD,
+            0,
             2,
             'compact'
         );

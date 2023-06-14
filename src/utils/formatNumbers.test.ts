@@ -64,11 +64,11 @@ describe('ordinaryFormat', () => {
     });
 
     it('should format a regular number with custom decimals and standard notation', () => {
-        expect(ordinaryFormat(1234.567, 3)).toEqual('1,234.567');
+        expect(ordinaryFormat(1234.567, 0, 3)).toEqual('1,234.567');
     });
 
     it('should format a regular number with custom decimals and compact notation', () => {
-        expect(ordinaryFormat(1234.567, 2, 'compact')).toEqual('1.23K');
+        expect(ordinaryFormat(1234.567, 0, 2, 'compact')).toEqual('1.23K');
     });
 
     it('should format a BigInt with default decimals and notation', () => {
@@ -79,6 +79,17 @@ describe('ordinaryFormat', () => {
 
     it('should format a BigNumber with default decimals and notation', () => {
         expect(ordinaryFormat(BigNumber.from(1234567))).toEqual('1,234,567');
+    });
+
+    it('should format a regular number with min and max decimals', () => {
+        expect(ordinaryFormat(1234.567, 0, 2)).toEqual('1,234.57');
+        expect(ordinaryFormat(1234.567, 0, 4)).toEqual('1,234.567');
+        expect(ordinaryFormat(1234.567, 4, 4)).toEqual('1,234.5670');
+        expect(ordinaryFormat(1234.567, 6, 6)).toEqual('1,234.567000');
+    });
+
+    it('should throw an error if the min decimals is greater than the max decimals', () => {
+        expect(() => ordinaryFormat(1234.567, 4, 2)).toThrow();
     });
 });
 

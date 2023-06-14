@@ -10,7 +10,7 @@ interface CollateralSelectorProps {
 }
 
 const formatOption = (availableAmount: number, name: string) => {
-    return `${ordinaryFormat(availableAmount, 4)} ${name} Available`;
+    return `${ordinaryFormat(availableAmount, 0, 4)} ${name} Available`;
 };
 
 export const CollateralSelector = ({
