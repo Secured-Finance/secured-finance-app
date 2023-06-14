@@ -104,7 +104,6 @@ export const DepositCollateral = ({
     const securedFinance = useSF();
     const [asset, setAsset] = useState(CurrencySymbol.USDC);
     const [collateral, setCollateral] = useState(BigNumber.from(0));
-    const [depositAddress, setDepositAddress] = useState('');
     const [state, dispatch] = useReducer(reducer, stateRecord[1]);
     const [errorMessage, setErrorMessage] = useState(
         'Your deposit transaction has failed.'
@@ -151,7 +150,6 @@ export const DepositCollateral = ({
             if (!transactionStatus) {
                 dispatch({ type: 'error' });
             } else {
-                setDepositAddress(tx?.to ?? '');
                 setTxHash(tx?.hash);
                 trackCollateralEvent(
                     CollateralEvents.DEPOSIT_COLLATERAL,
@@ -244,10 +242,7 @@ export const DepositCollateral = ({
                                     ['Status', 'Complete'],
                                     [
                                         'Deposit Address',
-                                        AddressUtils.format(
-                                            depositAddress ?? '',
-                                            6
-                                        ),
+                                        AddressUtils.format(txHash ?? '', 6),
                                     ],
                                     [
                                         'Amount',
