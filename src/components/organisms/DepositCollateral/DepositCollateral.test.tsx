@@ -71,7 +71,7 @@ describe('DepositCollateral component', () => {
             expect(screen.getByText('Status')).toBeInTheDocument();
             expect(screen.getByText('Complete')).toBeInTheDocument();
             expect(screen.getByText('Deposit Address')).toBeInTheDocument();
-            expect(screen.getByText('0xb98b...fd6d')).toBeInTheDocument();
+            expect(screen.getByText('0xb98b...65e4')).toBeInTheDocument();
             expect(screen.getByText('Amount')).toBeInTheDocument();
             expect(screen.getByText('37.5')).toBeInTheDocument();
 
