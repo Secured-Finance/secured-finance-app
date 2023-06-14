@@ -42,19 +42,22 @@ export const percentFormat = (
 
 export const ordinaryFormat = (
     number: number | bigint | BigNumber | FixedNumber,
-    decimals = 2,
+    minDecimals = 0,
+    maxDecimals = 2,
     notation: 'standard' | 'compact' = 'standard'
 ) => {
     if (number instanceof BigNumber) {
         return Intl.NumberFormat('en-US', {
-            maximumFractionDigits: decimals,
+            minimumFractionDigits: minDecimals,
+            maximumFractionDigits: maxDecimals,
             notation: notation,
         }).format(number.toBigInt());
     } else if (number instanceof FixedNumber) {
         return number.toString();
     } else {
         return Intl.NumberFormat('en-US', {
-            maximumFractionDigits: decimals,
+            minimumFractionDigits: minDecimals,
+            maximumFractionDigits: maxDecimals,
             notation: notation,
         }).format(number);
     }
@@ -65,7 +68,7 @@ export const formatWithCurrency = (
     currency: string,
     decimals = 2
 ) => {
-    return `${ordinaryFormat(number, decimals)} ${currency}`;
+    return `${ordinaryFormat(number, 0, decimals)} ${currency}`;
 };
 
 export const formatLoanValue = (value: LoanValue, type: 'price' | 'rate') => {
