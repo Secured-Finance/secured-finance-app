@@ -13,6 +13,7 @@
       "source.organizeImports": true
     }
   },
+  "prettier.prettierPath": "node_modules/prettier",
   "cSpell.words": [
     "attofil",
     "bignumber",
