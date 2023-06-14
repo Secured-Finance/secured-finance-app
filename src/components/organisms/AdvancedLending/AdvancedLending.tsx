@@ -1,7 +1,7 @@
 import { toBytes32 } from '@secured-finance/sf-graph-client';
 import queries from '@secured-finance/sf-graph-client/dist/graphclients/';
 import { BigNumber } from 'ethers';
-import { useCallback, useMemo, useEffect } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
     AdvancedLendingTopBar,
@@ -15,9 +15,8 @@ import {
     OrderWidget,
 } from 'src/components/organisms';
 import { TwoColumnsWithTopBar } from 'src/components/templates';
-import { CollateralBook, useGraphClientHook } from 'src/hooks';
+import { CollateralBook, useGraphClientHook, useOrderList } from 'src/hooks';
 import { useOrderbook } from 'src/hooks/useOrderbook';
-import { useOrderList } from 'src/hooks';
 import { getAssetPrice } from 'src/store/assetPrices/selectors';
 import {
     selectLandingOrderForm,
@@ -179,32 +178,19 @@ export const AdvancedLending = ({
         >
             <AdvancedLendingOrderCard collateralBook={collateralBook} />
             <div className='flex min-w-0 flex-grow flex-col gap-6'>
-                <Tab
-                    tabDataArray={[
-                        { text: 'Yield Curve' },
-                        { text: 'Price History', disabled: true },
-                    ]}
-                >
+                <Tab tabDataArray={[{ text: 'Yield Curve' }]}>
                     <LineChartTab
                         maturitiesOptionList={maturitiesOptionList}
                         rates={rates}
                     />
                     <div />
                 </Tab>
-                <HorizontalTab
-                    tabTitles={[
-                        'Order Book',
-                        'Market Trades',
-                        'My Orders',
-                        'My Trades',
-                    ]}
-                >
+                <HorizontalTab tabTitles={['Order Book', 'My Orders']}>
                     <OrderWidget
                         buyOrders={orderBook.borrowOrderbook}
                         sellOrders={orderBook.lendOrderbook}
                         currency={currency}
                     />
-                    <></>
                     <OrderTable data={orderList.activeOrderList} />
                 </HorizontalTab>
             </div>
