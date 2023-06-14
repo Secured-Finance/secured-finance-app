@@ -8,6 +8,7 @@ import {
     mar23Fixture,
     ethBytes32,
     efilBytes32,
+    wbtcBytes32,
 } from './fixtures';
 
 export const mockUseSF = () => {
@@ -299,12 +300,21 @@ export const mockUseSF = () => {
                         timestamp: BigNumber.from('1609295092'),
                     },
                     {
-                        orderId: 1,
+                        orderId: 3,
                         ccy: efilBytes32,
                         side: 1,
                         maturity: BigNumber.from(dec22Fixture.toString()),
                         unitPrice: BigNumber.from('9800'),
                         amount: BigNumber.from('100000000000000000000'),
+                        timestamp: BigNumber.from('1609295092'),
+                    },
+                    {
+                        orderId: 4,
+                        ccy: wbtcBytes32,
+                        side: 0,
+                        maturity: BigNumber.from(dec22Fixture.toString()),
+                        unitPrice: BigNumber.from('9800'),
+                        amount: BigNumber.from('500000000'),
                         timestamp: BigNumber.from('1609295092'),
                     },
                 ],
