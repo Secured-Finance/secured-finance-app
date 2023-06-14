@@ -32,7 +32,6 @@ import {
     AddressUtils,
 } from 'src/utils';
 import { Amount, LoanValue, Maturity } from 'src/utils/entities';
-import { useWallet } from 'use-wallet';
 
 enum Step {
     orderConfirm = 1,
@@ -124,7 +123,6 @@ export const PlaceOrder = ({
     walletSource: WalletSource;
 } & DialogState) => {
     const securedFinance = useSF();
-    const { account } = useWallet();
     const [state, dispatch] = useReducer(reducer, stateRecord[1]);
     const [txHash, setTxHash] = useState<string | undefined>();
     const globalDispatch = useDispatch();
@@ -329,8 +327,8 @@ export const PlaceOrder = ({
                                 itemList={[
                                     ['Status', 'Complete'],
                                     [
-                                        'Deposit Address',
-                                        AddressUtils.format(account ?? '', 16),
+                                        'Transaction Hash',
+                                        AddressUtils.format(txHash ?? '', 16),
                                     ],
                                     [
                                         'Amount',
