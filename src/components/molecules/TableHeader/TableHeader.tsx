@@ -44,7 +44,7 @@ export const TableHeader = ({
 };
 
 const Container = ({
-    align,
+    align = 'center',
     children,
 }: {
     align?: 'left' | 'center' | 'right';

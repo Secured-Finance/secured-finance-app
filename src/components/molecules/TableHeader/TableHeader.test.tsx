@@ -25,6 +25,13 @@ describe('TableHeader Component', () => {
         expect(screen.getByTestId('sorting-icons')).toBeInTheDocument();
     });
 
+    it('should center the text by default', () => {
+        render(<Default />);
+        expect(screen.getByTestId('table-header-wrapper')).toHaveClass(
+            'justify-center'
+        );
+    });
+
     it('should align the text to the right when align is right', () => {
         render(<Default align='right' />);
         expect(screen.getByTestId('table-header-wrapper')).toHaveClass(
