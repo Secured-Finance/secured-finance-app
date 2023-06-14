@@ -17,7 +17,7 @@ export * from './MyWalletCard';
 export * from './OrderTable';
 export * from './OrderAction';
 export * from './OrderHistoryTable';
-export * from './OrderWidget';
+export * from './OrderBookWidget';
 export * from './PlaceOrder';
 export * from './UnwindDialog';
 export * from './WalletDialog';
