@@ -1,11 +1,8 @@
 import { Popover, Transition } from '@headlessui/react';
 import { ClipboardDocumentIcon } from '@heroicons/react/24/outline';
 import { Fragment } from 'react';
-import Discord from 'src/assets/icons/discord.svg';
-import Medium from 'src/assets/icons/medium.svg';
-import SF from 'src/assets/icons/SF-KO.svg';
-import Twitter from 'src/assets/icons/twitter.svg';
 import { MenuItem, Separator } from 'src/components/atoms';
+import { LinkList } from 'src/utils';
 
 export const MenuPopover = ({}) => {
     return (
@@ -32,42 +29,25 @@ export const MenuPopover = ({}) => {
                                 <Popover.Panel className='absolute left-40 z-10 mt-2 w-80 -translate-x-1/2'>
                                     <div className='overflow-hidden rounded-lg shadow-sm'>
                                         <div className='relative flex flex-col space-y-2 border border-black bg-universeBlue p-2  shadow-dropdown'>
-                                            <MenuItem
-                                                text='Secured Finance Landing page'
-                                                icon={
-                                                    <SF className='h-6 w-6 rounded-full ' />
-                                                }
-                                                link='https://secured.finance/'
-                                                badge={<ExternalIcon />}
-                                            />
-                                            <Separator />
-                                            <MenuItem
-                                                text='Documentation'
-                                                icon={
-                                                    <Medium className='h-6 w-6 text-slateGray' />
-                                                }
-                                                link='https://blog.secured.finance/'
-                                                badge={<ExternalIcon />}
-                                            />
-                                            <Separator />
-                                            <MenuItem
-                                                text='Follow us on Twitter'
-                                                icon={
-                                                    <Twitter className='h-6 w-6 text-slateGray' />
-                                                }
-                                                link='https://twitter.com/Secured_Fi'
-                                                badge={<ExternalIcon />}
-                                            />
-
-                                            <Separator />
-                                            <MenuItem
-                                                text='Join us on Discord'
-                                                icon={
-                                                    <Discord className='h-6 w-6 text-slateGray' />
-                                                }
-                                                link='https://discord.com/invite/FqrdfQgmjT'
-                                                badge={<ExternalIcon />}
-                                            />
+                                            {LinkList.map((link, index) => {
+                                                return (
+                                                    <div key={index}>
+                                                        <MenuItem
+                                                            text={link.text}
+                                                            icon={link.icon}
+                                                            link={link.href}
+                                                            badge={
+                                                                <ExternalIcon />
+                                                            }
+                                                        />
+                                                        {index !==
+                                                            LinkList.length -
+                                                                1 && (
+                                                            <Separator />
+                                                        )}
+                                                    </div>
+                                                );
+                                            })}
                                         </div>
                                     </div>
                                 </Popover.Panel>
