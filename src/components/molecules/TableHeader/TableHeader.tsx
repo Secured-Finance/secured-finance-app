@@ -50,19 +50,16 @@ const Container = ({
     align?: 'left' | 'center' | 'right';
     children: React.ReactNode;
 }) => {
-    if (align) {
-        return (
-            <div
-                data-testid='table-header-wrapper'
-                className={classNames('flex', {
-                    'justify-start': align === 'left',
-                    'justify-center': align === 'center',
-                    'justify-end': align === 'right',
-                })}
-            >
-                {children}
-            </div>
-        );
-    }
-    return <>{children}</>;
+    return (
+        <div
+            data-testid='table-header-wrapper'
+            className={classNames('flex', {
+                'justify-start': align === 'left',
+                'justify-center': align === 'center',
+                'justify-end': align === 'right',
+            })}
+        >
+            {children}
+        </div>
+    );
 };

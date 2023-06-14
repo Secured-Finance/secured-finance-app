@@ -32,13 +32,6 @@ describe('TableHeader Component', () => {
         );
     });
 
-    it('should not wrap the component in a div when align is not provided', () => {
-        render(<Default />);
-        expect(
-            screen.queryByTestId('table-header-wrapper')
-        ).not.toBeInTheDocument();
-    });
-
     it('should display title hint on mouse enter as a tooltip', () => {
         render(<TitleHint />);
         const button = screen.getByRole('button');
