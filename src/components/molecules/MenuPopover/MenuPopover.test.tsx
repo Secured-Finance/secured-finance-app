@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from 'src/test-utils.js';
+import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
 
 import { composeStories } from '@storybook/testing-react';
 import * as stories from './MenuPopover.stories';
@@ -11,16 +11,23 @@ describe('MenuPopover component', () => {
         const button = screen.getByRole('button', { name: 'More...' });
         expect(button).toBeInTheDocument();
     });
-    it('should render when clicked on the More... button', () => {
+    it('should render when clicked on the More... button', async () => {
         render(<Default />);
+
         expect(screen.queryByText('Official Site')).toBeNull();
         expect(screen.queryByText('Documentation')).toBeNull();
         expect(screen.queryByText('Follow us on Twitter')).toBeNull();
         expect(screen.queryByText('Join us on Discord')).toBeNull();
         fireEvent.click(screen.getByRole('button'));
-        expect(screen.queryByText('Official Site')).toBeInTheDocument();
-        expect(screen.queryByText('Documentation')).toBeInTheDocument();
-        expect(screen.queryByText('Follow us on Twitter')).toBeInTheDocument();
-        expect(screen.queryByText('Join us on Discord')).toBeInTheDocument();
+        await waitFor(() => {
+            expect(screen.queryByText('Official Site')).toBeInTheDocument();
+            expect(screen.queryByText('Documentation')).toBeInTheDocument();
+            expect(
+                screen.queryByText('Follow us on Twitter')
+            ).toBeInTheDocument();
+            expect(
+                screen.queryByText('Join us on Discord')
+            ).toBeInTheDocument();
+        });
     });
 });

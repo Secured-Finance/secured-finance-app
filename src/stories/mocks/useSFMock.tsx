@@ -13,6 +13,9 @@ import {
 
 export const mockUseSF = () => {
     const mockSecuredFinance = {
+        config: {
+            network: 'sepolia',
+        },
         placeOrder: jest.fn(),
         placePreOrder: jest.fn(),
         getBorrowUnitPrices: jest.fn(() =>
@@ -152,6 +155,7 @@ export const mockUseSF = () => {
             Promise.resolve({
                 wait: jest.fn(() => Promise.resolve({ blockNumber: 123 })),
                 to: '0xb98bd7c7f656290071e52d1aa617d9cb4467fd6d',
+                hash: '0xb98bd7c7f656290hu071e52d1a56e6uyh98765e4',
             })
         ),
 
