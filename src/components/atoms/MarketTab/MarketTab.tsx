@@ -36,7 +36,9 @@ export const MarketTab = ({ name, value, source }: MarketTabProps) => {
                     'flex items-center'
                 )}
             >
-                {typeof value === 'number' ? ordinaryFormat(value, 4) : value}
+                {typeof value === 'number'
+                    ? ordinaryFormat(value, 0, 4)
+                    : value}
                 {source && (
                     <a
                         href={source}
