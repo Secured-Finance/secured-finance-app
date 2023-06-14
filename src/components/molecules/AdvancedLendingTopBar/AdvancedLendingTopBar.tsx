@@ -5,7 +5,7 @@ import { setCurrency } from 'src/store/landingOrderForm';
 import { IndexOf } from 'src/types';
 import { COIN_GECKO_SOURCE, CurrencySymbol, currencyMap } from 'src/utils';
 import { LoanValue } from 'src/utils/entities';
-import { formatLoanValue, formatTimestamp } from 'src/utils';
+import { formatLoanValue, formatTimestampWithMonth } from 'src/utils';
 
 type ValueField = number | string;
 type AdvancedLendingTopBarProp<T> = {
@@ -73,7 +73,7 @@ export const AdvancedLendingTopBar = <T extends string = string>({
                     />
                     {lastTradeTime !== 0 && (
                         <div className='typography-caption-2 whitespace-nowrap text-neutral-4'>
-                            {formatTimestamp(lastTradeTime)}
+                            {formatTimestampWithMonth(lastTradeTime)}
                         </div>
                     )}
                 </div>

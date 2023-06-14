@@ -2,6 +2,7 @@ import { BigNumber } from 'ethers';
 import {
     formatCollateralRatio,
     formatTimestamp,
+    formatTimestampWithMonth,
     formatWithCurrency,
     ordinaryFormat,
     usdFormat,
@@ -97,5 +98,15 @@ describe('formatTimestamp', () => {
         expect(formatTimestamp(0)).toEqual('1/1/1970 00:00:00');
         expect(formatTimestamp(86400)).toEqual('1/2/1970 00:00:00');
         expect(formatTimestamp(1671859344)).toEqual('12/24/2022 05:22:24');
+    });
+});
+
+describe('formatTimestampWithMonth', () => {
+    it('should format a timestamp in utc timezone with month details', () => {
+        expect(formatTimestampWithMonth(0)).toEqual('Jan 1, 1970 00:00:00');
+        expect(formatTimestampWithMonth(86400)).toEqual('Jan 2, 1970 00:00:00');
+        expect(formatTimestampWithMonth(1671859344)).toEqual(
+            'Dec 24, 2022 05:22:24'
+        );
     });
 });
