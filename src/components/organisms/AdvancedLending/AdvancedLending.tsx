@@ -11,8 +11,8 @@ import {
 import {
     AdvancedLendingOrderCard,
     LineChartTab,
+    OrderBookWidget,
     OrderTable,
-    OrderWidget,
 } from 'src/components/organisms';
 import { TwoColumnsWithTopBar } from 'src/components/templates';
 import { CollateralBook, useGraphClientHook, useOrderList } from 'src/hooks';
@@ -186,7 +186,7 @@ export const AdvancedLending = ({
                     <div />
                 </Tab>
                 <HorizontalTab tabTitles={['Order Book', 'My Orders']}>
-                    <OrderWidget
+                    <OrderBookWidget
                         buyOrders={orderBook.borrowOrderbook}
                         sellOrders={orderBook.lendOrderbook}
                         currency={currency}
