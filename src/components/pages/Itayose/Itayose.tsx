@@ -12,7 +12,7 @@ import {
 } from 'src/components/molecules';
 import {
     AdvancedLendingOrderCard,
-    OrderWidget,
+    OrderBookWidget,
 } from 'src/components/organisms';
 import { Page } from 'src/components/templates';
 import { TwoColumnsWithTopBar } from 'src/components/templates/TwoColumnsWithTopBar';
@@ -193,7 +193,7 @@ export const Itayose = () => {
                                 'My Trades',
                             ]}
                         >
-                            <OrderWidget
+                            <OrderBookWidget
                                 currency={currency}
                                 buyOrders={orderBook.borrowOrderbook}
                                 sellOrders={orderBook.lendOrderbook}
