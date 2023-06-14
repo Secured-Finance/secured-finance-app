@@ -56,19 +56,20 @@ describe('CollateralTabLeftPane component', () => {
     it('should prompt user to deposit collateral when wallet is connected', () => {
         render(<Default collateralBook={emptyCollateralBook} />);
         expect(screen.getByText('Collateral Balance')).toBeInTheDocument();
+        expect(screen.getByText('$0.00')).toBeInTheDocument();
         expect(
-            screen.getByText(
+            screen.getAllByText(
                 'Deposit collateral from your connected wallet to enable lending service on Secured Finance.'
-            )
+            )[0]
         ).toBeInTheDocument();
     });
 
     it('should render non-collateral asset if usdCollateral is zero and usdNonCollateral is not zero', () => {
         render(<Default collateralBook={emptyUSDCollateral} />);
         expect(
-            screen.getByText(
+            screen.getAllByText(
                 'Deposit collateral from your connected wallet to enable lending service on Secured Finance.'
-            )
+            )[0]
         ).toBeInTheDocument();
         expect(screen.getByText('Non-collateral Assets')).toBeInTheDocument();
     });
