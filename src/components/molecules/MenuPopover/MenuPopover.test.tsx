@@ -13,14 +13,12 @@ describe('MenuPopover component', () => {
     });
     it('should render when clicked on the More... button', () => {
         render(<Default />);
-        expect(screen.queryByText('Secured Finance Landing page')).toBeNull();
+        expect(screen.queryByText('Official Site')).toBeNull();
         expect(screen.queryByText('Documentation')).toBeNull();
         expect(screen.queryByText('Follow us on Twitter')).toBeNull();
         expect(screen.queryByText('Join us on Discord')).toBeNull();
         fireEvent.click(screen.getByRole('button'));
-        expect(
-            screen.queryByText('Secured Finance Landing page')
-        ).toBeInTheDocument();
+        expect(screen.queryByText('Official Site')).toBeInTheDocument();
         expect(screen.queryByText('Documentation')).toBeInTheDocument();
         expect(screen.queryByText('Follow us on Twitter')).toBeInTheDocument();
         expect(screen.queryByText('Join us on Discord')).toBeInTheDocument();
