@@ -21,11 +21,9 @@ export const StatsBar = ({
                 {values.map((item, index) => (
                     <div
                         key={`${testid}-table-${index}`}
-                        className={`${
-                            values.length - 1 !== index
-                                ? 'border-r border-white-10'
-                                : ''
-                        }`}
+                        className={
+                            'border-white-10 odd:border-r tablet:last:border-none tablet:even:border-r'
+                        }
                     >
                         <StatsBox
                             key={item.name}
