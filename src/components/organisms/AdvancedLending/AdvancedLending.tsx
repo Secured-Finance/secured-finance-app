@@ -49,10 +49,16 @@ const useTradeHistoryDetails = (
         let max = 0;
         let sum = BigNumber.from(0);
         let count = 0;
+        let lastTradePrice = 0;
+        let lastTradeTime = 0;
         for (const t of transactions) {
             const price = t.averagePrice * 10000;
             if (price < min) min = price;
             if (price > max) max = price;
+            if (t.createdAt > lastTradeTime) {
+                lastTradePrice = price;
+                lastTradeTime = t.createdAt;
+            }
             sum = sum.add(BigNumber.from(t.amount));
             count++;
         }
@@ -62,6 +68,11 @@ const useTradeHistoryDetails = (
             max: LoanValue.fromPrice(max, maturity.toNumber()),
             sum: currencyMap[currency].fromBaseUnit(sum),
             count,
+            lastTradeLoan: LoanValue.fromPrice(
+                lastTradePrice,
+                maturity.toNumber()
+            ),
+            lastTradeTime,
         };
     }, [currency, maturity, transactions]);
 };
@@ -166,6 +177,8 @@ export const AdvancedLending = ({
                     }}
                     onAssetChange={handleCurrencyChange}
                     onTermChange={handleTermChange}
+                    lastTradeLoan={tradeHistoryDetails.lastTradeLoan}
+                    lastTradeTime={tradeHistoryDetails.lastTradeTime}
                     values={[
                         formatLoanValue(tradeHistoryDetails.max, 'price'),
                         formatLoanValue(tradeHistoryDetails.min, 'price'),
