@@ -241,8 +241,8 @@ export const DepositCollateral = ({
                                 itemList={[
                                     ['Status', 'Complete'],
                                     [
-                                        'Deposit Address',
-                                        AddressUtils.format(txHash ?? '', 6),
+                                        'Transaction hash',
+                                        AddressUtils.format(txHash ?? '', 8),
                                     ],
                                     [
                                         'Amount',

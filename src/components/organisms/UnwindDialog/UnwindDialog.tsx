@@ -231,7 +231,7 @@ export const UnwindDialog = ({
                             ['Status', 'Complete'],
                             [
                                 'Transaction Hash',
-                                AddressUtils.format(txHash ?? '', 16),
+                                AddressUtils.format(txHash ?? '', 8),
                             ],
                         ]}
                         txHash={txHash}
