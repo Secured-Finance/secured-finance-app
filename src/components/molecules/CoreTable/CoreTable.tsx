@@ -69,7 +69,9 @@ export const CoreTable = <T,>({
 
     const coreTable = (
         <table
-            className='h-full w-full text-white'
+            className={classNames('h-full w-full', {
+                'table-fixed': !coreTableOptions.responsive,
+            })}
             data-testid={coreTableOptions.name}
         >
             <thead className='typography-caption-2 h-14 border-b border-white-10 px-6 py-4 text-slateGray'>
@@ -150,7 +152,7 @@ export const CoreTable = <T,>({
         return (
             <div
                 className={classNames({
-                    'overflow-x-auto tablet:overflow-hidden':
+                    'overflow-x-auto text-white tablet:overflow-hidden':
                         coreTableOptions.responsive,
                 })}
             >

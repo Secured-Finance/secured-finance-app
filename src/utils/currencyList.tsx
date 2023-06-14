@@ -50,6 +50,7 @@ export const currencyMap: Readonly<
         toCurrency: () => EFIL.onChain(),
         chartColor: tailwindConfig.theme.colors.chart.fil,
         pillColor: tailwindConfig.theme.colors.pill.fil,
+        roundingDecimal: 0,
     },
     [CurrencySymbol.ETH]: {
         index: 1,
@@ -65,6 +66,7 @@ export const currencyMap: Readonly<
         toCurrency: () => ETH,
         chartColor: tailwindConfig.theme.colors.chart.eth,
         pillColor: tailwindConfig.theme.colors.pill.eth,
+        roundingDecimal: 3,
     },
     [CurrencySymbol.USDC]: {
         index: 2,
@@ -80,6 +82,7 @@ export const currencyMap: Readonly<
         toCurrency: () => USDC.onChain(),
         chartColor: tailwindConfig.theme.colors.chart.usdc,
         pillColor: tailwindConfig.theme.colors.pill.usdc,
+        roundingDecimal: 0,
     },
     [CurrencySymbol.WBTC]: {
         index: 3,
@@ -95,6 +98,7 @@ export const currencyMap: Readonly<
         toCurrency: () => WBTC.onChain(),
         chartColor: tailwindConfig.theme.colors.chart.btc,
         pillColor: tailwindConfig.theme.colors.pill.btc,
+        roundingDecimal: 4,
     },
 };
 
@@ -144,6 +148,7 @@ export type CurrencyInfo = {
     toCurrency: () => CurrencyInterface;
     chartColor: string;
     pillColor: string;
+    roundingDecimal: number;
 };
 
 export const toCurrency = (ccy: CurrencySymbol) => {
