@@ -85,3 +85,16 @@ export const formatTimestamp = (timestamp: number) => {
         timeZone: 'UTC',
     })} ${date.toLocaleTimeString('en-GB', { timeZone: 'UTC' })}`;
 };
+
+export const formatTimestampWithMonth = (timestamp: number) => {
+    const date = new Date(timestamp * 1000);
+
+    const month = new Intl.DateTimeFormat('en-US', {
+        month: 'short',
+    }).format(date);
+    const day = date.getDate();
+    const year = date.getFullYear();
+    const time = date.toLocaleTimeString('en-GB', { timeZone: 'UTC' });
+
+    return `${month} ${day}, ${year} ${time}`;
+};
