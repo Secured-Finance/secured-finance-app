@@ -82,8 +82,6 @@ export const getLiquidationInformation = (liquidationPercentage: number) => {
         return { color: 'text-progressBarStart', risk: 'Low' };
     } else if (liquidationPercentage >= 40 && liquidationPercentage < 60) {
         return { color: 'text-progressBarVia', risk: 'Medium' };
-    } else if (liquidationPercentage >= 60 && liquidationPercentage < 80) {
-        return { color: 'text-progressBarEnd', risk: 'High' };
     }
-    return { color: 'text-progressBarEnd', risk: 'Liquidated' };
+    return { color: 'text-progressBarEnd', risk: 'High' };
 };
