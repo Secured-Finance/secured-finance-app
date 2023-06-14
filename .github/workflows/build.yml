@@ -6,6 +6,11 @@ on:
         required: true
         type: string
       environment_name:
+        required: true
+        type: string
+      ref:
+        description: 'The branch or tag ref to checkout. Default is the branch that triggered the workflow.'
+        default: ''
         required: false
         type: string
     secrets:
@@ -29,6 +34,7 @@ jobs:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
+          ref: ${{ inputs.ref }}
 
       - uses: actions/setup-node@v3
         with:

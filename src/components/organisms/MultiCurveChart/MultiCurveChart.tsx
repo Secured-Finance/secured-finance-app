@@ -1,5 +1,7 @@
 import {
+    ActiveElement,
     CategoryScale,
+    ChartEvent,
     Chart as ChartJS,
     ChartOptions,
     LinearScale,
@@ -54,6 +56,13 @@ export const options: ChartOptions<'line'> = {
             hoverBorderColor: '#FFFFFF',
             hoverBorderWidth: 1.5,
         },
+    },
+    onHover: (
+        _event: ChartEvent,
+        _elements: ActiveElement[],
+        chart: ChartJS<'line'>
+    ) => {
+        chart.canvas.style.cursor = 'pointer';
     },
     scales: {
         y: {
