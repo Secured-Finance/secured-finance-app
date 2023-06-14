@@ -1,17 +1,11 @@
-import { useCallback, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useCallback } from 'react';
 import { GradientBox, MarketTab, Option } from 'src/components/atoms';
 import { HorizontalAssetSelector } from 'src/components/molecules';
 import { setCurrency } from 'src/store/landingOrderForm';
-import { RootState } from 'src/store/types';
 import { IndexOf } from 'src/types';
-import {
-    COIN_GECKO_SOURCE,
-    CurrencySymbol,
-    currencyMap,
-    formatLoanValue,
-} from 'src/utils';
-import { LoanValue, Maturity } from 'src/utils/entities';
+import { COIN_GECKO_SOURCE, CurrencySymbol, currencyMap } from 'src/utils';
+import { LoanValue } from 'src/utils/entities';
+import { formatLoanValue, formatTimestampWithMonth } from 'src/utils';
 
 type ValueField = number | string;
 type AdvancedLendingTopBarProp<T> = {
@@ -21,6 +15,8 @@ type AdvancedLendingTopBarProp<T> = {
     selected: Option<T>;
     onAssetChange?: (v: CurrencySymbol) => void;
     onTermChange?: (v: T) => void;
+    lastTradeLoan: LoanValue;
+    lastTradeTime: number;
     values?: [ValueField, ValueField, ValueField, ValueField, ValueField];
 };
 
@@ -38,16 +34,12 @@ export const AdvancedLendingTopBar = <T extends string = string>({
     selected,
     onAssetChange,
     onTermChange,
+    lastTradeLoan,
+    lastTradeTime,
     values,
 }: AdvancedLendingTopBarProp<T>) => {
-    const [termValue, setTermValue] = useState(selected.value);
-    const midPrice = useSelector(
-        (state: RootState) => state.analytics.midPrice
-    );
-
     const handleTermChange = useCallback(
         (v: T) => {
-            setTermValue(v);
             onTermChange?.(v);
         },
         [onTermChange]
@@ -59,11 +51,6 @@ export const AdvancedLendingTopBar = <T extends string = string>({
             onAssetChange?.(v);
         },
         [onAssetChange]
-    );
-
-    const midLoanValue = LoanValue.fromPrice(
-        midPrice,
-        new Maturity(termValue).toNumber()
     );
 
     return (
@@ -81,9 +68,14 @@ export const AdvancedLendingTopBar = <T extends string = string>({
                 </div>
                 <div className='col-span-3 col-start-1 tablet:col-span-2 laptop:col-span-2 laptop:border-r laptop:border-white-10 laptop:pr-5'>
                     <MarketTab
-                        name={Number(formatLoanValue(midLoanValue, 'price'))}
-                        value={`${formatLoanValue(midLoanValue, 'rate')} APR`}
+                        name={Number(formatLoanValue(lastTradeLoan, 'price'))}
+                        value={`${formatLoanValue(lastTradeLoan, 'rate')} APR`}
                     />
+                    {lastTradeTime !== 0 && (
+                        <div className='typography-caption-2 whitespace-nowrap text-neutral-4'>
+                            {formatTimestampWithMonth(lastTradeTime)}
+                        </div>
+                    )}
                 </div>
                 <div className='border-r border-white-10 pr-5 tablet:col-start-4 tablet:row-start-1 laptop:col-start-auto laptop:row-start-auto laptop:px-5'>
                     <MarketTab name='24h High' value={getValue(values, 0)} />
