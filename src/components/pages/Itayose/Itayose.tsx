@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import {
     GradientBox,
     MarketTab,
@@ -95,7 +95,8 @@ export const Itayose = () => {
     );
 
     const lendingContracts = useSelector(
-        (state: RootState) => state.availableContracts.lendingMarkets[currency]
+        (state: RootState) => state.availableContracts.lendingMarkets[currency],
+        shallowEqual
     );
 
     const optionList = Object.entries(lendingContracts)

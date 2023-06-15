@@ -1,7 +1,7 @@
 import queries from '@secured-finance/sf-graph-client/dist/graphclients';
 import { BigNumber, utils } from 'ethers';
 import { useMemo } from 'react';
-import { useSelector } from 'react-redux';
+import { shallowEqual, useSelector } from 'react-redux';
 import {
     CollateralManagementConciseTab,
     GradientBox,
@@ -58,7 +58,8 @@ export const MarketDashboard = () => {
 
     const curves: Record<string, Rate[]> = {};
     const lendingContracts = useSelector(
-        (state: RootState) => state.availableContracts.lendingMarkets
+        (state: RootState) => state.availableContracts.lendingMarkets,
+        shallowEqual
     );
 
     getCurrencyMapAsList().forEach(ccy => {
