@@ -66,7 +66,7 @@ export const formatOrders = (orders: OrderList): TradeHistory => {
         amount: order.amount,
         side: order.side,
         orderPrice: order.unitPrice,
-        createdAt: order.timestamp,
+        createdAt: order.createdAt,
         currency: order.currency,
         maturity: order.maturity,
         forwardValue: calculateForwardValue(order.amount, order.unitPrice),

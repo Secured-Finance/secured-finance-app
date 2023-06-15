@@ -268,7 +268,7 @@ export const activeOrders: Order[] = [
         maturity: dec23Fixture.toString(),
         unitPrice: BigNumber.from('9800'),
         amount: BigNumber.from('1000000000000000000000'),
-        timestamp: BigNumber.from('1609292873'),
+        createdAt: BigNumber.from('1609299000'),
     },
     {
         orderId: BigNumber.from('2'),
@@ -277,7 +277,7 @@ export const activeOrders: Order[] = [
         maturity: mar23Fixture.toString(),
         unitPrice: BigNumber.from('9600'),
         amount: BigNumber.from('5000000000000000000000'),
-        timestamp: BigNumber.from('1609292092'),
+        createdAt: BigNumber.from('1609298000'),
     },
     {
         orderId: BigNumber.from('3'),
@@ -286,7 +286,7 @@ export const activeOrders: Order[] = [
         maturity: dec22Fixture.toString(),
         unitPrice: BigNumber.from('9800'),
         amount: BigNumber.from('1000000000'),
-        timestamp: BigNumber.from('1609297019'),
+        createdAt: BigNumber.from('1609297000'),
     },
     {
         orderId: BigNumber.from('4'),
@@ -295,16 +295,16 @@ export const activeOrders: Order[] = [
         maturity: mar23Fixture.toString(),
         unitPrice: BigNumber.from('9600'),
         amount: BigNumber.from('5000000000000000000000'),
-        timestamp: BigNumber.from('1609290981'),
+        createdAt: BigNumber.from('1609296000'),
     },
     {
-        orderId: BigNumber.from('1'),
+        orderId: BigNumber.from('5'),
         currency: ethBytes32,
         side: 0,
         maturity: dec23Fixture.toString(),
         unitPrice: BigNumber.from('9800'),
         amount: BigNumber.from('1000000000'),
-        timestamp: BigNumber.from('1609295092'),
+        createdAt: BigNumber.from('1609295000'),
     },
 ];
 
