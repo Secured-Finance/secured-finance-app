@@ -1,3 +1,4 @@
+import { userEvent } from '@storybook/testing-library';
 import { composeStories } from '@storybook/testing-react';
 import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
 import timemachine from 'timemachine';
@@ -86,5 +87,22 @@ describe('ActiveTradeTable Component', () => {
         waitFor(() => {
             expect(closeToMaturityRow).toHaveTextContent('1 Day');
         });
+    });
+    it('should show table hints', async () => {
+        render(<Default />);
+        const maturity = screen.getByText('Maturity');
+        expect(
+            screen.queryByText(
+                'Maturity of a loan contract is the date on which the contract is set to expire.'
+            )
+        ).not.toBeInTheDocument();
+        await waitFor(async () => {
+            await userEvent.hover(maturity);
+        });
+        expect(
+            screen.queryByText(
+                'Maturity of a loan contract is the date on which the contract is set to expire.'
+            )
+        ).toBeInTheDocument();
     });
 });

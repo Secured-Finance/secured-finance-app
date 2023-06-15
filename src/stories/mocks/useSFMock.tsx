@@ -13,6 +13,9 @@ import {
 
 export const mockUseSF = () => {
     const mockSecuredFinance = {
+        config: {
+            network: 'sepolia',
+        },
         placeOrder: jest.fn(),
         placePreOrder: jest.fn(),
         getBorrowUnitPrices: jest.fn(() =>
@@ -152,6 +155,7 @@ export const mockUseSF = () => {
             Promise.resolve({
                 wait: jest.fn(() => Promise.resolve({ blockNumber: 123 })),
                 to: '0xb98bd7c7f656290071e52d1aa617d9cb4467fd6d',
+                hash: '0xb98bd7c7f656290hu071e52d1a56e6uyh98765e4',
             })
         ),
 
@@ -288,7 +292,7 @@ export const mockUseSF = () => {
                         maturity: BigNumber.from(dec22Fixture.toString()),
                         unitPrice: BigNumber.from('9800'),
                         amount: BigNumber.from('1000000000000000000'),
-                        timestamp: BigNumber.from('1609295092'),
+                        timestamp: BigNumber.from('1609210000'),
                     },
                     {
                         orderId: 2,
@@ -297,7 +301,7 @@ export const mockUseSF = () => {
                         maturity: BigNumber.from(mar23Fixture.toString()),
                         unitPrice: BigNumber.from('9800'),
                         amount: BigNumber.from('100000000000000000'),
-                        timestamp: BigNumber.from('1609295092'),
+                        timestamp: BigNumber.from('1609220000'),
                     },
                     {
                         orderId: 3,
@@ -306,7 +310,7 @@ export const mockUseSF = () => {
                         maturity: BigNumber.from(dec22Fixture.toString()),
                         unitPrice: BigNumber.from('9800'),
                         amount: BigNumber.from('100000000000000000000'),
-                        timestamp: BigNumber.from('1609295092'),
+                        timestamp: BigNumber.from('1609205000'),
                     },
                     {
                         orderId: 4,
@@ -315,7 +319,7 @@ export const mockUseSF = () => {
                         maturity: BigNumber.from(dec22Fixture.toString()),
                         unitPrice: BigNumber.from('9800'),
                         amount: BigNumber.from('500000000'),
-                        timestamp: BigNumber.from('1609295092'),
+                        timestamp: BigNumber.from('1609212000'),
                     },
                 ],
                 inactiveOrders: [
@@ -339,6 +343,34 @@ export const mockUseSF = () => {
                     },
                 ],
             })
+        ),
+        getPositions: jest.fn(() =>
+            Promise.resolve([
+                {
+                    ccy: ethBytes32,
+                    maturity: dec22Fixture.toString(),
+                    presentValue: BigNumber.from('10000000000000000000'),
+                    futureValue: BigNumber.from('10210000000000000000'),
+                },
+                {
+                    ccy: ethBytes32,
+                    maturity: mar23Fixture.toString(),
+                    presentValue: BigNumber.from('-10000000000000000000'),
+                    futureValue: BigNumber.from('-10210000000000000000'),
+                },
+                {
+                    ccy: efilBytes32,
+                    maturity: dec22Fixture.toString(),
+                    presentValue: BigNumber.from('10000000000000000000'),
+                    futureValue: BigNumber.from('10210000000000000000'),
+                },
+                {
+                    ccy: efilBytes32,
+                    maturity: mar23Fixture.toString(),
+                    presentValue: BigNumber.from('-10000000000000000000'),
+                    futureValue: BigNumber.from('-10210000000000000000'),
+                },
+            ])
         ),
     };
 

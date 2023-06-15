@@ -152,7 +152,7 @@ export const CoreTable = <T,>({
         return (
             <div
                 className={classNames({
-                    'overflow-x-auto text-white tablet:overflow-hidden':
+                    'overflow-x-auto overflow-y-visible text-white laptop:overflow-visible':
                         coreTableOptions.responsive,
                 })}
             >

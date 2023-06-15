@@ -1,12 +1,10 @@
 import { BigNumber } from 'ethers';
 import { formatBytes32String } from 'ethers/lib/utils';
 import { AssetPriceMap } from 'src/store/assetPrices/selectors';
-import { aggregatedTrades, transactions } from 'src/stories/mocks/fixtures';
 import { TradeHistory } from 'src/types';
 import timemachine from 'timemachine';
 import { CurrencySymbol } from './currencyList';
 import {
-    aggregateTrades,
     computeNetValue,
     computeWeightedAverageRate,
     calculateForwardValue,
@@ -127,34 +125,7 @@ describe('computeNetValue', () => {
     });
 });
 
-describe('aggregateTrades', () => {
-    it('should aggregate trades', () => {
-        // Forward value is ignored in the comparison because I am not sure yet what we are getting for the Graph
-        expect(
-            aggregateTrades(transactions).map(
-                ({ amount, forwardValue, currency, maturity }) => ({
-                    amount,
-                    forwardValue,
-                    currency,
-                    maturity,
-                })
-            )
-        ).toEqual(
-            aggregatedTrades.map(
-                ({ amount, forwardValue, currency, maturity }) => ({
-                    amount,
-                    forwardValue,
-                    currency,
-                    maturity,
-                })
-            )
-        );
-    });
-
-    it('should return an empty array if no trades are provided', () => {
-        expect(aggregateTrades([])).toEqual([]);
-    });
-
+describe('formatOrders', () => {
     it('should return forward value', () => {
         expect(
             calculateForwardValue(BigNumber.from(900), BigNumber.from(9000))
@@ -174,7 +145,7 @@ describe('aggregateTrades', () => {
                 maturity: dec22Fixture.toString(),
                 unitPrice: BigNumber.from('9000'),
                 amount: BigNumber.from('900'),
-                timestamp: BigNumber.from('1609295092'),
+                createdAt: BigNumber.from('1609295092'),
             },
             {
                 orderId: BigNumber.from(2),
@@ -183,7 +154,7 @@ describe('aggregateTrades', () => {
                 maturity: dec22Fixture.toString(),
                 unitPrice: BigNumber.from('8000'),
                 amount: BigNumber.from('10000'),
-                timestamp: BigNumber.from('1609295092'),
+                createdAt: BigNumber.from('1609295092'),
             },
         ];
         const trades = [

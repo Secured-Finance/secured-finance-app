@@ -9,7 +9,7 @@ import WrappedBitcoinIcon from 'src/assets/coins/wbtc.svg';
 import SFLogoSmall from 'src/assets/img/logo-small.svg';
 import MetamaskIcon from 'src/assets/img/metamask-fox.svg';
 import { Option, WalletSourceOption } from 'src/components/atoms';
-import { CollateralBook, Order } from 'src/hooks';
+import { CollateralBook, Order, Position } from 'src/hooks';
 import { AssetPrices } from 'src/store/assetPrices';
 import { RootState } from 'src/store/types';
 import {
@@ -19,7 +19,7 @@ import {
     TradeHistory,
     Trades,
 } from 'src/types';
-import { CurrencySymbol, Rate, TradeSummary } from 'src/utils';
+import { CurrencySymbol, Rate } from 'src/utils';
 import { Maturity } from 'src/utils/entities';
 
 export const preloadedAssetPrices: { assetPrices: AssetPrices } = {
@@ -268,7 +268,7 @@ export const activeOrders: Order[] = [
         maturity: dec23Fixture.toString(),
         unitPrice: BigNumber.from('9800'),
         amount: BigNumber.from('1000000000000000000000'),
-        timestamp: BigNumber.from('1609292873'),
+        createdAt: BigNumber.from('1609299000'),
     },
     {
         orderId: BigNumber.from('2'),
@@ -277,7 +277,7 @@ export const activeOrders: Order[] = [
         maturity: mar23Fixture.toString(),
         unitPrice: BigNumber.from('9600'),
         amount: BigNumber.from('5000000000000000000000'),
-        timestamp: BigNumber.from('1609292092'),
+        createdAt: BigNumber.from('1609298000'),
     },
     {
         orderId: BigNumber.from('3'),
@@ -286,7 +286,7 @@ export const activeOrders: Order[] = [
         maturity: dec22Fixture.toString(),
         unitPrice: BigNumber.from('9800'),
         amount: BigNumber.from('1000000000'),
-        timestamp: BigNumber.from('1609297019'),
+        createdAt: BigNumber.from('1609297000'),
     },
     {
         orderId: BigNumber.from('4'),
@@ -295,16 +295,16 @@ export const activeOrders: Order[] = [
         maturity: mar23Fixture.toString(),
         unitPrice: BigNumber.from('9600'),
         amount: BigNumber.from('5000000000000000000000'),
-        timestamp: BigNumber.from('1609290981'),
+        createdAt: BigNumber.from('1609296000'),
     },
     {
-        orderId: BigNumber.from('1'),
+        orderId: BigNumber.from('5'),
         currency: ethBytes32,
         side: 0,
         maturity: dec23Fixture.toString(),
         unitPrice: BigNumber.from('9800'),
         amount: BigNumber.from('1000000000'),
-        timestamp: BigNumber.from('1609295092'),
+        createdAt: BigNumber.from('1609295000'),
     },
 ];
 
@@ -408,31 +408,27 @@ export const transactions: TradeHistory = [
     },
 ];
 
-export const aggregatedTrades: TradeSummary[] = [
+export const positions: Position[] = [
     {
         amount: BigNumber.from('500000000000000000000'),
         currency: efilBytes32,
         forwardValue: BigNumber.from('500000000000000000000'),
         maturity: jun23Fixture.toString(),
-        averagePrice: BigNumber.from(9671),
     },
     {
         amount: BigNumber.from('-500000000000000000000'),
         currency: efilBytes32,
         forwardValue: BigNumber.from('-520000000000000000000'),
         maturity: mar23Fixture.toString(),
-        averagePrice: BigNumber.from(9698),
     },
     {
         amount: BigNumber.from('-1000000000'),
-        averagePrice: BigNumber.from(9700),
         forwardValue: BigNumber.from('-1040000000'),
         currency: wbtcBytes32,
         maturity: jun23Fixture.toString(),
     },
     {
         amount: BigNumber.from('500000000'),
-        averagePrice: BigNumber.from(9800),
         forwardValue: BigNumber.from('505000000'),
         currency: wbtcBytes32,
         maturity: dec22Fixture.toString(),

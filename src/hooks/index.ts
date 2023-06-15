@@ -8,3 +8,4 @@ export * from './useMarketPhase';
 export * from './useOrders';
 export * from './useProtocolInformation';
 export * from './useOrderList';
+export * from './usePositions';

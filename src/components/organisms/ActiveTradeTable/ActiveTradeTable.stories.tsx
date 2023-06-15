@@ -5,7 +5,7 @@ import {
     withAssetPrice,
     withWalletProvider,
 } from 'src/../.storybook/decorators';
-import { aggregatedTrades, efilBytes32 } from 'src/stories/mocks/fixtures';
+import { positions, efilBytes32 } from 'src/stories/mocks/fixtures';
 import { Maturity } from 'src/utils/entities';
 import { ActiveTradeTable } from './ActiveTradeTable';
 
@@ -13,7 +13,7 @@ export default {
     title: 'Organism/ActiveTradeTable',
     component: ActiveTradeTable,
     args: {
-        data: aggregatedTrades,
+        data: positions,
     },
     parameters: {
         ...RESPONSIVE_PARAMETERS,
@@ -32,14 +32,12 @@ const Template: ComponentStory<typeof ActiveTradeTable> = args => {
             currency: efilBytes32,
             forwardValue: BigNumber.from('500000000000000000000'),
             maturity: new Maturity(getFutureTimeStamp(22)).toString(),
-            averagePrice: BigNumber.from(9671),
         },
         {
             amount: BigNumber.from('500000000000000000000'),
             currency: efilBytes32,
             forwardValue: BigNumber.from('500000000000000000000'),
             maturity: new Maturity(getFutureTimeStamp(28)).toString(),
-            averagePrice: BigNumber.from(9671),
         },
     ];
 

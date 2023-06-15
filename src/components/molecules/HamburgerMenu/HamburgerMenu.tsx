@@ -6,26 +6,8 @@ import React, { HTMLAttributes, LegacyRef } from 'react';
 import Burger from 'src/assets/img/burger.svg';
 import SFLogoSmall from 'src/assets/img/small-logo.svg';
 import { Closable } from 'src/components/templates';
+import { LinkList } from 'src/utils';
 import { UrlObject } from 'url';
-
-const EXTRA_LINKS = [
-    {
-        text: 'Landing Page',
-        href: 'https://secured.finance/',
-    },
-    {
-        text: 'Documentation',
-        href: 'https://blog.secured.finance/',
-    },
-    {
-        text: 'Follow us on Twitter',
-        href: 'https://twitter.com/Secured_Fi',
-    },
-    {
-        text: 'Join our Discord',
-        href: 'https://discord.com/invite/FqrdfQgmjT',
-    },
-];
 
 const NextLink = React.forwardRef(
     (
@@ -170,7 +152,7 @@ export const HamburgerMenu = ({
 
                                     {showMore && (
                                         <div className='w-full px-4'>
-                                            {EXTRA_LINKS.map(link => (
+                                            {LinkList.map(link => (
                                                 <MobileItemLink
                                                     key={link.text}
                                                     text={link.text}
