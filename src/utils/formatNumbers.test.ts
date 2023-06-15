@@ -105,10 +105,13 @@ describe('formatCollateralRatio', () => {
 });
 
 describe('formatTimestamp', () => {
-    it('should format a timestamp in utc timezone', () => {
-        expect(formatTimestamp(0)).toEqual('1/1/1970 00:00:00');
-        expect(formatTimestamp(86400)).toEqual('1/2/1970 00:00:00');
-        expect(formatTimestamp(1671859344)).toEqual('12/24/2022 05:22:24');
+    it('should format a timestamp in user timezone', () => {
+        jest.spyOn(window.navigator, 'language', 'get').mockReturnValue(
+            'en-GB'
+        );
+        expect(formatTimestamp(0)).toEqual('01/01/1970 05:30:00');
+        expect(formatTimestamp(86400)).toEqual('02/01/1970 05:30:00');
+        expect(formatTimestamp(1671859344)).toEqual('24/12/2022 10:52:24');
     });
 });
 
