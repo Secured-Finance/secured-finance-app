@@ -50,7 +50,10 @@ export const AssetDisclosure = ({
                             enterTo='transform scale-100 opacity-100'
                         >
                             <HeadlessDisclosure.Panel className='px-1 pt-2'>
-                                <CollateralInformationTable data={data} />
+                                <CollateralInformationTable
+                                    data={data}
+                                    assetTitle='Asset'
+                                />
                             </HeadlessDisclosure.Panel>
                         </Transition>
                     </div>
