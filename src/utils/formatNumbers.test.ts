@@ -109,14 +109,18 @@ describe('formatTimestamp', () => {
     for (let i = 0; i < timestamps.length; i++) {
         const timestamp = timestamps[i];
         it(`should format ${timestamp} in user timezone`, () => {
-            jest.spyOn(window.navigator, 'language', 'get').mockReturnValue(
-                'en-GB'
-            );
             const date = new Date(timestamp * 1000);
-            const day = date.toLocaleDateString(navigator.language);
-            const time = date.toLocaleTimeString(navigator.language);
-            const formattedTimestamp = formatTimestamp(timestamp);
-            expect(formattedTimestamp).toEqual(`${day} ${time}`);
+            const userTimezone =
+                Intl.DateTimeFormat().resolvedOptions().timeZone;
+            const formattedDate = new Intl.DateTimeFormat('en-US', {
+                timeZone: userTimezone,
+            }).format(date);
+            const time = date.toLocaleTimeString('en-GB', {
+                timeZone: userTimezone,
+            });
+            expect(formatTimestamp(timestamp)).toEqual(
+                `${formattedDate} ${time}`
+            );
         });
     }
 });
