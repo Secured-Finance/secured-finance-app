@@ -7,7 +7,7 @@ import { useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { CoreTable, TableActionMenu } from 'src/components/molecules';
 import { UnwindDialog } from 'src/components/organisms';
-import { useBreakpoint, Positions, Position } from 'src/hooks';
+import { useBreakpoint, Position } from 'src/hooks';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { setCurrency, setMaturity } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
@@ -22,7 +22,7 @@ import {
 
 const columnHelper = createColumnHelper<Position>();
 
-export const ActiveTradeTable = ({ data }: { data: Positions }) => {
+export const ActiveTradeTable = ({ data }: { data: Position[] }) => {
     const [unwindDialogData, setUnwindDialogData] = useState<{
         maturity: Maturity;
         amount: Amount;

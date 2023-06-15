@@ -13,8 +13,6 @@ export type Position = {
     forwardValue: BigNumber;
 };
 
-export type Positions = Array<Position>;
-
 export const usePositions = (account: string | null) => {
     const securedFinance = useSF();
 
@@ -22,7 +20,7 @@ export const usePositions = (account: string | null) => {
         (state: RootState) => state.blockchain.latestBlock
     );
 
-    const [positions, setPositions] = useState<Positions>([]);
+    const [positions, setPositions] = useState<Array<Position>>([]);
 
     const fetchPositions = useCallback(async () => {
         if (!securedFinance || !account) {
