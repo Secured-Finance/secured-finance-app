@@ -137,6 +137,7 @@ export const CollateralTabLeftPane = ({
                                                 ),
                                         };
                                     })}
+                                    assetTitle='Collateral Asset'
                                 />
                             ) : (
                                 <div className='flex w-full flex-col gap-2 rounded-b bg-black-20'>
@@ -162,6 +163,7 @@ export const CollateralTabLeftPane = ({
                                                 ),
                                         };
                                     })}
+                                    assetTitle='Non-Collateral Asset'
                                 />
                             )}
                         </div>
