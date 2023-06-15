@@ -36,7 +36,7 @@ export const StatsBox = ({ name, value }: StatsBoxProps) => {
                     />
                 ) : (
                     <span
-                        className='typography-body-1 h-8 w-full text-center text-white'
+                        className='typography-body-1-bold h-8 w-full text-center text-white'
                         data-testid='portfolio-tab-value'
                     >
                         {value}

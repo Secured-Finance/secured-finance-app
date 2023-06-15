@@ -53,7 +53,7 @@ const MobileItemLink = ({ text, href }: { text: string; href: string }) => {
             {({ active }) => (
                 <a
                     className={classNames(
-                        'flex h-16 w-full flex-row items-center justify-start gap-3 whitespace-nowrap p-4 text-center',
+                        'flex w-full flex-row items-center justify-start whitespace-nowrap px-4 text-center',
                         {
                             'rounded-2xl bg-[#233447] text-neutral-8': active,
                         }
@@ -62,15 +62,12 @@ const MobileItemLink = ({ text, href }: { text: string; href: string }) => {
                     target='_blank'
                     rel='noreferrer'
                 >
-                    <p>{text}</p>
+                    <p className='typography-nav-sub-menu p-4'>{text}</p>
                     <ArrowUpIcon
-                        className={classNames(
-                            'mt-1 h-4 w-4 rotate-45 text-white',
-                            {
-                                inline: active,
-                                hidden: !active,
-                            }
-                        )}
+                        className={classNames('h-3 w-3 rotate-45 text-white', {
+                            inline: active,
+                            hidden: !active,
+                        })}
                     />
                 </a>
             )}

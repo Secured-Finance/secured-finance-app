@@ -28,6 +28,10 @@ export default {
     },
     parameters: {
         ...RESPONSIVE_PARAMETERS,
+        viewport: {
+            ...RESPONSIVE_PARAMETERS.viewport,
+            defaultViewport: 'mobile',
+        },
         chromatic: {
             viewports: [VIEWPORTS.MOBILE, VIEWPORTS.TABLET],
             delay: 1000,

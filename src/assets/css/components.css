@@ -47,6 +47,9 @@
     .typography-nav-menu-default {
       @apply text-sm font-secondary leading-4 font-normal;
     }
+    .typography-nav-sub-menu {
+      @apply text-base font-secondary leading-6 font-normal laptop:text-xs laptop:leading-4;
+    }
     .typography-pill-label {
       @apply text-2xs font-secondary leading-4 font-semibold uppercase;
     }
