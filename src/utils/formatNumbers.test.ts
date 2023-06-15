@@ -112,15 +112,12 @@ describe('formatTimestamp', () => {
             const date = new Date(timestamp * 1000);
             const userTimezone =
                 Intl.DateTimeFormat().resolvedOptions().timeZone;
-            const formattedDate = new Intl.DateTimeFormat('en-US', {
+            const formattedDate = new Intl.DateTimeFormat(undefined, {
                 timeZone: userTimezone,
+                dateStyle: 'short',
+                timeStyle: 'short',
             }).format(date);
-            const time = date.toLocaleTimeString('en-GB', {
-                timeZone: userTimezone,
-            });
-            expect(formatTimestamp(timestamp)).toEqual(
-                `${formattedDate} ${time}`
-            );
+            expect(formatTimestamp(timestamp)).toEqual(formattedDate);
         });
     }
 });
