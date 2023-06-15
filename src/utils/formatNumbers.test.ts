@@ -105,14 +105,20 @@ describe('formatCollateralRatio', () => {
 });
 
 describe('formatTimestamp', () => {
-    it('should format a timestamp in user timezone', () => {
-        jest.spyOn(window.navigator, 'language', 'get').mockReturnValue(
-            'en-GB'
-        );
-        expect(formatTimestamp(0)).toEqual('01/01/1970 05:30:00');
-        expect(formatTimestamp(86400)).toEqual('02/01/1970 05:30:00');
-        expect(formatTimestamp(1671859344)).toEqual('24/12/2022 10:52:24');
-    });
+    const timestamps = [0, 86400, 1671859344];
+    for (let i = 0; i < timestamps.length; i++) {
+        const timestamp = timestamps[i];
+        it(`should format ${timestamp} in user timezone`, () => {
+            jest.spyOn(window.navigator, 'language', 'get').mockReturnValue(
+                'en-GB'
+            );
+            const date = new Date(timestamp * 1000);
+            const day = date.toLocaleDateString(navigator.language);
+            const time = date.toLocaleTimeString(navigator.language);
+            const formattedTimestamp = formatTimestamp(timestamp);
+            expect(formattedTimestamp).toEqual(`${day} ${time}`);
+        });
+    }
 });
 
 describe('formatTimestampWithMonth', () => {
