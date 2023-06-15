@@ -15,8 +15,8 @@ import {
 import { mockTrades } from 'src/stories/mocks/queries';
 import { Rate } from 'src/utils';
 import { LoanValue } from 'src/utils/entities';
-import { AdvancedLending } from './AdvancedLending';
 import timemachine from 'timemachine';
+import { AdvancedLending } from './AdvancedLending';
 
 export default {
     title: 'Organism/AdvancedLending',
@@ -32,6 +32,10 @@ export default {
             mocks: [...mockTrades],
         },
         ...RESPONSIVE_PARAMETERS,
+        chromatic: {
+            ...RESPONSIVE_PARAMETERS.chromatic,
+            delay: 3000,
+        },
     },
     decorators: [withFullPage, withAssetPrice, withWalletProvider],
 } as ComponentMeta<typeof AdvancedLending>;
