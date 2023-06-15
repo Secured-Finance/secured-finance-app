@@ -73,6 +73,7 @@ describe('CollateralTabLeftPane component', () => {
             )[0]
         ).toBeInTheDocument();
         expect(screen.getByText('Non-collateral Assets')).toBeInTheDocument();
+    });
 
     it('should change font size as collateral increases', async () => {
         render(
