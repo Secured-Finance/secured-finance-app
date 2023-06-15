@@ -191,32 +191,19 @@ export const AdvancedLending = ({
         >
             <AdvancedLendingOrderCard collateralBook={collateralBook} />
             <div className='flex min-w-0 flex-grow flex-col gap-6'>
-                <Tab
-                    tabDataArray={[
-                        { text: 'Yield Curve' },
-                        { text: 'Price History', disabled: true },
-                    ]}
-                >
+                <Tab tabDataArray={[{ text: 'Yield Curve' }]}>
                     <LineChartTab
                         maturitiesOptionList={maturitiesOptionList}
                         rates={rates}
                     />
                     <div />
                 </Tab>
-                <HorizontalTab
-                    tabTitles={[
-                        'Order Book',
-                        'Market Trades',
-                        'My Orders',
-                        'My Trades',
-                    ]}
-                >
+                <HorizontalTab tabTitles={['Order Book', 'My Orders']}>
                     <OrderBookWidget
                         buyOrders={orderBook.borrowOrderbook}
                         sellOrders={orderBook.lendOrderbook}
                         currency={currency}
                     />
-                    <></>
                     <OrderTable data={orderList.activeOrderList} />
                 </HorizontalTab>
             </div>
