@@ -9,7 +9,7 @@ import WrappedBitcoinIcon from 'src/assets/coins/wbtc.svg';
 import SFLogoSmall from 'src/assets/img/logo-small.svg';
 import MetamaskIcon from 'src/assets/img/metamask-fox.svg';
 import { Option, WalletSourceOption } from 'src/components/atoms';
-import { CollateralBook, Order, Positions } from 'src/hooks';
+import { CollateralBook, Order, Position } from 'src/hooks';
 import { AssetPrices } from 'src/store/assetPrices';
 import { RootState } from 'src/store/types';
 import {
@@ -408,7 +408,7 @@ export const transactions: TradeHistory = [
     },
 ];
 
-export const positions: Positions = [
+export const positions: Position[] = [
     {
         amount: BigNumber.from('500000000000000000000'),
         currency: efilBytes32,

@@ -6,8 +6,8 @@ import { ethBytes32, efilBytes32 } from 'src/stories/mocks/fixtures';
 const mock = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mock);
 
-describe('useOrderList', () => {
-    it('should return an array of activeOrders and inactiveOrders', async () => {
+describe('usePositions', () => {
+    it('should return an array of positions', async () => {
         const { result, waitForNextUpdate } = renderHook(() =>
             usePositions('0x1')
         );
