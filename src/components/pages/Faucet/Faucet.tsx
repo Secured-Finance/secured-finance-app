@@ -56,7 +56,7 @@ const MenuAddToken = ({
                             )}
                         >
                             <ClipboardDocumentIcon className='h-6 w-6 text-planetaryPurple' />
-                            <div>Copy Contract ID</div>
+                            <div>Add Token to Wallet</div>
                         </button>
                     )}
                 </Menu.Item>

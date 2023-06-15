@@ -1,4 +1,4 @@
-import { PencilIcon, TrashIcon } from '@heroicons/react/24/outline';
+import { TrashIcon } from '@heroicons/react/24/outline';
 import { BigNumber } from 'ethers';
 import { useOrders } from 'src/hooks';
 import { CurrencySymbol } from 'src/utils';
@@ -17,7 +17,6 @@ export const OpenOrderActionCell = ({
 
     return (
         <div className='flex flex-row justify-center gap-3 text-planetaryPurple'>
-            <PencilIcon className='h-4' />
             <button onClick={() => cancelOrder(orderId, ccy, maturity)}>
                 <TrashIcon className='h-4' />
             </button>
