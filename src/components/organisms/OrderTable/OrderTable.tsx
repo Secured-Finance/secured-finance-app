@@ -48,7 +48,7 @@ export const OrderTable = ({ data }: { data: Order[] }) => {
             ),
             dateAndTimeColumnDefinition(
                 columnHelper,
-                'Date and Time',
+                'Order Time',
                 'createdAt',
                 row => row.createdAt
             ),
