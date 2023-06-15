@@ -69,7 +69,7 @@ export const CoreTable = <T,>({
 
     const coreTable = (
         <table
-            className={classNames('h-full w-full', {
+            className={classNames('h-full w-full overflow-visible', {
                 'table-fixed': !coreTableOptions.responsive,
             })}
             data-testid={coreTableOptions.name}
