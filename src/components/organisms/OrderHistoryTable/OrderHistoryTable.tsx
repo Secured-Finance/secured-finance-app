@@ -57,6 +57,7 @@ export const OrderHistoryTable = ({ data }: { data: OrderList }) => {
         <CoreTable
             columns={isTablet ? columnsForTabletMobile : columns}
             data={data}
+            options={{ stickyColumns: new Set([0, 1]) }}
         />
     );
 };

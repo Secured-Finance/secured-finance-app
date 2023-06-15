@@ -174,7 +174,10 @@ export const ActiveTradeTable = ({ data }: { data: TradeSummary[] }) => {
             <CoreTable
                 data={data}
                 columns={isTablet ? columnsForTabletMobile : columns}
-                options={{ name: 'active-trade-table' }}
+                options={{
+                    name: 'active-trade-table',
+                    stickyColumns: new Set<number>([6]),
+                }}
             />
             <div className='typography-dropdown-selection-label mt-16 w-full rounded-xl bg-cardBackground/60 text-justify text-secondary7 '>
                 <p className='p-3'>
