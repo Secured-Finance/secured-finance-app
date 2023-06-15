@@ -9,6 +9,7 @@ import {
     contractColumnDefinition,
     loanTypeColumnDefinition,
     priceYieldColumnDefinition,
+    dateAndTimeColumnDefinition,
 } from 'src/utils/tableDefinitions';
 
 const columnHelper = createColumnHelper<Order>();
@@ -44,6 +45,12 @@ export const OrderTable = ({ data }: { data: Order[] }) => {
                 'amount',
                 row => row.amount,
                 { compact: true, color: false }
+            ),
+            dateAndTimeColumnDefinition(
+                columnHelper,
+                'Date and Time',
+                'createdAt',
+                row => row.createdAt
             ),
             columnHelper.display({
                 id: 'actions',

@@ -13,7 +13,7 @@ export type Order = {
     side: number;
     unitPrice: BigNumber;
     amount: BigNumber;
-    timestamp: BigNumber;
+    createdAt: BigNumber;
 };
 
 export type OrderList = Array<Order>;
@@ -21,6 +21,10 @@ export type OrderList = Array<Order>;
 const emptyOrderList = {
     activeOrderList: [],
     inactiveOrderList: [],
+};
+
+const sortOrders = (a: Order, b: Order) => {
+    return Number(b.createdAt.sub(a.createdAt));
 };
 
 export const useOrderList = (account: string | null) => {
@@ -53,25 +57,29 @@ export const useOrderList = (account: string | null) => {
         const { activeOrders, inactiveOrders } =
             await securedFinance.getOrderList(account, convertedCurrencies);
 
-        const activeOrderList = activeOrders.map(order => ({
-            orderId: BigNumber.from(order.orderId),
-            currency: order.ccy,
-            maturity: order.maturity.toString(),
-            side: order.side,
-            unitPrice: order.unitPrice,
-            amount: order.amount,
-            timestamp: order.timestamp,
-        }));
+        const activeOrderList = activeOrders
+            .map(order => ({
+                orderId: BigNumber.from(order.orderId),
+                currency: order.ccy,
+                maturity: order.maturity.toString(),
+                side: order.side,
+                unitPrice: order.unitPrice,
+                amount: order.amount,
+                createdAt: order.timestamp,
+            }))
+            .sort((a, b) => sortOrders(a, b));
 
-        const inactiveOrderList = inactiveOrders.map(order => ({
-            orderId: BigNumber.from(order.orderId),
-            currency: order.ccy,
-            maturity: order.maturity.toString(),
-            side: order.side,
-            unitPrice: order.unitPrice,
-            amount: order.amount,
-            timestamp: order.timestamp,
-        }));
+        const inactiveOrderList = inactiveOrders
+            .map(order => ({
+                orderId: BigNumber.from(order.orderId),
+                currency: order.ccy,
+                maturity: order.maturity.toString(),
+                side: order.side,
+                unitPrice: order.unitPrice,
+                amount: order.amount,
+                createdAt: order.timestamp,
+            }))
+            .sort((a, b) => sortOrders(a, b));
 
         setOrderList({
             activeOrderList,
