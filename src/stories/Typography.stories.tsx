@@ -13,26 +13,27 @@ export const Typography: Story = () => (
         <div className='border-b'>Class Name:</div>
         <div className='border-b'>Usage</div>
 
-        <div>Hero</div>
-        <div className='typography-hero'>Hero</div>
-
-        <div>Headline 1</div>
-        <div className='typography-headline-1'>Headline 1</div>
-
-        <div>Headline 2</div>
-        <div className='typography-headline-2'>Headline 2</div>
-
-        <div>Headline 3</div>
-        <div className='typography-headline-3'>Headline 3</div>
+        <div>Module Number Large</div>
+        <div className='typography-module-number-large'>
+            Module Number Large
+        </div>
 
         <div>Big Body Bold</div>
         <div className='typography-big-body-bold'>Big Body Bold</div>
+
+        <div>Big Body Light</div>
+        <div className='typography-big-body-light'>Big Body Bold</div>
 
         <div>Modal Title</div>
         <div className='typography-modal-title'>Modal Title</div>
 
         <div>Body 1</div>
         <div className='typography-body-1'>
+            Body text large for big paragraphs
+        </div>
+
+        <div>Body 1 (Bold)</div>
+        <div className='typography-body-1-bold'>
             Body text large for big paragraphs
         </div>
 

@@ -20,7 +20,7 @@ export const AmountCard = ({
                 </span>
             </div>
             <div className='flex h-6 flex-row items-center justify-end gap-2'>
-                <span className='typography-body-1 font-bold text-white'>
+                <span className='typography-body-1-bold text-white'>
                     {ordinaryFormat(amount.value)}
                 </span>
                 <span className='typography-caption h-5 text-white-60'>

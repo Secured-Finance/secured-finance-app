@@ -2,7 +2,7 @@ import { BigNumber } from 'ethers';
 import { useCallback } from 'react';
 import { FontSize, InputBase } from 'src/components/atoms';
 import { PercentageSelector } from 'src/components/molecules';
-import { amountFormatterToBase, CurrencySymbol, usdFormat } from 'src/utils';
+import { CurrencySymbol, amountFormatterToBase, usdFormat } from 'src/utils';
 
 interface CollateralInputProps {
     price: number;
@@ -67,7 +67,7 @@ export const CollateralInput = ({
             <div className='flex h-full flex-1 flex-col items-center gap-1'>
                 <InputBase
                     value={amount}
-                    className='typography-headline-4 h-14 w-full text-center text-neutral-8'
+                    className='typography-module-number-large h-14 w-full text-center text-neutral-8'
                     onValueChange={handleAmountChange}
                     fontSize={fontSize}
                 />

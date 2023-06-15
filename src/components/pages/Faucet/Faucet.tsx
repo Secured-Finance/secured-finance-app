@@ -170,7 +170,7 @@ export const Faucet = () => {
             <TwoColumns>
                 <GradientBox>
                     <div className='grid grid-cols-1 gap-12 px-5 pb-4 desktop:px-[70px]'>
-                        <h1 className='typography-headline-4 py-8 text-center text-2xl font-bold text-white'>
+                        <h1 className='typography-module-number-large py-8 text-center text-2xl font-bold text-white'>
                             Test Token Faucet
                         </h1>
                         <div className='flex flex-col gap-10'>

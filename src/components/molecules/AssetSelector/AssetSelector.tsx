@@ -99,7 +99,7 @@ export const AssetSelector = <AssetType extends string = string>({
                     onChange={handleAssetChange}
                 />
                 <InputBase
-                    className='typography-body-1 h-8 w-20 rounded-lg text-right font-bold text-white'
+                    className='typography-body-1-bold h-8 w-20 rounded-lg text-right text-white'
                     onValueChange={handleAmountChange}
                     value={amount}
                     data-cy='asset-selector-input'

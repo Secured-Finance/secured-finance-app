@@ -56,12 +56,12 @@ module.exports = {
         },
 
         fontSize: {
-            '5xl': ['86px', { lineHeight: '96px', letterSpacing: '-0.02em' }],
             '4xl': ['54px', { lineHeight: '64px', letterSpacing: '-0.02em' }],
             '3xl': ['42px', { lineHeight: '52px', letterSpacing: '-0.02em' }],
             '2xl': ['36px', { lineHeight: '42px', letterSpacing: '-0.02em' }],
             xl: ['32px', { lineHeight: '40px', letterSpacing: '-0.01em' }],
             lg: ['28px', { lineHeight: '36px', letterSpacing: '-0.01em' }],
+            xmd: ['26px', { lineHeight: '32px', letterSpacing: '-0.01em' }],
             md: ['24px', { lineHeight: '32px', letterSpacing: '-0.01em' }],
             smd: ['20px', { lineHeight: '25px' }],
             base: '16px',
