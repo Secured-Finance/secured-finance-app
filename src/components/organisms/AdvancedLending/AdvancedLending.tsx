@@ -1,7 +1,7 @@
 import { toBytes32 } from '@secured-finance/sf-graph-client';
 import queries from '@secured-finance/sf-graph-client/dist/graphclients/';
 import { BigNumber } from 'ethers';
-import { useCallback, useEffect, useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
     AdvancedLendingTopBar,
@@ -74,7 +74,8 @@ const useTradeHistoryDetails = (
             ),
             lastTradeTime,
         };
-    }, [currency, maturity, transactions]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [currency, maturity.toNumber(), transactions.length]);
 };
 
 export const AdvancedLending = ({
@@ -97,9 +98,13 @@ export const AdvancedLending = ({
     );
 
     const { account } = useWallet();
-
-    const assetList = useMemo(() => getCurrencyMapAsOptions(), []);
     const dispatch = useDispatch();
+    const assetList = useMemo(() => getCurrencyMapAsOptions(), []);
+
+    const [timestamp, setTimestamp] = useState<number>(1643713200);
+    useEffect(() => {
+        setTimestamp(Math.round(new Date().getTime() / 1000));
+    }, []);
 
     const selectedTerm = useMemo(() => {
         return (
@@ -112,24 +117,20 @@ export const AdvancedLending = ({
     const orderBook = useOrderbook(currency, selectedTerm.value, 10);
     const orderList = useOrderList(account);
 
-    const ts = Math.round(new Date().getTime() / 1000);
-    const tsYesterday = ts - 24 * 3600;
-
-    const last24hoursTrades =
-        useGraphClientHook(
-            {
-                currency: toBytes32(currency),
-                maturity: maturity.toNumber(),
-                from: tsYesterday,
-                to: ts,
-            },
-            queries.TradesDocument,
-            'transactions',
-            false
-        ).data ?? [];
+    const last24hoursTrades = useGraphClientHook(
+        {
+            currency: toBytes32(currency),
+            maturity: maturity.toNumber(),
+            from: timestamp - 24 * 3600,
+            to: timestamp,
+        },
+        queries.TradesDocument,
+        'transactions',
+        false
+    ).data;
 
     const tradeHistoryDetails = useTradeHistoryDetails(
-        last24hoursTrades,
+        last24hoursTrades ?? [],
         currency,
         selectedTerm.value
     );
