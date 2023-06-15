@@ -61,7 +61,11 @@ describe('CoreTable Component', () => {
     });
 
     it('should have a sticky column and background-color if responsive is true', () => {
-        render(<Default options={{ responsive: true }} />);
+        render(
+            <Default
+                options={{ responsive: true, stickyColumns: new Set([5]) }}
+            />
+        );
         const header = screen.getAllByTestId('core-table-header-cell')[5];
         expect(header).toHaveClass('sticky');
         expect(header).toHaveClass('bg-black-20/100');
