@@ -145,7 +145,7 @@ describe('formatOrders', () => {
                 maturity: dec22Fixture.toString(),
                 unitPrice: BigNumber.from('9000'),
                 amount: BigNumber.from('900'),
-                timestamp: BigNumber.from('1609295092'),
+                createdAt: BigNumber.from('1609295092'),
             },
             {
                 orderId: BigNumber.from(2),
@@ -154,7 +154,7 @@ describe('formatOrders', () => {
                 maturity: dec22Fixture.toString(),
                 unitPrice: BigNumber.from('8000'),
                 amount: BigNumber.from('10000'),
-                timestamp: BigNumber.from('1609295092'),
+                createdAt: BigNumber.from('1609295092'),
             },
         ];
         const trades = [
