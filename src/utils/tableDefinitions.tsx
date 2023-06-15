@@ -12,6 +12,7 @@ import { AssetPriceMap } from 'src/store/assetPrices/selectors';
 import { ColorFormat } from 'src/types';
 import { currencyMap, hexToCurrencySymbol } from './currencyList';
 import { LoanValue, Maturity } from './entities';
+import { formatTimestamp } from 'src/utils';
 
 export const tableHeaderDefinition =
     <TData,>(title: string, titleHint?: string) =>
@@ -210,6 +211,26 @@ export const priceYieldColumnDefinition = <T extends { maturity: string }>(
                         compact={variant === 'compact'}
                         firstLineType={type}
                     />
+                </div>
+            );
+        },
+        header: tableHeaderDefinition(title, titleHint),
+    });
+};
+
+export const dateAndTimeColumnDefinition = <T extends { createdAt: BigNumber }>(
+    columnHelper: ColumnHelper<T>,
+    title: string,
+    id: string,
+    accessor: AccessorFn<T, BigNumber>,
+    titleHint?: string
+) => {
+    return columnHelper.accessor(accessor, {
+        id: id,
+        cell: info => {
+            return (
+                <div className='typography-caption text-slateGray'>
+                    {formatTimestamp(+info.getValue().toString())}
                 </div>
             );
         },

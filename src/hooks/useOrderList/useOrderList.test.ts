@@ -11,7 +11,7 @@ const mock = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mock);
 
 describe('useOrderList', () => {
-    it('should return an array of activeOrders and inactiveOrders', async () => {
+    it('should return a sorted array of activeOrders and inactiveOrders', async () => {
         const { result, waitForNextUpdate } = renderHook(() =>
             useOrderList('0x1')
         );
@@ -25,9 +25,9 @@ describe('useOrderList', () => {
 
         expect(result.current.activeOrderList.length).toBe(4);
         expect(result.current.activeOrderList[0].currency).toBe(ethBytes32);
-        expect(result.current.activeOrderList[1].currency).toBe(ethBytes32);
-        expect(result.current.activeOrderList[2].currency).toBe(efilBytes32);
-        expect(result.current.activeOrderList[3].currency).toBe(wbtcBytes32);
+        expect(result.current.activeOrderList[1].currency).toBe(wbtcBytes32);
+        expect(result.current.activeOrderList[2].currency).toBe(ethBytes32);
+        expect(result.current.activeOrderList[3].currency).toBe(efilBytes32);
 
         expect(result.current.inactiveOrderList.length).toBe(2);
         expect(result.current.inactiveOrderList[0].currency).toBe(ethBytes32);

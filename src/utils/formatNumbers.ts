@@ -84,9 +84,10 @@ export function formatCollateralRatio(collateral: number) {
 }
 export const formatTimestamp = (timestamp: number) => {
     const date = new Date(timestamp * 1000);
-    return `${date.toLocaleDateString('en-US', {
-        timeZone: 'UTC',
-    })} ${date.toLocaleTimeString('en-GB', { timeZone: 'UTC' })}`;
+    return new Intl.DateTimeFormat(undefined, {
+        dateStyle: 'short',
+        timeStyle: 'short',
+    }).format(date);
 };
 
 export const formatTimestampWithMonth = (timestamp: number) => {

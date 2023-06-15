@@ -63,6 +63,7 @@ export const CollateralTabLeftPane = ({
                         Collateral Balance
                     </span>
                     <span
+                        data-testid='collateral-balance'
                         className={classNames(
                             'w-fit font-secondary font-semibold text-white',
                             {

@@ -6,7 +6,7 @@ import { useRouter } from 'next/router';
 import React, { Fragment, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import MetamaskLogo from 'src/assets/img/metamask-fox.svg';
-import { ExpandIndicator, Separator, Toggle } from 'src/components/atoms';
+import { ExpandIndicator, Separator } from 'src/components/atoms';
 import { CACHED_PROVIDER_KEY } from 'src/contexts/SecuredFinanceProvider/SecuredFinanceProvider';
 import { RootState } from 'src/store/types';
 import { isEthereumWalletConnected, resetEthWallet } from 'src/store/wallet';
@@ -146,13 +146,6 @@ export const WalletPopover = ({
                                                 <ArrowLeftOnRectangleIcon className='h-5 w-5 text-slateGray' />
                                             }
                                         />
-                                        <Separator />
-                                        <p className='flex flex-row items-center justify-between rounded-md p-2 transition duration-150 ease-in-out hover:bg-horizonBlue'>
-                                            <span className=''>Dark Mode</span>
-                                            <span>
-                                                <Toggle disabled />
-                                            </span>
-                                        </p>
                                     </div>
                                 </div>
                             </Popover.Panel>

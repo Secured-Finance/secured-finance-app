@@ -50,46 +50,6 @@ export type TradeSummary = {
     averagePrice: BigNumber;
 };
 
-export const aggregateTrades = (trades: TradeHistory): TradeSummary[] => {
-    const tradeMap: Map<string, TradeSummary> = new Map();
-
-    for (const trade of trades) {
-        const key = trade.currency + trade.maturity.toString();
-        let summary = tradeMap.get(key);
-        if (!summary) {
-            summary = {
-                currency: trade.currency,
-                maturity: trade.maturity,
-                amount: BigNumber.from(0),
-                forwardValue: BigNumber.from(0),
-                averagePrice: BigNumber.from(0),
-            };
-            tradeMap.set(key, summary);
-        }
-
-        // 1 = borrow, 0 = lend
-        summary.amount = summary.amount.add(
-            BigNumber.from(trade.amount).mul(trade.side === 1 ? -1 : 1)
-        );
-        summary.averagePrice = summary.averagePrice.add(
-            BigNumber.from(trade.orderPrice)
-                .mul(trade.side === 1 ? -1 : 1)
-                .mul(trade.amount)
-        );
-        summary.forwardValue = summary.forwardValue.add(
-            BigNumber.from(trade.forwardValue).mul(trade.side === 1 ? -1 : 1)
-        );
-    }
-
-    return Array.from(tradeMap.values()).map(summary => ({
-        ...summary,
-        forwardValue: BigNumber.from(summary.forwardValue),
-        averagePrice: !summary.amount.isZero
-            ? summary.averagePrice.div(summary.amount)
-            : BigNumber.from(0),
-    }));
-};
-
 export const calculateForwardValue = (
     amount: BigNumber,
     unitPrice: BigNumber
@@ -106,7 +66,7 @@ export const formatOrders = (orders: OrderList): TradeHistory => {
         amount: order.amount,
         side: order.side,
         orderPrice: order.unitPrice,
-        createdAt: order.timestamp,
+        createdAt: order.createdAt,
         currency: order.currency,
         maturity: order.maturity,
         forwardValue: calculateForwardValue(order.amount, order.unitPrice),

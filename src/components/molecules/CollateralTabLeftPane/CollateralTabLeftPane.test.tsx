@@ -2,6 +2,7 @@ import { composeStories } from '@storybook/testing-react';
 import {
     emptyCollateralBook,
     emptyUSDCollateral,
+    collateralBook80,
 } from 'src/stories/mocks/fixtures';
 import { fireEvent, render, screen } from 'src/test-utils.js';
 import * as stories from './CollateralTabLeftPane.stories';
@@ -72,5 +73,40 @@ describe('CollateralTabLeftPane component', () => {
             )[0]
         ).toBeInTheDocument();
         expect(screen.getByText('Non-collateral Assets')).toBeInTheDocument();
+
+    it('should change font size as collateral increases', async () => {
+        render(
+            <Default
+                collateralBook={{ ...collateralBook80, usdCollateral: 210.2 }}
+            />
+        );
+        const input = screen.getByTestId('collateral-balance');
+        expect(input).toHaveClass('text-xl');
+    });
+
+    it('should change font size as collateral increases', async () => {
+        render(
+            <Default
+                collateralBook={{
+                    ...collateralBook80,
+                    usdCollateral: 100000.2,
+                }}
+            />
+        );
+        const input = screen.getByTestId('collateral-balance');
+        expect(input).toHaveClass('text-xl tablet:text-md');
+    });
+
+    it('should change font size as collateral increases', async () => {
+        render(
+            <Default
+                collateralBook={{
+                    ...collateralBook80,
+                    usdCollateral: 210000000.2,
+                }}
+            />
+        );
+        const input = screen.getByTestId('collateral-balance');
+        expect(input).toHaveClass('text-md tablet:text-smd');
     });
 });

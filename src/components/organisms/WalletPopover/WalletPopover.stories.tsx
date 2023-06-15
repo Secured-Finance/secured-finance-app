@@ -11,7 +11,6 @@ export default {
         wallet: '0x0123...321',
         networkName: 'Sepolia',
         status: 'connected',
-        // children: 'Connect Wallet',
     },
     argTypes: {
         wallet: { control: 'text' },
