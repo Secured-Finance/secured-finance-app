@@ -60,3 +60,9 @@ DisplayMyTransactions.play = async ({ canvasElement }) => {
     const myTransactionsTab = canvas.getByTestId('My Transactions');
     myTransactionsTab.click();
 };
+
+export const ActivePosition = Template.bind({});
+ActivePosition.play = async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    canvas.getByTestId('Active Positions').click();
+};
