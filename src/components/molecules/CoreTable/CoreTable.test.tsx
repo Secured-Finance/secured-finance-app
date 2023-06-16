@@ -2,7 +2,7 @@ import { composeStories } from '@storybook/testing-react';
 import { fireEvent, render, screen } from 'src/test-utils.js';
 import * as stories from './CoreTable.stories';
 
-const { Default, WithHiddenColumn } = composeStories(stories);
+const { Default, WithHiddenColumn, NonResponsive } = composeStories(stories);
 
 describe('CoreTable Component', () => {
     it('should render a CoreTable', () => {
@@ -60,9 +60,21 @@ describe('CoreTable Component', () => {
         expect(header).toHaveTextContent('name');
     });
 
-    it('should have a sticky column if responsive is true', () => {
-        render(<Default options={{ responsive: true }} />);
-        const header = screen.getAllByTestId('core-table-header-cell')[0];
+    it('should have a sticky column and background-color if responsive is true', () => {
+        render(
+            <Default
+                options={{ responsive: true, stickyColumns: new Set([5]) }}
+            />
+        );
+        const header = screen.getAllByTestId('core-table-header-cell')[5];
         expect(header).toHaveClass('sticky');
+        expect(header).toHaveClass('bg-gunMetal/100');
+    });
+
+    it('should have not a sticky column if responsive is true', () => {
+        render(<NonResponsive />);
+        const header = screen.getAllByTestId('core-table-header-cell')[5];
+        expect(header).not.toHaveClass('sticky');
+        expect(header).not.toHaveClass('bg-gunMetal/100');
     });
 });

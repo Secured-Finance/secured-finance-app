@@ -85,14 +85,16 @@ export const CollateralTabLeftPane = ({
                         Connect your wallet to see your deposited collateral
                         balance.
                     </div>
-                ) : collateralBalance > 0 ? (
+                ) : (
                     <div>
                         <div className='mx-5 my-6 hidden flex-col gap-6 tablet:flex'>
-                            <AssetInformation
-                                header='Collateral Assets'
-                                informationText={getInformationText()}
-                                collateralBook={collateralBook.collateral}
-                            ></AssetInformation>
+                            {collateralBalance > 0 && (
+                                <AssetInformation
+                                    header='Collateral Assets'
+                                    informationText={getInformationText()}
+                                    collateralBook={collateralBook.collateral}
+                                ></AssetInformation>
+                            )}
                             {nonCollateralBalance > 0 && (
                                 <AssetInformation
                                     header='Non-collateral Assets'
@@ -101,6 +103,13 @@ export const CollateralTabLeftPane = ({
                                         collateralBook.nonCollateral
                                     }
                                 ></AssetInformation>
+                            )}
+                            {collateralBalance === 0 && (
+                                <div className='typography-caption w-40 text-grayScale'>
+                                    Deposit collateral from your connected
+                                    wallet to enable lending service on Secured
+                                    Finance.
+                                </div>
                             )}
                         </div>
                         <div className='mx-3 mt-6 flex flex-col gap-3 tablet:hidden'>
@@ -115,27 +124,60 @@ export const CollateralTabLeftPane = ({
                                     collateralBook.collateralThreshold
                                 }
                             />
-                            <CollateralInformationTable
-                                data={(
-                                    Object.entries(
-                                        collateralBook.collateral
-                                    ) as [CurrencySymbol, BigNumber][]
-                                ).map(([asset, quantity]) => {
-                                    return {
-                                        asset: asset,
-                                        quantity:
-                                            amountFormatterFromBase[asset](
-                                                quantity
-                                            ),
-                                    };
-                                })}
-                            />
+                            {collateralBalance > 0 && (
+                                <CollateralInformationTable
+                                    data={(
+                                        Object.entries(
+                                            collateralBook.collateral
+                                        ) as [CurrencySymbol, BigNumber][]
+                                    )
+                                        .filter(
+                                            ([_asset, quantity]) =>
+                                                !quantity.isZero()
+                                        )
+                                        .map(([asset, quantity]) => {
+                                            return {
+                                                asset: asset,
+                                                quantity:
+                                                    amountFormatterFromBase[
+                                                        asset
+                                                    ](quantity),
+                                            };
+                                        })}
+                                    assetTitle='Collateral Asset'
+                                />
+                            )}
+                            {nonCollateralBalance > 0 && (
+                                <CollateralInformationTable
+                                    data={(
+                                        Object.entries(
+                                            collateralBook.nonCollateral
+                                        ) as [CurrencySymbol, BigNumber][]
+                                    )
+                                        .filter(
+                                            ([_asset, quantity]) =>
+                                                !quantity.isZero()
+                                        )
+                                        .map(([asset, quantity]) => {
+                                            return {
+                                                asset: asset,
+                                                quantity:
+                                                    amountFormatterFromBase[
+                                                        asset
+                                                    ](quantity),
+                                            };
+                                        })}
+                                    assetTitle='Non-Collateral Asset'
+                                />
+                            )}
+                            {collateralBalance === 0 && (
+                                <div className='typography-caption gap-2 text-grayScale'>
+                                    Deposit collateral from your connected
+                                    wallet to enable lending service on Secured
+                                    Finance.
+                                </div>
+                            )}
                         </div>
-                    </div>
-                ) : (
-                    <div className='typography-caption ml-5 w-40 text-grayScale'>
-                        Deposit collateral from your connected wallet to enable
-                        lending service on Secured Finance.
                     </div>
                 )}
             </div>
