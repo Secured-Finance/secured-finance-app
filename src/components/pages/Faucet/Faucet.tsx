@@ -56,7 +56,7 @@ const MenuAddToken = ({
                             )}
                         >
                             <ClipboardDocumentIcon className='h-6 w-6 text-planetaryPurple' />
-                            <div>Copy Contract ID</div>
+                            <div>Add Token to Wallet</div>
                         </button>
                     )}
                 </Menu.Item>
@@ -83,6 +83,7 @@ const MenuAddToken = ({
     );
 };
 export const Faucet = () => {
+    const securedFinance = useSF();
     const { account, ethereum } = useWallet();
     const sf = useSF();
 
@@ -98,6 +99,7 @@ export const Faucet = () => {
     const [address, setAddress] = useState<string>('');
     const [isPending, setIsPending] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
+    const [txHash, setTxHash] = useState<string | undefined>();
 
     const token = useMemo(() => {
         if (!ccy) return null;
@@ -119,6 +121,7 @@ export const Faucet = () => {
             if (!transactionStatus) {
                 console.error('Some error occurred');
             } else {
+                setTxHash(tx?.to);
                 track('Mint Tokens', {
                     'Asset Type': token.symbol,
                 });
@@ -340,6 +343,8 @@ export const Faucet = () => {
                             AddressUtils.format(account ?? '', 16),
                         ],
                     ]}
+                    txHash={txHash}
+                    network={securedFinance?.config?.network ?? 'unknown'}
                 />
             </Dialog>
         </Page>

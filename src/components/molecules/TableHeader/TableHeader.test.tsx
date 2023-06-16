@@ -25,6 +25,13 @@ describe('TableHeader Component', () => {
         expect(screen.getByTestId('sorting-icons')).toBeInTheDocument();
     });
 
+    it('should center the text by default', () => {
+        render(<Default />);
+        expect(screen.getByTestId('table-header-wrapper')).toHaveClass(
+            'justify-center'
+        );
+    });
+
     it('should align the text to the right when align is right', () => {
         render(<Default align='right' />);
         expect(screen.getByTestId('table-header-wrapper')).toHaveClass(
@@ -32,19 +39,13 @@ describe('TableHeader Component', () => {
         );
     });
 
-    it('should not wrap the component in a div when align is not provided', () => {
-        render(<Default />);
-        expect(
-            screen.queryByTestId('table-header-wrapper')
-        ).not.toBeInTheDocument();
-    });
-
-    it('should display title hint on mouse enter', () => {
+    it('should display title hint on mouse enter as a tooltip', () => {
         render(<TitleHint />);
         const button = screen.getByRole('button');
         fireEvent.mouseEnter(button);
 
         expect(screen.getByText('This is a title hint.')).toBeInTheDocument();
+        expect(screen.getByRole('tooltip')).toBeInTheDocument();
     });
 
     it('should not display title hint on mouse out', () => {
@@ -56,5 +57,6 @@ describe('TableHeader Component', () => {
         expect(
             screen.queryByText('This is a title hint.')
         ).not.toBeInTheDocument();
+        expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
     });
 });

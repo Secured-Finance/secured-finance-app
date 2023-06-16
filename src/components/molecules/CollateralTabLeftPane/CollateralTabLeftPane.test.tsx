@@ -1,5 +1,8 @@
 import { composeStories } from '@storybook/testing-react';
-import { emptyCollateralBook } from 'src/stories/mocks/fixtures';
+import {
+    collateralBook80,
+    emptyCollateralBook,
+} from 'src/stories/mocks/fixtures';
 import { fireEvent, render, screen } from 'src/test-utils.js';
 import * as stories from './CollateralTabLeftPane.stories';
 
@@ -58,5 +61,41 @@ describe('CollateralTabLeftPane component', () => {
         render(<Default onClick={onClick} />);
         fireEvent.click(screen.getByTestId('withdraw-collateral'));
         expect(onClick).toHaveBeenCalledWith('withdraw');
+    });
+
+    it('should change font size as collateral increases', async () => {
+        render(
+            <Default
+                collateralBook={{ ...collateralBook80, usdCollateral: 210.2 }}
+            />
+        );
+        const input = screen.getByTestId('collateral-balance');
+        expect(input).toHaveClass('text-xl');
+    });
+
+    it('should change font size as collateral increases', async () => {
+        render(
+            <Default
+                collateralBook={{
+                    ...collateralBook80,
+                    usdCollateral: 100000.2,
+                }}
+            />
+        );
+        const input = screen.getByTestId('collateral-balance');
+        expect(input).toHaveClass('text-xl tablet:text-md');
+    });
+
+    it('should change font size as collateral increases', async () => {
+        render(
+            <Default
+                collateralBook={{
+                    ...collateralBook80,
+                    usdCollateral: 210000000.2,
+                }}
+            />
+        );
+        const input = screen.getByTestId('collateral-balance');
+        expect(input).toHaveClass('text-md tablet:text-smd');
     });
 });

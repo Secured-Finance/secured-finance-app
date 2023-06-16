@@ -1,8 +1,11 @@
 import { RESPONSIVE_PARAMETERS } from '.storybook/constants';
-import { withMidPrice } from '.storybook/decorators';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { currencyList, maturityOptions } from 'src/stories/mocks/fixtures';
 import { AdvancedLendingTopBar } from '.';
+import { LoanValue } from 'src/utils/entities';
+
+const lastTradePrice = 8000;
+
 export default {
     title: 'Molecules/AdvancedLendingTopBar',
     component: AdvancedLendingTopBar,
@@ -17,8 +20,12 @@ export default {
             label: maturityOptions[0].label,
             value: maturityOptions[0].value.toString(),
         },
+        lastTradeLoan: LoanValue.fromPrice(
+            lastTradePrice,
+            maturityOptions[0].value.toNumber()
+        ),
+        lastTradeTime: 1643713200,
     },
-    decorators: [withMidPrice],
     parameters: {
         ...RESPONSIVE_PARAMETERS,
     },

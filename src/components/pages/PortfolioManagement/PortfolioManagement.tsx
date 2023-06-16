@@ -17,12 +17,11 @@ import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { RootState } from 'src/store/types';
 import {
     WalletSource,
-    aggregateTrades,
     computeNetValue,
     usdFormat,
     formatOrders,
 } from 'src/utils';
-import { useCollateralBook, useOrderList } from 'src/hooks';
+import { useCollateralBook, useOrderList, usePositions } from 'src/hooks';
 import { useWallet } from 'use-wallet';
 import { TradeHistory } from 'src/types';
 
@@ -36,6 +35,7 @@ export const PortfolioManagement = () => {
         'user'
     );
     const orderList = useOrderList(account);
+    const positions = usePositions(account);
 
     const tradesFromCon = formatOrders(orderList.inactiveOrderList);
     const tradeFromSub = userHistory.data?.transactions ?? [];
@@ -96,9 +96,7 @@ export const PortfolioManagement = () => {
                                 'My Transactions',
                             ]}
                         >
-                            <ActiveTradeTable
-                                data={aggregateTrades(tradeHistory)}
-                            />
+                            <ActiveTradeTable data={positions} />
                             <OrderTable data={orderList.activeOrderList} />
                             <OrderHistoryTable data={orderHistory} />
                             <MyTransactionsTable data={tradeHistory} />

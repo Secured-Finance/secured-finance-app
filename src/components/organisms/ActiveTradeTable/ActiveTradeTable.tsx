@@ -7,23 +7,22 @@ import { useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { CoreTable, TableActionMenu } from 'src/components/molecules';
 import { UnwindDialog } from 'src/components/organisms';
-import { useBreakpoint } from 'src/hooks';
+import { useBreakpoint, Position } from 'src/hooks';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { setCurrency, setMaturity } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
-import { TradeSummary, hexToCurrencySymbol } from 'src/utils';
+import { hexToCurrencySymbol } from 'src/utils';
 import { Amount, Maturity } from 'src/utils/entities';
 import {
     amountColumnDefinition,
     contractColumnDefinition,
     loanTypeFromAmountColumnDefinition,
-    priceYieldColumnDefinition,
     tableHeaderDefinition,
 } from 'src/utils/tableDefinitions';
 
-const columnHelper = createColumnHelper<TradeSummary>();
+const columnHelper = createColumnHelper<Position>();
 
-export const ActiveTradeTable = ({ data }: { data: TradeSummary[] }) => {
+export const ActiveTradeTable = ({ data }: { data: Position[] }) => {
     const [unwindDialogData, setUnwindDialogData] = useState<{
         maturity: Maturity;
         amount: Amount;
@@ -85,21 +84,21 @@ export const ActiveTradeTable = ({ data }: { data: TradeSummary[] }) => {
                     );
                 },
                 header: tableHeaderDefinition(
-                    'D.T.M.',
-                    'Days to Maturity (DTM) of a loan contract is the date on which the contract is set to expire.'
+                    'Maturity',
+                    'Maturity of a loan contract is the date on which the contract is set to expire.'
                 ),
             }),
             amountColumnDefinition(
                 columnHelper,
-                'F.V',
+                'FV',
                 'forwardValue',
                 row => row.forwardValue,
                 { color: true, priceList: priceList, compact: false },
-                'Future Value (F.V) of a loan contract is the obligation value of the contract at time of maturity.'
+                'Future Value (FV) of a loan contract is the obligation value of the contract at time of maturity.'
             ),
             amountColumnDefinition(
                 columnHelper,
-                'P.V',
+                'PV',
                 'amount',
                 row => row.amount,
                 {
@@ -107,16 +106,7 @@ export const ActiveTradeTable = ({ data }: { data: TradeSummary[] }) => {
                     priceList: priceList,
                     compact: false,
                 },
-                'Present Value (P.V) is the current worth of the contract, taking into account the time value of money.'
-            ),
-            priceYieldColumnDefinition(
-                columnHelper,
-                'M.T.M.',
-                'averagePrice',
-                row => row.averagePrice,
-                'default',
-                'price',
-                'Mark to Market (MTM) is the estimated current value of a loan based on prevailing market conditions.'
+                'Present Value (PV) is the current worth of the contract, taking into account the time value of money.'
             ),
             columnHelper.display({
                 id: 'actions',
