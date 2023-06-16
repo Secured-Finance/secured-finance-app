@@ -24,6 +24,7 @@ const MenuItem = ({ text, onClick, disabled = false }: MenuItem) => {
         </div>
     );
 };
+
 export const TableActionMenu = ({ items }: { items: MenuItem[] }) => {
     return (
         <div className='relative'>
@@ -33,22 +34,26 @@ export const TableActionMenu = ({ items }: { items: MenuItem[] }) => {
                 </Menu.Button>
                 <Menu.Items
                     as='div'
-                    className='absolute right-[4vh] top-8 z-50 w-fit min-w-[150px] rounded-xl bg-gunMetal/100 focus:outline-none tablet:right-0'
+                    className='fixed inset-0 z-50 flex items-center justify-center backdrop-blur-lg backdrop-filter tablet:absolute tablet:inset-auto tablet:right-0'
                 >
-                    {items.map((item, index) => (
-                        <Menu.Item key={index} as='div'>
-                            <MenuItem
-                                text={item.text}
-                                onClick={item.onClick}
-                                disabled={item.disabled}
-                            />
-                            {index !== items.length - 1 ? (
-                                <div className='px-2'>
-                                    <Separator />
-                                </div>
-                            ) : null}
-                        </Menu.Item>
-                    ))}
+                    <div className='relative z-50 w-fit min-w-[150px] rounded-xl bg-gunMetal/100 focus:outline-none'>
+                        {items.map((item, index) => (
+                            <Menu.Item key={index} as='div'>
+                                <MenuItem
+                                    text={item.text}
+                                    onClick={() => {
+                                        item.onClick();
+                                    }}
+                                    disabled={item.disabled}
+                                />
+                                {index !== items.length - 1 ? (
+                                    <div className='px-2'>
+                                        <Separator />
+                                    </div>
+                                ) : null}
+                            </Menu.Item>
+                        ))}
+                    </div>
                 </Menu.Items>
             </Menu>
         </div>

@@ -94,7 +94,7 @@ export const CoreTable = <T,>({
                                 className={classNames(
                                     'py-2 pr-1 text-center font-bold tablet:px-1',
                                     {
-                                        'sticky z-10 bg-black-20/100 tablet:relative tablet:bg-transparent':
+                                        'sticky z-10 bg-gunMetal/100 tablet:relative tablet:bg-transparent':
                                             coreTableOptions.responsive &&
                                             coreTableOptions?.stickyColumns?.has(
                                                 columnIndex
@@ -143,7 +143,7 @@ export const CoreTable = <T,>({
                                 className={classNames(
                                     'min-w-fit py-2 pr-1 text-center font-medium tablet:px-1',
                                     {
-                                        'sticky bg-black-20/100 tablet:relative tablet:bg-transparent':
+                                        'sticky z-10 bg-gunMetal/100 tablet:relative tablet:z-auto tablet:bg-transparent':
                                             coreTableOptions.responsive &&
                                             coreTableOptions?.stickyColumns?.has(
                                                 cellIndex

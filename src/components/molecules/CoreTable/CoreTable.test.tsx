@@ -68,13 +68,13 @@ describe('CoreTable Component', () => {
         );
         const header = screen.getAllByTestId('core-table-header-cell')[5];
         expect(header).toHaveClass('sticky');
-        expect(header).toHaveClass('bg-black-20/100');
+        expect(header).toHaveClass('bg-gunMetal/100');
     });
 
     it('should have not a sticky column if responsive is true', () => {
         render(<NonResponsive />);
         const header = screen.getAllByTestId('core-table-header-cell')[5];
         expect(header).not.toHaveClass('sticky');
-        expect(header).not.toHaveClass('bg-black-20/100');
+        expect(header).not.toHaveClass('bg-gunMetal/100');
     });
 });
