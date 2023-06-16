@@ -492,6 +492,25 @@ export const emptyCollateralBook: CollateralBook = {
     },
 };
 
+export const emptyUSDCollateral: CollateralBook = {
+    collateral: {
+        ETH: BigNumber.from('0'),
+        USDC: BigNumber.from('0'),
+    },
+    nonCollateral: {
+        EFIL: BigNumber.from('100000000000000000000'),
+        WBTC: BigNumber.from('20000000'),
+    },
+    usdCollateral: 0,
+    usdNonCollateral: 10600,
+    coverage: BigNumber.from('0'), // 0%
+    collateralThreshold: 80,
+    withdrawableCollateral: {
+        [CurrencySymbol.USDC]: BigNumber.from(0),
+        [CurrencySymbol.ETH]: BigNumber.from(0),
+    },
+};
+
 function generateDailyVolumes(days: number) {
     const volumes: DailyVolumes = [];
     for (let i = 0; i < days; i++) {

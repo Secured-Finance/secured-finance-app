@@ -11,6 +11,7 @@ export default {
             { asset: CurrencySymbol.ETH, quantity: 1.2 },
             { asset: CurrencySymbol.USDC, quantity: 100 },
         ],
+        assetTitle: 'Asset',
     },
     decorators: [withAssetPrice],
 } as ComponentMeta<typeof CollateralInformationTable>;
