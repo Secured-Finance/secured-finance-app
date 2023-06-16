@@ -35,7 +35,7 @@ export const SuccessPanel = ({
                             <Tooltip
                                 iconElement={
                                     <button
-                                        className='secondary cursor-pointer text-planetaryPurple underline'
+                                        className='secondary cursor-pointer whitespace-nowrap text-planetaryPurple underline'
                                         onClick={handleButtonClick}
                                     >
                                         {value}
@@ -49,10 +49,13 @@ export const SuccessPanel = ({
                             </Tooltip>
                         ) : (
                             <span
-                                className={classNames('leading-6', {
-                                    'text-[#58BD7D]': index === 0,
-                                    'text-neutral-8': index !== 0,
-                                })}
+                                className={classNames(
+                                    'whitespace-nowrap leading-6',
+                                    {
+                                        'text-[#58BD7D]': index === 0,
+                                        'text-neutral-8': index !== 0,
+                                    }
+                                )}
                             >
                                 {value}
                             </span>
