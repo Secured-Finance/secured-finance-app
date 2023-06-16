@@ -92,7 +92,7 @@ export const CoreTable = <T,>({
                                 data-testid={`${coreTableOptions.name}-header-cell`}
                                 key={header.id}
                                 className={classNames(
-                                    'whitespace-nowrap py-2 pr-1 text-center font-bold tablet:px-1',
+                                    'py-2 pr-1 text-center font-bold tablet:px-1',
                                     {
                                         'sticky z-10 bg-black-20/100 tablet:relative tablet:bg-transparent':
                                             coreTableOptions.responsive &&
@@ -141,9 +141,9 @@ export const CoreTable = <T,>({
                             <td
                                 key={cell.id}
                                 className={classNames(
-                                    'min-w-fit whitespace-nowrap py-2 pr-1 text-center font-medium tablet:px-1',
+                                    'min-w-fit py-2 pr-1 text-center font-medium tablet:px-1',
                                     {
-                                        'sticky z-10 bg-black-20/100 tablet:relative tablet:bg-transparent':
+                                        'sticky bg-black-20/100 tablet:relative tablet:bg-transparent':
                                             coreTableOptions.responsive &&
                                             coreTableOptions?.stickyColumns?.has(
                                                 cellIndex
