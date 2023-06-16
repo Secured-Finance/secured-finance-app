@@ -1,4 +1,5 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { within } from '@storybook/testing-library';
 import { Option } from 'src/components/atoms';
 import { TermSelector } from './TermSelector';
 
@@ -38,4 +39,10 @@ WithTransformFunction.args = {
     transformLabel: (v: string) => {
         return v.toUpperCase();
     },
+};
+
+export const Expanded = Template.bind({});
+Expanded.play = async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    canvas.getByRole('button').click();
 };

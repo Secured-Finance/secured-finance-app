@@ -1,4 +1,5 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { within } from '@storybook/testing-library';
 import { assetList } from 'src/stories/mocks/fixtures';
 import { DropdownSelector } from './DropdownSelector';
 
@@ -23,7 +24,14 @@ const Template: ComponentStory<typeof DropdownSelector> = args => (
     <DropdownSelector {...args} />
 );
 
+const play = async ({ canvasElement }: { canvasElement: HTMLElement }) => {
+    const canvas = within(canvasElement);
+    canvas.getByRole('button').click();
+};
+
 export const AssetDropdown = Template.bind({});
+AssetDropdown.play = play;
+
 export const TermDropdown = Template.bind({});
 TermDropdown.args = {
     optionList: [
@@ -34,6 +42,8 @@ TermDropdown.args = {
     ],
     selected: { label: 'Sep 2022', value: 'Sep2022' },
 };
+TermDropdown.play = play;
+
 export const LongSelectionDropdown = Template.bind({});
 LongSelectionDropdown.args = {
     optionList: [
@@ -50,15 +60,19 @@ LongSelectionDropdown.args = {
     ],
     selected: { label: 'Sep 2022', value: 'Sep2022' },
 };
+LongSelectionDropdown.play = play;
 
 export const RoundedExpandButton = Template.bind({});
 RoundedExpandButton.args = {
     variant: 'roundedExpandButton',
 };
+RoundedExpandButton.play = play;
+
 export const NoLabel = Template.bind({});
 NoLabel.args = {
     variant: 'noLabel',
 };
+NoLabel.play = play;
 
 export const FullSize = Template.bind({});
 FullSize.args = {
@@ -75,3 +89,4 @@ FullSize.args = {
         value: '1',
     },
 };
+FullSize.play = play;

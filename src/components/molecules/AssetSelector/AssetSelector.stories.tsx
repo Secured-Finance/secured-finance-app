@@ -1,4 +1,5 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { within } from '@storybook/testing-library';
 import { assetList } from 'src/stories/mocks/fixtures';
 import { AssetSelector } from './AssetSelector';
 
@@ -38,3 +39,9 @@ const Template: ComponentStory<typeof AssetSelector> = args => (
 );
 
 export const Default = Template.bind({});
+
+export const Expanded = Template.bind({});
+Expanded.play = async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    canvas.getByRole('button').click();
+};
