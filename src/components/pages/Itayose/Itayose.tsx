@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
+import { BigNumber } from 'ethers';
 import {
     GradientBox,
     MarketTab,
@@ -23,6 +24,7 @@ import {
     selectLandingOrderForm,
     setCurrency,
     setMaturity,
+    setAmount,
 } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
 import { CurrencySymbol, getCurrencyMapAsOptions, usdFormat } from 'src/utils';
@@ -53,6 +55,12 @@ const Toolbar = ({
     );
     const dispatch = useDispatch();
 
+    const handleAssetChange = (v: CurrencySymbol) => {
+        if (v === currency) return;
+        dispatch(setCurrency(v));
+        dispatch(setAmount(BigNumber.from(0)));
+    };
+
     return (
         <GradientBox shape='rectangle'>
             <div className='flex min-w-fit flex-row items-center justify-between gap-20 px-6 py-3'>
@@ -61,9 +69,7 @@ const Toolbar = ({
                     selectedAsset={selectedAsset}
                     options={options}
                     selected={selected}
-                    onAssetChange={v => {
-                        dispatch(setCurrency(v));
-                    }}
+                    onAssetChange={handleAssetChange}
                     onTermChange={v => {
                         dispatch(setMaturity(new Maturity(v)));
                     }}
