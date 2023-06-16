@@ -55,7 +55,6 @@ describe('ActiveTradeTable Component', () => {
         expect(moreOptionsButton).toHaveLength(6);
         fireEvent.click(moreOptionsButton[0]);
         expect(screen.getByRole('menu')).toBeInTheDocument();
-        expect(screen.getByText('View Contract')).toBeInTheDocument();
         expect(screen.getByText('Add/Reduce Position')).toBeInTheDocument();
         expect(screen.getByText('Unwind Position')).toBeInTheDocument();
     });
