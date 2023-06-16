@@ -88,18 +88,12 @@ export const CollateralTabLeftPane = ({
                 ) : (
                     <div>
                         <div className='mx-5 my-6 hidden flex-col gap-6 tablet:flex'>
-                            {collateralBalance > 0 ? (
+                            {collateralBalance > 0 && (
                                 <AssetInformation
                                     header='Collateral Assets'
                                     informationText={getInformationText()}
                                     collateralBook={collateralBook.collateral}
                                 ></AssetInformation>
-                            ) : (
-                                <div className='typography-caption w-40 text-grayScale'>
-                                    Deposit collateral from your connected
-                                    wallet to enable lending service on Secured
-                                    Finance.
-                                </div>
                             )}
                             {nonCollateralBalance > 0 && (
                                 <AssetInformation
@@ -109,6 +103,13 @@ export const CollateralTabLeftPane = ({
                                         collateralBook.nonCollateral
                                     }
                                 ></AssetInformation>
+                            )}
+                            {collateralBalance === 0 && (
+                                <div className='typography-caption w-40 text-grayScale'>
+                                    Deposit collateral from your connected
+                                    wallet to enable lending service on Secured
+                                    Finance.
+                                </div>
                             )}
                         </div>
                         <div className='mx-3 mt-6 flex flex-col gap-3 tablet:hidden'>
@@ -123,7 +124,7 @@ export const CollateralTabLeftPane = ({
                                     collateralBook.collateralThreshold
                                 }
                             />
-                            {collateralBalance > 0 ? (
+                            {collateralBalance > 0 && (
                                 <CollateralInformationTable
                                     data={(
                                         Object.entries(
@@ -140,14 +141,6 @@ export const CollateralTabLeftPane = ({
                                     })}
                                     assetTitle='Collateral Asset'
                                 />
-                            ) : (
-                                <div className='flex w-full flex-col gap-2 rounded-b bg-black-20'>
-                                    <div className='mx-4 my-5 text-grayScale'>
-                                        Deposit collateral from your connected
-                                        wallet to enable lending service on
-                                        Secured Finance.
-                                    </div>
-                                </div>
                             )}
                             {nonCollateralBalance > 0 && (
                                 <CollateralInformationTable
@@ -166,6 +159,13 @@ export const CollateralTabLeftPane = ({
                                     })}
                                     assetTitle='Non-Collateral Asset'
                                 />
+                            )}
+                            {collateralBalance === 0 && (
+                                <div className='typography-caption gap-2 text-grayScale'>
+                                    Deposit collateral from your connected
+                                    wallet to enable lending service on Secured
+                                    Finance.
+                                </div>
                             )}
                         </div>
                     </div>
