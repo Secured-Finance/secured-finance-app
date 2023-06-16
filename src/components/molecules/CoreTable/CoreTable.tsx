@@ -68,7 +68,7 @@ export const CoreTable = <T,>({
 
     const table = useReactTable<T>(configuration);
 
-    const lastColumnIndex = columns.length - 1;
+    const lastColumnIndex = filteredColumns.length - 1;
 
     const stickyClass: Record<number, string> = {
         0: 'left-0',
@@ -100,6 +100,7 @@ export const CoreTable = <T,>({
                                                 columnIndex
                                             ),
                                         [stickyClass[columnIndex]]:
+                                            coreTableOptions.responsive &&
                                             coreTableOptions.stickyColumns?.has(
                                                 columnIndex
                                             ),
@@ -149,6 +150,7 @@ export const CoreTable = <T,>({
                                                 cellIndex
                                             ),
                                         [stickyClass[cellIndex]]:
+                                            coreTableOptions.responsive &&
                                             coreTableOptions.stickyColumns?.has(
                                                 cellIndex
                                             ),
