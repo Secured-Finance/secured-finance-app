@@ -130,15 +130,20 @@ export const CollateralTabLeftPane = ({
                                         Object.entries(
                                             collateralBook.collateral
                                         ) as [CurrencySymbol, BigNumber][]
-                                    ).map(([asset, quantity]) => {
-                                        return {
-                                            asset: asset,
-                                            quantity:
-                                                amountFormatterFromBase[asset](
-                                                    quantity
-                                                ),
-                                        };
-                                    })}
+                                    )
+                                        .filter(
+                                            ([_asset, quantity]) =>
+                                                !quantity.isZero()
+                                        )
+                                        .map(([asset, quantity]) => {
+                                            return {
+                                                asset: asset,
+                                                quantity:
+                                                    amountFormatterFromBase[
+                                                        asset
+                                                    ](quantity),
+                                            };
+                                        })}
                                     assetTitle='Collateral Asset'
                                 />
                             )}
@@ -148,15 +153,20 @@ export const CollateralTabLeftPane = ({
                                         Object.entries(
                                             collateralBook.nonCollateral
                                         ) as [CurrencySymbol, BigNumber][]
-                                    ).map(([asset, quantity]) => {
-                                        return {
-                                            asset: asset,
-                                            quantity:
-                                                amountFormatterFromBase[asset](
-                                                    quantity
-                                                ),
-                                        };
-                                    })}
+                                    )
+                                        .filter(
+                                            ([_asset, quantity]) =>
+                                                !quantity.isZero()
+                                        )
+                                        .map(([asset, quantity]) => {
+                                            return {
+                                                asset: asset,
+                                                quantity:
+                                                    amountFormatterFromBase[
+                                                        asset
+                                                    ](quantity),
+                                            };
+                                        })}
                                     assetTitle='Non-Collateral Asset'
                                 />
                             )}
