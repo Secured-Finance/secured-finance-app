@@ -142,7 +142,7 @@ export const ActiveTradeTable = ({ data }: { data: Position[] }) => {
                         </div>
                     );
                 },
-                header: () => <div>Actions</div>,
+                header: () => <div className='p-2'>Actions</div>,
             }),
         ],
         [dispatch, priceList, router]
