@@ -4,7 +4,10 @@ import {
     withAssetPrice,
     withWalletProvider,
 } from 'src/../.storybook/decorators';
-import { collateralBook80 } from 'src/stories/mocks/fixtures';
+import {
+    collateralBook80,
+    emptyUSDCollateral,
+} from 'src/stories/mocks/fixtures';
 import { CollateralTabLeftPane } from './CollateralTabLeftPane';
 
 export default {
@@ -34,4 +37,11 @@ export const NotConnectedToWallet = Template.bind({});
 NotConnectedToWallet.args = {
     account: null,
     onClick: () => {},
+};
+
+export const EmptyUSDCollateralBalance = Template.bind({});
+EmptyUSDCollateralBalance.args = {
+    account: 'as',
+    onClick: () => {},
+    collateralBook: emptyUSDCollateral,
 };
