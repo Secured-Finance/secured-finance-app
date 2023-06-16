@@ -17,7 +17,7 @@ describe('Dropdown Asset Selection Component', () => {
     it('should render a dropdown', () => {
         render(<AssetDropdown />);
         fireEvent.click(screen.getByRole('button'));
-        expect(screen.getByRole('menu')).toBeInTheDocument();
+        expect(screen.getByRole('listbox')).toBeInTheDocument();
     });
 
     it('should render a dropdown with the value prop as the selected default option', () => {
@@ -83,6 +83,6 @@ describe('Dropdown Asset Selection Component', () => {
         render(<AssetDropdown variant='fullWidth' />);
         expect(screen.getByRole('button')).toHaveClass('w-full');
         fireEvent.click(screen.getByRole('button'));
-        expect(screen.getByRole('menu')).toHaveClass('w-full');
+        expect(screen.getByRole('listbox')).toHaveClass('w-full');
     });
 });

@@ -19,7 +19,7 @@ describe('AssetSelector Component', () => {
         render(<Default />);
         const input = screen.getByRole('textbox');
         fireEvent.click(screen.getByRole('button'));
-        fireEvent.click(screen.getByText('Ethereum'));
+        fireEvent.click(screen.getByRole('option', { name: 'Ethereum' }));
         fireEvent.change(input, { target: { value: '1' } });
         expect(screen.getByText(`~ 1,012 USD`)).toBeInTheDocument();
         fireEvent.change(input, { target: { value: '10' } });

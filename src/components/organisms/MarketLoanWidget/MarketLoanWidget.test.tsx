@@ -13,7 +13,7 @@ describe('MarketLoanWidget Component', () => {
         render(<Default />);
         expect(screen.queryByText('WBTC')).toBeInTheDocument();
         screen.getByRole('button', { name: 'All Assets' }).click();
-        screen.getByRole('menuitem', { name: 'Filecoin' }).click();
+        screen.getByRole('option', { name: 'Filecoin' }).click();
         expect(screen.queryByText('WBTC')).not.toBeInTheDocument();
     });
 
@@ -21,7 +21,7 @@ describe('MarketLoanWidget Component', () => {
         render(<Default />);
         expect(screen.getAllByText('Dec 1, 2022').length).toEqual(2);
         screen.getByRole('button', { name: 'DEC22' }).click();
-        screen.getByRole('menuitem', { name: 'JUN23' }).click();
+        screen.getByRole('option', { name: 'JUN23' }).click();
         expect(screen.queryByText('Dec 1, 2022')).not.toBeInTheDocument();
         expect(screen.getAllByText('Jun 1, 2023').length).toEqual(2);
     });
@@ -29,7 +29,7 @@ describe('MarketLoanWidget Component', () => {
     it('should dedupe maturity', () => {
         render(<Default />);
         screen.getByRole('button', { name: 'DEC22' }).click();
-        expect(screen.getAllByRole('menuitem').length).toBe(9);
+        expect(screen.getAllByRole('option').length).toBe(9);
     });
 
     it('should display the APR column when the market is open', () => {
@@ -41,7 +41,7 @@ describe('MarketLoanWidget Component', () => {
     it('should hide the APR column when the market is not open', () => {
         render(<Default />);
         screen.getByRole('button', { name: 'DEC22' }).click();
-        screen.getByRole('menuitem', { name: 'DEC24' }).click();
+        screen.getByRole('option', { name: 'DEC24' }).click();
         expect(screen.queryByText('APR')).not.toBeInTheDocument();
         expect(screen.queryByText('Market Open')).toBeInTheDocument();
     });

@@ -40,7 +40,7 @@ describe('LendingCard Component', () => {
                 name: DEFAULT_CHOICE.name,
             })
         );
-        fireEvent.click(screen.getByRole('menuitem', { name: 'Ether' }));
+        fireEvent.click(screen.getByRole('option', { name: 'Ether' }));
     };
     it('should render a LendingCard', async () => {
         await waitFor(() => render(<Default />));
@@ -81,13 +81,13 @@ describe('LendingCard Component', () => {
         );
 
         expect(
-            screen.getByRole('menuitem', { name: 'USDC' })
+            screen.getByRole('option', { name: 'USDC' })
         ).toBeInTheDocument();
         expect(
-            screen.getByRole('menuitem', { name: 'Filecoin' })
+            screen.getByRole('option', { name: 'Filecoin' })
         ).toBeInTheDocument();
         expect(
-            screen.getByRole('menuitem', { name: 'Ether' })
+            screen.getByRole('option', { name: 'Ether' })
         ).toBeInTheDocument();
     });
 

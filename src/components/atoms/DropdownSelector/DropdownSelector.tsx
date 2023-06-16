@@ -1,6 +1,6 @@
-import { Menu } from '@headlessui/react';
+import { Listbox } from '@headlessui/react';
 import classNames from 'classnames';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { ExpandIndicator, Separator } from 'src/components/atoms';
 import { SvgIcon } from 'src/types';
 
@@ -101,41 +101,32 @@ export const DropdownSelector = <T extends string = string>({
     onChange: (v: T) => void;
     variant?: 'default' | 'roundedExpandButton' | 'noLabel' | 'fullWidth';
 }) => {
-    const [selectedOptionValue, setSelectedOptionValue] = useState<T>(
-        selected.value
-    );
-
-    const selectedOption = useMemo(
-        () => optionList.find(o => o.value === selectedOptionValue),
-        [optionList, selectedOptionValue]
-    );
+    const [selectedOption, setSelectedOption] = useState<Option<T>>(selected);
 
     const handleSelect = useCallback(
         (option: Option<T>) => {
-            setSelectedOptionValue(option.value);
+            setSelectedOption(option);
             onChange(option.value);
         },
         [onChange]
     );
 
-    //Handle the case of the initial value
     useEffect(() => {
-        if (selected.value === selectedOptionValue) {
+        if (selected.value === selectedOption.value) {
             onChange(selected.value);
         }
-    }, [onChange, selectedOptionValue, selected.label, selected.value]);
-
-    useEffect(() => {
-        if (selected.value) {
-            setSelectedOptionValue(selected.value);
-        }
-    }, [selected.value]);
+    }, [selected.value, onChange, selectedOption.value]);
 
     return (
-        <Menu as='div' className='relative'>
+        <Listbox
+            as='div'
+            className='relative'
+            value={selectedOption}
+            onChange={handleSelect}
+        >
             {({ open }) => (
                 <>
-                    <Menu.Button
+                    <Listbox.Button
                         className={classNames({
                             'w-full': variant === 'fullWidth',
                         })}
@@ -167,8 +158,8 @@ export const DropdownSelector = <T extends string = string>({
                                     );
                             }
                         }}
-                    </Menu.Button>
-                    <Menu.Items
+                    </Listbox.Button>
+                    <Listbox.Options
                         className={classNames(
                             'scrollbar absolute z-50 mt-2 flex flex-col overflow-y-auto rounded-lg bg-gunMetal p-2 shadow-sm',
                             {
@@ -179,18 +170,18 @@ export const DropdownSelector = <T extends string = string>({
                         )}
                     >
                         {optionList.map((asset, i) => (
-                            <Menu.Item
+                            <Listbox.Option
                                 key={`${asset.label}_${i}`}
-                                as='button'
-                                onClick={() => handleSelect(asset)}
+                                value={asset}
                             >
-                                {({ active }) => (
-                                    <div>
+                                {({ active, selected }) => (
+                                    <>
                                         <div
                                             className={classNames(
                                                 'flex flex-row items-center justify-start space-x-4 rounded-lg p-2 text-white-80',
                                                 {
-                                                    'bg-horizonBlue': active,
+                                                    'bg-horizonBlue':
+                                                        active || selected,
                                                 }
                                             )}
                                         >
@@ -209,13 +200,13 @@ export const DropdownSelector = <T extends string = string>({
                                                 <Separator />
                                             </div>
                                         ) : null}
-                                    </div>
+                                    </>
                                 )}
-                            </Menu.Item>
+                            </Listbox.Option>
                         ))}
-                    </Menu.Items>
+                    </Listbox.Options>
                 </>
             )}
-        </Menu>
+        </Listbox>
     );
 };
