@@ -34,6 +34,30 @@ const DefaultButton = ({
     );
 };
 
+const FillWidthButton = ({
+    selectedOption,
+    open,
+}: {
+    selectedOption: Option<string> | undefined;
+    open: boolean;
+}) => {
+    return (
+        <div className='flex h-10 w-full flex-row items-center justify-between space-x-2 rounded-lg bg-white-5 px-2'>
+            {selectedOption?.iconSVG ? (
+                <span>
+                    <selectedOption.iconSVG className='h-6 w-6' />
+                </span>
+            ) : null}
+            <span className='typography-caption text-white'>
+                {selectedOption?.label}
+            </span>
+            <span data-cy={`asset-expand-${selectedOption?.label}`}>
+                <ExpandIndicator expanded={open} />
+            </span>
+        </div>
+    );
+};
+
 const RoundedExpandButton = ({
     selectedOption,
     open,
@@ -75,7 +99,7 @@ export const DropdownSelector = <T extends string = string>({
     optionList: Readonly<Array<Option<T>>>;
     selected?: Option<T>;
     onChange: (v: T) => void;
-    variant?: 'default' | 'roundedExpandButton' | 'noLabel';
+    variant?: 'default' | 'roundedExpandButton' | 'noLabel' | 'fullWidth';
 }) => {
     const [selectedOptionValue, setSelectedOptionValue] = useState<T>(
         selected.value
@@ -111,7 +135,11 @@ export const DropdownSelector = <T extends string = string>({
         <Menu as='div' className='relative'>
             {({ open }) => (
                 <>
-                    <Menu.Button>
+                    <Menu.Button
+                        className={classNames({
+                            'w-full': variant === 'fullWidth',
+                        })}
+                    >
                         {() => {
                             switch (variant) {
                                 case 'default':
@@ -130,13 +158,25 @@ export const DropdownSelector = <T extends string = string>({
                                     );
                                 case 'noLabel':
                                     return <NoLabelButton open={open} />;
+                                case 'fullWidth':
+                                    return (
+                                        <FillWidthButton
+                                            open={open}
+                                            selectedOption={selectedOption}
+                                        />
+                                    );
                             }
                         }}
                     </Menu.Button>
                     <Menu.Items
-                        className={`scrollbar absolute z-50 mt-2 flex max-h-60 w-52 flex-col overflow-y-auto rounded-lg bg-gunMetal p-2 shadow-sm ${
-                            variant === 'noLabel' ? 'right-0' : ''
-                        }`}
+                        className={classNames(
+                            'scrollbar absolute z-50 mt-2 flex flex-col overflow-y-auto rounded-lg bg-gunMetal p-2 shadow-sm',
+                            {
+                                'right-0': variant === 'noLabel',
+                                'max-h-60 w-52': variant !== 'fullWidth',
+                                'w-full': variant === 'fullWidth',
+                            }
+                        )}
                     >
                         {optionList.map((asset, i) => (
                             <Menu.Item

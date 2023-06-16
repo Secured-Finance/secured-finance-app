@@ -1,8 +1,7 @@
-import { Tab as HeadlessTab, Menu } from '@headlessui/react';
-import ChevronDownIcon from '@heroicons/react/24/outline/ChevronDownIcon';
+import { Tab as HeadlessTab } from '@headlessui/react';
 import classNames from 'classnames';
 import React, { Children, useState } from 'react';
-import { Separator } from 'src/components/atoms';
+import { DropdownSelector } from 'src/components/atoms';
 
 const TitleChip = ({
     title,
@@ -44,52 +43,20 @@ export const HorizontalTab = ({
             >
                 <HeadlessTab.List className='h-16 justify-start border-b border-white-10 p-3'>
                     <div className='w-full tablet:hidden'>
-                        <Menu as='div' className='relative'>
-                            <Menu.Button
-                                data-testid='menu'
-                                className=' flex h-10 w-full flex-row items-center justify-between rounded-xl bg-black-30 p-2 text-neutral-8 focus:outline-none'
-                            >
-                                {tabTitles[selectedIndex]}
-                                <ChevronDownIcon className='h-4' />
-                            </Menu.Button>
-                            <Menu.Items className='absolute z-20 mt-1 flex w-full flex-col rounded-lg bg-gunMetal p-2 shadow-sm'>
-                                {tabTitles.map((title, index) => (
-                                    <Menu.Item key={title}>
-                                        {({ active }) => (
-                                            <div>
-                                                <div
-                                                    className={classNames(
-                                                        'flex flex-row items-center justify-between space-x-4 rounded-lg p-2 text-white-80',
-                                                        {
-                                                            'bg-horizonBlue':
-                                                                active,
-                                                        }
-                                                    )}
-                                                >
-                                                    <button
-                                                        onClick={() =>
-                                                            setSelectedIndex(
-                                                                index
-                                                            )
-                                                        }
-                                                        className='w-full'
-                                                        data-testid={`${title}-mobile`}
-                                                    >
-                                                        {title}
-                                                    </button>
-                                                </div>
-                                                {index !==
-                                                tabTitles.length - 1 ? (
-                                                    <div className='py-2'>
-                                                        <Separator />
-                                                    </div>
-                                                ) : null}
-                                            </div>
-                                        )}
-                                    </Menu.Item>
-                                ))}
-                            </Menu.Items>
-                        </Menu>
+                        <DropdownSelector
+                            optionList={tabTitles.map((title, index) => ({
+                                label: title,
+                                value: index.toString(),
+                            }))}
+                            selected={{
+                                label: tabTitles[selectedIndex],
+                                value: selectedIndex.toString(),
+                            }}
+                            onChange={option =>
+                                setSelectedIndex(parseInt(option) || 0)
+                            }
+                            variant='fullWidth'
+                        />
                     </div>
                     <div className='hidden tablet:block'>
                         {tabTitles.map((title, index) => {
