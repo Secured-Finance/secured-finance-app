@@ -59,3 +59,19 @@ export const NoLabel = Template.bind({});
 NoLabel.args = {
     variant: 'noLabel',
 };
+
+export const FullSize = Template.bind({});
+FullSize.args = {
+    variant: 'fullWidth',
+    optionList: [
+        { label: 'This is a very long option and it is great', value: '1' },
+        {
+            label: 'This is a another very long option and it is great',
+            value: '2',
+        },
+    ],
+    selected: {
+        label: 'This is a very long option and it is great',
+        value: '1',
+    },
+};

@@ -78,4 +78,11 @@ describe('Dropdown Asset Selection Component', () => {
         fireEvent.click(screen.getByText('Ethereum'));
         expect(screen.queryByText('Ethereum')).not.toBeInTheDocument();
     });
+
+    it('should render a full width button and options for fullWidth variant', () => {
+        render(<AssetDropdown variant='fullWidth' />);
+        expect(screen.getByRole('button')).toHaveClass('w-full');
+        fireEvent.click(screen.getByRole('button'));
+        expect(screen.getByRole('menu')).toHaveClass('w-full');
+    });
 });

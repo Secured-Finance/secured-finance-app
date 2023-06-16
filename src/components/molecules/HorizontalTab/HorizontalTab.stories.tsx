@@ -37,5 +37,5 @@ MobileViewport.parameters = {
 };
 MobileViewport.play = async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    canvas.getByTestId('menu').click();
+    canvas.getByRole('button', { hidden: true }).click();
 };
