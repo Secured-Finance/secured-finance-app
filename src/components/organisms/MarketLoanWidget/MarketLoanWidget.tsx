@@ -90,7 +90,7 @@ export const MarketLoanWidget = ({ loans }: { loans: Loan[] }) => {
                 id: 'maturity',
                 cell: info => {
                     return (
-                        <div className='flex flex-col items-center justify-center'>
+                        <div className='flex flex-col items-center justify-center whitespace-nowrap px-1'>
                             <div className='flex flex-col items-end justify-end'>
                                 <div className='typography-caption text-neutral-8'>
                                     {getUTCMonthYear(info.getValue())}
@@ -108,7 +108,7 @@ export const MarketLoanWidget = ({ loans }: { loans: Loan[] }) => {
                 id: 'apr',
                 cell: info => {
                     return (
-                        <div className='typography-body-2 flex justify-center'>
+                        <div className='typography-body-2 flex justify-center px-1'>
                             {info.getValue() && info.row.original.maturity
                                 ? formatLoanValue(
                                       LoanValue.fromPrice(
@@ -139,7 +139,7 @@ export const MarketLoanWidget = ({ loans }: { loans: Loan[] }) => {
                 id: 'action',
                 cell: info => {
                     return (
-                        <div className='flex justify-center'>
+                        <div className='flex justify-center px-1'>
                             <Button onClick={() => handleClick(info)} size='sm'>
                                 {info.row.original.isReady
                                     ? 'Open Order'
@@ -195,6 +195,7 @@ export const MarketLoanWidget = ({ loans }: { loans: Loan[] }) => {
                         hideColumnIds: isItayoseMarket
                             ? ['apr']
                             : ['openingDate'],
+                        stickyColumns: new Set([3]),
                     }}
                 />
             </div>
