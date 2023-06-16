@@ -79,6 +79,7 @@ export const OrderTable = ({ data }: { data: Order[] }) => {
             options={{
                 name: 'open-order-table',
                 border: false,
+                stickyColumns: new Set([6]),
             }}
         />
     );

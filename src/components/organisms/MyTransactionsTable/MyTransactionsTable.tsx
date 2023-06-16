@@ -99,6 +99,7 @@ export const MyTransactionsTable = ({ data }: { data: TradeHistory }) => {
                 options={{
                     name: 'active-trade-table',
                     border: false,
+                    stickyColumns: new Set([0, 1]),
                 }}
             />
         </div>
