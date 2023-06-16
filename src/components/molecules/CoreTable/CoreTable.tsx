@@ -71,9 +71,9 @@ export const CoreTable = <T,>({
     const lastColumnIndex = filteredColumns.length - 1;
 
     const stickyClass: Record<number, string> = {
-        0: 'left-0',
-        1: 'left-1/3',
-        [lastColumnIndex]: 'right-0',
+        0: 'left-0 tablet:left-auto',
+        1: 'left-1/3 tablet:left-auto',
+        [lastColumnIndex]: 'right-0 tablet:right-auto',
     };
 
     const coreTable = (
@@ -94,7 +94,7 @@ export const CoreTable = <T,>({
                                 data-testid={`${coreTableOptions.name}-header-cell`}
                                 key={header.id}
                                 className={classNames(
-                                    'py-2 pr-1 text-center font-bold tablet:px-1',
+                                    'whitespace-nowrap py-2 pr-1 text-center font-bold tablet:px-1',
                                     {
                                         'sticky z-10 bg-gunMetal/100 tablet:relative tablet:bg-transparent':
                                             coreTableOptions.responsive &&
@@ -144,7 +144,7 @@ export const CoreTable = <T,>({
                             <td
                                 key={cell.id}
                                 className={classNames(
-                                    'min-w-fit py-2 pr-1 text-center font-medium tablet:px-1',
+                                    'min-w-fit whitespace-nowrap py-2 pr-1 text-center font-medium tablet:px-1',
                                     {
                                         'sticky z-10 bg-gunMetal/100 tablet:relative tablet:z-auto tablet:bg-transparent':
                                             coreTableOptions.responsive &&

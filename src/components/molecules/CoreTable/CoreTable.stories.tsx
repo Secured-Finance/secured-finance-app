@@ -66,7 +66,9 @@ export default {
 } as ComponentMeta<typeof CoreTable>;
 
 const Template: ComponentStory<typeof CoreTable> = args => (
-    <CoreTable {...args} />
+    <div className='text-white'>
+        <CoreTable {...args} />
+    </div>
 );
 
 export const Default = Template.bind({});
