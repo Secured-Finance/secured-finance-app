@@ -15,7 +15,9 @@ export default {
 } as ComponentMeta<typeof TableActionMenu>;
 
 const Template: ComponentStory<typeof TableActionMenu> = args => (
-    <TableActionMenu {...args} />
+    <div className='flex w-full justify-center'>
+        <TableActionMenu {...args} />
+    </div>
 );
 
 export const Default = Template.bind({});
