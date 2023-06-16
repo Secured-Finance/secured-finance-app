@@ -16,6 +16,7 @@ type CoreTableOptions = {
     hoverRow?: (rowId: string) => boolean;
     hideColumnIds?: string[];
     responsive: boolean;
+    stickyColumns?: Set<number>;
 };
 
 const DEFAULT_OPTIONS: CoreTableOptions = {
@@ -67,6 +68,14 @@ export const CoreTable = <T,>({
 
     const table = useReactTable<T>(configuration);
 
+    const lastColumnIndex = filteredColumns.length - 1;
+
+    const stickyClass: Record<number, string> = {
+        0: 'left-0 tablet:left-auto',
+        1: 'left-1/3 tablet:left-auto',
+        [lastColumnIndex]: 'right-0 tablet:right-auto',
+    };
+
     const coreTable = (
         <table
             className={classNames('h-full w-full', {
@@ -85,11 +94,18 @@ export const CoreTable = <T,>({
                                 data-testid={`${coreTableOptions.name}-header-cell`}
                                 key={header.id}
                                 className={classNames(
-                                    'px-1 py-2 text-center font-bold',
+                                    'whitespace-nowrap py-2 pr-1 text-center font-bold tablet:px-1',
                                     {
-                                        'sticky left-0 z-10 bg-black-20/100 tablet:bg-transparent':
-                                            columnIndex === 0 &&
-                                            coreTableOptions.responsive,
+                                        'sticky z-10 bg-gunMetal/100 tablet:relative tablet:bg-transparent':
+                                            coreTableOptions.responsive &&
+                                            coreTableOptions?.stickyColumns?.has(
+                                                columnIndex
+                                            ),
+                                        [stickyClass[columnIndex]]:
+                                            coreTableOptions.responsive &&
+                                            coreTableOptions.stickyColumns?.has(
+                                                columnIndex
+                                            ),
                                     }
                                 )}
                             >
@@ -128,11 +144,18 @@ export const CoreTable = <T,>({
                             <td
                                 key={cell.id}
                                 className={classNames(
-                                    'min-w-fit whitespace-nowrap px-1 py-2 text-center font-medium',
+                                    'min-w-fit whitespace-nowrap py-2 pr-1 text-center font-medium tablet:px-1',
                                     {
-                                        'sticky left-0 z-10 bg-black-20/100 tablet:bg-transparent':
-                                            cellIndex === 0 &&
-                                            coreTableOptions.responsive,
+                                        'sticky z-10 bg-gunMetal/100 tablet:relative tablet:z-auto tablet:bg-transparent':
+                                            coreTableOptions.responsive &&
+                                            coreTableOptions?.stickyColumns?.has(
+                                                cellIndex
+                                            ),
+                                        [stickyClass[cellIndex]]:
+                                            coreTableOptions.responsive &&
+                                            coreTableOptions.stickyColumns?.has(
+                                                cellIndex
+                                            ),
                                     }
                                 )}
                             >
