@@ -10,6 +10,7 @@ import {
 } from 'src/components/molecules';
 import { CollateralInput } from 'src/components/organisms';
 import { useWithdrawCollateral } from 'src/hooks/useDepositCollateral';
+import useSF from 'src/hooks/useSecuredFinance';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { RootState } from 'src/store/types';
 import {
@@ -100,10 +101,12 @@ export const WithdrawCollateral = ({
 }: {
     collateralList: Record<CurrencySymbol, CollateralInfo>;
 } & DialogState) => {
+    const securedFinance = useSF();
     const { account } = useWallet();
     const [asset, setAsset] = useState(CurrencySymbol.ETH);
     const [state, dispatch] = useReducer(reducer, stateRecord[1]);
     const [collateral, setCollateral] = useState(BigNumber.from(0));
+    const [txHash, setTxHash] = useState<string | undefined>();
     const [errorMessage, setErrorMessage] = useState(
         'Your withdrawal transaction has failed.'
     );
@@ -145,6 +148,7 @@ export const WithdrawCollateral = ({
                     collateral,
                     source ?? ''
                 );
+                setTxHash(tx?.hash);
                 dispatch({ type: 'next' });
             }
         } catch (e) {
@@ -244,6 +248,10 @@ export const WithdrawCollateral = ({
                                         ).toString(),
                                     ],
                                 ]}
+                                txHash={txHash}
+                                network={
+                                    securedFinance?.config?.network ?? 'unknown'
+                                }
                             />
                         );
                     case Step.error:

@@ -16,6 +16,7 @@ describe('Tooltip Component', () => {
 
         expect(screen.getByTestId('information-popover')).toBeInTheDocument();
         expect(screen.getByText('Tooltip content')).toBeInTheDocument();
+        expect(screen.getByRole('tooltip')).toBeInTheDocument();
     });
 
     it('should remove rendered information on mouseOut event', () => {
@@ -25,5 +26,6 @@ describe('Tooltip Component', () => {
         fireEvent.mouseOut(information);
 
         expect(screen.queryByText('Tooltip content')).not.toBeInTheDocument();
+        expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
     });
 });

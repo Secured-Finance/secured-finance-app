@@ -1,13 +1,8 @@
-import { Disclosure } from '@headlessui/react';
 import { OrderSide } from '@secured-finance/sf-client';
 import { useCallback, useReducer, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Loader from 'src/assets/img/gradient-loader.png';
-import {
-    ExpandIndicator,
-    Section,
-    SectionWithItems,
-} from 'src/components/atoms';
+import { Section } from 'src/components/atoms';
 import {
     AmountCard,
     CollateralSimulationSection,
@@ -17,10 +12,15 @@ import {
     SuccessPanel,
 } from 'src/components/molecules';
 import { useCollateralBook, useOrders } from 'src/hooks';
+import useSF from 'src/hooks/useSecuredFinance';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { setLastMessage } from 'src/store/lastError';
 import { RootState } from 'src/store/types';
-import { CurrencySymbol, handleContractTransaction } from 'src/utils';
+import {
+    AddressUtils,
+    CurrencySymbol,
+    handleContractTransaction,
+} from 'src/utils';
 import { Amount, Maturity } from 'src/utils/entities';
 import { useWallet } from 'use-wallet';
 
@@ -100,9 +100,10 @@ export const UnwindDialog = ({
     amount: Amount;
     maturity: Maturity;
 } & DialogState) => {
+    const securedFinance = useSF();
     const { account } = useWallet();
     const [state, dispatch] = useReducer(reducer, stateRecord[1]);
-    const [txHash, setTxHash] = useState<string | undefined>(undefined);
+    const [txHash, setTxHash] = useState<string | undefined>();
     const [errorMessage, setErrorMessage] = useState(
         'Your position could not be unwound.'
     );
@@ -175,7 +176,7 @@ export const UnwindDialog = ({
                             assetPrice={price}
                             type='unwind'
                         />
-                        <Disclosure>
+                        {/* <Disclosure>
                             {({ open }) => (
                                 <>
                                     <Disclosure.Button className='flex h-6 flex-row items-center justify-between'>
@@ -204,7 +205,7 @@ export const UnwindDialog = ({
                                     </Disclosure.Panel>
                                 </>
                             )}
-                        </Disclosure>
+                        </Disclosure> */}
                     </div>
                 );
             case Step.processing:
@@ -223,8 +224,13 @@ export const UnwindDialog = ({
                     <SuccessPanel
                         itemList={[
                             ['Status', 'Complete'],
-                            ['Transaction Hash', txHash ?? ''],
+                            [
+                                'Transaction Hash',
+                                AddressUtils.format(txHash ?? '', 8),
+                            ],
                         ]}
+                        txHash={txHash}
+                        network={securedFinance?.config?.network ?? 'unknown'}
                     />
                 );
             case Step.error:

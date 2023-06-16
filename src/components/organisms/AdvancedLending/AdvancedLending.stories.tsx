@@ -15,6 +15,7 @@ import {
 import { mockTrades } from 'src/stories/mocks/queries';
 import { Rate } from 'src/utils';
 import { LoanValue } from 'src/utils/entities';
+import timemachine from 'timemachine';
 import { AdvancedLending } from './AdvancedLending';
 
 export default {
@@ -31,11 +32,18 @@ export default {
             mocks: [...mockTrades],
         },
         ...RESPONSIVE_PARAMETERS,
+        chromatic: {
+            ...RESPONSIVE_PARAMETERS.chromatic,
+            delay: 5000,
+        },
     },
     decorators: [withFullPage, withAssetPrice, withWalletProvider],
 } as ComponentMeta<typeof AdvancedLending>;
 
 const Template: ComponentStory<typeof AdvancedLending> = args => {
+    timemachine.config({
+        dateString: '2022-02-01T11:00:00.00Z',
+    });
     return <AdvancedLending {...args} />;
 };
 

@@ -1,7 +1,7 @@
 import queries from '@secured-finance/sf-graph-client/dist/graphclients';
 import { BigNumber, utils } from 'ethers';
 import { useMemo } from 'react';
-import { useSelector } from 'react-redux';
+import { shallowEqual, useSelector } from 'react-redux';
 import {
     CollateralManagementConciseTab,
     GradientBox,
@@ -49,7 +49,7 @@ const computeTotalUsers = (users: string) => {
         getEnvironment().toLowerCase() === Environment.DEVELOPMENT
             ? +users
             : +users + PREVIOUS_TOTAL_USERS;
-    return ordinaryFormat(totalUsers ?? 0, 2, 'compact');
+    return ordinaryFormat(totalUsers ?? 0, 0, 2, 'compact');
 };
 
 export const MarketDashboard = () => {
@@ -58,7 +58,8 @@ export const MarketDashboard = () => {
 
     const curves: Record<string, Rate[]> = {};
     const lendingContracts = useSelector(
-        (state: RootState) => state.availableContracts.lendingMarkets
+        (state: RootState) => state.availableContracts.lendingMarkets,
+        shallowEqual
     );
 
     getCurrencyMapAsList().forEach(ccy => {
@@ -92,6 +93,7 @@ export const MarketDashboard = () => {
         return ordinaryFormat(
             computeTotalDailyVolumeInUSD(dailyVolumes.data ?? [], priceList)
                 .totalVolumeUSD,
+            0,
             2,
             'compact'
         );

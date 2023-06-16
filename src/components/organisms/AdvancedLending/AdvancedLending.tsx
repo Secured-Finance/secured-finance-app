@@ -1,7 +1,7 @@
 import { toBytes32 } from '@secured-finance/sf-graph-client';
 import queries from '@secured-finance/sf-graph-client/dist/graphclients/';
 import { BigNumber } from 'ethers';
-import { useCallback, useMemo, useEffect } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
     AdvancedLendingTopBar,
@@ -11,13 +11,12 @@ import {
 import {
     AdvancedLendingOrderCard,
     LineChartTab,
+    OrderBookWidget,
     OrderTable,
-    OrderWidget,
 } from 'src/components/organisms';
 import { TwoColumnsWithTopBar } from 'src/components/templates';
-import { CollateralBook, useGraphClientHook } from 'src/hooks';
+import { CollateralBook, useGraphClientHook, useOrderList } from 'src/hooks';
 import { useOrderbook } from 'src/hooks/useOrderbook';
-import { useOrderList } from 'src/hooks';
 import { getAssetPrice } from 'src/store/assetPrices/selectors';
 import {
     selectLandingOrderForm,
@@ -50,10 +49,16 @@ const useTradeHistoryDetails = (
         let max = 0;
         let sum = BigNumber.from(0);
         let count = 0;
+        let lastTradePrice = 0;
+        let lastTradeTime = 0;
         for (const t of transactions) {
             const price = t.averagePrice * 10000;
             if (price < min) min = price;
             if (price > max) max = price;
+            if (t.createdAt > lastTradeTime) {
+                lastTradePrice = price;
+                lastTradeTime = t.createdAt;
+            }
             sum = sum.add(BigNumber.from(t.amount));
             count++;
         }
@@ -63,8 +68,14 @@ const useTradeHistoryDetails = (
             max: LoanValue.fromPrice(max, maturity.toNumber()),
             sum: currencyMap[currency].fromBaseUnit(sum),
             count,
+            lastTradeLoan: LoanValue.fromPrice(
+                lastTradePrice,
+                maturity.toNumber()
+            ),
+            lastTradeTime,
         };
-    }, [currency, maturity, transactions]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [currency, maturity.toNumber(), transactions.length]);
 };
 
 export const AdvancedLending = ({
@@ -87,9 +98,13 @@ export const AdvancedLending = ({
     );
 
     const { account } = useWallet();
-
-    const assetList = useMemo(() => getCurrencyMapAsOptions(), []);
     const dispatch = useDispatch();
+    const assetList = useMemo(() => getCurrencyMapAsOptions(), []);
+
+    const [timestamp, setTimestamp] = useState<number>(1643713200);
+    useEffect(() => {
+        setTimestamp(Math.round(new Date().getTime() / 1000));
+    }, []);
 
     const selectedTerm = useMemo(() => {
         return (
@@ -102,24 +117,20 @@ export const AdvancedLending = ({
     const orderBook = useOrderbook(currency, selectedTerm.value, 10);
     const orderList = useOrderList(account);
 
-    const ts = Math.round(new Date().getTime() / 1000);
-    const tsYesterday = ts - 24 * 3600;
-
-    const last24hoursTrades =
-        useGraphClientHook(
-            {
-                currency: toBytes32(currency),
-                maturity: maturity.toNumber(),
-                from: tsYesterday,
-                to: ts,
-            },
-            queries.TradesDocument,
-            'transactions',
-            false
-        ).data ?? [];
+    const last24hoursTrades = useGraphClientHook(
+        {
+            currency: toBytes32(currency),
+            maturity: maturity.toNumber(),
+            from: timestamp - 24 * 3600,
+            to: timestamp,
+        },
+        queries.TradesDocument,
+        'transactions',
+        false
+    ).data;
 
     const tradeHistoryDetails = useTradeHistoryDetails(
-        last24hoursTrades,
+        last24hoursTrades ?? [],
         currency,
         selectedTerm.value
     );
@@ -167,6 +178,8 @@ export const AdvancedLending = ({
                     }}
                     onAssetChange={handleCurrencyChange}
                     onTermChange={handleTermChange}
+                    lastTradeLoan={tradeHistoryDetails.lastTradeLoan}
+                    lastTradeTime={tradeHistoryDetails.lastTradeTime}
                     values={[
                         formatLoanValue(tradeHistoryDetails.max, 'price'),
                         formatLoanValue(tradeHistoryDetails.min, 'price'),
@@ -179,32 +192,19 @@ export const AdvancedLending = ({
         >
             <AdvancedLendingOrderCard collateralBook={collateralBook} />
             <div className='flex min-w-0 flex-grow flex-col gap-6'>
-                <Tab
-                    tabDataArray={[
-                        { text: 'Yield Curve' },
-                        { text: 'Price History', disabled: true },
-                    ]}
-                >
+                <Tab tabDataArray={[{ text: 'Yield Curve' }]}>
                     <LineChartTab
                         maturitiesOptionList={maturitiesOptionList}
                         rates={rates}
                     />
                     <div />
                 </Tab>
-                <HorizontalTab
-                    tabTitles={[
-                        'Order Book',
-                        'Market Trades',
-                        'My Orders',
-                        'My Trades',
-                    ]}
-                >
-                    <OrderWidget
+                <HorizontalTab tabTitles={['Order Book', 'My Orders']}>
+                    <OrderBookWidget
                         buyOrders={orderBook.borrowOrderbook}
                         sellOrders={orderBook.lendOrderbook}
                         currency={currency}
                     />
-                    <></>
                     <OrderTable data={orderList.activeOrderList} />
                 </HorizontalTab>
             </div>

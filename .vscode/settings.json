@@ -13,6 +13,7 @@
       "source.organizeImports": true
     }
   },
+  "prettier.prettierPath": "node_modules/prettier",
   "cSpell.words": [
     "attofil",
     "bignumber",
@@ -35,6 +36,7 @@
     "reduxjs",
     "Scriptable",
     "secp",
+    "Sepolia",
     "Subcontainer",
     "tanstack",
     "testid",

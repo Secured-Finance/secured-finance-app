@@ -42,6 +42,7 @@ type User = NonNullable<UserHistoryQuery['user']>;
 export type OrderList = User['orders'];
 export type TradeHistory = User['transactions'];
 export type DailyVolumes = DailyVolumesQuery['dailyVolumes'];
+export type Trades = TradesQuery['transactions'];
 
 export interface ColorFormat {
     color?: 'neutral' | 'positive' | 'negative';

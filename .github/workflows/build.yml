@@ -6,6 +6,11 @@ on:
         required: true
         type: string
       environment_name:
+        required: true
+        type: string
+      ref:
+        description: 'The branch or tag ref to checkout. Default is the branch that triggered the workflow.'
+        default: ''
         required: false
         type: string
     secrets:
@@ -29,6 +34,7 @@ jobs:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
+          ref: ${{ inputs.ref }}
 
       - uses: actions/setup-node@v3
         with:
@@ -48,7 +54,7 @@ jobs:
           NEXT_PUBLIC_EFIL_CONTRACT_ADDRESS=${{ vars.TOKEN_EFIL }}
           NEXT_PUBLIC_USDC_CONTRACT_ADDRESS=${{ vars.TOKEN_USDC }}
           NEXT_PUBLIC_WBTC_CONTRACT_ADDRESS=${{ vars.TOKEN_WBTC }}
-          NEXT_PUBLIC_USE_PACKAGE_VERSION=${{ vars.USE_COMMIT_HASH }}
+          NEXT_PUBLIC_USE_PACKAGE_VERSION=${{ vars.USE_PACKAGE_VERSION }}
           EOF
 
       - name: Check Syntax with Prettier
