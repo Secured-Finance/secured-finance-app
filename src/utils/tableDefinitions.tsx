@@ -10,9 +10,9 @@ import { Chip, CurrencyItem, PriceYieldItem } from 'src/components/atoms';
 import { TableContractCell, TableHeader } from 'src/components/molecules';
 import { AssetPriceMap } from 'src/store/assetPrices/selectors';
 import { ColorFormat } from 'src/types';
+import { formatTimestamp } from 'src/utils';
 import { currencyMap, hexToCurrencySymbol } from './currencyList';
 import { LoanValue, Maturity } from './entities';
-import { formatTimestamp } from 'src/utils';
 
 export const tableHeaderDefinition =
     <TData,>(title: string, titleHint?: string) =>

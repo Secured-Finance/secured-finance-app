@@ -7,7 +7,7 @@ import { useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { CoreTable, TableActionMenu } from 'src/components/molecules';
 import { UnwindDialog } from 'src/components/organisms';
-import { useBreakpoint, Position } from 'src/hooks';
+import { Position, useBreakpoint } from 'src/hooks';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { setCurrency, setMaturity } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
@@ -116,14 +116,9 @@ export const ActiveTradeTable = ({ data }: { data: Position[] }) => {
                     const amount = BigNumber.from(info.row.original.amount);
                     if (!ccy) return null;
                     return (
-                        <div className='relative flex justify-center'>
+                        <div className='flex justify-center'>
                             <TableActionMenu
                                 items={[
-                                    {
-                                        text: 'View Contract',
-                                        onClick: () => {},
-                                        disabled: true,
-                                    },
                                     {
                                         text: 'Add/Reduce Position',
                                         onClick: () => {
@@ -147,7 +142,7 @@ export const ActiveTradeTable = ({ data }: { data: Position[] }) => {
                         </div>
                     );
                 },
-                header: () => <div>Actions</div>,
+                header: () => <div className='p-2'>Actions</div>,
             }),
         ],
         [dispatch, priceList, router]

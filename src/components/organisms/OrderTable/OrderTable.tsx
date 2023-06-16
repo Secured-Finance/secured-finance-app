@@ -7,9 +7,9 @@ import { Maturity } from 'src/utils/entities';
 import {
     amountColumnDefinition,
     contractColumnDefinition,
+    dateAndTimeColumnDefinition,
     loanTypeColumnDefinition,
     priceYieldColumnDefinition,
-    dateAndTimeColumnDefinition,
 } from 'src/utils/tableDefinitions';
 
 const columnHelper = createColumnHelper<Order>();
@@ -66,7 +66,7 @@ export const OrderTable = ({ data }: { data: Order[] }) => {
                         />
                     );
                 },
-                header: () => <div>Actions</div>,
+                header: () => <div className='p-2'>Actions</div>,
             }),
         ],
         []
