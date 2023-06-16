@@ -34,7 +34,7 @@ export default {
         ...RESPONSIVE_PARAMETERS,
         chromatic: {
             ...RESPONSIVE_PARAMETERS.chromatic,
-            delay: 3000,
+            delay: 5000,
         },
     },
     decorators: [withFullPage, withAssetPrice, withWalletProvider],
