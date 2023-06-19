@@ -18,6 +18,7 @@ import {
     contractColumnDefinition,
     loanTypeFromAmountColumnDefinition,
     tableHeaderDefinition,
+    forwardValueColumnDefinition,
 } from 'src/utils/tableDefinitions';
 
 const columnHelper = createColumnHelper<Position>();
@@ -88,7 +89,7 @@ export const ActiveTradeTable = ({ data }: { data: Position[] }) => {
                     'Maturity of a loan contract is the date on which the contract is set to expire.'
                 ),
             }),
-            amountColumnDefinition(
+            forwardValueColumnDefinition(
                 columnHelper,
                 'FV',
                 'forwardValue',
