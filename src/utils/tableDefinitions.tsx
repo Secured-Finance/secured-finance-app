@@ -184,9 +184,7 @@ export const loanTypeColumnDefinition = <T extends SideProperty>(
     });
 };
 
-export const loanTypeFromAmountColumnDefinition = <
-    T extends ForwardValueProperty
->(
+export const loanTypeFromFVColumnDefinition = <T extends ForwardValueProperty>(
     columnHelper: ColumnHelper<T>,
     title: string,
     id: string
