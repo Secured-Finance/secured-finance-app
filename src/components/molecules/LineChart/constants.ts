@@ -125,6 +125,7 @@ export const options: ChartOptions<'line'> = {
             hoverBorderColor: '#FFFFFF',
             hoverBorderWidth: 2,
             backgroundColor: '#5162FF',
+            hitRadius: 24,
         },
     },
     scales: {
