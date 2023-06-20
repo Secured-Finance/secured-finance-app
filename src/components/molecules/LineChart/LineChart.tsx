@@ -12,7 +12,7 @@ import {
 } from 'chart.js';
 import ChartTooltip from 'chart.js/auto';
 import React, { useEffect, useRef } from 'react';
-import { ChartProps, Line, getElementAtEvent } from 'react-chartjs-2';
+import { ChartProps, Line } from 'react-chartjs-2';
 import { Spinner } from 'src/components/atoms';
 import {
     crossHairPlugin,
@@ -100,7 +100,12 @@ export const LineChart = ({
     const handleClick = (event: React.MouseEvent<HTMLCanvasElement>) => {
         if (!chartRef.current) return;
 
-        const element = getElementAtEvent(chartRef.current, event);
+        const element = chartRef.current.getElementsAtEventForMode(
+            event as unknown as Event,
+            'nearest',
+            { axis: 'x', intersect: false },
+            true
+        );
         if (element && element[0]) {
             const { index } = element[0];
             const label = data.labels?.[index];
