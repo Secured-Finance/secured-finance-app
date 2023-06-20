@@ -11,6 +11,7 @@ export type Position = {
     maturity: string;
     amount: BigNumber;
     forwardValue: BigNumber;
+    midPrice: BigNumber;
 };
 
 export const usePositions = (account: string | null) => {
@@ -46,6 +47,10 @@ export const usePositions = (account: string | null) => {
             maturity: position.maturity.toString(),
             amount: position.presentValue,
             forwardValue: position.futureValue,
+            midPrice: calculateMidPrice(
+                position.presentValue,
+                position.futureValue
+            ),
         }));
         setPositions(mappedPositions);
     }, [account, securedFinance]);
@@ -55,4 +60,11 @@ export const usePositions = (account: string | null) => {
     }, [block, fetchPositions]);
 
     return positions;
+};
+
+const calculateMidPrice = (
+    presentValue: BigNumber,
+    futureValue: BigNumber
+): BigNumber => {
+    return presentValue.mul(10000).div(futureValue);
 };
