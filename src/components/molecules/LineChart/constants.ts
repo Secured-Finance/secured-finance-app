@@ -50,12 +50,18 @@ export const crossHairPlugin = {
             const ctx = chart.ctx;
             const x = activePoint.element.x;
             const y = activePoint.element.y;
+            const topY = chart.scales.y.top;
             const bottomY = chart.scales.y.bottom;
             ctx.save();
             ctx.beginPath();
             ctx.moveTo(x, y);
             ctx.lineTo(x, bottomY + 15);
             ctx.lineWidth = 1;
+            const gradient = ctx.createLinearGradient(x, topY, x, bottomY);
+            gradient.addColorStop(0, 'rgba(217, 217, 217, 0.1)');
+            gradient.addColorStop(1, 'rgba(217, 217, 217, 0)');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(x - 24, topY, 48, bottomY - topY);
             ctx.setLineDash([8, 8]);
             ctx.strokeStyle = 'rgba(252, 252, 253, 1)';
             ctx.stroke();
@@ -125,7 +131,6 @@ export const options: ChartOptions<'line'> = {
             hoverBorderColor: '#FFFFFF',
             hoverBorderWidth: 2,
             backgroundColor: '#5162FF',
-            hitRadius: 24,
         },
     },
     scales: {
@@ -180,5 +185,5 @@ export const options: ChartOptions<'line'> = {
             },
         },
     },
-    events: ['click', 'mousemove', 'touchmove'],
+    events: ['click', 'mousemove'],
 };
