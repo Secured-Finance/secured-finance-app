@@ -164,6 +164,7 @@ describe('LendingCard Component', () => {
         expect(screen.getByText('Lending Source')).toBeInTheDocument();
         expect(screen.getByText('10,000 EFIL')).toBeInTheDocument();
     });
+
     it('should show Collateral Usage and Available to Borrow only in Borrow order', async () => {
         await waitFor(() => render(<Default />, { preloadedState }));
         expect(screen.queryByText('Available to borrow')).toBeInTheDocument();

@@ -103,19 +103,19 @@ export const DropdownSelector = <T extends string = string>({
 }) => {
     const [selectedOption, setSelectedOption] = useState<Option<T>>(selected);
 
-    const handleSelect = useCallback(
-        (option: Option<T>) => {
-            setSelectedOption(option);
-            onChange(option.value);
-        },
-        [onChange]
-    );
+    const handleSelect = useCallback((option: Option<T>) => {
+        setSelectedOption(option);
+    }, []);
 
     useEffect(() => {
-        if (selected.value === selectedOption.value) {
-            onChange(selected.value);
+        if (selectedOption) {
+            onChange(selectedOption.value);
         }
-    }, [selected.value, onChange, selectedOption.value]);
+    }, [onChange, selectedOption]);
+
+    useEffect(() => {
+        setSelectedOption(selected);
+    }, [selected]);
 
     return (
         <Listbox
@@ -123,6 +123,7 @@ export const DropdownSelector = <T extends string = string>({
             className='relative'
             value={selectedOption}
             onChange={handleSelect}
+            by='value'
         >
             {({ open }) => (
                 <>
@@ -169,10 +170,11 @@ export const DropdownSelector = <T extends string = string>({
                             }
                         )}
                     >
-                        {optionList.map((asset, i) => (
+                        {optionList.map((option, i) => (
                             <Listbox.Option
-                                key={`${asset.label}_${i}`}
-                                value={asset}
+                                key={`${option.label}_${i}`}
+                                value={option}
+                                className='cursor-pointer'
                             >
                                 {({ active, selected }) => (
                                     <>
@@ -185,14 +187,14 @@ export const DropdownSelector = <T extends string = string>({
                                                 }
                                             )}
                                         >
-                                            {asset.iconSVG ? (
+                                            {option.iconSVG ? (
                                                 <span>
-                                                    <asset.iconSVG className='h-6 w-6' />
+                                                    <option.iconSVG className='h-6 w-6' />
                                                 </span>
                                             ) : null}
 
                                             <span className='typography-button-1'>
-                                                {asset.label}
+                                                {option.label}
                                             </span>
                                         </div>
                                         {i !== optionList.length - 1 ? (

@@ -2,6 +2,7 @@ import { Tab as HeadlessTab } from '@headlessui/react';
 import classNames from 'classnames';
 import React, { Children, useState } from 'react';
 import { DropdownSelector } from 'src/components/atoms';
+import { useBreakpoint } from 'src/hooks';
 
 const TitleChip = ({
     title,
@@ -35,14 +36,18 @@ export const HorizontalTab = ({
     const arrayChildren = Children.toArray(children);
     const [selectedIndex, setSelectedIndex] = useState(0);
 
+    const isMobileOrTablet = useBreakpoint('tablet');
+
     return (
-        <div className='rounded-b-2xl border border-white-10 bg-cardBackground/60 shadow-tab'>
-            <HeadlessTab.Group
-                selectedIndex={selectedIndex}
-                onChange={setSelectedIndex}
-            >
-                <HeadlessTab.List className='h-16 justify-start border-b border-white-10 p-3'>
-                    <div className='w-full tablet:hidden'>
+        <HeadlessTab.Group
+            selectedIndex={selectedIndex}
+            onChange={setSelectedIndex}
+            className='rounded-b-2xl border border-white-10 bg-cardBackground/60 shadow-tab'
+            as='div'
+        >
+            <HeadlessTab.List className='h-16 justify-start border-b border-white-10 p-3'>
+                {({ selectedIndex }) =>
+                    isMobileOrTablet ? (
                         <DropdownSelector
                             optionList={tabTitles.map((title, index) => ({
                                 label: title,
@@ -57,29 +62,26 @@ export const HorizontalTab = ({
                             }
                             variant='fullWidth'
                         />
-                    </div>
-                    <div className='hidden tablet:block'>
-                        {tabTitles.map((title, index) => {
-                            return (
-                                <HeadlessTab
-                                    key={index}
-                                    className='h-full focus:outline-none'
-                                >
-                                    {({ selected }) => (
-                                        <TitleChip
-                                            title={title}
-                                            selected={selected}
-                                        />
-                                    )}
-                                </HeadlessTab>
-                            );
-                        })}
-                    </div>
-                </HeadlessTab.List>
-                <HeadlessTab.Panels className='min-h-[30vh] rounded-b-2xl bg-black-20 px-2'>
-                    {arrayChildren[selectedIndex]}
-                </HeadlessTab.Panels>
-            </HeadlessTab.Group>
-        </div>
+                    ) : (
+                        tabTitles.map((title, index) => (
+                            <HeadlessTab
+                                key={index}
+                                className='h-full focus:outline-none'
+                            >
+                                {({ selected }) => (
+                                    <TitleChip
+                                        title={title}
+                                        selected={selected}
+                                    />
+                                )}
+                            </HeadlessTab>
+                        ))
+                    )
+                }
+            </HeadlessTab.List>
+            <HeadlessTab.Panels className='min-h-[30vh] rounded-b-2xl bg-black-20 px-2'>
+                {arrayChildren[selectedIndex]}
+            </HeadlessTab.Panels>
+        </HeadlessTab.Group>
     );
 };

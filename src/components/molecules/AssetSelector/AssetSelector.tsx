@@ -95,7 +95,7 @@ export const AssetSelector = <AssetType extends string = string>({
             <div className='flex h-14 flex-row items-center justify-between space-x-2 rounded-lg bg-black-20 py-2 pl-2 pr-4 ring-starBlue focus-within:ring'>
                 <DropdownSelector
                     optionList={options}
-                    selected={selected}
+                    selected={selectedOption}
                     onChange={handleAssetChange}
                 />
                 <InputBase

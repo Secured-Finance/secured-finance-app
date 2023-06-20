@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { DropdownSelector, Option } from 'src/components/atoms';
 
 export const TermSelector = <T extends string = string>({
@@ -25,6 +25,10 @@ export const TermSelector = <T extends string = string>({
         }
     };
 
+    useEffect(() => {
+        setTermValue(selected.value);
+    }, [selected]);
+
     return (
         <div className='flex flex-col items-start justify-start space-y-2'>
             <div className='typography-caption-2 ml-2 text-planetaryPurple'>
@@ -34,7 +38,7 @@ export const TermSelector = <T extends string = string>({
                 <div>
                     <DropdownSelector
                         optionList={options}
-                        selected={selected}
+                        selected={selectedTerm}
                         onChange={handleTermChange}
                     />
                 </div>
