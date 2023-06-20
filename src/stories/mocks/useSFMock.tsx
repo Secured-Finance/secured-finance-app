@@ -362,7 +362,7 @@ export const mockUseSF = () => {
                     ccy: efilBytes32,
                     maturity: dec22Fixture.toString(),
                     presentValue: BigNumber.from('10000000000000000000'),
-                    futureValue: BigNumber.from('10210000000000000000'),
+                    futureValue: BigNumber.from('10220000000000000000'),
                 },
                 {
                     ccy: efilBytes32,

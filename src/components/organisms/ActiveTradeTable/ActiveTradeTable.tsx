@@ -18,6 +18,7 @@ import {
     contractColumnDefinition,
     loanTypeFromAmountColumnDefinition,
     tableHeaderDefinition,
+    priceYieldColumnDefinition,
 } from 'src/utils/tableDefinitions';
 
 const columnHelper = createColumnHelper<Position>();
@@ -107,6 +108,12 @@ export const ActiveTradeTable = ({ data }: { data: Position[] }) => {
                     compact: false,
                 },
                 'Present Value (PV) is the current worth of the contract, taking into account the time value of money.'
+            ),
+            priceYieldColumnDefinition(
+                columnHelper,
+                'Mid Price',
+                'midPrice',
+                row => row.midPrice
             ),
             columnHelper.display({
                 id: 'actions',
