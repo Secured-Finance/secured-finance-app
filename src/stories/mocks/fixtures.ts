@@ -410,32 +410,32 @@ export const transactions: TradeHistory = [
 
 export const positions: Position[] = [
     {
-        amount: BigNumber.from('500000000000000000000'),
+        amount: BigNumber.from('400000000000000000000'),
         currency: efilBytes32,
         forwardValue: BigNumber.from('500000000000000000000'),
         maturity: jun23Fixture.toString(),
-        midPrice: BigNumber.from(0),
+        midPrice: BigNumber.from(8000),
     },
     {
         amount: BigNumber.from('-500000000000000000000'),
         currency: efilBytes32,
-        forwardValue: BigNumber.from('-520000000000000000000'),
+        forwardValue: BigNumber.from('-1000000000000000000000'),
         maturity: mar23Fixture.toString(),
-        midPrice: BigNumber.from(0),
+        midPrice: BigNumber.from(5000),
     },
     {
-        amount: BigNumber.from('-1000000000'),
-        forwardValue: BigNumber.from('-1040000000'),
+        amount: BigNumber.from('-900000000'),
+        forwardValue: BigNumber.from('-1000000000'),
         currency: wbtcBytes32,
         maturity: jun23Fixture.toString(),
-        midPrice: BigNumber.from(0),
+        midPrice: BigNumber.from(9000),
     },
     {
-        amount: BigNumber.from('500000000'),
-        forwardValue: BigNumber.from('505000000'),
+        amount: BigNumber.from('495000000'),
+        forwardValue: BigNumber.from('500000000'),
         currency: wbtcBytes32,
         maturity: dec22Fixture.toString(),
-        midPrice: BigNumber.from(0),
+        midPrice: BigNumber.from(9900),
     },
 ];
 
