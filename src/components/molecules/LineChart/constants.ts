@@ -179,5 +179,5 @@ export const options: ChartOptions<'line'> = {
             },
         },
     },
-    events: ['click', 'mousemove'],
+    events: ['click', 'mousemove', 'touchmove'],
 };
