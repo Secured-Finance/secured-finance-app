@@ -35,11 +35,11 @@ const Template: ComponentStory<typeof ActiveTradeTable> = args => {
             midPrice: BigNumber.from(10000),
         },
         {
-            amount: BigNumber.from('500000000000000000000'),
+            amount: BigNumber.from('0'),
             currency: efilBytes32,
             forwardValue: BigNumber.from('500000000000000000000'),
             maturity: new Maturity(getFutureTimeStamp(28)).toString(),
-            midPrice: BigNumber.from(10000),
+            midPrice: BigNumber.from(0),
         },
     ];
 
