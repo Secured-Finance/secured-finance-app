@@ -3,13 +3,14 @@ import { useMemo } from 'react';
 import { CoreTable } from 'src/components/molecules';
 import { useBreakpoint } from 'src/hooks';
 import { TradeHistory } from 'src/types';
-import { formatLoanValue, formatTimestamp } from 'src/utils';
+import { formatLoanValue } from 'src/utils';
 import { LoanValue } from 'src/utils/entities';
 import {
     amountColumnDefinition,
     contractColumnDefinition,
     loanTypeColumnDefinition,
     tableHeaderDefinition,
+    dateAndTimeColumnDefinition,
 } from 'src/utils/tableDefinitions';
 
 const columnHelper = createColumnHelper<TradeHistory[0]>();
@@ -40,19 +41,6 @@ const priceYieldColumnDef = (
     });
 };
 
-const timestampColumnDef = (headerTitle: string) => {
-    return columnHelper.accessor('createdAt', {
-        cell: info => {
-            return (
-                <div className='typography-caption text-slateGray'>
-                    {formatTimestamp(+info.getValue().toString())}
-                </div>
-            );
-        },
-        header: tableHeaderDefinition(headerTitle),
-    });
-};
-
 export const MyTransactionsTable = ({ data }: { data: TradeHistory }) => {
     const isTablet = useBreakpoint('tablet');
     const columns = useMemo(
@@ -69,7 +57,7 @@ export const MyTransactionsTable = ({ data }: { data: TradeHistory }) => {
                 'Amount',
                 'amount',
                 row => row.amount,
-                { compact: true, color: true }
+                { compact: true, color: true, fontSize: 'typography-caption-2' }
             ),
             priceYieldColumnDef('Price/DF', 'price', 'price'),
             priceYieldColumnDef('APR%', 'apr', 'rate'),
@@ -78,9 +66,18 @@ export const MyTransactionsTable = ({ data }: { data: TradeHistory }) => {
                 'F.V.',
                 'forwardValue',
                 row => row.forwardValue,
-                { compact: true, color: true }
+                {
+                    compact: true,
+                    color: false,
+                    fontSize: 'typography-caption-2',
+                }
             ),
-            timestampColumnDef('Date and Time'),
+            dateAndTimeColumnDefinition(
+                columnHelper,
+                'Date and Time',
+                'createdAt',
+                row => row.createdAt
+            ),
         ],
         []
     );

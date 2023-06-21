@@ -66,5 +66,6 @@ const calculateMidPrice = (
     presentValue: BigNumber,
     futureValue: BigNumber
 ): BigNumber => {
-    return presentValue.mul(10000).div(futureValue);
+    const midPrice = presentValue.mul(1000000).div(futureValue);
+    return BigNumber.from(Math.round(midPrice.toNumber() / 100));
 };

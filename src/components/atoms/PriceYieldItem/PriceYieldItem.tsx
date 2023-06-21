@@ -4,7 +4,7 @@ import { LoanValue } from 'src/utils/entities';
 
 export const PriceYieldItem = ({
     loanValue,
-    align = 'left',
+    align = 'right',
     compact = false,
     firstLineType = 'price',
 }: {
@@ -21,7 +21,15 @@ export const PriceYieldItem = ({
                 'text-left': align === 'left',
             })}
         >
-            <span className='typography-caption-2 h-6 text-neutral-6'>
+            <span
+                className={classNames(
+                    {
+                        'typography-caption-2': compact === true,
+                        'typography-caption': compact === false,
+                    },
+                    'h-6 text-neutral-6'
+                )}
+            >
                 {formatLoanValue(loanValue, firstLineType)}
             </span>
             {compact === false ? (
