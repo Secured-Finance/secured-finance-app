@@ -19,6 +19,7 @@ import {
     loanTypeFromFVColumnDefinition,
     tableHeaderDefinition,
     forwardValueColumnDefinition,
+    priceYieldColumnDefinition,
 } from 'src/utils/tableDefinitions';
 
 const columnHelper = createColumnHelper<Position>();
