@@ -46,6 +46,23 @@ describe('ActiveTradeTable Component', () => {
         expect(sortedRowsDesc[6]).toHaveTextContent('Lend');
     });
 
+    it('should display correct color code for future value', () => {
+        render(<Default />);
+        const rows = screen.getAllByTestId('currency-amount-item');
+        let firstSpan = rows[0].querySelector('span');
+        expect(firstSpan?.classList).toContain('text-nebulaTeal');
+        firstSpan = rows[2].querySelector('span');
+        expect(firstSpan?.classList).toContain('text-galacticOrange');
+        firstSpan = rows[4].querySelector('span');
+        expect(firstSpan?.classList).toContain('text-galacticOrange');
+        firstSpan = rows[6].querySelector('span');
+        expect(firstSpan?.classList).toContain('text-nebulaTeal');
+        firstSpan = rows[8].querySelector('span');
+        expect(firstSpan?.classList).toContain('text-nebulaTeal');
+        firstSpan = rows[10].querySelector('span');
+        expect(firstSpan?.classList).toContain('text-nebulaTeal');
+    });
+
     it('should display more options when clicking on the ... button', () => {
         render(<Default />);
         expect(screen.queryByRole('menu')).not.toBeInTheDocument();
