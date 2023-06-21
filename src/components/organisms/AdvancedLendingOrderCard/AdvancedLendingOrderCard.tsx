@@ -122,10 +122,15 @@ export const AdvancedLendingOrderCard = ({
     }, [sourceAccount, walletSourceList]);
 
     const handleAmountChange = (percentage: number) => {
+        const balanceToLend =
+            selectedWalletSource.source === WalletSource.METAMASK
+                ? balanceRecord[currency]
+                : amountFormatterFromBase[currency](
+                      collateralBook.nonCollateral[currency] ??
+                          BigNumber.from(0)
+                  );
         const available =
-            side === OrderSide.BORROW
-                ? availableToBorrow
-                : balanceRecord[currency];
+            side === OrderSide.BORROW ? availableToBorrow : balanceToLend;
         dispatch(
             setAmount(
                 amountFormatterToBase[currency](
