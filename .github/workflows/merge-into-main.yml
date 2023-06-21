@@ -31,3 +31,4 @@ jobs:
           git config user.email "${{ secrets.MACHINE_USER_APP_ID }}+sf-machine-user[bot]@users.noreply.github.com"
           git switch main
           git merge ${{ github.event.inputs.commit || 'develop' }}
+          git push
