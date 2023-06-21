@@ -57,7 +57,7 @@ export const crossHairPlugin = {
             ctx.moveTo(x, y);
             ctx.lineTo(x, bottomY + 15);
             ctx.lineWidth = 1;
-            const gradient = ctx.createLinearGradient(x, topY, x, bottomY);
+            const gradient = ctx.createLinearGradient(x, bottomY, x, topY);
             gradient.addColorStop(0, 'rgba(217, 217, 217, 0.1)');
             gradient.addColorStop(1, 'rgba(217, 217, 217, 0)');
             ctx.fillStyle = gradient;
@@ -119,11 +119,6 @@ export const options: ChartOptions<'line'> = {
     interaction: {
         mode: 'index',
         intersect: false,
-    },
-    layout: {
-        padding: {
-            top: 50,
-        },
     },
     elements: {
         point: {
