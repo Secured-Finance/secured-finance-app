@@ -1,7 +1,7 @@
 import { Listbox, Transition } from '@headlessui/react';
 import { WalletSource } from '@secured-finance/sf-client';
 import classNames from 'classnames';
-import { Fragment, useEffect, useMemo, useState } from 'react';
+import { Fragment, useMemo, useState } from 'react';
 import { ExpandIndicator, Separator } from 'src/components/atoms';
 import { SvgIcon } from 'src/types';
 import { AddressUtils, CurrencySymbol, ordinaryFormat } from 'src/utils';
@@ -51,10 +51,6 @@ export const WalletSourceSelector = ({
         [list, selectedValue]
     );
 
-    useEffect(() => {
-        onChange(selectedValue.source);
-    }, [selectedValue, onChange]);
-
     return (
         <div className='flex h-20 w-full flex-col justify-between'>
             <div className='typography-caption-2 flex flex-row justify-between text-planetaryPurple'>
@@ -62,7 +58,13 @@ export const WalletSourceSelector = ({
                 <span className='mr-1'>Available to Lend</span>
             </div>
             <div className='w-full'>
-                <Listbox value={selectedOption} onChange={setSelectedValue}>
+                <Listbox
+                    value={selectedOption}
+                    onChange={v => {
+                        setSelectedValue(v);
+                        onChange(v.source);
+                    }}
+                >
                     {({ open }) => (
                         <>
                             <div className='relative h-full'>
