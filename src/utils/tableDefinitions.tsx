@@ -70,6 +70,7 @@ export const amountColumnDefinition = <T extends AmountColumnType>(
         color: boolean;
         compact: boolean;
         priceList?: AssetPriceMap;
+        fontSize?: string;
     },
     titleHint?: string
 ) => {
@@ -102,6 +103,7 @@ export const amountColumnDefinition = <T extends AmountColumnType>(
                             price={options.priceList?.[ccy]}
                             color={options.color ? color : undefined}
                             compact={options.compact}
+                            fontSize={options.fontSize}
                         />
                     </div>
                 </div>
@@ -291,8 +293,12 @@ export const dateAndTimeColumnDefinition = <T extends { createdAt: BigNumber }>(
         id: id,
         cell: info => {
             return (
-                <div className='typography-caption text-slateGray'>
-                    {formatTimestamp(+info.getValue().toString())}
+                <div className='flex justify-center'>
+                    <div className='flex flex-col text-right'>
+                        <span className='typography-caption-2 h-6 text-slateGray'>
+                            {formatTimestamp(+info.getValue().toString())}
+                        </span>
+                    </div>
                 </div>
             );
         },
