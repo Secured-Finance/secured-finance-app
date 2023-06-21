@@ -16,9 +16,9 @@ import { Amount, Maturity } from 'src/utils/entities';
 import {
     amountColumnDefinition,
     contractColumnDefinition,
-    loanTypeFromAmountColumnDefinition,
+    loanTypeFromFVColumnDefinition,
     tableHeaderDefinition,
-    priceYieldColumnDefinition,
+    forwardValueColumnDefinition,
 } from 'src/utils/tableDefinitions';
 
 const columnHelper = createColumnHelper<Position>();
@@ -36,7 +36,7 @@ export const ActiveTradeTable = ({ data }: { data: Position[] }) => {
 
     const columns = useMemo(
         () => [
-            loanTypeFromAmountColumnDefinition(columnHelper, 'Type', 'side'),
+            loanTypeFromFVColumnDefinition(columnHelper, 'Type', 'side'),
             contractColumnDefinition(columnHelper, 'Contract', 'contract'),
             columnHelper.accessor('maturity', {
                 cell: info => {
@@ -89,7 +89,7 @@ export const ActiveTradeTable = ({ data }: { data: Position[] }) => {
                     'Maturity of a loan contract is the date on which the contract is set to expire.'
                 ),
             }),
-            amountColumnDefinition(
+            forwardValueColumnDefinition(
                 columnHelper,
                 'FV',
                 'forwardValue',

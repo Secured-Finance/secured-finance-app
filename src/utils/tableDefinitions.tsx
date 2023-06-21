@@ -36,12 +36,24 @@ type SideProperty = {
 type AmountProperty = {
     amount: BigNumber;
 };
-type AmountColumnType = (AmountProperty | SideProperty) & CurrencyProperty;
+
+type ForwardValueProperty = {
+    forwardValue: BigNumber;
+};
+
+type AmountColumnType = (AmountProperty | SideProperty | ForwardValueProperty) &
+    CurrencyProperty;
 
 function hasAmountProperty<T extends AmountColumnType>(
     obj: T
 ): obj is T & AmountProperty {
     return (obj as AmountProperty).amount !== undefined;
+}
+
+function hasForwardValueProperty<T extends AmountColumnType>(
+    obj: T
+): obj is T & ForwardValueProperty {
+    return (obj as ForwardValueProperty).forwardValue !== undefined;
 }
 
 function hasSideProperty<T extends AmountColumnType>(
@@ -101,6 +113,56 @@ export const amountColumnDefinition = <T extends AmountColumnType>(
     });
 };
 
+export const forwardValueColumnDefinition = <T extends AmountColumnType>(
+    columnHelper: ColumnHelper<T>,
+    title: string,
+    id: string,
+    accessor: AccessorFn<T, BigNumber>,
+    options: {
+        color: boolean;
+        compact: boolean;
+        priceList?: AssetPriceMap;
+    },
+    titleHint?: string
+) => {
+    return columnHelper.accessor(accessor, {
+        id: id,
+        cell: info => {
+            const ccy = hexToCurrencySymbol(info.row.original.currency);
+            if (!ccy) return null;
+
+            let color: ColorFormat['color'];
+            if (hasSideProperty(info.row.original)) {
+                color = info.row.original.side === 1 ? 'negative' : 'positive';
+            } else if (hasForwardValueProperty(info.row.original)) {
+                color = info.row.original.forwardValue.isNegative()
+                    ? 'negative'
+                    : 'positive';
+            } else {
+                // do nothing
+            }
+
+            return (
+                <div className='flex w-full items-center justify-end whitespace-nowrap pr-[15%]'>
+                    <div className='flex justify-end'>
+                        <CurrencyItem
+                            amount={currencyMap[ccy].fromBaseUnit(
+                                info.getValue() as BigNumber
+                            )}
+                            ccy={ccy}
+                            align='right'
+                            price={options.priceList?.[ccy]}
+                            color={options.color ? color : undefined}
+                            compact={options.compact}
+                        />
+                    </div>
+                </div>
+            );
+        },
+        header: tableHeaderDefinition(title, titleHint),
+    });
+};
+
 export const loanTypeColumnDefinition = <T extends SideProperty>(
     columnHelper: ColumnHelper<T>,
     title: string,
@@ -124,12 +186,12 @@ export const loanTypeColumnDefinition = <T extends SideProperty>(
     });
 };
 
-export const loanTypeFromAmountColumnDefinition = <T extends AmountProperty>(
+export const loanTypeFromFVColumnDefinition = <T extends ForwardValueProperty>(
     columnHelper: ColumnHelper<T>,
     title: string,
     id: string
 ) => {
-    const assessorFn: AccessorFn<T, BigNumber> = row => row.amount;
+    const assessorFn: AccessorFn<T, BigNumber> = row => row.forwardValue;
 
     return columnHelper.accessor(assessorFn, {
         id: id,
