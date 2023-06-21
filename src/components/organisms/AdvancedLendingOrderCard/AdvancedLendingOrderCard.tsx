@@ -143,10 +143,15 @@ export const AdvancedLendingOrderCard = ({
 
     const handleInputChange = (v: number | BigNumber) => {
         dispatch(setAmount(v as BigNumber));
+        const balanceToLend =
+            selectedWalletSource.source === WalletSource.METAMASK
+                ? balanceRecord[currency]
+                : amountFormatterFromBase[currency](
+                      collateralBook.nonCollateral[currency] ??
+                          BigNumber.from(0)
+                  );
         const available =
-            side === OrderSide.BORROW
-                ? availableToBorrow
-                : balanceRecord[currency];
+            side === OrderSide.BORROW ? availableToBorrow : balanceToLend;
         const inputValue = amountFormatterFromBase[currency](v as BigNumber);
         available > 0
             ? setSliderValue(Math.min(100.0, (inputValue * 100.0) / available))
@@ -157,6 +162,11 @@ export const AdvancedLendingOrderCard = ({
             dispatch(setOrderType(OrderType.LIMIT));
         }
     }, [dispatch, onlyLimitOrder]);
+
+    const handleWalletSourceChange = (source: WalletSource) => {
+        dispatch(setSourceAccount(source));
+        handleInputChange(0);
+    };
 
     return (
         <div className='h-fit rounded-b-xl border border-white-10 bg-cardBackground bg-opacity-60 pb-7'>
@@ -208,7 +218,7 @@ export const AdvancedLendingOrderCard = ({
                         optionList={walletSourceList}
                         selected={selectedWalletSource}
                         account={account ?? ''}
-                        onChange={v => dispatch(setSourceAccount(v))}
+                        onChange={handleWalletSourceChange}
                     />
                 )}
                 <div className='flex flex-col gap-[10px]'>
