@@ -355,8 +355,8 @@ export const mockUseSF = () => {
                 {
                     ccy: ethBytes32,
                     maturity: mar23Fixture.toString(),
-                    presentValue: BigNumber.from('-9954750000000000000'),
-                    futureValue: BigNumber.from('-10210000000000000000'),
+                    presentValue: BigNumber.from('-10558255657026800000'),
+                    futureValue: BigNumber.from('-11113953323186200000'),
                 },
                 {
                     ccy: efilBytes32,
@@ -367,8 +367,8 @@ export const mockUseSF = () => {
                 {
                     ccy: efilBytes32,
                     maturity: mar23Fixture.toString(),
-                    presentValue: BigNumber.from('-9954750000000000000'),
-                    futureValue: BigNumber.from('-10210000000000000000'),
+                    presentValue: BigNumber.from('-10558255657026800000'),
+                    futureValue: BigNumber.from('-11113953323186200000'),
                 },
             ])
         ),
