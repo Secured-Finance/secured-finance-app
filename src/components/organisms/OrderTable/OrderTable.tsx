@@ -44,7 +44,11 @@ export const OrderTable = ({ data }: { data: Order[] }) => {
                 'Amount',
                 'amount',
                 row => row.amount,
-                { compact: true, color: false }
+                {
+                    compact: true,
+                    color: false,
+                    fontSize: 'typography-caption-2',
+                }
             ),
             dateAndTimeColumnDefinition(
                 columnHelper,
