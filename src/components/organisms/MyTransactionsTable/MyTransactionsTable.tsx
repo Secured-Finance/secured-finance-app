@@ -63,12 +63,12 @@ export const MyTransactionsTable = ({ data }: { data: TradeHistory }) => {
             priceYieldColumnDef('APR%', 'apr', 'rate'),
             amountColumnDefinition(
                 columnHelper,
-                'F.V.',
+                'FV',
                 'forwardValue',
                 row => row.forwardValue,
                 {
                     compact: true,
-                    color: false,
+                    color: true,
                     fontSize: 'typography-caption-2',
                 }
             ),
