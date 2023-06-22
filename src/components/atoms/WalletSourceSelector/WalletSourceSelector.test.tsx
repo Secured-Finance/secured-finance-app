@@ -30,7 +30,7 @@ describe('WalletSourceSelector component', () => {
         expect(screen.getByText('Lending Source')).toBeInTheDocument();
         expect(screen.getByText('Available to Lend')).toBeInTheDocument();
         expect(screen.getByText('0xb98b...fd6d')).toBeInTheDocument();
-        expect(screen.getByText('1,000 WBTC')).toBeInTheDocument();
+        expect(screen.getByText('1,000.00 WBTC')).toBeInTheDocument();
     });
 
     it('should render a clickable button', () => {
@@ -55,7 +55,7 @@ describe('WalletSourceSelector component', () => {
 
         await waitFor(() => {
             expect(screen.getByText('SF Vault')).toBeInTheDocument();
-            expect(screen.getByText('4,000 WBTC')).toBeInTheDocument();
+            expect(screen.getByText('4,000.00 WBTC')).toBeInTheDocument();
 
             expect(onChange).toBeCalledTimes(1);
             expect(onChange).toHaveBeenLastCalledWith(WalletSource.SF_VAULT);
@@ -65,7 +65,7 @@ describe('WalletSourceSelector component', () => {
     it('should not render options which have zero balance except metamask', async () => {
         render(<Default optionList={walletSourceList} />);
         expect(screen.getByText('0xb98b...fd6d')).toBeInTheDocument();
-        expect(screen.getByText('1,000 WBTC')).toBeInTheDocument();
+        expect(screen.getByText('1,000.00 WBTC')).toBeInTheDocument();
 
         fireEvent.click(screen.getByTestId('wallet-source-selector-button'));
         await waitFor(() => {
