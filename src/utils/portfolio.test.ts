@@ -1,7 +1,7 @@
 import { BigNumber, utils } from 'ethers';
 import { formatBytes32String } from 'ethers/lib/utils';
 import { AssetPriceMap } from 'src/store/assetPrices/selectors';
-import { TradeHistory, Open } from 'src/types';
+import { TradeHistory } from 'src/types';
 import timemachine from 'timemachine';
 import { CurrencySymbol } from './currencyList';
 import {
@@ -243,7 +243,7 @@ describe('checkOrderIsFilled', () => {
             unitPrice: BigNumber.from('9800'),
             filledAmount: BigNumber.from('1000000000000000000000'),
             amount: BigNumber.from('1000000000000000000000'),
-            status: Open,
+            status: 'Open' as const,
             createdAt: BigNumber.from('1'),
             txHash: utils.formatBytes32String('hash'),
         };
@@ -260,7 +260,7 @@ describe('checkOrderIsFilled', () => {
             unitPrice: BigNumber.from('9800'),
             filledAmount: BigNumber.from('1000000000000000000000'),
             amount: BigNumber.from('1000000000000000000000'),
-            status: Open,
+            status: 'Open' as const,
             createdAt: BigNumber.from('1'),
             txHash: utils.formatBytes32String('hash'),
         };
