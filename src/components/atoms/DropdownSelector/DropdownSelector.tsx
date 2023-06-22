@@ -162,7 +162,7 @@ export const DropdownSelector = <T extends string = string>({
                     </Listbox.Button>
                     <Listbox.Options
                         className={classNames(
-                            'scrollbar absolute z-50 mt-2 flex flex-col overflow-y-auto rounded-lg bg-gunMetal p-2 shadow-sm',
+                            'scrollbar absolute bottom-0 z-50 mt-2 flex flex-col overflow-y-auto rounded-lg bg-gunMetal p-2 shadow-sm tablet:bottom-auto',
                             {
                                 'right-0': variant === 'noLabel',
                                 'max-h-60 w-52': variant !== 'fullWidth',
@@ -176,14 +176,13 @@ export const DropdownSelector = <T extends string = string>({
                                 value={option}
                                 className='cursor-pointer'
                             >
-                                {({ active, selected }) => (
+                                {({ active }) => (
                                     <>
                                         <div
                                             className={classNames(
                                                 'flex flex-row items-center justify-start space-x-4 rounded-lg p-2 text-white-80',
                                                 {
-                                                    'bg-horizonBlue':
-                                                        active || selected,
+                                                    'bg-horizonBlue': active,
                                                 }
                                             )}
                                         >
