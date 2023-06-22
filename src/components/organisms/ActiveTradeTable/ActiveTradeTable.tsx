@@ -117,7 +117,7 @@ export const ActiveTradeTable = ({ data }: { data: Position[] }) => {
                 row => row.midPrice,
                 'default',
                 'price',
-                'Mid Price is the average unitPrice of the best borrowing and lending order unitPrice.'
+                'Mid Price is the average price of the best borrowing and lending order unit price.'
             ),
             columnHelper.display({
                 id: 'actions',
