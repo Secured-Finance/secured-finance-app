@@ -121,39 +121,41 @@ export const AdvancedLendingOrderCard = ({
         );
     }, [sourceAccount, walletSourceList]);
 
+    const balanceToLend = useMemo(() => {
+        return selectedWalletSource.source === WalletSource.METAMASK
+            ? balanceRecord[currency]
+            : amountFormatterFromBase[currency](
+                  collateralBook.nonCollateral[currency] ?? BigNumber.from(0)
+              );
+    }, [
+        balanceRecord,
+        collateralBook.nonCollateral,
+        currency,
+        selectedWalletSource.source,
+    ]);
+
     const handleAmountChange = (percentage: number) => {
-        const balanceToLend =
-            selectedWalletSource.source === WalletSource.METAMASK
-                ? balanceRecord[currency]
-                : amountFormatterFromBase[currency](
-                      collateralBook.nonCollateral[currency] ??
-                          BigNumber.from(0)
-                  );
         const available =
             side === OrderSide.BORROW ? availableToBorrow : balanceToLend;
-        dispatch(
-            setAmount(
-                amountFormatterToBase[currency](
-                    Math.floor(percentage * available) / 100.0
-                )
-            )
-        );
+        available
+            ? dispatch(
+                  setAmount(
+                      amountFormatterToBase[currency](
+                          Math.floor(percentage * available) / 100.0
+                      )
+                  )
+              )
+            : dispatch(setAmount(BigNumber.from(0)));
         setSliderValue(percentage);
     };
 
     const handleInputChange = (v: number | BigNumber) => {
         dispatch(setAmount(v as BigNumber));
-        const balanceToLend =
-            selectedWalletSource.source === WalletSource.METAMASK
-                ? balanceRecord[currency]
-                : amountFormatterFromBase[currency](
-                      collateralBook.nonCollateral[currency] ??
-                          BigNumber.from(0)
-                  );
+
         const available =
             side === OrderSide.BORROW ? availableToBorrow : balanceToLend;
         const inputValue = amountFormatterFromBase[currency](v as BigNumber);
-        available > 0
+        available && available > 0
             ? setSliderValue(Math.min(100.0, (inputValue * 100.0) / available))
             : setSliderValue(0.0);
     };
