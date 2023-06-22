@@ -313,7 +313,7 @@ export const mockUseSF = () => {
                         timestamp: BigNumber.from('1609205000'),
                     },
                     {
-                        orderId: 4,
+                        orderId: 1,
                         ccy: wbtcBytes32,
                         side: 0,
                         maturity: BigNumber.from(dec22Fixture.toString()),
@@ -324,18 +324,18 @@ export const mockUseSF = () => {
                 ],
                 inactiveOrders: [
                     {
-                        orderId: 4,
+                        orderId: 1,
                         ccy: ethBytes32,
                         side: 0,
                         maturity: BigNumber.from(dec22Fixture.toString()),
                         unitPrice: BigNumber.from('9800'),
-                        amount: BigNumber.from('1000000000000000000'),
+                        amount: BigNumber.from('450000000000000000'),
                         timestamp: BigNumber.from('1609295092'),
                     },
                     {
-                        orderId: 5,
+                        orderId: 1,
                         ccy: efilBytes32,
-                        side: 0,
+                        side: 1,
                         maturity: BigNumber.from(dec22Fixture.toString()),
                         unitPrice: BigNumber.from('9800'),
                         amount: BigNumber.from('1000000000000000000000'),
