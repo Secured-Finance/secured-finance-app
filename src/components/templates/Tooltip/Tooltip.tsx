@@ -36,7 +36,7 @@ export const Tooltip = ({
                             role='tooltip'
                             static
                         >
-                            <div className='typography-caption-3 relative w-fit overflow-hidden whitespace-normal rounded-lg border border-black-20 bg-gunMetal p-4 text-neutral-8 shadow-dropdown'>
+                            <div className='typography-caption-3 relative w-fit overflow-hidden whitespace-normal rounded-lg border border-black-20 bg-gunMetal p-4 text-left text-neutral-8 shadow-dropdown'>
                                 {children}
                             </div>
                         </Popover.Panel>

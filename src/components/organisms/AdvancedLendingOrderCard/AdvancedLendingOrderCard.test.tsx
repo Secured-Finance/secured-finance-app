@@ -158,7 +158,7 @@ describe('AdvancedLendingOrderCard Component', () => {
         await waitFor(() =>
             expect(screen.getByText('Lending Source')).toBeInTheDocument()
         );
-        expect(screen.getByText('10,000 USDC')).toBeInTheDocument();
+        expect(screen.getByText('10,000.00 USDC')).toBeInTheDocument();
     });
 
     it('should change amount when slider is moved', async () => {
