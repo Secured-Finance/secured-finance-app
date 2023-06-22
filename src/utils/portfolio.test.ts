@@ -1,5 +1,4 @@
 import { BigNumber, utils } from 'ethers';
-import { formatBytes32String } from 'ethers/lib/utils';
 import { AssetPriceMap } from 'src/store/assetPrices/selectors';
 import { TradeHistory } from 'src/types';
 import timemachine from 'timemachine';
@@ -63,67 +62,77 @@ describe('computeNetValue', () => {
         [CurrencySymbol.WBTC]: 30000,
     };
     it('should return the net value', () => {
-        const trades = [
+        const positions = [
             {
-                amount: '1000000000000000000',
-                currency: formatBytes32String(CurrencySymbol.ETH),
-                side: 0,
+                amount: BigNumber.from('400000000000000000000'),
+                currency: efilBytes32,
+                forwardValue: BigNumber.from('500000000000000000000'),
+                maturity: dec22Fixture.toString(),
+                midPrice: BigNumber.from(8000),
             },
             {
-                amount: '100000000000000000000',
-                currency: formatBytes32String(CurrencySymbol.EFIL),
-                side: 1,
+                amount: BigNumber.from('-500000000000000000000'),
+                currency: efilBytes32,
+                forwardValue: BigNumber.from('-1000000000000000000000'),
+                maturity: dec22Fixture.toString(),
+                midPrice: BigNumber.from(5000),
             },
         ];
-        expect(
-            computeNetValue(trades as unknown as TradeHistory, priceMap)
-        ).toEqual(400);
+        expect(computeNetValue(positions, priceMap)).toEqual(-600);
     });
 
-    it('should return 0 if no trades are provided', () => {
+    it('should return 0 if no positions are provided', () => {
         expect(computeNetValue([], priceMap)).toEqual(0);
     });
 
-    it('should return the net value of borrow and lend trades', () => {
-        const trades = [
+    it('should return the net value of borrow and lend positions', () => {
+        const positions = [
             {
-                amount: '10000000000000000000',
-                currency: formatBytes32String(CurrencySymbol.ETH),
-                side: 1,
+                amount: BigNumber.from('400000000000000000000'),
+                currency: efilBytes32,
+                forwardValue: BigNumber.from('500000000000000000000'),
+                maturity: dec22Fixture.toString(),
+                midPrice: BigNumber.from(8000),
             },
             {
-                amount: '1000000000000000000000',
-                currency: formatBytes32String(CurrencySymbol.EFIL),
-                side: 1,
+                amount: BigNumber.from('-500000000000000000000'),
+                currency: efilBytes32,
+                forwardValue: BigNumber.from('-1000000000000000000000'),
+                maturity: dec22Fixture.toString(),
+                midPrice: BigNumber.from(5000),
             },
             {
-                amount: '100000000',
-                currency: formatBytes32String(CurrencySymbol.WBTC),
-                side: 0,
+                amount: BigNumber.from('-500000000'),
+                forwardValue: BigNumber.from('-1000000000'),
+                currency: wbtcBytes32,
+                maturity: dec22Fixture.toString(),
+                midPrice: BigNumber.from(50),
             },
             {
-                amount: '1000000000',
-                currency: formatBytes32String(CurrencySymbol.USDC),
-                side: 1,
+                amount: BigNumber.from('505000000'),
+                forwardValue: BigNumber.from('505000000'),
+                currency: wbtcBytes32,
+                maturity: dec22Fixture.toString(),
+                midPrice: BigNumber.from(100),
             },
         ];
         expect(
             computeNetValue(
-                trades.filter(
-                    trade => trade.side === 1
-                ) as unknown as TradeHistory,
+                positions.filter(position =>
+                    position.forwardValue.isNegative()
+                ),
                 priceMap
             )
-        ).toEqual(-17000);
+        ).toEqual(-153000);
 
         expect(
             computeNetValue(
-                trades.filter(
-                    trade => trade.side === 0
-                ) as unknown as TradeHistory,
+                positions.filter(
+                    position => !position.forwardValue.isNegative()
+                ),
                 priceMap
             )
-        ).toEqual(30000);
+        ).toEqual(153900);
     });
 });
 
