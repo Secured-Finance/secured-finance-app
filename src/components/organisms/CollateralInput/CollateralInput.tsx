@@ -2,15 +2,14 @@ import { BigNumber } from 'ethers';
 import { useCallback } from 'react';
 import { FontSize, InputBase } from 'src/components/atoms';
 import { PercentageSelector } from 'src/components/molecules';
-import { amountFormatterToBase, CurrencySymbol, usdFormat } from 'src/utils';
+import { CurrencySymbol, amountFormatterToBase, usdFormat } from 'src/utils';
 
 interface CollateralInputProps {
     price: number;
     availableAmount: number;
     asset: CurrencySymbol;
-    onAmountChange?: (v: BigNumber) => void;
+    onAmountChange?: (v: BigNumber | undefined) => void;
     amount: number | undefined;
-    setAmount: (amt: number | undefined) => void;
 }
 
 export const CollateralInput = ({
@@ -19,44 +18,41 @@ export const CollateralInput = ({
     asset,
     onAmountChange,
     amount,
-    setAmount,
 }: CollateralInputProps) => {
     const handleInputChange = useCallback(
         (
-            amount: number,
+            amount: number | undefined,
             asset: CurrencySymbol,
-            onAmountChange: (v: BigNumber) => void
+            onAmountChange: (v: BigNumber | undefined) => void
         ) => {
             let format = (x: number) => BigNumber.from(x);
             if (amountFormatterToBase && amountFormatterToBase[asset]) {
                 format = amountFormatterToBase[asset];
             }
 
-            onAmountChange(format(amount));
+            onAmountChange(amount ? format(amount) : undefined);
         },
         []
     );
 
     const handleAmountChange = useCallback(
         (amount: number | undefined) => {
-            setAmount(amount);
             if (onAmountChange) {
-                handleInputChange(amount ?? 0, asset, onAmountChange);
+                handleInputChange(amount, asset, onAmountChange);
             }
         },
-        [asset, handleInputChange, onAmountChange, setAmount]
+        [asset, handleInputChange, onAmountChange]
     );
 
     const handleClick = useCallback(
         (percentage: number) => {
             const amount =
                 Math.floor(percentage * availableAmount * 10000) / 10000.0;
-            setAmount(amount);
             if (onAmountChange) {
                 handleInputChange(amount, asset, onAmountChange);
             }
         },
-        [availableAmount, setAmount, onAmountChange, handleInputChange, asset]
+        [availableAmount, onAmountChange, handleInputChange, asset]
     );
 
     return (
