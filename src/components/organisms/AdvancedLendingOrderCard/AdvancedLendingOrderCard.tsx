@@ -137,15 +137,13 @@ export const AdvancedLendingOrderCard = ({
     const handleAmountChange = (percentage: number) => {
         const available =
             side === OrderSide.BORROW ? availableToBorrow : balanceToLend;
-        available
-            ? dispatch(
-                  setAmount(
-                      amountFormatterToBase[currency](
-                          Math.floor(percentage * available) / 100.0
-                      )
-                  )
-              )
-            : dispatch(setAmount(BigNumber.from(0)));
+        dispatch(
+            setAmount(
+                amountFormatterToBase[currency](
+                    Math.floor(percentage * available) / 100.0
+                )
+            )
+        );
         setSliderValue(percentage);
     };
 
@@ -155,7 +153,7 @@ export const AdvancedLendingOrderCard = ({
         const available =
             side === OrderSide.BORROW ? availableToBorrow : balanceToLend;
         const inputValue = amountFormatterFromBase[currency](v as BigNumber);
-        available && available > 0
+        available > 0
             ? setSliderValue(Math.min(100.0, (inputValue * 100.0) / available))
             : setSliderValue(0.0);
     };
@@ -167,7 +165,7 @@ export const AdvancedLendingOrderCard = ({
 
     const handleWalletSourceChange = (source: WalletSource) => {
         dispatch(setSourceAccount(source));
-        handleInputChange(0);
+        handleInputChange(BigNumber.from(0));
     };
 
     return (
