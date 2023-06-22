@@ -20,7 +20,7 @@ const preloadedState = {
         marketPhase: 'Open',
     },
     wallet: {
-        balances: { [CurrencySymbol.USDC]: 10000 },
+        balances: { [CurrencySymbol.USDC]: 10000, [CurrencySymbol.EFIL]: 5000 },
     },
     ...preloadedAssetPrices,
 };
@@ -242,7 +242,7 @@ describe('AdvancedLendingOrderCard Component', () => {
         expect(screen.getByText('0xB98b...Fd6D')).toBeInTheDocument();
         expect(input).toHaveValue('0.0000');
         fireEvent.change(slider, { target: { value: 100 } });
-        expect(input).toHaveValue('0.0000');
+        expect(input).toHaveValue('5,000');
 
         const walletSourceButton = screen.getByTestId(
             'wallet-source-selector-button'
@@ -252,7 +252,7 @@ describe('AdvancedLendingOrderCard Component', () => {
         expect(screen.getByText('SF Vault')).toBeInTheDocument();
         const option = screen.getByTestId('option-1');
         fireEvent.click(option);
-        expect(input).toHaveValue('0.0000');
+        expect(input).toHaveValue('0');
         fireEvent.change(slider, { target: { value: 100 } });
         expect(input).toHaveValue('100');
     });
