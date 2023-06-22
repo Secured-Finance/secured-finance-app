@@ -1,6 +1,5 @@
 import { OrderSide, WalletSource } from '@secured-finance/sf-client';
 import queries from '@secured-finance/sf-graph-client/dist/graphclients';
-import { OrderStatus } from '@secured-finance/sf-graph-client/dist/graphclients/development/.graphclient';
 import { BigNumber, ContractTransaction } from 'ethers';
 import { Option } from 'src/components/atoms';
 import { Maturity } from 'src/utils/entities';
@@ -63,9 +62,3 @@ export enum OrderType {
     MARKET = 'Market',
     LIMIT = 'Limit',
 }
-
-export const Filled: OrderStatus = 'Filled';
-export const Open: OrderStatus = 'Open';
-export const PartiallyFilled: OrderStatus = 'PartiallyFilled';
-export const Cancelled: OrderStatus = 'Cancelled';
-export const Expired: OrderStatus = 'Expired';

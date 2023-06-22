@@ -24,7 +24,7 @@ import {
 } from 'src/utils';
 import { useCollateralBook, useOrderList, usePositions } from 'src/hooks';
 import { useWallet } from 'use-wallet';
-import { TradeHistory, Filled, Open } from 'src/types';
+import { TradeHistory } from 'src/types';
 
 export type Trade = TradeHistory[0];
 
@@ -47,7 +47,7 @@ export const PortfolioManagement = () => {
         if (checkOrderIsFilled(order, orderList.inactiveOrderList)) {
             return {
                 ...order,
-                status: Filled,
+                status: 'Filled' as const,
                 filledAmount: order.amount,
             };
         } else {
@@ -112,7 +112,7 @@ export const PortfolioManagement = () => {
                             <OrderTable data={orderList.activeOrderList} />
                             <OrderHistoryTable
                                 data={orderHistory.filter(
-                                    order => order.status !== Open
+                                    order => order.status !== 'Open'
                                 )}
                             />
                             <MyTransactionsTable data={tradeHistory} />
