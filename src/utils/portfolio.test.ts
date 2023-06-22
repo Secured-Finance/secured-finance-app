@@ -1,4 +1,4 @@
-import { BigNumber } from 'ethers';
+import { BigNumber, utils } from 'ethers';
 import { formatBytes32String } from 'ethers/lib/utils';
 import { AssetPriceMap } from 'src/store/assetPrices/selectors';
 import { TradeHistory } from 'src/types';
@@ -10,11 +10,13 @@ import {
     calculateForwardValue,
     calculateAveragePrice,
     formatOrders,
+    checkOrderIsFilled,
 } from './portfolio';
 import {
     dec22Fixture,
     ethBytes32,
     efilBytes32,
+    wbtcBytes32,
 } from 'src/stories/mocks/fixtures';
 
 beforeAll(() => {
@@ -181,5 +183,88 @@ describe('formatOrders', () => {
         ];
 
         expect(formatOrders(orders)).toEqual(trades);
+    });
+});
+
+describe('checkOrderIsFilled', () => {
+    const orders = [
+        {
+            orderId: BigNumber.from(1),
+            currency: efilBytes32,
+            side: 1,
+            maturity: dec22Fixture.toString(),
+            unitPrice: BigNumber.from('9800'),
+            amount: BigNumber.from('1000000000000000000000'),
+            createdAt: BigNumber.from('1609299000'),
+        },
+        {
+            orderId: BigNumber.from(2),
+            currency: efilBytes32,
+            side: 1,
+            maturity: dec22Fixture.toString(),
+            unitPrice: BigNumber.from('9600'),
+            amount: BigNumber.from('5000000000000000000000'),
+            createdAt: BigNumber.from('1609298000'),
+        },
+        {
+            orderId: BigNumber.from(3),
+            currency: efilBytes32,
+            side: 0,
+            maturity: dec22Fixture.toString(),
+            unitPrice: BigNumber.from('9800'),
+            amount: BigNumber.from('1000000000'),
+            createdAt: BigNumber.from('1609297000'),
+        },
+        {
+            orderId: BigNumber.from(4),
+            currency: wbtcBytes32,
+            side: 1,
+            maturity: dec22Fixture.toString(),
+            unitPrice: BigNumber.from('9600'),
+            amount: BigNumber.from('5000000000000000000000'),
+            createdAt: BigNumber.from('1609296000'),
+        },
+        {
+            orderId: BigNumber.from(5),
+            currency: ethBytes32,
+            side: 0,
+            maturity: dec22Fixture.toString(),
+            unitPrice: BigNumber.from('9800'),
+            amount: BigNumber.from('1000000000'),
+            createdAt: BigNumber.from('1609295000'),
+        },
+    ];
+    it('should return true', () => {
+        const order = {
+            orderId: 5,
+            currency: ethBytes32,
+            side: 0,
+            maturity: dec22Fixture,
+            unitPrice: BigNumber.from('9800'),
+            filledAmount: BigNumber.from('1000000000000000000000'),
+            amount: BigNumber.from('1000000000000000000000'),
+            status: 'Open' as const,
+            createdAt: BigNumber.from('1'),
+            txHash: utils.formatBytes32String('hash'),
+        };
+
+        expect(checkOrderIsFilled(order, orders)).toEqual(true);
+    });
+
+    it('should return false', () => {
+        const order = {
+            orderId: 6,
+            currency: ethBytes32,
+            side: 0,
+            maturity: dec22Fixture,
+            unitPrice: BigNumber.from('9800'),
+            filledAmount: BigNumber.from('1000000000000000000000'),
+            amount: BigNumber.from('1000000000000000000000'),
+            status: 'Open' as const,
+            createdAt: BigNumber.from('1'),
+            txHash: utils.formatBytes32String('hash'),
+        };
+
+        expect(checkOrderIsFilled(order, orders)).toEqual(false);
     });
 });

@@ -20,6 +20,7 @@ import {
     computeNetValue,
     usdFormat,
     formatOrders,
+    checkOrderIsFilled,
 } from 'src/utils';
 import { useCollateralBook, useOrderList, usePositions } from 'src/hooks';
 import { useWallet } from 'use-wallet';
@@ -41,7 +42,18 @@ export const PortfolioManagement = () => {
     const tradeFromSub = userHistory.data?.transactions ?? [];
     const tradeHistory = [...tradeFromSub, ...tradesFromCon];
 
-    const orderHistory = userHistory.data?.orders ?? [];
+    const lazyOrderHistory = userHistory.data?.orders ?? [];
+    const orderHistory = lazyOrderHistory.map(order => {
+        if (checkOrderIsFilled(order, orderList.inactiveOrderList)) {
+            return {
+                ...order,
+                status: 'Filled' as const,
+                filledAmount: order.amount,
+            };
+        } else {
+            return order;
+        }
+    });
 
     const priceMap = useSelector((state: RootState) => getPriceMap(state));
 
@@ -98,7 +110,11 @@ export const PortfolioManagement = () => {
                         >
                             <ActiveTradeTable data={positions} />
                             <OrderTable data={orderList.activeOrderList} />
-                            <OrderHistoryTable data={orderHistory} />
+                            <OrderHistoryTable
+                                data={orderHistory.filter(
+                                    order => order.status !== 'Open'
+                                )}
+                            />
                             <MyTransactionsTable data={tradeHistory} />
                         </HorizontalTab>
                     </div>
