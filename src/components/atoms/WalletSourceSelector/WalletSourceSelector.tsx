@@ -21,7 +21,11 @@ export type WalletSourceOption = {
 };
 
 const formatOption = (available: number, asset: CurrencySymbol) => {
-    return `${ordinaryFormat(available, 2, 4)} ${asset}`;
+    return `${ordinaryFormat(
+        Math.floor(available * 100) / 100,
+        0,
+        4
+    )} ${asset}`;
 };
 
 const formatSource = (walletSource: WalletSource, account: string) => {

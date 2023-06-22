@@ -147,12 +147,12 @@ export const AdvancedLendingOrderCard = ({
         setSliderValue(percentage);
     };
 
-    const handleInputChange = (v: number | BigNumber) => {
-        dispatch(setAmount(v as BigNumber));
+    const handleInputChange = (v: BigNumber) => {
+        dispatch(setAmount(v));
 
         const available =
             side === OrderSide.BORROW ? availableToBorrow : balanceToLend;
-        const inputValue = amountFormatterFromBase[currency](v as BigNumber);
+        const inputValue = amountFormatterFromBase[currency](v);
         available > 0
             ? setSliderValue(Math.min(100.0, (inputValue * 100.0) / available))
             : setSliderValue(0.0);
@@ -251,7 +251,7 @@ export const AdvancedLendingOrderCard = ({
                     unit={currency}
                     asset={currency}
                     initialValue={orderAmount.value}
-                    onValueChange={handleInputChange}
+                    onValueChange={v => handleInputChange(BigNumber.from(v))}
                 />
                 <div className='mx-10px flex flex-col gap-6'>
                     <OrderDisplayBox
