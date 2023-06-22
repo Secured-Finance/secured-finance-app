@@ -34,19 +34,23 @@ beforeEach(() => {
 
 describe('AdvancedLendingOrderCard Component', () => {
     it('should render an AdvancedLendingOrderCard', async () => {
-        await waitFor(() => render(<Default />, { preloadedState }));
-
-        expect(screen.getByTestId('place-order-button')).toHaveTextContent(
-            'Place Order'
+        render(<Default />, { preloadedState });
+        await waitFor(() =>
+            expect(screen.getByTestId('place-order-button')).toHaveTextContent(
+                'Place Order'
+            )
         );
         expect(screen.getAllByRole('radio')).toHaveLength(4);
         expect(screen.getAllByRole('radiogroup')).toHaveLength(2);
     });
 
     it('should render CollateralManagementConciseTab', async () => {
-        await waitFor(() => render(<Default />, { preloadedState }));
-
-        expect(screen.getByText('Collateral Management')).toBeInTheDocument();
+        render(<Default />, { preloadedState });
+        await waitFor(() =>
+            expect(
+                screen.getByText('Collateral Management')
+            ).toBeInTheDocument()
+        );
         expect(screen.getByText('Collateral Utilization')).toBeInTheDocument();
         expect(screen.getByText('37%')).toBeInTheDocument();
         expect(screen.getByTestId('collateral-progress-bar-track')).toHaveStyle(
@@ -64,18 +68,19 @@ describe('AdvancedLendingOrderCard Component', () => {
     });
 
     it('should render order form', async () => {
-        await waitFor(() => render(<Default />, { preloadedState }));
+        render(<Default />, { preloadedState });
+        await waitFor(() => {
+            const inputs = screen.getAllByRole('textbox');
+            expect(screen.getByText('Bond Price')).toBeInTheDocument();
+            expect(inputs[0].getAttribute('value')).toBe('95');
 
-        const inputs = screen.getAllByRole('textbox');
-        expect(screen.getByText('Bond Price')).toBeInTheDocument();
-        expect(inputs[0].getAttribute('value')).toBe('95');
+            expect(screen.getByText('Fixed Rate (APR)')).toBeInTheDocument();
+            expect(screen.getByText('17%')).toBeInTheDocument();
 
-        expect(screen.getByText('Fixed Rate (APR)')).toBeInTheDocument();
-        expect(screen.getByText('17%')).toBeInTheDocument();
-
-        expect(screen.getByText('Amount')).toBeInTheDocument();
-        expect(inputs[1].getAttribute('value')).toBe('500');
-        expect(screen.getByText('USDC')).toBeInTheDocument();
+            expect(screen.getByText('Amount')).toBeInTheDocument();
+            expect(inputs[1].getAttribute('value')).toBe('500');
+            expect(screen.getByText('USDC')).toBeInTheDocument();
+        });
 
         expect(screen.getByText('Est. Present Value')).toBeInTheDocument();
         expect(screen.getByText('$500.00')).toBeInTheDocument();
@@ -83,8 +88,10 @@ describe('AdvancedLendingOrderCard Component', () => {
     });
 
     it('should display the PlaceOrder Dialog when clicking on the Place Order button', async () => {
-        await waitFor(() => render(<Default />, { preloadedState }));
-        expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+        render(<Default />, { preloadedState });
+        await waitFor(() =>
+            expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+        );
         screen.getByTestId('place-order-button').click();
         expect(
             screen.getByRole('dialog', {
@@ -94,16 +101,20 @@ describe('AdvancedLendingOrderCard Component', () => {
     });
 
     it('should show a button to manage collateral', async () => {
-        await waitFor(() => render(<Default />));
-        expect(
-            screen.getByRole('button', { name: 'Manage »' })
-        ).toBeInTheDocument();
+        render(<Default />);
+        await waitFor(() =>
+            expect(
+                screen.getByRole('button', { name: 'Manage »' })
+            ).toBeInTheDocument()
+        );
     });
 
     it('should show both market and limit order when in default mode', async () => {
-        await waitFor(() => render(<Default />, { preloadedState }));
-        expect(screen.getByRole('radio', { name: 'Market' })).not.toHaveClass(
-            'hidden'
+        render(<Default />, { preloadedState });
+        await waitFor(() =>
+            expect(
+                screen.getByRole('radio', { name: 'Market' })
+            ).not.toHaveClass('hidden')
         );
         expect(screen.getByRole('radio', { name: 'Limit' })).not.toHaveClass(
             'hidden'
@@ -111,10 +122,13 @@ describe('AdvancedLendingOrderCard Component', () => {
     });
 
     it('should show only limit order when in onlyLimitOrder mode', async () => {
-        await waitFor(() => render(<Default onlyLimitOrder />));
-        expect(screen.queryByRole('radio', { name: 'Market' })).toHaveClass(
-            'hidden'
+        render(<Default onlyLimitOrder />);
+        await waitFor(() =>
+            expect(screen.queryByRole('radio', { name: 'Market' })).toHaveClass(
+                'hidden'
+            )
         );
+
         expect(screen.getByRole('radio', { name: 'Limit' })).not.toHaveClass(
             'hidden'
         );
@@ -125,20 +139,121 @@ describe('AdvancedLendingOrderCard Component', () => {
     });
 
     it('place order button should be disabled if amount is zero', async () => {
-        await waitFor(() => render(<Default />, { preloadedState }));
-        const button = screen.getByTestId('place-order-button');
-        expect(button).toBeInTheDocument();
-        expect(screen.getByText('Place Order')).toBeInTheDocument();
-        const input = screen.getByRole('textbox', { name: 'Amount' });
-        fireEvent.change(input, { target: { value: '0' } });
-        expect(button).toBeDisabled();
+        render(<Default />, { preloadedState });
+
+        await waitFor(() => {
+            const button = screen.getByTestId('place-order-button');
+            expect(button).toBeInTheDocument();
+            expect(screen.getByText('Place Order')).toBeInTheDocument();
+            const input = screen.getByRole('textbox', { name: 'Amount' });
+            fireEvent.change(input, { target: { value: '0' } });
+            expect(button).toBeDisabled();
+        });
     });
 
     it('should render wallet source when side is lend', async () => {
-        await waitFor(() => render(<Default />, { preloadedState }));
+        render(<Default />, { preloadedState });
         const lendTab = screen.getByText('Lend');
         fireEvent.click(lendTab);
-        expect(screen.getByText('Lending Source')).toBeInTheDocument();
+        await waitFor(() =>
+            expect(screen.getByText('Lending Source')).toBeInTheDocument()
+        );
         expect(screen.getByText('10,000 USDC')).toBeInTheDocument();
+    });
+
+    it('should change amount when slider is moved', async () => {
+        render(<Default />, {
+            preloadedState: {
+                ...preloadedState,
+                landingOrderForm: {
+                    ...preloadedState.landingOrderForm,
+                    currency: CurrencySymbol.EFIL,
+                    side: OrderSide.LEND,
+                },
+            },
+        });
+
+        await waitFor(() => {
+            const walletSourceButton = screen.getByTestId(
+                'wallet-source-selector-button'
+            );
+            fireEvent.click(walletSourceButton);
+        });
+
+        expect(screen.getByText('SF Vault')).toBeInTheDocument();
+        const option = screen.getByTestId('option-1');
+        fireEvent.click(option);
+
+        const slider = screen.getByRole('slider');
+        const input = screen.getByRole('textbox', { name: 'Amount' });
+        expect(input).toHaveValue('0.0000');
+        fireEvent.change(slider, { target: { value: 50 } });
+        expect(input).toHaveValue('50');
+        fireEvent.change(slider, { target: { value: 100 } });
+        expect(input).toHaveValue('100');
+    });
+
+    it('should reset amount and slider to 0 when wallet source is changed', async () => {
+        await waitFor(() => {
+            render(<Default />, {
+                preloadedState: {
+                    ...preloadedState,
+                    landingOrderForm: {
+                        ...preloadedState.landingOrderForm,
+                        currency: CurrencySymbol.EFIL,
+                        side: OrderSide.LEND,
+                    },
+                },
+            });
+        });
+
+        const slider = screen.getByRole('slider');
+        const input = screen.getByRole('textbox', { name: 'Amount' });
+        fireEvent.change(input, { target: { value: '100' } });
+
+        const walletSourceButton = screen.getByTestId(
+            'wallet-source-selector-button'
+        );
+        fireEvent.click(walletSourceButton);
+        const option = screen.getByTestId('option-1');
+        fireEvent.click(option);
+
+        expect(input).toHaveValue('0');
+        expect(slider).toHaveValue('0');
+    });
+
+    it('slider should move according to source balance', async () => {
+        await waitFor(() =>
+            render(<Default />, {
+                preloadedState: {
+                    ...preloadedState,
+                    landingOrderForm: {
+                        ...preloadedState.landingOrderForm,
+                        currency: CurrencySymbol.EFIL,
+                        side: OrderSide.LEND,
+                    },
+                },
+            })
+        );
+
+        const slider = screen.getByRole('slider');
+        const input = screen.getByRole('textbox', { name: 'Amount' });
+
+        expect(screen.getByText('0xB98b...Fd6D')).toBeInTheDocument();
+        expect(input).toHaveValue('0.0000');
+        fireEvent.change(slider, { target: { value: 100 } });
+        expect(input).toHaveValue('0.0000');
+
+        const walletSourceButton = screen.getByTestId(
+            'wallet-source-selector-button'
+        );
+        fireEvent.click(walletSourceButton);
+
+        expect(screen.getByText('SF Vault')).toBeInTheDocument();
+        const option = screen.getByTestId('option-1');
+        fireEvent.click(option);
+        expect(input).toHaveValue('0.0000');
+        fireEvent.change(slider, { target: { value: 100 } });
+        expect(input).toHaveValue('100');
     });
 });
