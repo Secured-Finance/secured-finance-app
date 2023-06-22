@@ -6,6 +6,7 @@ import { currencyMap, hexToCurrencySymbol } from './currencyList';
 import { LoanValue } from './entities';
 import { Rate } from './rate';
 import { OrderList } from 'src/hooks';
+import { Order } from 'src/types';
 
 export const computeWeightedAverageRate = (trades: TradeHistory) => {
     if (!trades.length) {
@@ -72,4 +73,25 @@ export const formatOrders = (orders: OrderList): TradeHistory => {
         forwardValue: calculateForwardValue(order.amount, order.unitPrice),
         averagePrice: calculateAveragePrice(order.unitPrice),
     }));
+};
+
+export const checkOrderIsFilled = (
+    order: Order,
+    orders: OrderList
+): boolean => {
+    for (let i = 0; i < orders.length; i++) {
+        if (checkOrdersAreSame(order, orders[i])) {
+            return true;
+        }
+    }
+    return false;
+};
+
+export const checkOrdersAreSame = (order1: Order, order2: OrderList[0]) => {
+    return (
+        BigNumber.from(order1.orderId).toString() ===
+            order2.orderId.toString() &&
+        order1.currency === order2.currency &&
+        order1.maturity.toString() === order2.maturity
+    );
 };
