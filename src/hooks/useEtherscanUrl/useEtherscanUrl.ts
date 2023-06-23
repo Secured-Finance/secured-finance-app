@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import useSF from '../useSecuredFinance';
+import useSF from 'src/hooks/useSecuredFinance';
 
 export const useEtherscanUrl = () => {
     const securedFinance = useSF();
@@ -9,7 +9,7 @@ export const useEtherscanUrl = () => {
         if (!securedFinance) {
             return;
         }
-        const network = securedFinance?.config?.network ?? 'unknown';
+        const network = securedFinance.config?.network ?? 'unknown';
         const baseUrl =
             network === 'mainnet'
                 ? 'https://etherscan.io'
