@@ -5,9 +5,9 @@ import useSF from 'src/hooks/useSecuredFinance';
 import { AssetPriceMap, getPriceMap } from 'src/store/assetPrices/selectors';
 import { selectAllBalances } from 'src/store/wallet';
 import {
+    CurrencySymbol,
     amountFormatterFromBase,
     currencyMap,
-    CurrencySymbol,
     getCurrencyMapAsList,
     toCurrency,
 } from 'src/utils';
@@ -127,9 +127,6 @@ export const useCollateralBook = (account: string | null) => {
 
     useEffect(() => {
         getCollateralBook();
-        return () => {
-            setCollateralBook(emptyBook);
-        };
     }, [getCollateralBook]);
 
     return collateralBook;
