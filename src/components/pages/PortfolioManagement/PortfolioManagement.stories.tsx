@@ -32,7 +32,7 @@ export default {
         connected: true,
         ...RESPONSIVE_PARAMETERS,
         chromatic: {
-            delay: 3000,
+            delay: 5000,
         },
         layout: 'fullscreen',
     },
