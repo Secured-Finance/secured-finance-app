@@ -1,11 +1,10 @@
-import { OrderSide } from '@secured-finance/sf-client';
 import { BigNumber } from 'ethers';
 import { AssetPriceMap } from 'src/store/assetPrices/selectors';
 import { TradeHistory } from 'src/types';
 import { currencyMap, hexToCurrencySymbol } from './currencyList';
 import { LoanValue } from './entities';
 import { Rate } from './rate';
-import { OrderList } from 'src/hooks';
+import { OrderList, Position } from 'src/hooks';
 import { Order } from 'src/types';
 
 export const computeWeightedAverageRate = (trades: TradeHistory) => {
@@ -28,18 +27,13 @@ export const computeWeightedAverageRate = (trades: TradeHistory) => {
 };
 
 export const computeNetValue = (
-    trades: TradeHistory,
+    positions: Position[],
     priceList: AssetPriceMap
 ) => {
-    return trades.reduce((acc, { amount, currency, side }) => {
+    return positions.reduce((acc, { amount, currency }) => {
         const ccy = hexToCurrencySymbol(currency);
         if (!ccy) return acc;
-        return (
-            acc +
-            currencyMap[ccy].fromBaseUnit(BigNumber.from(amount)) *
-                priceList[ccy] *
-                (side.toString() === OrderSide.LEND ? 1 : -1)
-        );
+        return acc + currencyMap[ccy].fromBaseUnit(amount) * priceList[ccy];
     }, 0);
 };
 

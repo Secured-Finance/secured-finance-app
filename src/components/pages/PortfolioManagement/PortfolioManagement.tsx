@@ -58,12 +58,12 @@ export const PortfolioManagement = () => {
     const priceMap = useSelector((state: RootState) => getPriceMap(state));
 
     const borrowedPV = computeNetValue(
-        tradeHistory.filter(trade => trade.side === 1), // 1 = borrow
+        positions.filter(position => position.forwardValue.isNegative()),
         priceMap
     );
 
     const lentPV = computeNetValue(
-        tradeHistory.filter(trade => trade.side === 0), // 0 = lend
+        positions.filter(position => !position.forwardValue.isNegative()),
         priceMap
     );
 
