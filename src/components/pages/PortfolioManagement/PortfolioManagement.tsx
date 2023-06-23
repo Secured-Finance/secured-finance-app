@@ -1,5 +1,6 @@
 import queries from '@secured-finance/sf-graph-client/dist/graphclients';
 import { useSelector } from 'react-redux';
+import { useMemo } from 'react';
 import { HorizontalTab, StatsBar } from 'src/components/molecules';
 import {
     ActiveTradeTable,
@@ -57,17 +58,39 @@ export const PortfolioManagement = () => {
 
     const priceMap = useSelector((state: RootState) => getPriceMap(state));
 
-    const borrowedPV = computeNetValue(
-        positions.filter(position => position.forwardValue.isNegative()),
-        priceMap
-    );
-
-    const lentPV = computeNetValue(
-        positions.filter(position => !position.forwardValue.isNegative()),
-        priceMap
-    );
-
     const collateralBook = useCollateralBook(account);
+
+    const portfolioAnalytics = useMemo(() => {
+        if (collateralBook.usdCollateral === 0 && !collateralBook.fetched) {
+            return {
+                borrowedPV: 0,
+                lentPV: 0,
+                netAssetValue: 0,
+            };
+        }
+        return {
+            borrowedPV: computeNetValue(
+                positions.filter(position =>
+                    position.forwardValue.isNegative()
+                ),
+                priceMap
+            ),
+            lentPV: computeNetValue(
+                positions.filter(
+                    position => !position.forwardValue.isNegative()
+                ),
+                priceMap
+            ),
+            netAssetValue:
+                computeNetValue(positions, priceMap) +
+                collateralBook.usdCollateral,
+        };
+    }, [
+        collateralBook.fetched,
+        collateralBook.usdCollateral,
+        positions,
+        priceMap,
+    ]);
 
     return (
         <Page title='Portfolio Management' name='portfolio-management'>
@@ -79,22 +102,20 @@ export const PortfolioManagement = () => {
                             {
                                 name: 'Net Asset Value',
                                 value: usdFormat(
-                                    borrowedPV +
-                                        lentPV +
-                                        collateralBook.usdCollateral
+                                    portfolioAnalytics.netAssetValue
                                 ),
                             },
                             {
                                 name: 'Active Contracts',
-                                value: tradeHistory.length.toString(),
+                                value: positions.length.toString(),
                             },
                             {
                                 name: 'Lending PV',
-                                value: usdFormat(lentPV),
+                                value: usdFormat(portfolioAnalytics.lentPV),
                             },
                             {
                                 name: 'Borrowing PV',
-                                value: usdFormat(borrowedPV),
+                                value: usdFormat(portfolioAnalytics.borrowedPV),
                             },
                         ]}
                     />

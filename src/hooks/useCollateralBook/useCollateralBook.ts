@@ -23,6 +23,7 @@ export interface CollateralBook {
     usdNonCollateral: number;
     coverage: BigNumber;
     collateralThreshold: number;
+    fetched: boolean;
 }
 
 const emptyBook: CollateralBook = {
@@ -42,6 +43,7 @@ const emptyBook: CollateralBook = {
     usdNonCollateral: 0,
     coverage: ZERO_BN,
     collateralThreshold: 0,
+    fetched: false,
 };
 
 export const useCollateralBook = (account: string | null) => {
@@ -111,6 +113,7 @@ export const useCollateralBook = (account: string | null) => {
             coverage: collateralCoverage,
             collateralThreshold: collateralThreshold,
             withdrawableCollateral: await getWithdrawableCollateral(),
+            fetched: true,
 
             // 0% collateral not used
             // 100% collateral used BigNumber(10000)
