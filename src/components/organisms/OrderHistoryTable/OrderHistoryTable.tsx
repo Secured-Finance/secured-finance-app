@@ -2,7 +2,7 @@ import { createColumnHelper } from '@tanstack/react-table';
 import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { CoreTable, TableActionMenu } from 'src/components/molecules';
-import { useBreakpoint } from 'src/hooks';
+import { useBreakpoint, useEtherscanUrl } from 'src/hooks';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { RootState } from 'src/store/types';
 import { OrderList } from 'src/types';
@@ -13,7 +13,6 @@ import {
     priceYieldColumnDefinition,
     tableHeaderDefinition,
 } from 'src/utils/tableDefinitions';
-import useSF from 'src/hooks/useSecuredFinance';
 
 export type Order = OrderList[0];
 
@@ -26,12 +25,7 @@ const getStatus = (status: string) => {
 export const OrderHistoryTable = ({ data }: { data: OrderList }) => {
     const priceList = useSelector((state: RootState) => getPriceMap(state));
     const isTablet = useBreakpoint('tablet');
-    const securedFinance = useSF();
-    const network = securedFinance?.config?.network ?? 'unknown';
-    const baseUrl =
-        network === 'mainnet'
-            ? 'https://etherscan.io'
-            : `https://${network}.etherscan.io`;
+    const etherscanUrl = useEtherscanUrl();
 
     const columns = useMemo(
         () => [
@@ -69,7 +63,9 @@ export const OrderHistoryTable = ({ data }: { data: OrderList }) => {
                 id: 'actions',
                 cell: info => {
                     const txHash = info.row.original.txHash;
-                    const etherscanLink = `${baseUrl}/tx/${txHash}`;
+                    const etherscanLink = etherscanUrl
+                        ? `${etherscanUrl}/tx/${txHash}`
+                        : '';
                     return (
                         <div className='flex justify-center'>
                             <TableActionMenu
@@ -91,7 +87,7 @@ export const OrderHistoryTable = ({ data }: { data: OrderList }) => {
                 header: () => <div className='p-2'>Actions</div>,
             }),
         ],
-        [baseUrl, priceList]
+        [etherscanUrl, priceList]
     );
 
     const columnsForTabletMobile = [
@@ -104,7 +100,10 @@ export const OrderHistoryTable = ({ data }: { data: OrderList }) => {
         <CoreTable
             columns={isTablet ? columnsForTabletMobile : columns}
             data={data}
-            options={{ stickyColumns: new Set([0, 1]) }}
+            options={{
+                name: 'order-history-table',
+                stickyColumns: new Set([6]),
+            }}
         />
     );
 };

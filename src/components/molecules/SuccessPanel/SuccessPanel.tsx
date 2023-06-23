@@ -6,16 +6,13 @@ import { Tooltip } from 'src/components/templates';
 export const SuccessPanel = ({
     itemList,
     txHash,
-    network,
+    etherscanUrl,
 }: {
     itemList: [string, string][];
     txHash?: string;
-    network?: string;
+    etherscanUrl?: string;
 }) => {
-    const baseUrl = `https://${
-        network !== 'mainnet' ? network + '.' : ''
-    }etherscan.io`;
-    const etherscanLink = `${baseUrl}/tx/${txHash}`;
+    const etherscanLink = etherscanUrl ? `${etherscanUrl}/tx/${txHash}` : '';
 
     const handleButtonClick = () => {
         window.open(etherscanLink, '_blank');

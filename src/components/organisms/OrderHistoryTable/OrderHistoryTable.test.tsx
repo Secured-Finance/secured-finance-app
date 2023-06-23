@@ -11,12 +11,14 @@ window.open = jest.fn();
 describe('OrderHistoryTable Component', () => {
     it('should render a TradeHistoryTable', () => {
         render(<Default />);
-        expect(screen.getAllByTestId('core-table-row')).toHaveLength(9);
+        expect(screen.getAllByTestId('order-history-table-row')).toHaveLength(
+            9
+        );
     });
 
     it('should open etherscan link', () => {
         render(<Default />);
-        const rows = screen.getAllByTestId('core-table-row');
+        const rows = screen.getAllByTestId('order-history-table-row');
         const actionButton = rows[0].querySelectorAll('button')[0];
         fireEvent.click(actionButton);
         const etherscanButton = rows[0].querySelectorAll('button')[1];
