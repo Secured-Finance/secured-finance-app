@@ -26,9 +26,9 @@ describe('DepositCollateral component', () => {
         expect(screen.getByRole('textbox')).toBeInTheDocument();
     });
 
-    it('should open with collateral amount 0', () => {
+    it('should open with placeholder zero', () => {
         render(<Default />);
-        expect(screen.getByRole('textbox').getAttribute('value')).toBe('0');
+        expect(screen.getByRole('textbox').getAttribute('value')).toBe('');
         expect(screen.getByRole('textbox').getAttribute('placeholder')).toBe(
             '0'
         );
@@ -44,6 +44,24 @@ describe('DepositCollateral component', () => {
         const tab = screen.getByTestId(75);
         fireEvent.click(tab);
         expect(screen.getByText('$37.50')).toBeInTheDocument();
+    });
+
+    it('should reset amount to zero when asset is changed in collateral selector', () => {
+        render(<Default />, { preloadedState });
+        fireEvent.click(screen.getByTestId('collateral-selector-button'));
+        fireEvent.click(screen.getByTestId('option-0'));
+
+        const tab = screen.getByTestId(75);
+        fireEvent.click(tab);
+        expect(screen.getByText('$37.50')).toBeInTheDocument();
+        expect(screen.getByRole('textbox').getAttribute('value')).toBe('37.5');
+
+        fireEvent.click(screen.getByTestId('collateral-selector-button'));
+        fireEvent.click(screen.getByTestId('option-1'));
+        expect(screen.getByRole('textbox').getAttribute('value')).toBe('');
+        expect(screen.getByRole('textbox').getAttribute('placeholder')).toBe(
+            '0'
+        );
     });
 
     it('should reach success screen when transaction receipt is received', async () => {
@@ -118,7 +136,7 @@ describe('DepositCollateral component', () => {
         });
     });
 
-    it('should disable the button when collateral amount is greater than available amount and continue button is clicked', () => {
+    it('should disable the continue button when collateral amount is greater than available amount', () => {
         const onClose = jest.fn();
         render(<Default onClose={onClose} />);
         const input = screen.getByRole('textbox');
