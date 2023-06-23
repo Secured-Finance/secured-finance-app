@@ -1,7 +1,7 @@
 import { createColumnHelper } from '@tanstack/react-table';
 import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
-import { CoreTable } from 'src/components/molecules';
+import { CoreTable, TableActionMenu } from 'src/components/molecules';
 import { useBreakpoint } from 'src/hooks';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { RootState } from 'src/store/types';
@@ -13,6 +13,7 @@ import {
     priceYieldColumnDefinition,
     tableHeaderDefinition,
 } from 'src/utils/tableDefinitions';
+import useSF from 'src/hooks/useSecuredFinance';
 
 export type Order = OrderList[0];
 
@@ -25,6 +26,12 @@ const getStatus = (status: string) => {
 export const OrderHistoryTable = ({ data }: { data: OrderList }) => {
     const priceList = useSelector((state: RootState) => getPriceMap(state));
     const isTablet = useBreakpoint('tablet');
+    const securedFinance = useSF();
+    const network = securedFinance?.config?.network ?? 'unknown';
+    const baseUrl =
+        network === 'mainnet'
+            ? 'https://etherscan.io'
+            : `https://${network}.etherscan.io`;
 
     const columns = useMemo(
         () => [
@@ -51,11 +58,40 @@ export const OrderHistoryTable = ({ data }: { data: OrderList }) => {
                 { compact: false, color: true, priceList: priceList }
             ),
             columnHelper.accessor('status', {
-                cell: info => <div>{getStatus(info.getValue())}</div>,
+                cell: info => (
+                    <div className='typography-caption'>
+                        {getStatus(info.getValue())}
+                    </div>
+                ),
                 header: tableHeaderDefinition('Status'),
             }),
+            columnHelper.display({
+                id: 'actions',
+                cell: info => {
+                    const txHash = info.row.original.txHash;
+                    const etherscanLink = `${baseUrl}/tx/${txHash}`;
+                    return (
+                        <div className='flex justify-center'>
+                            <TableActionMenu
+                                items={[
+                                    {
+                                        text: 'View on Etherscan',
+                                        onClick: () => {
+                                            window.open(
+                                                etherscanLink,
+                                                '_blank'
+                                            );
+                                        },
+                                    },
+                                ]}
+                            />
+                        </div>
+                    );
+                },
+                header: () => <div className='p-2'>Actions</div>,
+            }),
         ],
-        [priceList]
+        [baseUrl, priceList]
     );
 
     const columnsForTabletMobile = [
