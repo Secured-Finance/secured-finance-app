@@ -27,6 +27,7 @@ export const mockUserHistory = [
         result: {
             data: {
                 user: {
+                    id: '',
                     orders: [],
                     transactions: [],
                 },
@@ -36,6 +37,7 @@ export const mockUserHistory = [
             return {
                 data: {
                     user: {
+                        id: '',
                         orders: [],
                         transactions: [],
                     },
@@ -54,6 +56,7 @@ export const mockUserHistory = [
         result: {
             data: {
                 user: {
+                    id: '0xb98bd7c7f656290071e52d1aa617d9cb4467fd6d',
                     orders: orderHistoryList,
                     transactions: transactions,
                 },
@@ -63,6 +66,7 @@ export const mockUserHistory = [
             return {
                 data: {
                     user: {
+                        id: '0xb98bd7c7f656290071e52d1aa617d9cb4467fd6d',
                         orders: orderHistoryList,
                         transactions: transactions,
                     },
