@@ -6,7 +6,6 @@ import * as stories from './OrderHistoryTable.stories';
 const { Default } = composeStories(stories);
 const mock = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mock);
-window.open = jest.fn();
 
 describe('OrderHistoryTable Component', () => {
     it('should render a TradeHistoryTable', () => {
@@ -17,6 +16,7 @@ describe('OrderHistoryTable Component', () => {
     });
 
     it('should open etherscan link', () => {
+        window.open = jest.fn();
         render(<Default />);
         const rows = screen.getAllByTestId('order-history-table-row');
         const actionButton = rows[0].querySelectorAll('button')[0];
