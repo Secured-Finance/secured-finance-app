@@ -1,5 +1,4 @@
 import { composeStories } from '@storybook/testing-react';
-import { BigNumber } from 'ethers';
 import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
 import * as stories from './CollateralInput.stories';
 
@@ -13,25 +12,17 @@ describe('CollateralInput component', () => {
         expect(screen.getByRole('textbox').getAttribute('placeholder')).toBe(
             '0'
         );
+        expect(screen.getByRole('textbox').getAttribute('value')).toBe('');
     });
 
-    it('should call setCollateral amount with the correct amount when percentage button is clicked', () => {
-        const setAmount = jest.fn();
-        render(<Default setAmount={setAmount} />);
+    it('should update collateral amount when percentage button is clicked', () => {
+        render(<Default />);
         const tab = screen.getByTestId(50);
         fireEvent.click(tab);
-        expect(setAmount).toBeCalledWith(5);
+        expect(screen.getByRole('textbox').getAttribute('value')).toBe('5');
+        expect(screen.getByText('$500.00')).toBeInTheDocument();
     });
 
-    it('should call onAmountChange when percentage button is clicked', () => {
-        const onChange = jest.fn();
-        render(<Default onAmountChange={onChange} />);
-        const tab = screen.getByTestId(50);
-        fireEvent.click(tab);
-        expect(onChange).toHaveBeenCalledWith(
-            BigNumber.from('5000000000000000000')
-        );
-    });
     it('should change fontsize according to length of input', async () => {
         render(<Default />);
         const input = screen.getByRole('textbox');
