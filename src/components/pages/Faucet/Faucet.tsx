@@ -19,6 +19,7 @@ import { Dialog, SuccessPanel } from 'src/components/molecules';
 import { ConnectWalletCard, MyWalletCard } from 'src/components/organisms';
 import { Page, Tooltip, TwoColumns } from 'src/components/templates';
 import useSF from 'src/hooks/useSecuredFinance';
+import { useEtherscanUrl } from 'src/hooks';
 import {
     AddressUtils,
     CurrencySymbol,
@@ -83,7 +84,7 @@ const MenuAddToken = ({
     );
 };
 export const Faucet = () => {
-    const securedFinance = useSF();
+    const etherscanUrl = useEtherscanUrl();
     const { account, ethereum } = useWallet();
     const sf = useSF();
 
@@ -344,7 +345,7 @@ export const Faucet = () => {
                         ],
                     ]}
                     txHash={txHash}
-                    network={securedFinance?.config?.network ?? 'unknown'}
+                    etherscanUrl={etherscanUrl}
                 />
             </Dialog>
         </Page>
