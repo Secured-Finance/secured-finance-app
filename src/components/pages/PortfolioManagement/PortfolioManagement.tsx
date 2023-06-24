@@ -61,7 +61,7 @@ export const PortfolioManagement = () => {
     const collateralBook = useCollateralBook(account);
 
     const portfolioAnalytics = useMemo(() => {
-        if (!collateralBook.fetched && collateralBook.usdCollateral) {
+        if (!collateralBook.fetched) {
             return {
                 borrowedPV: 0,
                 lentPV: 0,
