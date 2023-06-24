@@ -61,29 +61,25 @@ export const PortfolioManagement = () => {
     const collateralBook = useCollateralBook(account);
 
     const portfolioAnalytics = useMemo(() => {
-        if (!collateralBook.fetched) {
+        if (!collateralBook.fetched && collateralBook.usdCollateral) {
             return {
                 borrowedPV: 0,
                 lentPV: 0,
                 netAssetValue: 0,
             };
         }
+        const borrowedPV = computeNetValue(
+            positions.filter(position => position.forwardValue.isNegative()),
+            priceMap
+        );
+        const lentPV = computeNetValue(
+            positions.filter(position => !position.forwardValue.isNegative()),
+            priceMap
+        );
         return {
-            borrowedPV: computeNetValue(
-                positions.filter(position =>
-                    position.forwardValue.isNegative()
-                ),
-                priceMap
-            ),
-            lentPV: computeNetValue(
-                positions.filter(
-                    position => !position.forwardValue.isNegative()
-                ),
-                priceMap
-            ),
-            netAssetValue:
-                computeNetValue(positions, priceMap) +
-                collateralBook.usdCollateral,
+            borrowedPV,
+            lentPV,
+            netAssetValue: borrowedPV + lentPV + collateralBook.usdCollateral,
         };
     }, [
         collateralBook.fetched,
