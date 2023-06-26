@@ -2,12 +2,13 @@ import { Currency } from '@secured-finance/sf-core';
 import { BigNumber } from 'ethers';
 import * as jest from 'jest-mock';
 import { CurrencySymbol, getCurrencyMapAsList } from 'src/utils';
-import { collateralBook80, dec24Fixture } from './fixtures';
 import {
+    collateralBook80,
     dec22Fixture,
-    mar23Fixture,
-    ethBytes32,
+    dec24Fixture,
     efilBytes32,
+    ethBytes32,
+    mar23Fixture,
     wbtcBytes32,
 } from './fixtures';
 
@@ -320,6 +321,15 @@ export const mockUseSF = () => {
                         unitPrice: BigNumber.from('9800'),
                         amount: BigNumber.from('500000000'),
                         timestamp: BigNumber.from('1609212000'),
+                    },
+                    {
+                        orderId: 5,
+                        ccy: efilBytes32,
+                        side: 1,
+                        maturity: BigNumber.from(dec24Fixture.toString()),
+                        unitPrice: BigNumber.from('7800'),
+                        amount: BigNumber.from('100000000000000000000'),
+                        timestamp: BigNumber.from('1409220000'),
                     },
                 ],
                 inactiveOrders: [

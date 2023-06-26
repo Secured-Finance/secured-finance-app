@@ -39,4 +39,12 @@ describe('Itayose Component', () => {
             '0'
         );
     });
+
+    it('should only show the pre-order orders of the user when they are connected', async () => {
+        render(<Default />);
+        fireEvent.click(screen.getByRole('tab', { name: 'My Orders' }));
+
+        const myOrders = await screen.findAllByRole('row');
+        expect(myOrders).toHaveLength(1);
+    });
 });
