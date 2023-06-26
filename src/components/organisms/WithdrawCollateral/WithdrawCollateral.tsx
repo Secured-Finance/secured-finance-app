@@ -10,7 +10,7 @@ import {
 } from 'src/components/molecules';
 import { CollateralInput } from 'src/components/organisms';
 import { useWithdrawCollateral } from 'src/hooks/useDepositCollateral';
-import useSF from 'src/hooks/useSecuredFinance';
+import { useEtherscanUrl } from 'src/hooks';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { RootState } from 'src/store/types';
 import {
@@ -102,7 +102,7 @@ export const WithdrawCollateral = ({
 }: {
     collateralList: Record<CurrencySymbol, CollateralInfo>;
 } & DialogState) => {
-    const securedFinance = useSF();
+    const etherscanUrl = useEtherscanUrl();
     const { account } = useWallet();
     const [asset, setAsset] = useState(CurrencySymbol.ETH);
     const [state, dispatch] = useReducer(reducer, stateRecord[1]);
@@ -254,9 +254,7 @@ export const WithdrawCollateral = ({
                                     ],
                                 ]}
                                 txHash={txHash}
-                                network={
-                                    securedFinance?.config?.network ?? 'unknown'
-                                }
+                                etherscanUrl={etherscanUrl}
                             />
                         );
                     case Step.error:

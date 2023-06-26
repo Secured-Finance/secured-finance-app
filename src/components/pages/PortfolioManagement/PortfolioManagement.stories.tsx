@@ -32,6 +32,7 @@ export default {
         connected: true,
         ...RESPONSIVE_PARAMETERS,
         chromatic: {
+            ...RESPONSIVE_PARAMETERS.chromatic,
             delay: 3000,
         },
         layout: 'fullscreen',
