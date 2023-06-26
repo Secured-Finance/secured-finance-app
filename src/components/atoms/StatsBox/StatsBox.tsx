@@ -1,4 +1,5 @@
 import { Counter } from 'src/components/atoms/Counter';
+import { useState, useEffect } from 'react';
 
 export interface StatsBoxProps {
     name: string;
@@ -17,8 +18,15 @@ const getCounterValues = (value: string) => {
 };
 
 export const StatsBox = ({ name, value }: StatsBoxProps) => {
-    const counterValues = getCounterValues(value);
+    const [counterValues, setCounterValues] = useState({
+        prefix: '',
+        suffix: '',
+        value: 0,
+    });
 
+    useEffect(() => {
+        setCounterValues(getCounterValues(value));
+    }, [value]);
     return (
         <div
             className='flex h-28 w-full flex-col items-center justify-center'
