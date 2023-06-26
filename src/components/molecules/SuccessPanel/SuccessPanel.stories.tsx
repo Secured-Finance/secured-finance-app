@@ -23,7 +23,7 @@ export const WithTransactionHash = Template.bind({});
 
 WithTransactionHash.args = {
     txHash: '1123456789',
-    network: 'sepolia',
+    etherscanUrl: 'https://sepolia.etherscan.io',
 };
 
 WithTransactionHash.play = async ({ canvasElement }) => {

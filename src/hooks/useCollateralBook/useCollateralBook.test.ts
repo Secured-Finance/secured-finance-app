@@ -1,8 +1,5 @@
 import { BigNumber } from 'ethers';
-import {
-    emptyCollateralBook,
-    preloadedAssetPrices,
-} from 'src/stories/mocks/fixtures';
+import { emptyBook, preloadedAssetPrices } from 'src/stories/mocks/fixtures';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { act, renderHook } from 'src/test-utils';
 import { amountFormatterFromBase, CurrencySymbol } from 'src/utils';
@@ -42,12 +39,13 @@ describe('useCollateralBook hook', () => {
             [CurrencySymbol.USDC]: 1000000000000,
             [CurrencySymbol.ETH]: 1000000000000,
         });
+        expect(colBook.fetched).toEqual(true);
     });
 
     it('should return the empty book when given an null user', async () => {
         const { result } = renderHook(() => useCollateralBook(null));
         const colBook = result.current as CollateralBook;
-        expect(colBook).toEqual(emptyCollateralBook);
+        expect(colBook).toEqual(emptyBook);
     });
 
     it('should compute the collaterals in USD', async () => {
