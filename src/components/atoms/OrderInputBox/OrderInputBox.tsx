@@ -6,7 +6,7 @@ import { amountFormatterToBase, CurrencySymbol } from 'src/utils';
 interface OrderInputBoxProps {
     field: string;
     unit?: string;
-    initialValue?: number | string;
+    initialValue?: number | string | undefined;
     asset?: CurrencySymbol;
     disabled?: boolean;
     informationText?: string;
@@ -18,7 +18,7 @@ interface OrderInputBoxProps {
 export const OrderInputBox = ({
     field,
     unit,
-    initialValue = 0,
+    initialValue,
     asset,
     disabled = false,
     informationText,
