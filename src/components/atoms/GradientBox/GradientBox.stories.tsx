@@ -23,3 +23,8 @@ export const Header = Template.bind({});
 Header.args = {
     header: 'Header',
 };
+
+export const HighContrast = Template.bind({});
+HighContrast.args = {
+    variant: 'high-contrast',
+};
