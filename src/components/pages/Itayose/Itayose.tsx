@@ -76,14 +76,18 @@ const Toolbar = ({
                     }}
                 />
                 <div className='flex w-full flex-row items-center justify-between'>
-                    <MarketTab
-                        name={nextMarketPhase}
-                        value={countdown(date * 1000)}
-                    />
-                    <MarketTab
-                        name={`${currency} price`}
-                        value={usdFormat(currencyPrice, 2)}
-                    />
+                    <div>
+                        <MarketTab
+                            name={nextMarketPhase}
+                            value={countdown(date * 1000)}
+                        />
+                    </div>
+                    <div>
+                        <MarketTab
+                            name={`${currency} price`}
+                            value={usdFormat(currencyPrice, 2)}
+                        />
+                    </div>
                 </div>
             </div>
         </GradientBox>

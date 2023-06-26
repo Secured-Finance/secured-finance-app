@@ -19,8 +19,8 @@ jest.mock(
 );
 
 describe('Itayose Component', () => {
-    it('should render a Itayose', () => {
-        render(<Default />);
+    it('should render a Itayose', async () => {
+        await waitFor(() => render(<Default />));
     });
 
     it('should reset the amount when the user change the currency', async () => {
