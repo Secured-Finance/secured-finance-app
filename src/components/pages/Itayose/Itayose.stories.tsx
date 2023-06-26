@@ -13,6 +13,10 @@ export default {
     title: 'Pages/Itayose',
     component: Itayose,
     args: {},
+    parameters: {
+        chromatic: { delay: 1000 },
+        connected: true,
+    },
     decorators: [
         withAppLayout,
         withMaturities,
@@ -26,9 +30,6 @@ const Template: ComponentStory<typeof Itayose> = () => <Itayose />;
 
 export const Default = Template.bind({});
 export const MyOrders = Template.bind({});
-MyOrders.parameters = {
-    connected: true,
-};
 MyOrders.play = async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     canvas.getByText('My Orders').click();
