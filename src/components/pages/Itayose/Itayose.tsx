@@ -76,19 +76,14 @@ const Toolbar = ({
                     }}
                 />
                 <div className='flex w-full flex-row items-center justify-between'>
-                    <div>
-                        <MarketTab
-                            name={nextMarketPhase}
-                            value={countdown(date * 1000)}
-                        />
-                    </div>
-
-                    <div>
-                        <MarketTab
-                            name={`${currency} price`}
-                            value={usdFormat(currencyPrice, 2)}
-                        />
-                    </div>
+                    <MarketTab
+                        name={nextMarketPhase}
+                        value={countdown(date * 1000)}
+                    />
+                    <MarketTab
+                        name={`${currency} price`}
+                        value={usdFormat(currencyPrice, 2)}
+                    />
                 </div>
             </div>
         </GradientBox>
@@ -129,7 +124,7 @@ export const Itayose = () => {
         return assetList.find(option => option.value === currency);
     }, [currency, assetList]);
 
-    const orderBook = useOrderbook(currency, selectedTerm.value, 10);
+    const orderBook = useOrderbook(currency, selectedTerm.value);
     const orderList = useOrderList(account);
     const collateralBook = useCollateralBook(account);
 

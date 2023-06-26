@@ -19,6 +19,8 @@ export type OrderBookEntry = {
 
 export type OrderBook = Array<OrderBookEntry>;
 
+const MAX_ORDERBOOK_LENGTH = 40;
+
 const sortOrders = (
     a: OrderBookEntry,
     b: OrderBookEntry,
@@ -48,6 +50,24 @@ const transformOrderbook = (
     return orderBook.sort((a, b) => sortOrders(a, b, direction));
 };
 
+const trimOrderbook = (orderBook: {
+    borrowOrderbook: OrderBook | [];
+    lendOrderbook: OrderBook | [];
+}) => {
+    const trim = (orderBook: OrderBook) =>
+        orderBook.filter(o => !o.amount.isZero());
+
+    const size = Math.max(
+        trim(orderBook.borrowOrderbook).length,
+        trim(orderBook.lendOrderbook).length
+    );
+
+    return {
+        borrowOrderbook: orderBook.borrowOrderbook.slice(0, size),
+        lendOrderbook: orderBook.lendOrderbook.slice(0, size),
+    };
+};
+
 const emptyOrderbook = {
     lendOrderbook: [],
     borrowOrderbook: [],
@@ -56,7 +76,7 @@ const emptyOrderbook = {
 export const useOrderbook = (
     ccy: CurrencySymbol,
     maturity: Maturity,
-    limit: number
+    limit: number = MAX_ORDERBOOK_LENGTH
 ) => {
     const securedFinance = useSF();
     const block = useSelector(
@@ -96,10 +116,12 @@ export const useOrderbook = (
                 'desc'
             );
 
-            setOrderbook({
-                lendOrderbook,
-                borrowOrderbook,
-            });
+            setOrderbook(
+                trimOrderbook({
+                    lendOrderbook,
+                    borrowOrderbook,
+                })
+            );
         },
         []
     );
