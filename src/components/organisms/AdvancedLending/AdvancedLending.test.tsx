@@ -29,9 +29,7 @@ describe('Advanced Lending Component', () => {
         fireEvent.click(screen.getByRole('button', { name: 'Filecoin' }));
         fireEvent.click(screen.getByRole('menuitem', { name: 'USDC' }));
         expect(store.getState().landingOrderForm.amount).toEqual('0');
-        expect(screen.getByRole('textbox', { name: 'Amount' })).toHaveValue(
-            '0'
-        );
+        expect(screen.getByRole('textbox', { name: 'Amount' })).toHaveValue('');
     });
 
     it('should reset the amount when the user change the maturity', async () => {
@@ -50,9 +48,7 @@ describe('Advanced Lending Component', () => {
         fireEvent.click(screen.getByRole('button', { name: 'DEC22' }));
         fireEvent.click(screen.getByText('MAR23'));
         expect(store.getState().landingOrderForm.amount).toEqual('0');
-        expect(screen.getByRole('textbox', { name: 'Amount' })).toHaveValue(
-            '0'
-        );
+        expect(screen.getByRole('textbox', { name: 'Amount' })).toHaveValue('');
     });
 
     it('should show the maturity as a date for the selected maturity', async () => {
