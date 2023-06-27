@@ -288,7 +288,7 @@ export const dateAndTimeColumnDefinition = <T extends { createdAt: BigNumber }>(
     title: string,
     id: string,
     accessor: AccessorFn<T, BigNumber>,
-    fontSize: string,
+    fontSize?: string,
     titleHint?: string
 ) => {
     return columnHelper.accessor(accessor, {
@@ -299,7 +299,7 @@ export const dateAndTimeColumnDefinition = <T extends { createdAt: BigNumber }>(
                     <div className='flex flex-col text-right'>
                         <span
                             className={classNames(
-                                fontSize,
+                                fontSize ? fontSize : 'typography-caption-2',
                                 'h-6 text-slateGray'
                             )}
                         >

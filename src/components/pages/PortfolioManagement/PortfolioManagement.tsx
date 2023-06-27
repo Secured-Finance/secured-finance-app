@@ -22,21 +22,13 @@ import {
     usdFormat,
     formatOrders,
     checkOrderIsFilled,
+    sortOrders,
 } from 'src/utils';
-import {
-    useCollateralBook,
-    useOrderList,
-    usePositions,
-    Order,
-} from 'src/hooks';
+import { useCollateralBook, useOrderList, usePositions } from 'src/hooks';
 import { useWallet } from 'use-wallet';
 import { TradeHistory } from 'src/types';
 
 export type Trade = TradeHistory[0];
-
-const sortOrders = (a: Order, b: Order) => {
-    return Number(b.createdAt.sub(a.createdAt));
-};
 
 export const PortfolioManagement = () => {
     const { account } = useWallet();
