@@ -49,11 +49,11 @@ Default.parameters = {
 };
 
 export const ConnectedToWallet = Template.bind({});
-export const DisplayOrderHistory = Template.bind({});
-DisplayOrderHistory.play = async ({ canvasElement }) => {
+export const DisplayOpenOrders = Template.bind({});
+DisplayOpenOrders.play = async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    const orderHistoryTab = canvas.getByTestId('Open Orders');
-    orderHistoryTab.click();
+    const openOrdersTab = canvas.getByTestId('Open Orders');
+    openOrdersTab.click();
 };
 export const DisplayMyTransactions = Template.bind({});
 DisplayMyTransactions.play = async ({ canvasElement }) => {
@@ -66,4 +66,11 @@ export const ActivePosition = Template.bind({});
 ActivePosition.play = async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     canvas.getByTestId('Active Positions').click();
+};
+
+export const DisplayOrderHistory = Template.bind({});
+DisplayOrderHistory.play = async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const orderHistoryTab = canvas.getByTestId('Order History');
+    orderHistoryTab.click();
 };

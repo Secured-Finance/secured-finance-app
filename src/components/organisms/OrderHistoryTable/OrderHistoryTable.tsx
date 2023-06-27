@@ -110,7 +110,7 @@ export const OrderHistoryTable = ({ data }: { data: OrderList }) => {
             data={data}
             options={{
                 name: 'order-history-table',
-                stickyColumns: new Set([6]),
+                stickyColumns: new Set([7]),
             }}
         />
     );
