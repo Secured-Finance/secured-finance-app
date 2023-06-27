@@ -22,7 +22,7 @@ export const TableActionMenu = ({ items }: { items: MenuItem[] }) => {
     return (
         <Menu className='relative' as='div'>
             <Menu.Button aria-label='More options'>
-                <EllipsisHorizontalIcon className='ml-1 h-5 w-5 text-starBlue' />
+                <EllipsisHorizontalIcon className='ml-1 h-5 w-5 text-planetaryPurple' />
             </Menu.Button>
             <Menu.Items
                 as='div'

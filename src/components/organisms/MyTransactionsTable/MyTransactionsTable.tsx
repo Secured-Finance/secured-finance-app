@@ -10,7 +10,6 @@ import {
     contractColumnDefinition,
     loanTypeColumnDefinition,
     tableHeaderDefinition,
-    dateAndTimeColumnDefinition,
 } from 'src/utils/tableDefinitions';
 
 const columnHelper = createColumnHelper<TradeHistory[0]>();
@@ -71,12 +70,6 @@ export const MyTransactionsTable = ({ data }: { data: TradeHistory }) => {
                     color: true,
                     fontSize: 'typography-caption-2',
                 }
-            ),
-            dateAndTimeColumnDefinition(
-                columnHelper,
-                'Date and Time',
-                'createdAt',
-                row => row.createdAt
             ),
         ],
         []

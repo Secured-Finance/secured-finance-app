@@ -23,11 +23,20 @@ import {
     formatOrders,
     checkOrderIsFilled,
 } from 'src/utils';
-import { useCollateralBook, useOrderList, usePositions } from 'src/hooks';
+import {
+    useCollateralBook,
+    useOrderList,
+    usePositions,
+    Order,
+} from 'src/hooks';
 import { useWallet } from 'use-wallet';
 import { TradeHistory } from 'src/types';
 
 export type Trade = TradeHistory[0];
+
+const sortOrders = (a: Order, b: Order) => {
+    return Number(b.createdAt.sub(a.createdAt));
+};
 
 export const PortfolioManagement = () => {
     const { account } = useWallet();
@@ -44,17 +53,19 @@ export const PortfolioManagement = () => {
     const tradeHistory = [...tradeFromSub, ...tradesFromCon];
 
     const lazyOrderHistory = userHistory.data?.orders ?? [];
-    const orderHistory = lazyOrderHistory.map(order => {
-        if (checkOrderIsFilled(order, orderList.inactiveOrderList)) {
-            return {
-                ...order,
-                status: 'Filled' as const,
-                filledAmount: order.amount,
-            };
-        } else {
-            return order;
-        }
-    });
+    const sortedOrderHistory = lazyOrderHistory
+        .map(order => {
+            if (checkOrderIsFilled(order, orderList.inactiveOrderList)) {
+                return {
+                    ...order,
+                    status: 'Filled' as const,
+                    filledAmount: order.amount,
+                };
+            } else {
+                return order;
+            }
+        })
+        .sort((a, b) => sortOrders(a, b));
 
     const priceMap = useSelector((state: RootState) => getPriceMap(state));
 
@@ -128,7 +139,7 @@ export const PortfolioManagement = () => {
                             <ActiveTradeTable data={positions} />
                             <OrderTable data={orderList.activeOrderList} />
                             <OrderHistoryTable
-                                data={orderHistory.filter(
+                                data={sortedOrderHistory.filter(
                                     order => order.status !== 'Open'
                                 )}
                             />
