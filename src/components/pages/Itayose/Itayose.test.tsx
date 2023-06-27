@@ -19,8 +19,8 @@ jest.mock(
 );
 
 describe('Itayose Component', () => {
-    it('should render a Itayose', () => {
-        render(<Default />);
+    it('should render a Itayose', async () => {
+        await waitFor(() => render(<Default />));
     });
 
     it('should reset the amount when the user change the currency', async () => {
@@ -38,5 +38,13 @@ describe('Itayose Component', () => {
         expect(screen.getByRole('textbox', { name: 'Amount' })).toHaveValue(
             '0'
         );
+    });
+
+    it('should only show the pre-order orders of the user when they are connected', async () => {
+        render(<Default />);
+        fireEvent.click(screen.getByRole('tab', { name: 'My Orders' }));
+
+        const myOrders = await screen.findAllByRole('row');
+        expect(myOrders).toHaveLength(1);
     });
 });

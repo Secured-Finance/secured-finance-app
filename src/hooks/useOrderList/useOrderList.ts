@@ -1,10 +1,10 @@
-import { BigNumber } from 'ethers';
-import { useEffect, useState, useCallback } from 'react';
-import useSF from '../useSecuredFinance';
-import { useSelector } from 'react-redux';
-import { RootState } from 'src/store/types';
 import { Currency } from '@secured-finance/sf-core';
-import { toCurrency, hexToCurrencySymbol } from 'src/utils';
+import { BigNumber } from 'ethers';
+import { useCallback, useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import useSF from 'src/hooks/useSecuredFinance';
+import { RootState } from 'src/store/types';
+import { hexToCurrencySymbol, toCurrency } from 'src/utils';
 
 export type Order = {
     orderId: BigNumber;
