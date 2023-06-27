@@ -13,6 +13,7 @@ import { ColorFormat } from 'src/types';
 import { formatTimestamp } from 'src/utils';
 import { currencyMap, hexToCurrencySymbol } from './currencyList';
 import { LoanValue, Maturity } from './entities';
+import classNames from 'classnames';
 
 export const tableHeaderDefinition =
     <TData,>(title: string, titleHint?: string) =>
@@ -287,6 +288,7 @@ export const dateAndTimeColumnDefinition = <T extends { createdAt: BigNumber }>(
     title: string,
     id: string,
     accessor: AccessorFn<T, BigNumber>,
+    fontSize: string,
     titleHint?: string
 ) => {
     return columnHelper.accessor(accessor, {
@@ -295,7 +297,12 @@ export const dateAndTimeColumnDefinition = <T extends { createdAt: BigNumber }>(
             return (
                 <div className='flex justify-center'>
                     <div className='flex flex-col text-right'>
-                        <span className='typography-caption-2 h-6 text-slateGray'>
+                        <span
+                            className={classNames(
+                                fontSize,
+                                'h-6 text-slateGray'
+                            )}
+                        >
                             {formatTimestamp(+info.getValue().toString())}
                         </span>
                     </div>
