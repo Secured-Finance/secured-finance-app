@@ -119,7 +119,7 @@
     "patch-package": "^7.0.0",
     "postcss": "^8.4.14",
     "postcss-import": "^14.1.0",
-    "prettier": "^2.3.0",
+    "prettier": "^2.8.8",
     "prettier-plugin-tailwindcss": "^0.2.8",
     "process": "^0.11.10",
     "storybook-addon-apollo-client": "^4.0.12",
