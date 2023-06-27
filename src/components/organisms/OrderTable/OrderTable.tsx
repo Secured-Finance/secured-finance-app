@@ -55,8 +55,7 @@ export const OrderTable = ({ data }: { data: Order[] }) => {
                 columnHelper,
                 'Order Time',
                 'createdAt',
-                row => row.createdAt,
-                'typography-caption-2'
+                row => row.createdAt
             ),
             columnHelper.display({
                 id: 'actions',
