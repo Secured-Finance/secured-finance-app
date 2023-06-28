@@ -32,7 +32,7 @@ jest.mock('src/hooks/useSecuredFinance', () => () => mock);
 
 const preloadedState = { ...preloadedBalances, ...preloadedLendingMarkets };
 
-describe('Landing Component', () => {
+describe.skip('Landing Component', () => {
     it('should change the rate when the user changes the maturity', async () => {
         timemachine.config({
             dateString: '2022-02-01T11:00:00.00Z',

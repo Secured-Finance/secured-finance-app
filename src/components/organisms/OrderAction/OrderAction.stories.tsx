@@ -11,9 +11,12 @@ import { setAmount, setCurrency, setSide } from 'src/store/landingOrderForm';
 import {
     collateralBook37,
     collateralBook80,
+    dec22Fixture,
     emptyCollateralBook,
+    maturityOptions,
 } from 'src/stories/mocks/fixtures';
 import { CurrencySymbol } from 'src/utils';
+import { LoanValue } from 'src/utils/entities';
 import { OrderAction } from '.';
 
 export default {
@@ -21,6 +24,8 @@ export default {
     component: OrderAction,
     args: {
         collateralBook: emptyCollateralBook,
+        loanValue: LoanValue.fromPrice(9800, dec22Fixture.toNumber()),
+        maturitiesOptionList: maturityOptions,
     },
     decorators: [withAssetPrice, withWalletProvider],
 } as ComponentMeta<typeof OrderAction>;
