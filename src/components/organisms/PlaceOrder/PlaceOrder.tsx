@@ -13,8 +13,7 @@ import {
     FailurePanel,
     SuccessPanel,
 } from 'src/components/molecules';
-import { CollateralBook } from 'src/hooks';
-import useSF from 'src/hooks/useSecuredFinance';
+import { CollateralBook, useEtherscanUrl } from 'src/hooks';
 import { setLastMessage } from 'src/store/lastError';
 import { OrderType, PlaceOrderFunction } from 'src/types';
 import {
@@ -116,7 +115,7 @@ export const PlaceOrder = ({
     assetPrice: number;
     walletSource: WalletSource;
 } & DialogState) => {
-    const securedFinance = useSF();
+    const etherscanUrl = useEtherscanUrl();
     const [state, dispatch] = useReducer(reducer, stateRecord[1]);
     const [txHash, setTxHash] = useState<string | undefined>();
     const globalDispatch = useDispatch();
@@ -333,9 +332,7 @@ export const PlaceOrder = ({
                                     ],
                                 ]}
                                 txHash={txHash}
-                                network={
-                                    securedFinance?.config?.network ?? 'unknown'
-                                }
+                                etherscanUrl={etherscanUrl}
                             />
                         );
                     case Step.error:

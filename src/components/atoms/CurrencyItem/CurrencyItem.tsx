@@ -15,12 +15,14 @@ export const CurrencyItem = ({
     align = 'left',
     color = 'neutral',
     compact = false,
+    fontSize = 'typography-caption',
 }: {
     amount?: number;
     ccy: CurrencySymbol;
     price?: number;
     align?: 'left' | 'right' | 'center';
     compact?: boolean;
+    fontSize?: string;
 } & ColorFormat) => {
     let secondLine: string;
     if (amount !== undefined && price !== undefined) {
@@ -42,7 +44,7 @@ export const CurrencyItem = ({
             })}
         >
             <span
-                className={classNames('typography-caption h-6', {
+                className={classNames(fontSize, 'h-6', {
                     'text-galacticOrange': color === 'negative',
                     'text-nebulaTeal': color === 'positive',
                     'text-neutral-8': color === 'neutral',

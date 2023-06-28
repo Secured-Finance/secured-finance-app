@@ -1,5 +1,6 @@
 import queries from '@secured-finance/sf-graph-client/dist/graphclients';
 import { useSelector } from 'react-redux';
+import { useMemo } from 'react';
 import { HorizontalTab, StatsBar } from 'src/components/molecules';
 import {
     ActiveTradeTable,
@@ -20,6 +21,7 @@ import {
     computeNetValue,
     usdFormat,
     formatOrders,
+    checkOrderIsFilled,
 } from 'src/utils';
 import { useCollateralBook, useOrderList, usePositions } from 'src/hooks';
 import { useWallet } from 'use-wallet';
@@ -41,21 +43,50 @@ export const PortfolioManagement = () => {
     const tradeFromSub = userHistory.data?.transactions ?? [];
     const tradeHistory = [...tradeFromSub, ...tradesFromCon];
 
-    const orderHistory = userHistory.data?.orders ?? [];
+    const lazyOrderHistory = userHistory.data?.orders ?? [];
+    const orderHistory = lazyOrderHistory.map(order => {
+        if (checkOrderIsFilled(order, orderList.inactiveOrderList)) {
+            return {
+                ...order,
+                status: 'Filled' as const,
+                filledAmount: order.amount,
+            };
+        } else {
+            return order;
+        }
+    });
 
     const priceMap = useSelector((state: RootState) => getPriceMap(state));
 
-    const borrowedPV = computeNetValue(
-        tradeHistory.filter(trade => trade.side === 1), // 1 = borrow
-        priceMap
-    );
-
-    const lentPV = computeNetValue(
-        tradeHistory.filter(trade => trade.side === 0), // 0 = lend
-        priceMap
-    );
-
     const collateralBook = useCollateralBook(account);
+
+    const portfolioAnalytics = useMemo(() => {
+        if (!collateralBook.fetched) {
+            return {
+                borrowedPV: 0,
+                lentPV: 0,
+                netAssetValue: 0,
+            };
+        }
+        const borrowedPV = computeNetValue(
+            positions.filter(position => position.forwardValue.isNegative()),
+            priceMap
+        );
+        const lentPV = computeNetValue(
+            positions.filter(position => !position.forwardValue.isNegative()),
+            priceMap
+        );
+        return {
+            borrowedPV,
+            lentPV,
+            netAssetValue: borrowedPV + lentPV + collateralBook.usdCollateral,
+        };
+    }, [
+        collateralBook.fetched,
+        collateralBook.usdCollateral,
+        positions,
+        priceMap,
+    ]);
 
     return (
         <Page title='Portfolio Management' name='portfolio-management'>
@@ -67,22 +98,20 @@ export const PortfolioManagement = () => {
                             {
                                 name: 'Net Asset Value',
                                 value: usdFormat(
-                                    borrowedPV +
-                                        lentPV +
-                                        collateralBook.usdCollateral
+                                    portfolioAnalytics.netAssetValue
                                 ),
                             },
                             {
                                 name: 'Active Contracts',
-                                value: tradeHistory.length.toString(),
+                                value: positions.length.toString(),
                             },
                             {
                                 name: 'Lending PV',
-                                value: usdFormat(lentPV),
+                                value: usdFormat(portfolioAnalytics.lentPV),
                             },
                             {
                                 name: 'Borrowing PV',
-                                value: usdFormat(borrowedPV),
+                                value: usdFormat(portfolioAnalytics.borrowedPV),
                             },
                         ]}
                     />
@@ -98,7 +127,11 @@ export const PortfolioManagement = () => {
                         >
                             <ActiveTradeTable data={positions} />
                             <OrderTable data={orderList.activeOrderList} />
-                            <OrderHistoryTable data={orderHistory} />
+                            <OrderHistoryTable
+                                data={orderHistory.filter(
+                                    order => order.status !== 'Open'
+                                )}
+                            />
                             <MyTransactionsTable data={tradeHistory} />
                         </HorizontalTab>
                     </div>

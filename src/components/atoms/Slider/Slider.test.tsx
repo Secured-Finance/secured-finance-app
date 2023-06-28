@@ -1,5 +1,5 @@
 import { composeStories } from '@storybook/testing-react';
-import { render } from 'src/test-utils.js';
+import { fireEvent, render, screen } from 'src/test-utils.js';
 import * as stories from './Slider.stories';
 
 const { Default } = composeStories(stories);
@@ -7,5 +7,14 @@ const { Default } = composeStories(stories);
 describe('test Slider component', () => {
     it('should render Slider', () => {
         render(<Default />);
+    });
+
+    it('should change value when a slider is moved', () => {
+        const onChangeMock = jest.fn();
+        render(<Default onChange={onChangeMock} />);
+
+        const slider = screen.getByRole('slider');
+        fireEvent.change(slider, { target: { value: 100 } });
+        expect(onChangeMock).toHaveBeenCalledWith(100);
     });
 });

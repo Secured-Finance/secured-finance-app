@@ -1,6 +1,7 @@
 import { BigNumber } from 'ethers';
 
 export const MAX_COVERAGE = 10000;
+export const ZERO_BN = BigNumber.from(0);
 
 export const computeAvailableToBorrow = (
     assetPrice: number,
