@@ -59,7 +59,11 @@ export const LiquidationProgressBar = ({
                 <span className='typography-body-2 text-slateGray'>
                     Liquidation Risk
                 </span>
-                <span className={`typography-body-1 ${info.color}`}>
+                <span
+                    className={`typography-body-1 ${
+                        liquidationPercentage === 0 ? 'text-white' : info.color
+                    }`}
+                >
                     {info.risk}
                 </span>
             </div>

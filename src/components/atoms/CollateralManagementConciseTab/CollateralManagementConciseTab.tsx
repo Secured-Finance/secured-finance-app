@@ -77,7 +77,7 @@ export const CollateralManagementConciseTab = ({
 
 export const getLiquidationInformation = (liquidationPercentage: number) => {
     if (liquidationPercentage === 0) {
-        return { color: 'text-white', risk: 'N/A' };
+        return { color: 'text-progressBarStart', risk: 'N/A' };
     } else if (liquidationPercentage < 40) {
         return { color: 'text-progressBarStart', risk: 'Low' };
     } else if (liquidationPercentage >= 40 && liquidationPercentage < 60) {
