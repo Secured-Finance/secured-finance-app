@@ -27,7 +27,7 @@ describe('CollateralManagementConciseTab component', () => {
         render(<Default collateralCoverage={0} />);
         expect(screen.getByText('Threshold: 80%')).toBeInTheDocument();
         expect(screen.getByText('N/A')).toBeInTheDocument();
-        expect(screen.getByText('N/A')).toHaveClass('text-white');
+        expect(screen.getByText('N/A')).toHaveClass('text-progressBarStart');
 
         render(<Default collateralCoverage={30} />);
         expect(screen.getByText('Threshold: 50%')).toBeInTheDocument();
