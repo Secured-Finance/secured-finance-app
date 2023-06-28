@@ -13,20 +13,23 @@ import { setWalletDialogOpen } from 'src/store/interactions';
 import { selectLandingOrderForm } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
 import { selectCollateralCurrencyBalance } from 'src/store/wallet';
+import { MaturityOptionList } from 'src/types';
 import { amountFormatterFromBase } from 'src/utils';
 import { MAX_COVERAGE, computeAvailableToBorrow } from 'src/utils/collateral';
 import { Amount, LoanValue } from 'src/utils/entities';
 import { useWallet } from 'use-wallet';
 
 interface OrderActionProps {
-    loanValue?: LoanValue;
+    loanValue: LoanValue;
     collateralBook: CollateralBook;
+    maturitiesOptionList: MaturityOptionList;
     renderSide?: boolean;
 }
 
 export const OrderAction = ({
     loanValue,
     collateralBook,
+    maturitiesOptionList,
     renderSide = false,
 }: OrderActionProps) => {
     const { account } = useWallet();
@@ -136,6 +139,7 @@ export const OrderAction = ({
                 side={side}
                 orderType={orderType}
                 walletSource={sourceAccount}
+                maturitiesOptionList={maturitiesOptionList}
             />
 
             <DepositCollateral

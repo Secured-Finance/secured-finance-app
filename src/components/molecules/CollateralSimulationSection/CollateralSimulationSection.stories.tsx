@@ -1,8 +1,8 @@
 import { OrderSide } from '@secured-finance/sf-client';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
-import { collateralBook37 } from 'src/stories/mocks/fixtures';
+import { collateralBook37, dec22Fixture } from 'src/stories/mocks/fixtures';
 import { CurrencySymbol } from 'src/utils';
-import { Amount } from 'src/utils/entities';
+import { Amount, LoanValue } from 'src/utils/entities';
 import { CollateralSimulationSection } from './CollateralSimulationSection';
 
 export default {
@@ -10,9 +10,10 @@ export default {
     component: CollateralSimulationSection,
     args: {
         collateral: collateralBook37,
-        tradeAmount: new Amount('5000000000000000000', CurrencySymbol.EFIL),
-        tradePosition: OrderSide.BORROW,
-        assetPrice: 8,
+        tradeAmount: new Amount('50000000000000000000', CurrencySymbol.EFIL),
+        side: OrderSide.BORROW,
+        assetPrice: 10,
+        tradeValue: LoanValue.fromPrice(9800, dec22Fixture.toNumber()),
         type: 'trade',
     },
 } as ComponentMeta<typeof CollateralSimulationSection>;

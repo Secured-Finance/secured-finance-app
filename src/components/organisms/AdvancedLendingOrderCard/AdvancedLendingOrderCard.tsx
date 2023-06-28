@@ -28,9 +28,10 @@ import {
 } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
 import { selectAllBalances } from 'src/store/wallet';
-import { OrderType } from 'src/types';
+import { MaturityOptionList, OrderType } from 'src/types';
 import {
     MAX_COVERAGE,
+    amountFormatterFromBase,
     amountFormatterToBase,
     computeAvailableToBorrow,
     divide,
@@ -38,16 +39,17 @@ import {
     multiply,
     percentFormat,
     usdFormat,
-    amountFormatterFromBase,
 } from 'src/utils';
 import { Amount, LoanValue } from 'src/utils/entities';
 import { useWallet } from 'use-wallet';
 
 export const AdvancedLendingOrderCard = ({
     collateralBook,
+    maturitiesOptionList,
     onlyLimitOrder = false,
 }: {
     collateralBook: CollateralBook;
+    maturitiesOptionList: MaturityOptionList;
     onlyLimitOrder?: boolean;
 }) => {
     const {
@@ -233,6 +235,15 @@ export const AdvancedLendingOrderCard = ({
                         decimalPlacesAllowed={2}
                         maxLimit={100}
                     />
+                    {orderType === OrderType.MARKET && (
+                        <div className='mx-10px'>
+                            <OrderDisplayBox
+                                field='Max Slippage'
+                                value='--'
+                                informationText='A bond price limit, triggering a circuit breaker if exceeded within a single block due to price fluctuations.'
+                            />
+                        </div>
+                    )}
                     <div className='mx-10px'>
                         <OrderDisplayBox
                             field='Fixed Rate (APR)'
@@ -268,6 +279,7 @@ export const AdvancedLendingOrderCard = ({
                 <OrderAction
                     loanValue={loanValue}
                     collateralBook={collateralBook}
+                    maturitiesOptionList={maturitiesOptionList}
                 />
 
                 <Separator color='neutral-3'></Separator>

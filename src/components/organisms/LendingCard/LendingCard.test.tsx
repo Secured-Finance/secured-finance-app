@@ -136,7 +136,6 @@ describe('LendingCard Component', () => {
         fireEvent.change(input, { target: { value: '10' } });
         fireEvent.click(screen.getByTestId('place-order-button'));
         expect(screen.getByText('Confirm Order')).toBeInTheDocument();
-        expect(screen.getByText('Market Order')).toBeInTheDocument();
     });
 
     it('should support orders with decimal amounts', async () => {

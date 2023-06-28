@@ -190,7 +190,10 @@ export const AdvancedLending = ({
                 />
             }
         >
-            <AdvancedLendingOrderCard collateralBook={collateralBook} />
+            <AdvancedLendingOrderCard
+                collateralBook={collateralBook}
+                maturitiesOptionList={maturitiesOptionList}
+            />
             <div className='flex min-w-0 flex-grow flex-col gap-6'>
                 <Tab tabDataArray={[{ text: 'Yield Curve' }]}>
                     <LineChartTab
