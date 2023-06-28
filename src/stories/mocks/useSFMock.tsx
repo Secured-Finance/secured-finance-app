@@ -2,12 +2,13 @@ import { Currency } from '@secured-finance/sf-core';
 import { BigNumber } from 'ethers';
 import * as jest from 'jest-mock';
 import { CurrencySymbol, getCurrencyMapAsList } from 'src/utils';
-import { collateralBook80, dec24Fixture } from './fixtures';
 import {
+    collateralBook80,
     dec22Fixture,
-    mar23Fixture,
-    ethBytes32,
+    dec24Fixture,
     efilBytes32,
+    ethBytes32,
+    mar23Fixture,
     wbtcBytes32,
 } from './fixtures';
 
@@ -313,7 +314,7 @@ export const mockUseSF = () => {
                         timestamp: BigNumber.from('1609205000'),
                     },
                     {
-                        orderId: 4,
+                        orderId: 1,
                         ccy: wbtcBytes32,
                         side: 0,
                         maturity: BigNumber.from(dec22Fixture.toString()),
@@ -321,21 +322,30 @@ export const mockUseSF = () => {
                         amount: BigNumber.from('500000000'),
                         timestamp: BigNumber.from('1609212000'),
                     },
+                    {
+                        orderId: 5,
+                        ccy: efilBytes32,
+                        side: 1,
+                        maturity: BigNumber.from(dec24Fixture.toString()),
+                        unitPrice: BigNumber.from('7800'),
+                        amount: BigNumber.from('100000000000000000000'),
+                        timestamp: BigNumber.from('1409220000'),
+                    },
                 ],
                 inactiveOrders: [
                     {
-                        orderId: 4,
+                        orderId: 1,
                         ccy: ethBytes32,
                         side: 0,
                         maturity: BigNumber.from(dec22Fixture.toString()),
                         unitPrice: BigNumber.from('9800'),
-                        amount: BigNumber.from('1000000000000000000'),
+                        amount: BigNumber.from('450000000000000000'),
                         timestamp: BigNumber.from('1609295092'),
                     },
                     {
-                        orderId: 5,
+                        orderId: 1,
                         ccy: efilBytes32,
-                        side: 0,
+                        side: 1,
                         maturity: BigNumber.from(dec22Fixture.toString()),
                         unitPrice: BigNumber.from('9800'),
                         amount: BigNumber.from('1000000000000000000000'),
@@ -349,26 +359,26 @@ export const mockUseSF = () => {
                 {
                     ccy: ethBytes32,
                     maturity: dec22Fixture.toString(),
-                    presentValue: BigNumber.from('10000000000000000000'),
+                    presentValue: BigNumber.from('9954750000000000000'),
                     futureValue: BigNumber.from('10210000000000000000'),
                 },
                 {
                     ccy: ethBytes32,
                     maturity: mar23Fixture.toString(),
-                    presentValue: BigNumber.from('-10000000000000000000'),
-                    futureValue: BigNumber.from('-10210000000000000000'),
+                    presentValue: BigNumber.from('-10558255657026800000'),
+                    futureValue: BigNumber.from('-11113953323186200000'),
                 },
                 {
                     ccy: efilBytes32,
                     maturity: dec22Fixture.toString(),
-                    presentValue: BigNumber.from('10000000000000000000'),
+                    presentValue: BigNumber.from('9954750000000000000'),
                     futureValue: BigNumber.from('10210000000000000000'),
                 },
                 {
                     ccy: efilBytes32,
                     maturity: mar23Fixture.toString(),
-                    presentValue: BigNumber.from('-10000000000000000000'),
-                    futureValue: BigNumber.from('-10210000000000000000'),
+                    presentValue: BigNumber.from('-10558255657026800000'),
+                    futureValue: BigNumber.from('-11113953323186200000'),
                 },
             ])
         ),

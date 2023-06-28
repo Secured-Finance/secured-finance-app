@@ -40,6 +40,7 @@ export type TradesQuery = Awaited<
 
 type User = NonNullable<UserHistoryQuery['user']>;
 export type OrderList = User['orders'];
+export type Order = OrderList[0];
 export type TradeHistory = User['transactions'];
 export type DailyVolumes = DailyVolumesQuery['dailyVolumes'];
 export type Trades = TradesQuery['transactions'];

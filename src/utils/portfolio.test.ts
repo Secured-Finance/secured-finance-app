@@ -1,5 +1,4 @@
-import { BigNumber } from 'ethers';
-import { formatBytes32String } from 'ethers/lib/utils';
+import { BigNumber, utils } from 'ethers';
 import { AssetPriceMap } from 'src/store/assetPrices/selectors';
 import { TradeHistory } from 'src/types';
 import timemachine from 'timemachine';
@@ -10,11 +9,13 @@ import {
     calculateForwardValue,
     calculateAveragePrice,
     formatOrders,
+    checkOrderIsFilled,
 } from './portfolio';
 import {
     dec22Fixture,
     ethBytes32,
     efilBytes32,
+    wbtcBytes32,
 } from 'src/stories/mocks/fixtures';
 
 beforeAll(() => {
@@ -61,67 +62,77 @@ describe('computeNetValue', () => {
         [CurrencySymbol.WBTC]: 30000,
     };
     it('should return the net value', () => {
-        const trades = [
+        const positions = [
             {
-                amount: '1000000000000000000',
-                currency: formatBytes32String(CurrencySymbol.ETH),
-                side: 0,
+                amount: BigNumber.from('400000000000000000000'),
+                currency: efilBytes32,
+                forwardValue: BigNumber.from('500000000000000000000'),
+                maturity: dec22Fixture.toString(),
+                midPrice: BigNumber.from(8000),
             },
             {
-                amount: '100000000000000000000',
-                currency: formatBytes32String(CurrencySymbol.EFIL),
-                side: 1,
+                amount: BigNumber.from('-500000000000000000000'),
+                currency: efilBytes32,
+                forwardValue: BigNumber.from('-1000000000000000000000'),
+                maturity: dec22Fixture.toString(),
+                midPrice: BigNumber.from(5000),
             },
         ];
-        expect(
-            computeNetValue(trades as unknown as TradeHistory, priceMap)
-        ).toEqual(400);
+        expect(computeNetValue(positions, priceMap)).toEqual(-600);
     });
 
-    it('should return 0 if no trades are provided', () => {
+    it('should return 0 if no positions are provided', () => {
         expect(computeNetValue([], priceMap)).toEqual(0);
     });
 
-    it('should return the net value of borrow and lend trades', () => {
-        const trades = [
+    it('should return the net value of borrow and lend positions', () => {
+        const positions = [
             {
-                amount: '10000000000000000000',
-                currency: formatBytes32String(CurrencySymbol.ETH),
-                side: 1,
+                amount: BigNumber.from('400000000000000000000'),
+                currency: efilBytes32,
+                forwardValue: BigNumber.from('500000000000000000000'),
+                maturity: dec22Fixture.toString(),
+                midPrice: BigNumber.from(8000),
             },
             {
-                amount: '1000000000000000000000',
-                currency: formatBytes32String(CurrencySymbol.EFIL),
-                side: 1,
+                amount: BigNumber.from('-500000000000000000000'),
+                currency: efilBytes32,
+                forwardValue: BigNumber.from('-1000000000000000000000'),
+                maturity: dec22Fixture.toString(),
+                midPrice: BigNumber.from(5000),
             },
             {
-                amount: '100000000',
-                currency: formatBytes32String(CurrencySymbol.WBTC),
-                side: 0,
+                amount: BigNumber.from('-500000000'),
+                forwardValue: BigNumber.from('-1000000000'),
+                currency: wbtcBytes32,
+                maturity: dec22Fixture.toString(),
+                midPrice: BigNumber.from(50),
             },
             {
-                amount: '1000000000',
-                currency: formatBytes32String(CurrencySymbol.USDC),
-                side: 1,
+                amount: BigNumber.from('505000000'),
+                forwardValue: BigNumber.from('505000000'),
+                currency: wbtcBytes32,
+                maturity: dec22Fixture.toString(),
+                midPrice: BigNumber.from(100),
             },
         ];
         expect(
             computeNetValue(
-                trades.filter(
-                    trade => trade.side === 1
-                ) as unknown as TradeHistory,
+                positions.filter(position =>
+                    position.forwardValue.isNegative()
+                ),
                 priceMap
             )
-        ).toEqual(-17000);
+        ).toEqual(-153000);
 
         expect(
             computeNetValue(
-                trades.filter(
-                    trade => trade.side === 0
-                ) as unknown as TradeHistory,
+                positions.filter(
+                    position => !position.forwardValue.isNegative()
+                ),
                 priceMap
             )
-        ).toEqual(30000);
+        ).toEqual(153900);
     });
 });
 
@@ -181,5 +192,88 @@ describe('formatOrders', () => {
         ];
 
         expect(formatOrders(orders)).toEqual(trades);
+    });
+});
+
+describe('checkOrderIsFilled', () => {
+    const orders = [
+        {
+            orderId: BigNumber.from(1),
+            currency: efilBytes32,
+            side: 1,
+            maturity: dec22Fixture.toString(),
+            unitPrice: BigNumber.from('9800'),
+            amount: BigNumber.from('1000000000000000000000'),
+            createdAt: BigNumber.from('1609299000'),
+        },
+        {
+            orderId: BigNumber.from(2),
+            currency: efilBytes32,
+            side: 1,
+            maturity: dec22Fixture.toString(),
+            unitPrice: BigNumber.from('9600'),
+            amount: BigNumber.from('5000000000000000000000'),
+            createdAt: BigNumber.from('1609298000'),
+        },
+        {
+            orderId: BigNumber.from(3),
+            currency: efilBytes32,
+            side: 0,
+            maturity: dec22Fixture.toString(),
+            unitPrice: BigNumber.from('9800'),
+            amount: BigNumber.from('1000000000'),
+            createdAt: BigNumber.from('1609297000'),
+        },
+        {
+            orderId: BigNumber.from(4),
+            currency: wbtcBytes32,
+            side: 1,
+            maturity: dec22Fixture.toString(),
+            unitPrice: BigNumber.from('9600'),
+            amount: BigNumber.from('5000000000000000000000'),
+            createdAt: BigNumber.from('1609296000'),
+        },
+        {
+            orderId: BigNumber.from(5),
+            currency: ethBytes32,
+            side: 0,
+            maturity: dec22Fixture.toString(),
+            unitPrice: BigNumber.from('9800'),
+            amount: BigNumber.from('1000000000'),
+            createdAt: BigNumber.from('1609295000'),
+        },
+    ];
+    it('should return true', () => {
+        const order = {
+            orderId: 5,
+            currency: ethBytes32,
+            side: 0,
+            maturity: dec22Fixture,
+            unitPrice: BigNumber.from('9800'),
+            filledAmount: BigNumber.from('1000000000000000000000'),
+            amount: BigNumber.from('1000000000000000000000'),
+            status: 'Open' as const,
+            createdAt: BigNumber.from('1'),
+            txHash: utils.formatBytes32String('hash'),
+        };
+
+        expect(checkOrderIsFilled(order, orders)).toEqual(true);
+    });
+
+    it('should return false', () => {
+        const order = {
+            orderId: 6,
+            currency: ethBytes32,
+            side: 0,
+            maturity: dec22Fixture,
+            unitPrice: BigNumber.from('9800'),
+            filledAmount: BigNumber.from('1000000000000000000000'),
+            amount: BigNumber.from('1000000000000000000000'),
+            status: 'Open' as const,
+            createdAt: BigNumber.from('1'),
+            txHash: utils.formatBytes32String('hash'),
+        };
+
+        expect(checkOrderIsFilled(order, orders)).toEqual(false);
     });
 });

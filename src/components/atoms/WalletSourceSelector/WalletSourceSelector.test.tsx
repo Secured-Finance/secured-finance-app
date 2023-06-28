@@ -50,9 +50,6 @@ describe('WalletSourceSelector component', () => {
         const onChange = jest.fn();
         render(<Default onChange={onChange} />);
 
-        expect(onChange).toBeCalledTimes(1);
-        expect(onChange).toHaveBeenLastCalledWith(WalletSource.METAMASK);
-
         fireEvent.click(screen.getByTestId('wallet-source-selector-button'));
         fireEvent.click(screen.getByTestId('option-1'));
 
@@ -60,7 +57,7 @@ describe('WalletSourceSelector component', () => {
             expect(screen.getByText('SF Vault')).toBeInTheDocument();
             expect(screen.getByText('4,000 WBTC')).toBeInTheDocument();
 
-            expect(onChange).toBeCalledTimes(2);
+            expect(onChange).toBeCalledTimes(1);
             expect(onChange).toHaveBeenLastCalledWith(WalletSource.SF_VAULT);
         });
     });

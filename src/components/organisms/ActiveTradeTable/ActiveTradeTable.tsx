@@ -16,8 +16,10 @@ import { Amount, Maturity } from 'src/utils/entities';
 import {
     amountColumnDefinition,
     contractColumnDefinition,
-    loanTypeFromAmountColumnDefinition,
+    loanTypeFromFVColumnDefinition,
     tableHeaderDefinition,
+    forwardValueColumnDefinition,
+    priceYieldColumnDefinition,
 } from 'src/utils/tableDefinitions';
 
 const columnHelper = createColumnHelper<Position>();
@@ -35,7 +37,7 @@ export const ActiveTradeTable = ({ data }: { data: Position[] }) => {
 
     const columns = useMemo(
         () => [
-            loanTypeFromAmountColumnDefinition(columnHelper, 'Type', 'side'),
+            loanTypeFromFVColumnDefinition(columnHelper, 'Type', 'side'),
             contractColumnDefinition(columnHelper, 'Contract', 'contract'),
             columnHelper.accessor('maturity', {
                 cell: info => {
@@ -88,7 +90,7 @@ export const ActiveTradeTable = ({ data }: { data: Position[] }) => {
                     'Maturity of a loan contract is the date on which the contract is set to expire.'
                 ),
             }),
-            amountColumnDefinition(
+            forwardValueColumnDefinition(
                 columnHelper,
                 'FV',
                 'forwardValue',
@@ -107,6 +109,15 @@ export const ActiveTradeTable = ({ data }: { data: Position[] }) => {
                     compact: false,
                 },
                 'Present Value (PV) is the current worth of the contract, taking into account the time value of money.'
+            ),
+            priceYieldColumnDefinition(
+                columnHelper,
+                'Mid Price',
+                'midPrice',
+                row => row.midPrice,
+                'default',
+                'price',
+                'Mid Price is the average price of the best borrowing and lending order unit price.'
             ),
             columnHelper.display({
                 id: 'actions',
@@ -161,7 +172,7 @@ export const ActiveTradeTable = ({ data }: { data: Position[] }) => {
                 columns={isTablet ? columnsForTabletMobile : columns}
                 options={{
                     name: 'active-trade-table',
-                    stickyColumns: new Set<number>([5]),
+                    stickyColumns: new Set<number>([6]),
                 }}
             />
             <div className='typography-dropdown-selection-label mt-16 w-full rounded-xl bg-cardBackground/60 text-justify text-secondary7 '>

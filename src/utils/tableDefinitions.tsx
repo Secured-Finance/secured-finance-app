@@ -36,12 +36,24 @@ type SideProperty = {
 type AmountProperty = {
     amount: BigNumber;
 };
-type AmountColumnType = (AmountProperty | SideProperty) & CurrencyProperty;
+
+type ForwardValueProperty = {
+    forwardValue: BigNumber;
+};
+
+type AmountColumnType = (AmountProperty | SideProperty | ForwardValueProperty) &
+    CurrencyProperty;
 
 function hasAmountProperty<T extends AmountColumnType>(
     obj: T
 ): obj is T & AmountProperty {
     return (obj as AmountProperty).amount !== undefined;
+}
+
+function hasForwardValueProperty<T extends AmountColumnType>(
+    obj: T
+): obj is T & ForwardValueProperty {
+    return (obj as ForwardValueProperty).forwardValue !== undefined;
 }
 
 function hasSideProperty<T extends AmountColumnType>(
@@ -50,6 +62,58 @@ function hasSideProperty<T extends AmountColumnType>(
     return (obj as SideProperty).side !== undefined;
 }
 export const amountColumnDefinition = <T extends AmountColumnType>(
+    columnHelper: ColumnHelper<T>,
+    title: string,
+    id: string,
+    accessor: AccessorFn<T, BigNumber>,
+    options: {
+        color: boolean;
+        compact: boolean;
+        priceList?: AssetPriceMap;
+        fontSize?: string;
+    },
+    titleHint?: string
+) => {
+    return columnHelper.accessor(accessor, {
+        id: id,
+        cell: info => {
+            const ccy = hexToCurrencySymbol(info.row.original.currency);
+            if (!ccy) return null;
+
+            let color: ColorFormat['color'];
+            if (hasSideProperty(info.row.original)) {
+                color = info.row.original.side === 1 ? 'negative' : 'positive';
+            } else if (hasAmountProperty(info.row.original)) {
+                color = info.row.original.amount.isNegative()
+                    ? 'negative'
+                    : 'positive';
+            } else {
+                // do nothing
+            }
+
+            return (
+                <div className='flex w-full items-center justify-end whitespace-nowrap pr-[15%]'>
+                    <div className='flex justify-end'>
+                        <CurrencyItem
+                            amount={currencyMap[ccy].fromBaseUnit(
+                                info.getValue() as BigNumber
+                            )}
+                            ccy={ccy}
+                            align='right'
+                            price={options.priceList?.[ccy]}
+                            color={options.color ? color : undefined}
+                            compact={options.compact}
+                            fontSize={options.fontSize}
+                        />
+                    </div>
+                </div>
+            );
+        },
+        header: tableHeaderDefinition(title, titleHint),
+    });
+};
+
+export const forwardValueColumnDefinition = <T extends AmountColumnType>(
     columnHelper: ColumnHelper<T>,
     title: string,
     id: string,
@@ -70,8 +134,8 @@ export const amountColumnDefinition = <T extends AmountColumnType>(
             let color: ColorFormat['color'];
             if (hasSideProperty(info.row.original)) {
                 color = info.row.original.side === 1 ? 'negative' : 'positive';
-            } else if (hasAmountProperty(info.row.original)) {
-                color = info.row.original.amount.isNegative()
+            } else if (hasForwardValueProperty(info.row.original)) {
+                color = info.row.original.forwardValue.isNegative()
                     ? 'negative'
                     : 'positive';
             } else {
@@ -122,12 +186,12 @@ export const loanTypeColumnDefinition = <T extends SideProperty>(
     });
 };
 
-export const loanTypeFromAmountColumnDefinition = <T extends AmountProperty>(
+export const loanTypeFromFVColumnDefinition = <T extends ForwardValueProperty>(
     columnHelper: ColumnHelper<T>,
     title: string,
     id: string
 ) => {
-    const assessorFn: AccessorFn<T, BigNumber> = row => row.amount;
+    const assessorFn: AccessorFn<T, BigNumber> = row => row.forwardValue;
 
     return columnHelper.accessor(assessorFn, {
         id: id,
@@ -229,8 +293,12 @@ export const dateAndTimeColumnDefinition = <T extends { createdAt: BigNumber }>(
         id: id,
         cell: info => {
             return (
-                <div className='typography-caption text-slateGray'>
-                    {formatTimestamp(+info.getValue().toString())}
+                <div className='flex justify-center'>
+                    <div className='flex flex-col text-right'>
+                        <span className='typography-caption-2 h-6 text-slateGray'>
+                            {formatTimestamp(+info.getValue().toString())}
+                        </span>
+                    </div>
                 </div>
             );
         },

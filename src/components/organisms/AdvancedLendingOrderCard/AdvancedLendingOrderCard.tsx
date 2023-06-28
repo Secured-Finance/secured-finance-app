@@ -121,11 +121,22 @@ export const AdvancedLendingOrderCard = ({
         );
     }, [sourceAccount, walletSourceList]);
 
+    const balanceToLend = useMemo(() => {
+        return selectedWalletSource.source === WalletSource.METAMASK
+            ? balanceRecord[currency]
+            : amountFormatterFromBase[currency](
+                  collateralBook.nonCollateral[currency] ?? BigNumber.from(0)
+              );
+    }, [
+        balanceRecord,
+        collateralBook.nonCollateral,
+        currency,
+        selectedWalletSource.source,
+    ]);
+
     const handleAmountChange = (percentage: number) => {
         const available =
-            side === OrderSide.BORROW
-                ? availableToBorrow
-                : balanceRecord[currency];
+            side === OrderSide.BORROW ? availableToBorrow : balanceToLend;
         dispatch(
             setAmount(
                 amountFormatterToBase[currency](
@@ -136,13 +147,12 @@ export const AdvancedLendingOrderCard = ({
         setSliderValue(percentage);
     };
 
-    const handleInputChange = (v: number | BigNumber) => {
-        dispatch(setAmount(v as BigNumber));
+    const handleInputChange = (v: BigNumber) => {
+        dispatch(setAmount(v));
+
         const available =
-            side === OrderSide.BORROW
-                ? availableToBorrow
-                : balanceRecord[currency];
-        const inputValue = amountFormatterFromBase[currency](v as BigNumber);
+            side === OrderSide.BORROW ? availableToBorrow : balanceToLend;
+        const inputValue = amountFormatterFromBase[currency](v);
         available > 0
             ? setSliderValue(Math.min(100.0, (inputValue * 100.0) / available))
             : setSliderValue(0.0);
@@ -152,6 +162,11 @@ export const AdvancedLendingOrderCard = ({
             dispatch(setOrderType(OrderType.LIMIT));
         }
     }, [dispatch, onlyLimitOrder]);
+
+    const handleWalletSourceChange = (source: WalletSource) => {
+        dispatch(setSourceAccount(source));
+        handleInputChange(BigNumber.from(0));
+    };
 
     return (
         <div className='h-fit rounded-b-xl border border-white-10 bg-cardBackground bg-opacity-60 pb-7'>
@@ -203,7 +218,7 @@ export const AdvancedLendingOrderCard = ({
                         optionList={walletSourceList}
                         selected={selectedWalletSource}
                         account={account ?? ''}
-                        onChange={v => dispatch(setSourceAccount(v))}
+                        onChange={handleWalletSourceChange}
                     />
                 )}
                 <div className='flex flex-col gap-[10px]'>
@@ -236,7 +251,7 @@ export const AdvancedLendingOrderCard = ({
                     unit={currency}
                     asset={currency}
                     initialValue={orderAmount.value}
-                    onValueChange={handleInputChange}
+                    onValueChange={v => handleInputChange(BigNumber.from(v))}
                 />
                 <div className='mx-10px flex flex-col gap-6'>
                     <OrderDisplayBox
