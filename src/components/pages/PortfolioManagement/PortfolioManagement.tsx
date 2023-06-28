@@ -22,6 +22,7 @@ import {
     usdFormat,
     formatOrders,
     checkOrderIsFilled,
+    sortOrders,
 } from 'src/utils';
 import { useCollateralBook, useOrderList, usePositions } from 'src/hooks';
 import { useWallet } from 'use-wallet';
@@ -44,17 +45,19 @@ export const PortfolioManagement = () => {
     const tradeHistory = [...tradeFromSub, ...tradesFromCon];
 
     const lazyOrderHistory = userHistory.data?.orders ?? [];
-    const orderHistory = lazyOrderHistory.map(order => {
-        if (checkOrderIsFilled(order, orderList.inactiveOrderList)) {
-            return {
-                ...order,
-                status: 'Filled' as const,
-                filledAmount: order.amount,
-            };
-        } else {
-            return order;
-        }
-    });
+    const sortedOrderHistory = lazyOrderHistory
+        .map(order => {
+            if (checkOrderIsFilled(order, orderList.inactiveOrderList)) {
+                return {
+                    ...order,
+                    status: 'Filled' as const,
+                    filledAmount: order.amount,
+                };
+            } else {
+                return order;
+            }
+        })
+        .sort((a, b) => sortOrders(a, b));
 
     const priceMap = useSelector((state: RootState) => getPriceMap(state));
 
@@ -128,7 +131,7 @@ export const PortfolioManagement = () => {
                             <ActiveTradeTable data={positions} />
                             <OrderTable data={orderList.activeOrderList} />
                             <OrderHistoryTable
-                                data={orderHistory.filter(
+                                data={sortedOrderHistory.filter(
                                     order => order.status !== 'Open'
                                 )}
                             />
