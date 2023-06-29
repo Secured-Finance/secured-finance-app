@@ -51,6 +51,8 @@ export const CollateralProgressBar = ({
         collateralThreshold
     );
 
+    const barWidth = Math.min(1, collateralCoverage);
+
     return (
         <div
             className='pointer-events-none flex flex-col gap-3 rounded-lg px-5 pb-12 pt-6 hover:bg-black-20'
@@ -69,18 +71,18 @@ export const CollateralProgressBar = ({
             <div className='flex flex-col gap-[6px]'>
                 <div
                     style={{
-                        width: `calc(100% * ${collateralCoverage} + 4px )`,
+                        width: `calc(100% * ${barWidth} + 4px )`,
                     }}
                     className='transition-width duration-700 ease-in'
                     data-testid='collateral-progress-bar-tick'
                 >
                     <Tick className='float-right h-5px w-2'></Tick>
                 </div>
-                <div className='relative h-5px w-full overflow-hidden rounded-full bg-black-60'>
+                <div className='h-5px w-full rounded-full bg-black-60'>
                     <div
                         className='float-left h-full bg-nebulaTeal transition-width duration-700 ease-in'
                         style={{
-                            width: `calc(100% * ${collateralCoverage})`,
+                            width: `calc(100% * ${barWidth})`,
                         }}
                         data-testid='collateral-progress-bar-track'
                     ></div>

@@ -103,9 +103,7 @@ describe('Landing Component', () => {
             });
             fireEvent.click(screen.getByText('Advanced'));
         });
-        expect(screen.getByRole('textbox', { name: 'Amount' })).toHaveValue(
-            '0'
-        );
+        expect(screen.getByRole('textbox', { name: 'Amount' })).toHaveValue('');
         expect(screen.getByRole('textbox', { name: 'Bond Price' })).toHaveValue(
             '96.85'
         );
@@ -136,9 +134,7 @@ describe('Landing Component', () => {
         fireEvent.click(screen.getByText('MAR23'));
         expect(screen.getByText('MAR23')).toBeInTheDocument();
 
-        expect(screen.getByRole('textbox', { name: 'Amount' })).toHaveValue(
-            '0'
-        );
+        expect(screen.getByRole('textbox', { name: 'Amount' })).toHaveValue('');
         expect(screen.getByRole('textbox', { name: 'Bond Price' })).toHaveValue(
             '96.83'
         );
@@ -168,9 +164,7 @@ describe('Landing Component', () => {
         fireEvent.click(screen.getByRole('button', { name: 'Filecoin' }));
         fireEvent.click(screen.getByRole('menuitem', { name: 'USDC' }));
 
-        expect(screen.getByRole('textbox', { name: 'Amount' })).toHaveValue(
-            '0'
-        );
+        expect(screen.getByRole('textbox', { name: 'Amount' })).toHaveValue('');
         expect(screen.getByRole('textbox', { name: 'Bond Price' })).toHaveValue(
             '96.85'
         );
