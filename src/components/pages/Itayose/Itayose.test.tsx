@@ -35,9 +35,7 @@ describe('Itayose Component', () => {
         fireEvent.click(screen.getByRole('button', { name: 'Filecoin' }));
         fireEvent.click(screen.getByRole('menuitem', { name: 'USDC' }));
         expect(store.getState().landingOrderForm.amount).toEqual('0');
-        expect(screen.getByRole('textbox', { name: 'Amount' })).toHaveValue(
-            '0'
-        );
+        expect(screen.getByRole('textbox', { name: 'Amount' })).toHaveValue('');
     });
 
     it('should only show the pre-order orders of the user when they are connected', async () => {
