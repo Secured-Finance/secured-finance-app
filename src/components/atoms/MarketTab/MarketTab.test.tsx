@@ -7,6 +7,7 @@ const { Default, GreenMarketTab } = composeStories(stories);
 describe('test Market Tab component', () => {
     it('should render Market Tab', () => {
         render(<Default />);
+        expect(screen.getByLabelText('24h Volume')).toBeInTheDocument();
         expect(screen.getByText('24h Volume')).toBeInTheDocument();
         expect(screen.getByText('24h Volume')).toHaveClass(
             'typography-caption-2 text-slateGray'
@@ -19,6 +20,7 @@ describe('test Market Tab component', () => {
 
     it('should render Green Market Tab', () => {
         render(<GreenMarketTab />);
+        expect(screen.getByLabelText('Green Market Tab')).toBeInTheDocument();
         expect(screen.getByText('7977.00')).toBeInTheDocument();
         expect(screen.getByText('7977.00')).toHaveClass(
             'typography-button-3 leading-7 text-nebulaTeal'
@@ -27,6 +29,11 @@ describe('test Market Tab component', () => {
         expect(screen.getByText('25.00% APR')).toHaveClass(
             'typography-caption-2 font-semibold text-white'
         );
+    });
+
+    it('should override the default label with the label prop', () => {
+        render(<Default label='Custom Label' />);
+        expect(screen.getByLabelText('Custom Label')).toBeInTheDocument();
     });
 
     it('should not render source link if source is not provided', () => {
