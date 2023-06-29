@@ -1,8 +1,9 @@
 import { composeStories } from '@storybook/testing-react';
-import { fireEvent, render, screen } from 'src/test-utils.js';
+import { act, fireEvent, render, screen, waitFor } from 'src/test-utils.js';
 import * as stories from './CoreTable.stories';
 
-const { Default, WithHiddenColumn, NonResponsive } = composeStories(stories);
+const { Default, WithHiddenColumn, NonResponsive, WithPagination } =
+    composeStories(stories);
 
 describe('CoreTable Component', () => {
     it('should render a CoreTable', () => {
@@ -76,5 +77,34 @@ describe('CoreTable Component', () => {
         const header = screen.getAllByTestId('core-table-header-cell')[5];
         expect(header).not.toHaveClass('sticky');
         expect(header).not.toHaveClass('bg-gunMetal/100');
+    });
+
+    it('should not load more data when scrolled if getMoreData function is available', async () => {
+        render(<Default />);
+        expect(screen.getAllByTestId('core-table-row')).toHaveLength(20);
+        await act(async () => {
+            fireEvent.scroll(window, { target: { scrollY: 100 } });
+            expect(screen.queryByText('Loading...')).not.toBeInTheDocument();
+            await waitFor(async () => {
+                expect(screen.getAllByTestId('core-table-row')).toHaveLength(
+                    20
+                );
+            });
+        });
+    });
+
+    it('should load more data when scrolled if getMoreData function is available', async () => {
+        await waitFor(() => render(<WithPagination />));
+        expect(screen.getAllByTestId('core-table-row')).toHaveLength(20);
+        await act(async () => {
+            fireEvent.scroll(window, { target: { scrollY: 100 } });
+            expect(screen.getByText('Loading...')).toBeInTheDocument();
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            await waitFor(async () => {
+                expect(screen.getAllByTestId('core-table-row')).toHaveLength(
+                    40
+                );
+            });
+        });
     });
 });
