@@ -16,6 +16,7 @@ export type LendingMarket = {
     midUnitPrice: number;
     isReady: boolean;
     preOpenDate: number;
+    openingUnitPrice: number;
 };
 export type ContractMap = Record<string, LendingMarket>;
 
@@ -46,6 +47,7 @@ export const useLendingMarkets = (
                                         openingDate,
                                         midUnitPrice,
                                         isReady,
+                                        openingUnitPrice,
                                     }
                                 ) => {
                                     if (acc[name]) {
@@ -71,6 +73,8 @@ export const useLendingMarkets = (
                                             midUnitPrice:
                                                 midUnitPrice.toNumber(),
                                             isReady,
+                                            openingUnitPrice:
+                                                openingUnitPrice.toNumber(),
                                             preOpenDate:
                                                 openingDate.toNumber() -
                                                 PRE_OPEN_TIME,

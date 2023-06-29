@@ -1,3 +1,4 @@
+import { getUTCMonthYear } from '@secured-finance/sf-core';
 import { toBytes32 } from '@secured-finance/sf-graph-client';
 import queries from '@secured-finance/sf-graph-client/dist/graphclients/';
 import { BigNumber } from 'ethers';
@@ -26,7 +27,7 @@ import {
     setUnitPrice,
 } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
-import { MaturityOptionList, TradesQuery } from 'src/types';
+import { MaturityOptionList, TransactionList } from 'src/types';
 import {
     CurrencySymbol,
     Rate,
@@ -40,7 +41,7 @@ import { LoanValue, Maturity } from 'src/utils/entities';
 import { useWallet } from 'use-wallet';
 
 const useTradeHistoryDetails = (
-    transactions: NonNullable<TradesQuery>['transactions'],
+    transactions: TransactionList,
     currency: CurrencySymbol,
     maturity: Maturity
 ) => {
@@ -49,16 +50,14 @@ const useTradeHistoryDetails = (
         let max = 0;
         let sum = BigNumber.from(0);
         let count = 0;
-        let lastTradePrice = 0;
-        let lastTradeTime = 0;
+        if (!transactions.length) {
+            min = 0;
+            max = 0;
+        }
         for (const t of transactions) {
             const price = t.averagePrice * 10000;
             if (price < min) min = price;
             if (price > max) max = price;
-            if (t.createdAt > lastTradeTime) {
-                lastTradePrice = price;
-                lastTradeTime = t.createdAt;
-            }
             sum = sum.add(BigNumber.from(t.amount));
             count++;
         }
@@ -68,11 +67,6 @@ const useTradeHistoryDetails = (
             max: LoanValue.fromPrice(max, maturity.toNumber()),
             sum: currencyMap[currency].fromBaseUnit(sum),
             count,
-            lastTradeLoan: LoanValue.fromPrice(
-                lastTradePrice,
-                maturity.toNumber()
-            ),
-            lastTradeTime,
         };
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [currency, maturity.toNumber(), transactions.length]);
@@ -91,6 +85,13 @@ export const AdvancedLending = ({
 }) => {
     const { currency, maturity, orderType } = useSelector((state: RootState) =>
         selectLandingOrderForm(state.landingOrderForm)
+    );
+
+    const openingUnitPrice = useSelector(
+        (state: RootState) =>
+            state.availableContracts.lendingMarkets[currency][
+                getUTCMonthYear(maturity.toNumber())
+            ]?.openingUnitPrice
     );
 
     const currencyPrice = useSelector((state: RootState) =>
@@ -117,23 +118,45 @@ export const AdvancedLending = ({
     const orderBook = useOrderbook(currency, selectedTerm.value, 10);
     const orderList = useOrderList(account);
 
-    const last24hoursTrades = useGraphClientHook(
+    const transactionHistory = useGraphClientHook(
         {
             currency: toBytes32(currency),
             maturity: maturity.toNumber(),
             from: timestamp - 24 * 3600,
             to: timestamp,
         },
-        queries.TradesDocument,
-        'transactions',
-        false
+        queries.TransactionHistoryDocument
     ).data;
 
     const tradeHistoryDetails = useTradeHistoryDetails(
-        last24hoursTrades ?? [],
+        transactionHistory?.transactionHistory ?? [],
         currency,
         selectedTerm.value
     );
+
+    const lastTransaction = useMemo(() => {
+        // if there is no transaction, return the lending market opening price
+        if (!transactionHistory?.lastTransaction?.length)
+            return {
+                createdAt: 0,
+                value: openingUnitPrice
+                    ? LoanValue.fromPrice(openingUnitPrice, maturity.toNumber())
+                    : undefined,
+            };
+        return {
+            createdAt: transactionHistory?.lastTransaction[0]?.createdAt,
+            value: LoanValue.fromPrice(
+                transactionHistory?.lastTransaction[0]?.averagePrice * 10000,
+                maturity.toNumber()
+            ),
+        };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        JSON.stringify(maturity),
+        transactionHistory?.lastTransaction,
+        openingUnitPrice,
+    ]);
 
     const selectedAsset = useMemo(() => {
         return assetList.find(option => option.value === currency);
@@ -141,20 +164,18 @@ export const AdvancedLending = ({
 
     const handleCurrencyChange = useCallback(
         (v: CurrencySymbol) => {
-            if (v === currency) return;
             dispatch(setCurrency(v));
             dispatch(setAmount(BigNumber.from(0)));
         },
-        [currency, dispatch]
+        [dispatch]
     );
 
     const handleTermChange = useCallback(
         (v: string) => {
-            if (v === maturity.toString()) return;
             dispatch(setMaturity(new Maturity(v)));
             dispatch(setAmount(BigNumber.from(0)));
         },
-        [maturity, dispatch]
+        [dispatch]
     );
 
     useEffect(() => {
@@ -178,13 +199,15 @@ export const AdvancedLending = ({
                     }}
                     onAssetChange={handleCurrencyChange}
                     onTermChange={handleTermChange}
-                    lastTradeLoan={tradeHistoryDetails.lastTradeLoan}
-                    lastTradeTime={tradeHistoryDetails.lastTradeTime}
+                    lastTradeLoan={lastTransaction.value}
+                    lastTradeTime={lastTransaction.createdAt}
                     values={[
                         formatLoanValue(tradeHistoryDetails.max, 'price'),
                         formatLoanValue(tradeHistoryDetails.min, 'price'),
                         tradeHistoryDetails.count,
-                        ordinaryFormat(tradeHistoryDetails.sum),
+                        tradeHistoryDetails.sum
+                            ? ordinaryFormat(tradeHistoryDetails.sum)
+                            : '-',
                         usdFormat(currencyPrice, 2),
                     ]}
                 />

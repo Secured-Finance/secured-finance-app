@@ -4,13 +4,24 @@ import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from 'src/store/types';
 
-export const useGraphClientHook = <T, TVariables, K extends keyof T>(
+export function useGraphClientHook<T, TVariables>(
+    variables: TVariables,
+    queryDocument: Parameters<typeof useQuery<T>>[0]
+): Awaited<ReturnType<typeof useQuery<T>>>;
+
+export function useGraphClientHook<T, TVariables, K extends keyof T>(
     variables: TVariables,
     queryDocument: Parameters<typeof useQuery<T>>[0],
-    entity: K,
+    entity: K
+): Omit<ReturnType<typeof useQuery<T>>, 'data'> & { data: T[K] | undefined };
+
+export function useGraphClientHook<T, TVariables, K extends keyof T>(
+    variables: TVariables,
+    queryDocument: Parameters<typeof useQuery<T>>[0],
+    entity?: K,
     realTime = false,
     client?: GraphApolloClient
-) => {
+) {
     if (!queryDocument) {
         return {
             data: undefined,
@@ -44,12 +55,10 @@ export const useGraphClientHook = <T, TVariables, K extends keyof T>(
         if (realTime) refetch?.();
     }, [block, realTime, refetch]);
 
-    const isExists = data?.[entity];
-
     return {
-        data: isExists ? data[entity] : undefined,
+        data: entity ? data?.[entity] : data,
         error,
         refetch,
         networkStatus,
     };
-};
+}

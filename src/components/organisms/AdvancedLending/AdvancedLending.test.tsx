@@ -1,20 +1,13 @@
 import { composeStories } from '@storybook/testing-react';
-import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
+import { emptyTransaction } from 'src/stories/mocks/queries';
+import { fireEvent, render, screen, waitFor, within } from 'src/test-utils.js';
 import * as stories from './AdvancedLending.stories';
 
 const { Default } = composeStories(stories);
 
 describe('Advanced Lending Component', () => {
-    it('should render advanced lending', async () => {
-        waitFor(() =>
-            render(<Default />, {
-                apolloMocks: Default.parameters?.apolloClient.mocks,
-            })
-        );
-    });
-
     it('should reset the amount when the user change the currency', async () => {
-        const { store } = await waitFor(() =>
+        const { store, unmount } = await waitFor(() =>
             render(<Default />, {
                 apolloMocks: Default.parameters?.apolloClient.mocks,
             })
@@ -30,10 +23,12 @@ describe('Advanced Lending Component', () => {
         fireEvent.click(screen.getByRole('menuitem', { name: 'USDC' }));
         expect(store.getState().landingOrderForm.amount).toEqual('0');
         expect(screen.getByRole('textbox', { name: 'Amount' })).toHaveValue('');
+
+        unmount();
     });
 
     it('should reset the amount when the user change the maturity', async () => {
-        const { store } = await waitFor(() =>
+        const { store, unmount } = await waitFor(() =>
             render(<Default />, {
                 apolloMocks: Default.parameters?.apolloClient.mocks,
             })
@@ -49,17 +44,74 @@ describe('Advanced Lending Component', () => {
         fireEvent.click(screen.getByText('MAR23'));
         expect(store.getState().landingOrderForm.amount).toEqual('0');
         expect(screen.getByRole('textbox', { name: 'Amount' })).toHaveValue('');
+
+        unmount();
     });
 
     it('should show the maturity as a date for the selected maturity', async () => {
-        await waitFor(() =>
+        const { unmount } = render(<Default />, {
+            apolloMocks: Default.parameters?.apolloClient.mocks,
+        });
+        expect(
+            await screen.findByRole('button', { name: 'DEC22' })
+        ).toBeInTheDocument();
+        expect(screen.getByText('Maturity Dec 1, 2022')).toBeInTheDocument();
+        unmount();
+    });
+
+    it('should display the last trades in the top bar', async () => {
+        const { unmount } = render(<Default />, {
+            apolloMocks: Default.parameters?.apolloClient.mocks,
+        });
+
+        expect(
+            await within(
+                screen.getByLabelText('Last Trade Analytics')
+            ).findByText('80.00')
+        ).toBeInTheDocument();
+
+        expect(
+            within(screen.getByLabelText('24h High')).getByText('90.00')
+        ).toBeInTheDocument();
+        expect(
+            within(screen.getByLabelText('24h Low')).getByText('80.00')
+        ).toBeInTheDocument();
+        expect(
+            within(screen.getByLabelText('24h Trades')).getByText('2')
+        ).toBeInTheDocument();
+        expect(
+            within(screen.getByLabelText('24h Volume')).getByText('0')
+        ).toBeInTheDocument();
+
+        unmount();
+    });
+
+    it('should display the opening unit price as the only trade if there is no last trades', async () => {
+        const { unmount } = await waitFor(() =>
             render(<Default />, {
-                apolloMocks: Default.parameters?.apolloClient.mocks,
+                apolloMocks: emptyTransaction as never,
             })
         );
         expect(
-            screen.getByRole('button', { name: 'DEC22' })
+            await within(
+                screen.getByLabelText('Last Trade Analytics')
+            ).findByText('97.10')
         ).toBeInTheDocument();
-        expect(screen.getByText('Maturity Dec 1, 2022')).toBeInTheDocument();
+        expect(screen.getByText('Opening Price')).toBeInTheDocument();
+
+        expect(
+            within(screen.getByLabelText('24h High')).getByText('0.00')
+        ).toBeInTheDocument();
+        expect(
+            within(screen.getByLabelText('24h Low')).getByText('0.00')
+        ).toBeInTheDocument();
+        expect(
+            within(screen.getByLabelText('24h Trades')).getByText(0)
+        ).toBeInTheDocument();
+        expect(
+            within(screen.getByLabelText('24h Volume')).getByText('-')
+        ).toBeInTheDocument();
+
+        unmount();
     });
 });
