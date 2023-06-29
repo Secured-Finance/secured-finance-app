@@ -12,17 +12,17 @@ const columnHelper = createColumnHelper<{
     history: number;
 }>();
 
-const data = [
-    { name: 'John', age: 13, english: 90, maths: 60, science: 95, history: 60 },
-    {
-        name: 'Jane',
-        age: 13,
-        english: 60,
-        maths: 100,
-        science: 90,
-        history: 90,
-    },
-];
+const data = Array(20)
+    .fill(null)
+    .map((_, index) => ({
+        name: `Person ${index + 1}`,
+        age: Math.floor(Math.random() * 20) + 10,
+        english: Math.floor(Math.random() * 100),
+        maths: 60,
+        science: 95,
+        history: 60,
+    }));
+
 const columns = [
     columnHelper.accessor('name', {
         id: 'name',
@@ -90,5 +90,22 @@ export const NonResponsive = Template.bind({});
 NonResponsive.args = {
     options: {
         responsive: false,
+    },
+};
+
+export const WithPagination = Template.bind({});
+WithPagination.args = {
+    options: {
+        getMoreData: () =>
+            Array(20)
+                .fill(null)
+                .map((_, index) => ({
+                    name: `Person ${index + 1}`,
+                    age: Math.floor(Math.random() * 20) + 10,
+                    english: Math.floor(Math.random() * 100),
+                    maths: 60,
+                    science: 95,
+                    history: 60,
+                })),
     },
 };
