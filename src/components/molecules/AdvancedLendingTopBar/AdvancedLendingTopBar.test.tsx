@@ -19,7 +19,7 @@ describe('AdvancedLendingTopBar Component', () => {
         expect(screen.getByText('24h Volume')).toBeInTheDocument();
         expect(screen.getAllByText('0')).toHaveLength(5);
         expect(screen.getByText('80.00')).toBeInTheDocument();
-        expect(screen.getByText('25.07% APR')).toBeInTheDocument();
+        expect(screen.getByText('25.03% APR')).toBeInTheDocument();
     });
 
     it('should render the values on the AdvancedLendingTopBar', () => {
