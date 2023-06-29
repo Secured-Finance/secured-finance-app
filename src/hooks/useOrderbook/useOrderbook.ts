@@ -57,10 +57,11 @@ const trimOrderbook = (orderBook: {
     const trim = (orderBook: OrderBook) =>
         orderBook.filter(o => !o.amount.isZero());
 
-    const size = Math.max(
-        trim(orderBook.borrowOrderbook).length,
-        trim(orderBook.lendOrderbook).length
-    );
+    const size =
+        Math.max(
+            trim(orderBook.borrowOrderbook).length,
+            trim(orderBook.lendOrderbook).length
+        ) || 1;
 
     return {
         borrowOrderbook: orderBook.borrowOrderbook.slice(0, size),
