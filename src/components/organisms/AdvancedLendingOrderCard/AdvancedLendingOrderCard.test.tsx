@@ -75,7 +75,7 @@ describe('AdvancedLendingOrderCard Component', () => {
             expect(inputs[0].getAttribute('value')).toBe('95');
 
             expect(screen.getByText('Fixed Rate (APR)')).toBeInTheDocument();
-            expect(screen.getByText('17%')).toBeInTheDocument();
+            expect(screen.getByText('16.91%')).toBeInTheDocument();
 
             expect(screen.getByText('Amount')).toBeInTheDocument();
             expect(inputs[1].getAttribute('value')).toBe('500');

@@ -56,14 +56,14 @@ describe('LoanValue class', () => {
         const maturityDec24 = new Maturity(1712492800);
 
         const prices: [number, Maturity, number][] = [
-            [9626, maturityMar23, 228731],
-            [9595, maturityJun23, 124245],
-            [9585, maturitySep23, 85423],
-            [9580, maturityDec23, 64785],
-            [9571, maturityMar24, 53118],
-            [9565, maturityJun24, 44850],
-            [9560, maturitySep24, 38842],
-            [9555, maturityDec24, 34276],
+            [9626, maturityMar23, 226902],
+            [9595, maturityJun23, 124171],
+            [9585, maturitySep23, 85125],
+            [9580, maturityDec23, 64727],
+            [9571, maturityMar24, 52981],
+            [9565, maturityJun24, 44804],
+            [9560, maturitySep24, 38755],
+            [9555, maturityDec24, 34239],
         ];
 
         prices.forEach(([price, maturity, apr]) => {
@@ -75,7 +75,7 @@ describe('LoanValue class', () => {
 });
 
 describe('APR calculation edge cases', () => {
-    it('should return an o APR if the price is 100', () => {
+    it('should return a zero APR if the price is 100', () => {
         const loanValue = LoanValue.fromPrice(10000, 1712492800);
         expect(loanValue.apr.toNumber()).toEqual(0);
     });
