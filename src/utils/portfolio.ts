@@ -89,3 +89,7 @@ export const checkOrdersAreSame = (order1: Order, order2: OrderList[0]) => {
         order1.maturity.toString() === order2.maturity
     );
 };
+
+export const sortOrders = (a: OrderList[0], b: OrderList[0]) => {
+    return Number(b.createdAt.sub(a.createdAt));
+};
