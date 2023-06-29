@@ -39,6 +39,7 @@ import {
     percentFormat,
     usdFormat,
     amountFormatterFromBase,
+    ZERO_BN,
 } from 'src/utils';
 import { Amount, LoanValue } from 'src/utils/entities';
 import { useWallet } from 'use-wallet';
@@ -87,7 +88,9 @@ export const AdvancedLendingOrderCard = ({
 
     const price = priceList[currency];
 
-    const orderAmount = new Amount(amount, currency);
+    const orderAmount = amount.gt(ZERO_BN)
+        ? new Amount(amount, currency)
+        : undefined;
 
     const availableToBorrow = useMemo(() => {
         return currency && assetPriceMap
@@ -250,13 +253,13 @@ export const AdvancedLendingOrderCard = ({
                     field='Amount'
                     unit={currency}
                     asset={currency}
-                    initialValue={orderAmount.value}
+                    initialValue={orderAmount?.value}
                     onValueChange={v => handleInputChange(BigNumber.from(v))}
                 />
                 <div className='mx-10px flex flex-col gap-6'>
                     <OrderDisplayBox
                         field='Est. Present Value'
-                        value={usdFormat(orderAmount.toUSD(price), 2)}
+                        value={usdFormat(orderAmount?.toUSD(price) ?? 0, 2)}
                     />
                     <OrderDisplayBox
                         field='Future Value'

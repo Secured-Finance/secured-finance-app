@@ -12,6 +12,7 @@ import {
     loanTypeColumnDefinition,
     priceYieldColumnDefinition,
     tableHeaderDefinition,
+    dateAndTimeColumnDefinition,
 } from 'src/utils/tableDefinitions';
 
 export type Order = OrderList[0];
@@ -59,6 +60,13 @@ export const OrderHistoryTable = ({ data }: { data: OrderList }) => {
                 ),
                 header: tableHeaderDefinition('Status'),
             }),
+            dateAndTimeColumnDefinition(
+                columnHelper,
+                'Order Time',
+                'createdAt',
+                row => row.createdAt,
+                'typography-caption'
+            ),
             columnHelper.display({
                 id: 'actions',
                 cell: info => {
@@ -102,7 +110,7 @@ export const OrderHistoryTable = ({ data }: { data: OrderList }) => {
             data={data}
             options={{
                 name: 'order-history-table',
-                stickyColumns: new Set([6]),
+                stickyColumns: new Set([7]),
             }}
         />
     );

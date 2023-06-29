@@ -16,6 +16,7 @@ import {
     computeNetValue,
     computeWeightedAverageRate,
     formatOrders,
+    sortOrders,
 } from './portfolio';
 
 beforeAll(() => {
@@ -276,4 +277,61 @@ describe('checkOrderIsFilled', () => {
 
         expect(checkOrderIsFilled(order, orders)).toEqual(false);
     });
+});
+
+describe('sortOrders', () => {
+    const orders = [
+        {
+            orderId: BigNumber.from(1),
+            currency: efilBytes32,
+            side: 1,
+            maturity: dec22Fixture.toString(),
+            unitPrice: BigNumber.from('9800'),
+            amount: BigNumber.from('1000000000000000000000'),
+            createdAt: BigNumber.from('1609291000'),
+        },
+        {
+            orderId: BigNumber.from(2),
+            currency: efilBytes32,
+            side: 1,
+            maturity: dec22Fixture.toString(),
+            unitPrice: BigNumber.from('9600'),
+            amount: BigNumber.from('5000000000000000000000'),
+            createdAt: BigNumber.from('1609298000'),
+        },
+        {
+            orderId: BigNumber.from(3),
+            currency: efilBytes32,
+            side: 0,
+            maturity: dec22Fixture.toString(),
+            unitPrice: BigNumber.from('9800'),
+            amount: BigNumber.from('1000000000'),
+            createdAt: BigNumber.from('1609297000'),
+        },
+        {
+            orderId: BigNumber.from(4),
+            currency: wbtcBytes32,
+            side: 1,
+            maturity: dec22Fixture.toString(),
+            unitPrice: BigNumber.from('9600'),
+            amount: BigNumber.from('5000000000000000000000'),
+            createdAt: BigNumber.from('1609299000'),
+        },
+        {
+            orderId: BigNumber.from(5),
+            currency: ethBytes32,
+            side: 0,
+            maturity: dec22Fixture.toString(),
+            unitPrice: BigNumber.from('9800'),
+            amount: BigNumber.from('1000000000'),
+            createdAt: BigNumber.from('1609295000'),
+        },
+    ];
+    const sortedOrders = orders.sort((a, b) => sortOrders(a, b));
+
+    for (let i = 0; i < sortedOrders.length - 1; i++) {
+        expect(sortedOrders[i].createdAt.toNumber()).toBeGreaterThanOrEqual(
+            sortedOrders[i + 1].createdAt.toNumber()
+        );
+    }
 });

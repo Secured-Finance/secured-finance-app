@@ -17,7 +17,6 @@ export * from './HorizontalTab';
 export * from './LineChart';
 export * from './LiquidationProgressBar';
 export * from './MenuPopover';
-export * from './OpenOrderActionCell';
 export * from './PercentageSelector';
 export * from './StatsBar';
 export * from './SuccessPanel';
