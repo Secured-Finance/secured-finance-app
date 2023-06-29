@@ -7,10 +7,10 @@ import { useOrderbook } from './useOrderbook';
 
 const mock = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mock);
+const maturity = new Maturity(1675252800);
 
 describe('useOrderbook', () => {
     it('should return an array of number for borrow rates', async () => {
-        const maturity = new Maturity(1675252800);
         const { result, waitForNextUpdate } = renderHook(() =>
             useOrderbook(CurrencySymbol.ETH, maturity, 5)
         );
@@ -32,7 +32,6 @@ describe('useOrderbook', () => {
     });
 
     it('should trim the orderbook from the zeros but keep the borrow and lending orderbook the same size', async () => {
-        const maturity = new Maturity(1675252800);
         const base = {
             unitPrices: [
                 BigNumber.from(9690),
@@ -93,5 +92,29 @@ describe('useOrderbook', () => {
 
         expect(result.current.borrowOrderbook.length).toBe(6);
         expect(result.current.lendOrderbook.length).toBe(6);
+    });
+
+    it('should return an orderbook with one line even if there is no orders in the orderbook', async () => {
+        const emptyOrderbook = {
+            unitPrices: [ZERO_BN, ZERO_BN, ZERO_BN],
+            amounts: [ZERO_BN, ZERO_BN, ZERO_BN],
+            quantities: [ZERO_BN, ZERO_BN, ZERO_BN],
+        };
+
+        mock.getLendOrderBook.mockResolvedValueOnce(emptyOrderbook);
+        mock.getBorrowOrderBook.mockResolvedValueOnce(emptyOrderbook);
+        const { result, waitForNextUpdate } = renderHook(() =>
+            useOrderbook(CurrencySymbol.ETH, maturity)
+        );
+
+        expect(result.current).toEqual({
+            borrowOrderbook: [],
+            lendOrderbook: [],
+        });
+
+        await waitForNextUpdate();
+
+        expect(result.current.borrowOrderbook.length).toBe(1);
+        expect(result.current.lendOrderbook.length).toBe(1);
     });
 });
