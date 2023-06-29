@@ -186,7 +186,7 @@ describe('AdvancedLendingOrderCard Component', () => {
 
         const slider = screen.getByRole('slider');
         const input = screen.getByRole('textbox', { name: 'Amount' });
-        expect(input).toHaveValue('0.0000');
+        expect(input).toHaveValue('');
         fireEvent.change(slider, { target: { value: 50 } });
         expect(input).toHaveValue('50');
         fireEvent.change(slider, { target: { value: 100 } });
@@ -218,7 +218,7 @@ describe('AdvancedLendingOrderCard Component', () => {
         const option = screen.getByTestId('option-1');
         fireEvent.click(option);
 
-        expect(input).toHaveValue('0');
+        expect(input).toHaveValue('');
         expect(slider).toHaveValue('0');
     });
 
@@ -252,7 +252,7 @@ describe('AdvancedLendingOrderCard Component', () => {
         expect(screen.getByText('SF Vault')).toBeInTheDocument();
         const option = screen.getByTestId('option-1');
         fireEvent.click(option);
-        expect(input).toHaveValue('0');
+        expect(input).toHaveValue('');
         fireEvent.change(slider, { target: { value: 100 } });
         expect(input).toHaveValue('100');
     });
