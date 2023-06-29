@@ -11,8 +11,8 @@ describe('CoreTable Component', () => {
 
     it('should render a CoreTable with 2 rows and a header row', () => {
         render(<Default />);
-        expect(screen.getAllByRole('row').length).toBe(3);
-        expect(screen.getAllByTestId('core-table-row').length).toBe(2);
+        expect(screen.getAllByRole('row').length).toBe(21);
+        expect(screen.getAllByTestId('core-table-row').length).toBe(20);
         expect(screen.getAllByTestId('core-table-header').length).toBe(1);
     });
 

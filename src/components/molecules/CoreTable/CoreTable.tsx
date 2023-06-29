@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
     ColumnDef,
     flexRender,
@@ -7,7 +8,8 @@ import {
     useReactTable,
 } from '@tanstack/react-table';
 import classNames from 'classnames';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import InfiniteScroll from 'react-infinite-scroll-component';
 
 type CoreTableOptions = {
     border: boolean;
@@ -17,6 +19,7 @@ type CoreTableOptions = {
     hideColumnIds?: string[];
     responsive: boolean;
     stickyColumns?: Set<number>;
+    getMoreData?: () => Array<any>;
 };
 
 const DEFAULT_OPTIONS: CoreTableOptions = {
@@ -34,16 +37,20 @@ export const CoreTable = <T,>({
     options = DEFAULT_OPTIONS,
 }: {
     data: Array<T>;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     columns: ColumnDef<T, any>[];
     options?: Partial<CoreTableOptions>;
 }) => {
     const [sorting, setSorting] = useState<SortingState>([]);
+    const [rowData, setRowData] = useState<Array<T>>([]);
 
     const coreTableOptions: CoreTableOptions = {
         ...DEFAULT_OPTIONS,
         ...options,
     };
+
+    useEffect(() => {
+        setRowData([...data]);
+    }, [data]);
 
     const filteredColumns = columns.filter(column => {
         if (
@@ -56,7 +63,7 @@ export const CoreTable = <T,>({
     });
 
     const configuration = {
-        data,
+        data: rowData,
         columns: filteredColumns,
         getCoreRowModel: getCoreRowModel(),
         state: {
@@ -171,6 +178,15 @@ export const CoreTable = <T,>({
         </table>
     );
 
+    const fetchMoreData = () => {
+        setTimeout(() => {
+            if (coreTableOptions.getMoreData) {
+                const newData = [...rowData, ...coreTableOptions.getMoreData()];
+                setRowData(newData);
+            }
+        }, 1000);
+    };
+
     if (coreTableOptions.responsive) {
         return (
             <div
@@ -179,10 +195,45 @@ export const CoreTable = <T,>({
                         coreTableOptions.responsive,
                 })}
             >
-                {coreTable}
+                <PaginatedScrolling
+                    data={rowData}
+                    fetchMoreData={fetchMoreData}
+                    hasMore={!!coreTableOptions.getMoreData}
+                >
+                    {coreTable}
+                </PaginatedScrolling>
             </div>
         );
     }
 
-    return coreTable;
+    return (
+        <PaginatedScrolling
+            data={rowData}
+            fetchMoreData={fetchMoreData}
+            hasMore={!!coreTableOptions.getMoreData}
+        >
+            {coreTable}
+        </PaginatedScrolling>
+    );
 };
+
+const PaginatedScrolling = ({
+    children,
+    data,
+    fetchMoreData,
+    hasMore,
+}: {
+    children: React.ReactNode;
+    data: Array<any>;
+    fetchMoreData: () => void;
+    hasMore: boolean;
+}) => (
+    <InfiniteScroll
+        dataLength={data.length}
+        next={fetchMoreData}
+        hasMore={hasMore}
+        loader={<h4>Loading...</h4>}
+    >
+        {children}
+    </InfiniteScroll>
+);
