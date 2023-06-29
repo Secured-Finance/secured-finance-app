@@ -55,7 +55,7 @@ describe('Landing Component', () => {
 
         await waitFor(() => {
             expect(screen.getByTestId('market-rate')).toHaveTextContent(
-                '3.93%'
+                '3.92%'
             );
         });
 

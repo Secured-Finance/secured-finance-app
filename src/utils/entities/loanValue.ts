@@ -1,4 +1,5 @@
 import * as dayjs from 'dayjs';
+import { divide } from '../currencyList';
 import { Rate } from '../rate';
 
 export class LoanValue {
@@ -9,7 +10,7 @@ export class LoanValue {
 
     private static PAR_VALUE = 10000;
     private PAR_VALUE_RATE = 1000000;
-    private DAYS_IN_YEAR = 365;
+    private SECONDS_IN_YEAR = 365 * 24 * 60 * 60;
 
     private constructor() {
         // do nothing
@@ -108,10 +109,10 @@ export class LoanValue {
     }
 
     private dayToMaturity(): number {
-        return dayjs.unix(this._maturity).diff(Date.now(), 'day');
+        return dayjs.unix(this._maturity).diff(Date.now(), 'second');
     }
 
     private yearFraction(): number {
-        return this.dayToMaturity() / this.DAYS_IN_YEAR;
+        return divide(this.dayToMaturity(), this.SECONDS_IN_YEAR, 10);
     }
 }

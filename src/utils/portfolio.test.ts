@@ -1,22 +1,22 @@
 import { BigNumber, utils } from 'ethers';
 import { AssetPriceMap } from 'src/store/assetPrices/selectors';
+import {
+    dec22Fixture,
+    efilBytes32,
+    ethBytes32,
+    wbtcBytes32,
+} from 'src/stories/mocks/fixtures';
 import { TradeHistory } from 'src/types';
 import timemachine from 'timemachine';
 import { CurrencySymbol } from './currencyList';
 import {
+    calculateAveragePrice,
+    calculateForwardValue,
+    checkOrderIsFilled,
     computeNetValue,
     computeWeightedAverageRate,
-    calculateForwardValue,
-    calculateAveragePrice,
     formatOrders,
-    checkOrderIsFilled,
 } from './portfolio';
-import {
-    dec22Fixture,
-    ethBytes32,
-    efilBytes32,
-    wbtcBytes32,
-} from 'src/stories/mocks/fixtures';
 
 beforeAll(() => {
     timemachine.reset();
@@ -46,7 +46,7 @@ describe('computeWeightedAverage', () => {
             computeWeightedAverageRate(
                 trades as unknown as TradeHistory
             ).toNumber()
-        ).toEqual(196880);
+        ).toEqual(196748);
     });
 
     it('should return 0 if no trades are provided', () => {
