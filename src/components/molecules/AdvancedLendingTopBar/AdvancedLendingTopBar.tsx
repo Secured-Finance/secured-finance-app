@@ -3,9 +3,14 @@ import { GradientBox, MarketTab, Option } from 'src/components/atoms';
 import { HorizontalAssetSelector } from 'src/components/molecules';
 import { setCurrency } from 'src/store/landingOrderForm';
 import { IndexOf } from 'src/types';
-import { COIN_GECKO_SOURCE, CurrencySymbol, currencyMap } from 'src/utils';
+import {
+    COIN_GECKO_SOURCE,
+    CurrencySymbol,
+    currencyMap,
+    formatLoanValue,
+    formatTimestampWithMonth,
+} from 'src/utils';
 import { LoanValue } from 'src/utils/entities';
-import { formatLoanValue, formatTimestampWithMonth } from 'src/utils';
 
 type ValueField = number | string;
 type AdvancedLendingTopBarProp<T> = {
@@ -68,8 +73,10 @@ export const AdvancedLendingTopBar = <T extends string = string>({
                 </div>
                 <div className='col-span-3 col-start-1 tablet:col-span-2 laptop:col-span-2 laptop:border-r laptop:border-white-10 laptop:pr-5'>
                     <MarketTab
-                        name={Number(formatLoanValue(lastTradeLoan, 'price'))}
+                        name={formatLoanValue(lastTradeLoan, 'price')}
                         value={`${formatLoanValue(lastTradeLoan, 'rate')} APR`}
+                        variant='green-name'
+                        label='Last Trade Analytics'
                     />
                     {lastTradeTime !== 0 && (
                         <div className='typography-caption-2 whitespace-nowrap text-neutral-4'>
