@@ -83,8 +83,7 @@ export const Landing = ({ view }: { view?: ViewType }) => {
     const dailyVolumes = useGraphClientHook(
         {}, // no variables
         queries.DailyVolumesDocument,
-        'dailyVolumes',
-        false
+        'dailyVolumes'
     );
 
     return (
