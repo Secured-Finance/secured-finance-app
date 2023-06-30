@@ -18,7 +18,7 @@ import {
 } from 'src/components/organisms';
 import { Page } from 'src/components/templates';
 import { TwoColumnsWithTopBar } from 'src/components/templates/TwoColumnsWithTopBar';
-import { useCollateralBook, useOrderList } from 'src/hooks';
+import { useCollateralBook, useMaturityOptions, useOrderList } from 'src/hooks';
 import { useOrderbook } from 'src/hooks/useOrderbook';
 import { getAssetPrice } from 'src/store/assetPrices/selectors';
 import { MarketPhase, selectMarketPhase } from 'src/store/availableContracts';
@@ -33,7 +33,6 @@ import { CurrencySymbol, getCurrencyMapAsOptions, usdFormat } from 'src/utils';
 import { countdown } from 'src/utils/date';
 import { Maturity } from 'src/utils/entities';
 import { useWallet } from 'use-wallet';
-import { emptyOptionList } from '..';
 
 const Toolbar = ({
     selectedAsset,
@@ -110,16 +109,10 @@ export const Itayose = () => {
         selectMarketPhase(currency, maturity)(state)
     );
 
-    const optionList = Object.entries(lendingContracts)
-        .filter(o => !o[1].isReady)
-        .map(o => ({
-            label: o[1].name,
-            value: new Maturity(o[1].maturity),
-        }));
-
-    const maturityOptionList = useMemo(() => {
-        return optionList.length > 0 ? optionList : emptyOptionList;
-    }, [optionList]);
+    const maturityOptionList = useMaturityOptions(
+        lendingContracts,
+        market => market.isPreOrderPeriod || market.isItayosePeriod
+    );
 
     const selectedTerm = useMemo(() => {
         return (
