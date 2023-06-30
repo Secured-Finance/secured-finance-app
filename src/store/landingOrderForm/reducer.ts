@@ -4,7 +4,6 @@ import { BigNumber } from 'ethers';
 import { ViewType } from 'src/components/atoms';
 import { OrderType } from 'src/types';
 import { CurrencySymbol } from 'src/utils';
-import { Maturity } from 'src/utils/entities';
 
 type LandingOrderFormStore = {
     currency: CurrencySymbol;
@@ -34,8 +33,8 @@ const landingOrderFormSlice = createSlice({
         setCurrency: (state, action: PayloadAction<CurrencySymbol>) => {
             state.currency = action.payload;
         },
-        setMaturity: (state, action: PayloadAction<Maturity>) => {
-            state.maturity = action.payload.toNumber();
+        setMaturity: (state, action: PayloadAction<number>) => {
+            state.maturity = action.payload;
         },
         setSide: (state, action: PayloadAction<OrderSide>) => {
             state.side = action.payload;
@@ -61,7 +60,6 @@ const landingOrderFormSlice = createSlice({
 export const selectLandingOrderForm = (state: LandingOrderFormStore) => {
     return {
         ...state,
-        maturity: new Maturity(state.maturity),
         amount: BigNumber.from(state.amount),
     };
 };

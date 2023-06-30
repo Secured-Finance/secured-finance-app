@@ -16,7 +16,7 @@ import { RootState } from 'src/store/types';
 import { selectCollateralCurrencyBalance } from 'src/store/wallet';
 import { amountFormatterFromBase } from 'src/utils';
 import { MAX_COVERAGE, computeAvailableToBorrow } from 'src/utils/collateral';
-import { Amount, LoanValue } from 'src/utils/entities';
+import { Amount, LoanValue, Maturity } from 'src/utils/entities';
 import { useWallet } from 'use-wallet';
 
 interface OrderActionProps {
@@ -44,7 +44,7 @@ export const OrderAction = ({
         );
 
     const marketPhase = useSelector((state: RootState) =>
-        selectMarketPhase(currency, maturity.toNumber())(state)
+        selectMarketPhase(currency, maturity)(state)
     );
 
     const balances = useSelector((state: RootState) =>
@@ -131,7 +131,7 @@ export const OrderAction = ({
                 loanValue={loanValue}
                 collateral={collateralBook}
                 assetPrice={assetPriceMap?.[currency]}
-                maturity={maturity}
+                maturity={new Maturity(maturity)}
                 orderAmount={new Amount(amount, currency)}
                 side={side}
                 orderType={orderType}

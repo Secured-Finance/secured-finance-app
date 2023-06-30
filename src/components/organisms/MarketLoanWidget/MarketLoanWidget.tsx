@@ -15,7 +15,7 @@ import {
     toCurrencySymbol,
 } from 'src/utils';
 import { countdown } from 'src/utils/date';
-import { LoanValue, Maturity } from 'src/utils/entities';
+import { LoanValue } from 'src/utils/entities';
 import {
     contractColumnDefinition,
     tableHeaderDefinition,
@@ -68,7 +68,7 @@ export const MarketLoanWidget = ({ markets }: { markets: Market[] }) => {
     const handleClick = useCallback(
         (info: CellContext<Market, string>) => {
             const ccy = fromBytes32(info.getValue()) as CurrencySymbol;
-            dispatch(setMaturity(new Maturity(info.row.original.maturity)));
+            dispatch(setMaturity(Number(info.row.original.maturity)));
             dispatch(setCurrency(ccy));
 
             info.row.original.isOpened

@@ -66,7 +66,7 @@ export const Landing = ({ view }: { view?: ViewType }) => {
         const value =
             unitPrices[
                 Object.values(lendingContracts).findIndex(
-                    v => v.maturity === maturity.toNumber()
+                    v => v.maturity === maturity
                 )
             ];
         if (!value) {

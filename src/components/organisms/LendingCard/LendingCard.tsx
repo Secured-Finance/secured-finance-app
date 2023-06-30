@@ -72,7 +72,7 @@ export const LendingCard = ({
     const selectedTerm = useMemo(() => {
         return (
             maturitiesOptionList.find(option =>
-                option.value.equals(maturity)
+                option.value.equals(new Maturity(maturity))
             ) || maturitiesOptionList[0]
         );
     }, [maturity, maturitiesOptionList]);
@@ -141,7 +141,7 @@ export const LendingCard = ({
                         ...selectedTerm,
                         value: selectedTerm.value.toString(),
                     }}
-                    onTermChange={v => dispatch(setMaturity(new Maturity(v)))}
+                    onTermChange={v => dispatch(setMaturity(Number(v)))}
                     transformLabel={getTransformMaturityOption(
                         maturitiesOptionList.map(o => ({
                             ...o,

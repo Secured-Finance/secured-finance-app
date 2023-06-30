@@ -4,7 +4,6 @@ export * from './useEtherscanUrl';
 export * from './useGraphClientHook';
 export * from './useLendingMarkets';
 export * from './useLoanValues';
-export * from './useMarket';
 export * from './useOrderList';
 export * from './useOrders';
 export * from './usePositions';

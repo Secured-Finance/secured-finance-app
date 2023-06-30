@@ -103,14 +103,14 @@ export const AdvancedLending = ({
     const selectedTerm = useMemo(() => {
         return (
             maturitiesOptionList.find(option =>
-                option.value.equals(maturity)
+                option.value.equals(new Maturity(maturity))
             ) || maturitiesOptionList[0]
         );
     }, [maturity, maturitiesOptionList]);
 
     const openingUnitPrice = useSelector(
         (state: RootState) =>
-            selectMarket(currency, maturity.toNumber())(state)?.openingUnitPrice
+            selectMarket(currency, maturity)(state)?.openingUnitPrice
     );
 
     const orderBook = useOrderbook(currency, selectedTerm.value, 10);
@@ -119,7 +119,7 @@ export const AdvancedLending = ({
     const transactionHistory = useGraphClientHook(
         {
             currency: toBytes32(currency),
-            maturity: maturity.toNumber(),
+            maturity: maturity,
             from: timestamp - 24 * 3600,
             to: timestamp,
         },
@@ -138,23 +138,18 @@ export const AdvancedLending = ({
             return {
                 createdAt: 0,
                 value: openingUnitPrice
-                    ? LoanValue.fromPrice(openingUnitPrice, maturity.toNumber())
+                    ? LoanValue.fromPrice(openingUnitPrice, maturity)
                     : undefined,
             };
         return {
             createdAt: transactionHistory?.lastTransaction[0]?.createdAt,
             value: LoanValue.fromPrice(
                 transactionHistory?.lastTransaction[0]?.averagePrice * 10000,
-                maturity.toNumber()
+                maturity
             ),
         };
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-        JSON.stringify(maturity),
-        transactionHistory?.lastTransaction,
-        openingUnitPrice,
-    ]);
+    }, [maturity, transactionHistory?.lastTransaction, openingUnitPrice]);
 
     const selectedAsset = useMemo(() => {
         return assetList.find(option => option.value === currency);
@@ -170,7 +165,7 @@ export const AdvancedLending = ({
 
     const handleTermChange = useCallback(
         (v: string) => {
-            dispatch(setMaturity(new Maturity(v)));
+            dispatch(setMaturity(Number(v)));
             dispatch(setAmount(BigNumber.from(0)));
         },
         [dispatch]
@@ -178,8 +173,7 @@ export const AdvancedLending = ({
 
     useEffect(() => {
         dispatch(setUnitPrice(loanValue.price));
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [dispatch, loanValue.price, orderType, currency, maturity.toString()]);
+    }, [dispatch, loanValue.price, orderType, currency, maturity]);
 
     return (
         <TwoColumnsWithTopBar
