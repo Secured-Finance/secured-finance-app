@@ -110,7 +110,7 @@ export const AdvancedLending = ({
 
     const openingUnitPrice = useSelector(
         (state: RootState) =>
-            selectMarket(currency, selectedTerm.label)(state)?.openingUnitPrice
+            selectMarket(currency, maturity.toNumber())(state)?.openingUnitPrice
     );
 
     const orderBook = useOrderbook(currency, selectedTerm.value, 10);

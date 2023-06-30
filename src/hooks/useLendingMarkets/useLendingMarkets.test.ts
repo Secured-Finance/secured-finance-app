@@ -21,15 +21,19 @@ describe('useLendingMarkets', () => {
                 CurrencySymbol.ETH
             ]
         ).toEqual({
-            EMPTY: {
+            0: {
                 isActive: false,
                 maturity: 0,
                 name: 'EMPTY',
                 utcOpeningDate: 0,
                 midUnitPrice: 0,
-                isReady: false,
                 preOpenDate: 0,
                 openingUnitPrice: 0,
+                isReady: false,
+                isOpened: false,
+                isMatured: false,
+                isPreOrderPeriod: false,
+                isItayosePeriod: false,
             },
         });
     });

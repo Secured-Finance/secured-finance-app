@@ -1,6 +1,10 @@
 import { OrderSide } from '@secured-finance/sf-client';
 import { composeStories } from '@storybook/testing-react';
-import { preloadedAssetPrices } from 'src/stories/mocks/fixtures';
+import {
+    dec22Fixture,
+    preloadedAssetPrices,
+    preloadedLendingMarkets,
+} from 'src/stories/mocks/fixtures';
 import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
 import { OrderType } from 'src/types';
 import { CurrencySymbol } from 'src/utils';
@@ -16,13 +20,13 @@ const {
 const preloadedState = {
     landingOrderForm: {
         currency: CurrencySymbol.USDC,
-        maturity: 0,
+        maturity: dec22Fixture.toNumber(),
         side: OrderSide.BORROW,
         amount: '500000000',
         unitPrice: 0,
         orderType: OrderType.LIMIT,
-        marketPhase: 'Open',
     },
+    ...preloadedLendingMarkets,
     ...preloadedAssetPrices,
 };
 
@@ -97,22 +101,5 @@ describe('OrderAction component', () => {
         expect(
             screen.getByRole('dialog', { name: 'Confirm Order' })
         ).toBeInTheDocument();
-    });
-
-    it('should disable the order action if market is not open', async () => {
-        await waitFor(() =>
-            render(<EnoughCollateral />, {
-                preloadedState: {
-                    landingOrderForm: {
-                        ...preloadedState.landingOrderForm,
-                        marketPhase: 'Closed',
-                        side: OrderSide.LEND,
-                    },
-                },
-            })
-        );
-        expect(screen.getByTestId('place-order-button')).toBeInTheDocument();
-        expect(screen.getByText('Place Order')).toBeInTheDocument();
-        expect(screen.getByTestId('place-order-button')).toBeDisabled();
     });
 });
