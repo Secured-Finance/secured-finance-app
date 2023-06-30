@@ -1,4 +1,3 @@
-import { getUTCMonthYear } from '@secured-finance/sf-core';
 import { toBytes32 } from '@secured-finance/sf-graph-client';
 import queries from '@secured-finance/sf-graph-client/dist/graphclients/';
 import { BigNumber } from 'ethers';
@@ -19,6 +18,7 @@ import { TwoColumnsWithTopBar } from 'src/components/templates';
 import { CollateralBook, useGraphClientHook, useOrderList } from 'src/hooks';
 import { useOrderbook } from 'src/hooks/useOrderbook';
 import { getAssetPrice } from 'src/store/assetPrices/selectors';
+import { selectMarket } from 'src/store/availableContracts';
 import {
     selectLandingOrderForm,
     setAmount,
@@ -87,13 +87,6 @@ export const AdvancedLending = ({
         selectLandingOrderForm(state.landingOrderForm)
     );
 
-    const openingUnitPrice = useSelector(
-        (state: RootState) =>
-            state.availableContracts.lendingMarkets[currency][
-                getUTCMonthYear(maturity.toNumber())
-            ]?.openingUnitPrice
-    );
-
     const currencyPrice = useSelector((state: RootState) =>
         getAssetPrice(currency)(state)
     );
@@ -114,6 +107,11 @@ export const AdvancedLending = ({
             ) || maturitiesOptionList[0]
         );
     }, [maturity, maturitiesOptionList]);
+
+    const openingUnitPrice = useSelector(
+        (state: RootState) =>
+            selectMarket(currency, selectedTerm.label)(state)?.openingUnitPrice
+    );
 
     const orderBook = useOrderbook(currency, selectedTerm.value, 10);
     const orderList = useOrderList(account);
