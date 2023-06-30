@@ -1,8 +1,12 @@
 import { OrderSide, WalletSource } from '@secured-finance/sf-client';
 import { BigNumber } from 'ethers';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { BorrowLendSelector, WalletSourceSelector } from 'src/components/atoms';
+import {
+    BorrowLendSelector,
+    ErrorInfo,
+    WalletSourceSelector,
+} from 'src/components/atoms';
 import {
     AssetSelector,
     CollateralUsageSection,
@@ -30,6 +34,7 @@ import {
     getCurrencyMapAsList,
     getCurrencyMapAsOptions,
     getTransformMaturityOption,
+    amountFormatterFromBase,
 } from 'src/utils';
 import { LoanValue, Maturity } from 'src/utils/entities';
 import { useWallet } from 'use-wallet';
@@ -46,6 +51,8 @@ export const LendingCard = ({
     const { currency, maturity, side, sourceAccount } = useSelector(
         (state: RootState) => selectLandingOrderForm(state.landingOrderForm)
     );
+
+    const [lendAmountValidation, setLendAmountValidation] = useState(false);
 
     const dispatch = useDispatch();
     const { account } = useWallet();
@@ -96,6 +103,23 @@ export const LendingCard = ({
         return assetList.find(option => option.value === currency);
     }, [currency, assetList]);
 
+    const balanceToLend = useMemo(() => {
+        return selectedWalletSource.source === WalletSource.METAMASK
+            ? balanceRecord[currency]
+            : amountFormatterFromBase[currency](
+                  collateralBook.nonCollateral[currency] ?? BigNumber.from(0)
+              );
+    }, [
+        balanceRecord,
+        collateralBook.nonCollateral,
+        currency,
+        selectedWalletSource.source,
+    ]);
+
+    const validateLendAmount = (value: number | undefined): void => {
+        setLendAmountValidation(!!value && value > balanceToLend);
+    };
+
     return (
         <div className='w-80 flex-col space-y-6 rounded-b-xl border border-panelStroke bg-transparent pb-6 shadow-deep'>
             <BorrowLendSelector
@@ -130,6 +154,7 @@ export const LendingCard = ({
                     onAssetChange={(v: CurrencySymbol) => {
                         dispatch(setCurrency(v));
                     }}
+                    validationFunction={validateLendAmount}
                 />
 
                 <TermSelector
@@ -151,12 +176,18 @@ export const LendingCard = ({
                 />
 
                 {account && side === OrderSide.LEND && (
-                    <WalletSourceSelector
-                        optionList={walletSourceList}
-                        selected={selectedWalletSource}
-                        account={account ?? ''}
-                        onChange={v => dispatch(setSourceAccount(v))}
-                    />
+                    <>
+                        <WalletSourceSelector
+                            optionList={walletSourceList}
+                            selected={selectedWalletSource}
+                            account={account ?? ''}
+                            onChange={v => dispatch(setSourceAccount(v))}
+                        />
+                        <ErrorInfo
+                            showError={lendAmountValidation}
+                            errorMessage='Insufficient amount'
+                        />
+                    </>
                 )}
 
                 {side === OrderSide.BORROW && (
@@ -168,7 +199,11 @@ export const LendingCard = ({
                     />
                 )}
 
-                <OrderAction collateralBook={collateralBook} renderSide />
+                <OrderAction
+                    collateralBook={collateralBook}
+                    renderSide
+                    validation={lendAmountValidation}
+                />
             </div>
         </div>
     );
