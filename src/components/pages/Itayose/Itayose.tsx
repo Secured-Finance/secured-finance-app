@@ -21,6 +21,7 @@ import { TwoColumnsWithTopBar } from 'src/components/templates/TwoColumnsWithTop
 import { useCollateralBook, useOrderList } from 'src/hooks';
 import { useOrderbook } from 'src/hooks/useOrderbook';
 import { getAssetPrice } from 'src/store/assetPrices/selectors';
+import { MarketPhase, selectMarketPhase } from 'src/store/availableContracts';
 import {
     selectLandingOrderForm,
     setAmount,
@@ -96,8 +97,8 @@ const Toolbar = ({
 export const Itayose = () => {
     const { account } = useWallet();
 
-    const { currency, maturity, marketPhase } = useSelector(
-        (state: RootState) => selectLandingOrderForm(state.landingOrderForm)
+    const { currency, maturity } = useSelector((state: RootState) =>
+        selectLandingOrderForm(state.landingOrderForm)
     );
 
     const lendingContracts = useSelector(
@@ -105,10 +106,14 @@ export const Itayose = () => {
         shallowEqual
     );
 
+    const marketPhase = useSelector((state: RootState) =>
+        selectMarketPhase(currency, maturity.toNumber())(state)
+    );
+
     const optionList = Object.entries(lendingContracts)
         .filter(o => !o[1].isReady)
         .map(o => ({
-            label: o[0],
+            label: o[1].name,
             value: new Maturity(o[1].maturity),
         }));
 
@@ -145,14 +150,18 @@ export const Itayose = () => {
                 topBar={
                     <Toolbar
                         date={
-                            marketPhase === 'PreOrder'
-                                ? lendingContracts[selectedTerm.label]
-                                      ?.preOpenDate
-                                : lendingContracts[selectedTerm.label]
-                                      ?.utcOpeningDate
+                            marketPhase === MarketPhase.PRE_ORDER
+                                ? lendingContracts[
+                                      selectedTerm.value.toNumber()
+                                  ]?.preOpenDate
+                                : lendingContracts[
+                                      selectedTerm.value.toNumber()
+                                  ]?.utcOpeningDate
                         }
                         nextMarketPhase={
-                            marketPhase === 'PreOrder' ? 'PreOrder' : 'Open in'
+                            marketPhase === MarketPhase.PRE_ORDER
+                                ? 'PreOrder'
+                                : 'Open in'
                         }
                         assetList={assetList}
                         selectedAsset={selectedAsset}

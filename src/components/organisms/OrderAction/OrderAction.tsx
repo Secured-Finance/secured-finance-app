@@ -9,6 +9,7 @@ import {
 } from 'src/components/organisms';
 import { CollateralBook, useOrders } from 'src/hooks';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
+import { MarketPhase, selectMarketPhase } from 'src/store/availableContracts';
 import { setWalletDialogOpen } from 'src/store/interactions';
 import { selectLandingOrderForm } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
@@ -37,16 +38,13 @@ export const OrderAction = ({
         useState(false);
     const [openPlaceOrderDialog, setOpenPlaceOrderDialog] = useState(false);
 
-    const {
-        currency,
-        amount,
-        side,
-        marketPhase,
-        maturity,
-        orderType,
-        sourceAccount,
-    } = useSelector((state: RootState) =>
-        selectLandingOrderForm(state.landingOrderForm)
+    const { currency, amount, side, maturity, orderType, sourceAccount } =
+        useSelector((state: RootState) =>
+            selectLandingOrderForm(state.landingOrderForm)
+        );
+
+    const marketPhase = useSelector((state: RootState) =>
+        selectMarketPhase(currency, maturity.toNumber())(state)
     );
 
     const balances = useSelector((state: RootState) =>
@@ -89,8 +87,8 @@ export const OrderAction = ({
                     <Button
                         disabled={
                             amount.isZero() ||
-                            (marketPhase !== 'Open' &&
-                                marketPhase !== 'PreOrder')
+                            (marketPhase !== MarketPhase.PRE_ORDER &&
+                                marketPhase !== MarketPhase.OPEN)
                         }
                         fullWidth
                         onClick={() => {
@@ -124,7 +122,9 @@ export const OrderAction = ({
 
             <PlaceOrder
                 onPlaceOrder={
-                    marketPhase === 'Open' ? placeOrder : placePreOrder
+                    marketPhase === MarketPhase.OPEN
+                        ? placeOrder
+                        : placePreOrder
                 }
                 isOpen={openPlaceOrderDialog}
                 onClose={() => setOpenPlaceOrderDialog(false)}

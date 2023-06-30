@@ -169,9 +169,11 @@ export const MarketDashboard = () => {
                             if (!currency) return acc;
                             const currencyContracts = Object.keys(
                                 lendingContracts[currency]
-                            ).map(contractName => {
+                            ).map(maturity => {
                                 const contract =
-                                    lendingContracts[currency][contractName];
+                                    lendingContracts[currency][
+                                        Number(maturity)
+                                    ];
                                 return {
                                     ...contract,
                                     ccy: ccy,

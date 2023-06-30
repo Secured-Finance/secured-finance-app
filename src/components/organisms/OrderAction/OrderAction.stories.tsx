@@ -5,6 +5,7 @@ import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import {
     withAssetPrice,
+    withMaturities,
     withWalletProvider,
 } from 'src/../.storybook/decorators';
 import { setAmount, setCurrency, setSide } from 'src/store/landingOrderForm';
@@ -22,7 +23,7 @@ export default {
     args: {
         collateralBook: emptyCollateralBook,
     },
-    decorators: [withAssetPrice, withWalletProvider],
+    decorators: [withAssetPrice, withMaturities, withWalletProvider],
 } as ComponentMeta<typeof OrderAction>;
 
 const Template: ComponentStory<typeof OrderAction> = args => {

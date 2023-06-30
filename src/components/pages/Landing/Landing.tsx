@@ -48,7 +48,7 @@ export const Landing = ({ view }: { view?: ViewType }) => {
     const optionList = Object.entries(lendingContracts)
         .filter(o => o[1].isReady)
         .map(o => ({
-            label: o[0],
+            label: o[1].name,
             value: new Maturity(o[1].maturity),
         }));
 
