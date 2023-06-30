@@ -77,14 +77,12 @@ export const MarketDashboard = () => {
     const totalUser = useGraphClientHook(
         {}, // no variables
         queries.UserCountDocument,
-        'protocol',
-        false
+        'protocol'
     );
     const dailyVolumes = useGraphClientHook(
         {}, // no variables
         queries.DailyVolumesDocument,
-        'dailyVolumes',
-        false
+        'dailyVolumes'
     );
 
     const priceList = useSelector((state: RootState) => getPriceMap(state));
@@ -175,15 +173,9 @@ export const MarketDashboard = () => {
                                 const contract =
                                     lendingContracts[currency][contractName];
                                 return {
-                                    name: contract.name,
-                                    maturity: contract.maturity,
-                                    isActive: contract.isActive,
-                                    utcOpeningDate: contract.utcOpeningDate,
-                                    preOpenDate: contract.preOpenDate,
-                                    midUnitPrice: contract.midUnitPrice,
-                                    currency: utils.formatBytes32String(ccy),
-                                    isReady: contract.isReady,
+                                    ...contract,
                                     ccy: ccy,
+                                    currency: utils.formatBytes32String(ccy),
                                 };
                             });
                             return [...acc, ...currencyContracts];

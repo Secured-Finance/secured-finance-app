@@ -1,11 +1,15 @@
 import { useCallback } from 'react';
 import { GradientBox, MarketTab, Option } from 'src/components/atoms';
 import { HorizontalAssetSelector } from 'src/components/molecules';
-import { setCurrency } from 'src/store/landingOrderForm';
 import { IndexOf } from 'src/types';
-import { COIN_GECKO_SOURCE, CurrencySymbol, currencyMap } from 'src/utils';
+import {
+    COIN_GECKO_SOURCE,
+    CurrencySymbol,
+    currencyMap,
+    formatLoanValue,
+    formatTimestampWithMonth,
+} from 'src/utils';
 import { LoanValue } from 'src/utils/entities';
-import { formatLoanValue, formatTimestampWithMonth } from 'src/utils';
 
 type ValueField = number | string;
 type AdvancedLendingTopBarProp<T> = {
@@ -15,7 +19,7 @@ type AdvancedLendingTopBarProp<T> = {
     selected: Option<T>;
     onAssetChange?: (v: CurrencySymbol) => void;
     onTermChange?: (v: T) => void;
-    lastTradeLoan: LoanValue;
+    lastTradeLoan: LoanValue | undefined;
     lastTradeTime: number;
     values?: [ValueField, ValueField, ValueField, ValueField, ValueField];
 };
@@ -47,7 +51,6 @@ export const AdvancedLendingTopBar = <T extends string = string>({
 
     const handleAssetChange = useCallback(
         (v: CurrencySymbol) => {
-            setCurrency(v);
             onAssetChange?.(v);
         },
         [onAssetChange]
@@ -68,14 +71,25 @@ export const AdvancedLendingTopBar = <T extends string = string>({
                 </div>
                 <div className='col-span-3 col-start-1 tablet:col-span-2 laptop:col-span-2 laptop:border-r laptop:border-white-10 laptop:pr-5'>
                     <MarketTab
-                        name={Number(formatLoanValue(lastTradeLoan, 'price'))}
-                        value={`${formatLoanValue(lastTradeLoan, 'rate')} APR`}
+                        name={
+                            lastTradeLoan
+                                ? formatLoanValue(lastTradeLoan, 'price')
+                                : '0'
+                        }
+                        value={`${
+                            lastTradeLoan
+                                ? formatLoanValue(lastTradeLoan, 'rate')
+                                : '0'
+                        } APR`}
+                        variant='green-name'
+                        label='Last Trade Analytics'
                     />
-                    {lastTradeTime !== 0 && (
-                        <div className='typography-caption-2 whitespace-nowrap text-neutral-4'>
-                            {formatTimestampWithMonth(lastTradeTime)}
-                        </div>
-                    )}
+
+                    <div className='typography-caption-2 whitespace-nowrap text-neutral-4'>
+                        {lastTradeTime
+                            ? formatTimestampWithMonth(lastTradeTime)
+                            : 'Opening Price'}
+                    </div>
                 </div>
                 <div className='border-r border-white-10 pr-5 tablet:col-start-4 tablet:row-start-1 laptop:col-start-auto laptop:row-start-auto laptop:px-5'>
                     <MarketTab name='24h High' value={getValue(values, 0)} />

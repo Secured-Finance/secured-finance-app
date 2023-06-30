@@ -17,7 +17,7 @@ import {
     MaturityOptionList,
     OrderList,
     TradeHistory,
-    Trades,
+    TransactionList,
 } from 'src/types';
 import { CurrencySymbol, Rate } from 'src/utils';
 import { Maturity } from 'src/utils/entities';
@@ -81,6 +81,7 @@ export const maturities = {
         midUnitPrice: 9801,
         isReady: true,
         preOpenDate: 1504828800,
+        openingUnitPrice: 9710,
     },
     MAR23: {
         name: 'MAR23',
@@ -90,6 +91,7 @@ export const maturities = {
         midUnitPrice: 9701,
         isReady: true,
         preOpenDate: 1504828800,
+        openingUnitPrice: 9710,
     },
     JUN23: {
         name: 'JUN23',
@@ -99,6 +101,7 @@ export const maturities = {
         midUnitPrice: 9601,
         isReady: true,
         preOpenDate: 1504828800,
+        openingUnitPrice: 9710,
     },
     SEP23: {
         name: 'SEP23',
@@ -108,6 +111,7 @@ export const maturities = {
         midUnitPrice: 9501,
         isReady: true,
         preOpenDate: 1504828800,
+        openingUnitPrice: 9710,
     },
     DEC23: {
         name: 'DEC23',
@@ -117,6 +121,7 @@ export const maturities = {
         midUnitPrice: 9401,
         isReady: true,
         preOpenDate: 1504828800,
+        openingUnitPrice: 9710,
     },
     MAR24: {
         name: 'MAR24',
@@ -126,6 +131,7 @@ export const maturities = {
         midUnitPrice: 9301,
         isReady: true,
         preOpenDate: 1504828800,
+        openingUnitPrice: 9710,
     },
     JUN24: {
         name: 'JUN24',
@@ -135,6 +141,7 @@ export const maturities = {
         midUnitPrice: 9201,
         isReady: true,
         preOpenDate: 1504828800,
+        openingUnitPrice: 9710,
     },
     SEP24: {
         name: 'SEP24',
@@ -144,6 +151,7 @@ export const maturities = {
         midUnitPrice: 9101,
         isReady: true,
         preOpenDate: 1504828800,
+        openingUnitPrice: 9710,
     },
     DEC24: {
         name: 'DEC24',
@@ -153,6 +161,7 @@ export const maturities = {
         midUnitPrice: 9001,
         isReady: false,
         preOpenDate: 1512777600,
+        openingUnitPrice: 9710,
     },
 };
 
@@ -257,7 +266,7 @@ export const yieldCurveRates = [
 
 export const efilBytes32 = utils.formatBytes32String('EFIL'); //0x46494c0000000000000000000000000000000000000000000000000000000000
 export const ethBytes32 = utils.formatBytes32String('ETH');
-export const wbtcBytes32 = utils.formatBytes32String('WBTC');
+export const wbtcBytes32 = utils.formatBytes32String('WBTC'); //0x4546494c00000000000000000000000000000000000000000000000000000000
 export const usdcBytes32 = utils.formatBytes32String('USDC'); // '0x5553444300000000000000000000000000000000000000000000000000000000'
 
 export const activeOrders: Order[] = [
@@ -629,7 +638,7 @@ function generateDailyVolumes(days: number) {
 
 export const dailyVolumes: DailyVolumes = generateDailyVolumes(365 * 4);
 
-export const tradesEFIL: Trades = [
+export const tradesEFIL: TransactionList = [
     {
         amount: 100000000000,
         maturity: dec22Fixture,
@@ -648,7 +657,7 @@ export const tradesEFIL: Trades = [
     },
 ];
 
-export const tradesETH: Trades = [
+export const tradesETH: TransactionList = [
     {
         amount: 100000000000,
         maturity: dec22Fixture,
@@ -667,7 +676,7 @@ export const tradesETH: Trades = [
     },
 ];
 
-export const tradesUSDC: Trades = [
+export const tradesUSDC: TransactionList = [
     {
         amount: 100000000000,
         maturity: dec22Fixture,
@@ -686,7 +695,7 @@ export const tradesUSDC: Trades = [
     },
 ];
 
-export const tradesWBTC: Trades = [
+export const tradesWBTC: TransactionList = [
     {
         amount: 100000000000,
         maturity: dec22Fixture,

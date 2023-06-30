@@ -34,8 +34,12 @@ type DailyVolumesQuery = Awaited<
     >
 >;
 
-export type TradesQuery = Awaited<
-    ReturnType<Awaited<ReturnType<typeof queries.getBuiltGraphSDK>['Trades']>>
+type TransactionsQuery = Awaited<
+    ReturnType<
+        Awaited<
+            ReturnType<typeof queries.getBuiltGraphSDK>['TransactionHistory']
+        >
+    >
 >;
 
 type User = NonNullable<UserHistoryQuery['user']>;
@@ -43,7 +47,7 @@ export type OrderList = User['orders'];
 export type Order = OrderList[0];
 export type TradeHistory = User['transactions'];
 export type DailyVolumes = DailyVolumesQuery['dailyVolumes'];
-export type Trades = TradesQuery['transactions'];
+export type TransactionList = TransactionsQuery['transactionHistory'];
 
 export interface ColorFormat {
     color?: 'neutral' | 'positive' | 'negative';
