@@ -9,7 +9,6 @@ import {
 import { StatsBar } from 'src/components/molecules';
 import {
     ConnectWalletCard,
-    Loan,
     MarketLoanWidget,
     MultiCurveChart,
     MyWalletCard,
@@ -35,7 +34,6 @@ import {
     getCurrencyMapAsList,
     getEnvironment,
     ordinaryFormat,
-    toCurrencySymbol,
     usdFormat,
 } from 'src/utils';
 import { Maturity } from 'src/utils/entities';
@@ -100,23 +98,37 @@ export const MarketDashboard = () => {
 
     const totalValueLockedInUSD = useMemo(() => {
         let val = BigNumber.from(0);
-        if (protocolInformation.valueLockedByCurrency) {
-            for (const key of Object.keys(
-                protocolInformation.valueLockedByCurrency
-            )) {
-                const ccy = key as CurrencySymbol;
-                val = val.add(
-                    Math.floor(
-                        currencyMap[ccy].fromBaseUnit(
-                            protocolInformation.valueLockedByCurrency[ccy]
-                        ) * priceList[ccy]
-                    )
-                );
-            }
+        if (!protocolInformation.valueLockedByCurrency) {
+            return val;
         }
+        for (const ccy of getCurrencyMapAsList()) {
+            val = val.add(
+                Math.floor(
+                    currencyMap[ccy.symbol].fromBaseUnit(
+                        protocolInformation.valueLockedByCurrency[ccy.symbol]
+                    ) * priceList[ccy.symbol]
+                )
+            );
+        }
+
         return val;
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [JSON.stringify(priceList), protocolInformation.valueLockedByCurrency]);
+
+    const marketList = useMemo(() => {
+        const result = [];
+        for (const ccy of getCurrencyMapAsList()) {
+            for (const maturity of Object.keys(lendingContracts[ccy.symbol])) {
+                const contract = lendingContracts[ccy.symbol][Number(maturity)];
+                result.push({
+                    ...contract,
+                    ccy: ccy.symbol,
+                    currency: utils.formatBytes32String(ccy.symbol),
+                });
+            }
+        }
+        return result;
+    }, [lendingContracts]);
 
     return (
         <Page title='Market Dashboard' name='dashboard-page'>
@@ -161,28 +173,7 @@ export const MarketDashboard = () => {
                         />
                     </div>
 
-                    <MarketLoanWidget
-                        loans={(
-                            Object.keys(lendingContracts) as CurrencySymbol[]
-                        ).reduce((acc, ccy) => {
-                            const currency = toCurrencySymbol(ccy);
-                            if (!currency) return acc;
-                            const currencyContracts = Object.keys(
-                                lendingContracts[currency]
-                            ).map(maturity => {
-                                const contract =
-                                    lendingContracts[currency][
-                                        Number(maturity)
-                                    ];
-                                return {
-                                    ...contract,
-                                    ccy: ccy,
-                                    currency: utils.formatBytes32String(ccy),
-                                };
-                            });
-                            return [...acc, ...currencyContracts];
-                        }, [] as Loan[])}
-                    />
+                    <MarketLoanWidget markets={marketList} />
                 </div>
                 <section className='flex flex-col gap-5'>
                     {account && (
