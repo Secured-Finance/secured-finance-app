@@ -23,9 +23,19 @@ export type PlaceOrderFunction = (
     sourceWallet: WalletSource
 ) => Promise<ContractTransaction | undefined>;
 
-type UserHistoryQuery = Awaited<
+type UserOrderHistoryQuery = Awaited<
     ReturnType<
-        Awaited<ReturnType<typeof queries.getBuiltGraphSDK>['UserHistory']>
+        Awaited<ReturnType<typeof queries.getBuiltGraphSDK>['UserOrderHistory']>
+    >
+>;
+
+type UserTransactionHistoryQuery = Awaited<
+    ReturnType<
+        Awaited<
+            ReturnType<
+                typeof queries.getBuiltGraphSDK
+            >['UserTransactionHistory']
+        >
     >
 >;
 type DailyVolumesQuery = Awaited<
@@ -42,10 +52,11 @@ type TransactionsQuery = Awaited<
     >
 >;
 
-type User = NonNullable<UserHistoryQuery['user']>;
-export type OrderList = User['orders'];
+export type OrderList = NonNullable<UserOrderHistoryQuery['user']>['orders'];
 export type Order = OrderList[0];
-export type TradeHistory = User['transactions'];
+export type TradeHistory = NonNullable<
+    UserTransactionHistoryQuery['user']
+>['transactions'];
 export type DailyVolumes = DailyVolumesQuery['dailyVolumes'];
 export type TransactionList = TransactionsQuery['transactionHistory'];
 
