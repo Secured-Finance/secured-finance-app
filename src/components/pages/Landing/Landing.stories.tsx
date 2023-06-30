@@ -12,7 +12,8 @@ import {
 import {
     mockDailyVolumes,
     mockTrades,
-    mockUserHistory,
+    mockUserTransactionHistory,
+    mockUserOrderHistory,
 } from 'src/stories/mocks/queries';
 import { Landing } from './Landing';
 
@@ -29,7 +30,12 @@ export default {
     ],
     parameters: {
         apolloClient: {
-            mocks: [...mockUserHistory, ...mockTrades, ...mockDailyVolumes],
+            mocks: [
+                ...mockUserTransactionHistory,
+                ...mockUserOrderHistory,
+                ...mockTrades,
+                ...mockDailyVolumes,
+            ],
         },
         ...RESPONSIVE_PARAMETERS,
         layout: 'fullscreen',
