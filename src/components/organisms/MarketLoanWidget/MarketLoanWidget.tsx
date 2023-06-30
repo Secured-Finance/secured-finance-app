@@ -71,7 +71,7 @@ export const MarketLoanWidget = ({ loans }: { loans: Loan[] }) => {
             dispatch(setMaturity(new Maturity(info.row.original.maturity)));
             dispatch(setCurrency(ccy));
 
-            info.row.original.isReady
+            info.row.original.isOpened
                 ? router.push('/advanced/')
                 : router.push('/itayose/');
         },
@@ -141,7 +141,7 @@ export const MarketLoanWidget = ({ loans }: { loans: Loan[] }) => {
                     return (
                         <div className='flex justify-center px-1'>
                             <Button onClick={() => handleClick(info)} size='sm'>
-                                {info.row.original.isReady
+                                {info.row.original.isOpened
                                     ? 'Open Order'
                                     : 'Pre-Open Order'}
                             </Button>
