@@ -116,8 +116,13 @@ export const LendingCard = ({
         selectedWalletSource.source,
     ]);
 
-    const validateLendAmount = (value: number | undefined): void => {
+    const validateAmount = (value: number | undefined): void => {
         setLendAmountValidation(!!value && value > balanceToLend);
+    };
+
+    const handleAmountChange = (v: BigNumber) => {
+        dispatch(setAmount(v));
+        validateAmount(amountFormatterFromBase[currency](v));
     };
 
     return (
@@ -149,12 +154,11 @@ export const LendingCard = ({
                     selected={selectedAsset}
                     transformLabel={(v: string) => shortNames[v]}
                     priceList={assetPriceMap}
-                    onAmountChange={(v: BigNumber) => dispatch(setAmount(v))}
+                    onAmountChange={handleAmountChange}
                     amountFormatterMap={amountFormatterToBase}
                     onAssetChange={(v: CurrencySymbol) => {
                         dispatch(setCurrency(v));
                     }}
-                    validationFunction={validateLendAmount}
                 />
 
                 <TermSelector
