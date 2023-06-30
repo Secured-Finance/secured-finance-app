@@ -20,13 +20,13 @@ import {
     contractColumnDefinition,
     tableHeaderDefinition,
 } from 'src/utils/tableDefinitions';
-export type Loan = LendingMarket & {
+type Market = LendingMarket & {
     currency: string;
     ccy: CurrencySymbol;
 };
-const columnHelper = createColumnHelper<Loan>();
+const columnHelper = createColumnHelper<Market>();
 
-export const MarketLoanWidget = ({ loans }: { loans: Loan[] }) => {
+export const MarketLoanWidget = ({ markets }: { markets: Market[] }) => {
     const dispatch = useDispatch();
     const router = useRouter();
 
@@ -37,20 +37,20 @@ export const MarketLoanWidget = ({ loans }: { loans: Loan[] }) => {
     const [isItayoseMarket, setIsItayoseMarket] = useState(false);
     const filteredLoans = useMemo(
         () =>
-            loans.filter(
+            markets.filter(
                 loan =>
                     (!selectedCurrency || loan.ccy === selectedCurrency) &&
                     (!selectedTerm || loan.maturity === selectedTerm)
             ),
         // eslint-disable-next-line react-hooks/exhaustive-deps
-        [JSON.stringify(loans), selectedCurrency, selectedTerm]
+        [JSON.stringify(markets), selectedCurrency, selectedTerm]
     );
 
     const maturityOptionList = useMemo(
         () => {
             const res: Option<string>[] = [];
 
-            loans.forEach(loan => {
+            markets.forEach(loan => {
                 if (!res.find(m => m.value === loan.maturity.toString())) {
                     res.push({
                         label: loan.name,
@@ -62,11 +62,11 @@ export const MarketLoanWidget = ({ loans }: { loans: Loan[] }) => {
             return res;
         },
         // eslint-disable-next-line react-hooks/exhaustive-deps
-        [JSON.stringify(loans)]
+        [JSON.stringify(markets)]
     );
 
     const handleClick = useCallback(
-        (info: CellContext<Loan, string>) => {
+        (info: CellContext<Market, string>) => {
             const ccy = fromBytes32(info.getValue()) as CurrencySymbol;
             dispatch(setMaturity(new Maturity(info.row.original.maturity)));
             dispatch(setCurrency(ccy));
@@ -173,7 +173,7 @@ export const MarketLoanWidget = ({ loans }: { loans: Loan[] }) => {
                         onChange={v => {
                             const maturity = parseInt(v);
                             setSelectedTerm(maturity);
-                            for (const loan of loans) {
+                            for (const loan of markets) {
                                 if (loan.maturity === maturity) {
                                     if (!loan.isReady) {
                                         setIsItayoseMarket(true);
