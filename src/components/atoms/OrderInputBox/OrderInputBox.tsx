@@ -13,6 +13,7 @@ interface OrderInputBoxProps {
     decimalPlacesAllowed?: number;
     maxLimit?: number;
     onValueChange?: (v: number | BigNumber) => void;
+    validationFunction?: (input: number | undefined) => void;
 }
 
 export const OrderInputBox = ({
@@ -25,6 +26,7 @@ export const OrderInputBox = ({
     decimalPlacesAllowed,
     maxLimit,
     onValueChange,
+    validationFunction,
 }: OrderInputBoxProps) => {
     const [inputValue, setInputValue] = useState(initialValue);
 
@@ -86,6 +88,7 @@ export const OrderInputBox = ({
                         onValueChange={handleAmountChange}
                         decimalPlacesAllowed={decimalPlacesAllowed}
                         maxLimit={maxLimit}
+                        validationFunction={validationFunction}
                     />
                 )}
                 {unit && <div className='text-neutral-4'>{unit}</div>}

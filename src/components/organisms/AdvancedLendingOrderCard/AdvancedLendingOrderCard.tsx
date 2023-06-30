@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
     BorrowLendSelector,
     CollateralManagementConciseTab,
+    ErrorInfo,
     NavTab,
     OrderDisplayBox,
     OrderInputBox,
@@ -63,6 +64,8 @@ export const AdvancedLendingOrderCard = ({
         selectLandingOrderForm(state.landingOrderForm)
     );
     const [sliderValue, setSliderValue] = useState(0.0);
+
+    const [lendAmountValidation, setLendAmountValidation] = useState(false);
 
     const balanceRecord = useSelector((state: RootState) =>
         selectAllBalances(state)
@@ -136,6 +139,10 @@ export const AdvancedLendingOrderCard = ({
         currency,
         selectedWalletSource.source,
     ]);
+
+    const validateLendAmount = (value: number | undefined): void => {
+        setLendAmountValidation(!!value && value > balanceToLend);
+    };
 
     const handleAmountChange = (percentage: number) => {
         const available =
@@ -217,12 +224,18 @@ export const AdvancedLendingOrderCard = ({
                     variant='advanced'
                 />
                 {account && side === OrderSide.LEND && (
-                    <WalletSourceSelector
-                        optionList={walletSourceList}
-                        selected={selectedWalletSource}
-                        account={account ?? ''}
-                        onChange={handleWalletSourceChange}
-                    />
+                    <>
+                        <WalletSourceSelector
+                            optionList={walletSourceList}
+                            selected={selectedWalletSource}
+                            account={account ?? ''}
+                            onChange={handleWalletSourceChange}
+                        />
+                        <ErrorInfo
+                            showError={lendAmountValidation}
+                            errorMessage='Insufficient amount'
+                        />
+                    </>
                 )}
                 <div className='flex flex-col gap-[10px]'>
                     <OrderInputBox
@@ -255,6 +268,7 @@ export const AdvancedLendingOrderCard = ({
                     asset={currency}
                     initialValue={orderAmount?.value}
                     onValueChange={v => handleInputChange(BigNumber.from(v))}
+                    validationFunction={validateLendAmount}
                 />
                 <div className='mx-10px flex flex-col gap-6'>
                     <OrderDisplayBox
@@ -271,6 +285,7 @@ export const AdvancedLendingOrderCard = ({
                 <OrderAction
                     loanValue={loanValue}
                     collateralBook={collateralBook}
+                    validation={lendAmountValidation}
                 />
 
                 <Separator color='neutral-3'></Separator>
