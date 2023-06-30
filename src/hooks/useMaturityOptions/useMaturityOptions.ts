@@ -8,6 +8,18 @@ const emptyOption = {
     value: new Maturity(0),
 };
 
+function deduplicate<T>(array: T[], getKey: (item: T) => string | number) {
+    const seenItems: Record<string, boolean> = {};
+    return array.filter(item => {
+        const key = getKey(item);
+        if (seenItems[key]) {
+            return false;
+        }
+        seenItems[key] = true;
+        return true;
+    });
+}
+
 export const useMaturityOptions = (
     lendingMarkets: ContractMap,
     filterFn: (market: LendingMarket) => unknown = passThrough
@@ -19,6 +31,8 @@ export const useMaturityOptions = (
                 label: o[1].name,
                 value: new Maturity(o[1].maturity),
             }));
-        return optionList.length ? optionList : [emptyOption];
+        return optionList.length
+            ? deduplicate(optionList, o => o.value.toNumber())
+            : [emptyOption];
     }, [filterFn, lendingMarkets]);
 };

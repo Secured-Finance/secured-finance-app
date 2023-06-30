@@ -4,9 +4,9 @@ import { CellContext, createColumnHelper } from '@tanstack/react-table';
 import { useRouter } from 'next/router';
 import { useCallback, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { Button, DropdownSelector, NavTab, Option } from 'src/components/atoms';
+import { Button, DropdownSelector, NavTab } from 'src/components/atoms';
 import { CoreTable } from 'src/components/molecules';
-import { LendingMarket } from 'src/hooks';
+import { LendingMarket, useMaturityOptions } from 'src/hooks';
 import { setCurrency, setMaturity } from 'src/store/landingOrderForm';
 import {
     CurrencySymbol,
@@ -46,24 +46,7 @@ export const MarketLoanWidget = ({ markets }: { markets: Market[] }) => {
         [JSON.stringify(markets), selectedCurrency, selectedTerm]
     );
 
-    const maturityOptionList = useMemo(
-        () => {
-            const res: Option<string>[] = [];
-
-            markets.forEach(loan => {
-                if (!res.find(m => m.value === loan.maturity.toString())) {
-                    res.push({
-                        label: loan.name,
-                        value: loan.maturity.toString(),
-                    });
-                }
-            });
-
-            return res;
-        },
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-        [JSON.stringify(markets)]
-    );
+    const maturityOptionList = useMaturityOptions(markets);
 
     const handleClick = useCallback(
         (info: CellContext<Market, string>) => {
@@ -168,14 +151,23 @@ export const MarketLoanWidget = ({ markets }: { markets: Market[] }) => {
                         onChange={v => setSelectedCurrency(toCurrencySymbol(v))}
                     />
                     <DropdownSelector
-                        optionList={maturityOptionList}
-                        selected={maturityOptionList[0]}
+                        optionList={maturityOptionList.map(o => ({
+                            label: o.label,
+                            value: o.value.toString(),
+                        }))}
+                        selected={{
+                            ...maturityOptionList[0],
+                            value: maturityOptionList[0].value.toString(),
+                        }}
                         onChange={v => {
                             const maturity = parseInt(v);
                             setSelectedTerm(maturity);
                             for (const loan of markets) {
                                 if (loan.maturity === maturity) {
-                                    if (!loan.isReady) {
+                                    if (
+                                        loan.isPreOrderPeriod ||
+                                        loan.isPreOrderPeriod
+                                    ) {
                                         setIsItayoseMarket(true);
                                         break;
                                     }
