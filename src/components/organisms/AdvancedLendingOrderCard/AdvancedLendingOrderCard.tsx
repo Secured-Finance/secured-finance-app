@@ -140,7 +140,7 @@ export const AdvancedLendingOrderCard = ({
         selectedWalletSource.source,
     ]);
 
-    const validateLendAmount = (value: number | undefined): void => {
+    const validateAmount = (value: number | undefined): void => {
         setLendAmountValidation(!!value && value > balanceToLend);
     };
 
@@ -166,6 +166,7 @@ export const AdvancedLendingOrderCard = ({
         available > 0
             ? setSliderValue(Math.min(100.0, (inputValue * 100.0) / available))
             : setSliderValue(0.0);
+        validateAmount(inputValue);
     };
     useEffect(() => {
         if (onlyLimitOrder) {
@@ -268,7 +269,6 @@ export const AdvancedLendingOrderCard = ({
                     asset={currency}
                     initialValue={orderAmount?.value}
                     onValueChange={v => handleInputChange(BigNumber.from(v))}
-                    validationFunction={validateLendAmount}
                 />
                 <div className='mx-10px flex flex-col gap-6'>
                     <OrderDisplayBox

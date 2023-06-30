@@ -84,14 +84,4 @@ describe('test InputBase component', () => {
         fireEvent.input(input, { target: { value: '12345' } });
         expect(input).toHaveClass('text-xl');
     });
-
-    it(' should call validation function if function is available', () => {
-        const validationFn = jest.fn();
-        render(<Default validationFunction={validationFn} />);
-
-        const input = screen.getByRole('textbox');
-
-        userEvent.type(input, '1000000');
-        expect(validationFn).toHaveBeenCalledTimes(7);
-    });
 });

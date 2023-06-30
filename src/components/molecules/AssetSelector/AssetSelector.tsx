@@ -12,7 +12,6 @@ export const AssetSelector = <AssetType extends string = string>({
     amountFormatterMap,
     onAssetChange,
     onAmountChange,
-    validationFunction,
 }: {
     options: Readonly<Array<Option<AssetType>>>;
     selected?: Option<AssetType>;
@@ -21,7 +20,6 @@ export const AssetSelector = <AssetType extends string = string>({
     transformLabel?: (v: string) => string;
     onAssetChange?: (v: AssetType) => void;
     onAmountChange?: (v: BigNumber) => void;
-    validationFunction?: (v: number | undefined) => void;
 }) => {
     const [assetValue, setAssetValue] = useState(selected.value);
     const [amount, setAmount] = useState<number | undefined>();
@@ -105,7 +103,6 @@ export const AssetSelector = <AssetType extends string = string>({
                     onValueChange={handleAmountChange}
                     value={amount}
                     data-cy='asset-selector-input'
-                    validationFunction={validationFunction}
                 />
 
                 <div

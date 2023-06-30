@@ -12,7 +12,6 @@ interface InputBaseProps {
     decimalPlacesAllowed?: number;
     maxLimit?: number;
     fontSize?: Record<FontSize, number>;
-    validationFunction?: (value: number | undefined) => void;
 }
 export const InputBase = ({
     className,
@@ -22,7 +21,6 @@ export const InputBase = ({
     decimalPlacesAllowed = 4,
     maxLimit = 10 ** 10,
     fontSize,
-    validationFunction,
 }: InputBaseProps) => {
     const handleValueChange = (
         values: NumberFormatValues,
@@ -31,9 +29,6 @@ export const InputBase = ({
         const value = values.floatValue;
         if (onValueChange) {
             onValueChange(value);
-        }
-        if (validationFunction) {
-            validationFunction(values.floatValue);
         }
     };
 
