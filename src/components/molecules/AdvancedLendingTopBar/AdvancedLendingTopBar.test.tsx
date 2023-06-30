@@ -1,5 +1,5 @@
 import { composeStories } from '@storybook/testing-react';
-import { render, screen } from 'src/test-utils.js';
+import { render, screen, within } from 'src/test-utils.js';
 import * as stories from './AdvancedLendingTopBar.stories';
 
 const { Default, Values } = composeStories(stories);
@@ -44,5 +44,19 @@ describe('AdvancedLendingTopBar Component', () => {
             'href',
             'https://www.coingecko.com/en/coins/filecoin'
         );
+    });
+
+    it('should indicate the last price is an opening price if there is no last trade time', () => {
+        render(<Default lastTradeTime={undefined} />);
+        expect(screen.getByText('Opening Price')).toBeInTheDocument();
+    });
+
+    it('should show 0 as a value for the last trade price if there is no last trade', () => {
+        render(<Default lastTradeLoan={undefined} />);
+        const lastTradeTab = within(
+            screen.getByLabelText('Last Trade Analytics')
+        );
+        expect(lastTradeTab.getByText('0')).toBeInTheDocument();
+        expect(lastTradeTab.getByText('0 APR')).toBeInTheDocument();
     });
 });

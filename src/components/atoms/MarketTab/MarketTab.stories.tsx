@@ -17,4 +17,9 @@ const Template: ComponentStory<typeof MarketTab> = args => (
 export const Default = Template.bind({});
 
 export const GreenMarketTab = Template.bind({});
-GreenMarketTab.args = { name: 7977, value: '25.00% APR' };
+GreenMarketTab.args = {
+    name: '7977.00',
+    value: '25.00% APR',
+    variant: 'green-name',
+    label: 'Green Market Tab',
+};
