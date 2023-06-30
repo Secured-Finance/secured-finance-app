@@ -31,6 +31,8 @@ import { selectAllBalances } from 'src/store/wallet';
 import { OrderType } from 'src/types';
 import {
     MAX_COVERAGE,
+    ZERO_BN,
+    amountFormatterFromBase,
     amountFormatterToBase,
     computeAvailableToBorrow,
     divide,
@@ -38,8 +40,6 @@ import {
     multiply,
     percentFormat,
     usdFormat,
-    amountFormatterFromBase,
-    ZERO_BN,
 } from 'src/utils';
 import { Amount, LoanValue } from 'src/utils/entities';
 import { useWallet } from 'use-wallet';
@@ -70,7 +70,7 @@ export const AdvancedLendingOrderCard = ({
 
     const loanValue = useMemo(() => {
         if (unitPrice && maturity) {
-            return LoanValue.fromPrice(unitPrice, maturity.toNumber());
+            return LoanValue.fromPrice(unitPrice, maturity);
         }
 
         return LoanValue.ZERO;
@@ -242,7 +242,7 @@ export const AdvancedLendingOrderCard = ({
                             value={percentFormat(
                                 LoanValue.fromPrice(
                                     unitPrice,
-                                    maturity.toNumber()
+                                    maturity
                                 ).apr.toNormalizedNumber()
                             )}
                         />

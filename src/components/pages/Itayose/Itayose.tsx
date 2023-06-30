@@ -73,7 +73,7 @@ const Toolbar = ({
                     selected={selected}
                     onAssetChange={handleAssetChange}
                     onTermChange={v => {
-                        dispatch(setMaturity(new Maturity(v)));
+                        dispatch(setMaturity(Number(v)));
                     }}
                 />
                 <div className='flex w-full flex-row items-center justify-between'>
@@ -107,7 +107,7 @@ export const Itayose = () => {
     );
 
     const marketPhase = useSelector((state: RootState) =>
-        selectMarketPhase(currency, maturity.toNumber())(state)
+        selectMarketPhase(currency, maturity)(state)
     );
 
     const optionList = Object.entries(lendingContracts)
@@ -123,8 +123,9 @@ export const Itayose = () => {
 
     const selectedTerm = useMemo(() => {
         return (
-            maturityOptionList.find(option => option.value.equals(maturity)) ||
-            maturityOptionList[0]
+            maturityOptionList.find(option =>
+                option.value.equals(new Maturity(maturity))
+            ) || maturityOptionList[0]
         );
     }, [maturity, maturityOptionList]);
 
