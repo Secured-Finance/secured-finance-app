@@ -3,12 +3,11 @@ import { CurrencySymbol } from 'src/utils';
 import { RootState } from '../types';
 
 export enum MarketPhase {
-    NOT_FOUND,
-    NOT_READY,
-    PRE_ORDER,
-    ITAYOSE,
-    OPEN,
-    MATURED,
+    NOT_FOUND = 'Not Found',
+    PRE_ORDER = 'Pre Order',
+    ITAYOSE = 'Itayose',
+    OPEN = 'Open',
+    MATURED = 'Matured',
 }
 
 export const selectMarket =
@@ -20,10 +19,6 @@ export const selectMarketPhase = (currency: CurrencySymbol, maturity: number) =>
     createSelector(selectMarket(currency, maturity), market => {
         if (!market) {
             return MarketPhase.NOT_FOUND;
-        }
-
-        if (!market.isReady) {
-            return MarketPhase.NOT_READY;
         }
 
         if (market.isPreOrderPeriod) {
