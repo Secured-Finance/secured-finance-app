@@ -19,7 +19,10 @@ type CoreTableOptions = {
     hideColumnIds?: string[];
     responsive: boolean;
     stickyColumns?: Set<number>;
-    getMoreData?: () => Array<any>;
+    pagination?: {
+        getMoreData: () => Array<any>;
+        totalData: number;
+    };
 };
 
 const DEFAULT_OPTIONS: CoreTableOptions = {
@@ -42,11 +45,13 @@ export const CoreTable = <T,>({
 }) => {
     const [sorting, setSorting] = useState<SortingState>([]);
     const [rowData, setRowData] = useState<Array<T>>([]);
-
     const coreTableOptions: CoreTableOptions = {
         ...DEFAULT_OPTIONS,
         ...options,
     };
+    const [hasMoreData, setHasMoreData] = useState(
+        !!coreTableOptions?.pagination?.totalData
+    );
 
     useEffect(() => {
         setRowData([...data]);
@@ -180,9 +185,18 @@ export const CoreTable = <T,>({
 
     const fetchMoreData = () => {
         setTimeout(() => {
-            if (coreTableOptions.getMoreData) {
-                const newData = [...rowData, ...coreTableOptions.getMoreData()];
+            if (
+                coreTableOptions?.pagination?.getMoreData &&
+                coreTableOptions.pagination.totalData
+            ) {
+                const newData = [
+                    ...rowData,
+                    ...coreTableOptions.pagination.getMoreData(),
+                ];
                 setRowData(newData);
+                if (newData.length >= coreTableOptions.pagination.totalData) {
+                    setHasMoreData(false);
+                }
             }
         }, 1000);
     };
@@ -198,7 +212,7 @@ export const CoreTable = <T,>({
                 <PaginatedScrolling
                     data={rowData}
                     fetchMoreData={fetchMoreData}
-                    hasMore={!!coreTableOptions.getMoreData}
+                    hasMoreData={hasMoreData}
                 >
                     {coreTable}
                 </PaginatedScrolling>
@@ -210,7 +224,7 @@ export const CoreTable = <T,>({
         <PaginatedScrolling
             data={rowData}
             fetchMoreData={fetchMoreData}
-            hasMore={!!coreTableOptions.getMoreData}
+            hasMoreData={hasMoreData}
         >
             {coreTable}
         </PaginatedScrolling>
@@ -221,17 +235,17 @@ const PaginatedScrolling = ({
     children,
     data,
     fetchMoreData,
-    hasMore,
+    hasMoreData,
 }: {
     children: React.ReactNode;
     data: Array<any>;
     fetchMoreData: () => void;
-    hasMore: boolean;
+    hasMoreData: boolean;
 }) => (
     <InfiniteScroll
         dataLength={data.length}
         next={fetchMoreData}
-        hasMore={hasMore}
+        hasMore={hasMoreData}
         loader={<h4>Loading...</h4>}
     >
         {children}

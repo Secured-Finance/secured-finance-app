@@ -96,16 +96,19 @@ NonResponsive.args = {
 export const WithPagination = Template.bind({});
 WithPagination.args = {
     options: {
-        getMoreData: () =>
-            Array(20)
-                .fill(null)
-                .map((_, index) => ({
-                    name: `Person ${index + 1}`,
-                    age: Math.floor(Math.random() * 20) + 10,
-                    english: Math.floor(Math.random() * 100),
-                    maths: 60,
-                    science: 95,
-                    history: 60,
-                })),
+        pagination: {
+            getMoreData: () =>
+                Array(20)
+                    .fill(null)
+                    .map((_, index) => ({
+                        name: `Person ${index + 1}`,
+                        age: Math.floor(Math.random() * 20) + 10,
+                        english: Math.floor(Math.random() * 100),
+                        maths: 60,
+                        science: 95,
+                        history: 60,
+                    })),
+            totalData: 50,
+        },
     },
 };
