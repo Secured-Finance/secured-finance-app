@@ -13,20 +13,21 @@ import {
     usdcBytes32,
 } from './fixtures';
 
-export const mockUserHistory = [
+export const mockUserTransactionHistory = [
     {
         request: {
-            query: queries.UserHistoryDocument,
+            query: queries.UserTransactionHistoryDocument,
             variables: {
                 address: '',
+                skip: 0,
+                first: 1000,
                 awaitRefetchQueries: true,
             },
         },
         result: {
             data: {
                 user: {
-                    id: '',
-                    orders: [],
+                    transactionCount: 0,
                     transactions: [],
                 },
             },
@@ -35,8 +36,7 @@ export const mockUserHistory = [
             return {
                 data: {
                     user: {
-                        id: '',
-                        orders: [],
+                        transactionCount: 0,
                         transactions: [],
                     },
                 },
@@ -45,17 +45,18 @@ export const mockUserHistory = [
     },
     {
         request: {
-            query: queries.UserHistoryDocument,
+            query: queries.UserTransactionHistoryDocument,
             variables: {
                 address: '0xb98bd7c7f656290071e52d1aa617d9cb4467fd6d',
+                skip: 0,
+                first: 1000,
                 awaitRefetchQueries: true,
             },
         },
         result: {
             data: {
                 user: {
-                    id: '0xb98bd7c7f656290071e52d1aa617d9cb4467fd6d',
-                    orders: orderHistoryList,
+                    transactionCount: 5,
                     transactions: transactions,
                 },
             },
@@ -64,9 +65,69 @@ export const mockUserHistory = [
             return {
                 data: {
                     user: {
-                        id: '0xb98bd7c7f656290071e52d1aa617d9cb4467fd6d',
-                        orders: orderHistoryList,
+                        transactionCount: 5,
                         transactions: transactions,
+                    },
+                },
+            };
+        },
+    },
+];
+
+export const mockUserOrderHistory = [
+    {
+        request: {
+            query: queries.UserOrderHistoryDocument,
+            variables: {
+                address: '',
+                skip: 0,
+                first: 1000,
+                awaitRefetchQueries: true,
+            },
+        },
+        result: {
+            data: {
+                user: {
+                    orderCount: 0,
+                    orders: [],
+                },
+            },
+        },
+        newData: () => {
+            return {
+                data: {
+                    user: {
+                        orderCount: 0,
+                        orders: [],
+                    },
+                },
+            };
+        },
+    },
+    {
+        request: {
+            query: queries.UserOrderHistoryDocument,
+            variables: {
+                address: '0xb98bd7c7f656290071e52d1aa617d9cb4467fd6d',
+                skip: 0,
+                first: 1000,
+                awaitRefetchQueries: true,
+            },
+        },
+        result: {
+            data: {
+                user: {
+                    orderCount: 9,
+                    orders: orderHistoryList,
+                },
+            },
+        },
+        newData: () => {
+            return {
+                data: {
+                    user: {
+                        orderCount: 9,
+                        orders: orderHistoryList,
                     },
                 },
             };
