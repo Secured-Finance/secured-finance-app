@@ -11,7 +11,7 @@ import classNames from 'classnames';
 import { useState, useEffect } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
-type CoreTableOptions = {
+type CoreTableOptions<T> = {
     border: boolean;
     name: string;
     onLineClick?: (rowId: string) => void;
@@ -20,12 +20,12 @@ type CoreTableOptions = {
     responsive: boolean;
     stickyColumns?: Set<number>;
     pagination?: {
-        getMoreData: () => Array<any>;
+        getMoreData: () => Promise<Array<T>>;
         totalData: number;
     };
 };
 
-const DEFAULT_OPTIONS: CoreTableOptions = {
+const DEFAULT_OPTIONS: CoreTableOptions<any> = {
     border: true,
     name: 'core-table',
     onLineClick: undefined,
@@ -41,11 +41,11 @@ export const CoreTable = <T,>({
 }: {
     data: Array<T>;
     columns: ColumnDef<T, any>[];
-    options?: Partial<CoreTableOptions>;
+    options?: Partial<CoreTableOptions<T>>;
 }) => {
     const [sorting, setSorting] = useState<SortingState>([]);
     const [rowData, setRowData] = useState<Array<T>>([]);
-    const coreTableOptions: CoreTableOptions = {
+    const coreTableOptions: CoreTableOptions<T> = {
         ...DEFAULT_OPTIONS,
         ...options,
     };
@@ -183,22 +183,18 @@ export const CoreTable = <T,>({
         </table>
     );
 
-    const fetchMoreData = () => {
-        setTimeout(() => {
-            if (
-                coreTableOptions?.pagination?.getMoreData &&
-                coreTableOptions.pagination.totalData
-            ) {
-                const newData = [
-                    ...rowData,
-                    ...coreTableOptions.pagination.getMoreData(),
-                ];
-                setRowData(newData);
-                if (newData.length >= coreTableOptions.pagination.totalData) {
-                    setHasMoreData(false);
-                }
+    const fetchMoreData = async () => {
+        if (
+            coreTableOptions?.pagination?.getMoreData &&
+            coreTableOptions.pagination.totalData
+        ) {
+            const moreData = await coreTableOptions.pagination.getMoreData();
+            const newData = [...rowData, ...moreData];
+            setRowData(newData);
+            if (newData.length >= coreTableOptions.pagination.totalData) {
+                setHasMoreData(false);
             }
-        }, 1000);
+        }
     };
 
     if (coreTableOptions.responsive) {

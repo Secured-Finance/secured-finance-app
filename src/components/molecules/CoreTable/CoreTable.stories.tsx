@@ -97,17 +97,23 @@ export const WithPagination = Template.bind({});
 WithPagination.args = {
     options: {
         pagination: {
-            getMoreData: () =>
-                Array(20)
-                    .fill(null)
-                    .map((_, index) => ({
-                        name: `Person ${index + 1}`,
-                        age: Math.floor(Math.random() * 20) + 10,
-                        english: Math.floor(Math.random() * 100),
-                        maths: 60,
-                        science: 95,
-                        history: 60,
-                    })),
+            getMoreData: () => {
+                return new Promise(resolve => {
+                    setTimeout(() => {
+                        const data = Array(20)
+                            .fill(null)
+                            .map((_, index) => ({
+                                name: `Person ${index + 1}`,
+                                age: Math.floor(Math.random() * 20) + 10,
+                                english: Math.floor(Math.random() * 100),
+                                maths: 60,
+                                science: 95,
+                                history: 60,
+                            }));
+                        resolve(data);
+                    }, 1000);
+                });
+            },
             totalData: 50,
         },
     },
