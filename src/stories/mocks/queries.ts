@@ -1,34 +1,33 @@
 import queries from '@secured-finance/sf-graph-client/dist/graphclients';
+import { TransactionList } from 'src/types';
+import { Maturity } from 'src/utils/entities';
 import {
     dailyVolumes,
     dec22Fixture,
-    mar23Fixture,
     efilBytes32,
-    ethBytes32,
+    mar23Fixture,
     orderHistoryList,
     tradesEFIL,
-    tradesETH,
     tradesUSDC,
-    tradesWBTC,
     transactions,
     usdcBytes32,
-    wbtcBytes32,
 } from './fixtures';
 
-export const mockUserHistory = [
+export const mockUserTransactionHistory = [
     {
         request: {
-            query: queries.UserHistoryDocument,
+            query: queries.UserTransactionHistoryDocument,
             variables: {
                 address: '',
+                skip: 0,
+                first: 1000,
                 awaitRefetchQueries: true,
             },
         },
         result: {
             data: {
                 user: {
-                    id: '',
-                    orders: [],
+                    transactionCount: 0,
                     transactions: [],
                 },
             },
@@ -37,8 +36,7 @@ export const mockUserHistory = [
             return {
                 data: {
                     user: {
-                        id: '',
-                        orders: [],
+                        transactionCount: 0,
                         transactions: [],
                     },
                 },
@@ -47,17 +45,18 @@ export const mockUserHistory = [
     },
     {
         request: {
-            query: queries.UserHistoryDocument,
+            query: queries.UserTransactionHistoryDocument,
             variables: {
                 address: '0xb98bd7c7f656290071e52d1aa617d9cb4467fd6d',
+                skip: 0,
+                first: 1000,
                 awaitRefetchQueries: true,
             },
         },
         result: {
             data: {
                 user: {
-                    id: '0xb98bd7c7f656290071e52d1aa617d9cb4467fd6d',
-                    orders: orderHistoryList,
+                    transactionCount: 5,
                     transactions: transactions,
                 },
             },
@@ -66,9 +65,69 @@ export const mockUserHistory = [
             return {
                 data: {
                     user: {
-                        id: '0xb98bd7c7f656290071e52d1aa617d9cb4467fd6d',
-                        orders: orderHistoryList,
+                        transactionCount: 5,
                         transactions: transactions,
+                    },
+                },
+            };
+        },
+    },
+];
+
+export const mockUserOrderHistory = [
+    {
+        request: {
+            query: queries.UserOrderHistoryDocument,
+            variables: {
+                address: '',
+                skip: 0,
+                first: 1000,
+                awaitRefetchQueries: true,
+            },
+        },
+        result: {
+            data: {
+                user: {
+                    orderCount: 0,
+                    orders: [],
+                },
+            },
+        },
+        newData: () => {
+            return {
+                data: {
+                    user: {
+                        orderCount: 0,
+                        orders: [],
+                    },
+                },
+            };
+        },
+    },
+    {
+        request: {
+            query: queries.UserOrderHistoryDocument,
+            variables: {
+                address: '0xb98bd7c7f656290071e52d1aa617d9cb4467fd6d',
+                skip: 0,
+                first: 1000,
+                awaitRefetchQueries: true,
+            },
+        },
+        result: {
+            data: {
+                user: {
+                    orderCount: 9,
+                    orders: orderHistoryList,
+                },
+            },
+        },
+        newData: () => {
+            return {
+                data: {
+                    user: {
+                        orderCount: 9,
+                        orders: orderHistoryList,
                     },
                 },
             };
@@ -104,485 +163,103 @@ const yesterday = today - 24 * 3600;
 const today2 = 1638356400;
 const yesterday2 = today2 - 24 * 3600;
 
+function getTransactionQuery(
+    currency: string,
+    maturity: Maturity,
+    from: number,
+    to: number,
+    transactions: TransactionList,
+    lastTransaction: [TransactionList[0]] | []
+) {
+    return {
+        request: {
+            query: queries.TransactionHistoryDocument,
+            variables: {
+                currency: currency,
+                maturity: maturity.toNumber(),
+                from: from,
+                to: to,
+                awaitRefetchQueries: true,
+            },
+        },
+        result: {
+            data: {
+                transactionHistory: transactions,
+                lastTransaction: lastTransaction,
+            },
+        },
+        newData: () => {
+            return {
+                data: {
+                    transactionHistory: transactions,
+                    lastTransaction: lastTransaction,
+                },
+            };
+        },
+    };
+}
+const MATURITY_ZERO = new Maturity(0);
+export const emptyTransaction = [
+    getTransactionQuery(efilBytes32, dec22Fixture, yesterday, today, [], []),
+    getTransactionQuery(efilBytes32, dec22Fixture, yesterday2, today2, [], []),
+    getTransactionQuery(efilBytes32, MATURITY_ZERO, yesterday, today, [], []),
+    getTransactionQuery(efilBytes32, MATURITY_ZERO, yesterday2, today2, [], []),
+];
+
+function getQueryForCurrency(currency: string, transactions: TransactionList) {
+    return [
+        getTransactionQuery(
+            currency,
+            dec22Fixture,
+            yesterday,
+            today,
+            transactions,
+            [transactions[0]]
+        ),
+        getTransactionQuery(
+            currency,
+            dec22Fixture,
+            yesterday2,
+            today2,
+            transactions,
+            [transactions[0]]
+        ),
+        getTransactionQuery(
+            currency,
+            mar23Fixture,
+            yesterday,
+            today,
+            transactions,
+            [transactions[0]]
+        ),
+        getTransactionQuery(
+            currency,
+            mar23Fixture,
+            yesterday2,
+            today2,
+            transactions,
+            [transactions[0]]
+        ),
+        getTransactionQuery(
+            currency,
+            MATURITY_ZERO,
+            yesterday,
+            today,
+            transactions,
+            [transactions[0]]
+        ),
+        getTransactionQuery(
+            currency,
+            MATURITY_ZERO,
+            yesterday2,
+            today2,
+            transactions,
+            [transactions[0]]
+        ),
+    ];
+}
+
 export const mockTrades = [
-    {
-        request: {
-            query: queries.TradesDocument,
-            variables: {
-                currency: efilBytes32,
-                maturity: dec22Fixture.toNumber(),
-                from: yesterday,
-                to: today,
-                awaitRefetchQueries: true,
-            },
-        },
-        result: {
-            data: {
-                transactions: tradesEFIL,
-            },
-        },
-        newData: () => {
-            return {
-                data: {
-                    transactions: tradesEFIL,
-                },
-            };
-        },
-    },
-    {
-        request: {
-            query: queries.TradesDocument,
-            variables: {
-                currency: efilBytes32,
-                maturity: 0,
-                from: yesterday,
-                to: today,
-                awaitRefetchQueries: true,
-            },
-        },
-        result: {
-            data: {
-                tradesEFIL,
-            },
-        },
-        newData: () => {
-            return {
-                data: {
-                    tradesEFIL,
-                },
-            };
-        },
-    },
-    {
-        request: {
-            query: queries.TradesDocument,
-            variables: {
-                currency: ethBytes32,
-                maturity: dec22Fixture.toNumber(),
-                from: yesterday,
-                to: today,
-                awaitRefetchQueries: true,
-            },
-        },
-        result: {
-            data: {
-                transactions: tradesETH,
-            },
-        },
-        newData: () => {
-            return {
-                data: {
-                    transactions: tradesETH,
-                },
-            };
-        },
-    },
-    {
-        request: {
-            query: queries.TradesDocument,
-            variables: {
-                currency: wbtcBytes32,
-                maturity: dec22Fixture.toNumber(),
-                from: yesterday,
-                to: today,
-                awaitRefetchQueries: true,
-            },
-        },
-        result: {
-            data: {
-                transactions: tradesWBTC,
-            },
-        },
-        newData: () => {
-            return {
-                data: {
-                    transactions: tradesWBTC,
-                },
-            };
-        },
-    },
-    {
-        request: {
-            query: queries.TradesDocument,
-            variables: {
-                currency: usdcBytes32,
-                maturity: dec22Fixture.toNumber(),
-                from: yesterday,
-                to: today,
-                awaitRefetchQueries: true,
-            },
-        },
-        result: {
-            data: {
-                transactions: tradesUSDC,
-            },
-        },
-        newData: () => {
-            return {
-                data: {
-                    transactions: tradesUSDC,
-                },
-            };
-        },
-    },
-    {
-        request: {
-            query: queries.TradesDocument,
-            variables: {
-                currency: efilBytes32,
-                maturity: dec22Fixture.toNumber(),
-                from: yesterday2,
-                to: today2,
-                awaitRefetchQueries: true,
-            },
-        },
-        result: {
-            data: {
-                transactions: tradesEFIL,
-            },
-        },
-        newData: () => {
-            return {
-                data: {
-                    transactions: tradesEFIL,
-                },
-            };
-        },
-    },
-    {
-        request: {
-            query: queries.TradesDocument,
-            variables: {
-                currency: efilBytes32,
-                maturity: 0,
-                from: yesterday2,
-                to: today2,
-                awaitRefetchQueries: true,
-            },
-        },
-        result: {
-            data: {
-                tradesEFIL,
-            },
-        },
-        newData: () => {
-            return {
-                data: {
-                    tradesEFIL,
-                },
-            };
-        },
-    },
-    {
-        request: {
-            query: queries.TradesDocument,
-            variables: {
-                currency: ethBytes32,
-                maturity: dec22Fixture.toNumber(),
-                from: yesterday2,
-                to: today2,
-                awaitRefetchQueries: true,
-            },
-        },
-        result: {
-            data: {
-                transactions: tradesETH,
-            },
-        },
-        newData: () => {
-            return {
-                data: {
-                    transactions: tradesETH,
-                },
-            };
-        },
-    },
-    {
-        request: {
-            query: queries.TradesDocument,
-            variables: {
-                currency: wbtcBytes32,
-                maturity: dec22Fixture.toNumber(),
-                from: yesterday2,
-                to: today2,
-                awaitRefetchQueries: true,
-            },
-        },
-        result: {
-            data: {
-                transactions: tradesWBTC,
-            },
-        },
-        newData: () => {
-            return {
-                data: {
-                    transactions: tradesWBTC,
-                },
-            };
-        },
-    },
-    {
-        request: {
-            query: queries.TradesDocument,
-            variables: {
-                currency: usdcBytes32,
-                maturity: dec22Fixture.toNumber(),
-                from: yesterday2,
-                to: today2,
-                awaitRefetchQueries: true,
-            },
-        },
-        result: {
-            data: {
-                transactions: tradesUSDC,
-            },
-        },
-        newData: () => {
-            return {
-                data: {
-                    transactions: tradesUSDC,
-                },
-            };
-        },
-    },
-    {
-        request: {
-            query: queries.TradesDocument,
-            variables: {
-                currency: efilBytes32,
-                maturity: mar23Fixture.toNumber(),
-                from: yesterday,
-                to: today,
-                awaitRefetchQueries: true,
-            },
-        },
-        result: {
-            data: {
-                tradesEFIL,
-            },
-        },
-        newData: () => {
-            return {
-                data: {
-                    tradesEFIL,
-                },
-            };
-        },
-    },
-    {
-        request: {
-            query: queries.TradesDocument,
-            variables: {
-                currency: usdcBytes32,
-                maturity: 0,
-                from: yesterday,
-                to: today,
-                awaitRefetchQueries: true,
-            },
-        },
-        result: {
-            data: {
-                tradesUSDC,
-            },
-        },
-        newData: () => {
-            return {
-                data: {
-                    tradesUSDC,
-                },
-            };
-        },
-    },
-    {
-        request: {
-            query: queries.TradesDocument,
-            variables: {
-                currency: ethBytes32,
-                maturity: mar23Fixture.toNumber(),
-                from: yesterday,
-                to: today,
-                awaitRefetchQueries: true,
-            },
-        },
-        result: {
-            data: {
-                tradesETH,
-            },
-        },
-        newData: () => {
-            return {
-                data: {
-                    tradesETH,
-                },
-            };
-        },
-    },
-    {
-        request: {
-            query: queries.TradesDocument,
-            variables: {
-                currency: wbtcBytes32,
-                maturity: mar23Fixture.toNumber(),
-                from: yesterday,
-                to: today,
-                awaitRefetchQueries: true,
-            },
-        },
-        result: {
-            data: {
-                tradesWBTC,
-            },
-        },
-        newData: () => {
-            return {
-                data: {
-                    tradesWBTC,
-                },
-            };
-        },
-    },
-    {
-        request: {
-            query: queries.TradesDocument,
-            variables: {
-                currency: usdcBytes32,
-                maturity: mar23Fixture.toNumber(),
-                from: yesterday,
-                to: today,
-                awaitRefetchQueries: true,
-            },
-        },
-        result: {
-            data: {
-                tradesUSDC,
-            },
-        },
-        newData: () => {
-            return {
-                data: {
-                    tradesUSDC,
-                },
-            };
-        },
-    },
-    {
-        request: {
-            query: queries.TradesDocument,
-            variables: {
-                currency: efilBytes32,
-                maturity: mar23Fixture.toNumber(),
-                from: yesterday2,
-                to: today2,
-                awaitRefetchQueries: true,
-            },
-        },
-        result: {
-            data: {
-                tradesEFIL,
-            },
-        },
-        newData: () => {
-            return {
-                data: {
-                    tradesEFIL,
-                },
-            };
-        },
-    },
-    {
-        request: {
-            query: queries.TradesDocument,
-            variables: {
-                currency: usdcBytes32,
-                maturity: 0,
-                from: yesterday2,
-                to: today2,
-                awaitRefetchQueries: true,
-            },
-        },
-        result: {
-            data: {
-                tradesUSDC,
-            },
-        },
-        newData: () => {
-            return {
-                data: {
-                    tradesUSDC,
-                },
-            };
-        },
-    },
-    {
-        request: {
-            query: queries.TradesDocument,
-            variables: {
-                currency: ethBytes32,
-                maturity: mar23Fixture.toNumber(),
-                from: yesterday2,
-                to: today2,
-                awaitRefetchQueries: true,
-            },
-        },
-        result: {
-            data: {
-                tradesETH,
-            },
-        },
-        newData: () => {
-            return {
-                data: {
-                    tradesETH,
-                },
-            };
-        },
-    },
-    {
-        request: {
-            query: queries.TradesDocument,
-            variables: {
-                currency: wbtcBytes32,
-                maturity: mar23Fixture.toNumber(),
-                from: yesterday2,
-                to: today2,
-                awaitRefetchQueries: true,
-            },
-        },
-        result: {
-            data: {
-                tradesWBTC,
-            },
-        },
-        newData: () => {
-            return {
-                data: {
-                    tradesWBTC,
-                },
-            };
-        },
-    },
-    {
-        request: {
-            query: queries.TradesDocument,
-            variables: {
-                currency: usdcBytes32,
-                maturity: mar23Fixture.toNumber(),
-                from: yesterday2,
-                to: today2,
-                awaitRefetchQueries: true,
-            },
-        },
-        result: {
-            data: {
-                tradesUSDC,
-            },
-        },
-        newData: () => {
-            return {
-                data: {
-                    tradesUSDC,
-                },
-            };
-        },
-    },
+    ...getQueryForCurrency(usdcBytes32, tradesUSDC),
+    ...getQueryForCurrency(efilBytes32, tradesEFIL),
 ];

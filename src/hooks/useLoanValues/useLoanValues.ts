@@ -24,6 +24,7 @@ export const useLoanValues = (
         (state: RootState) => state.blockchain.latestBlock
     );
     const [unitPrices, setUnitPrices] = useState<BigNumber[]>([]);
+    const loanValues: LoanValue[] = [];
 
     const fetchYieldCurve = useCallback(
         async (securedFinance: SecuredFinanceClient) => {
@@ -55,10 +56,16 @@ export const useLoanValues = (
         }
     }, [fetchYieldCurve, securedFinance, block]);
 
-    return unitPrices.map((unitPrice, index) => {
-        return LoanValue.fromPrice(
-            unitPrice.toNumber(),
-            maturity[index] && maturity[index].toNumber()
-        );
+    unitPrices.forEach((unitPrice, index) => {
+        if (maturity[index]) {
+            loanValues.push(
+                LoanValue.fromPrice(
+                    unitPrice.toNumber(),
+                    maturity[index].toNumber()
+                )
+            );
+        }
     });
+
+    return loanValues;
 };

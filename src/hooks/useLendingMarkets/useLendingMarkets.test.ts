@@ -29,6 +29,7 @@ describe('useLendingMarkets', () => {
                 midUnitPrice: 0,
                 isReady: false,
                 preOpenDate: 0,
+                openingUnitPrice: 0,
             },
         });
     });

@@ -38,7 +38,7 @@ describe('CollateralSimulationSection Component', () => {
     it('should display the APR when the tradeValue is provided', () => {
         render(<Trade />);
         expect(screen.getByText('APR')).toBeInTheDocument();
-        expect(screen.getByText('~ 2.05%')).toBeInTheDocument();
+        expect(screen.getByText('~ 2.04%')).toBeInTheDocument();
     });
 
     it('should increase the collateral usage when the tradePosition is BORROW', () => {

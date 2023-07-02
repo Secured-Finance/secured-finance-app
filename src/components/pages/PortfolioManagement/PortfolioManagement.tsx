@@ -32,19 +32,24 @@ export type Trade = TradeHistory[0];
 
 export const PortfolioManagement = () => {
     const { account } = useWallet();
-    const userHistory = useGraphClientHook(
-        { address: account?.toLowerCase() ?? '' },
-        queries.UserHistoryDocument,
+    const userOrderHistory = useGraphClientHook(
+        { address: account?.toLowerCase() ?? '', skip: 0, first: 1000 },
+        queries.UserOrderHistoryDocument,
+        'user'
+    );
+    const userTransactionHistory = useGraphClientHook(
+        { address: account?.toLowerCase() ?? '', skip: 0, first: 1000 },
+        queries.UserTransactionHistoryDocument,
         'user'
     );
     const orderList = useOrderList(account);
     const positions = usePositions(account);
 
     const tradesFromCon = formatOrders(orderList.inactiveOrderList);
-    const tradeFromSub = userHistory.data?.transactions ?? [];
+    const tradeFromSub = userTransactionHistory.data?.transactions ?? [];
     const tradeHistory = [...tradeFromSub, ...tradesFromCon];
 
-    const lazyOrderHistory = userHistory.data?.orders ?? [];
+    const lazyOrderHistory = userOrderHistory.data?.orders ?? [];
     const sortedOrderHistory = lazyOrderHistory
         .map(order => {
             if (checkOrderIsFilled(order, orderList.inactiveOrderList)) {
