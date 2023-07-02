@@ -65,6 +65,22 @@ describe('PlaceOrder component', () => {
         expect(screen.getByText('63.61%')).toHaveClass('text-progressBarEnd');
     });
 
+    it('should display the circuit breaker disclaimer', async () => {
+        render(<Default />);
+
+        await waitFor(() => {
+            expect(screen.getByTestId('disclaimer-button')).toBeInTheDocument();
+        });
+        const button = screen.getByTestId('disclaimer-button');
+        expect(button).toHaveTextContent('Circuit Breaker Disclaimer');
+        await waitFor(() => fireEvent.click(button));
+        expect(
+            screen.getByText(
+                'Circuit breaker will be triggered if the order is filled at over the max slippage level at 1 block.'
+            )
+        ).toBeInTheDocument();
+    });
+
     it('should not display the borrow remaining and the collateral usage if its a LEND order', async () => {
         render(<Default side={OrderSide.LEND} />);
 

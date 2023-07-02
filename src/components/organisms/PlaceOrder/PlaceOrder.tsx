@@ -312,9 +312,9 @@ export const PlaceOrder = ({
                                                             Circuit breaker will
                                                             be triggered if the
                                                             order is filled at
-                                                            over 92.03 which is
-                                                            the max slippage
-                                                            level at 1 block.
+                                                            over the max
+                                                            slippage level at 1
+                                                            block.
                                                         </div>
                                                     </Disclosure.Panel>
                                                 </Transition>
