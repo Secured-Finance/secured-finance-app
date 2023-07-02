@@ -17,6 +17,9 @@ export const useOrderFee = (ccy: CurrencySymbol) => {
 
     useEffect(() => {
         getOrderFee();
+        return () => {
+            setOrderFee(0);
+        };
     }, [getOrderFee]);
 
     return orderFee;
