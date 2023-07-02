@@ -50,7 +50,7 @@ describe('PlaceOrder component', () => {
         expect(screen.getByText('Bond Price')).toBeInTheDocument();
         expect(screen.getByText('~ 94.1')).toBeInTheDocument();
         expect(screen.getByText('APR')).toBeInTheDocument();
-        expect(screen.getByText('~ 6.29%')).toBeInTheDocument();
+        expect(screen.getByText('~ 6.28%')).toBeInTheDocument();
     });
 
     it('should render collateral utilization in borrow orders', async () => {
@@ -78,7 +78,7 @@ describe('PlaceOrder component', () => {
         expect(screen.getByText('Bond Price')).toBeInTheDocument();
         expect(screen.getByText('~ 94.1')).toBeInTheDocument();
         expect(screen.getByText('APR')).toBeInTheDocument();
-        expect(screen.getByText('~ 6.29%')).toBeInTheDocument();
+        expect(screen.getByText('~ 6.28%')).toBeInTheDocument();
     });
 
     it('should reach success screen when transaction receipt is received', async () => {
