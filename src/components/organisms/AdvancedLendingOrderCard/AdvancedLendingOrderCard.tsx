@@ -65,8 +65,6 @@ export const AdvancedLendingOrderCard = ({
     );
     const [sliderValue, setSliderValue] = useState(0.0);
 
-    const [isAmountValid, setIsAmountValid] = useState(false);
-
     const balanceRecord = useSelector((state: RootState) =>
         selectAllBalances(state)
     );
@@ -140,8 +138,9 @@ export const AdvancedLendingOrderCard = ({
         selectedWalletSource.source,
     ]);
 
-    const validateAmount = (value: number | undefined): void => {
-        setIsAmountValid(!!value && value > balanceToLend);
+    const getAmountValidation = (): boolean => {
+        const value = amountFormatterFromBase[currency](amount);
+        return !!value && value > balanceToLend;
     };
 
     const handleAmountChange = (percentage: number) => {
@@ -166,7 +165,6 @@ export const AdvancedLendingOrderCard = ({
         available > 0
             ? setSliderValue(Math.min(100.0, (inputValue * 100.0) / available))
             : setSliderValue(0.0);
-        validateAmount(inputValue);
     };
     useEffect(() => {
         if (onlyLimitOrder) {
@@ -225,7 +223,7 @@ export const AdvancedLendingOrderCard = ({
                     variant='advanced'
                 />
                 {account && side === OrderSide.LEND && (
-                    <>
+                    <div className='space-y-[4px]'>
                         <WalletSourceSelector
                             optionList={walletSourceList}
                             selected={selectedWalletSource}
@@ -233,10 +231,10 @@ export const AdvancedLendingOrderCard = ({
                             onChange={handleWalletSourceChange}
                         />
                         <ErrorInfo
-                            showError={isAmountValid}
+                            showError={getAmountValidation()}
                             errorMessage='Insufficient amount in source'
                         />
-                    </>
+                    </div>
                 )}
                 <div className='flex flex-col gap-[10px]'>
                     <OrderInputBox
@@ -285,7 +283,7 @@ export const AdvancedLendingOrderCard = ({
                 <OrderAction
                     loanValue={loanValue}
                     collateralBook={collateralBook}
-                    validation={isAmountValid}
+                    validation={getAmountValidation()}
                 />
 
                 <Separator color='neutral-3'></Separator>
