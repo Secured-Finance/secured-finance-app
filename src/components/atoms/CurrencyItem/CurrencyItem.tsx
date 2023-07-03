@@ -5,7 +5,6 @@ import {
     CurrencySymbol,
     ordinaryFormat,
     usdFormat,
-    usdFormatAppendUSD,
 } from 'src/utils';
 
 export const CurrencyItem = ({
@@ -32,14 +31,15 @@ export const CurrencyItem = ({
     if (amount !== undefined && price !== undefined) {
         secondLine = usdFormat(amount * price, 2);
     } else if (price) {
-        secondLine = usdFormatAppendUSD(price, 2);
+        secondLine = usdFormat(price, 2);
     } else {
         secondLine = currencyMap[ccy].name;
     }
 
-    const firstLine = amount
-        ? `${ordinaryFormat(amount, minDecimals, maxDecimals)} ${ccy}`
-        : ccy;
+    const firstLine =
+        amount !== undefined
+            ? `${ordinaryFormat(amount, minDecimals, maxDecimals)} ${ccy}`
+            : ccy;
     return (
         <div
             data-testid='currency-amount-item'

@@ -16,10 +16,10 @@ import { Amount, Maturity } from 'src/utils/entities';
 import {
     amountColumnDefinition,
     contractColumnDefinition,
-    loanTypeFromFVColumnDefinition,
-    tableHeaderDefinition,
     forwardValueColumnDefinition,
+    loanTypeFromFVColumnDefinition,
     priceYieldColumnDefinition,
+    tableHeaderDefinition,
 } from 'src/utils/tableDefinitions';
 
 const columnHelper = createColumnHelper<Position>();
@@ -122,7 +122,7 @@ export const ActiveTradeTable = ({ data }: { data: Position[] }) => {
             columnHelper.display({
                 id: 'actions',
                 cell: info => {
-                    const maturity = new Maturity(info.row.original.maturity);
+                    const maturity = Number(info.row.original.maturity);
                     const ccy = hexToCurrencySymbol(info.row.original.currency);
                     const amount = BigNumber.from(info.row.original.amount);
                     if (!ccy) return null;
@@ -142,7 +142,9 @@ export const ActiveTradeTable = ({ data }: { data: Position[] }) => {
                                         text: 'Unwind Position',
                                         onClick: () => {
                                             setUnwindDialogData({
-                                                maturity,
+                                                maturity: new Maturity(
+                                                    maturity
+                                                ),
                                                 amount: new Amount(amount, ccy),
                                                 show: true,
                                             });

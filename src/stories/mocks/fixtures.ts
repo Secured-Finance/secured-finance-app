@@ -17,7 +17,7 @@ import {
     MaturityOptionList,
     OrderList,
     TradeHistory,
-    Trades,
+    TransactionList,
 } from 'src/types';
 import { CurrencySymbol, Rate } from 'src/utils';
 import { Maturity } from 'src/utils/entities';
@@ -73,86 +73,131 @@ const sep24Fixture = new Maturity(1725148800);
 export const dec24Fixture = new Maturity(1733011200);
 
 export const maturities = {
-    DEC22: {
+    [dec22Fixture.toNumber()]: {
         name: 'DEC22',
-        maturity: 1669852800,
+        maturity: dec22Fixture.toNumber(),
         isActive: true,
         utcOpeningDate: 1677628800,
         midUnitPrice: 9801,
-        isReady: true,
         preOpenDate: 1504828800,
+        openingUnitPrice: 9710,
+        isReady: true,
+        isOpened: true,
+        isMatured: false,
+        isPreOrderPeriod: false,
+        isItayosePeriod: false,
     },
-    MAR23: {
+    [mar23Fixture.toNumber()]: {
         name: 'MAR23',
-        maturity: 1677628800,
+        maturity: mar23Fixture.toNumber(),
         isActive: true,
         utcOpeningDate: 1677628800,
         midUnitPrice: 9701,
-        isReady: true,
         preOpenDate: 1504828800,
+        openingUnitPrice: 9710,
+        isReady: true,
+        isOpened: true,
+        isMatured: false,
+        isPreOrderPeriod: false,
+        isItayosePeriod: false,
     },
-    JUN23: {
+    [jun23Fixture.toNumber()]: {
         name: 'JUN23',
-        maturity: 1685577600,
+        maturity: jun23Fixture.toNumber(),
         isActive: true,
         utcOpeningDate: 1677628800,
         midUnitPrice: 9601,
-        isReady: true,
         preOpenDate: 1504828800,
+        openingUnitPrice: 9710,
+        isReady: true,
+        isOpened: true,
+        isMatured: false,
+        isPreOrderPeriod: false,
+        isItayosePeriod: false,
     },
-    SEP23: {
+    [sep23Fixture.toNumber()]: {
         name: 'SEP23',
-        maturity: 1693526400,
+        maturity: sep23Fixture.toNumber(),
         isActive: true,
         utcOpeningDate: 1677628800,
         midUnitPrice: 9501,
-        isReady: true,
         preOpenDate: 1504828800,
+        openingUnitPrice: 9710,
+        isReady: true,
+        isOpened: true,
+        isMatured: false,
+        isPreOrderPeriod: false,
+        isItayosePeriod: false,
     },
-    DEC23: {
+    [dec23Fixture.toNumber()]: {
         name: 'DEC23',
-        maturity: 1701388800,
+        maturity: dec23Fixture.toNumber(),
         isActive: true,
         utcOpeningDate: 1677628800,
         midUnitPrice: 9401,
-        isReady: true,
         preOpenDate: 1504828800,
+        openingUnitPrice: 9710,
+        isReady: true,
+        isOpened: true,
+        isMatured: false,
+        isPreOrderPeriod: false,
+        isItayosePeriod: false,
     },
-    MAR24: {
+    [mar24Fixture.toNumber()]: {
         name: 'MAR24',
-        maturity: 1709251200,
+        maturity: mar24Fixture.toNumber(),
         isActive: true,
         utcOpeningDate: 1677628800,
         midUnitPrice: 9301,
-        isReady: true,
         preOpenDate: 1504828800,
+        openingUnitPrice: 9710,
+        isReady: true,
+        isOpened: true,
+        isMatured: false,
+        isPreOrderPeriod: false,
+        isItayosePeriod: false,
     },
-    JUN24: {
+    [jun24Fixture.toNumber()]: {
         name: 'JUN24',
-        maturity: 1717200000,
+        maturity: jun24Fixture.toNumber(),
         isActive: true,
         utcOpeningDate: 1677628800,
         midUnitPrice: 9201,
-        isReady: true,
         preOpenDate: 1504828800,
+        openingUnitPrice: 9710,
+        isReady: true,
+        isOpened: true,
+        isMatured: false,
+        isPreOrderPeriod: false,
+        isItayosePeriod: false,
     },
-    SEP24: {
+    [sep24Fixture.toNumber()]: {
         name: 'SEP24',
-        maturity: 1725148800,
+        maturity: sep24Fixture.toNumber(),
         isActive: true,
         utcOpeningDate: 1677628800,
         midUnitPrice: 9101,
-        isReady: true,
         preOpenDate: 1504828800,
+        openingUnitPrice: 9710,
+        isReady: true,
+        isOpened: true,
+        isMatured: false,
+        isPreOrderPeriod: false,
+        isItayosePeriod: false,
     },
-    DEC24: {
+    [dec24Fixture.toNumber()]: {
         name: 'DEC24',
         maturity: dec24Fixture.toNumber(),
         isActive: false,
         utcOpeningDate: 1685577600,
         midUnitPrice: 9001,
-        isReady: false,
         preOpenDate: 1512777600,
+        openingUnitPrice: 9710,
+        isReady: false,
+        isOpened: false,
+        isMatured: false,
+        isPreOrderPeriod: true,
+        isItayosePeriod: false,
     },
 };
 
@@ -257,7 +302,7 @@ export const yieldCurveRates = [
 
 export const efilBytes32 = utils.formatBytes32String('EFIL'); //0x46494c0000000000000000000000000000000000000000000000000000000000
 export const ethBytes32 = utils.formatBytes32String('ETH');
-export const wbtcBytes32 = utils.formatBytes32String('WBTC');
+export const wbtcBytes32 = utils.formatBytes32String('WBTC'); //0x4546494c00000000000000000000000000000000000000000000000000000000
 export const usdcBytes32 = utils.formatBytes32String('USDC'); // '0x5553444300000000000000000000000000000000000000000000000000000000'
 
 export const activeOrders: Order[] = [
@@ -629,7 +674,7 @@ function generateDailyVolumes(days: number) {
 
 export const dailyVolumes: DailyVolumes = generateDailyVolumes(365 * 4);
 
-export const tradesEFIL: Trades = [
+export const tradesEFIL: TransactionList = [
     {
         amount: 100000000000,
         maturity: dec22Fixture,
@@ -648,7 +693,7 @@ export const tradesEFIL: Trades = [
     },
 ];
 
-export const tradesETH: Trades = [
+export const tradesETH: TransactionList = [
     {
         amount: 100000000000,
         maturity: dec22Fixture,
@@ -667,7 +712,7 @@ export const tradesETH: Trades = [
     },
 ];
 
-export const tradesUSDC: Trades = [
+export const tradesUSDC: TransactionList = [
     {
         amount: 100000000000,
         maturity: dec22Fixture,
@@ -686,7 +731,7 @@ export const tradesUSDC: Trades = [
     },
 ];
 
-export const tradesWBTC: Trades = [
+export const tradesWBTC: TransactionList = [
     {
         amount: 100000000000,
         maturity: dec22Fixture,

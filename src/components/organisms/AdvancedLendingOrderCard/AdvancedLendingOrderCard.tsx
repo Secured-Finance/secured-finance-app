@@ -31,6 +31,8 @@ import { selectAllBalances } from 'src/store/wallet';
 import { OrderType } from 'src/types';
 import {
     MAX_COVERAGE,
+    ZERO_BN,
+    amountFormatterFromBase,
     amountFormatterToBase,
     computeAvailableToBorrow,
     divide,
@@ -38,7 +40,6 @@ import {
     multiply,
     percentFormat,
     usdFormat,
-    amountFormatterFromBase,
 } from 'src/utils';
 import { Amount, LoanValue } from 'src/utils/entities';
 import { useWallet } from 'use-wallet';
@@ -69,7 +70,7 @@ export const AdvancedLendingOrderCard = ({
 
     const loanValue = useMemo(() => {
         if (unitPrice && maturity) {
-            return LoanValue.fromPrice(unitPrice, maturity.toNumber());
+            return LoanValue.fromPrice(unitPrice, maturity);
         }
 
         return LoanValue.ZERO;
@@ -87,7 +88,9 @@ export const AdvancedLendingOrderCard = ({
 
     const price = priceList[currency];
 
-    const orderAmount = new Amount(amount, currency);
+    const orderAmount = amount.gt(ZERO_BN)
+        ? new Amount(amount, currency)
+        : undefined;
 
     const availableToBorrow = useMemo(() => {
         return currency && assetPriceMap
@@ -239,7 +242,7 @@ export const AdvancedLendingOrderCard = ({
                             value={percentFormat(
                                 LoanValue.fromPrice(
                                     unitPrice,
-                                    maturity.toNumber()
+                                    maturity
                                 ).apr.toNormalizedNumber()
                             )}
                         />
@@ -250,13 +253,13 @@ export const AdvancedLendingOrderCard = ({
                     field='Amount'
                     unit={currency}
                     asset={currency}
-                    initialValue={orderAmount.value}
+                    initialValue={orderAmount?.value}
                     onValueChange={v => handleInputChange(BigNumber.from(v))}
                 />
                 <div className='mx-10px flex flex-col gap-6'>
                     <OrderDisplayBox
                         field='Est. Present Value'
-                        value={usdFormat(orderAmount.toUSD(price), 2)}
+                        value={usdFormat(orderAmount?.toUSD(price) ?? 0, 2)}
                     />
                     <OrderDisplayBox
                         field='Future Value'

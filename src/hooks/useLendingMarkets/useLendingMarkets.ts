@@ -14,10 +14,15 @@ export type LendingMarket = {
     isActive: boolean;
     utcOpeningDate: number;
     midUnitPrice: number;
-    isReady: boolean;
     preOpenDate: number;
+    openingUnitPrice: number;
+    isReady: boolean;
+    isOpened: boolean;
+    isMatured: boolean;
+    isPreOrderPeriod: boolean;
+    isItayosePeriod: boolean;
 };
-export type ContractMap = Record<string, LendingMarket>;
+export type ContractMap = Record<number, LendingMarket>;
 
 export const useLendingMarkets = (
     securedFinance: SecuredFinanceClient | undefined
@@ -29,6 +34,7 @@ export const useLendingMarkets = (
 
     useEffect(() => {
         const fetchLendingMarkets = async (ccy: CurrencySymbol) => {
+            const names: string[] = [];
             try {
                 const lendingMarkets = await securedFinance?.getLendingMarkets(
                     toCurrency(ccy)
@@ -45,22 +51,28 @@ export const useLendingMarkets = (
                                         maturity,
                                         openingDate,
                                         midUnitPrice,
+                                        openingUnitPrice,
                                         isReady,
+                                        isOpened,
+                                        isMatured,
+                                        isPreOrderPeriod,
+                                        isItayosePeriod,
                                     }
                                 ) => {
-                                    if (acc[name]) {
+                                    if (names.includes(name)) {
                                         // If the name already exists in the accumulator
                                         // Increment the name by appending a number
                                         let i = 1;
-                                        while (acc[`${name}-${i}`]) {
+                                        while (names.includes(`${name}-${i}`)) {
                                             i++;
                                         }
                                         name = `${name}-${i}`;
                                     }
+                                    names.push(name);
 
                                     return {
                                         ...acc,
-                                        [name]: {
+                                        [maturity.toNumber()]: {
                                             name,
                                             maturity: maturity.toNumber(),
                                             utcOpeningDate:
@@ -70,10 +82,16 @@ export const useLendingMarkets = (
                                             ),
                                             midUnitPrice:
                                                 midUnitPrice.toNumber(),
-                                            isReady,
+                                            openingUnitPrice:
+                                                openingUnitPrice.toNumber(),
                                             preOpenDate:
                                                 openingDate.toNumber() -
                                                 PRE_OPEN_TIME,
+                                            isReady,
+                                            isOpened,
+                                            isMatured,
+                                            isPreOrderPeriod,
+                                            isItayosePeriod,
                                         },
                                     };
                                 },
