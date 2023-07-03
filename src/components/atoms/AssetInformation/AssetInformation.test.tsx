@@ -12,7 +12,7 @@ describe('test AssetInformation component', () => {
         expect(screen.getByText('Collateral Assets')).toBeInTheDocument();
         expect(screen.getByText('ETH')).toBeInTheDocument();
         expect(screen.getByText('$2,000.34')).toBeInTheDocument();
-        expect(screen.getByText('1.2')).toBeInTheDocument();
+        expect(screen.getByText('1.200')).toBeInTheDocument();
         expect(screen.getByText('$2,400.41')).toBeInTheDocument();
 
         expect(screen.getByText('USDC')).toBeInTheDocument();
@@ -37,12 +37,12 @@ describe('test AssetInformation component', () => {
         expect(screen.getByText('Collateral Assets')).toBeInTheDocument();
         expect(screen.getByText('ETH')).toBeInTheDocument();
         expect(screen.getByText('$2,000.34')).toBeInTheDocument();
-        expect(screen.getByText('1.2')).toBeInTheDocument();
+        expect(screen.getByText('1.200')).toBeInTheDocument();
         expect(screen.getByText('$2,400.41')).toBeInTheDocument();
 
         expect(screen.queryByText('USDC')).not.toBeInTheDocument();
-        expect(screen.queryByText('$1.00 USD')).not.toBeInTheDocument();
+        expect(screen.queryByText('$1')).not.toBeInTheDocument();
         expect(screen.queryByText('10 USDC')).not.toBeInTheDocument();
-        expect(screen.queryByText('$10.00')).not.toBeInTheDocument();
+        expect(screen.queryByText('$10')).not.toBeInTheDocument();
     });
 });
