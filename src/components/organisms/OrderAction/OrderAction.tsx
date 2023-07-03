@@ -80,6 +80,18 @@ export const OrderAction = ({
         [amount, availableToBorrow, currency]
     );
 
+    const getButtonText = () => {
+        if (!renderSide) {
+            return 'Place Order';
+        }
+
+        if (side === OrderSide.BORROW) {
+            return 'Borrow';
+        } else {
+            return 'Lend';
+        }
+    };
+
     return (
         <div>
             {account ? (
@@ -96,11 +108,7 @@ export const OrderAction = ({
                         }}
                         data-testid='place-order-button'
                     >
-                        {renderSide
-                            ? side === OrderSide.BORROW
-                                ? 'Borrow'
-                                : 'Lend'
-                            : 'Place Order'}
+                        {getButtonText()}
                     </Button>
                 ) : (
                     <Button

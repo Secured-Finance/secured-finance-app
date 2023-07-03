@@ -102,4 +102,32 @@ describe('OrderAction component', () => {
             screen.getByRole('dialog', { name: 'Confirm Order' })
         ).toBeInTheDocument();
     });
+
+    it('should disable the button if the market is not open or pre-open', async () => {
+        await waitFor(() =>
+            render(<EnoughCollateral />, {
+                preloadedState: {
+                    ...preloadedState,
+                    availableContracts: {
+                        lendingMarkets: {
+                            [CurrencySymbol.USDC]: {
+                                ...preloadedLendingMarkets.availableContracts
+                                    ?.lendingMarkets[CurrencySymbol.USDC],
+                                [dec22Fixture.toNumber()]: {
+                                    ...preloadedLendingMarkets
+                                        .availableContracts?.lendingMarkets[
+                                        CurrencySymbol.USDC
+                                    ][dec22Fixture.toNumber()],
+                                    isItayosePeriod: true,
+                                    isPreOrderPeriod: false,
+                                    isOpened: false,
+                                },
+                            },
+                        },
+                    },
+                },
+            })
+        );
+        expect(screen.getByRole('button')).toBeDisabled();
+    });
 });

@@ -73,9 +73,9 @@ const sep24Fixture = new Maturity(1725148800);
 export const dec24Fixture = new Maturity(1733011200);
 
 export const maturities = {
-    1669852800: {
+    [dec22Fixture.toNumber()]: {
         name: 'DEC22',
-        maturity: 1669852800,
+        maturity: dec22Fixture.toNumber(),
         isActive: true,
         utcOpeningDate: 1677628800,
         midUnitPrice: 9801,
@@ -87,9 +87,9 @@ export const maturities = {
         isPreOrderPeriod: false,
         isItayosePeriod: false,
     },
-    1677628800: {
+    [mar23Fixture.toNumber()]: {
         name: 'MAR23',
-        maturity: 1677628800,
+        maturity: mar23Fixture.toNumber(),
         isActive: true,
         utcOpeningDate: 1677628800,
         midUnitPrice: 9701,
@@ -101,9 +101,9 @@ export const maturities = {
         isPreOrderPeriod: false,
         isItayosePeriod: false,
     },
-    1685577600: {
+    [jun23Fixture.toNumber()]: {
         name: 'JUN23',
-        maturity: 1685577600,
+        maturity: jun23Fixture.toNumber(),
         isActive: true,
         utcOpeningDate: 1677628800,
         midUnitPrice: 9601,
@@ -115,9 +115,9 @@ export const maturities = {
         isPreOrderPeriod: false,
         isItayosePeriod: false,
     },
-    1693526400: {
+    [sep23Fixture.toNumber()]: {
         name: 'SEP23',
-        maturity: 1693526400,
+        maturity: sep23Fixture.toNumber(),
         isActive: true,
         utcOpeningDate: 1677628800,
         midUnitPrice: 9501,
@@ -129,9 +129,9 @@ export const maturities = {
         isPreOrderPeriod: false,
         isItayosePeriod: false,
     },
-    1701388800: {
+    [dec23Fixture.toNumber()]: {
         name: 'DEC23',
-        maturity: 1701388800,
+        maturity: dec23Fixture.toNumber(),
         isActive: true,
         utcOpeningDate: 1677628800,
         midUnitPrice: 9401,
@@ -143,9 +143,9 @@ export const maturities = {
         isPreOrderPeriod: false,
         isItayosePeriod: false,
     },
-    1709251200: {
+    [mar24Fixture.toNumber()]: {
         name: 'MAR24',
-        maturity: 1709251200,
+        maturity: mar24Fixture.toNumber(),
         isActive: true,
         utcOpeningDate: 1677628800,
         midUnitPrice: 9301,
@@ -157,9 +157,9 @@ export const maturities = {
         isPreOrderPeriod: false,
         isItayosePeriod: false,
     },
-    1717200000: {
+    [jun24Fixture.toNumber()]: {
         name: 'JUN24',
-        maturity: 1717200000,
+        maturity: jun24Fixture.toNumber(),
         isActive: true,
         utcOpeningDate: 1677628800,
         midUnitPrice: 9201,
@@ -171,9 +171,9 @@ export const maturities = {
         isPreOrderPeriod: false,
         isItayosePeriod: false,
     },
-    1725148800: {
+    [sep24Fixture.toNumber()]: {
         name: 'SEP24',
-        maturity: 1725148800,
+        maturity: sep24Fixture.toNumber(),
         isActive: true,
         utcOpeningDate: 1677628800,
         midUnitPrice: 9101,
@@ -185,7 +185,7 @@ export const maturities = {
         isPreOrderPeriod: false,
         isItayosePeriod: false,
     },
-    1733011200: {
+    [dec24Fixture.toNumber()]: {
         name: 'DEC24',
         maturity: dec24Fixture.toNumber(),
         isActive: false,

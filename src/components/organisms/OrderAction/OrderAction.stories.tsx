@@ -8,10 +8,16 @@ import {
     withMaturities,
     withWalletProvider,
 } from 'src/../.storybook/decorators';
-import { setAmount, setCurrency, setSide } from 'src/store/landingOrderForm';
+import {
+    setAmount,
+    setCurrency,
+    setMaturity,
+    setSide,
+} from 'src/store/landingOrderForm';
 import {
     collateralBook37,
     collateralBook80,
+    dec22Fixture,
     emptyCollateralBook,
 } from 'src/stories/mocks/fixtures';
 import { CurrencySymbol } from 'src/utils';
@@ -33,6 +39,7 @@ const Template: ComponentStory<typeof OrderAction> = args => {
             dispatch(setCurrency(CurrencySymbol.USDC));
             dispatch(setAmount(BigNumber.from(500000000)));
             dispatch(setSide(OrderSide.BORROW));
+            dispatch(setMaturity(dec22Fixture.toNumber()));
         }, 200);
 
         return () => clearTimeout(timerId);
