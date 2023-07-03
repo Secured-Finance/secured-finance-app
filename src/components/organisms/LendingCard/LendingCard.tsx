@@ -147,7 +147,7 @@ export const LendingCard = ({
                     </span>
                 </div>
 
-                <div className='space-y-[4px]'>
+                <div className='space-y-1'>
                     <AssetSelector
                         options={assetList}
                         selected={selectedAsset}
@@ -159,11 +159,12 @@ export const LendingCard = ({
                             dispatch(setCurrency(v));
                         }}
                     />
-
-                    <ErrorInfo
-                        showError={getAmountValidation()}
-                        errorMessage='Insufficient amount in source'
-                    />
+                    {side === OrderSide.LEND && (
+                        <ErrorInfo
+                            showError={getAmountValidation()}
+                            errorMessage='Insufficient amount in source'
+                        />
+                    )}
                 </div>
 
                 <TermSelector
