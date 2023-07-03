@@ -2,7 +2,7 @@ import { useSelector } from 'react-redux';
 import { CurrencyIcon, CurrencyItem } from 'src/components/atoms';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { RootState } from 'src/store/types';
-import { CurrencySymbol } from 'src/utils';
+import { CurrencySymbol, currencyMap } from 'src/utils';
 
 export interface CollateralInformationProps {
     asset: CurrencySymbol;
@@ -26,6 +26,7 @@ export const CollateralInformation = ({
                     ccy={asset}
                     price={price}
                     align='right'
+                    maxDecimals={currencyMap[asset].roundingDecimal}
                 />
             </div>
         </div>

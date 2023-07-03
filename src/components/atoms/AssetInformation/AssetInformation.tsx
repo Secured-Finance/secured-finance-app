@@ -8,7 +8,11 @@ import {
 import { CollateralBook } from 'src/hooks';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { RootState } from 'src/store/types';
-import { CurrencySymbol, amountFormatterFromBase } from 'src/utils';
+import {
+    CurrencySymbol,
+    amountFormatterFromBase,
+    currencyMap,
+} from 'src/utils';
 
 interface AssetInformationProps {
     header: string;
@@ -63,6 +67,9 @@ export const AssetInformation = ({
                                         ccy={asset}
                                         price={priceList[asset]}
                                         align='right'
+                                        maxDecimals={
+                                            currencyMap[asset].roundingDecimal
+                                        }
                                     />
                                 </div>
                             </div>
