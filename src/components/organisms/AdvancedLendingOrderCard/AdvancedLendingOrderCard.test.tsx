@@ -160,6 +160,16 @@ describe('AdvancedLendingOrderCard Component', () => {
             expect(screen.getByText('Lending Source')).toBeInTheDocument()
         );
         expect(screen.getByText('10,000 USDC')).toBeInTheDocument();
+
+        const walletSourceButton = screen.getByTestId(
+            'wallet-source-selector-button'
+        );
+        fireEvent.click(walletSourceButton);
+
+        expect(screen.getByText('SF Vault')).toBeInTheDocument();
+        const option = screen.getByTestId('option-1');
+        fireEvent.click(option);
+        expect(screen.getByText('0.1 USDC')).toBeInTheDocument();
     });
 
     it('should change amount when slider is moved', async () => {

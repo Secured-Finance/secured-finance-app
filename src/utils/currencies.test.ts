@@ -1,4 +1,10 @@
-import { generateWalletInformation, WalletSource } from './currencies';
+import { WalletSource as Source } from '@secured-finance/sf-client';
+import { BigNumber } from 'ethers';
+import {
+    generateWalletInformation,
+    generateWalletSourceInformation,
+    WalletSource,
+} from './currencies';
 import { CurrencySymbol } from './currencyList';
 
 describe('currencies.generateWalletInformation', () => {
@@ -37,5 +43,20 @@ describe('currencies.generateWalletInformation', () => {
                 },
             ],
         });
+    });
+});
+
+describe('currencies.generateWalletSourceInformation', () => {
+    it('should return walletSourceInformation as WalletSourceOption', () => {
+        const options = generateWalletSourceInformation(
+            CurrencySymbol.USDC,
+            1000,
+            BigNumber.from(500000000)
+        );
+        expect(options).toHaveLength(2);
+        expect(options[0].source).toEqual(Source.METAMASK);
+        expect(options[1].source).toEqual(Source.SF_VAULT);
+        expect(options[0].available).toEqual(1000);
+        expect(options[1].available).toEqual(500);
     });
 });
