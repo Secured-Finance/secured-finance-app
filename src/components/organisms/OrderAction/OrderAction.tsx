@@ -1,13 +1,12 @@
 import { OrderSide } from '@secured-finance/sf-client';
 import { useMemo, useState } from 'react';
-import { shallowEqual, useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Button } from 'src/components/atoms';
 import {
     DepositCollateral,
     PlaceOrder,
     generateCollateralList,
 } from 'src/components/organisms';
-import { emptyOptionList } from 'src/components/pages';
 import { CollateralBook, useOrders } from 'src/hooks';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { MarketPhase, selectMarketPhase } from 'src/store/availableContracts';
@@ -47,22 +46,6 @@ export const OrderAction = ({
     const marketPhase = useSelector((state: RootState) =>
         selectMarketPhase(currency, maturity)(state)
     );
-
-    const lendingContracts = useSelector(
-        (state: RootState) => state.availableContracts.lendingMarkets[currency],
-        shallowEqual
-    );
-
-    const optionList = Object.entries(lendingContracts)
-        .filter(o => o[1].isReady)
-        .map(o => ({
-            label: o[0],
-            value: new Maturity(o[1].maturity),
-        }));
-
-    const maturitiesOptionList = useMemo(() => {
-        return optionList.length > 0 ? optionList : emptyOptionList;
-    }, [optionList]);
 
     const balances = useSelector((state: RootState) =>
         selectCollateralCurrencyBalance(state)
@@ -161,7 +144,6 @@ export const OrderAction = ({
                 side={side}
                 orderType={orderType}
                 walletSource={sourceAccount}
-                maturitiesOptionList={maturitiesOptionList}
             />
 
             <DepositCollateral

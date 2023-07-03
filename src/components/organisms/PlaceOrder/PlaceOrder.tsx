@@ -4,7 +4,7 @@ import { OrderSide, WalletSource } from '@secured-finance/sf-client';
 import { formatDate, getUTCMonthYear } from '@secured-finance/sf-core';
 import { BigNumber } from 'ethers';
 import { useCallback, useMemo, useReducer, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import {
     ExpandIndicator,
     InformationPopover,
@@ -20,9 +20,15 @@ import {
     FailurePanel,
     SuccessPanel,
 } from 'src/components/molecules';
-import { CollateralBook, useEtherscanUrl, useOrderFee } from 'src/hooks';
+import {
+    CollateralBook,
+    useEtherscanUrl,
+    useMaturityOptions,
+    useOrderFee,
+} from 'src/hooks';
 import { setLastMessage } from 'src/store/lastError';
-import { MaturityOptionList, OrderType, PlaceOrderFunction } from 'src/types';
+import { RootState } from 'src/store/types';
+import { OrderType, PlaceOrderFunction } from 'src/types';
 import {
     AddressUtils,
     CurrencySymbol,
@@ -112,7 +118,6 @@ export const PlaceOrder = ({
     orderType,
     assetPrice,
     walletSource,
-    maturitiesOptionList,
 }: {
     collateral: CollateralBook;
     loanValue: LoanValue;
@@ -123,12 +128,22 @@ export const PlaceOrder = ({
     orderType: OrderType;
     assetPrice: number;
     walletSource: WalletSource;
-    maturitiesOptionList: MaturityOptionList;
 } & DialogState) => {
     const etherscanUrl = useEtherscanUrl();
     const [state, dispatch] = useReducer(reducer, stateRecord[1]);
     const [txHash, setTxHash] = useState<string | undefined>();
     const globalDispatch = useDispatch();
+
+    const lendingContracts = useSelector(
+        (state: RootState) =>
+            state.availableContracts.lendingMarkets[orderAmount.currency],
+        shallowEqual
+    );
+
+    const maturityOptionList = useMaturityOptions(
+        lendingContracts,
+        market => market.isOpened
+    );
 
     const [errorMessage, setErrorMessage] = useState(
         'Your order could not be placed'
@@ -189,11 +204,11 @@ export const PlaceOrder = ({
     const fee = useOrderFee(orderAmount.currency);
     const quarter = useMemo(() => {
         return (
-            maturitiesOptionList.findIndex(element =>
+            maturityOptionList.findIndex(element =>
                 element.value.equals(maturity)
             ) + 1
         );
-    }, [maturity, maturitiesOptionList]);
+    }, [maturity, maturityOptionList]);
 
     const onClick = useCallback(
         async (currentStep: Step) => {
