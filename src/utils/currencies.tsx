@@ -64,7 +64,7 @@ export const generateWalletInformation = (
 export const generateWalletSourceInformation = (
     asset: CurrencySymbol,
     metamaskBalance: number,
-    nonCollateralBalance: BigNumber
+    vaultBalance?: BigNumber
 ): WalletSourceOption[] => {
     return [
         {
@@ -75,7 +75,9 @@ export const generateWalletSourceInformation = (
         },
         {
             source: Source.SF_VAULT,
-            available: amountFormatterFromBase[asset](nonCollateralBalance),
+            available: vaultBalance
+                ? amountFormatterFromBase[asset](vaultBalance)
+                : 0,
             asset: asset,
             iconSVG: SFLogoSmall,
         },
