@@ -136,7 +136,7 @@ export const Itayose = () => {
             o => o.maturity === selectedTerm.value.toString()
         );
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [orderList, selectedTerm.value.toNumber]);
+    }, [orderList, selectedTerm.value.toNumber()]);
 
     return (
         <Page title='Pre-Open Order Book'>
