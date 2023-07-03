@@ -16,8 +16,8 @@ const data = Array(20)
     .fill(null)
     .map((_, index) => ({
         name: `Person ${index + 1}`,
-        age: Math.floor(Math.random() * 20) + 10,
-        english: Math.floor(Math.random() * 100),
+        age: 10,
+        english: 80,
         maths: 60,
         science: 95,
         history: 60,
@@ -104,8 +104,8 @@ WithPagination.args = {
                             .fill(null)
                             .map((_, index) => ({
                                 name: `Person ${index + 1}`,
-                                age: Math.floor(Math.random() * 20) + 10,
-                                english: Math.floor(Math.random() * 100),
+                                age: 15,
+                                english: 90,
                                 maths: 60,
                                 science: 95,
                                 history: 60,
