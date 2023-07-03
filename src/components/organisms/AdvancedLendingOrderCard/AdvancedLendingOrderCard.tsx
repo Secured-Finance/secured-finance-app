@@ -28,7 +28,7 @@ import {
 } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
 import { selectAllBalances } from 'src/store/wallet';
-import { MaturityOptionList, OrderType } from 'src/types';
+import { OrderType } from 'src/types';
 import {
     MAX_COVERAGE,
     ZERO_BN,
@@ -46,11 +46,9 @@ import { useWallet } from 'use-wallet';
 
 export const AdvancedLendingOrderCard = ({
     collateralBook,
-    maturitiesOptionList,
     onlyLimitOrder = false,
 }: {
     collateralBook: CollateralBook;
-    maturitiesOptionList: MaturityOptionList;
     onlyLimitOrder?: boolean;
 }) => {
     const {
@@ -273,7 +271,6 @@ export const AdvancedLendingOrderCard = ({
                 <OrderAction
                     loanValue={loanValue}
                     collateralBook={collateralBook}
-                    maturitiesOptionList={maturitiesOptionList}
                 />
 
                 <Separator color='neutral-3'></Separator>

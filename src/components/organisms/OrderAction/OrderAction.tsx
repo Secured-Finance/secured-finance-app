@@ -1,35 +1,33 @@
 import { OrderSide } from '@secured-finance/sf-client';
 import { useMemo, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { Button } from 'src/components/atoms';
 import {
     DepositCollateral,
     PlaceOrder,
     generateCollateralList,
 } from 'src/components/organisms';
+import { emptyOptionList } from 'src/components/pages';
 import { CollateralBook, useOrders } from 'src/hooks';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { setWalletDialogOpen } from 'src/store/interactions';
 import { selectLandingOrderForm } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
 import { selectCollateralCurrencyBalance } from 'src/store/wallet';
-import { MaturityOptionList } from 'src/types';
 import { amountFormatterFromBase } from 'src/utils';
 import { MAX_COVERAGE, computeAvailableToBorrow } from 'src/utils/collateral';
-import { Amount, LoanValue } from 'src/utils/entities';
+import { Amount, LoanValue, Maturity } from 'src/utils/entities';
 import { useWallet } from 'use-wallet';
 
 interface OrderActionProps {
     loanValue: LoanValue;
     collateralBook: CollateralBook;
-    maturitiesOptionList: MaturityOptionList;
     renderSide?: boolean;
 }
 
 export const OrderAction = ({
     loanValue,
     collateralBook,
-    maturitiesOptionList,
     renderSide = false,
 }: OrderActionProps) => {
     const { account } = useWallet();
@@ -51,6 +49,22 @@ export const OrderAction = ({
     } = useSelector((state: RootState) =>
         selectLandingOrderForm(state.landingOrderForm)
     );
+
+    const lendingContracts = useSelector(
+        (state: RootState) => state.availableContracts.lendingMarkets[currency],
+        shallowEqual
+    );
+
+    const optionList = Object.entries(lendingContracts)
+        .filter(o => o[1].isReady)
+        .map(o => ({
+            label: o[0],
+            value: new Maturity(o[1].maturity),
+        }));
+
+    const maturitiesOptionList = useMemo(() => {
+        return optionList.length > 0 ? optionList : emptyOptionList;
+    }, [optionList]);
 
     const balances = useSelector((state: RootState) =>
         selectCollateralCurrencyBalance(state)

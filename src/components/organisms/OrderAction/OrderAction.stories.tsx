@@ -5,15 +5,21 @@ import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import {
     withAssetPrice,
+    withMaturities,
     withWalletProvider,
 } from 'src/../.storybook/decorators';
-import { setAmount, setCurrency, setSide } from 'src/store/landingOrderForm';
+import {
+    setAmount,
+    setCurrency,
+    setMaturity,
+    setSide,
+} from 'src/store/landingOrderForm';
 import {
     collateralBook37,
     collateralBook80,
     dec22Fixture,
     emptyCollateralBook,
-    maturityOptions,
+    mar23Fixture,
 } from 'src/stories/mocks/fixtures';
 import { CurrencySymbol } from 'src/utils';
 import { LoanValue } from 'src/utils/entities';
@@ -25,9 +31,8 @@ export default {
     args: {
         collateralBook: emptyCollateralBook,
         loanValue: LoanValue.fromPrice(9800, dec22Fixture.toNumber()),
-        maturitiesOptionList: maturityOptions,
     },
-    decorators: [withAssetPrice, withWalletProvider],
+    decorators: [withAssetPrice, withWalletProvider, withMaturities],
 } as ComponentMeta<typeof OrderAction>;
 
 const Template: ComponentStory<typeof OrderAction> = args => {
@@ -36,6 +41,7 @@ const Template: ComponentStory<typeof OrderAction> = args => {
         const timerId = setTimeout(() => {
             dispatch(setCurrency(CurrencySymbol.USDC));
             dispatch(setAmount(BigNumber.from(500000000)));
+            dispatch(setMaturity(mar23Fixture));
             dispatch(setSide(OrderSide.BORROW));
         }, 200);
 
