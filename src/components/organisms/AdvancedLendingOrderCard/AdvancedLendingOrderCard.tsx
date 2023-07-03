@@ -234,7 +234,7 @@ export const AdvancedLendingOrderCard = ({
                         />
                         <ErrorInfo
                             showError={isAmountValid}
-                            errorMessage='Insufficient amount'
+                            errorMessage='Insufficient amount in source'
                         />
                     </>
                 )}
