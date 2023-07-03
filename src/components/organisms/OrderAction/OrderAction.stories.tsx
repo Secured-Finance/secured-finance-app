@@ -5,6 +5,7 @@ import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import {
     withAssetPrice,
+    withMaturities,
     withWalletProvider,
 } from 'src/../.storybook/decorators';
 import {
@@ -30,7 +31,7 @@ export default {
         collateralBook: emptyCollateralBook,
         loanValue: LoanValue.fromPrice(9800, dec22Fixture.toNumber()),
     },
-    decorators: [withAssetPrice, withWalletProvider],
+    decorators: [withAssetPrice, withWalletProvider, withMaturities],
 } as ComponentMeta<typeof OrderAction>;
 
 const Template: ComponentStory<typeof OrderAction> = args => {
