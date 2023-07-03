@@ -10,7 +10,7 @@ describe('ErrorInfo Component', () => {
         expect(screen.getByText('This is an error')).toBeInTheDocument();
     });
 
-    it('should not render an error text', () => {
+    it('should not render an error text if showError is false', () => {
         render(<Default showError={false} />);
         expect(screen.queryByText('This is an error')).not.toBeInTheDocument();
     });

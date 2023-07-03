@@ -223,7 +223,7 @@ export const AdvancedLendingOrderCard = ({
                     variant='advanced'
                 />
                 {account && side === OrderSide.LEND && (
-                    <div className='space-y-[4px]'>
+                    <div className='space-y-1'>
                         <WalletSourceSelector
                             optionList={walletSourceList}
                             selected={selectedWalletSource}
