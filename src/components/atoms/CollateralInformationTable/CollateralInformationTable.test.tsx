@@ -11,8 +11,8 @@ describe('test CollateralInformationTable component', () => {
         expect(screen.getByText('Balance')).toBeInTheDocument();
         expect(screen.getByText('ETH')).toBeInTheDocument();
         expect(screen.getByText('Ether')).toBeInTheDocument();
-        expect(screen.getByText('1.2 ETH')).toBeInTheDocument();
+        expect(screen.getByText('1.2')).toBeInTheDocument();
         expect(screen.getAllByText('USDC')).toHaveLength(2);
-        expect(screen.getByText('100 USDC')).toBeInTheDocument();
+        expect(screen.getByText('100')).toBeInTheDocument();
     });
 });
