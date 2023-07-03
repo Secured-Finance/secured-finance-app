@@ -67,6 +67,9 @@ export const AssetInformation = ({
                                         ccy={asset}
                                         price={priceList[asset]}
                                         align='right'
+                                        minDecimals={
+                                            currencyMap[asset].roundingDecimal
+                                        }
                                         maxDecimals={
                                             currencyMap[asset].roundingDecimal
                                         }

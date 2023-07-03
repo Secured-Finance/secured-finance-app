@@ -26,6 +26,7 @@ export const CollateralInformation = ({
                     ccy={asset}
                     price={price}
                     align='right'
+                    minDecimals={currencyMap[asset].roundingDecimal}
                     maxDecimals={currencyMap[asset].roundingDecimal}
                 />
             </div>

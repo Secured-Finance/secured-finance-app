@@ -38,7 +38,7 @@ export const CurrencyItem = ({
 
     const firstLine =
         amount !== undefined
-            ? `${ordinaryFormat(amount, minDecimals, maxDecimals)} ${ccy}`
+            ? `${ordinaryFormat(amount, minDecimals, maxDecimals)}`
             : ccy;
     return (
         <div
