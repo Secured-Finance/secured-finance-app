@@ -1,6 +1,5 @@
 import availableContractsSlice from './reducer';
-import { selectMarket } from './selectors';
 
 export const { updateLendingMarketContract } = availableContractsSlice.actions;
-export { selectMarket };
+export * from './selectors';
 export default availableContractsSlice.reducer;

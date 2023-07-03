@@ -5,7 +5,6 @@ import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import {
     withAssetPrice,
-    withMaturities,
     withWalletProvider,
 } from 'src/../.storybook/decorators';
 import {
@@ -19,7 +18,6 @@ import {
     collateralBook80,
     dec22Fixture,
     emptyCollateralBook,
-    mar23Fixture,
 } from 'src/stories/mocks/fixtures';
 import { CurrencySymbol } from 'src/utils';
 import { LoanValue } from 'src/utils/entities';
@@ -32,7 +30,7 @@ export default {
         collateralBook: emptyCollateralBook,
         loanValue: LoanValue.fromPrice(9800, dec22Fixture.toNumber()),
     },
-    decorators: [withAssetPrice, withWalletProvider, withMaturities],
+    decorators: [withAssetPrice, withWalletProvider],
 } as ComponentMeta<typeof OrderAction>;
 
 const Template: ComponentStory<typeof OrderAction> = args => {
@@ -41,8 +39,8 @@ const Template: ComponentStory<typeof OrderAction> = args => {
         const timerId = setTimeout(() => {
             dispatch(setCurrency(CurrencySymbol.USDC));
             dispatch(setAmount(BigNumber.from(500000000)));
-            dispatch(setMaturity(mar23Fixture));
             dispatch(setSide(OrderSide.BORROW));
+            dispatch(setMaturity(dec22Fixture.toNumber()));
         }, 200);
 
         return () => clearTimeout(timerId);

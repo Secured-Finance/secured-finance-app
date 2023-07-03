@@ -9,7 +9,6 @@ export const {
     setUnitPrice,
     setOrderType,
     setLastView,
-    setMarketPhase,
     setSourceAccount,
 } = landingOrderFormSlice.actions;
 
