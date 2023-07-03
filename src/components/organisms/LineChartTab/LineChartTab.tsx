@@ -1,6 +1,6 @@
 import { OrderSide } from '@secured-finance/sf-client';
 import { useDispatch, useSelector } from 'react-redux';
-import { getData, LineChart } from 'src/components/molecules';
+import { LineChart, getData } from 'src/components/molecules';
 import {
     selectLandingOrderForm,
     setMaturity,
@@ -8,6 +8,7 @@ import {
 import { RootState } from 'src/store/types';
 import { MaturityOptionList } from 'src/types';
 import { Rate } from 'src/utils';
+import { Maturity } from 'src/utils/entities';
 
 export const LineChartTab = ({
     maturitiesOptionList,
@@ -35,9 +36,9 @@ export const LineChartTab = ({
                     data={data}
                     maturitiesOptionList={maturitiesOptionList}
                     handleChartClick={maturity =>
-                        dispatch(setMaturity(maturity))
+                        dispatch(setMaturity(maturity.toNumber()))
                     }
-                    maturity={maturity}
+                    maturity={new Maturity(maturity)}
                 ></LineChart>
             )}
         </div>

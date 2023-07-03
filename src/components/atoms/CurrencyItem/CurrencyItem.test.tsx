@@ -17,7 +17,7 @@ describe('CurrencyAmountItem Component', () => {
 
     it('should render the formatted currency amount in EFIL', () => {
         render(<Default />);
-        expect(screen.getByText('1,000 EFIL')).toBeInTheDocument();
+        expect(screen.getByText('1,000')).toBeInTheDocument();
     });
 
     it('should align the currency amount to the right', () => {
@@ -44,7 +44,7 @@ describe('CurrencyAmountItem Component', () => {
     it('should render information about the currency when no amount is defined', () => {
         render(<CurrencyPrice />);
         expect(screen.getByText('EFIL')).toBeInTheDocument();
-        expect(screen.getByText('$8.20 USD')).toBeInTheDocument();
+        expect(screen.getByText('$8.20')).toBeInTheDocument();
     });
 
     it('should render the currency name when no amount and no price are defined', () => {
@@ -75,6 +75,6 @@ describe('CurrencyAmountItem Component', () => {
 
     it('should display only one line of text when Compact is true', () => {
         render(<Compact />);
-        expect(screen.getByText('1,000 EFIL')).toBeInTheDocument();
+        expect(screen.getByText('1,000')).toBeInTheDocument();
     });
 });

@@ -10,6 +10,7 @@ import {
 import { emptyOptionList } from 'src/components/pages';
 import { CollateralBook, useOrders } from 'src/hooks';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
+import { MarketPhase, selectMarketPhase } from 'src/store/availableContracts';
 import { setWalletDialogOpen } from 'src/store/interactions';
 import { selectLandingOrderForm } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
@@ -38,16 +39,13 @@ export const OrderAction = ({
         useState(false);
     const [openPlaceOrderDialog, setOpenPlaceOrderDialog] = useState(false);
 
-    const {
-        currency,
-        amount,
-        side,
-        marketPhase,
-        maturity,
-        orderType,
-        sourceAccount,
-    } = useSelector((state: RootState) =>
-        selectLandingOrderForm(state.landingOrderForm)
+    const { currency, amount, side, maturity, orderType, sourceAccount } =
+        useSelector((state: RootState) =>
+            selectLandingOrderForm(state.landingOrderForm)
+        );
+
+    const marketPhase = useSelector((state: RootState) =>
+        selectMarketPhase(currency, maturity)(state)
     );
 
     const lendingContracts = useSelector(
@@ -99,6 +97,18 @@ export const OrderAction = ({
         [amount, availableToBorrow, currency]
     );
 
+    const getButtonText = () => {
+        if (!renderSide) {
+            return 'Place Order';
+        }
+
+        if (side === OrderSide.BORROW) {
+            return 'Borrow';
+        } else {
+            return 'Lend';
+        }
+    };
+
     return (
         <div>
             {account ? (
@@ -106,8 +116,8 @@ export const OrderAction = ({
                     <Button
                         disabled={
                             amount.isZero() ||
-                            (marketPhase !== 'Open' &&
-                                marketPhase !== 'PreOrder')
+                            (marketPhase !== MarketPhase.PRE_ORDER &&
+                                marketPhase !== MarketPhase.OPEN)
                         }
                         fullWidth
                         onClick={() => {
@@ -115,11 +125,7 @@ export const OrderAction = ({
                         }}
                         data-testid='place-order-button'
                     >
-                        {renderSide
-                            ? side === OrderSide.BORROW
-                                ? 'Borrow'
-                                : 'Lend'
-                            : 'Place Order'}
+                        {getButtonText()}
                     </Button>
                 ) : (
                     <Button
@@ -141,14 +147,16 @@ export const OrderAction = ({
 
             <PlaceOrder
                 onPlaceOrder={
-                    marketPhase === 'Open' ? placeOrder : placePreOrder
+                    marketPhase === MarketPhase.OPEN
+                        ? placeOrder
+                        : placePreOrder
                 }
                 isOpen={openPlaceOrderDialog}
                 onClose={() => setOpenPlaceOrderDialog(false)}
                 loanValue={loanValue}
                 collateral={collateralBook}
                 assetPrice={assetPriceMap?.[currency]}
-                maturity={maturity}
+                maturity={new Maturity(maturity)}
                 orderAmount={new Amount(amount, currency)}
                 side={side}
                 orderType={orderType}

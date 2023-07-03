@@ -1,6 +1,10 @@
 import { OrderSide } from '@secured-finance/sf-client';
 import { composeStories } from '@storybook/testing-react';
-import { preloadedAssetPrices } from 'src/stories/mocks/fixtures';
+import {
+    dec22Fixture,
+    preloadedAssetPrices,
+    preloadedLendingMarkets,
+} from 'src/stories/mocks/fixtures';
 import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
 import { OrderType } from 'src/types';
 import { CurrencySymbol } from 'src/utils';
@@ -16,13 +20,13 @@ const {
 const preloadedState = {
     landingOrderForm: {
         currency: CurrencySymbol.USDC,
-        maturity: 0,
+        maturity: dec22Fixture.toNumber(),
         side: OrderSide.BORROW,
         amount: '500000000',
         unitPrice: 0,
         orderType: OrderType.LIMIT,
-        marketPhase: 'Open',
     },
+    ...preloadedLendingMarkets,
     ...preloadedAssetPrices,
 };
 
@@ -99,20 +103,31 @@ describe('OrderAction component', () => {
         ).toBeInTheDocument();
     });
 
-    it('should disable the order action if market is not open', async () => {
+    it('should disable the button if the market is not open or pre-open', async () => {
         await waitFor(() =>
             render(<EnoughCollateral />, {
                 preloadedState: {
-                    landingOrderForm: {
-                        ...preloadedState.landingOrderForm,
-                        marketPhase: 'Closed',
-                        side: OrderSide.LEND,
+                    ...preloadedState,
+                    availableContracts: {
+                        lendingMarkets: {
+                            [CurrencySymbol.USDC]: {
+                                ...preloadedLendingMarkets.availableContracts
+                                    ?.lendingMarkets[CurrencySymbol.USDC],
+                                [dec22Fixture.toNumber()]: {
+                                    ...preloadedLendingMarkets
+                                        .availableContracts?.lendingMarkets[
+                                        CurrencySymbol.USDC
+                                    ][dec22Fixture.toNumber()],
+                                    isItayosePeriod: true,
+                                    isPreOrderPeriod: false,
+                                    isOpened: false,
+                                },
+                            },
+                        },
                     },
                 },
             })
         );
-        expect(screen.getByTestId('place-order-button')).toBeInTheDocument();
-        expect(screen.getByText('Place Order')).toBeInTheDocument();
-        expect(screen.getByTestId('place-order-button')).toBeDisabled();
+        expect(screen.getByRole('button')).toBeDisabled();
     });
 });

@@ -70,7 +70,7 @@ export const AdvancedLendingOrderCard = ({
 
     const loanValue = useMemo(() => {
         if (unitPrice && maturity) {
-            return LoanValue.fromPrice(unitPrice, maturity.toNumber());
+            return LoanValue.fromPrice(unitPrice, maturity);
         }
 
         return LoanValue.ZERO;
@@ -242,7 +242,7 @@ export const AdvancedLendingOrderCard = ({
                             value={percentFormat(
                                 LoanValue.fromPrice(
                                     unitPrice,
-                                    maturity.toNumber()
+                                    maturity
                                 ).apr.toNormalizedNumber()
                             )}
                         />

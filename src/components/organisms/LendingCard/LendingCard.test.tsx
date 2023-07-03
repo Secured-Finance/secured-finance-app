@@ -4,6 +4,7 @@ import {
     dec22Fixture,
     mar23Fixture,
     preloadedAssetPrices,
+    preloadedLendingMarkets,
 } from 'src/stories/mocks/fixtures';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
@@ -29,6 +30,7 @@ const DEFAULT_CHOICE = Object.values(currencyMap).reduce<CurrencyInfo>(
 describe('LendingCard Component', () => {
     const preloadedState = {
         ...preloadedAssetPrices,
+        ...preloadedLendingMarkets,
         wallet: {
             balances: { [CurrencySymbol.EFIL]: 10000 },
         },
