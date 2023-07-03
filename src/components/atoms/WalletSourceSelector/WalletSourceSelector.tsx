@@ -112,23 +112,25 @@ export const WalletSourceSelector = ({
                                                     <div>
                                                         <div
                                                             className={classNames(
-                                                                'flex flex-row items-center gap-3 rounded-lg p-2',
+                                                                'flex flex-row items-center justify-between rounded-lg p-2',
                                                                 {
                                                                     'bg-horizonBlue':
                                                                         active,
                                                                 }
                                                             )}
                                                         >
-                                                            <span>
-                                                                <assetObj.iconSVG className='h-6 w-6' />
-                                                            </span>
-                                                            <span className='typography-caption-2 min-w-[100px] leading-4 text-grayScale'>
-                                                                {formatSource(
-                                                                    assetObj.source,
-                                                                    account
-                                                                )}
-                                                            </span>
-                                                            <span className='typography-caption-2 flex w-full max-w-[200px] items-center justify-end leading-4 text-planetaryPurple'>
+                                                            <div className='flex items-center gap-3'>
+                                                                <span>
+                                                                    <assetObj.iconSVG className='h-6 w-6' />
+                                                                </span>
+                                                                <span className='typography-caption-2 leading-4 text-grayScale'>
+                                                                    {formatSource(
+                                                                        assetObj.source,
+                                                                        account
+                                                                    )}
+                                                                </span>
+                                                            </div>
+                                                            <span className='typography-caption-2 leading-4 text-planetaryPurple'>
                                                                 {formatOption(
                                                                     assetObj.available,
                                                                     assetObj.asset
