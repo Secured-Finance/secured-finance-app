@@ -22,4 +22,13 @@ describe('Footer component', () => {
         ).toBeInTheDocument();
         expect(screen.getByText('(stg)')).toBeInTheDocument();
     });
+
+    it('should render storybook as commit hash if .storybook is the commit hash even if USE_PACKAGE_VERSION is set', () => {
+        process.env.NEXT_PUBLIC_USE_PACKAGE_VERSION = 'true';
+        process.env.COMMIT_HASH = '.storybook';
+        render(<Default />);
+        expect(
+            screen.getByText(`Secured Finance v.storybook`)
+        ).toBeInTheDocument();
+    });
 });
