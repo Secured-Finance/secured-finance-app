@@ -18,4 +18,16 @@ describe('useOrderFee hook', () => {
         const fee = result.current as BigNumber;
         expect(fee).toEqual(1);
     });
+
+    it('should divide by 100 the returned value', async () => {
+        mock.getOrderFeeRate.mockResolvedValueOnce(BigNumber.from(50));
+        const { result, waitForNextUpdate } = renderHook(() =>
+            useOrderFee(CurrencySymbol.EFIL)
+        );
+        await act(async () => {
+            await waitForNextUpdate();
+        });
+        const fee = result.current as BigNumber;
+        expect(fee).toEqual(0.5);
+    });
 });

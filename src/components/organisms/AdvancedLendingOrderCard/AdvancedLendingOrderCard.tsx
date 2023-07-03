@@ -238,15 +238,6 @@ export const AdvancedLendingOrderCard = ({
                         decimalPlacesAllowed={2}
                         maxLimit={100}
                     />
-                    {orderType === OrderType.MARKET && (
-                        <div className='mx-10px'>
-                            <OrderDisplayBox
-                                field='Max Slippage'
-                                value='--'
-                                informationText='A bond price limit, triggering a circuit breaker if exceeded within a single block due to price fluctuations.'
-                            />
-                        </div>
-                    )}
                     <div className='mx-10px'>
                         <OrderDisplayBox
                             field='Fixed Rate (APR)'
