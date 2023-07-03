@@ -179,7 +179,18 @@ describe('LendingCard Component', () => {
         fireEvent.click(lendTab);
         expect(screen.getByText('Lending Source')).toBeInTheDocument();
         expect(screen.getByText('10,000 EFIL')).toBeInTheDocument();
+
+        const walletSourceButton = screen.getByTestId(
+            'wallet-source-selector-button'
+        );
+        fireEvent.click(walletSourceButton);
+
+        expect(screen.getByText('SF Vault')).toBeInTheDocument();
+        const option = screen.getByTestId('option-1');
+        fireEvent.click(option);
+        expect(screen.getByText('100 EFIL')).toBeInTheDocument();
     });
+
     it('should show Collateral Usage and Available to Borrow only in Borrow order', async () => {
         await waitFor(() => render(<Default />, { preloadedState }));
         expect(screen.queryByText('Available to borrow')).toBeInTheDocument();
