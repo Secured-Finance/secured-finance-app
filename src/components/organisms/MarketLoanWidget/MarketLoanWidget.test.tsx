@@ -31,10 +31,11 @@ describe('MarketLoanWidget Component', () => {
         expect(screen.getAllByText('Jun 1, 2023').length).toEqual(2);
     });
 
-    it('should dedupe maturity', () => {
+    it('should dedupe maturity and add a "All" option', () => {
         render(<Default />);
         screen.getByRole('button', { name: 'DEC22' }).click();
-        expect(screen.getAllByRole('menuitem').length).toBe(9);
+        expect(screen.getAllByRole('menuitem').length).toBe(10);
+        expect(screen.queryByText('All')).toBeInTheDocument();
     });
 
     it('should display the APR column when the market is open', () => {
