@@ -3,27 +3,36 @@ import ArrowUpSquare from 'src/assets/icons/arrow-up-square.svg';
 import { ordinaryFormat } from 'src/utils';
 
 export interface MarketTabProps {
-    name: string | number;
+    name: string;
     value: string | number;
     source?: string;
+    variant?: 'default' | 'green-name';
+    label?: string;
 }
 
-export const MarketTab = ({ name, value, source }: MarketTabProps) => {
+export const MarketTab = ({
+    name,
+    value,
+    source,
+    variant = 'default',
+    label,
+}: MarketTabProps) => {
     return (
-        <div
-            className={`flex h-fit flex-grow flex-col ${
-                typeof name === 'string' ? 'gap-1' : ''
-            }`}
+        <section
+            className={classNames('flex h-fit flex-grow flex-col', {
+                'gap-1': variant === 'default',
+            })}
+            aria-label={label ?? name}
         >
             <span
                 className={classNames({
                     'typography-button-3 whitespace-nowrap leading-7 text-nebulaTeal':
-                        typeof name === 'number',
+                        variant === 'green-name',
                     'typography-caption-2 whitespace-nowrap text-slateGray':
-                        typeof name === 'string',
+                        variant === 'default',
                 })}
             >
-                {typeof name === 'number' ? name.toFixed(2) : name}
+                {name}
             </span>
             <span
                 className={classNames(
@@ -50,6 +59,6 @@ export const MarketTab = ({ name, value, source }: MarketTabProps) => {
                     </a>
                 )}
             </span>
-        </div>
+        </section>
     );
 };

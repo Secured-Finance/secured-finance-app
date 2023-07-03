@@ -42,7 +42,7 @@ export default {
         },
     },
     args: {
-        loans: [...filMarkets, ...btcMarkets],
+        markets: [...filMarkets, ...btcMarkets],
     },
 } as ComponentMeta<typeof MarketLoanWidget>;
 

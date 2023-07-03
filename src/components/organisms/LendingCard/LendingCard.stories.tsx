@@ -2,6 +2,7 @@ import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { within } from '@storybook/testing-library';
 import {
     withAssetPrice,
+    withMaturities,
     withWalletProvider,
 } from 'src/../.storybook/decorators';
 import {
@@ -24,7 +25,7 @@ export default {
         ),
         maturitiesOptionList: maturityOptions,
     },
-    decorators: [withAssetPrice, withWalletProvider],
+    decorators: [withAssetPrice, withMaturities, withWalletProvider],
     parameters: {
         connected: true,
     },

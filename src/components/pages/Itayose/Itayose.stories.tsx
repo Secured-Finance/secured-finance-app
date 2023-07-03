@@ -14,7 +14,7 @@ export default {
     component: Itayose,
     args: {},
     parameters: {
-        chromatic: { delay: 1000 },
+        chromatic: { delay: 2000 },
         connected: true,
     },
     decorators: [
