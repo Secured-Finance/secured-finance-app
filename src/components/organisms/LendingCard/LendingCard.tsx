@@ -52,7 +52,7 @@ export const LendingCard = ({
         (state: RootState) => selectLandingOrderForm(state.landingOrderForm)
     );
 
-    const [lendAmountValidation, setLendAmountValidation] = useState(false);
+    const [isAmountValid, setIsAmountValid] = useState(false);
 
     const dispatch = useDispatch();
     const { account } = useWallet();
@@ -117,7 +117,7 @@ export const LendingCard = ({
     ]);
 
     const validateAmount = (value: number | undefined): void => {
-        setLendAmountValidation(!!value && value > balanceToLend);
+        setIsAmountValid(!!value && value > balanceToLend);
     };
 
     const handleAmountChange = (v: BigNumber) => {
@@ -188,7 +188,7 @@ export const LendingCard = ({
                             onChange={v => dispatch(setSourceAccount(v))}
                         />
                         <ErrorInfo
-                            showError={lendAmountValidation}
+                            showError={isAmountValid}
                             errorMessage='Insufficient amount'
                         />
                     </>
@@ -206,7 +206,7 @@ export const LendingCard = ({
                 <OrderAction
                     collateralBook={collateralBook}
                     renderSide
-                    validation={lendAmountValidation}
+                    validation={isAmountValid}
                 />
             </div>
         </div>

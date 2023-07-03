@@ -1,5 +1,5 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
-import { within } from '@storybook/testing-library';
+import { userEvent, within } from '@storybook/testing-library';
 import {
     withAssetPrice,
     withWalletProvider,
@@ -41,4 +41,15 @@ Lend.play = async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     const lendTab = canvas.getByText('Lend');
     lendTab.click();
+};
+
+export const FailedAmountValidation = Template.bind({});
+FailedAmountValidation.play = async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const lendTab = canvas.getByText('Lend');
+    lendTab.click();
+    const input = canvas.getByRole('textbox');
+    await userEvent.type(input, '999999999', {
+        delay: 100,
+    });
 };
