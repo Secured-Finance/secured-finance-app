@@ -32,7 +32,10 @@ describe('LendingCard Component', () => {
         ...preloadedAssetPrices,
         ...preloadedLendingMarkets,
         wallet: {
-            balances: { [CurrencySymbol.EFIL]: 10000 },
+            balances: {
+                [CurrencySymbol.EFIL]: 10000,
+                [CurrencySymbol.USDC]: 10000,
+            },
         },
     };
 
@@ -152,10 +155,20 @@ describe('LendingCard Component', () => {
         ).toBeInTheDocument();
     });
 
-    it('should render a disabled button if amount is zero', async () => {
+    it('should render a disabled button if amount is undefined or zero', async () => {
         await waitFor(() => render(<Default />, { preloadedState }));
         const input = screen.getByRole('textbox');
         expect(input).toHaveValue('');
+        expect(screen.getByTestId('place-order-button')).toBeDisabled();
+        await waitFor(() => {
+            fireEvent.change(input, { target: { value: '10' } });
+        });
+
+        expect(screen.getByTestId('place-order-button')).not.toBeDisabled();
+        await waitFor(() => {
+            fireEvent.change(input, { target: { value: '0' } });
+        });
+
         expect(screen.getByTestId('place-order-button')).toBeDisabled();
     });
 
@@ -176,5 +189,28 @@ describe('LendingCard Component', () => {
             screen.queryByText('Available to borrow')
         ).not.toBeInTheDocument();
         expect(screen.queryByText('Collateral Usage')).not.toBeInTheDocument();
+    });
+
+    it('it should disable the action button and show error hint if amount is greater than available amount', async () => {
+        await waitFor(() => render(<Default />, { preloadedState }));
+
+        const lendTab = screen.getByText('Lend');
+        fireEvent.click(lendTab);
+
+        const input = screen.getByRole('textbox');
+        fireEvent.change(input, { target: { value: '200' } });
+
+        const button = screen.getByTestId('place-order-button');
+        expect(button).not.toBeDisabled();
+        expect(
+            screen.queryByText('Insufficient amount in source')
+        ).not.toBeInTheDocument();
+
+        fireEvent.change(input, { target: { value: '20000' } });
+
+        expect(button).toBeDisabled();
+        expect(
+            screen.queryByText('Insufficient amount in source')
+        ).toBeInTheDocument();
     });
 });
