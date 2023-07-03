@@ -37,3 +37,4 @@ export * from './StatsBox';
 export * from './Toggle';
 export * from './TraderProTab';
 export * from './WalletSourceSelector';
+export * from './ErrorInfo';

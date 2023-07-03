@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
     BorrowLendSelector,
     CollateralManagementConciseTab,
+    ErrorInfo,
     NavTab,
     OrderDisplayBox,
     OrderInputBox,
@@ -137,6 +138,11 @@ export const AdvancedLendingOrderCard = ({
         selectedWalletSource.source,
     ]);
 
+    const getAmountValidation = (): boolean => {
+        const value = amountFormatterFromBase[currency](amount);
+        return !!value && value > balanceToLend;
+    };
+
     const handleAmountChange = (percentage: number) => {
         const available =
             side === OrderSide.BORROW ? availableToBorrow : balanceToLend;
@@ -217,12 +223,18 @@ export const AdvancedLendingOrderCard = ({
                     variant='advanced'
                 />
                 {account && side === OrderSide.LEND && (
-                    <WalletSourceSelector
-                        optionList={walletSourceList}
-                        selected={selectedWalletSource}
-                        account={account ?? ''}
-                        onChange={handleWalletSourceChange}
-                    />
+                    <div className='space-y-1'>
+                        <WalletSourceSelector
+                            optionList={walletSourceList}
+                            selected={selectedWalletSource}
+                            account={account ?? ''}
+                            onChange={handleWalletSourceChange}
+                        />
+                        <ErrorInfo
+                            showError={getAmountValidation()}
+                            errorMessage='Insufficient amount in source'
+                        />
+                    </div>
                 )}
                 <div className='flex flex-col gap-[10px]'>
                     <OrderInputBox
@@ -271,6 +283,7 @@ export const AdvancedLendingOrderCard = ({
                 <OrderAction
                     loanValue={loanValue}
                     collateralBook={collateralBook}
+                    validation={getAmountValidation()}
                 />
 
                 <Separator color='neutral-3'></Separator>

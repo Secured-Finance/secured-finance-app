@@ -23,12 +23,14 @@ interface OrderActionProps {
     loanValue?: LoanValue;
     collateralBook: CollateralBook;
     renderSide?: boolean;
+    validation?: boolean;
 }
 
 export const OrderAction = ({
     loanValue,
     collateralBook,
     renderSide = false,
+    validation,
 }: OrderActionProps) => {
     const { account } = useWallet();
     const dispatch = useDispatch();
@@ -98,6 +100,8 @@ export const OrderAction = ({
                 canBorrow || side === OrderSide.LEND ? (
                     <Button
                         disabled={
+                            validation ||
+                            !amount ||
                             amount.isZero() ||
                             (marketPhase !== MarketPhase.PRE_ORDER &&
                                 marketPhase !== MarketPhase.OPEN)

@@ -257,4 +257,34 @@ describe('AdvancedLendingOrderCard Component', () => {
         fireEvent.change(slider, { target: { value: 100 } });
         expect(input).toHaveValue('100');
     });
+
+    it('it should disable the action button and show error hint if amount is greater than available amount', async () => {
+        render(<Default />, {
+            preloadedState: {
+                ...preloadedState,
+                landingOrderForm: {
+                    ...preloadedState.landingOrderForm,
+                    currency: CurrencySymbol.EFIL,
+                    side: OrderSide.LEND,
+                },
+            },
+        });
+        await waitFor(() => {
+            const input = screen.getByRole('textbox', { name: 'Amount' });
+            fireEvent.change(input, { target: { value: '200' } });
+
+            const button = screen.getByTestId('place-order-button');
+            expect(button).not.toBeDisabled();
+            expect(
+                screen.queryByText('Insufficient amount in source')
+            ).not.toBeInTheDocument();
+
+            fireEvent.change(input, { target: { value: '20000' } });
+
+            expect(button).toBeDisabled();
+            expect(
+                screen.queryByText('Insufficient amount in source')
+            ).toBeInTheDocument();
+        });
+    });
 });
