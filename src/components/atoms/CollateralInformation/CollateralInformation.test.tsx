@@ -9,6 +9,6 @@ describe('test CollateralInformation component', () => {
         render(<Default />);
         expect(screen.getByText('ETH')).toBeInTheDocument();
         expect(screen.getByText('Ether')).toBeInTheDocument();
-        expect(screen.getByText('1.2')).toBeInTheDocument();
+        expect(screen.getByText('1.200')).toBeInTheDocument();
     });
 });

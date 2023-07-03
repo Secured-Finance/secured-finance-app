@@ -7,7 +7,7 @@ const { Default } = composeStories(stories);
 
 describe('Advanced Lending Component', () => {
     it('should reset the amount when the user change the currency', async () => {
-        const { store, unmount } = await waitFor(() =>
+        const { store } = await waitFor(() =>
             render(<Default />, {
                 apolloMocks: Default.parameters?.apolloClient.mocks,
             })
@@ -23,12 +23,10 @@ describe('Advanced Lending Component', () => {
         fireEvent.click(screen.getByRole('menuitem', { name: 'USDC' }));
         expect(store.getState().landingOrderForm.amount).toEqual('0');
         expect(screen.getByRole('textbox', { name: 'Amount' })).toHaveValue('');
-
-        unmount();
     });
 
     it('should reset the amount when the user change the maturity', async () => {
-        const { store, unmount } = await waitFor(() =>
+        const { store } = await waitFor(() =>
             render(<Default />, {
                 apolloMocks: Default.parameters?.apolloClient.mocks,
             })
@@ -44,23 +42,20 @@ describe('Advanced Lending Component', () => {
         fireEvent.click(screen.getByText('MAR23'));
         expect(store.getState().landingOrderForm.amount).toEqual('0');
         expect(screen.getByRole('textbox', { name: 'Amount' })).toHaveValue('');
-
-        unmount();
     });
 
     it('should show the maturity as a date for the selected maturity', async () => {
-        const { unmount } = render(<Default />, {
+        render(<Default />, {
             apolloMocks: Default.parameters?.apolloClient.mocks,
         });
         expect(
             await screen.findByRole('button', { name: 'DEC22' })
         ).toBeInTheDocument();
         expect(screen.getByText('Maturity Dec 1, 2022')).toBeInTheDocument();
-        unmount();
     });
 
     it('should display the last trades in the top bar', async () => {
-        const { unmount } = render(<Default />, {
+        render(<Default />, {
             apolloMocks: Default.parameters?.apolloClient.mocks,
         });
 
@@ -82,12 +77,10 @@ describe('Advanced Lending Component', () => {
         expect(
             within(screen.getByLabelText('24h Volume')).getByText('0')
         ).toBeInTheDocument();
-
-        unmount();
     });
 
     it('should display the opening unit price as the only trade if there is no last trades', async () => {
-        const { unmount } = await waitFor(() =>
+        await waitFor(() =>
             render(<Default />, {
                 apolloMocks: emptyTransaction as never,
             })
@@ -111,7 +104,5 @@ describe('Advanced Lending Component', () => {
         expect(
             within(screen.getByLabelText('24h Volume')).getByText('-')
         ).toBeInTheDocument();
-
-        unmount();
     });
 });

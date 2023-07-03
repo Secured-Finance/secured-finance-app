@@ -3,6 +3,7 @@
 // expect(element).toHaveTextContent(/react/i)
 // learn more: https://github.com/testing-library/jest-dom
 import '@testing-library/jest-dom';
+import { cleanup } from '@testing-library/react';
 import 'jest-canvas-mock';
 import failOnConsole from 'jest-fail-on-console';
 import timemachine from 'timemachine';
@@ -20,4 +21,8 @@ afterAll(() => {
     global.gc && global.gc();
     jest.clearAllMocks();
     jest.clearAllTimers();
+});
+
+afterEach(() => {
+    cleanup();
 });

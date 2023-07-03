@@ -105,6 +105,8 @@ export const amountColumnDefinition = <T extends AmountColumnType>(
                             color={options.color ? color : undefined}
                             compact={options.compact}
                             fontSize={options.fontSize}
+                            minDecimals={currencyMap[ccy].roundingDecimal}
+                            maxDecimals={currencyMap[ccy].roundingDecimal}
                         />
                     </div>
                 </div>
@@ -155,6 +157,8 @@ export const forwardValueColumnDefinition = <T extends AmountColumnType>(
                             price={options.priceList?.[ccy]}
                             color={options.color ? color : undefined}
                             compact={options.compact}
+                            minDecimals={currencyMap[ccy].roundingDecimal}
+                            maxDecimals={currencyMap[ccy].roundingDecimal}
                         />
                     </div>
                 </div>

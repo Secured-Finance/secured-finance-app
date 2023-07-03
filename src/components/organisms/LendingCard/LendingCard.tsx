@@ -2,7 +2,11 @@ import { OrderSide, WalletSource } from '@secured-finance/sf-client';
 import { BigNumber } from 'ethers';
 import { useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { BorrowLendSelector, WalletSourceSelector } from 'src/components/atoms';
+import {
+    BorrowLendSelector,
+    ErrorInfo,
+    WalletSourceSelector,
+} from 'src/components/atoms';
 import {
     AssetSelector,
     CollateralUsageSection,
@@ -24,6 +28,7 @@ import { selectAllBalances } from 'src/store/wallet';
 import { MaturityOptionList } from 'src/types';
 import {
     CurrencySymbol,
+    amountFormatterFromBase,
     amountFormatterToBase,
     formatLoanValue,
     generateWalletSourceInformation,
@@ -43,7 +48,7 @@ export const LendingCard = ({
     marketValue: LoanValue;
     maturitiesOptionList: MaturityOptionList;
 }) => {
-    const { currency, maturity, side, sourceAccount } = useSelector(
+    const { currency, maturity, side, sourceAccount, amount } = useSelector(
         (state: RootState) => selectLandingOrderForm(state.landingOrderForm)
     );
 
@@ -96,6 +101,24 @@ export const LendingCard = ({
         return assetList.find(option => option.value === currency);
     }, [currency, assetList]);
 
+    const balanceToLend = useMemo(() => {
+        return selectedWalletSource.source === WalletSource.METAMASK
+            ? balanceRecord[currency]
+            : amountFormatterFromBase[currency](
+                  collateralBook.nonCollateral[currency] ?? BigNumber.from(0)
+              );
+    }, [
+        balanceRecord,
+        collateralBook.nonCollateral,
+        currency,
+        selectedWalletSource.source,
+    ]);
+
+    const getAmountValidation = (): boolean => {
+        const value = amountFormatterFromBase[currency](amount);
+        return !!value && value > balanceToLend;
+    };
+
     return (
         <div className='w-80 flex-col space-y-6 rounded-b-xl border border-panelStroke bg-transparent pb-6 shadow-deep'>
             <BorrowLendSelector
@@ -120,17 +143,25 @@ export const LendingCard = ({
                     </span>
                 </div>
 
-                <AssetSelector
-                    options={assetList}
-                    selected={selectedAsset}
-                    transformLabel={(v: string) => shortNames[v]}
-                    priceList={assetPriceMap}
-                    onAmountChange={(v: BigNumber) => dispatch(setAmount(v))}
-                    amountFormatterMap={amountFormatterToBase}
-                    onAssetChange={(v: CurrencySymbol) => {
-                        dispatch(setCurrency(v));
-                    }}
-                />
+                <div className='space-y-1'>
+                    <AssetSelector
+                        options={assetList}
+                        selected={selectedAsset}
+                        transformLabel={(v: string) => shortNames[v]}
+                        priceList={assetPriceMap}
+                        onAmountChange={v => dispatch(setAmount(v))}
+                        amountFormatterMap={amountFormatterToBase}
+                        onAssetChange={(v: CurrencySymbol) => {
+                            dispatch(setCurrency(v));
+                        }}
+                    />
+                    {side === OrderSide.LEND && (
+                        <ErrorInfo
+                            showError={getAmountValidation()}
+                            errorMessage='Insufficient amount in source'
+                        />
+                    )}
+                </div>
 
                 <TermSelector
                     options={maturitiesOptionList.map(o => ({
@@ -172,6 +203,7 @@ export const LendingCard = ({
                     collateralBook={collateralBook}
                     loanValue={marketValue}
                     renderSide
+                    validation={getAmountValidation()}
                 />
             </div>
         </div>
