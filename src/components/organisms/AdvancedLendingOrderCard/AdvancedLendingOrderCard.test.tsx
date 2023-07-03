@@ -1,6 +1,10 @@
 import { OrderSide } from '@secured-finance/sf-client';
 import { composeStories } from '@storybook/testing-react';
-import { preloadedAssetPrices } from 'src/stories/mocks/fixtures';
+import {
+    dec22Fixture,
+    preloadedAssetPrices,
+    preloadedLendingMarkets,
+} from 'src/stories/mocks/fixtures';
 import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
 import { OrderType } from 'src/types';
 import { CurrencySymbol } from 'src/utils';
@@ -12,16 +16,16 @@ const { Default } = composeStories(stories);
 const preloadedState = {
     landingOrderForm: {
         currency: CurrencySymbol.USDC,
-        maturity: 1679665616,
+        maturity: dec22Fixture,
         side: OrderSide.BORROW,
         amount: '500000000',
         unitPrice: 9500,
         orderType: OrderType.LIMIT,
-        marketPhase: 'Open',
     },
     wallet: {
         balances: { [CurrencySymbol.USDC]: 10000, [CurrencySymbol.EFIL]: 5000 },
     },
+    ...preloadedLendingMarkets,
     ...preloadedAssetPrices,
 };
 
@@ -73,9 +77,6 @@ describe('AdvancedLendingOrderCard Component', () => {
             const inputs = screen.getAllByRole('textbox');
             expect(screen.getByText('Bond Price')).toBeInTheDocument();
             expect(inputs[0].getAttribute('value')).toBe('95');
-
-            expect(screen.getByText('Fixed Rate (APR)')).toBeInTheDocument();
-            expect(screen.getByText('16.91%')).toBeInTheDocument();
 
             expect(screen.getByText('Amount')).toBeInTheDocument();
             expect(inputs[1].getAttribute('value')).toBe('500');

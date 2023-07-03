@@ -18,9 +18,10 @@ import {
 } from 'src/components/organisms';
 import { Page } from 'src/components/templates';
 import { TwoColumnsWithTopBar } from 'src/components/templates/TwoColumnsWithTopBar';
-import { useCollateralBook, useOrderList } from 'src/hooks';
+import { useCollateralBook, useMaturityOptions, useOrderList } from 'src/hooks';
 import { useOrderbook } from 'src/hooks/useOrderbook';
 import { getAssetPrice } from 'src/store/assetPrices/selectors';
+import { MarketPhase, selectMarketPhase } from 'src/store/availableContracts';
 import {
     selectLandingOrderForm,
     setAmount,
@@ -32,7 +33,6 @@ import { CurrencySymbol, getCurrencyMapAsOptions, usdFormat } from 'src/utils';
 import { countdown } from 'src/utils/date';
 import { Maturity } from 'src/utils/entities';
 import { useWallet } from 'use-wallet';
-import { emptyOptionList } from '..';
 
 const Toolbar = ({
     selectedAsset,
@@ -72,7 +72,7 @@ const Toolbar = ({
                     selected={selected}
                     onAssetChange={handleAssetChange}
                     onTermChange={v => {
-                        dispatch(setMaturity(new Maturity(v)));
+                        dispatch(setMaturity(Number(v)));
                     }}
                 />
                 <div className='flex w-full flex-row items-center justify-between'>
@@ -96,8 +96,8 @@ const Toolbar = ({
 export const Itayose = () => {
     const { account } = useWallet();
 
-    const { currency, maturity, marketPhase } = useSelector(
-        (state: RootState) => selectLandingOrderForm(state.landingOrderForm)
+    const { currency, maturity } = useSelector((state: RootState) =>
+        selectLandingOrderForm(state.landingOrderForm)
     );
 
     const lendingContracts = useSelector(
@@ -105,21 +105,20 @@ export const Itayose = () => {
         shallowEqual
     );
 
-    const optionList = Object.entries(lendingContracts)
-        .filter(o => !o[1].isReady)
-        .map(o => ({
-            label: o[0],
-            value: new Maturity(o[1].maturity),
-        }));
+    const marketPhase = useSelector((state: RootState) =>
+        selectMarketPhase(currency, maturity)(state)
+    );
 
-    const maturityOptionList = useMemo(() => {
-        return optionList.length > 0 ? optionList : emptyOptionList;
-    }, [optionList]);
+    const maturityOptionList = useMaturityOptions(
+        lendingContracts,
+        market => market.isPreOrderPeriod || market.isItayosePeriod
+    );
 
     const selectedTerm = useMemo(() => {
         return (
-            maturityOptionList.find(option => option.value.equals(maturity)) ||
-            maturityOptionList[0]
+            maturityOptionList.find(option =>
+                option.value.equals(new Maturity(maturity))
+            ) || maturityOptionList[0]
         );
     }, [maturity, maturityOptionList]);
 
@@ -137,7 +136,7 @@ export const Itayose = () => {
             o => o.maturity === selectedTerm.value.toString()
         );
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [orderList, selectedTerm.value.toNumber]);
+    }, [orderList, selectedTerm.value.toNumber()]);
 
     return (
         <Page title='Pre-Open Order Book'>
@@ -145,14 +144,18 @@ export const Itayose = () => {
                 topBar={
                     <Toolbar
                         date={
-                            marketPhase === 'PreOrder'
-                                ? lendingContracts[selectedTerm.label]
-                                      ?.preOpenDate
-                                : lendingContracts[selectedTerm.label]
-                                      ?.utcOpeningDate
+                            marketPhase === MarketPhase.PRE_ORDER
+                                ? lendingContracts[
+                                      selectedTerm.value.toNumber()
+                                  ]?.preOpenDate
+                                : lendingContracts[
+                                      selectedTerm.value.toNumber()
+                                  ]?.utcOpeningDate
                         }
                         nextMarketPhase={
-                            marketPhase === 'PreOrder' ? 'PreOrder' : 'Open in'
+                            marketPhase === MarketPhase.PRE_ORDER
+                                ? 'PreOrder'
+                                : 'Open in'
                         }
                         assetList={assetList}
                         selectedAsset={selectedAsset}

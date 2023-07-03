@@ -14,6 +14,7 @@ import {
     useCollateralBook,
     useGraphClientHook,
     useLoanValues,
+    useMaturityOptions,
 } from 'src/hooks';
 import {
     selectLandingOrderForm,
@@ -44,18 +45,15 @@ export const Landing = ({ view }: { view?: ViewType }) => {
     const dispatch = useDispatch();
 
     const collateralBook = useCollateralBook(account);
-
-    const optionList = Object.entries(lendingContracts)
-        .filter(o => o[1].isReady)
-        .map(o => ({
-            label: o[0],
-            value: new Maturity(o[1].maturity),
-        }));
+    const maturityOptionList = useMaturityOptions(
+        lendingContracts,
+        market => market.isOpened
+    );
 
     const unitPrices = useLoanValues(
         currency,
         side === OrderSide.BORROW ? RateType.Borrow : RateType.Lend,
-        optionList.map(o => o.value)
+        maturityOptionList.map(o => o.value)
     );
 
     const marketValue = useMemo(() => {
@@ -66,7 +64,7 @@ export const Landing = ({ view }: { view?: ViewType }) => {
         const value =
             unitPrices[
                 Object.values(lendingContracts).findIndex(
-                    v => v.maturity === maturity.toNumber()
+                    v => v.maturity === maturity
                 )
             ];
         if (!value) {
@@ -75,10 +73,6 @@ export const Landing = ({ view }: { view?: ViewType }) => {
 
         return value;
     }, [unitPrices, lendingContracts, maturity]);
-
-    const maturityOptionList = useMemo(() => {
-        return optionList.length > 0 ? optionList : emptyOptionList;
-    }, [optionList]);
 
     const dailyVolumes = useGraphClientHook(
         {}, // no variables
