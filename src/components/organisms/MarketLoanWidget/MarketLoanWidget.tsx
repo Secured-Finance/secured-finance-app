@@ -166,7 +166,7 @@ export const MarketLoanWidget = ({ markets }: { markets: Market[] }) => {
                                 if (loan.maturity === maturity) {
                                     if (
                                         loan.isPreOrderPeriod ||
-                                        loan.isPreOrderPeriod
+                                        loan.isItayosePeriod
                                     ) {
                                         setIsItayoseMarket(true);
                                         break;
