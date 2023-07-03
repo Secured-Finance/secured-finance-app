@@ -160,6 +160,12 @@ export const LendingCard = ({
                         dispatch(setCurrency(v));
                     }}
                 />
+                {side === OrderSide.LEND && (
+                    <ErrorInfo
+                        showError={isAmountValid}
+                        errorMessage='Insufficient amount in source'
+                    />
+                )}
 
                 <TermSelector
                     options={maturitiesOptionList.map(o => ({
@@ -180,18 +186,12 @@ export const LendingCard = ({
                 />
 
                 {account && side === OrderSide.LEND && (
-                    <>
-                        <WalletSourceSelector
-                            optionList={walletSourceList}
-                            selected={selectedWalletSource}
-                            account={account ?? ''}
-                            onChange={v => dispatch(setSourceAccount(v))}
-                        />
-                        <ErrorInfo
-                            showError={isAmountValid}
-                            errorMessage='Insufficient amount'
-                        />
-                    </>
+                    <WalletSourceSelector
+                        optionList={walletSourceList}
+                        selected={selectedWalletSource}
+                        account={account ?? ''}
+                        onChange={v => dispatch(setSourceAccount(v))}
+                    />
                 )}
 
                 {side === OrderSide.BORROW && (

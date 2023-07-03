@@ -201,12 +201,14 @@ describe('LendingCard Component', () => {
         const button = screen.getByTestId('place-order-button');
         expect(button).not.toBeDisabled();
         expect(
-            screen.queryByText('Insufficient amount')
+            screen.queryByText('Insufficient amount in source')
         ).not.toBeInTheDocument();
 
         fireEvent.change(input, { target: { value: '20000' } });
 
         expect(button).toBeDisabled();
-        expect(screen.queryByText('Insufficient amount')).toBeInTheDocument();
+        expect(
+            screen.queryByText('Insufficient amount in source')
+        ).toBeInTheDocument();
     });
 });

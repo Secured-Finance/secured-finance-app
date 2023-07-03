@@ -17,7 +17,9 @@ export const ErrorInfo = ({
                 'justify-end': align === 'right',
             })}
         >
-            <p className='text-secondary text-red'>{errorMessage}</p>
+            <p className='typography-caption-2 text-galacticOrange'>
+                {errorMessage}
+            </p>
         </div>
     ) : null;
 };
