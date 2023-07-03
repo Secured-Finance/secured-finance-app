@@ -119,10 +119,6 @@ export const LendingCard = ({
         return !!value && value > balanceToLend;
     };
 
-    const handleAmountChange = (v: BigNumber) => {
-        dispatch(setAmount(v));
-    };
-
     return (
         <div className='w-80 flex-col space-y-6 rounded-b-xl border border-panelStroke bg-transparent pb-6 shadow-deep'>
             <BorrowLendSelector
@@ -153,7 +149,7 @@ export const LendingCard = ({
                         selected={selectedAsset}
                         transformLabel={(v: string) => shortNames[v]}
                         priceList={assetPriceMap}
-                        onAmountChange={handleAmountChange}
+                        onAmountChange={v => dispatch(setAmount(v))}
                         amountFormatterMap={amountFormatterToBase}
                         onAssetChange={(v: CurrencySymbol) => {
                             dispatch(setCurrency(v));
