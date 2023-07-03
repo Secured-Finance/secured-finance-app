@@ -10,7 +10,7 @@ describe('CoreTable Component', () => {
         render(<Default />);
     });
 
-    it('should render a CoreTable with 2 rows and a header row', () => {
+    it('should render a CoreTable with 20 rows and a header row', () => {
         render(<Default />);
         expect(screen.getAllByRole('row').length).toBe(21);
         expect(screen.getAllByTestId('core-table-row').length).toBe(20);
@@ -79,7 +79,7 @@ describe('CoreTable Component', () => {
         expect(header).not.toHaveClass('bg-gunMetal/100');
     });
 
-    it('should not load more data when scrolled if getMoreData function is available', async () => {
+    it('should not load more data when scrolled if getMoreData function is not available', async () => {
         render(<Default />);
         expect(screen.getAllByTestId('core-table-row')).toHaveLength(20);
         await act(async () => {
