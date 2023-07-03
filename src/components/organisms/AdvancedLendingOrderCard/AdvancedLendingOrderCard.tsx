@@ -65,7 +65,7 @@ export const AdvancedLendingOrderCard = ({
     );
     const [sliderValue, setSliderValue] = useState(0.0);
 
-    const [lendAmountValidation, setLendAmountValidation] = useState(false);
+    const [isAmountValid, setIsAmountValid] = useState(false);
 
     const balanceRecord = useSelector((state: RootState) =>
         selectAllBalances(state)
@@ -141,7 +141,7 @@ export const AdvancedLendingOrderCard = ({
     ]);
 
     const validateAmount = (value: number | undefined): void => {
-        setLendAmountValidation(!!value && value > balanceToLend);
+        setIsAmountValid(!!value && value > balanceToLend);
     };
 
     const handleAmountChange = (percentage: number) => {
@@ -233,7 +233,7 @@ export const AdvancedLendingOrderCard = ({
                             onChange={handleWalletSourceChange}
                         />
                         <ErrorInfo
-                            showError={lendAmountValidation}
+                            showError={isAmountValid}
                             errorMessage='Insufficient amount'
                         />
                     </>
@@ -285,7 +285,7 @@ export const AdvancedLendingOrderCard = ({
                 <OrderAction
                     loanValue={loanValue}
                     collateralBook={collateralBook}
-                    validation={lendAmountValidation}
+                    validation={isAmountValid}
                 />
 
                 <Separator color='neutral-3'></Separator>
