@@ -171,7 +171,6 @@ export const LendingCard = ({
                 <OrderAction
                     collateralBook={collateralBook}
                     loanValue={marketValue}
-                    maturitiesOptionList={maturitiesOptionList}
                     renderSide
                 />
             </div>

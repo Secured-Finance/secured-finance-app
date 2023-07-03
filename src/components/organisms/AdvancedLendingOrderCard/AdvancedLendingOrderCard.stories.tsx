@@ -4,7 +4,7 @@ import {
     withAssetPrice,
     withWalletProvider,
 } from 'src/../.storybook/decorators';
-import { collateralBook37, maturityOptions } from 'src/stories/mocks/fixtures';
+import { collateralBook37 } from 'src/stories/mocks/fixtures';
 import { AdvancedLendingOrderCard } from './AdvancedLendingOrderCard';
 
 export default {
@@ -12,7 +12,6 @@ export default {
     component: AdvancedLendingOrderCard,
     args: {
         collateralBook: collateralBook37,
-        maturitiesOptionList: maturityOptions,
     },
     parameters: {
         connected: true,

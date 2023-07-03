@@ -171,7 +171,6 @@ export const Itayose = () => {
                 <div>
                     <AdvancedLendingOrderCard
                         collateralBook={collateralBook}
-                        maturitiesOptionList={maturityOptionList}
                         onlyLimitOrder
                     />
                 </div>
