@@ -5,7 +5,7 @@ import {
     preloadedLendingMarkets,
 } from 'src/stories/mocks/fixtures';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
-import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
+import { fireEvent, render, screen, waitFor, within } from 'src/test-utils.js';
 import { OrderType } from 'src/types';
 import { CurrencySymbol } from 'src/utils';
 import timemachine from 'timemachine';
@@ -32,11 +32,15 @@ jest.mock('src/hooks/useSecuredFinance', () => () => mock);
 
 const preloadedState = { ...preloadedBalances, ...preloadedLendingMarkets };
 
+beforeAll(() => {
+    timemachine.reset();
+    timemachine.config({
+        dateString: '2021-12-01T11:00:00.00Z',
+    });
+});
+
 describe('Landing Component', () => {
     it('should change the rate when the user changes the maturity', async () => {
-        timemachine.config({
-            dateString: '2022-02-01T11:00:00.00Z',
-        });
         render(<Default />, {
             apolloMocks: Default.parameters?.apolloClient.mocks,
             preloadedState: {
@@ -52,20 +56,14 @@ describe('Landing Component', () => {
                 },
             },
         });
-
-        await waitFor(() => {
-            expect(screen.getByTestId('market-rate')).toHaveTextContent(
-                '3.92%'
-            );
-        });
+        expect(
+            await within(screen.getByTestId('market-rate')).findByText('3.26%')
+        ).toBeInTheDocument();
 
         fireEvent.click(screen.getByRole('button', { name: 'DEC22' }));
         fireEvent.click(screen.getByText('MAR23'));
-        expect(screen.getByTestId('market-rate')).toHaveTextContent('3.04%');
-        timemachine.config({
-            dateString: '2021-12-01T11:00:00.00Z',
-        });
-    }, 10000); //TODO: TEST THROWS TIMEOUT EXCEEDED WARNING ON GITHUB ACTIONS
+        expect(screen.getByTestId('market-rate')).toHaveTextContent('2.62%');
+    });
 
     it('should select the limit order type when the user change to advance mode', async () => {
         waitFor(() => {
@@ -223,8 +221,9 @@ describe('Landing Component', () => {
                 apolloMocks: Default.parameters?.apolloClient.mocks,
                 preloadedState,
             });
-            fireEvent.click(screen.getByText('Advanced'));
         });
+        fireEvent.click(screen.getByText('Advanced'));
+        expect(await screen.findByText('DEC22')).toBeInTheDocument();
         expect(screen.getByRole('slider')).toHaveValue('0');
         fireEvent.click(screen.getByRole('radio', { name: 'Lend' }));
         fireEvent.change(screen.getByRole('textbox', { name: 'Amount' }), {
@@ -243,8 +242,9 @@ describe('Landing Component', () => {
                 apolloMocks: Default.parameters?.apolloClient.mocks,
                 preloadedState,
             });
-            fireEvent.click(screen.getByText('Advanced'));
         });
+        fireEvent.click(screen.getByText('Advanced'));
+        expect(await screen.findByText('DEC22')).toBeInTheDocument();
         expect(screen.getByRole('slider')).toHaveValue('0');
         fireEvent.change(screen.getByRole('textbox', { name: 'Amount' }), {
             target: { value: '100' },
