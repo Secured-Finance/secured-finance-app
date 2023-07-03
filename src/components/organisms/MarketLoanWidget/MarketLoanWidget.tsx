@@ -34,17 +34,27 @@ export const MarketLoanWidget = ({ markets }: { markets: Market[] }) => {
         CurrencySymbol | ''
     >();
     const [selectedTerm, setSelectedTerm] = useState<number>();
-    const [isItayoseMarket, setIsItayoseMarket] = useState(false);
-    const filteredLoans = useMemo(
-        () =>
-            markets.filter(
-                loan =>
-                    (!selectedCurrency || loan.ccy === selectedCurrency) &&
-                    (!selectedTerm || loan.maturity === selectedTerm)
-            ),
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-        [JSON.stringify(markets), selectedCurrency, selectedTerm]
-    );
+    const columnToHide = useMemo(() => {
+        for (const market of markets) {
+            if (market.maturity !== selectedTerm) continue;
+            if (market.isPreOrderPeriod || market.isItayosePeriod) {
+                return ['apr'];
+            }
+        }
+        return ['openingDate'];
+    }, [markets, selectedTerm]);
+
+    const filteredMarkets = useMemo(() => {
+        if (!selectedCurrency && !selectedTerm) {
+            return markets;
+        }
+
+        return markets.filter(
+            market =>
+                (!selectedCurrency || market.ccy === selectedCurrency) &&
+                (!selectedTerm || market.maturity === selectedTerm)
+        );
+    }, [markets, selectedCurrency, selectedTerm]);
 
     const maturityOptionList = useMaturityOptions(markets);
 
@@ -151,10 +161,13 @@ export const MarketLoanWidget = ({ markets }: { markets: Market[] }) => {
                         onChange={v => setSelectedCurrency(toCurrencySymbol(v))}
                     />
                     <DropdownSelector
-                        optionList={maturityOptionList.map(o => ({
-                            label: o.label,
-                            value: o.value.toString(),
-                        }))}
+                        optionList={[
+                            { label: 'All', value: '' },
+                            ...maturityOptionList.map(o => ({
+                                label: o.label,
+                                value: o.value.toString(),
+                            })),
+                        ]}
                         selected={{
                             ...maturityOptionList[0],
                             value: maturityOptionList[0].value.toString(),
@@ -162,18 +175,6 @@ export const MarketLoanWidget = ({ markets }: { markets: Market[] }) => {
                         onChange={v => {
                             const maturity = parseInt(v);
                             setSelectedTerm(maturity);
-                            for (const loan of markets) {
-                                if (loan.maturity === maturity) {
-                                    if (
-                                        loan.isPreOrderPeriod ||
-                                        loan.isItayosePeriod
-                                    ) {
-                                        setIsItayoseMarket(true);
-                                        break;
-                                    }
-                                }
-                                setIsItayoseMarket(false);
-                            }
                         }}
                     />
                 </div>
@@ -181,12 +182,10 @@ export const MarketLoanWidget = ({ markets }: { markets: Market[] }) => {
             <div className='p-6 pt-3'>
                 <CoreTable
                     columns={columns}
-                    data={filteredLoans}
+                    data={filteredMarkets}
                     options={{
                         border: false,
-                        hideColumnIds: isItayoseMarket
-                            ? ['apr']
-                            : ['openingDate'],
+                        hideColumnIds: columnToHide,
                         stickyColumns: new Set([3]),
                     }}
                 />
