@@ -2,7 +2,7 @@ import packageJson from 'package.json';
 import { getCommitHash, getEnvShort, getUsePackageVersion } from 'src/utils';
 
 const getVersion = () => {
-    if (getUsePackageVersion()) {
+    if (getUsePackageVersion() && getCommitHash() !== '.storybook') {
         return packageJson.version;
     }
 
