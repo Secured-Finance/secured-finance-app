@@ -4,9 +4,9 @@ import { CellContext, createColumnHelper } from '@tanstack/react-table';
 import { useRouter } from 'next/router';
 import { useCallback, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { Button, DropdownSelector, NavTab, Option } from 'src/components/atoms';
+import { Button, DropdownSelector, NavTab } from 'src/components/atoms';
 import { CoreTable } from 'src/components/molecules';
-import { LendingMarket } from 'src/hooks';
+import { LendingMarket, useMaturityOptions } from 'src/hooks';
 import { setCurrency, setMaturity } from 'src/store/landingOrderForm';
 import {
     CurrencySymbol,
@@ -15,18 +15,18 @@ import {
     toCurrencySymbol,
 } from 'src/utils';
 import { countdown } from 'src/utils/date';
-import { LoanValue, Maturity } from 'src/utils/entities';
+import { LoanValue } from 'src/utils/entities';
 import {
     contractColumnDefinition,
     tableHeaderDefinition,
 } from 'src/utils/tableDefinitions';
-export type Loan = LendingMarket & {
+type Market = LendingMarket & {
     currency: string;
     ccy: CurrencySymbol;
 };
-const columnHelper = createColumnHelper<Loan>();
+const columnHelper = createColumnHelper<Market>();
 
-export const MarketLoanWidget = ({ loans }: { loans: Loan[] }) => {
+export const MarketLoanWidget = ({ markets }: { markets: Market[] }) => {
     const dispatch = useDispatch();
     const router = useRouter();
 
@@ -37,41 +37,24 @@ export const MarketLoanWidget = ({ loans }: { loans: Loan[] }) => {
     const [isItayoseMarket, setIsItayoseMarket] = useState(false);
     const filteredLoans = useMemo(
         () =>
-            loans.filter(
+            markets.filter(
                 loan =>
                     (!selectedCurrency || loan.ccy === selectedCurrency) &&
                     (!selectedTerm || loan.maturity === selectedTerm)
             ),
         // eslint-disable-next-line react-hooks/exhaustive-deps
-        [JSON.stringify(loans), selectedCurrency, selectedTerm]
+        [JSON.stringify(markets), selectedCurrency, selectedTerm]
     );
 
-    const maturityOptionList = useMemo(
-        () => {
-            const res: Option<string>[] = [];
-
-            loans.forEach(loan => {
-                if (!res.find(m => m.value === loan.maturity.toString())) {
-                    res.push({
-                        label: loan.name,
-                        value: loan.maturity.toString(),
-                    });
-                }
-            });
-
-            return res;
-        },
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-        [JSON.stringify(loans)]
-    );
+    const maturityOptionList = useMaturityOptions(markets);
 
     const handleClick = useCallback(
-        (info: CellContext<Loan, string>) => {
+        (info: CellContext<Market, string>) => {
             const ccy = fromBytes32(info.getValue()) as CurrencySymbol;
-            dispatch(setMaturity(new Maturity(info.row.original.maturity)));
+            dispatch(setMaturity(Number(info.row.original.maturity)));
             dispatch(setCurrency(ccy));
 
-            info.row.original.isReady
+            info.row.original.isOpened
                 ? router.push('/advanced/')
                 : router.push('/itayose/');
         },
@@ -141,7 +124,7 @@ export const MarketLoanWidget = ({ loans }: { loans: Loan[] }) => {
                     return (
                         <div className='flex justify-center px-1'>
                             <Button onClick={() => handleClick(info)} size='sm'>
-                                {info.row.original.isReady
+                                {info.row.original.isOpened
                                     ? 'Open Order'
                                     : 'Pre-Open Order'}
                             </Button>
@@ -168,14 +151,23 @@ export const MarketLoanWidget = ({ loans }: { loans: Loan[] }) => {
                         onChange={v => setSelectedCurrency(toCurrencySymbol(v))}
                     />
                     <DropdownSelector
-                        optionList={maturityOptionList}
-                        selected={maturityOptionList[0]}
+                        optionList={maturityOptionList.map(o => ({
+                            label: o.label,
+                            value: o.value.toString(),
+                        }))}
+                        selected={{
+                            ...maturityOptionList[0],
+                            value: maturityOptionList[0].value.toString(),
+                        }}
                         onChange={v => {
                             const maturity = parseInt(v);
                             setSelectedTerm(maturity);
-                            for (const loan of loans) {
+                            for (const loan of markets) {
                                 if (loan.maturity === maturity) {
-                                    if (!loan.isReady) {
+                                    if (
+                                        loan.isPreOrderPeriod ||
+                                        loan.isItayosePeriod
+                                    ) {
                                         setIsItayoseMarket(true);
                                         break;
                                     }
