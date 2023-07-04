@@ -70,7 +70,7 @@ const dec23Fixture = new Maturity(1701388800);
 const mar24Fixture = new Maturity(1709251200);
 const jun24Fixture = new Maturity(1717200000);
 const sep24Fixture = new Maturity(1725148800);
-const sep22Fixture = new Maturity(1661990400);
+const sep22Fixture = new Maturity(1662280400);
 export const dec24Fixture = new Maturity(1733011200);
 
 export const maturities = {
