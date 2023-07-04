@@ -127,7 +127,7 @@ export const AdvancedLending = ({
     ).data;
 
     const tradeHistoryDetails = useTradeHistoryDetails(
-        transactionHistory?.transactionHistory ?? [],
+        (transactionHistory && transactionHistory?.transactionHistory) ?? [],
         currency,
         selectedTerm.value
     );
