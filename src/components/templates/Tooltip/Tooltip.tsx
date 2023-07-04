@@ -32,7 +32,7 @@ export const Tooltip = ({
                     </Popover.Button>
                     {open && children && (
                         <Popover.Panel
-                            className='absolute z-10 mt-2 w-screen max-w-[256px]'
+                            className='absolute left-1/2 z-10 mt-2 flex w-screen max-w-[256px] -translate-x-1/2 transform justify-center'
                             role='tooltip'
                             static
                         >

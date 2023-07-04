@@ -38,7 +38,7 @@ describe('CollateralUsageSection Component', () => {
     it('should render correct color on collateral usage', () => {
         render(<Default collateralCoverage={0} />);
         expect(screen.getByText('0%')).toBeInTheDocument();
-        expect(screen.getByText('0%')).toHaveClass('text-white');
+        expect(screen.getByText('0%')).toHaveClass('text-progressBarStart');
 
         render(<Default collateralCoverage={1000} />);
         expect(screen.getByText('10%')).toBeInTheDocument();

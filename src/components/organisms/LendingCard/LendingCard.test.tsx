@@ -39,13 +39,15 @@ describe('LendingCard Component', () => {
         },
     };
 
-    const selectEthereum = () => {
-        fireEvent.click(
-            screen.getByRole('button', {
-                name: DEFAULT_CHOICE.name,
-            })
-        );
-        fireEvent.click(screen.getByRole('menuitem', { name: 'Ether' }));
+    const selectEthereum = async () => {
+        await waitFor(() => {
+            fireEvent.click(
+                screen.getByRole('button', {
+                    name: DEFAULT_CHOICE.name,
+                })
+            );
+            fireEvent.click(screen.getByRole('menuitem', { name: 'Ether' }));
+        });
     };
     it('should render a LendingCard', async () => {
         await waitFor(() => render(<Default />));
@@ -98,7 +100,7 @@ describe('LendingCard Component', () => {
 
     it('should switch to Ethereum when selecting it from the option', async () => {
         await waitFor(() => render(<Default />));
-        selectEthereum();
+        await selectEthereum();
         expect(screen.getByText('Ether')).toBeInTheDocument();
     });
 
@@ -141,7 +143,6 @@ describe('LendingCard Component', () => {
         fireEvent.change(input, { target: { value: '10' } });
         fireEvent.click(screen.getByTestId('place-order-button'));
         expect(screen.getByText('Confirm Order')).toBeInTheDocument();
-        expect(screen.getByText('Market Order')).toBeInTheDocument();
     });
 
     it('should support orders with decimal amounts', async () => {

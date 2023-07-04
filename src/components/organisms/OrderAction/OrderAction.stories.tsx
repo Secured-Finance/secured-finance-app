@@ -21,6 +21,7 @@ import {
     emptyCollateralBook,
 } from 'src/stories/mocks/fixtures';
 import { CurrencySymbol } from 'src/utils';
+import { LoanValue } from 'src/utils/entities';
 import { OrderAction } from '.';
 
 export default {
@@ -28,8 +29,9 @@ export default {
     component: OrderAction,
     args: {
         collateralBook: emptyCollateralBook,
+        loanValue: LoanValue.fromPrice(9800, dec22Fixture.toNumber()),
     },
-    decorators: [withAssetPrice, withMaturities, withWalletProvider],
+    decorators: [withAssetPrice, withWalletProvider, withMaturities],
 } as ComponentMeta<typeof OrderAction>;
 
 const Template: ComponentStory<typeof OrderAction> = args => {

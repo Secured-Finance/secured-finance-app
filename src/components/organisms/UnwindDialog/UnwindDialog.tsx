@@ -11,7 +11,7 @@ import {
     FailurePanel,
     SuccessPanel,
 } from 'src/components/molecules';
-import { useCollateralBook, useOrders, useEtherscanUrl } from 'src/hooks';
+import { useCollateralBook, useEtherscanUrl, useOrders } from 'src/hooks';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { setLastMessage } from 'src/store/lastError';
 import { RootState } from 'src/store/types';
@@ -171,7 +171,7 @@ export const UnwindDialog = ({
                         <CollateralSimulationSection
                             collateral={collateral}
                             tradeAmount={amount}
-                            tradePosition={OrderSide.BORROW}
+                            side={OrderSide.BORROW}
                             assetPrice={price}
                             type='unwind'
                         />

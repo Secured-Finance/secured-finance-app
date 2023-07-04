@@ -17,3 +17,16 @@ const Template: ComponentStory<typeof SectionWithItems> = args => (
 );
 
 export const Default = Template.bind({});
+export const WithChildren = Template.bind({});
+WithChildren.args = {
+    itemList: [
+        [
+            (<div className='text-white'>Label A</div>) as React.ReactNode,
+            (<div className='text-green'>Value A</div>) as React.ReactNode,
+        ],
+        [
+            (<div className='text-white'>Label B</div>) as React.ReactNode,
+            (<div className='text-green'>Value B</div>) as React.ReactNode,
+        ],
+    ],
+};

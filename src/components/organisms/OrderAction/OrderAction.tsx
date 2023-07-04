@@ -20,7 +20,7 @@ import { Amount, LoanValue, Maturity } from 'src/utils/entities';
 import { useWallet } from 'use-wallet';
 
 interface OrderActionProps {
-    loanValue?: LoanValue;
+    loanValue: LoanValue;
     collateralBook: CollateralBook;
     renderSide?: boolean;
     validation?: boolean;
