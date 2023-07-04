@@ -1,10 +1,17 @@
 import { track } from '@amplitude/analytics-browser';
+import { Disclosure, Transition } from '@headlessui/react';
 import { OrderSide, WalletSource } from '@secured-finance/sf-client';
 import { formatDate, getUTCMonthYear } from '@secured-finance/sf-core';
 import { BigNumber } from 'ethers';
-import { useCallback, useReducer, useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { Section, SectionWithItems, Spinner } from 'src/components/atoms';
+import { useCallback, useMemo, useReducer, useState } from 'react';
+import { shallowEqual, useDispatch, useSelector } from 'react-redux';
+import {
+    ExpandIndicator,
+    InformationPopover,
+    Section,
+    SectionWithItems,
+    Spinner,
+} from 'src/components/atoms';
 import {
     AmountCard,
     CollateralSimulationSection,
@@ -13,16 +20,23 @@ import {
     FailurePanel,
     SuccessPanel,
 } from 'src/components/molecules';
-import { CollateralBook, useEtherscanUrl } from 'src/hooks';
+import {
+    CollateralBook,
+    useEtherscanUrl,
+    useMaturityOptions,
+    useOrderFee,
+} from 'src/hooks';
 import { setLastMessage } from 'src/store/lastError';
+import { RootState } from 'src/store/types';
 import { OrderType, PlaceOrderFunction } from 'src/types';
 import {
+    AddressUtils,
     CurrencySymbol,
     OrderEvents,
     OrderProperties,
     handleContractTransaction,
     ordinaryFormat,
-    AddressUtils,
+    percentFormat,
 } from 'src/utils';
 import { Amount, LoanValue, Maturity } from 'src/utils/entities';
 
@@ -106,7 +120,7 @@ export const PlaceOrder = ({
     walletSource,
 }: {
     collateral: CollateralBook;
-    loanValue?: LoanValue;
+    loanValue: LoanValue;
     onPlaceOrder: PlaceOrderFunction;
     orderAmount: Amount;
     maturity: Maturity;
@@ -119,6 +133,17 @@ export const PlaceOrder = ({
     const [state, dispatch] = useReducer(reducer, stateRecord[1]);
     const [txHash, setTxHash] = useState<string | undefined>();
     const globalDispatch = useDispatch();
+
+    const lendingContracts = useSelector(
+        (state: RootState) =>
+            state.availableContracts.lendingMarkets[orderAmount.currency],
+        shallowEqual
+    );
+
+    const maturityOptionList = useMaturityOptions(
+        lendingContracts,
+        market => market.isOpened
+    );
 
     const [errorMessage, setErrorMessage] = useState(
         'Your order could not be placed'
@@ -176,6 +201,15 @@ export const PlaceOrder = ({
         [onPlaceOrder, orderType, orderAmount.value, globalDispatch]
     );
 
+    const fee = useOrderFee(orderAmount.currency);
+    const quarter = useMemo(() => {
+        return (
+            maturityOptionList.findIndex(element =>
+                element.value.equals(maturity)
+            ) + 1
+        );
+    }, [maturity, maturityOptionList]);
+
     const onClick = useCallback(
         async (currentStep: Step) => {
             switch (currentStep) {
@@ -226,36 +260,6 @@ export const PlaceOrder = ({
         ]
     );
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const itemList: [string, string][] = loanValue
-        ? [
-              [
-                  'Bond Price',
-                  loanValue
-                      ? (loanValue.price / 100).toString()
-                      : 'Market Order',
-              ],
-              ['Loan Start Date', formatDate(Date.now() / 1000)],
-              ['Loan Maturity Date', formatDate(maturity.toNumber())],
-              [
-                  'Total Interest (USD)',
-                  ordinaryFormat(
-                      orderAmount.value * loanValue?.apr.toNormalizedNumber()
-                  ).toString(),
-              ],
-              [
-                  side === OrderSide.BORROW
-                      ? 'Est. Total Debt (USD)'
-                      : 'Est. Total Loan value (USD)',
-                  ordinaryFormat(
-                      orderAmount.value +
-                          orderAmount.value *
-                              loanValue?.apr.toNormalizedNumber()
-                  ).toString(),
-              ],
-          ]
-        : [['Loan Maturity Date', formatDate(maturity.toNumber())]];
-
     return (
         <Dialog
             isOpen={isOpen}
@@ -279,34 +283,60 @@ export const PlaceOrder = ({
                                 <CollateralSimulationSection
                                     collateral={collateral}
                                     tradeAmount={orderAmount}
-                                    tradePosition={side}
+                                    side={side}
                                     assetPrice={assetPrice}
                                     tradeValue={loanValue}
                                     type='trade'
-                                    side={side}
                                 />
                                 <SectionWithItems
-                                    itemList={[['Borrow Fee %', '0.25 %']]}
+                                    itemList={[
+                                        [
+                                            'Maturity Date',
+                                            formatDate(maturity.toNumber()),
+                                        ],
+                                        [
+                                            feeItem(),
+                                            percentFormat((fee * quarter) / 4),
+                                        ],
+                                    ]}
                                 />
-                                {/* <Disclosure>
+                                <Disclosure>
                                     {({ open }) => (
                                         <>
-                                            <Disclosure.Button className='flex h-6 flex-row items-center justify-between'>
-                                                <h2 className='typography-hairline-2 text-neutral-8'>
-                                                    Additional Information
-                                                </h2>
-                                                <ExpandIndicator
-                                                    expanded={open}
-                                                />
-                                            </Disclosure.Button>
-                                            <Disclosure.Panel>
-                                                <SectionWithItems
-                                                    itemList={itemList}
-                                                />
-                                            </Disclosure.Panel>
+                                            <div className='relative'>
+                                                <Disclosure.Button
+                                                    className='flex h-6 w-full flex-row items-center justify-between'
+                                                    data-testid='disclaimer-button'
+                                                >
+                                                    <h2 className='typography-hairline-2 text-neutral-8'>
+                                                        Circuit Breaker
+                                                        Disclaimer
+                                                    </h2>
+                                                    <ExpandIndicator
+                                                        expanded={open}
+                                                    />
+                                                </Disclosure.Button>
+                                                <Transition
+                                                    show={open}
+                                                    enter='transition duration-100 ease-out'
+                                                    enterFrom='transform scale-95 opacity-0'
+                                                    enterTo='transform scale-100 opacity-100'
+                                                >
+                                                    <Disclosure.Panel>
+                                                        <div className='typography-caption pt-3 text-secondary7'>
+                                                            Circuit breaker will
+                                                            be triggered if the
+                                                            order is filled at
+                                                            over the max
+                                                            slippage level at 1
+                                                            block.
+                                                        </div>
+                                                    </Disclosure.Panel>
+                                                </Transition>
+                                            </div>
                                         </>
                                     )}
-                                </Disclosure> */}
+                                </Disclosure>
                             </div>
                         );
                     case Step.orderProcessing:
@@ -342,5 +372,17 @@ export const PlaceOrder = ({
                 }
             })()}
         </Dialog>
+    );
+};
+
+const feeItem = () => {
+    return (
+        <div className='flex flex-row items-center gap-1'>
+            <div className='text-planetaryPurple'>Transaction Fee %</div>
+            <InformationPopover>
+                A duration-based transaction fee only for market takers,
+                factored into the bond price, and deducted from its future value
+            </InformationPopover>
+        </div>
     );
 };

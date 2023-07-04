@@ -1,15 +1,20 @@
 import { OrderSide } from '@secured-finance/sf-client';
 import { useMemo } from 'react';
-import { SectionWithItems } from 'src/components/atoms';
+import {
+    SectionWithItems,
+    getLiquidationInformation,
+} from 'src/components/atoms';
 import { CollateralBook } from 'src/hooks';
 import {
+    divide,
     formatCollateralRatio,
     formatLoanValue,
     ordinaryFormat,
+    usdFormat,
 } from 'src/utils';
 import {
-    computeAvailableToBorrow,
     MAX_COVERAGE,
+    computeAvailableToBorrow,
     recomputeCollateralUtilization,
 } from 'src/utils/collateral';
 import { Amount, LoanValue } from 'src/utils/entities';
@@ -17,73 +22,109 @@ import { Amount, LoanValue } from 'src/utils/entities';
 export const CollateralSimulationSection = ({
     collateral,
     tradeAmount,
-    tradePosition,
+    side,
     assetPrice,
     tradeValue,
     type,
-    side,
 }: {
     collateral: CollateralBook;
     tradeAmount: Amount;
-    tradePosition: OrderSide;
+    side: OrderSide;
     assetPrice: number;
     type: 'unwind' | 'trade';
     tradeValue?: LoanValue;
-    side?: OrderSide;
 }) => {
-    const collateralUsageText = `${formatCollateralRatio(
-        collateral.coverage.toNumber()
-    )} -> ${formatCollateralRatio(
-        recomputeCollateralUtilization(
-            collateral.usdCollateral,
-            collateral.coverage.toNumber(),
-            tradePosition === OrderSide.BORROW
-                ? tradeAmount.toUSD(assetPrice)
-                : -1 * tradeAmount.toUSD(assetPrice)
-        )
-    )}`;
-
     const remainingToBorrowText = useMemo(() => {
-        const availableAssetMultiplier = collateral.collateralThreshold
-            ? (collateral.collateralThreshold -
-                  collateral.coverage.toNumber() / 100) /
-              100
-            : 0;
+        const availableToBorrow = computeAvailableToBorrow(
+            1,
+            collateral.usdCollateral,
+            collateral.coverage.toNumber() / MAX_COVERAGE,
+            collateral.collateralThreshold
+        );
 
-        return `${ordinaryFormat(
-            (collateral.usdCollateral * availableAssetMultiplier -
-                tradeAmount.toUSD(assetPrice)) /
-                assetPrice
-        )} / ${ordinaryFormat(
-            computeAvailableToBorrow(
-                assetPrice,
-                collateral.usdCollateral,
-                collateral.coverage.toNumber() / MAX_COVERAGE,
-                collateral.collateralThreshold
-            )
+        return `${usdFormat(
+            availableToBorrow - tradeAmount.toUSD(assetPrice),
+            2
         )}`;
     }, [
-        assetPrice,
-        collateral.coverage,
         collateral.usdCollateral,
+        collateral.coverage,
         collateral.collateralThreshold,
         tradeAmount,
+        assetPrice,
     ]);
 
-    const items: [string, string][] =
+    const recomputeCollateral = useMemo(() => {
+        return recomputeCollateralUtilization(
+            collateral.usdCollateral,
+            collateral.coverage.toNumber(),
+            tradeAmount.toUSD(assetPrice)
+        );
+    }, [
+        collateral.usdCollateral,
+        collateral.coverage,
+        tradeAmount,
+        assetPrice,
+    ]);
+
+    const items: [string, string | React.ReactNode][] =
         side === OrderSide.BORROW
             ? [
+                  [
+                      'Borrow Amount',
+                      `${ordinaryFormat(tradeAmount.value)} ${
+                          tradeAmount.currency
+                      }`,
+                  ],
                   ['Borrow Remaining', remainingToBorrowText],
-                  ['Collateral Usage', collateralUsageText],
+                  [
+                      'Collateral Usage',
+                      getCollateralUsage(
+                          collateral.coverage.toNumber(),
+                          recomputeCollateral
+                      ),
+                  ],
+                  [
+                      'Bond Price',
+                      `~ ${(
+                          tradeValue && divide(tradeValue.price, 100)
+                      )?.toString()}`,
+                  ],
               ]
-            : [['Collateral Usage', collateralUsageText]];
+            : [
+                  [
+                      'Lend Amount',
+                      `${ordinaryFormat(tradeAmount.value)} ${
+                          tradeAmount.currency
+                      }`,
+                  ],
+                  [
+                      'Bond Price',
+                      `~ ${(
+                          tradeValue && divide(tradeValue.price, 100)
+                      )?.toString()}`,
+                  ],
+              ];
 
-    if (type === 'trade') {
-        items.push([
-            'APR',
-            tradeValue ? formatLoanValue(tradeValue, 'rate') : 'Market Order',
-        ]);
+    if (type === 'trade' && tradeValue) {
+        items.push(['APR', `~ ${formatLoanValue(tradeValue, 'rate')}`]);
     }
 
     return <SectionWithItems itemList={items} />;
+};
+
+const getCollateralUsage = (initial: number, final: number) => {
+    const initialColor = getLiquidationInformation(initial / 100).color;
+    const finalColor = getLiquidationInformation(final / 100).color;
+    return (
+        <div className='flex flex-row gap-1'>
+            <span className={`${initialColor}`}>
+                {formatCollateralRatio(initial)}
+            </span>
+            <span className='text-neutral-8'>&#8594;</span>
+            <span className={`${finalColor}`}>
+                {formatCollateralRatio(final)}
+            </span>
+        </div>
+    );
 };

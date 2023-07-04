@@ -27,7 +27,11 @@ export default {
     },
 } as ComponentMeta<typeof Tooltip>;
 
-const Template: ComponentStory<typeof Tooltip> = args => <Tooltip {...args} />;
+const Template: ComponentStory<typeof Tooltip> = args => (
+    <div className='mx-10 w-fit'>
+        <Tooltip {...args} />
+    </div>
+);
 
 export const Default = Template.bind({});
 Default.play = async ({ canvasElement }) => {

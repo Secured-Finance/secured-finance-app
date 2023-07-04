@@ -28,13 +28,13 @@ import { selectAllBalances } from 'src/store/wallet';
 import { MaturityOptionList } from 'src/types';
 import {
     CurrencySymbol,
+    amountFormatterFromBase,
     amountFormatterToBase,
     formatLoanValue,
     generateWalletSourceInformation,
     getCurrencyMapAsList,
     getCurrencyMapAsOptions,
     getTransformMaturityOption,
-    amountFormatterFromBase,
 } from 'src/utils';
 import { LoanValue, Maturity } from 'src/utils/entities';
 import { useWallet } from 'use-wallet';
@@ -201,6 +201,7 @@ export const LendingCard = ({
 
                 <OrderAction
                     collateralBook={collateralBook}
+                    loanValue={marketValue}
                     renderSide
                     validation={getAmountValidation()}
                 />

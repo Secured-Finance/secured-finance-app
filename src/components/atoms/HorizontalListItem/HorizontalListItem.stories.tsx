@@ -15,3 +15,8 @@ const Template: ComponentStory<typeof HorizontalListItem> = args => (
 );
 
 export const Default = Template.bind({});
+export const WithChildren = Template.bind({});
+WithChildren.args = {
+    label: <div className='text-white'>Label</div>,
+    value: <div className='text-green'>Value</div>,
+};

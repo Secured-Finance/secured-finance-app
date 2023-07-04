@@ -3,14 +3,14 @@ import { HorizontalListItem } from 'src/components/atoms';
 export const SectionWithItems = ({
     itemList,
 }: {
-    itemList: [string, string][];
+    itemList: [React.ReactNode, React.ReactNode][];
 }) => {
     return (
         <Section>
             <div className='grid grid-cols-1 gap-2'>
-                {itemList.map(([label, value]) => (
+                {itemList.map(([label, value], index) => (
                     <HorizontalListItem
-                        key={label}
+                        key={index}
                         label={label}
                         value={value}
                     />

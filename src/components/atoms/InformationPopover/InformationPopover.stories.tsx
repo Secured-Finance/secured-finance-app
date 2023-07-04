@@ -8,9 +8,11 @@ export default {
 } as ComponentMeta<typeof InformationPopover>;
 
 const Template: ComponentStory<typeof InformationPopover> = () => (
-    <InformationPopover>
-        You are currently at 43% to liquidation.
-    </InformationPopover>
+    <div className='mx-40 w-fit'>
+        <InformationPopover>
+            You are currently at 43% to liquidation.
+        </InformationPopover>
+    </div>
 );
 
 export const Default = Template.bind({});
