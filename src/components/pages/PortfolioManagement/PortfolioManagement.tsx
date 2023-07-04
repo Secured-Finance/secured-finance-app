@@ -59,7 +59,7 @@ export const PortfolioManagement = () => {
                     filledAmount: order.amount,
                 };
             } else if (
-                Number(order.maturity) <= Date.now() / 1000 &&
+                !order.lendingMarket.isActive &&
                 (order.status === 'Open' || order.status === 'PartiallyFilled')
             ) {
                 return {

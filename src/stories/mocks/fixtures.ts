@@ -365,6 +365,10 @@ export const orderHistoryList: OrderList = [
         status: 'Open',
         createdAt: BigNumber.from('1'),
         txHash: utils.formatBytes32String('hash'),
+        lendingMarket: {
+            id: '1',
+            isActive: true,
+        },
     },
     {
         orderId: 2,
@@ -377,6 +381,10 @@ export const orderHistoryList: OrderList = [
         status: 'Open',
         createdAt: BigNumber.from('1'),
         txHash: utils.formatBytes32String('hash'),
+        lendingMarket: {
+            id: '1',
+            isActive: true,
+        },
     },
     {
         orderId: 1,
@@ -389,6 +397,10 @@ export const orderHistoryList: OrderList = [
         status: 'PartiallyFilled',
         createdAt: BigNumber.from('1609295092'),
         txHash: utils.formatBytes32String('hash'),
+        lendingMarket: {
+            id: '1',
+            isActive: true,
+        },
     },
     {
         orderId: 1,
@@ -401,6 +413,10 @@ export const orderHistoryList: OrderList = [
         status: 'Open',
         createdAt: BigNumber.from('1'),
         txHash: utils.formatBytes32String('hash'),
+        lendingMarket: {
+            id: '1',
+            isActive: true,
+        },
     },
     {
         orderId: 1,
@@ -413,6 +429,10 @@ export const orderHistoryList: OrderList = [
         status: 'Filled',
         createdAt: BigNumber.from('1'),
         txHash: utils.formatBytes32String('hash'),
+        lendingMarket: {
+            id: '1',
+            isActive: false,
+        },
     },
     {
         orderId: 2,
@@ -425,6 +445,10 @@ export const orderHistoryList: OrderList = [
         status: 'Open',
         createdAt: BigNumber.from('1'),
         txHash: utils.formatBytes32String('hash'),
+        lendingMarket: {
+            id: '1',
+            isActive: true,
+        },
     },
     {
         orderId: 1,
@@ -437,6 +461,10 @@ export const orderHistoryList: OrderList = [
         status: 'Cancelled',
         createdAt: BigNumber.from('1609295092'),
         txHash: utils.formatBytes32String('hash'),
+        lendingMarket: {
+            id: '1',
+            isActive: true,
+        },
     },
     {
         orderId: 1,
@@ -449,6 +477,10 @@ export const orderHistoryList: OrderList = [
         status: 'PartiallyFilled',
         createdAt: BigNumber.from('1'),
         txHash: utils.formatBytes32String('hash'),
+        lendingMarket: {
+            id: '1',
+            isActive: true,
+        },
     },
     {
         orderId: 3,
@@ -461,6 +493,10 @@ export const orderHistoryList: OrderList = [
         status: 'PartiallyFilled',
         createdAt: BigNumber.from('1'),
         txHash: utils.formatBytes32String('hash'),
+        lendingMarket: {
+            id: '1',
+            isActive: false,
+        },
     },
 ];
 
