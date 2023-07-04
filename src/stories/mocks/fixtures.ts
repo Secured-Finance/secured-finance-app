@@ -70,6 +70,7 @@ const dec23Fixture = new Maturity(1701388800);
 const mar24Fixture = new Maturity(1709251200);
 const jun24Fixture = new Maturity(1717200000);
 const sep24Fixture = new Maturity(1725148800);
+const sep22Fixture = new Maturity(1661990400);
 export const dec24Fixture = new Maturity(1733011200);
 
 export const maturities = {
@@ -422,7 +423,7 @@ export const orderHistoryList: OrderList = [
         orderId: 1,
         currency: efilBytes32,
         side: 1,
-        maturity: BigNumber.from(mar23Fixture.toString()),
+        maturity: BigNumber.from(sep22Fixture.toString()),
         unitPrice: BigNumber.from('9800'),
         filledAmount: BigNumber.from('1000000000000000000000'),
         amount: BigNumber.from('1000000000000000000000'),
@@ -486,7 +487,7 @@ export const orderHistoryList: OrderList = [
         orderId: 3,
         currency: efilBytes32,
         side: 1,
-        maturity: BigNumber.from('1643000000'),
+        maturity: BigNumber.from(sep22Fixture.toString()),
         unitPrice: BigNumber.from('9800'),
         filledAmount: BigNumber.from('0'),
         amount: BigNumber.from('100000000000000000000'),
