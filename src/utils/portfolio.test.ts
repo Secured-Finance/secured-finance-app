@@ -256,6 +256,10 @@ describe('checkOrderIsFilled', () => {
             status: 'Open' as const,
             createdAt: BigNumber.from('1'),
             txHash: utils.formatBytes32String('hash'),
+            lendingMarket: {
+                id: '1',
+                isActive: true,
+            },
         };
 
         expect(checkOrderIsFilled(order, orders)).toEqual(true);
@@ -273,6 +277,10 @@ describe('checkOrderIsFilled', () => {
             status: 'Open' as const,
             createdAt: BigNumber.from('1'),
             txHash: utils.formatBytes32String('hash'),
+            lendingMarket: {
+                id: '1',
+                isActive: true,
+            },
         };
 
         expect(checkOrderIsFilled(order, orders)).toEqual(false);
