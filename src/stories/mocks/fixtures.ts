@@ -200,20 +200,6 @@ export const maturities = {
         isPreOrderPeriod: true,
         isItayosePeriod: false,
     },
-    [sep22Fixture.toNumber()]: {
-        name: 'SEP22',
-        maturity: sep22Fixture.toNumber(),
-        isActive: false,
-        utcOpeningDate: 1669680000,
-        midUnitPrice: 9001,
-        preOpenDate: 1512777600,
-        openingUnitPrice: 9710,
-        isReady: false,
-        isOpened: false,
-        isMatured: true,
-        isPreOrderPeriod: false,
-        isItayosePeriod: false,
-    },
 };
 
 export const preloadedLendingMarkets: Partial<RootState> = {
