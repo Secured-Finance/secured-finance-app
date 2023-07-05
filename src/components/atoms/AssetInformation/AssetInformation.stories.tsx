@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import { BigNumber } from 'ethers';
 import { withAssetPrice } from 'src/../.storybook/decorators';
 import { AssetInformation } from '.';
@@ -15,9 +15,9 @@ export default {
         informationText: 'Only USDC and ETH are eligible as collateral.',
     },
     decorators: [withAssetPrice],
-} as ComponentMeta<typeof AssetInformation>;
+} as Meta<typeof AssetInformation>;
 
-const Template: ComponentStory<typeof AssetInformation> = args => {
+const Template: StoryFn<typeof AssetInformation> = args => {
     return <AssetInformation {...args} />;
 };
 

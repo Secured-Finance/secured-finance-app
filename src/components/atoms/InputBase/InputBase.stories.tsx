@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import { userEvent, within } from '@storybook/testing-library';
 import { useState } from 'react';
 import { InputBase } from '.';
@@ -11,9 +11,9 @@ export default {
             'typography-headline-4 h-14 w-full text-center text-neutral-8',
         onValueChange: () => {},
     },
-} as ComponentMeta<typeof InputBase>;
+} as Meta<typeof InputBase>;
 
-const Template: ComponentStory<typeof InputBase> = args => {
+const Template: StoryFn<typeof InputBase> = args => {
     const [value, setValue] = useState(args.value);
     const handleChange = (newValue: number | undefined) => {
         setValue(newValue);

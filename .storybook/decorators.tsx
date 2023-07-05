@@ -1,5 +1,5 @@
 import { GraphClientProvider } from '@secured-finance/sf-graph-client';
-import { Story, StoryContext } from '@storybook/react';
+import { StoryContext, StoryFn } from '@storybook/react';
 import { Wallet } from 'ethers';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
@@ -15,10 +15,9 @@ import { CustomizedBridge } from 'src/stories/mocks/customBridge';
 import { maturities } from 'src/stories/mocks/fixtures';
 import { CurrencySymbol } from 'src/utils';
 import { coingeckoApi } from 'src/utils/coinGeckoApi';
-import timemachine from 'timemachine';
 import { UseWalletProvider, useWallet } from 'use-wallet';
 
-export const withAppLayout = (Story: Story) => {
+export const withAppLayout = (Story: StoryFn) => {
     return (
         <Layout navBar={<Header />} footer={<Footer />}>
             <Story />
@@ -57,7 +56,7 @@ const WithConnectedWallet = ({
     return <>{children}</>;
 };
 
-export const withWalletProvider = (Story: Story, Context: StoryContext) => {
+export const withWalletProvider = (Story: StoryFn, Context: StoryContext) => {
     return (
         <UseWalletProvider
             connectors={{
@@ -73,7 +72,7 @@ export const withWalletProvider = (Story: Story, Context: StoryContext) => {
     );
 };
 
-export const withAssetPrice = (Story: Story) => {
+export const withAssetPrice = (Story: StoryFn) => {
     const dispatch = useDispatch();
     useEffect(() => {
         const timeoutId = setTimeout(
@@ -113,25 +112,13 @@ export const withAssetPrice = (Story: Story) => {
     );
 };
 
-export const WithGraphClient = (Story: Story) => (
+export const WithGraphClient = (Story: StoryFn) => (
     <GraphClientProvider network='sepolia'>
         <Story />
     </GraphClientProvider>
 );
 
-export const withMockDate = (Story: Story, context: StoryContext) => {
-    timemachine.reset();
-    if (context?.parameters?.date?.value instanceof Date) {
-        timemachine.config({
-            dateString: context.parameters.date.value,
-            tick: true,
-        });
-    }
-
-    return <Story />;
-};
-
-export const withMaturities = (Story: Story) => {
+export const withMaturities = (Story: StoryFn) => {
     const dispatch = useDispatch();
     useEffect(() => {
         const timerId = setTimeout(() => {
@@ -155,13 +142,13 @@ export const withMaturities = (Story: Story) => {
     return <Story />;
 };
 
-export const withFullPage = (Story: Story) => (
+export const withFullPage = (Story: StoryFn) => (
     <div className='h-[1500px] pb-10'>
         <Story />
     </div>
 );
 
-export const withWalletBalances = (Story: Story) => {
+export const withWalletBalances = (Story: StoryFn) => {
     const dispatch = useDispatch();
     useEffect(() => {
         const timeoutId = setTimeout(() => {
@@ -177,7 +164,7 @@ export const withWalletBalances = (Story: Story) => {
     return <Story />;
 };
 
-export const withMidPrice = (Story: Story) => {
+export const withMidPrice = (Story: StoryFn) => {
     const dispatch = useDispatch();
     useEffect(() => {
         const timeoutId = setTimeout(() => {
@@ -190,7 +177,7 @@ export const withMidPrice = (Story: Story) => {
     return <Story />;
 };
 
-export const withChainErrorDisabled = (Story: Story) => {
+export const withChainErrorDisabled = (Story: StoryFn) => {
     const dispatch = useDispatch();
     useEffect(() => {
         const timeoutId = setTimeout(() => {

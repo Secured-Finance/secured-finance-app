@@ -1,6 +1,7 @@
 const webpack = require('./../webpack-config');
+import type { StorybookConfig } from '@storybook/nextjs';
 
-module.exports = {
+const config: StorybookConfig = {
     stories: [
         '../src/**/*.stories.mdx',
         '../src/**/*.stories.@(js|jsx|ts|tsx)',
@@ -10,22 +11,19 @@ module.exports = {
         '@storybook/addon-essentials',
         '@storybook/addon-a11y',
         'storybook-addon-performance',
-        'storybook-addon-next',
         'storybook-addon-apollo-client',
         '@storybook/addon-interactions',
+        'storybook-mock-date-decorator',
     ],
-    typescript: {
-        reactDocgen: 'none',
+    typescript: {},
+    framework: {
+        name: '@storybook/nextjs',
+        options: {},
     },
-    framework: '@storybook/react',
-    core: {
-        builder: 'webpack5',
-    },
-
     webpackFinal: (config, options) => webpack.webpackOverride(config),
-
     env: config => ({
         ...config,
         COMMIT_HASH: '.storybook',
     }),
 };
+export default config;
