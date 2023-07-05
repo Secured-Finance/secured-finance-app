@@ -114,9 +114,15 @@ export const AdvancedLendingOrderCard = ({
         return generateWalletSourceInformation(
             currency,
             balanceRecord[currency],
-            collateralBook.nonCollateral[currency] ?? BigNumber.from(0)
+            collateralBook.withdrawableCollateral[currency] ||
+                collateralBook.nonCollateral[currency]
         );
-    }, [balanceRecord, collateralBook.nonCollateral, currency]);
+    }, [
+        balanceRecord,
+        collateralBook.nonCollateral,
+        collateralBook.withdrawableCollateral,
+        currency,
+    ]);
 
     const selectedWalletSource = useMemo(() => {
         return (
