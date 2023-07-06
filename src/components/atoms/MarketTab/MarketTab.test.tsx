@@ -14,7 +14,7 @@ describe('test Market Tab component', () => {
         );
         expect(screen.getByText('10,000')).toBeInTheDocument();
         expect(screen.getByText('10,000')).toHaveClass(
-            'typography-caption font-medium text-neutral-8'
+            'typography-caption text-neutral-8'
         );
     });
 
@@ -27,7 +27,7 @@ describe('test Market Tab component', () => {
         );
         expect(screen.getByText('25.00% APR')).toBeInTheDocument();
         expect(screen.getByText('25.00% APR')).toHaveClass(
-            'typography-caption-2 font-semibold text-white'
+            'typography-caption text-white'
         );
     });
 
