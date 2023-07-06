@@ -62,6 +62,7 @@ export const preloadedBalances = {
     },
 };
 
+const sep22Fixture = new Maturity(1661990400);
 export const dec22Fixture = new Maturity(1669852800);
 export const mar23Fixture = new Maturity(1677628800);
 export const jun23Fixture = new Maturity(1685577600);
@@ -365,6 +366,10 @@ export const orderHistoryList: OrderList = [
         status: 'Open',
         createdAt: BigNumber.from('1'),
         txHash: utils.formatBytes32String('hash'),
+        lendingMarket: {
+            id: '1',
+            isActive: true,
+        },
     },
     {
         orderId: 2,
@@ -377,6 +382,10 @@ export const orderHistoryList: OrderList = [
         status: 'Open',
         createdAt: BigNumber.from('1'),
         txHash: utils.formatBytes32String('hash'),
+        lendingMarket: {
+            id: '1',
+            isActive: true,
+        },
     },
     {
         orderId: 1,
@@ -389,6 +398,10 @@ export const orderHistoryList: OrderList = [
         status: 'PartiallyFilled',
         createdAt: BigNumber.from('1609295092'),
         txHash: utils.formatBytes32String('hash'),
+        lendingMarket: {
+            id: '1',
+            isActive: true,
+        },
     },
     {
         orderId: 1,
@@ -401,18 +414,26 @@ export const orderHistoryList: OrderList = [
         status: 'Open',
         createdAt: BigNumber.from('1'),
         txHash: utils.formatBytes32String('hash'),
+        lendingMarket: {
+            id: '1',
+            isActive: true,
+        },
     },
     {
         orderId: 1,
         currency: efilBytes32,
         side: 1,
-        maturity: BigNumber.from(mar23Fixture.toString()),
+        maturity: BigNumber.from(sep22Fixture.toString()),
         unitPrice: BigNumber.from('9800'),
         filledAmount: BigNumber.from('1000000000000000000000'),
         amount: BigNumber.from('1000000000000000000000'),
         status: 'Filled',
         createdAt: BigNumber.from('1'),
         txHash: utils.formatBytes32String('hash'),
+        lendingMarket: {
+            id: '1',
+            isActive: false,
+        },
     },
     {
         orderId: 2,
@@ -425,6 +446,10 @@ export const orderHistoryList: OrderList = [
         status: 'Open',
         createdAt: BigNumber.from('1'),
         txHash: utils.formatBytes32String('hash'),
+        lendingMarket: {
+            id: '1',
+            isActive: true,
+        },
     },
     {
         orderId: 1,
@@ -437,6 +462,10 @@ export const orderHistoryList: OrderList = [
         status: 'Cancelled',
         createdAt: BigNumber.from('1609295092'),
         txHash: utils.formatBytes32String('hash'),
+        lendingMarket: {
+            id: '1',
+            isActive: true,
+        },
     },
     {
         orderId: 1,
@@ -449,18 +478,26 @@ export const orderHistoryList: OrderList = [
         status: 'PartiallyFilled',
         createdAt: BigNumber.from('1'),
         txHash: utils.formatBytes32String('hash'),
+        lendingMarket: {
+            id: '1',
+            isActive: true,
+        },
     },
     {
         orderId: 3,
         currency: efilBytes32,
         side: 1,
-        maturity: BigNumber.from(dec22Fixture.toString()),
+        maturity: BigNumber.from(sep22Fixture.toString()),
         unitPrice: BigNumber.from('9800'),
         filledAmount: BigNumber.from('0'),
         amount: BigNumber.from('100000000000000000000'),
-        status: 'Expired',
+        status: 'PartiallyFilled',
         createdAt: BigNumber.from('1'),
         txHash: utils.formatBytes32String('hash'),
+        lendingMarket: {
+            id: '1',
+            isActive: false,
+        },
     },
 ];
 
