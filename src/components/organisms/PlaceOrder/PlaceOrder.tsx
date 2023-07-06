@@ -272,10 +272,10 @@ export const PlaceOrder = ({
                                         ],
                                         [
                                             feeItem(),
-                                            calculateFee(
+                                            `~ ${calculateFee(
                                                 maturity.toNumber(),
                                                 orderFee
-                                            ),
+                                            )}`,
                                         ],
                                     ]}
                                 />
