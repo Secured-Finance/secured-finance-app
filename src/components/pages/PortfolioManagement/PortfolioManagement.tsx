@@ -58,6 +58,14 @@ export const PortfolioManagement = () => {
                     status: 'Filled' as const,
                     filledAmount: order.amount,
                 };
+            } else if (
+                !order.lendingMarket.isActive &&
+                (order.status === 'Open' || order.status === 'PartiallyFilled')
+            ) {
+                return {
+                    ...order,
+                    status: 'Expired' as const,
+                };
             } else {
                 return order;
             }
