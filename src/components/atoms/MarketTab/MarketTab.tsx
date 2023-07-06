@@ -37,10 +37,10 @@ export const MarketTab = ({
             <span
                 className={classNames(
                     {
-                        'typography-caption font-medium text-neutral-8':
-                            typeof value === 'number',
-                        'typography-caption-2 whitespace-nowrap font-semibold text-white':
-                            typeof value === 'string',
+                        'typography-caption whitespace-nowrap text-white':
+                            variant === 'green-name',
+                        'typography-caption text-neutral-8':
+                            variant === 'default',
                     },
                     'flex items-center'
                 )}
