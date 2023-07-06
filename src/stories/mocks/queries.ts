@@ -152,7 +152,7 @@ export const mockUserTransactionHistory = [
             variables: {
                 address: '0xb98bd7c7f656290071e52d1aa617d9cb4467fd6d',
                 skip: 10,
-                first: 20,
+                first: 10,
                 awaitRefetchQueries: true,
             },
         },
@@ -203,7 +203,7 @@ export const mockUserTransactionHistory = [
             variables: {
                 address: '0xb98bd7c7f656290071e52d1aa617d9cb4467fd6d',
                 skip: 20,
-                first: 30,
+                first: 10,
                 awaitRefetchQueries: true,
             },
         },
@@ -246,7 +246,7 @@ export const mockUserTransactionHistory = [
             variables: {
                 address: '0xb98bd7c7f656290071e52d1aa617d9cb4467fd6d',
                 skip: 30,
-                first: 40,
+                first: 10,
                 awaitRefetchQueries: true,
             },
         },

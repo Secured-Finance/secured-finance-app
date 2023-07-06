@@ -1,6 +1,6 @@
 import queries from '@secured-finance/sf-graph-client/dist/graphclients';
-import { useSelector } from 'react-redux';
 import { useCallback, useMemo, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { HorizontalTab, StatsBar } from 'src/components/molecules';
 import {
     ActiveTradeTable,
@@ -9,30 +9,45 @@ import {
     MyTransactionsTable,
     MyWalletCard,
     OrderHistoryTable,
-    WalletDialog,
     OrderTable,
+    WalletDialog,
 } from 'src/components/organisms';
 import { Page, TwoColumns } from 'src/components/templates';
-import { useGraphClientHook } from 'src/hooks';
+import {
+    useCollateralBook,
+    useGraphClientHook,
+    useOrderList,
+    usePositions,
+} from 'src/hooks';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { RootState } from 'src/store/types';
+import { TradeHistory } from 'src/types';
 import {
     WalletSource,
-    computeNetValue,
-    usdFormat,
-    formatOrders,
     checkOrderIsFilled,
+    computeNetValue,
+    formatOrders,
     sortOrders,
+    usdFormat,
 } from 'src/utils';
-import { useCollateralBook, useOrderList, usePositions } from 'src/hooks';
 import { useWallet } from 'use-wallet';
-import { TradeHistory } from 'src/types';
 
 export type Trade = TradeHistory[0];
 
+const useFetchData = (account: string, skip: number, first: number) => {
+    const userTransactionHistory = useGraphClientHook(
+        { address: account?.toLowerCase() ?? '', skip: skip, first: first },
+        queries.UserTransactionHistoryDocument,
+        'user'
+    );
+    return userTransactionHistory;
+};
+
 export const PortfolioManagement = () => {
     const { account } = useWallet();
-    const [skip, setSkip] = useState(10);
+    const [skip, setSkip] = useState(0);
+    const data = useFetchData(account ?? '', skip, 10);
+
     const userOrderHistory = useGraphClientHook(
         { address: account?.toLowerCase() ?? '', skip: 0, first: 1000 },
         queries.UserOrderHistoryDocument,
@@ -41,16 +56,6 @@ export const PortfolioManagement = () => {
 
     const orderList = useOrderList(account);
     const positions = usePositions(account);
-
-    const fetchData = (account: string, skip: number, first: number) => {
-        // eslint-disable-next-line react-hooks/rules-of-hooks
-        const userTransactionHistory = useGraphClientHook(
-            { address: account.toLowerCase(), skip: skip, first: first },
-            queries.UserTransactionHistoryDocument,
-            'user'
-        );
-        return userTransactionHistory;
-    };
 
     const getTradeHistory = useCallback(
         (transactionHistory): Trade[] => {
@@ -108,17 +113,19 @@ export const PortfolioManagement = () => {
         priceMap,
     ]);
 
-    const getMoreData = useCallback(() => {
-        const newData = fetchData(account ?? '', skip, skip + 10); //added skip as it should be in original code
-        setSkip(prevSkip => prevSkip + 10);
-        const tradeHistory = getTradeHistory(newData);
-        return tradeHistory;
-    }, [account, getTradeHistory, skip]);
+    const getMoreData = () => {
+        // console.log('newData', data);
+        if (skip < 30) {
+            setSkip(skip + 10);
+        }
 
-    const fetchInitialData = useCallback(() => {
-        const data = fetchData(account ?? '', 0, 10);
+        const tradeHistory = getTradeHistory(data);
+        return tradeHistory;
+    };
+
+    const fetchInitialData = () => {
         return getTradeHistory(data);
-    }, [account, getTradeHistory]);
+    };
 
     return (
         <Page title='Portfolio Management' name='portfolio-management'>
