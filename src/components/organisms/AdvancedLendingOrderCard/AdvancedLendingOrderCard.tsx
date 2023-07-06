@@ -146,7 +146,7 @@ export const AdvancedLendingOrderCard = ({
 
     const getAmountValidation = (): boolean => {
         const value = amountFormatterFromBase[currency](amount);
-        return !!value && value > balanceToLend;
+        return !!value && value > balanceToLend && side === OrderSide.LEND;
     };
 
     const handleAmountChange = (percentage: number) => {

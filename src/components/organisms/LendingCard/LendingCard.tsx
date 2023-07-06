@@ -122,7 +122,7 @@ export const LendingCard = ({
 
     const getAmountValidation = (): boolean => {
         const value = amountFormatterFromBase[currency](amount);
-        return !!value && value > balanceToLend;
+        return !!value && value > balanceToLend && side === OrderSide.LEND;
     };
 
     return (
