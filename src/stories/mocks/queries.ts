@@ -5,6 +5,7 @@ import {
     dailyVolumes,
     dec22Fixture,
     efilBytes32,
+    jun23Fixture,
     mar23Fixture,
     orderHistoryList,
     tradesEFIL,
@@ -67,6 +68,216 @@ export const mockUserTransactionHistory = [
                     user: {
                         transactionCount: 5,
                         transactions: transactions,
+                    },
+                },
+            };
+        },
+    },
+    {
+        request: {
+            query: queries.UserTransactionHistoryDocument,
+            variables: {
+                address: '',
+                skip: 0,
+                first: 10,
+                awaitRefetchQueries: true,
+            },
+        },
+        result: {
+            data: {
+                user: {
+                    transactionCount: 0,
+                    transactions: [],
+                },
+            },
+        },
+        newData: () => {
+            return {
+                data: {
+                    user: {
+                        transactionCount: 0,
+                        transactions: [],
+                    },
+                },
+            };
+        },
+    },
+
+    {
+        request: {
+            query: queries.UserTransactionHistoryDocument,
+            variables: {
+                address: '0xb98bd7c7f656290071e52d1aa617d9cb4467fd6d',
+                skip: 0,
+                first: 10,
+                awaitRefetchQueries: true,
+            },
+        },
+        result: {
+            data: {
+                user: {
+                    transactionCount: 40,
+                    transactions: Array.from(
+                        { length: 10 },
+                        (_, index) => transactions[index % transactions.length]
+                    ),
+                },
+            },
+        },
+        newData: () => {
+            return {
+                data: {
+                    user: {
+                        transactionCount: 40,
+                        transactions: Array(10)
+                            .fill(null)
+                            .map(() => ({
+                                amount: '500000000000000000000',
+                                averagePrice: '0.8000', // TODO: rework the unit in the graph. This is changed only for a dirty fix
+                                side: 1,
+                                orderPrice: '9543',
+                                createdAt: '1671080520',
+                                forwardValue: '520000000000000000000',
+                                currency: efilBytes32,
+                                maturity: jun23Fixture.toString(),
+                            })),
+                    },
+                },
+            };
+        },
+    },
+    {
+        request: {
+            query: queries.UserTransactionHistoryDocument,
+            variables: {
+                address: '0xb98bd7c7f656290071e52d1aa617d9cb4467fd6d',
+                skip: 10,
+                first: 20,
+                awaitRefetchQueries: true,
+            },
+        },
+        result: {
+            data: {
+                user: {
+                    transactionCount: 40,
+                    transactions: Array(10)
+                        .fill(null)
+                        .map(() => ({
+                            amount: '600000000000000000000',
+                            averagePrice: '0.8000', // TODO: rework the unit in the graph. This is changed only for a dirty fix
+                            side: 1,
+                            orderPrice: '9543',
+                            createdAt: '1671080520',
+                            forwardValue: '520000000000000000000',
+                            currency: efilBytes32,
+                            maturity: jun23Fixture.toString(),
+                        })),
+                },
+            },
+        },
+        newData: () => {
+            return {
+                data: {
+                    user: {
+                        transactionCount: 40,
+                        transactions: Array(10)
+                            .fill(null)
+                            .map(() => ({
+                                amount: '600000000000000000000',
+                                averagePrice: '0.8000', // TODO: rework the unit in the graph. This is changed only for a dirty fix
+                                side: 1,
+                                orderPrice: '9543',
+                                createdAt: '1671080520',
+                                forwardValue: '520000000000000000000',
+                                currency: efilBytes32,
+                                maturity: jun23Fixture.toString(),
+                            })),
+                    },
+                },
+            };
+        },
+    },
+    {
+        request: {
+            query: queries.UserTransactionHistoryDocument,
+            variables: {
+                address: '0xb98bd7c7f656290071e52d1aa617d9cb4467fd6d',
+                skip: 20,
+                first: 30,
+                awaitRefetchQueries: true,
+            },
+        },
+        result: {
+            data: {
+                user: {
+                    transactionCount: 40,
+                    transactions: Array.from(
+                        { length: 10 },
+                        (_, index) => transactions[index % transactions.length]
+                    ),
+                },
+            },
+        },
+        newData: () => {
+            return {
+                data: {
+                    user: {
+                        transactionCount: 40,
+                        transactions: Array(10)
+                            .fill(null)
+                            .map(() => ({
+                                amount: '700000000000000000000',
+                                averagePrice: '0.8000', // TODO: rework the unit in the graph. This is changed only for a dirty fix
+                                side: 1,
+                                orderPrice: '9543',
+                                createdAt: '1671080520',
+                                forwardValue: '520000000000000000000',
+                                currency: efilBytes32,
+                                maturity: jun23Fixture.toString(),
+                            })),
+                    },
+                },
+            };
+        },
+    },
+    {
+        request: {
+            query: queries.UserTransactionHistoryDocument,
+            variables: {
+                address: '0xb98bd7c7f656290071e52d1aa617d9cb4467fd6d',
+                skip: 30,
+                first: 40,
+                awaitRefetchQueries: true,
+            },
+        },
+        result: {
+            data: {
+                user: {
+                    transactionCount: 40,
+                    transactions: Array.from(
+                        { length: 10 },
+                        (_, index) => transactions[index % transactions.length]
+                    ),
+                },
+            },
+        },
+        newData: () => {
+            return {
+                data: {
+                    user: {
+                        transactionCount: 40,
+                        transactions: Array(10)
+                            .fill(null)
+                            .map(() => ({
+                                amount: '800000000000000000000',
+                                averagePrice: '0.8000', // TODO: rework the unit in the graph. This is changed only for a dirty fix
+                                side: 1,
+                                orderPrice: '9543',
+                                createdAt: '1671080520',
+                                forwardValue: '520000000000000000000',
+                                currency: efilBytes32,
+                                maturity: jun23Fixture.toString(),
+                            })),
                     },
                 },
             };

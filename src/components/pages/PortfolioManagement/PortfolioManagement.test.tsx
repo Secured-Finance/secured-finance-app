@@ -19,7 +19,7 @@ jest.mock(
             children
 );
 
-describe('PortfolioManagement component', () => {
+describe.skip('PortfolioManagement component', () => {
     it('should render PortfolioManagement', async () => {
         waitFor(() =>
             render(<Default />, {

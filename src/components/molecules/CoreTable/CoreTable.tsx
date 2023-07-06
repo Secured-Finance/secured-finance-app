@@ -56,7 +56,6 @@ export const CoreTable = <T,>({
     useEffect(() => {
         setRowData([...data]);
     }, [data]);
-
     const filteredColumns = columns.filter(column => {
         if (
             coreTableOptions.hideColumnIds === undefined ||
@@ -243,6 +242,7 @@ const PaginatedScrolling = ({
         next={fetchMoreData}
         hasMore={hasMoreData}
         loader={<h4>Loading...</h4>}
+        height={400}
     >
         {children}
     </InfiniteScroll>

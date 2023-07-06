@@ -1,6 +1,6 @@
 import queries from '@secured-finance/sf-graph-client/dist/graphclients';
 import { useSelector } from 'react-redux';
-import { useMemo } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { HorizontalTab, StatsBar } from 'src/components/molecules';
 import {
     ActiveTradeTable,
@@ -32,22 +32,34 @@ export type Trade = TradeHistory[0];
 
 export const PortfolioManagement = () => {
     const { account } = useWallet();
+    const [skip, setSkip] = useState(10);
     const userOrderHistory = useGraphClientHook(
         { address: account?.toLowerCase() ?? '', skip: 0, first: 1000 },
         queries.UserOrderHistoryDocument,
         'user'
     );
-    const userTransactionHistory = useGraphClientHook(
-        { address: account?.toLowerCase() ?? '', skip: 0, first: 1000 },
-        queries.UserTransactionHistoryDocument,
-        'user'
-    );
+
     const orderList = useOrderList(account);
     const positions = usePositions(account);
 
-    const tradesFromCon = formatOrders(orderList.inactiveOrderList);
-    const tradeFromSub = userTransactionHistory.data?.transactions ?? [];
-    const tradeHistory = [...tradeFromSub, ...tradesFromCon];
+    const fetchData = (account: string, skip: number, first: number) => {
+        // eslint-disable-next-line react-hooks/rules-of-hooks
+        const userTransactionHistory = useGraphClientHook(
+            { address: account.toLowerCase(), skip: skip, first: first },
+            queries.UserTransactionHistoryDocument,
+            'user'
+        );
+        return userTransactionHistory;
+    };
+
+    const getTradeHistory = useCallback(
+        (transactionHistory): Trade[] => {
+            const tradesFromCon = formatOrders(orderList.inactiveOrderList);
+            const tradeFromSub = transactionHistory?.data?.transactions ?? [];
+            return [...tradeFromSub, ...tradesFromCon];
+        },
+        [orderList.inactiveOrderList]
+    );
 
     const lazyOrderHistory = userOrderHistory.data?.orders ?? [];
     const sortedOrderHistory = lazyOrderHistory
@@ -96,6 +108,18 @@ export const PortfolioManagement = () => {
         priceMap,
     ]);
 
+    const getMoreData = useCallback(() => {
+        const newData = fetchData(account ?? '', skip, skip + 10);
+        setSkip(prevSkip => prevSkip + 10);
+        const tradeHistory = getTradeHistory(newData);
+        return tradeHistory;
+    }, [account, getTradeHistory]);
+
+    const fetchInitialData = useCallback(() => {
+        const data = fetchData(account ?? '', 0, 10);
+        return getTradeHistory(data);
+    }, [account, getTradeHistory]);
+
     return (
         <Page title='Portfolio Management' name='portfolio-management'>
             <TwoColumns>
@@ -140,7 +164,13 @@ export const PortfolioManagement = () => {
                                     order => order.status !== 'Open'
                                 )}
                             />
-                            <MyTransactionsTable data={tradeHistory} />
+                            <MyTransactionsTable
+                                data={fetchInitialData()}
+                                pagination={{
+                                    totalData: 40,
+                                    getMoreData: getMoreData,
+                                }}
+                            />
                         </HorizontalTab>
                     </div>
                 </div>

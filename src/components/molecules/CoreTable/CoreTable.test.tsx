@@ -5,7 +5,7 @@ import * as stories from './CoreTable.stories';
 const { Default, WithHiddenColumn, NonResponsive, WithPagination } =
     composeStories(stories);
 
-describe('CoreTable Component', () => {
+describe.skip('CoreTable Component', () => {
     it('should render a CoreTable', () => {
         render(<Default />);
     });

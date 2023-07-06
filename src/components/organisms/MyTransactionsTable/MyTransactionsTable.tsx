@@ -40,7 +40,14 @@ const priceYieldColumnDef = (
     });
 };
 
-export const MyTransactionsTable = ({ data }: { data: TradeHistory }) => {
+export const MyTransactionsTable = ({
+    data,
+    pagination,
+}: {
+    data: TradeHistory;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    pagination?: { totalData: number; getMoreData: () => any };
+}) => {
     const isTablet = useBreakpoint('tablet');
     const columns = useMemo(
         () => [
@@ -90,6 +97,7 @@ export const MyTransactionsTable = ({ data }: { data: TradeHistory }) => {
                     name: 'active-trade-table',
                     border: false,
                     stickyColumns: new Set([0, 1]),
+                    pagination: pagination,
                 }}
             />
         </div>
