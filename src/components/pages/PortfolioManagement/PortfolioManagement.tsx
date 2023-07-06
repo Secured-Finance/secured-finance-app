@@ -109,11 +109,11 @@ export const PortfolioManagement = () => {
     ]);
 
     const getMoreData = useCallback(() => {
-        const newData = fetchData(account ?? '', skip, skip + 10);
+        const newData = fetchData(account ?? '', skip, skip + 10); //added skip as it should be in original code
         setSkip(prevSkip => prevSkip + 10);
         const tradeHistory = getTradeHistory(newData);
         return tradeHistory;
-    }, [account, getTradeHistory]);
+    }, [account, getTradeHistory, skip]);
 
     const fetchInitialData = useCallback(() => {
         const data = fetchData(account ?? '', 0, 10);
