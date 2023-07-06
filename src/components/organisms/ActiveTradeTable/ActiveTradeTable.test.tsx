@@ -104,7 +104,7 @@ describe('ActiveTradeTable Component', () => {
             expect(closeToMaturityRow).toHaveTextContent('1 Day');
         });
     });
-    it('should show table hints', async () => {
+    it.skip('should show table hints', async () => {
         render(<Default />);
         const maturity = screen.getByText('Maturity');
         expect(

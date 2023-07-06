@@ -26,4 +26,5 @@ const config: StorybookConfig = {
         COMMIT_HASH: '.storybook',
     }),
 };
+
 export default config;
