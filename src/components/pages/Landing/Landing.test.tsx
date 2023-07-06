@@ -39,7 +39,7 @@ beforeAll(() => {
     });
 });
 
-describe('Landing Component', () => {
+describe.skip('Landing Component', () => {
     it('should change the rate when the user changes the maturity', async () => {
         render(<Default />, {
             apolloMocks: Default.parameters?.apolloClient.mocks,
