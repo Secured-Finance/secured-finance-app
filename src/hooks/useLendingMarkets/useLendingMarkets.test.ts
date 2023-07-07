@@ -2,6 +2,7 @@ import { SecuredFinanceClient } from '@secured-finance/sf-client';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { renderHook } from 'src/test-utils';
 import { CurrencySymbol } from 'src/utils';
+import { Maturity } from 'src/utils/entities';
 import timemachine from 'timemachine';
 import { useLendingMarkets } from './useLendingMarkets';
 
@@ -69,5 +70,32 @@ describe('useLendingMarkets', () => {
                 isItayosePeriod: false,
             },
         });
+    });
+
+    it('should increment the name of the contract if it already exists', async () => {
+        const lendingMarkets = await mock.getLendingMarkets();
+        mock.getLendingMarkets.mockResolvedValueOnce([
+            ...lendingMarkets,
+            { ...lendingMarkets[0], maturity: new Maturity(10000) },
+        ]);
+
+        const { result, store } = renderHook(() => useLendingMarkets());
+        const fetchLendingMarkets = result.current.fetchLendingMarkets;
+        await fetchLendingMarkets(
+            CurrencySymbol.EFIL,
+            mock as unknown as SecuredFinanceClient
+        );
+        expect(
+            Object.keys(
+                store.getState().availableContracts.lendingMarkets[
+                    CurrencySymbol.EFIL
+                ]
+            )
+        ).toHaveLength(3);
+        expect(
+            store.getState().availableContracts.lendingMarkets[
+                CurrencySymbol.EFIL
+            ][10000].name
+        ).toEqual('ETH-1000-1');
     });
 });
