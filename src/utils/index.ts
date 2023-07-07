@@ -4,6 +4,7 @@ export * from './currencies';
 export * from './currencyList';
 export * from './env';
 export * from './events/interface';
+export * from './fee';
 export * from './formatNumbers';
 export * from './handleContractTransaction';
 export * from './links';

@@ -3,8 +3,8 @@ import { Disclosure, Transition } from '@headlessui/react';
 import { OrderSide, WalletSource } from '@secured-finance/sf-client';
 import { formatDate, getUTCMonthYear } from '@secured-finance/sf-core';
 import { BigNumber } from 'ethers';
-import { useCallback, useMemo, useReducer, useState } from 'react';
-import { shallowEqual, useDispatch, useSelector } from 'react-redux';
+import { useCallback, useReducer, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import {
     ExpandIndicator,
     InformationPopover,
@@ -20,23 +20,17 @@ import {
     FailurePanel,
     SuccessPanel,
 } from 'src/components/molecules';
-import {
-    CollateralBook,
-    useEtherscanUrl,
-    useMaturityOptions,
-    useOrderFee,
-} from 'src/hooks';
+import { CollateralBook, useEtherscanUrl, useOrderFee } from 'src/hooks';
 import { setLastMessage } from 'src/store/lastError';
-import { RootState } from 'src/store/types';
 import { OrderType, PlaceOrderFunction } from 'src/types';
 import {
     AddressUtils,
     CurrencySymbol,
     OrderEvents,
     OrderProperties,
+    calculateFee,
     handleContractTransaction,
     ordinaryFormat,
-    percentFormat,
 } from 'src/utils';
 import { Amount, LoanValue, Maturity } from 'src/utils/entities';
 
@@ -134,17 +128,6 @@ export const PlaceOrder = ({
     const [txHash, setTxHash] = useState<string | undefined>();
     const globalDispatch = useDispatch();
 
-    const lendingContracts = useSelector(
-        (state: RootState) =>
-            state.availableContracts.lendingMarkets[orderAmount.currency],
-        shallowEqual
-    );
-
-    const maturityOptionList = useMaturityOptions(
-        lendingContracts,
-        market => market.isOpened
-    );
-
     const [errorMessage, setErrorMessage] = useState(
         'Your order could not be placed'
     );
@@ -201,14 +184,7 @@ export const PlaceOrder = ({
         [onPlaceOrder, orderType, orderAmount.value, globalDispatch]
     );
 
-    const fee = useOrderFee(orderAmount.currency);
-    const quarter = useMemo(() => {
-        return (
-            maturityOptionList.findIndex(element =>
-                element.value.equals(maturity)
-            ) + 1
-        );
-    }, [maturity, maturityOptionList]);
+    const orderFee = useOrderFee(orderAmount.currency);
 
     const onClick = useCallback(
         async (currentStep: Step) => {
@@ -296,7 +272,10 @@ export const PlaceOrder = ({
                                         ],
                                         [
                                             feeItem(),
-                                            percentFormat((fee * quarter) / 4),
+                                            `~ ${calculateFee(
+                                                maturity.toNumber(),
+                                                orderFee
+                                            )}`,
                                         ],
                                     ]}
                                 />
