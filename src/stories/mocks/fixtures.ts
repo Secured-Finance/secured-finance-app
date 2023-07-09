@@ -640,13 +640,13 @@ export const collateralBook80: CollateralBook = {
 export const collateralBook37: CollateralBook = {
     collateral: {
         ETH: BigNumber.from('1000000000000000000'),
-        USDC: BigNumber.from('10000000'),
+        USDC: BigNumber.from('100000000'),
     },
     nonCollateral: {
         EFIL: BigNumber.from('100000000000000000000'),
         WBTC: BigNumber.from('20000000'),
     },
-    usdCollateral: 2300,
+    usdCollateral: 2100.34,
     usdNonCollateral: 10600,
     coverage: BigNumber.from('3700'),
     collateralThreshold: 80,

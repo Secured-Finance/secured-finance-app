@@ -4,7 +4,7 @@ import * as jest from 'jest-mock';
 import { CurrencySymbol, getCurrencyMapAsList } from 'src/utils';
 import { Maturity } from 'src/utils/entities';
 import {
-    collateralBook80,
+    collateralBook37,
     dec22Fixture,
     dec24Fixture,
     efilBytes32,
@@ -99,10 +99,10 @@ export const mockUseSF = () => {
         getCollateralBook: jest.fn(() =>
             Promise.resolve({
                 collateral: {
-                    ...collateralBook80.collateral,
-                    ...collateralBook80.nonCollateral,
+                    ...collateralBook37.collateral,
+                    ...collateralBook37.nonCollateral,
                 },
-                collateralCoverage: collateralBook80.coverage,
+                collateralCoverage: collateralBook37.coverage,
             })
         ),
 

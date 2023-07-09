@@ -1,3 +1,4 @@
+import { OrderSide } from '@secured-finance/sf-client';
 import { formatDate } from '@secured-finance/sf-core';
 import { createColumnHelper } from '@tanstack/react-table';
 import * as dayjs from 'dayjs';
@@ -28,6 +29,7 @@ export const ActiveTradeTable = ({ data }: { data: Position[] }) => {
     const [unwindDialogData, setUnwindDialogData] = useState<{
         maturity: Maturity;
         amount: Amount;
+        side: OrderSide;
         show: boolean;
     }>();
     const priceList = useSelector((state: RootState) => getPriceMap(state));
@@ -125,6 +127,11 @@ export const ActiveTradeTable = ({ data }: { data: Position[] }) => {
                     const maturity = Number(info.row.original.maturity);
                     const ccy = hexToCurrencySymbol(info.row.original.currency);
                     const amount = BigNumber.from(info.row.original.amount);
+                    const side = BigNumber.from(
+                        info.row.original.forwardValue
+                    ).isNegative()
+                        ? OrderSide.LEND
+                        : OrderSide.BORROW; // side is reversed as unwind
                     if (!ccy) return null;
                     return (
                         <div className='flex justify-center'>
@@ -145,8 +152,14 @@ export const ActiveTradeTable = ({ data }: { data: Position[] }) => {
                                                 maturity: new Maturity(
                                                     maturity
                                                 ),
-                                                amount: new Amount(amount, ccy),
+                                                amount: new Amount(
+                                                    amount.isNegative()
+                                                        ? amount.mul(-1)
+                                                        : amount,
+                                                    ccy
+                                                ),
                                                 show: true,
+                                                side: side,
                                             });
                                         },
                                     },
@@ -203,6 +216,7 @@ export const ActiveTradeTable = ({ data }: { data: Position[] }) => {
                     }
                     maturity={unwindDialogData.maturity}
                     amount={unwindDialogData.amount}
+                    side={unwindDialogData.side}
                 />
             )}
         </div>

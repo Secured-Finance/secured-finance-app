@@ -262,7 +262,6 @@ export const PlaceOrder = ({
                                     side={side}
                                     assetPrice={assetPrice}
                                     tradeValue={loanValue}
-                                    type='trade'
                                 />
                                 <SectionWithItems
                                     itemList={[
