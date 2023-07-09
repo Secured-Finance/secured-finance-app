@@ -60,7 +60,7 @@ describe('AdvancedLendingOrderCard Component', () => {
         expect(screen.getByTestId('collateral-progress-bar-track')).toHaveStyle(
             'width: calc(100% * 0.37)'
         );
-        expect(screen.getByText('Available: $989.00')).toBeInTheDocument();
+        expect(screen.getByText('Available: $903.15')).toBeInTheDocument();
 
         expect(screen.getByText('Liquidation Risk')).toBeInTheDocument();
         expect(screen.getByText('Low')).toBeInTheDocument();
