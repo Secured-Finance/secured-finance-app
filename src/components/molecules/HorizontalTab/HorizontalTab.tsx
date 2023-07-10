@@ -28,18 +28,25 @@ const TitleChip = ({
 export const HorizontalTab = ({
     tabTitles,
     children,
+    onTabChange,
 }: {
     tabTitles: string[];
     children?: React.ReactNode;
+    onTabChange?: (v: number) => void;
 }) => {
     const arrayChildren = Children.toArray(children);
     const [selectedIndex, setSelectedIndex] = useState(0);
+
+    const onChange = (index: number) => {
+        setSelectedIndex(index);
+        onTabChange?.(index);
+    };
 
     return (
         <div className='rounded-b-2xl border border-white-10 bg-cardBackground/60 shadow-tab'>
             <HeadlessTab.Group
                 selectedIndex={selectedIndex}
-                onChange={setSelectedIndex}
+                onChange={onChange}
             >
                 <HeadlessTab.List className='h-16 justify-start border-b border-white-10 p-3'>
                     <div className='w-full tablet:hidden'>
