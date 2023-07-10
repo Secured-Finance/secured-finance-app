@@ -33,7 +33,7 @@ export const ActiveTradeTable = ({ data }: { data: Position[] }) => {
     const priceList = useSelector((state: RootState) => getPriceMap(state));
     const router = useRouter();
     const dispatch = useDispatch();
-    const isTablet = useBreakpoint('tablet');
+    const isTablet = useBreakpoint('laptop');
 
     const columns = useMemo(
         () => [

@@ -50,9 +50,9 @@ module.exports = {
         },
 
         screens: {
-            tablet: '768px',
-            laptop: '1024px',
-            desktop: '1440px',
+            tablet: '767px',
+            laptop: '1023px',
+            desktop: '1439px',
         },
 
         fontSize: {
