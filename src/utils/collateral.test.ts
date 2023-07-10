@@ -32,9 +32,7 @@ describe('collateral.calculatePercentage', () => {
     });
 
     it('should return 0 when total is zero', () => {
-        expect(calculatePercentage(ONE_ETH, ZERO_ETH)).toEqual(
-            BigNumber.from(0)
-        );
+        expect(calculatePercentage(ONE_ETH, ZERO_ETH)).toEqual(ZERO_ETH);
     });
 });
 
