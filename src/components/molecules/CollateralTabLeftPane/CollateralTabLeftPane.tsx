@@ -13,6 +13,7 @@ import {
     getCurrencyMapAsList,
     usdFormat,
 } from 'src/utils';
+import { useMemo } from 'react';
 
 interface CollateralTabLeftPaneProps {
     account: string | null;
@@ -47,7 +48,7 @@ const getInformationText = () => {
     return `Only ${currencyString} ${article} eligible as collateral.`;
 };
 
-const checkAssetExist = (
+const checkAssetQuantityExist = (
     collateralBook: CollateralBook['collateral' | 'nonCollateral']
 ) => {
     let exist = false;
@@ -65,6 +66,12 @@ export const CollateralTabLeftPane = ({
     onClick,
     collateralBook,
 }: CollateralTabLeftPaneProps) => {
+    const collateralQuantityExist = useMemo(() => {
+        return checkAssetQuantityExist(collateralBook.collateral);
+    }, [collateralBook.collateral]);
+    const nonCollateralQuantityExist = useMemo(() => {
+        return checkAssetQuantityExist(collateralBook.nonCollateral);
+    }, [collateralBook.nonCollateral]);
     const collateralBalance = account ? collateralBook.usdCollateral : 0;
 
     return (
@@ -100,14 +107,14 @@ export const CollateralTabLeftPane = ({
                 ) : (
                     <div>
                         <div className='mx-5 my-6 hidden flex-col gap-6 tablet:flex'>
-                            {checkAssetExist(collateralBook.collateral) && (
+                            {collateralQuantityExist && (
                                 <AssetInformation
                                     header='Collateral Assets'
                                     informationText={getInformationText()}
                                     collateralBook={collateralBook.collateral}
                                 ></AssetInformation>
                             )}
-                            {checkAssetExist(collateralBook.nonCollateral) && (
+                            {nonCollateralQuantityExist && (
                                 <AssetInformation
                                     header='Non-collateral Assets'
                                     informationText='Not eligible as collateral'
@@ -116,7 +123,7 @@ export const CollateralTabLeftPane = ({
                                     }
                                 ></AssetInformation>
                             )}
-                            {!checkAssetExist(collateralBook.collateral) && (
+                            {!collateralQuantityExist && (
                                 <div className='typography-caption w-40 text-grayScale'>
                                     Deposit collateral from your connected
                                     wallet to enable lending service on Secured
@@ -136,7 +143,7 @@ export const CollateralTabLeftPane = ({
                                     collateralBook.collateralThreshold
                                 }
                             />
-                            {checkAssetExist(collateralBook.collateral) && (
+                            {collateralQuantityExist && (
                                 <CollateralInformationTable
                                     data={(
                                         Object.entries(
@@ -159,7 +166,7 @@ export const CollateralTabLeftPane = ({
                                     assetTitle='Collateral Asset'
                                 />
                             )}
-                            {checkAssetExist(collateralBook.nonCollateral) && (
+                            {nonCollateralQuantityExist && (
                                 <CollateralInformationTable
                                     data={(
                                         Object.entries(
@@ -182,7 +189,7 @@ export const CollateralTabLeftPane = ({
                                     assetTitle='Non-Collateral Asset'
                                 />
                             )}
-                            {!checkAssetExist(collateralBook.collateral) && (
+                            {!collateralQuantityExist && (
                                 <div className='typography-caption gap-2 text-grayScale'>
                                     Deposit collateral from your connected
                                     wallet to enable lending service on Secured
