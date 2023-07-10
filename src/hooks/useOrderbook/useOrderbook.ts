@@ -21,7 +21,7 @@ export type OrderBook = Array<OrderBookEntry>;
 
 const MAX_ORDERBOOK_LENGTH = 40;
 
-const sortOrders = (
+export const sortOrders = (
     a: OrderBookEntry,
     b: OrderBookEntry,
     order: 'asc' | 'desc'
