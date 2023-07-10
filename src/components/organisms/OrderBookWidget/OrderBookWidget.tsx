@@ -147,7 +147,7 @@ export const OrderBookWidget = ({
     hideMidPrice?: boolean;
 }) => {
     const dispatch = useDispatch();
-    const isTabletOrMobile = useBreakpoint('tablet');
+    const isTabletOrMobile = useBreakpoint('laptop');
     const tableAlign = useMemo(
         () => (isTabletOrMobile ? 'left' : 'right'),
         [isTabletOrMobile]
@@ -335,7 +335,11 @@ export const OrderBookWidget = ({
             ) : (
                 <>
                     <CoreTable
-                        data={sellOrders}
+                        data={
+                            isTabletOrMobile
+                                ? [...sellOrders].reverse()
+                                : sellOrders
+                        }
                         columns={
                             isTabletOrMobile
                                 ? [...sellColumns].reverse()
