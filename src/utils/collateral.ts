@@ -15,7 +15,7 @@ export const computeAvailableToBorrow = (
 };
 
 export const calculatePercentage = (value: BigNumber, total: BigNumber) => {
-    return value.mul(100).div(total);
+    return total.isZero() ? BigNumber.from('0') : value.mul(100).div(total);
 };
 
 export function recomputeCollateralUtilization(
