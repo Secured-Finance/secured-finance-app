@@ -53,7 +53,7 @@ const checkAssetQuantityExist = (
 ) => {
     let exist = false;
     collateralBook &&
-        (Object.values(collateralBook) as BigNumber[]).forEach(quantity => {
+        Object.values(collateralBook).forEach(quantity => {
             if (!quantity.isZero()) {
                 exist = true;
             }
