@@ -1,64 +1,91 @@
-/* eslint-disable react-hooks/rules-of-hooks */
-import { GraphApolloClient, useQuery } from '@secured-finance/sf-graph-client';
-import { useEffect } from 'react';
+import {
+    GraphApolloClient,
+    QueryResult,
+    useQuery,
+} from '@secured-finance/sf-graph-client';
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from 'src/store/types';
+
+type QueryResultType<T, K extends keyof T> = Omit<
+    QueryResult<T>,
+    'data' | 'error'
+> & {
+    data: T[K] | undefined;
+    error: QueryResult<T>['error'] | undefined;
+};
 
 export function useGraphClientHook<T, TVariables>(
     variables: TVariables,
     queryDocument: Parameters<typeof useQuery<T>>[0]
-): Awaited<ReturnType<typeof useQuery<T>>>;
+): QueryResult<T>;
 
 export function useGraphClientHook<T, TVariables, K extends keyof T>(
     variables: TVariables,
     queryDocument: Parameters<typeof useQuery<T>>[0],
-    entity: K
-): Omit<ReturnType<typeof useQuery<T>>, 'data'> & { data: T[K] | undefined };
+    entity: K,
+    skip?: boolean,
+    realTime?: boolean
+): QueryResultType<T, K>;
 
 export function useGraphClientHook<T, TVariables, K extends keyof T>(
     variables: TVariables,
     queryDocument: Parameters<typeof useQuery<T>>[0],
     entity?: K,
+    skip = false,
     realTime = false,
     client?: GraphApolloClient
 ) {
-    if (!queryDocument) {
-        return {
-            data: undefined,
-            error: undefined,
-            refetch: undefined,
-            networkStatus: undefined,
-        };
-    }
-    const { error, data, refetch, networkStatus } = useQuery<T, TVariables>(
-        queryDocument,
-        {
-            client: client,
-            variables: {
-                ...variables,
-                awaitRefetchQueries: true,
-            },
-            fetchPolicy: 'network-only',
-            notifyOnNetworkStatusChange: true,
+    const [result, setResult] = useState<
+        Omit<QueryResult<T>, 'data' | 'error'> & {
+            data: QueryResultType<T, K>['data'] | QueryResult<T>['data'];
+            error: QueryResult<T>['error'] | QueryResult<T>['data'];
         }
-    );
+    >({
+        data: undefined,
+        error: undefined,
+        refetch: undefined,
+        networkStatus: undefined,
+    });
 
     const block = useSelector(
         (state: RootState) => state.blockchain.latestBlock
     );
 
-    if (error) {
-        console.error(error);
-    }
+    const { refetch, networkStatus } = useQuery<T, TVariables>(queryDocument, {
+        client: client,
+        variables: {
+            ...variables,
+            awaitRefetchQueries: true,
+        },
+        fetchPolicy: 'network-only',
+        notifyOnNetworkStatusChange: true,
+        pollInterval: undefined,
+        skip,
+        onCompleted: data => {
+            setResult({
+                data: entity ? data?.[entity] : data,
+                error: undefined,
+                refetch,
+                networkStatus,
+            });
+        },
+        onError: error => {
+            setResult({
+                data: undefined,
+                error,
+                refetch,
+                networkStatus,
+            });
+            console.error(error);
+        },
+    });
 
     useEffect(() => {
-        if (realTime) refetch?.();
-    }, [block, realTime, refetch]);
+        if (realTime) {
+            refetch?.();
+        }
+    }, [block, refetch, realTime]);
 
-    return {
-        data: entity ? data?.[entity] : data,
-        error,
-        refetch,
-        networkStatus,
-    };
+    return result;
 }
