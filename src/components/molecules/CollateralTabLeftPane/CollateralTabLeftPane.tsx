@@ -13,6 +13,7 @@ import {
     getCurrencyMapAsList,
     usdFormat,
 } from 'src/utils';
+import { useMemo } from 'react';
 
 interface CollateralTabLeftPaneProps {
     account: string | null;
@@ -47,13 +48,31 @@ const getInformationText = () => {
     return `Only ${currencyString} ${article} eligible as collateral.`;
 };
 
+const checkAssetQuantityExist = (
+    collateralBook: CollateralBook['collateral' | 'nonCollateral']
+) => {
+    let exist = false;
+    collateralBook &&
+        Object.values(collateralBook).forEach(quantity => {
+            if (!quantity.isZero()) {
+                exist = true;
+            }
+        });
+    return exist;
+};
+
 export const CollateralTabLeftPane = ({
     account,
     onClick,
     collateralBook,
 }: CollateralTabLeftPaneProps) => {
+    const collateralQuantityExist = useMemo(() => {
+        return checkAssetQuantityExist(collateralBook.collateral);
+    }, [collateralBook.collateral]);
+    const nonCollateralQuantityExist = useMemo(() => {
+        return checkAssetQuantityExist(collateralBook.nonCollateral);
+    }, [collateralBook.nonCollateral]);
     const collateralBalance = account ? collateralBook.usdCollateral : 0;
-    const nonCollateralBalance = account ? collateralBook.usdNonCollateral : 0;
 
     return (
         <div className='flex min-h-[400px] w-full flex-col border-white-10 tablet:w-64 tablet:border-r'>
@@ -88,14 +107,14 @@ export const CollateralTabLeftPane = ({
                 ) : (
                     <div>
                         <div className='mx-5 my-6 hidden flex-col gap-6 tablet:flex'>
-                            {collateralBalance > 0 && (
+                            {collateralQuantityExist && (
                                 <AssetInformation
                                     header='Collateral Assets'
                                     informationText={getInformationText()}
                                     collateralBook={collateralBook.collateral}
                                 ></AssetInformation>
                             )}
-                            {nonCollateralBalance > 0 && (
+                            {nonCollateralQuantityExist && (
                                 <AssetInformation
                                     header='Non-collateral Assets'
                                     informationText='Not eligible as collateral'
@@ -104,7 +123,7 @@ export const CollateralTabLeftPane = ({
                                     }
                                 ></AssetInformation>
                             )}
-                            {collateralBalance === 0 && (
+                            {!collateralQuantityExist && (
                                 <div className='typography-caption w-40 text-grayScale'>
                                     Deposit collateral from your connected
                                     wallet to enable lending service on Secured
@@ -124,7 +143,7 @@ export const CollateralTabLeftPane = ({
                                     collateralBook.collateralThreshold
                                 }
                             />
-                            {collateralBalance > 0 && (
+                            {collateralQuantityExist && (
                                 <CollateralInformationTable
                                     data={(
                                         Object.entries(
@@ -147,7 +166,7 @@ export const CollateralTabLeftPane = ({
                                     assetTitle='Collateral Asset'
                                 />
                             )}
-                            {nonCollateralBalance > 0 && (
+                            {nonCollateralQuantityExist && (
                                 <CollateralInformationTable
                                     data={(
                                         Object.entries(
@@ -170,7 +189,7 @@ export const CollateralTabLeftPane = ({
                                     assetTitle='Non-Collateral Asset'
                                 />
                             )}
-                            {collateralBalance === 0 && (
+                            {!collateralQuantityExist && (
                                 <div className='typography-caption gap-2 text-grayScale'>
                                     Deposit collateral from your connected
                                     wallet to enable lending service on Secured
