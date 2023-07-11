@@ -13,7 +13,7 @@ describe('CollateralSimulationSection Component', () => {
     it('should display the borrow remaining and the collateral usage if its a BORROW order', () => {
         render(<Trade side={OrderSide.BORROW} />);
         expect(screen.getByText('Borrow Amount')).toBeInTheDocument();
-        expect(screen.getByText('50 EFIL')).toBeInTheDocument();
+        expect(screen.getByText('50 WFIL')).toBeInTheDocument();
 
         expect(screen.getByText('Borrow Remaining')).toBeInTheDocument();
         expect(screen.getByText('$489.00')).toBeInTheDocument();
@@ -26,7 +26,7 @@ describe('CollateralSimulationSection Component', () => {
     it('should not display the borrow remaining and the collateral usage if its a LEND order', () => {
         render(<Trade side={OrderSide.LEND} />);
         expect(screen.getByText('Lend Amount')).toBeInTheDocument();
-        expect(screen.getByText('50 EFIL')).toBeInTheDocument();
+        expect(screen.getByText('50 WFIL')).toBeInTheDocument();
 
         expect(screen.queryByText('Borrow Remaining')).not.toBeInTheDocument();
         expect(screen.queryByText('Collateral Usage')).not.toBeInTheDocument();

@@ -7,7 +7,7 @@ export default {
     title: 'Molecules/AmountCard',
     component: AmountCard,
     args: {
-        amount: new Amount('5000000000000000000000', CurrencySymbol.EFIL),
+        amount: new Amount('5000000000000000000000', CurrencySymbol.WFIL),
         price: 8.3,
     },
 } as ComponentMeta<typeof AmountCard>;

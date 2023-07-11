@@ -23,7 +23,7 @@ const preloadedState = {
         orderType: OrderType.LIMIT,
     },
     wallet: {
-        balances: { [CurrencySymbol.USDC]: 10000, [CurrencySymbol.EFIL]: 5000 },
+        balances: { [CurrencySymbol.USDC]: 10000, [CurrencySymbol.WFIL]: 5000 },
     },
     ...preloadedLendingMarkets,
     ...preloadedAssetPrices,
@@ -178,7 +178,7 @@ describe('AdvancedLendingOrderCard Component', () => {
                 ...preloadedState,
                 landingOrderForm: {
                     ...preloadedState.landingOrderForm,
-                    currency: CurrencySymbol.EFIL,
+                    currency: CurrencySymbol.WFIL,
                     side: OrderSide.LEND,
                 },
             },
@@ -211,7 +211,7 @@ describe('AdvancedLendingOrderCard Component', () => {
                     ...preloadedState,
                     landingOrderForm: {
                         ...preloadedState.landingOrderForm,
-                        currency: CurrencySymbol.EFIL,
+                        currency: CurrencySymbol.WFIL,
                         side: OrderSide.LEND,
                     },
                 },
@@ -240,7 +240,7 @@ describe('AdvancedLendingOrderCard Component', () => {
                     ...preloadedState,
                     landingOrderForm: {
                         ...preloadedState.landingOrderForm,
-                        currency: CurrencySymbol.EFIL,
+                        currency: CurrencySymbol.WFIL,
                         side: OrderSide.LEND,
                     },
                 },
@@ -274,7 +274,7 @@ describe('AdvancedLendingOrderCard Component', () => {
                 ...preloadedState,
                 landingOrderForm: {
                     ...preloadedState.landingOrderForm,
-                    currency: CurrencySymbol.EFIL,
+                    currency: CurrencySymbol.WFIL,
                     side: OrderSide.LEND,
                 },
             },

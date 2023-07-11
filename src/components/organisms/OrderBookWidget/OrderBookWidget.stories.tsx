@@ -114,7 +114,7 @@ export default {
     args: {
         buyOrders: borrowEntries,
         sellOrders: lendEntries,
-        currency: CurrencySymbol.EFIL,
+        currency: CurrencySymbol.WFIL,
     },
     parameters: {
         ...RESPONSIVE_PARAMETERS,

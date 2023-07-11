@@ -16,7 +16,7 @@ export function computeTotalDailyVolumeInUSD(
 } {
     const volumePerCurrency: Record<CurrencySymbol, BigNumber> = {
         [CurrencySymbol.ETH]: BigNumber.from(0),
-        [CurrencySymbol.EFIL]: BigNumber.from(0),
+        [CurrencySymbol.WFIL]: BigNumber.from(0),
         [CurrencySymbol.USDC]: BigNumber.from(0),
         [CurrencySymbol.WBTC]: BigNumber.from(0),
     };

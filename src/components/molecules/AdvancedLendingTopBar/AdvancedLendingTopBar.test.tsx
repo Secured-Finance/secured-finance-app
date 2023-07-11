@@ -9,7 +9,7 @@ describe('AdvancedLendingTopBar Component', () => {
         render(<Default />);
 
         expect(
-            screen.getByRole('button', { name: 'EFIL' })
+            screen.getByRole('button', { name: 'WFIL' })
         ).toBeInTheDocument();
         expect(screen.getByText('Maturity Dec 1, 2022')).toBeInTheDocument();
 
@@ -36,7 +36,7 @@ describe('AdvancedLendingTopBar Component', () => {
         render(<Default />);
 
         expect(
-            screen.getByRole('button', { name: 'EFIL' })
+            screen.getByRole('button', { name: 'WFIL' })
         ).toBeInTheDocument();
         const source = screen.getByRole('link');
         expect(source).toBeInTheDocument();

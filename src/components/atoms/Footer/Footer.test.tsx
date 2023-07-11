@@ -7,6 +7,7 @@ const { Default } = composeStories(stories);
 
 describe('Footer component', () => {
     it('should render footer', () => {
+        process.env.NEXT_PUBLIC_USE_PACKAGE_VERSION = 'true';
         render(<Default />);
         expect(
             screen.getByText(`Secured Finance v${packageJson.version}`)
@@ -15,6 +16,7 @@ describe('Footer component', () => {
     });
 
     it('should render correct environment', () => {
+        process.env.NEXT_PUBLIC_USE_PACKAGE_VERSION = 'true';
         process.env.SF_ENV = 'staging';
         render(<Default />);
         expect(
