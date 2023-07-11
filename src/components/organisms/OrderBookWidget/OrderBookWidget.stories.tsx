@@ -1,7 +1,7 @@
 import { RESPONSIVE_PARAMETERS } from '.storybook/constants';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { BigNumber } from 'ethers';
-import { OrderBookEntry } from 'src/hooks/useOrderbook';
+import { OrderBookEntry, sortOrders } from 'src/hooks/useOrderbook';
 import { CurrencySymbol } from 'src/utils';
 import { LoanValue, Maturity } from 'src/utils/entities';
 import { OrderBookWidget } from './OrderBookWidget';
@@ -112,8 +112,8 @@ export default {
     title: 'Organism/OrderBookWidget',
     component: OrderBookWidget,
     args: {
-        buyOrders: borrowEntries,
-        sellOrders: lendEntries,
+        buyOrders: borrowEntries.sort((a, b) => sortOrders(a, b, 'asc')),
+        sellOrders: lendEntries.sort((a, b) => sortOrders(a, b, 'desc')),
         currency: CurrencySymbol.WFIL,
     },
     parameters: {
@@ -128,15 +128,15 @@ const Template: ComponentStory<typeof OrderBookWidget> = args => (
 export const Default = Template.bind({});
 export const Bitcoin = Template.bind({});
 Bitcoin.args = {
-    buyOrders: btcEntries,
-    sellOrders: btcEntries,
+    buyOrders: [...btcEntries].sort((a, b) => sortOrders(a, b, 'asc')),
+    sellOrders: [...btcEntries].sort((a, b) => sortOrders(a, b, 'desc')),
     currency: CurrencySymbol.WBTC,
 };
 
 export const Eth = Template.bind({});
 Eth.args = {
-    buyOrders: ethEntries,
-    sellOrders: ethEntries,
+    buyOrders: [...ethEntries].sort((a, b) => sortOrders(a, b, 'asc')),
+    sellOrders: [...ethEntries].sort((a, b) => sortOrders(a, b, 'desc')),
     currency: CurrencySymbol.ETH,
 };
 

@@ -47,4 +47,11 @@ describe('HorizontalTab Component', () => {
         render(<HorizontalTab tabTitles={[]}></HorizontalTab>);
         expect(screen.getByRole('tablist')).toBeInTheDocument();
     });
+
+    it('should call the onTabChange callback when the tab is changed with the tab index', () => {
+        const onTabChange = jest.fn();
+        render(<Default onTabChange={onTabChange} />);
+        screen.getByTestId('Trade History').click();
+        expect(onTabChange).toHaveBeenCalledWith(1);
+    });
 });
