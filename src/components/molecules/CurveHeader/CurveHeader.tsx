@@ -20,7 +20,7 @@ interface CurveHeaderProps {
 }
 
 export const CurveHeader = ({
-    asset = CurrencySymbol.EFIL,
+    asset = CurrencySymbol.WFIL,
     dailyVolumes,
 }: CurveHeaderProps): JSX.Element => {
     const priceList = useSelector((state: RootState) => getPriceMap(state));

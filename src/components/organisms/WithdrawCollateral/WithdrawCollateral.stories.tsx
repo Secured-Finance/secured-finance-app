@@ -19,8 +19,8 @@ export default {
                 available: 1,
                 name: 'Ethereum',
             },
-            [CurrencySymbol.EFIL]: {
-                symbol: CurrencySymbol.EFIL,
+            [CurrencySymbol.WFIL]: {
+                symbol: CurrencySymbol.WFIL,
                 available: 100,
                 name: 'filecoin',
             },

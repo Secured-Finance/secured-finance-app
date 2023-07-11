@@ -15,7 +15,7 @@ describe('CurrencyAmountItem Component', () => {
         expect(screen.getByText('$500.00')).toBeInTheDocument();
     });
 
-    it('should render the formatted currency amount in EFIL', () => {
+    it('should render the formatted currency amount in WFIL', () => {
         render(<Default />);
         expect(screen.getByText('1,000')).toBeInTheDocument();
     });
@@ -43,7 +43,7 @@ describe('CurrencyAmountItem Component', () => {
 
     it('should render information about the currency when no amount is defined', () => {
         render(<CurrencyPrice />);
-        expect(screen.getByText('EFIL')).toBeInTheDocument();
+        expect(screen.getByText('WFIL')).toBeInTheDocument();
         expect(screen.getByText('$8.20')).toBeInTheDocument();
     });
 

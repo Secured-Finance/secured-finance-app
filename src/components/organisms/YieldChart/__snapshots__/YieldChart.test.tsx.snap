@@ -21,7 +21,7 @@ exports[`YieldChart Component should render YieldChart 1`] = `
             >
               <div>
                 <svg
-                  aria-label="EFIL"
+                  aria-label="WFIL"
                   class="h-9 w-9"
                   role="img"
                 />
@@ -64,7 +64,7 @@ exports[`YieldChart Component should render YieldChart 1`] = `
                 <div
                   class="typography-caption h-6 text-white-60"
                 >
-                  300 EFIL
+                  300 WFIL
                 </div>
               </div>
               <div

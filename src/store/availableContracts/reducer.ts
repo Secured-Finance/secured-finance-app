@@ -25,7 +25,7 @@ const emptyContract: { 0: LendingMarket } = {
 const initialState: AvailableContracts = {
     lendingMarkets: {
         [CurrencySymbol.ETH]: emptyContract,
-        [CurrencySymbol.EFIL]: emptyContract,
+        [CurrencySymbol.WFIL]: emptyContract,
         [CurrencySymbol.USDC]: emptyContract,
         [CurrencySymbol.WBTC]: emptyContract,
     },

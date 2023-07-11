@@ -2,9 +2,9 @@ import { BigNumber, utils } from 'ethers';
 import { AssetPriceMap } from 'src/store/assetPrices/selectors';
 import {
     dec22Fixture,
-    efilBytes32,
     ethBytes32,
     wbtcBytes32,
+    wfilBytes32,
 } from 'src/stories/mocks/fixtures';
 import { TradeHistory } from 'src/types';
 import timemachine from 'timemachine';
@@ -58,7 +58,7 @@ describe('computeWeightedAverage', () => {
 describe('computeNetValue', () => {
     const priceMap: AssetPriceMap = {
         [CurrencySymbol.ETH]: 1000,
-        [CurrencySymbol.EFIL]: 6,
+        [CurrencySymbol.WFIL]: 6,
         [CurrencySymbol.USDC]: 1,
         [CurrencySymbol.WBTC]: 30000,
     };
@@ -66,14 +66,14 @@ describe('computeNetValue', () => {
         const positions = [
             {
                 amount: BigNumber.from('400000000000000000000'),
-                currency: efilBytes32,
+                currency: wfilBytes32,
                 forwardValue: BigNumber.from('500000000000000000000'),
                 maturity: dec22Fixture.toString(),
                 midPrice: BigNumber.from(8000),
             },
             {
                 amount: BigNumber.from('-500000000000000000000'),
-                currency: efilBytes32,
+                currency: wfilBytes32,
                 forwardValue: BigNumber.from('-1000000000000000000000'),
                 maturity: dec22Fixture.toString(),
                 midPrice: BigNumber.from(5000),
@@ -90,14 +90,14 @@ describe('computeNetValue', () => {
         const positions = [
             {
                 amount: BigNumber.from('400000000000000000000'),
-                currency: efilBytes32,
+                currency: wfilBytes32,
                 forwardValue: BigNumber.from('500000000000000000000'),
                 maturity: dec22Fixture.toString(),
                 midPrice: BigNumber.from(8000),
             },
             {
                 amount: BigNumber.from('-500000000000000000000'),
-                currency: efilBytes32,
+                currency: wfilBytes32,
                 forwardValue: BigNumber.from('-1000000000000000000000'),
                 maturity: dec22Fixture.toString(),
                 midPrice: BigNumber.from(5000),
@@ -161,7 +161,7 @@ describe('formatOrders', () => {
             },
             {
                 orderId: BigNumber.from(2),
-                currency: efilBytes32,
+                currency: wfilBytes32,
                 side: 1,
                 maturity: dec22Fixture.toString(),
                 unitPrice: BigNumber.from('8000'),
@@ -185,7 +185,7 @@ describe('formatOrders', () => {
                 side: 1,
                 orderPrice: BigNumber.from('8000'),
                 createdAt: BigNumber.from('1609295092'),
-                currency: efilBytes32,
+                currency: wfilBytes32,
                 maturity: dec22Fixture.toString(),
                 forwardValue: BigNumber.from(12500),
                 averagePrice: 0.8,
@@ -200,7 +200,7 @@ describe('checkOrderIsFilled', () => {
     const orders = [
         {
             orderId: BigNumber.from(1),
-            currency: efilBytes32,
+            currency: wfilBytes32,
             side: 1,
             maturity: dec22Fixture.toString(),
             unitPrice: BigNumber.from('9800'),
@@ -209,7 +209,7 @@ describe('checkOrderIsFilled', () => {
         },
         {
             orderId: BigNumber.from(2),
-            currency: efilBytes32,
+            currency: wfilBytes32,
             side: 1,
             maturity: dec22Fixture.toString(),
             unitPrice: BigNumber.from('9600'),
@@ -218,7 +218,7 @@ describe('checkOrderIsFilled', () => {
         },
         {
             orderId: BigNumber.from(3),
-            currency: efilBytes32,
+            currency: wfilBytes32,
             side: 0,
             maturity: dec22Fixture.toString(),
             unitPrice: BigNumber.from('9800'),
@@ -291,7 +291,7 @@ describe('sortOrders', () => {
     const orders = [
         {
             orderId: BigNumber.from(1),
-            currency: efilBytes32,
+            currency: wfilBytes32,
             side: 1,
             maturity: dec22Fixture.toString(),
             unitPrice: BigNumber.from('9800'),
@@ -300,7 +300,7 @@ describe('sortOrders', () => {
         },
         {
             orderId: BigNumber.from(2),
-            currency: efilBytes32,
+            currency: wfilBytes32,
             side: 1,
             maturity: dec22Fixture.toString(),
             unitPrice: BigNumber.from('9600'),
@@ -309,7 +309,7 @@ describe('sortOrders', () => {
         },
         {
             orderId: BigNumber.from(3),
-            currency: efilBytes32,
+            currency: wfilBytes32,
             side: 0,
             maturity: dec22Fixture.toString(),
             unitPrice: BigNumber.from('9800'),
