@@ -38,12 +38,12 @@ import {
     computeAvailableToBorrow,
     divide,
     generateWalletSourceInformation,
+    getAmountValidation,
     multiply,
     percentFormat,
     usdFormat,
 } from 'src/utils';
 import { Amount, LoanValue } from 'src/utils/entities';
-import { getAmountValidation } from 'src/utils/validation';
 import { useWallet } from 'use-wallet';
 
 export const AdvancedLendingOrderCard = ({

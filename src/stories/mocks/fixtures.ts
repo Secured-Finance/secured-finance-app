@@ -588,26 +588,6 @@ export const collateralBook37: CollateralBook = {
     fetched: true,
 };
 
-export const collateralBook0: CollateralBook = {
-    collateral: {
-        ETH: BigNumber.from('1000000000000000000'),
-        USDC: BigNumber.from('10000000'),
-    },
-    nonCollateral: {
-        EFIL: BigNumber.from('100000000000000000000'),
-        WBTC: BigNumber.from('20000000'),
-    },
-    usdCollateral: 23000,
-    usdNonCollateral: 10600,
-    coverage: BigNumber.from('0000'),
-    collateralThreshold: 80,
-    withdrawableCollateral: {
-        [CurrencySymbol.USDC]: BigNumber.from(100000),
-        [CurrencySymbol.ETH]: BigNumber.from(100000),
-    },
-    fetched: true,
-};
-
 export const emptyCollateralBook: CollateralBook = {
     collateral: {
         ETH: BigNumber.from('0'),

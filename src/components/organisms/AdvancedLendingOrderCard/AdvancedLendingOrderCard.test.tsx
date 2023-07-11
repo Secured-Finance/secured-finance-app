@@ -1,7 +1,8 @@
 import { OrderSide } from '@secured-finance/sf-client';
 import { composeStories } from '@storybook/testing-react';
+import { BigNumber } from 'ethers';
+import { CollateralBook } from 'src/hooks';
 import {
-    collateralBook0,
     dec22Fixture,
     preloadedAssetPrices,
     preloadedLendingMarkets,
@@ -28,6 +29,26 @@ const preloadedState = {
     },
     ...preloadedLendingMarkets,
     ...preloadedAssetPrices,
+};
+
+const collateralBook0: CollateralBook = {
+    collateral: {
+        ETH: BigNumber.from('1000000000000000000'),
+        USDC: BigNumber.from('10000000'),
+    },
+    nonCollateral: {
+        EFIL: BigNumber.from('100000000000000000000'),
+        WBTC: BigNumber.from('20000000'),
+    },
+    usdCollateral: 23000,
+    usdNonCollateral: 10600,
+    coverage: BigNumber.from('0000'),
+    collateralThreshold: 80,
+    withdrawableCollateral: {
+        [CurrencySymbol.USDC]: BigNumber.from(100000),
+        [CurrencySymbol.ETH]: BigNumber.from(100000),
+    },
+    fetched: true,
 };
 
 beforeEach(() => {
@@ -300,8 +321,9 @@ describe('AdvancedLendingOrderCard Component', () => {
     });
 
     it('should not disable button in Borrow orders when input is less than available to borrow amount', async () => {
-        //SF vault has 100 EFIL
-        //Test asserts that the validation condition for Lend orders i.e (input amount< balance to lend) is not applicable to borrow orders
+        // SF vault has 100 EFIL
+        // test asserts that the validation condition for Lend orders i.e (input amount< balance to lend) is not applicable to borrow orders
+
         render(<Default collateralBook={collateralBook0} />, {
             preloadedState: {
                 ...preloadedState,
