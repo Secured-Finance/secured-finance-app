@@ -25,6 +25,7 @@ export const usePositions = (account: string | null) => {
 
     const fetchPositions = useCallback(async () => {
         if (!securedFinance || !account) {
+            setPositions([]);
             return;
         }
 
