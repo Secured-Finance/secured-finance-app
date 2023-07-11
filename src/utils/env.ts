@@ -37,21 +37,6 @@ export const getAmplitudeApiKey = () => {
     return NEXT_PUBLIC_AMPLITUDE_API_KEY;
 };
 
-export const getEthereumBlockTimer = () => {
-    const NEXT_PUBLIC_ETHEREUM_BLOCK_TIMER =
-        process.env.NEXT_PUBLIC_ETHEREUM_BLOCK_TIMER;
-
-    if (!NEXT_PUBLIC_ETHEREUM_BLOCK_TIMER) {
-        // eslint-disable-next-line no-console
-        console.warn(
-            'NEXT_PUBLIC_ETHEREUM_BLOCK_TIMER is not set, defaulting to 10000'
-        );
-        return 10000;
-    }
-
-    return parseInt(NEXT_PUBLIC_ETHEREUM_BLOCK_TIMER);
-};
-
 export const getEnvironment = () => {
     const SF_ENV = process.env.SF_ENV;
 
