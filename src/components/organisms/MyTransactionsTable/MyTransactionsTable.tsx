@@ -41,7 +41,7 @@ const priceYieldColumnDef = (
 };
 
 export const MyTransactionsTable = ({ data }: { data: TradeHistory }) => {
-    const isTablet = useBreakpoint('tablet');
+    const isTablet = useBreakpoint('laptop');
     const columns = useMemo(
         () => [
             loanTypeColumnDefinition(columnHelper, 'Type', 'type'),
