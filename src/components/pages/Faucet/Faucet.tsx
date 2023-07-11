@@ -260,7 +260,10 @@ export const Faucet = () => {
                                 <div></div>
                             </div>
                             <div className='flex justify-center'>
-                                <Button onClick={mint} disabled={isPending}>
+                                <Button
+                                    onClick={mint}
+                                    disabled={!account || isPending}
+                                >
                                     {isPending ? 'Minting...' : 'Mint tokens'}
                                 </Button>
                             </div>
