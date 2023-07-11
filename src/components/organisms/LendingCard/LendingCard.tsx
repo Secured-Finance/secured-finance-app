@@ -32,12 +32,12 @@ import {
     amountFormatterToBase,
     formatLoanValue,
     generateWalletSourceInformation,
+    getAmountValidation,
     getCurrencyMapAsList,
     getCurrencyMapAsOptions,
     getTransformMaturityOption,
 } from 'src/utils';
 import { LoanValue, Maturity } from 'src/utils/entities';
-import { getAmountValidation } from 'src/utils/validation';
 import { useWallet } from 'use-wallet';
 
 export const LendingCard = ({
