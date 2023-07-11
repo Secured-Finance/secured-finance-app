@@ -54,6 +54,8 @@ describe('useLendingMarkets', () => {
                 isMatured: false,
                 isPreOrderPeriod: false,
                 isItayosePeriod: false,
+                borrowUnitPrice: 9620,
+                lendUnitPrice: 9618,
             },
             2000: {
                 isActive: false,
@@ -68,6 +70,8 @@ describe('useLendingMarkets', () => {
                 isMatured: false,
                 isPreOrderPeriod: false,
                 isItayosePeriod: false,
+                borrowUnitPrice: 9610,
+                lendUnitPrice: 9608,
             },
         });
     });

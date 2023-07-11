@@ -2,7 +2,7 @@ import { Disclosure, Transition } from '@headlessui/react';
 import { OrderSide } from '@secured-finance/sf-client';
 import { formatDate } from '@secured-finance/sf-core';
 import { useCallback, useMemo, useReducer, useState } from 'react';
-import { shallowEqual, useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
     ExpandIndicator,
     InformationPopover,
@@ -19,15 +19,13 @@ import {
     SuccessPanel,
 } from 'src/components/molecules';
 import {
-    RateType,
     useCollateralBook,
     useEtherscanUrl,
-    useLoanValues,
-    useMaturityOptions,
     useOrderFee,
     useOrders,
 } from 'src/hooks';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
+import { selectMarket } from 'src/store/availableContracts';
 import { setLastMessage } from 'src/store/lastError';
 import { RootState } from 'src/store/types';
 import {
@@ -132,40 +130,22 @@ export const UnwindDialog = ({
     const priceList = useSelector((state: RootState) => getPriceMap(state));
     const price = priceList[amount.currency];
 
-    const lendingContracts = useSelector(
-        (state: RootState) =>
-            state.availableContracts.lendingMarkets[amount.currency],
-        shallowEqual
-    );
-
-    const maturityOptionList = useMaturityOptions(
-        lendingContracts,
-        market => market.isOpened
-    );
-
-    const unitPrices = useLoanValues(
-        amount.currency,
-        side === OrderSide.BORROW ? RateType.Borrow : RateType.Lend,
-        maturityOptionList.map(o => o.value)
+    const market = useSelector((state: RootState) =>
+        selectMarket(amount.currency, maturity.toNumber())(state)
     );
 
     const marketValue = useMemo(() => {
-        if (!unitPrices) {
+        if (!market) {
             return LoanValue.ZERO;
         }
 
-        const value =
-            unitPrices[
-                Object.values(lendingContracts).findIndex(
-                    v => v.maturity === maturity.toNumber()
-                )
-            ];
-        if (!value) {
-            return LoanValue.ZERO;
-        }
+        const unitPrice =
+            side === OrderSide.BORROW
+                ? market.borrowUnitPrice
+                : market.lendUnitPrice;
 
-        return value;
-    }, [unitPrices, lendingContracts, maturity]);
+        return LoanValue.fromPrice(unitPrice, maturity.toNumber());
+    }, [market, maturity, side]);
 
     const { unwindPosition } = useOrders();
 
