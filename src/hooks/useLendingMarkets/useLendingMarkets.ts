@@ -1,9 +1,8 @@
 import { SecuredFinanceClient } from '@secured-finance/sf-client';
-import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useCallback } from 'react';
+import { useDispatch } from 'react-redux';
 import { updateLendingMarketContract } from 'src/store/availableContracts';
-import { RootState } from 'src/store/types';
-import { CurrencySymbol, getCurrencyMapAsList, toCurrency } from 'src/utils';
+import { CurrencySymbol, toCurrency } from 'src/utils';
 import { isPastDate } from 'src/utils/date';
 
 const PRE_OPEN_TIME = 60 * 60 * 48 * 1000; // 2 days
@@ -24,16 +23,14 @@ export type LendingMarket = {
 };
 export type ContractMap = Record<number, LendingMarket>;
 
-export const useLendingMarkets = (
-    securedFinance: SecuredFinanceClient | undefined
-) => {
-    const block = useSelector(
-        (state: RootState) => state.blockchain.latestBlock
-    );
+export const useLendingMarkets = () => {
     const dispatch = useDispatch();
 
-    useEffect(() => {
-        const fetchLendingMarkets = async (ccy: CurrencySymbol) => {
+    const fetchLendingMarkets = useCallback(
+        async (
+            ccy: CurrencySymbol,
+            securedFinance: SecuredFinanceClient | undefined
+        ) => {
             const names: string[] = [];
             try {
                 const lendingMarkets = await securedFinance?.getLendingMarkets(
@@ -105,9 +102,9 @@ export const useLendingMarkets = (
             } catch (e) {
                 console.error(e);
             }
-        };
-        for (const currency of getCurrencyMapAsList()) {
-            fetchLendingMarkets(currency.symbol);
-        }
-    }, [securedFinance, block, dispatch]);
+        },
+        [dispatch]
+    );
+
+    return { fetchLendingMarkets };
 };
