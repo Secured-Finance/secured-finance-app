@@ -25,7 +25,7 @@ const getStatus = (status: string) => {
 
 export const OrderHistoryTable = ({ data }: { data: OrderList }) => {
     const priceList = useSelector((state: RootState) => getPriceMap(state));
-    const isTablet = useBreakpoint('tablet');
+    const isTablet = useBreakpoint('laptop');
     const etherscanUrl = useEtherscanUrl();
 
     const columns = useMemo(
