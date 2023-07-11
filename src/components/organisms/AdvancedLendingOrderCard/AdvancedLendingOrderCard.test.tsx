@@ -1,6 +1,7 @@
 import { OrderSide } from '@secured-finance/sf-client';
 import { composeStories } from '@storybook/testing-react';
 import {
+    collateralBook0,
     dec22Fixture,
     preloadedAssetPrices,
     preloadedLendingMarkets,
@@ -296,5 +297,26 @@ describe('AdvancedLendingOrderCard Component', () => {
                 screen.queryByText('Insufficient amount in source')
             ).toBeInTheDocument();
         });
+    });
+
+    it('should not disable button in Borrow orders when input is less than available to borrow amount', async () => {
+        //SF vault has 100 EFIL
+        //Test asserts that the validation condition for Lend orders i.e (input amount< balance to lend) is not applicable to borrow orders
+        render(<Default collateralBook={collateralBook0} />, {
+            preloadedState: {
+                ...preloadedState,
+                landingOrderForm: {
+                    ...preloadedState.landingOrderForm,
+                    currency: CurrencySymbol.EFIL,
+                },
+            },
+        });
+        await waitFor(() => {
+            const input = screen.getByRole('textbox', { name: 'Amount' });
+            fireEvent.change(input, { target: { value: '1000' } });
+        });
+
+        const button = screen.getByTestId('place-order-button');
+        expect(button).not.toBeDisabled();
     });
 });
