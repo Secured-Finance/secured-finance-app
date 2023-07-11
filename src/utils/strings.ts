@@ -46,3 +46,7 @@ export const getEnvShort = () => {
             return '';
     }
 };
+
+export const prefixTilde = (value: string): string => {
+    return value ? `~ ${value}` : '';
+};

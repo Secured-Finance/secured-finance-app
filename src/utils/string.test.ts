@@ -2,6 +2,7 @@ import {
     Environment,
     getEnvShort,
     getTransformMaturityOption,
+    prefixTilde,
 } from './strings';
 
 describe('getTransformMaturityOption', () => {
@@ -35,5 +36,12 @@ describe('getEnvShort', () => {
         expect(getEnvShort()).toEqual('stg');
         process.env.SF_ENV = 'random';
         expect(getEnvShort()).toEqual('');
+    });
+});
+
+describe('prefixTilde', () => {
+    it('should return the value prefixed with ~ sign', () => {
+        expect(prefixTilde('test')).toEqual('~ test');
+        expect(prefixTilde('')).toEqual('');
     });
 });
