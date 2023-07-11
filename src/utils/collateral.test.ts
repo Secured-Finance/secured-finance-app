@@ -7,6 +7,7 @@ import {
 
 const ONE_ETH = BigNumber.from('1000000000000000000');
 const TWO_ETH = BigNumber.from('2000000000000000000');
+const ZERO_ETH = BigNumber.from('0');
 
 describe('collateral.computeAvailableToBorrow', () => {
     it('should compute the available amount to borrow with a collateral threshold of 80%', () => {
@@ -28,6 +29,10 @@ describe('collateral.calculatePercentage', () => {
         expect(calculatePercentage(ONE_ETH, TWO_ETH)).toEqual(
             BigNumber.from(50)
         );
+    });
+
+    it('should return 0 when total is zero', () => {
+        expect(calculatePercentage(ONE_ETH, ZERO_ETH)).toEqual(ZERO_ETH);
     });
 });
 

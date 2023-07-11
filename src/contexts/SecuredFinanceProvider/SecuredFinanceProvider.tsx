@@ -7,7 +7,7 @@ import { useLendingMarkets } from 'src/hooks';
 import { useEthereumWalletStore } from 'src/hooks/useEthWallet';
 import { updateChainError, updateLatestBlock } from 'src/store/blockchain';
 import {
-    getEthereumBlockTimer,
+    getCurrencyMapAsList,
     getEthereumChainId,
     getRpcEndpoint,
     hexToDec,
@@ -42,7 +42,7 @@ const SecuredFinanceProvider: React.FC = ({ children }) => {
 
     //TODO: move this to redux listener to reduce the number of calls and rerenders
     useEthereumWalletStore(securedFinance);
-    useLendingMarkets(securedFinance);
+    const { fetchLendingMarkets } = useLendingMarkets();
 
     const handleAccountChanged = useCallback((accounts: string[]) => {
         track(InterfaceEvents.WALLET_CHANGED_THROUGH_PROVIDER);
@@ -153,21 +153,20 @@ const SecuredFinanceProvider: React.FC = ({ children }) => {
         }
     }, [connect, account]);
 
-    // Update the latest block every 10 seconds with the latest block number.
-    // If we are working with a fork, we just update it once with a hardcoded block number.
     useEffect(() => {
         if (!web3Provider) return;
-        const updateIntervalTime = getEthereumBlockTimer();
-
-        const interval = setInterval(async () => {
-            const block = window.localStorage.getItem('FORK')
-                ? 0
-                : await web3Provider.getBlockNumber();
-            dispatch(updateLatestBlock(block));
-        }, updateIntervalTime);
-
-        return () => clearInterval(interval);
-    }, [dispatch, web3Provider]);
+        web3Provider.on('block', blockNumber => {
+            if (blockNumber && typeof blockNumber === 'number') {
+                dispatch(updateLatestBlock(blockNumber));
+                for (const currency of getCurrencyMapAsList()) {
+                    fetchLendingMarkets(currency.symbol, securedFinance);
+                }
+            }
+        });
+        return () => {
+            web3Provider?.removeAllListeners('block');
+        };
+    }, [dispatch, fetchLendingMarkets, securedFinance, web3Provider]);
 
     return (
         <Context.Provider value={{ securedFinance }}>

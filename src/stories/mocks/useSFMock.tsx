@@ -2,6 +2,7 @@ import { Currency } from '@secured-finance/sf-core';
 import { BigNumber } from 'ethers';
 import * as jest from 'jest-mock';
 import { CurrencySymbol, getCurrencyMapAsList } from 'src/utils';
+import { Maturity } from 'src/utils/entities';
 import {
     collateralBook37,
     dec22Fixture,
@@ -134,20 +135,28 @@ export const mockUseSF = () => {
         getLendingMarkets: jest.fn(() =>
             Promise.resolve([
                 {
-                    midRate: 100,
-                    lendRate: 200,
-                    borrowRate: 300,
-                    maturity: 1000,
+                    midUnitPrice: new Maturity(100),
+                    maturity: new Maturity(1000),
                     name: 'ETH-1000',
-                    utcOpeningDate: 1620000000,
+                    openingDate: new Maturity(1620000000),
+                    openingUnitPrice: BigNumber.from(9686),
+                    isReady: true,
+                    isOpened: true,
+                    isMatured: false,
+                    isPreOrderPeriod: false,
+                    isItayosePeriod: false,
                 },
                 {
-                    midRate: 100,
-                    lendRate: 200,
-                    borrowRate: 300,
-                    maturity: 2000,
+                    midUnitPrice: new Maturity(100),
+                    maturity: new Maturity(2000),
                     name: 'ETH-2000',
-                    utcOpeningDate: 1720000000,
+                    openingDate: new Maturity(1720000000),
+                    openingUnitPrice: BigNumber.from(9786),
+                    isReady: true,
+                    isOpened: true,
+                    isMatured: false,
+                    isPreOrderPeriod: false,
+                    isItayosePeriod: false,
                 },
             ])
         ),

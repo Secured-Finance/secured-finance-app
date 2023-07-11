@@ -1,6 +1,6 @@
 import queries from '@secured-finance/sf-graph-client/dist/graphclients';
+import { useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { useMemo } from 'react';
 import { HorizontalTab, StatsBar } from 'src/components/molecules';
 import {
     ActiveTradeTable,
@@ -9,38 +9,54 @@ import {
     MyTransactionsTable,
     MyWalletCard,
     OrderHistoryTable,
-    WalletDialog,
     OrderTable,
+    WalletDialog,
 } from 'src/components/organisms';
 import { Page, TwoColumns } from 'src/components/templates';
-import { useGraphClientHook } from 'src/hooks';
+import {
+    useCollateralBook,
+    useGraphClientHook,
+    useOrderList,
+    usePositions,
+} from 'src/hooks';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { RootState } from 'src/store/types';
+import { TradeHistory } from 'src/types';
 import {
     WalletSource,
-    computeNetValue,
-    usdFormat,
-    formatOrders,
     checkOrderIsFilled,
+    computeNetValue,
+    formatOrders,
     sortOrders,
+    usdFormat,
 } from 'src/utils';
-import { useCollateralBook, useOrderList, usePositions } from 'src/hooks';
 import { useWallet } from 'use-wallet';
-import { TradeHistory } from 'src/types';
 
 export type Trade = TradeHistory[0];
 
+enum TableType {
+    ACTIVE_POSITION = 0,
+    OPEN_ORDERS,
+    ORDER_HISTORY,
+    MY_TRANSACTIONS,
+}
+
 export const PortfolioManagement = () => {
     const { account } = useWallet();
+    const [selectedTable, setSelectedTable] = useState(
+        TableType.ACTIVE_POSITION
+    );
     const userOrderHistory = useGraphClientHook(
         { address: account?.toLowerCase() ?? '', skip: 0, first: 1000 },
         queries.UserOrderHistoryDocument,
-        'user'
+        'user',
+        selectedTable !== TableType.ORDER_HISTORY
     );
     const userTransactionHistory = useGraphClientHook(
         { address: account?.toLowerCase() ?? '', skip: 0, first: 1000 },
         queries.UserTransactionHistoryDocument,
-        'user'
+        'user',
+        selectedTable !== TableType.MY_TRANSACTIONS
     );
     const orderList = useOrderList(account);
     const positions = usePositions(account);
@@ -49,28 +65,31 @@ export const PortfolioManagement = () => {
     const tradeFromSub = userTransactionHistory.data?.transactions ?? [];
     const tradeHistory = [...tradeFromSub, ...tradesFromCon];
 
-    const lazyOrderHistory = userOrderHistory.data?.orders ?? [];
-    const sortedOrderHistory = lazyOrderHistory
-        .map(order => {
-            if (checkOrderIsFilled(order, orderList.inactiveOrderList)) {
-                return {
-                    ...order,
-                    status: 'Filled' as const,
-                    filledAmount: order.amount,
-                };
-            } else if (
-                !order.lendingMarket.isActive &&
-                (order.status === 'Open' || order.status === 'PartiallyFilled')
-            ) {
-                return {
-                    ...order,
-                    status: 'Expired' as const,
-                };
-            } else {
-                return order;
-            }
-        })
-        .sort((a, b) => sortOrders(a, b));
+    const sortedOrderHistory = useMemo(() => {
+        const lazyOrderHistory = userOrderHistory.data?.orders ?? [];
+        return lazyOrderHistory
+            .map(order => {
+                if (checkOrderIsFilled(order, orderList.inactiveOrderList)) {
+                    return {
+                        ...order,
+                        status: 'Filled' as const,
+                        filledAmount: order.amount,
+                    };
+                } else if (
+                    !order.lendingMarket.isActive &&
+                    (order.status === 'Open' ||
+                        order.status === 'PartiallyFilled')
+                ) {
+                    return {
+                        ...order,
+                        status: 'Expired' as const,
+                    };
+                } else {
+                    return order;
+                }
+            })
+            .sort((a, b) => sortOrders(a, b));
+    }, [orderList.inactiveOrderList, userOrderHistory.data?.orders]);
 
     const priceMap = useSelector((state: RootState) => getPriceMap(state));
 
@@ -140,6 +159,7 @@ export const PortfolioManagement = () => {
                                 'Order History',
                                 'My Transactions',
                             ]}
+                            onTabChange={setSelectedTable}
                         >
                             <ActiveTradeTable data={positions} />
                             <OrderTable data={orderList.activeOrderList} />
