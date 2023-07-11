@@ -145,6 +145,8 @@ export const mockUseSF = () => {
                     isMatured: false,
                     isPreOrderPeriod: false,
                     isItayosePeriod: false,
+                    borrowUnitPrice: BigNumber.from(9618),
+                    lendUnitPrice: BigNumber.from(9620),
                 },
                 {
                     midUnitPrice: new Maturity(100),
@@ -157,6 +159,8 @@ export const mockUseSF = () => {
                     isMatured: false,
                     isPreOrderPeriod: false,
                     isItayosePeriod: false,
+                    borrowUnitPrice: BigNumber.from(9608),
+                    lendUnitPrice: BigNumber.from(9610),
                 },
             ])
         ),
