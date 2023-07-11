@@ -35,6 +35,7 @@ import {
     CurrencySymbol,
     calculateFee,
     handleContractTransaction,
+    prefixTilde,
 } from 'src/utils';
 import { Amount, LoanValue, Maturity } from 'src/utils/entities';
 import { useWallet } from 'use-wallet';
@@ -239,10 +240,12 @@ export const UnwindDialog = ({
                                 ],
                                 [
                                     feeItem(),
-                                    `~ ${calculateFee(
-                                        maturity.toNumber(),
-                                        orderFee
-                                    )}`,
+                                    prefixTilde(
+                                        calculateFee(
+                                            maturity.toNumber(),
+                                            orderFee
+                                        )
+                                    ),
                                 ],
                             ]}
                         />

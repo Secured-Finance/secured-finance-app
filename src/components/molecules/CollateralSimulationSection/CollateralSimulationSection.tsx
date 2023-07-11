@@ -9,6 +9,7 @@ import {
     formatCollateralRatio,
     formatLoanValue,
     ordinaryFormat,
+    prefixTilde,
     usdFormat,
 } from 'src/utils';
 import {
@@ -83,10 +84,9 @@ export const CollateralSimulationSection = ({
                   ],
                   [
                       'Bond Price',
-                      `~ ${formatLoanValue(
-                          tradeValue ?? LoanValue.ZERO,
-                          'price'
-                      )}`,
+                      prefixTilde(
+                          formatLoanValue(tradeValue ?? LoanValue.ZERO, 'price')
+                      ),
                   ],
               ]
             : [
@@ -98,16 +98,15 @@ export const CollateralSimulationSection = ({
                   ],
                   [
                       'Bond Price',
-                      `~ ${formatLoanValue(
-                          tradeValue ?? LoanValue.ZERO,
-                          'price'
-                      )}`,
+                      prefixTilde(
+                          formatLoanValue(tradeValue ?? LoanValue.ZERO, 'price')
+                      ),
                   ],
               ];
 
     items.push([
         'APR',
-        `~ ${formatLoanValue(tradeValue ?? LoanValue.ZERO, 'rate')}`,
+        prefixTilde(formatLoanValue(tradeValue ?? LoanValue.ZERO, 'rate')),
     ]);
 
     return <SectionWithItems itemList={items} />;

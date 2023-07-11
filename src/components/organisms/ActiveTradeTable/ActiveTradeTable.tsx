@@ -126,7 +126,9 @@ export const ActiveTradeTable = ({ data }: { data: Position[] }) => {
                 cell: info => {
                     const maturity = Number(info.row.original.maturity);
                     const ccy = hexToCurrencySymbol(info.row.original.currency);
-                    const amount = BigNumber.from(info.row.original.amount);
+                    const amount = BigNumber.from(
+                        info.row.original.amount
+                    ).abs();
                     const side = BigNumber.from(
                         info.row.original.forwardValue
                     ).isNegative()
@@ -152,12 +154,7 @@ export const ActiveTradeTable = ({ data }: { data: Position[] }) => {
                                                 maturity: new Maturity(
                                                     maturity
                                                 ),
-                                                amount: new Amount(
-                                                    amount.isNegative()
-                                                        ? amount.mul(-1)
-                                                        : amount,
-                                                    ccy
-                                                ),
+                                                amount: new Amount(amount, ccy),
                                                 show: true,
                                                 side: side,
                                             });
