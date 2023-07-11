@@ -11,6 +11,7 @@ interface InputBaseProps {
     label?: string;
     decimalPlacesAllowed?: number;
     maxLimit?: number;
+    minLimit?: number;
     fontSize?: Record<FontSize, number>;
 }
 export const InputBase = ({
@@ -20,6 +21,7 @@ export const InputBase = ({
     label,
     decimalPlacesAllowed = 4,
     maxLimit = 10 ** 10,
+    minLimit = 0,
     fontSize,
 }: InputBaseProps) => {
     const handleValueChange = (
@@ -60,8 +62,11 @@ export const InputBase = ({
             aria-label={label}
             decimalScale={decimalPlacesAllowed}
             isAllowed={values => {
-                const { floatValue = 0 } = values;
-                return floatValue <= maxLimit;
+                const { floatValue } = values;
+                if (floatValue === null || floatValue === undefined) {
+                    return true;
+                }
+                return floatValue >= minLimit && floatValue <= maxLimit;
             }}
         />
     );

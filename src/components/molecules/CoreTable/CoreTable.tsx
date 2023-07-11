@@ -197,33 +197,21 @@ export const CoreTable = <T,>({
         }
     };
 
-    if (coreTableOptions.responsive) {
-        return (
-            <div
-                className={classNames({
-                    'overflow-x-auto overflow-y-visible text-white laptop:overflow-visible':
-                        coreTableOptions.responsive,
-                })}
-            >
-                <PaginatedScrolling
-                    data={rowData}
-                    fetchMoreData={fetchMoreData}
-                    hasMoreData={hasMoreData}
-                >
-                    {coreTable}
-                </PaginatedScrolling>
-            </div>
-        );
-    }
-
     return (
-        <PaginatedScrolling
-            data={rowData}
-            fetchMoreData={fetchMoreData}
-            hasMoreData={hasMoreData}
+        <div
+            className={classNames({
+                'overflow-x-auto overflow-y-visible text-white laptop:overflow-visible':
+                    coreTableOptions.responsive,
+            })}
         >
-            {coreTable}
-        </PaginatedScrolling>
+            <PaginatedScrolling
+                data={rowData}
+                fetchMoreData={fetchMoreData}
+                hasMoreData={hasMoreData}
+            >
+                {coreTable}
+            </PaginatedScrolling>
+        </div>
     );
 };
 
@@ -239,6 +227,7 @@ const PaginatedScrolling = ({
     hasMoreData: boolean;
 }) => (
     <InfiniteScroll
+        style={{ overflow: 'visible' }}
         dataLength={data.length}
         next={fetchMoreData}
         hasMore={hasMoreData}

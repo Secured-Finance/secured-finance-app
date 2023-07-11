@@ -246,13 +246,18 @@ export const AdvancedLendingOrderCard = ({
                     <OrderInputBox
                         field='Bond Price'
                         disabled={orderType === OrderType.MARKET}
-                        initialValue={divide(unitPrice, 100)}
+                        initialValue={
+                            unitPrice > 0 || orderType === OrderType.MARKET
+                                ? divide(unitPrice, 100)
+                                : undefined
+                        }
                         onValueChange={v =>
                             dispatch(setUnitPrice(multiply(v as number, 100)))
                         }
-                        informationText='Input value from 0 to 100'
+                        informationText='Input value greater than 0 and upto 100'
                         decimalPlacesAllowed={2}
                         maxLimit={100}
+                        minLimit={orderType === OrderType.LIMIT ? 1 : 0}
                     />
                     <div className='mx-10px'>
                         <OrderDisplayBox

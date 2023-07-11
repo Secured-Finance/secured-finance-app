@@ -1,6 +1,8 @@
 import { BigNumber } from 'ethers';
 import { useCallback, useEffect, useState } from 'react';
-import { InformationPopover, InputBase } from 'src/components/atoms';
+import InformationCircle from 'src/assets/icons/information-circle.svg';
+import { InputBase } from 'src/components/atoms';
+import { Tooltip } from 'src/components/templates';
 import { amountFormatterToBase, CurrencySymbol } from 'src/utils';
 
 interface OrderInputBoxProps {
@@ -12,6 +14,7 @@ interface OrderInputBoxProps {
     informationText?: string;
     decimalPlacesAllowed?: number;
     maxLimit?: number;
+    minLimit?: number;
     onValueChange?: (v: number | BigNumber) => void;
 }
 
@@ -24,6 +27,7 @@ export const OrderInputBox = ({
     informationText,
     decimalPlacesAllowed,
     maxLimit,
+    minLimit,
     onValueChange,
 }: OrderInputBoxProps) => {
     const [inputValue, setInputValue] = useState(initialValue);
@@ -70,7 +74,21 @@ export const OrderInputBox = ({
                     {field}
                 </div>
                 {informationText && !disabled && (
-                    <InformationPopover>{informationText}</InformationPopover>
+                    <Tooltip
+                        iconElement={
+                            <InformationCircle
+                                className='cursor-pointer'
+                                data-testid='information-circle'
+                                width={12}
+                                height={12}
+                            />
+                        }
+                        align='right'
+                    >
+                        <div className='max-w-[165px]'>
+                            Input value greater than 0 and upto 100
+                        </div>
+                    </Tooltip>
                 )}
             </div>
             <div className='flex flex-row items-center gap-[10px]'>
@@ -86,6 +104,7 @@ export const OrderInputBox = ({
                         onValueChange={handleAmountChange}
                         decimalPlacesAllowed={decimalPlacesAllowed}
                         maxLimit={maxLimit}
+                        minLimit={minLimit}
                     />
                 )}
                 {unit && <div className='text-neutral-4'>{unit}</div>}

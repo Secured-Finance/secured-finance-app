@@ -28,13 +28,33 @@ export default {
 } as ComponentMeta<typeof Tooltip>;
 
 const Template: ComponentStory<typeof Tooltip> = args => (
-    <div className='mx-10 w-fit'>
+    <div className='flex w-full justify-center'>
         <Tooltip {...args} />
     </div>
 );
 
 export const Default = Template.bind({});
 Default.play = async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const button = canvas.getByTestId('button-icon');
+    await userEvent.hover(button);
+};
+
+export const LeftAligned = Template.bind({});
+LeftAligned.args = {
+    align: 'left',
+};
+LeftAligned.play = async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const button = canvas.getByTestId('button-icon');
+    await userEvent.hover(button);
+};
+
+export const RightAligned = Template.bind({});
+RightAligned.args = {
+    align: 'right',
+};
+RightAligned.play = async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     const button = canvas.getByTestId('button-icon');
     await userEvent.hover(button);
