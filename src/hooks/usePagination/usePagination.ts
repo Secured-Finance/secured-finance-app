@@ -21,31 +21,11 @@ export const usePagination = (
 
     const prevDataRef = useRef(data?.data?.[Object.keys(data?.data)[1]]);
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const arraysAreEqual = (arr1: string | any[], arr2: string | any[]) => {
-        if (arr1.length !== arr2.length) {
-            return false;
-        }
-
-        for (let i = 0; i < arr1.length; i++) {
-            const obj1 = arr1[i];
-            const obj2 = arr2[i];
-
-            for (const key in obj1) {
-                if (obj1[key] !== obj2[key]) {
-                    return false;
-                }
-            }
-        }
-
-        return true;
-    };
-
     useEffect(() => {
         const newData = data.data?.[Object.keys(data.data)[1]] ?? [];
         const previousData = prevDataRef.current ?? [];
         const currentData = newData;
-        if (!arraysAreEqual(previousData, currentData)) {
+        if (JSON.stringify(currentData) !== JSON.stringify(previousData)) {
             const updatedTotalData = [...totalData, ...currentData];
             setTotalData(updatedTotalData);
             prevDataRef.current = currentData as never;

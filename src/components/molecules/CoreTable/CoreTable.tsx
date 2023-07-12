@@ -50,7 +50,7 @@ export const CoreTable = <T,>({
         ...options,
     };
     const [hasMoreData, setHasMoreData] = useState(
-        !!!coreTableOptions.pagination?.totalData
+        !!coreTableOptions.pagination
     );
 
     useEffect(() => {
@@ -199,37 +199,22 @@ export const CoreTable = <T,>({
         }
     };
 
-    if (coreTableOptions.responsive) {
-        return (
-            <div
-                className={classNames({
-                    'overflow-x-auto overflow-y-visible text-white laptop:overflow-visible':
-                        coreTableOptions.responsive,
-                })}
-            >
-                <PaginatedScrolling
-                    data={data}
-                    fetchMoreData={fetchMoreData}
-                    hasMoreData={hasMoreData}
-                    containerHeight={
-                        coreTableOptions.pagination?.containerHeight
-                    }
-                >
-                    {coreTable}
-                </PaginatedScrolling>
-            </div>
-        );
-    }
-
     return (
-        <PaginatedScrolling
-            data={data}
-            fetchMoreData={fetchMoreData}
-            hasMoreData={hasMoreData}
-            containerHeight={coreTableOptions?.pagination?.containerHeight}
+        <div
+            className={classNames({
+                'overflow-x-auto overflow-y-visible text-white laptop:overflow-visible':
+                    coreTableOptions.responsive,
+            })}
         >
-            {coreTable}
-        </PaginatedScrolling>
+            <PaginatedScrolling
+                data={data}
+                fetchMoreData={fetchMoreData}
+                hasMoreData={hasMoreData}
+                containerHeight={coreTableOptions.pagination?.containerHeight}
+            >
+                {coreTable}
+            </PaginatedScrolling>
+        </div>
     );
 };
 
