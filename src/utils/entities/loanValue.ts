@@ -94,6 +94,10 @@ export class LoanValue {
         return this._apr;
     }
 
+    public get maturity(): number {
+        return this._maturity;
+    }
+
     public static getMidValue(bid: LoanValue, ask: LoanValue): LoanValue {
         if (bid._maturity !== ask._maturity) {
             throw new Error('cannot compute mid value: maturity mismatch');
