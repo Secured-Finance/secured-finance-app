@@ -65,10 +65,15 @@ export const MarketDashboard = () => {
         curves[ccy.symbol] = useLoanValues(
             ccy.symbol,
             RateType.MidRate,
-            Object.values(lendingContracts[ccy.symbol])
-                .filter(o => o.isReady)
-                .map(o => new Maturity(o.maturity))
-        ).map(r => r.apr);
+            Object.values(lendingContracts[ccy.symbol]).map(
+                o => new Maturity(o.maturity)
+            )
+        )
+            .filter(loanValue => {
+                const market = lendingContracts[ccy.symbol][loanValue.maturity];
+                if (market.isReady && !market.isMatured) return loanValue;
+            })
+            .map(r => r.apr);
     });
 
     const protocolInformation = useProtocolInformation();
@@ -120,6 +125,7 @@ export const MarketDashboard = () => {
         for (const ccy of getCurrencyMapAsList()) {
             for (const maturity of Object.keys(lendingContracts[ccy.symbol])) {
                 const contract = lendingContracts[ccy.symbol][Number(maturity)];
+                if (contract.isMatured) continue;
                 result.push({
                     ...contract,
                     ccy: ccy.symbol,
@@ -168,7 +174,7 @@ export const MarketDashboard = () => {
                             labels={Object.values(
                                 lendingContracts[CurrencySymbol.EFIL]
                             )
-                                .filter(o => o.isActive)
+                                .filter(o => o.isActive && !o.isMatured)
                                 .map(o => o.name)}
                         />
                     </div>
