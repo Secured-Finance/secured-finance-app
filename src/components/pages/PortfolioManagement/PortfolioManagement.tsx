@@ -1,4 +1,8 @@
 import queries from '@secured-finance/sf-graph-client/dist/graphclients';
+import {
+    Order,
+    LendingMarket,
+} from '@secured-finance/sf-graph-client/dist/graphclients/development/.graphclient';
 import { useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { HorizontalTab, StatsBar } from 'src/components/molecules';
@@ -15,14 +19,13 @@ import {
 import { Page, TwoColumns } from 'src/components/templates';
 import {
     useCollateralBook,
-    useGraphClientHook,
     useOrderList,
     usePagination,
     usePositions,
 } from 'src/hooks';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { RootState } from 'src/store/types';
-import { TradeHistory } from 'src/types';
+import { OrderList, TradeHistory } from 'src/types';
 import {
     WalletSource,
     checkOrderIsFilled,
@@ -44,7 +47,8 @@ enum TableType {
 
 export const PortfolioManagement = () => {
     const { account } = useWallet();
-    const [skip, setSkip] = useState(0);
+    const [skipTransactions, setSkipTransactions] = useState(0);
+    const [skipOrders, setSkipOrders] = useState(0);
     const [selectedTable, setSelectedTable] = useState(
         TableType.ACTIVE_POSITION
     );
@@ -55,43 +59,88 @@ export const PortfolioManagement = () => {
     const { totalData: transactionData, totalDataCount: transactionDataCount } =
         usePagination(
             account ?? '',
-            skip,
+            skipTransactions,
             queries.UserTransactionHistoryDocument,
             selectedTable !== TableType.MY_TRANSACTIONS
         );
 
-    const userOrderHistory = useGraphClientHook(
-        { address: account?.toLowerCase() ?? '', skip: 0, first: 1000 },
+    const {
+        totalData: orderHistoryData,
+        totalDataCount: orderHistoryDataCount,
+    } = usePagination(
+        account ?? '',
+        skipOrders,
         queries.UserOrderHistoryDocument,
-        'user',
         selectedTable !== TableType.ORDER_HISTORY
     );
 
     const sortedOrderHistory = useMemo(() => {
-        const lazyOrderHistory = userOrderHistory.data?.orders ?? [];
+        const lazyOrderHistory = orderHistoryData ?? [];
         return lazyOrderHistory
-            .map(order => {
-                if (checkOrderIsFilled(order, orderList.inactiveOrderList)) {
-                    return {
-                        ...order,
-                        status: 'Filled' as const,
-                        filledAmount: order.amount,
-                    };
-                } else if (
-                    !order.lendingMarket.isActive &&
-                    (order.status === 'Open' ||
-                        order.status === 'PartiallyFilled')
-                ) {
-                    return {
-                        ...order,
-                        status: 'Expired' as const,
-                    };
-                } else {
-                    return order;
+            .map(
+                (
+                    order:
+                        | (Pick<
+                              Order,
+                              | 'currency'
+                              | 'maturity'
+                              | 'side'
+                              | 'amount'
+                              | 'createdAt'
+                              | 'orderId'
+                              | 'unitPrice'
+                              | 'filledAmount'
+                              | 'status'
+                              | 'txHash'
+                          > & {
+                              lendingMarket: Pick<
+                                  LendingMarket,
+                                  'id' | 'isActive'
+                              >;
+                          })
+                        | (Pick<
+                              Order,
+                              | 'currency'
+                              | 'maturity'
+                              | 'side'
+                              | 'amount'
+                              | 'createdAt'
+                              | 'orderId'
+                              | 'unitPrice'
+                              | 'filledAmount'
+                              | 'status'
+                              | 'txHash'
+                          > & {
+                              lendingMarket: Pick<
+                                  LendingMarket,
+                                  'id' | 'isActive'
+                              >;
+                          })
+                ) => {
+                    if (
+                        checkOrderIsFilled(order, orderList.inactiveOrderList)
+                    ) {
+                        return {
+                            ...order,
+                            status: 'Filled' as const,
+                            filledAmount: order.amount,
+                        };
+                    } else if (
+                        !order.lendingMarket.isActive &&
+                        (order.status === 'Open' ||
+                            order.status === 'PartiallyFilled')
+                    ) {
+                        return {
+                            ...order,
+                            status: 'Expired' as const,
+                        };
+                    } else {
+                        return order;
+                    }
                 }
-            })
-            .sort((a, b) => sortOrders(a, b));
-    }, [orderList.inactiveOrderList, userOrderHistory.data?.orders]);
+            )
+            .sort((a: Order, b: Order) => sortOrders(a, b));
+    }, [orderHistoryData, orderList.inactiveOrderList]);
 
     const priceMap = useSelector((state: RootState) => getPriceMap(state));
 
@@ -176,15 +225,22 @@ export const PortfolioManagement = () => {
                             <ActiveTradeTable data={positions} />
                             <OrderTable data={orderList.activeOrderList} />
                             <OrderHistoryTable
-                                data={sortedOrderHistory.filter(
-                                    order => order.status !== 'Open'
-                                )}
+                                data={sortedOrderHistory as OrderList}
+                                pagination={{
+                                    totalData: orderHistoryDataCount ?? 0,
+                                    getMoreData: () =>
+                                        setSkipOrders(skipOrders + 100),
+                                    containerHeight: 400,
+                                }}
                             />
                             <MyTransactionsTable
-                                data={myTransactions}
+                                data={myTransactions as TradeHistory}
                                 pagination={{
                                     totalData: myTransactionsDataCount,
-                                    getMoreData: () => setSkip(skip + 100),
+                                    getMoreData: () =>
+                                        setSkipTransactions(
+                                            skipTransactions + 100
+                                        ),
                                     containerHeight: 400,
                                 }}
                             />

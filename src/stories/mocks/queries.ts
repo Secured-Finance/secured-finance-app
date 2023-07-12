@@ -1,4 +1,5 @@
 import queries from '@secured-finance/sf-graph-client/dist/graphclients';
+import { BigNumber, utils } from 'ethers';
 import { TransactionList } from 'src/types';
 import { Maturity } from 'src/utils/entities';
 import {
@@ -363,6 +364,303 @@ export const mockUserOrderHistory = [
                     user: {
                         orderCount: 9,
                         orders: orderHistoryList,
+                    },
+                },
+            };
+        },
+    },
+    {
+        request: {
+            query: queries.UserOrderHistoryDocument,
+            variables: {
+                address: '',
+                skip: 0,
+                first: 100,
+                awaitRefetchQueries: true,
+            },
+        },
+        result: {
+            data: {
+                user: {
+                    orderCount: 0,
+                    orders: [],
+                },
+            },
+        },
+        newData: () => {
+            return {
+                data: {
+                    user: {
+                        orderCount: 0,
+                        orders: [],
+                    },
+                },
+            };
+        },
+    },
+    {
+        request: {
+            query: queries.UserOrderHistoryDocument,
+            variables: {
+                address: '0xb98bd7c7f656290071e52d1aa617d9cb4467fd6d',
+                skip: 0,
+                first: 100,
+                awaitRefetchQueries: true,
+            },
+        },
+        result: {
+            data: {
+                user: {
+                    orderCount: 400,
+                    orders: Array(100)
+                        .fill(null)
+                        .map((_, index) => ({
+                            orderId: index,
+                            currency: efilBytes32,
+                            side: 1,
+                            maturity: BigNumber.from(dec22Fixture.toString()),
+                            unitPrice: BigNumber.from('9800'),
+                            filledAmount: BigNumber.from('0'),
+                            amount: BigNumber.from('1000000000000000000000'),
+                            status: 'Open',
+                            createdAt: BigNumber.from('1'),
+                            txHash: utils.formatBytes32String('hash'),
+                            lendingMarket: {
+                                id: '1',
+                                isActive: true,
+                            },
+                        })),
+                },
+            },
+        },
+        newData: () => {
+            return {
+                data: {
+                    user: {
+                        orderCount: 400,
+                        orders: Array(100)
+                            .fill(null)
+                            .map((_, index) => ({
+                                orderId: index,
+                                currency: efilBytes32,
+                                side: 1,
+                                maturity: BigNumber.from(
+                                    dec22Fixture.toString()
+                                ),
+                                unitPrice: BigNumber.from('9800'),
+                                filledAmount: BigNumber.from('0'),
+                                amount: BigNumber.from(
+                                    '1000000000000000000000'
+                                ),
+                                status: 'Open',
+                                createdAt: BigNumber.from('1'),
+                                txHash: utils.formatBytes32String('hash'),
+                                lendingMarket: {
+                                    id: '1',
+                                    isActive: true,
+                                },
+                            })),
+                    },
+                },
+            };
+        },
+    },
+    {
+        request: {
+            query: queries.UserOrderHistoryDocument,
+            variables: {
+                address: '0xb98bd7c7f656290071e52d1aa617d9cb4467fd6d',
+                skip: 100,
+                first: 100,
+                awaitRefetchQueries: true,
+            },
+        },
+        result: {
+            data: {
+                user: {
+                    orderCount: 400,
+                    orders: Array(100)
+                        .fill(null)
+                        .map((_, index) => ({
+                            orderId: index,
+                            currency: efilBytes32,
+                            side: 1,
+                            maturity: BigNumber.from(dec22Fixture.toString()),
+                            unitPrice: BigNumber.from('9800'),
+                            filledAmount: BigNumber.from('0'),
+                            amount: BigNumber.from('2000000000000000000000'),
+                            status: 'Open',
+                            createdAt: BigNumber.from('1'),
+                            txHash: utils.formatBytes32String('hash'),
+                            lendingMarket: {
+                                id: '1',
+                                isActive: true,
+                            },
+                        })),
+                },
+            },
+        },
+        newData: () => {
+            return {
+                data: {
+                    user: {
+                        orderCount: 400,
+                        orders: Array(100)
+                            .fill(null)
+                            .map((_, index) => ({
+                                orderId: index,
+                                currency: efilBytes32,
+                                side: 1,
+                                maturity: BigNumber.from(
+                                    dec22Fixture.toString()
+                                ),
+                                unitPrice: BigNumber.from('9800'),
+                                filledAmount: BigNumber.from('0'),
+                                amount: BigNumber.from(
+                                    '2000000000000000000000'
+                                ),
+                                status: 'Open',
+                                createdAt: BigNumber.from('1'),
+                                txHash: utils.formatBytes32String('hash'),
+                                lendingMarket: {
+                                    id: '1',
+                                    isActive: true,
+                                },
+                            })),
+                    },
+                },
+            };
+        },
+    },
+    {
+        request: {
+            query: queries.UserOrderHistoryDocument,
+            variables: {
+                address: '0xb98bd7c7f656290071e52d1aa617d9cb4467fd6d',
+                skip: 200,
+                first: 100,
+                awaitRefetchQueries: true,
+            },
+        },
+        result: {
+            data: {
+                user: {
+                    orderCount: 400,
+                    orders: Array(100)
+                        .fill(null)
+                        .map((_, index) => ({
+                            orderId: index,
+                            currency: efilBytes32,
+                            side: 1,
+                            maturity: BigNumber.from(dec22Fixture.toString()),
+                            unitPrice: BigNumber.from('9800'),
+                            filledAmount: BigNumber.from('0'),
+                            amount: BigNumber.from('3000000000000000000000'),
+                            status: 'Open',
+                            createdAt: BigNumber.from('1'),
+                            txHash: utils.formatBytes32String('hash'),
+                            lendingMarket: {
+                                id: '1',
+                                isActive: true,
+                            },
+                        })),
+                },
+            },
+        },
+        newData: () => {
+            return {
+                data: {
+                    user: {
+                        orderCount: 400,
+                        orders: Array(100)
+                            .fill(null)
+                            .map((_, index) => ({
+                                orderId: index,
+                                currency: efilBytes32,
+                                side: 1,
+                                maturity: BigNumber.from(
+                                    dec22Fixture.toString()
+                                ),
+                                unitPrice: BigNumber.from('9800'),
+                                filledAmount: BigNumber.from('0'),
+                                amount: BigNumber.from(
+                                    '3000000000000000000000'
+                                ),
+                                status: 'Open',
+                                createdAt: BigNumber.from('1'),
+                                txHash: utils.formatBytes32String('hash'),
+                                lendingMarket: {
+                                    id: '1',
+                                    isActive: true,
+                                },
+                            })),
+                    },
+                },
+            };
+        },
+    },
+    {
+        request: {
+            query: queries.UserOrderHistoryDocument,
+            variables: {
+                address: '0xb98bd7c7f656290071e52d1aa617d9cb4467fd6d',
+                skip: 300,
+                first: 100,
+                awaitRefetchQueries: true,
+            },
+        },
+        result: {
+            data: {
+                user: {
+                    orderCount: 400,
+                    orders: Array(100)
+                        .fill(null)
+                        .map((_, index) => ({
+                            orderId: index,
+                            currency: efilBytes32,
+                            side: 1,
+                            maturity: BigNumber.from(dec22Fixture.toString()),
+                            unitPrice: BigNumber.from('9800'),
+                            filledAmount: BigNumber.from('0'),
+                            amount: BigNumber.from('3000000000000000000000'),
+                            status: 'Open',
+                            createdAt: BigNumber.from('1'),
+                            txHash: utils.formatBytes32String('hash'),
+                            lendingMarket: {
+                                id: '1',
+                                isActive: true,
+                            },
+                        })),
+                },
+            },
+        },
+        newData: () => {
+            return {
+                data: {
+                    user: {
+                        orderCount: 400,
+                        orders: Array(100)
+                            .fill(null)
+                            .map((_, index) => ({
+                                orderId: index,
+                                currency: efilBytes32,
+                                side: 1,
+                                maturity: BigNumber.from(
+                                    dec22Fixture.toString()
+                                ),
+                                unitPrice: BigNumber.from('9800'),
+                                filledAmount: BigNumber.from('0'),
+                                amount: BigNumber.from(
+                                    '3000000000000000000000'
+                                ),
+                                status: 'Open',
+                                createdAt: BigNumber.from('1'),
+                                txHash: utils.formatBytes32String('hash'),
+                                lendingMarket: {
+                                    id: '1',
+                                    isActive: true,
+                                },
+                            })),
                     },
                 },
             };
