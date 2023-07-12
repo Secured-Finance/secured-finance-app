@@ -499,6 +499,38 @@ export const orderHistoryList: OrderList = [
             isActive: false,
         },
     },
+    {
+        orderId: 3,
+        currency: efilBytes32,
+        side: 1,
+        maturity: BigNumber.from(dec22Fixture.toString()),
+        unitPrice: BigNumber.from('9600'),
+        filledAmount: BigNumber.from('0'),
+        amount: BigNumber.from('5000000000000000000000'),
+        status: 'Blocked',
+        createdAt: BigNumber.from('1'),
+        txHash: utils.formatBytes32String('hash'),
+        lendingMarket: {
+            id: '1',
+            isActive: true,
+        },
+    },
+    {
+        orderId: 5,
+        currency: efilBytes32,
+        side: 1,
+        maturity: BigNumber.from(dec22Fixture.toString()),
+        unitPrice: BigNumber.from('9800'),
+        filledAmount: BigNumber.from('10000000000000000000'),
+        amount: BigNumber.from('100000000000000000000'),
+        status: 'PartiallyBlocked',
+        createdAt: BigNumber.from('1'),
+        txHash: utils.formatBytes32String('hash'),
+        lendingMarket: {
+            id: '1',
+            isActive: true,
+        },
+    },
 ];
 
 export const transactions: TradeHistory = [
