@@ -1,6 +1,7 @@
 import { RESPONSIVE_PARAMETERS, VIEWPORTS } from '.storybook/constants';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { createColumnHelper } from '@tanstack/react-table';
+import { useState } from 'react';
 import { CoreTable } from './CoreTable';
 
 const columnHelper = createColumnHelper<{
@@ -71,6 +72,40 @@ const Template: ComponentStory<typeof CoreTable> = args => (
     </div>
 );
 
+const PaginationTemplate: ComponentStory<typeof CoreTable> = args => {
+    const [data, setData] = useState(args.data);
+
+    return (
+        <div className='text-white'>
+            <CoreTable
+                {...args}
+                data={data}
+                options={{
+                    pagination: {
+                        totalData: 100,
+                        getMoreData: () => {
+                            const newData = Array(20)
+                                .fill(null)
+                                .map((_, index) => ({
+                                    name: `Person ${data.length + index + 1}`,
+                                    age: 15,
+                                    english: 90,
+                                    maths: 60,
+                                    science: 95,
+                                    history: 60,
+                                }));
+
+                            const updatedData = [...data, ...newData];
+                            setData(updatedData);
+                        },
+                        containerHeight: 400,
+                    },
+                }}
+            />
+        </div>
+    );
+};
+
 export const Default = Template.bind({});
 export const NoBorder = Template.bind({});
 NoBorder.args = {
@@ -93,28 +128,4 @@ NonResponsive.args = {
     },
 };
 
-export const WithPagination = Template.bind({});
-WithPagination.args = {
-    options: {
-        pagination: {
-            getMoreData: () => {
-                return new Promise(resolve => {
-                    setTimeout(() => {
-                        const data = Array(20)
-                            .fill(null)
-                            .map((_, index) => ({
-                                name: `Person ${index + 1}`,
-                                age: 15,
-                                english: 90,
-                                maths: 60,
-                                science: 95,
-                                history: 60,
-                            }));
-                        resolve(data);
-                    }, 1000);
-                });
-            },
-            totalData: 50,
-        },
-    },
-};
+export const WithPagination = PaginationTemplate.bind({});

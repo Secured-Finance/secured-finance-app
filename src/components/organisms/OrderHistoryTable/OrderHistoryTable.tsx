@@ -23,7 +23,17 @@ const getStatus = (status: string) => {
     return status === 'PartiallyFilled' ? 'Partially Filled' : status;
 };
 
-export const OrderHistoryTable = ({ data }: { data: OrderList }) => {
+export const OrderHistoryTable = ({
+    data,
+    pagination,
+}: {
+    data: OrderList;
+    pagination?: {
+        totalData: number;
+        getMoreData: () => void;
+        containerHeight: number;
+    };
+}) => {
     const priceList = useSelector((state: RootState) => getPriceMap(state));
     const isTablet = useBreakpoint('laptop');
     const etherscanUrl = useEtherscanUrl();
@@ -111,6 +121,7 @@ export const OrderHistoryTable = ({ data }: { data: OrderList }) => {
             options={{
                 name: 'order-history-table',
                 stickyColumns: new Set([7]),
+                pagination: pagination,
             }}
         />
     );

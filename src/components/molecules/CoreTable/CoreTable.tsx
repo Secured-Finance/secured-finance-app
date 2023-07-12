@@ -8,10 +8,10 @@ import {
     useReactTable,
 } from '@tanstack/react-table';
 import classNames from 'classnames';
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
-type CoreTableOptions<T> = {
+type CoreTableOptions = {
     border: boolean;
     name: string;
     onLineClick?: (rowId: string) => void;
@@ -20,12 +20,13 @@ type CoreTableOptions<T> = {
     responsive: boolean;
     stickyColumns?: Set<number>;
     pagination?: {
-        getMoreData: () => Promise<Array<T>>;
+        getMoreData: () => void;
         totalData: number;
+        containerHeight: number;
     };
 };
 
-const DEFAULT_OPTIONS: CoreTableOptions<any> = {
+const DEFAULT_OPTIONS: CoreTableOptions = {
     border: true,
     name: 'core-table',
     onLineClick: undefined,
@@ -41,21 +42,30 @@ export const CoreTable = <T,>({
 }: {
     data: Array<T>;
     columns: ColumnDef<T, any>[];
-    options?: Partial<CoreTableOptions<T>>;
+    options?: Partial<CoreTableOptions>;
 }) => {
     const [sorting, setSorting] = useState<SortingState>([]);
-    const [rowData, setRowData] = useState<Array<T>>([]);
-    const coreTableOptions: CoreTableOptions<T> = {
+    const coreTableOptions: CoreTableOptions = {
         ...DEFAULT_OPTIONS,
         ...options,
     };
     const [hasMoreData, setHasMoreData] = useState(
-        !!coreTableOptions?.pagination?.totalData
+        !!!coreTableOptions.pagination?.totalData
     );
 
     useEffect(() => {
-        setRowData([...data]);
-    }, [data]);
+        if (
+            coreTableOptions.pagination &&
+            data.length >= coreTableOptions.pagination.totalData &&
+            coreTableOptions.pagination.totalData > 0
+        ) {
+            setHasMoreData(false);
+        }
+    }, [
+        coreTableOptions.pagination,
+        coreTableOptions.pagination?.totalData,
+        data,
+    ]);
 
     const filteredColumns = columns.filter(column => {
         if (
@@ -68,7 +78,7 @@ export const CoreTable = <T,>({
     });
 
     const configuration = {
-        data: rowData,
+        data: data,
         columns: filteredColumns,
         getCoreRowModel: getCoreRowModel(),
         state: {
@@ -184,16 +194,8 @@ export const CoreTable = <T,>({
     );
 
     const fetchMoreData = async () => {
-        if (
-            coreTableOptions?.pagination?.getMoreData &&
-            coreTableOptions.pagination.totalData
-        ) {
-            const moreData = await coreTableOptions.pagination.getMoreData();
-            const newData = [...rowData, ...moreData];
-            setRowData(newData);
-            if (newData.length >= coreTableOptions.pagination.totalData) {
-                setHasMoreData(false);
-            }
+        if (coreTableOptions?.pagination?.getMoreData) {
+            coreTableOptions.pagination.getMoreData();
         }
     };
 
@@ -206,9 +208,12 @@ export const CoreTable = <T,>({
                 })}
             >
                 <PaginatedScrolling
-                    data={rowData}
+                    data={data}
                     fetchMoreData={fetchMoreData}
                     hasMoreData={hasMoreData}
+                    containerHeight={
+                        coreTableOptions.pagination?.containerHeight
+                    }
                 >
                     {coreTable}
                 </PaginatedScrolling>
@@ -218,9 +223,10 @@ export const CoreTable = <T,>({
 
     return (
         <PaginatedScrolling
-            data={rowData}
+            data={data}
             fetchMoreData={fetchMoreData}
             hasMoreData={hasMoreData}
+            containerHeight={coreTableOptions?.pagination?.containerHeight}
         >
             {coreTable}
         </PaginatedScrolling>
@@ -232,17 +238,20 @@ const PaginatedScrolling = ({
     data,
     fetchMoreData,
     hasMoreData,
+    containerHeight,
 }: {
     children: React.ReactNode;
     data: Array<any>;
     fetchMoreData: () => void;
     hasMoreData: boolean;
+    containerHeight?: number;
 }) => (
     <InfiniteScroll
         dataLength={data.length}
         next={fetchMoreData}
         hasMore={hasMoreData}
         loader={<h4>Loading...</h4>}
+        height={containerHeight}
     >
         {children}
     </InfiniteScroll>

@@ -17,6 +17,7 @@ import {
     useCollateralBook,
     useGraphClientHook,
     useOrderList,
+    usePagination,
     usePositions,
 } from 'src/hooks';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
@@ -43,27 +44,28 @@ enum TableType {
 
 export const PortfolioManagement = () => {
     const { account } = useWallet();
+    const [skip, setSkip] = useState(0);
     const [selectedTable, setSelectedTable] = useState(
         TableType.ACTIVE_POSITION
     );
+
+    const orderList = useOrderList(account);
+    const positions = usePositions(account);
+
+    const { totalData: transactionData, totalDataCount: transactionDataCount } =
+        usePagination(
+            account ?? '',
+            skip,
+            queries.UserTransactionHistoryDocument,
+            selectedTable !== TableType.MY_TRANSACTIONS
+        );
+
     const userOrderHistory = useGraphClientHook(
         { address: account?.toLowerCase() ?? '', skip: 0, first: 1000 },
         queries.UserOrderHistoryDocument,
         'user',
         selectedTable !== TableType.ORDER_HISTORY
     );
-    const userTransactionHistory = useGraphClientHook(
-        { address: account?.toLowerCase() ?? '', skip: 0, first: 1000 },
-        queries.UserTransactionHistoryDocument,
-        'user',
-        selectedTable !== TableType.MY_TRANSACTIONS
-    );
-    const orderList = useOrderList(account);
-    const positions = usePositions(account);
-
-    const tradesFromCon = formatOrders(orderList.inactiveOrderList);
-    const tradeFromSub = userTransactionHistory.data?.transactions ?? [];
-    const tradeHistory = [...tradeFromSub, ...tradesFromCon];
 
     const sortedOrderHistory = useMemo(() => {
         const lazyOrderHistory = userOrderHistory.data?.orders ?? [];
@@ -123,6 +125,16 @@ export const PortfolioManagement = () => {
         priceMap,
     ]);
 
+    const myTransactions = useMemo(() => {
+        const tradesFromCon = formatOrders(orderList.inactiveOrderList);
+        return [...tradesFromCon, ...transactionData];
+    }, [orderList.inactiveOrderList, transactionData]);
+
+    const myTransactionsDataCount =
+        transactionDataCount && transactionDataCount > 0
+            ? transactionDataCount + orderList.inactiveOrderList.length
+            : 0;
+
     return (
         <Page title='Portfolio Management' name='portfolio-management'>
             <TwoColumns>
@@ -168,7 +180,14 @@ export const PortfolioManagement = () => {
                                     order => order.status !== 'Open'
                                 )}
                             />
-                            <MyTransactionsTable data={tradeHistory} />
+                            <MyTransactionsTable
+                                data={myTransactions}
+                                pagination={{
+                                    totalData: myTransactionsDataCount,
+                                    getMoreData: () => setSkip(skip + 100),
+                                    containerHeight: 400,
+                                }}
+                            />
                         </HorizontalTab>
                     </div>
                 </div>
