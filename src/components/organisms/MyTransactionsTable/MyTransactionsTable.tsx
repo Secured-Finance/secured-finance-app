@@ -40,8 +40,18 @@ const priceYieldColumnDef = (
     });
 };
 
-export const MyTransactionsTable = ({ data }: { data: TradeHistory }) => {
-    const isTablet = useBreakpoint('laptop');
+export const MyTransactionsTable = ({
+    data,
+    pagination,
+}: {
+    data: TradeHistory;
+    pagination?: {
+        totalData: number;
+        getMoreData: () => void;
+        containerHeight: number;
+    };
+}) => {
+    const isTablet = useBreakpoint('tablet');
     const columns = useMemo(
         () => [
             loanTypeColumnDefinition(columnHelper, 'Type', 'type'),
@@ -90,6 +100,7 @@ export const MyTransactionsTable = ({ data }: { data: TradeHistory }) => {
                     name: 'active-trade-table',
                     border: false,
                     stickyColumns: new Set([0, 1]),
+                    pagination: pagination,
                 }}
             />
         </div>
