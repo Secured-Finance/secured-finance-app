@@ -1,8 +1,15 @@
+import { Disclosure, Transition } from '@headlessui/react';
 import { OrderSide } from '@secured-finance/sf-client';
-import { useCallback, useReducer, useState } from 'react';
+import { formatDate } from '@secured-finance/sf-core';
+import { useCallback, useMemo, useReducer, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import Loader from 'src/assets/img/gradient-loader.png';
-import { Section } from 'src/components/atoms';
+import {
+    ExpandIndicator,
+    InformationPopover,
+    Section,
+    SectionWithItems,
+    Spinner,
+} from 'src/components/atoms';
 import {
     AmountCard,
     CollateralSimulationSection,
@@ -11,16 +18,24 @@ import {
     FailurePanel,
     SuccessPanel,
 } from 'src/components/molecules';
-import { useCollateralBook, useEtherscanUrl, useOrders } from 'src/hooks';
+import {
+    useCollateralBook,
+    useEtherscanUrl,
+    useOrderFee,
+    useOrders,
+} from 'src/hooks';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
+import { selectMarket } from 'src/store/availableContracts';
 import { setLastMessage } from 'src/store/lastError';
 import { RootState } from 'src/store/types';
 import {
     AddressUtils,
     CurrencySymbol,
+    calculateFee,
     handleContractTransaction,
+    prefixTilde,
 } from 'src/utils';
-import { Amount, Maturity } from 'src/utils/entities';
+import { Amount, LoanValue, Maturity } from 'src/utils/entities';
 import { useWallet } from 'use-wallet';
 
 enum Step {
@@ -90,14 +105,17 @@ const reducer = (
             };
     }
 };
+
 export const UnwindDialog = ({
     isOpen,
     onClose,
     amount,
     maturity,
+    side,
 }: {
     amount: Amount;
     maturity: Maturity;
+    side: OrderSide;
 } & DialogState) => {
     const etherscanUrl = useEtherscanUrl();
     const { account } = useWallet();
@@ -111,6 +129,23 @@ export const UnwindDialog = ({
     const collateral = useCollateralBook(account);
     const priceList = useSelector((state: RootState) => getPriceMap(state));
     const price = priceList[amount.currency];
+
+    const market = useSelector((state: RootState) =>
+        selectMarket(amount.currency, maturity.toNumber())(state)
+    );
+
+    const marketValue = useMemo(() => {
+        if (!market) {
+            return LoanValue.ZERO;
+        }
+
+        const unitPrice =
+            side === OrderSide.BORROW
+                ? market.borrowUnitPrice
+                : market.lendUnitPrice;
+
+        return LoanValue.fromPrice(unitPrice, maturity.toNumber());
+    }, [market, maturity, side]);
 
     const { unwindPosition } = useOrders();
 
@@ -160,6 +195,8 @@ export const UnwindDialog = ({
         [amount.currency, handleClose, handleUnwindPosition, maturity]
     );
 
+    const orderFee = useOrderFee(amount.currency);
+
     const renderSelection = () => {
         switch (state.currentStep) {
             case Step.confirm:
@@ -171,51 +208,65 @@ export const UnwindDialog = ({
                         <CollateralSimulationSection
                             collateral={collateral}
                             tradeAmount={amount}
-                            side={OrderSide.BORROW}
+                            side={side}
                             assetPrice={price}
-                            type='unwind'
+                            tradeValue={marketValue}
                         />
-                        {/* <Disclosure>
+                        <SectionWithItems
+                            itemList={[
+                                [
+                                    'Maturity Date',
+                                    formatDate(maturity.toNumber()),
+                                ],
+                                [
+                                    feeItem(),
+                                    prefixTilde(
+                                        calculateFee(
+                                            maturity.toNumber(),
+                                            orderFee
+                                        )
+                                    ),
+                                ],
+                            ]}
+                        />
+                        <Disclosure>
                             {({ open }) => (
                                 <>
-                                    <Disclosure.Button className='flex h-6 flex-row items-center justify-between'>
-                                        <h2 className='typography-hairline-2 text-neutral-8'>
-                                            Additional Information
-                                        </h2>
-                                        <ExpandIndicator expanded={open} />
-                                    </Disclosure.Button>
-                                    <Disclosure.Panel>
-                                        <SectionWithItems
-                                            itemList={[
-                                                [
-                                                    'Contract Borrowed Amount',
-                                                    '0.1 ETH',
-                                                ],
-                                                [
-                                                    'Collateralization Ratio',
-                                                    '150%',
-                                                ],
-                                                [
-                                                    'Liquidation Price',
-                                                    '0.1 ETH',
-                                                ],
-                                            ]}
-                                        />
-                                    </Disclosure.Panel>
+                                    <div className='relative'>
+                                        <Disclosure.Button
+                                            className='flex h-6 w-full flex-row items-center justify-between'
+                                            data-testid='disclaimer-button'
+                                        >
+                                            <h2 className='typography-hairline-2 text-neutral-8'>
+                                                Circuit Breaker Disclaimer
+                                            </h2>
+                                            <ExpandIndicator expanded={open} />
+                                        </Disclosure.Button>
+                                        <Transition
+                                            show={open}
+                                            enter='transition duration-100 ease-out'
+                                            enterFrom='transform scale-95 opacity-0'
+                                            enterTo='transform scale-100 opacity-100'
+                                        >
+                                            <Disclosure.Panel>
+                                                <div className='typography-caption pt-3 text-secondary7'>
+                                                    Circuit breaker will be
+                                                    triggered if the order is
+                                                    filled at over the max
+                                                    slippage level at 1 block.
+                                                </div>
+                                            </Disclosure.Panel>
+                                        </Transition>
+                                    </div>
                                 </>
                             )}
-                        </Disclosure> */}
+                        </Disclosure>
                     </div>
                 );
             case Step.processing:
                 return (
-                    <div className='py-9'>
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img
-                            src={Loader.src}
-                            alt='Loader'
-                            className='animate-spin'
-                        ></img>
+                    <div className='flex h-full w-full items-center justify-center py-9'>
+                        <Spinner />
                     </div>
                 );
             case Step.placed:
@@ -248,5 +299,17 @@ export const UnwindDialog = ({
         >
             {renderSelection()}
         </Dialog>
+    );
+};
+
+const feeItem = () => {
+    return (
+        <div className='flex flex-row items-center gap-1'>
+            <div className='text-planetaryPurple'>Transaction Fee %</div>
+            <InformationPopover>
+                A duration-based transaction fee only for market takers,
+                factored into the bond price, and deducted from its future value
+            </InformationPopover>
+        </div>
     );
 };
