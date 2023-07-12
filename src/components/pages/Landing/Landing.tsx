@@ -51,8 +51,8 @@ export const Landing = ({ view }: { view?: ViewType }) => {
         currency,
         side === OrderSide.BORROW ? RateType.Borrow : RateType.Lend,
         maturityOptionList.map(o => o.value)
-    ).filter(unitPrice => {
-        if (lendingContracts[unitPrice.maturity].isOpened) return unitPrice;
+    ).filter(loanValue => {
+        if (lendingContracts[loanValue.maturity].isOpened) return loanValue;
     });
 
     const openedMaturityOptionList = maturityOptionList.filter(
@@ -103,7 +103,7 @@ export const Landing = ({ view }: { view?: ViewType }) => {
                     <YieldChart
                         asset={currency}
                         isBorrow={side === OrderSide.BORROW}
-                        rates={unitPrices?.map(v => v.apr)}
+                        rates={unitPrices.map(v => v.apr)}
                         maturitiesOptionList={
                             openedMaturityOptionList.length
                                 ? openedMaturityOptionList
@@ -117,7 +117,7 @@ export const Landing = ({ view }: { view?: ViewType }) => {
                 <AdvancedLending
                     collateralBook={collateralBook}
                     loanValue={marketValue}
-                    rates={unitPrices?.map(v => v.apr)}
+                    rates={unitPrices.map(v => v.apr)}
                     maturitiesOptionList={
                         openedMaturityOptionList.length
                             ? openedMaturityOptionList
