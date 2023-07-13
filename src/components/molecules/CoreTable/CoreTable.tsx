@@ -22,6 +22,7 @@ type CoreTableOptions = {
     pagination?: {
         getMoreData: () => void;
         totalData: number;
+        containerHeight?: boolean;
     };
 };
 
@@ -207,7 +208,9 @@ export const CoreTable = <T,>({
                 data={data}
                 fetchMoreData={fetchMoreData}
                 hasMoreData={hasMoreData}
-                containerHeight={!!coreTableOptions.pagination}
+                containerHeight={
+                    !!!coreTableOptions?.pagination?.containerHeight
+                }
             >
                 {coreTable}
             </PaginatedScrolling>
