@@ -55,7 +55,6 @@ const PaginationTemplate: ComponentStory<typeof MyTransactionsTable> = args => {
                         const updatedData = [...data, ...newData];
                         setData(updatedData);
                     },
-                    containerHeight: 400,
                 }}
             />
         </div>
