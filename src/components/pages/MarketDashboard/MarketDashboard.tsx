@@ -61,11 +61,12 @@ export const MarketDashboard = () => {
 
     getCurrencyMapAsList().forEach(ccy => {
         // eslint-disable-next-line react-hooks/rules-of-hooks
-        curves[ccy.symbol] = useLoanValues(
+        const unitPrices = useLoanValues(
             lendingContracts[ccy.symbol],
             RateType.MidRate,
             market => market.isReady && !market.isMatured
-        ).map(r => r.apr);
+        );
+        curves[ccy.symbol] = Array.from(unitPrices.values()).map(r => r.apr);
     });
 
     const protocolInformation = useProtocolInformation();

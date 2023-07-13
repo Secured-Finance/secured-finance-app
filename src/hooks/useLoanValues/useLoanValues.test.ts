@@ -9,14 +9,14 @@ describe('useLoanValues', () => {
         const { result } = renderHook(() =>
             useLoanValues(maturities, RateType.Borrow)
         );
-        expect(result.current.length).toBe(9);
-
         for (let i = 0; i < 9; i++) {
             const loanValue = LoanValue.fromPrice(
                 maturities[Number(keys[i])].borrowUnitPrice,
-                maturities[Number(keys[i])].maturity
+                Number(keys[i])
             );
-            expect(result.current[i]).toStrictEqual(loanValue);
+            expect(result.current.get(Number(keys[i]))).toStrictEqual(
+                loanValue
+            );
         }
     });
 
@@ -24,14 +24,14 @@ describe('useLoanValues', () => {
         const { result } = renderHook(() =>
             useLoanValues(maturities, RateType.Lend)
         );
-        expect(result.current.length).toBe(9);
-
         for (let i = 0; i < 9; i++) {
             const loanValue = LoanValue.fromPrice(
                 maturities[Number(keys[i])].lendUnitPrice,
-                maturities[Number(keys[i])].maturity
+                Number(keys[i])
             );
-            expect(result.current[i]).toStrictEqual(loanValue);
+            expect(result.current.get(Number(keys[i]))).toStrictEqual(
+                loanValue
+            );
         }
     });
 
@@ -39,14 +39,14 @@ describe('useLoanValues', () => {
         const { result } = renderHook(() =>
             useLoanValues(maturities, RateType.MidRate)
         );
-        expect(result.current.length).toBe(9);
-
         for (let i = 0; i < 9; i++) {
             const loanValue = LoanValue.fromPrice(
                 maturities[Number(keys[i])].midUnitPrice,
-                maturities[Number(keys[i])].maturity
+                Number(keys[i])
             );
-            expect(result.current[i]).toStrictEqual(loanValue);
+            expect(result.current.get(Number(keys[i]))).toStrictEqual(
+                loanValue
+            );
         }
     });
 });

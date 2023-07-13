@@ -16,25 +16,38 @@ export const useLoanValues = (
     filterFn: (market: LendingMarket) => unknown = passThrough
 ) => {
     return useMemo(() => {
-        const loanValues = Object.entries(lendingMarkets)
+        const loanValues = new Map<number, LoanValue>();
+        Object.entries(lendingMarkets)
             .filter(o => filterFn(o[1]))
             .map(o => {
                 switch (type) {
                     case RateType.Borrow:
-                        return LoanValue.fromPrice(
-                            o[1].borrowUnitPrice,
-                            o[1].maturity
+                        loanValues.set(
+                            o[1].maturity,
+                            LoanValue.fromPrice(
+                                o[1].borrowUnitPrice,
+                                o[1].maturity
+                            )
                         );
+                        break;
                     case RateType.Lend:
-                        return LoanValue.fromPrice(
-                            o[1].lendUnitPrice,
-                            o[1].maturity
+                        loanValues.set(
+                            o[1].maturity,
+                            LoanValue.fromPrice(
+                                o[1].lendUnitPrice,
+                                o[1].maturity
+                            )
                         );
+                        break;
                     case RateType.MidRate:
-                        return LoanValue.fromPrice(
-                            o[1].midUnitPrice,
-                            o[1].maturity
+                        loanValues.set(
+                            o[1].maturity,
+                            LoanValue.fromPrice(
+                                o[1].midUnitPrice,
+                                o[1].maturity
+                            )
                         );
+                        break;
                 }
             });
         return loanValues;
