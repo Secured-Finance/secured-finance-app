@@ -5,7 +5,7 @@ import { LoanValue } from 'src/utils/entities/loanValue';
 
 describe('useLoanValues', () => {
     const keys: string[] = Object.keys(maturities);
-    it('should return an array of Loan Values of borrow unit prices', async () => {
+    it('should return a map of Loan Values of borrow unit prices', async () => {
         const { result } = renderHook(() =>
             useLoanValues(maturities, RateType.Borrow)
         );
@@ -20,7 +20,7 @@ describe('useLoanValues', () => {
         }
     });
 
-    it('should return an array of Loan Values of lend unit prices', async () => {
+    it('should return a map of Loan Values of lend unit prices', async () => {
         const { result } = renderHook(() =>
             useLoanValues(maturities, RateType.Lend)
         );
@@ -35,7 +35,7 @@ describe('useLoanValues', () => {
         }
     });
 
-    it('should return an array of Loan Values of mid unit prices', async () => {
+    it('should return a map of Loan Values of mid unit prices', async () => {
         const { result } = renderHook(() =>
             useLoanValues(maturities, RateType.MidRate)
         );
@@ -50,7 +50,7 @@ describe('useLoanValues', () => {
         }
     });
 
-    it('should return an array of Loan Values of filtered market borrow unit prices', async () => {
+    it('should return a map of Loan Values of filtered market borrow unit prices', async () => {
         const { result } = renderHook(() =>
             useLoanValues(
                 maturities,
