@@ -6,10 +6,10 @@ import {
 } from 'src/components/atoms';
 import { CollateralBook } from 'src/hooks';
 import {
-    divide,
     formatCollateralRatio,
     formatLoanValue,
     ordinaryFormat,
+    prefixTilde,
     usdFormat,
 } from 'src/utils';
 import {
@@ -25,14 +25,12 @@ export const CollateralSimulationSection = ({
     side,
     assetPrice,
     tradeValue,
-    type,
 }: {
     collateral: CollateralBook;
     tradeAmount: Amount;
     side: OrderSide;
     assetPrice: number;
-    type: 'unwind' | 'trade';
-    tradeValue?: LoanValue;
+    tradeValue: LoanValue;
 }) => {
     const remainingToBorrowText = useMemo(() => {
         const availableToBorrow = computeAvailableToBorrow(
@@ -86,9 +84,9 @@ export const CollateralSimulationSection = ({
                   ],
                   [
                       'Bond Price',
-                      `~ ${(
-                          tradeValue && divide(tradeValue.price, 100)
-                      )?.toString()}`,
+                      prefixTilde(
+                          formatLoanValue(tradeValue ?? LoanValue.ZERO, 'price')
+                      ),
                   ],
               ]
             : [
@@ -100,15 +98,16 @@ export const CollateralSimulationSection = ({
                   ],
                   [
                       'Bond Price',
-                      `~ ${(
-                          tradeValue && divide(tradeValue.price, 100)
-                      )?.toString()}`,
+                      prefixTilde(
+                          formatLoanValue(tradeValue ?? LoanValue.ZERO, 'price')
+                      ),
                   ],
               ];
 
-    if (type === 'trade' && tradeValue) {
-        items.push(['APR', `~ ${formatLoanValue(tradeValue, 'rate')}`]);
-    }
+    items.push([
+        'APR',
+        prefixTilde(formatLoanValue(tradeValue ?? LoanValue.ZERO, 'rate')),
+    ]);
 
     return <SectionWithItems itemList={items} />;
 };

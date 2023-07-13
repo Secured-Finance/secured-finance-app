@@ -14,7 +14,6 @@ export default {
         side: OrderSide.BORROW,
         assetPrice: 10,
         tradeValue: LoanValue.fromPrice(9800, dec22Fixture.toNumber()),
-        type: 'trade',
     },
 } as ComponentMeta<typeof CollateralSimulationSection>;
 
@@ -23,7 +22,3 @@ const Template: ComponentStory<typeof CollateralSimulationSection> = args => (
 );
 
 export const Trade = Template.bind({});
-export const Unwind = Template.bind({});
-Unwind.args = {
-    type: 'unwind',
-};
