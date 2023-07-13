@@ -31,17 +31,17 @@ import { RootState } from 'src/store/types';
 import { selectAllBalances } from 'src/store/wallet';
 import { OrderType } from 'src/types';
 import {
-    MAX_COVERAGE,
-    ZERO_BN,
     amountFormatterFromBase,
     amountFormatterToBase,
     computeAvailableToBorrow,
     divide,
     generateWalletSourceInformation,
     getAmountValidation,
+    MAX_COVERAGE,
     multiply,
     percentFormat,
     usdFormat,
+    ZERO_BN,
 } from 'src/utils';
 import { Amount, LoanValue } from 'src/utils/entities';
 import { useWallet } from 'use-wallet';

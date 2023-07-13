@@ -29,12 +29,12 @@ import {
 import { RootState } from 'src/store/types';
 import { MaturityOptionList, OrderType, TransactionList } from 'src/types';
 import {
-    CurrencySymbol,
-    Rate,
     currencyMap,
+    CurrencySymbol,
     formatLoanValue,
     getCurrencyMapAsOptions,
     ordinaryFormat,
+    Rate,
     usdFormat,
 } from 'src/utils';
 import { LoanValue, Maturity } from 'src/utils/entities';
