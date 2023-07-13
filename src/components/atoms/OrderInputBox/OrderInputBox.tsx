@@ -1,6 +1,7 @@
 import { BigNumber } from 'ethers';
 import { useCallback, useEffect, useState } from 'react';
-import { InformationPopover, InputBase } from 'src/components/atoms';
+import { InputBase } from 'src/components/atoms';
+import { Tooltip } from 'src/components/templates';
 import { amountFormatterToBase, CurrencySymbol } from 'src/utils';
 
 interface OrderInputBoxProps {
@@ -70,7 +71,7 @@ export const OrderInputBox = ({
                     {field}
                 </div>
                 {informationText && !disabled && (
-                    <InformationPopover>{informationText}</InformationPopover>
+                    <Tooltip>{informationText}</Tooltip>
                 )}
             </div>
             <div className='flex flex-row items-center gap-[10px]'>

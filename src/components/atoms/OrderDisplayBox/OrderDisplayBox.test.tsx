@@ -15,8 +15,6 @@ describe('OrderDisplayBox component', () => {
         render(<WithInformationText />);
         const information = screen.getByTestId('information-circle');
         fireEvent.mouseEnter(information);
-        expect(screen.getByTestId('information-popover')).toHaveTextContent(
-            'Some hint.'
-        );
+        expect(screen.getByTestId('tooltip')).toHaveTextContent('Some hint.');
     });
 });
