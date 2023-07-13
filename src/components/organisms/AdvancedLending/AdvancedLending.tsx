@@ -172,7 +172,9 @@ export const AdvancedLending = ({
     );
 
     useEffect(() => {
-        dispatch(setUnitPrice(loanValue.price));
+        loanValue.price > 0
+            ? dispatch(setUnitPrice(loanValue.price))
+            : dispatch(setUnitPrice(undefined));
     }, [dispatch, loanValue.price, orderType, currency, maturity]);
 
     return (

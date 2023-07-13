@@ -65,7 +65,6 @@ export const AdvancedLendingOrderCard = ({
         selectLandingOrderForm(state.landingOrderForm)
     );
     const [sliderValue, setSliderValue] = useState(0.0);
-    const [bondPriceValidation, setBondPriceValidation] = useState(false);
 
     const balanceRecord = useSelector((state: RootState) =>
         selectAllBalances(state)
@@ -180,8 +179,8 @@ export const AdvancedLendingOrderCard = ({
         handleInputChange(BigNumber.from(0));
     };
 
-    const validateBondPrice = (v: number) => {
-        setBondPriceValidation(v === 0 && orderType === OrderType.LIMIT);
+    const validateBondPrice = () => {
+        return unitPrice === 0 && orderType === OrderType.LIMIT;
     };
 
     return (
@@ -252,12 +251,9 @@ export const AdvancedLendingOrderCard = ({
                         field='Bond Price'
                         disabled={orderType === OrderType.MARKET}
                         initialValue={
-                            unitPrice > 0 || orderType === OrderType.MARKET
-                                ? divide(unitPrice, 100)
-                                : undefined
+                            unitPrice ? divide(unitPrice, 100) : undefined
                         }
                         onValueChange={v => {
-                            validateBondPrice(v as number);
                             dispatch(setUnitPrice(multiply(v as number, 100)));
                         }}
                         informationText='Input value greater than 0 and upto 100'
@@ -266,14 +262,14 @@ export const AdvancedLendingOrderCard = ({
                     />
                     <ErrorInfo
                         errorMessage='Invalid bond price'
-                        showError={bondPriceValidation}
+                        showError={validateBondPrice()}
                     />
                     <div className='mx-10px'>
                         <OrderDisplayBox
                             field='Fixed Rate (APR)'
                             value={percentFormat(
                                 LoanValue.fromPrice(
-                                    unitPrice,
+                                    unitPrice ?? 0,
                                     maturity
                                 ).apr.toNormalizedNumber()
                             )}
@@ -308,7 +304,7 @@ export const AdvancedLendingOrderCard = ({
                             amountFormatterFromBase[currency](amount),
                             balanceToLend,
                             side
-                        ) || bondPriceValidation
+                        ) || validateBondPrice()
                     }
                 />
 

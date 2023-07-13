@@ -23,7 +23,9 @@ export const useLoanValues = (
     const block = useSelector(
         (state: RootState) => state.blockchain.latestBlock
     );
-    const [unitPrices, setUnitPrices] = useState<BigNumber[]>([]);
+    const [unitPrices, setUnitPrices] = useState<BigNumber[] | undefined>(
+        undefined
+    );
     const loanValues: LoanValue[] = [];
 
     const fetchYieldCurve = useCallback(
@@ -45,7 +47,10 @@ export const useLoanValues = (
                     priceFn = () => Promise.resolve([]);
                     break;
             }
-            setUnitPrices(await priceFn());
+            const prices = await priceFn();
+            if (prices !== undefined) {
+                setUnitPrices(prices);
+            }
         },
         [type, ccy]
     );
@@ -56,16 +61,18 @@ export const useLoanValues = (
         }
     }, [fetchYieldCurve, securedFinance, block]);
 
-    unitPrices.forEach((unitPrice, index) => {
-        if (maturity[index]) {
-            loanValues.push(
-                LoanValue.fromPrice(
-                    unitPrice.toNumber(),
-                    maturity[index].toNumber()
-                )
-            );
-        }
-    });
+    if (unitPrices !== undefined) {
+        unitPrices.forEach((unitPrice, index) => {
+            if (maturity[index]) {
+                loanValues.push(
+                    LoanValue.fromPrice(
+                        unitPrice.toNumber(),
+                        maturity[index].toNumber()
+                    )
+                );
+            }
+        });
+    }
 
     return loanValues;
 };
