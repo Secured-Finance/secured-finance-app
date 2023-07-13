@@ -61,18 +61,13 @@ export const Landing = ({ view }: { view?: ViewType }) => {
             return LoanValue.ZERO;
         }
 
-        const value =
-            unitPrices[
-                Object.values(maturityOptionList).findIndex(
-                    v => v.value.toNumber() === maturity
-                )
-            ];
+        const value = unitPrices.get(maturity);
         if (!value) {
             return LoanValue.ZERO;
         }
 
         return value;
-    }, [unitPrices, maturityOptionList, maturity]);
+    }, [unitPrices, maturity]);
 
     const dailyVolumes = useGraphClientHook(
         {}, // no variables
@@ -93,7 +88,7 @@ export const Landing = ({ view }: { view?: ViewType }) => {
                     <YieldChart
                         asset={currency}
                         isBorrow={side === OrderSide.BORROW}
-                        rates={unitPrices.map(v => v.apr)}
+                        rates={Array.from(unitPrices.values()).map(v => v.apr)}
                         maturitiesOptionList={maturityOptionList}
                         dailyVolumes={dailyVolumes.data ?? []}
                     />
@@ -103,7 +98,7 @@ export const Landing = ({ view }: { view?: ViewType }) => {
                 <AdvancedLending
                     collateralBook={collateralBook}
                     loanValue={marketValue}
-                    rates={unitPrices.map(v => v.apr)}
+                    rates={Array.from(unitPrices.values()).map(v => v.apr)}
                     maturitiesOptionList={maturityOptionList}
                 />
             }
