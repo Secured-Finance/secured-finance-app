@@ -37,9 +37,8 @@ export const usePagination = <T extends Record<string, any>, K extends keyof T>(
     );
 
     useEffect(() => {
-        const newData = data?.data?.[Object.keys(data?.data as T)[1]] ?? [];
+        const currentData = data?.data?.[Object.keys(data?.data as T)[1]] ?? [];
         const previousData = prevDataRef.current ?? [];
-        const currentData = newData;
         if (JSON.stringify(currentData) !== JSON.stringify(previousData)) {
             const updatedTotalData = [...totalData, ...currentData];
             setTotalData(updatedTotalData);
