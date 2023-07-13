@@ -13,7 +13,7 @@ export const usePagination = <T extends Record<string, any>, K extends keyof T>(
     account: string,
     skip: number,
     query: Parameters<typeof useQuery<T>>[0],
-    fetchData: boolean
+    refetch: boolean
 ): QueryResultType<T> => {
     const [totalData, setTotalData] = useState<T[K][]>([]);
 
@@ -27,7 +27,7 @@ export const usePagination = <T extends Record<string, any>, K extends keyof T>(
         variables,
         query,
         'user' as K,
-        fetchData
+        refetch
     );
 
     const totalDataCount = data?.data?.[Object.keys(data?.data as T)[0]];

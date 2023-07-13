@@ -79,7 +79,7 @@ describe('CoreTable Component', () => {
         expect(header).not.toHaveClass('bg-gunMetal/100');
     });
 
-    it.skip('should not load more data when scrolled if getMoreData function is not available', async () => {
+    it('should not load more data when scrolled if getMoreData function is not available', async () => {
         render(<Default />);
         expect(screen.getAllByTestId('core-table-row')).toHaveLength(20);
         await act(async () => {

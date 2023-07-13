@@ -179,10 +179,13 @@ export const PortfolioManagement = () => {
         return [...tradesFromCon, ...transactionData];
     }, [orderList.inactiveOrderList, transactionData]);
 
-    const myTransactionsDataCount =
-        transactionDataCount && transactionDataCount > 0
-            ? transactionDataCount + orderList.inactiveOrderList.length
-            : 0;
+    const myTransactionsDataCount = useMemo(
+        () =>
+            transactionDataCount && transactionDataCount > 0
+                ? transactionDataCount + orderList.inactiveOrderList.length
+                : 0,
+        [orderList.inactiveOrderList.length, transactionDataCount]
+    );
 
     return (
         <Page title='Portfolio Management' name='portfolio-management'>
