@@ -93,11 +93,16 @@ describe('CoreTable Component', () => {
         });
     });
 
-    it.skip('should load more data when scrolled if getMoreData function is available', async () => {
+    it('should load more data when scrolled if getMoreData function is available', async () => {
         await waitFor(() => render(<WithPagination />));
         expect(screen.getAllByTestId('core-table-row')).toHaveLength(20);
         await act(async () => {
-            fireEvent.scroll(window, { target: { scrollY: 100 } });
+            const table = screen.getByTestId('core-table');
+            table.addEventListener('scroll', () => {});
+            fireEvent.scroll(window, { target: { scrollTop: 100 } });
+        });
+
+        await waitFor(() => {
             expect(screen.getByText('Loading...')).toBeInTheDocument();
             expect(screen.getAllByTestId('core-table-row')).toHaveLength(40);
         });
