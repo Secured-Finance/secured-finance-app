@@ -53,8 +53,8 @@ describe('OrderInputBox component', () => {
         render(<WithInformationText />);
         const information = screen.getByTestId('information-circle');
         fireEvent.mouseEnter(information);
-        expect(screen.getByTestId('information-popover')).toHaveTextContent(
-            'Input value greater than 0 and upto 100'
+        expect(screen.getByTestId('tooltip')).toHaveTextContent(
+            'Input value from 0 to 100'
         );
     });
 

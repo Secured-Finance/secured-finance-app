@@ -1,6 +1,5 @@
 import { BigNumber } from 'ethers';
 import { useCallback, useEffect, useState } from 'react';
-import InformationCircle from 'src/assets/icons/information-circle.svg';
 import { InputBase } from 'src/components/atoms';
 import { Tooltip } from 'src/components/templates';
 import { amountFormatterToBase, CurrencySymbol } from 'src/utils';
@@ -74,20 +73,8 @@ export const OrderInputBox = ({
                     {field}
                 </div>
                 {informationText && !disabled && (
-                    <Tooltip
-                        iconElement={
-                            <InformationCircle
-                                className='cursor-pointer'
-                                data-testid='information-circle'
-                                width={12}
-                                height={12}
-                            />
-                        }
-                        align='right'
-                    >
-                        <div className='max-w-[165px]'>
-                            Input value greater than 0 and upto 100
-                        </div>
+                    <Tooltip align='right'>
+                        <div className='max-w-[165px]'>{informationText}</div>
                     </Tooltip>
                 )}
             </div>

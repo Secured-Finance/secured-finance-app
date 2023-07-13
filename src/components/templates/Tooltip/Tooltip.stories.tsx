@@ -22,7 +22,6 @@ export default {
     title: 'Templates/Tooltip',
     component: Tooltip,
     args: {
-        iconElement: InformationCircle,
         children: children,
     },
 } as ComponentMeta<typeof Tooltip>;
@@ -36,7 +35,7 @@ const Template: ComponentStory<typeof Tooltip> = args => (
 export const Default = Template.bind({});
 Default.play = async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    const button = canvas.getByTestId('button-icon');
+    const button = canvas.getByTestId('information-circle');
     await userEvent.hover(button);
 };
 
@@ -46,7 +45,7 @@ LeftAligned.args = {
 };
 LeftAligned.play = async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    const button = canvas.getByTestId('button-icon');
+    const button = canvas.getByTestId('information-circle');
     await userEvent.hover(button);
 };
 
@@ -55,6 +54,16 @@ RightAligned.args = {
     align: 'right',
 };
 RightAligned.play = async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const button = canvas.getByTestId('information-circle');
+    await userEvent.hover(button);
+};
+
+export const WithIconElement = Template.bind({});
+WithIconElement.args = {
+    iconElement: InformationCircle,
+};
+WithIconElement.play = async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     const button = canvas.getByTestId('button-icon');
     await userEvent.hover(button);

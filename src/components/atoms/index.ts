@@ -18,7 +18,6 @@ export * from './ExpandIndicator';
 export * from './Footer';
 export * from './GradientBox';
 export * from './HorizontalListItem';
-export * from './InformationPopover';
 export * from './InputBase';
 export * from './MarketTab';
 export * from './MenuItem';
