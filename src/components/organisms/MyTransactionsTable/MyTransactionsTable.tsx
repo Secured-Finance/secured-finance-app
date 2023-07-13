@@ -48,7 +48,6 @@ export const MyTransactionsTable = ({
     pagination?: {
         totalData: number;
         getMoreData: () => void;
-        containerHeight: number;
     };
 }) => {
     const isTablet = useBreakpoint('tablet');

@@ -98,7 +98,6 @@ const PaginationTemplate: ComponentStory<typeof CoreTable> = args => {
                             const updatedData = [...data, ...newData];
                             setData(updatedData);
                         },
-                        containerHeight: 400,
                     },
                 }}
             />

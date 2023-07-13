@@ -63,7 +63,6 @@ const PaginatedTemplate: ComponentStory<typeof OrderHistoryTable> = args => {
                     const updatedData = [...data, ...newData];
                     setData(updatedData);
                 },
-                containerHeight: 400,
             }}
         />
     );

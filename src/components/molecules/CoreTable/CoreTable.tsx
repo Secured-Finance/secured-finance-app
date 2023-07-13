@@ -22,7 +22,6 @@ type CoreTableOptions = {
     pagination?: {
         getMoreData: () => void;
         totalData: number;
-        containerHeight: number;
     };
 };
 
@@ -208,7 +207,7 @@ export const CoreTable = <T,>({
                 data={data}
                 fetchMoreData={fetchMoreData}
                 hasMoreData={hasMoreData}
-                containerHeight={coreTableOptions.pagination?.containerHeight}
+                containerHeight={!!coreTableOptions.pagination}
             >
                 {coreTable}
             </PaginatedScrolling>
@@ -227,14 +226,17 @@ const PaginatedScrolling = ({
     data: Array<any>;
     fetchMoreData: () => void;
     hasMoreData: boolean;
-    containerHeight?: number;
+    containerHeight?: boolean;
 }) => (
     <InfiniteScroll
+        style={{
+            overflow: 'visible',
+            height: `${containerHeight ? '30vh' : null}`,
+        }}
         dataLength={data.length}
         next={fetchMoreData}
         hasMore={hasMoreData}
         loader={<h4>Loading...</h4>}
-        height={containerHeight}
     >
         {children}
     </InfiniteScroll>
