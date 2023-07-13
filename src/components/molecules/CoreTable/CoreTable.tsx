@@ -99,7 +99,7 @@ export const CoreTable = <T,>({
 
     const coreTable = (
         <table
-            className={classNames('h-full w-full', {
+            className={classNames('w-full', {
                 'table-fixed': !coreTableOptions.responsive,
             })}
             data-testid={coreTableOptions.name}
@@ -233,7 +233,7 @@ const PaginatedScrolling = ({
         next={fetchMoreData}
         hasMore={hasMoreData}
         loader={<h4>Loading...</h4>}
-        height={containerHeight ? 400 : undefined}
+        height={containerHeight ? 300 : undefined}
     >
         {children}
     </InfiniteScroll>
