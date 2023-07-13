@@ -45,21 +45,15 @@ export const Landing = ({ view }: { view?: ViewType }) => {
     const dispatch = useDispatch();
 
     const collateralBook = useCollateralBook(account);
-    const maturityOptionList = useMaturityOptions(lendingContracts);
+    const maturityOptionList = useMaturityOptions(
+        lendingContracts,
+        market => market.isOpened
+    );
 
     const unitPrices = useLoanValues(
-        currency,
+        lendingContracts,
         side === OrderSide.BORROW ? RateType.Borrow : RateType.Lend,
-        maturityOptionList.map(o => o.value)
-    ).filter(loanValue => {
-        if (lendingContracts[loanValue.maturity].isOpened) return loanValue;
-    });
-
-    const openedMaturityOptionList = maturityOptionList.filter(
-        maturityOption => {
-            if (lendingContracts[maturityOption.value.toNumber()].isOpened)
-                return maturityOption;
-        }
+        market => market.isOpened
     );
 
     const marketValue = useMemo(() => {
@@ -69,8 +63,8 @@ export const Landing = ({ view }: { view?: ViewType }) => {
 
         const value =
             unitPrices[
-                Object.values(lendingContracts).findIndex(
-                    v => v.maturity === maturity
+                Object.values(maturityOptionList).findIndex(
+                    v => v.value.toNumber() === maturity
                 )
             ];
         if (!value) {
@@ -78,7 +72,7 @@ export const Landing = ({ view }: { view?: ViewType }) => {
         }
 
         return value;
-    }, [unitPrices, lendingContracts, maturity]);
+    }, [unitPrices, maturityOptionList, maturity]);
 
     const dailyVolumes = useGraphClientHook(
         {}, // no variables
@@ -94,21 +88,13 @@ export const Landing = ({ view }: { view?: ViewType }) => {
                     <LendingCard
                         collateralBook={collateralBook}
                         marketValue={marketValue}
-                        maturitiesOptionList={
-                            openedMaturityOptionList.length
-                                ? openedMaturityOptionList
-                                : emptyOptionList
-                        }
+                        maturitiesOptionList={maturityOptionList}
                     />
                     <YieldChart
                         asset={currency}
                         isBorrow={side === OrderSide.BORROW}
                         rates={unitPrices.map(v => v.apr)}
-                        maturitiesOptionList={
-                            openedMaturityOptionList.length
-                                ? openedMaturityOptionList
-                                : emptyOptionList
-                        }
+                        maturitiesOptionList={maturityOptionList}
                         dailyVolumes={dailyVolumes.data ?? []}
                     />
                 </div>
@@ -118,11 +104,7 @@ export const Landing = ({ view }: { view?: ViewType }) => {
                     collateralBook={collateralBook}
                     loanValue={marketValue}
                     rates={unitPrices.map(v => v.apr)}
-                    maturitiesOptionList={
-                        openedMaturityOptionList.length
-                            ? openedMaturityOptionList
-                            : emptyOptionList
-                    }
+                    maturitiesOptionList={maturityOptionList}
                 />
             }
             initialView={view ?? lastView}
