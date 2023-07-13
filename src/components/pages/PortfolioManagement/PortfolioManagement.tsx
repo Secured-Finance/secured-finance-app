@@ -1,8 +1,4 @@
 import queries from '@secured-finance/sf-graph-client/dist/graphclients';
-import {
-    Order,
-    LendingMarket,
-} from '@secured-finance/sf-graph-client/dist/graphclients/development/.graphclient';
 import { useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { HorizontalTab, StatsBar } from 'src/components/molecules';
@@ -19,10 +15,11 @@ import {
 import { Page, TwoColumns } from 'src/components/templates';
 import {
     useCollateralBook,
+    useGraphClientHook,
     useOrderList,
-    usePagination,
     usePositions,
 } from 'src/hooks';
+import usePagination from 'src/hooks/usePagination/usePagination';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { RootState } from 'src/store/types';
 import { TradeHistory } from 'src/types';
@@ -52,95 +49,62 @@ export const PortfolioManagement = () => {
     const [selectedTable, setSelectedTable] = useState(
         TableType.ACTIVE_POSITION
     );
-
+    const userOrderHistory = useGraphClientHook(
+        {
+            address: account?.toLowerCase() ?? '',
+            skip: skipOrders,
+            first: 100,
+        },
+        queries.UserOrderHistoryDocument,
+        'user',
+        selectedTable !== TableType.ORDER_HISTORY
+    );
+    const userTransactionHistory = useGraphClientHook(
+        {
+            address: account?.toLowerCase() ?? '',
+            skip: skipTransactions,
+            first: 100,
+        },
+        queries.UserTransactionHistoryDocument,
+        'user',
+        selectedTable !== TableType.MY_TRANSACTIONS
+    );
     const orderList = useOrderList(account);
     const positions = usePositions(account);
 
-    const { totalData: transactionData, totalDataCount: transactionDataCount } =
-        usePagination(
-            account ?? '',
-            skipTransactions,
-            queries.UserTransactionHistoryDocument,
-            selectedTable !== TableType.MY_TRANSACTIONS
-        );
+    const paginatedTransactions = usePagination(
+        userTransactionHistory.data?.transactions ?? []
+    );
 
-    const {
-        totalData: orderHistoryData,
-        totalDataCount: orderHistoryDataCount,
-    } = usePagination(
-        account ?? '',
-        skipOrders,
-        queries.UserOrderHistoryDocument,
-        selectedTable !== TableType.ORDER_HISTORY
+    const paginatedOrderHistory = usePagination(
+        userOrderHistory.data?.orders ?? []
     );
 
     const sortedOrderHistory = useMemo(() => {
-        const lazyOrderHistory = orderHistoryData ?? [];
+        const lazyOrderHistory = paginatedOrderHistory ?? [];
         return lazyOrderHistory
-            .map(
-                (
-                    order:
-                        | (Pick<
-                              Order,
-                              | 'currency'
-                              | 'maturity'
-                              | 'side'
-                              | 'amount'
-                              | 'createdAt'
-                              | 'orderId'
-                              | 'unitPrice'
-                              | 'filledAmount'
-                              | 'status'
-                              | 'txHash'
-                          > & {
-                              lendingMarket: Pick<
-                                  LendingMarket,
-                                  'id' | 'isActive'
-                              >;
-                          })
-                        | (Pick<
-                              Order,
-                              | 'currency'
-                              | 'maturity'
-                              | 'side'
-                              | 'amount'
-                              | 'createdAt'
-                              | 'orderId'
-                              | 'unitPrice'
-                              | 'filledAmount'
-                              | 'status'
-                              | 'txHash'
-                          > & {
-                              lendingMarket: Pick<
-                                  LendingMarket,
-                                  'id' | 'isActive'
-                              >;
-                          })
-                ) => {
-                    if (
-                        checkOrderIsFilled(order, orderList.inactiveOrderList)
-                    ) {
-                        return {
-                            ...order,
-                            status: 'Filled' as const,
-                            filledAmount: order.amount,
-                        };
-                    } else if (
-                        !order.lendingMarket.isActive &&
-                        (order.status === 'Open' ||
-                            order.status === 'PartiallyFilled')
-                    ) {
-                        return {
-                            ...order,
-                            status: 'Expired' as const,
-                        };
-                    } else {
-                        return order;
-                    }
+            .map(order => {
+                if (checkOrderIsFilled(order, orderList.inactiveOrderList)) {
+                    return {
+                        ...order,
+                        status: 'Filled' as const,
+                        filledAmount: order.amount,
+                    };
+                } else if (
+                    !order.lendingMarket.isActive &&
+                    (order.status === 'Open' ||
+                        order.status === 'PartiallyFilled')
+                ) {
+                    return {
+                        ...order,
+                        status: 'Expired' as const,
+                    };
+                } else {
+                    return order;
                 }
-            )
-            .sort((a: Order, b: Order) => sortOrders(a, b));
-    }, [orderHistoryData, orderList.inactiveOrderList]);
+            })
+            .sort((a, b) => sortOrders(a, b));
+    }, [orderList.inactiveOrderList, paginatedOrderHistory]);
 
     const priceMap = useSelector((state: RootState) => getPriceMap(state));
 
@@ -176,15 +140,20 @@ export const PortfolioManagement = () => {
 
     const myTransactions = useMemo(() => {
         const tradesFromCon = formatOrders(orderList.inactiveOrderList);
-        return [...tradesFromCon, ...transactionData];
-    }, [orderList.inactiveOrderList, transactionData]);
+        return [...tradesFromCon, ...paginatedTransactions];
+    }, [orderList.inactiveOrderList, paginatedTransactions]);
 
     const myTransactionsDataCount = useMemo(
         () =>
-            transactionDataCount && transactionDataCount > 0
-                ? transactionDataCount + orderList.inactiveOrderList.length
+            userTransactionHistory.data?.transactionCount &&
+            userTransactionHistory.data?.transactionCount > 0
+                ? userTransactionHistory.data?.transactionCount +
+                  orderList.inactiveOrderList.length
                 : 0,
-        [orderList.inactiveOrderList.length, transactionDataCount]
+        [
+            orderList.inactiveOrderList.length,
+            userTransactionHistory.data?.transactionCount,
+        ]
     );
 
     return (
@@ -230,7 +199,8 @@ export const PortfolioManagement = () => {
                             <OrderHistoryTable
                                 data={sortedOrderHistory}
                                 pagination={{
-                                    totalData: orderHistoryDataCount ?? 0,
+                                    totalData:
+                                        userOrderHistory.data?.orderCount ?? 0,
                                     getMoreData: () =>
                                         setSkipOrders(skipOrders + 100),
                                 }}
