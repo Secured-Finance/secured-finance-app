@@ -143,18 +143,12 @@ export const PortfolioManagement = () => {
         return [...tradesFromCon, ...paginatedTransactions];
     }, [orderList.inactiveOrderList, paginatedTransactions]);
 
-    const myTransactionsDataCount = useMemo(
-        () =>
-            userTransactionHistory.data?.transactionCount &&
-            userTransactionHistory.data?.transactionCount > 0
-                ? userTransactionHistory.data?.transactionCount +
-                  orderList.inactiveOrderList.length
-                : 0,
-        [
-            orderList.inactiveOrderList.length,
-            userTransactionHistory.data?.transactionCount,
-        ]
-    );
+    const myTransactionsDataCount: number =
+        userTransactionHistory.data?.transactionCount &&
+        parseInt(userTransactionHistory.data?.transactionCount) > 0
+            ? parseInt(userTransactionHistory.data?.transactionCount) +
+              orderList.inactiveOrderList.length
+            : 0;
 
     return (
         <Page title='Portfolio Management' name='portfolio-management'>
@@ -200,7 +194,9 @@ export const PortfolioManagement = () => {
                                 data={sortedOrderHistory}
                                 pagination={{
                                     totalData:
-                                        userOrderHistory.data?.orderCount ?? 0,
+                                        parseInt(
+                                            userOrderHistory.data?.orderCount
+                                        ) ?? 0,
                                     getMoreData: () =>
                                         setSkipOrders(skipOrders + 100),
                                 }}
