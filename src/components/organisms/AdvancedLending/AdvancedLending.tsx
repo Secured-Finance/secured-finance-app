@@ -38,7 +38,7 @@ import {
     usdFormat,
 } from 'src/utils';
 import { LoanValue, Maturity } from 'src/utils/entities';
-import { useWallet } from 'use-wallet';
+import { useAccount } from 'wagmi';
 
 const useTradeHistoryDetails = (
     transactions: TransactionList,
@@ -91,7 +91,7 @@ export const AdvancedLending = ({
         getAssetPrice(currency)(state)
     );
 
-    const { account } = useWallet();
+    const { address: account } = useAccount();
     const dispatch = useDispatch();
     const assetList = useMemo(() => getCurrencyMapAsOptions(), []);
 

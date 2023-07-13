@@ -1,6 +1,8 @@
 import { init } from '@amplitude/analytics-browser';
 import { LogLevel } from '@amplitude/analytics-types';
 import { GraphClientProvider } from '@secured-finance/sf-graph-client';
+import { EthereumClient, w3mConnectors } from '@web3modal/ethereum';
+import { Web3Modal } from '@web3modal/react';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
 import { Provider } from 'react-redux';
@@ -9,18 +11,28 @@ import { Header } from 'src/components/organisms';
 import { Layout } from 'src/components/templates';
 import SecuredFinanceProvider from 'src/contexts/SecuredFinanceProvider';
 import store from 'src/store';
-import {
-    getAmplitudeApiKey,
-    getEthereumChainId,
-    getEthereumNetwork,
-} from 'src/utils';
-import { UseWalletProvider } from 'use-wallet';
+import { getAmplitudeApiKey, getEthereumNetwork } from 'src/utils';
+import { createPublicClient, http } from 'viem';
+import { WagmiConfig, createConfig, sepolia } from 'wagmi';
 import '../assets/css/index.css';
+
+const chains = [sepolia];
+const projectId = '83209157e11b11d87ae68781c8f3762d';
 
 init(getAmplitudeApiKey(), undefined, {
     appVersion: process.env.SF_ENV,
     logLevel: LogLevel.None,
 });
+
+const config = createConfig({
+    autoConnect: true,
+    publicClient: createPublicClient({
+        chain: sepolia,
+        transport: http(),
+    }),
+    connectors: [...w3mConnectors({ projectId, chains })],
+});
+const ethereumClient = new EthereumClient(config, chains);
 
 function App({ Component, pageProps }: AppProps) {
     return (
@@ -46,22 +58,16 @@ function App({ Component, pageProps }: AppProps) {
 
 const Providers: React.FC = ({ children }) => {
     const network = getEthereumNetwork();
-    const chainId = getEthereumChainId();
 
     return (
         <GraphClientProvider network={network}>
-            <UseWalletProvider
-                connectors={{
-                    injected: {
-                        chainId: [chainId],
-                    },
-                    walletconnect: {
-                        rpcUrl: 'https://ropsten.eth.aragon.network/',
-                    },
-                }}
-            >
+            <WagmiConfig config={config}>
                 <SecuredFinanceProvider>{children}</SecuredFinanceProvider>
-            </UseWalletProvider>
+                <Web3Modal
+                    projectId={projectId}
+                    ethereumClient={ethereumClient}
+                />
+            </WagmiConfig>
         </GraphClientProvider>
     );
 };

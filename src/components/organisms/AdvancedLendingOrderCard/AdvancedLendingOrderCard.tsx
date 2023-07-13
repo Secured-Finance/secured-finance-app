@@ -43,7 +43,7 @@ import {
     usdFormat,
 } from 'src/utils';
 import { Amount, LoanValue } from 'src/utils/entities';
-import { useWallet } from 'use-wallet';
+import { useAccount } from 'wagmi';
 
 export const AdvancedLendingOrderCard = ({
     collateralBook,
@@ -78,7 +78,7 @@ export const AdvancedLendingOrderCard = ({
     }, [unitPrice, maturity]);
 
     const dispatch = useDispatch();
-    const { account } = useWallet();
+    const { address: account } = useAccount();
 
     const collateralUsagePercent = useMemo(() => {
         return collateralBook.coverage.toNumber() / 100.0;

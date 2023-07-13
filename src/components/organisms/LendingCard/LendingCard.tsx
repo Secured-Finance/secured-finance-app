@@ -37,7 +37,7 @@ import {
     getTransformMaturityOption,
 } from 'src/utils';
 import { LoanValue, Maturity } from 'src/utils/entities';
-import { useWallet } from 'use-wallet';
+import { useAccount } from 'wagmi';
 
 export const LendingCard = ({
     collateralBook,
@@ -53,7 +53,7 @@ export const LendingCard = ({
     );
 
     const dispatch = useDispatch();
-    const { account } = useWallet();
+    const { address: account } = useAccount();
 
     const shortNames = useMemo(
         () =>

@@ -30,7 +30,7 @@ import {
     sortOrders,
     usdFormat,
 } from 'src/utils';
-import { useWallet } from 'use-wallet';
+import { useAccount } from 'wagmi';
 
 export type Trade = TradeHistory[0];
 
@@ -42,7 +42,7 @@ enum TableType {
 }
 
 export const PortfolioManagement = () => {
-    const { account } = useWallet();
+    const { address: account } = useAccount();
     const [selectedTable, setSelectedTable] = useState(
         TableType.ACTIVE_POSITION
     );

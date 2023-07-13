@@ -18,8 +18,8 @@ import {
 import { Dialog, SuccessPanel } from 'src/components/molecules';
 import { ConnectWalletCard, MyWalletCard } from 'src/components/organisms';
 import { Page, Tooltip, TwoColumns } from 'src/components/templates';
-import useSF from 'src/hooks/useSecuredFinance';
 import { useEtherscanUrl } from 'src/hooks';
+import useSF from 'src/hooks/useSecuredFinance';
 import {
     AddressUtils,
     CurrencySymbol,
@@ -29,7 +29,7 @@ import {
     handleContractTransaction,
     toCurrency,
 } from 'src/utils';
-import { useWallet } from 'use-wallet';
+import { useAccount } from 'wagmi';
 
 const MenuAddToken = ({
     address,
@@ -85,7 +85,7 @@ const MenuAddToken = ({
 };
 export const Faucet = () => {
     const etherscanUrl = useEtherscanUrl();
-    const { account, ethereum } = useWallet();
+    const { address: account } = useAccount();
     const sf = useSF();
 
     const assetList = useMemo(
@@ -139,7 +139,8 @@ export const Faucet = () => {
     const addToMetamask = useCallback(
         async (token: Token | null) => {
             if (!account || !token) return;
-            await ethereum.request({
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            await (window as any).ethereum.request({
                 method: 'wallet_watchAsset',
                 params: {
                     type: 'ERC20',
@@ -151,7 +152,7 @@ export const Faucet = () => {
                 },
             });
         },
-        [account, ethereum]
+        [account]
     );
 
     useEffect(() => {

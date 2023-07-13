@@ -11,7 +11,7 @@ import { setWalletDialogOpen } from 'src/store/interactions';
 import { RootState } from 'src/store/types';
 import { getEnvShort } from 'src/utils';
 import { AddressUtils } from 'src/utils/address';
-import { useWallet } from 'use-wallet';
+import { useAccount } from 'wagmi';
 
 const LINKS = [
     {
@@ -39,7 +39,8 @@ const LINKS = [
 
 export const Header = () => {
     const dispatch = useDispatch();
-    const { account } = useWallet();
+    const { address: account } = useAccount();
+
     const securedFinance = useSF();
     const chainError = useSelector(
         (state: RootState) => state.blockchain.chainError
@@ -87,7 +88,7 @@ export const Header = () => {
                     <MenuPopover />
                 </div>
                 <div className='col-span-2 flex flex-row items-center justify-end gap-2 laptop:col-span-1'>
-                    {account ? (
+                    {account !== undefined ? (
                         <WalletPopover
                             wallet={AddressUtils.format(account, 6)}
                             networkName={

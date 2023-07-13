@@ -21,7 +21,7 @@ import {
     handleContractTransaction,
 } from 'src/utils';
 import { Amount, Maturity } from 'src/utils/entities';
-import { useWallet } from 'use-wallet';
+import { useAccount } from 'wagmi';
 
 enum Step {
     confirm = 1,
@@ -100,7 +100,7 @@ export const UnwindDialog = ({
     maturity: Maturity;
 } & DialogState) => {
     const etherscanUrl = useEtherscanUrl();
-    const { account } = useWallet();
+    const { address: account } = useAccount();
     const [state, dispatch] = useReducer(reducer, stateRecord[1]);
     const [txHash, setTxHash] = useState<string | undefined>();
     const [errorMessage, setErrorMessage] = useState(

@@ -1,7 +1,9 @@
 import { track } from '@amplitude/analytics-browser';
+import { useWeb3Modal } from '@web3modal/react';
 import { useCallback, useEffect, useReducer, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import MetaMaskIcon from 'src/assets/img/metamask-fox.svg';
+import WalletConnectIcon from 'src/assets/img/wallet-connect.svg';
 import { Spinner } from 'src/components/atoms';
 import {
     Dialog,
@@ -22,7 +24,7 @@ import {
     getEthereumChainId,
 } from 'src/utils';
 import { associateWallet } from 'src/utils/events';
-import { useWallet } from 'use-wallet';
+import { useAccount, useConnect } from 'wagmi';
 
 enum Step {
     selectWallet = 1,
@@ -108,7 +110,9 @@ export const WalletDialog = () => {
     );
     const globalDispatch = useDispatch();
 
-    const { account, connect } = useWallet();
+    const { connect, connectors } = useConnect();
+    const { address: account } = useAccount();
+    const { open } = useWeb3Modal();
 
     const handleClose = useCallback(() => {
         dispatch({ type: 'default' });
@@ -118,51 +122,58 @@ export const WalletDialog = () => {
     const handleConnect = useCallback(
         async (
             provider: 'injected' | 'walletconnect',
-            account: string | null
+            account: string | undefined
         ) => {
-            try {
-                if (!account) {
-                    await connect(provider);
-                    localStorage.setItem(CACHED_PROVIDER_KEY, 'connected');
-                } else {
-                    dispatch({ type: 'next' });
+            connectors.forEach(connector => {
+                try {
+                    if (!account && connector.name === 'MetaMask') {
+                        connect({ connector: connector });
+                        localStorage.setItem(CACHED_PROVIDER_KEY, 'connected');
+                    } else {
+                        dispatch({ type: 'next' });
+                    }
+                } catch (e) {
+                    if (e instanceof Error) {
+                        setErrorMessage(e.message);
+                        dispatch({ type: 'error' });
+                    }
                 }
-            } catch (e) {
-                if (e instanceof Error) {
-                    setErrorMessage(e.message);
-                    dispatch({ type: 'error' });
-                }
-            }
+            });
         },
-        [connect, dispatch]
+        [connect, connectors]
     );
 
     useEffect(() => {
         if (state.currentStep === Step.connecting) {
             const provider =
                 wallet === 'Metamask' ? 'injected' : 'walletconnect';
-            handleConnect(provider, account)
-                .then(() => {
-                    if (!account) return;
-                    track(InterfaceEvents.CONNECT_WALLET_BUTTON_CLICKED, {
-                        [InterfaceProperties.WALLET_CONNECTION_RESULT]:
-                            WalletConnectionResult.SUCCEEDED,
-                        [InterfaceProperties.WALLET_ADDRESS]: account,
+            if (provider === 'walletconnect') {
+                open();
+            }
+            if (provider === 'injected') {
+                handleConnect(provider, account)
+                    .then(() => {
+                        if (!account) return;
+                        track(InterfaceEvents.CONNECT_WALLET_BUTTON_CLICKED, {
+                            [InterfaceProperties.WALLET_CONNECTION_RESULT]:
+                                WalletConnectionResult.SUCCEEDED,
+                            [InterfaceProperties.WALLET_ADDRESS]: account,
+                        });
+                        associateWallet(account);
+                    })
+                    .catch(e => {
+                        track(InterfaceEvents.CONNECT_WALLET_BUTTON_CLICKED, {
+                            [InterfaceProperties.WALLET_CONNECTION_RESULT]:
+                                WalletConnectionResult.FAILED,
+                        });
+                        if (e instanceof Error) {
+                            setErrorMessage(e.message);
+                        }
+                        dispatch({ type: 'error' });
                     });
-                    associateWallet(account);
-                })
-                .catch(e => {
-                    track(InterfaceEvents.CONNECT_WALLET_BUTTON_CLICKED, {
-                        [InterfaceProperties.WALLET_CONNECTION_RESULT]:
-                            WalletConnectionResult.FAILED,
-                    });
-                    if (e instanceof Error) {
-                        setErrorMessage(e.message);
-                    }
-                    dispatch({ type: 'error' });
-                });
+            }
         }
-    }, [state, account, handleConnect, wallet]);
+    }, [state, account, handleConnect, wallet, open]);
 
     const onClick = useCallback(
         async (currentStep: Step) => {
@@ -173,7 +184,8 @@ export const WalletDialog = () => {
             switch (currentStep) {
                 case Step.selectWallet:
                     if (chainError) {
-                        const provider = window.ethereum;
+                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                        const provider = (window as any).ethereum;
                         if (provider) {
                             try {
                                 await provider.request({
@@ -236,6 +248,10 @@ export const WalletDialog = () => {
                                     {
                                         name: 'Metamask',
                                         Icon: MetaMaskIcon,
+                                    },
+                                    {
+                                        name: 'WalletConnect',
+                                        Icon: WalletConnectIcon,
                                     },
                                 ]}
                             />

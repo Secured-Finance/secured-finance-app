@@ -29,7 +29,7 @@ describe('Wallet Dialog component', () => {
         const button = screen.getByTestId('dialog-action-button');
         expect(button).toHaveTextContent('Connect Wallet');
 
-        expect(screen.getAllByRole('radio')).toHaveLength(1);
+        expect(screen.getAllByRole('radio')).toHaveLength(2);
     });
 
     it('should open with nothing selected', () => {
@@ -44,16 +44,14 @@ describe('Wallet Dialog component', () => {
 
         const button = screen.getByTestId('dialog-action-button');
         fireEvent.click(button);
-        expect(screen.getAllByRole('radio')).toHaveLength(1);
+        expect(screen.getAllByRole('radio')).toHaveLength(2);
     });
 
     it('should move to the next step if an option was selected', async () => {
         render(<Primary />, { preloadedState });
         selectMetamaskOption();
         fireEvent.click(screen.getByTestId('dialog-action-button'));
-        await waitFor(() => {
-            expect(screen.getByText('Connecting...')).toBeInTheDocument();
-        });
+        expect(await screen.findByText('Connecting...')).toBeInTheDocument();
     });
 
     it.skip('should proceed to failure screen if something goes wrong', async () => {

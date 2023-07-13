@@ -12,18 +12,19 @@ import {
     zeroBalances,
 } from 'src/store/wallet';
 import {
-    amountFormatterFromBase,
     CurrencySymbol,
+    amountFormatterFromBase,
     getCurrencyMapAsList,
 } from 'src/utils';
-import { useWallet } from 'use-wallet';
+import { useAccount, useBalance } from 'wagmi';
 import { useERC20Balance } from './useERC20Balance';
 
 export const useEthereumWalletStore = (
     securedFinance: SecuredFinanceClient | undefined
 ) => {
     const dispatch = useDispatch();
-    const { account, balance: ethBalance, status } = useWallet();
+    const { address: account, status } = useAccount();
+    const { data: ethBalance } = useBalance({ address: account });
     const { price, change } = useSelector((state: RootState) =>
         getAsset(CurrencySymbol.ETH)(state)
     );
@@ -48,7 +49,7 @@ export const useEthereumWalletStore = (
             } else {
                 result[currency.symbol] = amountFormatterFromBase[
                     currency.symbol
-                ](BigNumber.from(ethBalance));
+                ](BigNumber.from(ethBalance?.value ?? 0));
             }
         }
 
