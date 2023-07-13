@@ -271,7 +271,9 @@ export const PlaceOrder = ({
                                             formatDate(maturity.toNumber()),
                                         ],
                                         [
-                                            feeItem(),
+                                            <FeeItem
+                                                key={maturity.toString()}
+                                            />,
                                             `~ ${calculateFee(
                                                 maturity.toNumber(),
                                                 orderFee
@@ -354,7 +356,7 @@ export const PlaceOrder = ({
     );
 };
 
-const feeItem = () => {
+const FeeItem = () => {
     return (
         <div className='flex flex-row items-center gap-1'>
             <div className='text-planetaryPurple'>Transaction Fee %</div>

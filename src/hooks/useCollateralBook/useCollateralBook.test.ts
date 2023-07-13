@@ -2,7 +2,7 @@ import { BigNumber } from 'ethers';
 import { emptyBook, preloadedAssetPrices } from 'src/stories/mocks/fixtures';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { act, renderHook } from 'src/test-utils';
-import { amountFormatterFromBase, CurrencySymbol } from 'src/utils';
+import { CurrencySymbol, amountFormatterFromBase } from 'src/utils';
 import { CollateralBook, useCollateralBook } from './';
 
 const mock = mockUseSF();
@@ -42,8 +42,8 @@ describe('useCollateralBook hook', () => {
         expect(colBook.fetched).toEqual(true);
     });
 
-    it('should return the empty book when given an null user', async () => {
-        const { result } = renderHook(() => useCollateralBook(null));
+    it('should return the empty book when given an undefined user', async () => {
+        const { result } = renderHook(() => useCollateralBook(undefined));
         const colBook = result.current as CollateralBook;
         expect(colBook).toEqual(emptyBook);
     });

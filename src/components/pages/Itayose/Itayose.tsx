@@ -32,7 +32,7 @@ import { RootState } from 'src/store/types';
 import { CurrencySymbol, getCurrencyMapAsOptions, usdFormat } from 'src/utils';
 import { countdown } from 'src/utils/date';
 import { Maturity } from 'src/utils/entities';
-import { useWallet } from 'use-wallet';
+import { useAccount } from 'wagmi';
 
 const Toolbar = ({
     selectedAsset,
@@ -94,7 +94,7 @@ const Toolbar = ({
     );
 };
 export const Itayose = () => {
-    const { account } = useWallet();
+    const { address: account } = useAccount();
 
     const { currency, maturity } = useSelector((state: RootState) =>
         selectLandingOrderForm(state.landingOrderForm)

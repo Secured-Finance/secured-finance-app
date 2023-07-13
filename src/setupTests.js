@@ -18,11 +18,11 @@ beforeAll(() => {
 });
 
 afterAll(() => {
-    global.gc && global.gc();
     jest.clearAllMocks();
     jest.clearAllTimers();
 });
 
 afterEach(() => {
     cleanup();
+    global.gc && global.gc();
 });

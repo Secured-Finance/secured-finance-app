@@ -1,6 +1,6 @@
 import { OrderSide } from '@secured-finance/sf-client';
 import { useMemo, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { Button } from 'src/components/atoms';
 import {
     DepositCollateral,
@@ -17,13 +17,13 @@ import { selectCollateralCurrencyBalance } from 'src/store/wallet';
 import { amountFormatterFromBase } from 'src/utils';
 import { MAX_COVERAGE, computeAvailableToBorrow } from 'src/utils/collateral';
 import { Amount, LoanValue, Maturity } from 'src/utils/entities';
-import { useWallet } from 'use-wallet';
+import { useAccount } from 'wagmi';
 
 interface OrderActionProps {
     loanValue: LoanValue;
     collateralBook: CollateralBook;
     renderSide?: boolean;
-    validation?: boolean;
+    validation: boolean;
 }
 
 export const OrderAction = ({
@@ -32,7 +32,8 @@ export const OrderAction = ({
     renderSide = false,
     validation,
 }: OrderActionProps) => {
-    const { account } = useWallet();
+    const { isConnected, isDisconnected } = useAccount();
+
     const dispatch = useDispatch();
     const { placeOrder, placePreOrder } = useOrders();
 
@@ -49,11 +50,13 @@ export const OrderAction = ({
         selectMarketPhase(currency, maturity)(state)
     );
 
-    const balances = useSelector((state: RootState) =>
-        selectCollateralCurrencyBalance(state)
+    const balances = useSelector(
+        (state: RootState) => selectCollateralCurrencyBalance(state),
+        shallowEqual
     );
 
     const assetPriceMap = useSelector((state: RootState) => getPriceMap(state));
+    const price = assetPriceMap[currency];
 
     const depositCollateralList = useMemo(
         () => generateCollateralList(balances, false),
@@ -61,16 +64,16 @@ export const OrderAction = ({
     );
 
     const availableToBorrow = useMemo(() => {
-        return currency && assetPriceMap
+        return currency && price
             ? computeAvailableToBorrow(
-                  assetPriceMap[currency],
+                  price,
                   collateralBook.usdCollateral,
                   collateralBook.coverage.toNumber() / MAX_COVERAGE,
                   collateralBook.collateralThreshold
               )
             : 0;
     }, [
-        assetPriceMap,
+        price,
         collateralBook.coverage,
         collateralBook.usdCollateral,
         collateralBook.collateralThreshold,
@@ -94,18 +97,19 @@ export const OrderAction = ({
         }
     };
 
+    const isPlaceOrderDisabled =
+        validation ||
+        !amount ||
+        amount.isZero() ||
+        (marketPhase !== MarketPhase.PRE_ORDER &&
+            marketPhase !== MarketPhase.OPEN);
+
     return (
         <div>
-            {account ? (
-                canBorrow || side === OrderSide.LEND ? (
+            {isConnected &&
+                (canBorrow || side === OrderSide.LEND ? (
                     <Button
-                        disabled={
-                            validation ||
-                            !amount ||
-                            amount.isZero() ||
-                            (marketPhase !== MarketPhase.PRE_ORDER &&
-                                marketPhase !== MarketPhase.OPEN)
-                        }
+                        disabled={isPlaceOrderDisabled}
                         fullWidth
                         onClick={() => {
                             setOpenPlaceOrderDialog(true);
@@ -122,8 +126,8 @@ export const OrderAction = ({
                     >
                         Deposit collateral to borrow
                     </Button>
-                )
-            ) : (
+                ))}
+            {isDisconnected && (
                 <Button
                     fullWidth
                     onClick={() => dispatch(setWalletDialogOpen(true))}
@@ -142,7 +146,7 @@ export const OrderAction = ({
                 onClose={() => setOpenPlaceOrderDialog(false)}
                 loanValue={loanValue}
                 collateral={collateralBook}
-                assetPrice={assetPriceMap?.[currency]}
+                assetPrice={price}
                 maturity={new Maturity(maturity)}
                 orderAmount={new Amount(amount, currency)}
                 side={side}

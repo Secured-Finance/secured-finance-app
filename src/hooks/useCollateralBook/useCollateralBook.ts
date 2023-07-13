@@ -46,7 +46,7 @@ const emptyBook: CollateralBook = {
     fetched: false,
 };
 
-export const useCollateralBook = (account: string | null) => {
+export const useCollateralBook = (account: string | undefined) => {
     const [collateralBook, setCollateralBook] = useState(emptyBook);
     const securedFinance = useSF();
 

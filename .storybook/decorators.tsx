@@ -16,7 +16,16 @@ import { maturities } from 'src/stories/mocks/fixtures';
 import { CurrencySymbol } from 'src/utils';
 import { coingeckoApi } from 'src/utils/coinGeckoApi';
 import timemachine from 'timemachine';
-import { UseWalletProvider, useWallet } from 'use-wallet';
+import { createPublicClient, createWalletClient, custom } from 'viem';
+import { privateKeyToAccount } from 'viem/accounts';
+import {
+    WagmiConfig,
+    createConfig,
+    sepolia,
+    useAccount,
+    useConnect,
+} from 'wagmi';
+import { MockConnector } from 'wagmi/connectors/mock';
 
 export const withAppLayout = (Story: Story) => {
     return (
@@ -35,10 +44,36 @@ class ProviderMock {
 
 const signer = new CustomizedBridge(
     new Wallet(
-        'de926db3012af759b4f24b5a51ef6afa397f04670f634aa4f48d4480417007f3'
+        '0xde926db3012af759b4f24b5a51ef6afa397f04670f634aa4f48d4480417007f3'
     ),
-    new ProviderMock() as any
+    new ProviderMock() as any,
+    11155111
 );
+
+const client = createWalletClient({
+    account: privateKeyToAccount(
+        '0xde926db3012af759b4f24b5a51ef6afa397f04670f634aa4f48d4480417007f3'
+    ),
+    chain: sepolia,
+    transport: custom(signer),
+});
+
+const connector = new MockConnector({
+    chains: [sepolia],
+    options: {
+        chainId: sepolia.id,
+        walletClient: client,
+        flags: { isAuthorized: true },
+    },
+});
+
+const config = createConfig({
+    publicClient: createPublicClient({
+        chain: sepolia,
+        transport: custom(signer),
+    }),
+    connectors: [connector],
+});
 
 const WithConnectedWallet = ({
     connected,
@@ -47,29 +82,35 @@ const WithConnectedWallet = ({
     connected: boolean;
     children: React.ReactNode;
 }) => {
-    const { account, connect } = useWallet();
+    const { isConnected } = useAccount();
+    const { connect, connectors, isLoading, isIdle, reset, pendingConnector } =
+        useConnect();
+
     useEffect(() => {
-        if (!account && connected) {
-            connect('provided');
+        if (!connected) return;
+        if (!isConnected && !isLoading && !pendingConnector) {
+            connect({ connector: connectors[0] });
         }
-    }, [account, connect]);
+
+        return () => {
+            if (!isIdle) {
+                reset();
+            }
+        };
+    }, [isConnected, connect, isLoading, connected]);
 
     return <>{children}</>;
 };
 
 export const withWalletProvider = (Story: Story, Context: StoryContext) => {
     return (
-        <UseWalletProvider
-            connectors={{
-                provided: { provider: signer, chainId: [5] },
-            }}
-        >
+        <WagmiConfig config={config}>
             <WithConnectedWallet
                 connected={Context.parameters && Context.parameters.connected}
             >
                 <Story />
             </WithConnectedWallet>
-        </UseWalletProvider>
+        </WagmiConfig>
     );
 };
 

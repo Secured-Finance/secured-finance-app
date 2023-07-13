@@ -11,7 +11,7 @@ import { CACHED_PROVIDER_KEY } from 'src/contexts/SecuredFinanceProvider/Secured
 import { RootState } from 'src/store/types';
 import { isEthereumWalletConnected, resetEthWallet } from 'src/store/wallet';
 import { formatDataCy } from 'src/utils';
-import { useWallet } from 'use-wallet';
+import { useDisconnect } from 'wagmi';
 
 const MenuItem = ({
     label,
@@ -72,7 +72,7 @@ export const WalletPopover = ({
     wallet: string;
     networkName: string;
 }) => {
-    const { reset } = useWallet();
+    const { disconnect } = useDisconnect();
     const dispatch = useDispatch();
     const router = useRouter();
     const otherWalletConnected = useSelector((state: RootState) =>
@@ -81,14 +81,14 @@ export const WalletPopover = ({
 
     const handleSignOutClick = useCallback(() => {
         resetTracking();
-        reset();
+        disconnect();
         dispatch(resetEthWallet());
         localStorage.removeItem(CACHED_PROVIDER_KEY);
 
         if (!otherWalletConnected) {
             router.push('/');
         }
-    }, [dispatch, otherWalletConnected, reset, router]);
+    }, [disconnect, dispatch, otherWalletConnected, router]);
 
     return (
         <div className='max-w-sm'>

@@ -30,6 +30,6 @@ const Template: ComponentStory<typeof CollateralTabRightPane> = args => {
 export const Default = Template.bind({});
 export const NotConnectedToWallet = Template.bind({});
 NotConnectedToWallet.args = {
-    account: null,
+    account: undefined,
     collateralBook: emptyBook,
 };

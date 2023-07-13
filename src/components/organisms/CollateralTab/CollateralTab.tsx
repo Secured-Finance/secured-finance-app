@@ -18,7 +18,7 @@ import {
     amountFormatterFromBase,
     getCurrencyMapAsList,
 } from 'src/utils';
-import { useWallet } from 'use-wallet';
+import { useAccount } from 'wagmi';
 
 export const generateCollateralList = (
     balance: Partial<Record<CurrencySymbol, number | BigNumber>>,
@@ -54,7 +54,7 @@ export const CollateralTab = ({
 }: {
     collateralBook: CollateralBook;
 }) => {
-    const { account } = useWallet();
+    const { address: account } = useAccount();
     const [openModal, setOpenModal] = useState<'' | 'deposit' | 'withdraw'>('');
 
     const balances = useSelector((state: RootState) =>

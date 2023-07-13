@@ -10,10 +10,9 @@ import {
     getCurrencyMapAsList,
     getEthereumChainId,
     getRpcEndpoint,
-    hexToDec,
 } from 'src/utils';
 import { InterfaceEvents, associateWallet } from 'src/utils/events';
-import { useWallet } from 'use-wallet';
+import { useAccount, useConnect, useNetwork, useWalletClient } from 'wagmi';
 
 export const CACHED_PROVIDER_KEY = 'CACHED_PROVIDER_KEY';
 
@@ -34,8 +33,11 @@ declare global {
 const SecuredFinanceProvider: React.FC = ({ children }) => {
     const [web3Provider, setWeb3Provider] =
         useState<providers.BaseProvider | null>(null);
-    const { error, status, connect, account, ethereum, isConnected } =
-        useWallet();
+    const { address: account, isConnected } = useAccount();
+    const { connect } = useConnect();
+    const { chain } = useNetwork();
+    const { data: client } = useWalletClient();
+
     const [securedFinance, setSecuredFinance] =
         useState<SecuredFinanceClient>();
     const dispatch = useDispatch();
@@ -55,7 +57,7 @@ const SecuredFinanceProvider: React.FC = ({ children }) => {
     const dispatchChainError = useCallback(
         (chainId: string) => {
             dispatch(
-                updateChainError(hexToDec(chainId) !== getEthereumChainId())
+                updateChainError(Number(chainId) !== getEthereumChainId())
             );
         },
         [dispatch]
@@ -71,19 +73,13 @@ const SecuredFinanceProvider: React.FC = ({ children }) => {
     useEffect(() => {
         // this is required to get the chainId on initial page load
         const fetchChainId = async () => {
-            if (window.ethereum) {
-                const chainId = await window.ethereum.request({
-                    method: 'eth_chainId',
-                });
-                dispatchChainError(chainId);
+            if (client) {
+                const chainId = await client?.getChainId();
+                dispatchChainError(chainId.toString());
             }
         };
         fetchChainId();
-        window.ethereum?.on('chainChanged', handleChainChanged);
-        return () => {
-            window.ethereum?.removeListener('chainChanged', handleChainChanged);
-        };
-    }, [dispatchChainError, handleChainChanged]);
+    }, [client, dispatchChainError]);
 
     useEffect(() => {
         const connectSFClient = async (
@@ -112,34 +108,18 @@ const SecuredFinanceProvider: React.FC = ({ children }) => {
             });
             window.securedFinanceSDK = securedFinanceLib;
         };
-        if (ethereum) {
-            const chainId = Number(ethereum.chainId);
-            const provider = window.localStorage.getItem('FORK')
-                ? ethereum?.provider
-                : new providers.Web3Provider(ethereum, chainId);
+        if (isConnected && chain && client?.transport) {
+            const provider = new providers.Web3Provider(
+                client?.transport,
+                chain.id
+            );
             const signer = provider.getSigner();
             connectSFClient(provider, signer);
-            ethereum.on('accountsChanged', handleAccountChanged);
-
-            return () => {
-                if (ethereum.removeListener) {
-                    ethereum.removeListener(
-                        'accountsChanged',
-                        handleAccountChanged
-                    );
-                }
-            };
-        } else if (!isConnected()) {
+        } else if (!isConnected) {
             const provider = getDefaultProvider(getRpcEndpoint());
             connectSFClient(provider);
         }
-    }, [ethereum, isConnected, dispatch, handleAccountChanged]);
-
-    useEffect(() => {
-        if (status === 'error') {
-            console.error(error);
-        }
-    }, [status, error]);
+    }, [isConnected, dispatch, handleAccountChanged, chain, client?.transport]);
 
     useEffect(() => {
         if (account) {
@@ -149,7 +129,7 @@ const SecuredFinanceProvider: React.FC = ({ children }) => {
 
         const cachedProvider = localStorage.getItem(CACHED_PROVIDER_KEY);
         if (cachedProvider !== null) {
-            connect('injected');
+            connect();
         }
     }, [connect, account]);
 
@@ -163,10 +143,23 @@ const SecuredFinanceProvider: React.FC = ({ children }) => {
                 }
             }
         });
+
+        web3Provider.on('accountsChanged', handleAccountChanged);
+        web3Provider.on('chainChanged', handleChainChanged);
+
         return () => {
-            web3Provider?.removeAllListeners('block');
+            web3Provider.removeAllListeners('accountsChanged');
+            web3Provider.removeAllListeners('chainChanged');
+            web3Provider.removeAllListeners('block');
         };
-    }, [dispatch, fetchLendingMarkets, securedFinance, web3Provider]);
+    }, [
+        dispatch,
+        fetchLendingMarkets,
+        handleAccountChanged,
+        handleChainChanged,
+        securedFinance,
+        web3Provider,
+    ]);
 
     return (
         <Context.Provider value={{ securedFinance }}>

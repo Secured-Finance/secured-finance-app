@@ -37,7 +37,7 @@ import {
     usdFormat,
 } from 'src/utils';
 import { Maturity } from 'src/utils/entities';
-import { useWallet } from 'use-wallet';
+import { useAccount } from 'wagmi';
 
 const computeTotalUsers = (users: string) => {
     if (!users) {
@@ -51,7 +51,7 @@ const computeTotalUsers = (users: string) => {
 };
 
 export const MarketDashboard = () => {
-    const { account } = useWallet();
+    const { address: account } = useAccount();
     const collateralBook = useCollateralBook(account);
 
     const curves: Record<string, Rate[]> = {};
