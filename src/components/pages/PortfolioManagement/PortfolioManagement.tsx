@@ -25,7 +25,7 @@ import {
 } from 'src/hooks';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { RootState } from 'src/store/types';
-import { OrderList, TradeHistory } from 'src/types';
+import { TradeHistory } from 'src/types';
 import {
     WalletSource,
     checkOrderIsFilled,
@@ -228,7 +228,7 @@ export const PortfolioManagement = () => {
                             <ActiveTradeTable data={positions} />
                             <OrderTable data={orderList.activeOrderList} />
                             <OrderHistoryTable
-                                data={sortedOrderHistory as OrderList}
+                                data={sortedOrderHistory}
                                 pagination={{
                                     totalData: orderHistoryDataCount ?? 0,
                                     getMoreData: () =>
@@ -237,7 +237,7 @@ export const PortfolioManagement = () => {
                                 }}
                             />
                             <MyTransactionsTable
-                                data={myTransactions as TradeHistory}
+                                data={myTransactions}
                                 pagination={{
                                     totalData: myTransactionsDataCount,
                                     getMoreData: () =>
