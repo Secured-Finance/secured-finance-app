@@ -36,7 +36,6 @@ import {
     ordinaryFormat,
     usdFormat,
 } from 'src/utils';
-import { Maturity } from 'src/utils/entities';
 import { useWallet } from 'use-wallet';
 
 const computeTotalUsers = (users: string) => {
@@ -63,17 +62,10 @@ export const MarketDashboard = () => {
     getCurrencyMapAsList().forEach(ccy => {
         // eslint-disable-next-line react-hooks/rules-of-hooks
         curves[ccy.symbol] = useLoanValues(
-            ccy.symbol,
+            lendingContracts[ccy.symbol],
             RateType.MidRate,
-            Object.values(lendingContracts[ccy.symbol]).map(
-                o => new Maturity(o.maturity)
-            )
-        )
-            .filter(loanValue => {
-                const market = lendingContracts[ccy.symbol][loanValue.maturity];
-                if (market.isReady && !market.isMatured) return loanValue;
-            })
-            .map(r => r.apr);
+            market => market.isReady && !market.isMatured
+        ).map(r => r.apr);
     });
 
     const protocolInformation = useProtocolInformation();
@@ -174,7 +166,7 @@ export const MarketDashboard = () => {
                             labels={Object.values(
                                 lendingContracts[CurrencySymbol.EFIL]
                             )
-                                .filter(o => o.isActive && !o.isMatured)
+                                .filter(o => o.isReady && !o.isMatured)
                                 .map(o => o.name)}
                         />
                     </div>
