@@ -9,14 +9,14 @@ describe('useLoanValues', () => {
         const { result } = renderHook(() =>
             useLoanValues(maturities, RateType.Borrow)
         );
+        expect(result.current.size).toBe(9);
         for (let i = 0; i < 9; i++) {
+            const maturity = Number(keys[i]);
             const loanValue = LoanValue.fromPrice(
-                maturities[Number(keys[i])].borrowUnitPrice,
-                Number(keys[i])
+                maturities[maturity].borrowUnitPrice,
+                maturity
             );
-            expect(result.current.get(Number(keys[i]))).toStrictEqual(
-                loanValue
-            );
+            expect(result.current.get(maturity)).toStrictEqual(loanValue);
         }
     });
 
@@ -24,14 +24,14 @@ describe('useLoanValues', () => {
         const { result } = renderHook(() =>
             useLoanValues(maturities, RateType.Lend)
         );
+        expect(result.current.size).toBe(9);
         for (let i = 0; i < 9; i++) {
+            const maturity = Number(keys[i]);
             const loanValue = LoanValue.fromPrice(
-                maturities[Number(keys[i])].lendUnitPrice,
-                Number(keys[i])
+                maturities[maturity].lendUnitPrice,
+                maturity
             );
-            expect(result.current.get(Number(keys[i]))).toStrictEqual(
-                loanValue
-            );
+            expect(result.current.get(maturity)).toStrictEqual(loanValue);
         }
     });
 
@@ -39,14 +39,35 @@ describe('useLoanValues', () => {
         const { result } = renderHook(() =>
             useLoanValues(maturities, RateType.MidRate)
         );
+        expect(result.current.size).toBe(9);
         for (let i = 0; i < 9; i++) {
+            const maturity = Number(keys[i]);
             const loanValue = LoanValue.fromPrice(
-                maturities[Number(keys[i])].midUnitPrice,
-                Number(keys[i])
+                maturities[maturity].midUnitPrice,
+                maturity
             );
-            expect(result.current.get(Number(keys[i]))).toStrictEqual(
-                loanValue
-            );
+            expect(result.current.get(maturity)).toStrictEqual(loanValue);
+        }
+    });
+
+    it('should return an array of Loan Values of filtered market borrow unit prices', async () => {
+        const { result } = renderHook(() =>
+            useLoanValues(
+                maturities,
+                RateType.MidRate,
+                market => market.isOpened
+            )
+        );
+        expect(result.current.size).toBe(8);
+        for (let i = 0; i < 8; i++) {
+            const maturity = Number(keys[i]);
+            if (maturities[maturity].isOpened) {
+                const loanValue = LoanValue.fromPrice(
+                    maturities[maturity].midUnitPrice,
+                    maturity
+                );
+                expect(result.current.get(maturity)).toStrictEqual(loanValue);
+            }
         }
     });
 });

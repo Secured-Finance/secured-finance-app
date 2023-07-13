@@ -19,36 +19,25 @@ export const useLoanValues = (
         const loanValues = new Map<number, LoanValue>();
         Object.entries(lendingMarkets)
             .filter(o => filterFn(o[1]))
-            .map(o => {
+            .forEach(o => {
+                let price = 0;
                 switch (type) {
                     case RateType.Borrow:
-                        loanValues.set(
-                            o[1].maturity,
-                            LoanValue.fromPrice(
-                                o[1].borrowUnitPrice,
-                                o[1].maturity
-                            )
-                        );
+                        price = o[1].borrowUnitPrice;
                         break;
                     case RateType.Lend:
-                        loanValues.set(
-                            o[1].maturity,
-                            LoanValue.fromPrice(
-                                o[1].lendUnitPrice,
-                                o[1].maturity
-                            )
-                        );
+                        price = o[1].lendUnitPrice;
                         break;
                     case RateType.MidRate:
-                        loanValues.set(
-                            o[1].maturity,
-                            LoanValue.fromPrice(
-                                o[1].midUnitPrice,
-                                o[1].maturity
-                            )
-                        );
+                        price = o[1].midUnitPrice;
+                        break;
+                    default:
                         break;
                 }
+                loanValues.set(
+                    o[1].maturity,
+                    LoanValue.fromPrice(price, o[1].maturity)
+                );
             });
         return loanValues;
     }, [filterFn, lendingMarkets, type]);
