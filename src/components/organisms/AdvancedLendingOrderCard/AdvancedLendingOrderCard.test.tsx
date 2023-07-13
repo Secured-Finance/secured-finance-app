@@ -1,5 +1,7 @@
 import { OrderSide } from '@secured-finance/sf-client';
 import { composeStories } from '@storybook/testing-react';
+import { BigNumber } from 'ethers';
+import { CollateralBook } from 'src/hooks';
 import {
     dec22Fixture,
     preloadedAssetPrices,
@@ -27,6 +29,26 @@ const preloadedState = {
     },
     ...preloadedLendingMarkets,
     ...preloadedAssetPrices,
+};
+
+const collateralBook0: CollateralBook = {
+    collateral: {
+        ETH: BigNumber.from('1000000000000000000'),
+        USDC: BigNumber.from('10000000'),
+    },
+    nonCollateral: {
+        WFIL: BigNumber.from('100000000000000000000'),
+        WBTC: BigNumber.from('20000000'),
+    },
+    usdCollateral: 23000,
+    usdNonCollateral: 10600,
+    coverage: BigNumber.from('0000'),
+    collateralThreshold: 80,
+    withdrawableCollateral: {
+        [CurrencySymbol.USDC]: BigNumber.from(100000),
+        [CurrencySymbol.ETH]: BigNumber.from(100000),
+    },
+    fetched: true,
 };
 
 beforeEach(() => {
@@ -60,7 +82,7 @@ describe('AdvancedLendingOrderCard Component', () => {
         expect(screen.getByTestId('collateral-progress-bar-track')).toHaveStyle(
             'width: calc(100% * 0.37)'
         );
-        expect(screen.getByText('Available: $989.00')).toBeInTheDocument();
+        expect(screen.getByText('Available: $903.15')).toBeInTheDocument();
 
         expect(screen.getByText('Liquidation Risk')).toBeInTheDocument();
         expect(screen.getByText('Low')).toBeInTheDocument();
@@ -296,5 +318,27 @@ describe('AdvancedLendingOrderCard Component', () => {
                 screen.queryByText('Insufficient amount in source')
             ).toBeInTheDocument();
         });
+    });
+
+    it('should not disable button in Borrow orders when input is less than available to borrow amount', async () => {
+        // SF vault has 100 WFIL
+        // test asserts that the validation condition for Lend orders i.e (input amount< balance to lend) is not applicable to borrow orders
+
+        render(<Default collateralBook={collateralBook0} />, {
+            preloadedState: {
+                ...preloadedState,
+                landingOrderForm: {
+                    ...preloadedState.landingOrderForm,
+                    currency: CurrencySymbol.WFIL,
+                },
+            },
+        });
+        await waitFor(() => {
+            const input = screen.getByRole('textbox', { name: 'Amount' });
+            fireEvent.change(input, { target: { value: '1000' } });
+        });
+
+        const button = screen.getByTestId('place-order-button');
+        expect(button).not.toBeDisabled();
     });
 });

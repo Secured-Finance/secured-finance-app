@@ -1,11 +1,14 @@
-import {
-    GraphApolloClient,
-    QueryResult,
-    useQuery,
-} from '@secured-finance/sf-graph-client';
+import { GraphApolloClient, useQuery } from '@secured-finance/sf-graph-client';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from 'src/store/types';
+
+type QueryResult<T> = {
+    data: T | undefined;
+    error: unknown;
+    refetch?: unknown;
+    networkStatus?: unknown;
+};
 
 type QueryResultType<T, K extends keyof T> = Omit<
     QueryResult<T>,
