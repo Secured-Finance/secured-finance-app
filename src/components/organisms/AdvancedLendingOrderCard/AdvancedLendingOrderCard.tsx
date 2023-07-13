@@ -65,6 +65,7 @@ export const AdvancedLendingOrderCard = ({
         selectLandingOrderForm(state.landingOrderForm)
     );
     const [sliderValue, setSliderValue] = useState(0.0);
+    const [bondPriceValidation, setBondPriceValidation] = useState(false);
 
     const balanceRecord = useSelector((state: RootState) =>
         selectAllBalances(state)
@@ -179,6 +180,10 @@ export const AdvancedLendingOrderCard = ({
         handleInputChange(BigNumber.from(0));
     };
 
+    const validateBondPrice = (v: number) => {
+        setBondPriceValidation(v === 0 && orderType === OrderType.LIMIT);
+    };
+
     return (
         <div className='h-fit rounded-b-xl border border-white-10 bg-cardBackground bg-opacity-60 pb-7'>
             <RadioGroup
@@ -246,13 +251,22 @@ export const AdvancedLendingOrderCard = ({
                     <OrderInputBox
                         field='Bond Price'
                         disabled={orderType === OrderType.MARKET}
-                        initialValue={divide(unitPrice, 100)}
-                        onValueChange={v =>
-                            dispatch(setUnitPrice(multiply(v as number, 100)))
+                        initialValue={
+                            unitPrice > 0 || orderType === OrderType.MARKET
+                                ? divide(unitPrice, 100)
+                                : undefined
                         }
-                        informationText='Input value from 0 to 100'
+                        onValueChange={v => {
+                            validateBondPrice(v as number);
+                            dispatch(setUnitPrice(multiply(v as number, 100)));
+                        }}
+                        informationText='Input value greater than 0 and upto 100'
                         decimalPlacesAllowed={2}
                         maxLimit={100}
+                    />
+                    <ErrorInfo
+                        errorMessage='Invalid bond price'
+                        showError={bondPriceValidation}
                     />
                     <div className='mx-10px'>
                         <OrderDisplayBox
@@ -289,11 +303,13 @@ export const AdvancedLendingOrderCard = ({
                 <OrderAction
                     loanValue={loanValue}
                     collateralBook={collateralBook}
-                    validation={getAmountValidation(
-                        amountFormatterFromBase[currency](amount),
-                        balanceToLend,
-                        side
-                    )}
+                    validation={
+                        getAmountValidation(
+                            amountFormatterFromBase[currency](amount),
+                            balanceToLend,
+                            side
+                        ) || bondPriceValidation
+                    }
                 />
 
                 <Separator color='neutral-3'></Separator>
