@@ -229,14 +229,11 @@ const PaginatedScrolling = ({
     containerHeight?: boolean;
 }) => (
     <InfiniteScroll
-        style={{
-            overflow: 'visible',
-            height: `${containerHeight ? '30vh' : null}`,
-        }}
         dataLength={data.length}
         next={fetchMoreData}
         hasMore={hasMoreData}
         loader={<h4>Loading...</h4>}
+        height={containerHeight ? 400 : undefined}
     >
         {children}
     </InfiniteScroll>
