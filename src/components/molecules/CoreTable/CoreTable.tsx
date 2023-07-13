@@ -8,7 +8,7 @@ import {
     useReactTable,
 } from '@tanstack/react-table';
 import classNames from 'classnames';
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
 type CoreTableOptions = {
@@ -193,10 +193,8 @@ export const CoreTable = <T,>({
         </table>
     );
 
-    const fetchMoreData = async () => {
-        if (coreTableOptions?.pagination?.getMoreData) {
-            coreTableOptions.pagination.getMoreData();
-        }
+    const fetchMoreData = () => {
+        coreTableOptions?.pagination?.getMoreData();
     };
 
     return (

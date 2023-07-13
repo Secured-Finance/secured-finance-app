@@ -43,7 +43,7 @@ const PaginationTemplate: ComponentStory<typeof MyTransactionsTable> = args => {
                             .fill(null)
                             .map(_ => ({
                                 amount: '1000000000000000000000',
-                                averagePrice: '0.8000', // TODO: rework the unit in the graph. This is changed only for a dirty fix
+                                averagePrice: '0.8000',
                                 side: 0,
                                 orderPrice: '9800',
                                 createdAt: '1671859344',
