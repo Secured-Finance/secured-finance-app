@@ -31,6 +31,7 @@ export const OrderHistoryTable = ({
     pagination?: {
         totalData: number;
         getMoreData: () => void;
+        containerHeight: boolean;
     };
 }) => {
     const priceList = useSelector((state: RootState) => getPriceMap(state));

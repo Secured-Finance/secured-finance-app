@@ -29,7 +29,19 @@ const Template: ComponentStory<typeof MyTransactionsTable> = args => (
 export const Default = Template.bind({});
 
 const PaginationTemplate: ComponentStory<typeof MyTransactionsTable> = args => {
-    const [data, setData] = useState(args.data);
+    const initialData = Array(20)
+        .fill(null)
+        .map(_ => ({
+            amount: '1000000000000000000000',
+            averagePrice: '0.8000',
+            side: 0,
+            orderPrice: '9800',
+            createdAt: '1671859344',
+            forwardValue: '1020000000000000000000',
+            currency: efilBytes32,
+            maturity: jun23Fixture.toString(),
+        }));
+    const [data, setData] = useState(initialData);
 
     return (
         <div className='text-white'>
@@ -55,10 +67,11 @@ const PaginationTemplate: ComponentStory<typeof MyTransactionsTable> = args => {
                         const updatedData = [...data, ...newData];
                         setData(updatedData);
                     },
+                    containerHeight: false,
                 }}
             />
         </div>
     );
 };
 
-export const PaginatedMyTransactionsTable = PaginationTemplate.bind({});
+export const WithPagination = PaginationTemplate.bind({});
