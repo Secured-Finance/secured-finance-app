@@ -1,4 +1,4 @@
-import { maturities } from 'src/stories/mocks/fixtures';
+import { maturities, dec24Fixture } from 'src/stories/mocks/fixtures';
 import { renderHook } from 'src/test-utils';
 import { useLoanValues, RateType } from './useLoanValues';
 import { LoanValue } from 'src/utils/entities/loanValue';
@@ -67,6 +67,8 @@ describe('useLoanValues', () => {
                     maturity
                 );
                 expect(result.current.get(maturity)).toStrictEqual(loanValue);
+            } else {
+                expect(maturity).toBe(dec24Fixture);
             }
         }
     });
