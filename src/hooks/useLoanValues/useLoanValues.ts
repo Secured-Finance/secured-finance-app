@@ -17,26 +17,26 @@ export const useLoanValues = (
 ) => {
     return useMemo(() => {
         const loanValues = new Map<number, LoanValue>();
-        Object.entries(lendingMarkets)
-            .filter(o => filterFn(o[1]))
+        Object.values(lendingMarkets)
+            .filter(o => filterFn(o))
             .forEach(o => {
                 let price = 0;
                 switch (type) {
                     case RateType.Borrow:
-                        price = o[1].borrowUnitPrice;
+                        price = o.borrowUnitPrice;
                         break;
                     case RateType.Lend:
-                        price = o[1].lendUnitPrice;
+                        price = o.lendUnitPrice;
                         break;
                     case RateType.MidRate:
-                        price = o[1].midUnitPrice;
+                        price = o.midUnitPrice;
                         break;
                     default:
                         break;
                 }
                 loanValues.set(
-                    o[1].maturity,
-                    LoanValue.fromPrice(price, o[1].maturity)
+                    o.maturity,
+                    LoanValue.fromPrice(price, o.maturity)
                 );
             });
         return loanValues;
