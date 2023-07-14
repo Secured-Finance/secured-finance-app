@@ -268,7 +268,7 @@ export const MultiCurveChart = ({
                     options={dataOptions}
                     ref={chartRef}
                     onClick={() => {}}
-                    data-chromatic='ignore'
+                    // data-chromatic='ignore'
                     plugins={[crossHairMultiPlugin]}
                 />
                 {tooltipPos && (
