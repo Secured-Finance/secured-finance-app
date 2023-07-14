@@ -29,7 +29,13 @@ import {
     setMaturity,
 } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
-import { CurrencySymbol, getCurrencyMapAsOptions, usdFormat } from 'src/utils';
+import {
+    CurrencySymbol,
+    getCurrencyMapAsOptions,
+    usdFormat,
+    amountFormatterFromBase,
+    amountFormatterToBase,
+} from 'src/utils';
 import { countdown } from 'src/utils/date';
 import { Maturity } from 'src/utils/entities';
 import { useWallet } from 'use-wallet';
@@ -42,6 +48,8 @@ const Toolbar = ({
     date,
     nextMarketPhase,
     currency,
+    handleAssetChange,
+    handleTermChange,
 }: {
     selectedAsset: Option<CurrencySymbol> | undefined;
     assetList: Array<Option<CurrencySymbol>>;
@@ -50,17 +58,12 @@ const Toolbar = ({
     date: number;
     nextMarketPhase: string;
     currency: CurrencySymbol;
+    handleAssetChange: (v: CurrencySymbol) => void;
+    handleTermChange: (v: string) => void;
 }) => {
     const currencyPrice = useSelector((state: RootState) =>
         getAssetPrice(currency)(state)
     );
-    const dispatch = useDispatch();
-
-    const handleAssetChange = (v: CurrencySymbol) => {
-        if (v === currency) return;
-        dispatch(setCurrency(v));
-        dispatch(setAmount(BigNumber.from(0)));
-    };
 
     return (
         <GradientBox shape='rectangle'>
@@ -71,9 +74,7 @@ const Toolbar = ({
                     options={options}
                     selected={selected}
                     onAssetChange={handleAssetChange}
-                    onTermChange={v => {
-                        dispatch(setMaturity(Number(v)));
-                    }}
+                    onTermChange={handleTermChange}
                 />
                 <div className='flex w-full flex-row items-center justify-between'>
                     <div>
@@ -96,7 +97,7 @@ const Toolbar = ({
 export const Itayose = () => {
     const { account } = useWallet();
 
-    const { currency, maturity } = useSelector((state: RootState) =>
+    const { amount, currency, maturity } = useSelector((state: RootState) =>
         selectLandingOrderForm(state.landingOrderForm)
     );
 
@@ -138,6 +139,21 @@ export const Itayose = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [orderList, selectedTerm.value.toNumber()]);
 
+    const dispatch = useDispatch();
+
+    const handleAssetChange = (v: CurrencySymbol) => {
+        let formatFrom = (x: BigNumber) => x.toNumber();
+        if (amountFormatterFromBase && amountFormatterFromBase[currency]) {
+            formatFrom = amountFormatterFromBase[currency];
+        }
+        let formatTo = (x: number) => BigNumber.from(x);
+        if (amountFormatterToBase && amountFormatterToBase[v]) {
+            formatTo = amountFormatterToBase[v];
+        }
+        dispatch(setAmount(formatTo(formatFrom(amount))));
+        dispatch(setCurrency(v));
+    };
+
     return (
         <Page title='Pre-Open Order Book'>
             <TwoColumnsWithTopBar
@@ -168,6 +184,10 @@ export const Itayose = () => {
                             value: selectedTerm.value.toString(),
                         }}
                         currency={currency}
+                        handleAssetChange={handleAssetChange}
+                        handleTermChange={v => {
+                            dispatch(setMaturity(Number(v)));
+                        }}
                     />
                 }
             >
