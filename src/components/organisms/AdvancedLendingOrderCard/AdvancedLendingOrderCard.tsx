@@ -251,7 +251,9 @@ export const AdvancedLendingOrderCard = ({
                         field='Bond Price'
                         disabled={orderType === OrderType.MARKET}
                         initialValue={
-                            unitPrice ? divide(unitPrice, 100) : undefined
+                            unitPrice || orderType === OrderType.MARKET
+                                ? divide(unitPrice ?? 0, 100)
+                                : undefined
                         }
                         onValueChange={v => {
                             dispatch(setUnitPrice(multiply(v as number, 100)));
