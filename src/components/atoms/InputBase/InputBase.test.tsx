@@ -1,6 +1,6 @@
-import { fireEvent, userEvent } from '@storybook/testing-library';
-import { composeStories } from '@storybook/testing-react';
-import { render, screen } from 'src/test-utils.js';
+import { composeStories } from '@storybook/react';
+import { userEvent } from '@storybook/testing-library';
+import { fireEvent, render, screen } from 'src/test-utils.js';
 import * as stories from './InputBase.stories';
 
 const { Default, WithValue, DecimalPlacesAllowed, MaxLimit } =
