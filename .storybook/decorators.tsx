@@ -120,7 +120,6 @@ export const WithGraphClient = (Story: StoryFn) => (
 );
 
 export const withMockDate = (Story: StoryFn, context: StoryContext) => {
-    timemachine.reset();
     if (context?.parameters?.date?.value instanceof Date) {
         timemachine.config({
             dateString: context.parameters.date.value,
