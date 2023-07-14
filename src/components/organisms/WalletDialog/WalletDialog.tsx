@@ -19,6 +19,8 @@ import {
     InterfaceEvents,
     InterfaceProperties,
     WalletConnectionResult,
+    decToHex,
+    getEthereumChainId,
 } from 'src/utils';
 import { associateWallet } from 'src/utils/events';
 import { useAccount, useConnect } from 'wagmi';
@@ -51,6 +53,25 @@ export const WalletDialog = () => {
             const connector = connectors.find(
                 connect => connect.name === provider
             );
+
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const injected = (window as any).ethereum;
+            if (injected && injected?.request) {
+                try {
+                    await injected?.request({
+                        method: 'wallet_switchEthereumChain',
+                        params: [
+                            {
+                                chainId: decToHex(getEthereumChainId()),
+                            },
+                        ],
+                    });
+                } catch (e) {
+                    if (e instanceof Error) {
+                        setErrorMessage(e.message);
+                    }
+                }
+            }
 
             if (!connector) {
                 setErrorMessage('Provider not found.');
