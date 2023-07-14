@@ -199,6 +199,7 @@ export const PortfolioManagement = () => {
                                         ) ?? 0,
                                     getMoreData: () =>
                                         setSkipOrders(skipOrders + 100),
+                                    containerHeight: true,
                                 }}
                             />
                             <MyTransactionsTable
@@ -209,6 +210,7 @@ export const PortfolioManagement = () => {
                                         setSkipTransactions(
                                             skipTransactions + 100
                                         ),
+                                    containerHeight: true,
                                 }}
                             />
                         </HorizontalTab>

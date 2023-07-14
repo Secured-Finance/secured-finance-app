@@ -85,11 +85,9 @@ describe('CoreTable Component', () => {
         await act(async () => {
             fireEvent.scroll(window, { target: { scrollY: 100 } });
             expect(screen.queryByText('Loading...')).not.toBeInTheDocument();
-            await waitFor(async () => {
-                expect(screen.getAllByTestId('core-table-row')).toHaveLength(
-                    20
-                );
-            });
+        });
+        await waitFor(async () => {
+            expect(screen.getAllByTestId('core-table-row')).toHaveLength(20);
         });
     });
 
@@ -97,14 +95,39 @@ describe('CoreTable Component', () => {
         await waitFor(() => render(<WithPagination />));
         expect(screen.getAllByTestId('core-table-row')).toHaveLength(20);
         await act(async () => {
-            const table = screen.getByTestId('core-table');
-            table.addEventListener('scroll', () => {});
             fireEvent.scroll(window, { target: { scrollTop: 100 } });
         });
 
         await waitFor(() => {
             expect(screen.getByText('Loading...')).toBeInTheDocument();
             expect(screen.getAllByTestId('core-table-row')).toHaveLength(40);
+        });
+    });
+
+    it('should not load more data when scrolled if getMoreData function is available but totalData is equal to length of data', async () => {
+        const getMoreData = jest.fn();
+        await waitFor(() =>
+            render(
+                <Default
+                    options={{
+                        pagination: {
+                            totalData: 20,
+                            getMoreData: getMoreData,
+                            containerHeight: false,
+                        },
+                    }}
+                />
+            )
+        );
+        expect(screen.getAllByTestId('core-table-row')).toHaveLength(20);
+        await act(async () => {
+            fireEvent.scroll(window, { target: { scrollTop: 100 } });
+        });
+
+        await waitFor(() => {
+            expect(screen.queryByText('Loading...')).not.toBeInTheDocument();
+            expect(getMoreData).not.toBeCalled();
+            expect(screen.getAllByTestId('core-table-row')).toHaveLength(20);
         });
     });
 });
