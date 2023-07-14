@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import { assetList } from 'src/stories/mocks/fixtures';
 import { DropdownSelector } from './DropdownSelector';
 
@@ -17,9 +17,9 @@ export default {
         },
         onChange: { control: { disable: true }, action: 'onChange' },
     },
-} as ComponentMeta<typeof DropdownSelector>;
+} as Meta<typeof DropdownSelector>;
 
-const Template: ComponentStory<typeof DropdownSelector> = args => (
+const Template: StoryFn<typeof DropdownSelector> = args => (
     <DropdownSelector {...args} />
 );
 

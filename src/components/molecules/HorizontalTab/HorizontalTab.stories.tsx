@@ -1,5 +1,5 @@
 import { RESPONSIVE_PARAMETERS, VIEWPORTS } from '.storybook/constants';
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import { within } from '@storybook/testing-library';
 import { HorizontalTab } from './HorizontalTab';
 
@@ -15,9 +15,9 @@ export default {
             viewports: [VIEWPORTS.MOBILE, VIEWPORTS.TABLET],
         },
     },
-} as ComponentMeta<typeof HorizontalTab>;
+} as Meta<typeof HorizontalTab>;
 
-const Template: ComponentStory<typeof HorizontalTab> = args => (
+const Template: StoryFn<typeof HorizontalTab> = args => (
     <div className='w-full text-white-80'>
         <HorizontalTab {...args}>
             <div>This is a Great Tab Content</div>

@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import { OrderDisplayBox } from '.';
 
 export default {
@@ -8,9 +8,9 @@ export default {
         field: 'Fixed Rate',
         value: 1000,
     },
-} as ComponentMeta<typeof OrderDisplayBox>;
+} as Meta<typeof OrderDisplayBox>;
 
-const Template: ComponentStory<typeof OrderDisplayBox> = args => (
+const Template: StoryFn<typeof OrderDisplayBox> = args => (
     <OrderDisplayBox {...args} />
 );
 

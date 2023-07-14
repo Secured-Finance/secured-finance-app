@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import { within } from '@storybook/testing-library';
 import { RESPONSIVE_PARAMETERS } from 'src/../.storybook/constants';
 import {
@@ -12,8 +12,8 @@ import {
 import {
     mockDailyVolumes,
     mockTrades,
-    mockUserTransactionHistory,
     mockUserOrderHistory,
+    mockUserTransactionHistory,
 } from 'src/stories/mocks/queries';
 import { Landing } from './Landing';
 
@@ -40,9 +40,9 @@ export default {
         ...RESPONSIVE_PARAMETERS,
         layout: 'fullscreen',
     },
-} as ComponentMeta<typeof Landing>;
+} as Meta<typeof Landing>;
 
-const Template: ComponentStory<typeof Landing> = () => {
+const Template: StoryFn<typeof Landing> = () => {
     return <Landing />;
 };
 

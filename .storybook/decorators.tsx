@@ -1,5 +1,5 @@
 import { GraphClientProvider } from '@secured-finance/sf-graph-client';
-import { StoryContext, StoryFn } from '@storybook/react';
+import type { StoryContext, StoryFn } from '@storybook/react';
 import { Wallet } from 'ethers';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';

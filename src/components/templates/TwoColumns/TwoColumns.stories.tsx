@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import { RESPONSIVE_PARAMETERS } from 'src/../.storybook/constants';
 import { TwoColumns } from './TwoColumns';
 
@@ -22,11 +22,9 @@ export default {
         ...RESPONSIVE_PARAMETERS,
         layout: 'fullscreen',
     },
-} as ComponentMeta<typeof TwoColumns>;
+} as Meta<typeof TwoColumns>;
 
-const Template: ComponentStory<typeof TwoColumns> = args => (
-    <TwoColumns {...args} />
-);
+const Template: StoryFn<typeof TwoColumns> = args => <TwoColumns {...args} />;
 
 export const Default = Template.bind({});
 export const NarrowFirstColumn = Template.bind({});

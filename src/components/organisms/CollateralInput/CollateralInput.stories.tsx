@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import { screen, userEvent } from '@storybook/testing-library';
 import { BigNumber } from 'ethers';
 import { useState } from 'react';
@@ -15,9 +15,9 @@ export default {
         availableAmount: 10,
         asset: asset,
     },
-} as ComponentMeta<typeof CollateralInput>;
+} as Meta<typeof CollateralInput>;
 
-const Template: ComponentStory<typeof CollateralInput> = args => {
+const Template: StoryFn<typeof CollateralInput> = args => {
     const [value, setValue] = useState(args.amount);
     const handleAmountChange = (newValue: BigNumber | undefined) => {
         setValue(
