@@ -33,13 +33,15 @@ const preloadedState = {
 
 describe('OrderAction component', () => {
     it('should render connect wallet button', async () => {
-        render(<Primary />, { preloadedState });
+        await waitFor(() => render(<Primary />, { preloadedState }));
         expect(screen.getByRole('button')).toBeInTheDocument();
         expect(screen.getByText('Connect Wallet')).toBeInTheDocument();
     });
 
     it('should render deposit collateral button when collateral is not sufficient', async () => {
-        render(<NotEnoughCollateral />, { preloadedState });
+        await waitFor(() =>
+            render(<NotEnoughCollateral />, { preloadedState })
+        );
         expect(
             await screen.findByTestId('deposit-collateral-button')
         ).toBeInTheDocument();
@@ -54,7 +56,7 @@ describe('OrderAction component', () => {
     });
 
     it('should render place order button when collateral is sufficient for order', async () => {
-        render(<EnoughCollateral />, { preloadedState });
+        await waitFor(() => render(<EnoughCollateral />, { preloadedState }));
         expect(
             await screen.findByTestId('place-order-button')
         ).toBeInTheDocument();
@@ -67,7 +69,9 @@ describe('OrderAction component', () => {
     });
 
     it('should render order side on the place order button if provided as props', async () => {
-        render(<RenderOrderSideButton />, { preloadedState });
+        await waitFor(() =>
+            render(<RenderOrderSideButton />, { preloadedState })
+        );
         expect(
             await screen.findByTestId('place-order-button')
         ).toBeInTheDocument();
@@ -75,7 +79,9 @@ describe('OrderAction component', () => {
     });
 
     it('should render place order button as it is', async () => {
-        render(<EnoughCollateral renderSide={false} />, { preloadedState });
+        await waitFor(() =>
+            render(<EnoughCollateral renderSide={false} />, { preloadedState })
+        );
         expect(
             await screen.findByTestId('place-order-button')
         ).toBeInTheDocument();
@@ -83,15 +89,17 @@ describe('OrderAction component', () => {
     });
 
     it('should render place order button if orderside is lend', async () => {
-        render(<NotEnoughCollateral />, {
-            preloadedState: {
-                ...preloadedState,
-                landingOrderForm: {
-                    ...preloadedState.landingOrderForm,
-                    side: OrderSide.LEND,
+        await waitFor(() =>
+            render(<NotEnoughCollateral />, {
+                preloadedState: {
+                    ...preloadedState,
+                    landingOrderForm: {
+                        ...preloadedState.landingOrderForm,
+                        side: OrderSide.LEND,
+                    },
                 },
-            },
-        });
+            })
+        );
         expect(
             await screen.findByTestId('place-order-button')
         ).toBeInTheDocument();
@@ -104,28 +112,30 @@ describe('OrderAction component', () => {
     });
 
     it('should disable the button if the market is not open or pre-open', async () => {
-        render(<EnoughCollateral />, {
-            preloadedState: {
-                ...preloadedState,
-                availableContracts: {
-                    lendingMarkets: {
-                        [CurrencySymbol.USDC]: {
-                            ...preloadedLendingMarkets.availableContracts
-                                ?.lendingMarkets[CurrencySymbol.USDC],
-                            [dec22Fixture.toNumber()]: {
+        await waitFor(() =>
+            render(<EnoughCollateral />, {
+                preloadedState: {
+                    ...preloadedState,
+                    availableContracts: {
+                        lendingMarkets: {
+                            [CurrencySymbol.USDC]: {
                                 ...preloadedLendingMarkets.availableContracts
-                                    ?.lendingMarkets[CurrencySymbol.USDC][
-                                    dec22Fixture.toNumber()
-                                ],
-                                isItayosePeriod: true,
-                                isPreOrderPeriod: false,
-                                isOpened: false,
+                                    ?.lendingMarkets[CurrencySymbol.USDC],
+                                [dec22Fixture.toNumber()]: {
+                                    ...preloadedLendingMarkets
+                                        .availableContracts?.lendingMarkets[
+                                        CurrencySymbol.USDC
+                                    ][dec22Fixture.toNumber()],
+                                    isItayosePeriod: true,
+                                    isPreOrderPeriod: false,
+                                    isOpened: false,
+                                },
                             },
                         },
                     },
                 },
-            },
-        });
+            })
+        );
         await waitFor(() => expect(screen.getByRole('button')).toBeDisabled());
     });
 });

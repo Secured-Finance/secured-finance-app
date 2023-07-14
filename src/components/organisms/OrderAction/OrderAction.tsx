@@ -33,7 +33,6 @@ export const OrderAction = ({
     validation,
 }: OrderActionProps) => {
     const { isConnected, isDisconnected } = useAccount();
-
     const dispatch = useDispatch();
     const { placeOrder, placePreOrder } = useOrders();
 
