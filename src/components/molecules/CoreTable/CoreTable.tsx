@@ -60,6 +60,11 @@ export const CoreTable = <T,>({
             coreTableOptions.pagination.totalData > 0
         ) {
             setHasMoreData(false);
+        } else {
+            setHasMoreData(
+                !!coreTableOptions.pagination &&
+                    coreTableOptions.pagination.totalData > 0
+            );
         }
     }, [
         coreTableOptions.pagination,

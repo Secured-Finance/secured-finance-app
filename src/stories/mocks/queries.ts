@@ -411,7 +411,7 @@ export const mockUserOrderHistory = [
         result: {
             data: {
                 user: {
-                    orderCount: 400,
+                    orderCount: 300,
                     orders: Array(100)
                         .fill(null)
                         .map((_, index) => ({
@@ -437,7 +437,7 @@ export const mockUserOrderHistory = [
             return {
                 data: {
                     user: {
-                        orderCount: 400,
+                        orderCount: 300,
                         orders: Array(100)
                             .fill(null)
                             .map((_, index) => ({
@@ -478,7 +478,7 @@ export const mockUserOrderHistory = [
         result: {
             data: {
                 user: {
-                    orderCount: 400,
+                    orderCount: 300,
                     orders: Array(100)
                         .fill(null)
                         .map((_, index) => ({
@@ -504,7 +504,7 @@ export const mockUserOrderHistory = [
             return {
                 data: {
                     user: {
-                        orderCount: 400,
+                        orderCount: 300,
                         orders: Array(100)
                             .fill(null)
                             .map((_, index) => ({
@@ -545,7 +545,7 @@ export const mockUserOrderHistory = [
         result: {
             data: {
                 user: {
-                    orderCount: 400,
+                    orderCount: 300,
                     orders: Array(100)
                         .fill(null)
                         .map((_, index) => ({
@@ -571,7 +571,7 @@ export const mockUserOrderHistory = [
             return {
                 data: {
                     user: {
-                        orderCount: 400,
+                        orderCount: 300,
                         orders: Array(100)
                             .fill(null)
                             .map((_, index) => ({
@@ -612,7 +612,7 @@ export const mockUserOrderHistory = [
         result: {
             data: {
                 user: {
-                    orderCount: 400,
+                    orderCount: 300,
                     orders: Array(100)
                         .fill(null)
                         .map((_, index) => ({
@@ -638,7 +638,7 @@ export const mockUserOrderHistory = [
             return {
                 data: {
                     user: {
-                        orderCount: 400,
+                        orderCount: 300,
                         orders: Array(100)
                             .fill(null)
                             .map((_, index) => ({
@@ -652,73 +652,6 @@ export const mockUserOrderHistory = [
                                 filledAmount: BigNumber.from('0'),
                                 amount: BigNumber.from(
                                     '3000000000000000000000'
-                                ),
-                                status: 'Open',
-                                createdAt: BigNumber.from('1'),
-                                txHash: utils.formatBytes32String('hash'),
-                                lendingMarket: {
-                                    id: '1',
-                                    isActive: true,
-                                },
-                            })),
-                    },
-                },
-            };
-        },
-    },
-    {
-        request: {
-            query: queries.UserOrderHistoryDocument,
-            variables: {
-                address: '0xb98bd7c7f656290071e52d1aa617d9cb4467fd6d',
-                skip: 400,
-                first: 100,
-                awaitRefetchQueries: true,
-            },
-        },
-        result: {
-            data: {
-                user: {
-                    orderCount: 400,
-                    orders: Array(100)
-                        .fill(null)
-                        .map((_, index) => ({
-                            orderId: index,
-                            currency: efilBytes32,
-                            side: 1,
-                            maturity: BigNumber.from(dec22Fixture.toString()),
-                            unitPrice: BigNumber.from('9800'),
-                            filledAmount: BigNumber.from('0'),
-                            amount: BigNumber.from('4000000000000000000000'),
-                            status: 'Open',
-                            createdAt: BigNumber.from('1'),
-                            txHash: utils.formatBytes32String('hash'),
-                            lendingMarket: {
-                                id: '1',
-                                isActive: true,
-                            },
-                        })),
-                },
-            },
-        },
-        newData: () => {
-            return {
-                data: {
-                    user: {
-                        orderCount: 400,
-                        orders: Array(100)
-                            .fill(null)
-                            .map((_, index) => ({
-                                orderId: index,
-                                currency: efilBytes32,
-                                side: 1,
-                                maturity: BigNumber.from(
-                                    dec22Fixture.toString()
-                                ),
-                                unitPrice: BigNumber.from('9800'),
-                                filledAmount: BigNumber.from('0'),
-                                amount: BigNumber.from(
-                                    '4000000000000000000000'
                                 ),
                                 status: 'Open',
                                 createdAt: BigNumber.from('1'),
