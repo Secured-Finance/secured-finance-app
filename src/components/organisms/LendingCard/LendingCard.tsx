@@ -32,6 +32,7 @@ import {
     amountFormatterToBase,
     formatLoanValue,
     generateWalletSourceInformation,
+    getAmountValidation,
     getCurrencyMapAsList,
     getCurrencyMapAsOptions,
     getTransformMaturityOption,
@@ -120,11 +121,6 @@ export const LendingCard = ({
         selectedWalletSource.source,
     ]);
 
-    const getAmountValidation = (): boolean => {
-        const value = amountFormatterFromBase[currency](amount);
-        return !!value && value > balanceToLend;
-    };
-
     return (
         <div className='w-80 flex-col space-y-6 rounded-b-xl border border-panelStroke bg-transparent pb-6 shadow-deep'>
             <BorrowLendSelector
@@ -163,7 +159,11 @@ export const LendingCard = ({
                     />
                     {side === OrderSide.LEND && (
                         <ErrorInfo
-                            showError={getAmountValidation()}
+                            showError={getAmountValidation(
+                                amountFormatterFromBase[currency](amount),
+                                balanceToLend,
+                                side
+                            )}
                             errorMessage='Insufficient amount in source'
                         />
                     )}
@@ -209,7 +209,11 @@ export const LendingCard = ({
                     collateralBook={collateralBook}
                     loanValue={marketValue}
                     renderSide
-                    validation={getAmountValidation()}
+                    validation={getAmountValidation(
+                        amountFormatterFromBase[currency](amount),
+                        balanceToLend,
+                        side
+                    )}
                 />
             </div>
         </div>

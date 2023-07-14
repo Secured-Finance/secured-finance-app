@@ -87,6 +87,8 @@ export const maturities = {
         isMatured: false,
         isPreOrderPeriod: false,
         isItayosePeriod: false,
+        borrowUnitPrice: 9685,
+        lendUnitPrice: 9687,
     },
     [mar23Fixture.toNumber()]: {
         name: 'MAR23',
@@ -101,6 +103,8 @@ export const maturities = {
         isMatured: false,
         isPreOrderPeriod: false,
         isItayosePeriod: false,
+        borrowUnitPrice: 9683,
+        lendUnitPrice: 9685,
     },
     [jun23Fixture.toNumber()]: {
         name: 'JUN23',
@@ -115,6 +119,8 @@ export const maturities = {
         isMatured: false,
         isPreOrderPeriod: false,
         isItayosePeriod: false,
+        borrowUnitPrice: 9677,
+        lendUnitPrice: 9679,
     },
     [sep23Fixture.toNumber()]: {
         name: 'SEP23',
@@ -129,6 +135,8 @@ export const maturities = {
         isMatured: false,
         isPreOrderPeriod: false,
         isItayosePeriod: false,
+        borrowUnitPrice: 9672,
+        lendUnitPrice: 9674,
     },
     [dec23Fixture.toNumber()]: {
         name: 'DEC23',
@@ -143,6 +151,8 @@ export const maturities = {
         isMatured: false,
         isPreOrderPeriod: false,
         isItayosePeriod: false,
+        borrowUnitPrice: 9651,
+        lendUnitPrice: 9653,
     },
     [mar24Fixture.toNumber()]: {
         name: 'MAR24',
@@ -157,6 +167,8 @@ export const maturities = {
         isMatured: false,
         isPreOrderPeriod: false,
         isItayosePeriod: false,
+        borrowUnitPrice: 9641,
+        lendUnitPrice: 9643,
     },
     [jun24Fixture.toNumber()]: {
         name: 'JUN24',
@@ -171,6 +183,8 @@ export const maturities = {
         isMatured: false,
         isPreOrderPeriod: false,
         isItayosePeriod: false,
+        borrowUnitPrice: 9625,
+        lendUnitPrice: 9627,
     },
     [sep24Fixture.toNumber()]: {
         name: 'SEP24',
@@ -185,6 +199,8 @@ export const maturities = {
         isMatured: false,
         isPreOrderPeriod: false,
         isItayosePeriod: false,
+        borrowUnitPrice: 9615,
+        lendUnitPrice: 9617,
     },
     [dec24Fixture.toNumber()]: {
         name: 'DEC24',
@@ -199,6 +215,8 @@ export const maturities = {
         isMatured: false,
         isPreOrderPeriod: true,
         isItayosePeriod: false,
+        borrowUnitPrice: 9615,
+        lendUnitPrice: 9617,
     },
 };
 
@@ -499,6 +517,38 @@ export const orderHistoryList: OrderList = [
             isActive: false,
         },
     },
+    {
+        orderId: 3,
+        currency: efilBytes32,
+        side: 1,
+        maturity: BigNumber.from(dec22Fixture.toString()),
+        unitPrice: BigNumber.from('9600'),
+        filledAmount: BigNumber.from('0'),
+        amount: BigNumber.from('5000000000000000000000'),
+        status: 'Blocked',
+        createdAt: BigNumber.from('1'),
+        txHash: utils.formatBytes32String('hash'),
+        lendingMarket: {
+            id: '1',
+            isActive: true,
+        },
+    },
+    {
+        orderId: 5,
+        currency: efilBytes32,
+        side: 1,
+        maturity: BigNumber.from(dec22Fixture.toString()),
+        unitPrice: BigNumber.from('9800'),
+        filledAmount: BigNumber.from('10000000000000000000'),
+        amount: BigNumber.from('100000000000000000000'),
+        status: 'PartiallyBlocked',
+        createdAt: BigNumber.from('1'),
+        txHash: utils.formatBytes32String('hash'),
+        lendingMarket: {
+            id: '1',
+            isActive: true,
+        },
+    },
 ];
 
 export const transactions: TradeHistory = [
@@ -608,13 +658,13 @@ export const collateralBook80: CollateralBook = {
 export const collateralBook37: CollateralBook = {
     collateral: {
         ETH: BigNumber.from('1000000000000000000'),
-        USDC: BigNumber.from('10000000'),
+        USDC: BigNumber.from('100000000'),
     },
     nonCollateral: {
         EFIL: BigNumber.from('100000000000000000000'),
         WBTC: BigNumber.from('20000000'),
     },
-    usdCollateral: 2300,
+    usdCollateral: 2100.34,
     usdNonCollateral: 10600,
     coverage: BigNumber.from('3700'),
     collateralThreshold: 80,

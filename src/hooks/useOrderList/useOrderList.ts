@@ -41,6 +41,7 @@ export const useOrderList = (account: string | undefined) => {
 
     const fetchOrdersList = useCallback(async () => {
         if (!securedFinance || !account) {
+            setOrderList(emptyOrderList);
             return;
         }
 

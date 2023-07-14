@@ -1,6 +1,7 @@
 import { BigNumber } from 'ethers';
 import { useCallback, useMemo, useState } from 'react';
 import { DropdownSelector, InputBase, Option } from 'src/components/atoms';
+import { prefixTilde } from 'src/utils';
 
 type FormatFunction = (amount: number) => BigNumber;
 
@@ -89,7 +90,7 @@ export const AssetSelector = <AssetType extends string = string>({
                     className='mr-1 text-white-60'
                     data-testid='asset-selector-usd'
                 >
-                    {`~ ${amountInUsd} USD`}
+                    {prefixTilde(`${amountInUsd} USD`)}
                 </div>
             </div>
             <div className='flex h-14 flex-row items-center justify-between space-x-2 rounded-lg bg-black-20 py-2 pl-2 pr-4 ring-starBlue focus-within:ring'>

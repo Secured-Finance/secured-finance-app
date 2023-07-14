@@ -1,5 +1,5 @@
 import { CurrencyIcon } from 'src/components/atoms';
-import { currencyMap, ordinaryFormat, usdFormat } from 'src/utils';
+import { currencyMap, ordinaryFormat, prefixTilde, usdFormat } from 'src/utils';
 import { Amount } from 'src/utils/entities';
 
 export const AmountCard = ({
@@ -29,7 +29,7 @@ export const AmountCard = ({
             </div>
             <div></div>
             <div className='typography-caption-3 text-right text-white-60'>
-                ~ {usdFormat(amount.toUSD(price))}
+                {prefixTilde(usdFormat(amount.toUSD(price)))}
             </div>
         </div>
     );

@@ -38,6 +38,7 @@ import {
     computeAvailableToBorrow,
     divide,
     generateWalletSourceInformation,
+    getAmountValidation,
     multiply,
     percentFormat,
     usdFormat,
@@ -144,11 +145,6 @@ export const AdvancedLendingOrderCard = ({
         selectedWalletSource.source,
     ]);
 
-    const getAmountValidation = (): boolean => {
-        const value = amountFormatterFromBase[currency](amount);
-        return !!value && value > balanceToLend;
-    };
-
     const handleAmountChange = (percentage: number) => {
         const available =
             side === OrderSide.BORROW ? availableToBorrow : balanceToLend;
@@ -237,7 +233,11 @@ export const AdvancedLendingOrderCard = ({
                             onChange={handleWalletSourceChange}
                         />
                         <ErrorInfo
-                            showError={getAmountValidation()}
+                            showError={getAmountValidation(
+                                amountFormatterFromBase[currency](amount),
+                                balanceToLend,
+                                side
+                            )}
                             errorMessage='Insufficient amount in source'
                         />
                     </div>
@@ -289,7 +289,11 @@ export const AdvancedLendingOrderCard = ({
                 <OrderAction
                     loanValue={loanValue}
                     collateralBook={collateralBook}
-                    validation={getAmountValidation()}
+                    validation={getAmountValidation(
+                        amountFormatterFromBase[currency](amount),
+                        balanceToLend,
+                        side
+                    )}
                 />
 
                 <Separator color='neutral-3'></Separator>
