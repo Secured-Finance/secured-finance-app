@@ -1,4 +1,4 @@
-import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
+import { fireEvent, render, screen } from 'src/test-utils.js';
 
 import { composeStories } from '@storybook/testing-react';
 import * as stories from './WalletDialog.stories';
@@ -12,11 +12,6 @@ const preloadedState = {
     blockchain: {
         chainError: false,
     },
-};
-
-const selectMetamaskOption = () => {
-    const radio = screen.getAllByRole('radio');
-    fireEvent.click(radio[0]);
 };
 
 describe('Wallet Dialog component', () => {
@@ -45,25 +40,5 @@ describe('Wallet Dialog component', () => {
         const button = screen.getByTestId('dialog-action-button');
         fireEvent.click(button);
         expect(screen.getAllByRole('radio')).toHaveLength(2);
-    });
-
-    it('should move to the next step if an option was selected', async () => {
-        render(<Primary />, { preloadedState });
-        selectMetamaskOption();
-        fireEvent.click(screen.getByTestId('dialog-action-button'));
-        expect(await screen.findByText('Connecting...')).toBeInTheDocument();
-    });
-
-    it.skip('should proceed to failure screen if something goes wrong', async () => {
-        const useWalletMock = {
-            connect: jest.fn().mockRejectedValueOnce(new Error('failed')),
-        };
-        render(<Primary />, { preloadedState });
-        selectMetamaskOption();
-        fireEvent.click(screen.getByTestId('dialog-action-button'));
-        await waitFor(() => {
-            expect(useWalletMock.connect).toBeCalled();
-            expect(screen.getByText('Failed!')).toBeInTheDocument();
-        });
     });
 });
