@@ -12,6 +12,7 @@ export default {
     component: AdvancedLendingOrderCard,
     args: {
         collateralBook: collateralBook37,
+        onlyLimitOrder: false,
     },
     parameters: {
         connected: true,
@@ -41,7 +42,7 @@ FailedAmountValidation.play = async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     const lendTab = canvas.getByText('Lend');
     lendTab.click();
-    const input = canvas.getByRole('textbox');
+    const input = canvas.getByRole('textbox', { name: 'Amount' });
     await userEvent.type(input, '999999999', {
         delay: 100,
     });
