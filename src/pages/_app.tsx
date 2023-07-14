@@ -11,7 +11,11 @@ import { Header } from 'src/components/organisms';
 import { Layout } from 'src/components/templates';
 import SecuredFinanceProvider from 'src/contexts/SecuredFinanceProvider';
 import store from 'src/store';
-import { getAmplitudeApiKey, getEthereumNetwork } from 'src/utils';
+import {
+    getAmplitudeApiKey,
+    getEthereumNetwork,
+    getWalletConnectId,
+} from 'src/utils';
 import { WagmiConfig, configureChains, createConfig, sepolia } from 'wagmi';
 import { InjectedConnector } from 'wagmi/connectors/injected';
 import { MetaMaskConnector } from 'wagmi/connectors/metaMask';
@@ -20,7 +24,7 @@ import { alchemyProvider } from 'wagmi/providers/alchemy';
 import { publicProvider } from 'wagmi/providers/public';
 import '../assets/css/index.css';
 
-const projectId = '83209157e11b11d87ae68781c8f3762d';
+const projectId = getWalletConnectId();
 
 init(getAmplitudeApiKey(), undefined, {
     appVersion: process.env.SF_ENV,

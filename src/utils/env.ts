@@ -13,6 +13,12 @@ export const getEthereumChainId = (): number => {
     return parseInt(chainId, 10);
 };
 
+export const getWalletConnectId = () => {
+    const walletConnectId = process.env.NEXT_PUBLIC_WALLET_CONNECT_ID;
+    assert(walletConnectId, 'NEXT_PUBLIC_WALLET_CONNECT_ID is not set');
+    return walletConnectId;
+};
+
 export const getAmplitudeApiKey = () => {
     const NEXT_PUBLIC_AMPLITUDE_API_KEY =
         process.env.NEXT_PUBLIC_AMPLITUDE_API_KEY;
