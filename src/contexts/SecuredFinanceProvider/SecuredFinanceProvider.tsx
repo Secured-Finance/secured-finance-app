@@ -1,18 +1,19 @@
 import { reset, track } from '@amplitude/analytics-browser';
 import { SecuredFinanceClient } from '@secured-finance/sf-client';
-import { Signer, getDefaultProvider, providers } from 'ethers';
+import { Signer, providers } from 'ethers';
 import React, { createContext, useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useLendingMarkets } from 'src/hooks';
 import { useEthereumWalletStore } from 'src/hooks/useEthWallet';
 import { updateChainError, updateLatestBlock } from 'src/store/blockchain';
-import {
-    getCurrencyMapAsList,
-    getEthereumChainId,
-    getRpcEndpoint,
-} from 'src/utils';
+import { getCurrencyMapAsList, getEthereumChainId } from 'src/utils';
 import { InterfaceEvents, associateWallet } from 'src/utils/events';
-import { useAccount, useConnect, useNetwork, useWalletClient } from 'wagmi';
+import {
+    useAccount,
+    useConnect,
+    usePublicClient,
+    useWalletClient,
+} from 'wagmi';
 
 export const CACHED_PROVIDER_KEY = 'CACHED_PROVIDER_KEY';
 
@@ -24,19 +25,13 @@ export const Context = createContext<SFContext>({
     securedFinance: undefined,
 });
 
-declare global {
-    interface Window {
-        securedFinanceSDK: SecuredFinanceClient;
-    }
-}
-
 const SecuredFinanceProvider: React.FC = ({ children }) => {
     const [web3Provider, setWeb3Provider] =
         useState<providers.BaseProvider | null>(null);
-    const { address: account, isConnected, connector } = useAccount();
-    const { connect } = useConnect();
-    const { chain } = useNetwork();
+    const { address, isConnected } = useAccount();
+    const { connect, connectors } = useConnect();
     const { data: client } = useWalletClient();
+    const publicClient = usePublicClient();
 
     const [securedFinance, setSecuredFinance] =
         useState<SecuredFinanceClient>();
@@ -106,32 +101,49 @@ const SecuredFinanceProvider: React.FC = ({ children }) => {
 
                 return previous;
             });
-            window.securedFinanceSDK = securedFinanceLib;
         };
-        if (isConnected && chain && client?.transport) {
+        if (isConnected && client?.chain && client?.transport) {
             const provider = new providers.Web3Provider(
                 client?.transport,
-                chain.id
+                client?.chain.id
             );
             const signer = provider.getSigner();
             connectSFClient(provider, signer);
-        } else if (!isConnected) {
-            const provider = getDefaultProvider(getRpcEndpoint());
+        } else if (
+            !isConnected &&
+            publicClient?.transport &&
+            publicClient?.chain
+        ) {
+            const provider = new providers.Web3Provider(
+                publicClient?.transport,
+                publicClient?.chain.id
+            );
             connectSFClient(provider);
         }
-    }, [isConnected, dispatch, handleAccountChanged, chain, client?.transport]);
+    }, [
+        dispatch,
+        handleAccountChanged,
+        client?.transport,
+        client,
+        isConnected,
+        publicClient?.transport,
+        publicClient?.chain,
+    ]);
 
     useEffect(() => {
-        if (account) {
-            associateWallet(account, false);
+        if (address) {
+            associateWallet(address, false);
             return;
         }
 
         const cachedProvider = localStorage.getItem(CACHED_PROVIDER_KEY);
         if (cachedProvider !== null) {
-            connect({ connector: connector });
+            const connector = connectors.find(
+                connector => connector.name === cachedProvider
+            );
+            if (connector) connect({ connector: connector });
         }
-    }, [connect, account, connector]);
+    }, [connect, address, connectors]);
 
     useEffect(() => {
         if (!web3Provider) return;

@@ -13,17 +13,6 @@ export const getEthereumChainId = (): number => {
     return parseInt(chainId, 10);
 };
 
-export const getRpcEndpoint = () => {
-    const NEXT_PUBLIC_ETHEREUM_NETWORK = getEthereumNetwork();
-    const NEXT_PUBLIC_ALCHEMY_API_KEY = process.env.NEXT_PUBLIC_ALCHEMY_API_KEY;
-    assert(
-        NEXT_PUBLIC_ALCHEMY_API_KEY,
-        'NEXT_PUBLIC_ALCHEMY_API_KEY is not set'
-    );
-
-    return `https://eth-${NEXT_PUBLIC_ETHEREUM_NETWORK}.g.alchemy.com/v2/${NEXT_PUBLIC_ALCHEMY_API_KEY}`;
-};
-
 export const getAmplitudeApiKey = () => {
     const NEXT_PUBLIC_AMPLITUDE_API_KEY =
         process.env.NEXT_PUBLIC_AMPLITUDE_API_KEY;

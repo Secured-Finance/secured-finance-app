@@ -60,7 +60,7 @@ export const WalletDialog = () => {
             try {
                 if (!account && connector && connector.name === provider) {
                     connect({ connector: connector });
-                    localStorage.setItem(CACHED_PROVIDER_KEY, 'connected');
+                    localStorage.setItem(CACHED_PROVIDER_KEY, connector.name);
                 }
             } catch (e) {
                 if (e instanceof Error) {
