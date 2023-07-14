@@ -5,7 +5,6 @@ import {
     getEnvironment,
     getEthereumChainId,
     getEthereumNetwork,
-    getRpcEndpoint,
     getUsePackageVersion,
 } from 'src/utils';
 
@@ -37,32 +36,6 @@ describe('getEthereumChainId ', () => {
         process.env.NEXT_PUBLIC_ETHEREUM_CHAIN_ID = '';
         expect(() => getEthereumChainId()).toThrowError(
             'NEXT_PUBLIC_ETHEREUM_CHAIN_ID is not set'
-        );
-    });
-});
-
-describe('getRpcEndpoint', () => {
-    beforeEach(() => {
-        process.env.NEXT_PUBLIC_ETHEREUM_NETWORK = 'sepolia';
-        process.env.NEXT_PUBLIC_ALCHEMY_API_KEY = 'test';
-    });
-
-    it('should return rpc endpoint', () => {
-        const network = getRpcEndpoint();
-        expect(network).toBe(`https://eth-sepolia.g.alchemy.com/v2/test`);
-    });
-
-    it('should throw error if NEXT_PUBLIC_ETHEREUM_NETWORK is not set', () => {
-        process.env.NEXT_PUBLIC_ETHEREUM_NETWORK = '';
-        expect(() => getRpcEndpoint()).toThrowError(
-            'NEXT_PUBLIC_ETHEREUM_NETWORK is not set'
-        );
-    });
-
-    it('should throw error if NEXT_PUBLIC_ALCHEMY_API_KEY is not set', () => {
-        process.env.NEXT_PUBLIC_ALCHEMY_API_KEY = '';
-        expect(() => getRpcEndpoint()).toThrowError(
-            'NEXT_PUBLIC_ALCHEMY_API_KEY is not set'
         );
     });
 });

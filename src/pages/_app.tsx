@@ -12,14 +12,14 @@ import { Layout } from 'src/components/templates';
 import SecuredFinanceProvider from 'src/contexts/SecuredFinanceProvider';
 import store from 'src/store';
 import { getAmplitudeApiKey, getEthereumNetwork } from 'src/utils';
-import { createPublicClient, http } from 'viem';
-import { WagmiConfig, createConfig, sepolia } from 'wagmi';
+import { WagmiConfig, configureChains, createConfig, sepolia } from 'wagmi';
 import { InjectedConnector } from 'wagmi/connectors/injected';
 import { MetaMaskConnector } from 'wagmi/connectors/metaMask';
 import { WalletConnectConnector } from 'wagmi/connectors/walletConnect';
+import { alchemyProvider } from 'wagmi/providers/alchemy';
+import { publicProvider } from 'wagmi/providers/public';
 import '../assets/css/index.css';
 
-const chains = [sepolia];
 const projectId = '83209157e11b11d87ae68781c8f3762d';
 
 init(getAmplitudeApiKey(), undefined, {
@@ -27,12 +27,19 @@ init(getAmplitudeApiKey(), undefined, {
     logLevel: LogLevel.None,
 });
 
+const { chains, publicClient } = configureChains(
+    [sepolia],
+    [
+        alchemyProvider({
+            apiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY ?? '',
+        }),
+        publicProvider(),
+    ]
+);
+
 const config = createConfig({
     autoConnect: true,
-    publicClient: createPublicClient({
-        chain: sepolia,
-        transport: http(),
-    }),
+    publicClient: publicClient,
     connectors: [
         new MetaMaskConnector({ chains }),
         new WalletConnectConnector({
