@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import { withAssetPrice } from 'src/../.storybook/decorators';
 import { dailyVolumes, maturityOptions } from 'src/stories/mocks/fixtures';
 import { CurrencySymbol, Rate } from 'src/utils';
@@ -27,9 +27,9 @@ export default {
     },
     argTypes: {},
     decorators: [withAssetPrice],
-} as ComponentMeta<typeof YieldChart>;
+} as Meta<typeof YieldChart>;
 
-const Template: ComponentStory<typeof YieldChart> = args => {
+const Template: StoryFn<typeof YieldChart> = args => {
     return <YieldChart {...args} />;
 };
 

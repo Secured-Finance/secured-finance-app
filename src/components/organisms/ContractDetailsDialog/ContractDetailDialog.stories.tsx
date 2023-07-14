@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import { ContractDetailDialog } from './ContractDetailDialog';
 
 export default {
@@ -8,9 +8,9 @@ export default {
         isOpen: true,
         onClose: () => {},
     },
-} as ComponentMeta<typeof ContractDetailDialog>;
+} as Meta<typeof ContractDetailDialog>;
 
-const Template: ComponentStory<typeof ContractDetailDialog> = args => (
+const Template: StoryFn<typeof ContractDetailDialog> = args => (
     <ContractDetailDialog {...args} />
 );
 

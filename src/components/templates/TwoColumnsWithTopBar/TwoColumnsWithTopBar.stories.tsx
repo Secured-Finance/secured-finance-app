@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import { RESPONSIVE_PARAMETERS } from 'src/../.storybook/constants';
 import { TwoColumnsWithTopBar } from './TwoColumnsWithTopBar';
 
@@ -27,9 +27,9 @@ export default {
         ...RESPONSIVE_PARAMETERS,
         layout: 'fullscreen',
     },
-} as ComponentMeta<typeof TwoColumnsWithTopBar>;
+} as Meta<typeof TwoColumnsWithTopBar>;
 
-const Template: ComponentStory<typeof TwoColumnsWithTopBar> = args => (
+const Template: StoryFn<typeof TwoColumnsWithTopBar> = args => (
     <TwoColumnsWithTopBar {...args} />
 );
 

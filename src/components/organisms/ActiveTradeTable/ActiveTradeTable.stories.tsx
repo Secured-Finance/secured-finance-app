@@ -1,11 +1,11 @@
 import { RESPONSIVE_PARAMETERS, VIEWPORTS } from '.storybook/constants';
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import { BigNumber } from 'ethers';
 import {
     withAssetPrice,
     withWalletProvider,
 } from 'src/../.storybook/decorators';
-import { positions, efilBytes32 } from 'src/stories/mocks/fixtures';
+import { efilBytes32, positions } from 'src/stories/mocks/fixtures';
 import { Maturity } from 'src/utils/entities';
 import { ActiveTradeTable } from './ActiveTradeTable';
 
@@ -22,9 +22,9 @@ export default {
         },
     },
     decorators: [withAssetPrice, withWalletProvider],
-} as ComponentMeta<typeof ActiveTradeTable>;
+} as Meta<typeof ActiveTradeTable>;
 
-const Template: ComponentStory<typeof ActiveTradeTable> = args => {
+const Template: StoryFn<typeof ActiveTradeTable> = args => {
     args.data = [
         ...args.data,
         {

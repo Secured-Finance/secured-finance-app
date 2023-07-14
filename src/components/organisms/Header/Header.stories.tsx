@@ -3,7 +3,7 @@ import {
     withChainErrorDisabled,
     withWalletProvider,
 } from '.storybook/decorators';
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import { userEvent, within } from '@storybook/testing-library';
 import { Header } from './';
 
@@ -15,9 +15,9 @@ export default {
     parameters: {
         ...RESPONSIVE_PARAMETERS,
     },
-} as ComponentMeta<typeof Header>;
+} as Meta<typeof Header>;
 
-const Template: ComponentStory<typeof Header> = () => <Header />;
+const Template: StoryFn<typeof Header> = () => <Header />;
 
 export const Primary = Template.bind({});
 export const Connected = Template.bind({});

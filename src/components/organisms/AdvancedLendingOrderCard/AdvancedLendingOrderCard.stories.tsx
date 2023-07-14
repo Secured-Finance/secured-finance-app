@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import { userEvent, within } from '@storybook/testing-library';
 import {
     withAssetPrice,
@@ -18,9 +18,9 @@ export default {
         connected: true,
     },
     decorators: [withAssetPrice, withWalletProvider],
-} as ComponentMeta<typeof AdvancedLendingOrderCard>;
+} as Meta<typeof AdvancedLendingOrderCard>;
 
-const Template: ComponentStory<typeof AdvancedLendingOrderCard> = args => {
+const Template: StoryFn<typeof AdvancedLendingOrderCard> = args => {
     return <AdvancedLendingOrderCard {...args} />;
 };
 

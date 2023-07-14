@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import { FailurePanel } from './FailurePanel';
 
 export default {
@@ -7,9 +7,9 @@ export default {
     args: {
         errorMessage: 'This is an error.',
     },
-} as ComponentMeta<typeof FailurePanel>;
+} as Meta<typeof FailurePanel>;
 
-const Template: ComponentStory<typeof FailurePanel> = args => (
+const Template: StoryFn<typeof FailurePanel> = args => (
     <div className='w-[400px]'>
         <FailurePanel {...args} />
     </div>

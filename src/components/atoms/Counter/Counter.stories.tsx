@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import { Counter } from '.';
 
 export default {
@@ -12,9 +12,9 @@ export default {
     parameters: {
         chromatic: { delay: 3000 },
     },
-} as ComponentMeta<typeof Counter>;
+} as Meta<typeof Counter>;
 
-const Template: ComponentStory<typeof Counter> = args => <Counter {...args} />;
+const Template: StoryFn<typeof Counter> = args => <Counter {...args} />;
 
 export const Default = Template.bind({});
 

@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import { Slider } from '.';
 
 export default {
@@ -7,9 +7,9 @@ export default {
     args: {
         onChange: () => {},
     },
-} as ComponentMeta<typeof Slider>;
+} as Meta<typeof Slider>;
 
-const Template: ComponentStory<typeof Slider> = args => {
+const Template: StoryFn<typeof Slider> = args => {
     return (
         <div className='w-80'>
             <Slider {...args} />
