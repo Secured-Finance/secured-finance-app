@@ -33,7 +33,7 @@ declare global {
 const SecuredFinanceProvider: React.FC = ({ children }) => {
     const [web3Provider, setWeb3Provider] =
         useState<providers.BaseProvider | null>(null);
-    const { address: account, isConnected } = useAccount();
+    const { address: account, isConnected, connector } = useAccount();
     const { connect } = useConnect();
     const { chain } = useNetwork();
     const { data: client } = useWalletClient();
@@ -129,9 +129,9 @@ const SecuredFinanceProvider: React.FC = ({ children }) => {
 
         const cachedProvider = localStorage.getItem(CACHED_PROVIDER_KEY);
         if (cachedProvider !== null) {
-            connect();
+            connect({ connector: connector });
         }
-    }, [connect, account]);
+    }, [connect, account, connector]);
 
     useEffect(() => {
         if (!web3Provider) return;

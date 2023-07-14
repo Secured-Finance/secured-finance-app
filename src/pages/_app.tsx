@@ -1,7 +1,7 @@
 import { init } from '@amplitude/analytics-browser';
 import { LogLevel } from '@amplitude/analytics-types';
 import { GraphClientProvider } from '@secured-finance/sf-graph-client';
-import { EthereumClient, w3mConnectors } from '@web3modal/ethereum';
+import { EthereumClient } from '@web3modal/ethereum';
 import { Web3Modal } from '@web3modal/react';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
@@ -14,6 +14,9 @@ import store from 'src/store';
 import { getAmplitudeApiKey, getEthereumNetwork } from 'src/utils';
 import { createPublicClient, http } from 'viem';
 import { WagmiConfig, createConfig, sepolia } from 'wagmi';
+import { InjectedConnector } from 'wagmi/connectors/injected';
+import { MetaMaskConnector } from 'wagmi/connectors/metaMask';
+import { WalletConnectConnector } from 'wagmi/connectors/walletConnect';
 import '../assets/css/index.css';
 
 const chains = [sepolia];
@@ -30,7 +33,22 @@ const config = createConfig({
         chain: sepolia,
         transport: http(),
     }),
-    connectors: [...w3mConnectors({ projectId, chains })],
+    connectors: [
+        new MetaMaskConnector({ chains }),
+        new WalletConnectConnector({
+            chains,
+            options: {
+                projectId: projectId,
+            },
+        }),
+        new InjectedConnector({
+            chains,
+            options: {
+                name: 'Injected',
+                shimDisconnect: true,
+            },
+        }),
+    ],
 });
 const ethereumClient = new EthereumClient(config, chains);
 
