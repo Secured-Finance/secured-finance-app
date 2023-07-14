@@ -13,7 +13,7 @@ import FilIcon from 'src/assets/coins/fil.svg';
 import UsdcIcon from 'src/assets/coins/usdc.svg';
 import { Option } from 'src/components/atoms';
 import { SvgIcon } from 'src/types';
-import { hexToString } from 'web3-utils';
+import { hexToString } from 'viem';
 import { EFIL } from './currencies/filecoin';
 import { USDC } from './currencies/usdc';
 import { WBTC } from './currencies/wbtc';
@@ -171,7 +171,7 @@ export function toCurrencySymbol(ccy: string) {
 }
 
 export function hexToCurrencySymbol(hex: string) {
-    return toCurrencySymbol(hexToString(hex));
+    return toCurrencySymbol(hexToString(hex as `0x${string}`, { size: 32 }));
 }
 
 const convertToBlockchainUnit = (amount: number | string, ccy: Currency) => {
