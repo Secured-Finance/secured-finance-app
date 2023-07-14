@@ -59,7 +59,7 @@ describe('useLoanValues', () => {
             )
         );
         expect(result.current.size).toBe(8);
-        for (let i = 0; i < 8; i++) {
+        for (let i = 0; i < 9; i++) {
             const maturity = Number(keys[i]);
             if (maturities[maturity].isOpened) {
                 const loanValue = LoanValue.fromPrice(
@@ -68,7 +68,7 @@ describe('useLoanValues', () => {
                 );
                 expect(result.current.get(maturity)).toStrictEqual(loanValue);
             } else {
-                expect(maturity).toBe(dec24Fixture);
+                expect(maturity).toBe(dec24Fixture.toNumber());
             }
         }
     });
