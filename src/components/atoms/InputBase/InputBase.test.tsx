@@ -15,45 +15,45 @@ describe('test InputBase component', () => {
         expect(input.getAttribute('value')).toBe('');
     });
 
-    it('should render input with value', () => {
+    it('should render input with value', async () => {
         const onValueChange = jest.fn();
         render(<WithValue onValueChange={onValueChange} />);
 
         const input = screen.getByRole('textbox');
         expect(input.getAttribute('value')).toBe('50');
-        userEvent.clear(input);
-        userEvent.type(input, '100');
+        await userEvent.clear(input);
+        await userEvent.type(input, '100');
         expect(onValueChange).toHaveBeenCalledWith(100);
         expect(input.getAttribute('value')).toBe('100');
     });
 
-    it('should perform formatting on the value', () => {
+    it('should perform formatting on the value', async () => {
         render(<Default />);
 
         const input = screen.getByRole('textbox');
-        userEvent.clear(input);
-        userEvent.type(input, '1000000');
+        await userEvent.clear(input);
+        await userEvent.type(input, '1000000');
         expect(input.getAttribute('value')).toBe('1,000,000');
     });
 
-    it('should restrict decimal places', () => {
+    it('should restrict decimal places', async () => {
         render(<DecimalPlacesAllowed />);
 
         const input = screen.getByRole('textbox');
-        userEvent.clear(input);
-        userEvent.type(input, '100.2312');
+        await userEvent.clear(input);
+        await userEvent.type(input, '100.2312');
         expect(input.getAttribute('value')).toBe('100.23');
     });
 
-    it('should restrict input value if greater than max limit', () => {
+    it('should restrict input value if greater than max limit', async () => {
         render(<MaxLimit />);
 
         const input = screen.getByRole('textbox');
-        userEvent.clear(input);
-        userEvent.type(input, '1001');
+        await userEvent.clear(input);
+        await userEvent.type(input, '1001');
         expect(input.getAttribute('value')).toBe('100');
 
-        userEvent.type(input, '10001');
+        await userEvent.type(input, '10001');
         expect(input.getAttribute('value')).toBe('1,000');
     });
 
