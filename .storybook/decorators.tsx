@@ -18,13 +18,7 @@ import { coingeckoApi } from 'src/utils/coinGeckoApi';
 import timemachine from 'timemachine';
 import { createPublicClient, createWalletClient, custom } from 'viem';
 import { privateKeyToAccount } from 'viem/accounts';
-import {
-    WagmiConfig,
-    createConfig,
-    sepolia,
-    useAccount,
-    useConnect,
-} from 'wagmi';
+import { WagmiConfig, createConfig, sepolia } from 'wagmi';
 import { MockConnector } from 'wagmi/connectors/mock';
 
 export const withAppLayout = (Story: Story) => {
@@ -68,6 +62,7 @@ const connector = new MockConnector({
 });
 
 const config = createConfig({
+    autoConnect: true,
     publicClient: createPublicClient({
         chain: sepolia,
         transport: custom(signer),
@@ -75,41 +70,19 @@ const config = createConfig({
     connectors: [connector],
 });
 
-const WithConnectedWallet = ({
-    connected,
-    children,
-}: {
-    connected: boolean;
-    children: React.ReactNode;
-}) => {
-    const { isConnected } = useAccount();
-    const { connect, connectors, isLoading, isIdle, reset, pendingConnector } =
-        useConnect();
-
-    useEffect(() => {
-        if (!connected) return;
-        if (!isConnected && !isLoading && !pendingConnector) {
-            connect({ connector: connectors[0] });
-        }
-
-        return () => {
-            if (!isIdle) {
-                reset();
-            }
-        };
-    }, [isConnected, connect, isLoading, connected]);
-
-    return <>{children}</>;
-};
-
 export const withWalletProvider = (Story: Story, Context: StoryContext) => {
+    const config = createConfig({
+        autoConnect: Context.parameters && Context.parameters.connected,
+        publicClient: createPublicClient({
+            chain: sepolia,
+            transport: custom(signer),
+        }),
+        connectors: [connector],
+    });
+
     return (
         <WagmiConfig config={config}>
-            <WithConnectedWallet
-                connected={Context.parameters && Context.parameters.connected}
-            >
-                <Story />
-            </WithConnectedWallet>
+            <Story />
         </WagmiConfig>
     );
 };

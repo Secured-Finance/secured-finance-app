@@ -34,11 +34,25 @@ export default {
         validation: false,
     },
     decorators: [
-        withAssetPrice,
-        withWalletProvider,
         withMaturities,
         withWalletBalances,
+        withAssetPrice,
+        withWalletProvider,
     ],
+    argTypes: {
+        collateralBook: {
+            options: [
+                'collateralBook37',
+                'collateralBook80',
+                'emptyCollateralBook',
+            ],
+            mapping: {
+                collateralBook37: collateralBook37,
+                collateralBook80: collateralBook80,
+                emptyCollateralBook: emptyCollateralBook,
+            },
+        },
+    },
 } as ComponentMeta<typeof OrderAction>;
 
 const Template: ComponentStory<typeof OrderAction> = args => {

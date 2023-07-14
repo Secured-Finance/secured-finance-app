@@ -55,10 +55,11 @@ describe('LendingCard Component', () => {
 
     it('should render the component with Borrow as the default', async () => {
         await waitFor(() => render(<Default />, { preloadedState }));
-        expect(screen.getByTestId('place-order-button')).toHaveTextContent(
-            'Borrow'
-        );
+        expect(
+            await screen.findByTestId('place-order-button')
+        ).toHaveTextContent('Borrow');
     });
+
     it('should show correct market rate', async () => {
         await waitFor(() => render(<Default />, { preloadedState }));
         expect(screen.getByTestId('market-rate')).toHaveTextContent('1.00%');
@@ -68,7 +69,7 @@ describe('LendingCard Component', () => {
         await waitFor(() => render(<Default />, { preloadedState }));
         const input = screen.getByRole('textbox');
         fireEvent.change(input, { target: { value: '10' } });
-        fireEvent.click(screen.getByTestId('place-order-button'));
+        fireEvent.click(await screen.findByTestId('place-order-button'));
         expect(screen.getByRole('dialog')).toBeInTheDocument();
         expect(screen.getByText('Confirm Order')).toBeInTheDocument();
         const button = screen.getByTestId('dialog-action-button');
