@@ -4,7 +4,7 @@ import {
     withWalletProvider,
 } from '.storybook/decorators';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
-import { within } from '@storybook/testing-library';
+import { userEvent, within } from '@storybook/testing-library';
 import { Header } from './';
 
 export default {
@@ -28,8 +28,15 @@ Connected.parameters = {
 export const MenuExpanded = Template.bind({});
 MenuExpanded.parameters = {
     chromatic: { viewports: [VIEWPORTS.MOBILE, VIEWPORTS.TABLET] },
+    viewport: {
+        ...RESPONSIVE_PARAMETERS,
+        defaultViewport: 'mobile',
+    },
 };
 MenuExpanded.play = async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    canvas.getByRole('button', { name: 'Hamburger Menu' }).click();
+    const button = await canvas.findByRole('button', {
+        name: 'Hamburger Menu',
+    });
+    await userEvent.click(button);
 };
