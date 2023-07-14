@@ -1,4 +1,4 @@
-import { composeStories } from '@storybook/testing-react';
+import { composeStories } from '@storybook/react';
 import { fireEvent, render, screen } from 'src/test-utils.js';
 import * as stories from './LiquidationProgressBar.stories';
 

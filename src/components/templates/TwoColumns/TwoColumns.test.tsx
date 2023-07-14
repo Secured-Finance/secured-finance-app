@@ -1,4 +1,4 @@
-import { composeStories } from '@storybook/testing-react';
+import { composeStories } from '@storybook/react';
 import { render, screen } from 'src/test-utils.js';
 import * as stories from './TwoColumns.stories';
 

@@ -1,6 +1,6 @@
 import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
 
-import { composeStories } from '@storybook/testing-react';
+import { composeStories } from '@storybook/react';
 import * as stories from './WalletPopover.stories';
 
 const { Default } = composeStories(stories);
