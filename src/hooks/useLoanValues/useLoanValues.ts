@@ -1,12 +1,6 @@
-import { SecuredFinanceClient } from '@secured-finance/sf-client';
-import { BigNumber } from 'ethers';
-import { useCallback, useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { RootState } from 'src/store/types';
-import { CurrencySymbol, toCurrency } from 'src/utils';
-import { Maturity } from 'src/utils/entities';
+import { useMemo } from 'react';
+import { ContractMap, LendingMarket } from '../useLendingMarkets';
 import { LoanValue } from 'src/utils/entities/loanValue';
-import useSF from '../useSecuredFinance';
 
 export enum RateType {
     Borrow = 0,
@@ -14,58 +8,37 @@ export enum RateType {
     MidRate = 2,
 }
 
+const passThrough = () => true;
+
 export const useLoanValues = (
-    ccy: CurrencySymbol,
+    lendingMarkets: ContractMap,
     type: RateType,
-    maturity: Maturity[]
+    filterFn: (market: LendingMarket) => unknown = passThrough
 ) => {
-    const securedFinance = useSF();
-    const block = useSelector(
-        (state: RootState) => state.blockchain.latestBlock
-    );
-    const [unitPrices, setUnitPrices] = useState<BigNumber[]>([]);
-    const loanValues: LoanValue[] = [];
-
-    const fetchYieldCurve = useCallback(
-        async (securedFinance: SecuredFinanceClient) => {
-            const currency = toCurrency(ccy);
-            let priceFn;
-            switch (type) {
-                case RateType.Borrow:
-                    priceFn = () => securedFinance.getLendUnitPrices(currency);
-                    break;
-                case RateType.Lend:
-                    priceFn = () =>
-                        securedFinance.getBorrowUnitPrices(currency);
-                    break;
-                case RateType.MidRate:
-                    priceFn = () => securedFinance.getMidUnitPrices(currency);
-                    break;
-                default:
-                    priceFn = () => Promise.resolve([]);
-                    break;
-            }
-            setUnitPrices(await priceFn());
-        },
-        [type, ccy]
-    );
-
-    useEffect(() => {
-        if (securedFinance) {
-            fetchYieldCurve(securedFinance);
-        }
-    }, [fetchYieldCurve, securedFinance, block]);
-
-    unitPrices.forEach((unitPrice, index) => {
-        if (maturity[index]) {
-            loanValues.push(
-                LoanValue.fromPrice(
-                    unitPrice.toNumber(),
-                    maturity[index].toNumber()
-                )
-            );
-        }
-    });
-
-    return loanValues;
+    return useMemo(() => {
+        const loanValues = new Map<number, LoanValue>();
+        Object.values(lendingMarkets)
+            .filter(o => filterFn(o))
+            .forEach(o => {
+                let price = 0;
+                switch (type) {
+                    case RateType.Borrow:
+                        price = o.borrowUnitPrice;
+                        break;
+                    case RateType.Lend:
+                        price = o.lendUnitPrice;
+                        break;
+                    case RateType.MidRate:
+                        price = o.midUnitPrice;
+                        break;
+                    default:
+                        break;
+                }
+                loanValues.set(
+                    o.maturity,
+                    LoanValue.fromPrice(price, o.maturity)
+                );
+            });
+        return loanValues;
+    }, [filterFn, lendingMarkets, type]);
 };
