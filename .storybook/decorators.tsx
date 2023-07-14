@@ -61,15 +61,6 @@ const connector = new MockConnector({
     },
 });
 
-const config = createConfig({
-    autoConnect: true,
-    publicClient: createPublicClient({
-        chain: sepolia,
-        transport: custom(signer),
-    }),
-    connectors: [connector],
-});
-
 export const withWalletProvider = (Story: Story, Context: StoryContext) => {
     const config = createConfig({
         autoConnect: Context.parameters && Context.parameters.connected,
