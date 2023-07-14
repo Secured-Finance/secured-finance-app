@@ -1,7 +1,7 @@
 import { toBytes32 } from '@secured-finance/sf-graph-client';
 import queries from '@secured-finance/sf-graph-client/dist/graphclients/';
 import { BigNumber } from 'ethers';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
     AdvancedLendingTopBar,
@@ -21,10 +21,10 @@ import { getAssetPrice } from 'src/store/assetPrices/selectors';
 import { selectMarket } from 'src/store/availableContracts';
 import {
     selectLandingOrderForm,
-    setAmount,
     setCurrency,
     setMaturity,
     setUnitPrice,
+    setAmount,
 } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
 import { MaturityOptionList, TransactionList } from 'src/types';
@@ -36,6 +36,8 @@ import {
     getCurrencyMapAsOptions,
     ordinaryFormat,
     usdFormat,
+    amountFormatterFromBase,
+    amountFormatterToBase,
 } from 'src/utils';
 import { LoanValue, Maturity } from 'src/utils/entities';
 import { useWallet } from 'use-wallet';
@@ -83,8 +85,8 @@ export const AdvancedLending = ({
     maturitiesOptionList: MaturityOptionList;
     rates: Rate[];
 }) => {
-    const { currency, maturity, orderType } = useSelector((state: RootState) =>
-        selectLandingOrderForm(state.landingOrderForm)
+    const { amount, currency, maturity, orderType } = useSelector(
+        (state: RootState) => selectLandingOrderForm(state.landingOrderForm)
     );
 
     const currencyPrice = useSelector((state: RootState) =>
@@ -155,21 +157,18 @@ export const AdvancedLending = ({
         return assetList.find(option => option.value === currency);
     }, [currency, assetList]);
 
-    const handleCurrencyChange = useCallback(
-        (v: CurrencySymbol) => {
-            dispatch(setCurrency(v));
-            dispatch(setAmount(BigNumber.from(0)));
-        },
-        [dispatch]
-    );
-
-    const handleTermChange = useCallback(
-        (v: string) => {
-            dispatch(setMaturity(Number(v)));
-            dispatch(setAmount(BigNumber.from(0)));
-        },
-        [dispatch]
-    );
+    const handleCurrencyChange = (v: CurrencySymbol) => {
+        let formatFrom = (x: BigNumber) => x.toNumber();
+        if (amountFormatterFromBase && amountFormatterFromBase[currency]) {
+            formatFrom = amountFormatterFromBase[currency];
+        }
+        let formatTo = (x: number) => BigNumber.from(x);
+        if (amountFormatterToBase && amountFormatterToBase[v]) {
+            formatTo = amountFormatterToBase[v];
+        }
+        dispatch(setAmount(formatTo(formatFrom(amount))));
+        dispatch(setCurrency(v));
+    };
 
     useEffect(() => {
         dispatch(setUnitPrice(loanValue.price));
@@ -190,7 +189,9 @@ export const AdvancedLending = ({
                         value: selectedTerm.value.toString(),
                     }}
                     onAssetChange={handleCurrencyChange}
-                    onTermChange={handleTermChange}
+                    onTermChange={v => {
+                        dispatch(setMaturity(Number(v)));
+                    }}
                     lastTradeLoan={lastTransaction.value}
                     lastTradeTime={lastTransaction.createdAt}
                     values={[
