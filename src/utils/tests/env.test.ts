@@ -6,6 +6,7 @@ import {
     getEthereumChainId,
     getEthereumNetwork,
     getUsePackageVersion,
+    getWalletConnectId,
 } from 'src/utils';
 
 describe('getEthereumNetwork', () => {
@@ -36,6 +37,22 @@ describe('getEthereumChainId ', () => {
         process.env.NEXT_PUBLIC_ETHEREUM_CHAIN_ID = '';
         expect(() => getEthereumChainId()).toThrowError(
             'NEXT_PUBLIC_ETHEREUM_CHAIN_ID is not set'
+        );
+    });
+});
+
+describe('getWalletConnectId', () => {
+    it('should return the value of the environment variable', () => {
+        process.env.NEXT_PUBLIC_WALLET_CONNECT_ID = 'test';
+        const walletConnectId = getWalletConnectId();
+        expect(walletConnectId).toBe('test');
+        expect(typeof walletConnectId).toBe('string');
+    });
+
+    it('should throw error if variable is not set', () => {
+        process.env.NEXT_PUBLIC_WALLET_CONNECT_ID = '';
+        expect(() => getWalletConnectId()).toThrowError(
+            'NEXT_PUBLIC_WALLET_CONNECT_ID is not set'
         );
     });
 });
