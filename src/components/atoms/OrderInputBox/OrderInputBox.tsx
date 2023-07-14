@@ -58,7 +58,7 @@ export const OrderInputBox = ({
         (amount: number | undefined) => {
             setInputValue(amount ?? '');
             if (onValueChange && amount !== undefined) {
-                handleInputChange(amount ?? 0, asset, onValueChange);
+                handleInputChange(amount, asset, onValueChange);
             }
         },
         [onValueChange, handleInputChange, asset]
