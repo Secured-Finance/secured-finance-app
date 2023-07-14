@@ -1,23 +1,14 @@
 import { formatDate } from '@secured-finance/sf-core';
 import { Option } from 'src/components/atoms';
-import { hexToNumber, numberToHex } from 'web3-utils';
+import { numberToHex } from 'viem';
 import { getEnvironment } from './env';
-
 export enum Environment {
     DEVELOPMENT = 'development',
     STAGING = 'staging',
 }
 
-export const hexToDec = (key: string) => {
-    if (key !== null) {
-        return hexToNumber(key);
-    }
-};
-
 export const decToHex = (key: number) => {
-    if (key !== null) {
-        return numberToHex(key);
-    }
+    return numberToHex(key);
 };
 
 export const formatDataCy = (str: string): string => {
