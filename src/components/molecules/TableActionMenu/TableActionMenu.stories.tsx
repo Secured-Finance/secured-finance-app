@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import { within } from '@storybook/testing-library';
 import { TableActionMenu } from './TableActionMenu';
 
@@ -12,9 +12,9 @@ export default {
             { text: 'Disable', onClick: () => {}, disabled: true },
         ],
     },
-} as ComponentMeta<typeof TableActionMenu>;
+} as Meta<typeof TableActionMenu>;
 
-const Template: ComponentStory<typeof TableActionMenu> = args => (
+const Template: StoryFn<typeof TableActionMenu> = args => (
     <div className='flex w-full justify-center'>
         <TableActionMenu {...args} />
     </div>

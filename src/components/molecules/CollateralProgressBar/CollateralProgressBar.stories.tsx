@@ -1,5 +1,5 @@
 import { RESPONSIVE_PARAMETERS, VIEWPORTS } from '.storybook/constants';
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import { CollateralProgressBar } from './CollateralProgressBar';
 
 export default {
@@ -16,9 +16,9 @@ export default {
             viewports: [VIEWPORTS.MOBILE, VIEWPORTS.TABLET],
         },
     },
-} as ComponentMeta<typeof CollateralProgressBar>;
+} as Meta<typeof CollateralProgressBar>;
 
-const Template: ComponentStory<typeof CollateralProgressBar> = args => (
+const Template: StoryFn<typeof CollateralProgressBar> = args => (
     <CollateralProgressBar {...args} />
 );
 

@@ -1,13 +1,13 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import { GradientBox } from './GradientBox';
 
 export default {
     title: 'Atoms/GradientBox',
     component: GradientBox,
     args: {},
-} as ComponentMeta<typeof GradientBox>;
+} as Meta<typeof GradientBox>;
 
-const Template: ComponentStory<typeof GradientBox> = args => (
+const Template: StoryFn<typeof GradientBox> = args => (
     <GradientBox {...args}>
         <div className='p-5 text-white'>Box</div>
     </GradientBox>

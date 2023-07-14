@@ -1,5 +1,5 @@
 import { ChevronDoubleDownIcon } from '@heroicons/react/24/outline';
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import { userEvent, within } from '@storybook/testing-library';
 import { Tooltip } from './Tooltip';
 
@@ -24,9 +24,9 @@ export default {
     args: {
         children: children,
     },
-} as ComponentMeta<typeof Tooltip>;
+} as Meta<typeof Tooltip>;
 
-const Template: ComponentStory<typeof Tooltip> = args => (
+const Template: StoryFn<typeof Tooltip> = args => (
     <div className='mx-10 flex w-full justify-center'>
         <Tooltip {...args} />
     </div>

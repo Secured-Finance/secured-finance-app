@@ -1,5 +1,5 @@
 import { RESPONSIVE_PARAMETERS, VIEWPORTS } from '.storybook/constants';
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import { Rate } from 'src/utils';
 import { MultiCurveChart } from './MultiCurveChart';
 
@@ -67,9 +67,9 @@ export default {
             viewports: [VIEWPORTS.MOBILE, VIEWPORTS.TABLET],
         },
     },
-} as ComponentMeta<typeof MultiCurveChart>;
+} as Meta<typeof MultiCurveChart>;
 
-const Template: ComponentStory<typeof MultiCurveChart> = args => (
+const Template: StoryFn<typeof MultiCurveChart> = args => (
     <MultiCurveChart {...args} />
 );
 

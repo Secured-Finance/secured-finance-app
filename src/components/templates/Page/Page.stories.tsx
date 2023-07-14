@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import { RESPONSIVE_PARAMETERS } from 'src/../.storybook/constants';
 import { Page } from './Page';
 
@@ -25,9 +25,9 @@ export default {
         ...RESPONSIVE_PARAMETERS,
         layout: 'fullscreen',
     },
-} as ComponentMeta<typeof Page>;
+} as Meta<typeof Page>;
 
-const Template: ComponentStory<typeof Page> = args => <Page {...args} />;
+const Template: StoryFn<typeof Page> = args => <Page {...args} />;
 
 export const Default = Template.bind({});
 export const WithTitleComponent = Template.bind({});
