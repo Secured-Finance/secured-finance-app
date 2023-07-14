@@ -20,6 +20,8 @@ export type LendingMarket = {
     isMatured: boolean;
     isPreOrderPeriod: boolean;
     isItayosePeriod: boolean;
+    borrowUnitPrice: number;
+    lendUnitPrice: number;
 };
 export type ContractMap = Record<number, LendingMarket>;
 
@@ -54,6 +56,8 @@ export const useLendingMarkets = () => {
                                         isMatured,
                                         isPreOrderPeriod,
                                         isItayosePeriod,
+                                        borrowUnitPrice,
+                                        lendUnitPrice,
                                     }
                                 ) => {
                                     if (names.includes(name)) {
@@ -89,6 +93,10 @@ export const useLendingMarkets = () => {
                                             isMatured,
                                             isPreOrderPeriod,
                                             isItayosePeriod,
+                                            borrowUnitPrice:
+                                                lendUnitPrice.toNumber(),
+                                            lendUnitPrice:
+                                                borrowUnitPrice.toNumber(),
                                         },
                                     };
                                 },

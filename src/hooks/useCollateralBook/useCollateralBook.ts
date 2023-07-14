@@ -58,6 +58,7 @@ export const useCollateralBook = (account: string | undefined) => {
 
     const getCollateralBook = useCallback(async () => {
         if (!securedFinance || !account) {
+            setCollateralBook(emptyBook);
             return;
         }
 

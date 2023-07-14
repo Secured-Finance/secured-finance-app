@@ -9,8 +9,8 @@ const mockSecuredFinance = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mockSecuredFinance);
 
 describe('UnwindDialog Component', () => {
-    it('should render a UnwindDialog', () => {
-        render(<Default />);
+    it('should render a UnwindDialog', async () => {
+        await waitFor(() => render(<Default />));
     });
 
     it('should call the unwind function when the button is clicked', async () => {

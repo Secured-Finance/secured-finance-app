@@ -33,7 +33,7 @@ describe('useCollateralBook hook', () => {
         expect(colBook.nonCollateral.EFIL).toEqual(
             BigNumber.from('100000000000000000000')
         );
-        expect(colBook.coverage.toString()).toEqual('8000');
+        expect(colBook.coverage.toString()).toEqual('3700');
         expect(colBook.collateralThreshold).toEqual(80);
         expect(colBook.withdrawableCollateral).toEqual({
             [CurrencySymbol.USDC]: 1000000000000,

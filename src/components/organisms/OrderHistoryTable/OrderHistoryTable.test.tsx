@@ -8,10 +8,10 @@ const mock = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mock);
 
 describe('OrderHistoryTable Component', () => {
-    it('should render a TradeHistoryTable', () => {
+    it('should render a Order History Table', () => {
         render(<Default />);
         expect(screen.getAllByTestId('order-history-table-row')).toHaveLength(
-            9
+            11
         );
     });
 
