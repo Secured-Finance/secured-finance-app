@@ -1,5 +1,5 @@
 import { RESPONSIVE_PARAMETERS } from '.storybook/constants';
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import { within } from '@storybook/testing-library';
 import {
     withAppLayout,
@@ -10,8 +10,8 @@ import {
     withWalletProvider,
 } from 'src/../.storybook/decorators';
 import {
-    mockUserTransactionHistory,
     mockUserOrderHistory,
+    mockUserTransactionHistory,
 } from 'src/stories/mocks/queries';
 import { PortfolioManagement } from './PortfolioManagement';
 
@@ -40,9 +40,9 @@ export default {
         },
         layout: 'fullscreen',
     },
-} as ComponentMeta<typeof PortfolioManagement>;
+} as Meta<typeof PortfolioManagement>;
 
-const Template: ComponentStory<typeof PortfolioManagement> = () => (
+const Template: StoryFn<typeof PortfolioManagement> = () => (
     <PortfolioManagement />
 );
 

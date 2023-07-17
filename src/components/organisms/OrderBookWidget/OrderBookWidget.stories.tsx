@@ -1,5 +1,5 @@
 import { RESPONSIVE_PARAMETERS } from '.storybook/constants';
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import { BigNumber } from 'ethers';
 import { OrderBookEntry, sortOrders } from 'src/hooks/useOrderbook';
 import { CurrencySymbol } from 'src/utils';
@@ -119,9 +119,9 @@ export default {
     parameters: {
         ...RESPONSIVE_PARAMETERS,
     },
-} as ComponentMeta<typeof OrderBookWidget>;
+} as Meta<typeof OrderBookWidget>;
 
-const Template: ComponentStory<typeof OrderBookWidget> = args => (
+const Template: StoryFn<typeof OrderBookWidget> = args => (
     <OrderBookWidget {...args} />
 );
 

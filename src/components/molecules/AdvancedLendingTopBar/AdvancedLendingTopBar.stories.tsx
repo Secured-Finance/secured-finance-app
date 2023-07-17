@@ -1,8 +1,8 @@
 import { RESPONSIVE_PARAMETERS } from '.storybook/constants';
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import { currencyList, maturityOptions } from 'src/stories/mocks/fixtures';
-import { AdvancedLendingTopBar } from '.';
 import { LoanValue } from 'src/utils/entities';
+import { AdvancedLendingTopBar } from '.';
 
 const lastTradePrice = 8000;
 
@@ -29,9 +29,9 @@ export default {
     parameters: {
         ...RESPONSIVE_PARAMETERS,
     },
-} as ComponentMeta<typeof AdvancedLendingTopBar>;
+} as Meta<typeof AdvancedLendingTopBar>;
 
-const Template: ComponentStory<typeof AdvancedLendingTopBar> = args => (
+const Template: StoryFn<typeof AdvancedLendingTopBar> = args => (
     <AdvancedLendingTopBar {...args} />
 );
 

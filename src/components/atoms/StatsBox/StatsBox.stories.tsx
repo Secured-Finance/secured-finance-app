@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import { StatsBox } from '.';
 
 export default {
@@ -12,10 +12,8 @@ export default {
     parameters: {
         chromatic: { delay: 3000 },
     },
-} as ComponentMeta<typeof StatsBox>;
+} as Meta<typeof StatsBox>;
 
-const Template: ComponentStory<typeof StatsBox> = args => (
-    <StatsBox {...args} />
-);
+const Template: StoryFn<typeof StatsBox> = args => <StatsBox {...args} />;
 
 export const Default = Template.bind({});

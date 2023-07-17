@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import { CurrencySymbol } from 'src/utils';
 import { CollateralSelector } from './CollateralSelector';
 
@@ -23,9 +23,9 @@ export default {
         optionList: assetList,
         onChange: () => {},
     },
-} as ComponentMeta<typeof CollateralSelector>;
+} as Meta<typeof CollateralSelector>;
 
-const Template: ComponentStory<typeof CollateralSelector> = args => (
+const Template: StoryFn<typeof CollateralSelector> = args => (
     <div className='h-20 w-[360px]'>
         <CollateralSelector {...args} />
     </div>

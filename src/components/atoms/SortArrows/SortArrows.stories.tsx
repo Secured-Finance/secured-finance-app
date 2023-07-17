@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import { SortArrows } from './SortArrows';
 
 export default {
@@ -7,11 +7,9 @@ export default {
     args: {
         isSorted: false,
     },
-} as ComponentMeta<typeof SortArrows>;
+} as Meta<typeof SortArrows>;
 
-const Template: ComponentStory<typeof SortArrows> = args => (
-    <SortArrows {...args} />
-);
+const Template: StoryFn<typeof SortArrows> = args => <SortArrows {...args} />;
 
 export const Default = Template.bind({});
 export const Ascending = Template.bind({});

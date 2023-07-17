@@ -5,7 +5,7 @@ import {
     withWalletProvider,
 } from '.storybook/decorators';
 import { OrderSide, WalletSource } from '@secured-finance/sf-client';
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import {
     collateralBook37,
     dec22Fixture,
@@ -39,9 +39,9 @@ export default {
             viewports: [VIEWPORTS.MOBILE, VIEWPORTS.TABLET],
         },
     },
-} as ComponentMeta<typeof PlaceOrder>;
+} as Meta<typeof PlaceOrder>;
 
-const Template: ComponentStory<typeof PlaceOrder> = args => {
+const Template: StoryFn<typeof PlaceOrder> = args => {
     return <PlaceOrder {...args} />;
 };
 

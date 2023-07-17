@@ -1,5 +1,5 @@
 import { RESPONSIVE_PARAMETERS, VIEWPORTS } from '.storybook/constants';
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import {
     withAssetPrice,
     withWalletProvider,
@@ -21,9 +21,9 @@ export default {
         },
     },
     decorators: [withAssetPrice, withWalletProvider],
-} as ComponentMeta<typeof CollateralTabRightPane>;
+} as Meta<typeof CollateralTabRightPane>;
 
-const Template: ComponentStory<typeof CollateralTabRightPane> = args => {
+const Template: StoryFn<typeof CollateralTabRightPane> = args => {
     return <CollateralTabRightPane {...args} />;
 };
 

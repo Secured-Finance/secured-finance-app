@@ -1,5 +1,5 @@
 import { OrderSide } from '@secured-finance/sf-client';
-import { composeStories } from '@storybook/testing-react';
+import { composeStories } from '@storybook/react';
 import { fireEvent, render, screen } from 'src/test-utils.js';
 import { OrderType } from 'src/types';
 import * as stories from './OrderBookWidget.stories';

@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import { BigNumber } from 'ethers';
 import { ColorBar } from './ColorBar';
 
@@ -22,9 +22,9 @@ export default {
         },
         align: { control: { type: 'select', options: ['left', 'right'] } },
     },
-} as ComponentMeta<typeof ColorBar>;
+} as Meta<typeof ColorBar>;
 
-const Template: ComponentStory<typeof ColorBar> = args => (
+const Template: StoryFn<typeof ColorBar> = args => (
     <div className='relative h-12 w-2/3'>
         <ColorBar {...args} />
     </div>
