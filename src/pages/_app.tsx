@@ -40,7 +40,7 @@ const { chains, publicClient } = configureChains(
 );
 
 const config = createConfig({
-    autoConnect: true,
+    autoConnect: false,
     publicClient: publicClient,
     connectors: [
         new MetaMaskConnector({ chains }),
