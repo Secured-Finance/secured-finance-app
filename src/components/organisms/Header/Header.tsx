@@ -1,6 +1,5 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import SFLogo from 'src/assets/img/logo.svg';
 import SFLogoSmall from 'src/assets/img/small-logo.svg';
@@ -40,17 +39,7 @@ const LINKS = [
 
 export const Header = () => {
     const dispatch = useDispatch();
-
     const { address: account, isConnected } = useAccount();
-    const [connectionStat, setConnectionStat] = useState(false);
-    const [address, setAddress] = useState<string>('');
-
-    // this useEffect is there for SSR purposes: https://stackoverflow.com/a/75365001
-    useEffect(() => {
-        setConnectionStat(isConnected);
-        setAddress(account ?? '');
-    }, [account, isConnected]);
-
     const securedFinance = useSF();
     const chainError = useSelector(
         (state: RootState) => state.blockchain.chainError
@@ -98,9 +87,9 @@ export const Header = () => {
                     <MenuPopover />
                 </div>
                 <div className='col-span-2 flex flex-row items-center justify-end gap-2 laptop:col-span-1'>
-                    {connectionStat ? (
+                    {isConnected && account ? (
                         <WalletPopover
-                            wallet={AddressUtils.format(address, 6)}
+                            wallet={AddressUtils.format(account, 6)}
                             networkName={
                                 securedFinance?.config?.network ?? 'Unknown'
                             }
