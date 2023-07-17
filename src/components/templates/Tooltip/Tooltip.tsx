@@ -15,11 +15,11 @@ const InformationCircleIcon = (
 export const Tooltip = ({
     iconElement = InformationCircleIcon,
     children,
-    align,
+    align = 'centre',
 }: {
     iconElement?: React.ReactNode;
     children: React.ReactNode;
-    align?: 'left' | 'right';
+    align?: 'left' | 'right' | 'centre';
 }) => {
     const [open, setOpen] = useState(false);
 
@@ -46,12 +46,14 @@ export const Tooltip = ({
                     {open && children && (
                         <Popover.Panel
                             className={classNames(
-                                'absolute left-1/2 z-10 mt-2 flex w-screen max-w-[256px] -translate-x-1/2 transform justify-center',
+                                'absolute z-10 mt-2 flex w-screen max-w-[256px] transform justify-center',
                                 {
-                                    'left-1/2 -translate-x-3/4 transform':
-                                        align === 'left',
-                                    'right-0 -translate-x-1/4 transform':
+                                    'right-1 translate-x-3/4 transform':
                                         align === 'right',
+                                    'right-0 translate-x-1/4 transform':
+                                        align === 'left',
+                                    'left-1/2 -translate-x-1/2':
+                                        align === 'centre',
                                 }
                             )}
                             role='tooltip'

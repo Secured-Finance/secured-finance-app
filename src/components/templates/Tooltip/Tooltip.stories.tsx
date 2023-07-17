@@ -3,7 +3,7 @@ import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { userEvent, within } from '@storybook/testing-library';
 import { Tooltip } from './Tooltip';
 
-const InformationCircle = (
+const ButtonIcon = (
     <button
         className='flex items-center rounded-full bg-teal p-5'
         data-testid='button-icon'
@@ -41,7 +41,7 @@ Default.play = async ({ canvasElement }) => {
 
 export const WithIcon = Template.bind({});
 WithIcon.args = {
-    iconElement: InformationCircle,
+    iconElement: ButtonIcon,
 };
 
 WithIcon.play = async ({ canvasElement }) => {
