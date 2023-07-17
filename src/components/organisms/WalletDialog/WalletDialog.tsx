@@ -1,5 +1,5 @@
 import { track } from '@amplitude/analytics-browser';
-import { useCallback, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import MetaMaskIcon from 'src/assets/img/metamask-fox.svg';
 import WalletConnectIcon from 'src/assets/img/wallet-connect.svg';
@@ -11,7 +11,7 @@ import {
     WalletRadioGroup,
 } from 'src/components/molecules';
 import { CACHED_PROVIDER_KEY } from 'src/contexts/SecuredFinanceProvider/SecuredFinanceProvider';
-import { useEtherscanUrl } from 'src/hooks';
+import { useBreakpoint, useEtherscanUrl } from 'src/hooks';
 import { setWalletDialogOpen } from 'src/store/interactions';
 import { RootState } from 'src/store/types';
 import {
@@ -26,7 +26,26 @@ import { associateWallet } from 'src/utils/events';
 import { useAccount, useConnect } from 'wagmi';
 
 export const WalletDialog = () => {
+    const isMobileOrTablet = useBreakpoint('laptop');
+
     const etherscanUrl = useEtherscanUrl();
+    const options = useMemo(() => {
+        const mobileOptions = [
+            {
+                name: 'Metamask',
+                Icon: MetaMaskIcon,
+            },
+            {
+                name: 'WalletConnect',
+                Icon: WalletConnectIcon,
+            },
+        ];
+        if (isMobileOrTablet) {
+            return mobileOptions.slice(1, 2);
+        }
+        return mobileOptions;
+    }, [isMobileOrTablet]);
+
     const [wallet, setWallet] = useState<string>('');
     const [errorMessage, setErrorMessage] = useState(
         'Your wallet could not be connected.'
@@ -164,16 +183,7 @@ export const WalletDialog = () => {
                     <WalletRadioGroup
                         value={wallet}
                         onChange={setWallet}
-                        options={[
-                            {
-                                name: 'Metamask',
-                                Icon: MetaMaskIcon,
-                            },
-                            {
-                                name: 'WalletConnect',
-                                Icon: WalletConnectIcon,
-                            },
-                        ]}
+                        options={options}
                     />
                 )}
                 {isLoading && (
