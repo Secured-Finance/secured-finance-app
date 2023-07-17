@@ -136,11 +136,14 @@ export const AdvancedLendingOrderCard = ({
         return selectedWalletSource.source === WalletSource.METAMASK
             ? balanceRecord[currency]
             : amountFormatterFromBase[currency](
-                  collateralBook.nonCollateral[currency] ?? BigNumber.from(0)
+                  collateralBook.nonCollateral[currency] ||
+                      collateralBook.withdrawableCollateral[currency] ||
+                      BigNumber.from(0)
               );
     }, [
         balanceRecord,
         collateralBook.nonCollateral,
+        collateralBook.withdrawableCollateral,
         currency,
         selectedWalletSource.source,
     ]);
@@ -176,7 +179,29 @@ export const AdvancedLendingOrderCard = ({
 
     const handleWalletSourceChange = (source: WalletSource) => {
         dispatch(setSourceAccount(source));
-        handleInputChange(BigNumber.from(0));
+        const available =
+            source === WalletSource.METAMASK
+                ? balanceRecord[currency]
+                : amountFormatterFromBase[currency](
+                      collateralBook.nonCollateral[currency] ||
+                          collateralBook.withdrawableCollateral[currency] ||
+                          BigNumber.from(0)
+                  );
+        const inputAmount = amount.gt(
+            amountFormatterToBase[currency](available)
+        )
+            ? amountFormatterToBase[currency](available)
+            : amount;
+        dispatch(setAmount(inputAmount));
+        available
+            ? setSliderValue(
+                  Math.min(
+                      100.0,
+                      (amountFormatterFromBase[currency](inputAmount) * 100.0) /
+                          available
+                  )
+              )
+            : setSliderValue(0.0);
     };
 
     return (

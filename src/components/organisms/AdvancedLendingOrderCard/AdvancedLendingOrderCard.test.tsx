@@ -219,14 +219,13 @@ describe('AdvancedLendingOrderCard Component', () => {
 
         const slider = screen.getByRole('slider');
         const input = screen.getByRole('textbox', { name: 'Amount' });
-        expect(input).toHaveValue('');
         fireEvent.change(slider, { target: { value: 50 } });
         expect(input).toHaveValue('50');
         fireEvent.change(slider, { target: { value: 100 } });
         expect(input).toHaveValue('100');
     });
 
-    it('should reset amount and slider to 0 when wallet source is changed', async () => {
+    it('should not reset amount and slider to 0 when wallet source is changed', async () => {
         await waitFor(() => {
             render(<Default />, {
                 preloadedState: {
@@ -242,7 +241,7 @@ describe('AdvancedLendingOrderCard Component', () => {
 
         const slider = screen.getByRole('slider');
         const input = screen.getByRole('textbox', { name: 'Amount' });
-        fireEvent.change(input, { target: { value: '100' } });
+        fireEvent.change(input, { target: { value: '50' } });
 
         const walletSourceButton = screen.getByTestId(
             'wallet-source-selector-button'
@@ -251,11 +250,51 @@ describe('AdvancedLendingOrderCard Component', () => {
         const option = screen.getByTestId('option-1');
         fireEvent.click(option);
 
-        expect(input).toHaveValue('');
-        expect(slider).toHaveValue('0');
+        expect(input).toHaveValue('50');
+        expect(slider).toHaveValue('50');
     });
 
     it('slider should move according to source balance', async () => {
+        await waitFor(() =>
+            render(<Default />, {
+                preloadedState: {
+                    ...preloadedState,
+                    landingOrderForm: {
+                        ...preloadedState.landingOrderForm,
+                        currency: CurrencySymbol.EFIL,
+                        side: OrderSide.LEND,
+                    },
+                },
+            })
+        );
+
+        const slider = screen.getByRole('slider');
+        const input = screen.getByRole('textbox', { name: 'Amount' });
+
+        expect(screen.getByText('0xB98b...Fd6D')).toBeInTheDocument();
+        expect(input).toHaveValue('0.0000');
+        fireEvent.change(slider, { target: { value: 100 } });
+        expect(input).toHaveValue('5,000');
+        fireEvent.change(slider, { target: { value: 1 } });
+        expect(input).toHaveValue('50');
+
+        const walletSourceButton = screen.getByTestId(
+            'wallet-source-selector-button'
+        );
+        fireEvent.click(walletSourceButton);
+
+        expect(screen.getByText('SF Vault')).toBeInTheDocument();
+        const option = screen.getByTestId('option-1');
+        fireEvent.click(option);
+        expect(input).toHaveValue('50');
+        expect(input).toHaveValue('50');
+        fireEvent.change(slider, { target: { value: 10 } });
+        expect(input).toHaveValue('10');
+        fireEvent.change(slider, { target: { value: 50 } });
+        expect(input).toHaveValue('50');
+    });
+
+    it('amount should be set to max wallet amount if input amount is greater than wallet amount and wallet source is changed', async () => {
         await waitFor(() =>
             render(<Default />, {
                 preloadedState: {
@@ -285,8 +324,7 @@ describe('AdvancedLendingOrderCard Component', () => {
         expect(screen.getByText('SF Vault')).toBeInTheDocument();
         const option = screen.getByTestId('option-1');
         fireEvent.click(option);
-        expect(input).toHaveValue('');
-        fireEvent.change(slider, { target: { value: 100 } });
+        expect(input).toHaveValue('100');
         expect(input).toHaveValue('100');
     });
 

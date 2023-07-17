@@ -112,11 +112,14 @@ export const LendingCard = ({
         return selectedWalletSource.source === WalletSource.METAMASK
             ? balanceRecord[currency]
             : amountFormatterFromBase[currency](
-                  collateralBook.nonCollateral[currency] ?? BigNumber.from(0)
+                  collateralBook.nonCollateral[currency] ||
+                      collateralBook.withdrawableCollateral[currency] ||
+                      BigNumber.from(0)
               );
     }, [
         balanceRecord,
         collateralBook.nonCollateral,
+        collateralBook.withdrawableCollateral,
         currency,
         selectedWalletSource.source,
     ]);
