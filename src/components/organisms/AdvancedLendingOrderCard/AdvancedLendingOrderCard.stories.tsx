@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import { userEvent, within } from '@storybook/testing-library';
 import {
     withAssetPrice,
@@ -12,14 +12,15 @@ export default {
     component: AdvancedLendingOrderCard,
     args: {
         collateralBook: collateralBook37,
+        onlyLimitOrder: false,
     },
     parameters: {
         connected: true,
     },
     decorators: [withAssetPrice, withWalletProvider],
-} as ComponentMeta<typeof AdvancedLendingOrderCard>;
+} as Meta<typeof AdvancedLendingOrderCard>;
 
-const Template: ComponentStory<typeof AdvancedLendingOrderCard> = args => {
+const Template: StoryFn<typeof AdvancedLendingOrderCard> = args => {
     return <AdvancedLendingOrderCard {...args} />;
 };
 
@@ -41,7 +42,7 @@ FailedAmountValidation.play = async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     const lendTab = canvas.getByText('Lend');
     lendTab.click();
-    const input = canvas.getByRole('textbox');
+    const input = canvas.getByRole('textbox', { name: 'Amount' });
     await userEvent.type(input, '999999999', {
         delay: 100,
     });

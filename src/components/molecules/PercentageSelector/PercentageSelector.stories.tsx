@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import { PercentageSelector } from '.';
 
 export default {
@@ -7,9 +7,9 @@ export default {
     args: {
         onClick: () => {},
     },
-} as ComponentMeta<typeof PercentageSelector>;
+} as Meta<typeof PercentageSelector>;
 
-const Template: ComponentStory<typeof PercentageSelector> = args => (
+const Template: StoryFn<typeof PercentageSelector> = args => (
     <PercentageSelector {...args} />
 );
 

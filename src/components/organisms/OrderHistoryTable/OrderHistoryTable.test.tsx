@@ -1,6 +1,6 @@
-import { composeStories } from '@storybook/testing-react';
-import { render, screen, fireEvent } from 'src/test-utils.js';
+import { composeStories } from '@storybook/react';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
+import { fireEvent, render, screen } from 'src/test-utils.js';
 import * as stories from './OrderHistoryTable.stories';
 
 const { Default } = composeStories(stories);

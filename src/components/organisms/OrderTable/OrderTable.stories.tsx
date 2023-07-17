@@ -1,5 +1,5 @@
 import { RESPONSIVE_PARAMETERS, VIEWPORTS } from '.storybook/constants';
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import { activeOrders } from 'src/stories/mocks/fixtures';
 import { OrderTable } from './OrderTable';
 
@@ -15,10 +15,8 @@ export default {
             viewports: [VIEWPORTS.MOBILE, VIEWPORTS.TABLET],
         },
     },
-} as ComponentMeta<typeof OrderTable>;
+} as Meta<typeof OrderTable>;
 
-const Template: ComponentStory<typeof OrderTable> = args => (
-    <OrderTable {...args} />
-);
+const Template: StoryFn<typeof OrderTable> = args => <OrderTable {...args} />;
 
 export const Default = Template.bind({});

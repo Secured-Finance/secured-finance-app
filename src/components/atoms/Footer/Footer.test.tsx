@@ -1,4 +1,4 @@
-import { composeStories } from '@storybook/testing-react';
+import { composeStories } from '@storybook/react';
 import packageJson from 'package.json';
 import { render, screen } from 'src/test-utils.js';
 import * as stories from './Footer.stories';

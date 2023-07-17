@@ -24,7 +24,6 @@ function webpackOverride(config) {
     config.resolve.fallback = {
         fs: false,
         path: require.resolve('path-browserify'),
-        stream: false,
         constants: false,
         crypto: require.resolve('crypto-browserify'),
         assert: require.resolve('assert'),

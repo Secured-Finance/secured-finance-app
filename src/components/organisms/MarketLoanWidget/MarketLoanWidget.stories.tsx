@@ -1,5 +1,5 @@
 import { RESPONSIVE_PARAMETERS, VIEWPORTS } from '.storybook/constants';
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import { within } from '@storybook/testing-library';
 import {
     efilBytes32,
@@ -44,9 +44,9 @@ export default {
     args: {
         markets: [...filMarkets, ...btcMarkets],
     },
-} as ComponentMeta<typeof MarketLoanWidget>;
+} as Meta<typeof MarketLoanWidget>;
 
-const Template: ComponentStory<typeof MarketLoanWidget> = args => (
+const Template: StoryFn<typeof MarketLoanWidget> = args => (
     <MarketLoanWidget {...args} />
 );
 

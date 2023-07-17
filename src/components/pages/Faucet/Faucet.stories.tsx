@@ -1,5 +1,5 @@
 import { RESPONSIVE_PARAMETERS } from '.storybook/constants';
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import {
     withAppLayout,
     withAssetPrice,
@@ -24,9 +24,9 @@ export default {
         ...RESPONSIVE_PARAMETERS,
         layout: 'fullscreen',
     },
-} as ComponentMeta<typeof Faucet>;
+} as Meta<typeof Faucet>;
 
-const Template: ComponentStory<typeof Faucet> = () => <Faucet />;
+const Template: StoryFn<typeof Faucet> = () => <Faucet />;
 
 export const Default = Template.bind({});
 export const Connected = Template.bind({});
