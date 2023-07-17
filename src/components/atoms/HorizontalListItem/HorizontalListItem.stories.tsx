@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import { HorizontalListItem } from './HorizontalListItem';
 
 export default {
@@ -8,9 +8,9 @@ export default {
         label: 'Label',
         value: 'Value',
     },
-} as ComponentMeta<typeof HorizontalListItem>;
+} as Meta<typeof HorizontalListItem>;
 
-const Template: ComponentStory<typeof HorizontalListItem> = args => (
+const Template: StoryFn<typeof HorizontalListItem> = args => (
     <HorizontalListItem {...args} />
 );
 

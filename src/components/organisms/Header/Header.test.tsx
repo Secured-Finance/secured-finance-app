@@ -1,4 +1,4 @@
-import { composeStories } from '@storybook/testing-react';
+import { composeStories } from '@storybook/react';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { fireEvent, render, screen } from 'src/test-utils.js';

@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import { SectionWithItems } from './SectionWithItems';
 
 export default {
@@ -10,9 +10,9 @@ export default {
             ['Label B', 'Value B'],
         ],
     },
-} as ComponentMeta<typeof SectionWithItems>;
+} as Meta<typeof SectionWithItems>;
 
-const Template: ComponentStory<typeof SectionWithItems> = args => (
+const Template: StoryFn<typeof SectionWithItems> = args => (
     <SectionWithItems {...args} />
 );
 

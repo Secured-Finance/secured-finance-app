@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import { CollateralManagementConciseTab } from '.';
 
 export default {
@@ -9,10 +9,10 @@ export default {
         totalCollateralInUSD: 100,
         collateralThreshold: 80,
     },
-} as ComponentMeta<typeof CollateralManagementConciseTab>;
+} as Meta<typeof CollateralManagementConciseTab>;
 
-const Template: ComponentStory<
-    typeof CollateralManagementConciseTab
-> = args => <CollateralManagementConciseTab {...args} />;
+const Template: StoryFn<typeof CollateralManagementConciseTab> = args => (
+    <CollateralManagementConciseTab {...args} />
+);
 
 export const Default = Template.bind({});

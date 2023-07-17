@@ -1,4 +1,4 @@
-import { composeStories } from '@storybook/testing-react';
+import { composeStories } from '@storybook/react';
 import { preloadedBalances } from 'src/stories/mocks/fixtures';
 import { render, waitFor } from 'src/test-utils.js';
 import * as stories from './PortfolioManagement.stories';

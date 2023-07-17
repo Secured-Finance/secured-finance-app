@@ -3,8 +3,8 @@ import {
     withChainErrorDisabled,
     withWalletProvider,
 } from '.storybook/decorators';
-import { ComponentMeta, ComponentStory } from '@storybook/react';
-import { within } from '@storybook/testing-library';
+import type { Meta, StoryFn } from '@storybook/react';
+import { userEvent, within } from '@storybook/testing-library';
 import { Header } from './';
 
 export default {
@@ -15,9 +15,9 @@ export default {
     parameters: {
         ...RESPONSIVE_PARAMETERS,
     },
-} as ComponentMeta<typeof Header>;
+} as Meta<typeof Header>;
 
-const Template: ComponentStory<typeof Header> = () => <Header />;
+const Template: StoryFn<typeof Header> = () => <Header />;
 
 export const Primary = Template.bind({});
 export const Connected = Template.bind({});
@@ -28,8 +28,15 @@ Connected.parameters = {
 export const MenuExpanded = Template.bind({});
 MenuExpanded.parameters = {
     chromatic: { viewports: [VIEWPORTS.MOBILE, VIEWPORTS.TABLET] },
+    viewport: {
+        ...RESPONSIVE_PARAMETERS,
+        defaultViewport: 'mobile',
+    },
 };
 MenuExpanded.play = async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    canvas.getByRole('button', { name: 'Hamburger Menu' }).click();
+    const button = await canvas.findByRole('button', {
+        name: 'Hamburger Menu',
+    });
+    await userEvent.click(button);
 };

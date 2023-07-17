@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import { Option } from 'src/components/atoms';
 import { TermSelector } from './TermSelector';
 
@@ -25,9 +25,9 @@ export default {
     argTypes: {
         options: { control: { disable: true } },
     },
-} as ComponentMeta<typeof TermSelector>;
+} as Meta<typeof TermSelector>;
 
-const Template: ComponentStory<typeof TermSelector> = args => (
+const Template: StoryFn<typeof TermSelector> = args => (
     <TermSelector {...args} />
 );
 

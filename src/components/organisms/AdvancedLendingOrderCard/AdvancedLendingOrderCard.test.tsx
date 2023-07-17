@@ -1,5 +1,5 @@
 import { OrderSide } from '@secured-finance/sf-client';
-import { composeStories } from '@storybook/testing-react';
+import { composeStories } from '@storybook/react';
 import { BigNumber } from 'ethers';
 import { CollateralBook } from 'src/hooks';
 import {

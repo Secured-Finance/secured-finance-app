@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import { CloseButton } from './CloseButton';
 
 export default {
@@ -7,9 +7,9 @@ export default {
     args: {
         onClick: () => {},
     },
-} as ComponentMeta<typeof CloseButton>;
+} as Meta<typeof CloseButton>;
 
-const Template: ComponentStory<typeof CloseButton> = args => (
+const Template: StoryFn<typeof CloseButton> = args => (
     <CloseButton onClick={args.onClick} />
 );
 
