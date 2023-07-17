@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import { dec22Fixture, ethBytes32 } from 'src/stories/mocks/fixtures';
 import { TableContractCell } from './TableContractCell';
 
@@ -9,9 +9,9 @@ export default {
         maturity: dec22Fixture,
         ccyByte32: ethBytes32,
     },
-} as ComponentMeta<typeof TableContractCell>;
+} as Meta<typeof TableContractCell>;
 
-const Template: ComponentStory<typeof TableContractCell> = args => (
+const Template: StoryFn<typeof TableContractCell> = args => (
     <TableContractCell {...args} />
 );
 

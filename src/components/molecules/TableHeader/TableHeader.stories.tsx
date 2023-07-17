@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import { userEvent, within } from '@storybook/testing-library';
 import { TableHeader } from './TableHeader';
 
@@ -8,9 +8,9 @@ export default {
     args: {
         title: 'Title',
     },
-} as ComponentMeta<typeof TableHeader>;
+} as Meta<typeof TableHeader>;
 
-const Template: ComponentStory<typeof TableHeader> = args => (
+const Template: StoryFn<typeof TableHeader> = args => (
     <div className='typography-caption-2 h-14 w-1/3 border-b border-white-10 px-6 py-4 text-slateGray'>
         <TableHeader {...args} />
     </div>

@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import { walletSourceList } from 'src/stories/mocks/fixtures';
 import { WalletSourceSelector } from './WalletSourceSelector';
 
@@ -11,9 +11,9 @@ export default {
         account: '0xb98bd7c7f656290071e52d1aa617d9cb4467fd6d',
         onChange: () => {},
     },
-} as ComponentMeta<typeof WalletSourceSelector>;
+} as Meta<typeof WalletSourceSelector>;
 
-const Template: ComponentStory<typeof WalletSourceSelector> = args => (
+const Template: StoryFn<typeof WalletSourceSelector> = args => (
     <div className='w-[360px]'>
         <WalletSourceSelector {...args} />
     </div>

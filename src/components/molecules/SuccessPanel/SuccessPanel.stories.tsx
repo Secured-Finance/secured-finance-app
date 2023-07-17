@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import { userEvent, waitFor, within } from '@storybook/testing-library';
 import { SuccessPanel } from './SuccessPanel';
 
@@ -12,9 +12,9 @@ export default {
             ['Price', '10'],
         ],
     },
-} as ComponentMeta<typeof SuccessPanel>;
+} as Meta<typeof SuccessPanel>;
 
-const Template: ComponentStory<typeof SuccessPanel> = args => (
+const Template: StoryFn<typeof SuccessPanel> = args => (
     <SuccessPanel {...args} />
 );
 

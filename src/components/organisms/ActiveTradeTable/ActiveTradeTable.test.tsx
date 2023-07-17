@@ -1,5 +1,5 @@
+import { composeStories } from '@storybook/react';
 import { userEvent } from '@storybook/testing-library';
-import { composeStories } from '@storybook/testing-react';
 import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
 import timemachine from 'timemachine';
 import * as stories from './ActiveTradeTable.stories';
@@ -96,6 +96,7 @@ describe('ActiveTradeTable Component', () => {
             expect(closeToMaturityRow).toHaveTextContent('21h-59m');
         });
     });
+
     it('should display 1 day when maturity is less than 48 hours and greater than 24 hours', async () => {
         render(<Default />);
         const closeToMaturityRow = screen.getAllByRole('row')[6];
@@ -104,6 +105,7 @@ describe('ActiveTradeTable Component', () => {
             expect(closeToMaturityRow).toHaveTextContent('1 Day');
         });
     });
+
     it('should show table hints', async () => {
         render(<Default />);
         const maturity = screen.getByText('Maturity');
@@ -115,10 +117,12 @@ describe('ActiveTradeTable Component', () => {
         await waitFor(async () => {
             await userEvent.hover(maturity);
         });
-        expect(
-            screen.queryByText(
-                'Maturity of a loan contract is the date on which the contract is set to expire.'
-            )
-        ).toBeInTheDocument();
+        waitFor(() => {
+            expect(
+                screen.queryByText(
+                    'Maturity of a loan contract is the date on which the contract is set to expire.'
+                )
+            ).toBeInTheDocument();
+        });
     });
 });

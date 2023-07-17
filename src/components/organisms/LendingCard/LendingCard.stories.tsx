@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import { userEvent, within } from '@storybook/testing-library';
 import {
     withAssetPrice,
@@ -29,9 +29,9 @@ export default {
     parameters: {
         connected: true,
     },
-} as ComponentMeta<typeof LendingCard>;
+} as Meta<typeof LendingCard>;
 
-const Template: ComponentStory<typeof LendingCard> = args => {
+const Template: StoryFn<typeof LendingCard> = args => {
     return <LendingCard {...args} />;
 };
 

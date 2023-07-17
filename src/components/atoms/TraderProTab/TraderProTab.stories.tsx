@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import { TraderProTab } from './';
 
 export default {
@@ -8,9 +8,9 @@ export default {
         text: 'Trader Pro',
         onClick: () => {},
     },
-} as ComponentMeta<typeof TraderProTab>;
+} as Meta<typeof TraderProTab>;
 
-const Template: ComponentStory<typeof TraderProTab> = args => (
+const Template: StoryFn<typeof TraderProTab> = args => (
     <TraderProTab {...args} />
 );
 

@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import {
     withAssetPrice,
     withMaturities,
@@ -16,9 +16,9 @@ export default {
         rates: yieldCurveRates,
     },
     decorators: [withWalletProvider, withAssetPrice, withMaturities],
-} as ComponentMeta<typeof LineChartTab>;
+} as Meta<typeof LineChartTab>;
 
-const Template: ComponentStory<typeof LineChartTab> = args => {
+const Template: StoryFn<typeof LineChartTab> = args => {
     return <LineChartTab {...args} />;
 };
 
