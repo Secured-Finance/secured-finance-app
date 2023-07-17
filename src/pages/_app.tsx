@@ -1,8 +1,6 @@
 import { init } from '@amplitude/analytics-browser';
 import { LogLevel } from '@amplitude/analytics-types';
 import { GraphClientProvider } from '@secured-finance/sf-graph-client';
-import { EthereumClient } from '@web3modal/ethereum';
-import { Web3Modal } from '@web3modal/react';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
 import { Provider } from 'react-redux';
@@ -61,7 +59,6 @@ const config = createConfig({
         }),
     ],
 });
-const ethereumClient = new EthereumClient(config, chains);
 
 function App({ Component, pageProps }: AppProps) {
     return (
@@ -92,10 +89,6 @@ const Providers: React.FC = ({ children }) => {
         <GraphClientProvider network={network}>
             <WagmiConfig config={config}>
                 <SecuredFinanceProvider>{children}</SecuredFinanceProvider>
-                <Web3Modal
-                    projectId={projectId}
-                    ethereumClient={ethereumClient}
-                />
             </WagmiConfig>
         </GraphClientProvider>
     );
