@@ -25,8 +25,8 @@ describe('test AssetInformation component', () => {
         render(<Default />);
         const information = screen.getByTestId('information-circle');
         fireEvent.mouseEnter(information);
-        const informationPopover = screen.getByTestId('information-popover');
-        expect(informationPopover).toHaveTextContent(
+        const Tooltip = screen.getByTestId('tooltip');
+        expect(Tooltip).toHaveTextContent(
             'Only USDC and ETH are eligible as collateral.'
         );
     });

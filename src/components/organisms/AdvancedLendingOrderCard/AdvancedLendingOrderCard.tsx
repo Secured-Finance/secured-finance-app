@@ -31,17 +31,17 @@ import { RootState } from 'src/store/types';
 import { selectAllBalances } from 'src/store/wallet';
 import { OrderType } from 'src/types';
 import {
-    MAX_COVERAGE,
-    ZERO_BN,
     amountFormatterFromBase,
     amountFormatterToBase,
     computeAvailableToBorrow,
     divide,
     generateWalletSourceInformation,
     getAmountValidation,
+    MAX_COVERAGE,
     multiply,
     percentFormat,
     usdFormat,
+    ZERO_BN,
 } from 'src/utils';
 import { Amount, LoanValue } from 'src/utils/entities';
 import { useWallet } from 'use-wallet';
@@ -179,6 +179,15 @@ export const AdvancedLendingOrderCard = ({
         handleInputChange(BigNumber.from(0));
     };
 
+    const validateBondPrice = () => {
+        return unitPrice === 0 && orderType === OrderType.LIMIT;
+    };
+
+    const fixedRate = LoanValue.fromPrice(
+        unitPrice ?? 0,
+        maturity
+    ).apr.toNormalizedNumber();
+
     return (
         <div className='h-fit rounded-b-xl border border-white-10 bg-cardBackground bg-opacity-60 pb-7'>
             <RadioGroup
@@ -246,23 +255,28 @@ export const AdvancedLendingOrderCard = ({
                     <OrderInputBox
                         field='Bond Price'
                         disabled={orderType === OrderType.MARKET}
-                        initialValue={divide(unitPrice, 100)}
-                        onValueChange={v =>
-                            dispatch(setUnitPrice(multiply(v as number, 100)))
+                        initialValue={
+                            unitPrice !== undefined
+                                ? divide(unitPrice, 100)
+                                : undefined
                         }
-                        informationText='Input value from 0 to 100'
+                        onValueChange={v => {
+                            dispatch(setUnitPrice(multiply(v as number, 100)));
+                        }}
+                        informationText='Input value greater than 0 and upto 100'
                         decimalPlacesAllowed={2}
                         maxLimit={100}
+                    />
+                    <ErrorInfo
+                        errorMessage='Invalid bond price'
+                        showError={validateBondPrice()}
                     />
                     <div className='mx-10px'>
                         <OrderDisplayBox
                             field='Fixed Rate (APR)'
-                            value={percentFormat(
-                                LoanValue.fromPrice(
-                                    unitPrice,
-                                    maturity
-                                ).apr.toNormalizedNumber()
-                            )}
+                            value={
+                                !isNaN(fixedRate) ? percentFormat(fixedRate) : 0
+                            }
                         />
                     </div>
                 </div>
@@ -272,7 +286,9 @@ export const AdvancedLendingOrderCard = ({
                     unit={currency}
                     asset={currency}
                     initialValue={orderAmount?.value}
-                    onValueChange={v => handleInputChange(BigNumber.from(v))}
+                    onValueChange={v =>
+                        v && handleInputChange(BigNumber.from(v))
+                    }
                 />
                 <div className='mx-10px flex flex-col gap-6'>
                     <OrderDisplayBox
@@ -289,11 +305,13 @@ export const AdvancedLendingOrderCard = ({
                 <OrderAction
                     loanValue={loanValue}
                     collateralBook={collateralBook}
-                    validation={getAmountValidation(
-                        amountFormatterFromBase[currency](amount),
-                        balanceToLend,
-                        side
-                    )}
+                    validation={
+                        getAmountValidation(
+                            amountFormatterFromBase[currency](amount),
+                            balanceToLend,
+                            side
+                        ) || validateBondPrice()
+                    }
                 />
 
                 <Separator color='neutral-3'></Separator>

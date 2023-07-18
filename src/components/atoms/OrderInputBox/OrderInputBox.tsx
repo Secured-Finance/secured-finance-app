@@ -1,6 +1,7 @@
 import { BigNumber } from 'ethers';
 import { useCallback, useEffect, useState } from 'react';
-import { InformationPopover, InputBase } from 'src/components/atoms';
+import { InputBase } from 'src/components/atoms';
+import { Tooltip } from 'src/components/templates';
 import { amountFormatterToBase, CurrencySymbol } from 'src/utils';
 
 interface OrderInputBoxProps {
@@ -12,7 +13,7 @@ interface OrderInputBoxProps {
     informationText?: string;
     decimalPlacesAllowed?: number;
     maxLimit?: number;
-    onValueChange?: (v: number | BigNumber) => void;
+    onValueChange?: (v: number | BigNumber | undefined) => void;
 }
 
 export const OrderInputBox = ({
@@ -29,16 +30,14 @@ export const OrderInputBox = ({
     const [inputValue, setInputValue] = useState(initialValue);
 
     useEffect(() => {
-        if (inputValue !== '' || initialValue !== 0)
-            setInputValue(initialValue);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+        setInputValue(initialValue);
     }, [initialValue]);
 
     const handleInputChange = useCallback(
         (
-            amount: number,
+            amount: number | undefined,
             asset: CurrencySymbol | undefined,
-            onValueChange: (v: number | BigNumber) => void
+            onValueChange: (v: number | BigNumber | undefined) => void
         ) => {
             let format = (x: number) => BigNumber.from(x);
             if (
@@ -48,7 +47,9 @@ export const OrderInputBox = ({
             ) {
                 format = amountFormatterToBase[asset];
             }
-            asset ? onValueChange(format(amount)) : onValueChange(amount);
+            asset && amount !== undefined
+                ? onValueChange(format(amount))
+                : onValueChange(amount);
         },
         []
     );
@@ -57,7 +58,7 @@ export const OrderInputBox = ({
         (amount: number | undefined) => {
             setInputValue(amount ?? '');
             if (onValueChange) {
-                handleInputChange(amount ?? 0, asset, onValueChange);
+                handleInputChange(amount, asset, onValueChange);
             }
         },
         [onValueChange, handleInputChange, asset]
@@ -70,7 +71,9 @@ export const OrderInputBox = ({
                     {field}
                 </div>
                 {informationText && !disabled && (
-                    <InformationPopover>{informationText}</InformationPopover>
+                    <Tooltip align='right' maxWidth='small'>
+                        {informationText}
+                    </Tooltip>
                 )}
             </div>
             <div className='flex flex-row items-center gap-[10px]'>
