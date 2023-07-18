@@ -39,7 +39,7 @@ const LINKS = [
 
 export const Header = () => {
     const dispatch = useDispatch();
-    const { address: account, isConnected } = useAccount();
+    const { address, isConnected } = useAccount();
     const securedFinance = useSF();
     const chainError = useSelector(
         (state: RootState) => state.blockchain.chainError
@@ -87,9 +87,9 @@ export const Header = () => {
                     <MenuPopover />
                 </div>
                 <div className='col-span-2 flex flex-row items-center justify-end gap-2 laptop:col-span-1'>
-                    {isConnected && account ? (
+                    {isConnected && address ? (
                         <WalletPopover
-                            wallet={AddressUtils.format(account, 6)}
+                            wallet={AddressUtils.format(address, 6)}
                             networkName={
                                 securedFinance?.config?.network ?? 'Unknown'
                             }

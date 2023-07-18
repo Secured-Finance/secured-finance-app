@@ -54,7 +54,7 @@ export const LendingCard = ({
     );
 
     const dispatch = useDispatch();
-    const { address: account } = useAccount();
+    const { address, isConnected } = useAccount();
 
     const shortNames = useMemo(
         () =>
@@ -187,11 +187,11 @@ export const LendingCard = ({
                     )}
                 />
 
-                {account && side === OrderSide.LEND && (
+                {isConnected && side === OrderSide.LEND && (
                     <WalletSourceSelector
                         optionList={walletSourceList}
                         selected={selectedWalletSource}
-                        account={account ?? ''}
+                        account={address ?? ''}
                         onChange={v => dispatch(setSourceAccount(v))}
                     />
                 )}

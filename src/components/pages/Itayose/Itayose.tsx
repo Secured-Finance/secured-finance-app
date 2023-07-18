@@ -94,7 +94,7 @@ const Toolbar = ({
     );
 };
 export const Itayose = () => {
-    const { address: account } = useAccount();
+    const { address } = useAccount();
 
     const { currency, maturity } = useSelector((state: RootState) =>
         selectLandingOrderForm(state.landingOrderForm)
@@ -128,8 +128,8 @@ export const Itayose = () => {
     }, [currency, assetList]);
 
     const orderBook = useOrderbook(currency, selectedTerm.value);
-    const orderList = useOrderList(account);
-    const collateralBook = useCollateralBook(account);
+    const orderList = useOrderList(address);
+    const collateralBook = useCollateralBook(address);
 
     const filteredOrderList = useMemo(() => {
         return orderList.activeOrderList.filter(

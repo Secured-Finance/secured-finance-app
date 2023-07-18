@@ -79,7 +79,7 @@ export const AdvancedLendingOrderCard = ({
     }, [unitPrice, maturity]);
 
     const dispatch = useDispatch();
-    const { address: account } = useAccount();
+    const { address, isConnected } = useAccount();
 
     const collateralUsagePercent = useMemo(() => {
         return collateralBook.coverage.toNumber() / 100.0;
@@ -224,12 +224,12 @@ export const AdvancedLendingOrderCard = ({
                     side={side}
                     variant='advanced'
                 />
-                {account && side === OrderSide.LEND && (
+                {isConnected && side === OrderSide.LEND && (
                     <div className='space-y-1'>
                         <WalletSourceSelector
                             optionList={walletSourceList}
                             selected={selectedWalletSource}
-                            account={account ?? ''}
+                            account={address ?? ''}
                             onChange={handleWalletSourceChange}
                         />
                         <ErrorInfo

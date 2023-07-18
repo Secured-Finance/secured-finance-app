@@ -23,8 +23,8 @@ export const useEthereumWalletStore = (
     securedFinance: SecuredFinanceClient | undefined
 ) => {
     const dispatch = useDispatch();
-    const { address: account, status } = useAccount();
-    const { data: ethBalance } = useBalance({ address: account });
+    const { address, isConnected } = useAccount();
+    const { data: ethBalance } = useBalance({ address });
     const { price, change } = useSelector((state: RootState) =>
         getAsset(CurrencySymbol.ETH)(state)
     );
@@ -32,7 +32,7 @@ export const useEthereumWalletStore = (
     const { getERC20Balance } = useERC20Balance(securedFinance);
 
     const getWalletBalance = useCallback(async () => {
-        if (!account) return zeroBalances;
+        if (!address) return zeroBalances;
 
         const result: Record<string, number> = {};
 
@@ -42,7 +42,7 @@ export const useEthereumWalletStore = (
                     currency.symbol
                 ](
                     await getERC20Balance(
-                        account,
+                        address,
                         currency.toCurrency() as Token
                     )
                 );
@@ -54,7 +54,7 @@ export const useEthereumWalletStore = (
         }
 
         return result as Record<CurrencySymbol, number>;
-    }, [account, getERC20Balance, ethBalance]);
+    }, [address, getERC20Balance, ethBalance]);
 
     const fetchWalletStore = useCallback(
         async (account: string) => {
@@ -76,22 +76,22 @@ export const useEthereumWalletStore = (
     );
 
     useEffect(() => {
-        if (status === 'connected' && account) {
-            connectWallet(account);
+        if (isConnected && address) {
+            connectWallet(address);
         }
-    }, [status, connectWallet, account]);
+    }, [isConnected, connectWallet, address]);
 
     useEffect(() => {
-        if (account) {
-            fetchWalletStore(account);
+        if (address) {
+            fetchWalletStore(address);
         }
-    }, [account, ethBalance, change, fetchWalletStore, price]);
+    }, [address, ethBalance, change, fetchWalletStore, price]);
 
     useEffect(() => {
-        if (account === null) {
+        if (!isConnected) {
             dispatch(resetEthWallet());
         }
-    }, [account, dispatch]);
+    }, [dispatch, isConnected]);
 
     return wallet;
 };

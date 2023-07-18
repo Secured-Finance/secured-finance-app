@@ -103,7 +103,7 @@ export const WithdrawCollateral = ({
     collateralList: Record<CurrencySymbol, CollateralInfo>;
 } & DialogState) => {
     const etherscanUrl = useEtherscanUrl();
-    const { address: account } = useAccount();
+    const { address } = useAccount();
     const [asset, setAsset] = useState(CurrencySymbol.ETH);
     const [state, dispatch] = useReducer(reducer, stateRecord[1]);
     const [collateral, setCollateral] = useState<BigNumber>();
@@ -244,7 +244,7 @@ export const WithdrawCollateral = ({
                                     ['Status', 'Complete'],
                                     [
                                         'Ethereum Address',
-                                        AddressUtils.format(account ?? '', 6),
+                                        AddressUtils.format(address ?? '', 6),
                                     ],
                                     [
                                         'Amount',
