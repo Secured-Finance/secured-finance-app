@@ -14,7 +14,7 @@ const ButtonIcon = (
 
 const children = (
     <div className='text-white'>
-        <p>Tooltip content</p>
+        <p>This is tooltip content. This is tooltip content.</p>
     </div>
 );
 
@@ -65,6 +65,16 @@ RightAligned.args = {
     align: 'right',
 };
 RightAligned.play = async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const button = canvas.getByTestId('information-circle');
+    await userEvent.hover(button);
+};
+
+export const SmallWidth = Template.bind({});
+SmallWidth.args = {
+    maxWidth: 'small',
+};
+SmallWidth.play = async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     const button = canvas.getByTestId('information-circle');
     await userEvent.hover(button);

@@ -15,7 +15,11 @@ describe('Tooltip Component', () => {
         fireEvent.mouseEnter(information);
 
         expect(screen.getByTestId('tooltip')).toBeInTheDocument();
-        expect(screen.getByText('Tooltip content')).toBeInTheDocument();
+        expect(
+            screen.getByText(
+                'This is tooltip content. This is tooltip content.'
+            )
+        ).toBeInTheDocument();
         expect(screen.getByRole('tooltip')).toBeInTheDocument();
     });
 
@@ -25,7 +29,11 @@ describe('Tooltip Component', () => {
         fireEvent.mouseEnter(information);
         fireEvent.mouseLeave(information);
 
-        expect(screen.queryByText('Tooltip content')).not.toBeInTheDocument();
+        expect(
+            screen.queryByText(
+                'This is tooltip content. This is tooltip content.'
+            )
+        ).not.toBeInTheDocument();
         expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
     });
 });

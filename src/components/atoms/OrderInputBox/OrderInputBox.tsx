@@ -71,8 +71,8 @@ export const OrderInputBox = ({
                     {field}
                 </div>
                 {informationText && !disabled && (
-                    <Tooltip align='right'>
-                        <div className='max-w-[165px]'>{informationText}</div>
+                    <Tooltip align='right' maxWidth='small'>
+                        {informationText}
                     </Tooltip>
                 )}
             </div>
