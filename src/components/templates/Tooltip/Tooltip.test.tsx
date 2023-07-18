@@ -23,7 +23,7 @@ describe('Tooltip Component', () => {
         render(<Default />);
         const information = screen.getByTestId('information-circle');
         fireEvent.mouseEnter(information);
-        fireEvent.mouseOut(information);
+        fireEvent.mouseLeave(information);
 
         expect(screen.queryByText('Tooltip content')).not.toBeInTheDocument();
         expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
