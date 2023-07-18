@@ -17,6 +17,13 @@ import {
 
 export const CACHED_PROVIDER_KEY = 'CACHED_PROVIDER_KEY';
 
+declare global {
+    interface Window {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        ethereum: any;
+    }
+}
+
 export interface SFContext {
     securedFinance?: SecuredFinanceClient;
 }
@@ -50,16 +57,14 @@ const SecuredFinanceProvider: React.FC = ({ children }) => {
     }, []);
 
     const dispatchChainError = useCallback(
-        (chainId: string) => {
-            dispatch(
-                updateChainError(Number(chainId) !== getEthereumChainId())
-            );
+        (chainId: number) => {
+            dispatch(updateChainError(chainId !== getEthereumChainId()));
         },
         [dispatch]
     );
 
     const handleChainChanged = useCallback(
-        (chainId: string) => {
+        (chainId: number) => {
             dispatchChainError(chainId);
         },
         [dispatchChainError]
@@ -68,9 +73,11 @@ const SecuredFinanceProvider: React.FC = ({ children }) => {
     useEffect(() => {
         // this is required to get the chainId on initial page load
         const fetchChainId = async () => {
-            if (client) {
-                const chainId = await client?.getChainId();
-                dispatchChainError(chainId.toString());
+            if (window.ethereum) {
+                const chainId = await window.ethereum.request({
+                    method: 'eth_chainId',
+                });
+                dispatchChainError(chainId);
             }
         };
         fetchChainId();
