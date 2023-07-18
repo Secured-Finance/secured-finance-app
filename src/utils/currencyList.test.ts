@@ -33,6 +33,11 @@ describe('currencyList.getCurrencyMapAsOptions', () => {
                 iconSVG: 'svg',
             },
             {
+                label: 'Bitcoin',
+                value: 'WBTC',
+                iconSVG: 'svg',
+            },
+            {
                 label: 'Ether',
                 value: 'ETH',
                 iconSVG: 'svg',
@@ -40,11 +45,6 @@ describe('currencyList.getCurrencyMapAsOptions', () => {
             {
                 label: 'USDC',
                 value: 'USDC',
-                iconSVG: 'svg',
-            },
-            {
-                label: 'Bitcoin',
-                value: 'WBTC',
                 iconSVG: 'svg',
             },
         ]);
@@ -57,9 +57,9 @@ describe('currencyList.getCurrencyMapAsOptions', () => {
         expect(options).toHaveLength(4);
 
         expect(options[currencyMap.EFIL.index]).toEqual(currencyMap.EFIL);
+        expect(options[currencyMap.WBTC.index]).toEqual(currencyMap.WBTC);
         expect(options[currencyMap.ETH.index]).toEqual(currencyMap.ETH);
         expect(options[currencyMap.USDC.index]).toEqual(currencyMap.USDC);
-        expect(options[currencyMap.WBTC.index]).toEqual(currencyMap.WBTC);
     });
 });
 
