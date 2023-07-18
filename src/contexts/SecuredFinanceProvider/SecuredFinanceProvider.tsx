@@ -6,7 +6,11 @@ import { useDispatch } from 'react-redux';
 import { useLendingMarkets } from 'src/hooks';
 import { useEthereumWalletStore } from 'src/hooks/useEthWallet';
 import { updateChainError, updateLatestBlock } from 'src/store/blockchain';
-import { getCurrencyMapAsList, getEthereumChainId } from 'src/utils';
+import {
+    getCurrencyMapAsList,
+    getEthereumChainId,
+    readWalletFromStore,
+} from 'src/utils';
 import { InterfaceEvents, associateWallet } from 'src/utils/events';
 import {
     useAccount,
@@ -143,8 +147,8 @@ const SecuredFinanceProvider: React.FC = ({ children }) => {
             return;
         }
 
-        const cachedProvider = localStorage.getItem(CACHED_PROVIDER_KEY);
-        if (cachedProvider !== null) {
+        const cachedProvider = readWalletFromStore();
+        if (cachedProvider && cachedProvider === 'MetaMask') {
             const connector = connectors.find(
                 connector => connector.name === cachedProvider
             );

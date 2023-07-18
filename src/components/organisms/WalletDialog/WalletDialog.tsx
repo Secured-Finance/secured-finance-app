@@ -10,10 +10,10 @@ import {
     SuccessPanel,
     WalletRadioGroup,
 } from 'src/components/molecules';
-import { CACHED_PROVIDER_KEY } from 'src/contexts/SecuredFinanceProvider/SecuredFinanceProvider';
 import { useBreakpoint, useEtherscanUrl } from 'src/hooks';
 import { setWalletDialogOpen } from 'src/store/interactions';
 import { RootState } from 'src/store/types';
+import { Wallet } from 'src/types';
 import {
     AddressUtils,
     InterfaceEvents,
@@ -21,6 +21,7 @@ import {
     WalletConnectionResult,
     decToHex,
     getEthereumChainId,
+    writeWalletInStore,
 } from 'src/utils';
 import { associateWallet } from 'src/utils/events';
 import { useAccount, useConnect } from 'wagmi';
@@ -87,10 +88,7 @@ export const WalletDialog = () => {
     }, [dispatch, reset]);
 
     const handleConnect = useCallback(
-        async (
-            provider: 'MetaMask' | 'WalletConnect',
-            account: string | undefined
-        ) => {
+        async (provider: Wallet, account: string | undefined) => {
             const connector = connectors.find(
                 connect => connect.name === provider
             );
@@ -118,9 +116,9 @@ export const WalletDialog = () => {
                 return;
             }
 
-            if (!account && connector.name === provider) {
+            if (!account) {
                 connect({ connector: connector });
-                localStorage.setItem(CACHED_PROVIDER_KEY, connector.name);
+                writeWalletInStore(provider);
             }
         },
         [connect, connectors]

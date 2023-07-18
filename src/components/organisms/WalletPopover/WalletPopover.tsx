@@ -7,9 +7,8 @@ import React, { Fragment, useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 import MetamaskLogo from 'src/assets/img/metamask-fox.svg';
 import { ExpandIndicator, Separator } from 'src/components/atoms';
-import { CACHED_PROVIDER_KEY } from 'src/contexts/SecuredFinanceProvider/SecuredFinanceProvider';
 import { resetEthWallet } from 'src/store/wallet';
-import { formatDataCy } from 'src/utils';
+import { formatDataCy, removeWalletFromStore } from 'src/utils';
 import { useAccount, useDisconnect } from 'wagmi';
 
 const MenuItem = ({
@@ -82,7 +81,7 @@ export const WalletPopover = ({
         reset();
         disconnect();
         dispatch(resetEthWallet());
-        localStorage.removeItem(CACHED_PROVIDER_KEY);
+        removeWalletFromStore();
         router.push('/');
     }, [disconnect, dispatch, router, reset, isConnected]);
 
