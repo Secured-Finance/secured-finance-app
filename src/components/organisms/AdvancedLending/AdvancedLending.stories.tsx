@@ -5,7 +5,7 @@ import {
     withMaturities,
     withWalletProvider,
 } from '.storybook/decorators';
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import { within } from '@storybook/testing-library';
 import {
     collateralBook80,
@@ -44,9 +44,9 @@ export default {
         withMaturities,
         withWalletProvider,
     ],
-} as ComponentMeta<typeof AdvancedLending>;
+} as Meta<typeof AdvancedLending>;
 
-const Template: ComponentStory<typeof AdvancedLending> = args => {
+const Template: StoryFn<typeof AdvancedLending> = args => {
     timemachine.config({
         dateString: '2022-02-01T11:00:00.00Z',
     });

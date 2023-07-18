@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import { within } from '@storybook/testing-library';
 import { RESPONSIVE_PARAMETERS } from 'src/../.storybook/constants';
 import { SimpleAdvancedView } from './SimpleAdvancedView';
@@ -19,9 +19,9 @@ export default {
         ...RESPONSIVE_PARAMETERS,
         layout: 'fullscreen',
     },
-} as ComponentMeta<typeof SimpleAdvancedView>;
+} as Meta<typeof SimpleAdvancedView>;
 
-const Template: ComponentStory<typeof SimpleAdvancedView> = args => (
+const Template: StoryFn<typeof SimpleAdvancedView> = args => (
     <SimpleAdvancedView {...args} />
 );
 

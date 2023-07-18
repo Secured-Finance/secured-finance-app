@@ -1,5 +1,5 @@
 import { RESPONSIVE_PARAMETERS, VIEWPORTS } from '.storybook/constants';
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import { LiquidationProgressBar } from './LiquidationProgressBar';
 
 export default {
@@ -15,9 +15,9 @@ export default {
             viewports: [VIEWPORTS.MOBILE, VIEWPORTS.TABLET],
         },
     },
-} as ComponentMeta<typeof LiquidationProgressBar>;
+} as Meta<typeof LiquidationProgressBar>;
 
-const Template: ComponentStory<typeof LiquidationProgressBar> = args => (
+const Template: StoryFn<typeof LiquidationProgressBar> = args => (
     <LiquidationProgressBar {...args} />
 );
 

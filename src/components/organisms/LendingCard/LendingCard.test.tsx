@@ -1,5 +1,5 @@
 import { formatDate } from '@secured-finance/sf-core';
-import { composeStories } from '@storybook/testing-react';
+import { composeStories } from '@storybook/react';
 import {
     dec22Fixture,
     mar23Fixture,

@@ -1,6 +1,6 @@
 import { RESPONSIVE_PARAMETERS, VIEWPORTS } from '.storybook/constants';
 import queries from '@secured-finance/sf-graph-client/dist/graphclients';
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import { BigNumber } from 'ethers';
 import {
     withAppLayout,
@@ -69,9 +69,9 @@ export default {
         withAssetPrice,
         withChainErrorDisabled,
     ],
-} as ComponentMeta<typeof MarketDashboard>;
+} as Meta<typeof MarketDashboard>;
 
-const Template: ComponentStory<typeof MarketDashboard> = () => {
+const Template: StoryFn<typeof MarketDashboard> = () => {
     return <MarketDashboard />;
 };
 

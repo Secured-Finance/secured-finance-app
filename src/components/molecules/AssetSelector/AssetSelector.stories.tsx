@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import { assetList } from 'src/stories/mocks/fixtures';
 import { AssetSelector } from './AssetSelector';
 
@@ -31,9 +31,9 @@ export default {
         onAssetChange: () => {},
         onAmountChange: () => {},
     },
-} as ComponentMeta<typeof AssetSelector>;
+} as Meta<typeof AssetSelector>;
 
-const Template: ComponentStory<typeof AssetSelector> = args => (
+const Template: StoryFn<typeof AssetSelector> = args => (
     <AssetSelector {...args} />
 );
 
