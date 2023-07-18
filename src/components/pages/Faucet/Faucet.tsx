@@ -29,7 +29,7 @@ import {
     handleContractTransaction,
     toCurrency,
 } from 'src/utils';
-import { useAccount } from 'wagmi';
+import { useAccount, useWalletClient } from 'wagmi';
 
 const MenuAddToken = ({
     address,
@@ -86,6 +86,7 @@ const MenuAddToken = ({
 export const Faucet = () => {
     const etherscanUrl = useEtherscanUrl();
     const { address: account } = useAccount();
+    const { data: client } = useWalletClient();
     const sf = useSF();
 
     const assetList = useMemo(
@@ -138,21 +139,17 @@ export const Faucet = () => {
 
     const addToMetamask = useCallback(
         async (token: Token | null) => {
-            if (!account || !token) return;
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            await (window as any).ethereum.request({
-                method: 'wallet_watchAsset',
-                params: {
-                    type: 'ERC20',
-                    options: {
-                        address: token.address,
-                        symbol: token.symbol,
-                        decimals: token.decimals,
-                    },
+            if (!client || !token) return;
+            client.watchAsset({
+                type: 'ERC20',
+                options: {
+                    address: token.address,
+                    symbol: token.symbol,
+                    decimals: token.decimals,
                 },
             });
         },
-        [account]
+        [client]
     );
 
     useEffect(() => {
@@ -221,8 +218,17 @@ export const Faucet = () => {
                                                         onClick={() =>
                                                             addToMetamask(token)
                                                         }
+                                                        disabled={!client}
                                                     >
-                                                        <WalletIcon className='h-5 w-5 text-slateGray hover:text-planetaryPurple' />
+                                                        <WalletIcon
+                                                            className={classNames(
+                                                                'h-5 w-5 text-slateGray ',
+                                                                {
+                                                                    'hover:text-planetaryPurple':
+                                                                        client,
+                                                                }
+                                                            )}
+                                                        />
                                                     </button>
                                                 }
                                             >
