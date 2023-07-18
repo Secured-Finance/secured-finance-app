@@ -183,6 +183,11 @@ export const AdvancedLendingOrderCard = ({
         return unitPrice === 0 && orderType === OrderType.LIMIT;
     };
 
+    const fixedRate = LoanValue.fromPrice(
+        unitPrice ?? 0,
+        maturity
+    ).apr.toNormalizedNumber();
+
     return (
         <div className='h-fit rounded-b-xl border border-white-10 bg-cardBackground bg-opacity-60 pb-7'>
             <RadioGroup
@@ -269,12 +274,9 @@ export const AdvancedLendingOrderCard = ({
                     <div className='mx-10px'>
                         <OrderDisplayBox
                             field='Fixed Rate (APR)'
-                            value={percentFormat(
-                                LoanValue.fromPrice(
-                                    unitPrice ?? 0,
-                                    maturity
-                                ).apr.toNormalizedNumber()
-                            )}
+                            value={
+                                !isNaN(fixedRate) ? percentFormat(fixedRate) : 0
+                            }
                         />
                     </div>
                 </div>

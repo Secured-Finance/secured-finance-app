@@ -30,9 +30,7 @@ export const OrderInputBox = ({
     const [inputValue, setInputValue] = useState(initialValue);
 
     useEffect(() => {
-        if (inputValue !== '' || initialValue !== 0)
-            setInputValue(initialValue);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+        setInputValue(initialValue);
     }, [initialValue]);
 
     const handleInputChange = useCallback(
