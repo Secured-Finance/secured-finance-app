@@ -68,30 +68,13 @@ export const useEthereumWalletStore = (
         [getWalletBalance, dispatch]
     );
 
-    const connectWallet = useCallback(
-        (account: string) => {
-            dispatch(connectEthWallet(account));
-        },
-        [dispatch]
-    );
-
     useEffect(() => {
         if (isConnected && address) {
-            connectWallet(address);
-        }
-    }, [isConnected, connectWallet, address]);
-
-    useEffect(() => {
-        if (address) {
             fetchWalletStore(address);
-        }
-    }, [address, ethBalance, change, fetchWalletStore, price]);
-
-    useEffect(() => {
-        if (!isConnected) {
+        } else {
             dispatch(resetEthWallet());
         }
-    }, [dispatch, isConnected]);
+    }, [address, dispatch, fetchWalletStore, isConnected, price, change]);
 
     return wallet;
 };
