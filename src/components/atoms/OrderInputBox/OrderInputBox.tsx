@@ -13,7 +13,7 @@ interface OrderInputBoxProps {
     informationText?: string;
     decimalPlacesAllowed?: number;
     maxLimit?: number;
-    onValueChange?: (v: number | BigNumber) => void;
+    onValueChange?: (v: number | BigNumber | undefined) => void;
 }
 
 export const OrderInputBox = ({
@@ -37,9 +37,9 @@ export const OrderInputBox = ({
 
     const handleInputChange = useCallback(
         (
-            amount: number,
+            amount: number | undefined,
             asset: CurrencySymbol | undefined,
-            onValueChange: (v: number | BigNumber) => void
+            onValueChange: (v: number | BigNumber | undefined) => void
         ) => {
             let format = (x: number) => BigNumber.from(x);
             if (
@@ -49,7 +49,9 @@ export const OrderInputBox = ({
             ) {
                 format = amountFormatterToBase[asset];
             }
-            asset ? onValueChange(format(amount)) : onValueChange(amount);
+            asset && amount !== undefined
+                ? onValueChange(format(amount))
+                : onValueChange(amount);
         },
         []
     );
@@ -57,7 +59,7 @@ export const OrderInputBox = ({
     const handleAmountChange = useCallback(
         (amount: number | undefined) => {
             setInputValue(amount ?? '');
-            if (onValueChange && amount !== undefined) {
+            if (onValueChange) {
                 handleInputChange(amount, asset, onValueChange);
             }
         },
