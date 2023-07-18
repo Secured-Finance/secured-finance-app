@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import { CurrencySymbol } from 'src/utils';
 import { CurrencyIcon } from './CurrencyIcon';
 
@@ -20,9 +20,9 @@ export default {
             },
         },
     },
-} as ComponentMeta<typeof CurrencyIcon>;
+} as Meta<typeof CurrencyIcon>;
 
-const Template: ComponentStory<typeof CurrencyIcon> = args => (
+const Template: StoryFn<typeof CurrencyIcon> = args => (
     <CurrencyIcon {...args} />
 );
 

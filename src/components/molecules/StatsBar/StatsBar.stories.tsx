@@ -1,5 +1,5 @@
 import { RESPONSIVE_PARAMETERS, VIEWPORTS } from '.storybook/constants';
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import { StatsBar } from './StatsBar';
 
 export default {
@@ -32,10 +32,8 @@ export default {
             viewports: [VIEWPORTS.MOBILE, VIEWPORTS.TABLET],
         },
     },
-} as ComponentMeta<typeof StatsBar>;
+} as Meta<typeof StatsBar>;
 
-const Template: ComponentStory<typeof StatsBar> = args => (
-    <StatsBar {...args} />
-);
+const Template: StoryFn<typeof StatsBar> = args => <StatsBar {...args} />;
 
 export const Default = Template.bind({});

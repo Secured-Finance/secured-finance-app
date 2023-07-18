@@ -1,5 +1,5 @@
 import { RESPONSIVE_PARAMETERS, VIEWPORTS } from '.storybook/constants';
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import { Dialog } from './Dialog';
 
 export default {
@@ -20,9 +20,9 @@ export default {
             viewports: [VIEWPORTS.MOBILE, VIEWPORTS.TABLET],
         },
     },
-} as ComponentMeta<typeof Dialog>;
+} as Meta<typeof Dialog>;
 
-const Template: ComponentStory<typeof Dialog> = args => (
+const Template: StoryFn<typeof Dialog> = args => (
     <Dialog {...args}>
         <p className='body1 text-white-70'>
             This is the content but since it is a component, it can be styled as

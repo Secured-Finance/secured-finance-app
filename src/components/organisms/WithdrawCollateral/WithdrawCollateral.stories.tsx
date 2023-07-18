@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import { screen, userEvent } from '@storybook/testing-library';
 import {
     withAssetPrice,
@@ -38,9 +38,9 @@ export default {
         },
     },
     decorators: [withWalletProvider, withAssetPrice],
-} as ComponentMeta<typeof WithdrawCollateral>;
+} as Meta<typeof WithdrawCollateral>;
 
-const Template: ComponentStory<typeof WithdrawCollateral> = args => {
+const Template: StoryFn<typeof WithdrawCollateral> = args => {
     return <WithdrawCollateral {...args} />;
 };
 

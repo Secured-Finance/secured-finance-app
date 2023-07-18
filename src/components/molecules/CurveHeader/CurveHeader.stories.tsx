@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import { withAssetPrice } from 'src/../.storybook/decorators';
 import { dailyVolumes } from 'src/stories/mocks/fixtures';
 import { CurrencySymbol } from 'src/utils';
@@ -13,9 +13,9 @@ export default {
     },
     argTypes: {},
     decorators: [withAssetPrice],
-} as ComponentMeta<typeof CurveHeader>;
+} as Meta<typeof CurveHeader>;
 
-const Template: ComponentStory<typeof CurveHeader> = args => {
+const Template: StoryFn<typeof CurveHeader> = args => {
     return <CurveHeader {...args} />;
 };
 

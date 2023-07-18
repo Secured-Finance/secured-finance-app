@@ -1,5 +1,5 @@
 import { RESPONSIVE_PARAMETERS, VIEWPORTS } from '.storybook/constants';
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import { withAssetPrice } from 'src/../.storybook/decorators';
 import { orderHistoryList } from 'src/stories/mocks/fixtures';
 import { OrderHistoryTable } from './OrderHistoryTable';
@@ -17,9 +17,9 @@ export default {
         },
     },
     decorators: [withAssetPrice],
-} as ComponentMeta<typeof OrderHistoryTable>;
+} as Meta<typeof OrderHistoryTable>;
 
-const Template: ComponentStory<typeof OrderHistoryTable> = args => (
+const Template: StoryFn<typeof OrderHistoryTable> = args => (
     <OrderHistoryTable {...args} />
 );
 

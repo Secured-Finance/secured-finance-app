@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import { maturityOptions } from 'src/stories/mocks/fixtures';
 
 import { options } from '../../molecules/LineChart/constants';
@@ -31,9 +31,9 @@ export default {
         maturitiesOptionList: maturityOptions,
         maturity: maturityOptions[0].value,
     },
-} as ComponentMeta<typeof LineChart>;
+} as Meta<typeof LineChart>;
 
-const Template: ComponentStory<typeof LineChart> = args => {
+const Template: StoryFn<typeof LineChart> = args => {
     return (
         <div style={{ width: 500, height: 350 }}>
             <LineChart {...args} />

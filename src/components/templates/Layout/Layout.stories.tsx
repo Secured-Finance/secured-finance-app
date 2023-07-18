@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import Link from 'next/link';
 import { RESPONSIVE_PARAMETERS } from 'src/../.storybook/constants';
 import { Layout } from './Layout';
@@ -29,9 +29,9 @@ export default {
         ...RESPONSIVE_PARAMETERS,
         layout: 'fullscreen',
     },
-} as ComponentMeta<typeof Layout>;
+} as Meta<typeof Layout>;
 
-const Template: ComponentStory<typeof Layout> = args => (
+const Template: StoryFn<typeof Layout> = args => (
     <Layout navBar={args.navBar} footer={args.footer}>
         {args.children}
     </Layout>

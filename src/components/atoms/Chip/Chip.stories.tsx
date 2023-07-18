@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import { Chip } from './Chip';
 
 export default {
@@ -15,8 +15,8 @@ export default {
             },
         },
     },
-} as ComponentMeta<typeof Chip>;
+} as Meta<typeof Chip>;
 
-const Template: ComponentStory<typeof Chip> = args => <Chip {...args} />;
+const Template: StoryFn<typeof Chip> = args => <Chip {...args} />;
 
 export const Default = Template.bind({});

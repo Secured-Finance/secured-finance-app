@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import React from 'react';
 import MetaMaskIcon from 'src/assets/img/metamask-fox.svg';
 import WalletConnectIcon from 'src/assets/img/wallet-connect.svg';
@@ -7,9 +7,9 @@ import { WalletRadioGroup } from './WalletRadioGroup';
 export default {
     title: 'Molecules/WalletRadioGroup',
     component: WalletRadioGroup,
-} as ComponentMeta<typeof WalletRadioGroup>;
+} as Meta<typeof WalletRadioGroup>;
 
-const Template: ComponentStory<typeof WalletRadioGroup> = () => {
+const Template: StoryFn<typeof WalletRadioGroup> = () => {
     const [value, setValue] = React.useState('');
     return (
         <WalletRadioGroup

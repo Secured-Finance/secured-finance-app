@@ -1,6 +1,6 @@
 import { fireEvent, render, screen } from 'src/test-utils.js';
 
-import { composeStories } from '@storybook/testing-react';
+import { composeStories } from '@storybook/react';
 import * as stories from './WalletRadioGroup.stories';
 
 const { Default } = composeStories(stories);
