@@ -30,16 +30,16 @@ describe('currencies.generateWalletInformation', () => {
                     quantity: 0,
                 },
                 {
+                    asset: CurrencySymbol.WBTC,
+                    quantity: 0,
+                },
+                {
                     asset: CurrencySymbol.ETH,
                     quantity: 0.58,
                 },
                 {
                     asset: CurrencySymbol.USDC,
                     quantity: 150,
-                },
-                {
-                    asset: CurrencySymbol.WBTC,
-                    quantity: 0,
                 },
             ],
         });
