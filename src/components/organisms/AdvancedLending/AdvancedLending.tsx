@@ -27,7 +27,7 @@ import {
     setUnitPrice,
 } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
-import { MaturityOptionList, TransactionList } from 'src/types';
+import { MaturityOptionList, OrderType, TransactionList } from 'src/types';
 import {
     CurrencySymbol,
     Rate,
@@ -172,7 +172,7 @@ export const AdvancedLending = ({
     );
 
     useEffect(() => {
-        loanValue.price > 0
+        loanValue.price > 0 || orderType === OrderType.MARKET
             ? dispatch(setUnitPrice(loanValue.price))
             : dispatch(setUnitPrice(undefined));
     }, [dispatch, loanValue.price, orderType, currency, maturity]);

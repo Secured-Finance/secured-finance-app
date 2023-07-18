@@ -15,7 +15,9 @@ export const OrderDisplayBox = ({
         <div className='typography-caption flex h-6 w-full flex-row items-center justify-between bg-transparent'>
             <div className='flex flex-row items-center gap-2'>
                 <div className='text-slateGray'>{field}</div>
-                {informationText && <Tooltip>{informationText}</Tooltip>}
+                {informationText && (
+                    <Tooltip maxWidth='small'>{informationText}</Tooltip>
+                )}
             </div>
             <div className='text-right text-planetaryPurple'>{value}</div>
         </div>
