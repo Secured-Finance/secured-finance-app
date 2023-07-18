@@ -54,7 +54,7 @@ export const CollateralTab = ({
 }: {
     collateralBook: CollateralBook;
 }) => {
-    const { address: account } = useAccount();
+    const { address } = useAccount();
     const [openModal, setOpenModal] = useState<'' | 'deposit' | 'withdraw'>('');
 
     const balances = useSelector((state: RootState) =>
@@ -82,11 +82,11 @@ export const CollateralTab = ({
         <div className='flex w-full flex-row items-center'>
             <CollateralTabLeftPane
                 onClick={step => setOpenModal(step)}
-                account={account}
+                account={address}
                 collateralBook={collateralBook}
             />
             <CollateralTabRightPane
-                account={account}
+                account={address}
                 collateralBook={collateralBook}
             />
             <DepositCollateral

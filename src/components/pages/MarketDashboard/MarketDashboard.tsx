@@ -50,8 +50,8 @@ const computeTotalUsers = (users: string) => {
 };
 
 export const MarketDashboard = () => {
-    const { address: account } = useAccount();
-    const collateralBook = useCollateralBook(account);
+    const { address, isConnected } = useAccount();
+    const collateralBook = useCollateralBook(address);
 
     const curves: Record<string, Rate[]> = {};
     const lendingContracts = useSelector(
@@ -175,7 +175,7 @@ export const MarketDashboard = () => {
                     <MarketLoanWidget markets={marketList} />
                 </div>
                 <section className='flex flex-col gap-5'>
-                    {account && (
+                    {isConnected && (
                         <GradientBox header='My Collateral'>
                             <div className='px-3 py-6'>
                                 <CollateralManagementConciseTab
@@ -192,10 +192,10 @@ export const MarketDashboard = () => {
                             </div>
                         </GradientBox>
                     )}
-                    {account ? (
+                    {isConnected ? (
                         <MyWalletCard
                             addressRecord={{
-                                [WalletSource.METAMASK]: account,
+                                [WalletSource.METAMASK]: address,
                             }}
                         />
                     ) : (

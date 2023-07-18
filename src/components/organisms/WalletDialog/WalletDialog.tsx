@@ -58,7 +58,7 @@ export const WalletDialog = () => {
 
     const { connect, connectors, isLoading, isSuccess, isError, reset } =
         useConnect();
-    const { address: account, isConnected } = useAccount();
+    const { address, isConnected } = useAccount();
 
     const handleClose = useCallback(() => {
         dispatch(setWalletDialogOpen(false));
@@ -114,15 +114,15 @@ export const WalletDialog = () => {
     const connectWallet = useCallback(() => {
         const provider = wallet === 'Metamask' ? 'MetaMask' : 'WalletConnect';
 
-        handleConnect(provider, account)
+        handleConnect(provider, address)
             .then(() => {
-                if (!account) return;
+                if (!address) return;
                 track(InterfaceEvents.CONNECT_WALLET_BUTTON_CLICKED, {
                     [InterfaceProperties.WALLET_CONNECTION_RESULT]:
                         WalletConnectionResult.SUCCEEDED,
-                    [InterfaceProperties.WALLET_ADDRESS]: account,
+                    [InterfaceProperties.WALLET_ADDRESS]: address,
                 });
-                associateWallet(account);
+                associateWallet(address);
             })
             .catch(e => {
                 track(InterfaceEvents.CONNECT_WALLET_BUTTON_CLICKED, {
@@ -133,7 +133,7 @@ export const WalletDialog = () => {
                     setErrorMessage(e.message);
                 }
             });
-    }, [account, handleConnect, wallet]);
+    }, [address, handleConnect, wallet]);
 
     const dialogText = () => {
         if (!isConnected && !isLoading && !isError) {
@@ -149,7 +149,7 @@ export const WalletDialog = () => {
                 description: '',
                 buttonText: '',
             };
-        } else if (isSuccess && account) {
+        } else if (isSuccess && address) {
             return {
                 title: 'Success!',
                 description: 'Your wallet has been connected successfully.',
@@ -188,13 +188,13 @@ export const WalletDialog = () => {
                         <Spinner />
                     </div>
                 )}
-                {isSuccess && account && (
+                {isSuccess && address && (
                     <SuccessPanel
                         itemList={[
                             ['Status', 'Connected'],
                             [
                                 'Ethereum Address',
-                                AddressUtils.format(account ?? '', 16),
+                                AddressUtils.format(address ?? '', 16),
                             ],
                         ]}
                         etherscanUrl={etherscanUrl}

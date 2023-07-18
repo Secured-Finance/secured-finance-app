@@ -91,7 +91,7 @@ export const AdvancedLending = ({
         getAssetPrice(currency)(state)
     );
 
-    const { address: account } = useAccount();
+    const { address } = useAccount();
     const dispatch = useDispatch();
     const assetList = useMemo(() => getCurrencyMapAsOptions(), []);
 
@@ -114,7 +114,7 @@ export const AdvancedLending = ({
     );
 
     const orderBook = useOrderbook(currency, selectedTerm.value, 10);
-    const orderList = useOrderList(account);
+    const orderList = useOrderList(address);
 
     const transactionHistory = useGraphClientHook(
         {

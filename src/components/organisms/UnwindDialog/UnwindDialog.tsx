@@ -118,7 +118,7 @@ export const UnwindDialog = ({
     side: OrderSide;
 } & DialogState) => {
     const etherscanUrl = useEtherscanUrl();
-    const { address: account } = useAccount();
+    const { address } = useAccount();
     const [state, dispatch] = useReducer(reducer, stateRecord[1]);
     const [txHash, setTxHash] = useState<string | undefined>();
     const [errorMessage, setErrorMessage] = useState(
@@ -126,7 +126,7 @@ export const UnwindDialog = ({
     );
     const globalDispatch = useDispatch();
 
-    const collateral = useCollateralBook(account);
+    const collateral = useCollateralBook(address);
     const priceList = useSelector((state: RootState) => getPriceMap(state));
     const price = priceList[amount.currency];
 
