@@ -30,7 +30,7 @@ export const WalletDialog = () => {
 
     const etherscanUrl = useEtherscanUrl();
     const options = useMemo(() => {
-        const mobileOptions = [
+        const options = [
             {
                 name: 'Metamask',
                 Icon: MetaMaskIcon,
@@ -41,9 +41,9 @@ export const WalletDialog = () => {
             },
         ];
         if (isMobileOrTablet) {
-            return mobileOptions.slice(1, 2);
+            return options.slice(1, 2);
         }
-        return mobileOptions;
+        return options;
     }, [isMobileOrTablet]);
 
     const [wallet, setWallet] = useState<string>('');
@@ -54,15 +54,16 @@ export const WalletDialog = () => {
     const isOpen = useSelector(
         (state: RootState) => state.interactions.walletDialogOpen
     );
-    const globalDispatch = useDispatch();
+    const dispatch = useDispatch();
 
     const { connect, connectors, isLoading, isSuccess, isError, reset } =
         useConnect();
     const { address: account, isConnected } = useAccount();
 
     const handleClose = useCallback(() => {
-        globalDispatch(setWalletDialogOpen(false));
-    }, [globalDispatch]);
+        dispatch(setWalletDialogOpen(false));
+        reset();
+    }, [dispatch, reset]);
 
     const handleConnect = useCallback(
         async (
@@ -73,9 +74,8 @@ export const WalletDialog = () => {
                 connect => connect.name === provider
             );
 
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            const injected = (window as any).ethereum;
-            if (injected && injected?.request) {
+            const injected = window.ethereum;
+            if (injected && injected.request) {
                 try {
                     await injected?.request({
                         method: 'wallet_switchEthereumChain',
@@ -98,7 +98,7 @@ export const WalletDialog = () => {
             }
 
             try {
-                if (!account && connector && connector.name === provider) {
+                if (!account && connector.name === provider) {
                     connect({ connector: connector });
                     localStorage.setItem(CACHED_PROVIDER_KEY, connector.name);
                 }
@@ -172,10 +172,7 @@ export const WalletDialog = () => {
             callToAction={dialogText().buttonText}
             onClick={() => {
                 if (!isConnected && !isLoading && !isError) connectWallet();
-                else {
-                    reset();
-                    handleClose();
-                }
+                else handleClose();
             }}
         >
             <>
