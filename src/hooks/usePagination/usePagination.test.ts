@@ -1,5 +1,5 @@
 import { renderHook, act } from '@testing-library/react-hooks';
-import usePagination from './usePagination';
+import { usePagination } from './usePagination';
 
 describe('usePagination', () => {
     it('should return the complete array when data changes', () => {
@@ -26,5 +26,61 @@ describe('usePagination', () => {
         });
 
         expect(result.current).toEqual(['A', 'B']);
+    });
+
+    it('should load large amount of data', () => {
+        const initialProps = Array(1000)
+            .fill(null)
+            .map(_ => ({
+                name: 'SF',
+                age: 10,
+                english: 80,
+                maths: 60,
+                science: 95,
+                history: 60,
+            }));
+        const { result, rerender } = renderHook(props => usePagination(props), {
+            initialProps: initialProps,
+        });
+        expect(result.current).toEqual(initialProps);
+
+        act(() => {
+            rerender(
+                Array(1000)
+                    .fill(null)
+                    .map(_ => ({
+                        name: 'SF',
+                        age: 20,
+                        english: 80,
+                        maths: 60,
+                        science: 95,
+                        history: 60,
+                    }))
+            );
+        });
+
+        expect(result.current).toHaveLength(2000);
+        expect(result.current).toEqual([
+            ...Array(1000)
+                .fill(null)
+                .map(_ => ({
+                    name: 'SF',
+                    age: 10,
+                    english: 80,
+                    maths: 60,
+                    science: 95,
+                    history: 60,
+                })),
+            ...Array(1000)
+                .fill(null)
+                .map(_ => ({
+                    name: 'SF',
+                    age: 20,
+                    english: 80,
+                    maths: 60,
+                    science: 95,
+                    history: 60,
+                })),
+        ]);
     });
 });

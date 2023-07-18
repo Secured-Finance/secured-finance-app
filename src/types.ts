@@ -77,3 +77,9 @@ export enum OrderType {
     MARKET = 'Market',
     LIMIT = 'Limit',
 }
+
+export interface Pagination {
+    getMoreData: () => void;
+    totalData: number;
+    containerHeight: boolean;
+}

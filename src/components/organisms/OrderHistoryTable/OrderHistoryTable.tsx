@@ -5,7 +5,7 @@ import { CoreTable, TableActionMenu } from 'src/components/molecules';
 import { useBreakpoint, useEtherscanUrl } from 'src/hooks';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { RootState } from 'src/store/types';
-import { OrderList } from 'src/types';
+import { OrderList, Pagination } from 'src/types';
 import {
     amountColumnDefinition,
     contractColumnDefinition,
@@ -35,11 +35,7 @@ export const OrderHistoryTable = ({
     pagination,
 }: {
     data: OrderList;
-    pagination?: {
-        totalData: number;
-        getMoreData: () => void;
-        containerHeight: boolean;
-    };
+    pagination?: Pagination;
 }) => {
     const priceList = useSelector((state: RootState) => getPriceMap(state));
     const isTablet = useBreakpoint('laptop');
