@@ -57,7 +57,28 @@ export const WalletDialog = () => {
     const dispatch = useDispatch();
 
     const { connect, connectors, isLoading, isSuccess, isError, reset } =
-        useConnect();
+        useConnect({
+            onSettled(data, error) {
+                if (error) {
+                    track(InterfaceEvents.CONNECT_WALLET_BUTTON_CLICKED, {
+                        [InterfaceProperties.WALLET_CONNECTION_RESULT]:
+                            WalletConnectionResult.FAILED,
+                        [InterfaceProperties.WALLET_CONNECTOR]:
+                            data?.connector?.name,
+                    });
+                    setErrorMessage(error.message);
+                } else {
+                    track(InterfaceEvents.CONNECT_WALLET_BUTTON_CLICKED, {
+                        [InterfaceProperties.WALLET_CONNECTION_RESULT]:
+                            WalletConnectionResult.SUCCEEDED,
+                        [InterfaceProperties.WALLET_CONNECTOR]:
+                            data?.connector?.name,
+                        [InterfaceProperties.WALLET_ADDRESS]: data?.account,
+                    });
+                    if (data?.account) associateWallet(data.account);
+                }
+            },
+        });
     const { address, isConnected } = useAccount();
 
     const handleClose = useCallback(() => {
@@ -97,43 +118,22 @@ export const WalletDialog = () => {
                 return;
             }
 
-            try {
-                if (!account && connector.name === provider) {
-                    connect({ connector: connector });
-                    localStorage.setItem(CACHED_PROVIDER_KEY, connector.name);
-                }
-            } catch (e) {
-                if (e instanceof Error) {
-                    setErrorMessage(e.message);
-                }
+            if (!account && connector.name === provider) {
+                connect({ connector: connector });
+                localStorage.setItem(CACHED_PROVIDER_KEY, connector.name);
             }
         },
         [connect, connectors]
     );
 
-    const connectWallet = useCallback(() => {
-        const provider = wallet === 'Metamask' ? 'MetaMask' : 'WalletConnect';
-
-        handleConnect(provider, address)
-            .then(() => {
-                if (!address) return;
-                track(InterfaceEvents.CONNECT_WALLET_BUTTON_CLICKED, {
-                    [InterfaceProperties.WALLET_CONNECTION_RESULT]:
-                        WalletConnectionResult.SUCCEEDED,
-                    [InterfaceProperties.WALLET_ADDRESS]: address,
-                });
-                associateWallet(address);
-            })
-            .catch(e => {
-                track(InterfaceEvents.CONNECT_WALLET_BUTTON_CLICKED, {
-                    [InterfaceProperties.WALLET_CONNECTION_RESULT]:
-                        WalletConnectionResult.FAILED,
-                });
-                if (e instanceof Error) {
-                    setErrorMessage(e.message);
-                }
-            });
-    }, [address, handleConnect, wallet]);
+    const connectWallet = useCallback(
+        async (address: string | undefined) => {
+            const provider =
+                wallet === 'Metamask' ? 'MetaMask' : 'WalletConnect';
+            await handleConnect(provider, address);
+        },
+        [handleConnect, wallet]
+    );
 
     const dialogText = () => {
         if (!isConnected && !isLoading && !isError) {
@@ -171,7 +171,8 @@ export const WalletDialog = () => {
             description={dialogText().description}
             callToAction={dialogText().buttonText}
             onClick={() => {
-                if (!isConnected && !isLoading && !isError) connectWallet();
+                if (!isConnected && !isLoading && !isError)
+                    connectWallet(address);
                 else handleClose();
             }}
         >

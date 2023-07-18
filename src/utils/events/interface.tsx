@@ -31,6 +31,7 @@ export enum CollateralProperties {
 export enum InterfaceProperties {
     WALLET_CONNECTION_RESULT = 'Wallet Connection Result',
     WALLET_ADDRESS = 'Wallet Address',
+    WALLET_CONNECTOR = 'Wallet Connector',
 }
 
 export enum WalletConnectionResult {
