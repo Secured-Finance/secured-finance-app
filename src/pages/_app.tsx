@@ -48,6 +48,14 @@ const config = createConfig({
             chains,
             options: {
                 projectId: projectId,
+                qrModalOptions: {
+                    themeVariables: {
+                        '--wcm-font-family':
+                            "'Suisse International', sans-serif",
+                        '--wcm-accent-color': '#002133',
+                        '--wcm-background-color': '#5162FF',
+                    },
+                },
             },
         }),
         new InjectedConnector({
