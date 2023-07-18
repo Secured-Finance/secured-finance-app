@@ -16,6 +16,43 @@ import {
     wfilBytes32,
 } from './fixtures';
 
+const generateMyTransactions = (amount: string) => {
+    const myTransactions = [];
+    for (let i = 0; i < 20; i++) {
+        myTransactions.push({
+            amount: amount,
+            averagePrice: '0.8000',
+            side: 1,
+            orderPrice: '9543',
+            createdAt: '1671080520',
+            forwardValue: '520000000000000000000',
+            currency: efilBytes32,
+            maturity: jun23Fixture.toString(),
+        });
+    }
+    return myTransactions;
+};
+
+const generateMyOrderHistory = (amount: string) =>
+    Array(20)
+        .fill(null)
+        .map((_, index) => ({
+            orderId: index,
+            currency: efilBytes32,
+            side: 1,
+            maturity: BigNumber.from(dec22Fixture.toString()),
+            unitPrice: BigNumber.from('9800'),
+            filledAmount: BigNumber.from('0'),
+            amount: BigNumber.from(amount),
+            status: 'Open',
+            createdAt: BigNumber.from('1'),
+            txHash: utils.formatBytes32String('hash'),
+            lendingMarket: {
+                id: '1',
+                isActive: true,
+            },
+        }));
+
 export const mockUserTransactionHistory = [
     {
         request: {
@@ -81,7 +118,7 @@ export const mockUserTransactionHistory = [
             variables: {
                 address: '',
                 skip: 0,
-                first: 100,
+                first: 20,
                 awaitRefetchQueries: true,
             },
         },
@@ -111,26 +148,17 @@ export const mockUserTransactionHistory = [
             variables: {
                 address: '0xb98bd7c7f656290071e52d1aa617d9cb4467fd6d',
                 skip: 0,
-                first: 100,
+                first: 20,
                 awaitRefetchQueries: true,
             },
         },
         result: {
             data: {
                 user: {
-                    transactionCount: 400,
-                    transactions: Array(100)
-                        .fill(null)
-                        .map(() => ({
-                            amount: '500000000000000000000',
-                            averagePrice: '0.8000', // TODO: rework the unit in the graph. This is changed only for a dirty fix
-                            side: 1,
-                            orderPrice: '9543',
-                            createdAt: '1671080520',
-                            forwardValue: '520000000000000000000',
-                            currency: efilBytes32,
-                            maturity: jun23Fixture.toString(),
-                        })),
+                    transactionCount: 80,
+                    transactions: generateMyTransactions(
+                        '500000000000000000000'
+                    ),
                 },
             },
         },
@@ -138,19 +166,10 @@ export const mockUserTransactionHistory = [
             return {
                 data: {
                     user: {
-                        transactionCount: 400,
-                        transactions: Array(100)
-                            .fill(null)
-                            .map(() => ({
-                                amount: '500000000000000000000',
-                                averagePrice: '0.8000', // TODO: rework the unit in the graph. This is changed only for a dirty fix
-                                side: 1,
-                                orderPrice: '9543',
-                                createdAt: '1671080520',
-                                forwardValue: '520000000000000000000',
-                                currency: efilBytes32,
-                                maturity: jun23Fixture.toString(),
-                            })),
+                        transactionCount: 80,
+                        transactions: generateMyTransactions(
+                            '500000000000000000000'
+                        ),
                     },
                 },
             };
@@ -161,27 +180,18 @@ export const mockUserTransactionHistory = [
             query: queries.UserTransactionHistoryDocument,
             variables: {
                 address: '0xb98bd7c7f656290071e52d1aa617d9cb4467fd6d',
-                skip: 100,
-                first: 100,
+                skip: 20,
+                first: 20,
                 awaitRefetchQueries: true,
             },
         },
         result: {
             data: {
                 user: {
-                    transactionCount: 400,
-                    transactions: Array(100)
-                        .fill(null)
-                        .map(() => ({
-                            amount: '600000000000000000000',
-                            averagePrice: '0.8000', // TODO: rework the unit in the graph. This is changed only for a dirty fix
-                            side: 1,
-                            orderPrice: '9543',
-                            createdAt: '1671080520',
-                            forwardValue: '520000000000000000000',
-                            currency: efilBytes32,
-                            maturity: jun23Fixture.toString(),
-                        })),
+                    transactionCount: 80,
+                    transactions: generateMyTransactions(
+                        '600000000000000000000'
+                    ),
                 },
             },
         },
@@ -189,19 +199,10 @@ export const mockUserTransactionHistory = [
             return {
                 data: {
                     user: {
-                        transactionCount: 400,
-                        transactions: Array(100)
-                            .fill(null)
-                            .map(() => ({
-                                amount: '600000000000000000000',
-                                averagePrice: '0.8000', // TODO: rework the unit in the graph. This is changed only for a dirty fix
-                                side: 1,
-                                orderPrice: '9543',
-                                createdAt: '1671080520',
-                                forwardValue: '520000000000000000000',
-                                currency: efilBytes32,
-                                maturity: jun23Fixture.toString(),
-                            })),
+                        transactionCount: 80,
+                        transactions: generateMyTransactions(
+                            '600000000000000000000'
+                        ),
                     },
                 },
             };
@@ -212,27 +213,18 @@ export const mockUserTransactionHistory = [
             query: queries.UserTransactionHistoryDocument,
             variables: {
                 address: '0xb98bd7c7f656290071e52d1aa617d9cb4467fd6d',
-                skip: 200,
-                first: 100,
+                skip: 40,
+                first: 20,
                 awaitRefetchQueries: true,
             },
         },
         result: {
             data: {
                 user: {
-                    transactionCount: 400,
-                    transactions: Array(100)
-                        .fill(null)
-                        .map(() => ({
-                            amount: '700000000000000000000',
-                            averagePrice: '0.8000', // TODO: rework the unit in the graph. This is changed only for a dirty fix
-                            side: 1,
-                            orderPrice: '9543',
-                            createdAt: '1671080520',
-                            forwardValue: '520000000000000000000',
-                            currency: efilBytes32,
-                            maturity: jun23Fixture.toString(),
-                        })),
+                    transactionCount: 80,
+                    transactions: generateMyTransactions(
+                        '700000000000000000000'
+                    ),
                 },
             },
         },
@@ -240,19 +232,10 @@ export const mockUserTransactionHistory = [
             return {
                 data: {
                     user: {
-                        transactionCount: 400,
-                        transactions: Array(100)
-                            .fill(null)
-                            .map(() => ({
-                                amount: '700000000000000000000',
-                                averagePrice: '0.8000', // TODO: rework the unit in the graph. This is changed only for a dirty fix
-                                side: 1,
-                                orderPrice: '9543',
-                                createdAt: '1671080520',
-                                forwardValue: '520000000000000000000',
-                                currency: efilBytes32,
-                                maturity: jun23Fixture.toString(),
-                            })),
+                        transactionCount: 80,
+                        transactions: generateMyTransactions(
+                            '700000000000000000000'
+                        ),
                     },
                 },
             };
@@ -263,27 +246,18 @@ export const mockUserTransactionHistory = [
             query: queries.UserTransactionHistoryDocument,
             variables: {
                 address: '0xb98bd7c7f656290071e52d1aa617d9cb4467fd6d',
-                skip: 300,
-                first: 100,
+                skip: 60,
+                first: 20,
                 awaitRefetchQueries: true,
             },
         },
         result: {
             data: {
                 user: {
-                    transactionCount: 400,
-                    transactions: Array(100)
-                        .fill(null)
-                        .map(() => ({
-                            amount: '800000000000000000000',
-                            averagePrice: '0.8000', // TODO: rework the unit in the graph. This is changed only for a dirty fix
-                            side: 1,
-                            orderPrice: '9543',
-                            createdAt: '1671080520',
-                            forwardValue: '520000000000000000000',
-                            currency: efilBytes32,
-                            maturity: jun23Fixture.toString(),
-                        })),
+                    transactionCount: 80,
+                    transactions: generateMyTransactions(
+                        '800000000000000000000'
+                    ),
                 },
             },
         },
@@ -291,19 +265,10 @@ export const mockUserTransactionHistory = [
             return {
                 data: {
                     user: {
-                        transactionCount: 400,
-                        transactions: Array(100)
-                            .fill(null)
-                            .map(() => ({
-                                amount: '800000000000000000000',
-                                averagePrice: '0.8000', // TODO: rework the unit in the graph. This is changed only for a dirty fix
-                                side: 1,
-                                orderPrice: '9543',
-                                createdAt: '1671080520',
-                                forwardValue: '520000000000000000000',
-                                currency: efilBytes32,
-                                maturity: jun23Fixture.toString(),
-                            })),
+                        transactionCount: 80,
+                        transactions: generateMyTransactions(
+                            '800000000000000000000'
+                        ),
                     },
                 },
             };
@@ -376,7 +341,7 @@ export const mockUserOrderHistory = [
             variables: {
                 address: '',
                 skip: 0,
-                first: 100,
+                first: 20,
                 awaitRefetchQueries: true,
             },
         },
@@ -405,32 +370,15 @@ export const mockUserOrderHistory = [
             variables: {
                 address: '0xb98bd7c7f656290071e52d1aa617d9cb4467fd6d',
                 skip: 0,
-                first: 100,
+                first: 20,
                 awaitRefetchQueries: true,
             },
         },
         result: {
             data: {
                 user: {
-                    orderCount: 300,
-                    orders: Array(100)
-                        .fill(null)
-                        .map((_, index) => ({
-                            orderId: index,
-                            currency: efilBytes32,
-                            side: 1,
-                            maturity: BigNumber.from(dec22Fixture.toString()),
-                            unitPrice: BigNumber.from('9800'),
-                            filledAmount: BigNumber.from('0'),
-                            amount: BigNumber.from('1000000000000000000000'),
-                            status: 'Open',
-                            createdAt: BigNumber.from('1'),
-                            txHash: utils.formatBytes32String('hash'),
-                            lendingMarket: {
-                                id: '1',
-                                isActive: true,
-                            },
-                        })),
+                    orderCount: 60,
+                    orders: generateMyOrderHistory('1000000000000000000000'),
                 },
             },
         },
@@ -438,29 +386,10 @@ export const mockUserOrderHistory = [
             return {
                 data: {
                     user: {
-                        orderCount: 300,
-                        orders: Array(100)
-                            .fill(null)
-                            .map((_, index) => ({
-                                orderId: index,
-                                currency: efilBytes32,
-                                side: 1,
-                                maturity: BigNumber.from(
-                                    dec22Fixture.toString()
-                                ),
-                                unitPrice: BigNumber.from('9800'),
-                                filledAmount: BigNumber.from('0'),
-                                amount: BigNumber.from(
-                                    '1000000000000000000000'
-                                ),
-                                status: 'Open',
-                                createdAt: BigNumber.from('1'),
-                                txHash: utils.formatBytes32String('hash'),
-                                lendingMarket: {
-                                    id: '1',
-                                    isActive: true,
-                                },
-                            })),
+                        orderCount: 60,
+                        orders: generateMyOrderHistory(
+                            '1000000000000000000000'
+                        ),
                     },
                 },
             };
@@ -471,33 +400,16 @@ export const mockUserOrderHistory = [
             query: queries.UserOrderHistoryDocument,
             variables: {
                 address: '0xb98bd7c7f656290071e52d1aa617d9cb4467fd6d',
-                skip: 100,
-                first: 100,
+                skip: 20,
+                first: 20,
                 awaitRefetchQueries: true,
             },
         },
         result: {
             data: {
                 user: {
-                    orderCount: 300,
-                    orders: Array(100)
-                        .fill(null)
-                        .map((_, index) => ({
-                            orderId: index,
-                            currency: efilBytes32,
-                            side: 1,
-                            maturity: BigNumber.from(dec22Fixture.toString()),
-                            unitPrice: BigNumber.from('9800'),
-                            filledAmount: BigNumber.from('0'),
-                            amount: BigNumber.from('2000000000000000000000'),
-                            status: 'Open',
-                            createdAt: BigNumber.from('1'),
-                            txHash: utils.formatBytes32String('hash'),
-                            lendingMarket: {
-                                id: '1',
-                                isActive: true,
-                            },
-                        })),
+                    orderCount: 60,
+                    orders: generateMyOrderHistory('2000000000000000000000'),
                 },
             },
         },
@@ -505,29 +417,10 @@ export const mockUserOrderHistory = [
             return {
                 data: {
                     user: {
-                        orderCount: 300,
-                        orders: Array(100)
-                            .fill(null)
-                            .map((_, index) => ({
-                                orderId: index,
-                                currency: efilBytes32,
-                                side: 1,
-                                maturity: BigNumber.from(
-                                    dec22Fixture.toString()
-                                ),
-                                unitPrice: BigNumber.from('9800'),
-                                filledAmount: BigNumber.from('0'),
-                                amount: BigNumber.from(
-                                    '2000000000000000000000'
-                                ),
-                                status: 'Open',
-                                createdAt: BigNumber.from('1'),
-                                txHash: utils.formatBytes32String('hash'),
-                                lendingMarket: {
-                                    id: '1',
-                                    isActive: true,
-                                },
-                            })),
+                        orderCount: 60,
+                        orders: generateMyOrderHistory(
+                            '2000000000000000000000'
+                        ),
                     },
                 },
             };
@@ -538,33 +431,16 @@ export const mockUserOrderHistory = [
             query: queries.UserOrderHistoryDocument,
             variables: {
                 address: '0xb98bd7c7f656290071e52d1aa617d9cb4467fd6d',
-                skip: 200,
-                first: 100,
+                skip: 40,
+                first: 20,
                 awaitRefetchQueries: true,
             },
         },
         result: {
             data: {
                 user: {
-                    orderCount: 300,
-                    orders: Array(100)
-                        .fill(null)
-                        .map((_, index) => ({
-                            orderId: index,
-                            currency: efilBytes32,
-                            side: 1,
-                            maturity: BigNumber.from(dec22Fixture.toString()),
-                            unitPrice: BigNumber.from('9800'),
-                            filledAmount: BigNumber.from('0'),
-                            amount: BigNumber.from('3000000000000000000000'),
-                            status: 'Open',
-                            createdAt: BigNumber.from('1'),
-                            txHash: utils.formatBytes32String('hash'),
-                            lendingMarket: {
-                                id: '1',
-                                isActive: true,
-                            },
-                        })),
+                    orderCount: 60,
+                    orders: generateMyOrderHistory('3000000000000000000000'),
                 },
             },
         },
@@ -572,96 +448,10 @@ export const mockUserOrderHistory = [
             return {
                 data: {
                     user: {
-                        orderCount: 300,
-                        orders: Array(100)
-                            .fill(null)
-                            .map((_, index) => ({
-                                orderId: index,
-                                currency: efilBytes32,
-                                side: 1,
-                                maturity: BigNumber.from(
-                                    dec22Fixture.toString()
-                                ),
-                                unitPrice: BigNumber.from('9800'),
-                                filledAmount: BigNumber.from('0'),
-                                amount: BigNumber.from(
-                                    '3000000000000000000000'
-                                ),
-                                status: 'Open',
-                                createdAt: BigNumber.from('1'),
-                                txHash: utils.formatBytes32String('hash'),
-                                lendingMarket: {
-                                    id: '1',
-                                    isActive: true,
-                                },
-                            })),
-                    },
-                },
-            };
-        },
-    },
-    {
-        request: {
-            query: queries.UserOrderHistoryDocument,
-            variables: {
-                address: '0xb98bd7c7f656290071e52d1aa617d9cb4467fd6d',
-                skip: 300,
-                first: 100,
-                awaitRefetchQueries: true,
-            },
-        },
-        result: {
-            data: {
-                user: {
-                    orderCount: 300,
-                    orders: Array(100)
-                        .fill(null)
-                        .map((_, index) => ({
-                            orderId: index,
-                            currency: efilBytes32,
-                            side: 1,
-                            maturity: BigNumber.from(dec22Fixture.toString()),
-                            unitPrice: BigNumber.from('9800'),
-                            filledAmount: BigNumber.from('0'),
-                            amount: BigNumber.from('3000000000000000000000'),
-                            status: 'Open',
-                            createdAt: BigNumber.from('1'),
-                            txHash: utils.formatBytes32String('hash'),
-                            lendingMarket: {
-                                id: '1',
-                                isActive: true,
-                            },
-                        })),
-                },
-            },
-        },
-        newData: () => {
-            return {
-                data: {
-                    user: {
-                        orderCount: 300,
-                        orders: Array(100)
-                            .fill(null)
-                            .map((_, index) => ({
-                                orderId: index,
-                                currency: efilBytes32,
-                                side: 1,
-                                maturity: BigNumber.from(
-                                    dec22Fixture.toString()
-                                ),
-                                unitPrice: BigNumber.from('9800'),
-                                filledAmount: BigNumber.from('0'),
-                                amount: BigNumber.from(
-                                    '3000000000000000000000'
-                                ),
-                                status: 'Open',
-                                createdAt: BigNumber.from('1'),
-                                txHash: utils.formatBytes32String('hash'),
-                                lendingMarket: {
-                                    id: '1',
-                                    isActive: true,
-                                },
-                            })),
+                        orderCount: 60,
+                        orders: generateMyOrderHistory(
+                            '3000000000000000000000'
+                        ),
                     },
                 },
             };

@@ -2,7 +2,7 @@ import { createColumnHelper } from '@tanstack/react-table';
 import { useMemo } from 'react';
 import { CoreTable } from 'src/components/molecules';
 import { useBreakpoint } from 'src/hooks';
-import { TradeHistory } from 'src/types';
+import { Pagination, TradeHistory } from 'src/types';
 import { formatLoanValue } from 'src/utils';
 import { LoanValue } from 'src/utils/entities';
 import {
@@ -45,13 +45,9 @@ export const MyTransactionsTable = ({
     pagination,
 }: {
     data: TradeHistory;
-    pagination?: {
-        totalData: number;
-        getMoreData: () => void;
-        containerHeight: boolean;
-    };
+    pagination?: Pagination;
 }) => {
-    const isTablet = useBreakpoint('tablet');
+    const isTablet = useBreakpoint('laptop');
     const columns = useMemo(
         () => [
             loanTypeColumnDefinition(columnHelper, 'Type', 'type'),

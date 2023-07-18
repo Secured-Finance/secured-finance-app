@@ -75,3 +75,8 @@ const PaginationTemplate: ComponentStory<typeof MyTransactionsTable> = args => {
 };
 
 export const WithPagination = PaginationTemplate.bind({});
+WithPagination.parameters = {
+    chromatic: {
+        viewports: [VIEWPORTS.TABLET, VIEWPORTS.LAPTOP],
+    },
+};

@@ -18,8 +18,8 @@ import {
     useGraphClientHook,
     useOrderList,
     usePositions,
+    usePagination,
 } from 'src/hooks';
-import usePagination from 'src/hooks/usePagination/usePagination';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { RootState } from 'src/store/types';
 import { TradeHistory } from 'src/types';
@@ -42,18 +42,21 @@ enum TableType {
     MY_TRANSACTIONS,
 }
 
+const initialLoad = 20;
+const nextDataLoad = 20;
+
 export const PortfolioManagement = () => {
     const { account } = useWallet();
-    const [skipTransactions, setSkipTransactions] = useState(0);
-    const [skipOrders, setSkipOrders] = useState(0);
+    const [offsetTransactions, setOffsetTransactions] = useState(0);
+    const [offsetOrders, setOffsetOrders] = useState(0);
     const [selectedTable, setSelectedTable] = useState(
         TableType.ACTIVE_POSITION
     );
     const userOrderHistory = useGraphClientHook(
         {
             address: account?.toLowerCase() ?? '',
-            skip: skipOrders,
-            first: 100,
+            skip: offsetOrders,
+            first: initialLoad,
         },
         queries.UserOrderHistoryDocument,
         'user',
@@ -62,8 +65,8 @@ export const PortfolioManagement = () => {
     const userTransactionHistory = useGraphClientHook(
         {
             address: account?.toLowerCase() ?? '',
-            skip: skipTransactions,
-            first: 100,
+            skip: offsetTransactions,
+            first: initialLoad,
         },
         queries.UserTransactionHistoryDocument,
         'user',
@@ -81,7 +84,7 @@ export const PortfolioManagement = () => {
     );
 
     const sortedOrderHistory = useMemo(() => {
-        const lazyOrderHistory = paginatedOrderHistory ?? [];
+        const lazyOrderHistory = paginatedOrderHistory;
         return lazyOrderHistory
             .map(order => {
                 if (checkOrderIsFilled(order, orderList.inactiveOrderList)) {
@@ -198,7 +201,9 @@ export const PortfolioManagement = () => {
                                             userOrderHistory.data?.orderCount
                                         ) ?? 0,
                                     getMoreData: () =>
-                                        setSkipOrders(skipOrders + 100),
+                                        setOffsetOrders(
+                                            offsetOrders + nextDataLoad
+                                        ),
                                     containerHeight: true,
                                 }}
                             />
@@ -207,8 +212,8 @@ export const PortfolioManagement = () => {
                                 pagination={{
                                     totalData: myTransactionsDataCount,
                                     getMoreData: () =>
-                                        setSkipTransactions(
-                                            skipTransactions + 100
+                                        setOffsetTransactions(
+                                            offsetTransactions + nextDataLoad
                                         ),
                                     containerHeight: true,
                                 }}

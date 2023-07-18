@@ -6,8 +6,8 @@ import { useState } from 'react';
 import { withAssetPrice } from 'src/../.storybook/decorators';
 import {
     dec22Fixture,
-    efilBytes32,
     orderHistoryList,
+    wfilBytes32,
 } from 'src/stories/mocks/fixtures';
 import { OrderList } from 'src/types';
 import { OrderHistoryTable } from './OrderHistoryTable';
@@ -31,12 +31,12 @@ const Template: StoryFn<typeof OrderHistoryTable> = args => (
     <OrderHistoryTable {...args} />
 );
 
-const PaginatedTemplate: ComponentStory<typeof OrderHistoryTable> = args => {
+const PaginatedTemplate: StoryFn<typeof OrderHistoryTable> = args => {
     const initialData = Array(20)
         .fill(null)
         .map((_, index) => ({
             orderId: index,
-            currency: efilBytes32,
+            currency: wfilBytes32,
             side: 1,
             maturity: BigNumber.from(dec22Fixture.toString()),
             unitPrice: BigNumber.from('9800'),
@@ -63,7 +63,7 @@ const PaginatedTemplate: ComponentStory<typeof OrderHistoryTable> = args => {
                         .fill(null)
                         .map((_, index) => ({
                             orderId: index,
-                            currency: efilBytes32,
+                            currency: wfilBytes32,
                             side: 1,
                             maturity: BigNumber.from(dec22Fixture.toString()),
                             unitPrice: BigNumber.from('9800'),

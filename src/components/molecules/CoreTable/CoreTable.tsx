@@ -10,6 +10,7 @@ import {
 import classNames from 'classnames';
 import { useState, useEffect } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
+import { Pagination } from 'src/types';
 
 type CoreTableOptions = {
     border: boolean;
@@ -19,11 +20,7 @@ type CoreTableOptions = {
     hideColumnIds?: string[];
     responsive: boolean;
     stickyColumns?: Set<number>;
-    pagination?: {
-        getMoreData: () => void;
-        totalData: number;
-        containerHeight: boolean;
-    };
+    pagination?: Pagination;
 };
 
 const DEFAULT_OPTIONS: CoreTableOptions = {

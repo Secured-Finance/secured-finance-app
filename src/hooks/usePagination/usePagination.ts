@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 
-const usePagination = <T>(data: T[]) => {
+export const usePagination = <T>(data: T[]) => {
     const [totalData, setTotalData] = useState<T[]>([]);
     const prevDataRef = useRef<T[]>([]);
 
@@ -16,5 +16,3 @@ const usePagination = <T>(data: T[]) => {
 
     return totalData;
 };
-
-export default usePagination;
