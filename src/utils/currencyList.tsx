@@ -52,8 +52,24 @@ export const currencyMap: Readonly<
         pillColor: tailwindConfig.theme.colors.pill.fil,
         roundingDecimal: 0,
     },
-    [CurrencySymbol.ETH]: {
+    [CurrencySymbol.WBTC]: {
         index: 1,
+        symbol: CurrencySymbol.WBTC,
+        name: WBTC.onChain().name,
+        icon: BTCIcon,
+        coinGeckoId: 'wrapped-bitcoin',
+        isCollateral: false,
+        toBaseUnit: (amount: number) =>
+            convertToBlockchainUnit(amount, WBTC.onChain()),
+        fromBaseUnit: (amount: BigNumber) =>
+            convertFromBlockchainUnit(amount, WBTC.onChain()),
+        toCurrency: () => WBTC.onChain(),
+        chartColor: tailwindConfig.theme.colors.chart.btc,
+        pillColor: tailwindConfig.theme.colors.pill.btc,
+        roundingDecimal: 4,
+    },
+    [CurrencySymbol.ETH]: {
+        index: 2,
         icon: EthIcon,
         symbol: CurrencySymbol.ETH,
         // TODO: update sf-core to use the right name
@@ -69,7 +85,7 @@ export const currencyMap: Readonly<
         roundingDecimal: 3,
     },
     [CurrencySymbol.USDC]: {
-        index: 2,
+        index: 3,
         symbol: CurrencySymbol.USDC,
         name: USDC.onChain().name,
         icon: UsdcIcon,
@@ -83,22 +99,6 @@ export const currencyMap: Readonly<
         chartColor: tailwindConfig.theme.colors.chart.usdc,
         pillColor: tailwindConfig.theme.colors.pill.usdc,
         roundingDecimal: 0,
-    },
-    [CurrencySymbol.WBTC]: {
-        index: 3,
-        symbol: CurrencySymbol.WBTC,
-        name: WBTC.onChain().name,
-        icon: BTCIcon,
-        coinGeckoId: 'wrapped-bitcoin',
-        isCollateral: false,
-        toBaseUnit: (amount: number) =>
-            convertToBlockchainUnit(amount, WBTC.onChain()),
-        fromBaseUnit: (amount: BigNumber) =>
-            convertFromBlockchainUnit(amount, WBTC.onChain()),
-        toCurrency: () => WBTC.onChain(),
-        chartColor: tailwindConfig.theme.colors.chart.btc,
-        pillColor: tailwindConfig.theme.colors.pill.btc,
-        roundingDecimal: 4,
     },
 };
 
