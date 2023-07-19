@@ -20,6 +20,7 @@ beforeAll(() => {
 afterAll(() => {
     jest.clearAllMocks();
     jest.clearAllTimers();
+    global.gc && global.gc();
 });
 
 afterEach(() => {
