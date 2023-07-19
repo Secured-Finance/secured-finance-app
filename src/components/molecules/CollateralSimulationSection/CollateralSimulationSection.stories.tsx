@@ -10,7 +10,7 @@ export default {
     component: CollateralSimulationSection,
     args: {
         collateral: collateralBook37,
-        tradeAmount: new Amount('50000000000000000000', CurrencySymbol.EFIL),
+        tradeAmount: new Amount('50000000000000000000', CurrencySymbol.WFIL),
         side: OrderSide.BORROW,
         assetPrice: 10,
         tradeValue: LoanValue.fromPrice(9800, dec22Fixture.toNumber()),

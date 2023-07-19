@@ -1,4 +1,4 @@
-import { efilBytes32, ethBytes32 } from 'src/stories/mocks/fixtures';
+import { ethBytes32, wfilBytes32 } from 'src/stories/mocks/fixtures';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { renderHook } from 'src/test-utils';
 import { useOrderList } from './useOrderList';
@@ -30,6 +30,6 @@ describe('useOrderList', () => {
 
         expect(result.current.inactiveOrderList.length).toBe(2);
         expect(result.current.inactiveOrderList[0].currency).toBe(ethBytes32);
-        expect(result.current.inactiveOrderList[1].currency).toBe(efilBytes32);
+        expect(result.current.inactiveOrderList[1].currency).toBe(wfilBytes32);
     });
 });

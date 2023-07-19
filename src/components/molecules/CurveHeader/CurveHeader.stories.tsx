@@ -8,7 +8,7 @@ export default {
     title: 'Molecules/CurveHeader',
     component: CurveHeader,
     args: {
-        asset: CurrencySymbol.EFIL,
+        asset: CurrencySymbol.WFIL,
         dailyVolumes: dailyVolumes.slice(0, 10),
     },
     argTypes: {},

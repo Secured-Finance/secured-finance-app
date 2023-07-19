@@ -107,10 +107,10 @@ describe('DepositCollateral component', () => {
         expect(screen.getByText('50 USDC Available')).toBeInTheDocument();
         expect(screen.queryByText('ETH')).not.toBeInTheDocument();
         expect(screen.queryByText('ETH Available')).not.toBeInTheDocument();
-        expect(screen.queryByText('FIL')).not.toBeInTheDocument();
-        expect(screen.queryByText('FIL Available')).not.toBeInTheDocument();
-        expect(screen.queryByText('BTC')).not.toBeInTheDocument();
-        expect(screen.queryByText('BTC Available')).not.toBeInTheDocument();
+        expect(screen.queryByText('WFIL')).not.toBeInTheDocument();
+        expect(screen.queryByText('WFIL Available')).not.toBeInTheDocument();
+        expect(screen.queryByText('WBTC')).not.toBeInTheDocument();
+        expect(screen.queryByText('WBTC Available')).not.toBeInTheDocument();
     });
 
     it('should reach failure screen when transaction fails', async () => {
