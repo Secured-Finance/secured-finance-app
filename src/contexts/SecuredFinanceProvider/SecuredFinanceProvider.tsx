@@ -12,6 +12,7 @@ import {
     readWalletFromStore,
 } from 'src/utils';
 import { InterfaceEvents, associateWallet } from 'src/utils/events';
+import { hexToNumber } from 'viem';
 import {
     useAccount,
     useConnect,
@@ -81,7 +82,7 @@ const SecuredFinanceProvider: React.FC = ({ children }) => {
                 const chainId = await window.ethereum.request({
                     method: 'eth_chainId',
                 });
-                dispatchChainError(chainId);
+                dispatchChainError(hexToNumber(chainId));
             }
         };
         fetchChainId();
