@@ -1,25 +1,25 @@
 import { Token } from '@secured-finance/sf-core';
 import assert from 'assert';
 
-export class EFIL extends Token {
+export class WFIL extends Token {
     private constructor() {
         assert(
-            process.env.NEXT_PUBLIC_EFIL_CONTRACT_ADDRESS,
+            process.env.NEXT_PUBLIC_WFIL_CONTRACT_ADDRESS,
             'FIL_CONTRACT_ADDRESS is not set'
         );
         super(
             1,
-            process.env.NEXT_PUBLIC_EFIL_CONTRACT_ADDRESS,
+            process.env.NEXT_PUBLIC_WFIL_CONTRACT_ADDRESS,
             18,
-            'EFIL',
+            'WFIL',
             'Filecoin'
         );
     }
 
-    private static instance: EFIL;
+    private static instance: WFIL;
 
-    public static onChain(): EFIL {
-        this.instance = this.instance || new EFIL();
+    public static onChain(): WFIL {
+        this.instance = this.instance || new WFIL();
         return this.instance;
     }
 }

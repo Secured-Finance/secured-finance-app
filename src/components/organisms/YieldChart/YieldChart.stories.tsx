@@ -19,7 +19,7 @@ export default {
     component: YieldChart,
     chromatic: { pauseAnimationAtEnd: true, diffThreshold: 1 },
     args: {
-        asset: CurrencySymbol.EFIL,
+        asset: CurrencySymbol.WFIL,
         isBorrow: true,
         rates: rates,
         maturitiesOptionList: maturityOptions,
