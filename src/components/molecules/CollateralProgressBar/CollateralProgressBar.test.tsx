@@ -38,7 +38,7 @@ describe('CollateralProgressBar Component', () => {
         const information = screen.getByTestId('information-circle');
         fireEvent.mouseEnter(information);
 
-        const Tooltip = screen.getByTestId('tooltip');
+        const Tooltip = screen.getByRole('tooltip');
 
         expect(Tooltip).toHaveTextContent(
             'Your total borrow limit is at $80.00 which is 80% of your $100.00 collateral deposit.Increasing collateral deposit will increase your borrow limit by 80% of its value.'

@@ -23,7 +23,7 @@ describe('Tooltip Component', () => {
         expect(screen.getByRole('tooltip')).toBeInTheDocument();
     });
 
-    it('should remove rendered information on mouseOut event', () => {
+    it('should remove rendered information on mouseLeave event', () => {
         render(<Default />);
         const information = screen.getByTestId('information-circle');
         fireEvent.mouseEnter(information);

@@ -172,13 +172,11 @@ export const AdvancedLending = ({
     );
 
     useEffect(() => {
-        dispatch(
-            setUnitPrice(
-                loanValue.price > 0 || orderType === OrderType.MARKET
-                    ? loanValue.price
-                    : undefined
-            )
-        );
+        if (loanValue.price > 0 || orderType === OrderType.MARKET) {
+            dispatch(setUnitPrice(loanValue.price));
+        } else {
+            dispatch(setUnitPrice(undefined));
+        }
     }, [dispatch, loanValue.price, orderType, currency, maturity]);
 
     return (

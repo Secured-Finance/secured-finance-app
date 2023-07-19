@@ -35,7 +35,7 @@ describe('LiquidationProgressBar Component', () => {
         const information = screen.getByTestId('information-circle');
         fireEvent.mouseEnter(information);
 
-        const Tooltip = screen.getByTestId('tooltip');
+        const Tooltip = screen.getByRole('tooltip');
 
         expect(Tooltip).toHaveTextContent(
             'Liquidation threshold is the limit where your collateral will be eligible for liquidation.You are currently 35% under the liquidation threshold (80% of deposit balance).'
