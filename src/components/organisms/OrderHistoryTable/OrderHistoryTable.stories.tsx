@@ -1,8 +1,8 @@
 import { RESPONSIVE_PARAMETERS, VIEWPORTS } from '.storybook/constants';
-import { OrderStatus } from '@secured-finance/sf-graph-client/dist/graphclients/development/.graphclient';
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import { BigNumber, utils } from 'ethers';
 import { useState } from 'react';
+
 import { withAssetPrice } from 'src/../.storybook/decorators';
 import {
     dec22Fixture,
@@ -25,9 +25,9 @@ export default {
         },
     },
     decorators: [withAssetPrice],
-} as ComponentMeta<typeof OrderHistoryTable>;
+} as Meta<typeof OrderHistoryTable>;
 
-const Template: ComponentStory<typeof OrderHistoryTable> = args => (
+const Template: StoryFn<typeof OrderHistoryTable> = args => (
     <OrderHistoryTable {...args} />
 );
 
@@ -42,7 +42,7 @@ const PaginatedTemplate: ComponentStory<typeof OrderHistoryTable> = args => {
             unitPrice: BigNumber.from('9800'),
             filledAmount: BigNumber.from('0'),
             amount: BigNumber.from('1000000000000000000000'),
-            status: 'Open' as OrderStatus,
+            status: 'Open' as const,
             createdAt: BigNumber.from('1'),
             txHash: utils.formatBytes32String('hash'),
             lendingMarket: {
@@ -69,7 +69,7 @@ const PaginatedTemplate: ComponentStory<typeof OrderHistoryTable> = args => {
                             unitPrice: BigNumber.from('9800'),
                             filledAmount: BigNumber.from('0'),
                             amount: BigNumber.from('1000000000000000000000'),
-                            status: 'Open' as OrderStatus,
+                            status: 'Open' as const,
                             createdAt: BigNumber.from('1'),
                             txHash: utils.formatBytes32String('hash'),
                             lendingMarket: {

@@ -1,6 +1,6 @@
 import { RESPONSIVE_PARAMETERS, VIEWPORTS } from '.storybook/constants';
 import { withWalletProvider } from '.storybook/decorators';
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { setWalletDialogOpen } from 'src/store/interactions';
@@ -16,9 +16,9 @@ export default {
             viewports: [VIEWPORTS.MOBILE, VIEWPORTS.TABLET],
         },
     },
-} as ComponentMeta<typeof WalletDialog>;
+} as Meta<typeof WalletDialog>;
 
-const Template: ComponentStory<typeof WalletDialog> = () => {
+const Template: StoryFn<typeof WalletDialog> = () => {
     const dispatch = useDispatch();
     useEffect(() => {
         const timerId = setTimeout(() => {

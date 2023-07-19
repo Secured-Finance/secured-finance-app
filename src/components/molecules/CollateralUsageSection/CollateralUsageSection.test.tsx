@@ -1,4 +1,4 @@
-import { composeStories } from '@storybook/testing-react';
+import { composeStories } from '@storybook/react';
 import { preloadedAssetPrices } from 'src/stories/mocks/fixtures';
 import { render, screen } from 'src/test-utils.js';
 import { CurrencySymbol } from 'src/utils';
@@ -21,7 +21,7 @@ describe('CollateralUsageSection Component', () => {
         render(<Default />, { preloadedState: preloadedAssetPrices });
 
         expect(screen.getByText('Available to borrow')).toBeInTheDocument();
-        const available = await screen.findByText('164.83 EFIL');
+        const available = await screen.findByText('150.52 WFIL');
         expect(available).toBeInTheDocument();
     });
 
@@ -31,7 +31,7 @@ describe('CollateralUsageSection Component', () => {
         });
 
         expect(screen.getByText('Available to borrow')).toBeInTheDocument();
-        const available = await screen.findByText('989 USDC');
+        const available = await screen.findByText('903.15 USDC');
         expect(available).toBeInTheDocument();
     });
 

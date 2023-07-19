@@ -32,7 +32,7 @@ const emptyBook: CollateralBook = {
         [CurrencySymbol.USDC]: ZERO_BN,
     },
     nonCollateral: {
-        [CurrencySymbol.EFIL]: ZERO_BN,
+        [CurrencySymbol.WFIL]: ZERO_BN,
         [CurrencySymbol.WBTC]: ZERO_BN,
     },
     withdrawableCollateral: {
@@ -58,6 +58,7 @@ export const useCollateralBook = (account: string | null) => {
 
     const getCollateralBook = useCallback(async () => {
         if (!securedFinance || !account) {
+            setCollateralBook(emptyBook);
             return;
         }
 

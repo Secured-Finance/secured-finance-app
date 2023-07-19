@@ -1,5 +1,5 @@
 import { RESPONSIVE_PARAMETERS, VIEWPORTS } from '.storybook/constants';
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import { createColumnHelper } from '@tanstack/react-table';
 import { useState } from 'react';
 import { CoreTable } from './CoreTable';
@@ -64,9 +64,9 @@ export default {
             viewports: [VIEWPORTS.MOBILE, VIEWPORTS.TABLET],
         },
     },
-} as ComponentMeta<typeof CoreTable>;
+} as Meta<typeof CoreTable>;
 
-const Template: ComponentStory<typeof CoreTable> = args => (
+const Template: StoryFn<typeof CoreTable> = args => (
     <div className='text-white'>
         <CoreTable {...args} />
     </div>

@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import { currencyList, maturityOptions } from 'src/stories/mocks/fixtures';
 import { HorizontalAssetSelector } from './HorizontalAssetSelector';
 
@@ -19,9 +19,9 @@ export default {
         onAssetChange: () => {},
         onTermChange: () => {},
     },
-} as ComponentMeta<typeof HorizontalAssetSelector>;
+} as Meta<typeof HorizontalAssetSelector>;
 
-const Template: ComponentStory<typeof HorizontalAssetSelector> = args => (
+const Template: StoryFn<typeof HorizontalAssetSelector> = args => (
     <HorizontalAssetSelector {...args} />
 );
 

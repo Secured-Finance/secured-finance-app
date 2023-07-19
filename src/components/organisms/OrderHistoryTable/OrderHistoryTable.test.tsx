@@ -1,6 +1,7 @@
-import { composeStories } from '@storybook/testing-react';
+import { composeStories } from '@storybook/react';
 import { render, screen, fireEvent, waitFor, act } from 'src/test-utils.js';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
+import { fireEvent, render, screen } from 'src/test-utils.js';
 import * as stories from './OrderHistoryTable.stories';
 
 const { Default, WithPagination } = composeStories(stories);
@@ -8,10 +9,10 @@ const mock = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mock);
 
 describe('OrderHistoryTable Component', () => {
-    it('should render a TradeHistoryTable', () => {
+    it('should render a Order History Table', () => {
         render(<Default />);
         expect(screen.getAllByTestId('order-history-table-row')).toHaveLength(
-            9
+            11
         );
     });
 

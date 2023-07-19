@@ -1,5 +1,5 @@
 import * as analytics from '@amplitude/analytics-browser';
-import { composeStories } from '@storybook/testing-react';
+import { composeStories } from '@storybook/react';
 import { preloadedAssetPrices } from 'src/stories/mocks/fixtures';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';

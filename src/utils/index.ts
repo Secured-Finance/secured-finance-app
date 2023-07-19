@@ -12,3 +12,4 @@ export * from './portfolio';
 export * from './protocol';
 export * from './rate';
 export * from './strings';
+export * from './validation';

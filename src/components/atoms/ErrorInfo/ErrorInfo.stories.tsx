@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import { ErrorInfo } from './ErrorInfo';
 
 export default {
@@ -8,11 +8,9 @@ export default {
         errorMessage: 'This is an error',
         showError: true,
     },
-} as ComponentMeta<typeof ErrorInfo>;
+} as Meta<typeof ErrorInfo>;
 
-const Template: ComponentStory<typeof ErrorInfo> = args => (
-    <ErrorInfo {...args} />
-);
+const Template: StoryFn<typeof ErrorInfo> = args => <ErrorInfo {...args} />;
 
 export const Default = Template.bind({});
 
