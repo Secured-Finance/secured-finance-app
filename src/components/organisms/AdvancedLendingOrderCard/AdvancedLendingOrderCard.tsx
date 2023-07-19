@@ -31,17 +31,17 @@ import { RootState } from 'src/store/types';
 import { selectAllBalances } from 'src/store/wallet';
 import { OrderType } from 'src/types';
 import {
+    MAX_COVERAGE,
+    ZERO_BN,
     amountFormatterFromBase,
     amountFormatterToBase,
     computeAvailableToBorrow,
     divide,
     generateWalletSourceInformation,
     getAmountValidation,
-    MAX_COVERAGE,
     multiply,
     percentFormat,
     usdFormat,
-    ZERO_BN,
 } from 'src/utils';
 import { Amount, LoanValue } from 'src/utils/entities';
 import { useWallet } from 'use-wallet';
@@ -260,9 +260,9 @@ export const AdvancedLendingOrderCard = ({
                                 ? divide(unitPrice, 100)
                                 : undefined
                         }
-                        onValueChange={v => {
-                            dispatch(setUnitPrice(multiply(v as number, 100)));
-                        }}
+                        onValueChange={v =>
+                            dispatch(setUnitPrice(multiply(v as number, 100)))
+                        }
                         informationText='Input value greater than 0 and upto 100'
                         decimalPlacesAllowed={2}
                         maxLimit={100}

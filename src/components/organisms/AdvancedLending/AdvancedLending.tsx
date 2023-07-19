@@ -29,12 +29,12 @@ import {
 import { RootState } from 'src/store/types';
 import { MaturityOptionList, OrderType, TransactionList } from 'src/types';
 import {
-    currencyMap,
     CurrencySymbol,
+    Rate,
+    currencyMap,
     formatLoanValue,
     getCurrencyMapAsOptions,
     ordinaryFormat,
-    Rate,
     usdFormat,
 } from 'src/utils';
 import { LoanValue, Maturity } from 'src/utils/entities';
@@ -172,9 +172,13 @@ export const AdvancedLending = ({
     );
 
     useEffect(() => {
-        loanValue.price > 0 || orderType === OrderType.MARKET
-            ? dispatch(setUnitPrice(loanValue.price))
-            : dispatch(setUnitPrice(undefined));
+        dispatch(
+            setUnitPrice(
+                loanValue.price > 0 || orderType === OrderType.MARKET
+                    ? loanValue.price
+                    : undefined
+            )
+        );
     }, [dispatch, loanValue.price, orderType, currency, maturity]);
 
     return (
