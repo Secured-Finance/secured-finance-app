@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import { ExpandIndicator } from './ExpandIndicator';
 
 export default {
@@ -11,9 +11,9 @@ export default {
     argTypes: {
         variant: { control: 'select', options: ['solid', 'opaque'] },
     },
-} as ComponentMeta<typeof ExpandIndicator>;
+} as Meta<typeof ExpandIndicator>;
 
-const Template: ComponentStory<typeof ExpandIndicator> = args => (
+const Template: StoryFn<typeof ExpandIndicator> = args => (
     <ExpandIndicator {...args} />
 );
 

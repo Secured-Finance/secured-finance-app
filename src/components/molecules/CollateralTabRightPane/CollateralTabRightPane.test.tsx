@@ -1,4 +1,4 @@
-import { composeStories } from '@storybook/testing-react';
+import { composeStories } from '@storybook/react';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { render, screen } from 'src/test-utils.js';
 import * as stories from './CollateralTabRightPane.stories';
@@ -30,8 +30,8 @@ describe('CollateralTabRightPane component', () => {
         render(<Default />);
 
         expect(screen.getByText('Collateral Utilization')).toBeInTheDocument();
-        expect(screen.getByText('$989.00')).toBeInTheDocument();
-        expect(screen.getByText('of $1,840.00 available')).toBeInTheDocument();
+        expect(screen.getByText('$903.15')).toBeInTheDocument();
+        expect(screen.getByText('of $1,680.27 available')).toBeInTheDocument();
         expect(screen.getByText('37%')).toBeInTheDocument();
         expect(screen.getByText('Liquidation Risk')).toBeInTheDocument();
         expect(screen.getByText('Low')).toBeInTheDocument();

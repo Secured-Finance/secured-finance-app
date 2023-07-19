@@ -1,5 +1,5 @@
 import { OrderSide, WalletSource } from '@secured-finance/sf-client';
-import { composeStories } from '@storybook/testing-react';
+import { composeStories } from '@storybook/react';
 import { BigNumber } from 'ethers';
 import { dec22Fixture, preloadedAssetPrices } from 'src/stories/mocks/fixtures';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
@@ -46,9 +46,9 @@ describe('PlaceOrder component', () => {
         });
         expect(screen.getByText('100 USDC')).toBeInTheDocument();
         expect(screen.getByText('Borrow Remaining')).toBeInTheDocument();
-        expect(screen.getByText('$377.00')).toBeInTheDocument();
+        expect(screen.getByText('$291.15')).toBeInTheDocument();
         expect(screen.getByText('Bond Price')).toBeInTheDocument();
-        expect(screen.getByText('~ 94.1')).toBeInTheDocument();
+        expect(screen.getByText('~ 94.10')).toBeInTheDocument();
         expect(screen.getByText('APR')).toBeInTheDocument();
         expect(screen.getByText('~ 6.28%')).toBeInTheDocument();
     });
@@ -61,8 +61,8 @@ describe('PlaceOrder component', () => {
         });
         expect(screen.getByText('37%')).toBeInTheDocument();
         expect(screen.getByText('37%')).toHaveClass('text-progressBarStart');
-        expect(screen.getByText('63.61%')).toBeInTheDocument();
-        expect(screen.getByText('63.61%')).toHaveClass('text-progressBarEnd');
+        expect(screen.getByText('66.14%')).toBeInTheDocument();
+        expect(screen.getByText('66.14%')).toHaveClass('text-progressBarEnd');
     });
 
     it('should display the circuit breaker disclaimer', async () => {
@@ -92,7 +92,7 @@ describe('PlaceOrder component', () => {
         expect(screen.queryByText('Collateral Usage')).not.toBeInTheDocument();
 
         expect(screen.getByText('Bond Price')).toBeInTheDocument();
-        expect(screen.getByText('~ 94.1')).toBeInTheDocument();
+        expect(screen.getByText('~ 94.10')).toBeInTheDocument();
         expect(screen.getByText('APR')).toBeInTheDocument();
         expect(screen.getByText('~ 6.28%')).toBeInTheDocument();
     });

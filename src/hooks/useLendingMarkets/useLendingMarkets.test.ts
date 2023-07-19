@@ -26,19 +26,19 @@ describe('useLendingMarkets', () => {
         const { result, store } = renderHook(() => useLendingMarkets());
         const fetchLendingMarkets = result.current.fetchLendingMarkets;
         await fetchLendingMarkets(
-            CurrencySymbol.EFIL,
+            CurrencySymbol.WFIL,
             mock as unknown as SecuredFinanceClient
         );
         expect(
             Object.keys(
                 store.getState().availableContracts.lendingMarkets[
-                    CurrencySymbol.EFIL
+                    CurrencySymbol.WFIL
                 ]
             )
         ).toHaveLength(2);
         expect(
             store.getState().availableContracts.lendingMarkets[
-                CurrencySymbol.EFIL
+                CurrencySymbol.WFIL
             ]
         ).toEqual({
             1000: {
@@ -54,6 +54,8 @@ describe('useLendingMarkets', () => {
                 isMatured: false,
                 isPreOrderPeriod: false,
                 isItayosePeriod: false,
+                borrowUnitPrice: 9620,
+                lendUnitPrice: 9618,
             },
             2000: {
                 isActive: false,
@@ -68,6 +70,8 @@ describe('useLendingMarkets', () => {
                 isMatured: false,
                 isPreOrderPeriod: false,
                 isItayosePeriod: false,
+                borrowUnitPrice: 9610,
+                lendUnitPrice: 9608,
             },
         });
     });
@@ -82,19 +86,19 @@ describe('useLendingMarkets', () => {
         const { result, store } = renderHook(() => useLendingMarkets());
         const fetchLendingMarkets = result.current.fetchLendingMarkets;
         await fetchLendingMarkets(
-            CurrencySymbol.EFIL,
+            CurrencySymbol.WFIL,
             mock as unknown as SecuredFinanceClient
         );
         expect(
             Object.keys(
                 store.getState().availableContracts.lendingMarkets[
-                    CurrencySymbol.EFIL
+                    CurrencySymbol.WFIL
                 ]
             )
         ).toHaveLength(3);
         expect(
             store.getState().availableContracts.lendingMarkets[
-                CurrencySymbol.EFIL
+                CurrencySymbol.WFIL
             ][10000].name
         ).toEqual('ETH-1000-1');
     });

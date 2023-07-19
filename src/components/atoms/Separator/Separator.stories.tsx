@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import { Separator } from './Separator';
 
 export default {
@@ -21,11 +21,9 @@ export default {
             options: ['horizontal', 'vertical'],
         },
     },
-} as ComponentMeta<typeof Separator>;
+} as Meta<typeof Separator>;
 
-const Template: ComponentStory<typeof Separator> = args => (
-    <Separator {...args} />
-);
+const Template: StoryFn<typeof Separator> = args => <Separator {...args} />;
 
 export const Default = Template.bind({});
 export const Primary = Template.bind({});

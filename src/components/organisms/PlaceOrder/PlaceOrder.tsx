@@ -31,6 +31,7 @@ import {
     calculateFee,
     handleContractTransaction,
     ordinaryFormat,
+    prefixTilde,
 } from 'src/utils';
 import { Amount, LoanValue, Maturity } from 'src/utils/entities';
 
@@ -262,7 +263,6 @@ export const PlaceOrder = ({
                                     side={side}
                                     assetPrice={assetPrice}
                                     tradeValue={loanValue}
-                                    type='trade'
                                 />
                                 <SectionWithItems
                                     itemList={[
@@ -272,10 +272,12 @@ export const PlaceOrder = ({
                                         ],
                                         [
                                             feeItem(),
-                                            `~ ${calculateFee(
-                                                maturity.toNumber(),
-                                                orderFee
-                                            )}`,
+                                            prefixTilde(
+                                                calculateFee(
+                                                    maturity.toNumber(),
+                                                    orderFee
+                                                )
+                                            ),
                                         ],
                                     ]}
                                 />

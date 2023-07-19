@@ -1,4 +1,4 @@
-import { composeStories } from '@storybook/testing-react';
+import { composeStories } from '@storybook/react';
 import { render, screen, within } from 'src/test-utils.js';
 import * as stories from './AdvancedLendingTopBar.stories';
 
@@ -9,7 +9,7 @@ describe('AdvancedLendingTopBar Component', () => {
         render(<Default />);
 
         expect(
-            screen.getByRole('button', { name: 'EFIL' })
+            screen.getByRole('button', { name: 'WFIL' })
         ).toBeInTheDocument();
         expect(screen.getByText('Maturity Dec 1, 2022')).toBeInTheDocument();
 
@@ -36,7 +36,7 @@ describe('AdvancedLendingTopBar Component', () => {
         render(<Default />);
 
         expect(
-            screen.getByRole('button', { name: 'EFIL' })
+            screen.getByRole('button', { name: 'WFIL' })
         ).toBeInTheDocument();
         const source = screen.getByRole('link');
         expect(source).toBeInTheDocument();

@@ -2,7 +2,7 @@ import { BigNumber } from 'ethers';
 import { emptyBook, preloadedAssetPrices } from 'src/stories/mocks/fixtures';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { act, renderHook } from 'src/test-utils';
-import { amountFormatterFromBase, CurrencySymbol } from 'src/utils';
+import { CurrencySymbol, amountFormatterFromBase } from 'src/utils';
 import { CollateralBook, useCollateralBook } from './';
 
 const mock = mockUseSF();
@@ -30,10 +30,10 @@ describe('useCollateralBook hook', () => {
         );
         expect(colBook.collateral.USDC).toEqual(BigNumber.from('100000000'));
         expect(colBook.nonCollateral.WBTC).toEqual(BigNumber.from('20000000'));
-        expect(colBook.nonCollateral.EFIL).toEqual(
+        expect(colBook.nonCollateral.WFIL).toEqual(
             BigNumber.from('100000000000000000000')
         );
-        expect(colBook.coverage.toString()).toEqual('8000');
+        expect(colBook.coverage.toString()).toEqual('3700');
         expect(colBook.collateralThreshold).toEqual(80);
         expect(colBook.withdrawableCollateral).toEqual({
             [CurrencySymbol.USDC]: 1000000000000,
@@ -83,8 +83,8 @@ describe('useCollateralBook hook', () => {
                 colBook.nonCollateral.WBTC ?? BigNumber.from(0)
             ) *
                 WBTC_PRICE +
-                amountFormatterFromBase[CurrencySymbol.EFIL](
-                    colBook.nonCollateral.EFIL ?? BigNumber.from(0)
+                amountFormatterFromBase[CurrencySymbol.WFIL](
+                    colBook.nonCollateral.WFIL ?? BigNumber.from(0)
                 ) *
                     FIL_PRICE
         );

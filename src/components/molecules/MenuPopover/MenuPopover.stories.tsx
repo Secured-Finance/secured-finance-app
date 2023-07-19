@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import { within } from '@storybook/testing-library';
 import { MenuPopover } from './MenuPopover';
 
@@ -10,9 +10,9 @@ export default {
             disable: true,
         },
     },
-} as ComponentMeta<typeof MenuPopover>;
+} as Meta<typeof MenuPopover>;
 
-const Template: ComponentStory<typeof MenuPopover> = () => (
+const Template: StoryFn<typeof MenuPopover> = () => (
     <div>
         <MenuPopover />
     </div>

@@ -1,5 +1,5 @@
 import { OrderSide } from '@secured-finance/sf-client';
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import { BigNumber } from 'ethers';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
@@ -32,9 +32,9 @@ export default {
         loanValue: LoanValue.fromPrice(9800, dec22Fixture.toNumber()),
     },
     decorators: [withAssetPrice, withWalletProvider, withMaturities],
-} as ComponentMeta<typeof OrderAction>;
+} as Meta<typeof OrderAction>;
 
-const Template: ComponentStory<typeof OrderAction> = args => {
+const Template: StoryFn<typeof OrderAction> = args => {
     const dispatch = useDispatch();
     useEffect(() => {
         const timerId = setTimeout(() => {

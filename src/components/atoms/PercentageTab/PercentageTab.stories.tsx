@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import { PercentageTab } from '.';
 
 export default {
@@ -9,9 +9,9 @@ export default {
         active: true,
         onClick: () => {},
     },
-} as ComponentMeta<typeof PercentageTab>;
+} as Meta<typeof PercentageTab>;
 
-const Template: ComponentStory<typeof PercentageTab> = args => (
+const Template: StoryFn<typeof PercentageTab> = args => (
     <PercentageTab {...args} />
 );
 

@@ -17,7 +17,7 @@ export type AssetPriceMap = Record<CurrencySymbol, number>;
 export const getPriceMap = (state: RootState): AssetPriceMap => {
     return {
         [CurrencySymbol.ETH]: state.assetPrices.ETH.price,
-        [CurrencySymbol.EFIL]: state.assetPrices.EFIL.price,
+        [CurrencySymbol.WFIL]: state.assetPrices.WFIL.price,
         [CurrencySymbol.USDC]: state.assetPrices.USDC.price,
         [CurrencySymbol.WBTC]: state.assetPrices.WBTC.price,
     };
@@ -26,7 +26,7 @@ export const getPriceMap = (state: RootState): AssetPriceMap => {
 export const getPriceChangeMap = (state: RootState) => {
     return {
         [CurrencySymbol.ETH]: state.assetPrices.ETH.change,
-        [CurrencySymbol.EFIL]: state.assetPrices.EFIL.change,
+        [CurrencySymbol.WFIL]: state.assetPrices.WFIL.change,
         [CurrencySymbol.USDC]: state.assetPrices.USDC.change,
         [CurrencySymbol.WBTC]: state.assetPrices.WBTC.change,
     };

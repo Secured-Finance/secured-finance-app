@@ -1,5 +1,6 @@
-import { composeStories } from '@storybook/testing-react';
+import { composeStories } from '@storybook/react';
 import { act, fireEvent, render, waitFor, screen } from 'src/test-utils.js';
+
 import * as stories from './MyTransactionsTable.stories';
 
 const { Default, WithPagination } = composeStories(stories);

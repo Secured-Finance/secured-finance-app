@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import { withAssetPrice } from 'src/../.storybook/decorators';
 import { CurrencySymbol } from 'src/utils';
 import { CollateralInformation } from './CollateralInformation';
@@ -11,9 +11,9 @@ export default {
         quantity: 1.2,
     },
     decorators: [withAssetPrice],
-} as ComponentMeta<typeof CollateralInformation>;
+} as Meta<typeof CollateralInformation>;
 
-const Template: ComponentStory<typeof CollateralInformation> = args => {
+const Template: StoryFn<typeof CollateralInformation> = args => {
     return <CollateralInformation {...args} />;
 };
 

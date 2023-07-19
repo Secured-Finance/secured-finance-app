@@ -1,5 +1,5 @@
 import { StarIcon } from '@heroicons/react/24/solid';
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import { Button } from './';
 
 export default {
@@ -20,9 +20,9 @@ export default {
             disable: true,
         },
     },
-} as ComponentMeta<typeof Button>;
+} as Meta<typeof Button>;
 
-const Template: ComponentStory<typeof Button> = args => (
+const Template: StoryFn<typeof Button> = args => (
     <Button {...args}>{args.children}</Button>
 );
 

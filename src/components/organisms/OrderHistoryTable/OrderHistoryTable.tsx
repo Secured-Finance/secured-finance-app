@@ -20,7 +20,14 @@ export type Order = OrderList[0];
 const columnHelper = createColumnHelper<Order>();
 
 const getStatus = (status: string) => {
-    return status === 'PartiallyFilled' ? 'Partially Filled' : status;
+    switch (status) {
+        case 'PartiallyBlocked':
+            return 'Partially Blocked';
+        case 'PartiallyFilled':
+            return 'Partially Filled';
+        default:
+            return status;
+    }
 };
 
 export const OrderHistoryTable = ({
