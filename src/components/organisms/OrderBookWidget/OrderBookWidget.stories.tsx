@@ -114,7 +114,7 @@ export default {
     args: {
         buyOrders: borrowEntries.sort((a, b) => sortOrders(a, b, 'asc')),
         sellOrders: lendEntries.sort((a, b) => sortOrders(a, b, 'desc')),
-        currency: CurrencySymbol.EFIL,
+        currency: CurrencySymbol.WFIL,
     },
     parameters: {
         ...RESPONSIVE_PARAMETERS,
