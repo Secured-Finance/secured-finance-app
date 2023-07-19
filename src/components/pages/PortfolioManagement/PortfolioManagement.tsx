@@ -148,10 +148,8 @@ export const PortfolioManagement = () => {
 
     const myTransactionsDataCount: number =
         userTransactionHistory.data?.transactionCount &&
-        parseInt(userTransactionHistory.data?.transactionCount) > 0
-            ? parseInt(userTransactionHistory.data?.transactionCount) +
-              orderList.inactiveOrderList.length
-            : 0;
+        parseInt(userTransactionHistory.data?.transactionCount) +
+            orderList.inactiveOrderList.length;
 
     return (
         <Page title='Portfolio Management' name='portfolio-management'>
@@ -196,10 +194,9 @@ export const PortfolioManagement = () => {
                             <OrderHistoryTable
                                 data={sortedOrderHistory}
                                 pagination={{
-                                    totalData:
-                                        parseInt(
-                                            userOrderHistory.data?.orderCount
-                                        ) ?? 0,
+                                    totalData: parseInt(
+                                        userOrderHistory.data?.orderCount
+                                    ),
                                     getMoreData: () =>
                                         setOffsetOrders(
                                             offsetOrders + nextDataLoad
