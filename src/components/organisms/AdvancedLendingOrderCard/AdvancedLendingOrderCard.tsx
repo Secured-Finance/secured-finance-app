@@ -183,11 +183,6 @@ export const AdvancedLendingOrderCard = ({
         return unitPrice === 0 && orderType === OrderType.LIMIT;
     };
 
-    const fixedRate = LoanValue.fromPrice(
-        unitPrice ?? 0,
-        maturity
-    ).apr.toNormalizedNumber();
-
     return (
         <div className='h-fit rounded-b-xl border border-white-10 bg-cardBackground bg-opacity-60 pb-7'>
             <RadioGroup
@@ -261,7 +256,11 @@ export const AdvancedLendingOrderCard = ({
                                 : undefined
                         }
                         onValueChange={v =>
-                            dispatch(setUnitPrice(multiply(v as number, 100)))
+                            v !== undefined
+                                ? dispatch(
+                                      setUnitPrice(multiply(v as number, 100))
+                                  )
+                                : dispatch(setUnitPrice(undefined))
                         }
                         informationText='Input value greater than 0 and upto 100'
                         decimalPlacesAllowed={2}
@@ -274,9 +273,12 @@ export const AdvancedLendingOrderCard = ({
                     <div className='mx-10px'>
                         <OrderDisplayBox
                             field='Fixed Rate (APR)'
-                            value={
-                                !isNaN(fixedRate) ? percentFormat(fixedRate) : 0
-                            }
+                            value={percentFormat(
+                                LoanValue.fromPrice(
+                                    unitPrice ?? 0,
+                                    maturity
+                                ).apr.toNormalizedNumber()
+                            )}
                         />
                     </div>
                 </div>
