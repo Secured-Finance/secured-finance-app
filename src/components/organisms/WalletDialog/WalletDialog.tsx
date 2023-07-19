@@ -98,7 +98,10 @@ export const WalletDialog = () => {
             }
 
             if (!account) {
-                if ((await connector.getChainId()) !== getEthereumChainId()) {
+                if (
+                    provider === 'MetaMask' &&
+                    (await connector.getChainId()) !== getEthereumChainId()
+                ) {
                     await connector.switchChain?.(getEthereumChainId());
                 }
                 connect({ connector: connector });

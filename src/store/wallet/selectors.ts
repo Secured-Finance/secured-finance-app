@@ -2,10 +2,6 @@ import { currencyMap, CurrencySymbol } from 'src/utils';
 import { RootState } from '../types';
 import { WalletsStore } from './types';
 
-export const isEthereumWalletConnected = (state: RootState) => {
-    return !!state.wallet.address;
-};
-
 export const selectAllBalances = (state: RootState) => {
     return state.wallet.balances;
 };
