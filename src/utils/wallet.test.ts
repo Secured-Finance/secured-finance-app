@@ -14,15 +14,13 @@ describe('wallet', () => {
     describe('writeWalletInStore', () => {
         it('should write the wallet to localStorage', () => {
             writeWalletInStore(wallet);
-            expect(localStorage.getItem('CACHED_PROVIDER_KEY')).toEqual(
-                JSON.stringify(wallet)
-            );
+            expect(localStorage.getItem('CACHED_PROVIDER_KEY')).toEqual(wallet);
         });
     });
 
     describe('readWalletFromStore', () => {
         it('should read the wallet from localStorage', () => {
-            localStorage.setItem('CACHED_PROVIDER_KEY', JSON.stringify(wallet));
+            localStorage.setItem('CACHED_PROVIDER_KEY', wallet);
             expect(readWalletFromStore()).toEqual(wallet);
         });
 
@@ -33,7 +31,7 @@ describe('wallet', () => {
 
     describe('removeWalletFromStore', () => {
         it('should remove the wallet from localStorage', () => {
-            localStorage.setItem('CACHED_PROVIDER_KEY', JSON.stringify(wallet));
+            localStorage.setItem('CACHED_PROVIDER_KEY', wallet);
             removeWalletFromStore();
             expect(localStorage.getItem('CACHED_PROVIDER_KEY')).toBeNull();
         });

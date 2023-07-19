@@ -1,15 +1,10 @@
 import { formatDate } from '@secured-finance/sf-core';
 import { Option } from 'src/components/atoms';
-import { numberToHex } from 'viem';
 import { getEnvironment } from './env';
 export enum Environment {
     DEVELOPMENT = 'development',
     STAGING = 'staging',
 }
-
-export const decToHex = (key: number) => {
-    return numberToHex(key);
-};
 
 export const formatDataCy = (str: string): string => {
     return str.replace(/\s+/g, '-').toLowerCase();
