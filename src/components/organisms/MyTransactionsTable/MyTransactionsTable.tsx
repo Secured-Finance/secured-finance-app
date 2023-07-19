@@ -93,7 +93,7 @@ export const MyTransactionsTable = ({
                 data={data}
                 columns={isTablet ? columnsForTabletMobile : columns}
                 options={{
-                    name: 'active-trade-table',
+                    name: 'my-transactions-table',
                     border: false,
                     stickyColumns: new Set([0, 1]),
                     pagination: pagination,

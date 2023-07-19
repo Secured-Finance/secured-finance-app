@@ -1,7 +1,6 @@
 import { composeStories } from '@storybook/react';
 import { render, screen, fireEvent, waitFor, act } from 'src/test-utils.js';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
-import { fireEvent, render, screen } from 'src/test-utils.js';
 import * as stories from './OrderHistoryTable.stories';
 
 const { Default, WithPagination } = composeStories(stories);
@@ -30,16 +29,66 @@ describe('OrderHistoryTable Component', () => {
         );
     });
 
-    it('should load more data when scrolled if getMoreData function is available', async () => {
+    it('should load more data when scrolled if pagination is available', async () => {
         await waitFor(() => render(<WithPagination />));
-        expect(screen.getAllByText('1,000')).toHaveLength(20);
+        expect(screen.getAllByTestId('order-history-table-row')).toHaveLength(
+            20
+        );
         await act(async () => {
             fireEvent.scroll(window, { target: { scrollTop: 100 } });
         });
 
         await waitFor(() => {
             expect(screen.getByText('Loading...')).toBeInTheDocument();
-            expect(screen.getAllByText('1,000')).toHaveLength(40);
+            expect(
+                screen.getAllByTestId('order-history-table-row')
+            ).toHaveLength(40);
+        });
+    });
+
+    it('should not load more data when scrolled if pagination is not available', async () => {
+        await waitFor(() => render(<Default />));
+        expect(screen.getAllByTestId('order-history-table-row')).toHaveLength(
+            11
+        );
+        await act(async () => {
+            fireEvent.scroll(window, { target: { scrollTop: 100 } });
+        });
+
+        await waitFor(() => {
+            expect(screen.queryByText('Loading...')).not.toBeInTheDocument();
+            expect(
+                screen.queryAllByTestId('order-history-table-row')
+            ).toHaveLength(11);
+        });
+    });
+
+    it('should not load more data when scrolled if pagination is available but totalData is equal to length of data', async () => {
+        const getMoreData = jest.fn();
+        await waitFor(() =>
+            render(
+                <Default
+                    pagination={{
+                        totalData: 11,
+                        getMoreData: getMoreData,
+                        containerHeight: false,
+                    }}
+                />
+            )
+        );
+        expect(screen.getAllByTestId('order-history-table-row')).toHaveLength(
+            11
+        );
+        await act(async () => {
+            fireEvent.scroll(window, { target: { scrollTop: 100 } });
+        });
+
+        await waitFor(() => {
+            expect(screen.queryByText('Loading...')).not.toBeInTheDocument();
+            expect(getMoreData).not.toBeCalled();
+            expect(
+                screen.getAllByTestId('order-history-table-row')
+            ).toHaveLength(11);
         });
     });
 });

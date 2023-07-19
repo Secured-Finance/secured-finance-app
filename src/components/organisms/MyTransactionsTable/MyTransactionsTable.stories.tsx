@@ -2,7 +2,7 @@ import { RESPONSIVE_PARAMETERS, VIEWPORTS } from '.storybook/constants';
 import { useState } from 'react';
 import type { Meta, StoryFn } from '@storybook/react';
 import {
-    efilBytes32,
+    wfilBytes32,
     jun23Fixture,
     transactions,
 } from 'src/stories/mocks/fixtures';
@@ -28,7 +28,7 @@ const Template: StoryFn<typeof MyTransactionsTable> = args => (
 
 export const Default = Template.bind({});
 
-const PaginationTemplate: ComponentStory<typeof MyTransactionsTable> = args => {
+const PaginationTemplate: StoryFn<typeof MyTransactionsTable> = args => {
     const initialData = Array(20)
         .fill(null)
         .map(_ => ({
@@ -38,7 +38,7 @@ const PaginationTemplate: ComponentStory<typeof MyTransactionsTable> = args => {
             orderPrice: '9800',
             createdAt: '1671859344',
             forwardValue: '1020000000000000000000',
-            currency: efilBytes32,
+            currency: wfilBytes32,
             maturity: jun23Fixture.toString(),
         }));
     const [data, setData] = useState(initialData);
@@ -60,7 +60,7 @@ const PaginationTemplate: ComponentStory<typeof MyTransactionsTable> = args => {
                                 orderPrice: '9800',
                                 createdAt: '1671859344',
                                 forwardValue: '1020000000000000000000',
-                                currency: efilBytes32,
+                                currency: wfilBytes32,
                                 maturity: jun23Fixture.toString(),
                             }));
 
