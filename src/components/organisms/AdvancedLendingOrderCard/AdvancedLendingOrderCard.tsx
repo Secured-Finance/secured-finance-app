@@ -287,7 +287,7 @@ export const AdvancedLendingOrderCard = ({
                     asset={currency}
                     initialValue={orderAmount?.value}
                     onValueChange={v =>
-                        v && handleInputChange(BigNumber.from(v))
+                        handleInputChange(BigNumber.from(v ?? 0))
                     }
                 />
                 <div className='mx-10px flex flex-col gap-6'>
