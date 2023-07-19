@@ -7,7 +7,7 @@ const initialAssetPrice = { price: 0, change: 0 };
 
 const initialStore: AssetPrices = {
     [CurrencySymbol.ETH]: initialAssetPrice,
-    [CurrencySymbol.EFIL]: initialAssetPrice,
+    [CurrencySymbol.WFIL]: initialAssetPrice,
     [CurrencySymbol.USDC]: initialAssetPrice,
     [CurrencySymbol.WBTC]: initialAssetPrice,
     isLoading: false,
@@ -46,7 +46,7 @@ const assetPricesSlice = createSlice({
 
                 const {
                     ethereum: { usd: ethPrice, usd_24h_change: ethChange },
-                    filecoin: { usd: efilPrice, usd_24h_change: efilChange },
+                    filecoin: { usd: wfilPrice, usd_24h_change: wfilChange },
                     'usd-coin': { usd: usdcPrice, usd_24h_change: usdcChange },
                     'wrapped-bitcoin': {
                         usd: wbtcPrice,
@@ -55,8 +55,8 @@ const assetPricesSlice = createSlice({
                 } = action.payload;
                 state.ETH.price = ethPrice;
                 state.ETH.change = ethChange;
-                state.EFIL.price = efilPrice;
-                state.EFIL.change = efilChange;
+                state.WFIL.price = wfilPrice;
+                state.WFIL.change = wfilChange;
                 state.USDC.price = usdcPrice;
                 state.USDC.change = usdcChange;
                 state.WBTC.price = wbtcPrice;

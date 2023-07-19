@@ -6,7 +6,7 @@ export default {
     title: 'Atoms/CurveHeaderAsset',
     component: CurveHeaderAsset,
     args: {
-        ccy: CurrencySymbol.EFIL,
+        ccy: CurrencySymbol.WFIL,
         value: 8.02,
         fluctuation: -2.45,
     },

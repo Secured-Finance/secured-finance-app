@@ -9,7 +9,7 @@ export default {
     args: {
         title: 'Yield Curve Title',
         curves: {
-            EFIL: [
+            WFIL: [
                 new Rate(9486),
                 new Rate(8484),
                 new Rate(7478),

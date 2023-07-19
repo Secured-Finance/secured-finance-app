@@ -6,7 +6,7 @@ export default {
     component: CurveHeaderTotal,
     args: {
         header: 'Total Borrow (Asset)',
-        footer: '80,000,009 FIL',
+        footer: '80,000,009 WFIL',
     },
 } as Meta<typeof CurveHeaderTotal>;
 
