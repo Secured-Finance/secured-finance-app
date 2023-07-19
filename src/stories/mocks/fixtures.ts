@@ -1,8 +1,8 @@
 import { WalletSource } from '@secured-finance/sf-client';
 import { fromBytes32 } from '@secured-finance/sf-graph-client';
 import { BigNumber, utils } from 'ethers';
-import EfilIcon from 'src/assets/coins/efil.svg';
 import EthIcon from 'src/assets/coins/eth2.svg';
+import WfilIcon from 'src/assets/coins/fil.svg';
 import UsdcIcon from 'src/assets/coins/usdc.svg';
 import UsdtIcon from 'src/assets/coins/usdt.svg';
 import WrappedBitcoinIcon from 'src/assets/coins/wbtc.svg';
@@ -24,7 +24,7 @@ import { Maturity } from 'src/utils/entities';
 
 export const preloadedAssetPrices: { assetPrices: AssetPrices } = {
     assetPrices: {
-        EFIL: {
+        WFIL: {
             price: 6.0,
             change: -8.208519783216566,
         },
@@ -45,7 +45,7 @@ export const preloadedAssetPrices: { assetPrices: AssetPrices } = {
 };
 
 export const assetPriceMap = {
-    EFIL: 6.0,
+    WFIL: 6.0,
     ETH: 2000.34,
     USDC: 1.0,
     WBTC: 50000.0,
@@ -54,7 +54,7 @@ export const assetPriceMap = {
 export const preloadedBalances = {
     wallet: {
         balances: {
-            EFIL: 1000,
+            WFIL: 1000,
             ETH: 10,
             USDC: 100000,
             WBTC: 50,
@@ -223,7 +223,7 @@ export const maturities = {
 export const preloadedLendingMarkets: Partial<RootState> = {
     availableContracts: {
         lendingMarkets: {
-            [CurrencySymbol.EFIL]: maturities,
+            [CurrencySymbol.WFIL]: maturities,
             [CurrencySymbol.WBTC]: maturities,
             [CurrencySymbol.USDC]: maturities,
             [CurrencySymbol.ETH]: maturities,
@@ -269,9 +269,9 @@ export const assetList = [
         value: 'ETH',
     },
     {
-        label: 'EFIL',
-        iconSVG: EfilIcon,
-        value: 'EFIL',
+        label: 'WFIL',
+        iconSVG: WfilIcon,
+        value: 'WFIL',
     },
     {
         label: 'USDC',
@@ -297,9 +297,9 @@ export const currencyList = [
         value: CurrencySymbol.ETH,
     },
     {
-        label: 'EFIL',
-        iconSVG: EfilIcon,
-        value: CurrencySymbol.EFIL,
+        label: 'WFIL',
+        iconSVG: WfilIcon,
+        value: CurrencySymbol.WFIL,
     },
     {
         label: 'USDC',
@@ -319,7 +319,7 @@ export const yieldCurveRates = [
     new Rate(47746),
 ];
 
-export const efilBytes32 = utils.formatBytes32String('EFIL'); //0x46494c0000000000000000000000000000000000000000000000000000000000
+export const wfilBytes32 = utils.formatBytes32String('WFIL'); //0x5746494c0000000000000000000000000000000000000000000000000000000000
 export const ethBytes32 = utils.formatBytes32String('ETH');
 export const wbtcBytes32 = utils.formatBytes32String('WBTC'); //0x4546494c00000000000000000000000000000000000000000000000000000000
 export const usdcBytes32 = utils.formatBytes32String('USDC'); // '0x5553444300000000000000000000000000000000000000000000000000000000'
@@ -327,7 +327,7 @@ export const usdcBytes32 = utils.formatBytes32String('USDC'); // '0x555344430000
 export const activeOrders: Order[] = [
     {
         orderId: BigNumber.from('1'),
-        currency: efilBytes32,
+        currency: wfilBytes32,
         side: 1,
         maturity: dec23Fixture.toString(),
         unitPrice: BigNumber.from('9800'),
@@ -336,7 +336,7 @@ export const activeOrders: Order[] = [
     },
     {
         orderId: BigNumber.from('2'),
-        currency: efilBytes32,
+        currency: wfilBytes32,
         side: 1,
         maturity: mar23Fixture.toString(),
         unitPrice: BigNumber.from('9600'),
@@ -345,7 +345,7 @@ export const activeOrders: Order[] = [
     },
     {
         orderId: BigNumber.from('3'),
-        currency: efilBytes32,
+        currency: wfilBytes32,
         side: 0,
         maturity: dec22Fixture.toString(),
         unitPrice: BigNumber.from('9800'),
@@ -375,7 +375,7 @@ export const activeOrders: Order[] = [
 export const orderHistoryList: OrderList = [
     {
         orderId: 1,
-        currency: efilBytes32,
+        currency: wfilBytes32,
         side: 1,
         maturity: BigNumber.from(dec22Fixture.toString()),
         unitPrice: BigNumber.from('9800'),
@@ -391,7 +391,7 @@ export const orderHistoryList: OrderList = [
     },
     {
         orderId: 2,
-        currency: efilBytes32,
+        currency: wfilBytes32,
         side: 1,
         maturity: BigNumber.from(dec22Fixture.toString()),
         unitPrice: BigNumber.from('9600'),
@@ -439,7 +439,7 @@ export const orderHistoryList: OrderList = [
     },
     {
         orderId: 1,
-        currency: efilBytes32,
+        currency: wfilBytes32,
         side: 1,
         maturity: BigNumber.from(sep22Fixture.toString()),
         unitPrice: BigNumber.from('9800'),
@@ -503,7 +503,7 @@ export const orderHistoryList: OrderList = [
     },
     {
         orderId: 3,
-        currency: efilBytes32,
+        currency: wfilBytes32,
         side: 1,
         maturity: BigNumber.from(sep22Fixture.toString()),
         unitPrice: BigNumber.from('9800'),
@@ -519,7 +519,7 @@ export const orderHistoryList: OrderList = [
     },
     {
         orderId: 3,
-        currency: efilBytes32,
+        currency: wfilBytes32,
         side: 1,
         maturity: BigNumber.from(dec22Fixture.toString()),
         unitPrice: BigNumber.from('9600'),
@@ -535,7 +535,7 @@ export const orderHistoryList: OrderList = [
     },
     {
         orderId: 5,
-        currency: efilBytes32,
+        currency: wfilBytes32,
         side: 1,
         maturity: BigNumber.from(dec22Fixture.toString()),
         unitPrice: BigNumber.from('9800'),
@@ -559,7 +559,7 @@ export const transactions: TradeHistory = [
         orderPrice: '9800',
         createdAt: '1671859344',
         forwardValue: '1020000000000000000000',
-        currency: efilBytes32,
+        currency: wfilBytes32,
         maturity: jun23Fixture.toString(),
     },
     {
@@ -569,7 +569,7 @@ export const transactions: TradeHistory = [
         orderPrice: '9543',
         createdAt: '1671080520',
         forwardValue: '520000000000000000000',
-        currency: efilBytes32,
+        currency: wfilBytes32,
         maturity: jun23Fixture.toString(),
     },
     {
@@ -579,7 +579,7 @@ export const transactions: TradeHistory = [
         orderPrice: '9543',
         createdAt: '1671080520',
         forwardValue: '520000000000000000000',
-        currency: efilBytes32,
+        currency: wfilBytes32,
         maturity: mar23Fixture.toString(),
     },
     {
@@ -607,14 +607,14 @@ export const transactions: TradeHistory = [
 export const positions: Position[] = [
     {
         amount: BigNumber.from('400000000000000000000'),
-        currency: efilBytes32,
+        currency: wfilBytes32,
         forwardValue: BigNumber.from('500000000000000000000'),
         maturity: jun23Fixture.toString(),
         midPrice: BigNumber.from(8000),
     },
     {
         amount: BigNumber.from('-500000000000000000000'),
-        currency: efilBytes32,
+        currency: wfilBytes32,
         forwardValue: BigNumber.from('-1000000000000000000000'),
         maturity: mar23Fixture.toString(),
         midPrice: BigNumber.from(5000),
@@ -641,7 +641,7 @@ export const collateralBook80: CollateralBook = {
         USDC: BigNumber.from('100000000'),
     },
     nonCollateral: {
-        EFIL: BigNumber.from('100000000000000000000'),
+        WFIL: BigNumber.from('100000000000000000000'),
         WBTC: BigNumber.from('20000000'),
     },
     usdCollateral: 2100.34,
@@ -661,7 +661,7 @@ export const collateralBook37: CollateralBook = {
         USDC: BigNumber.from('100000000'),
     },
     nonCollateral: {
-        EFIL: BigNumber.from('100000000000000000000'),
+        WFIL: BigNumber.from('100000000000000000000'),
         WBTC: BigNumber.from('20000000'),
     },
     usdCollateral: 2100.34,
@@ -681,7 +681,7 @@ export const emptyCollateralBook: CollateralBook = {
         USDC: BigNumber.from('0'),
     },
     nonCollateral: {
-        EFIL: BigNumber.from('0'),
+        WFIL: BigNumber.from('0'),
         WBTC: BigNumber.from('0'),
     },
     usdCollateral: 0,
@@ -701,7 +701,7 @@ export const emptyUSDCollateral: CollateralBook = {
         USDC: BigNumber.from('0'),
     },
     nonCollateral: {
-        EFIL: BigNumber.from('100000000000000000000'),
+        WFIL: BigNumber.from('100000000000000000000'),
         WBTC: BigNumber.from('20000000'),
     },
     usdCollateral: 0,
@@ -721,7 +721,7 @@ export const emptyBook: CollateralBook = {
         USDC: BigNumber.from('0'),
     },
     nonCollateral: {
-        EFIL: BigNumber.from('0'),
+        WFIL: BigNumber.from('0'),
         WBTC: BigNumber.from('0'),
     },
     usdCollateral: 0,
@@ -738,7 +738,7 @@ export const emptyBook: CollateralBook = {
 function generateDailyVolumes(days: number) {
     const volumes: DailyVolumes = [];
     for (let i = 0; i < days; i++) {
-        for (const currency of [efilBytes32, wbtcBytes32, ethBytes32]) {
+        for (const currency of [wfilBytes32, wbtcBytes32, ethBytes32]) {
             for (const maturity of [
                 dec22Fixture,
                 mar23Fixture,
@@ -748,7 +748,7 @@ function generateDailyVolumes(days: number) {
             ])
                 volumes.push({
                     id: `${fromBytes32(currency)}-1677628800-2023-02-${i}`,
-                    currency: efilBytes32,
+                    currency: wfilBytes32,
                     maturity: dec22Fixture,
                     day: `2023-02-${i}`,
                     timestamp: maturity.toString(),
@@ -761,13 +761,13 @@ function generateDailyVolumes(days: number) {
 
 export const dailyVolumes: DailyVolumes = generateDailyVolumes(365 * 4);
 
-export const tradesEFIL: TransactionList = [
+export const tradesWFIL: TransactionList = [
     {
         amount: 100000000000,
         maturity: dec22Fixture,
         side: 0,
         createdAt: 1638356100,
-        currency: efilBytes32,
+        currency: wfilBytes32,
         averagePrice: 0.8,
     },
     {
@@ -775,7 +775,7 @@ export const tradesEFIL: TransactionList = [
         maturity: dec22Fixture,
         side: 1,
         createdAt: 1638355100,
-        currency: efilBytes32,
+        currency: wfilBytes32,
         averagePrice: 0.9,
     },
 ];

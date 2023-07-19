@@ -14,7 +14,7 @@ import UsdcIcon from 'src/assets/coins/usdc.svg';
 import { Option } from 'src/components/atoms';
 import { SvgIcon } from 'src/types';
 import { hexToString } from 'viem';
-import { EFIL } from './currencies/filecoin';
+import { WFIL } from './currencies/filecoin';
 import { USDC } from './currencies/usdc';
 import { WBTC } from './currencies/wbtc';
 
@@ -26,7 +26,7 @@ const ETH = Ether.onChain(
 
 export enum CurrencySymbol {
     ETH = 'ETH',
-    EFIL = 'EFIL',
+    WFIL = 'WFIL',
     USDC = 'USDC',
     WBTC = 'WBTC',
 }
@@ -34,11 +34,11 @@ export enum CurrencySymbol {
 export const currencyMap: Readonly<
     Record<CurrencySymbol, Readonly<CurrencyInfo>>
 > = {
-    [CurrencySymbol.EFIL]: {
+    [CurrencySymbol.WFIL]: {
         index: 0,
         icon: FilIcon,
-        symbol: CurrencySymbol.EFIL,
-        name: EFIL.onChain().name,
+        symbol: CurrencySymbol.WFIL,
+        name: WFIL.onChain().name,
         coinGeckoId: 'filecoin',
         isCollateral: false,
         toBaseUnit: (amount: number) => {
@@ -46,8 +46,8 @@ export const currencyMap: Readonly<
             return BigNumber.from(filAmount.toAttoFil());
         },
         fromBaseUnit: (amount: BigNumber) =>
-            convertFromBlockchainUnit(amount, EFIL.onChain()),
-        toCurrency: () => EFIL.onChain(),
+            convertFromBlockchainUnit(amount, WFIL.onChain()),
+        toCurrency: () => WFIL.onChain(),
         chartColor: tailwindConfig.theme.colors.chart.fil,
         pillColor: tailwindConfig.theme.colors.pill.fil,
         roundingDecimal: 0,
@@ -159,8 +159,8 @@ export function toCurrencySymbol(ccy: string) {
     switch (ccy) {
         case CurrencySymbol.ETH:
             return CurrencySymbol.ETH;
-        case CurrencySymbol.EFIL:
-            return CurrencySymbol.EFIL;
+        case CurrencySymbol.WFIL:
+            return CurrencySymbol.WFIL;
         case CurrencySymbol.USDC:
             return CurrencySymbol.USDC;
         case CurrencySymbol.WBTC:
