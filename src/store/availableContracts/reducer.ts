@@ -20,8 +20,10 @@ const emptyContract: { 0: LendingMarket } = {
         isMatured: false,
         isPreOrderPeriod: false,
         isItayosePeriod: false,
-        borrowUnitPrice: 0,
-        lendUnitPrice: 0,
+        bestBorrowUnitPrice: 0,
+        bestLendUnitPrice: 0,
+        minBorrowUnitPrice: 0,
+        maxLendUnitPrice: 0,
     },
 };
 const initialState: AvailableContracts = {
