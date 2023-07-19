@@ -47,27 +47,25 @@ export const CoreTable = <T,>({
         ...options,
     };
     const [hasMoreData, setHasMoreData] = useState(
-        !!coreTableOptions.pagination
+        !!coreTableOptions.pagination?.totalData &&
+            coreTableOptions.pagination?.totalData > 0
     );
 
     useEffect(() => {
+        setHasMoreData(
+            !!coreTableOptions.pagination?.totalData &&
+                coreTableOptions.pagination?.totalData > 0
+        );
+    }, [coreTableOptions.pagination?.totalData]);
+
+    useEffect(() => {
         if (
-            coreTableOptions.pagination &&
-            data.length >= coreTableOptions.pagination.totalData &&
-            coreTableOptions.pagination.totalData > 0
+            coreTableOptions.pagination?.totalData &&
+            data.length >= coreTableOptions.pagination.totalData
         ) {
             setHasMoreData(false);
-        } else {
-            setHasMoreData(
-                !!coreTableOptions.pagination &&
-                    coreTableOptions.pagination.totalData > 0
-            );
         }
-    }, [
-        coreTableOptions.pagination,
-        coreTableOptions.pagination?.totalData,
-        data,
-    ]);
+    }, [coreTableOptions.pagination?.totalData, data]);
 
     const filteredColumns = columns.filter(column => {
         if (

@@ -6,7 +6,6 @@ import {
     dailyVolumes,
     dec22Fixture,
     efilBytes32,
-    jun23Fixture,
     mar23Fixture,
     orderHistoryList,
     tradesUSDC,
@@ -27,7 +26,7 @@ const generateMyTransactions = (amount: string) => {
             createdAt: '1671080520',
             forwardValue: '520000000000000000000',
             currency: efilBytes32,
-            maturity: jun23Fixture.toString(),
+            maturity: mar23Fixture.toString(),
         });
     }
     return myTransactions;
