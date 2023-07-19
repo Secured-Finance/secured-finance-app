@@ -23,10 +23,10 @@ export const useLoanValues = (
                 let price = 0;
                 switch (type) {
                     case RateType.Borrow:
-                        price = o.borrowUnitPrice;
+                        price = o.bestBorrowUnitPrice;
                         break;
                     case RateType.Lend:
-                        price = o.lendUnitPrice;
+                        price = o.bestLendUnitPrice;
                         break;
                     case RateType.MidRate:
                         price = o.midUnitPrice;

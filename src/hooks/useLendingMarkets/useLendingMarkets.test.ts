@@ -54,8 +54,10 @@ describe('useLendingMarkets', () => {
                 isMatured: false,
                 isPreOrderPeriod: false,
                 isItayosePeriod: false,
-                borrowUnitPrice: 9620,
-                lendUnitPrice: 9618,
+                bestBorrowUnitPrice: 9620,
+                bestLendUnitPrice: 9618,
+                minBorrowUnitPrice: 9602,
+                maxLendUnitPrice: 9636,
             },
             2000: {
                 isActive: false,
@@ -70,15 +72,17 @@ describe('useLendingMarkets', () => {
                 isMatured: false,
                 isPreOrderPeriod: false,
                 isItayosePeriod: false,
-                borrowUnitPrice: 9610,
-                lendUnitPrice: 9608,
+                bestBorrowUnitPrice: 9610,
+                bestLendUnitPrice: 9608,
+                minBorrowUnitPrice: 9592,
+                maxLendUnitPrice: 9626,
             },
         });
     });
 
     it('should increment the name of the contract if it already exists', async () => {
-        const lendingMarkets = await mock.getLendingMarkets();
-        mock.getLendingMarkets.mockResolvedValueOnce([
+        const lendingMarkets = await mock.getLendingMarketDetailsPerCurrency();
+        mock.getLendingMarketDetailsPerCurrency.mockResolvedValueOnce([
             ...lendingMarkets,
             { ...lendingMarkets[0], maturity: new Maturity(10000) },
         ]);

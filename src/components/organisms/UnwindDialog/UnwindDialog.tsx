@@ -141,8 +141,8 @@ export const UnwindDialog = ({
 
         const unitPrice =
             side === OrderSide.BORROW
-                ? market.borrowUnitPrice
-                : market.lendUnitPrice;
+                ? market.bestBorrowUnitPrice
+                : market.bestLendUnitPrice;
 
         return LoanValue.fromPrice(unitPrice, maturity.toNumber());
     }, [market, maturity, side]);
