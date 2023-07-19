@@ -24,11 +24,17 @@ export const useEthereumWalletStore = (
 ) => {
     const dispatch = useDispatch();
     const { address, isConnected } = useAccount();
-    const { data: ethBalance } = useBalance({ address });
+    const { data: ethBalance } = useBalance({
+        address,
+        watch: true,
+    });
     const { price, change } = useSelector((state: RootState) =>
         getAsset(CurrencySymbol.ETH)(state)
     );
     const wallet = useSelector((state: RootState) => state.wallet);
+    const block = useSelector(
+        (state: RootState) => state.blockchain.latestBlock
+    );
     const { getERC20Balance } = useERC20Balance(securedFinance);
 
     const getWalletBalance = useCallback(async () => {
@@ -74,7 +80,16 @@ export const useEthereumWalletStore = (
         } else {
             dispatch(resetEthWallet());
         }
-    }, [address, dispatch, fetchWalletStore, isConnected, price, change]);
+    }, [
+        address,
+        dispatch,
+        fetchWalletStore,
+        isConnected,
+        price,
+        change,
+        ethBalance,
+        block,
+    ]);
 
     return wallet;
 };
