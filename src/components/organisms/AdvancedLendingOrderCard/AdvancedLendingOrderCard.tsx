@@ -262,7 +262,7 @@ export const AdvancedLendingOrderCard = ({
                                   )
                                 : dispatch(setUnitPrice(undefined))
                         }
-                        informationText='Input value greater than 0 and upto 100'
+                        informationText='Input value greater than or equal to 0.01 and up to and including 100.'
                         decimalPlacesAllowed={2}
                         maxLimit={100}
                     />
