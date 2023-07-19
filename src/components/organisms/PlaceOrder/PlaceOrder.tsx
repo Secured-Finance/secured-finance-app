@@ -25,11 +25,11 @@ import { setLastMessage } from 'src/store/lastError';
 import { OrderType, PlaceOrderFunction } from 'src/types';
 import {
     AddressUtils,
-    calculateFee,
     CurrencySymbol,
-    handleContractTransaction,
     OrderEvents,
     OrderProperties,
+    calculateFee,
+    handleContractTransaction,
     ordinaryFormat,
     prefixTilde,
 } from 'src/utils';

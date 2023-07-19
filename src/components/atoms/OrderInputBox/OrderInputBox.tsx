@@ -47,9 +47,7 @@ export const OrderInputBox = ({
             ) {
                 format = amountFormatterToBase[asset];
             }
-            asset && amount !== undefined
-                ? onValueChange(format(amount))
-                : onValueChange(amount);
+            asset ? onValueChange(format(amount ?? 0)) : onValueChange(amount);
         },
         []
     );

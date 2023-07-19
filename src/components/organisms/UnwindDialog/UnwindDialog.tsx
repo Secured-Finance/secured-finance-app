@@ -30,8 +30,8 @@ import { setLastMessage } from 'src/store/lastError';
 import { RootState } from 'src/store/types';
 import {
     AddressUtils,
-    calculateFee,
     CurrencySymbol,
+    calculateFee,
     handleContractTransaction,
     prefixTilde,
 } from 'src/utils';
