@@ -20,7 +20,7 @@ export default {
         maturity: dec22Fixture,
         amount: new Amount(
             BigNumber.from('100000000000000000000'),
-            CurrencySymbol.EFIL
+            CurrencySymbol.WFIL
         ),
         side: OrderSide.BORROW,
     },

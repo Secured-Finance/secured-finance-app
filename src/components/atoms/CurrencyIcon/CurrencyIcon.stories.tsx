@@ -5,7 +5,7 @@ import { CurrencyIcon } from './CurrencyIcon';
 export default {
     title: 'Atoms/CurrencyIcon',
     component: CurrencyIcon,
-    args: { ccy: CurrencySymbol.EFIL },
+    args: { ccy: CurrencySymbol.WFIL },
     argTypes: {
         ccy: {
             control: {

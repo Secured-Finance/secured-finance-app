@@ -46,7 +46,7 @@ describe('Landing Component', () => {
             preloadedState: {
                 ...preloadedState,
                 landingOrderForm: {
-                    currency: CurrencySymbol.EFIL,
+                    currency: CurrencySymbol.WFIL,
                     maturity: 1669852800,
                     side: OrderSide.BORROW,
                     amount: '500000000',
@@ -175,7 +175,7 @@ describe('Landing Component', () => {
                 preloadedState: {
                     ...preloadedState,
                     landingOrderForm: {
-                        currency: CurrencySymbol.EFIL,
+                        currency: CurrencySymbol.WFIL,
                         maturity: 0,
                         side: OrderSide.BORROW,
                         amount: '0',

@@ -26,7 +26,7 @@ describe('currencies.generateWalletInformation', () => {
             walletSource: WalletSource.METAMASK,
             data: [
                 {
-                    asset: CurrencySymbol.EFIL,
+                    asset: CurrencySymbol.WFIL,
                     quantity: 0,
                 },
                 {
