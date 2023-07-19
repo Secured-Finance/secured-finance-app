@@ -25,5 +25,4 @@ afterAll(() => {
 
 afterEach(() => {
     cleanup();
-    global.gc && global.gc();
 });
