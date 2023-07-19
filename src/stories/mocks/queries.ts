@@ -5,7 +5,6 @@ import { Maturity } from 'src/utils/entities';
 import {
     dailyVolumes,
     dec22Fixture,
-    efilBytes32,
     mar23Fixture,
     orderHistoryList,
     tradesUSDC,
@@ -25,7 +24,7 @@ const generateMyTransactions = (amount: string) => {
             orderPrice: '9543',
             createdAt: '1671080520',
             forwardValue: '520000000000000000000',
-            currency: efilBytes32,
+            currency: wfilBytes32,
             maturity: mar23Fixture.toString(),
         });
     }
@@ -37,7 +36,7 @@ const generateMyOrderHistory = (amount: string) =>
         .fill(null)
         .map((_, index) => ({
             orderId: index,
-            currency: efilBytes32,
+            currency: wfilBytes32,
             side: 1,
             maturity: BigNumber.from(dec22Fixture.toString()),
             unitPrice: BigNumber.from('9800'),

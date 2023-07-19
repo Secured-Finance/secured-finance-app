@@ -42,8 +42,7 @@ enum TableType {
     MY_TRANSACTIONS,
 }
 
-const initialLoad = 20;
-const nextDataLoad = 20;
+const offset = 20;
 
 export const PortfolioManagement = () => {
     const { account } = useWallet();
@@ -56,7 +55,7 @@ export const PortfolioManagement = () => {
         {
             address: account?.toLowerCase() ?? '',
             skip: offsetOrders,
-            first: initialLoad,
+            first: offset,
         },
         queries.UserOrderHistoryDocument,
         'user',
@@ -66,7 +65,7 @@ export const PortfolioManagement = () => {
         {
             address: account?.toLowerCase() ?? '',
             skip: offsetTransactions,
-            first: initialLoad,
+            first: offset,
         },
         queries.UserTransactionHistoryDocument,
         'user',
@@ -198,9 +197,7 @@ export const PortfolioManagement = () => {
                                         userOrderHistory.data?.orderCount
                                     ),
                                     getMoreData: () =>
-                                        setOffsetOrders(
-                                            offsetOrders + nextDataLoad
-                                        ),
+                                        setOffsetOrders(offsetOrders + offset),
                                     containerHeight: true,
                                 }}
                             />
@@ -210,7 +207,7 @@ export const PortfolioManagement = () => {
                                     totalData: myTransactionsDataCount,
                                     getMoreData: () =>
                                         setOffsetTransactions(
-                                            offsetTransactions + nextDataLoad
+                                            offsetTransactions + offset
                                         ),
                                     containerHeight: true,
                                 }}

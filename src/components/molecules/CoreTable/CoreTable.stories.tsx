@@ -72,7 +72,7 @@ const Template: StoryFn<typeof CoreTable> = args => (
     </div>
 );
 
-const PaginationTemplate: ComponentStory<typeof CoreTable> = args => {
+const PaginationTemplate: StoryFn<typeof CoreTable> = args => {
     const [data, setData] = useState(args.data);
 
     return (

@@ -237,7 +237,7 @@ const PaginatedScrolling = ({
         next={fetchMoreData}
         hasMore={hasMoreData}
         loader={<h4>Loading...</h4>}
-        height={containerHeight ? 300 : undefined}
+        height={containerHeight ? 300 : undefined} // This is required for tables who do not have pagination. This also allows us to scroll the table easily in tests.
     >
         {children}
     </InfiniteScroll>
