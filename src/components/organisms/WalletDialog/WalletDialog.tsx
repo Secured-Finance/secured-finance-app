@@ -19,7 +19,6 @@ import {
     InterfaceEvents,
     InterfaceProperties,
     WalletConnectionResult,
-    decToHex,
     getEthereumChainId,
     writeWalletInStore,
 } from 'src/utils';
@@ -93,30 +92,15 @@ export const WalletDialog = () => {
                 connect => connect.name === provider
             );
 
-            const injected = window.ethereum;
-            if (injected && injected.request) {
-                try {
-                    await injected?.request({
-                        method: 'wallet_switchEthereumChain',
-                        params: [
-                            {
-                                chainId: decToHex(getEthereumChainId()),
-                            },
-                        ],
-                    });
-                } catch (e) {
-                    if (e instanceof Error) {
-                        setErrorMessage(e.message);
-                    }
-                }
-            }
-
             if (!connector) {
                 setErrorMessage('Provider not found.');
                 return;
             }
 
             if (!account) {
+                if ((await connector.getChainId()) !== getEthereumChainId()) {
+                    await connector.switchChain?.(getEthereumChainId());
+                }
                 connect({ connector: connector });
                 writeWalletInStore(provider);
             }
@@ -126,11 +110,15 @@ export const WalletDialog = () => {
 
     const connectWallet = useCallback(
         async (address: string | undefined) => {
-            const provider =
-                wallet === 'Metamask' ? 'MetaMask' : 'WalletConnect';
-            await handleConnect(provider, address);
+            try {
+                const provider =
+                    wallet === 'Metamask' ? 'MetaMask' : 'WalletConnect';
+                await handleConnect(provider, address);
+            } catch (e) {
+                reset();
+            }
         },
-        [handleConnect, wallet]
+        [handleConnect, reset, wallet]
     );
 
     const dialogText = () => {
@@ -168,10 +156,12 @@ export const WalletDialog = () => {
             title={dialogText().title}
             description={dialogText().description}
             callToAction={dialogText().buttonText}
-            onClick={() => {
-                if (!isConnected && !isLoading && !isError)
-                    connectWallet(address);
-                else handleClose();
+            onClick={async () => {
+                if (!isConnected && !isLoading && !isError) {
+                    await connectWallet(address);
+                } else {
+                    handleClose();
+                }
             }}
         >
             <>
