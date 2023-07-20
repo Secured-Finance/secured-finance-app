@@ -23,14 +23,14 @@ describe('The Home Page', () => {
         cy.get('[data-testid="lending-page"]').should('be.visible');
     });
 
-    it('display one wallet provider when clicking unlocking wallet', () => {
+    it('display two wallet provider when clicking unlocking wallet', () => {
         cy.get('[data-cy="wallet"]').click();
         cy.get('[data-cy="modal"]').should('be.visible');
         cy.get('[data-cy="radio-group"]').should('be.visible');
 
         cy.get('[data-cy="radio-group"]')
             .children()
-            .should('have.length', 1)
+            .should('have.length', 2)
             .and(radioList => {
                 chai.expect(
                     radioList.get(0).textContent,
