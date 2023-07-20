@@ -18,15 +18,14 @@ import {
 import { Dialog, SuccessPanel } from 'src/components/molecules';
 import { ConnectWalletCard, MyWalletCard } from 'src/components/organisms';
 import { Page, Tooltip, TwoColumns } from 'src/components/templates';
+import { useEtherscanUrl, useHandleContractTransaction } from 'src/hooks';
 import useSF from 'src/hooks/useSecuredFinance';
-import { useEtherscanUrl } from 'src/hooks';
 import {
     AddressUtils,
     CurrencySymbol,
     WalletSource,
     getCurrencyMapAsList,
     getCurrencyMapAsOptions,
-    handleContractTransaction,
     toCurrency,
 } from 'src/utils';
 import { useWallet } from 'use-wallet';
@@ -85,6 +84,7 @@ const MenuAddToken = ({
 };
 export const Faucet = () => {
     const etherscanUrl = useEtherscanUrl();
+    const handleContractTransaction = useHandleContractTransaction();
     const { account, ethereum } = useWallet();
     const sf = useSF();
 
@@ -134,7 +134,7 @@ export const Faucet = () => {
             }
         }
         setIsPending(false);
-    }, [account, token, sf]);
+    }, [account, sf, token, handleContractTransaction]);
 
     const addToMetamask = useCallback(
         async (token: Token | null) => {

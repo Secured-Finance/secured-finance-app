@@ -9,8 +9,8 @@ import {
     SuccessPanel,
 } from 'src/components/molecules';
 import { CollateralInput } from 'src/components/organisms';
+import { useEtherscanUrl, useHandleContractTransaction } from 'src/hooks';
 import { useDepositCollateral } from 'src/hooks/useDepositCollateral';
-import { useEtherscanUrl } from 'src/hooks';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { RootState } from 'src/store/types';
 import {
@@ -21,7 +21,6 @@ import {
     ZERO_BN,
     amountFormatterFromBase,
     amountFormatterToBase,
-    handleContractTransaction,
 } from 'src/utils';
 import { trackCollateralEvent } from 'src/utils/events';
 
@@ -116,6 +115,7 @@ export const DepositCollateral = ({
         asset,
         collateral ?? ZERO_BN
     );
+    const handleContractTransaction = useHandleContractTransaction();
 
     const handleClose = useCallback(() => {
         dispatch({ type: 'default' });
@@ -167,7 +167,13 @@ export const DepositCollateral = ({
 
             dispatch({ type: 'error' });
         }
-    }, [asset, collateral, onDepositCollateral, source]);
+    }, [
+        asset,
+        collateral,
+        handleContractTransaction,
+        onDepositCollateral,
+        source,
+    ]);
 
     const onClick = useCallback(
         async (currentStep: Step) => {

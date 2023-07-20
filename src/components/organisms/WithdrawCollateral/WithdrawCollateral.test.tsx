@@ -77,6 +77,20 @@ describe('WithdrawCollateral component', () => {
         );
     });
 
+    it('should update the lastActionTimestamp in the store when the transaction receipt is received', async () => {
+        mockSecuredFinance.withdrawCollateral.mockResolvedValue({
+            wait: jest.fn(() => Promise.resolve({ blockNumber: 123 })),
+        });
+        const { store } = render(<Default />, { preloadedState });
+        fireEvent.click(screen.getByTestId('collateral-selector-button'));
+        fireEvent.click(screen.getByTestId('option-2'));
+        fireEvent.click(screen.getByTestId(75));
+        fireEvent.click(screen.getByTestId('dialog-action-button'));
+        expect(store.getState().blockchain.lastActionTimestamp).toBe(0);
+        expect(await screen.findByText('Success!')).toBeInTheDocument();
+        expect(store.getState().blockchain.lastActionTimestamp).toBeTruthy();
+    });
+
     it('should proceed to failure screen and call onclose when block number is undefined', async () => {
         mockSecuredFinance.withdrawCollateral.mockResolvedValue({
             wait: jest.fn(() => Promise.resolve({ blockNumber: undefined })),
