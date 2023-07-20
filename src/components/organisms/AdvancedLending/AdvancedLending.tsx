@@ -113,7 +113,7 @@ export const AdvancedLending = ({
             selectMarket(currency, maturity)(state)?.openingUnitPrice
     );
 
-    const orderBook = useOrderbook(currency, selectedTerm.value, 10);
+    const orderBook = useOrderbook(currency, maturity, 10);
     const orderList = useOrderList(account);
 
     const transactionHistory = useGraphClientHook(

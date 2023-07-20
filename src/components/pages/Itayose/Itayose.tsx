@@ -127,7 +127,7 @@ export const Itayose = () => {
         return assetList.find(option => option.value === currency);
     }, [currency, assetList]);
 
-    const orderBook = useOrderbook(currency, selectedTerm.value);
+    const orderBook = useOrderbook(currency, maturity);
     const orderList = useOrderList(account);
     const collateralBook = useCollateralBook(account);
 
