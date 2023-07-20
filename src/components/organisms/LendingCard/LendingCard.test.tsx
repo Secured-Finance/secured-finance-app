@@ -159,7 +159,7 @@ describe('LendingCard Component', () => {
     it('should render a disabled button if amount is undefined or zero', async () => {
         await waitFor(() => render(<Default />, { preloadedState }));
         const input = screen.getByRole('textbox');
-        expect(input).toHaveValue('');
+        expect(input).toHaveValue('0');
         expect(screen.getByTestId('place-order-button')).toBeDisabled();
         await waitFor(() => {
             fireEvent.change(input, { target: { value: '10' } });

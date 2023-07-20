@@ -124,6 +124,37 @@ export const LendingCard = ({
         selectedWalletSource.source,
     ]);
 
+    const handleCurrencyChange = (v: CurrencySymbol) => {
+        let formatFrom = (x: BigNumber) => x.toNumber();
+        if (amountFormatterFromBase && amountFormatterFromBase[currency]) {
+            formatFrom = amountFormatterFromBase[currency];
+        }
+        let formatTo = (x: number) => BigNumber.from(x);
+        if (amountFormatterToBase && amountFormatterToBase[v]) {
+            formatTo = amountFormatterToBase[v];
+        }
+        dispatch(setAmount(formatTo(formatFrom(amount))));
+        dispatch(setCurrency(v));
+    };
+
+    const handleWalletSourceChange = (source: WalletSource) => {
+        dispatch(setSourceAccount(source));
+        const available =
+            source === WalletSource.METAMASK
+                ? balanceRecord[currency]
+                : amountFormatterFromBase[currency](
+                      collateralBook.nonCollateral[currency] ||
+                          collateralBook.withdrawableCollateral[currency] ||
+                          BigNumber.from(0)
+                  );
+        const inputAmount = amount.gt(
+            amountFormatterToBase[currency](available)
+        )
+            ? amountFormatterToBase[currency](available)
+            : amount;
+        dispatch(setAmount(inputAmount));
+    };
+
     return (
         <div className='w-80 flex-col space-y-6 rounded-b-xl border border-panelStroke bg-transparent pb-6 shadow-deep'>
             <BorrowLendSelector
@@ -155,10 +186,9 @@ export const LendingCard = ({
                         transformLabel={(v: string) => shortNames[v]}
                         priceList={assetPriceMap}
                         onAmountChange={v => dispatch(setAmount(v))}
+                        initialValue={amountFormatterFromBase[currency](amount)}
                         amountFormatterMap={amountFormatterToBase}
-                        onAssetChange={(v: CurrencySymbol) => {
-                            dispatch(setCurrency(v));
-                        }}
+                        onAssetChange={handleCurrencyChange}
                     />
                     {side === OrderSide.LEND && (
                         <ErrorInfo
@@ -195,7 +225,7 @@ export const LendingCard = ({
                         optionList={walletSourceList}
                         selected={selectedWalletSource}
                         account={account ?? ''}
-                        onChange={v => dispatch(setSourceAccount(v))}
+                        onChange={handleWalletSourceChange}
                     />
                 )}
 
