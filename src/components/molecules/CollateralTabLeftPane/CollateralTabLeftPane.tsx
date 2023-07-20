@@ -1,5 +1,6 @@
 import classNames from 'classnames';
 import { BigNumber } from 'ethers';
+import { useMemo } from 'react';
 import {
     AssetInformation,
     Button,
@@ -13,10 +14,9 @@ import {
     getCurrencyMapAsList,
     usdFormat,
 } from 'src/utils';
-import { useMemo } from 'react';
 
 interface CollateralTabLeftPaneProps {
-    account: string | null;
+    account: string | undefined;
     onClick: (step: 'deposit' | 'withdraw') => void;
     collateralBook: CollateralBook;
 }

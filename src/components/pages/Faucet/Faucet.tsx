@@ -18,8 +18,8 @@ import {
 import { Dialog, SuccessPanel } from 'src/components/molecules';
 import { ConnectWalletCard, MyWalletCard } from 'src/components/organisms';
 import { Page, Tooltip, TwoColumns } from 'src/components/templates';
-import useSF from 'src/hooks/useSecuredFinance';
 import { useEtherscanUrl } from 'src/hooks';
+import useSF from 'src/hooks/useSecuredFinance';
 import {
     AddressUtils,
     CurrencySymbol,
@@ -29,7 +29,7 @@ import {
     handleContractTransaction,
     toCurrency,
 } from 'src/utils';
-import { useWallet } from 'use-wallet';
+import { useAccount, useWalletClient } from 'wagmi';
 
 const MenuAddToken = ({
     address,
@@ -85,7 +85,8 @@ const MenuAddToken = ({
 };
 export const Faucet = () => {
     const etherscanUrl = useEtherscanUrl();
-    const { account, ethereum } = useWallet();
+    const { address: account } = useAccount();
+    const { data: client } = useWalletClient();
     const sf = useSF();
 
     const assetList = useMemo(
@@ -138,20 +139,17 @@ export const Faucet = () => {
 
     const addToMetamask = useCallback(
         async (token: Token | null) => {
-            if (!account || !token) return;
-            await ethereum.request({
-                method: 'wallet_watchAsset',
-                params: {
-                    type: 'ERC20',
-                    options: {
-                        address: token.address,
-                        symbol: token.symbol,
-                        decimals: token.decimals,
-                    },
+            if (!client || !token) return;
+            client.watchAsset({
+                type: 'ERC20',
+                options: {
+                    address: token.address,
+                    symbol: token.symbol,
+                    decimals: token.decimals,
                 },
             });
         },
-        [account, ethereum]
+        [client]
     );
 
     useEffect(() => {
@@ -220,8 +218,17 @@ export const Faucet = () => {
                                                         onClick={() =>
                                                             addToMetamask(token)
                                                         }
+                                                        disabled={!client}
                                                     >
-                                                        <WalletIcon className='h-5 w-5 text-slateGray hover:text-planetaryPurple' />
+                                                        <WalletIcon
+                                                            className={classNames(
+                                                                'h-5 w-5 text-slateGray ',
+                                                                {
+                                                                    'hover:text-planetaryPurple':
+                                                                        client,
+                                                                }
+                                                            )}
+                                                        />
                                                     </button>
                                                 }
                                             >
