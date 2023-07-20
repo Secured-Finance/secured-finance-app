@@ -12,26 +12,33 @@ import {
     zeroBalances,
 } from 'src/store/wallet';
 import {
-    amountFormatterFromBase,
     CurrencySymbol,
+    amountFormatterFromBase,
     getCurrencyMapAsList,
 } from 'src/utils';
-import { useWallet } from 'use-wallet';
+import { useAccount, useBalance } from 'wagmi';
 import { useERC20Balance } from './useERC20Balance';
 
 export const useEthereumWalletStore = (
     securedFinance: SecuredFinanceClient | undefined
 ) => {
     const dispatch = useDispatch();
-    const { account, balance: ethBalance, status } = useWallet();
+    const { address, isConnected } = useAccount();
+    const { data: ethBalance } = useBalance({
+        address,
+        watch: true,
+    });
     const { price, change } = useSelector((state: RootState) =>
         getAsset(CurrencySymbol.ETH)(state)
     );
     const wallet = useSelector((state: RootState) => state.wallet);
+    const block = useSelector(
+        (state: RootState) => state.blockchain.latestBlock
+    );
     const { getERC20Balance } = useERC20Balance(securedFinance);
 
     const getWalletBalance = useCallback(async () => {
-        if (!account) return zeroBalances;
+        if (!address) return zeroBalances;
 
         const result: Record<string, number> = {};
 
@@ -41,19 +48,19 @@ export const useEthereumWalletStore = (
                     currency.symbol
                 ](
                     await getERC20Balance(
-                        account,
+                        address,
                         currency.toCurrency() as Token
                     )
                 );
             } else {
                 result[currency.symbol] = amountFormatterFromBase[
                     currency.symbol
-                ](BigNumber.from(ethBalance));
+                ](BigNumber.from(ethBalance?.value ?? 0));
             }
         }
 
         return result as Record<CurrencySymbol, number>;
-    }, [account, getERC20Balance, ethBalance]);
+    }, [address, getERC20Balance, ethBalance]);
 
     const fetchWalletStore = useCallback(
         async (account: string) => {
@@ -67,30 +74,22 @@ export const useEthereumWalletStore = (
         [getWalletBalance, dispatch]
     );
 
-    const connectWallet = useCallback(
-        (account: string) => {
-            dispatch(connectEthWallet(account));
-        },
-        [dispatch]
-    );
-
     useEffect(() => {
-        if (status === 'connected' && account) {
-            connectWallet(account);
-        }
-    }, [status, connectWallet, account]);
-
-    useEffect(() => {
-        if (account) {
-            fetchWalletStore(account);
-        }
-    }, [account, ethBalance, change, fetchWalletStore, price]);
-
-    useEffect(() => {
-        if (account === null) {
+        if (isConnected && address) {
+            fetchWalletStore(address);
+        } else {
             dispatch(resetEthWallet());
         }
-    }, [account, dispatch]);
+    }, [
+        address,
+        dispatch,
+        fetchWalletStore,
+        isConnected,
+        price,
+        change,
+        ethBalance,
+        block,
+    ]);
 
     return wallet;
 };

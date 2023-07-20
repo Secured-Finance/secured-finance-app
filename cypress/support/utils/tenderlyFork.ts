@@ -1,8 +1,6 @@
 import { JsonRpcProvider } from '@ethersproject/providers';
 import axios from 'axios';
 import { CustomizedBridge } from '../../../src/stories/mocks/customBridge';
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const request = require('request');
 
 const TENDERLY_KEY = Cypress.env('TENDERLY_KEY');
 const TENDERLY_ACCOUNT = Cypress.env('TENDERLY_ACCOUNT');
@@ -65,22 +63,6 @@ export class TenderlyFork {
     getRpcUrl() {
         if (!this.forkId) throw new Error('Fork not initialized!');
         return `https://rpc.tenderly.co/fork/${this.forkId}`;
-    }
-
-    async addBalanceRpc(address: string) {
-        if (!this.forkId) throw new Error('Fork not initialized!');
-        const options = {
-            url: this.getRpcUrl(),
-            method: 'post',
-            headers: { 'content-type': 'text/plain' },
-            body: JSON.stringify({
-                jsonrpc: '2.0',
-                method: 'tenderly_setBalance',
-                params: [address, '0x21e19e0c9bab2400000'],
-                id: '1234',
-            }),
-        };
-        request(options);
     }
 
     async deleteFork() {

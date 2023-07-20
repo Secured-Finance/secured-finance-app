@@ -1,6 +1,6 @@
 import { reset, track } from '@amplitude/analytics-browser';
 import { SecuredFinanceClient } from '@secured-finance/sf-client';
-import { Signer, getDefaultProvider, providers } from 'ethers';
+import { Signer, providers } from 'ethers';
 import React, { createContext, useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useLendingMarkets } from 'src/hooks';
@@ -9,13 +9,25 @@ import { updateChainError, updateLatestBlock } from 'src/store/blockchain';
 import {
     getCurrencyMapAsList,
     getEthereumChainId,
-    getRpcEndpoint,
-    hexToDec,
+    readWalletFromStore,
 } from 'src/utils';
 import { InterfaceEvents, associateWallet } from 'src/utils/events';
-import { useWallet } from 'use-wallet';
+import { hexToNumber } from 'viem';
+import {
+    useAccount,
+    useConnect,
+    usePublicClient,
+    useWalletClient,
+} from 'wagmi';
 
 export const CACHED_PROVIDER_KEY = 'CACHED_PROVIDER_KEY';
+
+declare global {
+    interface Window {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        ethereum: any;
+    }
+}
 
 export interface SFContext {
     securedFinance?: SecuredFinanceClient;
@@ -25,17 +37,14 @@ export const Context = createContext<SFContext>({
     securedFinance: undefined,
 });
 
-declare global {
-    interface Window {
-        securedFinanceSDK: SecuredFinanceClient;
-    }
-}
-
 const SecuredFinanceProvider: React.FC = ({ children }) => {
     const [web3Provider, setWeb3Provider] =
         useState<providers.BaseProvider | null>(null);
-    const { error, status, connect, account, ethereum, isConnected } =
-        useWallet();
+    const { address, isConnected } = useAccount();
+    const { connect, connectors } = useConnect();
+    const { data: client } = useWalletClient();
+    const publicClient = usePublicClient();
+
     const [securedFinance, setSecuredFinance] =
         useState<SecuredFinanceClient>();
     const dispatch = useDispatch();
@@ -53,16 +62,14 @@ const SecuredFinanceProvider: React.FC = ({ children }) => {
     }, []);
 
     const dispatchChainError = useCallback(
-        (chainId: string) => {
-            dispatch(
-                updateChainError(hexToDec(chainId) !== getEthereumChainId())
-            );
+        (chainId: number) => {
+            dispatch(updateChainError(chainId !== getEthereumChainId()));
         },
         [dispatch]
     );
 
     const handleChainChanged = useCallback(
-        (chainId: string) => {
+        (chainId: number) => {
             dispatchChainError(chainId);
         },
         [dispatchChainError]
@@ -75,15 +82,11 @@ const SecuredFinanceProvider: React.FC = ({ children }) => {
                 const chainId = await window.ethereum.request({
                     method: 'eth_chainId',
                 });
-                dispatchChainError(chainId);
+                dispatchChainError(hexToNumber(chainId));
             }
         };
         fetchChainId();
-        window.ethereum?.on('chainChanged', handleChainChanged);
-        return () => {
-            window.ethereum?.removeListener('chainChanged', handleChainChanged);
-        };
-    }, [dispatchChainError, handleChainChanged]);
+    }, [client, dispatchChainError]);
 
     useEffect(() => {
         const connectSFClient = async (
@@ -110,48 +113,49 @@ const SecuredFinanceProvider: React.FC = ({ children }) => {
 
                 return previous;
             });
-            window.securedFinanceSDK = securedFinanceLib;
         };
-        if (ethereum) {
-            const chainId = Number(ethereum.chainId);
-            const provider = window.localStorage.getItem('FORK')
-                ? ethereum?.provider
-                : new providers.Web3Provider(ethereum, chainId);
+        if (isConnected && client?.chain && client?.transport) {
+            const provider = new providers.Web3Provider(
+                client?.transport,
+                client?.chain.id
+            );
             const signer = provider.getSigner();
             connectSFClient(provider, signer);
-            ethereum.on('accountsChanged', handleAccountChanged);
-
-            return () => {
-                if (ethereum.removeListener) {
-                    ethereum.removeListener(
-                        'accountsChanged',
-                        handleAccountChanged
-                    );
-                }
-            };
-        } else if (!isConnected()) {
-            const provider = getDefaultProvider(getRpcEndpoint());
+        } else if (
+            !isConnected &&
+            publicClient?.transport &&
+            publicClient?.chain
+        ) {
+            const provider = new providers.Web3Provider(
+                publicClient?.transport,
+                publicClient?.chain.id
+            );
             connectSFClient(provider);
         }
-    }, [ethereum, isConnected, dispatch, handleAccountChanged]);
+    }, [
+        dispatch,
+        handleAccountChanged,
+        client?.transport,
+        client,
+        isConnected,
+        publicClient?.transport,
+        publicClient?.chain,
+    ]);
 
     useEffect(() => {
-        if (status === 'error') {
-            console.error(error);
-        }
-    }, [status, error]);
-
-    useEffect(() => {
-        if (account) {
-            associateWallet(account, false);
+        if (address) {
+            associateWallet(address, false);
             return;
         }
 
-        const cachedProvider = localStorage.getItem(CACHED_PROVIDER_KEY);
-        if (cachedProvider !== null) {
-            connect('injected');
+        const cachedProvider = readWalletFromStore();
+        if (cachedProvider && cachedProvider === 'MetaMask') {
+            const connector = connectors.find(
+                connector => connector.name === cachedProvider
+            );
+            if (connector) connect({ connector: connector });
         }
-    }, [connect, account]);
+    }, [connect, address, connectors]);
 
     useEffect(() => {
         if (!web3Provider) return;
@@ -163,10 +167,23 @@ const SecuredFinanceProvider: React.FC = ({ children }) => {
                 }
             }
         });
+
+        web3Provider.on('accountsChanged', handleAccountChanged);
+        web3Provider.on('chainChanged', handleChainChanged);
+
         return () => {
-            web3Provider?.removeAllListeners('block');
+            web3Provider.removeAllListeners('accountsChanged');
+            web3Provider.removeAllListeners('chainChanged');
+            web3Provider.removeAllListeners('block');
         };
-    }, [dispatch, fetchLendingMarkets, securedFinance, web3Provider]);
+    }, [
+        dispatch,
+        fetchLendingMarkets,
+        handleAccountChanged,
+        handleChainChanged,
+        securedFinance,
+        web3Provider,
+    ]);
 
     return (
         <Context.Provider value={{ securedFinance }}>

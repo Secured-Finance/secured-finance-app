@@ -7,7 +7,7 @@ export const useERC20Balance = (
     securedFinance: SecuredFinanceClient | undefined
 ) => {
     const getERC20Balance = useCallback(
-        async (account: string | null, token: Token) => {
+        async (account: string | undefined, token: Token) => {
             let balance = BigNumber.from(0);
             try {
                 if (!securedFinance || !account) return balance;

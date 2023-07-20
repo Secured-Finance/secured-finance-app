@@ -51,7 +51,6 @@ export const RESPONSIVE_PARAMETERS = {
     viewport: {
         disable: false,
         viewports: { ...customViewports, ...INITIAL_VIEWPORTS },
-        defaultViewport: 'responsive',
     },
     chromatic: CHROMATIC_VIEWPORTS,
 };

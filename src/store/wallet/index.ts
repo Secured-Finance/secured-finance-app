@@ -1,6 +1,5 @@
 import walletSlice from './reducer';
 export {
-    isEthereumWalletConnected,
     selectAllBalances,
     selectCollateralCurrencyBalance,
 } from './selectors';
