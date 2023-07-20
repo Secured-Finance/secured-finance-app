@@ -1,5 +1,5 @@
 import { RESPONSIVE_PARAMETERS, VIEWPORTS } from '.storybook/constants';
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import { within } from '@storybook/testing-library';
 import { HamburgerMenu } from './HamburgerMenu';
 
@@ -33,9 +33,9 @@ export default {
             delay: 1000,
         },
     },
-} as ComponentMeta<typeof HamburgerMenu>;
+} as Meta<typeof HamburgerMenu>;
 
-const Template: ComponentStory<typeof HamburgerMenu> = args => (
+const Template: StoryFn<typeof HamburgerMenu> = args => (
     <HamburgerMenu {...args} />
 );
 

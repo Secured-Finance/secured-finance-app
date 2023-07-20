@@ -1,6 +1,6 @@
 import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
 
-import { composeStories } from '@storybook/testing-react';
+import { composeStories } from '@storybook/react';
 import * as stories from './MenuPopover.stories';
 
 const { Default } = composeStories(stories);

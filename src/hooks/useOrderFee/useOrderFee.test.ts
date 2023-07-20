@@ -10,7 +10,7 @@ jest.mock('src/hooks/useSecuredFinance', () => () => mock);
 describe('useOrderFee hook', () => {
     it('should return the order fee for a currency', async () => {
         const { result, waitForNextUpdate } = renderHook(() =>
-            useOrderFee(CurrencySymbol.EFIL)
+            useOrderFee(CurrencySymbol.WFIL)
         );
         await act(async () => {
             await waitForNextUpdate();
@@ -22,7 +22,7 @@ describe('useOrderFee hook', () => {
     it('should divide by 100 the returned value', async () => {
         mock.getOrderFeeRate.mockResolvedValueOnce(BigNumber.from(50));
         const { result, waitForNextUpdate } = renderHook(() =>
-            useOrderFee(CurrencySymbol.EFIL)
+            useOrderFee(CurrencySymbol.WFIL)
         );
         await act(async () => {
             await waitForNextUpdate();

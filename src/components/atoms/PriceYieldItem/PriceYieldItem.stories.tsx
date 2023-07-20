@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import { dec22Fixture } from 'src/stories/mocks/fixtures';
 import { LoanValue } from 'src/utils/entities';
 import { PriceYieldItem } from './PriceYieldItem';
@@ -18,9 +18,9 @@ export default {
             },
         },
     },
-} as ComponentMeta<typeof PriceYieldItem>;
+} as Meta<typeof PriceYieldItem>;
 
-const Template: ComponentStory<typeof PriceYieldItem> = args => (
+const Template: StoryFn<typeof PriceYieldItem> = args => (
     <PriceYieldItem {...args} />
 );
 

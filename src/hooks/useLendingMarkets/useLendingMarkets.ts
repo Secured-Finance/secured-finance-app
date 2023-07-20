@@ -20,8 +20,10 @@ export type LendingMarket = {
     isMatured: boolean;
     isPreOrderPeriod: boolean;
     isItayosePeriod: boolean;
-    borrowUnitPrice: number;
-    lendUnitPrice: number;
+    bestBorrowUnitPrice: number;
+    bestLendUnitPrice: number;
+    minBorrowUnitPrice: number;
+    maxLendUnitPrice: number;
 };
 export type ContractMap = Record<number, LendingMarket>;
 
@@ -35,9 +37,10 @@ export const useLendingMarkets = () => {
         ) => {
             const names: string[] = [];
             try {
-                const lendingMarkets = await securedFinance?.getLendingMarkets(
-                    toCurrency(ccy)
-                );
+                const lendingMarkets =
+                    await securedFinance?.getLendingMarketDetailsPerCurrency(
+                        toCurrency(ccy)
+                    );
 
                 if (lendingMarkets && lendingMarkets.length !== 0) {
                     dispatch(
@@ -56,8 +59,10 @@ export const useLendingMarkets = () => {
                                         isMatured,
                                         isPreOrderPeriod,
                                         isItayosePeriod,
-                                        borrowUnitPrice,
-                                        lendUnitPrice,
+                                        bestBorrowUnitPrice,
+                                        bestLendUnitPrice,
+                                        minBorrowUnitPrice,
+                                        maxLendUnitPrice,
                                     }
                                 ) => {
                                     if (names.includes(name)) {
@@ -93,10 +98,14 @@ export const useLendingMarkets = () => {
                                             isMatured,
                                             isPreOrderPeriod,
                                             isItayosePeriod,
-                                            borrowUnitPrice:
-                                                lendUnitPrice.toNumber(),
-                                            lendUnitPrice:
-                                                borrowUnitPrice.toNumber(),
+                                            bestBorrowUnitPrice:
+                                                bestBorrowUnitPrice.toNumber(),
+                                            bestLendUnitPrice:
+                                                bestLendUnitPrice.toNumber(),
+                                            minBorrowUnitPrice:
+                                                minBorrowUnitPrice.toNumber(),
+                                            maxLendUnitPrice:
+                                                maxLendUnitPrice.toNumber(),
                                         },
                                     };
                                 },

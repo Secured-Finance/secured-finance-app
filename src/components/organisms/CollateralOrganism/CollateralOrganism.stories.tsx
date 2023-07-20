@@ -1,7 +1,7 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import { withWalletProvider } from 'src/../.storybook/decorators';
-import { CollateralOrganism } from './CollateralOrganism';
 import { collateralBook37 } from 'src/stories/mocks/fixtures';
+import { CollateralOrganism } from './CollateralOrganism';
 
 export default {
     title: 'Organism/CollateralOrganism',
@@ -10,9 +10,9 @@ export default {
         collateralBook: collateralBook37,
     },
     decorators: [withWalletProvider],
-} as ComponentMeta<typeof CollateralOrganism>;
+} as Meta<typeof CollateralOrganism>;
 
-const Template: ComponentStory<typeof CollateralOrganism> = args => (
+const Template: StoryFn<typeof CollateralOrganism> = args => (
     <CollateralOrganism {...args} />
 );
 

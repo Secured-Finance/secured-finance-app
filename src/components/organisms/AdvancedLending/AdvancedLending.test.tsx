@@ -1,4 +1,4 @@
-import { composeStories } from '@storybook/testing-react';
+import { composeStories } from '@storybook/react';
 import { emptyTransaction } from 'src/stories/mocks/queries';
 import { fireEvent, render, screen, waitFor, within } from 'src/test-utils.js';
 import * as stories from './AdvancedLending.stories';

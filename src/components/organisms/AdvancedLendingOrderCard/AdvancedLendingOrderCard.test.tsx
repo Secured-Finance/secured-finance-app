@@ -1,5 +1,5 @@
 import { OrderSide } from '@secured-finance/sf-client';
-import { composeStories } from '@storybook/testing-react';
+import { composeStories } from '@storybook/react';
 import { BigNumber } from 'ethers';
 import { CollateralBook } from 'src/hooks';
 import {
@@ -25,7 +25,7 @@ const preloadedState = {
         orderType: OrderType.LIMIT,
     },
     wallet: {
-        balances: { [CurrencySymbol.USDC]: 10000, [CurrencySymbol.EFIL]: 5000 },
+        balances: { [CurrencySymbol.USDC]: 10000, [CurrencySymbol.WFIL]: 5000 },
     },
     ...preloadedLendingMarkets,
     ...preloadedAssetPrices,
@@ -37,7 +37,7 @@ const collateralBook0: CollateralBook = {
         USDC: BigNumber.from('10000000'),
     },
     nonCollateral: {
-        EFIL: BigNumber.from('100000000000000000000'),
+        WFIL: BigNumber.from('100000000000000000000'),
         WBTC: BigNumber.from('20000000'),
     },
     usdCollateral: 23000,
@@ -200,7 +200,7 @@ describe('AdvancedLendingOrderCard Component', () => {
                 ...preloadedState,
                 landingOrderForm: {
                     ...preloadedState.landingOrderForm,
-                    currency: CurrencySymbol.EFIL,
+                    currency: CurrencySymbol.WFIL,
                     side: OrderSide.LEND,
                 },
             },
@@ -232,7 +232,7 @@ describe('AdvancedLendingOrderCard Component', () => {
                     ...preloadedState,
                     landingOrderForm: {
                         ...preloadedState.landingOrderForm,
-                        currency: CurrencySymbol.EFIL,
+                        currency: CurrencySymbol.WFIL,
                         side: OrderSide.LEND,
                     },
                 },
@@ -261,7 +261,7 @@ describe('AdvancedLendingOrderCard Component', () => {
                     ...preloadedState,
                     landingOrderForm: {
                         ...preloadedState.landingOrderForm,
-                        currency: CurrencySymbol.EFIL,
+                        currency: CurrencySymbol.WFIL,
                         side: OrderSide.LEND,
                     },
                 },
@@ -334,7 +334,7 @@ describe('AdvancedLendingOrderCard Component', () => {
                 ...preloadedState,
                 landingOrderForm: {
                     ...preloadedState.landingOrderForm,
-                    currency: CurrencySymbol.EFIL,
+                    currency: CurrencySymbol.WFIL,
                     side: OrderSide.LEND,
                 },
             },
@@ -359,7 +359,7 @@ describe('AdvancedLendingOrderCard Component', () => {
     });
 
     it('should not disable button in Borrow orders when input is less than available to borrow amount', async () => {
-        // SF vault has 100 EFIL
+        // SF vault has 100 WFIL
         // test asserts that the validation condition for Lend orders i.e (input amount< balance to lend) is not applicable to borrow orders
 
         render(<Default collateralBook={collateralBook0} />, {
@@ -367,7 +367,7 @@ describe('AdvancedLendingOrderCard Component', () => {
                 ...preloadedState,
                 landingOrderForm: {
                     ...preloadedState.landingOrderForm,
-                    currency: CurrencySymbol.EFIL,
+                    currency: CurrencySymbol.WFIL,
                 },
             },
         });

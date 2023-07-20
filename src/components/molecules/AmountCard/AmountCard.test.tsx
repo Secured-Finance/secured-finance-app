@@ -1,4 +1,4 @@
-import { composeStories } from '@storybook/testing-react';
+import { composeStories } from '@storybook/react';
 import { render, screen } from 'src/test-utils.js';
 import * as stories from './AmountCard.stories';
 
@@ -11,7 +11,7 @@ describe('AmountCard Component', () => {
 
     it('should render a AmountCard with the name of the currency', () => {
         render(<Default />);
-        expect(screen.getByText('EFIL')).toBeInTheDocument();
+        expect(screen.getByText('WFIL')).toBeInTheDocument();
     });
 
     it('should render a AmountCard with the amount of the currency', () => {
@@ -21,7 +21,7 @@ describe('AmountCard Component', () => {
 
     it('should render a AmountCard with the symbol of the currency', () => {
         render(<Default />);
-        expect(screen.getByText('EFIL')).toBeInTheDocument();
+        expect(screen.getByText('WFIL')).toBeInTheDocument();
     });
 
     it('should render a AmountCard with the amount in USD', () => {

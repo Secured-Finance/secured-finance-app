@@ -1,5 +1,5 @@
 import { OrderSide } from '@secured-finance/sf-client';
-import { composeStories } from '@storybook/testing-react';
+import { composeStories } from '@storybook/react';
 import { render, screen } from 'src/test-utils.js';
 import * as stories from './CollateralSimulationSection.stories';
 
@@ -13,7 +13,7 @@ describe('CollateralSimulationSection Component', () => {
     it('should display the borrow remaining and the collateral usage if its a BORROW order', () => {
         render(<Trade side={OrderSide.BORROW} />);
         expect(screen.getByText('Borrow Amount')).toBeInTheDocument();
-        expect(screen.getByText('50 EFIL')).toBeInTheDocument();
+        expect(screen.getByText('50 WFIL')).toBeInTheDocument();
 
         expect(screen.getByText('Borrow Remaining')).toBeInTheDocument();
         expect(screen.getByText('$403.15')).toBeInTheDocument();
@@ -26,7 +26,7 @@ describe('CollateralSimulationSection Component', () => {
     it('should not display the borrow remaining and the collateral usage if its a LEND order', () => {
         render(<Trade side={OrderSide.LEND} />);
         expect(screen.getByText('Lend Amount')).toBeInTheDocument();
-        expect(screen.getByText('50 EFIL')).toBeInTheDocument();
+        expect(screen.getByText('50 WFIL')).toBeInTheDocument();
 
         expect(screen.queryByText('Borrow Remaining')).not.toBeInTheDocument();
         expect(screen.queryByText('Collateral Usage')).not.toBeInTheDocument();

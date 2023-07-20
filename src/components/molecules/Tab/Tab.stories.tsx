@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import { Tab } from './Tab';
 
 export default {
@@ -11,9 +11,9 @@ export default {
             { text: 'Tab C', disabled: true },
         ],
     },
-} as ComponentMeta<typeof Tab>;
+} as Meta<typeof Tab>;
 
-const Template: ComponentStory<typeof Tab> = args => (
+const Template: StoryFn<typeof Tab> = args => (
     <div className='h-[400px] w-[600px] text-white-80'>
         <Tab {...args}>
             <p>Tab A Content</p>

@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import { CurrencySymbol } from 'src/utils';
 import { CurrencyItem } from './CurrencyItem';
 
@@ -7,7 +7,7 @@ export default {
     component: CurrencyItem,
     args: {
         amount: 1000,
-        ccy: CurrencySymbol.EFIL,
+        ccy: CurrencySymbol.WFIL,
         price: 8.2,
         align: 'left',
     },
@@ -19,9 +19,9 @@ export default {
             },
         },
     },
-} as ComponentMeta<typeof CurrencyItem>;
+} as Meta<typeof CurrencyItem>;
 
-const Template: ComponentStory<typeof CurrencyItem> = args => (
+const Template: StoryFn<typeof CurrencyItem> = args => (
     <CurrencyItem {...args} />
 );
 
@@ -29,7 +29,7 @@ export const Default = Template.bind({});
 export const CurrencyPrice = Template.bind({});
 CurrencyPrice.args = {
     amount: undefined,
-    ccy: CurrencySymbol.EFIL,
+    ccy: CurrencySymbol.WFIL,
     price: 8.2,
     align: 'left',
 };
@@ -37,7 +37,7 @@ CurrencyPrice.args = {
 export const CurrencyName = Template.bind({});
 CurrencyName.args = {
     amount: undefined,
-    ccy: CurrencySymbol.EFIL,
+    ccy: CurrencySymbol.WFIL,
     price: undefined,
     align: 'left',
 };
@@ -45,7 +45,7 @@ CurrencyName.args = {
 export const CurrencyAmountInColor = Template.bind({});
 CurrencyAmountInColor.args = {
     amount: 1000,
-    ccy: CurrencySymbol.EFIL,
+    ccy: CurrencySymbol.WFIL,
     price: 8.2,
     align: 'left',
     color: 'positive',
@@ -54,7 +54,7 @@ CurrencyAmountInColor.args = {
 export const Compact = Template.bind({});
 Compact.args = {
     amount: 1000,
-    ccy: CurrencySymbol.EFIL,
+    ccy: CurrencySymbol.WFIL,
     price: 8.2,
     align: 'left',
     compact: true,

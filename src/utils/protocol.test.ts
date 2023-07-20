@@ -16,7 +16,7 @@ describe('computeTotalDailyVolumeInUSD', () => {
             volumePerCurrency: {
                 [CurrencySymbol.USDC]: BigNumber.from(0),
                 [CurrencySymbol.ETH]: BigNumber.from(0),
-                [CurrencySymbol.EFIL]: BigNumber.from(0),
+                [CurrencySymbol.WFIL]: BigNumber.from(0),
                 [CurrencySymbol.WBTC]: BigNumber.from(0),
             },
         });
@@ -38,7 +38,7 @@ describe('computeTotalDailyVolumeInUSD', () => {
             volumePerCurrency: {
                 [CurrencySymbol.USDC]: BigNumber.from(30),
                 [CurrencySymbol.ETH]: BigNumber.from(0),
-                [CurrencySymbol.EFIL]: BigNumber.from(657000),
+                [CurrencySymbol.WFIL]: BigNumber.from(657000),
                 [CurrencySymbol.WBTC]: BigNumber.from(0),
             },
         });

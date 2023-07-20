@@ -1,4 +1,4 @@
-import { composeStories } from '@storybook/testing-react';
+import { composeStories } from '@storybook/react';
 import packageJson from 'package.json';
 import { render, screen } from 'src/test-utils.js';
 import * as stories from './Footer.stories';
@@ -7,6 +7,7 @@ const { Default } = composeStories(stories);
 
 describe('Footer component', () => {
     it('should render footer', () => {
+        process.env.NEXT_PUBLIC_USE_PACKAGE_VERSION = 'true';
         render(<Default />);
         expect(
             screen.getByText(`Secured Finance v${packageJson.version}`)
@@ -15,6 +16,7 @@ describe('Footer component', () => {
     });
 
     it('should render correct environment', () => {
+        process.env.NEXT_PUBLIC_USE_PACKAGE_VERSION = 'true';
         process.env.SF_ENV = 'staging';
         render(<Default />);
         expect(

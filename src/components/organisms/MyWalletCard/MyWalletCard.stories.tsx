@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import { withWalletBalances } from 'src/../.storybook/decorators';
 import { CurrencySymbol, WalletSource } from 'src/utils';
 import { MyWalletCard } from './MyWalletCard';
@@ -13,9 +13,9 @@ export default {
         },
     },
     decorators: [withWalletBalances],
-} as ComponentMeta<typeof MyWalletCard>;
+} as Meta<typeof MyWalletCard>;
 
-const Template: ComponentStory<typeof MyWalletCard> = args => (
+const Template: StoryFn<typeof MyWalletCard> = args => (
     <div className='w-[350px]'>
         <MyWalletCard {...args} />
     </div>

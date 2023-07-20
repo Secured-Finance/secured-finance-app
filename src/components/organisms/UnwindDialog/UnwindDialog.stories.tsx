@@ -5,7 +5,7 @@ import {
     withWalletProvider,
 } from '.storybook/decorators';
 import { OrderSide } from '@secured-finance/sf-client';
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import { BigNumber } from 'ethers';
 import { dec22Fixture } from 'src/stories/mocks/fixtures';
 import { CurrencySymbol } from 'src/utils';
@@ -20,7 +20,7 @@ export default {
         maturity: dec22Fixture,
         amount: new Amount(
             BigNumber.from('100000000000000000000'),
-            CurrencySymbol.EFIL
+            CurrencySymbol.WFIL
         ),
         side: OrderSide.BORROW,
     },
@@ -32,9 +32,9 @@ export default {
         },
         connected: true,
     },
-} as ComponentMeta<typeof UnwindDialog>;
+} as Meta<typeof UnwindDialog>;
 
-const Template: ComponentStory<typeof UnwindDialog> = args => (
+const Template: StoryFn<typeof UnwindDialog> = args => (
     <UnwindDialog {...args} />
 );
 

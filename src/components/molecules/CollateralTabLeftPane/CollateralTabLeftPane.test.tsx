@@ -1,8 +1,8 @@
-import { composeStories } from '@storybook/testing-react';
+import { composeStories } from '@storybook/react';
 import {
+    collateralBook80,
     emptyCollateralBook,
     emptyUSDCollateral,
-    collateralBook80,
 } from 'src/stories/mocks/fixtures';
 import { fireEvent, render, screen } from 'src/test-utils.js';
 import * as stories from './CollateralTabLeftPane.stories';

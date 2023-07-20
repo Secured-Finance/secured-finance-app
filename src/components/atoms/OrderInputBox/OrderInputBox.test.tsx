@@ -1,4 +1,4 @@
-import { composeStories } from '@storybook/testing-react';
+import { composeStories } from '@storybook/react';
 import { fireEvent, render, screen } from 'src/test-utils.js';
 import * as stories from './OrderInputBox.stories';
 
@@ -31,7 +31,7 @@ describe('OrderInputBox component', () => {
         fireEvent.change(input, { target: { value: '' } });
         expect(input.getAttribute('value')).toBe('');
 
-        expect(screen.getByText('EFIL')).toBeInTheDocument();
+        expect(screen.getByText('WFIL')).toBeInTheDocument();
     });
 
     it('should render total orderInputBox', () => {

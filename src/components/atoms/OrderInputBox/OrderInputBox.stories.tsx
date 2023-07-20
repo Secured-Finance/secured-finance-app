@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import { CurrencySymbol } from 'src/utils';
 import { OrderInputBox } from '.';
 
@@ -11,9 +11,9 @@ export default {
         disabled: true,
         initialValue: 1000,
     },
-} as ComponentMeta<typeof OrderInputBox>;
+} as Meta<typeof OrderInputBox>;
 
-const Template: ComponentStory<typeof OrderInputBox> = args => (
+const Template: StoryFn<typeof OrderInputBox> = args => (
     <OrderInputBox {...args} />
 );
 
@@ -22,8 +22,8 @@ export const Default = Template.bind({});
 export const Amount = Template.bind({});
 Amount.args = {
     field: 'Amount',
-    unit: CurrencySymbol.EFIL,
-    asset: CurrencySymbol.EFIL,
+    unit: CurrencySymbol.WFIL,
+    asset: CurrencySymbol.WFIL,
     disabled: false,
     initialValue: 10,
 };
