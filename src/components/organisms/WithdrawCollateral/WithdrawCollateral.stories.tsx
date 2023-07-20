@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import { screen, userEvent } from '@storybook/testing-library';
 import {
     withAssetPrice,
@@ -19,8 +19,8 @@ export default {
                 available: 1,
                 name: 'Ethereum',
             },
-            [CurrencySymbol.EFIL]: {
-                symbol: CurrencySymbol.EFIL,
+            [CurrencySymbol.WFIL]: {
+                symbol: CurrencySymbol.WFIL,
                 available: 100,
                 name: 'filecoin',
             },
@@ -38,9 +38,9 @@ export default {
         },
     },
     decorators: [withWalletProvider, withAssetPrice],
-} as ComponentMeta<typeof WithdrawCollateral>;
+} as Meta<typeof WithdrawCollateral>;
 
-const Template: ComponentStory<typeof WithdrawCollateral> = args => {
+const Template: StoryFn<typeof WithdrawCollateral> = args => {
     return <WithdrawCollateral {...args} />;
 };
 

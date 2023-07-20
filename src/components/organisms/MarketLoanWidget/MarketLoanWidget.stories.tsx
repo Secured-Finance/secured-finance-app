@@ -1,10 +1,10 @@
 import { RESPONSIVE_PARAMETERS, VIEWPORTS } from '.storybook/constants';
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import { within } from '@storybook/testing-library';
 import {
-    efilBytes32,
     preloadedLendingMarkets,
     wbtcBytes32,
+    wfilBytes32,
 } from 'src/stories/mocks/fixtures';
 import { CurrencySymbol } from 'src/utils';
 import { MarketLoanWidget } from './MarketLoanWidget';
@@ -12,12 +12,12 @@ import { MarketLoanWidget } from './MarketLoanWidget';
 const filMarkets = preloadedLendingMarkets?.availableContracts?.lendingMarkets
     ? Object.values(
           preloadedLendingMarkets?.availableContracts?.lendingMarkets[
-              CurrencySymbol.EFIL
+              CurrencySymbol.WFIL
           ]
       ).map(m => ({
           ...m,
-          currency: efilBytes32,
-          ccy: CurrencySymbol.EFIL,
+          currency: wfilBytes32,
+          ccy: CurrencySymbol.WFIL,
       }))
     : [];
 const btcMarkets = preloadedLendingMarkets?.availableContracts?.lendingMarkets
@@ -44,9 +44,9 @@ export default {
     args: {
         markets: [...filMarkets, ...btcMarkets],
     },
-} as ComponentMeta<typeof MarketLoanWidget>;
+} as Meta<typeof MarketLoanWidget>;
 
-const Template: ComponentStory<typeof MarketLoanWidget> = args => (
+const Template: StoryFn<typeof MarketLoanWidget> = args => (
     <MarketLoanWidget {...args} />
 );
 

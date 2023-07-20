@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import { NavTab } from './';
 
 export default {
@@ -13,9 +13,9 @@ export default {
             disable: true,
         },
     },
-} as ComponentMeta<typeof NavTab>;
+} as Meta<typeof NavTab>;
 
-const Template: ComponentStory<typeof NavTab> = args => (
+const Template: StoryFn<typeof NavTab> = args => (
     <div className='h-20'>
         <NavTab {...args} />
     </div>

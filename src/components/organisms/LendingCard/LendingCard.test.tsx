@@ -1,5 +1,5 @@
 import { formatDate } from '@secured-finance/sf-core';
-import { composeStories } from '@storybook/testing-react';
+import { composeStories } from '@storybook/react';
 import {
     dec22Fixture,
     mar23Fixture,
@@ -33,7 +33,7 @@ describe('LendingCard Component', () => {
         ...preloadedLendingMarkets,
         wallet: {
             balances: {
-                [CurrencySymbol.EFIL]: 10000,
+                [CurrencySymbol.WFIL]: 10000,
                 [CurrencySymbol.USDC]: 10000,
             },
         },
@@ -111,7 +111,7 @@ describe('LendingCard Component', () => {
 
         expect(
             screen.getByText(
-                `~ ${preloadedAssetPrices.assetPrices.EFIL.price * 10} USD`
+                `~ ${preloadedAssetPrices.assetPrices.WFIL.price * 10} USD`
             )
         ).toBeInTheDocument();
     });
@@ -151,7 +151,7 @@ describe('LendingCard Component', () => {
         fireEvent.change(input, { target: { value: '10.5' } });
         expect(
             screen.getByText(
-                `~ ${preloadedAssetPrices.assetPrices.EFIL.price * 10.5} USD`
+                `~ ${preloadedAssetPrices.assetPrices.WFIL.price * 10.5} USD`
             )
         ).toBeInTheDocument();
     });
@@ -178,7 +178,7 @@ describe('LendingCard Component', () => {
         const lendTab = screen.getByText('Lend');
         fireEvent.click(lendTab);
         expect(screen.getByText('Lending Source')).toBeInTheDocument();
-        expect(screen.getByText('10,000 EFIL')).toBeInTheDocument();
+        expect(screen.getByText('10,000 WFIL')).toBeInTheDocument();
 
         const walletSourceButton = screen.getByTestId(
             'wallet-source-selector-button'
@@ -188,7 +188,7 @@ describe('LendingCard Component', () => {
         expect(screen.getByText('SF Vault')).toBeInTheDocument();
         const option = screen.getByTestId('option-1');
         fireEvent.click(option);
-        expect(screen.getByText('100 EFIL')).toBeInTheDocument();
+        expect(screen.getByText('100 WFIL')).toBeInTheDocument();
     });
 
     it('should show Collateral Usage and Available to Borrow only in Borrow order', async () => {

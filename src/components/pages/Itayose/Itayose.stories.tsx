@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import { within } from '@storybook/testing-library';
 import {
     withAppLayout,
@@ -24,9 +24,9 @@ export default {
         withWalletProvider,
         withChainErrorDisabled,
     ],
-} as ComponentMeta<typeof Itayose>;
+} as Meta<typeof Itayose>;
 
-const Template: ComponentStory<typeof Itayose> = () => <Itayose />;
+const Template: StoryFn<typeof Itayose> = () => <Itayose />;
 
 export const Default = Template.bind({});
 export const MyOrders = Template.bind({});

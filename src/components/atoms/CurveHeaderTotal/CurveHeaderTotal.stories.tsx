@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import { CurveHeaderTotal } from './';
 
 export default {
@@ -6,11 +6,11 @@ export default {
     component: CurveHeaderTotal,
     args: {
         header: 'Total Borrow (Asset)',
-        footer: '80,000,009 FIL',
+        footer: '80,000,009 WFIL',
     },
-} as ComponentMeta<typeof CurveHeaderTotal>;
+} as Meta<typeof CurveHeaderTotal>;
 
-const Template: ComponentStory<typeof CurveHeaderTotal> = args => (
+const Template: StoryFn<typeof CurveHeaderTotal> = args => (
     <CurveHeaderTotal {...args} />
 );
 

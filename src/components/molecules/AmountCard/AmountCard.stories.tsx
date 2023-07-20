@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import { CurrencySymbol } from 'src/utils';
 import { Amount } from 'src/utils/entities';
 import { AmountCard } from './AmountCard';
@@ -7,13 +7,11 @@ export default {
     title: 'Molecules/AmountCard',
     component: AmountCard,
     args: {
-        amount: new Amount('5000000000000000000000', CurrencySymbol.EFIL),
+        amount: new Amount('5000000000000000000000', CurrencySymbol.WFIL),
         price: 8.3,
     },
-} as ComponentMeta<typeof AmountCard>;
+} as Meta<typeof AmountCard>;
 
-const Template: ComponentStory<typeof AmountCard> = args => (
-    <AmountCard {...args} />
-);
+const Template: StoryFn<typeof AmountCard> = args => <AmountCard {...args} />;
 
 export const Default = Template.bind({});
