@@ -10,7 +10,6 @@ import {
     MyWalletCard,
     OrderHistoryTable,
     OrderTable,
-    WalletDialog,
 } from 'src/components/organisms';
 import { Page, TwoColumns } from 'src/components/templates';
 import {
@@ -184,7 +183,6 @@ export const PortfolioManagement = () => {
                     )}
                 </div>
             </TwoColumns>
-            <WalletDialog />
         </Page>
     );
 };
