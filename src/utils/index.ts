@@ -6,7 +6,6 @@ export * from './env';
 export * from './events/interface';
 export * from './fee';
 export * from './formatNumbers';
-export * from './handleContractTransaction';
 export * from './links';
 export * from './portfolio';
 export * from './protocol';
