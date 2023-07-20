@@ -10,7 +10,7 @@ import {
     SuccessPanel,
     WalletRadioGroup,
 } from 'src/components/molecules';
-import { useBreakpoint, useEtherscanUrl } from 'src/hooks';
+import { useEtherscanUrl } from 'src/hooks';
 import { setWalletDialogOpen } from 'src/store/interactions';
 import { RootState } from 'src/store/types';
 import { Wallet } from 'src/types';
@@ -25,9 +25,14 @@ import {
 import { associateWallet } from 'src/utils/events';
 import { useAccount, useConnect } from 'wagmi';
 
-export const WalletDialog = () => {
-    const isMobileOrTablet = useBreakpoint('laptop');
+function hasMetaMask() {
+    if (typeof window === 'undefined') {
+        return false;
+    }
+    return typeof window.ethereum !== 'undefined';
+}
 
+export const WalletDialog = () => {
     const etherscanUrl = useEtherscanUrl();
     const options = useMemo(() => {
         const options = [
@@ -40,11 +45,11 @@ export const WalletDialog = () => {
                 Icon: WalletConnectIcon,
             },
         ];
-        if (isMobileOrTablet) {
+        if (!hasMetaMask()) {
             return options.slice(1, 2);
         }
         return options;
-    }, [isMobileOrTablet]);
+    }, []);
 
     const [wallet, setWallet] = useState<string>('');
     const [errorMessage, setErrorMessage] = useState(
@@ -100,6 +105,7 @@ export const WalletDialog = () => {
             if (!account) {
                 if (
                     provider === 'MetaMask' &&
+                    hasMetaMask() &&
                     (await connector.getChainId()) !== getEthereumChainId()
                 ) {
                     await connector.switchChain?.(getEthereumChainId());

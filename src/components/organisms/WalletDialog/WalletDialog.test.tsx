@@ -14,6 +14,22 @@ const preloadedState = {
     },
 };
 
+const mockEthereum = {
+    request: jest.fn(),
+    on: jest.fn(),
+};
+
+beforeEach(() => {
+    Object.defineProperty(window, 'ethereum', {
+        value: mockEthereum,
+        writable: true,
+    });
+});
+
+afterAll(() => {
+    jest.restoreAllMocks();
+});
+
 describe('Wallet Dialog component', () => {
     it('should display the wallet radio group in a modal at open', () => {
         render(<Primary />, { preloadedState });
@@ -25,6 +41,15 @@ describe('Wallet Dialog component', () => {
         expect(button).toHaveTextContent('Connect Wallet');
 
         expect(screen.getAllByRole('radio')).toHaveLength(2);
+    });
+
+    it('should hide the metamask option when metamask is not installed', () => {
+        Object.defineProperty(window, 'ethereum', {
+            value: undefined,
+            writable: true,
+        });
+        render(<Primary />, { preloadedState });
+        expect(screen.getAllByRole('radio')).toHaveLength(1);
     });
 
     it('should open with nothing selected', () => {
