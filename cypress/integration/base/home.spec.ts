@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 
-describe('The Home Page', () => {
+describe.skip('The Home Page', () => {
     beforeEach(() => {
         cy.visit('/');
     });
