@@ -14,7 +14,7 @@ export type Position = {
     midPrice: BigNumber;
 };
 
-export const usePositions = (account: string | null) => {
+export const usePositions = (account: string | undefined) => {
     const securedFinance = useSF();
 
     const { lastActionTimestamp, latestBlock } = useSelector(

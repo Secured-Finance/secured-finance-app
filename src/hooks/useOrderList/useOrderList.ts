@@ -27,7 +27,7 @@ const sortOrders = (a: Order, b: Order) => {
     return Number(b.createdAt.sub(a.createdAt));
 };
 
-export const useOrderList = (account: string | null) => {
+export const useOrderList = (account: string | undefined) => {
     const securedFinance = useSF();
 
     const { latestBlock, lastActionTimestamp } = useSelector(

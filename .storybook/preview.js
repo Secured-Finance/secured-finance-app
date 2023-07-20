@@ -2,7 +2,6 @@ import { MockedProvider } from '@apollo/client/testing';
 import '@storybook/addon-console';
 import { Provider } from 'react-redux';
 import 'src/assets/css/index.css';
-import { withPerformance } from 'storybook-addon-performance';
 import store from './../src/store';
 import { MockSecuredFinanceProvider } from './../src/stories/mocks/MockSecuredFinanceProvider';
 import { withMockDate } from './decorators';
@@ -18,7 +17,6 @@ export const parameters = {
 
     viewport: {
         disable: true,
-        defaultViewport: 'responsive',
     },
 
     backgrounds: {
@@ -58,6 +56,5 @@ export const decorators = [
             </MockSecuredFinanceProvider>
         </Provider>
     ),
-    withPerformance,
     withMockDate,
 ];

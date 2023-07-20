@@ -42,8 +42,8 @@ describe('useCollateralBook hook', () => {
         expect(colBook.fetched).toEqual(true);
     });
 
-    it('should return the empty book when given an null user', async () => {
-        const { result } = renderHook(() => useCollateralBook(null));
+    it('should return the empty book when given an undefined user', async () => {
+        const { result } = renderHook(() => useCollateralBook(undefined));
         const colBook = result.current as CollateralBook;
         expect(colBook).toEqual(emptyBook);
     });
