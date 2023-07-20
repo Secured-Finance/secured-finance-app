@@ -68,7 +68,9 @@ describe('LendingCard Component', () => {
         await waitFor(() => render(<Default />, { preloadedState }));
         const input = screen.getByRole('textbox');
         fireEvent.change(input, { target: { value: '10' } });
-        fireEvent.click(screen.getByTestId('place-order-button'));
+        await waitFor(() => {
+            fireEvent.click(screen.getByTestId('place-order-button'));
+        });
         expect(screen.getByRole('dialog')).toBeInTheDocument();
         expect(screen.getByText('Confirm Order')).toBeInTheDocument();
         const button = screen.getByTestId('dialog-action-button');
@@ -141,7 +143,9 @@ describe('LendingCard Component', () => {
         await waitFor(() => render(<Default />, { preloadedState }));
         const input = screen.getByRole('textbox');
         fireEvent.change(input, { target: { value: '10' } });
-        fireEvent.click(screen.getByTestId('place-order-button'));
+        await waitFor(() => {
+            fireEvent.click(screen.getByTestId('place-order-button'));
+        });
         expect(screen.getByText('Confirm Order')).toBeInTheDocument();
     });
 
