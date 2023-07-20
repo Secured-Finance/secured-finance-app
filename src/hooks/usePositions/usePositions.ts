@@ -1,10 +1,10 @@
-import { BigNumber } from 'ethers';
-import { useEffect, useState, useCallback } from 'react';
-import useSF from '../useSecuredFinance';
-import { useSelector } from 'react-redux';
-import { RootState } from 'src/store/types';
 import { Currency } from '@secured-finance/sf-core';
-import { toCurrency, hexToCurrencySymbol } from 'src/utils';
+import { BigNumber } from 'ethers';
+import { useCallback, useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import useSF from 'src/hooks/useSecuredFinance';
+import { RootState } from 'src/store/types';
+import { hexToCurrencySymbol, toCurrency } from 'src/utils';
 
 export type Position = {
     currency: string;
@@ -17,8 +17,8 @@ export type Position = {
 export const usePositions = (account: string | null) => {
     const securedFinance = useSF();
 
-    const block = useSelector(
-        (state: RootState) => state.blockchain.latestBlock
+    const { lastActionTimestamp, latestBlock } = useSelector(
+        (state: RootState) => state.blockchain
     );
 
     const [positions, setPositions] = useState<Array<Position>>([]);
@@ -58,7 +58,7 @@ export const usePositions = (account: string | null) => {
 
     useEffect(() => {
         fetchPositions();
-    }, [block, fetchPositions]);
+    }, [latestBlock, fetchPositions, lastActionTimestamp]);
 
     return positions;
 };
