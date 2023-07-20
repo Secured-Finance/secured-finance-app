@@ -1,6 +1,7 @@
 import queries from '@secured-finance/sf-graph-client/dist/graphclients';
 import { useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { Spinner } from 'src/components/atoms';
 import { HorizontalTab, StatsBar } from 'src/components/molecules';
 import {
     ActiveTradeTable,
@@ -39,6 +40,12 @@ enum TableType {
     ORDER_HISTORY,
     MY_TRANSACTIONS,
 }
+
+const TabSpinner = () => (
+    <div className='flex h-full w-full items-center justify-center pt-10'>
+        <Spinner />
+    </div>
+);
 
 export const PortfolioManagement = () => {
     const { account } = useWallet();
@@ -162,12 +169,20 @@ export const PortfolioManagement = () => {
                         >
                             <ActiveTradeTable data={positions} />
                             <OrderTable data={orderList.activeOrderList} />
-                            <OrderHistoryTable
-                                data={sortedOrderHistory.filter(
-                                    order => order.status !== 'Open'
-                                )}
-                            />
-                            <MyTransactionsTable data={tradeHistory} />
+                            {userOrderHistory.loading ? (
+                                <TabSpinner />
+                            ) : (
+                                <OrderHistoryTable
+                                    data={sortedOrderHistory.filter(
+                                        order => order.status !== 'Open'
+                                    )}
+                                />
+                            )}
+                            {userTransactionHistory.loading ? (
+                                <TabSpinner />
+                            ) : (
+                                <MyTransactionsTable data={tradeHistory} />
+                            )}
                         </HorizontalTab>
                     </div>
                 </div>
