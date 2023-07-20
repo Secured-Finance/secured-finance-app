@@ -301,7 +301,7 @@ describe('AdvancedLendingOrderCard Component', () => {
                     ...preloadedState,
                     landingOrderForm: {
                         ...preloadedState.landingOrderForm,
-                        currency: CurrencySymbol.EFIL,
+                        currency: CurrencySymbol.WFIL,
                         side: OrderSide.LEND,
                     },
                 },

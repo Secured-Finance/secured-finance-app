@@ -1,5 +1,5 @@
 import { BigNumber } from 'ethers';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState, useEffect } from 'react';
 import { DropdownSelector, InputBase, Option } from 'src/components/atoms';
 import { prefixTilde } from 'src/utils';
 
@@ -11,6 +11,7 @@ export const AssetSelector = <AssetType extends string = string>({
     priceList,
     transformLabel = (v: string) => v,
     amountFormatterMap,
+    initialValue,
     onAssetChange,
     onAmountChange,
 }: {
@@ -18,12 +19,17 @@ export const AssetSelector = <AssetType extends string = string>({
     selected?: Option<AssetType>;
     priceList: Record<AssetType, number>;
     amountFormatterMap?: Record<AssetType, FormatFunction>;
+    initialValue?: number;
     transformLabel?: (v: string) => string;
     onAssetChange?: (v: AssetType) => void;
     onAmountChange?: (v: BigNumber) => void;
 }) => {
     const [assetValue, setAssetValue] = useState(selected.value);
-    const [amount, setAmount] = useState<number | undefined>();
+    const [amount, setAmount] = useState(initialValue);
+
+    useEffect(() => {
+        setAmount(initialValue);
+    }, [initialValue]);
 
     const selectedOption = useMemo(
         () => options.find(o => o.value === assetValue),
@@ -61,11 +67,8 @@ export const AssetSelector = <AssetType extends string = string>({
             if (onAssetChange) {
                 onAssetChange(v);
             }
-            if (onAmountChange) {
-                handleInputChange(amount ?? 0, v, onAmountChange);
-            }
         },
-        [onAssetChange, onAmountChange, handleInputChange, amount]
+        [onAssetChange]
     );
 
     const handleAmountChange = useCallback(
