@@ -24,7 +24,7 @@ import {
 import { RootState } from 'src/store/types';
 import { OrderType } from 'src/types';
 import { LoanValue, Maturity } from 'src/utils/entities';
-import { useWallet } from 'use-wallet';
+import { useAccount } from 'wagmi';
 
 export const emptyOptionList = [
     {
@@ -34,7 +34,7 @@ export const emptyOptionList = [
 ];
 
 export const Landing = ({ view }: { view?: ViewType }) => {
-    const { account } = useWallet();
+    const { address } = useAccount();
     const { currency, side, maturity, lastView } = useSelector(
         (state: RootState) => selectLandingOrderForm(state.landingOrderForm)
     );
@@ -44,7 +44,7 @@ export const Landing = ({ view }: { view?: ViewType }) => {
     );
     const dispatch = useDispatch();
 
-    const collateralBook = useCollateralBook(account);
+    const collateralBook = useCollateralBook(address);
     const maturityOptionList = useMaturityOptions(
         lendingContracts,
         market => market.isOpened

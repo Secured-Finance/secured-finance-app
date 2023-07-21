@@ -13,7 +13,7 @@ import FilIcon from 'src/assets/coins/fil.svg';
 import UsdcIcon from 'src/assets/coins/usdc.svg';
 import { Option } from 'src/components/atoms';
 import { SvgIcon } from 'src/types';
-import { hexToString } from 'web3-utils';
+import { hexToString } from 'viem';
 import { WFIL } from './currencies/filecoin';
 import { USDC } from './currencies/usdc';
 import { WBTC } from './currencies/wbtc';
@@ -52,8 +52,24 @@ export const currencyMap: Readonly<
         pillColor: tailwindConfig.theme.colors.pill.fil,
         roundingDecimal: 0,
     },
-    [CurrencySymbol.ETH]: {
+    [CurrencySymbol.WBTC]: {
         index: 1,
+        symbol: CurrencySymbol.WBTC,
+        name: WBTC.onChain().name,
+        icon: BTCIcon,
+        coinGeckoId: 'wrapped-bitcoin',
+        isCollateral: false,
+        toBaseUnit: (amount: number) =>
+            convertToBlockchainUnit(amount, WBTC.onChain()),
+        fromBaseUnit: (amount: BigNumber) =>
+            convertFromBlockchainUnit(amount, WBTC.onChain()),
+        toCurrency: () => WBTC.onChain(),
+        chartColor: tailwindConfig.theme.colors.chart.btc,
+        pillColor: tailwindConfig.theme.colors.pill.btc,
+        roundingDecimal: 4,
+    },
+    [CurrencySymbol.ETH]: {
+        index: 2,
         icon: EthIcon,
         symbol: CurrencySymbol.ETH,
         // TODO: update sf-core to use the right name
@@ -69,7 +85,7 @@ export const currencyMap: Readonly<
         roundingDecimal: 3,
     },
     [CurrencySymbol.USDC]: {
-        index: 2,
+        index: 3,
         symbol: CurrencySymbol.USDC,
         name: USDC.onChain().name,
         icon: UsdcIcon,
@@ -83,22 +99,6 @@ export const currencyMap: Readonly<
         chartColor: tailwindConfig.theme.colors.chart.usdc,
         pillColor: tailwindConfig.theme.colors.pill.usdc,
         roundingDecimal: 0,
-    },
-    [CurrencySymbol.WBTC]: {
-        index: 3,
-        symbol: CurrencySymbol.WBTC,
-        name: WBTC.onChain().name,
-        icon: BTCIcon,
-        coinGeckoId: 'wrapped-bitcoin',
-        isCollateral: false,
-        toBaseUnit: (amount: number) =>
-            convertToBlockchainUnit(amount, WBTC.onChain()),
-        fromBaseUnit: (amount: BigNumber) =>
-            convertFromBlockchainUnit(amount, WBTC.onChain()),
-        toCurrency: () => WBTC.onChain(),
-        chartColor: tailwindConfig.theme.colors.chart.btc,
-        pillColor: tailwindConfig.theme.colors.pill.btc,
-        roundingDecimal: 4,
     },
 };
 
@@ -171,7 +171,7 @@ export function toCurrencySymbol(ccy: string) {
 }
 
 export function hexToCurrencySymbol(hex: string) {
-    return toCurrencySymbol(hexToString(hex));
+    return toCurrencySymbol(hexToString(hex as `0x${string}`, { size: 32 }));
 }
 
 const convertToBlockchainUnit = (amount: number | string, ccy: Currency) => {

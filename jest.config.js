@@ -13,7 +13,7 @@ const customJestConfig = {
     setupFilesAfterEnv: ['<rootDir>/src/setupTests.js'],
     setupFiles: ['<rootDir>/src/setupTestEnv.js'],
     moduleDirectories: ['node_modules', '<rootDir>/'],
-    testEnvironment: 'jest-environment-jsdom',
+    testEnvironment: './jest-environment-jsdom.js',
     collectCoverageFrom: [
         'src/**/*.{js,ts,jsx,tsx}',
         '!**/*.stories.tsx',
@@ -32,4 +32,13 @@ const customJestConfig = {
 };
 
 // createJestConfig is exported this way to ensure that next/jest can load the Next.js config which is async
-module.exports = createJestConfig(customJestConfig);
+const asyncConfig = createJestConfig(customJestConfig);
+
+// and wrap it...
+module.exports = async () => {
+    const config = await asyncConfig();
+    config.transformIgnorePatterns = [
+        'node_modules/(?!(wagmi|@wagmi|@web3modal)/)',
+    ];
+    return config;
+};

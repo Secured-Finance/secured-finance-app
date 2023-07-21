@@ -35,7 +35,7 @@ export const Default = Template.bind({});
 
 export const NotConnectedToWallet = Template.bind({});
 NotConnectedToWallet.args = {
-    account: null,
+    account: undefined,
     onClick: () => {},
 };
 

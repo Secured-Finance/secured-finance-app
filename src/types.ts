@@ -83,3 +83,6 @@ export interface Pagination {
     totalData: number;
     containerHeight: boolean;
 }
+
+export type Wallet = 'MetaMask' | 'WalletConnect';
+

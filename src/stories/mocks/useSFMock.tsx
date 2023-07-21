@@ -132,7 +132,7 @@ export const mockUseSF = () => {
             ])
         ),
 
-        getLendingMarkets: jest.fn(() =>
+        getLendingMarketDetailsPerCurrency: jest.fn(() =>
             Promise.resolve([
                 {
                     midUnitPrice: new Maturity(100),
@@ -145,8 +145,10 @@ export const mockUseSF = () => {
                     isMatured: false,
                     isPreOrderPeriod: false,
                     isItayosePeriod: false,
-                    borrowUnitPrice: BigNumber.from(9618),
-                    lendUnitPrice: BigNumber.from(9620),
+                    bestBorrowUnitPrice: BigNumber.from(9620),
+                    bestLendUnitPrice: BigNumber.from(9618),
+                    minBorrowUnitPrice: BigNumber.from(9602),
+                    maxLendUnitPrice: BigNumber.from(9636),
                 },
                 {
                     midUnitPrice: new Maturity(100),
@@ -159,8 +161,10 @@ export const mockUseSF = () => {
                     isMatured: false,
                     isPreOrderPeriod: false,
                     isItayosePeriod: false,
-                    borrowUnitPrice: BigNumber.from(9608),
-                    lendUnitPrice: BigNumber.from(9610),
+                    bestBorrowUnitPrice: BigNumber.from(9610),
+                    bestLendUnitPrice: BigNumber.from(9608),
+                    minBorrowUnitPrice: BigNumber.from(9592),
+                    maxLendUnitPrice: BigNumber.from(9626),
                 },
             ])
         ),
