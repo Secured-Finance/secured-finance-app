@@ -1,5 +1,5 @@
 import { composeStories } from '@storybook/react';
-import { render, screen, fireEvent, waitFor, act } from 'src/test-utils.js';
+import { render, screen, fireEvent, waitFor } from 'src/test-utils.js';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import * as stories from './OrderHistoryTable.stories';
 
@@ -34,7 +34,7 @@ describe('OrderHistoryTable Component', () => {
         expect(screen.getAllByTestId('order-history-table-row')).toHaveLength(
             20
         );
-        await act(async () => {
+        await waitFor(async () => {
             fireEvent.scroll(window, { target: { scrollTop: 100 } });
         });
 
@@ -51,7 +51,7 @@ describe('OrderHistoryTable Component', () => {
         expect(screen.getAllByTestId('order-history-table-row')).toHaveLength(
             11
         );
-        await act(async () => {
+        await waitFor(async () => {
             fireEvent.scroll(window, { target: { scrollTop: 100 } });
         });
 
@@ -79,7 +79,7 @@ describe('OrderHistoryTable Component', () => {
         expect(screen.getAllByTestId('order-history-table-row')).toHaveLength(
             11
         );
-        await act(async () => {
+        await waitFor(async () => {
             fireEvent.scroll(window, { target: { scrollTop: 100 } });
         });
 

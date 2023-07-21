@@ -1,6 +1,5 @@
 import { composeStories } from '@storybook/react';
-import { act, fireEvent, render, waitFor, screen } from 'src/test-utils.js';
-
+import { fireEvent, render, waitFor, screen } from 'src/test-utils.js';
 import * as stories from './MyTransactionsTable.stories';
 
 const { Default, WithPagination } = composeStories(stories);
@@ -15,7 +14,7 @@ describe('MyTransactionsTable Component', () => {
         expect(screen.getAllByTestId('my-transactions-table-row')).toHaveLength(
             20
         );
-        await act(async () => {
+        await waitFor(async () => {
             fireEvent.scroll(window, { target: { scrollTop: 100 } });
         });
 
@@ -32,7 +31,7 @@ describe('MyTransactionsTable Component', () => {
         expect(screen.getAllByTestId('my-transactions-table-row')).toHaveLength(
             5
         );
-        await act(async () => {
+        await waitFor(async () => {
             fireEvent.scroll(window, { target: { scrollTop: 100 } });
         });
 
@@ -60,7 +59,7 @@ describe('MyTransactionsTable Component', () => {
         expect(screen.getAllByTestId('my-transactions-table-row')).toHaveLength(
             5
         );
-        await act(async () => {
+        await waitFor(async () => {
             fireEvent.scroll(window, { target: { scrollTop: 100 } });
         });
 
