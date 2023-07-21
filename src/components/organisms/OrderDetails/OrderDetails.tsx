@@ -1,6 +1,8 @@
 import { Disclosure, Transition } from '@headlessui/react';
 import { OrderSide } from '@secured-finance/sf-client';
 import { formatDate } from '@secured-finance/sf-core';
+import { useMemo } from 'react';
+import { useSelector } from 'react-redux';
 import {
     ExpandIndicator,
     Section,
@@ -12,7 +14,9 @@ import {
 } from 'src/components/molecules';
 import { Tooltip } from 'src/components/templates';
 import { CollateralBook, useOrderFee } from 'src/hooks';
-import { calculateFee, prefixTilde } from 'src/utils';
+import { selectMarket } from 'src/store/availableContracts';
+import { RootState } from 'src/store/types';
+import { calculateFee, divide, prefixTilde } from 'src/utils';
 import { Amount, LoanValue, Maturity } from 'src/utils/entities';
 
 const FeeItem = () => {
@@ -44,6 +48,20 @@ export const OrderDetails = ({
 }) => {
     const orderFee = useOrderFee(amount.currency);
 
+    const market = useSelector((state: RootState) =>
+        selectMarket(amount.currency, maturity.toNumber())(state)
+    );
+
+    const slippage = useMemo(() => {
+        if (!market) {
+            return 0;
+        }
+
+        return side === OrderSide.BORROW
+            ? market.minBorrowUnitPrice
+            : market.maxLendUnitPrice;
+    }, [market, side]);
+
     return (
         <div className='grid w-full grid-cols-1 justify-items-stretch gap-6 text-white'>
             <Section>
@@ -72,7 +90,7 @@ export const OrderDetails = ({
                     <>
                         <div className='relative'>
                             <Disclosure.Button
-                                className='flex h-6 w-full flex-row items-center justify-between'
+                                className='flex h-6 w-full flex-row items-center justify-between focus:outline-none'
                                 data-testid='disclaimer-button'
                             >
                                 <h2 className='typography-hairline-2 text-neutral-8'>
@@ -86,11 +104,19 @@ export const OrderDetails = ({
                                 enterFrom='transform scale-95 opacity-0'
                                 enterTo='transform scale-100 opacity-100'
                             >
-                                <Disclosure.Panel>
+                                <Disclosure.Panel data-testid='disclaimer-text'>
                                     <div className='typography-caption pt-3 text-secondary7'>
-                                        Circuit breaker will be triggered if the
-                                        order is filled at over the max slippage
-                                        level at 1 block.
+                                        <span>
+                                            Circuit breaker will be triggered if
+                                            the order is filled at over
+                                        </span>
+                                        <span className='font-semibold text-white'>
+                                            {` ${divide(slippage, 100)} `}
+                                        </span>
+                                        <span>
+                                            which is the max slippage level at 1
+                                            block.
+                                        </span>
                                     </div>
                                 </Disclosure.Panel>
                             </Transition>

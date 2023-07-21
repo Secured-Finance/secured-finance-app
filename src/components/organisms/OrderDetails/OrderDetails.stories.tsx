@@ -4,7 +4,8 @@ import {
     withWalletProvider,
 } from '.storybook/decorators';
 import { OrderSide } from '@secured-finance/sf-client';
-import type { Meta, StoryFn } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
+import { userEvent, within } from '@storybook/testing-library';
 import { collateralBook37, dec22Fixture } from 'src/stories/mocks/fixtures';
 import { CurrencySymbol } from 'src/utils';
 import { Amount, LoanValue } from 'src/utils/entities';
@@ -21,6 +22,7 @@ export default {
         collateral: collateralBook37,
         loanValue: LoanValue.fromPrice(9410, dec22Fixture.toNumber()),
     },
+    chromatic: { delay: 1000 },
     decorators: [withAssetPrice, withWalletProvider, withMaturities],
 } as Meta<typeof OrderDetails>;
 
@@ -29,3 +31,18 @@ const Template: StoryFn<typeof OrderDetails> = args => (
 );
 
 export const Default = Template.bind({});
+Default.play = async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const button = await canvas.findByTestId('disclaimer-button');
+    await userEvent.click(button);
+};
+
+export const LendPosition = Template.bind({});
+LendPosition.args = {
+    side: OrderSide.LEND,
+};
+LendPosition.play = async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const button = await canvas.findByTestId('disclaimer-button');
+    await userEvent.click(button);
+};
