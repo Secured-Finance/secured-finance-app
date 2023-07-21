@@ -122,6 +122,20 @@ describe('PlaceOrder component', () => {
         await waitFor(() => expect(onClose).not.toHaveBeenCalled());
     });
 
+    it('should update the lastActionTimestamp in the store when the transaction receipt is received', async () => {
+        const tx = {
+            wait: jest.fn(() => Promise.resolve({ blockNumber: 13115215 })),
+        } as unknown;
+        const onPlaceOrder = jest.fn().mockReturnValue(Promise.resolve(tx));
+        const { store } = render(<Default onPlaceOrder={onPlaceOrder} />, {
+            preloadedState,
+        });
+        expect(store.getState().blockchain.lastActionTimestamp).toEqual(0);
+        fireEvent.click(screen.getByTestId('dialog-action-button'));
+        expect(await screen.findByText('Success!')).toBeInTheDocument();
+        expect(store.getState().blockchain.lastActionTimestamp).toBeTruthy();
+    });
+
     it('should write an error in the store and proceed to failure screen if onPlaceOrder throw an error', async () => {
         const onPlaceOrder = jest.fn(() => {
             throw new Error('This is an error');

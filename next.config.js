@@ -6,7 +6,11 @@ const commitHash = require('child_process')
     .toString()
     .trim();
 
-module.exports = {
+const withBundleAnalyzer = require('@next/bundle-analyzer')({
+    enabled: process.env.ANALYZE === 'true',
+});
+
+module.exports = withBundleAnalyzer({
     reactStrictMode: true,
     trailingSlash: true,
 
@@ -16,4 +20,4 @@ module.exports = {
         SF_ENV: process.env.SF_ENV,
         COMMIT_HASH: commitHash,
     },
-};
+});

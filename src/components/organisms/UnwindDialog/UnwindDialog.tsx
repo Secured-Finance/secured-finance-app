@@ -9,16 +9,17 @@ import {
     SuccessPanel,
 } from 'src/components/molecules';
 import { OrderDetails } from 'src/components/organisms';
-import { useCollateralBook, useEtherscanUrl, useOrders } from 'src/hooks';
+import {
+    useCollateralBook,
+    useEtherscanUrl,
+    useHandleContractTransaction,
+    useOrders,
+} from 'src/hooks';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { selectMarket } from 'src/store/availableContracts';
 import { setLastMessage } from 'src/store/lastError';
 import { RootState } from 'src/store/types';
-import {
-    AddressUtils,
-    CurrencySymbol,
-    handleContractTransaction,
-} from 'src/utils';
+import { AddressUtils, CurrencySymbol } from 'src/utils';
 import { Amount, LoanValue, Maturity } from 'src/utils/entities';
 import { useAccount } from 'wagmi';
 
@@ -102,6 +103,7 @@ export const UnwindDialog = ({
     side: OrderSide;
 } & DialogState) => {
     const etherscanUrl = useEtherscanUrl();
+    const handleContractTransaction = useHandleContractTransaction();
     const { address } = useAccount();
     const [state, dispatch] = useReducer(reducer, stateRecord[1]);
     const [txHash, setTxHash] = useState<string | undefined>();
@@ -156,7 +158,7 @@ export const UnwindDialog = ({
                 }
             }
         },
-        [unwindPosition, globalDispatch]
+        [unwindPosition, handleContractTransaction, globalDispatch]
     );
 
     const onClick = useCallback(
