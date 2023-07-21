@@ -30,8 +30,8 @@ const sortOrders = (a: Order, b: Order) => {
 export const useOrderList = (account: string | undefined) => {
     const securedFinance = useSF();
 
-    const block = useSelector(
-        (state: RootState) => state.blockchain.latestBlock
+    const { latestBlock, lastActionTimestamp } = useSelector(
+        (state: RootState) => state.blockchain
     );
 
     const [orderList, setOrderList] = useState<{
@@ -90,7 +90,7 @@ export const useOrderList = (account: string | undefined) => {
 
     useEffect(() => {
         fetchOrdersList();
-    }, [block, fetchOrdersList]);
+    }, [latestBlock, fetchOrdersList, lastActionTimestamp]);
 
     return orderList;
 };

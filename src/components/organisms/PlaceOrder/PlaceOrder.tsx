@@ -20,7 +20,12 @@ import {
     SuccessPanel,
 } from 'src/components/molecules';
 import { Tooltip } from 'src/components/templates';
-import { CollateralBook, useEtherscanUrl, useOrderFee } from 'src/hooks';
+import {
+    CollateralBook,
+    useEtherscanUrl,
+    useHandleContractTransaction,
+    useOrderFee,
+} from 'src/hooks';
 import { setLastMessage } from 'src/store/lastError';
 import { OrderType, PlaceOrderFunction } from 'src/types';
 import {
@@ -29,7 +34,6 @@ import {
     OrderEvents,
     OrderProperties,
     calculateFee,
-    handleContractTransaction,
     ordinaryFormat,
     prefixTilde,
 } from 'src/utils';
@@ -125,6 +129,7 @@ export const PlaceOrder = ({
     walletSource: WalletSource;
 } & DialogState) => {
     const etherscanUrl = useEtherscanUrl();
+    const handleContractTransaction = useHandleContractTransaction();
     const [state, dispatch] = useReducer(reducer, stateRecord[1]);
     const [txHash, setTxHash] = useState<string | undefined>();
     const globalDispatch = useDispatch();
@@ -182,7 +187,13 @@ export const PlaceOrder = ({
                 }
             }
         },
-        [onPlaceOrder, orderType, orderAmount.value, globalDispatch]
+        [
+            onPlaceOrder,
+            handleContractTransaction,
+            orderType,
+            orderAmount.value,
+            globalDispatch,
+        ]
     );
 
     const orderFee = useOrderFee(orderAmount.currency);

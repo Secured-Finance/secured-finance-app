@@ -9,7 +9,7 @@ import {
     SuccessPanel,
 } from 'src/components/molecules';
 import { CollateralInput } from 'src/components/organisms';
-import { useEtherscanUrl } from 'src/hooks';
+import { useEtherscanUrl, useHandleContractTransaction } from 'src/hooks';
 import { useWithdrawCollateral } from 'src/hooks/useDepositCollateral';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { RootState } from 'src/store/types';
@@ -20,7 +20,6 @@ import {
     ZERO_BN,
     amountFormatterFromBase,
     amountFormatterToBase,
-    handleContractTransaction,
 } from 'src/utils';
 import { CollateralEvents, trackCollateralEvent } from 'src/utils/events';
 import { useAccount } from 'wagmi';
@@ -103,6 +102,7 @@ export const WithdrawCollateral = ({
     collateralList: Record<CurrencySymbol, CollateralInfo>;
 } & DialogState) => {
     const etherscanUrl = useEtherscanUrl();
+    const handleContractTransaction = useHandleContractTransaction();
     const { address } = useAccount();
     const [asset, setAsset] = useState(CurrencySymbol.ETH);
     const [state, dispatch] = useReducer(reducer, stateRecord[1]);
@@ -158,7 +158,13 @@ export const WithdrawCollateral = ({
             }
             dispatch({ type: 'error' });
         }
-    }, [asset, collateral, onWithdrawCollateral, source]);
+    }, [
+        asset,
+        collateral,
+        handleContractTransaction,
+        onWithdrawCollateral,
+        source,
+    ]);
 
     const onClick = useCallback(
         async (currentStep: Step) => {

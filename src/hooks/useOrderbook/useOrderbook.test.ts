@@ -2,12 +2,11 @@ import { BigNumber } from 'ethers';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { renderHook } from 'src/test-utils';
 import { CurrencySymbol, ZERO_BN } from 'src/utils';
-import { Maturity } from 'src/utils/entities';
 import { useOrderbook } from './useOrderbook';
 
 const mock = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mock);
-const maturity = new Maturity(1675252800);
+const maturity = 1675252800;
 
 describe('useOrderbook', () => {
     it('should return an array of number for borrow rates', async () => {

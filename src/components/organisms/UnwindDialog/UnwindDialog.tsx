@@ -21,6 +21,7 @@ import { Tooltip } from 'src/components/templates';
 import {
     useCollateralBook,
     useEtherscanUrl,
+    useHandleContractTransaction,
     useOrderFee,
     useOrders,
 } from 'src/hooks';
@@ -32,7 +33,6 @@ import {
     AddressUtils,
     CurrencySymbol,
     calculateFee,
-    handleContractTransaction,
     prefixTilde,
 } from 'src/utils';
 import { Amount, LoanValue, Maturity } from 'src/utils/entities';
@@ -118,6 +118,7 @@ export const UnwindDialog = ({
     side: OrderSide;
 } & DialogState) => {
     const etherscanUrl = useEtherscanUrl();
+    const handleContractTransaction = useHandleContractTransaction();
     const { address } = useAccount();
     const [state, dispatch] = useReducer(reducer, stateRecord[1]);
     const [txHash, setTxHash] = useState<string | undefined>();
@@ -172,7 +173,7 @@ export const UnwindDialog = ({
                 }
             }
         },
-        [unwindPosition, globalDispatch]
+        [unwindPosition, handleContractTransaction, globalDispatch]
     );
 
     const onClick = useCallback(
