@@ -44,7 +44,7 @@ import {
     usdFormat,
 } from 'src/utils';
 import { Amount, LoanValue } from 'src/utils/entities';
-import { useWallet } from 'use-wallet';
+import { useAccount } from 'wagmi';
 
 export const AdvancedLendingOrderCard = ({
     collateralBook,
@@ -79,7 +79,7 @@ export const AdvancedLendingOrderCard = ({
     }, [unitPrice, maturity]);
 
     const dispatch = useDispatch();
-    const { account } = useWallet();
+    const { address, isConnected } = useAccount();
 
     const collateralUsagePercent = useMemo(() => {
         return collateralBook.coverage.toNumber() / 100.0;
@@ -249,12 +249,12 @@ export const AdvancedLendingOrderCard = ({
                     side={side}
                     variant='advanced'
                 />
-                {account && side === OrderSide.LEND && (
+                {isConnected && side === OrderSide.LEND && (
                     <div className='space-y-1'>
                         <WalletSourceSelector
                             optionList={walletSourceList}
                             selected={selectedWalletSource}
-                            account={account ?? ''}
+                            account={address ?? ''}
                             onChange={handleWalletSourceChange}
                         />
                         <ErrorInfo

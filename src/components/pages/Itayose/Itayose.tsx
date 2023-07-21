@@ -38,7 +38,7 @@ import {
 } from 'src/utils';
 import { countdown } from 'src/utils/date';
 import { Maturity } from 'src/utils/entities';
-import { useWallet } from 'use-wallet';
+import { useAccount } from 'wagmi';
 
 const Toolbar = ({
     selectedAsset,
@@ -95,7 +95,7 @@ const Toolbar = ({
     );
 };
 export const Itayose = () => {
-    const { account } = useWallet();
+    const { address } = useAccount();
 
     const { amount, currency, maturity } = useSelector((state: RootState) =>
         selectLandingOrderForm(state.landingOrderForm)
@@ -129,8 +129,8 @@ export const Itayose = () => {
     }, [currency, assetList]);
 
     const orderBook = useOrderbook(currency, selectedTerm.value);
-    const orderList = useOrderList(account);
-    const collateralBook = useCollateralBook(account);
+    const orderList = useOrderList(address);
+    const collateralBook = useCollateralBook(address);
 
     const filteredOrderList = useMemo(() => {
         return orderList.activeOrderList.filter(
