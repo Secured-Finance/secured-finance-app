@@ -1,4 +1,5 @@
 import queries from '@secured-finance/sf-graph-client/dist/graphclients';
+import { BigNumber, utils } from 'ethers';
 import { TransactionList } from 'src/types';
 import { Maturity } from 'src/utils/entities';
 import {
@@ -12,6 +13,43 @@ import {
     usdcBytes32,
     wfilBytes32,
 } from './fixtures';
+
+const generateMyTransactions = (amount: string) => {
+    const myTransactions = [];
+    for (let i = 0; i < 20; i++) {
+        myTransactions.push({
+            amount: amount,
+            averagePrice: '0.8000',
+            side: 1,
+            orderPrice: '9543',
+            createdAt: '1671080520',
+            forwardValue: '520000000000000000000',
+            currency: wfilBytes32,
+            maturity: mar23Fixture.toString(),
+        });
+    }
+    return myTransactions;
+};
+
+const generateMyOrderHistory = (amount: string) =>
+    Array(20)
+        .fill(null)
+        .map((_, index) => ({
+            orderId: index,
+            currency: wfilBytes32,
+            side: 1,
+            maturity: BigNumber.from(dec22Fixture.toString()),
+            unitPrice: BigNumber.from('9800'),
+            filledAmount: BigNumber.from('0'),
+            amount: BigNumber.from(amount),
+            status: 'Open',
+            createdAt: BigNumber.from('1'),
+            txHash: utils.formatBytes32String('hash'),
+            lendingMarket: {
+                id: '1',
+                isActive: true,
+            },
+        }));
 
 export const mockUserTransactionHistory = [
     {
@@ -67,6 +105,168 @@ export const mockUserTransactionHistory = [
                     user: {
                         transactionCount: 5,
                         transactions: transactions,
+                    },
+                },
+            };
+        },
+    },
+    {
+        request: {
+            query: queries.UserTransactionHistoryDocument,
+            variables: {
+                address: '',
+                skip: 0,
+                first: 20,
+                awaitRefetchQueries: true,
+            },
+        },
+        result: {
+            data: {
+                user: {
+                    transactionCount: 0,
+                    transactions: [],
+                },
+            },
+        },
+        newData: () => {
+            return {
+                data: {
+                    user: {
+                        transactionCount: 0,
+                        transactions: [],
+                    },
+                },
+            };
+        },
+    },
+
+    {
+        request: {
+            query: queries.UserTransactionHistoryDocument,
+            variables: {
+                address: '0xb98bd7c7f656290071e52d1aa617d9cb4467fd6d',
+                skip: 0,
+                first: 20,
+                awaitRefetchQueries: true,
+            },
+        },
+        result: {
+            data: {
+                user: {
+                    transactionCount: 80,
+                    transactions: generateMyTransactions(
+                        '500000000000000000000'
+                    ),
+                },
+            },
+        },
+        newData: () => {
+            return {
+                data: {
+                    user: {
+                        transactionCount: 80,
+                        transactions: generateMyTransactions(
+                            '500000000000000000000'
+                        ),
+                    },
+                },
+            };
+        },
+    },
+    {
+        request: {
+            query: queries.UserTransactionHistoryDocument,
+            variables: {
+                address: '0xb98bd7c7f656290071e52d1aa617d9cb4467fd6d',
+                skip: 20,
+                first: 20,
+                awaitRefetchQueries: true,
+            },
+        },
+        result: {
+            data: {
+                user: {
+                    transactionCount: 80,
+                    transactions: generateMyTransactions(
+                        '600000000000000000000'
+                    ),
+                },
+            },
+        },
+        newData: () => {
+            return {
+                data: {
+                    user: {
+                        transactionCount: 80,
+                        transactions: generateMyTransactions(
+                            '600000000000000000000'
+                        ),
+                    },
+                },
+            };
+        },
+    },
+    {
+        request: {
+            query: queries.UserTransactionHistoryDocument,
+            variables: {
+                address: '0xb98bd7c7f656290071e52d1aa617d9cb4467fd6d',
+                skip: 40,
+                first: 20,
+                awaitRefetchQueries: true,
+            },
+        },
+        result: {
+            data: {
+                user: {
+                    transactionCount: 80,
+                    transactions: generateMyTransactions(
+                        '700000000000000000000'
+                    ),
+                },
+            },
+        },
+        newData: () => {
+            return {
+                data: {
+                    user: {
+                        transactionCount: 80,
+                        transactions: generateMyTransactions(
+                            '700000000000000000000'
+                        ),
+                    },
+                },
+            };
+        },
+    },
+    {
+        request: {
+            query: queries.UserTransactionHistoryDocument,
+            variables: {
+                address: '0xb98bd7c7f656290071e52d1aa617d9cb4467fd6d',
+                skip: 60,
+                first: 20,
+                awaitRefetchQueries: true,
+            },
+        },
+        result: {
+            data: {
+                user: {
+                    transactionCount: 80,
+                    transactions: generateMyTransactions(
+                        '800000000000000000000'
+                    ),
+                },
+            },
+        },
+        newData: () => {
+            return {
+                data: {
+                    user: {
+                        transactionCount: 80,
+                        transactions: generateMyTransactions(
+                            '800000000000000000000'
+                        ),
                     },
                 },
             };
@@ -128,6 +328,128 @@ export const mockUserOrderHistory = [
                     user: {
                         orderCount: 9,
                         orders: orderHistoryList,
+                    },
+                },
+            };
+        },
+    },
+    {
+        request: {
+            query: queries.UserOrderHistoryDocument,
+            variables: {
+                address: '',
+                skip: 0,
+                first: 20,
+                awaitRefetchQueries: true,
+            },
+        },
+        result: {
+            data: {
+                user: {
+                    orderCount: 0,
+                    orders: [],
+                },
+            },
+        },
+        newData: () => {
+            return {
+                data: {
+                    user: {
+                        orderCount: 0,
+                        orders: [],
+                    },
+                },
+            };
+        },
+    },
+    {
+        request: {
+            query: queries.UserOrderHistoryDocument,
+            variables: {
+                address: '0xb98bd7c7f656290071e52d1aa617d9cb4467fd6d',
+                skip: 0,
+                first: 20,
+                awaitRefetchQueries: true,
+            },
+        },
+        result: {
+            data: {
+                user: {
+                    orderCount: 60,
+                    orders: generateMyOrderHistory('1000000000000000000000'),
+                },
+            },
+        },
+        newData: () => {
+            return {
+                data: {
+                    user: {
+                        orderCount: 60,
+                        orders: generateMyOrderHistory(
+                            '1000000000000000000000'
+                        ),
+                    },
+                },
+            };
+        },
+    },
+    {
+        request: {
+            query: queries.UserOrderHistoryDocument,
+            variables: {
+                address: '0xb98bd7c7f656290071e52d1aa617d9cb4467fd6d',
+                skip: 20,
+                first: 20,
+                awaitRefetchQueries: true,
+            },
+        },
+        result: {
+            data: {
+                user: {
+                    orderCount: 60,
+                    orders: generateMyOrderHistory('2000000000000000000000'),
+                },
+            },
+        },
+        newData: () => {
+            return {
+                data: {
+                    user: {
+                        orderCount: 60,
+                        orders: generateMyOrderHistory(
+                            '2000000000000000000000'
+                        ),
+                    },
+                },
+            };
+        },
+    },
+    {
+        request: {
+            query: queries.UserOrderHistoryDocument,
+            variables: {
+                address: '0xb98bd7c7f656290071e52d1aa617d9cb4467fd6d',
+                skip: 40,
+                first: 20,
+                awaitRefetchQueries: true,
+            },
+        },
+        result: {
+            data: {
+                user: {
+                    orderCount: 60,
+                    orders: generateMyOrderHistory('3000000000000000000000'),
+                },
+            },
+        },
+        newData: () => {
+            return {
+                data: {
+                    user: {
+                        orderCount: 60,
+                        orders: generateMyOrderHistory(
+                            '3000000000000000000000'
+                        ),
                     },
                 },
             };

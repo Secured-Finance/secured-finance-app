@@ -27,7 +27,7 @@ import {
     setUnitPrice,
 } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
-import { MaturityOptionList, TransactionList } from 'src/types';
+import { MaturityOptionList, OrderType, TransactionList } from 'src/types';
 import {
     CurrencySymbol,
     Rate,
@@ -38,7 +38,7 @@ import {
     usdFormat,
 } from 'src/utils';
 import { LoanValue, Maturity } from 'src/utils/entities';
-import { useWallet } from 'use-wallet';
+import { useAccount } from 'wagmi';
 
 const useTradeHistoryDetails = (
     transactions: TransactionList,
@@ -91,7 +91,7 @@ export const AdvancedLending = ({
         getAssetPrice(currency)(state)
     );
 
-    const { account } = useWallet();
+    const { address } = useAccount();
     const dispatch = useDispatch();
     const assetList = useMemo(() => getCurrencyMapAsOptions(), []);
 
@@ -114,7 +114,7 @@ export const AdvancedLending = ({
     );
 
     const orderBook = useOrderbook(currency, selectedTerm.value, 10);
-    const orderList = useOrderList(account);
+    const orderList = useOrderList(address);
 
     const transactionHistory = useGraphClientHook(
         {
@@ -172,7 +172,11 @@ export const AdvancedLending = ({
     );
 
     useEffect(() => {
-        dispatch(setUnitPrice(loanValue.price));
+        if (loanValue.price > 0 || orderType === OrderType.MARKET) {
+            dispatch(setUnitPrice(loanValue.price));
+        } else {
+            dispatch(setUnitPrice(undefined));
+        }
     }, [dispatch, loanValue.price, orderType, currency, maturity]);
 
     return (

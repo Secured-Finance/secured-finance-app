@@ -11,15 +11,61 @@ import SecuredFinanceProvider from 'src/contexts/SecuredFinanceProvider';
 import store from 'src/store';
 import {
     getAmplitudeApiKey,
-    getEthereumChainId,
     getEthereumNetwork,
+    getWalletConnectId,
 } from 'src/utils';
-import { UseWalletProvider } from 'use-wallet';
+import { WagmiConfig, configureChains, createConfig, sepolia } from 'wagmi';
+import { InjectedConnector } from 'wagmi/connectors/injected';
+import { MetaMaskConnector } from 'wagmi/connectors/metaMask';
+import { WalletConnectConnector } from 'wagmi/connectors/walletConnect';
+import { alchemyProvider } from 'wagmi/providers/alchemy';
+import { publicProvider } from 'wagmi/providers/public';
 import '../assets/css/index.css';
+
+const projectId = getWalletConnectId();
 
 init(getAmplitudeApiKey(), undefined, {
     appVersion: process.env.SF_ENV,
     logLevel: LogLevel.None,
+});
+
+const { chains, publicClient } = configureChains(
+    [sepolia],
+    [
+        alchemyProvider({
+            apiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY ?? '',
+        }),
+        publicProvider(),
+    ]
+);
+
+const config = createConfig({
+    autoConnect: false,
+    publicClient: publicClient,
+    connectors: [
+        new MetaMaskConnector({ chains }),
+        new WalletConnectConnector({
+            chains,
+            options: {
+                projectId: projectId,
+                qrModalOptions: {
+                    themeVariables: {
+                        '--wcm-font-family':
+                            "'Suisse International', sans-serif",
+                        '--wcm-accent-color': '#002133',
+                        '--wcm-background-color': '#5162FF',
+                    },
+                },
+            },
+        }),
+        new InjectedConnector({
+            chains,
+            options: {
+                name: 'Injected',
+                shimDisconnect: true,
+            },
+        }),
+    ],
 });
 
 function App({ Component, pageProps }: AppProps) {
@@ -46,22 +92,12 @@ function App({ Component, pageProps }: AppProps) {
 
 const Providers: React.FC = ({ children }) => {
     const network = getEthereumNetwork();
-    const chainId = getEthereumChainId();
 
     return (
         <GraphClientProvider network={network}>
-            <UseWalletProvider
-                connectors={{
-                    injected: {
-                        chainId: [chainId],
-                    },
-                    walletconnect: {
-                        rpcUrl: 'https://ropsten.eth.aragon.network/',
-                    },
-                }}
-            >
+            <WagmiConfig config={config}>
                 <SecuredFinanceProvider>{children}</SecuredFinanceProvider>
-            </UseWalletProvider>
+            </WagmiConfig>
         </GraphClientProvider>
     );
 };
