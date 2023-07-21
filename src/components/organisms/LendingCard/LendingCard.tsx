@@ -224,7 +224,7 @@ export const LendingCard = ({
                     <WalletSourceSelector
                         optionList={walletSourceList}
                         selected={selectedWalletSource}
-                        account={account ?? ''}
+                        account={address ?? ''}
                         onChange={handleWalletSourceChange}
                     />
                 )}
