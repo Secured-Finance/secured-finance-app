@@ -312,7 +312,10 @@ export const AdvancedLendingOrderCard = ({
                             amountFormatterFromBase[currency](amount),
                             balanceToLend,
                             side
-                        ) || validateBondPrice()
+                        ) ||
+                        validateBondPrice() ||
+                        (unitPrice === undefined &&
+                            orderType === OrderType.LIMIT)
                     }
                 />
 
