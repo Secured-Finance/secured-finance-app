@@ -1,6 +1,7 @@
 import queries from '@secured-finance/sf-graph-client/dist/graphclients';
 import { useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { Spinner } from 'src/components/atoms';
 import { HorizontalTab, StatsBar } from 'src/components/molecules';
 import {
     ActiveTradeTable,
@@ -16,8 +17,8 @@ import {
     useCollateralBook,
     useGraphClientHook,
     useOrderList,
-    usePositions,
     usePagination,
+    usePositions,
 } from 'src/hooks';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { RootState } from 'src/store/types';
@@ -41,6 +42,11 @@ enum TableType {
     MY_TRANSACTIONS,
 }
 
+const TabSpinner = () => (
+    <div className='flex h-full w-full items-center justify-center pt-10'>
+        <Spinner />
+    </div>
+);
 const offset = 20;
 
 export const PortfolioManagement = () => {
@@ -188,28 +194,39 @@ export const PortfolioManagement = () => {
                         >
                             <ActiveTradeTable data={positions} />
                             <OrderTable data={orderList.activeOrderList} />
-                            <OrderHistoryTable
-                                data={sortedOrderHistory}
-                                pagination={{
-                                    totalData: parseInt(
-                                        userOrderHistory.data?.orderCount
-                                    ),
-                                    getMoreData: () =>
-                                        setOffsetOrders(offsetOrders + offset),
-                                    containerHeight: true,
-                                }}
-                            />
-                            <MyTransactionsTable
-                                data={myTransactions}
-                                pagination={{
-                                    totalData: myTransactionsDataCount,
-                                    getMoreData: () =>
-                                        setOffsetTransactions(
-                                            offsetTransactions + offset
+
+                            {userOrderHistory.loading ? (
+                                <TabSpinner />
+                            ) : (
+                                <OrderHistoryTable
+                                    data={sortedOrderHistory}
+                                    pagination={{
+                                        totalData: parseInt(
+                                            userOrderHistory.data?.orderCount
                                         ),
-                                    containerHeight: true,
-                                }}
-                            />
+                                        getMoreData: () =>
+                                            setOffsetOrders(
+                                                offsetOrders + offset
+                                            ),
+                                        containerHeight: true,
+                                    }}
+                                />
+                            )}
+                            {userTransactionHistory.loading ? (
+                                <TabSpinner />
+                            ) : (
+                                <MyTransactionsTable
+                                    data={myTransactions}
+                                    pagination={{
+                                        totalData: myTransactionsDataCount,
+                                        getMoreData: () =>
+                                            setOffsetTransactions(
+                                                offsetTransactions + offset
+                                            ),
+                                        containerHeight: true,
+                                    }}
+                                />
+                            )}
                         </HorizontalTab>
                     </div>
                 </div>

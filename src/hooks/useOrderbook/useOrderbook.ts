@@ -4,7 +4,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from 'src/store/types';
 import { CurrencySymbol, toCurrency } from 'src/utils';
-import { LoanValue, Maturity } from 'src/utils/entities';
+import { LoanValue } from 'src/utils/entities';
 import useSF from '../useSecuredFinance';
 
 interface SmartContractOrderbook {
@@ -76,12 +76,12 @@ const emptyOrderbook = {
 
 export const useOrderbook = (
     ccy: CurrencySymbol,
-    maturity: Maturity,
+    maturity: number,
     limit: number = MAX_ORDERBOOK_LENGTH
 ) => {
     const securedFinance = useSF();
-    const block = useSelector(
-        (state: RootState) => state.blockchain.latestBlock
+    const { latestBlock, lastActionTimestamp } = useSelector(
+        (state: RootState) => state.blockchain
     );
 
     const [orderbook, setOrderbook] = useState<{
@@ -127,22 +127,19 @@ export const useOrderbook = (
         []
     );
 
-    useEffect(
-        () => {
-            if (securedFinance && !maturity.isZero()) {
-                fetchOrderbook(securedFinance, ccy, maturity.toNumber(), limit);
-            }
-        }, // eslint-disable-next-line react-hooks/exhaustive-deps
-        [
-            fetchOrderbook,
-            securedFinance,
-            block,
-            // eslint-disable-next-line react-hooks/exhaustive-deps
-            maturity.toNumber(),
-            ccy,
-            limit,
-        ]
-    );
+    useEffect(() => {
+        if (securedFinance && maturity) {
+            fetchOrderbook(securedFinance, ccy, maturity, limit);
+        }
+    }, [
+        fetchOrderbook,
+        securedFinance,
+        latestBlock,
+        lastActionTimestamp,
+        maturity,
+        ccy,
+        limit,
+    ]);
 
     return orderbook;
 };

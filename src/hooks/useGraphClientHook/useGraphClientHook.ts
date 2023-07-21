@@ -8,6 +8,7 @@ type QueryResult<T> = {
     error: unknown;
     refetch?: unknown;
     networkStatus?: unknown;
+    loading: boolean;
 };
 
 type QueryResultType<T, K extends keyof T> = Omit<
@@ -49,40 +50,46 @@ export function useGraphClientHook<T, TVariables, K extends keyof T>(
         error: undefined,
         refetch: undefined,
         networkStatus: undefined,
+        loading: true,
     });
 
     const block = useSelector(
         (state: RootState) => state.blockchain.latestBlock
     );
 
-    const { refetch, networkStatus } = useQuery<T, TVariables>(queryDocument, {
-        client: client,
-        variables: {
-            ...variables,
-            awaitRefetchQueries: true,
-        },
-        fetchPolicy: 'network-only',
-        notifyOnNetworkStatusChange: true,
-        pollInterval: undefined,
-        skip,
-        onCompleted: data => {
-            setResult({
-                data: entity ? data?.[entity] : data,
-                error: undefined,
-                refetch,
-                networkStatus,
-            });
-        },
-        onError: error => {
-            setResult({
-                data: undefined,
-                error,
-                refetch,
-                networkStatus,
-            });
-            console.error(error);
-        },
-    });
+    const { refetch, networkStatus, loading } = useQuery<T, TVariables>(
+        queryDocument,
+        {
+            client: client,
+            variables: {
+                ...variables,
+                awaitRefetchQueries: true,
+            },
+            fetchPolicy: 'network-only',
+            notifyOnNetworkStatusChange: true,
+            pollInterval: undefined,
+            skip,
+            onCompleted: data => {
+                setResult({
+                    data: entity ? data?.[entity] : data,
+                    error: undefined,
+                    refetch,
+                    networkStatus,
+                    loading,
+                });
+            },
+            onError: error => {
+                setResult({
+                    data: undefined,
+                    error,
+                    refetch,
+                    networkStatus,
+                    loading,
+                });
+                console.error(error);
+            },
+        }
+    );
 
     useEffect(() => {
         if (realTime) {
