@@ -38,7 +38,6 @@ This headless runner is a command line runner used for our continuous integratio
 - Start the development server with `npm run start`
 - start the cypress headless runner with `npm run cypress:run`
 ## Domains
-you need to install unstoppable domain [browser extension](https://chrome.google.com/webstore/detail/unstoppable-extension/beelkklmblgdljamcmoffgfbdddfpnnl?hl=en) for `.crypto`
 - https://securedfinance.on.fleek.co/
 - https://securedfinance.crypto
 
@@ -68,18 +67,6 @@ you need to install unstoppable domain [browser extension](https://chrome.google
 ## Deployment
 
 Deployed to ipfs using Fleek.
-
-## Note
-The following file is a tentative patch created by `patch-package` for `use-wallet` to support the Sepolia testnet, because it doesn't support Sepolia.
-
-[patches/use-wallet+0.13.4.patch](patches/use-wallet+0.13.4.patch)
-
-After `use-wallet` starts to support the Sepolia testnet, we need to do the followings:
-
-- Uninstall the `patch-package` module.
-- Remove the `patches` folder.
-- Remove the npm script, `postinstall`.
-- Update the `use-wallet` version.
 
 # License
 

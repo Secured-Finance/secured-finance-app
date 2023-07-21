@@ -1,7 +1,8 @@
 import { track } from '@amplitude/analytics-browser';
-import { useCallback, useEffect, useReducer, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import MetaMaskIcon from 'src/assets/img/metamask-fox.svg';
+import WalletConnectIcon from 'src/assets/img/wallet-connect.svg';
 import { Spinner } from 'src/components/atoms';
 import {
     Dialog,
@@ -9,263 +10,196 @@ import {
     SuccessPanel,
     WalletRadioGroup,
 } from 'src/components/molecules';
-import { CACHED_PROVIDER_KEY } from 'src/contexts/SecuredFinanceProvider/SecuredFinanceProvider';
 import { useEtherscanUrl } from 'src/hooks';
 import { setWalletDialogOpen } from 'src/store/interactions';
 import { RootState } from 'src/store/types';
+import { Wallet } from 'src/types';
 import {
     AddressUtils,
     InterfaceEvents,
     InterfaceProperties,
     WalletConnectionResult,
-    decToHex,
     getEthereumChainId,
+    writeWalletInStore,
 } from 'src/utils';
 import { associateWallet } from 'src/utils/events';
-import { useWallet } from 'use-wallet';
+import { useAccount, useConnect } from 'wagmi';
 
-enum Step {
-    selectWallet = 1,
-    connecting,
-    connected,
-    error,
+function hasMetaMask() {
+    if (typeof window === 'undefined') {
+        return false;
+    }
+    return typeof window.ethereum !== 'undefined';
 }
-
-type State = {
-    currentStep: Step;
-    nextStep: Step;
-    title: string;
-    description: string;
-    buttonText: string;
-};
-
-const stateRecord: Record<Step, State> = {
-    [Step.selectWallet]: {
-        currentStep: Step.selectWallet,
-        nextStep: Step.connecting,
-        title: 'Select Wallet Provider',
-        description:
-            'Connect your wallet to unlock and start using services on Secured Finance.',
-        buttonText: 'Connect Wallet',
-    },
-    [Step.connecting]: {
-        currentStep: Step.connecting,
-        nextStep: Step.connected,
-        title: 'Connecting...',
-        description: '',
-        buttonText: '',
-    },
-    [Step.connected]: {
-        currentStep: Step.connected,
-        nextStep: Step.selectWallet,
-        title: 'Success!',
-        description: 'Your wallet has been connected successfully.',
-        buttonText: 'OK',
-    },
-    [Step.error]: {
-        currentStep: Step.error,
-        nextStep: Step.selectWallet,
-        title: 'Failed!',
-        description: '',
-        buttonText: 'OK',
-    },
-};
-
-const reducer = (
-    state: State,
-    action: {
-        type: string;
-    }
-) => {
-    switch (action.type) {
-        case 'next':
-            return {
-                ...stateRecord[state.nextStep],
-            };
-        case 'error':
-            return {
-                ...stateRecord[Step.error],
-            };
-        default:
-            return {
-                ...stateRecord[Step.selectWallet],
-            };
-    }
-};
 
 export const WalletDialog = () => {
     const etherscanUrl = useEtherscanUrl();
+    const options = useMemo(() => {
+        const options = [
+            {
+                name: 'Metamask',
+                Icon: MetaMaskIcon,
+            },
+            {
+                name: 'WalletConnect',
+                Icon: WalletConnectIcon,
+            },
+        ];
+        if (!hasMetaMask()) {
+            return options.slice(1, 2);
+        }
+        return options;
+    }, []);
+
     const [wallet, setWallet] = useState<string>('');
     const [errorMessage, setErrorMessage] = useState(
         'Your wallet could not be connected.'
     );
-    const [state, dispatch] = useReducer(reducer, stateRecord[1]);
+
     const isOpen = useSelector(
         (state: RootState) => state.interactions.walletDialogOpen
     );
-    const chainError = useSelector(
-        (state: RootState) => state.blockchain.chainError
-    );
-    const globalDispatch = useDispatch();
+    const dispatch = useDispatch();
 
-    const { account, connect } = useWallet();
-
-    const handleClose = useCallback(() => {
-        dispatch({ type: 'default' });
-        globalDispatch(setWalletDialogOpen(false));
-    }, [globalDispatch]);
-
-    const handleConnect = useCallback(
-        async (
-            provider: 'injected' | 'walletconnect',
-            account: string | null
-        ) => {
-            try {
-                if (!account) {
-                    await connect(provider);
-                    localStorage.setItem(CACHED_PROVIDER_KEY, 'connected');
-                } else {
-                    dispatch({ type: 'next' });
-                }
-            } catch (e) {
-                if (e instanceof Error) {
-                    setErrorMessage(e.message);
-                    dispatch({ type: 'error' });
-                }
-            }
-        },
-        [connect, dispatch]
-    );
-
-    useEffect(() => {
-        if (state.currentStep === Step.connecting) {
-            const provider =
-                wallet === 'Metamask' ? 'injected' : 'walletconnect';
-            handleConnect(provider, account)
-                .then(() => {
-                    if (!account) return;
-                    track(InterfaceEvents.CONNECT_WALLET_BUTTON_CLICKED, {
-                        [InterfaceProperties.WALLET_CONNECTION_RESULT]:
-                            WalletConnectionResult.SUCCEEDED,
-                        [InterfaceProperties.WALLET_ADDRESS]: account,
-                    });
-                    associateWallet(account);
-                })
-                .catch(e => {
+    const { connect, connectors, isLoading, isSuccess, isError, reset } =
+        useConnect({
+            onSettled(data, error) {
+                if (error) {
                     track(InterfaceEvents.CONNECT_WALLET_BUTTON_CLICKED, {
                         [InterfaceProperties.WALLET_CONNECTION_RESULT]:
                             WalletConnectionResult.FAILED,
+                        [InterfaceProperties.WALLET_CONNECTOR]:
+                            data?.connector?.name,
                     });
-                    if (e instanceof Error) {
-                        setErrorMessage(e.message);
-                    }
-                    dispatch({ type: 'error' });
-                });
-        }
-    }, [state, account, handleConnect, wallet]);
+                    setErrorMessage(error.message);
+                } else {
+                    track(InterfaceEvents.CONNECT_WALLET_BUTTON_CLICKED, {
+                        [InterfaceProperties.WALLET_CONNECTION_RESULT]:
+                            WalletConnectionResult.SUCCEEDED,
+                        [InterfaceProperties.WALLET_CONNECTOR]:
+                            data?.connector?.name,
+                        [InterfaceProperties.WALLET_ADDRESS]: data?.account,
+                    });
+                    if (data?.account) associateWallet(data.account);
+                }
+            },
+        });
+    const { address, isConnected } = useAccount();
 
-    const onClick = useCallback(
-        async (currentStep: Step) => {
-            if (!wallet) {
+    const handleClose = useCallback(() => {
+        dispatch(setWalletDialogOpen(false));
+        reset();
+    }, [dispatch, reset]);
+
+    const handleConnect = useCallback(
+        async (provider: Wallet, account: string | undefined) => {
+            const connector = connectors.find(
+                connect => connect.name === provider
+            );
+
+            if (!connector) {
+                setErrorMessage('Provider not found.');
                 return;
             }
 
-            switch (currentStep) {
-                case Step.selectWallet:
-                    if (chainError) {
-                        const provider = window.ethereum;
-                        if (provider) {
-                            try {
-                                await provider.request({
-                                    method: 'wallet_switchEthereumChain',
-                                    params: [
-                                        {
-                                            chainId: decToHex(
-                                                getEthereumChainId()
-                                            ),
-                                        },
-                                    ],
-                                });
-                                dispatch({ type: 'next' });
-                            } catch (e) {
-                                if (e instanceof Error) {
-                                    setErrorMessage(e.message);
-                                    dispatch({ type: 'error' });
-                                }
-                            }
-                        } else {
-                            window.open(
-                                'https://metamask.io/',
-                                'inst_metamask'
-                            );
-                        }
-                    } else {
-                        dispatch({ type: 'next' });
-                    }
-                    break;
-                case Step.connecting:
-                    break;
-                case Step.connected:
-                    handleClose();
-                    break;
-                case Step.error:
-                    handleClose();
-                    break;
+            if (!account) {
+                if (
+                    provider === 'MetaMask' &&
+                    hasMetaMask() &&
+                    (await connector.getChainId()) !== getEthereumChainId()
+                ) {
+                    await connector.switchChain?.(getEthereumChainId());
+                }
+                connect({ connector: connector });
+                writeWalletInStore(provider);
             }
         },
-        [handleClose, wallet, chainError]
+        [connect, connectors]
     );
+
+    const connectWallet = useCallback(
+        async (address: string | undefined) => {
+            try {
+                const provider =
+                    wallet === 'Metamask' ? 'MetaMask' : 'WalletConnect';
+                await handleConnect(provider, address);
+            } catch (e) {
+                reset();
+            }
+        },
+        [handleConnect, reset, wallet]
+    );
+
+    const dialogText = () => {
+        if (!isConnected && !isLoading && !isError) {
+            return {
+                title: 'Select Wallet Provider',
+                description:
+                    'Connect your wallet to unlock and start using services on Secured Finance.',
+                buttonText: 'Connect Wallet',
+            };
+        } else if (isLoading) {
+            return {
+                title: 'Connecting...',
+                description: '',
+                buttonText: '',
+            };
+        } else if (isSuccess && address) {
+            return {
+                title: 'Success!',
+                description: 'Your wallet has been connected successfully.',
+                buttonText: 'OK',
+            };
+        }
+        return {
+            title: 'Failed!',
+            description: '',
+            buttonText: 'OK',
+        };
+    };
 
     return (
         <Dialog
             isOpen={isOpen}
             onClose={handleClose}
-            title={state.title}
-            description={state.description}
-            callToAction={state.buttonText}
-            onClick={() => onClick(state.currentStep)}
-        >
-            {(() => {
-                switch (state.currentStep) {
-                    case Step.selectWallet:
-                        return (
-                            <WalletRadioGroup
-                                value={wallet}
-                                onChange={setWallet}
-                                options={[
-                                    {
-                                        name: 'Metamask',
-                                        Icon: MetaMaskIcon,
-                                    },
-                                ]}
-                            />
-                        );
-                    case Step.connecting:
-                        return (
-                            <div className='flex h-full w-full items-center justify-center py-9'>
-                                <Spinner />
-                            </div>
-                        );
-                        break;
-                    case Step.connected:
-                        return (
-                            <SuccessPanel
-                                itemList={[
-                                    ['Status', 'Connected'],
-                                    [
-                                        'Ethereum Address',
-                                        AddressUtils.format(account ?? '', 16),
-                                    ],
-                                ]}
-                                etherscanUrl={etherscanUrl}
-                            />
-                        );
-                    case Step.error:
-                        return <FailurePanel errorMessage={errorMessage} />;
-                    default:
-                        return <p>Unknown</p>;
+            title={dialogText().title}
+            description={dialogText().description}
+            callToAction={dialogText().buttonText}
+            onClick={async () => {
+                if (!isConnected && !isLoading && !isError) {
+                    await connectWallet(address);
+                } else {
+                    handleClose();
                 }
-            })()}
+            }}
+        >
+            <>
+                {!isConnected && !isLoading && !isError && (
+                    <WalletRadioGroup
+                        value={wallet}
+                        onChange={setWallet}
+                        options={options}
+                    />
+                )}
+                {isLoading && (
+                    <div className='flex h-full w-full items-center justify-center py-9'>
+                        <Spinner />
+                    </div>
+                )}
+                {isSuccess && address && (
+                    <SuccessPanel
+                        itemList={[
+                            ['Status', 'Connected'],
+                            [
+                                'Ethereum Address',
+                                AddressUtils.format(address ?? '', 16),
+                            ],
+                        ]}
+                        etherscanUrl={etherscanUrl}
+                    />
+                )}
+                {isError && <FailurePanel errorMessage={errorMessage} />}
+            </>
         </Dialog>
     );
 };

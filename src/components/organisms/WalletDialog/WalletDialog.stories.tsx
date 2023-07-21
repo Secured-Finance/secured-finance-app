@@ -13,7 +13,7 @@ export default {
     parameters: {
         ...RESPONSIVE_PARAMETERS,
         chromatic: {
-            viewports: [VIEWPORTS.MOBILE, VIEWPORTS.TABLET],
+            viewports: [VIEWPORTS.MOBILE, VIEWPORTS.TABLET, VIEWPORTS.DESKTOP],
         },
     },
 } as Meta<typeof WalletDialog>;
