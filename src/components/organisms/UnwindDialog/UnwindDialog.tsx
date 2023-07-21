@@ -36,7 +36,7 @@ import {
     prefixTilde,
 } from 'src/utils';
 import { Amount, LoanValue, Maturity } from 'src/utils/entities';
-import { useWallet } from 'use-wallet';
+import { useAccount } from 'wagmi';
 
 enum Step {
     confirm = 1,
@@ -118,7 +118,7 @@ export const UnwindDialog = ({
     side: OrderSide;
 } & DialogState) => {
     const etherscanUrl = useEtherscanUrl();
-    const { account } = useWallet();
+    const { address } = useAccount();
     const [state, dispatch] = useReducer(reducer, stateRecord[1]);
     const [txHash, setTxHash] = useState<string | undefined>();
     const [errorMessage, setErrorMessage] = useState(
@@ -126,7 +126,7 @@ export const UnwindDialog = ({
     );
     const globalDispatch = useDispatch();
 
-    const collateral = useCollateralBook(account);
+    const collateral = useCollateralBook(address);
     const priceList = useSelector((state: RootState) => getPriceMap(state));
     const price = priceList[amount.currency];
 
@@ -141,8 +141,8 @@ export const UnwindDialog = ({
 
         const unitPrice =
             side === OrderSide.BORROW
-                ? market.borrowUnitPrice
-                : market.lendUnitPrice;
+                ? market.bestBorrowUnitPrice
+                : market.bestLendUnitPrice;
 
         return LoanValue.fromPrice(unitPrice, maturity.toNumber());
     }, [market, maturity, side]);

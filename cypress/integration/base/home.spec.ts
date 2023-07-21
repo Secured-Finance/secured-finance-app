@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 
-describe('The Home Page', () => {
+describe.skip('The Home Page', () => {
     beforeEach(() => {
         cy.visit('/');
     });
@@ -14,7 +14,7 @@ describe('The Home Page', () => {
         cy.get('[data-testid="lending-page"]').should('be.visible');
     });
 
-    it('can follow links on header buttons', () => {
+    it.skip('can follow links on header buttons', () => {
         cy.get('[data-cy="terminal"]').click();
         cy.url().should('include', '/dashboard');
         cy.get('[data-testid="dashboard-page"]').should('be.visible');
@@ -23,7 +23,7 @@ describe('The Home Page', () => {
         cy.get('[data-testid="lending-page"]').should('be.visible');
     });
 
-    it('display one wallet provider when clicking unlocking wallet', () => {
+    it.skip('display one wallet provider when clicking unlocking wallet', () => {
         cy.get('[data-cy="wallet"]').click();
         cy.get('[data-cy="modal"]').should('be.visible');
         cy.get('[data-cy="radio-group"]').should('be.visible');

@@ -38,7 +38,7 @@ import {
     getTransformMaturityOption,
 } from 'src/utils';
 import { LoanValue, Maturity } from 'src/utils/entities';
-import { useWallet } from 'use-wallet';
+import { useAccount } from 'wagmi';
 
 export const LendingCard = ({
     collateralBook,
@@ -54,7 +54,7 @@ export const LendingCard = ({
     );
 
     const dispatch = useDispatch();
-    const { account } = useWallet();
+    const { address, isConnected } = useAccount();
 
     const shortNames = useMemo(
         () =>
@@ -187,11 +187,11 @@ export const LendingCard = ({
                     )}
                 />
 
-                {account && side === OrderSide.LEND && (
+                {isConnected && side === OrderSide.LEND && (
                     <WalletSourceSelector
                         optionList={walletSourceList}
                         selected={selectedWalletSource}
-                        account={account ?? ''}
+                        account={address ?? ''}
                         onChange={v => dispatch(setSourceAccount(v))}
                     />
                 )}

@@ -13,7 +13,7 @@ describe('useLoanValues', () => {
         for (let i = 0; i < 9; i++) {
             const maturity = Number(keys[i]);
             const loanValue = LoanValue.fromPrice(
-                maturities[maturity].borrowUnitPrice,
+                maturities[maturity].bestBorrowUnitPrice,
                 maturity
             );
             expect(result.current.get(maturity)).toStrictEqual(loanValue);
@@ -28,7 +28,7 @@ describe('useLoanValues', () => {
         for (let i = 0; i < 9; i++) {
             const maturity = Number(keys[i]);
             const loanValue = LoanValue.fromPrice(
-                maturities[maturity].lendUnitPrice,
+                maturities[maturity].bestLendUnitPrice,
                 maturity
             );
             expect(result.current.get(maturity)).toStrictEqual(loanValue);

@@ -6,7 +6,7 @@ import {
 import { CollateralBook } from 'src/hooks';
 
 interface CollateralTabRightPaneProps {
-    account: string | null;
+    account: string | undefined;
     collateralBook: CollateralBook;
 }
 
