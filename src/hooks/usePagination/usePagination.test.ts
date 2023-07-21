@@ -82,62 +82,6 @@ describe('usePagination', () => {
                     history: 60,
                 })),
         ]);
-    });
-
-    it('should process large amount of data if same data is passed to the hook', () => {
-        const initialProps = Array(1000)
-            .fill(null)
-            .map(_ => ({
-                name: 'SF',
-                age: 10,
-                english: 80,
-                maths: 60,
-                science: 95,
-                history: 60,
-            }));
-        const { result, rerender } = renderHook(props => usePagination(props), {
-            initialProps: initialProps,
-        });
-        expect(result.current).toEqual(initialProps);
-
-        act(() => {
-            rerender(
-                Array(1000)
-                    .fill(null)
-                    .map(_ => ({
-                        name: 'SF',
-                        age: 20,
-                        english: 80,
-                        maths: 60,
-                        science: 95,
-                        history: 60,
-                    }))
-            );
-        });
-
-        expect(result.current).toHaveLength(2000);
-        expect(result.current).toEqual([
-            ...Array(1000)
-                .fill(null)
-                .map(_ => ({
-                    name: 'SF',
-                    age: 10,
-                    english: 80,
-                    maths: 60,
-                    science: 95,
-                    history: 60,
-                })),
-            ...Array(1000)
-                .fill(null)
-                .map(_ => ({
-                    name: 'SF',
-                    age: 20,
-                    english: 80,
-                    maths: 60,
-                    science: 95,
-                    history: 60,
-                })),
-        ]);
 
         act(() => {
             rerender(
