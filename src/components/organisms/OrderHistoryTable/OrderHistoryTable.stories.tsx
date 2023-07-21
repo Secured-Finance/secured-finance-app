@@ -2,7 +2,6 @@ import { RESPONSIVE_PARAMETERS, VIEWPORTS } from '.storybook/constants';
 import type { Meta, StoryFn } from '@storybook/react';
 import { BigNumber, utils } from 'ethers';
 import { useState } from 'react';
-
 import { withAssetPrice } from 'src/../.storybook/decorators';
 import {
     dec22Fixture,

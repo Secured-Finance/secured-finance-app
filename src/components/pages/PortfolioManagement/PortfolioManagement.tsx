@@ -83,8 +83,7 @@ export const PortfolioManagement = () => {
     );
 
     const sortedOrderHistory = useMemo(() => {
-        const lazyOrderHistory = paginatedOrderHistory;
-        return lazyOrderHistory
+        return paginatedOrderHistory
             .map(order => {
                 if (checkOrderIsFilled(order, orderList.inactiveOrderList)) {
                     return {

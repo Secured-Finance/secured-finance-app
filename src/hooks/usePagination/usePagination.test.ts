@@ -28,7 +28,7 @@ describe('usePagination', () => {
         expect(result.current).toEqual(['A', 'B']);
     });
 
-    it('should load large amount of data', () => {
+    it('should process large amount of data', () => {
         const initialProps = Array(1000)
             .fill(null)
             .map(_ => ({
@@ -71,6 +71,52 @@ describe('usePagination', () => {
                     science: 95,
                     history: 60,
                 })),
+            ...Array(1000)
+                .fill(null)
+                .map(_ => ({
+                    name: 'SF',
+                    age: 20,
+                    english: 80,
+                    maths: 60,
+                    science: 95,
+                    history: 60,
+                })),
+        ]);
+    });
+
+    it('should process large amount of data if same data is passed to the hook', () => {
+        const initialProps = Array(1000)
+            .fill(null)
+            .map(_ => ({
+                name: 'SF',
+                age: 20,
+                english: 80,
+                maths: 60,
+                science: 95,
+                history: 60,
+            }));
+        const { result, rerender } = renderHook(props => usePagination(props), {
+            initialProps: initialProps,
+        });
+        expect(result.current).toEqual(initialProps);
+
+        act(() => {
+            rerender(
+                Array(1000)
+                    .fill(null)
+                    .map(_ => ({
+                        name: 'SF',
+                        age: 20,
+                        english: 80,
+                        maths: 60,
+                        science: 95,
+                        history: 60,
+                    }))
+            );
+        });
+
+        expect(result.current).toHaveLength(1000);
+        expect(result.current).toEqual([
             ...Array(1000)
                 .fill(null)
                 .map(_ => ({

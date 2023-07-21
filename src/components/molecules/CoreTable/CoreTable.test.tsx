@@ -1,5 +1,5 @@
 import { composeStories } from '@storybook/react';
-import { act, fireEvent, render, screen, waitFor } from 'src/test-utils.js';
+import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
 import * as stories from './CoreTable.stories';
 
 const { Default, WithHiddenColumn, NonResponsive, WithPagination } =
@@ -82,7 +82,7 @@ describe('CoreTable Component', () => {
     it('should not load more data when scrolled if getMoreData function is not available', async () => {
         render(<Default />);
         expect(screen.getAllByTestId('core-table-row')).toHaveLength(20);
-        await act(async () => {
+        await waitFor(async () => {
             fireEvent.scroll(window, { target: { scrollY: 100 } });
             expect(screen.queryByText('Loading...')).not.toBeInTheDocument();
         });
@@ -94,7 +94,7 @@ describe('CoreTable Component', () => {
     it('should load more data when scrolled if getMoreData function is available', async () => {
         await waitFor(() => render(<WithPagination />));
         expect(screen.getAllByTestId('core-table-row')).toHaveLength(20);
-        await act(async () => {
+        await waitFor(async () => {
             fireEvent.scroll(window, { target: { scrollTop: 100 } });
         });
 
@@ -120,7 +120,7 @@ describe('CoreTable Component', () => {
             )
         );
         expect(screen.getAllByTestId('core-table-row')).toHaveLength(20);
-        await act(async () => {
+        await waitFor(async () => {
             fireEvent.scroll(window, { target: { scrollTop: 100 } });
         });
 
