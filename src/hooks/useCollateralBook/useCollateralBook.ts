@@ -32,7 +32,7 @@ const emptyBook: CollateralBook = {
         [CurrencySymbol.USDC]: ZERO_BN,
     },
     nonCollateral: {
-        [CurrencySymbol.EFIL]: ZERO_BN,
+        [CurrencySymbol.WFIL]: ZERO_BN,
         [CurrencySymbol.WBTC]: ZERO_BN,
     },
     withdrawableCollateral: {
@@ -46,7 +46,7 @@ const emptyBook: CollateralBook = {
     fetched: false,
 };
 
-export const useCollateralBook = (account: string | null) => {
+export const useCollateralBook = (account: string | undefined) => {
     const [collateralBook, setCollateralBook] = useState(emptyBook);
     const securedFinance = useSF();
 

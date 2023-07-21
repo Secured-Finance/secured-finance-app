@@ -32,12 +32,12 @@ describe('CurveHeader component', () => {
         expect(screen.getByText('-8.21%')).toBeInTheDocument();
     });
 
-    it('should display Total Volume (Asset) for EFIL and Total Volume (USD) when asset is EFIL', () => {
+    it('should display Total Volume (Asset) for WFIL and Total Volume (USD) when asset is WFIL', () => {
         render(<Default />, {
             preloadedState,
         });
 
-        assertAssetVolume('300 EFIL', '$1,800');
+        assertAssetVolume('300 WFIL', '$1,800');
     });
 
     it('should display Total Volume (Asset) for USDC and Total Volume (USD) when asset is USDC', () => {

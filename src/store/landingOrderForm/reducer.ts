@@ -16,7 +16,7 @@ type LandingOrderFormStore = {
     sourceAccount: WalletSource;
 };
 const initialStore: LandingOrderFormStore = {
-    currency: CurrencySymbol.EFIL,
+    currency: CurrencySymbol.WFIL,
     maturity: 0,
     side: OrderSide.BORROW,
     amount: '0',

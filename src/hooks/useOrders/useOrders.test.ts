@@ -77,7 +77,7 @@ describe('useOrders hook', () => {
     describe('unwind order', () => {
         it('should call the unwindPosition function', () => {
             const { result } = renderHook(() => useOrders());
-            result.current.unwindPosition(CurrencySymbol.EFIL, dec22Fixture);
+            result.current.unwindPosition(CurrencySymbol.WFIL, dec22Fixture);
             expect(mockSecuredFinance.unwindPosition).toBeCalled();
         });
     });
