@@ -1,17 +1,14 @@
 import { BigNumber } from 'ethers';
 import { useSelector } from 'react-redux';
-import {
-    CurrencyIcon,
-    CurrencyItem,
-    InformationPopover,
-} from 'src/components/atoms';
+import { CurrencyIcon, CurrencyItem } from 'src/components/atoms';
+import { Tooltip } from 'src/components/templates';
 import { CollateralBook } from 'src/hooks';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { RootState } from 'src/store/types';
 import {
-    CurrencySymbol,
     amountFormatterFromBase,
     currencyMap,
+    CurrencySymbol,
 } from 'src/utils';
 
 interface AssetInformationProps {
@@ -34,9 +31,7 @@ export const AssetInformation = ({
                         {header}
                     </div>
                     <div className='mt-[2px]'>
-                        <InformationPopover>
-                            {informationText}
-                        </InformationPopover>
+                        <Tooltip>{informationText}</Tooltip>
                     </div>
                 </div>
                 {collateralBook &&
