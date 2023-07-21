@@ -77,3 +77,5 @@ export enum OrderType {
     MARKET = 'Market',
     LIMIT = 'Limit',
 }
+
+export type Wallet = 'MetaMask' | 'WalletConnect';

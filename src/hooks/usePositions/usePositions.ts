@@ -1,10 +1,10 @@
+import { Currency } from '@secured-finance/sf-core';
 import { BigNumber } from 'ethers';
-import { useEffect, useState, useCallback } from 'react';
-import useSF from '../useSecuredFinance';
+import { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from 'src/store/types';
-import { Currency } from '@secured-finance/sf-core';
-import { toCurrency, hexToCurrencySymbol } from 'src/utils';
+import { hexToCurrencySymbol, toCurrency } from 'src/utils';
+import useSF from '../useSecuredFinance';
 
 export type Position = {
     currency: string;
@@ -14,7 +14,7 @@ export type Position = {
     midPrice: BigNumber;
 };
 
-export const usePositions = (account: string | null) => {
+export const usePositions = (account: string | undefined) => {
     const securedFinance = useSF();
 
     const block = useSelector(

@@ -4,13 +4,13 @@ import { Maturity } from 'src/utils/entities';
 import {
     dailyVolumes,
     dec22Fixture,
-    efilBytes32,
     mar23Fixture,
     orderHistoryList,
-    tradesEFIL,
     tradesUSDC,
+    tradesWFIL,
     transactions,
     usdcBytes32,
+    wfilBytes32,
 } from './fixtures';
 
 export const mockUserTransactionHistory = [
@@ -200,10 +200,10 @@ function getTransactionQuery(
 }
 const MATURITY_ZERO = new Maturity(0);
 export const emptyTransaction = [
-    getTransactionQuery(efilBytes32, dec22Fixture, yesterday, today, [], []),
-    getTransactionQuery(efilBytes32, dec22Fixture, yesterday2, today2, [], []),
-    getTransactionQuery(efilBytes32, MATURITY_ZERO, yesterday, today, [], []),
-    getTransactionQuery(efilBytes32, MATURITY_ZERO, yesterday2, today2, [], []),
+    getTransactionQuery(wfilBytes32, dec22Fixture, yesterday, today, [], []),
+    getTransactionQuery(wfilBytes32, dec22Fixture, yesterday2, today2, [], []),
+    getTransactionQuery(wfilBytes32, MATURITY_ZERO, yesterday, today, [], []),
+    getTransactionQuery(wfilBytes32, MATURITY_ZERO, yesterday2, today2, [], []),
 ];
 
 function getQueryForCurrency(currency: string, transactions: TransactionList) {
@@ -261,5 +261,5 @@ function getQueryForCurrency(currency: string, transactions: TransactionList) {
 
 export const mockTrades = [
     ...getQueryForCurrency(usdcBytes32, tradesUSDC),
-    ...getQueryForCurrency(efilBytes32, tradesEFIL),
+    ...getQueryForCurrency(wfilBytes32, tradesWFIL),
 ];

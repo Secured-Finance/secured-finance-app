@@ -1,13 +1,14 @@
+import {
+    withAssetPrice,
+    withMaturities,
+    withWalletBalances,
+    withWalletProvider,
+} from '.storybook/decorators';
 import { OrderSide } from '@secured-finance/sf-client';
 import type { Meta, StoryFn } from '@storybook/react';
 import { BigNumber } from 'ethers';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import {
-    withAssetPrice,
-    withMaturities,
-    withWalletProvider,
-} from 'src/../.storybook/decorators';
 import {
     setAmount,
     setCurrency,
@@ -30,8 +31,28 @@ export default {
     args: {
         collateralBook: emptyCollateralBook,
         loanValue: LoanValue.fromPrice(9800, dec22Fixture.toNumber()),
+        validation: false,
     },
-    decorators: [withAssetPrice, withWalletProvider, withMaturities],
+    decorators: [
+        withMaturities,
+        withWalletBalances,
+        withAssetPrice,
+        withWalletProvider,
+    ],
+    argTypes: {
+        collateralBook: {
+            options: [
+                'collateralBook37',
+                'collateralBook80',
+                'emptyCollateralBook',
+            ],
+            mapping: {
+                collateralBook37: collateralBook37,
+                collateralBook80: collateralBook80,
+                emptyCollateralBook: emptyCollateralBook,
+            },
+        },
+    },
 } as Meta<typeof OrderAction>;
 
 const Template: StoryFn<typeof OrderAction> = args => {
@@ -51,11 +72,11 @@ const Template: StoryFn<typeof OrderAction> = args => {
 
 export const Primary = Template.bind({});
 export const EnoughCollateral = Template.bind({});
-EnoughCollateral.args = {
-    collateralBook: collateralBook37,
-};
 EnoughCollateral.parameters = {
     connected: true,
+};
+EnoughCollateral.args = {
+    collateralBook: collateralBook37,
 };
 
 export const NotEnoughCollateral = Template.bind({});

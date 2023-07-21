@@ -7,10 +7,10 @@ import {
     collateralBook37,
     dec22Fixture,
     dec24Fixture,
-    efilBytes32,
     ethBytes32,
     mar23Fixture,
     wbtcBytes32,
+    wfilBytes32,
 } from './fixtures';
 
 export const mockUseSF = () => {
@@ -59,7 +59,7 @@ export const mockUseSF = () => {
                             BigNumber.from(9626),
                             BigNumber.from(9616),
                         ]);
-                    case CurrencySymbol.EFIL:
+                    case CurrencySymbol.WFIL:
                         return Promise.resolve([
                             BigNumber.from(9586),
                             BigNumber.from(9584),
@@ -132,7 +132,7 @@ export const mockUseSF = () => {
             ])
         ),
 
-        getLendingMarkets: jest.fn(() =>
+        getLendingMarketDetailsPerCurrency: jest.fn(() =>
             Promise.resolve([
                 {
                     midUnitPrice: new Maturity(100),
@@ -145,8 +145,10 @@ export const mockUseSF = () => {
                     isMatured: false,
                     isPreOrderPeriod: false,
                     isItayosePeriod: false,
-                    borrowUnitPrice: BigNumber.from(9618),
-                    lendUnitPrice: BigNumber.from(9620),
+                    bestBorrowUnitPrice: BigNumber.from(9620),
+                    bestLendUnitPrice: BigNumber.from(9618),
+                    minBorrowUnitPrice: BigNumber.from(9602),
+                    maxLendUnitPrice: BigNumber.from(9636),
                 },
                 {
                     midUnitPrice: new Maturity(100),
@@ -159,8 +161,10 @@ export const mockUseSF = () => {
                     isMatured: false,
                     isPreOrderPeriod: false,
                     isItayosePeriod: false,
-                    borrowUnitPrice: BigNumber.from(9608),
-                    lendUnitPrice: BigNumber.from(9610),
+                    bestBorrowUnitPrice: BigNumber.from(9610),
+                    bestLendUnitPrice: BigNumber.from(9608),
+                    minBorrowUnitPrice: BigNumber.from(9592),
+                    maxLendUnitPrice: BigNumber.from(9626),
                 },
             ])
         ),
@@ -265,7 +269,7 @@ export const mockUseSF = () => {
         getProtocolDepositAmount: jest.fn(() =>
             Promise.resolve({
                 ETH: BigNumber.from('100000000000000000000'), // 100 ETH
-                EFIL: BigNumber.from('100000000000000000000000'), // 100 000 EFIL
+                WFIL: BigNumber.from('100000000000000000000000'), // 100 000 WFIL
                 USDC: BigNumber.from('1000000000000'), // 1 000 000 USDC
                 WBTC: BigNumber.from('1000000000000'), // 1000 BTC
             })
@@ -293,7 +297,7 @@ export const mockUseSF = () => {
         ),
 
         getUsedCurrenciesForOrders: jest.fn(() =>
-            Promise.resolve([ethBytes32, efilBytes32])
+            Promise.resolve([ethBytes32, wfilBytes32])
         ),
 
         getOrderList: jest.fn(() =>
@@ -319,7 +323,7 @@ export const mockUseSF = () => {
                     },
                     {
                         orderId: 3,
-                        ccy: efilBytes32,
+                        ccy: wfilBytes32,
                         side: 1,
                         maturity: BigNumber.from(dec22Fixture.toString()),
                         unitPrice: BigNumber.from('9800'),
@@ -337,7 +341,7 @@ export const mockUseSF = () => {
                     },
                     {
                         orderId: 5,
-                        ccy: efilBytes32,
+                        ccy: wfilBytes32,
                         side: 1,
                         maturity: BigNumber.from(dec24Fixture.toString()),
                         unitPrice: BigNumber.from('7800'),
@@ -357,7 +361,7 @@ export const mockUseSF = () => {
                     },
                     {
                         orderId: 1,
-                        ccy: efilBytes32,
+                        ccy: wfilBytes32,
                         side: 1,
                         maturity: BigNumber.from(dec22Fixture.toString()),
                         unitPrice: BigNumber.from('9800'),
@@ -382,13 +386,13 @@ export const mockUseSF = () => {
                     futureValue: BigNumber.from('-11113953323186200000'),
                 },
                 {
-                    ccy: efilBytes32,
+                    ccy: wfilBytes32,
                     maturity: dec22Fixture.toString(),
                     presentValue: BigNumber.from('9954750000000000000'),
                     futureValue: BigNumber.from('10210000000000000000'),
                 },
                 {
-                    ccy: efilBytes32,
+                    ccy: wfilBytes32,
                     maturity: mar23Fixture.toString(),
                     presentValue: BigNumber.from('-10558255657026800000'),
                     futureValue: BigNumber.from('-11113953323186200000'),

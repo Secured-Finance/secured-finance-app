@@ -30,7 +30,7 @@ describe('useCollateralBook hook', () => {
         );
         expect(colBook.collateral.USDC).toEqual(BigNumber.from('100000000'));
         expect(colBook.nonCollateral.WBTC).toEqual(BigNumber.from('20000000'));
-        expect(colBook.nonCollateral.EFIL).toEqual(
+        expect(colBook.nonCollateral.WFIL).toEqual(
             BigNumber.from('100000000000000000000')
         );
         expect(colBook.coverage.toString()).toEqual('3700');
@@ -42,8 +42,8 @@ describe('useCollateralBook hook', () => {
         expect(colBook.fetched).toEqual(true);
     });
 
-    it('should return the empty book when given an null user', async () => {
-        const { result } = renderHook(() => useCollateralBook(null));
+    it('should return the empty book when given an undefined user', async () => {
+        const { result } = renderHook(() => useCollateralBook(undefined));
         const colBook = result.current as CollateralBook;
         expect(colBook).toEqual(emptyBook);
     });
@@ -83,8 +83,8 @@ describe('useCollateralBook hook', () => {
                 colBook.nonCollateral.WBTC ?? BigNumber.from(0)
             ) *
                 WBTC_PRICE +
-                amountFormatterFromBase[CurrencySymbol.EFIL](
-                    colBook.nonCollateral.EFIL ?? BigNumber.from(0)
+                amountFormatterFromBase[CurrencySymbol.WFIL](
+                    colBook.nonCollateral.WFIL ?? BigNumber.from(0)
                 ) *
                     FIL_PRICE
         );
