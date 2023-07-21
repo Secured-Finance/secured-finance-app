@@ -89,7 +89,7 @@ describe('usePagination', () => {
             .fill(null)
             .map(_ => ({
                 name: 'SF',
-                age: 20,
+                age: 10,
                 english: 80,
                 maths: 60,
                 science: 95,
@@ -115,8 +115,57 @@ describe('usePagination', () => {
             );
         });
 
-        expect(result.current).toHaveLength(1000);
+        expect(result.current).toHaveLength(2000);
         expect(result.current).toEqual([
+            ...Array(1000)
+                .fill(null)
+                .map(_ => ({
+                    name: 'SF',
+                    age: 10,
+                    english: 80,
+                    maths: 60,
+                    science: 95,
+                    history: 60,
+                })),
+            ...Array(1000)
+                .fill(null)
+                .map(_ => ({
+                    name: 'SF',
+                    age: 20,
+                    english: 80,
+                    maths: 60,
+                    science: 95,
+                    history: 60,
+                })),
+        ]);
+
+        act(() => {
+            rerender(
+                Array(1000)
+                    .fill(null)
+                    .map(_ => ({
+                        name: 'SF',
+                        age: 20,
+                        english: 80,
+                        maths: 60,
+                        science: 95,
+                        history: 60,
+                    }))
+            );
+        });
+
+        expect(result.current).toHaveLength(2000);
+        expect(result.current).toEqual([
+            ...Array(1000)
+                .fill(null)
+                .map(_ => ({
+                    name: 'SF',
+                    age: 10,
+                    english: 80,
+                    maths: 60,
+                    science: 95,
+                    history: 60,
+                })),
             ...Array(1000)
                 .fill(null)
                 .map(_ => ({
