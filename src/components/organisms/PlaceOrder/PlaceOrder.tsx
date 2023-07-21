@@ -7,7 +7,6 @@ import { useCallback, useReducer, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import {
     ExpandIndicator,
-    InformationPopover,
     Section,
     SectionWithItems,
     Spinner,
@@ -20,6 +19,7 @@ import {
     FailurePanel,
     SuccessPanel,
 } from 'src/components/molecules';
+import { Tooltip } from 'src/components/templates';
 import {
     CollateralBook,
     useEtherscanUrl,
@@ -373,10 +373,10 @@ const FeeItem = () => {
     return (
         <div className='flex flex-row items-center gap-1'>
             <div className='text-planetaryPurple'>Transaction Fee %</div>
-            <InformationPopover>
+            <Tooltip>
                 A duration-based transaction fee only for market takers,
                 factored into the bond price, and deducted from its future value
-            </InformationPopover>
+            </Tooltip>
         </div>
     );
 };
