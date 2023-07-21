@@ -1,6 +1,7 @@
 import queries from '@secured-finance/sf-graph-client/dist/graphclients';
 import { useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { Spinner } from 'src/components/atoms';
 import { HorizontalTab, StatsBar } from 'src/components/molecules';
 import {
     ActiveTradeTable,
@@ -16,6 +17,7 @@ import {
     useCollateralBook,
     useGraphClientHook,
     useOrderList,
+    usePagination,
     usePositions,
 } from 'src/hooks';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
@@ -40,19 +42,36 @@ enum TableType {
     MY_TRANSACTIONS,
 }
 
+const TabSpinner = () => (
+    <div className='flex h-full w-full items-center justify-center pt-10'>
+        <Spinner />
+    </div>
+);
+const offset = 20;
+
 export const PortfolioManagement = () => {
     const { address, isConnected } = useAccount();
+    const [offsetTransactions, setOffsetTransactions] = useState(0);
+    const [offsetOrders, setOffsetOrders] = useState(0);
     const [selectedTable, setSelectedTable] = useState(
         TableType.ACTIVE_POSITION
     );
     const userOrderHistory = useGraphClientHook(
-        { address: address?.toLowerCase() ?? '', skip: 0, first: 1000 },
+        {
+            address: address?.toLowerCase() ?? '',
+            skip: offsetOrders,
+            first: offset,
+        },
         queries.UserOrderHistoryDocument,
         'user',
         selectedTable !== TableType.ORDER_HISTORY
     );
     const userTransactionHistory = useGraphClientHook(
-        { address: address?.toLowerCase() ?? '', skip: 0, first: 1000 },
+        {
+            address: address?.toLowerCase() ?? '',
+            skip: offsetTransactions,
+            first: offset,
+        },
         queries.UserTransactionHistoryDocument,
         'user',
         selectedTable !== TableType.MY_TRANSACTIONS
@@ -60,13 +79,16 @@ export const PortfolioManagement = () => {
     const orderList = useOrderList(address);
     const positions = usePositions(address);
 
-    const tradesFromCon = formatOrders(orderList.inactiveOrderList);
-    const tradeFromSub = userTransactionHistory.data?.transactions ?? [];
-    const tradeHistory = [...tradeFromSub, ...tradesFromCon];
+    const paginatedTransactions = usePagination(
+        userTransactionHistory.data?.transactions ?? []
+    );
+
+    const paginatedOrderHistory = usePagination(
+        userOrderHistory.data?.orders ?? []
+    );
 
     const sortedOrderHistory = useMemo(() => {
-        const lazyOrderHistory = userOrderHistory.data?.orders ?? [];
-        return lazyOrderHistory
+        return paginatedOrderHistory
             .map(order => {
                 if (checkOrderIsFilled(order, orderList.inactiveOrderList)) {
                     return {
@@ -88,7 +110,7 @@ export const PortfolioManagement = () => {
                 }
             })
             .sort((a, b) => sortOrders(a, b));
-    }, [orderList.inactiveOrderList, userOrderHistory.data?.orders]);
+    }, [orderList.inactiveOrderList, paginatedOrderHistory]);
 
     const priceMap = useSelector((state: RootState) => getPriceMap(state));
 
@@ -121,6 +143,16 @@ export const PortfolioManagement = () => {
         positions,
         priceMap,
     ]);
+
+    const myTransactions = useMemo(() => {
+        const tradesFromCon = formatOrders(orderList.inactiveOrderList);
+        return [...tradesFromCon, ...paginatedTransactions];
+    }, [orderList.inactiveOrderList, paginatedTransactions]);
+
+    const myTransactionsDataCount: number =
+        userTransactionHistory.data?.transactionCount &&
+        parseInt(userTransactionHistory.data?.transactionCount) +
+            orderList.inactiveOrderList.length;
 
     return (
         <Page title='Portfolio Management' name='portfolio-management'>
@@ -162,12 +194,39 @@ export const PortfolioManagement = () => {
                         >
                             <ActiveTradeTable data={positions} />
                             <OrderTable data={orderList.activeOrderList} />
-                            <OrderHistoryTable
-                                data={sortedOrderHistory.filter(
-                                    order => order.status !== 'Open'
-                                )}
-                            />
-                            <MyTransactionsTable data={tradeHistory} />
+
+                            {userOrderHistory.loading ? (
+                                <TabSpinner />
+                            ) : (
+                                <OrderHistoryTable
+                                    data={sortedOrderHistory}
+                                    pagination={{
+                                        totalData: parseInt(
+                                            userOrderHistory.data?.orderCount
+                                        ),
+                                        getMoreData: () =>
+                                            setOffsetOrders(
+                                                offsetOrders + offset
+                                            ),
+                                        containerHeight: true,
+                                    }}
+                                />
+                            )}
+                            {userTransactionHistory.loading ? (
+                                <TabSpinner />
+                            ) : (
+                                <MyTransactionsTable
+                                    data={myTransactions}
+                                    pagination={{
+                                        totalData: myTransactionsDataCount,
+                                        getMoreData: () =>
+                                            setOffsetTransactions(
+                                                offsetTransactions + offset
+                                            ),
+                                        containerHeight: true,
+                                    }}
+                                />
+                            )}
                         </HorizontalTab>
                     </div>
                 </div>

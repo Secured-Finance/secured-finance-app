@@ -18,7 +18,7 @@ import {
 import { Dialog, SuccessPanel } from 'src/components/molecules';
 import { ConnectWalletCard, MyWalletCard } from 'src/components/organisms';
 import { Page, Tooltip, TwoColumns } from 'src/components/templates';
-import { useEtherscanUrl } from 'src/hooks';
+import { useEtherscanUrl, useHandleContractTransaction } from 'src/hooks';
 import useSF from 'src/hooks/useSecuredFinance';
 import {
     AddressUtils,
@@ -26,7 +26,6 @@ import {
     WalletSource,
     getCurrencyMapAsList,
     getCurrencyMapAsOptions,
-    handleContractTransaction,
     toCurrency,
 } from 'src/utils';
 import { useAccount, useWalletClient } from 'wagmi';
@@ -85,6 +84,7 @@ const MenuAddToken = ({
 };
 export const Faucet = () => {
     const etherscanUrl = useEtherscanUrl();
+    const handleContractTransaction = useHandleContractTransaction();
     const { address: account } = useAccount();
     const { data: client } = useWalletClient();
     const sf = useSF();
@@ -135,7 +135,7 @@ export const Faucet = () => {
             }
         }
         setIsPending(false);
-    }, [account, token, sf]);
+    }, [account, sf, token, handleContractTransaction]);
 
     const addToMetamask = useCallback(
         async (token: Token | null) => {

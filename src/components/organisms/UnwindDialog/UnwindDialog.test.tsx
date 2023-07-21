@@ -21,6 +21,14 @@ describe('UnwindDialog Component', () => {
         );
     });
 
+    it('should update the lastActionTimestamp in the store when the transaction receipt is received', async () => {
+        const { store } = render(<Default />);
+        expect(store.getState().blockchain.lastActionTimestamp).toEqual(0);
+        screen.getByText('Confirm').click();
+        expect(await screen.findByText('Success!')).toBeInTheDocument();
+        expect(store.getState().blockchain.lastActionTimestamp).toBeTruthy();
+    });
+
     it('should proceed to failure screen if unwindPosition throws an error', async () => {
         mockSecuredFinance.unwindPosition.mockRejectedValueOnce(
             new Error('error')

@@ -5,7 +5,7 @@ import { CoreTable, TableActionMenu } from 'src/components/molecules';
 import { useBreakpoint, useEtherscanUrl } from 'src/hooks';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { RootState } from 'src/store/types';
-import { OrderList } from 'src/types';
+import { OrderList, Pagination } from 'src/types';
 import {
     amountColumnDefinition,
     contractColumnDefinition,
@@ -30,7 +30,13 @@ const getStatus = (status: string) => {
     }
 };
 
-export const OrderHistoryTable = ({ data }: { data: OrderList }) => {
+export const OrderHistoryTable = ({
+    data,
+    pagination,
+}: {
+    data: OrderList;
+    pagination?: Pagination;
+}) => {
     const priceList = useSelector((state: RootState) => getPriceMap(state));
     const isTablet = useBreakpoint('laptop');
     const etherscanUrl = useEtherscanUrl();
@@ -118,6 +124,7 @@ export const OrderHistoryTable = ({ data }: { data: OrderList }) => {
             options={{
                 name: 'order-history-table',
                 stickyColumns: new Set([7]),
+                pagination: pagination,
             }}
         />
     );

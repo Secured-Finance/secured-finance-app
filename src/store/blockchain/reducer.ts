@@ -11,6 +11,7 @@ import { Blockchain } from './type';
 const initialState: Blockchain = {
     latestBlock: 0,
     chainError: true,
+    lastActionTimestamp: 0,
 };
 
 const blockchainSlice = createSlice({
@@ -22,6 +23,9 @@ const blockchainSlice = createSlice({
         },
         updateChainError(state, action: PayloadAction<boolean>) {
             state.chainError = action.payload;
+        },
+        updateLastActionTimestamp(state) {
+            state.lastActionTimestamp = Date.now();
         },
     },
 });

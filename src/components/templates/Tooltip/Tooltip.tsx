@@ -1,19 +1,34 @@
 import { Popover } from '@headlessui/react';
+import classNames from 'classnames';
 import React, { useState } from 'react';
+import InformationCircle from 'src/assets/icons/information-circle.svg';
+
+const InformationCircleIcon = (
+    <InformationCircle
+        className='cursor-pointer'
+        data-testid='information-circle'
+        width={12}
+        height={12}
+    />
+);
 
 export const Tooltip = ({
-    iconElement,
+    iconElement = InformationCircleIcon,
     children,
+    align = 'centre',
+    maxWidth = 'large',
 }: {
-    iconElement: React.ReactNode;
+    iconElement?: React.ReactNode;
     children: React.ReactNode;
+    align?: 'left' | 'right' | 'centre';
+    maxWidth?: 'small' | 'large';
 }) => {
     const [open, setOpen] = useState(false);
 
     return (
         <Popover
             className='pointer-events-auto relative overflow-visible'
-            data-testid='information-popover'
+            data-testid='tooltip'
         >
             {() => (
                 <>
@@ -32,7 +47,17 @@ export const Tooltip = ({
                     </Popover.Button>
                     {open && children && (
                         <Popover.Panel
-                            className='absolute left-1/2 z-10 mt-2 flex w-screen max-w-[256px] -translate-x-1/2 transform justify-center'
+                            className={classNames(
+                                'absolute z-10 mt-2 flex w-screen justify-center',
+                                {
+                                    'max-w-[256px]': maxWidth === 'large',
+                                    'max-w-[165px]': maxWidth === 'small',
+                                    'left-1/2 -translate-x-1/2 transform':
+                                        align === 'centre',
+                                    '-left-7': align === 'right',
+                                    '-right-7': align === 'left',
+                                }
+                            )}
                             role='tooltip'
                             static
                         >

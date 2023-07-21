@@ -47,3 +47,15 @@ FailedAmountValidation.play = async ({ canvasElement }) => {
         delay: 100,
     });
 };
+
+export const BondPriceFailedValidation = Template.bind({});
+BondPriceFailedValidation.args = {
+    onlyLimitOrder: true,
+};
+BondPriceFailedValidation.play = async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const input = canvas.getByRole('textbox', { name: 'Bond Price' });
+    await userEvent.type(input, '0', {
+        delay: 100,
+    });
+};
