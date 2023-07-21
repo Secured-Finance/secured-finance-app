@@ -85,4 +85,3 @@ export interface Pagination {
 }
 
 export type Wallet = 'MetaMask' | 'WalletConnect';
-
