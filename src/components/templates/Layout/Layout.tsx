@@ -9,12 +9,12 @@ export const Layout = ({
 }) => {
     return (
         <div
-            className='flex h-screen flex-col justify-between overflow-y-auto'
+            className='flex h-screen flex-col justify-between gap-8'
             data-testid='wrapper-div'
         >
             <div className='w-full'>
                 <header className='w-full'>{navBar}</header>
-                <main className='w-full pb-8'>{children}</main>
+                <main className='w-full'>{children}</main>
             </div>
             <footer className='w-full'>{footer}</footer>
         </div>

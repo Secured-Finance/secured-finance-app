@@ -159,12 +159,6 @@ export const withMaturities = (Story: StoryFn) => {
     return <Story />;
 };
 
-export const withFullPage = (Story: StoryFn) => (
-    <div className='h-[1500px] pb-10'>
-        <Story />
-    </div>
-);
-
 export const withWalletBalances = (Story: StoryFn) => {
     const dispatch = useDispatch();
     useEffect(() => {

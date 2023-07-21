@@ -20,11 +20,4 @@ describe('Layout Component', () => {
         expect(screen.getByRole('main')).toBeInTheDocument();
         expect(screen.getByRole('contentinfo')).toBeInTheDocument();
     });
-
-    it('should be scrollable', () => {
-        render(<Default />);
-        expect(screen.getByTestId('wrapper-div')).toHaveClass(
-            'overflow-y-auto'
-        );
-    });
 });
