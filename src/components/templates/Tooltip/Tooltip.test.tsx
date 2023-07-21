@@ -14,7 +14,7 @@ describe('Tooltip Component', () => {
         const information = screen.getByTestId('information-circle');
         fireEvent.mouseEnter(information);
 
-        expect(screen.getByTestId('tooltip')).toBeInTheDocument();
+        expect(screen.getByRole('tooltip')).toBeInTheDocument();
         expect(
             screen.getByText(
                 'This is tooltip content. This is tooltip content.'
