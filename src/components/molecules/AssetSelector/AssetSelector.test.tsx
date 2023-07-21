@@ -72,6 +72,19 @@ describe('AssetSelector Component', () => {
         expect(onAmountChange).toHaveBeenLastCalledWith(BigNumber.from(1000));
     });
 
+    it('should not call onAmountChange function when the asset is changed', () => {
+        const onAmountChange = jest.fn();
+        render(<Default onAmountChange={onAmountChange} />);
+        expect(onAmountChange).toHaveBeenCalledTimes(0);
+        fireEvent.click(screen.getByRole('button'));
+        fireEvent.click(screen.getByText('Ethereum'));
+        expect(onAmountChange).toHaveBeenCalledTimes(0);
+
+        fireEvent.click(screen.getByRole('button'));
+        fireEvent.click(screen.getByText('WFIL'));
+        expect(onAmountChange).toHaveBeenCalledTimes(0);
+    });
+
     it('should call the onAssetChange function when the asset is changed', () => {
         const onAssetChange = jest.fn();
         render(<Default onAssetChange={onAssetChange} />);

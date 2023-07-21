@@ -287,7 +287,7 @@ describe('AdvancedLendingOrderCard Component', () => {
         const option = screen.getByTestId('option-1');
         fireEvent.click(option);
         expect(input).toHaveValue('50');
-        expect(input).toHaveValue('50');
+        expect(slider).toHaveValue('50');
         fireEvent.change(slider, { target: { value: 10 } });
         expect(input).toHaveValue('10');
         fireEvent.change(slider, { target: { value: 50 } });
