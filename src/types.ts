@@ -78,4 +78,10 @@ export enum OrderType {
     LIMIT = 'Limit',
 }
 
+export interface Pagination {
+    getMoreData: () => void;
+    totalData: number;
+    containerHeight: boolean;
+}
+
 export type Wallet = 'MetaMask' | 'WalletConnect';
