@@ -52,10 +52,14 @@ export const CoreTable = <T,>({
     );
 
     useEffect(() => {
-        setHasMoreData(
+        if (
             !!coreTableOptions.pagination?.totalData &&
-                coreTableOptions.pagination?.totalData > 0
-        );
+            coreTableOptions.pagination?.totalData > 0
+        )
+            setHasMoreData(true);
+        else {
+            setHasMoreData(false);
+        }
     }, [coreTableOptions.pagination?.totalData]);
 
     useEffect(() => {
