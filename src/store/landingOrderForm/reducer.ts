@@ -10,7 +10,7 @@ type LandingOrderFormStore = {
     maturity: number;
     side: OrderSide;
     amount: string;
-    unitPrice: number;
+    unitPrice: number | undefined;
     orderType: OrderType;
     lastView: ViewType;
     sourceAccount: WalletSource;
@@ -20,7 +20,7 @@ const initialStore: LandingOrderFormStore = {
     maturity: 0,
     side: OrderSide.BORROW,
     amount: '0',
-    unitPrice: 0,
+    unitPrice: undefined,
     orderType: OrderType.MARKET,
     lastView: 'Simple',
     sourceAccount: WalletSource.METAMASK,
@@ -42,7 +42,7 @@ const landingOrderFormSlice = createSlice({
         setAmount: (state, action: PayloadAction<BigNumber>) => {
             state.amount = action.payload.toString();
         },
-        setUnitPrice: (state, action: PayloadAction<number>) => {
+        setUnitPrice: (state, action: PayloadAction<number | undefined>) => {
             state.unitPrice = action.payload;
         },
         setOrderType: (state, action: PayloadAction<OrderType>) => {

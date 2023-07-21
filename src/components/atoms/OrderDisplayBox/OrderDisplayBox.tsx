@@ -1,4 +1,4 @@
-import { InformationPopover } from 'src/components/atoms';
+import { Tooltip } from 'src/components/templates';
 
 interface OrderDisplayBoxProps {
     field: string;
@@ -16,7 +16,9 @@ export const OrderDisplayBox = ({
             <div className='flex flex-row items-center gap-2'>
                 <div className='text-slateGray'>{field}</div>
                 {informationText && (
-                    <InformationPopover>{informationText}</InformationPopover>
+                    <Tooltip maxWidth='small' align='right'>
+                        {informationText}
+                    </Tooltip>
                 )}
             </div>
             <div className='text-right text-planetaryPurple'>{value}</div>

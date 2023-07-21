@@ -1,8 +1,6 @@
 import Tick from 'src/assets/icons/tick.svg';
-import {
-    getLiquidationInformation,
-    InformationPopover,
-} from 'src/components/atoms';
+import { getLiquidationInformation } from 'src/components/atoms';
+import { Tooltip } from 'src/components/templates';
 import { percentFormat } from 'src/utils';
 
 interface LiquidationProgressBarProps {
@@ -97,12 +95,12 @@ export const LiquidationProgressBar = ({
                                 {` threshold to liquidation`}
                             </span>
                         </div>
-                        <InformationPopover>
+                        <Tooltip>
                             {getInformationText(
                                 liquidationPercentage,
                                 collateralThreshold
                             )}
-                        </InformationPopover>
+                        </Tooltip>
                     </div>
                 )}
             </div>
