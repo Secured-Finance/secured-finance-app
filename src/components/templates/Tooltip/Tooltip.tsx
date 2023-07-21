@@ -54,8 +54,8 @@ export const Tooltip = ({
                                     'max-w-[165px]': maxWidth === 'small',
                                     'left-1/2 -translate-x-1/2 transform':
                                         align === 'centre',
-                                    '-left-[20px]': align === 'right',
-                                    '-right-[20px]': align === 'left',
+                                    '-left-7': align === 'right',
+                                    '-right-7': align === 'left',
                                 }
                             )}
                             role='tooltip'

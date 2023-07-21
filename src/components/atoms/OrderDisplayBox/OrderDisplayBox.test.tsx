@@ -15,6 +15,6 @@ describe('OrderDisplayBox component', () => {
         render(<WithInformationText />);
         const information = screen.getByTestId('information-circle');
         fireEvent.mouseEnter(information);
-        expect(screen.getByTestId('tooltip')).toHaveTextContent('Some hint.');
+        expect(screen.getByRole('tooltip')).toHaveTextContent('Some hint.');
     });
 });
