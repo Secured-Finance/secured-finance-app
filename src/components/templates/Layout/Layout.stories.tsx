@@ -3,23 +3,27 @@ import Link from 'next/link';
 import { RESPONSIVE_PARAMETERS } from 'src/../.storybook/constants';
 import { Layout } from './Layout';
 
+const Main = () => (
+    <div className='border-4 border-horizonBlue bg-gunMetal text-white-80'>
+        <Link href='/borrowing'>To Borrowing</Link>
+    </div>
+);
+
+const NavBar = () => (
+    <div className='bg-red text-center text-4xl text-white'>NavBar</div>
+);
+
+const Footer = () => (
+    <div className='bg-teal text-center text-2xl text-white'>Footer</div>
+);
+
 export default {
     title: 'Templates/Layout',
     component: Layout,
     args: {
-        children: (
-            <div className='border-4 border-horizonBlue bg-gunMetal text-white-80'>
-                <Link href='/borrowing'>To Borrowing</Link>
-            </div>
-        ),
-        navBar: (
-            <div className='bg-red text-center text-4xl text-white'>NavBar</div>
-        ),
-        footer: (
-            <div className='bg-teal text-center text-2xl text-white'>
-                Footer
-            </div>
-        ),
+        children: <Main />,
+        navBar: <NavBar />,
+        footer: <Footer />,
     },
     argTypes: {
         children: { control: { disable: true } },

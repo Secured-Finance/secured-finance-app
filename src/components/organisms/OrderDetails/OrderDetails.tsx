@@ -3,7 +3,6 @@ import { OrderSide } from '@secured-finance/sf-client';
 import { formatDate } from '@secured-finance/sf-core';
 import {
     ExpandIndicator,
-    InformationPopover,
     Section,
     SectionWithItems,
 } from 'src/components/atoms';
@@ -11,6 +10,7 @@ import {
     AmountCard,
     CollateralSimulationSection,
 } from 'src/components/molecules';
+import { Tooltip } from 'src/components/templates';
 import { CollateralBook, useOrderFee } from 'src/hooks';
 import { calculateFee, prefixTilde } from 'src/utils';
 import { Amount, LoanValue, Maturity } from 'src/utils/entities';
@@ -19,10 +19,10 @@ const FeeItem = () => {
     return (
         <div className='flex flex-row items-center gap-1'>
             <div className='text-planetaryPurple'>Transaction Fee %</div>
-            <InformationPopover>
+            <Tooltip>
                 A duration-based transaction fee only for market takers,
                 factored into the bond price, and deducted from its future value
-            </InformationPopover>
+            </Tooltip>
         </div>
     );
 };

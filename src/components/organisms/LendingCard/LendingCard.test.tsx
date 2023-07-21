@@ -55,10 +55,11 @@ describe('LendingCard Component', () => {
 
     it('should render the component with Borrow as the default', async () => {
         await waitFor(() => render(<Default />, { preloadedState }));
-        expect(screen.getByTestId('place-order-button')).toHaveTextContent(
-            'Borrow'
-        );
+        expect(
+            await screen.findByTestId('place-order-button')
+        ).toHaveTextContent('Borrow');
     });
+
     it('should show correct market rate', async () => {
         await waitFor(() => render(<Default />, { preloadedState }));
         expect(screen.getByTestId('market-rate')).toHaveTextContent('1.00%');
