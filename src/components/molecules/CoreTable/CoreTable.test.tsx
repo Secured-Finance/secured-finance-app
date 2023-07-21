@@ -1,5 +1,5 @@
 import { composeStories } from '@storybook/react';
-import { act, fireEvent, render, screen, waitFor } from 'src/test-utils.js';
+import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
 import * as stories from './CoreTable.stories';
 
 const { Default, WithHiddenColumn, NonResponsive, WithPagination } =
@@ -82,29 +82,52 @@ describe('CoreTable Component', () => {
     it('should not load more data when scrolled if getMoreData function is not available', async () => {
         render(<Default />);
         expect(screen.getAllByTestId('core-table-row')).toHaveLength(20);
-        await act(async () => {
+        await waitFor(async () => {
             fireEvent.scroll(window, { target: { scrollY: 100 } });
             expect(screen.queryByText('Loading...')).not.toBeInTheDocument();
-            await waitFor(async () => {
-                expect(screen.getAllByTestId('core-table-row')).toHaveLength(
-                    20
-                );
-            });
+        });
+        await waitFor(async () => {
+            expect(screen.getAllByTestId('core-table-row')).toHaveLength(20);
         });
     });
 
     it('should load more data when scrolled if getMoreData function is available', async () => {
         await waitFor(() => render(<WithPagination />));
         expect(screen.getAllByTestId('core-table-row')).toHaveLength(20);
-        await act(async () => {
-            fireEvent.scroll(window, { target: { scrollY: 100 } });
+        await waitFor(async () => {
+            fireEvent.scroll(window, { target: { scrollTop: 100 } });
+        });
+
+        await waitFor(() => {
             expect(screen.getByText('Loading...')).toBeInTheDocument();
-            await new Promise(resolve => setTimeout(resolve, 1000));
-            await waitFor(async () => {
-                expect(screen.getAllByTestId('core-table-row')).toHaveLength(
-                    40
-                );
-            });
+            expect(screen.getAllByTestId('core-table-row')).toHaveLength(40);
+        });
+    });
+
+    it('should not load more data when scrolled if getMoreData function is available but totalData is equal to length of data', async () => {
+        const getMoreData = jest.fn();
+        await waitFor(() =>
+            render(
+                <Default
+                    options={{
+                        pagination: {
+                            totalData: 20,
+                            getMoreData: getMoreData,
+                            containerHeight: false,
+                        },
+                    }}
+                />
+            )
+        );
+        expect(screen.getAllByTestId('core-table-row')).toHaveLength(20);
+        await waitFor(async () => {
+            fireEvent.scroll(window, { target: { scrollTop: 100 } });
+        });
+
+        await waitFor(() => {
+            expect(screen.queryByText('Loading...')).not.toBeInTheDocument();
+            expect(getMoreData).not.toBeCalled();
+            expect(screen.getAllByTestId('core-table-row')).toHaveLength(20);
         });
     });
 });

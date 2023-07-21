@@ -2,7 +2,7 @@ import { createColumnHelper } from '@tanstack/react-table';
 import { useMemo } from 'react';
 import { CoreTable } from 'src/components/molecules';
 import { useBreakpoint } from 'src/hooks';
-import { TradeHistory } from 'src/types';
+import { Pagination, TradeHistory } from 'src/types';
 import { formatLoanValue } from 'src/utils';
 import { LoanValue } from 'src/utils/entities';
 import {
@@ -40,7 +40,13 @@ const priceYieldColumnDef = (
     });
 };
 
-export const MyTransactionsTable = ({ data }: { data: TradeHistory }) => {
+export const MyTransactionsTable = ({
+    data,
+    pagination,
+}: {
+    data: TradeHistory;
+    pagination?: Pagination;
+}) => {
     const isTablet = useBreakpoint('laptop');
     const columns = useMemo(
         () => [
@@ -87,9 +93,10 @@ export const MyTransactionsTable = ({ data }: { data: TradeHistory }) => {
                 data={data}
                 columns={isTablet ? columnsForTabletMobile : columns}
                 options={{
-                    name: 'active-trade-table',
+                    name: 'my-transactions-table',
                     border: false,
                     stickyColumns: new Set([0, 1]),
+                    pagination: pagination,
                 }}
             />
         </div>
