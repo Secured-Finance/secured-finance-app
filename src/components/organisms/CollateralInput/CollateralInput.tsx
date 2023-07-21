@@ -30,7 +30,7 @@ export const CollateralInput = ({
                 format = amountFormatterToBase[asset];
             }
 
-            onAmountChange(amount ? format(amount) : undefined);
+            onAmountChange(amount !== undefined ? format(amount) : undefined);
         },
         []
     );

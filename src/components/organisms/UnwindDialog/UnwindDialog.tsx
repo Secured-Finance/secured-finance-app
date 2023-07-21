@@ -5,7 +5,6 @@ import { useCallback, useMemo, useReducer, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
     ExpandIndicator,
-    InformationPopover,
     Section,
     SectionWithItems,
     Spinner,
@@ -18,9 +17,11 @@ import {
     FailurePanel,
     SuccessPanel,
 } from 'src/components/molecules';
+import { Tooltip } from 'src/components/templates';
 import {
     useCollateralBook,
     useEtherscanUrl,
+    useHandleContractTransaction,
     useOrderFee,
     useOrders,
 } from 'src/hooks';
@@ -32,7 +33,6 @@ import {
     AddressUtils,
     CurrencySymbol,
     calculateFee,
-    handleContractTransaction,
     prefixTilde,
 } from 'src/utils';
 import { Amount, LoanValue, Maturity } from 'src/utils/entities';
@@ -118,6 +118,7 @@ export const UnwindDialog = ({
     side: OrderSide;
 } & DialogState) => {
     const etherscanUrl = useEtherscanUrl();
+    const handleContractTransaction = useHandleContractTransaction();
     const { address } = useAccount();
     const [state, dispatch] = useReducer(reducer, stateRecord[1]);
     const [txHash, setTxHash] = useState<string | undefined>();
@@ -172,7 +173,7 @@ export const UnwindDialog = ({
                 }
             }
         },
-        [unwindPosition, globalDispatch]
+        [unwindPosition, handleContractTransaction, globalDispatch]
     );
 
     const onClick = useCallback(
@@ -306,10 +307,10 @@ const feeItem = () => {
     return (
         <div className='flex flex-row items-center gap-1'>
             <div className='text-planetaryPurple'>Transaction Fee %</div>
-            <InformationPopover>
+            <Tooltip>
                 A duration-based transaction fee only for market takers,
                 factored into the bond price, and deducted from its future value
-            </InformationPopover>
+            </Tooltip>
         </div>
     );
 };

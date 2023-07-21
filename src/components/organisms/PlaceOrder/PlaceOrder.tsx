@@ -7,7 +7,6 @@ import { useCallback, useReducer, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import {
     ExpandIndicator,
-    InformationPopover,
     Section,
     SectionWithItems,
     Spinner,
@@ -20,7 +19,13 @@ import {
     FailurePanel,
     SuccessPanel,
 } from 'src/components/molecules';
-import { CollateralBook, useEtherscanUrl, useOrderFee } from 'src/hooks';
+import { Tooltip } from 'src/components/templates';
+import {
+    CollateralBook,
+    useEtherscanUrl,
+    useHandleContractTransaction,
+    useOrderFee,
+} from 'src/hooks';
 import { setLastMessage } from 'src/store/lastError';
 import { OrderType, PlaceOrderFunction } from 'src/types';
 import {
@@ -29,7 +34,6 @@ import {
     OrderEvents,
     OrderProperties,
     calculateFee,
-    handleContractTransaction,
     ordinaryFormat,
     prefixTilde,
 } from 'src/utils';
@@ -125,6 +129,7 @@ export const PlaceOrder = ({
     walletSource: WalletSource;
 } & DialogState) => {
     const etherscanUrl = useEtherscanUrl();
+    const handleContractTransaction = useHandleContractTransaction();
     const [state, dispatch] = useReducer(reducer, stateRecord[1]);
     const [txHash, setTxHash] = useState<string | undefined>();
     const globalDispatch = useDispatch();
@@ -182,7 +187,13 @@ export const PlaceOrder = ({
                 }
             }
         },
-        [onPlaceOrder, orderType, orderAmount.value, globalDispatch]
+        [
+            onPlaceOrder,
+            handleContractTransaction,
+            orderType,
+            orderAmount.value,
+            globalDispatch,
+        ]
     );
 
     const orderFee = useOrderFee(orderAmount.currency);
@@ -362,10 +373,10 @@ const FeeItem = () => {
     return (
         <div className='flex flex-row items-center gap-1'>
             <div className='text-planetaryPurple'>Transaction Fee %</div>
-            <InformationPopover>
+            <Tooltip>
                 A duration-based transaction fee only for market takers,
                 factored into the bond price, and deducted from its future value
-            </InformationPopover>
+            </Tooltip>
         </div>
     );
 };

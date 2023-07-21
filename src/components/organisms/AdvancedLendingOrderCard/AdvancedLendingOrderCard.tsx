@@ -204,6 +204,10 @@ export const AdvancedLendingOrderCard = ({
             : setSliderValue(0.0);
     };
 
+    const validateBondPrice = () => {
+        return unitPrice === 0 && orderType === OrderType.LIMIT;
+    };
+
     return (
         <div className='h-fit rounded-b-xl border border-white-10 bg-cardBackground bg-opacity-60 pb-7'>
             <RadioGroup
@@ -271,20 +275,32 @@ export const AdvancedLendingOrderCard = ({
                     <OrderInputBox
                         field='Bond Price'
                         disabled={orderType === OrderType.MARKET}
-                        initialValue={divide(unitPrice, 100)}
-                        onValueChange={v =>
-                            dispatch(setUnitPrice(multiply(v as number, 100)))
+                        initialValue={
+                            unitPrice !== undefined
+                                ? divide(unitPrice, 100)
+                                : undefined
                         }
-                        informationText='Input value from 0 to 100'
+                        onValueChange={v =>
+                            v !== undefined
+                                ? dispatch(
+                                      setUnitPrice(multiply(v as number, 100))
+                                  )
+                                : dispatch(setUnitPrice(undefined))
+                        }
+                        informationText='Input value greater than or equal to 0.01 and up to and including 100.'
                         decimalPlacesAllowed={2}
                         maxLimit={100}
+                    />
+                    <ErrorInfo
+                        errorMessage='Invalid bond price'
+                        showError={validateBondPrice()}
                     />
                     <div className='mx-10px'>
                         <OrderDisplayBox
                             field='Fixed Rate (APR)'
                             value={percentFormat(
                                 LoanValue.fromPrice(
-                                    unitPrice,
+                                    unitPrice ?? 0,
                                     maturity
                                 ).apr.toNormalizedNumber()
                             )}
@@ -297,7 +313,9 @@ export const AdvancedLendingOrderCard = ({
                     unit={currency}
                     asset={currency}
                     initialValue={orderAmount?.value}
-                    onValueChange={v => handleInputChange(BigNumber.from(v))}
+                    onValueChange={v =>
+                        handleInputChange(BigNumber.from(v ?? 0))
+                    }
                 />
                 <div className='mx-10px flex flex-col gap-6'>
                     <OrderDisplayBox
@@ -314,11 +332,16 @@ export const AdvancedLendingOrderCard = ({
                 <OrderAction
                     loanValue={loanValue}
                     collateralBook={collateralBook}
-                    validation={getAmountValidation(
-                        amountFormatterFromBase[currency](amount),
-                        balanceToLend,
-                        side
-                    )}
+                    validation={
+                        getAmountValidation(
+                            amountFormatterFromBase[currency](amount),
+                            balanceToLend,
+                            side
+                        ) ||
+                        validateBondPrice() ||
+                        (unitPrice === undefined &&
+                            orderType === OrderType.LIMIT)
+                    }
                 />
 
                 <Separator color='neutral-3'></Separator>
