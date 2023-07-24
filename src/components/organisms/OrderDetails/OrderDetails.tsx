@@ -78,7 +78,7 @@ export const OrderDetails = ({
                 itemList={[
                     ['Maturity Date', formatDate(maturity.toNumber())],
                     [
-                        FeeItem(),
+                        <FeeItem key={maturity.toString()} />,
                         prefixTilde(
                             calculateFee(maturity.toNumber(), orderFee)
                         ),
