@@ -325,7 +325,7 @@ describe('AdvancedLendingOrderCard Component', () => {
         const option = screen.getByTestId('option-1');
         fireEvent.click(option);
         expect(input).toHaveValue('100');
-        expect(input).toHaveValue('100');
+        expect(slider).toHaveValue('100');
     });
 
     it('it should disable the action button and show error hint if amount is greater than available amount', async () => {
