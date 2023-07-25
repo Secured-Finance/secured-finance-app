@@ -36,6 +36,7 @@ import {
     getCurrencyMapAsList,
     getCurrencyMapAsOptions,
     getTransformMaturityOption,
+    ZERO_BN,
 } from 'src/utils';
 import { LoanValue, Maturity } from 'src/utils/entities';
 import { useAccount } from 'wagmi';
@@ -155,6 +156,10 @@ export const LendingCard = ({
         dispatch(setAmount(inputAmount));
     };
 
+    const orderAmount = amount.gt(ZERO_BN)
+        ? amountFormatterFromBase[currency](amount)
+        : undefined;
+
     return (
         <div className='w-80 flex-col space-y-6 rounded-b-xl border border-panelStroke bg-transparent pb-6 shadow-deep'>
             <BorrowLendSelector
@@ -186,7 +191,7 @@ export const LendingCard = ({
                         transformLabel={(v: string) => shortNames[v]}
                         priceList={assetPriceMap}
                         onAmountChange={v => dispatch(setAmount(v))}
-                        initialValue={amountFormatterFromBase[currency](amount)}
+                        initialValue={orderAmount}
                         amountFormatterMap={amountFormatterToBase}
                         onAssetChange={handleCurrencyChange}
                     />
