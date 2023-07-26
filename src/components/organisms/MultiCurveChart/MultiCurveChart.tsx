@@ -110,27 +110,27 @@ export const options: ChartOptions<'line'> = {
 
 const getData = (
     curves: Record<CurrencySymbol, Rate[]>,
-    currencies: CurrencySymbol[],
+    currencies: Set<CurrencySymbol>,
     labels: string[]
 ) => {
     return {
         labels: labels,
-        datasets: Object.keys(curves)
-            .filter(v => currencies.includes(v as CurrencySymbol))
-            .map(key => {
-                const ccy = toCurrencySymbol(key);
-                if (ccy === undefined) {
-                    throw new Error(`Invalid currency symbol: ${key}`);
-                }
+        datasets: Object.keys(curves).map(key => {
+            const ccy = toCurrencySymbol(key);
+            if (ccy === undefined) {
+                throw new Error(`Invalid currency symbol: ${key}`);
+            }
 
-                return {
-                    label: key,
-                    data: curves[ccy].map(r => r.toNormalizedNumber()),
-                    borderColor: currencyMap[ccy].chartColor,
-                    backgroundColor: currencyMap[ccy].chartColor,
-                    ...defaultDatasets,
-                };
-            }),
+            return {
+                label: key,
+                data: currencies.has(ccy)
+                    ? curves[ccy].map(r => r.toNormalizedNumber())
+                    : [],
+                borderColor: currencyMap[ccy].chartColor,
+                backgroundColor: currencyMap[ccy].chartColor,
+                ...defaultDatasets,
+            };
+        }),
     };
 };
 
@@ -264,7 +264,7 @@ export const MultiCurveChart = ({
             <div className='relative pb-7 pl-6 pr-5'>
                 <Line
                     className='h-[354px] rounded-b-xl bg-black-20'
-                    data={getData(curves, Array.from(activeCurrencies), labels)}
+                    data={getData(curves, activeCurrencies, labels)}
                     options={dataOptions}
                     ref={chartRef}
                     onClick={() => {}}
@@ -276,6 +276,7 @@ export const MultiCurveChart = ({
                         data={tooltipData}
                         position={tooltipPos}
                         visibility={tooltipVisible}
+                        activeCurrencies={activeCurrencies}
                     />
                 )}
             </div>
@@ -287,48 +288,48 @@ const GraphTooltip = ({
     data,
     position,
     visibility,
+    activeCurrencies,
 }: {
     data: TooltipItem<'line'>[] | undefined;
     position: Position;
     visibility: boolean;
+    activeCurrencies: Set<CurrencySymbol>;
 }) => {
+    const activeData = data
+        ? data.filter(val =>
+              activeCurrencies.has(val.dataset.label as CurrencySymbol)
+          )
+        : [];
+
     return (
         <div
             className={`absolute ml-8 flex w-40 flex-col gap-5 overflow-hidden rounded-[10px] border border-[#34384C] bg-[rgba(47,50,65,0.6)] px-3 pb-5 pt-4 shadow-curvetooltip backdrop-blur-[3px] transition-all duration-300 hover:!visible
         ${visibility ? 'visible' : 'invisible'}
-          `}
+        `}
             style={{
                 top: position?.top,
                 left: position?.left,
             }}
         >
-            {data && (
-                <>
-                    {data.map((val, index) => {
-                        return (
-                            <div
-                                className='typography-button-1 flex h-5 flex-row items-center justify-between leading-[22px]'
-                                key={index}
-                            >
-                                <div className='flex items-center gap-2'>
-                                    <CurrencyIcon
-                                        ccy={
-                                            val.dataset.label as CurrencySymbol
-                                        }
-                                        variant='small'
-                                    />
-                                    <span className='text-white'>
-                                        {val.dataset.label as CurrencySymbol}
-                                    </span>
-                                </div>
-                                <span className='text-nebulaTeal'>
-                                    {`${val.formattedValue}%`}
-                                </span>
-                            </div>
-                        );
-                    })}
-                </>
-            )}
+            {activeData.map((val, index) => {
+                return (
+                    <div
+                        className='typography-button-1 flex h-5 flex-row items-center justify-between leading-[22px]'
+                        key={index}
+                    >
+                        <div className='flex items-center gap-2'>
+                            <CurrencyIcon
+                                ccy={val.dataset.label as CurrencySymbol}
+                                variant='small'
+                            />
+                            <span className='text-white'>
+                                {val.dataset.label as CurrencySymbol}
+                            </span>
+                        </div>
+                        <span className='text-nebulaTeal'>{`${val.formattedValue}%`}</span>
+                    </div>
+                );
+            })}
         </div>
     );
 };
