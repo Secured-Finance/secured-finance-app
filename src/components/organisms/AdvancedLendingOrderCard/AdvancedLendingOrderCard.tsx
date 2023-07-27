@@ -26,6 +26,7 @@ import {
     setSide,
     setSourceAccount,
     setUnitPrice,
+    resetUnitPrice,
 } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
 import { selectAllBalances } from 'src/store/wallet';
@@ -61,6 +62,7 @@ export const AdvancedLendingOrderCard = ({
         unitPrice,
         maturity,
         sourceAccount,
+        marketPrice,
     } = useSelector((state: RootState) =>
         selectLandingOrderForm(state.landingOrderForm)
     );
@@ -71,12 +73,11 @@ export const AdvancedLendingOrderCard = ({
     );
 
     const loanValue = useMemo(() => {
-        if (unitPrice && maturity) {
+        if (unitPrice !== undefined && maturity) {
             return LoanValue.fromPrice(unitPrice, maturity);
         }
-
-        return LoanValue.ZERO;
-    }, [unitPrice, maturity]);
+        return LoanValue.fromPrice(marketPrice ?? 0, maturity);
+    }, [unitPrice, maturity, marketPrice]);
 
     const dispatch = useDispatch();
     const { address, isConnected } = useAccount();
@@ -224,6 +225,7 @@ export const AdvancedLendingOrderCard = ({
                     handleClick={side => {
                         dispatch(setSide(side));
                         dispatch(setSourceAccount(WalletSource.METAMASK));
+                        dispatch(resetUnitPrice());
                     }}
                     side={side}
                     variant='advanced'
@@ -251,8 +253,8 @@ export const AdvancedLendingOrderCard = ({
                         field='Bond Price'
                         disabled={orderType === OrderType.MARKET}
                         initialValue={
-                            unitPrice !== undefined
-                                ? divide(unitPrice, 100)
+                            loanValue.price > 0
+                                ? divide(loanValue.price, 100)
                                 : undefined
                         }
                         onValueChange={v =>
@@ -260,7 +262,7 @@ export const AdvancedLendingOrderCard = ({
                                 ? dispatch(
                                       setUnitPrice(multiply(v as number, 100))
                                   )
-                                : dispatch(setUnitPrice(undefined))
+                                : dispatch(setUnitPrice(0))
                         }
                         informationText='Input value greater than or equal to 0.01 and up to and including 100.'
                         decimalPlacesAllowed={2}

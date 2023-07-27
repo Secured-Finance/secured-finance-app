@@ -1,3 +1,4 @@
+import { OrderSide } from '@secured-finance/sf-client';
 import { formatDate } from '@secured-finance/sf-core';
 import { composeStories } from '@storybook/react';
 import {
@@ -8,8 +9,7 @@ import {
 } from 'src/stories/mocks/fixtures';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
-import { CurrencyInfo, CurrencySymbol, Rate, currencyMap } from 'src/utils';
-import { LoanValue } from 'src/utils/entities';
+import { CurrencyInfo, CurrencySymbol, currencyMap } from 'src/utils';
 import * as stories from './LendingCard.stories';
 
 const { Default } = composeStories(stories);
@@ -31,6 +31,14 @@ describe('LendingCard Component', () => {
     const preloadedState = {
         ...preloadedAssetPrices,
         ...preloadedLendingMarkets,
+        landingOrderForm: {
+            marketPrice: 1,
+            maturity: dec22Fixture,
+            currency: CurrencySymbol.WFIL,
+            side: OrderSide.BORROW,
+            amount: '500000000',
+            unitPrice: 9500,
+        },
         wallet: {
             balances: {
                 [CurrencySymbol.WFIL]: 10000,
@@ -62,7 +70,9 @@ describe('LendingCard Component', () => {
 
     it('should show correct market rate', async () => {
         await waitFor(() => render(<Default />, { preloadedState }));
-        expect(screen.getByTestId('market-rate')).toHaveTextContent('1.00%');
+        expect(screen.getByTestId('market-rate')).toHaveTextContent(
+            '1,000.00%'
+        );
     });
 
     it('should open confirm order dialog when borrow button is clicked', async () => {
@@ -115,15 +125,6 @@ describe('LendingCard Component', () => {
                 `~ ${preloadedAssetPrices.assetPrices.WFIL.price * 10} USD`
             )
         ).toBeInTheDocument();
-    });
-
-    it('should display the rate from the prop', async () => {
-        const rate = LoanValue.fromApr(
-            new Rate(20000),
-            dec22Fixture.toNumber()
-        );
-        await waitFor(() => render(<Default marketValue={rate} />));
-        expect(screen.getByText('2.00%')).toBeInTheDocument();
     });
 
     it('should transform the contract label to a date', async () => {

@@ -20,14 +20,14 @@ import { useOrderbook } from 'src/hooks/useOrderbook';
 import { getAssetPrice } from 'src/store/assetPrices/selectors';
 import { selectMarket } from 'src/store/availableContracts';
 import {
+    resetUnitPrice,
     selectLandingOrderForm,
     setAmount,
     setCurrency,
     setMaturity,
-    setUnitPrice,
 } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
-import { MaturityOptionList, OrderType, TransactionList } from 'src/types';
+import { MaturityOptionList, TransactionList } from 'src/types';
 import {
     CurrencySymbol,
     Rate,
@@ -74,16 +74,14 @@ const useTradeHistoryDetails = (
 
 export const AdvancedLending = ({
     collateralBook,
-    loanValue,
     maturitiesOptionList,
     rates,
 }: {
     collateralBook: CollateralBook;
-    loanValue: LoanValue;
     maturitiesOptionList: MaturityOptionList;
     rates: Rate[];
 }) => {
-    const { currency, maturity, orderType } = useSelector((state: RootState) =>
+    const { currency, maturity } = useSelector((state: RootState) =>
         selectLandingOrderForm(state.landingOrderForm)
     );
 
@@ -159,6 +157,7 @@ export const AdvancedLending = ({
         (v: CurrencySymbol) => {
             dispatch(setCurrency(v));
             dispatch(setAmount(BigNumber.from(0)));
+            dispatch(resetUnitPrice());
         },
         [dispatch]
     );
@@ -167,17 +166,10 @@ export const AdvancedLending = ({
         (v: string) => {
             dispatch(setMaturity(Number(v)));
             dispatch(setAmount(BigNumber.from(0)));
+            dispatch(resetUnitPrice());
         },
         [dispatch]
     );
-
-    useEffect(() => {
-        if (loanValue.price > 0 || orderType === OrderType.MARKET) {
-            dispatch(setUnitPrice(loanValue.price));
-        } else {
-            dispatch(setUnitPrice(undefined));
-        }
-    }, [dispatch, loanValue.price, orderType, currency, maturity]);
 
     return (
         <TwoColumnsWithTopBar

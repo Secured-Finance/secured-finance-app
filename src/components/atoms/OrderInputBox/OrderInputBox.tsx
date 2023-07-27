@@ -1,5 +1,5 @@
 import { BigNumber } from 'ethers';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback } from 'react';
 import { InputBase } from 'src/components/atoms';
 import { Tooltip } from 'src/components/templates';
 import { amountFormatterToBase, CurrencySymbol } from 'src/utils';
@@ -27,12 +27,6 @@ export const OrderInputBox = ({
     maxLimit,
     onValueChange,
 }: OrderInputBoxProps) => {
-    const [inputValue, setInputValue] = useState(initialValue);
-
-    useEffect(() => {
-        setInputValue(initialValue);
-    }, [initialValue]);
-
     const handleInputChange = useCallback(
         (
             amount: number | undefined,
@@ -54,7 +48,6 @@ export const OrderInputBox = ({
 
     const handleAmountChange = useCallback(
         (amount: number | undefined) => {
-            setInputValue(amount);
             if (onValueChange) {
                 handleInputChange(amount, asset, onValueChange);
             }
@@ -81,7 +74,7 @@ export const OrderInputBox = ({
                     </span>
                 ) : (
                     <InputBase
-                        value={inputValue as number}
+                        value={initialValue as number}
                         className='w-32 text-right text-[18px] font-semibold leading-6 text-neutral-8'
                         label={field}
                         onValueChange={handleAmountChange}

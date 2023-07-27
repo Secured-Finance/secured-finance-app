@@ -1,6 +1,6 @@
 import { OrderSide } from '@secured-finance/sf-client';
 import queries from '@secured-finance/sf-graph-client/dist/graphclients';
-import { useMemo } from 'react';
+import { useEffect } from 'react';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { ViewType } from 'src/components/atoms';
 import {
@@ -17,13 +17,15 @@ import {
     useMaturityOptions,
 } from 'src/hooks';
 import {
+    resetUnitPrice,
     selectLandingOrderForm,
     setLastView,
+    setMarketPrice,
     setOrderType,
 } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
 import { OrderType } from 'src/types';
-import { LoanValue, Maturity } from 'src/utils/entities';
+import { Maturity } from 'src/utils/entities';
 import { useAccount } from 'wagmi';
 
 export const emptyOptionList = [
@@ -56,18 +58,14 @@ export const Landing = ({ view }: { view?: ViewType }) => {
         market => market.isOpened
     );
 
-    const marketValue = useMemo(() => {
-        if (!unitPrices) {
-            return LoanValue.ZERO;
+    useEffect(() => {
+        if (unitPrices) {
+            const value = unitPrices.get(maturity);
+            if (value) {
+                dispatch(setMarketPrice(value.price));
+            }
         }
-
-        const value = unitPrices.get(maturity);
-        if (!value) {
-            return LoanValue.ZERO;
-        }
-
-        return value;
-    }, [unitPrices, maturity]);
+    }, [unitPrices, maturity, dispatch]);
 
     const dailyVolumes = useGraphClientHook(
         {}, // no variables
@@ -82,7 +80,6 @@ export const Landing = ({ view }: { view?: ViewType }) => {
                 <div className='flex flex-row items-center justify-center'>
                     <LendingCard
                         collateralBook={collateralBook}
-                        marketValue={marketValue}
                         maturitiesOptionList={maturityOptionList}
                     />
                     <YieldChart
@@ -97,7 +94,6 @@ export const Landing = ({ view }: { view?: ViewType }) => {
             advanceComponent={
                 <AdvancedLending
                     collateralBook={collateralBook}
-                    loanValue={marketValue}
                     rates={Array.from(unitPrices.values()).map(v => v.apr)}
                     maturitiesOptionList={maturityOptionList}
                 />
@@ -107,8 +103,10 @@ export const Landing = ({ view }: { view?: ViewType }) => {
                 dispatch(setLastView(v));
                 if (v === 'Simple') {
                     dispatch(setOrderType(OrderType.MARKET));
+                    dispatch(resetUnitPrice());
                 } else if (v === 'Advanced') {
                     dispatch(setOrderType(OrderType.LIMIT));
+                    dispatch(resetUnitPrice());
                 }
             }}
             pageName='lending-page'
