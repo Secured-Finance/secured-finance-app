@@ -14,6 +14,7 @@ type LandingOrderFormStore = {
     orderType: OrderType;
     lastView: ViewType;
     sourceAccount: WalletSource;
+    marketPrice?: number;
 };
 const initialStore: LandingOrderFormStore = {
     currency: CurrencySymbol.WFIL,
@@ -45,6 +46,9 @@ const landingOrderFormSlice = createSlice({
         setUnitPrice: (state, action: PayloadAction<number | undefined>) => {
             state.unitPrice = action.payload;
         },
+        resetUnitPrice: state => {
+            state.unitPrice = undefined;
+        },
         setOrderType: (state, action: PayloadAction<OrderType>) => {
             state.orderType = action.payload;
         },
@@ -53,6 +57,9 @@ const landingOrderFormSlice = createSlice({
         },
         setSourceAccount: (state, action: PayloadAction<WalletSource>) => {
             state.sourceAccount = action.payload;
+        },
+        setMarketPrice: (state, action: PayloadAction<number>) => {
+            state.marketPrice = action.payload;
         },
     },
 });

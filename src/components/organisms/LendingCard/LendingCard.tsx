@@ -42,16 +42,15 @@ import { useAccount } from 'wagmi';
 
 export const LendingCard = ({
     collateralBook,
-    marketValue,
     maturitiesOptionList,
 }: {
     collateralBook: CollateralBook;
-    marketValue: LoanValue;
     maturitiesOptionList: MaturityOptionList;
 }) => {
-    const { currency, maturity, side, sourceAccount, amount } = useSelector(
-        (state: RootState) => selectLandingOrderForm(state.landingOrderForm)
-    );
+    const { currency, maturity, side, sourceAccount, amount, marketPrice } =
+        useSelector((state: RootState) =>
+            selectLandingOrderForm(state.landingOrderForm)
+        );
 
     const dispatch = useDispatch();
     const { address, isConnected } = useAccount();
@@ -120,6 +119,11 @@ export const LendingCard = ({
         currency,
         selectedWalletSource.source,
     ]);
+
+    const marketValue = useMemo(
+        () => LoanValue.fromPrice(marketPrice ?? 0, maturity),
+        [marketPrice, maturity]
+    );
 
     return (
         <div className='w-80 flex-col space-y-6 rounded-b-xl border border-panelStroke bg-transparent pb-6 shadow-deep'>
