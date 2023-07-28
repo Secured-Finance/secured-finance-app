@@ -50,18 +50,14 @@
     "lint:check": "eslint . --max-warnings=0",
     "lint:write": "eslint --fix .",
     "cert": "openssl req -nodes -config certs/openssl.cnf -new -x509 -keyout certs/server.key -out certs/server.cert; openssl x509 -in certs/server.cert -out certs/cert.pem -outform PEM",
-    "storybook": "storybook dev -p 6006 -s public",
-    "build-storybook": "storybook build -s public",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build",
     "prepare": "husky install",
     "cypress:open": "cypress open",
     "cypress:run": "cypress run"
   },
   "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
+    "production": [">0.2%", "not dead", "not op_mini all"],
     "development": [
       "last 1 chrome version",
       "last 1 firefox version",
