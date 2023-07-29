@@ -1,30 +1,21 @@
 import { track } from '@amplitude/analytics-browser';
-import { Disclosure, Transition } from '@headlessui/react';
 import { OrderSide, WalletSource } from '@secured-finance/sf-client';
-import { formatDate, getUTCMonthYear } from '@secured-finance/sf-core';
+import { getUTCMonthYear } from '@secured-finance/sf-core';
 import { BigNumber } from 'ethers';
 import { useCallback, useReducer, useState } from 'react';
 import { useDispatch } from 'react-redux';
+import { Spinner } from 'src/components/atoms';
 import {
-    ExpandIndicator,
-    Section,
-    SectionWithItems,
-    Spinner,
-} from 'src/components/atoms';
-import {
-    AmountCard,
-    CollateralSimulationSection,
     Dialog,
     DialogState,
     FailurePanel,
     SuccessPanel,
 } from 'src/components/molecules';
-import { Tooltip } from 'src/components/templates';
+import { OrderDetails } from 'src/components/organisms';
 import {
     CollateralBook,
     useEtherscanUrl,
     useHandleContractTransaction,
-    useOrderFee,
 } from 'src/hooks';
 import { setLastMessage } from 'src/store/lastError';
 import { OrderType, PlaceOrderFunction } from 'src/types';
@@ -33,9 +24,7 @@ import {
     CurrencySymbol,
     OrderEvents,
     OrderProperties,
-    calculateFee,
     ordinaryFormat,
-    prefixTilde,
 } from 'src/utils';
 import { Amount, LoanValue, Maturity } from 'src/utils/entities';
 
@@ -196,8 +185,6 @@ export const PlaceOrder = ({
         ]
     );
 
-    const orderFee = useOrderFee(orderAmount.currency);
-
     const onClick = useCallback(
         async (currentStep: Step) => {
             switch (currentStep) {
@@ -261,77 +248,14 @@ export const PlaceOrder = ({
                 switch (state.currentStep) {
                     case Step.orderConfirm:
                         return (
-                            <div className='grid w-full grid-cols-1 justify-items-stretch gap-6 text-white'>
-                                <Section>
-                                    <AmountCard
-                                        amount={orderAmount}
-                                        price={assetPrice}
-                                    />
-                                </Section>
-                                <CollateralSimulationSection
-                                    collateral={collateral}
-                                    tradeAmount={orderAmount}
-                                    side={side}
-                                    assetPrice={assetPrice}
-                                    tradeValue={loanValue}
-                                />
-                                <SectionWithItems
-                                    itemList={[
-                                        [
-                                            'Maturity Date',
-                                            formatDate(maturity.toNumber()),
-                                        ],
-                                        [
-                                            <FeeItem
-                                                key={maturity.toString()}
-                                            />,
-                                            prefixTilde(
-                                                calculateFee(
-                                                    maturity.toNumber(),
-                                                    orderFee
-                                                )
-                                            ),
-                                        ],
-                                    ]}
-                                />
-                                <Disclosure>
-                                    {({ open }) => (
-                                        <>
-                                            <div className='relative'>
-                                                <Disclosure.Button
-                                                    className='flex h-6 w-full flex-row items-center justify-between'
-                                                    data-testid='disclaimer-button'
-                                                >
-                                                    <h2 className='typography-hairline-2 text-neutral-8'>
-                                                        Circuit Breaker
-                                                        Disclaimer
-                                                    </h2>
-                                                    <ExpandIndicator
-                                                        expanded={open}
-                                                    />
-                                                </Disclosure.Button>
-                                                <Transition
-                                                    show={open}
-                                                    enter='transition duration-100 ease-out'
-                                                    enterFrom='transform scale-95 opacity-0'
-                                                    enterTo='transform scale-100 opacity-100'
-                                                >
-                                                    <Disclosure.Panel>
-                                                        <div className='typography-caption pt-3 text-secondary7'>
-                                                            Circuit breaker will
-                                                            be triggered if the
-                                                            order is filled at
-                                                            over the max
-                                                            slippage level at 1
-                                                            block.
-                                                        </div>
-                                                    </Disclosure.Panel>
-                                                </Transition>
-                                            </div>
-                                        </>
-                                    )}
-                                </Disclosure>
-                            </div>
+                            <OrderDetails
+                                amount={orderAmount}
+                                maturity={maturity}
+                                side={side}
+                                assetPrice={assetPrice}
+                                collateral={collateral}
+                                loanValue={loanValue}
+                            />
                         );
                     case Step.orderProcessing:
                         return (
@@ -366,17 +290,5 @@ export const PlaceOrder = ({
                 }
             })()}
         </Dialog>
-    );
-};
-
-const FeeItem = () => {
-    return (
-        <div className='flex flex-row items-center gap-1'>
-            <div className='text-planetaryPurple'>Transaction Fee %</div>
-            <Tooltip>
-                A duration-based transaction fee only for market takers,
-                factored into the bond price, and deducted from its future value
-            </Tooltip>
-        </div>
     );
 };
