@@ -1,5 +1,6 @@
 import { MockedProvider } from '@apollo/client/testing';
 import { configureStore } from '@reduxjs/toolkit';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { render as rtlRender } from '@testing-library/react';
 import { renderHook as rtlRenderHook } from '@testing-library/react-hooks';
 import { Provider } from 'react-redux';
@@ -22,7 +23,15 @@ function render(
     } = {}
 ) {
     function Wrapper({ children }) {
-        const component = <Provider store={store}>{children}</Provider>;
+        const queryClient = new QueryClient();
+        const component = (
+            <Provider store={store}>
+                <QueryClientProvider client={queryClient}>
+                    {children}
+                </QueryClientProvider>
+            </Provider>
+        );
+
         if (apolloMocks) {
             return (
                 <MockedProvider mocks={apolloMocks}>{component}</MockedProvider>
@@ -49,7 +58,14 @@ function renderHook(
     } = {}
 ) {
     function Wrapper({ children }) {
-        return <Provider store={store}>{children}</Provider>;
+        const queryClient = new QueryClient();
+        return (
+            <Provider store={store}>
+                <QueryClientProvider client={queryClient}>
+                    {children}
+                </QueryClientProvider>
+            </Provider>
+        );
     }
     return {
         store,

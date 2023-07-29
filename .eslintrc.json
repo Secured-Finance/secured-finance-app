@@ -10,9 +10,10 @@
     "node": false,
     "es6": true
   },
-  "plugins": ["@typescript-eslint", "jest"],
+  "plugins": ["@tanstack/query", "@typescript-eslint", "jest"],
   "extends": [
     "plugin:prettier/recommended",
+    "plugin:@tanstack/eslint-plugin-query/recommended",
     "plugin:@typescript-eslint/recommended",
     "plugin:storybook/recommended",
     "plugin:jsx-a11y/recommended",

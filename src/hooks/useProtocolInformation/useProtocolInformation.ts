@@ -1,33 +1,42 @@
+import { useQuery } from '@tanstack/react-query';
 import { BigNumber } from 'ethers';
-import { useEffect, useState } from 'react';
-import { CurrencySymbol } from 'src/utils';
+import { CurrencySymbol, ZERO_BN } from 'src/utils';
 import useSF from '../useSecuredFinance';
 
 type ValueLockedBook = Record<CurrencySymbol, BigNumber>;
-type ProtocolInformation = {
-    totalNumberOfAsset: number;
-    valueLockedByCurrency: ValueLockedBook | null;
+
+export const emptyValueLockedBook: ValueLockedBook = {
+    [CurrencySymbol.ETH]: ZERO_BN,
+    [CurrencySymbol.USDC]: ZERO_BN,
+    [CurrencySymbol.WFIL]: ZERO_BN,
+    [CurrencySymbol.WBTC]: ZERO_BN,
 };
 
-export const useProtocolInformation = (): ProtocolInformation => {
+export const useTotalNumberOfAsset = () => {
     const securedFinance = useSF();
-    const [totalNumberOfAsset, setTotalNumberOfAsset] = useState<number>(0);
-    const [valueLockedByCurrency, setValueLockedByCurrency] =
-        useState<ValueLockedBook | null>(null);
 
-    useEffect(() => {
-        if (!securedFinance) return;
-        securedFinance.getCurrencies().then(currencies => {
-            setTotalNumberOfAsset(currencies.length);
-        });
-        securedFinance.getProtocolDepositAmount().then(value => {
-            const book = value as ValueLockedBook;
-            setValueLockedByCurrency(book as ValueLockedBook);
-        });
-    }, [securedFinance]);
+    return useQuery({
+        queryKey: ['getCurrencies'],
+        queryFn: async () => {
+            const currencies = await securedFinance?.getCurrencies();
+            return currencies ?? [];
+        },
+        initialData: [],
+        select: currencies => currencies.length,
+        enabled: !!securedFinance,
+    });
+};
 
-    return {
-        totalNumberOfAsset,
-        valueLockedByCurrency,
-    };
+export const useValueLockedByCurrency = () => {
+    const securedFinance = useSF();
+
+    return useQuery({
+        queryKey: ['getProtocolDepositAmount'],
+        queryFn: async () => {
+            const value = await securedFinance?.getProtocolDepositAmount();
+            return (value as ValueLockedBook) ?? emptyValueLockedBook;
+        },
+        initialData: emptyValueLockedBook,
+        enabled: !!securedFinance,
+    });
 };

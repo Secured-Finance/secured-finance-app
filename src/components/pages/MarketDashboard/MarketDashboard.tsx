@@ -19,7 +19,8 @@ import {
     useCollateralBook,
     useGraphClientHook,
     useLoanValues,
-    useProtocolInformation,
+    useTotalNumberOfAsset,
+    useValueLockedByCurrency,
 } from 'src/hooks';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { RootState } from 'src/store/types';
@@ -69,7 +70,10 @@ export const MarketDashboard = () => {
         curves[ccy.symbol] = Array.from(unitPrices.values()).map(r => r.apr);
     });
 
-    const protocolInformation = useProtocolInformation();
+    // const protocolInformation = useProtocolInformation();
+    const { data: totalNumberOfAsset } = useTotalNumberOfAsset();
+    const { data: valueLockedByCurrency } = useValueLockedByCurrency();
+
     const totalUser = useGraphClientHook(
         {}, // no variables
         queries.UserCountDocument,
@@ -96,14 +100,14 @@ export const MarketDashboard = () => {
 
     const totalValueLockedInUSD = useMemo(() => {
         let val = BigNumber.from(0);
-        if (!protocolInformation.valueLockedByCurrency) {
+        if (!valueLockedByCurrency) {
             return val;
         }
         for (const ccy of getCurrencyMapAsList()) {
             val = val.add(
                 Math.floor(
                     currencyMap[ccy.symbol].fromBaseUnit(
-                        protocolInformation.valueLockedByCurrency[ccy.symbol]
+                        valueLockedByCurrency[ccy.symbol]
                     ) * priceList[ccy.symbol]
                 )
             );
@@ -111,7 +115,7 @@ export const MarketDashboard = () => {
 
         return val;
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [JSON.stringify(priceList), protocolInformation.valueLockedByCurrency]);
+    }, [JSON.stringify(priceList), valueLockedByCurrency]);
 
     const marketList = useMemo(() => {
         const result = [];
@@ -138,7 +142,7 @@ export const MarketDashboard = () => {
                         values={[
                             {
                                 name: 'Digital Assets',
-                                value: protocolInformation.totalNumberOfAsset.toString(),
+                                value: totalNumberOfAsset.toString(),
                             },
                             {
                                 name: 'Total Value Locked',

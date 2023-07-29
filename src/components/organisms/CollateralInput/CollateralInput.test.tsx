@@ -30,7 +30,7 @@ describe('CollateralInput component', () => {
 
         fireEvent.input(input, { target: { value: '123456789' } });
         expect(input).toHaveClass('text-3xl');
-        waitFor(() => {
+        await waitFor(() => {
             fireEvent.input(input, { target: { value: '123456789.1234' } });
             expect(input).toHaveClass('text-2xl');
         });
