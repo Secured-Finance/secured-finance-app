@@ -1,7 +1,11 @@
 import { OrderSide, WalletSource } from '@secured-finance/sf-client';
 import { composeStories } from '@storybook/react';
 import { BigNumber } from 'ethers';
-import { dec22Fixture, preloadedAssetPrices } from 'src/stories/mocks/fixtures';
+import {
+    dec22Fixture,
+    preloadedAssetPrices,
+    preloadedLendingMarkets,
+} from 'src/stories/mocks/fixtures';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
 import { OrderType } from 'src/types';
@@ -66,19 +70,15 @@ describe('PlaceOrder component', () => {
     });
 
     it('should display the circuit breaker disclaimer', async () => {
-        render(<Default />);
+        render(<Default />, { preloadedState: preloadedLendingMarkets });
 
-        await waitFor(() => {
-            expect(screen.getByTestId('disclaimer-button')).toBeInTheDocument();
-        });
         const button = screen.getByTestId('disclaimer-button');
         expect(button).toHaveTextContent('Circuit Breaker Disclaimer');
         await waitFor(() => fireEvent.click(button));
-        expect(
-            screen.getByText(
-                'Circuit breaker will be triggered if the order is filled at over the max slippage level at 1 block.'
-            )
-        ).toBeInTheDocument();
+        const disclaimerText = await screen.findByTestId('disclaimer-text');
+        expect(disclaimerText).toHaveTextContent(
+            'Circuit breaker will be triggered if the order is filled at over 96.72 which is the max slippage level at 1 block.'
+        );
     });
 
     it('should not display the borrow remaining and the collateral usage if its a LEND order', async () => {
