@@ -1,6 +1,8 @@
 import { init } from '@amplitude/analytics-browser';
 import { LogLevel } from '@amplitude/analytics-types';
 import { GraphClientProvider } from '@secured-finance/sf-graph-client';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
 import { Provider } from 'react-redux';
@@ -23,6 +25,8 @@ import { publicProvider } from 'wagmi/providers/public';
 import '../assets/css/index.css';
 
 const projectId = getWalletConnectId();
+
+const queryClient = new QueryClient();
 
 init(getAmplitudeApiKey(), undefined, {
     appVersion: process.env.SF_ENV,
@@ -94,11 +98,14 @@ const Providers: React.FC = ({ children }) => {
     const network = getEthereumNetwork();
 
     return (
-        <GraphClientProvider network={network}>
-            <WagmiConfig config={config}>
-                <SecuredFinanceProvider>{children}</SecuredFinanceProvider>
-            </WagmiConfig>
-        </GraphClientProvider>
+        <QueryClientProvider client={queryClient}>
+            <GraphClientProvider network={network}>
+                <WagmiConfig config={config}>
+                    <SecuredFinanceProvider>{children}</SecuredFinanceProvider>
+                </WagmiConfig>
+            </GraphClientProvider>
+            <ReactQueryDevtools initialIsOpen={false} />
+        </QueryClientProvider>
     );
 };
 

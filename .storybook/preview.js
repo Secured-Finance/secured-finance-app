@@ -1,10 +1,13 @@
 import { MockedProvider } from '@apollo/client/testing';
 import '@storybook/addon-console';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Provider } from 'react-redux';
 import 'src/assets/css/index.css';
 import store from './../src/store';
 import { MockSecuredFinanceProvider } from './../src/stories/mocks/MockSecuredFinanceProvider';
 import { withMockDate } from './decorators';
+
+const queryClient = new QueryClient();
 
 export const parameters = {
     actions: { argTypesRegex: '^on.*' },
@@ -51,9 +54,11 @@ export const parameters = {
 export const decorators = [
     Story => (
         <Provider store={store}>
-            <MockSecuredFinanceProvider>
-                <Story />
-            </MockSecuredFinanceProvider>
+            <QueryClientProvider client={queryClient}>
+                <MockSecuredFinanceProvider>
+                    <Story />
+                </MockSecuredFinanceProvider>
+            </QueryClientProvider>
         </Provider>
     ),
     withMockDate,

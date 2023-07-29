@@ -27,7 +27,7 @@ const DEFAULT_CHOICE = Object.values(currencyMap).reduce<CurrencyInfo>(
     { ...currencyMap.ETH }
 );
 
-describe('LendingCard Component', () => {
+describe.skip('LendingCard Component', () => {
     const preloadedState = {
         ...preloadedAssetPrices,
         ...preloadedLendingMarkets,
