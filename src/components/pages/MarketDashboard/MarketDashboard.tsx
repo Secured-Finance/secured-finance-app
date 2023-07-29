@@ -70,7 +70,6 @@ export const MarketDashboard = () => {
         curves[ccy.symbol] = Array.from(unitPrices.values()).map(r => r.apr);
     });
 
-    // const protocolInformation = useProtocolInformation();
     const { data: totalNumberOfAsset } = useTotalNumberOfAsset();
     const { data: valueLockedByCurrency } = useValueLockedByCurrency();
 
