@@ -21,7 +21,7 @@ export const FailurePanel = ({ errorMessage }: { errorMessage: string }) => {
                         {buttonText}
                     </button>
                 </div>
-                <div className='typography-caption-2 scrollbar-error h-fit max-h-20 overflow-y-auto overflow-x-hidden break-words pr-2 font-medium text-[#A0AEC0]'>
+                <div className='typography-caption-2 scrollbar-table h-fit max-h-20 overflow-y-auto overflow-x-hidden break-words pr-2 font-medium text-[#A0AEC0]'>
                     {errorMessage}
                 </div>
             </div>

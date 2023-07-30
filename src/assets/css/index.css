@@ -72,21 +72,21 @@
     @apply bg-gradient-to-l from-horizonBlue to-starBlue;
   }
 
-  .scrollbar::-webkit-scrollbar {
+  .scrollbar-dropdown::-webkit-scrollbar {
     width: 16px;
   }
 
-  .scrollbar::-webkit-scrollbar-thumb {
+  .scrollbar-dropdown::-webkit-scrollbar-thumb {
     background: rgba(255, 255, 255, 0.2);
     border-radius: 100vh;
     border: 6px solid #292D3F;
   }
 
-  .scrollbar-error::-webkit-scrollbar {
+  .scrollbar-table::-webkit-scrollbar {
     width: 6px;
   }
 
-  .scrollbar-error::-webkit-scrollbar-thumb {
+  .scrollbar-table::-webkit-scrollbar-thumb {
     background: rgba(119, 126, 144, 1);
     border-radius: 50px;
   }
