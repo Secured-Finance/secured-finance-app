@@ -8,7 +8,7 @@ import {
     useReactTable,
 } from '@tanstack/react-table';
 import classNames from 'classnames';
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { Pagination } from 'src/types';
 
@@ -242,6 +242,7 @@ const PaginatedScrolling = ({
         dataLength={data.length}
         next={fetchMoreData}
         hasMore={hasMoreData}
+        className={'scrollbar-table'}
         loader={<h4>Loading...</h4>}
     >
         {children}
