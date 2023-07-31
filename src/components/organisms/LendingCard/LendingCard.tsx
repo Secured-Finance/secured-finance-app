@@ -1,6 +1,6 @@
 import { OrderSide, WalletSource } from '@secured-finance/sf-client';
 import { BigNumber } from 'ethers';
-import { useMemo } from 'react';
+import { useMemo, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
     BorrowLendSelector,
@@ -125,18 +125,21 @@ export const LendingCard = ({
         selectedWalletSource.source,
     ]);
 
-    const handleCurrencyChange = (v: CurrencySymbol) => {
-        let formatFrom = (x: BigNumber) => x.toNumber();
-        if (amountFormatterFromBase && amountFormatterFromBase[currency]) {
-            formatFrom = amountFormatterFromBase[currency];
-        }
-        let formatTo = (x: number) => BigNumber.from(x);
-        if (amountFormatterToBase && amountFormatterToBase[v]) {
-            formatTo = amountFormatterToBase[v];
-        }
-        dispatch(setAmount(formatTo(formatFrom(amount))));
-        dispatch(setCurrency(v));
-    };
+    const handleCurrencyChange = useCallback(
+        (v: CurrencySymbol) => {
+            let formatFrom = (x: BigNumber) => x.toNumber();
+            if (amountFormatterFromBase && amountFormatterFromBase[currency]) {
+                formatFrom = amountFormatterFromBase[currency];
+            }
+            let formatTo = (x: number) => BigNumber.from(x);
+            if (amountFormatterToBase && amountFormatterToBase[v]) {
+                formatTo = amountFormatterToBase[v];
+            }
+            dispatch(setAmount(formatTo(formatFrom(amount))));
+            dispatch(setCurrency(v));
+        },
+        [amount, currency, dispatch]
+    );
 
     const handleWalletSourceChange = (source: WalletSource) => {
         dispatch(setSourceAccount(source));

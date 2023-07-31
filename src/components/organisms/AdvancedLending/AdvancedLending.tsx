@@ -1,7 +1,7 @@
 import { toBytes32 } from '@secured-finance/sf-graph-client';
 import queries from '@secured-finance/sf-graph-client/dist/graphclients/';
 import { BigNumber } from 'ethers';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
     AdvancedLendingTopBar,
@@ -157,18 +157,21 @@ export const AdvancedLending = ({
         return assetList.find(option => option.value === currency);
     }, [currency, assetList]);
 
-    const handleCurrencyChange = (v: CurrencySymbol) => {
-        let formatFrom = (x: BigNumber) => x.toNumber();
-        if (amountFormatterFromBase && amountFormatterFromBase[currency]) {
-            formatFrom = amountFormatterFromBase[currency];
-        }
-        let formatTo = (x: number) => BigNumber.from(x);
-        if (amountFormatterToBase && amountFormatterToBase[v]) {
-            formatTo = amountFormatterToBase[v];
-        }
-        dispatch(setAmount(formatTo(formatFrom(amount))));
-        dispatch(setCurrency(v));
-    };
+    const handleCurrencyChange = useCallback(
+        (v: CurrencySymbol) => {
+            let formatFrom = (x: BigNumber) => x.toNumber();
+            if (amountFormatterFromBase && amountFormatterFromBase[currency]) {
+                formatFrom = amountFormatterFromBase[currency];
+            }
+            let formatTo = (x: number) => BigNumber.from(x);
+            if (amountFormatterToBase && amountFormatterToBase[v]) {
+                formatTo = amountFormatterToBase[v];
+            }
+            dispatch(setAmount(formatTo(formatFrom(amount))));
+            dispatch(setCurrency(v));
+        },
+        [amount, currency, dispatch]
+    );
 
     useEffect(() => {
         if (loanValue.price > 0 || orderType === OrderType.MARKET) {
@@ -193,9 +196,7 @@ export const AdvancedLending = ({
                         value: selectedTerm.value.toString(),
                     }}
                     onAssetChange={handleCurrencyChange}
-                    onTermChange={v => {
-                        dispatch(setMaturity(Number(v)));
-                    }}
+                    onTermChange={v => dispatch(setMaturity(Number(v)))}
                     lastTradeLoan={lastTransaction.value}
                     lastTradeTime={lastTransaction.createdAt}
                     values={[
