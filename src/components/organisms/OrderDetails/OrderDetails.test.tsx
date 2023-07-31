@@ -10,7 +10,7 @@ const { Default } = composeStories(stories);
 const mockSecuredFinance = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mockSecuredFinance);
 
-describe.skip('OrderDetails Component', () => {
+describe('OrderDetails Component', () => {
     it('should display the borrow remaining and the collateral usage if its a BORROW order', async () => {
         render(<Default />);
 

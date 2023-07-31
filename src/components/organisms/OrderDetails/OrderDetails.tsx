@@ -46,7 +46,7 @@ export const OrderDetails = ({
     collateral: CollateralBook;
     loanValue: LoanValue;
 }) => {
-    const { data: orderFee } = useOrderFee(amount.currency);
+    const orderFee = useOrderFee(amount.currency);
 
     const market = useSelector((state: RootState) =>
         selectMarket(amount.currency, maturity.toNumber())(state)
