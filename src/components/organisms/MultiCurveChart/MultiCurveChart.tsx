@@ -10,9 +10,9 @@ import {
     Title,
     Tooltip,
 } from 'chart.js';
-import { TooltipItem, TooltipModel } from 'chart.js/auto';
+import { TooltipModel } from 'chart.js/auto';
 import classNames from 'classnames';
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
 import { Line } from 'react-chartjs-2';
 import { CurrencyIcon } from 'src/components/atoms';
 import {
@@ -174,7 +174,7 @@ export const MultiCurveChart = ({
 }) => {
     const chartRef = useRef<ChartJS<'line'>>(null);
     const [tooltipVisible, setTooltipVisible] = useState(false);
-    const [tooltipData, setTooltipData] = useState<TooltipItem<'line'>[]>();
+    const [tooltipLabel, setTooltipLabel] = useState<string>();
     const [tooltipPos, setTooltipPos] = useState<Position>();
 
     const [activeCurrencies, setActiveCurrencies] = useState<
@@ -215,10 +215,9 @@ export const MultiCurveChart = ({
             if (canvas) {
                 const left = tooltip.x;
                 const top = tooltip.y;
-
+                setTooltipLabel(tooltip.title[0]);
                 if (tooltipPos?.top !== top || tooltipPos?.left !== left) {
                     setTooltipPos({ top: top, left: left });
-                    setTooltipData(tooltip.dataPoints);
                     setTooltipVisible(true);
                 }
             }
@@ -237,6 +236,19 @@ export const MultiCurveChart = ({
             },
         },
     };
+
+    const tooltipData = useMemo(() => {
+        if (!tooltipLabel) {
+            return [];
+        }
+
+        const tooltipIndex = labels.indexOf(tooltipLabel);
+        const activeData = Object.keys(curves)
+            .filter(curr => activeCurrencies.has(curr as CurrencySymbol))
+            .map(curr => [curr, curves[curr as CurrencySymbol][tooltipIndex]]);
+
+        return activeData;
+    }, [activeCurrencies, curves, labels, tooltipLabel]);
 
     return (
         <div className='box-border rounded-b-2xl border border-[#2D4064] bg-cardBackground/20 drop-shadow-tab'>
@@ -273,10 +285,9 @@ export const MultiCurveChart = ({
                 />
                 {tooltipPos && (
                     <GraphTooltip
-                        data={tooltipData}
+                        tooltipData={tooltipData}
                         position={tooltipPos}
                         visibility={tooltipVisible}
-                        activeCurrencies={activeCurrencies}
                     />
                 )}
             </div>
@@ -285,22 +296,17 @@ export const MultiCurveChart = ({
 };
 
 const GraphTooltip = ({
-    data,
+    tooltipData,
     position,
     visibility,
-    activeCurrencies,
 }: {
-    data: TooltipItem<'line'>[] | undefined;
+    tooltipData: Array<Array<string | Rate>>;
     position: Position;
     visibility: boolean;
-    activeCurrencies: Set<CurrencySymbol>;
 }) => {
-    const activeData = data
-        ? data.filter(val =>
-              activeCurrencies.has(val.dataset.label as CurrencySymbol)
-          )
-        : [];
-
+    if (tooltipData.length === 0) {
+        return null;
+    }
     return (
         <div
             className={`absolute ml-8 flex w-40 flex-col gap-5 overflow-hidden rounded-[10px] border border-[#34384C] bg-[rgba(47,50,65,0.6)] px-3 pb-5 pt-4 shadow-curvetooltip backdrop-blur-[3px] transition-all duration-300 hover:!visible
@@ -311,7 +317,7 @@ const GraphTooltip = ({
                 left: position?.left,
             }}
         >
-            {activeData.map((val, index) => {
+            {tooltipData.map((val, index) => {
                 return (
                     <div
                         className='typography-button-1 flex h-5 flex-row items-center justify-between leading-[22px]'
@@ -319,14 +325,16 @@ const GraphTooltip = ({
                     >
                         <div className='flex items-center gap-2'>
                             <CurrencyIcon
-                                ccy={val.dataset.label as CurrencySymbol}
+                                ccy={val[0] as CurrencySymbol}
                                 variant='small'
                             />
                             <span className='text-white'>
-                                {val.dataset.label as CurrencySymbol}
+                                {val[0] as CurrencySymbol}
                             </span>
                         </div>
-                        <span className='text-nebulaTeal'>{`${val.formattedValue}%`}</span>
+                        <span className='text-nebulaTeal'>{`${(
+                            val[1] as Rate
+                        ).toNormalizedNumber()}%`}</span>
                     </div>
                 );
             })}
