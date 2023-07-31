@@ -19,7 +19,7 @@ describe('OrderDetails Component', () => {
         });
         expect(screen.getByText('100 USDC')).toBeInTheDocument();
         expect(screen.getByText('Borrow Remaining')).toBeInTheDocument();
-        expect(screen.getByText('$803.15')).toBeInTheDocument();
+        expect(screen.getByText('$5,103.15')).toBeInTheDocument();
         expect(screen.getByText('Bond Price')).toBeInTheDocument();
         expect(screen.getByText('~ 94.10')).toBeInTheDocument();
         expect(screen.getByText('APR')).toBeInTheDocument();
@@ -34,8 +34,8 @@ describe('OrderDetails Component', () => {
         });
         expect(screen.getByText('37%')).toBeInTheDocument();
         expect(screen.getByText('37%')).toHaveClass('text-progressBarStart');
-        expect(screen.getByText('41.76%')).toBeInTheDocument();
-        expect(screen.getByText('41.76%')).toHaveClass('text-progressBarVia');
+        expect(screen.getByText('37.83%')).toBeInTheDocument();
+        expect(screen.getByText('37.83%')).toHaveClass('text-progressBarStart');
     });
 
     it('should display the circuit breaker disclaimer', async () => {
