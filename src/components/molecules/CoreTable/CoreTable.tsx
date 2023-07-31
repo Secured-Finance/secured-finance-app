@@ -8,7 +8,7 @@ import {
     useReactTable,
 } from '@tanstack/react-table';
 import classNames from 'classnames';
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { Pagination } from 'src/types';
 
@@ -238,7 +238,10 @@ const PaginatedScrolling = ({
     <InfiniteScroll
         // This is required for tables who do not have pagination. This also allows us to scroll the table easily in tests.
         height={containerHeight ? 300 : undefined}
-        style={{ overflow: `${containerHeight ? 'auto' : 'visible'}` }}
+        style={{
+            overflow: `${containerHeight ? 'auto' : 'visible'}`,
+            paddingBottom: `${containerHeight ? '20px' : '0px'}`,
+        }}
         dataLength={data.length}
         next={fetchMoreData}
         hasMore={hasMoreData}
