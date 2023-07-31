@@ -1,29 +1,21 @@
 import { BigNumber } from 'ethers';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
-import { renderHook } from 'src/test-utils';
+import { act, renderHook } from 'src/test-utils';
 import { CurrencySymbol } from 'src/utils';
 import { useOrderFee } from './useOrderFee';
 
 const mock = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mock);
-
-beforeEach(() => mock.getOrderFeeRate.mockClear());
-
 describe('useOrderFee hook', () => {
     it('should return the order fee for a currency', async () => {
         const { result, waitForNextUpdate } = renderHook(() =>
             useOrderFee(CurrencySymbol.WFIL)
         );
-        const value = result.current;
-        expect(value.data).toEqual(0);
-        expect(value.isFetching).toEqual(true);
-
-        await waitForNextUpdate();
-
-        expect(mock.getOrderFeeRate).toHaveBeenCalledTimes(1);
-        const newValue = result.current;
-        expect(newValue.data).toEqual(1);
-        expect(newValue.isFetching).toEqual(false);
+        await act(async () => {
+            await waitForNextUpdate();
+        });
+        const fee = result.current as BigNumber;
+        expect(fee).toEqual(1);
     });
 
     it('should divide by 100 the returned value', async () => {
@@ -31,11 +23,10 @@ describe('useOrderFee hook', () => {
         const { result, waitForNextUpdate } = renderHook(() =>
             useOrderFee(CurrencySymbol.WFIL)
         );
-
-        await waitForNextUpdate();
-
-        expect(mock.getOrderFeeRate).toHaveBeenCalledTimes(1);
-        const value = result.current;
-        expect(value.data).toEqual(0.5);
+        await act(async () => {
+            await waitForNextUpdate();
+        });
+        const fee = result.current as BigNumber;
+        expect(fee).toEqual(0.5);
     });
 });

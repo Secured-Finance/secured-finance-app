@@ -30,7 +30,7 @@ const preloadedState = {
 const mockSecuredFinance = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mockSecuredFinance);
 
-describe.skip('PlaceOrder component', () => {
+describe('PlaceOrder component', () => {
     it('should display the Place Order Modal when open', async () => {
         render(<Default />);
 
