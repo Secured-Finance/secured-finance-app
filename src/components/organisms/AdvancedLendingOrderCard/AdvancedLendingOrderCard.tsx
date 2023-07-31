@@ -76,7 +76,10 @@ export const AdvancedLendingOrderCard = ({
         if (unitPrice !== undefined && maturity) {
             return LoanValue.fromPrice(unitPrice, maturity);
         }
-        return LoanValue.fromPrice(marketPrice ?? 0, maturity);
+        if (marketPrice && maturity) {
+            return LoanValue.fromPrice(marketPrice, maturity);
+        }
+        return LoanValue.ZERO;
     }, [unitPrice, maturity, marketPrice]);
 
     const dispatch = useDispatch();
