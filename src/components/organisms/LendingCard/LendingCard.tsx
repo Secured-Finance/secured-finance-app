@@ -128,7 +128,7 @@ export const LendingCard = ({
         () => LoanValue.fromPrice(marketPrice ?? 0, maturity),
         [marketPrice, maturity]
     );
-    
+
     const handleCurrencyChange = useCallback(
         (v: CurrencySymbol) => {
             let formatFrom = (x: BigNumber) => x.toNumber();

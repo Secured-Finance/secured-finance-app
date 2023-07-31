@@ -24,7 +24,6 @@ import {
     selectLandingOrderForm,
     setCurrency,
     setMaturity,
-    setUnitPrice,
     setAmount,
 } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
@@ -84,8 +83,8 @@ export const AdvancedLending = ({
     maturitiesOptionList: MaturityOptionList;
     rates: Rate[];
 }) => {
-    const { amount, currency, maturity} = useSelector(
-        (state: RootState) => selectLandingOrderForm(state.landingOrderForm)
+    const { amount, currency, maturity } = useSelector((state: RootState) =>
+        selectLandingOrderForm(state.landingOrderForm)
     );
 
     const currencyPrice = useSelector((state: RootState) =>
@@ -170,7 +169,8 @@ export const AdvancedLending = ({
             dispatch(setCurrency(v));
             dispatch(resetUnitPrice());
         },
-        [dispatch]
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        [currency, dispatch]
     );
 
     const handleTermChange = useCallback(
@@ -178,7 +178,7 @@ export const AdvancedLending = ({
             dispatch(setMaturity(Number(v)));
             dispatch(resetUnitPrice());
         },
-        [amount, currency, dispatch]
+        [dispatch]
     );
 
     return (
