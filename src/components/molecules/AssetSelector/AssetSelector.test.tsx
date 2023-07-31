@@ -72,17 +72,17 @@ describe('AssetSelector Component', () => {
         expect(onAmountChange).toHaveBeenLastCalledWith(BigNumber.from(1000));
     });
 
-    it('should call onAmountChange function when the asset is changed', () => {
+    it('should not call onAmountChange function when the asset is changed', () => {
         const onAmountChange = jest.fn();
         render(<Default onAmountChange={onAmountChange} />);
-        expect(onAmountChange).toHaveBeenCalledTimes(1);
+        expect(onAmountChange).toHaveBeenCalledTimes(0);
         fireEvent.click(screen.getByRole('button'));
         fireEvent.click(screen.getByText('Ethereum'));
-        expect(onAmountChange).toHaveBeenCalledTimes(2);
+        expect(onAmountChange).toHaveBeenCalledTimes(0);
 
         fireEvent.click(screen.getByRole('button'));
         fireEvent.click(screen.getByText('WFIL'));
-        expect(onAmountChange).toHaveBeenCalledTimes(3);
+        expect(onAmountChange).toHaveBeenCalledTimes(0);
     });
 
     it('should call the onAssetChange function when the asset is changed', () => {
@@ -96,25 +96,5 @@ describe('AssetSelector Component', () => {
         fireEvent.click(screen.getByText('WFIL'));
         expect(onAssetChange).toHaveBeenLastCalledWith('WFIL');
         expect(onAssetChange).toHaveBeenCalledTimes(3);
-    });
-
-    it('should call the onAmountChange function when the asset is changed', () => {
-        const onAmountChange = jest.fn();
-        render(
-            <Default
-                onAmountChange={onAmountChange}
-                amountFormatterMap={amountFormatterMap}
-            />
-        );
-        expect(onAmountChange).toHaveBeenCalledWith(BigNumber.from(0));
-        const input = screen.getByRole('textbox');
-        fireEvent.change(input, { target: { value: '1' } });
-        expect(onAmountChange).toHaveBeenLastCalledWith(BigNumber.from(100));
-        fireEvent.click(screen.getByRole('button'));
-        fireEvent.click(screen.getByText('Ethereum'));
-        expect(onAmountChange).toHaveBeenLastCalledWith(BigNumber.from(1000));
-        fireEvent.click(screen.getByRole('button'));
-        fireEvent.click(screen.getByText('WFIL'));
-        expect(onAmountChange).toHaveBeenLastCalledWith(BigNumber.from(1));
     });
 });

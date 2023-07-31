@@ -1,6 +1,6 @@
 import { OrderSide, WalletSource } from '@secured-finance/sf-client';
 import { BigNumber } from 'ethers';
-import { useMemo } from 'react';
+import { useMemo, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
     BorrowLendSelector,
@@ -36,6 +36,7 @@ import {
     getCurrencyMapAsList,
     getCurrencyMapAsOptions,
     getTransformMaturityOption,
+    ZERO_BN,
 } from 'src/utils';
 import { LoanValue, Maturity } from 'src/utils/entities';
 import { useAccount } from 'wagmi';
@@ -112,14 +113,55 @@ export const LendingCard = ({
         return selectedWalletSource.source === WalletSource.METAMASK
             ? balanceRecord[currency]
             : amountFormatterFromBase[currency](
-                  collateralBook.nonCollateral[currency] ?? BigNumber.from(0)
+                  collateralBook.nonCollateral[currency] ||
+                      collateralBook.withdrawableCollateral[currency] ||
+                      BigNumber.from(0)
               );
     }, [
         balanceRecord,
         collateralBook.nonCollateral,
+        collateralBook.withdrawableCollateral,
         currency,
         selectedWalletSource.source,
     ]);
+
+    const handleCurrencyChange = useCallback(
+        (v: CurrencySymbol) => {
+            let formatFrom = (x: BigNumber) => x.toNumber();
+            if (amountFormatterFromBase && amountFormatterFromBase[currency]) {
+                formatFrom = amountFormatterFromBase[currency];
+            }
+            let formatTo = (x: number) => BigNumber.from(x);
+            if (amountFormatterToBase && amountFormatterToBase[v]) {
+                formatTo = amountFormatterToBase[v];
+            }
+            dispatch(setAmount(formatTo(formatFrom(amount))));
+            dispatch(setCurrency(v));
+        },
+        [amount, currency, dispatch]
+    );
+
+    const handleWalletSourceChange = (source: WalletSource) => {
+        dispatch(setSourceAccount(source));
+        const available =
+            source === WalletSource.METAMASK
+                ? balanceRecord[currency]
+                : amountFormatterFromBase[currency](
+                      collateralBook.nonCollateral[currency] ||
+                          collateralBook.withdrawableCollateral[currency] ||
+                          BigNumber.from(0)
+                  );
+        const inputAmount = amount.gt(
+            amountFormatterToBase[currency](available)
+        )
+            ? amountFormatterToBase[currency](available)
+            : amount;
+        dispatch(setAmount(inputAmount));
+    };
+
+    const orderAmount = amount.gt(ZERO_BN)
+        ? amountFormatterFromBase[currency](amount)
+        : undefined;
 
     return (
         <div className='w-80 flex-col space-y-6 rounded-b-xl border border-panelStroke bg-transparent pb-6 shadow-deep'>
@@ -152,10 +194,9 @@ export const LendingCard = ({
                         transformLabel={(v: string) => shortNames[v]}
                         priceList={assetPriceMap}
                         onAmountChange={v => dispatch(setAmount(v))}
+                        initialValue={orderAmount}
                         amountFormatterMap={amountFormatterToBase}
-                        onAssetChange={(v: CurrencySymbol) => {
-                            dispatch(setCurrency(v));
-                        }}
+                        onAssetChange={handleCurrencyChange}
                     />
                     {side === OrderSide.LEND && (
                         <ErrorInfo
@@ -192,7 +233,7 @@ export const LendingCard = ({
                         optionList={walletSourceList}
                         selected={selectedWalletSource}
                         account={address ?? ''}
-                        onChange={v => dispatch(setSourceAccount(v))}
+                        onChange={handleWalletSourceChange}
                     />
                 )}
 

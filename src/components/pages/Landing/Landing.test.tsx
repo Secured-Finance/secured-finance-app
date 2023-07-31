@@ -107,7 +107,7 @@ describe('Landing Component', () => {
         );
     });
 
-    it('should reset the amount and bond price when user changes maturity', async () => {
+    it('should reset bond price when user changes maturity', async () => {
         await waitFor(() => {
             render(<Default />, {
                 apolloMocks: Default.parameters?.apolloClient.mocks,
@@ -132,13 +132,15 @@ describe('Landing Component', () => {
         fireEvent.click(screen.getByText('MAR23'));
         expect(screen.getByText('MAR23')).toBeInTheDocument();
 
-        expect(screen.getByRole('textbox', { name: 'Amount' })).toHaveValue('');
+        expect(screen.getByRole('textbox', { name: 'Amount' })).toHaveValue(
+            '1'
+        );
         expect(screen.getByRole('textbox', { name: 'Bond Price' })).toHaveValue(
             '96.83'
         );
     });
 
-    it('should reset the amount and bond price when user changes currency', async () => {
+    it('should reset bond price when user changes currency', async () => {
         await waitFor(() => {
             render(<Default />, {
                 apolloMocks: Default.parameters?.apolloClient.mocks,
@@ -162,7 +164,9 @@ describe('Landing Component', () => {
         fireEvent.click(screen.getByRole('button', { name: 'Filecoin' }));
         fireEvent.click(screen.getByRole('menuitem', { name: 'USDC' }));
 
-        expect(screen.getByRole('textbox', { name: 'Amount' })).toHaveValue('');
+        expect(screen.getByRole('textbox', { name: 'Amount' })).toHaveValue(
+            '1'
+        );
         expect(screen.getByRole('textbox', { name: 'Bond Price' })).toHaveValue(
             '96.85'
         );
