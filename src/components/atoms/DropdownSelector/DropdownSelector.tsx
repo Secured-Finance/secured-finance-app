@@ -173,7 +173,8 @@ export const DropdownSelector = <T extends string = string>({
                             'scrollbar absolute z-50 mt-2 flex flex-col overflow-y-auto rounded-lg bg-gunMetal p-2 shadow-sm',
                             {
                                 'right-0': variant === 'noLabel',
-                                'max-h-60 w-52': variant !== 'fullWidth',
+                                'max-h-[196px] w-52 tablet:max-h-60':
+                                    variant !== 'fullWidth',
                                 'w-full': variant === 'fullWidth',
                             }
                         )}
@@ -196,7 +197,7 @@ export const DropdownSelector = <T extends string = string>({
                                         >
                                             {asset.iconSVG ? (
                                                 <span>
-                                                    <asset.iconSVG className='h-6 w-6' />
+                                                    <asset.iconSVG className='h-4 w-4 tablet:h-6 tablet:w-6' />
                                                 </span>
                                             ) : null}
 

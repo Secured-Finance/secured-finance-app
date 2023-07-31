@@ -23,7 +23,7 @@ describe('Itayose Component', () => {
         await waitFor(() => render(<Default />));
     });
 
-    it('should reset the amount when the user change the currency', async () => {
+    it('should convert the amount to changed currency when the user change the currency', async () => {
         const { store } = await waitFor(() => render(<Default />));
         expect(store.getState().landingOrderForm.amount).toEqual('0');
         fireEvent.change(screen.getByRole('textbox', { name: 'Amount' }), {
@@ -34,8 +34,10 @@ describe('Itayose Component', () => {
         );
         fireEvent.click(screen.getByRole('button', { name: 'Filecoin' }));
         fireEvent.click(screen.getByRole('menuitem', { name: 'USDC' }));
-        expect(store.getState().landingOrderForm.amount).toEqual('0');
-        expect(screen.getByRole('textbox', { name: 'Amount' })).toHaveValue('');
+        expect(store.getState().landingOrderForm.amount).toEqual('1000000');
+        expect(screen.getByRole('textbox', { name: 'Amount' })).toHaveValue(
+            '1'
+        );
     });
 
     it('should only show the pre-order orders of the user when they are connected', async () => {
