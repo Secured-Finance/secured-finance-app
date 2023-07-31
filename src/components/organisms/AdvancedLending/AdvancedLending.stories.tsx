@@ -2,6 +2,7 @@ import { RESPONSIVE_PARAMETERS } from '.storybook/constants';
 import {
     withAssetPrice,
     withFullPage,
+    withMarketPrice,
     withMaturities,
     withWalletProvider,
 } from '.storybook/decorators';
@@ -39,6 +40,7 @@ export default {
         withAssetPrice,
         withMaturities,
         withWalletProvider,
+        withMarketPrice,
     ],
 } as Meta<typeof AdvancedLending>;
 
