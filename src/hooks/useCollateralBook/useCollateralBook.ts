@@ -31,14 +31,15 @@ const emptyBook: CollateralBook = {
     collateral: {
         [CurrencySymbol.ETH]: ZERO_BN,
         [CurrencySymbol.USDC]: ZERO_BN,
+        [CurrencySymbol.WBTC]: ZERO_BN,
     },
     nonCollateral: {
         [CurrencySymbol.WFIL]: ZERO_BN,
-        [CurrencySymbol.WBTC]: ZERO_BN,
     },
     withdrawableCollateral: {
         [CurrencySymbol.USDC]: ZERO_BN,
         [CurrencySymbol.ETH]: ZERO_BN,
+        [CurrencySymbol.WBTC]: ZERO_BN,
     },
     usdCollateral: 0,
     usdNonCollateral: 0,
