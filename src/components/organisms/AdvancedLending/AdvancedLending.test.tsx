@@ -6,7 +6,7 @@ import * as stories from './AdvancedLending.stories';
 const { Default } = composeStories(stories);
 
 describe('Advanced Lending Component', () => {
-    it('should reset the amount when the user change the currency', async () => {
+    it('should convert the amount to new currency when the user change the currency', async () => {
         const { store } = await waitFor(() =>
             render(<Default />, {
                 apolloMocks: Default.parameters?.apolloClient.mocks,
@@ -21,11 +21,13 @@ describe('Advanced Lending Component', () => {
         );
         fireEvent.click(screen.getByRole('button', { name: 'Filecoin' }));
         fireEvent.click(screen.getByRole('menuitem', { name: 'USDC' }));
-        expect(store.getState().landingOrderForm.amount).toEqual('0');
-        expect(screen.getByRole('textbox', { name: 'Amount' })).toHaveValue('');
+        expect(store.getState().landingOrderForm.amount).toEqual('1000000');
+        expect(screen.getByRole('textbox', { name: 'Amount' })).toHaveValue(
+            '1'
+        );
     });
 
-    it('should reset the amount when the user change the maturity', async () => {
+    it('should not reset the amount when the user change the maturity', async () => {
         const { store } = await waitFor(() =>
             render(<Default />, {
                 apolloMocks: Default.parameters?.apolloClient.mocks,
@@ -40,8 +42,12 @@ describe('Advanced Lending Component', () => {
         );
         fireEvent.click(screen.getByRole('button', { name: 'DEC22' }));
         fireEvent.click(screen.getByText('MAR23'));
-        expect(store.getState().landingOrderForm.amount).toEqual('0');
-        expect(screen.getByRole('textbox', { name: 'Amount' })).toHaveValue('');
+        expect(store.getState().landingOrderForm.amount).toEqual(
+            '1000000000000000000'
+        );
+        expect(screen.getByRole('textbox', { name: 'Amount' })).toHaveValue(
+            '1'
+        );
     });
 
     it('should show the maturity as a date for the selected maturity', async () => {
