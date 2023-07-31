@@ -1,5 +1,5 @@
 import { BigNumber } from 'ethers';
-import { useMemo } from 'react';
+import { useMemo, useCallback } from 'react';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import {
     GradientBox,
@@ -141,18 +141,21 @@ export const Itayose = () => {
 
     const dispatch = useDispatch();
 
-    const handleAssetChange = (v: CurrencySymbol) => {
-        let formatFrom = (x: BigNumber) => x.toNumber();
-        if (amountFormatterFromBase && amountFormatterFromBase[currency]) {
-            formatFrom = amountFormatterFromBase[currency];
-        }
-        let formatTo = (x: number) => BigNumber.from(x);
-        if (amountFormatterToBase && amountFormatterToBase[v]) {
-            formatTo = amountFormatterToBase[v];
-        }
-        dispatch(setAmount(formatTo(formatFrom(amount))));
-        dispatch(setCurrency(v));
-    };
+    const handleAssetChange = useCallback(
+        (v: CurrencySymbol) => {
+            let formatFrom = (x: BigNumber) => x.toNumber();
+            if (amountFormatterFromBase && amountFormatterFromBase[currency]) {
+                formatFrom = amountFormatterFromBase[currency];
+            }
+            let formatTo = (x: number) => BigNumber.from(x);
+            if (amountFormatterToBase && amountFormatterToBase[v]) {
+                formatTo = amountFormatterToBase[v];
+            }
+            dispatch(setAmount(formatTo(formatFrom(amount))));
+            dispatch(setCurrency(v));
+        },
+        [amount, currency, dispatch]
+    );
 
     return (
         <Page title='Pre-Open Order Book'>
