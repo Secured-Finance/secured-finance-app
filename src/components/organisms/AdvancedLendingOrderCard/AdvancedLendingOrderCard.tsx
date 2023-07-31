@@ -19,6 +19,7 @@ import {
 import { OrderAction } from 'src/components/organisms';
 import { CollateralBook } from 'src/hooks';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
+import { selectMarket } from 'src/store/availableContracts';
 import {
     selectLandingOrderForm,
     setAmount,
@@ -90,29 +91,41 @@ export const AdvancedLendingOrderCard = ({
     }, [collateralBook]);
 
     const priceList = useSelector((state: RootState) => getPriceMap(state));
-    const assetPriceMap = useSelector((state: RootState) => getPriceMap(state));
-
     const price = priceList[currency];
+
+    const market = useSelector((state: RootState) =>
+        selectMarket(currency, maturity)(state)
+    );
+
+    const slippage = useMemo(() => {
+        if (!market) {
+            return 0;
+        }
+
+        return side === OrderSide.BORROW
+            ? market.minBorrowUnitPrice
+            : market.maxLendUnitPrice;
+    }, [market, side]);
 
     const orderAmount = amount.gt(ZERO_BN)
         ? new Amount(amount, currency)
         : undefined;
 
     const availableToBorrow = useMemo(() => {
-        return currency && assetPriceMap
+        return currency && price
             ? computeAvailableToBorrow(
-                  assetPriceMap[currency],
+                  price,
                   collateralBook.usdCollateral,
                   collateralBook.coverage.toNumber() / MAX_COVERAGE,
                   collateralBook.collateralThreshold
               )
             : 0;
     }, [
-        assetPriceMap,
         collateralBook.collateralThreshold,
         collateralBook.coverage,
         collateralBook.usdCollateral,
         currency,
+        price,
     ]);
 
     const walletSourceList = useMemo(() => {
@@ -140,11 +153,14 @@ export const AdvancedLendingOrderCard = ({
         return selectedWalletSource.source === WalletSource.METAMASK
             ? balanceRecord[currency]
             : amountFormatterFromBase[currency](
-                  collateralBook.nonCollateral[currency] ?? BigNumber.from(0)
+                  collateralBook.nonCollateral[currency] ||
+                      collateralBook.withdrawableCollateral[currency] ||
+                      BigNumber.from(0)
               );
     }, [
         balanceRecord,
         collateralBook.nonCollateral,
+        collateralBook.withdrawableCollateral,
         currency,
         selectedWalletSource.source,
     ]);
@@ -180,7 +196,29 @@ export const AdvancedLendingOrderCard = ({
 
     const handleWalletSourceChange = (source: WalletSource) => {
         dispatch(setSourceAccount(source));
-        handleInputChange(BigNumber.from(0));
+        const available =
+            source === WalletSource.METAMASK
+                ? balanceRecord[currency]
+                : amountFormatterFromBase[currency](
+                      collateralBook.nonCollateral[currency] ||
+                          collateralBook.withdrawableCollateral[currency] ||
+                          BigNumber.from(0)
+                  );
+        const inputAmount = amount.gt(
+            amountFormatterToBase[currency](available)
+        )
+            ? amountFormatterToBase[currency](available)
+            : amount;
+        dispatch(setAmount(inputAmount));
+        available
+            ? setSliderValue(
+                  Math.min(
+                      100.0,
+                      (amountFormatterFromBase[currency](inputAmount) * 100.0) /
+                          available
+                  )
+              )
+            : setSliderValue(0.0);
     };
 
     const validateBondPrice = () => {
@@ -275,6 +313,15 @@ export const AdvancedLendingOrderCard = ({
                         errorMessage='Invalid bond price'
                         showError={validateBondPrice()}
                     />
+                    {orderType === OrderType.MARKET && (
+                        <div className='mx-10px'>
+                            <OrderDisplayBox
+                                field='Max Slippage'
+                                value={divide(slippage, 100)}
+                                informationText='A bond price limit, triggering a circuit breaker if exceeded within a single block due to price fluctuations.'
+                            />
+                        </div>
+                    )}
                     <div className='mx-10px'>
                         <OrderDisplayBox
                             field='Fixed Rate (APR)'
