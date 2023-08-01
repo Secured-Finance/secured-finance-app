@@ -14,7 +14,7 @@ export default {
     args: {
         collateralBook: collateralBook37,
         maturitiesOptionList: maturityOptions,
-        marketPrice: 9800,
+        marketPrice: 9917,
     },
     decorators: [withAssetPrice, withMaturities, withWalletProvider],
     parameters: {

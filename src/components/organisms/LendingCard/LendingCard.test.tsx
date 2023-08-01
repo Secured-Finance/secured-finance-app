@@ -69,7 +69,7 @@ describe('LendingCard Component', () => {
     it('should show correct market rate', async () => {
         render(<Default />, { preloadedState });
         expect(await screen.findByTestId('market-rate')).toHaveTextContent(
-            '2.46%'
+            '1.01%'
         );
     });
 
