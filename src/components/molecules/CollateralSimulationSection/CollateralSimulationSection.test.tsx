@@ -16,7 +16,7 @@ describe('CollateralSimulationSection Component', () => {
         expect(screen.getByText('50 WFIL')).toBeInTheDocument();
 
         expect(screen.getByText('Borrow Remaining')).toBeInTheDocument();
-        expect(screen.getByText('$403.15')).toBeInTheDocument();
+        expect(screen.getByText('$4,703.15')).toBeInTheDocument();
 
         expect(screen.getByText('Collateral Usage')).toBeInTheDocument();
         expect(screen.getByText('Bond Price')).toBeInTheDocument();
@@ -45,7 +45,7 @@ describe('CollateralSimulationSection Component', () => {
         render(<Trade />);
         expect(screen.getByText('37%')).toBeInTheDocument();
         expect(screen.getByText('37%')).toHaveClass('text-progressBarStart');
-        expect(screen.getByText('60.81%')).toBeInTheDocument();
-        expect(screen.getByText('60.81%')).toHaveClass('text-progressBarEnd');
+        expect(screen.getByText('41.13%')).toBeInTheDocument();
+        expect(screen.getByText('41.13%')).toHaveClass('text-progressBarVia');
     });
 });

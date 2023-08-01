@@ -58,7 +58,7 @@ export const currencyMap: Readonly<
         name: WBTC.onChain().name,
         icon: BTCIcon,
         coinGeckoId: 'wrapped-bitcoin',
-        isCollateral: false,
+        isCollateral: true,
         toBaseUnit: (amount: number) =>
             convertToBlockchainUnit(amount, WBTC.onChain()),
         fromBaseUnit: (amount: BigNumber) =>

@@ -29,7 +29,7 @@ describe('useCollateralBook hook', () => {
             BigNumber.from('1000000000000000000')
         );
         expect(colBook.collateral.USDC).toEqual(BigNumber.from('100000000'));
-        expect(colBook.nonCollateral.WBTC).toEqual(BigNumber.from('20000000'));
+        expect(colBook.collateral.WBTC).toEqual(BigNumber.from('20000000'));
         expect(colBook.nonCollateral.WFIL).toEqual(
             BigNumber.from('100000000000000000000')
         );
@@ -38,6 +38,7 @@ describe('useCollateralBook hook', () => {
         expect(colBook.withdrawableCollateral).toEqual({
             [CurrencySymbol.USDC]: 1000000000000,
             [CurrencySymbol.ETH]: 1000000000000,
+            [CurrencySymbol.WBTC]: 1000000000000,
         });
         expect(colBook.fetched).toEqual(true);
     });
@@ -65,7 +66,11 @@ describe('useCollateralBook hook', () => {
                 amountFormatterFromBase[CurrencySymbol.USDC](
                     colBook.collateral.USDC ?? BigNumber.from(0)
                 ) *
-                    USDC_PRICE
+                    USDC_PRICE +
+                amountFormatterFromBase[CurrencySymbol.WBTC](
+                    colBook.collateral.WBTC ?? BigNumber.from(0)
+                ) *
+                    WBTC_PRICE
         );
     });
 
