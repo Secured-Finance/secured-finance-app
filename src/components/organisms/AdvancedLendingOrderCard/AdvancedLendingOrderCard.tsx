@@ -21,13 +21,13 @@ import { CollateralBook } from 'src/hooks';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { selectMarket } from 'src/store/availableContracts';
 import {
+    resetUnitPrice,
     selectLandingOrderForm,
     setAmount,
     setOrderType,
     setSide,
     setSourceAccount,
     setUnitPrice,
-    resetUnitPrice,
 } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
 import { selectAllBalances } from 'src/store/wallet';
@@ -51,9 +51,11 @@ import { useAccount } from 'wagmi';
 export const AdvancedLendingOrderCard = ({
     collateralBook,
     onlyLimitOrder = false,
+    marketPrice,
 }: {
     collateralBook: CollateralBook;
     onlyLimitOrder?: boolean;
+    marketPrice?: number;
 }) => {
     const {
         currency,
@@ -63,7 +65,6 @@ export const AdvancedLendingOrderCard = ({
         unitPrice,
         maturity,
         sourceAccount,
-        marketPrice,
     } = useSelector((state: RootState) =>
         selectLandingOrderForm(state.landingOrderForm)
     );
@@ -74,13 +75,12 @@ export const AdvancedLendingOrderCard = ({
     );
 
     const loanValue = useMemo(() => {
-        if (unitPrice !== undefined && maturity) {
+        if (!maturity) return LoanValue.ZERO;
+        if (unitPrice !== undefined) {
             return LoanValue.fromPrice(unitPrice, maturity);
         }
-        if (marketPrice && maturity) {
-            return LoanValue.fromPrice(marketPrice, maturity);
-        }
-        return LoanValue.ZERO;
+        if (!marketPrice) return LoanValue.ZERO;
+        return LoanValue.fromPrice(marketPrice, maturity);
     }, [unitPrice, maturity, marketPrice]);
 
     const dispatch = useDispatch();
@@ -231,6 +231,7 @@ export const AdvancedLendingOrderCard = ({
                 value={orderType}
                 onChange={(v: OrderType) => {
                     dispatch(setOrderType(v));
+                    dispatch(resetUnitPrice());
                 }}
                 as='div'
                 className='flex h-[60px] flex-row items-center justify-around'
@@ -298,13 +299,13 @@ export const AdvancedLendingOrderCard = ({
                                 ? divide(loanValue.price, 100)
                                 : undefined
                         }
-                        onValueChange={v =>
+                        onValueChange={v => {
                             v !== undefined
                                 ? dispatch(
                                       setUnitPrice(multiply(v as number, 100))
                                   )
-                                : dispatch(setUnitPrice(0))
-                        }
+                                : dispatch(setUnitPrice(0));
+                        }}
                         informationText='Input value greater than or equal to 0.01 and up to and including 100.'
                         decimalPlacesAllowed={2}
                         maxLimit={100}

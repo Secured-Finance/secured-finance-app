@@ -1,7 +1,7 @@
 import { toBytes32 } from '@secured-finance/sf-graph-client';
 import queries from '@secured-finance/sf-graph-client/dist/graphclients/';
 import { BigNumber } from 'ethers';
-import { useEffect, useMemo, useState, useCallback } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
     AdvancedLendingTopBar,
@@ -22,22 +22,22 @@ import { selectMarket } from 'src/store/availableContracts';
 import {
     resetUnitPrice,
     selectLandingOrderForm,
+    setAmount,
     setCurrency,
     setMaturity,
-    setAmount,
 } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
 import { MaturityOptionList, TransactionList } from 'src/types';
 import {
     CurrencySymbol,
     Rate,
+    amountFormatterFromBase,
+    amountFormatterToBase,
     currencyMap,
     formatLoanValue,
     getCurrencyMapAsOptions,
     ordinaryFormat,
     usdFormat,
-    amountFormatterFromBase,
-    amountFormatterToBase,
 } from 'src/utils';
 import { LoanValue, Maturity } from 'src/utils/entities';
 import { useAccount } from 'wagmi';
@@ -78,10 +78,12 @@ export const AdvancedLending = ({
     collateralBook,
     maturitiesOptionList,
     rates,
+    marketPrice,
 }: {
     collateralBook: CollateralBook;
     maturitiesOptionList: MaturityOptionList;
     rates: Rate[];
+    marketPrice: number | undefined;
 }) => {
     const { amount, currency, maturity } = useSelector((state: RootState) =>
         selectLandingOrderForm(state.landingOrderForm)
@@ -169,8 +171,7 @@ export const AdvancedLending = ({
             dispatch(setCurrency(v));
             dispatch(resetUnitPrice());
         },
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-        [currency, dispatch]
+        [amount, currency, dispatch]
     );
 
     const handleTermChange = useCallback(
@@ -211,7 +212,10 @@ export const AdvancedLending = ({
                 />
             }
         >
-            <AdvancedLendingOrderCard collateralBook={collateralBook} />
+            <AdvancedLendingOrderCard
+                collateralBook={collateralBook}
+                marketPrice={marketPrice}
+            />
             <div className='flex min-w-0 flex-grow flex-col gap-6'>
                 <Tab tabDataArray={[{ text: 'Yield Curve' }]}>
                     <LineChartTab

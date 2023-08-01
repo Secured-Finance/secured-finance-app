@@ -2,7 +2,6 @@ import { RESPONSIVE_PARAMETERS } from '.storybook/constants';
 import {
     withAssetPrice,
     withFullPage,
-    withMarketPrice,
     withMaturities,
     withWalletProvider,
 } from '.storybook/decorators';
@@ -24,6 +23,7 @@ export default {
         collateralBook: collateralBook80,
         maturitiesOptionList: maturityOptions,
         rates: yieldCurveRates,
+        marketPrice: 9800,
     },
     parameters: {
         apolloClient: {
@@ -40,7 +40,6 @@ export default {
         withAssetPrice,
         withMaturities,
         withWalletProvider,
-        withMarketPrice,
     ],
 } as Meta<typeof AdvancedLending>;
 

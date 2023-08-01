@@ -10,10 +10,6 @@ import * as stories from './MarketLoanWidget.stories';
 const { Default } = composeStories(stories);
 
 describe('MarketLoanWidget Component', () => {
-    it('should render a MarketLoanWidget', () => {
-        render(<Default />);
-    });
-
     it('should filter by currency', () => {
         render(<Default />);
         expect(screen.queryByText('WBTC')).toBeInTheDocument();

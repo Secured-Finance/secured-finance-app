@@ -1,6 +1,6 @@
 import { OrderSide, WalletSource } from '@secured-finance/sf-client';
 import { BigNumber } from 'ethers';
-import { useMemo, useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
     BorrowLendSelector,
@@ -28,6 +28,7 @@ import { selectAllBalances } from 'src/store/wallet';
 import { MaturityOptionList } from 'src/types';
 import {
     CurrencySymbol,
+    ZERO_BN,
     amountFormatterFromBase,
     amountFormatterToBase,
     formatLoanValue,
@@ -36,7 +37,6 @@ import {
     getCurrencyMapAsList,
     getCurrencyMapAsOptions,
     getTransformMaturityOption,
-    ZERO_BN,
 } from 'src/utils';
 import { LoanValue, Maturity } from 'src/utils/entities';
 import { useAccount } from 'wagmi';
@@ -44,14 +44,15 @@ import { useAccount } from 'wagmi';
 export const LendingCard = ({
     collateralBook,
     maturitiesOptionList,
+    marketPrice,
 }: {
     collateralBook: CollateralBook;
     maturitiesOptionList: MaturityOptionList;
+    marketPrice: number | undefined;
 }) => {
-    const { currency, maturity, side, sourceAccount, amount, marketPrice } =
-        useSelector((state: RootState) =>
-            selectLandingOrderForm(state.landingOrderForm)
-        );
+    const { currency, maturity, side, sourceAccount, amount } = useSelector(
+        (state: RootState) => selectLandingOrderForm(state.landingOrderForm)
+    );
 
     const dispatch = useDispatch();
     const { address, isConnected } = useAccount();
