@@ -215,10 +215,10 @@ export const MultiCurveChart = ({
             if (canvas) {
                 const left = tooltip.x;
                 const top = tooltip.y;
-                setTooltipLabel(tooltip.title[0]);
                 if (tooltipPos?.top !== top || tooltipPos?.left !== left) {
                     setTooltipPos({ top: top, left: left });
                     setTooltipVisible(true);
+                    setTooltipLabel(tooltip.title[0]);
                 }
             }
         },
@@ -239,13 +239,21 @@ export const MultiCurveChart = ({
 
     const tooltipData = useMemo(() => {
         if (!tooltipLabel) {
-            return [];
+            return {};
         }
 
         const tooltipIndex = labels.indexOf(tooltipLabel);
+        if (tooltipIndex < 0) {
+            return {};
+        }
+
         const activeData = Object.keys(curves)
             .filter(curr => activeCurrencies.has(curr as CurrencySymbol))
-            .map(curr => [curr, curves[curr as CurrencySymbol][tooltipIndex]]);
+            .reduce((result, curr) => {
+                const currency = curr as CurrencySymbol;
+                result[currency] = curves[currency][tooltipIndex];
+                return result;
+            }, {} as Partial<Record<CurrencySymbol, Rate>>);
 
         return activeData;
     }, [activeCurrencies, curves, labels, tooltipLabel]);
@@ -300,13 +308,16 @@ const GraphTooltip = ({
     position,
     visibility,
 }: {
-    tooltipData: Array<Array<string | Rate>>;
+    tooltipData: Partial<Record<CurrencySymbol, Rate>>;
     position: Position;
     visibility: boolean;
 }) => {
-    if (tooltipData.length === 0) {
+    const currencySymbols = Object.keys(tooltipData) as CurrencySymbol[];
+
+    if (currencySymbols.length === 0) {
         return null;
     }
+
     return (
         <div
             className={`absolute ml-8 flex w-40 flex-col gap-5 overflow-hidden rounded-[10px] border border-[#34384C] bg-[rgba(47,50,65,0.6)] px-3 pb-5 pt-4 shadow-curvetooltip backdrop-blur-[3px] transition-all duration-300 hover:!visible
@@ -317,7 +328,11 @@ const GraphTooltip = ({
                 left: position?.left,
             }}
         >
-            {tooltipData.map((val, index) => {
+            {currencySymbols.map((currencySymbol, index) => {
+                const rate = tooltipData[currencySymbol]
+                    ?.toNormalizedNumber()
+                    .toFixed(2);
+
                 return (
                     <div
                         className='typography-button-1 flex h-5 flex-row items-center justify-between leading-[22px]'
@@ -325,16 +340,12 @@ const GraphTooltip = ({
                     >
                         <div className='flex items-center gap-2'>
                             <CurrencyIcon
-                                ccy={val[0] as CurrencySymbol}
+                                ccy={currencySymbol}
                                 variant='small'
                             />
-                            <span className='text-white'>
-                                {val[0] as CurrencySymbol}
-                            </span>
+                            <span className='text-white'>{currencySymbol}</span>
                         </div>
-                        <span className='text-nebulaTeal'>{`${(
-                            val[1] as Rate
-                        ).toNormalizedNumber()}%`}</span>
+                        <span className='text-nebulaTeal'>{`${rate}%`}</span>
                     </div>
                 );
             })}
