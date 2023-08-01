@@ -1,5 +1,4 @@
 export * from './AssetInformation';
-export * from './BorrowLendSelector';
 export * from './Button';
 export * from './Chip';
 export * from './CloseButton';

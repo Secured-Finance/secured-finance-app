@@ -78,6 +78,13 @@ export enum OrderType {
     LIMIT = 'Limit',
 }
 
+export const OrderTypeOptions = [OrderType.LIMIT, OrderType.MARKET];
+
+export const OrderSideMap = Object.freeze({
+    [OrderSide.LEND]: 'Lend',
+    [OrderSide.BORROW]: 'Borrow',
+});
+
 export interface Pagination {
     getMoreData: () => void;
     totalData: number;
