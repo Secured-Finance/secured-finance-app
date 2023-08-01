@@ -19,13 +19,9 @@ jest.mock(
 );
 
 describe('Faucet Component', () => {
-    it('should render a Faucet', () => {
+    it('mint button should be disabled when walled is not connected', async () => {
         render(<Default />);
-    });
-
-    it('mint button should be disabled when walled is not connected', () => {
-        render(<Default />);
-        const mintButton = screen.getByRole('button', {
+        const mintButton = await screen.findByRole('button', {
             name: 'Mint tokens',
         });
         expect(mintButton).toBeDisabled();

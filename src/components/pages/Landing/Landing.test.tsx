@@ -40,6 +40,25 @@ beforeAll(() => {
 });
 
 describe('Landing Component', () => {
+    const clickAdvancedButton = () => {
+        fireEvent.click(screen.getByText('Advanced'));
+    };
+
+    const clickSimpleButton = () => {
+        fireEvent.click(screen.getByText('Simple'));
+    };
+
+    const changeInputValue = (label: string, value: string) => {
+        const input = screen.getByLabelText(label);
+        fireEvent.change(input, { target: { value } });
+        expect(input).toHaveValue(value);
+    };
+
+    const assertInputValue = (label: string, value: string) => {
+        const input = screen.getByLabelText(label);
+        expect(input).toHaveValue(value);
+    };
+
     it('should change the rate when the user changes the maturity', async () => {
         render(<Default />, {
             apolloMocks: Default.parameters?.apolloClient.mocks,
@@ -71,7 +90,7 @@ describe('Landing Component', () => {
                 apolloMocks: Default.parameters?.apolloClient.mocks,
                 preloadedState,
             });
-            fireEvent.click(screen.getByText('Advanced'));
+            clickAdvancedButton();
         });
 
         expect(screen.getByRole('radio', { name: 'Limit' })).toBeChecked();
@@ -84,7 +103,7 @@ describe('Landing Component', () => {
                 apolloMocks: Default.parameters?.apolloClient.mocks,
                 preloadedState,
             });
-            fireEvent.click(screen.getByText('Advanced'));
+            clickAdvancedButton();
         });
 
         expect(screen.getByRole('radio', { name: 'Limit' })).toBeChecked();
@@ -93,83 +112,76 @@ describe('Landing Component', () => {
         expect(screen.getByRole('radio', { name: 'Market' })).toBeChecked();
     });
 
-    it('should display the best price as bond price when user change to advance mode', async () => {
-        await waitFor(() => {
-            render(<Default />, {
-                apolloMocks: Default.parameters?.apolloClient.mocks,
-                preloadedState,
+    describe('Bond Price field', () => {
+        it('should display the best price as bond price when user change to advance mode', async () => {
+            await waitFor(() => {
+                render(<Default />, {
+                    apolloMocks: Default.parameters?.apolloClient.mocks,
+                    preloadedState,
+                });
+                clickAdvancedButton();
             });
-            fireEvent.click(screen.getByText('Advanced'));
-        });
-        expect(screen.getByRole('textbox', { name: 'Amount' })).toHaveValue('');
-        expect(screen.getByRole('textbox', { name: 'Bond Price' })).toHaveValue(
-            '96.85'
-        );
-    });
 
-    it('should reset bond price when user changes maturity', async () => {
-        await waitFor(() => {
-            render(<Default />, {
-                apolloMocks: Default.parameters?.apolloClient.mocks,
-                preloadedState,
+            assertInputValue('Amount', '');
+            assertInputValue('Bond Price', '96.85');
+        });
+
+        it('should reset bond price when user changes maturity', async () => {
+            await waitFor(() => {
+                render(<Default />, {
+                    apolloMocks: Default.parameters?.apolloClient.mocks,
+                    preloadedState,
+                });
+                clickAdvancedButton();
             });
-            fireEvent.click(screen.getByText('Advanced'));
-        });
-        fireEvent.change(screen.getByRole('textbox', { name: 'Amount' }), {
-            target: { value: '1' },
-        });
-        fireEvent.change(screen.getByRole('textbox', { name: 'Bond Price' }), {
-            target: { value: '80' },
-        });
-        expect(screen.getByRole('textbox', { name: 'Amount' })).toHaveValue(
-            '1'
-        );
-        expect(screen.getByRole('textbox', { name: 'Bond Price' })).toHaveValue(
-            '80'
-        );
+            assertInputValue('Bond Price', '96.85');
 
-        fireEvent.click(screen.getByRole('button', { name: 'DEC22' }));
-        fireEvent.click(screen.getByText('MAR23'));
-        expect(screen.getByText('MAR23')).toBeInTheDocument();
+            changeInputValue('Amount', '1');
+            changeInputValue('Bond Price', '80');
 
-        expect(screen.getByRole('textbox', { name: 'Amount' })).toHaveValue(
-            '1'
-        );
-        expect(screen.getByRole('textbox', { name: 'Bond Price' })).toHaveValue(
-            '96.83'
-        );
-    });
+            fireEvent.click(screen.getByRole('button', { name: 'DEC22' }));
+            fireEvent.click(screen.getByText('MAR23'));
+            expect(screen.getByText('MAR23')).toBeInTheDocument();
 
-    it.skip('should reset bond price when user changes currency', async () => {
-        await waitFor(() => {
-            render(<Default />, {
-                apolloMocks: Default.parameters?.apolloClient.mocks,
-                preloadedState,
+            assertInputValue('Amount', '1');
+            assertInputValue('Bond Price', '96.83');
+        });
+
+        it('should reset bond price to the best price when user changes currency', async () => {
+            await waitFor(() => {
+                render(<Default />, {
+                    apolloMocks: Default.parameters?.apolloClient.mocks,
+                    preloadedState,
+                });
+                clickAdvancedButton();
             });
-            fireEvent.click(screen.getByText('Advanced'));
-        });
-        fireEvent.change(screen.getByRole('textbox', { name: 'Amount' }), {
-            target: { value: '1' },
-        });
-        fireEvent.change(screen.getByRole('textbox', { name: 'Bond Price' }), {
-            target: { value: '80' },
-        });
-        expect(screen.getByRole('textbox', { name: 'Amount' })).toHaveValue(
-            '1'
-        );
-        expect(screen.getByRole('textbox', { name: 'Bond Price' })).toHaveValue(
-            '80'
-        );
+            assertInputValue('Bond Price', '96.85');
 
-        fireEvent.click(screen.getByRole('button', { name: 'Filecoin' }));
-        fireEvent.click(screen.getByRole('menuitem', { name: 'USDC' }));
+            changeInputValue('Amount', '1');
+            changeInputValue('Bond Price', '80');
 
-        expect(screen.getByRole('textbox', { name: 'Amount' })).toHaveValue(
-            '1'
-        );
-        expect(screen.getByRole('textbox', { name: 'Bond Price' })).toHaveValue(
-            '96.85'
-        );
+            fireEvent.click(screen.getByRole('button', { name: 'Filecoin' }));
+            fireEvent.click(screen.getByRole('menuitem', { name: 'USDC' }));
+
+            assertInputValue('Amount', '1');
+            assertInputValue('Bond Price', '96.85');
+        });
+
+        it('should reset bond price to the best price when user changes mode', async () => {
+            await waitFor(() => {
+                render(<Default />, {
+                    apolloMocks: Default.parameters?.apolloClient.mocks,
+                    preloadedState,
+                });
+                clickAdvancedButton();
+            });
+            assertInputValue('Bond Price', '96.85');
+            changeInputValue('Amount', '1');
+            changeInputValue('Bond Price', '80');
+            clickSimpleButton();
+            clickAdvancedButton();
+            assertInputValue('Bond Price', '96.85');
+        });
     });
 
     it('should open the landing page with the mode set in the store', async () => {
@@ -200,7 +212,7 @@ describe('Landing Component', () => {
                 preloadedState,
             });
             expect(store.getState().landingOrderForm.lastView).toBe('Simple');
-            fireEvent.click(screen.getByText('Advanced'));
+            clickAdvancedButton();
             expect(store.getState().landingOrderForm.lastView).toBe('Advanced');
         });
     });
@@ -226,7 +238,7 @@ describe('Landing Component', () => {
                 preloadedState,
             });
         });
-        fireEvent.click(screen.getByText('Advanced'));
+        clickAdvancedButton();
         expect(await screen.findByText('DEC22')).toBeInTheDocument();
         expect(screen.getByRole('slider')).toHaveValue('0');
         fireEvent.click(screen.getByRole('radio', { name: 'Lend' }));
@@ -247,7 +259,7 @@ describe('Landing Component', () => {
                 preloadedState,
             });
         });
-        fireEvent.click(screen.getByText('Advanced'));
+        clickAdvancedButton();
         expect(await screen.findByText('DEC22')).toBeInTheDocument();
         expect(screen.getByRole('slider')).toHaveValue('0');
         fireEvent.change(screen.getByRole('textbox', { name: 'Amount' }), {

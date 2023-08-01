@@ -9,7 +9,6 @@ import { Layout } from 'src/components/templates';
 import { setMidPrice } from 'src/store/analytics';
 import { updateLendingMarketContract } from 'src/store/availableContracts';
 import { updateChainError, updateLatestBlock } from 'src/store/blockchain';
-import { setMarketPrice } from 'src/store/landingOrderForm';
 import { updateBalance } from 'src/store/wallet';
 import AxiosMock from 'src/stories/mocks/AxiosMock';
 import { CustomizedBridge } from 'src/stories/mocks/customBridge';
@@ -152,19 +151,6 @@ export const withMaturities = (Story: StoryFn) => {
                 updateLendingMarketContract(maturities, CurrencySymbol.WBTC)
             );
         }, 200);
-
-        return () => clearTimeout(timerId);
-    }, [dispatch, maturities]);
-
-    return <Story />;
-};
-
-export const withMarketPrice = (Story: StoryFn) => {
-    const dispatch = useDispatch();
-    useEffect(() => {
-        const timerId = setTimeout(() => {
-            dispatch(setMarketPrice(9917));
-        }, 100);
 
         return () => clearTimeout(timerId);
     }, [dispatch, maturities]);

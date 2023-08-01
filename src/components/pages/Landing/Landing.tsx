@@ -1,6 +1,6 @@
 import { OrderSide } from '@secured-finance/sf-client';
 import queries from '@secured-finance/sf-graph-client/dist/graphclients';
-import { useEffect } from 'react';
+import { useMemo } from 'react';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { ViewType } from 'src/components/atoms';
 import {
@@ -20,7 +20,6 @@ import {
     resetUnitPrice,
     selectLandingOrderForm,
     setLastView,
-    setMarketPrice,
     setOrderType,
 } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
@@ -58,14 +57,12 @@ export const Landing = ({ view }: { view?: ViewType }) => {
         market => market.isOpened
     );
 
-    useEffect(() => {
+    const marketPrice = useMemo(() => {
         if (unitPrices) {
-            const value = unitPrices.get(maturity);
-            if (value) {
-                dispatch(setMarketPrice(value.price));
-            }
+            return unitPrices.get(maturity)?.price;
         }
-    }, [unitPrices, maturity, dispatch]);
+        return undefined;
+    }, [unitPrices, maturity]);
 
     const dailyVolumes = useGraphClientHook(
         {}, // no variables
@@ -81,6 +78,7 @@ export const Landing = ({ view }: { view?: ViewType }) => {
                     <LendingCard
                         collateralBook={collateralBook}
                         maturitiesOptionList={maturityOptionList}
+                        marketPrice={marketPrice}
                     />
                     <YieldChart
                         asset={currency}
@@ -96,6 +94,7 @@ export const Landing = ({ view }: { view?: ViewType }) => {
                     collateralBook={collateralBook}
                     rates={Array.from(unitPrices.values()).map(v => v.apr)}
                     maturitiesOptionList={maturityOptionList}
+                    marketPrice={marketPrice}
                 />
             }
             initialView={view ?? lastView}

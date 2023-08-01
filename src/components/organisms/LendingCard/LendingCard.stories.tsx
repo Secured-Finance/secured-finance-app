@@ -2,7 +2,6 @@ import type { Meta, StoryFn } from '@storybook/react';
 import { userEvent, within } from '@storybook/testing-library';
 import {
     withAssetPrice,
-    withMarketPrice,
     withMaturities,
     withWalletProvider,
 } from 'src/../.storybook/decorators';
@@ -15,13 +14,9 @@ export default {
     args: {
         collateralBook: collateralBook37,
         maturitiesOptionList: maturityOptions,
+        marketPrice: 9800,
     },
-    decorators: [
-        withAssetPrice,
-        withMaturities,
-        withWalletProvider,
-        withMarketPrice,
-    ],
+    decorators: [withAssetPrice, withMaturities, withWalletProvider],
     parameters: {
         connected: true,
     },

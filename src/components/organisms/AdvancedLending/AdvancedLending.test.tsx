@@ -6,7 +6,7 @@ import * as stories from './AdvancedLending.stories';
 const { Default } = composeStories(stories);
 
 describe('Advanced Lending Component', () => {
-    it.skip('should convert the amount to new currency when the user change the currency', async () => {
+    it('should convert the amount to new currency when the user change the currency', async () => {
         const { store } = await waitFor(() =>
             render(<Default />, {
                 apolloMocks: Default.parameters?.apolloClient.mocks,

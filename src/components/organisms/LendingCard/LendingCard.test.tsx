@@ -1,8 +1,6 @@
-import { OrderSide } from '@secured-finance/sf-client';
 import { formatDate } from '@secured-finance/sf-core';
 import { composeStories } from '@storybook/react';
 import {
-    dec22Fixture,
     mar23Fixture,
     preloadedAssetPrices,
     preloadedLendingMarkets,
@@ -10,6 +8,7 @@ import {
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
 import { CurrencyInfo, CurrencySymbol, currencyMap } from 'src/utils';
+import timemachine from 'timemachine';
 import * as stories from './LendingCard.stories';
 
 const { Default } = composeStories(stories);
@@ -27,18 +26,17 @@ const DEFAULT_CHOICE = Object.values(currencyMap).reduce<CurrencyInfo>(
     { ...currencyMap.ETH }
 );
 
+beforeAll(() => {
+    timemachine.reset();
+    timemachine.config({
+        dateString: '2022-02-01T11:00:00.00Z',
+    });
+});
+
 describe('LendingCard Component', () => {
     const preloadedState = {
         ...preloadedAssetPrices,
         ...preloadedLendingMarkets,
-        landingOrderForm: {
-            marketPrice: 1,
-            maturity: dec22Fixture,
-            currency: CurrencySymbol.WFIL,
-            side: OrderSide.BORROW,
-            amount: '500000000',
-            unitPrice: 9500,
-        },
         wallet: {
             balances: {
                 [CurrencySymbol.WFIL]: 10000,
@@ -62,16 +60,16 @@ describe('LendingCard Component', () => {
     });
 
     it('should render the component with Borrow as the default', async () => {
-        await waitFor(() => render(<Default />, { preloadedState }));
+        render(<Default />, { preloadedState });
         expect(
             await screen.findByTestId('place-order-button')
         ).toHaveTextContent('Borrow');
     });
 
     it('should show correct market rate', async () => {
-        await waitFor(() => render(<Default />, { preloadedState }));
-        expect(screen.getByTestId('market-rate')).toHaveTextContent(
-            '1,000.00%'
+        render(<Default />, { preloadedState });
+        expect(await screen.findByTestId('market-rate')).toHaveTextContent(
+            '2.46%'
         );
     });
 
@@ -89,9 +87,11 @@ describe('LendingCard Component', () => {
     });
 
     it('should let the user choose between ETH, Filecoin and USDC when clicking on the asset selector', async () => {
-        await waitFor(() => render(<Default />));
+        render(<Default />);
 
-        expect(screen.getByText(DEFAULT_CHOICE.name)).toBeInTheDocument();
+        expect(
+            await screen.findByText(DEFAULT_CHOICE.name)
+        ).toBeInTheDocument();
         expect(screen.queryByText('USDC')).not.toBeInTheDocument();
         expect(screen.queryByText('Ethereum')).not.toBeInTheDocument();
         fireEvent.click(
@@ -162,7 +162,7 @@ describe('LendingCard Component', () => {
         ).toBeInTheDocument();
     });
 
-    it.skip('should render a disabled button if amount is undefined or zero', async () => {
+    it('should render a disabled button if amount is undefined or zero', async () => {
         await waitFor(() => render(<Default />, { preloadedState }));
         const input = screen.getByRole('textbox');
         expect(input).toHaveValue('');

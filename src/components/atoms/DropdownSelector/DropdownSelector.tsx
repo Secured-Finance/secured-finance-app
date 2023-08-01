@@ -1,6 +1,6 @@
 import { Menu } from '@headlessui/react';
 import classNames from 'classnames';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { ExpandIndicator, Separator } from 'src/components/atoms';
 import { SvgIcon } from 'src/types';
 
@@ -112,24 +112,25 @@ export const DropdownSelector = <T extends string = string>({
 
     const handleSelect = useCallback(
         (option: Option<T>) => {
-            setSelectedOptionValue(option.value);
-            onChange(option.value);
+            if (option.value !== selectedOptionValue) {
+                setSelectedOptionValue(option.value);
+                onChange(option.value);
+            }
         },
-        [onChange]
+        [onChange, selectedOptionValue]
     );
 
-    //Handle the case of the initial value
+    const prevSelectedValue = useRef('');
     useEffect(() => {
-        if (selected.value === selectedOptionValue) {
+        if (
+            !prevSelectedValue ||
+            prevSelectedValue.current !== selected.value
+        ) {
+            setSelectedOptionValue(selected.value);
             onChange(selected.value);
         }
+        prevSelectedValue.current = selected.value;
     }, [onChange, selectedOptionValue, selected.label, selected.value]);
-
-    useEffect(() => {
-        if (selected.value) {
-            setSelectedOptionValue(selected.value);
-        }
-    }, [selected.value]);
 
     return (
         <Menu as='div' className='relative'>

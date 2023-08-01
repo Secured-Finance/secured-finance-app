@@ -2,7 +2,6 @@ import type { Meta, StoryFn } from '@storybook/react';
 import { userEvent, within } from '@storybook/testing-library';
 import {
     withAssetPrice,
-    withMarketPrice,
     withWalletProvider,
 } from 'src/../.storybook/decorators';
 import { collateralBook37 } from 'src/stories/mocks/fixtures';
@@ -14,11 +13,12 @@ export default {
     args: {
         collateralBook: collateralBook37,
         onlyLimitOrder: false,
+        marketPrice: 9800,
     },
     parameters: {
         connected: true,
     },
-    decorators: [withAssetPrice, withWalletProvider, withMarketPrice],
+    decorators: [withAssetPrice, withWalletProvider],
 } as Meta<typeof AdvancedLendingOrderCard>;
 
 const Template: StoryFn<typeof AdvancedLendingOrderCard> = args => {
