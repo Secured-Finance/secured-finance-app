@@ -657,18 +657,19 @@ export const collateralBook80: CollateralBook = {
     collateral: {
         ETH: BigNumber.from('1000000000000000000'),
         USDC: BigNumber.from('100000000'),
+        WBTC: BigNumber.from('20000000'),
     },
     nonCollateral: {
         WFIL: BigNumber.from('100000000000000000000'),
-        WBTC: BigNumber.from('20000000'),
     },
-    usdCollateral: 2100.34,
-    usdNonCollateral: 10600,
+    usdCollateral: 12100.34,
+    usdNonCollateral: 600,
     coverage: BigNumber.from('8000'), // 80%,
     collateralThreshold: 80,
     withdrawableCollateral: {
         [CurrencySymbol.USDC]: BigNumber.from(100000),
         [CurrencySymbol.ETH]: BigNumber.from(100000),
+        [CurrencySymbol.WBTC]: BigNumber.from(100000),
     },
     fetched: true,
 };
@@ -677,18 +678,19 @@ export const collateralBook37: CollateralBook = {
     collateral: {
         ETH: BigNumber.from('1000000000000000000'),
         USDC: BigNumber.from('100000000'),
+        WBTC: BigNumber.from('20000000'),
     },
     nonCollateral: {
         WFIL: BigNumber.from('100000000000000000000'),
-        WBTC: BigNumber.from('20000000'),
     },
-    usdCollateral: 2100.34,
-    usdNonCollateral: 10600,
+    usdCollateral: 12100.34,
+    usdNonCollateral: 600,
     coverage: BigNumber.from('3700'),
     collateralThreshold: 80,
     withdrawableCollateral: {
         [CurrencySymbol.USDC]: BigNumber.from(100000),
         [CurrencySymbol.ETH]: BigNumber.from(100000),
+        [CurrencySymbol.WBTC]: BigNumber.from(100000),
     },
     fetched: true,
 };
@@ -697,10 +699,10 @@ export const emptyCollateralBook: CollateralBook = {
     collateral: {
         ETH: BigNumber.from('0'),
         USDC: BigNumber.from('0'),
+        WBTC: BigNumber.from('0'),
     },
     nonCollateral: {
         WFIL: BigNumber.from('0'),
-        WBTC: BigNumber.from('0'),
     },
     usdCollateral: 0,
     usdNonCollateral: 0,
@@ -709,6 +711,7 @@ export const emptyCollateralBook: CollateralBook = {
     withdrawableCollateral: {
         [CurrencySymbol.USDC]: BigNumber.from(0),
         [CurrencySymbol.ETH]: BigNumber.from(0),
+        [CurrencySymbol.WBTC]: BigNumber.from(0),
     },
     fetched: true,
 };
@@ -717,18 +720,19 @@ export const emptyUSDCollateral: CollateralBook = {
     collateral: {
         ETH: BigNumber.from('0'),
         USDC: BigNumber.from('0'),
+        WBTC: BigNumber.from('0'),
     },
     nonCollateral: {
         WFIL: BigNumber.from('100000000000000000000'),
-        WBTC: BigNumber.from('20000000'),
     },
     usdCollateral: 0,
-    usdNonCollateral: 10600,
+    usdNonCollateral: 600,
     coverage: BigNumber.from('0'), // 0%
     collateralThreshold: 80,
     withdrawableCollateral: {
         [CurrencySymbol.USDC]: BigNumber.from(0),
         [CurrencySymbol.ETH]: BigNumber.from(0),
+        [CurrencySymbol.WBTC]: BigNumber.from(0),
     },
     fetched: true,
 };
@@ -737,10 +741,10 @@ export const emptyBook: CollateralBook = {
     collateral: {
         ETH: BigNumber.from('0'),
         USDC: BigNumber.from('0'),
+        WBTC: BigNumber.from('0'),
     },
     nonCollateral: {
         WFIL: BigNumber.from('0'),
-        WBTC: BigNumber.from('0'),
     },
     usdCollateral: 0,
     usdNonCollateral: 0,
@@ -749,6 +753,7 @@ export const emptyBook: CollateralBook = {
     withdrawableCollateral: {
         [CurrencySymbol.USDC]: BigNumber.from(0),
         [CurrencySymbol.ETH]: BigNumber.from(0),
+        [CurrencySymbol.WBTC]: BigNumber.from(0),
     },
     fetched: false,
 };
