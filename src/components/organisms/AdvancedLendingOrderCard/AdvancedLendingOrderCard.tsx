@@ -39,10 +39,10 @@ import {
     amountFormatterToBase,
     computeAvailableToBorrow,
     divide,
+    formatLoanValue,
     generateWalletSourceInformation,
     getAmountValidation,
     multiply,
-    percentFormat,
     usdFormat,
 } from 'src/utils';
 import { Amount, LoanValue } from 'src/utils/entities';
@@ -326,12 +326,7 @@ export const AdvancedLendingOrderCard = ({
                     <div className='mx-10px'>
                         <OrderDisplayBox
                             field='Fixed Rate (APR)'
-                            value={percentFormat(
-                                LoanValue.fromPrice(
-                                    unitPrice ?? 0,
-                                    maturity
-                                ).apr.toNormalizedNumber()
-                            )}
+                            value={formatLoanValue(loanValue, 'rate')}
                         />
                     </div>
                 </div>

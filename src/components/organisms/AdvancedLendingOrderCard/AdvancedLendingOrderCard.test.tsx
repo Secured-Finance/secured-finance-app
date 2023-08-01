@@ -54,11 +54,16 @@ const collateralBook0: CollateralBook = {
 beforeEach(() => {
     timemachine.reset();
     timemachine.config({
-        dateString: '2022-12-01T00:00:00.00Z',
+        dateString: '2022-02-01T11:00:00.00Z',
     });
 });
 
 describe('AdvancedLendingOrderCard Component', () => {
+    const changeInputValue = (label: string, value: string) => {
+        const input = screen.getByLabelText(label);
+        fireEvent.change(input, { target: { value } });
+    };
+
     it('should render an AdvancedLendingOrderCard', async () => {
         render(<Default />, { preloadedState });
         await waitFor(() =>
@@ -68,6 +73,11 @@ describe('AdvancedLendingOrderCard Component', () => {
         );
         expect(screen.getAllByRole('radio')).toHaveLength(4);
         expect(screen.getAllByRole('radiogroup')).toHaveLength(2);
+    });
+
+    it('should show the rate computed from the bond price', async () => {
+        render(<Default />, { preloadedState });
+        expect(await screen.findByText('6.35%')).toBeInTheDocument();
     });
 
     it('should render CollateralManagementConciseTab', async () => {
@@ -381,11 +391,6 @@ describe('AdvancedLendingOrderCard Component', () => {
     });
 
     describe('Error handling for invalid bond price in different order types and sides', () => {
-        const changeInputValue = (label: string, value: string) => {
-            const input = screen.getByLabelText(label);
-            fireEvent.change(input, { target: { value } });
-        };
-
         const assertPlaceOrderButtonIsDisabled = () => {
             const button = screen.getByTestId('place-order-button');
             expect(button).toBeInTheDocument();
@@ -613,6 +618,22 @@ describe('AdvancedLendingOrderCard Component', () => {
 
             fireEvent.click(screen.getByText('Market'));
             expect(screen.getByText('96')).toBeInTheDocument();
+        });
+
+        it('should calculate the APR from the user input bond price', async () => {
+            render(<Default marketPrice={9600} />, {
+                preloadedState: {
+                    ...preloadedState,
+                    landingOrderForm: {
+                        ...preloadedState.landingOrderForm,
+                        orderType: OrderType.LIMIT,
+                    },
+                },
+            });
+
+            expect(await screen.findByText('6.35%')).toBeInTheDocument();
+            changeInputValue('Bond Price', '94');
+            expect(screen.getByText('7.70%')).toBeInTheDocument();
         });
     });
 });

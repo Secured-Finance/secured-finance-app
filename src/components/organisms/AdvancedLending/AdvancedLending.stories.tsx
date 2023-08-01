@@ -13,7 +13,6 @@ import {
     yieldCurveRates,
 } from 'src/stories/mocks/fixtures';
 import { mockTrades } from 'src/stories/mocks/queries';
-import timemachine from 'timemachine';
 import { AdvancedLending } from './AdvancedLending';
 
 export default {
@@ -23,7 +22,7 @@ export default {
         collateralBook: collateralBook80,
         maturitiesOptionList: maturityOptions,
         rates: yieldCurveRates,
-        marketPrice: 9800,
+        marketPrice: 9917,
     },
     parameters: {
         apolloClient: {
@@ -44,9 +43,6 @@ export default {
 } as Meta<typeof AdvancedLending>;
 
 const Template: StoryFn<typeof AdvancedLending> = args => {
-    timemachine.config({
-        dateString: '2022-02-01T11:00:00.00Z',
-    });
     return <AdvancedLending {...args} />;
 };
 
