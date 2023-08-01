@@ -24,4 +24,10 @@ describe('fee', () => {
         maturity = getMaturity(183);
         expect(calculateFee(maturity, 2)).toEqual('1%');
     });
+
+    it('should not return negative fees if maturity has passed', () => {
+        const maturity = getMaturity(-365);
+        expect(calculateFee(maturity, 1)).toEqual('0%');
+        expect(calculateFee(maturity, 2)).toEqual('0%');
+    });
 });
