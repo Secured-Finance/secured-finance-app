@@ -1,10 +1,10 @@
 import { OrderSide, WalletSource } from '@secured-finance/sf-client';
 import { BigNumber } from 'ethers';
-import { useMemo, useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
-    BorrowLendSelector,
     ErrorInfo,
+    RadioGroupSelector,
     WalletSourceSelector,
 } from 'src/components/atoms';
 import {
@@ -25,9 +25,10 @@ import {
 } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
 import { selectAllBalances } from 'src/store/wallet';
-import { MaturityOptionList } from 'src/types';
+import { MaturityOptionList, OrderSideMap } from 'src/types';
 import {
     CurrencySymbol,
+    ZERO_BN,
     amountFormatterFromBase,
     amountFormatterToBase,
     formatLoanValue,
@@ -36,7 +37,6 @@ import {
     getCurrencyMapAsList,
     getCurrencyMapAsOptions,
     getTransformMaturityOption,
-    ZERO_BN,
 } from 'src/utils';
 import { LoanValue, Maturity } from 'src/utils/entities';
 import { useAccount } from 'wagmi';
@@ -165,13 +165,20 @@ export const LendingCard = ({
 
     return (
         <div className='w-80 flex-col space-y-6 rounded-b-xl border border-panelStroke bg-transparent pb-6 shadow-deep'>
-            <BorrowLendSelector
-                handleClick={side => {
-                    dispatch(setSide(side));
+            <RadioGroupSelector
+                options={Object.values(OrderSideMap)}
+                selectedOption={OrderSideMap[side]}
+                handleClick={option => {
+                    dispatch(
+                        setSide(
+                            option === 'Borrow'
+                                ? OrderSide.BORROW
+                                : OrderSide.LEND
+                        )
+                    );
                     dispatch(setSourceAccount(WalletSource.METAMASK));
                 }}
-                side={side}
-                variant='simple'
+                variant='NavTab'
             />
 
             <div className='grid justify-center space-y-6 px-4'>

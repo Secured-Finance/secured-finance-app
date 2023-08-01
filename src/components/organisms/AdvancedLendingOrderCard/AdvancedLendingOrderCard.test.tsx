@@ -139,26 +139,24 @@ describe('AdvancedLendingOrderCard Component', () => {
                 screen.getByRole('radio', { name: 'Market' })
             ).not.toHaveClass('hidden')
         );
-        expect(screen.getByRole('radio', { name: 'Limit' })).not.toHaveClass(
-            'hidden'
-        );
-    });
-
-    it('should show only limit order when in onlyLimitOrder mode', async () => {
-        render(<Default onlyLimitOrder />);
-        await waitFor(() =>
-            expect(screen.queryByRole('radio', { name: 'Market' })).toHaveClass(
-                'hidden'
-            )
-        );
-
+        expect(screen.getByRole('radio', { name: 'Market' })).not.toBeChecked();
         expect(screen.getByRole('radio', { name: 'Limit' })).not.toHaveClass(
             'hidden'
         );
         expect(screen.getByRole('radio', { name: 'Limit' })).toBeChecked();
+    });
+
+    it('should hide both market and limit order when in onlyLimitOrder mode', async () => {
+        render(<Default onlyLimitOrder />);
+        await waitFor(() =>
+            expect(
+                screen.queryByRole('radio', { name: 'Market' })
+            ).not.toBeInTheDocument()
+        );
+
         expect(
-            screen.getByRole('textbox', { name: 'Bond Price' })
-        ).not.toBeDisabled();
+            screen.queryByRole('radio', { name: 'Limit' })
+        ).not.toBeInTheDocument();
     });
 
     it('place order button should be disabled if amount is zero', async () => {
