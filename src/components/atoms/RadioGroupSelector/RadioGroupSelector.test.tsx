@@ -58,10 +58,10 @@ describe('RadioGroupSelector component', () => {
         expect(marketButton).toHaveClass('bg-starBlue text-neutral-8');
 
         const limitButton = screen.getByText('Limit');
-        expect(limitButton).toHaveClass('text-neutral-8 opacity-70');
+        expect(limitButton).toHaveClass('text-neutral-4 opacity-70');
 
         const stopButton = screen.getByText('Stop');
-        expect(stopButton).toHaveClass('text-neutral-8 opacity-70');
+        expect(stopButton).toHaveClass('text-neutral-4 opacity-70');
     });
 
     it('should call handleClick in StyledButton variant', () => {
@@ -69,7 +69,7 @@ describe('RadioGroupSelector component', () => {
         render(<StyledButton handleClick={handleClick} />);
 
         const stopButton = screen.getByText('Stop');
-        expect(stopButton).toHaveClass('text-neutral-8 opacity-70');
+        expect(stopButton).toHaveClass('text-neutral-4 opacity-70');
 
         fireEvent.click(stopButton);
         expect(handleClick).toBeCalledTimes(1);

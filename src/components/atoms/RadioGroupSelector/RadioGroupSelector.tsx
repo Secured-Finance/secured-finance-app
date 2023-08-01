@@ -48,10 +48,10 @@ const StyledButton = ({ active, text }: { active: boolean; text: string }) => {
     return (
         <div
             className={classNames(
-                'typography-caption-2 group flex h-full w-full items-center justify-center rounded duration-300 hover:opacity-100 hover:ease-in-out',
+                'typography-caption-2 group flex h-full w-full items-center justify-center rounded font-semibold duration-300 hover:opacity-100 hover:ease-in-out',
                 {
                     'bg-starBlue text-neutral-8': active,
-                    'text-neutral-8 opacity-70': !active,
+                    'text-neutral-4 opacity-70': !active,
                 }
             )}
         >
