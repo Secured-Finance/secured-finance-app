@@ -40,9 +40,10 @@ MaxLimit.args = {
 
 export const LongInput = Template.bind({});
 LongInput.args = {
-    fontSize: {
-        large: 15,
-        small: 5,
+    sizeDependentStyles: {
+        shortText: { maxChar: 5, styles: 'text-3xl' },
+        mediumText: { maxChar: 15, styles: 'text-2xl' },
+        longText: { maxChar: Infinity, styles: 'text-xl' },
     },
 };
 LongInput.play = async ({ canvasElement }) => {

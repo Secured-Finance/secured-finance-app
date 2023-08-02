@@ -4,6 +4,11 @@ import NumericFormat, {
     SourceInfo,
 } from 'react-number-format';
 
+export type SizeDependentStylesConfig = Record<
+    'shortText' | 'mediumText' | 'longText',
+    { maxChar: number; styles: string }
+>;
+
 interface InputBaseProps {
     className?: string;
     value?: number;
@@ -11,7 +16,7 @@ interface InputBaseProps {
     label?: string;
     decimalPlacesAllowed?: number;
     maxLimit?: number;
-    fontSize?: Record<FontSize, number>;
+    sizeDependentStyles?: SizeDependentStylesConfig;
 }
 export const InputBase = ({
     className,
@@ -20,7 +25,7 @@ export const InputBase = ({
     label,
     decimalPlacesAllowed = 4,
     maxLimit = 10 ** 10,
-    fontSize,
+    sizeDependentStyles,
 }: InputBaseProps) => {
     const handleValueChange = (
         values: NumberFormatValues,
@@ -32,15 +37,25 @@ export const InputBase = ({
         }
     };
 
-    const fontSizeClass = fontSize
+    const fontSizeClass = sizeDependentStyles
         ? classNames({
-              'text-xl': value && value.toString().length >= fontSize.large,
-              'text-2xl':
+              [sizeDependentStyles.shortText.styles]:
+                  !value ||
+                  (value &&
+                      value.toString().length <=
+                          sizeDependentStyles.shortText.maxChar),
+              [sizeDependentStyles.mediumText.styles]:
                   value &&
-                  value.toString().length >= fontSize.small &&
-                  value.toString().length < fontSize.large,
-              'text-3xl':
-                  !value || (value && value.toString().length < fontSize.small),
+                  value.toString().length >
+                      sizeDependentStyles.shortText.maxChar &&
+                  value.toString().length <=
+                      sizeDependentStyles.mediumText.maxChar,
+              [sizeDependentStyles.longText.styles]:
+                  value &&
+                  value.toString().length >
+                      sizeDependentStyles.mediumText.maxChar &&
+                  value.toString().length <=
+                      sizeDependentStyles.longText.maxChar,
           })
         : null;
 
@@ -66,5 +81,3 @@ export const InputBase = ({
         />
     );
 };
-
-export type FontSize = 'large' | 'small';
