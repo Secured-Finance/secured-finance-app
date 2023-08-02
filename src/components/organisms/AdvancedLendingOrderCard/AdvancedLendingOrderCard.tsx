@@ -21,6 +21,7 @@ import { CollateralBook } from 'src/hooks';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { selectMarket } from 'src/store/availableContracts';
 import {
+    resetUnitPrice,
     selectLandingOrderForm,
     setAmount,
     setOrderType,
@@ -38,10 +39,10 @@ import {
     amountFormatterToBase,
     computeAvailableToBorrow,
     divide,
+    formatLoanValue,
     generateWalletSourceInformation,
     getAmountValidation,
     multiply,
-    percentFormat,
     usdFormat,
 } from 'src/utils';
 import { Amount, LoanValue } from 'src/utils/entities';
@@ -50,9 +51,11 @@ import { useAccount } from 'wagmi';
 export const AdvancedLendingOrderCard = ({
     collateralBook,
     onlyLimitOrder = false,
+    marketPrice,
 }: {
     collateralBook: CollateralBook;
     onlyLimitOrder?: boolean;
+    marketPrice?: number;
 }) => {
     const {
         currency,
@@ -72,12 +75,13 @@ export const AdvancedLendingOrderCard = ({
     );
 
     const loanValue = useMemo(() => {
-        if (unitPrice && maturity) {
+        if (!maturity) return LoanValue.ZERO;
+        if (unitPrice !== undefined) {
             return LoanValue.fromPrice(unitPrice, maturity);
         }
-
-        return LoanValue.ZERO;
-    }, [unitPrice, maturity]);
+        if (!marketPrice) return LoanValue.ZERO;
+        return LoanValue.fromPrice(marketPrice, maturity);
+    }, [unitPrice, maturity, marketPrice]);
 
     const dispatch = useDispatch();
     const { address, isConnected } = useAccount();
@@ -227,6 +231,7 @@ export const AdvancedLendingOrderCard = ({
                 value={orderType}
                 onChange={(v: OrderType) => {
                     dispatch(setOrderType(v));
+                    dispatch(resetUnitPrice());
                 }}
                 as='div'
                 className='flex h-[60px] flex-row items-center justify-around'
@@ -262,6 +267,7 @@ export const AdvancedLendingOrderCard = ({
                     handleClick={side => {
                         dispatch(setSide(side));
                         dispatch(setSourceAccount(WalletSource.METAMASK));
+                        dispatch(resetUnitPrice());
                     }}
                     side={side}
                     variant='advanced'
@@ -289,17 +295,17 @@ export const AdvancedLendingOrderCard = ({
                         field='Bond Price'
                         disabled={orderType === OrderType.MARKET}
                         initialValue={
-                            unitPrice !== undefined
-                                ? divide(unitPrice, 100)
+                            loanValue.price > 0
+                                ? divide(loanValue.price, 100)
                                 : undefined
                         }
-                        onValueChange={v =>
+                        onValueChange={v => {
                             v !== undefined
                                 ? dispatch(
                                       setUnitPrice(multiply(v as number, 100))
                                   )
-                                : dispatch(setUnitPrice(undefined))
-                        }
+                                : dispatch(setUnitPrice(0));
+                        }}
                         informationText='Input value greater than or equal to 0.01 and up to and including 100.'
                         decimalPlacesAllowed={2}
                         maxLimit={100}
@@ -320,12 +326,7 @@ export const AdvancedLendingOrderCard = ({
                     <div className='mx-10px'>
                         <OrderDisplayBox
                             field='Fixed Rate (APR)'
-                            value={percentFormat(
-                                LoanValue.fromPrice(
-                                    unitPrice ?? 0,
-                                    maturity
-                                ).apr.toNormalizedNumber()
-                            )}
+                            value={formatLoanValue(loanValue, 'rate')}
                         />
                     </div>
                 </div>

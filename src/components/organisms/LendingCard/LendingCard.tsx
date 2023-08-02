@@ -1,6 +1,6 @@
 import { OrderSide, WalletSource } from '@secured-finance/sf-client';
 import { BigNumber } from 'ethers';
-import { useMemo, useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
     BorrowLendSelector,
@@ -28,6 +28,7 @@ import { selectAllBalances } from 'src/store/wallet';
 import { MaturityOptionList } from 'src/types';
 import {
     CurrencySymbol,
+    ZERO_BN,
     amountFormatterFromBase,
     amountFormatterToBase,
     formatLoanValue,
@@ -36,19 +37,18 @@ import {
     getCurrencyMapAsList,
     getCurrencyMapAsOptions,
     getTransformMaturityOption,
-    ZERO_BN,
 } from 'src/utils';
 import { LoanValue, Maturity } from 'src/utils/entities';
 import { useAccount } from 'wagmi';
 
 export const LendingCard = ({
     collateralBook,
-    marketValue,
     maturitiesOptionList,
+    marketPrice,
 }: {
     collateralBook: CollateralBook;
-    marketValue: LoanValue;
     maturitiesOptionList: MaturityOptionList;
+    marketPrice: number | undefined;
 }) => {
     const { currency, maturity, side, sourceAccount, amount } = useSelector(
         (state: RootState) => selectLandingOrderForm(state.landingOrderForm)
@@ -124,6 +124,11 @@ export const LendingCard = ({
         currency,
         selectedWalletSource.source,
     ]);
+
+    const marketValue = useMemo(
+        () => LoanValue.fromPrice(marketPrice ?? 0, maturity),
+        [marketPrice, maturity]
+    );
 
     const handleCurrencyChange = useCallback(
         (v: CurrencySymbol) => {

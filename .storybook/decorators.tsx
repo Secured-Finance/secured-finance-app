@@ -9,10 +9,11 @@ import { Layout } from 'src/components/templates';
 import { setMidPrice } from 'src/store/analytics';
 import { updateLendingMarketContract } from 'src/store/availableContracts';
 import { updateChainError, updateLatestBlock } from 'src/store/blockchain';
+import { setMaturity } from 'src/store/landingOrderForm';
 import { updateBalance } from 'src/store/wallet';
 import AxiosMock from 'src/stories/mocks/AxiosMock';
 import { CustomizedBridge } from 'src/stories/mocks/customBridge';
-import { maturities } from 'src/stories/mocks/fixtures';
+import { dec22Fixture, maturities } from 'src/stories/mocks/fixtures';
 import { CurrencySymbol } from 'src/utils';
 import { coingeckoApi } from 'src/utils/coinGeckoApi';
 import timemachine from 'timemachine';
@@ -199,6 +200,20 @@ export const withChainErrorDisabled = (Story: StoryFn) => {
         const timeoutId = setTimeout(() => {
             dispatch(updateChainError(false));
         }, 300);
+
+        return () => clearTimeout(timeoutId);
+    }, [dispatch]);
+
+    return <Story />;
+};
+
+export const withLendingOrderForm = (Story: StoryFn) => {
+    const dispatch = useDispatch();
+    useEffect(() => {
+        const timeoutId = setTimeout(() => {
+            setMaturity(dec22Fixture.toNumber());
+            // Add other needed values
+        }, 100);
 
         return () => clearTimeout(timeoutId);
     }, [dispatch]);

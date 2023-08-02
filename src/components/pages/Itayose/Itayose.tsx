@@ -1,5 +1,5 @@
 import { BigNumber } from 'ethers';
-import { useMemo, useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import {
     GradientBox,
@@ -31,10 +31,10 @@ import {
 import { RootState } from 'src/store/types';
 import {
     CurrencySymbol,
-    getCurrencyMapAsOptions,
-    usdFormat,
     amountFormatterFromBase,
     amountFormatterToBase,
+    getCurrencyMapAsOptions,
+    usdFormat,
 } from 'src/utils';
 import { countdown } from 'src/utils/date';
 import { Maturity } from 'src/utils/entities';

@@ -10,6 +10,7 @@ export const {
     setOrderType,
     setLastView,
     setSourceAccount,
+    resetUnitPrice,
 } = landingOrderFormSlice.actions;
 
 export { selectLandingOrderForm };
