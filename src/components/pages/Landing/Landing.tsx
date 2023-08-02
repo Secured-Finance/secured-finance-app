@@ -17,13 +17,14 @@ import {
     useMaturityOptions,
 } from 'src/hooks';
 import {
+    resetUnitPrice,
     selectLandingOrderForm,
     setLastView,
     setOrderType,
 } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
 import { OrderType } from 'src/types';
-import { LoanValue, Maturity } from 'src/utils/entities';
+import { Maturity } from 'src/utils/entities';
 import { useAccount } from 'wagmi';
 
 export const emptyOptionList = [
@@ -56,17 +57,11 @@ export const Landing = ({ view }: { view?: ViewType }) => {
         market => market.isOpened
     );
 
-    const marketValue = useMemo(() => {
-        if (!unitPrices) {
-            return LoanValue.ZERO;
+    const marketPrice = useMemo(() => {
+        if (unitPrices) {
+            return unitPrices.get(maturity)?.price;
         }
-
-        const value = unitPrices.get(maturity);
-        if (!value) {
-            return LoanValue.ZERO;
-        }
-
-        return value;
+        return undefined;
     }, [unitPrices, maturity]);
 
     const dailyVolumes = useGraphClientHook(
@@ -82,8 +77,8 @@ export const Landing = ({ view }: { view?: ViewType }) => {
                 <div className='flex flex-row items-center justify-center'>
                     <LendingCard
                         collateralBook={collateralBook}
-                        marketValue={marketValue}
                         maturitiesOptionList={maturityOptionList}
+                        marketPrice={marketPrice}
                     />
                     <YieldChart
                         asset={currency}
@@ -97,9 +92,9 @@ export const Landing = ({ view }: { view?: ViewType }) => {
             advanceComponent={
                 <AdvancedLending
                     collateralBook={collateralBook}
-                    loanValue={marketValue}
                     rates={Array.from(unitPrices.values()).map(v => v.apr)}
                     maturitiesOptionList={maturityOptionList}
+                    marketPrice={marketPrice}
                 />
             }
             initialView={view ?? lastView}
@@ -107,8 +102,10 @@ export const Landing = ({ view }: { view?: ViewType }) => {
                 dispatch(setLastView(v));
                 if (v === 'Simple') {
                     dispatch(setOrderType(OrderType.MARKET));
+                    dispatch(resetUnitPrice());
                 } else if (v === 'Advanced') {
                     dispatch(setOrderType(OrderType.LIMIT));
+                    dispatch(resetUnitPrice());
                 }
             }}
             pageName='lending-page'

@@ -3,7 +3,6 @@ import { OrderSide, WalletSource } from '@secured-finance/sf-client';
 import { getUTCMonthYear } from '@secured-finance/sf-core';
 import { BigNumber } from 'ethers';
 import { useCallback, useReducer, useState } from 'react';
-import { useDispatch } from 'react-redux';
 import { Spinner } from 'src/components/atoms';
 import {
     Dialog,
@@ -17,7 +16,6 @@ import {
     useEtherscanUrl,
     useHandleContractTransaction,
 } from 'src/hooks';
-import { setLastMessage } from 'src/store/lastError';
 import { OrderType, PlaceOrderFunction } from 'src/types';
 import {
     AddressUtils,
@@ -121,7 +119,6 @@ export const PlaceOrder = ({
     const handleContractTransaction = useHandleContractTransaction();
     const [state, dispatch] = useReducer(reducer, stateRecord[1]);
     const [txHash, setTxHash] = useState<string | undefined>();
-    const globalDispatch = useDispatch();
 
     const [errorMessage, setErrorMessage] = useState(
         'Your order could not be placed'
@@ -172,17 +169,10 @@ export const PlaceOrder = ({
                 dispatch({ type: 'error' });
                 if (e instanceof Error) {
                     setErrorMessage(e.message);
-                    globalDispatch(setLastMessage(e.message));
                 }
             }
         },
-        [
-            onPlaceOrder,
-            handleContractTransaction,
-            orderType,
-            orderAmount.value,
-            globalDispatch,
-        ]
+        [onPlaceOrder, handleContractTransaction, orderType, orderAmount.value]
     );
 
     const onClick = useCallback(

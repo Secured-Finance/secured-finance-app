@@ -1,4 +1,3 @@
-import { useCallback } from 'react';
 import { GradientBox, MarketTab, Option } from 'src/components/atoms';
 import { HorizontalAssetSelector } from 'src/components/molecules';
 import { IndexOf } from 'src/types';
@@ -17,8 +16,8 @@ type AdvancedLendingTopBarProp<T> = {
     assetList: Array<Option<CurrencySymbol>>;
     options: Array<Option<T>>;
     selected: Option<T>;
-    onAssetChange?: (v: CurrencySymbol) => void;
-    onTermChange?: (v: T) => void;
+    onAssetChange: (v: CurrencySymbol) => void;
+    onTermChange: (v: T) => void;
     lastTradeLoan: LoanValue | undefined;
     lastTradeTime: number;
     values?: [ValueField, ValueField, ValueField, ValueField, ValueField];
@@ -42,20 +41,6 @@ export const AdvancedLendingTopBar = <T extends string = string>({
     lastTradeTime,
     values,
 }: AdvancedLendingTopBarProp<T>) => {
-    const handleTermChange = useCallback(
-        (v: T) => {
-            onTermChange?.(v);
-        },
-        [onTermChange]
-    );
-
-    const handleAssetChange = useCallback(
-        (v: CurrencySymbol) => {
-            onAssetChange?.(v);
-        },
-        [onAssetChange]
-    );
-
     return (
         <GradientBox shape='rectangle'>
             <div className='grid-col-3 tablet:grid-col-6 grid gap-y-6 px-5 pb-3 pt-6 laptop:grid-flow-col laptop:place-content-around laptop:items-start laptop:pt-4'>
@@ -65,8 +50,8 @@ export const AdvancedLendingTopBar = <T extends string = string>({
                         assetList={assetList}
                         options={options}
                         selected={selected}
-                        onAssetChange={handleAssetChange}
-                        onTermChange={handleTermChange}
+                        onAssetChange={onAssetChange}
+                        onTermChange={onTermChange}
                     />
                 </div>
                 <div className='col-span-3 col-start-1 tablet:col-span-2 laptop:col-span-2 laptop:border-r laptop:border-white-10 laptop:pr-5'>

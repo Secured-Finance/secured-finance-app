@@ -54,11 +54,16 @@ const collateralBook0: CollateralBook = {
 beforeEach(() => {
     timemachine.reset();
     timemachine.config({
-        dateString: '2022-12-01T00:00:00.00Z',
+        dateString: '2022-02-01T11:00:00.00Z',
     });
 });
 
 describe('AdvancedLendingOrderCard Component', () => {
+    const changeInputValue = (label: string, value: string) => {
+        const input = screen.getByLabelText(label);
+        fireEvent.change(input, { target: { value } });
+    };
+
     it('should render an AdvancedLendingOrderCard', async () => {
         render(<Default />, { preloadedState });
         await waitFor(() =>
@@ -68,6 +73,11 @@ describe('AdvancedLendingOrderCard Component', () => {
         );
         expect(screen.getAllByRole('radio')).toHaveLength(4);
         expect(screen.getAllByRole('radiogroup')).toHaveLength(2);
+    });
+
+    it('should show the rate computed from the bond price', async () => {
+        render(<Default />, { preloadedState });
+        expect(await screen.findByText('6.35%')).toBeInTheDocument();
     });
 
     it('should render CollateralManagementConciseTab', async () => {
@@ -380,210 +390,250 @@ describe('AdvancedLendingOrderCard Component', () => {
         expect(button).not.toBeDisabled();
     });
 
-    it('error message should be visible and place order button should be disabled if bond price is 0 in LIMIT- BORROW orders', async () => {
-        render(<Default />, { preloadedState });
+    describe('Error handling for invalid bond price in different order types and sides', () => {
+        const assertPlaceOrderButtonIsDisabled = () => {
+            const button = screen.getByTestId('place-order-button');
+            expect(button).toBeInTheDocument();
+            expect(button).toBeDisabled();
+        };
 
-        await waitFor(() => {
-            const input = screen.getByRole('textbox', { name: 'Bond Price' });
-            fireEvent.change(input, { target: { value: '0' } });
+        const assertPlaceOrderButtonIsEnabled = () => {
+            const button = screen.getByTestId('place-order-button');
+            expect(button).toBeInTheDocument();
+            expect(button).not.toBeDisabled();
+        };
+
+        const assertInvalidBondPriceErrorIsShown = () => {
+            expect(screen.getByText('Invalid bond price')).toBeInTheDocument();
+        };
+
+        const assertInvalidBondPriceErrorIsNotShown = () => {
+            expect(
+                screen.queryByText('Invalid bond price')
+            ).not.toBeInTheDocument();
+        };
+
+        describe('LIMIT orders', () => {
+            it('should show error, place order button should be disabled if bond price is 0 for borrow order', async () => {
+                render(<Default />, {
+                    preloadedState: {
+                        ...preloadedState,
+                        landingOrderForm: {
+                            ...preloadedState.landingOrderForm,
+                            side: OrderSide.BORROW,
+                            orderType: OrderType.LIMIT,
+                        },
+                    },
+                });
+
+                changeInputValue('Bond Price', '0');
+                changeInputValue('Amount', '10');
+                assertPlaceOrderButtonIsDisabled();
+                assertInvalidBondPriceErrorIsShown();
+
+                changeInputValue('Bond Price', '10');
+                assertPlaceOrderButtonIsEnabled();
+                assertInvalidBondPriceErrorIsNotShown();
+            });
+
+            it('should show error, place order button should be disabled if bond price is 0 for lend order', async () => {
+                render(<Default />, {
+                    preloadedState: {
+                        ...preloadedState,
+                        landingOrderForm: {
+                            ...preloadedState.landingOrderForm,
+                            side: OrderSide.LEND,
+                            orderType: OrderType.LIMIT,
+                        },
+                    },
+                });
+
+                changeInputValue('Bond Price', '0');
+                changeInputValue('Amount', '10');
+                assertPlaceOrderButtonIsDisabled();
+                assertInvalidBondPriceErrorIsShown();
+
+                changeInputValue('Bond Price', '10');
+                assertPlaceOrderButtonIsEnabled();
+                assertInvalidBondPriceErrorIsNotShown();
+            });
+
+            it('should not show error, place order button should be disabled if bond price is undefined for borrow orders', async () => {
+                render(<Default />, {
+                    preloadedState: {
+                        ...preloadedState,
+                        landingOrderForm: {
+                            ...preloadedState.landingOrderForm,
+                            unitPrice: undefined,
+                        },
+                    },
+                });
+
+                changeInputValue('Amount', '10');
+                assertPlaceOrderButtonIsDisabled();
+                assertInvalidBondPriceErrorIsNotShown();
+
+                changeInputValue('Bond Price', '0');
+                assertPlaceOrderButtonIsDisabled();
+                assertInvalidBondPriceErrorIsShown();
+            });
+
+            it('should not show error, place order button should be disabled if bond price is undefined for lend orders', async () => {
+                render(<Default />, {
+                    preloadedState: {
+                        ...preloadedState,
+                        landingOrderForm: {
+                            ...preloadedState.landingOrderForm,
+                            side: OrderSide.LEND,
+                            unitPrice: undefined,
+                        },
+                    },
+                });
+
+                changeInputValue('Amount', '10');
+                assertPlaceOrderButtonIsDisabled();
+                assertInvalidBondPriceErrorIsNotShown();
+
+                changeInputValue('Bond Price', '0');
+                assertPlaceOrderButtonIsDisabled();
+                assertInvalidBondPriceErrorIsShown();
+            });
         });
 
-        await waitFor(() => {
-            const amountInput = screen.getByRole('textbox', { name: 'Amount' });
-            fireEvent.change(amountInput, { target: { value: '10' } });
+        describe('MARKET orders', () => {
+            it('should not show error, place order button should not be disabled if bond price is 0 for borrow orders', async () => {
+                render(<Default />, {
+                    preloadedState: {
+                        ...preloadedState,
+                        landingOrderForm: {
+                            ...preloadedState.landingOrderForm,
+                            orderType: OrderType.MARKET,
+                        },
+                    },
+                });
+
+                changeInputValue('Amount', '10');
+                assertPlaceOrderButtonIsEnabled();
+                assertInvalidBondPriceErrorIsNotShown();
+            });
+
+            it('should not show error, place order button should not be disabled if bond price is 0 for lend orders', async () => {
+                render(<Default />, {
+                    preloadedState: {
+                        ...preloadedState,
+                        landingOrderForm: {
+                            ...preloadedState.landingOrderForm,
+                            side: OrderSide.LEND,
+                            orderType: OrderType.MARKET,
+                        },
+                    },
+                });
+
+                changeInputValue('Amount', '10');
+                assertPlaceOrderButtonIsEnabled();
+                assertInvalidBondPriceErrorIsNotShown();
+            });
+
+            it('should not show error, place order button should not be disabled if bond price is undefined in MARKET orders', async () => {
+                render(<Default />, {
+                    preloadedState: {
+                        ...preloadedState,
+                        landingOrderForm: {
+                            ...preloadedState.landingOrderForm,
+                            orderType: OrderType.MARKET,
+                            unitPrice: undefined,
+                        },
+                    },
+                });
+
+                changeInputValue('Amount', '10');
+                assertPlaceOrderButtonIsEnabled();
+                assertInvalidBondPriceErrorIsNotShown();
+            });
         });
-
-        const button = screen.getByTestId('place-order-button');
-        expect(button).toBeInTheDocument();
-        expect(button).toBeDisabled();
-        expect(screen.getByText('Invalid bond price')).toBeInTheDocument();
-
-        await waitFor(() => {
-            const input = screen.getByRole('textbox', { name: 'Bond Price' });
-            fireEvent.change(input, { target: { value: '10' } });
-        });
-
-        expect(button).not.toBeDisabled();
-        expect(
-            screen.queryByText('Invalid bond price')
-        ).not.toBeInTheDocument();
     });
 
-    it('error message should be visible and place order button should be disabled if bond price is 0 in LIMIT- LEND orders', async () => {
-        render(<Default />, {
-            preloadedState: {
-                ...preloadedState,
-                landingOrderForm: {
-                    ...preloadedState.landingOrderForm,
-                    side: OrderSide.LEND,
+    describe('bond price input', () => {
+        const assertBondPriceInputValue = (expectedValue: string) => {
+            const input = screen.getByLabelText('Bond Price');
+            expect(input).toHaveAttribute('value', expectedValue);
+        };
+
+        it('should show the market price when market price is defined and unit price is undefined', () => {
+            render(<Default marketPrice={9600} />, {
+                preloadedState: {
+                    ...preloadedState,
+                    landingOrderForm: {
+                        ...preloadedState.landingOrderForm,
+                        orderType: OrderType.LIMIT,
+                        unitPrice: undefined,
+                    },
                 },
-            },
+            });
+
+            assertBondPriceInputValue('96');
         });
 
-        await waitFor(() => {
-            const input = screen.getByRole('textbox', { name: 'Bond Price' });
-            fireEvent.change(input, { target: { value: '0' } });
-        });
-
-        await waitFor(() => {
-            const amountInput = screen.getByRole('textbox', { name: 'Amount' });
-            fireEvent.change(amountInput, { target: { value: '10' } });
-        });
-
-        const button = screen.getByTestId('place-order-button');
-        expect(button).toBeInTheDocument();
-        expect(button).toBeDisabled();
-        expect(screen.getByText('Invalid bond price')).toBeInTheDocument();
-
-        await waitFor(() => {
-            const input = screen.getByRole('textbox', { name: 'Bond Price' });
-            fireEvent.change(input, { target: { value: '10' } });
-        });
-
-        expect(button).not.toBeDisabled();
-        expect(
-            screen.queryByText('Invalid bond price')
-        ).not.toBeInTheDocument();
-    });
-
-    it('error message should not be visible and place order button should not be disabled if bond price is 0 in MARKET- BORROW orders', async () => {
-        render(<Default />, {
-            preloadedState: {
-                ...preloadedState,
-                landingOrderForm: {
-                    ...preloadedState.landingOrderForm,
-                    orderType: OrderType.MARKET,
-                    unitPrice: 0,
+        it('should show the bond price as undefined when market price and unit price are undefined', () => {
+            render(<Default marketPrice={undefined} />, {
+                preloadedState: {
+                    ...preloadedState,
+                    landingOrderForm: {
+                        ...preloadedState.landingOrderForm,
+                        orderType: OrderType.LIMIT,
+                        unitPrice: undefined,
+                    },
                 },
-            },
+            });
+
+            assertBondPriceInputValue('');
         });
 
-        await waitFor(() => {
-            const amountInput = screen.getByRole('textbox', { name: 'Amount' });
-            fireEvent.change(amountInput, { target: { value: '10' } });
-        });
-
-        const button = screen.getByTestId('place-order-button');
-        expect(button).toBeInTheDocument();
-        expect(button).not.toBeDisabled();
-        expect(
-            screen.queryByText('Invalid bond price')
-        ).not.toBeInTheDocument();
-    });
-
-    it('error message should not be visible and place order button should not be disabled if bond price is 0 in MARKET-LEND orders', async () => {
-        render(<Default />, {
-            preloadedState: {
-                ...preloadedState,
-                landingOrderForm: {
-                    ...preloadedState.landingOrderForm,
-                    side: OrderSide.LEND,
-                    orderType: OrderType.MARKET,
-                    unitPrice: 0,
+        it('should show the unit price when market price and unit price are defined', () => {
+            render(<Default marketPrice={9600} />, {
+                preloadedState: {
+                    ...preloadedState,
+                    landingOrderForm: {
+                        ...preloadedState.landingOrderForm,
+                        orderType: OrderType.LIMIT,
+                        unitPrice: 9200,
+                    },
                 },
-            },
+            });
+            assertBondPriceInputValue('92');
         });
 
-        await waitFor(() => {
-            const amountInput = screen.getByRole('textbox', { name: 'Amount' });
-            fireEvent.change(amountInput, { target: { value: '10' } });
-        });
-
-        const button = screen.getByTestId('place-order-button');
-        expect(button).toBeInTheDocument();
-        expect(button).not.toBeDisabled();
-        expect(
-            screen.queryByText('Invalid bond price')
-        ).not.toBeInTheDocument();
-    });
-
-    it('error message should not be visible and place order button should be disabled if bond price is undefined in LIMIT- BORROW orders', async () => {
-        render(<Default />, {
-            preloadedState: {
-                ...preloadedState,
-                landingOrderForm: {
-                    ...preloadedState.landingOrderForm,
-                    unitPrice: undefined,
+        it('should be reset to market price when changing order type from LIMIT to MARKET', () => {
+            render(<Default marketPrice={9600} />, {
+                preloadedState: {
+                    ...preloadedState,
+                    landingOrderForm: {
+                        ...preloadedState.landingOrderForm,
+                        orderType: OrderType.LIMIT,
+                        unitPrice: 9200,
+                    },
                 },
-            },
+            });
+            assertBondPriceInputValue('92');
+
+            fireEvent.click(screen.getByText('Market'));
+            expect(screen.getByText('96')).toBeInTheDocument();
         });
 
-        await waitFor(() => {
-            const amountInput = screen.getByRole('textbox', { name: 'Amount' });
-            fireEvent.change(amountInput, { target: { value: '10' } });
-        });
-
-        const button = screen.getByTestId('place-order-button');
-        expect(button).toBeInTheDocument();
-        expect(button).toBeDisabled();
-        expect(
-            screen.queryByText('Invalid bond price')
-        ).not.toBeInTheDocument();
-
-        await waitFor(() => {
-            const input = screen.getByRole('textbox', { name: 'Bond Price' });
-            fireEvent.change(input, { target: { value: '0' } });
-        });
-
-        expect(button).toBeDisabled();
-        expect(screen.getByText('Invalid bond price')).toBeInTheDocument();
-    });
-
-    it('error message should not be visible and place order button should be disabled if bond price is undefined in LIMIT- LEND orders', async () => {
-        render(<Default />, {
-            preloadedState: {
-                ...preloadedState,
-                landingOrderForm: {
-                    ...preloadedState.landingOrderForm,
-                    side: OrderSide.LEND,
-                    unitPrice: undefined,
+        it('should calculate the APR from the user input bond price', async () => {
+            render(<Default marketPrice={9600} />, {
+                preloadedState: {
+                    ...preloadedState,
+                    landingOrderForm: {
+                        ...preloadedState.landingOrderForm,
+                        orderType: OrderType.LIMIT,
+                    },
                 },
-            },
+            });
+
+            expect(await screen.findByText('6.35%')).toBeInTheDocument();
+            changeInputValue('Bond Price', '94');
+            expect(screen.getByText('7.70%')).toBeInTheDocument();
         });
-
-        await waitFor(() => {
-            const amountInput = screen.getByRole('textbox', { name: 'Amount' });
-            fireEvent.change(amountInput, { target: { value: '10' } });
-        });
-
-        const button = screen.getByTestId('place-order-button');
-        expect(button).toBeInTheDocument();
-        expect(button).toBeDisabled();
-        expect(
-            screen.queryByText('Invalid bond price')
-        ).not.toBeInTheDocument();
-
-        await waitFor(() => {
-            const input = screen.getByRole('textbox', { name: 'Bond Price' });
-            fireEvent.change(input, { target: { value: '0' } });
-        });
-
-        expect(button).toBeDisabled();
-        expect(screen.getByText('Invalid bond price')).toBeInTheDocument();
-    });
-
-    it('error message should not be visible and place order button should not be disabled if bond price is undefined in MARKET orders', async () => {
-        render(<Default />, {
-            preloadedState: {
-                ...preloadedState,
-                landingOrderForm: {
-                    ...preloadedState.landingOrderForm,
-                    orderType: OrderType.MARKET,
-                    unitPrice: undefined,
-                },
-            },
-        });
-
-        await waitFor(() => {
-            const amountInput = screen.getByRole('textbox', { name: 'Amount' });
-            fireEvent.change(amountInput, { target: { value: '10' } });
-        });
-
-        const button = screen.getByTestId('place-order-button');
-        expect(button).toBeInTheDocument();
-        expect(button).not.toBeDisabled();
-        expect(
-            screen.queryByText('Invalid bond price')
-        ).not.toBeInTheDocument();
     });
 });
