@@ -37,7 +37,7 @@ const MenuItem = ({
         >
             {label && (
                 <span className='typography-dropdown-selection-label pb-1 text-slateGray'>
-                    {label}:
+                    {label}
                 </span>
             )}
             <button
@@ -54,7 +54,7 @@ const MenuItem = ({
                     {icon}
                 </div>
 
-                <p className='typography-caption flex capitalize text-white'>
+                <p className='typography-caption flex capitalize text-grayScale'>
                     {text}
                 </p>
                 {badge && <div className='pl-8'>{badge}</div>}
@@ -93,15 +93,15 @@ export const WalletPopover = ({
                         data-cy='popover-button'
                         aria-label='Wallet Popover Button'
                         className={classNames(
-                            'flex items-center gap-x-3 rounded-xl bg-transparent p-3 ring ring-neutral hover:bg-neutral',
-                            { 'bg-neutral': open }
+                            'flex items-center gap-x-3 rounded-xl bg-transparent px-4 py-3 ring-2 ring-white-20 hover:bg-white-10 hover:ring-white-10 focus:outline-none',
+                            { 'bg-white-10 ring-white-10': open }
                         )}
                     >
                         <span>
                             <MetamaskLogo className='h-4 w-4' />
                         </span>
                         <span
-                            className='typography-button-2 text-white'
+                            className='typography-button-2 text-grayScale'
                             data-cy='wallet-address'
                         >
                             {wallet}
@@ -119,25 +119,23 @@ export const WalletPopover = ({
                         leaveFrom='opacity-100 translate-y-0'
                         leaveTo='opacity-0 translate-y-5'
                     >
-                        <Popover.Panel className='absolute left-9 z-10 mt-3 w-64 -translate-x-1/2'>
-                            <div className='overflow-hidden rounded-lg shadow-sm'>
-                                <div className='relative flex flex-col space-y-2 border border-black bg-universeBlue p-2 text-white shadow-dropdown'>
-                                    <MenuItem
-                                        label='Network'
-                                        text={networkName}
-                                        icon={
-                                            <div className='h-2 w-2 rounded-full bg-green' />
-                                        }
-                                    />
-                                    <Separator />
-                                    <MenuItem
-                                        text='Disconnect Wallet'
-                                        onClick={handleSignOutClick}
-                                        icon={
-                                            <ArrowLeftOnRectangleIcon className='h-5 w-5 text-slateGray' />
-                                        }
-                                    />
-                                </div>
+                        <Popover.Panel className='absolute right-0 z-10 mt-3 w-64 origin-top-right'>
+                            <div className='relative flex flex-col space-y-2 overflow-hidden rounded-xl border border-black bg-universeBlue p-2 text-white shadow-dropdown'>
+                                <MenuItem
+                                    label='Network'
+                                    text={networkName}
+                                    icon={
+                                        <div className='h-2 w-2 rounded-full bg-green' />
+                                    }
+                                />
+                                <Separator />
+                                <MenuItem
+                                    text='Disconnect Wallet'
+                                    onClick={handleSignOutClick}
+                                    icon={
+                                        <ArrowLeftOnRectangleIcon className='h-5 w-5 text-slateGray' />
+                                    }
+                                />
                             </div>
                         </Popover.Panel>
                     </Transition>

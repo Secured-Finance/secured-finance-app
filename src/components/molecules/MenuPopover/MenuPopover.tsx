@@ -30,7 +30,7 @@ export const MenuPopover = ({}) => {
                                 leaveFrom='opacity-100 translate-y-0'
                                 leaveTo='opacity-0 translate-y-5'
                             >
-                                <Popover.Panel className='absolute left-40 z-10 mt-2 w-80 -translate-x-1/2'>
+                                <Popover.Panel className='absolute z-10 mt-2 w-80'>
                                     <div className='overflow-hidden rounded-lg shadow-sm'>
                                         <div className='relative flex flex-col space-y-2 border border-black bg-gunMetal p-2 shadow-dropdown'>
                                             {LinkList.map((link, index) => {
