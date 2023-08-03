@@ -37,6 +37,6 @@ TitleHint.args = {
 };
 TitleHint.play = async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    const button = canvas.getByRole('button');
+    const button = await canvas.findByRole('button');
     await userEvent.hover(button);
 };

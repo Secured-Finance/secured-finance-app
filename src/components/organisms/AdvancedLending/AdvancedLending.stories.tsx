@@ -6,7 +6,7 @@ import {
     withWalletProvider,
 } from '.storybook/decorators';
 import type { Meta, StoryFn } from '@storybook/react';
-import { within } from '@storybook/testing-library';
+import { userEvent, within } from '@storybook/testing-library';
 import {
     collateralBook80,
     maturityOptions,
@@ -56,7 +56,8 @@ ConnectedToWallet.parameters = {
 export const MyOrders = Template.bind({});
 MyOrders.play = async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    canvas.getByTestId('My Orders').click();
+    const myOrders = await canvas.findByTestId('My Orders');
+    await userEvent.click(myOrders);
 };
 
 export const MyOrdersConnectedToWallet = Template.bind({});
@@ -65,5 +66,6 @@ MyOrdersConnectedToWallet.parameters = {
 };
 MyOrdersConnectedToWallet.play = async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    canvas.getByTestId('My Orders').click();
+    const myOrders = await canvas.findByTestId('My Orders');
+    await userEvent.click(myOrders);
 };

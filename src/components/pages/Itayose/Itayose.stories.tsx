@@ -1,5 +1,5 @@
 import type { Meta, StoryFn } from '@storybook/react';
-import { within } from '@storybook/testing-library';
+import { userEvent, within } from '@storybook/testing-library';
 import {
     withAppLayout,
     withAssetPrice,
@@ -32,5 +32,6 @@ export const Default = Template.bind({});
 export const MyOrders = Template.bind({});
 MyOrders.play = async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    canvas.getByText('My Orders').click();
+    const myOrders = await canvas.findByTestId('My Orders');
+    await userEvent.click(myOrders);
 };

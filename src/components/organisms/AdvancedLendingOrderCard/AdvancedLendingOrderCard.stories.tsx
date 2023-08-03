@@ -35,16 +35,16 @@ OnlyLimitOrder.args = {
 export const Lend = Template.bind({});
 Lend.play = async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    const lendTab = canvas.getByText('Lend');
-    lendTab.click();
+    const lendTab = await canvas.findByText('Lend');
+    await userEvent.click(lendTab);
 };
 
 export const FailedAmountValidation = Template.bind({});
 FailedAmountValidation.play = async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    const lendTab = canvas.getByText('Lend');
-    lendTab.click();
-    const input = canvas.getByRole('textbox', { name: 'Amount' });
+    const lendTab = await canvas.findByText('Lend');
+    await userEvent.click(lendTab);
+    const input = await canvas.findByRole('textbox', { name: 'Amount' });
     await userEvent.type(input, '999999999', {
         delay: 100,
     });
@@ -56,7 +56,7 @@ BondPriceFailedValidation.args = {
 };
 BondPriceFailedValidation.play = async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    const input = canvas.getByRole('textbox', { name: 'Bond Price' });
+    const input = await canvas.findByRole('textbox', { name: 'Bond Price' });
     await userEvent.type(input, '0', {
         delay: 100,
     });
