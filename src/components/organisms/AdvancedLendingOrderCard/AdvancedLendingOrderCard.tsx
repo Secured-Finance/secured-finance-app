@@ -1,17 +1,14 @@
-import { RadioGroup } from '@headlessui/react';
 import { OrderSide, WalletSource } from '@secured-finance/sf-client';
-import classNames from 'classnames';
 import { BigNumber } from 'ethers';
 import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
-    BorrowLendSelector,
     CollateralManagementConciseTab,
     ErrorInfo,
-    NavTab,
     OrderDisplayBox,
     OrderInputBox,
+    RadioGroupSelector,
     Separator,
     Slider,
     WalletSourceSelector,
@@ -31,7 +28,7 @@ import {
 } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
 import { selectAllBalances } from 'src/store/wallet';
-import { OrderType } from 'src/types';
+import { OrderSideMap, OrderType, OrderTypeOptions } from 'src/types';
 import {
     MAX_COVERAGE,
     ZERO_BN,
@@ -227,51 +224,35 @@ export const AdvancedLendingOrderCard = ({
 
     return (
         <div className='h-fit rounded-b-xl border border-white-10 bg-cardBackground bg-opacity-60 pb-7'>
-            <RadioGroup
-                value={orderType}
-                onChange={(v: OrderType) => {
-                    dispatch(setOrderType(v));
+            <RadioGroupSelector
+                options={Object.values(OrderSideMap)}
+                selectedOption={OrderSideMap[side]}
+                handleClick={option => {
+                    dispatch(
+                        setSide(
+                            option === 'Borrow'
+                                ? OrderSide.BORROW
+                                : OrderSide.LEND
+                        )
+                    );
+                    dispatch(setSourceAccount(WalletSource.METAMASK));
                     dispatch(resetUnitPrice());
                 }}
-                as='div'
-                className='flex h-[60px] flex-row items-center justify-around'
-            >
-                <RadioGroup.Option
-                    value={OrderType.LIMIT}
-                    as='button'
-                    className={classNames('h-full', {
-                        'w-full': onlyLimitOrder,
-                        'w-1/2': !onlyLimitOrder,
-                    })}
-                >
-                    {({ checked }) => (
-                        <NavTab text={OrderType.LIMIT} active={checked} />
-                    )}
-                </RadioGroup.Option>
-                <RadioGroup.Option
-                    value={OrderType.MARKET}
-                    className={classNames('h-full', {
-                        hidden: onlyLimitOrder,
-                        'w-1/2': !onlyLimitOrder,
-                    })}
-                    as='button'
-                >
-                    {({ checked }) => (
-                        <NavTab text={OrderType.MARKET} active={checked} />
-                    )}
-                </RadioGroup.Option>
-            </RadioGroup>
+                variant='NavTab'
+            />
 
             <div className='flex w-full flex-col justify-center gap-6 px-4 pt-5'>
-                <BorrowLendSelector
-                    handleClick={side => {
-                        dispatch(setSide(side));
-                        dispatch(setSourceAccount(WalletSource.METAMASK));
-                        dispatch(resetUnitPrice());
-                    }}
-                    side={side}
-                    variant='advanced'
-                />
+                {!onlyLimitOrder && (
+                    <RadioGroupSelector
+                        options={OrderTypeOptions}
+                        selectedOption={orderType}
+                        handleClick={option => {
+                            dispatch(setOrderType(option as OrderType));
+                            dispatch(resetUnitPrice());
+                        }}
+                        variant='StyledButton'
+                    />
+                )}
                 {isConnected && side === OrderSide.LEND && (
                     <div className='space-y-1'>
                         <WalletSourceSelector
