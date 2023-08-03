@@ -35,7 +35,7 @@ const Template: StoryFn<typeof Tooltip> = args => (
 export const Default = Template.bind({});
 Default.play = async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    const button = await canvas.findByTestId('information-circle');
+    const button = canvas.getByTestId('information-circle');
     await userEvent.hover(button);
 };
 
@@ -46,7 +46,7 @@ WithIcon.args = {
 
 WithIcon.play = async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    const button = await canvas.findByTestId('button-icon');
+    const button = canvas.getByTestId('button-icon');
     await userEvent.hover(button);
 };
 
@@ -56,7 +56,7 @@ LeftAligned.args = {
 };
 LeftAligned.play = async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    const button = await canvas.findByTestId('information-circle');
+    const button = canvas.getByTestId('information-circle');
     await userEvent.hover(button);
 };
 
@@ -66,7 +66,7 @@ RightAligned.args = {
 };
 RightAligned.play = async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    const button = await canvas.findByTestId('information-circle');
+    const button = canvas.getByTestId('information-circle');
     await userEvent.hover(button);
 };
 
@@ -76,6 +76,6 @@ SmallWidth.args = {
 };
 SmallWidth.play = async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    const button = await canvas.findByTestId('information-circle');
+    const button = canvas.getByTestId('information-circle');
     await userEvent.hover(button);
 };

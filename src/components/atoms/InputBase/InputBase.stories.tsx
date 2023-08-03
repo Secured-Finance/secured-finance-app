@@ -47,7 +47,7 @@ LongInput.args = {
 };
 LongInput.play = async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    const input = await canvas.findByRole('textbox');
+    const input = canvas.getByRole('textbox');
     await userEvent.type(input, '123456789.123', {
         delay: 100,
     });

@@ -1,5 +1,5 @@
 import type { Meta, StoryFn } from '@storybook/react';
-import { userEvent, within } from '@storybook/testing-library';
+import { within } from '@storybook/testing-library';
 import { RESPONSIVE_PARAMETERS } from 'src/../.storybook/constants';
 import {
     withAppLayout,
@@ -56,8 +56,7 @@ ConnectedToWallet.parameters = {
 export const AdvancedView = Template.bind({});
 AdvancedView.play = async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    const advancedButton = await canvas.findByText('Advanced');
-    await userEvent.click(advancedButton);
+    canvas.getByText('Advanced').click();
 };
 
 export const MyOrders = Template.bind({});
@@ -67,8 +66,6 @@ MyOrders.parameters = {
 
 MyOrders.play = async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    const advancedButton = await canvas.findByText('Advanced');
-    await userEvent.click(advancedButton);
-    const myOrders = await canvas.findByTestId('My Orders');
-    await userEvent.click(myOrders);
+    canvas.getByText('Advanced').click();
+    canvas.getByTestId('My Orders').click();
 };

@@ -1,5 +1,5 @@
 import type { Meta, StoryFn } from '@storybook/react';
-import { userEvent, within } from '@storybook/testing-library';
+import { within } from '@storybook/testing-library';
 import { TableActionMenu } from './TableActionMenu';
 
 export default {
@@ -24,6 +24,6 @@ export const Default = Template.bind({});
 export const Open = Template.bind({});
 Open.play = async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    const actionMenu = await canvas.findByRole('button');
-    await userEvent.click(actionMenu);
+    const actionMenu = canvas.getByRole('button');
+    actionMenu.click();
 };

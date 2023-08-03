@@ -1,6 +1,6 @@
 import { RESPONSIVE_PARAMETERS, VIEWPORTS } from '.storybook/constants';
 import type { Meta, StoryFn } from '@storybook/react';
-import { userEvent, within } from '@storybook/testing-library';
+import { within } from '@storybook/testing-library';
 import { HamburgerMenu } from './HamburgerMenu';
 
 export default {
@@ -43,21 +43,15 @@ export const Default = Template.bind({});
 export const Expanded = Template.bind({});
 Expanded.play = async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    const hamburgerMenuButton = await canvas.findByRole('button', {
-        name: 'Hamburger Menu',
-    });
-    await userEvent.click(hamburgerMenuButton);
+    canvas.getByRole('button', { name: 'Hamburger Menu' }).click();
 };
 
 export const FullyExpanded = Template.bind({});
 FullyExpanded.play = async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    const hamburgerMenuButton = await canvas.findByRole('button', {
-        name: 'Hamburger Menu',
-    });
-    await userEvent.click(hamburgerMenuButton);
+    canvas.getByRole('button', { name: 'Hamburger Menu' }).click();
     const MoreButton = await canvas.findByRole('button', {
         name: 'Show More',
     });
-    await userEvent.click(MoreButton);
+    MoreButton.click();
 };
