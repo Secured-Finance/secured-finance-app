@@ -25,6 +25,8 @@ export default {
             maturityOptions[0].value.toNumber()
         ),
         lastTradeTime: 1643713200,
+        onAssetChange: () => {},
+        onTermChange: () => {},
     },
     parameters: {
         ...RESPONSIVE_PARAMETERS,

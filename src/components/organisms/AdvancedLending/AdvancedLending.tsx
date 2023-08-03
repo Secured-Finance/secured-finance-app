@@ -1,7 +1,7 @@
 import { toBytes32 } from '@secured-finance/sf-graph-client';
 import queries from '@secured-finance/sf-graph-client/dist/graphclients/';
 import { BigNumber } from 'ethers';
-import { useEffect, useMemo, useState, useCallback } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
     AdvancedLendingTopBar,
@@ -20,24 +20,24 @@ import { useOrderbook } from 'src/hooks/useOrderbook';
 import { getAssetPrice } from 'src/store/assetPrices/selectors';
 import { selectMarket } from 'src/store/availableContracts';
 import {
+    resetUnitPrice,
     selectLandingOrderForm,
+    setAmount,
     setCurrency,
     setMaturity,
-    setUnitPrice,
-    setAmount,
 } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
-import { MaturityOptionList, OrderType, TransactionList } from 'src/types';
+import { MaturityOptionList, TransactionList } from 'src/types';
 import {
     CurrencySymbol,
     Rate,
+    amountFormatterFromBase,
+    amountFormatterToBase,
     currencyMap,
     formatLoanValue,
     getCurrencyMapAsOptions,
     ordinaryFormat,
     usdFormat,
-    amountFormatterFromBase,
-    amountFormatterToBase,
 } from 'src/utils';
 import { LoanValue, Maturity } from 'src/utils/entities';
 import { useAccount } from 'wagmi';
@@ -76,17 +76,17 @@ const useTradeHistoryDetails = (
 
 export const AdvancedLending = ({
     collateralBook,
-    loanValue,
     maturitiesOptionList,
     rates,
+    marketPrice,
 }: {
     collateralBook: CollateralBook;
-    loanValue: LoanValue;
     maturitiesOptionList: MaturityOptionList;
     rates: Rate[];
+    marketPrice: number | undefined;
 }) => {
-    const { amount, currency, maturity, orderType } = useSelector(
-        (state: RootState) => selectLandingOrderForm(state.landingOrderForm)
+    const { amount, currency, maturity } = useSelector((state: RootState) =>
+        selectLandingOrderForm(state.landingOrderForm)
     );
 
     const currencyPrice = useSelector((state: RootState) =>
@@ -169,17 +169,18 @@ export const AdvancedLending = ({
             }
             dispatch(setAmount(formatTo(formatFrom(amount))));
             dispatch(setCurrency(v));
+            dispatch(resetUnitPrice());
         },
         [amount, currency, dispatch]
     );
 
-    useEffect(() => {
-        if (loanValue.price > 0 || orderType === OrderType.MARKET) {
-            dispatch(setUnitPrice(loanValue.price));
-        } else {
-            dispatch(setUnitPrice(undefined));
-        }
-    }, [dispatch, loanValue.price, orderType, currency, maturity]);
+    const handleTermChange = useCallback(
+        (v: string) => {
+            dispatch(setMaturity(Number(v)));
+            dispatch(resetUnitPrice());
+        },
+        [dispatch]
+    );
 
     return (
         <TwoColumnsWithTopBar
@@ -196,7 +197,7 @@ export const AdvancedLending = ({
                         value: selectedTerm.value.toString(),
                     }}
                     onAssetChange={handleCurrencyChange}
-                    onTermChange={v => dispatch(setMaturity(Number(v)))}
+                    onTermChange={handleTermChange}
                     lastTradeLoan={lastTransaction.value}
                     lastTradeTime={lastTransaction.createdAt}
                     values={[
@@ -211,7 +212,10 @@ export const AdvancedLending = ({
                 />
             }
         >
-            <AdvancedLendingOrderCard collateralBook={collateralBook} />
+            <AdvancedLendingOrderCard
+                collateralBook={collateralBook}
+                marketPrice={marketPrice}
+            />
             <div className='flex min-w-0 flex-grow flex-col gap-6'>
                 <Tab tabDataArray={[{ text: 'Yield Curve' }]}>
                     <LineChartTab

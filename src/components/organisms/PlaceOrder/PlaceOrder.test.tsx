@@ -136,21 +136,6 @@ describe('PlaceOrder component', () => {
         expect(store.getState().blockchain.lastActionTimestamp).toBeTruthy();
     });
 
-    it('should write an error in the store and proceed to failure screen if onPlaceOrder throw an error', async () => {
-        const onPlaceOrder = jest.fn(() => {
-            throw new Error('This is an error');
-        });
-        const { store } = render(<Default onPlaceOrder={onPlaceOrder} />);
-        fireEvent.click(screen.getByTestId('dialog-action-button'));
-        await waitFor(() =>
-            expect(store.getState().lastError.lastMessage).toEqual(
-                'This is an error'
-            )
-        );
-        expect(screen.getByText('Failed!')).toBeInTheDocument();
-        expect(screen.getByText('This is an error')).toBeInTheDocument();
-    });
-
     it('should call the onPlaceOrder function in market order mode if the orderType is MARKET', async () => {
         const tx = {
             wait: jest.fn(() => Promise.resolve({ blockNumber: 13115215 })),

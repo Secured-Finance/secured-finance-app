@@ -43,12 +43,12 @@ import { useAccount } from 'wagmi';
 
 export const LendingCard = ({
     collateralBook,
-    marketValue,
     maturitiesOptionList,
+    marketPrice,
 }: {
     collateralBook: CollateralBook;
-    marketValue: LoanValue;
     maturitiesOptionList: MaturityOptionList;
+    marketPrice: number | undefined;
 }) => {
     const { currency, maturity, side, sourceAccount, amount } = useSelector(
         (state: RootState) => selectLandingOrderForm(state.landingOrderForm)
@@ -124,6 +124,11 @@ export const LendingCard = ({
         currency,
         selectedWalletSource.source,
     ]);
+
+    const marketValue = useMemo(
+        () => LoanValue.fromPrice(marketPrice ?? 0, maturity),
+        [marketPrice, maturity]
+    );
 
     const handleCurrencyChange = useCallback(
         (v: CurrencySymbol) => {

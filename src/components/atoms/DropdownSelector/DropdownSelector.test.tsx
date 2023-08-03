@@ -55,19 +55,60 @@ describe('Dropdown Asset Selection Component', () => {
         expect(screen.getByRole('button')).toBeInTheDocument();
     });
 
-    it('should call onChange function when a dropdown item is selected with the value of the option', () => {
-        const onChange = jest.fn();
-        render(<AssetDropdown onChange={onChange} />);
-        fireEvent.click(screen.getByRole('button'));
-        fireEvent.click(screen.getByText('Ethereum'));
-        expect(onChange).toHaveBeenLastCalledWith('ETH');
-        expect(onChange).toHaveBeenCalledTimes(2);
-    });
+    describe('onChange behaviors', () => {
+        it('should call onChange function with the initial value', () => {
+            const onChange = jest.fn();
+            render(<AssetDropdown onChange={onChange} />);
+            expect(onChange).toHaveBeenLastCalledWith('WBTC');
+        });
 
-    it('should call onChange function with the initial value', () => {
-        const onChange = jest.fn();
-        render(<AssetDropdown onChange={onChange} />);
-        expect(onChange).toHaveBeenLastCalledWith('WBTC');
+        it('should call onChange function when a dropdown item is selected with the value of the option', () => {
+            const onChange = jest.fn();
+            render(<AssetDropdown onChange={onChange} />);
+            expect(onChange).toHaveBeenNthCalledWith(1, 'WBTC');
+            fireEvent.click(screen.getByRole('button'));
+            fireEvent.click(screen.getByText('Ethereum'));
+            expect(onChange).toHaveBeenNthCalledWith(2, 'ETH');
+            fireEvent.click(screen.getByRole('button'));
+            fireEvent.click(screen.getByText('WFIL'));
+            expect(onChange).toHaveBeenNthCalledWith(3, 'WFIL');
+            fireEvent.click(screen.getByRole('button'));
+            fireEvent.click(screen.getByText('Wrapped Bitcoin'));
+            expect(onChange).toHaveBeenNthCalledWith(4, 'WBTC');
+        });
+
+        it('should call onChange function only when the value is changed', () => {
+            const onChange = jest.fn();
+            render(<AssetDropdown onChange={onChange} />);
+            expect(onChange).toHaveBeenNthCalledWith(1, 'WBTC');
+            fireEvent.click(screen.getByRole('button'));
+            fireEvent.click(screen.getAllByText('Wrapped Bitcoin')[1]);
+            expect(onChange).toHaveBeenCalledTimes(1);
+        });
+
+        it('should not call onChange function when rerendering with the same selected value', () => {
+            const onChange = jest.fn();
+            const { rerender } = render(<AssetDropdown onChange={onChange} />);
+            expect(onChange).toHaveBeenCalledTimes(1);
+
+            rerender(<AssetDropdown onChange={onChange} />);
+            expect(onChange).toHaveBeenCalledTimes(1);
+        });
+
+        it('should call onChange function when rerendering with a different selected value', () => {
+            const onChange = jest.fn();
+            const { rerender } = render(<AssetDropdown onChange={onChange} />);
+            expect(onChange).toHaveBeenNthCalledWith(1, 'WBTC');
+
+            rerender(
+                <AssetDropdown
+                    onChange={onChange}
+                    selected={{ label: 'Ethereum', value: 'ETH' }}
+                />
+            );
+            expect(onChange).toHaveBeenNthCalledWith(2, 'ETH');
+            expect(onChange).toHaveBeenCalledTimes(2);
+        });
     });
 
     it('should render different button for variant nolabel', () => {
