@@ -19,7 +19,7 @@ export default {
 } as Meta<typeof WalletPopover>;
 
 const Template: StoryFn<typeof WalletPopover> = args => (
-    <div className='px-[100px]'>
+    <div className='flex justify-end'>
         <WalletPopover {...args} />
     </div>
 );
