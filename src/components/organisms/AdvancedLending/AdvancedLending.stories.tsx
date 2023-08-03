@@ -9,14 +9,10 @@ import type { Meta, StoryFn } from '@storybook/react';
 import { within } from '@storybook/testing-library';
 import {
     collateralBook80,
-    dec22Fixture,
     maturityOptions,
     yieldCurveRates,
 } from 'src/stories/mocks/fixtures';
 import { mockTrades } from 'src/stories/mocks/queries';
-import { Rate } from 'src/utils';
-import { LoanValue } from 'src/utils/entities';
-import timemachine from 'timemachine';
 import { AdvancedLending } from './AdvancedLending';
 
 export default {
@@ -24,9 +20,9 @@ export default {
     component: AdvancedLending,
     args: {
         collateralBook: collateralBook80,
-        loanValue: LoanValue.fromApr(new Rate(10000), dec22Fixture.toNumber()), // 1%
         maturitiesOptionList: maturityOptions,
         rates: yieldCurveRates,
+        marketPrice: 9917,
     },
     parameters: {
         apolloClient: {
@@ -47,9 +43,6 @@ export default {
 } as Meta<typeof AdvancedLending>;
 
 const Template: StoryFn<typeof AdvancedLending> = args => {
-    timemachine.config({
-        dateString: '2022-02-01T11:00:00.00Z',
-    });
     return <AdvancedLending {...args} />;
 };
 
