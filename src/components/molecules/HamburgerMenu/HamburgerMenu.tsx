@@ -129,7 +129,7 @@ export const HamburgerMenu = ({
                                                 }}
                                                 aria-label='Show More'
                                                 className={classNames(
-                                                    'flex h-16 w-full items-center justify-between px-9 py-4 text-center',
+                                                    'flex h-16 w-full items-center justify-between px-9 py-4 text-center focus:outline-none',
                                                     {
                                                         'border-l-4 border-starBlue bg-gradient-to-r from-[#6A76B159] via-[#4A5BAF1F] to-[#394DAE00] text-neutral-8':
                                                             active,

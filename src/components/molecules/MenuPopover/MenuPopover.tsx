@@ -10,13 +10,14 @@ import { LinkList } from 'src/utils';
 export const MenuPopover = ({}) => {
     return (
         <>
-            <div className='flex h-full w-fit items-center justify-center px-4'>
+            <div className='flex h-full items-center justify-center px-4'>
                 <Popover className='relative'>
                     {({}) => (
                         <>
                             <Popover.Button
+                                as='button'
                                 data-cy='popover-button'
-                                className='typography-nav-menu-default mt-1 flex h-4 flex-row items-center whitespace-nowrap text-planetaryPurple opacity-70 duration-300 focus:outline-none group-hover:opacity-100 group-hover:ease-in-out'
+                                className='typography-nav-menu-default mt-1 flex h-4 flex-row items-center whitespace-nowrap text-neutral-8 opacity-70 duration-300 focus-within:text-secondary7 focus-within:opacity-100 hover:text-secondary7 hover:opacity-100 hover:ease-in-out focus:outline-none'
                             >
                                 <p>More</p>
                                 <EllipsisHorizontalIcon className='ml-1 h-5 w-5' />
@@ -30,29 +31,26 @@ export const MenuPopover = ({}) => {
                                 leaveFrom='opacity-100 translate-y-0'
                                 leaveTo='opacity-0 translate-y-5'
                             >
-                                <Popover.Panel className='absolute z-10 mt-2 w-80'>
-                                    <div className='overflow-hidden rounded-lg shadow-sm'>
-                                        <div className='relative flex flex-col space-y-2 border border-black bg-gunMetal p-2 shadow-dropdown'>
-                                            {LinkList.map((link, index) => {
-                                                return (
-                                                    <div key={index}>
-                                                        <MenuItem
-                                                            text={link.text}
-                                                            icon={link.icon}
-                                                            link={link.href}
-                                                            badge={
-                                                                <ExternalIcon />
-                                                            }
-                                                        />
-                                                        {index !==
-                                                            LinkList.length -
-                                                                1 && (
+                                <Popover.Panel className='absolute -left-6 z-10 mt-5 w-56'>
+                                    <div className='relative flex flex-col overflow-hidden rounded-lg bg-gunMetal px-3 py-[14px] shadow-dropdown'>
+                                        {LinkList.map((link, index) => {
+                                            return (
+                                                <div key={index}>
+                                                    <MenuItem
+                                                        text={link.text}
+                                                        icon={link.icon}
+                                                        link={link.href}
+                                                        badge={<ExternalIcon />}
+                                                    />
+                                                    {index !==
+                                                        LinkList.length - 1 && (
+                                                        <div className='py-2'>
                                                             <Separator />
-                                                        )}
-                                                    </div>
-                                                );
-                                            })}
-                                        </div>
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            );
+                                        })}
                                     </div>
                                 </Popover.Panel>
                             </Transition>
@@ -64,6 +62,4 @@ export const MenuPopover = ({}) => {
     );
 };
 
-const ExternalIcon = () => (
-    <ArrowUpRightIcon className='mt-1.5 h-4 w-4 text-white' />
-);
+const ExternalIcon = () => <ArrowUpRightIcon className='h-4 w-4 text-white' />;
