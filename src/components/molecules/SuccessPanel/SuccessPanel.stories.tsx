@@ -28,7 +28,7 @@ WithTransactionHash.args = {
 
 WithTransactionHash.play = async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    const tooltip = await canvas.findByText('987654321123456789');
+    const tooltip = canvas.getByText('987654321123456789');
     await waitFor(async () => {
         await userEvent.hover(tooltip);
     });

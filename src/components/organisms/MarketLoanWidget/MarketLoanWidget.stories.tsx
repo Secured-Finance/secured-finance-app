@@ -1,6 +1,6 @@
 import { RESPONSIVE_PARAMETERS, VIEWPORTS } from '.storybook/constants';
 import type { Meta, StoryFn } from '@storybook/react';
-import { userEvent, within } from '@storybook/testing-library';
+import { within } from '@storybook/testing-library';
 import {
     preloadedLendingMarkets,
     wbtcBytes32,
@@ -54,8 +54,6 @@ export const Default = Template.bind({});
 export const ItayoseMarket = Template.bind({});
 ItayoseMarket.play = async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    const dec22Button = await canvas.findByRole('button', { name: 'DEC22' });
-    await userEvent.click(dec22Button);
-    const menuItem = await canvas.findByRole('menuitem', { name: 'JUN23' });
-    await userEvent.click(menuItem);
+    canvas.getByRole('button', { name: 'DEC22' }).click();
+    canvas.getByRole('menuitem', { name: 'JUN23' }).click();
 };
