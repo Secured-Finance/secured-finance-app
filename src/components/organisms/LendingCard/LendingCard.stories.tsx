@@ -31,16 +31,16 @@ export const Default = Template.bind({});
 export const Lend = Template.bind({});
 Lend.play = async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    const lendTab = canvas.getByText('Lend');
-    lendTab.click();
+    const lendTab = await canvas.findByText('Lend');
+    await userEvent.click(lendTab);
 };
 
 export const FailedAmountValidation = Template.bind({});
 FailedAmountValidation.play = async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    const lendTab = canvas.getByText('Lend');
-    lendTab.click();
-    const input = canvas.getByRole('textbox');
+    const lendTab = await canvas.findByText('Lend');
+    await userEvent.click(lendTab);
+    const input = await canvas.findByRole('textbox');
     await userEvent.type(input, '999999999', {
         delay: 100,
     });

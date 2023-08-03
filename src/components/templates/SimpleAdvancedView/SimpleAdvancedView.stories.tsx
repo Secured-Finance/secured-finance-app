@@ -1,5 +1,5 @@
 import type { Meta, StoryFn } from '@storybook/react';
-import { within } from '@storybook/testing-library';
+import { userEvent, within } from '@storybook/testing-library';
 import { RESPONSIVE_PARAMETERS } from 'src/../.storybook/constants';
 import { SimpleAdvancedView } from './SimpleAdvancedView';
 
@@ -29,5 +29,6 @@ export const Default = Template.bind({});
 export const Advanced = Template.bind({});
 Advanced.play = async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    canvas.getByText('Advanced').click();
+    const advancedButton = await canvas.findByText('Advanced');
+    await userEvent.click(advancedButton);
 };

@@ -1,6 +1,5 @@
 import type { Meta, StoryFn } from '@storybook/react';
-import { within } from '@storybook/testing-library';
-
+import { userEvent, within } from '@storybook/testing-library';
 import { withWalletProvider } from 'src/../.storybook/decorators';
 import { WalletPopover } from './WalletPopover';
 
@@ -27,8 +26,8 @@ const Template: StoryFn<typeof WalletPopover> = args => (
 
 export const Default = Template.bind({});
 export const Expanded = Template.bind({});
-Expanded.play = ({ canvasElement }) => {
+Expanded.play = async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    const walletButton = canvas.getByRole('button');
-    walletButton.click();
+    const walletButton = await canvas.findByRole('button');
+    await userEvent.click(walletButton);
 };

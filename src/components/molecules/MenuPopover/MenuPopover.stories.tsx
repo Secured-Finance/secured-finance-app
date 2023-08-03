@@ -1,5 +1,5 @@
 import type { Meta, StoryFn } from '@storybook/react';
-import { within } from '@storybook/testing-library';
+import { userEvent, within } from '@storybook/testing-library';
 import { MenuPopover } from './MenuPopover';
 
 export default {
@@ -20,8 +20,8 @@ const Template: StoryFn<typeof MenuPopover> = () => (
 
 export const Default = Template.bind({});
 export const Expanded = Template.bind({});
-Expanded.play = ({ canvasElement }) => {
+Expanded.play = async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    const menuButton = canvas.getByRole('button');
-    menuButton.click();
+    const menuButton = await canvas.findByRole('button');
+    await userEvent.click(menuButton);
 };
