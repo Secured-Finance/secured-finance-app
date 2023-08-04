@@ -74,6 +74,23 @@ export const LineChart = ({
 }: LineChartProps) => {
     const chartRef = useRef<ChartJS<'line'>>(null);
 
+    if (data.datasets.length > 0 && data.datasets[0].data.length > 0) {
+        const dataArray = data.datasets[0].data as number[];
+
+        if (dataArray.every(item => item === 0)) {
+            options = {
+                ...options,
+                scales: {
+                    ...options.scales,
+                    y: {
+                        display: false,
+                        beginAtZero: true,
+                    },
+                },
+            };
+        }
+    }
+
     const refinedDatasets = data.datasets.map(set => {
         if (defaultDatasets) {
             return {
