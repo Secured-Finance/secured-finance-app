@@ -13,7 +13,7 @@ export default {
 } as Meta<typeof MenuPopover>;
 
 const Template: StoryFn<typeof MenuPopover> = () => (
-    <div>
+    <div className='w-fit'>
         <MenuPopover />
     </div>
 );
