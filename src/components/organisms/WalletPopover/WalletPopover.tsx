@@ -93,8 +93,11 @@ export const WalletPopover = ({
                         data-cy='popover-button'
                         aria-label='Wallet Popover Button'
                         className={classNames(
-                            'flex items-center gap-x-3 rounded-xl bg-transparent px-4 py-3 ring-2 ring-white-20 hover:bg-white-10 hover:ring-white-10 focus:outline-none',
-                            { 'bg-white-10 ring-white-10': open }
+                            'flex items-center gap-x-3 rounded-xl bg-transparent px-4 py-3 ring-2 hover:bg-white-10 hover:ring-white-10 focus:outline-none',
+                            {
+                                'bg-white-10 ring-white-10': open,
+                                'ring-white-20': !open,
+                            }
                         )}
                     >
                         <span>
