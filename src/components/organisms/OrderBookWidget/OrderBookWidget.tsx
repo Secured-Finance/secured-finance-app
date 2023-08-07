@@ -7,8 +7,7 @@ import { useEffect, useMemo } from 'react';
 import { useDispatch } from 'react-redux';
 import { ColorBar, Spinner } from 'src/components/atoms';
 import { CoreTable, TableHeader } from 'src/components/molecules';
-import { useBreakpoint } from 'src/hooks';
-import { OrderBookEntry } from 'src/hooks/useOrderbook';
+import { OrderBookEntry, useBreakpoint, useOrderbook } from 'src/hooks';
 import { setMidPrice } from 'src/store/analytics';
 import {
     setAmount,
@@ -136,13 +135,11 @@ const AprCell = ({
 };
 
 export const OrderBookWidget = ({
-    buyOrders,
-    sellOrders,
+    orderbook,
     currency,
     hideMidPrice = false,
 }: {
-    buyOrders: Array<OrderBookEntry>;
-    sellOrders: Array<OrderBookEntry>;
+    orderbook: Pick<ReturnType<typeof useOrderbook>, 'data' | 'isFetching'>;
     currency: CurrencySymbol;
     hideMidPrice?: boolean;
 }) => {
@@ -156,6 +153,9 @@ export const OrderBookWidget = ({
         () => (isTabletOrMobile ? 'right' : 'left'),
         [isTabletOrMobile]
     );
+
+    const buyOrders = orderbook.data.borrowOrderbook;
+    const sellOrders = orderbook.data.lendOrderbook;
 
     const totalBuyAmount = useMemo(
         () =>
@@ -305,8 +305,6 @@ export const OrderBookWidget = ({
         return !rowData.amount.isZero();
     };
 
-    const isLoading = buyOrders.length === 0 || sellOrders.length === 0;
-
     return (
         <div className='grid w-full grid-cols-1 place-content-start gap-x-4 laptop:grid-cols-2'>
             <div className='row-start-2 laptop:col-span-2 laptop:row-start-1'>
@@ -328,7 +326,7 @@ export const OrderBookWidget = ({
                     </div>
                 )}
             </div>
-            {isLoading ? (
+            {orderbook.isFetching ? (
                 <div className='col-span-2 row-start-3 flex h-full w-full items-center justify-center pt-24'>
                     <Spinner />
                 </div>

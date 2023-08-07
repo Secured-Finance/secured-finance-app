@@ -28,7 +28,14 @@ describe('OrderBookWidget Component', () => {
     });
 
     it('should display 0 as the last mid price if any of the orders is empty', () => {
-        render(<Default buyOrders={[]} />);
+        render(
+            <Default
+                orderbook={{
+                    data: { borrowOrderbook: [], lendOrderbook: [] },
+                    isFetching: false,
+                }}
+            />
+        );
         expect(screen.getByTestId('last-mid-price')).toHaveTextContent('0');
     });
 

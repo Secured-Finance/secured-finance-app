@@ -227,8 +227,7 @@ export const Itayose = () => {
                     <HorizontalTab tabTitles={['Order Book', 'My Orders']}>
                         <OrderBookWidget
                             currency={currency}
-                            buyOrders={orderBook.borrowOrderbook}
-                            sellOrders={orderBook.lendOrderbook}
+                            orderbook={orderBook}
                             hideMidPrice
                         />
                         <OrderTable data={filteredOrderList} />
