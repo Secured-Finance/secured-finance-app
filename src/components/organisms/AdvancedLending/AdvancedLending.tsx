@@ -15,7 +15,12 @@ import {
     OrderTable,
 } from 'src/components/organisms';
 import { TwoColumnsWithTopBar } from 'src/components/templates';
-import { CollateralBook, useGraphClientHook, useOrderList } from 'src/hooks';
+import {
+    CollateralBook,
+    useCurrenciesForOrders,
+    useGraphClientHook,
+    useOrderList,
+} from 'src/hooks';
 import { useOrderbook } from 'src/hooks/useOrderbook';
 import { getAssetPrice } from 'src/store/assetPrices/selectors';
 import { selectMarket } from 'src/store/availableContracts';
@@ -116,7 +121,8 @@ export const AdvancedLending = ({
     );
 
     const orderBook = useOrderbook(currency, maturity, 10);
-    const orderList = useOrderList(address);
+    const { data: usedCurrencies } = useCurrenciesForOrders(address);
+    const { data: orderList } = useOrderList(address, usedCurrencies);
 
     const transactionHistory = useGraphClientHook(
         {

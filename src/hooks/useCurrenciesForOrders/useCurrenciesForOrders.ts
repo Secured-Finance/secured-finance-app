@@ -25,6 +25,6 @@ export const useCurrenciesForOrders = (account: string | undefined) => {
                     return convertedCurrency;
                 })
                 .filter((ccy): ccy is Currency => ccy !== null),
-        enabled: !!securedFinance || !!account,
+        enabled: !!securedFinance && !!account,
     });
 };
