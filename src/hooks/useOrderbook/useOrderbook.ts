@@ -1,8 +1,5 @@
-import { SecuredFinanceClient } from '@secured-finance/sf-client';
+import { useQuery } from '@tanstack/react-query';
 import { BigNumber } from 'ethers';
-import { useCallback, useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { RootState } from 'src/store/types';
 import { CurrencySymbol, toCurrency } from 'src/utils';
 import { LoanValue } from 'src/utils/entities';
 import useSF from '../useSecuredFinance';
@@ -69,77 +66,68 @@ const trimOrderbook = (orderBook: {
     };
 };
 
-const emptyOrderbook = {
-    lendOrderbook: [],
-    borrowOrderbook: [],
-};
-
 export const useOrderbook = (
     ccy: CurrencySymbol,
     maturity: number,
     limit: number = MAX_ORDERBOOK_LENGTH
 ) => {
     const securedFinance = useSF();
-    const { latestBlock, lastActionTimestamp } = useSelector(
-        (state: RootState) => state.blockchain
-    );
 
-    const [orderbook, setOrderbook] = useState<{
-        borrowOrderbook: OrderBook | [];
-        lendOrderbook: OrderBook | [];
-    }>(emptyOrderbook);
-
-    const fetchOrderbook = useCallback(
-        async (
-            securedFinance: SecuredFinanceClient,
-            ccy: CurrencySymbol,
-            maturity: number,
-            limit: number
-        ) => {
+    return useQuery({
+        queryKey: ['getOrderbook', ccy, maturity, limit],
+        queryFn: async () => {
             const currency = toCurrency(ccy);
-            const borrowOrderbook = transformOrderbook(
-                await securedFinance.getBorrowOrderBook(
-                    currency,
-                    maturity,
-                    limit
-                ),
+            const borrowOrderbook = await securedFinance?.getBorrowOrderBook(
+                currency,
                 maturity,
-                'asc'
+                limit
             );
 
-            const lendOrderbook = transformOrderbook(
-                await securedFinance.getLendOrderBook(
-                    currency,
-                    maturity,
-                    limit
-                ),
+            const lendOrderbook = await securedFinance?.getLendOrderBook(
+                currency,
                 maturity,
-                'desc'
+                limit
             );
 
-            setOrderbook(
-                trimOrderbook({
-                    lendOrderbook,
-                    borrowOrderbook,
-                })
-            );
+            return {
+                lendOrderbook: {
+                    unitPrices: lendOrderbook?.unitPrices ?? [],
+                    amounts: lendOrderbook?.amounts ?? [],
+                    quantities: lendOrderbook?.quantities ?? [],
+                },
+                borrowOrderbook: {
+                    unitPrices: borrowOrderbook?.unitPrices ?? [],
+                    amounts: borrowOrderbook?.amounts ?? [],
+                    quantities: borrowOrderbook?.quantities ?? [],
+                },
+            };
         },
-        []
-    );
-
-    useEffect(() => {
-        if (securedFinance && maturity) {
-            fetchOrderbook(securedFinance, ccy, maturity, limit);
-        }
-    }, [
-        fetchOrderbook,
-        securedFinance,
-        latestBlock,
-        lastActionTimestamp,
-        maturity,
-        ccy,
-        limit,
-    ]);
-
-    return orderbook;
+        initialData: {
+            borrowOrderbook: {
+                unitPrices: [],
+                amounts: [],
+                quantities: [],
+            },
+            lendOrderbook: {
+                unitPrices: [],
+                amounts: [],
+                quantities: [],
+            },
+        },
+        select: data => {
+            return trimOrderbook({
+                borrowOrderbook: transformOrderbook(
+                    data.borrowOrderbook,
+                    maturity,
+                    'asc'
+                ),
+                lendOrderbook: transformOrderbook(
+                    data.lendOrderbook,
+                    maturity,
+                    'desc'
+                ),
+            });
+        },
+        enabled: !!securedFinance,
+    });
 };

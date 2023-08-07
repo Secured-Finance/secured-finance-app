@@ -112,8 +112,17 @@ export default {
     title: 'Organism/OrderBookWidget',
     component: OrderBookWidget,
     args: {
-        buyOrders: borrowEntries.sort((a, b) => sortOrders(a, b, 'asc')),
-        sellOrders: lendEntries.sort((a, b) => sortOrders(a, b, 'desc')),
+        orderbook: {
+            data: {
+                borrowOrderbook: borrowEntries.sort((a, b) =>
+                    sortOrders(a, b, 'asc')
+                ),
+                lendOrderbook: lendEntries.sort((a, b) =>
+                    sortOrders(a, b, 'desc')
+                ),
+            },
+            isFetching: false,
+        },
         currency: CurrencySymbol.WFIL,
     },
     parameters: {
@@ -128,15 +137,25 @@ const Template: StoryFn<typeof OrderBookWidget> = args => (
 export const Default = Template.bind({});
 export const Bitcoin = Template.bind({});
 Bitcoin.args = {
-    buyOrders: [...btcEntries].sort((a, b) => sortOrders(a, b, 'asc')),
-    sellOrders: [...btcEntries].sort((a, b) => sortOrders(a, b, 'desc')),
+    orderbook: {
+        data: {
+            borrowOrderbook: btcEntries.sort((a, b) => sortOrders(a, b, 'asc')),
+            lendOrderbook: btcEntries.sort((a, b) => sortOrders(a, b, 'desc')),
+        },
+        isFetching: false,
+    },
     currency: CurrencySymbol.WBTC,
 };
 
 export const Eth = Template.bind({});
 Eth.args = {
-    buyOrders: [...ethEntries].sort((a, b) => sortOrders(a, b, 'asc')),
-    sellOrders: [...ethEntries].sort((a, b) => sortOrders(a, b, 'desc')),
+    orderbook: {
+        data: {
+            borrowOrderbook: ethEntries.sort((a, b) => sortOrders(a, b, 'asc')),
+            lendOrderbook: ethEntries.sort((a, b) => sortOrders(a, b, 'desc')),
+        },
+        isFetching: false,
+    },
     currency: CurrencySymbol.ETH,
 };
 
@@ -147,6 +166,11 @@ HideMidPrice.args = {
 
 export const Loading = Template.bind({});
 Loading.args = {
-    buyOrders: [],
-    sellOrders: [],
+    orderbook: {
+        data: {
+            borrowOrderbook: [],
+            lendOrderbook: [],
+        },
+        isFetching: true,
+    },
 };
