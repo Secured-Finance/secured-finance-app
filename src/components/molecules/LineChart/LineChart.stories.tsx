@@ -1,6 +1,5 @@
 import type { Meta, StoryFn } from '@storybook/react';
 import { maturityOptions } from 'src/stories/mocks/fixtures';
-
 import { options } from '../../molecules/LineChart/constants';
 import { LineChart } from './';
 
@@ -59,6 +58,28 @@ Loading.args = {
             {
                 label: 'Borrow',
                 data: [],
+            },
+        ],
+    },
+};
+
+export const ZeroCurve = Template.bind({});
+ZeroCurve.args = {
+    data: {
+        labels: [
+            'DEC22',
+            'MAR23',
+            'JUN23',
+            'SEP23',
+            'DEC23',
+            'MAR24',
+            'JUN24',
+            'SEP24',
+        ],
+        datasets: [
+            {
+                label: 'Borrow',
+                data: [0, 0, 0, 0, 0, 0, 0, 0],
             },
         ],
     },
