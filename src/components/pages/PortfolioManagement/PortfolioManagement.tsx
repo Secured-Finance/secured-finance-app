@@ -15,6 +15,7 @@ import {
 import { Page, TwoColumns } from 'src/components/templates';
 import {
     useCollateralBook,
+    useCurrenciesForOrders,
     useGraphClientHook,
     useOrderList,
     usePagination,
@@ -76,8 +77,9 @@ export const PortfolioManagement = () => {
         'user',
         selectedTable !== TableType.MY_TRANSACTIONS
     );
+    const { data: usedCurrencies } = useCurrenciesForOrders(address);
     const orderList = useOrderList(address);
-    const positions = usePositions(address);
+    const { data: positions } = usePositions(address, usedCurrencies);
 
     const paginatedTransactions = usePagination(
         userTransactionHistory.data?.transactions ?? []
