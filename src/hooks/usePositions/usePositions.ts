@@ -50,7 +50,7 @@ export const usePositions = (
                         ),
                     } as Position)
             ),
-        enabled: !!securedFinance || !!account || !!usedCurrencyKey,
+        enabled: !!securedFinance && !!account && !!usedCurrencyKey,
     });
 };
 

@@ -78,7 +78,7 @@ export const PortfolioManagement = () => {
         selectedTable !== TableType.MY_TRANSACTIONS
     );
     const { data: usedCurrencies } = useCurrenciesForOrders(address);
-    const orderList = useOrderList(address);
+    const { data: orderList } = useOrderList(address, usedCurrencies);
     const { data: positions } = usePositions(address, usedCurrencies);
 
     const paginatedTransactions = usePagination(
