@@ -8,7 +8,7 @@ export default {
     component: MenuItem,
     args: {
         text: 'Example',
-        icon: <SF className='h-6 w-6 rounded-full ' />,
+        icon: <SF className='h-5 w-5 rounded-full ' />,
         badge: <ArrowTopRightOnSquareIcon className='h-4 w-4 text-slateGray' />,
         link: 'https://secured.finance/',
     },
