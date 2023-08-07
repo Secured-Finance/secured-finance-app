@@ -2,6 +2,7 @@ import { Currency } from '@secured-finance/sf-core';
 import { useQuery } from '@tanstack/react-query';
 import { BigNumber } from 'ethers';
 import { useMemo } from 'react';
+import { QueryKeys } from 'src/hooks/queries';
 import useSF from 'src/hooks/useSecuredFinance';
 
 export type Position = {
@@ -27,7 +28,7 @@ export const usePositions = (
 
     return useQuery({
         // eslint-disable-next-line @tanstack/query/exhaustive-deps
-        queryKey: ['getPositions', account, usedCurrencyKey],
+        queryKey: [QueryKeys.POSITIONS, account, usedCurrencyKey],
         queryFn: async () => {
             const positions = await securedFinance?.getPositions(
                 account ?? '',

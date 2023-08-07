@@ -1,7 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
 import { BigNumber } from 'ethers';
+import { QueryKeys } from 'src/hooks/queries';
+import useSF from 'src/hooks/useSecuredFinance';
 import { CurrencySymbol, ZERO_BN } from 'src/utils';
-import useSF from '../useSecuredFinance';
 
 type ValueLockedBook = Record<CurrencySymbol, BigNumber>;
 
@@ -16,7 +17,7 @@ export const useTotalNumberOfAsset = () => {
     const securedFinance = useSF();
 
     return useQuery({
-        queryKey: ['getCurrencies'],
+        queryKey: [QueryKeys.CURRENCIES],
         queryFn: async () => {
             const currencies = await securedFinance?.getCurrencies();
             return currencies ?? [];
@@ -31,7 +32,7 @@ export const useValueLockedByCurrency = () => {
     const securedFinance = useSF();
 
     return useQuery({
-        queryKey: ['getProtocolDepositAmount'],
+        queryKey: [QueryKeys.PROTOCOL_DEPOSIT_AMOUNT],
         queryFn: async () => {
             const value = await securedFinance?.getProtocolDepositAmount();
             return (value as ValueLockedBook) ?? emptyValueLockedBook;
