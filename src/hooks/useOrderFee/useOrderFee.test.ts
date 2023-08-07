@@ -6,7 +6,6 @@ import { useOrderFee } from './useOrderFee';
 
 const mock = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mock);
-
 describe('useOrderFee hook', () => {
     it('should return the order fee for a currency', async () => {
         const { result, waitForNextUpdate } = renderHook(() =>
