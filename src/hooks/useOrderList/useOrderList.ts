@@ -2,6 +2,7 @@ import { Currency } from '@secured-finance/sf-core';
 import { useQuery } from '@tanstack/react-query';
 import { BigNumber } from 'ethers';
 import { useMemo } from 'react';
+import { QueryKeys } from 'src/hooks/queries';
 import useSF from 'src/hooks/useSecuredFinance';
 
 export type Order = {
@@ -40,7 +41,7 @@ export const useOrderList = (
 
     return useQuery({
         // eslint-disable-next-line @tanstack/query/exhaustive-deps
-        queryKey: ['getOrderList', account, usedCurrencyKey],
+        queryKey: [QueryKeys.ORDER_LIST, account, usedCurrencyKey],
         queryFn: async () => {
             const orders = await securedFinance?.getOrderList(
                 account ?? '',

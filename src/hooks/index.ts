@@ -1,3 +1,4 @@
+export * from './queries';
 export * from './useBreakpoint';
 export * from './useCollateralBook';
 export * from './useCurrenciesForOrders';
