@@ -3,14 +3,14 @@ import { useQuery } from '@tanstack/react-query';
 import useSF from 'src/hooks/useSecuredFinance';
 import { hexToCurrencySymbol, toCurrency } from 'src/utils';
 
-export const useCurrenciesForOrders = (account: string) => {
+export const useCurrenciesForOrders = (account: string | undefined) => {
     const securedFinance = useSF();
 
     return useQuery({
         queryKey: ['getUsedCurrenciesForOrders', account],
         queryFn: async () => {
             const currencies = await securedFinance?.getUsedCurrenciesForOrders(
-                account
+                account ?? ''
             );
             return currencies ?? [];
         },
@@ -25,6 +25,6 @@ export const useCurrenciesForOrders = (account: string) => {
                     return convertedCurrency;
                 })
                 .filter((ccy): ccy is Currency => ccy !== null),
-        enabled: !!securedFinance,
+        enabled: !!securedFinance || !!account,
     });
 };
