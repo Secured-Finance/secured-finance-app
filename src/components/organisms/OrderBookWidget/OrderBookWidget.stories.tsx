@@ -114,10 +114,10 @@ export default {
     args: {
         orderbook: {
             data: {
-                borrowOrderbook: borrowEntries.sort((a, b) =>
+                borrowOrderbook: [...borrowEntries].sort((a, b) =>
                     sortOrders(a, b, 'asc')
                 ),
-                lendOrderbook: lendEntries.sort((a, b) =>
+                lendOrderbook: [...lendEntries].sort((a, b) =>
                     sortOrders(a, b, 'desc')
                 ),
             },
@@ -139,8 +139,12 @@ export const Bitcoin = Template.bind({});
 Bitcoin.args = {
     orderbook: {
         data: {
-            borrowOrderbook: btcEntries.sort((a, b) => sortOrders(a, b, 'asc')),
-            lendOrderbook: btcEntries.sort((a, b) => sortOrders(a, b, 'desc')),
+            borrowOrderbook: [...btcEntries].sort((a, b) =>
+                sortOrders(a, b, 'asc')
+            ),
+            lendOrderbook: [...btcEntries].sort((a, b) =>
+                sortOrders(a, b, 'desc')
+            ),
         },
         isFetching: false,
     },
@@ -151,8 +155,12 @@ export const Eth = Template.bind({});
 Eth.args = {
     orderbook: {
         data: {
-            borrowOrderbook: ethEntries.sort((a, b) => sortOrders(a, b, 'asc')),
-            lendOrderbook: ethEntries.sort((a, b) => sortOrders(a, b, 'desc')),
+            borrowOrderbook: [...ethEntries].sort((a, b) =>
+                sortOrders(a, b, 'asc')
+            ),
+            lendOrderbook: [...ethEntries].sort((a, b) =>
+                sortOrders(a, b, 'desc')
+            ),
         },
         isFetching: false,
     },

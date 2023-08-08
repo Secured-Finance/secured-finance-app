@@ -14,10 +14,7 @@ describe('useOrderbook', () => {
             useOrderbook(CurrencySymbol.ETH, maturity, 5)
         );
 
-        expect(result.current.data).toEqual({
-            borrowOrderbook: [],
-            lendOrderbook: [],
-        });
+        expect(result.current.data).toBeUndefined();
 
         await waitForNextUpdate();
 
@@ -82,10 +79,7 @@ describe('useOrderbook', () => {
             useOrderbook(CurrencySymbol.ETH, maturity)
         );
 
-        expect(result.current.data).toEqual({
-            borrowOrderbook: [],
-            lendOrderbook: [],
-        });
+        expect(result.current.data).toBeUndefined();
 
         await waitForNextUpdate();
 
@@ -106,10 +100,7 @@ describe('useOrderbook', () => {
             useOrderbook(CurrencySymbol.ETH, maturity)
         );
 
-        expect(result.current.data).toEqual({
-            borrowOrderbook: [],
-            lendOrderbook: [],
-        });
+        expect(result.current.data).toBeUndefined();
 
         await waitForNextUpdate();
 
