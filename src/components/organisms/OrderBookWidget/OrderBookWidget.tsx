@@ -139,7 +139,7 @@ export const OrderBookWidget = ({
     currency,
     hideMidPrice = false,
 }: {
-    orderbook: Pick<ReturnType<typeof useOrderbook>, 'data' | 'isFetching'>;
+    orderbook: Pick<ReturnType<typeof useOrderbook>, 'data' | 'isLoading'>;
     currency: CurrencySymbol;
     hideMidPrice?: boolean;
 }) => {
@@ -333,7 +333,7 @@ export const OrderBookWidget = ({
                     </div>
                 )}
             </div>
-            {orderbook.isFetching ? (
+            {orderbook.isLoading ? (
                 <div className='col-span-2 row-start-3 flex h-full w-full items-center justify-center pt-24'>
                     <Spinner />
                 </div>
