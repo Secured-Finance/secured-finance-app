@@ -154,8 +154,15 @@ export const OrderBookWidget = ({
         [isTabletOrMobile]
     );
 
-    const buyOrders = orderbook.data.borrowOrderbook;
-    const sellOrders = orderbook.data.lendOrderbook;
+    const buyOrders = useMemo(
+        () => orderbook.data?.borrowOrderbook ?? [],
+        [orderbook.data?.borrowOrderbook]
+    );
+
+    const sellOrders = useMemo(
+        () => orderbook.data?.lendOrderbook ?? [],
+        [orderbook.data?.lendOrderbook]
+    );
 
     const totalBuyAmount = useMemo(
         () =>

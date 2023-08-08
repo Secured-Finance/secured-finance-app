@@ -77,17 +77,10 @@ export const useOrderbook = (
         queryKey: ['getOrderbook', ccy, maturity, limit],
         queryFn: async () => {
             const currency = toCurrency(ccy);
-            const borrowOrderbook = await securedFinance?.getBorrowOrderBook(
-                currency,
-                maturity,
-                limit
-            );
-
-            const lendOrderbook = await securedFinance?.getLendOrderBook(
-                currency,
-                maturity,
-                limit
-            );
+            const [borrowOrderbook, lendOrderbook] = await Promise.all([
+                securedFinance?.getBorrowOrderBook(currency, maturity, limit),
+                securedFinance?.getLendOrderBook(currency, maturity, limit),
+            ]);
 
             return {
                 lendOrderbook: {
@@ -101,18 +94,6 @@ export const useOrderbook = (
                     quantities: borrowOrderbook?.quantities ?? [],
                 },
             };
-        },
-        initialData: {
-            borrowOrderbook: {
-                unitPrices: [],
-                amounts: [],
-                quantities: [],
-            },
-            lendOrderbook: {
-                unitPrices: [],
-                amounts: [],
-                quantities: [],
-            },
         },
         select: data => {
             return trimOrderbook({
