@@ -19,6 +19,7 @@ import {
 import { Page } from 'src/components/templates';
 import { TwoColumnsWithTopBar } from 'src/components/templates/TwoColumnsWithTopBar';
 import {
+    emptyOrderList,
     useCollateralBook,
     useCurrenciesForOrders,
     useMaturityOptions,
@@ -134,8 +135,11 @@ export const Itayose = () => {
     }, [currency, assetList]);
 
     const orderBook = useOrderbook(currency, maturity);
-    const { data: usedCurrencies } = useCurrenciesForOrders(address);
-    const { data: orderList } = useOrderList(address, usedCurrencies);
+    const { data: usedCurrencies = [] } = useCurrenciesForOrders(address);
+    const { data: orderList = emptyOrderList } = useOrderList(
+        address,
+        usedCurrencies
+    );
     const collateralBook = useCollateralBook(address);
 
     const filteredOrderList = useMemo(() => {

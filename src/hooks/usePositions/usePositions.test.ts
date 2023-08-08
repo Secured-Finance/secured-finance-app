@@ -20,8 +20,8 @@ describe('usePositions', () => {
         );
 
         const value = result.current;
-        expect(value.data).toEqual([]);
-        expect(value.isFetching).toEqual(true);
+        expect(value.data).toEqual(undefined);
+        expect(value.isLoading).toEqual(true);
 
         await waitForNextUpdate();
         expect(mock.getPositions).toHaveBeenCalledTimes(1);
@@ -32,7 +32,7 @@ describe('usePositions', () => {
         expect(newValue.data[1].currency).toBe(ethBytes32);
         expect(newValue.data[2].currency).toBe(wfilBytes32);
         expect(newValue.data[3].currency).toBe(wfilBytes32);
-        expect(newValue.isFetching).toEqual(false);
+        expect(newValue.isLoading).toEqual(false);
     });
 
     it('positions should have midPrice', async () => {

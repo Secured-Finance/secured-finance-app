@@ -15,7 +15,6 @@ export const useCurrenciesForOrders = (account: string | undefined) => {
             );
             return currencies ?? [];
         },
-        initialData: [],
         select: currencies =>
             currencies
                 .map(ccy => {

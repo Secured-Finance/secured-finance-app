@@ -17,6 +17,7 @@ import {
 import { TwoColumnsWithTopBar } from 'src/components/templates';
 import {
     CollateralBook,
+    emptyOrderList,
     useCurrenciesForOrders,
     useGraphClientHook,
     useOrderList,
@@ -121,8 +122,11 @@ export const AdvancedLending = ({
     );
 
     const orderBook = useOrderbook(currency, maturity, 10);
-    const { data: usedCurrencies } = useCurrenciesForOrders(address);
-    const { data: orderList } = useOrderList(address, usedCurrencies);
+    const { data: usedCurrencies = [] } = useCurrenciesForOrders(address);
+    const { data: orderList = emptyOrderList } = useOrderList(
+        address,
+        usedCurrencies
+    );
 
     const transactionHistory = useGraphClientHook(
         {

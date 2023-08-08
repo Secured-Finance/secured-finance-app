@@ -36,7 +36,6 @@ export const usePositions = (
             );
             return positions ?? [];
         },
-        initialData: [],
         select: positions =>
             positions.map(
                 position =>

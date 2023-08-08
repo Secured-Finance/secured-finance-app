@@ -12,8 +12,8 @@ describe('useCurrenciesForOrders', () => {
             useCurrenciesForOrders('0x1')
         );
         const value = result.current;
-        expect(value.data).toEqual([]);
-        expect(value.isFetching).toEqual(true);
+        expect(value.data).toEqual(undefined);
+        expect(value.isLoading).toEqual(true);
 
         await waitForNextUpdate();
 
@@ -23,6 +23,6 @@ describe('useCurrenciesForOrders', () => {
         expect(newValue.data[0]).toEqual(toCurrency(CurrencySymbol.ETH));
         expect(newValue.data[1]).toEqual(toCurrency(CurrencySymbol.WFIL));
 
-        expect(newValue.isFetching).toEqual(false);
+        expect(newValue.isLoading).toEqual(false);
     });
 });
