@@ -14,6 +14,7 @@ import {
 } from 'src/components/organisms';
 import { Page, TwoColumns } from 'src/components/templates';
 import {
+    emptyOrderList,
     useCollateralBook,
     useCurrenciesForOrders,
     useGraphClientHook,
@@ -77,9 +78,12 @@ export const PortfolioManagement = () => {
         'user',
         selectedTable !== TableType.MY_TRANSACTIONS
     );
-    const { data: usedCurrencies } = useCurrenciesForOrders(address);
-    const { data: orderList } = useOrderList(address, usedCurrencies);
-    const { data: positions } = usePositions(address, usedCurrencies);
+    const { data: usedCurrencies = [] } = useCurrenciesForOrders(address);
+    const { data: orderList = emptyOrderList } = useOrderList(
+        address,
+        usedCurrencies
+    );
+    const { data: positions = [] } = usePositions(address, usedCurrencies);
 
     const paginatedTransactions = usePagination(
         userTransactionHistory.data?.transactions ?? []

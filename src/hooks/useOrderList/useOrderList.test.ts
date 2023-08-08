@@ -16,11 +16,8 @@ describe('useOrderList', () => {
         );
 
         const value = result.current;
-        expect(value.data).toEqual({
-            activeOrderList: [],
-            inactiveOrderList: [],
-        });
-        expect(value.isFetching).toEqual(true);
+        expect(value.data).toEqual(undefined);
+        expect(value.isLoading).toEqual(true);
 
         await waitForNextUpdate();
         expect(mock.getOrderList).toHaveBeenCalledTimes(1);
@@ -38,6 +35,6 @@ describe('useOrderList', () => {
         expect(newValue.data.inactiveOrderList.length).toBe(2);
         expect(newValue.data.inactiveOrderList[0].currency).toBe(ethBytes32);
         expect(newValue.data.inactiveOrderList[1].currency).toBe(wfilBytes32);
-        expect(newValue.isFetching).toEqual(false);
+        expect(newValue.isLoading).toEqual(false);
     });
 });

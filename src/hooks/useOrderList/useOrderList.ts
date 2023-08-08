@@ -17,9 +17,9 @@ export type Order = {
 
 export type OrderList = Array<Order>;
 
-const emptyOrderList = {
-    activeOrders: [],
-    inactiveOrders: [],
+export const emptyOrderList = {
+    activeOrderList: [],
+    inactiveOrderList: [],
 };
 
 const sortOrders = (a: Order, b: Order) => {
@@ -47,9 +47,13 @@ export const useOrderList = (
                 account ?? '',
                 usedCurrencies
             );
-            return orders ?? emptyOrderList;
+            return (
+                orders ?? {
+                    activeOrders: [],
+                    inactiveOrders: [],
+                }
+            );
         },
-        initialData: emptyOrderList,
         select: orderList => {
             return {
                 activeOrderList: orderList.activeOrders
