@@ -32,7 +32,7 @@ describe('OrderBookWidget Component', () => {
             <Default
                 orderbook={{
                     data: { borrowOrderbook: [], lendOrderbook: [] },
-                    isFetching: false,
+                    isLoading: false,
                 }}
             />
         );
