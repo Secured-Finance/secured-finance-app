@@ -1,4 +1,3 @@
-import { ArrowUpIcon } from '@heroicons/react/24/outline';
 import { OrderSide, WalletSource } from '@secured-finance/sf-client';
 import { createColumnHelper } from '@tanstack/react-table';
 import classNames from 'classnames';
@@ -54,7 +53,7 @@ const AmountCell = ({
     value: BigNumber;
     currency: CurrencySymbol;
 }) => (
-    <div className='flex justify-end pr-[25%]'>
+    <div className='typography-caption-2 flex justify-end pr-[25%] text-neutral-6'>
         {value.eq(0) ? (
             <OrderBookCell />
         ) : (
@@ -87,7 +86,7 @@ const PriceCell = ({
     return (
         <div
             className={classNames(
-                'relative flex items-center overflow-visible',
+                'typography-caption-2 relative flex items-center overflow-visible font-bold text-neutral-6',
                 {
                     'justify-start': align === 'left',
                     'justify-end': align === 'right',
@@ -120,7 +119,7 @@ const AprCell = ({
 }) => {
     return (
         <div
-            className={classNames('flex', {
+            className={classNames('typography-caption-2 flex', {
                 'justify-start': align === 'left',
                 'justify-end': align === 'right',
             })}
@@ -294,18 +293,15 @@ export const OrderBookWidget = ({
         <div className='grid w-full grid-cols-1 place-content-start gap-x-4 px-2'>
             <div className='row-start-2'>
                 {!hideMidPrice && (
-                    <div className='flex h-14 flex-row items-center justify-center gap-4 border-b border-white-10 bg-black-20'>
-                        <div className='flex flex-row items-center gap-1'>
-                            <ArrowUpIcon className='flex h-3 text-teal' />
-                            <span
-                                className='typography-portfolio-heading font-semibold text-teal'
-                                data-testid='last-mid-price'
-                            >
-                                {formatLoanValue(lastMidValue, 'price')}
-                            </span>
-                        </div>
+                    <div className='typography-portfolio-heading flex h-14 flex-row items-center justify-between gap-4'>
+                        <span
+                            className='px-4 font-semibold text-white'
+                            data-testid='last-mid-price'
+                        >
+                            {formatLoanValue(lastMidValue, 'price')}
+                        </span>
 
-                        <span className='typography-portfolio-heading font-normal text-slateGray'>
+                        <span className='px-4 font-normal text-slateGray'>
                             {formatLoanValue(lastMidValue, 'rate')}
                         </span>
                     </div>
@@ -337,6 +333,7 @@ export const OrderBookWidget = ({
                             border: false,
                             onLineClick: handleBuyOrdersClick,
                             hoverRow: handleBuyOrdersHoverRow,
+                            showHeaders: false,
                         }}
                     />
                 </>

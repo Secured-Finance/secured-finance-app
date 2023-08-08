@@ -130,4 +130,11 @@ describe('CoreTable Component', () => {
             expect(screen.getAllByTestId('core-table-row')).toHaveLength(20);
         });
     });
+
+    it('should not show the headers if showHeaders is false', () => {
+        render(<Default options={{ showHeaders: false }} />);
+        expect(
+            screen.queryByTestId('core-table-header')
+        ).not.toBeInTheDocument();
+    });
 });
