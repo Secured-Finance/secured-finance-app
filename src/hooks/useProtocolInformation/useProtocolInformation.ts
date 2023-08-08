@@ -22,7 +22,6 @@ export const useTotalNumberOfAsset = () => {
             const currencies = await securedFinance?.getCurrencies();
             return currencies ?? [];
         },
-        initialData: [],
         select: currencies => currencies.length,
         enabled: !!securedFinance,
     });
@@ -37,7 +36,6 @@ export const useValueLockedByCurrency = () => {
             const value = await securedFinance?.getProtocolDepositAmount();
             return (value as ValueLockedBook) ?? emptyValueLockedBook;
         },
-        initialData: emptyValueLockedBook,
         enabled: !!securedFinance,
     });
 };
