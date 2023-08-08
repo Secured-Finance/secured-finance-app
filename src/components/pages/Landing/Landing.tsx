@@ -92,7 +92,6 @@ export const Landing = ({ view }: { view?: ViewType }) => {
             advanceComponent={
                 <AdvancedLending
                     collateralBook={collateralBook}
-                    rates={Array.from(unitPrices.values()).map(v => v.apr)}
                     maturitiesOptionList={maturityOptionList}
                     marketPrice={marketPrice}
                 />

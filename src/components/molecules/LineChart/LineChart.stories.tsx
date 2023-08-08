@@ -1,6 +1,7 @@
 import type { Meta, StoryFn } from '@storybook/react';
+import { ScriptableContext } from 'chart.js';
 import { maturityOptions } from 'src/stories/mocks/fixtures';
-import { options } from '../../molecules/LineChart/constants';
+import { getCurveGradient, options } from '../../molecules/LineChart/constants';
 import { LineChart } from './';
 
 export default {
@@ -23,6 +24,12 @@ export default {
                 {
                     label: 'Borrow',
                     data: [50, 34, 27.37, 22.29, 18, 14.22, 10.81, 8.2],
+                    segment: {
+                        borderColor: ctx =>
+                            getCurveGradient(
+                                ctx as unknown as ScriptableContext<'line'>
+                            ),
+                    },
                 },
             ],
         },
@@ -80,6 +87,12 @@ ZeroCurve.args = {
             {
                 label: 'Borrow',
                 data: [0, 0, 0, 0, 0, 0, 0, 0],
+                segment: {
+                    borderColor: ctx =>
+                        getCurveGradient(
+                            ctx as unknown as ScriptableContext<'line'>
+                        ),
+                },
             },
         ],
     },

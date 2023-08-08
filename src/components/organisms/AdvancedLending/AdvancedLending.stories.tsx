@@ -7,11 +7,7 @@ import {
 } from '.storybook/decorators';
 import type { Meta, StoryFn } from '@storybook/react';
 import { within } from '@storybook/testing-library';
-import {
-    collateralBook80,
-    maturityOptions,
-    yieldCurveRates,
-} from 'src/stories/mocks/fixtures';
+import { collateralBook80, maturityOptions } from 'src/stories/mocks/fixtures';
 import { mockTrades } from 'src/stories/mocks/queries';
 import { AdvancedLending } from './AdvancedLending';
 
@@ -21,7 +17,6 @@ export default {
     args: {
         collateralBook: collateralBook80,
         maturitiesOptionList: maturityOptions,
-        rates: yieldCurveRates,
         marketPrice: 9917,
     },
     parameters: {
