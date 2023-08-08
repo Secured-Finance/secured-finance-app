@@ -10,14 +10,14 @@ import {
 import {
     HorizontalAssetSelector,
     HorizontalTab,
+    Tab,
 } from 'src/components/molecules';
 import {
     AdvancedLendingOrderCard,
     OrderBookWidget,
     OrderTable,
 } from 'src/components/organisms';
-import { Page } from 'src/components/templates';
-import { TwoColumnsWithTopBar } from 'src/components/templates/TwoColumnsWithTopBar';
+import { Page, ThreeColumnsWithTopBar } from 'src/components/templates';
 import { useCollateralBook, useMaturityOptions, useOrderList } from 'src/hooks';
 import { useOrderbook } from 'src/hooks/useOrderbook';
 import { getAssetPrice } from 'src/store/assetPrices/selectors';
@@ -159,7 +159,7 @@ export const Itayose = () => {
 
     return (
         <Page title='Pre-Open Order Book'>
-            <TwoColumnsWithTopBar
+            <ThreeColumnsWithTopBar
                 topBar={
                     <Toolbar
                         date={
@@ -194,12 +194,17 @@ export const Itayose = () => {
                     />
                 }
             >
-                <div>
-                    <AdvancedLendingOrderCard
-                        collateralBook={collateralBook}
-                        onlyLimitOrder
+                <AdvancedLendingOrderCard
+                    collateralBook={collateralBook}
+                    onlyLimitOrder
+                />
+                <Tab tabDataArray={[{ text: 'Order Book' }]}>
+                    <OrderBookWidget
+                        currency={currency}
+                        orderbook={orderBook}
+                        hideMidPrice
                     />
-                </div>
+                </Tab>
                 <div className='flex flex-col gap-4'>
                     <GradientBox variant='high-contrast'>
                         <div className='px-3'>
@@ -224,16 +229,11 @@ export const Itayose = () => {
                             </p>
                         </div>
                     </GradientBox>
-                    <HorizontalTab tabTitles={['Order Book', 'My Orders']}>
-                        <OrderBookWidget
-                            currency={currency}
-                            orderbook={orderBook}
-                            hideMidPrice
-                        />
+                    <HorizontalTab tabTitles={['My Orders']}>
                         <OrderTable data={filteredOrderList} />
                     </HorizontalTab>
                 </div>
-            </TwoColumnsWithTopBar>
+            </ThreeColumnsWithTopBar>
         </Page>
     );
 };
