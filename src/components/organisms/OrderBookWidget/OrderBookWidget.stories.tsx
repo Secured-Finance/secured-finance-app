@@ -121,7 +121,7 @@ export default {
                     sortOrders(a, b, 'desc')
                 ),
             },
-            isFetching: false,
+            isLoading: false,
         },
         currency: CurrencySymbol.WFIL,
     },
@@ -146,7 +146,7 @@ Bitcoin.args = {
                 sortOrders(a, b, 'desc')
             ),
         },
-        isFetching: false,
+        isLoading: false,
     },
     currency: CurrencySymbol.WBTC,
 };
@@ -162,7 +162,7 @@ Eth.args = {
                 sortOrders(a, b, 'desc')
             ),
         },
-        isFetching: false,
+        isLoading: false,
     },
     currency: CurrencySymbol.ETH,
 };
@@ -179,6 +179,6 @@ Loading.args = {
             borrowOrderbook: [],
             lendOrderbook: [],
         },
-        isFetching: true,
+        isLoading: true,
     },
 };
