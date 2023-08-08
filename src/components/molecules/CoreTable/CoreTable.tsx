@@ -21,6 +21,7 @@ type CoreTableOptions = {
     responsive: boolean;
     stickyColumns?: Set<number>;
     pagination?: Pagination;
+    showHeaders?: boolean;
 };
 
 const DEFAULT_OPTIONS: CoreTableOptions = {
@@ -30,6 +31,7 @@ const DEFAULT_OPTIONS: CoreTableOptions = {
     hoverRow: undefined,
     hideColumnIds: undefined,
     responsive: true,
+    showHeaders: true,
 };
 
 export const CoreTable = <T,>({
@@ -109,43 +111,52 @@ export const CoreTable = <T,>({
             })}
             data-testid={coreTableOptions.name}
         >
-            <thead className='typography-caption-2 h-14 border-b border-white-10 px-6 py-4 text-slateGray'>
-                {table.getHeaderGroups().map(headerGroup => (
-                    <tr
-                        key={headerGroup.id}
-                        data-testid={`${coreTableOptions.name}-header`}
-                    >
-                        {headerGroup.headers.map((header, columnIndex) => (
-                            <th
-                                data-testid={`${coreTableOptions.name}-header-cell`}
-                                key={header.id}
-                                className={classNames(
-                                    'whitespace-nowrap py-2 pr-1 text-center font-bold tablet:px-1',
-                                    {
-                                        'sticky z-10 bg-gunMetal/100 tablet:relative tablet:bg-transparent':
-                                            coreTableOptions.responsive &&
-                                            coreTableOptions?.stickyColumns?.has(
-                                                columnIndex
-                                            ),
-                                        [stickyClass[columnIndex]]:
-                                            coreTableOptions.responsive &&
-                                            coreTableOptions.stickyColumns?.has(
-                                                columnIndex
-                                            ),
-                                    }
-                                )}
-                            >
-                                {header.isPlaceholder
-                                    ? null
-                                    : flexRender(
-                                          header.column.columnDef.header,
-                                          header.getContext()
-                                      )}
-                            </th>
-                        ))}
-                    </tr>
-                ))}
-            </thead>
+            {coreTableOptions.showHeaders ? (
+                <thead
+                    className={classNames(
+                        'typography-caption-2 h-14 px-6 py-4 text-slateGray',
+                        {
+                            'border-b border-white-10': coreTableOptions.border,
+                        }
+                    )}
+                >
+                    {table.getHeaderGroups().map(headerGroup => (
+                        <tr
+                            key={headerGroup.id}
+                            data-testid={`${coreTableOptions.name}-header`}
+                        >
+                            {headerGroup.headers.map((header, columnIndex) => (
+                                <th
+                                    data-testid={`${coreTableOptions.name}-header-cell`}
+                                    key={header.id}
+                                    className={classNames(
+                                        'whitespace-nowrap py-2 pr-1 text-center font-bold tablet:px-1',
+                                        {
+                                            'sticky z-10 bg-gunMetal/100 tablet:relative tablet:bg-transparent':
+                                                coreTableOptions.responsive &&
+                                                coreTableOptions?.stickyColumns?.has(
+                                                    columnIndex
+                                                ),
+                                            [stickyClass[columnIndex]]:
+                                                coreTableOptions.responsive &&
+                                                coreTableOptions.stickyColumns?.has(
+                                                    columnIndex
+                                                ),
+                                        }
+                                    )}
+                                >
+                                    {header.isPlaceholder
+                                        ? null
+                                        : flexRender(
+                                              header.column.columnDef.header,
+                                              header.getContext()
+                                          )}
+                                </th>
+                            ))}
+                        </tr>
+                    ))}
+                </thead>
+            ) : null}
 
             <tbody>
                 {table.getRowModel().rows.map(row => (
