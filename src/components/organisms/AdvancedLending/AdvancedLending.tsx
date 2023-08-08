@@ -14,7 +14,7 @@ import {
     OrderBookWidget,
     OrderTable,
 } from 'src/components/organisms';
-import { TwoColumnsWithTopBar } from 'src/components/templates';
+import { ThreeColumnsWithTopBar } from 'src/components/templates';
 import { CollateralBook, useGraphClientHook, useOrderList } from 'src/hooks';
 import { useOrderbook } from 'src/hooks/useOrderbook';
 import { getAssetPrice } from 'src/store/assetPrices/selectors';
@@ -183,7 +183,7 @@ export const AdvancedLending = ({
     );
 
     return (
-        <TwoColumnsWithTopBar
+        <ThreeColumnsWithTopBar
             topBar={
                 <AdvancedLendingTopBar
                     selectedAsset={selectedAsset}
@@ -216,22 +216,21 @@ export const AdvancedLending = ({
                 collateralBook={collateralBook}
                 marketPrice={marketPrice}
             />
+
+            <Tab tabDataArray={[{ text: 'Order Book' }]}>
+                <OrderBookWidget orderbook={orderBook} currency={currency} />
+            </Tab>
             <div className='flex min-w-0 flex-grow flex-col gap-6'>
                 <Tab tabDataArray={[{ text: 'Yield Curve' }]}>
                     <LineChartTab
                         maturitiesOptionList={maturitiesOptionList}
                         rates={rates}
                     />
-                    <div />
                 </Tab>
-                <HorizontalTab tabTitles={['Order Book', 'My Orders']}>
-                    <OrderBookWidget
-                        orderbook={orderBook}
-                        currency={currency}
-                    />
+                <HorizontalTab tabTitles={['My Orders']}>
                     <OrderTable data={orderList.activeOrderList} />
                 </HorizontalTab>
             </div>
-        </TwoColumnsWithTopBar>
+        </ThreeColumnsWithTopBar>
     );
 };

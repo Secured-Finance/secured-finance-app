@@ -7,7 +7,7 @@ import { useEffect, useMemo } from 'react';
 import { useDispatch } from 'react-redux';
 import { ColorBar, Spinner } from 'src/components/atoms';
 import { CoreTable, TableHeader } from 'src/components/molecules';
-import { OrderBookEntry, useBreakpoint, useOrderbook } from 'src/hooks';
+import { OrderBookEntry, useOrderbook } from 'src/hooks';
 import { setMidPrice } from 'src/store/analytics';
 import {
     setAmount,
@@ -144,16 +144,6 @@ export const OrderBookWidget = ({
     hideMidPrice?: boolean;
 }) => {
     const dispatch = useDispatch();
-    const isTabletOrMobile = useBreakpoint('laptop');
-    const tableAlign = useMemo(
-        () => (isTabletOrMobile ? 'left' : 'right'),
-        [isTabletOrMobile]
-    );
-    const oppositeTableAlign = useMemo(
-        () => (isTabletOrMobile ? 'right' : 'left'),
-        [isTabletOrMobile]
-    );
-
     const buyOrders = useMemo(
         () => orderbook.data?.borrowOrderbook ?? [],
         [orderbook.data?.borrowOrderbook]
@@ -210,12 +200,7 @@ export const OrderBookWidget = ({
                 cell: info => (
                     <AmountCell value={info.getValue()} currency={currency} />
                 ),
-                header: () => (
-                    <TableHeader
-                        title={`Amount (${currency})`}
-                        align='center'
-                    />
-                ),
+                header: () => <TableHeader title='Amount' align='center' />,
             }),
             columnHelper.accessor('value', {
                 id: 'apr',
@@ -226,7 +211,7 @@ export const OrderBookWidget = ({
                         align='right'
                     />
                 ),
-                header: () => <TableHeader title='Borrow APR' align='right' />,
+                header: () => <TableHeader title='APR' align='right' />,
             }),
         ],
         [currency, totalBuyAmount]
@@ -240,24 +225,17 @@ export const OrderBookWidget = ({
                     <AprCell
                         value={info.getValue()}
                         display={!info.row.original.amount.eq(0)}
-                        align={oppositeTableAlign}
+                        align='right'
                     />
                 ),
-                header: () => (
-                    <TableHeader title='Lend APR' align={oppositeTableAlign} />
-                ),
+                header: () => <TableHeader title='APR' align='right' />,
             }),
             columnHelper.accessor('amount', {
                 id: 'amount',
                 cell: info => (
                     <AmountCell value={info.getValue()} currency={currency} />
                 ),
-                header: () => (
-                    <TableHeader
-                        title={`Amount (${currency})`}
-                        align='center'
-                    />
-                ),
+                header: () => <TableHeader title='Amount' align='center' />,
             }),
             columnHelper.accessor('value', {
                 id: 'price',
@@ -267,13 +245,13 @@ export const OrderBookWidget = ({
                         amount={info.row.original.amount}
                         totalAmount={totalSellAmount}
                         position='lend'
-                        align={tableAlign}
+                        align='left'
                     />
                 ),
-                header: () => <TableHeader title='Price' align={tableAlign} />,
+                header: () => <TableHeader title='Price' align='left' />,
             }),
         ],
-        [currency, oppositeTableAlign, tableAlign, totalSellAmount]
+        [currency, totalSellAmount]
     );
 
     useEffect(() => {
@@ -313,8 +291,8 @@ export const OrderBookWidget = ({
     };
 
     return (
-        <div className='grid w-full grid-cols-1 place-content-start gap-x-4 laptop:grid-cols-2'>
-            <div className='row-start-2 laptop:col-span-2 laptop:row-start-1'>
+        <div className='grid w-full grid-cols-1 place-content-start gap-x-4 px-2'>
+            <div className='row-start-2'>
                 {!hideMidPrice && (
                     <div className='flex h-14 flex-row items-center justify-center gap-4 border-b border-white-10 bg-black-20'>
                         <div className='flex flex-row items-center gap-1'>
@@ -340,16 +318,8 @@ export const OrderBookWidget = ({
             ) : (
                 <>
                     <CoreTable
-                        data={
-                            isTabletOrMobile
-                                ? [...sellOrders].reverse()
-                                : sellOrders
-                        }
-                        columns={
-                            isTabletOrMobile
-                                ? [...sellColumns].reverse()
-                                : sellColumns
-                        }
+                        data={[...sellOrders].reverse()}
+                        columns={[...sellColumns].reverse()}
                         options={{
                             responsive: false,
                             name: 'sellOrders',

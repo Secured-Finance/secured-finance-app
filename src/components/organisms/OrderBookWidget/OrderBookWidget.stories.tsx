@@ -1,4 +1,3 @@
-import { RESPONSIVE_PARAMETERS } from '.storybook/constants';
 import type { Meta, StoryFn } from '@storybook/react';
 import { BigNumber } from 'ethers';
 import { OrderBookEntry, sortOrders } from 'src/hooks/useOrderbook';
@@ -124,9 +123,6 @@ export default {
             isLoading: false,
         },
         currency: CurrencySymbol.WFIL,
-    },
-    parameters: {
-        ...RESPONSIVE_PARAMETERS,
     },
 } as Meta<typeof OrderBookWidget>;
 
