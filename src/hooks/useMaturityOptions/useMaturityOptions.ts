@@ -6,7 +6,6 @@ const passThrough = () => true;
 const emptyOption = {
     label: '',
     value: new Maturity(0),
-    isItayose: false,
 };
 
 function deduplicate<T>(array: T[], getKey: (item: T) => string | number) {
@@ -31,7 +30,6 @@ export const useMaturityOptions = (
             .map(o => ({
                 label: o[1].name,
                 value: new Maturity(o[1].maturity),
-                isItayose: !o[1].isPreOrderPeriod && o[1].isItayosePeriod,
             }));
         return optionList.length
             ? deduplicate(optionList, o => o.value.toNumber())

@@ -1,4 +1,5 @@
 import { OrderSide } from '@secured-finance/sf-client';
+import { useMemo } from 'react';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { LineChart, getData } from 'src/components/molecules';
 import { RateType, useLoanValues, useMaturityOptions } from 'src/hooks';
@@ -22,13 +23,19 @@ export const LineChartTab = () => {
 
     const maturitiesOptionList = useMaturityOptions(lendingContracts);
 
+    const maturityList = Object.values(lendingContracts).map(obj => obj.name);
+
     const unitPrices = useLoanValues(
         lendingContracts,
         side === OrderSide.BORROW ? RateType.Borrow : RateType.Lend
     );
 
-    const itayoseMarketIndex = maturitiesOptionList.findIndex(
-        market => market.isItayose === true
+    const itayoseMarketIndex = useMemo(
+        () =>
+            Object.values(lendingContracts).findIndex(
+                market => market.isItayosePeriod && !market.isPreOrderPeriod
+            ),
+        [lendingContracts]
     );
 
     const rates = Array.from(unitPrices.values()).map(v => v.apr);
@@ -36,7 +43,7 @@ export const LineChartTab = () => {
     const data = getData(
         rates,
         side === OrderSide.BORROW ? 'Borrow' : 'Lend',
-        maturitiesOptionList.map(o => o.label),
+        maturityList,
         itayoseMarketIndex
     );
 
