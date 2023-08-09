@@ -8,6 +8,7 @@ export * from './useLoanValues';
 export * from './useMaturityOptions';
 export * from './useOrderFee';
 export * from './useOrderList';
+export * from './useOrderbook';
 export * from './useOrders';
 export * from './usePagination';
 export * from './usePositions';
