@@ -217,9 +217,8 @@ export const AdvancedLending = ({
                 marketPrice={marketPrice}
             />
 
-            <Tab tabDataArray={[{ text: 'Order Book' }]}>
-                <OrderBookWidget orderbook={orderBook} currency={currency} />
-            </Tab>
+            <OrderBookWidget orderbook={orderBook} currency={currency} />
+
             <div className='flex min-w-0 flex-grow flex-col gap-6'>
                 <Tab tabDataArray={[{ text: 'Yield Curve' }]}>
                     <LineChartTab

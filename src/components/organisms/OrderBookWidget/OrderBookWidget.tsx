@@ -2,10 +2,10 @@ import { OrderSide, WalletSource } from '@secured-finance/sf-client';
 import { createColumnHelper } from '@tanstack/react-table';
 import classNames from 'classnames';
 import { BigNumber } from 'ethers';
-import { useEffect, useMemo, useState } from 'react';
+import { Fragment, useEffect, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { ColorBar, Spinner } from 'src/components/atoms';
-import { CoreTable, TableHeader } from 'src/components/molecules';
+import { CoreTable, Tab, TableHeader } from 'src/components/molecules';
 import { OrderBookEntry, useOrderbook } from 'src/hooks';
 import { setMidPrice } from 'src/store/analytics';
 import {
@@ -42,7 +42,7 @@ const OrderBookCell = ({
             'font-semibold': fontWeight === 'semibold',
         })}
     >
-        {value}
+        {value ? value : <Fragment>&nbsp;</Fragment>}
     </span>
 );
 
@@ -82,7 +82,6 @@ const PriceCell = ({
     align: 'left' | 'right';
 }) => {
     const color = position === 'borrow' ? 'negative' : 'positive';
-    if (amount.eq(0)) return <OrderBookCell />;
     return (
         <div
             className={classNames(
@@ -94,7 +93,7 @@ const PriceCell = ({
             )}
         >
             <OrderBookCell
-                value={formatLoanValue(value, 'price')}
+                value={!amount.isZero() ? formatLoanValue(value, 'price') : ''}
                 color={color}
                 fontWeight='semibold'
             />
@@ -299,76 +298,86 @@ export const OrderBookWidget = ({
     };
 
     return (
-        <div className='grid w-full grid-cols-1 place-content-start gap-x-4 px-2'>
-            <div className='row-start-2'>
-                {!hideMidPrice && (
-                    <div className='typography-portfolio-heading flex h-14 flex-row items-center justify-between gap-4'>
-                        <span
-                            className='px-4 font-semibold text-white'
-                            data-testid='last-mid-price'
-                        >
-                            {formatLoanValue(lastMidValue, 'price')}
-                        </span>
+        <div className='max-w-xs'>
+            <Tab tabDataArray={[{ text: 'Order Book' }]}>
+                <div className='grid w-full grid-cols-1 place-content-start gap-x-4'>
+                    <div className='row-start-2'>
+                        {!hideMidPrice && (
+                            <div className='typography-portfolio-heading flex h-14 flex-row items-center justify-between bg-black-20 px-4 py-3'>
+                                <span
+                                    className='font-semibold text-white'
+                                    data-testid='last-mid-price'
+                                >
+                                    {formatLoanValue(lastMidValue, 'price')}
+                                </span>
 
-                        <span className='px-4 font-normal text-slateGray'>
-                            {formatLoanValue(lastMidValue, 'rate')}
-                        </span>
+                                <span className='font-normal text-slateGray'>
+                                    {formatLoanValue(lastMidValue, 'rate')}
+                                </span>
+                            </div>
+                        )}
                     </div>
-                )}
-            </div>
-            {orderbook.isLoading ? (
-                <div className='col-span-2 row-start-3 flex h-full w-full items-center justify-center pt-24'>
-                    <Spinner />
+                    {orderbook.isLoading ? (
+                        <div className='col-span-2 row-start-3 flex h-full w-full items-center justify-center pt-24'>
+                            <Spinner />
+                        </div>
+                    ) : (
+                        <>
+                            <div className='row-start-1 px-3'>
+                                <CoreTable
+                                    data={[...lendOrders].reverse()}
+                                    columns={[...sellColumns].reverse()}
+                                    options={{
+                                        responsive: false,
+                                        name: 'sellOrders',
+                                        border: false,
+                                        onLineClick: handleSellOrdersClick,
+                                        hoverRow: handleSellOrdersHoverRow,
+                                        pagination: {
+                                            containerHeight: true,
+                                            totalData:
+                                                orderbook.data?.lendOrderbook
+                                                    .length ?? 0,
+                                            getMoreData: () => {
+                                                setSellOrderCount(
+                                                    lendOrders.length +
+                                                        ORDER_COUNT_INCREMENT
+                                                );
+                                            },
+                                        },
+                                    }}
+                                />
+                            </div>
+                            <div className='row-start-3 px-3'>
+                                <CoreTable
+                                    data={borrowOrders}
+                                    columns={buyColumns}
+                                    options={{
+                                        responsive: false,
+                                        name: 'buyOrders',
+                                        border: false,
+                                        onLineClick: handleBuyOrdersClick,
+                                        hoverRow: handleBuyOrdersHoverRow,
+                                        showHeaders: false,
+                                        pagination: {
+                                            containerHeight: true,
+                                            totalData:
+                                                orderbook.data?.borrowOrderbook
+                                                    .length ?? 0,
+                                            getMoreData: () => {
+                                                setBuyOrderCount(
+                                                    borrowOrders.length +
+                                                        ORDER_COUNT_INCREMENT
+                                                );
+                                            },
+                                        },
+                                    }}
+                                />
+                            </div>
+                        </>
+                    )}
                 </div>
-            ) : (
-                <>
-                    <CoreTable
-                        data={[...lendOrders].reverse()}
-                        columns={[...sellColumns].reverse()}
-                        options={{
-                            responsive: false,
-                            name: 'sellOrders',
-                            border: false,
-                            onLineClick: handleSellOrdersClick,
-                            hoverRow: handleSellOrdersHoverRow,
-                            pagination: {
-                                containerHeight: true,
-                                totalData:
-                                    orderbook.data?.lendOrderbook.length ?? 0,
-                                getMoreData: () => {
-                                    setSellOrderCount(
-                                        lendOrders.length +
-                                            ORDER_COUNT_INCREMENT
-                                    );
-                                },
-                            },
-                        }}
-                    />
-                    <CoreTable
-                        data={borrowOrders}
-                        columns={buyColumns}
-                        options={{
-                            responsive: false,
-                            name: 'buyOrders',
-                            border: false,
-                            onLineClick: handleBuyOrdersClick,
-                            hoverRow: handleBuyOrdersHoverRow,
-                            showHeaders: false,
-                            pagination: {
-                                containerHeight: true,
-                                totalData:
-                                    orderbook.data?.borrowOrderbook.length ?? 0,
-                                getMoreData: () => {
-                                    setBuyOrderCount(
-                                        borrowOrders.length +
-                                            ORDER_COUNT_INCREMENT
-                                    );
-                                },
-                            },
-                        }}
-                    />
-                </>
-            )}
+            </Tab>
         </div>
     );
 };
