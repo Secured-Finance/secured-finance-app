@@ -236,8 +236,7 @@ export const AdvancedLending = ({
                 </Tab>
                 <HorizontalTab tabTitles={['Order Book', 'My Orders']}>
                     <OrderBookWidget
-                        buyOrders={orderBook.borrowOrderbook}
-                        sellOrders={orderBook.lendOrderbook}
+                        orderbook={orderBook}
                         currency={currency}
                     />
                     <OrderTable data={orderList.activeOrderList} />

@@ -1,5 +1,6 @@
 import { reset, track } from '@amplitude/analytics-browser';
 import { SecuredFinanceClient } from '@secured-finance/sf-client';
+import { useQueryClient } from '@tanstack/react-query';
 import { Signer, providers } from 'ethers';
 import React, { createContext, useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
@@ -44,6 +45,7 @@ const SecuredFinanceProvider: React.FC = ({ children }) => {
     const { connect, connectors } = useConnect();
     const { data: client } = useWalletClient();
     const publicClient = usePublicClient();
+    const queryClient = useQueryClient();
 
     const [securedFinance, setSecuredFinance] =
         useState<SecuredFinanceClient>();
@@ -165,6 +167,9 @@ const SecuredFinanceProvider: React.FC = ({ children }) => {
                 for (const currency of getCurrencyMapAsList()) {
                     fetchLendingMarkets(currency.symbol, securedFinance);
                 }
+
+                // Invalidate the queries
+                queryClient.invalidateQueries({ queryKey: ['getOrderbook'] });
             }
         });
 
@@ -181,6 +186,7 @@ const SecuredFinanceProvider: React.FC = ({ children }) => {
         fetchLendingMarkets,
         handleAccountChanged,
         handleChainChanged,
+        queryClient,
         securedFinance,
         web3Provider,
     ]);
