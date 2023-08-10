@@ -14,20 +14,17 @@ describe('useOrderbook', () => {
             useOrderbook(CurrencySymbol.ETH, maturity, 5)
         );
 
-        expect(result.current).toEqual({
-            borrowOrderbook: [],
-            lendOrderbook: [],
-        });
+        expect(result.current.data).toBeUndefined();
 
         await waitForNextUpdate();
 
-        expect(result.current.borrowOrderbook.length).toBe(5);
-        expect(result.current.borrowOrderbook[0].value.price).toBe(9674);
-        expect(result.current.borrowOrderbook[4].value.price).toBe(9690);
+        expect(result.current.data.borrowOrderbook.length).toBe(5);
+        expect(result.current.data.borrowOrderbook[0].value.price).toBe(9674);
+        expect(result.current.data.borrowOrderbook[4].value.price).toBe(9690);
 
-        expect(result.current.lendOrderbook.length).toBe(5);
-        expect(result.current.lendOrderbook[0].value.price).toBe(9690);
-        expect(result.current.lendOrderbook[4].value.price).toBe(9674);
+        expect(result.current.data.lendOrderbook.length).toBe(5);
+        expect(result.current.data.lendOrderbook[0].value.price).toBe(9690);
+        expect(result.current.data.lendOrderbook[4].value.price).toBe(9674);
     });
 
     it('should trim the orderbook from the zeros but keep the borrow and lending orderbook the same size', async () => {
@@ -82,15 +79,12 @@ describe('useOrderbook', () => {
             useOrderbook(CurrencySymbol.ETH, maturity)
         );
 
-        expect(result.current).toEqual({
-            borrowOrderbook: [],
-            lendOrderbook: [],
-        });
+        expect(result.current.data).toBeUndefined();
 
         await waitForNextUpdate();
 
-        expect(result.current.borrowOrderbook.length).toBe(6);
-        expect(result.current.lendOrderbook.length).toBe(6);
+        expect(result.current.data.borrowOrderbook.length).toBe(6);
+        expect(result.current.data.lendOrderbook.length).toBe(6);
     });
 
     it('should return an orderbook with one line even if there is no orders in the orderbook', async () => {
@@ -106,14 +100,11 @@ describe('useOrderbook', () => {
             useOrderbook(CurrencySymbol.ETH, maturity)
         );
 
-        expect(result.current).toEqual({
-            borrowOrderbook: [],
-            lendOrderbook: [],
-        });
+        expect(result.current.data).toBeUndefined();
 
         await waitForNextUpdate();
 
-        expect(result.current.borrowOrderbook.length).toBe(1);
-        expect(result.current.lendOrderbook.length).toBe(1);
+        expect(result.current.data.borrowOrderbook.length).toBe(1);
+        expect(result.current.data.lendOrderbook.length).toBe(1);
     });
 });
