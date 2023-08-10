@@ -10,7 +10,6 @@ import {
 import {
     HorizontalAssetSelector,
     HorizontalTab,
-    Tab,
 } from 'src/components/molecules';
 import {
     AdvancedLendingOrderCard,
@@ -198,13 +197,12 @@ export const Itayose = () => {
                     collateralBook={collateralBook}
                     onlyLimitOrder
                 />
-                <Tab tabDataArray={[{ text: 'Order Book' }]}>
-                    <OrderBookWidget
-                        currency={currency}
-                        orderbook={orderBook}
-                        hideMidPrice
-                    />
-                </Tab>
+                <OrderBookWidget
+                    currency={currency}
+                    orderbook={orderBook}
+                    hideMidPrice
+                />
+
                 <div className='flex flex-col gap-4'>
                     <GradientBox variant='high-contrast'>
                         <div className='px-3'>

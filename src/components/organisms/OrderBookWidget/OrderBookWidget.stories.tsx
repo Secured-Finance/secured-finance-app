@@ -6,6 +6,10 @@ import { LoanValue, Maturity } from 'src/utils/entities';
 import { OrderBookWidget } from './OrderBookWidget';
 
 const maturityMar23 = new Maturity(1675252800);
+const ZERO_ENTRY = {
+    amount: BigNumber.from('0'),
+    value: LoanValue.fromPrice(0, maturityMar23.toNumber()),
+};
 
 const borrowEntries: Array<OrderBookEntry> = [
     {
@@ -145,10 +149,13 @@ export const Eth = Template.bind({});
 Eth.args = {
     orderbook: {
         data: {
-            borrowOrderbook: [...ethEntries].sort((a, b) =>
-                sortOrders(a, b, 'asc')
-            ),
-            lendOrderbook: [...ethEntries].sort((a, b) =>
+            borrowOrderbook: [
+                ...ethEntries,
+                ZERO_ENTRY,
+                ZERO_ENTRY,
+                ZERO_ENTRY,
+            ].sort((a, b) => sortOrders(a, b, 'asc')),
+            lendOrderbook: [...ethEntries, ZERO_ENTRY].sort((a, b) =>
                 sortOrders(a, b, 'desc')
             ),
         },

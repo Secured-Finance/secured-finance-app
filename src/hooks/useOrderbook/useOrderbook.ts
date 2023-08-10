@@ -17,6 +17,7 @@ export type OrderBookEntry = {
 export type OrderBook = Array<OrderBookEntry>;
 
 const MAX_ORDERBOOK_LENGTH = 40;
+const MIN_ORDERBOOK_LENGTH = 10;
 
 export const sortOrders = (
     a: OrderBookEntry,
@@ -47,10 +48,13 @@ const transformOrderbook = (
     return orderBook.sort((a, b) => sortOrders(a, b, direction));
 };
 
-const trimOrderbook = (orderBook: {
-    borrowOrderbook: OrderBook | [];
-    lendOrderbook: OrderBook | [];
-}) => {
+const trimOrderbook = (
+    orderBook: {
+        borrowOrderbook: OrderBook | [];
+        lendOrderbook: OrderBook | [];
+    },
+    minimumLength: number
+) => {
     const trim = (orderBook: OrderBook) =>
         orderBook.filter(o => !o.amount.isZero());
 
@@ -60,16 +64,28 @@ const trimOrderbook = (orderBook: {
             trim(orderBook.lendOrderbook).length
         ) || 1;
 
+    const maxLength = Math.max(size, minimumLength);
+
+    if (maxLength > size) {
+        const emptyOrderbook = Array(maxLength - size).fill({
+            amount: BigNumber.from(0),
+            value: LoanValue.fromPrice(0, 0),
+        }) as never[];
+        orderBook.borrowOrderbook.push(...emptyOrderbook);
+        orderBook.lendOrderbook.push(...emptyOrderbook);
+    }
+
     return {
-        borrowOrderbook: orderBook.borrowOrderbook.slice(0, size),
-        lendOrderbook: orderBook.lendOrderbook.slice(0, size),
+        borrowOrderbook: orderBook.borrowOrderbook.slice(0, maxLength),
+        lendOrderbook: orderBook.lendOrderbook.slice(0, maxLength),
     };
 };
 
 export const useOrderbook = (
     ccy: CurrencySymbol,
     maturity: number,
-    limit: number = MAX_ORDERBOOK_LENGTH
+    limit: number = MAX_ORDERBOOK_LENGTH,
+    minimum: number = MIN_ORDERBOOK_LENGTH
 ) => {
     const securedFinance = useSF();
 
@@ -96,18 +112,21 @@ export const useOrderbook = (
             };
         },
         select: data => {
-            return trimOrderbook({
-                borrowOrderbook: transformOrderbook(
-                    data.borrowOrderbook,
-                    maturity,
-                    'asc'
-                ),
-                lendOrderbook: transformOrderbook(
-                    data.lendOrderbook,
-                    maturity,
-                    'desc'
-                ),
-            });
+            return trimOrderbook(
+                {
+                    borrowOrderbook: transformOrderbook(
+                        data.borrowOrderbook,
+                        maturity,
+                        'asc'
+                    ),
+                    lendOrderbook: transformOrderbook(
+                        data.lendOrderbook,
+                        maturity,
+                        'desc'
+                    ),
+                },
+                minimum
+            );
         },
         enabled: !!securedFinance,
     });
