@@ -61,28 +61,22 @@ const lendEntries: Array<OrderBookEntry> = [
     },
 ];
 
-const btcEntries: Array<OrderBookEntry> = [
-    {
-        amount: BigNumber.from('12000000'),
-        value: LoanValue.fromPrice(9653, maturityMar23.toNumber()),
-    },
-    {
-        amount: BigNumber.from('123000000'),
-        value: LoanValue.fromPrice(9674, maturityMar23.toNumber()),
-    },
-    {
-        amount: BigNumber.from('1000000'),
-        value: LoanValue.fromPrice(9679, maturityMar23.toNumber()),
-    },
-    {
-        amount: BigNumber.from('1000000000'),
-        value: LoanValue.fromPrice(9679, maturityMar23.toNumber()),
-    },
-    {
-        amount: BigNumber.from('100002000'),
-        value: LoanValue.fromPrice(9679, maturityMar23.toNumber()),
-    },
-];
+const generateOrderBookEntries = (n: number, start: number) => {
+    return Array.from({ length: n }, (_, i) => {
+        return {
+            amount: BigNumber.from(`1${i}000000`),
+            value: LoanValue.fromPrice(start + i, maturityMar23.toNumber()),
+        };
+    });
+};
+const btcEntriesBorrow: Array<OrderBookEntry> = generateOrderBookEntries(
+    40,
+    9800
+);
+const btcEntriesLend: Array<OrderBookEntry> = generateOrderBookEntries(
+    40,
+    9700
+);
 
 const ethEntries: Array<OrderBookEntry> = [
     {
@@ -135,10 +129,10 @@ export const Bitcoin = Template.bind({});
 Bitcoin.args = {
     orderbook: {
         data: {
-            borrowOrderbook: [...btcEntries].sort((a, b) =>
+            borrowOrderbook: [...btcEntriesBorrow].sort((a, b) =>
                 sortOrders(a, b, 'asc')
             ),
-            lendOrderbook: [...btcEntries].sort((a, b) =>
+            lendOrderbook: [...btcEntriesLend].sort((a, b) =>
                 sortOrders(a, b, 'desc')
             ),
         },

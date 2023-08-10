@@ -2,7 +2,7 @@ import { OrderSide, WalletSource } from '@secured-finance/sf-client';
 import { createColumnHelper } from '@tanstack/react-table';
 import classNames from 'classnames';
 import { BigNumber } from 'ethers';
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { ColorBar, Spinner } from 'src/components/atoms';
 import { CoreTable, TableHeader } from 'src/components/molecules';
@@ -133,6 +133,9 @@ const AprCell = ({
     );
 };
 
+const INITIAL_ORDER_COUNT = 10;
+const ORDER_COUNT_INCREMENT = 2;
+
 export const OrderBookWidget = ({
     orderbook,
     currency,
@@ -143,41 +146,47 @@ export const OrderBookWidget = ({
     hideMidPrice?: boolean;
 }) => {
     const dispatch = useDispatch();
-    const buyOrders = useMemo(
-        () => orderbook.data?.borrowOrderbook ?? [],
-        [orderbook.data?.borrowOrderbook]
+    const [buyOrderCount, setBuyOrderCount] = useState(INITIAL_ORDER_COUNT);
+    const [sellOrderCount, setSellOrderCount] = useState(INITIAL_ORDER_COUNT);
+
+    const borrowOrders = useMemo(
+        () => orderbook.data?.borrowOrderbook.slice(0, buyOrderCount) ?? [],
+        [buyOrderCount, orderbook.data?.borrowOrderbook]
     );
 
-    const sellOrders = useMemo(
-        () => orderbook.data?.lendOrderbook ?? [],
-        [orderbook.data?.lendOrderbook]
+    const lendOrders = useMemo(
+        () => orderbook.data?.lendOrderbook.slice(0, sellOrderCount) ?? [],
+        [orderbook.data?.lendOrderbook, sellOrderCount]
     );
 
     const totalBuyAmount = useMemo(
         () =>
-            buyOrders.reduce(
+            borrowOrders.reduce(
                 (acc, order) => acc.add(order.amount),
                 BigNumber.from(0)
             ),
-        [buyOrders]
+        [borrowOrders]
     );
 
     const totalSellAmount = useMemo(
         () =>
-            sellOrders.reduce(
+            lendOrders.reduce(
                 (acc, order) => acc.add(order.amount),
                 BigNumber.from(0)
             ),
-        [sellOrders]
+        [lendOrders]
     );
 
     const lastMidValue = useMemo(() => {
-        if (buyOrders.length === 0 || sellOrders.length === 0) {
+        if (borrowOrders.length === 0 || lendOrders.length === 0) {
             return LoanValue.ZERO;
         }
 
-        return LoanValue.getMidValue(sellOrders[0].value, buyOrders[0].value);
-    }, [sellOrders, buyOrders]);
+        return LoanValue.getMidValue(
+            lendOrders[0].value,
+            borrowOrders[0].value
+        );
+    }, [lendOrders, borrowOrders]);
 
     const buyColumns = useMemo(
         () => [
@@ -260,8 +269,8 @@ export const OrderBookWidget = ({
     const handleClick = (rowId: string, side: OrderSide): void => {
         const rowData =
             side === OrderSide.BORROW
-                ? sellOrders[parseInt(rowId)]
-                : buyOrders[parseInt(rowId)];
+                ? lendOrders[parseInt(rowId)]
+                : borrowOrders[parseInt(rowId)];
         dispatch(setOrderType(OrderType.LIMIT));
         side ? dispatch(setSide(side)) : null;
         side === OrderSide.BORROW
@@ -280,12 +289,12 @@ export const OrderBookWidget = ({
     };
 
     const handleSellOrdersHoverRow = (rowId: string) => {
-        const rowData = sellOrders[parseInt(rowId)];
+        const rowData = lendOrders[parseInt(rowId)];
         return !rowData.amount.isZero();
     };
 
     const handleBuyOrdersHoverRow = (rowId: string) => {
-        const rowData = buyOrders[parseInt(rowId)];
+        const rowData = borrowOrders[parseInt(rowId)];
         return !rowData.amount.isZero();
     };
 
@@ -314,7 +323,7 @@ export const OrderBookWidget = ({
             ) : (
                 <>
                     <CoreTable
-                        data={[...sellOrders].reverse()}
+                        data={[...lendOrders].reverse()}
                         columns={[...sellColumns].reverse()}
                         options={{
                             responsive: false,
@@ -322,10 +331,21 @@ export const OrderBookWidget = ({
                             border: false,
                             onLineClick: handleSellOrdersClick,
                             hoverRow: handleSellOrdersHoverRow,
+                            pagination: {
+                                containerHeight: true,
+                                totalData:
+                                    orderbook.data?.lendOrderbook.length ?? 0,
+                                getMoreData: () => {
+                                    setSellOrderCount(
+                                        lendOrders.length +
+                                            ORDER_COUNT_INCREMENT
+                                    );
+                                },
+                            },
                         }}
                     />
                     <CoreTable
-                        data={buyOrders}
+                        data={borrowOrders}
                         columns={buyColumns}
                         options={{
                             responsive: false,
@@ -334,6 +354,17 @@ export const OrderBookWidget = ({
                             onLineClick: handleBuyOrdersClick,
                             hoverRow: handleBuyOrdersHoverRow,
                             showHeaders: false,
+                            pagination: {
+                                containerHeight: true,
+                                totalData:
+                                    orderbook.data?.borrowOrderbook.length ?? 0,
+                                getMoreData: () => {
+                                    setBuyOrderCount(
+                                        borrowOrders.length +
+                                            ORDER_COUNT_INCREMENT
+                                    );
+                                },
+                            },
                         }}
                     />
                 </>

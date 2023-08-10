@@ -10,7 +10,12 @@ import {
 import classNames from 'classnames';
 import { useEffect, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import { Pagination } from 'src/types';
+
+export interface Pagination {
+    getMoreData: () => void;
+    totalData: number;
+    containerHeight: boolean;
+}
 
 type CoreTableOptions = {
     border: boolean;
