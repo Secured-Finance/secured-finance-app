@@ -52,7 +52,7 @@ const SecuredFinanceProvider: React.FC = ({ children }) => {
     const dispatch = useDispatch();
 
     //TODO: move this to redux listener to reduce the number of calls and rerenders
-    useEthereumWalletStore(securedFinance);
+    useEthereumWalletStore();
     const { fetchLendingMarkets } = useLendingMarkets();
 
     const handleAccountChanged = useCallback((accounts: string[]) => {

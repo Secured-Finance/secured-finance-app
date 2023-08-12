@@ -1,7 +1,7 @@
-import { Currency } from '@secured-finance/sf-core';
+import { Currency, Token } from '@secured-finance/sf-core';
 import { BigNumber } from 'ethers';
 import * as jest from 'jest-mock';
-import { CurrencySymbol, getCurrencyMapAsList } from 'src/utils';
+import { CurrencySymbol, ZERO_BN, getCurrencyMapAsList } from 'src/utils';
 import { Maturity } from 'src/utils/entities';
 import {
     collateralBook37,
@@ -242,7 +242,17 @@ export const mockUseSF = () => {
             })
         ),
 
-        getERC20Balance: jest.fn(() => Promise.resolve({ balance: 10000000 })),
+        getERC20Balance: jest.fn((token: Token, _) => {
+            let balance = ZERO_BN;
+            if (token.symbol === CurrencySymbol.WFIL) {
+                balance = BigNumber.from('10000000000000000000000'); // 10,000 WFIL
+            } else if (token.symbol === CurrencySymbol.WBTC) {
+                balance = BigNumber.from('30000000000'); // 300 WBTC
+            } else if (token.symbol === CurrencySymbol.USDC) {
+                balance = BigNumber.from('4000000000'); // 4,000 USDC
+            }
+            return Promise.resolve(balance);
+        }),
 
         cancelLendingOrder: jest.fn(() =>
             Promise.resolve({
@@ -400,7 +410,7 @@ export const mockUseSF = () => {
             ])
         ),
 
-        getOrderFeeRate: jest.fn(() => Promise.resolve(BigNumber.from(100))),
+        getOrderFeeRate: jest.fn(() => Promise.resolve(BigNumber.from('100'))),
     };
 
     return mockSecuredFinance;

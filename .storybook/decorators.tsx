@@ -10,7 +10,7 @@ import { setMidPrice } from 'src/store/analytics';
 import { updateLendingMarketContract } from 'src/store/availableContracts';
 import { updateChainError, updateLatestBlock } from 'src/store/blockchain';
 import { setMaturity } from 'src/store/landingOrderForm';
-import { updateBalance } from 'src/store/wallet';
+import { connectEthWallet, updateEthBalance } from 'src/store/wallet';
 import AxiosMock from 'src/stories/mocks/AxiosMock';
 import { CustomizedBridge } from 'src/stories/mocks/customBridge';
 import { dec22Fixture, maturities } from 'src/stories/mocks/fixtures';
@@ -45,10 +45,10 @@ const signer = new CustomizedBridge(
     11155111
 );
 
+const account = privateKeyToAccount('0xde926db3012af759b4f24b5a51ef6afa397f04670f634aa4f48d4480417007f3');
+
 const client = createWalletClient({
-    account: privateKeyToAccount(
-        '0xde926db3012af759b4f24b5a51ef6afa397f04670f634aa4f48d4480417007f3'
-    ),
+    account: account,
     chain: sepolia,
     transport: custom(signer),
 });
@@ -63,6 +63,7 @@ const connector = new MockConnector({
 });
 
 export const withWalletProvider = (Story: StoryFn, Context: StoryContext) => {
+    const dispatch = useDispatch();
     const config = createConfig({
         autoConnect: Context.parameters && Context.parameters.connected,
         publicClient: createPublicClient({
@@ -71,6 +72,15 @@ export const withWalletProvider = (Story: StoryFn, Context: StoryContext) => {
         }),
         connectors: [connector],
     });
+
+    useEffect(() => {
+        const timeoutId = setTimeout(() => {
+            dispatch(connectEthWallet(account.address));
+        }, 300);
+
+        return () => clearTimeout(timeoutId);
+    }, [dispatch]);
+
     return (
         <WagmiConfig config={config}>
             <Story />
@@ -165,14 +175,11 @@ export const withFullPage = (Story: StoryFn) => (
     </div>
 );
 
-export const withWalletBalances = (Story: StoryFn) => {
+export const withEthBalance = (Story: StoryFn) => {
     const dispatch = useDispatch();
     useEffect(() => {
         const timeoutId = setTimeout(() => {
-            dispatch(updateBalance(10000, CurrencySymbol.WFIL));
-            dispatch(updateBalance(2000, CurrencySymbol.ETH));
-            dispatch(updateBalance(300, CurrencySymbol.WBTC));
-            dispatch(updateBalance(4000, CurrencySymbol.USDC));
+            dispatch(updateEthBalance(2000));
         }, 300);
 
         return () => clearTimeout(timeoutId);

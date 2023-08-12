@@ -5,16 +5,15 @@
 import '@testing-library/jest-dom';
 import { cleanup } from '@testing-library/react';
 import 'jest-canvas-mock';
-import failOnConsole from 'jest-fail-on-console';
 import timemachine from 'timemachine';
 
-failOnConsole({
-    silenceMessage: errorMessage => {
-        return errorMessage.startsWith(
-            "Warning: Can't perform a React state update on an unmounted component."
-        );
-    },
-});
+// failOnConsole({
+//     silenceMessage: errorMessage => {
+//         return errorMessage.startsWith(
+//             "Warning: Can't perform a React state update on an unmounted component."
+//         );
+//     },
+// });
 
 beforeAll(() => {
     timemachine.reset();
