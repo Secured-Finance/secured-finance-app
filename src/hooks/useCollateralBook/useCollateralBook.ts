@@ -4,7 +4,6 @@ import { useSelector } from 'react-redux';
 import useSF from 'src/hooks/useSecuredFinance';
 import { AssetPriceMap, getPriceMap } from 'src/store/assetPrices/selectors';
 import { selectLastUserActionTimestamp } from 'src/store/blockchain';
-import { selectAllBalances } from 'src/store/wallet';
 import {
     CurrencySymbol,
     amountFormatterFromBase,
@@ -13,6 +12,7 @@ import {
     toCurrency,
 } from 'src/utils';
 import { RootState } from '../../store/types';
+import { useBalances } from '../useERC20Balance';
 
 const ZERO_BN = BigNumber.from('0');
 
@@ -52,9 +52,9 @@ export const useCollateralBook = (account: string | undefined) => {
     const [collateralBook, setCollateralBook] = useState(emptyBook);
     const securedFinance = useSF();
 
-    const { ETH: ethBalance, USDC: usdcBalance } = useSelector(
-        (state: RootState) => selectAllBalances(state)
-    );
+    const balances = useBalances();
+    const ethBalance = balances[CurrencySymbol.ETH];
+    const usdcBalance = balances[CurrencySymbol.USDC];
 
     const lastUserActionTimestamp = useSelector((state: RootState) =>
         selectLastUserActionTimestamp(state)

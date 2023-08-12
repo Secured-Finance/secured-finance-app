@@ -15,6 +15,7 @@ import {
 } from 'src/components/atoms';
 import { OrderAction } from 'src/components/organisms';
 import { CollateralBook } from 'src/hooks';
+import { useBalances } from 'src/hooks/useERC20Balance';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { selectMarket } from 'src/store/availableContracts';
 import {
@@ -27,7 +28,6 @@ import {
     setUnitPrice,
 } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
-import { selectAllBalances } from 'src/store/wallet';
 import { OrderSideMap, OrderType, OrderTypeOptions } from 'src/types';
 import {
     MAX_COVERAGE,
@@ -67,9 +67,7 @@ export const AdvancedLendingOrderCard = ({
     );
     const [sliderValue, setSliderValue] = useState(0.0);
 
-    const balanceRecord = useSelector((state: RootState) =>
-        selectAllBalances(state)
-    );
+    const balanceRecord = useBalances();
 
     const loanValue = useMemo(() => {
         if (!maturity) return LoanValue.ZERO;

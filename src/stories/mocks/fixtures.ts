@@ -51,14 +51,9 @@ export const assetPriceMap = {
     WBTC: 50000.0,
 };
 
-export const preloadedBalances = {
+export const preloadedEthBalance = {
     wallet: {
-        balances: {
-            WFIL: 1000,
-            ETH: 10,
-            USDC: 100000,
-            WBTC: 50,
-        },
+        ethBalance: 10,
     },
 };
 

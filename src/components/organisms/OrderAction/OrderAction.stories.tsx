@@ -1,7 +1,7 @@
 import {
     withAssetPrice,
+    withEthBalance,
     withMaturities,
-    withWalletBalances,
     withWalletProvider,
 } from '.storybook/decorators';
 import { OrderSide } from '@secured-finance/sf-client';
@@ -35,7 +35,7 @@ export default {
     },
     decorators: [
         withMaturities,
-        withWalletBalances,
+        withEthBalance,
         withAssetPrice,
         withWalletProvider,
     ],
