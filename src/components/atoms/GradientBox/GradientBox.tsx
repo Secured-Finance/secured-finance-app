@@ -1,5 +1,4 @@
 import classNames from 'classnames';
-import React from 'react';
 import { Separator } from 'src/components/atoms';
 
 export const GradientBox = ({

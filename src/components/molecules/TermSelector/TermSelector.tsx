@@ -30,7 +30,7 @@ export const TermSelector = <T extends string = string>({
             <div className='typography-caption-2 ml-2 text-secondary7'>
                 Maturity
             </div>
-            <div className='flex h-14 flex-row items-center justify-between rounded-lg bg-black-20 p-2 ring-starBlue focus-within:ring'>
+            <div className='flex h-14 flex-row items-center justify-between rounded-lg bg-black-20 p-2 ring-inset ring-starBlue focus-within:ring-2'>
                 <DropdownSelector
                     optionList={options}
                     selected={selected}

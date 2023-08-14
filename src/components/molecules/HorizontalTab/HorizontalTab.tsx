@@ -1,6 +1,6 @@
 import { Tab as HeadlessTab } from '@headlessui/react';
 import classNames from 'classnames';
-import React, { Children, useState } from 'react';
+import { Children, useState } from 'react';
 import { DropdownSelector } from 'src/components/atoms';
 
 const TitleChip = ({
