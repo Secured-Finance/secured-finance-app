@@ -124,7 +124,7 @@ describe('LendingCard Component', () => {
 
         expect(
             screen.getByText(
-                `~ ${preloadedAssetPrices.assetPrices.WFIL.price * 10} USD`
+                `~ $${preloadedAssetPrices.assetPrices.WFIL.price * 10}`
             )
         ).toBeInTheDocument();
     });
@@ -157,7 +157,7 @@ describe('LendingCard Component', () => {
         fireEvent.change(input, { target: { value: '10.5' } });
         expect(
             screen.getByText(
-                `~ ${preloadedAssetPrices.assetPrices.WFIL.price * 10.5} USD`
+                `~ $${preloadedAssetPrices.assetPrices.WFIL.price * 10.5}`
             )
         ).toBeInTheDocument();
     });

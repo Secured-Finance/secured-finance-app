@@ -1,5 +1,5 @@
 import { BigNumber } from 'ethers';
-import { useCallback, useMemo, useState, useEffect } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { DropdownSelector, InputBase, Option } from 'src/components/atoms';
 import { prefixTilde } from 'src/utils';
 
@@ -9,7 +9,6 @@ export const AssetSelector = <AssetType extends string = string>({
     options,
     selected = options[0],
     priceList,
-    transformLabel = (v: string) => v,
     amountFormatterMap,
     initialValue,
     onAssetChange,
@@ -20,7 +19,6 @@ export const AssetSelector = <AssetType extends string = string>({
     priceList: Record<AssetType, number>;
     amountFormatterMap?: Record<AssetType, FormatFunction>;
     initialValue?: number;
-    transformLabel?: (v: string) => string;
     onAssetChange?: (v: AssetType) => void;
     onAmountChange?: (v: BigNumber) => void;
 }) => {
@@ -37,11 +35,15 @@ export const AssetSelector = <AssetType extends string = string>({
     );
 
     const amountInUsd = useMemo(() => {
-        if (!selectedOption?.value) {
-            return 0;
+        if (!selectedOption?.value || !amount) {
+            return '$0';
         }
         return new Intl.NumberFormat('en-us', {
+            style: 'currency',
+            currency: 'USD',
+            currencySign: 'accounting',
             minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
         }).format(priceList[selectedOption.value] * (amount ?? 0));
     }, [selectedOption?.value, priceList, amount]);
 
@@ -86,35 +88,25 @@ export const AssetSelector = <AssetType extends string = string>({
     );
 
     return (
-        <div className='w-72 flex-col items-start justify-start space-y-2'>
-            <div className='typography-caption-2 flex flex-row items-start justify-between'>
-                <div className='ml-2 text-planetaryPurple'>Asset</div>
-                <div
-                    className='mr-1 text-white-60'
-                    data-testid='asset-selector-usd'
-                >
-                    {prefixTilde(`${amountInUsd} USD`)}
+        <div className='flex-col space-y-1'>
+            <div className='typography-caption-2 mx-2 flex flex-row items-start justify-between'>
+                <div className='text-secondary7'>Asset</div>
+                <div className='text-white-60' data-testid='asset-selector-usd'>
+                    {prefixTilde(amountInUsd)}
                 </div>
             </div>
-            <div className='flex h-14 flex-row items-center justify-between space-x-2 rounded-lg bg-black-20 py-2 pl-2 pr-4 ring-starBlue focus-within:ring'>
+            <div className='flex h-14 flex-row items-center justify-between rounded-lg bg-black-20 p-2 ring-starBlue focus-within:ring'>
                 <DropdownSelector
                     optionList={options}
                     selected={selected}
                     onChange={handleAssetChange}
                 />
                 <InputBase
-                    className='typography-body-1 h-8 w-20 rounded-lg text-right font-bold text-white'
+                    className='typography-body-1 w-full text-right text-white'
                     onValueChange={handleAmountChange}
                     value={amount}
                     data-cy='asset-selector-input'
                 />
-
-                <div
-                    className='typography-caption ml-2 flex text-white-60'
-                    data-testid='asset-selector-transformed-value'
-                >
-                    {selectedOption && transformLabel(selectedOption.label)}
-                </div>
             </div>
         </div>
     );
