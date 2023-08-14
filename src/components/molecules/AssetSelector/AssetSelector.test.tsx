@@ -21,22 +21,9 @@ describe('AssetSelector Component', () => {
         fireEvent.click(screen.getByRole('button'));
         fireEvent.click(screen.getByText('Ethereum'));
         fireEvent.change(input, { target: { value: '1' } });
-        expect(screen.getByText(`~ 1,012 USD`)).toBeInTheDocument();
+        expect(screen.getByText(`~ $1,012`)).toBeInTheDocument();
         fireEvent.change(input, { target: { value: '10' } });
-        expect(screen.getByText(`~ 10,120 USD`)).toBeInTheDocument();
-    });
-
-    it('should transform the option selected with the transform function', () => {
-        render(<Default />);
-        expect(
-            screen.getByTestId('asset-selector-transformed-value')
-        ).toHaveTextContent('WBTC');
-        fireEvent.click(screen.getByRole('button'));
-
-        fireEvent.click(screen.getByText('WFIL'));
-        expect(
-            screen.getByTestId('asset-selector-transformed-value')
-        ).toHaveTextContent('WFIL');
+        expect(screen.getByText(`~ $10,120`)).toBeInTheDocument();
     });
 
     it('should call the onAmountChange function when the amount is changed', () => {

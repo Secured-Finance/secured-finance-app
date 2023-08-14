@@ -5,7 +5,7 @@ module.exports = {
     theme: {
         extend: {
             boxShadow: {
-                deep: '0px 34px 64px rgba(0, 0, 0, 0.45)',
+                deep: '0px 34px 64px 0px rgba(0, 0, 0, 0.45)',
                 dropdown: '0px 16px 64px -48px rgba(31, 47, 70, 0.4)',
                 tab: '0px 46px 64px rgba(31, 47, 70, 0.4)',
                 selector: 'inset 0px 2px 4px rgba(0, 0, 0, 0.25)',

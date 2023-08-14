@@ -34,7 +34,6 @@ import {
     formatLoanValue,
     generateWalletSourceInformation,
     getAmountValidation,
-    getCurrencyMapAsList,
     getCurrencyMapAsOptions,
     getTransformMaturityOption,
 } from 'src/utils';
@@ -56,18 +55,6 @@ export const LendingCard = ({
 
     const dispatch = useDispatch();
     const { address, isConnected } = useAccount();
-
-    const shortNames = useMemo(
-        () =>
-            getCurrencyMapAsList().reduce<Record<string, CurrencySymbol>>(
-                (acc, ccy) => ({
-                    ...acc,
-                    [ccy.name]: ccy.symbol,
-                }),
-                {}
-            ),
-        []
-    );
 
     const assetPriceMap = useSelector((state: RootState) => getPriceMap(state));
     const assetList = useMemo(() => getCurrencyMapAsOptions(), []);
@@ -169,7 +156,7 @@ export const LendingCard = ({
         : undefined;
 
     return (
-        <div className='w-80 flex-col space-y-6 rounded-b-xl border border-panelStroke bg-transparent pb-6 shadow-deep'>
+        <div className='w-80 space-y-6 rounded-b-xl border border-panelStroke bg-transparent pb-6 shadow-deep'>
             <RadioGroupSelector
                 options={Object.values(OrderSideMap)}
                 selectedOption={OrderSideMap[side]}
@@ -187,14 +174,14 @@ export const LendingCard = ({
             />
 
             <div className='grid justify-center space-y-6 px-4'>
-                <div className='flex flex-col text-center'>
+                <div className='flex flex-col pb-2 text-center'>
                     <span
                         className='typography-amount-large text-white'
                         data-testid='market-rate'
                     >
                         {formatLoanValue(marketValue, 'rate')}
                     </span>
-                    <span className='typography-caption uppercase text-planetaryPurple'>
+                    <span className='typography-caption uppercase text-secondary7'>
                         Fixed Rate APR
                     </span>
                 </div>
@@ -203,7 +190,6 @@ export const LendingCard = ({
                     <AssetSelector
                         options={assetList}
                         selected={selectedAsset}
-                        transformLabel={(v: string) => shortNames[v]}
                         priceList={assetPriceMap}
                         onAmountChange={v => dispatch(setAmount(v))}
                         initialValue={orderAmount}
@@ -250,12 +236,16 @@ export const LendingCard = ({
                 )}
 
                 {side === OrderSide.BORROW && (
-                    <CollateralUsageSection
-                        usdCollateral={collateralBook.usdCollateral}
-                        collateralCoverage={collateralBook.coverage.toNumber()}
-                        currency={currency}
-                        collateralThreshold={collateralBook.collateralThreshold}
-                    />
+                    <div className='px-2'>
+                        <CollateralUsageSection
+                            usdCollateral={collateralBook.usdCollateral}
+                            collateralCoverage={collateralBook.coverage.toNumber()}
+                            currency={currency}
+                            collateralThreshold={
+                                collateralBook.collateralThreshold
+                            }
+                        />
+                    </div>
                 )}
 
                 <OrderAction

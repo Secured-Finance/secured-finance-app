@@ -4,14 +4,6 @@ import { AssetSelector } from './AssetSelector';
 
 type AllowedCcy = 'WBTC' | 'ETH' | 'WFIL' | 'USDC' | 'USDT';
 
-const shortNames: Record<string, string> = {
-    'Wrapped Bitcoin': 'WBTC',
-    Ethereum: 'ETH',
-    WFIL: 'WFIL',
-    'USD Coin': 'USDC',
-    'USD Tether': 'USDT',
-};
-
 const priceList: Record<AllowedCcy, number> = {
     WBTC: 20515,
     ETH: 1012,
@@ -26,7 +18,6 @@ export default {
     args: {
         options: assetList,
         selected: assetList[0],
-        transformLabel: (v: string) => shortNames[v],
         priceList,
         onAssetChange: () => {},
         onAmountChange: () => {},
