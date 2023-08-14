@@ -1,5 +1,5 @@
 import type { Meta, StoryFn } from '@storybook/react';
-import React from 'react';
+import { useState } from 'react';
 import MetaMaskIcon from 'src/assets/img/metamask-fox.svg';
 import WalletConnectIcon from 'src/assets/img/wallet-connect.svg';
 import { WalletRadioGroup } from './WalletRadioGroup';
@@ -10,7 +10,7 @@ export default {
 } as Meta<typeof WalletRadioGroup>;
 
 const Template: StoryFn<typeof WalletRadioGroup> = () => {
-    const [value, setValue] = React.useState('');
+    const [value, setValue] = useState('');
     return (
         <WalletRadioGroup
             value={value}

@@ -1,6 +1,6 @@
 import { Popover } from '@headlessui/react';
 import classNames from 'classnames';
-import React, { useState } from 'react';
+import { cloneElement, useState } from 'react';
 import InformationCircle from 'src/assets/icons/information-circle.svg';
 
 const InformationCircleIcon = (
@@ -36,7 +36,7 @@ export const Tooltip = ({
                         className='flex items-center focus:outline-none'
                         as='div'
                     >
-                        {React.cloneElement(
+                        {cloneElement(
                             // eslint-disable-next-line @typescript-eslint/no-explicit-any
                             iconElement as React.ReactElement<any>,
                             {

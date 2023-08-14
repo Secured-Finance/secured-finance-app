@@ -16,7 +16,7 @@ describe('test Button component', () => {
     it('should render a medium button by default', () => {
         render(<Default />);
         const button = screen.getByRole('button');
-        expect(button).toHaveClass('h-11');
+        expect(button).toHaveClass('h-12');
     });
 
     it('should render as an anchor when used with a href', () => {

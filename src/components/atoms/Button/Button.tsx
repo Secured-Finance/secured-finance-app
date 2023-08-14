@@ -1,5 +1,4 @@
 import classNames from 'classnames';
-import React from 'react';
 import { SvgIcon } from 'src/types';
 
 export const Button = ({
@@ -40,7 +39,7 @@ export const Button = ({
                 'disabled:bg-gradient-to-t disabled:from-black/25 disabled:via-black/25 disabled:to-starBlue disabled:opacity-50',
                 {
                     'h-10 px-4 py-3': size === 'sm',
-                    'h-11 px-6 py-4': size === 'md',
+                    'h-12 px-6 py-4': size === 'md',
                     'w-full': fullWidth,
                     'w-fit': !fullWidth,
                 }
@@ -54,7 +53,7 @@ export const Button = ({
             <p
                 className={classNames('whitespace-nowrap text-neutral-8', {
                     'typography-button-2': size === 'sm',
-                    'typography-button-1`': size === 'md',
+                    'typography-button-1': size === 'md',
                 })}
             >
                 {children}

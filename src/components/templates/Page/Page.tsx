@@ -1,4 +1,4 @@
-import React from 'react';
+import { Children } from 'react';
 
 export const Page = ({
     title,
@@ -23,7 +23,7 @@ export const Page = ({
                 {titleComponent ? titleComponent : null}
             </div>
             <div className='flex flex-col gap-6'>
-                {React.Children.map(children, (child, index) => {
+                {Children.map(children, (child, index) => {
                     return (
                         <div className='' key={`page-${name}-${index}`}>
                             {child}

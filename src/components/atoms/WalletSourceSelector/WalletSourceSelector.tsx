@@ -57,9 +57,9 @@ export const WalletSourceSelector = ({
 
     return (
         <div className='flex h-20 w-full flex-col justify-between'>
-            <div className='typography-caption-2 flex flex-row justify-between text-planetaryPurple'>
-                <span className='ml-2'>Lending Source</span>
-                <span className='mr-1'>Available to Lend</span>
+            <div className='typography-caption-2 mx-2 flex flex-row justify-between text-secondary7'>
+                <span>Lending Source</span>
+                <span>Available to Lend</span>
             </div>
             <div className='w-full'>
                 <Listbox
@@ -73,14 +73,14 @@ export const WalletSourceSelector = ({
                         <>
                             <div className='relative h-full'>
                                 <Listbox.Button
-                                    className='flex w-full cursor-default flex-row items-center justify-between rounded-lg bg-black-20 py-2 pl-2 pr-3 ring-starBlue focus-within:ring'
+                                    className='flex w-full cursor-default flex-row items-center justify-between rounded-lg bg-black-20 py-2 pl-2 pr-4 ring-inset ring-starBlue focus-within:ring-2'
                                     data-testid='wallet-source-selector-button'
                                 >
-                                    <div className='flex h-10 flex-row items-center gap-2 rounded-lg bg-white-5 px-2'>
+                                    <div className='flex h-10 cursor-pointer flex-row items-center gap-2 rounded-lg bg-white-5 px-2'>
                                         <span>
                                             <selectedOption.iconSVG className='h-5 w-5' />
                                         </span>
-                                        <span className='typography-caption-2 min-w-[80px] items-center leading-4 text-grayScale'>
+                                        <span className='typography-caption-2 min-w-[80px] text-left leading-4 text-grayScale'>
                                             {formatSource(
                                                 selectedOption.source,
                                                 account
@@ -88,10 +88,13 @@ export const WalletSourceSelector = ({
                                         </span>
                                         <ExpandIndicator expanded={open} />
                                     </div>
-                                    <div className='typography-caption w-fit max-w-[200px] items-center justify-end text-white-60'>
-                                        {formatOption(
-                                            selectedOption.available,
-                                            selectedOption.asset
+                                    <div className='typography-caption w-fit max-w-[200px] text-white-60'>
+                                        {ordinaryFormat(
+                                            Math.floor(
+                                                selectedOption.available * 100
+                                            ) / 100,
+                                            0,
+                                            4
                                         )}
                                     </div>
                                 </Listbox.Button>

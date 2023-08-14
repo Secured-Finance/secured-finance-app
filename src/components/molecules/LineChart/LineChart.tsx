@@ -11,7 +11,7 @@ import {
     Tooltip,
 } from 'chart.js';
 import ChartTooltip from 'chart.js/auto';
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { ChartProps, Line } from 'react-chartjs-2';
 import { Spinner } from 'src/components/atoms';
 import {

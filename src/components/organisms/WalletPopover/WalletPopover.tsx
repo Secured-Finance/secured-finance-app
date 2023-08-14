@@ -3,7 +3,7 @@ import { Popover, Transition } from '@headlessui/react';
 import { ArrowLeftOnRectangleIcon } from '@heroicons/react/24/outline';
 import classNames from 'classnames';
 import { useRouter } from 'next/router';
-import React, { Fragment, useCallback } from 'react';
+import { Fragment, useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 import MetamaskLogo from 'src/assets/img/metamask-fox.svg';
 import { ExpandIndicator, Separator } from 'src/components/atoms';

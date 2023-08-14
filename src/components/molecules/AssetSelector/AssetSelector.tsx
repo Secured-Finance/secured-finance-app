@@ -95,7 +95,7 @@ export const AssetSelector = <AssetType extends string = string>({
                     {prefixTilde(amountInUsd)}
                 </div>
             </div>
-            <div className='flex h-14 flex-row items-center justify-between rounded-lg bg-black-20 p-2 ring-starBlue focus-within:ring'>
+            <div className='flex h-14 flex-row items-center justify-between rounded-lg bg-black-20 p-2 ring-inset ring-starBlue focus-within:ring-2'>
                 <DropdownSelector
                     optionList={options}
                     selected={selected}

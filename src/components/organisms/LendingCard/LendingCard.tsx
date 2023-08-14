@@ -156,7 +156,7 @@ export const LendingCard = ({
         : undefined;
 
     return (
-        <div className='w-80 space-y-6 rounded-b-xl border border-panelStroke bg-transparent pb-6 shadow-deep'>
+        <div className='w-80 space-y-6 rounded-b-xl border border-panelStroke bg-transparent pb-7 shadow-deep'>
             <RadioGroupSelector
                 options={Object.values(OrderSideMap)}
                 selectedOption={OrderSideMap[side]}
@@ -173,81 +173,82 @@ export const LendingCard = ({
                 variant='NavTab'
             />
 
-            <div className='grid justify-center space-y-6 px-4'>
-                <div className='flex flex-col pb-2 text-center'>
-                    <span
-                        className='typography-amount-large text-white'
-                        data-testid='market-rate'
-                    >
-                        {formatLoanValue(marketValue, 'rate')}
-                    </span>
-                    <span className='typography-caption uppercase text-secondary7'>
-                        Fixed Rate APR
-                    </span>
-                </div>
+            <div className='flex h-[480px] flex-col justify-between px-4'>
+                <div className='flex flex-col gap-6'>
+                    <div className='flex flex-col pb-2 text-center'>
+                        <span
+                            className='typography-amount-large text-white'
+                            data-testid='market-rate'
+                        >
+                            {formatLoanValue(marketValue, 'rate')}
+                        </span>
+                        <span className='typography-caption uppercase text-secondary7'>
+                            Fixed Rate APR
+                        </span>
+                    </div>
 
-                <div className='space-y-1'>
-                    <AssetSelector
-                        options={assetList}
-                        selected={selectedAsset}
-                        priceList={assetPriceMap}
-                        onAmountChange={v => dispatch(setAmount(v))}
-                        initialValue={orderAmount}
-                        amountFormatterMap={amountFormatterToBase}
-                        onAssetChange={handleCurrencyChange}
-                    />
-                    {side === OrderSide.LEND && (
-                        <ErrorInfo
-                            showError={getAmountValidation(
-                                amountFormatterFromBase[currency](amount),
-                                balanceToLend,
-                                side
-                            )}
-                            errorMessage='Insufficient amount in source'
+                    <div className='space-y-1'>
+                        <AssetSelector
+                            options={assetList}
+                            selected={selectedAsset}
+                            priceList={assetPriceMap}
+                            onAmountChange={v => dispatch(setAmount(v))}
+                            initialValue={orderAmount}
+                            amountFormatterMap={amountFormatterToBase}
+                            onAssetChange={handleCurrencyChange}
                         />
-                    )}
-                </div>
+                        {side === OrderSide.LEND && (
+                            <ErrorInfo
+                                showError={getAmountValidation(
+                                    amountFormatterFromBase[currency](amount),
+                                    balanceToLend,
+                                    side
+                                )}
+                                errorMessage='Insufficient amount in source'
+                            />
+                        )}
+                    </div>
 
-                <TermSelector
-                    options={maturitiesOptionList.map(o => ({
-                        ...o,
-                        value: o.value.toString(),
-                    }))}
-                    selected={{
-                        ...selectedTerm,
-                        value: selectedTerm.value.toString(),
-                    }}
-                    onTermChange={v => dispatch(setMaturity(Number(v)))}
-                    transformLabel={getTransformMaturityOption(
-                        maturitiesOptionList.map(o => ({
+                    <TermSelector
+                        options={maturitiesOptionList.map(o => ({
                             ...o,
                             value: o.value.toString(),
-                        }))
-                    )}
-                />
-
-                {isConnected && side === OrderSide.LEND && (
-                    <WalletSourceSelector
-                        optionList={walletSourceList}
-                        selected={selectedWalletSource}
-                        account={address ?? ''}
-                        onChange={handleWalletSourceChange}
+                        }))}
+                        selected={{
+                            ...selectedTerm,
+                            value: selectedTerm.value.toString(),
+                        }}
+                        onTermChange={v => dispatch(setMaturity(Number(v)))}
+                        transformLabel={getTransformMaturityOption(
+                            maturitiesOptionList.map(o => ({
+                                ...o,
+                                value: o.value.toString(),
+                            }))
+                        )}
                     />
-                )}
 
-                {side === OrderSide.BORROW && (
-                    <div className='px-2'>
-                        <CollateralUsageSection
-                            usdCollateral={collateralBook.usdCollateral}
-                            collateralCoverage={collateralBook.coverage.toNumber()}
-                            currency={currency}
-                            collateralThreshold={
-                                collateralBook.collateralThreshold
-                            }
+                    {isConnected && side === OrderSide.LEND && (
+                        <WalletSourceSelector
+                            optionList={walletSourceList}
+                            selected={selectedWalletSource}
+                            account={address ?? ''}
+                            onChange={handleWalletSourceChange}
                         />
-                    </div>
-                )}
+                    )}
 
+                    {side === OrderSide.BORROW && (
+                        <div className='px-2'>
+                            <CollateralUsageSection
+                                usdCollateral={collateralBook.usdCollateral}
+                                collateralCoverage={collateralBook.coverage.toNumber()}
+                                currency={currency}
+                                collateralThreshold={
+                                    collateralBook.collateralThreshold
+                                }
+                            />
+                        </div>
+                    )}
+                </div>
                 <OrderAction
                     collateralBook={collateralBook}
                     loanValue={marketValue}
