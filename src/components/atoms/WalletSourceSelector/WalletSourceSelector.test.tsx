@@ -7,7 +7,7 @@ import { CurrencySymbol } from 'src/utils';
 import { WalletSourceOption } from './WalletSourceSelector';
 import * as stories from './WalletSourceSelector.stories';
 
-const { Default } = composeStories(stories);
+const { Default, NotConnectedToWallet } = composeStories(stories);
 
 const walletSourceList: WalletSourceOption[] = [
     {
@@ -33,9 +33,22 @@ describe('WalletSourceSelector component', () => {
         expect(screen.getByText('1,000')).toBeInTheDocument();
     });
 
+    it('should render disabled WalletSourceSelector when wallet is disconnected', () => {
+        render(<NotConnectedToWallet />);
+        expect(screen.getByText('Lending Source')).toBeInTheDocument();
+        expect(screen.getByText('Available to Lend')).toBeInTheDocument();
+        expect(screen.getByText('Select Source')).toBeInTheDocument();
+        expect(screen.getByText('--')).toBeInTheDocument();
+    });
+
     it('should render a clickable button', () => {
         render(<Default />);
         expect(screen.getByRole('button')).toBeInTheDocument();
+    });
+
+    it('should render a disabled button when wallet is disconnected', async () => {
+        render(<NotConnectedToWallet />);
+        expect(screen.getByRole('button')).toBeDisabled();
     });
 
     it('should render a dropdown', async () => {
@@ -43,6 +56,14 @@ describe('WalletSourceSelector component', () => {
         fireEvent.click(screen.getByRole('button'));
         await waitFor(() => {
             expect(screen.getByRole('listbox')).toBeInTheDocument();
+        });
+    });
+
+    it('should not render a dropdown when wallet is disconnected', async () => {
+        render(<NotConnectedToWallet />);
+        fireEvent.click(screen.getByRole('button'));
+        await waitFor(() => {
+            expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
         });
     });
 

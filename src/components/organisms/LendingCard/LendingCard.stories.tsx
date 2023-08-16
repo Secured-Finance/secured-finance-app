@@ -31,14 +31,14 @@ export const Default = Template.bind({});
 export const Lend = Template.bind({});
 Lend.play = async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    const lendTab = canvas.getByText('Lend');
+    const lendTab = canvas.getByRole('radio', { name: 'Lend' });
     lendTab.click();
 };
 
 export const FailedAmountValidation = Template.bind({});
 FailedAmountValidation.play = async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    const lendTab = canvas.getByText('Lend');
+    const lendTab = canvas.getByRole('radio', { name: 'Lend' });
     lendTab.click();
     const input = canvas.getByRole('textbox');
     await userEvent.type(input, '999999999', {

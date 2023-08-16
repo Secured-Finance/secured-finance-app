@@ -20,3 +20,7 @@ const Template: StoryFn<typeof WalletSourceSelector> = args => (
 );
 
 export const Default = Template.bind({});
+export const NotConnectedToWallet = Template.bind({});
+NotConnectedToWallet.args = {
+    account: '',
+};
