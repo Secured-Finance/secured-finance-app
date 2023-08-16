@@ -19,6 +19,7 @@ import {
 import { Page } from 'src/components/templates';
 import { TwoColumnsWithTopBar } from 'src/components/templates/TwoColumnsWithTopBar';
 import {
+    emptyCollateralBook,
     emptyOrderList,
     useCollateralBook,
     useCurrenciesForOrders,
@@ -140,7 +141,8 @@ export const Itayose = () => {
         address,
         usedCurrencies
     );
-    const collateralBook = useCollateralBook(address);
+    const { data: collateralBook = emptyCollateralBook } =
+        useCollateralBook(address);
 
     const filteredOrderList = useMemo(() => {
         return orderList.activeOrderList.filter(
