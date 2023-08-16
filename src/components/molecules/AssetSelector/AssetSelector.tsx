@@ -44,7 +44,7 @@ export const AssetSelector = <AssetType extends string = string>({
             currencySign: 'accounting',
             minimumFractionDigits: 0,
             maximumFractionDigits: 2,
-        }).format(priceList[selectedOption.value] * (amount ?? 0));
+        }).format(priceList[selectedOption.value] * amount);
     }, [selectedOption?.value, priceList, amount]);
 
     const handleInputChange = useCallback(
