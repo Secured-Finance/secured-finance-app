@@ -54,7 +54,7 @@ export const LendingCard = ({
     );
 
     const dispatch = useDispatch();
-    const { address, isConnected } = useAccount();
+    const { address } = useAccount();
 
     const assetPriceMap = useSelector((state: RootState) => getPriceMap(state));
     const assetList = useMemo(() => getCurrencyMapAsOptions(), []);
@@ -156,7 +156,7 @@ export const LendingCard = ({
         : undefined;
 
     return (
-        <div className='w-80 space-y-6 rounded-b-xl border border-panelStroke bg-transparent pb-7 shadow-deep'>
+        <div className='w-[345px] space-y-6 rounded-b-xl border border-panelStroke bg-transparent pb-7 shadow-deep'>
             <RadioGroupSelector
                 options={Object.values(OrderSideMap)}
                 selectedOption={OrderSideMap[side]}
@@ -227,7 +227,7 @@ export const LendingCard = ({
                         )}
                     />
 
-                    {isConnected && side === OrderSide.LEND && (
+                    {side === OrderSide.LEND && (
                         <WalletSourceSelector
                             optionList={walletSourceList}
                             selected={selectedWalletSource}
