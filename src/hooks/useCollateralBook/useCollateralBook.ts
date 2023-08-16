@@ -45,7 +45,7 @@ export const emptyCollateralBook: CollateralBook = {
     collateralThreshold: 0,
 };
 
-const emptyCollateral = {
+const emptyCollateralValues = {
     collateral: {
         [CurrencySymbol.ETH]: ZERO_BN,
         [CurrencySymbol.USDC]: ZERO_BN,
@@ -74,65 +74,64 @@ export const useCollateralBook = (account: string | undefined) => {
     return useQuery({
         queryKey: [QueryKeys.COLLATERAL_BOOK, account],
         queryFn: async () => {
-            const [collateral, collateralParameters, withdrawableCollateral] =
-                await Promise.all([
-                    securedFinance?.getCollateralBook(account ?? ''),
-                    securedFinance?.getCollateralParameters(),
-                    await Promise.all(
-                        collateralCurrencyList.map(async currencyInfo => {
-                            const ccy = currencyInfo.symbol;
-                            const withdrawableCollateral =
-                                await securedFinance?.getWithdrawableCollateral(
-                                    toCurrency(ccy),
-                                    account ?? ''
-                                );
-                            return [ccy, withdrawableCollateral ?? ZERO_BN];
-                        })
-                    ),
-                ]);
+            const [
+                collateralValues,
+                collateralParameters,
+                withdrawableCollateral,
+            ] = await Promise.all([
+                securedFinance?.getCollateralBook(account ?? ''),
+                securedFinance?.getCollateralParameters(),
+                await Promise.all(
+                    collateralCurrencyList.map(async currencyInfo => {
+                        const ccy = currencyInfo.symbol;
+                        const withdrawableCollateral =
+                            await securedFinance?.getWithdrawableCollateral(
+                                toCurrency(ccy),
+                                account ?? ''
+                            );
+                        return { [ccy]: withdrawableCollateral ?? ZERO_BN };
+                    })
+                ),
+            ]);
 
             return {
-                collateral: collateral ?? emptyCollateral,
+                collateralValues: collateralValues ?? emptyCollateralValues,
                 collateralParameters:
                     collateralParameters ?? emptyCollateralParameters,
                 withdrawableCollateral: withdrawableCollateral,
             };
         },
-        select: cb => {
+        select: data => {
             const {
                 collateralBook,
                 nonCollateralBook,
                 usdCollateral,
                 usdNonCollateral,
-            } = formatCollateral(cb.collateral.collateral, priceList);
+            } = formatCollateral(data.collateralValues.collateral, priceList);
 
             const liquidationThresholdRate =
-                cb.collateralParameters.liquidationThresholdRate;
+                data.collateralParameters.liquidationThresholdRate;
             const collateralThreshold = liquidationThresholdRate.isZero()
                 ? 0
                 : 1000000 / liquidationThresholdRate.toNumber();
 
-            const withdrawableCollateral: Partial<
-                Record<CurrencySymbol, BigNumber>
-            > = {};
+            const withdrawableCollateral: CollateralBook['withdrawableCollateral'] =
+                data.withdrawableCollateral.reduce((acc, obj) => ({
+                    ...acc,
+                    ...obj,
+                }));
 
-            cb.withdrawableCollateral.forEach(value => {
-                if (value) {
-                    withdrawableCollateral[value[0] as CurrencySymbol] =
-                        value[1] as BigNumber;
-                }
-            });
-
-            const cBook: CollateralBook = {
+            const colBook: CollateralBook = {
                 collateral: collateralBook,
                 nonCollateral: nonCollateralBook,
                 usdCollateral: usdCollateral,
                 usdNonCollateral: usdNonCollateral,
-                coverage: cb.collateral.collateralCoverage,
+                coverage: data.collateralValues.collateralCoverage,
                 collateralThreshold: collateralThreshold,
                 withdrawableCollateral: withdrawableCollateral,
             };
-            return cBook;
+
+            return colBook;
         },
         enabled: !!securedFinance && !!account,
     });
