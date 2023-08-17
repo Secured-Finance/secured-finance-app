@@ -1,11 +1,7 @@
 import { OrderSide, WalletSource } from '@secured-finance/sf-client';
 import { composeStories } from '@storybook/react';
 import { BigNumber } from 'ethers';
-import {
-    dec22Fixture,
-    preloadedAssetPrices,
-    preloadedLendingMarkets,
-} from 'src/stories/mocks/fixtures';
+import { dec22Fixture, preloadedAssetPrices } from 'src/stories/mocks/fixtures';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
 import { OrderType } from 'src/types';
@@ -70,8 +66,11 @@ describe('PlaceOrder component', () => {
     });
 
     it('should display the circuit breaker disclaimer', async () => {
-        render(<Default />, { preloadedState: preloadedLendingMarkets });
+        render(<Default />);
 
+        await waitFor(() =>
+            expect(screen.getByText('Dec 1, 2022')).toBeInTheDocument()
+        );
         const button = screen.getByTestId('disclaimer-button');
         expect(button).toHaveTextContent('Circuit Breaker Disclaimer');
         await waitFor(() => fireEvent.click(button));

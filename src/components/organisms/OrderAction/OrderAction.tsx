@@ -7,10 +7,14 @@ import {
     PlaceOrder,
     generateCollateralList,
 } from 'src/components/organisms';
-import { CollateralBook, useOrders } from 'src/hooks';
+import {
+    CollateralBook,
+    MarketPhase,
+    useMarketPhase,
+    useOrders,
+} from 'src/hooks';
 import { useCollateralBalances } from 'src/hooks/useERC20Balance';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
-import { MarketPhase, selectMarketPhase } from 'src/store/availableContracts';
 import { setWalletDialogOpen } from 'src/store/interactions';
 import { selectLandingOrderForm } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
@@ -45,9 +49,7 @@ export const OrderAction = ({
             selectLandingOrderForm(state.landingOrderForm)
         );
 
-    const marketPhase = useSelector((state: RootState) =>
-        selectMarketPhase(currency, maturity)(state)
-    );
+    const marketPhase = useMarketPhase(currency, maturity);
 
     const collateralBalances = useCollateralBalances();
 

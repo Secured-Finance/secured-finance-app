@@ -1,6 +1,7 @@
 export enum QueryKeys {
     CURRENCIES = 'CURRENCIES',
     COLLATERAL_BOOK = 'COLLATERAL_BOOK',
+    LENDING_MARKETS = 'LENDING_MARKETS',
     ORDER_BOOK = 'ORDER_BOOK',
     ORDER_FEE = 'ORDER_FEE',
     ORDER_LIST = 'ORDER_LIST',
@@ -13,6 +14,7 @@ export enum QueryKeys {
 export const QUERIES_TO_INVALIDATE = [
     QueryKeys.COLLATERAL_BOOK,
     QueryKeys.ORDER_BOOK,
+    QueryKeys.LENDING_MARKETS,
     QueryKeys.USED_CURRENCIES_FOR_ORDERS,
     QueryKeys.ORDER_LIST,
     QueryKeys.POSITIONS,

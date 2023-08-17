@@ -1,10 +1,6 @@
 import { formatDate } from '@secured-finance/sf-core';
 import { composeStories } from '@storybook/react';
-import {
-    mar23Fixture,
-    preloadedAssetPrices,
-    preloadedLendingMarkets,
-} from 'src/stories/mocks/fixtures';
+import { mar23Fixture, preloadedAssetPrices } from 'src/stories/mocks/fixtures';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
 import { CurrencyInfo, currencyMap } from 'src/utils';
@@ -36,7 +32,6 @@ beforeAll(() => {
 describe('LendingCard Component', () => {
     const preloadedState = {
         ...preloadedAssetPrices,
-        ...preloadedLendingMarkets,
         wallet: {
             address: '0x1',
         },

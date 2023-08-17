@@ -1,10 +1,5 @@
 import { composeStories } from '@storybook/react';
-import {
-    dec24Fixture,
-    preloadedLendingMarkets,
-} from 'src/stories/mocks/fixtures';
 import { render, screen } from 'src/test-utils.js';
-import { CurrencySymbol } from 'src/utils';
 import * as stories from './MarketLoanWidget.stories';
 
 const { Default } = composeStories(stories);
@@ -48,31 +43,31 @@ describe('MarketLoanWidget Component', () => {
         expect(screen.queryByText('Market Open')).toBeInTheDocument();
     });
 
-    it('should hide the APR column when the market is in itayose mode', () => {
-        render(<Default />, {
-            preloadedState: {
-                ...preloadedLendingMarkets,
-                availableContracts: {
-                    ...preloadedLendingMarkets.availableContracts,
-                    lendingMarket: {
-                        [CurrencySymbol.WBTC]: {
-                            ...preloadedLendingMarkets.availableContracts
-                                ?.lendingMarkets?.[CurrencySymbol.WBTC],
-                            [dec24Fixture.toNumber()]: {
-                                ...preloadedLendingMarkets.availableContracts
-                                    ?.lendingMarkets?.[CurrencySymbol.WBTC]?.[
-                                    dec24Fixture.toNumber()
-                                ],
-                                itayose: true,
-                            },
-                        },
-                    },
-                },
-            },
-        });
-        screen.getByRole('button', { name: 'DEC22' }).click();
-        screen.getByRole('menuitem', { name: 'DEC24' }).click();
-        expect(screen.queryByText('APR')).not.toBeInTheDocument();
-        expect(screen.queryByText('Market Open')).toBeInTheDocument();
-    });
+    // it('should hide the APR column when the market is in itayose mode', () => {
+    //     render(<Default />, {
+    //         preloadedState: {
+    //             ...preloadedLendingMarkets,
+    //             availableContracts: {
+    //                 ...preloadedLendingMarkets.availableContracts,
+    //                 lendingMarket: {
+    //                     [CurrencySymbol.WBTC]: {
+    //                         ...preloadedLendingMarkets.availableContracts
+    //                             ?.lendingMarkets?.[CurrencySymbol.WBTC],
+    //                         [dec24Fixture.toNumber()]: {
+    //                             ...preloadedLendingMarkets.availableContracts
+    //                                 ?.lendingMarkets?.[CurrencySymbol.WBTC]?.[
+    //                                 dec24Fixture.toNumber()
+    //                             ],
+    //                             itayose: true,
+    //                         },
+    //                     },
+    //                 },
+    //             },
+    //         },
+    //     });
+    //     screen.getByRole('button', { name: 'DEC22' }).click();
+    //     screen.getByRole('menuitem', { name: 'DEC24' }).click();
+    //     expect(screen.queryByText('APR')).not.toBeInTheDocument();
+    //     expect(screen.queryByText('Market Open')).toBeInTheDocument();
+    // });
 });

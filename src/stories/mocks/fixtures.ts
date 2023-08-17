@@ -11,7 +11,6 @@ import MetamaskIcon from 'src/assets/img/metamask-fox.svg';
 import { Option, WalletSourceOption } from 'src/components/atoms';
 import { CollateralBook, Order, Position } from 'src/hooks';
 import { AssetPrices } from 'src/store/assetPrices';
-import { RootState } from 'src/store/types';
 import {
     DailyVolumes,
     MaturityOptionList,
@@ -21,6 +20,11 @@ import {
 } from 'src/types';
 import { CurrencySymbol, Rate } from 'src/utils';
 import { Maturity } from 'src/utils/entities';
+
+export const wfilBytes32 = utils.formatBytes32String('WFIL'); // 0x5746494c0000000000000000000000000000000000000000000000000000000000
+export const ethBytes32 = utils.formatBytes32String('ETH'); // 0x455448000000000000000000000000000000000000000000000000000000000
+export const wbtcBytes32 = utils.formatBytes32String('WBTC'); // 0x5742544300000000000000000000000000000000000000000000000000000000
+export const usdcBytes32 = utils.formatBytes32String('USDC'); // 0x5553444300000000000000000000000000000000000000000000000000000000
 
 export const preloadedAssetPrices: { assetPrices: AssetPrices } = {
     assetPrices: {
@@ -68,14 +72,174 @@ const jun24Fixture = new Maturity(1717200000);
 const sep24Fixture = new Maturity(1725148800);
 export const dec24Fixture = new Maturity(1733011200);
 
+const openingDateTimestamp = 1638316800;
+const openingDate = BigNumber.from(openingDateTimestamp);
+const preOpenDateTimestamp = 1638144000;
+
+export const maturitiesMock = (ccy: string) => [
+    {
+        name: 'DEC22',
+        maturity: BigNumber.from(dec22Fixture.toString()),
+        openingDate: openingDate,
+        midUnitPrice: BigNumber.from('9801'),
+        openingUnitPrice: BigNumber.from('9710'),
+        isReady: true,
+        isOpened: true,
+        isMatured: false,
+        isPreOrderPeriod: false,
+        isItayosePeriod: false,
+        bestBorrowUnitPrice: BigNumber.from('9685'),
+        bestLendUnitPrice: BigNumber.from('9687'),
+        minBorrowUnitPrice: BigNumber.from('9672'),
+        maxLendUnitPrice: BigNumber.from('9700'),
+        ccy,
+    },
+    {
+        name: 'MAR23',
+        maturity: BigNumber.from(mar23Fixture.toString()),
+        openingDate: openingDate,
+        midUnitPrice: BigNumber.from('9701'),
+        openingUnitPrice: BigNumber.from('9710'),
+        isReady: true,
+        isOpened: true,
+        isMatured: false,
+        isPreOrderPeriod: false,
+        isItayosePeriod: false,
+        bestBorrowUnitPrice: BigNumber.from('9683'),
+        bestLendUnitPrice: BigNumber.from('9685'),
+        minBorrowUnitPrice: BigNumber.from('9670'),
+        maxLendUnitPrice: BigNumber.from('9698'),
+        ccy,
+    },
+    {
+        name: 'JUN23',
+        maturity: BigNumber.from(jun23Fixture.toString()),
+        openingDate: openingDate,
+        midUnitPrice: BigNumber.from('9601'),
+        openingUnitPrice: BigNumber.from('9710'),
+        isReady: true,
+        isOpened: true,
+        isMatured: false,
+        isPreOrderPeriod: false,
+        isItayosePeriod: false,
+        bestBorrowUnitPrice: BigNumber.from('9677'),
+        bestLendUnitPrice: BigNumber.from('9679'),
+        minBorrowUnitPrice: BigNumber.from('9664'),
+        maxLendUnitPrice: BigNumber.from('9692'),
+        ccy,
+    },
+    {
+        name: 'SEP23',
+        maturity: BigNumber.from(sep23Fixture.toString()),
+        openingDate: openingDate,
+        midUnitPrice: BigNumber.from('9501'),
+        openingUnitPrice: BigNumber.from('9710'),
+        isReady: true,
+        isOpened: true,
+        isMatured: false,
+        isPreOrderPeriod: false,
+        isItayosePeriod: false,
+        bestBorrowUnitPrice: BigNumber.from('9672'),
+        bestLendUnitPrice: BigNumber.from('9674'),
+        minBorrowUnitPrice: BigNumber.from('9659'),
+        maxLendUnitPrice: BigNumber.from('9687'),
+        ccy,
+    },
+    {
+        name: 'DEC23',
+        maturity: BigNumber.from(dec23Fixture.toString()),
+        openingDate: openingDate,
+        midUnitPrice: BigNumber.from('9401'),
+        openingUnitPrice: BigNumber.from('9710'),
+        isReady: true,
+        isOpened: true,
+        isMatured: false,
+        isPreOrderPeriod: false,
+        isItayosePeriod: false,
+        bestBorrowUnitPrice: BigNumber.from('9651'),
+        bestLendUnitPrice: BigNumber.from('9653'),
+        minBorrowUnitPrice: BigNumber.from('9638'),
+        maxLendUnitPrice: BigNumber.from('9666'),
+        ccy,
+    },
+    {
+        name: 'MAR24',
+        maturity: BigNumber.from(mar24Fixture.toString()),
+        openingDate: openingDate,
+        midUnitPrice: BigNumber.from('9301'),
+        openingUnitPrice: BigNumber.from('9710'),
+        isReady: true,
+        isOpened: true,
+        isMatured: false,
+        isPreOrderPeriod: false,
+        isItayosePeriod: false,
+        bestBorrowUnitPrice: BigNumber.from('9641'),
+        bestLendUnitPrice: BigNumber.from('9643'),
+        minBorrowUnitPrice: BigNumber.from('9628'),
+        maxLendUnitPrice: BigNumber.from('9656'),
+        ccy,
+    },
+    {
+        name: 'JUN24',
+        maturity: BigNumber.from(jun24Fixture.toString()),
+        openingDate: openingDate,
+        midUnitPrice: BigNumber.from('9201'),
+        openingUnitPrice: BigNumber.from('9710'),
+        isReady: true,
+        isOpened: true,
+        isMatured: false,
+        isPreOrderPeriod: false,
+        isItayosePeriod: false,
+        bestBorrowUnitPrice: BigNumber.from('9625'),
+        bestLendUnitPrice: BigNumber.from('9627'),
+        minBorrowUnitPrice: BigNumber.from('9612'),
+        maxLendUnitPrice: BigNumber.from('9640'),
+        ccy,
+    },
+    {
+        name: 'SEP24',
+        maturity: BigNumber.from(sep24Fixture.toString()),
+        openingDate: openingDate,
+        midUnitPrice: BigNumber.from('9101'),
+        openingUnitPrice: BigNumber.from('9710'),
+        isReady: true,
+        isOpened: true,
+        isMatured: false,
+        isPreOrderPeriod: false,
+        isItayosePeriod: false,
+        bestBorrowUnitPrice: BigNumber.from('9615'),
+        bestLendUnitPrice: BigNumber.from('9617'),
+        minBorrowUnitPrice: BigNumber.from('9602'),
+        maxLendUnitPrice: BigNumber.from('9630'),
+        ccy,
+    },
+    {
+        name: 'DEC24',
+        maturity: BigNumber.from(dec24Fixture.toString()),
+        openingDate: BigNumber.from('1685577600'),
+        midUnitPrice: BigNumber.from('9001'),
+        openingUnitPrice: BigNumber.from('9710'),
+        isReady: false,
+        isOpened: false,
+        isMatured: false,
+        isPreOrderPeriod: true,
+        isItayosePeriod: false,
+        bestBorrowUnitPrice: BigNumber.from('9615'),
+        bestLendUnitPrice: BigNumber.from('9617'),
+        minBorrowUnitPrice: BigNumber.from('9602'),
+        maxLendUnitPrice: BigNumber.from('9630'),
+        ccy,
+    },
+];
+
 export const maturities = {
     [dec22Fixture.toNumber()]: {
         name: 'DEC22',
         maturity: dec22Fixture.toNumber(),
         isActive: true,
-        utcOpeningDate: 1677628800,
+        utcOpeningDate: openingDateTimestamp,
         midUnitPrice: 9801,
-        preOpenDate: 1504828800,
+        preOpenDate: preOpenDateTimestamp,
         openingUnitPrice: 9710,
         isReady: true,
         isOpened: true,
@@ -91,9 +255,9 @@ export const maturities = {
         name: 'MAR23',
         maturity: mar23Fixture.toNumber(),
         isActive: true,
-        utcOpeningDate: 1677628800,
+        utcOpeningDate: openingDateTimestamp,
         midUnitPrice: 9701,
-        preOpenDate: 1504828800,
+        preOpenDate: preOpenDateTimestamp,
         openingUnitPrice: 9710,
         isReady: true,
         isOpened: true,
@@ -109,9 +273,9 @@ export const maturities = {
         name: 'JUN23',
         maturity: jun23Fixture.toNumber(),
         isActive: true,
-        utcOpeningDate: 1677628800,
+        utcOpeningDate: openingDateTimestamp,
         midUnitPrice: 9601,
-        preOpenDate: 1504828800,
+        preOpenDate: preOpenDateTimestamp,
         openingUnitPrice: 9710,
         isReady: true,
         isOpened: true,
@@ -127,9 +291,9 @@ export const maturities = {
         name: 'SEP23',
         maturity: sep23Fixture.toNumber(),
         isActive: true,
-        utcOpeningDate: 1677628800,
+        utcOpeningDate: openingDateTimestamp,
         midUnitPrice: 9501,
-        preOpenDate: 1504828800,
+        preOpenDate: preOpenDateTimestamp,
         openingUnitPrice: 9710,
         isReady: true,
         isOpened: true,
@@ -145,9 +309,9 @@ export const maturities = {
         name: 'DEC23',
         maturity: dec23Fixture.toNumber(),
         isActive: true,
-        utcOpeningDate: 1677628800,
+        utcOpeningDate: openingDateTimestamp,
         midUnitPrice: 9401,
-        preOpenDate: 1504828800,
+        preOpenDate: preOpenDateTimestamp,
         openingUnitPrice: 9710,
         isReady: true,
         isOpened: true,
@@ -163,9 +327,9 @@ export const maturities = {
         name: 'MAR24',
         maturity: mar24Fixture.toNumber(),
         isActive: true,
-        utcOpeningDate: 1677628800,
+        utcOpeningDate: openingDateTimestamp,
         midUnitPrice: 9301,
-        preOpenDate: 1504828800,
+        preOpenDate: preOpenDateTimestamp,
         openingUnitPrice: 9710,
         isReady: true,
         isOpened: true,
@@ -181,9 +345,9 @@ export const maturities = {
         name: 'JUN24',
         maturity: jun24Fixture.toNumber(),
         isActive: true,
-        utcOpeningDate: 1677628800,
+        utcOpeningDate: openingDateTimestamp,
         midUnitPrice: 9201,
-        preOpenDate: 1504828800,
+        preOpenDate: preOpenDateTimestamp,
         openingUnitPrice: 9710,
         isReady: true,
         isOpened: true,
@@ -199,9 +363,9 @@ export const maturities = {
         name: 'SEP24',
         maturity: sep24Fixture.toNumber(),
         isActive: true,
-        utcOpeningDate: 1677628800,
+        utcOpeningDate: openingDateTimestamp,
         midUnitPrice: 9101,
-        preOpenDate: 1504828800,
+        preOpenDate: preOpenDateTimestamp,
         openingUnitPrice: 9710,
         isReady: true,
         isOpened: true,
@@ -219,7 +383,7 @@ export const maturities = {
         isActive: false,
         utcOpeningDate: 1685577600,
         midUnitPrice: 9001,
-        preOpenDate: 1512777600,
+        preOpenDate: 1685404800,
         openingUnitPrice: 9710,
         isReady: false,
         isOpened: false,
@@ -230,17 +394,6 @@ export const maturities = {
         bestLendUnitPrice: 9617,
         minBorrowUnitPrice: 9602,
         maxLendUnitPrice: 9630,
-    },
-};
-
-export const preloadedLendingMarkets: Partial<RootState> = {
-    availableContracts: {
-        lendingMarkets: {
-            [CurrencySymbol.WFIL]: maturities,
-            [CurrencySymbol.WBTC]: maturities,
-            [CurrencySymbol.USDC]: maturities,
-            [CurrencySymbol.ETH]: maturities,
-        },
     },
 };
 
@@ -331,11 +484,6 @@ export const yieldCurveRates = [
     new Rate(46219),
     new Rate(47746),
 ];
-
-export const wfilBytes32 = utils.formatBytes32String('WFIL'); //0x5746494c0000000000000000000000000000000000000000000000000000000000
-export const ethBytes32 = utils.formatBytes32String('ETH');
-export const wbtcBytes32 = utils.formatBytes32String('WBTC'); //0x4546494c00000000000000000000000000000000000000000000000000000000
-export const usdcBytes32 = utils.formatBytes32String('USDC'); // '0x5553444300000000000000000000000000000000000000000000000000000000'
 
 export const activeOrders: Order[] = [
     {
@@ -720,7 +868,9 @@ function generateDailyVolumes(days: number) {
                 dec23Fixture,
             ])
                 volumes.push({
-                    id: `${fromBytes32(currency)}-1677628800-2023-02-${i}`,
+                    id: `${fromBytes32(
+                        currency
+                    )}-openingDateTimestamp-2023-02-${i}`,
                     currency: wfilBytes32,
                     maturity: dec22Fixture,
                     day: `2023-02-${i}`,

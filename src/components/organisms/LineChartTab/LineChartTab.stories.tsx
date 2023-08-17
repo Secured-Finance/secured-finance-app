@@ -1,7 +1,6 @@
 import type { Meta, StoryFn } from '@storybook/react';
 import {
     withAssetPrice,
-    withMaturities,
     withWalletProvider,
 } from 'src/../.storybook/decorators';
 import { maturityOptions, yieldCurveRates } from 'src/stories/mocks/fixtures';
@@ -15,7 +14,7 @@ export default {
         maturitiesOptionList: maturityOptions,
         rates: yieldCurveRates,
     },
-    decorators: [withWalletProvider, withAssetPrice, withMaturities],
+    decorators: [withWalletProvider, withAssetPrice],
 } as Meta<typeof LineChartTab>;
 
 const Template: StoryFn<typeof LineChartTab> = args => {

@@ -1,6 +1,5 @@
 import { OrderSide } from '@secured-finance/sf-client';
 import { composeStories } from '@storybook/react';
-import { preloadedLendingMarkets } from 'src/stories/mocks/fixtures';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { fireEvent, render, screen, waitFor, within } from 'src/test-utils.js';
 import { OrderType } from 'src/types';
@@ -28,7 +27,6 @@ const mock = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mock);
 
 const preloadedState = {
-    ...preloadedLendingMarkets,
     wallet: { address: '0x1' },
 };
 
@@ -119,9 +117,12 @@ describe('Landing Component', () => {
                     apolloMocks: Default.parameters?.apolloClient.mocks,
                     preloadedState,
                 });
-                clickAdvancedButton();
             });
+            clickAdvancedButton();
 
+            await waitFor(() =>
+                expect(screen.getByText('DEC22')).toBeInTheDocument()
+            );
             assertInputValue('Amount', '');
             assertInputValue('Bond Price', '96.85');
         });
@@ -132,8 +133,12 @@ describe('Landing Component', () => {
                     apolloMocks: Default.parameters?.apolloClient.mocks,
                     preloadedState,
                 });
-                clickAdvancedButton();
             });
+            clickAdvancedButton();
+
+            await waitFor(() =>
+                expect(screen.getByText('DEC22')).toBeInTheDocument()
+            );
             assertInputValue('Bond Price', '96.85');
 
             changeInputValue('Amount', '1');
@@ -153,8 +158,11 @@ describe('Landing Component', () => {
                     apolloMocks: Default.parameters?.apolloClient.mocks,
                     preloadedState,
                 });
-                clickAdvancedButton();
             });
+            clickAdvancedButton();
+            await waitFor(() =>
+                expect(screen.getByText('DEC22')).toBeInTheDocument()
+            );
             assertInputValue('Bond Price', '96.85');
 
             changeInputValue('Amount', '1');
@@ -173,8 +181,11 @@ describe('Landing Component', () => {
                     apolloMocks: Default.parameters?.apolloClient.mocks,
                     preloadedState,
                 });
-                clickAdvancedButton();
             });
+            clickAdvancedButton();
+            await waitFor(() =>
+                expect(screen.getByText('DEC22')).toBeInTheDocument()
+            );
             assertInputValue('Bond Price', '96.85');
             changeInputValue('Amount', '1');
             changeInputValue('Bond Price', '80');
@@ -225,7 +236,9 @@ describe('Landing Component', () => {
             });
         });
 
-        expect(screen.getByText('DEC22')).toBeInTheDocument();
+        await waitFor(() =>
+            expect(screen.getByText('DEC22')).toBeInTheDocument()
+        );
         fireEvent.click(screen.getByText('DEC22'));
         expect(screen.getByText('MAR23')).toBeInTheDocument();
         expect(screen.queryByText('DEC24')).not.toBeInTheDocument();

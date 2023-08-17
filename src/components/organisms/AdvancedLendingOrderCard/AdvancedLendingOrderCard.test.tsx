@@ -2,11 +2,7 @@ import { OrderSide } from '@secured-finance/sf-client';
 import { composeStories } from '@storybook/react';
 import { BigNumber } from 'ethers';
 import { CollateralBook } from 'src/hooks';
-import {
-    dec22Fixture,
-    preloadedAssetPrices,
-    preloadedLendingMarkets,
-} from 'src/stories/mocks/fixtures';
+import { dec22Fixture, preloadedAssetPrices } from 'src/stories/mocks/fixtures';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
 import { OrderType } from 'src/types';
@@ -28,7 +24,6 @@ const preloadedState = {
     wallet: {
         address: '0x1',
     },
-    ...preloadedLendingMarkets,
     ...preloadedAssetPrices,
 };
 
@@ -444,6 +439,9 @@ describe('AdvancedLendingOrderCard Component', () => {
                         },
                     },
                 });
+                await waitFor(() =>
+                    expect(screen.getByText('Place Order')).toBeInTheDocument()
+                );
 
                 changeInputValue('Bond Price', '0');
                 changeInputValue('Amount', '10');
@@ -532,6 +530,9 @@ describe('AdvancedLendingOrderCard Component', () => {
                         },
                     },
                 });
+                await waitFor(() =>
+                    expect(screen.getByText('Place Order')).toBeInTheDocument()
+                );
 
                 changeInputValue('Amount', '10');
                 assertPlaceOrderButtonIsEnabled();
@@ -568,7 +569,9 @@ describe('AdvancedLendingOrderCard Component', () => {
                         },
                     },
                 });
-
+                await waitFor(() =>
+                    expect(screen.getByText('Place Order')).toBeInTheDocument()
+                );
                 changeInputValue('Amount', '10');
                 assertPlaceOrderButtonIsEnabled();
                 assertInvalidBondPriceErrorIsNotShown();

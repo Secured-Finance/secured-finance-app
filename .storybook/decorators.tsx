@@ -7,14 +7,12 @@ import { Footer } from 'src/components/atoms';
 import { Header } from 'src/components/organisms';
 import { Layout } from 'src/components/templates';
 import { setMidPrice } from 'src/store/analytics';
-import { updateLendingMarketContract } from 'src/store/availableContracts';
 import { updateChainError, updateLatestBlock } from 'src/store/blockchain';
 import { setMaturity } from 'src/store/landingOrderForm';
 import { connectEthWallet, updateEthBalance } from 'src/store/wallet';
 import AxiosMock from 'src/stories/mocks/AxiosMock';
 import { CustomizedBridge } from 'src/stories/mocks/customBridge';
-import { dec22Fixture, maturities } from 'src/stories/mocks/fixtures';
-import { CurrencySymbol } from 'src/utils';
+import { dec22Fixture } from 'src/stories/mocks/fixtures';
 import { coingeckoApi } from 'src/utils/coinGeckoApi';
 import timemachine from 'timemachine';
 import { createPublicClient, createWalletClient, custom } from 'viem';
@@ -141,30 +139,6 @@ export const withMockDate = (Story: StoryFn, context: StoryContext) => {
             tick: true,
         });
     }
-
-    return <Story />;
-};
-
-export const withMaturities = (Story: StoryFn) => {
-    const dispatch = useDispatch();
-    useEffect(() => {
-        const timerId = setTimeout(() => {
-            dispatch(
-                updateLendingMarketContract(maturities, CurrencySymbol.WFIL)
-            );
-            dispatch(
-                updateLendingMarketContract(maturities, CurrencySymbol.ETH)
-            );
-            dispatch(
-                updateLendingMarketContract(maturities, CurrencySymbol.USDC)
-            );
-            dispatch(
-                updateLendingMarketContract(maturities, CurrencySymbol.WBTC)
-            );
-        }, 200);
-
-        return () => clearTimeout(timerId);
-    }, [dispatch, maturities]);
 
     return <Story />;
 };

@@ -4,14 +4,10 @@ import { useQueryClient } from '@tanstack/react-query';
 import { Signer, providers } from 'ethers';
 import React, { createContext, useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { QUERIES_TO_INVALIDATE, useLendingMarkets } from 'src/hooks';
+import { QUERIES_TO_INVALIDATE } from 'src/hooks';
 import { useEthereumWalletStore } from 'src/hooks/useEthWallet';
 import { updateChainError, updateLatestBlock } from 'src/store/blockchain';
-import {
-    getCurrencyMapAsList,
-    getEthereumChainId,
-    readWalletFromStore,
-} from 'src/utils';
+import { getEthereumChainId, readWalletFromStore } from 'src/utils';
 import { InterfaceEvents, associateWallet } from 'src/utils/events';
 import { hexToNumber } from 'viem';
 import {
@@ -53,7 +49,6 @@ const SecuredFinanceProvider: React.FC = ({ children }) => {
 
     //TODO: move this to redux listener to reduce the number of calls and rerenders
     useEthereumWalletStore();
-    const { fetchLendingMarkets } = useLendingMarkets();
 
     const handleAccountChanged = useCallback((accounts: string[]) => {
         track(InterfaceEvents.WALLET_CHANGED_THROUGH_PROVIDER);
@@ -164,9 +159,6 @@ const SecuredFinanceProvider: React.FC = ({ children }) => {
         web3Provider.on('block', blockNumber => {
             if (blockNumber && typeof blockNumber === 'number') {
                 dispatch(updateLatestBlock(blockNumber));
-                for (const currency of getCurrencyMapAsList()) {
-                    fetchLendingMarkets(currency.symbol, securedFinance);
-                }
 
                 // Invalidate all queries
                 Promise.all(
@@ -187,7 +179,6 @@ const SecuredFinanceProvider: React.FC = ({ children }) => {
         };
     }, [
         dispatch,
-        fetchLendingMarkets,
         handleAccountChanged,
         handleChainChanged,
         queryClient,

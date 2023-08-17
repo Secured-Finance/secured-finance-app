@@ -1,6 +1,5 @@
 import { OrderSide } from '@secured-finance/sf-client';
 import { composeStories } from '@storybook/react';
-import { preloadedLendingMarkets } from 'src/stories/mocks/fixtures';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
 import * as stories from './OrderDetails.stories';
@@ -39,7 +38,7 @@ describe('OrderDetails Component', () => {
     });
 
     it('should display the circuit breaker disclaimer', async () => {
-        render(<Default />, { preloadedState: preloadedLendingMarkets });
+        render(<Default />);
 
         const button = screen.getByTestId('disclaimer-button');
         expect(button).toHaveTextContent('Circuit Breaker Disclaimer');
@@ -51,8 +50,7 @@ describe('OrderDetails Component', () => {
     });
 
     it('should not display the borrow remaining and the collateral usage if its a LEND order', async () => {
-        render(<Default side={OrderSide.LEND} />),
-            { preloadedState: preloadedLendingMarkets };
+        render(<Default side={OrderSide.LEND} />);
 
         await waitFor(() => {
             expect(screen.getByText('Lend Amount')).toBeInTheDocument();
