@@ -14,6 +14,7 @@ import {
 } from 'src/components/organisms';
 import { Page, TwoColumns } from 'src/components/templates';
 import {
+    emptyCollateralBook,
     emptyOrderList,
     useCollateralBook,
     useCurrenciesForOrders,
@@ -120,10 +121,11 @@ export const PortfolioManagement = () => {
 
     const priceMap = useSelector((state: RootState) => getPriceMap(state));
 
-    const collateralBook = useCollateralBook(address);
+    const { data: collateralBook = emptyCollateralBook, isLoading } =
+        useCollateralBook(address);
 
     const portfolioAnalytics = useMemo(() => {
-        if (!collateralBook.fetched) {
+        if (isLoading) {
             return {
                 borrowedPV: 0,
                 lentPV: 0,
@@ -143,12 +145,7 @@ export const PortfolioManagement = () => {
             lentPV,
             netAssetValue: borrowedPV + lentPV + collateralBook.usdCollateral,
         };
-    }, [
-        collateralBook.fetched,
-        collateralBook.usdCollateral,
-        positions,
-        priceMap,
-    ]);
+    }, [collateralBook.usdCollateral, isLoading, positions, priceMap]);
 
     const myTransactions = useMemo(() => {
         const tradesFromCon = formatOrders(orderList.inactiveOrderList);

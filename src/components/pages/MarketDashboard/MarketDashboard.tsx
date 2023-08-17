@@ -16,6 +16,7 @@ import {
 import { Page, TwoColumns } from 'src/components/templates';
 import {
     RateType,
+    emptyCollateralBook,
     emptyValueLockedBook,
     useCollateralBook,
     useGraphClientHook,
@@ -53,7 +54,8 @@ const computeTotalUsers = (users: string) => {
 
 export const MarketDashboard = () => {
     const { address, isConnected } = useAccount();
-    const collateralBook = useCollateralBook(address);
+    const { data: collateralBook = emptyCollateralBook } =
+        useCollateralBook(address);
 
     const curves: Record<string, Rate[]> = {};
     const lendingContracts = useSelector(
