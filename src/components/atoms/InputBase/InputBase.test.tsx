@@ -57,23 +57,95 @@ describe('test InputBase component', () => {
         expect(input.getAttribute('value')).toBe('1,000');
     });
 
-    it('should change font size as input length changes if fontSize is provided', async () => {
-        const { getByRole } = render(
-            <WithValue fontSize={{ small: 5, large: 10 }} />
-        );
-        const input = getByRole('textbox');
-        expect(input).toHaveClass('text-3xl');
-        fireEvent.input(input, { target: { value: '1234' } });
-        expect(input).toHaveClass('text-3xl');
-        fireEvent.input(input, { target: { value: '123456' } });
-        expect(input).toHaveClass('text-2xl');
-        fireEvent.input(input, { target: { value: '123456789.123' } });
-        expect(input).toHaveClass('text-xl');
-        fireEvent.input(input, { target: { value: '1234' } });
-        expect(input).toHaveClass('text-3xl');
+    describe('when the sizeDependentStyles prop is provided', () => {
+        it('should apply styles as input length changes', () => {
+            render(
+                <WithValue
+                    sizeDependentStyles={{
+                        shortText: {
+                            styles: 'text-3xl',
+                            maxChar: 4,
+                        },
+                        mediumText: {
+                            styles: 'text-2xl bg-moonGrey text-teal',
+                            maxChar: 10,
+                        },
+                        longText: {
+                            styles: 'text-xl',
+                            maxChar: Infinity,
+                        },
+                    }}
+                />
+            );
+            const input = screen.getByRole('textbox');
+            expect(input).toHaveClass('text-3xl');
+            fireEvent.input(input, { target: { value: '1234' } });
+            expect(input).toHaveClass('text-3xl');
+            fireEvent.input(input, { target: { value: '123456' } });
+            expect(input).toHaveClass('text-2xl bg-moonGrey text-teal');
+            fireEvent.input(input, { target: { value: '123456789.123' } });
+            expect(input).toHaveClass('text-xl');
+            fireEvent.input(input, { target: { value: '1234' } });
+            expect(input).toHaveClass('text-3xl');
+        });
+
+        it('should not apply any style if the input value is longer than the maximum defined', () => {
+            render(
+                <WithValue
+                    sizeDependentStyles={{
+                        shortText: {
+                            styles: 'text-3xl',
+                            maxChar: 4,
+                        },
+                        mediumText: {
+                            styles: 'text-2xl',
+                            maxChar: 6,
+                        },
+                        longText: {
+                            styles: 'text-xl',
+                            maxChar: 8,
+                        },
+                    }}
+                />
+            );
+            const input = screen.getByRole('textbox');
+            expect(input).toHaveClass('text-3xl');
+            fireEvent.input(input, { target: { value: '123456' } });
+            expect(input).toHaveClass('text-2xl');
+            fireEvent.input(input, { target: { value: '123456789' } });
+            expect(input).not.toHaveClass('text-xl');
+            expect(input).not.toHaveClass('text-2xl');
+            expect(input).not.toHaveClass('text-3xl');
+        });
+
+        it('should apply the shortText styles if the input value is not defined', () => {
+            render(
+                <WithValue
+                    sizeDependentStyles={{
+                        shortText: {
+                            styles: 'text-3xl',
+                            maxChar: 4,
+                        },
+                        mediumText: {
+                            styles: 'text-2xl',
+                            maxChar: 6,
+                        },
+                        longText: {
+                            styles: 'text-xl',
+                            maxChar: 8,
+                        },
+                    }}
+                />
+            );
+            const input = screen.getByRole('textbox');
+            fireEvent.input(input, { target: { value: '12345678' } });
+            expect(input).toHaveClass('text-xl');
+            fireEvent.input(input, { target: { value: '' } });
+            expect(input).toHaveClass('text-3xl');
+        });
     });
 
-    it('should not change font size as input length changes if fontSize is not provided', async () => {
+    it('should not change font size as input length changes if sizeDependentStyles is not provided', async () => {
         const { getByRole } = render(<WithValue className='text-xl' />);
         const input = getByRole('textbox');
         expect(input).toHaveClass('text-xl');

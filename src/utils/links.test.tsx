@@ -1,7 +1,7 @@
 import { LinkList } from './links';
 
 describe('links', () => {
-    it('should have four links', () => {
-        expect(LinkList).toHaveLength(4);
+    it('should have five links', () => {
+        expect(LinkList).toHaveLength(5);
     });
 });
