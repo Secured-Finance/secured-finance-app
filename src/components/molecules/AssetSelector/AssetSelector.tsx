@@ -106,6 +106,11 @@ export const AssetSelector = <AssetType extends string = string>({
                     onValueChange={handleAmountChange}
                     value={amount}
                     data-cy='asset-selector-input'
+                    sizeDependentStyles={{
+                        shortText: { maxChar: 3, styles: 'text-md' },
+                        mediumText: { maxChar: 6, styles: 'text-base' },
+                        longText: { maxChar: Infinity, styles: 'text-sm' },
+                    }}
                 />
             </div>
         </div>

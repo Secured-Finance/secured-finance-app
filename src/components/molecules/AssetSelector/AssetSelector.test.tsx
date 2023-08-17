@@ -84,4 +84,14 @@ describe('AssetSelector Component', () => {
         expect(onAssetChange).toHaveBeenLastCalledWith('WFIL');
         expect(onAssetChange).toHaveBeenCalledTimes(3);
     });
+
+    it('should reduce the size of the text when typing a big number', () => {
+        render(<Default />);
+        const input = screen.getByRole('textbox');
+        expect(input).toHaveClass('text-md');
+        fireEvent.change(input, { target: { value: '10000' } });
+        expect(input).toHaveClass('text-base');
+        fireEvent.change(input, { target: { value: '1000000' } });
+        expect(input).toHaveClass('text-sm');
+    });
 });
