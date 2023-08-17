@@ -1,9 +1,5 @@
 import { RESPONSIVE_PARAMETERS, VIEWPORTS } from '.storybook/constants';
-import {
-    withAssetPrice,
-    withMaturities,
-    withWalletProvider,
-} from '.storybook/decorators';
+import { withAssetPrice, withWalletProvider } from '.storybook/decorators';
 import { OrderSide } from '@secured-finance/sf-client';
 import type { Meta, StoryFn } from '@storybook/react';
 import { BigNumber } from 'ethers';
@@ -25,7 +21,7 @@ export default {
         ),
         side: OrderSide.BORROW,
     },
-    decorators: [withAssetPrice, withWalletProvider, withMaturities],
+    decorators: [withAssetPrice, withWalletProvider],
     parameters: {
         ...RESPONSIVE_PARAMETERS,
         chromatic: {

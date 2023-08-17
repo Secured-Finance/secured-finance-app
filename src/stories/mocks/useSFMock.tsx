@@ -2,13 +2,14 @@ import { Currency, Token } from '@secured-finance/sf-core';
 import { BigNumber } from 'ethers';
 import * as jest from 'jest-mock';
 import { CurrencySymbol, ZERO_BN, getCurrencyMapAsList } from 'src/utils';
-import { Maturity } from 'src/utils/entities';
 import {
     collateralBook37,
     dec22Fixture,
     dec24Fixture,
     ethBytes32,
     mar23Fixture,
+    maturitiesMock,
+    usdcBytes32,
     wbtcBytes32,
     wfilBytes32,
 } from './fixtures';
@@ -132,42 +133,17 @@ export const mockUseSF = () => {
             ])
         ),
 
-        getLendingMarketDetailsPerCurrency: jest.fn(() =>
-            Promise.resolve([
-                {
-                    midUnitPrice: new Maturity(100),
-                    maturity: new Maturity(1000),
-                    name: 'ETH-1000',
-                    openingDate: new Maturity(1620000000),
-                    openingUnitPrice: BigNumber.from(9686),
-                    isReady: true,
-                    isOpened: true,
-                    isMatured: false,
-                    isPreOrderPeriod: false,
-                    isItayosePeriod: false,
-                    bestBorrowUnitPrice: BigNumber.from(9620),
-                    bestLendUnitPrice: BigNumber.from(9618),
-                    minBorrowUnitPrice: BigNumber.from(9602),
-                    maxLendUnitPrice: BigNumber.from(9636),
-                },
-                {
-                    midUnitPrice: new Maturity(100),
-                    maturity: new Maturity(2000),
-                    name: 'ETH-2000',
-                    openingDate: new Maturity(1720000000),
-                    openingUnitPrice: BigNumber.from(9786),
-                    isReady: true,
-                    isOpened: true,
-                    isMatured: false,
-                    isPreOrderPeriod: false,
-                    isItayosePeriod: false,
-                    bestBorrowUnitPrice: BigNumber.from(9610),
-                    bestLendUnitPrice: BigNumber.from(9608),
-                    minBorrowUnitPrice: BigNumber.from(9592),
-                    maxLendUnitPrice: BigNumber.from(9626),
-                },
-            ])
-        ),
+        getLendingMarketDetails: jest.fn(() => {
+            const maturities = [
+                maturitiesMock(ethBytes32),
+                maturitiesMock(wfilBytes32),
+                maturitiesMock(wbtcBytes32),
+                maturitiesMock(usdcBytes32),
+            ];
+            return Promise.resolve(
+                maturities.reduce((r, e) => (r.push(...e), r), [])
+            );
+        }),
 
         depositCollateral: jest.fn(() =>
             Promise.resolve({

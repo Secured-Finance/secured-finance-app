@@ -21,10 +21,10 @@ import {
     useCurrenciesForOrders,
     useGraphClientHook,
     useOrderList,
+    useSelectMarket,
 } from 'src/hooks';
 import { useOrderbook } from 'src/hooks/useOrderbook';
 import { getAssetPrice } from 'src/store/assetPrices/selectors';
-import { selectMarket } from 'src/store/availableContracts';
 import {
     resetUnitPrice,
     selectLandingOrderForm,
@@ -116,10 +116,10 @@ export const AdvancedLending = ({
         );
     }, [maturity, maturitiesOptionList]);
 
-    const openingUnitPrice = useSelector(
-        (state: RootState) =>
-            selectMarket(currency, maturity)(state)?.openingUnitPrice
-    );
+    const openingUnitPrice = useSelectMarket(
+        currency,
+        maturity
+    )?.openingUnitPrice;
 
     const orderBook = useOrderbook(currency, maturity, 10);
     const { data: usedCurrencies = [] } = useCurrenciesForOrders(address);

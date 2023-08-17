@@ -1,9 +1,5 @@
 import { RESPONSIVE_PARAMETERS, VIEWPORTS } from '.storybook/constants';
-import {
-    withAssetPrice,
-    withMaturities,
-    withWalletProvider,
-} from '.storybook/decorators';
+import { withAssetPrice, withWalletProvider } from '.storybook/decorators';
 import { OrderSide, WalletSource } from '@secured-finance/sf-client';
 import type { Meta, StoryFn } from '@storybook/react';
 import {
@@ -32,7 +28,7 @@ export default {
         walletSource: WalletSource.METAMASK,
         maturitiesOptionList: maturityOptions,
     },
-    decorators: [withAssetPrice, withWalletProvider, withMaturities],
+    decorators: [withAssetPrice, withWalletProvider],
     parameters: {
         ...RESPONSIVE_PARAMETERS,
         chromatic: {

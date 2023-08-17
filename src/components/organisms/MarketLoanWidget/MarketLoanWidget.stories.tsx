@@ -2,35 +2,23 @@ import { RESPONSIVE_PARAMETERS, VIEWPORTS } from '.storybook/constants';
 import type { Meta, StoryFn } from '@storybook/react';
 import { within } from '@storybook/testing-library';
 import {
-    preloadedLendingMarkets,
+    maturities,
     wbtcBytes32,
     wfilBytes32,
 } from 'src/stories/mocks/fixtures';
 import { CurrencySymbol } from 'src/utils';
 import { MarketLoanWidget } from './MarketLoanWidget';
 
-const filMarkets = preloadedLendingMarkets?.availableContracts?.lendingMarkets
-    ? Object.values(
-          preloadedLendingMarkets?.availableContracts?.lendingMarkets[
-              CurrencySymbol.WFIL
-          ]
-      ).map(m => ({
-          ...m,
-          currency: wfilBytes32,
-          ccy: CurrencySymbol.WFIL,
-      }))
-    : [];
-const btcMarkets = preloadedLendingMarkets?.availableContracts?.lendingMarkets
-    ? Object.values(
-          preloadedLendingMarkets?.availableContracts?.lendingMarkets[
-              CurrencySymbol.WBTC
-          ]
-      ).map(m => ({
-          ...m,
-          currency: wbtcBytes32,
-          ccy: CurrencySymbol.WBTC,
-      }))
-    : [];
+const filMarkets = Object.values(maturities).map(m => ({
+    ...m,
+    currency: wfilBytes32,
+    ccy: CurrencySymbol.WFIL,
+}));
+const btcMarkets = Object.values(maturities).map(m => ({
+    ...m,
+    currency: wbtcBytes32,
+    ccy: CurrencySymbol.WBTC,
+}));
 
 export default {
     title: 'Organism/MarketLoanWidget',
