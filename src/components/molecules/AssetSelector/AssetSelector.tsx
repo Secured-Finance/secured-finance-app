@@ -95,7 +95,7 @@ export const AssetSelector = <AssetType extends string = string>({
                     {prefixTilde(amountInUsd)}
                 </div>
             </div>
-            <div className='flex h-14 flex-row items-center justify-between rounded-lg bg-black-20 p-2 ring-inset ring-starBlue focus-within:ring-2'>
+            <div className='flex h-14 flex-row items-center justify-between gap-1 rounded-lg bg-black-20 p-2 ring-inset ring-starBlue focus-within:ring-2'>
                 <DropdownSelector
                     optionList={options}
                     selected={selected}
@@ -107,8 +107,8 @@ export const AssetSelector = <AssetType extends string = string>({
                     value={amount}
                     data-cy='asset-selector-input'
                     sizeDependentStyles={{
-                        shortText: { maxChar: 3, styles: 'text-md' },
-                        mediumText: { maxChar: 6, styles: 'text-base' },
+                        shortText: { maxChar: 8, styles: 'text-md' },
+                        mediumText: { maxChar: 11, styles: 'text-[20px]' },
                         longText: { maxChar: Infinity, styles: 'text-sm' },
                     }}
                 />
