@@ -86,10 +86,12 @@ describe('AssetSelector Component', () => {
     });
 
     it('should reduce the size of the text when typing a big number', () => {
-        render(<Default />);
+        render(<Default amountFormatterMap={amountFormatterMap} />);
         const input = screen.getByRole('textbox');
         expect(input).toHaveClass('text-md');
         fireEvent.change(input, { target: { value: '100000000' } });
         expect(input).toHaveClass('text-[20px]');
+        fireEvent.change(input, { target: { value: '100000000.22' } });
+        expect(input).toHaveClass('text-sm');
     });
 });
