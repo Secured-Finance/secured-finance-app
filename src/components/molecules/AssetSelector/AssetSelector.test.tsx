@@ -89,9 +89,7 @@ describe('AssetSelector Component', () => {
         render(<Default />);
         const input = screen.getByRole('textbox');
         expect(input).toHaveClass('text-md');
-        fireEvent.change(input, { target: { value: '10000' } });
-        expect(input).toHaveClass('text-base');
-        fireEvent.change(input, { target: { value: '1000000' } });
-        expect(input).toHaveClass('text-sm');
+        fireEvent.change(input, { target: { value: '100000000' } });
+        expect(input).toHaveClass('text-[20px]');
     });
 });

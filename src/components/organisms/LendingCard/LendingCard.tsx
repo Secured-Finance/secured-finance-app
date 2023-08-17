@@ -175,7 +175,7 @@ export const LendingCard = ({
 
             <div className='flex h-[480px] flex-col justify-between px-4'>
                 <div className='flex flex-col gap-6'>
-                    <div className='flex flex-col pb-2 text-center'>
+                    <div className='flex flex-col gap-1 pb-1 text-center'>
                         <span
                             className='typography-amount-large text-white'
                             data-testid='market-rate'
