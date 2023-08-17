@@ -666,7 +666,6 @@ export const collateralBook80: CollateralBook = {
         [CurrencySymbol.ETH]: BigNumber.from(100000),
         [CurrencySymbol.WBTC]: BigNumber.from(100000),
     },
-    fetched: true,
 };
 
 export const collateralBook37: CollateralBook = {
@@ -687,28 +686,6 @@ export const collateralBook37: CollateralBook = {
         [CurrencySymbol.ETH]: BigNumber.from(100000),
         [CurrencySymbol.WBTC]: BigNumber.from(100000),
     },
-    fetched: true,
-};
-
-export const emptyCollateralBook: CollateralBook = {
-    collateral: {
-        ETH: BigNumber.from('0'),
-        USDC: BigNumber.from('0'),
-        WBTC: BigNumber.from('0'),
-    },
-    nonCollateral: {
-        WFIL: BigNumber.from('0'),
-    },
-    usdCollateral: 0,
-    usdNonCollateral: 0,
-    coverage: BigNumber.from('0'), // 0%
-    collateralThreshold: 0,
-    withdrawableCollateral: {
-        [CurrencySymbol.USDC]: BigNumber.from(0),
-        [CurrencySymbol.ETH]: BigNumber.from(0),
-        [CurrencySymbol.WBTC]: BigNumber.from(0),
-    },
-    fetched: true,
 };
 
 export const emptyUSDCollateral: CollateralBook = {
@@ -729,28 +706,6 @@ export const emptyUSDCollateral: CollateralBook = {
         [CurrencySymbol.ETH]: BigNumber.from(0),
         [CurrencySymbol.WBTC]: BigNumber.from(0),
     },
-    fetched: true,
-};
-
-export const emptyBook: CollateralBook = {
-    collateral: {
-        ETH: BigNumber.from('0'),
-        USDC: BigNumber.from('0'),
-        WBTC: BigNumber.from('0'),
-    },
-    nonCollateral: {
-        WFIL: BigNumber.from('0'),
-    },
-    usdCollateral: 0,
-    usdNonCollateral: 0,
-    coverage: BigNumber.from('0'), // 0%
-    collateralThreshold: 0,
-    withdrawableCollateral: {
-        [CurrencySymbol.USDC]: BigNumber.from(0),
-        [CurrencySymbol.ETH]: BigNumber.from(0),
-        [CurrencySymbol.WBTC]: BigNumber.from(0),
-    },
-    fetched: false,
 };
 
 function generateDailyVolumes(days: number) {
