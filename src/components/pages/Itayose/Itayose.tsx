@@ -18,7 +18,14 @@ import {
 } from 'src/components/organisms';
 import { Page } from 'src/components/templates';
 import { TwoColumnsWithTopBar } from 'src/components/templates/TwoColumnsWithTopBar';
-import { useCollateralBook, useMaturityOptions, useOrderList } from 'src/hooks';
+import {
+    emptyCollateralBook,
+    emptyOrderList,
+    useCollateralBook,
+    useCurrenciesForOrders,
+    useMaturityOptions,
+    useOrderList,
+} from 'src/hooks';
 import { useOrderbook } from 'src/hooks/useOrderbook';
 import { getAssetPrice } from 'src/store/assetPrices/selectors';
 import { MarketPhase, selectMarketPhase } from 'src/store/availableContracts';
@@ -129,8 +136,13 @@ export const Itayose = () => {
     }, [currency, assetList]);
 
     const orderBook = useOrderbook(currency, maturity);
-    const orderList = useOrderList(address);
-    const collateralBook = useCollateralBook(address);
+    const { data: usedCurrencies = [] } = useCurrenciesForOrders(address);
+    const { data: orderList = emptyOrderList } = useOrderList(
+        address,
+        usedCurrencies
+    );
+    const { data: collateralBook = emptyCollateralBook } =
+        useCollateralBook(address);
 
     const filteredOrderList = useMemo(() => {
         return orderList.activeOrderList.filter(

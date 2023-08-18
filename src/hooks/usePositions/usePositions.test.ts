@@ -2,38 +2,50 @@ import { BigNumber } from 'ethers';
 import { ethBytes32, wfilBytes32 } from 'src/stories/mocks/fixtures';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { renderHook } from 'src/test-utils';
+import { CurrencySymbol, toCurrency } from 'src/utils';
 import { usePositions } from './usePositions';
 
 const mock = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mock);
 
+const usedCurrencies = [
+    toCurrency(CurrencySymbol.ETH),
+    toCurrency(CurrencySymbol.WFIL),
+];
+
 describe('usePositions', () => {
     it('should return an array of positions', async () => {
         const { result, waitForNextUpdate } = renderHook(() =>
-            usePositions('0x1')
+            usePositions('0x1', usedCurrencies)
         );
 
-        expect(result.current).toEqual([]);
+        const value = result.current;
+        expect(value.data).toEqual(undefined);
+        expect(value.isLoading).toEqual(true);
 
         await waitForNextUpdate();
+        expect(mock.getPositions).toHaveBeenCalledTimes(1);
 
-        expect(result.current.length).toBe(4);
-        expect(result.current[0].currency).toBe(ethBytes32);
-        expect(result.current[1].currency).toBe(ethBytes32);
-        expect(result.current[2].currency).toBe(wfilBytes32);
-        expect(result.current[3].currency).toBe(wfilBytes32);
+        const newValue = result.current;
+        expect(newValue.data).toHaveLength(4);
+        expect(newValue.data[0].currency).toBe(ethBytes32);
+        expect(newValue.data[1].currency).toBe(ethBytes32);
+        expect(newValue.data[2].currency).toBe(wfilBytes32);
+        expect(newValue.data[3].currency).toBe(wfilBytes32);
+        expect(newValue.isLoading).toEqual(false);
     });
 
     it('positions should have midPrice', async () => {
         const { result, waitForNextUpdate } = renderHook(() =>
-            usePositions('0x1')
+            usePositions('0x1', usedCurrencies)
         );
         await waitForNextUpdate();
 
-        expect(result.current.length).toBe(4);
-        expect(result.current[0].midPrice).toStrictEqual(BigNumber.from(9750));
-        expect(result.current[1].midPrice).toStrictEqual(BigNumber.from(9500));
-        expect(result.current[2].midPrice).toStrictEqual(BigNumber.from(9750));
-        expect(result.current[3].midPrice).toStrictEqual(BigNumber.from(9500));
+        const newValue = result.current;
+        expect(newValue.data).toHaveLength(4);
+        expect(newValue.data[0].midPrice).toStrictEqual(BigNumber.from(9750));
+        expect(newValue.data[1].midPrice).toStrictEqual(BigNumber.from(9500));
+        expect(newValue.data[2].midPrice).toStrictEqual(BigNumber.from(9750));
+        expect(newValue.data[3].midPrice).toStrictEqual(BigNumber.from(9500));
     });
 });

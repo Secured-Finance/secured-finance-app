@@ -1,10 +1,9 @@
 import { Currency } from '@secured-finance/sf-core';
+import { useQuery } from '@tanstack/react-query';
 import { BigNumber } from 'ethers';
-import { useCallback, useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useMemo } from 'react';
+import { QueryKeys } from 'src/hooks/queries';
 import useSF from 'src/hooks/useSecuredFinance';
-import { RootState } from 'src/store/types';
-import { hexToCurrencySymbol, toCurrency } from 'src/utils';
 
 export type Position = {
     currency: string;
@@ -14,53 +13,45 @@ export type Position = {
     midPrice: BigNumber;
 };
 
-export const usePositions = (account: string | undefined) => {
+export const usePositions = (
+    account: string | undefined,
+    usedCurrencies: Currency[]
+) => {
     const securedFinance = useSF();
 
-    const { lastActionTimestamp, latestBlock } = useSelector(
-        (state: RootState) => state.blockchain
-    );
+    const usedCurrencyKey = useMemo(() => {
+        return usedCurrencies
+            .map(ccy => ccy.symbol)
+            .sort()
+            .join('-');
+    }, [usedCurrencies]);
 
-    const [positions, setPositions] = useState<Array<Position>>([]);
-
-    const fetchPositions = useCallback(async () => {
-        if (!securedFinance || !account) {
-            setPositions([]);
-            return;
-        }
-
-        const usedCurrenciesListInHex =
-            await securedFinance.getUsedCurrenciesForOrders(account);
-        const convertedCurrencies = usedCurrenciesListInHex
-            .map(currency => {
-                const symbol = hexToCurrencySymbol(currency);
-                const convertedCurrency = symbol ? toCurrency(symbol) : null;
-                return convertedCurrency;
-            })
-            .filter((currency): currency is Currency => currency !== null);
-
-        const positions = await securedFinance.getPositions(
-            account,
-            convertedCurrencies
-        );
-        const mappedPositions = positions.map(position => ({
-            currency: position.ccy,
-            maturity: position.maturity.toString(),
-            amount: position.presentValue,
-            forwardValue: position.futureValue,
-            midPrice: calculateMidPrice(
-                position.presentValue,
-                position.futureValue
+    return useQuery({
+        // eslint-disable-next-line @tanstack/query/exhaustive-deps
+        queryKey: [QueryKeys.POSITIONS, account, usedCurrencyKey],
+        queryFn: async () => {
+            const positions = await securedFinance?.getPositions(
+                account ?? '',
+                usedCurrencies
+            );
+            return positions ?? [];
+        },
+        select: positions =>
+            positions.map(
+                position =>
+                    ({
+                        currency: position.ccy,
+                        maturity: position.maturity.toString(),
+                        amount: position.presentValue,
+                        forwardValue: position.futureValue,
+                        midPrice: calculateMidPrice(
+                            position.presentValue,
+                            position.futureValue
+                        ),
+                    } as Position)
             ),
-        }));
-        setPositions(mappedPositions);
-    }, [account, securedFinance]);
-
-    useEffect(() => {
-        fetchPositions();
-    }, [latestBlock, fetchPositions, lastActionTimestamp]);
-
-    return positions;
+        enabled: !!securedFinance && !!account && !!usedCurrencyKey,
+    });
 };
 
 const calculateMidPrice = (
