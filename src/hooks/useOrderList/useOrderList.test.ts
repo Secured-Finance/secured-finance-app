@@ -1,35 +1,40 @@
 import { ethBytes32, wfilBytes32 } from 'src/stories/mocks/fixtures';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { renderHook } from 'src/test-utils';
+import { CurrencySymbol, toCurrency } from 'src/utils/currencyList';
 import { useOrderList } from './useOrderList';
 
 const mock = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mock);
 
+const usedCurrencies = [toCurrency(CurrencySymbol.ETH)];
+
 describe('useOrderList', () => {
     it('should return a sorted array of activeOrders and inactiveOrders by creation date', async () => {
         const { result, waitForNextUpdate } = renderHook(() =>
-            useOrderList('0x1')
+            useOrderList('0x1', usedCurrencies)
         );
 
-        expect(result.current).toEqual({
-            activeOrderList: [],
-            inactiveOrderList: [],
-        });
+        const value = result.current;
+        expect(value.data).toEqual(undefined);
+        expect(value.isLoading).toEqual(true);
 
         await waitForNextUpdate();
+        expect(mock.getOrderList).toHaveBeenCalledTimes(1);
 
-        expect(result.current.activeOrderList.length).toBe(5);
-        for (let i = 0; i < result.current.activeOrderList.length - 1; i++) {
+        const newValue = result.current;
+        expect(newValue.data.activeOrderList.length).toBe(5);
+        for (let i = 0; i < newValue.data.activeOrderList.length - 1; i++) {
             expect(
-                result.current.activeOrderList[i].createdAt.toNumber()
+                newValue.data.activeOrderList[i].createdAt.toNumber()
             ).toBeGreaterThanOrEqual(
-                result.current.activeOrderList[i + 1].createdAt.toNumber()
+                newValue.data.activeOrderList[i + 1].createdAt.toNumber()
             );
         }
 
-        expect(result.current.inactiveOrderList.length).toBe(2);
-        expect(result.current.inactiveOrderList[0].currency).toBe(ethBytes32);
-        expect(result.current.inactiveOrderList[1].currency).toBe(wfilBytes32);
+        expect(newValue.data.inactiveOrderList.length).toBe(2);
+        expect(newValue.data.inactiveOrderList[0].currency).toBe(ethBytes32);
+        expect(newValue.data.inactiveOrderList[1].currency).toBe(wfilBytes32);
+        expect(newValue.isLoading).toEqual(false);
     });
 });
