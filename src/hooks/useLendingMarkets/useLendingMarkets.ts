@@ -38,7 +38,7 @@ export const useLendingMarkets = () => {
             const names: string[] = [];
             try {
                 const lendingMarkets =
-                    await securedFinance?.getLendingMarketDetailsPerCurrency(
+                    await securedFinance?.getOrderBookDetailsPerCurrency(
                         toCurrency(ccy)
                     );
 
