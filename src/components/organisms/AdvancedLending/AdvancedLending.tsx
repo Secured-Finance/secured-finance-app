@@ -44,6 +44,7 @@ import {
     getCurrencyMapAsOptions,
     ordinaryFormat,
     usdFormat,
+    hexToCurrencySymbol,
 } from 'src/utils';
 import { LoanValue, Maturity } from 'src/utils/entities';
 import { useAccount } from 'wagmi';
@@ -127,6 +128,12 @@ export const AdvancedLending = ({
         address,
         usedCurrencies
     );
+    const openOrders = orderList.activeOrderList.filter(order => {
+        return (
+            hexToCurrencySymbol(order.currency) === currency &&
+            order.maturity === maturity.toString()
+        );
+    });
 
     const transactionHistory = useGraphClientHook(
         {
@@ -234,12 +241,12 @@ export const AdvancedLending = ({
                     />
                     <div />
                 </Tab>
-                <HorizontalTab tabTitles={['Order Book', 'My Orders']}>
+                <HorizontalTab tabTitles={['Order Book', 'Open Orders']}>
                     <OrderBookWidget
                         orderbook={orderBook}
                         currency={currency}
                     />
-                    <OrderTable data={orderList.activeOrderList} />
+                    <OrderTable data={openOrders} />
                 </HorizontalTab>
             </div>
         </TwoColumnsWithTopBar>
