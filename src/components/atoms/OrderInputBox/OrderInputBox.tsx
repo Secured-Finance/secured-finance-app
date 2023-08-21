@@ -35,13 +35,16 @@ export const OrderInputBox = ({
     );
     const [inputAmount, setInputAmount] = useState(initialValue);
     useEffect(() => {
-        setInputAmount(initialValue);
+        if (initialValue === undefined || initialValue === 0)
+            setInputAmount(undefined);
+        else setInputAmount(initialValue);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [currency, maturity]);
 
     useEffect(() => {
         if (initialValue !== 0) setInputAmount(initialValue);
     }, [initialValue]);
+
     const handleInputChange = useCallback(
         (
             amount: number | undefined,
