@@ -1,8 +1,11 @@
 import { BigNumber } from 'ethers';
-import { useCallback } from 'react';
+import { useCallback, useState, useEffect } from 'react';
 import { InputBase } from 'src/components/atoms';
 import { Tooltip } from 'src/components/templates';
 import { amountFormatterToBase, CurrencySymbol } from 'src/utils';
+import { useSelector } from 'react-redux';
+import { RootState } from 'src/store/types';
+import { selectLandingOrderForm } from 'src/store/landingOrderForm';
 
 interface OrderInputBoxProps {
     field: string;
@@ -27,6 +30,18 @@ export const OrderInputBox = ({
     maxLimit,
     onValueChange,
 }: OrderInputBoxProps) => {
+    const { currency, maturity } = useSelector((state: RootState) =>
+        selectLandingOrderForm(state.landingOrderForm)
+    );
+    const [inputAmount, setInputAmount] = useState(initialValue);
+    useEffect(() => {
+        setInputAmount(initialValue);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [currency, maturity]);
+
+    useEffect(() => {
+        if (initialValue !== 0) setInputAmount(initialValue);
+    }, [initialValue]);
     const handleInputChange = useCallback(
         (
             amount: number | undefined,
@@ -48,6 +63,7 @@ export const OrderInputBox = ({
 
     const handleAmountChange = useCallback(
         (amount: number | undefined) => {
+            setInputAmount(amount);
             if (onValueChange) {
                 handleInputChange(amount, asset, onValueChange);
             }
@@ -74,7 +90,7 @@ export const OrderInputBox = ({
                     </span>
                 ) : (
                     <InputBase
-                        value={initialValue as number}
+                        value={inputAmount as number}
                         className='w-32 text-right text-[18px] font-semibold leading-6 text-neutral-8'
                         label={field}
                         onValueChange={handleAmountChange}
