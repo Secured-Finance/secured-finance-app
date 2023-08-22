@@ -132,7 +132,7 @@ export const mockUseSF = () => {
             ])
         ),
 
-        getLendingMarketDetailsPerCurrency: jest.fn(() =>
+        getOrderBookDetailsPerCurrency: jest.fn(() =>
             Promise.resolve([
                 {
                     midUnitPrice: new Maturity(100),
