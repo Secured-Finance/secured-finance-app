@@ -33,6 +33,7 @@ describe('useOrderEstimation', () => {
         expect(mock.getOrderEstimation).toHaveBeenCalledWith(
             toCurrency(CurrencySymbol.USDC),
             dec22Fixture.toNumber(),
+            '0x0',
             OrderSide.BORROW,
             BigNumber.from('5000000'),
             9800,
@@ -62,6 +63,7 @@ describe('useOrderEstimation', () => {
         expect(mock.getOrderEstimation).toHaveBeenCalledWith(
             toCurrency(CurrencySymbol.USDC),
             dec22Fixture.toNumber(),
+            '0x0',
             OrderSide.BORROW,
             BigNumber.from('5000000'),
             9800,
@@ -92,6 +94,7 @@ describe('useOrderEstimation', () => {
         expect(mock.getOrderEstimation).toHaveBeenCalledWith(
             toCurrency(CurrencySymbol.USDC),
             dec22Fixture.toNumber(),
+            '0x0',
             OrderSide.LEND,
             BigNumber.from('5000000'),
             9800,
@@ -122,6 +125,7 @@ describe('useOrderEstimation', () => {
         expect(mock.getOrderEstimation).toHaveBeenCalledWith(
             toCurrency(CurrencySymbol.USDC),
             dec22Fixture.toNumber(),
+            '0x0',
             OrderSide.LEND,
             BigNumber.from('5000000'),
             9800,
