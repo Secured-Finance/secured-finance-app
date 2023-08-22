@@ -236,7 +236,7 @@ export const Itayose = () => {
                             </p>
                         </div>
                     </GradientBox>
-                    <HorizontalTab tabTitles={['Order Book', 'My Orders']}>
+                    <HorizontalTab tabTitles={['Order Book', 'Open Orders']}>
                         <OrderBookWidget
                             currency={currency}
                             orderbook={orderBook}
