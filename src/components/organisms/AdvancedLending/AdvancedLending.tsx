@@ -128,12 +128,13 @@ export const AdvancedLending = ({
         address,
         usedCurrencies
     );
-    const openOrders = orderList.activeOrderList.filter(order => {
-        return (
-            hexToCurrencySymbol(order.currency) === currency &&
-            order.maturity === maturity.toString()
+    const filteredOrderList = useMemo(() => {
+        return orderList.activeOrderList.filter(
+            order =>
+                hexToCurrencySymbol(order.currency) === currency &&
+                order.maturity === maturity.toString()
         );
-    });
+    }, [currency, maturity, orderList.activeOrderList]);
 
     const transactionHistory = useGraphClientHook(
         {
@@ -246,7 +247,7 @@ export const AdvancedLending = ({
                         orderbook={orderBook}
                         currency={currency}
                     />
-                    <OrderTable data={openOrders} />
+                    <OrderTable data={filteredOrderList} />
                 </HorizontalTab>
             </div>
         </TwoColumnsWithTopBar>
