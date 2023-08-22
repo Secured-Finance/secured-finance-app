@@ -13,8 +13,10 @@ import {
     Slider,
     WalletSourceSelector,
 } from 'src/components/atoms';
+import { BorrowedCollateral } from 'src/components/molecules';
 import { OrderAction } from 'src/components/organisms';
-import { CollateralBook } from 'src/hooks';
+import { Tooltip } from 'src/components/templates';
+import { CollateralBook, useOrderEstimation } from 'src/hooks';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { selectMarket } from 'src/store/availableContracts';
 import {
@@ -41,6 +43,8 @@ import {
     getAmountValidation,
     multiply,
     usdFormat,
+    prefixTilde,
+    ordinaryFormat,
 } from 'src/utils';
 import { Amount, LoanValue } from 'src/utils/entities';
 import { useAccount } from 'wagmi';
@@ -62,9 +66,11 @@ export const AdvancedLendingOrderCard = ({
         unitPrice,
         maturity,
         sourceAccount,
+        isBorrowedCollateral,
     } = useSelector((state: RootState) =>
         selectLandingOrderForm(state.landingOrderForm)
     );
+
     const [sliderValue, setSliderValue] = useState(0.0);
 
     const balanceRecord = useSelector((state: RootState) =>
@@ -83,9 +89,15 @@ export const AdvancedLendingOrderCard = ({
     const dispatch = useDispatch();
     const { address, isConnected } = useAccount();
 
+    const { data: coverage } = useOrderEstimation(address ?? '');
+
+    const collateralCoverage = isBorrowedCollateral
+        ? coverage
+        : collateralBook.coverage.toNumber();
+
     const collateralUsagePercent = useMemo(() => {
-        return collateralBook.coverage.toNumber() / 100.0;
-    }, [collateralBook]);
+        return (collateralCoverage ?? 0) / 100.0;
+    }, [collateralCoverage]);
 
     const priceList = useSelector((state: RootState) => getPriceMap(state));
     const price = priceList[currency];
@@ -113,14 +125,14 @@ export const AdvancedLendingOrderCard = ({
             ? computeAvailableToBorrow(
                   price,
                   collateralBook.usdCollateral,
-                  collateralBook.coverage.toNumber() / MAX_COVERAGE,
+                  (collateralCoverage ?? 0) / MAX_COVERAGE,
                   collateralBook.collateralThreshold
               )
             : 0;
     }, [
         collateralBook.collateralThreshold,
-        collateralBook.coverage,
         collateralBook.usdCollateral,
+        collateralCoverage,
         currency,
         price,
     ]);
@@ -222,6 +234,17 @@ export const AdvancedLendingOrderCard = ({
         return unitPrice === 0 && orderType === OrderType.LIMIT;
     };
 
+    const borrowedCollateralLabel = (
+        <div className='flex flex-row items-center gap-1'>
+            <div className='text-secondary w-full whitespace-normal text-slateGray'>
+                Bond as Collateral
+            </div>
+            <Tooltip>
+                Include ZC bonds of the same underlying asset as collateral
+            </Tooltip>
+        </div>
+    );
+
     return (
         <div className='h-fit rounded-b-xl border border-white-10 bg-cardBackground bg-opacity-60 pb-7'>
             <RadioGroupSelector
@@ -312,6 +335,15 @@ export const AdvancedLendingOrderCard = ({
                     </div>
                 </div>
                 <Slider onChange={handleAmountChange} value={sliderValue} />
+                <div className='typography-caption flex flex-row justify-between'>
+                    <div className='text-slateGray'>{`Available To Borrow ${currency.toString()}`}</div>
+                    <div
+                        data-testid='availableToBorrow'
+                        className='text-right text-planetaryPurple'
+                    >
+                        {prefixTilde(ordinaryFormat(availableToBorrow))}
+                    </div>
+                </div>
                 <OrderInputBox
                     field='Amount'
                     unit={currency}
@@ -361,6 +393,12 @@ export const AdvancedLendingOrderCard = ({
                             {'Manage \u00BB'}
                         </a>
                     </Link>
+                </div>
+                <div className='flex w-full flex-row justify-between'>
+                    <div className='typography text-neutral-8'>
+                        My Collateral
+                    </div>
+                    <BorrowedCollateral label={borrowedCollateralLabel} />
                 </div>
 
                 <CollateralManagementConciseTab

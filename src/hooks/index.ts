@@ -8,6 +8,7 @@ export * from './useHandleContractTransaction';
 export * from './useLendingMarkets';
 export * from './useLoanValues';
 export * from './useMaturityOptions';
+export * from './useOrderEstimation';
 export * from './useOrderFee';
 export * from './useOrderList';
 export * from './useOrderbook';

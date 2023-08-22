@@ -3,11 +3,8 @@ import { OrderSide } from '@secured-finance/sf-client';
 import { formatDate } from '@secured-finance/sf-core';
 import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
-import {
-    ExpandIndicator,
-    Section,
-    SectionWithItems,
-} from 'src/components/atoms';
+import { ExpandIndicator, SectionWithItems } from 'src/components/atoms';
+import { SectionWithItemsAndHeader } from 'src/components/atoms/SectionWithItemsAndHeader/SectionWithItemsAndHeader';
 import {
     AmountCard,
     CollateralSimulationSection,
@@ -16,7 +13,7 @@ import { Tooltip } from 'src/components/templates';
 import { CollateralBook, useOrderFee } from 'src/hooks';
 import { selectMarket } from 'src/store/availableContracts';
 import { RootState } from 'src/store/types';
-import { calculateFee, divide, prefixTilde } from 'src/utils';
+import { calculateFee, divide, formatLoanValue, prefixTilde } from 'src/utils';
 import { Amount, LoanValue, Maturity } from 'src/utils/entities';
 
 const FeeItem = () => {
@@ -64,19 +61,37 @@ export const OrderDetails = ({
 
     return (
         <div className='grid w-full grid-cols-1 justify-items-stretch gap-6 text-white'>
-            <Section>
+            <SectionWithItemsAndHeader
+                itemList={[
+                    ['Maturity Date', formatDate(maturity.toNumber())],
+                    [
+                        'Bond Price',
+                        prefixTilde(
+                            formatLoanValue(
+                                loanValue ?? LoanValue.ZERO,
+                                'price'
+                            )
+                        ),
+                    ],
+                    [
+                        'APR',
+                        prefixTilde(
+                            formatLoanValue(loanValue ?? LoanValue.ZERO, 'rate')
+                        ),
+                    ],
+                ]}
+            >
                 <AmountCard amount={amount} price={assetPrice} />
-            </Section>
+            </SectionWithItemsAndHeader>
+
             <CollateralSimulationSection
                 collateral={collateral}
                 tradeAmount={amount}
-                side={side}
                 assetPrice={assetPrice}
-                tradeValue={loanValue}
             />
+
             <SectionWithItems
                 itemList={[
-                    ['Maturity Date', formatDate(maturity.toNumber())],
                     [
                         <FeeItem key={maturity.toString()} />,
                         prefixTilde(

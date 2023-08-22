@@ -1,4 +1,3 @@
-import { OrderSide } from '@secured-finance/sf-client';
 import { composeStories } from '@storybook/react';
 import { preloadedLendingMarkets } from 'src/stories/mocks/fixtures';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
@@ -11,31 +10,28 @@ const mockSecuredFinance = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mockSecuredFinance);
 
 describe('OrderDetails Component', () => {
-    it('should display the borrow remaining and the collateral usage if its a BORROW order', async () => {
+    it('should display the borrow remaining and the collateral usage', async () => {
         render(<Default />);
 
-        await waitFor(() => {
-            expect(screen.getByText('Borrow Amount')).toBeInTheDocument();
-        });
-        expect(screen.getByText('100 USDC')).toBeInTheDocument();
         expect(screen.getByText('Borrow Remaining')).toBeInTheDocument();
-        expect(screen.getByText('$5,103.15')).toBeInTheDocument();
+        expect(screen.getByText('$9,535.50')).toBeInTheDocument();
+        expect(screen.getByText('~ $100')).toBeInTheDocument();
         expect(screen.getByText('Bond Price')).toBeInTheDocument();
         expect(screen.getByText('~ 94.10')).toBeInTheDocument();
         expect(screen.getByText('APR')).toBeInTheDocument();
         expect(screen.getByText('~ 6.28%')).toBeInTheDocument();
     });
 
-    it('should render collateral utilization in borrow orders', async () => {
+    it('should render collateral utilization', async () => {
         render(<Default />);
 
-        await waitFor(() => {
-            expect(screen.getByText('Collateral Usage')).toBeInTheDocument();
-        });
+        expect(screen.getByText('Collateral Usage')).toBeInTheDocument();
         expect(screen.getByText('37%')).toBeInTheDocument();
         expect(screen.getByText('37%')).toHaveClass('text-progressBarStart');
-        expect(screen.getByText('37.83%')).toBeInTheDocument();
-        expect(screen.getByText('37.83%')).toHaveClass('text-progressBarStart');
+        await waitFor(() => {
+            expect(screen.getByText('55%')).toBeInTheDocument();
+            expect(screen.getByText('55%')).toHaveClass('text-progressBarVia');
+        });
     });
 
     it('should display the circuit breaker disclaimer', async () => {
@@ -48,22 +44,5 @@ describe('OrderDetails Component', () => {
         expect(disclaimerText).toHaveTextContent(
             'Circuit breaker will be triggered if the order is filled at over 96.72 which is the max slippage level at 1 block.'
         );
-    });
-
-    it('should not display the borrow remaining and the collateral usage if its a LEND order', async () => {
-        render(<Default side={OrderSide.LEND} />),
-            { preloadedState: preloadedLendingMarkets };
-
-        await waitFor(() => {
-            expect(screen.getByText('Lend Amount')).toBeInTheDocument();
-        });
-        expect(screen.getByText('100 USDC')).toBeInTheDocument();
-        expect(screen.queryByText('Borrow Remaining')).not.toBeInTheDocument();
-        expect(screen.queryByText('Collateral Usage')).not.toBeInTheDocument();
-
-        expect(screen.getByText('Bond Price')).toBeInTheDocument();
-        expect(screen.getByText('~ 94.10')).toBeInTheDocument();
-        expect(screen.getByText('APR')).toBeInTheDocument();
-        expect(screen.getByText('~ 6.28%')).toBeInTheDocument();
     });
 });

@@ -2,6 +2,7 @@ export * from './AdvancedLendingTopBar';
 export * from './AmountCard';
 export * from './AssetDisclosure';
 export * from './AssetSelector';
+export * from './BorrowedCollateral';
 export * from './CollateralProgressBar';
 export * from './CollateralSimulationSection';
 export * from './CollateralTabLeftPane';
