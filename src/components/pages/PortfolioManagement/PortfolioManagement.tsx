@@ -101,7 +101,7 @@ export const PortfolioManagement = () => {
                     return {
                         ...order,
                         status: 'Filled' as const,
-                        filledAmount: order.amount,
+                        filledAmount: order.inputAmount,
                     };
                 } else if (
                     !order.lendingMarket.isActive &&
