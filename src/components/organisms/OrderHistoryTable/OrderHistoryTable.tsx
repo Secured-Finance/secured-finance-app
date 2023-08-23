@@ -5,7 +5,7 @@ import { CoreTable, TableActionMenu } from 'src/components/molecules';
 import { useBreakpoint, useEtherscanUrl } from 'src/hooks';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { RootState } from 'src/store/types';
-import { OrderList, Pagination } from 'src/types';
+import { OrderHistoryList, Pagination } from 'src/types';
 import {
     amountColumnDefinition,
     contractColumnDefinition,
@@ -15,7 +15,7 @@ import {
     dateAndTimeColumnDefinition,
 } from 'src/utils/tableDefinitions';
 
-export type Order = OrderList[0];
+export type Order = OrderHistoryList[0];
 
 const columnHelper = createColumnHelper<Order>();
 
@@ -34,7 +34,7 @@ export const OrderHistoryTable = ({
     data,
     pagination,
 }: {
-    data: OrderList;
+    data: OrderHistoryList;
     pagination?: Pagination;
 }) => {
     const priceList = useSelector((state: RootState) => getPriceMap(state));
@@ -49,7 +49,7 @@ export const OrderHistoryTable = ({
                 columnHelper,
                 'Price',
                 'price',
-                row => row.unitPrice
+                row => row.inputUnitPrice
             ),
             amountColumnDefinition(
                 columnHelper,
@@ -62,7 +62,7 @@ export const OrderHistoryTable = ({
                 columnHelper,
                 'Amount',
                 'amount',
-                row => row.amount,
+                row => row.inputAmount,
                 { compact: false, color: true, priceList: priceList }
             ),
             columnHelper.accessor('status', {
