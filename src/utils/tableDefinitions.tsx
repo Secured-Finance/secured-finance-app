@@ -356,6 +356,35 @@ export const priceYieldColumnDefinition = <T extends { maturity: string }>(
     });
 };
 
+export const inputPriceYieldColumnDefinition = <T extends { maturity: string }>(
+    columnHelper: ColumnHelper<T>,
+    title: string,
+    id: string,
+    accessor: AccessorFn<T, BigNumber>
+) => {
+    return columnHelper.accessor(accessor, {
+        id: id,
+        cell: info => {
+            return (
+                <div className='flex justify-center'>
+                    {Number(info.getValue().toString()) === 0 ? (
+                        <div className='typography-caption'>Market Price</div>
+                    ) : (
+                        <PriceYieldItem
+                            loanValue={LoanValue.fromPrice(
+                                Number(info.getValue().toString()),
+                                Number(info.row.original.maturity.toString())
+                            )}
+                            firstLineType='price'
+                        />
+                    )}
+                </div>
+            );
+        },
+        header: tableHeaderDefinition(title),
+    });
+};
+
 export const dateAndTimeColumnDefinition = <T extends { createdAt: BigNumber }>(
     columnHelper: ColumnHelper<T>,
     title: string,
