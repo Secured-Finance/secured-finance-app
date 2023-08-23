@@ -1,6 +1,6 @@
 import { composeStories } from '@storybook/react';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
-import { render, screen, waitFor } from 'src/test-utils.js';
+import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
 import * as stories from './CollateralSimulationSection.stories';
 
 const { Trade } = composeStories(stories);
@@ -32,5 +32,28 @@ describe('CollateralSimulationSection Component', () => {
             expect(screen.getByText('55%')).toBeInTheDocument();
             expect(screen.getByText('55%')).toHaveClass('text-progressBarVia');
         });
+    });
+
+    it('should display a checkbox for applying borrowed amount as collateral', async () => {
+        const { store } = render(<Trade />);
+
+        expect(screen.getByText('Apply Borrowing Asset as Collateral'));
+        expect(screen.getByRole('checkbox')).toBeInTheDocument();
+        expect(store.getState().landingOrderForm.isBorrowedCollateral).toEqual(
+            false
+        );
+        const checkbox = screen.getByRole('checkbox');
+        await waitFor(() => {
+            fireEvent.click(checkbox);
+        });
+        expect(store.getState().landingOrderForm.isBorrowedCollateral).toEqual(
+            true
+        );
+        await waitFor(() => {
+            fireEvent.click(checkbox);
+        });
+        expect(store.getState().landingOrderForm.isBorrowedCollateral).toEqual(
+            false
+        );
     });
 });
