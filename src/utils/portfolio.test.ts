@@ -5,6 +5,7 @@ import {
     ethBytes32,
     wbtcBytes32,
     wfilBytes32,
+    orderHistoryList,
 } from 'src/stories/mocks/fixtures';
 import { TradeHistory } from 'src/types';
 import timemachine from 'timemachine';
@@ -250,10 +251,11 @@ describe('checkOrderIsFilled', () => {
             currency: ethBytes32,
             side: 0,
             maturity: dec22Fixture,
-            unitPrice: BigNumber.from('9800'),
+            inputUnitPrice: BigNumber.from('9800'),
             filledAmount: BigNumber.from('1000000000000000000000'),
-            amount: BigNumber.from('1000000000000000000000'),
+            inputAmount: BigNumber.from('1000000000000000000000'),
             status: 'Open' as const,
+            type: 'Limit' as const,
             createdAt: BigNumber.from('1'),
             txHash: utils.formatBytes32String('hash'),
             lendingMarket: {
@@ -271,10 +273,11 @@ describe('checkOrderIsFilled', () => {
             currency: ethBytes32,
             side: 0,
             maturity: dec22Fixture,
-            unitPrice: BigNumber.from('9800'),
+            inputUnitPrice: BigNumber.from('9800'),
             filledAmount: BigNumber.from('1000000000000000000000'),
-            amount: BigNumber.from('1000000000000000000000'),
+            inputAmount: BigNumber.from('1000000000000000000000'),
             status: 'Open' as const,
+            type: 'Limit' as const,
             createdAt: BigNumber.from('1'),
             txHash: utils.formatBytes32String('hash'),
             lendingMarket: {
@@ -288,54 +291,7 @@ describe('checkOrderIsFilled', () => {
 });
 
 describe('sortOrders', () => {
-    const orders = [
-        {
-            orderId: BigNumber.from(1),
-            currency: wfilBytes32,
-            side: 1,
-            maturity: dec22Fixture.toString(),
-            unitPrice: BigNumber.from('9800'),
-            amount: BigNumber.from('1000000000000000000000'),
-            createdAt: BigNumber.from('1609291000'),
-        },
-        {
-            orderId: BigNumber.from(2),
-            currency: wfilBytes32,
-            side: 1,
-            maturity: dec22Fixture.toString(),
-            unitPrice: BigNumber.from('9600'),
-            amount: BigNumber.from('5000000000000000000000'),
-            createdAt: BigNumber.from('1609298000'),
-        },
-        {
-            orderId: BigNumber.from(3),
-            currency: wfilBytes32,
-            side: 0,
-            maturity: dec22Fixture.toString(),
-            unitPrice: BigNumber.from('9800'),
-            amount: BigNumber.from('1000000000'),
-            createdAt: BigNumber.from('1609297000'),
-        },
-        {
-            orderId: BigNumber.from(4),
-            currency: wbtcBytes32,
-            side: 1,
-            maturity: dec22Fixture.toString(),
-            unitPrice: BigNumber.from('9600'),
-            amount: BigNumber.from('5000000000000000000000'),
-            createdAt: BigNumber.from('1609299000'),
-        },
-        {
-            orderId: BigNumber.from(5),
-            currency: ethBytes32,
-            side: 0,
-            maturity: dec22Fixture.toString(),
-            unitPrice: BigNumber.from('9800'),
-            amount: BigNumber.from('1000000000'),
-            createdAt: BigNumber.from('1609295000'),
-        },
-    ];
-    const sortedOrders = orders.sort((a, b) => sortOrders(a, b));
+    const sortedOrders = orderHistoryList.sort((a, b) => sortOrders(a, b));
 
     for (let i = 0; i < sortedOrders.length - 1; i++) {
         expect(sortedOrders[i].createdAt.toNumber()).toBeGreaterThanOrEqual(

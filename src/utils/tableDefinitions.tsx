@@ -37,12 +37,20 @@ type SideProperty = {
 type AmountProperty = {
     amount: BigNumber;
 };
+type InputAmountProperty = {
+    inputAmount: BigNumber;
+};
 
 type ForwardValueProperty = {
     forwardValue: BigNumber;
 };
 
-type AmountColumnType = (AmountProperty | SideProperty | ForwardValueProperty) &
+type AmountColumnType = (
+    | AmountProperty
+    | SideProperty
+    | ForwardValueProperty
+    | InputAmountProperty
+) &
     CurrencyProperty;
 
 function hasAmountProperty<T extends AmountColumnType>(
