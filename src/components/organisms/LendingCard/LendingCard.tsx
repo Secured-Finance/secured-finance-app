@@ -156,7 +156,7 @@ export const LendingCard = ({
         : undefined;
 
     return (
-        <div className='w-[345px] space-y-6 rounded-b-xl border border-panelStroke bg-transparent pb-7 shadow-deep'>
+        <div className='w-[345px] flex-shrink-0 space-y-6 rounded-b-xl border border-panelStroke bg-transparent pb-7 shadow-deep'>
             <RadioGroupSelector
                 options={Object.values(OrderSideMap)}
                 selectedOption={OrderSideMap[side]}

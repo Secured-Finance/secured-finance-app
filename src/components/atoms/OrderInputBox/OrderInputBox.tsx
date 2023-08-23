@@ -75,7 +75,7 @@ export const OrderInputBox = ({
                 ) : (
                     <InputBase
                         value={initialValue as number}
-                        className='w-full text-right text-[18px] font-semibold leading-6 text-neutral-8'
+                        className='w-32 text-right text-[18px] font-semibold leading-6 text-neutral-8'
                         label={field}
                         onValueChange={handleAmountChange}
                         decimalPlacesAllowed={decimalPlacesAllowed}
