@@ -87,8 +87,9 @@ export const useLendingMarkets = () => {
         // eslint-disable-next-line @tanstack/query/exhaustive-deps
         queryKey: [QueryKeys.LENDING_MARKETS, currencyKey],
         queryFn: async () => {
-            const lendingMarkets =
-                await securedFinance?.getLendingMarketDetails(currencies);
+            const lendingMarkets = await securedFinance?.getOrderBookDetails(
+                currencies
+            );
             return lendingMarkets ?? [];
         },
         select: markets => {

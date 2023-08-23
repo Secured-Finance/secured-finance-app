@@ -133,7 +133,7 @@ export const mockUseSF = () => {
             ])
         ),
 
-        getLendingMarketDetails: jest.fn(() => {
+        getOrderBookDetails: jest.fn(() => {
             const maturities = [
                 maturitiesMock(ethBytes32),
                 maturitiesMock(wfilBytes32),

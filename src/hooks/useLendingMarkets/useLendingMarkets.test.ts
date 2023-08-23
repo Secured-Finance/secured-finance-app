@@ -26,7 +26,7 @@ describe('useLendingMarkets1', () => {
 
         await waitForNextUpdate();
 
-        expect(mock.getLendingMarketDetails).toHaveBeenCalledTimes(1);
+        expect(mock.getOrderBookDetails).toHaveBeenCalledTimes(1);
         const newValue = result.current;
         expect(newValue.data).toEqual({
             ETH: maturities,
@@ -38,8 +38,8 @@ describe('useLendingMarkets1', () => {
     });
 
     it('should increment the name of the contract if it already exists', async () => {
-        const lendingMarkets = await mock.getLendingMarketDetails();
-        mock.getLendingMarketDetails.mockResolvedValueOnce([
+        const lendingMarkets = await mock.getOrderBookDetails();
+        mock.getOrderBookDetails.mockResolvedValueOnce([
             ...lendingMarkets,
             { ...lendingMarkets[0], maturity: BigNumber.from('10000') },
         ]);
