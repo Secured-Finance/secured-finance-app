@@ -13,6 +13,7 @@ import {
     priceYieldColumnDefinition,
     tableHeaderDefinition,
     dateAndTimeColumnDefinition,
+    inputAmountColumnDefinition,
 } from 'src/utils/tableDefinitions';
 
 export type Order = OrderHistoryList[0];
@@ -58,7 +59,7 @@ export const OrderHistoryTable = ({
                 row => row.filledAmount,
                 { compact: false, color: true, priceList: priceList }
             ),
-            amountColumnDefinition(
+            inputAmountColumnDefinition(
                 columnHelper,
                 'Amount',
                 'amount',
