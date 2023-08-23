@@ -1,4 +1,9 @@
-import { currencyMap, ordinaryFormat, prefixTilde, usdFormat } from 'src/utils';
+import {
+    CurrencySymbol,
+    ordinaryFormat,
+    prefixTilde,
+    usdFormat,
+} from 'src/utils';
 import { Amount } from 'src/utils/entities';
 
 export const AmountCard = ({
@@ -8,6 +13,13 @@ export const AmountCard = ({
     amount: Amount;
     price: number;
 }) => {
+    const currencyName: Record<CurrencySymbol, string> = {
+        [CurrencySymbol.USDC]: 'USD Coin',
+        [CurrencySymbol.WFIL]: 'Wrapped Filecoin',
+        [CurrencySymbol.WBTC]: 'Bitcoin',
+        [CurrencySymbol.ETH]: 'Ethereum',
+    };
+
     return (
         <div className='grid w-full grid-cols-2 justify-around'>
             <div className='grid items-center justify-start'>
@@ -15,7 +27,7 @@ export const AmountCard = ({
                     {amount.currency}
                 </span>
                 <span className='typography-caption-3 font-bold text-white-60'>
-                    {currencyMap[amount.currency].name}
+                    {currencyName[amount.currency]}
                 </span>
             </div>
             <div className='grid items-center justify-end'>
