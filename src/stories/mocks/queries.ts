@@ -39,10 +39,11 @@ const generateMyOrderHistory = (amount: string) =>
             currency: wfilBytes32,
             side: 1,
             maturity: BigNumber.from(dec22Fixture.toString()),
-            unitPrice: BigNumber.from('9800'),
+            inputUnitPrice: BigNumber.from('9800'),
             filledAmount: BigNumber.from('0'),
-            amount: BigNumber.from(amount),
+            inputAmount: BigNumber.from(amount),
             status: 'Open',
+            type: 'Limit',
             createdAt: BigNumber.from('1'),
             txHash: utils.formatBytes32String('hash'),
             lendingMarket: {
