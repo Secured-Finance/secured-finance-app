@@ -10,7 +10,7 @@ import {
     amountColumnDefinition,
     contractColumnDefinition,
     loanTypeColumnDefinition,
-    priceYieldColumnDefinition,
+    inputPriceYieldColumnDefinition,
     tableHeaderDefinition,
     dateAndTimeColumnDefinition,
     inputAmountColumnDefinition,
@@ -46,7 +46,7 @@ export const OrderHistoryTable = ({
         () => [
             loanTypeColumnDefinition(columnHelper, 'Type', 'type'),
             contractColumnDefinition(columnHelper, 'Contract', 'contract'),
-            priceYieldColumnDefinition(
+            inputPriceYieldColumnDefinition(
                 columnHelper,
                 'Price',
                 'price',
