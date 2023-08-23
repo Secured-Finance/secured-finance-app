@@ -66,6 +66,8 @@ export const AdvancedLendingOrderCard = ({
         selectLandingOrderForm(state.landingOrderForm)
     );
     const [sliderValue, setSliderValue] = useState(0.0);
+    const [amountFlag, setAmountFlag] = useState(true);
+    const [priceFlag, setPriceFlag] = useState(true);
 
     const balanceRecord = useSelector((state: RootState) =>
         selectAllBalances(state)
@@ -104,9 +106,9 @@ export const AdvancedLendingOrderCard = ({
             : market.maxLendUnitPrice;
     }, [market, side]);
 
-    const orderAmount = amount.gt(ZERO_BN)
-        ? new Amount(amount, currency)
-        : undefined;
+    const orderAmount = useMemo(() => {
+        return amount.gt(ZERO_BN) ? new Amount(amount, currency) : undefined;
+    }, [amount, currency]);
 
     const availableToBorrow = useMemo(() => {
         return currency && price
@@ -172,11 +174,17 @@ export const AdvancedLendingOrderCard = ({
                 )
             )
         );
+        setAmountFlag(true);
         setSliderValue(percentage);
     };
 
     const handleInputChange = (v: BigNumber) => {
         dispatch(setAmount(v));
+        if (v.isZero()) {
+            setAmountFlag(false);
+        } else {
+            setAmountFlag(true);
+        }
 
         const available =
             side === OrderSide.BORROW ? availableToBorrow : balanceToLend;
@@ -185,6 +193,18 @@ export const AdvancedLendingOrderCard = ({
             ? setSliderValue(Math.min(100.0, (inputValue * 100.0) / available))
             : setSliderValue(0.0);
     };
+
+    const handlePriceChange = (v: number) => {
+        v !== undefined
+            ? dispatch(setUnitPrice(multiply(v as number, 100)))
+            : dispatch(setUnitPrice(0));
+        if (v === 0) {
+            setPriceFlag(false);
+        } else {
+            setPriceFlag(true);
+        }
+    };
+
     useEffect(() => {
         if (onlyLimitOrder) {
             dispatch(setOrderType(OrderType.LIMIT));
@@ -207,6 +227,7 @@ export const AdvancedLendingOrderCard = ({
             ? amountFormatterToBase[currency](available)
             : amount;
         dispatch(setAmount(inputAmount));
+        setAmountFlag(true);
         available
             ? setSliderValue(
                   Math.min(
@@ -237,6 +258,7 @@ export const AdvancedLendingOrderCard = ({
                     );
                     dispatch(setSourceAccount(WalletSource.METAMASK));
                     dispatch(resetUnitPrice());
+                    setPriceFlag(true);
                 }}
                 variant='NavTab'
             />
@@ -249,6 +271,7 @@ export const AdvancedLendingOrderCard = ({
                         handleClick={option => {
                             dispatch(setOrderType(option as OrderType));
                             dispatch(resetUnitPrice());
+                            setPriceFlag(true);
                         }}
                         variant='StyledButton'
                     />
@@ -280,16 +303,11 @@ export const AdvancedLendingOrderCard = ({
                                 ? divide(loanValue.price, 100)
                                 : undefined
                         }
-                        onValueChange={v => {
-                            v !== undefined
-                                ? dispatch(
-                                      setUnitPrice(multiply(v as number, 100))
-                                  )
-                                : dispatch(setUnitPrice(0));
-                        }}
+                        onValueChange={v => handlePriceChange(v as number)}
                         informationText='Input value greater than or equal to 0.01 and up to and including 100.'
                         decimalPlacesAllowed={2}
                         maxLimit={100}
+                        flag={priceFlag}
                     />
                     <ErrorInfo
                         errorMessage='Invalid bond price'
@@ -317,9 +335,10 @@ export const AdvancedLendingOrderCard = ({
                     unit={currency}
                     asset={currency}
                     initialValue={orderAmount?.value}
-                    onValueChange={v =>
-                        handleInputChange(BigNumber.from(v ?? 0))
-                    }
+                    onValueChange={v => {
+                        handleInputChange(BigNumber.from(v ?? 0));
+                    }}
+                    flag={amountFlag}
                 />
                 <div className='mx-10px flex flex-col gap-6'>
                     <OrderDisplayBox

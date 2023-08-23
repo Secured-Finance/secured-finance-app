@@ -3,9 +3,6 @@ import { useCallback, useState, useEffect } from 'react';
 import { InputBase } from 'src/components/atoms';
 import { Tooltip } from 'src/components/templates';
 import { amountFormatterToBase, CurrencySymbol } from 'src/utils';
-import { useSelector } from 'react-redux';
-import { RootState } from 'src/store/types';
-import { selectLandingOrderForm } from 'src/store/landingOrderForm';
 
 interface OrderInputBoxProps {
     field: string;
@@ -17,6 +14,7 @@ interface OrderInputBoxProps {
     decimalPlacesAllowed?: number;
     maxLimit?: number;
     onValueChange?: (v: number | BigNumber | undefined) => void;
+    flag?: boolean;
 }
 
 export const OrderInputBox = ({
@@ -29,21 +27,15 @@ export const OrderInputBox = ({
     decimalPlacesAllowed,
     maxLimit,
     onValueChange,
+    flag,
 }: OrderInputBoxProps) => {
-    const { currency, maturity } = useSelector((state: RootState) =>
-        selectLandingOrderForm(state.landingOrderForm)
-    );
     const [inputAmount, setInputAmount] = useState(initialValue);
-    useEffect(() => {
-        if (initialValue === undefined || initialValue === 0)
-            setInputAmount(undefined);
-        else setInputAmount(initialValue);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [currency, maturity]);
 
     useEffect(() => {
-        if (initialValue !== 0) setInputAmount(initialValue);
-    }, [initialValue]);
+        if (flag) {
+            setInputAmount(initialValue);
+        }
+    }, [flag, initialValue]);
 
     const handleInputChange = useCallback(
         (
