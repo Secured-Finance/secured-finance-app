@@ -112,7 +112,7 @@ describe('Advanced Lending Component', () => {
         ).toBeInTheDocument();
     });
 
-    it('should only show the pre-order orders of the user when they are connected', async () => {
+    it('should only show the orders of the user related to orderbook', async () => {
         await waitFor(() =>
             render(<ConnectedToWallet />, {
                 apolloMocks: Default.parameters?.apolloClient.mocks,
