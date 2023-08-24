@@ -114,7 +114,6 @@ describe('useOrderEstimation', () => {
                     ...preloadedState,
                     landingOrderForm: {
                         ...preloadedState.landingOrderForm,
-                        sourceAccount: WalletSource.METAMASK,
                         side: OrderSide.LEND,
                     },
                 },
@@ -171,15 +170,7 @@ describe('useOrderEstimation', () => {
     it('should be called with 0 additionalDepositAmount in Borrow orders', async () => {
         const { result, waitForNextUpdate } = renderHook(
             () => useOrderEstimation('0x0'),
-            {
-                preloadedState: {
-                    ...preloadedState,
-                    landingOrderForm: {
-                        ...preloadedState.landingOrderForm,
-                        side: OrderSide.BORROW,
-                    },
-                },
-            }
+            { preloadedState }
         );
         await act(async () => {
             await waitForNextUpdate();
