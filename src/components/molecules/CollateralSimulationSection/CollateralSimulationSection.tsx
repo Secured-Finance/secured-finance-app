@@ -1,13 +1,10 @@
 import { OrderSide } from '@secured-finance/sf-client';
 import { useMemo } from 'react';
-import { useSelector } from 'react-redux';
 import {
     SectionWithItems,
     getLiquidationInformation,
 } from 'src/components/atoms';
 import { CollateralBook, useOrderEstimation } from 'src/hooks';
-import { selectLandingOrderForm } from 'src/store/landingOrderForm';
-import { RootState } from 'src/store/types';
 import {
     divide,
     formatCollateralRatio,
@@ -35,21 +32,13 @@ export const CollateralSimulationSection = ({
 }) => {
     const { address } = useAccount();
 
-    const { isBorrowedCollateral } = useSelector((state: RootState) =>
-        selectLandingOrderForm(state.landingOrderForm)
-    );
-
     const { data: coverage } = useOrderEstimation(address ?? '');
-
-    const collateralCoverage = isBorrowedCollateral
-        ? coverage
-        : collateral.coverage.toNumber();
 
     const remainingToBorrowText = useMemo(() => {
         const availableToBorrow = computeAvailableToBorrow(
             1,
             collateral.usdCollateral,
-            divide(collateralCoverage ?? 0, 100) / MAX_COVERAGE,
+            divide(coverage ?? 0, 100) / MAX_COVERAGE,
             collateral.collateralThreshold
         );
 
@@ -60,7 +49,7 @@ export const CollateralSimulationSection = ({
     }, [
         collateral.usdCollateral,
         collateral.collateralThreshold,
-        collateralCoverage,
+        coverage,
         tradeAmount,
         assetPrice,
     ]);
