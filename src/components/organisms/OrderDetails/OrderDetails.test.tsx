@@ -19,7 +19,7 @@ describe('OrderDetails Component', () => {
         });
         expect(screen.getByText('100 USDC')).toBeInTheDocument();
         expect(screen.getByText('Borrow Remaining')).toBeInTheDocument();
-        expect(screen.getByText('$5,103.15')).toBeInTheDocument();
+        expect(screen.getByText('$9,535.50')).toBeInTheDocument();
         expect(screen.getByText('Bond Price')).toBeInTheDocument();
         expect(screen.getByText('~ 94.10')).toBeInTheDocument();
         expect(screen.getByText('APR')).toBeInTheDocument();
@@ -29,13 +29,13 @@ describe('OrderDetails Component', () => {
     it('should render collateral utilization in borrow orders', async () => {
         render(<Default />);
 
-        await waitFor(() => {
-            expect(screen.getByText('Collateral Usage')).toBeInTheDocument();
-        });
+        expect(screen.getByText('Collateral Usage')).toBeInTheDocument();
         expect(screen.getByText('37%')).toBeInTheDocument();
         expect(screen.getByText('37%')).toHaveClass('text-progressBarStart');
-        expect(screen.getByText('37.83%')).toBeInTheDocument();
-        expect(screen.getByText('37.83%')).toHaveClass('text-progressBarStart');
+        await waitFor(() => {
+            expect(screen.getByText('55%')).toBeInTheDocument();
+            expect(screen.getByText('55%')).toHaveClass('text-progressBarVia');
+        });
     });
 
     it('should display the circuit breaker disclaimer', async () => {

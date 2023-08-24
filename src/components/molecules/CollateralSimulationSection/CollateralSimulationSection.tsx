@@ -1,23 +1,24 @@
 import { OrderSide } from '@secured-finance/sf-client';
 import { useMemo } from 'react';
+import { useSelector } from 'react-redux';
 import {
     SectionWithItems,
     getLiquidationInformation,
 } from 'src/components/atoms';
-import { CollateralBook } from 'src/hooks';
+import { CollateralBook, useOrderEstimation } from 'src/hooks';
+import { selectLandingOrderForm } from 'src/store/landingOrderForm';
+import { RootState } from 'src/store/types';
 import {
+    divide,
     formatCollateralRatio,
     formatLoanValue,
     ordinaryFormat,
     prefixTilde,
     usdFormat,
 } from 'src/utils';
-import {
-    MAX_COVERAGE,
-    computeAvailableToBorrow,
-    recomputeCollateralUtilization,
-} from 'src/utils/collateral';
+import { computeAvailableToBorrow, MAX_COVERAGE } from 'src/utils/collateral';
 import { Amount, LoanValue } from 'src/utils/entities';
+import { useAccount } from 'wagmi';
 
 export const CollateralSimulationSection = ({
     collateral,
@@ -32,11 +33,23 @@ export const CollateralSimulationSection = ({
     assetPrice: number;
     tradeValue: LoanValue;
 }) => {
+    const { address } = useAccount();
+
+    const { isBorrowedCollateral } = useSelector((state: RootState) =>
+        selectLandingOrderForm(state.landingOrderForm)
+    );
+
+    const { data: coverage } = useOrderEstimation(address ?? '');
+
+    const collateralCoverage = isBorrowedCollateral
+        ? coverage
+        : collateral.coverage.toNumber();
+
     const remainingToBorrowText = useMemo(() => {
         const availableToBorrow = computeAvailableToBorrow(
             1,
             collateral.usdCollateral,
-            collateral.coverage.toNumber() / MAX_COVERAGE,
+            divide(collateralCoverage ?? 0, 100) / MAX_COVERAGE,
             collateral.collateralThreshold
         );
 
@@ -46,21 +59,8 @@ export const CollateralSimulationSection = ({
         )}`;
     }, [
         collateral.usdCollateral,
-        collateral.coverage,
         collateral.collateralThreshold,
-        tradeAmount,
-        assetPrice,
-    ]);
-
-    const recomputeCollateral = useMemo(() => {
-        return recomputeCollateralUtilization(
-            collateral.usdCollateral,
-            collateral.coverage.toNumber(),
-            tradeAmount.toUSD(assetPrice)
-        );
-    }, [
-        collateral.usdCollateral,
-        collateral.coverage,
+        collateralCoverage,
         tradeAmount,
         assetPrice,
     ]);
@@ -79,7 +79,7 @@ export const CollateralSimulationSection = ({
                       'Collateral Usage',
                       getCollateralUsage(
                           collateral.coverage.toNumber(),
-                          recomputeCollateral
+                          coverage ?? 0
                       ),
                   ],
                   [
