@@ -30,11 +30,14 @@ export const MenuPopover = ({}) => {
                             leaveFrom='opacity-100 translate-y-0'
                             leaveTo='opacity-0 translate-y-5'
                         >
-                            <Popover.Panel className='absolute -left-6 z-10 mt-5 w-56'>
+                            <Popover.Panel
+                                className='absolute -left-6 z-10 mt-5 w-56'
+                                role='menu'
+                            >
                                 <div className='relative flex flex-col overflow-hidden rounded-lg bg-gunMetal px-3 py-[14px] shadow-dropdown'>
                                     {LinkList.map((link, index) => {
                                         return (
-                                            <div key={index}>
+                                            <div key={index} role='menuitem'>
                                                 <MenuItem
                                                     text={link.text}
                                                     icon={link.icon}

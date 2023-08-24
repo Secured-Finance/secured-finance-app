@@ -7,7 +7,7 @@ import { CurrencySymbol } from 'src/utils';
 import { WalletSourceOption } from './WalletSourceSelector';
 import * as stories from './WalletSourceSelector.stories';
 
-const { Default } = composeStories(stories);
+const { Default, NotConnectedToWallet } = composeStories(stories);
 
 const walletSourceList: WalletSourceOption[] = [
     {
@@ -30,7 +30,15 @@ describe('WalletSourceSelector component', () => {
         expect(screen.getByText('Lending Source')).toBeInTheDocument();
         expect(screen.getByText('Available to Lend')).toBeInTheDocument();
         expect(screen.getByText('0xb98b...fd6d')).toBeInTheDocument();
-        expect(screen.getByText('1,000 WBTC')).toBeInTheDocument();
+        expect(screen.getByText('1,000')).toBeInTheDocument();
+    });
+
+    it('should render disabled WalletSourceSelector when wallet is disconnected', () => {
+        render(<NotConnectedToWallet />);
+        expect(screen.getByText('Lending Source')).toBeInTheDocument();
+        expect(screen.getByText('Available to Lend')).toBeInTheDocument();
+        expect(screen.getByText('Select Source')).toBeInTheDocument();
+        expect(screen.getByText('--')).toBeInTheDocument();
     });
 
     it('should render a clickable button', () => {
@@ -38,11 +46,24 @@ describe('WalletSourceSelector component', () => {
         expect(screen.getByRole('button')).toBeInTheDocument();
     });
 
+    it('should render a disabled button when wallet is disconnected', async () => {
+        render(<NotConnectedToWallet />);
+        expect(screen.getByRole('button')).toBeDisabled();
+    });
+
     it('should render a dropdown', async () => {
         render(<Default />);
         fireEvent.click(screen.getByRole('button'));
         await waitFor(() => {
             expect(screen.getByRole('listbox')).toBeInTheDocument();
+        });
+    });
+
+    it('should not render a dropdown when wallet is disconnected', async () => {
+        render(<NotConnectedToWallet />);
+        fireEvent.click(screen.getByRole('button'));
+        await waitFor(() => {
+            expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
         });
     });
 
@@ -55,7 +76,7 @@ describe('WalletSourceSelector component', () => {
 
         await waitFor(() => {
             expect(screen.getByText('SF Vault')).toBeInTheDocument();
-            expect(screen.getByText('4,000 WBTC')).toBeInTheDocument();
+            expect(screen.getByText('4,000')).toBeInTheDocument();
 
             expect(onChange).toBeCalledTimes(1);
             expect(onChange).toHaveBeenLastCalledWith(WalletSource.SF_VAULT);
@@ -65,7 +86,7 @@ describe('WalletSourceSelector component', () => {
     it('should not render options which have zero balance except metamask', async () => {
         render(<Default optionList={walletSourceList} />);
         expect(screen.getByText('0xb98b...fd6d')).toBeInTheDocument();
-        expect(screen.getByText('1,000 WBTC')).toBeInTheDocument();
+        expect(screen.getByText('1,000')).toBeInTheDocument();
 
         fireEvent.click(screen.getByTestId('wallet-source-selector-button'));
         await waitFor(() => {

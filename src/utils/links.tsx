@@ -1,5 +1,6 @@
 import SF from 'src/assets/icons/SF-KO.svg';
 import Discord from 'src/assets/icons/discord.svg';
+import GitBook from 'src/assets/icons/gitbook.svg';
 import Medium from 'src/assets/icons/medium.svg';
 import Twitter from 'src/assets/icons/twitter.svg';
 
@@ -8,6 +9,7 @@ type ExternalLink = {
     href: string;
     icon: React.ReactNode;
 };
+
 export const LinkList: ExternalLink[] = [
     {
         text: 'Official Site',
@@ -16,6 +18,11 @@ export const LinkList: ExternalLink[] = [
     },
     {
         text: 'Documentation',
+        href: 'https://docs.secured.finance/',
+        icon: <GitBook className='h-5 w-5 text-white' />,
+    },
+    {
+        text: 'Articles on Medium',
         href: 'https://blog.secured.finance/',
         icon: <Medium className='h-5 w-5 text-white' />,
     },
