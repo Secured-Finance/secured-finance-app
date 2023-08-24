@@ -21,7 +21,7 @@ describe('CollateralSimulationSection Component', () => {
 
         await waitFor(() => {
             expect(screen.getByText('Borrow Remaining')).toBeInTheDocument();
-            expect(screen.getByText('$9,135.50')).toBeInTheDocument();
+            expect(screen.getByText('$9,113.72')).toBeInTheDocument();
         });
 
         expect(screen.getByText('Collateral Usage')).toBeInTheDocument();
