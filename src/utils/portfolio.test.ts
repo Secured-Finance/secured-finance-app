@@ -7,7 +7,7 @@ import {
     wfilBytes32,
     orderHistoryList,
 } from 'src/stories/mocks/fixtures';
-import { TradeHistory } from 'src/types';
+import { TradeHistory, OrderType } from 'src/types';
 import timemachine from 'timemachine';
 import { CurrencySymbol } from './currencyList';
 import {
@@ -255,7 +255,7 @@ describe('checkOrderIsFilled', () => {
             filledAmount: BigNumber.from('1000000000000000000000'),
             inputAmount: BigNumber.from('1000000000000000000000'),
             status: 'Open' as const,
-            type: 'Limit' as const,
+            type: OrderType.LIMIT,
             createdAt: BigNumber.from('1'),
             txHash: utils.formatBytes32String('hash'),
             lendingMarket: {
@@ -277,7 +277,7 @@ describe('checkOrderIsFilled', () => {
             filledAmount: BigNumber.from('1000000000000000000000'),
             inputAmount: BigNumber.from('1000000000000000000000'),
             status: 'Open' as const,
-            type: 'Limit' as const,
+            type: OrderType.LIMIT,
             createdAt: BigNumber.from('1'),
             txHash: utils.formatBytes32String('hash'),
             lendingMarket: {
