@@ -387,6 +387,17 @@ describe('AdvancedLendingOrderCard Component', () => {
         expect(button).not.toBeDisabled();
     });
 
+    it('should show available to borrow on borrow screen', async () => {
+        const preloadedState = { ...preloadedAssetPrices };
+        render(<Default />, { preloadedState });
+        expect(
+            screen.getByText('Available To Borrow WFIL')
+        ).toBeInTheDocument();
+        await waitFor(() => {
+            expect(screen.getByText('~ 867.19')).toBeInTheDocument();
+        });
+    });
+
     describe('Error handling for invalid bond price in different order types and sides', () => {
         const assertPlaceOrderButtonIsDisabled = () => {
             const button = screen.getByTestId('place-order-button');

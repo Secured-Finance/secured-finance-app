@@ -1,3 +1,4 @@
+import { withWalletProvider } from '.storybook/decorators';
 import { OrderSide } from '@secured-finance/sf-client';
 import type { Meta, StoryFn } from '@storybook/react';
 import { collateralBook37, dec22Fixture } from 'src/stories/mocks/fixtures';
@@ -15,6 +16,7 @@ export default {
         assetPrice: 10,
         tradeValue: LoanValue.fromPrice(9800, dec22Fixture.toNumber()),
     },
+    decorators: [withWalletProvider],
 } as Meta<typeof CollateralSimulationSection>;
 
 const Template: StoryFn<typeof CollateralSimulationSection> = args => (

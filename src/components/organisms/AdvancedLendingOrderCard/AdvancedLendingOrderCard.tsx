@@ -40,6 +40,8 @@ import {
     generateWalletSourceInformation,
     getAmountValidation,
     multiply,
+    ordinaryFormat,
+    prefixTilde,
     usdFormat,
 } from 'src/utils';
 import { Amount, LoanValue } from 'src/utils/entities';
@@ -312,6 +314,12 @@ export const AdvancedLendingOrderCard = ({
                     </div>
                 </div>
                 <Slider onChange={handleAmountChange} value={sliderValue} />
+                <div className='typography-caption flex flex-row justify-between'>
+                    <div className='text-slateGray'>{`Available To Borrow ${currency.toString()}`}</div>
+                    <div className='text-right text-planetaryPurple'>
+                        {prefixTilde(ordinaryFormat(availableToBorrow))}
+                    </div>
+                </div>
                 <OrderInputBox
                     field='Amount'
                     unit={currency}
