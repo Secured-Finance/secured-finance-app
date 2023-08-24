@@ -8,7 +8,7 @@ import {
     orderHistoryList,
     wfilBytes32,
 } from 'src/stories/mocks/fixtures';
-import { OrderHistoryList } from 'src/types';
+import { OrderHistoryList, OrderType } from 'src/types';
 import { OrderHistoryTable } from './OrderHistoryTable';
 
 export default {
@@ -42,7 +42,7 @@ const PaginatedTemplate: StoryFn<typeof OrderHistoryTable> = args => {
             filledAmount: BigNumber.from('0'),
             inputAmount: BigNumber.from('1000000000000000000000'),
             status: 'Open' as const,
-            type: 'Limit' as const,
+            type: OrderType.LIMIT,
             createdAt: BigNumber.from('1'),
             txHash: utils.formatBytes32String('hash'),
             lendingMarket: {
@@ -72,7 +72,7 @@ const PaginatedTemplate: StoryFn<typeof OrderHistoryTable> = args => {
                                 '1000000000000000000000'
                             ),
                             status: 'Open' as const,
-                            type: 'Limit' as const,
+                            type: OrderType.LIMIT,
                             createdAt: BigNumber.from('1'),
                             txHash: utils.formatBytes32String('hash'),
                             lendingMarket: {
