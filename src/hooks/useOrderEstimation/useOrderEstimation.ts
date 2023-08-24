@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux';
 import { selectLandingOrderForm } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
 import { toCurrency } from 'src/utils';
+import { QueryKeys } from '../queries';
 import useSF from '../useSecuredFinance';
 
 export const useOrderEstimation = (account: string) => {
@@ -37,7 +38,7 @@ export const useOrderEstimation = (account: string) => {
 
     return useQuery({
         queryKey: [
-            'getOrderEstimation',
+            QueryKeys.ORDER_ESTIMATE,
             currency,
             maturity,
             account,
