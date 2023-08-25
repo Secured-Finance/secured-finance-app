@@ -191,7 +191,7 @@ describe('AdvancedLendingOrderCard Component', () => {
             expect(screen.getByText('Lending Source')).toBeInTheDocument()
         );
         await waitFor(() =>
-            expect(screen.getByText('4,000 USDC')).toBeInTheDocument()
+            expect(screen.getByText('4,000')).toBeInTheDocument()
         );
 
         const walletSourceButton = screen.getByTestId(
@@ -202,9 +202,7 @@ describe('AdvancedLendingOrderCard Component', () => {
         expect(screen.getByText('SF Vault')).toBeInTheDocument();
         const option = screen.getByTestId('option-1');
         fireEvent.click(option);
-        await waitFor(async () =>
-            expect(screen.getByText('0.1 USDC')).toBeInTheDocument()
-        );
+        expect(screen.getByText('0.1')).toBeInTheDocument();
     });
 
     it('should change amount when slider is moved', async () => {
@@ -465,7 +463,7 @@ describe('AdvancedLendingOrderCard Component', () => {
                     },
                 });
                 await waitFor(() =>
-                    expect(screen.getByText('4,000 USDC')).toBeInTheDocument()
+                    expect(screen.getByText('4,000')).toBeInTheDocument()
                 );
                 changeInputValue('Bond Price', '0');
                 changeInputValue('Amount', '10');
@@ -551,7 +549,7 @@ describe('AdvancedLendingOrderCard Component', () => {
                     },
                 });
                 await waitFor(() =>
-                    expect(screen.getByText('4,000 USDC')).toBeInTheDocument()
+                    expect(screen.getByText('4,000')).toBeInTheDocument()
                 );
                 changeInputValue('Amount', '10');
                 assertPlaceOrderButtonIsEnabled();

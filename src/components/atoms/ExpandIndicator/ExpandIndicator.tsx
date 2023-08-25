@@ -1,4 +1,4 @@
-import { ChevronDownIcon } from '@heroicons/react/24/outline';
+import { ChevronDownIcon } from '@heroicons/react/20/solid';
 import classNames from 'classnames';
 
 export const ExpandIndicator = ({
