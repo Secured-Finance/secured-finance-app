@@ -134,7 +134,8 @@ export const AdvancedLending = ({
                 hexToCurrencySymbol(order.currency) === currency &&
                 order.maturity === maturity.toString()
         );
-    }, [currency, maturity, orderList.activeOrderList]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [currency, maturity, JSON.stringify(orderList.activeOrderList)]);
 
     const transactionHistory = useGraphClientHook(
         {
