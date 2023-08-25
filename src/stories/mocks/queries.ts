@@ -1,6 +1,6 @@
 import queries from '@secured-finance/sf-graph-client/dist/graphclients';
 import { BigNumber, utils } from 'ethers';
-import { TransactionList } from 'src/types';
+import { TransactionList, OrderType } from 'src/types';
 import { Maturity } from 'src/utils/entities';
 import {
     dailyVolumes,
@@ -43,7 +43,7 @@ const generateMyOrderHistory = (amount: string) =>
             filledAmount: BigNumber.from('0'),
             inputAmount: BigNumber.from(amount),
             status: 'Open',
-            type: 'Limit',
+            type: OrderType.LIMIT,
             createdAt: BigNumber.from('1'),
             txHash: utils.formatBytes32String('hash'),
             lendingMarket: {

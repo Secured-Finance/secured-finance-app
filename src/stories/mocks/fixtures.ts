@@ -18,6 +18,7 @@ import {
     OrderHistoryList,
     TradeHistory,
     TransactionList,
+    OrderType,
 } from 'src/types';
 import { CurrencySymbol, Rate } from 'src/utils';
 import { Maturity } from 'src/utils/entities';
@@ -400,7 +401,7 @@ export const orderHistoryList: OrderHistoryList = [
         filledAmount: BigNumber.from('0'),
         inputAmount: BigNumber.from('1000000000000000000000'),
         status: 'Open',
-        type: 'Limit',
+        type: OrderType.LIMIT,
         createdAt: BigNumber.from('7687675'),
         txHash: utils.formatBytes32String('hash'),
         lendingMarket: {
@@ -417,7 +418,7 @@ export const orderHistoryList: OrderHistoryList = [
         filledAmount: BigNumber.from('0'),
         inputAmount: BigNumber.from('5000000000000000000000'),
         status: 'Open',
-        type: 'Limit',
+        type: OrderType.LIMIT,
         createdAt: BigNumber.from('7234234'),
         txHash: utils.formatBytes32String('hash'),
         lendingMarket: {
@@ -434,7 +435,7 @@ export const orderHistoryList: OrderHistoryList = [
         filledAmount: BigNumber.from('500000000'),
         inputAmount: BigNumber.from('1000000000'),
         status: 'PartiallyFilled',
-        type: 'Limit',
+        type: OrderType.LIMIT,
         createdAt: BigNumber.from('1609295092'),
         txHash: utils.formatBytes32String('hash'),
         lendingMarket: {
@@ -451,7 +452,7 @@ export const orderHistoryList: OrderHistoryList = [
         filledAmount: BigNumber.from('0'),
         inputAmount: BigNumber.from('5000000000000000000000'),
         status: 'Open',
-        type: 'Limit',
+        type: OrderType.LIMIT,
         createdAt: BigNumber.from('31244235'),
         txHash: utils.formatBytes32String('hash'),
         lendingMarket: {
@@ -468,7 +469,7 @@ export const orderHistoryList: OrderHistoryList = [
         filledAmount: BigNumber.from('1000000000000000000000'),
         inputAmount: BigNumber.from('1000000000000000000000'),
         status: 'Filled',
-        type: 'Limit',
+        type: OrderType.LIMIT,
         createdAt: BigNumber.from('1234134235'),
         txHash: utils.formatBytes32String('hash'),
         lendingMarket: {
@@ -485,7 +486,7 @@ export const orderHistoryList: OrderHistoryList = [
         filledAmount: BigNumber.from('0'),
         inputAmount: BigNumber.from('100000000000000000'),
         status: 'Open',
-        type: 'Limit',
+        type: OrderType.LIMIT,
         createdAt: BigNumber.from('916238713'),
         txHash: utils.formatBytes32String('hash'),
         lendingMarket: {
@@ -502,7 +503,7 @@ export const orderHistoryList: OrderHistoryList = [
         filledAmount: BigNumber.from('500000000'),
         inputAmount: BigNumber.from('1000000000'),
         status: 'Cancelled',
-        type: 'Limit',
+        type: OrderType.LIMIT,
         createdAt: BigNumber.from('1609295092'),
         txHash: utils.formatBytes32String('hash'),
         lendingMarket: {
@@ -519,7 +520,7 @@ export const orderHistoryList: OrderHistoryList = [
         filledAmount: BigNumber.from('50000000000000000'),
         inputAmount: BigNumber.from('500000000000000000'),
         status: 'PartiallyFilled',
-        type: 'Limit',
+        type: OrderType.LIMIT,
         createdAt: BigNumber.from('131736913'),
         txHash: utils.formatBytes32String('hash'),
         lendingMarket: {
@@ -536,7 +537,7 @@ export const orderHistoryList: OrderHistoryList = [
         filledAmount: BigNumber.from('10000000000000000000'),
         inputAmount: BigNumber.from('100000000000000000000'),
         status: 'PartiallyBlocked',
-        type: 'Market',
+        type: OrderType.MARKET,
         createdAt: BigNumber.from('839873894'),
         txHash: utils.formatBytes32String('hash'),
         lendingMarket: {
@@ -553,7 +554,7 @@ export const orderHistoryList: OrderHistoryList = [
         filledAmount: BigNumber.from('0'),
         inputAmount: BigNumber.from('5000000000000000000000'),
         status: 'Blocked',
-        type: 'Limit',
+        type: OrderType.LIMIT,
         createdAt: BigNumber.from('784782114'),
         txHash: utils.formatBytes32String('hash'),
         lendingMarket: {
@@ -570,7 +571,7 @@ export const orderHistoryList: OrderHistoryList = [
         filledAmount: BigNumber.from('10000000000000000000'),
         inputAmount: BigNumber.from('100000000000000000000'),
         status: 'PartiallyBlocked',
-        type: 'Limit',
+        type: OrderType.LIMIT,
         createdAt: BigNumber.from('434689913'),
         txHash: utils.formatBytes32String('hash'),
         lendingMarket: {
@@ -587,7 +588,7 @@ export const orderHistoryList: OrderHistoryList = [
         filledAmount: BigNumber.from('10000000000000000000'),
         inputAmount: BigNumber.from('100000000000000000000'),
         status: 'Filled',
-        type: 'Market',
+        type: OrderType.MARKET,
         createdAt: BigNumber.from('972368873'),
         txHash: utils.formatBytes32String('hash'),
         lendingMarket: {
