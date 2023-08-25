@@ -116,7 +116,7 @@ describe('LendingCard Component', () => {
 
         expect(
             screen.getByText(
-                `~ ${preloadedAssetPrices.assetPrices.WFIL.price * 10} USD`
+                `~ $${preloadedAssetPrices.assetPrices.WFIL.price * 10}`
             )
         ).toBeInTheDocument();
     });
@@ -149,7 +149,7 @@ describe('LendingCard Component', () => {
         fireEvent.change(input, { target: { value: '10.5' } });
         expect(
             screen.getByText(
-                `~ ${preloadedAssetPrices.assetPrices.WFIL.price * 10.5} USD`
+                `~ $${preloadedAssetPrices.assetPrices.WFIL.price * 10.5}`
             )
         ).toBeInTheDocument();
     });
@@ -180,7 +180,7 @@ describe('LendingCard Component', () => {
         await waitFor(() =>
             expect(screen.getByText('Lending Source')).toBeInTheDocument()
         );
-        expect(screen.getByText('10,000 WFIL')).toBeInTheDocument();
+        expect(screen.getByText('10,000')).toBeInTheDocument();
 
         const walletSourceButton = screen.getByTestId(
             'wallet-source-selector-button'
@@ -190,7 +190,7 @@ describe('LendingCard Component', () => {
         expect(screen.getByText('SF Vault')).toBeInTheDocument();
         const option = screen.getByTestId('option-1');
         fireEvent.click(option);
-        expect(screen.getByText('100 WFIL')).toBeInTheDocument();
+        expect(screen.getByText('100')).toBeInTheDocument();
     });
 
     it('should show Collateral Usage and Available to Borrow only in Borrow order', async () => {
