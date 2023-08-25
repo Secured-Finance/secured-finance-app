@@ -34,9 +34,7 @@ describe('PlaceOrder component', () => {
     it('should display the Place Order Modal when open', async () => {
         render(<Default />);
 
-        await waitFor(() => {
-            expect(screen.getByRole('dialog')).toBeInTheDocument();
-        });
+        expect(await screen.getByRole('dialog')).toBeInTheDocument();
         expect(screen.getByText('Confirm Order')).toBeInTheDocument();
         const button = screen.getByTestId('dialog-action-button');
         expect(button).toHaveTextContent('OK');

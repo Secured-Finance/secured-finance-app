@@ -32,13 +32,13 @@ export const CollateralSimulationSection = ({
 }) => {
     const { address } = useAccount();
 
-    const { data: coverage } = useOrderEstimation(address ?? '');
+    const { data: coverage = 0 } = useOrderEstimation(address);
 
     const remainingToBorrowText = useMemo(() => {
         const availableToBorrow = computeAvailableToBorrow(
             1,
             collateral.usdCollateral,
-            divide(coverage ?? 0, 100) / MAX_COVERAGE,
+            divide(coverage, 100) / MAX_COVERAGE,
             collateral.collateralThreshold
         );
 
@@ -68,7 +68,7 @@ export const CollateralSimulationSection = ({
                       'Collateral Usage',
                       getCollateralUsage(
                           collateral.coverage.toNumber(),
-                          coverage ?? 0
+                          coverage
                       ),
                   ],
                   [

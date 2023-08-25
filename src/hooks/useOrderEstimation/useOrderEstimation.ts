@@ -8,7 +8,7 @@ import { toCurrency } from 'src/utils';
 import { QueryKeys } from '../queries';
 import useSF from '../useSecuredFinance';
 
-export const useOrderEstimation = (account: string) => {
+export const useOrderEstimation = (account: string | undefined) => {
     const securedFinance = useSF();
 
     const {
@@ -52,7 +52,7 @@ export const useOrderEstimation = (account: string) => {
             const orderEstimation = await securedFinance?.getOrderEstimation(
                 toCurrency(currency),
                 maturity,
-                account,
+                account ?? '',
                 side,
                 amount,
                 unitPrice ?? 0,
@@ -61,6 +61,6 @@ export const useOrderEstimation = (account: string) => {
             );
             return orderEstimation?.coverage.toNumber();
         },
-        enabled: !!securedFinance,
+        enabled: !!securedFinance && !!account,
     });
 };
