@@ -2,7 +2,7 @@ import { OrderSide, WalletSource } from '@secured-finance/sf-client';
 import { BigNumber } from 'ethers';
 import { dec22Fixture } from 'src/stories/mocks/fixtures';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
-import { act, renderHook } from 'src/test-utils';
+import { renderHook } from 'src/test-utils';
 import { CurrencySymbol, toCurrency } from 'src/utils';
 import { useOrderEstimation } from './useOrderEstimation';
 
@@ -27,9 +27,9 @@ describe('useOrderEstimation', () => {
             () => useOrderEstimation('0x0'),
             { preloadedState }
         );
-        await act(async () => {
-            await waitForNextUpdate();
-        });
+
+        await waitForNextUpdate();
+
         expect(mock.getOrderEstimation).toHaveBeenCalledWith(
             toCurrency(CurrencySymbol.USDC),
             dec22Fixture.toNumber(),
@@ -57,9 +57,9 @@ describe('useOrderEstimation', () => {
                 },
             }
         );
-        await act(async () => {
-            await waitForNextUpdate();
-        });
+
+        await waitForNextUpdate();
+
         expect(mock.getOrderEstimation).toHaveBeenCalledWith(
             toCurrency(CurrencySymbol.USDC),
             dec22Fixture.toNumber(),
@@ -89,9 +89,9 @@ describe('useOrderEstimation', () => {
                 },
             }
         );
-        await act(async () => {
-            await waitForNextUpdate();
-        });
+
+        await waitForNextUpdate();
+
         expect(mock.getOrderEstimation).toHaveBeenCalledWith(
             toCurrency(CurrencySymbol.USDC),
             dec22Fixture.toNumber(),
@@ -119,9 +119,9 @@ describe('useOrderEstimation', () => {
                 },
             }
         );
-        await act(async () => {
-            await waitForNextUpdate();
-        });
+
+        await waitForNextUpdate();
+
         expect(mock.getOrderEstimation).toHaveBeenCalledWith(
             toCurrency(CurrencySymbol.USDC),
             dec22Fixture.toNumber(),
@@ -150,9 +150,9 @@ describe('useOrderEstimation', () => {
                 },
             }
         );
-        await act(async () => {
-            await waitForNextUpdate();
-        });
+
+        await waitForNextUpdate();
+
         expect(mock.getOrderEstimation).toHaveBeenCalledWith(
             toCurrency(CurrencySymbol.USDC),
             dec22Fixture.toNumber(),
@@ -172,9 +172,9 @@ describe('useOrderEstimation', () => {
             () => useOrderEstimation('0x0'),
             { preloadedState }
         );
-        await act(async () => {
-            await waitForNextUpdate();
-        });
+
+        await waitForNextUpdate();
+
         expect(mock.getOrderEstimation).toHaveBeenCalledWith(
             toCurrency(CurrencySymbol.USDC),
             dec22Fixture.toNumber(),

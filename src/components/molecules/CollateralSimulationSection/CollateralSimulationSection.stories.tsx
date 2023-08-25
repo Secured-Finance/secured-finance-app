@@ -9,6 +9,7 @@ import { CollateralSimulationSection } from './CollateralSimulationSection';
 export default {
     title: 'Organism/CollateralSimulationSection',
     component: CollateralSimulationSection,
+    decorators: [withWalletProvider],
     args: {
         collateral: collateralBook37,
         tradeAmount: new Amount('50000000000000000000', CurrencySymbol.WFIL),
@@ -16,7 +17,9 @@ export default {
         assetPrice: 10,
         tradeValue: LoanValue.fromPrice(9800, dec22Fixture.toNumber()),
     },
-    decorators: [withWalletProvider],
+    parameters: {
+        connected: true,
+    },
 } as Meta<typeof CollateralSimulationSection>;
 
 const Template: StoryFn<typeof CollateralSimulationSection> = args => (

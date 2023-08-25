@@ -24,6 +24,9 @@ export default {
     },
     chromatic: { delay: 1000 },
     decorators: [withAssetPrice, withWalletProvider, withMaturities],
+    parameters: {
+        connected: true,
+    },
 } as Meta<typeof OrderDetails>;
 
 const Template: StoryFn<typeof OrderDetails> = args => (
