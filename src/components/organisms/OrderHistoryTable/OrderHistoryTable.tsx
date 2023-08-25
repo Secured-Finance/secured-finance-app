@@ -5,7 +5,7 @@ import { CoreTable, TableActionMenu } from 'src/components/molecules';
 import { useBreakpoint, useEtherscanUrl } from 'src/hooks';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { RootState } from 'src/store/types';
-import { OrderHistoryList, Pagination } from 'src/types';
+import { OrderHistoryList, Pagination, Order } from 'src/types';
 import {
     amountColumnDefinition,
     contractColumnDefinition,
@@ -15,8 +15,6 @@ import {
     dateAndTimeColumnDefinition,
     inputAmountColumnDefinition,
 } from 'src/utils/tableDefinitions';
-
-export type Order = OrderHistoryList[0];
 
 const columnHelper = createColumnHelper<Order>();
 
