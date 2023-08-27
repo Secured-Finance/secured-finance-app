@@ -1,12 +1,11 @@
 import { OrderSide } from '@secured-finance/sf-client';
 import { useMemo } from 'react';
 import {
-    SectionWithItems,
     getLiquidationInformation,
+    SectionWithItems,
 } from 'src/components/atoms';
 import { CollateralBook, useOrderEstimation } from 'src/hooks';
 import {
-    divide,
     formatCollateralRatio,
     formatLoanValue,
     ordinaryFormat,
@@ -21,38 +20,30 @@ export const CollateralSimulationSection = ({
     collateral,
     tradeAmount,
     side,
-    assetPrice,
     tradeValue,
 }: {
     collateral: CollateralBook;
     tradeAmount: Amount;
     side: OrderSide;
-    assetPrice: number;
     tradeValue: LoanValue;
 }) => {
     const { address } = useAccount();
 
     const { data: coverage = 0 } = useOrderEstimation(address);
 
-    const remainingToBorrowText = useMemo(() => {
-        const availableToBorrow = computeAvailableToBorrow(
-            1,
-            collateral.usdCollateral,
-            divide(coverage, 100) / MAX_COVERAGE,
-            collateral.collateralThreshold
-        );
-
-        return `${usdFormat(
-            availableToBorrow - tradeAmount.toUSD(assetPrice),
-            2
-        )}`;
-    }, [
-        collateral.usdCollateral,
-        collateral.collateralThreshold,
-        coverage,
-        tradeAmount,
-        assetPrice,
-    ]);
+    const remainingToBorrowText = useMemo(
+        () =>
+            usdFormat(
+                computeAvailableToBorrow(
+                    1,
+                    collateral.usdCollateral,
+                    (coverage ?? 0) / MAX_COVERAGE,
+                    collateral.collateralThreshold
+                ),
+                2
+            ),
+        [collateral.usdCollateral, collateral.collateralThreshold, coverage]
+    );
 
     const items: [string, string | React.ReactNode][] =
         side === OrderSide.BORROW
