@@ -28,13 +28,10 @@ export const useOrderEstimation = (account: string | undefined) => {
         [isBorrowedCollateral, side]
     );
 
-    const additionalDepositAmount = useMemo(
-        () =>
-            side === OrderSide.LEND && sourceAccount === WalletSource.METAMASK
-                ? amount
-                : 0,
-        [amount, side, sourceAccount]
-    );
+    const additionalDepositAmount =
+        side === OrderSide.LEND && sourceAccount === WalletSource.METAMASK
+            ? amount
+            : 0;
 
     return useQuery({
         queryKey: [
