@@ -2,11 +2,11 @@ import { OrderSide, WalletSource } from '@secured-finance/sf-client';
 import { useQuery } from '@tanstack/react-query';
 import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
+import { QueryKeys } from 'src/hooks/queries';
+import useSF from 'src/hooks/useSecuredFinance';
 import { selectLandingOrderForm } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
 import { toCurrency } from 'src/utils';
-import { QueryKeys } from '../queries';
-import useSF from '../useSecuredFinance';
 
 export const useOrderEstimation = (account: string | undefined) => {
     const securedFinance = useSF();
@@ -24,7 +24,7 @@ export const useOrderEstimation = (account: string | undefined) => {
     );
 
     const ignoreBorrowedAmount = useMemo(
-        () => (side === OrderSide.BORROW ? isBorrowedCollateral : undefined),
+        () => (side === OrderSide.BORROW ? isBorrowedCollateral : false),
         [isBorrowedCollateral, side]
     );
 
@@ -32,7 +32,7 @@ export const useOrderEstimation = (account: string | undefined) => {
         () =>
             side === OrderSide.LEND && sourceAccount === WalletSource.METAMASK
                 ? amount
-                : undefined,
+                : 0,
         [amount, side, sourceAccount]
     );
 
@@ -56,7 +56,7 @@ export const useOrderEstimation = (account: string | undefined) => {
                 side,
                 amount,
                 unitPrice ?? 0,
-                additionalDepositAmount ?? 0,
+                additionalDepositAmount,
                 ignoreBorrowedAmount
             );
             return orderEstimation?.coverage.toNumber();
