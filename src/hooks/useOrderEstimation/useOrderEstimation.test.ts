@@ -100,7 +100,7 @@ describe('useOrderEstimation', () => {
             BigNumber.from('5000000'),
             9800,
             0,
-            undefined
+            false
         );
         const value = result.current.data;
         expect(value).toEqual(5500);
@@ -130,7 +130,7 @@ describe('useOrderEstimation', () => {
             BigNumber.from('5000000'),
             9800,
             BigNumber.from('5000000'),
-            undefined
+            false
         );
         const value = result.current.data;
         expect(value).toEqual(5500);
@@ -161,7 +161,7 @@ describe('useOrderEstimation', () => {
             BigNumber.from('5000000'),
             9800,
             0,
-            undefined
+            false
         );
         const value = result.current.data;
         expect(value).toEqual(5500);
@@ -183,7 +183,7 @@ describe('useOrderEstimation', () => {
             BigNumber.from('5000000'),
             9800,
             0,
-            undefined
+            false
         );
         const value = result.current.data;
         expect(value).toEqual(5500);
