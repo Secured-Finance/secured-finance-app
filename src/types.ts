@@ -52,8 +52,10 @@ type TransactionsQuery = Awaited<
     >
 >;
 
-export type OrderList = NonNullable<UserOrderHistoryQuery['user']>['orders'];
-export type Order = OrderList[0];
+export type OrderHistoryList = NonNullable<
+    UserOrderHistoryQuery['user']
+>['orders'];
+export type Order = OrderHistoryList[0];
 export type TradeHistory = NonNullable<
     UserTransactionHistoryQuery['user']
 >['transactions'];

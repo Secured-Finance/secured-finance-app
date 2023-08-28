@@ -8,7 +8,7 @@ import {
     orderHistoryList,
     wfilBytes32,
 } from 'src/stories/mocks/fixtures';
-import { OrderList } from 'src/types';
+import { OrderHistoryList, OrderType } from 'src/types';
 import { OrderHistoryTable } from './OrderHistoryTable';
 
 export default {
@@ -38,10 +38,11 @@ const PaginatedTemplate: StoryFn<typeof OrderHistoryTable> = args => {
             currency: wfilBytes32,
             side: 1,
             maturity: BigNumber.from(dec22Fixture.toString()),
-            unitPrice: BigNumber.from('9800'),
+            inputUnitPrice: BigNumber.from('9800'),
             filledAmount: BigNumber.from('0'),
-            amount: BigNumber.from('1000000000000000000000'),
+            inputAmount: BigNumber.from('1000000000000000000000'),
             status: 'Open' as const,
+            type: OrderType.LIMIT,
             createdAt: BigNumber.from('1'),
             txHash: utils.formatBytes32String('hash'),
             lendingMarket: {
@@ -49,7 +50,7 @@ const PaginatedTemplate: StoryFn<typeof OrderHistoryTable> = args => {
                 isActive: true,
             },
         }));
-    const [data, setData] = useState<OrderList>(initialData);
+    const [data, setData] = useState<OrderHistoryList>(initialData);
 
     return (
         <OrderHistoryTable
@@ -65,10 +66,13 @@ const PaginatedTemplate: StoryFn<typeof OrderHistoryTable> = args => {
                             currency: wfilBytes32,
                             side: 1,
                             maturity: BigNumber.from(dec22Fixture.toString()),
-                            unitPrice: BigNumber.from('9800'),
+                            inputUnitPrice: BigNumber.from('9800'),
                             filledAmount: BigNumber.from('0'),
-                            amount: BigNumber.from('1000000000000000000000'),
+                            inputAmount: BigNumber.from(
+                                '1000000000000000000000'
+                            ),
                             status: 'Open' as const,
+                            type: OrderType.LIMIT,
                             createdAt: BigNumber.from('1'),
                             txHash: utils.formatBytes32String('hash'),
                             lendingMarket: {
