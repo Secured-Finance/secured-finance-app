@@ -61,7 +61,7 @@ jobs:
 
       - name: Deploy the WebApp on IPFS
         id: deploy
-        uses: fleekhq/action-deploy@v1
+        uses: fleekhq/action-deploy@v1.0.1
         with:
           apiKey: ${{ secrets.FLEEK_API_KEY }}
           workDir: .deploy/${{ vars.FLEEK_ENV }}
