@@ -37,6 +37,18 @@ type SideProperty = {
 type AmountProperty = {
     amount: BigNumber;
 };
+type InputAmountProperty = {
+    inputAmount: BigNumber;
+};
+type FilledAmountProperty = {
+    filledAmount: BigNumber;
+};
+type TypeProperty = {
+    type: string;
+};
+type StatusProperty = {
+    status: string;
+};
 
 type ForwardValueProperty = {
     forwardValue: BigNumber;
@@ -44,6 +56,13 @@ type ForwardValueProperty = {
 
 type AmountColumnType = (AmountProperty | SideProperty | ForwardValueProperty) &
     CurrencyProperty;
+
+type InputAmountColumnType = InputAmountProperty &
+    FilledAmountProperty &
+    CurrencyProperty &
+    SideProperty &
+    TypeProperty &
+    StatusProperty;
 
 function hasAmountProperty<T extends AmountColumnType>(
     obj: T
@@ -99,6 +118,56 @@ export const amountColumnDefinition = <T extends AmountColumnType>(
                             amount={currencyMap[ccy].fromBaseUnit(
                                 info.getValue() as BigNumber
                             )}
+                            ccy={ccy}
+                            align='right'
+                            price={options.priceList?.[ccy]}
+                            color={options.color ? color : undefined}
+                            compact={options.compact}
+                            fontSize={options.fontSize}
+                            minDecimals={currencyMap[ccy].roundingDecimal}
+                            maxDecimals={currencyMap[ccy].roundingDecimal}
+                        />
+                    </div>
+                </div>
+            );
+        },
+        header: tableHeaderDefinition(title, titleHint),
+    });
+};
+
+export const inputAmountColumnDefinition = <T extends InputAmountColumnType>(
+    columnHelper: ColumnHelper<T>,
+    title: string,
+    id: string,
+    accessor: AccessorFn<T, BigNumber>,
+    options: {
+        color: boolean;
+        compact: boolean;
+        priceList?: AssetPriceMap;
+        fontSize?: string;
+    },
+    titleHint?: string
+) => {
+    return columnHelper.accessor(accessor, {
+        id: id,
+        cell: info => {
+            const ccy = hexToCurrencySymbol(info.row.original.currency);
+            if (!ccy) return null;
+
+            const color: ColorFormat['color'] =
+                info.row.original.side === 1 ? 'negative' : 'positive';
+
+            const inputAmount =
+                info.row.original.type === 'Market' &&
+                info.row.original.status === 'Filled'
+                    ? info.row.original.filledAmount
+                    : info.row.original.inputAmount;
+
+            return (
+                <div className='flex w-full items-center justify-end whitespace-nowrap pr-[15%]'>
+                    <div className='flex justify-end'>
+                        <CurrencyItem
+                            amount={currencyMap[ccy].fromBaseUnit(inputAmount)}
                             ccy={ccy}
                             align='right'
                             price={options.priceList?.[ccy]}
@@ -284,6 +353,35 @@ export const priceYieldColumnDefinition = <T extends { maturity: string }>(
             );
         },
         header: tableHeaderDefinition(title, titleHint),
+    });
+};
+
+export const inputPriceYieldColumnDefinition = <T extends { maturity: string }>(
+    columnHelper: ColumnHelper<T>,
+    title: string,
+    id: string,
+    accessor: AccessorFn<T, BigNumber>
+) => {
+    return columnHelper.accessor(accessor, {
+        id: id,
+        cell: info => {
+            return (
+                <div className='flex justify-center'>
+                    {Number(info.getValue().toString()) === 0 ? (
+                        <div className='typography-caption'>Market Price</div>
+                    ) : (
+                        <PriceYieldItem
+                            loanValue={LoanValue.fromPrice(
+                                Number(info.getValue().toString()),
+                                Number(info.row.original.maturity.toString())
+                            )}
+                            firstLineType='price'
+                        />
+                    )}
+                </div>
+            );
+        },
+        header: tableHeaderDefinition(title),
     });
 };
 

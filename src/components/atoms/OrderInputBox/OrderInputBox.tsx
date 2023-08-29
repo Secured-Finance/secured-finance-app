@@ -67,7 +67,7 @@ export const OrderInputBox = ({
     );
 
     return (
-        <div className='typography-caption flex h-10 w-full flex-row items-center justify-between rounded-lg bg-black-20 py-2 pl-2 pr-4 ring-starBlue focus-within:ring'>
+        <div className='typography-caption flex h-10 w-full flex-row items-center justify-between rounded-lg bg-black-20 py-2 pl-2 pr-4 ring-inset ring-starBlue focus-within:ring-2'>
             <div className='flex flex-row items-center gap-2'>
                 <div className='typography-caption text-planetaryPurple'>
                     {field}
@@ -78,7 +78,7 @@ export const OrderInputBox = ({
                     </Tooltip>
                 )}
             </div>
-            <div className='flex flex-row items-center gap-[10px]'>
+            <div className='flex flex-row items-center gap-10px'>
                 {disabled ? (
                     <span className='text-right text-[18px] font-semibold leading-6 text-neutral-8/30'>
                         {initialValue ?? 0}

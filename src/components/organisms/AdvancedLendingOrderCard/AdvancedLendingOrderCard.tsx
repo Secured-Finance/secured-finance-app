@@ -83,7 +83,7 @@ export const AdvancedLendingOrderCard = ({
     }, [unitPrice, maturity, marketPrice]);
 
     const dispatch = useDispatch();
-    const { address, isConnected } = useAccount();
+    const { address } = useAccount();
 
     const collateralUsagePercent = useMemo(() => {
         return collateralBook.coverage.toNumber() / 100.0;
@@ -276,7 +276,7 @@ export const AdvancedLendingOrderCard = ({
                         variant='StyledButton'
                     />
                 )}
-                {isConnected && side === OrderSide.LEND && (
+                {side === OrderSide.LEND && (
                     <div className='space-y-1'>
                         <WalletSourceSelector
                             optionList={walletSourceList}
@@ -294,7 +294,7 @@ export const AdvancedLendingOrderCard = ({
                         />
                     </div>
                 )}
-                <div className='flex flex-col gap-[10px]'>
+                <div className='flex flex-col gap-10px'>
                     <OrderInputBox
                         field='Bond Price'
                         disabled={orderType === OrderType.MARKET}
