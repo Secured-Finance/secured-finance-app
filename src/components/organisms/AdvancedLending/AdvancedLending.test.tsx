@@ -4,7 +4,7 @@ import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { fireEvent, render, screen, waitFor, within } from 'src/test-utils.js';
 import * as stories from './AdvancedLending.stories';
 
-const { Default } = composeStories(stories);
+const { Default, ConnectedToWallet } = composeStories(stories);
 
 const mockSecuredFinance = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mockSecuredFinance);
@@ -114,5 +114,17 @@ describe('Advanced Lending Component', () => {
         expect(
             within(screen.getByLabelText('24h Volume')).getByText('-')
         ).toBeInTheDocument();
+    });
+
+    it('should only show the orders of the user related to orderbook', async () => {
+        await waitFor(() =>
+            render(<ConnectedToWallet />, {
+                apolloMocks: Default.parameters?.apolloClient.mocks,
+            })
+        );
+        fireEvent.click(screen.getByRole('tab', { name: 'Open Orders' }));
+
+        const openOrders = await screen.findAllByRole('row');
+        expect(openOrders).toHaveLength(1);
     });
 });
