@@ -14,7 +14,7 @@ import {
     WalletSourceSelector,
 } from 'src/components/atoms';
 import { OrderAction } from 'src/components/organisms';
-import { CollateralBook, useSelectMarket } from 'src/hooks';
+import { CollateralBook, useMarket } from 'src/hooks';
 import { useBalances } from 'src/hooks/useERC20Balance';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import {
@@ -87,7 +87,7 @@ export const AdvancedLendingOrderCard = ({
     const priceList = useSelector((state: RootState) => getPriceMap(state));
     const price = priceList[currency];
 
-    const market = useSelectMarket(currency, maturity);
+    const market = useMarket(currency, maturity);
 
     const slippage = useMemo(() => {
         if (!market) {

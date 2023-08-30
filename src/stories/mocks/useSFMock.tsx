@@ -8,7 +8,7 @@ import {
     dec24Fixture,
     ethBytes32,
     mar23Fixture,
-    maturitiesMock,
+    maturitiesMockFromContract,
     usdcBytes32,
     wbtcBytes32,
     wfilBytes32,
@@ -135,10 +135,10 @@ export const mockUseSF = () => {
 
         getOrderBookDetails: jest.fn(() => {
             const maturities = [
-                maturitiesMock(ethBytes32),
-                maturitiesMock(wfilBytes32),
-                maturitiesMock(wbtcBytes32),
-                maturitiesMock(usdcBytes32),
+                maturitiesMockFromContract(ethBytes32),
+                maturitiesMockFromContract(wfilBytes32),
+                maturitiesMockFromContract(wbtcBytes32),
+                maturitiesMockFromContract(usdcBytes32),
             ];
             return Promise.resolve(
                 maturities.reduce((r, e) => (r.push(...e), r), [])

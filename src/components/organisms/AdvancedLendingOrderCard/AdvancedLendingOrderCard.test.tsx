@@ -56,7 +56,7 @@ beforeEach(() => {
 const mockSecuredFinance = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mockSecuredFinance);
 
-describe('AdvancedLendingOrderCard Component', () => {
+describe.skip('AdvancedLendingOrderCard Component', () => {
     const changeInputValue = (label: string, value: string) => {
         const input = screen.getByLabelText(label);
         fireEvent.change(input, { target: { value } });

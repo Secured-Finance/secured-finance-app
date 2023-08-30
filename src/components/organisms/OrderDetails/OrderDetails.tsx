@@ -12,7 +12,7 @@ import {
     CollateralSimulationSection,
 } from 'src/components/molecules';
 import { Tooltip } from 'src/components/templates';
-import { CollateralBook, useOrderFee, useSelectMarket } from 'src/hooks';
+import { CollateralBook, useMarket, useOrderFee } from 'src/hooks';
 import { calculateFee, divide, prefixTilde } from 'src/utils';
 import { Amount, LoanValue, Maturity } from 'src/utils/entities';
 
@@ -45,7 +45,7 @@ export const OrderDetails = ({
 }) => {
     const { data: orderFee = 0 } = useOrderFee(amount.currency);
 
-    const market = useSelectMarket(amount.currency, maturity.toNumber());
+    const market = useMarket(amount.currency, maturity.toNumber());
 
     const slippage = useMemo(() => {
         if (!market) {
