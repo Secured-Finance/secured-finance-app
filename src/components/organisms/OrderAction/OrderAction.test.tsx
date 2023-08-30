@@ -58,16 +58,18 @@ describe('OrderAction component', () => {
         ).toBeInTheDocument();
     });
 
-    it.skip('should render place order button when collateral is sufficient for order', async () => {
-        await waitFor(() => render(<EnoughCollateral />, { preloadedState }));
+    it('should render place order button when collateral is sufficient for order', async () => {
+        await waitFor(() => {
+            render(<EnoughCollateral />, { preloadedState });
+        });
         expect(
             await screen.findByTestId('place-order-button')
         ).toBeInTheDocument();
-        expect(await screen.findByText('Place Order')).toBeEnabled();
         const button = screen.getByTestId('place-order-button');
+        await waitFor(() => expect(button).toBeEnabled());
         fireEvent.click(button);
         expect(
-            await screen.findByRole('dialog', { name: 'Confirm Order' })
+            screen.getByRole('dialog', { name: 'Confirm Order' })
         ).toBeInTheDocument();
     });
 
@@ -91,8 +93,8 @@ describe('OrderAction component', () => {
         expect(screen.getByText('Place Order')).toBeInTheDocument();
     });
 
-    it.skip('should render place order button if orderside is lend', async () => {
-        await waitFor(() =>
+    it('should render place order button if orderside is lend', async () => {
+        await waitFor(() => {
             render(<NotEnoughCollateral />, {
                 preloadedState: {
                     ...preloadedState,
@@ -101,16 +103,16 @@ describe('OrderAction component', () => {
                         side: OrderSide.LEND,
                     },
                 },
-            })
-        );
+            });
+        });
         expect(
             await screen.findByTestId('place-order-button')
         ).toBeInTheDocument();
-        expect(await screen.findByText('Place Order')).toBeEnabled();
         const button = screen.getByTestId('place-order-button');
+        await waitFor(() => expect(button).toBeEnabled());
         fireEvent.click(button);
         expect(
-            await screen.findByRole('dialog', { name: 'Confirm Order' })
+            screen.getByRole('dialog', { name: 'Confirm Order' })
         ).toBeInTheDocument();
     });
 

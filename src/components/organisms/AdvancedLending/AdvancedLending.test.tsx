@@ -17,9 +17,11 @@ describe('Advanced Lending Component', () => {
             })
         );
         expect(store.getState().landingOrderForm.amount).toEqual('0');
-        await waitFor(() => fireEvent.input(screen.getByRole('textbox', { name: 'Amount' }), {
-            target: { value: '1' },
-        }));
+        await waitFor(() =>
+            fireEvent.input(screen.getByRole('textbox', { name: 'Amount' }), {
+                target: { value: '1' },
+            })
+        );
         expect(store.getState().landingOrderForm.amount).toEqual(
             '1000000000000000000'
         );
@@ -38,9 +40,11 @@ describe('Advanced Lending Component', () => {
             })
         );
         expect(store.getState().landingOrderForm.amount).toEqual('0');
-        await waitFor(() => fireEvent.input(screen.getByRole('textbox', { name: 'Amount' }), {
-            target: { value: '1' },
-        }));
+        await waitFor(() =>
+            fireEvent.input(screen.getByRole('textbox', { name: 'Amount' }), {
+                target: { value: '1' },
+            })
+        );
         expect(store.getState().landingOrderForm.amount).toEqual(
             '1000000000000000000'
         );
