@@ -13,8 +13,7 @@ import {
     TermSelector,
 } from 'src/components/molecules';
 import { OrderAction } from 'src/components/organisms';
-import { CollateralBook } from 'src/hooks';
-import { useBalances } from 'src/hooks/useERC20Balance';
+import { CollateralBook, useBalances } from 'src/hooks';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import {
     selectLandingOrderForm,

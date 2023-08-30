@@ -13,7 +13,7 @@ import {
     useMarketPhase,
     useOrders,
 } from 'src/hooks';
-import { useCollateralBalances } from 'src/hooks/useERC20Balance';
+import { useCollateralBalances } from 'src/hooks/useBalances';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { setWalletDialogOpen } from 'src/store/interactions';
 import { selectLandingOrderForm } from 'src/store/landingOrderForm';

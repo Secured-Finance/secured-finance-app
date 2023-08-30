@@ -16,8 +16,8 @@ import {
 import { Page, TwoColumns } from 'src/components/templates';
 import {
     RateType,
+    baseContracts,
     emptyCollateralBook,
-    emptyContracts,
     emptyValueLockedBook,
     useCollateralBook,
     useGraphClientHook,
@@ -60,7 +60,7 @@ export const MarketDashboard = () => {
         useCollateralBook(address);
 
     const curves: Record<string, Rate[]> = {};
-    const { data: lendingContracts = emptyContracts } = useLendingMarkets();
+    const { data: lendingContracts = baseContracts } = useLendingMarkets();
 
     getCurrencyMapAsList().forEach(ccy => {
         // eslint-disable-next-line react-hooks/rules-of-hooks

@@ -4,7 +4,7 @@ import {
     AssetDisclosure,
     AssetDisclosureProps,
 } from 'src/components/molecules';
-import { useBalances } from 'src/hooks/useERC20Balance';
+import { useBalances } from 'src/hooks';
 import {
     CurrencySymbol,
     WalletSource,
