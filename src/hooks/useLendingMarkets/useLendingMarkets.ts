@@ -27,7 +27,7 @@ export type LendingMarket = {
     maxLendUnitPrice: number;
 };
 
-const emptyContract: { 0: LendingMarket } = {
+const baseContract: { 0: LendingMarket } = {
     0: {
         name: 'EMPTY',
         maturity: 0,
@@ -48,22 +48,14 @@ const emptyContract: { 0: LendingMarket } = {
     },
 };
 
-export enum MarketPhase {
-    NOT_FOUND = 'Not Found',
-    PRE_ORDER = 'Pre Order',
-    ITAYOSE = 'Itayose',
-    OPEN = 'Open',
-    MATURED = 'Matured',
-}
-
-export const emptyContracts: AvailableContracts = {
-    [CurrencySymbol.ETH]: emptyContract,
-    [CurrencySymbol.WFIL]: emptyContract,
-    [CurrencySymbol.USDC]: emptyContract,
-    [CurrencySymbol.WBTC]: emptyContract,
+export const baseContracts: AvailableContracts = {
+    [CurrencySymbol.ETH]: baseContract,
+    [CurrencySymbol.WFIL]: baseContract,
+    [CurrencySymbol.USDC]: baseContract,
+    [CurrencySymbol.WBTC]: baseContract,
 };
 
-export const emptyContract1: AvailableContracts = {
+const emptyContracts: AvailableContracts = {
     [CurrencySymbol.ETH]: {},
     [CurrencySymbol.WFIL]: {},
     [CurrencySymbol.USDC]: {},
@@ -94,9 +86,9 @@ export const useLendingMarkets = () => {
         },
         select: markets => {
             const names: string[] = [];
-            let availableContracts: AvailableContracts = emptyContracts;
+            let availableContracts: AvailableContracts = baseContracts;
             if (markets && markets.length > 0) {
-                availableContracts = emptyContract1;
+                availableContracts = emptyContracts;
                 markets.forEach(market => {
                     let name = market.name;
                     const {
@@ -118,8 +110,7 @@ export const useLendingMarkets = () => {
                     const currency = fromBytes32(ccy) as CurrencySymbol;
                     let nameToPush = `${ccy}-${name}`;
                     if (names.includes(nameToPush)) {
-                        // If the name already exists in the accumulator
-                        // Increment the name by appending a number
+                        // if ccy-name already exists in the accumulator increment the ccy-name by appending a number
                         let i = 1;
                         while (names.includes(`${ccy}-${name}-${i}`)) {
                             i++;
@@ -155,34 +146,4 @@ export const useLendingMarkets = () => {
         },
         enabled: !!securedFinance,
     });
-};
-
-export const useMarket = (currency: CurrencySymbol, maturity: number) => {
-    const { data: lendingMarkets = emptyContracts } = useLendingMarkets();
-    return lendingMarkets[currency][maturity];
-};
-
-export const useMarketPhase = (currency: CurrencySymbol, maturity: number) => {
-    const market = useMarket(currency, maturity);
-    if (!market) {
-        return MarketPhase.NOT_FOUND;
-    }
-
-    if (market.isPreOrderPeriod) {
-        return MarketPhase.PRE_ORDER;
-    }
-
-    if (market.isItayosePeriod) {
-        return MarketPhase.ITAYOSE;
-    }
-
-    if (market.isOpened) {
-        return MarketPhase.OPEN;
-    }
-
-    if (market.isMatured) {
-        return MarketPhase.MATURED;
-    }
-
-    return MarketPhase.NOT_FOUND;
 };

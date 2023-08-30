@@ -8,8 +8,7 @@ import {
     DepositCollateral,
     WithdrawCollateral,
 } from 'src/components/organisms';
-import { CollateralBook } from 'src/hooks';
-import { useCollateralBalances } from 'src/hooks/useERC20Balance';
+import { CollateralBook, useCollateralBalances } from 'src/hooks';
 import {
     CollateralInfo,
     CurrencySymbol,

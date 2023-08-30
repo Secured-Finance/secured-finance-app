@@ -11,8 +11,8 @@ import {
 import { SimpleAdvancedView } from 'src/components/templates';
 import {
     RateType,
+    baseContracts,
     emptyCollateralBook,
-    emptyContracts,
     useCollateralBook,
     useGraphClientHook,
     useLendingMarkets,
@@ -42,7 +42,7 @@ export const Landing = ({ view }: { view?: ViewType }) => {
     const { currency, side, maturity, lastView } = useSelector(
         (state: RootState) => selectLandingOrderForm(state.landingOrderForm)
     );
-    const { data: lendingMarkets = emptyContracts } = useLendingMarkets();
+    const { data: lendingMarkets = baseContracts } = useLendingMarkets();
     const lendingContracts = lendingMarkets[currency];
     const dispatch = useDispatch();
 

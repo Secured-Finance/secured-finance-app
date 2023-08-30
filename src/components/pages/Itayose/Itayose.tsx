@@ -20,8 +20,8 @@ import { Page } from 'src/components/templates';
 import { TwoColumnsWithTopBar } from 'src/components/templates/TwoColumnsWithTopBar';
 import {
     MarketPhase,
+    baseContracts,
     emptyCollateralBook,
-    emptyContracts,
     emptyOrderList,
     useCollateralBook,
     useCurrenciesForOrders,
@@ -113,7 +113,7 @@ export const Itayose = () => {
         selectLandingOrderForm(state.landingOrderForm)
     );
 
-    const { data: lendingMarkets = emptyContracts } = useLendingMarkets();
+    const { data: lendingMarkets = baseContracts } = useLendingMarkets();
     const lendingContracts = lendingMarkets[currency];
 
     const marketPhase = useMarketPhase(currency, maturity);

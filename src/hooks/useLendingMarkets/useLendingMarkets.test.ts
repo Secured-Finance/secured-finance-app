@@ -15,7 +15,7 @@ beforeAll(() => {
 const mock = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mock);
 
-describe('useLendingMarkets1', () => {
+describe('useLendingMarkets', () => {
     it('should return a function to fetch the lending markets', async () => {
         const { result, waitForNextUpdate } = renderHook(() =>
             useLendingMarkets()

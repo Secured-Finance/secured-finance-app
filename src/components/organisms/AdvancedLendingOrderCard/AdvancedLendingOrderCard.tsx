@@ -14,8 +14,7 @@ import {
     WalletSourceSelector,
 } from 'src/components/atoms';
 import { OrderAction } from 'src/components/organisms';
-import { CollateralBook, useMarket } from 'src/hooks';
-import { useBalances } from 'src/hooks/useERC20Balance';
+import { CollateralBook, useBalances, useMarket } from 'src/hooks';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import {
     resetUnitPrice,
