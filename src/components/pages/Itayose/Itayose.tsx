@@ -45,6 +45,7 @@ import {
     amountFormatterToBase,
     getCurrencyMapAsOptions,
     usdFormat,
+    hexToCurrencySymbol,
 } from 'src/utils';
 import { countdown } from 'src/utils/date';
 import { Maturity } from 'src/utils/entities';
@@ -145,10 +146,12 @@ export const Itayose = () => {
 
     const filteredOrderList = useMemo(() => {
         return orderList.activeOrderList.filter(
-            o => o.maturity === selectedTerm.value.toString()
+            o =>
+                hexToCurrencySymbol(o.currency) === currency &&
+                o.maturity === selectedTerm.value.toString()
         );
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [orderList, selectedTerm.value.toNumber()]);
+    }, [JSON.stringify(orderList), selectedTerm.value.toNumber()]);
 
     const dispatch = useDispatch();
 
@@ -235,7 +238,7 @@ export const Itayose = () => {
                             </p>
                         </div>
                     </GradientBox>
-                    <HorizontalTab tabTitles={['Order Book', 'My Orders']}>
+                    <HorizontalTab tabTitles={['Order Book', 'Open Orders']}>
                         <OrderBookWidget
                             currency={currency}
                             orderbook={orderBook}

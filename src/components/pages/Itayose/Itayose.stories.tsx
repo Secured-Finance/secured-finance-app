@@ -27,8 +27,8 @@ export default {
 const Template: StoryFn<typeof Itayose> = () => <Itayose />;
 
 export const Default = Template.bind({});
-export const MyOrders = Template.bind({});
-MyOrders.play = async ({ canvasElement }) => {
+export const OpenOrders = Template.bind({});
+OpenOrders.play = async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    canvas.getByText('My Orders').click();
+    canvas.getByText('Open Orders').click();
 };
