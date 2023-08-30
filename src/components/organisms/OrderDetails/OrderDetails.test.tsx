@@ -44,8 +44,10 @@ describe('OrderDetails Component', () => {
         expect(button).toHaveTextContent('Circuit Breaker Disclaimer');
         await waitFor(() => fireEvent.click(button));
         const disclaimerText = await screen.findByTestId('disclaimer-text');
-        expect(disclaimerText).toHaveTextContent(
-            'Circuit breaker will be triggered if the order is filled at over 96.72 which is the max slippage level at 1 block.'
+        await waitFor(() =>
+            expect(disclaimerText).toHaveTextContent(
+                'Circuit breaker will be triggered if the order is filled at over 96.72 which is the max slippage level at 1 block.'
+            )
         );
     });
 
