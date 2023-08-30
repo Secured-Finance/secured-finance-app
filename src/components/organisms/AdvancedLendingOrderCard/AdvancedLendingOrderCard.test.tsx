@@ -56,7 +56,7 @@ beforeEach(() => {
 const mockSecuredFinance = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mockSecuredFinance);
 
-describe.skip('AdvancedLendingOrderCard Component', () => {
+describe('AdvancedLendingOrderCard Component', () => {
     const changeInputValue = (label: string, value: string) => {
         const input = screen.getByLabelText(label);
         fireEvent.change(input, { target: { value } });
@@ -120,12 +120,11 @@ describe.skip('AdvancedLendingOrderCard Component', () => {
 
     it('should display the PlaceOrder Dialog when clicking on the Place Order button', async () => {
         render(<Default />, { preloadedState });
-        await waitFor(() =>
-            expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
-        );
-        await waitFor(() =>
-            expect(screen.getByTestId('place-order-button')).toBeInTheDocument()
-        );
+        expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+        expect(
+            await screen.findByTestId('place-order-button')
+        ).toBeInTheDocument();
+        expect(await screen.findByText('Place Order')).toBeEnabled();
         screen.getByTestId('place-order-button').click();
         expect(
             screen.getByRole('dialog', {
@@ -187,12 +186,8 @@ describe.skip('AdvancedLendingOrderCard Component', () => {
         render(<Default />, { preloadedState });
         const lendTab = screen.getByText('Lend');
         fireEvent.click(lendTab);
-        await waitFor(() =>
-            expect(screen.getByText('Lending Source')).toBeInTheDocument()
-        );
-        await waitFor(() =>
-            expect(screen.getByText('4,000')).toBeInTheDocument()
-        );
+        expect(screen.getByText('Lending Source')).toBeInTheDocument();
+        expect(await screen.findByText('4,000')).toBeInTheDocument();
 
         const walletSourceButton = screen.getByTestId(
             'wallet-source-selector-button'
@@ -217,12 +212,10 @@ describe.skip('AdvancedLendingOrderCard Component', () => {
             },
         });
 
-        await waitFor(() => {
-            const walletSourceButton = screen.getByTestId(
-                'wallet-source-selector-button'
-            );
-            fireEvent.click(walletSourceButton);
-        });
+        const walletSourceButton = screen.getByTestId(
+            'wallet-source-selector-button'
+        );
+        fireEvent.click(walletSourceButton);
 
         expect(screen.getByText('SF Vault')).toBeInTheDocument();
         const option = screen.getByTestId('option-1');
@@ -254,11 +247,9 @@ describe.skip('AdvancedLendingOrderCard Component', () => {
         const input = screen.getByRole('textbox', { name: 'Amount' });
         fireEvent.change(input, { target: { value: '50' } });
 
-        await waitFor(() =>
-            expect(
-                screen.getByTestId('wallet-source-selector-button')
-            ).toBeInTheDocument()
-        );
+        expect(
+            await screen.findByTestId('wallet-source-selector-button')
+        ).toBeInTheDocument();
 
         const walletSourceButton = screen.getByTestId(
             'wallet-source-selector-button'
@@ -288,9 +279,7 @@ describe.skip('AdvancedLendingOrderCard Component', () => {
         const slider = screen.getByRole('slider');
         const input = screen.getByRole('textbox', { name: 'Amount' });
 
-        await waitFor(() =>
-            expect(screen.getByText('0xB98b...Fd6D')).toBeInTheDocument()
-        );
+        expect(await screen.findByText('0xB98b...Fd6D')).toBeInTheDocument();
         expect(input).toHaveValue('0.0000');
         fireEvent.change(slider, { target: { value: 100 } });
         expect(input).toHaveValue('10,000');
@@ -330,9 +319,7 @@ describe.skip('AdvancedLendingOrderCard Component', () => {
         const slider = screen.getByRole('slider');
         const input = screen.getByRole('textbox', { name: 'Amount' });
 
-        await waitFor(() =>
-            expect(screen.getByText('0xB98b...Fd6D')).toBeInTheDocument()
-        );
+        expect(await screen.findByText('0xB98b...Fd6D')).toBeInTheDocument();
         expect(input).toHaveValue('0.0000');
         fireEvent.change(slider, { target: { value: 100 } });
         expect(input).toHaveValue('10,000');
@@ -437,9 +424,9 @@ describe.skip('AdvancedLendingOrderCard Component', () => {
                         },
                     },
                 });
-                await waitFor(() =>
-                    expect(screen.getByText('Place Order')).toBeInTheDocument()
-                );
+                expect(
+                    await screen.findByText('Place Order')
+                ).toBeInTheDocument();
 
                 changeInputValue('Bond Price', '0');
                 changeInputValue('Amount', '10');
@@ -462,9 +449,7 @@ describe.skip('AdvancedLendingOrderCard Component', () => {
                         },
                     },
                 });
-                await waitFor(() =>
-                    expect(screen.getByText('4,000')).toBeInTheDocument()
-                );
+                expect(await screen.findByText('4,000')).toBeInTheDocument();
                 changeInputValue('Bond Price', '0');
                 changeInputValue('Amount', '10');
                 assertPlaceOrderButtonIsDisabled();
@@ -528,9 +513,9 @@ describe.skip('AdvancedLendingOrderCard Component', () => {
                         },
                     },
                 });
-                await waitFor(() =>
-                    expect(screen.getByText('Place Order')).toBeInTheDocument()
-                );
+                expect(
+                    await screen.findByText('Place Order')
+                ).toBeInTheDocument();
 
                 changeInputValue('Amount', '10');
                 assertPlaceOrderButtonIsEnabled();
@@ -548,9 +533,7 @@ describe.skip('AdvancedLendingOrderCard Component', () => {
                         },
                     },
                 });
-                await waitFor(() =>
-                    expect(screen.getByText('4,000')).toBeInTheDocument()
-                );
+                expect(await screen.findByText('4,000')).toBeInTheDocument();
                 changeInputValue('Amount', '10');
                 assertPlaceOrderButtonIsEnabled();
                 assertInvalidBondPriceErrorIsNotShown();
@@ -567,9 +550,9 @@ describe.skip('AdvancedLendingOrderCard Component', () => {
                         },
                     },
                 });
-                await waitFor(() =>
-                    expect(screen.getByText('Place Order')).toBeInTheDocument()
-                );
+                expect(
+                    await screen.findByText('Place Order')
+                ).toBeInTheDocument();
                 changeInputValue('Amount', '10');
                 assertPlaceOrderButtonIsEnabled();
                 assertInvalidBondPriceErrorIsNotShown();

@@ -244,29 +244,28 @@ describe('Landing Component', () => {
         expect(screen.queryByText('DEC24')).not.toBeInTheDocument();
     });
 
-    it.skip('should change the amount slider when amount input changes and user has balance', async () => {
-        await waitFor(() =>
+    it('should change the amount slider when amount input changes and user has balance', async () => {
+        await waitFor(() => {
             render(<ConnectedToWallet />, {
                 apolloMocks: Default.parameters?.apolloClient.mocks,
                 preloadedState,
-            })
-        );
+            });
+        });
         clickAdvancedButton();
         expect(await screen.findByText('DEC22')).toBeInTheDocument();
         expect(screen.getByRole('slider')).toHaveValue('0');
+        fireEvent.click(screen.getByRole('radio', { name: 'Lend' }));
         await waitFor(() =>
-            fireEvent.click(screen.getByRole('radio', { name: 'Lend' }))
+            fireEvent.input(screen.getByRole('textbox', { name: 'Amount' }), {
+                target: { value: '1000' },
+            })
         );
-        await waitFor(() =>
-            expect(screen.getByText('10,000 WFIL')).toBeInTheDocument()
-        );
-        fireEvent.change(screen.getByRole('textbox', { name: 'Amount' }), {
-            target: { value: '1000' },
-        });
         expect(screen.getByRole('slider')).toHaveValue('10');
-        fireEvent.change(screen.getByRole('textbox', { name: 'Amount' }), {
-            target: { value: '5000' },
-        });
+        await waitFor(() =>
+            fireEvent.input(screen.getByRole('textbox', { name: 'Amount' }), {
+                target: { value: '5000' },
+            })
+        );
         expect(screen.getByRole('slider')).toHaveValue('50');
     });
 

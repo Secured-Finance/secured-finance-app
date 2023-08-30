@@ -9,7 +9,7 @@ const { Default, ConnectedToWallet } = composeStories(stories);
 const mockSecuredFinance = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mockSecuredFinance);
 
-describe.skip('Advanced Lending Component', () => {
+describe('Advanced Lending Component', () => {
     it('should convert the amount to new currency when the user change the currency', async () => {
         const { store } = await waitFor(() =>
             render(<Default />, {
@@ -17,9 +17,9 @@ describe.skip('Advanced Lending Component', () => {
             })
         );
         expect(store.getState().landingOrderForm.amount).toEqual('0');
-        fireEvent.change(screen.getByRole('textbox', { name: 'Amount' }), {
+        await waitFor(() => fireEvent.input(screen.getByRole('textbox', { name: 'Amount' }), {
             target: { value: '1' },
-        });
+        }));
         expect(store.getState().landingOrderForm.amount).toEqual(
             '1000000000000000000'
         );
@@ -31,16 +31,16 @@ describe.skip('Advanced Lending Component', () => {
         );
     });
 
-    it.skip('should not reset the amount when the user change the maturity', async () => {
+    it('should not reset the amount when the user change the maturity', async () => {
         const { store } = await waitFor(() =>
             render(<Default />, {
                 apolloMocks: Default.parameters?.apolloClient.mocks,
             })
         );
         expect(store.getState().landingOrderForm.amount).toEqual('0');
-        fireEvent.change(screen.getByRole('textbox', { name: 'Amount' }), {
+        await waitFor(() => fireEvent.input(screen.getByRole('textbox', { name: 'Amount' }), {
             target: { value: '1' },
-        });
+        }));
         expect(store.getState().landingOrderForm.amount).toEqual(
             '1000000000000000000'
         );

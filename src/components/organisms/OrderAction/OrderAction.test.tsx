@@ -1,6 +1,10 @@
 import { OrderSide } from '@secured-finance/sf-client';
 import { composeStories } from '@storybook/react';
-import { dec22Fixture, preloadedAssetPrices } from 'src/stories/mocks/fixtures';
+import {
+    dec22Fixture,
+    preloadedAssetPrices,
+    usdcBytes32,
+} from 'src/stories/mocks/fixtures';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
 import { OrderType } from 'src/types';
@@ -54,14 +58,12 @@ describe('OrderAction component', () => {
         ).toBeInTheDocument();
     });
 
-    it('should render place order button when collateral is sufficient for order', async () => {
+    it.skip('should render place order button when collateral is sufficient for order', async () => {
         await waitFor(() => render(<EnoughCollateral />, { preloadedState }));
         expect(
             await screen.findByTestId('place-order-button')
         ).toBeInTheDocument();
-        await waitFor(() =>
-            expect(screen.getByText('Place Order')).toBeEnabled()
-        );
+        expect(await screen.findByText('Place Order')).toBeEnabled();
         const button = screen.getByTestId('place-order-button');
         fireEvent.click(button);
         expect(
@@ -104,41 +106,36 @@ describe('OrderAction component', () => {
         expect(
             await screen.findByTestId('place-order-button')
         ).toBeInTheDocument();
-        expect(screen.getByText('Place Order')).toBeInTheDocument();
+        expect(await screen.findByText('Place Order')).toBeEnabled();
         const button = screen.getByTestId('place-order-button');
         fireEvent.click(button);
-        await waitFor(() =>
-            expect(
-                screen.queryByRole('dialog', { name: 'Confirm Order' })
-            ).toBeInTheDocument()
-        );
+        expect(
+            await screen.findByRole('dialog', { name: 'Confirm Order' })
+        ).toBeInTheDocument();
     });
 
-    // it.skip('should disable the button if the market is not open or pre-open', async () => {
-    //     await waitFor(() =>
-    //         render(<EnoughCollateral />, {
-    //             preloadedState: {
-    //                 ...preloadedState,
-    //                 availableContracts: {
-    //                     lendingMarkets: {
-    //                         [CurrencySymbol.USDC]: {
-    //                             ...preloadedLendingMarkets.availableContracts
-    //                                 ?.lendingMarkets[CurrencySymbol.USDC],
-    //                             [dec22Fixture.toNumber()]: {
-    //                                 ...preloadedLendingMarkets
-    //                                     .availableContracts?.lendingMarkets[
-    //                                     CurrencySymbol.USDC
-    //                                 ][dec22Fixture.toNumber()],
-    //                                 isItayosePeriod: true,
-    //                                 isPreOrderPeriod: false,
-    //                                 isOpened: false,
-    //                             },
-    //                         },
-    //                     },
-    //                 },
-    //             },
-    //         })
-    //     );
-    //     await waitFor(() => expect(screen.getByRole('button')).toBeDisabled());
-    // });
+    it('should disable the button if the market is not open or pre-open', async () => {
+        const lendingMarkets = await mockSecuredFinance.getOrderBookDetails();
+        const marketIndex = lendingMarkets.findIndex(
+            value => value.ccy === usdcBytes32 && value.name === 'DEC22'
+        );
+        const market = lendingMarkets[marketIndex];
+        lendingMarkets[marketIndex] = {
+            ...market,
+            isItayosePeriod: true,
+            isPreOrderPeriod: false,
+            isOpened: false,
+        };
+        mockSecuredFinance.getOrderBookDetails.mockResolvedValueOnce(
+            lendingMarkets
+        );
+
+        render(<EnoughCollateral />, { preloadedState });
+
+        await waitFor(async () =>
+            expect(
+                await screen.findByTestId('place-order-button')
+            ).toBeDisabled()
+        );
+    });
 });

@@ -1,8 +1,13 @@
 import { composeStories } from '@storybook/react';
+import { wbtcBytes32 } from 'src/stories/mocks/fixtures';
+import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { render, screen } from 'src/test-utils.js';
 import * as stories from './MarketLoanWidget.stories';
 
 const { Default } = composeStories(stories);
+
+const mock = mockUseSF();
+jest.mock('src/hooks/useSecuredFinance', () => () => mock);
 
 describe('MarketLoanWidget Component', () => {
     it('should filter by currency', () => {
@@ -43,31 +48,23 @@ describe('MarketLoanWidget Component', () => {
         expect(screen.queryByText('Market Open')).toBeInTheDocument();
     });
 
-    // it('should hide the APR column when the market is in itayose mode', () => {
-    //     render(<Default />, {
-    //         preloadedState: {
-    //             ...preloadedLendingMarkets,
-    //             availableContracts: {
-    //                 ...preloadedLendingMarkets.availableContracts,
-    //                 lendingMarket: {
-    //                     [CurrencySymbol.WBTC]: {
-    //                         ...preloadedLendingMarkets.availableContracts
-    //                             ?.lendingMarkets?.[CurrencySymbol.WBTC],
-    //                         [dec24Fixture.toNumber()]: {
-    //                             ...preloadedLendingMarkets.availableContracts
-    //                                 ?.lendingMarkets?.[CurrencySymbol.WBTC]?.[
-    //                                 dec24Fixture.toNumber()
-    //                             ],
-    //                             itayose: true,
-    //                         },
-    //                     },
-    //                 },
-    //             },
-    //         },
-    //     });
-    //     screen.getByRole('button', { name: 'DEC22' }).click();
-    //     screen.getByRole('menuitem', { name: 'DEC24' }).click();
-    //     expect(screen.queryByText('APR')).not.toBeInTheDocument();
-    //     expect(screen.queryByText('Market Open')).toBeInTheDocument();
-    // });
+    it('should hide the APR column when the market is in itayose mode', async () => {
+        const lendingMarkets = await mock.getOrderBookDetails();
+        const marketIndex = lendingMarkets.findIndex(
+            value => value.ccy === wbtcBytes32 && value.name === 'DEC24'
+        );
+        const market = lendingMarkets[marketIndex];
+        lendingMarkets[marketIndex] = {
+            ...market,
+            isPreOrderPeriod: false,
+            isItayosePeriod: true,
+        };
+        mock.getOrderBookDetails.mockResolvedValueOnce(lendingMarkets);
+
+        render(<Default />);
+        screen.getByRole('button', { name: 'DEC22' }).click();
+        screen.getByRole('menuitem', { name: 'DEC24' }).click();
+        expect(screen.queryByText('APR')).not.toBeInTheDocument();
+        expect(screen.queryByText('Market Open')).toBeInTheDocument();
+    });
 });
