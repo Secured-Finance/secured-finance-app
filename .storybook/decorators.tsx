@@ -35,15 +35,16 @@ class ProviderMock {
     }
 }
 
+const privateKey =
+    '0xde926db3012af759b4f24b5a51ef6afa397f04670f634aa4f48d4480417007f3';
+
 const signer = new CustomizedBridge(
-    new Wallet(
-        '0xde926db3012af759b4f24b5a51ef6afa397f04670f634aa4f48d4480417007f3'
-    ),
+    new Wallet(privateKey),
     new ProviderMock() as any,
     11155111
 );
 
-const account = privateKeyToAccount('0xde926db3012af759b4f24b5a51ef6afa397f04670f634aa4f48d4480417007f3');
+const account = privateKeyToAccount(privateKey);
 
 const client = createWalletClient({
     account: account,

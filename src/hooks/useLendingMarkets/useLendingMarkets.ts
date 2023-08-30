@@ -157,13 +157,13 @@ export const useLendingMarkets = () => {
     });
 };
 
-export const useSelectMarket = (currency: CurrencySymbol, maturity: number) => {
+export const useMarket = (currency: CurrencySymbol, maturity: number) => {
     const { data: lendingMarkets = emptyContracts } = useLendingMarkets();
     return lendingMarkets[currency][maturity];
 };
 
 export const useMarketPhase = (currency: CurrencySymbol, maturity: number) => {
-    const market = useSelectMarket(currency, maturity);
+    const market = useMarket(currency, maturity);
     if (!market) {
         return MarketPhase.NOT_FOUND;
     }

@@ -44,8 +44,8 @@ import {
     amountFormatterFromBase,
     amountFormatterToBase,
     getCurrencyMapAsOptions,
-    usdFormat,
     hexToCurrencySymbol,
+    usdFormat,
 } from 'src/utils';
 import { countdown } from 'src/utils/date';
 import { Maturity } from 'src/utils/entities';
@@ -105,6 +105,7 @@ const Toolbar = ({
         </GradientBox>
     );
 };
+
 export const Itayose = () => {
     const { address } = useAccount();
 

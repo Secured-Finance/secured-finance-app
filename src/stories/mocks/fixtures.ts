@@ -15,9 +15,9 @@ import {
     DailyVolumes,
     MaturityOptionList,
     OrderHistoryList,
+    OrderType,
     TradeHistory,
     TransactionList,
-    OrderType,
 } from 'src/types';
 import { CurrencySymbol, Rate } from 'src/utils';
 import { Maturity } from 'src/utils/entities';
@@ -77,7 +77,7 @@ const openingDateTimestamp = 1638316800;
 const openingDate = BigNumber.from(openingDateTimestamp);
 const preOpenDateTimestamp = 1638144000;
 
-export const maturitiesMock = (ccy: string) => [
+export const maturitiesMockFromContract = (ccy: string) => [
     {
         name: 'DEC22',
         maturity: BigNumber.from(dec22Fixture.toString()),
@@ -899,7 +899,7 @@ function generateDailyVolumes(days: number) {
                 volumes.push({
                     id: `${fromBytes32(
                         currency
-                    )}-openingDateTimestamp-2023-02-${i}`,
+                    )}-${openingDateTimestamp}-2023-02-${i}`,
                     currency: wfilBytes32,
                     maturity: dec22Fixture,
                     day: `2023-02-${i}`,
