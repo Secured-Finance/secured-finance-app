@@ -3,9 +3,10 @@ import classNames from 'classnames';
 interface NavTabProps {
     text: string;
     active: boolean;
+    highlighted?: boolean;
 }
 
-export const NavTab = ({ text, active = false }: NavTabProps) => {
+export const NavTab = ({ text, active = false, highlighted }: NavTabProps) => {
     return (
         <div className='group flex h-full w-full flex-col text-center'>
             <div
@@ -13,7 +14,7 @@ export const NavTab = ({ text, active = false }: NavTabProps) => {
             ></div>
             <div
                 className={classNames(
-                    'flex h-full items-center justify-center px-4',
+                    'flex h-full items-center justify-center gap-2 px-4',
                     {
                         'bg-gradient-to-b from-tabGradient2 to-tabGradient1':
                             active,
@@ -32,6 +33,11 @@ export const NavTab = ({ text, active = false }: NavTabProps) => {
                 >
                     {text}
                 </p>
+                {highlighted && (
+                    <div className='typography-dropdown-selection-label flex h-3 w-8 items-center justify-center rounded-3xl bg-starBlue text-neutral-8'>
+                        NEW
+                    </div>
+                )}
             </div>
         </div>
     );
