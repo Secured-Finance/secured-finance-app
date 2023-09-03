@@ -22,5 +22,5 @@ export const Default = Template.bind({});
 export const ItayoseMarket = Template.bind({});
 ItayoseMarket.play = async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    canvas.getByTestId('Pre-Open').click();
+    canvas.getByText('Pre-Open').click();
 };
