@@ -46,7 +46,7 @@ const renderConnected = async () => {
     );
 };
 
-describe.skip('MarketDashboard Component', () => {
+describe('MarketDashboard Component', () => {
     it('should render MarketDashboard', async () => {
         await renderDefault();
     });

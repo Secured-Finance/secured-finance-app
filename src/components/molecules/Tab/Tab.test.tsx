@@ -2,7 +2,7 @@ import { composeStories } from '@storybook/react';
 import { fireEvent, render, screen } from 'src/test-utils.js';
 import * as stories from './Tab.stories';
 
-const { Default } = composeStories(stories);
+const { Default, WithUtils } = composeStories(stories);
 
 describe('Tab component', () => {
     it('should render all Tabs', () => {
@@ -37,5 +37,16 @@ describe('Tab component', () => {
         fireEvent.click(tab);
         expect(tab.getAttribute('aria-selected')).toBe('false');
         expect(screen.getByText('Tab A Content')).toBeInTheDocument();
+    });
+
+    it('should render utils of the selected tab when provided', () => {
+        render(<WithUtils />);
+
+        expect(screen.getByText('Tab A Content')).toBeInTheDocument();
+        expect(screen.getAllByText('Util A')).toHaveLength(2);
+        const tab = screen.getAllByRole('tab')[1];
+        fireEvent.click(tab);
+        expect(screen.getByText('Tab B Content')).toBeInTheDocument();
+        expect(screen.getByText('Util B')).toBeInTheDocument();
     });
 });

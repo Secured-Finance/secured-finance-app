@@ -1,17 +1,19 @@
 import { composeStories } from '@storybook/react';
+import { waitFor } from '@storybook/testing-library';
 import {
     dec24Fixture,
     preloadedLendingMarkets,
 } from 'src/stories/mocks/fixtures';
-import { render, screen } from 'src/test-utils.js';
+import { fireEvent, render, screen } from 'src/test-utils.js';
 import { CurrencySymbol } from 'src/utils';
 import * as stories from './MarketLoanWidget.stories';
 
-const { Default } = composeStories(stories);
+const { Default, ItayoseMarket } = composeStories(stories);
 
-describe.skip('MarketLoanWidget Component', () => {
+describe('MarketLoanWidget Component', () => {
+    const preloadedState = { ...preloadedLendingMarkets };
     it('should filter by currency', () => {
-        render(<Default />);
+        render(<Default />, { preloadedState });
         expect(screen.queryByText('WBTC')).toBeInTheDocument();
         screen.getByRole('button', { name: 'All Assets' }).click();
         screen.getByRole('menuitem', { name: 'Filecoin' }).click();
@@ -19,37 +21,41 @@ describe.skip('MarketLoanWidget Component', () => {
     });
 
     it('should filter by maturity', () => {
-        render(<Default />);
-        expect(screen.getAllByText('Dec 1, 2022').length).toEqual(2);
+        render(<Default />, { preloadedState });
+        expect(screen.getAllByText('Dec 1, 2022').length).toEqual(4);
         screen.getByRole('button', { name: 'DEC22' }).click();
         screen.getByRole('menuitem', { name: 'JUN23' }).click();
         expect(screen.queryByText('Dec 1, 2022')).not.toBeInTheDocument();
-        expect(screen.getAllByText('Jun 1, 2023').length).toEqual(2);
+        expect(screen.getAllByText('Jun 1, 2023').length).toEqual(4);
     });
 
     it('should dedupe maturity and add a "All" option', () => {
-        render(<Default />);
+        render(<Default />, { preloadedState });
         screen.getByRole('button', { name: 'DEC22' }).click();
-        expect(screen.getAllByRole('menuitem').length).toBe(10);
+        expect(screen.getAllByRole('menuitem').length).toBe(9);
         expect(screen.queryByText('All')).toBeInTheDocument();
     });
 
     it('should display the APR column when the market is open', () => {
-        render(<Default />);
+        render(<Default />, { preloadedState });
         expect(screen.queryByText('APR')).toBeInTheDocument();
         expect(screen.queryByText('Market Open')).not.toBeInTheDocument();
     });
 
-    it('should hide the APR column when the market is in pre-order', () => {
-        render(<Default />);
-        screen.getByRole('button', { name: 'DEC22' }).click();
-        screen.getByRole('menuitem', { name: 'DEC24' }).click();
+    it('should hide the APR column when the market is in pre-order', async () => {
+        render(<Default />, { preloadedState });
+        const button = screen.getByText('Pre-Open');
+        await waitFor(() => {
+            fireEvent.click(button);
+        });
+
+        expect(screen.queryAllByText('Dec 1, 2024')).toHaveLength(4);
         expect(screen.queryByText('APR')).not.toBeInTheDocument();
         expect(screen.queryByText('Market Open')).toBeInTheDocument();
     });
 
-    it('should hide the APR column when the market is in itayose mode', () => {
-        render(<Default />, {
+    it('should hide the APR column when the market is in itayose mode', async () => {
+        render(<ItayoseMarket />, {
             preloadedState: {
                 ...preloadedLendingMarkets,
                 availableContracts: {
@@ -70,9 +76,24 @@ describe.skip('MarketLoanWidget Component', () => {
                 },
             },
         });
-        screen.getByRole('button', { name: 'DEC22' }).click();
-        screen.getByRole('menuitem', { name: 'DEC24' }).click();
+        const button = screen.getByText('Pre-Open');
+        await waitFor(() => {
+            fireEvent.click(button);
+        });
         expect(screen.queryByText('APR')).not.toBeInTheDocument();
         expect(screen.queryByText('Market Open')).toBeInTheDocument();
+    });
+
+    it('should not show maturity dropdown in itayose screen', async () => {
+        render(<Default />, { preloadedState });
+        const button = screen.getByText('Pre-Open');
+        await waitFor(() => {
+            fireEvent.click(button);
+        });
+
+        expect(screen.getByText('All Assets')).toBeInTheDocument();
+        expect(
+            screen.queryByRole('button', { name: 'DEC24' })
+        ).not.toBeInTheDocument();
     });
 });

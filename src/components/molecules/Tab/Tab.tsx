@@ -37,7 +37,6 @@ export const Tab: React.FC<TabProps> = ({ tabDataArray, children }) => {
                                             text={tabData.text}
                                             active={selected}
                                             highlighted={tabData.highlighted}
-                                            data-testid={tabData.text}
                                         ></NavTab>
                                     )}
                                 </HeadlessTab>
@@ -46,7 +45,9 @@ export const Tab: React.FC<TabProps> = ({ tabDataArray, children }) => {
                     </HeadlessTab.List>
                     <div className='col-span-1 flex w-full flex-row justify-end gap-4 px-3 py-2'>
                         {tabDataArray[selectedIndex].utilsArray?.map(
-                            util => util
+                            (util, index) => (
+                                <div key={index}>{util}</div>
+                            )
                         )}
                     </div>
                 </div>
