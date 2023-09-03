@@ -5,6 +5,8 @@ import { NavTab } from 'src/components/atoms';
 type TabData = {
     text: string;
     disabled?: boolean;
+    highlighted?: boolean;
+    utilsArray?: React.ReactNode[];
 };
 
 interface TabProps {
@@ -21,24 +23,33 @@ export const Tab: React.FC<TabProps> = ({ tabDataArray, children }) => {
                 selectedIndex={selectedIndex}
                 onChange={setSelectedIndex}
             >
-                <HeadlessTab.List className='flex h-[60px] border-b border-white-10'>
-                    {tabDataArray.map(tabData => {
-                        return (
-                            <HeadlessTab
-                                key={tabData.text}
-                                className='h-full focus:outline-none'
-                                disabled={tabData.disabled}
-                            >
-                                {({ selected }) => (
-                                    <NavTab
-                                        text={tabData.text}
-                                        active={selected}
-                                    ></NavTab>
-                                )}
-                            </HeadlessTab>
-                        );
-                    })}
-                </HeadlessTab.List>
+                <div className='grid w-full grid-cols-1 items-center justify-between border-b border-white-10 tablet:grid-cols-2'>
+                    <HeadlessTab.List className='col-span-1 flex h-[60px] w-full'>
+                        {tabDataArray.map(tabData => {
+                            return (
+                                <HeadlessTab
+                                    key={tabData.text}
+                                    className='h-full w-full focus:outline-none tablet:w-fit'
+                                    disabled={tabData.disabled}
+                                >
+                                    {({ selected }) => (
+                                        <NavTab
+                                            text={tabData.text}
+                                            active={selected}
+                                            highlighted={tabData.highlighted}
+                                            data-testid={tabData.text}
+                                        ></NavTab>
+                                    )}
+                                </HeadlessTab>
+                            );
+                        })}
+                    </HeadlessTab.List>
+                    <div className='col-span-1 flex w-full flex-row justify-end gap-4 px-3 py-2'>
+                        {tabDataArray[selectedIndex].utilsArray?.map(
+                            util => util
+                        )}
+                    </div>
+                </div>
                 <HeadlessTab.Panels>
                     {arrayChildren[selectedIndex]}
                 </HeadlessTab.Panels>
