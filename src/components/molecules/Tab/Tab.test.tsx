@@ -41,11 +41,11 @@ describe('Tab component', () => {
 
     it('should render utils of the selected tab when provided', () => {
         render(<WithUtils />);
-
         expect(screen.getByText('Tab A Content')).toBeInTheDocument();
         expect(screen.getAllByText('Util A')).toHaveLength(2);
         const tab = screen.getAllByRole('tab')[1];
         fireEvent.click(tab);
+        expect(screen.queryByText('Util A')).not.toBeInTheDocument();
         expect(screen.getByText('Tab B Content')).toBeInTheDocument();
         expect(screen.getByText('Util B')).toBeInTheDocument();
     });
