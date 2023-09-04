@@ -34,7 +34,7 @@ export const NavTab = ({ text, active = false, highlighted }: NavTabProps) => {
                     {text}
                 </p>
                 {highlighted && (
-                    <div className='typography-dropdown-selection-label flex h-3 w-8 items-center justify-center rounded-3xl bg-starBlue text-neutral-8'>
+                    <div className='typography-caption-3 flex h-4 w-8 items-center justify-center rounded-3xl bg-starBlue text-neutral-8'>
                         NEW
                     </div>
                 )}

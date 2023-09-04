@@ -16,18 +16,20 @@ export const useMarketLists = () => {
         for (const maturity of Object.keys(lendingContracts[ccy.symbol])) {
             const contract = lendingContracts[ccy.symbol][Number(maturity)];
             if (contract.isMatured) continue;
-            else if (contract.isItayosePeriod || contract.isPreOrderPeriod) {
-                itayoseMarkets.push({
-                    ...contract,
-                    ccy: ccy.symbol,
-                    currency: utils.formatBytes32String(ccy.symbol),
-                });
+
+            const isItayoseOrPreOrder =
+                contract.isItayosePeriod || contract.isPreOrderPeriod;
+
+            const market = {
+                ...contract,
+                ccy: ccy.symbol,
+                currency: utils.formatBytes32String(ccy.symbol),
+            };
+
+            if (isItayoseOrPreOrder) {
+                itayoseMarkets.push(market);
             } else {
-                openMarkets.push({
-                    ...contract,
-                    ccy: ccy.symbol,
-                    currency: utils.formatBytes32String(ccy.symbol),
-                });
+                openMarkets.push(market);
             }
         }
     }
