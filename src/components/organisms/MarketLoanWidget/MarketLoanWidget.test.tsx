@@ -1,10 +1,9 @@
 import { composeStories } from '@storybook/react';
-import { waitFor } from '@storybook/testing-library';
 import {
     dec24Fixture,
     preloadedLendingMarkets,
 } from 'src/stories/mocks/fixtures';
-import { fireEvent, render, screen } from 'src/test-utils.js';
+import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
 import { CurrencySymbol } from 'src/utils';
 import * as stories from './MarketLoanWidget.stories';
 
