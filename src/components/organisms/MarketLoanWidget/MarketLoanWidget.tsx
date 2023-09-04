@@ -134,7 +134,7 @@ export const MarketLoanWidget = () => {
                 id: 'action',
                 cell: info => {
                     return (
-                        <div className='flex justify-center px-1'>
+                        <div className='flex w-20 justify-start px-1'>
                             <Button onClick={() => handleClick(info)} size='sm'>
                                 {info.row.original.isOpened
                                     ? 'Open Order'
