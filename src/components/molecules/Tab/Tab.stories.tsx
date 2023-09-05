@@ -32,14 +32,24 @@ WithUtils.args = {
             util: (
                 <div
                     key={1}
-                    className='flex flex-row items-center justify-center'
+                    className='flex h-full flex-row items-center justify-end gap-2'
                 >
                     <p>Util A</p>
                     <p>Util A</p>
                 </div>
             ),
         },
-        { text: 'Tab B', util: <div key={3}>Util B</div> },
+        {
+            text: 'Tab B',
+            util: (
+                <div
+                    className='flex h-full flex-row items-center justify-start'
+                    key={3}
+                >
+                    Util B
+                </div>
+            ),
+        },
         { text: 'Tab C', disabled: true },
     ],
 };
