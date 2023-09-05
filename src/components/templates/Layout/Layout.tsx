@@ -9,7 +9,7 @@ export const Layout = ({
 }) => {
     return (
         <div
-            className='flex h-screen flex-col justify-between gap-8'
+            className='flex h-screen w-screen flex-col justify-between gap-8'
             data-testid='wrapper-div'
         >
             <div className='w-full'>
