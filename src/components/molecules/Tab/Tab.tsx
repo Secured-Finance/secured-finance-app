@@ -5,8 +5,8 @@ import { NavTab } from 'src/components/atoms';
 type TabData = {
     text: string;
     disabled?: boolean;
-    highlighted?: boolean;
-    utilsArray?: React.ReactNode[];
+    highlight?: { text: string; size: 'small' | 'large' };
+    util?: React.ReactNode;
 };
 
 interface TabProps {
@@ -17,7 +17,7 @@ export const Tab: React.FC<TabProps> = ({ tabDataArray, children }) => {
     const arrayChildren = Children.toArray(children);
     const [selectedIndex, setSelectedIndex] = useState(0);
 
-    const utilsArray = tabDataArray[selectedIndex].utilsArray;
+    const util = tabDataArray[selectedIndex].util;
 
     return (
         <div className='h-full w-full rounded-b-2xl border border-white-10 bg-cardBackground/60 shadow-tab'>
@@ -38,22 +38,14 @@ export const Tab: React.FC<TabProps> = ({ tabDataArray, children }) => {
                                         <NavTab
                                             text={tabData.text}
                                             active={selected}
-                                            highlighted={tabData.highlighted}
+                                            highlight={tabData.highlight}
                                         ></NavTab>
                                     )}
                                 </HeadlessTab>
                             );
                         })}
                     </HeadlessTab.List>
-                    {utilsArray && utilsArray?.length > 0 && (
-                        <div className='col-span-1 flex h-full w-full flex-row items-center justify-center gap-4 px-3 py-2 tablet:justify-end'>
-                            {tabDataArray[selectedIndex].utilsArray?.map(
-                                (util, index) => (
-                                    <div key={index}>{util}</div>
-                                )
-                            )}
-                        </div>
-                    )}
+                    {util && <div className=' col-span-1'>{util}</div>}
                 </div>
                 <HeadlessTab.Panels>
                     {arrayChildren[selectedIndex]}

@@ -17,6 +17,7 @@ export * from './ErrorInfo';
 export * from './ExpandIndicator';
 export * from './Footer';
 export * from './GradientBox';
+export * from './HighlightChip';
 export * from './HorizontalListItem';
 export * from './InputBase';
 export * from './MarketTab';

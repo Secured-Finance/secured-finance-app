@@ -179,16 +179,30 @@ export const MarketLoanWidget = () => {
         />
     );
 
+    const itayoseHighlight: { text: string; size: 'small' | 'large' } = {
+        text: 'NEW',
+        size: 'small',
+    };
+
+    const openMarketUtil = (
+        <div className=' flex flex-row items-center justify-center gap-4 px-3 py-2 tablet:justify-end'>
+            {assetDropdown}
+            {maturityDropdown}
+        </div>
+    );
+
+    const itayoseMarketUtil = (
+        <div className='hidden flex-row items-center justify-end px-3 py-2 tablet:flex'>
+            {assetDropdown}
+        </div>
+    );
+
     const tabDataArray = [
-        { text: 'Loans', utilsArray: [assetDropdown, maturityDropdown] },
+        { text: 'Loans', util: openMarketUtil },
         {
             text: 'Pre-Open',
-            highlighted: true,
-            utilsArray: [
-                <div className='hidden tablet:block' key='asset'>
-                    {assetDropdown}
-                </div>,
-            ],
+            highlight: itayoseHighlight,
+            util: itayoseMarketUtil,
         },
     ];
 

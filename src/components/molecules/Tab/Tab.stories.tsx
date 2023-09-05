@@ -29,9 +29,17 @@ WithUtils.args = {
     tabDataArray: [
         {
             text: 'Tab A',
-            utilsArray: [<div key={1}>Util A</div>, <div key={2}>Util A</div>],
+            util: (
+                <div
+                    key={1}
+                    className='flex flex-row items-center justify-center'
+                >
+                    <p>Util A</p>
+                    <p>Util A</p>
+                </div>
+            ),
         },
-        { text: 'Tab B', utilsArray: [<div key={3}>Util B</div>] },
+        { text: 'Tab B', util: <div key={3}>Util B</div> },
         { text: 'Tab C', disabled: true },
     ],
 };
