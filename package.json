@@ -35,7 +35,7 @@
   },
   "scripts": {
     "start": "next dev",
-    "build": "next build && next export",
+    "build": "next build",
     "postbuild": "npm run export",
     "preview:server": "next build && next start",
     "preview": "npm run build && npx serve ./build",
