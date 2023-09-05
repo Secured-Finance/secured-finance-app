@@ -87,7 +87,7 @@ export const MarketLoanWidget = () => {
                 id: 'maturity',
                 cell: info => {
                     return (
-                        <div className=' grid w-full whitespace-nowrap'>
+                        <div className=' grid w-full whitespace-nowrap px-1'>
                             <div className='typography-caption text-neutral-8'>
                                 {getUTCMonthYear(info.getValue())}
                             </div>
@@ -134,7 +134,7 @@ export const MarketLoanWidget = () => {
                 id: 'action',
                 cell: info => {
                     return (
-                        <div className='flex w-20 justify-start px-1'>
+                        <div className='flex justify-center px-1'>
                             <Button onClick={() => handleClick(info)} size='sm'>
                                 {info.row.original.isOpened
                                     ? 'Open Order'
@@ -193,7 +193,7 @@ export const MarketLoanWidget = () => {
     ];
 
     return (
-        <div className='h-fit rounded-b-2xl border border-white-10 bg-cardBackground/60 shadow-tab'>
+        <div className='h-fit rounded-b-2xl border border-white-10 shadow-tab'>
             <Tab tabDataArray={tabDataArray}>
                 <div className='p-6 pt-3'>
                     <CoreTable
