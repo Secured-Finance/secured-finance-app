@@ -7,7 +7,7 @@ import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
 import { CurrencySymbol } from 'src/utils';
 import * as stories from './MarketLoanWidget.stories';
 
-const { Default, ItayoseMarket } = composeStories(stories);
+const { Default } = composeStories(stories);
 
 describe('MarketLoanWidget Component', () => {
     const preloadedState = { ...preloadedLendingMarkets };
@@ -54,7 +54,7 @@ describe('MarketLoanWidget Component', () => {
     });
 
     it('should hide the APR column when the market is in itayose mode', async () => {
-        render(<ItayoseMarket />, {
+        render(<Default />, {
             preloadedState: {
                 ...preloadedLendingMarkets,
                 availableContracts: {

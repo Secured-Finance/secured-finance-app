@@ -17,6 +17,8 @@ export const Tab: React.FC<TabProps> = ({ tabDataArray, children }) => {
     const arrayChildren = Children.toArray(children);
     const [selectedIndex, setSelectedIndex] = useState(0);
 
+    const utilsArray = tabDataArray[selectedIndex].utilsArray;
+
     return (
         <div className='h-full w-full rounded-b-2xl border border-white-10 bg-cardBackground/60 shadow-tab'>
             <HeadlessTab.Group
@@ -43,8 +45,8 @@ export const Tab: React.FC<TabProps> = ({ tabDataArray, children }) => {
                             );
                         })}
                     </HeadlessTab.List>
-                    {tabDataArray[selectedIndex].utilsArray && (
-                        <div className='col-span-1 flex h-full w-full flex-row justify-end gap-4 px-3 py-2'>
+                    {utilsArray && utilsArray?.length > 0 && (
+                        <div className='col-span-1 flex h-full w-full flex-row items-center justify-center gap-4 px-3 py-2 tablet:justify-end'>
                             {tabDataArray[selectedIndex].utilsArray?.map(
                                 (util, index) => (
                                     <div key={index}>{util}</div>
