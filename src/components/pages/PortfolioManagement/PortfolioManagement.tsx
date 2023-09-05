@@ -14,7 +14,10 @@ import {
 } from 'src/components/organisms';
 import { Page, TwoColumns } from 'src/components/templates';
 import {
+    emptyCollateralBook,
+    emptyOrderList,
     useCollateralBook,
+    useCurrenciesForOrders,
     useGraphClientHook,
     useOrderList,
     usePagination,
@@ -76,8 +79,12 @@ export const PortfolioManagement = () => {
         'user',
         selectedTable !== TableType.MY_TRANSACTIONS
     );
-    const orderList = useOrderList(address);
-    const positions = usePositions(address);
+    const { data: usedCurrencies = [] } = useCurrenciesForOrders(address);
+    const { data: orderList = emptyOrderList } = useOrderList(
+        address,
+        usedCurrencies
+    );
+    const { data: positions = [] } = usePositions(address, usedCurrencies);
 
     const paginatedTransactions = usePagination(
         userTransactionHistory.data?.transactions ?? []
@@ -94,7 +101,7 @@ export const PortfolioManagement = () => {
                     return {
                         ...order,
                         status: 'Filled' as const,
-                        filledAmount: order.amount,
+                        filledAmount: order.inputAmount,
                     };
                 } else if (
                     !order.lendingMarket.isActive &&
@@ -114,10 +121,11 @@ export const PortfolioManagement = () => {
 
     const priceMap = useSelector((state: RootState) => getPriceMap(state));
 
-    const collateralBook = useCollateralBook(address);
+    const { data: collateralBook = emptyCollateralBook, isLoading } =
+        useCollateralBook(address);
 
     const portfolioAnalytics = useMemo(() => {
-        if (!collateralBook.fetched) {
+        if (isLoading) {
             return {
                 borrowedPV: 0,
                 lentPV: 0,
@@ -137,12 +145,7 @@ export const PortfolioManagement = () => {
             lentPV,
             netAssetValue: borrowedPV + lentPV + collateralBook.usdCollateral,
         };
-    }, [
-        collateralBook.fetched,
-        collateralBook.usdCollateral,
-        positions,
-        priceMap,
-    ]);
+    }, [collateralBook.usdCollateral, isLoading, positions, priceMap]);
 
     const myTransactions = useMemo(() => {
         const tradesFromCon = formatOrders(orderList.inactiveOrderList);

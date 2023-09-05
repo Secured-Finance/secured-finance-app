@@ -15,7 +15,13 @@ import {
     OrderTable,
 } from 'src/components/organisms';
 import { ThreeColumnsWithTopBar } from 'src/components/templates';
-import { CollateralBook, useGraphClientHook, useOrderList } from 'src/hooks';
+import {
+    CollateralBook,
+    emptyOrderList,
+    useCurrenciesForOrders,
+    useGraphClientHook,
+    useOrderList,
+} from 'src/hooks';
 import { useOrderbook } from 'src/hooks/useOrderbook';
 import { getAssetPrice } from 'src/store/assetPrices/selectors';
 import { selectMarket } from 'src/store/availableContracts';
@@ -36,6 +42,7 @@ import {
     currencyMap,
     formatLoanValue,
     getCurrencyMapAsOptions,
+    hexToCurrencySymbol,
     ordinaryFormat,
     usdFormat,
 } from 'src/utils';
@@ -116,7 +123,19 @@ export const AdvancedLending = ({
     );
 
     const orderBook = useOrderbook(currency, maturity, 10);
-    const orderList = useOrderList(address);
+    const { data: usedCurrencies = [] } = useCurrenciesForOrders(address);
+    const { data: orderList = emptyOrderList } = useOrderList(
+        address,
+        usedCurrencies
+    );
+    const filteredOrderList = useMemo(() => {
+        return orderList.activeOrderList.filter(
+            order =>
+                hexToCurrencySymbol(order.currency) === currency &&
+                order.maturity === maturity.toString()
+        );
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [currency, maturity, JSON.stringify(orderList.activeOrderList)]);
 
     const transactionHistory = useGraphClientHook(
         {
@@ -226,8 +245,8 @@ export const AdvancedLending = ({
                         rates={rates}
                     />
                 </Tab>
-                <HorizontalTab tabTitles={['My Orders']}>
-                    <OrderTable data={orderList.activeOrderList} />
+                <HorizontalTab tabTitles={['Open Orders']}>
+                    <OrderTable data={filteredOrderList} />
                 </HorizontalTab>
             </div>
         </ThreeColumnsWithTopBar>

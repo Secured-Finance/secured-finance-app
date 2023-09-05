@@ -26,7 +26,9 @@ import '../assets/css/index.css';
 
 const projectId = getWalletConnectId();
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+    defaultOptions: { queries: { refetchOnWindowFocus: false } },
+});
 
 init(getAmplitudeApiKey(), undefined, {
     appVersion: process.env.SF_ENV,

@@ -4,14 +4,15 @@ import {
     withAssetPrice,
     withWalletProvider,
 } from 'src/../.storybook/decorators';
-import { collateralBook80, emptyBook } from 'src/stories/mocks/fixtures';
+import { emptyCollateralBook } from 'src/hooks';
+import { collateralBook80 } from 'src/stories/mocks/fixtures';
 import { CollateralTab } from './CollateralTab';
 
 export default {
     title: 'Organism/CollateralTab',
     component: CollateralTab,
     args: {
-        collateralBook: emptyBook,
+        collateralBook: emptyCollateralBook,
     },
     parameters: {
         ...RESPONSIVE_PARAMETERS,

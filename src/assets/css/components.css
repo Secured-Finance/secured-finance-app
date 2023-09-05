@@ -66,6 +66,6 @@
       @apply text-smd font-secondary leading-7;
     }
     .typography-amount-large {
-      @apply text-[40px] font-secondary leading-[44px] font-semibold;
+      @apply text-[44px] font-secondary font-semibold leading-10;
     }
   }

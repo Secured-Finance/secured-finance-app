@@ -10,6 +10,7 @@ import {
 } from 'src/components/molecules';
 import { OrderDetails } from 'src/components/organisms';
 import {
+    emptyCollateralBook,
     useCollateralBook,
     useEtherscanUrl,
     useHandleContractTransaction,
@@ -112,7 +113,8 @@ export const UnwindDialog = ({
     );
     const globalDispatch = useDispatch();
 
-    const collateral = useCollateralBook(address);
+    const { data: collateralBook = emptyCollateralBook } =
+        useCollateralBook(address);
     const priceList = useSelector((state: RootState) => getPriceMap(state));
     const price = priceList[amount.currency];
 
@@ -190,7 +192,7 @@ export const UnwindDialog = ({
                         maturity={maturity}
                         side={side}
                         assetPrice={price}
-                        collateral={collateral}
+                        collateral={collateralBook}
                         loanValue={marketValue}
                     />
                 );

@@ -48,7 +48,6 @@ const collateralBook0: CollateralBook = {
         [CurrencySymbol.USDC]: BigNumber.from(100000),
         [CurrencySymbol.ETH]: BigNumber.from(100000),
     },
-    fetched: true,
 };
 
 beforeEach(() => {
@@ -189,7 +188,7 @@ describe('AdvancedLendingOrderCard Component', () => {
         await waitFor(() =>
             expect(screen.getByText('Lending Source')).toBeInTheDocument()
         );
-        expect(screen.getByText('10,000 USDC')).toBeInTheDocument();
+        expect(screen.getByText('10,000')).toBeInTheDocument();
 
         const walletSourceButton = screen.getByTestId(
             'wallet-source-selector-button'
@@ -199,7 +198,7 @@ describe('AdvancedLendingOrderCard Component', () => {
         expect(screen.getByText('SF Vault')).toBeInTheDocument();
         const option = screen.getByTestId('option-1');
         fireEvent.click(option);
-        expect(screen.getByText('0.1 USDC')).toBeInTheDocument();
+        expect(screen.getByText('0.1')).toBeInTheDocument();
     });
 
     it('should change amount when slider is moved', async () => {

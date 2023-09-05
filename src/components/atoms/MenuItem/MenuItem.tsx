@@ -15,12 +15,12 @@ export const MenuItem = ({
     return (
         <div
             data-cy={formatDataCy(text)}
-            className='flex w-full cursor-pointer items-center rounded-md p-2 hover:bg-horizonBlue focus:outline-none'
+            className='group flex w-full cursor-pointer items-center rounded-md p-2 hover:bg-horizonBlue focus:outline-none'
         >
             <Link href={link} className='flex h-full w-full' passHref>
                 <a
                     href={link}
-                    className='group h-full w-full'
+                    className='h-full w-full'
                     aria-label='Menu Item'
                     target='_blank'
                     rel='noopener noreferrer'
@@ -32,7 +32,7 @@ export const MenuItem = ({
                                 {text}
                             </p>
                         </div>
-                        <span className='opacity-0 group-hover:opacity-100'>
+                        <span className='hidden group-hover:block'>
                             {badge}
                         </span>
                     </div>

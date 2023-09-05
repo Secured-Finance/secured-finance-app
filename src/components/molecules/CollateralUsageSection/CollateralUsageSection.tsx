@@ -49,19 +49,19 @@ export const CollateralUsageSection = ({
     return (
         <div className='flex max-w-sm flex-row justify-between'>
             <div className='flex-col'>
-                <h3 className='typography-caption-2 text-planetaryPurple'>
+                <h3 className='typography-caption-2 text-secondary7'>
                     Available to borrow
                 </h3>
-                <p className='typography-caption ml-1 font-bold text-white'>
+                <p className='typography-caption font-bold text-white'>
                     {availableToBorrow}
                 </p>
             </div>
             <div className='flex-col'>
-                <h3 className='typography-caption-2 text-planetaryPurple'>
+                <h3 className='typography-caption-2 text-secondary7'>
                     Collateral Usage
                 </h3>
                 <p
-                    className={`typography-caption mr-1 text-right font-bold ${info.color}`}
+                    className={`typography-caption text-right font-bold ${info.color}`}
                 >
                     {collateralUsagePercent}
                 </p>

@@ -16,6 +16,8 @@ import {
 import { Page, TwoColumns } from 'src/components/templates';
 import {
     RateType,
+    emptyCollateralBook,
+    emptyValueLockedBook,
     useCollateralBook,
     useGraphClientHook,
     useLoanValues,
@@ -52,7 +54,8 @@ const computeTotalUsers = (users: string) => {
 
 export const MarketDashboard = () => {
     const { address, isConnected } = useAccount();
-    const collateralBook = useCollateralBook(address);
+    const { data: collateralBook = emptyCollateralBook } =
+        useCollateralBook(address);
 
     const curves: Record<string, Rate[]> = {};
     const lendingContracts = useSelector(
@@ -70,8 +73,9 @@ export const MarketDashboard = () => {
         curves[ccy.symbol] = Array.from(unitPrices.values()).map(r => r.apr);
     });
 
-    const { data: totalNumberOfAsset } = useTotalNumberOfAsset();
-    const { data: valueLockedByCurrency } = useValueLockedByCurrency();
+    const { data: totalNumberOfAsset = 0 } = useTotalNumberOfAsset();
+    const { data: valueLockedByCurrency = emptyValueLockedBook } =
+        useValueLockedByCurrency();
 
     const totalUser = useGraphClientHook(
         {}, // no variables

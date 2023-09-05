@@ -6,6 +6,8 @@ import { renderHook as rtlRenderHook } from '@testing-library/react-hooks';
 import { Provider } from 'react-redux';
 import { rootReducers } from 'src/store';
 
+const defaultOptions = { defaultOptions: { queries: { retry: false } } };
+
 function render(
     ui,
     {
@@ -23,7 +25,7 @@ function render(
     } = {}
 ) {
     function Wrapper({ children }) {
-        const queryClient = new QueryClient();
+        const queryClient = new QueryClient(defaultOptions);
         const component = (
             <Provider store={store}>
                 <QueryClientProvider client={queryClient}>
@@ -58,7 +60,7 @@ function renderHook(
     } = {}
 ) {
     function Wrapper({ children }) {
-        const queryClient = new QueryClient();
+        const queryClient = new QueryClient(defaultOptions);
         return (
             <Provider store={store}>
                 <QueryClientProvider client={queryClient}>

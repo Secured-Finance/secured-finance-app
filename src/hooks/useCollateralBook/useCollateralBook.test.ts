@@ -1,7 +1,7 @@
 import { BigNumber } from 'ethers';
-import { emptyBook, preloadedAssetPrices } from 'src/stories/mocks/fixtures';
+import { preloadedAssetPrices } from 'src/stories/mocks/fixtures';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
-import { act, renderHook } from 'src/test-utils';
+import { renderHook } from 'src/test-utils';
 import { CurrencySymbol, amountFormatterFromBase } from 'src/utils';
 import { CollateralBook, useCollateralBook } from './';
 
@@ -21,10 +21,18 @@ describe('useCollateralBook hook', () => {
         const { result, waitForNextUpdate } = renderHook(() =>
             useCollateralBook('0x0')
         );
-        await act(async () => {
-            await waitForNextUpdate();
-        });
-        const colBook = result.current as CollateralBook;
+
+        const value = result.current;
+        expect(value.data).toEqual(undefined);
+        expect(value.isLoading).toEqual(true);
+
+        await waitForNextUpdate();
+        expect(mock.getCollateralBook).toHaveBeenCalledTimes(1);
+        expect(mock.getCollateralParameters).toHaveBeenCalledTimes(1);
+        expect(mock.getWithdrawableCollateral).toHaveBeenCalledTimes(3);
+
+        const newValue = result.current;
+        const colBook = newValue.data as CollateralBook;
         expect(colBook.collateral.ETH).toEqual(
             BigNumber.from('1000000000000000000')
         );
@@ -40,13 +48,13 @@ describe('useCollateralBook hook', () => {
             [CurrencySymbol.ETH]: 1000000000000,
             [CurrencySymbol.WBTC]: 1000000000000,
         });
-        expect(colBook.fetched).toEqual(true);
+        expect(newValue.isLoading).toEqual(false);
     });
 
-    it('should return the empty book when given an undefined user', async () => {
+    it('should return undefined when given an undefined user', async () => {
         const { result } = renderHook(() => useCollateralBook(undefined));
-        const colBook = result.current as CollateralBook;
-        expect(colBook).toEqual(emptyBook);
+        const colBook = result.current.data as CollateralBook;
+        expect(colBook).toEqual(undefined);
     });
 
     it('should compute the collaterals in USD', async () => {
@@ -54,10 +62,8 @@ describe('useCollateralBook hook', () => {
             () => useCollateralBook('0x0'),
             { preloadedState }
         );
-        await act(async () => {
-            await waitForNextUpdate();
-        });
-        const colBook = result.current as CollateralBook;
+        await waitForNextUpdate();
+        const colBook = result.current.data as CollateralBook;
         expect(colBook.usdCollateral).toEqual(
             amountFormatterFromBase[CurrencySymbol.ETH](
                 colBook.collateral.ETH ?? BigNumber.from(0)
@@ -79,10 +85,8 @@ describe('useCollateralBook hook', () => {
             () => useCollateralBook('0x0'),
             { preloadedState }
         );
-        await act(async () => {
-            await waitForNextUpdate();
-        });
-        const colBook = result.current as CollateralBook;
+        await waitForNextUpdate();
+        const colBook = result.current.data as CollateralBook;
         expect(colBook.usdNonCollateral).toEqual(
             amountFormatterFromBase[CurrencySymbol.WBTC](
                 colBook.nonCollateral.WBTC ?? BigNumber.from(0)
