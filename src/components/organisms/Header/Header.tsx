@@ -64,7 +64,9 @@ export const Header = () => {
                             <SFLogoSmall className='inline h-7 w-7 tablet:hidden' />
                         </a>
                     </Link>
-                    {envShort && <HighlightChip text={envShort} />}
+                    {envShort && (
+                        <HighlightChip text={envShort.toUpperCase()} />
+                    )}
                 </div>
                 {LINKS.map(link => (
                     <div
