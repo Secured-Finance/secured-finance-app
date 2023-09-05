@@ -1,12 +1,16 @@
 import classNames from 'classnames';
+import { HighlightChip } from '../HighlightChip';
 
 interface NavTabProps {
     text: string;
     active: boolean;
-    highlighted?: boolean;
+    highlight?: {
+        text: string;
+        size: 'small' | 'large';
+    };
 }
 
-export const NavTab = ({ text, active = false, highlighted }: NavTabProps) => {
+export const NavTab = ({ text, active = false, highlight }: NavTabProps) => {
     return (
         <div className='group flex h-full w-full flex-col text-center'>
             <div
@@ -33,10 +37,11 @@ export const NavTab = ({ text, active = false, highlighted }: NavTabProps) => {
                 >
                     {text}
                 </p>
-                {highlighted && (
-                    <div className='typography-caption-3 flex h-4 w-8 items-center justify-center rounded-3xl bg-starBlue text-neutral-8'>
-                        NEW
-                    </div>
+                {highlight && (
+                    <HighlightChip
+                        text={highlight.text}
+                        size={highlight.size}
+                    />
                 )}
             </div>
         </div>
