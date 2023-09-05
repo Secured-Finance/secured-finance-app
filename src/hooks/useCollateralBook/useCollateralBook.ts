@@ -1,20 +1,19 @@
+import { useQuery } from '@tanstack/react-query';
 import { BigNumber } from 'ethers';
-import { useCallback, useEffect, useState } from 'react';
+import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
+import { QueryKeys } from 'src/hooks/queries';
 import useSF from 'src/hooks/useSecuredFinance';
 import { AssetPriceMap, getPriceMap } from 'src/store/assetPrices/selectors';
-import { selectLastUserActionTimestamp } from 'src/store/blockchain';
-import { selectAllBalances } from 'src/store/wallet';
+import { RootState } from 'src/store/types';
 import {
     CurrencySymbol,
+    ZERO_BN,
     amountFormatterFromBase,
     currencyMap,
     getCurrencyMapAsList,
     toCurrency,
 } from 'src/utils';
-import { RootState } from '../../store/types';
-
-const ZERO_BN = BigNumber.from('0');
 
 export interface CollateralBook {
     collateral: Partial<Record<CurrencySymbol, BigNumber>>;
@@ -24,10 +23,9 @@ export interface CollateralBook {
     usdNonCollateral: number;
     coverage: BigNumber;
     collateralThreshold: number;
-    fetched: boolean;
 }
 
-const emptyBook: CollateralBook = {
+export const emptyCollateralBook: CollateralBook = {
     collateral: {
         [CurrencySymbol.ETH]: ZERO_BN,
         [CurrencySymbol.USDC]: ZERO_BN,
@@ -45,101 +43,98 @@ const emptyBook: CollateralBook = {
     usdNonCollateral: 0,
     coverage: ZERO_BN,
     collateralThreshold: 0,
-    fetched: false,
+};
+
+const emptyCollateralValues = {
+    collateral: {
+        [CurrencySymbol.ETH]: ZERO_BN,
+        [CurrencySymbol.USDC]: ZERO_BN,
+        [CurrencySymbol.WBTC]: ZERO_BN,
+        [CurrencySymbol.WFIL]: ZERO_BN,
+    },
+    collateralCoverage: ZERO_BN,
+};
+
+const emptyCollateralParameters = {
+    liquidationThresholdRate: ZERO_BN,
+    liquidationProtocolFeeRate: ZERO_BN,
+    liquidatorFeeRate: ZERO_BN,
 };
 
 export const useCollateralBook = (account: string | undefined) => {
-    const [collateralBook, setCollateralBook] = useState(emptyBook);
     const securedFinance = useSF();
 
-    const { ETH: ethBalance, USDC: usdcBalance } = useSelector(
-        (state: RootState) => selectAllBalances(state)
-    );
-
-    const lastUserActionTimestamp = useSelector((state: RootState) =>
-        selectLastUserActionTimestamp(state)
+    const collateralCurrencyList = useMemo(
+        () => getCurrencyMapAsList().filter(ccy => ccy.isCollateral),
+        []
     );
 
     const priceList = useSelector((state: RootState) => getPriceMap(state));
 
-    const getCollateralBook = useCallback(async () => {
-        if (!securedFinance || !account) {
-            setCollateralBook(emptyBook);
-            return;
-        }
+    return useQuery({
+        queryKey: [QueryKeys.COLLATERAL_BOOK, account],
+        queryFn: async () => {
+            const [
+                collateralValues,
+                collateralParameters,
+                withdrawableCollateral,
+            ] = await Promise.all([
+                securedFinance?.getCollateralBook(account ?? ''),
+                securedFinance?.getCollateralParameters(),
+                await Promise.all(
+                    collateralCurrencyList.map(async currencyInfo => {
+                        const ccy = currencyInfo.symbol;
+                        const withdrawableCollateral =
+                            await securedFinance?.getWithdrawableCollateral(
+                                toCurrency(ccy),
+                                account ?? ''
+                            );
+                        return { [ccy]: withdrawableCollateral ?? ZERO_BN };
+                    })
+                ),
+            ]);
 
-        const { collateral, collateralCoverage } =
-            await securedFinance.getCollateralBook(account);
+            return {
+                collateralValues: collateralValues ?? emptyCollateralValues,
+                collateralParameters:
+                    collateralParameters ?? emptyCollateralParameters,
+                withdrawableCollateral: withdrawableCollateral,
+            };
+        },
+        select: data => {
+            const {
+                collateralBook,
+                nonCollateralBook,
+                usdCollateral,
+                usdNonCollateral,
+            } = formatCollateral(data.collateralValues.collateral, priceList);
 
-        const { liquidationThresholdRate } =
-            await securedFinance.getCollateralParameters();
+            const liquidationThresholdRate =
+                data.collateralParameters.liquidationThresholdRate;
+            const collateralThreshold = liquidationThresholdRate.isZero()
+                ? 0
+                : 1000000 / liquidationThresholdRate.toNumber();
 
-        const getWithdrawableCollateral = async () => {
-            let withdrawableCollateral: Partial<
-                Record<CurrencySymbol, BigNumber>
-            > = {};
-            const currencyList = getCurrencyMapAsList().filter(
-                ccy => ccy.isCollateral
-            );
+            const withdrawableCollateral: CollateralBook['withdrawableCollateral'] =
+                data.withdrawableCollateral.reduce((acc, obj) => ({
+                    ...acc,
+                    ...obj,
+                }));
 
-            await Promise.all(
-                currencyList.map(async currencyInfo => {
-                    const ccy = currencyInfo.symbol;
-                    const collateral =
-                        await securedFinance.getWithdrawableCollateral(
-                            toCurrency(ccy),
-                            account
-                        );
+            const colBook: CollateralBook = {
+                collateral: collateralBook,
+                nonCollateral: nonCollateralBook,
+                usdCollateral: usdCollateral,
+                usdNonCollateral: usdNonCollateral,
+                coverage: data.collateralValues.collateralCoverage,
+                collateralThreshold: collateralThreshold,
+                withdrawableCollateral: withdrawableCollateral,
+            };
 
-                    withdrawableCollateral = {
-                        ...withdrawableCollateral,
-                        [ccy]: collateral,
-                    };
-                })
-            );
-            return withdrawableCollateral;
-        };
-
-        const collateralThreshold =
-            liquidationThresholdRate && !liquidationThresholdRate.isZero()
-                ? 1000000 / liquidationThresholdRate.toNumber()
-                : 0;
-
-        const {
-            collateralBook,
-            nonCollateralBook,
-            usdCollateral,
-            usdNonCollateral,
-        } = formatCollateral(collateral, priceList);
-
-        setCollateralBook({
-            collateral: collateralBook,
-            nonCollateral: nonCollateralBook,
-            usdCollateral: usdCollateral,
-            usdNonCollateral: usdNonCollateral,
-            coverage: collateralCoverage,
-            collateralThreshold: collateralThreshold,
-            withdrawableCollateral: await getWithdrawableCollateral(),
-            fetched: true,
-
-            // 0% collateral not used
-            // 100% collateral used BigNumber(10000)
-        });
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [
-        account,
-        securedFinance,
-        ethBalance,
-        usdcBalance,
-        priceList.ETH,
-        priceList.USDC,
-    ]);
-
-    useEffect(() => {
-        getCollateralBook();
-    }, [getCollateralBook, lastUserActionTimestamp]);
-
-    return collateralBook;
+            return colBook;
+        },
+        enabled: !!securedFinance && !!account,
+    });
 };
 
 const formatCollateral = (

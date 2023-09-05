@@ -90,6 +90,6 @@ export const checkOrdersAreSame = (order1: Order, order2: OrderList[0]) => {
     );
 };
 
-export const sortOrders = (a: OrderList[0], b: OrderList[0]) => {
+export const sortOrders = (a: Order, b: Order) => {
     return Number(b.createdAt.sub(a.createdAt));
 };

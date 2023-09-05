@@ -2,7 +2,6 @@ import { BigNumber } from 'ethers';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { renderHook } from 'src/test-utils';
 import {
-    emptyValueLockedBook,
     useTotalNumberOfAsset,
     useValueLockedByCurrency,
 } from './useProtocolInformation';
@@ -16,15 +15,15 @@ describe('useTotalNumberOfAsset', () => {
             useTotalNumberOfAsset()
         );
         const value = result.current;
-        expect(value.data).toEqual(0);
-        expect(value.isFetching).toEqual(true);
+        expect(value.data).toEqual(undefined);
+        expect(value.isLoading).toEqual(true);
 
         await waitForNextUpdate();
 
         expect(mock.getCurrencies).toHaveBeenCalledTimes(1);
         const newValue = result.current;
         expect(newValue.data).toEqual(4);
-        expect(newValue.isFetching).toEqual(false);
+        expect(newValue.isLoading).toEqual(false);
     });
 });
 
@@ -34,8 +33,8 @@ describe('useValueLockedByCurrency', () => {
             useValueLockedByCurrency()
         );
         const value = result.current;
-        expect(value.data).toEqual(emptyValueLockedBook);
-        expect(value.isFetching).toEqual(true);
+        expect(value.data).toEqual(undefined);
+        expect(value.isLoading).toEqual(true);
 
         await waitForNextUpdate();
 
@@ -47,6 +46,6 @@ describe('useValueLockedByCurrency', () => {
             USDC: BigNumber.from('1000000000000'), // 1 000 000 USDC
             WBTC: BigNumber.from('1000000000000'), // 1000 BTC
         });
-        expect(newValue.isFetching).toEqual(false);
+        expect(newValue.isLoading).toEqual(false);
     });
 });

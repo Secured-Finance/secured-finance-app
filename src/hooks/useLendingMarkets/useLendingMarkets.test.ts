@@ -81,8 +81,8 @@ describe('useLendingMarkets', () => {
     });
 
     it('should increment the name of the contract if it already exists', async () => {
-        const lendingMarkets = await mock.getLendingMarketDetailsPerCurrency();
-        mock.getLendingMarketDetailsPerCurrency.mockResolvedValueOnce([
+        const lendingMarkets = await mock.getOrderBookDetailsPerCurrency();
+        mock.getOrderBookDetailsPerCurrency.mockResolvedValueOnce([
             ...lendingMarkets,
             { ...lendingMarkets[0], maturity: new Maturity(10000) },
         ]);

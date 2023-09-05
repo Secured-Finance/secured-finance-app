@@ -1,26 +1,18 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { QueryKeys } from 'src/hooks/queries';
 import useSF from 'src/hooks/useSecuredFinance';
-import { CurrencySymbol, divide, toCurrency } from 'src/utils';
+import { CurrencySymbol, ZERO_BN, divide, toCurrency } from 'src/utils';
 
 export const useOrderFee = (ccy: CurrencySymbol) => {
     const securedFinance = useSF();
-    const [orderFee, setOrderFee] = useState(0);
 
-    const getOrderFee = useCallback(async () => {
-        if (!securedFinance || !ccy) {
-            return;
-        }
-
-        const fee = await securedFinance.getOrderFeeRate(toCurrency(ccy));
-        setOrderFee(divide(fee.toNumber(), 100)); // 100 -> 1%
-    }, [securedFinance, ccy]);
-
-    useEffect(() => {
-        getOrderFee();
-        return () => {
-            setOrderFee(0);
-        };
-    }, [getOrderFee]);
-
-    return orderFee;
+    return useQuery({
+        queryKey: [QueryKeys.ORDER_FEE, ccy],
+        queryFn: async () => {
+            const orderFee = securedFinance?.getOrderFeeRate(toCurrency(ccy));
+            return orderFee ?? ZERO_BN;
+        },
+        select: fee => divide(fee.toNumber(), 100),
+        enabled: !!securedFinance,
+    });
 };

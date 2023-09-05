@@ -17,7 +17,14 @@ import {
     OrderTable,
 } from 'src/components/organisms';
 import { Page, ThreeColumnsWithTopBar } from 'src/components/templates';
-import { useCollateralBook, useMaturityOptions, useOrderList } from 'src/hooks';
+import {
+    emptyCollateralBook,
+    emptyOrderList,
+    useCollateralBook,
+    useCurrenciesForOrders,
+    useMaturityOptions,
+    useOrderList,
+} from 'src/hooks';
 import { useOrderbook } from 'src/hooks/useOrderbook';
 import { getAssetPrice } from 'src/store/assetPrices/selectors';
 import { MarketPhase, selectMarketPhase } from 'src/store/availableContracts';
@@ -33,6 +40,7 @@ import {
     amountFormatterFromBase,
     amountFormatterToBase,
     getCurrencyMapAsOptions,
+    hexToCurrencySymbol,
     usdFormat,
 } from 'src/utils';
 import { countdown } from 'src/utils/date';
@@ -128,15 +136,22 @@ export const Itayose = () => {
     }, [currency, assetList]);
 
     const orderBook = useOrderbook(currency, maturity);
-    const orderList = useOrderList(address);
-    const collateralBook = useCollateralBook(address);
+    const { data: usedCurrencies = [] } = useCurrenciesForOrders(address);
+    const { data: orderList = emptyOrderList } = useOrderList(
+        address,
+        usedCurrencies
+    );
+    const { data: collateralBook = emptyCollateralBook } =
+        useCollateralBook(address);
 
     const filteredOrderList = useMemo(() => {
         return orderList.activeOrderList.filter(
-            o => o.maturity === selectedTerm.value.toString()
+            o =>
+                hexToCurrencySymbol(o.currency) === currency &&
+                o.maturity === selectedTerm.value.toString()
         );
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [orderList, selectedTerm.value.toNumber()]);
+    }, [JSON.stringify(orderList), selectedTerm.value.toNumber()]);
 
     const dispatch = useDispatch();
 
@@ -227,7 +242,7 @@ export const Itayose = () => {
                             </p>
                         </div>
                     </GradientBox>
-                    <HorizontalTab tabTitles={['My Orders']}>
+                    <HorizontalTab tabTitles={['Open Orders']}>
                         <OrderTable data={filteredOrderList} />
                     </HorizontalTab>
                 </div>

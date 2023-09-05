@@ -2,6 +2,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { ContractTransaction } from 'ethers';
 import { useCallback } from 'react';
 import { useDispatch } from 'react-redux';
+import { QUERIES_TO_INVALIDATE } from 'src/hooks/queries';
 import { updateLastActionTimestamp } from 'src/store/blockchain';
 
 export const useHandleContractTransaction = () => {
@@ -14,7 +15,11 @@ export const useHandleContractTransaction = () => {
             dispatch(updateLastActionTimestamp());
 
             // Invalidate all queries
-            await queryClient.invalidateQueries({ queryKey: ['getOrderbook'] });
+            await Promise.all(
+                QUERIES_TO_INVALIDATE.map(queryKey =>
+                    queryClient.invalidateQueries({ queryKey: [queryKey] })
+                )
+            );
             if (contractReceipt && contractReceipt.blockNumber) {
                 return true;
             }

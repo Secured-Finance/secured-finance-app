@@ -9,6 +9,7 @@ import type { Meta, StoryFn } from '@storybook/react';
 import { BigNumber } from 'ethers';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
+import { emptyCollateralBook } from 'src/hooks';
 import {
     setAmount,
     setCurrency,
@@ -19,7 +20,6 @@ import {
     collateralBook37,
     collateralBook80,
     dec22Fixture,
-    emptyCollateralBook,
 } from 'src/stories/mocks/fixtures';
 import { CurrencySymbol } from 'src/utils';
 import { LoanValue } from 'src/utils/entities';

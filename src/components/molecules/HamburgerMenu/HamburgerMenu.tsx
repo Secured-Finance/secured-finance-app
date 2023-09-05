@@ -2,14 +2,14 @@ import { Menu, Transition } from '@headlessui/react';
 import { ArrowUpIcon, ChevronDownIcon } from '@heroicons/react/24/solid';
 import classNames from 'classnames';
 import Link from 'next/link';
-import React, { HTMLAttributes, LegacyRef } from 'react';
+import { HTMLAttributes, LegacyRef, forwardRef, useState } from 'react';
 import Burger from 'src/assets/img/burger.svg';
 import SFLogoSmall from 'src/assets/img/small-logo.svg';
 import { Closable } from 'src/components/templates';
 import { LinkList } from 'src/utils';
 import { UrlObject } from 'url';
 
-const NextLink = React.forwardRef(
+const NextLink = forwardRef(
     (
         props: HTMLAttributes<HTMLAnchorElement> & { href: string | UrlObject },
         ref: LegacyRef<HTMLAnchorElement>
@@ -83,7 +83,7 @@ export const HamburgerMenu = ({
 }: {
     links: { label: string; link: string }[];
 }) => {
-    const [showMore, setShowMore] = React.useState(false);
+    const [showMore, setShowMore] = useState(false);
 
     return (
         <Menu>

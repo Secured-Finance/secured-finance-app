@@ -3,7 +3,7 @@ import { emptyTransaction } from 'src/stories/mocks/queries';
 import { fireEvent, render, screen, waitFor, within } from 'src/test-utils.js';
 import * as stories from './AdvancedLending.stories';
 
-const { Default } = composeStories(stories);
+const { Default, ConnectedToWallet } = composeStories(stories);
 
 describe('Advanced Lending Component', () => {
     it('should convert the amount to new currency when the user change the currency', async () => {
@@ -21,10 +21,12 @@ describe('Advanced Lending Component', () => {
         );
         fireEvent.click(screen.getByRole('button', { name: 'Filecoin' }));
         fireEvent.click(screen.getByRole('menuitem', { name: 'USDC' }));
-        expect(store.getState().landingOrderForm.amount).toEqual('1000000');
-        expect(screen.getByRole('textbox', { name: 'Amount' })).toHaveValue(
-            '1'
-        );
+        await waitFor(() => {
+            expect(store.getState().landingOrderForm.amount).toEqual('1000000');
+            expect(screen.getByRole('textbox', { name: 'Amount' })).toHaveValue(
+                '1'
+            );
+        });
     });
 
     it('should not reset the amount when the user change the maturity', async () => {
@@ -42,12 +44,14 @@ describe('Advanced Lending Component', () => {
         );
         fireEvent.click(screen.getByRole('button', { name: 'DEC22' }));
         fireEvent.click(screen.getByText('MAR23'));
-        expect(store.getState().landingOrderForm.amount).toEqual(
-            '1000000000000000000'
-        );
-        expect(screen.getByRole('textbox', { name: 'Amount' })).toHaveValue(
-            '1'
-        );
+        await waitFor(() => {
+            expect(store.getState().landingOrderForm.amount).toEqual(
+                '1000000000000000000'
+            );
+            expect(screen.getByRole('textbox', { name: 'Amount' })).toHaveValue(
+                '1'
+            );
+        });
     });
 
     it('should show the maturity as a date for the selected maturity', async () => {
@@ -110,5 +114,17 @@ describe('Advanced Lending Component', () => {
         expect(
             within(screen.getByLabelText('24h Volume')).getByText('-')
         ).toBeInTheDocument();
+    });
+
+    it('should only show the orders of the user related to orderbook', async () => {
+        await waitFor(() =>
+            render(<ConnectedToWallet />, {
+                apolloMocks: Default.parameters?.apolloClient.mocks,
+            })
+        );
+        fireEvent.click(screen.getByRole('tab', { name: 'Open Orders' }));
+
+        const openOrders = await screen.findAllByRole('row');
+        expect(openOrders).toHaveLength(1);
     });
 });

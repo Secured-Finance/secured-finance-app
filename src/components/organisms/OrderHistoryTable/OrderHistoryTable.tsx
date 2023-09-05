@@ -9,17 +9,16 @@ import {
 import { useBreakpoint, useEtherscanUrl } from 'src/hooks';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { RootState } from 'src/store/types';
-import { OrderList } from 'src/types';
+import { Order, OrderHistoryList } from 'src/types';
 import {
     amountColumnDefinition,
     contractColumnDefinition,
     dateAndTimeColumnDefinition,
+    inputAmountColumnDefinition,
+    inputPriceYieldColumnDefinition,
     loanTypeColumnDefinition,
-    priceYieldColumnDefinition,
     tableHeaderDefinition,
 } from 'src/utils/tableDefinitions';
-
-export type Order = OrderList[0];
 
 const columnHelper = createColumnHelper<Order>();
 
@@ -38,7 +37,7 @@ export const OrderHistoryTable = ({
     data,
     pagination,
 }: {
-    data: OrderList;
+    data: OrderHistoryList;
     pagination?: Pagination;
 }) => {
     const priceList = useSelector((state: RootState) => getPriceMap(state));
@@ -49,11 +48,11 @@ export const OrderHistoryTable = ({
         () => [
             loanTypeColumnDefinition(columnHelper, 'Type', 'type'),
             contractColumnDefinition(columnHelper, 'Contract', 'contract'),
-            priceYieldColumnDefinition(
+            inputPriceYieldColumnDefinition(
                 columnHelper,
                 'Price',
                 'price',
-                row => row.unitPrice
+                row => row.inputUnitPrice
             ),
             amountColumnDefinition(
                 columnHelper,
@@ -62,11 +61,11 @@ export const OrderHistoryTable = ({
                 row => row.filledAmount,
                 { compact: false, color: true, priceList: priceList }
             ),
-            amountColumnDefinition(
+            inputAmountColumnDefinition(
                 columnHelper,
                 'Amount',
                 'amount',
-                row => row.amount,
+                row => row.inputAmount,
                 { compact: false, color: true, priceList: priceList }
             ),
             columnHelper.accessor('status', {

@@ -1,8 +1,9 @@
 import { useQuery } from '@tanstack/react-query';
 import { BigNumber } from 'ethers';
+import { QueryKeys } from 'src/hooks/queries';
+import useSF from 'src/hooks/useSecuredFinance';
 import { CurrencySymbol, toCurrency } from 'src/utils';
 import { LoanValue } from 'src/utils/entities';
-import useSF from '../useSecuredFinance';
 
 interface SmartContractOrderbook {
     unitPrices: BigNumber[];
@@ -90,7 +91,7 @@ export const useOrderbook = (
     const securedFinance = useSF();
 
     return useQuery({
-        queryKey: ['getOrderbook', ccy, maturity, limit],
+        queryKey: [QueryKeys.ORDER_BOOK, ccy, maturity, limit],
         queryFn: async () => {
             const currency = toCurrency(ccy);
             const [borrowOrderbook, lendOrderbook] = await Promise.all([

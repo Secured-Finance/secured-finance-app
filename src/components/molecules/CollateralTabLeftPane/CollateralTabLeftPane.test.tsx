@@ -1,7 +1,7 @@
 import { composeStories } from '@storybook/react';
+import { emptyCollateralBook } from 'src/hooks';
 import {
     collateralBook80,
-    emptyCollateralBook,
     emptyUSDCollateral,
 } from 'src/stories/mocks/fixtures';
 import { fireEvent, render, screen } from 'src/test-utils.js';

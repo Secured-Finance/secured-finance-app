@@ -11,7 +11,7 @@ describe('OrderHistoryTable Component', () => {
     it('should render a Order History Table', () => {
         render(<Default />);
         expect(screen.getAllByTestId('order-history-table-row')).toHaveLength(
-            11
+            12
         );
     });
 
@@ -49,7 +49,7 @@ describe('OrderHistoryTable Component', () => {
     it('should not load more data when scrolled if pagination is not available', async () => {
         await waitFor(() => render(<Default />));
         expect(screen.getAllByTestId('order-history-table-row')).toHaveLength(
-            11
+            12
         );
         await waitFor(async () => {
             fireEvent.scroll(window, { target: { scrollTop: 100 } });
@@ -59,7 +59,7 @@ describe('OrderHistoryTable Component', () => {
             expect(screen.queryByText('Loading...')).not.toBeInTheDocument();
             expect(
                 screen.queryAllByTestId('order-history-table-row')
-            ).toHaveLength(11);
+            ).toHaveLength(12);
         });
     });
 
@@ -77,7 +77,7 @@ describe('OrderHistoryTable Component', () => {
             )
         );
         expect(screen.getAllByTestId('order-history-table-row')).toHaveLength(
-            11
+            12
         );
         await waitFor(async () => {
             fireEvent.scroll(window, { target: { scrollTop: 100 } });
@@ -88,7 +88,7 @@ describe('OrderHistoryTable Component', () => {
             expect(getMoreData).not.toBeCalled();
             expect(
                 screen.getAllByTestId('order-history-table-row')
-            ).toHaveLength(11);
+            ).toHaveLength(12);
         });
     });
 });

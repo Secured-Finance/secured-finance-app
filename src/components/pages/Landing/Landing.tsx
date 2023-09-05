@@ -11,6 +11,7 @@ import {
 import { SimpleAdvancedView } from 'src/components/templates';
 import {
     RateType,
+    emptyCollateralBook,
     useCollateralBook,
     useGraphClientHook,
     useLoanValues,
@@ -45,7 +46,9 @@ export const Landing = ({ view }: { view?: ViewType }) => {
     );
     const dispatch = useDispatch();
 
-    const collateralBook = useCollateralBook(address);
+    const { data: collateralBook = emptyCollateralBook } =
+        useCollateralBook(address);
+
     const maturityOptionList = useMaturityOptions(
         lendingContracts,
         market => market.isOpened
