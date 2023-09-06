@@ -4,7 +4,6 @@ import {
     withAppLayout,
     withAssetPrice,
     withChainErrorDisabled,
-    withMaturities,
     withWalletProvider,
 } from 'src/../.storybook/decorators';
 import { Itayose } from './Itayose';
@@ -19,7 +18,6 @@ export default {
     },
     decorators: [
         withAppLayout,
-        withMaturities,
         withAssetPrice,
         withWalletProvider,
         withChainErrorDisabled,

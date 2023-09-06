@@ -14,9 +14,8 @@ import {
     WalletSourceSelector,
 } from 'src/components/atoms';
 import { OrderAction } from 'src/components/organisms';
-import { CollateralBook } from 'src/hooks';
+import { CollateralBook, useBalances, useMarket } from 'src/hooks';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
-import { selectMarket } from 'src/store/availableContracts';
 import {
     resetUnitPrice,
     selectLandingOrderForm,
@@ -27,7 +26,6 @@ import {
     setUnitPrice,
 } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
-import { selectAllBalances } from 'src/store/wallet';
 import { OrderSideMap, OrderType, OrderTypeOptions } from 'src/types';
 import {
     MAX_COVERAGE,
@@ -67,9 +65,7 @@ export const AdvancedLendingOrderCard = ({
     );
     const [sliderValue, setSliderValue] = useState(0.0);
 
-    const balanceRecord = useSelector((state: RootState) =>
-        selectAllBalances(state)
-    );
+    const balanceRecord = useBalances();
 
     const loanValue = useMemo(() => {
         if (!maturity) return LoanValue.ZERO;
@@ -90,9 +86,7 @@ export const AdvancedLendingOrderCard = ({
     const priceList = useSelector((state: RootState) => getPriceMap(state));
     const price = priceList[currency];
 
-    const market = useSelector((state: RootState) =>
-        selectMarket(currency, maturity)(state)
-    );
+    const market = useMarket(currency, maturity);
 
     const slippage = useMemo(() => {
         if (!market) {

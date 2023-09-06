@@ -6,8 +6,7 @@ import {
     withAppLayout,
     withAssetPrice,
     withChainErrorDisabled,
-    withMaturities,
-    withWalletBalances,
+    withEthBalance,
     withWalletProvider,
 } from 'src/../.storybook/decorators';
 import { mockDailyVolumes } from 'src/stories/mocks/queries';
@@ -64,8 +63,7 @@ export default {
     decorators: [
         withAppLayout,
         withWalletProvider,
-        withWalletBalances,
-        withMaturities,
+        withEthBalance,
         withAssetPrice,
         withChainErrorDisabled,
     ],
