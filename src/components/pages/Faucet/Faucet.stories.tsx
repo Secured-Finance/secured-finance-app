@@ -4,7 +4,7 @@ import {
     withAppLayout,
     withAssetPrice,
     withChainErrorDisabled,
-    withWalletBalances,
+    withEthBalance,
     withWalletProvider,
 } from 'src/../.storybook/decorators';
 import { Faucet } from './Faucet';
@@ -15,7 +15,7 @@ export default {
     args: {},
     decorators: [
         withAppLayout,
-        withWalletBalances,
+        withEthBalance,
         withAssetPrice,
         withWalletProvider,
         withChainErrorDisabled,
