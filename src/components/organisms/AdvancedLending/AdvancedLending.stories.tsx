@@ -1,9 +1,5 @@
 import { RESPONSIVE_PARAMETERS } from '.storybook/constants';
-import {
-    withAssetPrice,
-    withFullPage,
-    withWalletProvider,
-} from '.storybook/decorators';
+import { withAssetPrice, withWalletProvider } from '.storybook/decorators';
 import type { Meta, StoryFn } from '@storybook/react';
 import { within } from '@storybook/testing-library';
 import {
@@ -33,7 +29,7 @@ export default {
             delay: 5000,
         },
     },
-    decorators: [withFullPage, withAssetPrice, withWalletProvider],
+    decorators: [withAssetPrice, withWalletProvider],
 } as Meta<typeof AdvancedLending>;
 
 const Template: StoryFn<typeof AdvancedLending> = args => {

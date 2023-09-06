@@ -144,12 +144,6 @@ export const withMockDate = (Story: StoryFn, context: StoryContext) => {
     return <Story />;
 };
 
-export const withFullPage = (Story: StoryFn) => (
-    <div className='h-[1500px] pb-10'>
-        <Story />
-    </div>
-);
-
 export const withEthBalance = (Story: StoryFn) => {
     const dispatch = useDispatch();
     useEffect(() => {
