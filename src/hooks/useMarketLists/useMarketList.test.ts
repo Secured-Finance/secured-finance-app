@@ -5,9 +5,13 @@ import { useMarketLists } from './useMarketList';
 const mockSecuredFinance = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mockSecuredFinance);
 
-describe.skip('useMarketLists', () => {
-    it('should return open and itayose markets correctly', () => {
-        const { result } = renderHook(() => useMarketLists());
+describe('useMarketList', () => {
+    it('should return open and itayose markets correctly', async () => {
+        const { result, waitForNextUpdate } = renderHook(() =>
+            useMarketLists()
+        );
+
+        await waitForNextUpdate();
 
         expect(result.current.openMarkets).toHaveLength(32);
         expect(result.current.itayoseMarkets).toHaveLength(4);

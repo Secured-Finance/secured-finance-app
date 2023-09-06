@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { utils } from 'ethers';
 import { CurrencySymbol, getCurrencyMapAsList } from 'src/utils';
 import {
@@ -9,32 +10,36 @@ import {
 export const useMarketLists = () => {
     const { data: lendingContracts = baseContracts } = useLendingMarkets();
 
-    const openMarkets: Market[] = [];
-    const itayoseMarkets: Market[] = [];
+    const marketLists = useMemo(() => {
+        const openMarkets: Market[] = [];
+        const itayoseMarkets: Market[] = [];
 
-    for (const ccy of getCurrencyMapAsList()) {
-        for (const maturity of Object.keys(lendingContracts[ccy.symbol])) {
-            const contract = lendingContracts[ccy.symbol][Number(maturity)];
-            if (contract.isMatured) continue;
+        for (const ccy of getCurrencyMapAsList()) {
+            for (const maturity of Object.keys(lendingContracts[ccy.symbol])) {
+                const contract = lendingContracts[ccy.symbol][Number(maturity)];
+                if (contract.isMatured) continue;
 
-            const isItayoseOrPreOrder =
-                contract.isItayosePeriod || contract.isPreOrderPeriod;
+                const isItayoseOrPreOrder =
+                    contract.isItayosePeriod || contract.isPreOrderPeriod;
 
-            const market = {
-                ...contract,
-                ccy: ccy.symbol,
-                currency: utils.formatBytes32String(ccy.symbol),
-            };
+                const market = {
+                    ...contract,
+                    ccy: ccy.symbol,
+                    currency: utils.formatBytes32String(ccy.symbol),
+                };
 
-            if (isItayoseOrPreOrder) {
-                itayoseMarkets.push(market);
-            } else {
-                openMarkets.push(market);
+                if (isItayoseOrPreOrder) {
+                    itayoseMarkets.push(market);
+                } else {
+                    openMarkets.push(market);
+                }
             }
         }
-    }
 
-    return { openMarkets, itayoseMarkets };
+        return { openMarkets, itayoseMarkets };
+    }, [lendingContracts]);
+
+    return marketLists;
 };
 
 export type Market = LendingMarket & {
