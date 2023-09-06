@@ -9,7 +9,7 @@ const { Default } = composeStories(stories);
 const mock = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mock);
 
-describe.skip('MarketLoanWidget Component', () => {
+describe('MarketLoanWidget Component', () => {
     it('should filter by currency', () => {
         render(<Default />);
         expect(screen.queryByText('WBTC')).toBeInTheDocument();
@@ -18,18 +18,23 @@ describe.skip('MarketLoanWidget Component', () => {
         expect(screen.queryByText('WBTC')).not.toBeInTheDocument();
     });
 
-    it('should filter by maturity', () => {
+    it('should filter by maturity', async () => {
         render(<Default />);
-        expect(screen.getAllByText('Dec 1, 2022').length).toEqual(4);
-        screen.getByRole('button', { name: 'DEC22' }).click();
-        screen.getByRole('menuitem', { name: 'JUN23' }).click();
+        await waitFor(() => {
+            expect(screen.getAllByText('Dec 1, 2022').length).toEqual(4);
+            screen.getByRole('button', { name: 'DEC22' }).click();
+            screen.getByRole('menuitem', { name: 'JUN23' }).click();
+        });
         expect(screen.queryByText('Dec 1, 2022')).not.toBeInTheDocument();
         expect(screen.getAllByText('Jun 1, 2023').length).toEqual(4);
     });
 
-    it('should dedupe maturity and add a "All" option', () => {
+    it('should dedupe maturity and add a "All" option', async () => {
         render(<Default />);
-        screen.getByRole('button', { name: 'DEC22' }).click();
+        await waitFor(() => {
+            screen.getByRole('button', { name: 'DEC22' }).click();
+        });
+
         expect(screen.getAllByRole('menuitem').length).toBe(9);
         expect(screen.queryByText('All')).toBeInTheDocument();
     });
@@ -43,11 +48,11 @@ describe.skip('MarketLoanWidget Component', () => {
     it('should hide the APR column when the market is in pre-order', async () => {
         render(<Default />);
         const button = screen.getByText('Pre-Open');
+        fireEvent.click(button);
         await waitFor(() => {
-            fireEvent.click(button);
+            expect(screen.queryAllByText('Dec 1, 2024')).toHaveLength(4);
         });
 
-        expect(screen.queryAllByText('Dec 1, 2024')).toHaveLength(4);
         expect(screen.queryByText('APR')).not.toBeInTheDocument();
         expect(screen.queryByText('Market Open')).toBeInTheDocument();
     });

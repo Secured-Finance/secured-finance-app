@@ -45,7 +45,9 @@ export const Tab: React.FC<TabProps> = ({ tabDataArray, children }) => {
                             );
                         })}
                     </HeadlessTab.List>
-                    {util && <div className='col-span-1'>{util}</div>}
+                    {util && (
+                        <div className='col-span-1 h-full w-full'>{util}</div>
+                    )}
                 </div>
                 <HeadlessTab.Panels>
                     {arrayChildren[selectedIndex]}

@@ -15,10 +15,10 @@ import {
 } from 'src/components/organisms';
 import { Page, TwoColumns } from 'src/components/templates';
 import {
+    RateType,
     baseContracts,
     emptyCollateralBook,
     emptyValueLockedBook,
-    RateType,
     useCollateralBook,
     useGraphClientHook,
     useLendingMarkets,
@@ -29,17 +29,17 @@ import {
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { RootState } from 'src/store/types';
 import {
-    computeTotalDailyVolumeInUSD,
-    currencyMap,
     CurrencySymbol,
     Environment,
+    PREVIOUS_TOTAL_USERS,
+    Rate,
+    WalletSource,
+    computeTotalDailyVolumeInUSD,
+    currencyMap,
     getCurrencyMapAsList,
     getEnvironment,
     ordinaryFormat,
-    PREVIOUS_TOTAL_USERS,
-    Rate,
     usdFormat,
-    WalletSource,
 } from 'src/utils';
 import { useAccount } from 'wagmi';
 
