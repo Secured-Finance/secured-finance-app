@@ -1,7 +1,7 @@
 import { OrderSide } from '@secured-finance/sf-client';
 import queries from '@secured-finance/sf-graph-client/dist/graphclients';
 import { useMemo } from 'react';
-import { shallowEqual, useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { ViewType } from 'src/components/atoms';
 import {
     AdvancedLending,
@@ -11,9 +11,11 @@ import {
 import { SimpleAdvancedView } from 'src/components/templates';
 import {
     RateType,
+    baseContracts,
     emptyCollateralBook,
     useCollateralBook,
     useGraphClientHook,
+    useLendingMarkets,
     useLoanValues,
     useMaturityOptions,
 } from 'src/hooks';
@@ -40,10 +42,8 @@ export const Landing = ({ view }: { view?: ViewType }) => {
     const { currency, side, maturity, lastView } = useSelector(
         (state: RootState) => selectLandingOrderForm(state.landingOrderForm)
     );
-    const lendingContracts = useSelector(
-        (state: RootState) => state.availableContracts.lendingMarkets[currency],
-        shallowEqual
-    );
+    const { data: lendingMarkets = baseContracts } = useLendingMarkets();
+    const lendingContracts = lendingMarkets[currency];
     const dispatch = useDispatch();
 
     const { data: collateralBook = emptyCollateralBook } =

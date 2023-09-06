@@ -14,10 +14,10 @@ import {
     useCollateralBook,
     useEtherscanUrl,
     useHandleContractTransaction,
+    useMarket,
     useOrders,
 } from 'src/hooks';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
-import { selectMarket } from 'src/store/availableContracts';
 import { setLastMessage } from 'src/store/lastError';
 import { RootState } from 'src/store/types';
 import { AddressUtils, CurrencySymbol } from 'src/utils';
@@ -118,9 +118,7 @@ export const UnwindDialog = ({
     const priceList = useSelector((state: RootState) => getPriceMap(state));
     const price = priceList[amount.currency];
 
-    const market = useSelector((state: RootState) =>
-        selectMarket(amount.currency, maturity.toNumber())(state)
-    );
+    const market = useMarket(amount.currency, maturity.toNumber());
 
     const marketValue = useMemo(() => {
         if (!market) {

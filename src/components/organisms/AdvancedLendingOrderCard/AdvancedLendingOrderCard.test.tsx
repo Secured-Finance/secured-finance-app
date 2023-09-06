@@ -2,11 +2,8 @@ import { OrderSide } from '@secured-finance/sf-client';
 import { composeStories } from '@storybook/react';
 import { BigNumber } from 'ethers';
 import { CollateralBook } from 'src/hooks';
-import {
-    dec22Fixture,
-    preloadedAssetPrices,
-    preloadedLendingMarkets,
-} from 'src/stories/mocks/fixtures';
+import { dec22Fixture, preloadedAssetPrices } from 'src/stories/mocks/fixtures';
+import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
 import { OrderType } from 'src/types';
 import { CurrencySymbol } from 'src/utils';
@@ -25,9 +22,8 @@ const preloadedState = {
         orderType: OrderType.LIMIT,
     },
     wallet: {
-        balances: { [CurrencySymbol.USDC]: 10000, [CurrencySymbol.WFIL]: 5000 },
+        address: '0x1',
     },
-    ...preloadedLendingMarkets,
     ...preloadedAssetPrices,
 };
 
@@ -35,14 +31,14 @@ const collateralBook0: CollateralBook = {
     collateral: {
         ETH: BigNumber.from('1000000000000000000'),
         USDC: BigNumber.from('10000000'),
+        WBTC: BigNumber.from('20000000'),
     },
     nonCollateral: {
         WFIL: BigNumber.from('100000000000000000000'),
-        WBTC: BigNumber.from('20000000'),
     },
-    usdCollateral: 23000,
-    usdNonCollateral: 10600,
-    coverage: BigNumber.from('0000'),
+    usdCollateral: 12100.34,
+    usdNonCollateral: 600,
+    coverage: BigNumber.from('0'),
     collateralThreshold: 80,
     withdrawableCollateral: {
         [CurrencySymbol.USDC]: BigNumber.from(100000),
@@ -56,6 +52,9 @@ beforeEach(() => {
         dateString: '2022-02-01T11:00:00.00Z',
     });
 });
+
+const mockSecuredFinance = mockUseSF();
+jest.mock('src/hooks/useSecuredFinance', () => () => mockSecuredFinance);
 
 describe('AdvancedLendingOrderCard Component', () => {
     const changeInputValue = (label: string, value: string) => {
@@ -121,9 +120,11 @@ describe('AdvancedLendingOrderCard Component', () => {
 
     it('should display the PlaceOrder Dialog when clicking on the Place Order button', async () => {
         render(<Default />, { preloadedState });
-        await waitFor(() =>
-            expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
-        );
+        expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+        expect(
+            await screen.findByTestId('place-order-button')
+        ).toBeInTheDocument();
+        expect(await screen.findByText('Place Order')).toBeEnabled();
         screen.getByTestId('place-order-button').click();
         expect(
             screen.getByRole('dialog', {
@@ -185,10 +186,8 @@ describe('AdvancedLendingOrderCard Component', () => {
         render(<Default />, { preloadedState });
         const lendTab = screen.getByText('Lend');
         fireEvent.click(lendTab);
-        await waitFor(() =>
-            expect(screen.getByText('Lending Source')).toBeInTheDocument()
-        );
-        expect(screen.getByText('10,000')).toBeInTheDocument();
+        expect(screen.getByText('Lending Source')).toBeInTheDocument();
+        expect(await screen.findByText('4,000')).toBeInTheDocument();
 
         const walletSourceButton = screen.getByTestId(
             'wallet-source-selector-button'
@@ -213,12 +212,10 @@ describe('AdvancedLendingOrderCard Component', () => {
             },
         });
 
-        await waitFor(() => {
-            const walletSourceButton = screen.getByTestId(
-                'wallet-source-selector-button'
-            );
-            fireEvent.click(walletSourceButton);
-        });
+        const walletSourceButton = screen.getByTestId(
+            'wallet-source-selector-button'
+        );
+        fireEvent.click(walletSourceButton);
 
         expect(screen.getByText('SF Vault')).toBeInTheDocument();
         const option = screen.getByTestId('option-1');
@@ -250,6 +247,10 @@ describe('AdvancedLendingOrderCard Component', () => {
         const input = screen.getByRole('textbox', { name: 'Amount' });
         fireEvent.change(input, { target: { value: '50' } });
 
+        expect(
+            await screen.findByTestId('wallet-source-selector-button')
+        ).toBeInTheDocument();
+
         const walletSourceButton = screen.getByTestId(
             'wallet-source-selector-button'
         );
@@ -278,12 +279,12 @@ describe('AdvancedLendingOrderCard Component', () => {
         const slider = screen.getByRole('slider');
         const input = screen.getByRole('textbox', { name: 'Amount' });
 
-        expect(screen.getByText('0xB98b...Fd6D')).toBeInTheDocument();
+        expect(await screen.findByText('0xB98b...Fd6D')).toBeInTheDocument();
         expect(input).toHaveValue('0.0000');
         fireEvent.change(slider, { target: { value: 100 } });
-        expect(input).toHaveValue('5,000');
+        expect(input).toHaveValue('10,000');
         fireEvent.change(slider, { target: { value: 1 } });
-        expect(input).toHaveValue('50');
+        expect(input).toHaveValue('100');
 
         const walletSourceButton = screen.getByTestId(
             'wallet-source-selector-button'
@@ -293,8 +294,8 @@ describe('AdvancedLendingOrderCard Component', () => {
         expect(screen.getByText('SF Vault')).toBeInTheDocument();
         const option = screen.getByTestId('option-1');
         fireEvent.click(option);
-        expect(input).toHaveValue('50');
-        expect(slider).toHaveValue('50');
+        expect(input).toHaveValue('100');
+        expect(slider).toHaveValue('100');
         fireEvent.change(slider, { target: { value: 10 } });
         expect(input).toHaveValue('10');
         fireEvent.change(slider, { target: { value: 50 } });
@@ -318,10 +319,10 @@ describe('AdvancedLendingOrderCard Component', () => {
         const slider = screen.getByRole('slider');
         const input = screen.getByRole('textbox', { name: 'Amount' });
 
-        expect(screen.getByText('0xB98b...Fd6D')).toBeInTheDocument();
+        expect(await screen.findByText('0xB98b...Fd6D')).toBeInTheDocument();
         expect(input).toHaveValue('0.0000');
         fireEvent.change(slider, { target: { value: 100 } });
-        expect(input).toHaveValue('5,000');
+        expect(input).toHaveValue('10,000');
 
         const walletSourceButton = screen.getByTestId(
             'wallet-source-selector-button'
@@ -383,8 +384,9 @@ describe('AdvancedLendingOrderCard Component', () => {
             fireEvent.change(input, { target: { value: '1000' } });
         });
 
-        const button = screen.getByTestId('place-order-button');
-        expect(button).not.toBeDisabled();
+        await waitFor(() =>
+            expect(screen.getByTestId('place-order-button')).not.toBeDisabled()
+        );
     });
 
     describe('Error handling for invalid bond price in different order types and sides', () => {
@@ -422,6 +424,9 @@ describe('AdvancedLendingOrderCard Component', () => {
                         },
                     },
                 });
+                expect(
+                    await screen.findByText('Place Order')
+                ).toBeInTheDocument();
 
                 changeInputValue('Bond Price', '0');
                 changeInputValue('Amount', '10');
@@ -444,7 +449,7 @@ describe('AdvancedLendingOrderCard Component', () => {
                         },
                     },
                 });
-
+                expect(await screen.findByText('4,000')).toBeInTheDocument();
                 changeInputValue('Bond Price', '0');
                 changeInputValue('Amount', '10');
                 assertPlaceOrderButtonIsDisabled();
@@ -508,6 +513,9 @@ describe('AdvancedLendingOrderCard Component', () => {
                         },
                     },
                 });
+                expect(
+                    await screen.findByText('Place Order')
+                ).toBeInTheDocument();
 
                 changeInputValue('Amount', '10');
                 assertPlaceOrderButtonIsEnabled();
@@ -525,7 +533,7 @@ describe('AdvancedLendingOrderCard Component', () => {
                         },
                     },
                 });
-
+                expect(await screen.findByText('4,000')).toBeInTheDocument();
                 changeInputValue('Amount', '10');
                 assertPlaceOrderButtonIsEnabled();
                 assertInvalidBondPriceErrorIsNotShown();
@@ -542,7 +550,9 @@ describe('AdvancedLendingOrderCard Component', () => {
                         },
                     },
                 });
-
+                expect(
+                    await screen.findByText('Place Order')
+                ).toBeInTheDocument();
                 changeInputValue('Amount', '10');
                 assertPlaceOrderButtonIsEnabled();
                 assertInvalidBondPriceErrorIsNotShown();

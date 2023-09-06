@@ -1,7 +1,6 @@
 import {
     withAssetPrice,
-    withMaturities,
-    withWalletBalances,
+    withEthBalance,
     withWalletProvider,
 } from '.storybook/decorators';
 import { OrderSide } from '@secured-finance/sf-client';
@@ -33,12 +32,7 @@ export default {
         loanValue: LoanValue.fromPrice(9800, dec22Fixture.toNumber()),
         validation: false,
     },
-    decorators: [
-        withMaturities,
-        withWalletBalances,
-        withAssetPrice,
-        withWalletProvider,
-    ],
+    decorators: [withEthBalance, withAssetPrice, withWalletProvider],
     argTypes: {
         collateralBook: {
             options: [

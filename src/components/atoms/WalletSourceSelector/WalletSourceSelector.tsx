@@ -1,7 +1,7 @@
 import { Listbox, Transition } from '@headlessui/react';
 import { WalletSource } from '@secured-finance/sf-client';
 import classNames from 'classnames';
-import { Fragment, useMemo, useState } from 'react';
+import { Fragment, useMemo } from 'react';
 import { ExpandIndicator, Separator } from 'src/components/atoms';
 import { SvgIcon } from 'src/types';
 import { AddressUtils, CurrencySymbol, ordinaryFormat } from 'src/utils';
@@ -40,7 +40,6 @@ export const WalletSourceSelector = ({
     account,
     onChange,
 }: WalletSourceSelectorProps) => {
-    const [selectedValue, setSelectedValue] = useState(selected);
     const list = useMemo(
         () =>
             optionList.filter(
@@ -51,8 +50,8 @@ export const WalletSourceSelector = ({
     );
 
     const selectedOption = useMemo(
-        () => list.find(o => o === selectedValue) || list[0],
-        [list, selectedValue]
+        () => list.find(o => o === selected) || list[0],
+        [list, selected]
     );
 
     return (
@@ -64,10 +63,7 @@ export const WalletSourceSelector = ({
             <div className='w-full'>
                 <Listbox
                     value={selectedOption}
-                    onChange={v => {
-                        setSelectedValue(v);
-                        onChange(v.source);
-                    }}
+                    onChange={v => onChange(v.source)}
                     disabled={!account}
                 >
                     {({ open }) => (

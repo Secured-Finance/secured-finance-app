@@ -13,20 +13,6 @@ export const emptyValueLockedBook: ValueLockedBook = {
     [CurrencySymbol.WBTC]: ZERO_BN,
 };
 
-export const useTotalNumberOfAsset = () => {
-    const securedFinance = useSF();
-
-    return useQuery({
-        queryKey: [QueryKeys.CURRENCIES],
-        queryFn: async () => {
-            const currencies = await securedFinance?.getCurrencies();
-            return currencies ?? [];
-        },
-        select: currencies => currencies.length,
-        enabled: !!securedFinance,
-    });
-};
-
 export const useValueLockedByCurrency = () => {
     const securedFinance = useSF();
 
