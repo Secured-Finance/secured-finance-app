@@ -1,14 +1,14 @@
 import { utils } from 'ethers';
-import { shallowEqual, useSelector } from 'react-redux';
-import { RootState } from 'src/store/types';
 import { CurrencySymbol, getCurrencyMapAsList } from 'src/utils';
-import { LendingMarket } from '../useLendingMarkets';
+import {
+    baseContracts,
+    LendingMarket,
+    useLendingMarkets,
+} from '../useLendingMarkets';
 
 export const useMarketLists = () => {
-    const lendingContracts = useSelector(
-        (state: RootState) => state.availableContracts.lendingMarkets,
-        shallowEqual
-    );
+    const { data: lendingContracts = baseContracts } = useLendingMarkets();
+
     const openMarkets: Market[] = [];
     const itayoseMarkets: Market[] = [];
 

@@ -1,8 +1,7 @@
-import { SecuredFinanceClient } from '@secured-finance/sf-client';
+import { BigNumber } from 'ethers';
+import { maturities } from 'src/stories/mocks/fixtures';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { renderHook } from 'src/test-utils';
-import { CurrencySymbol } from 'src/utils';
-import { Maturity } from 'src/utils/entities';
 import timemachine from 'timemachine';
 import { useLendingMarkets } from './useLendingMarkets';
 
@@ -18,92 +17,39 @@ jest.mock('src/hooks/useSecuredFinance', () => () => mock);
 
 describe('useLendingMarkets', () => {
     it('should return a function to fetch the lending markets', async () => {
-        const { result } = renderHook(() => useLendingMarkets());
-        expect(result.current.fetchLendingMarkets).toBeInstanceOf(Function);
-    });
-
-    it('should insert the lending markets in the store', async () => {
-        const { result, store } = renderHook(() => useLendingMarkets());
-        const fetchLendingMarkets = result.current.fetchLendingMarkets;
-        await fetchLendingMarkets(
-            CurrencySymbol.WFIL,
-            mock as unknown as SecuredFinanceClient
+        const { result, waitForNextUpdate } = renderHook(() =>
+            useLendingMarkets()
         );
-        expect(
-            Object.keys(
-                store.getState().availableContracts.lendingMarkets[
-                    CurrencySymbol.WFIL
-                ]
-            )
-        ).toHaveLength(2);
-        expect(
-            store.getState().availableContracts.lendingMarkets[
-                CurrencySymbol.WFIL
-            ]
-        ).toEqual({
-            1000: {
-                isActive: true,
-                maturity: 1000,
-                name: 'ETH-1000',
-                utcOpeningDate: 1620000000,
-                midUnitPrice: 100,
-                preOpenDate: 1447200000,
-                openingUnitPrice: 9686,
-                isReady: true,
-                isOpened: true,
-                isMatured: false,
-                isPreOrderPeriod: false,
-                isItayosePeriod: false,
-                bestBorrowUnitPrice: 9620,
-                bestLendUnitPrice: 9618,
-                minBorrowUnitPrice: 9602,
-                maxLendUnitPrice: 9636,
-            },
-            2000: {
-                isActive: false,
-                maturity: 2000,
-                name: 'ETH-2000',
-                utcOpeningDate: 1720000000,
-                midUnitPrice: 100,
-                preOpenDate: 1547200000,
-                openingUnitPrice: 9786,
-                isReady: true,
-                isOpened: true,
-                isMatured: false,
-                isPreOrderPeriod: false,
-                isItayosePeriod: false,
-                bestBorrowUnitPrice: 9610,
-                bestLendUnitPrice: 9608,
-                minBorrowUnitPrice: 9592,
-                maxLendUnitPrice: 9626,
-            },
+        const value = result.current;
+        expect(value.data).toEqual(undefined);
+        expect(value.isLoading).toEqual(true);
+
+        await waitForNextUpdate();
+
+        expect(mock.getOrderBookDetails).toHaveBeenCalledTimes(1);
+        const newValue = result.current;
+        expect(newValue.data).toEqual({
+            ETH: maturities,
+            USDC: maturities,
+            WBTC: maturities,
+            WFIL: maturities,
         });
+        expect(newValue.isLoading).toEqual(false);
     });
 
     it('should increment the name of the contract if it already exists', async () => {
-        const lendingMarkets = await mock.getOrderBookDetailsPerCurrency();
-        mock.getOrderBookDetailsPerCurrency.mockResolvedValueOnce([
+        const lendingMarkets = await mock.getOrderBookDetails();
+        mock.getOrderBookDetails.mockResolvedValueOnce([
             ...lendingMarkets,
-            { ...lendingMarkets[0], maturity: new Maturity(10000) },
+            { ...lendingMarkets[0], maturity: BigNumber.from('10000') },
         ]);
 
-        const { result, store } = renderHook(() => useLendingMarkets());
-        const fetchLendingMarkets = result.current.fetchLendingMarkets;
-        await fetchLendingMarkets(
-            CurrencySymbol.WFIL,
-            mock as unknown as SecuredFinanceClient
+        const { result, waitForNextUpdate } = renderHook(() =>
+            useLendingMarkets()
         );
-        expect(
-            Object.keys(
-                store.getState().availableContracts.lendingMarkets[
-                    CurrencySymbol.WFIL
-                ]
-            )
-        ).toHaveLength(3);
-        expect(
-            store.getState().availableContracts.lendingMarkets[
-                CurrencySymbol.WFIL
-            ][10000].name
-        ).toEqual('ETH-1000-1');
+        await waitForNextUpdate();
+        const newValue = result.current;
+
+        expect(newValue.data.ETH[10000].name).toEqual('DEC22-1');
     });
 });

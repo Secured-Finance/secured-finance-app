@@ -1,7 +1,7 @@
 import queries from '@secured-finance/sf-graph-client/dist/graphclients';
 import { BigNumber } from 'ethers';
 import { useMemo } from 'react';
-import { shallowEqual, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import {
     CollateralManagementConciseTab,
     GradientBox,
@@ -15,11 +15,13 @@ import {
 } from 'src/components/organisms';
 import { Page, TwoColumns } from 'src/components/templates';
 import {
-    RateType,
+    baseContracts,
     emptyCollateralBook,
     emptyValueLockedBook,
+    RateType,
     useCollateralBook,
     useGraphClientHook,
+    useLendingMarkets,
     useLoanValues,
     useTotalNumberOfAsset,
     useValueLockedByCurrency,
@@ -27,17 +29,17 @@ import {
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { RootState } from 'src/store/types';
 import {
-    CurrencySymbol,
-    Environment,
-    PREVIOUS_TOTAL_USERS,
-    Rate,
-    WalletSource,
     computeTotalDailyVolumeInUSD,
     currencyMap,
+    CurrencySymbol,
+    Environment,
     getCurrencyMapAsList,
     getEnvironment,
     ordinaryFormat,
+    PREVIOUS_TOTAL_USERS,
+    Rate,
     usdFormat,
+    WalletSource,
 } from 'src/utils';
 import { useAccount } from 'wagmi';
 
@@ -58,10 +60,7 @@ export const MarketDashboard = () => {
         useCollateralBook(address);
 
     const curves: Record<string, Rate[]> = {};
-    const lendingContracts = useSelector(
-        (state: RootState) => state.availableContracts.lendingMarkets,
-        shallowEqual
-    );
+    const { data: lendingContracts = baseContracts } = useLendingMarkets();
 
     getCurrencyMapAsList().forEach(ccy => {
         // eslint-disable-next-line react-hooks/rules-of-hooks
