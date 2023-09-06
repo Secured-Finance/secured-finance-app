@@ -1,4 +1,5 @@
 export * from './queries';
+export * from './useBalances';
 export * from './useBreakpoint';
 export * from './useCollateralBook';
 export * from './useCurrenciesForOrders';
@@ -15,4 +16,5 @@ export * from './useOrderbook';
 export * from './useOrders';
 export * from './usePagination';
 export * from './usePositions';
-export * from './useProtocolInformation';
+export * from './useTotalNumberOfAsset';
+export * from './useValueLockedByCurrency';

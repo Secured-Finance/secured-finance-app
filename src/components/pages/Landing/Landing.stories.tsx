@@ -5,8 +5,7 @@ import {
     withAppLayout,
     withAssetPrice,
     withChainErrorDisabled,
-    withMaturities,
-    withWalletBalances,
+    withEthBalance,
     withWalletProvider,
 } from 'src/../.storybook/decorators';
 import {
@@ -22,9 +21,8 @@ export default {
     component: Landing,
     decorators: [
         withAppLayout,
-        withMaturities,
         withAssetPrice,
-        withWalletBalances,
+        withEthBalance,
         withWalletProvider,
         withChainErrorDisabled,
     ],
@@ -67,5 +65,5 @@ MyOrders.parameters = {
 MyOrders.play = async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     canvas.getByText('Advanced').click();
-    canvas.getByTestId('My Orders').click();
+    canvas.getByTestId('Open Orders').click();
 };

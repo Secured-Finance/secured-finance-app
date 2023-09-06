@@ -1,5 +1,4 @@
 import { RESPONSIVE_PARAMETERS, VIEWPORTS } from '.storybook/constants';
-import { withMaturities } from '.storybook/decorators';
 import type { Meta, StoryFn } from '@storybook/react';
 import { within } from '@storybook/testing-library';
 import { MarketLoanWidget } from './MarketLoanWidget';
@@ -13,7 +12,6 @@ export default {
             viewports: [VIEWPORTS.MOBILE, VIEWPORTS.TABLET],
         },
     },
-    decorators: [withMaturities],
 } as Meta<typeof MarketLoanWidget>;
 
 const Template: StoryFn<typeof MarketLoanWidget> = () => <MarketLoanWidget />;

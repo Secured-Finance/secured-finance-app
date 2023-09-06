@@ -20,11 +20,11 @@ import {
     emptyOrderList,
     useCurrenciesForOrders,
     useGraphClientHook,
+    useMarket,
     useOrderList,
 } from 'src/hooks';
 import { useOrderbook } from 'src/hooks/useOrderbook';
 import { getAssetPrice } from 'src/store/assetPrices/selectors';
-import { selectMarket } from 'src/store/availableContracts';
 import {
     resetUnitPrice,
     selectLandingOrderForm,
@@ -42,6 +42,7 @@ import {
     currencyMap,
     formatLoanValue,
     getCurrencyMapAsOptions,
+    hexToCurrencySymbol,
     ordinaryFormat,
     usdFormat,
 } from 'src/utils';
@@ -116,10 +117,7 @@ export const AdvancedLending = ({
         );
     }, [maturity, maturitiesOptionList]);
 
-    const openingUnitPrice = useSelector(
-        (state: RootState) =>
-            selectMarket(currency, maturity)(state)?.openingUnitPrice
-    );
+    const openingUnitPrice = useMarket(currency, maturity)?.openingUnitPrice;
 
     const orderBook = useOrderbook(currency, maturity, 10);
     const { data: usedCurrencies = [] } = useCurrenciesForOrders(address);
@@ -127,6 +125,14 @@ export const AdvancedLending = ({
         address,
         usedCurrencies
     );
+    const filteredOrderList = useMemo(() => {
+        return orderList.activeOrderList.filter(
+            order =>
+                hexToCurrencySymbol(order.currency) === currency &&
+                order.maturity === maturity.toString()
+        );
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [currency, maturity, JSON.stringify(orderList.activeOrderList)]);
 
     const transactionHistory = useGraphClientHook(
         {
@@ -234,12 +240,12 @@ export const AdvancedLending = ({
                     />
                     <div />
                 </Tab>
-                <HorizontalTab tabTitles={['Order Book', 'My Orders']}>
+                <HorizontalTab tabTitles={['Order Book', 'Open Orders']}>
                     <OrderBookWidget
                         orderbook={orderBook}
                         currency={currency}
                     />
-                    <OrderTable data={orderList.activeOrderList} />
+                    <OrderTable data={filteredOrderList} />
                 </HorizontalTab>
             </div>
         </TwoColumnsWithTopBar>

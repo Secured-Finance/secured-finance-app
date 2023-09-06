@@ -1,5 +1,5 @@
 import { composeStories } from '@storybook/react';
-import { preloadedBalances } from 'src/stories/mocks/fixtures';
+import { preloadedEthBalance } from 'src/stories/mocks/fixtures';
 import { render, waitFor } from 'src/test-utils.js';
 import * as stories from './PortfolioManagement.stories';
 
@@ -24,7 +24,7 @@ describe('PortfolioManagement component', () => {
         waitFor(() =>
             render(<Default />, {
                 apolloMocks: Default.parameters?.apolloClient.mocks,
-                preloadedState: preloadedBalances,
+                preloadedState: preloadedEthBalance,
             })
         );
     });

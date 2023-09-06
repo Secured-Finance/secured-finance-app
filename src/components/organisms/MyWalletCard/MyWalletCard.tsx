@@ -1,12 +1,10 @@
 import { useMemo } from 'react';
-import { useSelector } from 'react-redux';
 import { GradientBox, Separator } from 'src/components/atoms';
 import {
     AssetDisclosure,
     AssetDisclosureProps,
 } from 'src/components/molecules';
-import { RootState } from 'src/store/types';
-import { selectAllBalances } from 'src/store/wallet';
+import { useBalances } from 'src/hooks';
 import {
     CurrencySymbol,
     WalletSource,
@@ -20,9 +18,7 @@ export const MyWalletCard = ({
     addressRecord: Partial<Record<WalletSource, string>>;
     information?: Partial<Record<WalletSource, CurrencySymbol[]>>;
 }) => {
-    const balanceRecord = useSelector((state: RootState) =>
-        selectAllBalances(state)
-    );
+    const balanceRecord = useBalances();
 
     const assetMap: AssetDisclosureProps[] = useMemo(
         () =>
