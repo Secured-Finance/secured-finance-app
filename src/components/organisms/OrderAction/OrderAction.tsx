@@ -1,19 +1,23 @@
 import { OrderSide } from '@secured-finance/sf-client';
 import { useMemo, useState } from 'react';
-import { shallowEqual, useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Button } from 'src/components/atoms';
 import {
     DepositCollateral,
     PlaceOrder,
     generateCollateralList,
 } from 'src/components/organisms';
-import { CollateralBook, useOrders } from 'src/hooks';
+import {
+    CollateralBook,
+    MarketPhase,
+    useMarketPhase,
+    useOrders,
+} from 'src/hooks';
+import { useCollateralBalances } from 'src/hooks/useBalances';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
-import { MarketPhase, selectMarketPhase } from 'src/store/availableContracts';
 import { setWalletDialogOpen } from 'src/store/interactions';
 import { selectLandingOrderForm } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
-import { selectCollateralCurrencyBalance } from 'src/store/wallet';
 import { amountFormatterFromBase } from 'src/utils';
 import { MAX_COVERAGE, computeAvailableToBorrow } from 'src/utils/collateral';
 import { Amount, LoanValue, Maturity } from 'src/utils/entities';
@@ -45,21 +49,16 @@ export const OrderAction = ({
             selectLandingOrderForm(state.landingOrderForm)
         );
 
-    const marketPhase = useSelector((state: RootState) =>
-        selectMarketPhase(currency, maturity)(state)
-    );
+    const marketPhase = useMarketPhase(currency, maturity);
 
-    const balances = useSelector(
-        (state: RootState) => selectCollateralCurrencyBalance(state),
-        shallowEqual
-    );
+    const collateralBalances = useCollateralBalances();
 
     const assetPriceMap = useSelector((state: RootState) => getPriceMap(state));
     const price = assetPriceMap[currency];
 
     const depositCollateralList = useMemo(
-        () => generateCollateralList(balances, false),
-        [balances]
+        () => generateCollateralList(collateralBalances, false),
+        [collateralBalances]
     );
 
     const availableToBorrow = useMemo(() => {

@@ -5,8 +5,7 @@ import {
     withAppLayout,
     withAssetPrice,
     withChainErrorDisabled,
-    withMaturities,
-    withWalletBalances,
+    withEthBalance,
     withWalletProvider,
 } from 'src/../.storybook/decorators';
 import {
@@ -22,9 +21,8 @@ export default {
     component: Landing,
     decorators: [
         withAppLayout,
-        withMaturities,
         withAssetPrice,
-        withWalletBalances,
+        withEthBalance,
         withWalletProvider,
         withChainErrorDisabled,
     ],

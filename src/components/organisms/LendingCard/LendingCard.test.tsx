@@ -1,13 +1,9 @@
 import { formatDate } from '@secured-finance/sf-core';
 import { composeStories } from '@storybook/react';
-import {
-    mar23Fixture,
-    preloadedAssetPrices,
-    preloadedLendingMarkets,
-} from 'src/stories/mocks/fixtures';
+import { mar23Fixture, preloadedAssetPrices } from 'src/stories/mocks/fixtures';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
-import { CurrencyInfo, CurrencySymbol, currencyMap } from 'src/utils';
+import { CurrencyInfo, currencyMap } from 'src/utils';
 import timemachine from 'timemachine';
 import * as stories from './LendingCard.stories';
 
@@ -36,12 +32,8 @@ beforeAll(() => {
 describe('LendingCard Component', () => {
     const preloadedState = {
         ...preloadedAssetPrices,
-        ...preloadedLendingMarkets,
         wallet: {
-            balances: {
-                [CurrencySymbol.WFIL]: 10000,
-                [CurrencySymbol.USDC]: 10000,
-            },
+            address: '0x1',
         },
     };
 
@@ -166,7 +158,9 @@ describe('LendingCard Component', () => {
         await waitFor(() => render(<Default />, { preloadedState }));
         const input = screen.getByRole('textbox');
         expect(input).toHaveValue('');
-        expect(screen.getByTestId('place-order-button')).toBeDisabled();
+        await waitFor(() =>
+            expect(screen.getByTestId('place-order-button')).toBeDisabled()
+        );
         await waitFor(() => {
             fireEvent.change(input, { target: { value: '10' } });
         });
@@ -183,7 +177,9 @@ describe('LendingCard Component', () => {
         await waitFor(() => render(<Default />, { preloadedState }));
         const lendTab = screen.getByText('Lend');
         fireEvent.click(lendTab);
-        expect(screen.getByText('Lending Source')).toBeInTheDocument();
+        await waitFor(() =>
+            expect(screen.getByText('Lending Source')).toBeInTheDocument()
+        );
         expect(screen.getByText('10,000')).toBeInTheDocument();
 
         const walletSourceButton = screen.getByTestId(
@@ -215,6 +211,9 @@ describe('LendingCard Component', () => {
         const lendTab = screen.getByText('Lend');
         fireEvent.click(lendTab);
 
+        await waitFor(() =>
+            expect(screen.getByText('Lending Source')).toBeInTheDocument()
+        );
         const input = screen.getByRole('textbox');
         fireEvent.change(input, { target: { value: '200' } });
 
