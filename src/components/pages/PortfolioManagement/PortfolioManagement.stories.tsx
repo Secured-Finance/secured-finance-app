@@ -6,7 +6,6 @@ import {
     withAssetPrice,
     withChainErrorDisabled,
     withEthBalance,
-    withFullPage,
     withWalletProvider,
 } from 'src/../.storybook/decorators';
 import {
@@ -18,10 +17,8 @@ import { PortfolioManagement } from './PortfolioManagement';
 export default {
     title: 'Pages/PortfolioManagement',
     component: PortfolioManagement,
-    chromatic: { viewports: [1024, 1440] },
     args: {},
     decorators: [
-        withFullPage,
         withEthBalance,
         withAssetPrice,
         withAppLayout,
