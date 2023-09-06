@@ -5,7 +5,7 @@ import {
     withAppLayout,
     withAssetPrice,
     withChainErrorDisabled,
-    withWalletBalances,
+    withEthBalance,
     withWalletProvider,
 } from 'src/../.storybook/decorators';
 import {
@@ -19,7 +19,7 @@ export default {
     component: PortfolioManagement,
     args: {},
     decorators: [
-        withWalletBalances,
+        withEthBalance,
         withAssetPrice,
         withAppLayout,
         withWalletProvider,
