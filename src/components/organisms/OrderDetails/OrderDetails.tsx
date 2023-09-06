@@ -2,7 +2,6 @@ import { Disclosure, Transition } from '@headlessui/react';
 import { OrderSide } from '@secured-finance/sf-client';
 import { formatDate } from '@secured-finance/sf-core';
 import { useMemo } from 'react';
-import { useSelector } from 'react-redux';
 import {
     ExpandIndicator,
     Section,
@@ -13,9 +12,7 @@ import {
     CollateralSimulationSection,
 } from 'src/components/molecules';
 import { Tooltip } from 'src/components/templates';
-import { CollateralBook, useOrderFee } from 'src/hooks';
-import { selectMarket } from 'src/store/availableContracts';
-import { RootState } from 'src/store/types';
+import { CollateralBook, useMarket, useOrderFee } from 'src/hooks';
 import { calculateFee, divide, prefixTilde } from 'src/utils';
 import { Amount, LoanValue, Maturity } from 'src/utils/entities';
 
@@ -48,9 +45,7 @@ export const OrderDetails = ({
 }) => {
     const { data: orderFee = 0 } = useOrderFee(amount.currency);
 
-    const market = useSelector((state: RootState) =>
-        selectMarket(amount.currency, maturity.toNumber())(state)
-    );
+    const market = useMarket(amount.currency, maturity.toNumber());
 
     const slippage = useMemo(() => {
         if (!market) {

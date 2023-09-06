@@ -7,14 +7,12 @@ import { Footer } from 'src/components/atoms';
 import { Header } from 'src/components/organisms';
 import { Layout } from 'src/components/templates';
 import { setMidPrice } from 'src/store/analytics';
-import { updateLendingMarketContract } from 'src/store/availableContracts';
 import { updateChainError, updateLatestBlock } from 'src/store/blockchain';
 import { setMaturity } from 'src/store/landingOrderForm';
-import { updateBalance } from 'src/store/wallet';
+import { connectEthWallet, updateEthBalance } from 'src/store/wallet';
 import AxiosMock from 'src/stories/mocks/AxiosMock';
 import { CustomizedBridge } from 'src/stories/mocks/customBridge';
-import { dec22Fixture, maturities } from 'src/stories/mocks/fixtures';
-import { CurrencySymbol } from 'src/utils';
+import { dec22Fixture } from 'src/stories/mocks/fixtures';
 import { coingeckoApi } from 'src/utils/coinGeckoApi';
 import timemachine from 'timemachine';
 import { createPublicClient, createWalletClient, custom } from 'viem';
@@ -37,18 +35,19 @@ class ProviderMock {
     }
 }
 
+const privateKey =
+    '0xde926db3012af759b4f24b5a51ef6afa397f04670f634aa4f48d4480417007f3';
+
 const signer = new CustomizedBridge(
-    new Wallet(
-        '0xde926db3012af759b4f24b5a51ef6afa397f04670f634aa4f48d4480417007f3'
-    ),
+    new Wallet(privateKey),
     new ProviderMock() as any,
     11155111
 );
 
+const account = privateKeyToAccount(privateKey);
+
 const client = createWalletClient({
-    account: privateKeyToAccount(
-        '0xde926db3012af759b4f24b5a51ef6afa397f04670f634aa4f48d4480417007f3'
-    ),
+    account: account,
     chain: sepolia,
     transport: custom(signer),
 });
@@ -63,6 +62,7 @@ const connector = new MockConnector({
 });
 
 export const withWalletProvider = (Story: StoryFn, Context: StoryContext) => {
+    const dispatch = useDispatch();
     const config = createConfig({
         autoConnect: Context.parameters && Context.parameters.connected,
         publicClient: createPublicClient({
@@ -71,6 +71,15 @@ export const withWalletProvider = (Story: StoryFn, Context: StoryContext) => {
         }),
         connectors: [connector],
     });
+
+    useEffect(() => {
+        const timeoutId = setTimeout(() => {
+            dispatch(connectEthWallet(account.address));
+        }, 300);
+
+        return () => clearTimeout(timeoutId);
+    }, [dispatch]);
+
     return (
         <WagmiConfig config={config}>
             <Story />
@@ -135,44 +144,11 @@ export const withMockDate = (Story: StoryFn, context: StoryContext) => {
     return <Story />;
 };
 
-export const withMaturities = (Story: StoryFn) => {
-    const dispatch = useDispatch();
-    useEffect(() => {
-        const timerId = setTimeout(() => {
-            dispatch(
-                updateLendingMarketContract(maturities, CurrencySymbol.WFIL)
-            );
-            dispatch(
-                updateLendingMarketContract(maturities, CurrencySymbol.ETH)
-            );
-            dispatch(
-                updateLendingMarketContract(maturities, CurrencySymbol.USDC)
-            );
-            dispatch(
-                updateLendingMarketContract(maturities, CurrencySymbol.WBTC)
-            );
-        }, 200);
-
-        return () => clearTimeout(timerId);
-    }, [dispatch, maturities]);
-
-    return <Story />;
-};
-
-export const withFullPage = (Story: StoryFn) => (
-    <div className='h-[1500px] pb-10'>
-        <Story />
-    </div>
-);
-
-export const withWalletBalances = (Story: StoryFn) => {
+export const withEthBalance = (Story: StoryFn) => {
     const dispatch = useDispatch();
     useEffect(() => {
         const timeoutId = setTimeout(() => {
-            dispatch(updateBalance(10000, CurrencySymbol.WFIL));
-            dispatch(updateBalance(2000, CurrencySymbol.ETH));
-            dispatch(updateBalance(300, CurrencySymbol.WBTC));
-            dispatch(updateBalance(4000, CurrencySymbol.USDC));
+            dispatch(updateEthBalance(2000));
         }, 300);
 
         return () => clearTimeout(timeoutId);
