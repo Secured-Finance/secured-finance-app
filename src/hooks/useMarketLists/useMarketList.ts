@@ -1,11 +1,7 @@
 import { useMemo } from 'react';
 import { utils } from 'ethers';
 import { CurrencySymbol, getCurrencyMapAsList } from 'src/utils';
-import {
-    baseContracts,
-    LendingMarket,
-    useLendingMarkets,
-} from '../useLendingMarkets';
+import { baseContracts, LendingMarket, useLendingMarkets } from 'src/hooks';
 
 export const useMarketLists = () => {
     const { data: lendingContracts = baseContracts } = useLendingMarkets();
@@ -37,7 +33,8 @@ export const useMarketLists = () => {
         }
 
         return { openMarkets, itayoseMarkets };
-    }, [lendingContracts]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [JSON.stringify(lendingContracts)]);
 
     return marketLists;
 };
