@@ -1,8 +1,8 @@
 import { OrderSide } from '@secured-finance/sf-client';
 import { useMemo } from 'react';
 import {
-    getLiquidationInformation,
     SectionWithItems,
+    getLiquidationInformation,
 } from 'src/components/atoms';
 import { CollateralBook, useOrderEstimation } from 'src/hooks';
 import {
@@ -12,7 +12,7 @@ import {
     prefixTilde,
     usdFormat,
 } from 'src/utils';
-import { computeAvailableToBorrow, MAX_COVERAGE } from 'src/utils/collateral';
+import { MAX_COVERAGE, computeAvailableToBorrow } from 'src/utils/collateral';
 import { Amount, LoanValue } from 'src/utils/entities';
 import { useAccount } from 'wagmi';
 
