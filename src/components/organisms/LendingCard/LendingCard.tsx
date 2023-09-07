@@ -13,7 +13,7 @@ import {
     TermSelector,
 } from 'src/components/molecules';
 import { OrderAction } from 'src/components/organisms';
-import { CollateralBook } from 'src/hooks';
+import { CollateralBook, useBalances } from 'src/hooks';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import {
     selectLandingOrderForm,
@@ -24,7 +24,6 @@ import {
     setSourceAccount,
 } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
-import { selectAllBalances } from 'src/store/wallet';
 import { MaturityOptionList, OrderSideMap } from 'src/types';
 import {
     CurrencySymbol,
@@ -59,9 +58,7 @@ export const LendingCard = ({
     const assetPriceMap = useSelector((state: RootState) => getPriceMap(state));
     const assetList = useMemo(() => getCurrencyMapAsOptions(), []);
 
-    const balanceRecord = useSelector((state: RootState) =>
-        selectAllBalances(state)
-    );
+    const balanceRecord = useBalances();
 
     const selectedTerm = useMemo(() => {
         return (

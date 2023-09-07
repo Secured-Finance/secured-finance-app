@@ -1,11 +1,17 @@
 import type { Meta, StoryFn } from '@storybook/react';
 import Link from 'next/link';
-import { RESPONSIVE_PARAMETERS } from 'src/../.storybook/constants';
+import { RESPONSIVE_PARAMETERS, VIEWPORTS } from 'src/../.storybook/constants';
 import { Layout } from './Layout';
 
 const Main = () => (
     <div className='border-4 border-horizonBlue bg-gunMetal text-white-80'>
         <Link href='/borrowing'>To Borrowing</Link>
+    </div>
+);
+
+const LongMain = () => (
+    <div className='h-[900px] border-4 border-galacticOrange bg-galacticOrange text-white-80'>
+        This is very Long
     </div>
 );
 
@@ -42,3 +48,12 @@ const Template: StoryFn<typeof Layout> = args => (
 );
 
 export const Default = Template.bind({});
+export const LongContent = Template.bind({});
+LongContent.args = {
+    children: <LongMain />,
+};
+LongContent.parameters = {
+    chromatic: {
+        viewports: [VIEWPORTS.TABLET],
+    },
+};

@@ -1,6 +1,5 @@
 import { BigNumber } from 'ethers';
 import { useMemo, useState } from 'react';
-import { useSelector } from 'react-redux';
 import {
     CollateralTabLeftPane,
     CollateralTabRightPane,
@@ -9,9 +8,7 @@ import {
     DepositCollateral,
     WithdrawCollateral,
 } from 'src/components/organisms';
-import { CollateralBook } from 'src/hooks';
-import { RootState } from 'src/store/types';
-import { selectCollateralCurrencyBalance } from 'src/store/wallet';
+import { CollateralBook, useCollateralBalances } from 'src/hooks';
 import {
     CollateralInfo,
     CurrencySymbol,
@@ -57,13 +54,11 @@ export const CollateralTab = ({
     const { address } = useAccount();
     const [openModal, setOpenModal] = useState<'' | 'deposit' | 'withdraw'>('');
 
-    const balances = useSelector((state: RootState) =>
-        selectCollateralCurrencyBalance(state)
-    );
+    const collateralBalances = useCollateralBalances();
 
     const depositCollateralList = useMemo(
-        () => generateCollateralList(balances, false),
-        [balances]
+        () => generateCollateralList(collateralBalances, false),
+        [collateralBalances]
     );
 
     const withdrawCollateralList = useMemo(

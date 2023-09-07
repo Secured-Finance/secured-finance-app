@@ -1,6 +1,5 @@
 import { OrderSide } from '@secured-finance/sf-client';
 import { composeStories } from '@storybook/react';
-import { preloadedLendingMarkets } from 'src/stories/mocks/fixtures';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
 import * as stories from './OrderDetails.stories';
@@ -41,20 +40,21 @@ describe('OrderDetails Component', () => {
     });
 
     it('should display the circuit breaker disclaimer', async () => {
-        render(<Default />, { preloadedState: preloadedLendingMarkets });
+        render(<Default />);
 
         const button = screen.getByTestId('disclaimer-button');
         expect(button).toHaveTextContent('Circuit Breaker Disclaimer');
         await waitFor(() => fireEvent.click(button));
         const disclaimerText = await screen.findByTestId('disclaimer-text');
-        expect(disclaimerText).toHaveTextContent(
-            'Circuit breaker will be triggered if the order is filled at over 96.72 which is the max slippage level at 1 block.'
+        await waitFor(() =>
+            expect(disclaimerText).toHaveTextContent(
+                'Circuit breaker will be triggered if the order is filled at over 96.72 which is the max slippage level at 1 block.'
+            )
         );
     });
 
-    it('should not display the borrow remaining and the collateral usage if its a LEND order', () => {
-        render(<Default side={OrderSide.LEND} />),
-            { preloadedState: preloadedLendingMarkets };
+    it('should not display the borrow remaining and the collateral usage if its a LEND order', async () => {
+        render(<Default side={OrderSide.LEND} />);
 
         expect(screen.getByText('Lend Amount')).toBeInTheDocument();
         expect(screen.getByText('100 USDC')).toBeInTheDocument();

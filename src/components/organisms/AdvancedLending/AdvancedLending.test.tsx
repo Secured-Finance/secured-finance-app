@@ -1,9 +1,13 @@
 import { composeStories } from '@storybook/react';
 import { emptyTransaction } from 'src/stories/mocks/queries';
+import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { fireEvent, render, screen, waitFor, within } from 'src/test-utils.js';
 import * as stories from './AdvancedLending.stories';
 
 const { Default, ConnectedToWallet } = composeStories(stories);
+
+const mockSecuredFinance = mockUseSF();
+jest.mock('src/hooks/useSecuredFinance', () => () => mockSecuredFinance);
 
 describe('Advanced Lending Component', () => {
     it('should convert the amount to new currency when the user change the currency', async () => {
@@ -13,9 +17,11 @@ describe('Advanced Lending Component', () => {
             })
         );
         expect(store.getState().landingOrderForm.amount).toEqual('0');
-        fireEvent.change(screen.getByRole('textbox', { name: 'Amount' }), {
-            target: { value: '1' },
-        });
+        await waitFor(() =>
+            fireEvent.input(screen.getByRole('textbox', { name: 'Amount' }), {
+                target: { value: '1' },
+            })
+        );
         expect(store.getState().landingOrderForm.amount).toEqual(
             '1000000000000000000'
         );
@@ -34,9 +40,11 @@ describe('Advanced Lending Component', () => {
             })
         );
         expect(store.getState().landingOrderForm.amount).toEqual('0');
-        fireEvent.change(screen.getByRole('textbox', { name: 'Amount' }), {
-            target: { value: '1' },
-        });
+        await waitFor(() =>
+            fireEvent.input(screen.getByRole('textbox', { name: 'Amount' }), {
+                target: { value: '1' },
+            })
+        );
         expect(store.getState().landingOrderForm.amount).toEqual(
             '1000000000000000000'
         );

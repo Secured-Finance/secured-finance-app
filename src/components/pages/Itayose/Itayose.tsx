@@ -1,6 +1,6 @@
 import { BigNumber } from 'ethers';
 import { useCallback, useMemo } from 'react';
-import { shallowEqual, useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
     GradientBox,
     MarketTab,
@@ -19,16 +19,19 @@ import {
 import { Page } from 'src/components/templates';
 import { TwoColumnsWithTopBar } from 'src/components/templates/TwoColumnsWithTopBar';
 import {
+    MarketPhase,
+    baseContracts,
     emptyCollateralBook,
     emptyOrderList,
     useCollateralBook,
     useCurrenciesForOrders,
+    useLendingMarkets,
+    useMarketPhase,
     useMaturityOptions,
     useOrderList,
 } from 'src/hooks';
 import { useOrderbook } from 'src/hooks/useOrderbook';
 import { getAssetPrice } from 'src/store/assetPrices/selectors';
-import { MarketPhase, selectMarketPhase } from 'src/store/availableContracts';
 import {
     selectLandingOrderForm,
     setAmount,
@@ -41,8 +44,8 @@ import {
     amountFormatterFromBase,
     amountFormatterToBase,
     getCurrencyMapAsOptions,
-    usdFormat,
     hexToCurrencySymbol,
+    usdFormat,
 } from 'src/utils';
 import { countdown } from 'src/utils/date';
 import { Maturity } from 'src/utils/entities';
@@ -102,6 +105,7 @@ const Toolbar = ({
         </GradientBox>
     );
 };
+
 export const Itayose = () => {
     const { address } = useAccount();
 
@@ -109,14 +113,10 @@ export const Itayose = () => {
         selectLandingOrderForm(state.landingOrderForm)
     );
 
-    const lendingContracts = useSelector(
-        (state: RootState) => state.availableContracts.lendingMarkets[currency],
-        shallowEqual
-    );
+    const { data: lendingMarkets = baseContracts } = useLendingMarkets();
+    const lendingContracts = lendingMarkets[currency];
 
-    const marketPhase = useSelector((state: RootState) =>
-        selectMarketPhase(currency, maturity)(state)
-    );
+    const marketPhase = useMarketPhase(currency, maturity);
 
     const maturityOptionList = useMaturityOptions(
         lendingContracts,
