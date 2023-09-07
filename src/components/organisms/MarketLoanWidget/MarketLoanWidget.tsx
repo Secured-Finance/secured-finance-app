@@ -60,8 +60,6 @@ export const MarketLoanWidget = () => {
         [selectedCurrency, selectedTerm]
     );
 
-    const maturityOptionList = useMaturityOptions(openMarkets);
-
     const handleClick = useCallback(
         (info: CellContext<Market, string>) => {
             const ccy = fromBytes32(info.getValue()) as CurrencySymbol;
@@ -149,36 +147,6 @@ export const MarketLoanWidget = () => {
         [handleClick]
     );
 
-    const assetDropdown = (
-        <DropdownSelector<string>
-            optionList={[
-                { label: 'All Assets', value: '' },
-                ...getCurrencyMapAsOptions(),
-            ]}
-            onChange={v => setSelectedCurrency(toCurrencySymbol(v))}
-        />
-    );
-
-    const maturityDropdown = (
-        <DropdownSelector
-            optionList={[
-                { label: 'All', value: '' },
-                ...maturityOptionList.map(o => ({
-                    label: o.label,
-                    value: o.value.toString(),
-                })),
-            ]}
-            selected={{
-                ...maturityOptionList[0],
-                value: maturityOptionList[0].value.toString(),
-            }}
-            onChange={v => {
-                const maturity = parseInt(v);
-                setSelectedTerm(maturity);
-            }}
-        />
-    );
-
     const itayoseHighlight: { text: string; size: 'small' | 'large' } = {
         text: 'NEW',
         size: 'small',
@@ -186,14 +154,25 @@ export const MarketLoanWidget = () => {
 
     const openMarketUtil = (
         <div className=' flex flex-row items-center justify-center gap-4 px-3 py-2 tablet:justify-end'>
-            {assetDropdown}
-            {maturityDropdown}
+            <AssetDropdown
+                handleSelectedCurrency={(ccy: CurrencySymbol | undefined) =>
+                    setSelectedCurrency(ccy)
+                }
+            />
+            <MaturityDropdown
+                markets={openMarkets}
+                handleSelectedTerm={(term: number) => setSelectedTerm(term)}
+            />
         </div>
     );
 
     const itayoseMarketUtil = (
         <div className='hidden flex-row items-center justify-end px-3 py-2 tablet:flex'>
-            {assetDropdown}
+            <AssetDropdown
+                handleSelectedCurrency={(ccy: CurrencySymbol | undefined) =>
+                    setSelectedCurrency(ccy)
+                }
+            />
         </div>
     );
 
@@ -233,5 +212,51 @@ export const MarketLoanWidget = () => {
                 </div>
             </Tab>
         </div>
+    );
+};
+
+const MaturityDropdown = ({
+    markets,
+    handleSelectedTerm,
+}: {
+    markets: Market[];
+    handleSelectedTerm: (term: number) => void;
+}) => {
+    const maturityOptionList = useMaturityOptions(markets);
+
+    return (
+        <DropdownSelector
+            optionList={[
+                { label: 'All', value: '' },
+                ...maturityOptionList.map(o => ({
+                    label: o.label,
+                    value: o.value.toString(),
+                })),
+            ]}
+            selected={{
+                ...maturityOptionList[0],
+                value: maturityOptionList[0].value.toString(),
+            }}
+            onChange={v => {
+                const maturity = parseInt(v);
+                handleSelectedTerm(maturity);
+            }}
+        />
+    );
+};
+
+const AssetDropdown = ({
+    handleSelectedCurrency,
+}: {
+    handleSelectedCurrency: (ccy: CurrencySymbol | undefined) => void;
+}) => {
+    return (
+        <DropdownSelector<string>
+            optionList={[
+                { label: 'All Assets', value: '' },
+                ...getCurrencyMapAsOptions(),
+            ]}
+            onChange={v => handleSelectedCurrency(toCurrencySymbol(v))}
+        />
     );
 };
