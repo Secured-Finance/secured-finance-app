@@ -1,8 +1,4 @@
-import {
-    withAssetPrice,
-    withMaturities,
-    withWalletProvider,
-} from '.storybook/decorators';
+import { withAssetPrice, withWalletProvider } from '.storybook/decorators';
 import { OrderSide } from '@secured-finance/sf-client';
 import { Meta, StoryFn } from '@storybook/react';
 import { userEvent, within } from '@storybook/testing-library';
@@ -23,7 +19,7 @@ export default {
         loanValue: LoanValue.fromPrice(9410, dec22Fixture.toNumber()),
     },
     chromatic: { delay: 1000 },
-    decorators: [withAssetPrice, withWalletProvider, withMaturities],
+    decorators: [withAssetPrice, withWalletProvider],
     parameters: {
         connected: true,
     },

@@ -3,8 +3,9 @@ import { composeStories } from '@storybook/react';
 import {
     dec22Fixture,
     preloadedAssetPrices,
-    preloadedLendingMarkets,
+    usdcBytes32,
 } from 'src/stories/mocks/fixtures';
+import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
 import { OrderType } from 'src/types';
 import { CurrencySymbol, WalletSource } from 'src/utils';
@@ -27,9 +28,11 @@ const preloadedState = {
         orderType: OrderType.LIMIT,
         sourceAccount: WalletSource.METAMASK,
     },
-    ...preloadedLendingMarkets,
     ...preloadedAssetPrices,
 };
+
+const mockSecuredFinance = mockUseSF();
+jest.mock('src/hooks/useSecuredFinance', () => () => mockSecuredFinance);
 
 describe('OrderAction component', () => {
     it('should render connect wallet button', async () => {
@@ -56,15 +59,17 @@ describe('OrderAction component', () => {
     });
 
     it('should render place order button when collateral is sufficient for order', async () => {
-        await waitFor(() => render(<EnoughCollateral />, { preloadedState }));
+        await waitFor(() => {
+            render(<EnoughCollateral />, { preloadedState });
+        });
         expect(
             await screen.findByTestId('place-order-button')
         ).toBeInTheDocument();
-        expect(screen.getByText('Place Order')).toBeInTheDocument();
         const button = screen.getByTestId('place-order-button');
+        await waitFor(() => expect(button).toBeEnabled());
         fireEvent.click(button);
         expect(
-            await screen.findByRole('dialog', { name: 'Confirm Order' })
+            screen.getByRole('dialog', { name: 'Confirm Order' })
         ).toBeInTheDocument();
     });
 
@@ -89,7 +94,7 @@ describe('OrderAction component', () => {
     });
 
     it('should render place order button if orderside is lend', async () => {
-        await waitFor(() =>
+        await waitFor(() => {
             render(<NotEnoughCollateral />, {
                 preloadedState: {
                     ...preloadedState,
@@ -98,13 +103,13 @@ describe('OrderAction component', () => {
                         side: OrderSide.LEND,
                     },
                 },
-            })
-        );
+            });
+        });
         expect(
             await screen.findByTestId('place-order-button')
         ).toBeInTheDocument();
-        expect(screen.getByText('Place Order')).toBeInTheDocument();
         const button = screen.getByTestId('place-order-button');
+        await waitFor(() => expect(button).toBeEnabled());
         fireEvent.click(button);
         expect(
             screen.getByRole('dialog', { name: 'Confirm Order' })
@@ -112,30 +117,27 @@ describe('OrderAction component', () => {
     });
 
     it('should disable the button if the market is not open or pre-open', async () => {
-        await waitFor(() =>
-            render(<EnoughCollateral />, {
-                preloadedState: {
-                    ...preloadedState,
-                    availableContracts: {
-                        lendingMarkets: {
-                            [CurrencySymbol.USDC]: {
-                                ...preloadedLendingMarkets.availableContracts
-                                    ?.lendingMarkets[CurrencySymbol.USDC],
-                                [dec22Fixture.toNumber()]: {
-                                    ...preloadedLendingMarkets
-                                        .availableContracts?.lendingMarkets[
-                                        CurrencySymbol.USDC
-                                    ][dec22Fixture.toNumber()],
-                                    isItayosePeriod: true,
-                                    isPreOrderPeriod: false,
-                                    isOpened: false,
-                                },
-                            },
-                        },
-                    },
-                },
-            })
+        const lendingMarkets = await mockSecuredFinance.getOrderBookDetails();
+        const marketIndex = lendingMarkets.findIndex(
+            value => value.ccy === usdcBytes32 && value.name === 'DEC22'
         );
-        await waitFor(() => expect(screen.getByRole('button')).toBeDisabled());
+        const market = lendingMarkets[marketIndex];
+        lendingMarkets[marketIndex] = {
+            ...market,
+            isItayosePeriod: true,
+            isPreOrderPeriod: false,
+            isOpened: false,
+        };
+        mockSecuredFinance.getOrderBookDetails.mockResolvedValueOnce(
+            lendingMarkets
+        );
+
+        render(<EnoughCollateral />, { preloadedState });
+
+        await waitFor(async () =>
+            expect(
+                await screen.findByTestId('place-order-button')
+            ).toBeDisabled()
+        );
     });
 });

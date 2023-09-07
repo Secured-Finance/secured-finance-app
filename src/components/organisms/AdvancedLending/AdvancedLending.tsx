@@ -20,11 +20,11 @@ import {
     emptyOrderList,
     useCurrenciesForOrders,
     useGraphClientHook,
+    useMarket,
     useOrderList,
 } from 'src/hooks';
 import { useOrderbook } from 'src/hooks/useOrderbook';
 import { getAssetPrice } from 'src/store/assetPrices/selectors';
-import { selectMarket } from 'src/store/availableContracts';
 import {
     resetUnitPrice,
     selectLandingOrderForm,
@@ -42,9 +42,9 @@ import {
     currencyMap,
     formatLoanValue,
     getCurrencyMapAsOptions,
+    hexToCurrencySymbol,
     ordinaryFormat,
     usdFormat,
-    hexToCurrencySymbol,
 } from 'src/utils';
 import { LoanValue, Maturity } from 'src/utils/entities';
 import { useAccount } from 'wagmi';
@@ -117,10 +117,7 @@ export const AdvancedLending = ({
         );
     }, [maturity, maturitiesOptionList]);
 
-    const openingUnitPrice = useSelector(
-        (state: RootState) =>
-            selectMarket(currency, maturity)(state)?.openingUnitPrice
-    );
+    const openingUnitPrice = useMarket(currency, maturity)?.openingUnitPrice;
 
     const orderBook = useOrderbook(currency, maturity, 10);
     const { data: usedCurrencies = [] } = useCurrenciesForOrders(address);
