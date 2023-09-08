@@ -11,7 +11,7 @@ import {
     Tooltip,
 } from 'chart.js';
 import ChartTooltip from 'chart.js/auto';
-import { useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import { ChartProps, Line } from 'react-chartjs-2';
 import { Spinner } from 'src/components/atoms';
 import {
@@ -135,7 +135,7 @@ export const LineChart = ({
         }
     };
 
-    useEffect(() => {
+    const onMouseOut = useCallback(() => {
         if (!chartRef.current) return;
 
         const numberOfElements = chartRef.current.data.datasets[0].data.length;
@@ -148,7 +148,11 @@ export const LineChart = ({
             triggerHover(chartRef.current, index);
             triggerTooltip(chartRef.current, index);
         }
-    }, [maturity, maturitiesOptionList]);
+    }, [maturitiesOptionList, maturity]);
+
+    useEffect(() => {
+        onMouseOut();
+    }, [onMouseOut]);
 
     return (
         <>
@@ -162,6 +166,7 @@ export const LineChart = ({
                     onClick={handleClick}
                     data-chromatic='ignore'
                     plugins={[crossHairPlugin]}
+                    onMouseOut={onMouseOut}
                 />
             ) : (
                 <div className='flex h-full w-full items-center justify-center'>
