@@ -2,7 +2,7 @@ import { OrderSide, WalletSource } from '@secured-finance/sf-client';
 import { createColumnHelper } from '@tanstack/react-table';
 import classNames from 'classnames';
 import { BigNumber } from 'ethers';
-import { Fragment, useEffect, useMemo, useReducer } from 'react';
+import { Fragment, useEffect, useMemo, useReducer, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import ShowFirstIcon from 'src/assets/icons/orderbook-first.svg';
 import ShowAllIcon from 'src/assets/icons/orderbook-full.svg';
@@ -10,7 +10,12 @@ import ShowLastIcon from 'src/assets/icons/orderbook-last.svg';
 
 import { ColorBar, DropdownSelector, Spinner } from 'src/components/atoms';
 import { CoreTable, Tab, TableHeader } from 'src/components/molecules';
-import { OrderBookEntry, sortOrders, useOrderbook } from 'src/hooks';
+import {
+    AggregationFactorType,
+    OrderBookEntry,
+    useOrderbook,
+    usePrepareOrderbookData,
+} from 'src/hooks';
 import { setMidPrice } from 'src/store/analytics';
 import {
     setAmount,
@@ -24,7 +29,6 @@ import {
     CurrencySymbol,
     currencyMap,
     formatLoanValue,
-    getOrderbookAggregationFactor,
     ordinaryFormat,
 } from 'src/utils';
 import { LoanValue } from 'src/utils/entities';
@@ -185,33 +189,22 @@ export const OrderBookWidget = ({
     hideMidPrice?: boolean;
 }) => {
     const [state, dispatch] = useReducer(reducer, initialState);
+    const [aggregationFactor, setAggregationFactor] =
+        useState<AggregationFactorType>(1);
 
     const globalDispatch = useDispatch();
 
-    const borrowOrders = useMemo(() => {
-        if (orderbook.data?.borrowOrderbook) {
-            const oderList = [...orderbook.data.borrowOrderbook].sort((a, b) =>
-                sortOrders(a, b, 'desc')
-            );
-            const result = [...oderList.filter(order => order.amount.gt(0))];
-            for (let index = 0; index < oderList.length; index++) {
-                if (oderList[index].amount.eq(0)) {
-                    result.unshift(oderList[index]);
-                }
-            }
-            return result;
-        }
-        return [];
-    }, [orderbook.data]);
+    const borrowOrders = usePrepareOrderbookData(
+        orderbook.data,
+        'borrowOrderbook',
+        aggregationFactor
+    );
 
-    const lendOrders = useMemo(() => {
-        if (orderbook.data?.lendOrderbook) {
-            return [...orderbook.data.lendOrderbook].sort((a, b) =>
-                sortOrders(a, b, 'desc')
-            );
-        }
-        return [];
-    }, [orderbook.data]);
+    const lendOrders = usePrepareOrderbookData(
+        orderbook.data,
+        'lendOrderbook',
+        aggregationFactor
+    );
 
     const totalBuyAmount = useMemo(
         () =>
@@ -238,7 +231,7 @@ export const OrderBookWidget = ({
 
         return LoanValue.getMidValue(
             lendOrders[0].value,
-            borrowOrders[lendOrders.length - 1].value
+            borrowOrders[borrowOrders.length - 1].value
         );
     }, [lendOrders, borrowOrders]);
 
@@ -383,10 +376,19 @@ export const OrderBookWidget = ({
                             <div className='flex items-center justify-end'>
                                 <div className='w-20'>
                                     <DropdownSelector
-                                        optionList={getOrderbookAggregationFactor(
-                                            currency
-                                        )}
-                                        onChange={() => null}
+                                        optionList={[
+                                            { label: '0.01', value: '1' },
+                                            { label: '0.1', value: '10' },
+                                            { label: '1', value: '100' },
+                                            { label: '10', value: '1000' },
+                                        ]}
+                                        onChange={v =>
+                                            setAggregationFactor(
+                                                Number(
+                                                    v
+                                                ) as AggregationFactorType
+                                            )
+                                        }
                                         variant='fullWidth'
                                     />
                                 </div>

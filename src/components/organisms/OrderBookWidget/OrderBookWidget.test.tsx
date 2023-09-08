@@ -71,7 +71,7 @@ describe('OrderBookWidget Component', () => {
 
     it('should update store when Lend order row is clicked', async () => {
         const { store } = render(<Default />);
-        const row = screen.getAllByTestId('buyOrders-row')[5];
+        const row = screen.getAllByTestId('buyOrders-row')[4];
         fireEvent.click(row);
 
         expect(store.getState().landingOrderForm.orderType).toEqual(
@@ -199,7 +199,7 @@ describe('OrderBookWidget Component', () => {
     describe('Orderbook data', () => {
         it('should display the correct number of rows', () => {
             render(<Default />);
-            expect(screen.getAllByTestId('buyOrders-row')).toHaveLength(6);
+            expect(screen.getAllByTestId('buyOrders-row')).toHaveLength(5);
             expect(screen.getAllByTestId('sellOrders-row')).toHaveLength(6);
         });
 
@@ -210,7 +210,6 @@ describe('OrderBookWidget Component', () => {
             const buyPrices = buyRows.map(row => row.children[0].textContent);
             const sellPrices = sellRows.map(row => row.children[0].textContent);
             expect(buyPrices).toEqual([
-                '\xa0', // this is a non-breaking space
                 '98.50',
                 '97.00',
                 '95.00',
@@ -231,14 +230,24 @@ describe('OrderBookWidget Component', () => {
     describe('Orderbook data with aggregation', () => {
         it('should show a dropdown with the correct options', () => {
             render(<Default />);
-            const dropdown = screen.getByRole('button', { name: '0.0001' });
+            const dropdown = screen.getByRole('button', { name: '0.01' });
             fireEvent.click(dropdown);
             const options = screen.getAllByRole('menuitem');
             expect(options).toHaveLength(4);
-            expect(options[0]).toHaveTextContent('0.0001');
-            expect(options[1]).toHaveTextContent('0.001');
-            expect(options[2]).toHaveTextContent('0.01');
-            expect(options[3]).toHaveTextContent('0.1');
+            expect(options[0]).toHaveTextContent('0.01');
+            expect(options[1]).toHaveTextContent('0.1');
+            expect(options[2]).toHaveTextContent('1');
+            expect(options[3]).toHaveTextContent('10');
+        });
+
+        it('should update the aggregation when an option is clicked', () => {
+            render(<Default />);
+            const dropdown = screen.getByRole('button', { name: '0.01' });
+            fireEvent.click(dropdown);
+            const options = screen.getAllByRole('menuitem');
+            fireEvent.click(options[3]);
+            expect(screen.getAllByTestId('buyOrders-row')).toHaveLength(1);
+            expect(screen.getAllByTestId('sellOrders-row')).toHaveLength(2);
         });
     });
 });

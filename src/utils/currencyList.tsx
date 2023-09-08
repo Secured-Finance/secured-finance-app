@@ -51,8 +51,6 @@ export const currencyMap: Readonly<
         chartColor: tailwindConfig.theme.colors.chart.fil,
         pillColor: tailwindConfig.theme.colors.pill.fil,
         roundingDecimal: 0,
-        minAggregation: -4,
-        maxAggregation: -1,
     },
     [CurrencySymbol.WBTC]: {
         index: 1,
@@ -69,8 +67,6 @@ export const currencyMap: Readonly<
         chartColor: tailwindConfig.theme.colors.chart.btc,
         pillColor: tailwindConfig.theme.colors.pill.btc,
         roundingDecimal: 4,
-        minAggregation: -2,
-        maxAggregation: 2,
     },
     [CurrencySymbol.ETH]: {
         index: 2,
@@ -87,8 +83,6 @@ export const currencyMap: Readonly<
         chartColor: tailwindConfig.theme.colors.chart.eth,
         pillColor: tailwindConfig.theme.colors.pill.eth,
         roundingDecimal: 3,
-        minAggregation: -2,
-        maxAggregation: 2,
     },
     [CurrencySymbol.USDC]: {
         index: 3,
@@ -105,8 +99,6 @@ export const currencyMap: Readonly<
         chartColor: tailwindConfig.theme.colors.chart.usdc,
         pillColor: tailwindConfig.theme.colors.pill.usdc,
         roundingDecimal: 0,
-        minAggregation: -4,
-        maxAggregation: -1,
     },
 };
 
@@ -157,8 +149,6 @@ export type CurrencyInfo = {
     chartColor: string;
     pillColor: string;
     roundingDecimal: number;
-    minAggregation: number; // 10 power to the min aggregation
-    maxAggregation: number; // 10 power to the max aggregation
 };
 
 export const toCurrency = (ccy: CurrencySymbol) => {
@@ -209,21 +199,4 @@ export const divide = (valueA: number, valueB: number, precision = 2) => {
     return parseFloat(
         new BigNumberJS(valueA).dividedBy(valueB).toFixed(precision)
     );
-};
-
-export const getOrderbookAggregationFactor = (ccy: CurrencySymbol) => {
-    const ccyInfo = currencyMap[ccy];
-    const factors = [];
-    for (let i = ccyInfo.minAggregation; i <= ccyInfo.maxAggregation; i++) {
-        factors.push((10 ** i).toFixed(Math.abs(i)));
-    }
-
-    return factors
-        .sort((a, b) => parseFloat(a) - parseFloat(b))
-        .map(f => {
-            return {
-                label: f.toString(),
-                value: f.toString(),
-            };
-        });
 };
