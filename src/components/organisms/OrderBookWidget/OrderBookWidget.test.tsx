@@ -227,4 +227,18 @@ describe('OrderBookWidget Component', () => {
             ]);
         });
     });
+
+    describe('Orderbook data with aggregation', () => {
+        it('should show a dropdown with the correct options', () => {
+            render(<Default />);
+            const dropdown = screen.getByRole('button', { name: '0.0001' });
+            fireEvent.click(dropdown);
+            const options = screen.getAllByRole('menuitem');
+            expect(options).toHaveLength(4);
+            expect(options[0]).toHaveTextContent('0.0001');
+            expect(options[1]).toHaveTextContent('0.001');
+            expect(options[2]).toHaveTextContent('0.01');
+            expect(options[3]).toHaveTextContent('0.1');
+        });
+    });
 });
