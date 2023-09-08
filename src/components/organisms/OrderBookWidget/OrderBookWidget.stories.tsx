@@ -1,6 +1,6 @@
 import type { Meta, StoryFn } from '@storybook/react';
 import { BigNumber } from 'ethers';
-import { OrderBookEntry, sortOrders } from 'src/hooks/useOrderbook';
+import { OrderBookEntry } from 'src/hooks/useOrderbook';
 import { CurrencySymbol } from 'src/utils';
 import { LoanValue, Maturity } from 'src/utils/entities';
 import { OrderBookWidget } from './OrderBookWidget';
@@ -14,54 +14,54 @@ const ZERO_ENTRY = {
 const borrowEntries: Array<OrderBookEntry> = [
     {
         amount: BigNumber.from('43003200000000000000000'),
-        value: LoanValue.fromPrice(9653, maturityMar23.toNumber()),
+        value: LoanValue.fromPrice(9850, maturityMar23.toNumber()),
     },
     {
         amount: BigNumber.from('230000052000000000000000'),
-        value: LoanValue.fromPrice(9674, maturityMar23.toNumber()),
+        value: LoanValue.fromPrice(9700, maturityMar23.toNumber()),
     },
     {
         amount: BigNumber.from('15000000000000000000000'),
-        value: LoanValue.fromPrice(9679, maturityMar23.toNumber()),
+        value: LoanValue.fromPrice(9500, maturityMar23.toNumber()),
     },
     {
         amount: BigNumber.from('12000000000000000000000'),
-        value: LoanValue.fromPrice(9685, maturityMar23.toNumber()),
+        value: LoanValue.fromPrice(9475, maturityMar23.toNumber()),
     },
     {
         amount: BigNumber.from('1800000000000000000000'),
-        value: LoanValue.fromPrice(9687, maturityMar23.toNumber()),
+        value: LoanValue.fromPrice(9400, maturityMar23.toNumber()),
     },
     {
         amount: BigNumber.from('0'),
-        value: LoanValue.fromPrice(9690, maturityMar23.toNumber()),
+        value: LoanValue.fromPrice(9200, maturityMar23.toNumber()),
     },
 ];
 
 const lendEntries: Array<OrderBookEntry> = [
     {
         amount: BigNumber.from('43000000000000000000000'),
-        value: LoanValue.fromPrice(9690, maturityMar23.toNumber()),
+        value: LoanValue.fromPrice(9200, maturityMar23.toNumber()),
     },
     {
         amount: BigNumber.from('55000000000000000000000'),
-        value: LoanValue.fromPrice(9687, maturityMar23.toNumber()),
+        value: LoanValue.fromPrice(9110, maturityMar23.toNumber()),
     },
     {
         amount: BigNumber.from('3000000000000000000000'),
-        value: LoanValue.fromPrice(9685, maturityMar23.toNumber()),
+        value: LoanValue.fromPrice(9050, maturityMar23.toNumber()),
     },
     {
         amount: BigNumber.from('15000000000000000000000'),
-        value: LoanValue.fromPrice(9679, maturityMar23.toNumber()),
+        value: LoanValue.fromPrice(9010, maturityMar23.toNumber()),
     },
     {
         amount: BigNumber.from('21000000000000000000000'),
-        value: LoanValue.fromPrice(9674, maturityMar23.toNumber()),
+        value: LoanValue.fromPrice(8980, maturityMar23.toNumber()),
     },
     {
         amount: BigNumber.from('51000000000000000000000'),
-        value: LoanValue.fromPrice(9653, maturityMar23.toNumber()),
+        value: LoanValue.fromPrice(8960, maturityMar23.toNumber()),
     },
 ];
 
@@ -111,12 +111,8 @@ export default {
     args: {
         orderbook: {
             data: {
-                borrowOrderbook: [...borrowEntries].sort((a, b) =>
-                    sortOrders(a, b, 'asc')
-                ),
-                lendOrderbook: [...lendEntries].sort((a, b) =>
-                    sortOrders(a, b, 'desc')
-                ),
+                borrowOrderbook: borrowEntries,
+                lendOrderbook: lendEntries,
             },
             isLoading: false,
         },
@@ -133,12 +129,8 @@ export const Bitcoin = Template.bind({});
 Bitcoin.args = {
     orderbook: {
         data: {
-            borrowOrderbook: [...btcEntriesBorrow].sort((a, b) =>
-                sortOrders(a, b, 'asc')
-            ),
-            lendOrderbook: [...btcEntriesLend].sort((a, b) =>
-                sortOrders(a, b, 'desc')
-            ),
+            borrowOrderbook: btcEntriesBorrow,
+            lendOrderbook: btcEntriesLend,
         },
         isLoading: false,
     },
@@ -154,10 +146,8 @@ Eth.args = {
                 ZERO_ENTRY,
                 ZERO_ENTRY,
                 ZERO_ENTRY,
-            ].sort((a, b) => sortOrders(a, b, 'asc')),
-            lendOrderbook: [...ethEntries, ZERO_ENTRY].sort((a, b) =>
-                sortOrders(a, b, 'desc')
-            ),
+            ],
+            lendOrderbook: [...ethEntries, ZERO_ENTRY],
         },
         isLoading: false,
     },

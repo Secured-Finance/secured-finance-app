@@ -19,12 +19,7 @@ describe('useOrderbook', () => {
         await waitForNextUpdate();
 
         expect(result.current.data.borrowOrderbook.length).toBe(5);
-        expect(result.current.data.borrowOrderbook[0].value.price).toBe(9674);
-        expect(result.current.data.borrowOrderbook[4].value.price).toBe(9690);
-
         expect(result.current.data.lendOrderbook.length).toBe(5);
-        expect(result.current.data.lendOrderbook[0].value.price).toBe(9690);
-        expect(result.current.data.lendOrderbook[4].value.price).toBe(9674);
     });
 
     it('should trim the orderbook from the zeros but keep the borrow and lending orderbook the same size', async () => {
