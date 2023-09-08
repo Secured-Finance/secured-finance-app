@@ -2,11 +2,15 @@ import { OrderSide, WalletSource } from '@secured-finance/sf-client';
 import { createColumnHelper } from '@tanstack/react-table';
 import classNames from 'classnames';
 import { BigNumber } from 'ethers';
-import { Fragment, useEffect, useMemo } from 'react';
+import { Fragment, useEffect, useMemo, useReducer } from 'react';
 import { useDispatch } from 'react-redux';
+import ShowFirstIcon from 'src/assets/icons/orderbook-first.svg';
+import ShowAllIcon from 'src/assets/icons/orderbook-full.svg';
+import ShowLastIcon from 'src/assets/icons/orderbook-last.svg';
+
 import { ColorBar, Spinner } from 'src/components/atoms';
 import { CoreTable, Tab, TableHeader } from 'src/components/molecules';
-import { OrderBookEntry, useOrderbook } from 'src/hooks';
+import { OrderBookEntry, sortOrders, useOrderbook } from 'src/hooks';
 import { setMidPrice } from 'src/store/analytics';
 import {
     setAmount,
@@ -132,6 +136,44 @@ const AprCell = ({
     );
 };
 
+type VisibilityState = {
+    showBorrow: boolean;
+    showLend: boolean;
+    showMidPrice: boolean;
+};
+
+type VisibilityAction = 'toggleBorrow' | 'toggleLend' | 'reset';
+
+const initialState: VisibilityState = {
+    showBorrow: true,
+    showLend: true,
+    showMidPrice: true,
+};
+
+const reducer = (
+    state: VisibilityState,
+    action: VisibilityAction
+): VisibilityState => {
+    switch (action) {
+        case 'toggleLend':
+            return {
+                ...state,
+                showBorrow: true,
+                showLend: !state.showLend,
+                showMidPrice: !state.showMidPrice,
+            };
+        case 'toggleBorrow':
+            return {
+                ...state,
+                showBorrow: !state.showBorrow,
+                showLend: true,
+                showMidPrice: !state.showMidPrice,
+            };
+        default:
+            return initialState;
+    }
+};
+
 export const OrderBookWidget = ({
     orderbook,
     currency,
@@ -141,16 +183,34 @@ export const OrderBookWidget = ({
     currency: CurrencySymbol;
     hideMidPrice?: boolean;
 }) => {
-    const dispatch = useDispatch();
+    const [state, dispatch] = useReducer(reducer, initialState);
 
-    const borrowOrders = useMemo(
-        () => orderbook?.data?.borrowOrderbook ?? [],
-        [orderbook.data]
-    );
-    const lendOrders = useMemo(
-        () => orderbook?.data?.lendOrderbook ?? [],
-        [orderbook.data]
-    );
+    const globalDispatch = useDispatch();
+
+    const borrowOrders = useMemo(() => {
+        if (orderbook.data?.borrowOrderbook) {
+            const oderList = [...orderbook.data.borrowOrderbook].sort((a, b) =>
+                sortOrders(a, b, 'desc')
+            );
+            const result = [...oderList.filter(order => order.amount.gt(0))];
+            for (let index = 0; index < oderList.length; index++) {
+                if (oderList[index].amount.eq(0)) {
+                    result.unshift(oderList[index]);
+                }
+            }
+            return result;
+        }
+        return [];
+    }, [orderbook.data]);
+
+    const lendOrders = useMemo(() => {
+        if (orderbook.data?.lendOrderbook) {
+            return [...orderbook.data.lendOrderbook].sort((a, b) =>
+                sortOrders(a, b, 'desc')
+            );
+        }
+        return [];
+    }, [orderbook.data]);
 
     const totalBuyAmount = useMemo(
         () =>
@@ -177,7 +237,7 @@ export const OrderBookWidget = ({
 
         return LoanValue.getMidValue(
             lendOrders[0].value,
-            borrowOrders[0].value
+            borrowOrders[lendOrders.length - 1].value
         );
     }, [lendOrders, borrowOrders]);
 
@@ -256,21 +316,21 @@ export const OrderBookWidget = ({
     );
 
     useEffect(() => {
-        dispatch(setMidPrice(lastMidValue.price));
-    }, [dispatch, lastMidValue.price]);
+        globalDispatch(setMidPrice(lastMidValue.price));
+    }, [globalDispatch, lastMidValue.price]);
 
     const handleClick = (rowId: string, side: OrderSide): void => {
         const rowData =
             side === OrderSide.BORROW
                 ? lendOrders[parseInt(rowId)]
                 : borrowOrders[parseInt(rowId)];
-        dispatch(setOrderType(OrderType.LIMIT));
-        side ? dispatch(setSide(side)) : null;
+        globalDispatch(setOrderType(OrderType.LIMIT));
+        side ? globalDispatch(setSide(side)) : null;
         side === OrderSide.BORROW
-            ? dispatch(setSourceAccount(WalletSource.METAMASK))
+            ? globalDispatch(setSourceAccount(WalletSource.METAMASK))
             : null;
-        dispatch(setUnitPrice(rowData.value.price));
-        dispatch(setAmount(rowData.amount));
+        globalDispatch(setUnitPrice(rowData.value.price));
+        globalDispatch(setAmount(rowData.amount));
     };
 
     const handleSellOrdersClick = (rowId: string) => {
@@ -295,8 +355,30 @@ export const OrderBookWidget = ({
         <div className='max-w-xs'>
             <Tab tabDataArray={[{ text: 'Order Book' }]}>
                 <div className='grid w-full grid-cols-1 place-content-start gap-x-4'>
-                    <div className='row-start-2'>
-                        {!hideMidPrice && (
+                    <div className='flex flex-row items-start gap-3 px-3 py-3'>
+                        <OrderBookIcon
+                            name='showAll'
+                            Icon={<ShowAllIcon className='mr-1 h-4 w-4' />}
+                            onClick={() => dispatch('reset')}
+                            active={state.showBorrow && state.showLend}
+                        />
+
+                        <OrderBookIcon
+                            name='showLendOrders'
+                            Icon={<ShowLastIcon className='mr-1 h-4 w-4' />}
+                            onClick={() => dispatch('toggleBorrow')}
+                            active={!state.showBorrow && state.showLend}
+                        />
+
+                        <OrderBookIcon
+                            name='showBorrowOrders'
+                            Icon={<ShowFirstIcon className='mr-1 h-4 w-4' />}
+                            onClick={() => dispatch('toggleLend')}
+                            active={!state.showLend && state.showBorrow}
+                        />
+                    </div>
+                    <div className='row-start-3'>
+                        {!hideMidPrice && state.showMidPrice && (
                             <div className='typography-portfolio-heading flex h-14 flex-row items-center justify-between bg-black-20 px-4 py-3'>
                                 <span
                                     className='font-semibold text-white'
@@ -317,33 +399,37 @@ export const OrderBookWidget = ({
                         </div>
                     ) : (
                         <>
-                            <div className='row-start-1 px-3'>
-                                <CoreTable
-                                    data={[...lendOrders].reverse()}
-                                    columns={[...sellColumns].reverse()}
-                                    options={{
-                                        responsive: false,
-                                        name: 'sellOrders',
-                                        border: false,
-                                        onLineClick: handleSellOrdersClick,
-                                        hoverRow: handleSellOrdersHoverRow,
-                                    }}
-                                />
-                            </div>
-                            <div className='row-start-3 px-3'>
-                                <CoreTable
-                                    data={borrowOrders}
-                                    columns={buyColumns}
-                                    options={{
-                                        responsive: false,
-                                        name: 'buyOrders',
-                                        border: false,
-                                        onLineClick: handleBuyOrdersClick,
-                                        hoverRow: handleBuyOrdersHoverRow,
-                                        showHeaders: false,
-                                    }}
-                                />
-                            </div>
+                            {state.showBorrow && (
+                                <div className='row-start-2 px-3'>
+                                    <CoreTable
+                                        data={borrowOrders}
+                                        columns={buyColumns}
+                                        options={{
+                                            responsive: false,
+                                            name: 'buyOrders',
+                                            border: false,
+                                            onLineClick: handleBuyOrdersClick,
+                                            hoverRow: handleBuyOrdersHoverRow,
+                                        }}
+                                    />
+                                </div>
+                            )}
+                            {state.showLend && (
+                                <div className='row-start-4 px-3'>
+                                    <CoreTable
+                                        data={lendOrders}
+                                        columns={[...sellColumns].reverse()}
+                                        options={{
+                                            responsive: false,
+                                            name: 'sellOrders',
+                                            border: false,
+                                            onLineClick: handleSellOrdersClick,
+                                            hoverRow: handleSellOrdersHoverRow,
+                                            showHeaders: false,
+                                        }}
+                                    />
+                                </div>
+                            )}
                         </>
                     )}
                 </div>
@@ -351,3 +437,26 @@ export const OrderBookWidget = ({
         </div>
     );
 };
+
+const OrderBookIcon = ({
+    Icon,
+    name,
+    active,
+    onClick,
+}: {
+    Icon: React.ReactNode;
+    name: string;
+    active: boolean;
+    onClick: () => void;
+}) => (
+    <button
+        key={name}
+        aria-label={name}
+        className={classNames('px-[10px] py-[11px] hover:bg-universeBlue', {
+            'bg-universeBlue': active,
+        })}
+        onClick={onClick}
+    >
+        {Icon}
+    </button>
+);

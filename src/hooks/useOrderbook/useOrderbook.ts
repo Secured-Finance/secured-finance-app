@@ -39,14 +39,12 @@ export const sortOrders = (
 
 const transformOrderbook = (
     input: SmartContractOrderbook,
-    maturity: number,
-    direction: 'asc' | 'desc'
+    maturity: number
 ): OrderBook => {
-    const orderBook = input.unitPrices.map((unitPrice, index) => ({
+    return input.unitPrices.map((unitPrice, index) => ({
         amount: input.amounts[index],
         value: LoanValue.fromPrice(unitPrice.toNumber(), maturity),
     }));
-    return orderBook.sort((a, b) => sortOrders(a, b, direction));
 };
 
 const trimOrderbook = (
@@ -117,13 +115,11 @@ export const useOrderbook = (
                 {
                     borrowOrderbook: transformOrderbook(
                         data.borrowOrderbook,
-                        maturity,
-                        'asc'
+                        maturity
                     ),
                     lendOrderbook: transformOrderbook(
                         data.lendOrderbook,
-                        maturity,
-                        'desc'
+                        maturity
                     ),
                 },
                 minimum
