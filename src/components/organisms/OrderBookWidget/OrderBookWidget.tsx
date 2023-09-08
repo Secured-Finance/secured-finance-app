@@ -8,7 +8,7 @@ import ShowFirstIcon from 'src/assets/icons/orderbook-first.svg';
 import ShowAllIcon from 'src/assets/icons/orderbook-full.svg';
 import ShowLastIcon from 'src/assets/icons/orderbook-last.svg';
 
-import { ColorBar, Spinner } from 'src/components/atoms';
+import { ColorBar, DropdownSelector, Spinner } from 'src/components/atoms';
 import { CoreTable, Tab, TableHeader } from 'src/components/molecules';
 import { OrderBookEntry, sortOrders, useOrderbook } from 'src/hooks';
 import { setMidPrice } from 'src/store/analytics';
@@ -24,6 +24,7 @@ import {
     CurrencySymbol,
     currencyMap,
     formatLoanValue,
+    getOrderbookAggregationFactor,
     ordinaryFormat,
 } from 'src/utils';
 import { LoanValue } from 'src/utils/entities';
@@ -355,27 +356,42 @@ export const OrderBookWidget = ({
         <div className='max-w-xs'>
             <Tab tabDataArray={[{ text: 'Order Book' }]}>
                 <div className='grid w-full grid-cols-1 place-content-start gap-x-4'>
-                    <div className='flex flex-row items-start gap-3 px-3 py-3'>
-                        <OrderBookIcon
-                            name='showAll'
-                            Icon={<ShowAllIcon className='mr-1 h-4 w-4' />}
-                            onClick={() => dispatch('reset')}
-                            active={state.showBorrow && state.showLend}
-                        />
-
-                        <OrderBookIcon
-                            name='showLendOrders'
-                            Icon={<ShowLastIcon className='mr-1 h-4 w-4' />}
-                            onClick={() => dispatch('toggleBorrow')}
-                            active={!state.showBorrow && state.showLend}
-                        />
-
-                        <OrderBookIcon
-                            name='showBorrowOrders'
-                            Icon={<ShowFirstIcon className='mr-1 h-4 w-4' />}
-                            onClick={() => dispatch('toggleLend')}
-                            active={!state.showLend && state.showBorrow}
-                        />
+                    <div className='grid grid-cols-2 px-3 py-3'>
+                        <div className='flex flex-row items-start gap-3'>
+                            <OrderBookIcon
+                                name='showAll'
+                                Icon={<ShowAllIcon className='mr-1 h-4 w-4' />}
+                                onClick={() => dispatch('reset')}
+                                active={state.showBorrow && state.showLend}
+                            />
+                            <OrderBookIcon
+                                name='showLendOrders'
+                                Icon={<ShowLastIcon className='mr-1 h-4 w-4' />}
+                                onClick={() => dispatch('toggleBorrow')}
+                                active={!state.showBorrow && state.showLend}
+                            />
+                            <OrderBookIcon
+                                name='showBorrowOrders'
+                                Icon={
+                                    <ShowFirstIcon className='mr-1 h-4 w-4' />
+                                }
+                                onClick={() => dispatch('toggleLend')}
+                                active={!state.showLend && state.showBorrow}
+                            />
+                        </div>
+                        <div>
+                            <div className='flex items-center justify-end'>
+                                <div className='w-20'>
+                                    <DropdownSelector
+                                        optionList={getOrderbookAggregationFactor(
+                                            currency
+                                        )}
+                                        onChange={() => null}
+                                        variant='fullWidth'
+                                    />
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div className='row-start-3'>
                         {!hideMidPrice && state.showMidPrice && (

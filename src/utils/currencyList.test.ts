@@ -13,6 +13,7 @@ import {
     divide,
     getCurrencyMapAsList,
     getCurrencyMapAsOptions,
+    getOrderbookAggregationFactor,
     hexToCurrencySymbol,
     multiply,
     toCurrency,
@@ -313,5 +314,34 @@ describe('divide', () => {
     it('should divide two numbers with precision', () => {
         expect(divide(8060, 100)).toEqual(80.6);
         expect(divide(80.612, 99.12345, 4)).toEqual(0.8132);
+    });
+});
+
+describe('getOrderbookAggregationFactor', () => {
+    it('should return an array of factors sorted in ascending order', () => {
+        const expectedFactors = [
+            { label: '0.01', value: '0.01' },
+            { label: '0.1', value: '0.1' },
+            { label: '1', value: '1' },
+            { label: '10', value: '10' },
+            { label: '100', value: '100' },
+        ];
+
+        const result = getOrderbookAggregationFactor(CurrencySymbol.WBTC);
+
+        expect(result).toEqual(expectedFactors);
+    });
+
+    it.only('should return an array of factor with rounded number', () => {
+        const expectedFactors = [
+            { label: '0.0001', value: '0.0001' },
+            { label: '0.001', value: '0.001' },
+            { label: '0.01', value: '0.01' },
+            { label: '0.1', value: '0.1' },
+        ];
+
+        const result = getOrderbookAggregationFactor(CurrencySymbol.WFIL);
+
+        expect(result).toEqual(expectedFactors);
     });
 });
