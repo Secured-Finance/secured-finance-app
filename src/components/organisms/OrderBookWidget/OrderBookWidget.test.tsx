@@ -168,6 +168,32 @@ describe('OrderBookWidget Component', () => {
             expect(screen.getByTestId('buyOrders')).toBeInTheDocument();
             expect(screen.getByTestId('sellOrders')).toBeInTheDocument();
         });
+
+        it('should hide the mid price when showLendOrders is clicked and show it again when re clicked', () => {
+            render(<Default />);
+            expect(screen.getByTestId('last-mid-price')).toBeInTheDocument();
+            fireEvent.click(getButton('showLendOrders'));
+            expect(
+                screen.queryByTestId('last-mid-price')
+            ).not.toBeInTheDocument();
+            fireEvent.click(getButton('showLendOrders'));
+            expect(screen.getByTestId('last-mid-price')).toBeInTheDocument();
+        });
+
+        it('should never show the mid price if hideMidPrice is true', () => {
+            render(<Default hideMidPrice />);
+            expect(
+                screen.queryByTestId('last-mid-price')
+            ).not.toBeInTheDocument();
+            fireEvent.click(getButton('showLendOrders'));
+            expect(
+                screen.queryByTestId('last-mid-price')
+            ).not.toBeInTheDocument();
+            fireEvent.click(getButton('showBorrowOrders'));
+            expect(
+                screen.queryByTestId('last-mid-price')
+            ).not.toBeInTheDocument();
+        });
     });
 
     describe('Orderbook data', () => {
