@@ -230,7 +230,6 @@ export const AdvancedLendingOrderCard = ({
                         )
                     );
                     dispatch(setSourceAccount(WalletSource.METAMASK));
-                    dispatch(resetUnitPrice());
                 }}
                 variant='NavTab'
             />
