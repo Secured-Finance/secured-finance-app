@@ -1,11 +1,10 @@
-import type { Meta, StoryFn } from '@storybook/react';
-import { within } from '@storybook/testing-library';
 import {
     withAppLayout,
     withAssetPrice,
     withChainErrorDisabled,
     withWalletProvider,
-} from 'src/../.storybook/decorators';
+} from '.storybook/decorators';
+import type { Meta, StoryFn } from '@storybook/react';
 import { Itayose } from './Itayose';
 
 export default {
@@ -27,8 +26,3 @@ export default {
 const Template: StoryFn<typeof Itayose> = () => <Itayose />;
 
 export const Default = Template.bind({});
-export const OpenOrders = Template.bind({});
-OpenOrders.play = async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    canvas.getByText('Open Orders').click();
-};
