@@ -57,11 +57,7 @@
     "cypress:run": "cypress run"
   },
   "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
+    "production": [">0.2%", "not dead", "not op_mini all"],
     "development": [
       "last 1 chrome version",
       "last 1 firefox version",
@@ -69,7 +65,6 @@
     ]
   },
   "devDependencies": {
-    "@cloudflare/next-on-pages": "^1.6.0",
     "@commitlint/cli": "^17.0.0",
     "@commitlint/config-conventional": "^17.0.0",
     "@ethersproject/experimental": "^5.6.0",
