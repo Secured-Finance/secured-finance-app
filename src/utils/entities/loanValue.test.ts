@@ -42,6 +42,7 @@ describe('LoanValue class', () => {
             );
             expect(value.apr.toNumber()).toEqual(apr.toNumber());
             expect(value.price).toEqual(price);
+            expect(value.maturity).toEqual(maturity.toNumber());
         });
     });
 
@@ -70,6 +71,7 @@ describe('LoanValue class', () => {
             const value = LoanValue.fromPrice(price, maturity.toNumber());
             expect(value.price).toEqual(price);
             expect(value.apr.toNumber()).toEqual(apr);
+            expect(value.maturity).toEqual(maturity.toNumber());
         });
     });
 });

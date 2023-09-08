@@ -15,5 +15,6 @@ export * from './useOrderbook';
 export * from './useOrders';
 export * from './usePagination';
 export * from './usePositions';
+export * from './usePrepareOrderbookData';
 export * from './useTotalNumberOfAsset';
 export * from './useValueLockedByCurrency';
