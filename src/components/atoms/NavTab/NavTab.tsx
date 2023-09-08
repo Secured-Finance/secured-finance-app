@@ -22,7 +22,7 @@ export const NavTab = ({ text, active = false }: NavTabProps) => {
             >
                 <p
                     className={classNames(
-                        'typography-nav-menu-default h-4 whitespace-nowrap bg-red text-neutral-8 duration-300 group-hover:opacity-100 group-hover:ease-in-out',
+                        'typography-nav-menu-default h-4 whitespace-nowrap bg-green text-neutral-8 duration-300 group-hover:opacity-100 group-hover:ease-in-out',
                         {
                             'opacity-100': active,
                             'opacity-70': !active,
