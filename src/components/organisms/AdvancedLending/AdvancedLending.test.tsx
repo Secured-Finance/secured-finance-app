@@ -131,8 +131,8 @@ describe('Advanced Lending Component', () => {
             })
         );
         fireEvent.click(screen.getByRole('tab', { name: 'Open Orders' }));
-
-        const openOrders = await screen.findAllByRole('row');
-        expect(openOrders).toHaveLength(1);
+        expect(
+            within(screen.getByTestId('open-order-table')).queryAllByRole('row')
+        ).toHaveLength(1);
     });
 });

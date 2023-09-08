@@ -2,7 +2,7 @@ import { OrderSide, WalletSource } from '@secured-finance/sf-client';
 import { createColumnHelper } from '@tanstack/react-table';
 import classNames from 'classnames';
 import { BigNumber } from 'ethers';
-import { Fragment, useEffect, useMemo, useState } from 'react';
+import { Fragment, useEffect, useMemo } from 'react';
 import { useDispatch } from 'react-redux';
 import { ColorBar, Spinner } from 'src/components/atoms';
 import { CoreTable, Tab, TableHeader } from 'src/components/molecules';
@@ -132,9 +132,6 @@ const AprCell = ({
     );
 };
 
-const INITIAL_ORDER_COUNT = 10;
-const ORDER_COUNT_INCREMENT = 2;
-
 export const OrderBookWidget = ({
     orderbook,
     currency,
@@ -145,17 +142,14 @@ export const OrderBookWidget = ({
     hideMidPrice?: boolean;
 }) => {
     const dispatch = useDispatch();
-    const [buyOrderCount, setBuyOrderCount] = useState(INITIAL_ORDER_COUNT);
-    const [sellOrderCount, setSellOrderCount] = useState(INITIAL_ORDER_COUNT);
 
     const borrowOrders = useMemo(
-        () => orderbook.data?.borrowOrderbook.slice(0, buyOrderCount) ?? [],
-        [buyOrderCount, orderbook.data?.borrowOrderbook]
+        () => orderbook?.data?.borrowOrderbook ?? [],
+        [orderbook.data]
     );
-
     const lendOrders = useMemo(
-        () => orderbook.data?.lendOrderbook.slice(0, sellOrderCount) ?? [],
-        [orderbook.data?.lendOrderbook, sellOrderCount]
+        () => orderbook?.data?.lendOrderbook ?? [],
+        [orderbook.data]
     );
 
     const totalBuyAmount = useMemo(
@@ -333,18 +327,6 @@ export const OrderBookWidget = ({
                                         border: false,
                                         onLineClick: handleSellOrdersClick,
                                         hoverRow: handleSellOrdersHoverRow,
-                                        pagination: {
-                                            containerHeight: true,
-                                            totalData:
-                                                orderbook.data?.lendOrderbook
-                                                    .length ?? 0,
-                                            getMoreData: () => {
-                                                setSellOrderCount(
-                                                    lendOrders.length +
-                                                        ORDER_COUNT_INCREMENT
-                                                );
-                                            },
-                                        },
                                     }}
                                 />
                             </div>
@@ -359,18 +341,6 @@ export const OrderBookWidget = ({
                                         onLineClick: handleBuyOrdersClick,
                                         hoverRow: handleBuyOrdersHoverRow,
                                         showHeaders: false,
-                                        pagination: {
-                                            containerHeight: true,
-                                            totalData:
-                                                orderbook.data?.borrowOrderbook
-                                                    .length ?? 0,
-                                            getMoreData: () => {
-                                                setBuyOrderCount(
-                                                    borrowOrders.length +
-                                                        ORDER_COUNT_INCREMENT
-                                                );
-                                            },
-                                        },
                                     }}
                                 />
                             </div>
