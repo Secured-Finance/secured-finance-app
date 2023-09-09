@@ -7,9 +7,13 @@ import { useDispatch } from 'react-redux';
 import ShowFirstIcon from 'src/assets/icons/orderbook-first.svg';
 import ShowAllIcon from 'src/assets/icons/orderbook-full.svg';
 import ShowLastIcon from 'src/assets/icons/orderbook-last.svg';
-
-import { ColorBar, DropdownSelector, Spinner } from 'src/components/atoms';
-import { CoreTable, Tab, TableHeader } from 'src/components/molecules';
+import {
+    ColorBar,
+    DropdownSelector,
+    NavTab,
+    Spinner,
+} from 'src/components/atoms';
+import { CoreTable, TableHeader } from 'src/components/molecules';
 import {
     AggregationFactorType,
     OrderBookEntry,
@@ -346,112 +350,99 @@ export const OrderBookWidget = ({
     };
 
     return (
-        <div className='max-w-xs'>
-            <Tab tabDataArray={[{ text: 'Order Book' }]}>
-                <div className='grid w-full grid-cols-1 place-content-start gap-x-4'>
-                    <div className='grid grid-cols-2 px-3 py-3'>
-                        <div className='flex flex-row items-start gap-3'>
-                            <OrderBookIcon
-                                name='showAll'
-                                Icon={<ShowAllIcon className='mr-1 h-4 w-4' />}
-                                onClick={() => dispatch('reset')}
-                                active={state.showBorrow && state.showLend}
-                            />
-                            <OrderBookIcon
-                                name='showLendOrders'
-                                Icon={<ShowLastIcon className='mr-1 h-4 w-4' />}
-                                onClick={() => dispatch('toggleBorrow')}
-                                active={!state.showBorrow && state.showLend}
-                            />
-                            <OrderBookIcon
-                                name='showBorrowOrders'
-                                Icon={
-                                    <ShowFirstIcon className='mr-1 h-4 w-4' />
-                                }
-                                onClick={() => dispatch('toggleLend')}
-                                active={!state.showLend && state.showBorrow}
-                            />
-                        </div>
-                        <div>
-                            <div className='flex items-center justify-end'>
-                                <div className='w-20'>
-                                    <DropdownSelector
-                                        optionList={[
-                                            { label: '0.01', value: '1' },
-                                            { label: '0.1', value: '10' },
-                                            { label: '1', value: '100' },
-                                            { label: '10', value: '1000' },
-                                        ]}
-                                        onChange={v =>
-                                            setAggregationFactor(
-                                                Number(
-                                                    v
-                                                ) as AggregationFactorType
-                                            )
-                                        }
-                                        variant='fullWidth'
-                                    />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div className='row-start-3'>
-                        {!hideMidPrice && state.showMidPrice && (
-                            <div className='typography-portfolio-heading flex h-14 flex-row items-center justify-between bg-black-20 px-4 py-3'>
-                                <span
-                                    className='font-semibold text-white'
-                                    data-testid='last-mid-price'
-                                >
-                                    {formatLoanValue(lastMidValue, 'price')}
-                                </span>
-
-                                <span className='font-normal text-slateGray'>
-                                    {formatLoanValue(lastMidValue, 'rate')}
-                                </span>
-                            </div>
-                        )}
-                    </div>
-                    {orderbook.isLoading ? (
-                        <div className='col-span-2 row-start-3 flex h-full w-full items-center justify-center pt-24'>
-                            <Spinner />
-                        </div>
-                    ) : (
-                        <>
-                            {state.showBorrow && (
-                                <div className='row-start-2 px-3'>
-                                    <CoreTable
-                                        data={borrowOrders}
-                                        columns={buyColumns}
-                                        options={{
-                                            responsive: false,
-                                            name: 'buyOrders',
-                                            border: false,
-                                            onLineClick: handleBuyOrdersClick,
-                                            hoverRow: handleBuyOrdersHoverRow,
-                                        }}
-                                    />
-                                </div>
-                            )}
-                            {state.showLend && (
-                                <div className='row-start-4 px-3'>
-                                    <CoreTable
-                                        data={lendOrders}
-                                        columns={[...sellColumns].reverse()}
-                                        options={{
-                                            responsive: false,
-                                            name: 'sellOrders',
-                                            border: false,
-                                            onLineClick: handleSellOrdersClick,
-                                            hoverRow: handleSellOrdersHoverRow,
-                                            showHeaders: false,
-                                        }}
-                                    />
-                                </div>
-                            )}
-                        </>
-                    )}
+        <div className='grid w-full max-w-xs grid-cols-1 place-content-start gap-y-3 rounded-b-2xl border border-white-10 bg-cardBackground/60 px-3 pb-4 shadow-tab'>
+            <div className='-mx-3 h-[60px] w-1/2'>
+                <NavTab text='Order Book' active={true} />
+            </div>
+            <div className='flex flex-row justify-between'>
+                <div className='flex flex-row items-start gap-3'>
+                    <OrderBookIcon
+                        name='showAll'
+                        Icon={<ShowAllIcon className='mr-1 h-4 w-4' />}
+                        onClick={() => dispatch('reset')}
+                        active={state.showBorrow && state.showLend}
+                    />
+                    <OrderBookIcon
+                        name='showLendOrders'
+                        Icon={<ShowLastIcon className='mr-1 h-4 w-4' />}
+                        onClick={() => dispatch('toggleBorrow')}
+                        active={!state.showBorrow && state.showLend}
+                    />
+                    <OrderBookIcon
+                        name='showBorrowOrders'
+                        Icon={<ShowFirstIcon className='mr-1 h-4 w-4' />}
+                        onClick={() => dispatch('toggleLend')}
+                        active={!state.showLend && state.showBorrow}
+                    />
                 </div>
-            </Tab>
+                <div className='flex items-center justify-end'>
+                    <div className='w-20'>
+                        <DropdownSelector
+                            optionList={[
+                                { label: '0.01', value: '1' },
+                                { label: '0.1', value: '10' },
+                                { label: '1', value: '100' },
+                                { label: '10', value: '1000' },
+                            ]}
+                            onChange={v =>
+                                setAggregationFactor(
+                                    Number(v) as AggregationFactorType
+                                )
+                            }
+                            variant='fullWidth'
+                        />
+                    </div>
+                </div>
+            </div>
+            {orderbook.isLoading ? (
+                <div className='flex h-full w-full items-center justify-center'>
+                    <Spinner />
+                </div>
+            ) : (
+                <>
+                    {state.showBorrow && (
+                        <CoreTable
+                            data={borrowOrders}
+                            columns={buyColumns}
+                            options={{
+                                responsive: false,
+                                name: 'buyOrders',
+                                border: false,
+                                onLineClick: handleBuyOrdersClick,
+                                hoverRow: handleBuyOrdersHoverRow,
+                            }}
+                        />
+                    )}
+                    {!hideMidPrice && state.showMidPrice && (
+                        <div className='typography-portfolio-heading -mx-3 flex h-14 flex-row items-center justify-between bg-black-20 px-4'>
+                            <span
+                                className='font-semibold text-white'
+                                data-testid='last-mid-price'
+                            >
+                                {formatLoanValue(lastMidValue, 'price')}
+                            </span>
+
+                            <span className='font-normal text-slateGray'>
+                                {formatLoanValue(lastMidValue, 'rate')}
+                            </span>
+                        </div>
+                    )}
+                    {state.showLend && (
+                        <CoreTable
+                            data={lendOrders}
+                            columns={[...sellColumns].reverse()}
+                            options={{
+                                responsive: false,
+                                name: 'sellOrders',
+                                border: false,
+                                onLineClick: handleSellOrdersClick,
+                                hoverRow: handleSellOrdersHoverRow,
+                                showHeaders: false,
+                            }}
+                        />
+                    )}
+                </>
+            )}
         </div>
     );
 };
