@@ -215,7 +215,7 @@ export const Itayose = () => {
                 <OrderBookWidget
                     currency={currency}
                     orderbook={orderBook}
-                    hideMidPrice
+                    variant='itayose'
                 />
 
                 <div className='flex flex-col gap-4'>

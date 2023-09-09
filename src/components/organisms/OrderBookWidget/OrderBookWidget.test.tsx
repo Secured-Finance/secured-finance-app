@@ -41,13 +41,6 @@ describe('OrderBookWidget Component', () => {
             );
             expect(screen.getByTestId('last-mid-price')).toHaveTextContent('0');
         });
-
-        it('should hide the mid price when hideMidPrice is true', () => {
-            render(<Default hideMidPrice />);
-            expect(
-                screen.queryByTestId('last-mid-price')
-            ).not.toBeInTheDocument();
-        });
     });
 
     it('should update store when Sell order row is clicked', () => {
@@ -180,16 +173,22 @@ describe('OrderBookWidget Component', () => {
             expect(screen.getByTestId('last-mid-price')).toBeInTheDocument();
         });
 
-        it('should never show the mid price if hideMidPrice is true', () => {
-            render(<Default hideMidPrice />);
-            expect(
-                screen.queryByTestId('last-mid-price')
-            ).not.toBeInTheDocument();
+        it('should be able to toggle between showLendOrders and showBorrowOrders', () => {
+            render(<Default />);
+            expect(screen.getByTestId('buyOrders')).toBeInTheDocument();
+            expect(screen.getByTestId('sellOrders')).toBeInTheDocument();
+            expect(screen.findByTestId('last-mid-price')).toBeInTheDocument();
+
             fireEvent.click(getButton('showLendOrders'));
+            expect(screen.queryByTestId('buyOrders')).not.toBeInTheDocument();
+            expect(screen.getByTestId('sellOrders')).toBeInTheDocument();
             expect(
                 screen.queryByTestId('last-mid-price')
             ).not.toBeInTheDocument();
+
             fireEvent.click(getButton('showBorrowOrders'));
+            expect(screen.getByTestId('buyOrders')).toBeInTheDocument();
+            expect(screen.queryByTestId('sellOrders')).not.toBeInTheDocument();
             expect(
                 screen.queryByTestId('last-mid-price')
             ).not.toBeInTheDocument();
@@ -249,6 +248,20 @@ describe('OrderBookWidget Component', () => {
             fireEvent.click(options[3]);
             expect(screen.getAllByTestId('buyOrders-row')).toHaveLength(2);
             expect(screen.getAllByTestId('sellOrders-row')).toHaveLength(2);
+        });
+    });
+
+    describe('Variants', () => {
+        it('should display the last mid price in the correct color', () => {
+            render(<Default variant='itayose' />);
+            expect(screen.getByTestId('last-mid-price')).toHaveClass(
+                'text-white'
+            );
+        });
+
+        it('should display a help tooltip', () => {
+            render(<Default variant='itayose' />);
+            expect(screen.getByTestId('tooltip')).toBeInTheDocument();
         });
     });
 });

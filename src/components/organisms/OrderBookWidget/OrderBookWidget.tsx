@@ -14,6 +14,7 @@ import {
     Spinner,
 } from 'src/components/atoms';
 import { CoreTable, TableHeader } from 'src/components/molecules';
+import { Tooltip } from 'src/components/templates';
 import {
     AggregationFactorType,
     OrderBookEntry,
@@ -151,7 +152,7 @@ type VisibilityState = {
     showMidPrice: boolean;
 };
 
-type VisibilityAction = 'toggleBorrow' | 'toggleLend' | 'reset';
+type VisibilityAction = 'showOnlyBorrow' | 'showOnlyLend' | 'reset';
 
 const initialState: VisibilityState = {
     showBorrow: true,
@@ -164,19 +165,25 @@ const reducer = (
     action: VisibilityAction
 ): VisibilityState => {
     switch (action) {
-        case 'toggleLend':
+        case 'showOnlyBorrow':
+            if (!state.showLend) {
+                return initialState;
+            }
             return {
                 ...state,
                 showBorrow: true,
-                showLend: !state.showLend,
-                showMidPrice: !state.showMidPrice,
+                showLend: false,
+                showMidPrice: false,
             };
-        case 'toggleBorrow':
+        case 'showOnlyLend':
+            if (!state.showBorrow) {
+                return initialState;
+            }
             return {
                 ...state,
-                showBorrow: !state.showBorrow,
+                showBorrow: false,
                 showLend: true,
-                showMidPrice: !state.showMidPrice,
+                showMidPrice: false,
             };
         default:
             return initialState;
@@ -186,11 +193,11 @@ const reducer = (
 export const OrderBookWidget = ({
     orderbook,
     currency,
-    hideMidPrice = false,
+    variant = 'default',
 }: {
     orderbook: Pick<ReturnType<typeof useOrderbook>, 'data' | 'isLoading'>;
     currency: CurrencySymbol;
-    hideMidPrice?: boolean;
+    variant?: 'default' | 'itayose';
 }) => {
     const [state, dispatch] = useReducer(reducer, initialState);
     const [aggregationFactor, setAggregationFactor] =
@@ -365,13 +372,13 @@ export const OrderBookWidget = ({
                     <OrderBookIcon
                         name='showLendOrders'
                         Icon={<ShowLastIcon className='mr-1 h-4 w-4' />}
-                        onClick={() => dispatch('toggleBorrow')}
+                        onClick={() => dispatch('showOnlyLend')}
                         active={!state.showBorrow && state.showLend}
                     />
                     <OrderBookIcon
                         name='showBorrowOrders'
                         Icon={<ShowFirstIcon className='mr-1 h-4 w-4' />}
-                        onClick={() => dispatch('toggleLend')}
+                        onClick={() => dispatch('showOnlyBorrow')}
                         active={!state.showLend && state.showBorrow}
                     />
                 </div>
@@ -400,26 +407,37 @@ export const OrderBookWidget = ({
                 </div>
             ) : (
                 <>
-                    {state.showBorrow && (
-                        <CoreTable
-                            data={borrowOrders}
-                            columns={buyColumns}
-                            options={{
-                                responsive: false,
-                                name: 'buyOrders',
-                                border: false,
-                                onLineClick: handleBuyOrdersClick,
-                                hoverRow: handleBuyOrdersHoverRow,
-                            }}
-                        />
-                    )}
-                    {!hideMidPrice && state.showMidPrice && (
+                    <CoreTable
+                        data={state.showBorrow ? borrowOrders : []}
+                        columns={buyColumns}
+                        options={{
+                            responsive: false,
+                            name: 'buyOrders',
+                            border: false,
+                            onLineClick: handleBuyOrdersClick,
+                            hoverRow: handleBuyOrdersHoverRow,
+                        }}
+                    />
+                    {state.showMidPrice && (
                         <div className='typography-portfolio-heading -mx-3 flex h-14 flex-row items-center justify-between bg-black-20 px-4'>
                             <span
-                                className='font-semibold text-white'
+                                className={classNames('font-semibold', {
+                                    'flex flex-row items-center gap-2 text-white':
+                                        variant === 'itayose',
+                                    'text-nebulaTeal': variant === 'default',
+                                })}
                                 data-testid='last-mid-price'
                             >
-                                {formatLoanValue(lastMidValue, 'price')}
+                                <p>{formatLoanValue(lastMidValue, 'price')}</p>
+                                {variant === 'itayose' && (
+                                    <Tooltip>
+                                        <p className='text-white'>
+                                            Placeholder text explaining
+                                            indicative opening price based on
+                                            aggregated orders
+                                        </p>
+                                    </Tooltip>
+                                )}
                             </span>
 
                             <span className='font-normal text-slateGray'>
@@ -427,20 +445,19 @@ export const OrderBookWidget = ({
                             </span>
                         </div>
                     )}
-                    {state.showLend && (
-                        <CoreTable
-                            data={lendOrders}
-                            columns={[...sellColumns].reverse()}
-                            options={{
-                                responsive: false,
-                                name: 'sellOrders',
-                                border: false,
-                                onLineClick: handleSellOrdersClick,
-                                hoverRow: handleSellOrdersHoverRow,
-                                showHeaders: false,
-                            }}
-                        />
-                    )}
+
+                    <CoreTable
+                        data={state.showLend ? lendOrders : []}
+                        columns={[...sellColumns].reverse()}
+                        options={{
+                            responsive: false,
+                            name: 'sellOrders',
+                            border: false,
+                            onLineClick: handleSellOrdersClick,
+                            hoverRow: handleSellOrdersHoverRow,
+                            showHeaders: false,
+                        }}
+                    />
                 </>
             )}
         </div>
