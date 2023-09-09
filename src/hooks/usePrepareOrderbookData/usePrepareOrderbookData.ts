@@ -13,27 +13,36 @@ export const usePrepareOrderbookData = <
 ) => {
     return useMemo(() => {
         if (!data) return [];
-        const result = data[orderbookType]
-            .filter(order => order.amount.gt(0))
-            .reduce((acc, order) => {
-                const price =
-                    Math.floor(Number(order.value.price) / aggregationFactor) *
-                    aggregationFactor;
-                if (!acc[price]) {
-                    acc[price] = {} as OrderBookEntry;
-                    acc[price].amount = order.amount;
-                    acc[price].value = LoanValue.fromPrice(
-                        price,
-                        order.value.maturity
-                    );
-                } else {
-                    acc[price].amount = acc[price].amount.add(order.amount);
-                }
-                return acc;
-            }, {} as Record<number, OrderBookEntry>);
 
-        return [...Object.values(result)].sort((a, b) =>
+        const zeroValues = data[orderbookType].filter(order =>
+            order.amount.isZero()
+        );
+
+        const result: Record<number, OrderBookEntry> = {};
+        data[orderbookType]
+            .filter(order => order.amount.gt(0))
+            .forEach(order => {
+                const price =
+                    Math.trunc(Number(order.value.price) / aggregationFactor) *
+                    aggregationFactor;
+                if (!result[price]) {
+                    result[price] = {
+                        amount: order.amount,
+                        value: LoanValue.fromPrice(price, order.value.maturity),
+                    };
+                } else {
+                    result[price].amount = result[price].amount.add(
+                        order.amount
+                    );
+                }
+            });
+
+        const sortedResult = [...Object.values(result)].sort((a, b) =>
             sortOrders(a, b, 'desc')
         );
+
+        return orderbookType === 'lendOrderbook'
+            ? [...sortedResult, ...zeroValues]
+            : [...zeroValues, ...sortedResult];
     }, [data, orderbookType, aggregationFactor]);
 };
