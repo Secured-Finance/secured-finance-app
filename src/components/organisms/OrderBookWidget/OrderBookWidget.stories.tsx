@@ -154,9 +154,9 @@ Eth.args = {
     currency: CurrencySymbol.ETH,
 };
 
-export const HideMidPrice = Template.bind({});
-HideMidPrice.args = {
-    hideMidPrice: true,
+export const Itayose = Template.bind({});
+Itayose.args = {
+    variant: 'itayose',
 };
 
 export const Loading = Template.bind({});
