@@ -357,7 +357,7 @@ export const OrderBookWidget = ({
     };
 
     return (
-        <div className='grid h-full w-full max-w-xs grid-cols-1 place-content-start gap-y-3 rounded-b-2xl border border-white-10 bg-cardBackground/60 px-3 pb-4 shadow-tab'>
+        <div className='grid h-full w-full grid-cols-1 place-content-start gap-y-3 rounded-b-2xl border border-white-10 bg-cardBackground/60 px-3 pb-4 shadow-tab'>
             <div className='-mx-3 h-[60px] w-1/2'>
                 <NavTab text='Order Book' active={true} />
             </div>
