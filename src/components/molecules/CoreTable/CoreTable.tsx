@@ -27,6 +27,7 @@ type CoreTableOptions = {
     stickyColumns?: Set<number>;
     pagination?: Pagination;
     showHeaders?: boolean;
+    compact?: boolean;
 };
 
 const DEFAULT_OPTIONS: CoreTableOptions = {
@@ -37,6 +38,7 @@ const DEFAULT_OPTIONS: CoreTableOptions = {
     hideColumnIds: undefined,
     responsive: true,
     showHeaders: true,
+    compact: false,
 };
 
 export const CoreTable = <T,>({
@@ -119,9 +121,11 @@ export const CoreTable = <T,>({
             {coreTableOptions.showHeaders ? (
                 <thead
                     className={classNames(
-                        'typography-caption-2 h-14 px-6 py-4 text-slateGray',
+                        'typography-caption-2 px-6 text-slateGray',
                         {
                             'border-b border-white-10': coreTableOptions.border,
+                            'h-14 py-4': !coreTableOptions.compact,
+                            'h-5 py-1': coreTableOptions.compact,
                         }
                     )}
                 >
@@ -186,7 +190,7 @@ export const CoreTable = <T,>({
                             <td
                                 key={cell.id}
                                 className={classNames(
-                                    'min-w-fit whitespace-nowrap py-2 pr-1 text-center font-medium tablet:px-1',
+                                    'min-w-fit whitespace-nowrap pr-1 text-center font-medium tablet:px-1',
                                     {
                                         'sticky z-10 bg-gunMetal/100 tablet:relative tablet:z-auto tablet:bg-transparent':
                                             coreTableOptions.responsive &&
@@ -198,6 +202,8 @@ export const CoreTable = <T,>({
                                             coreTableOptions.stickyColumns?.has(
                                                 cellIndex
                                             ),
+                                        'py-2': !coreTableOptions.compact,
+                                        'py-1': coreTableOptions.compact,
                                     }
                                 )}
                             >

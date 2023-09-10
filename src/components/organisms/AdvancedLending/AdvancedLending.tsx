@@ -119,7 +119,7 @@ export const AdvancedLending = ({
 
     const openingUnitPrice = useMarket(currency, maturity)?.openingUnitPrice;
 
-    const orderBook = useOrderbook(currency, maturity, 10);
+    const orderBook = useOrderbook(currency, maturity, 10, 10);
     const { data: usedCurrencies = [] } = useCurrenciesForOrders(address);
     const { data: orderList = emptyOrderList } = useOrderList(
         address,

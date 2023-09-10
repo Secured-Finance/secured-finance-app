@@ -31,7 +31,7 @@ export const ColorBar = ({
     );
     return (
         <div
-            className={classNames('absolute h-[150%]', {
+            className={classNames('absolute h-6', {
                 'bg-galacticOrange/20': color === 'negative',
                 'bg-nebulaTeal/20': color === 'positive',
                 '-left-0.5': align === 'left',

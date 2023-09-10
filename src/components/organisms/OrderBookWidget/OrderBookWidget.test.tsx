@@ -4,13 +4,9 @@ import { fireEvent, render, screen } from 'src/test-utils.js';
 import { OrderType } from 'src/types';
 import * as stories from './OrderBookWidget.stories';
 
-const { Default, Loading } = composeStories(stories);
+const { Default, Loading, Itayose } = composeStories(stories);
 
 describe('OrderBookWidget Component', () => {
-    it('should render a OrderBookWidget', () => {
-        render(<Default />);
-    });
-
     it('should render two tables', () => {
         render(<Default />);
         expect(screen.getByTestId('buyOrders')).toBeInTheDocument();
@@ -253,14 +249,14 @@ describe('OrderBookWidget Component', () => {
 
     describe('Variants', () => {
         it('should display the last mid price in the correct color', () => {
-            render(<Default variant='itayose' />);
+            render(<Itayose />);
             expect(screen.getByTestId('last-mid-price')).toHaveClass(
                 'text-white'
             );
         });
 
         it('should display a help tooltip', () => {
-            render(<Default variant='itayose' />);
+            render(<Itayose />);
             expect(screen.getByTestId('tooltip')).toBeInTheDocument();
         });
     });
