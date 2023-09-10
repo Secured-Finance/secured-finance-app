@@ -357,12 +357,12 @@ export const OrderBookWidget = ({
     };
 
     return (
-        <div className='grid w-full max-w-xs grid-cols-1 place-content-start gap-y-3 rounded-b-2xl border border-white-10 bg-cardBackground/60 px-3 pb-4 shadow-tab'>
+        <div className='grid h-full w-full max-w-xs grid-cols-1 place-content-start gap-y-3 rounded-b-2xl border border-white-10 bg-cardBackground/60 px-3 pb-4 shadow-tab'>
             <div className='-mx-3 h-[60px] w-1/2'>
                 <NavTab text='Order Book' active={true} />
             </div>
             <div className='flex flex-row justify-between'>
-                <div className='flex flex-row items-start gap-3'>
+                <div className='flex h-8 flex-row items-start gap-3'>
                     <OrderBookIcon
                         name='showAll'
                         Icon={<ShowAllIcon className='mr-1 h-4 w-4' />}
@@ -416,6 +416,7 @@ export const OrderBookWidget = ({
                             border: false,
                             onLineClick: handleBuyOrdersClick,
                             hoverRow: handleBuyOrdersHoverRow,
+                            compact: true,
                         }}
                     />
                     {state.showMidPrice && (
@@ -456,6 +457,7 @@ export const OrderBookWidget = ({
                             onLineClick: handleSellOrdersClick,
                             hoverRow: handleSellOrdersHoverRow,
                             showHeaders: false,
+                            compact: true,
                         }}
                     />
                 </>
