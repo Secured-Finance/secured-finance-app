@@ -57,3 +57,4 @@ jobs:
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           projectName: secured-finance-app
           directory: .deploy/build
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
