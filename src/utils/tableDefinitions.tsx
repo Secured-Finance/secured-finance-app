@@ -295,11 +295,13 @@ export const contractColumnDefinition = <
     return columnHelper.accessor(assessorFn, {
         id: id,
         cell: info => (
-            <TableContractCell
-                maturity={new Maturity(info.getValue())}
-                ccyByte32={info.row.original.currency}
-                variant={variant}
-            />
+            <div className='flex justify-center'>
+                <TableContractCell
+                    maturity={new Maturity(info.getValue())}
+                    ccyByte32={info.row.original.currency}
+                    variant={variant}
+                />
+            </div>
         ),
         header: tableHeaderDefinition(title),
         sortingFn: contractSortingFn,
