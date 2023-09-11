@@ -1,9 +1,5 @@
 import { BigNumber } from 'ethers';
-import {
-    calculatePercentage,
-    computeAvailableToBorrow,
-    recomputeCollateralUtilization,
-} from './collateral';
+import { calculatePercentage, computeAvailableToBorrow } from './collateral';
 
 const ONE_ETH = BigNumber.from('1000000000000000000');
 const TWO_ETH = BigNumber.from('2000000000000000000');
@@ -33,25 +29,5 @@ describe('collateral.calculatePercentage', () => {
 
     it('should return 0 when total is zero', () => {
         expect(calculatePercentage(ONE_ETH, ZERO_ETH)).toEqual(ZERO_ETH);
-    });
-});
-
-describe('recomputeCollateralUtilization', () => {
-    it('should increase the collateral utilization when the new usdTradeValue is positive', () => {
-        expect(recomputeCollateralUtilization(1000, 5000, 100)).toEqual(6000);
-        expect(recomputeCollateralUtilization(1000, 5000, 200)).toEqual(7000);
-    });
-
-    it('should decrease the collateral utilization when the new usdTradeValue is negative', () => {
-        expect(recomputeCollateralUtilization(1000, 5000, -100)).toEqual(4000);
-        expect(recomputeCollateralUtilization(1000, 5000, -200)).toEqual(3000);
-    });
-
-    it('should not change the collateral utilization when the new usdTradeValue is 0', () => {
-        expect(recomputeCollateralUtilization(1000, 5000, 0)).toEqual(5000);
-    });
-
-    it('should return 0 if the new usdTradeValue is bigger than the collateral and negative', () => {
-        expect(recomputeCollateralUtilization(1000, 5000, -2000)).toEqual(0);
     });
 });

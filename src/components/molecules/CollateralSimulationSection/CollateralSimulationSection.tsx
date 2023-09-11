@@ -4,7 +4,7 @@ import {
     SectionWithItems,
     getLiquidationInformation,
 } from 'src/components/atoms';
-import { CollateralBook } from 'src/hooks';
+import { CollateralBook, useOrderEstimation } from 'src/hooks';
 import {
     formatCollateralRatio,
     formatLoanValue,
@@ -12,58 +12,38 @@ import {
     prefixTilde,
     usdFormat,
 } from 'src/utils';
-import {
-    MAX_COVERAGE,
-    computeAvailableToBorrow,
-    recomputeCollateralUtilization,
-} from 'src/utils/collateral';
+import { MAX_COVERAGE, computeAvailableToBorrow } from 'src/utils/collateral';
 import { Amount, LoanValue } from 'src/utils/entities';
+import { useAccount } from 'wagmi';
 
 export const CollateralSimulationSection = ({
     collateral,
     tradeAmount,
     side,
-    assetPrice,
     tradeValue,
 }: {
     collateral: CollateralBook;
     tradeAmount: Amount;
     side: OrderSide;
-    assetPrice: number;
     tradeValue: LoanValue;
 }) => {
-    const remainingToBorrowText = useMemo(() => {
-        const availableToBorrow = computeAvailableToBorrow(
-            1,
-            collateral.usdCollateral,
-            collateral.coverage.toNumber() / MAX_COVERAGE,
-            collateral.collateralThreshold
-        );
+    const { address } = useAccount();
 
-        return `${usdFormat(
-            availableToBorrow - tradeAmount.toUSD(assetPrice),
-            2
-        )}`;
-    }, [
-        collateral.usdCollateral,
-        collateral.coverage,
-        collateral.collateralThreshold,
-        tradeAmount,
-        assetPrice,
-    ]);
+    const { data: coverage = 0 } = useOrderEstimation(address);
 
-    const recomputeCollateral = useMemo(() => {
-        return recomputeCollateralUtilization(
-            collateral.usdCollateral,
-            collateral.coverage.toNumber(),
-            tradeAmount.toUSD(assetPrice)
-        );
-    }, [
-        collateral.usdCollateral,
-        collateral.coverage,
-        tradeAmount,
-        assetPrice,
-    ]);
+    const remainingToBorrowText = useMemo(
+        () =>
+            usdFormat(
+                computeAvailableToBorrow(
+                    1,
+                    collateral.usdCollateral,
+                    (coverage ?? 0) / MAX_COVERAGE,
+                    collateral.collateralThreshold
+                ),
+                2
+            ),
+        [collateral.usdCollateral, collateral.collateralThreshold, coverage]
+    );
 
     const items: [string, string | React.ReactNode][] =
         side === OrderSide.BORROW
@@ -79,7 +59,7 @@ export const CollateralSimulationSection = ({
                       'Collateral Usage',
                       getCollateralUsage(
                           collateral.coverage.toNumber(),
-                          recomputeCollateral
+                          coverage
                       ),
                   ],
                   [

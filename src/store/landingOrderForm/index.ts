@@ -11,6 +11,7 @@ export const {
     setLastView,
     setSourceAccount,
     resetUnitPrice,
+    setIsBorrowedCollateral,
 } = landingOrderFormSlice.actions;
 
 export { selectLandingOrderForm };
