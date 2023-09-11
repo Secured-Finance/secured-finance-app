@@ -38,6 +38,7 @@ jobs:
     permissions:
       contents: read
       deployments: write
+      pull-requests: write
     needs: [build-and-test-all]
     steps:
       - name: Checkout
@@ -57,6 +58,13 @@ jobs:
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           projectName: secured-finance-app
           directory: .deploy/build
+          branch: ${{ github.ref }}
 
       - name: Get the output url
         run: echo "Deploy url is ${{ steps.deploy.outputs.url }}"
+
+      - name: Comment on PR
+        uses: mshick/add-pr-comment@v2
+        with:
+          message: |
+            🚀 This branch can be previewed at ${{ steps.deploy.outputs.url }}
