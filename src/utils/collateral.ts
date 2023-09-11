@@ -17,16 +17,3 @@ export const computeAvailableToBorrow = (
 export const calculatePercentage = (value: BigNumber, total: BigNumber) => {
     return total.isZero() ? ZERO_BN : value.mul(100).div(total);
 };
-
-export function recomputeCollateralUtilization(
-    totalCollateralInUsd: number,
-    coverageRatio: number,
-    newTradeUsdValue: number
-) {
-    return Math.max(
-        0,
-        (totalCollateralInUsd * coverageRatio +
-            newTradeUsdValue * MAX_COVERAGE) /
-            totalCollateralInUsd
-    );
-}

@@ -30,9 +30,7 @@ describe('PlaceOrder component', () => {
     it('should display the Place Order Modal when open', async () => {
         render(<Default />);
 
-        await waitFor(() => {
-            expect(screen.getByRole('dialog')).toBeInTheDocument();
-        });
+        expect(await screen.getByRole('dialog')).toBeInTheDocument();
         expect(screen.getByText('Confirm Order')).toBeInTheDocument();
         const button = screen.getByTestId('dialog-action-button');
         expect(button).toHaveTextContent('OK');
@@ -41,12 +39,13 @@ describe('PlaceOrder component', () => {
     it('should display the borrow remaining and the collateral usage if its a BORROW order', async () => {
         render(<Default />);
 
-        await waitFor(() => {
-            expect(screen.getByText('Borrow Amount')).toBeInTheDocument();
-        });
+        expect(screen.getByText('Borrow Amount')).toBeInTheDocument();
         expect(screen.getByText('100 USDC')).toBeInTheDocument();
         expect(screen.getByText('Borrow Remaining')).toBeInTheDocument();
-        expect(screen.getByText('$4,591.15')).toBeInTheDocument();
+        await waitFor(() => {
+            expect(screen.getByText('$3,025.09')).toBeInTheDocument();
+        });
+
         expect(screen.getByText('Bond Price')).toBeInTheDocument();
         expect(screen.getByText('~ 94.10')).toBeInTheDocument();
         expect(screen.getByText('APR')).toBeInTheDocument();
@@ -56,13 +55,13 @@ describe('PlaceOrder component', () => {
     it('should render collateral utilization in borrow orders', async () => {
         render(<Default />);
 
-        await waitFor(() => {
-            expect(screen.getByText('Collateral Usage')).toBeInTheDocument();
-        });
+        expect(screen.getByText('Collateral Usage')).toBeInTheDocument();
         expect(screen.getByText('37%')).toBeInTheDocument();
         expect(screen.getByText('37%')).toHaveClass('text-progressBarStart');
-        expect(screen.getByText('42.06%')).toBeInTheDocument();
-        expect(screen.getByText('42.06%')).toHaveClass('text-progressBarVia');
+        await waitFor(() => {
+            expect(screen.getByText('55%')).toBeInTheDocument();
+            expect(screen.getByText('55%')).toHaveClass('text-progressBarVia');
+        });
     });
 
     it('should display the circuit breaker disclaimer', async () => {
@@ -80,12 +79,10 @@ describe('PlaceOrder component', () => {
         );
     });
 
-    it('should not display the borrow remaining and the collateral usage if its a LEND order', async () => {
+    it('should not display the borrow remaining and the collateral usage if its a LEND order', () => {
         render(<Default side={OrderSide.LEND} />);
 
-        await waitFor(() => {
-            expect(screen.getByText('Lend Amount')).toBeInTheDocument();
-        });
+        expect(screen.getByText('Lend Amount')).toBeInTheDocument();
         expect(screen.getByText('100 USDC')).toBeInTheDocument();
         expect(screen.queryByText('Borrow Remaining')).not.toBeInTheDocument();
         expect(screen.queryByText('Collateral Usage')).not.toBeInTheDocument();
