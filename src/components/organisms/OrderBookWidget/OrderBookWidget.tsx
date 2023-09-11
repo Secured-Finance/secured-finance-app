@@ -364,19 +364,19 @@ export const OrderBookWidget = ({
             <div className='flex flex-row justify-between'>
                 <div className='flex h-8 flex-row items-start gap-3'>
                     <OrderBookIcon
-                        name='showAll'
+                        name='Show All Orders'
                         Icon={<ShowAllIcon className='mr-1 h-4 w-4' />}
                         onClick={() => dispatch('reset')}
                         active={state.showBorrow && state.showLend}
                     />
                     <OrderBookIcon
-                        name='showLendOrders'
+                        name='Show Only Lend Orders'
                         Icon={<ShowLastIcon className='mr-1 h-4 w-4' />}
                         onClick={() => dispatch('showOnlyLend')}
                         active={!state.showBorrow && state.showLend}
                     />
                     <OrderBookIcon
-                        name='showBorrowOrders'
+                        name='Show Only Borrow Orders'
                         Icon={<ShowFirstIcon className='mr-1 h-4 w-4' />}
                         onClick={() => dispatch('showOnlyBorrow')}
                         active={!state.showLend && state.showBorrow}
