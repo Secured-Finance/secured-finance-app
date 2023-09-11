@@ -24,3 +24,8 @@ export const Compact = Template.bind({});
 Compact.args = {
     variant: 'compact',
 };
+Compact.parameters = {
+    chromatic: {
+        viewports: [VIEWPORTS.TABLET],
+    },
+};
