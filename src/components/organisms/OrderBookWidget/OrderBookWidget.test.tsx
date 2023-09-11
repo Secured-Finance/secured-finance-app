@@ -257,6 +257,17 @@ describe('OrderBookWidget Component', () => {
             expect(screen.getAllByTestId('buyOrders-row')).toHaveLength(2);
             expect(screen.getAllByTestId('sellOrders-row')).toHaveLength(2);
         });
+
+        it('should not influence the mid price', () => {
+            render(<Default />);
+            const dropdown = screen.getByRole('button', { name: '0.01' });
+            fireEvent.click(dropdown);
+            const options = screen.getAllByRole('menuitem');
+            fireEvent.click(options[3]);
+            expect(screen.getByTestId('last-mid-price')).toHaveTextContent(
+                '93.00'
+            );
+        });
     });
 
     describe('Variants', () => {

@@ -18,6 +18,7 @@ import { Tooltip } from 'src/components/templates';
 import {
     AggregationFactorType,
     OrderBookEntry,
+    sortOrders,
     useOrderbook,
     usePrepareOrderbookData,
 } from 'src/hooks';
@@ -235,16 +236,32 @@ export const OrderBookWidget = ({
         [lendOrders]
     );
 
-    const lastMidValue = useMemo(() => {
-        if (borrowOrders.length === 0 || lendOrders.length === 0) {
+    const midValue = useMemo(() => {
+        const borrowOrders =
+            orderbook.data?.borrowOrderbook?.filter(
+                order => !order.amount.isZero()
+            ) ?? [];
+        const lendOrders =
+            orderbook.data?.lendOrderbook?.filter(
+                order => !order.amount.isZero()
+            ) ?? [];
+
+        if (!borrowOrders.length || !lendOrders.length) {
             return LoanValue.ZERO;
         }
 
-        return LoanValue.getMidValue(
-            lendOrders[0].value,
-            borrowOrders[borrowOrders.length - 1].value
+        const sortedBorrowOrders = [...borrowOrders].sort((a, b) =>
+            sortOrders(a, b, 'asc')
         );
-    }, [lendOrders, borrowOrders]);
+        const sortedLendOrders = [...lendOrders].sort((a, b) =>
+            sortOrders(a, b, 'desc')
+        );
+
+        return LoanValue.getMidValue(
+            sortedLendOrders[0].value,
+            sortedBorrowOrders[0].value
+        );
+    }, [orderbook.data?.borrowOrderbook, orderbook.data?.lendOrderbook]);
 
     const buyColumns = useMemo(
         () => [
@@ -321,8 +338,8 @@ export const OrderBookWidget = ({
     );
 
     useEffect(() => {
-        globalDispatch(setMidPrice(lastMidValue.price));
-    }, [globalDispatch, lastMidValue.price]);
+        globalDispatch(setMidPrice(midValue.price));
+    }, [globalDispatch, midValue.price]);
 
     const handleClick = (rowId: string, side: OrderSide): void => {
         const rowData =
@@ -429,7 +446,7 @@ export const OrderBookWidget = ({
                                 })}
                                 data-testid='last-mid-price'
                             >
-                                <p>{formatLoanValue(lastMidValue, 'price')}</p>
+                                <p>{formatLoanValue(midValue, 'price')}</p>
                                 {variant === 'itayose' && (
                                     <Tooltip>
                                         <p className='text-white'>
@@ -442,7 +459,7 @@ export const OrderBookWidget = ({
                             </span>
 
                             <span className='font-normal text-slateGray'>
-                                {formatLoanValue(lastMidValue, 'rate')}
+                                {formatLoanValue(midValue, 'rate')}
                             </span>
                         </div>
                     )}
