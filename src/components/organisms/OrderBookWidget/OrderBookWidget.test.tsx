@@ -94,18 +94,18 @@ describe('OrderBookWidget Component', () => {
 
         it('should render three toggle buttons', () => {
             render(<Default />);
-            expect(getButton('showAll')).toBeInTheDocument();
-            expect(getButton('showLendOrders')).toBeInTheDocument();
-            expect(getButton('showBorrowOrders')).toBeInTheDocument();
+            expect(getButton('Show All Orders')).toBeInTheDocument();
+            expect(getButton('Show Only Lend Orders')).toBeInTheDocument();
+            expect(getButton('Show Only Borrow Orders')).toBeInTheDocument();
         });
 
-        it('should render the showAll button as active by default', () => {
+        it('should render the Show All Orders button as active by default', () => {
             render(<Default />);
-            expect(getButton('showAll')).toHaveClass('bg-universeBlue');
-            expect(getButton('showLendOrders')).not.toHaveClass(
+            expect(getButton('Show All Orders')).toHaveClass('bg-universeBlue');
+            expect(getButton('Show Only Lend Orders')).not.toHaveClass(
                 'bg-universeBlue'
             );
-            expect(getButton('showBorrowOrders')).not.toHaveClass(
+            expect(getButton('Show Only Borrow Orders')).not.toHaveClass(
                 'bg-universeBlue'
             );
         });
@@ -115,23 +115,25 @@ describe('OrderBookWidget Component', () => {
             expectToHaveRows('buyOrders');
             expectToHaveRows('sellOrders');
 
-            fireEvent.click(getButton('showBorrowOrders'));
-            expect(getButton('showAll')).not.toHaveClass('bg-universeBlue');
-            expect(getButton('showLendOrders')).not.toHaveClass(
+            fireEvent.click(getButton('Show Only Borrow Orders'));
+            expect(getButton('Show All Orders')).not.toHaveClass(
                 'bg-universeBlue'
             );
-            expect(getButton('showBorrowOrders')).toHaveClass(
+            expect(getButton('Show Only Lend Orders')).not.toHaveClass(
+                'bg-universeBlue'
+            );
+            expect(getButton('Show Only Borrow Orders')).toHaveClass(
                 'bg-universeBlue'
             );
             expectToHaveRows('buyOrders');
             expectNotToHaveRows('sellOrders');
 
-            fireEvent.click(getButton('showBorrowOrders'));
-            expect(getButton('showAll')).toHaveClass('bg-universeBlue');
-            expect(getButton('showLendOrders')).not.toHaveClass(
+            fireEvent.click(getButton('Show Only Borrow Orders'));
+            expect(getButton('Show All Orders')).toHaveClass('bg-universeBlue');
+            expect(getButton('Show Only Lend Orders')).not.toHaveClass(
                 'bg-universeBlue'
             );
-            expect(getButton('showBorrowOrders')).not.toHaveClass(
+            expect(getButton('Show Only Borrow Orders')).not.toHaveClass(
                 'bg-universeBlue'
             );
             expectToHaveRows('buyOrders');
@@ -143,52 +145,56 @@ describe('OrderBookWidget Component', () => {
             expectToHaveRows('buyOrders');
             expectToHaveRows('sellOrders');
 
-            fireEvent.click(getButton('showLendOrders'));
-            expect(getButton('showAll')).not.toHaveClass('bg-universeBlue');
-            expect(getButton('showLendOrders')).toHaveClass('bg-universeBlue');
-            expect(getButton('showBorrowOrders')).not.toHaveClass(
+            fireEvent.click(getButton('Show Only Lend Orders'));
+            expect(getButton('Show All Orders')).not.toHaveClass(
+                'bg-universeBlue'
+            );
+            expect(getButton('Show Only Lend Orders')).toHaveClass(
+                'bg-universeBlue'
+            );
+            expect(getButton('Show Only Borrow Orders')).not.toHaveClass(
                 'bg-universeBlue'
             );
             expectNotToHaveRows('buyOrders');
             expectToHaveRows('sellOrders');
 
-            fireEvent.click(getButton('showLendOrders'));
-            expect(getButton('showAll')).toHaveClass('bg-universeBlue');
-            expect(getButton('showLendOrders')).not.toHaveClass(
+            fireEvent.click(getButton('Show Only Lend Orders'));
+            expect(getButton('Show All Orders')).toHaveClass('bg-universeBlue');
+            expect(getButton('Show Only Lend Orders')).not.toHaveClass(
                 'bg-universeBlue'
             );
-            expect(getButton('showBorrowOrders')).not.toHaveClass(
+            expect(getButton('Show Only Borrow Orders')).not.toHaveClass(
                 'bg-universeBlue'
             );
             expectToHaveRows('buyOrders');
             expectToHaveRows('sellOrders');
         });
 
-        it('should hide the mid price when showLendOrders is clicked and show it again when re clicked', () => {
+        it('should hide the mid price when Show Only Lend Orders is clicked and show it again when re clicked', () => {
             render(<Default />);
             expect(screen.getByTestId('last-mid-price')).toBeInTheDocument();
-            fireEvent.click(getButton('showLendOrders'));
+            fireEvent.click(getButton('Show Only Lend Orders'));
             expect(
                 screen.queryByTestId('last-mid-price')
             ).not.toBeInTheDocument();
-            fireEvent.click(getButton('showLendOrders'));
+            fireEvent.click(getButton('Show Only Lend Orders'));
             expect(screen.getByTestId('last-mid-price')).toBeInTheDocument();
         });
 
-        it('should be able to toggle between showLendOrders and showBorrowOrders', () => {
+        it('should be able to toggle between Show Only Lend Orders and Show Only Borrow Orders', () => {
             render(<Default />);
             expect(screen.getByTestId('buyOrders')).toBeInTheDocument();
             expect(screen.getByTestId('sellOrders')).toBeInTheDocument();
             expect(screen.getByTestId('last-mid-price')).toBeInTheDocument();
 
-            fireEvent.click(getButton('showLendOrders'));
+            fireEvent.click(getButton('Show Only Lend Orders'));
             expectNotToHaveRows('buyOrders');
             expectToHaveRows('sellOrders');
             expect(
                 screen.queryByTestId('last-mid-price')
             ).not.toBeInTheDocument();
 
-            fireEvent.click(getButton('showBorrowOrders'));
+            fireEvent.click(getButton('Show Only Borrow Orders'));
             expectToHaveRows('buyOrders');
             expectNotToHaveRows('sellOrders');
             expect(
