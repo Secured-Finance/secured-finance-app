@@ -51,12 +51,12 @@ jobs:
 
       - name: Publish to Cloudflare Pages
         uses: cloudflare/pages-action@v1
+        id: deploy
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           projectName: secured-finance-app
           directory: .deploy/build
-          githubToken: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Get the output url
         run: echo "Deploy url is ${{ steps.deploy.outputs.url }}"
