@@ -14,6 +14,7 @@ type LandingOrderFormStore = {
     orderType: OrderType;
     lastView: ViewType;
     sourceAccount: WalletSource;
+    isBorrowedCollateral: boolean;
 };
 const initialStore: LandingOrderFormStore = {
     currency: CurrencySymbol.WFIL,
@@ -24,6 +25,7 @@ const initialStore: LandingOrderFormStore = {
     orderType: OrderType.MARKET,
     lastView: 'Simple',
     sourceAccount: WalletSource.METAMASK,
+    isBorrowedCollateral: false,
 };
 
 const landingOrderFormSlice = createSlice({
@@ -56,6 +58,9 @@ const landingOrderFormSlice = createSlice({
         },
         setSourceAccount: (state, action: PayloadAction<WalletSource>) => {
             state.sourceAccount = action.payload;
+        },
+        setIsBorrowedCollateral: (state, action: PayloadAction<boolean>) => {
+            state.isBorrowedCollateral = action.payload;
         },
     },
 });

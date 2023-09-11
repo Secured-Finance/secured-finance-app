@@ -387,6 +387,10 @@ export const mockUseSF = () => {
         ),
 
         getOrderFeeRate: jest.fn(() => Promise.resolve(BigNumber.from('100'))),
+
+        getOrderEstimation: jest.fn(() =>
+            Promise.resolve({ coverage: BigNumber.from('5500') })
+        ),
     };
 
     return mockSecuredFinance;
