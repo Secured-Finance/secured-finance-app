@@ -58,7 +58,7 @@ jobs:
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           projectName: secured-finance-app
           directory: .deploy/build
-          branch: ${{ github.ref }}
+          branch: ${{ github.event.pull_request.head.ref || github.ref_name }}
 
       - name: Get the output url
         run: echo "Deploy url is ${{ steps.deploy.outputs.url }}"
@@ -67,4 +67,4 @@ jobs:
         uses: mshick/add-pr-comment@v2
         with:
           message: |
-            🚀 This branch can be previewed at ${{ steps.deploy.outputs.url }}
+            🚀 This branch can be previewed at ${{ steps.deploy.outputs.url }} or ${{ steps.deploy.outputs.alias }}
