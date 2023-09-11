@@ -20,3 +20,7 @@ export default {
 const Template: StoryFn<typeof OrderTable> = args => <OrderTable {...args} />;
 
 export const Default = Template.bind({});
+export const Compact = Template.bind({});
+Compact.args = {
+    variant: 'compact',
+};
