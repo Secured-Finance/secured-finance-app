@@ -48,7 +48,7 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: WebApp
-          path: .deploy/${{ vars.FLEEK_ENV }}/build
+          path: .deploy/build
 
       - name: Publish to Cloudflare Pages
         uses: cloudflare/pages-action@v1
@@ -56,5 +56,5 @@ jobs:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           projectName: secured-finance-app
-          directory: .deploy/${{ vars.FLEEK_ENV }}
+          directory: .deploy/build
           gitHubToken: ${{ secrets.PAT }}
