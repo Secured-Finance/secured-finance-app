@@ -35,11 +35,10 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     name: Publish to Cloudflare Pages
-    environment: ${{ needs.identify-env.outputs.environment_name }}
     permissions:
       contents: read
       deployments: write
-    needs: [identify-env, build-and-test-all]
+    needs: [build-and-test-all]
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -58,3 +57,6 @@ jobs:
           projectName: secured-finance-app
           directory: .deploy/build
           githubToken: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Get the output url
+        run: echo "Deploy url is ${{ steps.deploy.outputs.url }}"
