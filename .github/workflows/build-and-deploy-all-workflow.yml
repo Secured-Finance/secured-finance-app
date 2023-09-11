@@ -31,3 +31,40 @@ jobs:
     with:
       artifact_name: WebApp
     secrets: inherit
+
+  publish:
+    runs-on: ubuntu-latest
+    name: Publish to Cloudflare Pages
+    permissions:
+      contents: read
+      deployments: write
+      pull-requests: write
+    needs: [build-and-test-all]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Retrieve artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: WebApp
+          path: .deploy/build
+
+      - name: Publish to Cloudflare Pages
+        uses: cloudflare/pages-action@v1
+        id: deploy
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          projectName: secured-finance-app
+          directory: .deploy/build
+          branch: ${{ github.event.pull_request.head.ref || github.ref_name }}
+
+      - name: Get the output url
+        run: echo "Deploy url is ${{ steps.deploy.outputs }}"
+
+      - name: Comment on PR
+        uses: mshick/add-pr-comment@v2
+        with:
+          message: |
+            🚀 This branch can be previewed at ${{ steps.deploy.outputs.url }} or ${{ steps.deploy.outputs.alias }}

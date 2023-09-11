@@ -62,11 +62,7 @@ export const YieldChart = ({
                                 handleChartClick={maturity =>
                                     dispatch(setMaturity(maturity.toNumber()))
                                 }
-                                maturity={
-                                    maturity
-                                        ? maturitiesOptionList[0].value
-                                        : new Maturity(maturity)
-                                }
+                                maturity={new Maturity(maturity)}
                             />
                         )}
                     </div>

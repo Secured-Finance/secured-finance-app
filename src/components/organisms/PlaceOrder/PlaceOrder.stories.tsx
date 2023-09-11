@@ -34,6 +34,7 @@ export default {
         chromatic: {
             viewports: [VIEWPORTS.MOBILE, VIEWPORTS.TABLET],
         },
+        connected: true,
     },
 } as Meta<typeof PlaceOrder>;
 

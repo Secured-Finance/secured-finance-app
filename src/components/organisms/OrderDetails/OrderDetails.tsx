@@ -66,7 +66,6 @@ export const OrderDetails = ({
                 collateral={collateral}
                 tradeAmount={amount}
                 side={side}
-                assetPrice={assetPrice}
                 tradeValue={loanValue}
             />
             <SectionWithItems

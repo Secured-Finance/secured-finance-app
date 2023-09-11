@@ -13,6 +13,7 @@ export * from './useOrderFee';
 export * from './useOrderList';
 export * from './useOrderbook';
 export * from './useOrders';
+export * from './useOrderEstimation';
 export * from './usePagination';
 export * from './usePositions';
 export * from './usePrepareOrderbookData';
