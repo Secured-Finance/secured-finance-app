@@ -1,6 +1,6 @@
 import { OrderSide } from '@secured-finance/sf-client';
 import { composeStories } from '@storybook/react';
-import { fireEvent, render, screen } from 'src/test-utils.js';
+import { fireEvent, render, screen, within } from 'src/test-utils.js';
 import { OrderType } from 'src/types';
 import * as stories from './OrderBookWidget.stories';
 
@@ -87,6 +87,11 @@ describe('OrderBookWidget Component', () => {
         const getButton = (name: string) =>
             screen.getByRole('button', { name });
 
+        const expectToHaveRows = (name: string) =>
+            within(screen.getByTestId(name)).getAllByRole('row').length > 0;
+        const expectNotToHaveRows = (name: string) =>
+            within(screen.getByTestId(name)).queryAllByRole('row').length === 0;
+
         it('should render three toggle buttons', () => {
             render(<Default />);
             expect(getButton('showAll')).toBeInTheDocument();
@@ -107,8 +112,9 @@ describe('OrderBookWidget Component', () => {
 
         it('should toggle showBorrow state when Borrow button is clicked', () => {
             render(<Default />);
-            expect(screen.getByTestId('buyOrders')).toBeInTheDocument();
-            expect(screen.getByTestId('sellOrders')).toBeInTheDocument();
+            expectToHaveRows('buyOrders');
+            expectToHaveRows('sellOrders');
+
             fireEvent.click(getButton('showBorrowOrders'));
             expect(getButton('showAll')).not.toHaveClass('bg-universeBlue');
             expect(getButton('showLendOrders')).not.toHaveClass(
@@ -117,8 +123,8 @@ describe('OrderBookWidget Component', () => {
             expect(getButton('showBorrowOrders')).toHaveClass(
                 'bg-universeBlue'
             );
-            expect(screen.getByTestId('buyOrders')).toBeInTheDocument();
-            expect(screen.queryByTestId('sellOrders')).not.toBeInTheDocument();
+            expectToHaveRows('buyOrders');
+            expectNotToHaveRows('sellOrders');
 
             fireEvent.click(getButton('showBorrowOrders'));
             expect(getButton('showAll')).toHaveClass('bg-universeBlue');
@@ -128,14 +134,14 @@ describe('OrderBookWidget Component', () => {
             expect(getButton('showBorrowOrders')).not.toHaveClass(
                 'bg-universeBlue'
             );
-            expect(screen.getByTestId('buyOrders')).toBeInTheDocument();
-            expect(screen.getByTestId('sellOrders')).toBeInTheDocument();
+            expectToHaveRows('buyOrders');
+            expectToHaveRows('sellOrders');
         });
 
         it('should toggle showLend state when Lend button is clicked', () => {
             render(<Default />);
-            expect(screen.getByTestId('buyOrders')).toBeInTheDocument();
-            expect(screen.getByTestId('sellOrders')).toBeInTheDocument();
+            expectToHaveRows('buyOrders');
+            expectToHaveRows('sellOrders');
 
             fireEvent.click(getButton('showLendOrders'));
             expect(getButton('showAll')).not.toHaveClass('bg-universeBlue');
@@ -143,8 +149,8 @@ describe('OrderBookWidget Component', () => {
             expect(getButton('showBorrowOrders')).not.toHaveClass(
                 'bg-universeBlue'
             );
-            expect(screen.queryByTestId('buyOrders')).not.toBeInTheDocument();
-            expect(screen.getByTestId('sellOrders')).toBeInTheDocument();
+            expectNotToHaveRows('buyOrders');
+            expectToHaveRows('sellOrders');
 
             fireEvent.click(getButton('showLendOrders'));
             expect(getButton('showAll')).toHaveClass('bg-universeBlue');
@@ -154,8 +160,8 @@ describe('OrderBookWidget Component', () => {
             expect(getButton('showBorrowOrders')).not.toHaveClass(
                 'bg-universeBlue'
             );
-            expect(screen.getByTestId('buyOrders')).toBeInTheDocument();
-            expect(screen.getByTestId('sellOrders')).toBeInTheDocument();
+            expectToHaveRows('buyOrders');
+            expectToHaveRows('sellOrders');
         });
 
         it('should hide the mid price when showLendOrders is clicked and show it again when re clicked', () => {
@@ -173,18 +179,18 @@ describe('OrderBookWidget Component', () => {
             render(<Default />);
             expect(screen.getByTestId('buyOrders')).toBeInTheDocument();
             expect(screen.getByTestId('sellOrders')).toBeInTheDocument();
-            expect(screen.findByTestId('last-mid-price')).toBeInTheDocument();
+            expect(screen.getByTestId('last-mid-price')).toBeInTheDocument();
 
             fireEvent.click(getButton('showLendOrders'));
-            expect(screen.queryByTestId('buyOrders')).not.toBeInTheDocument();
-            expect(screen.getByTestId('sellOrders')).toBeInTheDocument();
+            expectNotToHaveRows('buyOrders');
+            expectToHaveRows('sellOrders');
             expect(
                 screen.queryByTestId('last-mid-price')
             ).not.toBeInTheDocument();
 
             fireEvent.click(getButton('showBorrowOrders'));
-            expect(screen.getByTestId('buyOrders')).toBeInTheDocument();
-            expect(screen.queryByTestId('sellOrders')).not.toBeInTheDocument();
+            expectToHaveRows('buyOrders');
+            expectNotToHaveRows('sellOrders');
             expect(
                 screen.queryByTestId('last-mid-price')
             ).not.toBeInTheDocument();
