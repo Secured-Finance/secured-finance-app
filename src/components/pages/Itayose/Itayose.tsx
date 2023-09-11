@@ -243,7 +243,10 @@ export const Itayose = () => {
                         </div>
                     </GradientBox>
                     <HorizontalTab tabTitles={['Open Orders']}>
-                        <OrderTable data={filteredOrderList} />
+                        <OrderTable
+                            data={filteredOrderList}
+                            variant='compact'
+                        />
                     </HorizontalTab>
                 </div>
             </ThreeColumnsWithTopBar>
