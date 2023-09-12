@@ -2,10 +2,17 @@ import { useMemo } from 'react';
 import { CurrencySymbol, currencyMap, hexToCurrencySymbol } from 'src/utils';
 import { emptyOrderList, useOrderList } from '../useOrderList';
 
+const passThrough = () => true;
+
 export const useMarketOrderList = (
     account: string | undefined,
     ccy: CurrencySymbol,
-    maturity: number
+    maturity: number,
+    filterFn: (
+        order: NonNullable<
+            ReturnType<typeof useOrderList>['data']
+        >['activeOrderList'][0]
+    ) => unknown = passThrough
 ) => {
     const currency = currencyMap[ccy].toCurrency();
     const { data: orderList = emptyOrderList } = useOrderList(account, [
@@ -13,11 +20,13 @@ export const useMarketOrderList = (
     ]);
 
     return useMemo(() => {
-        return orderList.activeOrderList.filter(
-            o =>
-                hexToCurrencySymbol(o.currency) === ccy &&
-                o.maturity === maturity.toString()
-        );
+        return orderList.activeOrderList
+            .filter(
+                o =>
+                    hexToCurrencySymbol(o.currency) === ccy &&
+                    o.maturity === maturity.toString()
+            )
+            .filter(o => filterFn(o));
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [JSON.stringify(orderList), maturity]);
 };

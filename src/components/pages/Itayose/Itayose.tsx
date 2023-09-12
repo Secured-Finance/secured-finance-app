@@ -137,7 +137,12 @@ export const Itayose = () => {
     const { data: collateralBook = emptyCollateralBook } =
         useCollateralBook(address);
 
-    const filteredOrderList = useMarketOrderList(address, currency, maturity);
+    const filteredOrderList = useMarketOrderList(
+        address,
+        currency,
+        maturity,
+        o => o.isPreOrder
+    );
 
     const dispatch = useDispatch();
 
