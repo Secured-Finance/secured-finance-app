@@ -1,5 +1,7 @@
 import { composeStories } from '@storybook/react';
 import { render, screen } from 'src/test-utils.js';
+import { CurrencySymbol } from 'src/utils';
+import { Amount } from 'src/utils/entities';
 import * as stories from './AmountCard.stories';
 
 const { Default } = composeStories(stories);
@@ -27,5 +29,33 @@ describe('AmountCard Component', () => {
     it('should render a AmountCard with the amount in USD', () => {
         render(<Default />);
         expect(screen.getByText('~ $41,500')).toBeInTheDocument();
+    });
+
+    describe('Rounding', () => {
+        it('should display the amount with no decimals when the number does not have any', () => {
+            render(<Default />);
+            expect(screen.getByText('5,000')).toBeInTheDocument();
+        });
+
+        it('should display the amount with the correct number of decimal places depending of the currency', () => {
+            render(
+                <Default
+                    amount={
+                        new Amount('1001000000000000000', CurrencySymbol.ETH)
+                    }
+                />
+            );
+            expect(screen.getByText('1.001')).toBeInTheDocument();
+        });
+        it('should display the amount with the correct number of decimal places depending of the currency', () => {
+            render(
+                <Default
+                    amount={
+                        new Amount('1000000000000001000', CurrencySymbol.ETH)
+                    }
+                />
+            );
+            expect(screen.getByText('1')).toBeInTheDocument();
+        });
     });
 });
