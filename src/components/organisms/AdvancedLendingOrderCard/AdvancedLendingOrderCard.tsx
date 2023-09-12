@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
+    Checkbox,
     CollateralManagementConciseTab,
     ErrorInfo,
     OrderDisplayBox,
@@ -14,12 +15,19 @@ import {
     WalletSourceSelector,
 } from 'src/components/atoms';
 import { OrderAction } from 'src/components/organisms';
-import { CollateralBook, useBalances, useMarket } from 'src/hooks';
+import { Tooltip } from 'src/components/templates';
+import {
+    CollateralBook,
+    useBalances,
+    useMarket,
+    useOrderEstimation,
+} from 'src/hooks';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import {
     resetUnitPrice,
     selectLandingOrderForm,
     setAmount,
+    setIsBorrowedCollateral,
     setOrderType,
     setSide,
     setSourceAccount,
@@ -62,6 +70,7 @@ export const AdvancedLendingOrderCard = ({
         unitPrice,
         maturity,
         sourceAccount,
+        isBorrowedCollateral,
     } = useSelector((state: RootState) =>
         selectLandingOrderForm(state.landingOrderForm)
     );
@@ -80,6 +89,8 @@ export const AdvancedLendingOrderCard = ({
 
     const dispatch = useDispatch();
     const { address } = useAccount();
+
+    const { data: coverage = 0 } = useOrderEstimation(address);
 
     const collateralUsagePercent = useMemo(() => {
         return collateralBook.coverage.toNumber() / 100.0;
@@ -104,19 +115,23 @@ export const AdvancedLendingOrderCard = ({
         ? new Amount(amount, currency)
         : undefined;
 
+    const collateralCoverage = isBorrowedCollateral
+        ? coverage
+        : collateralBook.coverage.toNumber();
+
     const availableToBorrow = useMemo(() => {
         return currency && price
             ? computeAvailableToBorrow(
                   price,
                   collateralBook.usdCollateral,
-                  collateralBook.coverage.toNumber() / MAX_COVERAGE,
+                  collateralCoverage / MAX_COVERAGE,
                   collateralBook.collateralThreshold
               )
             : 0;
     }, [
         collateralBook.collateralThreshold,
-        collateralBook.coverage,
         collateralBook.usdCollateral,
+        collateralCoverage,
         currency,
         price,
     ]);
@@ -315,6 +330,25 @@ export const AdvancedLendingOrderCard = ({
                     <div className='text-right text-planetaryPurple'>
                         {prefixTilde(ordinaryFormat(availableToBorrow))}
                     </div>
+                </div>
+                <div className='mx-10px'>
+                    <Checkbox
+                        handleToggle={(value: boolean) =>
+                            dispatch(setIsBorrowedCollateral(value))
+                        }
+                        value={isBorrowedCollateral}
+                    >
+                        <div className='flex flex-row items-center justify-between gap-1'>
+                            <div className='typography-caption text-slateGray '>
+                                Borrow to vault
+                            </div>
+                            <Tooltip>
+                                Keeping this asset as collateral in your vault
+                                increases your borrowing power and lowers
+                                liquidation risk
+                            </Tooltip>
+                        </div>
+                    </Checkbox>
                 </div>
                 <OrderInputBox
                     field='Amount'
