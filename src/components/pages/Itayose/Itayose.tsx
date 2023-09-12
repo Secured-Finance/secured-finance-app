@@ -197,7 +197,8 @@ export const Itayose = () => {
                 <div>
                     <AdvancedLendingOrderCard
                         collateralBook={collateralBook}
-                        onlyLimitOrder
+                        isItayose
+                        hasPreOrders={filteredOrderList.length > 0}
                     />
                 </div>
                 <div className='flex flex-col gap-4'>
