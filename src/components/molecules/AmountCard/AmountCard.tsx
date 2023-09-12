@@ -21,7 +21,11 @@ export const AmountCard = ({
             </div>
             <div className='flex h-6 flex-row items-center justify-end gap-2'>
                 <span className='typography-body-1 font-bold text-white'>
-                    {ordinaryFormat(amount.value)}
+                    {ordinaryFormat(
+                        amount.value,
+                        0,
+                        currencyMap[amount.currency].roundingDecimal
+                    )}
                 </span>
                 <span className='typography-caption h-5 text-white-60'>
                     {amount.currency}
