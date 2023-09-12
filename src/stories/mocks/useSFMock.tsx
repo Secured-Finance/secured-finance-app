@@ -297,6 +297,7 @@ export const mockUseSF = () => {
                         unitPrice: BigNumber.from('9800'),
                         amount: BigNumber.from('1000000000000000000'),
                         timestamp: BigNumber.from('1609210000'),
+                        isPreOrder: false,
                     },
                     {
                         orderId: 2,
@@ -306,6 +307,7 @@ export const mockUseSF = () => {
                         unitPrice: BigNumber.from('9800'),
                         amount: BigNumber.from('100000000000000000'),
                         timestamp: BigNumber.from('1609220000'),
+                        isPreOrder: false,
                     },
                     {
                         orderId: 3,
@@ -315,6 +317,7 @@ export const mockUseSF = () => {
                         unitPrice: BigNumber.from('9800'),
                         amount: BigNumber.from('100000000000000000000'),
                         timestamp: BigNumber.from('1609205000'),
+                        isPreOrder: false,
                     },
                     {
                         orderId: 1,
@@ -324,6 +327,7 @@ export const mockUseSF = () => {
                         unitPrice: BigNumber.from('9800'),
                         amount: BigNumber.from('500000000'),
                         timestamp: BigNumber.from('1609212000'),
+                        isPreOrder: false,
                     },
                     {
                         orderId: 5,
@@ -333,6 +337,7 @@ export const mockUseSF = () => {
                         unitPrice: BigNumber.from('7800'),
                         amount: BigNumber.from('100000000000000000000'),
                         timestamp: BigNumber.from('1409220000'),
+                        isPreOrder: true,
                     },
                 ],
                 inactiveOrders: [
@@ -344,6 +349,7 @@ export const mockUseSF = () => {
                         unitPrice: BigNumber.from('9800'),
                         amount: BigNumber.from('450000000000000000'),
                         timestamp: BigNumber.from('1609295092'),
+                        isPreOrder: false,
                     },
                     {
                         orderId: 1,
@@ -353,6 +359,7 @@ export const mockUseSF = () => {
                         unitPrice: BigNumber.from('9800'),
                         amount: BigNumber.from('1000000000000000000000'),
                         timestamp: BigNumber.from('1609295092'),
+                        isPreOrder: false,
                     },
                 ],
             })

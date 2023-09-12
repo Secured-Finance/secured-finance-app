@@ -65,6 +65,7 @@ export const useOrderList = (
                         unitPrice: order.unitPrice,
                         amount: order.amount,
                         createdAt: order.timestamp,
+                        isPreOrder: order.isPreOrder,
                     }))
                     .sort((a, b) => sortOrders(a, b)),
                 inactiveOrderList: orderList.inactiveOrders
@@ -76,6 +77,7 @@ export const useOrderList = (
                         unitPrice: order.unitPrice,
                         amount: order.amount,
                         createdAt: order.timestamp,
+                        isPreOrder: order.isPreOrder,
                     }))
                     .sort((a, b) => sortOrders(a, b)),
             };
