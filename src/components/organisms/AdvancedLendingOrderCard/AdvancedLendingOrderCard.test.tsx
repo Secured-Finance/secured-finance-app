@@ -393,7 +393,6 @@ describe('AdvancedLendingOrderCard Component', () => {
         render(<Default />, {
             preloadedState: {
                 ...preloadedState,
-                ...preloadedAssetPrices,
                 landingOrderForm: {
                     ...preloadedState.landingOrderForm,
                     side: OrderSide.BORROW,
@@ -413,7 +412,6 @@ describe('AdvancedLendingOrderCard Component', () => {
         render(<Default />, {
             preloadedState: {
                 ...preloadedState,
-                ...preloadedAssetPrices,
                 landingOrderForm: {
                     ...preloadedState.landingOrderForm,
                     side: OrderSide.LEND,
