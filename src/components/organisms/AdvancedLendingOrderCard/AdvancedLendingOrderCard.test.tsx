@@ -390,14 +390,40 @@ describe('AdvancedLendingOrderCard Component', () => {
     });
 
     it('should show available to borrow on borrow screen', async () => {
-        const preloadedState = { ...preloadedAssetPrices };
-        render(<Default />, { preloadedState });
+        render(<Default />, {
+            preloadedState: {
+                ...preloadedState,
+                ...preloadedAssetPrices,
+                landingOrderForm: {
+                    ...preloadedState.landingOrderForm,
+                    side: OrderSide.BORROW,
+                    currency: CurrencySymbol.WFIL,
+                },
+            },
+        });
         expect(
             screen.getByText('Available To Borrow (WFIL)')
         ).toBeInTheDocument();
         await waitFor(() => {
             expect(screen.getByText('~ 867.19')).toBeInTheDocument();
         });
+    });
+
+    it('should not show available to borrow on lend screen', async () => {
+        render(<Default />, {
+            preloadedState: {
+                ...preloadedState,
+                ...preloadedAssetPrices,
+                landingOrderForm: {
+                    ...preloadedState.landingOrderForm,
+                    side: OrderSide.LEND,
+                    currency: CurrencySymbol.WFIL,
+                },
+            },
+        });
+        expect(
+            screen.queryByText('Available To Borrow (WFIL)')
+        ).not.toBeInTheDocument();
     });
 
     describe('Error handling for invalid bond price in different order types and sides', () => {
