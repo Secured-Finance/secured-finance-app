@@ -22,13 +22,11 @@ import {
     MarketPhase,
     baseContracts,
     emptyCollateralBook,
-    emptyOrderList,
     useCollateralBook,
-    useCurrenciesForOrders,
     useLendingMarkets,
+    useMarketOrderList,
     useMarketPhase,
     useMaturityOptions,
-    useOrderList,
 } from 'src/hooks';
 import { useOrderbook } from 'src/hooks/useOrderbook';
 import { getAssetPrice } from 'src/store/assetPrices/selectors';
@@ -44,7 +42,6 @@ import {
     amountFormatterFromBase,
     amountFormatterToBase,
     getCurrencyMapAsOptions,
-    hexToCurrencySymbol,
     usdFormat,
 } from 'src/utils';
 import { countdown } from 'src/utils/date';
@@ -137,22 +134,10 @@ export const Itayose = () => {
     }, [currency, assetList]);
 
     const orderBook = useOrderbook(currency, maturity);
-    const { data: usedCurrencies = [] } = useCurrenciesForOrders(address);
-    const { data: orderList = emptyOrderList } = useOrderList(
-        address,
-        usedCurrencies
-    );
     const { data: collateralBook = emptyCollateralBook } =
         useCollateralBook(address);
 
-    const filteredOrderList = useMemo(() => {
-        return orderList.activeOrderList.filter(
-            o =>
-                hexToCurrencySymbol(o.currency) === currency &&
-                o.maturity === selectedTerm.value.toString()
-        );
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [JSON.stringify(orderList), selectedTerm.value.toNumber()]);
+    const filteredOrderList = useMarketOrderList(address, currency, maturity);
 
     const dispatch = useDispatch();
 
