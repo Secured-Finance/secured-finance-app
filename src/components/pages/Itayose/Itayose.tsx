@@ -227,15 +227,19 @@ export const Itayose = () => {
                                 order feature for our users. This feature allows
                                 you to place limit orders 7 days before a new
                                 orderbook starts trading to secure your position
-                                in the market. Please note that no new
-                                pre-orders will be accepted within 1 hour prior
-                                to the start of trading.
+                                in the market. To maintain market fairness,
+                                users can place either a buy or sell order, but
+                                not both, during the pre-open period.
+                                Additionally, please note that no new pre-orders
+                                will be accepted within 1 hour prior to the
+                                start of trading.
                             </p>
                             <p className='typography-nav-menu-default pb-7 pr-7 text-white'>
                                 Secured Finance does not charge any fees for
-                                placing orders during the pre-order period. To
-                                learn more about pre-market orders and how we
-                                determine prices in Secured Finance GitBook.
+                                placing orders during the pre-order period. For
+                                more information about pre-market orders and our
+                                pricing process, please refer to the Secured
+                                Finance GitBook.
                             </p>
                         </div>
                     </GradientBox>
