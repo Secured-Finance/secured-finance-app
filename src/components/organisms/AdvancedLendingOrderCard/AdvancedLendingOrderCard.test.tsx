@@ -653,5 +653,15 @@ describe('AdvancedLendingOrderCard Component', () => {
             changeInputValue('Bond Price', '94');
             expect(screen.getByText('7.70%')).toBeInTheDocument();
         });
+
+        it('should not reset user input value of bond price when switching order side', async () => {
+            render(<Default marketPrice={9600} />, { preloadedState });
+            changeInputValue('Bond Price', '20');
+            assertBondPriceInputValue('20');
+            await waitFor(() => {
+                fireEvent.click(screen.getByText('Lend'));
+            });
+            assertBondPriceInputValue('20');
+        });
     });
 });
