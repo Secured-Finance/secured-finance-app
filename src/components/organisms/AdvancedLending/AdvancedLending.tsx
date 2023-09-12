@@ -235,7 +235,7 @@ export const AdvancedLending = ({
 
             <OrderBookWidget orderbook={orderBook} currency={currency} />
 
-            <div className='flex flex-grow flex-col gap-6'>
+            <div className='flex h-full flex-grow flex-col gap-6'>
                 <Tab tabDataArray={[{ text: 'Yield Curve' }]}>
                     <LineChartTab
                         maturitiesOptionList={maturitiesOptionList}

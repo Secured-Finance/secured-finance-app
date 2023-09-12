@@ -218,7 +218,7 @@ export const Itayose = () => {
                     variant='itayose'
                 />
 
-                <div className='flex flex-col gap-4'>
+                <div className='flex h-full flex-col items-stretch justify-stretch gap-6'>
                     <GradientBox variant='high-contrast'>
                         <div className='px-3'>
                             <h1 className='typography-nav-menu-default whitespace-nowrap py-5 text-left text-neutral-8'>
