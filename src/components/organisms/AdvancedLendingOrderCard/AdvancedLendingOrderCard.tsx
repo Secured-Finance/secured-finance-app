@@ -45,15 +45,17 @@ import {
 import { Amount, LoanValue } from 'src/utils/entities';
 import { useAccount } from 'wagmi';
 
-export const AdvancedLendingOrderCard = ({
+export function AdvancedLendingOrderCard({
     collateralBook,
-    onlyLimitOrder = false,
+    isItayose = false,
+    hasPreOrders = false,
     marketPrice,
 }: {
     collateralBook: CollateralBook;
-    onlyLimitOrder?: boolean;
+    isItayose?: boolean;
+    hasPreOrders?: boolean;
     marketPrice?: number;
-}) => {
+}): JSX.Element {
     const {
         currency,
         amount,
@@ -182,10 +184,10 @@ export const AdvancedLendingOrderCard = ({
             : setSliderValue(0.0);
     };
     useEffect(() => {
-        if (onlyLimitOrder) {
+        if (isItayose) {
             dispatch(setOrderType(OrderType.LIMIT));
         }
-    }, [dispatch, onlyLimitOrder]);
+    }, [dispatch, isItayose]);
 
     const handleWalletSourceChange = (source: WalletSource) => {
         dispatch(setSourceAccount(source));
@@ -237,7 +239,7 @@ export const AdvancedLendingOrderCard = ({
             />
 
             <div className='flex w-full flex-col justify-center gap-6 px-4 pt-5'>
-                {!onlyLimitOrder && (
+                {!isItayose && (
                     <RadioGroupSelector
                         options={OrderTypeOptions}
                         selectedOption={orderType}
@@ -353,6 +355,14 @@ export const AdvancedLendingOrderCard = ({
                     }
                 />
 
+                {isItayose && (
+                    <ErrorInfo
+                        errorMessage='Simultaneous borrow and lend orders are not allowed during the pre-open market period.'
+                        align='left'
+                        showError={hasPreOrders}
+                    />
+                )}
+
                 <Separator color='neutral-3'></Separator>
 
                 <div className='typography-nav-menu-default flex flex-row justify-between'>
@@ -376,4 +386,4 @@ export const AdvancedLendingOrderCard = ({
             </div>
         </div>
     );
-};
+}
