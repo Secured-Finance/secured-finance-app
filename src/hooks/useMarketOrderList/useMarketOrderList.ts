@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { CurrencySymbol, currencyMap, hexToCurrencySymbol } from 'src/utils';
+import { CurrencySymbol, currencyMap } from 'src/utils';
 import { emptyOrderList, useOrderList } from '../useOrderList';
 
 const passThrough = () => true;
@@ -21,11 +21,7 @@ export const useMarketOrderList = (
 
     return useMemo(() => {
         return orderList.activeOrderList
-            .filter(
-                o =>
-                    hexToCurrencySymbol(o.currency) === ccy &&
-                    o.maturity === maturity.toString()
-            )
+            .filter(o => o.maturity === maturity.toString())
             .filter(o => filterFn(o));
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [JSON.stringify(orderList), maturity]);

@@ -44,6 +44,31 @@ describe('useOrderList', () => {
     });
 
     it('should filter the orders by the given filter function', async () => {
+        mock.getOrderList.mockResolvedValueOnce({
+            activeOrders: [
+                {
+                    orderId: 3,
+                    ccy: wfilBytes32,
+                    side: 1,
+                    maturity: BigNumber.from(dec24Fixture.toString()),
+                    unitPrice: BigNumber.from('9800'),
+                    amount: BigNumber.from('100000000000000000000'),
+                    timestamp: BigNumber.from('1609205000'),
+                    isPreOrder: false,
+                },
+                {
+                    orderId: 4,
+                    ccy: wfilBytes32,
+                    side: 1,
+                    maturity: BigNumber.from(dec24Fixture.toString()),
+                    unitPrice: BigNumber.from('7800'),
+                    amount: BigNumber.from('100000000000000000000'),
+                    timestamp: BigNumber.from('1409220000'),
+                    isPreOrder: true,
+                },
+            ],
+            inactiveOrders: [],
+        });
         const { result, waitForNextUpdate } = renderHook(() =>
             useMarketOrderList(
                 'account',
@@ -56,7 +81,7 @@ describe('useOrderList', () => {
 
         expect(result.current).toEqual([
             {
-                orderId: BigNumber.from(5),
+                orderId: BigNumber.from(4),
                 currency: wfilBytes32,
                 side: 1,
                 maturity: dec24Fixture.toString(),
