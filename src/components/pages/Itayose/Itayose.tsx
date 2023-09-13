@@ -1,3 +1,4 @@
+import { OrderSide } from '@secured-finance/sf-client';
 import { BigNumber } from 'ethers';
 import { useCallback, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -203,7 +204,13 @@ export const Itayose = () => {
                     <AdvancedLendingOrderCard
                         collateralBook={collateralBook}
                         isItayose
-                        hasPreOrders={filteredOrderList.length > 0}
+                        preOrderPosition={
+                            filteredOrderList.length > 0 &&
+                            filteredOrderList[0].side.toString() ===
+                                OrderSide.BORROW
+                                ? 'borrow'
+                                : 'lend'
+                        }
                     />
                 </div>
                 <div className='flex flex-col gap-4'>

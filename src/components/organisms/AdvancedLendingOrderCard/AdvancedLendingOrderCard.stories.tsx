@@ -29,7 +29,7 @@ export const Default = Template.bind({});
 export const OnlyLimitOrder = Template.bind({});
 OnlyLimitOrder.args = {
     isItayose: true,
-    hasPreOrders: false,
+    preOrderPosition: 'none',
 };
 
 export const Lend = Template.bind({});
@@ -53,7 +53,7 @@ FailedAmountValidation.play = async ({ canvasElement }) => {
 export const BondPriceFailedValidation = Template.bind({});
 BondPriceFailedValidation.args = {
     isItayose: true,
-    hasPreOrders: false,
+    preOrderPosition: 'none',
 };
 BondPriceFailedValidation.play = async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -66,5 +66,5 @@ BondPriceFailedValidation.play = async ({ canvasElement }) => {
 export const ItayoseWithPreOrders = Template.bind({});
 ItayoseWithPreOrders.args = {
     isItayose: true,
-    hasPreOrders: true,
+    preOrderPosition: 'lend',
 };
