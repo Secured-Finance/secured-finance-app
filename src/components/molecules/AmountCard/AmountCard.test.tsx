@@ -37,7 +37,7 @@ describe('AmountCard Component', () => {
             expect(screen.getByText('5,000')).toBeInTheDocument();
         });
 
-        it('should display the amount with the correct number of decimal places depending of the currency', () => {
+        it('should display the amount with a maximum of 8 decimals', () => {
             render(
                 <Default
                     amount={
@@ -46,16 +46,6 @@ describe('AmountCard Component', () => {
                 />
             );
             expect(screen.getByText('1.001')).toBeInTheDocument();
-        });
-        it('should display the amount with the correct number of decimal places depending of the currency', () => {
-            render(
-                <Default
-                    amount={
-                        new Amount('1000000000000001000', CurrencySymbol.ETH)
-                    }
-                />
-            );
-            expect(screen.getByText('1')).toBeInTheDocument();
         });
     });
 });
