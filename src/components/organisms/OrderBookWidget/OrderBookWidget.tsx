@@ -1,5 +1,5 @@
 import { ArrowUpIcon } from '@heroicons/react/24/outline';
-import { OrderSide, WalletSource } from '@secured-finance/sf-client';
+import { OrderSide } from '@secured-finance/sf-client';
 import { createColumnHelper } from '@tanstack/react-table';
 import classNames from 'classnames';
 import { BigNumber } from 'ethers';
@@ -9,13 +9,7 @@ import { ColorBar, Spinner } from 'src/components/atoms';
 import { CoreTable, TableHeader } from 'src/components/molecules';
 import { OrderBookEntry, useBreakpoint, useOrderbook } from 'src/hooks';
 import { setMidPrice } from 'src/store/analytics';
-import {
-    setAmount,
-    setOrderType,
-    setSide,
-    setSourceAccount,
-    setUnitPrice,
-} from 'src/store/landingOrderForm';
+import { setOrderType, setUnitPrice } from 'src/store/landingOrderForm';
 import { ColorFormat, OrderType } from 'src/types';
 import {
     CurrencySymbol,
@@ -286,12 +280,7 @@ export const OrderBookWidget = ({
                 ? sellOrders[parseInt(rowId)]
                 : buyOrders[parseInt(rowId)];
         dispatch(setOrderType(OrderType.LIMIT));
-        side ? dispatch(setSide(side)) : null;
-        side === OrderSide.BORROW
-            ? dispatch(setSourceAccount(WalletSource.METAMASK))
-            : null;
         dispatch(setUnitPrice(rowData.value.price));
-        dispatch(setAmount(rowData.amount));
     };
 
     const handleSellOrdersClick = (rowId: string) => {

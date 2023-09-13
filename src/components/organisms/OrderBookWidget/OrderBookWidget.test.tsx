@@ -1,4 +1,3 @@
-import { OrderSide } from '@secured-finance/sf-client';
 import { composeStories } from '@storybook/react';
 import { fireEvent, render, screen } from 'src/test-utils.js';
 import { OrderType } from 'src/types';
@@ -46,16 +45,7 @@ describe('OrderBookWidget Component', () => {
         expect(store.getState().landingOrderForm.orderType).toEqual(
             OrderType.LIMIT
         );
-
-        expect(store.getState().landingOrderForm.amount).toEqual(
-            '43000000000000000000000'
-        );
-
         expect(store.getState().landingOrderForm.unitPrice).toEqual(9690);
-
-        expect(store.getState().landingOrderForm.side).toEqual(
-            OrderSide.BORROW
-        );
     });
 
     it('should update store when Lend order row is clicked', async () => {
@@ -66,14 +56,7 @@ describe('OrderBookWidget Component', () => {
         expect(store.getState().landingOrderForm.orderType).toEqual(
             OrderType.LIMIT
         );
-
-        expect(store.getState().landingOrderForm.amount).toEqual(
-            '43003200000000000000000'
-        );
-
         expect(store.getState().landingOrderForm.unitPrice).toEqual(9653);
-
-        expect(store.getState().landingOrderForm.side).toEqual(OrderSide.LEND);
     });
 
     it('should hide the mid price when hideMidPrice is true', () => {
