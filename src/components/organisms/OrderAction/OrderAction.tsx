@@ -113,6 +113,7 @@ export const OrderAction = ({
                             setOpenPlaceOrderDialog(true);
                         }}
                         data-testid='place-order-button'
+                        aria-label={getButtonText()}
                     >
                         {getButtonText()}
                     </Button>

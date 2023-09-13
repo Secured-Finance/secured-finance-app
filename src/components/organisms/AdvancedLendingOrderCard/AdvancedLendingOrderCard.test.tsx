@@ -413,7 +413,7 @@ describe('AdvancedLendingOrderCard Component', () => {
 
     describe('Itayose Order Card', () => {
         it('should hide both market and limit order when in onlyLimitOrder mode', async () => {
-            render(<Default isItayose hasPreOrders={false} />);
+            render(<Default isItayose preOrderPosition='none' />);
             expect(
                 screen.queryByRole('radio', { name: 'Market' })
             ).not.toBeInTheDocument();
@@ -422,13 +422,44 @@ describe('AdvancedLendingOrderCard Component', () => {
             ).not.toBeInTheDocument();
         });
 
-        it('should display an error message if the user already hasPreOrders', async () => {
-            render(<Default isItayose hasPreOrders />);
+        it('should display an error message if the user select borrow but already has lend pre-orders', async () => {
+            render(
+                <Default
+                    collateralBook={collateralBook0}
+                    isItayose
+                    preOrderPosition='borrow'
+                />,
+                {
+                    preloadedState: {
+                        ...preloadedState,
+                        landingOrderForm: {
+                            ...preloadedState.landingOrderForm,
+                            currency: CurrencySymbol.WFIL,
+                        },
+                    },
+                }
+            );
+
             expect(
-                await screen.findByText(
+                screen.queryByText(
+                    'Simultaneous borrow and lend orders are not allowed during the pre-open market period.'
+                )
+            ).not.toBeInTheDocument();
+            await waitFor(() =>
+                expect(
+                    screen.getByTestId('place-order-button')
+                ).not.toBeDisabled()
+            );
+
+            fireEvent.click(screen.getByRole('radio', { name: 'Lend' }));
+            expect(
+                screen.queryByText(
                     'Simultaneous borrow and lend orders are not allowed during the pre-open market period.'
                 )
             ).toBeInTheDocument();
+            expect(
+                screen.getByRole('button', { name: 'Place Order' })
+            ).toBeDisabled();
         });
     });
 

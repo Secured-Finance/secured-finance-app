@@ -48,12 +48,12 @@ import { useAccount } from 'wagmi';
 export function AdvancedLendingOrderCard({
     collateralBook,
     isItayose = false,
-    hasPreOrders = false,
+    preOrderPosition = 'none',
     marketPrice,
 }: {
     collateralBook: CollateralBook;
     isItayose?: boolean;
-    hasPreOrders?: boolean;
+    preOrderPosition?: 'borrow' | 'lend' | 'none';
     marketPrice?: number;
 }): JSX.Element {
     const {
@@ -220,6 +220,12 @@ export function AdvancedLendingOrderCard({
         return unitPrice === 0 && orderType === OrderType.LIMIT;
     };
 
+    const showPreOrderError =
+        (isItayose &&
+            preOrderPosition === 'borrow' &&
+            side === OrderSide.LEND) ||
+        (preOrderPosition === 'lend' && side === OrderSide.BORROW);
+
     return (
         <div className='h-fit rounded-b-xl border border-white-10 bg-cardBackground bg-opacity-60 pb-7'>
             <RadioGroupSelector
@@ -351,17 +357,16 @@ export function AdvancedLendingOrderCard({
                         ) ||
                         validateBondPrice() ||
                         (unitPrice === undefined &&
-                            orderType === OrderType.LIMIT)
+                            orderType === OrderType.LIMIT) ||
+                        showPreOrderError
                     }
                 />
 
-                {isItayose && (
-                    <ErrorInfo
-                        errorMessage='Simultaneous borrow and lend orders are not allowed during the pre-open market period.'
-                        align='left'
-                        showError={hasPreOrders}
-                    />
-                )}
+                <ErrorInfo
+                    errorMessage='Simultaneous borrow and lend orders are not allowed during the pre-open market period.'
+                    align='left'
+                    showError={showPreOrderError}
+                />
 
                 <Separator color='neutral-3'></Separator>
 
