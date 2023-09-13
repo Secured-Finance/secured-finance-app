@@ -27,7 +27,7 @@ interface OrderActionProps {
     loanValue: LoanValue;
     collateralBook: CollateralBook;
     renderSide?: boolean;
-    validation: boolean;
+    validation: boolean; // true to disable button
 }
 
 export const OrderAction = ({
