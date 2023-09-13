@@ -205,11 +205,12 @@ export const Itayose = () => {
                         collateralBook={collateralBook}
                         isItayose
                         preOrderPosition={
-                            filteredOrderList.length > 0 &&
-                            filteredOrderList[0].side.toString() ===
-                                OrderSide.BORROW
-                                ? 'borrow'
-                                : 'lend'
+                            filteredOrderList.length > 0
+                                ? filteredOrderList[0].side.toString() ===
+                                  OrderSide.BORROW
+                                    ? 'borrow'
+                                    : 'lend'
+                                : 'none'
                         }
                     />
                 </div>
