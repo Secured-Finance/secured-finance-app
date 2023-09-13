@@ -309,12 +309,14 @@ export const AdvancedLendingOrderCard = ({
                 <div className='mx-10px'>
                     <Slider onChange={handleAmountChange} value={sliderValue} />
                 </div>
-                <div className='typography-caption mx-10px flex flex-row justify-between'>
-                    <div className='text-slateGray'>{`Available To Borrow (${currency.toString()})`}</div>
-                    <div className='text-right text-planetaryPurple'>
-                        {prefixTilde(ordinaryFormat(availableToBorrow))}
+                {side === OrderSide.BORROW && (
+                    <div className='typography-caption mx-10px flex flex-row justify-between'>
+                        <div className='text-slateGray'>{`Available To Borrow (${currency.toString()})`}</div>
+                        <div className='text-right text-planetaryPurple'>
+                            {prefixTilde(ordinaryFormat(availableToBorrow))}
+                        </div>
                     </div>
-                </div>
+                )}
                 <OrderInputBox
                     field='Amount'
                     unit={currency}
