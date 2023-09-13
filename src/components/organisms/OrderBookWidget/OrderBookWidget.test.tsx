@@ -241,11 +241,12 @@ describe('OrderBookWidget Component', () => {
             const dropdown = screen.getByRole('button', { name: '0.01' });
             fireEvent.click(dropdown);
             const options = screen.getAllByRole('menuitem');
-            expect(options).toHaveLength(4);
+            expect(options).toHaveLength(5);
             expect(options[0]).toHaveTextContent('0.01');
             expect(options[1]).toHaveTextContent('0.1');
             expect(options[2]).toHaveTextContent('1');
-            expect(options[3]).toHaveTextContent('10');
+            expect(options[3]).toHaveTextContent('5');
+            expect(options[4]).toHaveTextContent('10');
         });
 
         it('should update the aggregation when an option is clicked', () => {
@@ -253,7 +254,7 @@ describe('OrderBookWidget Component', () => {
             const dropdown = screen.getByRole('button', { name: '0.01' });
             fireEvent.click(dropdown);
             const options = screen.getAllByRole('menuitem');
-            fireEvent.click(options[3]);
+            fireEvent.click(options[4]);
             expect(screen.getAllByTestId('buyOrders-row')).toHaveLength(2);
             expect(screen.getAllByTestId('sellOrders-row')).toHaveLength(2);
         });
@@ -267,6 +268,35 @@ describe('OrderBookWidget Component', () => {
             expect(screen.getByTestId('last-mid-price')).toHaveTextContent(
                 '93.00'
             );
+        });
+
+        it('should conserve the sum of the amounts when aggregating', () => {
+            render(<Default />);
+            function sumSecondColumn(table: HTMLElement): number {
+                return within(table)
+                    .getAllByRole('row')
+                    .reduce((sum, row) => {
+                        const amount =
+                            row.children[1].children[0].children[0]
+                                .textContent ?? '';
+
+                        return isNaN(parseInt(amount))
+                            ? sum
+                            : sum + parseInt(amount.replace(',', ''), 10);
+                    }, 0);
+            }
+            const sumBefore = sumSecondColumn(screen.getByTestId('buyOrders'));
+            const dropdown = screen.getByRole('button', { name: '0.01' });
+            fireEvent.click(dropdown);
+            const options = screen.getAllByRole('menuitem');
+            fireEvent.click(options[3]);
+            const sumAfter = sumSecondColumn(screen.getByTestId('buyOrders'));
+            expect(sumBefore).toEqual(sumAfter);
+            fireEvent.click(options[4]);
+            const sumAfterAgain = sumSecondColumn(
+                screen.getByTestId('buyOrders')
+            );
+            expect(sumBefore).toEqual(sumAfterAgain);
         });
     });
 

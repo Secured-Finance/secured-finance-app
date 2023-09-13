@@ -39,6 +39,14 @@ import {
 } from 'src/utils';
 import { LoanValue } from 'src/utils/entities';
 
+const AGGREGATION_OPTIONS = [
+    { label: '0.01', value: '1' },
+    { label: '0.1', value: '10' },
+    { label: '1', value: '100' },
+    { label: '5', value: '500' },
+    { label: '10', value: '1000' },
+];
+
 const columnHelper = createColumnHelper<OrderBookEntry>();
 
 const OrderBookCell = ({
@@ -402,12 +410,7 @@ export const OrderBookWidget = ({
                 <div className='flex items-center justify-end'>
                     <div className='w-20'>
                         <DropdownSelector
-                            optionList={[
-                                { label: '0.01', value: '1' },
-                                { label: '0.1', value: '10' },
-                                { label: '1', value: '100' },
-                                { label: '10', value: '1000' },
-                            ]}
+                            optionList={AGGREGATION_OPTIONS}
                             onChange={v =>
                                 setAggregationFactor(
                                     Number(v) as AggregationFactorType
