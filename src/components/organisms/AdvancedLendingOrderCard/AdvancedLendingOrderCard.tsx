@@ -216,15 +216,22 @@ export function AdvancedLendingOrderCard({
             : setSliderValue(0.0);
     };
 
-    const validateBondPrice = () => {
-        return unitPrice === 0 && orderType === OrderType.LIMIT;
-    };
+    const isInvalidBondPrice = unitPrice === 0 && orderType === OrderType.LIMIT;
 
     const showPreOrderError =
-        (isItayose &&
-            preOrderPosition === 'borrow' &&
-            side === OrderSide.LEND) ||
-        (preOrderPosition === 'lend' && side === OrderSide.BORROW);
+        ((preOrderPosition === 'borrow' && side === OrderSide.LEND) ||
+            (preOrderPosition === 'lend' && side === OrderSide.BORROW)) &&
+        isItayose;
+
+    const shouldDisableActionButton =
+        getAmountValidation(
+            amountFormatterFromBase[currency](amount),
+            balanceToLend,
+            side
+        ) ||
+        isInvalidBondPrice ||
+        (orderType === OrderType.LIMIT && unitPrice === 0) ||
+        showPreOrderError;
 
     return (
         <div className='h-fit rounded-b-xl border border-white-10 bg-cardBackground bg-opacity-60 pb-7'>
@@ -296,7 +303,7 @@ export function AdvancedLendingOrderCard({
                     />
                     <ErrorInfo
                         errorMessage='Invalid bond price'
-                        showError={validateBondPrice()}
+                        showError={isInvalidBondPrice}
                     />
                     {orderType === OrderType.MARKET && (
                         <div className='mx-10px'>
@@ -349,17 +356,7 @@ export function AdvancedLendingOrderCard({
                 <OrderAction
                     loanValue={loanValue}
                     collateralBook={collateralBook}
-                    validation={
-                        getAmountValidation(
-                            amountFormatterFromBase[currency](amount),
-                            balanceToLend,
-                            side
-                        ) ||
-                        validateBondPrice() ||
-                        (unitPrice === undefined &&
-                            orderType === OrderType.LIMIT) ||
-                        showPreOrderError
-                    }
+                    validation={shouldDisableActionButton}
                 />
 
                 <ErrorInfo
