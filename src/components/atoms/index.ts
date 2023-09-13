@@ -29,7 +29,6 @@ export * from './PercentageTab';
 export * from './PriceYieldItem';
 export * from './RadioGroupSelector';
 export * from './SectionWithItems';
-export * from './SectionWithItemsAndHeader';
 export * from './Separator';
 export * from './SimpleAdvancedSelector';
 export * from './Slider';

@@ -3,10 +3,25 @@ import {
     SectionWithItems,
     getLiquidationInformation,
 } from 'src/components/atoms';
+import { Tooltip } from 'src/components/templates';
 import { CollateralBook, useOrderEstimation } from 'src/hooks';
 import { formatCollateralRatio, usdFormat } from 'src/utils';
 import { MAX_COVERAGE, computeAvailableToBorrow } from 'src/utils/collateral';
 import { useAccount } from 'wagmi';
+
+const CollateralUsageItem = () => {
+    return (
+        <div className='flex flex-row items-center gap-1'>
+            <div className='typography-caption text-planetaryPurple'>
+                Collateral Usage
+            </div>
+            <Tooltip>
+                Existing open orders are factored into your collateral usage and
+                may affect remaining borrow capacity
+            </Tooltip>
+        </div>
+    );
+};
 
 export const CollateralSimulationSection = ({
     collateral,
@@ -31,10 +46,10 @@ export const CollateralSimulationSection = ({
         [collateral.usdCollateral, collateral.collateralThreshold, coverage]
     );
 
-    const items: [string, string | React.ReactNode][] = [
+    const items: [string | React.ReactNode, string | React.ReactNode][] = [
         ['Borrow Remaining', remainingToBorrowText],
         [
-            'Collateral Usage',
+            <CollateralUsageItem key={1} />,
             getCollateralUsage(collateral.coverage.toNumber(), coverage),
         ],
     ];

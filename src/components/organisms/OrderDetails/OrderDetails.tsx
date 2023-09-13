@@ -2,11 +2,7 @@ import { Disclosure, Transition } from '@headlessui/react';
 import { OrderSide } from '@secured-finance/sf-client';
 import { formatDate } from '@secured-finance/sf-core';
 import { useMemo } from 'react';
-import {
-    ExpandIndicator,
-    SectionWithItems,
-    SectionWithItemsAndHeader,
-} from 'src/components/atoms';
+import { ExpandIndicator, SectionWithItems } from 'src/components/atoms';
 import {
     AmountCard,
     CollateralSimulationSection,
@@ -57,9 +53,12 @@ export const OrderDetails = ({
             : market.maxLendUnitPrice;
     }, [market, side]);
 
+    const amountCard = <AmountCard amount={amount} price={assetPrice} />;
+
     return (
         <div className='grid w-full grid-cols-1 justify-items-stretch gap-6 text-white'>
-            <SectionWithItemsAndHeader
+            <SectionWithItems
+                header={amountCard}
                 itemList={[
                     ['Maturity Date', formatDate(maturity.toNumber())],
                     [
@@ -78,9 +77,7 @@ export const OrderDetails = ({
                         ),
                     ],
                 ]}
-            >
-                <AmountCard amount={amount} price={assetPrice} />
-            </SectionWithItemsAndHeader>
+            />
             <CollateralSimulationSection collateral={collateral} />
             <SectionWithItems
                 itemList={[
