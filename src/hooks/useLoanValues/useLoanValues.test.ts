@@ -1,7 +1,7 @@
-import { maturities, dec24Fixture } from 'src/stories/mocks/fixtures';
+import { dec24Fixture, maturities } from 'src/stories/mocks/fixtures';
 import { renderHook } from 'src/test-utils';
-import { useLoanValues, RateType } from './useLoanValues';
 import { LoanValue } from 'src/utils/entities/loanValue';
+import { RateType, useLoanValues } from './useLoanValues';
 
 describe('useLoanValues', () => {
     const keys: string[] = Object.keys(maturities);
@@ -37,13 +37,13 @@ describe('useLoanValues', () => {
 
     it('should return a map of Loan Values of mid unit prices', async () => {
         const { result } = renderHook(() =>
-            useLoanValues(maturities, RateType.MidRate)
+            useLoanValues(maturities, RateType.Market)
         );
         expect(result.current.size).toBe(9);
         for (let i = 0; i < 9; i++) {
             const maturity = Number(keys[i]);
             const loanValue = LoanValue.fromPrice(
-                maturities[maturity].midUnitPrice,
+                maturities[maturity].marketUnitPrice,
                 maturity
             );
             expect(result.current.get(maturity)).toStrictEqual(loanValue);
@@ -54,7 +54,7 @@ describe('useLoanValues', () => {
         const { result } = renderHook(() =>
             useLoanValues(
                 maturities,
-                RateType.MidRate,
+                RateType.Market,
                 market => market.isOpened
             )
         );
@@ -63,7 +63,7 @@ describe('useLoanValues', () => {
             const maturity = Number(keys[i]);
             if (maturities[maturity].isOpened) {
                 const loanValue = LoanValue.fromPrice(
-                    maturities[maturity].midUnitPrice,
+                    maturities[maturity].marketUnitPrice,
                     maturity
                 );
                 expect(result.current.get(maturity)).toStrictEqual(loanValue);

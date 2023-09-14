@@ -13,7 +13,7 @@ export type LendingMarket = {
     maturity: number;
     isActive: boolean;
     utcOpeningDate: number;
-    midUnitPrice: number;
+    marketUnitPrice: number;
     preOpenDate: number;
     openingUnitPrice: number;
     isReady: boolean;
@@ -33,7 +33,7 @@ const baseContract: { 0: LendingMarket } = {
         maturity: 0,
         isActive: false,
         utcOpeningDate: 0,
-        midUnitPrice: 0,
+        marketUnitPrice: 0,
         preOpenDate: 0,
         openingUnitPrice: 0,
         isReady: false,
@@ -94,7 +94,7 @@ export const useLendingMarkets = () => {
                     const {
                         maturity,
                         openingDate,
-                        midUnitPrice,
+                        marketUnitPrice,
                         openingUnitPrice,
                         isReady,
                         isOpened,
@@ -126,7 +126,7 @@ export const useLendingMarkets = () => {
                             maturity: maturity.toNumber(),
                             utcOpeningDate: openingDate.toNumber(),
                             isActive: isPastDate(openingDate.toNumber()),
-                            midUnitPrice: midUnitPrice.toNumber(),
+                            marketUnitPrice: marketUnitPrice.toNumber(),
                             openingUnitPrice: openingUnitPrice.toNumber(),
                             preOpenDate: openingDate.toNumber() - PRE_OPEN_TIME,
                             isReady,
