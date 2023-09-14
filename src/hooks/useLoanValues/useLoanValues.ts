@@ -5,7 +5,7 @@ import { LoanValue } from 'src/utils/entities/loanValue';
 export enum RateType {
     Borrow = 0,
     Lend = 1,
-    MidRate = 2,
+    Market = 2,
 }
 
 const passThrough = () => true;
@@ -28,8 +28,8 @@ export const useLoanValues = (
                     case RateType.Lend:
                         price = o.bestLendUnitPrice;
                         break;
-                    case RateType.MidRate:
-                        price = o.midUnitPrice;
+                    case RateType.Market:
+                        price = o.marketUnitPrice;
                         break;
                     default:
                         break;

@@ -1,4 +1,4 @@
-import { currencyMap, ordinaryFormat, prefixTilde, usdFormat } from 'src/utils';
+import { currencyMap, formatAmount, prefixTilde, usdFormat } from 'src/utils';
 import { Amount } from 'src/utils/entities';
 
 export const AmountCard = ({
@@ -19,7 +19,7 @@ export const AmountCard = ({
         </div>
         <div className='grid items-center justify-end'>
             <span className='typography-body-1 font-bold text-white'>
-                {ordinaryFormat(amount.value)}
+                {formatAmount(amount.value)}
             </span>
             <div className='typography-caption-3 text-right text-white-60'>
                 {prefixTilde(usdFormat(amount.toUSD(price)))}

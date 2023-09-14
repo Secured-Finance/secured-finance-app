@@ -97,7 +97,7 @@ export const MarketLoanWidget = () => {
                 },
                 header: tableHeaderDefinition('Maturity'),
             }),
-            columnHelper.accessor('midUnitPrice', {
+            columnHelper.accessor('marketUnitPrice', {
                 id: 'apr',
                 cell: info => {
                     return (

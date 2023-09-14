@@ -22,7 +22,7 @@ import {
     CurrencySymbol,
     OrderEvents,
     OrderProperties,
-    ordinaryFormat,
+    formatAmount,
 } from 'src/utils';
 import { Amount, LoanValue, Maturity } from 'src/utils/entities';
 
@@ -264,7 +264,7 @@ export const PlaceOrder = ({
                                     ],
                                     [
                                         'Amount',
-                                        `${ordinaryFormat(orderAmount.value)} ${
+                                        `${formatAmount(orderAmount.value)} ${
                                             orderAmount.currency
                                         }`,
                                     ],
