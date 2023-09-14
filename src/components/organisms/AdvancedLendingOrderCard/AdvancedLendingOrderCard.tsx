@@ -41,6 +41,7 @@ import {
     amountFormatterFromBase,
     amountFormatterToBase,
     computeAvailableToBorrow,
+    CurrencySymbol,
     divide,
     formatLoanValue,
     generateWalletSourceInformation,
@@ -115,9 +116,14 @@ export const AdvancedLendingOrderCard = ({
         ? new Amount(amount, currency)
         : undefined;
 
-    const collateralCoverage = isBorrowedCollateral
-        ? coverage
-        : collateralBook.coverage.toNumber();
+    const showBorrowToVaultCheckbox =
+        side === OrderSide.BORROW &&
+        (currency === CurrencySymbol.ETH || currency === CurrencySymbol.USDC);
+
+    const collateralCoverage =
+        isBorrowedCollateral && showBorrowToVaultCheckbox
+            ? coverage
+            : collateralBook.coverage.toNumber();
 
     const availableToBorrow = useMemo(() => {
         return currency && price
@@ -332,25 +338,27 @@ export const AdvancedLendingOrderCard = ({
                         </div>
                     </div>
                 )}
-                <div className='mx-10px'>
-                    <Checkbox
-                        handleToggle={(value: boolean) =>
-                            dispatch(setIsBorrowedCollateral(value))
-                        }
-                        value={isBorrowedCollateral}
-                    >
-                        <div className='flex flex-row items-center justify-between gap-1'>
-                            <div className='typography-caption text-slateGray '>
-                                Borrow to vault
+                {showBorrowToVaultCheckbox && (
+                    <div className='mx-10px'>
+                        <Checkbox
+                            handleToggle={(value: boolean) =>
+                                dispatch(setIsBorrowedCollateral(value))
+                            }
+                            value={isBorrowedCollateral}
+                        >
+                            <div className='flex flex-row items-center justify-between gap-1'>
+                                <div className='typography-caption text-slateGray '>
+                                    Borrow to vault
+                                </div>
+                                <Tooltip>
+                                    Keeping this asset as collateral in your
+                                    vault increases your borrowing power and
+                                    lowers liquidation risk
+                                </Tooltip>
                             </div>
-                            <Tooltip>
-                                Keeping this asset as collateral in your vault
-                                increases your borrowing power and lowers
-                                liquidation risk
-                            </Tooltip>
-                        </div>
-                    </Checkbox>
-                </div>
+                        </Checkbox>
+                    </div>
+                )}
                 <OrderInputBox
                     field='Amount'
                     unit={currency}

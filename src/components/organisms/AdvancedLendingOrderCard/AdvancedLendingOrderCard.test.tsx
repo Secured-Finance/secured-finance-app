@@ -424,34 +424,6 @@ describe('AdvancedLendingOrderCard Component', () => {
         ).not.toBeInTheDocument();
     });
 
-    it('should toggle isBorrowedCollateral when checkbox for borrow to vault is toggled', async () => {
-        const { store } = render(<Default />, {
-            preloadedState: {
-                ...preloadedState,
-                landingOrderForm: {
-                    ...preloadedState.landingOrderForm,
-                    isBorrowedCollateral: false,
-                },
-            },
-        });
-        const checkbox = screen.getByRole('checkbox');
-        expect(checkbox).not.toBeChecked();
-        await waitFor(() => {
-            fireEvent.click(checkbox);
-        });
-        expect(checkbox).toBeChecked();
-        expect(store.getState().landingOrderForm.isBorrowedCollateral).toEqual(
-            true
-        );
-        await waitFor(() => {
-            fireEvent.click(checkbox);
-        });
-        expect(checkbox).not.toBeChecked();
-        expect(store.getState().landingOrderForm.isBorrowedCollateral).toEqual(
-            false
-        );
-    });
-
     describe('Error handling for invalid bond price in different order types and sides', () => {
         const assertPlaceOrderButtonIsDisabled = () => {
             const button = screen.getByTestId('place-order-button');
@@ -714,6 +686,93 @@ describe('AdvancedLendingOrderCard Component', () => {
                 fireEvent.click(screen.getByText('Lend'));
             });
             assertBondPriceInputValue('20');
+        });
+    });
+
+    describe('Borrow to vault', () => {
+        it('should not show Borrow to vault on LEND screen', async () => {
+            render(<Default />, {
+                preloadedState: {
+                    ...preloadedState,
+                    landingOrderForm: {
+                        ...preloadedState.landingOrderForm,
+                        side: OrderSide.LEND,
+                    },
+                },
+            });
+            expect(screen.queryByRole('checkbox')).not.toBeInTheDocument();
+        });
+
+        it('should show Borrow to vault on BORROW screen for USDC', async () => {
+            render(<Default />, { preloadedState });
+            expect(screen.getByRole('checkbox')).toBeInTheDocument();
+        });
+
+        it('should show Borrow to vault for ETH', async () => {
+            render(<Default />, {
+                preloadedState: {
+                    ...preloadedState,
+                    landingOrderForm: {
+                        ...preloadedState.landingOrderForm,
+                        currency: CurrencySymbol.ETH,
+                    },
+                },
+            });
+            expect(screen.getByRole('checkbox')).toBeInTheDocument();
+        });
+
+        it('should not show Borrow to vault for WFIL', async () => {
+            render(<Default />, {
+                preloadedState: {
+                    ...preloadedState,
+                    landingOrderForm: {
+                        ...preloadedState.landingOrderForm,
+                        currency: CurrencySymbol.WFIL,
+                    },
+                },
+            });
+            expect(screen.queryByRole('checkbox')).not.toBeInTheDocument();
+        });
+
+        it('should not show Borrow to vault for WBTC', async () => {
+            render(<Default />, {
+                preloadedState: {
+                    ...preloadedState,
+                    landingOrderForm: {
+                        ...preloadedState.landingOrderForm,
+                        currency: CurrencySymbol.WBTC,
+                    },
+                },
+            });
+            expect(screen.queryByRole('checkbox')).not.toBeInTheDocument();
+        });
+
+        it('should toggle isBorrowedCollateral when checkbox for borrow to vault is toggled', async () => {
+            const { store } = render(<Default />, {
+                preloadedState: {
+                    ...preloadedState,
+                    landingOrderForm: {
+                        ...preloadedState.landingOrderForm,
+                        isBorrowedCollateral: false,
+                    },
+                },
+            });
+            const checkbox = screen.getByRole('checkbox');
+            expect(checkbox).not.toBeChecked();
+            await waitFor(() => {
+                fireEvent.click(checkbox);
+            });
+            expect(checkbox).toBeChecked();
+            expect(
+                store.getState().landingOrderForm.isBorrowedCollateral
+            ).toEqual(true);
+            await waitFor(() => {
+                fireEvent.click(checkbox);
+            });
+            expect(checkbox).not.toBeChecked();
+            expect(
+                store.getState().landingOrderForm.isBorrowedCollateral
+            ).toEqual(false);
         });
     });
 });
