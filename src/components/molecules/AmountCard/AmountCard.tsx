@@ -26,7 +26,7 @@ export const AmountCard = ({
                 <span className='typography font-bold text-white'>
                     {amount.currency}
                 </span>
-                <span className='typography-caption-3 font-bold text-white-60'>
+                <span className='typography-caption-3 text-white-60'>
                     {currencyName[amount.currency]}
                 </span>
             </div>

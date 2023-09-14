@@ -60,7 +60,6 @@ export const OrderDetails = ({
             <SectionWithItems
                 header={amountCard}
                 itemList={[
-                    ['Maturity Date', formatDate(maturity.toNumber())],
                     [
                         'Bond Price',
                         prefixTilde(
@@ -76,6 +75,7 @@ export const OrderDetails = ({
                             formatLoanValue(loanValue ?? LoanValue.ZERO, 'rate')
                         ),
                     ],
+                    ['Maturity Date', formatDate(maturity.toNumber())],
                 ]}
             />
             <CollateralSimulationSection collateral={collateral} />
