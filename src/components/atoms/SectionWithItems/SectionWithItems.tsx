@@ -11,7 +11,7 @@ export const SectionWithItems = ({
         <Section>
             {header && (
                 <div className='mb-2'>
-                    <div className='mb-2'>{header}</div>
+                    {header}
                     <Separator color='neutral-3'></Separator>
                 </div>
             )}

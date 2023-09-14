@@ -51,6 +51,7 @@ export const currencyMap: Readonly<
         chartColor: tailwindConfig.theme.colors.chart.fil,
         pillColor: tailwindConfig.theme.colors.pill.fil,
         roundingDecimal: 0,
+        longName: 'Wrapped Filecoin',
     },
     [CurrencySymbol.WBTC]: {
         index: 1,
@@ -67,6 +68,7 @@ export const currencyMap: Readonly<
         chartColor: tailwindConfig.theme.colors.chart.btc,
         pillColor: tailwindConfig.theme.colors.pill.btc,
         roundingDecimal: 4,
+        longName: 'Bitcoin',
     },
     [CurrencySymbol.ETH]: {
         index: 2,
@@ -83,6 +85,7 @@ export const currencyMap: Readonly<
         chartColor: tailwindConfig.theme.colors.chart.eth,
         pillColor: tailwindConfig.theme.colors.pill.eth,
         roundingDecimal: 3,
+        longName: 'Ethereum',
     },
     [CurrencySymbol.USDC]: {
         index: 3,
@@ -99,6 +102,7 @@ export const currencyMap: Readonly<
         chartColor: tailwindConfig.theme.colors.chart.usdc,
         pillColor: tailwindConfig.theme.colors.pill.usdc,
         roundingDecimal: 0,
+        longName: 'USD Coin',
     },
 };
 
@@ -149,6 +153,7 @@ export type CurrencyInfo = {
     chartColor: string;
     pillColor: string;
     roundingDecimal: number;
+    longName: string;
 };
 
 export const toCurrency = (ccy: CurrencySymbol) => {

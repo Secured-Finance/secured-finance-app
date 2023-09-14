@@ -424,6 +424,34 @@ describe('AdvancedLendingOrderCard Component', () => {
         ).not.toBeInTheDocument();
     });
 
+    it('should toggle isBorrowedCollateral when checkbox for borrow to vault is toggled', async () => {
+        const { store } = render(<Default />, {
+            preloadedState: {
+                ...preloadedState,
+                landingOrderForm: {
+                    ...preloadedState.landingOrderForm,
+                    isBorrowedCollateral: false,
+                },
+            },
+        });
+        const checkbox = screen.getByRole('checkbox');
+        expect(checkbox).not.toBeChecked();
+        await waitFor(() => {
+            fireEvent.click(checkbox);
+        });
+        expect(checkbox).toBeChecked();
+        expect(store.getState().landingOrderForm.isBorrowedCollateral).toEqual(
+            true
+        );
+        await waitFor(() => {
+            fireEvent.click(checkbox);
+        });
+        expect(checkbox).not.toBeChecked();
+        expect(store.getState().landingOrderForm.isBorrowedCollateral).toEqual(
+            false
+        );
+    });
+
     describe('Error handling for invalid bond price in different order types and sides', () => {
         const assertPlaceOrderButtonIsDisabled = () => {
             const button = screen.getByTestId('place-order-button');
