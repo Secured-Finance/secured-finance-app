@@ -118,7 +118,7 @@ export const AdvancedLendingOrderCard = ({
 
     const showBorrowToVaultCheckbox =
         side === OrderSide.BORROW &&
-        (currency === CurrencySymbol.ETH || currency === CurrencySymbol.USDC);
+        [CurrencySymbol.ETH, CurrencySymbol.USDC].includes(currency);
 
     const collateralCoverage =
         isBorrowedCollateral && showBorrowToVaultCheckbox
