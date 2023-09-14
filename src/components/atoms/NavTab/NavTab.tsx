@@ -1,11 +1,16 @@
 import classNames from 'classnames';
+import { HighlightChip } from '../HighlightChip';
 
 interface NavTabProps {
     text: string;
     active: boolean;
+    highlight?: {
+        text: string;
+        size: 'small' | 'large';
+    };
 }
 
-export const NavTab = ({ text, active = false }: NavTabProps) => {
+export const NavTab = ({ text, active = false, highlight }: NavTabProps) => {
     return (
         <div className='group flex h-full w-full flex-col text-center'>
             <div
@@ -13,7 +18,7 @@ export const NavTab = ({ text, active = false }: NavTabProps) => {
             ></div>
             <div
                 className={classNames(
-                    'flex h-full items-center justify-center px-4',
+                    'flex h-full items-center justify-center gap-2 px-4',
                     {
                         'bg-gradient-to-b from-tabGradient2 to-tabGradient1':
                             active,
@@ -32,6 +37,12 @@ export const NavTab = ({ text, active = false }: NavTabProps) => {
                 >
                     {text}
                 </p>
+                {highlight && (
+                    <HighlightChip
+                        text={highlight.text}
+                        size={highlight.size}
+                    />
+                )}
             </div>
         </div>
     );

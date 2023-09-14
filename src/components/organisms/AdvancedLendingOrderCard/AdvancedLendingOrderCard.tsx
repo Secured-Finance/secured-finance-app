@@ -36,8 +36,6 @@ import {
 import { RootState } from 'src/store/types';
 import { OrderSideMap, OrderType, OrderTypeOptions } from 'src/types';
 import {
-    MAX_COVERAGE,
-    ZERO_BN,
     amountFormatterFromBase,
     amountFormatterToBase,
     computeAvailableToBorrow,
@@ -45,10 +43,12 @@ import {
     formatLoanValue,
     generateWalletSourceInformation,
     getAmountValidation,
+    MAX_COVERAGE,
     multiply,
     ordinaryFormat,
     prefixTilde,
     usdFormat,
+    ZERO_BN,
 } from 'src/utils';
 import { Amount, LoanValue } from 'src/utils/entities';
 import { useAccount } from 'wagmi';
@@ -247,7 +247,6 @@ export const AdvancedLendingOrderCard = ({
                         )
                     );
                     dispatch(setSourceAccount(WalletSource.METAMASK));
-                    dispatch(resetUnitPrice());
                 }}
                 variant='NavTab'
             />
@@ -325,12 +324,14 @@ export const AdvancedLendingOrderCard = ({
                 <div className='mx-10px'>
                     <Slider onChange={handleAmountChange} value={sliderValue} />
                 </div>
-                <div className='typography-caption mx-10px flex flex-row justify-between'>
-                    <div className='text-slateGray'>{`Available To Borrow (${currency.toString()})`}</div>
-                    <div className='text-right text-planetaryPurple'>
-                        {prefixTilde(ordinaryFormat(availableToBorrow))}
+                {side === OrderSide.BORROW && (
+                    <div className='typography-caption mx-10px flex flex-row justify-between'>
+                        <div className='text-slateGray'>{`Available To Borrow (${currency.toString()})`}</div>
+                        <div className='text-right text-planetaryPurple'>
+                            {prefixTilde(ordinaryFormat(availableToBorrow))}
+                        </div>
                     </div>
-                </div>
+                )}
                 <div className='mx-10px'>
                     <Checkbox
                         handleToggle={(value: boolean) =>

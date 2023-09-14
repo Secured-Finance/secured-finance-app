@@ -390,14 +390,38 @@ describe('AdvancedLendingOrderCard Component', () => {
     });
 
     it('should show available to borrow on borrow screen', async () => {
-        const preloadedState = { ...preloadedAssetPrices };
-        render(<Default />, { preloadedState });
+        render(<Default />, {
+            preloadedState: {
+                ...preloadedState,
+                landingOrderForm: {
+                    ...preloadedState.landingOrderForm,
+                    side: OrderSide.BORROW,
+                    currency: CurrencySymbol.WFIL,
+                },
+            },
+        });
         expect(
             screen.getByText('Available To Borrow (WFIL)')
         ).toBeInTheDocument();
         await waitFor(() => {
             expect(screen.getByText('~ 867.19')).toBeInTheDocument();
         });
+    });
+
+    it('should not show available to borrow on lend screen', async () => {
+        render(<Default />, {
+            preloadedState: {
+                ...preloadedState,
+                landingOrderForm: {
+                    ...preloadedState.landingOrderForm,
+                    side: OrderSide.LEND,
+                    currency: CurrencySymbol.WFIL,
+                },
+            },
+        });
+        expect(
+            screen.queryByText('Available To Borrow (WFIL)')
+        ).not.toBeInTheDocument();
     });
 
     describe('Error handling for invalid bond price in different order types and sides', () => {
@@ -652,6 +676,16 @@ describe('AdvancedLendingOrderCard Component', () => {
             expect(await screen.findByText('6.35%')).toBeInTheDocument();
             changeInputValue('Bond Price', '94');
             expect(screen.getByText('7.70%')).toBeInTheDocument();
+        });
+
+        it('should not reset user input value of bond price when switching order side', async () => {
+            render(<Default marketPrice={9600} />, { preloadedState });
+            changeInputValue('Bond Price', '20');
+            assertBondPriceInputValue('20');
+            await waitFor(() => {
+                fireEvent.click(screen.getByText('Lend'));
+            });
+            assertBondPriceInputValue('20');
         });
     });
 });
