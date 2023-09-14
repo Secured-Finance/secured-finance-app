@@ -8,6 +8,7 @@ export * from './useGraphClientHook';
 export * from './useHandleContractTransaction';
 export * from './useLendingMarkets';
 export * from './useLoanValues';
+export * from './useMarketLists';
 export * from './useMaturityOptions';
 export * from './useOrderFee';
 export * from './useOrderList';

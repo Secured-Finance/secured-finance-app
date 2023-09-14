@@ -59,6 +59,12 @@ export const ordinaryFormat = (
     }
 };
 
+export const formatAmount = (
+    number: number | bigint | BigNumber | FixedNumber
+) => {
+    return ordinaryFormat(number, 0, 8);
+};
+
 export const formatWithCurrency = (
     number: number | bigint | BigNumber | FixedNumber,
     currency: string,
