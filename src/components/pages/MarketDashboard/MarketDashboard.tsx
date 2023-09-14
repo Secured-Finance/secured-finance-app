@@ -66,7 +66,7 @@ export const MarketDashboard = () => {
         // eslint-disable-next-line react-hooks/rules-of-hooks
         const unitPrices = useLoanValues(
             lendingContracts[ccy.symbol],
-            RateType.MidRate,
+            RateType.Market,
             market => market.isReady && !market.isMatured
         );
         curves[ccy.symbol] = Array.from(unitPrices.values()).map(r => r.apr);
