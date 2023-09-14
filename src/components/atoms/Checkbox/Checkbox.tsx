@@ -30,9 +30,9 @@ export const Checkbox = ({ children, value, handleToggle }: CheckboxProps) => {
                 id='checkbox'
             />
             {isChecked ? (
-                <CheckBoxIcon className='ml-1 h-4 w-4' />
+                <CheckBoxIcon className='h-4 w-4' />
             ) : (
-                <UnCheckedCheckBoxIcon className='ml-1 h-4 w-4' />
+                <UnCheckedCheckBoxIcon className='h-4 w-4' />
             )}
         </label>
     );

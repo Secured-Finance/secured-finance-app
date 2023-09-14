@@ -9,7 +9,7 @@ export const AmountCard = ({
     price: number;
 }) => (
     <div className='mb-3 grid w-full grid-cols-2 justify-around'>
-        <div className='grid items-center justify-start'>
+        <div className='col-span-1 grid items-center justify-start'>
             <span className='typography font-bold text-white'>
                 {amount.currency}
             </span>
@@ -17,7 +17,7 @@ export const AmountCard = ({
                 {currencyMap[amount.currency].longName}
             </span>
         </div>
-        <div className='grid items-center justify-end'>
+        <div className='col-span-1 grid items-center justify-end'>
             <span className='typography-body-1 font-bold text-white'>
                 {formatAmount(amount.value)}
             </span>

@@ -690,7 +690,7 @@ describe('AdvancedLendingOrderCard Component', () => {
     });
 
     describe('Borrow to vault', () => {
-        it('should not show Borrow to vault on LEND screen', async () => {
+        it('should not show Borrow to vault on LEND screen', () => {
             render(<Default />, {
                 preloadedState: {
                     ...preloadedState,
@@ -703,12 +703,12 @@ describe('AdvancedLendingOrderCard Component', () => {
             expect(screen.queryByRole('checkbox')).not.toBeInTheDocument();
         });
 
-        it('should show Borrow to vault on BORROW screen for USDC', async () => {
+        it('should show Borrow to vault on BORROW screen for USDC', () => {
             render(<Default />, { preloadedState });
             expect(screen.getByRole('checkbox')).toBeInTheDocument();
         });
 
-        it('should show Borrow to vault for ETH', async () => {
+        it('should show Borrow to vault for ETH', () => {
             render(<Default />, {
                 preloadedState: {
                     ...preloadedState,
@@ -721,7 +721,7 @@ describe('AdvancedLendingOrderCard Component', () => {
             expect(screen.getByRole('checkbox')).toBeInTheDocument();
         });
 
-        it('should not show Borrow to vault for WFIL', async () => {
+        it('should not show Borrow to vault for WFIL', () => {
             render(<Default />, {
                 preloadedState: {
                     ...preloadedState,
@@ -734,7 +734,7 @@ describe('AdvancedLendingOrderCard Component', () => {
             expect(screen.queryByRole('checkbox')).not.toBeInTheDocument();
         });
 
-        it('should not show Borrow to vault for WBTC', async () => {
+        it('should not show Borrow to vault for WBTC', () => {
             render(<Default />, {
                 preloadedState: {
                     ...preloadedState,

@@ -24,6 +24,7 @@ describe('Checkbox Component', () => {
         await waitFor(() => {
             fireEvent.click(checkbox);
         });
+        expect(checkbox).not.toBeChecked();
         expect(handleToggle).toHaveBeenCalledTimes(2);
         expect(handleToggle).toHaveBeenCalledWith(false);
     });
