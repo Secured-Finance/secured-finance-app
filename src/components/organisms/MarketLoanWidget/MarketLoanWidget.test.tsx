@@ -1,7 +1,7 @@
 import { composeStories } from '@storybook/react';
 import { wbtcBytes32 } from 'src/stories/mocks/fixtures';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
-import { render, screen } from 'src/test-utils.js';
+import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
 import * as stories from './MarketLoanWidget.stories';
 
 const { Default } = composeStories(stories);
@@ -18,19 +18,24 @@ describe('MarketLoanWidget Component', () => {
         expect(screen.queryByText('WBTC')).not.toBeInTheDocument();
     });
 
-    it('should filter by maturity', () => {
+    it('should filter by maturity', async () => {
         render(<Default />);
-        expect(screen.getAllByText('Dec 1, 2022').length).toEqual(2);
-        screen.getByRole('button', { name: 'DEC22' }).click();
-        screen.getByRole('menuitem', { name: 'JUN23' }).click();
+        await waitFor(() => {
+            expect(screen.getAllByText('Dec 1, 2022').length).toEqual(4);
+            screen.getByRole('button', { name: 'DEC22' }).click();
+            screen.getByRole('menuitem', { name: 'JUN23' }).click();
+        });
         expect(screen.queryByText('Dec 1, 2022')).not.toBeInTheDocument();
-        expect(screen.getAllByText('Jun 1, 2023').length).toEqual(2);
+        expect(screen.getAllByText('Jun 1, 2023').length).toEqual(4);
     });
 
-    it('should dedupe maturity and add a "All" option', () => {
+    it('should dedupe maturity and add a "All" option', async () => {
         render(<Default />);
-        screen.getByRole('button', { name: 'DEC22' }).click();
-        expect(screen.getAllByRole('menuitem').length).toBe(10);
+        await waitFor(() => {
+            screen.getByRole('button', { name: 'DEC22' }).click();
+        });
+
+        expect(screen.getAllByRole('menuitem').length).toBe(9);
         expect(screen.queryByText('All')).toBeInTheDocument();
     });
 
@@ -40,10 +45,14 @@ describe('MarketLoanWidget Component', () => {
         expect(screen.queryByText('Market Open')).not.toBeInTheDocument();
     });
 
-    it('should hide the APR column when the market is in pre-order', () => {
+    it('should hide the APR column when the market is in pre-order', async () => {
         render(<Default />);
-        screen.getByRole('button', { name: 'DEC22' }).click();
-        screen.getByRole('menuitem', { name: 'DEC24' }).click();
+        const button = screen.getByText('Pre-Open');
+        fireEvent.click(button);
+        await waitFor(() => {
+            expect(screen.queryAllByText('Dec 1, 2024')).toHaveLength(4);
+        });
+
         expect(screen.queryByText('APR')).not.toBeInTheDocument();
         expect(screen.queryByText('Market Open')).toBeInTheDocument();
     });
@@ -62,9 +71,24 @@ describe('MarketLoanWidget Component', () => {
         mock.getOrderBookDetails.mockResolvedValueOnce(lendingMarkets);
 
         render(<Default />);
-        screen.getByRole('button', { name: 'DEC22' }).click();
-        screen.getByRole('menuitem', { name: 'DEC24' }).click();
+        const button = screen.getByText('Pre-Open');
+        await waitFor(() => {
+            fireEvent.click(button);
+        });
         expect(screen.queryByText('APR')).not.toBeInTheDocument();
         expect(screen.queryByText('Market Open')).toBeInTheDocument();
+    });
+
+    it('should not show maturity dropdown in itayose screen', async () => {
+        render(<Default />);
+        const button = screen.getByText('Pre-Open');
+        await waitFor(() => {
+            fireEvent.click(button);
+        });
+
+        expect(screen.getByText('All Assets')).toBeInTheDocument();
+        expect(
+            screen.queryByRole('button', { name: 'DEC24' })
+        ).not.toBeInTheDocument();
     });
 });

@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { useDispatch, useSelector } from 'react-redux';
 import SFLogo from 'src/assets/img/logo.svg';
 import SFLogoSmall from 'src/assets/img/small-logo.svg';
-import { Button, NavTab } from 'src/components/atoms';
+import { Button, HighlightChip, NavTab } from 'src/components/atoms';
 import { HamburgerMenu, MenuPopover } from 'src/components/molecules';
 import { WalletDialog, WalletPopover } from 'src/components/organisms';
 import useSF from 'src/hooks/useSecuredFinance';
@@ -65,9 +65,7 @@ export const Header = () => {
                         </a>
                     </Link>
                     {envShort && (
-                        <div className='typography-dropdown-selection-label flex h-5 w-10 items-center justify-center rounded-3xl bg-starBlue font-semibold uppercase text-white'>
-                            {envShort}
-                        </div>
+                        <HighlightChip text={envShort.toUpperCase()} />
                     )}
                 </div>
                 {LINKS.map(link => (

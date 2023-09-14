@@ -1,5 +1,5 @@
 import queries from '@secured-finance/sf-graph-client/dist/graphclients';
-import { BigNumber, utils } from 'ethers';
+import { BigNumber } from 'ethers';
 import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import {
@@ -119,23 +119,6 @@ export const MarketDashboard = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [JSON.stringify(priceList), valueLockedByCurrency]);
 
-    const marketList = useMemo(() => {
-        const result = [];
-        for (const ccy of getCurrencyMapAsList()) {
-            for (const maturity of Object.keys(lendingContracts[ccy.symbol])) {
-                const contract = lendingContracts[ccy.symbol][Number(maturity)];
-                if (contract.isMatured) continue;
-                result.push({
-                    ...contract,
-                    ccy: ccy.symbol,
-                    currency: utils.formatBytes32String(ccy.symbol),
-                });
-            }
-        }
-        return result;
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [JSON.stringify(lendingContracts)]);
-
     return (
         <Page title='Market Dashboard' name='dashboard-page'>
             <TwoColumns>
@@ -179,7 +162,7 @@ export const MarketDashboard = () => {
                         />
                     </div>
 
-                    <MarketLoanWidget markets={marketList} />
+                    <MarketLoanWidget />
                 </div>
                 <section className='flex flex-col gap-5'>
                     {isConnected && (
