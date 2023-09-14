@@ -6,9 +6,9 @@ import {
 } from 'src/components/atoms';
 import { CollateralBook, useOrderEstimation } from 'src/hooks';
 import {
+    formatAmount,
     formatCollateralRatio,
     formatLoanValue,
-    ordinaryFormat,
     prefixTilde,
     usdFormat,
 } from 'src/utils';
@@ -50,7 +50,7 @@ export const CollateralSimulationSection = ({
             ? [
                   [
                       'Borrow Amount',
-                      `${ordinaryFormat(tradeAmount.value)} ${
+                      `${formatAmount(tradeAmount.value)} ${
                           tradeAmount.currency
                       }`,
                   ],
@@ -72,7 +72,7 @@ export const CollateralSimulationSection = ({
             : [
                   [
                       'Lend Amount',
-                      `${ordinaryFormat(tradeAmount.value)} ${
+                      `${formatAmount(tradeAmount.value)} ${
                           tradeAmount.currency
                       }`,
                   ],

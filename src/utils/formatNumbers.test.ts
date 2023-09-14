@@ -1,5 +1,6 @@
 import { BigNumber } from 'ethers';
 import {
+    formatAmount,
     formatCollateralRatio,
     formatTimestamp,
     formatTimestampWithMonth,
@@ -91,6 +92,16 @@ describe('ordinaryFormat', () => {
 
     it('should throw an error if the min decimals is greater than the max decimals', () => {
         expect(() => ordinaryFormat(1234.567, 4, 2)).toThrow();
+    });
+});
+
+describe('formatAmount', () => {
+    it('should format a number with 8 decimal places', () => {
+        expect(formatAmount(1234.56789012)).toBe('1,234.56789012');
+    });
+
+    it('should format a number only with the decimal places that are present', () => {
+        expect(formatAmount(1234.5)).toBe('1,234.5');
     });
 });
 

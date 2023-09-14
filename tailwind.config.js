@@ -30,6 +30,10 @@ module.exports = {
                 '2px': '2px',
                 '5px': '5px',
                 '6px': '6px',
+                screen: [
+                    '100vh /* fallback for Opera, IE and etc. */',
+                    '100dvh',
+                ],
             },
             width: {
                 '1px': '1px',
