@@ -1,9 +1,9 @@
-import { Currency } from '@secured-finance/sf-core';
 import { useQuery } from '@tanstack/react-query';
 import { BigNumber } from 'ethers';
 import { useMemo } from 'react';
 import { QueryKeys } from 'src/hooks/queries';
 import useSF from 'src/hooks/useSecuredFinance';
+import { CurrencySymbol, toCurrency } from 'src/utils';
 
 export type Order = {
     orderId: BigNumber;
@@ -28,15 +28,12 @@ const sortOrders = (a: Order, b: Order) => {
 
 export const useOrderList = (
     account: string | undefined,
-    usedCurrencies: Currency[]
+    usedCurrencies: CurrencySymbol[]
 ) => {
     const securedFinance = useSF();
 
     const usedCurrencyKey = useMemo(() => {
-        return usedCurrencies
-            .map(ccy => ccy.symbol)
-            .sort()
-            .join('-');
+        return usedCurrencies.sort().join('-');
     }, [usedCurrencies]);
 
     return useQuery({
@@ -45,7 +42,7 @@ export const useOrderList = (
         queryFn: async () => {
             const orders = await securedFinance?.getOrderList(
                 account ?? '',
-                usedCurrencies
+                usedCurrencies.map(c => toCurrency(c))
             );
             return (
                 orders ?? {

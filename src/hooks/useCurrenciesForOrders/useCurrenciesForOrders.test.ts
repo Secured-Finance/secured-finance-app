@@ -1,6 +1,6 @@
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { renderHook } from 'src/test-utils';
-import { CurrencySymbol, toCurrency } from 'src/utils';
+import { CurrencySymbol } from 'src/utils';
 import { useCurrenciesForOrders } from './useCurrenciesForOrders';
 
 const mock = mockUseSF();
@@ -20,8 +20,8 @@ describe('useCurrenciesForOrders', () => {
         expect(mock.getUsedCurrenciesForOrders).toHaveBeenCalledTimes(1);
         const newValue = result.current;
         expect(newValue.data).toHaveLength(2);
-        expect(newValue.data[0]).toEqual(toCurrency(CurrencySymbol.ETH));
-        expect(newValue.data[1]).toEqual(toCurrency(CurrencySymbol.WFIL));
+        expect(newValue.data[0]).toEqual(CurrencySymbol.ETH);
+        expect(newValue.data[1]).toEqual(CurrencySymbol.WFIL);
 
         expect(newValue.isLoading).toEqual(false);
     });
