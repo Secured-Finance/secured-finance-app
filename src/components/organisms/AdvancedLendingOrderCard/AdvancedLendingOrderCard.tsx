@@ -36,6 +36,8 @@ import {
 import { RootState } from 'src/store/types';
 import { OrderSideMap, OrderType, OrderTypeOptions } from 'src/types';
 import {
+    MAX_COVERAGE,
+    ZERO_BN,
     amountFormatterFromBase,
     amountFormatterToBase,
     computeAvailableToBorrow,
@@ -43,12 +45,10 @@ import {
     formatLoanValue,
     generateWalletSourceInformation,
     getAmountValidation,
-    MAX_COVERAGE,
     multiply,
     ordinaryFormat,
     prefixTilde,
     usdFormat,
-    ZERO_BN,
 } from 'src/utils';
 import { Amount, LoanValue } from 'src/utils/entities';
 import { useAccount } from 'wagmi';
