@@ -219,9 +219,9 @@ export function AdvancedLendingOrderCard({
     const isInvalidBondPrice = unitPrice === 0 && orderType === OrderType.LIMIT;
 
     const showPreOrderError =
+        isItayose &&
         ((preOrderPosition === 'borrow' && side === OrderSide.LEND) ||
-            (preOrderPosition === 'lend' && side === OrderSide.BORROW)) &&
-        isItayose;
+            (preOrderPosition === 'lend' && side === OrderSide.BORROW));
 
     const shouldDisableActionButton =
         getAmountValidation(
@@ -230,7 +230,6 @@ export function AdvancedLendingOrderCard({
             side
         ) ||
         isInvalidBondPrice ||
-        (orderType === OrderType.LIMIT && unitPrice === 0) ||
         showPreOrderError;
 
     return (
