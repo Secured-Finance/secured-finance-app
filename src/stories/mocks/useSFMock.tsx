@@ -1,7 +1,13 @@
 import { Currency, Token } from '@secured-finance/sf-core';
 import { BigNumber } from 'ethers';
 import * as jest from 'jest-mock';
-import { CurrencySymbol, ZERO_BN, getCurrencyMapAsList } from 'src/utils';
+import {
+    CurrencySymbol,
+    ZERO_BN,
+    currencyMap,
+    getCurrencyMapAsList,
+    hexToCurrencySymbol,
+} from 'src/utils';
 import {
     collateralBook37,
     dec22Fixture,
@@ -286,8 +292,14 @@ export const mockUseSF = () => {
             Promise.resolve([ethBytes32, wfilBytes32])
         ),
 
-        getOrderList: jest.fn(() =>
-            Promise.resolve({
+        getOrderList: jest.fn((_, useCurrencies: Currency[]) => {
+            const filterFn = (order: { ccy: string }) =>
+                useCurrencies.includes(
+                    currencyMap[
+                        hexToCurrencySymbol(order.ccy) ?? CurrencySymbol.WFIL
+                    ].toCurrency()
+                );
+            return Promise.resolve({
                 activeOrders: [
                     {
                         orderId: 1,
@@ -339,7 +351,7 @@ export const mockUseSF = () => {
                         timestamp: BigNumber.from('1409220000'),
                         isPreOrder: true,
                     },
-                ],
+                ].filter(order => filterFn(order)),
                 inactiveOrders: [
                     {
                         orderId: 1,
@@ -361,9 +373,9 @@ export const mockUseSF = () => {
                         timestamp: BigNumber.from('1609295092'),
                         isPreOrder: false,
                     },
-                ],
-            })
-        ),
+                ].filter(order => filterFn(order)),
+            });
+        }),
         getPositions: jest.fn(() =>
             Promise.resolve([
                 {
