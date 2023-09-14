@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { CurrencySymbol, currencyMap } from 'src/utils';
+import { CurrencySymbol } from 'src/utils';
 import { emptyOrderList, useOrderList } from '../useOrderList';
 
 const passThrough = () => true;
@@ -14,10 +14,7 @@ export const useMarketOrderList = (
         >['activeOrderList'][0]
     ) => unknown = passThrough
 ) => {
-    const currency = currencyMap[ccy].toCurrency();
-    const { data: orderList = emptyOrderList } = useOrderList(account, [
-        currency,
-    ]);
+    const { data: orderList = emptyOrderList } = useOrderList(account, [ccy]);
 
     return useMemo(() => {
         return orderList.activeOrderList
