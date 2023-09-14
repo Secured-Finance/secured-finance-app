@@ -422,7 +422,7 @@ describe('AdvancedLendingOrderCard Component', () => {
             ).not.toBeInTheDocument();
         });
 
-        it('should display an error message if the user select borrow but already has lend pre-orders', async () => {
+        it('should display an error message if the user select lend but already has borrow pre-orders', async () => {
             render(
                 <Default
                     collateralBook={collateralBook0}
