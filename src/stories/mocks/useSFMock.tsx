@@ -289,7 +289,7 @@ export const mockUseSF = () => {
         ),
 
         getUsedCurrenciesForOrders: jest.fn(() =>
-            Promise.resolve([ethBytes32, wfilBytes32])
+            Promise.resolve([ethBytes32, wfilBytes32, wbtcBytes32, usdcBytes32])
         ),
 
         getOrderList: jest.fn((_, useCurrencies: Currency[]) => {
