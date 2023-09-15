@@ -1,9 +1,9 @@
-import { Currency } from '@secured-finance/sf-core';
 import { useQuery } from '@tanstack/react-query';
 import { BigNumber } from 'ethers';
 import { useMemo } from 'react';
 import { QueryKeys } from 'src/hooks/queries';
 import useSF from 'src/hooks/useSecuredFinance';
+import { CurrencySymbol, toCurrency } from 'src/utils';
 
 export type Position = {
     currency: string;
@@ -15,15 +15,12 @@ export type Position = {
 
 export const usePositions = (
     account: string | undefined,
-    usedCurrencies: Currency[]
+    usedCurrencies: CurrencySymbol[]
 ) => {
     const securedFinance = useSF();
 
     const usedCurrencyKey = useMemo(() => {
-        return usedCurrencies
-            .map(ccy => ccy.symbol)
-            .sort()
-            .join('-');
+        return usedCurrencies.sort().join('-');
     }, [usedCurrencies]);
 
     return useQuery({
@@ -32,7 +29,7 @@ export const usePositions = (
         queryFn: async () => {
             const positions = await securedFinance?.getPositions(
                 account ?? '',
-                usedCurrencies
+                usedCurrencies.map(c => toCurrency(c))
             );
             return positions ?? [];
         },

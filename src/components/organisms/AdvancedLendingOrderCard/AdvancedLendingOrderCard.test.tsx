@@ -156,19 +156,6 @@ describe('AdvancedLendingOrderCard Component', () => {
         expect(screen.getByRole('radio', { name: 'Limit' })).toBeChecked();
     });
 
-    it('should hide both market and limit order when in onlyLimitOrder mode', async () => {
-        render(<Default onlyLimitOrder />);
-        await waitFor(() =>
-            expect(
-                screen.queryByRole('radio', { name: 'Market' })
-            ).not.toBeInTheDocument()
-        );
-
-        expect(
-            screen.queryByRole('radio', { name: 'Limit' })
-        ).not.toBeInTheDocument();
-    });
-
     it('place order button should be disabled if amount is zero', async () => {
         render(<Default />, { preloadedState });
 
@@ -422,6 +409,58 @@ describe('AdvancedLendingOrderCard Component', () => {
         expect(
             screen.queryByText('Available To Borrow (WFIL)')
         ).not.toBeInTheDocument();
+    });
+
+    describe('Itayose Order Card', () => {
+        it('should hide both market and limit order when in onlyLimitOrder mode', async () => {
+            render(<Default isItayose preOrderPosition='none' />);
+            expect(
+                screen.queryByRole('radio', { name: 'Market' })
+            ).not.toBeInTheDocument();
+            expect(
+                screen.queryByRole('radio', { name: 'Limit' })
+            ).not.toBeInTheDocument();
+        });
+
+        it('should display an error message if the user select lend but already has borrow pre-orders', async () => {
+            render(
+                <Default
+                    collateralBook={collateralBook0}
+                    isItayose
+                    preOrderPosition='borrow'
+                />,
+                {
+                    preloadedState: {
+                        ...preloadedState,
+                        landingOrderForm: {
+                            ...preloadedState.landingOrderForm,
+                            currency: CurrencySymbol.WFIL,
+                        },
+                    },
+                }
+            );
+
+            expect(
+                screen.queryByText(
+                    'Simultaneous borrow and lend orders are not allowed during the pre-open market period.'
+                )
+            ).not.toBeInTheDocument();
+            await waitFor(() =>
+                expect(
+                    screen.getByTestId('place-order-button')
+                ).not.toBeDisabled()
+            );
+
+            fireEvent.click(screen.getByRole('radio', { name: 'Lend' }));
+            expect(
+                screen.queryByText(
+                    'Simultaneous borrow and lend orders are not allowed during the pre-open market period.'
+                )
+            ).toBeInTheDocument();
+            expect(
+                screen.getByRole('button', { name: 'Place Order' })
+            ).toBeDisabled();
+        });
     });
 
     describe('Error handling for invalid bond price in different order types and sides', () => {

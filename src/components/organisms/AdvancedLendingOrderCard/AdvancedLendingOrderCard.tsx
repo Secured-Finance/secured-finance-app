@@ -45,15 +45,17 @@ import {
 import { Amount, LoanValue } from 'src/utils/entities';
 import { useAccount } from 'wagmi';
 
-export const AdvancedLendingOrderCard = ({
+export function AdvancedLendingOrderCard({
     collateralBook,
-    onlyLimitOrder = false,
+    isItayose = false,
+    preOrderPosition = 'none',
     marketPrice,
 }: {
     collateralBook: CollateralBook;
-    onlyLimitOrder?: boolean;
+    isItayose?: boolean;
+    preOrderPosition?: 'borrow' | 'lend' | 'none';
     marketPrice?: number;
-}) => {
+}): JSX.Element {
     const {
         currency,
         amount,
@@ -182,10 +184,10 @@ export const AdvancedLendingOrderCard = ({
             : setSliderValue(0.0);
     };
     useEffect(() => {
-        if (onlyLimitOrder) {
+        if (isItayose) {
             dispatch(setOrderType(OrderType.LIMIT));
         }
-    }, [dispatch, onlyLimitOrder]);
+    }, [dispatch, isItayose]);
 
     const handleWalletSourceChange = (source: WalletSource) => {
         dispatch(setSourceAccount(source));
@@ -214,9 +216,21 @@ export const AdvancedLendingOrderCard = ({
             : setSliderValue(0.0);
     };
 
-    const validateBondPrice = () => {
-        return unitPrice === 0 && orderType === OrderType.LIMIT;
-    };
+    const isInvalidBondPrice = unitPrice === 0 && orderType === OrderType.LIMIT;
+
+    const showPreOrderError =
+        isItayose &&
+        ((preOrderPosition === 'borrow' && side === OrderSide.LEND) ||
+            (preOrderPosition === 'lend' && side === OrderSide.BORROW));
+
+    const shouldDisableActionButton =
+        getAmountValidation(
+            amountFormatterFromBase[currency](amount),
+            balanceToLend,
+            side
+        ) ||
+        isInvalidBondPrice ||
+        showPreOrderError;
 
     return (
         <div className='h-full rounded-b-xl border border-white-10 bg-cardBackground bg-opacity-60 pb-7'>
@@ -237,7 +251,7 @@ export const AdvancedLendingOrderCard = ({
             />
 
             <div className='flex w-full flex-col justify-center gap-6 px-4 pt-5'>
-                {!onlyLimitOrder && (
+                {!isItayose && (
                     <RadioGroupSelector
                         options={OrderTypeOptions}
                         selectedOption={orderType}
@@ -288,7 +302,7 @@ export const AdvancedLendingOrderCard = ({
                     />
                     <ErrorInfo
                         errorMessage='Invalid bond price'
-                        showError={validateBondPrice()}
+                        showError={isInvalidBondPrice}
                     />
                     {orderType === OrderType.MARKET && (
                         <div className='mx-10px'>
@@ -341,16 +355,13 @@ export const AdvancedLendingOrderCard = ({
                 <OrderAction
                     loanValue={loanValue}
                     collateralBook={collateralBook}
-                    validation={
-                        getAmountValidation(
-                            amountFormatterFromBase[currency](amount),
-                            balanceToLend,
-                            side
-                        ) ||
-                        validateBondPrice() ||
-                        (unitPrice === undefined &&
-                            orderType === OrderType.LIMIT)
-                    }
+                    validation={shouldDisableActionButton}
+                />
+
+                <ErrorInfo
+                    errorMessage='Simultaneous borrow and lend orders are not allowed during the pre-open market period.'
+                    align='left'
+                    showError={showPreOrderError}
                 />
 
                 <Separator color='neutral-3'></Separator>
@@ -376,4 +387,4 @@ export const AdvancedLendingOrderCard = ({
             </div>
         </div>
     );
-};
+}
