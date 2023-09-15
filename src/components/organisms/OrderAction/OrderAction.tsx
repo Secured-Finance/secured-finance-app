@@ -27,7 +27,7 @@ interface OrderActionProps {
     loanValue: LoanValue;
     collateralBook: CollateralBook;
     renderSide?: boolean;
-    validation: boolean;
+    validation: boolean; // true to disable button
 }
 
 export const OrderAction = ({
@@ -113,6 +113,7 @@ export const OrderAction = ({
                             setOpenPlaceOrderDialog(true);
                         }}
                         data-testid='place-order-button'
+                        aria-label={getButtonText()}
                     >
                         {getButtonText()}
                     </Button>

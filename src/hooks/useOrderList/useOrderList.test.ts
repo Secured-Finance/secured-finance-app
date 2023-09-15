@@ -1,13 +1,18 @@
 import { ethBytes32, wfilBytes32 } from 'src/stories/mocks/fixtures';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { renderHook } from 'src/test-utils';
-import { CurrencySymbol, toCurrency } from 'src/utils/currencyList';
+import { CurrencySymbol } from 'src/utils/currencyList';
 import { useOrderList } from './useOrderList';
 
 const mock = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mock);
 
-const usedCurrencies = [toCurrency(CurrencySymbol.ETH)];
+const usedCurrencies = [
+    CurrencySymbol.ETH,
+    CurrencySymbol.WFIL,
+    CurrencySymbol.WBTC,
+    CurrencySymbol.USDC,
+];
 
 describe('useOrderList', () => {
     it('should return a sorted array of activeOrders and inactiveOrders by creation date', async () => {

@@ -1,3 +1,4 @@
+import { OrderSide } from '@secured-finance/sf-client';
 import { BigNumber } from 'ethers';
 import { useCallback, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -21,13 +22,11 @@ import {
     MarketPhase,
     baseContracts,
     emptyCollateralBook,
-    emptyOrderList,
     useCollateralBook,
-    useCurrenciesForOrders,
     useLendingMarkets,
+    useMarketOrderList,
     useMarketPhase,
     useMaturityOptions,
-    useOrderList,
 } from 'src/hooks';
 import { useOrderbook } from 'src/hooks/useOrderbook';
 import { getAssetPrice } from 'src/store/assetPrices/selectors';
@@ -43,7 +42,6 @@ import {
     amountFormatterFromBase,
     amountFormatterToBase,
     getCurrencyMapAsOptions,
-    hexToCurrencySymbol,
     usdFormat,
 } from 'src/utils';
 import { countdown } from 'src/utils/date';
@@ -136,22 +134,15 @@ export const Itayose = () => {
     }, [currency, assetList]);
 
     const orderBook = useOrderbook(currency, maturity);
-    const { data: usedCurrencies = [] } = useCurrenciesForOrders(address);
-    const { data: orderList = emptyOrderList } = useOrderList(
-        address,
-        usedCurrencies
-    );
     const { data: collateralBook = emptyCollateralBook } =
         useCollateralBook(address);
 
-    const filteredOrderList = useMemo(() => {
-        return orderList.activeOrderList.filter(
-            o =>
-                hexToCurrencySymbol(o.currency) === currency &&
-                o.maturity === selectedTerm.value.toString()
-        );
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [JSON.stringify(orderList), selectedTerm.value.toNumber()]);
+    const filteredOrderList = useMarketOrderList(
+        address,
+        currency,
+        maturity,
+        o => o.isPreOrder
+    );
 
     const dispatch = useDispatch();
 
@@ -210,8 +201,17 @@ export const Itayose = () => {
             >
                 <AdvancedLendingOrderCard
                     collateralBook={collateralBook}
-                    onlyLimitOrder
+                    isItayose
+                    preOrderPosition={
+                        filteredOrderList.length > 0
+                            ? filteredOrderList[0].side.toString() ===
+                              OrderSide.BORROW
+                                ? 'borrow'
+                                : 'lend'
+                            : 'none'
+                    }
                 />
+
                 <OrderBookWidget
                     currency={currency}
                     orderbook={orderBook}
@@ -230,15 +230,19 @@ export const Itayose = () => {
                                 order feature for our users. This feature allows
                                 you to place limit orders 7 days before a new
                                 orderbook starts trading to secure your position
-                                in the market. Please note that no new
-                                pre-orders will be accepted within 1 hour prior
-                                to the start of trading.
+                                in the market. To maintain market fairness,
+                                users can place either a buy or sell order, but
+                                not both, during the pre-open period.
+                                Additionally, please note that no new pre-orders
+                                will be accepted within 1 hour prior to the
+                                start of trading.
                             </p>
                             <p className='typography-nav-menu-default pb-7 pr-7 text-white'>
                                 Secured Finance does not charge any fees for
-                                placing orders during the pre-order period. To
-                                learn more about pre-market orders and how we
-                                determine prices in Secured Finance GitBook.
+                                placing orders during the pre-order period. For
+                                more information about pre-market orders and our
+                                pricing process, please refer to the Secured
+                                Finance GitBook.
                             </p>
                         </div>
                     </GradientBox>
