@@ -1,6 +1,7 @@
+import { wfilBytes32 } from 'src/stories/mocks/fixtures';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { renderHook } from 'src/test-utils';
-import { CurrencySymbol, toCurrency } from 'src/utils';
+import { CurrencySymbol } from 'src/utils';
 import { useCurrenciesForOrders } from './useCurrenciesForOrders';
 
 const mock = mockUseSF();
@@ -19,10 +20,53 @@ describe('useCurrenciesForOrders', () => {
 
         expect(mock.getUsedCurrenciesForOrders).toHaveBeenCalledTimes(1);
         const newValue = result.current;
-        expect(newValue.data).toHaveLength(2);
-        expect(newValue.data[0]).toEqual(toCurrency(CurrencySymbol.ETH));
-        expect(newValue.data[1]).toEqual(toCurrency(CurrencySymbol.WFIL));
+        expect(newValue.data).toHaveLength(4);
+        expect(newValue.data[0]).toEqual(CurrencySymbol.ETH);
+        expect(newValue.data[1]).toEqual(CurrencySymbol.WFIL);
+        expect(newValue.data[2]).toEqual(CurrencySymbol.WBTC);
+        expect(newValue.data[3]).toEqual(CurrencySymbol.USDC);
 
         expect(newValue.isLoading).toEqual(false);
+    });
+
+    it('should return an empty array if no orders exist', async () => {
+        mock.getUsedCurrenciesForOrders.mockResolvedValueOnce([]);
+        const { result, waitForNextUpdate } = renderHook(() =>
+            useCurrenciesForOrders('0x1')
+        );
+        await waitForNextUpdate();
+
+        const newValue = result.current;
+        expect(newValue.data).toHaveLength(0);
+    });
+
+    it('should return the CurrencySymbol associated to the bytes32', async () => {
+        mock.getUsedCurrenciesForOrders.mockResolvedValueOnce([
+            wfilBytes32, // WFIL
+        ]);
+
+        const { result, waitForNextUpdate } = renderHook(() =>
+            useCurrenciesForOrders('0x1')
+        );
+        await waitForNextUpdate();
+
+        const newValue = result.current;
+        expect(newValue.data).toHaveLength(1);
+        expect(newValue.data[0]).toEqual(CurrencySymbol.WFIL);
+    });
+
+    it('should remove values not recognized by CurrencySymbol', async () => {
+        mock.getUsedCurrenciesForOrders.mockResolvedValueOnce([
+            wfilBytes32, // WFIL
+            '0x1234', // unknown
+        ]);
+        const { result, waitForNextUpdate } = renderHook(() =>
+            useCurrenciesForOrders('0x1')
+        );
+        await waitForNextUpdate();
+
+        const newValue = result.current;
+        expect(newValue.data).toHaveLength(1);
+        expect(newValue.data[0]).toEqual(CurrencySymbol.WFIL);
     });
 });

@@ -2,16 +2,13 @@ import { BigNumber } from 'ethers';
 import { ethBytes32, wfilBytes32 } from 'src/stories/mocks/fixtures';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { renderHook } from 'src/test-utils';
-import { CurrencySymbol, toCurrency } from 'src/utils';
+import { CurrencySymbol } from 'src/utils';
 import { usePositions } from './usePositions';
 
 const mock = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mock);
 
-const usedCurrencies = [
-    toCurrency(CurrencySymbol.ETH),
-    toCurrency(CurrencySymbol.WFIL),
-];
+const usedCurrencies = [CurrencySymbol.ETH, CurrencySymbol.WFIL];
 
 describe('usePositions', () => {
     it('should return an array of positions', async () => {

@@ -1,7 +1,13 @@
 import { Currency, Token } from '@secured-finance/sf-core';
 import { BigNumber } from 'ethers';
 import * as jest from 'jest-mock';
-import { CurrencySymbol, ZERO_BN, getCurrencyMapAsList } from 'src/utils';
+import {
+    CurrencySymbol,
+    ZERO_BN,
+    currencyMap,
+    getCurrencyMapAsList,
+    hexToCurrencySymbol,
+} from 'src/utils';
 import {
     collateralBook37,
     dec22Fixture,
@@ -283,11 +289,17 @@ export const mockUseSF = () => {
         ),
 
         getUsedCurrenciesForOrders: jest.fn(() =>
-            Promise.resolve([ethBytes32, wfilBytes32])
+            Promise.resolve([ethBytes32, wfilBytes32, wbtcBytes32, usdcBytes32])
         ),
 
-        getOrderList: jest.fn(() =>
-            Promise.resolve({
+        getOrderList: jest.fn((_, useCurrencies: Currency[]) => {
+            const filterFn = (order: { ccy: string }) =>
+                useCurrencies.includes(
+                    currencyMap[
+                        hexToCurrencySymbol(order.ccy) ?? CurrencySymbol.WFIL
+                    ].toCurrency()
+                );
+            return Promise.resolve({
                 activeOrders: [
                     {
                         orderId: 1,
@@ -297,6 +309,7 @@ export const mockUseSF = () => {
                         unitPrice: BigNumber.from('9800'),
                         amount: BigNumber.from('1000000000000000000'),
                         timestamp: BigNumber.from('1609210000'),
+                        isPreOrder: false,
                     },
                     {
                         orderId: 2,
@@ -306,6 +319,7 @@ export const mockUseSF = () => {
                         unitPrice: BigNumber.from('9800'),
                         amount: BigNumber.from('100000000000000000'),
                         timestamp: BigNumber.from('1609220000'),
+                        isPreOrder: false,
                     },
                     {
                         orderId: 3,
@@ -315,6 +329,7 @@ export const mockUseSF = () => {
                         unitPrice: BigNumber.from('9800'),
                         amount: BigNumber.from('100000000000000000000'),
                         timestamp: BigNumber.from('1609205000'),
+                        isPreOrder: false,
                     },
                     {
                         orderId: 1,
@@ -324,6 +339,7 @@ export const mockUseSF = () => {
                         unitPrice: BigNumber.from('9800'),
                         amount: BigNumber.from('500000000'),
                         timestamp: BigNumber.from('1609212000'),
+                        isPreOrder: false,
                     },
                     {
                         orderId: 5,
@@ -333,8 +349,9 @@ export const mockUseSF = () => {
                         unitPrice: BigNumber.from('7800'),
                         amount: BigNumber.from('100000000000000000000'),
                         timestamp: BigNumber.from('1409220000'),
+                        isPreOrder: true,
                     },
-                ],
+                ].filter(order => filterFn(order)),
                 inactiveOrders: [
                     {
                         orderId: 1,
@@ -344,6 +361,7 @@ export const mockUseSF = () => {
                         unitPrice: BigNumber.from('9800'),
                         amount: BigNumber.from('450000000000000000'),
                         timestamp: BigNumber.from('1609295092'),
+                        isPreOrder: false,
                     },
                     {
                         orderId: 1,
@@ -353,10 +371,11 @@ export const mockUseSF = () => {
                         unitPrice: BigNumber.from('9800'),
                         amount: BigNumber.from('1000000000000000000000'),
                         timestamp: BigNumber.from('1609295092'),
+                        isPreOrder: false,
                     },
-                ],
-            })
-        ),
+                ].filter(order => filterFn(order)),
+            });
+        }),
         getPositions: jest.fn(() =>
             Promise.resolve([
                 {
