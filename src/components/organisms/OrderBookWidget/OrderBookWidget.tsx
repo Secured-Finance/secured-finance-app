@@ -97,14 +97,28 @@ const PriceCell = ({
     totalAmount,
     position,
     align,
+    aggregationFactor,
 }: {
     value: LoanValue;
     amount: BigNumber;
     totalAmount: BigNumber;
     position: 'borrow' | 'lend';
     align: 'left' | 'right';
+    aggregationFactor: AggregationFactorType;
 }) => {
     const color = position === 'borrow' ? 'negative' : 'positive';
+    const price = useMemo(() => {
+        if (amount.isZero()) {
+            return '';
+        }
+
+        return formatLoanValue(
+            value,
+            'price',
+            Math.abs(Math.log10(Math.min(aggregationFactor, 100) / 100)) // get the power of 10 of the aggregation factor for the number of decimals, but never more than 2
+        );
+    }, [aggregationFactor, amount, value]);
+
     return (
         <div
             className={classNames(
@@ -115,11 +129,7 @@ const PriceCell = ({
                 }
             )}
         >
-            <OrderBookCell
-                value={!amount.isZero() ? formatLoanValue(value, 'price') : ''}
-                color={color}
-                fontWeight='semibold'
-            />
+            <OrderBookCell value={price} color={color} fontWeight='semibold' />
             <ColorBar
                 value={amount}
                 total={totalAmount}
@@ -280,6 +290,7 @@ export const OrderBookWidget = ({
                         value={info.getValue()}
                         amount={info.row.original.amount}
                         totalAmount={totalBuyAmount}
+                        aggregationFactor={aggregationFactor}
                         position='borrow'
                         align='left'
                     />
@@ -305,7 +316,7 @@ export const OrderBookWidget = ({
                 header: () => <TableHeader title='APR' align='right' />,
             }),
         ],
-        [currency, totalBuyAmount]
+        [aggregationFactor, currency, totalBuyAmount]
     );
 
     const sellColumns = useMemo(
@@ -335,6 +346,7 @@ export const OrderBookWidget = ({
                         value={info.getValue()}
                         amount={info.row.original.amount}
                         totalAmount={totalSellAmount}
+                        aggregationFactor={aggregationFactor}
                         position='lend'
                         align='left'
                     />
@@ -342,7 +354,7 @@ export const OrderBookWidget = ({
                 header: () => <TableHeader title='Price' align='left' />,
             }),
         ],
-        [currency, totalSellAmount]
+        [aggregationFactor, currency, totalSellAmount]
     );
 
     useEffect(() => {
