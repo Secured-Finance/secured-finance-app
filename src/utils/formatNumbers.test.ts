@@ -1,13 +1,16 @@
 import { BigNumber } from 'ethers';
+import { LoanValue } from './entities';
 import {
     formatAmount,
     formatCollateralRatio,
+    formatLoanValue,
     formatTimestamp,
     formatTimestampWithMonth,
     formatWithCurrency,
     ordinaryFormat,
     usdFormat,
 } from './formatNumbers';
+import { Rate } from './rate';
 
 describe('formatWithCurrency', () => {
     it('should format the number with the given currency and decimals', () => {
@@ -140,5 +143,43 @@ describe('formatTimestampWithMonth', () => {
         expect(formatTimestampWithMonth(1671859344)).toEqual(
             'Dec 24, 2022 05:22:24'
         );
+    });
+});
+
+describe('formatLoanValue', () => {
+    it('should format the price correctly with default max decimals', () => {
+        expect(
+            formatLoanValue(LoanValue.fromPrice(9698, 100), 'price')
+        ).toEqual('96.98');
+        expect(
+            formatLoanValue(LoanValue.fromPrice(9600, 100), 'price')
+        ).toEqual('96.00');
+    });
+
+    it('should format the rate correctly with default max decimals', () => {
+        expect(
+            formatLoanValue(LoanValue.fromApr(new Rate(515000), 100), 'rate')
+        ).toEqual('51.50%');
+        expect(
+            formatLoanValue(LoanValue.fromApr(new Rate(500000), 100), 'rate')
+        ).toEqual('50.00%');
+    });
+
+    it('should format the price correctly with custom max decimals', () => {
+        expect(
+            formatLoanValue(LoanValue.fromPrice(9623, 100), 'price', 1)
+        ).toEqual('96.2');
+        expect(
+            formatLoanValue(LoanValue.fromPrice(9600, 100), 'price', 4)
+        ).toEqual('96.0000');
+    });
+
+    it('should format the rate correctly with custom max decimals', () => {
+        expect(
+            formatLoanValue(LoanValue.fromApr(new Rate(515000), 100), 'rate', 1)
+        ).toEqual('51.5%');
+        expect(
+            formatLoanValue(LoanValue.fromApr(new Rate(500000), 100), 'rate', 4)
+        ).toEqual('50.0000%');
     });
 });

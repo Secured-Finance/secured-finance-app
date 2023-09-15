@@ -298,6 +298,37 @@ describe('OrderBookWidget Component', () => {
             );
             expect(sumBefore).toEqual(sumAfterAgain);
         });
+
+        it('should change the precision of the prices when changing the aggregation factor', () => {
+            const getOrderRowTextContent = (id: string) => {
+                return screen
+                    .getAllByTestId(id)
+                    .map(row => row.children[0].textContent);
+            };
+
+            render(<Default />);
+            const dropdown = screen.getByRole('button', { name: '0.01' });
+            fireEvent.click(dropdown);
+
+            const options = screen.getAllByRole('menuitem');
+            fireEvent.click(options[1]);
+            expect(getOrderRowTextContent('buyOrders-row')).toEqual([
+                '\xa0', // this is a non-breaking space
+                '98.5',
+                '97.0',
+                '95.0',
+                '94.7',
+                '94.0',
+            ]);
+            expect(getOrderRowTextContent('sellOrders-row')).toEqual([
+                '92.0',
+                '91.1',
+                '90.5',
+                '90.1',
+                '89.8',
+                '89.6',
+            ]);
+        });
     });
 
     describe('Variants', () => {
