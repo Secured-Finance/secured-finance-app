@@ -17,8 +17,7 @@ import {
     OrderBookWidget,
     OrderTable,
 } from 'src/components/organisms';
-import { Page } from 'src/components/templates';
-import { TwoColumnsWithTopBar } from 'src/components/templates/TwoColumnsWithTopBar';
+import { Page, ThreeColumnsWithTopBar } from 'src/components/templates';
 import {
     MarketPhase,
     baseContracts,
@@ -165,7 +164,7 @@ export const Itayose = () => {
 
     return (
         <Page title='Pre-Open Order Book'>
-            <TwoColumnsWithTopBar
+            <ThreeColumnsWithTopBar
                 topBar={
                     <Toolbar
                         date={
@@ -200,21 +199,26 @@ export const Itayose = () => {
                     />
                 }
             >
-                <div>
-                    <AdvancedLendingOrderCard
-                        collateralBook={collateralBook}
-                        isItayose
-                        preOrderPosition={
-                            filteredOrderList.length > 0
-                                ? filteredOrderList[0].side.toString() ===
-                                  OrderSide.BORROW
-                                    ? 'borrow'
-                                    : 'lend'
-                                : 'none'
-                        }
-                    />
-                </div>
-                <div className='flex flex-col gap-4'>
+                <AdvancedLendingOrderCard
+                    collateralBook={collateralBook}
+                    isItayose
+                    preOrderPosition={
+                        filteredOrderList.length > 0
+                            ? filteredOrderList[0].side.toString() ===
+                              OrderSide.BORROW
+                                ? 'borrow'
+                                : 'lend'
+                            : 'none'
+                    }
+                />
+
+                <OrderBookWidget
+                    currency={currency}
+                    orderbook={orderBook}
+                    variant='itayose'
+                />
+
+                <div className='flex h-full flex-col items-stretch justify-stretch gap-6'>
                     <GradientBox variant='high-contrast'>
                         <div className='px-3'>
                             <h1 className='typography-nav-menu-default whitespace-nowrap py-5 text-left text-neutral-8'>
@@ -242,16 +246,14 @@ export const Itayose = () => {
                             </p>
                         </div>
                     </GradientBox>
-                    <HorizontalTab tabTitles={['Order Book', 'Open Orders']}>
-                        <OrderBookWidget
-                            currency={currency}
-                            orderbook={orderBook}
-                            hideMidPrice
+                    <HorizontalTab tabTitles={['Open Orders']}>
+                        <OrderTable
+                            data={filteredOrderList}
+                            variant='compact'
                         />
-                        <OrderTable data={filteredOrderList} />
                     </HorizontalTab>
                 </div>
-            </TwoColumnsWithTopBar>
+            </ThreeColumnsWithTopBar>
         </Page>
     );
 };

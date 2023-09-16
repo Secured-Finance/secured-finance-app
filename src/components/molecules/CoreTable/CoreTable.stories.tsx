@@ -129,3 +129,9 @@ NonResponsive.args = {
 };
 
 export const WithPagination = PaginationTemplate.bind({});
+export const HideHeader = Template.bind({});
+HideHeader.args = {
+    options: {
+        showHeaders: false,
+    },
+};

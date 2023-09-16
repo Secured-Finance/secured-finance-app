@@ -14,7 +14,13 @@ import {
 
 const columnHelper = createColumnHelper<Order>();
 
-export const OrderTable = ({ data }: { data: Order[] }) => {
+export const OrderTable = ({
+    data,
+    variant = 'default',
+}: {
+    data: Order[];
+    variant?: 'compact' | 'default';
+}) => {
     const { cancelOrder } = useOrders();
     const columns = useMemo(
         () => [
@@ -23,7 +29,7 @@ export const OrderTable = ({ data }: { data: Order[] }) => {
                 columnHelper,
                 'Contract',
                 'contract',
-                'compact'
+                variant === 'default' ? 'compact' : 'contractOnly'
             ),
             priceYieldColumnDefinition(
                 columnHelper,
@@ -87,12 +93,16 @@ export const OrderTable = ({ data }: { data: Order[] }) => {
                 header: () => <div className='p-2'>Actions</div>,
             }),
         ],
-        [cancelOrder]
+        [cancelOrder, variant]
     );
 
     return (
         <CoreTable
-            columns={columns}
+            columns={
+                variant === 'compact'
+                    ? columns.filter(column => column.id !== 'createdAt')
+                    : columns
+            }
             data={data}
             options={{
                 name: 'open-order-table',

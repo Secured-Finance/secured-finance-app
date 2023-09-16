@@ -1,5 +1,6 @@
 import { BigNumber, FixedNumber } from 'ethers';
 import { MAX_COVERAGE } from './collateral';
+import { divide } from './currencyList';
 import { LoanValue } from './entities';
 
 export const usdFormat = (
@@ -73,11 +74,20 @@ export const formatWithCurrency = (
     return `${ordinaryFormat(number, 0, decimals)} ${currency}`;
 };
 
-export const formatLoanValue = (value: LoanValue, type: 'price' | 'rate') => {
+export const formatLoanValue = (
+    value: LoanValue,
+    type: 'price' | 'rate',
+    decimal = 2
+) => {
     if (type === 'price') {
-        return (value.price / 100).toFixed(2).toString();
+        return divide(value.price, 100).toFixed(decimal).toString();
     } else {
-        return percentFormat(value.apr.toNormalizedNumber(), 100, 2, 2);
+        return percentFormat(
+            value.apr.toNormalizedNumber(),
+            100,
+            decimal,
+            decimal
+        );
     }
 };
 

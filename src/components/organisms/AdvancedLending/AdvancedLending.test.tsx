@@ -27,10 +27,12 @@ describe('Advanced Lending Component', () => {
         );
         fireEvent.click(screen.getByRole('button', { name: 'Filecoin' }));
         fireEvent.click(screen.getByRole('menuitem', { name: 'USDC' }));
-        expect(store.getState().landingOrderForm.amount).toEqual('1000000');
-        expect(screen.getByRole('textbox', { name: 'Amount' })).toHaveValue(
-            '1'
-        );
+        await waitFor(() => {
+            expect(store.getState().landingOrderForm.amount).toEqual('1000000');
+            expect(screen.getByRole('textbox', { name: 'Amount' })).toHaveValue(
+                '1'
+            );
+        });
     });
 
     it('should not reset the amount when the user change the maturity', async () => {
@@ -50,12 +52,14 @@ describe('Advanced Lending Component', () => {
         );
         fireEvent.click(screen.getByRole('button', { name: 'DEC22' }));
         fireEvent.click(screen.getByText('MAR23'));
-        expect(store.getState().landingOrderForm.amount).toEqual(
-            '1000000000000000000'
-        );
-        expect(screen.getByRole('textbox', { name: 'Amount' })).toHaveValue(
-            '1'
-        );
+        await waitFor(() => {
+            expect(store.getState().landingOrderForm.amount).toEqual(
+                '1000000000000000000'
+            );
+            expect(screen.getByRole('textbox', { name: 'Amount' })).toHaveValue(
+                '1'
+            );
+        });
     });
 
     it('should show the maturity as a date for the selected maturity', async () => {
@@ -127,8 +131,8 @@ describe('Advanced Lending Component', () => {
             })
         );
         fireEvent.click(screen.getByRole('tab', { name: 'Open Orders' }));
-
-        const openOrders = await screen.findAllByRole('row');
-        expect(openOrders).toHaveLength(1);
+        expect(
+            within(screen.getByTestId('open-order-table')).queryAllByRole('row')
+        ).toHaveLength(1);
     });
 });

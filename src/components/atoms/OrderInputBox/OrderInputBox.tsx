@@ -56,9 +56,9 @@ export const OrderInputBox = ({
     );
 
     return (
-        <div className='typography-caption flex h-10 w-full flex-row items-center justify-between rounded-lg bg-black-20 py-2 pl-2 pr-4 ring-inset ring-starBlue focus-within:ring-2'>
+        <div className='typography-caption grid h-10 grid-cols-2 place-content-between rounded-lg bg-black-20 p-2 ring-inset ring-starBlue focus-within:ring-2'>
             <div className='flex flex-row items-center gap-2'>
-                <div className='typography-caption text-planetaryPurple'>
+                <div className='typography-caption whitespace-nowrap text-planetaryPurple'>
                     {field}
                 </div>
                 {informationText && !disabled && (
@@ -67,7 +67,7 @@ export const OrderInputBox = ({
                     </Tooltip>
                 )}
             </div>
-            <div className='flex flex-row items-center gap-10px'>
+            <div className='grid grid-flow-col place-content-end gap-10px'>
                 {disabled ? (
                     <span className='text-right text-[18px] font-semibold leading-6 text-neutral-8/30'>
                         {initialValue ?? 0}
@@ -75,7 +75,7 @@ export const OrderInputBox = ({
                 ) : (
                     <InputBase
                         value={initialValue as number}
-                        className='w-32 text-right text-[18px] font-semibold leading-6 text-neutral-8'
+                        className='col col-span-2 flex text-right text-[18px] font-semibold leading-6 text-neutral-8'
                         label={field}
                         onValueChange={handleAmountChange}
                         decimalPlacesAllowed={decimalPlacesAllowed}

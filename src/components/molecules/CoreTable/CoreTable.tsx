@@ -10,7 +10,12 @@ import {
 import classNames from 'classnames';
 import { useEffect, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import { Pagination } from 'src/types';
+
+export interface Pagination {
+    getMoreData: () => void;
+    totalData: number;
+    containerHeight: boolean;
+}
 
 type CoreTableOptions = {
     border: boolean;
@@ -21,6 +26,8 @@ type CoreTableOptions = {
     responsive: boolean;
     stickyColumns?: Set<number>;
     pagination?: Pagination;
+    showHeaders?: boolean;
+    compact?: boolean;
 };
 
 const DEFAULT_OPTIONS: CoreTableOptions = {
@@ -30,6 +37,8 @@ const DEFAULT_OPTIONS: CoreTableOptions = {
     hoverRow: undefined,
     hideColumnIds: undefined,
     responsive: true,
+    showHeaders: true,
+    compact: false,
 };
 
 export const CoreTable = <T,>({
@@ -109,43 +118,54 @@ export const CoreTable = <T,>({
             })}
             data-testid={coreTableOptions.name}
         >
-            <thead className='typography-caption-2 h-14 border-b border-white-10 px-6 py-4 text-slateGray'>
-                {table.getHeaderGroups().map(headerGroup => (
-                    <tr
-                        key={headerGroup.id}
-                        data-testid={`${coreTableOptions.name}-header`}
-                    >
-                        {headerGroup.headers.map((header, columnIndex) => (
-                            <th
-                                data-testid={`${coreTableOptions.name}-header-cell`}
-                                key={header.id}
-                                className={classNames(
-                                    'whitespace-nowrap py-2 pr-1 text-center font-bold tablet:px-1',
-                                    {
-                                        'sticky z-10 bg-gunMetal/100 tablet:relative tablet:bg-transparent':
-                                            coreTableOptions.responsive &&
-                                            coreTableOptions?.stickyColumns?.has(
-                                                columnIndex
-                                            ),
-                                        [stickyClass[columnIndex]]:
-                                            coreTableOptions.responsive &&
-                                            coreTableOptions.stickyColumns?.has(
-                                                columnIndex
-                                            ),
-                                    }
-                                )}
-                            >
-                                {header.isPlaceholder
-                                    ? null
-                                    : flexRender(
-                                          header.column.columnDef.header,
-                                          header.getContext()
-                                      )}
-                            </th>
-                        ))}
-                    </tr>
-                ))}
-            </thead>
+            {coreTableOptions.showHeaders ? (
+                <thead
+                    className={classNames(
+                        'typography-caption-2 px-6 text-slateGray',
+                        {
+                            'border-b border-white-10': coreTableOptions.border,
+                            'h-14 py-4': !coreTableOptions.compact,
+                            'h-5 py-1': coreTableOptions.compact,
+                        }
+                    )}
+                >
+                    {table.getHeaderGroups().map(headerGroup => (
+                        <tr
+                            key={headerGroup.id}
+                            data-testid={`${coreTableOptions.name}-header`}
+                        >
+                            {headerGroup.headers.map((header, columnIndex) => (
+                                <th
+                                    data-testid={`${coreTableOptions.name}-header-cell`}
+                                    key={header.id}
+                                    className={classNames(
+                                        'whitespace-nowrap py-2 pr-1 text-center font-bold tablet:px-1',
+                                        {
+                                            'sticky z-10 bg-gunMetal/100 tablet:relative tablet:bg-transparent':
+                                                coreTableOptions.responsive &&
+                                                coreTableOptions?.stickyColumns?.has(
+                                                    columnIndex
+                                                ),
+                                            [stickyClass[columnIndex]]:
+                                                coreTableOptions.responsive &&
+                                                coreTableOptions.stickyColumns?.has(
+                                                    columnIndex
+                                                ),
+                                        }
+                                    )}
+                                >
+                                    {header.isPlaceholder
+                                        ? null
+                                        : flexRender(
+                                              header.column.columnDef.header,
+                                              header.getContext()
+                                          )}
+                                </th>
+                            ))}
+                        </tr>
+                    ))}
+                </thead>
+            ) : null}
 
             <tbody>
                 {table.getRowModel().rows.map(row => (
@@ -170,7 +190,7 @@ export const CoreTable = <T,>({
                             <td
                                 key={cell.id}
                                 className={classNames(
-                                    'min-w-fit whitespace-nowrap py-2 pr-1 text-center font-medium tablet:px-1',
+                                    'min-w-fit whitespace-nowrap pr-1 text-center font-medium tablet:px-1',
                                     {
                                         'sticky z-10 bg-gunMetal/100 tablet:relative tablet:z-auto tablet:bg-transparent':
                                             coreTableOptions.responsive &&
@@ -182,6 +202,8 @@ export const CoreTable = <T,>({
                                             coreTableOptions.stickyColumns?.has(
                                                 cellIndex
                                             ),
+                                        'py-2': !coreTableOptions.compact,
+                                        'py-1': coreTableOptions.compact,
                                     }
                                 )}
                             >

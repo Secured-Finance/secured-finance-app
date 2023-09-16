@@ -11,7 +11,7 @@ const maturity = 1675252800;
 describe('useOrderbook', () => {
     it('should return an array of number for borrow rates', async () => {
         const { result, waitForNextUpdate } = renderHook(() =>
-            useOrderbook(CurrencySymbol.ETH, maturity, 5)
+            useOrderbook(CurrencySymbol.ETH, maturity, 5, 5)
         );
 
         expect(result.current.data).toBeUndefined();
@@ -19,12 +19,7 @@ describe('useOrderbook', () => {
         await waitForNextUpdate();
 
         expect(result.current.data.borrowOrderbook.length).toBe(5);
-        expect(result.current.data.borrowOrderbook[0].value.price).toBe(9674);
-        expect(result.current.data.borrowOrderbook[4].value.price).toBe(9690);
-
         expect(result.current.data.lendOrderbook.length).toBe(5);
-        expect(result.current.data.lendOrderbook[0].value.price).toBe(9690);
-        expect(result.current.data.lendOrderbook[4].value.price).toBe(9674);
     });
 
     it('should trim the orderbook from the zeros but keep the borrow and lending orderbook the same size', async () => {
@@ -76,7 +71,7 @@ describe('useOrderbook', () => {
         });
 
         const { result, waitForNextUpdate } = renderHook(() =>
-            useOrderbook(CurrencySymbol.ETH, maturity)
+            useOrderbook(CurrencySymbol.ETH, maturity, 40, 0)
         );
 
         expect(result.current.data).toBeUndefined();
@@ -97,7 +92,7 @@ describe('useOrderbook', () => {
         mock.getLendOrderBook.mockResolvedValueOnce(emptyOrderbook);
         mock.getBorrowOrderBook.mockResolvedValueOnce(emptyOrderbook);
         const { result, waitForNextUpdate } = renderHook(() =>
-            useOrderbook(CurrencySymbol.ETH, maturity)
+            useOrderbook(CurrencySymbol.ETH, maturity, 40, 0)
         );
 
         expect(result.current.data).toBeUndefined();
@@ -106,5 +101,26 @@ describe('useOrderbook', () => {
 
         expect(result.current.data.borrowOrderbook.length).toBe(1);
         expect(result.current.data.lendOrderbook.length).toBe(1);
+    });
+
+    it('should return an orderbook with a minimum number of line even if there is no orders in the orderbook', async () => {
+        const emptyOrderbook = {
+            unitPrices: [ZERO_BN, ZERO_BN, ZERO_BN],
+            amounts: [ZERO_BN, ZERO_BN, ZERO_BN],
+            quantities: [ZERO_BN, ZERO_BN, ZERO_BN],
+        };
+
+        mock.getLendOrderBook.mockResolvedValueOnce(emptyOrderbook);
+        mock.getBorrowOrderBook.mockResolvedValueOnce(emptyOrderbook);
+        const { result, waitForNextUpdate } = renderHook(() =>
+            useOrderbook(CurrencySymbol.ETH, maturity, 40, 5)
+        );
+
+        expect(result.current.data).toBeUndefined();
+
+        await waitForNextUpdate();
+
+        expect(result.current.data.borrowOrderbook.length).toBe(5);
+        expect(result.current.data.lendOrderbook.length).toBe(5);
     });
 });

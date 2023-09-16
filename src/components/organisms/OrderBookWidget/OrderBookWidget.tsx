@@ -1,13 +1,27 @@
-import { ArrowUpIcon } from '@heroicons/react/24/outline';
 import { OrderSide, WalletSource } from '@secured-finance/sf-client';
 import { createColumnHelper } from '@tanstack/react-table';
 import classNames from 'classnames';
 import { BigNumber } from 'ethers';
-import { useEffect, useMemo } from 'react';
+import { Fragment, useEffect, useMemo, useReducer, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { ColorBar, Spinner } from 'src/components/atoms';
+import ShowFirstIcon from 'src/assets/icons/orderbook-first.svg';
+import ShowAllIcon from 'src/assets/icons/orderbook-full.svg';
+import ShowLastIcon from 'src/assets/icons/orderbook-last.svg';
+import {
+    ColorBar,
+    DropdownSelector,
+    NavTab,
+    Spinner,
+} from 'src/components/atoms';
 import { CoreTable, TableHeader } from 'src/components/molecules';
-import { OrderBookEntry, useBreakpoint, useOrderbook } from 'src/hooks';
+import { Tooltip } from 'src/components/templates';
+import {
+    AggregationFactorType,
+    OrderBookEntry,
+    sortOrders,
+    useOrderbook,
+    usePrepareOrderbookData,
+} from 'src/hooks';
 import { setMidPrice } from 'src/store/analytics';
 import {
     setAmount,
@@ -24,6 +38,14 @@ import {
     ordinaryFormat,
 } from 'src/utils';
 import { LoanValue } from 'src/utils/entities';
+
+const AGGREGATION_OPTIONS = [
+    { label: '0.01', value: '1' },
+    { label: '0.1', value: '10' },
+    { label: '1', value: '100' },
+    { label: '5', value: '500' },
+    { label: '10', value: '1000' },
+];
 
 const columnHelper = createColumnHelper<OrderBookEntry>();
 
@@ -43,7 +65,7 @@ const OrderBookCell = ({
             'font-semibold': fontWeight === 'semibold',
         })}
     >
-        {value}
+        {value ? value : <Fragment>&nbsp;</Fragment>}
     </span>
 );
 
@@ -54,7 +76,7 @@ const AmountCell = ({
     value: BigNumber;
     currency: CurrencySymbol;
 }) => (
-    <div className='flex justify-end pr-[25%]'>
+    <div className='typography-caption-2 flex justify-end pr-[25%] text-neutral-6'>
         {value.eq(0) ? (
             <OrderBookCell />
         ) : (
@@ -75,30 +97,39 @@ const PriceCell = ({
     totalAmount,
     position,
     align,
+    aggregationFactor,
 }: {
     value: LoanValue;
     amount: BigNumber;
     totalAmount: BigNumber;
     position: 'borrow' | 'lend';
     align: 'left' | 'right';
+    aggregationFactor: AggregationFactorType;
 }) => {
     const color = position === 'borrow' ? 'negative' : 'positive';
-    if (amount.eq(0)) return <OrderBookCell />;
+    const price = useMemo(() => {
+        if (amount.isZero()) {
+            return '';
+        }
+
+        return formatLoanValue(
+            value,
+            'price',
+            Math.abs(Math.log10(Math.min(aggregationFactor, 100) / 100)) // get the power of 10 of the aggregation factor for the number of decimals, but never more than 2
+        );
+    }, [aggregationFactor, amount, value]);
+
     return (
         <div
             className={classNames(
-                'relative flex items-center overflow-visible',
+                'typography-caption-2 relative flex items-center overflow-visible font-bold text-neutral-6',
                 {
                     'justify-start': align === 'left',
                     'justify-end': align === 'right',
                 }
             )}
         >
-            <OrderBookCell
-                value={formatLoanValue(value, 'price')}
-                color={color}
-                fontWeight='semibold'
-            />
+            <OrderBookCell value={price} color={color} fontWeight='semibold' />
             <ColorBar
                 value={amount}
                 total={totalAmount}
@@ -120,7 +151,7 @@ const AprCell = ({
 }) => {
     return (
         <div
-            className={classNames('flex', {
+            className={classNames('typography-caption-2 flex', {
                 'justify-start': align === 'left',
                 'justify-end': align === 'right',
             })}
@@ -134,61 +165,121 @@ const AprCell = ({
     );
 };
 
+type VisibilityState = {
+    showBorrow: boolean;
+    showLend: boolean;
+    showMidPrice: boolean;
+};
+
+type VisibilityAction = 'showOnlyBorrow' | 'showOnlyLend' | 'reset';
+
+const initialState: VisibilityState = {
+    showBorrow: true,
+    showLend: true,
+    showMidPrice: true,
+};
+
+const reducer = (
+    state: VisibilityState,
+    action: VisibilityAction
+): VisibilityState => {
+    switch (action) {
+        case 'showOnlyBorrow':
+            if (!state.showLend) {
+                return initialState;
+            }
+            return {
+                ...state,
+                showBorrow: true,
+                showLend: false,
+                showMidPrice: false,
+            };
+        case 'showOnlyLend':
+            if (!state.showBorrow) {
+                return initialState;
+            }
+            return {
+                ...state,
+                showBorrow: false,
+                showLend: true,
+                showMidPrice: false,
+            };
+        default:
+            return initialState;
+    }
+};
+
 export const OrderBookWidget = ({
     orderbook,
     currency,
-    hideMidPrice = false,
+    variant = 'default',
 }: {
     orderbook: Pick<ReturnType<typeof useOrderbook>, 'data' | 'isLoading'>;
     currency: CurrencySymbol;
-    hideMidPrice?: boolean;
+    variant?: 'default' | 'itayose';
 }) => {
-    const dispatch = useDispatch();
-    const isTabletOrMobile = useBreakpoint('laptop');
-    const tableAlign = useMemo(
-        () => (isTabletOrMobile ? 'left' : 'right'),
-        [isTabletOrMobile]
-    );
-    const oppositeTableAlign = useMemo(
-        () => (isTabletOrMobile ? 'right' : 'left'),
-        [isTabletOrMobile]
+    const [state, dispatch] = useReducer(reducer, initialState);
+    const [aggregationFactor, setAggregationFactor] =
+        useState<AggregationFactorType>(1);
+
+    const globalDispatch = useDispatch();
+
+    const borrowOrders = usePrepareOrderbookData(
+        orderbook.data,
+        'borrowOrderbook',
+        aggregationFactor
     );
 
-    const buyOrders = useMemo(
-        () => orderbook.data?.borrowOrderbook ?? [],
-        [orderbook.data?.borrowOrderbook]
-    );
-
-    const sellOrders = useMemo(
-        () => orderbook.data?.lendOrderbook ?? [],
-        [orderbook.data?.lendOrderbook]
+    const lendOrders = usePrepareOrderbookData(
+        orderbook.data,
+        'lendOrderbook',
+        aggregationFactor
     );
 
     const totalBuyAmount = useMemo(
         () =>
-            buyOrders.reduce(
+            borrowOrders.reduce(
                 (acc, order) => acc.add(order.amount),
                 BigNumber.from(0)
             ),
-        [buyOrders]
+        [borrowOrders]
     );
 
     const totalSellAmount = useMemo(
         () =>
-            sellOrders.reduce(
+            lendOrders.reduce(
                 (acc, order) => acc.add(order.amount),
                 BigNumber.from(0)
             ),
-        [sellOrders]
+        [lendOrders]
     );
 
-    const lastMidValue = useMemo(() => {
-        if (buyOrders.length === 0 || sellOrders.length === 0) {
+    const midValue = useMemo(() => {
+        const borrowOrders =
+            orderbook.data?.borrowOrderbook?.filter(
+                order => !order.amount.isZero()
+            ) ?? [];
+        const lendOrders =
+            orderbook.data?.lendOrderbook?.filter(
+                order => !order.amount.isZero()
+            ) ?? [];
+
+        if (!borrowOrders.length || !lendOrders.length) {
             return LoanValue.ZERO;
         }
 
-        return LoanValue.getMidValue(sellOrders[0].value, buyOrders[0].value);
-    }, [sellOrders, buyOrders]);
+        const sortedBorrowOrders = [...borrowOrders].sort((a, b) =>
+            sortOrders(a, b, 'asc')
+        );
+        const sortedLendOrders = [...lendOrders].sort((a, b) =>
+            sortOrders(a, b, 'desc')
+        );
+
+        return LoanValue.getMidValue(
+            sortedLendOrders[0].value,
+            sortedBorrowOrders[0].value
+        );
+    }, [orderbook.data?.borrowOrderbook, orderbook.data?.lendOrderbook]);
 
     const buyColumns = useMemo(
         () => [
@@ -199,6 +290,7 @@ export const OrderBookWidget = ({
                         value={info.getValue()}
                         amount={info.row.original.amount}
                         totalAmount={totalBuyAmount}
+                        aggregationFactor={aggregationFactor}
                         position='borrow'
                         align='left'
                     />
@@ -210,12 +302,7 @@ export const OrderBookWidget = ({
                 cell: info => (
                     <AmountCell value={info.getValue()} currency={currency} />
                 ),
-                header: () => (
-                    <TableHeader
-                        title={`Amount (${currency})`}
-                        align='center'
-                    />
-                ),
+                header: () => <TableHeader title='Amount' align='center' />,
             }),
             columnHelper.accessor('value', {
                 id: 'apr',
@@ -226,10 +313,10 @@ export const OrderBookWidget = ({
                         align='right'
                     />
                 ),
-                header: () => <TableHeader title='Borrow APR' align='right' />,
+                header: () => <TableHeader title='APR' align='right' />,
             }),
         ],
-        [currency, totalBuyAmount]
+        [aggregationFactor, currency, totalBuyAmount]
     );
 
     const sellColumns = useMemo(
@@ -240,24 +327,17 @@ export const OrderBookWidget = ({
                     <AprCell
                         value={info.getValue()}
                         display={!info.row.original.amount.eq(0)}
-                        align={oppositeTableAlign}
+                        align='right'
                     />
                 ),
-                header: () => (
-                    <TableHeader title='Lend APR' align={oppositeTableAlign} />
-                ),
+                header: () => <TableHeader title='APR' align='right' />,
             }),
             columnHelper.accessor('amount', {
                 id: 'amount',
                 cell: info => (
                     <AmountCell value={info.getValue()} currency={currency} />
                 ),
-                header: () => (
-                    <TableHeader
-                        title={`Amount (${currency})`}
-                        align='center'
-                    />
-                ),
+                header: () => <TableHeader title='Amount' align='center' />,
             }),
             columnHelper.accessor('value', {
                 id: 'price',
@@ -266,32 +346,33 @@ export const OrderBookWidget = ({
                         value={info.getValue()}
                         amount={info.row.original.amount}
                         totalAmount={totalSellAmount}
+                        aggregationFactor={aggregationFactor}
                         position='lend'
-                        align={tableAlign}
+                        align='left'
                     />
                 ),
-                header: () => <TableHeader title='Price' align={tableAlign} />,
+                header: () => <TableHeader title='Price' align='left' />,
             }),
         ],
-        [currency, oppositeTableAlign, tableAlign, totalSellAmount]
+        [aggregationFactor, currency, totalSellAmount]
     );
 
     useEffect(() => {
-        dispatch(setMidPrice(lastMidValue.price));
-    }, [dispatch, lastMidValue.price]);
+        globalDispatch(setMidPrice(midValue.price));
+    }, [globalDispatch, midValue.price]);
 
     const handleClick = (rowId: string, side: OrderSide): void => {
         const rowData =
             side === OrderSide.BORROW
-                ? sellOrders[parseInt(rowId)]
-                : buyOrders[parseInt(rowId)];
-        dispatch(setOrderType(OrderType.LIMIT));
-        side ? dispatch(setSide(side)) : null;
+                ? lendOrders[parseInt(rowId)]
+                : borrowOrders[parseInt(rowId)];
+        globalDispatch(setOrderType(OrderType.LIMIT));
+        side ? globalDispatch(setSide(side)) : null;
         side === OrderSide.BORROW
-            ? dispatch(setSourceAccount(WalletSource.METAMASK))
+            ? globalDispatch(setSourceAccount(WalletSource.METAMASK))
             : null;
-        dispatch(setUnitPrice(rowData.value.price));
-        dispatch(setAmount(rowData.amount));
+        globalDispatch(setUnitPrice(rowData.value.price));
+        globalDispatch(setAmount(rowData.amount));
     };
 
     const handleSellOrdersClick = (rowId: string) => {
@@ -303,63 +384,63 @@ export const OrderBookWidget = ({
     };
 
     const handleSellOrdersHoverRow = (rowId: string) => {
-        const rowData = sellOrders[parseInt(rowId)];
+        const rowData = lendOrders[parseInt(rowId)];
         return !rowData.amount.isZero();
     };
 
     const handleBuyOrdersHoverRow = (rowId: string) => {
-        const rowData = buyOrders[parseInt(rowId)];
+        const rowData = borrowOrders[parseInt(rowId)];
         return !rowData.amount.isZero();
     };
 
     return (
-        <div className='grid w-full grid-cols-1 place-content-start gap-x-4 laptop:grid-cols-2'>
-            <div className='row-start-2 laptop:col-span-2 laptop:row-start-1'>
-                {!hideMidPrice && (
-                    <div className='flex h-14 flex-row items-center justify-center gap-4 border-b border-white-10 bg-black-20'>
-                        <div className='flex flex-row items-center gap-1'>
-                            <ArrowUpIcon className='flex h-3 text-teal' />
-                            <span
-                                className='typography-portfolio-heading font-semibold text-teal'
-                                data-testid='last-mid-price'
-                            >
-                                {formatLoanValue(lastMidValue, 'price')}
-                            </span>
-                        </div>
-
-                        <span className='typography-portfolio-heading font-normal text-slateGray'>
-                            {formatLoanValue(lastMidValue, 'rate')}
-                        </span>
+        <div className='grid h-full w-full grid-cols-1 place-content-start gap-y-3 rounded-b-2xl border border-white-10 bg-cardBackground/60 px-3 pb-4 shadow-tab'>
+            <div className='-mx-3 h-[60px] w-1/2'>
+                <NavTab text='Order Book' active={true} />
+            </div>
+            <div className='flex flex-row justify-between'>
+                <div className='flex h-8 flex-row items-start gap-3'>
+                    <OrderBookIcon
+                        name='Show All Orders'
+                        Icon={<ShowAllIcon className='mr-1 h-4 w-4' />}
+                        onClick={() => dispatch('reset')}
+                        active={state.showBorrow && state.showLend}
+                    />
+                    <OrderBookIcon
+                        name='Show Only Lend Orders'
+                        Icon={<ShowLastIcon className='mr-1 h-4 w-4' />}
+                        onClick={() => dispatch('showOnlyLend')}
+                        active={!state.showBorrow && state.showLend}
+                    />
+                    <OrderBookIcon
+                        name='Show Only Borrow Orders'
+                        Icon={<ShowFirstIcon className='mr-1 h-4 w-4' />}
+                        onClick={() => dispatch('showOnlyBorrow')}
+                        active={!state.showLend && state.showBorrow}
+                    />
+                </div>
+                <div className='flex items-center justify-end'>
+                    <div className='w-20'>
+                        <DropdownSelector
+                            optionList={AGGREGATION_OPTIONS}
+                            onChange={v =>
+                                setAggregationFactor(
+                                    Number(v) as AggregationFactorType
+                                )
+                            }
+                            variant='fullWidth'
+                        />
                     </div>
-                )}
+                </div>
             </div>
             {orderbook.isLoading ? (
-                <div className='col-span-2 row-start-3 flex h-full w-full items-center justify-center pt-24'>
+                <div className='flex h-full w-full items-center justify-center'>
                     <Spinner />
                 </div>
             ) : (
                 <>
                     <CoreTable
-                        data={
-                            isTabletOrMobile
-                                ? [...sellOrders].reverse()
-                                : sellOrders
-                        }
-                        columns={
-                            isTabletOrMobile
-                                ? [...sellColumns].reverse()
-                                : sellColumns
-                        }
-                        options={{
-                            responsive: false,
-                            name: 'sellOrders',
-                            border: false,
-                            onLineClick: handleSellOrdersClick,
-                            hoverRow: handleSellOrdersHoverRow,
-                        }}
-                    />
-                    <CoreTable
-                        data={buyOrders}
+                        data={state.showBorrow ? borrowOrders : []}
                         columns={buyColumns}
                         options={{
                             responsive: false,
@@ -367,6 +448,48 @@ export const OrderBookWidget = ({
                             border: false,
                             onLineClick: handleBuyOrdersClick,
                             hoverRow: handleBuyOrdersHoverRow,
+                            compact: true,
+                        }}
+                    />
+                    {state.showMidPrice && (
+                        <div className='typography-portfolio-heading -mx-3 flex h-14 flex-row items-center justify-between bg-black-20 px-4'>
+                            <span
+                                className={classNames('font-semibold', {
+                                    'flex flex-row items-center gap-2 text-white':
+                                        variant === 'itayose',
+                                    'text-nebulaTeal': variant === 'default',
+                                })}
+                                data-testid='last-mid-price'
+                            >
+                                <p>{formatLoanValue(midValue, 'price')}</p>
+                                {variant === 'itayose' && (
+                                    <Tooltip>
+                                        <p className='text-white'>
+                                            Placeholder text explaining
+                                            indicative opening price based on
+                                            aggregated orders
+                                        </p>
+                                    </Tooltip>
+                                )}
+                            </span>
+
+                            <span className='font-normal text-slateGray'>
+                                {formatLoanValue(midValue, 'rate')}
+                            </span>
+                        </div>
+                    )}
+
+                    <CoreTable
+                        data={state.showLend ? lendOrders : []}
+                        columns={[...sellColumns].reverse()}
+                        options={{
+                            responsive: false,
+                            name: 'sellOrders',
+                            border: false,
+                            onLineClick: handleSellOrdersClick,
+                            hoverRow: handleSellOrdersHoverRow,
+                            showHeaders: false,
+                            compact: true,
                         }}
                     />
                 </>
@@ -374,3 +497,26 @@ export const OrderBookWidget = ({
         </div>
     );
 };
+
+const OrderBookIcon = ({
+    Icon,
+    name,
+    active,
+    onClick,
+}: {
+    Icon: React.ReactNode;
+    name: string;
+    active: boolean;
+    onClick: () => void;
+}) => (
+    <button
+        key={name}
+        aria-label={name}
+        className={classNames('px-[10px] py-[11px] hover:bg-universeBlue', {
+            'bg-universeBlue': active,
+        })}
+        onClick={onClick}
+    >
+        {Icon}
+    </button>
+);
