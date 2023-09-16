@@ -1,19 +1,23 @@
 import { createColumnHelper } from '@tanstack/react-table';
 import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
-import { CoreTable, TableActionMenu } from 'src/components/molecules';
+import {
+    CoreTable,
+    Pagination,
+    TableActionMenu,
+} from 'src/components/molecules';
 import { useBreakpoint, useEtherscanUrl } from 'src/hooks';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { RootState } from 'src/store/types';
-import { OrderHistoryList, Pagination, Order } from 'src/types';
+import { Order, OrderHistoryList } from 'src/types';
 import {
     amountColumnDefinition,
     contractColumnDefinition,
-    loanTypeColumnDefinition,
-    inputPriceYieldColumnDefinition,
-    tableHeaderDefinition,
     dateAndTimeColumnDefinition,
     inputAmountColumnDefinition,
+    inputPriceYieldColumnDefinition,
+    loanTypeColumnDefinition,
+    tableHeaderDefinition,
 } from 'src/utils/tableDefinitions';
 
 const columnHelper = createColumnHelper<Order>();

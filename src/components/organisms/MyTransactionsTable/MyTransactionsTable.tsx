@@ -1,8 +1,8 @@
 import { createColumnHelper } from '@tanstack/react-table';
 import { useMemo } from 'react';
-import { CoreTable } from 'src/components/molecules';
+import { CoreTable, Pagination } from 'src/components/molecules';
 import { useBreakpoint } from 'src/hooks';
-import { Pagination, TradeHistory } from 'src/types';
+import { TradeHistory } from 'src/types';
 import { formatLoanValue } from 'src/utils';
 import { LoanValue } from 'src/utils/entities';
 import {

@@ -14,7 +14,7 @@ import {
     OrderBookWidget,
     OrderTable,
 } from 'src/components/organisms';
-import { TwoColumnsWithTopBar } from 'src/components/templates';
+import { ThreeColumnsWithTopBar } from 'src/components/templates';
 import {
     CollateralBook,
     useGraphClientHook,
@@ -184,7 +184,7 @@ export const AdvancedLending = ({
     );
 
     return (
-        <TwoColumnsWithTopBar
+        <ThreeColumnsWithTopBar
             topBar={
                 <AdvancedLendingTopBar
                     selectedAsset={selectedAsset}
@@ -217,22 +217,20 @@ export const AdvancedLending = ({
                 collateralBook={collateralBook}
                 marketPrice={marketPrice}
             />
-            <div className='flex min-w-0 flex-grow flex-col gap-6'>
+
+            <OrderBookWidget orderbook={orderBook} currency={currency} />
+
+            <div className='flex h-full flex-grow flex-col gap-6'>
                 <Tab tabDataArray={[{ text: 'Yield Curve' }]}>
                     <LineChartTab
                         maturitiesOptionList={maturitiesOptionList}
                         rates={rates}
                     />
-                    <div />
                 </Tab>
-                <HorizontalTab tabTitles={['Order Book', 'Open Orders']}>
-                    <OrderBookWidget
-                        orderbook={orderBook}
-                        currency={currency}
-                    />
-                    <OrderTable data={filteredOrderList} />
+                <HorizontalTab tabTitles={['Open Orders']}>
+                    <OrderTable data={filteredOrderList} variant='compact' />
                 </HorizontalTab>
             </div>
-        </TwoColumnsWithTopBar>
+        </ThreeColumnsWithTopBar>
     );
 };

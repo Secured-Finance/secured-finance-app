@@ -11,7 +11,7 @@ export const TwoColumns = ({
     const smallSize = 'w-full laptop:w-[30%]';
 
     return (
-        <div className='flex flex-col justify-between gap-6 pt-4 laptop:flex-row'>
+        <div className='flex flex-col justify-between gap-x-3 gap-y-4 laptop:flex-row'>
             <div
                 className={classNames({
                     [bigSize]: !narrowFirstColumn,

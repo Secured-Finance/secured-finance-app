@@ -87,10 +87,4 @@ export const OrderSideMap = Object.freeze({
     [OrderSide.BORROW]: 'Borrow',
 });
 
-export interface Pagination {
-    getMoreData: () => void;
-    totalData: number;
-    containerHeight: boolean;
-}
-
 export type Wallet = 'MetaMask' | 'WalletConnect';

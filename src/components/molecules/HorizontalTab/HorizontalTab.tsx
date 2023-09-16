@@ -43,50 +43,50 @@ export const HorizontalTab = ({
     };
 
     return (
-        <div className='rounded-b-2xl border border-white-10 bg-cardBackground/60 shadow-tab'>
-            <HeadlessTab.Group
-                selectedIndex={selectedIndex}
-                onChange={onChange}
-            >
-                <HeadlessTab.List className='h-16 justify-start border-b border-white-10 p-3'>
-                    <div className='w-full tablet:hidden'>
-                        <DropdownSelector
-                            optionList={tabTitles.map((title, index) => ({
-                                label: title,
-                                value: index.toString(),
-                            }))}
-                            selected={{
-                                label: tabTitles[selectedIndex],
-                                value: selectedIndex.toString(),
-                            }}
-                            onChange={option =>
-                                setSelectedIndex(parseInt(option) || 0)
-                            }
-                            variant='fullWidth'
-                        />
-                    </div>
-                    <div className='hidden tablet:block'>
-                        {tabTitles.map((title, index) => {
-                            return (
-                                <HeadlessTab
-                                    key={index}
-                                    className='h-full focus:outline-none'
-                                >
-                                    {({ selected }) => (
-                                        <TitleChip
-                                            title={title}
-                                            selected={selected}
-                                        />
-                                    )}
-                                </HeadlessTab>
-                            );
-                        })}
-                    </div>
-                </HeadlessTab.List>
-                <HeadlessTab.Panels className='min-h-[30vh] rounded-b-2xl bg-black-20 px-2'>
-                    {arrayChildren[selectedIndex]}
-                </HeadlessTab.Panels>
-            </HeadlessTab.Group>
-        </div>
+        <HeadlessTab.Group
+            selectedIndex={selectedIndex}
+            onChange={onChange}
+            as='div'
+            className='flex h-full flex-col rounded-b-2xl border border-white-10 bg-cardBackground/60 shadow-tab'
+        >
+            <HeadlessTab.List className='h-16 justify-start border-b border-white-10 p-3'>
+                <div className='w-full tablet:hidden'>
+                    <DropdownSelector
+                        optionList={tabTitles.map((title, index) => ({
+                            label: title,
+                            value: index.toString(),
+                        }))}
+                        selected={{
+                            label: tabTitles[selectedIndex],
+                            value: selectedIndex.toString(),
+                        }}
+                        onChange={option =>
+                            setSelectedIndex(parseInt(option) || 0)
+                        }
+                        variant='fullWidth'
+                    />
+                </div>
+                <div className='hidden tablet:block'>
+                    {tabTitles.map((title, index) => {
+                        return (
+                            <HeadlessTab
+                                key={index}
+                                className='h-full focus:outline-none'
+                            >
+                                {({ selected }) => (
+                                    <TitleChip
+                                        title={title}
+                                        selected={selected}
+                                    />
+                                )}
+                            </HeadlessTab>
+                        );
+                    })}
+                </div>
+            </HeadlessTab.List>
+            <HeadlessTab.Panels className='h-full min-h-[30vh] rounded-b-2xl bg-black-20 px-2'>
+                {arrayChildren[selectedIndex]}
+            </HeadlessTab.Panels>
+        </HeadlessTab.Group>
     );
 };

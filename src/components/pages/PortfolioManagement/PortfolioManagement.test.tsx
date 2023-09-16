@@ -21,7 +21,7 @@ jest.mock(
 
 describe('PortfolioManagement component', () => {
     it('should render PortfolioManagement', async () => {
-        waitFor(() =>
+        await waitFor(() =>
             render(<Default />, {
                 apolloMocks: Default.parameters?.apolloClient.mocks,
                 preloadedState: preloadedEthBalance,

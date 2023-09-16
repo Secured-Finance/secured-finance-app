@@ -41,3 +41,16 @@ WithInformationText.args = {
     informationText: 'Input value from 0 to 100',
     disabled: false,
 };
+
+export const SmallWidth: StoryFn<typeof OrderInputBox> = args => (
+    <div className='w-64 rounded-md border border-horizonBlue bg-gunMetal p-3'>
+        <OrderInputBox {...args} />
+    </div>
+);
+SmallWidth.args = {
+    field: 'Amount',
+    unit: CurrencySymbol.WFIL,
+    disabled: false,
+    initialValue: `10000000`,
+    informationText: 'Input value from 0 to 100',
+};

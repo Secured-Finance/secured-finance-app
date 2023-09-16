@@ -2,13 +2,9 @@ import { composeStories } from '@storybook/react';
 import { render, screen } from 'src/test-utils.js';
 import * as stories from './OrderTable.stories';
 
-const { Default } = composeStories(stories);
+const { Default, Compact } = composeStories(stories);
 
 describe('OrderTable Component', () => {
-    it('should render a OrderTable', () => {
-        render(<Default />);
-    });
-
     it('should sort the open orders contract column correctly according to currency and maturity', () => {
         render(<Default />);
 
@@ -36,5 +32,10 @@ describe('OrderTable Component', () => {
         expect(sortedRowsDesc[3]).toHaveTextContent('WFIL-DEC22');
         expect(sortedRowsDesc[4]).toHaveTextContent('WBTC-MAR23');
         expect(sortedRowsDesc[5]).toHaveTextContent('ETH-DEC23');
+    });
+
+    it('should show a compact table when the compact variant is passed', () => {
+        render(<Compact />);
+        expect(screen.queryAllByRole('img')).toHaveLength(0);
     });
 });

@@ -5,6 +5,7 @@ import {
     HeaderContext,
     Row,
 } from '@tanstack/react-table';
+import classNames from 'classnames';
 import { BigNumber } from 'ethers';
 import { Chip, CurrencyItem, PriceYieldItem } from 'src/components/atoms';
 import { TableContractCell, TableHeader } from 'src/components/molecules';
@@ -13,7 +14,6 @@ import { ColorFormat } from 'src/types';
 import { formatTimestamp } from 'src/utils';
 import { currencyMap, hexToCurrencySymbol } from './currencyList';
 import { LoanValue, Maturity } from './entities';
-import classNames from 'classnames';
 
 export const tableHeaderDefinition =
     <TData,>(title: string, titleHint?: string) =>
@@ -288,7 +288,7 @@ export const contractColumnDefinition = <
     columnHelper: ColumnHelper<T>,
     title: string,
     id: string,
-    variant: 'compact' | 'default' | 'currencyOnly' = 'default'
+    variant: 'compact' | 'default' | 'contractOnly' | 'currencyOnly' = 'default'
 ) => {
     const assessorFn: AccessorFn<T, string> = row => row.maturity.toString();
 
