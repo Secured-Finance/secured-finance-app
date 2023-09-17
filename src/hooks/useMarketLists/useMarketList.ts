@@ -1,7 +1,7 @@
-import { useMemo } from 'react';
 import { utils } from 'ethers';
+import { useMemo } from 'react';
+import { LendingMarket, baseContracts, useLendingMarkets } from 'src/hooks';
 import { CurrencySymbol, getCurrencyMapAsList } from 'src/utils';
-import { baseContracts, LendingMarket, useLendingMarkets } from 'src/hooks';
 
 export const useMarketLists = () => {
     const { data: lendingContracts = baseContracts } = useLendingMarkets();
@@ -26,7 +26,7 @@ export const useMarketLists = () => {
 
                 if (isItayoseOrPreOrder) {
                     itayoseMarkets.push(market);
-                } else {
+                } else if (contract.isOpened) {
                     openMarkets.push(market);
                 }
             }
