@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { BigNumber } from 'ethers';
+import { useState } from 'react';
 import { QueryKeys } from 'src/hooks/queries';
 import useSF from 'src/hooks/useSecuredFinance';
 import { CurrencySymbol, toCurrency } from 'src/utils';
@@ -87,44 +88,52 @@ export const useOrderbook = (
     minimum: number = MIN_ORDERBOOK_LENGTH
 ) => {
     const securedFinance = useSF();
+    const [depth, setDepth] = useState(limit);
 
-    return useQuery({
-        queryKey: [QueryKeys.ORDER_BOOK, ccy, maturity, limit],
-        queryFn: async () => {
-            const currency = toCurrency(ccy);
-            const [borrowOrderbook, lendOrderbook] = await Promise.all([
-                securedFinance?.getBorrowOrderBook(currency, maturity, limit),
-                securedFinance?.getLendOrderBook(currency, maturity, limit),
-            ]);
+    return [
+        useQuery({
+            queryKey: [QueryKeys.ORDER_BOOK, ccy, maturity, depth],
+            queryFn: async () => {
+                const currency = toCurrency(ccy);
+                const [borrowOrderbook, lendOrderbook] = await Promise.all([
+                    securedFinance?.getBorrowOrderBook(
+                        currency,
+                        maturity,
+                        depth
+                    ),
+                    securedFinance?.getLendOrderBook(currency, maturity, depth),
+                ]);
 
-            return {
-                lendOrderbook: {
-                    unitPrices: lendOrderbook?.unitPrices ?? [],
-                    amounts: lendOrderbook?.amounts ?? [],
-                    quantities: lendOrderbook?.quantities ?? [],
-                },
-                borrowOrderbook: {
-                    unitPrices: borrowOrderbook?.unitPrices ?? [],
-                    amounts: borrowOrderbook?.amounts ?? [],
-                    quantities: borrowOrderbook?.quantities ?? [],
-                },
-            };
-        },
-        select: data => {
-            return trimOrderbook(
-                {
-                    borrowOrderbook: transformOrderbook(
-                        data.borrowOrderbook,
-                        maturity
-                    ),
-                    lendOrderbook: transformOrderbook(
-                        data.lendOrderbook,
-                        maturity
-                    ),
-                },
-                minimum
-            );
-        },
-        enabled: !!securedFinance,
-    });
+                return {
+                    lendOrderbook: {
+                        unitPrices: lendOrderbook?.unitPrices ?? [],
+                        amounts: lendOrderbook?.amounts ?? [],
+                        quantities: lendOrderbook?.quantities ?? [],
+                    },
+                    borrowOrderbook: {
+                        unitPrices: borrowOrderbook?.unitPrices ?? [],
+                        amounts: borrowOrderbook?.amounts ?? [],
+                        quantities: borrowOrderbook?.quantities ?? [],
+                    },
+                };
+            },
+            select: data => {
+                return trimOrderbook(
+                    {
+                        borrowOrderbook: transformOrderbook(
+                            data.borrowOrderbook,
+                            maturity
+                        ),
+                        lendOrderbook: transformOrderbook(
+                            data.lendOrderbook,
+                            maturity
+                        ),
+                    },
+                    minimum
+                );
+            },
+            enabled: !!securedFinance,
+        }),
+        setDepth,
+    ] as const;
 };

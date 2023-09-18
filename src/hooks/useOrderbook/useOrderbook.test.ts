@@ -9,7 +9,7 @@ jest.mock('src/hooks/useSecuredFinance', () => () => mock);
 const maturity = 1675252800;
 
 describe('useOrderbook', () => {
-    it('should return an array of number for borrow rates', async () => {
+    it('should return an array of number for borrow rates and a callback function to set the max number of orders', async () => {
         const { result, waitForNextUpdate } = renderHook(() =>
             useOrderbook(CurrencySymbol.ETH, maturity, 5, 5)
         );
@@ -18,8 +18,10 @@ describe('useOrderbook', () => {
 
         await waitForNextUpdate();
 
-        expect(result.current.data.borrowOrderbook.length).toBe(5);
-        expect(result.current.data.lendOrderbook.length).toBe(5);
+        expect(result.current[0].data.borrowOrderbook.length).toBe(5);
+        expect(result.current[0].data.lendOrderbook.length).toBe(5);
+
+        expect(result.current[1]).toBeInstanceOf(Function);
     });
 
     it('should trim the orderbook from the zeros but keep the borrow and lending orderbook the same size', async () => {
@@ -78,8 +80,8 @@ describe('useOrderbook', () => {
 
         await waitForNextUpdate();
 
-        expect(result.current.data.borrowOrderbook.length).toBe(6);
-        expect(result.current.data.lendOrderbook.length).toBe(6);
+        expect(result.current[0].data.borrowOrderbook.length).toBe(6);
+        expect(result.current[0].data.lendOrderbook.length).toBe(6);
     });
 
     it('should return an orderbook with one line even if there is no orders in the orderbook', async () => {
@@ -99,8 +101,8 @@ describe('useOrderbook', () => {
 
         await waitForNextUpdate();
 
-        expect(result.current.data.borrowOrderbook.length).toBe(1);
-        expect(result.current.data.lendOrderbook.length).toBe(1);
+        expect(result.current[0].data.borrowOrderbook.length).toBe(1);
+        expect(result.current[0].data.lendOrderbook.length).toBe(1);
     });
 
     it('should return an orderbook with a minimum number of line even if there is no orders in the orderbook', async () => {
@@ -120,7 +122,7 @@ describe('useOrderbook', () => {
 
         await waitForNextUpdate();
 
-        expect(result.current.data.borrowOrderbook.length).toBe(5);
-        expect(result.current.data.lendOrderbook.length).toBe(5);
+        expect(result.current[0].data.borrowOrderbook.length).toBe(5);
+        expect(result.current[0].data.lendOrderbook.length).toBe(5);
     });
 });
