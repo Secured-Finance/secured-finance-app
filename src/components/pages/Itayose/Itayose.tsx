@@ -1,6 +1,6 @@
 import { OrderSide } from '@secured-finance/sf-client';
 import { BigNumber } from 'ethers';
-import { useCallback, useMemo } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
     GradientBox,
@@ -103,6 +103,9 @@ const Toolbar = ({
     );
 };
 
+const DEFAULT_ORDERBOOK_DEPTH = 20;
+const MINIMUM_ORDERBOOK_DEPTH = 10;
+
 export const Itayose = () => {
     const { address } = useAccount();
 
@@ -133,7 +136,15 @@ export const Itayose = () => {
         return assetList.find(option => option.value === currency);
     }, [currency, assetList]);
 
-    const orderBook = useOrderbook(currency, maturity);
+    const [orderBookDepth, setOrderBookDepth] = useState(
+        DEFAULT_ORDERBOOK_DEPTH
+    );
+    const orderBook = useOrderbook(
+        currency,
+        maturity,
+        orderBookDepth,
+        MINIMUM_ORDERBOOK_DEPTH
+    );
     const { data: collateralBook = emptyCollateralBook } =
         useCollateralBook(address);
 
@@ -216,6 +227,13 @@ export const Itayose = () => {
                     currency={currency}
                     orderbook={orderBook}
                     variant='itayose'
+                    onFilterChange={state => {
+                        if (!state.showBorrow || !state.showLend) {
+                            setOrderBookDepth(2 * DEFAULT_ORDERBOOK_DEPTH);
+                        } else {
+                            setOrderBookDepth(DEFAULT_ORDERBOOK_DEPTH);
+                        }
+                    }}
                 />
 
                 <div className='flex h-full flex-col items-stretch justify-stretch gap-6'>
