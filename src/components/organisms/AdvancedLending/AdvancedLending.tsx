@@ -120,13 +120,10 @@ export const AdvancedLending = ({
 
     const openingUnitPrice = useMarket(currency, maturity)?.openingUnitPrice;
 
-    const [orderBookDepth, setOrderBookDepth] = useState(
-        DEFAULT_ORDERBOOK_DEPTH
-    );
-    const orderBook = useOrderbook(
+    const [orderBook, setOrderBookDepth] = useOrderbook(
         currency,
         maturity,
-        orderBookDepth,
+        DEFAULT_ORDERBOOK_DEPTH,
         MINIMUM_ORDERBOOK_DEPTH
     );
     const filteredOrderList = useMarketOrderList(address, currency, maturity);
@@ -234,11 +231,11 @@ export const AdvancedLending = ({
                 orderbook={orderBook}
                 currency={currency}
                 onFilterChange={state => {
-                    if (!state.showBorrow || !state.showLend) {
-                        setOrderBookDepth(DEFAULT_ORDERBOOK_DEPTH_FULL);
-                    } else {
-                        setOrderBookDepth(DEFAULT_ORDERBOOK_DEPTH);
-                    }
+                    setOrderBookDepth(
+                        !state.showBorrow || !state.showLend
+                            ? DEFAULT_ORDERBOOK_DEPTH_FULL
+                            : DEFAULT_ORDERBOOK_DEPTH
+                    );
                 }}
             />
 

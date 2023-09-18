@@ -209,7 +209,7 @@ export const OrderBookWidget = ({
     onFilterChange,
     variant = 'default',
 }: {
-    orderbook: Pick<ReturnType<typeof useOrderbook>, 'data' | 'isLoading'>;
+    orderbook: Pick<ReturnType<typeof useOrderbook>[0], 'data' | 'isLoading'>;
     currency: CurrencySymbol;
     onFilterChange?: (filter: VisibilityState) => void;
     variant?: 'default' | 'itayose';
