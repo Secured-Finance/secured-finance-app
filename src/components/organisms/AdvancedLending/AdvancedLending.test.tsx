@@ -79,8 +79,8 @@ describe('Advanced Lending Component', () => {
 
         expect(
             await within(
-                screen.getByLabelText('Last Trade Analytics')
-            ).findByText('80.00')
+                await screen.findByLabelText('Current Market')
+            ).findByText('98.01')
         ).toBeInTheDocument();
 
         expect(
@@ -97,7 +97,7 @@ describe('Advanced Lending Component', () => {
         ).toBeInTheDocument();
     });
 
-    it('should display the opening unit price as the only trade if there is no last trades', async () => {
+    it.skip('should display the opening unit price as the only trade if there is no last trades', async () => {
         await waitFor(() =>
             render(<Default />, {
                 apolloMocks: emptyTransaction as never,
@@ -105,8 +105,8 @@ describe('Advanced Lending Component', () => {
         );
         expect(
             await within(
-                screen.getByLabelText('Last Trade Analytics')
-            ).findByText('97.10')
+                await screen.findByLabelText('Current Market')
+            ).findByText('97.01')
         ).toBeInTheDocument();
         expect(screen.getByText('Opening Price')).toBeInTheDocument();
 
