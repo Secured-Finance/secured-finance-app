@@ -18,9 +18,14 @@ type AdvancedLendingTopBarProp<T> = {
     selected: Option<T>;
     onAssetChange: (v: CurrencySymbol) => void;
     onTermChange: (v: T) => void;
-    lastTradeLoan: LoanValue | undefined;
-    lastTradeTime: number;
+    currentMarket: CurrentMarket | undefined;
     values?: [ValueField, ValueField, ValueField, ValueField, ValueField];
+};
+
+type CurrentMarket = {
+    value: LoanValue;
+    time: number;
+    type: 'opening' | 'block';
 };
 
 const getValue = (
@@ -37,8 +42,7 @@ export const AdvancedLendingTopBar = <T extends string = string>({
     selected,
     onAssetChange,
     onTermChange,
-    lastTradeLoan,
-    lastTradeTime,
+    currentMarket,
     values,
 }: AdvancedLendingTopBarProp<T>) => {
     return (
@@ -55,26 +59,30 @@ export const AdvancedLendingTopBar = <T extends string = string>({
                     />
                 </div>
                 <div className='col-span-3 col-start-1 tablet:col-span-2 laptop:col-span-2 laptop:border-r laptop:border-white-10 laptop:pr-5'>
-                    <MarketTab
-                        name={
-                            lastTradeLoan
-                                ? formatLoanValue(lastTradeLoan, 'price')
-                                : '0'
-                        }
-                        value={`${
-                            lastTradeLoan
-                                ? formatLoanValue(lastTradeLoan, 'rate')
-                                : '0'
-                        } APR`}
-                        variant='green-name'
-                        label='Last Trade Analytics'
-                    />
+                    {currentMarket && (
+                        <>
+                            <MarketTab
+                                name={formatLoanValue(
+                                    currentMarket.value,
+                                    'price'
+                                )}
+                                value={`${formatLoanValue(
+                                    currentMarket.value,
+                                    'rate'
+                                )} APR`}
+                                variant='green-name'
+                                label='Current Market'
+                            />
 
-                    <div className='typography-caption-2 whitespace-nowrap text-neutral-4'>
-                        {lastTradeTime
-                            ? formatTimestampWithMonth(lastTradeTime)
-                            : 'Opening Price'}
-                    </div>
+                            <div className='typography-caption-2 whitespace-nowrap text-neutral-4'>
+                                {currentMarket.type === 'block'
+                                    ? formatTimestampWithMonth(
+                                          currentMarket.time
+                                      )
+                                    : 'Opening Price'}
+                            </div>
+                        </>
+                    )}
                 </div>
                 <div className='border-r border-white-10 pr-5 tablet:col-start-4 tablet:row-start-1 laptop:col-start-auto laptop:row-start-auto laptop:px-5'>
                     <MarketTab name='24h High' value={getValue(values, 0)} />

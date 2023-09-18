@@ -22,13 +22,14 @@ import {
     MarketPhase,
     baseContracts,
     emptyCollateralBook,
+    sortOrders,
     useCollateralBook,
     useLendingMarkets,
     useMarketOrderList,
     useMarketPhase,
     useMaturityOptions,
+    useOrderbook,
 } from 'src/hooks';
-import { useOrderbook } from 'src/hooks/useOrderbook';
 import { getAssetPrice } from 'src/store/assetPrices/selectors';
 import {
     selectLandingOrderForm,
@@ -45,7 +46,7 @@ import {
     usdFormat,
 } from 'src/utils';
 import { countdown } from 'src/utils/date';
-import { Maturity } from 'src/utils/entities';
+import { LoanValue, Maturity } from 'src/utils/entities';
 import { useAccount } from 'wagmi';
 
 const Toolbar = ({
@@ -162,6 +163,33 @@ export const Itayose = () => {
         [amount, currency, dispatch]
     );
 
+    const estimatedOpening = useMemo(() => {
+        const borrowOrders =
+            orderBook.data?.borrowOrderbook?.filter(
+                order => !order.amount.isZero()
+            ) ?? [];
+        const lendOrders =
+            orderBook.data?.lendOrderbook?.filter(
+                order => !order.amount.isZero()
+            ) ?? [];
+
+        if (!borrowOrders.length || !lendOrders.length) {
+            return LoanValue.ZERO;
+        }
+
+        const sortedBorrowOrders = [...borrowOrders].sort((a, b) =>
+            sortOrders(a, b, 'asc')
+        );
+        const sortedLendOrders = [...lendOrders].sort((a, b) =>
+            sortOrders(a, b, 'desc')
+        );
+
+        return LoanValue.getMidValue(
+            sortedLendOrders[0].value,
+            sortedBorrowOrders[0].value
+        );
+    }, [orderBook.data?.borrowOrderbook, orderBook.data?.lendOrderbook]);
+
     return (
         <Page title='Pre-Open Order Book'>
             <ThreeColumnsWithTopBar
@@ -216,6 +244,7 @@ export const Itayose = () => {
                     currency={currency}
                     orderbook={orderBook}
                     variant='itayose'
+                    marketPrice={estimatedOpening}
                 />
 
                 <div className='flex h-full flex-col items-stretch justify-stretch gap-6'>
