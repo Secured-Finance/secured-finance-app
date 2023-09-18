@@ -1,4 +1,4 @@
-import { OrderSide, WalletSource } from '@secured-finance/sf-client';
+import { OrderSide } from '@secured-finance/sf-client';
 import { createColumnHelper } from '@tanstack/react-table';
 import classNames from 'classnames';
 import { BigNumber } from 'ethers';
@@ -23,13 +23,7 @@ import {
     usePrepareOrderbookData,
 } from 'src/hooks';
 import { setMidPrice } from 'src/store/analytics';
-import {
-    setAmount,
-    setOrderType,
-    setSide,
-    setSourceAccount,
-    setUnitPrice,
-} from 'src/store/landingOrderForm';
+import { setOrderType, setUnitPrice } from 'src/store/landingOrderForm';
 import { ColorFormat, OrderType } from 'src/types';
 import {
     CurrencySymbol,
@@ -367,12 +361,7 @@ export const OrderBookWidget = ({
                 ? lendOrders[parseInt(rowId)]
                 : borrowOrders[parseInt(rowId)];
         globalDispatch(setOrderType(OrderType.LIMIT));
-        side ? globalDispatch(setSide(side)) : null;
-        side === OrderSide.BORROW
-            ? globalDispatch(setSourceAccount(WalletSource.METAMASK))
-            : null;
         globalDispatch(setUnitPrice(rowData.value.price));
-        globalDispatch(setAmount(rowData.amount));
     };
 
     const handleSellOrdersClick = (rowId: string) => {
