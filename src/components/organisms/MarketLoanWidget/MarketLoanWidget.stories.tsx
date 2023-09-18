@@ -1,6 +1,7 @@
 import { RESPONSIVE_PARAMETERS, VIEWPORTS } from '.storybook/constants';
+import { expect } from '@storybook/jest';
 import type { Meta, StoryFn } from '@storybook/react';
-import { within } from '@storybook/testing-library';
+import { userEvent, waitFor, within } from '@storybook/testing-library';
 import { MarketLoanWidget } from './MarketLoanWidget';
 
 export default {
@@ -20,5 +21,7 @@ export const Default = Template.bind({});
 export const ItayoseMarket = Template.bind({});
 ItayoseMarket.play = async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    canvas.getByText('Pre-Open').click();
+    const button = canvas.getByTestId('Pre-Open');
+    await waitFor(() => expect(button).not.toBeDisabled());
+    await userEvent.click(button);
 };
