@@ -61,7 +61,7 @@ jobs:
           branch: ${{ github.event.pull_request.head.ref || github.ref_name }}
 
       - name: Get the output url
-        run: echo "Deploy url is ${{ steps.deploy.outputs }}"
+        run: echo "Deploy url is ${{ steps.deploy.outputs.url }}"
 
       - name: Comment on PR
         uses: mshick/add-pr-comment@v2
