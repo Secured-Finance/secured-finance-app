@@ -10,11 +10,13 @@ const mock = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mock);
 
 describe('MarketLoanWidget Component', () => {
-    it('should filter by currency', () => {
+    it('should filter by currency', async () => {
         render(<Default />);
-        expect(screen.queryByText('WBTC')).toBeInTheDocument();
-        screen.getByRole('button', { name: 'All Assets' }).click();
-        screen.getByRole('menuitem', { name: 'Filecoin' }).click();
+        await waitFor(() => {
+            expect(screen.queryByText('WBTC')).toBeInTheDocument();
+            screen.getByRole('button', { name: 'All Assets' }).click();
+            screen.getByRole('menuitem', { name: 'Filecoin' }).click();
+        });
         expect(screen.queryByText('WBTC')).not.toBeInTheDocument();
     });
 

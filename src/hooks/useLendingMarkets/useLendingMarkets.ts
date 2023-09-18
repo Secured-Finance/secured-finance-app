@@ -6,7 +6,7 @@ import useSF from 'src/hooks/useSecuredFinance';
 import { CurrencySymbol, getCurrencyMapAsList } from 'src/utils';
 import { isPastDate } from 'src/utils/date';
 
-const PRE_OPEN_TIME = 60 * 60 * 24 * 2; // 2 days in seconds
+const PRE_OPEN_TIME = 60 * 60 * 24 * 7; // 7 days in seconds
 
 export type LendingMarket = {
     name: string;
