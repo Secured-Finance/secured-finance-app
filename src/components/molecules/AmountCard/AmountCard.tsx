@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import { CurrencyIcon } from 'src/components/atoms';
 import { currencyMap, formatAmount, prefixTilde, usdFormat } from 'src/utils';
 import { Amount } from 'src/utils/entities';
@@ -9,6 +10,8 @@ export const AmountCard = ({
     amount: Amount;
     price: number;
 }) => {
+    const formattedValue = formatAmount(amount.value);
+
     return (
         <div className='grid w-full grid-cols-2 justify-around'>
             <div className='flex flex-row items-center justify-start gap-2'>
@@ -20,8 +23,13 @@ export const AmountCard = ({
                 </span>
             </div>
             <div className='flex h-6 flex-row items-center justify-end gap-2'>
-                <span className='typography-body-1 font-bold text-white'>
-                    {formatAmount(amount.value)}
+                <span
+                    className={classNames('font-bold text-white', {
+                        'typography-body-2': formattedValue.length > 10,
+                        'typography-body-1': formattedValue.length <= 10,
+                    })}
+                >
+                    {formattedValue}
                 </span>
                 <span className='typography-caption h-5 text-white-60'>
                     {amount.currency}

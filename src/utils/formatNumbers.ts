@@ -63,7 +63,7 @@ export const ordinaryFormat = (
 export const formatAmount = (
     number: number | bigint | BigNumber | FixedNumber
 ) => {
-    return ordinaryFormat(number, 0, 8);
+    return ordinaryFormat(number, 0, 4);
 };
 
 export const formatWithCurrency = (
