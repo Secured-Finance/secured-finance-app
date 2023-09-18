@@ -50,9 +50,7 @@ describe('MarketLoanWidget Component', () => {
     it('should hide the APR column when the market is in pre-order', async () => {
         render(<Default />);
         const button = screen.getByTestId('Pre-Open');
-        await waitFor(() => {
-            expect(button).not.toBeDisabled();
-        });
+        await waitFor(() => expect(button).not.toBeDisabled());
         fireEvent.click(button);
         expect(screen.queryAllByText('Dec 1, 2024')).toHaveLength(4);
 
@@ -75,9 +73,7 @@ describe('MarketLoanWidget Component', () => {
 
         render(<Default />);
         const button = screen.getByTestId('Pre-Open');
-        await waitFor(() => {
-            expect(button).not.toBeDisabled();
-        });
+        await waitFor(() => expect(button).not.toBeDisabled());
         fireEvent.click(button);
         expect(screen.queryByText('APR')).not.toBeInTheDocument();
         expect(screen.queryByText('Market Open')).toBeInTheDocument();
@@ -86,9 +82,7 @@ describe('MarketLoanWidget Component', () => {
     it('should not show maturity dropdown in itayose screen', async () => {
         render(<Default />);
         const button = screen.getByTestId('Pre-Open');
-        await waitFor(() => {
-            expect(button).not.toBeDisabled();
-        });
+        await waitFor(() => expect(button).not.toBeDisabled());
         fireEvent.click(button);
 
         expect(screen.queryByText('APR')).not.toBeInTheDocument();
@@ -106,8 +100,6 @@ describe('MarketLoanWidget Component', () => {
 
         render(<Default />);
         const button = screen.getByTestId('Pre-Open');
-        await waitFor(() => {
-            expect(button).toBeDisabled();
-        });
+        await waitFor(() => expect(button).toBeDisabled());
     });
 });
