@@ -33,6 +33,7 @@ export const Tab: React.FC<TabProps> = ({ tabDataArray, children }) => {
                                     key={tabData.text}
                                     className='h-full w-full focus:outline-none tablet:w-fit'
                                     disabled={tabData.disabled}
+                                    data-testid={tabData.text}
                                 >
                                     {({ selected }) => (
                                         <NavTab

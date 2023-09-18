@@ -49,11 +49,12 @@ describe('MarketLoanWidget Component', () => {
 
     it('should hide the APR column when the market is in pre-order', async () => {
         render(<Default />);
-        const button = screen.getByText('Pre-Open');
-        fireEvent.click(button);
+        const button = screen.getByTestId('Pre-Open');
         await waitFor(() => {
-            expect(screen.queryAllByText('Dec 1, 2024')).toHaveLength(4);
+            expect(button).not.toBeDisabled();
         });
+        fireEvent.click(button);
+        expect(screen.queryAllByText('Dec 1, 2024')).toHaveLength(4);
 
         expect(screen.queryByText('APR')).not.toBeInTheDocument();
         expect(screen.queryByText('Market Open')).toBeInTheDocument();
@@ -73,24 +74,40 @@ describe('MarketLoanWidget Component', () => {
         mock.getOrderBookDetails.mockResolvedValueOnce(lendingMarkets);
 
         render(<Default />);
-        const button = screen.getByText('Pre-Open');
+        const button = screen.getByTestId('Pre-Open');
         await waitFor(() => {
-            fireEvent.click(button);
+            expect(button).not.toBeDisabled();
         });
+        fireEvent.click(button);
         expect(screen.queryByText('APR')).not.toBeInTheDocument();
         expect(screen.queryByText('Market Open')).toBeInTheDocument();
     });
 
     it('should not show maturity dropdown in itayose screen', async () => {
         render(<Default />);
-        const button = screen.getByText('Pre-Open');
+        const button = screen.getByTestId('Pre-Open');
         await waitFor(() => {
-            fireEvent.click(button);
+            expect(button).not.toBeDisabled();
         });
+        fireEvent.click(button);
 
+        expect(screen.queryByText('APR')).not.toBeInTheDocument();
         expect(screen.getByText('All Assets')).toBeInTheDocument();
         expect(
             screen.queryByRole('button', { name: 'DEC24' })
         ).not.toBeInTheDocument();
+    });
+
+    it('should disble pre open tab if no itayose or pre order market is available', async () => {
+        const lendingMarkets = await mock.getOrderBookDetails();
+        mock.getOrderBookDetails.mockResolvedValueOnce(
+            lendingMarkets.slice(0, 8)
+        );
+
+        render(<Default />);
+        const button = screen.getByTestId('Pre-Open');
+        await waitFor(() => {
+            expect(button).toBeDisabled();
+        });
     });
 });
