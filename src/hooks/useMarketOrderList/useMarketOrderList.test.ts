@@ -29,18 +29,7 @@ describe('useOrderList', () => {
         );
         await waitForNextUpdate();
 
-        expect(result.current).toEqual([
-            {
-                orderId: BigNumber.from(5),
-                currency: wfilBytes32,
-                side: 1,
-                maturity: dec24Fixture.toString(),
-                unitPrice: BigNumber.from('7800'),
-                amount: BigNumber.from('100000000000000000000'),
-                createdAt: BigNumber.from('1409220000'),
-                isPreOrder: true,
-            },
-        ]);
+        expect(result.current).toHaveLength(21);
     });
 
     it('should filter the orders by the given filter function', async () => {

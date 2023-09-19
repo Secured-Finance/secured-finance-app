@@ -66,6 +66,7 @@ export const formatOrders = (orders: OrderList): TradeHistory => {
         maturity: order.maturity,
         forwardValue: calculateForwardValue(order.amount, order.unitPrice),
         averagePrice: calculateAveragePrice(order.unitPrice),
+        feeInFV: BigNumber.from(0),
     }));
 };
 

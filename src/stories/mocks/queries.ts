@@ -23,6 +23,7 @@ const generateMyTransactions = (amount: string) => {
             side: 1,
             orderPrice: '9543',
             createdAt: '1671080520',
+            feeInFV: '3213742117859654893',
             forwardValue: '520000000000000000000',
             currency: wfilBytes32,
             maturity: mar23Fixture.toString(),

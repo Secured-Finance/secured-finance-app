@@ -182,6 +182,7 @@ export const MarketLoanWidget = () => {
             text: 'Pre-Open',
             highlight: itayoseHighlight,
             util: itayoseMarketUtil,
+            disabled: itayoseMarkets.length === 0,
         },
     ];
 
