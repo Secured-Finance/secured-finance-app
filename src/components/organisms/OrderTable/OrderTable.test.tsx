@@ -38,4 +38,12 @@ describe('OrderTable Component', () => {
         render(<Compact />);
         expect(screen.queryAllByRole('img')).toHaveLength(0);
     });
+
+    it('should be scrollable when the compact variant is passed', () => {
+        render(<Compact />);
+        expect(
+            screen.getByRole('table').parentElement?.parentElement
+                ?.parentElement
+        ).toHaveClass('overflow-y-visible');
+    });
 });

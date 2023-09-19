@@ -17,9 +17,11 @@ const columnHelper = createColumnHelper<Order>();
 export const OrderTable = ({
     data,
     variant = 'default',
+    height,
 }: {
     data: Order[];
     variant?: 'compact' | 'default';
+    height?: number;
 }) => {
     const { cancelOrder } = useOrders();
     const columns = useMemo(
@@ -108,6 +110,13 @@ export const OrderTable = ({
                 name: 'open-order-table',
                 border: false,
                 stickyColumns: new Set([6]),
+                ...(variant === 'compact' && {
+                    pagination: {
+                        containerHeight: height || 300,
+                        getMoreData: () => {},
+                        totalData: data.length,
+                    },
+                }),
             }}
         />
     );

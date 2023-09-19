@@ -211,7 +211,7 @@ export const PortfolioManagement = () => {
                                             setOffsetOrders(
                                                 offsetOrders + offset
                                             ),
-                                        containerHeight: true,
+                                        containerHeight: 300,
                                     }}
                                 />
                             )}
@@ -226,7 +226,7 @@ export const PortfolioManagement = () => {
                                             setOffsetTransactions(
                                                 offsetTransactions + offset
                                             ),
-                                        containerHeight: true,
+                                        containerHeight: 300,
                                     }}
                                 />
                             )}
