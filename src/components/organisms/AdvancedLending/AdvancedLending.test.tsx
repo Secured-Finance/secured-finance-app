@@ -135,4 +135,35 @@ describe('Advanced Lending Component', () => {
             within(screen.getByTestId('open-order-table')).queryAllByRole('row')
         ).toHaveLength(1);
     });
+
+    describe('Dynamic orderbook depth', () => {
+        it('should retrieve more data when the user select only one side of the orderbook', async () => {
+            await waitFor(() =>
+                render(<Default />, {
+                    apolloMocks: Default.parameters?.apolloClient.mocks,
+                })
+            );
+            expect(
+                mockSecuredFinance.getBorrowOrderBook
+            ).toHaveBeenLastCalledWith(
+                expect.anything(),
+                expect.anything(),
+                12
+            );
+            await waitFor(() =>
+                fireEvent.click(
+                    screen.getByRole('button', {
+                        name: 'Show Only Lend Orders',
+                    })
+                )
+            );
+            expect(
+                mockSecuredFinance.getBorrowOrderBook
+            ).toHaveBeenLastCalledWith(
+                expect.anything(),
+                expect.anything(),
+                26
+            );
+        });
+    });
 });

@@ -43,17 +43,12 @@ ConnectedToWallet.parameters = {
     connected: true,
 };
 
-export const OpenOrders = Template.bind({});
-OpenOrders.play = async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    canvas.getByTestId('Open Orders').click();
-};
-
 export const OpenOrdersConnectedToWallet = Template.bind({});
 OpenOrdersConnectedToWallet.parameters = {
     connected: true,
 };
 OpenOrdersConnectedToWallet.play = async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    canvas.getByTestId('Open Orders').click();
+    canvas.getByRole('button', { name: 'DEC22' }).click();
+    canvas.getByRole('menuitem', { name: 'JUN23' }).click();
 };

@@ -78,6 +78,9 @@ const useTradeHistoryDetails = (
     }, [currency, maturity.toNumber(), transactions.length]);
 };
 
+const DEFAULT_ORDERBOOK_DEPTH = 12;
+const DEFAULT_ORDERBOOK_DEPTH_FULL = 26;
+
 export const AdvancedLending = ({
     collateralBook,
     maturitiesOptionList,
@@ -116,7 +119,11 @@ export const AdvancedLending = ({
 
     const openingUnitPrice = useMarket(currency, maturity)?.openingUnitPrice;
 
-    const orderBook = useOrderbook(currency, maturity, 10);
+    const [orderBook, setOrderBookDepth] = useOrderbook(
+        currency,
+        maturity,
+        DEFAULT_ORDERBOOK_DEPTH
+    );
     const filteredOrderList = useMarketOrderList(address, currency, maturity);
 
     const transactionHistory = useGraphClientHook(
@@ -218,9 +225,19 @@ export const AdvancedLending = ({
                 marketPrice={marketPrice}
             />
 
-            <OrderBookWidget orderbook={orderBook} currency={currency} />
+            <OrderBookWidget
+                orderbook={orderBook}
+                currency={currency}
+                onFilterChange={state => {
+                    setOrderBookDepth(
+                        !state.showBorrow || !state.showLend
+                            ? DEFAULT_ORDERBOOK_DEPTH_FULL
+                            : DEFAULT_ORDERBOOK_DEPTH
+                    );
+                }}
+            />
 
-            <div className='flex h-full flex-grow flex-col gap-6'>
+            <div className='flex h-full flex-grow flex-col gap-4'>
                 <Tab tabDataArray={[{ text: 'Yield Curve' }]}>
                     <LineChartTab
                         maturitiesOptionList={maturitiesOptionList}
@@ -228,7 +245,11 @@ export const AdvancedLending = ({
                     />
                 </Tab>
                 <HorizontalTab tabTitles={['Open Orders']}>
-                    <OrderTable data={filteredOrderList} variant='compact' />
+                    <OrderTable
+                        data={filteredOrderList}
+                        variant='compact'
+                        height={350}
+                    />
                 </HorizontalTab>
             </div>
         </ThreeColumnsWithTopBar>

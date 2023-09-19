@@ -103,6 +103,9 @@ const Toolbar = ({
     );
 };
 
+const DEFAULT_ORDERBOOK_DEPTH = 12;
+const DEFAULT_ORDERBOOK_DEPTH_FULL = 26;
+
 export const Itayose = () => {
     const { address } = useAccount();
 
@@ -133,7 +136,11 @@ export const Itayose = () => {
         return assetList.find(option => option.value === currency);
     }, [currency, assetList]);
 
-    const orderBook = useOrderbook(currency, maturity);
+    const [orderBook, setOrderBookDepth] = useOrderbook(
+        currency,
+        maturity,
+        DEFAULT_ORDERBOOK_DEPTH
+    );
     const { data: collateralBook = emptyCollateralBook } =
         useCollateralBook(address);
 
@@ -216,6 +223,13 @@ export const Itayose = () => {
                     currency={currency}
                     orderbook={orderBook}
                     variant='itayose'
+                    onFilterChange={state => {
+                        setOrderBookDepth(
+                            !state.showBorrow || !state.showLend
+                                ? DEFAULT_ORDERBOOK_DEPTH_FULL
+                                : DEFAULT_ORDERBOOK_DEPTH
+                        );
+                    }}
                 />
 
                 <div className='flex h-full flex-col items-stretch justify-stretch gap-6'>
@@ -250,6 +264,7 @@ export const Itayose = () => {
                         <OrderTable
                             data={filteredOrderList}
                             variant='compact'
+                            height={520}
                         />
                     </HorizontalTab>
                 </div>
