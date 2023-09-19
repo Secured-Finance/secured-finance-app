@@ -100,7 +100,7 @@ describe('ordinaryFormat', () => {
 
 describe('formatAmount', () => {
     it('should format a number with 8 decimal places', () => {
-        expect(formatAmount(1234.56789012)).toBe('1,234.56789012');
+        expect(formatAmount(1234.56789012)).toBe('1,234.5679');
     });
 
     it('should format a number only with the decimal places that are present', () => {

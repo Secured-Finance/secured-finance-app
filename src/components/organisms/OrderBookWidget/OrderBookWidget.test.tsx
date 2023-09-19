@@ -173,6 +173,22 @@ describe('OrderBookWidget Component', () => {
                 screen.queryByTestId('current-market-price')
             ).not.toBeInTheDocument();
         });
+
+        it('should call onFilterChange when a button is clicked', () => {
+            const onFilterChange = jest.fn();
+            render(<Default onFilterChange={onFilterChange} />);
+            expect(onFilterChange).not.toHaveBeenLastCalledWith({
+                showBorrow: false,
+                showLend: false,
+            });
+            fireEvent.click(getButton('Show Only Lend Orders'));
+            expect(onFilterChange).toHaveBeenLastCalledWith({
+                showBorrow: false,
+                showLend: true,
+                showTicker: false,
+            });
+            expect(onFilterChange).toHaveBeenCalledTimes(2);
+        });
     });
 
     describe('Orderbook data', () => {

@@ -1,4 +1,5 @@
 import { composeStories } from '@storybook/react';
+import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
 import * as stories from './Itayose.stories';
 
@@ -18,6 +19,9 @@ jest.mock(
             children
 );
 
+const mockSecuredFinance = mockUseSF();
+jest.mock('src/hooks/useSecuredFinance', () => () => mockSecuredFinance);
+
 describe('Itayose Component', () => {
     it('should render a Itayose', async () => {
         await waitFor(() => render(<Default />));
@@ -32,8 +36,10 @@ describe('Itayose Component', () => {
         expect(store.getState().landingOrderForm.amount).toEqual(
             '1000000000000000000'
         );
-        fireEvent.click(screen.getByRole('button', { name: 'Filecoin' }));
-        fireEvent.click(screen.getByRole('menuitem', { name: 'USDC' }));
+        await waitFor(() => {
+            fireEvent.click(screen.getByRole('button', { name: 'Filecoin' }));
+            fireEvent.click(screen.getByRole('menuitem', { name: 'USDC' }));
+        });
         expect(store.getState().landingOrderForm.amount).toEqual('1000000');
         expect(screen.getByRole('textbox', { name: 'Amount' })).toHaveValue(
             '1'
@@ -46,5 +52,32 @@ describe('Itayose Component', () => {
 
         const openOrders = await screen.findAllByRole('row');
         expect(openOrders).toHaveLength(1);
+    });
+
+    describe('Dynamic orderbook depth', () => {
+        it('should retrieve more data when the user select only one side of the orderbook', async () => {
+            render(<Default />);
+            expect(
+                mockSecuredFinance.getLendOrderBook
+            ).toHaveBeenLastCalledWith(
+                expect.anything(),
+                expect.anything(),
+                12
+            );
+            await waitFor(() =>
+                fireEvent.click(
+                    screen.getByRole('button', {
+                        name: 'Show Only Lend Orders',
+                    })
+                )
+            );
+            expect(
+                mockSecuredFinance.getBorrowOrderBook
+            ).toHaveBeenLastCalledWith(
+                expect.anything(),
+                expect.anything(),
+                26
+            );
+        });
     });
 });
