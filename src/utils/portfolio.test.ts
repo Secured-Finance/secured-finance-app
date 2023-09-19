@@ -180,6 +180,7 @@ describe('formatOrders', () => {
                 maturity: dec22Fixture.toString(),
                 forwardValue: BigNumber.from(1000),
                 averagePrice: 0.9,
+                feeInFV: BigNumber.from(0),
             },
             {
                 amount: BigNumber.from('10000'),
@@ -190,6 +191,7 @@ describe('formatOrders', () => {
                 maturity: dec22Fixture.toString(),
                 forwardValue: BigNumber.from(12500),
                 averagePrice: 0.8,
+                feeInFV: BigNumber.from(0),
             },
         ];
 
