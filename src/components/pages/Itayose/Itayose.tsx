@@ -103,8 +103,8 @@ const Toolbar = ({
     );
 };
 
-const DEFAULT_ORDERBOOK_DEPTH = 20;
-const MINIMUM_ORDERBOOK_DEPTH = 10;
+const DEFAULT_ORDERBOOK_DEPTH = 12;
+const DEFAULT_ORDERBOOK_DEPTH_FULL = 26;
 
 export const Itayose = () => {
     const { address } = useAccount();
@@ -139,8 +139,7 @@ export const Itayose = () => {
     const [orderBook, setOrderBookDepth] = useOrderbook(
         currency,
         maturity,
-        DEFAULT_ORDERBOOK_DEPTH,
-        MINIMUM_ORDERBOOK_DEPTH
+        DEFAULT_ORDERBOOK_DEPTH
     );
     const { data: collateralBook = emptyCollateralBook } =
         useCollateralBook(address);
@@ -227,7 +226,7 @@ export const Itayose = () => {
                     onFilterChange={state => {
                         setOrderBookDepth(
                             !state.showBorrow || !state.showLend
-                                ? 2 * DEFAULT_ORDERBOOK_DEPTH
+                                ? DEFAULT_ORDERBOOK_DEPTH_FULL
                                 : DEFAULT_ORDERBOOK_DEPTH
                         );
                     }}

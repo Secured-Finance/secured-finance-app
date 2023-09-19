@@ -84,7 +84,7 @@ export const HorizontalTab = ({
                     })}
                 </div>
             </HeadlessTab.List>
-            <HeadlessTab.Panels className='h-full min-h-[30vh] rounded-b-2xl bg-black-20 px-2'>
+            <HeadlessTab.Panels className='h-full min-h-[25vh] rounded-b-2xl bg-black-20 px-2'>
                 {arrayChildren[selectedIndex]}
             </HeadlessTab.Panels>
         </HeadlessTab.Group>

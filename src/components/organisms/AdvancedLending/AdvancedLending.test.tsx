@@ -148,7 +148,7 @@ describe('Advanced Lending Component', () => {
             ).toHaveBeenLastCalledWith(
                 expect.anything(),
                 expect.anything(),
-                17
+                12
             );
             await waitFor(() =>
                 fireEvent.click(
@@ -162,7 +162,7 @@ describe('Advanced Lending Component', () => {
             ).toHaveBeenLastCalledWith(
                 expect.anything(),
                 expect.anything(),
-                40
+                26
             );
         });
     });
