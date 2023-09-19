@@ -8,8 +8,8 @@ const mock = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mock);
 
 const balanceArray = [
-    [CurrencySymbol.WFIL, 10000],
     [CurrencySymbol.WBTC, 300],
+    [CurrencySymbol.WFIL, 10000],
     [CurrencySymbol.USDC, 4000],
 ];
 

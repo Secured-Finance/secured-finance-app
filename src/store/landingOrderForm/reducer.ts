@@ -17,7 +17,7 @@ type LandingOrderFormStore = {
     isBorrowedCollateral: boolean;
 };
 const initialStore: LandingOrderFormStore = {
-    currency: CurrencySymbol.WFIL,
+    currency: CurrencySymbol.WBTC,
     maturity: 0,
     side: OrderSide.BORROW,
     amount: '0',

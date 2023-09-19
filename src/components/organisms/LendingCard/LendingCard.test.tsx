@@ -1,6 +1,10 @@
 import { formatDate } from '@secured-finance/sf-core';
 import { composeStories } from '@storybook/react';
-import { mar23Fixture, preloadedAssetPrices } from 'src/stories/mocks/fixtures';
+import {
+    mar23Fixture,
+    preloadedAssetPrices,
+    preloadedState,
+} from 'src/stories/mocks/fixtures';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
 import { CurrencyInfo, currencyMap } from 'src/utils';
@@ -30,13 +34,6 @@ beforeAll(() => {
 });
 
 describe('LendingCard Component', () => {
-    const preloadedState = {
-        ...preloadedAssetPrices,
-        wallet: {
-            address: '0x1',
-        },
-    };
-
     const selectEthereum = async () => {
         await waitFor(() => {
             fireEvent.click(
@@ -78,7 +75,7 @@ describe('LendingCard Component', () => {
         expect(button).toHaveTextContent('OK');
     });
 
-    it('should let the user choose between ETH, Filecoin and USDC when clicking on the asset selector', async () => {
+    it('should let the user choose between ETH, Filecoin, Bitcoin and USDC when clicking on the asset selector', async () => {
         render(<Default />);
 
         expect(
@@ -88,7 +85,7 @@ describe('LendingCard Component', () => {
         expect(screen.queryByText('Ethereum')).not.toBeInTheDocument();
         fireEvent.click(
             screen.getByRole('button', {
-                name: 'Filecoin',
+                name: 'Bitcoin',
             })
         );
 
@@ -100,6 +97,9 @@ describe('LendingCard Component', () => {
         ).toBeInTheDocument();
         expect(
             screen.getByRole('menuitem', { name: 'Ether' })
+        ).toBeInTheDocument();
+        expect(
+            screen.getByRole('menuitem', { name: 'Bitcoin' })
         ).toBeInTheDocument();
     });
 

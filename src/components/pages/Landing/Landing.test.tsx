@@ -1,5 +1,6 @@
 import { OrderSide } from '@secured-finance/sf-client';
 import { composeStories } from '@storybook/react';
+import { preloadedState } from 'src/stories/mocks/fixtures';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { fireEvent, render, screen, waitFor, within } from 'src/test-utils.js';
 import { OrderType } from 'src/types';
@@ -25,10 +26,6 @@ jest.mock(
 
 const mock = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mock);
-
-const preloadedState = {
-    wallet: { address: '0x1' },
-};
 
 beforeAll(() => {
     timemachine.reset();
