@@ -1,4 +1,4 @@
-import { WalletSource } from '@secured-finance/sf-client';
+import { OrderSide, WalletSource } from '@secured-finance/sf-client';
 import { fromBytes32 } from '@secured-finance/sf-graph-client';
 import { BigNumber, utils } from 'ethers';
 import EthIcon from 'src/assets/coins/eth2.svg';
@@ -60,6 +60,25 @@ export const preloadedEthBalance = {
     wallet: {
         ethBalance: 10,
     },
+};
+
+export const preloadedState = {
+    landingOrderForm: {
+        currency: CurrencySymbol.WFIL,
+        maturity: 0,
+        side: OrderSide.BORROW,
+        amount: '0',
+        unitPrice: undefined,
+        orderType: OrderType.MARKET,
+        lastView: 'Simple',
+        sourceAccount: WalletSource.METAMASK,
+        isBorrowedCollateral: false,
+    },
+    wallet: {
+        address: '0x1',
+        ethBalance: 10,
+    },
+    ...preloadedAssetPrices,
 };
 
 const sep22Fixture = new Maturity(1661990400);

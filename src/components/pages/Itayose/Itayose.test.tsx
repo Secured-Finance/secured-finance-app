@@ -1,4 +1,5 @@
 import { composeStories } from '@storybook/react';
+import { preloadedState } from 'src/stories/mocks/fixtures';
 import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
 import * as stories from './Itayose.stories';
 
@@ -24,7 +25,9 @@ describe('Itayose Component', () => {
     });
 
     it('should convert the amount to changed currency when the user change the currency', async () => {
-        const { store } = await waitFor(() => render(<Default />));
+        const { store } = await waitFor(() =>
+            render(<Default />, { preloadedState })
+        );
         expect(store.getState().landingOrderForm.amount).toEqual('0');
         fireEvent.change(screen.getByRole('textbox', { name: 'Amount' }), {
             target: { value: '1' },

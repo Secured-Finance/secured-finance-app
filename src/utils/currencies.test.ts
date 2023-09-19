@@ -26,16 +26,16 @@ describe('currencies.generateWalletInformation', () => {
             walletSource: WalletSource.METAMASK,
             data: [
                 {
-                    asset: CurrencySymbol.WFIL,
-                    quantity: 0,
-                },
-                {
                     asset: CurrencySymbol.WBTC,
                     quantity: 0,
                 },
                 {
                     asset: CurrencySymbol.ETH,
                     quantity: 0.58,
+                },
+                {
+                    asset: CurrencySymbol.WFIL,
+                    quantity: 0,
                 },
                 {
                     asset: CurrencySymbol.USDC,
