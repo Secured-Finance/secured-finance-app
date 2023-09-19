@@ -14,6 +14,8 @@ import {
 
 const columnHelper = createColumnHelper<Order>();
 
+const DEFAULT_HEIGHT = 300;
+
 export const OrderTable = ({
     data,
     variant = 'default',
@@ -110,13 +112,11 @@ export const OrderTable = ({
                 name: 'open-order-table',
                 border: false,
                 stickyColumns: new Set([6]),
-                ...(variant === 'compact' && {
-                    pagination: {
-                        containerHeight: height || 350,
-                        getMoreData: () => {},
-                        totalData: data.length,
-                    },
-                }),
+                pagination: {
+                    containerHeight: height || DEFAULT_HEIGHT,
+                    getMoreData: () => {},
+                    totalData: data.length,
+                },
             }}
         />
     );

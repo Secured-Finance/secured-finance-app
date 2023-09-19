@@ -245,7 +245,11 @@ export const AdvancedLending = ({
                     />
                 </Tab>
                 <HorizontalTab tabTitles={['Open Orders']}>
-                    <OrderTable data={filteredOrderList} variant='compact' />
+                    <OrderTable
+                        data={filteredOrderList}
+                        variant='compact'
+                        height={350}
+                    />
                 </HorizontalTab>
             </div>
         </ThreeColumnsWithTopBar>
