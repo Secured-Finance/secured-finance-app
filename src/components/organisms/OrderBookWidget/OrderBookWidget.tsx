@@ -18,11 +18,9 @@ import { Tooltip } from 'src/components/templates';
 import {
     AggregationFactorType,
     OrderBookEntry,
-    sortOrders,
     useOrderbook,
     usePrepareOrderbookData,
 } from 'src/hooks';
-import { setMidPrice } from 'src/store/analytics';
 import { setOrderType, setUnitPrice } from 'src/store/landingOrderForm';
 import { ColorFormat, OrderType } from 'src/types';
 import {
@@ -162,7 +160,7 @@ const AprCell = ({
 type VisibilityState = {
     showBorrow: boolean;
     showLend: boolean;
-    showMidPrice: boolean;
+    showTicker: boolean;
 };
 
 type VisibilityAction = 'showOnlyBorrow' | 'showOnlyLend' | 'reset';
@@ -170,7 +168,7 @@ type VisibilityAction = 'showOnlyBorrow' | 'showOnlyLend' | 'reset';
 const initialState: VisibilityState = {
     showBorrow: true,
     showLend: true,
-    showMidPrice: true,
+    showTicker: true,
 };
 
 const reducer = (
@@ -186,7 +184,7 @@ const reducer = (
                 ...state,
                 showBorrow: true,
                 showLend: false,
-                showMidPrice: false,
+                showTicker: false,
             };
         case 'showOnlyLend':
             if (!state.showBorrow) {
@@ -196,7 +194,7 @@ const reducer = (
                 ...state,
                 showBorrow: false,
                 showLend: true,
-                showMidPrice: false,
+                showTicker: false,
             };
         default:
             return initialState;
@@ -206,11 +204,13 @@ const reducer = (
 export const OrderBookWidget = ({
     orderbook,
     currency,
+    marketPrice,
     onFilterChange,
     variant = 'default',
 }: {
     orderbook: Pick<ReturnType<typeof useOrderbook>[0], 'data' | 'isLoading'>;
     currency: CurrencySymbol;
+    marketPrice?: LoanValue;
     onFilterChange?: (filter: VisibilityState) => void;
     variant?: 'default' | 'itayose';
 }) => {
@@ -253,33 +253,6 @@ export const OrderBookWidget = ({
             ),
         [lendOrders]
     );
-
-    const midValue = useMemo(() => {
-        const borrowOrders =
-            orderbook.data?.borrowOrderbook?.filter(
-                order => !order.amount.isZero()
-            ) ?? [];
-        const lendOrders =
-            orderbook.data?.lendOrderbook?.filter(
-                order => !order.amount.isZero()
-            ) ?? [];
-
-        if (!borrowOrders.length || !lendOrders.length) {
-            return LoanValue.ZERO;
-        }
-
-        const sortedBorrowOrders = [...borrowOrders].sort((a, b) =>
-            sortOrders(a, b, 'asc')
-        );
-        const sortedLendOrders = [...lendOrders].sort((a, b) =>
-            sortOrders(a, b, 'desc')
-        );
-
-        return LoanValue.getMidValue(
-            sortedLendOrders[0].value,
-            sortedBorrowOrders[0].value
-        );
-    }, [orderbook.data?.borrowOrderbook, orderbook.data?.lendOrderbook]);
 
     const buyColumns = useMemo(
         () => [
@@ -356,10 +329,6 @@ export const OrderBookWidget = ({
         ],
         [aggregationFactor, currency, totalSellAmount]
     );
-
-    useEffect(() => {
-        globalDispatch(setMidPrice(midValue.price));
-    }, [globalDispatch, midValue.price]);
 
     const handleClick = (rowId: string, side: OrderSide): void => {
         const rowData =
@@ -454,7 +423,7 @@ export const OrderBookWidget = ({
                                 }}
                             />
                         </div>
-                        {state.showMidPrice && (
+                        {state.showTicker && marketPrice && (
                             <div className='typography-portfolio-heading -mx-3 flex h-14 flex-row items-center justify-between bg-black-20 px-4'>
                                 <span
                                     className={classNames('font-semibold', {
@@ -463,22 +432,25 @@ export const OrderBookWidget = ({
                                         'text-nebulaTeal':
                                             variant === 'default',
                                     })}
-                                    data-testid='last-mid-price'
+                                    data-testid='current-market-price'
                                 >
-                                    <p>{formatLoanValue(midValue, 'price')}</p>
+                                    <p>
+                                        {formatLoanValue(marketPrice, 'price')}
+                                    </p>
                                     {variant === 'itayose' && (
                                         <Tooltip>
                                             <p className='text-white'>
-                                                Placeholder text explaining
-                                                indicative opening price based
-                                                on aggregated orders
+                                                Overlapping orders are
+                                                aggregated to show net amounts.
+                                                The price indicates the
+                                                estimated opening price.
                                             </p>
                                         </Tooltip>
                                     )}
                                 </span>
 
                                 <span className='font-normal text-slateGray'>
-                                    {formatLoanValue(midValue, 'rate')}
+                                    {formatLoanValue(marketPrice, 'rate')}
                                 </span>
                             </div>
                         )}

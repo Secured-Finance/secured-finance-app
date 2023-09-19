@@ -13,28 +13,11 @@ describe('OrderBookWidget Component', () => {
     });
 
     describe('Mid Price', () => {
-        it('should display the last mid price', () => {
+        it('should display the market price', () => {
             render(<Default />);
-            expect(screen.getByTestId('last-mid-price')).toHaveTextContent(
-                '93.00'
-            );
-        });
-
-        it('should write the last mid price in the store', () => {
-            const { store } = render(<Default />);
-            expect(store.getState().analytics.midPrice).toBe(9300);
-        });
-
-        it('should display 0 as the last mid price if any of the orders is empty', () => {
-            render(
-                <Default
-                    orderbook={{
-                        data: { borrowOrderbook: [], lendOrderbook: [] },
-                        isLoading: false,
-                    }}
-                />
-            );
-            expect(screen.getByTestId('last-mid-price')).toHaveTextContent('0');
+            expect(
+                screen.getByTestId('current-market-price')
+            ).toHaveTextContent('93.00');
         });
     });
 
@@ -153,35 +136,41 @@ describe('OrderBookWidget Component', () => {
             expectToHaveRows('sellOrders');
         });
 
-        it('should hide the mid price when Show Only Lend Orders is clicked and show it again when re clicked', () => {
+        it('should hide the current market price when Show Only Lend Orders is clicked and show it again when re clicked', () => {
             render(<Default />);
-            expect(screen.getByTestId('last-mid-price')).toBeInTheDocument();
+            expect(
+                screen.getByTestId('current-market-price')
+            ).toBeInTheDocument();
             fireEvent.click(getButton('Show Only Lend Orders'));
             expect(
-                screen.queryByTestId('last-mid-price')
+                screen.queryByTestId('current-market-price')
             ).not.toBeInTheDocument();
             fireEvent.click(getButton('Show Only Lend Orders'));
-            expect(screen.getByTestId('last-mid-price')).toBeInTheDocument();
+            expect(
+                screen.getByTestId('current-market-price')
+            ).toBeInTheDocument();
         });
 
         it('should be able to toggle between Show Only Lend Orders and Show Only Borrow Orders', () => {
             render(<Default />);
             expect(screen.getByTestId('buyOrders')).toBeInTheDocument();
             expect(screen.getByTestId('sellOrders')).toBeInTheDocument();
-            expect(screen.getByTestId('last-mid-price')).toBeInTheDocument();
+            expect(
+                screen.getByTestId('current-market-price')
+            ).toBeInTheDocument();
 
             fireEvent.click(getButton('Show Only Lend Orders'));
             expectNotToHaveRows('buyOrders');
             expectToHaveRows('sellOrders');
             expect(
-                screen.queryByTestId('last-mid-price')
+                screen.queryByTestId('current-market-price')
             ).not.toBeInTheDocument();
 
             fireEvent.click(getButton('Show Only Borrow Orders'));
             expectToHaveRows('buyOrders');
             expectNotToHaveRows('sellOrders');
             expect(
-                screen.queryByTestId('last-mid-price')
+                screen.queryByTestId('current-market-price')
             ).not.toBeInTheDocument();
         });
 
@@ -196,7 +185,7 @@ describe('OrderBookWidget Component', () => {
             expect(onFilterChange).toHaveBeenLastCalledWith({
                 showBorrow: false,
                 showLend: true,
-                showMidPrice: false,
+                showTicker: false,
             });
             expect(onFilterChange).toHaveBeenCalledTimes(2);
         });
@@ -256,17 +245,6 @@ describe('OrderBookWidget Component', () => {
             fireEvent.click(options[4]);
             expect(screen.getAllByTestId('buyOrders-row')).toHaveLength(2);
             expect(screen.getAllByTestId('sellOrders-row')).toHaveLength(2);
-        });
-
-        it('should not influence the mid price', () => {
-            render(<Default />);
-            const dropdown = screen.getByRole('button', { name: '0.01' });
-            fireEvent.click(dropdown);
-            const options = screen.getAllByRole('menuitem');
-            fireEvent.click(options[3]);
-            expect(screen.getByTestId('last-mid-price')).toHaveTextContent(
-                '93.00'
-            );
         });
 
         it('should conserve the sum of the amounts when aggregating', () => {
@@ -331,9 +309,9 @@ describe('OrderBookWidget Component', () => {
     });
 
     describe('Variants', () => {
-        it('should display the last mid price in the correct color', () => {
+        it('should display the current market price in the correct color', () => {
             render(<Itayose />);
-            expect(screen.getByTestId('last-mid-price')).toHaveClass(
+            expect(screen.getByTestId('current-market-price')).toHaveClass(
                 'text-white'
             );
         });

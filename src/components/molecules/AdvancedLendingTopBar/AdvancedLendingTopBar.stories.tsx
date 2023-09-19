@@ -20,11 +20,15 @@ export default {
             label: maturityOptions[0].label,
             value: maturityOptions[0].value.toString(),
         },
-        lastTradeLoan: LoanValue.fromPrice(
-            lastTradePrice,
-            maturityOptions[0].value.toNumber()
-        ),
-        lastTradeTime: 1643713200,
+        currentMarket: {
+            value: LoanValue.fromPrice(
+                lastTradePrice,
+                maturityOptions[0].value.toNumber()
+            ),
+            time: 0,
+            type: 'block',
+        },
+
         onAssetChange: () => {},
         onTermChange: () => {},
     },

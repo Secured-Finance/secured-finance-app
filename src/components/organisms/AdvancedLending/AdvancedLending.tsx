@@ -117,7 +117,9 @@ export const AdvancedLending = ({
         );
     }, [maturity, maturitiesOptionList]);
 
-    const openingUnitPrice = useMarket(currency, maturity)?.openingUnitPrice;
+    const data = useMarket(currency, maturity);
+    const marketUnitPrice = data?.marketUnitPrice;
+    const openingUnitPrice = data?.openingUnitPrice;
 
     const [orderBook, setOrderBookDepth] = useOrderbook(
         currency,
@@ -142,24 +144,23 @@ export const AdvancedLending = ({
         selectedTerm.value
     );
 
-    const lastTransaction = useMemo(() => {
-        // if there is no transaction, return the lending market opening price
-        if (!transactionHistory?.lastTransaction?.length)
+    const currentMarket = useMemo(() => {
+        if (marketUnitPrice) {
             return {
-                createdAt: 0,
-                value: openingUnitPrice
-                    ? LoanValue.fromPrice(openingUnitPrice, maturity)
-                    : undefined,
+                value: LoanValue.fromPrice(marketUnitPrice, maturity),
+                // TODO: get the time from the block
+                time: 0,
+                type: 'block' as const,
             };
-        return {
-            createdAt: transactionHistory?.lastTransaction[0]?.createdAt,
-            value: LoanValue.fromPrice(
-                transactionHistory?.lastTransaction[0]?.averagePrice * 10000,
-                maturity
-            ),
-        };
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [maturity, transactionHistory?.lastTransaction, openingUnitPrice]);
+        }
+        if (openingUnitPrice) {
+            return {
+                value: LoanValue.fromPrice(openingUnitPrice, maturity),
+                time: 0,
+                type: 'opening' as const,
+            };
+        }
+    }, [marketUnitPrice, maturity, openingUnitPrice]);
 
     const selectedAsset = useMemo(() => {
         return assetList.find(option => option.value === currency);
@@ -206,8 +207,7 @@ export const AdvancedLending = ({
                     }}
                     onAssetChange={handleCurrencyChange}
                     onTermChange={handleTermChange}
-                    lastTradeLoan={lastTransaction.value}
-                    lastTradeTime={lastTransaction.createdAt}
+                    currentMarket={currentMarket}
                     values={[
                         formatLoanValue(tradeHistoryDetails.max, 'price'),
                         formatLoanValue(tradeHistoryDetails.min, 'price'),
@@ -228,6 +228,7 @@ export const AdvancedLending = ({
             <OrderBookWidget
                 orderbook={orderBook}
                 currency={currency}
+                marketPrice={currentMarket?.value}
                 onFilterChange={state => {
                     setOrderBookDepth(
                         !state.showBorrow || !state.showLend

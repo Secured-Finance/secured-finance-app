@@ -399,6 +399,7 @@ export const mockUseSF = () => {
                 ].filter(order => filterFn(order)),
             });
         }),
+
         getPositions: jest.fn(() =>
             Promise.resolve([
                 {
