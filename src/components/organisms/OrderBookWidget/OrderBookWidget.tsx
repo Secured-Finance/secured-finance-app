@@ -206,13 +206,19 @@ const reducer = (
 export const OrderBookWidget = ({
     orderbook,
     currency,
+    onFilterChange,
     variant = 'default',
 }: {
-    orderbook: Pick<ReturnType<typeof useOrderbook>, 'data' | 'isLoading'>;
+    orderbook: Pick<ReturnType<typeof useOrderbook>[0], 'data' | 'isLoading'>;
     currency: CurrencySymbol;
+    onFilterChange?: (filter: VisibilityState) => void;
     variant?: 'default' | 'itayose';
 }) => {
     const [state, dispatch] = useReducer(reducer, initialState);
+    useEffect(() => {
+        onFilterChange?.(state);
+    }, [onFilterChange, state]);
+
     const [aggregationFactor, setAggregationFactor] =
         useState<AggregationFactorType>(1);
 
@@ -383,7 +389,7 @@ export const OrderBookWidget = ({
     };
 
     return (
-        <div className='grid h-full w-full grid-cols-1 place-content-start gap-y-3 rounded-b-2xl border border-white-10 bg-cardBackground/60 px-3 pb-4 shadow-tab'>
+        <div className='flex h-full w-full flex-col justify-start gap-y-3 rounded-b-2xl border border-white-10 bg-cardBackground/60 px-3 shadow-tab'>
             <div className='-mx-3 h-[60px] w-1/2'>
                 <NavTab text='Order Book' active={true} />
             </div>
@@ -422,67 +428,83 @@ export const OrderBookWidget = ({
                     </div>
                 </div>
             </div>
-            {orderbook.isLoading ? (
-                <div className='flex h-full w-full items-center justify-center'>
-                    <Spinner />
-                </div>
-            ) : (
-                <>
-                    <CoreTable
-                        data={state.showBorrow ? borrowOrders : []}
-                        columns={buyColumns}
-                        options={{
-                            responsive: false,
-                            name: 'buyOrders',
-                            border: false,
-                            onLineClick: handleBuyOrdersClick,
-                            hoverRow: handleBuyOrdersHoverRow,
-                            compact: true,
-                        }}
-                    />
-                    {state.showMidPrice && (
-                        <div className='typography-portfolio-heading -mx-3 flex h-14 flex-row items-center justify-between bg-black-20 px-4'>
-                            <span
-                                className={classNames('font-semibold', {
-                                    'flex flex-row items-center gap-2 text-white':
-                                        variant === 'itayose',
-                                    'text-nebulaTeal': variant === 'default',
-                                })}
-                                data-testid='last-mid-price'
-                            >
-                                <p>{formatLoanValue(midValue, 'price')}</p>
-                                {variant === 'itayose' && (
-                                    <Tooltip>
-                                        <p className='text-white'>
-                                            Placeholder text explaining
-                                            indicative opening price based on
-                                            aggregated orders
-                                        </p>
-                                    </Tooltip>
-                                )}
-                            </span>
-
-                            <span className='font-normal text-slateGray'>
-                                {formatLoanValue(midValue, 'rate')}
-                            </span>
+            <div className='h-full'>
+                {orderbook.isLoading ? (
+                    <div className='flex h-full w-full items-center justify-center'>
+                        <Spinner />
+                    </div>
+                ) : (
+                    <>
+                        <div
+                            className={classNames('flex pb-3', {
+                                'h-fit': state.showBorrow && state.showLend,
+                                'h-[40px]': !state.showBorrow,
+                            })}
+                        >
+                            <CoreTable
+                                data={state.showBorrow ? borrowOrders : []}
+                                columns={buyColumns}
+                                options={{
+                                    responsive: false,
+                                    name: 'buyOrders',
+                                    border: false,
+                                    onLineClick: handleBuyOrdersClick,
+                                    hoverRow: handleBuyOrdersHoverRow,
+                                    compact: true,
+                                }}
+                            />
                         </div>
-                    )}
+                        {state.showMidPrice && (
+                            <div className='typography-portfolio-heading -mx-3 flex h-14 flex-row items-center justify-between bg-black-20 px-4'>
+                                <span
+                                    className={classNames('font-semibold', {
+                                        'flex flex-row items-center gap-2 text-white':
+                                            variant === 'itayose',
+                                        'text-nebulaTeal':
+                                            variant === 'default',
+                                    })}
+                                    data-testid='last-mid-price'
+                                >
+                                    <p>{formatLoanValue(midValue, 'price')}</p>
+                                    {variant === 'itayose' && (
+                                        <Tooltip>
+                                            <p className='text-white'>
+                                                Placeholder text explaining
+                                                indicative opening price based
+                                                on aggregated orders
+                                            </p>
+                                        </Tooltip>
+                                    )}
+                                </span>
 
-                    <CoreTable
-                        data={state.showLend ? lendOrders : []}
-                        columns={[...sellColumns].reverse()}
-                        options={{
-                            responsive: false,
-                            name: 'sellOrders',
-                            border: false,
-                            onLineClick: handleSellOrdersClick,
-                            hoverRow: handleSellOrdersHoverRow,
-                            showHeaders: false,
-                            compact: true,
-                        }}
-                    />
-                </>
-            )}
+                                <span className='font-normal text-slateGray'>
+                                    {formatLoanValue(midValue, 'rate')}
+                                </span>
+                            </div>
+                        )}
+                        <div
+                            className={classNames('flex pt-3', {
+                                'h-fit': state.showBorrow && state.showLend,
+                                'h-0': !state.showLend,
+                            })}
+                        >
+                            <CoreTable
+                                data={state.showLend ? lendOrders : []}
+                                columns={[...sellColumns].reverse()}
+                                options={{
+                                    responsive: false,
+                                    name: 'sellOrders',
+                                    border: false,
+                                    onLineClick: handleSellOrdersClick,
+                                    hoverRow: handleSellOrdersHoverRow,
+                                    showHeaders: false,
+                                    compact: true,
+                                }}
+                            />
+                        </div>
+                    </>
+                )}
+            </div>
         </div>
     );
 };

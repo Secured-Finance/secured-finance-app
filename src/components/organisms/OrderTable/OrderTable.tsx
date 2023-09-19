@@ -14,12 +14,16 @@ import {
 
 const columnHelper = createColumnHelper<Order>();
 
+const DEFAULT_HEIGHT = 300;
+
 export const OrderTable = ({
     data,
     variant = 'default',
+    height,
 }: {
     data: Order[];
     variant?: 'compact' | 'default';
+    height?: number;
 }) => {
     const { cancelOrder } = useOrders();
     const columns = useMemo(
@@ -108,6 +112,11 @@ export const OrderTable = ({
                 name: 'open-order-table',
                 border: false,
                 stickyColumns: new Set([6]),
+                pagination: {
+                    containerHeight: height || DEFAULT_HEIGHT,
+                    getMoreData: () => {},
+                    totalData: data.length,
+                },
             }}
         />
     );
