@@ -148,7 +148,8 @@ export const AdvancedLending = ({
         if (marketUnitPrice) {
             return {
                 value: LoanValue.fromPrice(marketUnitPrice, maturity),
-                time: 12345677889,
+                // TODO: get the time from the block
+                time: 0,
                 type: 'block' as const,
             };
         }

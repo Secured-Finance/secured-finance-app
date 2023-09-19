@@ -75,11 +75,16 @@ export const AdvancedLendingTopBar = <T extends string = string>({
                             />
 
                             <div className='typography-caption-2 whitespace-nowrap text-neutral-4'>
-                                {currentMarket.type === 'block'
-                                    ? formatTimestampWithMonth(
-                                          currentMarket.time
-                                      )
-                                    : 'Opening Price'}
+                                {
+                                    currentMarket.type === 'block'
+                                        ? currentMarket.time
+                                            ? formatTimestampWithMonth(
+                                                  currentMarket.time
+                                              )
+                                            : '-'
+                                        : 'Opening Price'
+                                    // TODO: replace this '-' with the block time
+                                }
                             </div>
                         </>
                     )}
