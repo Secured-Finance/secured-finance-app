@@ -71,12 +71,14 @@ describe('Itayose Component', () => {
                     })
                 )
             );
-            expect(
-                mockSecuredFinance.getBorrowOrderBook
-            ).toHaveBeenLastCalledWith(
-                expect.anything(),
-                expect.anything(),
-                26
+            await waitFor(() =>
+                expect(
+                    mockSecuredFinance.getBorrowOrderBook
+                ).toHaveBeenLastCalledWith(
+                    expect.anything(),
+                    expect.anything(),
+                    26
+                )
             );
         });
     });
