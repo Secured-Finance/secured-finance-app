@@ -78,9 +78,8 @@ const useTradeHistoryDetails = (
     }, [currency, maturity.toNumber(), transactions.length]);
 };
 
-const DEFAULT_ORDERBOOK_DEPTH = 17;
-const DEFAULT_ORDERBOOK_DEPTH_FULL = 40;
-const MINIMUM_ORDERBOOK_DEPTH = 10;
+const DEFAULT_ORDERBOOK_DEPTH = 12;
+const DEFAULT_ORDERBOOK_DEPTH_FULL = 26;
 
 export const AdvancedLending = ({
     collateralBook,
@@ -123,8 +122,7 @@ export const AdvancedLending = ({
     const [orderBook, setOrderBookDepth] = useOrderbook(
         currency,
         maturity,
-        DEFAULT_ORDERBOOK_DEPTH,
-        MINIMUM_ORDERBOOK_DEPTH
+        DEFAULT_ORDERBOOK_DEPTH
     );
     const filteredOrderList = useMarketOrderList(address, currency, maturity);
 
@@ -239,7 +237,7 @@ export const AdvancedLending = ({
                 }}
             />
 
-            <div className='flex h-full flex-grow flex-col gap-6'>
+            <div className='flex h-full flex-grow flex-col gap-4'>
                 <Tab tabDataArray={[{ text: 'Yield Curve' }]}>
                     <LineChartTab
                         maturitiesOptionList={maturitiesOptionList}

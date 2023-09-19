@@ -389,7 +389,7 @@ export const OrderBookWidget = ({
     };
 
     return (
-        <div className='flex h-full w-full flex-col justify-start gap-y-3 rounded-b-2xl border border-white-10 bg-cardBackground/60 px-3 pb-4 shadow-tab'>
+        <div className='flex h-full w-full flex-col justify-start gap-y-3 rounded-b-2xl border border-white-10 bg-cardBackground/60 px-3 shadow-tab'>
             <div className='-mx-3 h-[60px] w-1/2'>
                 <NavTab text='Order Book' active={true} />
             </div>
@@ -437,7 +437,7 @@ export const OrderBookWidget = ({
                     <>
                         <div
                             className={classNames('flex pb-3', {
-                                'h-1/2': state.showBorrow && state.showLend,
+                                'h-fit': state.showBorrow && state.showLend,
                                 'h-[40px]': !state.showBorrow,
                             })}
                         >
@@ -484,7 +484,7 @@ export const OrderBookWidget = ({
                         )}
                         <div
                             className={classNames('flex pt-3', {
-                                'h-1/2': state.showBorrow && state.showLend,
+                                'h-fit': state.showBorrow && state.showLend,
                                 'h-0': !state.showLend,
                             })}
                         >

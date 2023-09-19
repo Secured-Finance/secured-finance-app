@@ -62,7 +62,7 @@ describe('Itayose Component', () => {
             ).toHaveBeenLastCalledWith(
                 expect.anything(),
                 expect.anything(),
-                20
+                12
             );
             await waitFor(() =>
                 fireEvent.click(
@@ -76,7 +76,7 @@ describe('Itayose Component', () => {
             ).toHaveBeenLastCalledWith(
                 expect.anything(),
                 expect.anything(),
-                40
+                26
             );
         });
     });
