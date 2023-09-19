@@ -1,5 +1,7 @@
 import { composeStories } from '@storybook/react';
-import { render, screen, within } from 'src/test-utils.js';
+import { render, screen } from 'src/test-utils.js';
+import { formatTimestampWithMonth } from 'src/utils';
+import { LoanValue } from 'src/utils/entities';
 import * as stories from './AdvancedLendingTopBar.stories';
 
 const { Default, Values } = composeStories(stories);
@@ -46,17 +48,40 @@ describe('AdvancedLendingTopBar Component', () => {
         );
     });
 
-    it('should indicate the last price is an opening price if there is no last trade time', () => {
-        render(<Default lastTradeTime={undefined} />);
-        expect(screen.getByText('Opening Price')).toBeInTheDocument();
-    });
+    describe('Current Market', () => {
+        it('should show that the current market is an opening price if indicated', () => {
+            render(
+                <Default
+                    currentMarket={{
+                        value: LoanValue.fromPrice(8000, 1643713200),
+                        time: 1643713200,
+                        type: 'opening',
+                    }}
+                />
+            );
+            expect(screen.getByText('Opening Price')).toBeInTheDocument();
+        });
 
-    it('should show 0 as a value for the last trade price if there is no last trade', () => {
-        render(<Default lastTradeLoan={undefined} />);
-        const lastTradeTab = within(
-            screen.getByLabelText('Last Trade Analytics')
-        );
-        expect(lastTradeTab.getByText('0')).toBeInTheDocument();
-        expect(lastTradeTab.getByText('0 APR')).toBeInTheDocument();
+        it('should show that the current market is a last block price if indicated', () => {
+            render(
+                <Default
+                    currentMarket={{
+                        value: LoanValue.fromPrice(8000, 1643713200),
+                        time: 1643713200,
+                        type: 'block',
+                    }}
+                />
+            );
+            expect(
+                screen.getByText(`${formatTimestampWithMonth(1643713200)}`)
+            ).toBeInTheDocument();
+        });
+
+        it('should not show the current market box if there is no current market', () => {
+            render(<Default currentMarket={undefined} />);
+            expect(
+                screen.queryByLabelText('Current Market')
+            ).not.toBeInTheDocument();
+        });
     });
 });

@@ -7,7 +7,7 @@ export default {
     title: 'Organism/OrderTable',
     component: OrderTable,
     args: {
-        data: activeOrders,
+        data: [...activeOrders, ...activeOrders, ...activeOrders],
     },
     parameters: {
         ...RESPONSIVE_PARAMETERS,

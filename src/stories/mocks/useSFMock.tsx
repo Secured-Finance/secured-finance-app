@@ -13,12 +13,67 @@ import {
     dec22Fixture,
     dec24Fixture,
     ethBytes32,
+    jun23Fixture,
     mar23Fixture,
     maturitiesMockFromContract,
     usdcBytes32,
     wbtcBytes32,
     wfilBytes32,
 } from './fixtures';
+
+function generateOrderbook(depth: number) {
+    const unitPrices = [
+        BigNumber.from(9690),
+        BigNumber.from(9687),
+        BigNumber.from(9685),
+        BigNumber.from(9679),
+        BigNumber.from(9674),
+    ];
+
+    const zeros = Array(depth - unitPrices.length).fill(BigNumber.from(0));
+
+    const amounts = [
+        BigNumber.from('43000000000000000000000'),
+        BigNumber.from('23000000000000000000000'),
+        BigNumber.from('15000000000000000000000'),
+        BigNumber.from('12000000000000000000000'),
+        BigNumber.from('1800000000000000000000'),
+    ];
+
+    const quantities = [
+        BigNumber.from('1000'),
+        BigNumber.from('2000'),
+        BigNumber.from('3000'),
+        BigNumber.from('4000'),
+        BigNumber.from('5000'),
+    ];
+
+    return {
+        unitPrices: [...unitPrices, ...zeros],
+        amounts: [...amounts, ...zeros],
+        quantities: [...quantities, ...zeros],
+    };
+}
+
+function generateSimpleOrders(
+    maturity: number,
+    currency: string,
+    isPreOrder: boolean,
+    count: number
+) {
+    return Array(count)
+        .fill(0)
+        .map((_, i) => ({
+            orderId: i,
+            ccy: currency,
+            side: 0,
+            maturity: BigNumber.from(maturity),
+            unitPrice: BigNumber.from('9800'),
+            amount: BigNumber.from('1000000000000000000'),
+            timestamp: BigNumber.from('1609210000'),
+            isPreOrder: isPreOrder,
+        }));
+}
 
 export const mockUseSF = () => {
     const mockSecuredFinance = {
@@ -172,56 +227,12 @@ export const mockUseSF = () => {
             })
         ),
 
-        getBorrowOrderBook: jest.fn(() =>
-            Promise.resolve({
-                unitPrices: [
-                    BigNumber.from(9690),
-                    BigNumber.from(9687),
-                    BigNumber.from(9685),
-                    BigNumber.from(9679),
-                    BigNumber.from(9674),
-                ],
-                amounts: [
-                    BigNumber.from('43000000000000000000000'),
-                    BigNumber.from('23000000000000000000000'),
-                    BigNumber.from('15000000000000000000000'),
-                    BigNumber.from('12000000000000000000000'),
-                    BigNumber.from('1800000000000000000000'),
-                ],
-                quantities: [
-                    BigNumber.from('1000'),
-                    BigNumber.from('2000'),
-                    BigNumber.from('3000'),
-                    BigNumber.from('4000'),
-                    BigNumber.from('5000'),
-                ],
-            })
+        getBorrowOrderBook: jest.fn((_, __, limit: number) =>
+            Promise.resolve(generateOrderbook(limit))
         ),
 
-        getLendOrderBook: jest.fn(() =>
-            Promise.resolve({
-                unitPrices: [
-                    BigNumber.from(9690),
-                    BigNumber.from(9687),
-                    BigNumber.from(9685),
-                    BigNumber.from(9679),
-                    BigNumber.from(9674),
-                ],
-                amounts: [
-                    BigNumber.from('43000000000000000000000'),
-                    BigNumber.from('23000000000000000000000'),
-                    BigNumber.from('15000000000000000000000'),
-                    BigNumber.from('12000000000000000000000'),
-                    BigNumber.from('1800000000000000000000'),
-                ],
-                quantities: [
-                    BigNumber.from('1000'),
-                    BigNumber.from('2000'),
-                    BigNumber.from('3000'),
-                    BigNumber.from('4000'),
-                    BigNumber.from('5000'),
-                ],
-            })
+        getLendOrderBook: jest.fn((_, __, limit: number) =>
+            Promise.resolve(generateOrderbook(limit))
         ),
 
         getERC20Balance: jest.fn((token: Token, _) => {
@@ -351,6 +362,18 @@ export const mockUseSF = () => {
                         timestamp: BigNumber.from('1409220000'),
                         isPreOrder: true,
                     },
+                    ...generateSimpleOrders(
+                        jun23Fixture.toNumber(),
+                        wfilBytes32,
+                        false,
+                        20
+                    ),
+                    ...generateSimpleOrders(
+                        dec24Fixture.toNumber(),
+                        wfilBytes32,
+                        true,
+                        20
+                    ),
                 ].filter(order => filterFn(order)),
                 inactiveOrders: [
                     {
@@ -376,6 +399,7 @@ export const mockUseSF = () => {
                 ].filter(order => filterFn(order)),
             });
         }),
+
         getPositions: jest.fn(() =>
             Promise.resolve([
                 {

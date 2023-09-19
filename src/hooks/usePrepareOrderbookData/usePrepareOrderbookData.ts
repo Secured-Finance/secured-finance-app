@@ -5,9 +5,9 @@ import { LoanValue } from 'src/utils/entities';
 export type AggregationFactorType = 1 | 10 | 100 | 1000;
 
 export const usePrepareOrderbookData = <
-    T extends keyof NonNullable<ReturnType<typeof useOrderbook>['data']>
+    T extends keyof NonNullable<ReturnType<typeof useOrderbook>[0]['data']>
 >(
-    data: ReturnType<typeof useOrderbook>['data'],
+    data: ReturnType<typeof useOrderbook>[0]['data'],
     orderbookType: T,
     aggregationFactor: AggregationFactorType
 ) => {

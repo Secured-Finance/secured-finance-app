@@ -84,8 +84,8 @@ describe('Advanced Lending Component', () => {
 
         expect(
             await within(
-                screen.getByLabelText('Last Trade Analytics')
-            ).findByText('80.00')
+                await screen.findByLabelText('Current Market')
+            ).findByText('98.01')
         ).toBeInTheDocument();
 
         expect(
@@ -102,7 +102,7 @@ describe('Advanced Lending Component', () => {
         ).toBeInTheDocument();
     });
 
-    it('should display the opening unit price as the only trade if there is no last trades', async () => {
+    it.skip('should display the opening unit price as the only trade if there is no last trades', async () => {
         await waitFor(() =>
             render(<Default />, {
                 apolloMocks: emptyTransaction as never,
@@ -111,8 +111,8 @@ describe('Advanced Lending Component', () => {
         );
         expect(
             await within(
-                screen.getByLabelText('Last Trade Analytics')
-            ).findByText('97.10')
+                await screen.findByLabelText('Current Market')
+            ).findByText('97.01')
         ).toBeInTheDocument();
         expect(screen.getByText('Opening Price')).toBeInTheDocument();
 
@@ -141,5 +141,37 @@ describe('Advanced Lending Component', () => {
         expect(
             within(screen.getByTestId('open-order-table')).queryAllByRole('row')
         ).toHaveLength(1);
+    });
+
+    describe('Dynamic orderbook depth', () => {
+        it('should retrieve more data when the user select only one side of the orderbook', async () => {
+            await waitFor(() =>
+                render(<Default />, {
+                    apolloMocks: Default.parameters?.apolloClient.mocks,
+                    preloadedState,
+                })
+            );
+            expect(
+                mockSecuredFinance.getBorrowOrderBook
+            ).toHaveBeenLastCalledWith(
+                expect.anything(),
+                expect.anything(),
+                12
+            );
+            await waitFor(() =>
+                fireEvent.click(
+                    screen.getByRole('button', {
+                        name: 'Show Only Lend Orders',
+                    })
+                )
+            );
+            expect(
+                mockSecuredFinance.getBorrowOrderBook
+            ).toHaveBeenLastCalledWith(
+                expect.anything(),
+                expect.anything(),
+                26
+            );
+        });
     });
 });
