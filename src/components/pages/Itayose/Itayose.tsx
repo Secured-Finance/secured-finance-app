@@ -264,6 +264,7 @@ export const Itayose = () => {
                         <OrderTable
                             data={filteredOrderList}
                             variant='compact'
+                            height={520}
                         />
                     </HorizontalTab>
                 </div>

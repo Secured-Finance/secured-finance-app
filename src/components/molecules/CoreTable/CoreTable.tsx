@@ -14,7 +14,7 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 export interface Pagination {
     getMoreData: () => void;
     totalData: number;
-    containerHeight: boolean;
+    containerHeight: number | false;
 }
 
 type CoreTableOptions = {
@@ -235,7 +235,9 @@ export const CoreTable = <T,>({
                 fetchMoreData={fetchMoreData}
                 hasMoreData={hasMoreData}
                 containerHeight={
-                    !!coreTableOptions?.pagination?.containerHeight
+                    coreTableOptions?.pagination?.containerHeight
+                        ? coreTableOptions.pagination.containerHeight
+                        : undefined
                 }
             >
                 {coreTable}
@@ -255,11 +257,11 @@ const PaginatedScrolling = ({
     data: Array<any>;
     fetchMoreData: () => void;
     hasMoreData: boolean;
-    containerHeight?: boolean;
+    containerHeight?: number;
 }) => (
     <InfiniteScroll
         // This is required for tables who do not have pagination. This also allows us to scroll the table easily in tests.
-        height={containerHeight ? 300 : undefined}
+        height={containerHeight}
         style={{
             overflow: `${containerHeight ? 'auto' : 'visible'}`,
             paddingBottom: `${containerHeight ? '20px' : '0px'}`,
