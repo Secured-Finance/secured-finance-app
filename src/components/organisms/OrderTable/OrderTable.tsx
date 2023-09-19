@@ -112,7 +112,7 @@ export const OrderTable = ({
                 stickyColumns: new Set([6]),
                 ...(variant === 'compact' && {
                     pagination: {
-                        containerHeight: height || 300,
+                        containerHeight: height || 350,
                         getMoreData: () => {},
                         totalData: data.length,
                     },
