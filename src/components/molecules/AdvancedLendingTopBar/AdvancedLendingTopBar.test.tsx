@@ -77,11 +77,14 @@ describe('AdvancedLendingTopBar Component', () => {
             ).toBeInTheDocument();
         });
 
-        it('should not show the current market box if there is no current market', () => {
+        it('should show the current market box in gray if there is no current market', () => {
             render(<Default currentMarket={undefined} />);
             expect(
                 screen.queryByLabelText('Current Market')
-            ).not.toBeInTheDocument();
+            ).toBeInTheDocument();
+            expect(
+                screen.queryByLabelText('Current Market')?.children[0]
+            ).toHaveClass('text-slateGray');
         });
     });
 });
