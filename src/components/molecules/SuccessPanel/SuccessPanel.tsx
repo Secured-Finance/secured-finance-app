@@ -46,13 +46,10 @@ export const SuccessPanel = ({
                             </Tooltip>
                         ) : (
                             <span
-                                className={classNames(
-                                    'whitespace-nowrap leading-6',
-                                    {
-                                        'text-[#58BD7D]': index === 0,
-                                        'text-neutral-8': index !== 0,
-                                    }
-                                )}
+                                className={classNames(' leading-6', {
+                                    'text-[#58BD7D]': index === 0,
+                                    'text-neutral-8': index !== 0,
+                                })}
                             >
                                 {value}
                             </span>
