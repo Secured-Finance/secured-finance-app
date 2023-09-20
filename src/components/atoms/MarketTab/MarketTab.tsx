@@ -6,7 +6,7 @@ export interface MarketTabProps {
     name: string;
     value: string | number;
     source?: string;
-    variant?: 'default' | 'green-name';
+    variant?: 'default' | 'green-name' | 'gray-name';
     label?: string;
 }
 
@@ -28,6 +28,8 @@ export const MarketTab = ({
                 className={classNames({
                     'typography-button-3 whitespace-nowrap leading-7 text-nebulaTeal':
                         variant === 'green-name',
+                    'typography-button-3 whitespace-nowrap leading-7 text-slateGray':
+                        variant === 'gray-name',
                     'typography-caption-2 whitespace-nowrap text-slateGray':
                         variant === 'default',
                 })}
@@ -39,6 +41,8 @@ export const MarketTab = ({
                     {
                         'typography-caption whitespace-nowrap text-white':
                             variant === 'green-name',
+                        'typography-caption whitespace-nowrap text-slateGray':
+                            variant === 'gray-name',
                         'typography-caption text-neutral-8':
                             variant === 'default',
                     },
