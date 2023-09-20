@@ -1,13 +1,10 @@
 import { formatDate } from '@secured-finance/sf-core';
 import { composeStories } from '@storybook/react';
-import {
-    mar23Fixture,
-    preloadedAssetPrices,
-    preloadedState,
-} from 'src/stories/mocks/fixtures';
+import { mar23Fixture, preloadedAssetPrices } from 'src/stories/mocks/fixtures';
+import { initialStore } from 'src/stories/mocks/mockStore';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
-import { CurrencyInfo, currencyMap } from 'src/utils';
+import { CurrencySymbol, currencyMap } from 'src/utils';
 import timemachine from 'timemachine';
 import * as stories from './LendingCard.stories';
 
@@ -16,15 +13,7 @@ const { Default } = composeStories(stories);
 const mockSecuredFinance = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mockSecuredFinance);
 
-const DEFAULT_CHOICE = Object.values(currencyMap).reduce<CurrencyInfo>(
-    (acc, ccy) => {
-        if (acc.index < ccy.index) {
-            return acc;
-        }
-        return ccy;
-    },
-    { ...currencyMap.ETH }
-);
+const DEFAULT_CHOICE = currencyMap[CurrencySymbol.WFIL];
 
 beforeAll(() => {
     timemachine.reset();
@@ -34,6 +23,14 @@ beforeAll(() => {
 });
 
 describe('LendingCard Component', () => {
+    const preloadedState = {
+        ...initialStore,
+        ...preloadedAssetPrices,
+        wallet: {
+            address: '0x1',
+        },
+    };
+
     const selectEthereum = async () => {
         await waitFor(() => {
             fireEvent.click(
@@ -75,7 +72,7 @@ describe('LendingCard Component', () => {
         expect(button).toHaveTextContent('OK');
     });
 
-    it('should let the user choose between ETH, Filecoin, Bitcoin and USDC when clicking on the asset selector', async () => {
+    it('should let the user choose between ETH, Filecoin and USDC when clicking on the asset selector', async () => {
         render(<Default />);
 
         expect(
@@ -85,7 +82,7 @@ describe('LendingCard Component', () => {
         expect(screen.queryByText('Ethereum')).not.toBeInTheDocument();
         fireEvent.click(
             screen.getByRole('button', {
-                name: 'Bitcoin',
+                name: 'Filecoin',
             })
         );
 
@@ -97,9 +94,6 @@ describe('LendingCard Component', () => {
         ).toBeInTheDocument();
         expect(
             screen.getByRole('menuitem', { name: 'Ether' })
-        ).toBeInTheDocument();
-        expect(
-            screen.getByRole('menuitem', { name: 'Bitcoin' })
         ).toBeInTheDocument();
     });
 
