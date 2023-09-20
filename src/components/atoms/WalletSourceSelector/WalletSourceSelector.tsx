@@ -56,10 +56,6 @@ export const WalletSourceSelector = ({
 
     return (
         <div className='flex h-20 w-full flex-col justify-between'>
-            <div className='typography-caption-2 mx-2 flex flex-row justify-between text-secondary7'>
-                <span>Lending Source</span>
-                <span>Available to Lend</span>
-            </div>
             <div className='w-full'>
                 <Listbox
                     value={selectedOption}
@@ -108,17 +104,22 @@ export const WalletSourceSelector = ({
                                             }
                                         />
                                     </div>
-                                    <div className='typography-caption w-fit max-w-[200px] text-white-60'>
-                                        {account
-                                            ? ordinaryFormat(
-                                                  Math.floor(
-                                                      selectedOption.available *
-                                                          100
-                                                  ) / 100,
-                                                  0,
-                                                  4
-                                              )
-                                            : '--'}
+                                    <div className='mx-2 w-fit max-w-[200px] text-right'>
+                                        <span className='typography-caption-2 text-grayScale/50'>
+                                            Available to Lend
+                                        </span>
+                                        <div className='typography-caption text-white-60'>
+                                            {account
+                                                ? ordinaryFormat(
+                                                      Math.floor(
+                                                          selectedOption.available *
+                                                              100
+                                                      ) / 100,
+                                                      0,
+                                                      4
+                                                  )
+                                                : '--'}
+                                        </div>
                                     </div>
                                 </Listbox.Button>
                                 <Transition
