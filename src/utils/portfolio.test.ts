@@ -3,11 +3,11 @@ import { AssetPriceMap } from 'src/store/assetPrices/selectors';
 import {
     dec22Fixture,
     ethBytes32,
+    orderHistoryList,
     wbtcBytes32,
     wfilBytes32,
-    orderHistoryList,
 } from 'src/stories/mocks/fixtures';
-import { TradeHistory, OrderType } from 'src/types';
+import { OrderType, TradeHistory } from 'src/types';
 import timemachine from 'timemachine';
 import { CurrencySymbol } from './currencyList';
 import {
@@ -17,6 +17,7 @@ import {
     computeNetValue,
     computeWeightedAverageRate,
     formatOrders,
+    getMaxAmount,
     sortOrders,
 } from './portfolio';
 
@@ -300,4 +301,28 @@ describe('sortOrders', () => {
             sortedOrders[i + 1].createdAt.toNumber()
         );
     }
+});
+
+describe('getMaxAmount', () => {
+    it('returns the maximum amount from an array of orders', () => {
+        const orders = [
+            { amount: BigNumber.from(10) },
+            { amount: BigNumber.from(5) },
+            { amount: BigNumber.from(20) },
+        ];
+        const maxAmount = getMaxAmount(orders);
+        expect(maxAmount.toString()).toBe('20');
+    });
+
+    it('returns the amount of the only order in the array', () => {
+        const orders = [{ amount: BigNumber.from(10) }];
+        const maxAmount = getMaxAmount(orders);
+        expect(maxAmount.toString()).toBe('10');
+    });
+
+    it('returns zero if the array is empty', () => {
+        const orders: { amount: BigNumber }[] = [];
+        const maxAmount = getMaxAmount(orders);
+        expect(maxAmount.toString()).toBe('0');
+    });
 });

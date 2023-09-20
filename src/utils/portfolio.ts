@@ -1,11 +1,10 @@
 import { BigNumber } from 'ethers';
+import { OrderList, Position } from 'src/hooks';
 import { AssetPriceMap } from 'src/store/assetPrices/selectors';
-import { TradeHistory } from 'src/types';
+import { Order, TradeHistory } from 'src/types';
 import { currencyMap, hexToCurrencySymbol } from './currencyList';
 import { LoanValue } from './entities';
 import { Rate } from './rate';
-import { OrderList, Position } from 'src/hooks';
-import { Order } from 'src/types';
 
 export const computeWeightedAverageRate = (trades: TradeHistory) => {
     if (!trades.length) {
@@ -93,4 +92,14 @@ export const checkOrdersAreSame = (order1: Order, order2: OrderList[0]) => {
 
 export const sortOrders = (a: Order, b: Order) => {
     return Number(b.createdAt.sub(a.createdAt));
+};
+
+export const getMaxAmount = (orders: { amount: BigNumber }[]) => {
+    if (!orders.length) {
+        return BigNumber.from(0);
+    }
+    return orders.reduce(
+        (prev, current) => (prev.gt(current.amount) ? prev : current.amount),
+        orders[0].amount
+    );
 };
