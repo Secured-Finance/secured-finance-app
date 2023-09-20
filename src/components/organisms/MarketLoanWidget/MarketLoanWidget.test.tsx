@@ -100,6 +100,7 @@ describe('MarketLoanWidget Component', () => {
 
         render(<Default />);
         const button = screen.getByTestId('Pre-Open');
+        expect(screen.queryByText('NEW')).not.toBeInTheDocument();
         await waitFor(() => expect(button).toBeDisabled());
     });
 });
