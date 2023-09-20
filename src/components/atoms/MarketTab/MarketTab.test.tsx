@@ -2,7 +2,7 @@ import { composeStories } from '@storybook/react';
 import { render, screen } from 'src/test-utils.js';
 import * as stories from './MarketTab.stories';
 
-const { Default, GreenMarketTab } = composeStories(stories);
+const { Default, GreenMarketTab, GrayMarketTab } = composeStories(stories);
 
 describe('test Market Tab component', () => {
     it('should render Market Tab', () => {
@@ -28,6 +28,19 @@ describe('test Market Tab component', () => {
         expect(screen.getByText('25.00% APR')).toBeInTheDocument();
         expect(screen.getByText('25.00% APR')).toHaveClass(
             'typography-caption text-white'
+        );
+    });
+
+    it('should render Gray Market Tab', () => {
+        render(<GrayMarketTab />);
+        expect(screen.getByLabelText('Gray Market Tab')).toBeInTheDocument();
+        expect(screen.getByText('7977.00')).toBeInTheDocument();
+        expect(screen.getByText('7977.00')).toHaveClass(
+            'typography-button-3 leading-7 text-slateGray'
+        );
+        expect(screen.getByText('25.00% APR')).toBeInTheDocument();
+        expect(screen.getByText('25.00% APR')).toHaveClass(
+            'typography-caption text-slateGray'
         );
     });
 

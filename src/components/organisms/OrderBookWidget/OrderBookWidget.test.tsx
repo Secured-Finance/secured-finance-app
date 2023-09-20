@@ -19,6 +19,23 @@ describe('OrderBookWidget Component', () => {
                 screen.getByTestId('current-market-price')
             ).toHaveTextContent('93.00');
         });
+
+        it('should display the market price in the correct color', () => {
+            render(<Default />);
+            expect(screen.getByTestId('current-market-price')).toHaveClass(
+                'text-nebulaTeal'
+            );
+        });
+
+        it('should show a placeholder when the market price is not available', () => {
+            render(<Default marketPrice={undefined} />);
+            expect(
+                screen.getByTestId('current-market-price')
+            ).toHaveTextContent('--.--');
+            expect(screen.getByTestId('current-market-price')).toHaveClass(
+                'text-slateGray'
+            );
+        });
     });
 
     it('should update store when Sell order row is clicked', () => {

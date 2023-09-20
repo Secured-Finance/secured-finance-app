@@ -45,6 +45,22 @@ export const AdvancedLendingTopBar = <T extends string = string>({
     currentMarket,
     values,
 }: AdvancedLendingTopBarProp<T>) => {
+    const getTime = () => {
+        if (currentMarket) {
+            if (currentMarket.type === 'opening') {
+                return 'Opening Price';
+            }
+
+            if (currentMarket.type === 'block' && currentMarket.time) {
+                return formatTimestampWithMonth(currentMarket.time);
+            }
+
+            // TODO: replace this '-' with the block time
+            return '-';
+        }
+        return '-';
+    };
+
     return (
         <GradientBox shape='rectangle'>
             <div className='grid-col-3 tablet:grid-col-6 grid gap-y-6 px-5 pb-3 pt-6 laptop:grid-flow-col laptop:place-content-around laptop:items-start laptop:pt-4'>
@@ -59,35 +75,19 @@ export const AdvancedLendingTopBar = <T extends string = string>({
                     />
                 </div>
                 <div className='col-span-3 col-start-1 tablet:col-span-2 laptop:col-span-2 laptop:border-r laptop:border-white-10 laptop:pr-5'>
-                    {currentMarket && (
-                        <>
-                            <MarketTab
-                                name={formatLoanValue(
-                                    currentMarket.value,
-                                    'price'
-                                )}
-                                value={`${formatLoanValue(
-                                    currentMarket.value,
-                                    'rate'
-                                )} APR`}
-                                variant='green-name'
-                                label='Current Market'
-                            />
+                    <MarketTab
+                        name={formatLoanValue(currentMarket?.value, 'price')}
+                        value={`${formatLoanValue(
+                            currentMarket?.value,
+                            'rate'
+                        )} APR`}
+                        variant={currentMarket ? 'green-name' : 'gray-name'}
+                        label='Current Market'
+                    />
 
-                            <div className='typography-caption-2 whitespace-nowrap text-neutral-4'>
-                                {
-                                    currentMarket.type === 'block'
-                                        ? currentMarket.time
-                                            ? formatTimestampWithMonth(
-                                                  currentMarket.time
-                                              )
-                                            : '-'
-                                        : 'Opening Price'
-                                    // TODO: replace this '-' with the block time
-                                }
-                            </div>
-                        </>
-                    )}
+                    <div className='typography-caption-2 whitespace-nowrap text-neutral-4'>
+                        {getTime()}
+                    </div>
                 </div>
                 <div className='border-r border-white-10 pr-5 tablet:col-start-4 tablet:row-start-1 laptop:col-start-auto laptop:row-start-auto laptop:px-5'>
                     <MarketTab name='24h High' value={getValue(values, 0)} />

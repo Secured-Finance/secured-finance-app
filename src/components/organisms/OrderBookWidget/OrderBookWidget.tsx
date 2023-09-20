@@ -423,14 +423,16 @@ export const OrderBookWidget = ({
                                 }}
                             />
                         </div>
-                        {state.showTicker && marketPrice && (
+                        {state.showTicker && (
                             <div className='typography-portfolio-heading -mx-3 flex h-14 flex-row items-center justify-between bg-black-20 px-4'>
                                 <span
                                     className={classNames('font-semibold', {
                                         'flex flex-row items-center gap-2 text-white':
                                             variant === 'itayose',
                                         'text-nebulaTeal':
+                                            marketPrice &&
                                             variant === 'default',
+                                        'text-slateGray': !marketPrice,
                                     })}
                                     data-testid='current-market-price'
                                 >
