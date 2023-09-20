@@ -7,6 +7,7 @@ interface NavTabProps {
     highlight?: {
         text: string;
         size: 'small' | 'large';
+        visible: boolean;
     };
 }
 
@@ -37,7 +38,7 @@ export const NavTab = ({ text, active = false, highlight }: NavTabProps) => {
                 >
                     {text}
                 </p>
-                {highlight && (
+                {highlight && highlight.visible && (
                     <HighlightChip
                         text={highlight.text}
                         size={highlight.size}
