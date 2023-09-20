@@ -36,7 +36,7 @@ export const OrderAction = ({
     renderSide = false,
     validation,
 }: OrderActionProps) => {
-    const { isConnected, isDisconnected } = useAccount();
+    const { isConnected } = useAccount();
     const dispatch = useDispatch();
     const { placeOrder, placePreOrder } = useOrders();
 
@@ -126,7 +126,7 @@ export const OrderAction = ({
                         Deposit collateral to borrow
                     </Button>
                 ))}
-            {isDisconnected && (
+            {!isConnected && (
                 <Button
                     fullWidth
                     onClick={() => dispatch(setWalletDialogOpen(true))}

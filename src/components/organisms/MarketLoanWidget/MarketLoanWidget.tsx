@@ -147,9 +147,14 @@ export const MarketLoanWidget = () => {
         [handleClick]
     );
 
-    const itayoseHighlight: { text: string; size: 'small' | 'large' } = {
+    const itayoseHighlight: {
+        text: string;
+        size: 'small' | 'large';
+        visible: boolean;
+    } = {
         text: 'NEW',
         size: 'small',
+        visible: itayoseMarkets.length !== 0,
     };
 
     const openMarketUtil = (

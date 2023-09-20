@@ -5,7 +5,7 @@ import { NavTab } from 'src/components/atoms';
 type TabData = {
     text: string;
     disabled?: boolean;
-    highlight?: { text: string; size: 'small' | 'large' };
+    highlight?: { text: string; size: 'small' | 'large'; visible: boolean };
     util?: React.ReactNode;
 };
 
