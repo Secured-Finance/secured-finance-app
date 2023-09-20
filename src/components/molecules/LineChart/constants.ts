@@ -8,7 +8,7 @@ import {
     ScriptableContext,
     TooltipItem,
 } from 'chart.js';
-import { Rate } from 'src/utils';
+import { Rate, percentFormat } from 'src/utils';
 
 export const defaultDatasets = {
     borderWidth: 3,
@@ -61,7 +61,7 @@ export const crossHairPlugin = {
             gradient.addColorStop(0, 'rgba(217, 217, 217, 0.1)');
             gradient.addColorStop(1, 'rgba(217, 217, 217, 0)');
             ctx.fillStyle = gradient;
-            ctx.fillRect(x - 24, topY, 48, bottomY - topY);
+            ctx.fillRect(x - 20, topY, 40, bottomY - topY);
             ctx.setLineDash([8, 8]);
             ctx.strokeStyle = 'rgba(252, 252, 253, 1)';
             ctx.stroke();
@@ -130,7 +130,23 @@ export const options: ChartOptions<'line'> = {
     },
     scales: {
         y: {
-            display: false,
+            beginAtZero: false,
+            display: true,
+            ticks: {
+                callback: function (value: string | number) {
+                    return percentFormat(Number(value));
+                },
+                color: 'rgba(255, 255, 255, 0.6)',
+                font: {
+                    lineHeight: 2.0,
+                },
+                padding: 20,
+                maxTicksLimit: 8,
+            },
+            grid: {
+                display: false,
+                drawBorder: false,
+            },
         },
 
         x: {
@@ -144,7 +160,7 @@ export const options: ChartOptions<'line'> = {
             },
             grid: {
                 display: false,
-                borderColor: 'transparent',
+                drawBorder: false,
             },
         },
     },
