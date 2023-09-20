@@ -55,7 +55,7 @@ export const WalletSourceSelector = ({
     );
 
     return (
-        <div className='flex h-20 w-full flex-col justify-between'>
+        <div className='h-15 flex w-full flex-col justify-between'>
             <div className='w-full'>
                 <Listbox
                     value={selectedOption}

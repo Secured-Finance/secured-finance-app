@@ -262,24 +262,6 @@ export function AdvancedLendingOrderCard({
                         variant='StyledButton'
                     />
                 )}
-                {side === OrderSide.LEND && (
-                    <div className='space-y-1'>
-                        <WalletSourceSelector
-                            optionList={walletSourceList}
-                            selected={selectedWalletSource}
-                            account={address ?? ''}
-                            onChange={handleWalletSourceChange}
-                        />
-                        <ErrorInfo
-                            showError={getAmountValidation(
-                                amountFormatterFromBase[currency](amount),
-                                balanceToLend,
-                                side
-                            )}
-                            errorMessage='Insufficient amount in source'
-                        />
-                    </div>
-                )}
                 <div className='flex flex-col gap-10px'>
                     <OrderInputBox
                         field='Bond Price'
@@ -320,6 +302,24 @@ export function AdvancedLendingOrderCard({
                         />
                     </div>
                 </div>
+                {side === OrderSide.LEND && (
+                    <div className='space-y-1'>
+                        <WalletSourceSelector
+                            optionList={walletSourceList}
+                            selected={selectedWalletSource}
+                            account={address ?? ''}
+                            onChange={handleWalletSourceChange}
+                        />
+                        <ErrorInfo
+                            showError={getAmountValidation(
+                                amountFormatterFromBase[currency](amount),
+                                balanceToLend,
+                                side
+                            )}
+                            errorMessage='Insufficient amount in source'
+                        />
+                    </div>
+                )}
                 <div className='mx-10px'>
                     <Slider onChange={handleAmountChange} value={sliderValue} />
                 </div>
