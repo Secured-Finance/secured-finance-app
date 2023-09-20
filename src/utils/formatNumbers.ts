@@ -75,13 +75,15 @@ export const formatWithCurrency = (
 };
 
 export const formatLoanValue = (
-    value: LoanValue,
+    value: LoanValue | undefined,
     type: 'price' | 'rate',
     decimal = 2
 ) => {
     if (type === 'price') {
+        if (!value) return '--.--';
         return divide(value.price, 100).toFixed(decimal).toString();
     } else {
+        if (!value) return '--.--%';
         return percentFormat(
             value.apr.toNormalizedNumber(),
             100,

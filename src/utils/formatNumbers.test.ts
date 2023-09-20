@@ -182,4 +182,14 @@ describe('formatLoanValue', () => {
             formatLoanValue(LoanValue.fromApr(new Rate(500000), 100), 'rate', 4)
         ).toEqual('50.0000%');
     });
+
+    it('should return "--.--" when value is undefined and type is "price"', () => {
+        const result = formatLoanValue(undefined, 'price');
+        expect(result).toEqual('--.--');
+    });
+
+    it('should return "--.--%" when value is undefined and type is "rate"', () => {
+        const result = formatLoanValue(undefined, 'rate');
+        expect(result).toEqual('--.--%');
+    });
 });
