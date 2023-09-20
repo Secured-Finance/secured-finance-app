@@ -1,5 +1,4 @@
 import { composeStories } from '@storybook/react';
-import { preloadedState } from 'src/stories/mocks/fixtures';
 import { emptyTransaction } from 'src/stories/mocks/queries';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { fireEvent, render, screen, waitFor, within } from 'src/test-utils.js';
@@ -15,7 +14,6 @@ describe('Advanced Lending Component', () => {
         const { store } = await waitFor(() =>
             render(<Default />, {
                 apolloMocks: Default.parameters?.apolloClient.mocks,
-                preloadedState,
             })
         );
         expect(store.getState().landingOrderForm.amount).toEqual('0');
@@ -41,7 +39,6 @@ describe('Advanced Lending Component', () => {
         const { store } = await waitFor(() =>
             render(<Default />, {
                 apolloMocks: Default.parameters?.apolloClient.mocks,
-                preloadedState,
             })
         );
         expect(store.getState().landingOrderForm.amount).toEqual('0');
@@ -68,7 +65,6 @@ describe('Advanced Lending Component', () => {
     it('should show the maturity as a date for the selected maturity', async () => {
         render(<Default />, {
             apolloMocks: Default.parameters?.apolloClient.mocks,
-            preloadedState,
         });
         expect(
             await screen.findByRole('button', { name: 'DEC22' })
@@ -79,7 +75,6 @@ describe('Advanced Lending Component', () => {
     it('should display the last trades in the top bar', async () => {
         render(<Default />, {
             apolloMocks: Default.parameters?.apolloClient.mocks,
-            preloadedState,
         });
 
         expect(
@@ -106,7 +101,6 @@ describe('Advanced Lending Component', () => {
         await waitFor(() =>
             render(<Default />, {
                 apolloMocks: emptyTransaction as never,
-                preloadedState,
             })
         );
         expect(
@@ -134,7 +128,6 @@ describe('Advanced Lending Component', () => {
         await waitFor(() =>
             render(<ConnectedToWallet />, {
                 apolloMocks: Default.parameters?.apolloClient.mocks,
-                preloadedState,
             })
         );
         fireEvent.click(screen.getByRole('tab', { name: 'Open Orders' }));
@@ -148,7 +141,6 @@ describe('Advanced Lending Component', () => {
             await waitFor(() =>
                 render(<Default />, {
                     apolloMocks: Default.parameters?.apolloClient.mocks,
-                    preloadedState,
                 })
             );
             expect(

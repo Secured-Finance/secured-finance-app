@@ -4,8 +4,8 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import isChromatic from 'chromatic/isChromatic';
 import { Provider } from 'react-redux';
 import 'src/assets/css/index.css';
-import store from './../src/store';
 import { MockSecuredFinanceProvider } from './../src/stories/mocks/MockSecuredFinanceProvider';
+import { mockStore } from './../src/stories/mocks/mockStore';
 import { withMockDate } from './decorators';
 
 const queryClient = new QueryClient();
@@ -57,7 +57,7 @@ export const parameters = {
 
 export const decorators = [
     Story => (
-        <Provider store={store}>
+        <Provider store={mockStore}>
             <QueryClientProvider client={queryClient}>
                 <MockSecuredFinanceProvider>
                     <Story />
