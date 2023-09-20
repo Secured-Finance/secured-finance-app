@@ -5,13 +5,20 @@ import { render as rtlRender } from '@testing-library/react';
 import { renderHook as rtlRenderHook } from '@testing-library/react-hooks';
 import { Provider } from 'react-redux';
 import { rootReducers } from 'src/store';
+import { initialStore } from './stories/mocks/mockStore';
 
 const defaultOptions = { defaultOptions: { queries: { retry: false } } };
 
+/**
+ *
+ * @param {*} ui
+ * @param {*} param1
+ * @returns
+ */
 function render(
     ui,
     {
-        preloadedState = {},
+        preloadedState = initialStore,
         store = configureStore({
             reducer: rootReducers,
             preloadedState,
@@ -44,10 +51,16 @@ function render(
     return { store, ...rtlRender(ui, { wrapper: Wrapper, ...renderOptions }) };
 }
 
+/**
+ *
+ * @param {*} ui
+ * @param {*} param1
+ * @returns
+ */
 function renderHook(
     hook,
     {
-        preloadedState = {},
+        preloadedState = initialStore,
         store = configureStore({
             reducer: rootReducers,
             preloadedState,

@@ -1,9 +1,10 @@
 import { formatDate } from '@secured-finance/sf-core';
 import { composeStories } from '@storybook/react';
 import { mar23Fixture, preloadedAssetPrices } from 'src/stories/mocks/fixtures';
+import { initialStore } from 'src/stories/mocks/mockStore';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
-import { CurrencyInfo, currencyMap } from 'src/utils';
+import { CurrencySymbol, currencyMap } from 'src/utils';
 import timemachine from 'timemachine';
 import * as stories from './LendingCard.stories';
 
@@ -12,15 +13,7 @@ const { Default } = composeStories(stories);
 const mockSecuredFinance = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mockSecuredFinance);
 
-const DEFAULT_CHOICE = Object.values(currencyMap).reduce<CurrencyInfo>(
-    (acc, ccy) => {
-        if (acc.index < ccy.index) {
-            return acc;
-        }
-        return ccy;
-    },
-    { ...currencyMap.ETH }
-);
+const DEFAULT_CHOICE = currencyMap[CurrencySymbol.WFIL];
 
 beforeAll(() => {
     timemachine.reset();
@@ -31,6 +24,7 @@ beforeAll(() => {
 
 describe('LendingCard Component', () => {
     const preloadedState = {
+        ...initialStore,
         ...preloadedAssetPrices,
         wallet: {
             address: '0x1',
