@@ -104,11 +104,11 @@ export const WalletSourceSelector = ({
                                             }
                                         />
                                     </div>
-                                    <div className='mx-2 w-fit max-w-[200px] text-right'>
+                                    <div className='flex w-fit max-w-[200px] flex-col text-right'>
                                         <span className='typography-caption-2 text-grayScale/50'>
                                             Available to Lend
                                         </span>
-                                        <div className='typography-caption text-white-60'>
+                                        <span className='typography-caption text-white-60'>
                                             {account
                                                 ? ordinaryFormat(
                                                       Math.floor(
@@ -119,7 +119,7 @@ export const WalletSourceSelector = ({
                                                       4
                                                   )
                                                 : '--'}
-                                        </div>
+                                        </span>
                                     </div>
                                 </Listbox.Button>
                                 <Transition
