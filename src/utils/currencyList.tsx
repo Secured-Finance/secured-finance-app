@@ -34,26 +34,8 @@ export enum CurrencySymbol {
 export const currencyMap: Readonly<
     Record<CurrencySymbol, Readonly<CurrencyInfo>>
 > = {
-    [CurrencySymbol.WFIL]: {
-        index: 0,
-        icon: FilIcon,
-        symbol: CurrencySymbol.WFIL,
-        name: WFIL.onChain().name,
-        coinGeckoId: 'filecoin',
-        isCollateral: false,
-        toBaseUnit: (amount: number) => {
-            const filAmount = new FilecoinNumber(amount, 'fil');
-            return BigNumber.from(filAmount.toAttoFil());
-        },
-        fromBaseUnit: (amount: BigNumber) =>
-            convertFromBlockchainUnit(amount, WFIL.onChain()),
-        toCurrency: () => WFIL.onChain(),
-        chartColor: tailwindConfig.theme.colors.chart.fil,
-        pillColor: tailwindConfig.theme.colors.pill.fil,
-        roundingDecimal: 0,
-    },
     [CurrencySymbol.WBTC]: {
-        index: 1,
+        index: 0,
         symbol: CurrencySymbol.WBTC,
         name: WBTC.onChain().name,
         icon: BTCIcon,
@@ -69,7 +51,7 @@ export const currencyMap: Readonly<
         roundingDecimal: 4,
     },
     [CurrencySymbol.ETH]: {
-        index: 2,
+        index: 1,
         icon: EthIcon,
         symbol: CurrencySymbol.ETH,
         // TODO: update sf-core to use the right name
@@ -83,6 +65,24 @@ export const currencyMap: Readonly<
         chartColor: tailwindConfig.theme.colors.chart.eth,
         pillColor: tailwindConfig.theme.colors.pill.eth,
         roundingDecimal: 3,
+    },
+    [CurrencySymbol.WFIL]: {
+        index: 2,
+        icon: FilIcon,
+        symbol: CurrencySymbol.WFIL,
+        name: WFIL.onChain().name,
+        coinGeckoId: 'filecoin',
+        isCollateral: false,
+        toBaseUnit: (amount: number) => {
+            const filAmount = new FilecoinNumber(amount, 'fil');
+            return BigNumber.from(filAmount.toAttoFil());
+        },
+        fromBaseUnit: (amount: BigNumber) =>
+            convertFromBlockchainUnit(amount, WFIL.onChain()),
+        toCurrency: () => WFIL.onChain(),
+        chartColor: tailwindConfig.theme.colors.chart.fil,
+        pillColor: tailwindConfig.theme.colors.pill.fil,
+        roundingDecimal: 0,
     },
     [CurrencySymbol.USDC]: {
         index: 3,

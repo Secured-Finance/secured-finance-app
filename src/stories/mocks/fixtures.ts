@@ -59,6 +59,7 @@ export const assetPriceMap = {
 export const preloadedEthBalance = {
     wallet: {
         ethBalance: 10,
+        address: '',
     },
 };
 
