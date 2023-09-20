@@ -70,7 +70,7 @@ export const WalletSourceSelector = ({
                                     data-testid='wallet-source-selector-button'
                                 >
                                     <div
-                                        className={`flex h-10 w-[156px] flex-row items-center justify-between rounded-lg bg-white-5 px-2 ${
+                                        className={`flex h-10 w-[156px] flex-row items-center justify-between rounded-lg bg-white-5 px-2 laptop:w-[100px] desktop:w-[156px] ${
                                             account
                                                 ? 'cursor-pointer'
                                                 : 'cursor-default'
@@ -79,13 +79,13 @@ export const WalletSourceSelector = ({
                                         <div className='flex flex-row items-center gap-2'>
                                             {account && (
                                                 <span>
-                                                    <selectedOption.iconSVG className='h-5 w-5' />
+                                                    <selectedOption.iconSVG className='h-5 w-5 laptop:h-3 laptop:w-3 desktop:h-5 desktop:w-5' />
                                                 </span>
                                             )}
                                             <span
                                                 className={`typography-caption-2 leading-4 ${
                                                     account
-                                                        ? 'text-grayScale'
+                                                        ? 'text-grayScale laptop:text-2xs desktop:text-xs'
                                                         : 'text-grayScale/50'
                                                 }`}
                                             >
@@ -105,10 +105,10 @@ export const WalletSourceSelector = ({
                                         />
                                     </div>
                                     <div className='flex w-fit max-w-[200px] flex-col text-right'>
-                                        <span className='typography-caption-2 text-grayScale/50'>
+                                        <span className='typography-caption-2 text-grayScale/50 laptop:text-2xs desktop:text-xs'>
                                             Available to Lend
                                         </span>
-                                        <span className='typography-caption text-white-60'>
+                                        <span className='typography-caption text-white-60 laptop:text-xs desktop:text-sm'>
                                             {account
                                                 ? ordinaryFormat(
                                                       Math.floor(
@@ -146,18 +146,18 @@ export const WalletSourceSelector = ({
                                                                 }
                                                             )}
                                                         >
-                                                            <div className='flex items-center gap-3'>
+                                                            <div className='flex items-center gap-3 laptop:gap-1 desktop:gap-3'>
                                                                 <span>
-                                                                    <assetObj.iconSVG className='h-6 w-6' />
+                                                                    <assetObj.iconSVG className='h-6 w-6 laptop:h-3 laptop:w-3 desktop:h-6 desktop:w-6' />
                                                                 </span>
-                                                                <span className='typography-caption-2 leading-4 text-grayScale'>
+                                                                <span className='typography-caption-2 leading-4 text-grayScale laptop:text-2xs desktop:text-xs'>
                                                                     {formatSource(
                                                                         assetObj.source,
                                                                         account
                                                                     )}
                                                                 </span>
                                                             </div>
-                                                            <span className='typography-caption-2 leading-4 text-planetaryPurple'>
+                                                            <span className='typography-caption-2 leading-4 text-planetaryPurple laptop:text-2xs desktop:text-xs'>
                                                                 {formatOption(
                                                                     assetObj.available,
                                                                     assetObj.asset

@@ -1,3 +1,4 @@
+import { RESPONSIVE_PARAMETERS, VIEWPORTS } from '.storybook/constants';
 import { WalletSource } from '@secured-finance/sf-client';
 import type { Meta, StoryFn } from '@storybook/react';
 import { useState } from 'react';
@@ -27,7 +28,7 @@ const Template: StoryFn<typeof WalletSourceSelector> = args => {
     };
 
     return (
-        <div className='w-[360px]'>
+        <div className='w-[360px] laptop:w-[199px] desktop:w-[360px]'>
             <WalletSourceSelector
                 {...args}
                 selected={selected}
@@ -38,6 +39,12 @@ const Template: StoryFn<typeof WalletSourceSelector> = args => {
 };
 
 export const Default = Template.bind({});
+Default.parameters = {
+    ...RESPONSIVE_PARAMETERS,
+    chromatic: {
+        viewports: [VIEWPORTS.DESKTOP, VIEWPORTS.TABLET, VIEWPORTS.DESKTOP],
+    },
+};
 export const NotConnectedToWallet = Template.bind({});
 NotConnectedToWallet.args = {
     account: '',
