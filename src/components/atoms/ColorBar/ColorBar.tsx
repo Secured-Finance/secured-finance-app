@@ -1,11 +1,11 @@
 import classNames from 'classnames';
 import { BigNumber } from 'ethers';
 import { ColorFormat } from 'src/types';
+import { divide, multiply } from 'src/utils';
 import { calculatePercentage } from 'src/utils/collateral';
 
-const COLORBAR_MIN_WIDTH = 20;
-const COLORBAR_MAX_WIDTH = 300;
-const COLORBAR_MAGNIFIER = 1.5;
+const COLORBAR_MIN_WIDTH = 5;
+const COLORBAR_MAX_WIDTH = 308;
 export const ColorBar = ({
     value,
     total,
@@ -18,14 +18,11 @@ export const ColorBar = ({
 } & Required<ColorFormat>) => {
     const width = Math.min(
         Math.max(
-            COLORBAR_MIN_WIDTH,
-            Math.trunc(
-                COLORBAR_MIN_WIDTH +
-                    Math.pow(
-                        calculatePercentage(value, total).toNumber(),
-                        COLORBAR_MAGNIFIER
-                    )
-            )
+            multiply(
+                divide(calculatePercentage(value, total).toNumber(), 100),
+                COLORBAR_MAX_WIDTH
+            ),
+            COLORBAR_MIN_WIDTH
         ),
         COLORBAR_MAX_WIDTH
     );

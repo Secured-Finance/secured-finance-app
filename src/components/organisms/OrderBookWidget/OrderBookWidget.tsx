@@ -27,6 +27,7 @@ import {
     CurrencySymbol,
     currencyMap,
     formatLoanValue,
+    getMaxAmount,
     ordinaryFormat,
 } from 'src/utils';
 import { LoanValue } from 'src/utils/entities';
@@ -236,23 +237,12 @@ export const OrderBookWidget = ({
         aggregationFactor
     );
 
-    const totalBuyAmount = useMemo(
-        () =>
-            borrowOrders.reduce(
-                (acc, order) => acc.add(order.amount),
-                BigNumber.from(0)
-            ),
+    const maxBorrowAmount = useMemo(
+        () => getMaxAmount(borrowOrders),
         [borrowOrders]
     );
 
-    const totalSellAmount = useMemo(
-        () =>
-            lendOrders.reduce(
-                (acc, order) => acc.add(order.amount),
-                BigNumber.from(0)
-            ),
-        [lendOrders]
-    );
+    const maxLendAmount = useMemo(() => getMaxAmount(lendOrders), [lendOrders]);
 
     const buyColumns = useMemo(
         () => [
@@ -262,7 +252,7 @@ export const OrderBookWidget = ({
                     <PriceCell
                         value={info.getValue()}
                         amount={info.row.original.amount}
-                        totalAmount={totalBuyAmount}
+                        totalAmount={maxBorrowAmount}
                         aggregationFactor={aggregationFactor}
                         position='borrow'
                         align='left'
@@ -289,7 +279,7 @@ export const OrderBookWidget = ({
                 header: () => <TableHeader title='APR' align='right' />,
             }),
         ],
-        [aggregationFactor, currency, totalBuyAmount]
+        [aggregationFactor, currency, maxBorrowAmount]
     );
 
     const sellColumns = useMemo(
@@ -318,7 +308,7 @@ export const OrderBookWidget = ({
                     <PriceCell
                         value={info.getValue()}
                         amount={info.row.original.amount}
-                        totalAmount={totalSellAmount}
+                        totalAmount={maxLendAmount}
                         aggregationFactor={aggregationFactor}
                         position='lend'
                         align='left'
@@ -327,7 +317,7 @@ export const OrderBookWidget = ({
                 header: () => <TableHeader title='Price' align='left' />,
             }),
         ],
-        [aggregationFactor, currency, totalSellAmount]
+        [aggregationFactor, currency, maxLendAmount]
     );
 
     const handleClick = (rowId: string, side: OrderSide): void => {
