@@ -173,7 +173,7 @@ describe('AdvancedLendingOrderCard Component', () => {
         render(<Default />, { preloadedState });
         const lendTab = screen.getByText('Lend');
         fireEvent.click(lendTab);
-        expect(screen.getByText('Lending Source')).toBeInTheDocument();
+        expect(screen.getByText('Available to Lend')).toBeInTheDocument();
         expect(await screen.findByText('4,000')).toBeInTheDocument();
 
         const walletSourceButton = screen.getByTestId(
