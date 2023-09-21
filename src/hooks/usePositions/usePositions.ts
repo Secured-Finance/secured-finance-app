@@ -10,7 +10,7 @@ export type Position = {
     maturity: string;
     amount: BigNumber;
     forwardValue: BigNumber;
-    midPrice: BigNumber;
+    marketPrice: BigNumber;
 };
 
 export const usePositions = (
@@ -41,7 +41,7 @@ export const usePositions = (
                         maturity: position.maturity.toString(),
                         amount: position.presentValue,
                         forwardValue: position.futureValue,
-                        midPrice: calculateMidPrice(
+                        marketPrice: calculateMarketPrice(
                             position.presentValue,
                             position.futureValue
                         ),
@@ -51,10 +51,10 @@ export const usePositions = (
     });
 };
 
-const calculateMidPrice = (
+const calculateMarketPrice = (
     presentValue: BigNumber,
     futureValue: BigNumber
 ): BigNumber => {
-    const midPrice = presentValue.mul(1000000).div(futureValue);
-    return BigNumber.from(Math.round(midPrice.toNumber() / 100));
+    const marketPrice = presentValue.mul(1000000).div(futureValue);
+    return BigNumber.from(Math.round(marketPrice.toNumber() / 100));
 };

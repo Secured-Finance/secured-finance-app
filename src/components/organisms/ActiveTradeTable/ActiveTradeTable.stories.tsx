@@ -32,14 +32,14 @@ const Template: StoryFn<typeof ActiveTradeTable> = args => {
             currency: wfilBytes32,
             forwardValue: BigNumber.from('500000000000000000000'),
             maturity: new Maturity(getFutureTimeStamp(22)).toString(),
-            midPrice: BigNumber.from(10000),
+            marketPrice: BigNumber.from(10000),
         },
         {
             amount: BigNumber.from('0'),
             currency: wfilBytes32,
             forwardValue: BigNumber.from('500000000000000000000'),
             maturity: new Maturity(getFutureTimeStamp(28)).toString(),
-            midPrice: BigNumber.from(0),
+            marketPrice: BigNumber.from(0),
         },
     ];
 

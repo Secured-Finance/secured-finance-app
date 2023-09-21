@@ -32,7 +32,7 @@ describe('usePositions', () => {
         expect(newValue.isLoading).toEqual(false);
     });
 
-    it('positions should have midPrice', async () => {
+    it('positions should have marketPrice', async () => {
         const { result, waitForNextUpdate } = renderHook(() =>
             usePositions('0x1', usedCurrencies)
         );
@@ -40,9 +40,17 @@ describe('usePositions', () => {
 
         const newValue = result.current;
         expect(newValue.data).toHaveLength(4);
-        expect(newValue.data[0].midPrice).toStrictEqual(BigNumber.from(9750));
-        expect(newValue.data[1].midPrice).toStrictEqual(BigNumber.from(9500));
-        expect(newValue.data[2].midPrice).toStrictEqual(BigNumber.from(9750));
-        expect(newValue.data[3].midPrice).toStrictEqual(BigNumber.from(9500));
+        expect(newValue.data[0].marketPrice).toStrictEqual(
+            BigNumber.from(9750)
+        );
+        expect(newValue.data[1].marketPrice).toStrictEqual(
+            BigNumber.from(9500)
+        );
+        expect(newValue.data[2].marketPrice).toStrictEqual(
+            BigNumber.from(9750)
+        );
+        expect(newValue.data[3].marketPrice).toStrictEqual(
+            BigNumber.from(9500)
+        );
     });
 });
