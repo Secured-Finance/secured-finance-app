@@ -1,5 +1,4 @@
 import { configureStore } from '@reduxjs/toolkit';
-import analytics from './analytics';
 import assetPrices from './assetPrices';
 import blockchain from './blockchain';
 import { listenerMiddleware } from './blockchain/reducer';
@@ -9,7 +8,6 @@ import lastError from './lastError';
 import wallet from './wallet';
 
 export const rootReducers = {
-    analytics,
     assetPrices,
     blockchain,
     interactions,
