@@ -114,12 +114,12 @@ export const ActiveTradeTable = ({ data }: { data: Position[] }) => {
             ),
             priceYieldColumnDefinition(
                 columnHelper,
-                'Mid Price',
-                'midPrice',
-                row => row.midPrice,
+                'Market Price',
+                'marketPrice',
+                row => row.marketPrice,
                 'default',
                 'price',
-                'Mid Price is the average price of the best borrowing and lending order unit price.'
+                'Market Price is the volume-weighted average unit price of filled orders at the last block.'
             ),
             columnHelper.display({
                 id: 'actions',

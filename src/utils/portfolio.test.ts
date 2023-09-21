@@ -71,14 +71,14 @@ describe('computeNetValue', () => {
                 currency: wfilBytes32,
                 forwardValue: BigNumber.from('500000000000000000000'),
                 maturity: dec22Fixture.toString(),
-                midPrice: BigNumber.from(8000),
+                marketPrice: BigNumber.from(8000),
             },
             {
                 amount: BigNumber.from('-500000000000000000000'),
                 currency: wfilBytes32,
                 forwardValue: BigNumber.from('-1000000000000000000000'),
                 maturity: dec22Fixture.toString(),
-                midPrice: BigNumber.from(5000),
+                marketPrice: BigNumber.from(5000),
             },
         ];
         expect(computeNetValue(positions, priceMap)).toEqual(-600);
@@ -95,28 +95,28 @@ describe('computeNetValue', () => {
                 currency: wfilBytes32,
                 forwardValue: BigNumber.from('500000000000000000000'),
                 maturity: dec22Fixture.toString(),
-                midPrice: BigNumber.from(8000),
+                marketPrice: BigNumber.from(8000),
             },
             {
                 amount: BigNumber.from('-500000000000000000000'),
                 currency: wfilBytes32,
                 forwardValue: BigNumber.from('-1000000000000000000000'),
                 maturity: dec22Fixture.toString(),
-                midPrice: BigNumber.from(5000),
+                marketPrice: BigNumber.from(5000),
             },
             {
                 amount: BigNumber.from('-500000000'),
                 forwardValue: BigNumber.from('-1000000000'),
                 currency: wbtcBytes32,
                 maturity: dec22Fixture.toString(),
-                midPrice: BigNumber.from(50),
+                marketPrice: BigNumber.from(50),
             },
             {
                 amount: BigNumber.from('505000000'),
                 forwardValue: BigNumber.from('505000000'),
                 currency: wbtcBytes32,
                 maturity: dec22Fixture.toString(),
-                midPrice: BigNumber.from(100),
+                marketPrice: BigNumber.from(100),
             },
         ];
         expect(
