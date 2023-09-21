@@ -806,28 +806,28 @@ export const positions: Position[] = [
         currency: wfilBytes32,
         forwardValue: BigNumber.from('500000000000000000000'),
         maturity: jun23Fixture.toString(),
-        midPrice: BigNumber.from(8000),
+        marketPrice: BigNumber.from(8000),
     },
     {
         amount: BigNumber.from('-500000000000000000000'),
         currency: wfilBytes32,
         forwardValue: BigNumber.from('-1000000000000000000000'),
         maturity: mar23Fixture.toString(),
-        midPrice: BigNumber.from(5000),
+        marketPrice: BigNumber.from(5000),
     },
     {
         amount: BigNumber.from('0'),
         forwardValue: BigNumber.from('-1040000000'),
         currency: wbtcBytes32,
         maturity: jun23Fixture.toString(),
-        midPrice: BigNumber.from(0),
+        marketPrice: BigNumber.from(0),
     },
     {
         amount: BigNumber.from('0'),
         forwardValue: BigNumber.from('505000000'),
         currency: wbtcBytes32,
         maturity: dec22Fixture.toString(),
-        midPrice: BigNumber.from(0),
+        marketPrice: BigNumber.from(0),
     },
 ];
 

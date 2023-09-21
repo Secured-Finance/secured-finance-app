@@ -6,7 +6,7 @@ import { useDispatch } from 'react-redux';
 import { Footer } from 'src/components/atoms';
 import { Header } from 'src/components/organisms';
 import { Layout } from 'src/components/templates';
-import { setMidPrice } from 'src/store/analytics';
+import { setMarketPrice } from 'src/store/analytics';
 import { updateChainError, updateLatestBlock } from 'src/store/blockchain';
 import { setMaturity } from 'src/store/landingOrderForm';
 import { connectEthWallet, updateEthBalance } from 'src/store/wallet';
@@ -157,11 +157,11 @@ export const withEthBalance = (Story: StoryFn) => {
     return <Story />;
 };
 
-export const withMidPrice = (Story: StoryFn) => {
+export const withMarketPrice = (Story: StoryFn) => {
     const dispatch = useDispatch();
     useEffect(() => {
         const timeoutId = setTimeout(() => {
-            dispatch(setMidPrice(9780));
+            dispatch(setMarketPrice(9780));
         }, 300);
 
         return () => clearTimeout(timeoutId);
