@@ -144,7 +144,7 @@ const WithBanner = ({
         <div className='flex flex-col justify-center gap-5'>
             {market && (
                 <Alert severity='info'>
-                    <div className='typography-caption flex flex-row gap-3 text-white'>
+                    <div className='typography-caption text-white'>
                         <p>
                             {`Itayose market for ${ccy}-${getUTCMonthYear(
                                 market.maturity
@@ -157,15 +157,17 @@ const WithBanner = ({
                                     day: 'numeric',
                                 }
                             ).format(market.utcOpeningDate * 1000)}`}
+                            <span className='pl-4'>
+                                <Link href='itayose' passHref>
+                                    <a
+                                        href='_'
+                                        className='text-planetaryPurple underline'
+                                    >
+                                        Place Order Now
+                                    </a>
+                                </Link>
+                            </span>
                         </p>
-                        <Link href='itayose' passHref>
-                            <a
-                                href='_'
-                                className='text-planetaryPurple underline'
-                            >
-                                Place Order Now
-                            </a>
-                        </Link>
                     </div>
                 </Alert>
             )}
