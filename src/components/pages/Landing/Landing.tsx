@@ -1,8 +1,11 @@
 import { OrderSide } from '@secured-finance/sf-client';
+import { getUTCMonthYear } from '@secured-finance/sf-core';
 import queries from '@secured-finance/sf-graph-client/dist/graphclients';
+import Link from 'next/link';
 import { useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { ViewType } from 'src/components/atoms';
+import { Alert } from 'src/components/molecules';
 import {
     AdvancedLending,
     LendingCard,
@@ -10,6 +13,7 @@ import {
 } from 'src/components/organisms';
 import { SimpleAdvancedView } from 'src/components/templates';
 import {
+    LendingMarket,
     RateType,
     baseContracts,
     emptyCollateralBook,
@@ -27,6 +31,7 @@ import {
 } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
 import { OrderType } from 'src/types';
+import { CurrencySymbol } from 'src/utils';
 import { Maturity } from 'src/utils/entities';
 import { useAccount } from 'wagmi';
 
@@ -54,6 +59,10 @@ export const Landing = ({ view }: { view?: ViewType }) => {
         market => market.isOpened
     );
 
+    const itayoseMarket = Object.entries(lendingContracts).find(
+        ([, market]) => market.isPreOrderPeriod || market.isItayosePeriod
+    )?.[1];
+
     const unitPrices = useLoanValues(
         lendingContracts,
         side === OrderSide.BORROW ? RateType.Borrow : RateType.Lend,
@@ -77,28 +86,34 @@ export const Landing = ({ view }: { view?: ViewType }) => {
         <SimpleAdvancedView
             title='OTC Lending'
             simpleComponent={
-                <div className='flex flex-row items-center justify-center'>
-                    <LendingCard
+                <WithBanner ccy={currency} market={itayoseMarket}>
+                    <div className='flex flex-row items-center justify-center'>
+                        <LendingCard
+                            collateralBook={collateralBook}
+                            maturitiesOptionList={maturityOptionList}
+                            marketPrice={marketPrice}
+                        />
+                        <YieldChart
+                            asset={currency}
+                            isBorrow={side === OrderSide.BORROW}
+                            rates={Array.from(unitPrices.values()).map(
+                                v => v.apr
+                            )}
+                            maturitiesOptionList={maturityOptionList}
+                            dailyVolumes={dailyVolumes.data ?? []}
+                        />
+                    </div>
+                </WithBanner>
+            }
+            advanceComponent={
+                <WithBanner ccy={currency} market={itayoseMarket}>
+                    <AdvancedLending
                         collateralBook={collateralBook}
+                        rates={Array.from(unitPrices.values()).map(v => v.apr)}
                         maturitiesOptionList={maturityOptionList}
                         marketPrice={marketPrice}
                     />
-                    <YieldChart
-                        asset={currency}
-                        isBorrow={side === OrderSide.BORROW}
-                        rates={Array.from(unitPrices.values()).map(v => v.apr)}
-                        maturitiesOptionList={maturityOptionList}
-                        dailyVolumes={dailyVolumes.data ?? []}
-                    />
-                </div>
-            }
-            advanceComponent={
-                <AdvancedLending
-                    collateralBook={collateralBook}
-                    rates={Array.from(unitPrices.values()).map(v => v.apr)}
-                    maturitiesOptionList={maturityOptionList}
-                    marketPrice={marketPrice}
-                />
+                </WithBanner>
             }
             initialView={view ?? lastView}
             onModeChange={v => {
@@ -113,5 +128,48 @@ export const Landing = ({ view }: { view?: ViewType }) => {
             }}
             pageName='lending-page'
         />
+    );
+};
+
+const WithBanner = ({
+    ccy,
+    market,
+    children,
+}: {
+    ccy: CurrencySymbol;
+    market: LendingMarket | undefined;
+    children: React.ReactNode;
+}) => {
+    return (
+        <div className='flex flex-col justify-center gap-5'>
+            {market && (
+                <Alert severity='info'>
+                    <div className='typography-caption flex flex-row gap-3 text-white'>
+                        <p>
+                            {`Itayose market for ${ccy}-${getUTCMonthYear(
+                                market.maturity
+                            )} is now open until ${Intl.DateTimeFormat(
+                                undefined,
+                                {
+                                    weekday: 'long',
+                                    year: 'numeric',
+                                    month: 'long',
+                                    day: 'numeric',
+                                }
+                            ).format(market.utcOpeningDate * 1000)}`}
+                        </p>
+                        <Link href='itayose' passHref>
+                            <a
+                                href='_'
+                                className='text-planetaryPurple underline'
+                            >
+                                Place Order Now
+                            </a>
+                        </Link>
+                    </div>
+                </Alert>
+            )}
+            {children}
+        </div>
     );
 };
