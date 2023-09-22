@@ -1,4 +1,5 @@
 export * from './AdvancedLendingTopBar';
+export * from './Alert';
 export * from './AmountCard';
 export * from './AssetDisclosure';
 export * from './AssetSelector';
