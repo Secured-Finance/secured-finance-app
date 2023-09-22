@@ -76,7 +76,7 @@ const Toolbar = ({
 
     return (
         <GradientBox shape='rectangle'>
-            <div className='flex min-w-fit flex-row items-center justify-between gap-20 px-6 py-3'>
+            <div className='flex min-w-fit flex-row items-center justify-start gap-20 px-6 py-3 tablet:justify-between'>
                 <HorizontalAssetSelector
                     assetList={assetList}
                     selectedAsset={selectedAsset}
@@ -85,7 +85,7 @@ const Toolbar = ({
                     onAssetChange={handleAssetChange}
                     onTermChange={handleTermChange}
                 />
-                <div className='flex w-full flex-row items-center justify-between'>
+                <div className='hidden w-full flex-row items-center justify-between tablet:flex'>
                     <div>
                         <MarketTab
                             name={nextMarketPhase}
