@@ -149,7 +149,7 @@ const WithBanner = ({
                             {`Itayose market for ${ccy}-${getUTCMonthYear(
                                 market.maturity
                             )} is now open until ${Intl.DateTimeFormat(
-                                undefined,
+                                'en-US',
                                 {
                                     weekday: 'long',
                                     year: 'numeric',
