@@ -25,7 +25,15 @@ import {
 
 const columnHelper = createColumnHelper<Position>();
 
-export const ActiveTradeTable = ({ data }: { data: Position[] }) => {
+const DEFAULT_HEIGHT = 180;
+
+export const ActiveTradeTable = ({
+    data,
+    height,
+}: {
+    data: Position[];
+    height?: number;
+}) => {
     const [unwindDialogData, setUnwindDialogData] = useState<{
         maturity: Maturity;
         amount: Amount;
@@ -186,7 +194,7 @@ export const ActiveTradeTable = ({ data }: { data: Position[] }) => {
                     name: 'active-trade-table',
                     stickyColumns: new Set<number>([6]),
                     pagination: {
-                        containerHeight: 150,
+                        containerHeight: height || DEFAULT_HEIGHT,
                         getMoreData: () => {},
                         totalData: data.length,
                     },
