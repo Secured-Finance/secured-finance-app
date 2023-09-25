@@ -9,6 +9,9 @@ export default {
     args: {
         collateralBook: collateralBook37,
     },
+    parameters: {
+        connected: true,
+    },
     decorators: [withWalletProvider],
 } as Meta<typeof CollateralOrganism>;
 
