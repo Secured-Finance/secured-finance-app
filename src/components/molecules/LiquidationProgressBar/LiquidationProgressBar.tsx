@@ -12,7 +12,6 @@ const getInformationText = (
     liquidationPercentage: number,
     collateralThreshold: number
 ) => {
-    if (liquidationPercentage === 0) return;
     return (
         <div className='flex flex-col gap-4'>
             <div>
@@ -35,7 +34,7 @@ const getInformationText = (
 };
 
 export const LiquidationProgressBar = ({
-    liquidationPercentage = 0,
+    liquidationPercentage,
     collateralThreshold,
 }: LiquidationProgressBarProps) => {
     let padding =
@@ -57,11 +56,7 @@ export const LiquidationProgressBar = ({
                 <span className='typography-body-2 text-slateGray'>
                     Liquidation Risk
                 </span>
-                <span
-                    className={`typography-body-1 ${
-                        liquidationPercentage === 0 ? 'text-white' : info.color
-                    }`}
-                >
+                <span className={`typography-body-1 ${info.color}`}>
                     {info.risk}
                 </span>
             </div>
@@ -74,35 +69,29 @@ export const LiquidationProgressBar = ({
                     <Tick className='float-right h-5px w-2'></Tick>
                 </div>
                 <div className='h-5px w-full rounded-full bg-gradient-to-r from-progressBarStart from-0% via-progressBarVia via-45% to-progressBarEnd to-80%'></div>
-                {liquidationPercentage === 0 ? (
-                    <div className='typography-caption mt-1 text-white'>
-                        N/A
-                    </div>
-                ) : (
-                    <div className='mt-1 flex w-full flex-row items-center gap-1'>
-                        <div className='typography-caption'>
-                            <span
-                                className={`whitespace-pre font-semibold ${info.color}`}
-                            >
-                                {percentFormat(
-                                    collateralThreshold > liquidationPercentage
-                                        ? collateralThreshold -
-                                              liquidationPercentage
-                                        : 0
-                                )}
-                            </span>
-                            <span className='text-planetaryPurple'>
-                                {` threshold to liquidation`}
-                            </span>
-                        </div>
-                        <Tooltip>
-                            {getInformationText(
-                                liquidationPercentage,
-                                collateralThreshold
+                <div className='mt-1 flex w-full flex-row items-center gap-1'>
+                    <div className='typography-caption'>
+                        <span
+                            className={`whitespace-pre font-semibold ${info.color}`}
+                        >
+                            {percentFormat(
+                                collateralThreshold > liquidationPercentage
+                                    ? collateralThreshold -
+                                          liquidationPercentage
+                                    : 0
                             )}
-                        </Tooltip>
+                        </span>
+                        <span className='text-planetaryPurple'>
+                            {` threshold to liquidation`}
+                        </span>
                     </div>
-                )}
+                    <Tooltip>
+                        {getInformationText(
+                            liquidationPercentage,
+                            collateralThreshold
+                        )}
+                    </Tooltip>
+                </div>
             </div>
         </div>
     );

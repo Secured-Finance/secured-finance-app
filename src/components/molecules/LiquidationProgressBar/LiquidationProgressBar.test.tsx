@@ -9,8 +9,6 @@ describe('LiquidationProgressBar Component', () => {
         render(<Default />);
 
         expect(screen.getByText('Liquidation Risk')).toBeInTheDocument();
-        expect(screen.getAllByText('N/A')).toHaveLength(2);
-
         expect(screen.getByTestId('liquidation-progress-bar-tick')).toHaveStyle(
             'width: calc(100% * 0 + 4px )'
         );

@@ -23,7 +23,6 @@ describe('CollateralTabRightPane component', () => {
         ).toBeInTheDocument();
         expect(screen.getByText('Collateral Utilization')).toBeInTheDocument();
         expect(screen.getByText('Liquidation Risk')).toBeInTheDocument();
-        expect(screen.getAllByText('N/A')).toHaveLength(4);
     });
 
     it('should render the progress bars with appropriate values', () => {

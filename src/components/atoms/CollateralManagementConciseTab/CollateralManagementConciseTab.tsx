@@ -50,13 +50,7 @@ export const CollateralManagementConciseTab = ({
             <div className='mx-4 mb-4 mt-5 flex flex-col'>
                 <div className='typography-caption mb-1 flex flex-row justify-between'>
                     <span className='text-grayScale'>Liquidation Risk</span>
-                    <span
-                        className={`${
-                            collateralCoverage === 0 ? 'text-white' : info.color
-                        }`}
-                    >
-                        {info.risk}
-                    </span>
+                    <span className={`${info.color}`}>{info.risk}</span>
                 </div>
                 <div
                     style={{
@@ -82,9 +76,7 @@ export const CollateralManagementConciseTab = ({
 };
 
 export const getLiquidationInformation = (liquidationPercentage: number) => {
-    if (liquidationPercentage === 0) {
-        return { color: 'text-progressBarStart', risk: 'N/A' };
-    } else if (liquidationPercentage < 40) {
+    if (liquidationPercentage < 40) {
         return { color: 'text-progressBarStart', risk: 'Low' };
     } else if (liquidationPercentage >= 40 && liquidationPercentage < 60) {
         return { color: 'text-progressBarVia', risk: 'Medium' };

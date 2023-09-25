@@ -14,7 +14,6 @@ const getInformationText = (
     borrowLimit: number,
     collateralThreshold: number
 ) => {
-    if (totalCollateralInUSD === 0) return;
     return (
         <div className='flex flex-col gap-4'>
             <div>
@@ -36,9 +35,9 @@ const getInformationText = (
 };
 
 export const CollateralProgressBar = ({
-    collateralCoverage = 0,
-    totalCollateralInUSD = 0,
-    collateralThreshold = 0,
+    collateralCoverage,
+    totalCollateralInUSD,
+    collateralThreshold,
 }: CollateralProgressBarProps) => {
     collateralCoverage /= 100.0;
 
@@ -63,9 +62,7 @@ export const CollateralProgressBar = ({
                     Collateral Utilization
                 </span>
                 <span className='typography-body-1 text-white'>
-                    {totalCollateralInUSD === 0
-                        ? 'N/A'
-                        : percentFormat(collateralCoverage, 1)}
+                    {percentFormat(collateralCoverage, 1)}
                 </span>
             </div>
             <div className='flex flex-col gap-[6px]'>
@@ -87,30 +84,24 @@ export const CollateralProgressBar = ({
                         data-testid='collateral-progress-bar-track'
                     ></div>
                 </div>
-                {totalCollateralInUSD === 0 ? (
-                    <div className='typography-caption mt-1 text-white'>
-                        N/A
+                <div className='mt-1 flex w-full flex-row items-center gap-1'>
+                    <div className='typography-caption flex flex-row text-planetaryPurple'>
+                        <span className='whitespace-pre font-semibold text-nebulaTeal'>
+                            {`${usdFormat(availableToBorrow, 2)} `}
+                        </span>
+                        <span>{`of ${usdFormat(
+                            borrowLimit,
+                            2
+                        )} available`}</span>
                     </div>
-                ) : (
-                    <div className='mt-1 flex w-full flex-row items-center gap-1'>
-                        <div className='typography-caption flex flex-row text-planetaryPurple'>
-                            <span className='whitespace-pre font-semibold text-nebulaTeal'>
-                                {`${usdFormat(availableToBorrow, 2)} `}
-                            </span>
-                            <span>{`of ${usdFormat(
-                                borrowLimit,
-                                2
-                            )} available`}</span>
-                        </div>
-                        <Tooltip>
-                            {getInformationText(
-                                totalCollateralInUSD,
-                                borrowLimit,
-                                collateralThreshold
-                            )}
-                        </Tooltip>
-                    </div>
-                )}
+                    <Tooltip>
+                        {getInformationText(
+                            totalCollateralInUSD,
+                            borrowLimit,
+                            collateralThreshold
+                        )}
+                    </Tooltip>
+                </div>
             </div>
         </div>
     );

@@ -9,8 +9,6 @@ describe('CollateralProgressBar Component', () => {
         render(<Default />);
 
         expect(screen.getByText('Collateral Utilization')).toBeInTheDocument();
-        expect(screen.getAllByText('N/A')).toHaveLength(2);
-
         expect(screen.getByTestId('collateral-progress-bar-tick')).toHaveStyle(
             'width: calc(100% * 0 + 4px )'
         );

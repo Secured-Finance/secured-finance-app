@@ -9,7 +9,6 @@ describe('CollateralTab Component', () => {
     it('should render CollateralTab', () => {
         render(<Default />, { preloadedState: preloadedEthBalance });
         expect(screen.getByText('Collateral Balance')).toBeInTheDocument();
-        expect(screen.getByText('$0.00')).toBeInTheDocument();
         expect(
             screen.getByText(
                 'Connect your wallet to see your deposited collateral balance.'
