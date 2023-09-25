@@ -102,7 +102,7 @@ describe('DepositCollateral component', () => {
             expect(screen.getByText('Transaction hash')).toBeInTheDocument();
             expect(screen.getByText('0xb98bd7...65e4')).toBeInTheDocument();
             expect(screen.getByText('Amount')).toBeInTheDocument();
-            expect(screen.getByText('37.5')).toBeInTheDocument();
+            expect(screen.getByText('37.5 USDC')).toBeInTheDocument();
 
             expect(
                 screen.getByTestId('dialog-action-button')
