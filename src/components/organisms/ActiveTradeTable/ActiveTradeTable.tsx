@@ -25,7 +25,7 @@ import {
 
 const columnHelper = createColumnHelper<Position>();
 
-const DEFAULT_HEIGHT = 180;
+const DEFAULT_HEIGHT = 300;
 
 export const ActiveTradeTable = ({
     data,
