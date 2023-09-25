@@ -20,6 +20,7 @@ import {
     ZERO_BN,
     amountFormatterFromBase,
     amountFormatterToBase,
+    formatAmount,
 } from 'src/utils';
 import { CollateralEvents, trackCollateralEvent } from 'src/utils/events';
 import { useAccount } from 'wagmi';
@@ -254,9 +255,11 @@ export const WithdrawCollateral = ({
                                     ],
                                     [
                                         'Amount',
-                                        amountFormatterFromBase[asset](
-                                            collateral ?? ZERO_BN
-                                        ).toString(),
+                                        `${formatAmount(
+                                            amountFormatterFromBase[asset](
+                                                collateral ?? ZERO_BN
+                                            )
+                                        )} ${asset}`,
                                     ],
                                 ]}
                                 txHash={txHash}
