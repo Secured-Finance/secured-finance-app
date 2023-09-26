@@ -349,6 +349,12 @@ export const OrderBookWidget = ({
 
     return (
         <div className='flex h-full w-full flex-col justify-start gap-y-3 rounded-b-2xl border border-white-10 bg-cardBackground/60 px-3 shadow-tab'>
+            <div className='flex h-9 w-full flex-row items-center gap-3 border-t border-neutral-1 bg-black-20 px-4'>
+                <span className='h-2 w-2 rounded-full bg-red'></span>
+                <div className='typography-caption-2 w-full text-planetaryPurple'>
+                    Orderbook paused for delisting
+                </div>
+            </div>
             <div className='-mx-3 h-[60px] w-1/2'>
                 <NavTab text='Order Book' active={true} />
             </div>

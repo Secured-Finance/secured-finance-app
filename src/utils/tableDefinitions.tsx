@@ -14,6 +14,8 @@ import { ColorFormat } from 'src/types';
 import { formatTimestamp } from 'src/utils';
 import { currencyMap, hexToCurrencySymbol } from './currencyList';
 import { LoanValue, Maturity } from './entities';
+import ErrorOutlinedIcon from 'src/assets/icons/error-outlined.svg';
+import { Tooltip } from 'src/components/templates';
 
 export const tableHeaderDefinition =
     <TData,>(title: string, titleHint?: string) =>
@@ -301,6 +303,11 @@ export const contractColumnDefinition = <
                     ccyByte32={info.row.original.currency}
                     variant={variant}
                 />
+                <Tooltip
+                    iconElement={<ErrorOutlinedIcon className='h-4 w-4' />}
+                >
+                    Delisting
+                </Tooltip>
             </div>
         ),
         header: tableHeaderDefinition(title),
