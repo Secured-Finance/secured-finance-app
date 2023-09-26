@@ -22,6 +22,8 @@ import {
     priceYieldColumnDefinition,
     tableHeaderDefinition,
 } from 'src/utils/tableDefinitions';
+import ErrorIcon from 'src/assets/icons/error.svg';
+import { Separator } from 'src/components/atoms';
 
 const columnHelper = createColumnHelper<Position>();
 
@@ -188,6 +190,24 @@ export const ActiveTradeTable = ({ data }: { data: Position[] }) => {
                 }}
             />
             <div className='typography-dropdown-selection-label mt-16 w-full rounded-xl bg-cardBackground/60 text-justify text-secondary7 '>
+                <div className='flex p-3'>
+                    <ErrorIcon className='mr-1 h-4 w-4' />
+                    <p>
+                        <span className='flex text-red'>
+                            Delisting Contracts
+                        </span>
+                        - Auto-rolls will cease after the contract&apos;s
+                        maturity date. Borrowers are recommended to repay within
+                        7 days following maturity to avoid any fees (7% penalty
+                        will be applied for non-repayment). Lenders can redeem
+                        their funds 7 days after the maturity date. Be aware
+                        that some order books might take up to 2 years to fully
+                        mature. It&apos;s crucial to act promptly to prevent any
+                        penalties. Learn More
+                    </p>
+                </div>
+
+                <Separator color='neutral-3'></Separator>
                 <p className='p-3'>
                     Secured Finance lending contract includes an auto-roll
                     feature. If no action is taken by the user prior to the

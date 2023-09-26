@@ -19,3 +19,8 @@ export default {
 const Template: StoryFn<typeof Alert> = args => <Alert {...args} />;
 
 export const Default = Template.bind({});
+
+export const Error = Template.bind({});
+Error.args = {
+    severity: 'error',
+};
