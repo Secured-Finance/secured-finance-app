@@ -21,6 +21,7 @@ import {
     ZERO_BN,
     amountFormatterFromBase,
     amountFormatterToBase,
+    formatAmount,
 } from 'src/utils';
 import { trackCollateralEvent } from 'src/utils/events';
 
@@ -257,9 +258,11 @@ export const DepositCollateral = ({
                                     ],
                                     [
                                         'Amount',
-                                        amountFormatterFromBase[asset](
-                                            collateral ?? ZERO_BN
-                                        ).toString(),
+                                        `${formatAmount(
+                                            amountFormatterFromBase[asset](
+                                                collateral ?? ZERO_BN
+                                            )
+                                        )} ${asset}`,
                                     ],
                                 ]}
                                 txHash={txHash}

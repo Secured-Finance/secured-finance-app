@@ -161,4 +161,37 @@ describe('WithdrawCollateral component', () => {
             )
         );
     });
+
+    it('should reach success screen when transaction receipt is received', async () => {
+        const onClose = jest.fn();
+        render(<Default onClose={onClose} source='Source of Withdrawal' />, {
+            preloadedState,
+        });
+
+        fireEvent.click(screen.getByTestId('collateral-selector-button'));
+        fireEvent.click(screen.getByTestId('option-2'));
+        fireEvent.click(screen.getByTestId(75));
+
+        const button = screen.getByTestId('dialog-action-button');
+        fireEvent.click(button);
+
+        await waitFor(() => {
+            expect(screen.getByText('Success!')).toBeInTheDocument();
+            expect(
+                screen.getByText(
+                    'You have successfully withdrawn collateral on Secured Finance.'
+                )
+            ).toBeInTheDocument();
+            expect(screen.getByText('Status')).toBeInTheDocument();
+            expect(screen.getByText('Complete')).toBeInTheDocument();
+            expect(screen.getByText('Amount')).toBeInTheDocument();
+            expect(screen.getByText('37.5 USDC')).toBeInTheDocument();
+
+            expect(
+                screen.getByTestId('dialog-action-button')
+            ).toHaveTextContent('OK');
+        });
+
+        await waitFor(() => expect(onClose).not.toHaveBeenCalled());
+    });
 });
