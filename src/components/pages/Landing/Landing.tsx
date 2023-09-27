@@ -1,7 +1,7 @@
 import { OrderSide } from '@secured-finance/sf-client';
-import { getUTCMonthYear } from '@secured-finance/sf-core';
+// import { getUTCMonthYear } from '@secured-finance/sf-core';
 import queries from '@secured-finance/sf-graph-client/dist/graphclients';
-import Link from 'next/link';
+// import Link from 'next/link';
 import { useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { ViewType } from 'src/components/atoms';
@@ -132,7 +132,7 @@ export const Landing = ({ view }: { view?: ViewType }) => {
 };
 
 const WithBanner = ({
-    ccy,
+    // ccy,
     market,
     children,
 }: {
@@ -143,33 +143,45 @@ const WithBanner = ({
     return (
         <div className='flex flex-col justify-center gap-5'>
             {market && (
-                <Alert severity='info'>
-                    <div className='typography-caption text-white'>
-                        <p>
-                            {`Itayose market for ${ccy}-${getUTCMonthYear(
-                                market.maturity
-                            )} is now open until ${Intl.DateTimeFormat(
-                                'en-US',
-                                {
-                                    weekday: 'long',
-                                    year: 'numeric',
-                                    month: 'long',
-                                    day: 'numeric',
-                                }
-                            ).format(market.utcOpeningDate * 1000)}`}
-                            <span className='pl-4'>
-                                <Link href='itayose' passHref>
-                                    <a
-                                        href='_'
-                                        className='text-planetaryPurple underline'
-                                    >
-                                        Place Order Now
-                                    </a>
-                                </Link>
-                            </span>
-                        </p>
-                    </div>
+                <Alert severity='error'>
+                    <p className='text-white'>
+                        Please note that all contracts for WFIL will be delisted
+                        on Secured Finance.{' '}
+                        <a
+                            className='text-secondary7'
+                            href='https://docs.secured.finance/product-guide/unique-features/auto-rolling/price-discovery-for-auto-rolling'
+                        >
+                            Learn more
+                        </a>
+                    </p>
                 </Alert>
+                // <Alert severity='info'>
+                //     <div className='typography-caption text-white'>
+                //         <p>
+                //             {`Itayose market for ${ccy}-${getUTCMonthYear(
+                //                 market.maturity
+                //             )} is now open until ${Intl.DateTimeFormat(
+                //                 'en-US',
+                //                 {
+                //                     weekday: 'long',
+                //                     year: 'numeric',
+                //                     month: 'long',
+                //                     day: 'numeric',
+                //                 }
+                //             ).format(market.utcOpeningDate * 1000)}`}
+                //             <span className='pl-4'>
+                //                 <Link href='itayose' passHref>
+                //                     <a
+                //                         href='_'
+                //                         className='text-planetaryPurple underline'
+                //                     >
+                //                         Place Order Now
+                //                     </a>
+                //                 </Link>
+                //             </span>
+                //         </p>
+                //     </div>
+                // </Alert>
             )}
             {children}
         </div>

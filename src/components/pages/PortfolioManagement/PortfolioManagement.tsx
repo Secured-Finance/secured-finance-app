@@ -2,7 +2,7 @@ import queries from '@secured-finance/sf-graph-client/dist/graphclients';
 import { useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Spinner } from 'src/components/atoms';
-import { HorizontalTab, StatsBar } from 'src/components/molecules';
+import { Alert, HorizontalTab, StatsBar } from 'src/components/molecules';
 import {
     ActiveTradeTable,
     CollateralOrganism,
@@ -159,6 +159,18 @@ export const PortfolioManagement = () => {
 
     return (
         <Page title='Portfolio Management' name='portfolio-management'>
+            <Alert severity='error'>
+                <p className='text-white'>
+                    Please note that all contracts for WFIL will be delisted on
+                    Secured Finance.{' '}
+                    <a
+                        className='text-secondary7'
+                        href='https://docs.secured.finance/product-guide/unique-features/auto-rolling/price-discovery-for-auto-rolling'
+                    >
+                        Learn more
+                    </a>
+                </p>
+            </Alert>
             <TwoColumns>
                 <div className='flex flex-col gap-6'>
                     <StatsBar
