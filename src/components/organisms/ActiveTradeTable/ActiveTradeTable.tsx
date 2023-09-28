@@ -25,7 +25,15 @@ import {
 
 const columnHelper = createColumnHelper<Position>();
 
-export const ActiveTradeTable = ({ data }: { data: Position[] }) => {
+const DEFAULT_HEIGHT = 300;
+
+export const ActiveTradeTable = ({
+    data,
+    height,
+}: {
+    data: Position[];
+    height?: number;
+}) => {
     const [unwindDialogData, setUnwindDialogData] = useState<{
         maturity: Maturity;
         amount: Amount;
@@ -185,6 +193,11 @@ export const ActiveTradeTable = ({ data }: { data: Position[] }) => {
                 options={{
                     name: 'active-trade-table',
                     stickyColumns: new Set<number>([6]),
+                    pagination: {
+                        containerHeight: height || DEFAULT_HEIGHT,
+                        getMoreData: () => {},
+                        totalData: data.length,
+                    },
                 }}
             />
             <div className='typography-dropdown-selection-label mt-16 w-full rounded-xl bg-cardBackground/60 text-justify text-secondary7 '>
