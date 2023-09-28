@@ -14,8 +14,6 @@ import { ColorFormat } from 'src/types';
 import { formatTimestamp } from 'src/utils';
 import { currencyMap, hexToCurrencySymbol } from './currencyList';
 import { LoanValue, Maturity } from './entities';
-import ErrorOutlinedIcon from 'src/assets/icons/error-outlined.svg';
-import { Tooltip } from 'src/components/templates';
 
 export const tableHeaderDefinition =
     <TData,>(title: string, titleHint?: string) =>
@@ -296,20 +294,17 @@ export const contractColumnDefinition = <
 
     return columnHelper.accessor(assessorFn, {
         id: id,
-        cell: info => (
-            <div className='flex justify-center'>
-                <TableContractCell
-                    maturity={new Maturity(info.getValue())}
-                    ccyByte32={info.row.original.currency}
-                    variant={variant}
-                />
-                <Tooltip
-                    iconElement={<ErrorOutlinedIcon className='h-4 w-4' />}
-                >
-                    Delisting
-                </Tooltip>
-            </div>
-        ),
+        cell: info => {
+            return (
+                <div className='flex justify-center'>
+                    <TableContractCell
+                        maturity={new Maturity(info.getValue())}
+                        ccyByte32={info.row.original.currency}
+                        variant={variant}
+                    />
+                </div>
+            );
+        },
         header: tableHeaderDefinition(title),
         sortingFn: contractSortingFn,
     });

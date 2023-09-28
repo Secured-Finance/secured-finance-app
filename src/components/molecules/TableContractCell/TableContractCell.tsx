@@ -2,8 +2,10 @@ import { getUTCMonthYear } from '@secured-finance/sf-core';
 import classNames from 'classnames';
 import { useMemo } from 'react';
 import { CurrencyIcon } from 'src/components/atoms';
+import { Tooltip } from 'src/components/templates';
 import { currencyMap, hexToCurrencySymbol } from 'src/utils';
 import { Maturity } from 'src/utils/entities';
+import ErrorOutlinedIcon from 'src/assets/icons/error-outlined.svg';
 
 export const TableContractCell = ({
     maturity,
@@ -51,6 +53,13 @@ export const TableContractCell = ({
                 <span className='typography-caption-2 text-neutral-6'>
                     {contract}
                 </span>
+                {ccy === 'WFIL' && (
+                    <Tooltip
+                        iconElement={<ErrorOutlinedIcon className='h-4 w-4' />}
+                    >
+                        Delisting
+                    </Tooltip>
+                )}
             </div>
             {variant !== 'compact' && variant !== 'contractOnly' ? (
                 <div
