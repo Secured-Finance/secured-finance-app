@@ -104,8 +104,8 @@ const Toolbar = ({
     );
 };
 
-const DEFAULT_ORDERBOOK_DEPTH = 12;
-const DEFAULT_ORDERBOOK_DEPTH_FULL = 26;
+const DEFAULT_ORDERBOOK_DEPTH = 100;
+const DEFAULT_ORDERBOOK_DEPTH_FULL = 200;
 
 export const Itayose = () => {
     const { address } = useAccount();
