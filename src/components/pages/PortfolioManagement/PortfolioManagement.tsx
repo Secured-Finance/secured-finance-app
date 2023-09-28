@@ -164,7 +164,7 @@ export const PortfolioManagement = () => {
                     Please note that all contracts for WFIL will be delisted on
                     Secured Finance.{' '}
                     <a
-                        className='text-secondary7'
+                        className='text-secondary7 underline'
                         href='https://docs.secured.finance/product-guide/unique-features/auto-rolling/price-discovery-for-auto-rolling'
                     >
                         Learn more
