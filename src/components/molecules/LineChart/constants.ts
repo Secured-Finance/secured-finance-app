@@ -25,7 +25,7 @@ export const getData = (
     rates: Rate[],
     label: string,
     labels: string[],
-    itayoseMarketIndex?: number
+    itayoseMarketIndex: number
 ): ChartData<'line'> => {
     return {
         labels: labels,
@@ -35,15 +35,13 @@ export const getData = (
                 data: refineArray(rates),
                 segment: {
                     borderColor: ctx =>
-                        ctx.p1.parsed.x === itayoseMarketIndex &&
-                        itayoseMarketIndex
+                        ctx.p1.parsed.x === itayoseMarketIndex
                             ? 'white'
                             : getCurveGradient(
                                   ctx as unknown as ScriptableContext<'line'>
                               ),
                     borderDash: ctx =>
-                        ctx.p1.parsed.x === itayoseMarketIndex &&
-                        itayoseMarketIndex
+                        ctx.p1.parsed.x === itayoseMarketIndex
                             ? [5, 5]
                             : undefined,
                 },
