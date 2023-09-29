@@ -9,9 +9,12 @@ import {
 import { RootState } from 'src/store/types';
 import { Rate } from 'src/utils';
 import { LoanValue, Maturity } from 'src/utils/entities';
+import { useRouter } from 'next/router';
 
 export const LineChartTab = () => {
     const dispatch = useDispatch();
+    const router = useRouter();
+
     const { side, maturity, currency } = useSelector((state: RootState) =>
         selectLandingOrderForm(state.landingOrderForm)
     );
@@ -41,6 +44,7 @@ export const LineChartTab = () => {
             maturityList.push({
                 label: obj.name,
                 maturity: obj.maturity,
+                isPreOrderPeriod: obj.isPreOrderPeriod || obj.isItayosePeriod,
             });
             if (obj.isItayosePeriod || obj.isPreOrderPeriod) {
                 rates.push(
@@ -80,9 +84,12 @@ export const LineChartTab = () => {
                     type='line'
                     data={data}
                     maturityList={maturityList}
-                    handleChartClick={maturity =>
-                        dispatch(setMaturity(maturity))
-                    }
+                    handleChartClick={(maturity, isPreOrderPeriod) => {
+                        dispatch(setMaturity(maturity));
+                        if (isPreOrderPeriod) {
+                            router.push('/itayose');
+                        }
+                    }}
                     maturity={new Maturity(maturity)}
                 ></LineChart>
             )}
@@ -93,4 +100,5 @@ export const LineChartTab = () => {
 export type MaturityListItem = {
     label: string;
     maturity: number;
+    isPreOrderPeriod: boolean;
 };

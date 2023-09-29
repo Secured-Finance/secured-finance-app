@@ -60,7 +60,7 @@ export type LineChartProps = {
     data: ChartData<'line'>;
     maturityList: MaturityListItem[];
     maturity: Maturity;
-    handleChartClick: (maturity: number) => void;
+    handleChartClick: (maturity: number, isPreOrderPeriod: boolean) => void;
 } & ChartProps;
 
 export const LineChart = ({
@@ -127,7 +127,10 @@ export const LineChart = ({
                 element => element.label === label
             );
             if (selectedMaturity) {
-                handleChartClick(selectedMaturity.maturity);
+                handleChartClick(
+                    selectedMaturity.maturity,
+                    selectedMaturity.isPreOrderPeriod
+                );
             }
         }
     };
