@@ -1,16 +1,16 @@
 import { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+// import { useDispatch, useSelector } from 'react-redux';
 import SFLogoSmall from 'src/assets/img/logo-small.svg';
 import { ExpandIndicator } from 'src/components/atoms';
-import { CurveHeader, LineChart, getData } from 'src/components/molecules';
-import {
-    selectLandingOrderForm,
-    setMaturity,
-} from 'src/store/landingOrderForm';
-import { RootState } from 'src/store/types';
+import { CurveHeader } from 'src/components/molecules';
+// import {
+//     selectLandingOrderForm,
+//     setMaturity,
+// } from 'src/store/landingOrderForm';
+// import { RootState } from 'src/store/types';
 import { DailyVolumes, MaturityOptionList } from 'src/types';
 import { CurrencySymbol, Rate } from 'src/utils';
-import { Maturity } from 'src/utils/entities';
+// import { Maturity } from 'src/utils/entities';
 
 interface YieldChartProps {
     asset: CurrencySymbol;
@@ -22,16 +22,16 @@ interface YieldChartProps {
 
 export const YieldChart = ({
     asset,
-    isBorrow,
-    rates,
-    maturitiesOptionList,
+    // isBorrow,
+    // rates,
+    // maturitiesOptionList,
     dailyVolumes,
 }: YieldChartProps): JSX.Element => {
-    const dispatch = useDispatch();
+    // const dispatch = useDispatch();
 
-    const { maturity } = useSelector((state: RootState) =>
-        selectLandingOrderForm(state.landingOrderForm)
-    );
+    // const { maturity } = useSelector((state: RootState) =>
+    //     selectLandingOrderForm(state.landingOrderForm)
+    // );
     const [show, setShow] = useState(true);
 
     return (
@@ -50,7 +50,7 @@ export const YieldChart = ({
                 </div>
                 <div className='flex flex-grow items-center pl-[35px]'>
                     <div className='h-[350px] w-[500px]'>
-                        {rates && (
+                        {/* {rates && (
                             <LineChart
                                 type='line'
                                 data={getData(
@@ -60,11 +60,11 @@ export const YieldChart = ({
                                 )}
                                 maturitiesOptionList={maturitiesOptionList}
                                 handleChartClick={maturity =>
-                                    dispatch(setMaturity(maturity.toNumber()))
+                                    dispatch(setMaturity(maturity))
                                 }
                                 maturity={new Maturity(maturity)}
                             />
-                        )}
+                        )} */}
                     </div>
                 </div>
             </div>

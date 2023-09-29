@@ -34,7 +34,6 @@ import { RootState } from 'src/store/types';
 import { MaturityOptionList, TransactionList } from 'src/types';
 import {
     CurrencySymbol,
-    Rate,
     amountFormatterFromBase,
     amountFormatterToBase,
     currencyMap,
@@ -84,12 +83,10 @@ const DEFAULT_ORDERBOOK_DEPTH_FULL = 26;
 export const AdvancedLending = ({
     collateralBook,
     maturitiesOptionList,
-    rates,
     marketPrice,
 }: {
     collateralBook: CollateralBook;
     maturitiesOptionList: MaturityOptionList;
-    rates: Rate[];
     marketPrice: number | undefined;
 }) => {
     const { amount, currency, maturity } = useSelector((state: RootState) =>
@@ -240,10 +237,7 @@ export const AdvancedLending = ({
 
             <div className='flex h-full flex-grow flex-col gap-4'>
                 <Tab tabDataArray={[{ text: 'Yield Curve' }]}>
-                    <LineChartTab
-                        maturitiesOptionList={maturitiesOptionList}
-                        rates={rates}
-                    />
+                    <LineChartTab />
                 </Tab>
                 <HorizontalTab tabTitles={['Open Orders']}>
                     <OrderTable

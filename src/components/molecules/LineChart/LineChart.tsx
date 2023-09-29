@@ -19,7 +19,7 @@ import {
     options as customOptions,
     defaultDatasets,
 } from 'src/components/molecules/LineChart/constants';
-import { MaturityOptionList } from 'src/types';
+import { ListItem } from 'src/components/organisms';
 import { Maturity } from 'src/utils/entities';
 
 ChartJS.register(
@@ -58,16 +58,16 @@ const triggerTooltip = (chart: ChartJS<'line'>, index: number) => {
 export type LineChartProps = {
     style?: React.CSSProperties;
     data: ChartData<'line'>;
-    maturitiesOptionList: MaturityOptionList;
+    maturityList: ListItem[];
     maturity: Maturity;
-    handleChartClick: (maturity: Maturity) => void;
+    handleChartClick: (maturity: number) => void;
 } & ChartProps;
 
 export const LineChart = ({
     data = { datasets: [], labels: [] },
     options = customOptions,
     style,
-    maturitiesOptionList,
+    maturityList,
     maturity,
     handleChartClick,
 }: LineChartProps) => {
@@ -123,11 +123,11 @@ export const LineChart = ({
         if (element && element[0]) {
             const { index } = element[0];
             const label = data.labels?.[index];
-            const selectedMaturity = maturitiesOptionList.find(
+            const selectedMaturity = maturityList?.find(
                 element => element.label === label
             );
             if (selectedMaturity) {
-                handleChartClick(selectedMaturity.value);
+                handleChartClick(selectedMaturity.maturity);
             }
         }
     };
@@ -136,8 +136,8 @@ export const LineChart = ({
         if (!chartRef.current) return;
 
         const numberOfElements = chartRef.current.data.datasets[0].data.length;
-        let index = maturitiesOptionList.findIndex(element =>
-            element.value.equals(maturity)
+        let index = maturityList?.findIndex(
+            element => element.maturity === maturity.toNumber()
         );
 
         if (numberOfElements) {
@@ -145,7 +145,7 @@ export const LineChart = ({
             triggerHover(chartRef.current, index);
             triggerTooltip(chartRef.current, index);
         }
-    }, [maturitiesOptionList, maturity]);
+    }, [maturityList, maturity]);
 
     useEffect(() => {
         onMouseOut();
