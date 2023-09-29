@@ -38,36 +38,34 @@ export const LineChartTab = () => {
 
     Object.values(lendingContracts).map(obj => {
         if (
-            (obj.isOpened || obj.isItayosePeriod || obj.isPreOrderPeriod) &&
-            !maturityIsAWeekAway(obj.maturity)
+            !(obj.isOpened || obj.isItayosePeriod || obj.isPreOrderPeriod) ||
+            maturityIsAWeekAway(obj.maturity)
         ) {
-            maturityList.push({
-                label: obj.name,
-                maturity: obj.maturity,
-                isPreOrderPeriod: obj.isPreOrderPeriod || obj.isItayosePeriod,
-            });
-            if (obj.isItayosePeriod || obj.isPreOrderPeriod) {
-                rates.push(
-                    LoanValue.fromPrice(obj.openingUnitPrice, obj.maturity).apr
-                );
-                itayoseMarketIndex = currentIndex;
-            } else {
-                if (side === OrderSide.LEND) {
-                    rates.push(
-                        LoanValue.fromPrice(obj.bestLendUnitPrice, obj.maturity)
-                            .apr
-                    );
-                } else {
-                    rates.push(
-                        LoanValue.fromPrice(
-                            obj.bestBorrowUnitPrice,
-                            obj.maturity
-                        ).apr
-                    );
-                }
-            }
-            currentIndex += 1;
+            return;
         }
+        maturityList.push({
+            label: obj.name,
+            maturity: obj.maturity,
+            isPreOrderPeriod: obj.isPreOrderPeriod || obj.isItayosePeriod,
+        });
+        if (obj.isItayosePeriod || obj.isPreOrderPeriod) {
+            rates.push(
+                LoanValue.fromPrice(obj.openingUnitPrice, obj.maturity).apr
+            );
+            itayoseMarketIndex = currentIndex;
+        } else {
+            if (side === OrderSide.LEND) {
+                rates.push(
+                    LoanValue.fromPrice(obj.bestLendUnitPrice, obj.maturity).apr
+                );
+            } else {
+                rates.push(
+                    LoanValue.fromPrice(obj.bestBorrowUnitPrice, obj.maturity)
+                        .apr
+                );
+            }
+        }
+        currentIndex += 1;
     });
 
     const data = getData(
