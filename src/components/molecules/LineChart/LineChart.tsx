@@ -18,7 +18,6 @@ import {
     crossHairPlugin,
     options as customOptions,
     defaultDatasets,
-    getCurveGradient,
 } from 'src/components/molecules/LineChart/constants';
 import { MaturityOptionList } from 'src/types';
 import { Maturity } from 'src/utils/entities';
@@ -98,8 +97,6 @@ export const LineChart = ({
                     CanvasLineCap,
                     ScriptableContext<'line'>
                 >,
-                borderColor: (context: ScriptableContext<'line'>) =>
-                    getCurveGradient(context),
                 ...defaultDatasets,
                 ...set,
             };

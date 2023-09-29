@@ -8,7 +8,7 @@ import {
     ScriptableContext,
     TooltipItem,
 } from 'chart.js';
-import { Rate, percentFormat } from 'src/utils';
+import { percentFormat, Rate } from 'src/utils';
 
 export const defaultDatasets = {
     borderWidth: 3,
@@ -24,7 +24,8 @@ const refineArray = (array: Array<Rate>) => {
 export const getData = (
     rates: Rate[],
     label: string,
-    labels: string[]
+    labels: string[],
+    itayoseMarketIndex?: number
 ): ChartData<'line'> => {
     return {
         labels: labels,
@@ -32,6 +33,20 @@ export const getData = (
             {
                 label: label,
                 data: refineArray(rates),
+                segment: {
+                    borderColor: ctx =>
+                        ctx.p1.parsed.x === itayoseMarketIndex &&
+                        itayoseMarketIndex
+                            ? 'white'
+                            : getCurveGradient(
+                                  ctx as unknown as ScriptableContext<'line'>
+                              ),
+                    borderDash: ctx =>
+                        ctx.p1.parsed.x === itayoseMarketIndex &&
+                        itayoseMarketIndex
+                            ? [5, 5]
+                            : undefined,
+                },
             },
         ],
     };
