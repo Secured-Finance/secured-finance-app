@@ -1,6 +1,6 @@
 import { OrderSide } from '@secured-finance/sf-client';
 import { BigNumber } from 'ethers';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
     GradientBox,
@@ -104,9 +104,6 @@ const Toolbar = ({
     );
 };
 
-const DEFAULT_ORDERBOOK_DEPTH = 12;
-const DEFAULT_ORDERBOOK_DEPTH_FULL = 26;
-
 export const Itayose = () => {
     const { address } = useAccount();
 
@@ -137,11 +134,11 @@ export const Itayose = () => {
         return assetList.find(option => option.value === currency);
     }, [currency, assetList]);
 
-    const [orderBook, setOrderBookDepth] = useOrderbook(
+    const [orderBook, setMultiplier, setIsShowingAll] = useOrderbook(
         currency,
-        maturity,
-        DEFAULT_ORDERBOOK_DEPTH
+        maturity
     );
+
     const { data: collateralBook = emptyCollateralBook } =
         useCollateralBook(address);
 
@@ -196,16 +193,6 @@ export const Itayose = () => {
             sortedBorrowOrders[0].value
         );
     }, [orderBook.data?.borrowOrderbook, orderBook.data?.lendOrderbook]);
-
-    const [isDoubleOrderBook, setIsDoubleOrderBook] = useState(true);
-    const [multiplier, setMultiplier] = useState(1);
-
-    useEffect(() => {
-        setOrderBookDepth(
-            (DEFAULT_ORDERBOOK_DEPTH_FULL * multiplier) /
-                (isDoubleOrderBook ? 2 : 1)
-        );
-    }, [multiplier, isDoubleOrderBook, setOrderBookDepth]);
 
     return (
         <Page title='Pre-Open Order Book'>
@@ -262,17 +249,10 @@ export const Itayose = () => {
                     orderbook={orderBook}
                     variant='itayose'
                     marketPrice={estimatedOpening}
-                    onFilterChange={state => {
-                        setIsDoubleOrderBook(
-                            state.showBorrow && state.showLend
-                        );
-                    }}
-                    onAggregationChange={setMultiplier}
-                    limit={
-                        isDoubleOrderBook
-                            ? DEFAULT_ORDERBOOK_DEPTH
-                            : DEFAULT_ORDERBOOK_DEPTH_FULL
+                    onFilterChange={state =>
+                        setIsShowingAll(state.showBorrow && state.showLend)
                     }
+                    onAggregationChange={setMultiplier}
                 />
 
                 <div className='flex h-full flex-col items-stretch justify-stretch gap-6'>
