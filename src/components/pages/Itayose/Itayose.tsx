@@ -1,6 +1,6 @@
 import { OrderSide } from '@secured-finance/sf-client';
 import { BigNumber } from 'ethers';
-import { useCallback, useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
     GradientBox,
@@ -104,8 +104,8 @@ const Toolbar = ({
     );
 };
 
-const DEFAULT_ORDERBOOK_DEPTH = 100;
-const DEFAULT_ORDERBOOK_DEPTH_FULL = 200;
+const DEFAULT_ORDERBOOK_DEPTH = 12;
+const DEFAULT_ORDERBOOK_DEPTH_FULL = 26;
 
 export const Itayose = () => {
     const { address } = useAccount();
@@ -197,6 +197,16 @@ export const Itayose = () => {
         );
     }, [orderBook.data?.borrowOrderbook, orderBook.data?.lendOrderbook]);
 
+    const [isDoubleOrderBook, setIsDoubleOrderBook] = useState(true);
+    const [multiplier, setMultiplier] = useState(1);
+
+    useEffect(() => {
+        setOrderBookDepth(
+            (DEFAULT_ORDERBOOK_DEPTH_FULL * multiplier) /
+                (isDoubleOrderBook ? 2 : 1)
+        );
+    }, [multiplier, isDoubleOrderBook, setOrderBookDepth]);
+
     return (
         <Page title='Pre-Open Order Book'>
             <ThreeColumnsWithTopBar
@@ -253,12 +263,16 @@ export const Itayose = () => {
                     variant='itayose'
                     marketPrice={estimatedOpening}
                     onFilterChange={state => {
-                        setOrderBookDepth(
-                            !state.showBorrow || !state.showLend
-                                ? DEFAULT_ORDERBOOK_DEPTH_FULL
-                                : DEFAULT_ORDERBOOK_DEPTH
+                        setIsDoubleOrderBook(
+                            state.showBorrow && state.showLend
                         );
                     }}
+                    onAggregationChange={setMultiplier}
+                    limit={
+                        isDoubleOrderBook
+                            ? DEFAULT_ORDERBOOK_DEPTH
+                            : DEFAULT_ORDERBOOK_DEPTH_FULL
+                    }
                 />
 
                 <div className='flex h-full flex-col items-stretch justify-stretch gap-6'>

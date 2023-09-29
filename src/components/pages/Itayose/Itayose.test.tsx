@@ -54,7 +54,7 @@ describe('Itayose Component', () => {
         expect(openOrders).toHaveLength(1);
     });
 
-    describe.skip('Dynamic orderbook depth', () => {
+    describe('Dynamic orderbook depth', () => {
         it('should retrieve more data when the user select only one side of the orderbook', async () => {
             render(<Default />);
             expect(
@@ -62,7 +62,7 @@ describe('Itayose Component', () => {
             ).toHaveBeenLastCalledWith(
                 expect.anything(),
                 expect.anything(),
-                12
+                13
             );
             await waitFor(() =>
                 fireEvent.click(

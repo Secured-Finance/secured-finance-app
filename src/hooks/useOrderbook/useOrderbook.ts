@@ -97,5 +97,6 @@ export const useOrderbook = (
             enabled: !!securedFinance,
         }),
         setDepth,
+        depth,
     ] as const;
 };

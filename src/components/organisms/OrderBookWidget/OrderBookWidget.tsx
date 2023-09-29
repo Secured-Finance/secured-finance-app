@@ -11,6 +11,7 @@ import {
     ColorBar,
     DropdownSelector,
     NavTab,
+    Option,
     Spinner,
 } from 'src/components/atoms';
 import { CoreTable, TableHeader } from 'src/components/molecules';
@@ -32,12 +33,12 @@ import {
 } from 'src/utils';
 import { LoanValue } from 'src/utils/entities';
 
-const AGGREGATION_OPTIONS = [
-    { label: '0.01', value: '1' },
-    { label: '0.1', value: '10' },
-    { label: '1', value: '100' },
-    { label: '5', value: '500' },
-    { label: '10', value: '1000' },
+const AGGREGATION_OPTIONS: (Option<string> & { multiplier: number })[] = [
+    { label: '0.01', value: '1', multiplier: 1 },
+    { label: '0.1', value: '10', multiplier: 10 },
+    { label: '1', value: '100', multiplier: 100 },
+    { label: '5', value: '500', multiplier: 500 },
+    { label: '10', value: '1000', multiplier: 1000 },
 ];
 
 const columnHelper = createColumnHelper<OrderBookEntry>();
@@ -205,14 +206,18 @@ const reducer = (
 export const OrderBookWidget = ({
     orderbook,
     currency,
+    limit,
     marketPrice,
     onFilterChange,
+    onAggregationChange,
     variant = 'default',
 }: {
     orderbook: Pick<ReturnType<typeof useOrderbook>[0], 'data' | 'isLoading'>;
     currency: CurrencySymbol;
+    limit: number;
     marketPrice?: LoanValue;
     onFilterChange?: (filter: VisibilityState) => void;
+    onAggregationChange?: (multiplier: number) => void;
     variant?: 'default' | 'itayose';
 }) => {
     const [state, dispatch] = useReducer(reducer, initialState);
@@ -223,17 +228,23 @@ export const OrderBookWidget = ({
     const [aggregationFactor, setAggregationFactor] =
         useState<AggregationFactorType>(1);
 
+    useEffect(() => {
+        onAggregationChange?.(aggregationFactor);
+    }, [onAggregationChange, aggregationFactor]);
+
     const globalDispatch = useDispatch();
 
     const borrowOrders = usePrepareOrderbookData(
         orderbook.data,
         'borrowOrderbook',
+        limit,
         aggregationFactor
     );
 
     const lendOrders = usePrepareOrderbookData(
         orderbook.data,
         'lendOrderbook',
+        limit,
         aggregationFactor
     );
 
