@@ -109,7 +109,6 @@ export const Landing = ({ view }: { view?: ViewType }) => {
                 <WithBanner ccy={currency} market={itayoseMarket}>
                     <AdvancedLending
                         collateralBook={collateralBook}
-                        rates={Array.from(unitPrices.values()).map(v => v.apr)}
                         maturitiesOptionList={maturityOptionList}
                         marketPrice={marketPrice}
                     />

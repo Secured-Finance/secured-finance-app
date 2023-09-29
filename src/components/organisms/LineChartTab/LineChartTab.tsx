@@ -1,5 +1,4 @@
 import { OrderSide } from '@secured-finance/sf-client';
-import { useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { LineChart, getData } from 'src/components/molecules';
 import { baseContracts, useLendingMarkets } from 'src/hooks';
@@ -8,16 +7,10 @@ import {
     setMaturity,
 } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
-import { MaturityOptionList } from 'src/types';
 import { Rate } from 'src/utils';
 import { LoanValue, Maturity } from 'src/utils/entities';
 
-export const LineChartTab = ({
-    maturitiesOptionList,
-}: {
-    maturitiesOptionList: MaturityOptionList;
-    rates: Rate[];
-}) => {
+export const LineChartTab = () => {
     const dispatch = useDispatch();
     const { side, maturity, currency } = useSelector((state: RootState) =>
         selectLandingOrderForm(state.landingOrderForm)
@@ -26,54 +19,58 @@ export const LineChartTab = ({
     const { data: lendingMarkets = baseContracts } = useLendingMarkets();
     const lendingContracts = lendingMarkets[currency];
 
-    // console.log(lendingContracts);
+    const isAWeekAway = (timestamp: number) => {
+        const targetDate = new Date(timestamp * 1000);
+        const currentDate = new Date();
+        const differenceInMilliseconds =
+            targetDate.getTime() - currentDate.getTime();
+        const millisecondsInAWeek = 7 * 24 * 60 * 60 * 1000;
+        return differenceInMilliseconds <= millisecondsInAWeek;
+    };
 
-    // const isAWeekAway = (timetsamp: number) => {
-    //     const timestamp = 1695945600; // Replace this with your actual timestamp
+    const rates: Rate[] = [];
+    const maturityList: ListItem[] = [];
+    let itayoseMarketIndex = 0;
 
-    //     // Convert the timestamp to a Date object
-    //     const targetDate = new Date(timestamp * 1000); // Multiply by 1000 to convert seconds to milliseconds
+    let currentIndex = 0;
 
-    //     // Get the current date
-    //     const currentDate = new Date();
-
-    //     // Calculate the difference in milliseconds
-    //     const differenceInMilliseconds =
-    //         targetDate.getTime() - currentDate.getTime();
-
-    //     // Calculate the number of milliseconds in a week
-    //     const millisecondsInAWeek = 7 * 24 * 60 * 60 * 1000;
-
-    //     // Check if the difference is less than or equal to a week
-    //     return differenceInMilliseconds <= millisecondsInAWeek;
-    // };
-
-    const maturityList = Object.values(lendingContracts).map(obj => obj.name);
-
-    const loanValues = Object.values(lendingContracts).map(obj => {
-        if (obj.isItayosePeriod) {
-            return LoanValue.fromPrice(obj.openingUnitPrice, obj.maturity);
-        } else {
-            return side === OrderSide.BORROW
-                ? LoanValue.fromPrice(obj.bestBorrowUnitPrice, obj.maturity)
-                : LoanValue.fromPrice(obj.bestLendUnitPrice, obj.maturity);
+    Object.values(lendingContracts).map(obj => {
+        if (
+            (obj.isOpened || obj.isItayosePeriod || obj.isPreOrderPeriod) &&
+            !isAWeekAway(obj.maturity)
+        ) {
+            maturityList.push({
+                label: obj.name,
+                maturity: obj.maturity,
+            });
+            if (obj.isItayosePeriod || obj.isPreOrderPeriod) {
+                rates.push(
+                    LoanValue.fromPrice(obj.openingUnitPrice, obj.maturity).apr
+                );
+                itayoseMarketIndex = currentIndex;
+            } else {
+                if (side === OrderSide.LEND) {
+                    rates.push(
+                        LoanValue.fromPrice(obj.bestLendUnitPrice, obj.maturity)
+                            .apr
+                    );
+                } else {
+                    rates.push(
+                        LoanValue.fromPrice(
+                            obj.bestBorrowUnitPrice,
+                            obj.maturity
+                        ).apr
+                    );
+                }
+            }
+            currentIndex += 1;
         }
     });
-
-    const rates = Array.from(loanValues.values()).map(v => v.apr);
-
-    const itayoseMarketIndex = useMemo(
-        () =>
-            Object.values(lendingContracts).findIndex(
-                market => market.isItayosePeriod && !market.isPreOrderPeriod
-            ),
-        [lendingContracts]
-    );
 
     const data = getData(
         rates,
         side === OrderSide.BORROW ? 'Borrow' : 'Lend',
-        maturityList,
+        maturityList.map(item => item.label),
         itayoseMarketIndex
     );
 
@@ -83,13 +80,18 @@ export const LineChartTab = ({
                 <LineChart
                     type='line'
                     data={data}
-                    maturitiesOptionList={maturitiesOptionList}
+                    maturityList={maturityList}
                     handleChartClick={maturity =>
-                        dispatch(setMaturity(maturity.toNumber()))
+                        dispatch(setMaturity(maturity))
                     }
                     maturity={new Maturity(maturity)}
                 ></LineChart>
             )}
         </div>
     );
+};
+
+export type ListItem = {
+    label: string;
+    maturity: number;
 };
