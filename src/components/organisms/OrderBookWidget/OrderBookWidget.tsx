@@ -41,6 +41,9 @@ const AGGREGATION_OPTIONS: (Option<string> & { multiplier: number })[] = [
     { label: '10', value: '1000', multiplier: 1000 },
 ];
 
+const ORDERBOOK_DOUBLE_MAX_LINES = 12;
+const ORDERBOOK_SINGLE_MAX_LINES = 26;
+
 const columnHelper = createColumnHelper<OrderBookEntry>();
 
 const OrderBookCell = ({
@@ -206,7 +209,6 @@ const reducer = (
 export const OrderBookWidget = ({
     orderbook,
     currency,
-    limit,
     marketPrice,
     onFilterChange,
     onAggregationChange,
@@ -214,7 +216,6 @@ export const OrderBookWidget = ({
 }: {
     orderbook: Pick<ReturnType<typeof useOrderbook>[0], 'data' | 'isLoading'>;
     currency: CurrencySymbol;
-    limit: number;
     marketPrice?: LoanValue;
     onFilterChange?: (filter: VisibilityState) => void;
     onAggregationChange?: (multiplier: number) => void;
@@ -233,6 +234,15 @@ export const OrderBookWidget = ({
     }, [onAggregationChange, aggregationFactor]);
 
     const globalDispatch = useDispatch();
+
+    const [limit, setLimit] = useState(ORDERBOOK_DOUBLE_MAX_LINES);
+    useEffect(() => {
+        setLimit(
+            state.showBorrow && state.showLend
+                ? ORDERBOOK_DOUBLE_MAX_LINES
+                : ORDERBOOK_SINGLE_MAX_LINES
+        );
+    }, [state]);
 
     const borrowOrders = usePrepareOrderbookData(
         orderbook.data,

@@ -1,10 +1,12 @@
 import { useQuery } from '@tanstack/react-query';
 import { BigNumber } from 'ethers';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { QueryKeys } from 'src/hooks/queries';
 import useSF from 'src/hooks/useSecuredFinance';
 import { CurrencySymbol, toCurrency } from 'src/utils';
 import { LoanValue } from 'src/utils/entities';
+
+const DEFAULT_ORDERBOOK_DEPTH = 26;
 
 interface SmartContractOrderbook {
     unitPrices: BigNumber[];
@@ -17,8 +19,6 @@ export type OrderBookEntry = {
 };
 
 export type OrderBook = Array<OrderBookEntry>;
-
-const MAX_ORDERBOOK_LENGTH = 40;
 
 export const sortOrders = (
     a: OrderBookEntry,
@@ -47,13 +47,17 @@ const transformOrderbook = (
     }));
 };
 
-export const useOrderbook = (
-    ccy: CurrencySymbol,
-    maturity: number,
-    limit: number = MAX_ORDERBOOK_LENGTH
-) => {
+export const useOrderbook = (ccy: CurrencySymbol, maturity: number) => {
     const securedFinance = useSF();
-    const [depth, setDepth] = useState(limit);
+    const [depth, setDepth] = useState(DEFAULT_ORDERBOOK_DEPTH);
+    const [multiplier, setMultiplier] = useState(1);
+    const [isShowingAll, setIsShowingAll] = useState(true);
+
+    useEffect(() => {
+        setDepth(
+            (DEFAULT_ORDERBOOK_DEPTH * multiplier) / (isShowingAll ? 2 : 1)
+        );
+    }, [isShowingAll, multiplier]);
 
     return [
         useQuery({
@@ -96,7 +100,7 @@ export const useOrderbook = (
             },
             enabled: !!securedFinance,
         }),
-        setDepth,
-        depth,
+        setMultiplier,
+        setIsShowingAll,
     ] as const;
 };

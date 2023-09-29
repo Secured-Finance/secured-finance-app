@@ -78,9 +78,6 @@ const useTradeHistoryDetails = (
     }, [currency, maturity.toNumber(), transactions.length]);
 };
 
-const DEFAULT_ORDERBOOK_DEPTH = 12;
-const DEFAULT_ORDERBOOK_DEPTH_FULL = 26;
-
 export const AdvancedLending = ({
     collateralBook,
     maturitiesOptionList,
@@ -121,11 +118,11 @@ export const AdvancedLending = ({
     const marketUnitPrice = data?.marketUnitPrice;
     const openingUnitPrice = data?.openingUnitPrice;
 
-    const [orderBook, setOrderBookDepth] = useOrderbook(
+    const [orderBook, setMultiplier, setIsShowingAll] = useOrderbook(
         currency,
-        maturity,
-        DEFAULT_ORDERBOOK_DEPTH
+        maturity
     );
+
     const filteredOrderList = useMarketOrderList(address, currency, maturity);
 
     const transactionHistory = useGraphClientHook(
@@ -191,16 +188,6 @@ export const AdvancedLending = ({
         [dispatch]
     );
 
-    const [isDoubleOrderBook, setIsDoubleOrderBook] = useState(true);
-    const [multiplier, setMultiplier] = useState(1);
-
-    useEffect(() => {
-        setOrderBookDepth(
-            (DEFAULT_ORDERBOOK_DEPTH_FULL * multiplier) /
-                (isDoubleOrderBook ? 2 : 1)
-        );
-    }, [multiplier, isDoubleOrderBook, setOrderBookDepth]);
-
     return (
         <ThreeColumnsWithTopBar
             topBar={
@@ -239,15 +226,10 @@ export const AdvancedLending = ({
                 orderbook={orderBook}
                 currency={currency}
                 marketPrice={currentMarket?.value}
-                onFilterChange={state => {
-                    setIsDoubleOrderBook(state.showBorrow && state.showLend);
-                }}
-                onAggregationChange={setMultiplier}
-                limit={
-                    isDoubleOrderBook
-                        ? DEFAULT_ORDERBOOK_DEPTH
-                        : DEFAULT_ORDERBOOK_DEPTH_FULL
+                onFilterChange={state =>
+                    setIsShowingAll(state.showBorrow && state.showLend)
                 }
+                onAggregationChange={setMultiplier}
             />
 
             <div className='flex h-full flex-grow flex-col gap-4'>
