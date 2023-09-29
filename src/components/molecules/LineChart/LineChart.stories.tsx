@@ -1,7 +1,10 @@
 import type { Meta, StoryFn } from '@storybook/react';
 import { ScriptableContext } from 'chart.js';
 import { maturityOptions } from 'src/stories/mocks/fixtures';
-import { getCurveGradient, options } from '../../molecules/LineChart/constants';
+import {
+    getCurveGradient,
+    options,
+} from 'src/components/molecules/LineChart/constants';
 import { LineChart } from './';
 
 export default {

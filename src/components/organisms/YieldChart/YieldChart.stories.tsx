@@ -16,6 +16,9 @@ export default {
         dailyVolumes: dailyVolumes.slice(0, 10),
     },
     argTypes: {},
+    parameters: {
+        connected: true,
+    },
     decorators: [withAssetPrice, withWalletProvider],
 } as Meta<typeof YieldChart>;
 
@@ -25,3 +28,6 @@ const Template: StoryFn<typeof YieldChart> = args => {
 
 export const Default = Template.bind({});
 export const Loading = Template.bind({});
+Loading.parameters = {
+    connected: false,
+};

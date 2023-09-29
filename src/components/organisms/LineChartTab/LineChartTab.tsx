@@ -19,7 +19,7 @@ export const LineChartTab = () => {
     const { data: lendingMarkets = baseContracts } = useLendingMarkets();
     const lendingContracts = lendingMarkets[currency];
 
-    const isAWeekAway = (timestamp: number) => {
+    const maturityIsAWeekAway = (timestamp: number) => {
         const targetDate = new Date(timestamp * 1000);
         const currentDate = new Date();
         const differenceInMilliseconds =
@@ -29,15 +29,14 @@ export const LineChartTab = () => {
     };
 
     const rates: Rate[] = [];
-    const maturityList: ListItem[] = [];
+    const maturityList: MaturityListItem[] = [];
     let itayoseMarketIndex = 0;
-
     let currentIndex = 0;
 
     Object.values(lendingContracts).map(obj => {
         if (
             (obj.isOpened || obj.isItayosePeriod || obj.isPreOrderPeriod) &&
-            !isAWeekAway(obj.maturity)
+            !maturityIsAWeekAway(obj.maturity)
         ) {
             maturityList.push({
                 label: obj.name,
@@ -91,7 +90,7 @@ export const LineChartTab = () => {
     );
 };
 
-export type ListItem = {
+export type MaturityListItem = {
     label: string;
     maturity: number;
 };

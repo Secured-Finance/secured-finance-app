@@ -19,7 +19,7 @@ import {
     options as customOptions,
     defaultDatasets,
 } from 'src/components/molecules/LineChart/constants';
-import { ListItem } from 'src/components/organisms';
+import { MaturityListItem } from 'src/components/organisms';
 import { Maturity } from 'src/utils/entities';
 
 ChartJS.register(
@@ -58,7 +58,7 @@ const triggerTooltip = (chart: ChartJS<'line'>, index: number) => {
 export type LineChartProps = {
     style?: React.CSSProperties;
     data: ChartData<'line'>;
-    maturityList: ListItem[];
+    maturityList: MaturityListItem[];
     maturity: Maturity;
     handleChartClick: (maturity: number) => void;
 } & ChartProps;
@@ -123,7 +123,7 @@ export const LineChart = ({
         if (element && element[0]) {
             const { index } = element[0];
             const label = data.labels?.[index];
-            const selectedMaturity = maturityList?.find(
+            const selectedMaturity = maturityList.find(
                 element => element.label === label
             );
             if (selectedMaturity) {
@@ -136,7 +136,7 @@ export const LineChart = ({
         if (!chartRef.current) return;
 
         const numberOfElements = chartRef.current.data.datasets[0].data.length;
-        let index = maturityList?.findIndex(
+        let index = maturityList.findIndex(
             element => element.maturity === maturity.toNumber()
         );
 
