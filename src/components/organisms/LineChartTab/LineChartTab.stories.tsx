@@ -13,7 +13,11 @@ export default {
 } as Meta<typeof LineChartTab>;
 
 const Template: StoryFn<typeof LineChartTab> = () => {
-    return <LineChartTab />;
+    return (
+        <div className='h-[410px] w-full px-6 py-4'>
+            <LineChartTab />
+        </div>
+    );
 };
 
 export const Default = Template.bind({});

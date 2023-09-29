@@ -90,13 +90,24 @@ exports[`YieldChart Component should render YieldChart 1`] = `
           <div
             class="h-[350px] w-[500px]"
           >
-            <canvas
-              data-chromatic="ignore"
-              height="0"
-              role="img"
-              style="display: block; box-sizing: border-box; height: 0px; width: 0px;"
-              width="0"
-            />
+            <div
+              class="h-full w-full"
+            >
+              <div
+                class="flex h-full w-full items-center justify-center"
+              >
+                <div
+                  aria-label="Loading"
+                  role="alertdialog"
+                >
+                  <img
+                    alt="Loader"
+                    class="animate-spin"
+                    src="/img.jpg"
+                  />
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>

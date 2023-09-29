@@ -75,7 +75,7 @@ export const LineChartTab = () => {
     );
 
     return (
-        <div className='h-[410px] w-full px-6 py-4'>
+        <div className='h-full w-full'>
             {rates && (
                 <LineChart
                     type='line'

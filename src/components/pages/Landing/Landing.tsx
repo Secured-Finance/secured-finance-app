@@ -95,11 +95,6 @@ export const Landing = ({ view }: { view?: ViewType }) => {
                         />
                         <YieldChart
                             asset={currency}
-                            isBorrow={side === OrderSide.BORROW}
-                            rates={Array.from(unitPrices.values()).map(
-                                v => v.apr
-                            )}
-                            maturitiesOptionList={maturityOptionList}
                             dailyVolumes={dailyVolumes.data ?? []}
                         />
                     </div>

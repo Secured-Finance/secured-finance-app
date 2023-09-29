@@ -237,7 +237,9 @@ export const AdvancedLending = ({
 
             <div className='flex h-full flex-grow flex-col gap-4'>
                 <Tab tabDataArray={[{ text: 'Yield Curve' }]}>
-                    <LineChartTab />
+                    <div className='h-[410px] w-full px-6 py-4'>
+                        <LineChartTab />
+                    </div>
                 </Tab>
                 <HorizontalTab tabTitles={['Open Orders']}>
                     <OrderTable
