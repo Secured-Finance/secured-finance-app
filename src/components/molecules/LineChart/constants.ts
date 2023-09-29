@@ -8,7 +8,7 @@ import {
     ScriptableContext,
     TooltipItem,
 } from 'chart.js';
-import { percentFormat, Rate } from 'src/utils';
+import { Rate, percentFormat } from 'src/utils';
 
 export const defaultDatasets = {
     borderWidth: 3,
