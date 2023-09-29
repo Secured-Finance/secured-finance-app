@@ -6,6 +6,9 @@ import {
     options,
 } from 'src/components/molecules/LineChart/constants';
 import { LineChart } from './';
+import { MaturityListItem } from 'src/components/organisms';
+
+const maturityList: MaturityListItem[] = [];
 
 export default {
     title: 'Molecules/LineChart',
@@ -37,8 +40,9 @@ export default {
             ],
         },
         options,
-        maturitiesOptionList: maturityOptions,
+        maturityList: maturityList,
         maturity: maturityOptions[0].value,
+        handleChartClick: () => {},
     },
 } as Meta<typeof LineChart>;
 
