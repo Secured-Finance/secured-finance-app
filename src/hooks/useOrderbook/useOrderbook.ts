@@ -25,13 +25,6 @@ export const sortOrders = (
     b: OrderBookEntry,
     order: 'asc' | 'desc'
 ) => {
-    if (
-        a.value.price === 0 ||
-        b.value.price === 0 ||
-        a.amount.isZero() ||
-        b.amount.isZero()
-    )
-        return 1;
     return order === 'asc'
         ? a.value.price - b.value.price
         : b.value.price - a.value.price;
