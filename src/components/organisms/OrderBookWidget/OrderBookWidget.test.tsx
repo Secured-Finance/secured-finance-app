@@ -207,7 +207,7 @@ describe('OrderBookWidget Component', () => {
             expect(onFilterChange).toHaveBeenCalledTimes(2);
         });
 
-        it.only('should show a different number of rows when a button is clicked', () => {
+        it('should show a different number of rows when a button is clicked', () => {
             render(<Bitcoin />);
             expect(screen.getAllByTestId('buyOrders-row')).toHaveLength(12);
             expect(screen.getAllByTestId('sellOrders-row')).toHaveLength(12);
