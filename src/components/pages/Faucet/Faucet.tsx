@@ -351,7 +351,7 @@ export const Faucet = () => {
                         ['Status', 'Success'],
                         [
                             'Ethereum Address',
-                            AddressUtils.format(account ?? '', 16),
+                            AddressUtils.format(account ?? '', 8),
                         ],
                     ]}
                     txHash={txHash}
