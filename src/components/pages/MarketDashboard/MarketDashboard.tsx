@@ -178,6 +178,7 @@ export const MarketDashboard = () => {
                                     collateralThreshold={
                                         collateralBook.collateralThreshold
                                     }
+                                    account={address}
                                 />
                             </div>
                         </GradientBox>
