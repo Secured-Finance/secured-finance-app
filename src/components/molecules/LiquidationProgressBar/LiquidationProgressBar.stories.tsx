@@ -7,7 +7,8 @@ export default {
     component: LiquidationProgressBar,
     args: {
         liquidationPercentage: 0,
-        collateralThreshold: 80,
+        collateralThreshold: 0,
+        account: undefined,
     },
     parameters: {
         ...RESPONSIVE_PARAMETERS,
@@ -21,9 +22,11 @@ const Template: StoryFn<typeof LiquidationProgressBar> = args => (
     <LiquidationProgressBar {...args} />
 );
 
-export const Default = Template.bind({});
-export const ConnectedToWallet = Template.bind({});
-ConnectedToWallet.args = {
+export const NotConnectedToWallet = Template.bind({});
+
+export const CollateralDepositedWithCoverage = Template.bind({});
+CollateralDepositedWithCoverage.args = {
     liquidationPercentage: 45,
     collateralThreshold: 80,
+    account: '0x123',
 };
