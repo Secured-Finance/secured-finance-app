@@ -192,7 +192,7 @@ export const WalletDialog = () => {
                             ['Status', 'Connected'],
                             [
                                 'Ethereum Address',
-                                AddressUtils.format(address ?? '', 16),
+                                AddressUtils.format(address ?? '', 8),
                             ],
                         ]}
                         etherscanUrl={etherscanUrl}

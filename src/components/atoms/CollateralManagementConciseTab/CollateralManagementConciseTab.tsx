@@ -7,12 +7,14 @@ interface CollateralManagementConciseTabProps {
     collateralCoverage: number;
     totalCollateralInUSD: number;
     collateralThreshold: number;
+    account: string | undefined;
 }
 
 export const CollateralManagementConciseTab = ({
     collateralCoverage,
     totalCollateralInUSD,
     collateralThreshold,
+    account,
 }: CollateralManagementConciseTabProps) => {
     let padding = collateralCoverage / 100.0;
     if (padding > 1) {
@@ -43,20 +45,16 @@ export const CollateralManagementConciseTab = ({
                     ></div>
                 </div>
                 <div className='typography-caption-2 mt-1 leading-6 text-planetaryPurple'>
-                    {`Available: ${usdFormat(availableToBorrow, 2)}`}
+                    {account
+                        ? `Available: ${usdFormat(availableToBorrow, 2)}`
+                        : 'N/A'}
                 </div>
             </div>
             <Separator color='neutral-3' />
             <div className='mx-4 mb-4 mt-5 flex flex-col'>
                 <div className='typography-caption mb-1 flex flex-row justify-between'>
                     <span className='text-grayScale'>Liquidation Risk</span>
-                    <span
-                        className={`${
-                            collateralCoverage === 0 ? 'text-white' : info.color
-                        }`}
-                    >
-                        {info.risk}
-                    </span>
+                    <span className={`${info.color}`}>{info.risk}</span>
                 </div>
                 <div
                     style={{
@@ -69,12 +67,14 @@ export const CollateralManagementConciseTab = ({
                 </div>
                 <div className='mt-2 h-6px w-full rounded-full bg-gradient-to-r from-progressBarStart from-0% via-progressBarVia via-45% to-progressBarEnd to-80%'></div>
                 <div className='typography-caption-2 mt-1 leading-6 text-planetaryPurple'>
-                    {`Threshold: ${percentFormat(
-                        collateralThreshold &&
-                            collateralThreshold > collateralCoverage
-                            ? collateralThreshold - collateralCoverage
-                            : 0
-                    )}`}
+                    {account
+                        ? `Threshold: ${percentFormat(
+                              collateralThreshold &&
+                                  collateralThreshold > collateralCoverage
+                                  ? collateralThreshold - collateralCoverage
+                                  : 0
+                          )}`
+                        : 'N/A'}
                 </div>
             </div>
         </div>
@@ -82,9 +82,7 @@ export const CollateralManagementConciseTab = ({
 };
 
 export const getLiquidationInformation = (liquidationPercentage: number) => {
-    if (liquidationPercentage === 0) {
-        return { color: 'text-progressBarStart', risk: 'N/A' };
-    } else if (liquidationPercentage < 40) {
+    if (liquidationPercentage < 40) {
         return { color: 'text-progressBarStart', risk: 'Low' };
     } else if (liquidationPercentage >= 40 && liquidationPercentage < 60) {
         return { color: 'text-progressBarVia', risk: 'Medium' };
