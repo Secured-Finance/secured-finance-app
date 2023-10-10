@@ -334,6 +334,7 @@ export const priceYieldColumnDefinition = <T extends { maturity: string }>(
     accessor: AccessorFn<T, BigNumber>,
     variant: 'compact' | 'default' = 'default',
     type: Parameters<typeof PriceYieldItem>[0]['firstLineType'] = 'price',
+    itayoseOpeningDate?: number,
     titleHint?: string
 ) => {
     return columnHelper.accessor(accessor, {
@@ -344,7 +345,8 @@ export const priceYieldColumnDefinition = <T extends { maturity: string }>(
                     <PriceYieldItem
                         loanValue={LoanValue.fromPrice(
                             Number(info.getValue().toString()),
-                            Number(info.row.original.maturity.toString())
+                            Number(info.row.original.maturity.toString()),
+                            itayoseOpeningDate
                         )}
                         compact={variant === 'compact'}
                         firstLineType={type}

@@ -48,11 +48,13 @@ import { useAccount } from 'wagmi';
 export function AdvancedLendingOrderCard({
     collateralBook,
     isItayose = false,
+    itayoseOpeningDate = 0,
     preOrderPosition = 'none',
     marketPrice,
 }: {
     collateralBook: CollateralBook;
     isItayose?: boolean;
+    itayoseOpeningDate?: number;
     preOrderPosition?: 'borrow' | 'lend' | 'none';
     marketPrice?: number;
 }): JSX.Element {
@@ -74,11 +76,11 @@ export function AdvancedLendingOrderCard({
     const loanValue = useMemo(() => {
         if (!maturity) return LoanValue.ZERO;
         if (unitPrice !== undefined) {
-            return LoanValue.fromPrice(unitPrice, maturity);
+            return LoanValue.fromPrice(unitPrice, maturity, itayoseOpeningDate);
         }
         if (!marketPrice) return LoanValue.ZERO;
         return LoanValue.fromPrice(marketPrice, maturity);
-    }, [unitPrice, maturity, marketPrice]);
+    }, [maturity, unitPrice, marketPrice, itayoseOpeningDate]);
 
     const dispatch = useDispatch();
     const { address } = useAccount();

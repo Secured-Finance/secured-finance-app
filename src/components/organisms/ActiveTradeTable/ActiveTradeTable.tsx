@@ -127,6 +127,7 @@ export const ActiveTradeTable = ({
                 row => row.marketPrice,
                 'default',
                 'price',
+                0,
                 'Market Price is the volume-weighted average unit price of filled orders at the last block.'
             ),
             columnHelper.display({
