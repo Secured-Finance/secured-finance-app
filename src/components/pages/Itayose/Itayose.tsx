@@ -193,9 +193,15 @@ export const Itayose = () => {
 
         return LoanValue.getMidValue(
             sortedLendOrders[0].value,
-            sortedBorrowOrders[0].value
+            sortedBorrowOrders[0].value,
+            lendingContracts[selectedTerm.value.toNumber()]?.utcOpeningDate
         );
-    }, [orderBook.data?.borrowOrderbook, orderBook.data?.lendOrderbook]);
+    }, [
+        lendingContracts,
+        orderBook.data?.borrowOrderbook,
+        orderBook.data?.lendOrderbook,
+        selectedTerm.value,
+    ]);
 
     return (
         <Page title='Pre-Open Order Book'>
@@ -237,6 +243,10 @@ export const Itayose = () => {
                 <AdvancedLendingOrderCard
                     collateralBook={collateralBook}
                     isItayose
+                    itayoseOpeningDate={
+                        lendingContracts[selectedTerm.value.toNumber()]
+                            ?.utcOpeningDate
+                    }
                     preOrderPosition={
                         filteredOrderList.length > 0
                             ? filteredOrderList[0].side.toString() ===
@@ -294,6 +304,10 @@ export const Itayose = () => {
                             data={filteredOrderList}
                             variant='compact'
                             height={520}
+                            itayoseOpeningDate={
+                                lendingContracts[selectedTerm.value.toNumber()]
+                                    ?.utcOpeningDate
+                            }
                         />
                     </HorizontalTab>
                 </div>
