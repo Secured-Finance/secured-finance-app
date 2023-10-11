@@ -24,6 +24,7 @@ import {
     emptyCollateralBook,
     sortOrders,
     useCollateralBook,
+    useCurrencyDelistedStatus,
     useLendingMarkets,
     useMarketOrderList,
     useMarketPhase,
@@ -132,7 +133,11 @@ export const Itayose = () => {
         );
     }, [maturity, maturityOptionList]);
 
-    const assetList = useMemo(() => getCurrencyMapAsOptions(), []);
+    const ccyStatus = useCurrencyDelistedStatus();
+    const assetList = useMemo(
+        () => getCurrencyMapAsOptions(ccyStatus.data),
+        [ccyStatus]
+    );
     const selectedAsset = useMemo(() => {
         return assetList.find(option => option.value === currency);
     }, [currency, assetList]);

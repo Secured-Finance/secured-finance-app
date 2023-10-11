@@ -170,7 +170,7 @@ describe('Landing Component', () => {
             changeInputValue('Amount', '1');
             changeInputValue('Bond Price', '80');
 
-            fireEvent.click(screen.getByRole('button', { name: 'Filecoin' }));
+            fireEvent.click(screen.getByRole('button', { name: 'WFIL' }));
             fireEvent.click(screen.getByRole('menuitem', { name: 'USDC' }));
 
             assertInputValue('Amount', '1');

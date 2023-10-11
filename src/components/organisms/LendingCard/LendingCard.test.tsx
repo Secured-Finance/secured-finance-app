@@ -35,10 +35,10 @@ describe('LendingCard Component', () => {
         await waitFor(() => {
             fireEvent.click(
                 screen.getByRole('button', {
-                    name: DEFAULT_CHOICE.name,
+                    name: DEFAULT_CHOICE.symbol,
                 })
             );
-            fireEvent.click(screen.getByRole('menuitem', { name: 'Ether' }));
+            fireEvent.click(screen.getByRole('menuitem', { name: 'ETH' }));
         });
     };
     it('should render a LendingCard', async () => {
@@ -76,13 +76,13 @@ describe('LendingCard Component', () => {
         render(<Default />);
 
         expect(
-            await screen.findByText(DEFAULT_CHOICE.name)
+            await screen.findByText(DEFAULT_CHOICE.symbol)
         ).toBeInTheDocument();
         expect(screen.queryByText('USDC')).not.toBeInTheDocument();
         expect(screen.queryByText('Ethereum')).not.toBeInTheDocument();
         fireEvent.click(
             screen.getByRole('button', {
-                name: 'Filecoin',
+                name: 'WFIL',
             })
         );
 
@@ -90,17 +90,17 @@ describe('LendingCard Component', () => {
             screen.getByRole('menuitem', { name: 'USDC' })
         ).toBeInTheDocument();
         expect(
-            screen.getByRole('menuitem', { name: 'Filecoin' })
+            screen.getByRole('menuitem', { name: 'WFIL' })
         ).toBeInTheDocument();
         expect(
-            screen.getByRole('menuitem', { name: 'Ether' })
+            screen.getByRole('menuitem', { name: 'ETH' })
         ).toBeInTheDocument();
     });
 
     it('should switch to Ethereum when selecting it from the option', async () => {
         await waitFor(() => render(<Default />));
         await selectEthereum();
-        expect(screen.getByText('Ether')).toBeInTheDocument();
+        expect(screen.getByText('ETH')).toBeInTheDocument();
     });
 
     it('should display the amount inputted by the user in USD', async () => {

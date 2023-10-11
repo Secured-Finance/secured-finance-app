@@ -17,6 +17,7 @@ import {
 import { ThreeColumnsWithTopBar } from 'src/components/templates';
 import {
     CollateralBook,
+    useCurrencyDelistedStatus,
     useGraphClientHook,
     useMarket,
     useMarketOrderList,
@@ -102,7 +103,11 @@ export const AdvancedLending = ({
 
     const { address } = useAccount();
     const dispatch = useDispatch();
-    const assetList = useMemo(() => getCurrencyMapAsOptions(), []);
+    const ccyStatus = useCurrencyDelistedStatus();
+    const assetList = useMemo(
+        () => getCurrencyMapAsOptions(ccyStatus.data),
+        [ccyStatus]
+    );
 
     const [timestamp, setTimestamp] = useState<number>(1643713200);
     useEffect(() => {

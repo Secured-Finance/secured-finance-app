@@ -37,7 +37,7 @@ describe('Itayose Component', () => {
             '1000000000000000000'
         );
         await waitFor(() => {
-            fireEvent.click(screen.getByRole('button', { name: 'Filecoin' }));
+            fireEvent.click(screen.getByRole('button', { name: 'WFIL' }));
             fireEvent.click(screen.getByRole('menuitem', { name: 'USDC' }));
         });
         expect(store.getState().landingOrderForm.amount).toEqual('1000000');

@@ -15,7 +15,7 @@ describe('MarketLoanWidget Component', () => {
         await waitFor(() => {
             expect(screen.queryByText('WBTC')).toBeInTheDocument();
             screen.getByRole('button', { name: 'All Assets' }).click();
-            screen.getByRole('menuitem', { name: 'Filecoin' }).click();
+            screen.getByRole('menuitem', { name: 'WFIL' }).click();
         });
         expect(screen.queryByText('WBTC')).not.toBeInTheDocument();
     });

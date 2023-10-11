@@ -10,24 +10,24 @@ export const defaultDelistedStatus: Record<CurrencySymbol, boolean> = {
     [CurrencySymbol.USDC]: true,
 };
 
-export const useCurrencyDelistedStatus = (account: string | undefined) => {
+export const useCurrencyDelistedStatus = () => {
     const securedFinance = useSF();
 
     return useQuery({
-        queryKey: [QueryKeys.CURRENCY_EXISTS, account],
+        queryKey: [QueryKeys.CURRENCY_EXISTS],
         queryFn: async () => {
             const currencyDelistedStatusMap =
                 await getCurrencyMapAsList().reduce(
                     async (delistedStatus, currencyInfo) => {
                         const accumulator = await delistedStatus;
                         const ccy = currencyInfo.symbol;
-                        const isCurrencyDelisted =
+                        const currencyExist =
                             await securedFinance?.currencyExists(
                                 toCurrency(ccy)
                             );
                         return {
                             ...accumulator,
-                            [ccy]: isCurrencyDelisted,
+                            [ccy]: !currencyExist,
                         };
                     },
                     Promise.resolve(defaultDelistedStatus)
@@ -35,6 +35,6 @@ export const useCurrencyDelistedStatus = (account: string | undefined) => {
 
             return currencyDelistedStatusMap;
         },
-        enabled: !!securedFinance && !!account,
+        enabled: !!securedFinance,
     });
 };
