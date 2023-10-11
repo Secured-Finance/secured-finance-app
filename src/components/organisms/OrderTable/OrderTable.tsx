@@ -20,12 +20,12 @@ export const OrderTable = ({
     data,
     variant = 'default',
     height,
-    itayoseStartDate,
+    calculationDate,
 }: {
     data: Order[];
     variant?: 'compact' | 'default';
     height?: number;
-    itayoseStartDate?: number;
+    calculationDate?: number;
 }) => {
     const { cancelOrder } = useOrders();
     const columns = useMemo(
@@ -51,7 +51,7 @@ export const OrderTable = ({
                 row => row.unitPrice,
                 'compact',
                 'rate',
-                itayoseStartDate
+                calculationDate
             ),
             amountColumnDefinition(
                 columnHelper,
@@ -100,7 +100,7 @@ export const OrderTable = ({
                 header: () => <div className='p-2'>Actions</div>,
             }),
         ],
-        [cancelOrder, itayoseStartDate, variant]
+        [cancelOrder, calculationDate, variant]
     );
 
     return (
