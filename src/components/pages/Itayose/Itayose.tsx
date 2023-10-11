@@ -235,7 +235,7 @@ export const Itayose = () => {
                 <AdvancedLendingOrderCard
                     collateralBook={collateralBook}
                     isItayose
-                    itayoseOpeningDate={
+                    itayoseStartDate={
                         lendingContracts[selectedTerm.value.toNumber()]
                             ?.utcOpeningDate
                     }
@@ -293,7 +293,7 @@ export const Itayose = () => {
                             data={filteredOrderList}
                             variant='compact'
                             height={520}
-                            itayoseOpeningDate={
+                            itayoseStartDate={
                                 lendingContracts[selectedTerm.value.toNumber()]
                                     ?.utcOpeningDate
                             }
