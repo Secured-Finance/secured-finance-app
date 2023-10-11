@@ -37,8 +37,11 @@ const transformOrderbook = (
 ): OrderBook => {
     return input.unitPrices.map((unitPrice, index) => ({
         amount: input.amounts[index],
-        value: LoanValue.fromPrice(unitPrice.toNumber(), maturity),
-        itayoseOpeningDate,
+        value: LoanValue.fromPrice(
+            unitPrice.toNumber(),
+            maturity,
+            itayoseOpeningDate
+        ),
     }));
 };
 

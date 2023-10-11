@@ -29,7 +29,11 @@ export const usePrepareOrderbookData = <
                 if (!result[price]) {
                     result[price] = {
                         amount: order.amount,
-                        value: LoanValue.fromPrice(price, order.value.maturity),
+                        value: LoanValue.fromPrice(
+                            price,
+                            order.value.maturity,
+                            order.value.calculationDate
+                        ),
                     };
                 } else {
                     result[price].amount = result[price].amount.add(
