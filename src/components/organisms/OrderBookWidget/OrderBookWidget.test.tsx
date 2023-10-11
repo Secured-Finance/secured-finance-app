@@ -3,7 +3,7 @@ import { fireEvent, render, screen, within } from 'src/test-utils.js';
 import { OrderType } from 'src/types';
 import * as stories from './OrderBookWidget.stories';
 
-const { Default, Loading, Itayose } = composeStories(stories);
+const { Default, Loading, Itayose, Bitcoin } = composeStories(stories);
 
 describe('OrderBookWidget Component', () => {
     it('should render two tables', () => {
@@ -205,6 +205,18 @@ describe('OrderBookWidget Component', () => {
                 showTicker: false,
             });
             expect(onFilterChange).toHaveBeenCalledTimes(2);
+        });
+
+        it('should show a different number of rows when a button is clicked', () => {
+            render(<Bitcoin />);
+            expect(screen.getAllByTestId('buyOrders-row')).toHaveLength(12);
+            expect(screen.getAllByTestId('sellOrders-row')).toHaveLength(12);
+            fireEvent.click(getButton('Show Only Lend Orders'));
+            expect(screen.queryAllByTestId('buyOrders-row')).toHaveLength(0);
+            expect(screen.getAllByTestId('sellOrders-row')).toHaveLength(26);
+            fireEvent.click(getButton('Show Only Borrow Orders'));
+            expect(screen.getAllByTestId('buyOrders-row')).toHaveLength(26);
+            expect(screen.queryAllByTestId('sellOrders-row')).toHaveLength(0);
         });
     });
 
