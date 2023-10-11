@@ -65,8 +65,8 @@ const SecuredFinanceProvider: React.FC = ({ children }) => {
     );
 
     const handleChainChanged = useCallback(
-        (chainId: number) => {
-            dispatchChainError(chainId);
+        (chainId: string) => {
+            dispatchChainError(hexToNumber(chainId as `0x${string}`));
         },
         [dispatchChainError]
     );
@@ -82,7 +82,11 @@ const SecuredFinanceProvider: React.FC = ({ children }) => {
             }
         };
         fetchChainId();
-    }, [client, dispatchChainError]);
+        window.ethereum?.on('chainChanged', handleChainChanged);
+        return () => {
+            window.ethereum?.removeListener('chainChanged', handleChainChanged);
+        };
+    }, [dispatchChainError, handleChainChanged]);
 
     useEffect(() => {
         const connectSFClient = async (
@@ -169,11 +173,9 @@ const SecuredFinanceProvider: React.FC = ({ children }) => {
         });
 
         web3Provider.on('accountsChanged', handleAccountChanged);
-        web3Provider.on('chainChanged', handleChainChanged);
 
         return () => {
             web3Provider.removeAllListeners('accountsChanged');
-            web3Provider.removeAllListeners('chainChanged');
             web3Provider.removeAllListeners('block');
         };
     }, [
