@@ -25,6 +25,8 @@ export type LendingMarket = {
     bestLendUnitPrice: number;
     minBorrowUnitPrice: number;
     maxLendUnitPrice: number;
+    lastOrderBlockNumber: number;
+    blockUnitPriceHistory: number[];
 };
 
 const baseContract: { 0: LendingMarket } = {
@@ -45,6 +47,8 @@ const baseContract: { 0: LendingMarket } = {
         bestLendUnitPrice: 0,
         minBorrowUnitPrice: 0,
         maxLendUnitPrice: 0,
+        lastOrderBlockNumber: 0,
+        blockUnitPriceHistory: [],
     },
 };
 
@@ -82,6 +86,7 @@ export const useLendingMarkets = () => {
             const lendingMarkets = await securedFinance?.getOrderBookDetails(
                 currencies
             );
+
             return lendingMarkets ?? [];
         },
         select: markets => {
@@ -96,6 +101,8 @@ export const useLendingMarkets = () => {
                         openingDate,
                         marketUnitPrice,
                         openingUnitPrice,
+                        blockUnitPriceHistory,
+                        lastOrderBlockNumber,
                         isReady,
                         isOpened,
                         isMatured,
@@ -138,6 +145,11 @@ export const useLendingMarkets = () => {
                             bestLendUnitPrice: bestLendUnitPrice.toNumber(),
                             minBorrowUnitPrice: minBorrowUnitPrice.toNumber(),
                             maxLendUnitPrice: maxLendUnitPrice.toNumber(),
+                            lastOrderBlockNumber:
+                                lastOrderBlockNumber.toNumber(),
+                            blockUnitPriceHistory: blockUnitPriceHistory.map(
+                                price => price.toNumber()
+                            ),
                         },
                     };
                 });

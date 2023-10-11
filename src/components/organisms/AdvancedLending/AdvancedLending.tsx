@@ -120,6 +120,7 @@ export const AdvancedLending = ({
     const data = useMarket(currency, maturity);
     const marketUnitPrice = data?.marketUnitPrice;
     const openingUnitPrice = data?.openingUnitPrice;
+    const lastOrderBlockNumber = data?.lastOrderBlockNumber;
 
     const [orderBook, setOrderBookDepth] = useOrderbook(
         currency,
@@ -148,19 +149,18 @@ export const AdvancedLending = ({
         if (marketUnitPrice) {
             return {
                 value: LoanValue.fromPrice(marketUnitPrice, maturity),
-                // TODO: get the time from the block
-                time: 0,
+                block: lastOrderBlockNumber,
                 type: 'block' as const,
             };
         }
         if (openingUnitPrice) {
             return {
                 value: LoanValue.fromPrice(openingUnitPrice, maturity),
-                time: 0,
+                block: 0,
                 type: 'opening' as const,
             };
         }
-    }, [marketUnitPrice, maturity, openingUnitPrice]);
+    }, [lastOrderBlockNumber, marketUnitPrice, maturity, openingUnitPrice]);
 
     const selectedAsset = useMemo(() => {
         return assetList.find(option => option.value === currency);

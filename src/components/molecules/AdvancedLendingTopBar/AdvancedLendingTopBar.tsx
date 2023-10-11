@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { GradientBox, MarketTab, Option } from 'src/components/atoms';
 import { HorizontalAssetSelector } from 'src/components/molecules';
 import { IndexOf } from 'src/types';
@@ -9,6 +10,7 @@ import {
     formatTimestampWithMonth,
 } from 'src/utils';
 import { LoanValue } from 'src/utils/entities';
+import { usePublicClient } from 'wagmi';
 
 type ValueField = number | string;
 type AdvancedLendingTopBarProp<T> = {
@@ -24,7 +26,7 @@ type AdvancedLendingTopBarProp<T> = {
 
 type CurrentMarket = {
     value: LoanValue;
-    time: number;
+    block: number;
     type: 'opening' | 'block';
 };
 
@@ -45,21 +47,35 @@ export const AdvancedLendingTopBar = <T extends string = string>({
     currentMarket,
     values,
 }: AdvancedLendingTopBarProp<T>) => {
-    const getTime = () => {
-        if (currentMarket) {
-            if (currentMarket.type === 'opening') {
-                return 'Opening Price';
-            }
+    const publicClient = usePublicClient();
+    const [time, setTime] = useState<string>('-');
 
-            if (currentMarket.type === 'block' && currentMarket.time) {
-                return formatTimestampWithMonth(currentMarket.time);
-            }
+    useEffect(() => {
+        const getTime = async () => {
+            if (currentMarket) {
+                if (currentMarket.type === 'opening') {
+                    return 'Opening Price';
+                }
 
-            // TODO: replace this '-' with the block time
+                if (currentMarket.type === 'block' && currentMarket.block) {
+                    return formatTimestampWithMonth(
+                        Number(
+                            (
+                                await publicClient.getBlock({
+                                    blockNumber: BigInt(currentMarket.block),
+                                })
+                            ).timestamp
+                        )
+                    );
+                }
+
+                // TODO: replace this '-' with the block time
+                return '-';
+            }
             return '-';
-        }
-        return '-';
-    };
+        };
+        getTime().then(time => setTime(time));
+    }, [currentMarket, publicClient]);
 
     return (
         <GradientBox shape='rectangle'>
@@ -86,7 +102,7 @@ export const AdvancedLendingTopBar = <T extends string = string>({
                     />
 
                     <div className='typography-caption-2 whitespace-nowrap text-neutral-4'>
-                        {getTime()}
+                        {time}
                     </div>
                 </div>
                 <div className='border-r border-white-10 pr-5 tablet:col-start-4 tablet:row-start-1 laptop:col-start-auto laptop:row-start-auto laptop:px-5'>

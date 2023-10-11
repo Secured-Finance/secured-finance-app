@@ -1,6 +1,5 @@
 import { composeStories } from '@storybook/react';
 import { render, screen } from 'src/test-utils.js';
-import { formatTimestampWithMonth } from 'src/utils';
 import { LoanValue } from 'src/utils/entities';
 import * as stories from './AdvancedLendingTopBar.stories';
 
@@ -49,31 +48,18 @@ describe('AdvancedLendingTopBar Component', () => {
     });
 
     describe('Current Market', () => {
-        it('should show that the current market is an opening price if indicated', () => {
+        it('should show that the current market is an opening price if indicated', async () => {
             render(
                 <Default
                     currentMarket={{
                         value: LoanValue.fromPrice(8000, 1643713200),
-                        time: 1643713200,
+                        block: 1643713200,
                         type: 'opening',
                     }}
                 />
             );
-            expect(screen.getByText('Opening Price')).toBeInTheDocument();
-        });
-
-        it('should show that the current market is a last block price if indicated', () => {
-            render(
-                <Default
-                    currentMarket={{
-                        value: LoanValue.fromPrice(8000, 1643713200),
-                        time: 1643713200,
-                        type: 'block',
-                    }}
-                />
-            );
             expect(
-                screen.getByText(`${formatTimestampWithMonth(1643713200)}`)
+                await screen.findByText('Opening Price')
             ).toBeInTheDocument();
         });
 

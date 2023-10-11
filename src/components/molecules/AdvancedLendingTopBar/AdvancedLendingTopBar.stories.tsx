@@ -1,4 +1,5 @@
 import { RESPONSIVE_PARAMETERS } from '.storybook/constants';
+import { withWalletProvider } from '.storybook/decorators';
 import type { Meta, StoryFn } from '@storybook/react';
 import { currencyList, maturityOptions } from 'src/stories/mocks/fixtures';
 import { LoanValue } from 'src/utils/entities';
@@ -25,13 +26,14 @@ export default {
                 lastTradePrice,
                 maturityOptions[0].value.toNumber()
             ),
-            time: 0,
+            block: 0,
             type: 'block',
         },
 
         onAssetChange: () => {},
         onTermChange: () => {},
     },
+    decorators: [withWalletProvider],
     parameters: {
         ...RESPONSIVE_PARAMETERS,
     },

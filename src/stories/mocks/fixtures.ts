@@ -95,6 +95,8 @@ export const maturitiesMockFromContract = (ccy: string) => [
         minBorrowUnitPrice: BigNumber.from('9672'),
         maxLendUnitPrice: BigNumber.from('9700'),
         ccy,
+        lastOrderBlockNumber: BigNumber.from('12345678'),
+        blockUnitPriceHistory: [BigNumber.from(9801), BigNumber.from(9701)],
     },
     {
         name: 'MAR23',
@@ -112,6 +114,8 @@ export const maturitiesMockFromContract = (ccy: string) => [
         minBorrowUnitPrice: BigNumber.from('9670'),
         maxLendUnitPrice: BigNumber.from('9698'),
         ccy,
+        lastOrderBlockNumber: BigNumber.from('12345678'),
+        blockUnitPriceHistory: [BigNumber.from(9801), BigNumber.from(9701)],
     },
     {
         name: 'JUN23',
@@ -129,6 +133,8 @@ export const maturitiesMockFromContract = (ccy: string) => [
         minBorrowUnitPrice: BigNumber.from('9664'),
         maxLendUnitPrice: BigNumber.from('9692'),
         ccy,
+        lastOrderBlockNumber: BigNumber.from('12345678'),
+        blockUnitPriceHistory: [BigNumber.from(9801), BigNumber.from(9701)],
     },
     {
         name: 'SEP23',
@@ -146,6 +152,8 @@ export const maturitiesMockFromContract = (ccy: string) => [
         minBorrowUnitPrice: BigNumber.from('9659'),
         maxLendUnitPrice: BigNumber.from('9687'),
         ccy,
+        lastOrderBlockNumber: BigNumber.from('12345678'),
+        blockUnitPriceHistory: [BigNumber.from(9801), BigNumber.from(9701)],
     },
     {
         name: 'DEC23',
@@ -163,6 +171,8 @@ export const maturitiesMockFromContract = (ccy: string) => [
         minBorrowUnitPrice: BigNumber.from('9638'),
         maxLendUnitPrice: BigNumber.from('9666'),
         ccy,
+        lastOrderBlockNumber: BigNumber.from('12345678'),
+        blockUnitPriceHistory: [BigNumber.from(9801), BigNumber.from(9701)],
     },
     {
         name: 'MAR24',
@@ -180,6 +190,8 @@ export const maturitiesMockFromContract = (ccy: string) => [
         minBorrowUnitPrice: BigNumber.from('9628'),
         maxLendUnitPrice: BigNumber.from('9656'),
         ccy,
+        lastOrderBlockNumber: BigNumber.from('12345678'),
+        blockUnitPriceHistory: [BigNumber.from(9801), BigNumber.from(9701)],
     },
     {
         name: 'JUN24',
@@ -197,6 +209,8 @@ export const maturitiesMockFromContract = (ccy: string) => [
         minBorrowUnitPrice: BigNumber.from('9612'),
         maxLendUnitPrice: BigNumber.from('9640'),
         ccy,
+        lastOrderBlockNumber: BigNumber.from('12345678'),
+        blockUnitPriceHistory: [BigNumber.from(9801), BigNumber.from(9701)],
     },
     {
         name: 'SEP24',
@@ -214,6 +228,8 @@ export const maturitiesMockFromContract = (ccy: string) => [
         minBorrowUnitPrice: BigNumber.from('9602'),
         maxLendUnitPrice: BigNumber.from('9630'),
         ccy,
+        lastOrderBlockNumber: BigNumber.from('12345678'),
+        blockUnitPriceHistory: [BigNumber.from(9801), BigNumber.from(9701)],
     },
     {
         name: 'DEC24',
@@ -231,6 +247,8 @@ export const maturitiesMockFromContract = (ccy: string) => [
         minBorrowUnitPrice: BigNumber.from('9602'),
         maxLendUnitPrice: BigNumber.from('9630'),
         ccy,
+        lastOrderBlockNumber: BigNumber.from('12345678'),
+        blockUnitPriceHistory: [BigNumber.from(9801), BigNumber.from(9701)],
     },
 ];
 
@@ -252,6 +270,8 @@ export const maturities = {
         bestLendUnitPrice: 9687,
         minBorrowUnitPrice: 9672,
         maxLendUnitPrice: 9700,
+        lastOrderBlockNumber: 12345678,
+        blockUnitPriceHistory: [9801, 9701],
     },
     [mar23Fixture.toNumber()]: {
         name: 'MAR23',
@@ -270,6 +290,8 @@ export const maturities = {
         bestLendUnitPrice: 9685,
         minBorrowUnitPrice: 9670,
         maxLendUnitPrice: 9698,
+        lastOrderBlockNumber: 12345678,
+        blockUnitPriceHistory: [9801, 9701],
     },
     [jun23Fixture.toNumber()]: {
         name: 'JUN23',
@@ -288,6 +310,8 @@ export const maturities = {
         bestLendUnitPrice: 9679,
         minBorrowUnitPrice: 9664,
         maxLendUnitPrice: 9692,
+        lastOrderBlockNumber: 12345678,
+        blockUnitPriceHistory: [9801, 9701],
     },
     [sep23Fixture.toNumber()]: {
         name: 'SEP23',
@@ -306,6 +330,8 @@ export const maturities = {
         bestLendUnitPrice: 9674,
         minBorrowUnitPrice: 9659,
         maxLendUnitPrice: 9687,
+        lastOrderBlockNumber: 12345678,
+        blockUnitPriceHistory: [9801, 9701],
     },
     [dec23Fixture.toNumber()]: {
         name: 'DEC23',
@@ -324,6 +350,8 @@ export const maturities = {
         bestLendUnitPrice: 9653,
         minBorrowUnitPrice: 9638,
         maxLendUnitPrice: 9666,
+        lastOrderBlockNumber: 12345678,
+        blockUnitPriceHistory: [9801, 9701],
     },
     [mar24Fixture.toNumber()]: {
         name: 'MAR24',
@@ -342,6 +370,8 @@ export const maturities = {
         bestLendUnitPrice: 9643,
         minBorrowUnitPrice: 9628,
         maxLendUnitPrice: 9656,
+        lastOrderBlockNumber: 12345678,
+        blockUnitPriceHistory: [9801, 9701],
     },
     [jun24Fixture.toNumber()]: {
         name: 'JUN24',
@@ -360,6 +390,8 @@ export const maturities = {
         bestLendUnitPrice: 9627,
         minBorrowUnitPrice: 9612,
         maxLendUnitPrice: 9640,
+        lastOrderBlockNumber: 12345678,
+        blockUnitPriceHistory: [9801, 9701],
     },
     [sep24Fixture.toNumber()]: {
         name: 'SEP24',
@@ -378,6 +410,8 @@ export const maturities = {
         bestLendUnitPrice: 9617,
         minBorrowUnitPrice: 9602,
         maxLendUnitPrice: 9630,
+        lastOrderBlockNumber: 12345678,
+        blockUnitPriceHistory: [9801, 9701],
     },
     [dec24Fixture.toNumber()]: {
         name: 'DEC24',
@@ -396,6 +430,8 @@ export const maturities = {
         bestLendUnitPrice: 9617,
         minBorrowUnitPrice: 9602,
         maxLendUnitPrice: 9630,
+        lastOrderBlockNumber: 12345678,
+        blockUnitPriceHistory: [9801, 9701],
     },
 };
 
