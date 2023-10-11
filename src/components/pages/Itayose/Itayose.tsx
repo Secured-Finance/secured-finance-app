@@ -140,7 +140,8 @@ export const Itayose = () => {
     const [orderBook, setOrderBookDepth] = useOrderbook(
         currency,
         maturity,
-        DEFAULT_ORDERBOOK_DEPTH
+        DEFAULT_ORDERBOOK_DEPTH,
+        lendingContracts[selectedTerm.value.toNumber()]?.utcOpeningDate
     );
     const { data: collateralBook = emptyCollateralBook } =
         useCollateralBook(address);
@@ -193,15 +194,9 @@ export const Itayose = () => {
 
         return LoanValue.getMidValue(
             sortedLendOrders[0].value,
-            sortedBorrowOrders[0].value,
-            lendingContracts[selectedTerm.value.toNumber()]?.utcOpeningDate
+            sortedBorrowOrders[0].value
         );
-    }, [
-        lendingContracts,
-        orderBook.data?.borrowOrderbook,
-        orderBook.data?.lendOrderbook,
-        selectedTerm.value,
-    ]);
+    }, [orderBook.data?.borrowOrderbook, orderBook.data?.lendOrderbook]);
 
     return (
         <Page title='Pre-Open Order Book'>

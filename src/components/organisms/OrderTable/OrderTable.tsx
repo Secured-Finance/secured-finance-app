@@ -20,7 +20,7 @@ export const OrderTable = ({
     data,
     variant = 'default',
     height,
-    itayoseOpeningDate = 0,
+    itayoseOpeningDate,
 }: {
     data: Order[];
     variant?: 'compact' | 'default';
