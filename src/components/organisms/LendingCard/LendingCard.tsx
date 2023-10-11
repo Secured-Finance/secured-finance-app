@@ -13,7 +13,11 @@ import {
     TermSelector,
 } from 'src/components/molecules';
 import { OrderAction } from 'src/components/organisms';
-import { CollateralBook, useBalances } from 'src/hooks';
+import {
+    CollateralBook,
+    useBalances,
+    useCurrencyDelistedStatus,
+} from 'src/hooks';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import {
     selectLandingOrderForm,
@@ -56,7 +60,12 @@ export const LendingCard = ({
     const { address } = useAccount();
 
     const assetPriceMap = useSelector((state: RootState) => getPriceMap(state));
-    const assetList = useMemo(() => getCurrencyMapAsOptions(), []);
+
+    const ccyStatus = useCurrencyDelistedStatus();
+    const assetList = useMemo(
+        () => getCurrencyMapAsOptions(ccyStatus.data),
+        [ccyStatus.data]
+    );
 
     const balanceRecord = useBalances();
 

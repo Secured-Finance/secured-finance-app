@@ -19,7 +19,7 @@ describe('AssetSelector Component', () => {
         render(<Default />);
         const input = screen.getByRole('textbox');
         fireEvent.click(screen.getByRole('button'));
-        fireEvent.click(screen.getByText('Ethereum'));
+        fireEvent.click(screen.getByText('ETH'));
         fireEvent.change(input, { target: { value: '1' } });
         expect(screen.getByText(`~ $1,012`)).toBeInTheDocument();
         fireEvent.change(input, { target: { value: '10' } });
@@ -64,7 +64,7 @@ describe('AssetSelector Component', () => {
         render(<Default onAmountChange={onAmountChange} />);
         expect(onAmountChange).toHaveBeenCalledTimes(0);
         fireEvent.click(screen.getByRole('button'));
-        fireEvent.click(screen.getByText('Ethereum'));
+        fireEvent.click(screen.getByText('ETH'));
         expect(onAmountChange).toHaveBeenCalledTimes(0);
 
         fireEvent.click(screen.getByRole('button'));
@@ -77,7 +77,7 @@ describe('AssetSelector Component', () => {
         render(<Default onAssetChange={onAssetChange} />);
         expect(onAssetChange).toHaveBeenCalledWith('WBTC');
         fireEvent.click(screen.getByRole('button'));
-        fireEvent.click(screen.getByText('Ethereum'));
+        fireEvent.click(screen.getByText('ETH'));
         expect(onAssetChange).toHaveBeenLastCalledWith('ETH');
         fireEvent.click(screen.getByRole('button'));
         fireEvent.click(screen.getByText('WFIL'));

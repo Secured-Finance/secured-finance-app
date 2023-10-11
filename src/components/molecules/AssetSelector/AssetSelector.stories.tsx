@@ -1,8 +1,12 @@
 import type { Meta, StoryFn } from '@storybook/react';
+import { within } from '@storybook/testing-library';
 import { assetList } from 'src/stories/mocks/fixtures';
 import { AssetSelector } from './AssetSelector';
 
 type AllowedCcy = 'WBTC' | 'ETH' | 'WFIL' | 'USDC' | 'USDT';
+const Chip = (
+    <div className='rounded-xl bg-black-40 px-4 py-1 text-orange'>Chip</div>
+);
 
 const priceList: Record<AllowedCcy, number> = {
     WBTC: 20515,
@@ -16,7 +20,10 @@ export default {
     title: 'Molecules/AssetSelector',
     component: AssetSelector<AllowedCcy>,
     args: {
-        options: assetList,
+        options: assetList.map(a => ({
+            ...a,
+            chip: Chip,
+        })),
         selected: assetList[0],
         priceList,
         onAssetChange: () => {},
@@ -29,3 +36,7 @@ const Template: StoryFn<typeof AssetSelector> = args => (
 );
 
 export const Default = Template.bind({});
+Default.play = async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    canvas.getByRole('button').click();
+};

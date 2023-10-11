@@ -427,12 +427,12 @@ export const walletSourceList: WalletSourceOption[] = [
 
 export const assetList = [
     {
-        label: 'Wrapped Bitcoin',
+        label: 'WBTC',
         iconSVG: WrappedBitcoinIcon,
         value: 'WBTC',
     },
     {
-        label: 'Ethereum',
+        label: 'ETH',
         iconSVG: EthIcon,
         value: 'ETH',
     },
@@ -447,7 +447,7 @@ export const assetList = [
         value: 'USDC',
     },
     {
-        label: 'USD Tether',
+        label: 'USDT',
         iconSVG: UsdtIcon,
         value: 'USDT',
     },

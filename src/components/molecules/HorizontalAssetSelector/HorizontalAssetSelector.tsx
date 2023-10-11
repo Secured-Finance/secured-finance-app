@@ -1,8 +1,8 @@
 import { useCallback, useMemo, useState } from 'react';
 import { DropdownSelector, Option } from 'src/components/atoms';
 import {
-    currencyMap,
     CurrencySymbol,
+    currencyMap,
     getTransformMaturityOption,
 } from 'src/utils';
 type HorizontalAssetSelectorProp<T> = {
@@ -43,6 +43,7 @@ export const HorizontalAssetSelector = <T extends string = string>({
                 optionList={assetList}
                 selected={selectedAsset}
                 onChange={onAssetChange}
+                variant='fixedWidth'
             />
             <DropdownSelector
                 optionList={options}

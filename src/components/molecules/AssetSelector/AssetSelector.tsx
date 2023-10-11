@@ -100,6 +100,7 @@ export const AssetSelector = <AssetType extends string = string>({
                     optionList={options}
                     selected={selected}
                     onChange={handleAssetChange}
+                    variant='fixedWidth'
                 />
                 <InputBase
                     className='typography-body-1 w-full text-right text-white'
