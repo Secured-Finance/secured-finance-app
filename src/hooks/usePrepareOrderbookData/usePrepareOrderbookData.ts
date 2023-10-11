@@ -9,6 +9,7 @@ export const usePrepareOrderbookData = <
 >(
     data: ReturnType<typeof useOrderbook>[0]['data'],
     orderbookType: T,
+    limit: number,
     aggregationFactor: AggregationFactorType
 ) => {
     return useMemo(() => {
@@ -42,7 +43,7 @@ export const usePrepareOrderbookData = <
         );
 
         return orderbookType === 'lendOrderbook'
-            ? [...sortedResult, ...zeroValues]
-            : [...zeroValues, ...sortedResult];
-    }, [data, orderbookType, aggregationFactor]);
+            ? [...sortedResult, ...zeroValues].slice(0, limit)
+            : [...zeroValues, ...sortedResult].slice(-limit);
+    }, [data, orderbookType, aggregationFactor, limit]);
 };
