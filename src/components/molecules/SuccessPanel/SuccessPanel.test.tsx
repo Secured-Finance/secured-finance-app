@@ -23,7 +23,7 @@ describe('SuccessPanel Component', () => {
         expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
     });
 
-    it.skip('should have a link to etherscan if txHash is provided and tooltip should be visible on hover', async () => {
+    it('should have a link to etherscan if txHash is provided and tooltip should be visible on hover', async () => {
         render(<WithTransactionHash />);
         const address = screen.getByText('987654321123456789');
         expect(address).toBeInTheDocument();
