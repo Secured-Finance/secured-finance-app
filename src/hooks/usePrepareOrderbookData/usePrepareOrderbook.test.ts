@@ -59,10 +59,37 @@ const data = {
     ],
 };
 
+const sortedResults = [
+    {
+        amount: BigNumber.from('0'),
+        value: LoanValue.fromPrice(9855, maturity),
+    },
+    {
+        amount: BigNumber.from('1'),
+        value: LoanValue.fromPrice(9854, maturity),
+    },
+    {
+        amount: BigNumber.from('1'),
+        value: LoanValue.fromPrice(9853, maturity),
+    },
+    {
+        amount: BigNumber.from('1'),
+        value: LoanValue.fromPrice(9852, maturity),
+    },
+    {
+        amount: BigNumber.from('1'),
+        value: LoanValue.fromPrice(9851, maturity),
+    },
+    {
+        amount: BigNumber.from('1'),
+        value: LoanValue.fromPrice(9850, maturity),
+    },
+];
+
 describe('usePrepareOrderbookData', () => {
     it('should return an empty array when no data is provided', () => {
         const { result } = renderHook(() =>
-            usePrepareOrderbookData(undefined, 'borrowOrderbook', 1)
+            usePrepareOrderbookData(undefined, 'borrowOrderbook', 6, 1)
         );
         expect(result.current).toEqual([]);
     });
@@ -70,7 +97,7 @@ describe('usePrepareOrderbookData', () => {
     describe('aggregation', () => {
         it('should return the correct data when provided with valid data', () => {
             const { result } = renderHook(() =>
-                usePrepareOrderbookData(data, 'borrowOrderbook', 10)
+                usePrepareOrderbookData(data, 'borrowOrderbook', 6, 10)
             );
             expect(result.current).toEqual([
                 {
@@ -86,39 +113,14 @@ describe('usePrepareOrderbookData', () => {
 
         it('should not aggregate the data when provided with an aggregation factor of 1 but still sort it and order the zeros', () => {
             const { result } = renderHook(() =>
-                usePrepareOrderbookData(data, 'borrowOrderbook', 1)
+                usePrepareOrderbookData(data, 'borrowOrderbook', 6, 1)
             );
-            expect(result.current).toEqual([
-                {
-                    amount: BigNumber.from('0'),
-                    value: LoanValue.fromPrice(9855, maturity),
-                },
-                {
-                    amount: BigNumber.from('1'),
-                    value: LoanValue.fromPrice(9854, maturity),
-                },
-                {
-                    amount: BigNumber.from('1'),
-                    value: LoanValue.fromPrice(9853, maturity),
-                },
-                {
-                    amount: BigNumber.from('1'),
-                    value: LoanValue.fromPrice(9852, maturity),
-                },
-                {
-                    amount: BigNumber.from('1'),
-                    value: LoanValue.fromPrice(9851, maturity),
-                },
-                {
-                    amount: BigNumber.from('1'),
-                    value: LoanValue.fromPrice(9850, maturity),
-                },
-            ]);
+            expect(result.current).toEqual(sortedResults);
         });
 
         it('should aggregate the data by 1000 when provided with an aggregation factor of 1000', () => {
             const { result } = renderHook(() =>
-                usePrepareOrderbookData(data, 'lendOrderbook', 1000)
+                usePrepareOrderbookData(data, 'lendOrderbook', 6, 1000)
             );
             expect(result.current).toEqual([
                 {
@@ -161,6 +163,7 @@ describe('usePrepareOrderbookData', () => {
                         lendOrderbook: withZeros,
                     },
                     'lendOrderbook',
+                    4,
                     1
                 )
             );
@@ -180,6 +183,7 @@ describe('usePrepareOrderbookData', () => {
                         borrowOrderbook: withZeros,
                     },
                     'borrowOrderbook',
+                    4,
                     1
                 )
             );
@@ -189,6 +193,62 @@ describe('usePrepareOrderbookData', () => {
                 withZeros[0],
                 withZeros[3],
             ]);
+        });
+    });
+
+    describe('limit', () => {
+        it('should limit the data to the provided limit for lend orderbook to the biggest prices', () => {
+            const { result } = renderHook(() =>
+                usePrepareOrderbookData(data, 'lendOrderbook', 3, 1)
+            );
+            expect(result.current).toEqual([
+                {
+                    amount: BigNumber.from('1'),
+                    value: LoanValue.fromPrice(9200, maturity),
+                },
+                {
+                    amount: BigNumber.from('2'),
+                    value: LoanValue.fromPrice(9110, maturity),
+                },
+                {
+                    amount: BigNumber.from('3'),
+                    value: LoanValue.fromPrice(9050, maturity),
+                },
+            ]);
+        });
+
+        it('should limit the data to the provided limit for borrow orderbook to the smallest prices', () => {
+            const { result } = renderHook(() =>
+                usePrepareOrderbookData(data, 'borrowOrderbook', 3, 1)
+            );
+            expect(result.current).toEqual([
+                {
+                    amount: BigNumber.from('1'),
+                    value: LoanValue.fromPrice(9852, maturity),
+                },
+                {
+                    amount: BigNumber.from('1'),
+                    value: LoanValue.fromPrice(9851, maturity),
+                },
+                {
+                    amount: BigNumber.from('1'),
+                    value: LoanValue.fromPrice(9850, maturity),
+                },
+            ]);
+        });
+
+        it('should return all the data if limit is zero', () => {
+            const { result } = renderHook(() =>
+                usePrepareOrderbookData(data, 'borrowOrderbook', 0, 1)
+            );
+            expect(result.current).toEqual(sortedResults);
+        });
+
+        it('should return all the data if limit is bigger than the length of the data', () => {
+            const { result } = renderHook(() =>
+                usePrepareOrderbookData(data, 'borrowOrderbook', 10, 1)
+            );
+            expect(result.current).toEqual(sortedResults);
         });
     });
 });

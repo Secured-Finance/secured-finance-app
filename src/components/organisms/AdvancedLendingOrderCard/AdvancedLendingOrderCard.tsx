@@ -385,6 +385,7 @@ export function AdvancedLendingOrderCard({
                     collateralCoverage={collateralUsagePercent}
                     totalCollateralInUSD={collateralBook.usdCollateral}
                     collateralThreshold={collateralBook.collateralThreshold}
+                    account={address}
                 />
             </div>
         </div>

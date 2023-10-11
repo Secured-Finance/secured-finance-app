@@ -142,6 +142,7 @@ export const CollateralTabLeftPane = ({
                                 collateralThreshold={
                                     collateralBook.collateralThreshold
                                 }
+                                account={account}
                             />
                             {collateralQuantityExist && (
                                 <CollateralInformationTable
