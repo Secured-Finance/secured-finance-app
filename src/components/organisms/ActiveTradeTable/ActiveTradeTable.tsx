@@ -26,12 +26,16 @@ import {
 
 const columnHelper = createColumnHelper<Position>();
 
+const DEFAULT_HEIGHT = 300;
+
 export const ActiveTradeTable = ({
     data,
     currencyDelistedStatusMap,
+    height,
 }: {
     data: Position[];
     currencyDelistedStatusMap: Record<CurrencySymbol, boolean>;
+    height?: number;
 }) => {
     const [unwindDialogData, setUnwindDialogData] = useState<{
         maturity: Maturity;
@@ -256,6 +260,11 @@ export const ActiveTradeTable = ({
                 options={{
                     name: 'active-trade-table',
                     stickyColumns: new Set<number>([6]),
+                    pagination: {
+                        containerHeight: height || DEFAULT_HEIGHT,
+                        getMoreData: () => {},
+                        totalData: data.length,
+                    },
                 }}
             />
             {unwindDialogData && (

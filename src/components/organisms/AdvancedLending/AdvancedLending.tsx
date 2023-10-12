@@ -33,14 +33,14 @@ import {
 import { RootState } from 'src/store/types';
 import { MaturityOptionList, TransactionList } from 'src/types';
 import {
-    CurrencySymbol,
-    Rate,
     amountFormatterFromBase,
     amountFormatterToBase,
     currencyMap,
+    CurrencySymbol,
     formatLoanValue,
     getCurrencyMapAsOptions,
     ordinaryFormat,
+    Rate,
     usdFormat,
 } from 'src/utils';
 import { LoanValue, Maturity } from 'src/utils/entities';
@@ -77,9 +77,6 @@ const useTradeHistoryDetails = (
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [currency, maturity.toNumber(), transactions.length]);
 };
-
-const DEFAULT_ORDERBOOK_DEPTH = 12;
-const DEFAULT_ORDERBOOK_DEPTH_FULL = 26;
 
 export const AdvancedLending = ({
     collateralBook,
@@ -123,11 +120,11 @@ export const AdvancedLending = ({
     const marketUnitPrice = data?.marketUnitPrice;
     const openingUnitPrice = data?.openingUnitPrice;
 
-    const [orderBook, setOrderBookDepth] = useOrderbook(
+    const [orderBook, setMultiplier, setIsShowingAll] = useOrderbook(
         currency,
-        maturity,
-        DEFAULT_ORDERBOOK_DEPTH
+        maturity
     );
+
     const filteredOrderList = useMarketOrderList(address, currency, maturity);
 
     const transactionHistory = useGraphClientHook(
@@ -231,14 +228,11 @@ export const AdvancedLending = ({
                 orderbook={orderBook}
                 currency={currency}
                 marketPrice={currentMarket?.value}
-                onFilterChange={state => {
-                    setOrderBookDepth(
-                        !state.showBorrow || !state.showLend
-                            ? DEFAULT_ORDERBOOK_DEPTH_FULL
-                            : DEFAULT_ORDERBOOK_DEPTH
-                    );
-                }}
                 currencyDelistedStatusMap={currencyDelistedStatusMap}
+                onFilterChange={state =>
+                    setIsShowingAll(state.showBorrow && state.showLend)
+                }
+                onAggregationChange={setMultiplier}
             />
 
             <div className='flex h-full flex-grow flex-col gap-4'>

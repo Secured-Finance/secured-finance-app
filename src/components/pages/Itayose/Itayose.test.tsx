@@ -62,7 +62,7 @@ describe('Itayose Component', () => {
             ).toHaveBeenLastCalledWith(
                 expect.anything(),
                 expect.anything(),
-                12
+                13
             );
             await waitFor(() =>
                 fireEvent.click(
@@ -78,6 +78,30 @@ describe('Itayose Component', () => {
                     expect.anything(),
                     expect.anything(),
                     26
+                )
+            );
+        });
+
+        it('should retrieve more data when the user select a aggregation factor', async () => {
+            render(<Default />);
+            expect(
+                mockSecuredFinance.getLendOrderBook
+            ).toHaveBeenLastCalledWith(
+                expect.anything(),
+                expect.anything(),
+                13
+            );
+            await waitFor(() => {
+                fireEvent.click(screen.getByRole('button', { name: '0.01' }));
+                fireEvent.click(screen.getByRole('menuitem', { name: '1' }));
+            });
+            await waitFor(() =>
+                expect(
+                    mockSecuredFinance.getLendOrderBook
+                ).toHaveBeenLastCalledWith(
+                    expect.anything(),
+                    expect.anything(),
+                    1300
                 )
             );
         });

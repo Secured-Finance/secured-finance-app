@@ -251,7 +251,7 @@ export const WithdrawCollateral = ({
                                     ['Status', 'Complete'],
                                     [
                                         'Ethereum Address',
-                                        AddressUtils.format(address ?? '', 6),
+                                        AddressUtils.format(address ?? '', 8),
                                     ],
                                     [
                                         'Amount',
