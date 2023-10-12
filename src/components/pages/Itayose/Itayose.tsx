@@ -19,10 +19,10 @@ import {
 } from 'src/components/organisms';
 import { Page, ThreeColumnsWithTopBar } from 'src/components/templates';
 import {
-    MarketPhase,
     baseContracts,
     defaultDelistedStatusMap,
     emptyCollateralBook,
+    MarketPhase,
     sortOrders,
     useCollateralBook,
     useCurrencyDelistedStatus,
@@ -41,9 +41,9 @@ import {
 } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
 import {
-    CurrencySymbol,
     amountFormatterFromBase,
     amountFormatterToBase,
+    CurrencySymbol,
     getCurrencyMapAsOptions,
     usdFormat,
 } from 'src/utils';
@@ -106,9 +106,6 @@ const Toolbar = ({
     );
 };
 
-const DEFAULT_ORDERBOOK_DEPTH = 12;
-const DEFAULT_ORDERBOOK_DEPTH_FULL = 26;
-
 export const Itayose = () => {
     const { address } = useAccount();
 
@@ -142,11 +139,11 @@ export const Itayose = () => {
         return assetList.find(option => option.value === currency);
     }, [currency, assetList]);
 
-    const [orderBook, setOrderBookDepth] = useOrderbook(
+    const [orderBook, setMultiplier, setIsShowingAll] = useOrderbook(
         currency,
-        maturity,
-        DEFAULT_ORDERBOOK_DEPTH
+        maturity
     );
+
     const { data: collateralBook = emptyCollateralBook } =
         useCollateralBook(address);
 
@@ -257,14 +254,11 @@ export const Itayose = () => {
                     orderbook={orderBook}
                     variant='itayose'
                     marketPrice={estimatedOpening}
-                    onFilterChange={state => {
-                        setOrderBookDepth(
-                            !state.showBorrow || !state.showLend
-                                ? DEFAULT_ORDERBOOK_DEPTH_FULL
-                                : DEFAULT_ORDERBOOK_DEPTH
-                        );
-                    }}
                     currencyDelistedStatusMap={currencyDelistedStatusMap}
+                    onFilterChange={state =>
+                        setIsShowingAll(state.showBorrow && state.showLend)
+                    }
+                    onAggregationChange={setMultiplier}
                 />
 
                 <div className='flex h-full flex-col items-stretch justify-stretch gap-6'>
