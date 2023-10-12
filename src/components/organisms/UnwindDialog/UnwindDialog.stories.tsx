@@ -38,25 +38,9 @@ const Template: StoryFn<typeof UnwindDialog> = args => (
 export const Default = Template.bind({});
 export const Repay = Template.bind({});
 Repay.args = {
-    isOpen: true,
-    onClose: () => {},
-    maturity: dec22Fixture,
-    amount: new Amount(
-        BigNumber.from('100000000000000000000'),
-        CurrencySymbol.WFIL
-    ),
-    side: OrderSide.BORROW,
     type: 'REPAY',
 };
 export const Redeem = Template.bind({});
 Redeem.args = {
-    isOpen: true,
-    onClose: () => {},
-    maturity: dec22Fixture,
-    amount: new Amount(
-        BigNumber.from('100000000000000000000'),
-        CurrencySymbol.WFIL
-    ),
-    side: OrderSide.BORROW,
     type: 'REDEEM',
 };

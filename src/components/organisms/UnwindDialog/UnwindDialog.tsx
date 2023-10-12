@@ -72,18 +72,21 @@ export const UnwindDialog = ({
                 processingTitle: 'Unwinding Position...',
                 handlePosition: unwindPosition,
                 error: 'Your position could not be unwound.',
+                success: 'Your position was successfully unwound',
             },
             REDEEM: {
                 confirmTitle: 'Redeem Position',
                 processingTitle: 'Redeeming Position...',
                 handlePosition: redeemPosition,
                 error: 'Your position could not be redeemed.',
+                success: 'Your position was successfully redeemed',
             },
             REPAY: {
                 confirmTitle: 'Repay Position',
                 processingTitle: 'Repaying Position...',
                 handlePosition: repayPosition,
                 error: 'Your position could not be repaid.',
+                success: 'Your position was successfully repaid',
             },
         }),
         [redeemPosition, repayPosition, unwindPosition]
@@ -108,7 +111,7 @@ export const UnwindDialog = ({
             currentStep: Step.placed,
             nextStep: Step.confirm,
             title: 'Success!',
-            description: 'Your position was successfully unwound.',
+            description: stateMap[type].success,
             buttonText: 'OK',
         },
         [Step.error]: {
