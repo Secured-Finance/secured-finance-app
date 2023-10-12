@@ -442,27 +442,9 @@ export const mockUseSF = () => {
             return Promise.resolve(true);
         }),
 
-        executeRepayment: jest.fn(() =>
-            Promise.resolve({
-                hash: '0x123',
-                wait: jest.fn(() =>
-                    Promise.resolve({
-                        blockNumber: 123,
-                    })
-                ),
-            })
-        ),
+        executeRepayment: jest.fn(() => Promise.resolve({})),
 
-        executeRedemption: jest.fn(() =>
-            Promise.resolve({
-                hash: '0x123',
-                wait: jest.fn(() =>
-                    Promise.resolve({
-                        blockNumber: 123,
-                    })
-                ),
-            })
-        ),
+        executeRedemption: jest.fn(() => Promise.resolve({})),
     };
 
     return mockSecuredFinance;

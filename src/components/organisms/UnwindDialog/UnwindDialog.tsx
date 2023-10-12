@@ -56,9 +56,6 @@ export const UnwindDialog = ({
     const handleContractTransaction = useHandleContractTransaction();
     const { address } = useAccount();
     const [txHash, setTxHash] = useState<string | undefined>();
-    const [errorMessage, setErrorMessage] = useState(
-        'Your position could not be unwound.'
-    );
     const globalDispatch = useDispatch();
 
     const { data: collateralBook = emptyCollateralBook } =
@@ -74,16 +71,19 @@ export const UnwindDialog = ({
                 confirmTitle: 'Unwind Position',
                 processingTitle: 'Unwinding Position...',
                 handlePosition: unwindPosition,
+                error: 'Your position could not be unwound.',
             },
             REDEEM: {
                 confirmTitle: 'Redeem Position',
                 processingTitle: 'Redeeming Position...',
                 handlePosition: redeemPosition,
+                error: 'Your position could not be redeemed.',
             },
             REPAY: {
                 confirmTitle: 'Repay Position',
                 processingTitle: 'Repaying Position...',
                 handlePosition: repayPosition,
+                error: 'Your position could not be repaid.',
             },
         }),
         [redeemPosition, repayPosition, unwindPosition]
@@ -143,6 +143,7 @@ export const UnwindDialog = ({
     };
 
     const [state, dispatch] = useReducer(reducer, stateRecord[1]);
+    const [errorMessage, setErrorMessage] = useState(stateMap[type].error);
 
     const market = useMarket(amount.currency, maturity.toNumber());
 
