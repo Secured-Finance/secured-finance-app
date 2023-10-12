@@ -3,38 +3,38 @@ import { QueryKeys } from 'src/hooks/queries';
 import useSF from 'src/hooks/useSecuredFinance';
 import { CurrencySymbol, getCurrencyMapAsList, toCurrency } from 'src/utils';
 
-export const defaultDelistedStatus: Record<CurrencySymbol, boolean> = {
-    [CurrencySymbol.WBTC]: true,
-    [CurrencySymbol.WFIL]: true,
-    [CurrencySymbol.ETH]: true,
-    [CurrencySymbol.USDC]: true,
+export const defaultDelistedStatusMap: Record<CurrencySymbol, boolean> = {
+    [CurrencySymbol.WBTC]: false,
+    [CurrencySymbol.WFIL]: false,
+    [CurrencySymbol.ETH]: false,
+    [CurrencySymbol.USDC]: false,
 };
 
-export const useCurrencyDelistedStatus = (account: string | undefined) => {
+export const useCurrencyDelistedStatus = () => {
     const securedFinance = useSF();
 
     return useQuery({
-        queryKey: [QueryKeys.CURRENCY_EXISTS, account],
+        queryKey: [QueryKeys.CURRENCY_EXISTS],
         queryFn: async () => {
             const currencyDelistedStatusMap =
                 await getCurrencyMapAsList().reduce(
                     async (delistedStatus, currencyInfo) => {
                         const accumulator = await delistedStatus;
                         const ccy = currencyInfo.symbol;
-                        const isCurrencyDelisted =
+                        const currencyExist =
                             await securedFinance?.currencyExists(
                                 toCurrency(ccy)
                             );
                         return {
                             ...accumulator,
-                            [ccy]: isCurrencyDelisted,
+                            [ccy]: !currencyExist,
                         };
                     },
-                    Promise.resolve(defaultDelistedStatus)
+                    Promise.resolve(defaultDelistedStatusMap)
                 );
 
             return currencyDelistedStatusMap;
         },
-        enabled: !!securedFinance && !!account,
+        enabled: !!securedFinance,
     });
 };

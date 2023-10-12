@@ -45,3 +45,13 @@ LendPosition.play = async ({ canvasElement }) => {
     const button = await canvas.findByTestId('disclaimer-button');
     await userEvent.click(button);
 };
+
+export const Delisted = Template.bind({});
+Delisted.args = {
+    amount: new Amount('100000000', CurrencySymbol.WFIL),
+};
+Delisted.play = async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const button = await canvas.findByTestId('disclaimer-button');
+    await userEvent.click(button);
+};

@@ -25,6 +25,8 @@ import {
     useLoanValues,
     useTotalNumberOfAsset,
     useValueLockedByCurrency,
+    defaultDelistedStatusMap,
+    useCurrencyDelistedStatus,
 } from 'src/hooks';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { RootState } from 'src/store/types';
@@ -42,6 +44,7 @@ import {
     usdFormat,
 } from 'src/utils';
 import { useAccount } from 'wagmi';
+import { GeneralDelistedAlert } from '../Landing';
 
 const computeTotalUsers = (users: string) => {
     if (!users) {
@@ -61,6 +64,9 @@ export const MarketDashboard = () => {
 
     const curves: Record<string, Rate[]> = {};
     const { data: lendingContracts = baseContracts } = useLendingMarkets();
+
+    const { data: currencyDelistedStatusMap = defaultDelistedStatusMap } =
+        useCurrencyDelistedStatus();
 
     getCurrencyMapAsList().forEach(ccy => {
         // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -119,8 +125,13 @@ export const MarketDashboard = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [JSON.stringify(priceList), valueLockedByCurrency]);
 
+    const delistedCurrencies = Object.keys(currencyDelistedStatusMap).filter(
+        ccy => currencyDelistedStatusMap[ccy as CurrencySymbol]
+    );
+
     return (
         <Page title='Market Dashboard' name='dashboard-page'>
+            <GeneralDelistedAlert currencies={delistedCurrencies} />
             <TwoColumns>
                 <div className='grid grid-cols-1 gap-y-7'>
                     <StatsBar

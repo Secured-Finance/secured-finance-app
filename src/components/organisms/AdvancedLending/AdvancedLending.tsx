@@ -86,11 +86,13 @@ export const AdvancedLending = ({
     maturitiesOptionList,
     rates,
     marketPrice,
+    currencyDelistedStatusMap,
 }: {
     collateralBook: CollateralBook;
     maturitiesOptionList: MaturityOptionList;
     rates: Rate[];
     marketPrice: number | undefined;
+    currencyDelistedStatusMap: Record<CurrencySymbol, boolean>;
 }) => {
     const { amount, currency, maturity } = useSelector((state: RootState) =>
         selectLandingOrderForm(state.landingOrderForm)
@@ -236,6 +238,7 @@ export const AdvancedLending = ({
                             : DEFAULT_ORDERBOOK_DEPTH
                     );
                 }}
+                currencyDelistedStatusMap={currencyDelistedStatusMap}
             />
 
             <div className='flex h-full flex-grow flex-col gap-4'>

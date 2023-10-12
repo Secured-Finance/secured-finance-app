@@ -7,6 +7,7 @@ import { useDispatch } from 'react-redux';
 import ShowFirstIcon from 'src/assets/icons/orderbook-first.svg';
 import ShowAllIcon from 'src/assets/icons/orderbook-full.svg';
 import ShowLastIcon from 'src/assets/icons/orderbook-last.svg';
+import WarningCircleIcon from 'src/assets/icons/warning-circle.svg';
 import {
     ColorBar,
     DropdownSelector,
@@ -208,12 +209,14 @@ export const OrderBookWidget = ({
     marketPrice,
     onFilterChange,
     variant = 'default',
+    currencyDelistedStatusMap,
 }: {
     orderbook: Pick<ReturnType<typeof useOrderbook>[0], 'data' | 'isLoading'>;
     currency: CurrencySymbol;
     marketPrice?: LoanValue;
     onFilterChange?: (filter: VisibilityState) => void;
     variant?: 'default' | 'itayose';
+    currencyDelistedStatusMap: Record<CurrencySymbol, boolean>;
 }) => {
     const [state, dispatch] = useReducer(reducer, initialState);
     useEffect(() => {
@@ -349,15 +352,17 @@ export const OrderBookWidget = ({
 
     return (
         <div className='flex h-full w-full flex-col justify-start gap-y-3 rounded-b-2xl border border-white-10 bg-cardBackground/60 px-3 shadow-tab'>
-            <div className='-mx-3 flex h-9 flex-row items-center gap-3 bg-black-20 px-4'>
-                <span className='h-2 w-2 rounded-full bg-red'></span>
-                <div className='typography-caption-2 w-full text-planetaryPurple'>
-                    Orderbook paused for delisting
-                </div>
-            </div>
             <div className='-mx-3 h-[60px] w-1/2'>
                 <NavTab text='Order Book' active={true} />
             </div>
+            {currencyDelistedStatusMap[currency] && (
+                <div className='-mx-3 flex h-9 flex-row items-center gap-3 bg-black-20 px-4'>
+                    <WarningCircleIcon className='h-4 w-4' />
+                    <div className='typography-caption-2 w-full text-planetaryPurple'>
+                        {currency} will be delisted
+                    </div>
+                </div>
+            )}
             <div className='flex flex-row justify-between'>
                 <div className='flex h-8 flex-row items-start gap-3'>
                     <OrderBookIcon

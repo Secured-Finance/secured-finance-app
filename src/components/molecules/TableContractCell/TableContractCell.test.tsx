@@ -2,7 +2,7 @@ import { composeStories } from '@storybook/react';
 import { render, screen } from 'src/test-utils.js';
 import * as stories from './TableContractCell.stories';
 
-const { Default, Compact, ContractOnly } = composeStories(stories);
+const { Default, Compact, ContractOnly, Delisted } = composeStories(stories);
 
 describe('TableContractCell Component', () => {
     describe('Default Variant', () => {
@@ -19,6 +19,11 @@ describe('TableContractCell Component', () => {
         it('should display a larger image by default', () => {
             render(<Default />);
             expect(screen.getByRole('img')).toHaveClass('w-6 h-6');
+        });
+
+        it('should display the tooltip if delisted is true', () => {
+            render(<Delisted />);
+            expect(screen.getByTestId('tooltip')).toBeInTheDocument();
         });
     });
 

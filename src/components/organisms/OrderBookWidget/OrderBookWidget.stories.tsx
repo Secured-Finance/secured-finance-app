@@ -1,5 +1,6 @@
 import type { Meta, StoryFn } from '@storybook/react';
 import { BigNumber } from 'ethers';
+import { defaultDelistedStatusMap } from 'src/hooks';
 import { OrderBookEntry } from 'src/hooks/useOrderbook';
 import { CurrencySymbol } from 'src/utils';
 import { LoanValue, Maturity } from 'src/utils/entities';
@@ -118,6 +119,7 @@ export default {
         },
         marketPrice: LoanValue.fromPrice(9300, maturityMar23.toNumber()),
         currency: CurrencySymbol.WFIL,
+        currencyDelistedStatusMap: defaultDelistedStatusMap,
     },
 } as Meta<typeof OrderBookWidget>;
 
@@ -168,5 +170,13 @@ Loading.args = {
             lendOrderbook: [],
         },
         isLoading: true,
+    },
+};
+
+export const Delisted = Template.bind({});
+Delisted.args = {
+    currencyDelistedStatusMap: {
+        ...defaultDelistedStatusMap,
+        [CurrencySymbol.WFIL]: true,
     },
 };
