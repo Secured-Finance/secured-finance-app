@@ -13,7 +13,7 @@ describe('HorizontalAssetSelector Component', () => {
         const onAssetChange = jest.fn();
         render(<Default onAssetChange={onAssetChange} />);
         expect(onAssetChange).toHaveBeenNthCalledWith(1, 'WBTC');
-        screen.getByRole('button', { name: 'Wrapped Bitcoin' }).click();
+        screen.getByRole('button', { name: 'WBTC' }).click();
         screen.getByRole('menuitem', { name: 'USDC' }).click();
         expect(onAssetChange).toHaveBeenNthCalledWith(2, 'USDC');
     });

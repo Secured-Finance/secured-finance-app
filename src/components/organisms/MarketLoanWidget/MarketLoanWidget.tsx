@@ -260,6 +260,7 @@ const AssetDropdown = ({
         <DropdownSelector<string>
             optionList={[
                 { label: 'All Assets', value: '' },
+                //TODO: add delisting
                 ...getCurrencyMapAsOptions(),
             ]}
             onChange={v => handleSelectedCurrency(toCurrencySymbol(v))}

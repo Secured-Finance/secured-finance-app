@@ -56,6 +56,7 @@ export const LendingCard = ({
     const { address } = useAccount();
 
     const assetPriceMap = useSelector((state: RootState) => getPriceMap(state));
+
     const assetList = useMemo(() => getCurrencyMapAsOptions(), []);
 
     const balanceRecord = useBalances();
