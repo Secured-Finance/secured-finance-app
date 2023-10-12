@@ -21,7 +21,6 @@ import { Page, ThreeColumnsWithTopBar } from 'src/components/templates';
 import {
     MarketPhase,
     baseContracts,
-    defaultDelistedStatusMap,
     emptyCollateralBook,
     sortOrders,
     useCollateralBook,
@@ -41,9 +40,9 @@ import {
 } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
 import {
+    CurrencySymbol,
     amountFormatterFromBase,
     amountFormatterToBase,
-    CurrencySymbol,
     getCurrencyMapAsOptions,
     usdFormat,
 } from 'src/utils';
@@ -113,8 +112,7 @@ export const Itayose = () => {
         selectLandingOrderForm(state.landingOrderForm)
     );
 
-    const { data: currencyDelistedStatusMap = defaultDelistedStatusMap } =
-        useCurrencyDelistedStatus();
+    const { data: currencyDelistedStatusMap } = useCurrencyDelistedStatus();
 
     const { data: lendingMarkets = baseContracts } = useLendingMarkets();
     const lendingContracts = lendingMarkets[currency];
