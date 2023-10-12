@@ -7,7 +7,6 @@ import type { Meta, StoryFn } from '@storybook/react';
 import { userEvent, within } from '@storybook/testing-library';
 import { defaultDelistedStatusMap } from 'src/hooks';
 import { collateralBook37 } from 'src/stories/mocks/fixtures';
-import { CurrencySymbol } from 'src/utils';
 import { AdvancedLendingOrderCard } from './AdvancedLendingOrderCard';
 
 export default {
@@ -70,12 +69,4 @@ export const ItayoseWithPreOrders = Template.bind({});
 ItayoseWithPreOrders.args = {
     isItayose: true,
     preOrderPosition: 'lend',
-};
-
-export const Delisted = Template.bind({});
-Delisted.args = {
-    currencyDelistedStatusMap: {
-        ...defaultDelistedStatusMap,
-        [CurrencySymbol.WFIL]: true,
-    },
 };
