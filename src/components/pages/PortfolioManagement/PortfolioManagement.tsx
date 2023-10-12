@@ -23,10 +23,7 @@ import {
     usePagination,
     usePositions,
 } from 'src/hooks';
-import {
-    defaultDelistedStatusMap,
-    useCurrencyDelistedStatus,
-} from 'src/hooks/useCurrencyDelistedStatus/useCurrencyDelistedStatus';
+import { useCurrencyDelistedStatus } from 'src/hooks/';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { RootState } from 'src/store/types';
 import { TradeHistory } from 'src/types';
@@ -35,9 +32,9 @@ import {
     checkOrderIsFilled,
     computeNetValue,
     formatOrders,
+    hexToCurrencySymbol,
     sortOrders,
     usdFormat,
-    hexToCurrencySymbol,
 } from 'src/utils';
 import { useAccount } from 'wagmi';
 
@@ -64,8 +61,7 @@ export const PortfolioManagement = () => {
     const [selectedTable, setSelectedTable] = useState(
         TableType.ACTIVE_POSITION
     );
-    const { data: currencyDelistedStatusMap = defaultDelistedStatusMap } =
-        useCurrencyDelistedStatus();
+    const { data: currencyDelistedStatusMap } = useCurrencyDelistedStatus();
 
     const userOrderHistory = useGraphClientHook(
         {
