@@ -43,10 +43,12 @@ export const LendingCard = ({
     collateralBook,
     maturitiesOptionList,
     marketPrice,
+    currencyDelistedStatusMap,
 }: {
     collateralBook: CollateralBook;
     maturitiesOptionList: MaturityOptionList;
     marketPrice: number | undefined;
+    currencyDelistedStatusMap: Record<CurrencySymbol, boolean>;
 }) => {
     const { currency, maturity, side, sourceAccount, amount } = useSelector(
         (state: RootState) => selectLandingOrderForm(state.landingOrderForm)
@@ -256,6 +258,7 @@ export const LendingCard = ({
                         balanceToLend,
                         side
                     )}
+                    isCurrencyDelisted={currencyDelistedStatusMap[currency]}
                 />
             </div>
         </div>

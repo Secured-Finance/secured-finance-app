@@ -87,7 +87,7 @@ export const ActiveTradeTable = ({
                         );
                     } else if (dayToMaturity === 1) {
                         maturity = `${dayToMaturity} Day`;
-                    } else if (dayToMaturity < 1 && dayToMaturity >= 0) {
+                    } else {
                         maturity = (
                             <div>
                                 {diffHours !== 0 && (

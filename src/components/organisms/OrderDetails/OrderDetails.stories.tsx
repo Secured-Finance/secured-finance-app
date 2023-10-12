@@ -17,6 +17,7 @@ export default {
         assetPrice: 1,
         collateral: collateralBook37,
         loanValue: LoanValue.fromPrice(9410, dec22Fixture.toNumber()),
+        isCurrencyDelisted: false,
     },
     chromatic: { delay: 1000 },
     decorators: [withAssetPrice, withWalletProvider],
@@ -48,7 +49,7 @@ LendPosition.play = async ({ canvasElement }) => {
 
 export const Delisted = Template.bind({});
 Delisted.args = {
-    amount: new Amount('100000000', CurrencySymbol.WFIL),
+    isCurrencyDelisted: true,
 };
 Delisted.play = async ({ canvasElement }) => {
     const canvas = within(canvasElement);

@@ -34,6 +34,5 @@ ContractOnly.args = {
 
 export const Delisted = Template.bind({});
 Delisted.args = {
-    delisted: true,
-    side: OrderSide.LEND,
+    delistedContractSide: OrderSide.LEND,
 };

@@ -60,7 +60,7 @@ describe('ActiveTradeTable Component', () => {
     });
 
     it('should display correct color code for future value', () => {
-        render(<Default />); // this is definitely not working
+        render(<Default />);
         const rows = screen.getAllByTestId('currency-amount-item');
         let firstSpan = rows[0].querySelector('span');
         expect(firstSpan?.classList).toContain('text-nebulaTeal');
@@ -198,7 +198,7 @@ describe('ActiveTradeTable Component', () => {
             const closeToMaturityRow = screen.getAllByRole('row')[8];
             expect(closeToMaturityRow).toHaveTextContent('Feb 2, 2022');
             waitFor(() => {
-                expect(closeToMaturityRow).toHaveTextContent('21h-59m');
+                expect(closeToMaturityRow).toHaveTextContent('21h 59m');
             });
             const moreOptionsButton = screen.getAllByRole('button', {
                 name: 'More options',

@@ -12,14 +12,12 @@ export const TableContractCell = ({
     maturity,
     ccyByte32,
     variant = 'default',
-    delisted = false,
-    side,
+    delistedContractSide,
 }: {
     maturity: Maturity;
     ccyByte32: string;
-    delisted?: boolean;
     variant?: 'default' | 'compact' | 'currencyOnly' | 'contractOnly';
-    side?: OrderSide;
+    delistedContractSide?: OrderSide;
 }) => {
     const ccy = useMemo(() => hexToCurrencySymbol(ccyByte32), [ccyByte32]);
     const contract = useMemo(() => {
@@ -38,7 +36,7 @@ export const TableContractCell = ({
     if (!ccy) return null;
 
     const tooltipText =
-        side === OrderSide.BORROW
+        delistedContractSide === OrderSide.BORROW
             ? 'Delisting: Repayment period within 7 days of maturity to avoid 7% fee.'
             : 'Delisting: Redemption will be available 7 days post-maturity.';
 
@@ -64,7 +62,7 @@ export const TableContractCell = ({
                 <span className='typography-caption-2 text-neutral-6'>
                     {contract}
                 </span>
-                {delisted && (
+                {delistedContractSide && (
                     <Tooltip
                         iconElement={<ErrorCircleIcon className='h-4 w-4' />}
                     >

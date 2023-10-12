@@ -324,8 +324,7 @@ export const contractColumnDefinition = <
                         maturity={new Maturity(info.getValue())}
                         ccyByte32={info.row.original.currency}
                         variant={variant}
-                        delisted={delisted}
-                        side={side}
+                        delistedContractSide={delisted ? side : undefined}
                     />
                 </div>
             );

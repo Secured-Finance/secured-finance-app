@@ -33,14 +33,14 @@ import {
 import { RootState } from 'src/store/types';
 import { MaturityOptionList, TransactionList } from 'src/types';
 import {
+    CurrencySymbol,
+    Rate,
     amountFormatterFromBase,
     amountFormatterToBase,
     currencyMap,
-    CurrencySymbol,
     formatLoanValue,
     getCurrencyMapAsOptions,
     ordinaryFormat,
-    Rate,
     usdFormat,
 } from 'src/utils';
 import { LoanValue, Maturity } from 'src/utils/entities';
@@ -222,13 +222,14 @@ export const AdvancedLending = ({
             <AdvancedLendingOrderCard
                 collateralBook={collateralBook}
                 marketPrice={marketPrice}
+                currencyDelistedStatusMap={currencyDelistedStatusMap}
             />
 
             <OrderBookWidget
                 orderbook={orderBook}
                 currency={currency}
                 marketPrice={currentMarket?.value}
-                currencyDelistedStatusMap={currencyDelistedStatusMap}
+                isCurrencyDelisted={currencyDelistedStatusMap[currency]}
                 onFilterChange={state =>
                     setIsShowingAll(state.showBorrow && state.showLend)
                 }
