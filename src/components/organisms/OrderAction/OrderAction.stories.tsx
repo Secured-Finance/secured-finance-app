@@ -90,8 +90,3 @@ RenderOrderSideButton.args = {
 RenderOrderSideButton.parameters = {
     connected: true,
 };
-
-export const Delisted = Template.bind({});
-Delisted.args = {
-    isCurrencyDelisted: true,
-};

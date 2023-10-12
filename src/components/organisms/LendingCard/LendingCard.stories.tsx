@@ -6,7 +6,6 @@ import {
 } from 'src/../.storybook/decorators';
 import { defaultDelistedStatusMap } from 'src/hooks';
 import { collateralBook37, maturityOptions } from 'src/stories/mocks/fixtures';
-import { CurrencySymbol } from 'src/utils';
 import { LendingCard } from './LendingCard';
 
 export default {
@@ -46,12 +45,4 @@ FailedAmountValidation.play = async ({ canvasElement }) => {
     await userEvent.type(input, '999999999', {
         delay: 100,
     });
-};
-
-export const Delisted = Template.bind({});
-Delisted.args = {
-    currencyDelistedStatusMap: {
-        ...defaultDelistedStatusMap,
-        [CurrencySymbol.WFIL]: true,
-    },
 };

@@ -43,3 +43,8 @@ const Template: StoryFn<typeof PlaceOrder> = args => {
 };
 
 export const Default = Template.bind({});
+
+export const Delisted = Template.bind({});
+Delisted.args = {
+    isCurrencyDelisted: true,
+};
