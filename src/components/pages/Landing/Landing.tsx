@@ -23,10 +23,7 @@ import {
     useLoanValues,
     useMaturityOptions,
 } from 'src/hooks';
-import {
-    defaultDelistedStatusMap,
-    useCurrencyDelistedStatus,
-} from 'src/hooks/useCurrencyDelistedStatus/useCurrencyDelistedStatus';
+import { useCurrencyDelistedStatus } from 'src/hooks/';
 import {
     resetUnitPrice,
     selectLandingOrderForm,
@@ -49,8 +46,7 @@ export const emptyOptionList = [
 
 export const Landing = ({ view }: { view?: ViewType }) => {
     const { address } = useAccount();
-    const { data: currencyDelistedStatusMap = defaultDelistedStatusMap } =
-        useCurrencyDelistedStatus();
+    const { data: currencyDelistedStatusMap } = useCurrencyDelistedStatus();
     const { currency, side, maturity, lastView } = useSelector(
         (state: RootState) => selectLandingOrderForm(state.landingOrderForm)
     );

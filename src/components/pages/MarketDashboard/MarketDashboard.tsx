@@ -20,13 +20,12 @@ import {
     emptyCollateralBook,
     emptyValueLockedBook,
     useCollateralBook,
+    useCurrencyDelistedStatus,
     useGraphClientHook,
     useLendingMarkets,
     useLoanValues,
     useTotalNumberOfAsset,
     useValueLockedByCurrency,
-    defaultDelistedStatusMap,
-    useCurrencyDelistedStatus,
 } from 'src/hooks';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { RootState } from 'src/store/types';
@@ -65,8 +64,7 @@ export const MarketDashboard = () => {
     const curves: Record<string, Rate[]> = {};
     const { data: lendingContracts = baseContracts } = useLendingMarkets();
 
-    const { data: currencyDelistedStatusMap = defaultDelistedStatusMap } =
-        useCurrencyDelistedStatus();
+    const { data: currencyDelistedStatusMap } = useCurrencyDelistedStatus();
 
     getCurrencyMapAsList().forEach(ccy => {
         // eslint-disable-next-line react-hooks/rules-of-hooks

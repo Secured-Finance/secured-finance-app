@@ -15,7 +15,6 @@ import {
 import { Tooltip } from 'src/components/templates';
 import {
     CollateralBook,
-    defaultDelistedStatusMap,
     useCurrencyDelistedStatus,
     useMarket,
     useOrderFee,
@@ -54,8 +53,7 @@ export const OrderDetails = ({
 
     const market = useMarket(amount.currency, maturity.toNumber());
 
-    const { data: currencyDelistedStatusMap = defaultDelistedStatusMap } =
-        useCurrencyDelistedStatus();
+    const { data: currencyDelistedStatusMap } = useCurrencyDelistedStatus();
 
     const slippage = useMemo(() => {
         if (!market) {

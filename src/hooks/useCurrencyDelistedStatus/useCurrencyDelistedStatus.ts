@@ -31,6 +31,7 @@ export const useCurrencyDelistedStatus = () => {
                 defaultDelistedStatusMap
             );
         },
+        initialData: defaultDelistedStatusMap,
         enabled: !!securedFinance,
     });
 };
