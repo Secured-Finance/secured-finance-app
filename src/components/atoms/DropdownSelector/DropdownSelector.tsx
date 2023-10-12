@@ -214,7 +214,7 @@ export const DropdownSelector = <T extends string = string>({
                                         >
                                             <div className='flex flex-row items-center justify-start space-x-2'>
                                                 {asset.iconSVG ? (
-                                                    <span>
+                                                    <span role='img'>
                                                         <asset.iconSVG className='h-4 w-4 tablet:h-6 tablet:w-6' />
                                                     </span>
                                                 ) : null}

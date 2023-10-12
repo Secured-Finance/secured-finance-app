@@ -3,7 +3,6 @@ import { BigNumber } from 'ethers';
 import { useCallback, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
-    DelistingChip,
     GradientBox,
     MarketTab,
     Option,
@@ -25,7 +24,6 @@ import {
     emptyCollateralBook,
     sortOrders,
     useCollateralBook,
-    useCurrencyDelistedStatus,
     useLendingMarkets,
     useMarketOrderList,
     useMarketPhase,
@@ -134,11 +132,7 @@ export const Itayose = () => {
         );
     }, [maturity, maturityOptionList]);
 
-    const ccyStatus = useCurrencyDelistedStatus();
-    const assetList = useMemo(
-        () => getCurrencyMapAsOptions(ccyStatus.data),
-        [ccyStatus]
-    );
+    const assetList = useMemo(() => getCurrencyMapAsOptions(), []);
     const selectedAsset = useMemo(() => {
         return assetList.find(option => option.value === currency);
     }, [currency, assetList]);
@@ -222,10 +216,7 @@ export const Itayose = () => {
                                 ? 'PreOrder'
                                 : 'Open in'
                         }
-                        assetList={assetList.map(o => ({
-                            ...o,
-                            ...(o.delisted ? { chip: <DelistingChip /> } : {}),
-                        }))}
+                        assetList={assetList}
                         selectedAsset={selectedAsset}
                         options={maturityOptionList.map(o => ({
                             label: o.label,
