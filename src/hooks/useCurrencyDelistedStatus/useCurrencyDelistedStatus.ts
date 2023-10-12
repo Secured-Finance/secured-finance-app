@@ -16,24 +16,20 @@ export const useCurrencyDelistedStatus = () => {
     return useQuery({
         queryKey: [QueryKeys.CURRENCY_EXISTS],
         queryFn: async () => {
-            const currencyDelistedStatusMap =
-                await getCurrencyMapAsList().reduce(
-                    async (delistedStatus, currencyInfo) => {
-                        const accumulator = await delistedStatus;
-                        const ccy = currencyInfo.symbol;
-                        const currencyExist =
-                            await securedFinance?.currencyExists(
-                                toCurrency(ccy)
-                            );
-                        return {
-                            ...accumulator,
-                            [ccy]: !currencyExist,
-                        };
-                    },
-                    Promise.resolve(defaultDelistedStatusMap)
-                );
+            const currencies = getCurrencyMapAsList().map(c => c.symbol);
+            const currencyExistList = await Promise.all(
+                currencies.map(symbol =>
+                    securedFinance?.currencyExists(toCurrency(symbol))
+                )
+            );
 
-            return currencyDelistedStatusMap;
+            return currencyExistList.reduce(
+                (delistedStatus, currencyExist, index) => ({
+                    ...delistedStatus,
+                    [currencies[index]]: !currencyExist,
+                }),
+                defaultDelistedStatusMap
+            );
         },
         enabled: !!securedFinance,
     });
