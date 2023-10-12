@@ -1,14 +1,19 @@
 import { composeStories } from '@storybook/react';
 import { BigNumber } from 'ethers';
 import { fireEvent, render, screen } from 'src/test-utils.js';
+import { CurrencySymbol } from 'src/utils';
 import * as stories from './AssetSelector.stories';
 
 const { Default } = composeStories(stories);
 
 describe('AssetSelector Component', () => {
     const amountFormatterMap = {
-        ['WBTC']: (amount: number) => BigNumber.from(amount * 100),
-        ['ETH']: (amount: number) => BigNumber.from(amount * 1000),
+        [CurrencySymbol.WBTC]: (amount: number) => BigNumber.from(amount * 100),
+        [CurrencySymbol.ETH]: (amount: number) => BigNumber.from(amount * 1000),
+        [CurrencySymbol.WFIL]: (amount: number) =>
+            BigNumber.from(amount * 10000),
+        [CurrencySymbol.USDC]: (amount: number) =>
+            BigNumber.from(amount * 100000),
     };
 
     it('should render a AssetSelector', () => {

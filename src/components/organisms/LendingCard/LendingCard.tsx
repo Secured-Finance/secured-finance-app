@@ -3,7 +3,6 @@ import { BigNumber } from 'ethers';
 import { useCallback, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
-    DelistingChip,
     ErrorInfo,
     RadioGroupSelector,
     WalletSourceSelector,
@@ -14,11 +13,7 @@ import {
     TermSelector,
 } from 'src/components/molecules';
 import { OrderAction } from 'src/components/organisms';
-import {
-    CollateralBook,
-    useBalances,
-    useCurrencyDelistedStatus,
-} from 'src/hooks';
+import { CollateralBook, useBalances } from 'src/hooks';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import {
     selectLandingOrderForm,
@@ -62,11 +57,7 @@ export const LendingCard = ({
 
     const assetPriceMap = useSelector((state: RootState) => getPriceMap(state));
 
-    const ccyStatus = useCurrencyDelistedStatus();
-    const assetList = useMemo(
-        () => getCurrencyMapAsOptions(ccyStatus.data),
-        [ccyStatus.data]
-    );
+    const assetList = useMemo(() => getCurrencyMapAsOptions(), []);
 
     const balanceRecord = useBalances();
 
@@ -196,12 +187,7 @@ export const LendingCard = ({
 
                     <div className='space-y-1'>
                         <AssetSelector
-                            options={assetList.map(o => ({
-                                ...o,
-                                ...(o.delisted
-                                    ? { chip: <DelistingChip /> }
-                                    : {}),
-                            }))}
+                            options={assetList}
                             selected={selectedAsset}
                             priceList={assetPriceMap}
                             onAmountChange={v => dispatch(setAmount(v))}

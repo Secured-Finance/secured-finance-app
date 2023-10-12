@@ -3,7 +3,6 @@ import queries from '@secured-finance/sf-graph-client/dist/graphclients/';
 import { BigNumber } from 'ethers';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { DelistingChip } from 'src/components/atoms';
 import {
     AdvancedLendingTopBar,
     HorizontalTab,
@@ -18,7 +17,6 @@ import {
 import { ThreeColumnsWithTopBar } from 'src/components/templates';
 import {
     CollateralBook,
-    useCurrencyDelistedStatus,
     useGraphClientHook,
     useMarket,
     useMarketOrderList,
@@ -104,11 +102,7 @@ export const AdvancedLending = ({
 
     const { address } = useAccount();
     const dispatch = useDispatch();
-    const ccyStatus = useCurrencyDelistedStatus();
-    const assetList = useMemo(
-        () => getCurrencyMapAsOptions(ccyStatus.data),
-        [ccyStatus]
-    );
+    const assetList = useMemo(() => getCurrencyMapAsOptions(), []);
 
     const [timestamp, setTimestamp] = useState<number>(1643713200);
     useEffect(() => {
@@ -202,10 +196,7 @@ export const AdvancedLending = ({
             topBar={
                 <AdvancedLendingTopBar
                     selectedAsset={selectedAsset}
-                    assetList={assetList.map(o => ({
-                        ...o,
-                        ...(o.delisted ? { chip: <DelistingChip /> } : {}),
-                    }))}
+                    assetList={assetList}
                     options={maturitiesOptionList.map(o => ({
                         label: o.label,
                         value: o.value.toString(),
