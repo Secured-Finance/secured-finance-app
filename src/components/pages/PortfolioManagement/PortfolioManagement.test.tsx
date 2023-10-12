@@ -89,7 +89,7 @@ describe('PortfolioManagement component', () => {
         await waitFor(() => {
             expect(
                 screen.queryByText(
-                    'Please note that your contracts for WFIL will be delisted at maturity on Secured Finance.'
+                    'Please note that your contracts for USDC will be delisted at maturity on Secured Finance.'
                 )
             ).not.toBeInTheDocument();
         });
