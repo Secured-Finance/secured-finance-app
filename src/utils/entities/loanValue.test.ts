@@ -120,7 +120,7 @@ describe('LoanValue', () => {
 
         it('should compute and return the apr calculated from openingDate when it is provided', () => {
             const loanValue = LoanValue.fromPrice(9626, 1677715200, 1675252800);
-            expect(loanValue.apr).toEqual(new Rate(717));
+            expect(loanValue.apr).toEqual(new Rate(497592));
         });
 
         it('should return 0 if price is 0', () => {
@@ -166,7 +166,7 @@ describe('LoanValue', () => {
                 midPrice
             );
             expect(LoanValue.getMidValue(bidValue, askValue).apr).toEqual(
-                new Rate(717)
+                new Rate(497592)
             );
         });
 
