@@ -5,7 +5,9 @@ import {
 } from '.storybook/decorators';
 import type { Meta, StoryFn } from '@storybook/react';
 import { userEvent, within } from '@storybook/testing-library';
+import { defaultDelistedStatusMap } from 'src/hooks';
 import { collateralBook37 } from 'src/stories/mocks/fixtures';
+import { CurrencySymbol } from 'src/utils';
 import { AdvancedLendingOrderCard } from './AdvancedLendingOrderCard';
 
 export default {
@@ -14,6 +16,7 @@ export default {
     args: {
         collateralBook: collateralBook37,
         marketPrice: 9917,
+        currencyDelistedStatusMap: defaultDelistedStatusMap,
     },
     parameters: {
         connected: true,
@@ -67,4 +70,12 @@ export const ItayoseWithPreOrders = Template.bind({});
 ItayoseWithPreOrders.args = {
     isItayose: true,
     preOrderPosition: 'lend',
+};
+
+export const Delisted = Template.bind({});
+Delisted.args = {
+    currencyDelistedStatusMap: {
+        ...defaultDelistedStatusMap,
+        [CurrencySymbol.WFIL]: true,
+    },
 };

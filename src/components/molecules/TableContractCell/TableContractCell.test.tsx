@@ -25,6 +25,8 @@ describe('TableContractCell Component', () => {
             render(<Delisted />);
             expect(screen.getByTestId('tooltip')).toBeInTheDocument();
         });
+
+        // TODO: Add tests for hovering over the tooltip
     });
 
     describe('Compact Variant', () => {

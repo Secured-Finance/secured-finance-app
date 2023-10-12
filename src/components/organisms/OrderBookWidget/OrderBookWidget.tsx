@@ -214,7 +214,7 @@ export const OrderBookWidget = ({
     onFilterChange,
     onAggregationChange,
     variant = 'default',
-    currencyDelistedStatusMap,
+    isCurrencyDelisted,
 }: {
     orderbook: Pick<ReturnType<typeof useOrderbook>[0], 'data' | 'isLoading'>;
     currency: CurrencySymbol;
@@ -222,7 +222,7 @@ export const OrderBookWidget = ({
     onFilterChange?: (filter: VisibilityState) => void;
     onAggregationChange?: (multiplier: number) => void;
     variant?: 'default' | 'itayose';
-    currencyDelistedStatusMap: Record<CurrencySymbol, boolean>;
+    isCurrencyDelisted: boolean;
 }) => {
     const [state, dispatch] = useReducer(reducer, initialState);
     useEffect(() => {
@@ -376,7 +376,7 @@ export const OrderBookWidget = ({
             <div className='-mx-3 h-[60px] w-1/2'>
                 <NavTab text='Order Book' active={true} />
             </div>
-            {currencyDelistedStatusMap[currency] && (
+            {isCurrencyDelisted && (
                 <div className='-mx-3 flex h-9 flex-row items-center gap-3 bg-black-20 px-4'>
                     <WarningCircleIcon className='h-4 w-4' />
                     <div className='typography-caption-2 w-full text-planetaryPurple'>

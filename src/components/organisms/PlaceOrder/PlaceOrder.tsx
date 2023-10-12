@@ -104,6 +104,7 @@ export const PlaceOrder = ({
     orderType,
     assetPrice,
     walletSource,
+    isCurrencyDelisted,
 }: {
     collateral: CollateralBook;
     loanValue: LoanValue;
@@ -114,6 +115,7 @@ export const PlaceOrder = ({
     orderType: OrderType;
     assetPrice: number;
     walletSource: WalletSource;
+    isCurrencyDelisted: boolean;
 } & DialogState) => {
     const etherscanUrl = useEtherscanUrl();
     const handleContractTransaction = useHandleContractTransaction();
@@ -245,6 +247,7 @@ export const PlaceOrder = ({
                                 assetPrice={assetPrice}
                                 collateral={collateral}
                                 loanValue={loanValue}
+                                isCurrencyDelisted={isCurrencyDelisted}
                             />
                         );
                     case Step.orderProcessing:

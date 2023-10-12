@@ -72,17 +72,17 @@ describe('OrderDetails Component', () => {
         await waitFor(() => {
             expect(
                 screen.getByText(
-                    'Please note that WFIL will be delisted on Secured Finance.'
+                    'Please note that USDC will be delisted on Secured Finance.'
                 )
             ).toBeInTheDocument();
         });
     });
 
-    it('should not display delisting disclaimer currency is not being delisted', () => {
+    it('should not display delisting disclaimer if currency is not being delisted', () => {
         render(<Default />);
         expect(
             screen.queryByText(
-                'Please note that WFIL will be delisted on Secured Finance.'
+                'Please note that USDC will be delisted on Secured Finance.'
             )
         ).not.toBeInTheDocument();
     });

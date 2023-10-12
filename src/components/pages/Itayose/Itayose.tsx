@@ -19,10 +19,10 @@ import {
 } from 'src/components/organisms';
 import { Page, ThreeColumnsWithTopBar } from 'src/components/templates';
 import {
+    MarketPhase,
     baseContracts,
     defaultDelistedStatusMap,
     emptyCollateralBook,
-    MarketPhase,
     sortOrders,
     useCollateralBook,
     useCurrencyDelistedStatus,
@@ -247,6 +247,7 @@ export const Itayose = () => {
                                 : 'lend'
                             : 'none'
                     }
+                    currencyDelistedStatusMap={currencyDelistedStatusMap}
                 />
 
                 <OrderBookWidget
@@ -254,11 +255,11 @@ export const Itayose = () => {
                     orderbook={orderBook}
                     variant='itayose'
                     marketPrice={estimatedOpening}
-                    currencyDelistedStatusMap={currencyDelistedStatusMap}
                     onFilterChange={state =>
                         setIsShowingAll(state.showBorrow && state.showLend)
                     }
                     onAggregationChange={setMultiplier}
+                    isCurrencyDelisted={currencyDelistedStatusMap[currency]}
                 />
 
                 <div className='flex h-full flex-col items-stretch justify-stretch gap-6'>

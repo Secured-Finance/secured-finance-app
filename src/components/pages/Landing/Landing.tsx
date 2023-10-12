@@ -103,6 +103,9 @@ export const Landing = ({ view }: { view?: ViewType }) => {
                             collateralBook={collateralBook}
                             maturitiesOptionList={maturityOptionList}
                             marketPrice={marketPrice}
+                            currencyDelistedStatusMap={
+                                currencyDelistedStatusMap
+                            }
                         />
                         <YieldChart
                             asset={currency}
