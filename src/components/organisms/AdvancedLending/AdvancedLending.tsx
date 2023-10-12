@@ -3,6 +3,7 @@ import queries from '@secured-finance/sf-graph-client/dist/graphclients/';
 import { BigNumber } from 'ethers';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { DelistingChip } from 'src/components/atoms';
 import {
     AdvancedLendingTopBar,
     HorizontalTab,
@@ -201,7 +202,10 @@ export const AdvancedLending = ({
             topBar={
                 <AdvancedLendingTopBar
                     selectedAsset={selectedAsset}
-                    assetList={assetList}
+                    assetList={assetList.map(o => ({
+                        ...o,
+                        ...(o.delisted ? { chip: <DelistingChip /> } : {}),
+                    }))}
                     options={maturitiesOptionList.map(o => ({
                         label: o.label,
                         value: o.value.toString(),

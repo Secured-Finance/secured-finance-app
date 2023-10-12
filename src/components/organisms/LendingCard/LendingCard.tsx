@@ -3,6 +3,7 @@ import { BigNumber } from 'ethers';
 import { useCallback, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
+    DelistingChip,
     ErrorInfo,
     RadioGroupSelector,
     WalletSourceSelector,
@@ -195,7 +196,12 @@ export const LendingCard = ({
 
                     <div className='space-y-1'>
                         <AssetSelector
-                            options={assetList}
+                            options={assetList.map(o => ({
+                                ...o,
+                                ...(o.delisted
+                                    ? { chip: <DelistingChip /> }
+                                    : {}),
+                            }))}
                             selected={selectedAsset}
                             priceList={assetPriceMap}
                             onAmountChange={v => dispatch(setAmount(v))}
