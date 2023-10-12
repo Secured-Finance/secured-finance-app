@@ -436,14 +436,33 @@ export const mockUseSF = () => {
         ),
 
         currencyExists: jest.fn((currency: Currency) => {
-            if (
-                currency.symbol === CurrencySymbol.WFIL ||
-                currency.symbol === CurrencySymbol.WBTC
-            ) {
+            if (currency.symbol === CurrencySymbol.WFIL) {
                 return Promise.resolve(false);
             }
             return Promise.resolve(true);
         }),
+
+        executeRepayment: jest.fn(() =>
+            Promise.resolve({
+                hash: '0x123',
+                wait: jest.fn(() =>
+                    Promise.resolve({
+                        blockNumber: 123,
+                    })
+                ),
+            })
+        ),
+
+        executeRedemption: jest.fn(() =>
+            Promise.resolve({
+                hash: '0x123',
+                wait: jest.fn(() =>
+                    Promise.resolve({
+                        blockNumber: 123,
+                    })
+                ),
+            })
+        ),
     };
 
     return mockSecuredFinance;

@@ -4,7 +4,7 @@ import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
 import * as stories from './OrderDetails.stories';
 
-const { Default } = composeStories(stories);
+const { Default, Delisted } = composeStories(stories);
 
 const mockSecuredFinance = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mockSecuredFinance);
@@ -65,5 +65,25 @@ describe('OrderDetails Component', () => {
         expect(screen.getByText('~ 94.10')).toBeInTheDocument();
         expect(screen.getByText('APR')).toBeInTheDocument();
         expect(screen.getByText('~ 6.28%')).toBeInTheDocument();
+    });
+
+    it('should display delisting disclaimer if order currency is being delisted', async () => {
+        render(<Delisted />);
+        await waitFor(() => {
+            expect(
+                screen.getByText(
+                    'Please note that WFIL will be delisted on Secured Finance.'
+                )
+            ).toBeInTheDocument();
+        });
+    });
+
+    it('should not display delisting disclaimer currency is not being delisted', () => {
+        render(<Default />);
+        expect(
+            screen.queryByText(
+                'Please note that WFIL will be delisted on Secured Finance.'
+            )
+        ).not.toBeInTheDocument();
     });
 });

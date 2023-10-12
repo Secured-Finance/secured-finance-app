@@ -3,6 +3,7 @@ import {
     preloadedAssetPrices,
     preloadedEthBalance,
 } from 'src/stories/mocks/fixtures';
+import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { render, screen, waitFor } from 'src/test-utils.js';
 import * as stories from './MarketDashboard.stories';
 
@@ -21,6 +22,9 @@ jest.mock(
         ({ children }: { children: React.ReactNode }) =>
             children
 );
+
+const mock = mockUseSF();
+jest.mock('src/hooks/useSecuredFinance', () => () => mock);
 
 const renderDefault = async () => {
     await waitFor(() =>
@@ -75,4 +79,27 @@ describe('MarketDashboard Component', () => {
         );
         expect(collateralWidget).toBeInTheDocument();
     }, 10000); //TODO: TEST THROWS TIMEOUT EXCEEDED WARNING ON GITHUB ACTIONS
+
+    it('should show delisting disclaimer if a currency is being delisted', async () => {
+        await renderDefault();
+        await waitFor(() => {
+            expect(
+                screen.getByText(
+                    'Please note that WFIL will be delisted on Secured Finance.'
+                )
+            ).toBeInTheDocument();
+        });
+    });
+
+    it.only('should not show delisting disclaimer if no currency is being delisted', async () => {
+        jest.spyOn(mock, 'currencyExists').mockResolvedValue(true);
+        await renderDefault();
+        await waitFor(() => {
+            expect(
+                screen.queryByText(
+                    'Please note that WFIL will be delisted on Secured Finance.'
+                )
+            ).not.toBeInTheDocument();
+        });
+    });
 });

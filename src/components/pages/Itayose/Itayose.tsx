@@ -21,9 +21,11 @@ import { Page, ThreeColumnsWithTopBar } from 'src/components/templates';
 import {
     MarketPhase,
     baseContracts,
+    defaultDelistedStatusMap,
     emptyCollateralBook,
     sortOrders,
     useCollateralBook,
+    useCurrencyDelistedStatus,
     useLendingMarkets,
     useMarketOrderList,
     useMarketPhase,
@@ -113,6 +115,9 @@ export const Itayose = () => {
     const { amount, currency, maturity } = useSelector((state: RootState) =>
         selectLandingOrderForm(state.landingOrderForm)
     );
+
+    const { data: currencyDelistedStatusMap = defaultDelistedStatusMap } =
+        useCurrencyDelistedStatus();
 
     const { data: lendingMarkets = baseContracts } = useLendingMarkets();
     const lendingContracts = lendingMarkets[currency];
@@ -259,6 +264,7 @@ export const Itayose = () => {
                                 : DEFAULT_ORDERBOOK_DEPTH
                         );
                     }}
+                    currencyDelistedStatusMap={currencyDelistedStatusMap}
                 />
 
                 <div className='flex h-full flex-col items-stretch justify-stretch gap-6'>

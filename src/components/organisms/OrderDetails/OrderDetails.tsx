@@ -8,11 +8,18 @@ import {
     SectionWithItems,
 } from 'src/components/atoms';
 import {
+    Alert,
     AmountCard,
     CollateralSimulationSection,
 } from 'src/components/molecules';
 import { Tooltip } from 'src/components/templates';
-import { CollateralBook, useMarket, useOrderFee } from 'src/hooks';
+import {
+    CollateralBook,
+    defaultDelistedStatusMap,
+    useCurrencyDelistedStatus,
+    useMarket,
+    useOrderFee,
+} from 'src/hooks';
 import { calculateFee, divide, prefixTilde } from 'src/utils';
 import { Amount, LoanValue, Maturity } from 'src/utils/entities';
 
@@ -47,6 +54,9 @@ export const OrderDetails = ({
 
     const market = useMarket(amount.currency, maturity.toNumber());
 
+    const { data: currencyDelistedStatusMap = defaultDelistedStatusMap } =
+        useCurrencyDelistedStatus();
+
     const slippage = useMemo(() => {
         if (!market) {
             return 0;
@@ -59,6 +69,20 @@ export const OrderDetails = ({
 
     return (
         <div className='grid w-full grid-cols-1 justify-items-stretch gap-6 text-white'>
+            {currencyDelistedStatusMap[amount.currency] && (
+                <Alert severity='warning' variant='outlined'>
+                    <p className='typography-caption text-white'>
+                        Please note that {amount.currency} will be delisted on
+                        Secured Finance.{' '}
+                        <a
+                            className='text-secondary7 underline'
+                            href='https://docs.secured.finance/product-guide/unique-features/auto-rolling/price-discovery-for-auto-rolling'
+                        >
+                            Learn more
+                        </a>
+                    </p>
+                </Alert>
+            )}
             <Section>
                 <AmountCard amount={amount} price={assetPrice} />
             </Section>

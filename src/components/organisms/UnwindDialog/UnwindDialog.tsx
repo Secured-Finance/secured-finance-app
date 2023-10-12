@@ -39,74 +39,22 @@ type State = {
     buttonText: string;
 };
 
-const stateRecord: Record<Step, State> = {
-    [Step.confirm]: {
-        currentStep: Step.confirm,
-        nextStep: Step.processing,
-        title: 'Unwind Position',
-        description: '',
-        buttonText: 'Confirm',
-    },
-    [Step.processing]: {
-        currentStep: Step.processing,
-        nextStep: Step.placed,
-        title: 'Unwinding Position...',
-        description: '',
-        buttonText: '',
-    },
-    [Step.placed]: {
-        currentStep: Step.placed,
-        nextStep: Step.confirm,
-        title: 'Success!',
-        description: 'Your position was successfully unwound.',
-        buttonText: 'OK',
-    },
-    [Step.error]: {
-        currentStep: Step.error,
-        nextStep: Step.confirm,
-        title: 'Failed!',
-        description: '',
-        buttonText: 'OK',
-    },
-};
-
-const reducer = (
-    state: State,
-    action: {
-        type: string;
-    }
-) => {
-    switch (action.type) {
-        case 'next':
-            return {
-                ...stateRecord[state.nextStep],
-            };
-        case 'error':
-            return {
-                ...stateRecord[Step.error],
-            };
-        default:
-            return {
-                ...stateRecord[Step.confirm],
-            };
-    }
-};
-
 export const UnwindDialog = ({
     isOpen,
     onClose,
     amount,
     maturity,
     side,
+    type = 'UNWIND',
 }: {
     amount: Amount;
     maturity: Maturity;
     side: OrderSide;
+    type: 'UNWIND' | 'REPAY' | 'REDEEM';
 } & DialogState) => {
     const etherscanUrl = useEtherscanUrl();
     const handleContractTransaction = useHandleContractTransaction();
     const { address } = useAccount();
-    const [state, dispatch] = useReducer(reducer, stateRecord[1]);
     const [txHash, setTxHash] = useState<string | undefined>();
     const [errorMessage, setErrorMessage] = useState(
         'Your position could not be unwound.'
@@ -117,6 +65,84 @@ export const UnwindDialog = ({
         useCollateralBook(address);
     const priceList = useSelector((state: RootState) => getPriceMap(state));
     const price = priceList[amount.currency];
+
+    const { unwindPosition, redeemPosition, repayPosition } = useOrders();
+
+    const stateMap = useMemo(
+        () => ({
+            UNWIND: {
+                confirmTitle: 'Unwind Position',
+                processingTitle: 'Unwinding Position...',
+                handlePosition: unwindPosition,
+            },
+            REDEEM: {
+                confirmTitle: 'Redeem Position',
+                processingTitle: 'Redeeming Position...',
+                handlePosition: redeemPosition,
+            },
+            REPAY: {
+                confirmTitle: 'Repay Position',
+                processingTitle: 'Repaying Position...',
+                handlePosition: repayPosition,
+            },
+        }),
+        [redeemPosition, repayPosition, unwindPosition]
+    );
+
+    const stateRecord: Record<Step, State> = {
+        [Step.confirm]: {
+            currentStep: Step.confirm,
+            nextStep: Step.processing,
+            title: stateMap[type].confirmTitle,
+            description: '',
+            buttonText: 'Confirm',
+        },
+        [Step.processing]: {
+            currentStep: Step.processing,
+            nextStep: Step.placed,
+            title: stateMap[type].processingTitle,
+            description: '',
+            buttonText: '',
+        },
+        [Step.placed]: {
+            currentStep: Step.placed,
+            nextStep: Step.confirm,
+            title: 'Success!',
+            description: 'Your position was successfully unwound.',
+            buttonText: 'OK',
+        },
+        [Step.error]: {
+            currentStep: Step.error,
+            nextStep: Step.confirm,
+            title: 'Failed!',
+            description: '',
+            buttonText: 'OK',
+        },
+    };
+
+    const reducer = (
+        state: State,
+        action: {
+            type: string;
+        }
+    ) => {
+        switch (action.type) {
+            case 'next':
+                return {
+                    ...stateRecord[state.nextStep],
+                };
+            case 'error':
+                return {
+                    ...stateRecord[Step.error],
+                };
+            default:
+                return {
+                    ...stateRecord[Step.confirm],
+                };
+        }
+    };
+
+    const [state, dispatch] = useReducer(reducer, stateRecord[1]);
 
     const market = useMarket(amount.currency, maturity.toNumber());
 
@@ -133,8 +159,6 @@ export const UnwindDialog = ({
         return LoanValue.fromPrice(unitPrice, maturity.toNumber());
     }, [market, maturity, side]);
 
-    const { unwindPosition } = useOrders();
-
     const handleClose = useCallback(() => {
         dispatch({ type: 'default' });
         onClose();
@@ -143,7 +167,7 @@ export const UnwindDialog = ({
     const handleUnwindPosition = useCallback(
         async (ccy: CurrencySymbol, maturity: Maturity) => {
             try {
-                const tx = await unwindPosition(ccy, maturity);
+                const tx = await stateMap[type].handlePosition(ccy, maturity);
                 const transactionStatus = await handleContractTransaction(tx);
                 if (!transactionStatus) {
                     dispatch({ type: 'error' });
@@ -158,7 +182,7 @@ export const UnwindDialog = ({
                 }
             }
         },
-        [unwindPosition, handleContractTransaction, globalDispatch]
+        [stateMap, type, handleContractTransaction, globalDispatch]
     );
 
     const onClick = useCallback(

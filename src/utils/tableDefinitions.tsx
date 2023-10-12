@@ -1,4 +1,5 @@
 /* eslint-disable react/display-name */
+import { OrderSide } from '@secured-finance/sf-client';
 import {
     AccessorFn,
     ColumnHelper,
@@ -12,7 +13,11 @@ import { TableContractCell, TableHeader } from 'src/components/molecules';
 import { AssetPriceMap } from 'src/store/assetPrices/selectors';
 import { ColorFormat } from 'src/types';
 import { formatTimestamp } from 'src/utils';
-import { currencyMap, hexToCurrencySymbol } from './currencyList';
+import {
+    currencyMap,
+    CurrencySymbol,
+    hexToCurrencySymbol,
+} from './currencyList';
 import { LoanValue, Maturity } from './entities';
 
 export const tableHeaderDefinition =
@@ -283,24 +288,44 @@ export const loanTypeFromFVColumnDefinition = <T extends ForwardValueProperty>(
 };
 
 export const contractColumnDefinition = <
-    T extends { maturity: string | number; currency: string }
+    T extends {
+        maturity: string | number;
+        currency: string;
+        forwardValue?: BigNumber;
+    }
 >(
     columnHelper: ColumnHelper<T>,
     title: string,
     id: string,
-    variant: 'compact' | 'default' | 'contractOnly' | 'currencyOnly' = 'default'
+    variant:
+        | 'compact'
+        | 'default'
+        | 'contractOnly'
+        | 'currencyOnly' = 'default',
+    currencyDelistedStatusMap?: Record<CurrencySymbol, boolean>
 ) => {
     const assessorFn: AccessorFn<T, string> = row => row.maturity.toString();
-
     return columnHelper.accessor(assessorFn, {
         id: id,
         cell: info => {
+            const currency = hexToCurrencySymbol(info.row.original.currency);
+            const delisted =
+                currency && currencyDelistedStatusMap
+                    ? currencyDelistedStatusMap[currency]
+                    : false;
+            const side = BigNumber.from(
+                info.row.original.forwardValue ?? 0
+            ).isNegative()
+                ? OrderSide.BORROW
+                : OrderSide.LEND;
             return (
                 <div className='flex justify-center'>
                     <TableContractCell
                         maturity={new Maturity(info.getValue())}
                         ccyByte32={info.row.original.currency}
                         variant={variant}
+                        delisted={delisted}
+                        side={side}
                     />
                 </div>
             );

@@ -1,3 +1,4 @@
+import { OrderSide } from '@secured-finance/sf-client';
 import { getUTCMonthYear } from '@secured-finance/sf-core';
 import classNames from 'classnames';
 import { useMemo } from 'react';
@@ -5,16 +6,20 @@ import { CurrencyIcon } from 'src/components/atoms';
 import { Tooltip } from 'src/components/templates';
 import { currencyMap, hexToCurrencySymbol } from 'src/utils';
 import { Maturity } from 'src/utils/entities';
-import ErrorOutlinedIcon from 'src/assets/icons/error-outlined.svg';
+import ErrorCircleIcon from 'src/assets/icons/error-circle.svg';
 
 export const TableContractCell = ({
     maturity,
     ccyByte32,
     variant = 'default',
+    delisted = false,
+    side,
 }: {
     maturity: Maturity;
     ccyByte32: string;
+    delisted?: boolean;
     variant?: 'default' | 'compact' | 'currencyOnly' | 'contractOnly';
+    side?: OrderSide;
 }) => {
     const ccy = useMemo(() => hexToCurrencySymbol(ccyByte32), [ccyByte32]);
     const contract = useMemo(() => {
@@ -31,6 +36,12 @@ export const TableContractCell = ({
     }, [variant]);
 
     if (!ccy) return null;
+
+    const tooltipText =
+        side === OrderSide.BORROW
+            ? 'Delisting: Repayment period within 7 days of maturity to avoid 7% fee.'
+            : 'Delisting: Redemption will be available 7 days post-maturity.';
+
     return (
         <div className='flex flex-col'>
             <div
@@ -53,11 +64,11 @@ export const TableContractCell = ({
                 <span className='typography-caption-2 text-neutral-6'>
                     {contract}
                 </span>
-                {ccy === 'WFIL' && (
+                {delisted && (
                     <Tooltip
-                        iconElement={<ErrorOutlinedIcon className='h-4 w-4' />}
+                        iconElement={<ErrorCircleIcon className='h-4 w-4' />}
                     >
-                        Delisting
+                        {tooltipText}
                     </Tooltip>
                 )}
             </div>

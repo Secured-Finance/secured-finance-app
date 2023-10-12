@@ -24,3 +24,14 @@ export const Error = Template.bind({});
 Error.args = {
     severity: 'error',
 };
+
+export const Warning = Template.bind({});
+Error.args = {
+    severity: 'warning',
+};
+
+export const Outlined = Template.bind({});
+Outlined.args = {
+    severity: 'warning',
+    variant: 'outlined',
+};

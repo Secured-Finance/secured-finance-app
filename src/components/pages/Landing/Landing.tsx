@@ -1,7 +1,7 @@
 import { OrderSide } from '@secured-finance/sf-client';
-// import { getUTCMonthYear } from '@secured-finance/sf-core';
+import { getUTCMonthYear } from '@secured-finance/sf-core';
 import queries from '@secured-finance/sf-graph-client/dist/graphclients';
-// import Link from 'next/link';
+import Link from 'next/link';
 import { useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { ViewType } from 'src/components/atoms';
@@ -24,6 +24,10 @@ import {
     useMaturityOptions,
 } from 'src/hooks';
 import {
+    defaultDelistedStatusMap,
+    useCurrencyDelistedStatus,
+} from 'src/hooks/useCurrencyDelistedStatus/useCurrencyDelistedStatus';
+import {
     resetUnitPrice,
     selectLandingOrderForm,
     setLastView,
@@ -34,6 +38,7 @@ import { OrderType } from 'src/types';
 import { CurrencySymbol } from 'src/utils';
 import { Maturity } from 'src/utils/entities';
 import { useAccount } from 'wagmi';
+import { generateDelistedCurrencyText } from '../PortfolioManagement';
 
 export const emptyOptionList = [
     {
@@ -44,6 +49,8 @@ export const emptyOptionList = [
 
 export const Landing = ({ view }: { view?: ViewType }) => {
     const { address } = useAccount();
+    const { data: currencyDelistedStatusMap = defaultDelistedStatusMap } =
+        useCurrencyDelistedStatus();
     const { currency, side, maturity, lastView } = useSelector(
         (state: RootState) => selectLandingOrderForm(state.landingOrderForm)
     );
@@ -86,7 +93,11 @@ export const Landing = ({ view }: { view?: ViewType }) => {
         <SimpleAdvancedView
             title='OTC Lending'
             simpleComponent={
-                <WithBanner ccy={currency} market={itayoseMarket}>
+                <WithBanner
+                    ccy={currency}
+                    market={itayoseMarket}
+                    currencyDelistedStatusMap={currencyDelistedStatusMap}
+                >
                     <div className='flex flex-row items-center justify-center'>
                         <LendingCard
                             collateralBook={collateralBook}
@@ -106,12 +117,17 @@ export const Landing = ({ view }: { view?: ViewType }) => {
                 </WithBanner>
             }
             advanceComponent={
-                <WithBanner ccy={currency} market={itayoseMarket}>
+                <WithBanner
+                    ccy={currency}
+                    market={itayoseMarket}
+                    currencyDelistedStatusMap={currencyDelistedStatusMap}
+                >
                     <AdvancedLending
                         collateralBook={collateralBook}
                         rates={Array.from(unitPrices.values()).map(v => v.apr)}
                         maturitiesOptionList={maturityOptionList}
                         marketPrice={marketPrice}
+                        currencyDelistedStatusMap={currencyDelistedStatusMap}
                     />
                 </WithBanner>
             }
@@ -132,58 +148,80 @@ export const Landing = ({ view }: { view?: ViewType }) => {
 };
 
 const WithBanner = ({
-    // ccy,
+    ccy,
     market,
+    currencyDelistedStatusMap,
     children,
 }: {
     ccy: CurrencySymbol;
     market: LendingMarket | undefined;
+    currencyDelistedStatusMap: Record<CurrencySymbol, boolean>;
     children: React.ReactNode;
 }) => {
+    const delistedCurrencies = Object.keys(currencyDelistedStatusMap).filter(
+        ccy => currencyDelistedStatusMap[ccy as CurrencySymbol]
+    );
+
     return (
         <div className='flex flex-col justify-center gap-5'>
+            <GeneralDelistedAlert currencies={delistedCurrencies} />
             {market && (
-                <Alert severity='error'>
-                    <p className='text-white'>
-                        Please note that all contracts for WFIL will be delisted
-                        on Secured Finance.{' '}
+                <Alert severity='info'>
+                    <div className='typography-caption text-white'>
+                        <p>
+                            {`Itayose market for ${ccy}-${getUTCMonthYear(
+                                market.maturity
+                            )} is now open until ${Intl.DateTimeFormat(
+                                'en-US',
+                                {
+                                    weekday: 'long',
+                                    year: 'numeric',
+                                    month: 'long',
+                                    day: 'numeric',
+                                }
+                            ).format(market.utcOpeningDate * 1000)}`}
+                            .
+                            <span className='pl-4'>
+                                <Link href='itayose' passHref>
+                                    <a
+                                        href='_'
+                                        className='text-planetaryPurple underline'
+                                    >
+                                        Place Order Now
+                                    </a>
+                                </Link>
+                            </span>
+                        </p>
+                    </div>
+                </Alert>
+            )}
+            {children}
+        </div>
+    );
+};
+
+export const GeneralDelistedAlert = ({
+    currencies,
+}: {
+    currencies: string[];
+}) => {
+    return (
+        <>
+            {currencies.length > 0 && (
+                <Alert severity='warning'>
+                    <p className='typography-caption text-white'>
+                        Please note that{' '}
+                        {generateDelistedCurrencyText(currencies)} will be
+                        delisted on Secured Finance.{' '}
                         <a
-                            className='text-secondary7'
+                            className='text-secondary7 underline'
                             href='https://docs.secured.finance/product-guide/unique-features/auto-rolling/price-discovery-for-auto-rolling'
                         >
                             Learn more
                         </a>
                     </p>
                 </Alert>
-                // <Alert severity='info'>
-                //     <div className='typography-caption text-white'>
-                //         <p>
-                //             {`Itayose market for ${ccy}-${getUTCMonthYear(
-                //                 market.maturity
-                //             )} is now open until ${Intl.DateTimeFormat(
-                //                 'en-US',
-                //                 {
-                //                     weekday: 'long',
-                //                     year: 'numeric',
-                //                     month: 'long',
-                //                     day: 'numeric',
-                //                 }
-                //             ).format(market.utcOpeningDate * 1000)}`}
-                //             <span className='pl-4'>
-                //                 <Link href='itayose' passHref>
-                //                     <a
-                //                         href='_'
-                //                         className='text-planetaryPurple underline'
-                //                     >
-                //                         Place Order Now
-                //                     </a>
-                //                 </Link>
-                //             </span>
-                //         </p>
-                //     </div>
-                // </Alert>
             )}
-            {children}
-        </div>
+        </>
     );
 };

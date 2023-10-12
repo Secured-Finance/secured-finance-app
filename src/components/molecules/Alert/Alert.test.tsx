@@ -1,5 +1,5 @@
 import { composeStories } from '@storybook/react';
-import { render } from 'src/test-utils.js';
+import { render, screen } from 'src/test-utils.js';
 import * as stories from './Alert.stories';
 
 const { Default } = composeStories(stories);
@@ -7,5 +7,23 @@ const { Default } = composeStories(stories);
 describe('Alert Component', () => {
     it('should render a Alert', () => {
         render(<Default />);
+    });
+
+    it('should render solid variant if variant is not provided', () => {
+        render(<Default />);
+        const alert = screen.getByRole('alert');
+        expect(alert).toHaveClass(
+            'bg-[rgba(41, 45, 63, 0.60)] border border-white-10 shadow-tab'
+        );
+        expect(alert).not.toHaveClass('border-2 border-yellow bg-yellow/20');
+    });
+
+    it('should render outlined variant if specified', () => {
+        render(<Default variant='outlined' />);
+        const alert = screen.getByRole('alert');
+        expect(alert).not.toHaveClass(
+            'bg-[rgba(41, 45, 63, 0.60)] border border-white-10 shadow-tab'
+        );
+        expect(alert).toHaveClass('border-2 border-yellow bg-yellow/20');
     });
 });

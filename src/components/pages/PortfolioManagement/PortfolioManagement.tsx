@@ -23,6 +23,10 @@ import {
     usePagination,
     usePositions,
 } from 'src/hooks';
+import {
+    defaultDelistedStatusMap,
+    useCurrencyDelistedStatus,
+} from 'src/hooks/useCurrencyDelistedStatus/useCurrencyDelistedStatus';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { RootState } from 'src/store/types';
 import { TradeHistory } from 'src/types';
@@ -33,6 +37,7 @@ import {
     formatOrders,
     sortOrders,
     usdFormat,
+    hexToCurrencySymbol,
 } from 'src/utils';
 import { useAccount } from 'wagmi';
 
@@ -59,6 +64,9 @@ export const PortfolioManagement = () => {
     const [selectedTable, setSelectedTable] = useState(
         TableType.ACTIVE_POSITION
     );
+    const { data: currencyDelistedStatusMap = defaultDelistedStatusMap } =
+        useCurrencyDelistedStatus();
+
     const userOrderHistory = useGraphClientHook(
         {
             address: address?.toLowerCase() ?? '',
@@ -157,20 +165,49 @@ export const PortfolioManagement = () => {
         parseInt(userTransactionHistory.data?.transactionCount) +
             orderList.inactiveOrderList.length;
 
+    const scrollToBottom = () => {
+        window.scrollTo({
+            top: document.documentElement.scrollHeight,
+            behavior: 'smooth',
+        });
+    };
+
+    const userDelistedCurrenciesSet = new Set<string>();
+
+    positions.flatMap(position => {
+        const ccy = hexToCurrencySymbol(position.currency);
+        if (ccy && currencyDelistedStatusMap[ccy]) {
+            userDelistedCurrenciesSet.add(ccy);
+        }
+        return [];
+    });
+
+    const userDelistedCurrenciesArray = Array.from(userDelistedCurrenciesSet);
+
     return (
         <Page title='Portfolio Management' name='portfolio-management'>
-            <Alert severity='error'>
-                <p className='text-white'>
-                    Please note that all contracts for WFIL will be delisted on
-                    Secured Finance.{' '}
-                    <a
-                        className='text-secondary7 underline'
-                        href='https://docs.secured.finance/product-guide/unique-features/auto-rolling/price-discovery-for-auto-rolling'
-                    >
-                        Learn more
-                    </a>
-                </p>
-            </Alert>
+            {userDelistedCurrenciesArray.length > 0 && (
+                <Alert severity='error'>
+                    <p className='text-white'>
+                        Please note that your contracts for{' '}
+                        {generateDelistedCurrencyText(
+                            userDelistedCurrenciesArray
+                        )}{' '}
+                        will be delisted at maturity on Secured Finance.{' '}
+                        <a
+                            className='text-secondary7 underline'
+                            href='https://docs.secured.finance/product-guide/unique-features/auto-rolling/price-discovery-for-auto-rolling'
+                            onClick={e => {
+                                e.preventDefault();
+                                scrollToBottom();
+                            }}
+                        >
+                            Learn more
+                        </a>
+                    </p>
+                </Alert>
+            )}
+
             <TwoColumns>
                 <div className='flex flex-col gap-6'>
                     <StatsBar
@@ -207,7 +244,12 @@ export const PortfolioManagement = () => {
                             ]}
                             onTabChange={setSelectedTable}
                         >
-                            <ActiveTradeTable data={positions} />
+                            <ActiveTradeTable
+                                data={positions}
+                                currencyDelistedStatusMap={
+                                    currencyDelistedStatusMap
+                                }
+                            />
                             <OrderTable data={orderList.activeOrderList} />
 
                             {userOrderHistory.loading ? (
@@ -244,6 +286,11 @@ export const PortfolioManagement = () => {
                             )}
                         </HorizontalTab>
                     </div>
+                    <Disclaimer
+                        showDelistedCurrencyDisclaimer={
+                            userDelistedCurrenciesArray.length > 0
+                        }
+                    />
                 </div>
                 <div className='my-4 laptop:my-0'>
                     {isConnected ? (
@@ -259,4 +306,71 @@ export const PortfolioManagement = () => {
             </TwoColumns>
         </Page>
     );
+};
+
+const Disclaimer = ({
+    showDelistedCurrencyDisclaimer,
+}: {
+    showDelistedCurrencyDisclaimer: boolean;
+}) => {
+    return (
+        <div className='typography-dropdown-selection-label mt-4 w-fit rounded-xl text-justify text-secondary7 '>
+            {showDelistedCurrencyDisclaimer && (
+                <p className='p-3'>
+                    <span className='inline-flex items-baseline gap-1 text-galacticOrange'>
+                        Delisting Contracts
+                    </span>{' '}
+                    - Auto-rolls are discontinued after the contract&apos;s
+                    maturity. Borrowers are advised to repay within 7 days of
+                    maturity to avoid 7% penalty. Lenders can redeem their funds
+                    starting 7 days post-maturity. Note that some order books
+                    might necessitate up to 2 years to reach full maturity.
+                </p>
+            )}
+
+            <p className='p-3'>
+                <span className='inline-flex items-baseline gap-1 text-white'>
+                    Standard Contracts
+                </span>{' '}
+                - Secured Finance lending contract includes an auto-roll
+                feature. If no action is taken by the user prior to the
+                contract&apos;s maturity date, it will automatically roll over
+                into the next closest expiration date. This convenience comes
+                with a 0.25% fee for the auto-roll transaction.
+            </p>
+            <p className='p-3'>
+                It is the user&apos;s responsibility to take action to unwind
+                the contract prior to its maturity date. Failure to do so will
+                result in the contract being automatically rolled over,
+                incurring the aforementioned fee.
+            </p>
+            <p className='p-3'>
+                For an in-depth understanding of our protocol, please refer to{' '}
+                <a
+                    href='https://docs.secured.finance/'
+                    className='text-planetaryPurple'
+                >
+                    Docs.Secured.Finance.
+                </a>
+            </p>
+        </div>
+    );
+};
+
+export const generateDelistedCurrencyText = (currencies: string[]) => {
+    const numberOfCurrencies = currencies.length;
+
+    if (numberOfCurrencies === 1) {
+        return currencies[0];
+    }
+
+    return currencies.reduce((acc, ccy: string, index: number) => {
+        if (index === numberOfCurrencies - 1) {
+            return acc + `and ${ccy}`;
+        } else if (index === numberOfCurrencies - 2) {
+            return acc + `${ccy} `;
+        } else {
+            return acc + `${ccy}, `;
+        }
+    }, '');
 };
