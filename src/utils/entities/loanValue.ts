@@ -132,8 +132,9 @@ export class LoanValue {
         return dayjs
             .unix(this._maturity)
             .diff(
-                this._calculationDate !== 0
-                    ? this._calculationDate
+                this._calculationDate !== undefined &&
+                    this._calculationDate !== 0
+                    ? this._calculationDate * 1000
                     : Date.now(),
                 'second'
             );
