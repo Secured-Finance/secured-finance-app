@@ -4,10 +4,10 @@ import useSF from 'src/hooks/useSecuredFinance';
 import { CurrencySymbol, getCurrencyMapAsList, toCurrency } from 'src/utils';
 
 export const defaultDelistedStatus: Record<CurrencySymbol, boolean> = {
-    [CurrencySymbol.WBTC]: true,
-    [CurrencySymbol.WFIL]: true,
-    [CurrencySymbol.ETH]: true,
-    [CurrencySymbol.USDC]: true,
+    [CurrencySymbol.WBTC]: false,
+    [CurrencySymbol.WFIL]: false,
+    [CurrencySymbol.ETH]: false,
+    [CurrencySymbol.USDC]: false,
 };
 
 export const useCurrencyDelistedStatus = () => {

@@ -3,6 +3,7 @@ import { BigNumber } from 'ethers';
 import { useCallback, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
+    DelistingChip,
     GradientBox,
     MarketTab,
     Option,
@@ -221,7 +222,10 @@ export const Itayose = () => {
                                 ? 'PreOrder'
                                 : 'Open in'
                         }
-                        assetList={assetList}
+                        assetList={assetList.map(o => ({
+                            ...o,
+                            ...(o.delisted ? { chip: <DelistingChip /> } : {}),
+                        }))}
                         selectedAsset={selectedAsset}
                         options={maturityOptionList.map(o => ({
                             label: o.label,

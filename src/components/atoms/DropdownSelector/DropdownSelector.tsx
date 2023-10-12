@@ -200,6 +200,7 @@ export const DropdownSelector = <T extends string = string>({
                                 key={`${asset.label}_${i}`}
                                 as='button'
                                 onClick={() => handleSelect(asset)}
+                                aria-label={asset.label}
                             >
                                 {({ active }) => (
                                     <div>
