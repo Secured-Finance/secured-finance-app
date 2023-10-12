@@ -1,6 +1,6 @@
-import { useState } from 'react';
 import { InformationCircleIcon } from '@heroicons/react/24/solid';
 import classNames from 'classnames';
+import { useState } from 'react';
 import ErrorCircleIcon from 'src/assets/icons/error-circle.svg';
 import WarningCircleIcon from 'src/assets/icons/warning-circle.svg';
 import { CloseButton } from 'src/components/atoms';
@@ -45,7 +45,7 @@ export const Alert = ({
             aria-label={severity}
             role='alert'
             className={classNames('rounded-xl', {
-                'border-2 border-yellow bg-yellow/20': variant === 'outlined', // reconsider this
+                'border-2 border-yellow bg-yellow/20': variant === 'outlined',
                 'bg-[rgba(41, 45, 63, 0.60)] border border-white-10 shadow-tab':
                     variant === 'solid',
             })}
