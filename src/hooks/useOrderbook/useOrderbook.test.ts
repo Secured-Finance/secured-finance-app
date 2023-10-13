@@ -58,6 +58,27 @@ describe('useOrderbook', () => {
         ]);
     });
 
+    it('should return the transformed orderbook with calculationDate when it is passed', async () => {
+        const calculationDate = 1669852800;
+        const { result, waitForNextUpdate } = renderHook(() =>
+            useOrderbook(CurrencySymbol.ETH, maturity, calculationDate)
+        );
+
+        await waitForNextUpdate();
+
+        expect(
+            result.current[0].data.borrowOrderbook.map(
+                (v: OrderBookEntry) => v.value.price
+            )
+        ).toEqual([9690, 9687, 9685, 9679, 9674, 0, 0, 0, 0, 0, 0, 0, 0]);
+
+        expect(
+            result.current[0].data.borrowOrderbook.map(
+                (v: OrderBookEntry) => v.value.calculationDate
+            )
+        ).toEqual(Array(13).fill(calculationDate));
+    });
+
     it('should double the depth when not showing all orderbook', async () => {
         const { result, waitForNextUpdate } = renderHook(() =>
             useOrderbook(CurrencySymbol.ETH, maturity)
