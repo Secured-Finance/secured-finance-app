@@ -64,7 +64,7 @@ export const MarketDashboard = () => {
     const curves: Record<string, Rate[]> = {};
     const { data: lendingContracts = baseContracts } = useLendingMarkets();
 
-    const { data: currencyDelistedStatusMap } = useCurrencyDelistedStatus();
+    const { data: delistedCurrencySet } = useCurrencyDelistedStatus();
 
     getCurrencyMapAsList().forEach(ccy => {
         // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -124,13 +124,9 @@ export const MarketDashboard = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [JSON.stringify(priceList), valueLockedByCurrency]);
 
-    const delistedCurrencies = Object.keys(currencyDelistedStatusMap).filter(
-        ccy => currencyDelistedStatusMap[ccy as CurrencySymbol]
-    );
-
     return (
         <Page title='Market Dashboard' name='dashboard-page'>
-            <DelistedCurrencyDisclaimer currencies={delistedCurrencies} />
+            <DelistedCurrencyDisclaimer currencies={delistedCurrencySet} />
             <TwoColumns>
                 <div className='grid grid-cols-1 gap-y-7'>
                     <StatsBar

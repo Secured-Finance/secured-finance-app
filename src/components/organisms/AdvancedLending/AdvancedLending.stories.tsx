@@ -2,7 +2,7 @@ import { RESPONSIVE_PARAMETERS } from '.storybook/constants';
 import { withAssetPrice, withWalletProvider } from '.storybook/decorators';
 import type { Meta, StoryFn } from '@storybook/react';
 import { within } from '@storybook/testing-library';
-import { defaultDelistedStatusMap } from 'src/hooks';
+import { defaultDelistedStatusSet } from 'src/hooks';
 import {
     collateralBook80,
     maturityOptions,
@@ -20,7 +20,7 @@ export default {
         maturitiesOptionList: maturityOptions,
         rates: yieldCurveRates,
         marketPrice: 9917,
-        currencyDelistedStatusMap: defaultDelistedStatusMap,
+        delistedCurrencySet: defaultDelistedStatusSet,
     },
     parameters: {
         apolloClient: {
@@ -58,8 +58,5 @@ OpenOrdersConnectedToWallet.play = async ({ canvasElement }) => {
 
 export const Delisted = Template.bind({});
 Delisted.args = {
-    currencyDelistedStatusMap: {
-        ...defaultDelistedStatusMap,
-        [CurrencySymbol.WFIL]: true,
-    },
+    delistedCurrencySet: new Set([CurrencySymbol.WFIL]),
 };

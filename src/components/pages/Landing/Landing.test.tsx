@@ -281,9 +281,12 @@ describe('Landing Component', () => {
         clickAdvancedButton();
         expect(await screen.findByText('DEC22')).toBeInTheDocument();
         expect(screen.getByRole('slider')).toHaveValue('0');
-        fireEvent.change(screen.getByRole('textbox', { name: 'Amount' }), {
-            target: { value: '100' },
+        waitFor(() => {
+            fireEvent.change(screen.getByRole('textbox', { name: 'Amount' }), {
+                target: { value: '100' },
+            });
         });
+
         expect(screen.getByRole('slider')).toHaveValue('0');
     });
 

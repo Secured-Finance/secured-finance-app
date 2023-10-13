@@ -302,7 +302,7 @@ export const contractColumnDefinition = <
         | 'default'
         | 'contractOnly'
         | 'currencyOnly' = 'default',
-    currencyDelistedStatusMap?: Record<CurrencySymbol, boolean>
+    delistedCurrencySet?: Set<CurrencySymbol>
 ) => {
     const assessorFn: AccessorFn<T, string> = row => row.maturity.toString();
     return columnHelper.accessor(assessorFn, {
@@ -310,8 +310,8 @@ export const contractColumnDefinition = <
         cell: info => {
             const currency = hexToCurrencySymbol(info.row.original.currency);
             const delisted =
-                currency && currencyDelistedStatusMap
-                    ? currencyDelistedStatusMap[currency]
+                currency && delistedCurrencySet
+                    ? delistedCurrencySet.has(currency)
                     : false;
             const side = BigNumber.from(
                 info.row.original.forwardValue ?? 0

@@ -1,18 +1,20 @@
 import { Alert } from 'src/components/molecules';
 import { generateDelistedCurrencyText } from 'src/components/pages';
+import { CurrencySymbol } from 'src/utils';
 
 export const DelistedCurrencyDisclaimer = ({
     currencies,
 }: {
-    currencies: string[];
+    currencies: Set<CurrencySymbol>;
 }) => {
+    const currencyArray = Array.from(currencies);
     return (
         <>
-            {currencies.length > 0 && (
+            {currencyArray.length > 0 && (
                 <Alert severity='warning'>
                     <p className='typography-caption text-white'>
                         Please note that{' '}
-                        {generateDelistedCurrencyText(currencies)} will be
+                        {generateDelistedCurrencyText(currencyArray)} will be
                         delisted on Secured Finance.{' '}
                         <a
                             className='whitespace-nowrap text-secondary7 underline'

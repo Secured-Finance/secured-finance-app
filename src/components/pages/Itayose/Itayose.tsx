@@ -112,7 +112,7 @@ export const Itayose = () => {
         selectLandingOrderForm(state.landingOrderForm)
     );
 
-    const { data: currencyDelistedStatusMap } = useCurrencyDelistedStatus();
+    const { data: delistedCurrencySet } = useCurrencyDelistedStatus();
 
     const { data: lendingMarkets = baseContracts } = useLendingMarkets();
     const lendingContracts = lendingMarkets[currency];
@@ -245,7 +245,7 @@ export const Itayose = () => {
                                 : 'lend'
                             : 'none'
                     }
-                    currencyDelistedStatusMap={currencyDelistedStatusMap}
+                    delistedCurrencySet={delistedCurrencySet}
                 />
 
                 <OrderBookWidget
@@ -257,7 +257,7 @@ export const Itayose = () => {
                         setIsShowingAll(state.showBorrow && state.showLend)
                     }
                     onAggregationChange={setMultiplier}
-                    isCurrencyDelisted={currencyDelistedStatusMap[currency]}
+                    isCurrencyDelisted={delistedCurrencySet.has(currency)}
                 />
 
                 <div className='flex h-full flex-col items-stretch justify-stretch gap-6'>

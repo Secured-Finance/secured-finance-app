@@ -45,7 +45,7 @@ export const emptyOptionList = [
 
 export const Landing = ({ view }: { view?: ViewType }) => {
     const { address } = useAccount();
-    const { data: currencyDelistedStatusMap } = useCurrencyDelistedStatus();
+    const { data: delistedCurrencySet } = useCurrencyDelistedStatus();
     const { currency, side, maturity, lastView } = useSelector(
         (state: RootState) => selectLandingOrderForm(state.landingOrderForm)
     );
@@ -91,16 +91,14 @@ export const Landing = ({ view }: { view?: ViewType }) => {
                 <WithBanner
                     ccy={currency}
                     market={itayoseMarket}
-                    currencyDelistedStatusMap={currencyDelistedStatusMap}
+                    delistedCurrencySet={delistedCurrencySet}
                 >
                     <div className='flex flex-row items-center justify-center'>
                         <LendingCard
                             collateralBook={collateralBook}
                             maturitiesOptionList={maturityOptionList}
                             marketPrice={marketPrice}
-                            currencyDelistedStatusMap={
-                                currencyDelistedStatusMap
-                            }
+                            delistedCurrencySet={delistedCurrencySet}
                         />
                         <YieldChart
                             asset={currency}
@@ -118,14 +116,14 @@ export const Landing = ({ view }: { view?: ViewType }) => {
                 <WithBanner
                     ccy={currency}
                     market={itayoseMarket}
-                    currencyDelistedStatusMap={currencyDelistedStatusMap}
+                    delistedCurrencySet={delistedCurrencySet}
                 >
                     <AdvancedLending
                         collateralBook={collateralBook}
                         rates={Array.from(unitPrices.values()).map(v => v.apr)}
                         maturitiesOptionList={maturityOptionList}
                         marketPrice={marketPrice}
-                        currencyDelistedStatusMap={currencyDelistedStatusMap}
+                        delistedCurrencySet={delistedCurrencySet}
                     />
                 </WithBanner>
             }
@@ -148,21 +146,17 @@ export const Landing = ({ view }: { view?: ViewType }) => {
 const WithBanner = ({
     ccy,
     market,
-    currencyDelistedStatusMap,
+    delistedCurrencySet,
     children,
 }: {
     ccy: CurrencySymbol;
     market: LendingMarket | undefined;
-    currencyDelistedStatusMap: Record<CurrencySymbol, boolean>;
+    delistedCurrencySet: Set<CurrencySymbol>;
     children: React.ReactNode;
 }) => {
-    const delistedCurrencies = Object.keys(currencyDelistedStatusMap).filter(
-        ccy => currencyDelistedStatusMap[ccy as CurrencySymbol]
-    );
-
     return (
         <div className='flex flex-col justify-center gap-5'>
-            <DelistedCurrencyDisclaimer currencies={delistedCurrencies} />
+            <DelistedCurrencyDisclaimer currencies={delistedCurrencySet} />
             {market && (
                 <Alert severity='info'>
                     <div className='typography-caption text-white'>

@@ -5,7 +5,7 @@ import {
     withAssetPrice,
     withWalletProvider,
 } from 'src/../.storybook/decorators';
-import { defaultDelistedStatusMap } from 'src/hooks';
+import { defaultDelistedStatusSet } from 'src/hooks';
 import { positions, wfilBytes32 } from 'src/stories/mocks/fixtures';
 import { CurrencySymbol } from 'src/utils';
 import { getTimestampRelativeToNow } from 'src/utils/date';
@@ -17,7 +17,7 @@ export default {
     component: ActiveTradeTable,
     args: {
         data: positions,
-        currencyDelistedStatusMap: defaultDelistedStatusMap,
+        delistedCurrencySet: defaultDelistedStatusSet,
     },
     parameters: {
         ...RESPONSIVE_PARAMETERS,
@@ -79,8 +79,5 @@ export const Default = Template.bind({});
 
 export const Delisted = Template.bind({});
 Delisted.args = {
-    currencyDelistedStatusMap: {
-        ...defaultDelistedStatusMap,
-        [CurrencySymbol.WFIL]: true,
-    },
+    delistedCurrencySet: new Set([CurrencySymbol.WFIL]),
 };
