@@ -14,6 +14,7 @@ import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { setCurrency, setMaturity } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
 import { CurrencySymbol, hexToCurrencySymbol } from 'src/utils';
+import { isRedemptionPeriod, isRepaymentPeriod } from 'src/utils/date';
 import { Amount, Maturity } from 'src/utils/entities';
 import {
     amountColumnDefinition,
@@ -170,27 +171,7 @@ export const ActiveTradeTable = ({
                         ? OrderSide.LEND
                         : OrderSide.BORROW; // side is reversed as unwind
                     if (!ccy) return null;
-                    const millisecondsInAWeek = 7 * 24 * 60 * 60 * 1000;
 
-                    const calculateTimeDifference = (timestamp: number) => {
-                        const targetDate = new Date(timestamp * 1000);
-                        const currentDate = new Date();
-                        return currentDate.getTime() - targetDate.getTime();
-                    };
-
-                    const isRepaymentPeriod = (maturity: number) => {
-                        return (
-                            Math.abs(calculateTimeDifference(maturity)) <=
-                            millisecondsInAWeek
-                        );
-                    };
-
-                    const isRedemptionPeriod = (maturity: number) => {
-                        return (
-                            calculateTimeDifference(maturity) >=
-                            millisecondsInAWeek
-                        );
-                    };
                     let type: 'UNWIND' | 'REPAY' | 'REDEEM' = 'UNWIND';
                     let label = 'Unwind Position';
                     if (currencyDelistedStatusMap[ccy]) {

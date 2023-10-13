@@ -4,6 +4,7 @@ import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import {
     CollateralManagementConciseTab,
+    DelistedCurrencyDisclaimer,
     GradientBox,
 } from 'src/components/atoms';
 import { StatsBar } from 'src/components/molecules';
@@ -43,7 +44,6 @@ import {
     usdFormat,
 } from 'src/utils';
 import { useAccount } from 'wagmi';
-import { GeneralDelistedAlert } from '../Landing';
 
 const computeTotalUsers = (users: string) => {
     if (!users) {
@@ -130,7 +130,7 @@ export const MarketDashboard = () => {
 
     return (
         <Page title='Market Dashboard' name='dashboard-page'>
-            <GeneralDelistedAlert currencies={delistedCurrencies} />
+            <DelistedCurrencyDisclaimer currencies={delistedCurrencies} />
             <TwoColumns>
                 <div className='grid grid-cols-1 gap-y-7'>
                     <StatsBar
