@@ -26,7 +26,7 @@ Error.args = {
 };
 
 export const Warning = Template.bind({});
-Error.args = {
+Warning.args = {
     severity: 'warning',
 };
 

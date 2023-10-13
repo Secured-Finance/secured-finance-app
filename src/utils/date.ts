@@ -36,10 +36,7 @@ export function countdown(targetTimestamp: number): string {
 
 const millisecondsInAWeek = 7 * 24 * 60 * 60 * 1000;
 
-export const getTimestampRelativeToNow = (
-    hours: number,
-    isFuture?: boolean
-) => {
+export const getTimestampRelativeToNow = (hours: number, isFuture = false) => {
     const now = new Date();
     const offset = isFuture ? 1 : -1;
     const adjustedTimestamp = new Date(

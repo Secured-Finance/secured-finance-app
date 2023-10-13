@@ -11,7 +11,7 @@ export const Alert = ({
     variant = 'solid',
     onClose,
 }: {
-    severity: 'error' | 'info' | 'success' | 'warning';
+    severity?: 'error' | 'info' | 'success' | 'warning';
     children: React.ReactNode;
     variant?: 'solid' | 'outlined';
     onClose?: () => void;

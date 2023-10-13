@@ -14,7 +14,7 @@ import {
     getCurrencyMapAsOptions,
     toCurrencySymbol,
 } from 'src/utils';
-import { countdown } from 'src/utils/date';
+import { countdown } from 'src/utils';
 import { LoanValue } from 'src/utils/entities';
 import {
     contractColumnDefinition,
