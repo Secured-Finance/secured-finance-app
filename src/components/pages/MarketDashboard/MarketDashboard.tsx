@@ -110,6 +110,7 @@ export const MarketDashboard = () => {
             return val;
         }
         for (const ccy of getCurrencyMapAsList()) {
+            if (!valueLockedByCurrency[ccy.symbol]) continue;
             val = val.add(
                 Math.floor(
                     currencyMap[ccy.symbol].fromBaseUnit(
