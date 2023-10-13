@@ -33,3 +33,31 @@ export function countdown(targetTimestamp: number): string {
 
     return countdownString;
 }
+
+const millisecondsInAWeek = 7 * 24 * 60 * 60 * 1000;
+
+export const getTimestampRelativeToNow = (
+    hours: number,
+    isFuture?: boolean
+) => {
+    const now = new Date();
+    const offset = isFuture ? 1 : -1;
+    const adjustedTimestamp = new Date(
+        now.getTime() + offset * hours * 60 * 60 * 1000
+    );
+    return Math.floor(adjustedTimestamp.getTime() / 1000);
+};
+
+export const calculateTimeDifference = (timestamp: number) => {
+    const targetDate = new Date(timestamp * 1000);
+    const currentDate = new Date();
+    return currentDate.getTime() - targetDate.getTime();
+};
+
+export const isRepaymentPeriod = (maturity: number) => {
+    return Math.abs(calculateTimeDifference(maturity)) <= millisecondsInAWeek;
+};
+
+export const isRedemptionPeriod = (maturity: number) => {
+    return calculateTimeDifference(maturity) >= millisecondsInAWeek;
+};

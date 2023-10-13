@@ -191,7 +191,7 @@ export const PortfolioManagement = () => {
                         )}{' '}
                         will be delisted at maturity on Secured Finance.{' '}
                         <a
-                            className='text-secondary7 underline'
+                            className='whitespace-nowrap text-secondary7 underline'
                             href='https://docs.secured.finance/product-guide/unique-features/auto-rolling/price-discovery-for-auto-rolling'
                             onClick={e => {
                                 e.preventDefault();
@@ -344,7 +344,7 @@ const Disclaimer = ({
                 For an in-depth understanding of our protocol, please refer to{' '}
                 <a
                     href='https://docs.secured.finance/'
-                    className='text-planetaryPurple'
+                    className='whitespace-nowrap text-planetaryPurple'
                 >
                     Docs.Secured.Finance.
                 </a>

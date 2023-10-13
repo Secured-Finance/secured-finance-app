@@ -1,5 +1,12 @@
 import timemachine from 'timemachine';
-import { countdown, isPastDate } from './date';
+import {
+    calculateTimeDifference,
+    countdown,
+    getTimestampRelativeToNow,
+    isPastDate,
+    isRedemptionPeriod,
+    isRepaymentPeriod,
+} from './date';
 
 beforeAll(() => {
     timemachine.reset();
@@ -7,6 +14,8 @@ beforeAll(() => {
         dateString: '2022-12-15T00:00:00.00Z',
     });
 });
+
+const currentTimestamp = 1671062400;
 
 describe('isPastDate', () => {
     it('should returns true for a past date', () => {
@@ -71,5 +80,78 @@ describe('countdown', () => {
         const countdownString = countdown(targetTimestamp);
 
         expect(countdownString).toEqual(expectedCountdown);
+    });
+});
+
+describe('getTimeStampRelativeToNow function', () => {
+    it('should return a future timestamp for if isFuture is true', () => {
+        const hours = 3;
+        const result = getTimestampRelativeToNow(hours, true);
+        const expectedTimestamp = Math.floor(
+            currentTimestamp + hours * 60 * 60
+        );
+        expect(result).toBe(expectedTimestamp);
+    });
+
+    it('should return a past timestamp if isFuture is false', () => {
+        const hours = 2;
+        const isFuture = false;
+        const result = getTimestampRelativeToNow(hours, isFuture);
+        const expectedTimestamp = Math.floor(
+            currentTimestamp - hours * 60 * 60
+        );
+        expect(result).toBe(expectedTimestamp);
+    });
+});
+
+describe('calculateTimeDifference', () => {
+    it('calculates time difference correctly', () => {
+        const timestamp = Math.floor(currentTimestamp - 2 * 60 * 60);
+        const timeDifference = calculateTimeDifference(timestamp);
+        expect(timeDifference).toBeCloseTo(2 * 60 * 60 * 1000, -2);
+    });
+});
+
+describe('isRepaymentPeriod', () => {
+    it('returns true for repayment period within a week', () => {
+        const timestamp = getTimestampRelativeToNow(144, true); //6 days in future
+        const result = isRepaymentPeriod(timestamp);
+        expect(result).toBe(true);
+        const pastTimestamp = getTimestampRelativeToNow(144); // 6 days in past
+        expect(isRepaymentPeriod(pastTimestamp)).toBe(true);
+    });
+
+    it('returns false for repayment period beyond a week', () => {
+        const maturity = getTimestampRelativeToNow(240);
+        const result = isRepaymentPeriod(maturity);
+        expect(result).toBe(false);
+    });
+
+    it('returns false for repayment period till a week before', () => {
+        const maturity = getTimestampRelativeToNow(240, true);
+        const result = isRepaymentPeriod(maturity);
+        expect(result).toBe(false);
+    });
+});
+
+describe('isRedemptionPeriod', () => {
+    it('returns true for redemption period beyond a week', () => {
+        const maturity = getTimestampRelativeToNow(240);
+        const result = isRedemptionPeriod(maturity);
+        expect(result).toBe(true);
+    });
+
+    it('returns false for redemption period within a week after maturity', () => {
+        const maturity = getTimestampRelativeToNow(144);
+        const result = isRedemptionPeriod(maturity);
+
+        expect(result).toBe(false);
+    });
+
+    it('returns false for redemption period before maturity', () => {
+        const maturity = getTimestampRelativeToNow(22, true);
+        const result = isRedemptionPeriod(maturity);
+
+        expect(result).toBe(false);
     });
 });

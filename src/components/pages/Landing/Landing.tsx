@@ -4,7 +4,7 @@ import queries from '@secured-finance/sf-graph-client/dist/graphclients';
 import Link from 'next/link';
 import { useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { ViewType } from 'src/components/atoms';
+import { DelistedCurrencyDisclaimer, ViewType } from 'src/components/atoms';
 import { Alert } from 'src/components/molecules';
 import {
     AdvancedLending,
@@ -35,7 +35,6 @@ import { OrderType } from 'src/types';
 import { CurrencySymbol } from 'src/utils';
 import { Maturity } from 'src/utils/entities';
 import { useAccount } from 'wagmi';
-import { generateDelistedCurrencyText } from '../PortfolioManagement';
 
 export const emptyOptionList = [
     {
@@ -163,7 +162,7 @@ const WithBanner = ({
 
     return (
         <div className='flex flex-col justify-center gap-5'>
-            <GeneralDelistedAlert currencies={delistedCurrencies} />
+            <DelistedCurrencyDisclaimer currencies={delistedCurrencies} />
             {market && (
                 <Alert severity='info'>
                     <div className='typography-caption text-white'>
@@ -196,31 +195,5 @@ const WithBanner = ({
             )}
             {children}
         </div>
-    );
-};
-
-export const GeneralDelistedAlert = ({
-    currencies,
-}: {
-    currencies: string[];
-}) => {
-    return (
-        <>
-            {currencies.length > 0 && (
-                <Alert severity='warning'>
-                    <p className='typography-caption text-white'>
-                        Please note that{' '}
-                        {generateDelistedCurrencyText(currencies)} will be
-                        delisted on Secured Finance.{' '}
-                        <a
-                            className='text-secondary7 underline'
-                            href='https://docs.secured.finance/product-guide/unique-features/auto-rolling/price-discovery-for-auto-rolling'
-                        >
-                            Learn more
-                        </a>
-                    </p>
-                </Alert>
-            )}
-        </>
     );
 };

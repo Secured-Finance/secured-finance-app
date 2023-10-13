@@ -3,12 +3,12 @@ import { OrderSide } from '@secured-finance/sf-client';
 import { formatDate } from '@secured-finance/sf-core';
 import { useMemo } from 'react';
 import {
+    DelistedCurrencyDisclaimer,
     ExpandIndicator,
     Section,
     SectionWithItems,
 } from 'src/components/atoms';
 import {
-    Alert,
     AmountCard,
     CollateralSimulationSection,
 } from 'src/components/molecules';
@@ -63,18 +63,7 @@ export const OrderDetails = ({
     return (
         <div className='grid w-full grid-cols-1 justify-items-stretch gap-6 text-white'>
             {isCurrencyDelisted && (
-                <Alert severity='warning' variant='outlined'>
-                    <p className='typography-caption text-white'>
-                        Please note that {amount.currency} will be delisted on
-                        Secured Finance.{' '}
-                        <a
-                            className='text-secondary7 underline'
-                            href='https://docs.secured.finance/product-guide/unique-features/auto-rolling/price-discovery-for-auto-rolling'
-                        >
-                            Learn more
-                        </a>
-                    </p>
-                </Alert>
+                <DelistedCurrencyDisclaimer currencies={[amount.currency]} />
             )}
             <Section>
                 <AmountCard amount={amount} price={assetPrice} />

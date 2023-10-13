@@ -52,7 +52,7 @@ export const Alert = ({
         >
             <div
                 className={classNames(
-                    'flex w-full flex-row items-center justify-between rounded-xl px-5 py-3',
+                    'flex w-full flex-row items-center justify-between gap-1 rounded-xl px-5 py-3',
                     {
                         'bg-gradient-to-b from-[rgba(111,116,176,0.35)] to-[rgba(57,77,174,0)]':
                             variant === 'solid',
