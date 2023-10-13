@@ -4,12 +4,7 @@ import { QueryKeys } from 'src/hooks/queries';
 import useSF from 'src/hooks/useSecuredFinance';
 import { CurrencySymbol, getCurrencyMapAsList, toCurrency } from 'src/utils';
 
-export const defaultDelistedStatusMap: Record<CurrencySymbol, boolean> = {
-    [CurrencySymbol.WBTC]: false,
-    [CurrencySymbol.WFIL]: false,
-    [CurrencySymbol.ETH]: false,
-    [CurrencySymbol.USDC]: false,
-};
+export const defaultDelistedStatusSet: Set<CurrencySymbol> = new Set();
 
 export const useCurrencyDelistedStatus = () => {
     const securedFinance = useSF();
@@ -27,15 +22,17 @@ export const useCurrencyDelistedStatus = () => {
                 )
             );
 
-            return currencyExistList.reduce(
-                (delistedStatus, currencyExist, index) => ({
-                    ...delistedStatus,
-                    [currencies[index]]: !currencyExist,
-                }),
-                defaultDelistedStatusMap
-            );
+            const delistedStatusSet: Set<CurrencySymbol> = new Set();
+
+            currencyExistList.forEach((currencyExist, index) => {
+                if (!currencyExist) {
+                    delistedStatusSet.add(currencies[index]);
+                }
+            });
+
+            return delistedStatusSet;
         },
-        initialData: defaultDelistedStatusMap,
+        initialData: defaultDelistedStatusSet,
         enabled: !!securedFinance,
     });
 };

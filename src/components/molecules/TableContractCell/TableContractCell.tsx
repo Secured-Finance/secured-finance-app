@@ -64,6 +64,7 @@ export const TableContractCell = ({
                 </span>
                 {delistedContractSide && (
                     <Tooltip
+                        align='right'
                         iconElement={<ErrorCircleIcon className='h-4 w-4' />}
                     >
                         {tooltipText}

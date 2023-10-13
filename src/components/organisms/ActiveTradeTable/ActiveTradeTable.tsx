@@ -31,11 +31,11 @@ const DEFAULT_HEIGHT = 300;
 
 export const ActiveTradeTable = ({
     data,
-    currencyDelistedStatusMap,
+    delistedCurrencySet,
     height,
 }: {
     data: Position[];
-    currencyDelistedStatusMap: Record<CurrencySymbol, boolean>;
+    delistedCurrencySet: Set<CurrencySymbol>;
     height?: number;
 }) => {
     const [unwindDialogData, setUnwindDialogData] = useState<{
@@ -58,7 +58,7 @@ export const ActiveTradeTable = ({
                 'Contract',
                 'contract',
                 'default',
-                currencyDelistedStatusMap
+                delistedCurrencySet
             ),
             columnHelper.accessor('maturity', {
                 cell: info => {
@@ -90,14 +90,14 @@ export const ActiveTradeTable = ({
                         maturity = `${dayToMaturity} Day`;
                     } else {
                         maturity = (
-                            <div>
+                            <>
                                 {diffHours !== 0 && (
                                     <span className='mx-1'>{diffHours}h</span>
                                 )}
                                 {diffMinutes !== 0 && (
                                     <span>{diffMinutes}m</span>
                                 )}
-                            </div>
+                            </>
                         );
                     }
                     return (
@@ -107,11 +107,10 @@ export const ActiveTradeTable = ({
                                     'typography-caption w-full',
                                     {
                                         'text-galacticOrange':
-                                            ccy &&
-                                            currencyDelistedStatusMap[ccy],
+                                            ccy && delistedCurrencySet.has(ccy),
                                         'text-neutral7':
                                             ccy &&
-                                            !currencyDelistedStatusMap[ccy],
+                                            !delistedCurrencySet.has(ccy),
                                     }
                                 )}
                             >
@@ -174,7 +173,7 @@ export const ActiveTradeTable = ({
 
                     let type: 'UNWIND' | 'REPAY' | 'REDEEM' = 'UNWIND';
                     let label = 'Unwind Position';
-                    if (currencyDelistedStatusMap[ccy]) {
+                    if (delistedCurrencySet.has(ccy)) {
                         if (
                             side === OrderSide.BORROW &&
                             isRedemptionPeriod(maturity)
@@ -224,7 +223,7 @@ export const ActiveTradeTable = ({
                 header: () => <div className='p-2'>Actions</div>,
             }),
         ],
-        [currencyDelistedStatusMap, dispatch, priceList, router]
+        [delistedCurrencySet, dispatch, priceList, router]
     );
 
     const columnsForTabletMobile = [

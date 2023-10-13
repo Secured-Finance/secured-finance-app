@@ -61,7 +61,7 @@ export const PortfolioManagement = () => {
     const [selectedTable, setSelectedTable] = useState(
         TableType.ACTIVE_POSITION
     );
-    const { data: currencyDelistedStatusMap } = useCurrencyDelistedStatus();
+    const { data: delistedCurrencySet } = useCurrencyDelistedStatus();
 
     const userOrderHistory = useGraphClientHook(
         {
@@ -170,12 +170,11 @@ export const PortfolioManagement = () => {
 
     const userDelistedCurrenciesSet = new Set<string>();
 
-    positions.flatMap(position => {
+    positions.forEach(position => {
         const ccy = hexToCurrencySymbol(position.currency);
-        if (ccy && currencyDelistedStatusMap[ccy]) {
+        if (ccy && delistedCurrencySet.has(ccy)) {
             userDelistedCurrenciesSet.add(ccy);
         }
-        return [];
     });
 
     const userDelistedCurrenciesArray = Array.from(userDelistedCurrenciesSet);
@@ -242,9 +241,7 @@ export const PortfolioManagement = () => {
                         >
                             <ActiveTradeTable
                                 data={positions}
-                                currencyDelistedStatusMap={
-                                    currencyDelistedStatusMap
-                                }
+                                delistedCurrencySet={delistedCurrencySet}
                             />
                             <OrderTable data={orderList.activeOrderList} />
 

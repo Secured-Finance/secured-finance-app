@@ -83,13 +83,13 @@ export const AdvancedLending = ({
     maturitiesOptionList,
     rates,
     marketPrice,
-    currencyDelistedStatusMap,
+    delistedCurrencySet,
 }: {
     collateralBook: CollateralBook;
     maturitiesOptionList: MaturityOptionList;
     rates: Rate[];
     marketPrice: number | undefined;
-    currencyDelistedStatusMap: Record<CurrencySymbol, boolean>;
+    delistedCurrencySet: Set<CurrencySymbol>;
 }) => {
     const { amount, currency, maturity } = useSelector((state: RootState) =>
         selectLandingOrderForm(state.landingOrderForm)
@@ -222,14 +222,14 @@ export const AdvancedLending = ({
             <AdvancedLendingOrderCard
                 collateralBook={collateralBook}
                 marketPrice={marketPrice}
-                currencyDelistedStatusMap={currencyDelistedStatusMap}
+                delistedCurrencySet={delistedCurrencySet}
             />
 
             <OrderBookWidget
                 orderbook={orderBook}
                 currency={currency}
                 marketPrice={currentMarket?.value}
-                isCurrencyDelisted={currencyDelistedStatusMap[currency]}
+                isCurrencyDelisted={delistedCurrencySet.has(currency)}
                 onFilterChange={state =>
                     setIsShowingAll(state.showBorrow && state.showLend)
                 }

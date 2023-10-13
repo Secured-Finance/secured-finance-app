@@ -63,7 +63,9 @@ export const OrderDetails = ({
     return (
         <div className='grid w-full grid-cols-1 justify-items-stretch gap-6 text-white'>
             {isCurrencyDelisted && (
-                <DelistedCurrencyDisclaimer currencies={[amount.currency]} />
+                <DelistedCurrencyDisclaimer
+                    currencies={new Set([amount.currency])}
+                />
             )}
             <Section>
                 <AmountCard amount={amount} price={assetPrice} />

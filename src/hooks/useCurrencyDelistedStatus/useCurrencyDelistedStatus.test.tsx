@@ -1,10 +1,7 @@
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { renderHook } from 'src/test-utils';
 import { CurrencySymbol } from 'src/utils';
-import {
-    defaultDelistedStatusMap,
-    useCurrencyDelistedStatus,
-} from './useCurrencyDelistedStatus';
+import { useCurrencyDelistedStatus } from './useCurrencyDelistedStatus';
 
 const mock = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mock);
@@ -17,11 +14,10 @@ describe('useCurrencyDelistedStatus hook', () => {
 
         await waitForNextUpdate();
 
+        const delistedCurrencySet = new Set([CurrencySymbol.WFIL]);
+
         expect(mock.currencyExists).toHaveBeenCalledTimes(4);
         const newValue = result.current;
-        expect(newValue.data).toEqual({
-            ...defaultDelistedStatusMap,
-            [CurrencySymbol.WFIL]: true,
-        });
+        expect(newValue.data).toEqual(delistedCurrencySet);
     });
 });

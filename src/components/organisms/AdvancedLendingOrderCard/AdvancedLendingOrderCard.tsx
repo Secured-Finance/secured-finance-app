@@ -51,13 +51,13 @@ export function AdvancedLendingOrderCard({
     isItayose = false,
     preOrderPosition = 'none',
     marketPrice,
-    currencyDelistedStatusMap,
+    delistedCurrencySet,
 }: {
     collateralBook: CollateralBook;
     isItayose?: boolean;
     preOrderPosition?: 'borrow' | 'lend' | 'none';
     marketPrice?: number;
-    currencyDelistedStatusMap: Record<CurrencySymbol, boolean>;
+    delistedCurrencySet: Set<CurrencySymbol>;
 }): JSX.Element {
     const {
         currency,
@@ -359,7 +359,7 @@ export function AdvancedLendingOrderCard({
                     loanValue={loanValue}
                     collateralBook={collateralBook}
                     validation={shouldDisableActionButton}
-                    isCurrencyDelisted={currencyDelistedStatusMap[currency]}
+                    isCurrencyDelisted={delistedCurrencySet.has(currency)}
                 />
 
                 <ErrorInfo
