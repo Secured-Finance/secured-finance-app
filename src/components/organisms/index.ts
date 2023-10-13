@@ -12,7 +12,7 @@ export * from './LineChartTab';
 export * from './MarketLoanWidget';
 export * from './MultiCurveChart';
 export * from './MyTransactionsTable';
-export * from './MyWalletCard';
+export * from './MyWalletWidget';
 export * from './OrderAction';
 export * from './OrderBookWidget';
 export * from './OrderDetails';

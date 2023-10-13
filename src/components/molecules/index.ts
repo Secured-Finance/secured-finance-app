@@ -18,6 +18,7 @@ export * from './HorizontalTab';
 export * from './LineChart';
 export * from './LiquidationProgressBar';
 export * from './MenuPopover';
+export * from './MyWalletCard';
 export * from './PercentageSelector';
 export * from './StatsBar';
 export * from './SuccessPanel';
