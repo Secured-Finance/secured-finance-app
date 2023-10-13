@@ -32,15 +32,24 @@ export const sortOrders = (
 
 const transformOrderbook = (
     input: SmartContractOrderbook,
-    maturity: number
+    maturity: number,
+    calculationDate: number | undefined
 ): OrderBook => {
     return input.unitPrices.map((unitPrice, index) => ({
         amount: input.amounts[index],
-        value: LoanValue.fromPrice(unitPrice.toNumber(), maturity),
+        value: LoanValue.fromPrice(
+            unitPrice.toNumber(),
+            maturity,
+            calculationDate
+        ),
     }));
 };
 
-export const useOrderbook = (ccy: CurrencySymbol, maturity: number) => {
+export const useOrderbook = (
+    ccy: CurrencySymbol,
+    maturity: number,
+    calculationDate?: number
+) => {
     const securedFinance = useSF();
     const [depth, setDepth] = useState(DEFAULT_ORDERBOOK_DEPTH);
     const [multiplier, setMultiplier] = useState(1);
@@ -83,11 +92,13 @@ export const useOrderbook = (ccy: CurrencySymbol, maturity: number) => {
                 return {
                     borrowOrderbook: transformOrderbook(
                         data.borrowOrderbook,
-                        maturity
+                        maturity,
+                        calculationDate
                     ),
                     lendOrderbook: transformOrderbook(
                         data.lendOrderbook,
-                        maturity
+                        maturity,
+                        calculationDate
                     ),
                 };
             },

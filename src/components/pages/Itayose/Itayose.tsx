@@ -136,7 +136,8 @@ export const Itayose = () => {
 
     const [orderBook, setMultiplier, setIsShowingAll] = useOrderbook(
         currency,
-        maturity
+        maturity,
+        lendingContracts[selectedTerm.value.toNumber()]?.utcOpeningDate
     );
 
     const { data: collateralBook = emptyCollateralBook } =
@@ -234,6 +235,10 @@ export const Itayose = () => {
                 <AdvancedLendingOrderCard
                     collateralBook={collateralBook}
                     isItayose
+                    calculationDate={
+                        lendingContracts[selectedTerm.value.toNumber()]
+                            ?.utcOpeningDate
+                    }
                     preOrderPosition={
                         filteredOrderList.length > 0
                             ? filteredOrderList[0].side.toString() ===
@@ -288,6 +293,10 @@ export const Itayose = () => {
                             data={filteredOrderList}
                             variant='compact'
                             height={520}
+                            calculationDate={
+                                lendingContracts[selectedTerm.value.toNumber()]
+                                    ?.utcOpeningDate
+                            }
                         />
                     </HorizontalTab>
                 </div>
