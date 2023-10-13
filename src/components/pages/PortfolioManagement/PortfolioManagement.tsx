@@ -342,8 +342,10 @@ const Disclaimer = ({
             <p className='p-3'>
                 For an in-depth understanding of our protocol, please refer to{' '}
                 <a
-                    href='https://docs.secured.finance/'
+                    href='https://docs.secured.finance/product-guide/loan-market-platform/loan-assets/listing-and-delisting'
                     className='whitespace-nowrap text-planetaryPurple'
+                    target='_blank'
+                    rel='noreferrer'
                 >
                     Docs.Secured.Finance.
                 </a>
