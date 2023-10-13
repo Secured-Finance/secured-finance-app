@@ -46,7 +46,7 @@ import {
     getCurrencyMapAsOptions,
     usdFormat,
 } from 'src/utils';
-import { countdown } from 'src/utils/date';
+import { countdown } from 'src/utils';
 import { LoanValue, Maturity } from 'src/utils/entities';
 import { useAccount } from 'wagmi';
 

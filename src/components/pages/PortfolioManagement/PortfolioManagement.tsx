@@ -191,7 +191,9 @@ export const PortfolioManagement = () => {
                         will be delisted at maturity on Secured Finance.{' '}
                         <a
                             className='whitespace-nowrap text-secondary7 underline'
-                            href='https://docs.secured.finance/product-guide/unique-features/auto-rolling/price-discovery-for-auto-rolling'
+                            href='https://docs.secured.finance/product-guide/loan-market-platform/loan-assets/listing-and-delisting'
+                            target='_blank'
+                            rel='noreferrer'
                             onClick={e => {
                                 e.preventDefault();
                                 scrollToBottom();

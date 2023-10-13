@@ -148,6 +148,7 @@ describe('ActiveTradeTable Component', () => {
             expect(maturity).toBeInTheDocument();
             expect(maturity.parentNode).toHaveClass('text-galacticOrange');
         });
+
         it('should display unwind position till 7 days since maturity for lend orders', async () => {
             render(<Delisted />);
             const closeToMaturityRow = screen.getAllByRole('row')[5];

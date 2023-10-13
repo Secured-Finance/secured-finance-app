@@ -8,7 +8,7 @@ import {
 import { defaultDelistedStatusSet } from 'src/hooks';
 import { positions, wfilBytes32 } from 'src/stories/mocks/fixtures';
 import { CurrencySymbol } from 'src/utils';
-import { getTimestampRelativeToNow } from 'src/utils/date';
+import { getTimestampRelativeToNow } from 'src/utils';
 import { Maturity } from 'src/utils/entities';
 import { ActiveTradeTable } from './ActiveTradeTable';
 

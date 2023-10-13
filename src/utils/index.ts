@@ -3,6 +3,7 @@ export * from './assets';
 export * from './collateral';
 export * from './currencies';
 export * from './currencyList';
+export * from './date';
 export * from './env';
 export * from './events/interface';
 export * from './fee';

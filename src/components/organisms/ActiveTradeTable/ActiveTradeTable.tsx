@@ -8,13 +8,17 @@ import { useRouter } from 'next/router';
 import { useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { CoreTable, TableActionMenu } from 'src/components/molecules';
-import { UnwindDialog } from 'src/components/organisms';
+import { UnwindDialog, UnwindDialogType } from 'src/components/organisms';
 import { Position, useBreakpoint } from 'src/hooks';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { setCurrency, setMaturity } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
-import { CurrencySymbol, hexToCurrencySymbol } from 'src/utils';
-import { isRedemptionPeriod, isRepaymentPeriod } from 'src/utils/date';
+import {
+    CurrencySymbol,
+    hexToCurrencySymbol,
+    isRedemptionPeriod,
+    isRepaymentPeriod,
+} from 'src/utils';
 import { Amount, Maturity } from 'src/utils/entities';
 import {
     amountColumnDefinition,
@@ -171,7 +175,7 @@ export const ActiveTradeTable = ({
                         : OrderSide.BORROW; // side is reversed as unwind
                     if (!ccy) return null;
 
-                    let type: 'UNWIND' | 'REPAY' | 'REDEEM' = 'UNWIND';
+                    let type: UnwindDialogType;
                     let label = 'Unwind Position';
                     if (delistedCurrencySet.has(ccy)) {
                         if (

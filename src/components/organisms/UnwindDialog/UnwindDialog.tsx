@@ -24,6 +24,8 @@ import { AddressUtils, CurrencySymbol } from 'src/utils';
 import { Amount, LoanValue, Maturity } from 'src/utils/entities';
 import { useAccount } from 'wagmi';
 
+export type UnwindDialogType = 'UNWIND' | 'REPAY' | 'REDEEM';
+
 enum Step {
     confirm = 1,
     processing,
@@ -50,7 +52,7 @@ export const UnwindDialog = ({
     amount: Amount;
     maturity: Maturity;
     side: OrderSide;
-    type: 'UNWIND' | 'REPAY' | 'REDEEM';
+    type: UnwindDialogType;
 } & DialogState) => {
     const etherscanUrl = useEtherscanUrl();
     const handleContractTransaction = useHandleContractTransaction();
