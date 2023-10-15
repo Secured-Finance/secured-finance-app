@@ -11,6 +11,7 @@ export * from './CollateralUsageSection';
 export * from './CoreTable';
 export * from './CurrencyDropdown';
 export * from './CurveHeader';
+export * from './DelistedCurrencyDisclaimer';
 export * from './Dialog';
 export * from './FailurePanel';
 export * from './HamburgerMenu';

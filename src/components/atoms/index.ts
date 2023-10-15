@@ -12,7 +12,6 @@ export * from './CurrencyIcon';
 export * from './CurrencyItem';
 export * from './CurveHeaderAsset';
 export * from './CurveHeaderTotal';
-export * from './DelistedCurrencyDisclaimer';
 export * from './DelistingChip';
 export * from './DropdownSelector';
 export * from './ErrorInfo';

@@ -3,7 +3,6 @@ import { OrderSide } from '@secured-finance/sf-client';
 import { formatDate } from '@secured-finance/sf-core';
 import { useMemo } from 'react';
 import {
-    DelistedCurrencyDisclaimer,
     ExpandIndicator,
     Section,
     SectionWithItems,
@@ -11,6 +10,7 @@ import {
 import {
     AmountCard,
     CollateralSimulationSection,
+    DelistedCurrencyDisclaimer,
 } from 'src/components/molecules';
 import { Tooltip } from 'src/components/templates';
 import { CollateralBook, useMarket, useOrderFee } from 'src/hooks';
