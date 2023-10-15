@@ -4,8 +4,7 @@ import {
     countdown,
     getTimestampRelativeToNow,
     isPastDate,
-    isRedemptionPeriod,
-    isRepaymentPeriod,
+    isMaturityPastDays,
 } from './date';
 
 beforeAll(() => {
@@ -112,46 +111,24 @@ describe('calculateTimeDifference', () => {
     });
 });
 
-describe('isRepaymentPeriod', () => {
-    it('returns true for repayment period within a week', () => {
-        const timestamp = getTimestampRelativeToNow(144, true); //6 days in future
-        const result = isRepaymentPeriod(timestamp);
-        expect(result).toBe(true);
-        const pastTimestamp = getTimestampRelativeToNow(144); // 6 days in past
-        expect(isRepaymentPeriod(pastTimestamp)).toBe(true);
+describe('isMaturityWithinDays', () => {
+    it('returns true if maturity is past specified days in the future', () => {
+        const maturityDate = getTimestampRelativeToNow(96, true);
+        expect(isMaturityPastDays(maturityDate, 2, true)).toBe(true);
     });
 
-    it('returns false for repayment period beyond a week', () => {
-        const maturity = getTimestampRelativeToNow(240);
-        const result = isRepaymentPeriod(maturity);
-        expect(result).toBe(false);
+    it('returns false if maturity is not past specified days in the future', () => {
+        const maturityDate = getTimestampRelativeToNow(96, true);
+        expect(isMaturityPastDays(maturityDate, 6, true)).toBe(false);
     });
 
-    it('returns false for repayment period till a week before', () => {
-        const maturity = getTimestampRelativeToNow(240, true);
-        const result = isRepaymentPeriod(maturity);
-        expect(result).toBe(false);
-    });
-});
-
-describe('isRedemptionPeriod', () => {
-    it('returns true for redemption period beyond a week', () => {
-        const maturity = getTimestampRelativeToNow(240);
-        const result = isRedemptionPeriod(maturity);
-        expect(result).toBe(true);
+    it('returns false if maturity is within specified days in the past', () => {
+        const maturityDate = getTimestampRelativeToNow(96);
+        expect(isMaturityPastDays(maturityDate, 6)).toBe(false);
     });
 
-    it('returns false for redemption period within a week after maturity', () => {
-        const maturity = getTimestampRelativeToNow(144);
-        const result = isRedemptionPeriod(maturity);
-
-        expect(result).toBe(false);
-    });
-
-    it('returns false for redemption period before maturity', () => {
-        const maturity = getTimestampRelativeToNow(22, true);
-        const result = isRedemptionPeriod(maturity);
-
-        expect(result).toBe(false);
+    it('returns true if maturity is not within specified days in the past', () => {
+        const maturityDate = getTimestampRelativeToNow(96);
+        expect(isMaturityPastDays(maturityDate, 2)).toBe(true);
     });
 });

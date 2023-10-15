@@ -194,21 +194,6 @@ describe('ActiveTradeTable Component', () => {
             expect(screen.getByRole('dialog')).toBeInTheDocument();
         });
 
-        it('should display repay position if within 7 days before maturity for borrow orders', async () => {
-            render(<Delisted />);
-            const closeToMaturityRow = screen.getAllByRole('row')[8];
-            expect(closeToMaturityRow).toHaveTextContent('Feb 2, 2022');
-            waitFor(() => {
-                expect(closeToMaturityRow).toHaveTextContent('21h 59m');
-            });
-            const moreOptionsButton = screen.getAllByRole('button', {
-                name: 'More options',
-            });
-            fireEvent.click(moreOptionsButton[7]);
-            fireEvent.click(screen.getByText('Repay Position'));
-            expect(screen.getByRole('dialog')).toBeInTheDocument();
-        });
-
         it('should display repay position if within 7 days post maturity for borrow orders', async () => {
             render(<Delisted />);
             const postMaturity = screen.getAllByRole('row')[9];
