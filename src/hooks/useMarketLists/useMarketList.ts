@@ -1,10 +1,17 @@
 import { utils } from 'ethers';
 import { useMemo } from 'react';
-import { LendingMarket, baseContracts, useLendingMarkets } from 'src/hooks';
+import {
+    LendingMarket,
+    baseContracts,
+    useLendingMarkets,
+    useCurrencyDelistedStatus,
+} from 'src/hooks';
 import { CurrencySymbol, getCurrencyMapAsList } from 'src/utils';
 
 export const useMarketLists = () => {
     const { data: lendingContracts = baseContracts } = useLendingMarkets();
+
+    const { data: currencyDelistedStatusSet } = useCurrencyDelistedStatus();
 
     const marketLists = useMemo(() => {
         const openMarkets: Market[] = [];
@@ -16,7 +23,8 @@ export const useMarketLists = () => {
                 if (contract.isMatured) continue;
 
                 const isItayoseOrPreOrder =
-                    contract.isItayosePeriod || contract.isPreOrderPeriod;
+                    (contract.isItayosePeriod || contract.isPreOrderPeriod) &&
+                    !currencyDelistedStatusSet.has(ccy.symbol);
 
                 const market = {
                     ...contract,
