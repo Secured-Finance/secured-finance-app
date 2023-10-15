@@ -4,8 +4,8 @@ import queries from '@secured-finance/sf-graph-client/dist/graphclients';
 import Link from 'next/link';
 import { useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { DelistedCurrencyDisclaimer, ViewType } from 'src/components/atoms';
-import { Alert } from 'src/components/molecules';
+import { ViewType } from 'src/components/atoms';
+import { Alert, DelistedCurrencyDisclaimer } from 'src/components/molecules';
 import {
     AdvancedLending,
     LendingCard,

@@ -343,7 +343,7 @@ const Disclaimer = ({
                 For an in-depth understanding of our protocol, please refer to{' '}
                 <a
                     href='https://docs.secured.finance/product-guide/loan-market-platform/loan-assets/listing-and-delisting'
-                    className='whitespace-nowrap text-planetaryPurple'
+                    className='whitespace-nowrap text-planetaryPurple underline'
                     target='_blank'
                     rel='noreferrer'
                 >

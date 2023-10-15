@@ -4,10 +4,9 @@ import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import {
     CollateralManagementConciseTab,
-    DelistedCurrencyDisclaimer,
     GradientBox,
 } from 'src/components/atoms';
-import { StatsBar } from 'src/components/molecules';
+import { DelistedCurrencyDisclaimer, StatsBar } from 'src/components/molecules';
 import {
     ConnectWalletCard,
     MarketLoanWidget,
