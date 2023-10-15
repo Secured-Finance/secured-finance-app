@@ -58,3 +58,16 @@ export const isRepaymentPeriod = (maturity: number) => {
 export const isRedemptionPeriod = (maturity: number) => {
     return calculateTimeDifference(maturity) >= millisecondsInAWeek;
 };
+
+export const isMaturityPastDays = (
+    maturity: number,
+    days: number,
+    inFuture = false
+) => {
+    const timeDiff = calculateTimeDifference(maturity);
+    const millisecondsInDays = days * 24 * 60 * 60 * 1000;
+
+    return inFuture
+        ? Math.abs(timeDiff) > millisecondsInDays
+        : timeDiff > millisecondsInDays;
+};

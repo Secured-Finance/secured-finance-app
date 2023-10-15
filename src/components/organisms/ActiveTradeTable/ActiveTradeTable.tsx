@@ -16,8 +16,8 @@ import { RootState } from 'src/store/types';
 import {
     CurrencySymbol,
     hexToCurrencySymbol,
-    isRedemptionPeriod,
-    isRepaymentPeriod,
+    isMaturityPastDays,
+    isPastDate,
 } from 'src/utils';
 import { Amount, Maturity } from 'src/utils/entities';
 import {
@@ -177,17 +177,17 @@ export const ActiveTradeTable = ({
 
                     let type: UnwindDialogType;
                     let label = 'Unwind Position';
-                    if (delistedCurrencySet.has(ccy)) {
+                    if (delistedCurrencySet.has(ccy) && isPastDate(maturity)) {
                         if (
                             side === OrderSide.BORROW &&
-                            isRedemptionPeriod(maturity)
+                            isMaturityPastDays(maturity, 7)
                         ) {
                             type = 'REDEEM';
                             label = 'Redeem Position';
                         }
                         if (
                             side === OrderSide.LEND &&
-                            isRepaymentPeriod(maturity)
+                            !isMaturityPastDays(maturity, 7)
                         ) {
                             label = 'Repay Position';
                             type = 'REPAY';
