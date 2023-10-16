@@ -30,3 +30,8 @@ export const ContractOnly = Template.bind({});
 ContractOnly.args = {
     variant: 'contractOnly',
 };
+
+export const CompactCurrencyOnly = Template.bind({});
+CompactCurrencyOnly.args = {
+    variant: 'compactCurrencyOnly',
+};
