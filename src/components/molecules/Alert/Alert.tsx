@@ -10,11 +10,13 @@ export const Alert = ({
     children,
     variant = 'solid',
     onClose,
+    showCloseButton = false,
 }: {
     severity?: 'error' | 'info' | 'success' | 'warning';
     children: React.ReactNode;
     variant?: 'solid' | 'outlined';
     onClose?: () => void;
+    showCloseButton?: boolean;
 }) => {
     const [isVisible, setIsVisible] = useState(true);
 
@@ -63,7 +65,7 @@ export const Alert = ({
                     <span>{alertIcon}</span>
                     {children}
                 </div>
-                <CloseButton onClick={handleClose} />
+                {showCloseButton && <CloseButton onClick={handleClose} />}
             </div>
         </section>
     ) : null;

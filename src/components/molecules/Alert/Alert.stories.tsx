@@ -35,3 +35,8 @@ Outlined.args = {
     severity: 'warning',
     variant: 'outlined',
 };
+
+export const WithCloseButton = Template.bind({});
+WithCloseButton.args = {
+    showCloseButton: true,
+};
