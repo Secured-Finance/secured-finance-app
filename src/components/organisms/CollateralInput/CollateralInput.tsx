@@ -47,7 +47,10 @@ export const CollateralInput = ({
     const handleClick = useCallback(
         (percentage: number) => {
             const amount =
-                Math.floor(percentage * availableAmount * 10000) / 10000.0;
+                percentage === 1
+                    ? availableAmount
+                    : Math.floor(percentage * availableAmount * 10000) /
+                      10000.0;
             if (onAmountChange) {
                 handleInputChange(amount, asset, onAmountChange);
             }
@@ -62,7 +65,9 @@ export const CollateralInput = ({
             </span>
             <div className='flex h-full flex-1 flex-col items-center gap-1'>
                 <InputBase
-                    value={amount}
+                    value={
+                        amount ? Math.round(amount * 10000) / 10000.0 : amount
+                    }
                     className='typography-headline-4 h-14 w-full text-center text-neutral-8'
                     onValueChange={handleAmountChange}
                     sizeDependentStyles={fontSize}
