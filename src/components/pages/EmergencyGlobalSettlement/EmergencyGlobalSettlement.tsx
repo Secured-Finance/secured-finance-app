@@ -1,4 +1,6 @@
+import { useSelector } from 'react-redux';
 import { GradientBox } from 'src/components/atoms';
+import { CollateralSnapshot } from 'src/components/molecules';
 import {
     MyWalletWidget,
     WithdrawPositionTable,
@@ -10,12 +12,16 @@ import {
     useCurrenciesForOrders,
     usePositions,
 } from 'src/hooks';
-import { ZERO_BN } from 'src/utils';
+import { getPriceMap } from 'src/store/assetPrices/selectors';
+import { RootState } from 'src/store/types';
+import { CurrencySymbol, ZERO_BN } from 'src/utils';
 import { toHex } from 'viem';
 import { useAccount } from 'wagmi';
 
 export const EmergencyGlobalSettlement = () => {
     const { address } = useAccount();
+    const priceList = useSelector((state: RootState) => getPriceMap(state));
+
     const { data: usedCurrencies = [] } = useCurrenciesForOrders(address);
     const { data: positions = [] } = usePositions(address, usedCurrencies);
     const { data: collateralBook = emptyCollateralBook } =
@@ -37,10 +43,18 @@ export const EmergencyGlobalSettlement = () => {
             })),
     ];
 
+    const snapshot = Object.entries(collateralBook.withdrawableCollateral).map(
+        ([key]) => ({
+            currency: key as CurrencySymbol,
+            ratio: 1000,
+            price: priceList[key as CurrencySymbol],
+        })
+    );
+
     return (
         <Page title='Emergency Global Settlement'>
             <TwoColumns>
-                <section className='typography-caption-2 grid grid-flow-row text-white'>
+                <section className='typography-caption-2 grid grid-flow-row gap-6 text-white'>
                     <GradientBox variant='high-contrast'>
                         <div className='flex flex-col gap-4 px-6 py-8'>
                             <p>
@@ -68,10 +82,11 @@ export const EmergencyGlobalSettlement = () => {
                     </GradientBox>
                     <WithdrawPositionTable data={withdrawableData} />
                 </section>
-                <section>
-                    <GradientBox header='Protocol Collateral Snapshot'>
-                        YOYOYOYO
-                    </GradientBox>
+                <section className='grid grid-flow-row gap-6'>
+                    <CollateralSnapshot
+                        data={snapshot}
+                        snapshotDate={123456789}
+                    />
                     <MyWalletWidget />
                 </section>
             </TwoColumns>
