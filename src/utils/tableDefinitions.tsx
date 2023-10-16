@@ -16,7 +16,11 @@ import { currencyMap, hexToCurrencySymbol } from './currencyList';
 import { LoanValue, Maturity } from './entities';
 
 export const tableHeaderDefinition =
-    <TData,>(title: string, titleHint?: string) =>
+    <TData,>(
+        title: string,
+        titleHint?: string,
+        align: 'left' | 'center' | 'right' = 'center'
+    ) =>
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (header: HeaderContext<TData, any>) =>
         (
@@ -25,6 +29,7 @@ export const tableHeaderDefinition =
                 titleHint={titleHint}
                 sortingHandler={header.column.getToggleSortingHandler()}
                 isSorted={header.column.getIsSorted()}
+                align={align}
             />
         );
 
@@ -92,7 +97,8 @@ export const amountColumnDefinition = <T extends AmountColumnType>(
         priceList?: AssetPriceMap;
         fontSize?: string;
     },
-    titleHint?: string
+    titleHint?: string,
+    align: 'left' | 'center' | 'right' = 'center'
 ) => {
     return columnHelper.accessor(accessor, {
         id: id,
@@ -111,27 +117,34 @@ export const amountColumnDefinition = <T extends AmountColumnType>(
                 // do nothing
             }
 
-            return (
-                <div className='flex w-full items-center justify-end whitespace-nowrap pr-[15%]'>
-                    <div className='flex justify-end'>
-                        <CurrencyItem
-                            amount={currencyMap[ccy].fromBaseUnit(
-                                info.getValue() as BigNumber
-                            )}
-                            ccy={ccy}
-                            align='right'
-                            price={options.priceList?.[ccy]}
-                            color={options.color ? color : undefined}
-                            compact={options.compact}
-                            fontSize={options.fontSize}
-                            minDecimals={currencyMap[ccy].roundingDecimal}
-                            maxDecimals={currencyMap[ccy].roundingDecimal}
-                        />
-                    </div>
+            const Component = (
+                <div className='flex justify-end'>
+                    <CurrencyItem
+                        amount={currencyMap[ccy].fromBaseUnit(
+                            info.getValue() as BigNumber
+                        )}
+                        ccy={ccy}
+                        align='right'
+                        price={options.priceList?.[ccy]}
+                        color={options.color ? color : undefined}
+                        compact={options.compact}
+                        fontSize={options.fontSize}
+                        minDecimals={currencyMap[ccy].roundingDecimal}
+                        maxDecimals={currencyMap[ccy].roundingDecimal}
+                    />
                 </div>
             );
+            if (align !== 'right') {
+                return (
+                    <div className='flex w-full items-center justify-end whitespace-nowrap pr-[15%]'>
+                        {Component}
+                    </div>
+                );
+            }
+
+            return <>{Component}</>;
         },
-        header: tableHeaderDefinition(title, titleHint),
+        header: tableHeaderDefinition(title, titleHint, align),
     });
 };
 
@@ -270,6 +283,7 @@ export const loanTypeFromFVColumnDefinition = <T extends ForwardValueProperty>(
     return columnHelper.accessor(assessorFn, {
         id: id,
         cell: info => {
+            if (info.getValue().isZero()) return null;
             return (
                 <div className='flex justify-center'>
                     <Chip
@@ -304,6 +318,40 @@ export const contractColumnDefinition = <
             </div>
         ),
         header: tableHeaderDefinition(title),
+        sortingFn: contractSortingFn,
+    });
+};
+
+export const withdrawableAssetColumnDefinition = <
+    T extends {
+        maturity: string | number;
+        currency: string;
+        type: 'position' | 'collateral';
+    }
+>(
+    columnHelper: ColumnHelper<T>,
+    title: string,
+    id: string
+) => {
+    const assessorFn: AccessorFn<T, string> = row => row.maturity.toString();
+    return columnHelper.accessor(assessorFn, {
+        id: id,
+        cell: info => {
+            const variant =
+                info.row.original.type === 'position'
+                    ? 'default'
+                    : 'compactCurrencyOnly';
+            return (
+                <div className='flex justify-start'>
+                    <TableContractCell
+                        maturity={new Maturity(info.getValue())}
+                        ccyByte32={info.row.original.currency}
+                        variant={variant}
+                    />
+                </div>
+            );
+        },
+        header: tableHeaderDefinition(title, undefined, 'left'),
         sortingFn: contractSortingFn,
     });
 };
