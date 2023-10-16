@@ -31,9 +31,9 @@ export const InputBase = ({
         values: NumberFormatValues,
         _sourceInfo: SourceInfo
     ) => {
-        const value = values.floatValue;
-        if (onValueChange) {
-            onValueChange(value);
+        const floatValue = values.floatValue;
+        if (onValueChange && value !== floatValue) {
+            onValueChange(floatValue);
         }
     };
 
