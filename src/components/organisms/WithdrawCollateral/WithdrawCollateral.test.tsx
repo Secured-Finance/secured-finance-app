@@ -194,4 +194,40 @@ describe('WithdrawCollateral component', () => {
 
         await waitFor(() => expect(onClose).not.toHaveBeenCalled());
     });
+
+    it('should withdraw whole amount when 100% is clicked', async () => {
+        const track = jest.spyOn(analytics, 'track');
+        mockSecuredFinance.withdrawCollateral.mockResolvedValue({
+            wait: jest.fn(() => Promise.resolve({ blockNumber: 123 })),
+        });
+        const onClose = jest.fn();
+        render(<Default onClose={onClose} source='Source of Withdrawal' />, {
+            preloadedState,
+        });
+
+        fireEvent.click(screen.getByTestId('collateral-selector-button'));
+        fireEvent.click(screen.getByTestId('option-3'));
+
+        expect(screen.getByText('Bitcoin')).toBeInTheDocument();
+        expect(
+            screen.getByText('1.1235 Bitcoin Available')
+        ).toBeInTheDocument();
+
+        fireEvent.click(screen.getByTestId(100));
+
+        const button = screen.getByTestId('dialog-action-button');
+        expect(button).toBeEnabled();
+
+        fireEvent.click(button);
+        await waitFor(() =>
+            expect(track).toHaveBeenCalledWith(
+                CollateralEvents.WITHDRAW_COLLATERAL,
+                {
+                    [CollateralProperties.ASSET_TYPE]: 'WBTC',
+                    [CollateralProperties.AMOUNT]: '1.12349999',
+                    [CollateralProperties.SOURCE]: 'Source of Withdrawal',
+                }
+            )
+        );
+    });
 });
