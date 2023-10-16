@@ -26,7 +26,7 @@ export const computeWeightedAverageRate = (trades: TradeHistory) => {
 };
 
 export const computeNetValue = (
-    positions: Position[],
+    positions: Pick<Position, 'amount' | 'currency'>[],
     priceList: AssetPriceMap
 ) => {
     return positions.reduce((acc, { amount, currency }) => {

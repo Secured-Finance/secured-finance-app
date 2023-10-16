@@ -1,8 +1,42 @@
 import { GradientBox } from 'src/components/atoms';
-import { MyWalletWidget } from 'src/components/organisms';
+import {
+    MyWalletWidget,
+    WithdrawPositionTable,
+} from 'src/components/organisms';
 import { Page, TwoColumns } from 'src/components/templates';
+import {
+    emptyCollateralBook,
+    useCollateralBook,
+    useCurrenciesForOrders,
+    usePositions,
+} from 'src/hooks';
+import { ZERO_BN } from 'src/utils';
+import { toHex } from 'viem';
+import { useAccount } from 'wagmi';
 
 export const EmergencyGlobalSettlement = () => {
+    const { address } = useAccount();
+    const { data: usedCurrencies = [] } = useCurrenciesForOrders(address);
+    const { data: positions = [] } = usePositions(address, usedCurrencies);
+    const { data: collateralBook = emptyCollateralBook } =
+        useCollateralBook(address);
+
+    const withdrawableData = [
+        ...positions.map(p => ({
+            ...p,
+            type: 'position' as const,
+        })),
+        ...Object.entries(collateralBook.collateral)
+            .filter(v => v[1] && !v[1].isZero())
+            .map(([key, value]) => ({
+                amount: value,
+                currency: toHex(key),
+                forwardValue: ZERO_BN,
+                maturity: '0',
+                type: 'collateral' as const,
+            })),
+    ];
+
     return (
         <Page title='Emergency Global Settlement'>
             <TwoColumns>
@@ -32,12 +66,7 @@ export const EmergencyGlobalSettlement = () => {
                             </p>
                         </div>
                     </GradientBox>
-                    <div>
-                        <h2>
-                            Redeem Your Active Contracts and Collateral
-                            Currencies
-                        </h2>
-                    </div>
+                    <WithdrawPositionTable data={withdrawableData} />
                 </section>
                 <section>
                     <GradientBox header='Protocol Collateral Snapshot'>
