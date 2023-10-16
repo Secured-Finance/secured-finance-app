@@ -11,7 +11,7 @@ export const DelistedCurrencyDisclaimer = ({
     return (
         <>
             {currencyArray.length > 0 && (
-                <Alert severity='warning'>
+                <Alert severity='warning' showCloseButton={true}>
                     <p className='typography-caption text-white'>
                         Please note that{' '}
                         {generateDelistedCurrencyText(currencyArray)} will be

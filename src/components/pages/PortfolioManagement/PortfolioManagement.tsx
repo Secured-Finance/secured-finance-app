@@ -182,7 +182,7 @@ export const PortfolioManagement = () => {
     return (
         <Page title='Portfolio Management' name='portfolio-management'>
             {userDelistedCurrenciesArray.length > 0 && (
-                <Alert severity='error'>
+                <Alert severity='error' showCloseButton={true}>
                     <p className='text-white'>
                         Please note that your contracts for{' '}
                         {generateDelistedCurrencyText(
