@@ -239,7 +239,8 @@ export const ActiveTradeTable = ({
                 columnHelper,
                 'PV',
                 'amount',
-                row => row.amount,
+                row =>
+                    isPastDate(Number(row.maturity)) ? undefined : row.amount,
                 {
                     color: false,
                     priceList: priceList,
@@ -251,7 +252,10 @@ export const ActiveTradeTable = ({
                 columnHelper,
                 'Market Price',
                 'marketPrice',
-                row => row.marketPrice,
+                row =>
+                    isPastDate(Number(row.maturity))
+                        ? BigNumber.from(10000)
+                        : row.marketPrice,
                 'default',
                 'price',
                 'Market Price is the volume-weighted average unit price of filled orders at the last block.'

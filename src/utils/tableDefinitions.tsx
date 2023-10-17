@@ -90,7 +90,7 @@ export const amountColumnDefinition = <T extends AmountColumnType>(
     columnHelper: ColumnHelper<T>,
     title: string,
     id: string,
-    accessor: AccessorFn<T, BigNumber>,
+    accessor: AccessorFn<T, BigNumber | undefined>,
     options: {
         color: boolean;
         compact: boolean;
@@ -102,6 +102,10 @@ export const amountColumnDefinition = <T extends AmountColumnType>(
     return columnHelper.accessor(accessor, {
         id: id,
         cell: info => {
+            const value = info.getValue() as BigNumber | undefined;
+            if (value === undefined) {
+                return null;
+            }
             const ccy = hexToCurrencySymbol(info.row.original.currency);
             if (!ccy) return null;
 
