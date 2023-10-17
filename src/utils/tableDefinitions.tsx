@@ -10,17 +10,13 @@ import { BigNumber } from 'ethers';
 import { Chip, CurrencyItem, PriceYieldItem } from 'src/components/atoms';
 import { TableContractCell, TableHeader } from 'src/components/molecules';
 import { AssetPriceMap } from 'src/store/assetPrices/selectors';
-import { ColorFormat } from 'src/types';
+import { Alignment, ColorFormat } from 'src/types';
 import { formatTimestamp } from 'src/utils';
 import { currencyMap, hexToCurrencySymbol } from './currencyList';
 import { LoanValue, Maturity } from './entities';
 
 export const tableHeaderDefinition =
-    <TData,>(
-        title: string,
-        titleHint?: string,
-        align: 'left' | 'center' | 'right' = 'center'
-    ) =>
+    <TData,>(title: string, titleHint?: string, align: Alignment = 'center') =>
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (header: HeaderContext<TData, any>) =>
         (
@@ -98,7 +94,7 @@ export const amountColumnDefinition = <T extends AmountColumnType>(
         fontSize?: string;
     },
     titleHint?: string,
-    align: 'left' | 'center' | 'right' = 'center'
+    align: Alignment = 'center'
 ) => {
     return columnHelper.accessor(accessor, {
         id: id,
