@@ -45,6 +45,7 @@ export const WithdrawPositionTable = ({
                     color: true,
                     priceList: priceList,
                     compact: false,
+                    showCurrency: true,
                 },
                 undefined,
                 'right'

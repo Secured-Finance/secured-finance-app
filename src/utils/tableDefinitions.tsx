@@ -92,6 +92,7 @@ export const amountColumnDefinition = <T extends AmountColumnType>(
         compact: boolean;
         priceList?: AssetPriceMap;
         fontSize?: string;
+        showCurrency?: boolean;
     },
     titleHint?: string,
     align: Alignment = 'center'
@@ -127,6 +128,7 @@ export const amountColumnDefinition = <T extends AmountColumnType>(
                         fontSize={options.fontSize}
                         minDecimals={currencyMap[ccy].roundingDecimal}
                         maxDecimals={currencyMap[ccy].roundingDecimal}
+                        showCurrency={options.showCurrency}
                     />
                 </div>
             );
