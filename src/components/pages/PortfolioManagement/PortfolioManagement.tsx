@@ -18,12 +18,12 @@ import {
     emptyOrderList,
     useCollateralBook,
     useCurrenciesForOrders,
+    useCurrencyDelistedStatus,
     useGraphClientHook,
     useOrderList,
     usePagination,
     usePositions,
 } from 'src/hooks';
-import { useCurrencyDelistedStatus } from 'src/hooks/';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { RootState } from 'src/store/types';
 import { TradeHistory } from 'src/types';

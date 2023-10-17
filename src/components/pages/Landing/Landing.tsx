@@ -18,12 +18,12 @@ import {
     baseContracts,
     emptyCollateralBook,
     useCollateralBook,
+    useCurrencyDelistedStatus,
     useGraphClientHook,
     useLendingMarkets,
     useLoanValues,
     useMaturityOptions,
 } from 'src/hooks';
-import { useCurrencyDelistedStatus } from 'src/hooks/';
 import {
     resetUnitPrice,
     selectLandingOrderForm,
@@ -172,7 +172,6 @@ const WithBanner = ({
                                     day: 'numeric',
                                 }
                             ).format(market.utcOpeningDate * 1000)}`}
-                            .
                             <span className='pl-4'>
                                 <Link href='itayose' passHref>
                                     <a

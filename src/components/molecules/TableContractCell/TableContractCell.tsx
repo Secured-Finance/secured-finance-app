@@ -4,9 +4,15 @@ import classNames from 'classnames';
 import { useMemo } from 'react';
 import { CurrencyIcon } from 'src/components/atoms';
 import { Tooltip } from 'src/components/templates';
-import { currencyMap, hexToCurrencySymbol } from 'src/utils';
+import {
+    currencyMap,
+    hexToCurrencySymbol,
+    isMaturityPastDays,
+    isPastDate,
+} from 'src/utils';
 import { Maturity } from 'src/utils/entities';
 import ErrorCircleIcon from 'src/assets/icons/error-circle.svg';
+import WarningCircleIcon from 'src/assets/icons/warning-circle.svg';
 
 export const TableContractCell = ({
     maturity,
@@ -40,6 +46,15 @@ export const TableContractCell = ({
             ? 'Delisting: Repayment period within 7 days of maturity to avoid 7% fee.'
             : 'Delisting: Redemption will be available 7 days post-maturity.';
 
+    const delistedTooltipIcon =
+        isPastDate(maturity.toNumber()) &&
+        isMaturityPastDays(maturity.toNumber(), 7) &&
+        delistedContractSide === OrderSide.LEND ? (
+            <WarningCircleIcon />
+        ) : (
+            <ErrorCircleIcon />
+        );
+
     return (
         <div className='flex flex-col'>
             <div
@@ -65,7 +80,9 @@ export const TableContractCell = ({
                 {delistedContractSide && (
                     <Tooltip
                         align='right'
-                        iconElement={<ErrorCircleIcon className='h-4 w-4' />}
+                        iconElement={
+                            <div className='h-4 w-4'>{delistedTooltipIcon}</div>
+                        }
                     >
                         {tooltipText}
                     </Tooltip>

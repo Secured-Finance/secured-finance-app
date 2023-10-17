@@ -102,7 +102,7 @@ export const amountColumnDefinition = <T extends AmountColumnType>(
     return columnHelper.accessor(accessor, {
         id: id,
         cell: info => {
-            const value = info.getValue() as BigNumber | undefined;
+            const value = info.getValue();
             if (value === undefined) {
                 return null;
             }

@@ -7,7 +7,7 @@ const mock = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mock);
 
 describe('useCurrencyDelistedStatus hook', () => {
-    it('should return a map of currency symbol and their delisted status', async () => {
+    it('should return a set of delisted currencies', async () => {
         const { result, waitForNextUpdate } = renderHook(() =>
             useCurrencyDelistedStatus()
         );
