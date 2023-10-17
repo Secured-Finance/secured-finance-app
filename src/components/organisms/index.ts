@@ -24,4 +24,5 @@ export * from './WalletDialog';
 export * from './WalletPopover';
 export * from './WithdrawCollateral';
 export * from './WithdrawPositionTable';
+export * from './WithdrawTokenTable';
 export * from './YieldChart';
