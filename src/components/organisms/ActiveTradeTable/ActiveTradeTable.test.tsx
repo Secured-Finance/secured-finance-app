@@ -117,7 +117,7 @@ describe('ActiveTradeTable Component', () => {
         render(<Default />);
         const closeToMaturityRow = screen.getAllByRole('row')[6];
         expect(closeToMaturityRow).toHaveTextContent('Feb 2, 2022');
-        await waitFor(() => {
+        waitFor(() => {
             expect(closeToMaturityRow).toHaveTextContent('1 Day');
         });
     });
@@ -153,7 +153,7 @@ describe('ActiveTradeTable Component', () => {
             });
         });
 
-        it('should display 100 MTM for matured delisted contracts', () => {
+        it('should display 100 Market Price for matured delisted contracts', () => {
             render(<Delisted />);
             waitFor(() => {
                 const delistedContractRow = screen.getAllByRole('row')[10];
