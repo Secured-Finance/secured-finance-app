@@ -1,8 +1,8 @@
 import classNames from 'classnames';
-import { ColorFormat } from 'src/types';
+import { Alignment, ColorFormat } from 'src/types';
 import {
-    currencyMap,
     CurrencySymbol,
+    currencyMap,
     ordinaryFormat,
     usdFormat,
 } from 'src/utils';
@@ -21,7 +21,7 @@ export const CurrencyItem = ({
     amount?: number;
     ccy: CurrencySymbol;
     price?: number;
-    align?: 'left' | 'right' | 'center';
+    align?: Alignment;
     compact?: boolean;
     fontSize?: string;
     minDecimals?: number;
