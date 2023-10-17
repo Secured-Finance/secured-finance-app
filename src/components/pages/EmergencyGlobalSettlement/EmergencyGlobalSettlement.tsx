@@ -4,6 +4,7 @@ import { CollateralSnapshot } from 'src/components/molecules';
 import {
     MyWalletWidget,
     WithdrawPositionTable,
+    WithdrawTokenTable,
 } from 'src/components/organisms';
 import { Page, TwoColumns } from 'src/components/templates';
 import {
@@ -43,6 +44,13 @@ export const EmergencyGlobalSettlement = () => {
             })),
     ];
 
+    const withdrawableTokens = Object.entries(collateralBook.nonCollateral).map(
+        ([key, value]) => ({
+            amount: value,
+            currency: toHex(key),
+        })
+    );
+
     const snapshot = Object.entries(collateralBook.withdrawableCollateral).map(
         ([key]) => ({
             currency: key as CurrencySymbol,
@@ -81,6 +89,7 @@ export const EmergencyGlobalSettlement = () => {
                         </div>
                     </GradientBox>
                     <WithdrawPositionTable data={withdrawableData} />
+                    <WithdrawTokenTable data={withdrawableTokens} />
                 </section>
                 <section className='grid grid-flow-row gap-6'>
                     <CollateralSnapshot
