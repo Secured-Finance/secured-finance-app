@@ -5,7 +5,7 @@ import classNames from 'classnames';
 import * as dayjs from 'dayjs';
 import { BigNumber } from 'ethers';
 import { useRouter } from 'next/router';
-import { useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { CoreTable, TableActionMenu } from 'src/components/molecules';
 import { UnwindDialog, UnwindDialogType } from 'src/components/organisms';
@@ -54,6 +54,127 @@ export const ActiveTradeTable = ({
     const dispatch = useDispatch();
     const isTablet = useBreakpoint('laptop');
 
+    const getTableActionMenu = useCallback(
+        (
+            maturity: number,
+            amount: BigNumber,
+            ccy: CurrencySymbol,
+            side: OrderSide
+        ) => {
+            const items = [
+                {
+                    text: 'Add/Reduce Position',
+                    onClick: (): void => {
+                        dispatch(setMaturity(maturity));
+                        dispatch(setCurrency(ccy));
+                        router.push('/advanced/');
+                    },
+                },
+                {
+                    text: 'Unwind Position',
+                    onClick: (): void => {
+                        setUnwindDialogData({
+                            maturity: new Maturity(maturity),
+                            amount: new Amount(amount, ccy),
+                            show: true,
+                            side: side,
+                            type: 'UNWIND',
+                        });
+                    },
+                },
+            ];
+            if (!isPastDate(maturity)) {
+                return items;
+            }
+
+            let label = 'Unwind Position';
+            let type: UnwindDialogType;
+            let disableAction;
+
+            if (delistedCurrencySet.has(ccy)) {
+                if (side === OrderSide.LEND) {
+                    label = 'Repay Position';
+                    type = 'REPAY';
+                } else {
+                    label = 'Redeem Position';
+                    type = 'REDEEM';
+                    if (!isMaturityPastDays(maturity, 7)) {
+                        disableAction = true;
+                    }
+                }
+            }
+
+            return [
+                {
+                    text: label,
+                    onClick: (): void => {
+                        setUnwindDialogData({
+                            maturity: new Maturity(maturity),
+                            amount: new Amount(amount, ccy),
+                            show: true,
+                            side: side,
+                            type: type,
+                        });
+                    },
+                    disabled: disableAction,
+                },
+            ];
+        },
+        [delistedCurrencySet, dispatch, router]
+    );
+
+    const getMaturityDisplayValue = useCallback(
+        (
+            maturityTimestamp: number,
+            side: OrderSide,
+            currency: CurrencySymbol | undefined
+        ) => {
+            const currentTime = Date.now();
+            const dayToMaturity = formatMaturity(
+                maturityTimestamp,
+                'day',
+                currentTime
+            );
+            const diffHours = formatMaturity(
+                maturityTimestamp,
+                'hours',
+                currentTime
+            );
+            const diffMinutes =
+                formatMaturity(maturityTimestamp, 'minutes', currentTime) % 60;
+            let maturity;
+            if (dayToMaturity > 1) {
+                maturity = <span className='mx-1'>{dayToMaturity} Days</span>;
+            } else if (dayToMaturity === 1) {
+                maturity = `${dayToMaturity} Day`;
+            } else {
+                maturity = (
+                    <>
+                        {diffHours !== 0 && (
+                            <span className='mx-1'>{diffHours}h</span>
+                        )}
+                        {diffMinutes !== 0 && <span>{diffMinutes}m</span>}
+                    </>
+                );
+            }
+
+            if (!isPastDate(maturityTimestamp))
+                return <span className='text-neutral7'>{maturity}</span>;
+
+            if (currency && !delistedCurrencySet.has(currency)) return null;
+
+            if (side === OrderSide.BORROW) {
+                if (isMaturityPastDays(maturityTimestamp, 7)) return `Repay`;
+                else return `${Math.abs(dayToMaturity)}d left to repay`;
+            } else {
+                if (isMaturityPastDays(maturityTimestamp, 7))
+                    return <span className='text-yellow'>Redeemable</span>;
+                else return `${Math.abs(dayToMaturity)}d to redeem`;
+            }
+        },
+        [delistedCurrencySet]
+    );
+
     const columns = useMemo(
         () => [
             loanTypeFromFVColumnDefinition(columnHelper, 'Type', 'side'),
@@ -67,43 +188,14 @@ export const ActiveTradeTable = ({
             columnHelper.accessor('maturity', {
                 cell: info => {
                     const ccy = hexToCurrencySymbol(info.row.original.currency);
-                    const currentTime = Date.now();
                     const maturityTimestamp = Number(info.getValue());
-                    const dayToMaturity = formatMaturity(
-                        maturityTimestamp,
-                        'day',
-                        currentTime
-                    );
-                    const diffHours = formatMaturity(
-                        maturityTimestamp,
-                        'hours',
-                        currentTime
-                    );
-                    const diffMinutes =
-                        formatMaturity(
-                            maturityTimestamp,
-                            'minutes',
-                            currentTime
-                        ) % 60;
-                    let maturity;
-                    if (dayToMaturity > 1 || dayToMaturity < 0) {
-                        maturity = (
-                            <span className='mx-1'>{dayToMaturity} Days</span>
-                        );
-                    } else if (dayToMaturity === 1) {
-                        maturity = `${dayToMaturity} Day`;
-                    } else {
-                        maturity = (
-                            <>
-                                {diffHours !== 0 && (
-                                    <span className='mx-1'>{diffHours}h</span>
-                                )}
-                                {diffMinutes !== 0 && (
-                                    <span>{diffMinutes}m</span>
-                                )}
-                            </>
-                        );
-                    }
+
+                    const side = BigNumber.from(
+                        info.row.original.forwardValue
+                    ).isNegative()
+                        ? OrderSide.BORROW
+                        : OrderSide.LEND;
+
                     return (
                         <div className='grid w-40 justify-center tablet:w-full'>
                             <div
@@ -118,7 +210,11 @@ export const ActiveTradeTable = ({
                                     }
                                 )}
                             >
-                                {maturity}
+                                {getMaturityDisplayValue(
+                                    maturityTimestamp,
+                                    side,
+                                    ccy
+                                )}
                             </div>
                             <span className='typography-caption-2 h-5 w-full text-neutral-4'>
                                 {formatDate(maturityTimestamp)}
@@ -175,51 +271,15 @@ export const ActiveTradeTable = ({
                         : OrderSide.BORROW; // side is reversed as unwind
                     if (!ccy) return null;
 
-                    let type: UnwindDialogType;
-                    let label = 'Unwind Position';
-                    if (delistedCurrencySet.has(ccy) && isPastDate(maturity)) {
-                        if (
-                            side === OrderSide.BORROW &&
-                            isMaturityPastDays(maturity, 7)
-                        ) {
-                            type = 'REDEEM';
-                            label = 'Redeem Position';
-                        }
-                        if (
-                            side === OrderSide.LEND &&
-                            !isMaturityPastDays(maturity, 7)
-                        ) {
-                            label = 'Repay Position';
-                            type = 'REPAY';
-                        }
-                    }
                     return (
                         <div className='flex justify-center'>
                             <TableActionMenu
-                                items={[
-                                    {
-                                        text: 'Add/Reduce Position',
-                                        onClick: () => {
-                                            dispatch(setMaturity(maturity));
-                                            dispatch(setCurrency(ccy));
-                                            router.push('/advanced/');
-                                        },
-                                    },
-                                    {
-                                        text: label,
-                                        onClick: () => {
-                                            setUnwindDialogData({
-                                                maturity: new Maturity(
-                                                    maturity
-                                                ),
-                                                amount: new Amount(amount, ccy),
-                                                show: true,
-                                                side: side,
-                                                type: type,
-                                            });
-                                        },
-                                    },
-                                ]}
+                                items={getTableActionMenu(
+                                    maturity,
+                                    amount,
+                                    ccy,
+                                    side
+                                )}
                             />
                         </div>
                     );
@@ -227,7 +287,12 @@ export const ActiveTradeTable = ({
                 header: () => <div className='p-2'>Actions</div>,
             }),
         ],
-        [delistedCurrencySet, dispatch, priceList, router]
+        [
+            delistedCurrencySet,
+            getMaturityDisplayValue,
+            getTableActionMenu,
+            priceList,
+        ]
     );
 
     const columnsForTabletMobile = [
