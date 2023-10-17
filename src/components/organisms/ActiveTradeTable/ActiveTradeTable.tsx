@@ -135,41 +135,43 @@ export const ActiveTradeTable = ({
                 'day',
                 currentTime
             );
-            const diffHours = formatMaturity(
-                maturityTimestamp,
-                'hours',
-                currentTime
-            );
-            const diffMinutes =
-                formatMaturity(maturityTimestamp, 'minutes', currentTime) % 60;
-            let maturity;
-            if (dayToMaturity > 1) {
-                maturity = <span className='mx-1'>{dayToMaturity} Days</span>;
-            } else if (dayToMaturity === 1) {
-                maturity = `${dayToMaturity} Day`;
-            } else {
-                maturity = (
-                    <>
-                        {diffHours !== 0 && (
-                            <span className='mx-1'>{diffHours}h</span>
-                        )}
-                        {diffMinutes !== 0 && <span>{diffMinutes}m</span>}
-                    </>
+
+            if (!isPastDate(maturityTimestamp)) {
+                const diffHours = formatMaturity(
+                    maturityTimestamp,
+                    'hours',
+                    currentTime
                 );
-            }
+                const diffMinutes =
+                    formatMaturity(maturityTimestamp, 'minutes', currentTime) %
+                    60;
 
-            if (!isPastDate(maturityTimestamp))
-                return <span className='text-neutral7'>{maturity}</span>;
-
-            if (currency && !delistedCurrencySet.has(currency)) return null;
-
-            if (side === OrderSide.BORROW) {
-                if (isMaturityPastDays(maturityTimestamp, 7)) return `Repay`;
-                else return `${Math.abs(dayToMaturity)}d left to repay`;
+                if (dayToMaturity > 1) {
+                    return <span className='mx-1'>{dayToMaturity} Days</span>;
+                } else if (dayToMaturity === 1) {
+                    return `${dayToMaturity} Day`;
+                } else {
+                    return (
+                        <>
+                            {diffHours !== 0 && (
+                                <span className='mx-1'>{diffHours}h</span>
+                            )}
+                            {diffMinutes !== 0 && <span>{diffMinutes}m</span>}
+                        </>
+                    );
+                }
             } else {
-                if (isMaturityPastDays(maturityTimestamp, 7))
-                    return <span className='text-yellow'>Redeemable</span>;
-                else return `${Math.abs(dayToMaturity)}d to redeem`;
+                if (currency && !delistedCurrencySet.has(currency)) return null;
+
+                if (side === OrderSide.BORROW) {
+                    if (isMaturityPastDays(maturityTimestamp, 7))
+                        return `Repay`;
+                    else return `${Math.abs(dayToMaturity)}d left to repay`;
+                } else {
+                    if (isMaturityPastDays(maturityTimestamp, 7))
+                        return <span className='text-yellow'>Redeemable</span>;
+                    else return `${Math.abs(dayToMaturity)}d to redeem`;
+                }
             }
         },
         [delistedCurrencySet]
