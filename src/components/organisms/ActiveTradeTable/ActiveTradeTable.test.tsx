@@ -153,6 +153,25 @@ describe('ActiveTradeTable Component', () => {
             });
         });
 
+        it('should display 100 MTM for matured delisted contracts', () => {
+            render(<Delisted />);
+            waitFor(() => {
+                const delistedContractRow = screen.getAllByRole('row')[10];
+                expect(delistedContractRow).toHaveTextContent('Redeemable');
+                expect(delistedContractRow).toHaveTextContent('100.00');
+            });
+        });
+
+        it('should not display PV for matured delisted contracts', () => {
+            render(<Delisted />);
+            waitFor(() => {
+                const delistedContractRow = screen.getAllByRole('row')[10];
+                expect(delistedContractRow).toHaveTextContent('Redeemable');
+                const rows = screen.getAllByTestId('currency-amount-item');
+                expect(rows[16]).toHaveValue(null);
+            });
+        });
+
         it('should display unwind position till maturity', async () => {
             render(<Delisted />);
             waitFor(() => {
