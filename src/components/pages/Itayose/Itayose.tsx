@@ -132,7 +132,14 @@ export const Itayose = () => {
         );
     }, [maturity, maturityOptionList]);
 
-    const assetList = useMemo(() => getCurrencyMapAsOptions(), []);
+    const assetList = useMemo(
+        () =>
+            getCurrencyMapAsOptions().filter(
+                ccy => !delistedCurrencySet.has(ccy.label as CurrencySymbol)
+            ),
+        [delistedCurrencySet]
+    );
+
     const selectedAsset = useMemo(() => {
         return assetList.find(option => option.value === currency);
     }, [currency, assetList]);
