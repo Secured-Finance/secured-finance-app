@@ -28,6 +28,7 @@ import {
 import { RootState } from 'src/store/types';
 import { OrderSideMap, OrderType, OrderTypeOptions } from 'src/types';
 import {
+    CurrencySymbol,
     MAX_COVERAGE,
     ZERO_BN,
     amountFormatterFromBase,
@@ -51,12 +52,14 @@ export function AdvancedLendingOrderCard({
     calculationDate,
     preOrderPosition = 'none',
     marketPrice,
+    delistedCurrencySet,
 }: {
     collateralBook: CollateralBook;
     isItayose?: boolean;
     calculationDate?: number;
     preOrderPosition?: 'borrow' | 'lend' | 'none';
     marketPrice?: number;
+    delistedCurrencySet: Set<CurrencySymbol>;
 }): JSX.Element {
     const {
         currency,
@@ -358,6 +361,7 @@ export function AdvancedLendingOrderCard({
                     loanValue={loanValue}
                     collateralBook={collateralBook}
                     validation={shouldDisableActionButton}
+                    isCurrencyDelisted={delistedCurrencySet.has(currency)}
                 />
 
                 <ErrorInfo

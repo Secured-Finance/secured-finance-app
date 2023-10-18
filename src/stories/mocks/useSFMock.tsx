@@ -434,6 +434,17 @@ export const mockUseSF = () => {
         getOrderEstimation: jest.fn(() =>
             Promise.resolve({ coverage: BigNumber.from('5500') })
         ),
+
+        currencyExists: jest.fn((currency: Currency) => {
+            if (currency.symbol === CurrencySymbol.WFIL) {
+                return Promise.resolve(false);
+            }
+            return Promise.resolve(true);
+        }),
+
+        executeRepayment: jest.fn(() => Promise.resolve({})),
+
+        executeRedemption: jest.fn(() => Promise.resolve({})),
     };
 
     return mockSecuredFinance;

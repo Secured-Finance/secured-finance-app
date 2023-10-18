@@ -11,7 +11,6 @@ import BTCIcon from 'src/assets/coins/btc.svg';
 import EthIcon from 'src/assets/coins/eth2.svg';
 import FilIcon from 'src/assets/coins/fil.svg';
 import UsdcIcon from 'src/assets/coins/usdc.svg';
-import { Option } from 'src/components/atoms';
 import { SvgIcon } from 'src/types';
 import { hexToString } from 'viem';
 import { WFIL } from './currencies/filecoin';
@@ -104,16 +103,6 @@ export const currencyMap: Readonly<
 
 export const getCurrencyMapAsList = () => {
     return Object.values(currencyMap).sort((a, b) => a.index - b.index);
-};
-
-export const getCurrencyMapAsOptions = () => {
-    return getCurrencyMapAsList().map<Option<CurrencySymbol>>(
-        ({ symbol, name, icon }) => ({
-            value: symbol,
-            label: name,
-            iconSVG: icon,
-        })
-    );
 };
 
 export const amountFormatterToBase = getCurrencyMapAsList().reduce<
