@@ -58,12 +58,9 @@ export const TableContractCell = ({
     return (
         <div className='flex flex-col'>
             <div
-                className={classNames(
-                    'flex h-6 flex-row items-center justify-start gap-2',
-                    {
-                        'w-40': variant !== 'contractOnly',
-                    }
-                )}
+                className={classNames('flex h-6 flex-row justify-start gap-2', {
+                    'w-40': variant !== 'contractOnly',
+                })}
             >
                 {variant !== 'contractOnly' ? (
                     <div
@@ -84,7 +81,7 @@ export const TableContractCell = ({
                     <Tooltip
                         align='right'
                         iconElement={
-                            <div className='flex h-3 w-3 items-center justify-center'>
+                            <div className='mt-1 flex h-3 w-3 items-center justify-center'>
                                 {delistedTooltipIcon}
                             </div>
                         }
