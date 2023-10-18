@@ -1,5 +1,5 @@
 import { createColumnHelper } from '@tanstack/react-table';
-import { ArcElement, Chart as ChartJS, Legend, Tooltip } from 'chart.js';
+import { ArcElement, Chart as ChartJS, Tooltip } from 'chart.js';
 import { useMemo } from 'react';
 import { Doughnut } from 'react-chartjs-2';
 import { CurrencyIcon, GradientBox } from 'src/components/atoms';
@@ -11,7 +11,7 @@ import {
     percentFormat,
     usdFormat,
 } from 'src/utils';
-ChartJS.register(ArcElement, Tooltip, Legend);
+ChartJS.register(ArcElement, Tooltip);
 
 type CollateralComposition = {
     currency: CurrencySymbol;
