@@ -24,6 +24,7 @@ import {
     emptyCollateralBook,
     sortOrders,
     useCollateralBook,
+    useCurrencyDelistedStatus,
     useLendingMarkets,
     useMarketOrderList,
     useMarketPhase,
@@ -42,10 +43,10 @@ import {
     CurrencySymbol,
     amountFormatterFromBase,
     amountFormatterToBase,
+    countdown,
     getCurrencyMapAsOptions,
     usdFormat,
 } from 'src/utils';
-import { countdown } from 'src/utils/date';
 import { LoanValue, Maturity } from 'src/utils/entities';
 import { useAccount } from 'wagmi';
 
@@ -111,6 +112,8 @@ export const Itayose = () => {
         selectLandingOrderForm(state.landingOrderForm)
     );
 
+    const { data: delistedCurrencySet } = useCurrencyDelistedStatus();
+
     const { data: lendingMarkets = baseContracts } = useLendingMarkets();
     const lendingContracts = lendingMarkets[currency];
 
@@ -129,7 +132,14 @@ export const Itayose = () => {
         );
     }, [maturity, maturityOptionList]);
 
-    const assetList = useMemo(() => getCurrencyMapAsOptions(), []);
+    const assetList = useMemo(
+        () =>
+            getCurrencyMapAsOptions().filter(
+                ccy => !delistedCurrencySet.has(ccy.label as CurrencySymbol)
+            ),
+        [delistedCurrencySet]
+    );
+
     const selectedAsset = useMemo(() => {
         return assetList.find(option => option.value === currency);
     }, [currency, assetList]);
@@ -247,6 +257,7 @@ export const Itayose = () => {
                                 : 'lend'
                             : 'none'
                     }
+                    delistedCurrencySet={delistedCurrencySet}
                 />
 
                 <OrderBookWidget
@@ -258,6 +269,7 @@ export const Itayose = () => {
                         setIsShowingAll(state.showBorrow && state.showLend)
                     }
                     onAggregationChange={setMultiplier}
+                    isCurrencyDelisted={delistedCurrencySet.has(currency)}
                 />
 
                 <div className='flex h-full flex-col items-stretch justify-stretch gap-6'>

@@ -4,11 +4,11 @@ import { BigNumber, utils } from 'ethers';
 import EthIcon from 'src/assets/coins/eth2.svg';
 import WfilIcon from 'src/assets/coins/fil.svg';
 import UsdcIcon from 'src/assets/coins/usdc.svg';
-import UsdtIcon from 'src/assets/coins/usdt.svg';
 import WrappedBitcoinIcon from 'src/assets/coins/wbtc.svg';
 import SFLogoSmall from 'src/assets/img/logo-small.svg';
 import MetamaskIcon from 'src/assets/img/metamask-fox.svg';
 import { Option, WalletSourceOption } from 'src/components/atoms';
+import { CurrencyOption } from 'src/components/molecules';
 import { CollateralBook, Order, Position } from 'src/hooks';
 import { AssetPrices } from 'src/store/assetPrices';
 import {
@@ -427,12 +427,12 @@ export const walletSourceList: WalletSourceOption[] = [
 
 export const assetList = [
     {
-        label: 'Wrapped Bitcoin',
+        label: 'WBTC',
         iconSVG: WrappedBitcoinIcon,
         value: 'WBTC',
     },
     {
-        label: 'Ethereum',
+        label: 'ETH',
         iconSVG: EthIcon,
         value: 'ETH',
     },
@@ -446,35 +446,26 @@ export const assetList = [
         iconSVG: UsdcIcon,
         value: 'USDC',
     },
-    {
-        label: 'USD Tether',
-        iconSVG: UsdtIcon,
-        value: 'USDT',
-    },
 ] as Array<Option>;
 
 export const currencyList = [
     {
-        label: 'Wrapped Bitcoin',
-        iconSVG: WrappedBitcoinIcon,
+        label: 'WBTC',
         value: CurrencySymbol.WBTC,
     },
     {
-        label: 'Ethereum',
-        iconSVG: EthIcon,
+        label: 'ETH',
         value: CurrencySymbol.ETH,
     },
     {
         label: 'WFIL',
-        iconSVG: WfilIcon,
         value: CurrencySymbol.WFIL,
     },
     {
         label: 'USDC',
-        iconSVG: UsdcIcon,
         value: CurrencySymbol.USDC,
     },
-] as Array<Option>;
+] as Array<CurrencyOption>;
 
 export const yieldCurveRates = [
     new Rate(37326),

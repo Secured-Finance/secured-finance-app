@@ -28,6 +28,7 @@ interface OrderActionProps {
     collateralBook: CollateralBook;
     renderSide?: boolean;
     validation: boolean; // true to disable button
+    isCurrencyDelisted: boolean;
 }
 
 export const OrderAction = ({
@@ -35,6 +36,7 @@ export const OrderAction = ({
     collateralBook,
     renderSide = false,
     validation,
+    isCurrencyDelisted,
 }: OrderActionProps) => {
     const { isConnected } = useAccount();
     const dispatch = useDispatch();
@@ -151,6 +153,7 @@ export const OrderAction = ({
                 side={side}
                 orderType={orderType}
                 walletSource={sourceAccount}
+                isCurrencyDelisted={isCurrencyDelisted}
             />
 
             <DepositCollateral

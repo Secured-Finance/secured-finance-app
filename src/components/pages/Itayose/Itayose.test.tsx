@@ -1,6 +1,9 @@
+import { OrderSide } from '@secured-finance/sf-client';
 import { composeStories } from '@storybook/react';
+import { dec22Fixture } from 'src/stories/mocks/fixtures';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
+import { CurrencySymbol } from 'src/utils';
 import * as stories from './Itayose.stories';
 
 const { Default } = composeStories(stories);
@@ -19,6 +22,16 @@ jest.mock(
             children
 );
 
+const preloadedState = {
+    landingOrderForm: {
+        currency: CurrencySymbol.WBTC,
+        maturity: dec22Fixture,
+        side: OrderSide.BORROW,
+        amount: '0',
+        unitPrice: 0,
+    },
+};
+
 const mockSecuredFinance = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mockSecuredFinance);
 
@@ -28,22 +41,30 @@ describe('Itayose Component', () => {
     });
 
     it('should convert the amount to changed currency when the user change the currency', async () => {
-        const { store } = await waitFor(() => render(<Default />));
+        const { store } = await waitFor(() =>
+            render(<Default />, { preloadedState })
+        );
         expect(store.getState().landingOrderForm.amount).toEqual('0');
         fireEvent.change(screen.getByRole('textbox', { name: 'Amount' }), {
             target: { value: '1' },
         });
-        expect(store.getState().landingOrderForm.amount).toEqual(
-            '1000000000000000000'
-        );
+        expect(store.getState().landingOrderForm.amount).toEqual('100000000');
         await waitFor(() => {
-            fireEvent.click(screen.getByRole('button', { name: 'Filecoin' }));
+            fireEvent.click(screen.getByRole('button', { name: 'WBTC' }));
             fireEvent.click(screen.getByRole('menuitem', { name: 'USDC' }));
         });
         expect(store.getState().landingOrderForm.amount).toEqual('1000000');
         expect(screen.getByRole('textbox', { name: 'Amount' })).toHaveValue(
             '1'
         );
+    });
+
+    it('should not show delisted currencies in asset dropwdown', async () => {
+        await waitFor(() => render(<Default />, { preloadedState }));
+        await waitFor(() => {
+            fireEvent.click(screen.getByRole('button', { name: 'WBTC' }));
+            expect(screen.queryByText('WFIL')).not.toBeInTheDocument();
+        });
     });
 
     it('should only show the pre-order orders of the user when they are connected', async () => {
