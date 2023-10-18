@@ -197,11 +197,7 @@ describe('WithdrawCollateral component', () => {
 
     it('should withdraw whole amount when 100% is clicked', async () => {
         const track = jest.spyOn(analytics, 'track');
-        mockSecuredFinance.withdrawCollateral.mockResolvedValue({
-            wait: jest.fn(() => Promise.resolve({ blockNumber: 123 })),
-        });
-        const onClose = jest.fn();
-        render(<Default onClose={onClose} source='Source of Withdrawal' />, {
+        render(<Default source='Source of Withdrawal' />, {
             preloadedState,
         });
 
