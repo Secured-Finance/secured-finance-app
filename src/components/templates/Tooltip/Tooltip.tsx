@@ -34,7 +34,7 @@ export const Tooltip = ({
             {() => (
                 <>
                     <Popover.Button
-                        className='flex items-center focus:outline-none'
+                        className='flex cursor-pointer items-center focus:outline-none'
                         as='div'
                     >
                         {cloneElement(

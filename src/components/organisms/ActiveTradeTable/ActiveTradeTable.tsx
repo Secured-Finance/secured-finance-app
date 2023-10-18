@@ -1,18 +1,24 @@
 import { OrderSide } from '@secured-finance/sf-client';
 import { formatDate } from '@secured-finance/sf-core';
 import { createColumnHelper } from '@tanstack/react-table';
+import classNames from 'classnames';
 import * as dayjs from 'dayjs';
 import { BigNumber } from 'ethers';
 import { useRouter } from 'next/router';
-import { useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { CoreTable, TableActionMenu } from 'src/components/molecules';
-import { UnwindDialog } from 'src/components/organisms';
+import { UnwindDialog, UnwindDialogType } from 'src/components/organisms';
 import { Position, useBreakpoint } from 'src/hooks';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { setCurrency, setMaturity } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
-import { hexToCurrencySymbol } from 'src/utils';
+import {
+    CurrencySymbol,
+    hexToCurrencySymbol,
+    isMaturityPastDays,
+    isPastDate,
+} from 'src/utils';
 import { Amount, Maturity } from 'src/utils/entities';
 import {
     amountColumnDefinition,
@@ -29,9 +35,11 @@ const DEFAULT_HEIGHT = 300;
 
 export const ActiveTradeTable = ({
     data,
+    delistedCurrencySet,
     height,
 }: {
     data: Position[];
+    delistedCurrencySet: Set<CurrencySymbol>;
     height?: number;
 }) => {
     const [unwindDialogData, setUnwindDialogData] = useState<{
@@ -39,55 +47,176 @@ export const ActiveTradeTable = ({
         amount: Amount;
         side: OrderSide;
         show: boolean;
+        type: 'UNWIND' | 'REDEEM' | 'REPAY';
     }>();
     const priceList = useSelector((state: RootState) => getPriceMap(state));
     const router = useRouter();
     const dispatch = useDispatch();
     const isTablet = useBreakpoint('laptop');
 
+    const getTableActionMenu = useCallback(
+        (
+            maturity: number,
+            amount: BigNumber,
+            ccy: CurrencySymbol,
+            side: OrderSide
+        ) => {
+            const items = [
+                {
+                    text: 'Add/Reduce Position',
+                    onClick: (): void => {
+                        dispatch(setMaturity(maturity));
+                        dispatch(setCurrency(ccy));
+                        router.push('/advanced/');
+                    },
+                },
+                {
+                    text: 'Unwind Position',
+                    onClick: (): void => {
+                        setUnwindDialogData({
+                            maturity: new Maturity(maturity),
+                            amount: new Amount(amount, ccy),
+                            show: true,
+                            side: side,
+                            type: 'UNWIND',
+                        });
+                    },
+                },
+            ];
+            if (!isPastDate(maturity)) {
+                return items;
+            }
+
+            let label = 'Unwind Position';
+            let type: UnwindDialogType;
+            let disableAction;
+
+            if (delistedCurrencySet.has(ccy)) {
+                if (side === OrderSide.LEND) {
+                    label = 'Repay Position';
+                    type = 'REPAY';
+                } else {
+                    label = 'Redeem Position';
+                    type = 'REDEEM';
+                    if (!isMaturityPastDays(maturity, 7)) {
+                        disableAction = true;
+                    }
+                }
+            }
+
+            return [
+                {
+                    text: label,
+                    onClick: (): void => {
+                        setUnwindDialogData({
+                            maturity: new Maturity(maturity),
+                            amount: new Amount(amount, ccy),
+                            show: true,
+                            side: side,
+                            type: type,
+                        });
+                    },
+                    disabled: disableAction,
+                },
+            ];
+        },
+        [delistedCurrencySet, dispatch, router]
+    );
+
+    const getMaturityDisplayValue = useCallback(
+        (
+            maturityTimestamp: number,
+            side: OrderSide,
+            currency: CurrencySymbol | undefined
+        ) => {
+            const currentTime = Date.now();
+            const dayToMaturity = formatMaturity(
+                maturityTimestamp,
+                'day',
+                currentTime
+            );
+
+            if (!isPastDate(maturityTimestamp)) {
+                const diffHours = formatMaturity(
+                    maturityTimestamp,
+                    'hours',
+                    currentTime
+                );
+                const diffMinutes =
+                    formatMaturity(maturityTimestamp, 'minutes', currentTime) %
+                    60;
+
+                if (dayToMaturity > 1) {
+                    return <span className='mx-1'>{dayToMaturity} Days</span>;
+                } else if (dayToMaturity === 1) {
+                    return `${dayToMaturity} Day`;
+                } else {
+                    return (
+                        <>
+                            {diffHours !== 0 && (
+                                <span className='mx-1'>{diffHours}h</span>
+                            )}
+                            {diffMinutes !== 0 && <span>{diffMinutes}m</span>}
+                        </>
+                    );
+                }
+            } else {
+                if (currency && !delistedCurrencySet.has(currency)) return null;
+
+                if (side === OrderSide.BORROW) {
+                    if (isMaturityPastDays(maturityTimestamp, 7))
+                        return `Repay`;
+                    else return `${7 - Math.abs(dayToMaturity)}d left to repay`;
+                } else {
+                    if (isMaturityPastDays(maturityTimestamp, 7))
+                        return <span className='text-yellow'>Redeemable</span>;
+                    else return `${Math.abs(dayToMaturity)}d to redeem`;
+                }
+            }
+        },
+        [delistedCurrencySet]
+    );
+
     const columns = useMemo(
         () => [
             loanTypeFromFVColumnDefinition(columnHelper, 'Type', 'side'),
-            contractColumnDefinition(columnHelper, 'Contract', 'contract'),
+            contractColumnDefinition(
+                columnHelper,
+                'Contract',
+                'contract',
+                'default',
+                delistedCurrencySet
+            ),
             columnHelper.accessor('maturity', {
                 cell: info => {
-                    const currentTime = Date.now();
+                    const ccy = hexToCurrencySymbol(info.row.original.currency);
                     const maturityTimestamp = Number(info.getValue());
-                    const dayToMaturity = formatMaturity(
-                        maturityTimestamp,
-                        'day',
-                        currentTime
-                    );
-                    const diffHours = formatMaturity(
-                        maturityTimestamp,
-                        'hours',
-                        currentTime
-                    );
-                    const diffMinutes =
-                        formatMaturity(
-                            maturityTimestamp,
-                            'minutes',
-                            currentTime
-                        ) % 60;
-                    let maturity;
-                    if (dayToMaturity > 1) {
-                        maturity = `${dayToMaturity} Days`;
-                    } else if (dayToMaturity === 1) {
-                        maturity = `${dayToMaturity} Day`;
-                    } else if (dayToMaturity < 1) {
-                        maturity = (
-                            <>
-                                {diffHours > 0 ? (
-                                    <span className='mx-1'>{diffHours}h</span>
-                                ) : null}
-                                {diffMinutes > 0 ? <>{diffMinutes}m</> : null}
-                            </>
-                        );
-                    }
+
+                    const side = BigNumber.from(
+                        info.row.original.forwardValue
+                    ).isNegative()
+                        ? OrderSide.BORROW
+                        : OrderSide.LEND;
+
                     return (
                         <div className='grid w-40 justify-center tablet:w-full'>
-                            <div className='typography-caption w-full text-neutral-7'>
-                                {maturity}
+                            <div
+                                className={classNames(
+                                    'typography-caption w-full',
+                                    {
+                                        'text-galacticOrange':
+                                            ccy && delistedCurrencySet.has(ccy),
+                                        'text-neutral7':
+                                            ccy &&
+                                            !delistedCurrencySet.has(ccy),
+                                    }
+                                )}
+                            >
+                                {getMaturityDisplayValue(
+                                    maturityTimestamp,
+                                    side,
+                                    ccy
+                                )}
                             </div>
                             <span className='typography-caption-2 h-5 w-full text-neutral-4'>
                                 {formatDate(maturityTimestamp)}
@@ -112,7 +241,8 @@ export const ActiveTradeTable = ({
                 columnHelper,
                 'PV',
                 'amount',
-                row => row.amount,
+                row =>
+                    isPastDate(Number(row.maturity)) ? undefined : row.amount,
                 {
                     color: false,
                     priceList: priceList,
@@ -124,7 +254,10 @@ export const ActiveTradeTable = ({
                 columnHelper,
                 'Market Price',
                 'marketPrice',
-                row => row.marketPrice,
+                row =>
+                    isPastDate(Number(row.maturity))
+                        ? BigNumber.from(10000)
+                        : row.marketPrice,
                 'default',
                 'price',
                 0,
@@ -144,32 +277,16 @@ export const ActiveTradeTable = ({
                         ? OrderSide.LEND
                         : OrderSide.BORROW; // side is reversed as unwind
                     if (!ccy) return null;
+
                     return (
                         <div className='flex justify-center'>
                             <TableActionMenu
-                                items={[
-                                    {
-                                        text: 'Add/Reduce Position',
-                                        onClick: () => {
-                                            dispatch(setMaturity(maturity));
-                                            dispatch(setCurrency(ccy));
-                                            router.push('/advanced/');
-                                        },
-                                    },
-                                    {
-                                        text: 'Unwind Position',
-                                        onClick: () => {
-                                            setUnwindDialogData({
-                                                maturity: new Maturity(
-                                                    maturity
-                                                ),
-                                                amount: new Amount(amount, ccy),
-                                                show: true,
-                                                side: side,
-                                            });
-                                        },
-                                    },
-                                ]}
+                                items={getTableActionMenu(
+                                    maturity,
+                                    amount,
+                                    ccy,
+                                    side
+                                )}
                             />
                         </div>
                     );
@@ -177,7 +294,12 @@ export const ActiveTradeTable = ({
                 header: () => <div className='p-2'>Actions</div>,
             }),
         ],
-        [dispatch, priceList, router]
+        [
+            delistedCurrencySet,
+            getMaturityDisplayValue,
+            getTableActionMenu,
+            priceList,
+        ]
     );
 
     const columnsForTabletMobile = [
@@ -187,7 +309,7 @@ export const ActiveTradeTable = ({
     ];
 
     return (
-        <div className='pb-2'>
+        <>
             <CoreTable
                 data={data}
                 columns={isTablet ? columnsForTabletMobile : columns}
@@ -201,21 +323,6 @@ export const ActiveTradeTable = ({
                     },
                 }}
             />
-            <div className='typography-dropdown-selection-label mt-16 w-full rounded-xl bg-cardBackground/60 text-justify text-secondary7 '>
-                <p className='p-3'>
-                    Secured Finance lending contract includes an auto-roll
-                    feature. If no action is taken by the user prior to the
-                    contract&apos;s maturity date, it will automatically roll
-                    over into the next closest expiration date. This convenience
-                    comes with a 0.25% fee for the auto-roll transaction.{' '}
-                </p>
-                <p className='p-3'>
-                    It is the user&apos;s responsibility to take action to
-                    unwind the contract prior to its maturity date. Failure to
-                    do so will result in the contract being automatically rolled
-                    over, incurring the aforementioned fee.
-                </p>
-            </div>
             {unwindDialogData && (
                 <UnwindDialog
                     isOpen={unwindDialogData.show}
@@ -228,9 +335,10 @@ export const ActiveTradeTable = ({
                     maturity={unwindDialogData.maturity}
                     amount={unwindDialogData.amount}
                     side={unwindDialogData.side}
+                    type={unwindDialogData.type}
                 />
             )}
-        </div>
+        </>
     );
 };
 

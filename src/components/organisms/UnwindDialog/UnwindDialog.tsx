@@ -24,6 +24,8 @@ import { AddressUtils, CurrencySymbol } from 'src/utils';
 import { Amount, LoanValue, Maturity } from 'src/utils/entities';
 import { useAccount } from 'wagmi';
 
+export type UnwindDialogType = 'UNWIND' | 'REPAY' | 'REDEEM';
+
 enum Step {
     confirm = 1,
     processing,
@@ -39,84 +41,114 @@ type State = {
     buttonText: string;
 };
 
-const stateRecord: Record<Step, State> = {
-    [Step.confirm]: {
-        currentStep: Step.confirm,
-        nextStep: Step.processing,
-        title: 'Unwind Position',
-        description: '',
-        buttonText: 'Confirm',
-    },
-    [Step.processing]: {
-        currentStep: Step.processing,
-        nextStep: Step.placed,
-        title: 'Unwinding Position...',
-        description: '',
-        buttonText: '',
-    },
-    [Step.placed]: {
-        currentStep: Step.placed,
-        nextStep: Step.confirm,
-        title: 'Success!',
-        description: 'Your position was successfully unwound.',
-        buttonText: 'OK',
-    },
-    [Step.error]: {
-        currentStep: Step.error,
-        nextStep: Step.confirm,
-        title: 'Failed!',
-        description: '',
-        buttonText: 'OK',
-    },
-};
-
-const reducer = (
-    state: State,
-    action: {
-        type: string;
-    }
-) => {
-    switch (action.type) {
-        case 'next':
-            return {
-                ...stateRecord[state.nextStep],
-            };
-        case 'error':
-            return {
-                ...stateRecord[Step.error],
-            };
-        default:
-            return {
-                ...stateRecord[Step.confirm],
-            };
-    }
-};
-
 export const UnwindDialog = ({
     isOpen,
     onClose,
     amount,
     maturity,
     side,
+    type = 'UNWIND',
 }: {
     amount: Amount;
     maturity: Maturity;
     side: OrderSide;
+    type: UnwindDialogType;
 } & DialogState) => {
     const etherscanUrl = useEtherscanUrl();
     const handleContractTransaction = useHandleContractTransaction();
     const { address } = useAccount();
-    const [state, dispatch] = useReducer(reducer, stateRecord[1]);
     const [txHash, setTxHash] = useState<string | undefined>();
-    const [errorMessage, setErrorMessage] = useState(
-        'Your position could not be unwound.'
-    );
     const globalDispatch = useDispatch();
 
     const { data: collateralBook = emptyCollateralBook } =
         useCollateralBook(address);
     const priceList = useSelector((state: RootState) => getPriceMap(state));
     const price = priceList[amount.currency];
+
+    const { unwindPosition, redeemPosition, repayPosition } = useOrders();
+
+    const stateMap = useMemo(
+        () => ({
+            UNWIND: {
+                confirmTitle: 'Unwind Position',
+                processingTitle: 'Unwinding Position...',
+                handlePosition: unwindPosition,
+                error: 'Your position could not be unwound.',
+                success: 'Your position was successfully unwound',
+            },
+            REDEEM: {
+                confirmTitle: 'Redeem Position',
+                processingTitle: 'Redeeming Position...',
+                handlePosition: redeemPosition,
+                error: 'Your position could not be redeemed.',
+                success: 'Your position was successfully redeemed',
+            },
+            REPAY: {
+                confirmTitle: 'Repay Position',
+                processingTitle: 'Repaying Position...',
+                handlePosition: repayPosition,
+                error: 'Your position could not be repaid.',
+                success: 'Your position was successfully repaid',
+            },
+        }),
+        [redeemPosition, repayPosition, unwindPosition]
+    );
+
+    const stateRecord: Record<Step, State> = {
+        [Step.confirm]: {
+            currentStep: Step.confirm,
+            nextStep: Step.processing,
+            title: stateMap[type].confirmTitle,
+            description: '',
+            buttonText: 'Confirm',
+        },
+        [Step.processing]: {
+            currentStep: Step.processing,
+            nextStep: Step.placed,
+            title: stateMap[type].processingTitle,
+            description: '',
+            buttonText: '',
+        },
+        [Step.placed]: {
+            currentStep: Step.placed,
+            nextStep: Step.confirm,
+            title: 'Success!',
+            description: stateMap[type].success,
+            buttonText: 'OK',
+        },
+        [Step.error]: {
+            currentStep: Step.error,
+            nextStep: Step.confirm,
+            title: 'Failed!',
+            description: '',
+            buttonText: 'OK',
+        },
+    };
+
+    const reducer = (
+        state: State,
+        action: {
+            type: string;
+        }
+    ) => {
+        switch (action.type) {
+            case 'next':
+                return {
+                    ...stateRecord[state.nextStep],
+                };
+            case 'error':
+                return {
+                    ...stateRecord[Step.error],
+                };
+            default:
+                return {
+                    ...stateRecord[Step.confirm],
+                };
+        }
+    };
+
+    const [state, dispatch] = useReducer(reducer, stateRecord[1]);
+    const [errorMessage, setErrorMessage] = useState(stateMap[type].error);
 
     const market = useMarket(amount.currency, maturity.toNumber());
 
@@ -133,8 +165,6 @@ export const UnwindDialog = ({
         return LoanValue.fromPrice(unitPrice, maturity.toNumber());
     }, [market, maturity, side]);
 
-    const { unwindPosition } = useOrders();
-
     const handleClose = useCallback(() => {
         dispatch({ type: 'default' });
         onClose();
@@ -143,7 +173,7 @@ export const UnwindDialog = ({
     const handleUnwindPosition = useCallback(
         async (ccy: CurrencySymbol, maturity: Maturity) => {
             try {
-                const tx = await unwindPosition(ccy, maturity);
+                const tx = await stateMap[type].handlePosition(ccy, maturity);
                 const transactionStatus = await handleContractTransaction(tx);
                 if (!transactionStatus) {
                     dispatch({ type: 'error' });
@@ -158,7 +188,7 @@ export const UnwindDialog = ({
                 }
             }
         },
-        [unwindPosition, handleContractTransaction, globalDispatch]
+        [stateMap, type, handleContractTransaction, globalDispatch]
     );
 
     const onClick = useCallback(

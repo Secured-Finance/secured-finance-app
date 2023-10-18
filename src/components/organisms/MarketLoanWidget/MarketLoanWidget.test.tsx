@@ -15,7 +15,7 @@ describe('MarketLoanWidget Component', () => {
         await waitFor(() => {
             expect(screen.queryByText('WBTC')).toBeInTheDocument();
             screen.getByRole('button', { name: 'All Assets' }).click();
-            screen.getByRole('menuitem', { name: 'Filecoin' }).click();
+            screen.getByRole('menuitem', { name: 'WFIL' }).click();
         });
         expect(screen.queryByText('WBTC')).not.toBeInTheDocument();
     });
@@ -47,7 +47,18 @@ describe('MarketLoanWidget Component', () => {
         expect(screen.queryByText('Market Open')).not.toBeInTheDocument();
     });
 
+    it('should not show delisted currencies', async () => {
+        render(<Default />);
+        const button = screen.getByTestId('Pre-Open');
+        await waitFor(() => expect(button).not.toBeDisabled());
+        fireEvent.click(button);
+        expect(screen.queryAllByText('Dec 1, 2024')).toHaveLength(3);
+
+        expect(screen.queryByText('WFIL')).not.toBeInTheDocument();
+    });
+
     it('should hide the APR column when the market is in pre-order', async () => {
+        jest.spyOn(mock, 'currencyExists').mockResolvedValue(true);
         render(<Default />);
         const button = screen.getByTestId('Pre-Open');
         await waitFor(() => expect(button).not.toBeDisabled());
