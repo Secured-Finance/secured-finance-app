@@ -51,7 +51,7 @@ export const WithdrawTokenTable = ({ data }: { data: TokenPosition[] }) => {
             ),
             columnHelper.accessor('currency', {
                 id: 'action',
-                cell: info => {
+                cell: () => {
                     return (
                         <div className='flex justify-center px-1'>
                             <Button onClick={() => {}} size='sm'>
@@ -72,7 +72,7 @@ export const WithdrawTokenTable = ({ data }: { data: TokenPosition[] }) => {
             showStep
         >
             {data.length !== 0 && (
-                <div className='bg-black-20 px-5 pb-7'>
+                <div className='bg-black-20 px-5 pb-7 font-normal'>
                     <CoreTable
                         data={data.map(o => {
                             return {

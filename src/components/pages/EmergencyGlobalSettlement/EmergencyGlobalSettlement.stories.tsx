@@ -1,4 +1,4 @@
-import { withWalletProvider } from '.storybook/decorators';
+import { withAssetPrice, withWalletProvider } from '.storybook/decorators';
 import { Meta, StoryFn } from '@storybook/react';
 import { EmergencyGlobalSettlement } from './EmergencyGlobalSettlement';
 
@@ -9,7 +9,7 @@ export default {
     parameters: {
         connected: true,
     },
-    decorators: [withWalletProvider],
+    decorators: [withWalletProvider, withAssetPrice],
 } as Meta<typeof EmergencyGlobalSettlement>;
 
 const Template: StoryFn<typeof EmergencyGlobalSettlement> = () => (
