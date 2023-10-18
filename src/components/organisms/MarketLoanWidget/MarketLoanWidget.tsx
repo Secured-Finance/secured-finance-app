@@ -6,7 +6,12 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Button, DropdownSelector } from 'src/components/atoms';
 import { CoreTable, Tab } from 'src/components/molecules';
-import { Market, useMarketLists, useMaturityOptions } from 'src/hooks';
+import {
+    Market,
+    useCurrencyDelistedStatus,
+    useMarketLists,
+    useMaturityOptions,
+} from 'src/hooks';
 import { setCurrency, setMaturity } from 'src/store/landingOrderForm';
 import {
     CurrencySymbol,
@@ -28,6 +33,12 @@ export const MarketLoanWidget = () => {
     const router = useRouter();
 
     const { openMarkets, itayoseMarkets } = useMarketLists();
+
+    const { data: delistedCurrencySet } = useCurrencyDelistedStatus();
+
+    const filteredItayoseMarkets = itayoseMarkets.filter(
+        market => !delistedCurrencySet.has(market.ccy)
+    );
 
     const [selectedCurrency, setSelectedCurrency] = useState<
         CurrencySymbol | ''
@@ -150,7 +161,7 @@ export const MarketLoanWidget = () => {
     } = {
         text: 'NEW',
         size: 'small',
-        visible: itayoseMarkets.length !== 0,
+        visible: filteredItayoseMarkets.length !== 0,
     };
 
     const openMarketUtil = (
@@ -183,7 +194,7 @@ export const MarketLoanWidget = () => {
             text: 'Pre-Open',
             highlight: itayoseHighlight,
             util: itayoseMarketUtil,
-            disabled: itayoseMarkets.length === 0,
+            disabled: filteredItayoseMarkets.length === 0,
         },
     ];
 
@@ -204,7 +215,7 @@ export const MarketLoanWidget = () => {
                 <div className='p-6 pt-3'>
                     <CoreTable
                         columns={columns}
-                        data={getFilteredMarkets(itayoseMarkets)}
+                        data={getFilteredMarkets(filteredItayoseMarkets)}
                         options={{
                             border: false,
                             hideColumnIds: ['apr'],
