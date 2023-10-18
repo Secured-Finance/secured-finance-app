@@ -36,12 +36,18 @@ export const CollateralInput = ({
     );
 
     const handleAmountChange = useCallback(
-        (amount: number | undefined) => {
+        (inputAmount: number | undefined) => {
+            if (
+                amount !== undefined &&
+                inputAmount === Math.round(amount * 10000) / 10000.0
+            ) {
+                return;
+            }
             if (onAmountChange) {
-                handleInputChange(amount, asset, onAmountChange);
+                handleInputChange(inputAmount, asset, onAmountChange);
             }
         },
-        [asset, handleInputChange, onAmountChange]
+        [amount, asset, handleInputChange, onAmountChange]
     );
 
     const handleClick = useCallback(
@@ -65,11 +71,7 @@ export const CollateralInput = ({
             </span>
             <div className='flex h-full flex-1 flex-col items-center gap-1'>
                 <InputBase
-                    value={
-                        amount !== undefined
-                            ? Math.round(amount * 10000) / 10000.0
-                            : undefined
-                    }
+                    value={amount}
                     className='typography-headline-4 h-14 w-full text-center text-neutral-8'
                     onValueChange={handleAmountChange}
                     sizeDependentStyles={fontSize}
