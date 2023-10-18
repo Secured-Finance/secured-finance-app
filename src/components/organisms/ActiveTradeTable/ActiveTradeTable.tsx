@@ -166,7 +166,7 @@ export const ActiveTradeTable = ({
                 if (side === OrderSide.BORROW) {
                     if (isMaturityPastDays(maturityTimestamp, 7))
                         return `Repay`;
-                    else return `${Math.abs(dayToMaturity)}d left to repay`;
+                    else return `${7 - Math.abs(dayToMaturity)}d left to repay`;
                 } else {
                     if (isMaturityPastDays(maturityTimestamp, 7))
                         return <span className='text-yellow'>Redeemable</span>;

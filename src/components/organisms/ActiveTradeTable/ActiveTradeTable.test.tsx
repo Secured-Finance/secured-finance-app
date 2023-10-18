@@ -224,7 +224,7 @@ describe('ActiveTradeTable Component', () => {
             render(<Delisted />);
             const postMaturity = screen.getAllByRole('row')[7];
             await waitFor(() => {
-                expect(postMaturity).toHaveTextContent('5d left to repay');
+                expect(postMaturity).toHaveTextContent('2d left to repay');
             });
             const moreOptionsButton = screen.getAllByRole('button', {
                 name: 'More options',
