@@ -43,7 +43,7 @@ export const WithdrawPositionTable = ({
                 'amount',
                 row => row.amount,
                 {
-                    color: true,
+                    color: false,
                     priceList: priceList,
                     compact: false,
                     showCurrency: true,
@@ -67,7 +67,7 @@ export const WithdrawPositionTable = ({
         >
             {data.length !== 0 && (
                 <>
-                    <div className='bg-black-20 px-5 pb-7'>
+                    <div className='bg-black-20 px-5 pb-7 font-normal'>
                         <CoreTable data={data} columns={columns} />
                     </div>
                     <div className='flex flex-row justify-around gap-5 pl-4 pr-7 pt-3'>
@@ -75,7 +75,7 @@ export const WithdrawPositionTable = ({
                             <span>
                                 <InformationCircleIcon className='h-5 w-5 text-planetaryPurple' />
                             </span>
-                            <span className='typography-dropdown-selection-label text-justify text-planetaryPurple'>
+                            <span className='typography-dropdown-selection-label text-left text-planetaryPurple'>
                                 Net value redemptions are based on our
                                 collateral vault&apos;s ratio of its currencies,
                                 regardless of the user&apos;s initial asset.
