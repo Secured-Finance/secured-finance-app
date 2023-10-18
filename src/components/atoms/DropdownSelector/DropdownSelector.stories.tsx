@@ -1,4 +1,5 @@
 import type { Meta, StoryFn } from '@storybook/react';
+import { within } from '@storybook/testing-library';
 import { assetList } from 'src/stories/mocks/fixtures';
 import { DropdownSelector } from './DropdownSelector';
 
@@ -74,4 +75,25 @@ FullSize.args = {
         label: 'This is a very long option and it is great',
         value: '1',
     },
+};
+
+export const ExpandedDropdown = Template.bind({});
+ExpandedDropdown.play = async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    canvas.getByRole('button').click();
+};
+
+const Chip = (
+    <div className='rounded-xl bg-black-40 px-4 py-1 text-orange'>Chip</div>
+);
+export const ExpandedDropdownWithFixedWidth = Template.bind({});
+ExpandedDropdownWithFixedWidth.args = {
+    variant: 'fixedWidth',
+    optionList: assetList.map(a => {
+        return { ...a, chip: Chip };
+    }),
+};
+ExpandedDropdownWithFixedWidth.play = async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    canvas.getByRole('button').click();
 };

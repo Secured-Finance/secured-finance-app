@@ -1,8 +1,9 @@
 import { useCallback, useMemo, useState } from 'react';
 import { DropdownSelector, Option } from 'src/components/atoms';
+import { CurrencyDropdown } from 'src/components/molecules';
 import {
-    currencyMap,
     CurrencySymbol,
+    currencyMap,
     getTransformMaturityOption,
 } from 'src/utils';
 type HorizontalAssetSelectorProp<T> = {
@@ -39,8 +40,8 @@ export const HorizontalAssetSelector = <T extends string = string>({
 
     return (
         <div className='typography-caption-2 grid min-w-fit grid-cols-2 gap-x-5 gap-y-1 text-neutral-4'>
-            <DropdownSelector
-                optionList={assetList}
+            <CurrencyDropdown
+                currencyOptionList={assetList}
                 selected={selectedAsset}
                 onChange={onAssetChange}
             />

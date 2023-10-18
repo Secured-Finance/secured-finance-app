@@ -1,6 +1,13 @@
 import { Menu } from '@headlessui/react';
 import classNames from 'classnames';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import {
+    ReactNode,
+    useCallback,
+    useEffect,
+    useMemo,
+    useRef,
+    useState,
+} from 'react';
 import { ExpandIndicator, Separator } from 'src/components/atoms';
 import { SvgIcon } from 'src/types';
 
@@ -8,6 +15,7 @@ export type Option<T = string> = {
     label: string;
     value: T;
     iconSVG?: SvgIcon;
+    chip?: ReactNode;
 };
 
 const DefaultButton = ({
@@ -24,7 +32,7 @@ const DefaultButton = ({
                     <selectedOption.iconSVG className='h-6 w-6' />
                 </span>
             ) : null}
-            <span className='typography-caption w-16 text-white'>
+            <span className='typography-caption w-16 text-left text-white'>
                 {selectedOption?.label}
             </span>
             <span data-cy={`asset-expand-${selectedOption?.label}`}>
@@ -99,7 +107,12 @@ export const DropdownSelector = <T extends string = string>({
     optionList: Readonly<Array<Option<T>>>;
     selected?: Option<T>;
     onChange: (v: T) => void;
-    variant?: 'default' | 'roundedExpandButton' | 'noLabel' | 'fullWidth';
+    variant?:
+        | 'default'
+        | 'roundedExpandButton'
+        | 'noLabel'
+        | 'fullWidth'
+        | 'fixedWidth';
 }) => {
     const [selectedOptionValue, setSelectedOptionValue] = useState<T>(
         selected.value
@@ -144,6 +157,7 @@ export const DropdownSelector = <T extends string = string>({
                         {() => {
                             switch (variant) {
                                 case 'default':
+                                case 'fixedWidth':
                                     return (
                                         <DefaultButton
                                             selectedOption={selectedOption}
@@ -177,6 +191,7 @@ export const DropdownSelector = <T extends string = string>({
                                 'max-h-[196px] w-52 tablet:max-h-60':
                                     variant !== 'fullWidth',
                                 'w-full': variant === 'fullWidth',
+                                'w-72': variant === 'fixedWidth',
                             }
                         )}
                     >
@@ -185,26 +200,32 @@ export const DropdownSelector = <T extends string = string>({
                                 key={`${asset.label}_${i}`}
                                 as='button'
                                 onClick={() => handleSelect(asset)}
+                                aria-label={asset.label}
                             >
                                 {({ active }) => (
                                     <div>
                                         <div
                                             className={classNames(
-                                                'flex flex-row items-center justify-start space-x-4 rounded-lg p-2 text-white-80',
+                                                'flex flex-row items-center justify-between space-x-2 rounded-lg p-3 text-white-80',
                                                 {
                                                     'bg-horizonBlue': active,
                                                 }
                                             )}
                                         >
-                                            {asset.iconSVG ? (
-                                                <span>
-                                                    <asset.iconSVG className='h-4 w-4 tablet:h-6 tablet:w-6' />
+                                            <div className='flex flex-row items-center justify-start space-x-2'>
+                                                {asset.iconSVG ? (
+                                                    <span role='img'>
+                                                        <asset.iconSVG className='h-4 w-4 tablet:h-6 tablet:w-6' />
+                                                    </span>
+                                                ) : null}
+                                                <span className='typography-button-1'>
+                                                    {asset.label}
                                                 </span>
-                                            ) : null}
+                                            </div>
 
-                                            <span className='typography-button-1'>
-                                                {asset.label}
-                                            </span>
+                                            {asset.chip ? (
+                                                <span>{asset.chip}</span>
+                                            ) : null}
                                         </div>
                                         {i !== optionList.length - 1 ? (
                                             <div className='py-2'>

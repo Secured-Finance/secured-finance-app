@@ -6,7 +6,7 @@ import {
     CollateralManagementConciseTab,
     GradientBox,
 } from 'src/components/atoms';
-import { StatsBar } from 'src/components/molecules';
+import { DelistedCurrencyDisclaimer, StatsBar } from 'src/components/molecules';
 import {
     ConnectWalletCard,
     MarketLoanWidget,
@@ -20,6 +20,7 @@ import {
     emptyCollateralBook,
     emptyValueLockedBook,
     useCollateralBook,
+    useCurrencyDelistedStatus,
     useGraphClientHook,
     useLendingMarkets,
     useLoanValues,
@@ -61,6 +62,8 @@ export const MarketDashboard = () => {
 
     const curves: Record<string, Rate[]> = {};
     const { data: lendingContracts = baseContracts } = useLendingMarkets();
+
+    const { data: delistedCurrencySet } = useCurrencyDelistedStatus();
 
     getCurrencyMapAsList().forEach(ccy => {
         // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -106,6 +109,7 @@ export const MarketDashboard = () => {
             return val;
         }
         for (const ccy of getCurrencyMapAsList()) {
+            if (!valueLockedByCurrency[ccy.symbol]) continue;
             val = val.add(
                 Math.floor(
                     currencyMap[ccy.symbol].fromBaseUnit(
@@ -121,6 +125,7 @@ export const MarketDashboard = () => {
 
     return (
         <Page title='Market Dashboard' name='dashboard-page'>
+            <DelistedCurrencyDisclaimer currencies={delistedCurrencySet} />
             <TwoColumns>
                 <div className='grid grid-cols-1 gap-y-7'>
                     <StatsBar
