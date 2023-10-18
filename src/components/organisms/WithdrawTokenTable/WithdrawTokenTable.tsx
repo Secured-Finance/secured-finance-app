@@ -41,7 +41,7 @@ export const WithdrawTokenTable = ({ data }: { data: TokenPosition[] }) => {
                 'amount',
                 row => row.amount,
                 {
-                    color: true,
+                    color: false,
                     priceList: priceList,
                     compact: false,
                     showCurrency: true,
@@ -53,7 +53,7 @@ export const WithdrawTokenTable = ({ data }: { data: TokenPosition[] }) => {
                 id: 'action',
                 cell: () => {
                     return (
-                        <div className='flex justify-center px-1'>
+                        <div className='flex justify-end px-1'>
                             <Button onClick={() => {}} size='sm'>
                                 Withdraw
                             </Button>

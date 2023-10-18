@@ -44,12 +44,12 @@ export const EmergencyGlobalSettlement = () => {
             })),
     ];
 
-    const withdrawableTokens = Object.entries(collateralBook.nonCollateral).map(
-        ([key, value]) => ({
+    const withdrawableTokens = Object.entries(collateralBook.nonCollateral)
+        .filter(v => v[1] && !v[1].isZero())
+        .map(([key, value]) => ({
             amount: value,
             currency: toHex(key),
-        })
-    );
+        }));
 
     const snapshot = Object.entries(collateralBook.withdrawableCollateral).map(
         ([key]) => ({
