@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { useSelector } from 'react-redux';
 import { GradientBox } from 'src/components/atoms';
 import { CollateralSnapshot } from 'src/components/molecules';
 import {
@@ -12,17 +11,16 @@ import {
     emptyCollateralBook,
     useCollateralBook,
     useCurrenciesForOrders,
+    useMarketTerminationDate,
+    useMarketTerminationRatio,
     usePositions,
 } from 'src/hooks';
-import { getPriceMap } from 'src/store/assetPrices/selectors';
-import { RootState } from 'src/store/types';
-import { CurrencySymbol, ZERO_BN } from 'src/utils';
+import { ZERO_BN } from 'src/utils';
 import { toHex } from 'viem';
 import { useAccount } from 'wagmi';
 
 export const EmergencyGlobalSettlement = () => {
     const { address } = useAccount();
-    const priceList = useSelector((state: RootState) => getPriceMap(state));
 
     const { data: usedCurrencies = [] } = useCurrenciesForOrders(address);
     const { data: positions = [] } = usePositions(address, usedCurrencies);
@@ -52,15 +50,10 @@ export const EmergencyGlobalSettlement = () => {
             currency: toHex(key),
         }));
 
-    const snapshot = Object.entries(collateralBook.withdrawableCollateral).map(
-        ([key]) => ({
-            currency: key as CurrencySymbol,
-            ratio: 1000,
-            price: priceList[key as CurrencySymbol],
-        })
-    );
+    const snapshot = useMarketTerminationRatio().data;
 
     const [userStep, setUserStep] = useState<'redeem' | 'withdraw'>('redeem');
+    const snapshotDate = useMarketTerminationDate().data;
 
     return (
         <Page title='Emergency Global Settlement'>
@@ -102,8 +95,8 @@ export const EmergencyGlobalSettlement = () => {
                 </section>
                 <section className='grid grid-flow-row gap-6'>
                     <CollateralSnapshot
-                        data={snapshot}
-                        snapshotDate={123456789}
+                        data={snapshot ?? []}
+                        snapshotDate={snapshotDate}
                     />
                     <MyWalletWidget />
                 </section>
