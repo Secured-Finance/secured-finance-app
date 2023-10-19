@@ -1,10 +1,9 @@
-import { BigNumber } from 'ethers';
 import { CurrencySymbol } from '../currencyList';
 import { Amount } from './amount';
 
 describe('Amount class', () => {
     const mockCurrency = CurrencySymbol.ETH;
-    const mockValue = BigNumber.from('1000000000000000000'); // 1 ETH in wei
+    const mockValue = BigInt('1000000000000000000'); // 1 ETH in wei
     const mockPrice = 2000;
 
     it('should create an instance of the Amount class', () => {
@@ -24,9 +23,9 @@ describe('Amount class', () => {
         expect(usdValue).toEqual(2000);
     });
 
-    it('should return the correct BigNumber value', () => {
+    it('should return the correct BigInt value', () => {
         const amount = new Amount(mockValue, mockCurrency);
-        const bigNumberValue = amount.toBigNumber();
-        expect(bigNumberValue).toEqual(mockValue);
+        const BigIntValue = amount.toBigInt();
+        expect(BigIntValue).toEqual(mockValue);
     });
 });

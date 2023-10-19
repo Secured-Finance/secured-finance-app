@@ -1,6 +1,6 @@
 import { GraphClientProvider } from '@secured-finance/sf-graph-client';
 import type { StoryContext, StoryFn } from '@storybook/react';
-import { Wallet } from 'ethers';
+// import { Wallet } from 'ethers';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { Footer } from 'src/components/atoms';
@@ -10,12 +10,13 @@ import { updateChainError, updateLatestBlock } from 'src/store/blockchain';
 import { setMaturity } from 'src/store/landingOrderForm';
 import { connectEthWallet, updateEthBalance } from 'src/store/wallet';
 import AxiosMock from 'src/stories/mocks/AxiosMock';
-import { CustomizedBridge } from 'src/stories/mocks/customBridge';
 import { dec22Fixture } from 'src/stories/mocks/fixtures';
 import { coingeckoApi } from 'src/utils/coinGeckoApi';
 import timemachine from 'timemachine';
-import { createPublicClient, createWalletClient, custom } from 'viem';
+import { RpcRequestError, createPublicClient, createWalletClient, custom, http } from 'viem';
 import { privateKeyToAccount } from 'viem/accounts';
+import { foundry } from 'viem/chains';
+import { rpc } from 'viem/utils';
 import { WagmiConfig, createConfig, sepolia } from 'wagmi';
 import { MockConnector } from 'wagmi/connectors/mock';
 
@@ -37,18 +38,41 @@ class ProviderMock {
 const privateKey =
     '0xde926db3012af759b4f24b5a51ef6afa397f04670f634aa4f48d4480417007f3';
 
-const signer = new CustomizedBridge(
-    new Wallet(privateKey),
-    new ProviderMock() as any,
-    11155111
-);
-
 const account = privateKeyToAccount(privateKey);
 
-const client = createWalletClient({
-    account: account,
+const publicClient = createPublicClient({
     chain: sepolia,
-    transport: custom(signer),
+    transport: http(),
+});
+
+publicClient.request = async ({ method, params }: any) => {
+    if (method === 'personal_sign') {
+      method = 'eth_sign'
+      params = [params[1], params[0]]
+    }
+
+    const url = foundry.rpcUrls.default.http[0]!
+    const body = {
+      method,
+      params,
+    }
+    const { result, error } = await rpc.http(url, {
+      body,
+    })
+    if (error) {
+      throw new RpcRequestError({
+        body,
+        error,
+        url,
+      })
+    }
+    return result
+  }
+
+const client = createWalletClient({
+    account: account.address,
+    chain: sepolia,
+    transport: custom(publicClient),
 });
 
 const connector = new MockConnector({
@@ -64,10 +88,7 @@ export const withWalletProvider = (Story: StoryFn, Context: StoryContext) => {
     const dispatch = useDispatch();
     const config = createConfig({
         autoConnect: Context.parameters && Context.parameters.connected,
-        publicClient: createPublicClient({
-            chain: sepolia,
-            transport: custom(signer),
-        }),
+        publicClient: publicClient,
         connectors: [connector],
     });
 

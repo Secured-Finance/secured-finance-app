@@ -1,6 +1,6 @@
 import type { Meta, StoryFn } from '@storybook/react';
 import { screen, userEvent } from '@storybook/testing-library';
-import { BigNumber } from 'ethers';
+
 import { useState } from 'react';
 import { CurrencySymbol, amountFormatterFromBase } from 'src/utils';
 import { CollateralInput } from './CollateralInput';
@@ -19,7 +19,7 @@ export default {
 
 const Template: StoryFn<typeof CollateralInput> = args => {
     const [value, setValue] = useState(args.amount);
-    const handleAmountChange = (newValue: BigNumber | undefined) => {
+    const handleAmountChange = (newValue: bigint | undefined) => {
         setValue(
             newValue ? amountFormatterFromBase[asset](newValue) : undefined
         );

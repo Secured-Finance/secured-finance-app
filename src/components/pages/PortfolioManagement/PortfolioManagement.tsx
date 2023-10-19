@@ -73,6 +73,7 @@ export const PortfolioManagement = () => {
         'user',
         selectedTable !== TableType.ORDER_HISTORY
     );
+
     const userTransactionHistory = useGraphClientHook(
         {
             address: address?.toLowerCase() ?? '',
@@ -137,11 +138,11 @@ export const PortfolioManagement = () => {
             };
         }
         const borrowedPV = computeNetValue(
-            positions.filter(position => position.forwardValue.isNegative()),
+            positions.filter(position => position.forwardValue < 0),
             priceMap
         );
         const lentPV = computeNetValue(
-            positions.filter(position => !position.forwardValue.isNegative()),
+            positions.filter(position => position.forwardValue > 0),
             priceMap
         );
         return {

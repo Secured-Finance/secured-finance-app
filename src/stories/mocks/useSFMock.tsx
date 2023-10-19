@@ -1,9 +1,8 @@
 import { Currency, Token } from '@secured-finance/sf-core';
-import { BigNumber } from 'ethers';
 import * as jest from 'jest-mock';
 import {
     CurrencySymbol,
-    ZERO_BN,
+    ZERO_BI,
     currencyMap,
     getCurrencyMapAsList,
     hexToCurrencySymbol,
@@ -23,29 +22,29 @@ import {
 
 function generateOrderbook(depth: number) {
     const unitPrices = [
-        BigNumber.from(9690),
-        BigNumber.from(9687),
-        BigNumber.from(9685),
-        BigNumber.from(9679),
-        BigNumber.from(9674),
+        BigInt(9690),
+        BigInt(9687),
+        BigInt(9685),
+        BigInt(9679),
+        BigInt(9674),
     ];
 
-    const zeros = Array(depth - unitPrices.length).fill(BigNumber.from(0));
+    const zeros = Array(depth - unitPrices.length).fill(ZERO_BI);
 
     const amounts = [
-        BigNumber.from('43000000000000000000000'),
-        BigNumber.from('23000000000000000000000'),
-        BigNumber.from('15000000000000000000000'),
-        BigNumber.from('12000000000000000000000'),
-        BigNumber.from('1800000000000000000000'),
+        BigInt('43000000000000000000000'),
+        BigInt('23000000000000000000000'),
+        BigInt('15000000000000000000000'),
+        BigInt('12000000000000000000000'),
+        BigInt('1800000000000000000000'),
     ];
 
     const quantities = [
-        BigNumber.from('1000'),
-        BigNumber.from('2000'),
-        BigNumber.from('3000'),
-        BigNumber.from('4000'),
-        BigNumber.from('5000'),
+        BigInt('1000'),
+        BigInt('2000'),
+        BigInt('3000'),
+        BigInt('4000'),
+        BigInt('5000'),
     ];
 
     return {
@@ -67,10 +66,10 @@ function generateSimpleOrders(
             orderId: i,
             ccy: currency,
             side: 0,
-            maturity: BigNumber.from(maturity),
-            unitPrice: BigNumber.from('9800'),
-            amount: BigNumber.from('1000000000000000000'),
-            timestamp: BigNumber.from('1609210000'),
+            maturity: BigInt(maturity),
+            unitPrice: BigInt('9800'),
+            amount: BigInt('1000000000000000000'),
+            timestamp: BigInt('1609210000'),
             isPreOrder: isPreOrder,
         }));
 }
@@ -84,75 +83,75 @@ export const mockUseSF = () => {
         placePreOrder: jest.fn(),
         getBorrowUnitPrices: jest.fn(() =>
             Promise.resolve([
-                BigNumber.from(9687),
-                BigNumber.from(9685),
-                BigNumber.from(9679),
-                BigNumber.from(9674),
-                BigNumber.from(9653),
-                BigNumber.from(9643),
-                BigNumber.from(9627),
-                BigNumber.from(9617),
+                BigInt(9687),
+                BigInt(9685),
+                BigInt(9679),
+                BigInt(9674),
+                BigInt(9653),
+                BigInt(9643),
+                BigInt(9627),
+                BigInt(9617),
             ])
         ),
         getLendUnitPrices: jest.fn(() =>
             Promise.resolve([
-                BigNumber.from(9685),
-                BigNumber.from(9683),
-                BigNumber.from(9677),
-                BigNumber.from(9672),
-                BigNumber.from(9651),
-                BigNumber.from(9641),
-                BigNumber.from(9625),
-                BigNumber.from(9615),
+                BigInt(9685),
+                BigInt(9683),
+                BigInt(9677),
+                BigInt(9672),
+                BigInt(9651),
+                BigInt(9641),
+                BigInt(9625),
+                BigInt(9615),
             ])
         ),
         getMidUnitPrices: jest
-            .fn<Promise<BigNumber[]>, Currency[]>()
+            .fn<Promise<bigint[]>, Currency[]>()
             .mockImplementation((ccy: Currency) => {
                 switch (ccy.symbol) {
                     case CurrencySymbol.ETH:
                         return Promise.resolve([
-                            BigNumber.from(9686),
-                            BigNumber.from(9684),
-                            BigNumber.from(9678),
-                            BigNumber.from(9673),
-                            BigNumber.from(9652),
-                            BigNumber.from(9642),
-                            BigNumber.from(9626),
-                            BigNumber.from(9616),
+                            BigInt(9686),
+                            BigInt(9684),
+                            BigInt(9678),
+                            BigInt(9673),
+                            BigInt(9652),
+                            BigInt(9642),
+                            BigInt(9626),
+                            BigInt(9616),
                         ]);
                     case CurrencySymbol.WFIL:
                         return Promise.resolve([
-                            BigNumber.from(9586),
-                            BigNumber.from(9584),
-                            BigNumber.from(9578),
-                            BigNumber.from(9573),
-                            BigNumber.from(9552),
-                            BigNumber.from(9542),
-                            BigNumber.from(9526),
-                            BigNumber.from(9516),
+                            BigInt(9586),
+                            BigInt(9584),
+                            BigInt(9578),
+                            BigInt(9573),
+                            BigInt(9552),
+                            BigInt(9542),
+                            BigInt(9526),
+                            BigInt(9516),
                         ]);
                     case CurrencySymbol.USDC:
                         return Promise.resolve([
-                            BigNumber.from(9486),
-                            BigNumber.from(9484),
-                            BigNumber.from(9478),
-                            BigNumber.from(9473),
-                            BigNumber.from(9452),
-                            BigNumber.from(9442),
-                            BigNumber.from(9426),
-                            BigNumber.from(9416),
+                            BigInt(9486),
+                            BigInt(9484),
+                            BigInt(9478),
+                            BigInt(9473),
+                            BigInt(9452),
+                            BigInt(9442),
+                            BigInt(9426),
+                            BigInt(9416),
                         ]);
                     case CurrencySymbol.WBTC:
                         return Promise.resolve([
-                            BigNumber.from(9386),
-                            BigNumber.from(9384),
-                            BigNumber.from(9378),
-                            BigNumber.from(9373),
-                            BigNumber.from(9352),
-                            BigNumber.from(9342),
-                            BigNumber.from(9326),
-                            BigNumber.from(9316),
+                            BigInt(9386),
+                            BigInt(9384),
+                            BigInt(9378),
+                            BigInt(9373),
+                            BigInt(9352),
+                            BigInt(9342),
+                            BigInt(9326),
+                            BigInt(9316),
                         ]);
                     default:
                         throw new Error('Not implemented');
@@ -186,11 +185,11 @@ export const mockUseSF = () => {
 
         getMaturities: jest.fn(() =>
             Promise.resolve([
-                BigNumber.from('1000'),
-                BigNumber.from('2000'),
-                BigNumber.from('3000'),
-                BigNumber.from('4000'),
-                BigNumber.from('5000'),
+                BigInt('1000'),
+                BigInt('2000'),
+                BigInt('3000'),
+                BigInt('4000'),
+                BigInt('5000'),
             ])
         ),
 
@@ -236,13 +235,13 @@ export const mockUseSF = () => {
         ),
 
         getERC20Balance: jest.fn((token: Token, _) => {
-            let balance = ZERO_BN;
+            let balance = ZERO_BI;
             if (token.symbol === CurrencySymbol.WFIL) {
-                balance = BigNumber.from('10000000000000000000000'); // 10,000 WFIL
+                balance = BigInt('10000000000000000000000'); // 10,000 WFIL
             } else if (token.symbol === CurrencySymbol.WBTC) {
-                balance = BigNumber.from('30000000000'); // 300 WBTC
+                balance = BigInt('30000000000'); // 300 WBTC
             } else if (token.symbol === CurrencySymbol.USDC) {
-                balance = BigNumber.from('4000000000'); // 4,000 USDC
+                balance = BigInt('4000000000'); // 4,000 USDC
             }
             return Promise.resolve(balance);
         }),
@@ -271,10 +270,10 @@ export const mockUseSF = () => {
 
         getProtocolDepositAmount: jest.fn(() =>
             Promise.resolve({
-                ETH: BigNumber.from('100000000000000000000'), // 100 ETH
-                WFIL: BigNumber.from('100000000000000000000000'), // 100 000 WFIL
-                USDC: BigNumber.from('1000000000000'), // 1 000 000 USDC
-                WBTC: BigNumber.from('1000000000000'), // 1000 BTC
+                ETH: BigInt('100000000000000000000'), // 100 ETH
+                WFIL: BigInt(100000000000000000000000), // 100 000 WFIL
+                USDC: BigInt(1000000000000), // 1 000 000 USDC
+                WBTC: BigInt(1000000000000), // 1000 BTC
             })
         ),
 
@@ -291,12 +290,12 @@ export const mockUseSF = () => {
 
         getCollateralParameters: jest.fn(() =>
             Promise.resolve({
-                liquidationThresholdRate: BigNumber.from('12500'),
+                liquidationThresholdRate: BigInt('12500'),
             })
         ),
 
         getWithdrawableCollateral: jest.fn(() =>
-            Promise.resolve(1000000000000)
+            Promise.resolve(BigInt(1000000000000))
         ),
 
         getUsedCurrenciesForOrders: jest.fn(() =>
@@ -316,50 +315,50 @@ export const mockUseSF = () => {
                         orderId: 1,
                         ccy: ethBytes32,
                         side: 0,
-                        maturity: BigNumber.from(dec22Fixture.toString()),
-                        unitPrice: BigNumber.from('9800'),
-                        amount: BigNumber.from('1000000000000000000'),
-                        timestamp: BigNumber.from('1609210000'),
+                        maturity: BigInt(dec22Fixture.toString()),
+                        unitPrice: BigInt('9800'),
+                        amount: BigInt('1000000000000000000'),
+                        timestamp: BigInt('1609210000'),
                         isPreOrder: false,
                     },
                     {
                         orderId: 2,
                         ccy: ethBytes32,
                         side: 0,
-                        maturity: BigNumber.from(mar23Fixture.toString()),
-                        unitPrice: BigNumber.from('9800'),
-                        amount: BigNumber.from('100000000000000000'),
-                        timestamp: BigNumber.from('1609220000'),
+                        maturity: BigInt(mar23Fixture.toString()),
+                        unitPrice: BigInt('9800'),
+                        amount: BigInt('100000000000000000'),
+                        timestamp: BigInt('1609220000'),
                         isPreOrder: false,
                     },
                     {
                         orderId: 3,
                         ccy: wfilBytes32,
                         side: 1,
-                        maturity: BigNumber.from(dec22Fixture.toString()),
-                        unitPrice: BigNumber.from('9800'),
-                        amount: BigNumber.from('100000000000000000000'),
-                        timestamp: BigNumber.from('1609205000'),
+                        maturity: BigInt(dec22Fixture.toString()),
+                        unitPrice: BigInt('9800'),
+                        amount: BigInt('100000000000000000000'),
+                        timestamp: BigInt('1609205000'),
                         isPreOrder: false,
                     },
                     {
                         orderId: 1,
                         ccy: wbtcBytes32,
                         side: 0,
-                        maturity: BigNumber.from(dec22Fixture.toString()),
-                        unitPrice: BigNumber.from('9800'),
-                        amount: BigNumber.from('500000000'),
-                        timestamp: BigNumber.from('1609212000'),
+                        maturity: BigInt(dec22Fixture.toString()),
+                        unitPrice: BigInt('9800'),
+                        amount: BigInt('500000000'),
+                        timestamp: BigInt('1609212000'),
                         isPreOrder: false,
                     },
                     {
                         orderId: 5,
                         ccy: wfilBytes32,
                         side: 1,
-                        maturity: BigNumber.from(dec24Fixture.toString()),
-                        unitPrice: BigNumber.from('7800'),
-                        amount: BigNumber.from('100000000000000000000'),
-                        timestamp: BigNumber.from('1409220000'),
+                        maturity: BigInt(dec24Fixture.toString()),
+                        unitPrice: BigInt('7800'),
+                        amount: BigInt('100000000000000000000'),
+                        timestamp: BigInt('1409220000'),
                         isPreOrder: true,
                     },
                     ...generateSimpleOrders(
@@ -380,20 +379,20 @@ export const mockUseSF = () => {
                         orderId: 1,
                         ccy: ethBytes32,
                         side: 0,
-                        maturity: BigNumber.from(dec22Fixture.toString()),
-                        unitPrice: BigNumber.from('9800'),
-                        amount: BigNumber.from('450000000000000000'),
-                        timestamp: BigNumber.from('1609295092'),
+                        maturity: BigInt(dec22Fixture.toString()),
+                        unitPrice: BigInt('9800'),
+                        amount: BigInt('450000000000000000'),
+                        timestamp: BigInt('1609295092'),
                         isPreOrder: false,
                     },
                     {
                         orderId: 1,
                         ccy: wfilBytes32,
                         side: 1,
-                        maturity: BigNumber.from(dec22Fixture.toString()),
-                        unitPrice: BigNumber.from('9800'),
-                        amount: BigNumber.from('1000000000000000000000'),
-                        timestamp: BigNumber.from('1609295092'),
+                        maturity: BigInt(dec22Fixture.toString()),
+                        unitPrice: BigInt('9800'),
+                        amount: BigInt('1000000000000000000000'),
+                        timestamp: BigInt('1609295092'),
                         isPreOrder: false,
                     },
                 ].filter(order => filterFn(order)),
@@ -405,35 +404,33 @@ export const mockUseSF = () => {
                 {
                     ccy: ethBytes32,
                     maturity: dec22Fixture.toString(),
-                    presentValue: BigNumber.from('9954750000000000000'),
-                    futureValue: BigNumber.from('10210000000000000000'),
+                    presentValue: BigInt('9954750000000000000'),
+                    futureValue: BigInt('10210000000000000000'),
                 },
                 {
                     ccy: ethBytes32,
                     maturity: mar23Fixture.toString(),
-                    presentValue: BigNumber.from('-10558255657026800000'),
-                    futureValue: BigNumber.from('-11113953323186200000'),
+                    presentValue: BigInt('-10558255657026800000'),
+                    futureValue: BigInt('-11113953323186200000'),
                 },
                 {
                     ccy: wfilBytes32,
                     maturity: dec22Fixture.toString(),
-                    presentValue: BigNumber.from('9954750000000000000'),
-                    futureValue: BigNumber.from('10210000000000000000'),
+                    presentValue: BigInt('9954750000000000000'),
+                    futureValue: BigInt('10210000000000000000'),
                 },
                 {
                     ccy: wfilBytes32,
                     maturity: mar23Fixture.toString(),
-                    presentValue: BigNumber.from('-10558255657026800000'),
-                    futureValue: BigNumber.from('-11113953323186200000'),
+                    presentValue: BigInt('-10558255657026800000'),
+                    futureValue: BigInt('-11113953323186200000'),
                 },
             ])
         ),
 
-        getOrderFeeRate: jest.fn(() => Promise.resolve(BigNumber.from('100'))),
+        getOrderFeeRate: jest.fn(() => Promise.resolve(BigInt('100'))),
 
-        getOrderEstimation: jest.fn(() =>
-            Promise.resolve({ coverage: BigNumber.from('5500') })
-        ),
+        getOrderEstimation: jest.fn(() => Promise.resolve([BigInt('5500')])),
 
         currencyExists: jest.fn((currency: Currency) => {
             if (currency.symbol === CurrencySymbol.WFIL) {

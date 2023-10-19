@@ -1,10 +1,10 @@
-import { BigNumber } from 'ethers';
 import {
     ethBytes32,
     usdcBytes32,
     wbtcBytes32,
     wfilBytes32,
 } from 'src/stories/mocks/fixtures';
+import { ZERO_BI } from '.';
 import {
     CurrencySymbol,
     amountFormatterFromBase,
@@ -83,59 +83,51 @@ describe('currencyList toBaseUnit', () => {
 describe('currencyList fromBaseUnit', () => {
     it('should return the value in ETH for wei amount', () => {
         expect(
-            eth.fromBaseUnit(BigNumber.from('1000000000000000000')).toString()
+            eth.fromBaseUnit(BigInt('1000000000000000000')).toString()
         ).toEqual('1');
         expect(
-            eth.fromBaseUnit(BigNumber.from('1230000000000000000')).toString()
+            eth.fromBaseUnit(BigInt('1230000000000000000')).toString()
         ).toEqual('1.23');
         expect(
-            eth.fromBaseUnit(BigNumber.from('1234567890000000000')).toString()
+            eth.fromBaseUnit(BigInt('1234567890000000000')).toString()
         ).toEqual('1.23456789');
         expect(
-            eth
-                .fromBaseUnit(BigNumber.from('9999999000000000000000000'))
-                .toString()
+            eth.fromBaseUnit(BigInt('9999999000000000000000000')).toString()
         ).toEqual('9999999');
-        expect(
-            eth.fromBaseUnit(BigNumber.from('10000000000')).toString()
-        ).toEqual('1e-8');
-        expect(eth.fromBaseUnit(BigNumber.from('1000000')).toString()).toEqual(
-            '1e-12'
+        expect(eth.fromBaseUnit(BigInt('10000000000')).toString()).toEqual(
+            '1e-8'
         );
+        expect(eth.fromBaseUnit(BigInt('1000000')).toString()).toEqual('1e-12');
     });
 
     it('should return the value in FIL for attoFil amount', () => {
         expect(
-            wfil.fromBaseUnit(BigNumber.from('1000000000000000000')).toString()
+            wfil.fromBaseUnit(BigInt('1000000000000000000')).toString()
         ).toEqual('1');
         expect(
-            wfil.fromBaseUnit(BigNumber.from('1230000000000000000')).toString()
+            wfil.fromBaseUnit(BigInt('1230000000000000000')).toString()
         ).toEqual('1.23');
         expect(
-            wfil.fromBaseUnit(BigNumber.from('1234567890000000000')).toString()
+            wfil.fromBaseUnit(BigInt('1234567890000000000')).toString()
         ).toEqual('1.23456789');
-        expect(
-            wfil.fromBaseUnit(BigNumber.from('10000000000')).toString()
-        ).toEqual('1e-8');
-        expect(wfil.fromBaseUnit(BigNumber.from('1000000')).toString()).toEqual(
+        expect(wfil.fromBaseUnit(BigInt('10000000000')).toString()).toEqual(
+            '1e-8'
+        );
+        expect(wfil.fromBaseUnit(BigInt('1000000')).toString()).toEqual(
             '1e-12'
         );
     });
 
     it('should return the value in WBTC for satoshi amount', () => {
-        expect(
-            wbtc.fromBaseUnit(BigNumber.from('100000000')).toString()
-        ).toEqual('1');
-        expect(
-            wbtc.fromBaseUnit(BigNumber.from('123000000')).toString()
-        ).toEqual('1.23');
-        expect(
-            wbtc.fromBaseUnit(BigNumber.from('123456789')).toString()
-        ).toEqual('1.23456789');
-        expect(wbtc.fromBaseUnit(BigNumber.from('1')).toString()).toEqual(
-            '1e-8'
+        expect(wbtc.fromBaseUnit(BigInt('100000000')).toString()).toEqual('1');
+        expect(wbtc.fromBaseUnit(BigInt('123000000')).toString()).toEqual(
+            '1.23'
         );
-        expect(wbtc.fromBaseUnit(BigNumber.from('0')).toString()).toEqual('0');
+        expect(wbtc.fromBaseUnit(BigInt('123456789')).toString()).toEqual(
+            '1.23456789'
+        );
+        expect(wbtc.fromBaseUnit(BigInt('1')).toString()).toEqual('1e-8');
+        expect(wbtc.fromBaseUnit(ZERO_BI).toString()).toEqual('0');
     });
 });
 
@@ -194,53 +186,41 @@ describe('currencyList amountFormatterToBase', () => {
 describe('currencyList amountFormatterFromBase', () => {
     it('should return the value in ETH for wei amount', () => {
         const format = amountFormatterFromBase[CurrencySymbol.ETH];
-        expect(
-            format(BigNumber.from('1000000000000000000000000')).toString()
-        ).toEqual('1000000');
-        expect(
-            format(BigNumber.from('1000000000000000000')).toString()
-        ).toEqual('1');
-        expect(
-            format(BigNumber.from('1230000000000000000')).toString()
-        ).toEqual('1.23');
-        expect(
-            format(BigNumber.from('1234567890000000000')).toString()
-        ).toEqual('1.23456789');
-        expect(format(BigNumber.from('10000000000')).toString()).toEqual(
-            '1e-8'
+        expect(format(BigInt('1000000000000000000000000')).toString()).toEqual(
+            '1000000'
         );
-        expect(format(BigNumber.from('1000000')).toString()).toEqual('1e-12');
+        expect(format(BigInt('1000000000000000000')).toString()).toEqual('1');
+        expect(format(BigInt('1230000000000000000')).toString()).toEqual(
+            '1.23'
+        );
+        expect(format(BigInt('1234567890000000000')).toString()).toEqual(
+            '1.23456789'
+        );
+        expect(format(BigInt('10000000000')).toString()).toEqual('1e-8');
+        expect(format(BigInt('1000000')).toString()).toEqual('1e-12');
     });
 
     it('should return the value in FIL for attoFil amount', () => {
         const format = amountFormatterFromBase[CurrencySymbol.WFIL];
-        expect(
-            format(BigNumber.from('1000000000000000000')).toString()
-        ).toEqual('1');
-        expect(
-            format(BigNumber.from('1230000000000000000')).toString()
-        ).toEqual('1.23');
-        expect(
-            format(BigNumber.from('1234567890000000000')).toString()
-        ).toEqual('1.23456789');
-        expect(format(BigNumber.from('10000000000')).toString()).toEqual(
-            '1e-8'
+        expect(format(BigInt('1000000000000000000')).toString()).toEqual('1');
+        expect(format(BigInt('1230000000000000000')).toString()).toEqual(
+            '1.23'
         );
-        expect(format(BigNumber.from('1000000')).toString()).toEqual('1e-12');
+        expect(format(BigInt('1234567890000000000')).toString()).toEqual(
+            '1.23456789'
+        );
+        expect(format(BigInt('10000000000')).toString()).toEqual('1e-8');
+        expect(format(BigInt('1000000')).toString()).toEqual('1e-12');
     });
 
     it('should return the value in WBTC for satoshi amount', () => {
         const format = amountFormatterFromBase[CurrencySymbol.WBTC];
-        expect(format(BigNumber.from('100000000')).toString()).toEqual('1');
-        expect(format(BigNumber.from('123000000')).toString()).toEqual('1.23');
-        expect(format(BigNumber.from('123456789')).toString()).toEqual(
-            '1.23456789'
-        );
-        expect(format(BigNumber.from('100000000000')).toString()).toEqual(
-            '1000'
-        );
-        expect(format(BigNumber.from('1')).toString()).toEqual('1e-8');
-        expect(format(BigNumber.from('0')).toString()).toEqual('0');
+        expect(format(BigInt('100000000')).toString()).toEqual('1');
+        expect(format(BigInt('123000000')).toString()).toEqual('1.23');
+        expect(format(BigInt('123456789')).toString()).toEqual('1.23456789');
+        expect(format(BigInt('100000000000')).toString()).toEqual('1000');
+        expect(format(BigInt('1')).toString()).toEqual('1e-8');
+        expect(format(ZERO_BI).toString()).toEqual('0');
     });
 });
 

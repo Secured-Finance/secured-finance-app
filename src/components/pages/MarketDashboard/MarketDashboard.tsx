@@ -1,5 +1,4 @@
 import queries from '@secured-finance/sf-graph-client/dist/graphclients';
-import { BigNumber } from 'ethers';
 import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import {
@@ -35,6 +34,7 @@ import {
     PREVIOUS_TOTAL_USERS,
     Rate,
     WalletSource,
+    ZERO_BI,
     computeTotalDailyVolumeInUSD,
     currencyMap,
     getCurrencyMapAsList,
@@ -42,6 +42,7 @@ import {
     ordinaryFormat,
     usdFormat,
 } from 'src/utils';
+import { jsonStringify } from 'src/utils/json-patch';
 import { useAccount } from 'wagmi';
 
 const computeTotalUsers = (users: string) => {
@@ -101,27 +102,29 @@ export const MarketDashboard = () => {
             'compact'
         );
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [JSON.stringify(priceList), dailyVolumes.data]);
+    }, [jsonStringify(priceList), dailyVolumes.data]);
 
     const totalValueLockedInUSD = useMemo(() => {
-        let val = BigNumber.from(0);
+        let val = ZERO_BI;
         if (!valueLockedByCurrency) {
             return val;
         }
         for (const ccy of getCurrencyMapAsList()) {
             if (!valueLockedByCurrency[ccy.symbol]) continue;
-            val = val.add(
-                Math.floor(
-                    currencyMap[ccy.symbol].fromBaseUnit(
-                        valueLockedByCurrency[ccy.symbol]
-                    ) * priceList[ccy.symbol]
-                )
-            );
+            val =
+                val +
+                BigInt(
+                    Math.floor(
+                        currencyMap[ccy.symbol].fromBaseUnit(
+                            valueLockedByCurrency[ccy.symbol]
+                        ) * priceList[ccy.symbol]
+                    )
+                );
         }
 
         return val;
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [JSON.stringify(priceList), valueLockedByCurrency]);
+    }, [jsonStringify(priceList), valueLockedByCurrency]);
 
     return (
         <Page title='Market Dashboard' name='dashboard-page'>
@@ -175,7 +178,7 @@ export const MarketDashboard = () => {
                             <div className='px-3 py-6'>
                                 <CollateralManagementConciseTab
                                     collateralCoverage={
-                                        collateralBook.coverage.toNumber() / 100
+                                        Number(collateralBook.coverage) / 100
                                     }
                                     totalCollateralInUSD={
                                         collateralBook.usdCollateral

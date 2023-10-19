@@ -24,6 +24,18 @@ import { alchemyProvider } from 'wagmi/providers/alchemy';
 import { publicProvider } from 'wagmi/providers/public';
 import '../assets/css/index.css';
 
+// // eslint-disable-next-line @typescript-eslint/no-explicit-any
+// (BigInt.prototype as any).toJSON = function () {
+//     return this.toString();
+// };
+
+// Object.defineProperty(BigInt.prototype, 'toJSON', {
+//     get() {
+//         'use strict';
+//         return () => String(this);
+//     },
+// });
+
 const projectId = getWalletConnectId();
 
 const queryClient = new QueryClient();

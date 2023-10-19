@@ -1,6 +1,6 @@
 import { RESPONSIVE_PARAMETERS, VIEWPORTS } from '.storybook/constants';
+import { toBytes32 } from '@secured-finance/sf-graph-client';
 import type { Meta, StoryFn } from '@storybook/react';
-import { BigNumber, utils } from 'ethers';
 import { useState } from 'react';
 import { withAssetPrice } from 'src/../.storybook/decorators';
 import {
@@ -9,6 +9,7 @@ import {
     wfilBytes32,
 } from 'src/stories/mocks/fixtures';
 import { OrderHistoryList, OrderType } from 'src/types';
+import { ZERO_BI } from 'src/utils';
 import { OrderHistoryTable } from './OrderHistoryTable';
 
 export default {
@@ -37,14 +38,14 @@ const PaginatedTemplate: StoryFn<typeof OrderHistoryTable> = args => {
             orderId: index,
             currency: wfilBytes32,
             side: 1,
-            maturity: BigNumber.from(dec22Fixture.toString()),
-            inputUnitPrice: BigNumber.from('9800'),
-            filledAmount: BigNumber.from('0'),
-            inputAmount: BigNumber.from('1000000000000000000000'),
+            maturity: BigInt(dec22Fixture.toString()),
+            inputUnitPrice: BigInt('9800'),
+            filledAmount: ZERO_BI,
+            inputAmount: BigInt('1000000000000000000000'),
             status: 'Open' as const,
             type: OrderType.LIMIT,
-            createdAt: BigNumber.from('1'),
-            txHash: utils.formatBytes32String('hash'),
+            createdAt: BigInt('1'),
+            txHash: toBytes32('hash'),
             lendingMarket: {
                 id: '1',
                 isActive: true,
@@ -65,16 +66,14 @@ const PaginatedTemplate: StoryFn<typeof OrderHistoryTable> = args => {
                             orderId: index,
                             currency: wfilBytes32,
                             side: 1,
-                            maturity: BigNumber.from(dec22Fixture.toString()),
-                            inputUnitPrice: BigNumber.from('9800'),
-                            filledAmount: BigNumber.from('0'),
-                            inputAmount: BigNumber.from(
-                                '1000000000000000000000'
-                            ),
+                            maturity: BigInt(dec22Fixture.toString()),
+                            inputUnitPrice: BigInt('9800'),
+                            filledAmount: ZERO_BI,
+                            inputAmount: BigInt('1000000000000000000000'),
                             status: 'Open' as const,
                             type: OrderType.LIMIT,
-                            createdAt: BigNumber.from('1'),
-                            txHash: utils.formatBytes32String('hash'),
+                            createdAt: BigInt('1'),
+                            txHash: toBytes32('hash'),
                             lendingMarket: {
                                 id: '1',
                                 isActive: true,

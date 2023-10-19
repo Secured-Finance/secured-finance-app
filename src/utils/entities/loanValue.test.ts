@@ -1,4 +1,3 @@
-import { BigNumber } from 'ethers';
 import timemachine from 'timemachine';
 import { Maturity } from '.';
 import { Rate } from '../rate';
@@ -15,32 +14,32 @@ beforeEach(() => {
 
 describe('LoanValue class', () => {
     const maturityMar23 = new Maturity(1677715200);
-    const aprPriceMaturity: [BigNumber, number, Maturity][] = [
-        [BigNumber.from(155839), 9626, maturityMar23], // 96.26
-        [BigNumber.from(169301), 9595, maturityMar23],
-        [BigNumber.from(173663), 9585, maturityMar23],
-        [BigNumber.from(175847), 9580, maturityMar23],
-        [BigNumber.from(179784), 9571, maturityMar23],
-        [BigNumber.from(182412), 9565, maturityMar23],
-        [BigNumber.from(184606), 9560, maturityMar23],
-        [BigNumber.from(186801), 9555, maturityMar23],
+    const aprPriceMaturity: [bigint, number, Maturity][] = [
+        [BigInt(155839), 9626, maturityMar23], // 96.26
+        [BigInt(169301), 9595, maturityMar23],
+        [BigInt(173663), 9585, maturityMar23],
+        [BigInt(175847), 9580, maturityMar23],
+        [BigInt(179784), 9571, maturityMar23],
+        [BigInt(182412), 9565, maturityMar23],
+        [BigInt(184606), 9560, maturityMar23],
+        [BigInt(186801), 9555, maturityMar23],
     ];
 
     it('should build from the price and maturity', () => {
         aprPriceMaturity.forEach(([apr, price, maturity]) => {
             const value = LoanValue.fromPrice(price, maturity.toNumber());
 
-            expect(value.apr.toNumber()).toEqual(apr.toNumber());
+            expect(value.apr.toNumber()).toEqual(Number(apr));
         });
     });
 
     it('should build from the apr and the maturity', () => {
         aprPriceMaturity.forEach(([apr, price, maturity]) => {
             const value = LoanValue.fromApr(
-                new Rate(apr.toNumber()),
+                new Rate(Number(apr)),
                 maturity.toNumber()
             );
-            expect(value.apr.toNumber()).toEqual(apr.toNumber());
+            expect(value.apr.toNumber()).toEqual(Number(apr));
             expect(value.price).toEqual(price);
             expect(value.maturity).toEqual(maturity.toNumber());
         });

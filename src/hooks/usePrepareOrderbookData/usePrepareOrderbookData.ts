@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import { OrderBookEntry, sortOrders, useOrderbook } from 'src/hooks';
+import { ZERO_BI } from 'src/utils';
 import { LoanValue } from 'src/utils/entities';
 
 export type AggregationFactorType = 1 | 10 | 100 | 1000;
@@ -15,13 +16,13 @@ export const usePrepareOrderbookData = <
     return useMemo(() => {
         if (!data) return [];
 
-        const zeroValues = data[orderbookType].filter(order =>
-            order.amount.isZero()
+        const zeroValues = data[orderbookType].filter(
+            order => order.amount === ZERO_BI
         );
 
         const result: Record<number, OrderBookEntry> = {};
         data[orderbookType]
-            .filter(order => order.amount.gt(0))
+            .filter(order => order.amount > 0)
             .forEach(order => {
                 const price =
                     Math.trunc(Number(order.value.price) / aggregationFactor) *
@@ -36,9 +37,7 @@ export const usePrepareOrderbookData = <
                         ),
                     };
                 } else {
-                    result[price].amount = result[price].amount.add(
-                        order.amount
-                    );
+                    result[price].amount = result[price].amount + order.amount;
                 }
             });
 

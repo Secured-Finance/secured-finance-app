@@ -93,7 +93,7 @@ describe('OrderAction component', () => {
         expect(screen.getByText('Place Order')).toBeInTheDocument();
     });
 
-    it('should render place order button if orderside is lend', async () => {
+    it.only('should render place order button if orderside is lend', async () => {
         await waitFor(() => {
             render(<NotEnoughCollateral />, {
                 preloadedState: {

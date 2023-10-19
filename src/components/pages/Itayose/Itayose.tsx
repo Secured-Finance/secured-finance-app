@@ -1,5 +1,4 @@
 import { OrderSide } from '@secured-finance/sf-client';
-import { BigNumber } from 'ethers';
 import { useCallback, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -41,6 +40,7 @@ import {
 import { RootState } from 'src/store/types';
 import {
     CurrencySymbol,
+    ZERO_BI,
     amountFormatterFromBase,
     amountFormatterToBase,
     countdown,
@@ -164,11 +164,11 @@ export const Itayose = () => {
 
     const handleAssetChange = useCallback(
         (v: CurrencySymbol) => {
-            let formatFrom = (x: BigNumber) => x.toNumber();
+            let formatFrom = (x: bigint) => Number(x);
             if (amountFormatterFromBase && amountFormatterFromBase[currency]) {
                 formatFrom = amountFormatterFromBase[currency];
             }
-            let formatTo = (x: number) => BigNumber.from(x);
+            let formatTo = (x: number) => BigInt(x);
             if (amountFormatterToBase && amountFormatterToBase[v]) {
                 formatTo = amountFormatterToBase[v];
             }
@@ -181,11 +181,11 @@ export const Itayose = () => {
     const estimatedOpening = useMemo(() => {
         const borrowOrders =
             orderBook.data?.borrowOrderbook?.filter(
-                order => !order.amount.isZero()
+                order => order.amount !== ZERO_BI
             ) ?? [];
         const lendOrders =
             orderBook.data?.lendOrderbook?.filter(
-                order => !order.amount.isZero()
+                order => order.amount !== ZERO_BI
             ) ?? [];
 
         if (!borrowOrders.length || !lendOrders.length) {
@@ -251,8 +251,7 @@ export const Itayose = () => {
                     }
                     preOrderPosition={
                         filteredOrderList.length > 0
-                            ? filteredOrderList[0].side.toString() ===
-                              OrderSide.BORROW
+                            ? filteredOrderList[0].side === OrderSide.BORROW
                                 ? 'borrow'
                                 : 'lend'
                             : 'none'

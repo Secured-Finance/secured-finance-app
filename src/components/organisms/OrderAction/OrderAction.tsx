@@ -7,19 +7,18 @@ import {
     PlaceOrder,
     generateCollateralList,
 } from 'src/components/organisms';
-import {
-    CollateralBook,
-    MarketPhase,
-    useMarketPhase,
-    useOrders,
-} from 'src/hooks';
+import { CollateralBook, MarketPhase, useMarketPhase } from 'src/hooks';
 import { useCollateralBalances } from 'src/hooks/useBalances';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { setWalletDialogOpen } from 'src/store/interactions';
 import { selectLandingOrderForm } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
 import { amountFormatterFromBase } from 'src/utils';
-import { MAX_COVERAGE, computeAvailableToBorrow } from 'src/utils/collateral';
+import {
+    MAX_COVERAGE,
+    ZERO_BI,
+    computeAvailableToBorrow,
+} from 'src/utils/collateral';
 import { Amount, LoanValue, Maturity } from 'src/utils/entities';
 import { useAccount } from 'wagmi';
 
@@ -40,7 +39,7 @@ export const OrderAction = ({
 }: OrderActionProps) => {
     const { isConnected } = useAccount();
     const dispatch = useDispatch();
-    const { placeOrder, placePreOrder } = useOrders();
+    // const { placeOrder, placePreOrder } = useOrders();
 
     const [openDepositCollateralDialog, setOpenDepositCollateralDialog] =
         useState(false);
@@ -68,7 +67,7 @@ export const OrderAction = ({
             ? computeAvailableToBorrow(
                   price,
                   collateralBook.usdCollateral,
-                  collateralBook.coverage.toNumber() / MAX_COVERAGE,
+                  Number(collateralBook.coverage) / MAX_COVERAGE,
                   collateralBook.collateralThreshold
               )
             : 0;
@@ -100,7 +99,7 @@ export const OrderAction = ({
     const isPlaceOrderDisabled =
         validation ||
         !amount ||
-        amount.isZero() ||
+        amount === ZERO_BI ||
         (marketPhase !== MarketPhase.PRE_ORDER &&
             marketPhase !== MarketPhase.OPEN);
 
@@ -138,11 +137,11 @@ export const OrderAction = ({
             )}
 
             <PlaceOrder
-                onPlaceOrder={
-                    marketPhase === MarketPhase.OPEN
-                        ? placeOrder
-                        : placePreOrder
-                }
+                // onPlaceOrder={
+                //     marketPhase === MarketPhase.OPEN
+                //         ? placeOrder
+                //         : placePreOrder
+                // }
                 isOpen={openPlaceOrderDialog}
                 onClose={() => setOpenPlaceOrderDialog(false)}
                 loanValue={loanValue}

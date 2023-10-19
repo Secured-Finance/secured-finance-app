@@ -1,6 +1,5 @@
 import { RESPONSIVE_PARAMETERS, VIEWPORTS } from '.storybook/constants';
 import type { Meta, StoryFn } from '@storybook/react';
-import { BigNumber } from 'ethers';
 import {
     withAssetPrice,
     withWalletProvider,
@@ -31,50 +30,50 @@ const Template: StoryFn<typeof ActiveTradeTable> = args => {
     args.data = [
         ...args.data,
         {
-            amount: BigNumber.from('500000000000000000000'),
+            amount: BigInt('500000000000000000000'),
             currency: wfilBytes32,
-            forwardValue: BigNumber.from('500000000000000000000'),
+            forwardValue: BigInt('500000000000000000000'),
             maturity: new Maturity(
                 getTimestampRelativeToNow(22, true)
             ).toString(),
-            marketPrice: BigNumber.from(10000),
+            marketPrice: BigInt(10000),
         },
         {
-            amount: BigNumber.from('500000000000000000000'),
+            amount: BigInt('500000000000000000000'),
             currency: wfilBytes32,
-            forwardValue: BigNumber.from('500000000000000000000'),
+            forwardValue: BigInt('500000000000000000000'),
             maturity: new Maturity(
                 getTimestampRelativeToNow(28, true)
             ).toString(),
-            marketPrice: BigNumber.from(10000),
+            marketPrice: BigInt(10000),
         },
         {
-            amount: BigNumber.from('-500000000000000000000'),
+            amount: BigInt('-500000000000000000000'),
             currency: wfilBytes32,
-            forwardValue: BigNumber.from('-500000000000000000000'),
+            forwardValue: BigInt('-500000000000000000000'),
             maturity: new Maturity(getTimestampRelativeToNow(120)).toString(),
-            marketPrice: BigNumber.from(10000),
+            marketPrice: BigInt(10000),
         },
         {
-            amount: BigNumber.from('-500000000000000000000'),
+            amount: BigInt('-500000000000000000000'),
             currency: wfilBytes32,
-            forwardValue: BigNumber.from('-500000000000000000000'),
+            forwardValue: BigInt('-500000000000000000000'),
             maturity: new Maturity(getTimestampRelativeToNow(200)).toString(),
-            marketPrice: BigNumber.from(10000),
+            marketPrice: BigInt(10000),
         },
         {
-            amount: BigNumber.from('500000000000000000000'),
+            amount: BigInt('500000000000000000000'),
             currency: wfilBytes32,
-            forwardValue: BigNumber.from('500000000000000000000'),
+            forwardValue: BigInt('500000000000000000000'),
             maturity: new Maturity(getTimestampRelativeToNow(168)).toString(),
-            marketPrice: BigNumber.from(10000),
+            marketPrice: BigInt(10000),
         },
         {
-            amount: BigNumber.from('500000000000000000000'),
+            amount: BigInt('500000000000000000000'),
             currency: wfilBytes32,
-            forwardValue: BigNumber.from('500000000000000000000'),
+            forwardValue: BigInt('500000000000000000000'),
             maturity: new Maturity(getTimestampRelativeToNow(200)).toString(),
-            marketPrice: BigNumber.from(10000),
+            marketPrice: BigInt(10000),
         },
     ];
 

@@ -1,13 +1,13 @@
 import type { Meta, StoryFn } from '@storybook/react';
-import { BigNumber } from 'ethers';
+
 import { ColorBar } from './ColorBar';
 
 export default {
     title: 'Atoms/ColorBar',
     component: ColorBar,
     args: {
-        value: BigNumber.from(100000),
-        total: BigNumber.from(1000000),
+        value: BigInt(100000),
+        total: BigInt(1000000),
         color: 'negative',
         align: 'left',
     },

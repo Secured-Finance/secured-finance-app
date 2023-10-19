@@ -1,7 +1,6 @@
 import { track } from '@amplitude/analytics-browser';
 import { OrderSide, WalletSource } from '@secured-finance/sf-client';
 import { getUTCMonthYear } from '@secured-finance/sf-core';
-import { BigNumber } from 'ethers';
 import { useCallback, useReducer, useState } from 'react';
 import { Spinner } from 'src/components/atoms';
 import {
@@ -97,6 +96,7 @@ export const PlaceOrder = ({
     onClose,
     collateral,
     loanValue,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     onPlaceOrder,
     orderAmount,
     side,
@@ -108,7 +108,7 @@ export const PlaceOrder = ({
 }: {
     collateral: CollateralBook;
     loanValue: LoanValue;
-    onPlaceOrder: PlaceOrderFunction;
+    onPlaceOrder?: PlaceOrderFunction;
     orderAmount: Amount;
     maturity: Maturity;
     side: OrderSide;
@@ -136,24 +136,27 @@ export const PlaceOrder = ({
             ccy: CurrencySymbol,
             maturity: Maturity,
             side: OrderSide,
-            amount: BigNumber,
+            amount: bigint,
             unitPrice: number,
-            walletSource: WalletSource
+            _walletSource: WalletSource
         ) => {
             try {
-                const tx = await onPlaceOrder(
-                    ccy,
-                    maturity,
-                    side,
-                    amount,
-                    unitPrice,
-                    walletSource
+                // const tx = await onPlaceOrder(
+                //     ccy,
+                //     maturity,
+                //     side,
+                //     amount,
+                //     unitPrice,
+                //     walletSource
+                // );
+                const tx = '';
+                const transactionStatus = await handleContractTransaction(
+                    '0x123'
                 );
-                const transactionStatus = await handleContractTransaction(tx);
                 if (!transactionStatus) {
                     dispatch({ type: 'error' });
                 } else {
-                    setTxHash(tx?.hash);
+                    setTxHash(tx);
                     track(OrderEvents.ORDER_PLACED, {
                         [OrderProperties.ORDER_SIDE]:
                             side === OrderSide.BORROW ? 'Borrow' : 'Lend',
@@ -174,7 +177,7 @@ export const PlaceOrder = ({
                 }
             }
         },
-        [onPlaceOrder, handleContractTransaction, orderType, orderAmount.value]
+        [handleContractTransaction, orderType, orderAmount.value]
     );
 
     const onClick = useCallback(
@@ -187,7 +190,7 @@ export const PlaceOrder = ({
                             orderAmount.currency,
                             maturity,
                             side,
-                            orderAmount.toBigNumber(),
+                            orderAmount.toBigInt(),
                             0,
                             walletSource
                         );
@@ -196,7 +199,7 @@ export const PlaceOrder = ({
                             orderAmount.currency,
                             maturity,
                             side,
-                            orderAmount.toBigNumber(),
+                            orderAmount.toBigInt(),
                             loanValue.price,
                             walletSource
                         );

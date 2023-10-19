@@ -2,6 +2,8 @@ import { OrderSide } from '@secured-finance/sf-client';
 import { getUTCMonthYear } from '@secured-finance/sf-core';
 import classNames from 'classnames';
 import { useMemo } from 'react';
+import ErrorCircleIcon from 'src/assets/icons/error-circle.svg';
+import WarningCircleIcon from 'src/assets/icons/warning-circle.svg';
 import { CurrencyIcon } from 'src/components/atoms';
 import { Tooltip } from 'src/components/templates';
 import {
@@ -11,8 +13,6 @@ import {
     isPastDate,
 } from 'src/utils';
 import { Maturity } from 'src/utils/entities';
-import ErrorCircleIcon from 'src/assets/icons/error-circle.svg';
-import WarningCircleIcon from 'src/assets/icons/warning-circle.svg';
 
 export const TableContractCell = ({
     maturity,
@@ -77,7 +77,7 @@ export const TableContractCell = ({
                 <span className='typography-caption-2 text-neutral-6'>
                     {contract}
                 </span>
-                {delistedContractSide && (
+                {delistedContractSide !== undefined && (
                     <Tooltip
                         align='right'
                         iconElement={

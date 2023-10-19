@@ -1,4 +1,3 @@
-import { BigNumber } from 'ethers';
 import { ethBytes32, wfilBytes32 } from 'src/stories/mocks/fixtures';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { renderHook } from 'src/test-utils';
@@ -40,17 +39,9 @@ describe('usePositions', () => {
 
         const newValue = result.current;
         expect(newValue.data).toHaveLength(4);
-        expect(newValue.data[0].marketPrice).toStrictEqual(
-            BigNumber.from(9750)
-        );
-        expect(newValue.data[1].marketPrice).toStrictEqual(
-            BigNumber.from(9500)
-        );
-        expect(newValue.data[2].marketPrice).toStrictEqual(
-            BigNumber.from(9750)
-        );
-        expect(newValue.data[3].marketPrice).toStrictEqual(
-            BigNumber.from(9500)
-        );
+        expect(newValue.data[0].marketPrice).toStrictEqual(BigInt(9750));
+        expect(newValue.data[1].marketPrice).toStrictEqual(BigInt(9500));
+        expect(newValue.data[2].marketPrice).toStrictEqual(BigInt(9750));
+        expect(newValue.data[3].marketPrice).toStrictEqual(BigInt(9500));
     });
 });

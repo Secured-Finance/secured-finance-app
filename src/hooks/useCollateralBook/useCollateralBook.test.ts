@@ -1,8 +1,7 @@
-import { BigNumber } from 'ethers';
 import { preloadedAssetPrices } from 'src/stories/mocks/fixtures';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { renderHook } from 'src/test-utils';
-import { CurrencySymbol, amountFormatterFromBase } from 'src/utils';
+import { CurrencySymbol, ZERO_BI, amountFormatterFromBase } from 'src/utils';
 import { CollateralBook, useCollateralBook } from './';
 
 const mock = mockUseSF();
@@ -33,20 +32,18 @@ describe('useCollateralBook hook', () => {
 
         const newValue = result.current;
         const colBook = newValue.data as CollateralBook;
-        expect(colBook.collateral.ETH).toEqual(
-            BigNumber.from('1000000000000000000')
-        );
-        expect(colBook.collateral.USDC).toEqual(BigNumber.from('100000000'));
-        expect(colBook.collateral.WBTC).toEqual(BigNumber.from('20000000'));
+        expect(colBook.collateral.ETH).toEqual(BigInt('1000000000000000000'));
+        expect(colBook.collateral.USDC).toEqual(BigInt('100000000'));
+        expect(colBook.collateral.WBTC).toEqual(BigInt('20000000'));
         expect(colBook.nonCollateral.WFIL).toEqual(
-            BigNumber.from('100000000000000000000')
+            BigInt('100000000000000000000')
         );
         expect(colBook.coverage.toString()).toEqual('3700');
         expect(colBook.collateralThreshold).toEqual(80);
         expect(colBook.withdrawableCollateral).toEqual({
-            [CurrencySymbol.USDC]: 1000000000000,
-            [CurrencySymbol.ETH]: 1000000000000,
-            [CurrencySymbol.WBTC]: 1000000000000,
+            [CurrencySymbol.USDC]: BigInt('1000000000000'),
+            [CurrencySymbol.ETH]: BigInt('1000000000000'),
+            [CurrencySymbol.WBTC]: BigInt('1000000000000'),
         });
         expect(newValue.isLoading).toEqual(false);
     });
@@ -66,15 +63,15 @@ describe('useCollateralBook hook', () => {
         const colBook = result.current.data as CollateralBook;
         expect(colBook.usdCollateral).toEqual(
             amountFormatterFromBase[CurrencySymbol.ETH](
-                colBook.collateral.ETH ?? BigNumber.from(0)
+                colBook.collateral.ETH ?? ZERO_BI
             ) *
                 ETH_PRICE +
                 amountFormatterFromBase[CurrencySymbol.USDC](
-                    colBook.collateral.USDC ?? BigNumber.from(0)
+                    colBook.collateral.USDC ?? ZERO_BI
                 ) *
                     USDC_PRICE +
                 amountFormatterFromBase[CurrencySymbol.WBTC](
-                    colBook.collateral.WBTC ?? BigNumber.from(0)
+                    colBook.collateral.WBTC ?? ZERO_BI
                 ) *
                     WBTC_PRICE
         );
@@ -89,11 +86,11 @@ describe('useCollateralBook hook', () => {
         const colBook = result.current.data as CollateralBook;
         expect(colBook.usdNonCollateral).toEqual(
             amountFormatterFromBase[CurrencySymbol.WBTC](
-                colBook.nonCollateral.WBTC ?? BigNumber.from(0)
+                colBook.nonCollateral.WBTC ?? ZERO_BI
             ) *
                 WBTC_PRICE +
                 amountFormatterFromBase[CurrencySymbol.WFIL](
-                    colBook.nonCollateral.WFIL ?? BigNumber.from(0)
+                    colBook.nonCollateral.WFIL ?? ZERO_BI
                 ) *
                     FIL_PRICE
         );

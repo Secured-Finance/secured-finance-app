@@ -1,7 +1,8 @@
-import { utils } from 'ethers';
+import { toBytes32 } from '@secured-finance/sf-graph-client';
 import { useMemo } from 'react';
 import { LendingMarket, baseContracts, useLendingMarkets } from 'src/hooks';
 import { CurrencySymbol, getCurrencyMapAsList } from 'src/utils';
+import { jsonStringify } from 'src/utils/json-patch';
 
 export const useMarketLists = () => {
     const { data: lendingContracts = baseContracts } = useLendingMarkets();
@@ -21,7 +22,7 @@ export const useMarketLists = () => {
                 const market = {
                     ...contract,
                     ccy: ccy.symbol,
-                    currency: utils.formatBytes32String(ccy.symbol),
+                    currency: toBytes32(ccy.symbol),
                 };
 
                 if (isItayoseOrPreOrder) {
@@ -34,7 +35,7 @@ export const useMarketLists = () => {
 
         return { openMarkets, itayoseMarkets };
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [JSON.stringify(lendingContracts)]);
+    }, [jsonStringify(lendingContracts)]);
 
     return marketLists;
 };

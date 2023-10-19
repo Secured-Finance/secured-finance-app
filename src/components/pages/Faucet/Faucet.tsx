@@ -122,7 +122,7 @@ export const Faucet = () => {
             if (!transactionStatus) {
                 console.error('Some error occurred');
             } else {
-                setTxHash(tx?.to);
+                setTxHash(tx);
                 track('Mint Tokens', {
                     'Asset Type': token.symbol,
                 });

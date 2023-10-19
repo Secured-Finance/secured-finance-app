@@ -1,7 +1,7 @@
 import { RESPONSIVE_PARAMETERS, VIEWPORTS } from '.storybook/constants';
 import queries from '@secured-finance/sf-graph-client/dist/graphclients';
 import type { Meta, StoryFn } from '@storybook/react';
-import { BigNumber } from 'ethers';
+
 import {
     withAppLayout,
     withAssetPrice,
@@ -23,7 +23,7 @@ const totalUser = [
         result: {
             data: {
                 protocol: {
-                    totalUsers: BigNumber.from(900000),
+                    totalUsers: 900000,
                 },
             },
         },
@@ -31,7 +31,7 @@ const totalUser = [
             return {
                 data: {
                     protocol: {
-                        totalUsers: BigNumber.from(12145),
+                        totalUsers: 12145,
                     },
                 },
             };

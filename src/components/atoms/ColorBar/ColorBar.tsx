@@ -1,8 +1,7 @@
 import classNames from 'classnames';
-import { BigNumber } from 'ethers';
 import { ColorFormat } from 'src/types';
 import { divide, multiply } from 'src/utils';
-import { calculatePercentage } from 'src/utils/collateral';
+import { ZERO_BI, calculatePercentage } from 'src/utils/collateral';
 
 const COLORBAR_MIN_WIDTH = 5;
 const COLORBAR_MAX_WIDTH = 308;
@@ -12,14 +11,14 @@ export const ColorBar = ({
     color,
     align,
 }: {
-    value: BigNumber;
-    total: BigNumber;
+    value: bigint;
+    total: bigint;
     align: 'left' | 'right';
 } & Required<ColorFormat>) => {
     const width = Math.min(
         Math.max(
             multiply(
-                divide(calculatePercentage(value, total).toNumber(), 100),
+                divide(calculatePercentage(value, total), 100),
                 COLORBAR_MAX_WIDTH
             ),
             COLORBAR_MIN_WIDTH
@@ -35,7 +34,7 @@ export const ColorBar = ({
                 '-right-0.5': align === 'right',
             })}
             data-testid='color-bar'
-            style={{ width: value.isZero() ? '2px' : `${width}%` }}
+            style={{ width: value === ZERO_BI ? '2px' : `${width}%` }}
         ></div>
     );
 };

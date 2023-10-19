@@ -31,10 +31,9 @@ describe('useOrderList', () => {
         expect(newValue.data.activeOrderList.length).toBe(45);
         for (let i = 0; i < newValue.data.activeOrderList.length - 1; i++) {
             expect(
-                newValue.data.activeOrderList[i].createdAt.toNumber()
-            ).toBeGreaterThanOrEqual(
-                newValue.data.activeOrderList[i + 1].createdAt.toNumber()
-            );
+                newValue.data.activeOrderList[i].createdAt >=
+                    newValue.data.activeOrderList[i + 1].createdAt
+            ).toBeTruthy();
         }
 
         expect(newValue.data.inactiveOrderList.length).toBe(2);

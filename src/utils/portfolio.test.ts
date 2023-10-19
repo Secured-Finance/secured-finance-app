@@ -1,4 +1,4 @@
-import { BigNumber, utils } from 'ethers';
+import { toBytes32 } from '@secured-finance/sf-graph-client';
 import { AssetPriceMap } from 'src/store/assetPrices/selectors';
 import {
     dec22Fixture,
@@ -9,6 +9,7 @@ import {
 } from 'src/stories/mocks/fixtures';
 import { OrderType, TradeHistory } from 'src/types';
 import timemachine from 'timemachine';
+import { ZERO_BI } from './collateral';
 import { CurrencySymbol } from './currencyList';
 import {
     calculateAveragePrice,
@@ -36,13 +37,13 @@ describe('computeWeightedAverage', () => {
         const trades = [
             {
                 amount: 1000,
-                averagePrice: BigNumber.from(9698),
-                maturity: BigNumber.from(1675252800),
+                averagePrice: 9698,
+                maturity: 1675252800,
             },
             {
                 amount: 9000,
-                averagePrice: BigNumber.from(9674),
-                maturity: BigNumber.from(1675252800),
+                averagePrice: 9674,
+                maturity: 1675252800,
             },
         ];
         expect(
@@ -67,18 +68,18 @@ describe('computeNetValue', () => {
     it('should return the net value', () => {
         const positions = [
             {
-                amount: BigNumber.from('400000000000000000000'),
+                amount: BigInt('400000000000000000000'),
                 currency: wfilBytes32,
-                forwardValue: BigNumber.from('500000000000000000000'),
+                forwardValue: BigInt('500000000000000000000'),
                 maturity: dec22Fixture.toString(),
-                marketPrice: BigNumber.from(8000),
+                marketPrice: BigInt(8000),
             },
             {
-                amount: BigNumber.from('-500000000000000000000'),
+                amount: BigInt('-500000000000000000000'),
                 currency: wfilBytes32,
-                forwardValue: BigNumber.from('-1000000000000000000000'),
+                forwardValue: BigInt('-1000000000000000000000'),
                 maturity: dec22Fixture.toString(),
-                marketPrice: BigNumber.from(5000),
+                marketPrice: BigInt(5000),
             },
         ];
         expect(computeNetValue(positions, priceMap)).toEqual(-600);
@@ -91,48 +92,44 @@ describe('computeNetValue', () => {
     it('should return the net value of borrow and lend positions', () => {
         const positions = [
             {
-                amount: BigNumber.from('400000000000000000000'),
+                amount: BigInt('400000000000000000000'),
                 currency: wfilBytes32,
-                forwardValue: BigNumber.from('500000000000000000000'),
+                forwardValue: BigInt('500000000000000000000'),
                 maturity: dec22Fixture.toString(),
-                marketPrice: BigNumber.from(8000),
+                marketPrice: BigInt(8000),
             },
             {
-                amount: BigNumber.from('-500000000000000000000'),
+                amount: BigInt('-500000000000000000000'),
                 currency: wfilBytes32,
-                forwardValue: BigNumber.from('-1000000000000000000000'),
+                forwardValue: BigInt('-1000000000000000000000'),
                 maturity: dec22Fixture.toString(),
-                marketPrice: BigNumber.from(5000),
+                marketPrice: BigInt(5000),
             },
             {
-                amount: BigNumber.from('-500000000'),
-                forwardValue: BigNumber.from('-1000000000'),
+                amount: BigInt('-500000000'),
+                forwardValue: BigInt('-1000000000'),
                 currency: wbtcBytes32,
                 maturity: dec22Fixture.toString(),
-                marketPrice: BigNumber.from(50),
+                marketPrice: BigInt(50),
             },
             {
-                amount: BigNumber.from('505000000'),
-                forwardValue: BigNumber.from('505000000'),
+                amount: BigInt('505000000'),
+                forwardValue: BigInt('505000000'),
                 currency: wbtcBytes32,
                 maturity: dec22Fixture.toString(),
-                marketPrice: BigNumber.from(100),
+                marketPrice: BigInt(100),
             },
         ];
         expect(
             computeNetValue(
-                positions.filter(position =>
-                    position.forwardValue.isNegative()
-                ),
+                positions.filter(position => position.forwardValue < 0),
                 priceMap
             )
         ).toEqual(-153000);
 
         expect(
             computeNetValue(
-                positions.filter(
-                    position => !position.forwardValue.isNegative()
-                ),
+                positions.filter(position => position.forwardValue > 0),
                 priceMap
             )
         ).toEqual(153900);
@@ -141,58 +138,58 @@ describe('computeNetValue', () => {
 
 describe('formatOrders', () => {
     it('should return forward value', () => {
-        expect(
-            calculateForwardValue(BigNumber.from(900), BigNumber.from(9000))
-        ).toEqual(BigNumber.from(1000));
+        expect(calculateForwardValue(BigInt(900), BigInt(9000))).toEqual(
+            BigInt(1000)
+        );
     });
 
     it('should return average price', () => {
-        expect(calculateAveragePrice(BigNumber.from(9000))).toEqual(0.9);
+        expect(calculateAveragePrice(BigInt(9000))).toEqual(0.9);
     });
 
     it('should format orders to trades', () => {
         const orders = [
             {
-                orderId: BigNumber.from(1),
+                orderId: BigInt(1),
                 currency: ethBytes32,
                 side: 0,
                 maturity: dec22Fixture.toString(),
-                unitPrice: BigNumber.from('9000'),
-                amount: BigNumber.from('900'),
-                createdAt: BigNumber.from('1609295092'),
+                unitPrice: BigInt('9000'),
+                amount: BigInt('900'),
+                createdAt: BigInt('1609295092'),
             },
             {
-                orderId: BigNumber.from(2),
+                orderId: BigInt(2),
                 currency: wfilBytes32,
                 side: 1,
                 maturity: dec22Fixture.toString(),
-                unitPrice: BigNumber.from('8000'),
-                amount: BigNumber.from('10000'),
-                createdAt: BigNumber.from('1609295092'),
+                unitPrice: BigInt('8000'),
+                amount: BigInt('10000'),
+                createdAt: BigInt('1609295092'),
             },
         ];
         const trades = [
             {
-                amount: BigNumber.from('900'),
+                amount: BigInt('900'),
                 side: 0,
-                orderPrice: BigNumber.from('9000'),
-                createdAt: BigNumber.from('1609295092'),
+                orderPrice: BigInt('9000'),
+                createdAt: BigInt('1609295092'),
                 currency: ethBytes32,
                 maturity: dec22Fixture.toString(),
-                forwardValue: BigNumber.from(1000),
+                forwardValue: BigInt(1000),
                 averagePrice: 0.9,
-                feeInFV: BigNumber.from(0),
+                feeInFV: ZERO_BI,
             },
             {
-                amount: BigNumber.from('10000'),
+                amount: BigInt('10000'),
                 side: 1,
-                orderPrice: BigNumber.from('8000'),
-                createdAt: BigNumber.from('1609295092'),
+                orderPrice: BigInt('8000'),
+                createdAt: BigInt('1609295092'),
                 currency: wfilBytes32,
                 maturity: dec22Fixture.toString(),
-                forwardValue: BigNumber.from(12500),
+                forwardValue: BigInt(12500),
                 averagePrice: 0.8,
-                feeInFV: BigNumber.from(0),
+                feeInFV: ZERO_BI,
             },
         ];
 
@@ -203,49 +200,49 @@ describe('formatOrders', () => {
 describe('checkOrderIsFilled', () => {
     const orders = [
         {
-            orderId: BigNumber.from(1),
+            orderId: BigInt(1),
             currency: wfilBytes32,
             side: 1,
             maturity: dec22Fixture.toString(),
-            unitPrice: BigNumber.from('9800'),
-            amount: BigNumber.from('1000000000000000000000'),
-            createdAt: BigNumber.from('1609299000'),
+            unitPrice: BigInt('9800'),
+            amount: BigInt('1000000000000000000000'),
+            createdAt: BigInt('1609299000'),
         },
         {
-            orderId: BigNumber.from(2),
+            orderId: BigInt(2),
             currency: wfilBytes32,
             side: 1,
             maturity: dec22Fixture.toString(),
-            unitPrice: BigNumber.from('9600'),
-            amount: BigNumber.from('5000000000000000000000'),
-            createdAt: BigNumber.from('1609298000'),
+            unitPrice: BigInt('9600'),
+            amount: BigInt('5000000000000000000000'),
+            createdAt: BigInt('1609298000'),
         },
         {
-            orderId: BigNumber.from(3),
+            orderId: BigInt(3),
             currency: wfilBytes32,
             side: 0,
             maturity: dec22Fixture.toString(),
-            unitPrice: BigNumber.from('9800'),
-            amount: BigNumber.from('1000000000'),
-            createdAt: BigNumber.from('1609297000'),
+            unitPrice: BigInt('9800'),
+            amount: BigInt('1000000000'),
+            createdAt: BigInt('1609297000'),
         },
         {
-            orderId: BigNumber.from(4),
+            orderId: BigInt(4),
             currency: wbtcBytes32,
             side: 1,
             maturity: dec22Fixture.toString(),
-            unitPrice: BigNumber.from('9600'),
-            amount: BigNumber.from('5000000000000000000000'),
-            createdAt: BigNumber.from('1609296000'),
+            unitPrice: BigInt('9600'),
+            amount: BigInt('5000000000000000000000'),
+            createdAt: BigInt('1609296000'),
         },
         {
-            orderId: BigNumber.from(5),
+            orderId: BigInt(5),
             currency: ethBytes32,
             side: 0,
             maturity: dec22Fixture.toString(),
-            unitPrice: BigNumber.from('9800'),
-            amount: BigNumber.from('1000000000'),
-            createdAt: BigNumber.from('1609295000'),
+            unitPrice: BigInt('9800'),
+            amount: BigInt('1000000000'),
+            createdAt: BigInt('1609295000'),
         },
     ];
     it('should return true', () => {
@@ -254,13 +251,13 @@ describe('checkOrderIsFilled', () => {
             currency: ethBytes32,
             side: 0,
             maturity: dec22Fixture,
-            inputUnitPrice: BigNumber.from('9800'),
-            filledAmount: BigNumber.from('1000000000000000000000'),
-            inputAmount: BigNumber.from('1000000000000000000000'),
+            inputUnitPrice: BigInt('9800'),
+            filledAmount: BigInt('1000000000000000000000'),
+            inputAmount: BigInt('1000000000000000000000'),
             status: 'Open' as const,
             type: OrderType.LIMIT,
-            createdAt: BigNumber.from('1'),
-            txHash: utils.formatBytes32String('hash'),
+            createdAt: BigInt('1'),
+            txHash: toBytes32('hash'),
             lendingMarket: {
                 id: '1',
                 isActive: true,
@@ -276,13 +273,13 @@ describe('checkOrderIsFilled', () => {
             currency: ethBytes32,
             side: 0,
             maturity: dec22Fixture,
-            inputUnitPrice: BigNumber.from('9800'),
-            filledAmount: BigNumber.from('1000000000000000000000'),
-            inputAmount: BigNumber.from('1000000000000000000000'),
+            inputUnitPrice: BigInt('9800'),
+            filledAmount: BigInt('1000000000000000000000'),
+            inputAmount: BigInt('1000000000000000000000'),
             status: 'Open' as const,
             type: OrderType.LIMIT,
-            createdAt: BigNumber.from('1'),
-            txHash: utils.formatBytes32String('hash'),
+            createdAt: BigInt('1'),
+            txHash: toBytes32('hash'),
             lendingMarket: {
                 id: '1',
                 isActive: true,
@@ -297,31 +294,31 @@ describe('sortOrders', () => {
     const sortedOrders = orderHistoryList.sort((a, b) => sortOrders(a, b));
 
     for (let i = 0; i < sortedOrders.length - 1; i++) {
-        expect(sortedOrders[i].createdAt.toNumber()).toBeGreaterThanOrEqual(
-            sortedOrders[i + 1].createdAt.toNumber()
-        );
+        expect(
+            sortedOrders[i].createdAt >= sortedOrders[i + 1].createdAt
+        ).toBeTruthy();
     }
 });
 
 describe('getMaxAmount', () => {
     it('returns the maximum amount from an array of orders', () => {
         const orders = [
-            { amount: BigNumber.from(10) },
-            { amount: BigNumber.from(5) },
-            { amount: BigNumber.from(20) },
+            { amount: BigInt(10) },
+            { amount: BigInt(5) },
+            { amount: BigInt(20) },
         ];
         const maxAmount = getMaxAmount(orders);
         expect(maxAmount.toString()).toBe('20');
     });
 
     it('returns the amount of the only order in the array', () => {
-        const orders = [{ amount: BigNumber.from(10) }];
+        const orders = [{ amount: BigInt(10) }];
         const maxAmount = getMaxAmount(orders);
         expect(maxAmount.toString()).toBe('10');
     });
 
     it('returns zero if the array is empty', () => {
-        const orders: { amount: BigNumber }[] = [];
+        const orders: { amount: bigint }[] = [];
         const maxAmount = getMaxAmount(orders);
         expect(maxAmount.toString()).toBe('0');
     });

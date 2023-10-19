@@ -3,7 +3,6 @@ import { formatDate } from '@secured-finance/sf-core';
 import { createColumnHelper } from '@tanstack/react-table';
 import classNames from 'classnames';
 import * as dayjs from 'dayjs';
-import { BigNumber } from 'ethers';
 import { useRouter } from 'next/router';
 import { useCallback, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -57,7 +56,7 @@ export const ActiveTradeTable = ({
     const getTableActionMenu = useCallback(
         (
             maturity: number,
-            amount: BigNumber,
+            amount: bigint,
             ccy: CurrencySymbol,
             side: OrderSide
         ) => {
@@ -192,11 +191,10 @@ export const ActiveTradeTable = ({
                     const ccy = hexToCurrencySymbol(info.row.original.currency);
                     const maturityTimestamp = Number(info.getValue());
 
-                    const side = BigNumber.from(
-                        info.row.original.forwardValue
-                    ).isNegative()
-                        ? OrderSide.BORROW
-                        : OrderSide.LEND;
+                    const side =
+                        BigInt(info.row.original.forwardValue) < 0
+                            ? OrderSide.BORROW
+                            : OrderSide.LEND;
 
                     return (
                         <div className='grid w-40 justify-center tablet:w-full'>
@@ -256,7 +254,7 @@ export const ActiveTradeTable = ({
                 'marketPrice',
                 row =>
                     isPastDate(Number(row.maturity))
-                        ? BigNumber.from(10000)
+                        ? BigInt(10000)
                         : row.marketPrice,
                 'default',
                 'price',
@@ -268,14 +266,14 @@ export const ActiveTradeTable = ({
                 cell: info => {
                     const maturity = Number(info.row.original.maturity);
                     const ccy = hexToCurrencySymbol(info.row.original.currency);
-                    const amount = BigNumber.from(
-                        info.row.original.amount
-                    ).abs();
-                    const side = BigNumber.from(
-                        info.row.original.forwardValue
-                    ).isNegative()
-                        ? OrderSide.LEND
-                        : OrderSide.BORROW; // side is reversed as unwind
+                    const amount =
+                        info.row.original.amount > 0
+                            ? info.row.original.amount
+                            : info.row.original.amount * BigInt(-1);
+                    const side =
+                        info.row.original.forwardValue < 0
+                            ? OrderSide.LEND
+                            : OrderSide.BORROW; // side is reversed as unwind
                     if (!ccy) return null;
 
                     return (

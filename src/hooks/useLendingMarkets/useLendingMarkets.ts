@@ -120,23 +120,23 @@ export const useLendingMarkets = () => {
                     names.push(nameToPush);
                     availableContracts[currency] = {
                         ...availableContracts[currency],
-                        [maturity.toNumber()]: {
+                        [Number(maturity)]: {
                             name,
-                            maturity: maturity.toNumber(),
-                            utcOpeningDate: openingDate.toNumber(),
-                            isActive: isPastDate(openingDate.toNumber()),
-                            marketUnitPrice: marketUnitPrice.toNumber(),
-                            openingUnitPrice: openingUnitPrice.toNumber(),
-                            preOpenDate: openingDate.toNumber() - PRE_OPEN_TIME,
+                            maturity: Number(maturity),
+                            utcOpeningDate: Number(openingDate),
+                            isActive: isPastDate(Number(openingDate)),
+                            marketUnitPrice: Number(marketUnitPrice),
+                            openingUnitPrice: Number(openingUnitPrice),
+                            preOpenDate: Number(openingDate) - PRE_OPEN_TIME,
                             isReady,
                             isOpened,
                             isMatured,
                             isPreOrderPeriod,
                             isItayosePeriod,
-                            bestBorrowUnitPrice: bestBorrowUnitPrice.toNumber(),
-                            bestLendUnitPrice: bestLendUnitPrice.toNumber(),
-                            minBorrowUnitPrice: minBorrowUnitPrice.toNumber(),
-                            maxLendUnitPrice: maxLendUnitPrice.toNumber(),
+                            bestBorrowUnitPrice: Number(bestBorrowUnitPrice),
+                            bestLendUnitPrice: Number(bestLendUnitPrice),
+                            minBorrowUnitPrice: Number(minBorrowUnitPrice),
+                            maxLendUnitPrice: Number(maxLendUnitPrice),
                         },
                     };
                 });

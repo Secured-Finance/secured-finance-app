@@ -1,5 +1,5 @@
 import { WalletSource as Source } from '@secured-finance/sf-client';
-import { BigNumber } from 'ethers';
+
 import SFLogoSmall from 'src/assets/img/logo-small.svg';
 import MetamaskIcon from 'src/assets/img/metamask-fox.svg';
 import { WalletSourceOption } from 'src/components/atoms';
@@ -64,7 +64,7 @@ export const generateWalletInformation = (
 export const generateWalletSourceInformation = (
     asset: CurrencySymbol,
     metamaskBalance: number,
-    vaultBalance?: BigNumber
+    vaultBalance?: bigint
 ): WalletSourceOption[] => {
     return [
         {

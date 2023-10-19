@@ -1,18 +1,17 @@
 import { useQuery } from '@tanstack/react-query';
-import { BigNumber } from 'ethers';
 import { useMemo } from 'react';
 import { QueryKeys } from 'src/hooks/queries';
 import useSF from 'src/hooks/useSecuredFinance';
 import { CurrencySymbol, toCurrency } from 'src/utils';
 
 export type Order = {
-    orderId: BigNumber;
+    orderId: bigint;
     currency: string;
     maturity: string;
     side: number;
-    unitPrice: BigNumber;
-    amount: BigNumber;
-    createdAt: BigNumber;
+    unitPrice: bigint;
+    amount: bigint;
+    createdAt: bigint;
 };
 
 export type OrderList = Array<Order>;
@@ -23,7 +22,7 @@ export const emptyOrderList = {
 };
 
 const sortOrders = (a: Order, b: Order) => {
-    return Number(b.createdAt.sub(a.createdAt));
+    return Number(b.createdAt - a.createdAt);
 };
 
 export const useOrderList = (
@@ -55,7 +54,7 @@ export const useOrderList = (
             return {
                 activeOrderList: orderList.activeOrders
                     .map(order => ({
-                        orderId: BigNumber.from(order.orderId),
+                        orderId: BigInt(order.orderId),
                         currency: order.ccy,
                         maturity: order.maturity.toString(),
                         side: order.side,
@@ -67,7 +66,7 @@ export const useOrderList = (
                     .sort((a, b) => sortOrders(a, b)),
                 inactiveOrderList: orderList.inactiveOrders
                     .map(order => ({
-                        orderId: BigNumber.from(order.orderId),
+                        orderId: BigInt(order.orderId),
                         currency: order.ccy,
                         maturity: order.maturity.toString(),
                         side: order.side,

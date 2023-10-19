@@ -1,6 +1,6 @@
 import { OrderSide } from '@secured-finance/sf-client';
 import { WalletSource } from '@secured-finance/sf-client/dist/secured-finance-client';
-import { BigNumber } from 'ethers';
+
 import { dec22Fixture } from 'src/stories/mocks/fixtures';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { renderHook } from 'src/test-utils';
@@ -44,8 +44,8 @@ describe('useOrders hook', () => {
             expect(mockSecuredFinance.placeOrder).toHaveBeenCalledWith(
                 toCurrency(CurrencySymbol.ETH),
                 2022,
-                '0',
-                BigNumber.from('1000000000000000000'),
+                0,
+                BigInt('1000000000000000000'),
                 WalletSource.METAMASK,
                 9863
             );
@@ -66,8 +66,8 @@ describe('useOrders hook', () => {
             expect(mockSecuredFinance.placeOrder).toHaveBeenCalledWith(
                 toCurrency(CurrencySymbol.ETH),
                 2022,
-                '0',
-                BigNumber.from('1000000000000000000'),
+                0,
+                BigInt('1000000000000000000'),
                 WalletSource.METAMASK,
                 0
             );
@@ -98,8 +98,8 @@ describe('useOrders hook', () => {
             expect(mockSecuredFinance.placePreOrder).toHaveBeenCalledWith(
                 toCurrency(CurrencySymbol.ETH),
                 2022,
-                '0',
-                BigNumber.from('1000000000000000000'),
+                0,
+                BigInt('1000000000000000000'),
                 WalletSource.METAMASK,
                 9863
             );
