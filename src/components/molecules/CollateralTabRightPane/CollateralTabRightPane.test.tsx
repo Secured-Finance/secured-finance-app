@@ -23,7 +23,10 @@ describe('CollateralTabRightPane component', () => {
         ).toBeInTheDocument();
         expect(screen.getByText('Collateral Utilization')).toBeInTheDocument();
         expect(screen.getByText('Liquidation Risk')).toBeInTheDocument();
-        expect(screen.getAllByText('N/A')).toHaveLength(4);
+        expect(screen.getAllByText('N/A')).toHaveLength(2);
+        expect(screen.getByText('0%')).toBeInTheDocument();
+        expect(screen.getByText('Low')).toBeInTheDocument();
+        expect(screen.getByText('Low')).toHaveClass('text-progressBarStart');
     });
 
     it('should render the progress bars with appropriate values', () => {
@@ -31,10 +34,11 @@ describe('CollateralTabRightPane component', () => {
 
         expect(screen.getByText('Collateral Utilization')).toBeInTheDocument();
         expect(screen.getByText('$5,203.15')).toBeInTheDocument();
-        expect(screen.getByText('of $9,680.27 available')).toBeInTheDocument();
+        expect(screen.getByText('of $12,100.34 available')).toBeInTheDocument();
         expect(screen.getByText('37%')).toBeInTheDocument();
         expect(screen.getByText('Liquidation Risk')).toBeInTheDocument();
         expect(screen.getByText('Low')).toBeInTheDocument();
         expect(screen.getByText('43%')).toBeInTheDocument();
+        expect(screen.getByText('Low')).toHaveClass('text-progressBarStart');
     });
 });

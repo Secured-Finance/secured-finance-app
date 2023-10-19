@@ -9,13 +9,12 @@ import { Token } from '@secured-finance/sf-core';
 import classNames from 'classnames';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import MetaMaskIcon from 'src/assets/img/metamask-fox.svg';
+import { Button, GradientBox, Separator } from 'src/components/atoms';
 import {
-    Button,
-    DropdownSelector,
-    GradientBox,
-    Separator,
-} from 'src/components/atoms';
-import { Dialog, SuccessPanel } from 'src/components/molecules';
+    CurrencyDropdown,
+    Dialog,
+    SuccessPanel,
+} from 'src/components/molecules';
 import { ConnectWalletCard, MyWalletCard } from 'src/components/organisms';
 import { Page, Tooltip, TwoColumns } from 'src/components/templates';
 import { useEtherscanUrl, useHandleContractTransaction } from 'src/hooks';
@@ -174,8 +173,8 @@ export const Faucet = () => {
                         </h1>
                         <div className='flex flex-col gap-10'>
                             <div className='grid h-14 grid-flow-col items-center justify-start gap-x-3 rounded-xl border border-neutral-3 bg-black-20 px-2 tablet:justify-stretch'>
-                                <DropdownSelector
-                                    optionList={assetList}
+                                <CurrencyDropdown
+                                    currencyOptionList={assetList}
                                     selected={assetList[0]}
                                     onChange={ccy => {
                                         if (
@@ -351,7 +350,7 @@ export const Faucet = () => {
                         ['Status', 'Success'],
                         [
                             'Ethereum Address',
-                            AddressUtils.format(account ?? '', 16),
+                            AddressUtils.format(account ?? '', 8),
                         ],
                     ]}
                     txHash={txHash}

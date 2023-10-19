@@ -1,5 +1,11 @@
 import timemachine from 'timemachine';
-import { countdown, isPastDate } from './date';
+import {
+    calculateTimeDifference,
+    countdown,
+    getTimestampRelativeToNow,
+    isPastDate,
+    isMaturityPastDays,
+} from './date';
 
 beforeAll(() => {
     timemachine.reset();
@@ -7,6 +13,8 @@ beforeAll(() => {
         dateString: '2022-12-15T00:00:00.00Z',
     });
 });
+
+const currentTimestamp = 1671062400;
 
 describe('isPastDate', () => {
     it('should returns true for a past date', () => {
@@ -71,5 +79,56 @@ describe('countdown', () => {
         const countdownString = countdown(targetTimestamp);
 
         expect(countdownString).toEqual(expectedCountdown);
+    });
+});
+
+describe('getTimeStampRelativeToNow function', () => {
+    it('should return a future timestamp for if isFuture is true', () => {
+        const hours = 3;
+        const result = getTimestampRelativeToNow(hours, true);
+        const expectedTimestamp = Math.floor(
+            currentTimestamp + hours * 60 * 60
+        );
+        expect(result).toBe(expectedTimestamp);
+    });
+
+    it('should return a past timestamp if isFuture is false', () => {
+        const hours = 2;
+        const isFuture = false;
+        const result = getTimestampRelativeToNow(hours, isFuture);
+        const expectedTimestamp = Math.floor(
+            currentTimestamp - hours * 60 * 60
+        );
+        expect(result).toBe(expectedTimestamp);
+    });
+});
+
+describe('calculateTimeDifference', () => {
+    it('calculates time difference correctly', () => {
+        const timestamp = Math.floor(currentTimestamp - 2 * 60 * 60);
+        const timeDifference = calculateTimeDifference(timestamp);
+        expect(timeDifference).toBeCloseTo(2 * 60 * 60 * 1000, -2);
+    });
+});
+
+describe('isMaturityWithinDays', () => {
+    it('returns true if maturity is past specified days in the future', () => {
+        const maturityDate = getTimestampRelativeToNow(96, true);
+        expect(isMaturityPastDays(maturityDate, 2, true)).toBe(true);
+    });
+
+    it('returns false if maturity is not past specified days in the future', () => {
+        const maturityDate = getTimestampRelativeToNow(96, true);
+        expect(isMaturityPastDays(maturityDate, 6, true)).toBe(false);
+    });
+
+    it('returns false if maturity is within specified days in the past', () => {
+        const maturityDate = getTimestampRelativeToNow(96);
+        expect(isMaturityPastDays(maturityDate, 6)).toBe(false);
+    });
+
+    it('returns true if maturity is not within specified days in the past', () => {
+        const maturityDate = getTimestampRelativeToNow(96);
+        expect(isMaturityPastDays(maturityDate, 2)).toBe(true);
     });
 });

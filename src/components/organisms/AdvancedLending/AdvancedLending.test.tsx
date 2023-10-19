@@ -4,7 +4,7 @@ import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { fireEvent, render, screen, waitFor, within } from 'src/test-utils.js';
 import * as stories from './AdvancedLending.stories';
 
-const { Default, ConnectedToWallet } = composeStories(stories);
+const { Default, ConnectedToWallet, Delisted } = composeStories(stories);
 
 const mockSecuredFinance = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mockSecuredFinance);
@@ -25,7 +25,7 @@ describe('Advanced Lending Component', () => {
         expect(store.getState().landingOrderForm.amount).toEqual(
             '1000000000000000000'
         );
-        fireEvent.click(screen.getByRole('button', { name: 'Filecoin' }));
+        fireEvent.click(screen.getByRole('button', { name: 'WFIL' }));
         fireEvent.click(screen.getByRole('menuitem', { name: 'USDC' }));
         await waitFor(() => {
             expect(store.getState().landingOrderForm.amount).toEqual('1000000');
@@ -136,6 +136,22 @@ describe('Advanced Lending Component', () => {
         ).toHaveLength(1);
     });
 
+    it('should display disclaimer if a currency is being delisted', () => {
+        render(<Delisted />, {
+            apolloMocks: Default.parameters?.apolloClient.mocks,
+        });
+        expect(screen.getByText('WFIL will be delisted')).toBeInTheDocument();
+    });
+
+    it('should not display disclaimer if no currency is being delisted', () => {
+        render(<Default />, {
+            apolloMocks: Default.parameters?.apolloClient.mocks,
+        });
+        expect(
+            screen.queryByText('WFIL will be delisted')
+        ).not.toBeInTheDocument();
+    });
+
     describe('Dynamic orderbook depth', () => {
         it('should retrieve more data when the user select only one side of the orderbook', async () => {
             await waitFor(() =>
@@ -148,7 +164,7 @@ describe('Advanced Lending Component', () => {
             ).toHaveBeenLastCalledWith(
                 expect.anything(),
                 expect.anything(),
-                12
+                13
             );
             await waitFor(() =>
                 fireEvent.click(
@@ -163,6 +179,34 @@ describe('Advanced Lending Component', () => {
                 expect.anything(),
                 expect.anything(),
                 26
+            );
+        });
+
+        it('should retrieve more data when the user select a aggregation factor', async () => {
+            await waitFor(() =>
+                render(<Default />, {
+                    apolloMocks: Default.parameters?.apolloClient.mocks,
+                })
+            );
+            expect(
+                mockSecuredFinance.getLendOrderBook
+            ).toHaveBeenLastCalledWith(
+                expect.anything(),
+                expect.anything(),
+                13
+            );
+            await waitFor(() => {
+                fireEvent.click(screen.getByRole('button', { name: '0.01' }));
+                fireEvent.click(screen.getByRole('menuitem', { name: '1' }));
+            });
+            await waitFor(() =>
+                expect(
+                    mockSecuredFinance.getLendOrderBook
+                ).toHaveBeenLastCalledWith(
+                    expect.anything(),
+                    expect.anything(),
+                    1300
+                )
             );
         });
     });

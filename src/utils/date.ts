@@ -33,3 +33,31 @@ export function countdown(targetTimestamp: number): string {
 
     return countdownString;
 }
+
+export const getTimestampRelativeToNow = (hours: number, isFuture = false) => {
+    const now = new Date();
+    const offset = isFuture ? 1 : -1;
+    const adjustedTimestamp = new Date(
+        now.getTime() + offset * hours * 60 * 60 * 1000
+    );
+    return Math.floor(adjustedTimestamp.getTime() / 1000);
+};
+
+export const calculateTimeDifference = (timestamp: number) => {
+    const targetDate = new Date(timestamp * 1000);
+    const currentDate = new Date();
+    return currentDate.getTime() - targetDate.getTime();
+};
+
+export const isMaturityPastDays = (
+    maturity: number,
+    days: number,
+    inFuture = false
+) => {
+    const timeDiff = calculateTimeDifference(maturity);
+    const millisecondsInDays = days * 24 * 60 * 60 * 1000;
+
+    return inFuture
+        ? Math.abs(timeDiff) > millisecondsInDays
+        : timeDiff > millisecondsInDays;
+};

@@ -36,3 +36,11 @@ const Template: StoryFn<typeof UnwindDialog> = args => (
 );
 
 export const Default = Template.bind({});
+export const Repay = Template.bind({});
+Repay.args = {
+    type: 'REPAY',
+};
+export const Redeem = Template.bind({});
+Redeem.args = {
+    type: 'REDEEM',
+};

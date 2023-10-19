@@ -13,6 +13,7 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 module.exports = withBundleAnalyzer({
     reactStrictMode: true,
     trailingSlash: true,
+    staticPageGenerationTimeout: 120,
 
     webpack: (config, options) => webpack.webpackOverride(config),
 

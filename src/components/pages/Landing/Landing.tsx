@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { ViewType } from 'src/components/atoms';
-import { Alert } from 'src/components/molecules';
+import { Alert, DelistedCurrencyDisclaimer } from 'src/components/molecules';
 import {
     AdvancedLending,
     LendingCard,
@@ -18,6 +18,7 @@ import {
     baseContracts,
     emptyCollateralBook,
     useCollateralBook,
+    useCurrencyDelistedStatus,
     useGraphClientHook,
     useLendingMarkets,
     useLoanValues,
@@ -44,6 +45,7 @@ export const emptyOptionList = [
 
 export const Landing = ({ view }: { view?: ViewType }) => {
     const { address } = useAccount();
+    const { data: delistedCurrencySet } = useCurrencyDelistedStatus();
     const { currency, side, maturity, lastView } = useSelector(
         (state: RootState) => selectLandingOrderForm(state.landingOrderForm)
     );
@@ -86,12 +88,17 @@ export const Landing = ({ view }: { view?: ViewType }) => {
         <SimpleAdvancedView
             title='OTC Lending'
             simpleComponent={
-                <WithBanner ccy={currency} market={itayoseMarket}>
+                <WithBanner
+                    ccy={currency}
+                    market={itayoseMarket}
+                    delistedCurrencySet={delistedCurrencySet}
+                >
                     <div className='flex flex-row items-center justify-center'>
                         <LendingCard
                             collateralBook={collateralBook}
                             maturitiesOptionList={maturityOptionList}
                             marketPrice={marketPrice}
+                            delistedCurrencySet={delistedCurrencySet}
                         />
                         <YieldChart
                             asset={currency}
@@ -101,11 +108,16 @@ export const Landing = ({ view }: { view?: ViewType }) => {
                 </WithBanner>
             }
             advanceComponent={
-                <WithBanner ccy={currency} market={itayoseMarket}>
+                <WithBanner
+                    ccy={currency}
+                    market={itayoseMarket}
+                    delistedCurrencySet={delistedCurrencySet}
+                >
                     <AdvancedLending
                         collateralBook={collateralBook}
                         maturitiesOptionList={maturityOptionList}
                         marketPrice={marketPrice}
+                        delistedCurrencySet={delistedCurrencySet}
                     />
                 </WithBanner>
             }
@@ -128,14 +140,17 @@ export const Landing = ({ view }: { view?: ViewType }) => {
 const WithBanner = ({
     ccy,
     market,
+    delistedCurrencySet,
     children,
 }: {
     ccy: CurrencySymbol;
     market: LendingMarket | undefined;
+    delistedCurrencySet: Set<CurrencySymbol>;
     children: React.ReactNode;
 }) => {
     return (
         <div className='flex flex-col justify-center gap-5'>
+            <DelistedCurrencyDisclaimer currencies={delistedCurrencySet} />
             {market && (
                 <Alert severity='info'>
                     <div className='typography-caption text-white'>
