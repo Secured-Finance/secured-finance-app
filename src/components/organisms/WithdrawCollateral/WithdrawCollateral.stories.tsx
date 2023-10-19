@@ -32,7 +32,7 @@ export default {
 
             [CurrencySymbol.WBTC]: {
                 symbol: CurrencySymbol.WBTC,
-                available: 1,
+                available: 1.12349999,
                 name: 'Bitcoin',
             },
         },

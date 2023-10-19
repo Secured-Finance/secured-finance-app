@@ -4,6 +4,7 @@ import {
     withAssetPrice,
     withWalletProvider,
 } from 'src/../.storybook/decorators';
+import { defaultDelistedStatusSet } from 'src/hooks';
 import { collateralBook37, maturityOptions } from 'src/stories/mocks/fixtures';
 import { LendingCard } from './LendingCard';
 
@@ -14,6 +15,7 @@ export default {
         collateralBook: collateralBook37,
         maturitiesOptionList: maturityOptions,
         marketPrice: 9917,
+        delistedCurrencySet: defaultDelistedStatusSet,
     },
     decorators: [withAssetPrice, withWalletProvider],
     parameters: {

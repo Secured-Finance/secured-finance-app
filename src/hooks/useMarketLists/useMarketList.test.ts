@@ -6,7 +6,10 @@ const mockSecuredFinance = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mockSecuredFinance);
 
 describe('useMarketList', () => {
-    it('should return open and itayose markets correctly', async () => {
+    it('should return all open and itayose markets', async () => {
+        jest.spyOn(mockSecuredFinance, 'currencyExists').mockResolvedValue(
+            true
+        );
         const { result, waitForNextUpdate } = renderHook(() =>
             useMarketLists()
         );
