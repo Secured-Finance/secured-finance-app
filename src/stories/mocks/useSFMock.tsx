@@ -445,6 +445,8 @@ export const mockUseSF = () => {
         executeRepayment: jest.fn(() => Promise.resolve({})),
 
         executeRedemption: jest.fn(() => Promise.resolve({})),
+
+        isTerminated: jest.fn(() => Promise.resolve(false)),
     };
 
     return mockSecuredFinance;
