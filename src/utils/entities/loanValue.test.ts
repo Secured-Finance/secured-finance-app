@@ -118,6 +118,11 @@ describe('LoanValue', () => {
             expect(loanValue.apr).toEqual(new Rate(155839));
         });
 
+        it('should compute and return the apr calculated from openingDate when it is provided', () => {
+            const loanValue = LoanValue.fromPrice(9626, 1677715200, 1675252800);
+            expect(loanValue.apr).toEqual(new Rate(497592));
+        });
+
         it('should return 0 if price is 0', () => {
             const loanValue = LoanValue.fromPrice(0, 1675252800);
             expect(loanValue.apr).toEqual(new Rate(0));
@@ -145,6 +150,23 @@ describe('LoanValue', () => {
 
             expect(LoanValue.getMidValue(bidValue, askValue).price).toEqual(
                 midPrice
+            );
+            expect(LoanValue.getMidValue(bidValue, askValue).apr).toEqual(
+                new Rate(149743)
+            );
+        });
+
+        it('should return the mid value of the loan value from the calculationDate', () => {
+            const bidValue = LoanValue.fromPrice(9652, 1677715200, 1675252800);
+            const askValue = LoanValue.fromPrice(9600, 1677715200, 1675252800);
+
+            const midPrice = (bidValue.price + askValue.price) / 2;
+
+            expect(LoanValue.getMidValue(bidValue, askValue).price).toEqual(
+                midPrice
+            );
+            expect(LoanValue.getMidValue(bidValue, askValue).apr).toEqual(
+                new Rate(497592)
             );
         });
 

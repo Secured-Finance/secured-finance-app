@@ -7,10 +7,12 @@ import { useDispatch } from 'react-redux';
 import ShowFirstIcon from 'src/assets/icons/orderbook-first.svg';
 import ShowAllIcon from 'src/assets/icons/orderbook-full.svg';
 import ShowLastIcon from 'src/assets/icons/orderbook-last.svg';
+import WarningCircleIcon from 'src/assets/icons/warning-circle.svg';
 import {
     ColorBar,
     DropdownSelector,
     NavTab,
+    Option,
     Spinner,
 } from 'src/components/atoms';
 import { CoreTable, TableHeader } from 'src/components/molecules';
@@ -32,13 +34,16 @@ import {
 } from 'src/utils';
 import { LoanValue } from 'src/utils/entities';
 
-const AGGREGATION_OPTIONS = [
-    { label: '0.01', value: '1' },
-    { label: '0.1', value: '10' },
-    { label: '1', value: '100' },
-    { label: '5', value: '500' },
-    { label: '10', value: '1000' },
+const AGGREGATION_OPTIONS: (Option<string> & { multiplier: number })[] = [
+    { label: '0.01', value: '1', multiplier: 1 },
+    { label: '0.1', value: '10', multiplier: 10 },
+    { label: '1', value: '100', multiplier: 100 },
+    { label: '5', value: '500', multiplier: 500 },
+    { label: '10', value: '1000', multiplier: 1000 },
 ];
+
+const ORDERBOOK_DOUBLE_MAX_LINES = 12;
+const ORDERBOOK_SINGLE_MAX_LINES = 26;
 
 const columnHelper = createColumnHelper<OrderBookEntry>();
 
@@ -207,13 +212,17 @@ export const OrderBookWidget = ({
     currency,
     marketPrice,
     onFilterChange,
+    onAggregationChange,
     variant = 'default',
+    isCurrencyDelisted,
 }: {
     orderbook: Pick<ReturnType<typeof useOrderbook>[0], 'data' | 'isLoading'>;
     currency: CurrencySymbol;
     marketPrice?: LoanValue;
     onFilterChange?: (filter: VisibilityState) => void;
+    onAggregationChange?: (multiplier: number) => void;
     variant?: 'default' | 'itayose';
+    isCurrencyDelisted: boolean;
 }) => {
     const [state, dispatch] = useReducer(reducer, initialState);
     useEffect(() => {
@@ -223,17 +232,32 @@ export const OrderBookWidget = ({
     const [aggregationFactor, setAggregationFactor] =
         useState<AggregationFactorType>(1);
 
+    useEffect(() => {
+        onAggregationChange?.(aggregationFactor);
+    }, [onAggregationChange, aggregationFactor]);
+
     const globalDispatch = useDispatch();
+
+    const [limit, setLimit] = useState(ORDERBOOK_DOUBLE_MAX_LINES);
+    useEffect(() => {
+        setLimit(
+            state.showBorrow && state.showLend
+                ? ORDERBOOK_DOUBLE_MAX_LINES
+                : ORDERBOOK_SINGLE_MAX_LINES
+        );
+    }, [state]);
 
     const borrowOrders = usePrepareOrderbookData(
         orderbook.data,
         'borrowOrderbook',
+        limit,
         aggregationFactor
     );
 
     const lendOrders = usePrepareOrderbookData(
         orderbook.data,
         'lendOrderbook',
+        limit,
         aggregationFactor
     );
 
@@ -352,6 +376,14 @@ export const OrderBookWidget = ({
             <div className='-mx-3 h-[60px] w-1/2'>
                 <NavTab text='Order Book' active={true} />
             </div>
+            {isCurrencyDelisted && (
+                <div className='-mx-3 flex h-9 flex-row items-center gap-3 bg-black-20 px-4'>
+                    <WarningCircleIcon className='h-4 w-4' />
+                    <div className='typography-caption-2 w-full text-planetaryPurple'>
+                        {currency} will be delisted
+                    </div>
+                </div>
+            )}
             <div className='flex flex-row justify-between'>
                 <div className='flex h-8 flex-row items-start gap-3'>
                     <OrderBookIcon

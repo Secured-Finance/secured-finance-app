@@ -170,7 +170,7 @@ describe('Landing Component', () => {
             changeInputValue('Amount', '1');
             changeInputValue('Bond Price', '80');
 
-            fireEvent.click(screen.getByRole('button', { name: 'Filecoin' }));
+            fireEvent.click(screen.getByRole('button', { name: 'WFIL' }));
             fireEvent.click(screen.getByRole('menuitem', { name: 'USDC' }));
 
             assertInputValue('Amount', '1');
@@ -281,9 +281,47 @@ describe('Landing Component', () => {
         clickAdvancedButton();
         expect(await screen.findByText('DEC22')).toBeInTheDocument();
         expect(screen.getByRole('slider')).toHaveValue('0');
-        fireEvent.change(screen.getByRole('textbox', { name: 'Amount' }), {
-            target: { value: '100' },
+        waitFor(() => {
+            fireEvent.change(screen.getByRole('textbox', { name: 'Amount' }), {
+                target: { value: '100' },
+            });
         });
+
         expect(screen.getByRole('slider')).toHaveValue('0');
+    });
+
+    it('should show delisting disclaimer if a currency is being delisted', async () => {
+        await waitFor(() => {
+            render(<Default />, {
+                apolloMocks: Default.parameters?.apolloClient.mocks,
+                preloadedState,
+            });
+        });
+
+        await waitFor(() => {
+            expect(
+                screen.getByText(
+                    'Please note that WFIL will be delisted on Secured Finance.'
+                )
+            ).toBeInTheDocument();
+        });
+    });
+
+    it('should not show delisting disclaimer if no currency is being delisted', async () => {
+        jest.spyOn(mock, 'currencyExists').mockResolvedValue(true);
+        await waitFor(() => {
+            render(<Default />, {
+                apolloMocks: Default.parameters?.apolloClient.mocks,
+                preloadedState,
+            });
+        });
+
+        await waitFor(() => {
+            expect(
+                screen.queryByText(
+                    'Please note that WFIL will be delisted on Secured Finance.'
+                )
+            ).not.toBeInTheDocument();
+        });
     });
 });

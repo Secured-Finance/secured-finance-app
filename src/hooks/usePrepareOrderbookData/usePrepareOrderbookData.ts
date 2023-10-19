@@ -9,6 +9,7 @@ export const usePrepareOrderbookData = <
 >(
     data: ReturnType<typeof useOrderbook>[0]['data'],
     orderbookType: T,
+    limit: number,
     aggregationFactor: AggregationFactorType
 ) => {
     return useMemo(() => {
@@ -28,7 +29,11 @@ export const usePrepareOrderbookData = <
                 if (!result[price]) {
                     result[price] = {
                         amount: order.amount,
-                        value: LoanValue.fromPrice(price, order.value.maturity),
+                        value: LoanValue.fromPrice(
+                            price,
+                            order.value.maturity,
+                            order.value.calculationDate
+                        ),
                     };
                 } else {
                     result[price].amount = result[price].amount.add(
@@ -42,7 +47,7 @@ export const usePrepareOrderbookData = <
         );
 
         return orderbookType === 'lendOrderbook'
-            ? [...sortedResult, ...zeroValues]
-            : [...zeroValues, ...sortedResult];
-    }, [data, orderbookType, aggregationFactor]);
+            ? [...sortedResult, ...zeroValues].slice(0, limit)
+            : [...zeroValues, ...sortedResult].slice(-limit);
+    }, [data, orderbookType, aggregationFactor, limit]);
 };

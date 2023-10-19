@@ -1,9 +1,11 @@
 import { composeStories } from '@storybook/react';
 import { fireEvent, render, screen, within } from 'src/test-utils.js';
 import { OrderType } from 'src/types';
+import { CurrencySymbol } from 'src/utils';
 import * as stories from './OrderBookWidget.stories';
 
-const { Default, Loading, Itayose } = composeStories(stories);
+const { Default, Loading, Itayose, Bitcoin, Delisted } =
+    composeStories(stories);
 
 describe('OrderBookWidget Component', () => {
     it('should render two tables', () => {
@@ -64,6 +66,25 @@ describe('OrderBookWidget Component', () => {
         expect(
             screen.getByRole('alertdialog', { name: 'Loading' })
         ).toBeInTheDocument();
+    });
+
+    it('should display delisting disclaimer if currency is being delisted', () => {
+        render(<Delisted />);
+        expect(screen.getByText('WFIL will be delisted')).toBeInTheDocument();
+    });
+
+    it('should display delisting disclaimer only if currency selected currency is being delisted', () => {
+        render(<Delisted currency={CurrencySymbol.USDC} />);
+        expect(
+            screen.queryByText('WFIL will be delisted')
+        ).not.toBeInTheDocument();
+    });
+
+    it('should not display delisting disclaimer if no currency is being delisted', () => {
+        render(<Default />);
+        expect(
+            screen.queryByText('WFIL will be delisted')
+        ).not.toBeInTheDocument();
     });
 
     describe('Visibility toggles', () => {
@@ -205,6 +226,18 @@ describe('OrderBookWidget Component', () => {
                 showTicker: false,
             });
             expect(onFilterChange).toHaveBeenCalledTimes(2);
+        });
+
+        it('should show a different number of rows when a button is clicked', () => {
+            render(<Bitcoin />);
+            expect(screen.getAllByTestId('buyOrders-row')).toHaveLength(12);
+            expect(screen.getAllByTestId('sellOrders-row')).toHaveLength(12);
+            fireEvent.click(getButton('Show Only Lend Orders'));
+            expect(screen.queryAllByTestId('buyOrders-row')).toHaveLength(0);
+            expect(screen.getAllByTestId('sellOrders-row')).toHaveLength(26);
+            fireEvent.click(getButton('Show Only Borrow Orders'));
+            expect(screen.getAllByTestId('buyOrders-row')).toHaveLength(26);
+            expect(screen.queryAllByTestId('sellOrders-row')).toHaveLength(0);
         });
     });
 

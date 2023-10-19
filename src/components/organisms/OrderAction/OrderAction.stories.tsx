@@ -31,6 +31,7 @@ export default {
         collateralBook: emptyCollateralBook,
         loanValue: LoanValue.fromPrice(9800, dec22Fixture.toNumber()),
         validation: false,
+        isCurrencyDelisted: false,
     },
     decorators: [withEthBalance, withAssetPrice, withWalletProvider],
     argTypes: {

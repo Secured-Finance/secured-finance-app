@@ -29,10 +29,12 @@ export const CollateralTabRightPane = ({
                 totalCollateralInUSD={balance}
                 collateralCoverage={collateralUsagePercent}
                 collateralThreshold={collateralBook.collateralThreshold}
+                account={account}
             />
             <LiquidationProgressBar
                 liquidationPercentage={collateralUsagePercent}
                 collateralThreshold={collateralBook.collateralThreshold}
+                account={account}
             />
         </div>
     );

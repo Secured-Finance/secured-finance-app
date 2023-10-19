@@ -8,7 +8,8 @@ export default {
     args: {
         collateralCoverage: 0,
         totalCollateralInUSD: 0,
-        collateralThreshold: 80,
+        collateralThreshold: 0,
+        account: undefined,
     },
     parameters: {
         ...RESPONSIVE_PARAMETERS,
@@ -22,10 +23,28 @@ const Template: StoryFn<typeof CollateralProgressBar> = args => (
     <CollateralProgressBar {...args} />
 );
 
-export const Default = Template.bind({});
-export const ConnectedToWallet = Template.bind({});
-ConnectedToWallet.args = {
+export const NotConnectedToWallet = Template.bind({});
+
+export const ZeroCollateral = Template.bind({});
+ZeroCollateral.args = {
+    collateralCoverage: 0,
+    totalCollateralInUSD: 0,
+    collateralThreshold: 80,
+    account: '0x123',
+};
+
+export const CollateralDepositedZeroCoverage = Template.bind({});
+CollateralDepositedZeroCoverage.args = {
+    collateralCoverage: 0,
+    totalCollateralInUSD: 100,
+    collateralThreshold: 80,
+    account: '0x123',
+};
+
+export const CollateralDepositedWithCoverage = Template.bind({});
+CollateralDepositedWithCoverage.args = {
     collateralCoverage: 37,
     totalCollateralInUSD: 100,
     collateralThreshold: 80,
+    account: '0x123',
 };

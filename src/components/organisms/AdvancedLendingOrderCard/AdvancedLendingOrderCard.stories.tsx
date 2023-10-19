@@ -5,6 +5,7 @@ import {
 } from '.storybook/decorators';
 import type { Meta, StoryFn } from '@storybook/react';
 import { userEvent, within } from '@storybook/testing-library';
+import { defaultDelistedStatusSet } from 'src/hooks';
 import { collateralBook37 } from 'src/stories/mocks/fixtures';
 import { AdvancedLendingOrderCard } from './AdvancedLendingOrderCard';
 
@@ -14,6 +15,7 @@ export default {
     args: {
         collateralBook: collateralBook37,
         marketPrice: 9917,
+        delistedCurrencySet: defaultDelistedStatusSet,
     },
     parameters: {
         connected: true,
