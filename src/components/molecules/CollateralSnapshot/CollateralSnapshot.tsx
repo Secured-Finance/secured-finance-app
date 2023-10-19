@@ -39,7 +39,7 @@ export const CollateralSnapshot = ({
     snapshotDate,
 }: {
     data: CollateralComposition[];
-    snapshotDate: number;
+    snapshotDate: number | undefined;
 }) => {
     const chartData = {
         labels: data.map(item => item.currency),
@@ -93,7 +93,7 @@ export const CollateralSnapshot = ({
                     <CoreTable columns={columns} data={data} />
                 </section>
                 <section className='typography-caption-2 text-center leading-6 text-slateGray'>
-                    {`Snapshot as of ${formatTimestamp(snapshotDate)}`}
+                    {`Snapshot as of ${formatTimestamp(snapshotDate ?? 0)}`}
                 </section>
             </div>
         </GradientBox>

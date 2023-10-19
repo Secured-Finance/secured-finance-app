@@ -447,6 +447,46 @@ export const mockUseSF = () => {
         executeRedemption: jest.fn(() => Promise.resolve({})),
 
         isTerminated: jest.fn(() => Promise.resolve(false)),
+
+        getMarketTerminationDate: jest.fn(() =>
+            Promise.resolve(BigNumber.from('1609210000'))
+        ),
+
+        getMarketTerminationRatio: jest.fn((currency: Currency) => {
+            switch (currency.symbol) {
+                case CurrencySymbol.ETH:
+                    return Promise.resolve(BigNumber.from('20000000000')); // 20%
+                case CurrencySymbol.WFIL:
+                    return Promise.resolve(BigNumber.from('20000000000'));
+                case CurrencySymbol.USDC:
+                    return Promise.resolve(BigNumber.from('20000000000'));
+                case CurrencySymbol.WBTC:
+                    return Promise.resolve(BigNumber.from('20000000000'));
+                default:
+                    throw new Error('Not implemented');
+            }
+        }),
+
+        getMarketTerminationPrice: jest.fn((currency: Currency) => {
+            switch (currency.symbol) {
+                case CurrencySymbol.ETH:
+                    return Promise.resolve(BigNumber.from('157771480752')); // 1577.71480752
+                case CurrencySymbol.WFIL:
+                    return Promise.resolve(BigNumber.from('351200000'));
+                case CurrencySymbol.USDC:
+                    return Promise.resolve(BigNumber.from('100000000'));
+                case CurrencySymbol.WBTC:
+                    return Promise.resolve(BigNumber.from('2557771480752'));
+                default:
+                    throw new Error('Not implemented');
+            }
+        }),
+
+        isRedemptionRequired: jest.fn(() => Promise.resolve(true)),
+
+        getCollateralCurrencies: jest.fn(() =>
+            Promise.resolve([ethBytes32, wbtcBytes32, usdcBytes32])
+        ),
     };
 
     return mockSecuredFinance;
