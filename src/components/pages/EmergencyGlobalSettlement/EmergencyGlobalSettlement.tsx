@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { GradientBox } from 'src/components/atoms';
 import { CollateralSnapshot } from 'src/components/molecules';
 import {
+    EmergencyRedeemDialog,
     MyWalletWidget,
     WithdrawPositionTable,
     WithdrawTokenTable,
@@ -53,6 +54,8 @@ export const EmergencyGlobalSettlement = () => {
     const snapshot = useMarketTerminationRatio().data;
 
     const [userStep, setUserStep] = useState<'redeem' | 'withdraw'>('redeem');
+    const [showRedeemDialog, setShowRedeemDialog] = useState(false);
+
     const snapshotDate = useMarketTerminationDate().data;
 
     return (
@@ -87,7 +90,10 @@ export const EmergencyGlobalSettlement = () => {
 
                     <WithdrawPositionTable
                         data={userStep === 'redeem' ? withdrawableData : []}
-                        onRedeem={() => setUserStep('withdraw')}
+                        onRedeem={() => {
+                            setShowRedeemDialog(true);
+                            setUserStep('withdraw');
+                        }}
                     />
                     <WithdrawTokenTable
                         data={userStep === 'withdraw' ? withdrawableTokens : []}
@@ -101,6 +107,13 @@ export const EmergencyGlobalSettlement = () => {
                     <MyWalletWidget />
                 </section>
             </TwoColumns>
+            <EmergencyRedeemDialog
+                isOpen={showRedeemDialog}
+                onClose={() => setShowRedeemDialog(false)}
+                data={snapshot ?? []}
+                snapshotDate={snapshotDate}
+                netValue='PlaceHolder'
+            />
         </Page>
     );
 };

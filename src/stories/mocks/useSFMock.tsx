@@ -487,6 +487,12 @@ export const mockUseSF = () => {
         getCollateralCurrencies: jest.fn(() =>
             Promise.resolve([ethBytes32, wbtcBytes32, usdcBytes32])
         ),
+
+        executeEmergencySettlement: jest.fn(() =>
+            Promise.resolve({
+                wait: jest.fn(() => Promise.resolve({ blockNumber: 123 })),
+            })
+        ),
     };
 
     return mockSecuredFinance;

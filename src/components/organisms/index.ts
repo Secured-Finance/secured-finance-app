@@ -6,6 +6,7 @@ export * from './CollateralOrganism';
 export * from './CollateralTab';
 export * from './ConnectWalletCard';
 export * from './DepositCollateral';
+export * from './EmergencyRedeemDialog';
 export * from './Header';
 export * from './LendingCard';
 export * from './LineChartTab';
