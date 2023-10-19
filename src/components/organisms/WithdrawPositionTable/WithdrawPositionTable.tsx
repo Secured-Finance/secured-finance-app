@@ -24,8 +24,10 @@ const columnHelper = createColumnHelper<WithdrawablePosition>();
 
 export const WithdrawPositionTable = ({
     data,
+    onRedeem,
 }: {
     data: WithdrawablePosition[];
+    onRedeem: () => void;
 }) => {
     const priceList = useSelector((state: RootState) => getPriceMap(state));
 
@@ -93,7 +95,7 @@ export const WithdrawPositionTable = ({
                                 {usdFormat(netValue)}
                             </span>
                         </span>
-                        <Button>Redeem</Button>
+                        <Button onClick={onRedeem}>Redeem</Button>
                     </div>
                 </>
             )}
