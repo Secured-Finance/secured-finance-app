@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { GradientBox } from 'src/components/atoms';
 import { CollateralSnapshot } from 'src/components/molecules';
@@ -59,6 +60,8 @@ export const EmergencyGlobalSettlement = () => {
         })
     );
 
+    const [userStep, setUserStep] = useState<'redeem' | 'withdraw'>('redeem');
+
     return (
         <Page title='Emergency Global Settlement'>
             <TwoColumns>
@@ -88,8 +91,14 @@ export const EmergencyGlobalSettlement = () => {
                             </p>
                         </div>
                     </GradientBox>
-                    <WithdrawPositionTable data={withdrawableData} />
-                    <WithdrawTokenTable data={withdrawableTokens} />
+
+                    <WithdrawPositionTable
+                        data={userStep === 'redeem' ? withdrawableData : []}
+                        onRedeem={() => setUserStep('withdraw')}
+                    />
+                    <WithdrawTokenTable
+                        data={userStep === 'withdraw' ? withdrawableTokens : []}
+                    />
                 </section>
                 <section className='grid grid-flow-row gap-6'>
                     <CollateralSnapshot

@@ -4,7 +4,14 @@ import * as stories from './EmergencyGlobalSettlement.stories';
 
 const { Default } = composeStories(stories);
 
-describe.skip('EmergencyGlobalSettlement Component', () => {
+jest.mock('next/router', () => ({
+    useRouter: jest.fn(() => ({
+        pathname: '/',
+        push: jest.fn(),
+    })),
+}));
+
+describe('EmergencyGlobalSettlement Component', () => {
     it('should render a EmergencyGlobalSettlement', () => {
         render(<Default />);
     });
