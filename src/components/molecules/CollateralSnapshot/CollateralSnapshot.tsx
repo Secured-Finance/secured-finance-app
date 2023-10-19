@@ -13,13 +13,13 @@ import {
 } from 'src/utils';
 ChartJS.register(ArcElement, Tooltip);
 
-type CollateralComposition = {
+export type CollateralSnapshot = {
     currency: CurrencySymbol;
     ratio: number;
     price: number;
 };
 
-const columnHelper = createColumnHelper<CollateralComposition>();
+const columnHelper = createColumnHelper<CollateralSnapshot>();
 
 const options = {
     elements: {
@@ -38,7 +38,7 @@ export const CollateralSnapshot = ({
     data,
     snapshotDate,
 }: {
-    data: CollateralComposition[];
+    data: CollateralSnapshot[];
     snapshotDate: number | undefined;
 }) => {
     const chartData = {
