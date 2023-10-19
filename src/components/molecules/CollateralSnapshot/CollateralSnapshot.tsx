@@ -85,9 +85,9 @@ export const CollateralSnapshot = ({
             header='Protocol Collateral Snapshot'
             shape='rounded-bottom'
         >
-            <div className='grid min-w-fit grid-flow-row place-content-center space-y-6 p-2'>
-                <section>
-                    <Doughnut data={chartData} options={options} />{' '}
+            <div className='grid min-w-fit grid-flow-row place-items-center space-y-6 p-2'>
+                <section className='w-48 pt-7'>
+                    <Doughnut data={chartData} options={options} />
                 </section>
                 <section className='typography-caption bg-black-20 px-4 pb-4'>
                     <CoreTable columns={columns} data={data} />
