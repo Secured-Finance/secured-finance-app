@@ -36,18 +36,27 @@ export const CollateralInput = ({
     );
 
     const handleAmountChange = useCallback(
-        (amount: number | undefined) => {
+        (inputAmount: number | undefined) => {
+            if (
+                amount !== undefined &&
+                inputAmount === Math.round(amount * 10000) / 10000.0
+            ) {
+                return;
+            }
             if (onAmountChange) {
-                handleInputChange(amount, asset, onAmountChange);
+                handleInputChange(inputAmount, asset, onAmountChange);
             }
         },
-        [asset, handleInputChange, onAmountChange]
+        [amount, asset, handleInputChange, onAmountChange]
     );
 
     const handleClick = useCallback(
         (percentage: number) => {
             const amount =
-                Math.floor(percentage * availableAmount * 10000) / 10000.0;
+                percentage === 1
+                    ? availableAmount
+                    : Math.floor(percentage * availableAmount * 10000) /
+                      10000.0;
             if (onAmountChange) {
                 handleInputChange(amount, asset, onAmountChange);
             }

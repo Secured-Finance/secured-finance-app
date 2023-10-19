@@ -1,14 +1,19 @@
 import { composeStories } from '@storybook/react';
 import { BigNumber } from 'ethers';
 import { fireEvent, render, screen } from 'src/test-utils.js';
+import { CurrencySymbol } from 'src/utils';
 import * as stories from './AssetSelector.stories';
 
 const { Default } = composeStories(stories);
 
 describe('AssetSelector Component', () => {
     const amountFormatterMap = {
-        ['WBTC']: (amount: number) => BigNumber.from(amount * 100),
-        ['ETH']: (amount: number) => BigNumber.from(amount * 1000),
+        [CurrencySymbol.WBTC]: (amount: number) => BigNumber.from(amount * 100),
+        [CurrencySymbol.ETH]: (amount: number) => BigNumber.from(amount * 1000),
+        [CurrencySymbol.WFIL]: (amount: number) =>
+            BigNumber.from(amount * 10000),
+        [CurrencySymbol.USDC]: (amount: number) =>
+            BigNumber.from(amount * 100000),
     };
 
     it('should render a AssetSelector', () => {
@@ -19,7 +24,7 @@ describe('AssetSelector Component', () => {
         render(<Default />);
         const input = screen.getByRole('textbox');
         fireEvent.click(screen.getByRole('button'));
-        fireEvent.click(screen.getByText('Ethereum'));
+        fireEvent.click(screen.getByText('ETH'));
         fireEvent.change(input, { target: { value: '1' } });
         expect(screen.getByText(`~ $1,012`)).toBeInTheDocument();
         fireEvent.change(input, { target: { value: '10' } });
@@ -64,7 +69,7 @@ describe('AssetSelector Component', () => {
         render(<Default onAmountChange={onAmountChange} />);
         expect(onAmountChange).toHaveBeenCalledTimes(0);
         fireEvent.click(screen.getByRole('button'));
-        fireEvent.click(screen.getByText('Ethereum'));
+        fireEvent.click(screen.getByText('ETH'));
         expect(onAmountChange).toHaveBeenCalledTimes(0);
 
         fireEvent.click(screen.getByRole('button'));
@@ -77,7 +82,7 @@ describe('AssetSelector Component', () => {
         render(<Default onAssetChange={onAssetChange} />);
         expect(onAssetChange).toHaveBeenCalledWith('WBTC');
         fireEvent.click(screen.getByRole('button'));
-        fireEvent.click(screen.getByText('Ethereum'));
+        fireEvent.click(screen.getByText('ETH'));
         expect(onAssetChange).toHaveBeenLastCalledWith('ETH');
         fireEvent.click(screen.getByRole('button'));
         fireEvent.click(screen.getByText('WFIL'));

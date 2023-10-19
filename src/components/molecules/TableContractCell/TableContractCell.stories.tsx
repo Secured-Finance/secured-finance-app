@@ -1,3 +1,4 @@
+import { OrderSide } from '@secured-finance/sf-client';
 import type { Meta, StoryFn } from '@storybook/react';
 import { dec22Fixture, ethBytes32 } from 'src/stories/mocks/fixtures';
 import { TableContractCell } from './TableContractCell';
@@ -29,4 +30,9 @@ CurrencyOnly.args = {
 export const ContractOnly = Template.bind({});
 ContractOnly.args = {
     variant: 'contractOnly',
+};
+
+export const Delisted = Template.bind({});
+Delisted.args = {
+    delistedContractSide: OrderSide.LEND,
 };

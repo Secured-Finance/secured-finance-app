@@ -80,6 +80,7 @@ module.exports = {
             teal: '#11CABE',
             green: '#5CD167',
             orange: '#F9AA4B',
+            yellow: '#FAAD14',
             red: '#FA2256',
             purple: '#BD47FB',
             gunMetal: '#292D3F',

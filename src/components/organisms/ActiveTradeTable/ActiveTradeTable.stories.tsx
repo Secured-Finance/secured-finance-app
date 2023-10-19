@@ -5,7 +5,9 @@ import {
     withAssetPrice,
     withWalletProvider,
 } from 'src/../.storybook/decorators';
+import { defaultDelistedStatusSet } from 'src/hooks';
 import { positions, wfilBytes32 } from 'src/stories/mocks/fixtures';
+import { CurrencySymbol, getTimestampRelativeToNow } from 'src/utils';
 import { Maturity } from 'src/utils/entities';
 import { ActiveTradeTable } from './ActiveTradeTable';
 
@@ -14,6 +16,7 @@ export default {
     component: ActiveTradeTable,
     args: {
         data: positions,
+        delistedCurrencySet: defaultDelistedStatusSet,
     },
     parameters: {
         ...RESPONSIVE_PARAMETERS,
@@ -31,15 +34,47 @@ const Template: StoryFn<typeof ActiveTradeTable> = args => {
             amount: BigNumber.from('500000000000000000000'),
             currency: wfilBytes32,
             forwardValue: BigNumber.from('500000000000000000000'),
-            maturity: new Maturity(getFutureTimeStamp(22)).toString(),
+            maturity: new Maturity(
+                getTimestampRelativeToNow(22, true)
+            ).toString(),
             marketPrice: BigNumber.from(10000),
         },
         {
-            amount: BigNumber.from('0'),
+            amount: BigNumber.from('500000000000000000000'),
             currency: wfilBytes32,
             forwardValue: BigNumber.from('500000000000000000000'),
-            maturity: new Maturity(getFutureTimeStamp(28)).toString(),
-            marketPrice: BigNumber.from(0),
+            maturity: new Maturity(
+                getTimestampRelativeToNow(28, true)
+            ).toString(),
+            marketPrice: BigNumber.from(10000),
+        },
+        {
+            amount: BigNumber.from('-500000000000000000000'),
+            currency: wfilBytes32,
+            forwardValue: BigNumber.from('-500000000000000000000'),
+            maturity: new Maturity(getTimestampRelativeToNow(120)).toString(),
+            marketPrice: BigNumber.from(10000),
+        },
+        {
+            amount: BigNumber.from('-500000000000000000000'),
+            currency: wfilBytes32,
+            forwardValue: BigNumber.from('-500000000000000000000'),
+            maturity: new Maturity(getTimestampRelativeToNow(200)).toString(),
+            marketPrice: BigNumber.from(10000),
+        },
+        {
+            amount: BigNumber.from('500000000000000000000'),
+            currency: wfilBytes32,
+            forwardValue: BigNumber.from('500000000000000000000'),
+            maturity: new Maturity(getTimestampRelativeToNow(168)).toString(),
+            marketPrice: BigNumber.from(10000),
+        },
+        {
+            amount: BigNumber.from('500000000000000000000'),
+            currency: wfilBytes32,
+            forwardValue: BigNumber.from('500000000000000000000'),
+            maturity: new Maturity(getTimestampRelativeToNow(200)).toString(),
+            marketPrice: BigNumber.from(10000),
         },
     ];
 
@@ -48,8 +83,7 @@ const Template: StoryFn<typeof ActiveTradeTable> = args => {
 
 export const Default = Template.bind({});
 
-const getFutureTimeStamp = (hours: number) => {
-    const now = new Date();
-    const futureTimestamp = new Date(now.getTime() + hours * 60 * 60 * 1000);
-    return Math.floor(futureTimestamp.getTime() / 1000);
+export const Delisted = Template.bind({});
+Delisted.args = {
+    delistedCurrencySet: new Set([CurrencySymbol.WFIL]),
 };

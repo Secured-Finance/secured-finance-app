@@ -1,5 +1,6 @@
 import { Menu } from '@headlessui/react';
 import EllipsisHorizontalIcon from '@heroicons/react/24/outline/EllipsisHorizontalIcon';
+import classNames from 'classnames';
 import { Separator } from 'src/components/atoms';
 
 type MenuItem = { text: string; onClick: () => void; disabled?: boolean };
@@ -12,7 +13,15 @@ const MenuItem = ({ text, onClick, disabled = false }: MenuItem) => {
             onClick={onClick}
             disabled={disabled}
         >
-            <p className='typography-caption-2 text-center capitalize text-neutral-8'>
+            <p
+                className={classNames(
+                    'typography-caption-2 text-center capitalize',
+                    {
+                        'text-neutral-8': !disabled,
+                        'text-slateGray': disabled,
+                    }
+                )}
+            >
                 {text}
             </p>
         </button>
