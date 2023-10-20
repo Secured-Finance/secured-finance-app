@@ -1,4 +1,3 @@
-import { OrderSide } from '@secured-finance/sf-client';
 import { useSelector } from 'react-redux';
 import { MaturityListItem } from 'src/components/organisms';
 import { selectLandingOrderForm } from 'src/store/landingOrderForm';
@@ -8,7 +7,7 @@ import { LoanValue } from 'src/utils/entities';
 import { baseContracts, useLendingMarkets } from '../useLendingMarkets';
 
 export const useYieldCurveMarketRates = () => {
-    const { side, currency } = useSelector((state: RootState) =>
+    const { currency } = useSelector((state: RootState) =>
         selectLandingOrderForm(state.landingOrderForm)
     );
 
@@ -19,12 +18,10 @@ export const useYieldCurveMarketRates = () => {
     const maturityList: MaturityListItem[] = [];
     let itayoseMarketIndexSet = new Set<number>();
     let currentIndex = 0;
-    let nearestMaturity = Number.POSITIVE_INFINITY;
 
     Object.values(lendingContracts).map(obj => {
         if (!(obj.isOpened || obj.isItayosePeriod || obj.isPreOrderPeriod))
             return;
-        nearestMaturity = Math.min(nearestMaturity, obj.maturity);
         maturityList.push({
             label: obj.name,
             maturity: obj.maturity,
@@ -36,16 +33,9 @@ export const useYieldCurveMarketRates = () => {
             );
             itayoseMarketIndexSet.add(currentIndex);
         } else {
-            if (side === OrderSide.LEND) {
-                rates.push(
-                    LoanValue.fromPrice(obj.bestLendUnitPrice, obj.maturity).apr
-                );
-            } else {
-                rates.push(
-                    LoanValue.fromPrice(obj.bestBorrowUnitPrice, obj.maturity)
-                        .apr
-                );
-            }
+            rates.push(
+                LoanValue.fromPrice(obj.marketUnitPrice, obj.maturity).apr
+            );
         }
         currentIndex += 1;
     });
