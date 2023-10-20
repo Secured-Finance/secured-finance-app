@@ -47,7 +47,9 @@ export const LineChartTab = ({
                     data={data}
                     maturityList={maturityList}
                     options={chartOptions}
-                    handleChartClick={(maturity, isPreOrderPeriod) => {
+                    handleChartClick={maturityIndex => {
+                        const { maturity, isPreOrderPeriod } =
+                            maturityList[maturityIndex];
                         dispatch(setMaturity(maturity));
                         if (isPreOrderPeriod) {
                             router.push('/itayose');
