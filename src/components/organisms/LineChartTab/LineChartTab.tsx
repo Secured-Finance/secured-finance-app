@@ -1,4 +1,3 @@
-import { OrderSide } from '@secured-finance/sf-client';
 import { useRouter } from 'next/router';
 import { useDispatch, useSelector } from 'react-redux';
 import { LineChart, getData } from 'src/components/molecules';
@@ -22,13 +21,13 @@ export const LineChartTab = ({
     const dispatch = useDispatch();
     const router = useRouter();
 
-    const { side, maturity } = useSelector((state: RootState) =>
+    const { maturity } = useSelector((state: RootState) =>
         selectLandingOrderForm(state.landingOrderForm)
     );
 
     const data = getData(
         rates,
-        side === OrderSide.BORROW ? 'Borrow' : 'Lend',
+        'Market price',
         maturityList.map(item => item.label),
         itayoseMarketIndexSet
     );

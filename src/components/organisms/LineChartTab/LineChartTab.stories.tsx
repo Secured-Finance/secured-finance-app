@@ -52,3 +52,10 @@ export const MultipleItayoseMarkets = Template.bind({});
 MultipleItayoseMarkets.args = {
     itayoseMarketIndexSet: new Set([5, 6, 7]),
 };
+
+export const WithLessThan8Markets = Template.bind({});
+WithLessThan8Markets.args = {
+    rates: yieldCurveRates.slice(3),
+    maturityList: maturityList.slice(3),
+    itayoseMarketIndexSet: new Set([1, 2, 3, 4]),
+};
