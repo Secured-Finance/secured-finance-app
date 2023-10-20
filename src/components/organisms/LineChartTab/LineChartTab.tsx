@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 import { useDispatch, useSelector } from 'react-redux';
-import { LineChart, getData } from 'src/components/molecules';
+import { LineChart, getData, options } from 'src/components/molecules';
 import {
     selectLandingOrderForm,
     setMaturity,
@@ -25,6 +25,13 @@ export const LineChartTab = ({
         selectLandingOrderForm(state.landingOrderForm)
     );
 
+    const chartOptions = {
+        ...options,
+        y: {
+            position: 'right',
+        },
+    };
+
     const data = getData(
         rates,
         'Market price',
@@ -39,6 +46,7 @@ export const LineChartTab = ({
                     type='line'
                     data={data}
                     maturityList={maturityList}
+                    options={chartOptions}
                     handleChartClick={(maturity, isPreOrderPeriod) => {
                         dispatch(setMaturity(maturity));
                         if (isPreOrderPeriod) {
