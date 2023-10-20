@@ -45,41 +45,31 @@ export const useMarketTerminationRatio = () => {
         queryFn: async () => {
             const currencies =
                 (await securedFinance?.getCollateralCurrencies()) ?? [];
+            const currencyList = currencies
+                .map(ccy => hexToCurrencySymbol(ccy))
+                .filter((ccy): ccy is CurrencySymbol => ccy !== undefined);
             return Promise.all(
-                currencies.map(async currency => {
-                    const ccy = hexToCurrencySymbol(currency);
-                    if (ccy) {
-                        return {
-                            currency: ccy,
-                            ratio:
-                                ((
-                                    await securedFinance?.getMarketTerminationRatio(
-                                        toCurrency(ccy)
-                                    )
-                                )?.toNumber() ?? 0) / 1e7,
-                            price:
-                                ((
-                                    await securedFinance?.getMarketTerminationPrice(
-                                        toCurrency(ccy)
-                                    )
-                                )?.toNumber() ?? 0) / 1e8,
-                        };
-                    }
+                currencyList.map(async ccy => {
+                    return {
+                        currency: ccy,
+                        ratio:
+                            ((
+                                await securedFinance?.getMarketTerminationRatio(
+                                    toCurrency(ccy)
+                                )
+                            )?.toNumber() ?? 0) / 1e10,
+                        price:
+                            ((
+                                await securedFinance?.getMarketTerminationPrice(
+                                    toCurrency(ccy)
+                                )
+                            )?.toNumber() ?? 0) / 1e8,
+                    };
                 })
             );
         },
         enabled: !!securedFinance,
         placeholderData: [],
-        select: data =>
-            data.filter(
-                (
-                    d
-                ): d is NonNullable<{
-                    currency: CurrencySymbol;
-                    ratio: number;
-                    price: number;
-                }> => d !== undefined
-            ),
         staleTime: Infinity,
         refetchOnWindowFocus: true,
     });
