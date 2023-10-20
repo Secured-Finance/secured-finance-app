@@ -1,8 +1,5 @@
 import type { Meta, StoryFn } from '@storybook/react';
-import {
-    withAssetPrice,
-    withWalletProvider,
-} from 'src/../.storybook/decorators';
+import { withAssetPrice } from 'src/../.storybook/decorators';
 import { dailyVolumes } from 'src/stories/mocks/fixtures';
 import { CurrencySymbol } from 'src/utils';
 import { YieldChart } from './';
@@ -19,7 +16,7 @@ export default {
     parameters: {
         connected: true,
     },
-    decorators: [withAssetPrice, withWalletProvider],
+    decorators: [withAssetPrice],
 } as Meta<typeof YieldChart>;
 
 const Template: StoryFn<typeof YieldChart> = args => {

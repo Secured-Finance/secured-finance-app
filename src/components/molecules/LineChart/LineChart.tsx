@@ -60,7 +60,7 @@ export type LineChartProps = {
     data: ChartData<'line'>;
     maturityList: MaturityListItem[];
     maturity: Maturity;
-    handleChartClick: (maturity: number, isPreOrderPeriod: boolean) => void;
+    handleChartClick: (index: number) => void;
 } & ChartProps;
 
 export const LineChart = ({
@@ -123,14 +123,11 @@ export const LineChart = ({
         if (element && element[0]) {
             const { index } = element[0];
             const label = data.labels?.[index];
-            const selectedMaturity = maturityList.find(
+            const selectedMaturityIndex = maturityList.findIndex(
                 element => element.label === label
             );
-            if (selectedMaturity) {
-                handleChartClick(
-                    selectedMaturity.maturity,
-                    selectedMaturity.isPreOrderPeriod
-                );
+            if (selectedMaturityIndex >= 0) {
+                handleChartClick(selectedMaturityIndex);
             }
         }
     };

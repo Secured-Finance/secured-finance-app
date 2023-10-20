@@ -19,9 +19,13 @@ export const useYieldCurveMarketRates = () => {
     let itayoseMarketIndexSet = new Set<number>();
     let currentIndex = 0;
 
-    Object.values(lendingContracts).map(obj => {
-        if (!(obj.isOpened || obj.isItayosePeriod || obj.isPreOrderPeriod))
-            return;
+    const sortedLendingContracts = Object.values(lendingContracts)
+        .filter(
+            obj => obj.isOpened || obj.isItayosePeriod || obj.isPreOrderPeriod
+        )
+        .sort((a, b) => a.maturity - b.maturity);
+
+    sortedLendingContracts.forEach(obj => {
         maturityList.push({
             label: obj.name,
             maturity: obj.maturity,

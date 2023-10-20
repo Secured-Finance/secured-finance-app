@@ -1,6 +1,5 @@
 import { composeStories } from '@storybook/react';
 import { preloadedAssetPrices } from 'src/stories/mocks/fixtures';
-import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import {
     fireEvent,
     queries,
@@ -12,9 +11,6 @@ import {
 import * as stories from './YieldChart.stories';
 
 const { Default, Loading } = composeStories(stories);
-
-const mockSecuredFinance = mockUseSF();
-jest.mock('src/hooks/useSecuredFinance', () => () => mockSecuredFinance);
 
 describe('YieldChart Component', () => {
     it.skip('should render YieldChart', async () => {
