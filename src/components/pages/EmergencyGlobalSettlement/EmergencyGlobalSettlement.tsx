@@ -51,7 +51,7 @@ export const EmergencyGlobalSettlement = () => {
                 amount: value,
                 currency: toHex(key),
             })),
-        ...Object.entries(collateralBook.collateral)
+        ...Object.entries(collateralBook.withdrawableCollateral)
             .filter(v => v[1] && !v[1].isZero())
             .map(([key, value]) => ({
                 amount: value,
