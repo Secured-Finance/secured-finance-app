@@ -1,4 +1,4 @@
-import ErrorPage from 'next/error';
+import Router from 'next/router';
 import { useEffect, useState } from 'react';
 import { Landing } from 'src/components/pages';
 import { useIsMarketTerminated } from 'src/hooks';
@@ -15,7 +15,10 @@ function EntryPoint() {
         return null;
     }
 
-    if (isTerminated) return <ErrorPage statusCode={404} />;
+    if (isTerminated) {
+        Router.push('/emergency');
+        return null;
+    }
 
     return <Landing />;
 }
