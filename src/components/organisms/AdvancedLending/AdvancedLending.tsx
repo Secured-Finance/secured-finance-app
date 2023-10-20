@@ -20,6 +20,7 @@ import {
     useGraphClientHook,
     useMarket,
     useMarketOrderList,
+    useYieldCurveMarketRates,
 } from 'src/hooks';
 import { useOrderbook } from 'src/hooks/useOrderbook';
 import { getAssetPrice } from 'src/store/assetPrices/selectors';
@@ -140,6 +141,9 @@ export const AdvancedLending = ({
         selectedTerm.value
     );
 
+    const { rates, maturityList, itayoseMarketIndexSet } =
+        useYieldCurveMarketRates();
+
     const currentMarket = useMemo(() => {
         if (marketUnitPrice) {
             return {
@@ -236,7 +240,11 @@ export const AdvancedLending = ({
             <div className='flex h-full flex-grow flex-col gap-4'>
                 <Tab tabDataArray={[{ text: 'Yield Curve' }]}>
                     <div className='h-[410px] w-full px-6 py-4'>
-                        <LineChartTab />
+                        <LineChartTab
+                            rates={rates}
+                            maturityList={maturityList}
+                            itayoseMarketIndexSet={itayoseMarketIndexSet}
+                        />
                     </div>
                 </Tab>
                 <HorizontalTab tabTitles={['Open Orders']}>

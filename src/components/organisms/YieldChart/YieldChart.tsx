@@ -2,9 +2,10 @@ import { useState } from 'react';
 import SFLogoSmall from 'src/assets/img/logo-small.svg';
 import { ExpandIndicator } from 'src/components/atoms';
 import { CurveHeader } from 'src/components/molecules';
+import { LineChartTab } from 'src/components/organisms';
+import { useYieldCurveMarketRates } from 'src/hooks';
 import { DailyVolumes } from 'src/types';
 import { CurrencySymbol } from 'src/utils';
-import { LineChartTab } from 'src/components/organisms';
 
 interface YieldChartProps {
     asset: CurrencySymbol;
@@ -16,6 +17,9 @@ export const YieldChart = ({
     dailyVolumes,
 }: YieldChartProps): JSX.Element => {
     const [show, setShow] = useState(true);
+
+    const { rates, maturityList, itayoseMarketIndexSet } =
+        useYieldCurveMarketRates();
 
     return (
         <div className='hidden h-[480px] w-fit flex-row overflow-hidden rounded-r-xl border-y border-r border-panelStroke shadow-[0_46px_64px_rgba(0,0,0,0.4)] tablet:visible tablet:flex'>
@@ -33,7 +37,11 @@ export const YieldChart = ({
                 </div>
                 <div className='flex flex-grow items-center pl-[35px]'>
                     <div className='h-[350px] w-[500px]'>
-                        <LineChartTab />
+                        <LineChartTab
+                            rates={rates}
+                            maturityList={maturityList}
+                            itayoseMarketIndexSet={itayoseMarketIndexSet}
+                        />
                     </div>
                 </div>
             </div>

@@ -22,3 +22,4 @@ export * from './usePositions';
 export * from './usePrepareOrderbookData';
 export * from './useTotalNumberOfAsset';
 export * from './useValueLockedByCurrency';
+export * from './useYieldCurveMarketRates';
