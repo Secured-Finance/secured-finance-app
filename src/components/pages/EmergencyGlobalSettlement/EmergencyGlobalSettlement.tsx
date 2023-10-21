@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { GradientBox } from 'src/components/atoms';
+import { GradientBox, TextLink } from 'src/components/atoms';
 import { CollateralSnapshot } from 'src/components/molecules';
 import {
     EmergencyRedeemDialog,
@@ -109,15 +109,17 @@ export const EmergencyGlobalSettlement = () => {
                                 setting the protocol to a non-operational
                                 status. Users can then redeem assets based on
                                 the latest cached feeds and withdraw the
-                                resulting collateral tokens. For a comprehensive
-                                understanding of the Emergency Global Settlement
-                                procedure, we encourage you to explore
-                                Docs.Secured.Finance.
+                                resulting collateral tokens.
                             </p>
                             <p>
                                 For a comprehensive understanding of the
                                 Emergency Global Settlement procedure, we
-                                encourage you to explore Docs.Secured.Finance.
+                                encourage you to explore &nbsp;
+                                <TextLink
+                                    href='http://docs.secured.finance/'
+                                    text='Docs.Secured.Finance'
+                                />
+                                .
                             </p>
                         </div>
                     </GradientBox>
