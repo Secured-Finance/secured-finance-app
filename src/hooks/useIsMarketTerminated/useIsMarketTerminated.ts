@@ -104,6 +104,18 @@ export const useMarketTerminationRatio = () => {
             );
         },
         enabled: !!securedFinance,
+        select: ratios => {
+            const total = ratios.reduce((acc, { ratio }) => {
+                return acc + ratio;
+            }, 0);
+
+            return ratios.map(({ currency, ratio }) => {
+                return {
+                    currency,
+                    ratio: ratio / total,
+                };
+            });
+        },
         placeholderData: [],
         staleTime: Infinity,
         refetchOnWindowFocus: true,
