@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { QueryKeys } from 'src/hooks/queries';
 import useSF from 'src/hooks/useSecuredFinance';
+import { AssetPriceMap } from 'src/store/assetPrices/selectors';
 import { CurrencySymbol, hexToCurrencySymbol, toCurrency } from 'src/utils';
 
 export const useIsMarketTerminated = () => {
@@ -37,6 +38,46 @@ export const useMarketTerminationDate = () => {
     });
 };
 
+export const useTerminationPrices = () => {
+    const securedFinance = useSF();
+    return useQuery({
+        queryKey: [QueryKeys.TERMINATION_PRICES],
+        queryFn: async () => {
+            const currencies =
+                (await securedFinance?.getCollateralCurrencies()) ?? [];
+            const currencyList = currencies
+                .map(ccy => hexToCurrencySymbol(ccy))
+                .filter((ccy): ccy is CurrencySymbol => ccy !== undefined);
+            const prices = await Promise.all(
+                currencyList.map(async ccy => {
+                    return (
+                        ((
+                            await securedFinance?.getMarketTerminationPrice(
+                                toCurrency(ccy)
+                            )
+                        )?.toNumber() ?? 0) / 1e8
+                    );
+                })
+            );
+
+            const assetPriceMap: AssetPriceMap = currencyList.reduce(
+                (acc, ccy, index) => {
+                    return {
+                        ...acc,
+                        [ccy]: prices[index],
+                    };
+                },
+                {} as AssetPriceMap
+            );
+
+            return assetPriceMap;
+        },
+        enabled: !!securedFinance,
+        staleTime: Infinity,
+        refetchOnWindowFocus: true,
+    });
+};
+
 export const useMarketTerminationRatio = () => {
     const securedFinance = useSF();
 
@@ -58,12 +99,6 @@ export const useMarketTerminationRatio = () => {
                                     toCurrency(ccy)
                                 )
                             )?.toNumber() ?? 0) / 1e10,
-                        price:
-                            ((
-                                await securedFinance?.getMarketTerminationPrice(
-                                    toCurrency(ccy)
-                                )
-                            )?.toNumber() ?? 0) / 1e8,
                     };
                 })
             );

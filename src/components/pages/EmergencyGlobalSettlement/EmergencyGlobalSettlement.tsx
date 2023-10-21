@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { GradientBox } from 'src/components/atoms';
 import { CollateralSnapshot } from 'src/components/molecules';
 import {
@@ -12,11 +12,13 @@ import {
     emptyCollateralBook,
     useCollateralBook,
     useCurrenciesForOrders,
+    useIsRedemptionRequired,
     useMarketTerminationDate,
     useMarketTerminationRatio,
     usePositions,
+    useTerminationPrices,
 } from 'src/hooks';
-import { ZERO_BN } from 'src/utils';
+import { ZERO_BN, computeNetValue, usdFormat } from 'src/utils';
 import { toHex } from 'viem';
 import { useAccount } from 'wagmi';
 
@@ -28,21 +30,24 @@ export const EmergencyGlobalSettlement = () => {
     const { data: collateralBook = emptyCollateralBook } =
         useCollateralBook(address);
 
-    const withdrawableData = [
-        ...positions.map(p => ({
-            ...p,
-            type: 'position' as const,
-        })),
-        ...Object.entries(collateralBook.collateral)
-            .filter(v => v[1] && !v[1].isZero())
-            .map(([key, value]) => ({
-                amount: value,
-                currency: toHex(key),
-                forwardValue: ZERO_BN,
-                maturity: '0',
-                type: 'collateral' as const,
+    const withdrawableData = useMemo(
+        () => [
+            ...positions.map(p => ({
+                ...p,
+                type: 'position' as const,
             })),
-    ];
+            ...Object.entries(collateralBook.collateral)
+                .filter(v => v[1] && !v[1].isZero())
+                .map(([key, value]) => ({
+                    amount: value,
+                    currency: toHex(key),
+                    forwardValue: ZERO_BN,
+                    maturity: '0',
+                    type: 'collateral' as const,
+                })),
+        ],
+        [positions, collateralBook]
+    );
 
     const withdrawableTokens = [
         ...Object.entries(collateralBook.nonCollateral)
@@ -60,11 +65,32 @@ export const EmergencyGlobalSettlement = () => {
     ];
 
     const snapshot = useMarketTerminationRatio().data;
+    const snapshotPrices = useTerminationPrices().data;
+    const snapshotWithPrice =
+        snapshot?.map(s => ({
+            ...s,
+            price: snapshotPrices?.[s.currency] ?? 0,
+        })) ?? [];
+
+    const isRedemptionRequired = useIsRedemptionRequired(address).data;
 
     const [userStep, setUserStep] = useState<'redeem' | 'withdraw'>('redeem');
     const [showRedeemDialog, setShowRedeemDialog] = useState(false);
 
     const snapshotDate = useMarketTerminationDate().data;
+
+    useEffect(() => {
+        if (isRedemptionRequired) {
+            setUserStep('redeem');
+        } else {
+            setUserStep('withdraw');
+        }
+    }, [isRedemptionRequired]);
+
+    const netValue = useMemo(() => {
+        if (!snapshotPrices) return 0;
+        return computeNetValue(withdrawableData, snapshotPrices);
+    }, [withdrawableData, snapshotPrices]);
 
     return (
         <Page title='Emergency Global Settlement'>
@@ -100,8 +126,8 @@ export const EmergencyGlobalSettlement = () => {
                         data={userStep === 'redeem' ? withdrawableData : []}
                         onRedeem={() => {
                             setShowRedeemDialog(true);
-                            setUserStep('withdraw');
                         }}
+                        netValue={netValue}
                     />
                     <WithdrawTokenTable
                         data={userStep === 'withdraw' ? withdrawableTokens : []}
@@ -109,7 +135,7 @@ export const EmergencyGlobalSettlement = () => {
                 </section>
                 <section className='grid grid-flow-row gap-6'>
                     <CollateralSnapshot
-                        data={snapshot ?? []}
+                        data={snapshotWithPrice}
                         snapshotDate={snapshotDate}
                     />
                     <MyWalletWidget />
@@ -118,9 +144,9 @@ export const EmergencyGlobalSettlement = () => {
             <EmergencyRedeemDialog
                 isOpen={showRedeemDialog}
                 onClose={() => setShowRedeemDialog(false)}
-                data={snapshot ?? []}
+                data={snapshotWithPrice ?? []}
                 snapshotDate={snapshotDate}
-                netValue='PlaceHolder'
+                netValue={usdFormat(netValue)}
             />
         </Page>
     );
