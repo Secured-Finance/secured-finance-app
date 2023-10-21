@@ -32,7 +32,10 @@ export const computeNetValue = (
     return positions.reduce((acc, { amount, currency }) => {
         const ccy = hexToCurrencySymbol(currency);
         if (!ccy) return acc;
-        return acc + currencyMap[ccy].fromBaseUnit(amount) * priceList[ccy];
+        return (
+            acc +
+            currencyMap[ccy].fromBaseUnit(amount) * (priceList?.[ccy] ?? 0)
+        );
     }, 0);
 };
 

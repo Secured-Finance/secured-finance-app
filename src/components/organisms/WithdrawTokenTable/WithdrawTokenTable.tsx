@@ -1,13 +1,11 @@
 import { createColumnHelper } from '@tanstack/react-table';
 import { BigNumber } from 'ethers';
 import { useMemo, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { Button } from 'src/components/atoms';
 import { CoreTable } from 'src/components/molecules';
 import { WithdrawCollateral } from 'src/components/organisms';
 import { EmergencySettlementStep } from 'src/components/templates';
-import { getPriceMap } from 'src/store/assetPrices/selectors';
-import { RootState } from 'src/store/types';
+import { useTerminationPrices } from 'src/hooks';
 import {
     CollateralInfo,
     CurrencySymbol,
@@ -34,7 +32,7 @@ const columnHelper = createColumnHelper<
 >();
 
 export const WithdrawTokenTable = ({ data }: { data: TokenPosition[] }) => {
-    const priceList = useSelector((state: RootState) => getPriceMap(state));
+    const priceList = useTerminationPrices().data;
     const [openModal, setOpenModal] = useState(false);
 
     const collateral: Record<CurrencySymbol, CollateralInfo> = data.reduce(
@@ -113,6 +111,7 @@ export const WithdrawTokenTable = ({ data }: { data: TokenPosition[] }) => {
                                 };
                             })}
                             columns={columns}
+                            options={{ name: 'emergency-step-2' }}
                         />
                     </div>
                 )}

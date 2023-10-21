@@ -1,14 +1,11 @@
 import { InformationCircleIcon } from '@heroicons/react/24/solid';
 import { createColumnHelper } from '@tanstack/react-table';
 import { useMemo } from 'react';
-import { useSelector } from 'react-redux';
 import { Button } from 'src/components/atoms';
 import { CoreTable } from 'src/components/molecules';
 import { EmergencySettlementStep } from 'src/components/templates';
-import { Position } from 'src/hooks';
-import { getPriceMap } from 'src/store/assetPrices/selectors';
-import { RootState } from 'src/store/types';
-import { computeNetValue, usdFormat } from 'src/utils';
+import { Position, useTerminationPrices } from 'src/hooks';
+import { usdFormat } from 'src/utils';
 import {
     amountColumnDefinition,
     loanTypeFromFVColumnDefinition,
@@ -25,11 +22,13 @@ const columnHelper = createColumnHelper<WithdrawablePosition>();
 export const WithdrawPositionTable = ({
     data,
     onRedeem,
+    netValue,
 }: {
     data: WithdrawablePosition[];
     onRedeem: () => void;
+    netValue: number;
 }) => {
-    const priceList = useSelector((state: RootState) => getPriceMap(state));
+    const priceList = useTerminationPrices().data;
 
     const columns = useMemo(
         () => [
@@ -57,11 +56,6 @@ export const WithdrawPositionTable = ({
         [priceList]
     );
 
-    const netValue = useMemo(
-        () => computeNetValue(data, priceList),
-        [data, priceList]
-    );
-
     return (
         <EmergencySettlementStep
             step='1. Redeem Your Active Contracts and Collateral Currencies'
@@ -70,7 +64,11 @@ export const WithdrawPositionTable = ({
             {data.length !== 0 && (
                 <>
                     <div className='bg-black-20 px-5 pb-7 font-normal'>
-                        <CoreTable data={data} columns={columns} />
+                        <CoreTable
+                            data={data}
+                            columns={columns}
+                            options={{ name: 'emergency-step-1' }}
+                        />
                     </div>
                     <div className='flex flex-row justify-around gap-5 pl-4 pr-7 pt-3'>
                         <span className='flex w-2/3 flex-row items-center justify-start gap-4 border-r border-white-20 pr-8 '>
