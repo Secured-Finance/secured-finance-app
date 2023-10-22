@@ -51,6 +51,10 @@ export const WithdrawTokenTable = ({ data }: { data: TokenPosition[] }) => {
         {} as Record<CurrencySymbol, CollateralInfo>
     );
 
+    const [currencyToWithdraw, setCurrencyToWithdraw] = useState<
+        CurrencySymbol | undefined
+    >();
+
     const columns = useMemo(
         () => [
             withdrawableAssetColumnDefinition(
@@ -74,11 +78,16 @@ export const WithdrawTokenTable = ({ data }: { data: TokenPosition[] }) => {
             ),
             columnHelper.accessor('currency', {
                 id: 'action',
-                cell: () => {
+                cell: info => {
                     return (
                         <div className='flex justify-end px-1'>
                             <Button
                                 onClick={() => {
+                                    setCurrencyToWithdraw(
+                                        hexToCurrencySymbol(
+                                            info.row.original.currency
+                                        )
+                                    );
                                     setOpenModal(true);
                                 }}
                                 size='sm'
@@ -120,6 +129,7 @@ export const WithdrawTokenTable = ({ data }: { data: TokenPosition[] }) => {
                 isOpen={openModal}
                 onClose={() => setOpenModal(false)}
                 collateralList={collateral}
+                selected={currencyToWithdraw}
             ></WithdrawCollateral>
         </>
     );

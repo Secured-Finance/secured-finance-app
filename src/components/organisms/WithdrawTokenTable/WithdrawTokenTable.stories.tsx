@@ -18,7 +18,7 @@ export default {
                 currency: wfilBytes32,
             },
             {
-                amount: BigNumber.from('-500000000000000000000'),
+                amount: BigNumber.from('500000000000000000000'),
                 currency: ethBytes32,
             },
             {
