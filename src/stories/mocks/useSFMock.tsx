@@ -455,9 +455,7 @@ export const mockUseSF = () => {
         getMarketTerminationRatio: jest.fn((currency: Currency) => {
             switch (currency.symbol) {
                 case CurrencySymbol.ETH:
-                    return Promise.resolve(BigNumber.from('20000000000')); // 20%
-                case CurrencySymbol.WFIL:
-                    return Promise.resolve(BigNumber.from('20000000000'));
+                    return Promise.resolve(BigNumber.from('10000000000'));
                 case CurrencySymbol.USDC:
                     return Promise.resolve(BigNumber.from('20000000000'));
                 case CurrencySymbol.WBTC:
