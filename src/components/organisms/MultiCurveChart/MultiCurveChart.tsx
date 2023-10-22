@@ -251,7 +251,10 @@ export const MultiCurveChart = ({
             .filter(curr => activeCurrencies.has(curr as CurrencySymbol))
             .reduce((result, curr) => {
                 const currency = curr as CurrencySymbol;
-                result[currency] = curves[currency][tooltipIndex];
+                const currencyRate = curves[currency][tooltipIndex];
+                if (currencyRate) {
+                    result[currency] = currencyRate;
+                }
                 return result;
             }, {} as Partial<Record<CurrencySymbol, Rate>>);
 
