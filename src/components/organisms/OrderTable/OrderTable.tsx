@@ -113,7 +113,6 @@ export const OrderTable = ({
             data={data}
             options={{
                 name: 'open-order-table',
-                border: false,
                 stickyColumns: new Set([6]),
                 pagination: {
                     containerHeight: height || DEFAULT_HEIGHT,

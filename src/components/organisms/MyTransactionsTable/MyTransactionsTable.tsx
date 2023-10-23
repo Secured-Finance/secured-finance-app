@@ -111,7 +111,6 @@ export const MyTransactionsTable = ({
                 columns={isTablet ? columnsForTabletMobile : columns}
                 options={{
                     name: 'my-transactions-table',
-                    border: false,
                     stickyColumns: new Set([0, 1]),
                     pagination: pagination,
                 }}
