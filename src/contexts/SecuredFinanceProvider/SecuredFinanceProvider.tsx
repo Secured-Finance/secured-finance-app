@@ -34,7 +34,7 @@ export const Context = createContext<SFContext>({
 });
 
 const SecuredFinanceProvider: React.FC = ({ children }) => {
-    const { address, isConnected } = useAccount();
+    const { address } = useAccount();
     const { connect, connectors } = useConnect();
     const { data: client } = useWalletClient();
     const publicClient = usePublicClient();
@@ -86,47 +86,24 @@ const SecuredFinanceProvider: React.FC = ({ children }) => {
     }, [dispatchChainError, handleChainChanged]);
 
     useEffect(() => {
-        const connectSFClient = async (walletClient?: WalletClient) => {
+        const connectSFClient = async () => {
             const securedFinanceLib = new SecuredFinanceClient();
-            await securedFinanceLib.init(
-                { name: 'sepolia', chainId: 11155111 },
-                publicClient,
-                walletClient
-            );
+            await securedFinanceLib.init(publicClient, client as WalletClient);
 
             setSecuredFinance(previous => {
                 if (!previous) {
                     return securedFinanceLib;
                 }
 
-                // if (
-                //     previous.config.signerOrProvider instanceof
-                //     providers.BaseProvider
-                // ) {
-                //     return securedFinanceLib;
-                // }
+                if (address) {
+                    return securedFinanceLib;
+                }
 
                 return previous;
             });
         };
-        if (isConnected && client?.chain && client?.transport) {
-            connectSFClient(client);
-        } else if (
-            !isConnected &&
-            publicClient?.transport &&
-            publicClient?.chain
-        ) {
-            connectSFClient();
-        }
-    }, [
-        dispatch,
-        client?.transport,
-        client,
-        isConnected,
-        publicClient?.transport,
-        publicClient?.chain,
-        publicClient,
-    ]);
+        connectSFClient();
+    }, [dispatch, client, publicClient, address]);
 
     useEffect(() => {
         if (address) {
@@ -148,7 +125,6 @@ const SecuredFinanceProvider: React.FC = ({ children }) => {
         const unwatch = publicClient.watchBlockNumber({
             onBlockNumber: blockNumber => {
                 if (blockNumber && typeof blockNumber === 'bigint') {
-                    console.log('blocknum', blockNumber);
                     dispatch(updateLatestBlock(Number(blockNumber)));
 
                     // Invalidate all queries

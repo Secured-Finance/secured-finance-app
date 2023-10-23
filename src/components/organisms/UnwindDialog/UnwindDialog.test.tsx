@@ -1,12 +1,24 @@
+import { publicClient } from '.storybook/decorators';
 import { composeStories } from '@storybook/react';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { render, screen, waitFor } from 'src/test-utils.js';
+import { TransactionReceipt } from 'viem';
 import * as stories from './UnwindDialog.stories';
 
 const { Default, Redeem, Repay } = composeStories(stories);
 
 const mockSecuredFinance = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mockSecuredFinance);
+
+beforeEach(() =>
+    jest
+        .spyOn(publicClient, 'waitForTransactionReceipt')
+        .mockImplementation(() =>
+            Promise.resolve({
+                blockNumber: 123,
+            } as unknown as TransactionReceipt)
+        )
+);
 
 describe('UnwindDialog Component', () => {
     it('should render a UnwindDialog', async () => {
@@ -26,7 +38,7 @@ describe('UnwindDialog Component', () => {
         );
     });
 
-    it.skip('should update the lastActionTimestamp in the store when the transaction receipt is received', async () => {
+    it('should update the lastActionTimestamp in the store when the transaction receipt is received', async () => {
         const { store } = render(<Default />);
         expect(store.getState().blockchain.lastActionTimestamp).toEqual(0);
         screen.getByText('Confirm').click();

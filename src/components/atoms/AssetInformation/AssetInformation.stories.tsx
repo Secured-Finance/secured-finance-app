@@ -3,7 +3,7 @@ import { withAssetPrice } from 'src/../.storybook/decorators';
 import { AssetInformation } from '.';
 
 export default {
-    title: 'Atoms/VssetInformation',
+    title: 'Atoms/AssetInformation',
     component: AssetInformation,
     args: {
         header: 'Collateral Assets',

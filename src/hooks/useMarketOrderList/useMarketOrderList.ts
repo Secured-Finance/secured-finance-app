@@ -1,6 +1,5 @@
 import { useMemo } from 'react';
 import { CurrencySymbol } from 'src/utils';
-import { jsonStringify } from 'src/utils/json-patch';
 import { emptyOrderList, useOrderList } from '../useOrderList';
 
 const passThrough = () => true;
@@ -16,11 +15,10 @@ export const useMarketOrderList = (
     ) => unknown = passThrough
 ) => {
     const { data: orderList = emptyOrderList } = useOrderList(account, [ccy]);
-
     return useMemo(() => {
         return orderList.activeOrderList
             .filter(o => o.maturity === maturity.toString())
             .filter(o => filterFn(o));
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [jsonStringify(orderList), maturity]);
+    }, [JSON.stringify(orderList), maturity]);
 };

@@ -2,7 +2,6 @@ import { toBytes32 } from '@secured-finance/sf-graph-client';
 import { useMemo } from 'react';
 import { LendingMarket, baseContracts, useLendingMarkets } from 'src/hooks';
 import { CurrencySymbol, getCurrencyMapAsList } from 'src/utils';
-import { jsonStringify } from 'src/utils/json-patch';
 
 export const useMarketLists = () => {
     const { data: lendingContracts = baseContracts } = useLendingMarkets();
@@ -35,7 +34,7 @@ export const useMarketLists = () => {
 
         return { openMarkets, itayoseMarkets };
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [jsonStringify(lendingContracts)]);
+    }, [JSON.stringify(lendingContracts)]);
 
     return marketLists;
 };

@@ -206,24 +206,11 @@ export const mockUseSF = () => {
         }),
 
         depositCollateral: jest.fn(() =>
-            Promise.resolve({
-                wait: jest.fn(() => Promise.resolve({ blockNumber: 123 })),
-                to: '0xb98bd7c7f656290071e52d1aa617d9cb4467fd6d',
-                hash: '0xb98bd7c7f656290hu071e52d1a56e6uyh98765e4',
-            })
+            Promise.resolve('0xb98bd7c7f656290hu071e52d1a56e6uyh98765e4')
         ),
 
-        withdrawCollateral: jest.fn<
-            Promise<{
-                wait: () => Promise<{
-                    blockNumber: number | undefined;
-                }>;
-            }>,
-            []
-        >(() =>
-            Promise.resolve({
-                wait: () => Promise.resolve({ blockNumber: 123 }),
-            })
+        withdrawCollateral: jest.fn(() =>
+            Promise.resolve('0xb98bd7c7f656290hu071e52d1a56e6uyh98765e4')
         ),
 
         getBorrowOrderBook: jest.fn((_, __, limit: number) =>
@@ -277,16 +264,7 @@ export const mockUseSF = () => {
             })
         ),
 
-        unwindPosition: jest.fn(() =>
-            Promise.resolve({
-                hash: '0x123',
-                wait: jest.fn(() =>
-                    Promise.resolve({
-                        blockNumber: 123,
-                    })
-                ),
-            })
-        ),
+        unwindPosition: jest.fn(() => Promise.resolve('0x123')),
 
         getCollateralParameters: jest.fn(() =>
             Promise.resolve({
@@ -439,9 +417,9 @@ export const mockUseSF = () => {
             return Promise.resolve(true);
         }),
 
-        executeRepayment: jest.fn(() => Promise.resolve({})),
+        executeRepayment: jest.fn(() => Promise.resolve('0x123')),
 
-        executeRedemption: jest.fn(() => Promise.resolve({})),
+        executeRedemption: jest.fn(() => Promise.resolve('0x123')),
     };
 
     return mockSecuredFinance;

@@ -48,7 +48,7 @@ export const calculateForwardValue = (
     amount: bigint,
     unitPrice: bigint
 ): bigint => {
-    return BigInt((Number(amount) * 10000) / Number(unitPrice));
+    return BigInt(Math.round((Number(amount) * 10000) / Number(unitPrice)));
 };
 
 export const calculateAveragePrice = (unitPrice: bigint): number => {

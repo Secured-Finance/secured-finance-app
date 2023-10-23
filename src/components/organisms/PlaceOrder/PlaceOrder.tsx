@@ -96,7 +96,6 @@ export const PlaceOrder = ({
     onClose,
     collateral,
     loanValue,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     onPlaceOrder,
     orderAmount,
     side,
@@ -108,7 +107,7 @@ export const PlaceOrder = ({
 }: {
     collateral: CollateralBook;
     loanValue: LoanValue;
-    onPlaceOrder?: PlaceOrderFunction;
+    onPlaceOrder: PlaceOrderFunction;
     orderAmount: Amount;
     maturity: Maturity;
     side: OrderSide;
@@ -138,21 +137,18 @@ export const PlaceOrder = ({
             side: OrderSide,
             amount: bigint,
             unitPrice: number,
-            _walletSource: WalletSource
+            walletSource: WalletSource
         ) => {
             try {
-                // const tx = await onPlaceOrder(
-                //     ccy,
-                //     maturity,
-                //     side,
-                //     amount,
-                //     unitPrice,
-                //     walletSource
-                // );
-                const tx = '';
-                const transactionStatus = await handleContractTransaction(
-                    '0x123'
+                const tx = await onPlaceOrder(
+                    ccy,
+                    maturity,
+                    side,
+                    amount,
+                    unitPrice,
+                    walletSource
                 );
+                const transactionStatus = await handleContractTransaction(tx);
                 if (!transactionStatus) {
                     dispatch({ type: 'error' });
                 } else {
@@ -177,7 +173,7 @@ export const PlaceOrder = ({
                 }
             }
         },
-        [handleContractTransaction, orderType, orderAmount.value]
+        [onPlaceOrder, handleContractTransaction, orderType, orderAmount.value]
     );
 
     const onClick = useCallback(

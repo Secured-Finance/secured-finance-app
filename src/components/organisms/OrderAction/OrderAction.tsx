@@ -7,7 +7,12 @@ import {
     PlaceOrder,
     generateCollateralList,
 } from 'src/components/organisms';
-import { CollateralBook, MarketPhase, useMarketPhase } from 'src/hooks';
+import {
+    CollateralBook,
+    MarketPhase,
+    useMarketPhase,
+    useOrders,
+} from 'src/hooks';
 import { useCollateralBalances } from 'src/hooks/useBalances';
 import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { setWalletDialogOpen } from 'src/store/interactions';
@@ -39,7 +44,7 @@ export const OrderAction = ({
 }: OrderActionProps) => {
     const { isConnected } = useAccount();
     const dispatch = useDispatch();
-    // const { placeOrder, placePreOrder } = useOrders();
+    const { placeOrder, placePreOrder } = useOrders();
 
     const [openDepositCollateralDialog, setOpenDepositCollateralDialog] =
         useState(false);
@@ -137,11 +142,11 @@ export const OrderAction = ({
             )}
 
             <PlaceOrder
-                // onPlaceOrder={
-                //     marketPhase === MarketPhase.OPEN
-                //         ? placeOrder
-                //         : placePreOrder
-                // }
+                onPlaceOrder={
+                    marketPhase === MarketPhase.OPEN
+                        ? placeOrder
+                        : placePreOrder
+                }
                 isOpen={openPlaceOrderDialog}
                 onClose={() => setOpenPlaceOrderDialog(false)}
                 loanValue={loanValue}

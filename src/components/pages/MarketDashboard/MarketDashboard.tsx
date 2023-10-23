@@ -42,7 +42,6 @@ import {
     ordinaryFormat,
     usdFormat,
 } from 'src/utils';
-import { jsonStringify } from 'src/utils/json-patch';
 import { useAccount } from 'wagmi';
 
 const computeTotalUsers = (users: string) => {
@@ -102,7 +101,7 @@ export const MarketDashboard = () => {
             'compact'
         );
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [jsonStringify(priceList), dailyVolumes.data]);
+    }, [JSON.stringify(priceList), dailyVolumes.data]);
 
     const totalValueLockedInUSD = useMemo(() => {
         let val = ZERO_BI;
@@ -124,7 +123,7 @@ export const MarketDashboard = () => {
 
         return val;
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [jsonStringify(priceList), valueLockedByCurrency]);
+    }, [JSON.stringify(priceList), valueLockedByCurrency]);
 
     return (
         <Page title='Market Dashboard' name='dashboard-page'>

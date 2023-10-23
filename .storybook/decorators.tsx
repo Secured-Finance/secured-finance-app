@@ -13,12 +13,20 @@ import AxiosMock from 'src/stories/mocks/AxiosMock';
 import { dec22Fixture } from 'src/stories/mocks/fixtures';
 import { coingeckoApi } from 'src/utils/coinGeckoApi';
 import timemachine from 'timemachine';
-import { RpcRequestError, createPublicClient, createWalletClient, custom, http } from 'viem';
+import {
+    RpcRequestError,
+    TransactionReceipt,
+    createPublicClient,
+    createWalletClient,
+    custom,
+    http,
+} from 'viem';
 import { privateKeyToAccount } from 'viem/accounts';
 import { foundry } from 'viem/chains';
 import { rpc } from 'viem/utils';
 import { WagmiConfig, createConfig, sepolia } from 'wagmi';
 import { MockConnector } from 'wagmi/connectors/mock';
+import '../src/patch';
 
 export const withAppLayout = (Story: StoryFn) => {
     return (
@@ -28,46 +36,45 @@ export const withAppLayout = (Story: StoryFn) => {
     );
 };
 
-class ProviderMock {
-    constructor() {}
-    getBlockNumber() {
-        return 123;
-    }
-}
-
 const privateKey =
     '0xde926db3012af759b4f24b5a51ef6afa397f04670f634aa4f48d4480417007f3';
 
 const account = privateKeyToAccount(privateKey);
 
-const publicClient = createPublicClient({
+export const publicClient = createPublicClient({
     chain: sepolia,
     transport: http(),
 });
 
+publicClient.waitForTransactionReceipt = async () => {
+    return {
+        blockNumber: '0x123',
+    } as unknown as TransactionReceipt;
+};
+
 publicClient.request = async ({ method, params }: any) => {
     if (method === 'personal_sign') {
-      method = 'eth_sign'
-      params = [params[1], params[0]]
+        method = 'eth_sign';
+        params = [params[1], params[0]];
     }
 
-    const url = foundry.rpcUrls.default.http[0]!
+    const url = foundry.rpcUrls.default.http[0]!;
     const body = {
-      method,
-      params,
-    }
+        method,
+        params,
+    };
     const { result, error } = await rpc.http(url, {
-      body,
-    })
-    if (error) {
-      throw new RpcRequestError({
         body,
-        error,
-        url,
-      })
+    });
+    if (error) {
+        throw new RpcRequestError({
+            body,
+            error,
+            url,
+        });
     }
-    return result
-  }
+    return result;
+};
 
 const client = createWalletClient({
     account: account.address,

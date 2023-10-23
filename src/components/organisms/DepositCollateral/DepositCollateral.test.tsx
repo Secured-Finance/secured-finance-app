@@ -1,9 +1,11 @@
+import { publicClient } from '.storybook/decorators';
 import * as analytics from '@amplitude/analytics-browser';
 import { composeStories } from '@storybook/react';
 import { preloadedAssetPrices } from 'src/stories/mocks/fixtures';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
 import { CollateralEvents, CollateralProperties } from 'src/utils';
+import { TransactionReceipt } from 'viem';
 import * as stories from './DepositCollateral.stories';
 
 const { Default } = composeStories(stories);
@@ -13,7 +15,17 @@ const preloadedState = { ...preloadedAssetPrices };
 const mockSecuredFinance = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mockSecuredFinance);
 
-describe.skip('DepositCollateral component', () => {
+beforeEach(() =>
+    jest
+        .spyOn(publicClient, 'waitForTransactionReceipt')
+        .mockImplementation(() =>
+            Promise.resolve({
+                blockNumber: 123,
+            } as unknown as TransactionReceipt)
+        )
+);
+
+describe('DepositCollateral component', () => {
     it('should display the DepositCollateral Modal when open', () => {
         render(<Default />);
 

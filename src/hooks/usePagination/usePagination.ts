@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from 'react';
-import { jsonStringify } from 'src/utils/json-patch';
 
 export const usePagination = <T>(data: T[]) => {
     const [totalData, setTotalData] = useState<T[]>([]);
@@ -8,7 +7,7 @@ export const usePagination = <T>(data: T[]) => {
     useEffect(() => {
         const currentData = data;
         const previousData = prevDataRef.current ?? [];
-        if (jsonStringify(currentData) !== jsonStringify(previousData)) {
+        if (JSON.stringify(currentData) !== JSON.stringify(previousData)) {
             const updatedTotalData = [...totalData, ...currentData];
             setTotalData(updatedTotalData);
             prevDataRef.current = currentData;
