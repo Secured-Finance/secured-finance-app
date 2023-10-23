@@ -1,7 +1,13 @@
 import { useQuery } from '@tanstack/react-query';
 import { QueryKeys } from 'src/hooks';
 import useSF from 'src/hooks/useSecuredFinance';
-import { CurrencySymbol, hexToCurrencySymbol, toCurrency } from 'src/utils';
+import {
+    CurrencySymbol,
+    ZERO_BN,
+    divide,
+    hexToCurrencySymbol,
+    toCurrency,
+} from 'src/utils';
 
 export const useMarketTerminationRatio = () => {
     const securedFinance = useSF();
@@ -19,11 +25,9 @@ export const useMarketTerminationRatio = () => {
                     return {
                         currency: ccy,
                         ratio:
-                            ((
-                                await securedFinance?.getMarketTerminationRatio(
-                                    toCurrency(ccy)
-                                )
-                            )?.toNumber() ?? 0) / 1e10,
+                            (await securedFinance?.getMarketTerminationRatio(
+                                toCurrency(ccy)
+                            )) ?? ZERO_BN,
                     };
                 })
             );
@@ -31,13 +35,13 @@ export const useMarketTerminationRatio = () => {
         enabled: !!securedFinance,
         select: ratios => {
             const total = ratios.reduce((acc, { ratio }) => {
-                return acc + ratio;
-            }, 0);
+                return acc.add(ratio);
+            }, ZERO_BN);
 
             return ratios.map(({ currency, ratio }) => {
                 return {
                     currency,
-                    ratio: ratio / total,
+                    ratio: divide(ratio.toNumber(), total.toNumber()) * 10000,
                 };
             });
         },

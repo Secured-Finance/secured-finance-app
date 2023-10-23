@@ -19,9 +19,9 @@ describe('useMarketTerminationRatio hook', () => {
 
         expect(mock.getMarketTerminationRatio).toHaveBeenCalledTimes(3); // 3 collateral tokens
         expect(result.current.data).toEqual([
-            { currency: CurrencySymbol.ETH, ratio: 0.2 },
-            { currency: CurrencySymbol.WBTC, ratio: 0.4 },
-            { currency: CurrencySymbol.USDC, ratio: 0.4 },
+            { currency: CurrencySymbol.ETH, ratio: 2000 },
+            { currency: CurrencySymbol.WBTC, ratio: 4000 },
+            { currency: CurrencySymbol.USDC, ratio: 4000 },
         ]);
     });
 });
