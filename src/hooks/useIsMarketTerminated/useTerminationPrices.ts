@@ -1,29 +1,31 @@
 import { useQuery } from '@tanstack/react-query';
+import { BigNumber as BigNumberJS } from 'bignumber.js';
 import { QueryKeys } from 'src/hooks';
 import useSF from 'src/hooks/useSecuredFinance';
 import { AssetPriceMap } from 'src/store/assetPrices/selectors';
-import { CurrencySymbol, hexToCurrencySymbol, toCurrency } from 'src/utils';
+import {
+    CurrencySymbol,
+    ZERO_BN,
+    hexToCurrencySymbol,
+    toCurrency,
+} from 'src/utils';
 
+//TODO: replace hardcoded division by CurrencyController#getDecimals
 export const useTerminationPrices = () => {
     const securedFinance = useSF();
-    //TODO: add prices of non collateral tokens
-    // TODO: use BigNumber instead of number
     return useQuery({
         queryKey: [QueryKeys.TERMINATION_PRICES],
         queryFn: async () => {
-            const currencies =
-                (await securedFinance?.getCollateralCurrencies()) ?? [];
+            const currencies = (await securedFinance?.getCurrencies()) ?? [];
             const currencyList = currencies
                 .map(ccy => hexToCurrencySymbol(ccy))
                 .filter((ccy): ccy is CurrencySymbol => ccy !== undefined);
             const prices = await Promise.all(
                 currencyList.map(async ccy => {
                     return (
-                        ((
-                            await securedFinance?.getMarketTerminationPrice(
-                                toCurrency(ccy)
-                            )
-                        )?.toNumber() ?? 0) / 1e8
+                        (await securedFinance?.getMarketTerminationPrice(
+                            toCurrency(ccy)
+                        )) ?? ZERO_BN
                     );
                 })
             );
@@ -32,7 +34,11 @@ export const useTerminationPrices = () => {
                 (acc, ccy, index) => {
                     return {
                         ...acc,
-                        [ccy]: prices[index],
+                        [ccy]: new BigNumberJS(prices[index].toString())
+                            .dividedBy(
+                                10 ** (ccy === CurrencySymbol.WFIL ? 26 : 8)
+                            )
+                            .toNumber(),
                     };
                 },
                 {} as AssetPriceMap

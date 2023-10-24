@@ -6,20 +6,19 @@ import { useTerminationPrices } from './useTerminationPrices';
 const mock = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mock);
 
-beforeEach(() => mock.getMarketTerminationPrice.mockClear());
-
 describe('useTerminationPrices hook', () => {
-    it('should a map with the prices of all collateral tokens', async () => {
+    it('should a map with the prices of all tokens', async () => {
         const { result, waitForNextUpdate } = renderHook(() =>
             useTerminationPrices()
         );
         expect(result.current.data).toEqual(undefined);
         await waitForNextUpdate();
-        expect(mock.getMarketTerminationPrice).toHaveBeenCalledTimes(3); // 3 collateral tokens
+        expect(mock.getMarketTerminationPrice).toHaveBeenCalledTimes(4);
         expect(result.current.data).toEqual({
             [CurrencySymbol.ETH]: 1577.71480752,
             [CurrencySymbol.USDC]: 1.0,
             [CurrencySymbol.WBTC]: 25577.71480752,
+            [CurrencySymbol.WFIL]: 3.204525549022934,
         });
     });
 });
