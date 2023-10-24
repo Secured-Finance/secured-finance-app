@@ -38,4 +38,20 @@ describe('Alert Component', () => {
         const closeButton = screen.getByTestId('close-button');
         expect(closeButton).toBeInTheDocument();
     });
+
+    it('should render alert if localStorageValue is not found in localStorage', () => {
+        localStorage.setItem('key', 'value');
+        render(
+            <WithCloseButton localStorageKey='key' localStorageValue='val' />
+        );
+        expect(screen.queryByRole('alert')).toBeInTheDocument();
+    });
+
+    it('should not render alert if localStorageValue is found in localStorage', () => {
+        localStorage.setItem('key', 'val');
+        render(
+            <WithCloseButton localStorageKey='key' localStorageValue='val' />
+        );
+        expect(screen.queryByRole('alert')).not.toBeInTheDocument();
+    });
 });
