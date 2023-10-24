@@ -90,7 +90,16 @@ export const CollateralSnapshot = ({
                     <Doughnut data={chartData} options={options} />
                 </section>
                 <section className='typography-caption bg-black-20 px-4 pb-4'>
-                    <CoreTable columns={columns} data={data} />
+                    <CoreTable
+                        columns={columns}
+                        data={[
+                            ...data.sort(
+                                (a, b) =>
+                                    currencyMap[a.currency].index -
+                                    currencyMap[b.currency].index
+                            ),
+                        ]}
+                    />
                 </section>
                 <section className='typography-caption-2 text-center leading-6 text-slateGray'>
                     {`Snapshot as of ${formatTimestamp(snapshotDate ?? 0)}`}
