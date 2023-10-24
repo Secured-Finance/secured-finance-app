@@ -127,9 +127,8 @@ export const EmergencyGlobalSettlement = () => {
 
                     <WithdrawPositionTable
                         data={userStep === 'redeem' ? withdrawableData : []}
-                        onRedeem={async () => {
+                        onRedeem={() => {
                             setShowRedeemDialog(true);
-                            await refetch();
                         }}
                         netValue={netValue}
                     />
@@ -147,7 +146,10 @@ export const EmergencyGlobalSettlement = () => {
             </TwoColumns>
             <EmergencyRedeemDialog
                 isOpen={showRedeemDialog}
-                onClose={() => setShowRedeemDialog(false)}
+                onClose={async () => {
+                    setShowRedeemDialog(false);
+                    await refetch();
+                }}
                 data={snapshotWithPrice ?? []}
                 snapshotDate={snapshotDate}
                 netValue={usdFormat(netValue)}
