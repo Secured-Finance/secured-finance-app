@@ -70,8 +70,8 @@ export const WithdrawPositionTable = ({
                             options={{ name: 'emergency-step-1' }}
                         />
                     </div>
-                    <div className='flex flex-row justify-around gap-5 pl-4 pr-7 pt-3'>
-                        <span className='flex w-2/3 flex-row items-center justify-start gap-4 border-r border-white-20 pr-8 '>
+                    <div className='grid grid-cols-2 grid-rows-2 place-items-center justify-items-center gap-5 pl-4 pr-7 pt-3 tablet:grid-cols-6 tablet:grid-rows-1'>
+                        <span className='col-span-2 row-start-2 flex flex-row items-center justify-start gap-4 border-white-20 pr-4 tablet:col-span-4 tablet:row-start-1 tablet:border-r'>
                             <span>
                                 <InformationCircleIcon className='h-5 w-5 text-planetaryPurple' />
                             </span>
@@ -85,7 +85,7 @@ export const WithdrawPositionTable = ({
                             </span>
                         </span>
 
-                        <span className='grid grid-flow-row place-items-end'>
+                        <span className='row-start-1 grid grid-flow-row place-items-end gap-y-1'>
                             <span className='typography-caption-2 leading-4 text-slateGray'>
                                 Net Value
                             </span>
@@ -93,7 +93,9 @@ export const WithdrawPositionTable = ({
                                 {usdFormat(netValue)}
                             </span>
                         </span>
-                        <Button onClick={onRedeem}>Redeem</Button>
+                        <Button className='row-start-1' onClick={onRedeem}>
+                            Redeem
+                        </Button>
                     </div>
                 </>
             )}
