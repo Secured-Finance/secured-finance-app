@@ -14,8 +14,8 @@ import { AssetPriceMap } from 'src/store/assetPrices/selectors';
 import { Alignment, ColorFormat } from 'src/types';
 import { formatTimestamp } from 'src/utils';
 import {
-    currencyMap,
     CurrencySymbol,
+    currencyMap,
     hexToCurrencySymbol,
 } from './currencyList';
 import { LoanValue, Maturity } from './entities';
@@ -354,7 +354,7 @@ export const withdrawableAssetColumnDefinition = <
     T extends {
         maturity: string | number;
         currency: string;
-        type: 'position' | 'collateral';
+        type: 'position' | 'collateral' | 'lending-order';
     }
 >(
     columnHelper: ColumnHelper<T>,
