@@ -11,14 +11,25 @@ export const Alert = ({
     variant = 'solid',
     onClose,
     showCloseButton = false,
+    localStorageKey,
+    localStorageValue,
 }: {
     severity?: 'error' | 'info' | 'success' | 'warning';
     children: React.ReactNode;
     variant?: 'solid' | 'outlined';
     onClose?: () => void;
     showCloseButton?: boolean;
+    localStorageKey?: string;
+    localStorageValue?: string;
 }) => {
-    const [isVisible, setIsVisible] = useState(true);
+    const value =
+        typeof window !== 'undefined' && localStorageKey
+            ? localStorage.getItem(localStorageKey)
+            : undefined;
+
+    const [isVisible, setIsVisible] = useState(
+        value ? !(value === localStorageValue) : true
+    );
 
     let alertIcon;
     switch (severity) {
@@ -37,6 +48,9 @@ export const Alert = ({
 
     const handleClose = () => {
         setIsVisible(false);
+        if (localStorageKey && localStorageValue) {
+            localStorage.setItem(localStorageKey, localStorageValue);
+        }
         if (onClose) {
             onClose();
         }
