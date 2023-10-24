@@ -5,7 +5,6 @@ import {
     CurrencySymbol,
     ZERO_BN,
     currencyMap,
-    getCurrencyMapAsList,
     hexToCurrencySymbol,
 } from 'src/utils';
 import {
@@ -264,9 +263,7 @@ export const mockUseSF = () => {
         ),
 
         getCurrencies: jest.fn(() =>
-            Promise.resolve(
-                getCurrencyMapAsList().map(currency => currency.symbol)
-            )
+            Promise.resolve([ethBytes32, wfilBytes32, wbtcBytes32, usdcBytes32])
         ),
 
         getProtocolDepositAmount: jest.fn(() =>
@@ -470,7 +467,9 @@ export const mockUseSF = () => {
                 case CurrencySymbol.ETH:
                     return Promise.resolve(BigNumber.from('157771480752')); // 1577.71480752
                 case CurrencySymbol.WFIL:
-                    return Promise.resolve(BigNumber.from('351200000'));
+                    return Promise.resolve(
+                        BigNumber.from('320452554902293372851000000')
+                    );
                 case CurrencySymbol.USDC:
                     return Promise.resolve(BigNumber.from('100000000'));
                 case CurrencySymbol.WBTC:
