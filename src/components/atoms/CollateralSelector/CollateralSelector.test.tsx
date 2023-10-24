@@ -1,6 +1,5 @@
 import { composeStories } from '@storybook/react';
 import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
-import { CurrencySymbol } from 'src/utils';
 import * as stories from './CollateralSelector.stories';
 
 const { Default } = composeStories(stories);
@@ -48,29 +47,5 @@ describe('CollateralSelector component', () => {
             name: 'Ethereum',
             symbol: 'ETH',
         });
-    });
-
-    it('should open with the selected option if provided', () => {
-        const onChange = jest.fn();
-        render(
-            <Default
-                onChange={onChange}
-                selectedOption={{
-                    symbol: CurrencySymbol.ETH,
-                    available: 120,
-                    name: 'Ethereum',
-                }}
-            />
-        );
-
-        expect(onChange).toBeCalledTimes(1);
-        expect(onChange).toHaveBeenLastCalledWith({
-            available: 120,
-            name: 'Ethereum',
-            symbol: CurrencySymbol.ETH,
-        });
-
-        expect(screen.getByText('Ethereum')).toBeInTheDocument();
-        expect(screen.getByText('120 Ethereum Available')).toBeInTheDocument();
     });
 });

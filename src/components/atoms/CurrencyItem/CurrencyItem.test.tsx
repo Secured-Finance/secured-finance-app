@@ -77,9 +77,4 @@ describe('CurrencyAmountItem Component', () => {
         render(<Compact />);
         expect(screen.getByText('1,000')).toBeInTheDocument();
     });
-
-    it('should show the currency symbol when showCurrency is true', () => {
-        render(<Default showCurrency={true} />);
-        expect(screen.getByText('1,000 WFIL')).toBeInTheDocument();
-    });
 });

@@ -26,16 +26,13 @@ export const computeWeightedAverageRate = (trades: TradeHistory) => {
 };
 
 export const computeNetValue = (
-    positions: Pick<Position, 'amount' | 'currency'>[],
+    positions: Position[],
     priceList: AssetPriceMap
 ) => {
     return positions.reduce((acc, { amount, currency }) => {
         const ccy = hexToCurrencySymbol(currency);
         if (!ccy) return acc;
-        return (
-            acc +
-            currencyMap[ccy].fromBaseUnit(amount) * (priceList?.[ccy] ?? 0)
-        );
+        return acc + currencyMap[ccy].fromBaseUnit(amount) * priceList[ccy];
     }, 0);
 };
 

@@ -8,7 +8,7 @@ import { CurrencySymbol, WalletSource } from 'src/utils';
 import { MyWalletCard } from './MyWalletCard';
 
 export default {
-    title: 'Molecules/MyWalletCard',
+    title: 'Organism/MyWalletCard',
     component: MyWalletCard,
     args: {
         addressRecord: {

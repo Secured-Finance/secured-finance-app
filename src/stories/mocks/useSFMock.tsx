@@ -5,6 +5,7 @@ import {
     CurrencySymbol,
     ZERO_BN,
     currencyMap,
+    getCurrencyMapAsList,
     hexToCurrencySymbol,
 } from 'src/utils';
 import {
@@ -263,7 +264,9 @@ export const mockUseSF = () => {
         ),
 
         getCurrencies: jest.fn(() =>
-            Promise.resolve([ethBytes32, wfilBytes32, wbtcBytes32, usdcBytes32])
+            Promise.resolve(
+                getCurrencyMapAsList().map(currency => currency.symbol)
+            )
         ),
 
         getProtocolDepositAmount: jest.fn(() =>
@@ -293,7 +296,7 @@ export const mockUseSF = () => {
         ),
 
         getWithdrawableCollateral: jest.fn(() =>
-            Promise.resolve(BigNumber.from(1000000000000))
+            Promise.resolve(1000000000000)
         ),
 
         getUsedCurrenciesForOrders: jest.fn(() =>
@@ -442,54 +445,6 @@ export const mockUseSF = () => {
         executeRepayment: jest.fn(() => Promise.resolve({})),
 
         executeRedemption: jest.fn(() => Promise.resolve({})),
-
-        isTerminated: jest.fn(() => Promise.resolve(false)),
-
-        getMarketTerminationDate: jest.fn(() =>
-            Promise.resolve(BigNumber.from('1609210000'))
-        ),
-
-        getMarketTerminationRatio: jest.fn((currency: Currency) => {
-            switch (currency.symbol) {
-                case CurrencySymbol.ETH:
-                    return Promise.resolve(BigNumber.from('10000000000'));
-                case CurrencySymbol.USDC:
-                    return Promise.resolve(BigNumber.from('20000000000'));
-                case CurrencySymbol.WBTC:
-                    return Promise.resolve(BigNumber.from('20000000000'));
-                default:
-                    throw new Error('Not implemented');
-            }
-        }),
-
-        getMarketTerminationPrice: jest.fn((currency: Currency) => {
-            switch (currency.symbol) {
-                case CurrencySymbol.ETH:
-                    return Promise.resolve(BigNumber.from('157771480752')); // 1577.71480752
-                case CurrencySymbol.WFIL:
-                    return Promise.resolve(
-                        BigNumber.from('320452554902293372851000000')
-                    );
-                case CurrencySymbol.USDC:
-                    return Promise.resolve(BigNumber.from('100000000'));
-                case CurrencySymbol.WBTC:
-                    return Promise.resolve(BigNumber.from('2557771480752'));
-                default:
-                    throw new Error('Not implemented');
-            }
-        }),
-
-        isRedemptionRequired: jest.fn(() => Promise.resolve(true)),
-
-        getCollateralCurrencies: jest.fn(() =>
-            Promise.resolve([ethBytes32, wbtcBytes32, usdcBytes32])
-        ),
-
-        executeEmergencySettlement: jest.fn(() =>
-            Promise.resolve({
-                wait: jest.fn(() => Promise.resolve({ blockNumber: 123 })),
-            })
-        ),
     };
 
     return mockSecuredFinance;

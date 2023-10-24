@@ -13,7 +13,7 @@ import * as stories from './YieldChart.stories';
 const { Default, Loading } = composeStories(stories);
 
 describe('YieldChart Component', () => {
-    it.skip('should render YieldChart', async () => {
+    it('should render YieldChart', async () => {
         let ag: RenderResult<typeof queries, HTMLElement>;
         await waitFor(() => {
             ag = render(<Default />, {

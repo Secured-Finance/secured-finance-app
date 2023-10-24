@@ -24,8 +24,7 @@ const refineArray = (array: Array<Rate>) => {
 export const getData = (
     rates: Rate[],
     label: string,
-    labels: string[],
-    itayoseMarketIndex: Set<number>
+    labels: string[]
 ): ChartData<'line'> => {
     return {
         labels: labels,
@@ -33,18 +32,6 @@ export const getData = (
             {
                 label: label,
                 data: refineArray(rates),
-                segment: {
-                    borderColor: ctx =>
-                        itayoseMarketIndex.has(ctx.p1.parsed.x)
-                            ? '#B9BDEA' // planetaryPurple
-                            : getCurveGradient(
-                                  ctx as unknown as ScriptableContext<'line'>
-                              ),
-                    borderDash: ctx =>
-                        itayoseMarketIndex.has(ctx.p1.parsed.x)
-                            ? [5, 7]
-                            : undefined,
-                },
             },
         ],
     };

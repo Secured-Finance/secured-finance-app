@@ -37,7 +37,7 @@ const LINKS = [
     },
 ];
 
-export const Header = ({ showNavigation }: { showNavigation: boolean }) => {
+export const Header = () => {
     const dispatch = useDispatch();
     const { address, isConnected } = useAccount();
     const securedFinance = useSF();
@@ -53,7 +53,6 @@ export const Header = ({ showNavigation }: { showNavigation: boolean }) => {
                     You are visiting Secured Finance on testnet
                 </div>
             )}
-
             <nav
                 data-cy='header'
                 className='grid h-20 w-full grid-flow-col border-b border-neutral-1 px-5 laptop:grid-flow-col'
@@ -69,26 +68,22 @@ export const Header = ({ showNavigation }: { showNavigation: boolean }) => {
                         <HighlightChip text={envShort.toUpperCase()} />
                     )}
                 </div>
-                {showNavigation && (
-                    <>
-                        {LINKS.map(link => (
-                            <div
-                                key={link.text}
-                                className='hidden h-full w-full laptop:inline'
-                            >
-                                <ItemLink
-                                    text={link.text}
-                                    dataCy={link.dataCy}
-                                    link={link.link}
-                                    alternateLink={link?.alternateLink}
-                                />
-                            </div>
-                        ))}
-                        <div className='hidden laptop:inline'>
-                            <MenuPopover />
-                        </div>
-                    </>
-                )}
+                {LINKS.map(link => (
+                    <div
+                        key={link.text}
+                        className='hidden h-full w-full laptop:inline'
+                    >
+                        <ItemLink
+                            text={link.text}
+                            dataCy={link.dataCy}
+                            link={link.link}
+                            alternateLink={link?.alternateLink}
+                        />
+                    </div>
+                ))}
+                <div className='hidden laptop:inline'>
+                    <MenuPopover />
+                </div>
                 <div className='col-span-2 flex flex-row items-center justify-end gap-2 laptop:col-span-1'>
                     {isConnected && address ? (
                         <WalletPopover

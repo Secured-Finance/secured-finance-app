@@ -32,11 +32,6 @@ ContractOnly.args = {
     variant: 'contractOnly',
 };
 
-export const CompactCurrencyOnly = Template.bind({});
-CompactCurrencyOnly.args = {
-    variant: 'compactCurrencyOnly',
-};
-
 export const Delisted = Template.bind({});
 Delisted.args = {
     delistedContractSide: OrderSide.LEND,

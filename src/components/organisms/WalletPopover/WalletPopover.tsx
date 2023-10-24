@@ -2,6 +2,7 @@ import { reset as resetTracking } from '@amplitude/analytics-browser';
 import { Popover, Transition } from '@headlessui/react';
 import { ArrowLeftOnRectangleIcon } from '@heroicons/react/24/outline';
 import classNames from 'classnames';
+import { useRouter } from 'next/router';
 import { Fragment, useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 import MetamaskLogo from 'src/assets/img/metamask-fox.svg';
@@ -72,6 +73,7 @@ export const WalletPopover = ({
     const { disconnect, reset } = useDisconnect();
     const { isConnected } = useAccount();
     const dispatch = useDispatch();
+    const router = useRouter();
 
     const handleSignOutClick = useCallback(() => {
         if (!isConnected) return;
@@ -80,7 +82,8 @@ export const WalletPopover = ({
         disconnect();
         dispatch(resetEthWallet());
         removeWalletFromStore();
-    }, [disconnect, dispatch, reset, isConnected]);
+        router.push('/');
+    }, [disconnect, dispatch, router, reset, isConnected]);
 
     return (
         <Popover className='relative max-w-sm'>

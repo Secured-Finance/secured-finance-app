@@ -36,7 +36,6 @@ export * from './Slider';
 export * from './SortArrows';
 export * from './Spinner';
 export * from './StatsBox';
-export * from './TextLink';
 export * from './Toggle';
 export * from './TraderProTab';
 export * from './WalletSourceSelector';

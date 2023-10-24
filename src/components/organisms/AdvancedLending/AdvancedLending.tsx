@@ -20,7 +20,6 @@ import {
     useGraphClientHook,
     useMarket,
     useMarketOrderList,
-    useYieldCurveMarketRates,
 } from 'src/hooks';
 import { useOrderbook } from 'src/hooks/useOrderbook';
 import { getAssetPrice } from 'src/store/assetPrices/selectors';
@@ -35,6 +34,7 @@ import { RootState } from 'src/store/types';
 import { MaturityOptionList, TransactionList } from 'src/types';
 import {
     CurrencySymbol,
+    Rate,
     amountFormatterFromBase,
     amountFormatterToBase,
     currencyMap,
@@ -81,11 +81,13 @@ const useTradeHistoryDetails = (
 export const AdvancedLending = ({
     collateralBook,
     maturitiesOptionList,
+    rates,
     marketPrice,
     delistedCurrencySet,
 }: {
     collateralBook: CollateralBook;
     maturitiesOptionList: MaturityOptionList;
+    rates: Rate[];
     marketPrice: number | undefined;
     delistedCurrencySet: Set<CurrencySymbol>;
 }) => {
@@ -140,9 +142,6 @@ export const AdvancedLending = ({
         currency,
         selectedTerm.value
     );
-
-    const { rates, maturityList, itayoseMarketIndexSet } =
-        useYieldCurveMarketRates();
 
     const currentMarket = useMemo(() => {
         if (marketUnitPrice) {
@@ -239,13 +238,10 @@ export const AdvancedLending = ({
 
             <div className='flex h-full flex-grow flex-col gap-4'>
                 <Tab tabDataArray={[{ text: 'Yield Curve' }]}>
-                    <div className='h-[410px] w-full px-6 py-4'>
-                        <LineChartTab
-                            rates={rates}
-                            maturityList={maturityList}
-                            itayoseMarketIndexSet={itayoseMarketIndexSet}
-                        />
-                    </div>
+                    <LineChartTab
+                        maturitiesOptionList={maturitiesOptionList}
+                        rates={rates}
+                    />
                 </Tab>
                 <HorizontalTab tabTitles={['Open Orders']}>
                     <OrderTable

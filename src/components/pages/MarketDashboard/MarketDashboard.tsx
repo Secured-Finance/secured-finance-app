@@ -8,9 +8,10 @@ import {
 } from 'src/components/atoms';
 import { DelistedCurrencyDisclaimer, StatsBar } from 'src/components/molecules';
 import {
+    ConnectWalletCard,
     MarketLoanWidget,
     MultiCurveChart,
-    MyWalletWidget,
+    MyWalletCard,
 } from 'src/components/organisms';
 import { Page, TwoColumns } from 'src/components/templates';
 import {
@@ -33,6 +34,7 @@ import {
     Environment,
     PREVIOUS_TOTAL_USERS,
     Rate,
+    WalletSource,
     computeTotalDailyVolumeInUSD,
     currencyMap,
     getCurrencyMapAsList,
@@ -186,7 +188,15 @@ export const MarketDashboard = () => {
                             </div>
                         </GradientBox>
                     )}
-                    <MyWalletWidget />
+                    {isConnected ? (
+                        <MyWalletCard
+                            addressRecord={{
+                                [WalletSource.METAMASK]: address,
+                            }}
+                        />
+                    ) : (
+                        <ConnectWalletCard />
+                    )}
                 </section>
             </TwoColumns>
         </Page>

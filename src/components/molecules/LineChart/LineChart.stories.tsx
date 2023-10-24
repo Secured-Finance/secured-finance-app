@@ -1,14 +1,7 @@
 import type { Meta, StoryFn } from '@storybook/react';
-import { ScriptableContext } from 'chart.js';
 import { maturityOptions } from 'src/stories/mocks/fixtures';
-import {
-    getCurveGradient,
-    options,
-} from 'src/components/molecules/LineChart/constants';
+import { options } from '../../molecules/LineChart/constants';
 import { LineChart } from './';
-import { MaturityListItem } from 'src/components/organisms';
-
-const maturityList: MaturityListItem[] = [];
 
 export default {
     title: 'Molecules/LineChart',
@@ -30,19 +23,12 @@ export default {
                 {
                     label: 'Borrow',
                     data: [50, 34, 27.37, 22.29, 18, 14.22, 10.81, 8.2],
-                    segment: {
-                        borderColor: ctx =>
-                            getCurveGradient(
-                                ctx as unknown as ScriptableContext<'line'>
-                            ),
-                    },
                 },
             ],
         },
         options,
-        maturityList: maturityList,
+        maturitiesOptionList: maturityOptions,
         maturity: maturityOptions[0].value,
-        handleChartClick: () => {},
     },
 } as Meta<typeof LineChart>;
 
@@ -94,12 +80,6 @@ ZeroCurve.args = {
             {
                 label: 'Borrow',
                 data: [0, 0, 0, 0, 0, 0, 0, 0],
-                segment: {
-                    borderColor: ctx =>
-                        getCurveGradient(
-                            ctx as unknown as ScriptableContext<'line'>
-                        ),
-                },
             },
         ],
     },

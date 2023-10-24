@@ -1,8 +1,8 @@
 import classNames from 'classnames';
-import { Alignment, ColorFormat } from 'src/types';
+import { ColorFormat } from 'src/types';
 import {
-    CurrencySymbol,
     currencyMap,
+    CurrencySymbol,
     ordinaryFormat,
     usdFormat,
 } from 'src/utils';
@@ -17,17 +17,15 @@ export const CurrencyItem = ({
     fontSize = 'typography-caption',
     minDecimals = 0,
     maxDecimals = 2,
-    showCurrency = false,
 }: {
     amount?: number;
     ccy: CurrencySymbol;
     price?: number;
-    align?: Alignment;
+    align?: 'left' | 'right' | 'center';
     compact?: boolean;
     fontSize?: string;
     minDecimals?: number;
     maxDecimals?: number;
-    showCurrency?: boolean;
 } & ColorFormat) => {
     let secondLine: string;
     if (amount !== undefined && price !== undefined) {
@@ -38,16 +36,10 @@ export const CurrencyItem = ({
         secondLine = currencyMap[ccy].name;
     }
 
-    let firstLine: string;
-    if (amount !== undefined) {
-        firstLine = ordinaryFormat(amount, minDecimals, maxDecimals);
-        if (showCurrency) {
-            firstLine += ` ${ccy}`;
-        }
-    } else {
-        firstLine = ccy;
-    }
-
+    const firstLine =
+        amount !== undefined
+            ? `${ordinaryFormat(amount, minDecimals, maxDecimals)}`
+            : ccy;
     return (
         <div
             data-testid='currency-amount-item'

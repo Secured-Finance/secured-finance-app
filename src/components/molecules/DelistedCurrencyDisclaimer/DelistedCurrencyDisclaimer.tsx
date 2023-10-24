@@ -1,4 +1,3 @@
-import { TextLink } from 'src/components/atoms';
 import { Alert } from 'src/components/molecules';
 import { generateDelistedCurrencyText } from 'src/components/pages';
 import {
@@ -29,13 +28,17 @@ export const DelistedCurrencyDisclaimer = ({
                     }
                 >
                     <p className='typography-caption text-white'>
-                        Please note that&nbsp;
+                        Please note that{' '}
                         {generateDelistedCurrencyText(currencyArray)} will be
-                        delisted on Secured Finance.&nbsp;
-                        <TextLink
+                        delisted on Secured Finance.{' '}
+                        <a
+                            className='whitespace-nowrap text-secondary7 underline'
                             href='https://docs.secured.finance/product-guide/loan-market-platform/loan-assets/listing-and-delisting'
-                            text='Learn more'
-                        />
+                            target='_blank'
+                            rel='noreferrer'
+                        >
+                            Learn more
+                        </a>
                     </p>
                 </Alert>
             )}

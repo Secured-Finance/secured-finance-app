@@ -59,12 +59,3 @@ Compact.args = {
     align: 'left',
     compact: true,
 };
-
-export const ShowCurrency = Template.bind({});
-ShowCurrency.args = {
-    amount: 1000,
-    ccy: CurrencySymbol.WFIL,
-    price: 8.2,
-    align: 'right',
-    showCurrency: true,
-};

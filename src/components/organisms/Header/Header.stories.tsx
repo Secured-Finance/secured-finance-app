@@ -10,16 +10,14 @@ import { Header } from './';
 export default {
     title: 'Organism/Header',
     component: Header,
-    args: {
-        showNavigation: true,
-    },
+    args: {},
     decorators: [withWalletProvider, withChainErrorDisabled],
     parameters: {
         ...RESPONSIVE_PARAMETERS,
     },
 } as Meta<typeof Header>;
 
-const Template: StoryFn<typeof Header> = args => <Header {...args} />;
+const Template: StoryFn<typeof Header> = () => <Header />;
 
 export const Primary = Template.bind({});
 export const Connected = Template.bind({});
@@ -41,12 +39,4 @@ MenuExpanded.play = async ({ canvasElement }) => {
         name: 'Hamburger Menu',
     });
     await userEvent.click(button);
-};
-
-export const WithoutNavigation = Template.bind({});
-WithoutNavigation.args = {
-    showNavigation: false,
-};
-WithoutNavigation.parameters = {
-    chromatic: { viewports: [VIEWPORTS.LAPTOP] },
 };

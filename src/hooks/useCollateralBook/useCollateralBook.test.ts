@@ -44,9 +44,9 @@ describe('useCollateralBook hook', () => {
         expect(colBook.coverage.toString()).toEqual('3700');
         expect(colBook.collateralThreshold).toEqual(80);
         expect(colBook.withdrawableCollateral).toEqual({
-            [CurrencySymbol.USDC]: BigNumber.from('1000000000000'),
-            [CurrencySymbol.ETH]: BigNumber.from('1000000000000'),
-            [CurrencySymbol.WBTC]: BigNumber.from('1000000000000'),
+            [CurrencySymbol.USDC]: 1000000000000,
+            [CurrencySymbol.ETH]: 1000000000000,
+            [CurrencySymbol.WBTC]: 1000000000000,
         });
         expect(newValue.isLoading).toEqual(false);
     });

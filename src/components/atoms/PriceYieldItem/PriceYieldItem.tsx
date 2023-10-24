@@ -1,5 +1,4 @@
 import classNames from 'classnames';
-import { Alignment } from 'src/types';
 import { formatLoanValue } from 'src/utils';
 import { LoanValue } from 'src/utils/entities';
 
@@ -10,7 +9,7 @@ export const PriceYieldItem = ({
     firstLineType = 'price',
 }: {
     loanValue: LoanValue;
-    align?: Alignment;
+    align?: 'left' | 'right' | 'center';
     compact?: boolean;
     firstLineType?: Parameters<typeof formatLoanValue>[1];
 }) => {
