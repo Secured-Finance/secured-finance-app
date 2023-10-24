@@ -17,6 +17,13 @@ export default {
         data: [
             {
                 amount: BigNumber.from('400000000000000000000'),
+                forwardValue: BigNumber.from('0'),
+                currency: wfilBytes32,
+                maturity: 0,
+                type: 'lending-order',
+            },
+            {
+                amount: BigNumber.from('400000000000000000000'),
                 forwardValue: BigNumber.from('500000000000000000000'),
                 currency: wfilBytes32,
                 maturity: jun23Fixture.toString(),
