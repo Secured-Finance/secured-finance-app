@@ -145,26 +145,32 @@ const formatCollateral = (
     let nonCollateralBook: CollateralBook['nonCollateral'] = {};
     let usdCollateral = 0;
     let usdNonCollateral = 0;
-    Object.keys(collateral).forEach((ccy: string) => {
-        const currency = ccy as CurrencySymbol;
-        const amount = collateral[ccy];
-        const usdValue =
-            amountFormatterFromBase[currency](amount) * priceList[currency];
+    Object.keys(collateral)
+        .sort(
+            (a, b) =>
+                currencyMap[a as CurrencySymbol].index -
+                currencyMap[b as CurrencySymbol].index
+        )
+        .forEach((ccy: string) => {
+            const currency = ccy as CurrencySymbol;
+            const amount = collateral[ccy];
+            const usdValue =
+                amountFormatterFromBase[currency](amount) * priceList[currency];
 
-        if (currencyMap[currency].isCollateral) {
-            collateralBook = {
-                ...collateralBook,
-                [currency]: amount,
-            };
-            usdCollateral += usdValue;
-        } else {
-            nonCollateralBook = {
-                ...nonCollateralBook,
-                [currency]: amount,
-            };
-            usdNonCollateral += usdValue;
-        }
-    });
+            if (currencyMap[currency].isCollateral) {
+                collateralBook = {
+                    ...collateralBook,
+                    [currency]: amount,
+                };
+                usdCollateral += usdValue;
+            } else {
+                nonCollateralBook = {
+                    ...nonCollateralBook,
+                    [currency]: amount,
+                };
+                usdNonCollateral += usdValue;
+            }
+        });
 
     return {
         collateralBook,

@@ -51,6 +51,23 @@ describe('PortfolioManagement component', () => {
         });
     });
 
+    it('should not show delisting disclaimer if user has previously closed the disclaimer', async () => {
+        localStorage.setItem('DELISTED_CURRENCIES_KEY', 'WFIL');
+        await waitFor(() =>
+            render(<ConnectedToWallet />, {
+                apolloMocks: Default.parameters?.apolloClient.mocks,
+                preloadedState: preloadedEthBalance,
+            })
+        );
+        await waitFor(() => {
+            expect(
+                screen.queryByText(
+                    'Please note that your contracts for WFIL will be delisted at maturity on Secured Finance.'
+                )
+            ).not.toBeInTheDocument();
+        });
+    });
+
     it('should not show delisting disclaimer if no currency is being delisted', async () => {
         jest.spyOn(mock, 'currencyExists').mockResolvedValue(true);
         await waitFor(() =>
