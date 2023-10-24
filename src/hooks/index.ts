@@ -7,6 +7,7 @@ export * from './useCurrencyDelistedStatus';
 export * from './useEtherscanUrl';
 export * from './useGraphClientHook';
 export * from './useHandleContractTransaction';
+export * from './useIsMarketTerminated';
 export * from './useLendingMarkets';
 export * from './useLoanValues';
 export * from './useMarketLists';
