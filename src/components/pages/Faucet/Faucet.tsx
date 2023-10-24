@@ -15,14 +15,13 @@ import {
     Dialog,
     SuccessPanel,
 } from 'src/components/molecules';
-import { ConnectWalletCard, MyWalletCard } from 'src/components/organisms';
+import { MyWalletWidget } from 'src/components/organisms';
 import { Page, Tooltip, TwoColumns } from 'src/components/templates';
 import { useEtherscanUrl, useHandleContractTransaction } from 'src/hooks';
 import useSF from 'src/hooks/useSecuredFinance';
 import {
     AddressUtils,
     CurrencySymbol,
-    WalletSource,
     getCurrencyMapAsList,
     getCurrencyMapAsOptions,
     toCurrency,
@@ -322,20 +321,7 @@ export const Faucet = () => {
                         </div>
                     </div>
                 </GradientBox>
-                {account ? (
-                    <MyWalletCard
-                        information={{
-                            [WalletSource.METAMASK]: assetList.map(
-                                ccy => ccy.value
-                            ),
-                        }}
-                        addressRecord={{
-                            [WalletSource.METAMASK]: account ?? '',
-                        }}
-                    />
-                ) : (
-                    <ConnectWalletCard />
-                )}
+                <MyWalletWidget />
             </TwoColumns>
             <Dialog
                 isOpen={isOpen}

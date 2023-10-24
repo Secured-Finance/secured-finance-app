@@ -2,6 +2,8 @@ import { OrderSide } from '@secured-finance/sf-client';
 import { getUTCMonthYear } from '@secured-finance/sf-core';
 import classNames from 'classnames';
 import { useMemo } from 'react';
+import ErrorCircleIcon from 'src/assets/icons/error-circle.svg';
+import WarningCircleIcon from 'src/assets/icons/warning-circle.svg';
 import { CurrencyIcon } from 'src/components/atoms';
 import { Tooltip } from 'src/components/templates';
 import {
@@ -11,8 +13,6 @@ import {
     isPastDate,
 } from 'src/utils';
 import { Maturity } from 'src/utils/entities';
-import ErrorCircleIcon from 'src/assets/icons/error-circle.svg';
-import WarningCircleIcon from 'src/assets/icons/warning-circle.svg';
 
 export const TableContractCell = ({
     maturity,
@@ -22,12 +22,18 @@ export const TableContractCell = ({
 }: {
     maturity: Maturity;
     ccyByte32: string;
-    variant?: 'default' | 'compact' | 'currencyOnly' | 'contractOnly';
+    variant?:
+        | 'default'
+        | 'compact'
+        | 'currencyOnly'
+        | 'contractOnly'
+        | 'compactCurrencyOnly';
     delistedContractSide?: OrderSide;
 }) => {
     const ccy = useMemo(() => hexToCurrencySymbol(ccyByte32), [ccyByte32]);
     const contract = useMemo(() => {
-        if (variant === 'currencyOnly') return `${ccy}`;
+        if (variant === 'currencyOnly' || variant === 'compactCurrencyOnly')
+            return `${ccy}`;
         if (variant === 'contractOnly')
             return `${getUTCMonthYear(maturity.toNumber())}`;
         return `${ccy}-${getUTCMonthYear(maturity.toNumber())}`;
@@ -67,7 +73,8 @@ export const TableContractCell = ({
                         className={classNames({
                             'mt-1':
                                 variant === 'default' ||
-                                variant === 'currencyOnly',
+                                variant === 'currencyOnly' ||
+                                variant === 'compactCurrencyOnly',
                             'mt-0': variant === 'compact',
                         })}
                     >
@@ -95,7 +102,9 @@ export const TableContractCell = ({
                     className={classNames(
                         'typography-caption-2 text-left text-neutral-4',
                         {
-                            'ml-8': variant === 'default',
+                            'ml-8':
+                                variant === 'default' ||
+                                variant === 'compactCurrencyOnly',
                             'ml-11': variant === 'currencyOnly',
                         }
                     )}
