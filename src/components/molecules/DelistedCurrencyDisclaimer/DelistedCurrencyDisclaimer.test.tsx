@@ -31,4 +31,14 @@ describe('DelistedCurrencyDisclaimer test', () => {
             )
         ).toBeInTheDocument();
     });
+
+    it('should not render disclaimer if user has previously closed the disclaimer', () => {
+        localStorage.setItem('DELISTED_CURRENCIES_KEY', 'WFIL,ETH,USDC');
+        render(<MultipleCurrencies />);
+        expect(
+            screen.queryByText(
+                'Please note that WFIL, ETH and USDC will be delisted on Secured Finance.'
+            )
+        ).not.toBeInTheDocument();
+    });
 });

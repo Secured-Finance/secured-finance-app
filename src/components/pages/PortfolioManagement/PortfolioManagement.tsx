@@ -33,8 +33,10 @@ import {
     computeNetValue,
     formatOrders,
     hexToCurrencySymbol,
+    readDelistedCurrencyClosedStatus,
     sortOrders,
     usdFormat,
+    writeDelistedCurrencyClosedStatus,
 } from 'src/utils';
 import { useAccount } from 'wagmi';
 
@@ -178,11 +180,24 @@ export const PortfolioManagement = () => {
     });
 
     const userDelistedCurrenciesArray = Array.from(userDelistedCurrenciesSet);
+    const delistedCurrencyArray = Array.from(delistedCurrencySet);
+    const delistedCurrencyClosedStatus = readDelistedCurrencyClosedStatus();
+    const isClosed = delistedCurrencyClosedStatus
+        ? delistedCurrencyArray.every(ccy =>
+              delistedCurrencyClosedStatus.includes(ccy)
+          )
+        : false;
 
     return (
         <Page title='Portfolio Management' name='portfolio-management'>
-            {userDelistedCurrenciesArray.length > 0 && (
-                <Alert severity='error' showCloseButton={true}>
+            {userDelistedCurrenciesArray.length > 0 && !isClosed && (
+                <Alert
+                    severity='error'
+                    showCloseButton={true}
+                    onClose={() =>
+                        writeDelistedCurrencyClosedStatus(delistedCurrencyArray)
+                    }
+                >
                     <p className='text-white'>
                         Please note that your contracts for{' '}
                         {generateDelistedCurrencyText(
