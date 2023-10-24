@@ -21,7 +21,7 @@ import { MockConnector } from 'wagmi/connectors/mock';
 
 export const withAppLayout = (Story: StoryFn) => {
     return (
-        <Layout navBar={<Header />} footer={<Footer />}>
+        <Layout navBar={<Header showNavigation />} footer={<Footer />}>
             <Story />
         </Layout>
     );

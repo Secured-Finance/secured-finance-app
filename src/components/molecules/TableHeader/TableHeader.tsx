@@ -2,6 +2,7 @@ import { SortDirection } from '@tanstack/react-table';
 import classNames from 'classnames';
 import { SortArrows } from 'src/components/atoms';
 import { Tooltip } from 'src/components/templates';
+import { Alignment } from 'src/types';
 
 export const TableHeader = ({
     title,
@@ -14,7 +15,7 @@ export const TableHeader = ({
     titleHint?: string;
     sortingHandler?: ((event: unknown) => void) | undefined;
     isSorted?: boolean | SortDirection;
-    align?: 'left' | 'center' | 'right';
+    align?: Alignment;
 }) => {
     const titleComponent = (
         <button
@@ -47,7 +48,7 @@ const Container = ({
     align = 'center',
     children,
 }: {
-    align?: 'left' | 'center' | 'right';
+    align?: Alignment;
     children: React.ReactNode;
 }) => {
     return (
