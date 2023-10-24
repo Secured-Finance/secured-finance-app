@@ -18,9 +18,8 @@ import {
     crossHairPlugin,
     options as customOptions,
     defaultDatasets,
-    getCurveGradient,
 } from 'src/components/molecules/LineChart/constants';
-import { MaturityOptionList } from 'src/types';
+import { MaturityListItem } from 'src/components/organisms';
 import { Maturity } from 'src/utils/entities';
 
 ChartJS.register(
@@ -59,16 +58,16 @@ const triggerTooltip = (chart: ChartJS<'line'>, index: number) => {
 export type LineChartProps = {
     style?: React.CSSProperties;
     data: ChartData<'line'>;
-    maturitiesOptionList: MaturityOptionList;
+    maturityList: MaturityListItem[];
     maturity: Maturity;
-    handleChartClick: (maturity: Maturity) => void;
+    handleChartClick: (index: number) => void;
 } & ChartProps;
 
 export const LineChart = ({
     data = { datasets: [], labels: [] },
     options = customOptions,
     style,
-    maturitiesOptionList,
+    maturityList,
     maturity,
     handleChartClick,
 }: LineChartProps) => {
@@ -98,8 +97,6 @@ export const LineChart = ({
                     CanvasLineCap,
                     ScriptableContext<'line'>
                 >,
-                borderColor: (context: ScriptableContext<'line'>) =>
-                    getCurveGradient(context),
                 ...defaultDatasets,
                 ...set,
             };
@@ -126,11 +123,11 @@ export const LineChart = ({
         if (element && element[0]) {
             const { index } = element[0];
             const label = data.labels?.[index];
-            const selectedMaturity = maturitiesOptionList.find(
+            const selectedMaturityIndex = maturityList.findIndex(
                 element => element.label === label
             );
-            if (selectedMaturity) {
-                handleChartClick(selectedMaturity.value);
+            if (selectedMaturityIndex >= 0) {
+                handleChartClick(selectedMaturityIndex);
             }
         }
     };
@@ -139,8 +136,8 @@ export const LineChart = ({
         if (!chartRef.current) return;
 
         const numberOfElements = chartRef.current.data.datasets[0].data.length;
-        let index = maturitiesOptionList.findIndex(element =>
-            element.value.equals(maturity)
+        let index = maturityList.findIndex(
+            element => element.maturity === maturity.toNumber()
         );
 
         if (numberOfElements) {
@@ -148,7 +145,7 @@ export const LineChart = ({
             triggerHover(chartRef.current, index);
             triggerTooltip(chartRef.current, index);
         }
-    }, [maturitiesOptionList, maturity]);
+    }, [maturityList, maturity]);
 
     useEffect(() => {
         onMouseOut();

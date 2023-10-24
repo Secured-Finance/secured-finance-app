@@ -1,46 +1,69 @@
-import { OrderSide } from '@secured-finance/sf-client';
+import { useRouter } from 'next/router';
 import { useDispatch, useSelector } from 'react-redux';
-import { LineChart, getData } from 'src/components/molecules';
+import { LineChart, getData, options } from 'src/components/molecules';
 import {
     selectLandingOrderForm,
     setMaturity,
 } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
-import { MaturityOptionList } from 'src/types';
 import { Rate } from 'src/utils';
 import { Maturity } from 'src/utils/entities';
 
 export const LineChartTab = ({
-    maturitiesOptionList,
     rates,
+    maturityList,
+    itayoseMarketIndexSet,
 }: {
-    maturitiesOptionList: MaturityOptionList;
     rates: Rate[];
+    maturityList: MaturityListItem[];
+    itayoseMarketIndexSet: Set<number>;
 }) => {
     const dispatch = useDispatch();
-    const { side, maturity } = useSelector((state: RootState) =>
+    const router = useRouter();
+
+    const { maturity } = useSelector((state: RootState) =>
         selectLandingOrderForm(state.landingOrderForm)
     );
 
+    const chartOptions = {
+        ...options,
+        y: {
+            position: 'right',
+        },
+    };
+
     const data = getData(
         rates,
-        side === OrderSide.BORROW ? 'Borrow' : 'Lend',
-        maturitiesOptionList.map(o => o.label)
+        'Market price',
+        maturityList.map(item => item.label),
+        itayoseMarketIndexSet
     );
 
     return (
-        <div className='h-[410px] w-full px-6 py-4'>
+        <div className='h-full w-full'>
             {rates && (
                 <LineChart
                     type='line'
                     data={data}
-                    maturitiesOptionList={maturitiesOptionList}
-                    handleChartClick={maturity =>
-                        dispatch(setMaturity(maturity.toNumber()))
-                    }
+                    maturityList={maturityList}
+                    options={chartOptions}
+                    handleChartClick={maturityIndex => {
+                        const { maturity, isPreOrderPeriod } =
+                            maturityList[maturityIndex];
+                        dispatch(setMaturity(maturity));
+                        if (isPreOrderPeriod) {
+                            router.push('/itayose');
+                        }
+                    }}
                     maturity={new Maturity(maturity)}
                 ></LineChart>
             )}
         </div>
     );
+};
+
+export type MaturityListItem = {
+    label: string;
+    maturity: number;
+    isPreOrderPeriod: boolean;
 };
