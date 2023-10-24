@@ -2,7 +2,12 @@ import queries from '@secured-finance/sf-graph-client/dist/graphclients';
 import { useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Spinner } from 'src/components/atoms';
-import { Alert, HorizontalTab, StatsBar } from 'src/components/molecules';
+import {
+    Alert,
+    DELISTED_CURRENCIES_KEY,
+    HorizontalTab,
+    StatsBar,
+} from 'src/components/molecules';
 import {
     ActiveTradeTable,
     CollateralOrganism,
@@ -33,10 +38,8 @@ import {
     computeNetValue,
     formatOrders,
     hexToCurrencySymbol,
-    readDelistedCurrencyClosedStatus,
     sortOrders,
     usdFormat,
-    writeDelistedCurrencyClosedStatus,
 } from 'src/utils';
 import { useAccount } from 'wagmi';
 
@@ -180,23 +183,17 @@ export const PortfolioManagement = () => {
     });
 
     const userDelistedCurrenciesArray = Array.from(userDelistedCurrenciesSet);
-    const delistedCurrencyArray = Array.from(delistedCurrencySet);
-    const delistedCurrencyClosedStatus = readDelistedCurrencyClosedStatus();
-    const isClosed = delistedCurrencyClosedStatus
-        ? delistedCurrencyArray.every(ccy =>
-              delistedCurrencyClosedStatus.includes(ccy)
-          )
-        : false;
 
     return (
         <Page title='Portfolio Management' name='portfolio-management'>
-            {userDelistedCurrenciesArray.length > 0 && !isClosed && (
+            {userDelistedCurrenciesArray.length > 0 && (
                 <Alert
                     severity='error'
                     showCloseButton={true}
-                    onClose={() =>
-                        writeDelistedCurrencyClosedStatus(delistedCurrencyArray)
-                    }
+                    localStorageKey={DELISTED_CURRENCIES_KEY}
+                    localStorageValue={Array.from(delistedCurrencySet)
+                        .sort()
+                        .join()}
                 >
                     <p className='text-white'>
                         Please note that your contracts for{' '}

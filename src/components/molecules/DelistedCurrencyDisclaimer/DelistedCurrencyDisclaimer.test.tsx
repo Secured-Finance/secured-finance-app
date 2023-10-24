@@ -33,7 +33,7 @@ describe('DelistedCurrencyDisclaimer test', () => {
     });
 
     it('should not render disclaimer if user has previously closed the disclaimer', () => {
-        localStorage.setItem('DELISTED_CURRENCIES_KEY', 'WFIL,ETH,USDC');
+        localStorage.setItem('DELISTED_CURRENCIES_KEY', 'ETH,USDC,WFIL');
         render(<MultipleCurrencies />);
         expect(
             screen.queryByText(
