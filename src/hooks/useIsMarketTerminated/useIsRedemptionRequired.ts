@@ -12,7 +12,6 @@ export const useIsRedemptionRequired = (account: string | undefined) => {
         },
         placeholderData: false,
         enabled: !!securedFinance && !!account,
-        staleTime: Infinity,
         refetchOnWindowFocus: true,
     });
 };

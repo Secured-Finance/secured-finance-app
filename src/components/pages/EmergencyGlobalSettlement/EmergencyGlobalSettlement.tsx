@@ -72,7 +72,8 @@ export const EmergencyGlobalSettlement = () => {
             price: snapshotPrices?.[s.currency] ?? 0,
         })) ?? [];
 
-    const isRedemptionRequired = useIsRedemptionRequired(address).data;
+    const { data: isRedemptionRequired, refetch } =
+        useIsRedemptionRequired(address);
 
     const [userStep, setUserStep] = useState<'redeem' | 'withdraw'>('redeem');
     const [showRedeemDialog, setShowRedeemDialog] = useState(false);
@@ -126,8 +127,9 @@ export const EmergencyGlobalSettlement = () => {
 
                     <WithdrawPositionTable
                         data={userStep === 'redeem' ? withdrawableData : []}
-                        onRedeem={() => {
+                        onRedeem={async () => {
                             setShowRedeemDialog(true);
+                            await refetch();
                         }}
                         netValue={netValue}
                     />
