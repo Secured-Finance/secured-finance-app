@@ -3,7 +3,7 @@ import { fromBytes32 } from '@secured-finance/sf-graph-client';
 import { CellContext, createColumnHelper } from '@tanstack/react-table';
 import { useRouter } from 'next/router';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Button, DropdownSelector } from 'src/components/atoms';
 import { CoreTable, Tab } from 'src/components/molecules';
 import {
@@ -12,14 +12,22 @@ import {
     useMarketLists,
     useMaturityOptions,
 } from 'src/hooks';
-import { setCurrency, setMaturity } from 'src/store/landingOrderForm';
+import {
+    selectLandingOrderForm,
+    setCurrency,
+    setMaturity,
+    setAmount,
+} from 'src/store/landingOrderForm';
+import { RootState } from 'src/store/types';
 import {
     CurrencySymbol,
     formatLoanValue,
     getCurrencyMapAsOptions,
     toCurrencySymbol,
+    amountFormatterFromBase,
+    amountFormatterToBase,
+    countdown,
 } from 'src/utils';
-import { countdown } from 'src/utils';
 import { LoanValue } from 'src/utils/entities';
 import {
     contractColumnDefinition,
@@ -29,6 +37,9 @@ import {
 const columnHelper = createColumnHelper<Market>();
 
 export const MarketLoanWidget = () => {
+    const { currency, amount } = useSelector((state: RootState) =>
+        selectLandingOrderForm(state.landingOrderForm)
+    );
     const dispatch = useDispatch();
     const router = useRouter();
 
@@ -74,14 +85,17 @@ export const MarketLoanWidget = () => {
     const handleClick = useCallback(
         (info: CellContext<Market, string>) => {
             const ccy = fromBytes32(info.getValue()) as CurrencySymbol;
+            const fromAmount = amountFormatterFromBase[currency](amount);
+            const toAmount = amountFormatterToBase[ccy](fromAmount);
             dispatch(setMaturity(Number(info.row.original.maturity)));
             dispatch(setCurrency(ccy));
+            dispatch(setAmount(toAmount));
 
             info.row.original.isOpened
                 ? router.push('/advanced/')
                 : router.push('/itayose/');
         },
-        [dispatch, router]
+        [amount, currency, dispatch, router]
     );
 
     const columns = useMemo(
