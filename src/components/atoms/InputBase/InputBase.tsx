@@ -1,6 +1,7 @@
 import classNames from 'classnames';
-import NumericFormat, {
+import {
     NumberFormatValues,
+    NumericFormat,
     SourceInfo,
 } from 'react-number-format';
 
@@ -78,6 +79,7 @@ export const InputBase = ({
                 const { floatValue = 0 } = values;
                 return floatValue <= maxLimit;
             }}
+            inputMode='decimal'
         />
     );
 };
