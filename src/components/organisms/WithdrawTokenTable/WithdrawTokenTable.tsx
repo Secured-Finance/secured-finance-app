@@ -117,6 +117,7 @@ export const WithdrawTokenTable = ({ data }: { data: TokenPosition[] }) => {
                                     ...o,
                                     type: 'collateral' as const,
                                     maturity: 0,
+                                    responsive: false,
                                 };
                             })}
                             columns={columns}

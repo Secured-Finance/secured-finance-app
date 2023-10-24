@@ -67,7 +67,10 @@ export const WithdrawPositionTable = ({
                         <CoreTable
                             data={data}
                             columns={columns}
-                            options={{ name: 'emergency-step-1' }}
+                            options={{
+                                name: 'emergency-step-1',
+                                responsive: false,
+                            }}
                         />
                     </div>
                     <div className='grid grid-cols-2 grid-rows-2 place-items-center justify-items-center gap-5 pl-4 pr-7 pt-3 tablet:grid-cols-6 tablet:grid-rows-1'>
