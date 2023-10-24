@@ -2,10 +2,16 @@ import { Tab as HeadlessTab } from '@headlessui/react';
 import { Children, useState } from 'react';
 import { NavTab } from 'src/components/atoms';
 
-type TabData = {
+export type TabHighlight = {
+    text: string;
+    size: 'small' | 'large';
+    visible: boolean;
+};
+
+export type TabData = {
     text: string;
     disabled?: boolean;
-    highlight?: { text: string; size: 'small' | 'large'; visible: boolean };
+    highlight?: TabHighlight;
     util?: React.ReactNode;
 };
 
