@@ -98,9 +98,11 @@ export const WithdrawCollateral = ({
     isOpen,
     onClose,
     collateralList,
+    selected,
     source,
 }: {
     collateralList: Record<CurrencySymbol, CollateralInfo>;
+    selected?: CurrencySymbol;
 } & DialogState) => {
     const etherscanUrl = useEtherscanUrl();
     const handleContractTransaction = useHandleContractTransaction();
@@ -211,6 +213,11 @@ export const WithdrawCollateral = ({
                                     headerText='Select Asset'
                                     onChange={handleChange}
                                     optionList={Object.values(collateralList)}
+                                    selectedOption={
+                                        selected
+                                            ? collateralList[selected]
+                                            : undefined
+                                    }
                                 />
                                 <CollateralInput
                                     price={priceList[asset]}

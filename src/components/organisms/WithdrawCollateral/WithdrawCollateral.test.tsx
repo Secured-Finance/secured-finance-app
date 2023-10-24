@@ -3,7 +3,11 @@ import { composeStories } from '@storybook/react';
 import { preloadedAssetPrices } from 'src/stories/mocks/fixtures';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
-import { CollateralEvents, CollateralProperties } from 'src/utils';
+import {
+    CollateralEvents,
+    CollateralProperties,
+    CurrencySymbol,
+} from 'src/utils';
 import * as stories from './WithdrawCollateral.stories';
 
 const { Default } = composeStories(stories);
@@ -225,5 +229,11 @@ describe('WithdrawCollateral component', () => {
                 }
             )
         );
+    });
+
+    it('should open the modal with the selected asset if currency is passed as argument', () => {
+        render(<Default selected={CurrencySymbol.USDC} />, { preloadedState });
+        expect(screen.getByText('USDC')).toBeInTheDocument();
+        expect(screen.getByText('50 USDC Available')).toBeInTheDocument();
     });
 });

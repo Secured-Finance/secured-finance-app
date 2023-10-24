@@ -6,6 +6,7 @@ import { ExpandIndicator } from '../ExpandIndicator';
 interface CollateralSelectorProps {
     headerText: string;
     optionList: CollateralInfo[];
+    selectedOption?: CollateralInfo;
     onChange: (v: CollateralInfo) => void;
 }
 
@@ -17,8 +18,9 @@ export const CollateralSelector = ({
     headerText,
     optionList,
     onChange,
+    selectedOption,
 }: CollateralSelectorProps) => {
-    const [selected, setSelected] = useState(optionList[0]);
+    const [selected, setSelected] = useState(selectedOption ?? optionList[0]);
 
     useEffect(() => {
         onChange(selected);

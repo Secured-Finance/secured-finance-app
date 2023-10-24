@@ -6,9 +6,8 @@ import { Alert, HorizontalTab, StatsBar } from 'src/components/molecules';
 import {
     ActiveTradeTable,
     CollateralOrganism,
-    ConnectWalletCard,
     MyTransactionsTable,
-    MyWalletCard,
+    MyWalletWidget,
     OrderHistoryTable,
     OrderTable,
 } from 'src/components/organisms';
@@ -28,7 +27,6 @@ import { getPriceMap } from 'src/store/assetPrices/selectors';
 import { RootState } from 'src/store/types';
 import { TradeHistory } from 'src/types';
 import {
-    WalletSource,
     checkOrderIsFilled,
     computeNetValue,
     formatOrders,
@@ -57,7 +55,7 @@ const TabSpinner = () => (
 const offset = 20;
 
 export const PortfolioManagement = () => {
-    const { address, isConnected } = useAccount();
+    const { address } = useAccount();
     const [offsetTransactions, setOffsetTransactions] = useState(0);
     const [offsetOrders, setOffsetOrders] = useState(0);
     const [selectedTable, setSelectedTable] = useState(
@@ -303,15 +301,7 @@ export const PortfolioManagement = () => {
                     />
                 </div>
                 <div className='my-4 laptop:my-0'>
-                    {isConnected ? (
-                        <MyWalletCard
-                            addressRecord={{
-                                [WalletSource.METAMASK]: address,
-                            }}
-                        />
-                    ) : (
-                        <ConnectWalletCard />
-                    )}
+                    <MyWalletWidget />
                 </div>
             </TwoColumns>
         </Page>

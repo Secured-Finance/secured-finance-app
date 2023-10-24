@@ -2,6 +2,7 @@ import { Popover } from '@headlessui/react';
 import classNames from 'classnames';
 import { cloneElement, useState } from 'react';
 import InformationCircle from 'src/assets/icons/information-circle.svg';
+import { Alignment } from 'src/types';
 
 const InformationCircleIcon = (
     <InformationCircle
@@ -15,12 +16,12 @@ const InformationCircleIcon = (
 export const Tooltip = ({
     iconElement = InformationCircleIcon,
     children,
-    align = 'centre',
+    align = 'center',
     maxWidth = 'large',
 }: {
     iconElement?: React.ReactNode;
     children: React.ReactNode;
-    align?: 'left' | 'right' | 'centre';
+    align?: Alignment;
     maxWidth?: 'small' | 'large';
 }) => {
     const [open, setOpen] = useState(false);
@@ -53,7 +54,7 @@ export const Tooltip = ({
                                     'max-w-[256px]': maxWidth === 'large',
                                     'max-w-[165px]': maxWidth === 'small',
                                     'left-1/2 -translate-x-1/2 transform':
-                                        align === 'centre',
+                                        align === 'center',
                                     '-left-7': align === 'right',
                                     '-right-7': align === 'left',
                                 }
