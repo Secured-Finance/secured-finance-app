@@ -5,7 +5,12 @@ import { useRouter } from 'next/router';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, DropdownSelector } from 'src/components/atoms';
-import { CoreTable, Tab } from 'src/components/molecules';
+import {
+    CoreTable,
+    Tab,
+    TabData,
+    TabHighlight,
+} from 'src/components/molecules';
 import {
     Market,
     useCurrencyDelistedStatus,
@@ -21,12 +26,12 @@ import {
 import { RootState } from 'src/store/types';
 import {
     CurrencySymbol,
-    formatLoanValue,
-    getCurrencyMapAsOptions,
-    toCurrencySymbol,
     amountFormatterFromBase,
     amountFormatterToBase,
     countdown,
+    formatLoanValue,
+    getCurrencyMapAsOptions,
+    toCurrencySymbol,
 } from 'src/utils';
 import { LoanValue } from 'src/utils/entities';
 import {
@@ -36,7 +41,11 @@ import {
 
 const columnHelper = createColumnHelper<Market>();
 
-export const MarketLoanWidget = () => {
+export const MarketLoanWidget = ({
+    openMarketExists,
+}: {
+    openMarketExists: boolean;
+}) => {
     const { currency, amount } = useSelector((state: RootState) =>
         selectLandingOrderForm(state.landingOrderForm)
     );
@@ -168,11 +177,7 @@ export const MarketLoanWidget = () => {
         [handleClick]
     );
 
-    const itayoseHighlight: {
-        text: string;
-        size: 'small' | 'large';
-        visible: boolean;
-    } = {
+    const itayoseHighlight: TabHighlight = {
         text: 'NEW',
         size: 'small',
         visible: filteredItayoseMarkets.length !== 0,
@@ -202,8 +207,7 @@ export const MarketLoanWidget = () => {
         </div>
     );
 
-    const tabDataArray = [
-        { text: 'Loans', util: openMarketUtil },
+    const tabDataArray: TabData[] = [
         {
             text: 'Pre-Open',
             highlight: itayoseHighlight,
@@ -212,20 +216,26 @@ export const MarketLoanWidget = () => {
         },
     ];
 
+    if (openMarketExists) {
+        tabDataArray.unshift({ text: 'Loans', util: openMarketUtil });
+    }
+
     return (
         <div className='h-fit rounded-b-2xl border border-white-10 shadow-tab'>
             <Tab tabDataArray={tabDataArray}>
-                <div className='p-6 pt-3'>
-                    <CoreTable
-                        columns={columns}
-                        data={getFilteredMarkets(openMarkets)}
-                        options={{
-                            border: false,
-                            hideColumnIds: ['openingDate'],
-                            stickyColumns: new Set([3]),
-                        }}
-                    />
-                </div>
+                {openMarketExists && (
+                    <div className='p-6 pt-3'>
+                        <CoreTable
+                            columns={columns}
+                            data={getFilteredMarkets(openMarkets)}
+                            options={{
+                                border: false,
+                                hideColumnIds: ['openingDate'],
+                                stickyColumns: new Set([3]),
+                            }}
+                        />
+                    </div>
+                )}
                 <div className='p-6 pt-3'>
                     <CoreTable
                         columns={columns}

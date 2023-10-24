@@ -23,6 +23,7 @@ import {
     useGraphClientHook,
     useLendingMarkets,
     useLoanValues,
+    useOpenMarketExists,
     useTotalNumberOfAsset,
     useValueLockedByCurrency,
 } from 'src/hooks';
@@ -62,6 +63,8 @@ export const MarketDashboard = () => {
     const { data: lendingContracts = baseContracts } = useLendingMarkets();
 
     const { data: delistedCurrencySet } = useCurrencyDelistedStatus();
+
+    const openMarketExists = useOpenMarketExists();
 
     getCurrencyMapAsList().forEach(ccy => {
         // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -153,19 +156,20 @@ export const MarketDashboard = () => {
                             },
                         ]}
                     />
-                    <div className='w-full'>
-                        <MultiCurveChart
-                            title='Yield Curve'
-                            curves={curves}
-                            labels={Object.values(
-                                lendingContracts[CurrencySymbol.WFIL]
-                            )
-                                .filter(o => o.isReady && !o.isMatured)
-                                .map(o => o.name)}
-                        />
-                    </div>
-
-                    <MarketLoanWidget />
+                    {openMarketExists && (
+                        <div className='w-full'>
+                            <MultiCurveChart
+                                title='Yield Curve'
+                                curves={curves}
+                                labels={Object.values(
+                                    lendingContracts[CurrencySymbol.WFIL]
+                                )
+                                    .filter(o => o.isReady && !o.isMatured)
+                                    .map(o => o.name)}
+                            />
+                        </div>
+                    )}
+                    <MarketLoanWidget openMarketExists={openMarketExists} />
                 </div>
                 <section className='flex flex-col gap-5'>
                     {isConnected && (

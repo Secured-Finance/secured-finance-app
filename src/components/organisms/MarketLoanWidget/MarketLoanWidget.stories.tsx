@@ -7,6 +7,9 @@ import { MarketLoanWidget } from './MarketLoanWidget';
 export default {
     title: 'Organism/MarketLoanWidget',
     component: MarketLoanWidget,
+    args: {
+        openMarketExists: true,
+    },
     parameters: {
         ...RESPONSIVE_PARAMETERS,
         chromatic: {
@@ -15,7 +18,14 @@ export default {
     },
 } as Meta<typeof MarketLoanWidget>;
 
-const Template: StoryFn<typeof MarketLoanWidget> = () => <MarketLoanWidget />;
+const Template: StoryFn<typeof MarketLoanWidget> = args => (
+    <MarketLoanWidget {...args} />
+);
+
+export const NoOpenMarket = Template.bind({});
+NoOpenMarket.args = {
+    openMarketExists: false,
+};
 
 export const Default = Template.bind({});
 export const ItayoseMarket = Template.bind({});
