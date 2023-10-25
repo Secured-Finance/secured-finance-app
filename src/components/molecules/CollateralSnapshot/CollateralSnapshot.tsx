@@ -1,5 +1,12 @@
 import { createColumnHelper } from '@tanstack/react-table';
-import { ArcElement, Chart as ChartJS, Tooltip } from 'chart.js';
+import {
+    ArcElement,
+    Chart as ChartJS,
+    ChartOptions,
+    ChartTypeRegistry,
+    Tooltip,
+    TooltipItem,
+} from 'chart.js';
 import { useMemo } from 'react';
 import { Doughnut } from 'react-chartjs-2';
 import { CurrencyIcon, GradientBox } from 'src/components/atoms';
@@ -21,7 +28,7 @@ export type CollateralSnapshot = {
 
 const columnHelper = createColumnHelper<CollateralSnapshot>();
 
-const options = {
+const options: ChartOptions<'doughnut'> = {
     elements: {
         arc: {
             borderWidth: 0,
@@ -30,6 +37,26 @@ const options = {
     plugins: {
         legend: {
             display: false,
+        },
+        tooltip: {
+            yAlign: 'bottom',
+            caretPadding: 16,
+            backgroundColor: 'rgba(47, 50, 65, 1)',
+            borderWidth: 1,
+            borderColor: 'rgba(52, 56, 76, 1)',
+            displayColors: false,
+            cornerRadius: 10,
+            padding: 8,
+            callbacks: {
+                label: (item: TooltipItem<keyof ChartTypeRegistry>) => {
+                    let content = '';
+                    content += item.formattedValue + '%';
+                    return content;
+                },
+                title: () => {
+                    return '';
+                },
+            },
         },
     },
 };
@@ -45,7 +72,7 @@ export const CollateralSnapshot = ({
         labels: data.map(item => item.currency),
         datasets: [
             {
-                data: data.map(item => item.ratio),
+                data: data.map(item => item.ratio / 100),
                 backgroundColor: data.map(
                     item => currencyMap[item.currency].chartColor
                 ),
