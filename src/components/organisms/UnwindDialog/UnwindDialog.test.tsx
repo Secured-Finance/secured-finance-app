@@ -3,7 +3,7 @@ import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { render, screen, waitFor } from 'src/test-utils.js';
 import * as stories from './UnwindDialog.stories';
 
-const { Default } = composeStories(stories);
+const { Default, Redeem, Repay } = composeStories(stories);
 
 const mockSecuredFinance = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mockSecuredFinance);
@@ -11,6 +11,11 @@ jest.mock('src/hooks/useSecuredFinance', () => () => mockSecuredFinance);
 describe('UnwindDialog Component', () => {
     it('should render a UnwindDialog', async () => {
         await waitFor(() => render(<Default />));
+    });
+
+    it('should open unwind dialog as default', async () => {
+        await waitFor(() => render(<Default />));
+        expect(screen.getByText('Unwind Position')).toBeInTheDocument();
     });
 
     it('should call the unwind function when the button is clicked', async () => {
@@ -45,5 +50,23 @@ describe('UnwindDialog Component', () => {
             expect(mockSecuredFinance.unwindPosition).toHaveBeenCalled();
             expect(screen.getByText('Failed!')).toBeInTheDocument();
         });
+    });
+
+    it('should open repay dialog when type is REPAY', async () => {
+        await waitFor(() => render(<Repay />));
+        expect(screen.getByText('Repay Position')).toBeInTheDocument();
+        screen.getByText('Confirm').click();
+        await waitFor(() =>
+            expect(mockSecuredFinance.executeRepayment).toHaveBeenCalled()
+        );
+    });
+
+    it('should open redeem dialog when type is REDEEM', async () => {
+        await waitFor(() => render(<Redeem />));
+        expect(screen.getByText('Redeem Position')).toBeInTheDocument();
+        screen.getByText('Confirm').click();
+        await waitFor(() =>
+            expect(mockSecuredFinance.executeRedemption).toHaveBeenCalled()
+        );
     });
 });

@@ -1,10 +1,12 @@
 import { useQuery } from '@tanstack/react-query';
 import { BigNumber } from 'ethers';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { QueryKeys } from 'src/hooks/queries';
 import useSF from 'src/hooks/useSecuredFinance';
 import { CurrencySymbol, toCurrency } from 'src/utils';
 import { LoanValue } from 'src/utils/entities';
+
+const DEFAULT_ORDERBOOK_DEPTH = 26;
 
 interface SmartContractOrderbook {
     unitPrices: BigNumber[];
@@ -18,20 +20,11 @@ export type OrderBookEntry = {
 
 export type OrderBook = Array<OrderBookEntry>;
 
-const MAX_ORDERBOOK_LENGTH = 40;
-
 export const sortOrders = (
     a: OrderBookEntry,
     b: OrderBookEntry,
     order: 'asc' | 'desc'
 ) => {
-    if (
-        a.value.price === 0 ||
-        b.value.price === 0 ||
-        a.amount.isZero() ||
-        b.amount.isZero()
-    )
-        return 1;
     return order === 'asc'
         ? a.value.price - b.value.price
         : b.value.price - a.value.price;
@@ -39,21 +32,34 @@ export const sortOrders = (
 
 const transformOrderbook = (
     input: SmartContractOrderbook,
-    maturity: number
+    maturity: number,
+    calculationDate: number | undefined
 ): OrderBook => {
     return input.unitPrices.map((unitPrice, index) => ({
         amount: input.amounts[index],
-        value: LoanValue.fromPrice(unitPrice.toNumber(), maturity),
+        value: LoanValue.fromPrice(
+            unitPrice.toNumber(),
+            maturity,
+            calculationDate
+        ),
     }));
 };
 
 export const useOrderbook = (
     ccy: CurrencySymbol,
     maturity: number,
-    limit: number = MAX_ORDERBOOK_LENGTH
+    calculationDate?: number
 ) => {
     const securedFinance = useSF();
-    const [depth, setDepth] = useState(limit);
+    const [depth, setDepth] = useState(DEFAULT_ORDERBOOK_DEPTH);
+    const [multiplier, setMultiplier] = useState(1);
+    const [isShowingAll, setIsShowingAll] = useState(true);
+
+    useEffect(() => {
+        setDepth(
+            (DEFAULT_ORDERBOOK_DEPTH * multiplier) / (isShowingAll ? 2 : 1)
+        );
+    }, [isShowingAll, multiplier]);
 
     return [
         useQuery({
@@ -86,16 +92,19 @@ export const useOrderbook = (
                 return {
                     borrowOrderbook: transformOrderbook(
                         data.borrowOrderbook,
-                        maturity
+                        maturity,
+                        calculationDate
                     ),
                     lendOrderbook: transformOrderbook(
                         data.lendOrderbook,
-                        maturity
+                        maturity,
+                        calculationDate
                     ),
                 };
             },
             enabled: !!securedFinance,
         }),
-        setDepth,
+        setMultiplier,
+        setIsShowingAll,
     ] as const;
 };

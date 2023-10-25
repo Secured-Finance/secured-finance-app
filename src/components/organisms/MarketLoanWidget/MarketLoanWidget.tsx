@@ -2,19 +2,32 @@ import { formatDate, getUTCMonthYear } from '@secured-finance/sf-core';
 import { fromBytes32 } from '@secured-finance/sf-graph-client';
 import { CellContext, createColumnHelper } from '@tanstack/react-table';
 import { useRouter } from 'next/router';
-import { useCallback, useMemo, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Button, DropdownSelector } from 'src/components/atoms';
 import { CoreTable, Tab } from 'src/components/molecules';
-import { Market, useMarketLists, useMaturityOptions } from 'src/hooks';
-import { setCurrency, setMaturity } from 'src/store/landingOrderForm';
+import {
+    Market,
+    useCurrencyDelistedStatus,
+    useMarketLists,
+    useMaturityOptions,
+} from 'src/hooks';
+import {
+    selectLandingOrderForm,
+    setCurrency,
+    setMaturity,
+    setAmount,
+} from 'src/store/landingOrderForm';
+import { RootState } from 'src/store/types';
 import {
     CurrencySymbol,
     formatLoanValue,
     getCurrencyMapAsOptions,
     toCurrencySymbol,
+    amountFormatterFromBase,
+    amountFormatterToBase,
+    countdown,
 } from 'src/utils';
-import { countdown } from 'src/utils/date';
 import { LoanValue } from 'src/utils/entities';
 import {
     contractColumnDefinition,
@@ -24,10 +37,19 @@ import {
 const columnHelper = createColumnHelper<Market>();
 
 export const MarketLoanWidget = () => {
+    const { currency, amount } = useSelector((state: RootState) =>
+        selectLandingOrderForm(state.landingOrderForm)
+    );
     const dispatch = useDispatch();
     const router = useRouter();
 
     const { openMarkets, itayoseMarkets } = useMarketLists();
+
+    const { data: delistedCurrencySet } = useCurrencyDelistedStatus();
+
+    const filteredItayoseMarkets = itayoseMarkets.filter(
+        market => !delistedCurrencySet.has(market.ccy)
+    );
 
     const [selectedCurrency, setSelectedCurrency] = useState<
         CurrencySymbol | ''
@@ -63,14 +85,17 @@ export const MarketLoanWidget = () => {
     const handleClick = useCallback(
         (info: CellContext<Market, string>) => {
             const ccy = fromBytes32(info.getValue()) as CurrencySymbol;
+            const fromAmount = amountFormatterFromBase[currency](amount);
+            const toAmount = amountFormatterToBase[ccy](fromAmount);
             dispatch(setMaturity(Number(info.row.original.maturity)));
             dispatch(setCurrency(ccy));
+            dispatch(setAmount(toAmount));
 
             info.row.original.isOpened
                 ? router.push('/advanced/')
                 : router.push('/itayose/');
         },
-        [dispatch, router]
+        [amount, currency, dispatch, router]
     );
 
     const columns = useMemo(
@@ -119,11 +144,7 @@ export const MarketLoanWidget = () => {
             columnHelper.accessor('utcOpeningDate', {
                 id: 'openingDate',
                 cell: info => {
-                    return (
-                        <div>{`starts in ${countdown(
-                            info.getValue() * 1000
-                        )}`}</div>
-                    );
+                    return <Timer targetTime={info.getValue() * 1000} />;
                 },
                 enableHiding: true,
                 header: tableHeaderDefinition('Market Open'),
@@ -154,7 +175,7 @@ export const MarketLoanWidget = () => {
     } = {
         text: 'NEW',
         size: 'small',
-        visible: itayoseMarkets.length !== 0,
+        visible: filteredItayoseMarkets.length !== 0,
     };
 
     const openMarketUtil = (
@@ -187,7 +208,7 @@ export const MarketLoanWidget = () => {
             text: 'Pre-Open',
             highlight: itayoseHighlight,
             util: itayoseMarketUtil,
-            disabled: itayoseMarkets.length === 0,
+            disabled: filteredItayoseMarkets.length === 0,
         },
     ];
 
@@ -208,7 +229,7 @@ export const MarketLoanWidget = () => {
                 <div className='p-6 pt-3'>
                     <CoreTable
                         columns={columns}
-                        data={getFilteredMarkets(itayoseMarkets)}
+                        data={getFilteredMarkets(filteredItayoseMarkets)}
                         options={{
                             border: false,
                             hideColumnIds: ['apr'],
@@ -260,9 +281,26 @@ const AssetDropdown = ({
         <DropdownSelector<string>
             optionList={[
                 { label: 'All Assets', value: '' },
+                //TODO: add delisting
                 ...getCurrencyMapAsOptions(),
             ]}
             onChange={v => handleSelectedCurrency(toCurrencySymbol(v))}
         />
     );
+};
+
+const Timer = ({ targetTime }: { targetTime: number }) => {
+    const [time, setTime] = useState<string>(countdown(targetTime));
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setTime(countdown(targetTime));
+        }, 1000);
+
+        return () => {
+            clearInterval(interval);
+        };
+    }, [targetTime]);
+
+    return <div>{`starts in ${time}`}</div>;
 };

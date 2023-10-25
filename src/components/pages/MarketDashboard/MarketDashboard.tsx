@@ -6,12 +6,11 @@ import {
     CollateralManagementConciseTab,
     GradientBox,
 } from 'src/components/atoms';
-import { StatsBar } from 'src/components/molecules';
+import { DelistedCurrencyDisclaimer, StatsBar } from 'src/components/molecules';
 import {
-    ConnectWalletCard,
     MarketLoanWidget,
     MultiCurveChart,
-    MyWalletCard,
+    MyWalletWidget,
 } from 'src/components/organisms';
 import { Page, TwoColumns } from 'src/components/templates';
 import {
@@ -20,6 +19,7 @@ import {
     emptyCollateralBook,
     emptyValueLockedBook,
     useCollateralBook,
+    useCurrencyDelistedStatus,
     useGraphClientHook,
     useLendingMarkets,
     useLoanValues,
@@ -33,7 +33,6 @@ import {
     Environment,
     PREVIOUS_TOTAL_USERS,
     Rate,
-    WalletSource,
     computeTotalDailyVolumeInUSD,
     currencyMap,
     getCurrencyMapAsList,
@@ -61,6 +60,8 @@ export const MarketDashboard = () => {
 
     const curves: Record<string, Rate[]> = {};
     const { data: lendingContracts = baseContracts } = useLendingMarkets();
+
+    const { data: delistedCurrencySet } = useCurrencyDelistedStatus();
 
     getCurrencyMapAsList().forEach(ccy => {
         // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -106,6 +107,7 @@ export const MarketDashboard = () => {
             return val;
         }
         for (const ccy of getCurrencyMapAsList()) {
+            if (!valueLockedByCurrency[ccy.symbol]) continue;
             val = val.add(
                 Math.floor(
                     currencyMap[ccy.symbol].fromBaseUnit(
@@ -121,6 +123,7 @@ export const MarketDashboard = () => {
 
     return (
         <Page title='Market Dashboard' name='dashboard-page'>
+            <DelistedCurrencyDisclaimer currencies={delistedCurrencySet} />
             <TwoColumns>
                 <div className='grid grid-cols-1 gap-y-7'>
                     <StatsBar
@@ -178,19 +181,12 @@ export const MarketDashboard = () => {
                                     collateralThreshold={
                                         collateralBook.collateralThreshold
                                     }
+                                    account={address}
                                 />
                             </div>
                         </GradientBox>
                     )}
-                    {isConnected ? (
-                        <MyWalletCard
-                            addressRecord={{
-                                [WalletSource.METAMASK]: address,
-                            }}
-                        />
-                    ) : (
-                        <ConnectWalletCard />
-                    )}
+                    <MyWalletWidget />
                 </section>
             </TwoColumns>
         </Page>

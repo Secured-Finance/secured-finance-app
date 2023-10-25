@@ -3,7 +3,11 @@ import { composeStories } from '@storybook/react';
 import { preloadedAssetPrices } from 'src/stories/mocks/fixtures';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
-import { CollateralEvents, CollateralProperties } from 'src/utils';
+import {
+    CollateralEvents,
+    CollateralProperties,
+    CurrencySymbol,
+} from 'src/utils';
 import * as stories from './WithdrawCollateral.stories';
 
 const { Default } = composeStories(stories);
@@ -160,5 +164,76 @@ describe('WithdrawCollateral component', () => {
                 }
             )
         );
+    });
+
+    it('should reach success screen when transaction receipt is received', async () => {
+        const onClose = jest.fn();
+        render(<Default onClose={onClose} source='Source of Withdrawal' />, {
+            preloadedState,
+        });
+
+        fireEvent.click(screen.getByTestId('collateral-selector-button'));
+        fireEvent.click(screen.getByTestId('option-2'));
+        fireEvent.click(screen.getByTestId(75));
+
+        const button = screen.getByTestId('dialog-action-button');
+        fireEvent.click(button);
+
+        await waitFor(() => {
+            expect(screen.getByText('Success!')).toBeInTheDocument();
+            expect(
+                screen.getByText(
+                    'You have successfully withdrawn collateral on Secured Finance.'
+                )
+            ).toBeInTheDocument();
+            expect(screen.getByText('Status')).toBeInTheDocument();
+            expect(screen.getByText('Complete')).toBeInTheDocument();
+            expect(screen.getByText('Amount')).toBeInTheDocument();
+            expect(screen.getByText('37.5 USDC')).toBeInTheDocument();
+
+            expect(
+                screen.getByTestId('dialog-action-button')
+            ).toHaveTextContent('OK');
+        });
+
+        await waitFor(() => expect(onClose).not.toHaveBeenCalled());
+    });
+
+    it('should withdraw whole amount when 100% is clicked', async () => {
+        const track = jest.spyOn(analytics, 'track');
+        render(<Default source='Source of Withdrawal' />, {
+            preloadedState,
+        });
+
+        fireEvent.click(screen.getByTestId('collateral-selector-button'));
+        fireEvent.click(screen.getByTestId('option-3'));
+
+        expect(screen.getByText('Bitcoin')).toBeInTheDocument();
+        expect(
+            screen.getByText('1.1235 Bitcoin Available')
+        ).toBeInTheDocument();
+
+        fireEvent.click(screen.getByTestId(100));
+
+        const button = screen.getByTestId('dialog-action-button');
+        expect(button).toBeEnabled();
+
+        fireEvent.click(button);
+        await waitFor(() =>
+            expect(track).toHaveBeenCalledWith(
+                CollateralEvents.WITHDRAW_COLLATERAL,
+                {
+                    [CollateralProperties.ASSET_TYPE]: 'WBTC',
+                    [CollateralProperties.AMOUNT]: '1.12349999',
+                    [CollateralProperties.SOURCE]: 'Source of Withdrawal',
+                }
+            )
+        );
+    });
+
+    it('should open the modal with the selected asset if currency is passed as argument', () => {
+        render(<Default selected={CurrencySymbol.USDC} />, { preloadedState });
+        expect(screen.getByText('USDC')).toBeInTheDocument();
+        expect(screen.getByText('50 USDC Available')).toBeInTheDocument();
     });
 });

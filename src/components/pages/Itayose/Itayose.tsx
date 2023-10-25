@@ -24,6 +24,7 @@ import {
     emptyCollateralBook,
     sortOrders,
     useCollateralBook,
+    useCurrencyDelistedStatus,
     useLendingMarkets,
     useMarketOrderList,
     useMarketPhase,
@@ -42,10 +43,10 @@ import {
     CurrencySymbol,
     amountFormatterFromBase,
     amountFormatterToBase,
+    countdown,
     getCurrencyMapAsOptions,
     usdFormat,
 } from 'src/utils';
-import { countdown } from 'src/utils/date';
 import { LoanValue, Maturity } from 'src/utils/entities';
 import { useAccount } from 'wagmi';
 
@@ -104,15 +105,14 @@ const Toolbar = ({
     );
 };
 
-const DEFAULT_ORDERBOOK_DEPTH = 12;
-const DEFAULT_ORDERBOOK_DEPTH_FULL = 26;
-
 export const Itayose = () => {
     const { address } = useAccount();
 
     const { amount, currency, maturity } = useSelector((state: RootState) =>
         selectLandingOrderForm(state.landingOrderForm)
     );
+
+    const { data: delistedCurrencySet } = useCurrencyDelistedStatus();
 
     const { data: lendingMarkets = baseContracts } = useLendingMarkets();
     const lendingContracts = lendingMarkets[currency];
@@ -132,16 +132,24 @@ export const Itayose = () => {
         );
     }, [maturity, maturityOptionList]);
 
-    const assetList = useMemo(() => getCurrencyMapAsOptions(), []);
+    const assetList = useMemo(
+        () =>
+            getCurrencyMapAsOptions().filter(
+                ccy => !delistedCurrencySet.has(ccy.label as CurrencySymbol)
+            ),
+        [delistedCurrencySet]
+    );
+
     const selectedAsset = useMemo(() => {
         return assetList.find(option => option.value === currency);
     }, [currency, assetList]);
 
-    const [orderBook, setOrderBookDepth] = useOrderbook(
+    const [orderBook, setMultiplier, setIsShowingAll] = useOrderbook(
         currency,
         maturity,
-        DEFAULT_ORDERBOOK_DEPTH
+        lendingContracts[selectedTerm.value.toNumber()]?.utcOpeningDate
     );
+
     const { data: collateralBook = emptyCollateralBook } =
         useCollateralBook(address);
 
@@ -237,6 +245,10 @@ export const Itayose = () => {
                 <AdvancedLendingOrderCard
                     collateralBook={collateralBook}
                     isItayose
+                    calculationDate={
+                        lendingContracts[selectedTerm.value.toNumber()]
+                            ?.utcOpeningDate
+                    }
                     preOrderPosition={
                         filteredOrderList.length > 0
                             ? filteredOrderList[0].side.toString() ===
@@ -245,6 +257,7 @@ export const Itayose = () => {
                                 : 'lend'
                             : 'none'
                     }
+                    delistedCurrencySet={delistedCurrencySet}
                 />
 
                 <OrderBookWidget
@@ -252,13 +265,11 @@ export const Itayose = () => {
                     orderbook={orderBook}
                     variant='itayose'
                     marketPrice={estimatedOpening}
-                    onFilterChange={state => {
-                        setOrderBookDepth(
-                            !state.showBorrow || !state.showLend
-                                ? DEFAULT_ORDERBOOK_DEPTH_FULL
-                                : DEFAULT_ORDERBOOK_DEPTH
-                        );
-                    }}
+                    onFilterChange={state =>
+                        setIsShowingAll(state.showBorrow && state.showLend)
+                    }
+                    onAggregationChange={setMultiplier}
+                    isCurrencyDelisted={delistedCurrencySet.has(currency)}
                 />
 
                 <div className='flex h-full flex-col items-stretch justify-stretch gap-6'>
@@ -294,6 +305,10 @@ export const Itayose = () => {
                             data={filteredOrderList}
                             variant='compact'
                             height={520}
+                            calculationDate={
+                                lendingContracts[selectedTerm.value.toNumber()]
+                                    ?.utcOpeningDate
+                            }
                         />
                     </HorizontalTab>
                 </div>

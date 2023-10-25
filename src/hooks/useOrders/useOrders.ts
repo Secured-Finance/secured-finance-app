@@ -105,5 +105,48 @@ export const useOrders = () => {
         [securedFinance]
     );
 
-    return { cancelOrder, placeOrder, unwindPosition, placePreOrder };
+    const repayPosition = useCallback(
+        async (ccy: CurrencySymbol, maturity: Maturity) => {
+            try {
+                if (!securedFinance) return;
+
+                const tx = await securedFinance.executeRepayment(
+                    toCurrency(ccy),
+                    maturity.toNumber()
+                );
+
+                return tx;
+            } catch (error) {
+                console.error(error);
+            }
+        },
+        [securedFinance]
+    );
+
+    const redeemPosition = useCallback(
+        async (ccy: CurrencySymbol, maturity: Maturity) => {
+            try {
+                if (!securedFinance) return;
+
+                const tx = await securedFinance.executeRedemption(
+                    toCurrency(ccy),
+                    maturity.toNumber()
+                );
+
+                return tx;
+            } catch (error) {
+                console.error(error);
+            }
+        },
+        [securedFinance]
+    );
+
+    return {
+        cancelOrder,
+        placeOrder,
+        unwindPosition,
+        placePreOrder,
+        repayPosition,
+        redeemPosition,
+    };
 };

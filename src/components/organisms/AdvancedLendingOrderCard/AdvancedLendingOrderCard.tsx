@@ -28,6 +28,7 @@ import {
 import { RootState } from 'src/store/types';
 import { OrderSideMap, OrderType, OrderTypeOptions } from 'src/types';
 import {
+    CurrencySymbol,
     MAX_COVERAGE,
     ZERO_BN,
     amountFormatterFromBase,
@@ -48,13 +49,17 @@ import { useAccount } from 'wagmi';
 export function AdvancedLendingOrderCard({
     collateralBook,
     isItayose = false,
+    calculationDate,
     preOrderPosition = 'none',
     marketPrice,
+    delistedCurrencySet,
 }: {
     collateralBook: CollateralBook;
     isItayose?: boolean;
+    calculationDate?: number;
     preOrderPosition?: 'borrow' | 'lend' | 'none';
     marketPrice?: number;
+    delistedCurrencySet: Set<CurrencySymbol>;
 }): JSX.Element {
     const {
         currency,
@@ -74,11 +79,11 @@ export function AdvancedLendingOrderCard({
     const loanValue = useMemo(() => {
         if (!maturity) return LoanValue.ZERO;
         if (unitPrice !== undefined) {
-            return LoanValue.fromPrice(unitPrice, maturity);
+            return LoanValue.fromPrice(unitPrice, maturity, calculationDate);
         }
         if (!marketPrice) return LoanValue.ZERO;
-        return LoanValue.fromPrice(marketPrice, maturity);
-    }, [unitPrice, maturity, marketPrice]);
+        return LoanValue.fromPrice(marketPrice, maturity, calculationDate);
+    }, [maturity, unitPrice, marketPrice, calculationDate]);
 
     const dispatch = useDispatch();
     const { address } = useAccount();
@@ -356,6 +361,7 @@ export function AdvancedLendingOrderCard({
                     loanValue={loanValue}
                     collateralBook={collateralBook}
                     validation={shouldDisableActionButton}
+                    isCurrencyDelisted={delistedCurrencySet.has(currency)}
                 />
 
                 <ErrorInfo
@@ -383,6 +389,7 @@ export function AdvancedLendingOrderCard({
                     collateralCoverage={collateralUsagePercent}
                     totalCollateralInUSD={collateralBook.usdCollateral}
                     collateralThreshold={collateralBook.collateralThreshold}
+                    account={address}
                 />
             </div>
         </div>

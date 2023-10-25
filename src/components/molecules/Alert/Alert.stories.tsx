@@ -19,3 +19,24 @@ export default {
 const Template: StoryFn<typeof Alert> = args => <Alert {...args} />;
 
 export const Default = Template.bind({});
+
+export const Error = Template.bind({});
+Error.args = {
+    severity: 'error',
+};
+
+export const Warning = Template.bind({});
+Warning.args = {
+    severity: 'warning',
+};
+
+export const Outlined = Template.bind({});
+Outlined.args = {
+    severity: 'warning',
+    variant: 'outlined',
+};
+
+export const WithCloseButton = Template.bind({});
+WithCloseButton.args = {
+    showCloseButton: true,
+};

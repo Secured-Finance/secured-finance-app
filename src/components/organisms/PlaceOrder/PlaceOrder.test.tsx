@@ -8,7 +8,7 @@ import { OrderType } from 'src/types';
 import { CurrencySymbol } from 'src/utils';
 import * as stories from './PlaceOrder.stories';
 
-const { Default } = composeStories(stories);
+const { Default, Delisted } = composeStories(stories);
 
 const preloadedState = {
     landingOrderForm: {
@@ -188,5 +188,23 @@ describe('PlaceOrder component', () => {
         fireEvent.click(screen.getByTestId('dialog-action-button'));
         await waitFor(() => expect(spy).toHaveBeenCalled());
         await waitFor(() => expect(onPlaceOrder).not.toHaveBeenCalled());
+    });
+
+    it('should display delisting disclaimer if currency is being delisted', () => {
+        render(<Delisted />);
+        expect(
+            screen.getByText(
+                'Please note that USDC will be delisted on Secured Finance.'
+            )
+        ).toBeInTheDocument();
+    });
+
+    it('should not display delisting disclaimer if currency is not being delisted', () => {
+        render(<Default />);
+        expect(
+            screen.queryByText(
+                'Please note that USDC will be delisted on Secured Finance.'
+            )
+        ).not.toBeInTheDocument();
     });
 });

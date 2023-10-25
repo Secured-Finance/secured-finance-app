@@ -1,22 +1,39 @@
+import { OrderSide } from '@secured-finance/sf-client';
 import { getUTCMonthYear } from '@secured-finance/sf-core';
 import classNames from 'classnames';
 import { useMemo } from 'react';
+import ErrorCircleIcon from 'src/assets/icons/error-circle.svg';
+import WarningCircleIcon from 'src/assets/icons/warning-circle.svg';
 import { CurrencyIcon } from 'src/components/atoms';
-import { currencyMap, hexToCurrencySymbol } from 'src/utils';
+import { Tooltip } from 'src/components/templates';
+import {
+    currencyMap,
+    hexToCurrencySymbol,
+    isMaturityPastDays,
+    isPastDate,
+} from 'src/utils';
 import { Maturity } from 'src/utils/entities';
 
 export const TableContractCell = ({
     maturity,
     ccyByte32,
     variant = 'default',
+    delistedContractSide,
 }: {
     maturity: Maturity;
     ccyByte32: string;
-    variant?: 'default' | 'compact' | 'currencyOnly' | 'contractOnly';
+    variant?:
+        | 'default'
+        | 'compact'
+        | 'currencyOnly'
+        | 'contractOnly'
+        | 'compactCurrencyOnly';
+    delistedContractSide?: OrderSide;
 }) => {
     const ccy = useMemo(() => hexToCurrencySymbol(ccyByte32), [ccyByte32]);
     const contract = useMemo(() => {
-        if (variant === 'currencyOnly') return `${ccy}`;
+        if (variant === 'currencyOnly' || variant === 'compactCurrencyOnly')
+            return `${ccy}`;
         if (variant === 'contractOnly')
             return `${getUTCMonthYear(maturity.toNumber())}`;
         return `${ccy}-${getUTCMonthYear(maturity.toNumber())}`;
@@ -29,6 +46,21 @@ export const TableContractCell = ({
     }, [variant]);
 
     if (!ccy) return null;
+
+    const tooltipText =
+        delistedContractSide === OrderSide.BORROW
+            ? 'Delisting: Repayment period within 7 days of maturity to avoid 7% fee.'
+            : 'Delisting: Redemption will be available 7 days post-maturity.';
+
+    const delistedTooltipIcon =
+        isPastDate(maturity.toNumber()) &&
+        isMaturityPastDays(maturity.toNumber(), 7) &&
+        delistedContractSide === OrderSide.LEND ? (
+            <WarningCircleIcon />
+        ) : (
+            <ErrorCircleIcon />
+        );
+
     return (
         <div className='flex flex-col'>
             <div
@@ -41,7 +73,8 @@ export const TableContractCell = ({
                         className={classNames({
                             'mt-1':
                                 variant === 'default' ||
-                                variant === 'currencyOnly',
+                                variant === 'currencyOnly' ||
+                                variant === 'compactCurrencyOnly',
                             'mt-0': variant === 'compact',
                         })}
                     >
@@ -51,13 +84,27 @@ export const TableContractCell = ({
                 <span className='typography-caption-2 text-neutral-6'>
                     {contract}
                 </span>
+                {delistedContractSide && (
+                    <Tooltip
+                        align='right'
+                        iconElement={
+                            <div className='mt-1 flex h-3 w-3 items-center justify-center'>
+                                {delistedTooltipIcon}
+                            </div>
+                        }
+                    >
+                        {tooltipText}
+                    </Tooltip>
+                )}
             </div>
             {variant !== 'compact' && variant !== 'contractOnly' ? (
                 <div
                     className={classNames(
                         'typography-caption-2 text-left text-neutral-4',
                         {
-                            'ml-8': variant === 'default',
+                            'ml-8':
+                                variant === 'default' ||
+                                variant === 'compactCurrencyOnly',
                             'ml-11': variant === 'currencyOnly',
                         }
                     )}

@@ -118,6 +118,7 @@ export default {
         },
         marketPrice: LoanValue.fromPrice(9300, maturityMar23.toNumber()),
         currency: CurrencySymbol.WFIL,
+        isCurrencyDelisted: false,
     },
 } as Meta<typeof OrderBookWidget>;
 
@@ -169,4 +170,9 @@ Loading.args = {
         },
         isLoading: true,
     },
+};
+
+export const Delisted = Template.bind({});
+Delisted.args = {
+    isCurrencyDelisted: true,
 };
