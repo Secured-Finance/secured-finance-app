@@ -1,10 +1,10 @@
 import { useQuery } from '@tanstack/react-query';
+import { BigNumber as BigNumberJS } from 'bignumber.js';
 import { QueryKeys } from 'src/hooks';
 import useSF from 'src/hooks/useSecuredFinance';
 import {
     CurrencySymbol,
     ZERO_BN,
-    divide,
     hexToCurrencySymbol,
     toCurrency,
 } from 'src/utils';
@@ -41,12 +41,15 @@ export const useMarketTerminationRatio = () => {
             return ratios.map(({ currency, ratio }) => {
                 return {
                     currency,
-                    ratio: divide(ratio.toNumber(), total.toNumber()) * 10000,
+                    ratio: new BigNumberJS(ratio.toString())
+                        .dividedBy(new BigNumberJS(total.toString()))
+                        .multipliedBy(10000)
+                        .dp(0)
+                        .toNumber(),
                 };
             });
         },
         placeholderData: [],
         staleTime: Infinity,
-        refetchOnWindowFocus: true,
     });
 };
