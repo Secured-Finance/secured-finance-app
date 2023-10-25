@@ -1,4 +1,5 @@
 import Router from 'next/router';
+import { useEffect } from 'react';
 import { Landing } from 'src/components/pages';
 import { useIsMarketTerminated, useOpenMarketExists } from 'src/hooks';
 
@@ -7,15 +8,14 @@ const Advanced = () => {
 
     const openMarketExists = useOpenMarketExists();
 
-    if (isTerminated) {
-        Router.push('/emergency');
-        return null;
-    }
-
-    if (!openMarketExists) {
-        Router.push('/itayose');
-        return null;
-    }
+    useEffect(() => {
+        if (isTerminated) {
+            Router.push('/emergency');
+        }
+        if (!openMarketExists) {
+            Router.push('/itayose');
+        }
+    }, [isTerminated, openMarketExists]);
 
     return <Landing view='Advanced' />;
 };
