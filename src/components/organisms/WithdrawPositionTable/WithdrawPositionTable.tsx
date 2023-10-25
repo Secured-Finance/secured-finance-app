@@ -12,10 +12,10 @@ import {
     withdrawableAssetColumnDefinition,
 } from 'src/utils/tableDefinitions';
 
-type WithdrawablePosition = Pick<
+export type WithdrawablePosition = Pick<
     Position,
     'currency' | 'maturity' | 'amount' | 'forwardValue'
-> & { type: 'position' | 'collateral' };
+> & { type: 'position' | 'collateral' | 'lending-order' };
 
 const columnHelper = createColumnHelper<WithdrawablePosition>();
 
