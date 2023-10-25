@@ -1,3 +1,4 @@
+import { BigNumber } from 'ethers';
 import { useEffect, useMemo, useState } from 'react';
 import { GradientBox, TextLink } from 'src/components/atoms';
 import { CollateralSnapshot } from 'src/components/molecules';
@@ -6,15 +7,18 @@ import {
     MyWalletWidget,
     WithdrawPositionTable,
     WithdrawTokenTable,
+    WithdrawablePosition,
 } from 'src/components/organisms';
 import { Page, TwoColumns } from 'src/components/templates';
 import {
     emptyCollateralBook,
+    emptyOrderList,
     useCollateralBook,
     useCurrenciesForOrders,
     useIsRedemptionRequired,
     useMarketTerminationDate,
     useMarketTerminationRatio,
+    useOrderList,
     usePositions,
     useTerminationPrices,
 } from 'src/hooks';
@@ -26,12 +30,37 @@ export const EmergencyGlobalSettlement = () => {
     const { address } = useAccount();
 
     const { data: usedCurrencies = [] } = useCurrenciesForOrders(address);
+    const { data: orders = emptyOrderList } = useOrderList(
+        address,
+        usedCurrencies
+    );
     const { data: positions = [] } = usePositions(address, usedCurrencies);
     const { data: collateralBook = emptyCollateralBook } =
         useCollateralBook(address);
 
-    const withdrawableData = useMemo(
-        () => [
+    const withdrawableData = useMemo(() => {
+        const aggregated = orders.activeOrderList
+            .filter(o => o.side === 0) // only lend orders
+            .reduce((acc, o) => {
+                const key = o.currency;
+                const amount = acc.get(key) ?? ZERO_BN;
+                acc.set(key, amount.add(o.amount));
+                return acc;
+            }, new Map<string, BigNumber>());
+
+        const lendOrders: WithdrawablePosition[] = [];
+        aggregated.forEach((v, k) => {
+            lendOrders.push({
+                amount: v,
+                currency: k,
+                forwardValue: ZERO_BN,
+                maturity: '0',
+                type: 'lending-order' as const,
+            });
+        });
+
+        return [
+            ...lendOrders,
             ...positions.map(p => ({
                 ...p,
                 type: 'position' as const,
@@ -45,9 +74,8 @@ export const EmergencyGlobalSettlement = () => {
                     maturity: '0',
                     type: 'collateral' as const,
                 })),
-        ],
-        [positions, collateralBook]
-    );
+        ];
+    }, [orders.activeOrderList, positions, collateralBook.collateral]);
 
     const withdrawableTokens = [
         ...Object.entries(collateralBook.nonCollateral)

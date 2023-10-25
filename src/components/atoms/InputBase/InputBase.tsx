@@ -78,6 +78,7 @@ export const InputBase = ({
                 const { floatValue = 0 } = values;
                 return floatValue <= maxLimit;
             }}
+            inputMode='decimal'
         />
     );
 };

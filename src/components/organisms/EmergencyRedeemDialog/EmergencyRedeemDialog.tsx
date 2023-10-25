@@ -39,7 +39,7 @@ const stateRecord: Record<Step, State> = {
         nextStep: Step.executing,
         title: 'Redeem',
         description: '',
-        buttonText: 'confirm Redeem',
+        buttonText: 'Confirm Redeem',
     },
     [Step.executing]: {
         currentStep: Step.executing,
