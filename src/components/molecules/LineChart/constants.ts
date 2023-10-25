@@ -25,7 +25,8 @@ export const getData = (
     rates: Rate[],
     label: string,
     labels: string[],
-    itayoseMarketIndex: Set<number>
+    itayoseMarketIndex: Set<number>,
+    itayoseBorderColor: string
 ): ChartData<'line'> => {
     return {
         labels: labels,
@@ -36,7 +37,7 @@ export const getData = (
                 segment: {
                     borderColor: ctx =>
                         itayoseMarketIndex.has(ctx.p1.parsed.x)
-                            ? '#B9BDEA' // planetaryPurple
+                            ? itayoseBorderColor
                             : getCurveGradient(
                                   ctx as unknown as ScriptableContext<'line'>
                               ),
