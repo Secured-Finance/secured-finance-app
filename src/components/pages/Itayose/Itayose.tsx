@@ -2,18 +2,16 @@ import { OrderSide } from '@secured-finance/sf-client';
 import { BigNumber } from 'ethers';
 import { useCallback, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { GradientBox, MarketTab, Option, TextLink } from 'src/components/atoms';
 import {
-    GradientBox,
-    MarketTab,
-    Option,
-    Separator,
-} from 'src/components/atoms';
-import {
+    Alert,
     HorizontalAssetSelector,
     HorizontalTab,
+    Tab,
 } from 'src/components/molecules';
 import {
     AdvancedLendingOrderCard,
+    LineChartTab,
     OrderBookWidget,
     OrderTable,
 } from 'src/components/organisms';
@@ -22,7 +20,6 @@ import {
     MarketPhase,
     baseContracts,
     emptyCollateralBook,
-    sortOrders,
     useCollateralBook,
     useCurrencyDelistedStatus,
     useLendingMarkets,
@@ -30,6 +27,7 @@ import {
     useMarketPhase,
     useMaturityOptions,
     useOrderbook,
+    useYieldCurveMarketRates,
 } from 'src/hooks';
 import { getAssetPrice } from 'src/store/assetPrices/selectors';
 import {
@@ -124,6 +122,9 @@ export const Itayose = () => {
         market => market.isPreOrderPeriod || market.isItayosePeriod
     );
 
+    const { rates, maturityList, itayoseMarketIndexSet } =
+        useYieldCurveMarketRates();
+
     const selectedTerm = useMemo(() => {
         return (
             maturityOptionList.find(option =>
@@ -178,35 +179,31 @@ export const Itayose = () => {
         [amount, currency, dispatch]
     );
 
-    const estimatedOpening = useMemo(() => {
-        const borrowOrders =
-            orderBook.data?.borrowOrderbook?.filter(
-                order => !order.amount.isZero()
-            ) ?? [];
-        const lendOrders =
-            orderBook.data?.lendOrderbook?.filter(
-                order => !order.amount.isZero()
-            ) ?? [];
-
-        if (!borrowOrders.length || !lendOrders.length) {
-            return LoanValue.ZERO;
-        }
-
-        const sortedBorrowOrders = [...borrowOrders].sort((a, b) =>
-            sortOrders(a, b, 'asc')
-        );
-        const sortedLendOrders = [...lendOrders].sort((a, b) =>
-            sortOrders(a, b, 'desc')
-        );
-
-        return LoanValue.getMidValue(
-            sortedLendOrders[0].value,
-            sortedBorrowOrders[0].value
-        );
-    }, [orderBook.data?.borrowOrderbook, orderBook.data?.lendOrderbook]);
+    const estimatedOpeningUnitPrice = useMemo(
+        () =>
+            LoanValue.fromPrice(
+                lendingMarkets[currency][maturity]?.openingUnitPrice ?? 0,
+                maturity
+            ),
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        [currency, maturity]
+    );
 
     return (
         <Page title='Pre-Open Order Book'>
+            <Alert>
+                <p className='typography-caption text-white'>
+                    Pre-market order allows ability to place limit orders before
+                    a new orderbook starts trading to secure your position in
+                    the market. No new pre-orders accepted within 1 hour of
+                    trading. No fees charged during pre-order period. Learn more
+                    in our&nbsp;
+                    <TextLink
+                        href='https://docs.secured.finance/'
+                        text='Secured Finance Gitbook'
+                    />
+                </p>
+            </Alert>
             <ThreeColumnsWithTopBar
                 topBar={
                     <Toolbar
@@ -264,7 +261,7 @@ export const Itayose = () => {
                     currency={currency}
                     orderbook={orderBook}
                     variant='itayose'
-                    marketPrice={estimatedOpening}
+                    marketPrice={estimatedOpeningUnitPrice}
                     onFilterChange={state =>
                         setIsShowingAll(state.showBorrow && state.showLend)
                     }
@@ -273,33 +270,16 @@ export const Itayose = () => {
                 />
 
                 <div className='flex h-full flex-col items-stretch justify-stretch gap-6'>
-                    <GradientBox variant='high-contrast'>
-                        <div className='px-3'>
-                            <h1 className='typography-nav-menu-default whitespace-nowrap py-5 text-left text-neutral-8'>
-                                Pre-Open Orders
-                            </h1>
-                            <Separator />
-                            <p className='typography-nav-menu-default py-7 pr-7 text-white'>
-                                Secured Finance offers a reliable pre-market
-                                order feature for our users. This feature allows
-                                you to place limit orders 7 days before a new
-                                orderbook starts trading to secure your position
-                                in the market. To maintain market fairness,
-                                users can place either a buy or sell order, but
-                                not both, during the pre-open period.
-                                Additionally, please note that no new pre-orders
-                                will be accepted within 1 hour prior to the
-                                start of trading.
-                            </p>
-                            <p className='typography-nav-menu-default pb-7 pr-7 text-white'>
-                                Secured Finance does not charge any fees for
-                                placing orders during the pre-order period. For
-                                more information about pre-market orders and our
-                                pricing process, please refer to the Secured
-                                Finance GitBook.
-                            </p>
+                    <Tab tabDataArray={[{ text: 'Yield Curve' }]}>
+                        <div className='h-[410px] w-full px-6 py-4'>
+                            <LineChartTab
+                                rates={rates}
+                                maturityList={maturityList}
+                                itayoseMarketIndexSet={itayoseMarketIndexSet}
+                            />
                         </div>
-                    </GradientBox>
+                    </Tab>
+
                     <HorizontalTab tabTitles={['Open Orders']}>
                         <OrderTable
                             data={filteredOrderList}
