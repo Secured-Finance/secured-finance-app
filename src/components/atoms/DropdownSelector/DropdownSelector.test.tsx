@@ -22,16 +22,14 @@ describe('Dropdown Asset Selection Component', () => {
 
     it('should render a dropdown with the value prop as the selected default option', () => {
         render(<AssetDropdown />);
-        expect(screen.getByText('Wrapped Bitcoin')).toBeInTheDocument();
+        expect(screen.getByText('WBTC')).toBeInTheDocument();
     });
 
     it('should change the value of selected option when rerendered with a different selected option', () => {
         render(<AssetDropdown />);
-        expect(screen.getByText('Wrapped Bitcoin')).toBeInTheDocument();
-        render(
-            <AssetDropdown selected={{ label: 'Ethereum', value: 'ETH' }} />
-        );
-        expect(screen.getByText('Ethereum')).toBeInTheDocument();
+        expect(screen.getByText('WBTC')).toBeInTheDocument();
+        render(<AssetDropdown selected={{ label: 'ETH', value: 'ETH' }} />);
+        expect(screen.getByText('ETH')).toBeInTheDocument();
     });
 
     it('should have an arrow down when the dropdown is not visible, and an arrow down when the dropdown is visible', () => {
@@ -46,8 +44,8 @@ describe('Dropdown Asset Selection Component', () => {
     it('should change the button when a dropdown item is selected', () => {
         render(<AssetDropdown />);
         fireEvent.click(screen.getByRole('button'));
-        fireEvent.click(screen.getByText('Ethereum'));
-        expect(screen.getByRole('button')).toHaveTextContent('Ethereum');
+        fireEvent.click(screen.getByText('ETH'));
+        expect(screen.getByRole('button')).toHaveTextContent('ETH');
     });
 
     it('should render a term selector', () => {
@@ -67,13 +65,13 @@ describe('Dropdown Asset Selection Component', () => {
             render(<AssetDropdown onChange={onChange} />);
             expect(onChange).toHaveBeenNthCalledWith(1, 'WBTC');
             fireEvent.click(screen.getByRole('button'));
-            fireEvent.click(screen.getByText('Ethereum'));
+            fireEvent.click(screen.getByText('ETH'));
             expect(onChange).toHaveBeenNthCalledWith(2, 'ETH');
             fireEvent.click(screen.getByRole('button'));
             fireEvent.click(screen.getByText('WFIL'));
             expect(onChange).toHaveBeenNthCalledWith(3, 'WFIL');
             fireEvent.click(screen.getByRole('button'));
-            fireEvent.click(screen.getByText('Wrapped Bitcoin'));
+            fireEvent.click(screen.getByText('WBTC'));
             expect(onChange).toHaveBeenNthCalledWith(4, 'WBTC');
         });
 
@@ -82,7 +80,7 @@ describe('Dropdown Asset Selection Component', () => {
             render(<AssetDropdown onChange={onChange} />);
             expect(onChange).toHaveBeenNthCalledWith(1, 'WBTC');
             fireEvent.click(screen.getByRole('button'));
-            fireEvent.click(screen.getAllByText('Wrapped Bitcoin')[1]);
+            fireEvent.click(screen.getAllByText('WBTC')[1]);
             expect(onChange).toHaveBeenCalledTimes(1);
         });
 
@@ -103,7 +101,7 @@ describe('Dropdown Asset Selection Component', () => {
             rerender(
                 <AssetDropdown
                     onChange={onChange}
-                    selected={{ label: 'Ethereum', value: 'ETH' }}
+                    selected={{ label: 'ETH', value: 'ETH' }}
                 />
             );
             expect(onChange).toHaveBeenNthCalledWith(2, 'ETH');
@@ -116,8 +114,8 @@ describe('Dropdown Asset Selection Component', () => {
         expect(screen.getByRole('button')).toBeInTheDocument();
         expect(screen.queryByText('Bitcoin')).not.toBeInTheDocument();
         fireEvent.click(screen.getByRole('button'));
-        fireEvent.click(screen.getByText('Ethereum'));
-        expect(screen.queryByText('Ethereum')).not.toBeInTheDocument();
+        fireEvent.click(screen.getByText('ETH'));
+        expect(screen.queryByText('ETH')).not.toBeInTheDocument();
     });
 
     it('should render a full width button and options for fullWidth variant', () => {

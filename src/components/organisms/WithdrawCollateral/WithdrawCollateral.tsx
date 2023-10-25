@@ -20,6 +20,7 @@ import {
     ZERO_BN,
     amountFormatterFromBase,
     amountFormatterToBase,
+    formatAmount,
 } from 'src/utils';
 import { CollateralEvents, trackCollateralEvent } from 'src/utils/events';
 import { useAccount } from 'wagmi';
@@ -97,9 +98,11 @@ export const WithdrawCollateral = ({
     isOpen,
     onClose,
     collateralList,
+    selected,
     source,
 }: {
     collateralList: Record<CurrencySymbol, CollateralInfo>;
+    selected?: CurrencySymbol;
 } & DialogState) => {
     const etherscanUrl = useEtherscanUrl();
     const handleContractTransaction = useHandleContractTransaction();
@@ -210,6 +213,11 @@ export const WithdrawCollateral = ({
                                     headerText='Select Asset'
                                     onChange={handleChange}
                                     optionList={Object.values(collateralList)}
+                                    selectedOption={
+                                        selected
+                                            ? collateralList[selected]
+                                            : undefined
+                                    }
                                 />
                                 <CollateralInput
                                     price={priceList[asset]}
@@ -250,13 +258,15 @@ export const WithdrawCollateral = ({
                                     ['Status', 'Complete'],
                                     [
                                         'Ethereum Address',
-                                        AddressUtils.format(address ?? '', 6),
+                                        AddressUtils.format(address ?? '', 8),
                                     ],
                                     [
                                         'Amount',
-                                        amountFormatterFromBase[asset](
-                                            collateral ?? ZERO_BN
-                                        ).toString(),
+                                        `${formatAmount(
+                                            amountFormatterFromBase[asset](
+                                                collateral ?? ZERO_BN
+                                            )
+                                        )} ${asset}`,
                                     ],
                                 ]}
                                 txHash={txHash}

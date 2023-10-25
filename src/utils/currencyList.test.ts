@@ -12,7 +12,6 @@ import {
     currencyMap,
     divide,
     getCurrencyMapAsList,
-    getCurrencyMapAsOptions,
     hexToCurrencySymbol,
     multiply,
     toCurrency,
@@ -22,34 +21,6 @@ import {
 const wfil = currencyMap.WFIL;
 const eth = currencyMap.ETH;
 const wbtc = currencyMap.WBTC;
-
-describe('currencyList.getCurrencyMapAsOptions', () => {
-    it('should return the currencyList as a list of Option for the ComboBox', () => {
-        const options = getCurrencyMapAsOptions();
-        expect(options).toEqual([
-            {
-                label: 'Bitcoin',
-                value: 'WBTC',
-                iconSVG: 'svg',
-            },
-            {
-                label: 'Ether',
-                value: 'ETH',
-                iconSVG: 'svg',
-            },
-            {
-                label: 'Filecoin',
-                value: 'WFIL',
-                iconSVG: 'svg',
-            },
-            {
-                label: 'USDC',
-                value: 'USDC',
-                iconSVG: 'svg',
-            },
-        ]);
-    });
-});
 
 describe('currencyList.getCurrencyMapAsOptions', () => {
     it('should return the getCurrencyMapAsOptions as a list ordered by index', () => {

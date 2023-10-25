@@ -1,11 +1,12 @@
 import { BigNumber } from 'ethers';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { DropdownSelector, InputBase, Option } from 'src/components/atoms';
-import { prefixTilde } from 'src/utils';
+import { InputBase } from 'src/components/atoms';
+import { CurrencyDropdown, CurrencyOption } from 'src/components/molecules';
+import { CurrencySymbol, prefixTilde } from 'src/utils';
 
 type FormatFunction = (amount: number) => BigNumber;
 
-export const AssetSelector = <AssetType extends string = string>({
+export const AssetSelector = ({
     options,
     selected = options[0],
     priceList,
@@ -14,12 +15,12 @@ export const AssetSelector = <AssetType extends string = string>({
     onAssetChange,
     onAmountChange,
 }: {
-    options: Readonly<Array<Option<AssetType>>>;
-    selected?: Option<AssetType>;
-    priceList: Record<AssetType, number>;
-    amountFormatterMap?: Record<AssetType, FormatFunction>;
+    options: Readonly<Array<CurrencyOption>>;
+    selected?: CurrencyOption;
+    priceList: Record<CurrencySymbol, number>;
+    amountFormatterMap?: Record<CurrencySymbol, FormatFunction>;
     initialValue?: number;
-    onAssetChange?: (v: AssetType) => void;
+    onAssetChange?: (v: CurrencySymbol) => void;
     onAmountChange?: (v: BigNumber) => void;
 }) => {
     const [assetValue, setAssetValue] = useState(selected.value);
@@ -50,7 +51,7 @@ export const AssetSelector = <AssetType extends string = string>({
     const handleInputChange = useCallback(
         (
             amount: number,
-            assetValue: AssetType,
+            assetValue: CurrencySymbol,
             onAmountChange: (v: BigNumber) => void
         ) => {
             let format = (x: number) => BigNumber.from(x);
@@ -64,7 +65,7 @@ export const AssetSelector = <AssetType extends string = string>({
     );
 
     const handleAssetChange = useCallback(
-        (v: AssetType) => {
+        (v: CurrencySymbol) => {
             setAssetValue(v);
             if (onAssetChange) {
                 onAssetChange(v);
@@ -96,8 +97,8 @@ export const AssetSelector = <AssetType extends string = string>({
                 </div>
             </div>
             <div className='flex h-14 flex-row items-center justify-between gap-1 rounded-lg bg-black-20 p-2 ring-inset ring-starBlue focus-within:ring-2'>
-                <DropdownSelector
-                    optionList={options}
+                <CurrencyDropdown
+                    currencyOptionList={options}
                     selected={selected}
                     onChange={handleAssetChange}
                 />

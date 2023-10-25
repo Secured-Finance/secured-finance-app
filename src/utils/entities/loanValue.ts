@@ -7,6 +7,7 @@ export class LoanValue {
     private _apr!: Rate;
 
     protected _maturity!: number;
+    protected _calculationDate!: number;
 
     private static PAR_VALUE = 10000;
     private PAR_VALUE_RATE = 1000000;
@@ -20,14 +21,20 @@ export class LoanValue {
         const loanValue = new LoanValue();
         loanValue._price = 0;
         loanValue._maturity = 0;
+        loanValue._calculationDate = 0;
         loanValue._apr = new Rate(0);
         return loanValue;
     }
 
-    public static fromPrice(price: number, maturity: number): LoanValue {
+    public static fromPrice(
+        price: number,
+        maturity: number,
+        calculationDate?: number
+    ): LoanValue {
         const loanValue = new LoanValue();
         loanValue._price = price;
         loanValue._maturity = maturity;
+        loanValue._calculationDate = calculationDate ? calculationDate : 0;
         return loanValue;
     }
 
@@ -98,9 +105,17 @@ export class LoanValue {
         return this._maturity;
     }
 
+    public get calculationDate(): number {
+        return this._calculationDate;
+    }
+
     public static getMidValue(bid: LoanValue, ask: LoanValue): LoanValue {
         if (bid._maturity !== ask._maturity) {
             throw new Error('cannot compute mid value: maturity mismatch');
+        }
+
+        if (bid._calculationDate !== ask._calculationDate) {
+            throw new Error('cannot compute mid value: calculateDate mismatch');
         }
 
         const bidPrice = bid.price ?? 0;
@@ -109,11 +124,20 @@ export class LoanValue {
         const loanValue = new LoanValue();
         loanValue._price = (bidPrice + askPrice) / 2;
         loanValue._maturity = bid._maturity;
+        loanValue._calculationDate = bid._calculationDate;
         return loanValue;
     }
 
     private dayToMaturity(): number {
-        return dayjs.unix(this._maturity).diff(Date.now(), 'second');
+        return dayjs
+            .unix(this._maturity)
+            .diff(
+                this._calculationDate !== undefined &&
+                    this._calculationDate !== 0
+                    ? this._calculationDate * 1000
+                    : Date.now(),
+                'second'
+            );
     }
 
     private yearFraction(): number {

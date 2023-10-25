@@ -1,4 +1,5 @@
 /* eslint-disable react/display-name */
+import { OrderSide } from '@secured-finance/sf-client';
 import {
     AccessorFn,
     ColumnHelper,
@@ -10,13 +11,17 @@ import { BigNumber } from 'ethers';
 import { Chip, CurrencyItem, PriceYieldItem } from 'src/components/atoms';
 import { TableContractCell, TableHeader } from 'src/components/molecules';
 import { AssetPriceMap } from 'src/store/assetPrices/selectors';
-import { ColorFormat } from 'src/types';
+import { Alignment, ColorFormat } from 'src/types';
 import { formatTimestamp } from 'src/utils';
-import { currencyMap, hexToCurrencySymbol } from './currencyList';
+import {
+    CurrencySymbol,
+    currencyMap,
+    hexToCurrencySymbol,
+} from './currencyList';
 import { LoanValue, Maturity } from './entities';
 
 export const tableHeaderDefinition =
-    <TData,>(title: string, titleHint?: string) =>
+    <TData,>(title: string, titleHint?: string, align: Alignment = 'center') =>
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (header: HeaderContext<TData, any>) =>
         (
@@ -25,6 +30,7 @@ export const tableHeaderDefinition =
                 titleHint={titleHint}
                 sortingHandler={header.column.getToggleSortingHandler()}
                 isSorted={header.column.getIsSorted()}
+                align={align}
             />
         );
 
@@ -85,18 +91,24 @@ export const amountColumnDefinition = <T extends AmountColumnType>(
     columnHelper: ColumnHelper<T>,
     title: string,
     id: string,
-    accessor: AccessorFn<T, BigNumber>,
+    accessor: AccessorFn<T, BigNumber | undefined>,
     options: {
         color: boolean;
         compact: boolean;
         priceList?: AssetPriceMap;
         fontSize?: string;
+        showCurrency?: boolean;
     },
-    titleHint?: string
+    titleHint?: string,
+    align: Alignment = 'center'
 ) => {
     return columnHelper.accessor(accessor, {
         id: id,
         cell: info => {
+            const value = info.getValue();
+            if (value === undefined) {
+                return null;
+            }
             const ccy = hexToCurrencySymbol(info.row.original.currency);
             if (!ccy) return null;
 
@@ -111,27 +123,35 @@ export const amountColumnDefinition = <T extends AmountColumnType>(
                 // do nothing
             }
 
-            return (
-                <div className='flex w-full items-center justify-end whitespace-nowrap pr-[15%]'>
-                    <div className='flex justify-end'>
-                        <CurrencyItem
-                            amount={currencyMap[ccy].fromBaseUnit(
-                                info.getValue() as BigNumber
-                            )}
-                            ccy={ccy}
-                            align='right'
-                            price={options.priceList?.[ccy]}
-                            color={options.color ? color : undefined}
-                            compact={options.compact}
-                            fontSize={options.fontSize}
-                            minDecimals={currencyMap[ccy].roundingDecimal}
-                            maxDecimals={currencyMap[ccy].roundingDecimal}
-                        />
-                    </div>
+            const Component = (
+                <div className='flex justify-end'>
+                    <CurrencyItem
+                        amount={currencyMap[ccy].fromBaseUnit(
+                            info.getValue() as BigNumber
+                        )}
+                        ccy={ccy}
+                        align='right'
+                        price={options.priceList?.[ccy]}
+                        color={options.color ? color : undefined}
+                        compact={options.compact}
+                        fontSize={options.fontSize}
+                        minDecimals={currencyMap[ccy].roundingDecimal}
+                        maxDecimals={currencyMap[ccy].roundingDecimal}
+                        showCurrency={options.showCurrency}
+                    />
                 </div>
             );
+            if (align !== 'right') {
+                return (
+                    <div className='flex w-full items-center justify-end whitespace-nowrap pr-[15%]'>
+                        {Component}
+                    </div>
+                );
+            }
+
+            return <>{Component}</>;
         },
-        header: tableHeaderDefinition(title, titleHint),
+        header: tableHeaderDefinition(title, titleHint, align),
     });
 };
 
@@ -270,6 +290,7 @@ export const loanTypeFromFVColumnDefinition = <T extends ForwardValueProperty>(
     return columnHelper.accessor(assessorFn, {
         id: id,
         cell: info => {
+            if (info.getValue().isZero()) return null;
             return (
                 <div className='flex justify-center'>
                     <Chip
@@ -283,27 +304,82 @@ export const loanTypeFromFVColumnDefinition = <T extends ForwardValueProperty>(
 };
 
 export const contractColumnDefinition = <
-    T extends { maturity: string | number; currency: string }
+    T extends {
+        maturity: string | number;
+        currency: string;
+        forwardValue?: BigNumber;
+    }
 >(
     columnHelper: ColumnHelper<T>,
     title: string,
     id: string,
-    variant: 'compact' | 'default' | 'contractOnly' | 'currencyOnly' = 'default'
+    variant:
+        | 'compact'
+        | 'default'
+        | 'contractOnly'
+        | 'currencyOnly' = 'default',
+    delistedCurrencySet?: Set<CurrencySymbol>
 ) => {
     const assessorFn: AccessorFn<T, string> = row => row.maturity.toString();
-
     return columnHelper.accessor(assessorFn, {
         id: id,
-        cell: info => (
-            <div className='flex justify-center'>
-                <TableContractCell
-                    maturity={new Maturity(info.getValue())}
-                    ccyByte32={info.row.original.currency}
-                    variant={variant}
-                />
-            </div>
-        ),
+        cell: info => {
+            const currency = hexToCurrencySymbol(info.row.original.currency);
+            const delisted =
+                currency && delistedCurrencySet
+                    ? delistedCurrencySet.has(currency)
+                    : false;
+            const side = BigNumber.from(
+                info.row.original.forwardValue ?? 0
+            ).isNegative()
+                ? OrderSide.BORROW
+                : OrderSide.LEND;
+            return (
+                <div className='flex justify-center'>
+                    <TableContractCell
+                        maturity={new Maturity(info.getValue())}
+                        ccyByte32={info.row.original.currency}
+                        variant={variant}
+                        delistedContractSide={delisted ? side : undefined}
+                    />
+                </div>
+            );
+        },
         header: tableHeaderDefinition(title),
+        sortingFn: contractSortingFn,
+    });
+};
+
+export const withdrawableAssetColumnDefinition = <
+    T extends {
+        maturity: string | number;
+        currency: string;
+        type: 'position' | 'collateral' | 'lending-order';
+    }
+>(
+    columnHelper: ColumnHelper<T>,
+    title: string,
+    id: string
+) => {
+    const assessorFn: AccessorFn<T, string> = row => row.maturity.toString();
+    return columnHelper.accessor(assessorFn, {
+        id: id,
+        cell: info => {
+            const variant =
+                info.row.original.type === 'position'
+                    ? 'default'
+                    : 'compactCurrencyOnly';
+            return (
+                <div className='flex justify-start'>
+                    <TableContractCell
+                        maturity={new Maturity(info.getValue())}
+                        ccyByte32={info.row.original.currency}
+                        variant={variant}
+                    />
+                </div>
+            );
+        },
+        header: tableHeaderDefinition(title, undefined, 'left'),
         sortingFn: contractSortingFn,
     });
 };
@@ -334,6 +410,7 @@ export const priceYieldColumnDefinition = <T extends { maturity: string }>(
     accessor: AccessorFn<T, BigNumber>,
     variant: 'compact' | 'default' = 'default',
     type: Parameters<typeof PriceYieldItem>[0]['firstLineType'] = 'price',
+    calculationDate?: number | undefined,
     titleHint?: string
 ) => {
     return columnHelper.accessor(accessor, {
@@ -344,7 +421,8 @@ export const priceYieldColumnDefinition = <T extends { maturity: string }>(
                     <PriceYieldItem
                         loanValue={LoanValue.fromPrice(
                             Number(info.getValue().toString()),
-                            Number(info.row.original.maturity.toString())
+                            Number(info.row.original.maturity.toString()),
+                            calculationDate
                         )}
                         compact={variant === 'compact'}
                         firstLineType={type}

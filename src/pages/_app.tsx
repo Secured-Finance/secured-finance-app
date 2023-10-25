@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 import { Provider } from 'react-redux';
 import { Footer } from 'src/components/atoms';
 import { Header } from 'src/components/organisms';
@@ -73,6 +74,7 @@ const config = createConfig({
 });
 
 function App({ Component, pageProps }: AppProps) {
+    const router = useRouter();
     return (
         <>
             <Head>
@@ -85,7 +87,16 @@ function App({ Component, pageProps }: AppProps) {
 
             <Provider store={store}>
                 <Providers>
-                    <Layout navBar={<Header />} footer={<Footer />}>
+                    <Layout
+                        navBar={
+                            <Header
+                                showNavigation={
+                                    router.pathname !== '/emergency'
+                                }
+                            />
+                        }
+                        footer={<Footer />}
+                    >
                         <Component {...pageProps} />
                     </Layout>
                 </Providers>

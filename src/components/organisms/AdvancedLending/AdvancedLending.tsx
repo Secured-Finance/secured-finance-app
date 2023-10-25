@@ -20,6 +20,7 @@ import {
     useGraphClientHook,
     useMarket,
     useMarketOrderList,
+    useYieldCurveMarketRates,
 } from 'src/hooks';
 import { useOrderbook } from 'src/hooks/useOrderbook';
 import { getAssetPrice } from 'src/store/assetPrices/selectors';
@@ -34,7 +35,6 @@ import { RootState } from 'src/store/types';
 import { MaturityOptionList, TransactionList } from 'src/types';
 import {
     CurrencySymbol,
-    Rate,
     amountFormatterFromBase,
     amountFormatterToBase,
     currencyMap,
@@ -78,19 +78,16 @@ const useTradeHistoryDetails = (
     }, [currency, maturity.toNumber(), transactions.length]);
 };
 
-const DEFAULT_ORDERBOOK_DEPTH = 12;
-const DEFAULT_ORDERBOOK_DEPTH_FULL = 26;
-
 export const AdvancedLending = ({
     collateralBook,
     maturitiesOptionList,
-    rates,
     marketPrice,
+    delistedCurrencySet,
 }: {
     collateralBook: CollateralBook;
     maturitiesOptionList: MaturityOptionList;
-    rates: Rate[];
     marketPrice: number | undefined;
+    delistedCurrencySet: Set<CurrencySymbol>;
 }) => {
     const { amount, currency, maturity } = useSelector((state: RootState) =>
         selectLandingOrderForm(state.landingOrderForm)
@@ -121,11 +118,11 @@ export const AdvancedLending = ({
     const marketUnitPrice = data?.marketUnitPrice;
     const openingUnitPrice = data?.openingUnitPrice;
 
-    const [orderBook, setOrderBookDepth] = useOrderbook(
+    const [orderBook, setMultiplier, setIsShowingAll] = useOrderbook(
         currency,
-        maturity,
-        DEFAULT_ORDERBOOK_DEPTH
+        maturity
     );
+
     const filteredOrderList = useMarketOrderList(address, currency, maturity);
 
     const transactionHistory = useGraphClientHook(
@@ -143,6 +140,9 @@ export const AdvancedLending = ({
         currency,
         selectedTerm.value
     );
+
+    const { rates, maturityList, itayoseMarketIndexSet } =
+        useYieldCurveMarketRates();
 
     const currentMarket = useMemo(() => {
         if (marketUnitPrice) {
@@ -223,27 +223,29 @@ export const AdvancedLending = ({
             <AdvancedLendingOrderCard
                 collateralBook={collateralBook}
                 marketPrice={marketPrice}
+                delistedCurrencySet={delistedCurrencySet}
             />
 
             <OrderBookWidget
                 orderbook={orderBook}
                 currency={currency}
                 marketPrice={currentMarket?.value}
-                onFilterChange={state => {
-                    setOrderBookDepth(
-                        !state.showBorrow || !state.showLend
-                            ? DEFAULT_ORDERBOOK_DEPTH_FULL
-                            : DEFAULT_ORDERBOOK_DEPTH
-                    );
-                }}
+                isCurrencyDelisted={delistedCurrencySet.has(currency)}
+                onFilterChange={state =>
+                    setIsShowingAll(state.showBorrow && state.showLend)
+                }
+                onAggregationChange={setMultiplier}
             />
 
             <div className='flex h-full flex-grow flex-col gap-4'>
                 <Tab tabDataArray={[{ text: 'Yield Curve' }]}>
-                    <LineChartTab
-                        maturitiesOptionList={maturitiesOptionList}
-                        rates={rates}
-                    />
+                    <div className='h-[410px] w-full px-6 py-4'>
+                        <LineChartTab
+                            rates={rates}
+                            maturityList={maturityList}
+                            itayoseMarketIndexSet={itayoseMarketIndexSet}
+                        />
+                    </div>
                 </Tab>
                 <HorizontalTab tabTitles={['Open Orders']}>
                     <OrderTable

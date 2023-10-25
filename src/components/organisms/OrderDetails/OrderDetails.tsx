@@ -10,6 +10,7 @@ import {
 import {
     AmountCard,
     CollateralSimulationSection,
+    DelistedCurrencyDisclaimer,
 } from 'src/components/molecules';
 import { Tooltip } from 'src/components/templates';
 import { CollateralBook, useMarket, useOrderFee } from 'src/hooks';
@@ -35,6 +36,7 @@ export const OrderDetails = ({
     assetPrice,
     collateral,
     loanValue,
+    isCurrencyDelisted,
 }: {
     amount: Amount;
     maturity: Maturity;
@@ -42,6 +44,7 @@ export const OrderDetails = ({
     assetPrice: number;
     collateral: CollateralBook;
     loanValue: LoanValue;
+    isCurrencyDelisted?: boolean;
 }) => {
     const { data: orderFee = 0 } = useOrderFee(amount.currency);
 
@@ -59,6 +62,11 @@ export const OrderDetails = ({
 
     return (
         <div className='grid w-full grid-cols-1 justify-items-stretch gap-6 text-white'>
+            {isCurrencyDelisted && (
+                <DelistedCurrencyDisclaimer
+                    currencies={new Set([amount.currency])}
+                />
+            )}
             <Section>
                 <AmountCard amount={amount} price={assetPrice} />
             </Section>

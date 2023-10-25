@@ -17,6 +17,7 @@ export default {
         assetPrice: 1,
         collateral: collateralBook37,
         loanValue: LoanValue.fromPrice(9410, dec22Fixture.toNumber()),
+        isCurrencyDelisted: false,
     },
     chromatic: { delay: 1000 },
     decorators: [withAssetPrice, withWalletProvider],
@@ -41,6 +42,16 @@ LendPosition.args = {
     side: OrderSide.LEND,
 };
 LendPosition.play = async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const button = await canvas.findByTestId('disclaimer-button');
+    await userEvent.click(button);
+};
+
+export const Delisted = Template.bind({});
+Delisted.args = {
+    isCurrencyDelisted: true,
+};
+Delisted.play = async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     const button = await canvas.findByTestId('disclaimer-button');
     await userEvent.click(button);

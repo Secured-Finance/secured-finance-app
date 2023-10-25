@@ -2,14 +2,17 @@ import { composeStories } from '@storybook/react';
 import { fireEvent, render, screen } from 'src/test-utils.js';
 import * as stories from './LiquidationProgressBar.stories';
 
-const { Default, ConnectedToWallet } = composeStories(stories);
+const { NotConnectedToWallet, CollateralDepositedWithCoverage } =
+    composeStories(stories);
 
 describe('LiquidationProgressBar Component', () => {
     it('should render a default LiquidationProgressBar', () => {
-        render(<Default />);
+        render(<NotConnectedToWallet />);
 
         expect(screen.getByText('Liquidation Risk')).toBeInTheDocument();
-        expect(screen.getAllByText('N/A')).toHaveLength(2);
+        expect(screen.getByText('Low')).toBeInTheDocument();
+        expect(screen.getByText('Low')).toHaveClass('text-progressBarStart');
+        expect(screen.getByText('N/A')).toBeInTheDocument();
 
         expect(screen.getByTestId('liquidation-progress-bar-tick')).toHaveStyle(
             'width: calc(100% * 0 + 4px )'
@@ -17,16 +20,17 @@ describe('LiquidationProgressBar Component', () => {
     });
 
     it('should render a LiquidationProgressBar with values', () => {
-        render(<ConnectedToWallet />);
+        render(<CollateralDepositedWithCoverage />);
 
         expect(screen.getByText('Liquidation Risk')).toBeInTheDocument();
+        expect(screen.getByText('Medium')).toBeInTheDocument();
+        expect(screen.getByText('Medium')).toHaveClass('text-progressBarVia');
         expect(screen.getByText('35%')).toBeInTheDocument();
         expect(screen.getByText('35%')).toHaveClass('text-progressBarVia');
         expect(
             screen.getByText('threshold to liquidation')
         ).toBeInTheDocument();
-        expect(screen.queryByText('Medium')).toBeInTheDocument();
-        expect(screen.getByText('Medium')).toHaveClass('text-progressBarVia');
+        expect(screen.queryByText('N/A')).not.toBeInTheDocument();
 
         expect(screen.getByTestId('liquidation-progress-bar-tick')).toHaveStyle(
             'width: calc(100% * 0.5625 + 4px )'
@@ -43,19 +47,19 @@ describe('LiquidationProgressBar Component', () => {
     });
 
     it('should render correct color and risk status', () => {
-        render(<Default liquidationPercentage={30} />);
+        render(<CollateralDepositedWithCoverage liquidationPercentage={30} />);
         expect(screen.getByText('50%')).toBeInTheDocument();
         expect(screen.getByText('50%')).toHaveClass('text-progressBarStart');
         expect(screen.getByText('Low')).toBeInTheDocument();
         expect(screen.getByText('Low')).toHaveClass('text-progressBarStart');
 
-        render(<Default liquidationPercentage={50} />);
+        render(<CollateralDepositedWithCoverage liquidationPercentage={50} />);
         expect(screen.getByText('30%')).toBeInTheDocument();
         expect(screen.getByText('30%')).toHaveClass('text-progressBarVia');
         expect(screen.getByText('Medium')).toBeInTheDocument();
         expect(screen.getByText('Medium')).toHaveClass('text-progressBarVia');
 
-        render(<Default liquidationPercentage={90} />);
+        render(<CollateralDepositedWithCoverage liquidationPercentage={90} />);
         expect(screen.getByText('0%')).toBeInTheDocument();
         expect(screen.getByText('0%')).toHaveClass('text-progressBarEnd');
         expect(screen.getByText('High')).toBeInTheDocument();
