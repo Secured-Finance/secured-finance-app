@@ -3,7 +3,7 @@
       @apply text-5xl font-primary;
     }
     .typography-headline-1 {
-      @apply text-4xl font-primary;
+      @apply tablet:text-4xl font-primary text-2xl;
     }
     .typography-headline-2 {
       @apply text-3xl font-primary;

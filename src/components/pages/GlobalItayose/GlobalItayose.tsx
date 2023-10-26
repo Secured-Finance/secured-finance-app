@@ -21,14 +21,18 @@ export const GlobalItayose = () => {
     );
 
     const { data: lendingContracts = baseContracts } = useLendingMarkets();
-    //TODO: fix this
     const targetTime = useMemo(() => {
+        let time = 0;
         for (const maturity of Object.keys(lendingContracts[currency])) {
             const contract = lendingContracts[currency][Number(maturity)];
-            return contract.utcOpeningDate * 1000;
+            if (
+                (contract.isItayosePeriod || contract.isPreOrderPeriod) &&
+                (time === 0 || contract.utcOpeningDate * 1000 < time)
+            )
+                time = contract.utcOpeningDate * 1000;
         }
 
-        return 0;
+        return time;
     }, [lendingContracts, currency]);
 
     const [time, setTime] = useState<string>(countdown(targetTime));
@@ -43,8 +47,8 @@ export const GlobalItayose = () => {
     }, [targetTime]);
 
     return (
-        <div className='grid grid-flow-row justify-items-center gap-y-8 px-8'>
-            <section className='grid grid-flow-row justify-items-center gap-y-8 pt-12'>
+        <div className='grid grid-flow-row justify-items-center gap-y-8 text-center'>
+            <section className='grid grid-flow-row justify-items-center gap-y-8 px-8 pt-12'>
                 <h1 className='typography-headline-1 text-white'>
                     Pre-Open Market: Global Itayose
                 </h1>
@@ -56,7 +60,7 @@ export const GlobalItayose = () => {
             </section>
 
             <section className='grid grid-flow-row justify-items-center gap-y-6 text-nebulaTeal'>
-                <p>Ends in {time}</p>
+                <p data-chromatic='ignore'>Ends in {time}</p>
                 <div className='flex flex-row items-center gap-4'>
                     <CurrencyDropdown
                         currencyOptionList={assetList}
@@ -78,12 +82,14 @@ export const GlobalItayose = () => {
                 <GlobalItayoseMultiCurveChart />
             </section>
 
-            <section className='text-white-80'>
-                Learn more about Itayose on&nbsp;
-                <TextLink
-                    href='http://docs.secured.finance/'
-                    text='Secured Finance Docs'
-                />
+            <section className='px-8 text-center text-white-80'>
+                <p>
+                    Learn more about Itayose on&nbsp;
+                    <TextLink
+                        href='http://docs.secured.finance/'
+                        text='Secured Finance Docs'
+                    />
+                </p>
             </section>
         </div>
     );
