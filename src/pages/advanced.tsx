@@ -13,7 +13,7 @@ const Advanced = () => {
             Router.push('/emergency');
         }
         if (isGlobalItayose) {
-            Router.push('/itayose');
+            Router.push('/globalitayose');
         }
     }, [isTerminated, isGlobalItayose]);
 
