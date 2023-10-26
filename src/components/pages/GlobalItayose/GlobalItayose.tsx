@@ -42,8 +42,8 @@ export const GlobalItayose = () => {
     }, [targetTime]);
 
     return (
-        <div className='grid grid-flow-row justify-items-center gap-y-8 px-8'>
-            <section className='grid grid-flow-row justify-items-center gap-y-8 pt-12'>
+        <div className='grid grid-flow-row justify-items-center gap-y-8 text-center'>
+            <section className='grid grid-flow-row justify-items-center gap-y-8 px-8 pt-12'>
                 <h1 className='typography-headline-1 text-white'>
                     Pre-Open Market: Global Itayose
                 </h1>
@@ -75,12 +75,14 @@ export const GlobalItayose = () => {
 
             <section>Multi Curve</section>
 
-            <section className='text-white-80'>
-                Learn more about Itayose on&nbsp;
-                <TextLink
-                    href='http://docs.secured.finance/'
-                    text='Secured Finance Docs'
-                />
+            <section className='px-8 text-center text-white-80'>
+                <p>
+                    Learn more about Itayose on&nbsp;
+                    <TextLink
+                        href='http://docs.secured.finance/'
+                        text='Secured Finance Docs'
+                    />
+                </p>
             </section>
         </div>
     );
