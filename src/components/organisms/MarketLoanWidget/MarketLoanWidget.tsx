@@ -2,9 +2,9 @@ import { formatDate, getUTCMonthYear } from '@secured-finance/sf-core';
 import { fromBytes32 } from '@secured-finance/sf-graph-client';
 import { CellContext, createColumnHelper } from '@tanstack/react-table';
 import { useRouter } from 'next/router';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button, DropdownSelector } from 'src/components/atoms';
+import { Button, DropdownSelector, Timer } from 'src/components/atoms';
 import {
     CoreTable,
     Tab,
@@ -28,7 +28,6 @@ import {
     CurrencySymbol,
     amountFormatterFromBase,
     amountFormatterToBase,
-    countdown,
     formatLoanValue,
     getCurrencyMapAsOptions,
     toCurrencySymbol,
@@ -153,7 +152,12 @@ export const MarketLoanWidget = ({
             columnHelper.accessor('utcOpeningDate', {
                 id: 'openingDate',
                 cell: info => {
-                    return <Timer targetTime={info.getValue() * 1000} />;
+                    return (
+                        <Timer
+                            targetTime={info.getValue() * 1000}
+                            text='starts in'
+                        />
+                    );
                 },
                 enableHiding: true,
                 header: tableHeaderDefinition('Market Open'),
@@ -297,20 +301,4 @@ const AssetDropdown = ({
             onChange={v => handleSelectedCurrency(toCurrencySymbol(v))}
         />
     );
-};
-
-const Timer = ({ targetTime }: { targetTime: number }) => {
-    const [time, setTime] = useState<string>(countdown(targetTime));
-
-    useEffect(() => {
-        const interval = setInterval(() => {
-            setTime(countdown(targetTime));
-        }, 1000);
-
-        return () => {
-            clearInterval(interval);
-        };
-    }, [targetTime]);
-
-    return <div>{`starts in ${time}`}</div>;
 };
