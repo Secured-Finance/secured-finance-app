@@ -318,7 +318,10 @@ export const contractColumnDefinition = <
         | 'default'
         | 'contractOnly'
         | 'currencyOnly' = 'default',
-    delistedCurrencySet?: Set<CurrencySymbol>
+    delistedCurrencySet?: Set<CurrencySymbol>,
+    alignCell: Alignment = 'center',
+    alignHeader: Alignment = 'center',
+    titleHint?: string
 ) => {
     const assessorFn: AccessorFn<T, string> = row => row.maturity.toString();
     return columnHelper.accessor(assessorFn, {
@@ -335,7 +338,13 @@ export const contractColumnDefinition = <
                 ? OrderSide.BORROW
                 : OrderSide.LEND;
             return (
-                <div className='flex justify-center'>
+                <div
+                    className={classNames('flex', {
+                        'justify-start': alignCell === 'left',
+                        'justify-center': alignCell === 'center',
+                        'justify-end': alignCell === 'right',
+                    })}
+                >
                     <TableContractCell
                         maturity={new Maturity(info.getValue())}
                         ccyByte32={info.row.original.currency}
@@ -345,7 +354,7 @@ export const contractColumnDefinition = <
                 </div>
             );
         },
-        header: tableHeaderDefinition(title),
+        header: tableHeaderDefinition(title, titleHint, alignHeader),
         sortingFn: contractSortingFn,
     });
 };

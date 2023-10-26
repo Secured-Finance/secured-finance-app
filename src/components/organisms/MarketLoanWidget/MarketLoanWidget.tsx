@@ -14,19 +14,19 @@ import {
 } from 'src/hooks';
 import {
     selectLandingOrderForm,
+    setAmount,
     setCurrency,
     setMaturity,
-    setAmount,
 } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
 import {
     CurrencySymbol,
-    formatLoanValue,
-    getCurrencyMapAsOptions,
-    toCurrencySymbol,
     amountFormatterFromBase,
     amountFormatterToBase,
     countdown,
+    formatLoanValue,
+    getCurrencyMapAsOptions,
+    toCurrencySymbol,
 } from 'src/utils';
 import { LoanValue } from 'src/utils/entities';
 import {
@@ -104,29 +104,33 @@ export const MarketLoanWidget = () => {
                 columnHelper,
                 'Asset',
                 'contract',
-                'currencyOnly'
+                'currencyOnly',
+                undefined,
+                'left',
+                'left',
+                ''
             ),
             columnHelper.accessor('maturity', {
                 id: 'maturity',
                 cell: info => {
                     return (
-                        <div className=' grid w-full whitespace-nowrap px-1'>
+                        <div className='flex flex-col justify-center text-left'>
                             <div className='typography-caption text-neutral-8'>
                                 {getUTCMonthYear(info.getValue())}
                             </div>
-                            <div className='typography-caption-2 text-slateGray'>
+                            <div className='typography-caption text-slateGray'>
                                 {formatDate(info.getValue())}
                             </div>
                         </div>
                     );
                 },
-                header: tableHeaderDefinition('Maturity'),
+                header: tableHeaderDefinition('Maturity', '', 'left'),
             }),
             columnHelper.accessor('marketUnitPrice', {
                 id: 'apr',
                 cell: info => {
                     return (
-                        <div className='typography-body-2 flex justify-center px-1'>
+                        <div className='typography-caption flex justify-center text-neutral-8'>
                             {info.getValue() && info.row.original.maturity
                                 ? formatLoanValue(
                                       LoanValue.fromPrice(
@@ -147,22 +151,22 @@ export const MarketLoanWidget = () => {
                     return <Timer targetTime={info.getValue() * 1000} />;
                 },
                 enableHiding: true,
-                header: tableHeaderDefinition('Market Open'),
+                header: tableHeaderDefinition('Market Opens'),
             }),
             columnHelper.accessor('currency', {
                 id: 'action',
                 cell: info => {
                     return (
-                        <div className='flex justify-center px-1'>
+                        <div className='flex justify-end px-1'>
                             <Button onClick={() => handleClick(info)} size='sm'>
                                 {info.row.original.isOpened
                                     ? 'Open Order'
-                                    : 'Pre-Open Order'}
+                                    : 'GO'}
                             </Button>
                         </div>
                     );
                 },
-                header: tableHeaderDefinition('Action'),
+                header: tableHeaderDefinition('Actions', '', 'right'),
             }),
         ],
         [handleClick]
@@ -215,23 +219,21 @@ export const MarketLoanWidget = () => {
     return (
         <div className='h-fit rounded-b-2xl border border-white-10 shadow-tab'>
             <Tab tabDataArray={tabDataArray}>
-                <div className='p-6 pt-3'>
+                <div className='min-h-[300px] rounded-b-2xl bg-black-20 px-7 pb-3'>
                     <CoreTable
                         columns={columns}
                         data={getFilteredMarkets(openMarkets)}
                         options={{
-                            border: false,
                             hideColumnIds: ['openingDate'],
                             stickyColumns: new Set([3]),
                         }}
                     />
                 </div>
-                <div className='p-6 pt-3'>
+                <div className='min-h-[300px] rounded-b-2xl bg-black-20 px-7 pb-3'>
                     <CoreTable
                         columns={columns}
                         data={getFilteredMarkets(filteredItayoseMarkets)}
                         options={{
-                            border: false,
                             hideColumnIds: ['apr'],
                             stickyColumns: new Set([3]),
                         }}
@@ -302,5 +304,9 @@ const Timer = ({ targetTime }: { targetTime: number }) => {
         };
     }, [targetTime]);
 
-    return <div>{`starts in ${time}`}</div>;
+    return (
+        <div className='flex justify-center'>
+            <span className='w-48 font-secondary text-xs leading-[14px] text-nebulaTeal'>{`Starts in ${time}`}</span>
+        </div>
+    );
 };
