@@ -4,10 +4,12 @@ import {
     ethBytes32,
     jun23Fixture,
     mar23Fixture,
+    maturitiesMockFromContract,
+    wfilBytes32,
 } from 'src/stories/mocks/fixtures';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { renderHook } from 'src/test-utils';
-import { useOpenMarketExists } from './useOpenMarketExists';
+import { useIsGlobalItayose } from './useIsGlobalItayose';
 
 const noOpenMarkets = [
     {
@@ -63,28 +65,41 @@ const noOpenMarkets = [
     },
 ];
 
+const noItayoseMarkets = maturitiesMockFromContract(wfilBytes32).slice(0, 8);
+
 const mock = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mock);
 
 beforeEach(() => mock.getOrderBookDetails.mockClear());
 
-describe('useOpenMarketExists', () => {
-    it('should return false if there are no open market', async () => {
+describe('useIsGlobalItayose', () => {
+    it('should return true if there are no open market', async () => {
         jest.spyOn(mock, 'getOrderBookDetails').mockResolvedValueOnce([
             ...noOpenMarkets,
         ]);
         const { result, waitForNextUpdate } = renderHook(() =>
-            useOpenMarketExists()
+            useIsGlobalItayose()
+        );
+        await waitForNextUpdate();
+        expect(result.current).toEqual(true);
+    });
+
+    it('should return false if itayose and open markets exist', async () => {
+        const { result, waitForNextUpdate } = renderHook(() =>
+            useIsGlobalItayose()
         );
         await waitForNextUpdate();
         expect(result.current).toEqual(false);
     });
 
-    it('should return true if there is an open market', async () => {
+    it('should return false if there are no itayose markets', async () => {
+        jest.spyOn(mock, 'getOrderBookDetails').mockResolvedValueOnce([
+            ...noItayoseMarkets,
+        ]);
         const { result, waitForNextUpdate } = renderHook(() =>
-            useOpenMarketExists()
+            useIsGlobalItayose()
         );
         await waitForNextUpdate();
-        expect(result.current).toEqual(true);
+        expect(result.current).toEqual(false);
     });
 });

@@ -1,17 +1,23 @@
 import { getCurrencyMapAsList } from 'src/utils';
 import { baseContracts, useLendingMarkets } from 'src/hooks/useLendingMarkets';
 
-export const useOpenMarketExists = () => {
+export const useIsGlobalItayose = () => {
     const { data: lendingContracts = baseContracts } = useLendingMarkets();
+
+    let itayoseMarketCount = 0;
+    let openMarketExists = false;
 
     for (const ccy of getCurrencyMapAsList()) {
         for (const maturity of Object.keys(lendingContracts[ccy.symbol])) {
             const contract = lendingContracts[ccy.symbol][Number(maturity)];
             if (contract.isOpened) {
-                return true;
+                openMarketExists = true;
+            }
+            if (contract.isPreOrderPeriod || contract.isItayosePeriod) {
+                itayoseMarketCount += 1;
             }
         }
     }
 
-    return false;
+    return !openMarketExists && itayoseMarketCount >= 1;
 };

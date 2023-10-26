@@ -22,9 +22,9 @@ import {
     useCollateralBook,
     useCurrencyDelistedStatus,
     useGraphClientHook,
+    useIsGlobalItayose,
     useLendingMarkets,
     useLoanValues,
-    useOpenMarketExists,
     useTotalNumberOfAsset,
     useValueLockedByCurrency,
 } from 'src/hooks';
@@ -65,7 +65,7 @@ export const MarketDashboard = () => {
 
     const { data: delistedCurrencySet } = useCurrencyDelistedStatus();
 
-    const openMarketExists = useOpenMarketExists();
+    const isGlobalItayose = useIsGlobalItayose();
 
     getCurrencyMapAsList().forEach(ccy => {
         // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -157,7 +157,7 @@ export const MarketDashboard = () => {
                             },
                         ]}
                     />
-                    {openMarketExists ? (
+                    {!isGlobalItayose ? (
                         <div className='w-full'>
                             <MultiCurveChart
                                 title='Yield Curve'
@@ -172,7 +172,7 @@ export const MarketDashboard = () => {
                     ) : (
                         <GlobalItayoseMultiCurveChart />
                     )}
-                    <MarketLoanWidget openMarketExists={openMarketExists} />
+                    <MarketLoanWidget isGlobalItayose={isGlobalItayose} />
                 </div>
                 <section className='flex flex-col gap-5'>
                     {isConnected && (

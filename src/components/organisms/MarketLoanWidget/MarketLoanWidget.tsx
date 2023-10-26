@@ -42,9 +42,9 @@ import {
 const columnHelper = createColumnHelper<Market>();
 
 export const MarketLoanWidget = ({
-    openMarketExists,
+    isGlobalItayose,
 }: {
-    openMarketExists: boolean;
+    isGlobalItayose: boolean;
 }) => {
     const { currency, amount } = useSelector((state: RootState) =>
         selectLandingOrderForm(state.landingOrderForm)
@@ -216,14 +216,14 @@ export const MarketLoanWidget = ({
         },
     ];
 
-    if (openMarketExists) {
+    if (!isGlobalItayose) {
         tabDataArray.unshift({ text: 'Loans', util: openMarketUtil });
     }
 
     return (
         <div className='h-fit rounded-b-2xl border border-white-10 shadow-tab'>
             <Tab tabDataArray={tabDataArray}>
-                {openMarketExists && (
+                {!isGlobalItayose && (
                     <div className='p-6 pt-3'>
                         <CoreTable
                             columns={columns}

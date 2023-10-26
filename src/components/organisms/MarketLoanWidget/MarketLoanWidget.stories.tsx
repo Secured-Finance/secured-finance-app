@@ -8,7 +8,7 @@ export default {
     title: 'Organism/MarketLoanWidget',
     component: MarketLoanWidget,
     args: {
-        openMarketExists: true,
+        isGlobalItayose: false,
     },
     parameters: {
         ...RESPONSIVE_PARAMETERS,
@@ -24,7 +24,7 @@ const Template: StoryFn<typeof MarketLoanWidget> = args => (
 
 export const NoOpenMarket = Template.bind({});
 NoOpenMarket.args = {
-    openMarketExists: false,
+    isGlobalItayose: true,
 };
 
 export const Default = Template.bind({});

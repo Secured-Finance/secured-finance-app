@@ -1,21 +1,21 @@
 import Router from 'next/router';
 import { useEffect } from 'react';
 import { Landing } from 'src/components/pages';
-import { useIsMarketTerminated, useOpenMarketExists } from 'src/hooks';
+import { useIsMarketTerminated, useIsGlobalItayose } from 'src/hooks';
 
 const Advanced = () => {
     const { data: isTerminated } = useIsMarketTerminated();
 
-    const openMarketExists = useOpenMarketExists();
+    const isGlobalItayose = useIsGlobalItayose();
 
     useEffect(() => {
         if (isTerminated) {
             Router.push('/emergency');
         }
-        if (!openMarketExists) {
+        if (isGlobalItayose) {
             Router.push('/itayose');
         }
-    }, [isTerminated, openMarketExists]);
+    }, [isTerminated, isGlobalItayose]);
 
     return <Landing view='Advanced' />;
 };
