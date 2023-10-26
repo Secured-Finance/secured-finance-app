@@ -20,14 +20,18 @@ export const GlobalItayose = () => {
     );
 
     const { data: lendingContracts = baseContracts } = useLendingMarkets();
-    //TODO: fix this
     const targetTime = useMemo(() => {
+        let time = 0;
         for (const maturity of Object.keys(lendingContracts[currency])) {
             const contract = lendingContracts[currency][Number(maturity)];
-            return contract.utcOpeningDate * 1000;
+            if (
+                (contract.isItayosePeriod || contract.isPreOrderPeriod) &&
+                (time === 0 || contract.utcOpeningDate * 1000 < time)
+            )
+                time = contract.utcOpeningDate * 1000;
         }
 
-        return 0;
+        return time;
     }, [lendingContracts, currency]);
 
     const [time, setTime] = useState<string>(countdown(targetTime));
@@ -55,7 +59,7 @@ export const GlobalItayose = () => {
             </section>
 
             <section className='grid grid-flow-row justify-items-center gap-y-6 text-nebulaTeal'>
-                <p>Ends in {time}</p>
+                <p data-chromatic='ignore'>Ends in {time}</p>
                 <div className='flex flex-row items-center gap-4'>
                     <CurrencyDropdown
                         currencyOptionList={assetList}
