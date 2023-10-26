@@ -102,9 +102,8 @@ export const crossHairMultiPlugin = {
             ctx.beginPath();
             ctx.moveTo(x, topY);
             ctx.lineTo(x, bottomY);
-            ctx.lineWidth = 1;
-            ctx.setLineDash([8, 8]);
-            ctx.strokeStyle = '#B9BDEA';
+            ctx.lineWidth = 2;
+            ctx.strokeStyle = '#4A5061';
             ctx.stroke();
             ctx.restore();
         }
