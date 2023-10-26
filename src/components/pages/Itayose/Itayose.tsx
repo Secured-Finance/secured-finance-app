@@ -182,15 +182,14 @@ export const Itayose = () => {
         [amount, currency, dispatch]
     );
 
-    const estimatedOpeningUnitPrice = useMemo(
-        () =>
-            LoanValue.fromPrice(
-                lendingMarkets[currency][maturity]?.openingUnitPrice ?? 0,
-                maturity
-            ),
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-        [currency, maturity]
-    );
+    const estimatedOpeningUnitPrice = lendingMarkets[currency][maturity]
+        ?.openingUnitPrice
+        ? LoanValue.fromPrice(
+              lendingMarkets[currency][maturity]?.openingUnitPrice ?? 0,
+              maturity,
+              lendingContracts[selectedTerm.value.toNumber()]?.utcOpeningDate
+          )
+        : undefined;
 
     return (
         <Page title='Pre-Open Order Book'>
