@@ -110,7 +110,7 @@ export const WithdrawTokenTable = ({ data }: { data: TokenPosition[] }) => {
                 showStep
             >
                 {data.length !== 0 && (
-                    <div className='bg-black-20 px-5 pb-7 font-normal'>
+                    <div className='bg-black-20 px-5 pb-3 font-normal'>
                         <CoreTable
                             data={data.map(o => {
                                 return {
