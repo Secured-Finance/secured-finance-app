@@ -63,7 +63,7 @@ export const WithdrawPositionTable = ({
         >
             {data.length !== 0 && (
                 <>
-                    <div className='bg-black-20 px-5 pb-7 font-normal'>
+                    <div className='bg-black-20 px-5 pb-3 font-normal'>
                         <CoreTable
                             data={data}
                             columns={columns}
