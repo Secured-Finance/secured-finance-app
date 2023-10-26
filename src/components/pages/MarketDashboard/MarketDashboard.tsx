@@ -8,6 +8,7 @@ import {
 } from 'src/components/atoms';
 import { DelistedCurrencyDisclaimer, StatsBar } from 'src/components/molecules';
 import {
+    GlobalItayoseMultiCurveChart,
     MarketLoanWidget,
     MultiCurveChart,
     MyWalletWidget,
@@ -156,7 +157,7 @@ export const MarketDashboard = () => {
                             },
                         ]}
                     />
-                    {openMarketExists && (
+                    {openMarketExists ? (
                         <div className='w-full'>
                             <MultiCurveChart
                                 title='Yield Curve'
@@ -168,6 +169,8 @@ export const MarketDashboard = () => {
                                     .map(o => o.name)}
                             />
                         </div>
+                    ) : (
+                        <GlobalItayoseMultiCurveChart />
                     )}
                     <MarketLoanWidget openMarketExists={openMarketExists} />
                 </div>
