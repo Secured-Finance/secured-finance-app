@@ -168,7 +168,7 @@ export const CoreTable = <T,>({
             ) : null}
 
             <tbody>
-                {table.getRowModel().rows.map(row => (
+                {table.getRowModel().rows.map((row, rowIndex) => (
                     <tr
                         key={row.id}
                         className={classNames('h-7', {
@@ -178,7 +178,10 @@ export const CoreTable = <T,>({
                             'hover:bg-black-30': coreTableOptions.hoverRow?.(
                                 row.id
                             ),
-                            'border-b border-white-10': coreTableOptions.border,
+                            'border-b border-white-10':
+                                coreTableOptions.border &&
+                                rowIndex !==
+                                    table.getRowModel().rows.length - 1,
                         })}
                         onClick={() =>
                             coreTableOptions.hoverRow?.(row.id) &&
