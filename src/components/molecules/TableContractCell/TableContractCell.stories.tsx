@@ -41,3 +41,6 @@ export const Delisted = Template.bind({});
 Delisted.args = {
     delistedContractSide: OrderSide.LEND,
 };
+
+export const CurrencyDefault = Template.bind({});
+CurrencyDefault.args = { asset: 'currency' };

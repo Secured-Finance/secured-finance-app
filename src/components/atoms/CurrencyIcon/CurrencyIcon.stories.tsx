@@ -13,12 +13,6 @@ export default {
                 options: Object.values(CurrencySymbol),
             },
         },
-        variant: {
-            control: {
-                type: 'select',
-                options: ['default', 'large'],
-            },
-        },
     },
 } as Meta<typeof CurrencyIcon>;
 
@@ -26,13 +20,13 @@ const Template: StoryFn<typeof CurrencyIcon> = args => (
     <CurrencyIcon {...args} />
 );
 
-export const Default = Template.bind({});
-export const Large = Template.bind({});
-Large.args = { variant: 'large' };
-export const Small = Template.bind({});
-Small.args = { variant: 'small' };
+export const CurrencyDefault = Template.bind({});
+export const CurrencyLarge = Template.bind({});
+CurrencyLarge.args = { variant: 'large' };
+export const CurrencySmall = Template.bind({});
+CurrencySmall.args = { variant: 'small' };
 
-export const All = () => (
+export const CurrencyAll = () => (
     <div className='flex flex-row gap-2'>
         {Object.values(CurrencySymbol).map(ccy => (
             <div className='flex' key={ccy}>
@@ -41,3 +35,12 @@ export const All = () => (
         ))}
     </div>
 );
+
+export const ZeroCouponDefault = Template.bind({});
+ZeroCouponDefault.args = { asset: 'zero-coupon' };
+
+export const ZeroCouponLarge = Template.bind({});
+ZeroCouponLarge.args = { asset: 'zero-coupon', variant: 'large' };
+
+export const ZeroCouponSmall = Template.bind({});
+ZeroCouponSmall.args = { asset: 'zero-coupon', variant: 'small' };

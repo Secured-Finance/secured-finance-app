@@ -4,12 +4,18 @@ import { currencyMap, CurrencySymbol } from 'src/utils';
 
 export const CurrencyIcon = ({
     ccy,
+    asset = 'currency',
     variant = 'default',
 }: {
     ccy: CurrencySymbol;
+    asset?: 'currency' | 'zero-coupon';
     variant?: 'default' | 'large' | 'small';
 }) => {
-    const Icon = useMemo(() => currencyMap[ccy].icon, [ccy]);
+    const Icon = useMemo(() => {
+        if (asset === 'zero-coupon') return currencyMap[ccy].zcIcon;
+        return currencyMap[ccy].icon;
+    }, [asset, ccy]);
+
     return (
         <Icon
             className={classNames({

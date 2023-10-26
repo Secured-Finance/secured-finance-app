@@ -18,10 +18,12 @@ export const TableContractCell = ({
     maturity,
     ccyByte32,
     variant = 'default',
+    asset = 'zero-coupon',
     delistedContractSide,
 }: {
     maturity: Maturity;
     ccyByte32: string;
+    asset?: 'currency' | 'zero-coupon';
     variant?:
         | 'default'
         | 'compact'
@@ -78,7 +80,11 @@ export const TableContractCell = ({
                             'mt-0': variant === 'compact',
                         })}
                     >
-                        <CurrencyIcon ccy={ccy} variant={iconSize} />
+                        <CurrencyIcon
+                            ccy={ccy}
+                            variant={iconSize}
+                            asset={asset}
+                        />
                     </div>
                 ) : null}
                 <span className='typography-caption-2 text-neutral-6'>

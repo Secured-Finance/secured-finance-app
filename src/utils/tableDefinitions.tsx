@@ -375,6 +375,11 @@ export const withdrawableAssetColumnDefinition = <
                         maturity={new Maturity(info.getValue())}
                         ccyByte32={info.row.original.currency}
                         variant={variant}
+                        asset={
+                            info.row.original.type === 'collateral'
+                                ? 'currency'
+                                : 'zero-coupon'
+                        }
                     />
                 </div>
             );
