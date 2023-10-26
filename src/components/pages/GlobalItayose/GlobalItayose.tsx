@@ -78,7 +78,7 @@ export const GlobalItayose = () => {
                 </div>
             </section>
 
-            <section>
+            <section className='w-full max-w-[90%] laptop:w-[746px]'>
                 <GlobalItayoseMultiCurveChart />
             </section>
 
