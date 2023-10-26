@@ -86,7 +86,7 @@ export const GlobalItayose = () => {
                 <p>
                     Learn more about Itayose on&nbsp;
                     <TextLink
-                        href='http://docs.secured.finance/'
+                        href='https://docs.secured.finance/platform-guide/unique-features/fair-price-discovery/'
                         text='Secured Finance Docs'
                     />
                 </p>
