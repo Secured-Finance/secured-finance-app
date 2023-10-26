@@ -22,7 +22,7 @@ function EntryPoint() {
     }
 
     if (!openMarketExists) {
-        Router.push('/itayose');
+        Router.push('/globalitayose');
         return null;
     }
 
