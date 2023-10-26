@@ -1,12 +1,12 @@
 import Router from 'next/router';
 import { useEffect, useState } from 'react';
 import { Landing } from 'src/components/pages';
-import { useIsMarketTerminated, useOpenMarketExists } from 'src/hooks';
+import { useIsMarketTerminated, useIsGlobalItayose } from 'src/hooks';
 
 function EntryPoint() {
     const [isMounted, setIsMounted] = useState(false);
     const { data: isTerminated } = useIsMarketTerminated();
-    const openMarketExists = useOpenMarketExists();
+    const isGlobalItayose = useIsGlobalItayose();
 
     useEffect(() => {
         setIsMounted(true);
@@ -21,7 +21,7 @@ function EntryPoint() {
         return null;
     }
 
-    if (!openMarketExists) {
+    if (isGlobalItayose) {
         Router.push('/globalitayose');
         return null;
     }
