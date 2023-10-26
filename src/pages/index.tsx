@@ -1,7 +1,7 @@
 import Router from 'next/router';
 import { useEffect, useState } from 'react';
 import { Landing } from 'src/components/pages';
-import { useIsMarketTerminated, useIsGlobalItayose } from 'src/hooks';
+import { useIsGlobalItayose, useIsMarketTerminated } from 'src/hooks';
 
 function EntryPoint() {
     const [isMounted, setIsMounted] = useState(false);
@@ -22,7 +22,7 @@ function EntryPoint() {
     }
 
     if (isGlobalItayose) {
-        Router.push('/globalitayose');
+        Router.push('/global-itayose');
         return null;
     }
 

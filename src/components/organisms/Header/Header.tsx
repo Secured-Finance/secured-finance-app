@@ -17,7 +17,7 @@ const LINKS = [
     {
         text: 'OTC Lending',
         link: '/',
-        alternateLink: '/advanced',
+        alternateLinks: ['/advanced', '/global-itayose'],
         dataCy: 'lending',
     },
     {
@@ -80,7 +80,7 @@ export const Header = ({ showNavigation }: { showNavigation: boolean }) => {
                                     text={link.text}
                                     dataCy={link.dataCy}
                                     link={link.link}
-                                    alternateLink={link?.alternateLink}
+                                    alternateLinks={link?.alternateLinks}
                                 />
                             </div>
                         ))}
@@ -126,16 +126,19 @@ const ItemLink = ({
     text,
     dataCy,
     link,
-    alternateLink,
+    alternateLinks,
 }: {
     text: string;
     dataCy: string;
     link: string;
-    alternateLink?: string;
+    alternateLinks?: string[];
 }) => {
     const router = useRouter();
     const useCheckActive = () => {
-        return router.pathname === link || router.pathname === alternateLink;
+        return (
+            router.pathname === link ||
+            !!alternateLinks?.includes(router.pathname)
+        );
     };
     return (
         <Link href={link} className='h-full' passHref>
