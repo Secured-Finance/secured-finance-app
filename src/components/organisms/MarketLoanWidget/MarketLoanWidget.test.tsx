@@ -44,7 +44,7 @@ describe('MarketLoanWidget Component', () => {
     it('should display the APR column when the market is open', () => {
         render(<Default />);
         expect(screen.queryByText('APR')).toBeInTheDocument();
-        expect(screen.queryByText('Market Open')).not.toBeInTheDocument();
+        expect(screen.queryByText('Market Opens')).not.toBeInTheDocument();
     });
 
     it('should not show delisted currencies', async () => {
@@ -66,7 +66,7 @@ describe('MarketLoanWidget Component', () => {
         expect(screen.queryAllByText('Dec 1, 2024')).toHaveLength(4);
 
         expect(screen.queryByText('APR')).not.toBeInTheDocument();
-        expect(screen.queryByText('Market Open')).toBeInTheDocument();
+        expect(screen.queryByText('Market Opens')).toBeInTheDocument();
     });
 
     it('should hide the APR column when the market is in itayose mode', async () => {
@@ -87,7 +87,7 @@ describe('MarketLoanWidget Component', () => {
         await waitFor(() => expect(button).not.toBeDisabled());
         fireEvent.click(button);
         expect(screen.queryByText('APR')).not.toBeInTheDocument();
-        expect(screen.queryByText('Market Open')).toBeInTheDocument();
+        expect(screen.queryByText('Market Opens')).toBeInTheDocument();
     });
 
     it('should not show maturity dropdown in itayose screen', async () => {
