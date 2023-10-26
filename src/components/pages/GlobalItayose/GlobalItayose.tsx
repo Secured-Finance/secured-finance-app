@@ -3,6 +3,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, TextLink } from 'src/components/atoms';
 import { CurrencyDropdown } from 'src/components/molecules';
+import { GlobalItayoseMultiCurveChart } from 'src/components/organisms';
 import { baseContracts, useLendingMarkets } from 'src/hooks';
 import {
     selectLandingOrderForm,
@@ -73,7 +74,9 @@ export const GlobalItayose = () => {
                 </div>
             </section>
 
-            <section>Multi Curve</section>
+            <section>
+                <GlobalItayoseMultiCurveChart />
+            </section>
 
             <section className='text-white-80'>
                 Learn more about Itayose on&nbsp;
