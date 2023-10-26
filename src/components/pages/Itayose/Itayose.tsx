@@ -2,7 +2,13 @@ import { OrderSide } from '@secured-finance/sf-client';
 import { BigNumber } from 'ethers';
 import { useCallback, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { GradientBox, MarketTab, Option, TextLink } from 'src/components/atoms';
+import {
+    GradientBox,
+    MarketTab,
+    Option,
+    TextLink,
+    Timer,
+} from 'src/components/atoms';
 import {
     Alert,
     HorizontalAssetSelector,
@@ -41,7 +47,6 @@ import {
     CurrencySymbol,
     amountFormatterFromBase,
     amountFormatterToBase,
-    countdown,
     getCurrencyMapAsOptions,
     usdFormat,
 } from 'src/utils';
@@ -86,10 +91,8 @@ const Toolbar = ({
                 />
                 <div className='hidden w-full flex-row items-center justify-between tablet:flex'>
                     <div>
-                        <MarketTab
-                            name={nextMarketPhase}
-                            value={countdown(date * 1000)}
-                        />
+                        <p className='text-white'>{nextMarketPhase}</p>
+                        <Timer targetTime={date * 1000} />
                     </div>
                     <div>
                         <MarketTab
@@ -193,11 +196,11 @@ export const Itayose = () => {
         <Page title='Pre-Open Order Book'>
             <Alert>
                 <p className='typography-caption text-white'>
-                    Pre-market order allows ability to place limit orders before
-                    a new orderbook starts trading to secure your position in
-                    the market. No new pre-orders accepted within 1 hour of
-                    trading. No fees charged during pre-order period. Learn more
-                    in our&nbsp;
+                    Secure your market position by placing limit orders up to 7
+                    days before trading begins with no fees. Opt for either a
+                    lend or borrow during pre-open, not both. No new pre-orders
+                    will be accepted within 1 hour prior to the start of
+                    trading. Learn more at&nbsp;
                     <TextLink
                         href='https://docs.secured.finance/'
                         text='Secured Finance Gitbook'
@@ -208,13 +211,8 @@ export const Itayose = () => {
                 topBar={
                     <Toolbar
                         date={
-                            marketPhase === MarketPhase.PRE_ORDER
-                                ? lendingContracts[
-                                      selectedTerm.value.toNumber()
-                                  ]?.preOpenDate
-                                : lendingContracts[
-                                      selectedTerm.value.toNumber()
-                                  ]?.utcOpeningDate
+                            lendingContracts[selectedTerm.value.toNumber()]
+                                ?.utcOpeningDate
                         }
                         nextMarketPhase={
                             marketPhase === MarketPhase.PRE_ORDER
