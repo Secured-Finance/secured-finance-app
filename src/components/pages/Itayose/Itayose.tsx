@@ -203,8 +203,8 @@ export const Itayose = () => {
                     will be accepted within 1 hour prior to the start of
                     trading. Learn more at&nbsp;
                     <TextLink
-                        href='https://docs.secured.finance/'
-                        text='Secured Finance Gitbook'
+                        href='https://docs.secured.finance/platform-guide/unique-features/fair-price-discovery/'
+                        text='Secured Finance Docs'
                     />
                 </p>
             </Alert>
