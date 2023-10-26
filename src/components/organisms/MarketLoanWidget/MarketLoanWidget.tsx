@@ -217,9 +217,9 @@ export const MarketLoanWidget = () => {
     ];
 
     return (
-        <div className='h-fit overflow-hidden rounded-b-2xl border border-white-10 shadow-tab'>
+        <div className='h-fit rounded-b-2xl border border-white-10 shadow-tab'>
             <Tab tabDataArray={tabDataArray}>
-                <div className='min-h-[300px] bg-black-20 px-7 pb-8'>
+                <div className='min-h-[300px] rounded-b-2xl bg-black-20 px-7 pb-8'>
                     <CoreTable
                         columns={columns}
                         data={getFilteredMarkets(openMarkets)}
@@ -229,7 +229,7 @@ export const MarketLoanWidget = () => {
                         }}
                     />
                 </div>
-                <div className='min-h-[300px] bg-black-20 px-7 pb-8'>
+                <div className='min-h-[300px] rounded-b-2xl bg-black-20 px-7 pb-8'>
                     <CoreTable
                         columns={columns}
                         data={getFilteredMarkets(filteredItayoseMarkets)}
