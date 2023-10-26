@@ -50,12 +50,12 @@ export const GlobalItayose = () => {
         <div className='grid grid-flow-row justify-items-center gap-y-8 text-center'>
             <section className='grid grid-flow-row justify-items-center gap-y-8 px-8 pt-12'>
                 <h1 className='typography-headline-1 text-white'>
-                    Pre-Open Market: Global Itayose
+                    Pre-Open&nbsp;Market: Global&nbsp;Itayose
                 </h1>
                 <h2 className='typography-body-2 w-full text-white-80 laptop:w-[525px]'>
                     We&apos;re excited to debut with four major currencies for
                     the first four quarterly contracts. Stay tuned for the
-                    introduction of additional markets.
+                    introduction of additional&nbsp;markets.
                 </h2>
             </section>
 
@@ -84,7 +84,7 @@ export const GlobalItayose = () => {
 
             <section className='px-8 text-center text-white-80'>
                 <p>
-                    Learn more about Itayose on&nbsp;
+                    Learn more about Itayose on{' '}
                     <TextLink
                         href='https://docs.secured.finance/platform-guide/unique-features/fair-price-discovery/'
                         text='Secured Finance Docs'
