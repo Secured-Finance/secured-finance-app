@@ -111,7 +111,8 @@ export const options: ChartOptions<'line'> = {
 const getData = (
     curves: Record<CurrencySymbol, Rate[]>,
     currencies: Set<CurrencySymbol>,
-    labels: string[]
+    labels: string[],
+    isGlobalItayose?: boolean
 ) => {
     return {
         labels: labels,
@@ -129,6 +130,7 @@ const getData = (
                 borderColor: currencyMap[ccy].chartColor,
                 backgroundColor: currencyMap[ccy].chartColor,
                 ...defaultDatasets,
+                borderDash: isGlobalItayose ? [8, 5] : undefined,
             };
         }),
     };
@@ -167,10 +169,12 @@ export const MultiCurveChart = ({
     title,
     curves,
     labels,
+    isGlobalItayose = false,
 }: {
     title: string;
     curves: Record<CurrencySymbol, Rate[]>;
     labels: string[];
+    isGlobalItayose?: boolean;
 }) => {
     const chartRef = useRef<ChartJS<'line'>>(null);
     const [tooltipVisible, setTooltipVisible] = useState(false);
@@ -287,7 +291,12 @@ export const MultiCurveChart = ({
             <div className='relative pb-7 pl-6 pr-5'>
                 <Line
                     className='h-[354px] rounded-b-xl bg-black-20'
-                    data={getData(curves, activeCurrencies, labels)}
+                    data={getData(
+                        curves,
+                        activeCurrencies,
+                        labels,
+                        isGlobalItayose
+                    )}
                     options={dataOptions}
                     ref={chartRef}
                     onClick={() => {}}
