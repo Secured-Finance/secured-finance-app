@@ -160,7 +160,7 @@ export const MarketLoanWidget = ({
                         <div className='flex w-48 justify-center font-secondary text-xs leading-[14px] text-nebulaTeal'>
                             <Timer
                                 targetTime={info.getValue() * 1000}
-                                text='starts in'
+                                text='ends in'
                             />
                         </div>
                     );

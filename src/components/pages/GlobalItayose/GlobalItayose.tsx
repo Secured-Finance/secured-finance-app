@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button, TextLink } from 'src/components/atoms';
+import { Button, TextLink, Timer } from 'src/components/atoms';
 import { CurrencyDropdown } from 'src/components/molecules';
 import { GlobalItayoseMultiCurveChart } from 'src/components/organisms';
 import { baseContracts, useLendingMarkets } from 'src/hooks';
@@ -10,7 +10,7 @@ import {
     setCurrency,
 } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
-import { countdown, getCurrencyMapAsOptions } from 'src/utils';
+import { getCurrencyMapAsOptions } from 'src/utils';
 
 export const GlobalItayose = () => {
     const dispatch = useDispatch();
@@ -35,17 +35,6 @@ export const GlobalItayose = () => {
         return time;
     }, [lendingContracts, currency]);
 
-    const [time, setTime] = useState<string>(countdown(targetTime));
-    useEffect(() => {
-        const interval = setInterval(() => {
-            setTime(countdown(targetTime));
-        }, 1000);
-
-        return () => {
-            clearInterval(interval);
-        };
-    }, [targetTime]);
-
     return (
         <div className='grid grid-flow-row justify-items-center gap-y-8 text-center'>
             <section className='grid grid-flow-row justify-items-center gap-y-8 px-8 pt-12'>
@@ -60,7 +49,7 @@ export const GlobalItayose = () => {
             </section>
 
             <section className='grid grid-flow-row justify-items-center gap-y-6 text-nebulaTeal'>
-                <p data-chromatic='ignore'>Ends in {time}</p>
+                <Timer targetTime={targetTime} text='Ends in' />
                 <div className='flex flex-row items-center gap-4'>
                     <CurrencyDropdown
                         currencyOptionList={assetList}

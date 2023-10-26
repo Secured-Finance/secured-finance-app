@@ -21,7 +21,7 @@ export const Timer = ({
     }, [targetTime]);
 
     return (
-        <div className='flex flex-row gap-1'>
+        <div className='flex flex-row gap-1' data-chromatic='ignore'>
             {text && <p>{text}</p>}
             {time}
         </div>
