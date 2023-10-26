@@ -17,7 +17,7 @@ export const CurrencyDropdown = ({
 
     const optionList = currencyOptionList.map(o => ({
         ...o,
-        iconSVG: currencyMap[o.value].icon,
+        iconSVG: currencyMap[o.value].zcIcon,
         ...(isDelisted.has(o.value) ? { chip: <DelistingChip /> } : {}),
     }));
 

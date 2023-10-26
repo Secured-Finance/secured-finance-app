@@ -8,9 +8,13 @@ import { BigNumber as BigNumberJS } from 'bignumber.js';
 import { BigNumber } from 'ethers';
 import tailwindConfig from 'src/../tailwind.config';
 import BTCIcon from 'src/assets/coins/btc.svg';
+import ZcBTCIcon from 'src/assets/coins/btc_zc.svg';
 import EthIcon from 'src/assets/coins/eth2.svg';
+import ZcEthIcon from 'src/assets/coins/eth_zc.svg';
 import FilIcon from 'src/assets/coins/fil.svg';
+import ZcFilIcon from 'src/assets/coins/fil_zc.svg';
 import UsdcIcon from 'src/assets/coins/usdc.svg';
+import ZcUsdcIcon from 'src/assets/coins/usdc_zc.svg';
 import { SvgIcon } from 'src/types';
 import { hexToString } from 'viem';
 import { WFIL } from './currencies/filecoin';
@@ -38,6 +42,7 @@ export const currencyMap: Readonly<
         symbol: CurrencySymbol.WBTC,
         name: WBTC.onChain().name,
         icon: BTCIcon,
+        zcIcon: ZcBTCIcon,
         coinGeckoId: 'wrapped-bitcoin',
         isCollateral: true,
         toBaseUnit: (amount: number) =>
@@ -52,6 +57,7 @@ export const currencyMap: Readonly<
     [CurrencySymbol.ETH]: {
         index: 1,
         icon: EthIcon,
+        zcIcon: ZcEthIcon,
         symbol: CurrencySymbol.ETH,
         // TODO: update sf-core to use the right name
         name: 'Ether',
@@ -68,6 +74,7 @@ export const currencyMap: Readonly<
     [CurrencySymbol.WFIL]: {
         index: 2,
         icon: FilIcon,
+        zcIcon: ZcFilIcon,
         symbol: CurrencySymbol.WFIL,
         name: WFIL.onChain().name,
         coinGeckoId: 'filecoin',
@@ -88,6 +95,7 @@ export const currencyMap: Readonly<
         symbol: CurrencySymbol.USDC,
         name: USDC.onChain().name,
         icon: UsdcIcon,
+        zcIcon: ZcUsdcIcon,
         coinGeckoId: 'usd-coin',
         isCollateral: true,
         toBaseUnit: (amount: number) =>
@@ -131,6 +139,7 @@ export type CurrencyInfo = {
     name: string;
     coinGeckoId: string;
     icon: SvgIcon;
+    zcIcon: SvgIcon;
     isCollateral: boolean;
     toBaseUnit: (amount: number) => BigNumber;
     fromBaseUnit: (amount: BigNumber) => number;
