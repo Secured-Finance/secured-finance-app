@@ -21,7 +21,7 @@ export const Timer = ({
     }, [targetTime]);
 
     return (
-        <div className='flex flex-row gap-1 text-white'>
+        <div className='flex flex-row gap-1'>
             {text && <p>{text}</p>}
             {time}
         </div>

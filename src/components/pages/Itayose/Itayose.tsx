@@ -80,7 +80,7 @@ const Toolbar = ({
 
     return (
         <GradientBox shape='rectangle'>
-            <div className='flex min-w-fit flex-row items-center justify-start gap-20 px-6 py-3 tablet:justify-between'>
+            <div className='flex min-w-fit flex-row items-center justify-start gap-10 px-6 py-3 tablet:justify-between'>
                 <HorizontalAssetSelector
                     assetList={assetList}
                     selectedAsset={selectedAsset}
@@ -89,14 +89,16 @@ const Toolbar = ({
                     onAssetChange={handleAssetChange}
                     onTermChange={handleTermChange}
                 />
-                <div className='hidden w-full flex-row items-center justify-between tablet:flex'>
-                    <div>
-                        <p className='text-white'>{nextMarketPhase}</p>
+                <div className='hidden w-full flex-row items-center justify-start gap-40 tablet:flex'>
+                    <div className='typography-caption w-40 text-nebulaTeal'>
+                        <p className=' typography-caption-2 text-slateGray'>
+                            {nextMarketPhase}
+                        </p>
                         <Timer targetTime={date * 1000} />
                     </div>
                     <div>
                         <MarketTab
-                            name={`${currency} price`}
+                            name={`${currency} Price`}
                             value={usdFormat(currencyPrice, 2)}
                         />
                     </div>
@@ -216,7 +218,7 @@ export const Itayose = () => {
                         }
                         nextMarketPhase={
                             marketPhase === MarketPhase.PRE_ORDER
-                                ? 'PreOrder'
+                                ? 'Pre-Open'
                                 : 'Open in'
                         }
                         assetList={assetList}
