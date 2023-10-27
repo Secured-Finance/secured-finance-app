@@ -31,18 +31,53 @@ const preOrderMarket = {
     ccy: wfilBytes32,
 };
 
-const noItayoseMarkets = [
-    ...maturitiesMockFromContract(wfilBytes32).splice(0, 8),
-];
+const closedMarket = {
+    name: 'DEC24-1',
+    maturity: BigNumber.from(itayoseFixture.toString()),
+    openingDate: BigNumber.from('1685587600'),
+    marketUnitPrice: BigNumber.from('9001'),
+    openingUnitPrice: BigNumber.from('9710'),
+    isReady: false,
+    isOpened: false,
+    isMatured: false,
+    isPreOrderPeriod: false,
+    isItayosePeriod: false,
+    bestBorrowUnitPrice: BigNumber.from('9615'),
+    bestLendUnitPrice: BigNumber.from('9617'),
+    minBorrowUnitPrice: BigNumber.from('9602'),
+    maxLendUnitPrice: BigNumber.from('9630'),
+    ccy: wfilBytes32,
+};
+
+const noItayoseMarkets = maturitiesMockFromContract(wfilBytes32).slice(0, 8);
 
 const twoItayoseMarkets = [
     ...maturitiesMockFromContract(wfilBytes32),
     preOrderMarket,
 ];
 
+const closedMarkets = [
+    ...maturitiesMockFromContract(wfilBytes32),
+    closedMarket,
+];
+
 describe('useYieldCurveMarketRates', () => {
-    afterEach(() => {
-        jest.restoreAllMocks();
+    beforeEach(() => {
+        jest.clearAllMocks();
+    });
+
+    it('should return empty index set for no itayose market', async () => {
+        jest.spyOn(mock, 'getOrderBookDetails').mockResolvedValueOnce([
+            ...noItayoseMarkets,
+        ]);
+        const { result, waitForNextUpdate } = renderHook(() =>
+            useYieldCurveMarketRates()
+        );
+
+        await waitForNextUpdate();
+        expect(result.current.rates).toHaveLength(8);
+        expect(result.current.maturityList).toHaveLength(8);
+        expect(result.current.itayoseMarketIndexSet).toEqual(new Set());
     });
 
     it('should return correct itayose index for default mocks', async () => {
@@ -56,23 +91,8 @@ describe('useYieldCurveMarketRates', () => {
         expect(result.current.itayoseMarketIndexSet).toEqual(new Set([7]));
     });
 
-    it.skip('should return empty index set for no itayose market', async () => {
-        mock.getOrderBookDetails.mockImplementation(async () => [
-            ...noItayoseMarkets,
-        ]);
-
-        const { result, waitForNextUpdate } = renderHook(() =>
-            useYieldCurveMarketRates()
-        );
-
-        await waitForNextUpdate();
-        expect(result.current.rates).toHaveLength(8);
-        expect(result.current.maturityList).toHaveLength(8);
-        expect(result.current.itayoseMarketIndexSet).toEqual(new Set());
-    });
-
     it('should return correct index set for more than one itayose markets', async () => {
-        mock.getOrderBookDetails.mockImplementation(async () => [
+        jest.spyOn(mock, 'getOrderBookDetails').mockResolvedValueOnce([
             ...twoItayoseMarkets,
         ]);
         const { result, waitForNextUpdate } = renderHook(() =>
@@ -95,14 +115,16 @@ describe('useYieldCurveMarketRates', () => {
         expect(result.current.itayoseMarketIndexSet).toEqual(new Set());
     });
 
-    it('should not return closed markets', async () => {
-        jest.spyOn(mock, 'getOrderBookDetails').mockResolvedValue([]);
+    it('should not return matured or markets not in pre-open or itayose mode', async () => {
+        jest.spyOn(mock, 'getOrderBookDetails').mockResolvedValue([
+            ...closedMarkets,
+        ]);
         const { result, waitForNextUpdate } = renderHook(() =>
             useYieldCurveMarketRates()
         );
         await waitForNextUpdate();
-        expect(result.current.rates).toHaveLength(0);
-        expect(result.current.maturityList).toHaveLength(0);
-        expect(result.current.itayoseMarketIndexSet).toEqual(new Set());
+        expect(result.current.rates).toHaveLength(8);
+        expect(result.current.maturityList).toHaveLength(8);
+        expect(result.current.itayoseMarketIndexSet).toEqual(new Set([7]));
     });
 });

@@ -22,8 +22,8 @@ const Template: StoryFn<typeof MarketLoanWidget> = args => (
     <MarketLoanWidget {...args} />
 );
 
-export const NoOpenMarket = Template.bind({});
-NoOpenMarket.args = {
+export const GlobalItayose = Template.bind({});
+GlobalItayose.args = {
     isGlobalItayose: true,
 };
 

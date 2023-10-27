@@ -73,7 +73,7 @@ jest.mock('src/hooks/useSecuredFinance', () => () => mock);
 beforeEach(() => mock.getOrderBookDetails.mockClear());
 
 describe('useIsGlobalItayose', () => {
-    it('should return true if there are no open market', async () => {
+    it('should return true if there are no open market and at least 1 itayose market exists', async () => {
         jest.spyOn(mock, 'getOrderBookDetails').mockResolvedValueOnce([
             ...noOpenMarkets,
         ]);
