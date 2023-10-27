@@ -61,6 +61,8 @@ export const LineChartTab = ({
                         dispatch(setMaturity(maturity));
                         if (isPreOrderPeriod) {
                             router.push('/itayose');
+                        } else {
+                            router.push('/advanced');
                         }
                     }}
                     maturity={new Maturity(maturity)}
