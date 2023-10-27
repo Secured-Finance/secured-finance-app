@@ -12,7 +12,7 @@ import {
 } from 'chart.js';
 import { TooltipModel } from 'chart.js/auto';
 import classNames from 'classnames';
-import { useCallback, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Line } from 'react-chartjs-2';
 import { CurrencyIcon } from 'src/components/atoms';
 import {
@@ -184,6 +184,13 @@ export const MultiCurveChart = ({
     const [activeCurrencies, setActiveCurrencies] = useState<
         Set<CurrencySymbol>
     >(new Set(Object.keys(curves) as CurrencySymbol[]));
+
+    useEffect(() => {
+        Object.keys(curves).forEach(ccy => {
+            activeCurrencies.add(ccy as CurrencySymbol);
+        });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [JSON.stringify(curves)]);
 
     const handleCurrencyClick = (ccy: CurrencySymbol) => {
         if (activeCurrencies.has(ccy)) {
