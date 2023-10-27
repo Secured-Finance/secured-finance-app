@@ -1,11 +1,12 @@
 import Router from 'next/router';
 import { useEffect, useState } from 'react';
 import { Landing } from 'src/components/pages';
-import { useIsMarketTerminated } from 'src/hooks';
+import { useIsGlobalItayose, useIsMarketTerminated } from 'src/hooks';
 
 function EntryPoint() {
     const [isMounted, setIsMounted] = useState(false);
     const { data: isTerminated } = useIsMarketTerminated();
+    const isGlobalItayose = useIsGlobalItayose();
 
     useEffect(() => {
         setIsMounted(true);
@@ -17,6 +18,11 @@ function EntryPoint() {
 
     if (isTerminated) {
         Router.push('/emergency');
+        return null;
+    }
+
+    if (isGlobalItayose) {
+        Router.push('/global-itayose');
         return null;
     }
 

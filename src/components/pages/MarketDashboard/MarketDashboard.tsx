@@ -8,6 +8,7 @@ import {
 } from 'src/components/atoms';
 import { DelistedCurrencyDisclaimer, StatsBar } from 'src/components/molecules';
 import {
+    GlobalItayoseMultiCurveChart,
     MarketLoanWidget,
     MultiCurveChart,
     MyWalletWidget,
@@ -21,6 +22,7 @@ import {
     useCollateralBook,
     useCurrencyDelistedStatus,
     useGraphClientHook,
+    useIsGlobalItayose,
     useLendingMarkets,
     useLoanValues,
     useTotalNumberOfAsset,
@@ -62,6 +64,8 @@ export const MarketDashboard = () => {
     const { data: lendingContracts = baseContracts } = useLendingMarkets();
 
     const { data: delistedCurrencySet } = useCurrencyDelistedStatus();
+
+    const isGlobalItayose = useIsGlobalItayose();
 
     getCurrencyMapAsList().forEach(ccy => {
         // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -153,19 +157,22 @@ export const MarketDashboard = () => {
                             },
                         ]}
                     />
-                    <div className='w-full'>
-                        <MultiCurveChart
-                            title='Yield Curve'
-                            curves={curves}
-                            labels={Object.values(
-                                lendingContracts[CurrencySymbol.WFIL]
-                            )
-                                .filter(o => o.isReady && !o.isMatured)
-                                .map(o => o.name)}
-                        />
-                    </div>
-
-                    <MarketLoanWidget />
+                    {!isGlobalItayose ? (
+                        <div className='w-full'>
+                            <MultiCurveChart
+                                title='Yield Curve'
+                                curves={curves}
+                                labels={Object.values(
+                                    lendingContracts[CurrencySymbol.WFIL]
+                                )
+                                    .filter(o => o.isReady && !o.isMatured)
+                                    .map(o => o.name)}
+                            />
+                        </div>
+                    ) : (
+                        <GlobalItayoseMultiCurveChart />
+                    )}
+                    <MarketLoanWidget isGlobalItayose={isGlobalItayose} />
                 </div>
                 <section className='flex flex-col gap-5'>
                     {isConnected && (

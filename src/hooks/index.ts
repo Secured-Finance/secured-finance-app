@@ -13,6 +13,7 @@ export * from './useLoanValues';
 export * from './useMarketLists';
 export * from './useMarketOrderList';
 export * from './useMaturityOptions';
+export * from './useIsGlobalItayose';
 export * from './useOrderEstimation';
 export * from './useOrderFee';
 export * from './useOrderList';

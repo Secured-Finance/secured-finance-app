@@ -2,10 +2,16 @@ import { Tab as HeadlessTab } from '@headlessui/react';
 import { Children, useState } from 'react';
 import { NavTab } from 'src/components/atoms';
 
-type TabData = {
+export type TabHighlight = {
+    text: string;
+    size: 'small' | 'large';
+    visible: boolean;
+};
+
+export type TabData = {
     text: string;
     disabled?: boolean;
-    highlight?: { text: string; size: 'small' | 'large'; visible: boolean };
+    highlight?: TabHighlight;
     util?: React.ReactNode;
 };
 
@@ -27,7 +33,7 @@ export const Tab: React.FC<TabProps> = ({ tabDataArray, children }) => {
             >
                 <div className='grid w-full grid-cols-1  border-b border-white-10 tablet:grid-cols-2'>
                     <HeadlessTab.List className='col-span-1 flex h-[60px] w-full'>
-                        {tabDataArray.map(tabData => {
+                        {tabDataArray.map((tabData, index) => {
                             return (
                                 <HeadlessTab
                                     key={tabData.text}
@@ -35,13 +41,11 @@ export const Tab: React.FC<TabProps> = ({ tabDataArray, children }) => {
                                     disabled={tabData.disabled}
                                     data-testid={tabData.text}
                                 >
-                                    {({ selected }) => (
-                                        <NavTab
-                                            text={tabData.text}
-                                            active={selected}
-                                            highlight={tabData.highlight}
-                                        ></NavTab>
-                                    )}
+                                    <NavTab
+                                        text={tabData.text}
+                                        active={selectedIndex === index}
+                                        highlight={tabData.highlight}
+                                    ></NavTab>
                                 </HeadlessTab>
                             );
                         })}
