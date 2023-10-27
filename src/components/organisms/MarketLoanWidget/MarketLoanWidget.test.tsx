@@ -4,7 +4,7 @@ import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
 import * as stories from './MarketLoanWidget.stories';
 
-const { Default, NoOpenMarket } = composeStories(stories);
+const { Default, GlobalItayose } = composeStories(stories);
 
 const mock = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mock);
@@ -116,7 +116,7 @@ describe('MarketLoanWidget Component', () => {
     });
 
     it('should not display Loans tab when there is no open market', () => {
-        render(<NoOpenMarket />);
+        render(<GlobalItayose />);
         expect(screen.queryByText('Loans')).not.toBeInTheDocument();
     });
 });
