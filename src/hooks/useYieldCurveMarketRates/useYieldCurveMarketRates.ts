@@ -26,22 +26,25 @@ export const useYieldCurveMarketRates = () => {
         .sort((a, b) => a.maturity - b.maturity);
 
     sortedLendingContracts.forEach(obj => {
-        maturityList.push({
-            label: obj.name,
-            maturity: obj.maturity,
-            isPreOrderPeriod: obj.isPreOrderPeriod || obj.isItayosePeriod,
-        });
-        if (obj.isItayosePeriod || obj.isPreOrderPeriod) {
-            rates.push(
-                LoanValue.fromPrice(obj.openingUnitPrice, obj.maturity).apr
-            );
-            itayoseMarketIndexSet.add(currentIndex);
-        } else {
-            rates.push(
-                LoanValue.fromPrice(obj.marketUnitPrice, obj.maturity).apr
-            );
+        if (obj.isItayosePeriod || obj.isPreOrderPeriod || obj.isOpened) {
+            maturityList.push({
+                label: obj.name,
+                maturity: obj.maturity,
+                isPreOrderPeriod: obj.isPreOrderPeriod || obj.isItayosePeriod,
+            });
+
+            if (obj.isItayosePeriod || obj.isPreOrderPeriod) {
+                rates.push(
+                    LoanValue.fromPrice(obj.openingUnitPrice, obj.maturity).apr
+                );
+                itayoseMarketIndexSet.add(currentIndex);
+            } else {
+                rates.push(
+                    LoanValue.fromPrice(obj.marketUnitPrice, obj.maturity).apr
+                );
+            }
+            currentIndex += 1;
         }
-        currentIndex += 1;
     });
 
     if (

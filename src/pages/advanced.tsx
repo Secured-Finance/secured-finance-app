@@ -1,12 +1,18 @@
 import Router from 'next/router';
 import { Landing } from 'src/components/pages';
-import { useIsMarketTerminated } from 'src/hooks';
+import { useIsGlobalItayose, useIsMarketTerminated } from 'src/hooks';
 
 const Advanced = () => {
     const { data: isTerminated } = useIsMarketTerminated();
 
+    const isGlobalItayose = useIsGlobalItayose();
+
     if (isTerminated) {
         Router.push('/emergency');
+        return null;
+    }
+    if (isGlobalItayose) {
+        Router.push('/global-itayose');
         return null;
     }
 

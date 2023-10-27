@@ -25,7 +25,8 @@ export const getData = (
     rates: Rate[],
     label: string,
     labels: string[],
-    itayoseMarketIndex: Set<number>
+    itayoseMarketIndex: Set<number>,
+    itayoseBorderColor: string
 ): ChartData<'line'> => {
     return {
         labels: labels,
@@ -36,7 +37,7 @@ export const getData = (
                 segment: {
                     borderColor: ctx =>
                         itayoseMarketIndex.has(ctx.p1.parsed.x)
-                            ? '#B9BDEA' // planetaryPurple
+                            ? itayoseBorderColor
                             : getCurveGradient(
                                   ctx as unknown as ScriptableContext<'line'>
                               ),
@@ -101,9 +102,8 @@ export const crossHairMultiPlugin = {
             ctx.beginPath();
             ctx.moveTo(x, topY);
             ctx.lineTo(x, bottomY);
-            ctx.lineWidth = 1;
-            ctx.setLineDash([8, 8]);
-            ctx.strokeStyle = '#B9BDEA';
+            ctx.lineWidth = 2;
+            ctx.strokeStyle = '#4A5061';
             ctx.stroke();
             ctx.restore();
         }

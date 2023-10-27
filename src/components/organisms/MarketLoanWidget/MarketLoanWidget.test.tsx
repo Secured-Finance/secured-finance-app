@@ -4,7 +4,7 @@ import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
 import * as stories from './MarketLoanWidget.stories';
 
-const { Default } = composeStories(stories);
+const { Default, GlobalItayose } = composeStories(stories);
 
 const mock = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mock);
@@ -113,5 +113,10 @@ describe('MarketLoanWidget Component', () => {
         const button = screen.getByTestId('Pre-Open');
         expect(screen.queryByText('NEW')).not.toBeInTheDocument();
         await waitFor(() => expect(button).toBeDisabled());
+    });
+
+    it('should not display Loans tab when there is no open market', () => {
+        render(<GlobalItayose />);
+        expect(screen.queryByText('Loans')).not.toBeInTheDocument();
     });
 });

@@ -12,7 +12,7 @@ import {
 } from 'chart.js';
 import { TooltipModel } from 'chart.js/auto';
 import classNames from 'classnames';
-import { useCallback, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Line } from 'react-chartjs-2';
 import { CurrencyIcon } from 'src/components/atoms';
 import {
@@ -111,7 +111,8 @@ export const options: ChartOptions<'line'> = {
 const getData = (
     curves: Record<CurrencySymbol, Rate[]>,
     currencies: Set<CurrencySymbol>,
-    labels: string[]
+    labels: string[],
+    isGlobalItayose?: boolean
 ) => {
     return {
         labels: labels,
@@ -129,6 +130,7 @@ const getData = (
                 borderColor: currencyMap[ccy].chartColor,
                 backgroundColor: currencyMap[ccy].chartColor,
                 ...defaultDatasets,
+                borderDash: isGlobalItayose ? [8, 5] : undefined,
             };
         }),
     };
@@ -167,10 +169,12 @@ export const MultiCurveChart = ({
     title,
     curves,
     labels,
+    isGlobalItayose = false,
 }: {
     title: string;
     curves: Record<CurrencySymbol, Rate[]>;
     labels: string[];
+    isGlobalItayose?: boolean;
 }) => {
     const chartRef = useRef<ChartJS<'line'>>(null);
     const [tooltipVisible, setTooltipVisible] = useState(false);
@@ -180,6 +184,13 @@ export const MultiCurveChart = ({
     const [activeCurrencies, setActiveCurrencies] = useState<
         Set<CurrencySymbol>
     >(new Set(Object.keys(curves) as CurrencySymbol[]));
+
+    useEffect(() => {
+        Object.keys(curves).forEach(ccy => {
+            activeCurrencies.add(ccy as CurrencySymbol);
+        });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [JSON.stringify(curves)]);
 
     const handleCurrencyClick = (ccy: CurrencySymbol) => {
         if (activeCurrencies.has(ccy)) {
@@ -287,7 +298,12 @@ export const MultiCurveChart = ({
             <div className='relative pb-7 pl-6 pr-5'>
                 <Line
                     className='h-[354px] rounded-b-xl bg-black-20'
-                    data={getData(curves, activeCurrencies, labels)}
+                    data={getData(
+                        curves,
+                        activeCurrencies,
+                        labels,
+                        isGlobalItayose
+                    )}
                     options={dataOptions}
                     ref={chartRef}
                     onClick={() => {}}

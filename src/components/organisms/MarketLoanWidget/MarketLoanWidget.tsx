@@ -2,10 +2,15 @@ import { formatDate, getUTCMonthYear } from '@secured-finance/sf-core';
 import { fromBytes32 } from '@secured-finance/sf-graph-client';
 import { CellContext, createColumnHelper } from '@tanstack/react-table';
 import { useRouter } from 'next/router';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button, DropdownSelector } from 'src/components/atoms';
-import { CoreTable, Tab } from 'src/components/molecules';
+import { Button, DropdownSelector, Timer } from 'src/components/atoms';
+import {
+    CoreTable,
+    Tab,
+    TabData,
+    TabHighlight,
+} from 'src/components/molecules';
 import {
     Market,
     useCurrencyDelistedStatus,
@@ -23,7 +28,6 @@ import {
     CurrencySymbol,
     amountFormatterFromBase,
     amountFormatterToBase,
-    countdown,
     formatLoanValue,
     getCurrencyMapAsOptions,
     toCurrencySymbol,
@@ -36,7 +40,11 @@ import {
 
 const columnHelper = createColumnHelper<Market>();
 
-export const MarketLoanWidget = () => {
+export const MarketLoanWidget = ({
+    isGlobalItayose,
+}: {
+    isGlobalItayose: boolean;
+}) => {
     const { currency, amount } = useSelector((state: RootState) =>
         selectLandingOrderForm(state.landingOrderForm)
     );
@@ -148,7 +156,14 @@ export const MarketLoanWidget = () => {
             columnHelper.accessor('utcOpeningDate', {
                 id: 'openingDate',
                 cell: info => {
-                    return <Timer targetTime={info.getValue() * 1000} />;
+                    return (
+                        <div className='flex w-48 justify-center font-secondary text-xs leading-[14px] text-nebulaTeal'>
+                            <Timer
+                                targetTime={info.getValue() * 1000}
+                                text='Ends in'
+                            />
+                        </div>
+                    );
                 },
                 enableHiding: true,
                 header: tableHeaderDefinition('Market Opens'),
@@ -172,11 +187,7 @@ export const MarketLoanWidget = () => {
         [handleClick]
     );
 
-    const itayoseHighlight: {
-        text: string;
-        size: 'small' | 'large';
-        visible: boolean;
-    } = {
+    const itayoseHighlight: TabHighlight = {
         text: 'NEW',
         size: 'small',
         visible: filteredItayoseMarkets.length !== 0,
@@ -206,8 +217,7 @@ export const MarketLoanWidget = () => {
         </div>
     );
 
-    const tabDataArray = [
-        { text: 'Loans', util: openMarketUtil },
+    const tabDataArray: TabData[] = [
         {
             text: 'Pre-Open',
             highlight: itayoseHighlight,
@@ -216,19 +226,26 @@ export const MarketLoanWidget = () => {
         },
     ];
 
+    if (!isGlobalItayose) {
+        tabDataArray.unshift({ text: 'Loans', util: openMarketUtil });
+    }
+
     return (
         <div className='h-fit rounded-b-2xl border border-white-10 shadow-tab'>
             <Tab tabDataArray={tabDataArray}>
-                <div className='min-h-[300px] rounded-b-2xl bg-black-20 px-7 pb-3'>
-                    <CoreTable
-                        columns={columns}
-                        data={getFilteredMarkets(openMarkets)}
-                        options={{
-                            hideColumnIds: ['openingDate'],
-                            stickyColumns: new Set([3]),
-                        }}
-                    />
-                </div>
+                {!isGlobalItayose && (
+                    <div className='min-h-[300px] rounded-b-2xl bg-black-20 px-7 pb-3'>
+                        <CoreTable
+                            columns={columns}
+                            data={getFilteredMarkets(openMarkets)}
+                            options={{
+                                hideColumnIds: ['openingDate'],
+                                stickyColumns: new Set([3]),
+                            }}
+                        />
+                    </div>
+                )}
+
                 <div className='min-h-[300px] rounded-b-2xl bg-black-20 px-7 pb-3'>
                     <CoreTable
                         columns={columns}
@@ -288,25 +305,5 @@ const AssetDropdown = ({
             ]}
             onChange={v => handleSelectedCurrency(toCurrencySymbol(v))}
         />
-    );
-};
-
-const Timer = ({ targetTime }: { targetTime: number }) => {
-    const [time, setTime] = useState<string>(countdown(targetTime));
-
-    useEffect(() => {
-        const interval = setInterval(() => {
-            setTime(countdown(targetTime));
-        }, 1000);
-
-        return () => {
-            clearInterval(interval);
-        };
-    }, [targetTime]);
-
-    return (
-        <div className='flex justify-center'>
-            <span className='w-48 font-secondary text-xs leading-[14px] text-nebulaTeal'>{`Starts in ${time}`}</span>
-        </div>
     );
 };
