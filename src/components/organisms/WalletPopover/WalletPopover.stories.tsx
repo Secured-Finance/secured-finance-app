@@ -1,7 +1,9 @@
 import type { Meta, StoryFn } from '@storybook/react';
 import { within } from '@storybook/testing-library';
-
-import { withWalletProvider } from 'src/../.storybook/decorators';
+import {
+    withChainErrorDisabled,
+    withWalletProvider,
+} from 'src/../.storybook/decorators';
 import { WalletPopover } from './WalletPopover';
 
 export default {
@@ -26,9 +28,17 @@ const Template: StoryFn<typeof WalletPopover> = args => (
 );
 
 export const Default = Template.bind({});
+export const WithChainError = Template.bind({});
+WithChainError.play = ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const walletButton = canvas.getByRole('button');
+    walletButton.click();
+};
+
 export const Expanded = Template.bind({});
 Expanded.play = ({ canvasElement }) => {
     const canvas = within(canvasElement);
     const walletButton = canvas.getByRole('button');
     walletButton.click();
 };
+Expanded.decorators = [withWalletProvider, withChainErrorDisabled];
