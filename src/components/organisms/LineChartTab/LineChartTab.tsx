@@ -14,10 +14,12 @@ export const LineChartTab = ({
     rates,
     maturityList,
     itayoseMarketIndexSet,
+    followLinks = true,
 }: {
     rates: Rate[];
     maturityList: MaturityListItem[];
     itayoseMarketIndexSet: Set<number>;
+    followLinks?: boolean;
 }) => {
     const dispatch = useDispatch();
     const router = useRouter();
@@ -59,9 +61,10 @@ export const LineChartTab = ({
                         const { maturity, isPreOrderPeriod } =
                             maturityList[maturityIndex];
                         dispatch(setMaturity(maturity));
+
                         if (isPreOrderPeriod) {
                             router.push('/itayose');
-                        } else {
+                        } else if (followLinks) {
                             router.push('/advanced');
                         }
                     }}
