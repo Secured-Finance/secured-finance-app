@@ -5,7 +5,7 @@ import {
 } from 'src/stories/mocks/fixtures';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { renderHook } from 'src/test-utils';
-import { Maturity } from 'src/utils/entities';
+import { LoanValue, Maturity } from 'src/utils/entities';
 import { useYieldCurveMarketRates } from './useYieldCurveMarketRates';
 
 const mock = mockUseSF();
@@ -126,5 +126,28 @@ describe('useYieldCurveMarketRates', () => {
         expect(result.current.rates).toHaveLength(8);
         expect(result.current.maturityList).toHaveLength(8);
         expect(result.current.itayoseMarketIndexSet).toEqual(new Set([7]));
+    });
+
+    it('should return ZC rates for open markets and FWD rates for pre-open markets', async () => {
+        jest.spyOn(mock, 'getOrderBookDetails').mockResolvedValue([
+            ...twoItayoseMarkets,
+        ]);
+        const { result, waitForNextUpdate } = renderHook(() =>
+            useYieldCurveMarketRates()
+        );
+        await waitForNextUpdate();
+        expect(result.current.rates).toHaveLength(9);
+        expect(result.current.maturityList).toHaveLength(9);
+        expect(result.current.itayoseMarketIndexSet).toEqual(new Set([7, 8]));
+
+        const fwdRate = LoanValue.fromPrice(
+            preOrderMarket.openingUnitPrice.toNumber(),
+            preOrderMarket.maturity.toNumber(),
+            preOrderMarket.openingDate.toNumber()
+        ).apr;
+        expect(result.current.rates[7].toNormalizedNumber()).toEqual(1.9758);
+        expect(result.current.rates[8].toNormalizedNumber()).toEqual(
+            fwdRate.toNormalizedNumber()
+        );
     });
 });
