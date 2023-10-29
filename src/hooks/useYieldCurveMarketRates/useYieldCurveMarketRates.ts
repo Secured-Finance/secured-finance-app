@@ -35,7 +35,11 @@ export const useYieldCurveMarketRates = () => {
 
             if (obj.isItayosePeriod || obj.isPreOrderPeriod) {
                 rates.push(
-                    LoanValue.fromPrice(obj.openingUnitPrice, obj.maturity).apr
+                    LoanValue.fromPrice(
+                        obj.openingUnitPrice,
+                        obj.maturity,
+                        obj.utcOpeningDate
+                    ).apr
                 );
                 itayoseMarketIndexSet.add(currentIndex);
             } else {
