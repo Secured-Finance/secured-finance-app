@@ -419,7 +419,7 @@ export const OrderBookWidget = ({
                     </div>
                 </div>
             </div>
-            <div className='h-full'>
+            <div className='h-[800px] tablet:h-full'>
                 {orderbook.isLoading ? (
                     <div className='flex h-full w-full items-center justify-center'>
                         <Spinner />

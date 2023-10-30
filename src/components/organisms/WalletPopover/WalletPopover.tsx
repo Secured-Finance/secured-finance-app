@@ -3,9 +3,12 @@ import { Popover, Transition } from '@headlessui/react';
 import { ArrowLeftOnRectangleIcon } from '@heroicons/react/24/outline';
 import classNames from 'classnames';
 import { Fragment, useCallback } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import AlertTriangle from 'src/assets/icons/alert-triangle.svg';
 import MetamaskLogo from 'src/assets/img/metamask-fox.svg';
 import { ExpandIndicator, Separator } from 'src/components/atoms';
+import { Tooltip } from 'src/components/templates';
+import { RootState } from 'src/store/types';
 import { resetEthWallet } from 'src/store/wallet';
 import { formatDataCy, removeWalletFromStore } from 'src/utils';
 import { useAccount, useDisconnect } from 'wagmi';
@@ -72,6 +75,9 @@ export const WalletPopover = ({
     const { disconnect, reset } = useDisconnect();
     const { isConnected } = useAccount();
     const dispatch = useDispatch();
+    const chainError = useSelector(
+        (state: RootState) => state.blockchain.chainError
+    );
 
     const handleSignOutClick = useCallback(() => {
         if (!isConnected) return;
@@ -125,7 +131,19 @@ export const WalletPopover = ({
                                     label='Network'
                                     text={networkName}
                                     icon={
-                                        <div className='h-2 w-2 rounded-full bg-green' />
+                                        chainError ? (
+                                            <Tooltip
+                                                align='right'
+                                                iconElement={
+                                                    <AlertTriangle data-testid='network-alert-triangle' />
+                                                }
+                                            >
+                                                Currently only Sepolia is
+                                                supported.
+                                            </Tooltip>
+                                        ) : (
+                                            <div className='h-2 w-2 rounded-full bg-green' />
+                                        )
                                     }
                                 />
                                 <Separator />

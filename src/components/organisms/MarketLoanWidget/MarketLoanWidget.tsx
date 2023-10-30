@@ -2,10 +2,15 @@ import { formatDate, getUTCMonthYear } from '@secured-finance/sf-core';
 import { fromBytes32 } from '@secured-finance/sf-graph-client';
 import { CellContext, createColumnHelper } from '@tanstack/react-table';
 import { useRouter } from 'next/router';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button, DropdownSelector } from 'src/components/atoms';
-import { CoreTable, Tab } from 'src/components/molecules';
+import { Button, DropdownSelector, Timer } from 'src/components/atoms';
+import {
+    CoreTable,
+    Tab,
+    TabData,
+    TabHighlight,
+} from 'src/components/molecules';
 import {
     Market,
     useCurrencyDelistedStatus,
@@ -14,19 +19,18 @@ import {
 } from 'src/hooks';
 import {
     selectLandingOrderForm,
+    setAmount,
     setCurrency,
     setMaturity,
-    setAmount,
 } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
 import {
     CurrencySymbol,
+    amountFormatterFromBase,
+    amountFormatterToBase,
     formatLoanValue,
     getCurrencyMapAsOptions,
     toCurrencySymbol,
-    amountFormatterFromBase,
-    amountFormatterToBase,
-    countdown,
 } from 'src/utils';
 import { LoanValue } from 'src/utils/entities';
 import {
@@ -36,7 +40,11 @@ import {
 
 const columnHelper = createColumnHelper<Market>();
 
-export const MarketLoanWidget = () => {
+export const MarketLoanWidget = ({
+    isGlobalItayose,
+}: {
+    isGlobalItayose: boolean;
+}) => {
     const { currency, amount } = useSelector((state: RootState) =>
         selectLandingOrderForm(state.landingOrderForm)
     );
@@ -104,29 +112,33 @@ export const MarketLoanWidget = () => {
                 columnHelper,
                 'Asset',
                 'contract',
-                'currencyOnly'
+                'currencyOnly',
+                undefined,
+                'left',
+                'left',
+                ''
             ),
             columnHelper.accessor('maturity', {
                 id: 'maturity',
                 cell: info => {
                     return (
-                        <div className=' grid w-full whitespace-nowrap px-1'>
+                        <div className='flex flex-col justify-center text-left'>
                             <div className='typography-caption text-neutral-8'>
                                 {getUTCMonthYear(info.getValue())}
                             </div>
-                            <div className='typography-caption-2 text-slateGray'>
+                            <div className='typography-caption text-slateGray'>
                                 {formatDate(info.getValue())}
                             </div>
                         </div>
                     );
                 },
-                header: tableHeaderDefinition('Maturity'),
+                header: tableHeaderDefinition('Maturity', '', 'left'),
             }),
             columnHelper.accessor('marketUnitPrice', {
                 id: 'apr',
                 cell: info => {
                     return (
-                        <div className='typography-body-2 flex justify-center px-1'>
+                        <div className='typography-caption flex justify-center text-neutral-8'>
                             {info.getValue() && info.row.original.maturity
                                 ? formatLoanValue(
                                       LoanValue.fromPrice(
@@ -144,35 +156,38 @@ export const MarketLoanWidget = () => {
             columnHelper.accessor('utcOpeningDate', {
                 id: 'openingDate',
                 cell: info => {
-                    return <Timer targetTime={info.getValue() * 1000} />;
+                    return (
+                        <div className='flex w-48 justify-center font-secondary text-xs leading-[14px] text-nebulaTeal'>
+                            <Timer
+                                targetTime={info.getValue() * 1000}
+                                text='Ends in'
+                            />
+                        </div>
+                    );
                 },
                 enableHiding: true,
-                header: tableHeaderDefinition('Market Open'),
+                header: tableHeaderDefinition('Market Opens'),
             }),
             columnHelper.accessor('currency', {
                 id: 'action',
                 cell: info => {
                     return (
-                        <div className='flex justify-center px-1'>
+                        <div className='flex justify-end px-1'>
                             <Button onClick={() => handleClick(info)} size='sm'>
                                 {info.row.original.isOpened
                                     ? 'Open Order'
-                                    : 'Pre-Open Order'}
+                                    : 'GO'}
                             </Button>
                         </div>
                     );
                 },
-                header: tableHeaderDefinition('Action'),
+                header: tableHeaderDefinition('Actions', '', 'right'),
             }),
         ],
         [handleClick]
     );
 
-    const itayoseHighlight: {
-        text: string;
-        size: 'small' | 'large';
-        visible: boolean;
-    } = {
+    const itayoseHighlight: TabHighlight = {
         text: 'NEW',
         size: 'small',
         visible: filteredItayoseMarkets.length !== 0,
@@ -202,8 +217,7 @@ export const MarketLoanWidget = () => {
         </div>
     );
 
-    const tabDataArray = [
-        { text: 'Loans', util: openMarketUtil },
+    const tabDataArray: TabData[] = [
         {
             text: 'Pre-Open',
             highlight: itayoseHighlight,
@@ -212,26 +226,31 @@ export const MarketLoanWidget = () => {
         },
     ];
 
+    if (!isGlobalItayose) {
+        tabDataArray.unshift({ text: 'Loans', util: openMarketUtil });
+    }
+
     return (
         <div className='h-fit rounded-b-2xl border border-white-10 shadow-tab'>
             <Tab tabDataArray={tabDataArray}>
-                <div className='p-6 pt-3'>
-                    <CoreTable
-                        columns={columns}
-                        data={getFilteredMarkets(openMarkets)}
-                        options={{
-                            border: false,
-                            hideColumnIds: ['openingDate'],
-                            stickyColumns: new Set([3]),
-                        }}
-                    />
-                </div>
-                <div className='p-6 pt-3'>
+                {!isGlobalItayose && (
+                    <div className='min-h-[300px] rounded-b-2xl bg-black-20 px-7 pb-3'>
+                        <CoreTable
+                            columns={columns}
+                            data={getFilteredMarkets(openMarkets)}
+                            options={{
+                                hideColumnIds: ['openingDate'],
+                                stickyColumns: new Set([3]),
+                            }}
+                        />
+                    </div>
+                )}
+
+                <div className='min-h-[300px] rounded-b-2xl bg-black-20 px-7 pb-3'>
                     <CoreTable
                         columns={columns}
                         data={getFilteredMarkets(filteredItayoseMarkets)}
                         options={{
-                            border: false,
                             hideColumnIds: ['apr'],
                             stickyColumns: new Set([3]),
                         }}
@@ -287,20 +306,4 @@ const AssetDropdown = ({
             onChange={v => handleSelectedCurrency(toCurrencySymbol(v))}
         />
     );
-};
-
-const Timer = ({ targetTime }: { targetTime: number }) => {
-    const [time, setTime] = useState<string>(countdown(targetTime));
-
-    useEffect(() => {
-        const interval = setInterval(() => {
-            setTime(countdown(targetTime));
-        }, 1000);
-
-        return () => {
-            clearInterval(interval);
-        };
-    }, [targetTime]);
-
-    return <div>{`starts in ${time}`}</div>;
 };

@@ -46,6 +46,17 @@ describe('Header component', () => {
         );
     });
 
+    it('should highlight the landing page when on global-itayose', () => {
+        (useRouter as jest.Mock).mockReturnValue({
+            pathname: '/global-itayose',
+        });
+        render(<Primary />);
+        const textElement = screen.getByText('OTC Lending');
+        expect(textElement.parentNode).toHaveClass(
+            'bg-gradient-to-b from-tabGradient2 to-tabGradient1'
+        );
+    });
+
     it('should highlight the dashboard page when on dashboard page', () => {
         (useRouter as jest.Mock).mockImplementation(() => ({
             pathname: '/dashboard',

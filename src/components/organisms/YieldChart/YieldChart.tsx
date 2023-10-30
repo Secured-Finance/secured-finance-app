@@ -41,6 +41,7 @@ export const YieldChart = ({
                             rates={rates}
                             maturityList={maturityList}
                             itayoseMarketIndexSet={itayoseMarketIndexSet}
+                            followLinks={false}
                         />
                     </div>
                 </div>

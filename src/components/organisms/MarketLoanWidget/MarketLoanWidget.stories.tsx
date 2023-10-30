@@ -7,6 +7,9 @@ import { MarketLoanWidget } from './MarketLoanWidget';
 export default {
     title: 'Organism/MarketLoanWidget',
     component: MarketLoanWidget,
+    args: {
+        isGlobalItayose: false,
+    },
     parameters: {
         ...RESPONSIVE_PARAMETERS,
         chromatic: {
@@ -15,7 +18,14 @@ export default {
     },
 } as Meta<typeof MarketLoanWidget>;
 
-const Template: StoryFn<typeof MarketLoanWidget> = () => <MarketLoanWidget />;
+const Template: StoryFn<typeof MarketLoanWidget> = args => (
+    <MarketLoanWidget {...args} />
+);
+
+export const GlobalItayose = Template.bind({});
+GlobalItayose.args = {
+    isGlobalItayose: true,
+};
 
 export const Default = Template.bind({});
 export const ItayoseMarket = Template.bind({});
