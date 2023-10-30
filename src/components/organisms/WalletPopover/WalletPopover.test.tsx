@@ -15,6 +15,25 @@ describe('WalletPopover component', () => {
         });
     });
 
+    it('should render an alert if current chain is not supported', async () => {
+        const preloadedState = {
+            blockchain: {
+                chainError: true,
+            },
+        };
+        render(<Default />, { preloadedState: preloadedState });
+        fireEvent.click(screen.getByRole('button'));
+        await waitFor(() => {
+            expect(screen.getByText('Sepolia')).toBeInTheDocument();
+        });
+        const alertIcon = screen.getByTestId('network-alert-triangle');
+        fireEvent.mouseEnter(alertIcon);
+        const tooltip = screen.getByRole('tooltip');
+        expect(tooltip).toHaveTextContent(
+            'Currently only Sepolia is supported.'
+        );
+    });
+
     it('should have a default cursor if there is no onclick action', async () => {
         render(<Default />);
         fireEvent.click(screen.getByRole('button'));

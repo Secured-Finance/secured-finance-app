@@ -31,10 +31,15 @@ describe('CoreTable Component', () => {
         });
     });
 
-    it('should have borders  for each row if border is true', () => {
+    it('should have borders for each row except the last if border is true', () => {
         render(<Default options={{ border: true }} />);
-        screen.getAllByTestId('core-table-row').forEach(row => {
-            expect(row).toHaveClass('border-b border-white-10');
+        const rows = screen.getAllByTestId('core-table-row');
+        rows.forEach((row, index) => {
+            if (index !== rows.length - 1) {
+                expect(row).toHaveClass('border-b border-white-10');
+            } else {
+                expect(row).not.toHaveClass('border-b border-white-10');
+            }
         });
     });
 

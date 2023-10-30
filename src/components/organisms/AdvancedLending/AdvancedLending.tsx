@@ -244,6 +244,7 @@ export const AdvancedLending = ({
                             rates={rates}
                             maturityList={maturityList}
                             itayoseMarketIndexSet={itayoseMarketIndexSet}
+                            followLinks={false}
                         />
                     </div>
                 </Tab>
