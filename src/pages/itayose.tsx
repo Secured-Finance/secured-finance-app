@@ -9,9 +9,17 @@ import {
 import { getCurrencyMapAsList } from 'src/utils';
 
 const Itayose = () => {
-    const { data: isTerminated } = useIsMarketTerminated();
+    const { data: isTerminated, isLoading: isLoadingMarketTerminated } =
+        useIsMarketTerminated();
 
-    const { data: lendingMarkets = baseContracts } = useLendingMarkets();
+    const {
+        data: lendingMarkets = baseContracts,
+        isLoading: isLoadingLendingMarkets,
+    } = useLendingMarkets();
+
+    if (isLoadingLendingMarkets || isLoadingMarketTerminated) {
+        return null;
+    }
 
     if (isTerminated) {
         Router.push('/emergency');

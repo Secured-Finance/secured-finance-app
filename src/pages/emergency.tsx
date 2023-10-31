@@ -3,10 +3,18 @@ import { EmergencyGlobalSettlement } from 'src/components/pages/';
 import { useIsMarketTerminated } from 'src/hooks';
 
 const Emergency = () => {
-    const { data: isTerminated } = useIsMarketTerminated();
-    if (!isTerminated) return <ErrorPage statusCode={404} />;
+    const { data: isTerminated, isLoading: isLoadingMarketTerminated } =
+        useIsMarketTerminated();
 
-    return <EmergencyGlobalSettlement />;
+    if (isLoadingMarketTerminated) {
+        return null;
+    }
+
+    if (isTerminated) {
+        return <EmergencyGlobalSettlement />;
+    }
+
+    return <ErrorPage statusCode={404} />;
 };
 
 export default Emergency;
