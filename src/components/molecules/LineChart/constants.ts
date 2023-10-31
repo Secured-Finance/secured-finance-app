@@ -46,6 +46,12 @@ export const getData = (
                             ? [5, 7]
                             : undefined,
                 },
+                pointBackgroundColor: ctx =>
+                    itayoseMarketIndex.has(ctx.dataIndex)
+                        ? itayoseBorderColor
+                        : getCurveGradient(
+                              ctx as unknown as ScriptableContext<'line'>
+                          ),
             },
         ],
     };
