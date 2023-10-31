@@ -186,9 +186,11 @@ export const MultiCurveChart = ({
     >(new Set(Object.keys(curves) as CurrencySymbol[]));
 
     useEffect(() => {
-        Object.keys(curves).forEach(ccy => {
-            activeCurrencies.add(ccy as CurrencySymbol);
-        });
+        if (activeCurrencies.size === 0) {
+            Object.keys(curves).forEach(ccy => {
+                activeCurrencies.add(ccy as CurrencySymbol);
+            });
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [JSON.stringify(curves)]);
 
@@ -331,11 +333,15 @@ const GraphTooltip = ({
     position: Position;
     visibility: boolean;
 }) => {
-    const currencySymbols = Object.keys(tooltipData) as CurrencySymbol[];
+    const tooltipDataArray = Object.entries(tooltipData);
 
-    if (currencySymbols.length === 0) {
+    if (tooltipDataArray.length === 0) {
         return null;
     }
+
+    const sortedData = tooltipDataArray.sort(([_a, aRate], [_b, bRate]) => {
+        return bRate.toNormalizedNumber() - aRate.toNormalizedNumber();
+    });
 
     return (
         <div
@@ -347,10 +353,8 @@ const GraphTooltip = ({
                 left: position?.left,
             }}
         >
-            {currencySymbols.map((currencySymbol, index) => {
-                const rate = tooltipData[currencySymbol]
-                    ?.toNormalizedNumber()
-                    .toFixed(2);
+            {sortedData.map(([currencySymbol, rate], index) => {
+                const formattedRate = rate.toNormalizedNumber().toFixed(2);
 
                 return (
                     <div
@@ -359,12 +363,12 @@ const GraphTooltip = ({
                     >
                         <div className='flex items-center gap-2'>
                             <CurrencyIcon
-                                ccy={currencySymbol}
+                                ccy={currencySymbol as CurrencySymbol}
                                 variant='small'
                             />
                             <span className='text-white'>{currencySymbol}</span>
                         </div>
-                        <span className='text-nebulaTeal'>{`${rate}%`}</span>
+                        <span className='text-nebulaTeal'>{`${formattedRate}%`}</span>
                     </div>
                 );
             })}
