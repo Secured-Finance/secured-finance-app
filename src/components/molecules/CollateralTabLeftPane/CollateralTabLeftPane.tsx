@@ -72,31 +72,32 @@ export const CollateralTabLeftPane = ({
     const nonCollateralQuantityExist = useMemo(() => {
         return checkAssetQuantityExist(collateralBook.nonCollateral);
     }, [collateralBook.nonCollateral]);
-    const collateralBalance = account ? collateralBook.usdCollateral : 0;
+    const vaultBalance = account
+        ? collateralBook.usdCollateral + collateralBook.usdNonCollateral
+        : 0;
 
     return (
         <div className='flex min-h-[400px] w-full flex-col border-white-10 tablet:w-64 tablet:border-r'>
             <div className='flex-grow tablet:border-b tablet:border-white-10'>
                 <div className='m-6 flex flex-col gap-1'>
                     <span className='typography-body-2 h-6 w-fit text-slateGray'>
-                        Collateral Balance
+                        SF Vault
                     </span>
                     <span
-                        data-testid='collateral-balance'
+                        data-testid='vault-balance'
                         className={classNames(
                             'w-fit font-secondary font-semibold text-white',
                             {
-                                'text-xl':
-                                    collateralBalance.toString().length <= 6,
+                                'text-xl': vaultBalance.toString().length <= 6,
                                 'text-xl tablet:text-md':
-                                    collateralBalance.toString().length > 6 &&
-                                    collateralBalance.toString().length <= 9,
+                                    vaultBalance.toString().length > 6 &&
+                                    vaultBalance.toString().length <= 9,
                                 'text-md tablet:text-smd':
-                                    collateralBalance.toString().length > 9,
+                                    vaultBalance.toString().length > 9,
                             }
                         )}
                     >
-                        {usdFormat(collateralBalance, 2)}
+                        {usdFormat(vaultBalance, 2)}
                     </span>
                 </div>
                 {!account ? (
@@ -213,7 +214,7 @@ export const CollateralTabLeftPane = ({
                 </Button>
                 <Button
                     size='sm'
-                    disabled={!account || collateralBalance <= 0}
+                    disabled={!account || vaultBalance <= 0}
                     onClick={() => onClick('withdraw')}
                     data-testid='withdraw-collateral'
                     fullWidth={true}
