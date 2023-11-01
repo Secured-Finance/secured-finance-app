@@ -412,19 +412,21 @@ const contractSortingFn = <
     return ccyA.localeCompare(ccyB);
 };
 
-export const priceYieldColumnDefinition = <T extends { maturity: string }>(
+export const priceYieldColumnDefinition = <
+    T extends { maturity: string; calculationDate?: number }
+>(
     columnHelper: ColumnHelper<T>,
     title: string,
     id: string,
     accessor: AccessorFn<T, BigNumber>,
     variant: 'compact' | 'default' = 'default',
     type: Parameters<typeof PriceYieldItem>[0]['firstLineType'] = 'price',
-    calculationDate?: number | undefined,
     titleHint?: string
 ) => {
     return columnHelper.accessor(accessor, {
         id: id,
         cell: info => {
+            const calculationDate = info.row.original.calculationDate;
             return (
                 <div className='flex justify-center'>
                     <PriceYieldItem

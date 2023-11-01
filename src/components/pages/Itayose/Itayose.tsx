@@ -164,7 +164,12 @@ export const Itayose = () => {
         currency,
         maturity,
         o => o.isPreOrder
-    );
+    ).map(o => {
+        return {
+            ...o,
+            calculationDate: lendingContracts[maturity].utcOpeningDate,
+        };
+    });
 
     const dispatch = useDispatch();
 
@@ -284,10 +289,6 @@ export const Itayose = () => {
                             data={filteredOrderList}
                             variant='compact'
                             height={350}
-                            calculationDate={
-                                lendingContracts[selectedTerm.value.toNumber()]
-                                    ?.utcOpeningDate
-                            }
                         />
                     </HorizontalTab>
                 </div>
