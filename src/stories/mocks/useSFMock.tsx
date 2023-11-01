@@ -418,10 +418,10 @@ export const mockUseSF = () => {
                     futureValue: BigNumber.from('10210000000000000000'),
                 },
                 {
-                    ccy: wfilBytes32,
+                    ccy: usdcBytes32,
                     maturity: mar23Fixture.toString(),
-                    presentValue: BigNumber.from('-10558255657026800000'),
-                    futureValue: BigNumber.from('-11113953323186200000'),
+                    presentValue: BigNumber.from('-63000000'),
+                    futureValue: BigNumber.from('-67000000'),
                 },
             ])
         ),
