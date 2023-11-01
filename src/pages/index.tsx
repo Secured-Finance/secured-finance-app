@@ -5,14 +5,17 @@ import { useIsGlobalItayose, useIsMarketTerminated } from 'src/hooks';
 
 function EntryPoint() {
     const [isMounted, setIsMounted] = useState(false);
-    const { data: isTerminated } = useIsMarketTerminated();
-    const isGlobalItayose = useIsGlobalItayose();
+    const { data: isTerminated, isLoading: isLoadingMarketTerminated } =
+        useIsMarketTerminated();
+
+    const { data: isGlobalItayose, isLoading: isLoadingGlobalItayose } =
+        useIsGlobalItayose();
 
     useEffect(() => {
         setIsMounted(true);
     }, []);
 
-    if (!isMounted) {
+    if (!isMounted || isLoadingGlobalItayose || isLoadingMarketTerminated) {
         return null;
     }
 

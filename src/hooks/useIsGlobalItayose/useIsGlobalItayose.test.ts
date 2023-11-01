@@ -81,7 +81,7 @@ describe('useIsGlobalItayose', () => {
             useIsGlobalItayose()
         );
         await waitForNextUpdate();
-        expect(result.current).toEqual(true);
+        expect(result.current.data).toEqual(true);
     });
 
     it('should return false if itayose and open markets exist', async () => {
@@ -89,7 +89,7 @@ describe('useIsGlobalItayose', () => {
             useIsGlobalItayose()
         );
         await waitForNextUpdate();
-        expect(result.current).toEqual(false);
+        expect(result.current.data).toEqual(false);
     });
 
     it('should return false if there are no itayose markets', async () => {
@@ -100,6 +100,6 @@ describe('useIsGlobalItayose', () => {
             useIsGlobalItayose()
         );
         await waitForNextUpdate();
-        expect(result.current).toEqual(false);
+        expect(result.current.data).toEqual(false);
     });
 });
