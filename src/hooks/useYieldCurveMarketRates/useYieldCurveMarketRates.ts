@@ -26,48 +26,42 @@ export const useYieldCurveMarketRates = () => {
         )
         .sort((a, b) => a.maturity - b.maturity);
 
-    if (sortedLendingContracts.length > 0) {
-        if (isMaturityPastDays(sortedLendingContracts[0].maturity, 7, true)) {
-            maximumRate = Number.MAX_VALUE;
-        }
-
-        sortedLendingContracts.forEach(obj => {
-            if (obj.isItayosePeriod || obj.isPreOrderPeriod || obj.isOpened) {
-                maturityList.push({
-                    label: obj.name,
-                    maturity: obj.maturity,
-                    isPreOrderPeriod:
-                        obj.isPreOrderPeriod || obj.isItayosePeriod,
-                });
-                if (isMaturityPastDays(obj.maturity, 7, true)) {
-                    maximumRate = Math.max(
-                        maximumRate,
-                        LoanValue.fromPrice(
-                            obj.marketUnitPrice,
-                            obj.maturity
-                        ).apr.toNumber()
-                    );
-                }
-
-                if (obj.isItayosePeriod || obj.isPreOrderPeriod) {
-                    rates.push(
-                        LoanValue.fromPrice(
-                            obj.openingUnitPrice,
-                            obj.maturity,
-                            obj.utcOpeningDate
-                        ).apr
-                    );
-                    itayoseMarketIndexSet.add(currentIndex);
-                } else {
-                    rates.push(
-                        LoanValue.fromPrice(obj.marketUnitPrice, obj.maturity)
-                            .apr
-                    );
-                }
-                currentIndex += 1;
-            }
-        });
+    if (isMaturityPastDays(sortedLendingContracts[0]?.maturity, 7, true)) {
+        maximumRate = Number.MAX_VALUE;
     }
+
+    sortedLendingContracts.forEach(obj => {
+        if (obj.isItayosePeriod || obj.isPreOrderPeriod || obj.isOpened) {
+            maturityList.push({
+                label: obj.name,
+                maturity: obj.maturity,
+                isPreOrderPeriod: obj.isPreOrderPeriod || obj.isItayosePeriod,
+            });
+
+            let rate: Rate;
+
+            if (obj.isItayosePeriod || obj.isPreOrderPeriod) {
+                rate = LoanValue.fromPrice(
+                    obj.openingUnitPrice,
+                    obj.maturity,
+                    obj.utcOpeningDate
+                ).apr;
+
+                itayoseMarketIndexSet.add(currentIndex);
+            } else {
+                rate = LoanValue.fromPrice(
+                    obj.marketUnitPrice,
+                    obj.maturity
+                ).apr;
+            }
+
+            rates.push(rate);
+            if (isMaturityPastDays(obj.maturity, 7, true)) {
+                maximumRate = Math.max(maximumRate, rate.toNumber());
+            }
+            currentIndex += 1;
+        }
+    });
 
     return { rates, maturityList, itayoseMarketIndexSet, maximumRate };
 };

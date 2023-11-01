@@ -162,6 +162,6 @@ describe('useYieldCurveMarketRates', () => {
             useYieldCurveMarketRates()
         );
         await waitForNextUpdate();
-        expect(result.current.maximumRate).toEqual(35687);
+        expect(result.current.maximumRate).toEqual(34820);
     });
 });

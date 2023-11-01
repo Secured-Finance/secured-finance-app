@@ -40,7 +40,7 @@ export const LineChartTab = ({
         y: {
             position: 'right',
             max:
-                maximumRate !== Number.MAX_VALUE
+                originalRate > maximumRate
                     ? maximumRate / ONE_PERCENT + 1
                     : null,
         },
@@ -52,9 +52,9 @@ export const LineChartTab = ({
                     label: (context: TooltipItem<keyof ChartTypeRegistry>) => {
                         if (
                             context.dataIndex === 0 &&
-                            maximumRate !== Number.MAX_VALUE
+                            originalRate > maximumRate
                         ) {
-                            return originalRate + '%';
+                            return originalRate / ONE_PERCENT + '%';
                         } else {
                             return context.parsed.y + '%';
                         }
@@ -69,7 +69,7 @@ export const LineChartTab = ({
         : currencyMap[currency].chartColor;
 
     if (rates[0]?.toNumber() > maximumRate && originalRate === 0) {
-        setOriginalRate(rates[0]?.toNormalizedNumber());
+        setOriginalRate(rates[0]?.toNumber());
         rates[0] = new Rate(maximumRate * 1.25);
     }
 
