@@ -468,7 +468,7 @@ export const currencyList = [
 ] as Array<CurrencyOption>;
 
 export const yieldCurveRates = [
-    new Rate(200000),
+    new Rate(37326),
     new Rate(37660),
     new Rate(38537),
     new Rate(39259),
