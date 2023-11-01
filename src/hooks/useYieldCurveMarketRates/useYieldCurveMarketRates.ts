@@ -19,6 +19,7 @@ export const useYieldCurveMarketRates = () => {
     const itayoseMarketIndexSet = new Set<number>();
     let currentIndex = 0;
     let maximumRate = 0;
+    let nearestMarketOriginalRate = 0;
 
     const sortedLendingContracts = Object.values(lendingContracts)
         .filter(
@@ -58,10 +59,22 @@ export const useYieldCurveMarketRates = () => {
             rates.push(rate);
             if (isMaturityPastDays(obj.maturity, 7, true)) {
                 maximumRate = Math.max(maximumRate, rate.toNumber());
+            } else {
+                nearestMarketOriginalRate = rate.toNumber();
             }
             currentIndex += 1;
         }
     });
 
-    return { rates, maturityList, itayoseMarketIndexSet, maximumRate };
+    if (rates[0]?.toNumber() > maximumRate) {
+        rates[0] = new Rate(maximumRate * 1.2);
+    }
+
+    return {
+        rates,
+        maturityList,
+        itayoseMarketIndexSet,
+        maximumRate: maximumRate,
+        nearestMarketOriginalRate,
+    };
 };

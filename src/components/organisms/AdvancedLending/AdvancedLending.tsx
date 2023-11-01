@@ -141,8 +141,13 @@ export const AdvancedLending = ({
         selectedTerm.value
     );
 
-    const { rates, maturityList, itayoseMarketIndexSet, maximumRate } =
-        useYieldCurveMarketRates();
+    const {
+        rates,
+        maturityList,
+        itayoseMarketIndexSet,
+        maximumRate,
+        nearestMarketOriginalRate,
+    } = useYieldCurveMarketRates();
 
     const currentMarket = useMemo(() => {
         if (marketUnitPrice) {
@@ -239,13 +244,16 @@ export const AdvancedLending = ({
 
             <div className='flex h-full flex-grow flex-col gap-4'>
                 <Tab tabDataArray={[{ text: 'Yield Curve' }]}>
-                    <div className='h-[410px] w-full px-6 py-4'>
+                    <div className='h-[410px] w-full px-2 py-4'>
                         <LineChartTab
                             rates={rates}
                             maturityList={maturityList}
                             itayoseMarketIndexSet={itayoseMarketIndexSet}
                             followLinks={false}
                             maximumRate={maximumRate}
+                            nearestMarketOriginalRate={
+                                nearestMarketOriginalRate
+                            }
                         />
                     </div>
                 </Tab>

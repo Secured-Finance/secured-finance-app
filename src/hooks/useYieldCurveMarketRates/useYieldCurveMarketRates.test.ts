@@ -37,6 +37,9 @@ const closedMarket = {
 const nearMaturityMarket = {
     ...preOrderMarket,
     maturity: BigNumber.from(new Maturity(1638662400).toString()),
+    isReady: true,
+    isOpened: true,
+    isPreOrderPeriod: false,
 };
 
 const noItayoseMarkets = maturitiesMockFromContract(wfilBytes32).slice(0, 8);
@@ -154,6 +157,14 @@ describe('useYieldCurveMarketRates', () => {
         expect(result.current.maximumRate).toEqual(Number.MAX_VALUE);
     });
 
+    it('should return 0 nearestMarketOriginalRate if no market is near maturity', async () => {
+        const { result, waitForNextUpdate } = renderHook(() =>
+            useYieldCurveMarketRates()
+        );
+        await waitForNextUpdate();
+        expect(result.current.nearestMarketOriginalRate).toEqual(0);
+    });
+
     it('should return correct maximumRate when a market is near maturity', async () => {
         jest.spyOn(mock, 'getOrderBookDetails').mockResolvedValue([
             ...closeToMaturity,
@@ -163,5 +174,16 @@ describe('useYieldCurveMarketRates', () => {
         );
         await waitForNextUpdate();
         expect(result.current.maximumRate).toEqual(34820);
+    });
+
+    it('should return correct nearestMarketOriginalRate when a market is near maturity', async () => {
+        jest.spyOn(mock, 'getOrderBookDetails').mockResolvedValue([
+            ...closeToMaturity,
+        ]);
+        const { result, waitForNextUpdate } = renderHook(() =>
+            useYieldCurveMarketRates()
+        );
+        await waitForNextUpdate();
+        expect(result.current.nearestMarketOriginalRate).toEqual(10000000);
     });
 });

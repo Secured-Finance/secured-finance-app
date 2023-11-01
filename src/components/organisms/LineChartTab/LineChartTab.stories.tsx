@@ -26,6 +26,7 @@ export default {
         maturityList: maturityList,
         itayoseMarketIndexSet: new Set(),
         maximumRate: Number.MAX_VALUE,
+        nearestMarketOriginalRate: 0,
     },
     chromatic: { pauseAnimationAtEnd: true },
     decorators: [withWalletProvider, withAssetPrice],
@@ -33,7 +34,7 @@ export default {
 
 const Template: StoryFn<typeof LineChartTab> = args => {
     return (
-        <div className='h-[410px] w-full px-6 py-4'>
+        <div className='h-[410px] w-[640px] px-6 py-4'>
             <LineChartTab {...args} />
         </div>
     );
@@ -65,11 +66,13 @@ WithLessThan8Markets.args = {
 export const WithNearestMarket = Template.bind({});
 WithNearestMarket.args = {
     maximumRate: 47746,
-    rates: [new Rate(200000), ...yieldCurveRates.slice(1)],
+    rates: [new Rate(59682), ...yieldCurveRates],
+    nearestMarketOriginalRate: 800000,
 };
 
 export const WithNearestMarketWithLowYield = Template.bind({});
 WithNearestMarketWithLowYield.args = {
     maximumRate: 47746,
-    rates: [new Rate(37666), ...yieldCurveRates.slice(1)],
+    rates: [new Rate(20000), ...yieldCurveRates],
+    nearestMarketOriginalRate: 0,
 };
