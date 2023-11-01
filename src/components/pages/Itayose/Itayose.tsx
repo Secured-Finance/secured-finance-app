@@ -127,7 +127,7 @@ export const Itayose = () => {
         market => market.isPreOrderPeriod || market.isItayosePeriod
     );
 
-    const { rates, maturityList, itayoseMarketIndexSet } =
+    const { rates, maturityList, itayoseMarketIndexSet, maximumRate } =
         useYieldCurveMarketRates();
 
     const selectedTerm = useMemo(() => {
@@ -275,6 +275,7 @@ export const Itayose = () => {
                                 rates={rates}
                                 maturityList={maturityList}
                                 itayoseMarketIndexSet={itayoseMarketIndexSet}
+                                maximumRate={maximumRate}
                             />
                         </div>
                     </Tab>

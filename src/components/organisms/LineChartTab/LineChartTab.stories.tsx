@@ -24,6 +24,7 @@ export default {
         rates: yieldCurveRates,
         maturityList: maturityList,
         itayoseMarketIndexSet: new Set(),
+        maximumRate: 47746,
     },
     chromatic: { pauseAnimationAtEnd: true },
     decorators: [withWalletProvider, withAssetPrice],

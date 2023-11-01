@@ -49,6 +49,24 @@ const closedMarket = {
     ccy: wfilBytes32,
 };
 
+const nearMaturityMarket = {
+    name: 'DEC24-1',
+    maturity: BigNumber.from(new Maturity(1638662400).toString()),
+    openingDate: BigNumber.from('1685587600'),
+    marketUnitPrice: BigNumber.from('9001'),
+    openingUnitPrice: BigNumber.from('9710'),
+    isReady: true,
+    isOpened: true,
+    isMatured: false,
+    isPreOrderPeriod: false,
+    isItayosePeriod: false,
+    bestBorrowUnitPrice: BigNumber.from('9615'),
+    bestLendUnitPrice: BigNumber.from('9617'),
+    minBorrowUnitPrice: BigNumber.from('9602'),
+    maxLendUnitPrice: BigNumber.from('9630'),
+    ccy: wfilBytes32,
+};
+
 const noItayoseMarkets = maturitiesMockFromContract(wfilBytes32).slice(0, 8);
 
 const twoItayoseMarkets = [
@@ -59,6 +77,11 @@ const twoItayoseMarkets = [
 const closedMarkets = [
     ...maturitiesMockFromContract(wfilBytes32),
     closedMarket,
+];
+
+const closeToMaturity = [
+    ...maturitiesMockFromContract(wfilBytes32),
+    nearMaturityMarket,
 ];
 
 describe('useYieldCurveMarketRates', () => {
@@ -86,9 +109,9 @@ describe('useYieldCurveMarketRates', () => {
         );
 
         await waitForNextUpdate();
-        expect(result.current.rates).toHaveLength(8);
-        expect(result.current.maturityList).toHaveLength(8);
-        expect(result.current.itayoseMarketIndexSet).toEqual(new Set([7]));
+        expect(result.current.rates).toHaveLength(9);
+        expect(result.current.maturityList).toHaveLength(9);
+        expect(result.current.itayoseMarketIndexSet).toEqual(new Set([8]));
     });
 
     it('should return correct index set for more than one itayose markets', async () => {
@@ -99,9 +122,9 @@ describe('useYieldCurveMarketRates', () => {
             useYieldCurveMarketRates()
         );
         await waitForNextUpdate();
-        expect(result.current.rates).toHaveLength(9);
-        expect(result.current.maturityList).toHaveLength(9);
-        expect(result.current.itayoseMarketIndexSet).toEqual(new Set([7, 8]));
+        expect(result.current.rates).toHaveLength(10);
+        expect(result.current.maturityList).toHaveLength(10);
+        expect(result.current.itayoseMarketIndexSet).toEqual(new Set([8, 9]));
     });
 
     it('should return empty lists for no markets', async () => {
@@ -123,9 +146,9 @@ describe('useYieldCurveMarketRates', () => {
             useYieldCurveMarketRates()
         );
         await waitForNextUpdate();
-        expect(result.current.rates).toHaveLength(8);
-        expect(result.current.maturityList).toHaveLength(8);
-        expect(result.current.itayoseMarketIndexSet).toEqual(new Set([7]));
+        expect(result.current.rates).toHaveLength(9);
+        expect(result.current.maturityList).toHaveLength(9);
+        expect(result.current.itayoseMarketIndexSet).toEqual(new Set([8]));
     });
 
     it('should return ZC rates for open markets and FWD rates for pre-open markets', async () => {
@@ -136,18 +159,37 @@ describe('useYieldCurveMarketRates', () => {
             useYieldCurveMarketRates()
         );
         await waitForNextUpdate();
-        expect(result.current.rates).toHaveLength(9);
-        expect(result.current.maturityList).toHaveLength(9);
-        expect(result.current.itayoseMarketIndexSet).toEqual(new Set([7, 8]));
+        expect(result.current.rates).toHaveLength(10);
+        expect(result.current.maturityList).toHaveLength(10);
+        expect(result.current.itayoseMarketIndexSet).toEqual(new Set([8, 9]));
 
         const fwdRate = LoanValue.fromPrice(
             preOrderMarket.openingUnitPrice.toNumber(),
             preOrderMarket.maturity.toNumber(),
             preOrderMarket.openingDate.toNumber()
         ).apr;
-        expect(result.current.rates[7].toNormalizedNumber()).toEqual(1.9758);
-        expect(result.current.rates[8].toNormalizedNumber()).toEqual(
+        expect(result.current.rates[8].toNormalizedNumber()).toEqual(1.9758);
+        expect(result.current.rates[9].toNormalizedNumber()).toEqual(
             fwdRate.toNormalizedNumber()
         );
+    });
+
+    it('should return MAX_VALUE for maximumRate if no market is near maturity', async () => {
+        const { result, waitForNextUpdate } = renderHook(() =>
+            useYieldCurveMarketRates()
+        );
+        await waitForNextUpdate();
+        expect(result.current.maximumRate).toEqual(Number.MAX_VALUE);
+    });
+
+    it('should return correct maximumRate when a market is near maturity', async () => {
+        jest.spyOn(mock, 'getOrderBookDetails').mockResolvedValue([
+            ...closeToMaturity,
+        ]);
+        const { result, waitForNextUpdate } = renderHook(() =>
+            useYieldCurveMarketRates()
+        );
+        await waitForNextUpdate();
+        expect(result.current.maximumRate).toEqual(35687);
     });
 });

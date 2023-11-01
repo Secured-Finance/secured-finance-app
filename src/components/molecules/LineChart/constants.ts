@@ -52,6 +52,7 @@ export const getData = (
                         : getCurveGradient(
                               ctx as unknown as ScriptableContext<'line'>
                           ),
+                pointHitRadius: 40,
             },
         ],
     };
