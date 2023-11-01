@@ -65,7 +65,7 @@ export const MarketDashboard = () => {
 
     const { data: delistedCurrencySet } = useCurrencyDelistedStatus();
 
-    const isGlobalItayose = useIsGlobalItayose();
+    const { data: isGlobalItayose } = useIsGlobalItayose();
 
     getCurrencyMapAsList().forEach(ccy => {
         // eslint-disable-next-line react-hooks/rules-of-hooks
