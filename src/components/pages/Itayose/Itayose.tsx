@@ -283,7 +283,7 @@ export const Itayose = () => {
                         <OrderTable
                             data={filteredOrderList}
                             variant='compact'
-                            height={520}
+                            height={350}
                             calculationDate={
                                 lendingContracts[selectedTerm.value.toNumber()]
                                     ?.utcOpeningDate
