@@ -67,3 +67,9 @@ WithNearestMarket.args = {
     maximumRate: 47746,
     rates: [new Rate(200000), ...yieldCurveRates.slice(1)],
 };
+
+export const WithNearestMarketWithLowYield = Template.bind({});
+WithNearestMarketWithLowYield.args = {
+    maximumRate: 47746,
+    rates: [new Rate(37666), ...yieldCurveRates.slice(1)],
+};
