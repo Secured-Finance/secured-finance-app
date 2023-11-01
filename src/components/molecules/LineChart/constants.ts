@@ -52,7 +52,6 @@ export const getData = (
                         : getCurveGradient(
                               ctx as unknown as ScriptableContext<'line'>
                           ),
-                pointHitRadius: 40,
             },
         ],
     };
@@ -146,6 +145,7 @@ export const options: ChartOptions<'line'> = {
             hoverBorderColor: '#FFFFFF',
             hoverBorderWidth: 2,
             backgroundColor: '#5162FF',
+            hitRadius: 50,
         },
     },
     scales: {

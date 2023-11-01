@@ -1,6 +1,5 @@
 import { ChartTypeRegistry, TooltipItem } from 'chart.js';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { LineChart, getData, options } from 'src/components/molecules';
 import { useIsGlobalItayose } from 'src/hooks';
@@ -18,14 +17,15 @@ export const LineChartTab = ({
     itayoseMarketIndexSet,
     followLinks = true,
     maximumRate,
+    nearestMarketOriginalRate,
 }: {
     rates: Rate[];
     maturityList: MaturityListItem[];
     itayoseMarketIndexSet: Set<number>;
     followLinks?: boolean;
     maximumRate: number;
+    nearestMarketOriginalRate: number;
 }) => {
-    const [originalRate, setOriginalRate] = useState(0);
     const dispatch = useDispatch();
     const router = useRouter();
 
@@ -40,8 +40,8 @@ export const LineChartTab = ({
         y: {
             position: 'right',
             max:
-                originalRate > maximumRate
-                    ? Math.floor(maximumRate / ONE_PERCENT + 1)
+                nearestMarketOriginalRate > maximumRate
+                    ? Math.floor((maximumRate * 1.2) / ONE_PERCENT)
                     : null,
         },
         plugins: {
@@ -52,9 +52,11 @@ export const LineChartTab = ({
                     label: (context: TooltipItem<keyof ChartTypeRegistry>) => {
                         if (
                             context.dataIndex === 0 &&
-                            originalRate > maximumRate
+                            nearestMarketOriginalRate > maximumRate
                         ) {
-                            return originalRate / ONE_PERCENT + '%';
+                            return (
+                                nearestMarketOriginalRate / ONE_PERCENT + '%'
+                            );
                         } else {
                             return context.parsed.y + '%';
                         }
@@ -67,11 +69,6 @@ export const LineChartTab = ({
     const itayoseBorderColor = !isGlobalItayose
         ? '#B9BDEA'
         : currencyMap[currency].chartColor;
-
-    if (rates[0]?.toNumber() > maximumRate && originalRate === 0) {
-        setOriginalRate(rates[0]?.toNumber());
-        rates[0] = new Rate(maximumRate * 1.08);
-    }
 
     const data = getData(
         rates,

@@ -18,8 +18,13 @@ export const YieldChart = ({
 }: YieldChartProps): JSX.Element => {
     const [show, setShow] = useState(true);
 
-    const { rates, maturityList, itayoseMarketIndexSet, maximumRate } =
-        useYieldCurveMarketRates();
+    const {
+        rates,
+        maturityList,
+        itayoseMarketIndexSet,
+        maximumRate,
+        nearestMarketOriginalRate,
+    } = useYieldCurveMarketRates();
 
     return (
         <div className='hidden h-[480px] w-fit flex-row overflow-hidden rounded-r-xl border-y border-r border-panelStroke shadow-[0_46px_64px_rgba(0,0,0,0.4)] tablet:visible tablet:flex'>
@@ -35,14 +40,17 @@ export const YieldChart = ({
                         dailyVolumes={dailyVolumes}
                     ></CurveHeader>
                 </div>
-                <div className='flex flex-grow items-center pl-[35px]'>
-                    <div className='h-[350px] w-[500px]'>
+                <div className='flex w-full flex-grow items-center pl-[35px]'>
+                    <div className='h-[350px] w-full'>
                         <LineChartTab
                             rates={rates}
                             maturityList={maturityList}
                             itayoseMarketIndexSet={itayoseMarketIndexSet}
                             followLinks={false}
                             maximumRate={maximumRate}
+                            nearestMarketOriginalRate={
+                                nearestMarketOriginalRate
+                            }
                         />
                     </div>
                 </div>
