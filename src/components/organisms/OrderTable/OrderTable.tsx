@@ -1,7 +1,7 @@
 import { createColumnHelper } from '@tanstack/react-table';
 import { useMemo } from 'react';
 import { CoreTable, TableActionMenu } from 'src/components/molecules';
-import { useOrders } from 'src/hooks';
+import { Order, useOrders } from 'src/hooks';
 import { hexToCurrencySymbol } from 'src/utils';
 import { Maturity } from 'src/utils/entities';
 import {
@@ -11,7 +11,8 @@ import {
     loanTypeColumnDefinition,
     priceYieldColumnDefinition,
 } from 'src/utils/tableDefinitions';
-import { OpenOrder } from 'src/types';
+
+type OpenOrder = Order & { calculationDate?: number };
 
 const columnHelper = createColumnHelper<OpenOrder>();
 

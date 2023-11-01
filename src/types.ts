@@ -90,14 +90,3 @@ export const OrderSideMap = Object.freeze({
 });
 
 export type Wallet = 'MetaMask' | 'WalletConnect';
-
-export type OpenOrder = {
-    orderId: BigNumber;
-    currency: string;
-    maturity: string;
-    side: number;
-    unitPrice: BigNumber;
-    amount: BigNumber;
-    createdAt: BigNumber;
-    calculationDate?: number;
-};
