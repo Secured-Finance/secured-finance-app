@@ -36,6 +36,15 @@ describe('PortfolioManagement component', () => {
     });
 
     it('should show delisting disclaimer if a user has active contracts in currency being delisted', async () => {
+        jest.spyOn(mock, 'currencyExists').mockImplementation(
+            (currency: Currency) => {
+                if (currency.symbol === CurrencySymbol.WFIL) {
+                    return Promise.resolve(false);
+                } else {
+                    return Promise.resolve(true);
+                }
+            }
+        );
         await waitFor(() =>
             render(<ConnectedToWallet />, {
                 apolloMocks: Default.parameters?.apolloClient.mocks,
@@ -52,6 +61,15 @@ describe('PortfolioManagement component', () => {
     });
 
     it('should not show delisting disclaimer if user has previously closed the disclaimer', async () => {
+        jest.spyOn(mock, 'currencyExists').mockImplementation(
+            (currency: Currency) => {
+                if (currency.symbol === CurrencySymbol.WFIL) {
+                    return Promise.resolve(false);
+                } else {
+                    return Promise.resolve(true);
+                }
+            }
+        );
         localStorage.setItem('DELISTED_CURRENCIES_KEY', 'WFIL');
         await waitFor(() =>
             render(<ConnectedToWallet />, {
@@ -87,15 +105,6 @@ describe('PortfolioManagement component', () => {
     });
 
     it('should not show delisting disclaimer if user does not have active contracts in currency being delisted', async () => {
-        jest.spyOn(mock, 'currencyExists').mockImplementation(
-            (currency: Currency) => {
-                if (currency.symbol === CurrencySymbol.USDC) {
-                    return Promise.resolve(true);
-                } else {
-                    return Promise.resolve(false);
-                }
-            }
-        );
         await waitFor(() =>
             render(<ConnectedToWallet />, {
                 apolloMocks: Default.parameters?.apolloClient.mocks,

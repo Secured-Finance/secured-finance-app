@@ -29,7 +29,7 @@ describe('CurrencyDropdown', () => {
         expect(onChange).toHaveBeenCalledWith('ETH');
     });
 
-    it.skip('displays a delisting chip for delisted currencies', async () => {
+    it('displays a delisting chip for delisted currencies', async () => {
         render(<Default />);
         const dropdown = screen.getByRole('button', {
             name: 'WBTC',
@@ -37,21 +37,18 @@ describe('CurrencyDropdown', () => {
         fireEvent.click(dropdown);
         expect(
             await within(
-                screen.getByRole('menuitem', { name: 'WBTC' })
+                screen.getByRole('menuitem', { name: 'USDC' })
             ).findByText('Delisting')
         ).toBeInTheDocument();
 
         expect(
-            await within(
-                screen.getByRole('menuitem', { name: 'WFIL' })
-            ).findByText('Delisting')
-        ).toBeInTheDocument();
-
+            screen.getByRole('menuitem', { name: 'WFIL' })
+        ).not.toHaveTextContent('Delisting');
         expect(
             screen.getByRole('menuitem', { name: 'ETH' })
         ).not.toHaveTextContent('Delisting');
         expect(
-            screen.getByRole('menuitem', { name: 'USDC' })
+            screen.getByRole('menuitem', { name: 'WBTC' })
         ).not.toHaveTextContent('Delisting');
     });
 

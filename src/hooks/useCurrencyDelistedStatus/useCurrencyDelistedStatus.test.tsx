@@ -14,7 +14,7 @@ describe('useCurrencyDelistedStatus hook', () => {
 
         await waitForNextUpdate();
 
-        const delistedCurrencySet = new Set([CurrencySymbol.WFIL]);
+        const delistedCurrencySet = new Set([CurrencySymbol.USDC]);
 
         expect(mock.currencyExists).toHaveBeenCalledTimes(4);
         const newValue = result.current;

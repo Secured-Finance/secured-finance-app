@@ -433,7 +433,7 @@ export const mockUseSF = () => {
         ),
 
         currencyExists: jest.fn((currency: Currency) => {
-            if (currency.symbol === CurrencySymbol.WFIL) {
+            if (currency.symbol === CurrencySymbol.USDC) {
                 return Promise.resolve(false);
             }
             return Promise.resolve(true);

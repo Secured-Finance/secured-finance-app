@@ -51,9 +51,11 @@ describe('Itayose Component', () => {
         expect(store.getState().landingOrderForm.amount).toEqual('100000000');
         await waitFor(() => {
             fireEvent.click(screen.getByRole('button', { name: 'WBTC' }));
-            fireEvent.click(screen.getByRole('menuitem', { name: 'USDC' }));
+            fireEvent.click(screen.getByRole('menuitem', { name: 'WFIL' }));
         });
-        expect(store.getState().landingOrderForm.amount).toEqual('1000000');
+        expect(store.getState().landingOrderForm.amount).toEqual(
+            '1000000000000000000'
+        );
         expect(screen.getByRole('textbox', { name: 'Amount' })).toHaveValue(
             '1'
         );
@@ -63,8 +65,8 @@ describe('Itayose Component', () => {
         await waitFor(() => render(<Default />, { preloadedState }));
         await waitFor(() => {
             fireEvent.click(screen.getByRole('button', { name: 'WBTC' }));
-            expect(screen.queryByText('WFIL')).not.toBeInTheDocument();
         });
+        expect(screen.queryByText('USDC')).not.toBeInTheDocument();
     });
 
     it('should only show the pre-order orders of the user when they are connected', async () => {
