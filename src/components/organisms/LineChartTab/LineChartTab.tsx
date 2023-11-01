@@ -41,7 +41,7 @@ export const LineChartTab = ({
             position: 'right',
             max:
                 originalRate > maximumRate
-                    ? maximumRate / ONE_PERCENT + 1
+                    ? Math.floor(maximumRate / ONE_PERCENT + 1)
                     : null,
         },
         plugins: {
@@ -70,7 +70,7 @@ export const LineChartTab = ({
 
     if (rates[0]?.toNumber() > maximumRate && originalRate === 0) {
         setOriginalRate(rates[0]?.toNumber());
-        rates[0] = new Rate(maximumRate * 1.25);
+        rates[0] = new Rate(maximumRate * 1.08);
     }
 
     const data = getData(
