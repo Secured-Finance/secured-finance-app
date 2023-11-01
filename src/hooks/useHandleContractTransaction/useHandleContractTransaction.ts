@@ -11,7 +11,10 @@ export const useHandleContractTransaction = () => {
 
     const handleContractTransaction = useCallback(
         async (tx: ContractTransaction | undefined) => {
-            const contractReceipt = await tx?.wait();
+            if (!tx) {
+                return false;
+            }
+            const contractReceipt = await tx.wait();
             dispatch(updateLastActionTimestamp());
 
             // Invalidate all queries
