@@ -18,7 +18,7 @@ export const YieldChart = ({
 }: YieldChartProps): JSX.Element => {
     const [show, setShow] = useState(true);
 
-    const { rates, maturityList, itayoseMarketIndexSet } =
+    const { rates, maturityList, itayoseMarketIndexSet, maximumRate } =
         useYieldCurveMarketRates();
 
     return (
@@ -42,6 +42,7 @@ export const YieldChart = ({
                             maturityList={maturityList}
                             itayoseMarketIndexSet={itayoseMarketIndexSet}
                             followLinks={false}
+                            maximumRate={maximumRate}
                         />
                     </div>
                 </div>

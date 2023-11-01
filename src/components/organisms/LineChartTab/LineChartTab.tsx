@@ -1,4 +1,6 @@
+import { ChartTypeRegistry, TooltipItem } from 'chart.js';
 import { useRouter } from 'next/router';
+import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { LineChart, getData, options } from 'src/components/molecules';
 import { useIsGlobalItayose } from 'src/hooks';
@@ -7,7 +9,7 @@ import {
     setMaturity,
 } from 'src/store/landingOrderForm';
 import { RootState } from 'src/store/types';
-import { Rate, currencyMap } from 'src/utils';
+import { ONE_PERCENT, Rate, currencyMap } from 'src/utils';
 import { Maturity } from 'src/utils/entities';
 
 export const LineChartTab = ({
@@ -15,12 +17,15 @@ export const LineChartTab = ({
     maturityList,
     itayoseMarketIndexSet,
     followLinks = true,
+    maximumRate,
 }: {
     rates: Rate[];
     maturityList: MaturityListItem[];
     itayoseMarketIndexSet: Set<number>;
     followLinks?: boolean;
+    maximumRate: number;
 }) => {
+    const [originalRate, setOriginalRate] = useState(0);
     const dispatch = useDispatch();
     const router = useRouter();
 
@@ -34,12 +39,36 @@ export const LineChartTab = ({
         ...options,
         y: {
             position: 'right',
+            max:
+                maximumRate !== Number.MAX_VALUE
+                    ? maximumRate / ONE_PERCENT + 1
+                    : null,
+        },
+        plugins: {
+            tooltip: {
+                ...options.plugins?.tooltip,
+                callbacks: {
+                    ...options.plugins?.tooltip?.callbacks,
+                    label: (context: TooltipItem<keyof ChartTypeRegistry>) => {
+                        if (context.dataIndex === 0) {
+                            return originalRate + '%';
+                        } else {
+                            return context.parsed.y + '%';
+                        }
+                    },
+                },
+            },
         },
     };
 
     const itayoseBorderColor = !isGlobalItayose
         ? '#B9BDEA'
         : currencyMap[currency].chartColor;
+
+    if (rates[0]?.toNumber() > maximumRate && originalRate === 0) {
+        setOriginalRate(rates[0]?.toNormalizedNumber());
+        rates[0] = new Rate(maximumRate * 1.25);
+    }
 
     const data = getData(
         rates,

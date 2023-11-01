@@ -141,7 +141,7 @@ export const AdvancedLending = ({
         selectedTerm.value
     );
 
-    const { rates, maturityList, itayoseMarketIndexSet } =
+    const { rates, maturityList, itayoseMarketIndexSet, maximumRate } =
         useYieldCurveMarketRates();
 
     const currentMarket = useMemo(() => {
@@ -245,6 +245,7 @@ export const AdvancedLending = ({
                             maturityList={maturityList}
                             itayoseMarketIndexSet={itayoseMarketIndexSet}
                             followLinks={false}
+                            maximumRate={maximumRate}
                         />
                     </div>
                 </Tab>
