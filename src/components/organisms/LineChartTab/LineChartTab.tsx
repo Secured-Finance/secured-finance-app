@@ -50,7 +50,10 @@ export const LineChartTab = ({
                 callbacks: {
                     ...options.plugins?.tooltip?.callbacks,
                     label: (context: TooltipItem<keyof ChartTypeRegistry>) => {
-                        if (context.dataIndex === 0) {
+                        if (
+                            context.dataIndex === 0 &&
+                            maximumRate !== Number.MAX_VALUE
+                        ) {
                             return originalRate + '%';
                         } else {
                             return context.parsed.y + '%';
