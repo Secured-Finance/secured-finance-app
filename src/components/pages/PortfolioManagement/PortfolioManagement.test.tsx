@@ -36,15 +36,6 @@ describe('PortfolioManagement component', () => {
     });
 
     it('should show delisting disclaimer if a user has active contracts in currency being delisted', async () => {
-        jest.spyOn(mock, 'currencyExists').mockImplementation(
-            (currency: Currency) => {
-                if (currency.symbol === CurrencySymbol.WFIL) {
-                    return Promise.resolve(false);
-                } else {
-                    return Promise.resolve(true);
-                }
-            }
-        );
         await waitFor(() =>
             render(<ConnectedToWallet />, {
                 apolloMocks: Default.parameters?.apolloClient.mocks,
@@ -54,23 +45,14 @@ describe('PortfolioManagement component', () => {
         await waitFor(() => {
             expect(
                 screen.getByText(
-                    'Please note that your contracts for WFIL will be delisted at maturity on Secured Finance.'
+                    'Please note that your contracts for USDC will be delisted at maturity on Secured Finance.'
                 )
             ).toBeInTheDocument();
         });
     });
 
     it('should not show delisting disclaimer if user has previously closed the disclaimer', async () => {
-        jest.spyOn(mock, 'currencyExists').mockImplementation(
-            (currency: Currency) => {
-                if (currency.symbol === CurrencySymbol.WFIL) {
-                    return Promise.resolve(false);
-                } else {
-                    return Promise.resolve(true);
-                }
-            }
-        );
-        localStorage.setItem('DELISTED_CURRENCIES_KEY', 'WFIL');
+        localStorage.setItem('DELISTED_CURRENCIES_KEY', 'USDC');
         await waitFor(() =>
             render(<ConnectedToWallet />, {
                 apolloMocks: Default.parameters?.apolloClient.mocks,
@@ -80,7 +62,7 @@ describe('PortfolioManagement component', () => {
         await waitFor(() => {
             expect(
                 screen.queryByText(
-                    'Please note that your contracts for WFIL will be delisted at maturity on Secured Finance.'
+                    'Please note that your contracts for USDC will be delisted at maturity on Secured Finance.'
                 )
             ).not.toBeInTheDocument();
         });
@@ -98,13 +80,22 @@ describe('PortfolioManagement component', () => {
         await waitFor(() => {
             expect(
                 screen.queryByText(
-                    'Please note that your contracts for WFIL will be delisted at maturity on Secured Finance.'
+                    'Please note that your contracts for USDC will be delisted at maturity on Secured Finance.'
                 )
             ).not.toBeInTheDocument();
         });
     });
 
     it('should not show delisting disclaimer if user does not have active contracts in currency being delisted', async () => {
+        jest.spyOn(mock, 'currencyExists').mockImplementation(
+            (currency: Currency) => {
+                if (currency.symbol === CurrencySymbol.WBTC) {
+                    return Promise.resolve(false);
+                } else {
+                    return Promise.resolve(true);
+                }
+            }
+        );
         await waitFor(() =>
             render(<ConnectedToWallet />, {
                 apolloMocks: Default.parameters?.apolloClient.mocks,
@@ -115,7 +106,7 @@ describe('PortfolioManagement component', () => {
         await waitFor(() => {
             expect(
                 screen.queryByText(
-                    'Please note that your contracts for USDC will be delisted at maturity on Secured Finance.'
+                    'Please note that your contracts for WBTC will be delisted at maturity on Secured Finance.'
                 )
             ).not.toBeInTheDocument();
         });
