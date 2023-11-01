@@ -11,11 +11,9 @@ import { useYieldCurveMarketRates } from './useYieldCurveMarketRates';
 const mock = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mock);
 
-const itayoseFixture = new Maturity(1743011200);
-
 const preOrderMarket = {
     name: 'DEC24-1',
-    maturity: BigNumber.from(itayoseFixture.toString()),
+    maturity: BigNumber.from(new Maturity(1743011200).toString()),
     openingDate: BigNumber.from('1685587600'),
     marketUnitPrice: BigNumber.from('9001'),
     openingUnitPrice: BigNumber.from('9710'),
@@ -32,39 +30,13 @@ const preOrderMarket = {
 };
 
 const closedMarket = {
-    name: 'DEC24-1',
-    maturity: BigNumber.from(itayoseFixture.toString()),
-    openingDate: BigNumber.from('1685587600'),
-    marketUnitPrice: BigNumber.from('9001'),
-    openingUnitPrice: BigNumber.from('9710'),
-    isReady: false,
-    isOpened: false,
-    isMatured: false,
+    ...preOrderMarket,
     isPreOrderPeriod: false,
-    isItayosePeriod: false,
-    bestBorrowUnitPrice: BigNumber.from('9615'),
-    bestLendUnitPrice: BigNumber.from('9617'),
-    minBorrowUnitPrice: BigNumber.from('9602'),
-    maxLendUnitPrice: BigNumber.from('9630'),
-    ccy: wfilBytes32,
 };
 
 const nearMaturityMarket = {
-    name: 'DEC24-1',
+    ...preOrderMarket,
     maturity: BigNumber.from(new Maturity(1638662400).toString()),
-    openingDate: BigNumber.from('1685587600'),
-    marketUnitPrice: BigNumber.from('9001'),
-    openingUnitPrice: BigNumber.from('9710'),
-    isReady: true,
-    isOpened: true,
-    isMatured: false,
-    isPreOrderPeriod: false,
-    isItayosePeriod: false,
-    bestBorrowUnitPrice: BigNumber.from('9615'),
-    bestLendUnitPrice: BigNumber.from('9617'),
-    minBorrowUnitPrice: BigNumber.from('9602'),
-    maxLendUnitPrice: BigNumber.from('9630'),
-    ccy: wfilBytes32,
 };
 
 const noItayoseMarkets = maturitiesMockFromContract(wfilBytes32).slice(0, 8);
