@@ -1,7 +1,7 @@
 import { createColumnHelper } from '@tanstack/react-table';
 import { useMemo } from 'react';
 import { CoreTable, TableActionMenu } from 'src/components/molecules';
-import { Order, useOrders } from 'src/hooks';
+import { useOrders } from 'src/hooks';
 import { hexToCurrencySymbol } from 'src/utils';
 import { Maturity } from 'src/utils/entities';
 import {
@@ -11,8 +11,9 @@ import {
     loanTypeColumnDefinition,
     priceYieldColumnDefinition,
 } from 'src/utils/tableDefinitions';
+import { OpenOrder } from 'src/types';
 
-const columnHelper = createColumnHelper<Order>();
+const columnHelper = createColumnHelper<OpenOrder>();
 
 const DEFAULT_HEIGHT = 300;
 
@@ -20,12 +21,10 @@ export const OrderTable = ({
     data,
     variant = 'default',
     height,
-    calculationDate,
 }: {
-    data: Order[];
+    data: OpenOrder[];
     variant?: 'compact' | 'default';
     height?: number;
-    calculationDate?: number;
 }) => {
     const { cancelOrder } = useOrders();
     const columns = useMemo(
@@ -50,8 +49,7 @@ export const OrderTable = ({
                 'yield',
                 row => row.unitPrice,
                 'compact',
-                'rate',
-                calculationDate
+                'rate'
             ),
             amountColumnDefinition(
                 columnHelper,
@@ -100,7 +98,7 @@ export const OrderTable = ({
                 header: () => <div className='p-2'>Actions</div>,
             }),
         ],
-        [cancelOrder, calculationDate, variant]
+        [cancelOrder, variant]
     );
 
     return (
