@@ -5,6 +5,7 @@ import {
 } from 'src/stories/mocks/fixtures';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { renderHook } from 'src/test-utils';
+import { Rate } from 'src/utils';
 import { LoanValue, Maturity } from 'src/utils/entities';
 import { useYieldCurveMarketRates } from './useYieldCurveMarketRates';
 
@@ -165,6 +166,14 @@ describe('useYieldCurveMarketRates', () => {
         expect(result.current.nearestMarketOriginalRate).toEqual(0);
     });
 
+    it('should not change first market yield chart rate if its not close to maturity', async () => {
+        const { result, waitForNextUpdate } = renderHook(() =>
+            useYieldCurveMarketRates()
+        );
+        await waitForNextUpdate();
+        expect(result.current.rates[0]).toEqual(new Rate(20329));
+    });
+
     it('should return correct maximumRate when a market is near maturity', async () => {
         jest.spyOn(mock, 'getOrderBookDetails').mockResolvedValue([
             ...closeToMaturity,
@@ -185,5 +194,28 @@ describe('useYieldCurveMarketRates', () => {
         );
         await waitForNextUpdate();
         expect(result.current.nearestMarketOriginalRate).toEqual(10000000);
+    });
+
+    it('should change first market yield chart rate if its close to maturity and greater than maximum rate', async () => {
+        jest.spyOn(mock, 'getOrderBookDetails').mockResolvedValue([
+            ...closeToMaturity,
+        ]);
+        const { result, waitForNextUpdate } = renderHook(() =>
+            useYieldCurveMarketRates()
+        );
+        await waitForNextUpdate();
+        expect(result.current.rates[0]).toEqual(new Rate(43525));
+    });
+
+    it('should not change first market yield chart rate if its close to maturity but lesser than maximum rate', async () => {
+        nearMaturityMarket.marketUnitPrice = BigNumber.from('0');
+        jest.spyOn(mock, 'getOrderBookDetails').mockResolvedValue([
+            ...closeToMaturity,
+        ]);
+        const { result, waitForNextUpdate } = renderHook(() =>
+            useYieldCurveMarketRates()
+        );
+        await waitForNextUpdate();
+        expect(result.current.rates[0]).toEqual(new Rate(0));
     });
 });
