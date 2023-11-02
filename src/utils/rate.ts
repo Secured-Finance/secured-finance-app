@@ -1,4 +1,4 @@
-const ONE_PERCENT = 10000;
+export const ONE_PERCENT = 10000;
 const MIN_RATE = 0;
 const MAX_RATE = 1000 * ONE_PERCENT;
 

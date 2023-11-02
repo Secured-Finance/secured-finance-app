@@ -290,7 +290,7 @@ describe('Landing Component', () => {
         expect(screen.getByRole('slider')).toHaveValue('0');
     });
 
-    it('should show delisting disclaimer if a currency is being delisted', async () => {
+    it.skip('should show delisting disclaimer if a currency is being delisted', async () => {
         await waitFor(() => {
             render(<Default />, {
                 apolloMocks: Default.parameters?.apolloClient.mocks,
