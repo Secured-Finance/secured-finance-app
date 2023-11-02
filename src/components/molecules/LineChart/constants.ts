@@ -138,6 +138,7 @@ export const options: ChartOptions<'line'> = {
     interaction: {
         mode: 'index',
         intersect: false,
+        includeInvisible: true,
     },
     elements: {
         point: {
@@ -145,7 +146,6 @@ export const options: ChartOptions<'line'> = {
             hoverBorderColor: '#FFFFFF',
             hoverBorderWidth: 2,
             backgroundColor: '#5162FF',
-            hitRadius: 50,
         },
     },
     scales: {
