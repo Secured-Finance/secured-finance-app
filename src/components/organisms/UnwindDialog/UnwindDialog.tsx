@@ -186,6 +186,7 @@ export const UnwindDialog = ({
                     setErrorMessage(e.message);
                     globalDispatch(setLastMessage(e.message));
                 }
+                dispatch({ type: 'error' });
             }
         },
         [stateMap, type, handleContractTransaction, globalDispatch]

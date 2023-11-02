@@ -168,10 +168,10 @@ export const PlaceOrder = ({
                     dispatch({ type: 'next' });
                 }
             } catch (e) {
-                dispatch({ type: 'error' });
                 if (e instanceof Error) {
                     setErrorMessage(e.message);
                 }
+                dispatch({ type: 'error' });
             }
         },
         [onPlaceOrder, handleContractTransaction, orderType, orderAmount.value]

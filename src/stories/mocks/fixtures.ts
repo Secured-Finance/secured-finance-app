@@ -985,3 +985,26 @@ export const tradesWBTC: TransactionList = [
         averagePrice: 0.9,
     },
 ];
+
+export const preOpenOrders = [
+    {
+        orderId: BigNumber.from('1'),
+        currency: wfilBytes32,
+        side: 1,
+        maturity: dec23Fixture.toString(),
+        unitPrice: BigNumber.from('9800'),
+        amount: BigNumber.from('1000000000000000000000'),
+        createdAt: BigNumber.from('1609299000'),
+        calculationDate: dec22Fixture.toNumber(),
+    },
+    {
+        orderId: BigNumber.from('2'),
+        currency: wfilBytes32,
+        side: 1,
+        maturity: mar24Fixture.toString(),
+        unitPrice: BigNumber.from('9600'),
+        amount: BigNumber.from('5000000000000000000000'),
+        createdAt: BigNumber.from('1609298000'),
+        calculationDate: mar23Fixture.toNumber(),
+    },
+];
