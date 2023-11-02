@@ -146,7 +146,7 @@ export const AdvancedLending = ({
         maturityList,
         itayoseMarketIndexSet,
         maximumRate,
-        nearestMarketOriginalRate,
+        marketCloseToMaturityOriginalRate,
     } = useYieldCurveMarketRates();
 
     const currentMarket = useMemo(() => {
@@ -251,8 +251,8 @@ export const AdvancedLending = ({
                             itayoseMarketIndexSet={itayoseMarketIndexSet}
                             followLinks={false}
                             maximumRate={maximumRate}
-                            nearestMarketOriginalRate={
-                                nearestMarketOriginalRate
+                            marketCloseToMaturityOriginalRate={
+                                marketCloseToMaturityOriginalRate
                             }
                         />
                     </div>

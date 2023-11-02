@@ -1,4 +1,4 @@
-import { ChartTypeRegistry, TooltipItem } from 'chart.js';
+import { ChartOptions, ChartTypeRegistry, TooltipItem } from 'chart.js';
 import { useRouter } from 'next/router';
 import { useDispatch, useSelector } from 'react-redux';
 import { LineChart, getData, options } from 'src/components/molecules';
@@ -17,14 +17,14 @@ export const LineChartTab = ({
     itayoseMarketIndexSet,
     followLinks = true,
     maximumRate,
-    nearestMarketOriginalRate,
+    marketCloseToMaturityOriginalRate,
 }: {
     rates: Rate[];
     maturityList: MaturityListItem[];
     itayoseMarketIndexSet: Set<number>;
     followLinks?: boolean;
     maximumRate: number;
-    nearestMarketOriginalRate: number;
+    marketCloseToMaturityOriginalRate: number;
 }) => {
     const dispatch = useDispatch();
     const router = useRouter();
@@ -35,14 +35,18 @@ export const LineChartTab = ({
         selectLandingOrderForm(state.landingOrderForm)
     );
 
-    const chartOptions = {
+    const chartOptions: ChartOptions<'line'> = {
         ...options,
-        y: {
-            position: 'right',
-            max:
-                nearestMarketOriginalRate > maximumRate
-                    ? Math.floor((maximumRate * 1.2) / ONE_PERCENT)
-                    : null,
+        scales: {
+            ...options.scales,
+            y: {
+                ...options.scales?.y,
+                position: 'right',
+                max:
+                    marketCloseToMaturityOriginalRate > maximumRate
+                        ? Math.floor((maximumRate * 1.2) / ONE_PERCENT)
+                        : undefined,
+            },
         },
         plugins: {
             tooltip: {
@@ -52,13 +56,16 @@ export const LineChartTab = ({
                     label: (context: TooltipItem<keyof ChartTypeRegistry>) => {
                         if (
                             context.dataIndex === 0 &&
-                            nearestMarketOriginalRate > maximumRate
+                            marketCloseToMaturityOriginalRate > maximumRate
                         ) {
                             return (
-                                nearestMarketOriginalRate / ONE_PERCENT + '%'
+                                (
+                                    marketCloseToMaturityOriginalRate /
+                                    ONE_PERCENT
+                                ).toFixed(3) + '%'
                             );
                         } else {
-                            return context.parsed.y + '%';
+                            return context.formattedValue + '%';
                         }
                     },
                 },
