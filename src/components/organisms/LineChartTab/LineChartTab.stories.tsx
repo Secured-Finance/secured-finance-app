@@ -4,6 +4,7 @@ import {
     withWalletProvider,
 } from 'src/../.storybook/decorators';
 import { yieldCurveRates } from 'src/stories/mocks/fixtures';
+import { Rate } from 'src/utils';
 import { LineChartTab } from './LineChartTab';
 
 const maturityList = [
@@ -24,6 +25,8 @@ export default {
         rates: yieldCurveRates,
         maturityList: maturityList,
         itayoseMarketIndexSet: new Set(),
+        maximumRate: Number.MAX_VALUE,
+        marketCloseToMaturityOriginalRate: 0,
     },
     chromatic: { pauseAnimationAtEnd: true },
     decorators: [withWalletProvider, withAssetPrice],
@@ -31,7 +34,7 @@ export default {
 
 const Template: StoryFn<typeof LineChartTab> = args => {
     return (
-        <div className='h-[410px] w-full px-6 py-4'>
+        <div className='h-[410px] w-[640px] px-6 py-4'>
             <LineChartTab {...args} />
         </div>
     );
@@ -58,4 +61,18 @@ WithLessThan8Markets.args = {
     rates: yieldCurveRates.slice(3),
     maturityList: maturityList.slice(3),
     itayoseMarketIndexSet: new Set([1, 2, 3, 4]),
+};
+
+export const WithNearestMarket = Template.bind({});
+WithNearestMarket.args = {
+    maximumRate: 47746,
+    rates: [new Rate(59682), ...yieldCurveRates],
+    marketCloseToMaturityOriginalRate: 800000,
+};
+
+export const WithNearestMarketWithLowYield = Template.bind({});
+WithNearestMarketWithLowYield.args = {
+    maximumRate: 47746,
+    rates: [new Rate(20000), ...yieldCurveRates],
+    marketCloseToMaturityOriginalRate: 0,
 };

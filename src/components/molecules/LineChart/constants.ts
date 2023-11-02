@@ -138,6 +138,7 @@ export const options: ChartOptions<'line'> = {
     interaction: {
         mode: 'index',
         intersect: false,
+        includeInvisible: true,
     },
     elements: {
         point: {
