@@ -127,8 +127,13 @@ export const Itayose = () => {
         market => market.isPreOrderPeriod || market.isItayosePeriod
     );
 
-    const { rates, maturityList, itayoseMarketIndexSet } =
-        useYieldCurveMarketRates();
+    const {
+        rates,
+        maturityList,
+        itayoseMarketIndexSet,
+        maximumRate,
+        marketCloseToMaturityOriginalRate,
+    } = useYieldCurveMarketRates();
 
     const selectedTerm = useMemo(() => {
         return (
@@ -164,7 +169,12 @@ export const Itayose = () => {
         currency,
         maturity,
         o => o.isPreOrder
-    );
+    ).map(o => {
+        return {
+            ...o,
+            calculationDate: lendingContracts[maturity].utcOpeningDate,
+        };
+    });
 
     const dispatch = useDispatch();
 
@@ -275,6 +285,10 @@ export const Itayose = () => {
                                 rates={rates}
                                 maturityList={maturityList}
                                 itayoseMarketIndexSet={itayoseMarketIndexSet}
+                                maximumRate={maximumRate}
+                                marketCloseToMaturityOriginalRate={
+                                    marketCloseToMaturityOriginalRate
+                                }
                             />
                         </div>
                     </Tab>
@@ -283,11 +297,7 @@ export const Itayose = () => {
                         <OrderTable
                             data={filteredOrderList}
                             variant='compact'
-                            height={520}
-                            calculationDate={
-                                lendingContracts[selectedTerm.value.toNumber()]
-                                    ?.utcOpeningDate
-                            }
+                            height={350}
                         />
                     </HorizontalTab>
                 </div>
