@@ -12,7 +12,7 @@ const { Default, NotConnectedToWallet } = composeStories(stories);
 describe('CollateralTabLeftPane component', () => {
     it('should render CollateralTabLeftPane', () => {
         render(<NotConnectedToWallet />);
-        expect(screen.getByText('Collateral Balance')).toBeInTheDocument();
+        expect(screen.getByText('SF Vault')).toBeInTheDocument();
         expect(screen.getByText('$0.00')).toBeInTheDocument();
         expect(
             screen.getByText(
@@ -29,7 +29,7 @@ describe('CollateralTabLeftPane component', () => {
 
     it('should render balance when wallet is connected and collateral is deposited', () => {
         render(<Default />);
-        expect(screen.getByText('$12,100.34')).toBeInTheDocument();
+        expect(screen.getByText('$12,700.34')).toBeInTheDocument();
         expect(screen.getByText('Collateral Assets')).toBeInTheDocument();
         expect(screen.getByText('Non-collateral Assets')).toBeInTheDocument();
     });
@@ -56,7 +56,7 @@ describe('CollateralTabLeftPane component', () => {
 
     it('should prompt user to deposit collateral when wallet is connected', () => {
         render(<Default collateralBook={emptyCollateralBook} />);
-        expect(screen.getByText('Collateral Balance')).toBeInTheDocument();
+        expect(screen.getByText('SF Vault')).toBeInTheDocument();
         expect(screen.getByText('$0.00')).toBeInTheDocument();
         expect(
             screen.getAllByText(
@@ -81,7 +81,7 @@ describe('CollateralTabLeftPane component', () => {
                 collateralBook={{ ...collateralBook80, usdCollateral: 210.2 }}
             />
         );
-        const input = screen.getByTestId('collateral-balance');
+        const input = screen.getByTestId('vault-balance');
         expect(input).toHaveClass('text-xl');
     });
 
@@ -94,7 +94,7 @@ describe('CollateralTabLeftPane component', () => {
                 }}
             />
         );
-        const input = screen.getByTestId('collateral-balance');
+        const input = screen.getByTestId('vault-balance');
         expect(input).toHaveClass('text-xl tablet:text-md');
     });
 
@@ -107,7 +107,7 @@ describe('CollateralTabLeftPane component', () => {
                 }}
             />
         );
-        const input = screen.getByTestId('collateral-balance');
+        const input = screen.getByTestId('vault-balance');
         expect(input).toHaveClass('text-md tablet:text-smd');
     });
 });

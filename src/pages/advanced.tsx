@@ -3,14 +3,21 @@ import { Landing } from 'src/components/pages';
 import { useIsGlobalItayose, useIsMarketTerminated } from 'src/hooks';
 
 const Advanced = () => {
-    const { data: isTerminated } = useIsMarketTerminated();
+    const { data: isTerminated, isLoading: isLoadingMarketTerminated } =
+        useIsMarketTerminated();
 
-    const isGlobalItayose = useIsGlobalItayose();
+    const { data: isGlobalItayose, isLoading: isLoadingGlobalItayose } =
+        useIsGlobalItayose();
+
+    if (isLoadingMarketTerminated || isLoadingGlobalItayose) {
+        return null;
+    }
 
     if (isTerminated) {
         Router.push('/emergency');
         return null;
     }
+
     if (isGlobalItayose) {
         Router.push('/global-itayose');
         return null;

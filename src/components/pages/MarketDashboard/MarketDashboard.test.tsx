@@ -85,7 +85,7 @@ describe('MarketDashboard Component', () => {
         await waitFor(() => {
             expect(
                 screen.getByText(
-                    'Please note that WFIL will be delisted on Secured Finance.'
+                    'Please note that USDC will be delisted on Secured Finance.'
                 )
             ).toBeInTheDocument();
         });
@@ -97,7 +97,7 @@ describe('MarketDashboard Component', () => {
         await waitFor(() => {
             expect(
                 screen.queryByText(
-                    'Please note that WFIL will be delisted on Secured Finance.'
+                    'Please note that USDC will be delisted on Secured Finance.'
                 )
             ).not.toBeInTheDocument();
         });

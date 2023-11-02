@@ -29,7 +29,7 @@ export const LineChartTab = ({
     const dispatch = useDispatch();
     const router = useRouter();
 
-    const isGlobalItayose = useIsGlobalItayose();
+    const { data: isGlobalItayose } = useIsGlobalItayose();
 
     const { currency, maturity } = useSelector((state: RootState) =>
         selectLandingOrderForm(state.landingOrderForm)
