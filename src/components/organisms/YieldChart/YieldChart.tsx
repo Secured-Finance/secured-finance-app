@@ -23,7 +23,7 @@ export const YieldChart = ({
         maturityList,
         itayoseMarketIndexSet,
         maximumRate,
-        nearestMarketOriginalRate,
+        marketCloseToMaturityOriginalRate,
     } = useYieldCurveMarketRates();
 
     return (
@@ -41,15 +41,15 @@ export const YieldChart = ({
                     ></CurveHeader>
                 </div>
                 <div className='flex w-full flex-grow items-center pl-[35px]'>
-                    <div className='h-[350px] w-full'>
+                    <div className='h-[350px] w-[550px]'>
                         <LineChartTab
                             rates={rates}
                             maturityList={maturityList}
                             itayoseMarketIndexSet={itayoseMarketIndexSet}
                             followLinks={false}
                             maximumRate={maximumRate}
-                            nearestMarketOriginalRate={
-                                nearestMarketOriginalRate
+                            marketCloseToMaturityOriginalRate={
+                                marketCloseToMaturityOriginalRate
                             }
                         />
                     </div>

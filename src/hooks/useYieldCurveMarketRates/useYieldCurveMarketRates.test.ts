@@ -158,12 +158,12 @@ describe('useYieldCurveMarketRates', () => {
         expect(result.current.maximumRate).toEqual(Number.MAX_VALUE);
     });
 
-    it('should return 0 nearestMarketOriginalRate if no market is near maturity', async () => {
+    it('should return 0 marketCloseToMaturityOriginalRate if no market is near maturity', async () => {
         const { result, waitForNextUpdate } = renderHook(() =>
             useYieldCurveMarketRates()
         );
         await waitForNextUpdate();
-        expect(result.current.nearestMarketOriginalRate).toEqual(0);
+        expect(result.current.marketCloseToMaturityOriginalRate).toEqual(0);
     });
 
     it('should not change first market yield chart rate if its not close to maturity', async () => {
@@ -185,7 +185,7 @@ describe('useYieldCurveMarketRates', () => {
         expect(result.current.maximumRate).toEqual(34820);
     });
 
-    it('should return correct nearestMarketOriginalRate when a market is near maturity', async () => {
+    it('should return correct marketCloseToMaturityOriginalRate when a market is near maturity', async () => {
         jest.spyOn(mock, 'getOrderBookDetails').mockResolvedValue([
             ...closeToMaturity,
         ]);
@@ -193,7 +193,9 @@ describe('useYieldCurveMarketRates', () => {
             useYieldCurveMarketRates()
         );
         await waitForNextUpdate();
-        expect(result.current.nearestMarketOriginalRate).toEqual(10000000);
+        expect(result.current.marketCloseToMaturityOriginalRate).toEqual(
+            10000000
+        );
     });
 
     it('should change first market yield chart rate if its close to maturity and greater than maximum rate', async () => {

@@ -26,7 +26,7 @@ export default {
         maturityList: maturityList,
         itayoseMarketIndexSet: new Set(),
         maximumRate: Number.MAX_VALUE,
-        nearestMarketOriginalRate: 0,
+        marketCloseToMaturityOriginalRate: 0,
     },
     chromatic: { pauseAnimationAtEnd: true },
     decorators: [withWalletProvider, withAssetPrice],
@@ -67,12 +67,12 @@ export const WithNearestMarket = Template.bind({});
 WithNearestMarket.args = {
     maximumRate: 47746,
     rates: [new Rate(59682), ...yieldCurveRates],
-    nearestMarketOriginalRate: 800000,
+    marketCloseToMaturityOriginalRate: 800000,
 };
 
 export const WithNearestMarketWithLowYield = Template.bind({});
 WithNearestMarketWithLowYield.args = {
     maximumRate: 47746,
     rates: [new Rate(20000), ...yieldCurveRates],
-    nearestMarketOriginalRate: 0,
+    marketCloseToMaturityOriginalRate: 0,
 };

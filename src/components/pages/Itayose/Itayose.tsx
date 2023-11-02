@@ -132,7 +132,7 @@ export const Itayose = () => {
         maturityList,
         itayoseMarketIndexSet,
         maximumRate,
-        nearestMarketOriginalRate,
+        marketCloseToMaturityOriginalRate,
     } = useYieldCurveMarketRates();
 
     const selectedTerm = useMemo(() => {
@@ -281,8 +281,8 @@ export const Itayose = () => {
                                 maturityList={maturityList}
                                 itayoseMarketIndexSet={itayoseMarketIndexSet}
                                 maximumRate={maximumRate}
-                                nearestMarketOriginalRate={
-                                    nearestMarketOriginalRate
+                                marketCloseToMaturityOriginalRate={
+                                    marketCloseToMaturityOriginalRate
                                 }
                             />
                         </div>
