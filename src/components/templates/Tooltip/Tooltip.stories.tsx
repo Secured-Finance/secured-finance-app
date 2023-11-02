@@ -79,3 +79,8 @@ SmallWidth.play = async ({ canvasElement }) => {
     const button = canvas.getByTestId('information-circle');
     await userEvent.hover(button);
 };
+
+export const OverrideIconColor = Template.bind({});
+OverrideIconColor.args = {
+    iconColor: 'text-orange',
+};

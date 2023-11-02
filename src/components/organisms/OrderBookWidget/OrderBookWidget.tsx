@@ -462,7 +462,7 @@ export const OrderBookWidget = ({
                                         {formatLoanValue(marketPrice, 'price')}
                                     </p>
                                     {variant === 'itayose' && (
-                                        <Tooltip>
+                                        <Tooltip iconColor='text-white'>
                                             <p className='text-white'>
                                                 Overlapping orders are
                                                 aggregated to show net amounts.
