@@ -16,8 +16,8 @@ export const computeWeightedAverageRate = (trades: TradeHistory) => {
         (acc, trade) =>
             acc +
             LoanValue.fromPrice(
-                trade.averagePrice,
-                trade.maturity
+                Number(trade.averagePrice),
+                Number(trade.maturity)
             ).apr.toNumber() *
                 trade.amount,
         0
@@ -93,7 +93,7 @@ export const checkOrdersAreSame = (order1: Order, order2: OrderList[0]) => {
 };
 
 export const sortOrders = (a: Order, b: Order) => {
-    return Number(b.createdAt.sub(a.createdAt));
+    return Number(b.createdAt - a.createdAt);
 };
 
 export const getMaxAmount = (orders: { amount: bigint }[]) => {

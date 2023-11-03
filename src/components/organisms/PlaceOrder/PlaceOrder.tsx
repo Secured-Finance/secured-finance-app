@@ -1,7 +1,6 @@
 import { track } from '@amplitude/analytics-browser';
 import { OrderSide, WalletSource } from '@secured-finance/sf-client';
 import { getUTCMonthYear } from '@secured-finance/sf-core';
-import { BigNumber } from 'ethers';
 import { useCallback, useReducer, useState } from 'react';
 import { Spinner } from 'src/components/atoms';
 import {
@@ -136,7 +135,7 @@ export const PlaceOrder = ({
             ccy: CurrencySymbol,
             maturity: Maturity,
             side: OrderSide,
-            amount: BigNumber,
+            amount: bigint,
             unitPrice: number,
             walletSource: WalletSource
         ) => {
@@ -153,7 +152,7 @@ export const PlaceOrder = ({
                 if (!transactionStatus) {
                     dispatch({ type: 'error' });
                 } else {
-                    setTxHash(tx?.hash);
+                    setTxHash(tx);
                     track(OrderEvents.ORDER_PLACED, {
                         [OrderProperties.ORDER_SIDE]:
                             side === OrderSide.BORROW ? 'Borrow' : 'Lend',
@@ -187,7 +186,7 @@ export const PlaceOrder = ({
                             orderAmount.currency,
                             maturity,
                             side,
-                            orderAmount.toBigNumber(),
+                            orderAmount.toBigInt(),
                             0,
                             walletSource
                         );
@@ -196,7 +195,7 @@ export const PlaceOrder = ({
                             orderAmount.currency,
                             maturity,
                             side,
-                            orderAmount.toBigNumber(),
+                            orderAmount.toBigInt(),
                             loanValue.price,
                             walletSource
                         );

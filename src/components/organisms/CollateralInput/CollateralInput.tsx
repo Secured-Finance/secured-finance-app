@@ -1,4 +1,3 @@
-import { BigNumber } from 'ethers';
 import { useCallback } from 'react';
 import { InputBase, SizeDependentStylesConfig } from 'src/components/atoms';
 import { PercentageSelector } from 'src/components/molecules';
@@ -8,7 +7,7 @@ interface CollateralInputProps {
     price: number;
     availableAmount: number;
     asset: CurrencySymbol;
-    onAmountChange?: (v: BigNumber | undefined) => void;
+    onAmountChange?: (v: bigint | undefined) => void;
     amount: number | undefined;
 }
 
@@ -23,9 +22,9 @@ export const CollateralInput = ({
         (
             amount: number | undefined,
             asset: CurrencySymbol,
-            onAmountChange: (v: BigNumber | undefined) => void
+            onAmountChange: (v: bigint | undefined) => void
         ) => {
-            let format = (x: number) => BigNumber.from(x);
+            let format = (x: number) => BigInt(x);
             if (amountFormatterToBase && amountFormatterToBase[asset]) {
                 format = amountFormatterToBase[asset];
             }

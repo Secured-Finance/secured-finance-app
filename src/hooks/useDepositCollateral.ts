@@ -1,12 +1,8 @@
-import { BigNumber } from 'ethers';
 import { useCallback } from 'react';
 import { CurrencySymbol, toCurrency } from 'src/utils';
 import useSF from './useSecuredFinance';
 
-export const useDepositCollateral = (
-    ccy: CurrencySymbol,
-    amount: number | BigNumber
-) => {
+export const useDepositCollateral = (ccy: CurrencySymbol, amount: bigint) => {
     const securedFinance = useSF();
 
     const handleDepositCollateral = useCallback(async () => {
@@ -23,10 +19,7 @@ export const useDepositCollateral = (
     return { onDepositCollateral: handleDepositCollateral };
 };
 
-export const useWithdrawCollateral = (
-    ccy: CurrencySymbol,
-    amount: number | BigNumber
-) => {
+export const useWithdrawCollateral = (ccy: CurrencySymbol, amount: bigint) => {
     const securedFinance = useSF();
 
     const handleWithdrawCollateral = useCallback(async () => {

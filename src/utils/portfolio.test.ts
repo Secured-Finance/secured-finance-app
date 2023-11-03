@@ -121,18 +121,14 @@ describe('computeNetValue', () => {
         ];
         expect(
             computeNetValue(
-                positions.filter(position =>
-                    position.forwardValue.isNegative()
-                ),
+                positions.filter(position => position.forwardValue < 0),
                 priceMap
             )
         ).toEqual(-153000);
 
         expect(
             computeNetValue(
-                positions.filter(
-                    position => !position.forwardValue.isNegative()
-                ),
+                positions.filter(position => position.forwardValue > 0),
                 priceMap
             )
         ).toEqual(153900);
@@ -297,9 +293,9 @@ describe('sortOrders', () => {
     const sortedOrders = orderHistoryList.sort((a, b) => sortOrders(a, b));
 
     for (let i = 0; i < sortedOrders.length - 1; i++) {
-        expect(sortedOrders[i].createdAt.toNumber()).toBeGreaterThanOrEqual(
-            sortedOrders[i + 1].createdAt.toNumber()
-        );
+        expect(
+            sortedOrders[i].createdAt >= sortedOrders[i + 1].createdAt
+        ).toBeTruthy();
     }
 });
 

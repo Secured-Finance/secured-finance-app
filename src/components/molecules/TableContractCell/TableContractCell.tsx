@@ -84,7 +84,7 @@ export const TableContractCell = ({
                 <span className='typography-caption-2 text-neutral-6'>
                     {contract}
                 </span>
-                {delistedContractSide && (
+                {delistedContractSide !== undefined && (
                     <Tooltip
                         align='right'
                         iconElement={

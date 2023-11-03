@@ -1,4 +1,3 @@
-import { BigNumber } from 'ethers';
 import { useMemo, useState } from 'react';
 import {
     CollateralTabLeftPane,
@@ -18,7 +17,7 @@ import {
 import { useAccount } from 'wagmi';
 
 export const generateCollateralList = (
-    balance: Partial<Record<CurrencySymbol, number | BigNumber>>,
+    balance: Partial<Record<CurrencySymbol, number | bigint>>,
     useAllCurrencies: boolean
 ): Record<CurrencySymbol, CollateralInfo> => {
     let collateralRecords: Record<string, CollateralInfo> = {};
@@ -35,7 +34,7 @@ export const generateCollateralList = (
                         ? typeof balance[ccy] === 'number'
                             ? (balance[ccy] as number)
                             : amountFormatterFromBase[ccy](
-                                  balance[ccy] as BigNumber
+                                  balance[ccy] as bigint
                               )
                         : 0,
                 },
