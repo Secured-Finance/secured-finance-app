@@ -21,7 +21,7 @@ beforeEach(() => jest.clearAllMocks());
 const mockSecuredFinance = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mockSecuredFinance);
 
-describe.skip('WithdrawCollateral component', () => {
+describe('WithdrawCollateral component', () => {
     it('should display the WithdrawCollateral Modal when open', () => {
         const onClose = jest.fn();
         render(<Default onClose={onClose} />);
@@ -82,9 +82,6 @@ describe.skip('WithdrawCollateral component', () => {
     });
 
     it('should update the lastActionTimestamp in the store when the transaction receipt is received', async () => {
-        mockSecuredFinance.withdrawCollateral.mockResolvedValue({
-            wait: jest.fn(() => Promise.resolve({ blockNumber: 123 })),
-        });
         const { store } = render(<Default />, { preloadedState });
         fireEvent.click(screen.getByTestId('collateral-selector-button'));
         fireEvent.click(screen.getByTestId('option-2'));
@@ -96,9 +93,7 @@ describe.skip('WithdrawCollateral component', () => {
     });
 
     it('should proceed to failure screen and call onclose when block number is undefined', async () => {
-        mockSecuredFinance.withdrawCollateral.mockResolvedValue({
-            wait: jest.fn(() => Promise.resolve({ blockNumber: undefined })),
-        });
+        mockSecuredFinance.withdrawCollateral.mockResolvedValueOnce('');
         const onClose = jest.fn();
         render(<Default onClose={onClose} />, { preloadedState });
         fireEvent.click(screen.getByTestId('collateral-selector-button'));
@@ -140,9 +135,6 @@ describe.skip('WithdrawCollateral component', () => {
 
     it('should track the withdrawing of collateral', async () => {
         const track = jest.spyOn(analytics, 'track');
-        mockSecuredFinance.withdrawCollateral.mockResolvedValue({
-            wait: jest.fn(() => Promise.resolve({ blockNumber: 123 })),
-        });
         const onClose = jest.fn();
         render(<Default onClose={onClose} source='Source of Withdrawal' />, {
             preloadedState,

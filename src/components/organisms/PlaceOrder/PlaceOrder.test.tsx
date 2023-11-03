@@ -25,7 +25,7 @@ const preloadedState = {
 const mockSecuredFinance = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mockSecuredFinance);
 
-describe.skip('PlaceOrder component', () => {
+describe('PlaceOrder component', () => {
     it('should display the Place Order Modal when open', async () => {
         render(<Default />);
 
@@ -94,10 +94,9 @@ describe.skip('PlaceOrder component', () => {
 
     it('should reach success screen when transaction receipt is received', async () => {
         const onClose = jest.fn();
-        const tx = {
-            wait: jest.fn(() => Promise.resolve({ blockNumber: 13115215 })),
-        } as unknown;
-        const onPlaceOrder = jest.fn().mockReturnValue(Promise.resolve(tx));
+        const onPlaceOrder = jest
+            .fn()
+            .mockReturnValue(Promise.resolve('0x123'));
 
         render(<Default onClose={onClose} onPlaceOrder={onPlaceOrder} />, {
             preloadedState,
@@ -118,10 +117,9 @@ describe.skip('PlaceOrder component', () => {
     });
 
     it('should update the lastActionTimestamp in the store when the transaction receipt is received', async () => {
-        const tx = {
-            wait: jest.fn(() => Promise.resolve({ blockNumber: 13115215 })),
-        } as unknown;
-        const onPlaceOrder = jest.fn().mockReturnValue(Promise.resolve(tx));
+        const onPlaceOrder = jest
+            .fn()
+            .mockReturnValue(Promise.resolve('0x123'));
         const { store } = render(<Default onPlaceOrder={onPlaceOrder} />, {
             preloadedState,
         });
@@ -132,10 +130,9 @@ describe.skip('PlaceOrder component', () => {
     });
 
     it('should call the onPlaceOrder function in market order mode if the orderType is MARKET', async () => {
-        const tx = {
-            wait: jest.fn(() => Promise.resolve({ blockNumber: 13115215 })),
-        } as unknown;
-        const onPlaceOrder = jest.fn().mockReturnValue(Promise.resolve(tx));
+        const onPlaceOrder = jest
+            .fn()
+            .mockReturnValue(Promise.resolve('0x123'));
         render(
             <Default
                 onPlaceOrder={onPlaceOrder}
@@ -157,10 +154,9 @@ describe.skip('PlaceOrder component', () => {
     });
 
     it('should call the onPlaceOrder function in limit order mode if the orderType is LIMIT', async () => {
-        const tx = {
-            wait: jest.fn(() => Promise.resolve({ blockNumber: 13115215 })),
-        } as unknown;
-        const onPlaceOrder = jest.fn().mockReturnValue(Promise.resolve(tx));
+        const onPlaceOrder = jest
+            .fn()
+            .mockReturnValue(Promise.resolve('0x123'));
         render(
             <Default onPlaceOrder={onPlaceOrder} orderType={OrderType.LIMIT} />,
             { preloadedState }

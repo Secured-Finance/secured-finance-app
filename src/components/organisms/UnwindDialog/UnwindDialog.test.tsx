@@ -8,7 +8,7 @@ const { Default, Redeem, Repay } = composeStories(stories);
 const mockSecuredFinance = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mockSecuredFinance);
 
-describe.skip('UnwindDialog Component', () => {
+describe('UnwindDialog Component', () => {
     it('should render a UnwindDialog', async () => {
         await waitFor(() => render(<Default />));
     });
