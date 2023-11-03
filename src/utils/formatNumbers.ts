@@ -1,26 +1,19 @@
-import { BigNumber, FixedNumber } from 'ethers';
 import { MAX_COVERAGE } from './collateral';
 import { divide } from './currencyList';
 import { LoanValue } from './entities';
 
 export const usdFormat = (
-    number: number | BigNumber,
+    number: number | bigint,
     digits = 0,
     notation: 'standard' | 'compact' = 'standard'
 ) => {
-    let val;
-    if (number instanceof BigNumber) {
-        val = number.toBigInt();
-    } else {
-        val = number;
-    }
     return Intl.NumberFormat('en-US', {
         style: 'currency',
         currency: 'USD',
         currencySign: 'accounting',
         maximumFractionDigits: digits,
         notation: notation,
-    }).format(val);
+    }).format(number);
 };
 
 export const percentFormat = (
@@ -38,36 +31,24 @@ export const percentFormat = (
 };
 
 export const ordinaryFormat = (
-    number: number | bigint | BigNumber | FixedNumber,
+    number: number | bigint,
     minDecimals = 0,
     maxDecimals = 2,
     notation: 'standard' | 'compact' = 'standard'
 ) => {
-    if (number instanceof BigNumber) {
-        return Intl.NumberFormat('en-US', {
-            minimumFractionDigits: minDecimals,
-            maximumFractionDigits: maxDecimals,
-            notation: notation,
-        }).format(number.toBigInt());
-    } else if (number instanceof FixedNumber) {
-        return number.toString();
-    } else {
-        return Intl.NumberFormat('en-US', {
-            minimumFractionDigits: minDecimals,
-            maximumFractionDigits: maxDecimals,
-            notation: notation,
-        }).format(number);
-    }
+    return Intl.NumberFormat('en-US', {
+        minimumFractionDigits: minDecimals,
+        maximumFractionDigits: maxDecimals,
+        notation: notation,
+    }).format(number);
 };
 
-export const formatAmount = (
-    number: number | bigint | BigNumber | FixedNumber
-) => {
+export const formatAmount = (number: number | bigint) => {
     return ordinaryFormat(number, 0, 4);
 };
 
 export const formatWithCurrency = (
-    number: number | bigint | BigNumber | FixedNumber,
+    number: number | bigint,
     currency: string,
     decimals = 2
 ) => {

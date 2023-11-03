@@ -1,7 +1,5 @@
-import { BigNumber } from 'ethers';
-
 export const MAX_COVERAGE = 10000;
-export const ZERO_BN = BigNumber.from(0);
+export const ZERO_BI = BigInt(0);
 
 export const computeAvailableToBorrow = (
     assetPrice: number,
@@ -14,6 +12,6 @@ export const computeAvailableToBorrow = (
     return ((threshold - coverageRatio) * totalCollateralInUsd) / assetPrice;
 };
 
-export const calculatePercentage = (value: BigNumber, total: BigNumber) => {
-    return total.isZero() ? ZERO_BN : value.mul(100).div(total);
+export const calculatePercentage = (value: bigint, total: bigint) => {
+    return total === ZERO_BI ? ZERO_BI : (value * BigInt(100)) / total;
 };

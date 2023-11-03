@@ -1,6 +1,6 @@
-import { BigNumber } from 'ethers';
 import { AssetPriceMap } from 'src/store/assetPrices/selectors';
 import { DailyVolumes } from 'src/types';
+import { ZERO_BI } from './collateral';
 import {
     currencyMap,
     CurrencySymbol,
@@ -11,17 +11,17 @@ export function computeTotalDailyVolumeInUSD(
     dailyVolumes: DailyVolumes,
     priceMap: AssetPriceMap
 ): {
-    totalVolumeUSD: BigNumber;
-    volumePerCurrency: Record<CurrencySymbol, BigNumber>;
+    totalVolumeUSD: bigint;
+    volumePerCurrency: Record<CurrencySymbol, bigint>;
 } {
-    const volumePerCurrency: Record<CurrencySymbol, BigNumber> = {
-        [CurrencySymbol.ETH]: BigNumber.from(0),
-        [CurrencySymbol.WFIL]: BigNumber.from(0),
-        [CurrencySymbol.USDC]: BigNumber.from(0),
-        [CurrencySymbol.WBTC]: BigNumber.from(0),
+    const volumePerCurrency: Record<CurrencySymbol, bigint> = {
+        [CurrencySymbol.ETH]: ZERO_BI,
+        [CurrencySymbol.WFIL]: ZERO_BI,
+        [CurrencySymbol.USDC]: ZERO_BI,
+        [CurrencySymbol.WBTC]: ZERO_BI,
     };
 
-    let totalVolumeUSD = BigNumber.from(0);
+    let totalVolumeUSD = ZERO_BI;
 
     dailyVolumes.forEach(dailyVolume => {
         const { currency, volume } = dailyVolume;
@@ -30,17 +30,11 @@ export function computeTotalDailyVolumeInUSD(
             return;
         }
 
-        const volumeInBaseUnit = currencyMap[ccy].fromBaseUnit(
-            BigNumber.from(volume)
-        );
+        const volumeInBaseUnit = currencyMap[ccy].fromBaseUnit(BigInt(volume));
 
         const valueInUSD = volumeInBaseUnit * priceMap[ccy];
-
-        volumePerCurrency[ccy] = volumePerCurrency[ccy].add(
-            Math.floor(volumeInBaseUnit)
-        );
-
-        totalVolumeUSD = totalVolumeUSD.add(Math.floor(valueInUSD));
+        volumePerCurrency[ccy] += BigInt(volumeInBaseUnit);
+        totalVolumeUSD += BigInt(valueInUSD);
     });
     return { totalVolumeUSD, volumePerCurrency };
 }
