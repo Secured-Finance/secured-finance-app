@@ -147,7 +147,7 @@ export const EmergencyRedeemDialog = ({
             if (!transactionStatus) {
                 dispatch({ type: 'error' });
             } else {
-                setTxHash(tx?.hash);
+                setTxHash(tx);
                 dispatch({ type: 'next' });
             }
         } catch (e) {

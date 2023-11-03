@@ -168,11 +168,11 @@ export const PortfolioManagement = () => {
             };
         }
         const borrowedPV = computeNetValue(
-            positions.filter(position => position.forwardValue.isNegative()),
+            positions.filter(position => position.forwardValue < 0),
             priceMap
         );
         const lentPV = computeNetValue(
-            positions.filter(position => !position.forwardValue.isNegative()),
+            positions.filter(position => position.forwardValue > 0),
             priceMap
         );
         return {

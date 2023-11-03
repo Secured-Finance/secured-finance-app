@@ -1,12 +1,11 @@
 import { OrderSide } from '@secured-finance/sf-client';
 import { composeStories } from '@storybook/react';
-import { BigNumber } from 'ethers';
 import { CollateralBook } from 'src/hooks';
 import { dec22Fixture, preloadedAssetPrices } from 'src/stories/mocks/fixtures';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
 import { OrderType } from 'src/types';
-import { CurrencySymbol } from 'src/utils';
+import { CurrencySymbol, ZERO_BI } from 'src/utils';
 import timemachine from 'timemachine';
 import * as stories from './AdvancedLendingOrderCard.stories';
 
@@ -29,20 +28,20 @@ const preloadedState = {
 
 const collateralBook0: CollateralBook = {
     collateral: {
-        ETH: BigNumber.from('1000000000000000000'),
-        USDC: BigNumber.from('10000000'),
-        WBTC: BigNumber.from('20000000'),
+        ETH: BigInt('1000000000000000000'),
+        USDC: BigInt('10000000'),
+        WBTC: BigInt('20000000'),
     },
     nonCollateral: {
-        WFIL: BigNumber.from('100000000000000000000'),
+        WFIL: BigInt('100000000000000000000'),
     },
     usdCollateral: 12100.34,
     usdNonCollateral: 600,
-    coverage: BigNumber.from('0'),
+    coverage: ZERO_BI,
     collateralThreshold: 80,
     withdrawableCollateral: {
-        [CurrencySymbol.USDC]: BigNumber.from(100000),
-        [CurrencySymbol.ETH]: BigNumber.from(100000),
+        [CurrencySymbol.USDC]: BigInt(100000),
+        [CurrencySymbol.ETH]: BigInt(100000),
     },
 };
 

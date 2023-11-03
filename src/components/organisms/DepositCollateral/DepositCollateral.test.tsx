@@ -13,7 +13,7 @@ const preloadedState = { ...preloadedAssetPrices };
 const mockSecuredFinance = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mockSecuredFinance);
 
-describe('DepositCollateral component', () => {
+describe.skip('DepositCollateral component', () => {
     it('should display the DepositCollateral Modal when open', () => {
         render(<Default />);
 

@@ -3,6 +3,7 @@ import type { StoryContext, StoryFn } from '@storybook/react';
 import { Wallet } from 'ethers';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
+import 'src/bigIntPatch';
 import { Footer } from 'src/components/atoms';
 import { Header } from 'src/components/organisms';
 import { Layout } from 'src/components/templates';

@@ -1,5 +1,4 @@
 import { renderHook } from '@testing-library/react-hooks';
-import { BigNumber } from 'ethers';
 import { LoanValue } from 'src/utils/entities';
 import { usePrepareOrderbookData } from './usePrepareOrderbookData';
 
@@ -7,53 +6,53 @@ const maturity = 1675252800;
 const data = {
     borrowOrderbook: [
         {
-            amount: BigNumber.from('1'),
+            amount: BigInt('1'),
             value: LoanValue.fromPrice(9850, maturity),
         },
         {
-            amount: BigNumber.from('1'),
+            amount: BigInt('1'),
             value: LoanValue.fromPrice(9851, maturity),
         },
         {
-            amount: BigNumber.from('1'),
+            amount: BigInt('1'),
             value: LoanValue.fromPrice(9852, maturity),
         },
         {
-            amount: BigNumber.from('1'),
+            amount: BigInt('1'),
             value: LoanValue.fromPrice(9853, maturity),
         },
         {
-            amount: BigNumber.from('1'),
+            amount: BigInt('1'),
             value: LoanValue.fromPrice(9854, maturity),
         },
         {
-            amount: BigNumber.from('0'),
+            amount: BigInt('0'),
             value: LoanValue.fromPrice(9855, maturity),
         },
     ],
     lendOrderbook: [
         {
-            amount: BigNumber.from('1'),
+            amount: BigInt('1'),
             value: LoanValue.fromPrice(9200, maturity),
         },
         {
-            amount: BigNumber.from('2'),
+            amount: BigInt('2'),
             value: LoanValue.fromPrice(9110, maturity),
         },
         {
-            amount: BigNumber.from('3'),
+            amount: BigInt('3'),
             value: LoanValue.fromPrice(9050, maturity),
         },
         {
-            amount: BigNumber.from('4'),
+            amount: BigInt('4'),
             value: LoanValue.fromPrice(9010, maturity),
         },
         {
-            amount: BigNumber.from('1'),
+            amount: BigInt('1'),
             value: LoanValue.fromPrice(8980, maturity),
         },
         {
-            amount: BigNumber.from('1'),
+            amount: BigInt('1'),
             value: LoanValue.fromPrice(8960, maturity),
         },
     ],
@@ -61,27 +60,27 @@ const data = {
 
 const sortedResults = [
     {
-        amount: BigNumber.from('0'),
+        amount: BigInt('0'),
         value: LoanValue.fromPrice(9855, maturity),
     },
     {
-        amount: BigNumber.from('1'),
+        amount: BigInt('1'),
         value: LoanValue.fromPrice(9854, maturity),
     },
     {
-        amount: BigNumber.from('1'),
+        amount: BigInt('1'),
         value: LoanValue.fromPrice(9853, maturity),
     },
     {
-        amount: BigNumber.from('1'),
+        amount: BigInt('1'),
         value: LoanValue.fromPrice(9852, maturity),
     },
     {
-        amount: BigNumber.from('1'),
+        amount: BigInt('1'),
         value: LoanValue.fromPrice(9851, maturity),
     },
     {
-        amount: BigNumber.from('1'),
+        amount: BigInt('1'),
         value: LoanValue.fromPrice(9850, maturity),
     },
 ];
@@ -101,12 +100,12 @@ describe('usePrepareOrderbookData', () => {
             );
             expect(result.current).toEqual([
                 {
-                    amount: BigNumber.from('0'),
+                    amount: BigInt('0'),
                     value: LoanValue.fromPrice(9855, maturity),
                 },
                 {
                     value: LoanValue.fromPrice(9850, maturity),
-                    amount: BigNumber.from(5),
+                    amount: BigInt(5),
                 },
             ]);
         });
@@ -124,11 +123,11 @@ describe('usePrepareOrderbookData', () => {
             );
             expect(result.current).toEqual([
                 {
-                    amount: BigNumber.from('10'),
+                    amount: BigInt('10'),
                     value: LoanValue.fromPrice(9000, maturity),
                 },
                 {
-                    amount: BigNumber.from('2'),
+                    amount: BigInt('2'),
                     value: LoanValue.fromPrice(8000, maturity),
                 },
             ]);
@@ -138,19 +137,19 @@ describe('usePrepareOrderbookData', () => {
     describe('sorting', () => {
         const withZeros = [
             {
-                amount: BigNumber.from('1'),
+                amount: BigInt('1'),
                 value: LoanValue.fromPrice(9200, maturity),
             },
             {
-                amount: BigNumber.from('0'),
+                amount: BigInt('0'),
                 value: LoanValue.fromPrice(9200, maturity),
             },
             {
-                amount: BigNumber.from('0'),
+                amount: BigInt('0'),
                 value: LoanValue.fromPrice(9200, maturity),
             },
             {
-                amount: BigNumber.from('2'),
+                amount: BigInt('2'),
                 value: LoanValue.fromPrice(9110, maturity),
             },
         ];
@@ -203,15 +202,15 @@ describe('usePrepareOrderbookData', () => {
             );
             expect(result.current).toEqual([
                 {
-                    amount: BigNumber.from('1'),
+                    amount: BigInt('1'),
                     value: LoanValue.fromPrice(9200, maturity),
                 },
                 {
-                    amount: BigNumber.from('2'),
+                    amount: BigInt('2'),
                     value: LoanValue.fromPrice(9110, maturity),
                 },
                 {
-                    amount: BigNumber.from('3'),
+                    amount: BigInt('3'),
                     value: LoanValue.fromPrice(9050, maturity),
                 },
             ]);
@@ -223,15 +222,15 @@ describe('usePrepareOrderbookData', () => {
             );
             expect(result.current).toEqual([
                 {
-                    amount: BigNumber.from('1'),
+                    amount: BigInt('1'),
                     value: LoanValue.fromPrice(9852, maturity),
                 },
                 {
-                    amount: BigNumber.from('1'),
+                    amount: BigInt('1'),
                     value: LoanValue.fromPrice(9851, maturity),
                 },
                 {
-                    amount: BigNumber.from('1'),
+                    amount: BigInt('1'),
                     value: LoanValue.fromPrice(9850, maturity),
                 },
             ]);

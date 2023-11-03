@@ -1,4 +1,3 @@
-import { BigNumber } from 'ethers';
 import { useCallback, useReducer, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { CollateralSelector, Spinner } from 'src/components/atoms';
@@ -17,7 +16,7 @@ import {
     AddressUtils,
     CollateralInfo,
     CurrencySymbol,
-    ZERO_BN,
+    ZERO_BI,
     amountFormatterFromBase,
     amountFormatterToBase,
     formatAmount,
@@ -109,7 +108,7 @@ export const WithdrawCollateral = ({
     const { address } = useAccount();
     const [asset, setAsset] = useState(CurrencySymbol.ETH);
     const [state, dispatch] = useReducer(reducer, stateRecord[1]);
-    const [collateral, setCollateral] = useState<BigNumber>();
+    const [collateral, setCollateral] = useState<bigint>();
     const [txHash, setTxHash] = useState<string | undefined>();
     const [errorMessage, setErrorMessage] = useState(
         'Your withdrawal transaction has failed.'
@@ -118,7 +117,7 @@ export const WithdrawCollateral = ({
     const priceList = useSelector((state: RootState) => getPriceMap(state));
     const { onWithdrawCollateral } = useWithdrawCollateral(
         asset,
-        collateral ?? ZERO_BN
+        collateral ?? ZERO_BI
     );
 
     const handleClose = useCallback(() => {
@@ -130,12 +129,11 @@ export const WithdrawCollateral = ({
         return (
             state.currentStep === Step.withdrawCollateral &&
             (!collateral ||
-                collateral.isZero() ||
-                collateral.gt(
+                collateral === ZERO_BI ||
+                collateral >
                     amountFormatterToBase[asset](
                         collateralList[asset]?.available ?? 0
-                    )
-                ))
+                    ))
         );
     }, [collateralList, asset, collateral, state.currentStep]);
 
@@ -149,10 +147,10 @@ export const WithdrawCollateral = ({
                 trackCollateralEvent(
                     CollateralEvents.WITHDRAW_COLLATERAL,
                     asset,
-                    collateral ?? ZERO_BN,
+                    collateral ?? ZERO_BI,
                     source ?? ''
                 );
-                setTxHash(tx?.hash);
+                setTxHash(tx);
                 dispatch({ type: 'next' });
             }
         } catch (e) {
@@ -222,9 +220,9 @@ export const WithdrawCollateral = ({
                                 <CollateralInput
                                     price={priceList[asset]}
                                     asset={asset}
-                                    onAmountChange={(
-                                        v: BigNumber | undefined
-                                    ) => setCollateral(v)}
+                                    onAmountChange={(v: bigint | undefined) =>
+                                        setCollateral(v)
+                                    }
                                     availableAmount={
                                         collateralList[asset]?.available
                                     }
@@ -264,7 +262,7 @@ export const WithdrawCollateral = ({
                                         'Amount',
                                         `${formatAmount(
                                             amountFormatterFromBase[asset](
-                                                collateral ?? ZERO_BN
+                                                collateral ?? ZERO_BI
                                             )
                                         )} ${asset}`,
                                     ],

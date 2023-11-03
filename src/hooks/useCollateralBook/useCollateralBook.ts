@@ -1,5 +1,4 @@
 import { useQuery } from '@tanstack/react-query';
-import { BigNumber } from 'ethers';
 import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { QueryKeys } from 'src/hooks/queries';
@@ -8,7 +7,7 @@ import { AssetPriceMap, getPriceMap } from 'src/store/assetPrices/selectors';
 import { RootState } from 'src/store/types';
 import {
     CurrencySymbol,
-    ZERO_BN,
+    ZERO_BI,
     amountFormatterFromBase,
     currencyMap,
     getCurrencyMapAsList,
@@ -16,49 +15,49 @@ import {
 } from 'src/utils';
 
 export interface CollateralBook {
-    collateral: Partial<Record<CurrencySymbol, BigNumber>>;
-    nonCollateral: Partial<Record<CurrencySymbol, BigNumber>>;
-    withdrawableCollateral: Partial<Record<CurrencySymbol, BigNumber>>;
+    collateral: Partial<Record<CurrencySymbol, bigint>>;
+    nonCollateral: Partial<Record<CurrencySymbol, bigint>>;
+    withdrawableCollateral: Partial<Record<CurrencySymbol, bigint>>;
     usdCollateral: number;
     usdNonCollateral: number;
-    coverage: BigNumber;
+    coverage: bigint;
     collateralThreshold: number;
 }
 
 export const emptyCollateralBook: CollateralBook = {
     collateral: {
-        [CurrencySymbol.ETH]: ZERO_BN,
-        [CurrencySymbol.USDC]: ZERO_BN,
-        [CurrencySymbol.WBTC]: ZERO_BN,
+        [CurrencySymbol.ETH]: ZERO_BI,
+        [CurrencySymbol.USDC]: ZERO_BI,
+        [CurrencySymbol.WBTC]: ZERO_BI,
     },
     nonCollateral: {
-        [CurrencySymbol.WFIL]: ZERO_BN,
+        [CurrencySymbol.WFIL]: ZERO_BI,
     },
     withdrawableCollateral: {
-        [CurrencySymbol.USDC]: ZERO_BN,
-        [CurrencySymbol.ETH]: ZERO_BN,
-        [CurrencySymbol.WBTC]: ZERO_BN,
+        [CurrencySymbol.USDC]: ZERO_BI,
+        [CurrencySymbol.ETH]: ZERO_BI,
+        [CurrencySymbol.WBTC]: ZERO_BI,
     },
     usdCollateral: 0,
     usdNonCollateral: 0,
-    coverage: ZERO_BN,
+    coverage: ZERO_BI,
     collateralThreshold: 0,
 };
 
 const emptyCollateralValues = {
     collateral: {
-        [CurrencySymbol.ETH]: ZERO_BN,
-        [CurrencySymbol.USDC]: ZERO_BN,
-        [CurrencySymbol.WBTC]: ZERO_BN,
-        [CurrencySymbol.WFIL]: ZERO_BN,
+        [CurrencySymbol.ETH]: ZERO_BI,
+        [CurrencySymbol.USDC]: ZERO_BI,
+        [CurrencySymbol.WBTC]: ZERO_BI,
+        [CurrencySymbol.WFIL]: ZERO_BI,
     },
-    collateralCoverage: ZERO_BN,
+    collateralCoverage: ZERO_BI,
 };
 
 const emptyCollateralParameters = {
-    liquidationThresholdRate: ZERO_BN,
-    liquidationProtocolFeeRate: ZERO_BN,
-    liquidatorFeeRate: ZERO_BN,
+    liquidationThresholdRate: ZERO_BI,
+    liquidationProtocolFeeRate: ZERO_BI,
+    liquidatorFeeRate: ZERO_BI,
 };
 
 export const useCollateralBook = (account: string | undefined) => {
@@ -89,7 +88,7 @@ export const useCollateralBook = (account: string | undefined) => {
                                 toCurrency(ccy),
                                 account ?? ''
                             );
-                        return { [ccy]: withdrawableCollateral ?? ZERO_BN };
+                        return { [ccy]: withdrawableCollateral ?? ZERO_BI };
                     })
                 ),
             ]);
@@ -109,11 +108,13 @@ export const useCollateralBook = (account: string | undefined) => {
                 usdNonCollateral,
             } = formatCollateral(data.collateralValues.collateral, priceList);
 
-            const liquidationThresholdRate =
-                data.collateralParameters.liquidationThresholdRate;
-            const collateralThreshold = liquidationThresholdRate.isZero()
-                ? 0
-                : 1000000 / liquidationThresholdRate.toNumber();
+            const liquidationThresholdRate = Number(
+                data.collateralParameters.liquidationThresholdRate
+            );
+            const collateralThreshold =
+                liquidationThresholdRate === 0
+                    ? 0
+                    : 1000000 / liquidationThresholdRate;
 
             const withdrawableCollateral: CollateralBook['withdrawableCollateral'] =
                 data.withdrawableCollateral.reduce((acc, obj) => ({
@@ -138,7 +139,7 @@ export const useCollateralBook = (account: string | undefined) => {
 };
 
 const formatCollateral = (
-    collateral: Record<string, BigNumber>,
+    collateral: Record<string, bigint>,
     priceList: AssetPriceMap
 ) => {
     let collateralBook: CollateralBook['collateral'] = {};

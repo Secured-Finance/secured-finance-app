@@ -33,8 +33,8 @@ export function computeTotalDailyVolumeInUSD(
         const volumeInBaseUnit = currencyMap[ccy].fromBaseUnit(BigInt(volume));
 
         const valueInUSD = volumeInBaseUnit * priceMap[ccy];
-        volumePerCurrency[ccy] += BigInt(volumeInBaseUnit);
-        totalVolumeUSD += BigInt(valueInUSD);
+        volumePerCurrency[ccy] += BigInt(Math.floor(volumeInBaseUnit));
+        totalVolumeUSD += BigInt(Math.floor(valueInUSD));
     });
     return { totalVolumeUSD, volumePerCurrency };
 }

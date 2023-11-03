@@ -1,5 +1,4 @@
 import { createColumnHelper } from '@tanstack/react-table';
-import { BigNumber } from 'ethers';
 import { useMemo, useState } from 'react';
 import { Button } from 'src/components/atoms';
 import { CoreTable } from 'src/components/molecules';
@@ -21,7 +20,7 @@ import {
 
 type TokenPosition = {
     currency: `0x${string}`;
-    amount: BigNumber;
+    amount: bigint;
 };
 
 const columnHelper = createColumnHelper<

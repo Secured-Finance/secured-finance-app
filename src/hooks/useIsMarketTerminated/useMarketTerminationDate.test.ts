@@ -1,6 +1,6 @@
-import { BigNumber } from 'ethers';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { renderHook } from 'src/test-utils';
+import { ZERO_BI } from 'src/utils';
 import { useMarketTerminationDate } from './useMarketTerminationDate';
 
 const mock = mockUseSF();
@@ -10,9 +10,7 @@ beforeEach(() => mock.getMarketTerminationDate.mockClear());
 
 describe('useMarketTerminationDate hook', () => {
     it('should return the termination date of the market', async () => {
-        mock.getMarketTerminationDate.mockResolvedValueOnce(
-            BigNumber.from(123)
-        );
+        mock.getMarketTerminationDate.mockResolvedValueOnce(BigInt(123));
         const { result, waitForNextUpdate } = renderHook(() =>
             useMarketTerminationDate()
         );
@@ -22,7 +20,7 @@ describe('useMarketTerminationDate hook', () => {
     });
 
     it('should return 0 if the market is not terminated', async () => {
-        mock.getMarketTerminationDate.mockResolvedValueOnce(BigNumber.from(0));
+        mock.getMarketTerminationDate.mockResolvedValueOnce(ZERO_BI);
         const { result, waitForNextUpdate } = renderHook(() =>
             useMarketTerminationDate()
         );
