@@ -12,11 +12,7 @@ import {
     prefixTilde,
     usdFormat,
 } from 'src/utils';
-import {
-    MAX_COVERAGE,
-    ZERO_BI,
-    computeAvailableToBorrow,
-} from 'src/utils/collateral';
+import { MAX_COVERAGE, computeAvailableToBorrow } from 'src/utils/collateral';
 import { Amount, LoanValue } from 'src/utils/entities';
 import { useAccount } from 'wagmi';
 
@@ -33,7 +29,7 @@ export const CollateralSimulationSection = ({
 }) => {
     const { address } = useAccount();
 
-    const { data: coverage = ZERO_BI } = useOrderEstimation(address);
+    const { data: coverage = 0 } = useOrderEstimation(address);
 
     const remainingToBorrowText = useMemo(
         () =>
