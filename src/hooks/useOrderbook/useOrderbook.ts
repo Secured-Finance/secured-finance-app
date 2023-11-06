@@ -78,12 +78,12 @@ export const useOrderbook = (
                     lendOrderbook: {
                         unitPrices: lendOrderbook?.unitPrices ?? [],
                         amounts: lendOrderbook?.amounts ?? [],
-                        quantities: lendOrderbook?.quantitites ?? [],
+                        quantities: lendOrderbook?.quantities ?? [],
                     },
                     borrowOrderbook: {
                         unitPrices: borrowOrderbook?.unitPrices ?? [],
                         amounts: borrowOrderbook?.amounts ?? [],
-                        quantities: borrowOrderbook?.quantitites ?? [],
+                        quantities: borrowOrderbook?.quantities ?? [],
                     },
                 };
             },

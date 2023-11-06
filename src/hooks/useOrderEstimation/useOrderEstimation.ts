@@ -56,7 +56,7 @@ export const useOrderEstimation = (account: string | undefined) => {
                 additionalDepositAmount,
                 ignoreBorrowedAmount
             );
-            return orderEstimation ? orderEstimation[0] : ZERO_BI;
+            return Number(orderEstimation?.coverage);
         },
         enabled: !!securedFinance && !!account,
     });
