@@ -168,11 +168,14 @@ const SecuredFinanceProvider: React.FC = ({ children }) => {
             },
         });
 
-        // TODO: handleAccountChanged
-        // web3Provider.on('accountsChanged', handleAccountChanged);
+        window.ethereum?.on('accountsChanged', handleAccountChanged);
 
         return () => {
             unwatch();
+            window.ethereum?.removeListener(
+                'accountsChanged',
+                handleAccountChanged
+            );
         };
     }, [
         dispatch,
