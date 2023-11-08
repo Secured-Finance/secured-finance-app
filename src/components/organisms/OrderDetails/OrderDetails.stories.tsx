@@ -61,8 +61,3 @@ export const CancelOrder = Template.bind({});
 CancelOrder.args = {
     isCancelOrder: true,
 };
-CancelOrder.play = async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    const button = await canvas.findByTestId('disclaimer-button');
-    await userEvent.click(button);
-};
