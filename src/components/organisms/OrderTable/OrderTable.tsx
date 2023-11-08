@@ -1,9 +1,11 @@
+import { OrderSide } from '@secured-finance/sf-client';
 import { createColumnHelper } from '@tanstack/react-table';
-import { useMemo } from 'react';
+import { BigNumber } from 'ethers';
+import { useMemo, useState } from 'react';
 import { CoreTable, TableActionMenu } from 'src/components/molecules';
-import { Order, useOrders } from 'src/hooks';
-import { hexToCurrencySymbol } from 'src/utils';
-import { Maturity } from 'src/utils/entities';
+import { Order } from 'src/hooks';
+import { CurrencySymbol, hexToCurrencySymbol } from 'src/utils';
+import { Amount, Maturity } from 'src/utils/entities';
 import {
     amountColumnDefinition,
     contractColumnDefinition,
@@ -11,6 +13,7 @@ import {
     loanTypeColumnDefinition,
     priceYieldColumnDefinition,
 } from 'src/utils/tableDefinitions';
+import { CancelDialog } from '../CancelDialog';
 
 type OpenOrder = Order & { calculationDate?: number };
 
@@ -27,7 +30,14 @@ export const OrderTable = ({
     variant?: 'compact' | 'default';
     height?: number;
 }) => {
-    const { cancelOrder } = useOrders();
+    const [cancelDialogData, setCancelDialogData] = useState<{
+        orderId: BigNumber;
+        currency: CurrencySymbol;
+        maturity: Maturity;
+        amount: Amount;
+        side: OrderSide;
+        isOpen: boolean;
+    }>();
     const columns = useMemo(
         () => [
             loanTypeColumnDefinition(columnHelper, 'Type', 'type'),
@@ -75,6 +85,15 @@ export const OrderTable = ({
                     const ccy = hexToCurrencySymbol(info.row.original.currency);
                     if (!ccy) return null;
 
+                    const side =
+                        info.row.original.side === 0
+                            ? OrderSide.LEND
+                            : OrderSide.BORROW;
+
+                    const amount = BigNumber.from(
+                        info.row.original.amount
+                    ).abs();
+
                     return (
                         <div className='flex justify-center'>
                             <TableActionMenu
@@ -82,13 +101,17 @@ export const OrderTable = ({
                                     {
                                         text: 'Cancel Order',
                                         onClick: () => {
-                                            cancelOrder(
-                                                info.row.original.orderId,
-                                                ccy,
-                                                new Maturity(
+                                            setCancelDialogData({
+                                                orderId:
+                                                    info.row.original.orderId,
+                                                currency: ccy,
+                                                maturity: new Maturity(
                                                     info.row.original.maturity
-                                                )
-                                            );
+                                                ),
+                                                amount: new Amount(amount, ccy),
+                                                side: side,
+                                                isOpen: true,
+                                            });
                                         },
                                     },
                                 ]}
@@ -99,26 +122,39 @@ export const OrderTable = ({
                 header: () => <div className='p-2'>Actions</div>,
             }),
         ],
-        [cancelOrder, variant]
+        [variant]
     );
 
     return (
-        <CoreTable
-            columns={
-                variant === 'compact'
-                    ? columns.filter(column => column.id !== 'createdAt')
-                    : columns
-            }
-            data={data}
-            options={{
-                name: 'open-order-table',
-                stickyColumns: new Set([6]),
-                pagination: {
-                    containerHeight: height || DEFAULT_HEIGHT,
-                    getMoreData: () => {},
-                    totalData: data.length,
-                },
-            }}
-        />
+        <>
+            <CoreTable
+                columns={
+                    variant === 'compact'
+                        ? columns.filter(column => column.id !== 'createdAt')
+                        : columns
+                }
+                data={data}
+                options={{
+                    name: 'open-order-table',
+                    stickyColumns: new Set([6]),
+                    pagination: {
+                        containerHeight: height || DEFAULT_HEIGHT,
+                        getMoreData: () => {},
+                        totalData: data.length,
+                    },
+                }}
+            />
+            {cancelDialogData && (
+                <CancelDialog
+                    {...cancelDialogData}
+                    onClose={() =>
+                        setCancelDialogData({
+                            ...cancelDialogData,
+                            isOpen: false,
+                        })
+                    }
+                />
+            )}
+        </>
     );
 };

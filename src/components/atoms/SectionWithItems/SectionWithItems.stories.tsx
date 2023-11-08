@@ -30,3 +30,12 @@ WithChildren.args = {
         ],
     ],
 };
+
+export const WithHeader = Template.bind({});
+WithHeader.args = {
+    header: (
+        <div className='text-secondary flex flex-row justify-center text-slateGray'>
+            Header
+        </div>
+    ),
+};

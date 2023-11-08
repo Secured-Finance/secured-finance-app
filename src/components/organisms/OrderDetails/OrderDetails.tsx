@@ -2,11 +2,7 @@ import { Disclosure, Transition } from '@headlessui/react';
 import { OrderSide } from '@secured-finance/sf-client';
 import { formatDate } from '@secured-finance/sf-core';
 import { useMemo } from 'react';
-import {
-    ExpandIndicator,
-    Section,
-    SectionWithItems,
-} from 'src/components/atoms';
+import { ExpandIndicator, SectionWithItems } from 'src/components/atoms';
 import {
     AmountCard,
     CollateralSimulationSection,
@@ -14,7 +10,7 @@ import {
 } from 'src/components/molecules';
 import { Tooltip } from 'src/components/templates';
 import { CollateralBook, useMarket, useOrderFee } from 'src/hooks';
-import { calculateFee, divide, prefixTilde } from 'src/utils';
+import { calculateFee, divide, formatLoanValue, prefixTilde } from 'src/utils';
 import { Amount, LoanValue, Maturity } from 'src/utils/entities';
 
 const FeeItem = () => {
@@ -37,6 +33,7 @@ export const OrderDetails = ({
     collateral,
     loanValue,
     isCurrencyDelisted,
+    isCancelOrder = false,
 }: {
     amount: Amount;
     maturity: Maturity;
@@ -45,6 +42,7 @@ export const OrderDetails = ({
     collateral: CollateralBook;
     loanValue: LoanValue;
     isCurrencyDelisted?: boolean;
+    isCancelOrder?: boolean;
 }) => {
     const { data: orderFee = 0 } = useOrderFee(amount.currency);
 
@@ -60,6 +58,8 @@ export const OrderDetails = ({
             : market.maxLendUnitPrice;
     }, [market, side]);
 
+    const amountCard = <AmountCard amount={amount} price={assetPrice} />;
+
     return (
         <div className='grid w-full grid-cols-1 justify-items-stretch gap-6 text-white'>
             {isCurrencyDelisted && (
@@ -67,18 +67,33 @@ export const OrderDetails = ({
                     currencies={new Set([amount.currency])}
                 />
             )}
-            <Section>
-                <AmountCard amount={amount} price={assetPrice} />
-            </Section>
-            <CollateralSimulationSection
-                collateral={collateral}
-                tradeAmount={amount}
-                side={side}
-                tradeValue={loanValue}
+            <SectionWithItems
+                header={amountCard}
+                itemList={[
+                    [
+                        'Bond Price',
+                        prefixTilde(
+                            formatLoanValue(
+                                loanValue ?? LoanValue.ZERO,
+                                'price'
+                            )
+                        ),
+                    ],
+                    [
+                        'APR',
+                        prefixTilde(
+                            formatLoanValue(loanValue ?? LoanValue.ZERO, 'rate')
+                        ),
+                    ],
+                    ['Maturity Date', formatDate(maturity.toNumber())],
+                ]}
             />
+            {!isCancelOrder && (
+                <CollateralSimulationSection collateral={collateral} />
+            )}
+
             <SectionWithItems
                 itemList={[
-                    ['Maturity Date', formatDate(maturity.toNumber())],
                     [
                         <FeeItem key={maturity.toString()} />,
                         prefixTilde(
@@ -87,45 +102,48 @@ export const OrderDetails = ({
                     ],
                 ]}
             />
-            <Disclosure>
-                {({ open }) => (
-                    <>
-                        <div className='relative'>
-                            <Disclosure.Button
-                                className='flex h-6 w-full flex-row items-center justify-between focus:outline-none'
-                                data-testid='disclaimer-button'
-                            >
-                                <h2 className='typography-hairline-2 text-neutral-8'>
-                                    Circuit Breaker Disclaimer
-                                </h2>
-                                <ExpandIndicator expanded={open} />
-                            </Disclosure.Button>
-                            <Transition
-                                show={open}
-                                enter='transition duration-100 ease-out'
-                                enterFrom='transform scale-95 opacity-0'
-                                enterTo='transform scale-100 opacity-100'
-                            >
-                                <Disclosure.Panel data-testid='disclaimer-text'>
-                                    <div className='typography-caption pt-3 text-secondary7'>
-                                        <span>
-                                            Circuit breaker will be triggered if
-                                            the order is filled at over
-                                        </span>
-                                        <span className='font-semibold text-white'>
-                                            {` ${divide(slippage, 100)} `}
-                                        </span>
-                                        <span>
-                                            which is the max slippage level at 1
-                                            block.
-                                        </span>
-                                    </div>
-                                </Disclosure.Panel>
-                            </Transition>
-                        </div>
-                    </>
-                )}
-            </Disclosure>
+            {!isCancelOrder && (
+                <Disclosure>
+                    {({ open }) => (
+                        <>
+                            <div className='relative'>
+                                <Disclosure.Button
+                                    className='flex h-6 w-full flex-row items-center justify-between focus:outline-none'
+                                    data-testid='disclaimer-button'
+                                >
+                                    <h2 className='typography-hairline-2 text-neutral-8'>
+                                        Circuit Breaker Disclaimer
+                                    </h2>
+                                    <ExpandIndicator expanded={open} />
+                                </Disclosure.Button>
+                                <Transition
+                                    show={open}
+                                    enter='transition duration-100 ease-out'
+                                    enterFrom='transform scale-95 opacity-0'
+                                    enterTo='transform scale-100 opacity-100'
+                                >
+                                    <Disclosure.Panel data-testid='disclaimer-text'>
+                                        <div className='typography-caption pt-3 text-secondary7'>
+                                            <span>
+                                                Circuit breaker will be
+                                                triggered if the order is filled
+                                                at over
+                                            </span>
+                                            <span className='font-semibold text-white'>
+                                                {` ${divide(slippage, 100)} `}
+                                            </span>
+                                            <span>
+                                                which is the max slippage level
+                                                at 1 block.
+                                            </span>
+                                        </div>
+                                    </Disclosure.Panel>
+                                </Transition>
+                            </div>
+                        </>
+                    )}
+                </Disclosure>
+            )}
         </div>
     );
 };
