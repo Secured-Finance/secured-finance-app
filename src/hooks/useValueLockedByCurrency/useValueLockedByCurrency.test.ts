@@ -1,4 +1,3 @@
-import { BigNumber } from 'ethers';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { renderHook } from 'src/test-utils';
 import { useValueLockedByCurrency } from './useValueLockedByCurrency';
@@ -20,10 +19,10 @@ describe('useValueLockedByCurrency', () => {
         expect(mock.getProtocolDepositAmount).toHaveBeenCalledTimes(1);
         const newValue = result.current;
         expect(newValue.data).toEqual({
-            ETH: BigNumber.from('100000000000000000000'), // 100 ETH
-            WFIL: BigNumber.from('100000000000000000000000'), // 100 000 FIL
-            USDC: BigNumber.from('1000000000000'), // 1 000 000 USDC
-            WBTC: BigNumber.from('1000000000000'), // 1000 BTC
+            ETH: BigInt('100000000000000000000'), // 100 ETH
+            WFIL: BigInt('100000000000000000000000'), // 100 000 FIL
+            USDC: BigInt('1000000000000'), // 1 000 000 USDC
+            WBTC: BigInt('1000000000000'), // 1000 BTC
         });
         expect(newValue.isLoading).toEqual(false);
     });

@@ -1,6 +1,5 @@
 import { toBytes32 } from '@secured-finance/sf-graph-client';
 import queries from '@secured-finance/sf-graph-client/dist/graphclients/';
-import { BigNumber } from 'ethers';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -35,6 +34,7 @@ import { RootState } from 'src/store/types';
 import { MaturityOptionList, TransactionList } from 'src/types';
 import {
     CurrencySymbol,
+    ZERO_BI,
     amountFormatterFromBase,
     amountFormatterToBase,
     currencyMap,
@@ -54,7 +54,7 @@ const useTradeHistoryDetails = (
     return useMemo(() => {
         let min = 10000;
         let max = 0;
-        let sum = BigNumber.from(0);
+        let sum = ZERO_BI;
         let count = 0;
         if (!transactions.length) {
             min = 0;
@@ -64,7 +64,7 @@ const useTradeHistoryDetails = (
             const price = t.averagePrice * 10000;
             if (price < min) min = price;
             if (price > max) max = price;
-            sum = sum.add(BigNumber.from(t.amount));
+            sum += BigInt(t.amount);
             count++;
         }
 
@@ -141,8 +141,13 @@ export const AdvancedLending = ({
         selectedTerm.value
     );
 
-    const { rates, maturityList, itayoseMarketIndexSet } =
-        useYieldCurveMarketRates();
+    const {
+        rates,
+        maturityList,
+        itayoseMarketIndexSet,
+        maximumRate,
+        marketCloseToMaturityOriginalRate,
+    } = useYieldCurveMarketRates();
 
     const currentMarket = useMemo(() => {
         if (marketUnitPrice) {
@@ -168,11 +173,11 @@ export const AdvancedLending = ({
 
     const handleCurrencyChange = useCallback(
         (v: CurrencySymbol) => {
-            let formatFrom = (x: BigNumber) => x.toNumber();
+            let formatFrom = (x: bigint) => Number(x);
             if (amountFormatterFromBase && amountFormatterFromBase[currency]) {
                 formatFrom = amountFormatterFromBase[currency];
             }
-            let formatTo = (x: number) => BigNumber.from(x);
+            let formatTo = (x: number) => BigInt(x);
             if (amountFormatterToBase && amountFormatterToBase[v]) {
                 formatTo = amountFormatterToBase[v];
             }
@@ -239,12 +244,16 @@ export const AdvancedLending = ({
 
             <div className='flex h-full flex-grow flex-col gap-4'>
                 <Tab tabDataArray={[{ text: 'Yield Curve' }]}>
-                    <div className='h-[410px] w-full px-6 py-4'>
+                    <div className='h-[410px] w-full px-2 py-4'>
                         <LineChartTab
                             rates={rates}
                             maturityList={maturityList}
                             itayoseMarketIndexSet={itayoseMarketIndexSet}
                             followLinks={false}
+                            maximumRate={maximumRate}
+                            marketCloseToMaturityOriginalRate={
+                                marketCloseToMaturityOriginalRate
+                            }
                         />
                     </div>
                 </Tab>

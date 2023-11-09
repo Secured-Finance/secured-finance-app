@@ -18,12 +18,14 @@ import {
 } from 'src/components/organisms';
 import { Page, TwoColumns } from 'src/components/templates';
 import {
+    baseContracts,
     emptyCollateralBook,
     emptyOrderList,
     useCollateralBook,
     useCurrenciesForOrders,
     useCurrencyDelistedStatus,
     useGraphClientHook,
+    useLendingMarkets,
     useOrderList,
     usePagination,
     usePositions,
@@ -65,6 +67,7 @@ export const PortfolioManagement = () => {
         TableType.ACTIVE_POSITION
     );
     const { data: delistedCurrencySet } = useCurrencyDelistedStatus();
+    const { data: lendingMarkets = baseContracts } = useLendingMarkets();
 
     const userOrderHistory = useGraphClientHook(
         {
@@ -91,6 +94,31 @@ export const PortfolioManagement = () => {
         address,
         usedCurrencies
     );
+    const activeOrderList = useMemo(() => {
+        return orderList.activeOrderList.map(order => {
+            const ccy = hexToCurrencySymbol(order.currency);
+            if (!ccy) return order;
+            const maturity = Number(order.maturity);
+            const lendingMarket = lendingMarkets[ccy][maturity];
+            if (
+                lendingMarket.isPreOrderPeriod ||
+                lendingMarket.isItayosePeriod
+            ) {
+                return {
+                    ...order,
+                    calculationDate: lendingMarket.utcOpeningDate,
+                };
+            } else {
+                return order;
+            }
+        });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        JSON.stringify(lendingMarkets),
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        JSON.stringify(orderList.activeOrderList),
+    ]);
     const { data: positions = [] } = usePositions(address, usedCurrencies);
 
     const paginatedTransactions = usePagination(
@@ -140,11 +168,11 @@ export const PortfolioManagement = () => {
             };
         }
         const borrowedPV = computeNetValue(
-            positions.filter(position => position.forwardValue.isNegative()),
+            positions.filter(position => position.forwardValue < 0),
             priceMap
         );
         const lentPV = computeNetValue(
-            positions.filter(position => !position.forwardValue.isNegative()),
+            positions.filter(position => position.forwardValue > 0),
             priceMap
         );
         return {
@@ -255,7 +283,7 @@ export const PortfolioManagement = () => {
                                 data={positions}
                                 delistedCurrencySet={delistedCurrencySet}
                             />
-                            <OrderTable data={orderList.activeOrderList} />
+                            <OrderTable data={activeOrderList} />
 
                             {userOrderHistory.loading ? (
                                 <TabSpinner />

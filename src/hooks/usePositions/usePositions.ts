@@ -1,5 +1,4 @@
 import { useQuery } from '@tanstack/react-query';
-import { BigNumber } from 'ethers';
 import { useMemo } from 'react';
 import { QueryKeys } from 'src/hooks/queries';
 import useSF from 'src/hooks/useSecuredFinance';
@@ -8,9 +7,9 @@ import { CurrencySymbol, toCurrency } from 'src/utils';
 export type Position = {
     currency: string;
     maturity: string;
-    amount: BigNumber;
-    forwardValue: BigNumber;
-    marketPrice: BigNumber;
+    amount: bigint;
+    forwardValue: bigint;
+    marketPrice: bigint;
 };
 
 export const usePositions = (
@@ -52,9 +51,9 @@ export const usePositions = (
 };
 
 const calculateMarketPrice = (
-    presentValue: BigNumber,
-    futureValue: BigNumber
-): BigNumber => {
-    const marketPrice = presentValue.mul(1000000).div(futureValue);
-    return BigNumber.from(Math.round(marketPrice.toNumber() / 100));
+    presentValue: bigint,
+    futureValue: bigint
+): bigint => {
+    const marketPrice = (presentValue * BigInt(1000000)) / futureValue;
+    return BigInt(Math.round(Number(marketPrice) / 100));
 };

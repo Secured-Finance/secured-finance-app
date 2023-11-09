@@ -1,6 +1,5 @@
 import { OrderSide, WalletSource } from '@secured-finance/sf-client';
 import { composeStories } from '@storybook/react';
-import { BigNumber } from 'ethers';
 import { dec22Fixture, preloadedAssetPrices } from 'src/stories/mocks/fixtures';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
@@ -95,10 +94,9 @@ describe('PlaceOrder component', () => {
 
     it('should reach success screen when transaction receipt is received', async () => {
         const onClose = jest.fn();
-        const tx = {
-            wait: jest.fn(() => Promise.resolve({ blockNumber: 13115215 })),
-        } as unknown;
-        const onPlaceOrder = jest.fn().mockReturnValue(Promise.resolve(tx));
+        const onPlaceOrder = jest
+            .fn()
+            .mockReturnValue(Promise.resolve('0x123'));
 
         render(<Default onClose={onClose} onPlaceOrder={onPlaceOrder} />, {
             preloadedState,
@@ -119,10 +117,9 @@ describe('PlaceOrder component', () => {
     });
 
     it('should update the lastActionTimestamp in the store when the transaction receipt is received', async () => {
-        const tx = {
-            wait: jest.fn(() => Promise.resolve({ blockNumber: 13115215 })),
-        } as unknown;
-        const onPlaceOrder = jest.fn().mockReturnValue(Promise.resolve(tx));
+        const onPlaceOrder = jest
+            .fn()
+            .mockReturnValue(Promise.resolve('0x123'));
         const { store } = render(<Default onPlaceOrder={onPlaceOrder} />, {
             preloadedState,
         });
@@ -133,10 +130,9 @@ describe('PlaceOrder component', () => {
     });
 
     it('should call the onPlaceOrder function in market order mode if the orderType is MARKET', async () => {
-        const tx = {
-            wait: jest.fn(() => Promise.resolve({ blockNumber: 13115215 })),
-        } as unknown;
-        const onPlaceOrder = jest.fn().mockReturnValue(Promise.resolve(tx));
+        const onPlaceOrder = jest
+            .fn()
+            .mockReturnValue(Promise.resolve('0x123'));
         render(
             <Default
                 onPlaceOrder={onPlaceOrder}
@@ -150,7 +146,7 @@ describe('PlaceOrder component', () => {
                 CurrencySymbol.USDC,
                 dec22Fixture,
                 OrderSide.BORROW,
-                BigNumber.from('100000000'),
+                BigInt('100000000'),
                 0,
                 WalletSource.METAMASK
             )
@@ -158,10 +154,9 @@ describe('PlaceOrder component', () => {
     });
 
     it('should call the onPlaceOrder function in limit order mode if the orderType is LIMIT', async () => {
-        const tx = {
-            wait: jest.fn(() => Promise.resolve({ blockNumber: 13115215 })),
-        } as unknown;
-        const onPlaceOrder = jest.fn().mockReturnValue(Promise.resolve(tx));
+        const onPlaceOrder = jest
+            .fn()
+            .mockReturnValue(Promise.resolve('0x123'));
         render(
             <Default onPlaceOrder={onPlaceOrder} orderType={OrderType.LIMIT} />,
             { preloadedState }
@@ -172,7 +167,7 @@ describe('PlaceOrder component', () => {
                 CurrencySymbol.USDC,
                 dec22Fixture,
                 OrderSide.BORROW,
-                BigNumber.from('100000000'),
+                BigInt('100000000'),
                 9410,
                 WalletSource.METAMASK
             )

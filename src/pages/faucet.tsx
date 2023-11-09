@@ -3,7 +3,12 @@ import { Faucet as FaucetComponent } from 'src/components/pages';
 import { useIsMarketTerminated } from 'src/hooks';
 
 const Faucet = () => {
-    const { data: isTerminated } = useIsMarketTerminated();
+    const { data: isTerminated, isLoading: isLoadingMarketTerminated } =
+        useIsMarketTerminated();
+
+    if (isLoadingMarketTerminated) {
+        return null;
+    }
 
     if (isTerminated) {
         Router.push('/emergency');

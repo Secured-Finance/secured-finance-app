@@ -1,8 +1,8 @@
 import { GraphClientProvider } from '@secured-finance/sf-graph-client';
 import type { StoryContext, StoryFn } from '@storybook/react';
-import { Wallet } from 'ethers';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
+import 'src/bigIntPatch';
 import { Footer } from 'src/components/atoms';
 import { Header } from 'src/components/organisms';
 import { Layout } from 'src/components/templates';
@@ -10,11 +10,17 @@ import { updateChainError, updateLatestBlock } from 'src/store/blockchain';
 import { setMaturity } from 'src/store/landingOrderForm';
 import { connectEthWallet, updateEthBalance } from 'src/store/wallet';
 import AxiosMock from 'src/stories/mocks/AxiosMock';
-import { CustomizedBridge } from 'src/stories/mocks/customBridge';
 import { dec22Fixture } from 'src/stories/mocks/fixtures';
 import { coingeckoApi } from 'src/utils/coinGeckoApi';
 import timemachine from 'timemachine';
-import { createPublicClient, createWalletClient, custom } from 'viem';
+import {
+    Chain,
+    TransactionReceipt,
+    WaitForTransactionReceiptParameters,
+    createPublicClient,
+    createWalletClient,
+    http
+} from 'viem';
 import { privateKeyToAccount } from 'viem/accounts';
 import { WagmiConfig, createConfig, sepolia } from 'wagmi';
 import { MockConnector } from 'wagmi/connectors/mock';
@@ -27,35 +33,35 @@ export const withAppLayout = (Story: StoryFn) => {
     );
 };
 
-class ProviderMock {
-    constructor() {}
-    getBlockNumber() {
-        return 123;
-    }
-}
-
 const privateKey =
     '0xde926db3012af759b4f24b5a51ef6afa397f04670f634aa4f48d4480417007f3';
 
-const signer = new CustomizedBridge(
-    new Wallet(privateKey),
-    new ProviderMock() as any,
-    11155111
-);
-
 const account = privateKeyToAccount(privateKey);
 
-const client = createWalletClient({
+const publicClient = createPublicClient({
+    chain: sepolia,
+    transport: http(),
+});
+
+publicClient.waitForTransactionReceipt = async (
+    args: WaitForTransactionReceiptParameters<Chain>
+) => {
+    return {
+        blockNumber: args.hash ? BigInt('123') : BigInt('0'),
+    } as unknown as TransactionReceipt;
+};
+
+const walletClient = createWalletClient({
     account: account,
     chain: sepolia,
-    transport: custom(signer),
+    transport: http(),
 });
 
 const connector = new MockConnector({
     chains: [sepolia],
     options: {
         chainId: sepolia.id,
-        walletClient: client,
+        walletClient: walletClient,
         flags: { isAuthorized: true },
     },
 });
@@ -64,10 +70,7 @@ export const withWalletProvider = (Story: StoryFn, Context: StoryContext) => {
     const dispatch = useDispatch();
     const config = createConfig({
         autoConnect: Context.parameters && Context.parameters.connected,
-        publicClient: createPublicClient({
-            chain: sepolia,
-            transport: custom(signer),
-        }),
+        publicClient: publicClient,
         connectors: [connector],
     });
 

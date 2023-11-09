@@ -1,3 +1,4 @@
+import { withWalletProvider } from '.storybook/decorators';
 import { Meta, StoryFn } from '@storybook/react';
 import { CurrencySymbol } from 'src/utils';
 import { EmergencyRedeemDialog } from './EmergencyRedeemDialog';
@@ -28,6 +29,7 @@ export default {
         ],
         snapshotDate: 1619014400,
     },
+    decorators: [withWalletProvider],
 } as Meta<typeof EmergencyRedeemDialog>;
 
 const Template: StoryFn<typeof EmergencyRedeemDialog> = args => (

@@ -54,7 +54,7 @@ describe('MarketLoanWidget Component', () => {
         fireEvent.click(button);
         expect(screen.queryAllByText('Dec 1, 2024')).toHaveLength(3);
 
-        expect(screen.queryByText('WFIL')).not.toBeInTheDocument();
+        expect(screen.queryByText('USDC')).not.toBeInTheDocument();
     });
 
     it('should hide the APR column when the market is in pre-order', async () => {
