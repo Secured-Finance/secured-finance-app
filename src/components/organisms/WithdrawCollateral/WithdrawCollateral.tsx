@@ -129,7 +129,6 @@ export const WithdrawCollateral = ({
         return (
             state.currentStep === Step.withdrawCollateral &&
             (!collateral ||
-                collateral === ZERO_BI ||
                 collateral >
                     amountFormatterToBase[asset](
                         collateralList[asset]?.available ?? 0

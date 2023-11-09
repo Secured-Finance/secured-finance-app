@@ -1,5 +1,5 @@
+import { withWalletProvider } from '.storybook/decorators';
 import { Meta, StoryFn } from '@storybook/react';
-import { withWalletProvider } from 'src/../.storybook/decorators';
 import { CurrencySymbol } from 'src/utils';
 import { EmergencyRedeemDialog } from './EmergencyRedeemDialog';
 
