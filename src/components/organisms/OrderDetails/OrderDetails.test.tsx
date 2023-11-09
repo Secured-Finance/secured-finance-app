@@ -4,7 +4,8 @@ import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
 import * as stories from './OrderDetails.stories';
 
-const { Default, Delisted } = composeStories(stories);
+const { Default, Delisted, UnderMinimumCollateralThreshold } =
+    composeStories(stories);
 
 const mockSecuredFinance = mockUseSF();
 jest.mock('src/hooks/useSecuredFinance', () => () => mockSecuredFinance);
@@ -17,14 +18,11 @@ describe('OrderDetails Component', () => {
         expect(screen.getByText('100 USDC')).toBeInTheDocument();
         expect(screen.getByText('Borrow Remaining')).toBeInTheDocument();
 
-        await waitFor(() => {
-            expect(screen.getByText('$3,025.09')).toBeInTheDocument();
-        });
-
+        expect(await screen.findByText('$3,025.09')).toBeInTheDocument();
         expect(screen.getByText('Bond Price')).toBeInTheDocument();
-        expect(screen.getByText('~ 94.10')).toBeInTheDocument();
+        expect(screen.getByText('~ 96.10')).toBeInTheDocument();
         expect(screen.getByText('APR')).toBeInTheDocument();
-        expect(screen.getByText('~ 6.28%')).toBeInTheDocument();
+        expect(screen.getByText('~ 4.06%')).toBeInTheDocument();
     });
 
     it('should render collateral utilization in borrow orders', async () => {
@@ -62,9 +60,9 @@ describe('OrderDetails Component', () => {
         expect(screen.queryByText('Collateral Usage')).not.toBeInTheDocument();
 
         expect(screen.getByText('Bond Price')).toBeInTheDocument();
-        expect(screen.getByText('~ 94.10')).toBeInTheDocument();
+        expect(await screen.findByText('~ 96.10')).toBeInTheDocument();
         expect(screen.getByText('APR')).toBeInTheDocument();
-        expect(screen.getByText('~ 6.28%')).toBeInTheDocument();
+        expect(screen.getByText('~ 4.06%')).toBeInTheDocument();
     });
 
     it('should display delisting disclaimer if order currency is being delisted', async () => {
@@ -85,5 +83,17 @@ describe('OrderDetails Component', () => {
                 'Please note that USDC will be delisted on Secured Finance.'
             )
         ).not.toBeInTheDocument();
+    });
+
+    describe('minimum collateral threshold', () => {
+        it('should display a warning if the order price is lower than the min debt price', async () => {
+            render(<UnderMinimumCollateralThreshold />);
+            expect(await screen.findByRole('alert')).toBeInTheDocument();
+        });
+
+        it('should not display a warning if the order price is higher than the min debt price', () => {
+            render(<Default />);
+            expect(screen.queryByRole('alert')).not.toBeInTheDocument();
+        });
     });
 });

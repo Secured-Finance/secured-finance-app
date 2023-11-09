@@ -16,7 +16,10 @@ export const Section = ({
 
     if (variant === 'warning') {
         interiorComponent = (
-            <div className='flex flex-row items-start justify-start gap-1 px-3 py-4'>
+            <div
+                className='flex flex-row items-start justify-start gap-1 px-3 py-4'
+                role='alert'
+            >
                 <span>
                     <WarningCircleIcon
                         className='mt-1 h-5 w-5 text-orange'

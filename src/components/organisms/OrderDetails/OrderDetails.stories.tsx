@@ -16,7 +16,7 @@ export default {
         side: OrderSide.BORROW,
         assetPrice: 1,
         collateral: collateralBook37,
-        loanValue: LoanValue.fromPrice(9410, dec22Fixture.toNumber()),
+        loanValue: LoanValue.fromPrice(9610, dec22Fixture.toNumber()),
         isCurrencyDelisted: false,
     },
     chromatic: { delay: 1000 },
@@ -55,4 +55,9 @@ Delisted.play = async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     const button = await canvas.findByTestId('disclaimer-button');
     await userEvent.click(button);
+};
+
+export const UnderMinimumCollateralThreshold = Template.bind({});
+UnderMinimumCollateralThreshold.args = {
+    loanValue: LoanValue.fromPrice(9410, dec22Fixture.toNumber()),
 };

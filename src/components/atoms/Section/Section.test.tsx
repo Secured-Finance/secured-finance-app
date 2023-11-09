@@ -14,5 +14,6 @@ describe('Section Component', () => {
         expect(
             screen.getByRole('img', { name: 'warning' })
         ).toBeInTheDocument();
+        expect(screen.getByRole('alert')).toBeInTheDocument();
     });
 });

@@ -6,6 +6,7 @@ import {
     ExpandIndicator,
     Section,
     SectionWithItems,
+    TextLink,
 } from 'src/components/atoms';
 import {
     AmountCard,
@@ -14,7 +15,13 @@ import {
 } from 'src/components/molecules';
 import { Tooltip } from 'src/components/templates';
 import { CollateralBook, useMarket, useOrderFee } from 'src/hooks';
-import { calculateFee, divide, prefixTilde } from 'src/utils';
+import {
+    calculateFee,
+    divide,
+    formatLoanValue,
+    formatWithCurrency,
+    prefixTilde,
+} from 'src/utils';
 import { Amount, LoanValue, Maturity } from 'src/utils/entities';
 
 const FeeItem = () => {
@@ -67,6 +74,38 @@ export const OrderDetails = ({
                     currencies={new Set([amount.currency])}
                 />
             )}
+            {market &&
+                !isCurrencyDelisted &&
+                loanValue.price < market.currentMinDebtUnitPrice && (
+                    <Section variant='warning'>
+                        <p>
+                            Warning: Your order price is currently lower than
+                            minimum collateral base price of{' '}
+                            <span className='font-bold'>
+                                {formatLoanValue(
+                                    LoanValue.fromPrice(
+                                        market.currentMinDebtUnitPrice,
+                                        market.maturity
+                                    ),
+                                    'price'
+                                )}
+                            </span>
+                            . Your adjusted PV will be{' '}
+                            <span>
+                                {formatWithCurrency(
+                                    amount.value,
+                                    amount.currency
+                                )}
+                            </span>
+                            . To place the order you need to deposit sufficient
+                            collateral.{' '}
+                            <TextLink
+                                href='https://docs.secured.finance/technical-overview/risk-management/minimum-collateral'
+                                text='Learn More'
+                            />
+                        </p>
+                    </Section>
+                )}
             <Section>
                 <AmountCard amount={amount} price={assetPrice} />
             </Section>
