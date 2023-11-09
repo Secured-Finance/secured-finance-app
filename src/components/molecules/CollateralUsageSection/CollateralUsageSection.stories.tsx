@@ -9,7 +9,7 @@ export default {
     component: CollateralUsageSection,
     args: {
         usdCollateral: collateralBook37.usdCollateral,
-        collateralCoverage: Number(collateralBook37.coverage),
+        collateralCoverage: collateralBook37.coverage,
         currency: CurrencySymbol.WFIL,
         collateralThreshold: 80,
     },

@@ -88,7 +88,7 @@ export function AdvancedLendingOrderCard({
     const { address } = useAccount();
 
     const collateralUsagePercent = useMemo(() => {
-        return Number(collateralBook.coverage) / 100.0;
+        return collateralBook.coverage / 100.0;
     }, [collateralBook]);
 
     const priceList = useSelector((state: RootState) => getPriceMap(state));
@@ -113,7 +113,7 @@ export function AdvancedLendingOrderCard({
             ? computeAvailableToBorrow(
                   price,
                   collateralBook.usdCollateral,
-                  Number(collateralBook.coverage) / MAX_COVERAGE,
+                  collateralBook.coverage / MAX_COVERAGE,
                   collateralBook.collateralThreshold
               )
             : 0;

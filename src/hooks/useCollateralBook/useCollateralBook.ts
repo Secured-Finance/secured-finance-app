@@ -20,7 +20,7 @@ export interface CollateralBook {
     withdrawableCollateral: Partial<Record<CurrencySymbol, bigint>>;
     usdCollateral: number;
     usdNonCollateral: number;
-    coverage: bigint;
+    coverage: number;
     collateralThreshold: number;
 }
 
@@ -40,7 +40,7 @@ export const emptyCollateralBook: CollateralBook = {
     },
     usdCollateral: 0,
     usdNonCollateral: 0,
-    coverage: ZERO_BI,
+    coverage: 0,
     collateralThreshold: 0,
 };
 
@@ -127,7 +127,7 @@ export const useCollateralBook = (account: string | undefined) => {
                 nonCollateral: nonCollateralBook,
                 usdCollateral: usdCollateral,
                 usdNonCollateral: usdNonCollateral,
-                coverage: data.collateralValues.collateralCoverage,
+                coverage: Number(data.collateralValues.collateralCoverage),
                 collateralThreshold: collateralThreshold,
                 withdrawableCollateral: withdrawableCollateral,
             };

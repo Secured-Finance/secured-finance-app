@@ -832,7 +832,7 @@ export const collateralBook80: CollateralBook = {
     },
     usdCollateral: 12100.34,
     usdNonCollateral: 600,
-    coverage: BigInt('8000'), // 80%,
+    coverage: 8000, // 80%,
     collateralThreshold: 80,
     withdrawableCollateral: {
         [CurrencySymbol.USDC]: BigInt(100000),
@@ -852,7 +852,7 @@ export const collateralBook37: CollateralBook = {
     },
     usdCollateral: 12100.34,
     usdNonCollateral: 600,
-    coverage: BigInt('3700'),
+    coverage: 3700,
     collateralThreshold: 80,
     withdrawableCollateral: {
         [CurrencySymbol.USDC]: BigInt(100000),
@@ -872,7 +872,7 @@ export const emptyUSDCollateral: CollateralBook = {
     },
     usdCollateral: 0,
     usdNonCollateral: 600,
-    coverage: BigInt('0'), // 0%
+    coverage: 0, // 0%
     collateralThreshold: 80,
     withdrawableCollateral: {
         [CurrencySymbol.USDC]: BigInt(0),

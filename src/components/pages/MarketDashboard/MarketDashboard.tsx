@@ -180,7 +180,7 @@ export const MarketDashboard = () => {
                             <div className='px-3 py-6'>
                                 <CollateralManagementConciseTab
                                     collateralCoverage={
-                                        Number(collateralBook.coverage) / 100
+                                        collateralBook.coverage / 100
                                     }
                                     totalCollateralInUSD={
                                         collateralBook.usdCollateral

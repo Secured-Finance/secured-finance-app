@@ -5,7 +5,7 @@ import { dec22Fixture, preloadedAssetPrices } from 'src/stories/mocks/fixtures';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { fireEvent, render, screen, waitFor } from 'src/test-utils.js';
 import { OrderType } from 'src/types';
-import { CurrencySymbol, ZERO_BI } from 'src/utils';
+import { CurrencySymbol } from 'src/utils';
 import timemachine from 'timemachine';
 import * as stories from './AdvancedLendingOrderCard.stories';
 
@@ -37,7 +37,7 @@ const collateralBook0: CollateralBook = {
     },
     usdCollateral: 12100.34,
     usdNonCollateral: 600,
-    coverage: ZERO_BI,
+    coverage: 0,
     collateralThreshold: 80,
     withdrawableCollateral: {
         [CurrencySymbol.USDC]: BigInt(100000),

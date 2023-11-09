@@ -68,7 +68,7 @@ export const OrderAction = ({
             ? computeAvailableToBorrow(
                   price,
                   collateralBook.usdCollateral,
-                  Number(collateralBook.coverage) / MAX_COVERAGE,
+                  collateralBook.coverage / MAX_COVERAGE,
                   collateralBook.collateralThreshold
               )
             : 0;
