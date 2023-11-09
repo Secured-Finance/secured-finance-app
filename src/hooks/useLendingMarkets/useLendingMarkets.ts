@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useMemo } from 'react';
 import { QueryKeys } from 'src/hooks/queries';
 import useSF from 'src/hooks/useSecuredFinance';
-import { CurrencySymbol, isPastDate, getCurrencyMapAsList } from 'src/utils';
+import { CurrencySymbol, getCurrencyMapAsList, isPastDate } from 'src/utils';
 
 const PRE_OPEN_TIME = 60 * 60 * 24 * 7; // 7 days in seconds
 
@@ -24,6 +24,7 @@ export type LendingMarket = {
     bestLendUnitPrice: number;
     minBorrowUnitPrice: number;
     maxLendUnitPrice: number;
+    currentMinDebtUnitPrice: number;
 };
 
 const baseContract: { 0: LendingMarket } = {
@@ -44,6 +45,7 @@ const baseContract: { 0: LendingMarket } = {
         bestLendUnitPrice: 0,
         minBorrowUnitPrice: 0,
         maxLendUnitPrice: 0,
+        currentMinDebtUnitPrice: 0,
     },
 };
 
@@ -105,6 +107,7 @@ export const useLendingMarkets = () => {
                         minBorrowUnitPrice,
                         maxLendUnitPrice,
                         ccy,
+                        currentMinDebtUnitPrice,
                     } = market;
                     const currency = fromBytes32(ccy) as CurrencySymbol;
                     let nameToPush = `${ccy}-${name}`;
@@ -137,6 +140,8 @@ export const useLendingMarkets = () => {
                             bestLendUnitPrice: bestLendUnitPrice.toNumber(),
                             minBorrowUnitPrice: minBorrowUnitPrice.toNumber(),
                             maxLendUnitPrice: maxLendUnitPrice.toNumber(),
+                            currentMinDebtUnitPrice:
+                                currentMinDebtUnitPrice.toNumber(),
                         },
                     };
                 });

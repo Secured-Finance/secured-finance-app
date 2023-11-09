@@ -28,6 +28,7 @@ const preOrderMarket = {
     bestLendUnitPrice: BigNumber.from('9617'),
     minBorrowUnitPrice: BigNumber.from('9602'),
     maxLendUnitPrice: BigNumber.from('9630'),
+    currentMinDebtUnitPrice: BigNumber.from('9500'),
     ccy: wfilBytes32,
 };
 
@@ -46,6 +47,7 @@ const closedMarket = {
     bestLendUnitPrice: BigNumber.from('9617'),
     minBorrowUnitPrice: BigNumber.from('9602'),
     maxLendUnitPrice: BigNumber.from('9630'),
+    currentMinDebtUnitPrice: BigNumber.from('9500'),
     ccy: wfilBytes32,
 };
 
