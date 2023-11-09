@@ -135,7 +135,6 @@ export const DepositCollateral = ({
         return (
             state.currentStep === Step.depositCollateral &&
             (!collateral ||
-                collateral === ZERO_BI ||
                 collateral >
                     amountFormatterToBase[asset](
                         collateralList[asset]?.available ?? 0
