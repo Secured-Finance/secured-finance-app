@@ -1,5 +1,4 @@
 import { OrderSide, WalletSource } from '@secured-finance/sf-client';
-import { BigNumber } from 'ethers';
 import { useCallback, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -27,7 +26,7 @@ import { RootState } from 'src/store/types';
 import { MaturityOptionList, OrderSideMap } from 'src/types';
 import {
     CurrencySymbol,
-    ZERO_BN,
+    ZERO_BI,
     amountFormatterFromBase,
     amountFormatterToBase,
     formatLoanValue,
@@ -102,7 +101,7 @@ export const LendingCard = ({
             : amountFormatterFromBase[currency](
                   collateralBook.nonCollateral[currency] ||
                       collateralBook.withdrawableCollateral[currency] ||
-                      BigNumber.from(0)
+                      ZERO_BI
               );
     }, [
         balanceRecord,
@@ -119,11 +118,11 @@ export const LendingCard = ({
 
     const handleCurrencyChange = useCallback(
         (v: CurrencySymbol) => {
-            let formatFrom = (x: BigNumber) => x.toNumber();
+            let formatFrom = (x: bigint) => Number(x);
             if (amountFormatterFromBase && amountFormatterFromBase[currency]) {
                 formatFrom = amountFormatterFromBase[currency];
             }
-            let formatTo = (x: number) => BigNumber.from(x);
+            let formatTo = (x: number) => BigInt(x);
             if (amountFormatterToBase && amountFormatterToBase[v]) {
                 formatTo = amountFormatterToBase[v];
             }
@@ -141,19 +140,19 @@ export const LendingCard = ({
                 : amountFormatterFromBase[currency](
                       collateralBook.nonCollateral[currency] ||
                           collateralBook.withdrawableCollateral[currency] ||
-                          BigNumber.from(0)
+                          ZERO_BI
                   );
-        const inputAmount = amount.gt(
-            amountFormatterToBase[currency](available)
-        )
-            ? amountFormatterToBase[currency](available)
-            : amount;
+        const inputAmount =
+            amount > amountFormatterToBase[currency](available)
+                ? amountFormatterToBase[currency](available)
+                : amount;
         dispatch(setAmount(inputAmount));
     };
 
-    const orderAmount = amount.gt(ZERO_BN)
-        ? amountFormatterFromBase[currency](amount)
-        : undefined;
+    const orderAmount =
+        amount > ZERO_BI
+            ? amountFormatterFromBase[currency](amount)
+            : undefined;
 
     return (
         <div className='w-[345px] flex-shrink-0 space-y-6 rounded-b-xl border border-panelStroke bg-transparent pb-7 shadow-deep'>
@@ -240,7 +239,7 @@ export const LendingCard = ({
                         <div className='px-2'>
                             <CollateralUsageSection
                                 usdCollateral={collateralBook.usdCollateral}
-                                collateralCoverage={collateralBook.coverage.toNumber()}
+                                collateralCoverage={collateralBook.coverage}
                                 currency={currency}
                                 collateralThreshold={
                                     collateralBook.collateralThreshold

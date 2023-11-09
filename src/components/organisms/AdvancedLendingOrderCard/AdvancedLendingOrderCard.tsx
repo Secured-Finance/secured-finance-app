@@ -1,5 +1,4 @@
 import { OrderSide, WalletSource } from '@secured-finance/sf-client';
-import { BigNumber } from 'ethers';
 import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -30,7 +29,7 @@ import { OrderSideMap, OrderType, OrderTypeOptions } from 'src/types';
 import {
     CurrencySymbol,
     MAX_COVERAGE,
-    ZERO_BN,
+    ZERO_BI,
     amountFormatterFromBase,
     amountFormatterToBase,
     computeAvailableToBorrow,
@@ -89,7 +88,7 @@ export function AdvancedLendingOrderCard({
     const { address } = useAccount();
 
     const collateralUsagePercent = useMemo(() => {
-        return collateralBook.coverage.toNumber() / 100.0;
+        return collateralBook.coverage / 100.0;
     }, [collateralBook]);
 
     const priceList = useSelector((state: RootState) => getPriceMap(state));
@@ -107,16 +106,14 @@ export function AdvancedLendingOrderCard({
             : market.maxLendUnitPrice;
     }, [market, side]);
 
-    const orderAmount = amount.gt(ZERO_BN)
-        ? new Amount(amount, currency)
-        : undefined;
+    const orderAmount = amount > 0 ? new Amount(amount, currency) : undefined;
 
     const availableToBorrow = useMemo(() => {
         return currency && price
             ? computeAvailableToBorrow(
                   price,
                   collateralBook.usdCollateral,
-                  collateralBook.coverage.toNumber() / MAX_COVERAGE,
+                  collateralBook.coverage / MAX_COVERAGE,
                   collateralBook.collateralThreshold
               )
             : 0;
@@ -155,7 +152,7 @@ export function AdvancedLendingOrderCard({
             : amountFormatterFromBase[currency](
                   collateralBook.nonCollateral[currency] ||
                       collateralBook.withdrawableCollateral[currency] ||
-                      BigNumber.from(0)
+                      ZERO_BI
               );
     }, [
         balanceRecord,
@@ -178,7 +175,7 @@ export function AdvancedLendingOrderCard({
         setSliderValue(percentage);
     };
 
-    const handleInputChange = (v: BigNumber) => {
+    const handleInputChange = (v: bigint) => {
         dispatch(setAmount(v));
 
         const available =
@@ -202,13 +199,12 @@ export function AdvancedLendingOrderCard({
                 : amountFormatterFromBase[currency](
                       collateralBook.nonCollateral[currency] ||
                           collateralBook.withdrawableCollateral[currency] ||
-                          BigNumber.from(0)
+                          ZERO_BI
                   );
-        const inputAmount = amount.gt(
-            amountFormatterToBase[currency](available)
-        )
-            ? amountFormatterToBase[currency](available)
-            : amount;
+        const inputAmount =
+            amount > amountFormatterToBase[currency](available)
+                ? amountFormatterToBase[currency](available)
+                : amount;
         dispatch(setAmount(inputAmount));
         available
             ? setSliderValue(
@@ -341,9 +337,7 @@ export function AdvancedLendingOrderCard({
                     unit={currency}
                     asset={currency}
                     initialValue={orderAmount?.value}
-                    onValueChange={v =>
-                        handleInputChange(BigNumber.from(v ?? 0))
-                    }
+                    onValueChange={v => handleInputChange(BigInt(v ?? 0))}
                 />
                 <div className='mx-10px flex flex-col gap-6'>
                     <OrderDisplayBox

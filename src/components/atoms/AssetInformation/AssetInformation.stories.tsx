@@ -1,5 +1,4 @@
 import type { Meta, StoryFn } from '@storybook/react';
-import { BigNumber } from 'ethers';
 import { withAssetPrice } from 'src/../.storybook/decorators';
 import { AssetInformation } from '.';
 
@@ -9,8 +8,8 @@ export default {
     args: {
         header: 'Collateral Assets',
         collateralBook: {
-            ETH: BigNumber.from('1200000000000000000'),
-            USDC: BigNumber.from('10000000'),
+            ETH: BigInt('1200000000000000000'),
+            USDC: BigInt('10000000'),
         },
         informationText: 'Only USDC and ETH are eligible as collateral.',
     },
@@ -25,7 +24,7 @@ export const Default = Template.bind({});
 export const ZeroUsdcCollateral = Template.bind({});
 ZeroUsdcCollateral.args = {
     collateralBook: {
-        ETH: BigNumber.from('1200000000000000000'),
-        USDC: BigNumber.from('0'),
+        ETH: BigInt('1200000000000000000'),
+        USDC: BigInt('0'),
     },
 };

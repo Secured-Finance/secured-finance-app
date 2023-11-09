@@ -37,7 +37,7 @@ export const CollateralSimulationSection = ({
                 computeAvailableToBorrow(
                     1,
                     collateral.usdCollateral,
-                    (coverage ?? 0) / MAX_COVERAGE,
+                    coverage / MAX_COVERAGE,
                     collateral.collateralThreshold
                 ),
                 2
@@ -57,10 +57,7 @@ export const CollateralSimulationSection = ({
                   ['Borrow Remaining', remainingToBorrowText],
                   [
                       'Collateral Usage',
-                      getCollateralUsage(
-                          collateral.coverage.toNumber(),
-                          coverage
-                      ),
+                      getCollateralUsage(collateral.coverage, coverage),
                   ],
                   [
                       'Bond Price',

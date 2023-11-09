@@ -1,8 +1,8 @@
 import { OrderSide, WalletSource } from '@secured-finance/sf-client';
 import queries from '@secured-finance/sf-graph-client/dist/graphclients';
-import { BigNumber, ContractTransaction } from 'ethers';
 import { Option } from 'src/components/atoms';
 import { Maturity } from 'src/utils/entities';
+import { Hex } from 'viem';
 import { CurrencySymbol } from './utils';
 
 export type SvgIcon = React.ForwardRefExoticComponent<
@@ -18,10 +18,10 @@ export type PlaceOrderFunction = (
     ccy: CurrencySymbol,
     maturity: Maturity,
     side: OrderSide,
-    amount: BigNumber,
+    amount: bigint,
     unitPrice: number,
     sourceWallet: WalletSource
-) => Promise<ContractTransaction | undefined>;
+) => Promise<Hex | undefined>;
 
 type UserOrderHistoryQuery = Awaited<
     ReturnType<

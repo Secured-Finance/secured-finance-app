@@ -1,5 +1,4 @@
 import { Currency } from '@secured-finance/sf-core';
-import { BigNumber } from 'ethers';
 import { mockUseSF } from 'src/stories/mocks/useSFMock';
 import { renderHook } from 'src/test-utils';
 import { CurrencySymbol } from 'src/utils';
@@ -32,17 +31,11 @@ describe('useMarketTerminationRatio hook', () => {
             (currency: Currency) => {
                 switch (currency.symbol) {
                     case CurrencySymbol.ETH:
-                        return Promise.resolve(
-                            BigNumber.from('18000000000000')
-                        );
+                        return Promise.resolve(BigInt('18000000000000'));
                     case CurrencySymbol.USDC:
-                        return Promise.resolve(
-                            BigNumber.from('10000000000000')
-                        );
+                        return Promise.resolve(BigInt('10000000000000'));
                     case CurrencySymbol.WBTC:
-                        return Promise.resolve(
-                            BigNumber.from('25000000000000')
-                        );
+                        return Promise.resolve(BigInt('25000000000000'));
                     default:
                         throw new Error('Not implemented');
                 }

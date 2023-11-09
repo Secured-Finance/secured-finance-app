@@ -1,10 +1,9 @@
-import { BigNumber } from 'ethers';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { InputBase } from 'src/components/atoms';
 import { CurrencyDropdown, CurrencyOption } from 'src/components/molecules';
 import { CurrencySymbol, prefixTilde } from 'src/utils';
 
-type FormatFunction = (amount: number) => BigNumber;
+type FormatFunction = (amount: number) => bigint;
 
 export const AssetSelector = ({
     options,
@@ -21,7 +20,7 @@ export const AssetSelector = ({
     amountFormatterMap?: Record<CurrencySymbol, FormatFunction>;
     initialValue?: number;
     onAssetChange?: (v: CurrencySymbol) => void;
-    onAmountChange?: (v: BigNumber) => void;
+    onAmountChange?: (v: bigint) => void;
 }) => {
     const [assetValue, setAssetValue] = useState(selected.value);
     const [amount, setAmount] = useState(initialValue);
@@ -52,9 +51,9 @@ export const AssetSelector = ({
         (
             amount: number,
             assetValue: CurrencySymbol,
-            onAmountChange: (v: BigNumber) => void
+            onAmountChange: (v: bigint) => void
         ) => {
-            let format = (x: number) => BigNumber.from(x);
+            let format = (x: number) => BigInt(x);
             if (amountFormatterMap && amountFormatterMap[assetValue]) {
                 format = amountFormatterMap[assetValue];
             }

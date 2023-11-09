@@ -68,7 +68,7 @@ export const OrderAction = ({
             ? computeAvailableToBorrow(
                   price,
                   collateralBook.usdCollateral,
-                  collateralBook.coverage.toNumber() / MAX_COVERAGE,
+                  collateralBook.coverage / MAX_COVERAGE,
                   collateralBook.collateralThreshold
               )
             : 0;
@@ -100,7 +100,6 @@ export const OrderAction = ({
     const isPlaceOrderDisabled =
         validation ||
         !amount ||
-        amount.isZero() ||
         (marketPhase !== MarketPhase.PRE_ORDER &&
             marketPhase !== MarketPhase.OPEN);
 

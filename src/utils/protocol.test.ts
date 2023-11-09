@@ -1,23 +1,23 @@
 import { fromBytes32 } from '@secured-finance/sf-graph-client';
-import { BigNumber } from 'ethers';
 import {
     assetPriceMap,
     dailyVolumes,
     dec22Fixture,
     usdcBytes32,
 } from 'src/stories/mocks/fixtures';
+import { ZERO_BI } from './collateral';
 import { CurrencySymbol } from './currencyList';
 import { computeTotalDailyVolumeInUSD } from './protocol';
 
 describe('computeTotalDailyVolumeInUSD', () => {
     it('should return 0 if no daily volumes', () => {
         expect(computeTotalDailyVolumeInUSD([], assetPriceMap)).toEqual({
-            totalVolumeUSD: BigNumber.from(0),
+            totalVolumeUSD: ZERO_BI,
             volumePerCurrency: {
-                [CurrencySymbol.USDC]: BigNumber.from(0),
-                [CurrencySymbol.ETH]: BigNumber.from(0),
-                [CurrencySymbol.WFIL]: BigNumber.from(0),
-                [CurrencySymbol.WBTC]: BigNumber.from(0),
+                [CurrencySymbol.USDC]: ZERO_BI,
+                [CurrencySymbol.ETH]: ZERO_BI,
+                [CurrencySymbol.WFIL]: ZERO_BI,
+                [CurrencySymbol.WBTC]: ZERO_BI,
             },
         });
     });
@@ -34,12 +34,12 @@ describe('computeTotalDailyVolumeInUSD', () => {
         expect(
             computeTotalDailyVolumeInUSD(dailyVolumes, assetPriceMap)
         ).toEqual({
-            totalVolumeUSD: BigNumber.from(3942030),
+            totalVolumeUSD: BigInt(3942030),
             volumePerCurrency: {
-                [CurrencySymbol.USDC]: BigNumber.from(30),
-                [CurrencySymbol.ETH]: BigNumber.from(0),
-                [CurrencySymbol.WFIL]: BigNumber.from(657000),
-                [CurrencySymbol.WBTC]: BigNumber.from(0),
+                [CurrencySymbol.USDC]: BigInt(30),
+                [CurrencySymbol.ETH]: ZERO_BI,
+                [CurrencySymbol.WFIL]: BigInt(657000),
+                [CurrencySymbol.WBTC]: ZERO_BI,
             },
         });
     });
